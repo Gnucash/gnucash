@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-28 17:36+0300\n"
-"PO-Revision-Date: 2010-09-29 20:35+0200\n"
+"POT-Creation-Date: 2010-10-02 14:15+0300\n"
+"PO-Revision-Date: 2010-10-05 12:46+0200\n"
 "Last-Translator: Seyfi Duyan <seyfi.duyan@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -134,7 +134,6 @@ msgstr "cleared:n"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:678
-#, fuzzy
 msgid "reconciled:y"
 msgstr "reconciled:m"
 
@@ -151,7 +150,7 @@ msgstr ""
 
 #: ../src/app-utils/gnc-ui-util.c:725
 msgid "Opening Balances"
-msgstr "Sermayeler"
+msgstr "Sermaye"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
@@ -966,7 +965,7 @@ msgstr "Fatura Sahibi"
 #: ../intl-scm/guile-strings.c:1584
 #: ../intl-scm/guile-strings.c:2192
 msgid "Invoice Notes"
-msgstr "Açıklama"
+msgstr "Notlar"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -1034,19 +1033,16 @@ msgid "Invoice ID"
 msgstr "Fatura No"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2452
-#, fuzzy
 msgid "Bill Owner"
-msgstr "Fatura Sahibi"
+msgstr "Sahibi"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2455
-#, fuzzy
 msgid "Bill Notes"
 msgstr "Notlar"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2480
-#, fuzzy
 msgid "Bill ID"
-msgstr "Müşteri Ref. No."
+msgstr "Takip No."
 
 #: ../src/business/business-gnome/dialog-invoice.c:2486
 msgid "Voucher Owner"
@@ -1054,7 +1050,7 @@ msgstr "Sahibi"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2489
 msgid "Voucher Notes"
-msgstr "Açıklama"
+msgstr "Notlar"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2514
 msgid "Voucher ID"
@@ -1665,7 +1661,7 @@ msgstr "GnuCash Başlangıç belgesini aç"
 #: ../src/business/business-gnome/glade/date-close.glade.h:1
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:75
 #: ../src/gnome/dialog-find-transactions.c:132
-#: ../src/gnome/dialog-tax-info.c:1298
+#: ../src/gnome/dialog-tax-info.c:1299
 #: ../src/gnome/glade/lots.glade.h:10
 #: ../src/gnome/reconcile-list.c:223
 #: ../src/gnome-utils/gnc-tree-model-budget.c:102
@@ -1908,7 +1904,6 @@ msgid "Access Control List"
 msgstr "Erişim Denetim Listesi"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:5
-#, fuzzy
 msgid "Billing"
 msgstr "Ücretlendirme"
 
@@ -1918,14 +1913,12 @@ msgid "Credit Account"
 msgstr "Alacak hesap"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:8
-#, fuzzy
 msgid "Default Hours per Day: "
-msgstr "Normal mesai süresi (saat): "
+msgstr "Günlük çalışma süresi (saat): "
 
 #: ../src/business/business-gnome/glade/employee.glade.h:9
-#, fuzzy
 msgid "Default Rate: "
-msgstr "Normal mesai ücreti (saat): "
+msgstr "Saatlik ücreti: "
 
 #. src/report/business-reports/gnucash/report/job-report.scm
 #. src/report/business-reports/gnucash/report/owner-report.scm
@@ -1945,7 +1938,6 @@ msgid "Employee Number: "
 msgstr "Personel No: "
 
 #: ../src/business/business-gnome/glade/employee.glade.h:15
-#, fuzzy
 msgid "Interface"
 msgstr "İletişim"
 
@@ -3547,9 +3539,10 @@ msgstr "Varlık"
 msgid "Credit Card"
 msgstr "Kredi Kartı"
 
+# Y. = Yabancı
 #: ../src/engine/Account.c:3953
 msgid "Liability"
-msgstr "Borç"
+msgstr "Y.Kaynak"
 
 #: ../src/engine/Account.c:3954
 msgid "Stock"
@@ -3711,7 +3704,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6828
 #: ../intl-scm/guile-strings.c:6830
 msgid "Weekly"
-msgstr "Haftalık"
+msgstr "Haftada"
 
 #. translators: %u is the recurrence multipler, i.e. this
 #. event should occur every %u'th week.
@@ -3733,9 +3726,8 @@ msgid "last %s"
 msgstr "Top %s"
 
 #: ../src/engine/Recurrence.c:656
-#, fuzzy
 msgid "Semi-monthly"
-msgstr "Ayda 2 defa"
+msgstr "15 günde"
 
 #. translators: %d is the number of Recurrences in the list.
 #: ../src/engine/Recurrence.c:671
@@ -3746,12 +3738,12 @@ msgstr ""
 #: ../src/engine/Recurrence.c:683
 #: ../src/gnome/glade/sched-xact.glade.h:122
 msgid "Once"
-msgstr "Bir defa"
+msgstr "Bir kez"
 
 #: ../src/engine/Recurrence.c:688
 #: ../src/gnome/glade/sched-xact.glade.h:66
 msgid "Daily"
-msgstr "Günlük"
+msgstr "Günde"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
@@ -3766,7 +3758,7 @@ msgstr "Günlük"
 #: ../intl-scm/guile-strings.c:6832
 #: ../intl-scm/guile-strings.c:6834
 msgid "Monthly"
-msgstr "Aylık"
+msgstr "Ayda"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
@@ -3780,7 +3772,7 @@ msgstr "Aylık"
 #: ../intl-scm/guile-strings.c:6840
 #: ../intl-scm/guile-strings.c:6842
 msgid "Yearly"
-msgstr "Yıllık"
+msgstr "Yılda"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
@@ -3788,7 +3780,7 @@ msgstr "Yıllık"
 #: ../intl-scm/guile-strings.c:3218
 #: ../intl-scm/guile-strings.c:4522
 msgid "Orphan"
-msgstr ""
+msgstr "Açık"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
@@ -3809,7 +3801,7 @@ msgstr "Açık"
 #: ../intl-scm/guile-strings.c:5924
 #: ../intl-scm/guile-strings.c:6998
 msgid "-- Split Transaction --"
-msgstr "-- Bileşenli İşlem --"
+msgstr "-- Bileşik İşlem --"
 
 #. Translators: This string has a disambiguation prefix
 #: ../src/engine/Split.c:1528
@@ -3968,7 +3960,7 @@ msgstr "Yeni Fiyat:"
 #: ../intl-scm/guile-strings.c:6916
 #: ../intl-scm/guile-strings.c:7424
 msgid "Shares"
-msgstr "Tutarı"
+msgstr "Hisse"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -3997,7 +3989,7 @@ msgstr "Değer"
 #: ../intl-scm/guile-strings.c:5734
 #: ../intl-scm/guile-strings.c:6808
 msgid "Number"
-msgstr "Rakam"
+msgstr "Numara"
 
 #: ../src/gnome/dialog-find-transactions.c:176
 #: ../src/gnome-search/dialog-search.c:1187
@@ -4275,7 +4267,7 @@ msgstr "Gelir Hesabı"
 msgid "CAUTION: If you set TXF categories, and later change 'Type', you will need to manually reset those categories one at a time"
 msgstr ""
 
-#: ../src/gnome/dialog-tax-info.c:1294
+#: ../src/gnome/dialog-tax-info.c:1295
 msgid "Form"
 msgstr ""
 
@@ -4327,9 +4319,8 @@ msgstr ". (Nokta)"
 
 #: ../src/gnome/druid-acct-period.c:561
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:2
-#, fuzzy
 msgid "Closing Date:"
-msgstr "Bitiş Tarihi:"
+msgstr "Kapanış Tarihi:"
 
 #: ../src/gnome/druid-hierarchy.c:402
 msgid "Selected"
@@ -4935,7 +4926,7 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
-"Varlıklarınız (yatırımlar, vadeli-vadesiz hesaplar, vs), borçlarınız (krediler, vs) ve çeşitli gelir ve giderlerinizi takip etmenizi sağlayacak hesapların açılışı yapılacaktır. \n"
+"Varlıklarınız (yatırımlar, vadeli-vadesiz hesaplar, vs), yabancı kaynaklarınız (krediler, vs) ve çeşitli gelir ve giderlerinizi takip etmenizi sağlayacak hesapların açılışı yapılacaktır. \n"
 "\n"
 "Şu anda hesap açılışı yapmak istemiyorsanız 'İptal'i tıklatın."
 
@@ -5020,9 +5011,8 @@ msgstr ""
 
 #: ../src/gnome/glade/acctperiod.glade.h:2
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:1
-#, fuzzy
 msgid "Close Book"
-msgstr "Kapat"
+msgstr "Hesapları Kapat"
 
 #: ../src/gnome/glade/acctperiod.glade.h:3
 #, fuzzy
@@ -5074,9 +5064,8 @@ msgstr "Bakiye Bilgisi"
 
 #: ../src/gnome/glade/autoclear.glade.h:2
 #: ../src/gnome/glade/reconcile.glade.h:6
-#, fuzzy
 msgid "_Ending Balance:"
-msgstr "Bitiş Bakiye:"
+msgstr "Biti_ş Kalanı:"
 
 #: ../src/gnome/glade/budget.glade.h:1
 msgid "Always use the last day (or day of week) in the month?"
@@ -5162,7 +5151,7 @@ msgstr ""
 #: ../src/gnome/glade/budget.glade.h:19
 #: ../src/gnome/glade/sched-xact.glade.h:151
 msgid "Start Date:"
-msgstr "Başl.Tarihi:"
+msgstr "Başlama Tarihi:"
 
 #: ../src/gnome/glade/budget.glade.h:20
 msgid "The number of leading digits to keep when rounding"
@@ -5194,9 +5183,8 @@ msgid "same week & day"
 msgstr ""
 
 #: ../src/gnome/glade/commodities.glade.h:1
-#, fuzzy
 msgid "<b>Securities</b>"
-msgstr "Açıklama"
+msgstr "<b>Kıymetler</b>"
 
 #: ../src/gnome/glade/commodities.glade.h:2
 msgid "Add a new commodity."
@@ -5213,33 +5201,28 @@ msgid "Remove the current commodity."
 msgstr "Cari kıymeti sil."
 
 #: ../src/gnome/glade/commodities.glade.h:5
-#, fuzzy
 msgid "Securities"
-msgstr "Özsermaye"
+msgstr "Kıymetler"
 
 #: ../src/gnome/glade/commodities.glade.h:6
 msgid "Show National Currencies"
 msgstr "Ulusal Para Birimlerini Göster"
 
 #: ../src/gnome/glade/fincalc.glade.h:1
-#, fuzzy
 msgid "<b>Calculations</b>"
-msgstr "Eyle_mler"
+msgstr "<b>Hesaplamalar</b>"
 
 #: ../src/gnome/glade/fincalc.glade.h:2
-#, fuzzy
 msgid "<b>Compounding:</b>"
-msgstr "Faiz:"
+msgstr "<b>Bileşik:</b>"
 
 #: ../src/gnome/glade/fincalc.glade.h:3
-#, fuzzy
 msgid "<b>Payment Options</b>"
-msgstr "Üst Toplu Hesabı"
+msgstr "<b>Ödeme Seçenekleri</b>"
 
 #: ../src/gnome/glade/fincalc.glade.h:4
-#, fuzzy
 msgid "<b>Period:</b>"
-msgstr "Açıklama"
+msgstr "<b>Dönem:</b>"
 
 #: ../src/gnome/glade/fincalc.glade.h:5
 msgid "Account Information"
@@ -5259,11 +5242,21 @@ msgid ""
 "Daily (360)\n"
 "Daily (365)"
 msgstr ""
+"Yıl\n"
+"6 ay\n"
+"4 ay\n"
+"3 ay\n"
+"2 ay\n"
+"Ay\n"
+"15 gün\n"
+"2 hafta\n"
+"Hafta\n"
+"Gün (360)\n"
+"Gün (365)"
 
 #: ../src/gnome/glade/fincalc.glade.h:17
-#, fuzzy
 msgid "Beginning"
-msgstr "Ücretlendirme"
+msgstr "Başında"
 
 #: ../src/gnome/glade/fincalc.glade.h:18
 msgid "Calculate"
@@ -5279,18 +5272,16 @@ msgid "Co_mpounding:"
 msgstr "Faiz:"
 
 #: ../src/gnome/glade/fincalc.glade.h:21
-#, fuzzy
 msgid "Continuous"
-msgstr "İçindekiler"
+msgstr "Sürekli"
 
 #: ../src/gnome/glade/fincalc.glade.h:22
-#, fuzzy
 msgid "Discrete"
-msgstr "İskonto"
+msgstr "Kesikli"
 
 #: ../src/gnome/glade/fincalc.glade.h:23
 msgid "End"
-msgstr "Bitiş"
+msgstr "Sonunda"
 
 #: ../src/gnome/glade/fincalc.glade.h:24
 msgid "Financial Calculator"
@@ -5302,31 +5293,26 @@ msgid "Frequency:"
 msgstr "Sıklık:"
 
 #: ../src/gnome/glade/fincalc.glade.h:26
-#, fuzzy
 msgid "Future value"
 msgstr "Kalan Tutar"
 
 #: ../src/gnome/glade/fincalc.glade.h:27
-#, fuzzy
 msgid "Interest rate"
-msgstr "Yıllık Faiz"
+msgstr "Yıllık faiz"
 
 #: ../src/gnome/glade/fincalc.glade.h:28
 msgid "Payment Total:"
 msgstr "Toplam Ödeme:"
 
 #: ../src/gnome/glade/fincalc.glade.h:29
-#, fuzzy
 msgid "Payment periods"
 msgstr "Dönem Sayısı"
 
 #: ../src/gnome/glade/fincalc.glade.h:30
-#, fuzzy
 msgid "Periodic payment"
 msgstr "Dönem Ödemesi"
 
 #: ../src/gnome/glade/fincalc.glade.h:31
-#, fuzzy
 msgid "Present value"
 msgstr "Ana Para"
 
@@ -5652,9 +5638,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/glade/print.glade.h:23
-#, fuzzy
 msgid "Save Custom Check Format"
-msgstr "Özel biçim"
+msgstr "Özel çek biçimini kaydet"
 
 #: ../src/gnome/glade/print.glade.h:24
 #, fuzzy
@@ -5744,31 +5729,27 @@ msgid "Working..."
 msgstr ""
 
 #: ../src/gnome/glade/reconcile.glade.h:1
-#, fuzzy
 msgid "<b>Reconcile Information</b>"
-msgstr "Mutabakat Bilgileri"
+msgstr "<b>Mutabakat Bilgileri</b>"
 
 #: ../src/gnome/glade/reconcile.glade.h:2
 #: ../src/gnome/window-reconcile.c:741
-#, fuzzy
 msgid "Enter _Interest Payment..."
-msgstr "Faiz Ödemesi gir..."
+msgstr "_Faiz Ödemesi ekle..."
 
 #: ../src/gnome/glade/reconcile.glade.h:3
-#, fuzzy
 msgid "Include _subaccounts"
-msgstr "Tali Hesaplar dahil"
+msgstr "_Alt hesaplar dahil"
 
 #. starting balance title/value
 #: ../src/gnome/glade/reconcile.glade.h:4
 #: ../src/gnome/window-reconcile.c:1755
 msgid "Starting Balance:"
-msgstr "Sermaye:"
+msgstr "Başlangıç Kalanı:"
 
 #: ../src/gnome/glade/reconcile.glade.h:5
-#, fuzzy
 msgid "Statement _Date:"
-msgstr "Ekstre Tarihi:"
+msgstr "_Ekstre Tarihi:"
 
 #: ../src/gnome/glade/register.glade.h:1
 #, fuzzy
@@ -6001,7 +5982,7 @@ msgstr "Notlara göre sırala"
 
 #: ../src/gnome/glade/register.glade.h:63
 msgid "Sort by number"
-msgstr "Madde No.ya göre sırala"
+msgstr "No.ya göre sırala"
 
 #: ../src/gnome/glade/register.glade.h:65
 msgid "Sort by the statement date (unreconciled items last)"
@@ -6085,7 +6066,7 @@ msgstr "_Notlar"
 
 #: ../src/gnome/glade/register.glade.h:92
 msgid "_Number"
-msgstr "_No"
+msgstr "_Numara"
 
 #: ../src/gnome/glade/register.glade.h:93
 #, fuzzy
@@ -6123,7 +6104,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:1
 msgid " days"
-msgstr "gün"
+msgstr " gün"
 
 #: ../src/gnome/glade/sched-xact.glade.h:4
 msgid "... utilize an escrow account for payments?"
@@ -6171,26 +6152,61 @@ msgid ""
 "Last Saturday\n"
 "Last Sunday"
 msgstr ""
+"1'i\n"
+"2'si\n"
+"3'ü\n"
+"4'ü\n"
+"5'i\n"
+"6'sı\n"
+"7'si\n"
+"8'i\n"
+"9'u\n"
+"10'u\n"
+"11'i\n"
+"12'si\n"
+"13'ü\n"
+"14'ü\n"
+"15'i\n"
+"16'sı\n"
+"17'si\n"
+"18'i\n"
+"19'u\n"
+"20'si\n"
+"21'i\n"
+"22'si\n"
+"23'ü\n"
+"24'ü\n"
+"25'i\n"
+"26'sı\n"
+"27'si\n"
+"28'i\n"
+"29'u\n"
+"30'u\n"
+"31'i\n"
+"Ayın son günü\n"
+"Son Pazartesi'si\n"
+"Son Salı'sı\n"
+"Son Çarşamba'sı\n"
+"Son Perşembe'si\n"
+"Son Cuma'sı\n"
+"Son Cumartesi'si\n"
+"Son Pazar'ı"
 
 #: ../src/gnome/glade/sched-xact.glade.h:44
-#, fuzzy
 msgid "<b>End</b>"
-msgstr "Bitiş Tarihi:"
+msgstr "<b>Bitiş</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:45
-#, fuzzy
 msgid "<b>Name</b>"
-msgstr "No"
+msgstr "<b>Adı</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:46
-#, fuzzy
 msgid "<b>Occurrences</b>"
-msgstr "Hesap Türü"
+msgstr "<b>Gerçekleşme</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:47
-#, fuzzy
 msgid "<b>Options</b>"
-msgstr "Eyle_mler"
+msgstr "<b>Seçenekler</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:48
 #, fuzzy
@@ -6234,14 +6250,12 @@ msgid "Crea_te in advance, days:"
 msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:58
-#, fuzzy
 msgid "Create automatically"
 msgstr "Otomatik oluştur"
 
 #: ../src/gnome/glade/sched-xact.glade.h:59
-#, fuzzy
 msgid "Create in advance:"
-msgstr " gün önceden"
+msgstr "Önceden oluştur:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:60
 msgid "Create the transaction this many days before its effective date."
@@ -6268,6 +6282,12 @@ msgid ""
 "Quarterly\n"
 "Yearly"
 msgstr ""
+"Gün\n"
+"Hafta\n"
+"15 gün\n"
+"Ay\n"
+"3 ay\n"
+"Yıl"
 
 #. src/report/business-reports/gnucash/report/job-report.scm
 #. src/report/business-reports/gnucash/report/owner-report.scm
@@ -6291,9 +6311,8 @@ msgstr "İleri tarihli İşlem düzenle"
 
 #: ../src/gnome/glade/sched-xact.glade.h:77
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:173
-#, fuzzy
 msgid "Enabled"
-msgstr "Tablo"
+msgstr "Aktif"
 
 #: ../src/gnome/glade/sched-xact.glade.h:78
 msgid "End Date:"
@@ -6309,7 +6328,7 @@ msgstr "Her"
 
 #: ../src/gnome/glade/sched-xact.glade.h:82
 msgid "First on the:"
-msgstr "İlk tekrar günü:"
+msgstr "İlk olarak ayın:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:83
 msgid ""
@@ -6373,9 +6392,8 @@ msgid "Loan Information"
 msgstr "Kredi Bilgileri"
 
 #: ../src/gnome/glade/sched-xact.glade.h:100
-#, fuzzy
 msgid "Make Scheduled Transaction"
-msgstr "İleri tarihli İşlem oluştur"
+msgstr "İleri tarihli İşlem oluşturma"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -6413,6 +6431,9 @@ msgid ""
 "Use previous weekday\n"
 "Use next weekday"
 msgstr ""
+"değiştirme\n"
+"önceki iş gününe değiştir\n"
+"sonraki iş gününe değiştir"
 
 #: ../src/gnome/glade/sched-xact.glade.h:112
 msgid ""
@@ -6423,6 +6444,12 @@ msgid ""
 "Semi-Monthly\n"
 "Monthly"
 msgstr ""
+"hiç\n"
+"Bir kez\n"
+"Gün\n"
+"Hafta\n"
+"15 gün\n"
+"Ay"
 
 #: ../src/gnome/glade/sched-xact.glade.h:118
 msgid "Not scheduled"
@@ -6438,12 +6465,11 @@ msgstr "Tekrar Sayısı:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:121
 msgid "On the"
-msgstr "Ayın günü"
+msgstr "Ayın"
 
 #: ../src/gnome/glade/sched-xact.glade.h:125
-#, fuzzy
 msgid "Overview"
-msgstr "Gözden Geçirme"
+msgstr "Genel"
 
 #: ../src/gnome/glade/sched-xact.glade.h:126
 msgid "Part of Payment Transaction"
@@ -6486,9 +6512,8 @@ msgid "Range: "
 msgstr "Aralık: "
 
 #: ../src/gnome/glade/sched-xact.glade.h:137
-#, fuzzy
 msgid "Remind in advance:"
-msgstr " gün önceden"
+msgstr "Önceden haber ver:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:138
 msgid "Repayment"
@@ -6504,9 +6529,8 @@ msgid "Repayment Type"
 msgstr "Geri Ödeme"
 
 #: ../src/gnome/glade/sched-xact.glade.h:141
-#, fuzzy
 msgid "Repeats:"
-msgstr "Rapor"
+msgstr "Tekrarlar:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:142
 msgid "Review"
@@ -6526,7 +6550,7 @@ msgstr "Gerçekleşme tarihini yukarıda girin."
 
 #: ../src/gnome/glade/sched-xact.glade.h:145
 msgid "Semi-Monthly"
-msgstr "Ayda 2 defa"
+msgstr "15 günde"
 
 #: ../src/gnome/glade/sched-xact.glade.h:146
 #, fuzzy
@@ -6553,7 +6577,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:152
 msgid "Start Date: "
-msgstr "Başl.Tarihi:"
+msgstr "Başlama Tarihi:"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -6564,9 +6588,8 @@ msgid "Sunday"
 msgstr "Pazar"
 
 #: ../src/gnome/glade/sched-xact.glade.h:154
-#, fuzzy
 msgid "Template Transaction"
-msgstr "Şablon Hareket"
+msgstr "Şablon İşlem"
 
 #: ../src/gnome/glade/sched-xact.glade.h:155
 msgid "The following Scheduled Transactions reference the deleted account, and must now be corrected.  Press OK to edit them."
@@ -6604,9 +6627,8 @@ msgid "Tuesday"
 msgstr "Salı"
 
 #: ../src/gnome/glade/sched-xact.glade.h:162
-#, fuzzy
 msgid "Until:"
-msgstr "Uzunluk birimi:"
+msgstr "Kadar:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:163
 msgid "Use Escrow Account"
@@ -6649,7 +6671,7 @@ msgstr "günde bir."
 
 #: ../src/gnome/glade/sched-xact.glade.h:172
 msgid "except on weekends:"
-msgstr ""
+msgstr "haftasonu ise:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:173
 msgid ""
@@ -6675,7 +6697,7 @@ msgstr "Ücretlendirme"
 
 #: ../src/gnome/glade/sched-xact.glade.h:178
 msgid "then on the:"
-msgstr "İkinci tekrar günü:"
+msgstr "sonra ayın:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:179
 msgid "weeks."
@@ -6754,9 +6776,8 @@ msgid "_Amount:"
 msgstr "_Miktar"
 
 #: ../src/gnome/glade/stocks.glade.h:19
-#, fuzzy
 msgid "_Shares:"
-msgstr "Tutarı:"
+msgstr "_Hisse:"
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
@@ -6830,10 +6851,10 @@ msgstr "Gider"
 msgid "_Income"
 msgstr "Gelir"
 
+# Y. = Yabancı
 #: ../src/gnome/glade/tax.glade.h:18
-#, fuzzy
 msgid "_Liability/Equity"
-msgstr "Borçlar"
+msgstr "_Y.Kaynak/Özkaynak"
 
 #: ../src/gnome/glade/tax.glade.h:19
 msgid "_Parent Account"
@@ -6995,13 +7016,12 @@ msgid "Use the financial calculator"
 msgstr "Mali hesaplayıcıyı kullan"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:187
-#, fuzzy
 msgid "_Close Book"
-msgstr "Kapat"
+msgstr "_Hesapları Kapat"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:188
 msgid "Close the Book at the end of the Period"
-msgstr ""
+msgstr "Dönem sonu kapanış işlemleri"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:195
 msgid "_Tips Of The Day"
@@ -7109,7 +7129,7 @@ msgstr "_Mutabakat..."
 #: ../src/gnome/gnc-plugin-page-account-tree.c:201
 #: ../src/gnome/gnc-plugin-page-register.c:287
 msgid "Reconcile the selected account"
-msgstr "Seçili hesabaı mutabakata sok"
+msgstr "Seçili hesaba mutabakata sok"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:205
 #: ../src/gnome/gnc-plugin-page-register.c:291
@@ -7589,26 +7609,21 @@ msgstr "Yevmiye Defteri"
 #. Translators: %s is the name
 #. of the tab page
 #: ../src/gnome/gnc-plugin-page-register.c:1240
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to %s?"
-msgstr "Cari fiyatı kaldır."
+msgstr "%s hesabına değişiklikler kaydedilsin mi?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1244
-#, fuzzy
 msgid "This register has pending changes to a transaction.  Would you like to save the changes to this transaction, discard the transaction, or cancel the operation?"
-msgstr ""
-"Cari şablon hareket değişti.\n"
-"Değişiklikler kayıt edilsin mi?"
+msgstr "Bu hesabın bir işleminde bekleyen değişiklikler var.  Bu değişiklikler kaydedilsin mi, yoksa geri alınsın mı, veya bu işlem iptal mı edilsin?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1247
-#, fuzzy
 msgid "_Discard Transaction"
-msgstr "_Hareket bul"
+msgstr "_Geri al"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1251
-#, fuzzy
 msgid "_Save Transaction"
-msgstr "Hareket Yapıştır"
+msgstr "_Geri al"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1283
 #: ../src/gnome/gnc-plugin-page-register.c:1317
@@ -7825,6 +7840,7 @@ msgid "Balancing entry from reconcilation"
 msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:1871
+#, fuzzy
 msgid "Present:"
 msgstr "Halen:"
 
@@ -7833,6 +7849,7 @@ msgid "Future:"
 msgstr "İleride:"
 
 #: ../src/gnome/gnc-split-reg.c:1873
+#, fuzzy
 msgid "Cleared:"
 msgstr "Net:"
 
@@ -7846,7 +7863,7 @@ msgstr "Öngörülen Asgari:"
 
 #: ../src/gnome/gnc-split-reg.c:1879
 msgid "Shares:"
-msgstr "Tutarı:"
+msgstr "Hisse:"
 
 #: ../src/gnome/gnc-split-reg.c:1880
 msgid "Current Value:"
@@ -8091,9 +8108,8 @@ msgid "This setting enables the date column."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:1
-#, fuzzy
 msgid "Custom date format"
-msgstr "Özel biçim"
+msgstr "Özel tarih biçimi"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:2
 #, fuzzy
@@ -9043,11 +9059,13 @@ msgstr "alacaklı"
 
 #. Build and connect the toggles
 #: ../src/gnome-search/search-reconciled.c:226
+#, fuzzy
 msgid "Not Cleared"
 msgstr "Netleşmemiş"
 
 #: ../src/gnome-search/search-reconciled.c:229
 #: ../src/gnome-utils/gnc-tree-view-account.c:578
+#, fuzzy
 msgid "Cleared"
 msgstr "Net"
 
@@ -9174,7 +9192,7 @@ msgstr "Geçerli bir sermaye girin veya boş bırakın."
 
 #: ../src/gnome-utils/dialog-account.c:899
 msgid "You must select a transfer account or choose the opening balances equity account."
-msgstr "Bir transfer hesabı seçin veya sermaye hesabını kullanın."
+msgstr "Bir transfer hesabı seçin veya özkaynak sermaye hesabını kullanın."
 
 #: ../src/gnome-utils/dialog-account.c:1455
 msgid "Edit Account"
@@ -9312,9 +9330,8 @@ msgid "Select All"
 msgstr "Tümünü Seç"
 
 #: ../src/gnome-utils/dialog-options.c:926
-#, fuzzy
 msgid "Select all accounts."
-msgstr "Tali hesapları seç"
+msgstr "Tüm hesapları seç."
 
 #: ../src/gnome-utils/dialog-options.c:931
 #: ../src/gnome-utils/dialog-options.c:1074
@@ -9322,19 +9339,16 @@ msgid "Clear All"
 msgstr "Seçimi Kaldır"
 
 #: ../src/gnome-utils/dialog-options.c:933
-#, fuzzy
 msgid "Clear the selection and unselect all accounts."
-msgstr "Seçili ana hesap ve bağlı tüm tali hesapları aç"
+msgstr "Seçimi kaldır ve hiçbir hesabı seçme."
 
 #: ../src/gnome-utils/dialog-options.c:938
-#, fuzzy
 msgid "Select Children"
-msgstr "Hesap Seçin"
+msgstr "Alt hesapları seç"
 
 #: ../src/gnome-utils/dialog-options.c:940
-#, fuzzy
 msgid "Select all descendents of selected account."
-msgstr "Seçili hesabı sil"
+msgstr "Seçili hesabın tüm alt hesaplarını seç."
 
 #: ../src/gnome-utils/dialog-options.c:946
 #: ../src/gnome-utils/dialog-options.c:1081
@@ -9342,18 +9356,16 @@ msgid "Select Default"
 msgstr "Varsayılanı Seç"
 
 #: ../src/gnome-utils/dialog-options.c:948
-#, fuzzy
 msgid "Select the default account selection."
-msgstr "Seçili hareketi sil"
+msgstr "Varsayılan hesap seçimini seç."
 
 #: ../src/gnome-utils/dialog-options.c:962
-#, fuzzy
 msgid "Show Hidden Accounts"
-msgstr "Açılacak hesapların seçimi"
+msgstr "Gizli hesapları göster"
 
 #: ../src/gnome-utils/dialog-options.c:964
 msgid "Show accounts that have been marked hidden."
-msgstr ""
+msgstr "Gizli olarak işaretlenmiş hesapları göster."
 
 #: ../src/gnome-utils/dialog-options.c:1069
 #, fuzzy
@@ -9375,9 +9387,8 @@ msgid "Reset defaults"
 msgstr "Varsayılanlara dön"
 
 #: ../src/gnome-utils/dialog-options.c:1240
-#, fuzzy
 msgid "Reset all values to their defaults."
-msgstr "Diğer bileşenlerin tümünü sil"
+msgstr "Tüm değerleri varsayılanlara döndür."
 
 #: ../src/gnome-utils/dialog-options.c:2111
 msgid "Clear"
@@ -9765,14 +9776,12 @@ msgid "Description:"
 msgstr "Açıklama:"
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:4
-#, fuzzy
 msgid "Expense Total:"
-msgstr "Gider Raporu"
+msgstr "Gider Toplamı:"
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:5
-#, fuzzy
 msgid "Income Total:"
-msgstr "Gelir Hesabı"
+msgstr "Gelir Toplamı:"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:1
 msgid "<b>Data Format:</b>"
@@ -10199,9 +10208,8 @@ msgid "<b>Default Report Currency</b>"
 msgstr "<b>Varsayılan Para Birimi (Rapor)</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:11
-#, fuzzy
 msgid "<b>Default Style</b>"
-msgstr "Varsayılan Defter Şekli"
+msgstr "<b>Varsayılan Biçem</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:12
 msgid "<b>End Date</b>"
@@ -11586,10 +11594,10 @@ msgstr "<bilinmiyor>"
 msgid "Close _Without Saving"
 msgstr "Kaydet_meden çık"
 
+# Book teriminin burada dosya(file) yerine kullanıldığı kabul edildi.
 #: ../src/gnome-utils/gnc-main-window.c:1389
-#, fuzzy
 msgid "Unsaved Book"
-msgstr "Kapat"
+msgstr "Kaydedilmemiş Dosya"
 
 #: ../src/gnome-utils/gnc-main-window.c:3961
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
@@ -11784,23 +11792,25 @@ msgid "Last Num"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:545
+#, fuzzy
 msgid "Present"
-msgstr "Mevcut"
+msgstr "Halen"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:552
+#, fuzzy
 msgid "Present (Report)"
-msgstr "Mevcut (Rapor)"
+msgstr "Halen (Rapor)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:565
 msgid "Balance (Report)"
 msgstr "Kalan (Rapor)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:572
-#, fuzzy
 msgid "Balance (Period)"
-msgstr "Bakiye (Rapor)"
+msgstr "Kalan (Dönem)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:585
+#, fuzzy
 msgid "Cleared (Report)"
 msgstr "Net (Rapor)"
 
@@ -11809,9 +11819,8 @@ msgid "Reconciled (Report)"
 msgstr "Mutabık (Rapor)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:604
-#, fuzzy
 msgid "Last Reconcile Date"
-msgstr "Mutabakat"
+msgstr "Son Mutabakat Tarihi"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:609
 msgid "Future Minimum"
@@ -11874,9 +11883,8 @@ msgid "Total (Report)"
 msgstr "Toplam (Rapor)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:635
-#, fuzzy
 msgid "Total (Period)"
-msgstr ". (Nokta)"
+msgstr "Toplam (Dönem)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:647
 msgid "Tax Info"
@@ -11886,7 +11894,7 @@ msgstr "Vergi Bilgisi"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-account.c:655
 msgid "Column letter for 'Placeholder'|P"
-msgstr ""
+msgstr "T"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1456
@@ -11908,21 +11916,21 @@ msgstr "Net"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1465
-#, fuzzy, c-format
+#, c-format
 msgid "Reconciled (%s)"
-msgstr "Mutabık"
+msgstr "Mutabık (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1468
-#, fuzzy, c-format
+#, c-format
 msgid "Future Minimum (%s)"
-msgstr "İlerideki Asgari"
+msgstr "İlerideki Asgari (%s)"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Total (%s)"
-msgstr "Top %s"
+msgstr "Toplam (%s)"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:395
 #, fuzzy
@@ -12027,11 +12035,12 @@ msgstr "Kıymet seçimi"
 msgid "Price"
 msgstr "Fiyat"
 
+# A: Aktif
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:176
 msgid "Single-character short column-title form of 'Enabled'|E"
-msgstr ""
+msgstr "A"
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:187
 msgid "Last Occur"
@@ -12077,9 +12086,9 @@ msgid "%s, Non Currency Commodities Total:"
 msgstr "Ulusal Para Birimlerini Göster"
 
 #: ../src/gnome-utils/window-main-summarybar.c:339
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Grand Total:"
-msgstr "Genel toplamlar için renk"
+msgstr "%s, Genel Toplam:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:343
 #, c-format
@@ -12091,9 +12100,8 @@ msgid "Assets:"
 msgstr "Varlıklar:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:453
-#, fuzzy
 msgid "Profits:"
-msgstr "Kâr"
+msgstr "Kâr:"
 
 #: ../src/gnome/window-reconcile.c:443
 msgid "Interest Payment"
@@ -12157,7 +12165,7 @@ msgstr "Bitiş Kalanı:"
 #. reconciled balance title/value
 #: ../src/gnome/window-reconcile.c:1775
 msgid "Reconciled Balance:"
-msgstr "Mutabık Kalanı:"
+msgstr "Mutabık Kalan:"
 
 #. difference title/value
 #: ../src/gnome/window-reconcile.c:1785
@@ -14363,9 +14371,8 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:1935
 #: ../src/register/ledger-core/split-register.c:1937
-#, fuzzy
 msgid "_Shares"
-msgstr "Tutarı:"
+msgstr "_Hisse"
 
 #: ../src/register/ledger-core/split-register.c:1935
 #: ../src/register/ledger-core/split-register.c:1942
@@ -14705,7 +14712,7 @@ msgstr "Top Borç"
 
 #: ../src/register/ledger-core/split-register-model.c:391
 msgid "Tot Shares"
-msgstr "Top Tutar"
+msgstr "Top Hisse"
 
 #: ../src/register/ledger-core/split-register-model.c:412
 msgid "Debit Formula"
@@ -14890,9 +14897,8 @@ msgid "_Print Report..."
 msgstr "_Raporu yazdır..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1009
-#, fuzzy
 msgid "Print the current report"
-msgstr "Cari raporu tekrar yükle"
+msgstr "Cari raporu yazdır"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1033
 #, fuzzy
@@ -14901,7 +14907,7 @@ msgstr "_Raporlar"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1034
 msgid "Add the current report to the `Custom' menu for later use. The report will be saved in the file ~/.gnucash/saved-reports-2.4. It will be accessible as menu entry in the report menu at the next startup of GnuCash."
-msgstr ""
+msgstr "Cari raporu 'Özel raporlar' menüsü altına ekler ve ~/.gnucash/saved-reports-2.4 dosyasına kaydeder. Menüde görmek için GnuCash tekrar başlatılmalıdır."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1041
 #, fuzzy
@@ -14946,9 +14952,8 @@ msgid "Reload"
 msgstr "Tekrar Yükle"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1063
-#, fuzzy
 msgid "Reload the current page"
-msgstr "Cari raporu tekrar yükle"
+msgstr "Cari sayfayı tekrar yükle"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1067
 msgid "Stop"
@@ -15025,7 +15030,7 @@ msgstr "Mevcut raporlar"
 
 #: ../src/report/report-gnome/report.glade.h:3
 msgid "<b>Available style sheets</b>"
-msgstr ""
+msgstr "<b>Mevcut biçem tabakaları</b>"
 
 #: ../src/report/report-gnome/report.glade.h:4
 msgid "<b>New style sheet info</b>"
@@ -15033,7 +15038,7 @@ msgstr "<b>Yeni tabaka bilgisi</b>"
 
 #: ../src/report/report-gnome/report.glade.h:5
 msgid "<b>Style sheet options</b>"
-msgstr ""
+msgstr "<b>Biçem tabakası seçenekleri</b>"
 
 #: ../src/report/report-gnome/report.glade.h:6
 #, fuzzy
@@ -15230,67 +15235,58 @@ msgstr ""
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:66
-#, fuzzy
 msgid "First day of the current calendar year"
-msgstr "Cari takvim yılının başlangıç tarihi"
+msgstr "Bu takvim yılının ilk günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:70
-#, fuzzy
 msgid "Last day of the current calendar year"
-msgstr "Cari takvim yılının başlangıç tarihi"
+msgstr "Bu takvim yılının son günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:74
-#, fuzzy
 msgid "First day of the previous calendar year"
-msgstr "Önceki takvim yılının başlangıç tarihi"
+msgstr "Önceki takvim yılının ilk günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:78
-#, fuzzy
 msgid "Last day of the previous calendar year"
-msgstr "Önceki takvim yılının başlangıç tarihi"
+msgstr "Önceki takvim yılının son günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:80
-#, fuzzy
 msgid "Start of accounting period"
-msgstr "Rapor başlangıç dönemi"
+msgstr "Dönem başı"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:82
 msgid "First day of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "Genel tercihlerde tespit edilmiş hesap döneminin ilk günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:84
-#, fuzzy
 msgid "End of accounting period"
-msgstr "Rapor bitiş dönemi"
+msgstr "Dönem sonu"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:86
 msgid "Last day of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "Genel tercihlerde tespit edilmiş hesap döneminin son günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:90
-#, fuzzy
 msgid "First day of the current month"
-msgstr "Cari ayın başlangıç günü"
+msgstr "Bu ayın ilk günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:94
-#, fuzzy
 msgid "Last day of the current month"
-msgstr "Cari ayın başlangıç günü"
+msgstr "Bu ayın son günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:98
-#, fuzzy
 msgid "First day of the previous month"
-msgstr "Önceki ayın bitiş günü"
+msgstr "Önceki ayın ilk günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:102
@@ -15304,9 +15300,8 @@ msgstr "Cari çeyrek başı"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:106
-#, fuzzy
 msgid "First day of the current quarterly accounting period"
-msgstr "Son 3 aylık muhasebe döneminin başlangıç tarihi"
+msgstr "Bu çeyrek dönemin ilk günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:108
@@ -15315,21 +15310,18 @@ msgstr "Cari çeyrek sonu"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:110
-#, fuzzy
 msgid "Last day of the current quarterly accounting period"
-msgstr "Son 3 aylık muhasebe döneminin başlangıç tarihi"
+msgstr "Bu çeyrek dönemin son günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:114
-#, fuzzy
 msgid "First day of the previous quarterly accounting period"
-msgstr "Önceki 3 aylık muhasebe döneminin başlangıç tarihi"
+msgstr "Önceki çeyrek dönemin ilk günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:118
-#, fuzzy
 msgid "Last day of previous quarterly accounting period"
-msgstr "Önceki 3 aylık muhasebe döneminin bitiş tarihi"
+msgstr "Önceki çeyrek dönemin son günü"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:122
@@ -16173,7 +16165,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5800
 #: ../intl-scm/guile-strings.c:6874
 msgid "Display the date?"
-msgstr ""
+msgstr "Tarih görünsün mü?"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -16196,7 +16188,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5812
 #: ../intl-scm/guile-strings.c:6886
 msgid "Display the description?"
-msgstr ""
+msgstr "Açıklama görünsün mü?"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -16443,7 +16435,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6992
 #: ../intl-scm/guile-strings.c:9036
 msgid "Display"
-msgstr ""
+msgstr "Sergi"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -16504,7 +16496,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6928
 #: ../intl-scm/guile-strings.c:7432
 msgid "Totals"
-msgstr ""
+msgstr "Toplamlar"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -16527,7 +16519,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5856
 #: ../intl-scm/guile-strings.c:6930
 msgid "Display the totals?"
-msgstr ""
+msgstr "Toplamlar görünsün mü?"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -19592,6 +19584,7 @@ msgstr "Net Varlıklar"
 msgid "Total Assets"
 msgstr "Toplam Varlıklar"
 
+# Y. = Yabancı
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -19613,22 +19606,25 @@ msgstr "Toplam Varlıklar"
 #: ../intl-scm/guile-strings.c:7256
 #: ../intl-scm/guile-strings.c:9098
 msgid "Liabilities"
-msgstr "Borçlar"
+msgstr "Y.Kaynaklar"
 
+# Y. = Yabancı
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2996
 #: ../intl-scm/guile-strings.c:4300
 msgid "Existing Liabilities"
-msgstr "Mevcut Borçlar"
+msgstr "Mevcut Y.Kaynaklar"
 
+# Y. = Yabancı
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2998
 #: ../intl-scm/guile-strings.c:4302
 msgid "New Liabilities"
-msgstr "Yeni Borçlar"
+msgstr "Yeni Y.Kaynaklar"
 
+# Y. = Yabancı
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
@@ -19638,7 +19634,7 @@ msgstr "Yeni Borçlar"
 #: ../intl-scm/guile-strings.c:6184
 #: ../intl-scm/guile-strings.c:7258
 msgid "Total Liabilities"
-msgstr "Toplam Borçlar"
+msgstr "Toplam Y.Kaynaklar"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
@@ -19762,7 +19758,7 @@ msgstr "Toplam Özkaynak"
 #: ../intl-scm/guile-strings.c:6202
 #: ../intl-scm/guile-strings.c:7276
 msgid "Total Liabilities & Equity"
-msgstr "Toplam Borçlar ve Özkaynak"
+msgstr "Toplam Özkaynak ve Y.Kaynaklar"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/account-summary.scm
@@ -19906,9 +19902,8 @@ msgstr "Hesap adı"
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:3130
 #: ../intl-scm/guile-strings.c:4434
-#, fuzzy
 msgid "Balance Sheet (eguile)"
-msgstr "Bilanço Hesapları"
+msgstr "Bilanço (eguile)"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
@@ -19918,9 +19913,8 @@ msgstr "Bilanço Hesapları"
 #: ../intl-scm/guile-strings.c:4440
 #: ../intl-scm/guile-strings.c:6102
 #: ../intl-scm/guile-strings.c:7176
-#, fuzzy
 msgid "Balance Sheet Date"
-msgstr "Bilanço Hesapları"
+msgstr "Bilanço Tarihi"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
@@ -20146,7 +20140,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6728
 #: ../intl-scm/guile-strings.c:7100
 msgid "Report on these accounts"
-msgstr ""
+msgstr "Raporda yer alacak hesaplar"
 
 #. src/report/standard-reports/budget-barchart.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-barchart.scm
@@ -20177,12 +20171,13 @@ msgstr "Gider Pasta grafiği"
 msgid "Asset Piechart"
 msgstr "Varlık Pasta grafiği"
 
+# Y. = Yabancı
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:3250
 #: ../intl-scm/guile-strings.c:4554
 msgid "Liability Piechart"
-msgstr "Borç Pasta grafiği"
+msgstr "Y.Kaynak Pasta grafiği"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
@@ -20266,9 +20261,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7288
 #: ../intl-scm/guile-strings.c:7470
 #: ../intl-scm/guile-strings.c:7520
-#, fuzzy
 msgid "Start Date"
-msgstr "Başl.Tarihi:"
+msgstr "Başlama Tarihi"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -20310,9 +20304,8 @@ msgstr "Başl.Tarihi:"
 #: ../intl-scm/guile-strings.c:7290
 #: ../intl-scm/guile-strings.c:7472
 #: ../intl-scm/guile-strings.c:7522
-#, fuzzy
 msgid "End Date"
-msgstr "Bitiş Tarihi:"
+msgstr "Bitiş Tarihi"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
@@ -21623,6 +21616,7 @@ msgstr "Cari Değer:"
 msgid "The title of the report"
 msgstr ""
 
+# Çek veya "transaction" no. olduğu kabul edildi.
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
@@ -21632,7 +21626,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5808
 #: ../intl-scm/guile-strings.c:6882
 msgid "Display the check number?"
-msgstr ""
+msgstr "Çek/işlem no. görünsün mü?"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -21643,7 +21637,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5860
 #: ../intl-scm/guile-strings.c:6934
 msgid "Display the memo?"
-msgstr ""
+msgstr "Bilgi notu görünsün mü?"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -21661,7 +21655,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5844
 #: ../intl-scm/guile-strings.c:6918
 msgid "Display the number of shares?"
-msgstr ""
+msgstr "Hisse adeti görünsün mü?"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -21679,7 +21673,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5848
 #: ../intl-scm/guile-strings.c:6922
 msgid "Display the shares price?"
-msgstr ""
+msgstr "Hisse fiyatı görünsün mü?"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -21690,7 +21684,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5866
 #: ../intl-scm/guile-strings.c:6940
 msgid "Display the amount?"
-msgstr ""
+msgstr "Tutar görünsün mü?"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -21703,7 +21697,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6718
 #: ../intl-scm/guile-strings.c:6946
 msgid "Single"
-msgstr ""
+msgstr "Tek"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -21714,7 +21708,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5874
 #: ../intl-scm/guile-strings.c:6948
 msgid "Single Column Display"
-msgstr ""
+msgstr "Tek Sütun Sergi"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -21725,7 +21719,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5876
 #: ../intl-scm/guile-strings.c:6950
 msgid "Double"
-msgstr ""
+msgstr "Çift"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -21736,7 +21730,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5878
 #: ../intl-scm/guile-strings.c:6952
 msgid "Two Column Display"
-msgstr ""
+msgstr "Çift Sütun Sergi"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
@@ -22317,8 +22311,9 @@ msgstr "İşlem Raporu"
 #: ../intl-scm/guile-strings.c:6668
 #: ../intl-scm/guile-strings.c:7396
 msgid "Sorting"
-msgstr ""
+msgstr "Sıralama"
 
+# 'anahtar' tercümesi yerine teknik olmayan bir karşılık olarak 'ölçüt' tercih edildi.
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -22328,7 +22323,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6578
 #: ../intl-scm/guile-strings.c:7438
 msgid "Primary Key"
-msgstr ""
+msgstr "Birincil ölçüt"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22339,7 +22334,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6580
 #: ../intl-scm/guile-strings.c:7444
 msgid "Primary Subtotal"
-msgstr ""
+msgstr "Birincil ara toplam"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22350,8 +22345,9 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6582
 #: ../intl-scm/guile-strings.c:7446
 msgid "Primary Subtotal for Date Key"
-msgstr ""
+msgstr "Tarih ölçütü için birincil ara toplam"
 
+# 'anahtar' tercümesi yerine teknik olmayan bir karşılık olarak 'ölçüt' tercih edildi.
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -22361,7 +22357,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6584
 #: ../intl-scm/guile-strings.c:7450
 msgid "Secondary Key"
-msgstr ""
+msgstr "İkincil ölçüt"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22372,7 +22368,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6586
 #: ../intl-scm/guile-strings.c:7452
 msgid "Secondary Subtotal"
-msgstr ""
+msgstr "İkincil ara toplam"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22383,7 +22379,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6588
 #: ../intl-scm/guile-strings.c:7454
 msgid "Secondary Subtotal for Date Key"
-msgstr ""
+msgstr "Tarih ölçütü için ikincil ara toplam"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22437,7 +22433,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6982
 #: ../intl-scm/guile-strings.c:7082
 msgid "Grand Total"
-msgstr ""
+msgstr "Genel Toplam"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22454,7 +22450,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6876
 #: ../intl-scm/guile-strings.c:7404
 msgid "Reconciled Date"
-msgstr ""
+msgstr "Mutabakat tarihi"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22469,7 +22465,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6904
 #: ../intl-scm/guile-strings.c:7418
 msgid "Other Account Name"
-msgstr ""
+msgstr "Mukabil hesap adı"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22481,9 +22477,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6646
 #: ../intl-scm/guile-strings.c:6896
 #: ../intl-scm/guile-strings.c:7414
-#, fuzzy
 msgid "Use Full Account Name"
-msgstr "Hesap Adı"
+msgstr "Hesabın tam adını kullan"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22498,7 +22493,7 @@ msgstr "Hesap Adı"
 #: ../intl-scm/guile-strings.c:6912
 #: ../intl-scm/guile-strings.c:7422
 msgid "Other Account Code"
-msgstr ""
+msgstr "Mukabil hesap kodu"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22510,9 +22505,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6662
 #: ../intl-scm/guile-strings.c:6908
 #: ../intl-scm/guile-strings.c:7420
-#, fuzzy
 msgid "Use Full Other Account Name"
-msgstr "Hesap Adı"
+msgstr "Mukabil hesabın tam adını kullan"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22524,9 +22518,8 @@ msgstr "Hesap Adı"
 #: ../intl-scm/guile-strings.c:6666
 #: ../intl-scm/guile-strings.c:6850
 #: ../intl-scm/guile-strings.c:7442
-#, fuzzy
 msgid "Show Account Code"
-msgstr "Hesap Kodu"
+msgstr "Hesap kodu görünsün"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22538,9 +22531,8 @@ msgstr "Hesap Kodu"
 #: ../intl-scm/guile-strings.c:6670
 #: ../intl-scm/guile-strings.c:6846
 #: ../intl-scm/guile-strings.c:7440
-#, fuzzy
 msgid "Show Full Account Name"
-msgstr "Hesap Adı"
+msgstr "Hesabın tam adı görünsün"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -22560,42 +22552,42 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6996
 #: ../intl-scm/guile-strings.c:7436
 msgid "Style"
-msgstr ""
+msgstr "Biçem"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5638
 #: ../intl-scm/guile-strings.c:6712
 msgid "Report style"
-msgstr ""
+msgstr "Rapor biçemi"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5640
 #: ../intl-scm/guile-strings.c:6714
 msgid "Multi-Line"
-msgstr ""
+msgstr "Çok satırlı"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5642
 #: ../intl-scm/guile-strings.c:6716
 msgid "Display N lines"
-msgstr ""
+msgstr "Birçok satır olarak"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5646
 #: ../intl-scm/guile-strings.c:6720
 msgid "Display 1 line"
-msgstr ""
+msgstr "1 satır olarak"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5648
 #: ../intl-scm/guile-strings.c:6722
 msgid "Convert all transactions into a common currency"
-msgstr ""
+msgstr "Tüm işlemleri ortak bir para birimine çevir"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -22718,21 +22710,21 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5692
 #: ../intl-scm/guile-strings.c:6766
 msgid "Do not sort"
-msgstr ""
+msgstr "Sıralama yok"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5696
 #: ../intl-scm/guile-strings.c:6770
 msgid "Sort & subtotal by account name"
-msgstr ""
+msgstr "Hesap adına göre sırala, ara toplamlı"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5700
 #: ../intl-scm/guile-strings.c:6774
 msgid "Sort & subtotal by account code"
-msgstr ""
+msgstr "Hesap koduna göre sırala, ara toplamlı"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -22753,7 +22745,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5712
 #: ../intl-scm/guile-strings.c:6786
 msgid "Sort by the Reconciled Date"
-msgstr ""
+msgstr "Mutabakat tarihine göre sırala"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -22774,49 +22766,49 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5720
 #: ../intl-scm/guile-strings.c:6794
 msgid "Sort by account transferred from/to's name"
-msgstr ""
+msgstr "Mukabil hesap adına göre sırala"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5724
 #: ../intl-scm/guile-strings.c:6798
 msgid "Sort by account transferred from/to's code"
-msgstr ""
+msgstr "Mukabil hesap koduna göre sırala"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5736
 #: ../intl-scm/guile-strings.c:6810
 msgid "Sort by check/transaction number"
-msgstr ""
+msgstr "Çek/işlem numarasına göre sırala"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5742
 #: ../intl-scm/guile-strings.c:6816
 msgid "Ascending"
-msgstr ""
+msgstr "Artan"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5744
 #: ../intl-scm/guile-strings.c:6818
 msgid "smallest to largest, earliest to latest"
-msgstr ""
+msgstr "küçükten büyüğe, eskiden yeniye"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5746
 #: ../intl-scm/guile-strings.c:6820
 msgid "Descending"
-msgstr ""
+msgstr "Azalan"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5748
 #: ../intl-scm/guile-strings.c:6822
 msgid "largest to smallest, latest to earliest"
-msgstr ""
+msgstr "büyükten küçüğe, yeniden eskiye"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -22832,28 +22824,28 @@ msgstr "3 aylık"
 #: ../intl-scm/guile-strings.c:5770
 #: ../intl-scm/guile-strings.c:6844
 msgid "Sort by this criterion first"
-msgstr ""
+msgstr "İlk bu ölçüte göre sırala"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5774
 #: ../intl-scm/guile-strings.c:6848
 msgid "Show the full account name for subtotals and subtitles?"
-msgstr ""
+msgstr "Ara toplam ve ara başlıklarda hesabın tam adı görünsün mü?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5778
 #: ../intl-scm/guile-strings.c:6852
 msgid "Show the account code for subtotals and subtitles?"
-msgstr ""
+msgstr "Ara toplam ve ara başlıklarda hesap kodu görünsün mü?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5780
 #: ../intl-scm/guile-strings.c:6854
 msgid "Subtotal according to the primary key?"
-msgstr ""
+msgstr "Birincil ölçüte göre ara toplam görünsün mü?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -22862,7 +22854,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6856
 #: ../intl-scm/guile-strings.c:6866
 msgid "Do a date subtotal"
-msgstr ""
+msgstr "Tarih bazlı ara toplam"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22873,28 +22865,28 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6858
 #: ../intl-scm/guile-strings.c:7448
 msgid "Primary Sort Order"
-msgstr ""
+msgstr "Birincil sıralanış"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5786
 #: ../intl-scm/guile-strings.c:6860
 msgid "Order of primary sorting"
-msgstr ""
+msgstr "Birincil sıralanış şekli"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5788
 #: ../intl-scm/guile-strings.c:6862
 msgid "Sort by this criterion second"
-msgstr ""
+msgstr "Sonra bu ölçüte göre sırala"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5790
 #: ../intl-scm/guile-strings.c:6864
 msgid "Subtotal according to the secondary key?"
-msgstr ""
+msgstr "İkincil ölçüte göre ara toplam görünsün mü?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22905,35 +22897,35 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6868
 #: ../intl-scm/guile-strings.c:7456
 msgid "Secondary Sort Order"
-msgstr ""
+msgstr "İkincil sıralanış"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5796
 #: ../intl-scm/guile-strings.c:6870
 msgid "Order of Secondary sorting"
-msgstr ""
+msgstr "İkincil sıralanış şekli"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5804
 #: ../intl-scm/guile-strings.c:6878
 msgid "Display the reconciled date?"
-msgstr ""
+msgstr "Mutabakat tarihi görünsün mü?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5816
 #: ../intl-scm/guile-strings.c:6890
 msgid "Display the notes if the memo is unavailable?"
-msgstr ""
+msgstr "Bilgi notu yoksa notlar görünsün mü?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5820
 #: ../intl-scm/guile-strings.c:6894
 msgid "Display the account name?"
-msgstr ""
+msgstr "Hesap adı görünsün mü?"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -22942,35 +22934,35 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6898
 #: ../intl-scm/guile-strings.c:6910
 msgid "Display the full account name"
-msgstr ""
+msgstr "Tam hesap adı görünsün"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5828
 #: ../intl-scm/guile-strings.c:6902
 msgid "Display the account code"
-msgstr ""
+msgstr "Hesap kodu görünsün"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5832
 #: ../intl-scm/guile-strings.c:6906
 msgid "Display the other account name? (if this is a split transaction, this parameter is guessed)."
-msgstr ""
+msgstr "Mukabil hesap adı görünsün mü? (bu bileşik bir işlem ise tahmini bir değerdir)."
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5840
 #: ../intl-scm/guile-strings.c:6914
 msgid "Display the other account code"
-msgstr ""
+msgstr "Mukabil hesabın kodu görünsün"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5870
 #: ../intl-scm/guile-strings.c:6944
 msgid "No amount display"
-msgstr ""
+msgstr "Tutar görünmesin"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -22997,14 +22989,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:5886
 #: ../intl-scm/guile-strings.c:6960
 msgid "Don't change any displayed amounts"
-msgstr ""
+msgstr "Tutarlarda değişiklik yok"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5888
 #: ../intl-scm/guile-strings.c:6962
 msgid "Income and Expense"
-msgstr ""
+msgstr "Gelir ve Gider"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -23017,6 +23009,7 @@ msgstr ""
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:5892
 #: ../intl-scm/guile-strings.c:6966
+#, fuzzy
 msgid "Credit Accounts"
 msgstr "Alacak Hesaplar"
 
@@ -23224,7 +23217,7 @@ msgstr "Varlık Sütun grafiği"
 #: ../intl-scm/guile-strings.c:5936
 #: ../intl-scm/guile-strings.c:7010
 msgid "Liability Barchart"
-msgstr "Borç Sütun grafiği"
+msgstr "Y.Kaynak Sütun grafiği"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -23811,7 +23804,7 @@ msgstr "Varlık Hesapları"
 #: ../intl-scm/guile-strings.c:6538
 #: ../intl-scm/guile-strings.c:6558
 msgid "Liability Accounts"
-msgstr "Borç Hesapları"
+msgstr "Y.Kaynak Hesapları"
 
 #. src/report/standard-reports/gnucash/report/balsheet-eg.eguile.scm
 #. src/report/standard-reports/balsheet-eg.eguile.scm
@@ -24906,9 +24899,8 @@ msgstr "%s raporunu göster"
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
 #: ../intl-scm/guile-strings.c:8998
 #: ../intl-scm/guile-strings.c:9012
-#, fuzzy
 msgid "Custom Reports"
-msgstr "Müşteri Raporu"
+msgstr "Özel Raporlar"
 
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
@@ -24934,7 +24926,7 @@ msgstr ""
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:9020
 msgid "_Assets & Liabilities"
-msgstr "_Varlıklar ve Borçlar"
+msgstr "_Varlıklar ve Y.Kaynaklar"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:9022
@@ -24958,20 +24950,19 @@ msgstr ""
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:9030
-#, fuzzy
 msgid "_Custom"
-msgstr "Müşteri"
+msgstr "Ö_zel"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:9038
 msgid "Report name"
-msgstr ""
+msgstr "Rapor adı"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:9040
 #: ../intl-scm/guile-strings.c:9052
 msgid "Stylesheet"
-msgstr ""
+msgstr "Biçem tabakası"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:9042
@@ -24986,12 +24977,12 @@ msgstr ""
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:9046
 msgid "Enter a descriptive name for this report"
-msgstr ""
+msgstr "Rapora bir ad verin"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:9048
 msgid "Select a stylesheet for the report."
-msgstr ""
+msgstr "Rapor için bir biçem tabakası seçin."
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:9056
@@ -25078,7 +25069,7 @@ msgstr "Döviz"
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:9110
 msgid "Equities"
-msgstr "Özsermaye"
+msgstr "Özkaynaklar"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:9112
@@ -25355,7 +25346,7 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:9260
 msgid "Select the currency to display the values of this report in."
-msgstr ""
+msgstr "Rapordaki değerlerin görüntüleneceği para birimini seçin."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:9262
@@ -26180,11 +26171,11 @@ msgstr ""
 msgid "Adding remaining good quotes."
 msgstr ""
 
+# Book teriminin burada dosya(file) yerine kullanıldığı kabul edildi.
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:9822
-#, fuzzy
 msgid "Book Options"
-msgstr "Ayarlar"
+msgstr "Dosya Seçenekleri"
 
 #: ../doc/tip_of_the_day.list.in:1
 #, c-format
