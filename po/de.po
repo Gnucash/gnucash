@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-24 21:27+0200\n"
-"PO-Revision-Date: 2010-10-02 20:38+0200\n"
+"PO-Revision-Date: 2010-10-05 21:53+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -605,13 +605,13 @@ msgid "View Invoice"
 msgstr "Rechnung anzeigen"
 
 msgid "New Bill"
-msgstr "Neue Rechnung"
+msgstr "Neue Lieferantenrechnung"
 
 msgid "Edit Bill"
-msgstr "Rechnung bearbeiten"
+msgstr "Lieferantenrechnung bearbeiten"
 
 msgid "View Bill"
-msgstr "Rechnung anzeigen"
+msgstr "Lieferantenrechnung anzeigen"
 
 msgid "New Expense Voucher"
 msgstr "Neue Auslagenerstattung"
@@ -626,7 +626,7 @@ msgid "View/Edit Invoice"
 msgstr "Rechnung anzeigen/bearbeiten"
 
 msgid "View/Edit Bill"
-msgstr "Rechnung anzeigen/bearbeiten"
+msgstr "Lieferantenrechnung anzeigen/bearbeiten"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
@@ -716,7 +716,7 @@ msgid "Num"
 msgstr "Nr"
 
 msgid "Find Bill"
-msgstr "Rechnung suchen"
+msgstr "Lieferantenrechnung suchen"
 
 msgid "Find Expense Voucher"
 msgstr "Auslagenerstattung suchen"
@@ -749,11 +749,11 @@ msgstr "Betrag"
 #, c-format
 msgid "The following %d bill is due:"
 msgid_plural "The following %d bills are due:"
-msgstr[0] "Die folgende %d Rechnung ist fällig:"
-msgstr[1] "Die folgenden %d Rechnungen sind fällig:"
+msgstr[0] "Die folgende %d Lieferantenrechnung ist fällig:"
+msgstr[1] "Die folgenden %d Lieferantenrechnungen sind fällig:"
 
 msgid "Due Bills Reminder"
-msgstr "Erinnerung an fällige Rechnungen"
+msgstr "Erinnerung an fällige Lieferantenrechnungen"
 
 msgid "The Job must be given a name."
 msgstr "Der Auftrag muss einen Namen erhalten."
@@ -868,7 +868,7 @@ msgid ""
 "s\" before you continue to process this payment.  Perhaps you want to create "
 "an Invoice or Bill first?"
 msgstr ""
-"Sie haben keine verwendbaren Konten für »Buchen nach«. Sie sollten ein Konto "
+"Sie haben keine verwendbaren Konten für »Buchen nach«. Sie müssen ein Konto "
 "der Kontoart »%s« erstellen, bevor Sie hier fortfahren. Möchten Sie "
 "vielleicht zuerst eine Rechnung erstellen?"
 
@@ -1021,7 +1021,7 @@ msgid "_Type:"
 msgstr "_Typ:"
 
 msgid "<b>Bills</b>"
-msgstr "<b>Rechnungseingang</b>"
+msgstr "<b>Lieferantenrechnungen</b>"
 
 msgid "<b>Invoices</b>"
 msgstr "<b>Rechnungsausgang</b>"
@@ -1497,7 +1497,7 @@ msgid "_Customer"
 msgstr "_Kunden"
 
 msgid "_New Customer..."
-msgstr "Kunde anlegen..."
+msgstr "_Neuer Kunde..."
 
 msgid "Open the New Customer dialog"
 msgstr "Den Dialog für das Anlegen neuer Kunden öffnen"
@@ -1509,7 +1509,7 @@ msgid "Open the Find Customer dialog"
 msgstr "Den Dialog für die Suche nach Kunden anzeigen"
 
 msgid "New _Invoice..."
-msgstr "Rechnung anlegen..."
+msgstr "N_eue Rechnung..."
 
 msgid "Open the New Invoice dialog"
 msgstr "Den Dialog für das Anlegen neuer Rechnungen öffnen"
@@ -1521,7 +1521,7 @@ msgid "Open the Find Invoice dialog"
 msgstr "Den Dialog für die Suche nach Rechnungen öffnen"
 
 msgid "New _Job..."
-msgstr "Auftrag anlegen..."
+msgstr "Ne_uer Auftrag..."
 
 msgid "Open the New Job dialog"
 msgstr "Den Dialog für das Anlegen neuer Aufträge öffnen"
@@ -1555,13 +1555,15 @@ msgid "Open the Find Vendor dialog"
 msgstr "Den Dialog für die Suche nach Lieferanten öffnen"
 
 msgid "New _Bill..."
-msgstr "Rechnung anlegen..."
+msgstr "Neue Lieferantenrechnung..."
 
 msgid "Open the New Bill dialog"
-msgstr "Den Dialog für das Anlegen neuer Rechnungen öffnen"
+msgstr ""
+"Den Dialog für das Anlegen neuer von Lieferanten empfangenen Rechnungen "
+"öffnen"
 
 msgid "Find Bi_ll..."
-msgstr "_Rechnung suchen..."
+msgstr "Lieferanten_rechnung suchen..."
 
 msgid "Open the Find Bill dialog"
 msgstr "Den Dialog für die Suche nach Rechnungen öffnen"
@@ -1571,10 +1573,11 @@ msgid "_Employee"
 msgstr "_Mitarbeiter"
 
 msgid "_New Employee..."
-msgstr "Mitarbeiter anlegen..."
+msgstr "Neuer Mitarbeiter..."
 
 msgid "Open the New Employee dialog"
-msgstr "Den Dialog für das Anlegen neuer Mitarbeiter öffnen"
+msgstr ""
+"Den Dialog für das Anlegen neuer Mitarbeiterinnen und Mitarbeitern öffnen"
 
 msgid "_Find Employee..."
 msgstr "_Mitarbeiter suchen..."
@@ -1583,7 +1586,7 @@ msgid "Open the Find Employee dialog"
 msgstr "Den Dialog für die Suche nach Mitarbeitern öffnen"
 
 msgid "New _Expense Voucher..."
-msgstr "Neue Auslagen_erstattung anlegen..."
+msgstr "Neue Auslagen_erstattung..."
 
 msgid "Open the New Expense Voucher dialog"
 msgstr "Den Dialog für das Anlegen von Auslagenerstattungen öffnen"
@@ -1607,7 +1610,7 @@ msgid "View and edit the list of Billing Terms"
 msgstr "Liste der Zahlungsbedingungen anzeigen und bearbeiten"
 
 msgid "Bills _Due Reminder"
-msgstr "Erinnerung an fällige Rechnungen"
+msgstr "Erinnerung an fällige Lieferantenrechnungen"
 
 msgid "Open the Bills Due Reminder dialog"
 msgstr "Das Fenster mit Erinnerungen an fällige Rechnungen öffnen"
@@ -1643,7 +1646,7 @@ msgid "Sort _Order"
 msgstr "S_ortierreihenfolge"
 
 msgid "New _Invoice"
-msgstr "Rechnung anlegen..."
+msgstr "Neue _Rechnung..."
 
 msgid "Create a new invoice"
 msgstr "Eine neue Rechnung anlegen"
