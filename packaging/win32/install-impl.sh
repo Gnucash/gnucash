@@ -543,7 +543,6 @@ function inst_gnome() {
         wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBJPEG_7_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBJPEG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -556,8 +555,6 @@ function inst_gnome() {
         wget_unpacked $PKG_CONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PIXMAN_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $EXPAT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -640,6 +637,17 @@ EOF
                 #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
             qpopd
         fi
+        wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/pixman-*
+        qpushd $TMP_UDIR/pixman-*
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=$_GNOME_UDIR \
+                --disable-static
+            make
+            make install
+        qpopd
+        rm -rf $TMP_UDIR/pixman-*
+        ${PKG_CONFIG} --exists pixman-1 || die "pixman not installed correctly"
         quiet gconftool-2 --version &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
         quiet intltoolize --version || die "gnome not installed correctly"
