@@ -834,16 +834,24 @@ gnc_xml_be_remove_old_files(FileBackend *be)
             continue;
 
         name = g_build_filename(be->dirname, dent, (gchar*)NULL);
-        len = strlen(name) - 4;
+        len = strlen(name);
 
         /* Never remove the current data file itself */
         if (g_strcmp0(name, be->fullpath) == 0)
             continue;
 
-        /* Is this file associated with the current data file */
-        if (strncmp(name, be->fullpath, pathlen) == 0)
+        /* Is this file associated with the current data file? 
+         * Additionally, the invariants for the pointer arithmetic
+         * must hold: String length long enough to contain the suffix,
+         * and string length large enough so that strptime below will
+         * not be passed a pointer outside of our string. (Otherwise
+         * the result of strptime might be parseable and the main data
+         * file is deleted, #593479) */
+        if ((strncmp(name, be->fullpath, pathlen) == 0)
+            && (len >= 4)
+            && (len > pathlen))
         {
-            if (safe_strcmp(name + len, ".LNK") == 0)
+            if (safe_strcmp(name + len - 4, ".LNK") == 0)
             {
                 /* Is a lock file. Skip the active lock file */
                 if ((safe_strcmp(name, be->linkfile) != 0) &&
