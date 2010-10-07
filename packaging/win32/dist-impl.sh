@@ -88,7 +88,6 @@ function dist_gnome() {
     smart_wget $LIBICONV_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
     wget_unpacked $GLIB_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBJPEG_7_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $DIST_DIR
