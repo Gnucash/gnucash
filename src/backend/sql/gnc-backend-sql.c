@@ -3134,6 +3134,30 @@ gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
     g_free( temp_table_name );
 }
 
+/* Adds one or more columns to an existing table. */
+gboolean gnc_sql_add_columns_to_table( GncSqlBackend* be, const gchar* table_name,
+                            const GncSqlColumnTableEntry* new_col_table )
+{
+    GList* col_info_list = NULL;
+    gboolean ok = FALSE;
+
+    g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( table_name != NULL, FALSE );
+    g_return_val_if_fail( new_col_table != NULL, FALSE );
+
+    for ( ; new_col_table->col_name != NULL; new_col_table++ )
+    {
+        GncSqlColumnTypeHandler* pHandler;
+
+        pHandler = get_handler( new_col_table );
+        g_assert( pHandler != NULL );
+        pHandler->add_col_info_to_list_fn( be, new_col_table, &col_info_list );
+    }
+    g_assert( col_info_list != NULL );
+    ok = gnc_sql_connection_add_columns_to_table( be->conn, table_name, col_info_list );
+    return ok;
+}
+
 /* ================================================================= */
 #define VERSION_TABLE_NAME "versions"
 #define MAX_TABLE_NAME_LEN 50

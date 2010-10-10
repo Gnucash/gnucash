@@ -158,6 +158,7 @@ struct GncSqlConnection
     gboolean (*commitTransaction)( GncSqlConnection* ); /**< Returns TRUE if successful, FALSE if error */
     gboolean (*createTable)( GncSqlConnection*, const gchar*, GList* ); /**< Returns TRUE if successful, FALSE if error */
     gboolean (*createIndex)( GncSqlConnection*, const gchar*, const gchar*, const GncSqlColumnTableEntry* ); /**< Returns TRUE if successful, FALSE if error */
+    gboolean (*addColumnsToTable)( GncSqlConnection*, const gchar* table, GList* ); /**< Returns TRUE if successful, FALSE if error */
     gchar* (*quoteString)( const GncSqlConnection*, gchar* );
 };
 #define gnc_sql_connection_dispose(CONN) (CONN)->dispose(CONN)
@@ -179,6 +180,8 @@ struct GncSqlConnection
 		(CONN)->createTable(CONN,NAME,COLLIST)
 #define gnc_sql_connection_create_index(CONN,INDEXNAME,TABLENAME,COLTABLE) \
 		(CONN)->createIndex(CONN,INDEXNAME,TABLENAME,COLTABLE)
+#define gnc_sql_connection_add_columns_to_table(CONN,TABLENAME,COLLIST) \
+		(CONN)->addColumnsToTable(CONN,TABLENAME,COLLIST)
 #define gnc_sql_connection_quote_string(CONN,STR) \
 		(CONN)->quoteString(CONN,STR)
 
@@ -715,6 +718,17 @@ gchar* gnc_sql_convert_timespec_to_string( const GncSqlBackend* be, Timespec ts 
  */
 void gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
                             const GncSqlColumnTableEntry* col_table );
+
+/**
+ * Adds one or more columns to an existing table.
+ *
+ * @param be SQL backend
+ * @param table_name SQL table name
+ * @param new_col_table Column table for new columns
+ * @return TRUE if successful, FALSE if unsuccessful
+ */
+gboolean gnc_sql_add_columns_to_table( GncSqlBackend* be, const gchar* table_name,
+                            const GncSqlColumnTableEntry* new_col_table );
 
 /**
  * Specifies the load order for a set of objects.  When loading from a database, the

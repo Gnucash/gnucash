@@ -44,19 +44,16 @@
 /*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "slots"
-#define TABLE_VERSION 2
+#define TABLE_VERSION 3
 
 typedef struct
 {
     /*@ dependent @*/ GncSqlBackend* be;
-    /*@ dependent @*/
-    const GncGUID* guid;
+    /*@ dependent @*/ const GncGUID* guid;
     gboolean is_ok;
-    /*@ dependent @*/
-    KvpFrame* pKvpFrame;
+    /*@ dependent @*/ KvpFrame* pKvpFrame;
     KvpValueType value_type;
-    /*@ dependent @*/
-    KvpValue* pKvpValue;
+    /*@ dependent @*/ KvpValue* pKvpValue;
     GString* path;
 } slot_info_t;
 
@@ -78,6 +75,8 @@ static /*@ null @*/ gpointer get_guid_val( gpointer pObject );
 static void set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue );
 static gnc_numeric get_numeric_val( gpointer pObject );
 static void set_numeric_val( gpointer pObject, gnc_numeric value );
+static GDate* get_gdate_val( gpointer pObject );
+static void set_gdate_val( gpointer pObject, GDate* value );
 
 #define SLOT_MAX_PATHNAME_LEN 4096
 #define SLOT_MAX_STRINGVAL_LEN 4096
@@ -122,6 +121,10 @@ static const GncSqlColumnTableEntry col_table[] =
         "numeric_val",  CT_NUMERIC,  0,                     0,        NULL, NULL,
         (QofAccessFunc)get_numeric_val, (QofSetterFunc)set_numeric_val
     },
+    {
+        "gdate_val",    CT_GDATE,    0,                     0,        NULL, NULL,
+        (QofAccessFunc)get_gdate_val, (QofSetterFunc)set_gdate_val
+    },
     { NULL }
     /*@ +full_init_block @*/
 };
@@ -132,6 +135,14 @@ static const GncSqlColumnTableEntry obj_guid_col_table[] =
 {
     /*@ -full_init_block @*/
     { "obj_guid", CT_GUID, 0, 0, NULL, NULL, (QofAccessFunc)get_obj_guid, _retrieve_guid_ },
+    { NULL }
+    /*@ +full_init_block @*/
+};
+
+static const GncSqlColumnTableEntry gdate_col_table[] =
+{
+    /*@ -full_init_block @*/
+    { "gdate_val", CT_GDATE, 0, 0, },
     { NULL }
     /*@ +full_init_block @*/
 };
@@ -373,6 +384,38 @@ set_numeric_val( gpointer pObject, gnc_numeric value )
     if ( pInfo->value_type == KVP_TYPE_NUMERIC )
     {
         kvp_frame_set_numeric( pInfo->pKvpFrame, pInfo->path->str, value );
+    }
+}
+
+static GDate*
+get_gdate_val( gpointer pObject )
+{
+    slot_info_t* pInfo = (slot_info_t*)pObject;
+    static GDate date;
+
+    g_return_val_if_fail( pObject != NULL, NULL );
+
+    if ( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_GDATE )
+    {
+        date = kvp_value_get_gdate( pInfo->pKvpValue );
+        return &date;
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
+static void
+set_gdate_val( gpointer pObject, GDate* value )
+{
+    slot_info_t* pInfo = (slot_info_t*)pObject;
+
+    g_return_if_fail( pObject != NULL );
+
+    if ( pInfo->value_type == KVP_TYPE_GDATE )
+    {
+        kvp_frame_set_gdate( pInfo->pKvpFrame, pInfo->path->str, *value );
     }
 }
 
@@ -713,14 +756,28 @@ create_slots_tables( GncSqlBackend* be )
             PERR( "Unable to create index\n" );
         }
     }
-    else if ( version == 1 )
+    else if ( version < TABLE_VERSION )
     {
-        /* Upgrade 64-bit int values to proper definition */
-        gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
-        ok = gnc_sql_create_index( be, "slots_guid_index", TABLE_NAME, obj_guid_col_table );
-        if ( !ok )
+        /* Upgrade:
+            1->2: 64-bit int values to proper definition, add index
+            2->3: Add gdate field
+        */
+        if ( version == 1 )
         {
-            PERR( "Unable to create index\n" );
+            gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+            ok = gnc_sql_create_index( be, "slots_guid_index", TABLE_NAME, obj_guid_col_table );
+            if ( !ok )
+            {
+                PERR( "Unable to create index\n" );
+            }
+        }
+        else if ( version == 2 )
+        {
+            ok = gnc_sql_add_columns_to_table( be, TABLE_NAME, gdate_col_table );
+            if ( !ok )
+            {
+                PERR( "Unable to add gdate column\n" );
+            }
         }
         (void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
     }
