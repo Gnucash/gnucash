@@ -18,10 +18,8 @@ EXTRA_PATH="${EXTRA_PATH}:@-GNC_GUILE_MODULE_DIR-@"
 EXTRA_PATH="${EXTRA_PATH}:@-GNC_SCM_INSTALL_DIR-@"
 GUILE_LOAD_PATH="${EXTRA_PATH}:${GUILE_LOAD_PATH}"
 
-EXTRA_LIBS="${GNC_MODULE_PATH}"
-EXTRA_LIBS="${EXTRA_LIBS}:/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ImageIO.framework/Versions/A/Resources/"
+EXTRA_LIBS="/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ImageIO.framework/Versions/A/Resources/"
 EXTRA_LIBS="${EXTRA_LIBS}:@-GNC_LIB_INSTALLDIR-@"
-EXTRA_LIBS="${EXTRA_LIBS}:@-GNC_PKGLIB_INSTALLDIR-@"
 
 LD_LIBRARY_PATH="${EXTRA_LIBS}:${LD_LIBRARY_PATH}"
 DYLD_LIBRARY_PATH="${EXTRA_LIBS}:${DYLD_LIBRARY_PATH}"
