@@ -87,6 +87,7 @@ gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	sed < $< > $@.tmp \
 		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
 		-e 's#@-libdir-@#${libdir}#g' \
+		-e 's#@-bindir-@#${bindir}#g' \
 		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
 		-e 's#@-datadir-@#${datadir}#g' \
 		-e 's#@-prefix-@#${prefix}#g'
