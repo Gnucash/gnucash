@@ -10,11 +10,11 @@
 (use-modules (sw_core_utils))
 
 (re-export gnc-is-debugging)
+(re-export gnc-path-get-bindir)
 (re-export gnc-path-get-stdreportsdir)
 (re-export gnc-build-dotgnucash-path)
 (re-export gnc-build-report-path)
 (re-export gnc-build-stdreports-path)
-(re-export g-find-program-in-path)
 (re-export gnc-utf8?)
 (re-export gnc-utf8-strip-invalid-strdup)
 (re-export gnc-locale-from-utf8)

@@ -31,6 +31,12 @@
  * @returns A newly allocated string. */
 gchar *gnc_path_get_prefix(void);
 
+/** Returns the bindir path, usually
+ * "$prefix/bin".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_bindir(void);
+
 /** Returns the libdir path, usually
  * "$prefix/lib". Needed for gnome_program_init(void).
  *

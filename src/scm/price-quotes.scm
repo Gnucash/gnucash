@@ -240,7 +240,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*finance-quote-check*
-  (g-find-program-in-path "gnc-fq-check"))
+  (string-append (gnc-path-get-bindir) "/gnc-fq-check"))
 
 (define (gnc:fq-check-sources)
   (let ((program '())
@@ -286,7 +286,7 @@
 ;; src/engine/gnc-pricedb.h
 
 (define gnc:*finance-quote-helper*
-  (g-find-program-in-path "gnc-fq-helper"))
+  (string-append (gnc-path-get-bindir) "/gnc-fq-helper"))
 
 (define (gnc:fq-get-quotes requests)
   ;; requests should be a list where each item is of the form

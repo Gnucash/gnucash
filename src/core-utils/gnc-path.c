@@ -31,6 +31,16 @@ gchar *gnc_path_get_prefix()
     return gnc_gbr_find_prefix (PREFIX);
 }
 
+/** Returns the bindir path, usually
+ * "$prefix/bin".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_bindir()
+{
+    //printf("Returning bindir %s\n", gnc_gbr_find_bin_dir (BINDIR));
+    return gnc_gbr_find_bin_dir (BINDIR);
+}
+
 /** Returns the libdir path, usually
  * "$prefix/lib". Needed for gnome_program_init().
  *

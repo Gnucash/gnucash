@@ -27,6 +27,7 @@
 #define DATADIR "@-datadir-@"
 #define SYSCONFDIR "@-sysconfdir-@"
 
+#define BINDIR "@-bindir-@"
 #define LIBDIR "@-libdir-@"
 
 #define LOCALE_DATADIRNAME "@-DATADIRNAME-@"

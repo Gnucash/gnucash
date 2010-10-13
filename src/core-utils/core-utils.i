@@ -12,11 +12,9 @@ SCM scm_init_sw_core_utils_module (void);
 
 %import "base-typemaps.i"
 
-%newobject g_find_program_in_path;
-gchar * g_find_program_in_path(const gchar *);
-
 gboolean gnc_is_debugging(void);
 
+gchar * gnc_path_get_bindir(void);
 gchar * gnc_path_get_stdreportsdir(void);
 gchar * gnc_build_dotgnucash_path(const gchar *);
 gchar * gnc_build_report_path(const gchar *);
