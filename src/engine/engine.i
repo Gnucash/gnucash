@@ -108,11 +108,15 @@ void qof_query_set_sort_order (QofQuery *q, GSList *params1,
 
 %clear GSList *;
 SplitList * qof_query_run (QofQuery *q);
+SplitList * qof_query_last_run (QofQuery *q);
+SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 
 %include <Query.h>
 %ignore qof_query_add_guid_match;
 %ignore qof_query_set_sort_order;
 %ignore qof_query_run;
+%ignore qof_query_last_run;
+%ignore qof_query_run_subquery;
 %include <qofquery.h>
 %include <qofquerycore.h>
 %include <qofbookslots.h>
@@ -120,31 +124,7 @@ SplitList * qof_query_run (QofQuery *q);
 
 KvpFrame* qof_book_get_slots(QofBook* book);
 
-gnc_numeric gnc_numeric_create(gint64 num, gint64 denom);
-gnc_numeric gnc_numeric_zero(void);
-gint64 gnc_numeric_num(gnc_numeric a);
-gint64 gnc_numeric_denom(gnc_numeric a);
-gboolean gnc_numeric_zero_p(gnc_numeric a);
-int gnc_numeric_compare(gnc_numeric a, gnc_numeric b);
-gboolean gnc_numeric_negative_p(gnc_numeric a);
-gboolean gnc_numeric_positive_p(gnc_numeric a);
-gboolean gnc_numeric_equal(gnc_numeric a, gnc_numeric b);
-gnc_numeric
-gnc_numeric_add(gnc_numeric a, gnc_numeric b, gint64 denom, gint how);
-gnc_numeric
-gnc_numeric_sub(gnc_numeric a, gnc_numeric b, gint64 denom, gint how);
-gnc_numeric
-gnc_numeric_mul(gnc_numeric a, gnc_numeric b, gint64 denom, gint how);
-gnc_numeric
-gnc_numeric_div(gnc_numeric a, gnc_numeric b, gint64 denom, gint how);
-gnc_numeric gnc_numeric_neg(gnc_numeric a);
-gnc_numeric gnc_numeric_abs(gnc_numeric a);
-gnc_numeric gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b);
-gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b);
-gnc_numeric gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how);
-gnc_numeric double_to_gnc_numeric(double in, gint64 denom, gint how);
-double gnc_numeric_to_double(gnc_numeric in);
-gchar * gnc_numeric_to_string(gnc_numeric n);
+%include <gnc-numeric.h>
 
 Timespec timespecCanonicalDayTime(Timespec t);
 
@@ -306,6 +286,14 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
     SET_ENUM("OPTION-NAME-DEFAULT-BUDGET");
 
     SET_ENUM("ACCOUNT-CODE-");  /* sic */
+
+    SET_ENUM("GNC-HOW-RND-CEIL");
+    SET_ENUM("GNC-HOW-RND-TRUNC");
+    SET_ENUM("GNC-HOW-RND-PROMOTE");
+    SET_ENUM("GNC-HOW-RND-ROUND-HALF-DOWN");
+    SET_ENUM("GNC-HOW-RND-ROUND-HALF-UP");
+    SET_ENUM("GNC-HOW-RND-ROUND");
+    SET_ENUM("GNC-HOW-RND-NEVER");
 
 #undefine SET_ENUM
   }
