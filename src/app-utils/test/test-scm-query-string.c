@@ -43,7 +43,7 @@ test_query (Query *q, SCM val2str)
 
     q2 = gnc_scm2query (res_q);
 
-    if (!xaccQueryEqual (q, q2))
+    if (!qof_query_equal (q, q2))
     {
         failure ("queries don't match");
         fprintf (stderr, "%s\n\n", str2 ? str2 : "(null)");
@@ -58,7 +58,7 @@ test_query (Query *q, SCM val2str)
         success ("queries match");
     }
     if (str2) g_free(str2);
-    if (q2) xaccFreeQuery (q2);
+    if (q2) qof_query_destroy (q2);
 }
 
 static void
@@ -75,7 +75,7 @@ run_tests (void)
     {
         q = get_random_query ();
         test_query (q, val2str);
-        xaccFreeQuery (q);
+        qof_query_destroy (q);
         printf("%d ", i);
         fflush(stdout);
     }
@@ -83,7 +83,7 @@ run_tests (void)
     {
         q = get_random_query ();
         test_query (q, val2str);
-        xaccFreeQuery (q);
+        qof_query_destroy (q);
         printf("%d ", i);
         fflush(stdout);
     }

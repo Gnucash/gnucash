@@ -778,7 +778,7 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
                                    gint match_date_hardlimit)
 {
     GList * list_element;
-    Query *query = xaccMallocQuery();
+    Query *query = qof_query_create_for(GNC_ID_SPLIT);
     g_assert (trans_info);
 
     /* Get list of splits of the originating account. */
@@ -793,14 +793,14 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
             xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (trans_info));
         time_t download_time = xaccTransGetDate (gnc_import_TransInfo_get_trans (trans_info));
 
-        xaccQuerySetBook (query, gnc_get_current_book());
+        qof_query_set_book (query, gnc_get_current_book());
         xaccQueryAddSingleAccountMatch (query, importaccount,
                                         QOF_QUERY_AND);
         xaccQueryAddDateMatchTT (query,
                                  TRUE, download_time - match_date_hardlimit * 86400,
                                  TRUE, download_time + match_date_hardlimit * 86400,
                                  QOF_QUERY_AND);
-        list_element = xaccQueryGetSplits (query);
+        list_element = qof_query_run (query);
         /* Sigh. Doesnt help too much. We still create and run one query
            for each imported transaction. Maybe it would improve
            performance further if there is one single (master-)query at
@@ -825,7 +825,7 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
         list_element = g_list_next (list_element);
     }
 
-    xaccFreeQuery (query);
+    qof_query_destroy (query);
 }
 
 

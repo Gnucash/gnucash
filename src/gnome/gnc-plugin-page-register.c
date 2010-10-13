@@ -2117,7 +2117,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     else if (ledger_type == LD_GL && reg->type == SEARCH_LEDGER)
     {
         Account *common_acct = NULL, *account;
-        splits = xaccQueryGetSplits(gnc_ledger_display_get_query(priv->ledger));
+        splits = qof_query_run(gnc_ledger_display_get_query(priv->ledger));
         /* Make sure each split is from the same account */
         for (item = splits; item; item = g_list_next(item))
         {
@@ -3056,7 +3056,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
     gnc_suspend_gui_refresh();
     root = gnc_get_current_root_account();
 
-    for (node = xaccQueryGetSplits(query); node; node = node->next)
+    for (node = qof_query_run(query); node; node = node->next)
     {
         split = node->data;
         trans = xaccSplitGetParent(split);
@@ -3112,9 +3112,9 @@ gnc_plugin_page_register_cmd_transaction_report (GtkAction *action,
     if (!split)
         return;
 
-    query = xaccMallocQuery ();
+    query = qof_query_create_for(GNC_ID_SPLIT);
 
-    xaccQuerySetBook (query, gnc_get_current_book ());
+    qof_query_set_book (query, gnc_get_current_book ());
 
     xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split),
                            GNC_ID_SPLIT, QUERY_AND);

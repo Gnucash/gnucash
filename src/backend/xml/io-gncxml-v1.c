@@ -2337,7 +2337,7 @@ query_restore_start_handler(GSList* sibling_data, gpointer parent_data,
                             gpointer *result, const gchar *tag, gchar **attrs)
 {
     Query *q;
-    q = xaccMallocQuery();
+    q = qof_query_create_for(GNC_ID_SPLIT);
     g_return_val_if_fail(q, FALSE);
     *data_for_children = q;
     *result = q;
@@ -2363,16 +2363,16 @@ query_restore_end_handler(gpointer data_for_children,
     g_return_val_if_fail(qand, FALSE);
 
     /* append the and terms by or'ing them in ... */
-    qret = xaccQueryMerge (q, qand, QUERY_OR);
+    qret = qof_query_merge (q, qand, QUERY_OR);
     if (!qret)
     {
-        xaccFreeQuery(qand);
+        qof_query_destroy(qand);
         *result = q;
         g_return_val_if_fail(qret, FALSE);
     }
 
-    xaccFreeQuery(q);
-    xaccFreeQuery(qand);
+    qof_query_destroy(q);
+    qof_query_destroy(qand);
 
     *result = qret;
     return(TRUE);
@@ -2402,7 +2402,7 @@ query_restore_fail_handler(gpointer data_for_children,
                            const gchar *tag)
 {
     Query *q = (Query *) data_for_children;
-    if (q) xaccFreeQuery(q);
+    if (q) qof_query_destroy(q);
 }
 
 /* ================================================================= */
@@ -2434,7 +2434,7 @@ query_and_start_handler(GSList* sibling_data, gpointer parent_data,
     Query *q;
 
     /* note this malloc freed in the node higher up (query_restore_end_handler) */
-    q = xaccMallocQuery();
+    q = qof_query_create_for(GNC_ID_SPLIT);
     g_return_val_if_fail(q, FALSE);
     *data_for_children = q;
     *result = q;
@@ -2463,7 +2463,7 @@ query_and_fail_handler(gpointer data_for_children,
                        const gchar *tag)
 {
     Query *q = (Query *) data_for_children;
-    if (q) xaccFreeQuery(q);
+    if (q) qof_query_destroy(q);
 }
 
 /* ================================================================= */

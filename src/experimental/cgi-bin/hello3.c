@@ -93,10 +93,10 @@ main (int argc, char *argv[])
             xaccQuerySetGroup (q, root);
 
             /* hack -- limit to 30 splits ... */
-            xaccQuerySetMaxSplits (q, 30);
-            split_list = xaccQueryGetSplits (q);
+            qof_query_set_max_results (q, 30);
+            split_list = qof_query_run (q);
 
-            xaccFreeQuery (q);
+            qof_query_destroy (q);
 
             /* wait for the next request */
             continue;

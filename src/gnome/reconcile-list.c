@@ -141,8 +141,8 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type,
     list->list_type = type;
     list->statement_date = statement_date;
 
-    query = xaccMallocQuery();
-    xaccQuerySetBook(query, gnc_get_current_book ());
+    query = qof_query_create_for(GNC_ID_SPLIT);
+    qof_query_set_book(query, gnc_get_current_book ());
 
     include_children = xaccAccountGetReconcileChildrenStatus(account);
     if (include_children)
@@ -177,7 +177,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type,
 
     if (auto_check)
     {
-        for (splits = xaccQueryGetSplits(query); splits; splits = splits->next)
+        for (splits = qof_query_run(query); splits; splits = splits->next)
         {
             Split *split = splits->data;
             char recn = xaccSplitGetReconcile(split);
@@ -193,7 +193,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type,
     }
 
     /* Free the query -- we don't need it anymore */
-    xaccFreeQuery(query);
+    qof_query_destroy(query);
 
     return GTK_WIDGET(list);
 }
@@ -649,7 +649,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 
     print_info = gnc_account_print_info (list->account, FALSE);
 
-    for (splits = xaccQueryGetSplits (list->query); splits; splits = splits->next)
+    for (splits = qof_query_run (list->query); splits; splits = splits->next)
     {
         gnc_numeric amount;
         Timespec ts;

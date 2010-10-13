@@ -21,7 +21,7 @@ test_query (Query *q)
 
     q2 = gnc_scm2query (scm_q);
 
-    if (!xaccQueryEqual (q, q2))
+    if (!qof_query_equal (q, q2))
     {
         failure ("queries don't match");
         scm_display (scm_q, SCM_UNDEFINED);
@@ -36,7 +36,7 @@ test_query (Query *q)
         success ("queries match");
     }
 
-    xaccFreeQuery (q2);
+    qof_query_destroy (q2);
 }
 
 static void
@@ -47,15 +47,15 @@ run_tests (void)
 
     test_query (NULL);
 
-    q = xaccMallocQuery ();
+    q = qof_query_create_for(GNC_ID_SPLIT);
     test_query (q);
-    xaccFreeQuery (q);
+    qof_query_destroy (q);
 
     for (i = 0; i < 50; i++)
     {
         q = get_random_query ();
         test_query (q);
-        xaccFreeQuery (q);
+        qof_query_destroy (q);
     }
 }
 

@@ -1000,14 +1000,14 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
     Query *book_query, *guid_query, *query;
     GList *guid_iter;
 
-    book_query = xaccMallocQuery();
-    guid_query = xaccMallocQuery();
-    xaccQuerySetBook(book_query, gnc_get_current_book());
+    book_query = qof_query_create_for(GNC_ID_SPLIT);
+    guid_query = qof_query_create_for(GNC_ID_SPLIT);
+    qof_query_set_book(book_query, gnc_get_current_book());
     for (guid_iter = created_txn_guids; guid_iter != NULL; guid_iter = guid_iter->next)
     {
         xaccQueryAddGUIDMatch(guid_query, (GncGUID*)guid_iter->data, GNC_ID_TRANS, QUERY_OR);
     }
-    query = xaccQueryMerge(book_query, guid_query, QUERY_AND);
+    query = qof_query_merge(book_query, guid_query, QUERY_AND);
 
     // inspired by dialog-find-transactions:do_find_cb:
     ledger = gnc_ledger_display_query(query, SEARCH_LEDGER, REG_STYLE_JOURNAL);
@@ -1016,9 +1016,9 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
     g_object_set(G_OBJECT(page), "page-name", _("Created Transactions"), NULL);
     gnc_main_window_open_page(NULL, page);
 
-    xaccFreeQuery(query);
-    xaccFreeQuery(book_query);
-    xaccFreeQuery(guid_query);
+    qof_query_destroy(query);
+    qof_query_destroy(book_query);
+    qof_query_destroy(guid_query);
 }
 
 static void

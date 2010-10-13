@@ -65,7 +65,7 @@ build_param_list_internal (const char *first, va_list rest)
 SplitList *
 xaccQueryGetSplitsUniqueTrans(Query *q)
 {
-    GList       * splits = xaccQueryGetSplits(q);
+    GList       * splits = qof_query_run(q);
     GList       * current;
     GList       * result = NULL;
     GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
@@ -117,7 +117,7 @@ query_match_any_filter_func(gpointer key, gpointer value, gpointer user_data)
 TransList *
 xaccQueryGetTransactions (Query * q, query_txn_match_t runtype)
 {
-    GList       * splits = xaccQueryGetSplits(q);
+    GList       * splits = qof_query_run(q);
     GList       * current = NULL;
     GList       * retval = NULL;
     GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
@@ -188,7 +188,7 @@ query_match_any_lot_filter_func(gpointer key, gpointer value, gpointer user_data
 LotList *
 xaccQueryGetLots (Query * q, query_txn_match_t runtype)
 {
-    GList       * splits = xaccQueryGetSplits(q);
+    GList       * splits = qof_query_run(q);
     GList       * current = NULL;
     GList       * retval = NULL;
     GHashTable  * lot_hash = g_hash_table_new(g_direct_hash, g_direct_equal);

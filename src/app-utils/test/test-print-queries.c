@@ -45,7 +45,7 @@ run_tests (int count)
     {
         q = get_random_query ();
         test_query (q, val2str);
-        xaccFreeQuery (q);
+        qof_query_destroy (q);
     }
     success ("");
 }

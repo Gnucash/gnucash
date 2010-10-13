@@ -472,7 +472,7 @@ gnc_query_list_destroy (GtkObject *object)
     }
     if (list->query)
     {
-        xaccFreeQuery(list->query);
+        qof_query_destroy(list->query);
         list->query = NULL;
     }
     if (list->column_params)
@@ -719,7 +719,7 @@ gnc_query_list_set_query_sort (GNCQueryList *list, gboolean new_column)
         gncQuerySetSortOrder (list->query, p1, p2, NULL);
     }
 
-    xaccQuerySetSortIncreasing (list->query,
+    qof_query_set_sort_increasing (list->query,
                                 sort_order,
                                 sort_order,
                                 sort_order);

@@ -39,30 +39,6 @@
 
 typedef QofQuery Query;
 
-#define xaccMallocQuery()	qof_query_create_for(GNC_ID_SPLIT)
-#define xaccFreeQuery		qof_query_destroy
-#define xaccQueryCopy		qof_query_copy
-#define xaccQuerySetBook	qof_query_set_book
-
-#define xaccQueryInvert		qof_query_invert
-#define xaccQueryMerge		qof_query_merge
-#define xaccQueryClear		qof_query_clear
-
-/* The xaccQueryHasTerms() routine returns the number of 'OR' terms in the query.
- * The xaccQueryNumTerms() routine returns the total number of terms in the query.
- */
-
-#define xaccQueryHasTerms	qof_query_has_terms
-#define xaccQueryNumTerms	qof_query_num_terms
-
-
-#define xaccQuerySetSortIncreasing	qof_query_set_sort_increasing
-
-#define xaccQuerySetMaxSplits	qof_query_set_max_results
-#define xaccQueryGetMaxSplits	qof_query_get_max_results
-
-#define xaccQueryEqual		qof_query_equal
-
 typedef enum
 {
     QUERY_TXN_MATCH_ALL = 1, /* match all accounts */
@@ -77,20 +53,22 @@ typedef enum
  *    query.  Any given split will appear at most once in the result;
  *    however, several splits from one transaction may appear in the list.
  *    The caller MUST NOT change the GList.
- *
+ */
+
+/**
  * The xaccQueryGetSplitsUniqueTrans() routine returns splits matching
  *    the query, but only one matching split per transaction will be
  *    returned.  In other words, any given transaction will be
  *    represented at most once in the returned list.  The caller must
  *    free the GList.
- *
+ */
+SplitList   * xaccQueryGetSplitsUniqueTrans(Query *q);
+
+/**
  * The xaccQueryGetTransactions() routine returns a list of
  *    transactions that match the query.  The GList must be freed by
  *    the caller. The query_run_t argument is used to provide account
  *    matching in the following way:
- *
- * The xaccQueryGetLots() routine is just like GetTransactions() except
- *    it returns a list of Lots.
  *
  *    query_txn_match_t describes how to match accounts when querying
  *    for transactions with xaccQueryGetTransactions().
@@ -107,9 +85,13 @@ typedef enum
  *    matching accounts, whereas 'AND' acts as a boolean-AND
  *    for matching accounts.  Whew. Got that?
  */
-#define xaccQueryGetSplits	qof_query_run
-SplitList   * xaccQueryGetSplitsUniqueTrans(Query *q);
 TransList   * xaccQueryGetTransactions(Query * q, query_txn_match_t type);
+
+/**
+ * The xaccQueryGetLots() routine is just like GetTransactions() except
+ *    it returns a list of Lots.
+ *
+ */
 LotList     * xaccQueryGetLots(Query * q, query_txn_match_t type);
 
 /*******************************************************************

@@ -58,9 +58,9 @@ main (int argc, char *argv[])
     root = gnc_book_get_root_account (book);
 
     /* build a query */
-    q = xaccMallocQuery ();
+    q = qof_query_create_for(GNC_ID_SPLIT);
     xaccQuerySetGroup (q, root);
-    xaccQuerySetMaxSplits (q, 30);
+    qof_query_set_max_results (q, 30);
 
     /* Get everything between some random dates */
     /* In real life, we would use a query as specified by the user */
@@ -68,7 +68,7 @@ main (int argc, char *argv[])
                            FALSE, 16, 10, 2010,
                            QUERY_OR);
 
-    split_list = xaccQueryGetSplits (q);
+    split_list = qof_query_run (q);
 
     /* count number of splits */
     i = 0;
@@ -80,9 +80,9 @@ main (int argc, char *argv[])
 
     gncxml_write_query_to_buf(q, &bufp, &sz);
     qq = gncxml_read_query (bufp, sz);
-    xaccQuerySetMaxSplits (qq, 30);
+    qof_query_set_max_results (qq, 30);
     xaccQuerySetGroup (qq, root);
-    sl2 = xaccQueryGetSplits (qq);
+    sl2 = qof_query_run (qq);
 
     /* count number of splits */
     ii = 0;
@@ -103,7 +103,7 @@ main (int argc, char *argv[])
     printf (" its %d and %d \n", i, ii);
 
     free (bufp);
-    xaccFreeQuery (q);
+    qof_query_destroy (q);
 
 
 bookerrexit:

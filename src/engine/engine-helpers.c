@@ -1181,7 +1181,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
         query_term_scm = SCM_CDR (query_term_scm);
         sense = scm_is_true (scm);
 
-        q = xaccMallocQuery ();
+        q = qof_query_create_for(GNC_ID_SPLIT);
 
         if (!safe_strcmp (pd_type, "pd-date"))
         {
@@ -1497,14 +1497,14 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
             out_q = q;
         else
         {
-            out_q = xaccQueryInvert (q);
-            xaccFreeQuery (q);
+            out_q = qof_query_invert (q);
+            qof_query_destroy (q);
         }
 
         return out_q;
     }
 
-    xaccFreeQuery (q);
+    qof_query_destroy (q);
     return NULL;
 }
 
@@ -1577,11 +1577,11 @@ gnc_scm2query_and_terms (SCM and_terms, query_version_t vers)
 
             if (q_and)
             {
-                q_new = xaccQueryMerge (q, q_and, QOF_QUERY_AND);
+                q_new = qof_query_merge (q, q_and, QOF_QUERY_AND);
 
                 if (q_new)
                 {
-                    xaccFreeQuery (q);
+                    qof_query_destroy (q);
                     q = q_new;
                 }
             }
@@ -1599,7 +1599,7 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
     if (!scm_is_list (or_terms))
         return NULL;
 
-    q = xaccMallocQuery ();
+    q = qof_query_create_for(GNC_ID_SPLIT);
 
     while (!scm_is_null (or_terms))
     {
@@ -1619,11 +1619,11 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
 
             if (q_or)
             {
-                q_new = xaccQueryMerge (q, q_or, QOF_QUERY_OR);
+                q_new = qof_query_merge (q, q_or, QOF_QUERY_OR);
 
                 if (q_new)
                 {
-                    xaccFreeQuery (q);
+                    qof_query_destroy (q);
                     q = q_new;
                 }
             }
@@ -1907,7 +1907,7 @@ gnc_scm2query_v1 (SCM query_scm)
         if (safe_strcmp ("terms", symbol) == 0)
         {
             if (q)
-                xaccFreeQuery (q);
+                qof_query_destroy (q);
 
             q = gnc_scm2query_or_terms (value, gnc_QUERY_v1);
             if (!q)
@@ -1999,12 +1999,12 @@ gnc_scm2query_v1 (SCM query_scm)
         qof_query_set_sort_order (q, s1, s2, s3);
         qof_query_set_sort_increasing (q, primary_increasing, secondary_increasing,
                                        tertiary_increasing);
-        xaccQuerySetMaxSplits (q, max_splits);
+        qof_query_set_max_results (q, max_splits);
 
         return q;
     }
 
-    xaccFreeQuery (q);
+    qof_query_destroy (q);
     return NULL;
 }
 
@@ -2058,7 +2058,7 @@ gnc_scm2query_v2 (SCM query_scm)
         if (!safe_strcmp ("terms", symbol))
         {
             if (q)
-                xaccFreeQuery (q);
+                qof_query_destroy (q);
 
             q = gnc_scm2query_or_terms (value, gnc_QUERY_v2);
             if (!q)
@@ -2138,7 +2138,7 @@ gnc_scm2query_v2 (SCM query_scm)
         return q;
     }
 
-    xaccFreeQuery (q);
+    qof_query_destroy (q);
     return NULL;
 }
 

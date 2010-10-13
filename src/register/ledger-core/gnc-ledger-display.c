@@ -413,9 +413,9 @@ gnc_ledger_display_gl (void)
 
     ENTER(" ");
 
-    query = xaccMallocQuery ();
+    query = qof_query_create_for(GNC_ID_SPLIT);
 
-    xaccQuerySetBook (query, gnc_get_current_book());
+    qof_query_set_book (query, gnc_get_current_book());
 
     /* In lieu of not "mis-using" some portion of the infrastructure by writing
      * a bunch of new code, we just filter out the accounts of the template
@@ -472,10 +472,10 @@ gnc_ledger_display_template_gl (char *id)
     acct = NULL;
     isTemplateModeTrue = TRUE;
 
-    q = xaccMallocQuery ();
+    q = qof_query_create_for(GNC_ID_SPLIT);
 
     book = gnc_get_current_book ();
-    xaccQuerySetBook (q, book);
+    qof_query_set_book (q, book);
 
     if ( id != NULL )
     {
@@ -612,7 +612,7 @@ close_handler (gpointer user_data)
     gnc_split_register_destroy (ld->reg);
     ld->reg = NULL;
 
-    xaccFreeQuery (ld->query);
+    qof_query_destroy (ld->query);
     ld->query = NULL;
 
     g_free (ld);
@@ -643,17 +643,17 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
         return;
     }
 
-    xaccFreeQuery (ld->query);
-    ld->query = xaccMallocQuery ();
+    qof_query_destroy (ld->query);
+    ld->query = qof_query_create_for(GNC_ID_SPLIT);
 
     /* This is a bit of a hack. The number of splits should be
      * configurable, or maybe we should go back a time range instead
      * of picking a number, or maybe we should be able to exclude
      * based on reconciled status. Anyway, this works for now. */
     if ((limit != 0) && (type != SEARCH_LEDGER))
-        xaccQuerySetMaxSplits (ld->query, limit);
+        qof_query_set_max_results (ld->query, limit);
 
-    xaccQuerySetBook (ld->query, gnc_get_current_book());
+    qof_query_set_book (ld->query, gnc_get_current_book());
 
     leader = gnc_ledger_display_leader (ld);
 
@@ -778,7 +778,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
 
     /* set up the query filter */
     if (q)
-        ld->query = xaccQueryCopy (q);
+        ld->query = qof_query_copy (q);
     else
         gnc_ledger_display_make_query (ld, limit, reg_type);
 
@@ -813,8 +813,8 @@ gnc_ledger_display_set_query (GNCLedgerDisplay *ledger_display, Query *q)
 
     g_return_if_fail (ledger_display->ld_type == LD_GL);
 
-    xaccFreeQuery (ledger_display->query);
-    ledger_display->query = xaccQueryCopy (q);
+    qof_query_destroy (ledger_display->query);
+    ledger_display->query = qof_query_copy (q);
 }
 
 GNCLedgerDisplay *
@@ -864,7 +864,7 @@ gnc_ledger_display_refresh (GNCLedgerDisplay *ld)
         return;
     }
 
-    gnc_ledger_display_refresh_internal (ld, xaccQueryGetSplits (ld->query));
+    gnc_ledger_display_refresh_internal (ld, qof_query_run (ld->query));
     LEAVE(" ");
 }
 

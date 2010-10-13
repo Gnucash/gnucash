@@ -348,8 +348,8 @@ main (int argc, char *argv[])
         xaccQuerySetGroup (q, root);
 
         /* hack -- limit to 30 splits ... */
-        xaccQuerySetMaxSplits (q, 30);
-        split_list = xaccQueryGetSplits (q);
+        qof_query_set_max_results (q, 30);
+        split_list = qof_query_run (q);
 
         /* poke those splits into an ccount group structure */
         /* XXX not implemented */
@@ -357,7 +357,7 @@ main (int argc, char *argv[])
         /* send the account group structure back to the user */
         /* XXX not implemented */
 
-        xaccFreeQuery (q);
+        qof_query_destroy (q);
         g_free (request_bufp);
 
     }

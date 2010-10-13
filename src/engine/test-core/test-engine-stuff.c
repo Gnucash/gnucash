@@ -1721,7 +1721,7 @@ get_random_query(void)
     num_terms = get_random_int_in_range (1, 3);
     if (gnc_engine_debug_random) printf("num_terms = %d", num_terms);
 
-    q = xaccMallocQuery ();
+    q = qof_query_create_for(GNC_ID_SPLIT);
 
     while (num_terms-- > 0)
     {
@@ -1882,12 +1882,12 @@ get_random_query(void)
     if (gnc_engine_debug_random) printf ("\n");
     set_query_sort (q, get_random_int_in_range (1, BY_NONE));
 
-    xaccQuerySetSortIncreasing (q,
+    qof_query_set_sort_increasing (q,
                                 get_random_boolean (),
                                 get_random_boolean (),
                                 get_random_boolean ());
 
-    xaccQuerySetMaxSplits (q, get_random_int_in_range (-50000, 50000));
+    qof_query_set_max_results (q, get_random_int_in_range (-50000, 50000));
 
     return q;
 }
@@ -2047,7 +2047,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
     if (query_types == RANDOM_QT)
         query_types = get_random_query_type ();
 
-    q = xaccMallocQuery ();
+    q = qof_query_create_for(GNC_ID_SPLIT);
 
     s = xaccTransGetSplit (trans, 0);
     a = xaccSplitGetAccount (s);
@@ -2121,7 +2121,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
                 break;
             default:
                 failure ("bad reconcile flag");
-                xaccFreeQuery (q);
+                qof_query_destroy (q);
                 return NULL;
             }
 
