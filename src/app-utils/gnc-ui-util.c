@@ -1014,21 +1014,22 @@ gnc_locale_default_currency (void)
 }
 
 
-gnc_commodity *
-gnc_default_currency (void)
+static gnc_commodity *
+gnc_default_currency_common (gchar *requested_currency,
+                      const gchar *gconf_section)
 {
     gnc_commodity *currency = NULL;
     gchar *choice, *mnemonic;
 
-    if (user_default_currency)
+    if (requested_currency)
         return gnc_commodity_table_lookup(gnc_get_current_commodities(),
                                           GNC_COMMODITY_NS_CURRENCY,
-                                          user_default_currency);
+                                          requested_currency);
 
-    choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_CHOICE, NULL);
-    if (choice && strcmp(choice, "other") == 0)
+    choice = gnc_gconf_get_string(gconf_section, KEY_CURRENCY_CHOICE, NULL);
+    if (g_strcmp0(choice, "other") == 0)
     {
-        mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
+        mnemonic = gnc_gconf_get_string(gconf_section, KEY_CURRENCY_OTHER, NULL);
         currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
                                               GNC_COMMODITY_NS_CURRENCY, mnemonic);
         DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
@@ -1040,47 +1041,24 @@ gnc_default_currency (void)
         currency = gnc_locale_default_currency ();
     if (currency)
     {
-        mnemonic = user_default_currency;
-        user_default_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
+        mnemonic = requested_currency;
+        requested_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
         g_free(mnemonic);
     }
     return currency;
+}
+
+gnc_commodity *
+gnc_default_currency (void)
+{
+    return gnc_default_currency_common (user_default_currency, GCONF_GENERAL);
 }
 
 gnc_commodity *
 gnc_default_report_currency (void)
 {
-    gnc_commodity *currency = NULL;
-    gchar *choice, *mnemonic;
-
-    if (user_report_currency)
-        return gnc_commodity_table_lookup(gnc_get_current_commodities(),
-                                          GNC_COMMODITY_NS_CURRENCY,
-                                          user_report_currency);
-    choice = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
-                                  KEY_CURRENCY_CHOICE, NULL);
-    if (choice && strcmp(choice, "other") == 0)
-    {
-        mnemonic = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
-                                        KEY_CURRENCY_OTHER, NULL);
-        currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-                                              GNC_COMMODITY_NS_CURRENCY, mnemonic);
-        DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
-        g_free(mnemonic);
-    }
-    g_free(choice);
-
-    if (!currency)
-        currency = gnc_locale_default_currency ();
-    if (currency)
-    {
-        mnemonic = user_report_currency;
-        user_report_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
-        g_free(mnemonic);
-    }
-    return currency;
+    return gnc_default_currency_common (user_report_currency, GCONF_GENERAL_REPORT);
 }
-
 
 static void
 gnc_currency_changed_cb (GConfEntry *entry, gpointer user_data)
