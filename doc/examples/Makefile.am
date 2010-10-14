@@ -11,22 +11,13 @@ doc_DATA = \
   abc.qif \
   bogus.qif \
   cbb-export.qif \
-  currency.gnucash \
   currency_tree_xml.gnucash \
   every.qif \
   ms-money.qif \
   quicktest.qif \
-  splitdemo.gnucash \
   swipe.qif \
   taxreport.gnucash \
-  test.gnucash \
-  test2.gnucash \
-  test3.gnucash \
-  test4.gnucash \
-  trading.gnucash \
-  trading2.gnucash \
-  web.qif \
-  xfer.gnucash
+  web.qif
 
 EXTRA_DIST = \
   ${doc_DATA}
