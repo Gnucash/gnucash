@@ -162,6 +162,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">&#x25CF;</property>
+                            <property name="activates_default">True</property>
                           </widget>
                           <packing>
                             <property name="position">0</property>
@@ -172,6 +173,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">&#x25CF;</property>
+                            <property name="activates_default">True</property>
                           </widget>
                           <packing>
                             <property name="position">1</property>
@@ -182,6 +184,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">&#x25CF;</property>
+                            <property name="activates_default">True</property>
                           </widget>
                           <packing>
                             <property name="position">2</property>
@@ -193,6 +196,7 @@
                             <property name="can_focus">True</property>
                             <property name="visibility">False</property>
                             <property name="invisible_char">&#x25CF;</property>
+                            <property name="activates_default">True</property>
                           </widget>
                           <packing>
                             <property name="position">3</property>
