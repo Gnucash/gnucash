@@ -231,6 +231,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     Split *sp;
     gnc_numeric runningBalance;
     gnc_numeric split_value;
+    const char *tmpStr;
 
     runningBalance = gnc_numeric_zero();
 
@@ -251,12 +252,16 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 
         if (gnc_numeric_positive_p(split_value))
         {
-            gnc_ttsplitinfo_set_debit_formula_numeric( ttsi, split_value );
+            tmpStr = xaccPrintAmount( split_value,
+                                      gnc_default_print_info(FALSE) );
+            gnc_ttsplitinfo_set_debit_formula( ttsi, tmpStr );
         }
         else
         {
             /* Negate the numeric so it prints w/o the sign at the front. */
-            gnc_ttsplitinfo_set_credit_formula_numeric ( ttsi, split_value );
+            tmpStr = xaccPrintAmount( gnc_numeric_neg( split_value ),
+                                      gnc_default_print_info(FALSE) );
+            gnc_ttsplitinfo_set_credit_formula( ttsi, tmpStr );
         }
 
         /* Copy over per-split account info */

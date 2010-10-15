@@ -1062,15 +1062,6 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
     kvp_value_delete(tmp_value);
 
     tmp_value
-    = kvp_value_new_numeric(gnc_ttsplitinfo_get_credit_numeric(s_info));
-    kvp_frame_set_slot_path(split_frame,
-                            tmp_value,
-                            GNC_SX_ID,
-                            GNC_SX_CREDIT_NUMERIC,
-                            NULL);
-    kvp_value_delete(tmp_value);
-
-    tmp_value
     = kvp_value_new_string(gnc_ttsplitinfo_get_debit_formula(s_info));
 
     kvp_frame_set_slot_path(split_frame,
@@ -1079,15 +1070,6 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
                             GNC_SX_DEBIT_FORMULA,
                             NULL);
 
-    kvp_value_delete(tmp_value);
-
-    tmp_value
-    = kvp_value_new_numeric(gnc_ttsplitinfo_get_debit_numeric(s_info));
-    kvp_frame_set_slot_path(split_frame,
-                            tmp_value,
-                            GNC_SX_ID,
-                            GNC_SX_DEBIT_NUMERIC,
-                            NULL);
     kvp_value_delete(tmp_value);
 
     acc_guid = qof_entity_get_guid(QOF_INSTANCE(gnc_ttsplitinfo_get_account(s_info)));
