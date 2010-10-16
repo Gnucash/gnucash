@@ -83,7 +83,7 @@ GType gnc_pricedb_get_type(void);
     they're really needed.
 
     Every QofBook contains a GNCPriceDB, accessible via
-    gnc_book_get_pricedb.
+    gnc_pricedb_get_db.
 
     \warning The PriceDB does not currently use the object
     system used elsewhere in the GnuCash Engine, i.e. it does
@@ -279,9 +279,6 @@ gboolean gnc_price_list_equal(PriceList *prices1, PriceList *prices2);
 */
 /** Data type */
 typedef struct gnc_price_db_s GNCPriceDB;
-
-/* XXX backwards-compat defines, remove these someday */
-#define gnc_book_get_pricedb  gnc_pricedb_get_db
 
 /** return the pricedb associated with the book */
 /*@ dependent @*/ GNCPriceDB * gnc_pricedb_get_db(QofBook *book);

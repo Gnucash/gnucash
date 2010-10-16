@@ -229,7 +229,7 @@ refresh_details_page (StockSplitInfo *info)
 
     commodity = xaccAccountGetCommodity (account);
     book = gnc_account_get_book (account);
-    db = gnc_book_get_pricedb(book);
+    db = gnc_pricedb_get_db(book);
 
     prices = gnc_pricedb_lookup_latest_any_currency(db, commodity);
     if (prices)
@@ -486,7 +486,7 @@ gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
         gnc_price_commit_edit (price);
 
         book = gnc_get_current_book ();
-        pdb = gnc_book_get_pricedb (book);
+        pdb = gnc_pricedb_get_db (book);
 
         if (!gnc_pricedb_add_price (pdb, price))
             gnc_error_dialog (info->window, "%s", _("Error adding price."));

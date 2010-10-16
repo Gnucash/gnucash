@@ -125,7 +125,7 @@ gnc_book_dom_tree_create(QofBook *book)
      */
     xmlAddChild(ret, gnc_commodity_dom_tree_create(
                     gnc_book_get_commodity_table(book)));
-    xmlAddChild(ret, gnc_pricedb_dom_tree_create(gnc_book_get_pricedb(book)));
+    xmlAddChild(ret, gnc_pricedb_dom_tree_create(gnc_pricedb_get_db(book)));
     if (allow_incompat)
     {
         accnode = gnc_account_dom_tree_create(account, FALSE);

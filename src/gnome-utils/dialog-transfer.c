@@ -1904,7 +1904,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
     }
 
     xferData->book = book;
-    xferData->pricedb = gnc_book_get_pricedb (book);
+    xferData->pricedb = gnc_pricedb_get_db (book);
 
     gnc_xfer_dialog_create(parent, xferData);
 

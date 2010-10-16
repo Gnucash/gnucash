@@ -95,7 +95,7 @@ load_all_prices( GncSqlBackend* be )
     g_return_if_fail( be != NULL );
 
     pBook = be->primary_book;
-    pPriceDB = gnc_book_get_pricedb( pBook );
+    pPriceDB = gnc_pricedb_get_db( pBook );
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     if ( stmt != NULL )
     {
@@ -217,7 +217,7 @@ write_prices( GncSqlBackend* be )
 
     g_return_val_if_fail( be != NULL, FALSE );
 
-    priceDB = gnc_book_get_pricedb( be->primary_book );
+    priceDB = gnc_pricedb_get_db( be->primary_book );
 
     data.be = be;
     data.is_ok = TRUE;

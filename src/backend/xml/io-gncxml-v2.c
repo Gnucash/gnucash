@@ -1073,7 +1073,7 @@ write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
     xmlNodePtr node;
 
-    node = gnc_pricedb_dom_tree_create(gnc_book_get_pricedb(book));
+    node = gnc_pricedb_dom_tree_create(gnc_pricedb_get_db(book));
 
     if (!node)
     {

@@ -462,7 +462,7 @@ finish_helper(gpointer key, gpointer value, gpointer data)
     comm = gnc_commodity_table_insert(gnc_get_current_commodities(), comm);
 
     /* s/old commodity/new commodity/g  in the pricedb */
-    gnc_pricedb_substitute_commodity(gnc_book_get_pricedb(book),
+    gnc_pricedb_substitute_commodity(gnc_pricedb_get_db(book),
                                      old_comm,
                                      comm);
 

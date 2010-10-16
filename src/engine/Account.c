@@ -3293,7 +3293,7 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
         return balance;
 
     book = gnc_account_get_book (acc);
-    pdb = gnc_book_get_pricedb (book);
+    pdb = gnc_pricedb_get_db (book);
 
     ts.tv_sec = date;
     ts.tv_nsec = 0;
