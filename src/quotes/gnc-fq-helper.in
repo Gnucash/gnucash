@@ -47,7 +47,7 @@ use Date::Manip;
 # For currency quotes, the symbols alternate between the 'from'
 # and 'to' currencies.
 
-# For examle:
+# For example:
 #
 # (yahoo "IBM" "LNUX")
 # (fidelity_direct "FBIOX" "FSELX")

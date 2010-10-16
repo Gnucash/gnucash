@@ -118,7 +118,7 @@
    types whose functions I call, so this header is providing almost no
    benefit of aggregation.  But, if it included all the headers I
    could just include this file.  Or would that cause a massive
-   recompile everytime one engine header changed?
+   recompile every time one engine header changed?
    Even if including all the headers here doesn't make sense, I think
    distributing the stuff in the "Types" section does.
 */
@@ -132,7 +132,7 @@
 typedef struct account_s             Account;
 
 /** @brief Split in Gnucash.
- * A "split" is more commonly refered to as a "entry" in a
+ * A "split" is more commonly referred to as a "entry" in a
  * "transaction". Each split belongs to one Account and one
  * Transaction. The split is one out of several parts a Transaction is
  * divided into.
@@ -183,7 +183,7 @@ typedef struct gnc_commodity_table_s gnc_commodity_table;
  * needed framework for implementing depreciation, capital gains,
  * inventory control and invoices.
  *
- * See the file src/doc/lots.txt for implmentation overview.
+ * See the file src/doc/lots.txt for implementation overview.
  */
 typedef struct gnc_lot_s             GNCLot;
 
@@ -219,11 +219,11 @@ typedef void (* gnc_engine_init_hook_t)(int, char **);
 
 /** PROTOTYPES ******************************************************/
 
-/** GnuCash version number infomation. */
+/** GnuCash version number information. */
 unsigned int gnucash_major_version (void);
-/** GnuCash version number infomation. */
+/** GnuCash version number information. */
 unsigned int gnucash_minor_version (void);
-/** GnuCash version number infomation. */
+/** GnuCash version number information. */
 unsigned int gnucash_micro_version (void);
 
 /** gnc_engine_init should be called before gnc engine
