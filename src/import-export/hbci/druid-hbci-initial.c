@@ -389,7 +389,7 @@ on_accountlist_changed (GtkTreeSelection *selection,
                 (strlen(AB_Account_GetCurrency (hbci_acc)) > 0))
         {
             currency = gnc_commodity_table_lookup
-                       (gnc_book_get_commodity_table (gnc_get_current_book ()),
+                       (gnc_commodity_table_get_table (gnc_get_current_book ()),
                         GNC_COMMODITY_NS_CURRENCY, AB_Account_GetCurrency (hbci_acc));
         }
 

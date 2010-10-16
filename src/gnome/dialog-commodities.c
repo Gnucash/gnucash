@@ -196,7 +196,7 @@ remove_clicked (CommoditiesDialog *cd)
     {
         gnc_commodity_table *ct;
 
-        ct = gnc_book_get_commodity_table (cd->book);
+        ct = gnc_commodity_table_get_table (cd->book);
         for (node = prices; node; node = node->next)
             gnc_pricedb_remove_price(pdb, node->data);
 

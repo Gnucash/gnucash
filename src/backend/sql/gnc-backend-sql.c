@@ -297,7 +297,7 @@ write_commodities( GncSqlBackend* be, QofBook* book )
     g_return_if_fail( be != NULL );
     g_return_if_fail( book != NULL );
 
-    tbl = gnc_book_get_commodity_table( book );
+    tbl = gnc_commodity_table_get_table( book );
     namespaces = gnc_commodity_table_get_namespaces( tbl );
     if ( namespaces != NULL )
     {

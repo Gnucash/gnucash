@@ -457,7 +457,7 @@ gnc_ui_update_commodity_picker (GtkWidget *cbe,
     gtk_list_store_clear(GTK_LIST_STORE(model));
     gtk_combo_box_set_active(combo_box, -1);
 
-    table = gnc_book_get_commodity_table (gnc_get_current_book ());
+    table = gnc_commodity_table_get_table (gnc_get_current_book ());
     commodities = gnc_commodity_table_get_commodities(table, namespace);
     for (iterator = commodities; iterator; iterator = iterator->next)
     {

@@ -193,7 +193,7 @@ add_account_local(sixtp_gdv2 *data, Account *act)
     Account *parent, *root;
     int type;
 
-    table = gnc_book_get_commodity_table (data->book);
+    table = gnc_commodity_table_get_table (data->book);
 
     clear_up_account_commodity(table, act,
                                DxaccAccountGetCurrency,
@@ -247,7 +247,7 @@ add_commodity_local(sixtp_gdv2 *data, gnc_commodity *com)
 {
     gnc_commodity_table *table;
 
-    table = gnc_book_get_commodity_table (data->book);
+    table = gnc_commodity_table_get_table (data->book);
 
     gnc_commodity_table_insert(table, com);
 
@@ -262,7 +262,7 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
 {
     gnc_commodity_table *table;
 
-    table = gnc_book_get_commodity_table (data->book);
+    table = gnc_commodity_table_get_table (data->book);
 
     xaccTransBeginEdit (trn);
     clear_up_transaction_commodity(table, trn,
@@ -793,7 +793,7 @@ qof_session_load_from_xml_file_v2_full(
 
     /* fix price quote sources */
     root = gnc_book_get_root_account(book);
-    xaccAccountTreeScrubQuoteSources (root, gnc_book_get_commodity_table(book));
+    xaccAccountTreeScrubQuoteSources (root, gnc_commodity_table_get_table(book));
 
     /* Fix account and transaction commodities */
     xaccAccountTreeScrubCommodities (root);
@@ -979,7 +979,7 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     if (!write_counts(out,
                       "commodity",
                       gnc_commodity_table_get_size(
-                          gnc_book_get_commodity_table(book)),
+                          gnc_commodity_table_get_table(book)),
                       "account",
                       1 + gnc_account_n_descendants(gnc_book_get_root_account(book)),
                       "transaction",
@@ -1026,7 +1026,7 @@ write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     GList *lp;
     gboolean success = TRUE;
 
-    tbl = gnc_book_get_commodity_table(book);
+    tbl = gnc_commodity_table_get_table(book);
 
     namespaces = gnc_commodity_table_get_namespaces(tbl);
     if (namespaces)
@@ -1263,7 +1263,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
     be = qof_book_get_backend(book);
     gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
     gd->counter.commodities_total =
-        gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
+        gnc_commodity_table_get_size(gnc_commodity_table_get_table(book));
     gd->counter.accounts_total = 1 +
                                  gnc_account_n_descendants(gnc_book_get_root_account(book));
     gd->counter.transactions_total = gnc_book_count_transactions(book);
@@ -1297,7 +1297,7 @@ gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE
     root = gnc_book_get_root_account(book);
     nacc = 1 + gnc_account_n_descendants(root);
 
-    table = gnc_book_get_commodity_table(book);
+    table = gnc_commodity_table_get_table(book);
     ncom = gnc_commodity_table_get_size(table);
 
     if (!write_v2_header(out)

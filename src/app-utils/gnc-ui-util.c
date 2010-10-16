@@ -236,7 +236,7 @@ gnc_get_current_root_account (void)
 gnc_commodity_table *
 gnc_get_current_commodities (void)
 {
-    return gnc_book_get_commodity_table (gnc_get_current_book ());
+    return gnc_commodity_table_get_table (gnc_get_current_book ());
 }
 
 gchar *

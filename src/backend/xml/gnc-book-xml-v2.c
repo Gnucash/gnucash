@@ -124,7 +124,7 @@ gnc_book_dom_tree_create(QofBook *book)
      * And that's OK, since its probably a performance boost anyway.
      */
     xmlAddChild(ret, gnc_commodity_dom_tree_create(
-                    gnc_book_get_commodity_table(book)));
+                    gnc_commodity_table_get_table(book)));
     xmlAddChild(ret, gnc_pricedb_dom_tree_create(gnc_pricedb_get_db(book)));
     if (allow_incompat)
     {

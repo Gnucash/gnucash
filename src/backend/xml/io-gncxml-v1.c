@@ -1985,7 +1985,7 @@ commodity_restore_end_handler(gpointer data_for_children,
         {
             gnc_commodity_table *ctab;
 
-            ctab = gnc_book_get_commodity_table (pstatus->book);
+            ctab = gnc_commodity_table_get_table (pstatus->book);
 
             if (ctab)
             {
@@ -2156,7 +2156,7 @@ generic_gnc_commodity_lookup_end_handler(gpointer data_for_children,
         gnc_commodity_table *table;
         gnc_commodity *com;
 
-        table = gnc_book_get_commodity_table (pstatus->book);
+        table = gnc_commodity_table_get_table (pstatus->book);
 
         com = gnc_commodity_table_lookup(table, cpi->namespace, cpi->id);
 

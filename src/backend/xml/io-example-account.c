@@ -144,7 +144,7 @@ add_account_local(GncExampleAccount *gea, Account *act)
 {
     gnc_commodity_table *table;
 
-    table = gnc_book_get_commodity_table (gea->book);
+    table = gnc_commodity_table_get_table (gea->book);
 
     clear_up_account_commodity(table, act,
                                xaccAccountGetCommodity,

@@ -369,7 +369,7 @@ gnc_tree_view_commodity_new (QofBook *book,
 
     ENTER(" ");
     /* Create/get a pointer to the existing model for this set of books. */
-    ct = gnc_book_get_commodity_table (book);
+    ct = gnc_commodity_table_get_table (book);
     model = gnc_tree_model_commodity_new (book, ct);
 
     /* Set up the view private filter on the common model. */

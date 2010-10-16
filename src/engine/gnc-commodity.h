@@ -691,13 +691,10 @@ gboolean gnc_commodity_is_currency(const gnc_commodity *cm);
 @{
 */
 
-/** Returns the commodity table assoicated with a book.
+/** Returns the commodity table associated with a book.
  */
 /*@ dependent @*/
 gnc_commodity_table * gnc_commodity_table_get_table(QofBook *book);
-
-/* XXX backwards compat function; remove me someday */
-#define gnc_book_get_commodity_table gnc_commodity_table_get_table
 
 /** compare two tables for equality */
 gboolean gnc_commodity_table_equal(gnc_commodity_table *t_1,

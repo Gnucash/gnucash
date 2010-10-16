@@ -210,7 +210,7 @@ test_add_account(const char *tag, gpointer globaldata, gpointer data)
 
     com = xaccAccountGetCommodity (account);
 
-    t = gnc_book_get_commodity_table (sixbook);
+    t = gnc_commodity_table_get_table (sixbook);
 
     new_com = gnc_commodity_table_lookup (t,
                                           gnc_commodity_get_namespace (com),
