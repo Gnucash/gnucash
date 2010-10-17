@@ -42,6 +42,8 @@
 #include "gnc-engine.h"
 #include "SX-book.h"
 #include "Recurrence.h"
+#include "gncBillTerm.h"
+#include "gncTaxTable.h"
 
 #include "gnc-gconf-utils.h"
 

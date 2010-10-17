@@ -36,8 +36,8 @@
  *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
  */
 
-#ifndef GNC_BACKEND_SQL_H_
-#define GNC_BACKEND_SQL_H_
+#ifndef GNC_BACKEND_SQL_H
+#define GNC_BACKEND_SQL_H
 
 #include "qof.h"
 #include "qofbackend-p.h"
@@ -752,7 +752,7 @@ typedef struct
     gboolean is_ok;
 } write_objects_t;
 
-#endif /* GNC_BACKEND_SQL_H_ */
+#endif /* GNC_BACKEND_SQL_H */
 
 /**
   @}  end of the SQL Backend Core doxygen group

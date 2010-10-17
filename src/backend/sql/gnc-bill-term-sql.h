@@ -30,7 +30,8 @@
 #ifndef GNC_BILLTERM_SQL_H
 #define GNC_BILLTERM_SQL_H
 
-#include "gncBillTerm.h"
+#include "gnc-backend-sql.h"
+#include "qof.h"
 
 #define CT_BILLTERMREF "billterm"
 

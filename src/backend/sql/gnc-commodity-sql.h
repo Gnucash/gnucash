@@ -26,13 +26,13 @@
  * restoring data to/from an SQL database
  */
 
-#ifndef GNC_COMMODITY_SQL_H_
-#define GNC_COMMODITY_SQL_H_
+#ifndef GNC_COMMODITY_SQL_H
+#define GNC_COMMODITY_SQL_H
 
-#include "qof.h"
-#include <gmodule.h>
+#include "gnc-backend-sql.h"
+#include "gnc-commodity.h"
 
 void gnc_sql_init_commodity_handler( void );
 gboolean gnc_sql_save_commodity( GncSqlBackend* be, gnc_commodity* pCommodity );
 
-#endif /* GNC_COMMODITY_SQL_H_ */
+#endif /* GNC_COMMODITY_SQL_H */

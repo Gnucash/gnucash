@@ -26,11 +26,13 @@
  * restoring data to/from an SQL database
  */
 
-#ifndef GNC_RECURRENCE_SQL_H_
-#define GNC_RECURRENCE_SQL_H_
+#ifndef GNC_RECURRENCE_SQL_H
+#define GNC_RECURRENCE_SQL_H
 
-#include "qof.h"
-#include <gmodule.h>
+#include <glib.h>
+#include "Recurrence.h"
+#include "guid.h"
+#include "gnc-backend-sql.h"
 
 gboolean gnc_sql_recurrence_save( GncSqlBackend* be, const GncGUID* guid, const Recurrence* pRecurrence );
 void gnc_sql_recurrence_save_list( GncSqlBackend* be, const GncGUID* guid, GList* schedule );
@@ -42,4 +44,4 @@ GList* gnc_sql_recurrence_load_list( GncSqlBackend* be, const GncGUID* guid );
 
 void gnc_sql_init_recurrence_handler( void );
 
-#endif /* GNC_RECURRENCE_SQL_H_ */
+#endif /* GNC_RECURRENCE_SQL_H */

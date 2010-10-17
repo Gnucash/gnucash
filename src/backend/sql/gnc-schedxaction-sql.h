@@ -26,13 +26,13 @@
  * restoring data to/from an SQL database
  */
 
-#ifndef GNC_SCHEDXACTION_SQL_H_
-#define GNC_SCHEDXACTION_SQL_H_
+#ifndef GNC_SCHEDXACTION_SQL_H
+#define GNC_SCHEDXACTION_SQL_H
 
 #include "qof.h"
-#include <gmodule.h>
+#include "gnc-backend-sql.h"
 
 void gnc_sql_init_schedxaction_handler( void );
 gboolean gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst );
 
-#endif /* GNC_SCHEDXACTION_SQL_H_ */
+#endif /* GNC_SCHEDXACTION_SQL_H */

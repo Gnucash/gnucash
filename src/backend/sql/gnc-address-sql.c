@@ -36,6 +36,8 @@
 
 #include "gnc-engine.h"
 
+#include "gncAddress.h"
+
 #include "gnc-backend-sql.h"
 #include "gnc-address-sql.h"
 

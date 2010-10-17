@@ -29,9 +29,6 @@
 #ifndef GNC_OWNER_SQL_H
 #define GNC_OWNER_SQL_H
 
-#include "gncOwner.h"
-#include "qof.h"
-
 #define CT_OWNERREF "owner"
 
 void gnc_owner_sql_initialize( void );

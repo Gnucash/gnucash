@@ -26,11 +26,14 @@
  * restoring data to/from an SQL database
  */
 
-#ifndef GNC_SLOTS_SQL_H_
-#define GNC_SLOTS_SQL_H_
+#ifndef GNC_SLOTS_SQL_H
+#define GNC_SLOTS_SQL_H
 
+#include <glib.h>
+#include "guid.h"
+#include "kvp_frame.h"
 #include "qof.h"
-#include <gmodule.h>
+#include "gnc-backend-sql.h"
 
 /**
  * gnc_sql_slots_save - Saves slots for an object to the db.
@@ -69,7 +72,6 @@ void gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst );
  */
 void gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list );
 
-
 typedef QofInstance* (*BookLookupFn)( const GncGUID* guid, const QofBook* book );
 
 /**
@@ -86,4 +88,4 @@ void gnc_sql_slots_load_for_sql_subquery( GncSqlBackend* be, const gchar* subque
 
 void gnc_sql_init_slots_handler( void );
 
-#endif /* GNC_SLOTS_SQL_H_ */
+#endif /* GNC_SLOTS_SQL_H */

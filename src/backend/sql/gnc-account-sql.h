@@ -26,13 +26,13 @@
  * restoring data to/from an SQL database
  */
 
-#ifndef GNC_ACCOUNT_SQL_H_
-#define GNC_ACCOUNT_SQL_H_
+#ifndef GNC_ACCOUNT_SQL_H
+#define GNC_ACCOUNT_SQL_H
 
+#include "gnc-backend-sql.h"
 #include "qof.h"
-#include <gmodule.h>
 
 void gnc_sql_init_account_handler( void );
 gboolean gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst );
 
-#endif /* GNC_ACCOUNT_SQL_H_ */
+#endif /* GNC_ACCOUNT_SQL_H */

@@ -26,12 +26,9 @@
  * restoring data to/from an SQL database
  */
 
-#ifndef GNC_PRICE_SQL_H_
-#define GNC_PRICE_SQL_H_
-
-#include "qof.h"
-#include <gmodule.h>
+#ifndef GNC_PRICE_SQL_H
+#define GNC_PRICE_SQL_H
 
 void gnc_sql_init_price_handler( void );
 
-#endif /* GNC_PRICE_SQL_H_ */
+#endif /* GNC_PRICE_SQL_H */

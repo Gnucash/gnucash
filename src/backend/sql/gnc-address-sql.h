@@ -29,8 +29,6 @@
 #ifndef GNC_ADDRESS_SQL_H
 #define GNC_ADDRESS_SQL_H
 
-#include "gncAddress.h"
-
 #define CT_ADDRESS "address"
 
 void gnc_address_sql_initialize( void );
