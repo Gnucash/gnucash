@@ -16,7 +16,6 @@ LDADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ../libgncmod-business-core.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-  ${top_builddir}/src/backend/xml/libgncmod-backend-xml.la \
   ${GLIB_LIBS}
 
 TESTS = \
