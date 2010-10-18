@@ -173,7 +173,7 @@ void qof_log_set_default(QofLogLevel log_level);
 
 /** Log a fatal error */
 #define FATAL(format, ...) do { \
-    g_log (log_module, G_LOG_LEVEL_FATAL, \
+    g_log (log_module, G_LOG_LEVEL_ERROR, \
       "[%s()] " format, PRETTY_FUNC_NAME , __VA_ARGS__); \
 } while (0)
 
@@ -225,7 +225,7 @@ void qof_log_set_default(QofLogLevel log_level);
 
 /** Log a fatal error */
 #define FATAL(format, args...) do { \
-    g_log (log_module, G_LOG_LEVEL_FATAL, \
+    g_log (log_module, G_LOG_LEVEL_ERROR, \
       "[%s()] " format, PRETTY_FUNC_NAME , ## args); \
 } while (0)
 
