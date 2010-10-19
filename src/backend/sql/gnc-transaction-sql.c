@@ -721,7 +721,7 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
         is_ok = gnc_sql_save_commodity( be, commodity );
 	if ( ! is_ok )
 	{
-	  err = "Commodity save failed: Probably and invalid or missing currency";
+	  err = "Commodity save failed: Probably an invalid or missing currency";
 	  qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
 	}
     }
