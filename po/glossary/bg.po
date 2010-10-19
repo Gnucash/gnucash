@@ -1,17 +1,16 @@
-# Bulgarian translation of glossary of terms gnucash po-file.
-# Copyright (C) 2010 Rosi Dimova <pocu@bk.ru>.
-# This file is distributed under the same license as the gnucash package.
-# Rosi Dimova <pocu@bk.ru>, 2010.
+# Glossary of terms in GnuCash
+# Copyright (C) 2001 Free Software Foundation, Inc.
+# Christian Stimming <stimming@tuhh.de>, 2001
 #
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash trunk\n"
+"Project-Id-Version: gnucash 2.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-29 15:14+0200\n"
-"PO-Revision-Date: 2010-07-23 09:47+0200\n"
+"PO-Revision-Date: 2010-08-31 14:21+0200\n"
 "Last-Translator: Rosi Dimova <pocu@bk.ru>\n"
-"Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"Language-Team: BG <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,7 +20,7 @@ msgstr ""
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr "Термин"
+msgstr "Срок"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -41,7 +40,7 @@ msgstr "име на сметка"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
 msgid "account type: Asset"
-msgstr "account type: активи"
+msgstr "account type: авоари"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -85,7 +84,7 @@ msgstr "account type: акции"
 
 #. "-"
 msgid "account: parent account"
-msgstr "account: родителска сметка"
+msgstr "account: основна сметка"
 
 #. "-"
 msgid "account: subaccount"
@@ -252,7 +251,7 @@ msgstr "затваряне"
 # Devise/Wertpapier (auch: Währung, Aktie)
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "стоки"
+msgstr "инвестиционна стока"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
@@ -276,7 +275,7 @@ msgstr "кредитна карта"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
-msgstr "превод"
+msgstr "кредитен превод"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -312,7 +311,7 @@ msgstr "Начални настройки"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr "Зачисление в кредит"
+msgstr "депозит"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -556,7 +555,7 @@ msgstr "промяна на транзакция"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
-msgstr "изравнявам"
+msgstr "сверявам"
 
 #. "-"
 msgid "record keeping"
@@ -668,19 +667,19 @@ msgstr "транзакция"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "по сметка"
+msgstr "платена"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr "замразен"
+msgstr "блокирана"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr "изравнен"
+msgstr "сверена"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "недействителен"
+msgstr "сторнирана"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -688,11 +687,11 @@ msgstr "превод"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
-msgstr "кореспондентска сметка"
+msgstr "преводна сметка"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr "вписвам в сметка"
+msgstr "превод, в (register toolbar)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
@@ -720,7 +719,7 @@ msgstr "доставчик"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr "ваучер"
+msgstr "авансов отчет"
 
 # Belastung
 #. "see debit"
