@@ -519,13 +519,18 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     {
         qof_object_foreach_backend( GNC_SQL_BACKEND, write_cb, be );
     }
+    if ( is_ok ) 
+    {
+	(void)gnc_sql_connection_commit_transaction( be->conn );
+	be->is_pristine_db = FALSE;
 
-    (void)gnc_sql_connection_commit_transaction( be->conn );
-    be->is_pristine_db = FALSE;
-
-    // Mark the book as clean
-    qof_book_mark_saved( book );
-
+	// Mark the book as clean
+	qof_book_mark_saved( book );
+    }
+    else
+    {
+	gnc_sql_connection_rollback_transaction( be->conn );
+    }
     LEAVE( "book=%p", book );
 }
 
