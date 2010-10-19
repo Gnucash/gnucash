@@ -16,7 +16,6 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS} \
   ${GCONF_CFLAGS} \
-  ${GTK_CFLAGS} \
   ${WARN_CFLAGS}
 
 libgnc_backend_sql_la_SOURCES = \

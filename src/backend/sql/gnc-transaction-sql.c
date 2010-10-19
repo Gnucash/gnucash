@@ -28,7 +28,6 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "qof.h"
@@ -717,11 +716,13 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
 
     if ( op != OP_DB_DELETE )
     {
+        gnc_commodity *commodity = xaccTransGetCurrency( pTx );
         // Ensure the commodity is in the db
-        is_ok = gnc_sql_save_commodity( be, xaccTransGetCurrency( pTx ) );
+        is_ok = gnc_sql_save_commodity( be, commodity );
 	if ( ! is_ok )
 	{
-	  err = N_("Commodity save failed: Probably and invalid or missing currency");
+	  err = "Commodity save failed: Probably and invalid or missing currency";
+	  qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
 	}
     }
 
@@ -730,7 +731,7 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
         is_ok = gnc_sql_do_db_operation( be, op, TRANSACTION_TABLE, GNC_ID_TRANS, pTx, tx_col_table );
 	if ( ! is_ok )
 	  {
-	    err = N_("Transaction header save failed. Check trace log for SQL errors");
+	    err = "Transaction header save failed. Check trace log for SQL errors";
 	  }
     }
 
@@ -743,14 +744,14 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
             is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
 	    if ( ! is_ok )
 	      {
-		err = N_("Slots save failed. Check trace log for SQL errors");
+		err = "Slots save failed. Check trace log for SQL errors";
 	      }
            if ( is_ok && do_save_splits )
             {
                 is_ok = save_splits( be, guid, xaccTransGetSplitList( pTx ) );
 		if ( ! is_ok )
 		  {
-		    err = N_("Split save failed. Check trace log for SQL errors");
+		    err = "Split save failed. Check trace log for SQL errors";
 		  }
             }
         }
@@ -759,42 +760,38 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
             is_ok = gnc_sql_slots_delete( be, guid );
 	    if ( ! is_ok )
 	      {
-		err = N_("Slots delete failed. Check trace log for SQL errors");
+		err = "Slots delete failed. Check trace log for SQL errors";
 	      }
             if ( is_ok )
             {
                 is_ok = delete_splits( be, pTx );
 		if ( ! is_ok )
 		  {
-		    err = N_("Split delete failed. Check trace log for SQL errors");
+		    err = "Split delete failed. Check trace log for SQL errors";
 		  }
              }
         }
     }
     if (! is_ok )
       {
-	gchar *message1 = N_("Transaction %s dated %s in account %s not saved due to %s.%s");
-	gchar *message2 = N_("\nDatabase may be corrupted, check your data carefully.");
-	GtkWidget* msg = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, 
-						GTK_MESSAGE_WARNING,
-						GTK_BUTTONS_CLOSE, 
-						N_("Error saving transaction") );
+	gchar *message1 = "Transaction %s dated %s in account %s not saved due to %s.%s";
+	gchar *message2 = "\nDatabase may be corrupted, check your data carefully.";
 	Split* split = xaccTransGetSplit( pTx, 0);
 	Account *acc = xaccSplitGetAccount( split );
-	gtk_message_dialog_format_secondary_text( GTK_MESSAGE_DIALOG( msg ),
+	/* FIXME: This needs to be implemented
+	qof_error_format_secondary_text( GTK_MESSAGE_DIALOG( msg ),
 						  message1,
 						 xaccTransGetDescription( pTx ),
 						  qof_print_date( xaccTransGetDate( pTx ) ), 
 						  xaccAccountGetName( acc ),
 						  err,
 						  message2 );
+	*/
 	PERR( "Transaction %s dated %s in account %s not saved due to %s.\n", 
 	      xaccTransGetDescription( pTx ),
 	      qof_print_date( xaccTransGetDate( pTx ) ), 
 	      xaccAccountGetName( acc ),
 	      err );
-	gtk_dialog_run ( GTK_DIALOG( msg ) );
-	gtk_widget_destroy ( msg );
       }
     return is_ok;
 }
