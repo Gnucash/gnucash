@@ -396,17 +396,21 @@ static void  process_trans_record(  FILE *log_file)
                     if ((trans = xaccTransLookup (&(record.trans_guid), book)) != NULL
                             && first_record == TRUE)
                     {
+                        first_record = FALSE;
                         if (xaccTransGetReadOnly(trans))
                         {
                             PWARN("Destroying a read only transaction.");
                             xaccTransClearReadOnly(trans);
                         }
+                        xaccTransBeginEdit(trans);
                         xaccTransDestroy(trans);
                     }
                     else if (first_record == TRUE)
                     {
                         PERR("The transaction to delete was not found!");
                     }
+                    else
+                        xaccTransDestroy(trans);
                     break;
                 case LOG_COMMIT:
                     DEBUG("process_trans_record(): Playing back LOG_COMMIT");
@@ -417,6 +421,7 @@ static void  process_trans_record(  FILE *log_file)
                         if (trans != NULL)
                         {
                             DEBUG("process_trans_record(): Transaction to be edited was found");
+                            xaccTransBeginEdit(trans);
                             trans_ro = g_strdup(xaccTransGetReadOnly(trans));
                             if (trans_ro)
                             {
@@ -428,9 +433,9 @@ static void  process_trans_record(  FILE *log_file)
                         {
                             DEBUG("process_trans_record(): Creating a new transaction");
                             trans = xaccMallocTransaction (book);
+                            xaccTransBeginEdit(trans);
                         }
 
-                        xaccTransBeginEdit(trans);
                         xaccTransSetGUID (trans, &(record.trans_guid));
                         /*Fill the transaction info*/
                         if (record.date_entered_present)
@@ -521,8 +526,8 @@ static void  process_trans_record(  FILE *log_file)
             if (trans != NULL) /*If we played with a transaction, commit it here*/
             {
                 xaccTransScrubCurrencyFromSplits(trans);
-                xaccTransCommitEdit(trans);
                 xaccTransSetReadOnly(trans, trans_ro);
+                xaccTransCommitEdit(trans);
                 g_free(trans_ro);
             }
         }
