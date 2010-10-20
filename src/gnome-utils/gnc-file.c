@@ -1122,7 +1122,7 @@ gnc_file_save (void)
 
 /* Note: this dialog will only be used when dbi is not enabled
  *       paths used in it always refer to files and are
- *       never db uris
+ *       never db uris. See gnc_file_do_save_as for that.
  */
 void
 gnc_file_save_as (void)
@@ -1308,20 +1308,49 @@ gnc_file_do_save_as (const char* filename)
     /* if we got to here, then we've successfully gotten a new session */
     /* close up the old file session (if any) */
     qof_session_swap_data (session, new_session);
-    gnc_clear_current_session();
-    session = NULL;
 
     /* XXX At this point, we should really mark the data in the new session
      * as being 'dirty', since we haven't saved it at all under the new
      * session. But I'm lazy...
      */
-    gnc_set_current_session(new_session);
 
     qof_event_resume();
 
+
+    gnc_set_busy_cursor (NULL, TRUE);
+    gnc_window_show_progress(_("Writing file..."), 0.0);
+    qof_session_save (new_session, gnc_window_show_progress);
+    gnc_window_show_progress(NULL, -1.0);
+    gnc_unset_busy_cursor (NULL);
+
+    io_err = qof_session_get_error( new_session );
+    if ( ERR_BACKEND_NO_ERR != io_err )
+    {
+/* Well, poop. The save failed, so the new session is invalid and we
+ * need to restore the old one.
+ */
+        show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE);
+	qof_event_suspend();
+	qof_session_swap_data( new_session, session );
+	qof_session_destroy( new_session );
+	new_session = NULL;
+	qof_event_resume();
+    }
+    else
+    {
+/* Yay! Save was successful, we can dump the old session */
+	qof_event_suspend();
+	gnc_clear_current_session();
+	gnc_set_current_session( new_session );
+	qof_event_resume();
+	session = NULL;
+
+	xaccReopenLog();
+	gnc_add_history (session);
+	gnc_hook_run(HOOK_BOOK_SAVED, session);
+    }
     /* --------------- END CORE SESSION CODE -------------- */
 
-    gnc_file_save ();
     save_in_progress--;
 
     g_free (newfile);
