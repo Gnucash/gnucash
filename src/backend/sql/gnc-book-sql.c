@@ -222,8 +222,6 @@ gnc_sql_save_book( GncSqlBackend* be, QofInstance* inst)
 
     status = gnc_sql_commit_standard_item( be, inst, BOOK_TABLE, GNC_ID_BOOK, col_table );
 
-    qof_book_mark_saved( QOF_BOOK(inst) );
-
     return status;
 }
 
