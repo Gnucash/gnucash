@@ -29,6 +29,7 @@
 #include "gnc-log-replay.h"
 #include "gnc-plugin-log-replay.h"
 #include "gnc-plugin-manager.h"
+#include "gnc-component-manager.h"
 
 static void gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass);
 static void gnc_plugin_log_replay_init (GncPluginLogreplay *plugin);
@@ -148,7 +149,9 @@ static void
 gnc_plugin_log_replay_cmd_new_log_replay (GtkAction *action,
         GncMainWindowActionData *data)
 {
+    gnc_suspend_gui_refresh();
     gnc_file_log_replay ();
+    gnc_resume_gui_refresh();
 }
 
 /************************************************************
