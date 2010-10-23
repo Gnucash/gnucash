@@ -461,9 +461,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                 {
                     gtk_main_iteration();
                 }
-//				gtk_html_jump_to_anchor( GTK_HTML(priv->html), label );
-		g_warning("jump_to_anchor is (still) unimplemented with the webkit viewer. Anchor=\"%s\"", label);
-
+		/* No action required: Webkit jumps to the anchor on its own. */
             }
 
             return;
@@ -865,10 +863,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
     }
     else if ( safe_strcmp( type, URL_TYPE_JUMP ) == 0 )
     {
-//		gtk_html_jump_to_anchor( GTK_HTML(priv->html), label );
-	g_warning("jump_to_anchor is (still) unimplemented with the webkit viewer. Anchor=\"%s\"", label);
-//        g_assert( FALSE );
-
+      /* Webkit jumps to the anchor on its own */
     }
     else if ( safe_strcmp( type, URL_TYPE_SECURE ) == 0 ||
               safe_strcmp( type, URL_TYPE_HTTP ) == 0 ||
