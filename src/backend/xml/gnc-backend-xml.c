@@ -39,6 +39,7 @@
 #include <limits.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <regex.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #else
@@ -775,18 +776,10 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
 
 /* ================================================================= */
 
-/* Determine whether the path refers to a gnucash created file
- * We can filter this based on the file's extension.
- * Currently this can be .gnucash, .log, .LNK or .xac
+/*
+ * Clean up any lock files from prior crashes, and clean up old
+ * backup and log files.
  */
-static int
-gnc_xml_be_select_files (const gchar *d)
-{
-    return (g_str_has_suffix(d, ".LNK") ||
-            g_str_has_suffix(d, ".xac") == 0 /* old datafile extension */ ||
-            g_str_has_suffix(d, GNC_DATAFILE_EXT) ||
-            g_str_has_suffix(d, GNC_LOGFILE_EXT));
-}
 
 static void
 gnc_xml_be_remove_old_files(FileBackend *be)
@@ -794,30 +787,10 @@ gnc_xml_be_remove_old_files(FileBackend *be)
     const gchar *dent;
     GDir *dir;
     struct stat lockstatbuf, statbuf;
-    int pathlen;
     time_t now;
 
     if (g_stat (be->lockfile, &lockstatbuf) != 0)
         return;
-    pathlen = strlen(be->fullpath);
-
-    /*
-     * Clean up any lockfiles from prior crashes, and clean up old
-     * data and log files.  Scandir will do a fist pass on the
-     * filenames and cull the directory down to just files with the
-     * appropriate extensions.  Pity you can't pass user data into
-     * scandir...
-     */
-
-    /*
-     * Unfortunately scandir() is not portable, so re-write this
-     * function without it.  Note that this version will be even a bit
-     * faster because it does not have to sort, malloc, or anything
-     * else that scandir did, and it only performs a single pass
-     * through the directory rather than one pass through the
-     * directory and then one pass over the 'matching' files. --
-     * warlord@MIT.EDU 2002-05-06
-     */
 
     dir = g_dir_open (be->dirname, 0, NULL);
     if (!dir)
@@ -826,73 +799,94 @@ gnc_xml_be_remove_old_files(FileBackend *be)
     now = time(NULL);
     while ((dent = g_dir_read_name(dir)) != NULL)
     {
-        char *name;
-        int len;
+        gchar *name;
 
-        /* Ensure we only evaluate gnucash related files. */
-        if (gnc_xml_be_select_files (dent) == 0)
+        /* Ensure we only evaluate GnuCash related files. */
+        if ( !(g_str_has_suffix(dent, ".LNK") ||
+               g_str_has_suffix(dent, ".xac") /* old data file extension */ ||
+               g_str_has_suffix(dent, GNC_DATAFILE_EXT) ||
+               g_str_has_suffix(dent, GNC_LOGFILE_EXT)) )
             continue;
 
         name = g_build_filename(be->dirname, dent, (gchar*)NULL);
-        len = strlen(name);
+
+        /* Only evaluate files associated with the current data file. */
+        if (!g_str_has_prefix(name, be->fullpath))
+            continue;
 
         /* Never remove the current data file itself */
         if (g_strcmp0(name, be->fullpath) == 0)
             continue;
 
-        /* Is this file associated with the current data file? 
-         * Additionally, the invariants for the pointer arithmetic
-         * must hold: String length long enough to contain the suffix,
-         * and string length large enough so that strptime below will
-         * not be passed a pointer outside of our string. (Otherwise
-         * the result of strptime might be parseable and the main data
-         * file is deleted, #593479) */
-        if ((strncmp(name, be->fullpath, pathlen) == 0)
-            && (len >= 4)
-            && (len > pathlen))
+        /* Test if the current file is a lock file */
+        if (g_str_has_suffix(name, ".LNK"))
         {
-            if (safe_strcmp(name + len - 4, ".LNK") == 0)
+            /* Is a lock file. Skip the active lock file */
+            if ((g_strcmp0(name, be->linkfile) != 0) &&
+                    /* Only delete lock files older than the active one */
+                    (g_stat(name, &statbuf) == 0) &&
+                    (statbuf.st_mtime < lockstatbuf.st_mtime))
             {
-                /* Is a lock file. Skip the active lock file */
-                if ((safe_strcmp(name, be->linkfile) != 0) &&
-                        /* Only delete lock files older than the active one */
-                        (g_stat(name, &statbuf) == 0) &&
-                        (statbuf.st_mtime < lockstatbuf.st_mtime))
-                {
-                    PINFO ("remove stale lock file: %s", name);
-                    g_unlink(name);
-                }
-            }
-            else if (be->file_retention_type == XML_RETAIN_NONE)
-            {
-                PINFO ("remove stale file: %s  - reason: preference XML_RETAIN_NONE", name);
+                PINFO ("remove stale lock file: %s", name);
                 g_unlink(name);
             }
-            else if ((be->file_retention_type == XML_RETAIN_DAYS) &&
-                     (be->file_retention_days > 0))
+
+            continue;
+        }
+
+        /* At this point we're sure the file's name is in one of these forms:
+         * <fullpath/to/datafile><anything>.gnucash
+         * <fullpath/to/datafile><anything>.xac
+         * <fullpath/to/datafile><anything>.log
+         *
+         * To be a file generated by GnuCash, the <anything> part should consist
+         * of 1 dot followed by 14 digits (0 to 9). Let's test this with a
+         * regular expression.
+         */
+        {
+            /* Find the start of the date stamp. This takes some pointer
+             * juggling, but considering the above tests, this should always
+             * be safe */
+            regex_t pattern;
+            gchar *stamp_start = name + strlen(be->fullpath);
+            gchar *expression = g_strdup_printf ("^\\.[[:digit:]]{14}(\\%s|\\%s|\\.xac)$",
+                                                 GNC_DATAFILE_EXT, GNC_LOGFILE_EXT);
+            gboolean got_date_stamp = FALSE;
+
+            if (regcomp(&pattern, expression, REG_EXTENDED | REG_ICASE) != 0)
+                PWARN("Cannot compile regex for date stamp");
+            else if (regexec(&pattern, stamp_start, 0, NULL, 0) == 0)
+                got_date_stamp = TRUE;
+
+            g_free(expression);
+
+            if (!got_date_stamp) /* Not a gnucash created file after all... */
+                continue;
+        }
+
+        /* The file is a backup or log file. Check the user's retention preference
+         * to determine if we should keep it or not
+         */
+        if (be->file_retention_type == XML_RETAIN_NONE)
+        {
+            PINFO ("remove stale file: %s  - reason: preference XML_RETAIN_NONE", name);
+            g_unlink(name);
+        }
+        else if ((be->file_retention_type == XML_RETAIN_DAYS) &&
+                (be->file_retention_days > 0))
+        {
+            int days;
+
+            /* Is the backup file old enough to delete */
+            if (g_stat(name, &statbuf) != 0)
+                continue;
+            days = (int)(difftime(now, statbuf.st_mtime) / 86400);
+
+            PINFO ("file retention = %d days", be->file_retention_days);
+            if (days >= be->file_retention_days)
             {
-                time_t file_time;
-                struct tm file_tm;
-                int days;
-                const char* res;
-
-                PINFO ("file retention = %d days", be->file_retention_days);
-
-                /* Is the backup file old enough to delete */
-                memset(&file_tm, 0, sizeof(file_tm));
-                res = strptime(name + pathlen + 1, "%Y%m%d%H%M%S", &file_tm);
-                file_time = mktime(&file_tm);
-                days = (int)(difftime(now, file_time) / 86400);
-
-
-                if (res
-                        && res != name + pathlen + 1
-                        && file_time > 0
-                        && days >= be->file_retention_days)
-                {
-                    PINFO ("remove stale file: %s  - reason: more than %d days old", name, days);
-                    g_unlink(name);
-                }
+                PINFO ("remove stale file: %s  - reason: more than %d days old", name, days);
+                g_unlink(name);
             }
         }
         g_free(name);
