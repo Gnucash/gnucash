@@ -2170,7 +2170,7 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
     {
         balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                                    gnc_commodity_get_fraction (new_currency),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_unref (price);
         return balance;
     }
@@ -2183,7 +2183,7 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
     {
         balance = gnc_numeric_div (balance, gnc_price_get_value (price),
                                    gnc_commodity_get_fraction (new_currency),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_unref (price);
         return balance;
     }
@@ -2239,7 +2239,7 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
                                GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER);
     balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                                gnc_commodity_get_fraction (new_currency),
-                               GNC_HOW_RND_ROUND);
+                               GNC_HOW_RND_ROUND_HALF_UP);
 
     gnc_price_list_destroy(price_list);
     return balance;
@@ -2267,7 +2267,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
     {
         balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                                    gnc_commodity_get_fraction (new_currency),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_unref (price);
         return balance;
     }
@@ -2280,7 +2280,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
     {
         balance = gnc_numeric_div (balance, gnc_price_get_value (price),
                                    gnc_commodity_get_fraction (new_currency),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_unref (price);
         return balance;
     }
@@ -2321,7 +2321,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
                 currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
                                                        gnc_price_get_value(currency_price),
                                                        gnc_commodity_get_fraction (new_currency),
-                                                       GNC_HOW_RND_ROUND);
+                                                       GNC_HOW_RND_ROUND_HALF_UP);
                 gnc_price_unref(currency_price);
             }
         }
@@ -2333,11 +2333,11 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
 
     balance = gnc_numeric_mul (balance, currency_price_value,
                                gnc_commodity_get_fraction (new_currency),
-                               GNC_HOW_RND_ROUND);
+                               GNC_HOW_RND_ROUND_HALF_UP);
 
     balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                                gnc_commodity_get_fraction (new_currency),
-                               GNC_HOW_RND_ROUND);
+                               GNC_HOW_RND_ROUND_HALF_UP);
 
     gnc_price_list_destroy(price_list);
     return balance;
@@ -2367,7 +2367,7 @@ gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
     {
         balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                                    gnc_commodity_get_fraction (new_currency),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_unref (price);
         return balance;
     }
@@ -2380,7 +2380,7 @@ gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
     {
         balance = gnc_numeric_div (balance, gnc_price_get_value (price),
                                    gnc_commodity_get_fraction (new_currency),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_unref (price);
         return balance;
     }
@@ -2421,7 +2421,7 @@ gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
                 currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
                                                        gnc_price_get_value(currency_price),
                                                        gnc_commodity_get_fraction (new_currency),
-                                                       GNC_HOW_RND_ROUND);
+                                                       GNC_HOW_RND_ROUND_HALF_UP);
                 gnc_price_unref(currency_price);
             }
         }
@@ -2433,10 +2433,10 @@ gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
 
     balance = gnc_numeric_mul (balance, currency_price_value,
                                gnc_commodity_get_fraction (new_currency),
-                               GNC_HOW_RND_ROUND);
+                               GNC_HOW_RND_ROUND_HALF_UP);
     balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                                gnc_commodity_get_fraction (new_currency),
-                               GNC_HOW_RND_ROUND);
+                               GNC_HOW_RND_ROUND_HALF_UP);
 
     gnc_price_list_destroy(price_list);
     return balance;

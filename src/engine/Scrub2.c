@@ -273,7 +273,7 @@ xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
         frac = gnc_numeric_div (dst_amt, src_amt,
                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
         target_val = gnc_numeric_mul (frac, src_val,
-                                      scu, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND);
+                                      scu, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
         if (gnc_numeric_check (target_val))
         {
             PERR ("Numeric overflow of value\n"

@@ -1918,7 +1918,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
     if (!recalc_shares &&
             !recalc_price &&
             !recalc_value &&
-            !gnc_numeric_same (value, calc_value, denom, GNC_HOW_RND_ROUND))
+            !gnc_numeric_same (value, calc_value, denom, GNC_HOW_RND_ROUND_HALF_UP))
     {
         int choice;
         int default_value;
@@ -1989,7 +1989,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
 
             denom = gnc_split_get_amount_denom (split);
 
-            amount = gnc_numeric_div (value, price, denom, GNC_HOW_RND_ROUND);
+            amount = gnc_numeric_div (value, price, denom, GNC_HOW_RND_ROUND_HALF_UP);
 
             cell = gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL);
             gnc_price_cell_set_value ((PriceCell *) cell, amount);
@@ -2047,7 +2047,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
 
         denom = gnc_split_get_value_denom (split);
 
-        value = gnc_numeric_mul (price, amount, denom, GNC_HOW_RND_ROUND);
+        value = gnc_numeric_mul (price, amount, denom, GNC_HOW_RND_ROUND_HALF_UP);
 
         gnc_price_cell_set_debt_credit_value ((PriceCell *) debit_cell,
                                               (PriceCell *) credit_cell, value);

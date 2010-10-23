@@ -779,7 +779,7 @@ balance_cell_edited (GtkCellRendererText *cell,
      */
     {
         int account_cmdty_fraction = xaccAccountGetCommoditySCU(account);
-        amount = gnc_numeric_convert(amount, account_cmdty_fraction, GNC_HOW_RND_ROUND);
+        amount = gnc_numeric_convert(amount, account_cmdty_fraction, GNC_HOW_RND_ROUND_HALF_UP);
     }
     set_final_balance (data->balance_hash, account, amount);
     qof_event_gen (QOF_INSTANCE(account), QOF_EVENT_MODIFY, NULL);

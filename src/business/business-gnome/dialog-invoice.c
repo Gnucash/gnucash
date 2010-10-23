@@ -1344,7 +1344,7 @@ gnc_invoice_reset_total_label (GtkLabel *label, gnc_numeric amt, gnc_commodity *
 {
     char string[256];
 
-    amt = gnc_numeric_convert (amt, gnc_commodity_get_fraction(com), GNC_HOW_RND_ROUND);
+    amt = gnc_numeric_convert (amt, gnc_commodity_get_fraction(com), GNC_HOW_RND_ROUND_HALF_UP);
     xaccSPrintAmount (string, amt, gnc_default_print_info (TRUE));
     gtk_label_set_text (label, string);
 }
@@ -1399,7 +1399,7 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     {
         amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CASH);
         amount = gnc_numeric_sub (amount, to_charge_amt,
-                                  gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND);
+                                  gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND_HALF_UP);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_cash_label), amount, currency);
     }
 
@@ -1407,7 +1407,7 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     {
         amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CARD);
         amount = gnc_numeric_add (amount, to_charge_amt,
-                                  gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND);
+                                  gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND_HALF_UP);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_charge_label), amount, currency);
     }
 }

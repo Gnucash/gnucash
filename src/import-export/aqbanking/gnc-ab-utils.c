@@ -520,7 +520,7 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
         gnc_amount = double_to_gnc_numeric(
                          d_value,
                          xaccAccountGetCommoditySCU(gnc_acc),
-                         GNC_HOW_RND_ROUND);
+                         GNC_HOW_RND_ROUND_HALF_UP);
         if (!ab_value)
             g_warning("transaction_cb: Oops, value was NULL.  Using 0");
         xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
@@ -815,7 +815,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
     value = double_to_gnc_numeric(booked_value,
                                   xaccAccountGetCommoditySCU(gnc_acc),
-                                  GNC_HOW_RND_ROUND);
+                                  GNC_HOW_RND_ROUND_HALF_UP);
     if (noted_value == 0.0 && booked_value == 0.0)
     {
         dialog = gtk_message_dialog_new(

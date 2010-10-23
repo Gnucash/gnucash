@@ -901,7 +901,7 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
         to_amount = gnc_numeric_zero();
     else
         to_amount = gnc_numeric_mul(gnc_amount_edit_get_amount(amount_edit),
-                                    price, scu, GNC_HOW_RND_ROUND);
+                                    price, scu, GNC_HOW_RND_ROUND_HALF_UP);
 
     /* Update the dialog. */
     gnc_amount_edit_set_amount(to_amount_edit, to_amount);
@@ -950,7 +950,7 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
     gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
 
     price = gnc_xfer_dialog_compute_price(xferData);
-    price = gnc_numeric_convert (price, PRECISION, GNC_HOW_RND_ROUND);
+    price = gnc_numeric_convert (price, PRECISION, GNC_HOW_RND_ROUND_HALF_UP);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), price);
     gnc_xfer_dialog_update_conv_info(xferData);
 

@@ -385,7 +385,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 
                     gnc_amount = double_to_gnc_numeric (data.amount,
                                                         gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
-                                                        GNC_HOW_RND_ROUND);
+                                                        GNC_HOW_RND_ROUND_HALF_UP);
                     xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
                     /* Also put the ofx transaction's memo in the split's memo field */
@@ -440,10 +440,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 
                             gnc_amount = double_to_gnc_numeric (ofx_get_investment_amount(data),
                                                                 gnc_commodity_get_fraction(investment_commodity),
-                                                                GNC_HOW_RND_ROUND);
+                                                                GNC_HOW_RND_ROUND_HALF_UP);
                             gnc_units = double_to_gnc_numeric (data.units,
                                                                gnc_commodity_get_fraction(investment_commodity),
-                                                               GNC_HOW_RND_ROUND);
+                                                               GNC_HOW_RND_ROUND_HALF_UP);
                             xaccSplitSetAmount(split, gnc_units);
                             xaccSplitSetValue(split, gnc_amount);
 
@@ -523,7 +523,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 
                             gnc_amount = double_to_gnc_numeric (data.amount,
                                                                 gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
-                                                                GNC_HOW_RND_ROUND);
+                                                                GNC_HOW_RND_ROUND_HALF_UP);
                             xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
                             /* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */
@@ -546,7 +546,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 
                             gnc_amount = double_to_gnc_numeric (-data.amount,/*OFX_INCOME amounts come in as positive numbers*/
                                                                 gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
-                                                                GNC_HOW_RND_ROUND);
+                                                                GNC_HOW_RND_ROUND_HALF_UP);
                             xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
                             /* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */
@@ -570,7 +570,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 
                             gnc_amount = double_to_gnc_numeric (-ofx_get_investment_amount(data),
                                                                 gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
-                                                                GNC_HOW_RND_ROUND);
+                                                                GNC_HOW_RND_ROUND_HALF_UP);
                             xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
                             /* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */

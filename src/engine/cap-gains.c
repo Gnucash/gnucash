@@ -494,7 +494,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
         val_a = gnc_numeric_mul (frac, val_tot,
                                  gnc_numeric_denom(val_tot),
-                                 GNC_HOW_RND_ROUND | GNC_HOW_DENOM_EXACT);
+                                 GNC_HOW_RND_ROUND_HALF_UP | GNC_HOW_DENOM_EXACT);
 
         val_b = gnc_numeric_sub_fixed (val_tot, val_a);
         if (gnc_numeric_check(val_a))
@@ -876,7 +876,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     /* Basis for this split: */
     value = gnc_numeric_mul (frac, lot_value,
                              gnc_numeric_denom(opening_value),
-                             GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND);
+                             GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
     /* Capital gain for this split: */
     value = gnc_numeric_sub (value, split->value,
                              GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);

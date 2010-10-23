@@ -3374,7 +3374,7 @@ xaccAccountBalanceHelper (Account *acc, gpointer data)
     balance = xaccAccountGetXxxBalanceInCurrency (acc, cb->fn, cb->currency);
     cb->balance = gnc_numeric_add (cb->balance, balance,
                                    gnc_commodity_get_fraction (cb->currency),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
 }
 
 static void
@@ -3389,7 +3389,7 @@ xaccAccountBalanceAsOfDateHelper (Account *acc, gpointer data)
                   acc, cb->date, cb->asOfDateFn, cb->currency);
     cb->balance = gnc_numeric_add (cb->balance, balance,
                                    gnc_commodity_get_fraction (cb->currency),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
 }
 
 

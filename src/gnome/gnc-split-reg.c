@@ -670,7 +670,7 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
             amount = gnc_numeric_mul (amount, gnc_price_get_value (price),
                                       gnc_commodity_get_fraction (currency),
-                                      GNC_HOW_RND_ROUND);
+                                      GNC_HOW_RND_ROUND_HALF_UP);
 
             xaccSPrintAmount (string, amount, print_info);
 

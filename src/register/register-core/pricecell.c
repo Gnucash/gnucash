@@ -144,7 +144,7 @@ gnc_price_cell_parse (PriceCell *cell, gboolean update_value)
         else if (gnc_exp_parser_parse (cell->cell.value, &amount, &err_location))
         {
             if (cell->fraction > 0)
-                amount = gnc_numeric_convert (amount, cell->fraction, GNC_HOW_RND_ROUND);
+                amount = gnc_numeric_convert (amount, cell->fraction, GNC_HOW_RND_ROUND_HALF_UP);
 
             cell->amount = amount;
         }
@@ -243,7 +243,7 @@ gnc_price_cell_set_value (PriceCell * cell, gnc_numeric amount)
         return FALSE;
 
     if (cell->fraction > 0)
-        amount = gnc_numeric_convert (amount, cell->fraction, GNC_HOW_RND_ROUND);
+        amount = gnc_numeric_convert (amount, cell->fraction, GNC_HOW_RND_ROUND_HALF_UP);
 
     cell->amount = amount;
     buff = gnc_price_cell_print_value (cell);

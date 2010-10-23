@@ -475,7 +475,7 @@ numeric_match_predicate (gpointer object, QofParam *getter,
             (gnc_numeric_compare (gnc_numeric_abs
                                   (gnc_numeric_sub (gnc_numeric_abs (obj_val),
                                           gnc_numeric_abs (pdata->amount),
-                                          100000, GNC_HOW_RND_ROUND)),
+                                          100000, GNC_HOW_RND_ROUND_HALF_UP)),
                                   cmp_val) < 0);
     }
     else

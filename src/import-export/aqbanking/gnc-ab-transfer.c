@@ -223,7 +223,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         amount = double_to_gnc_numeric(
                      AB_Value_GetValueAsDouble(AB_Transaction_GetValue(ab_trans)),
                      xaccAccountGetCommoditySCU(gnc_acc),
-                     GNC_HOW_RND_ROUND);
+                     GNC_HOW_RND_ROUND_HALF_UP);
         gnc_xfer_dialog_set_amount(xfer_dialog, amount);
 
         description = gnc_ab_description_to_gnc(ab_trans);

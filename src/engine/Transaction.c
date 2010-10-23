@@ -975,7 +975,7 @@ xaccTransGetAccountAmount (const Transaction *trans, const Account *acc)
     if (!trans || !acc) return total;
 
     total = gnc_numeric_convert (total, xaccAccountGetCommoditySCU (acc),
-                                 GNC_HOW_RND_ROUND);
+                                 GNC_HOW_RND_ROUND_HALF_UP);
     FOR_EACH_SPLIT(trans, if (acc == xaccSplitGetAccount(s))
                    total = gnc_numeric_add_fixed(
                                total, xaccSplitGetAmount(s)));

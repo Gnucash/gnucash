@@ -1173,13 +1173,13 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 
     if (discount_value != NULL)
     {
-        if (SCU) discount = gnc_numeric_convert(discount, SCU, GNC_HOW_RND_ROUND);
+        if (SCU) discount = gnc_numeric_convert(discount, SCU, GNC_HOW_RND_ROUND_HALF_UP);
         *discount_value = discount;
     }
 
     if (value != NULL)
     {
-        if (SCU) result = gnc_numeric_convert(result, SCU, GNC_HOW_RND_ROUND);
+        if (SCU) result = gnc_numeric_convert(result, SCU, GNC_HOW_RND_ROUND_HALF_UP);
         *value = result;
     }
 
@@ -1200,14 +1200,14 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
             switch (gncTaxTableEntryGetType (entry))
             {
             case GNC_AMT_TYPE_VALUE:
-                if (SCU) amount = gnc_numeric_convert(amount, SCU, GNC_HOW_RND_ROUND);
+                if (SCU) amount = gnc_numeric_convert(amount, SCU, GNC_HOW_RND_ROUND_HALF_UP);
                 taxes = gncAccountValueAdd (taxes, acc, amount);
                 break;
             case GNC_AMT_TYPE_PERCENT:
                 amount = gnc_numeric_div (amount, percent, GNC_DENOM_AUTO,
                                           GNC_HOW_DENOM_LCD);
                 tax = gnc_numeric_mul (pretax, amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                if (SCU) tax = gnc_numeric_convert(tax, SCU, GNC_HOW_RND_ROUND);
+                if (SCU) tax = gnc_numeric_convert(tax, SCU, GNC_HOW_RND_ROUND_HALF_UP);
                 taxes = gncAccountValueAdd (taxes, acc, tax);
                 break;
             default:
@@ -1303,18 +1303,18 @@ gncEntryRecomputeValues (GncEntry *entry)
                           &(entry->b_value), NULL, &(entry->b_tax_values));
 
     entry->i_value_rounded = gnc_numeric_convert (entry->i_value, denom,
-                             GNC_HOW_RND_ROUND);
+                             GNC_HOW_RND_ROUND_HALF_UP);
     entry->i_disc_value_rounded = gnc_numeric_convert (entry->i_disc_value, denom,
-                                  GNC_HOW_RND_ROUND);
+                                  GNC_HOW_RND_ROUND_HALF_UP);
     entry->i_tax_value = gncAccountValueTotal (entry->i_tax_values);
     entry->i_tax_value_rounded = gnc_numeric_convert (entry->i_tax_value, denom,
-                                 GNC_HOW_RND_ROUND);
+                                 GNC_HOW_RND_ROUND_HALF_UP);
 
     entry->b_value_rounded = gnc_numeric_convert (entry->b_value, denom,
-                             GNC_HOW_RND_ROUND);
+                             GNC_HOW_RND_ROUND_HALF_UP);
     entry->b_tax_value = gncAccountValueTotal (entry->b_tax_values);
     entry->b_tax_value_rounded = gnc_numeric_convert (entry->b_tax_value, denom,
-                                 GNC_HOW_RND_ROUND);
+                                 GNC_HOW_RND_ROUND_HALF_UP);
     entry->values_dirty = FALSE;
 }
 

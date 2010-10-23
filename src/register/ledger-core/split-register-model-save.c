@@ -440,7 +440,7 @@ gnc_split_register_save_amount_values (SRSaveData *sd, SplitRegister *reg)
             {
                 value = gnc_numeric_div(new_amount, amtconv,
                                         gnc_commodity_get_fraction(curr),
-                                        GNC_HOW_RND_ROUND);
+                                        GNC_HOW_RND_ROUND_HALF_UP);
                 xaccSplitSetValue(sd->split, value);
             }
             else
@@ -471,7 +471,7 @@ gnc_split_register_save_amount_values (SRSaveData *sd, SplitRegister *reg)
         /* convert the amount to the Value ... */
         value = gnc_numeric_div (new_amount, amtconv,
                                  gnc_commodity_get_fraction (curr),
-                                 GNC_HOW_RND_ROUND);
+                                 GNC_HOW_RND_ROUND_HALF_UP);
         xaccSplitSetValue (sd->split, value);
     }
     else
@@ -488,7 +488,7 @@ gnc_split_register_save_amount_values (SRSaveData *sd, SplitRegister *reg)
         acc = xaccSplitGetAccount (sd->split);
         new_amount = gnc_numeric_mul (value, convrate,
                                       xaccAccountGetCommoditySCU (acc),
-                                      GNC_HOW_RND_ROUND);
+                                      GNC_HOW_RND_ROUND_HALF_UP);
         xaccSplitSetAmount (sd->split, new_amount);
     }
 }
@@ -561,7 +561,7 @@ gnc_split_register_save_cells (gpointer save_data,
         {
             gnc_numeric amount = xaccSplitGetAmount (sd->split);
             value = gnc_numeric_div(
-                        amount, rate, gnc_commodity_get_fraction(txn_cur), GNC_HOW_RND_ROUND);
+                        amount, rate, gnc_commodity_get_fraction(txn_cur), GNC_HOW_RND_ROUND_HALF_UP);
             xaccSplitSetValue (sd->split, value);
 
             /* XXX: do we need to set the amount on the other split? */
@@ -584,7 +584,7 @@ gnc_split_register_save_cells (gpointer save_data,
                                                    acc);
 
             amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acc),
-                                      GNC_HOW_RND_ROUND);
+                                      GNC_HOW_RND_ROUND_HALF_UP);
             xaccSplitSetAmount (other_split, amount);
 
         }
@@ -612,7 +612,7 @@ gnc_split_register_save_cells (gpointer save_data,
 
             amount = xaccSplitGetAmount (sd->split);
             value = gnc_numeric_div (amount, rate, gnc_commodity_get_fraction (txn_cur),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
             xaccSplitSetValue (sd->split, value);
 #endif
         }

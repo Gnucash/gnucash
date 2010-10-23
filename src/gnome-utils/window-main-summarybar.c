@@ -206,7 +206,7 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                 currency_accum->assets =
                     gnc_numeric_add (currency_accum->assets, end_amount,
                                      gnc_commodity_get_fraction (account_currency),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
             }
 
             if (non_currency)
@@ -214,7 +214,7 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                 non_curr_accum->assets =
                     gnc_numeric_add (non_curr_accum->assets, end_amount_default_currency,
                                      gnc_commodity_get_fraction (options.default_currency),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
             }
 
             if (options.grand_total)
@@ -222,7 +222,7 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                 grand_total_accum->assets =
                     gnc_numeric_add (grand_total_accum->assets, end_amount_default_currency,
                                      gnc_commodity_get_fraction (options.default_currency),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
             }
 
             if (options.euro && (currency_accum != euro_accum))
@@ -231,7 +231,7 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                     gnc_numeric_add (euro_accum->assets,
                                      gnc_convert_to_euro(account_currency, end_amount),
                                      gnc_commodity_get_fraction (euro_commodity),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
             }
 
             gnc_ui_accounts_recurse(account, currency_list, options);
@@ -256,11 +256,11 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                 currency_accum->profits =
                     gnc_numeric_add (currency_accum->profits, start_amount,
                                      gnc_commodity_get_fraction (account_currency),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
                 currency_accum->profits =
                     gnc_numeric_sub (currency_accum->profits, end_amount,
                                      gnc_commodity_get_fraction (account_currency),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
             }
 
             if (non_currency)
@@ -268,11 +268,11 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                 non_curr_accum->profits =
                     gnc_numeric_add (non_curr_accum->profits, start_amount_default_currency,
                                      gnc_commodity_get_fraction (options.default_currency),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
                 non_curr_accum->profits =
                     gnc_numeric_sub (non_curr_accum->profits, end_amount_default_currency,
                                      gnc_commodity_get_fraction (options.default_currency),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
             }
 
             if (options.grand_total)
@@ -281,12 +281,12 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                     gnc_numeric_add (grand_total_accum->profits,
                                      start_amount_default_currency,
                                      gnc_commodity_get_fraction (options.default_currency),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
                 grand_total_accum->profits =
                     gnc_numeric_sub (grand_total_accum->profits,
                                      end_amount_default_currency,
                                      gnc_commodity_get_fraction (options.default_currency),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
             }
 
             if (options.euro && (currency_accum != euro_accum))
@@ -295,12 +295,12 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                     gnc_numeric_add (euro_accum->profits,
                                      gnc_convert_to_euro(account_currency, start_amount),
                                      gnc_commodity_get_fraction (euro_commodity),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
                 euro_accum->profits =
                     gnc_numeric_sub (euro_accum->profits,
                                      gnc_convert_to_euro(account_currency, end_amount),
                                      gnc_commodity_get_fraction (euro_commodity),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
             }
 
             gnc_ui_accounts_recurse(account, currency_list, options);

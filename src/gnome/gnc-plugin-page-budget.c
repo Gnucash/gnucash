@@ -916,7 +916,7 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
 
 
             num = gnc_numeric_convert(num, GNC_DENOM_AUTO,
-                                      GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND);
+                                      GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND_HALF_UP);
             gnc_budget_set_account_period_value(
                 priv->budget, acct, i, num);
         }

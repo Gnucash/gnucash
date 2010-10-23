@@ -1156,7 +1156,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                   {
                   exchange = gnc_numeric_div(gnc_numeric_create(1,1),
                   gnc_price_get_value(price),
-                  1000, GNC_HOW_RND_ROUND);
+                  1000, GNC_HOW_RND_ROUND_HALF_UP);
                   }
                   }
                   else
@@ -1177,7 +1177,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                 }
                 g_string_free(exchange_rate_var_name, TRUE);
 
-                amt = gnc_numeric_mul(final, exchange_rate, 1000, GNC_HOW_RND_ROUND);
+                amt = gnc_numeric_mul(final, exchange_rate, 1000, GNC_HOW_RND_ROUND_HALF_UP);
                 xaccSplitSetAmount(copying_split, amt);
             }
 
@@ -1612,7 +1612,7 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
             /* Multiply with the count factor. */
             final = gnc_numeric_mul(final_once, creation_data->count,
                                     gnc_numeric_denom(final_once),
-                                    GNC_HOW_RND_ROUND);
+                                    GNC_HOW_RND_ROUND_HALF_UP);
 
             gncn_error = gnc_numeric_check(final);
             if (gncn_error != GNC_ERROR_OK)

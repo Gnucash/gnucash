@@ -265,7 +265,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 
     value = double_to_gnc_numeric (booked_value,
                                    xaccAccountGetCommoditySCU(gnc_acc),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
     if ((noted_value == 0.0) && (booked_value == 0.0))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(parent),

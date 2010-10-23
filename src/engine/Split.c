@@ -937,9 +937,9 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
     xaccTransBeginEdit (s->parent);
 
     s->amount = double_to_gnc_numeric(amt, get_commodity_denom(s),
-                                      GNC_HOW_RND_ROUND);
+                                      GNC_HOW_RND_ROUND_HALF_UP);
     s->value  = double_to_gnc_numeric(price * amt, get_currency_denom(s),
-                                      GNC_HOW_RND_ROUND);
+                                      GNC_HOW_RND_ROUND_HALF_UP);
 
     SET_GAINS_A_VDIRTY(s);
     mark_split (s);
@@ -956,9 +956,9 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price, gnc_numeric amt)
     xaccTransBeginEdit (s->parent);
 
     s->amount = gnc_numeric_convert(amt, get_commodity_denom(s),
-                                    GNC_HOW_RND_ROUND);
+                                    GNC_HOW_RND_ROUND_HALF_UP);
     s->value  = gnc_numeric_mul(s->amount, price,
-                                get_currency_denom(s), GNC_HOW_RND_ROUND);
+                                get_currency_denom(s), GNC_HOW_RND_ROUND_HALF_UP);
 
     SET_GAINS_A_VDIRTY(s);
     mark_split (s);
@@ -973,7 +973,7 @@ qofSplitSetSharePrice (Split *split, gnc_numeric price)
     g_return_if_fail(split);
     split->value = gnc_numeric_mul(xaccSplitGetAmount(split),
                                    price, get_currency_denom(split),
-                                   GNC_HOW_RND_ROUND);
+                                   GNC_HOW_RND_ROUND_HALF_UP);
 }
 
 void
@@ -985,7 +985,7 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
 
     s->value = gnc_numeric_mul(xaccSplitGetAmount(s),
                                price, get_currency_denom(s),
-                               GNC_HOW_RND_ROUND);
+                               GNC_HOW_RND_ROUND_HALF_UP);
 
     SET_GAINS_VDIRTY(s);
     mark_split (s);
@@ -1000,7 +1000,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
     gnc_numeric old_price, old_amt;
     int commodity_denom = get_commodity_denom(s);
     gnc_numeric amt = double_to_gnc_numeric(damt, commodity_denom,
-                                            GNC_HOW_RND_ROUND);
+                                            GNC_HOW_RND_ROUND_HALF_UP);
     if (!s) return;
     ENTER (" ");
     xaccTransBeginEdit (s->parent);
@@ -1020,7 +1020,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
     s->amount = gnc_numeric_convert(amt, commodity_denom,
                                     GNC_HOW_RND_NEVER);
     s->value  = gnc_numeric_mul(s->amount, old_price,
-                                get_currency_denom(s), GNC_HOW_RND_ROUND);
+                                get_currency_denom(s), GNC_HOW_RND_ROUND_HALF_UP);
 
     SET_GAINS_A_VDIRTY(s);
     mark_split (s);
@@ -1036,7 +1036,7 @@ qofSplitSetAmount (Split *split, gnc_numeric amt)
     if (split->acc)
     {
         split->amount = gnc_numeric_convert(amt,
-                                            get_commodity_denom(split), GNC_HOW_RND_ROUND);
+                                            get_commodity_denom(split), GNC_HOW_RND_ROUND_HALF_UP);
     }
     else
     {
@@ -1057,7 +1057,7 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
     xaccTransBeginEdit (s->parent);
     if (s->acc)
         s->amount = gnc_numeric_convert(amt, get_commodity_denom(s),
-                                        GNC_HOW_RND_ROUND);
+                                        GNC_HOW_RND_ROUND_HALF_UP);
     else
         s->amount = amt;
 
@@ -1073,7 +1073,7 @@ qofSplitSetValue (Split *split, gnc_numeric amt)
 {
     g_return_if_fail(split);
     split->value = gnc_numeric_convert(amt,
-                                       get_currency_denom(split), GNC_HOW_RND_ROUND);
+                                       get_currency_denom(split), GNC_HOW_RND_ROUND_HALF_UP);
 }
 
 /* The value of the split in the _transaction's_ currency. */
@@ -1090,7 +1090,7 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
 
     xaccTransBeginEdit (s->parent);
     new_val = gnc_numeric_convert(amt, get_currency_denom(s),
-                                  GNC_HOW_RND_ROUND);
+                                  GNC_HOW_RND_ROUND_HALF_UP);
     if (gnc_numeric_check(new_val) == GNC_ERROR_OK)
         s->value = new_val;
     else PERR("numeric error in converting the split value's denominator");
@@ -1151,16 +1151,16 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
         {
             s->amount = gnc_numeric_convert(value,
                                             get_commodity_denom(s),
-                                            GNC_HOW_RND_ROUND);
+                                            GNC_HOW_RND_ROUND_HALF_UP);
         }
         s->value = gnc_numeric_convert(value,
                                        get_currency_denom(s),
-                                       GNC_HOW_RND_ROUND);
+                                       GNC_HOW_RND_ROUND_HALF_UP);
     }
     else if (gnc_commodity_equiv(commodity, base_currency))
     {
         s->amount = gnc_numeric_convert(value, get_commodity_denom(s),
-                                        GNC_HOW_RND_ROUND);
+                                        GNC_HOW_RND_ROUND_HALF_UP);
     }
     else
     {
@@ -1257,7 +1257,7 @@ xaccSplitsComputeValue (GList *splits, const Split * skip_me,
      * doesn't mean the denominators are the same! */
     value = gnc_numeric_convert(value,
                                 gnc_commodity_get_fraction (base_currency),
-                                GNC_HOW_RND_ROUND);
+                                GNC_HOW_RND_ROUND_HALF_UP);
 
     LEAVE (" total=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
            value.num, value.denom);
@@ -1329,7 +1329,7 @@ xaccSplitConvertAmount (const Split *split, const Account * account)
     convrate = xaccTransGetAccountConvRate(txn, account);
     return gnc_numeric_mul (value, convrate,
                             gnc_commodity_get_fraction (to_commodity),
-                            GNC_HOW_RND_ROUND);
+                            GNC_HOW_RND_ROUND_HALF_UP);
 }
 
 /********************************************************************\
@@ -1847,7 +1847,7 @@ xaccSplitGetSharePrice (const Split * split)
     price = gnc_numeric_div(val, amt,
                             GNC_DENOM_AUTO,
                             GNC_HOW_DENOM_SIGFIGS(PRICE_SIGFIGS) |
-                            GNC_HOW_RND_ROUND);
+                            GNC_HOW_RND_ROUND_HALF_UP);
 
     /* During random checks we can get some very weird prices.  Let's
      * handle some overflow and other error conditions by returning

@@ -1335,7 +1335,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
             rate = gnc_numeric_abs(get_random_gnc_numeric());
             amt = gnc_numeric_mul(val, rate,
                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-            amt = gnc_numeric_convert(amt, denom, GNC_HOW_RND_ROUND);
+            amt = gnc_numeric_convert(amt, denom, GNC_HOW_RND_ROUND_HALF_UP);
         }
         while (gnc_numeric_check(amt) != GNC_ERROR_OK);
     }

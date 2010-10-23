@@ -55,7 +55,7 @@ test_num (gnc_numeric n)
         print_info.force_fit = 0;
         print_info.round = 0;
 
-        n1 = gnc_numeric_convert (n, fraction, GNC_HOW_RND_ROUND);
+        n1 = gnc_numeric_convert (n, fraction, GNC_HOW_RND_ROUND_HALF_UP);
         if (gnc_numeric_check(n1))
         {
             do_test_args((gnc_numeric_check(n1) == GNC_ERROR_OVERFLOW),
@@ -108,11 +108,11 @@ run_tests (void)
         IS_VALID_NUM(n, n);
         test_num (n);
 
-        n1 = gnc_numeric_mul (n, n, n.denom, GNC_HOW_RND_ROUND);
+        n1 = gnc_numeric_mul (n, n, n.denom, GNC_HOW_RND_ROUND_HALF_UP);
         IS_VALID_NUM(n1, n);
         test_num (n);
 
-        n1 = gnc_numeric_mul (n, n, n.denom, GNC_HOW_RND_ROUND);
+        n1 = gnc_numeric_mul (n, n, n.denom, GNC_HOW_RND_ROUND_HALF_UP);
         IS_VALID_NUM(n1, n);
         test_num (n);
     }

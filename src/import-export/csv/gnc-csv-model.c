@@ -690,7 +690,7 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
             prop->value = g_new(gnc_numeric, 1);
             *((gnc_numeric*)(prop->value)) =
             double_to_gnc_numeric(value, xaccAccountGetCommoditySCU(prop->list->account),
-            GNC_HOW_RND_ROUND);
+            GNC_HOW_RND_ROUND_HALF_UP);
         }
         return TRUE;
     }
@@ -859,7 +859,7 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
     QofBook* book = gnc_account_get_book(list->account);
     gnc_commodity* currency = xaccAccountGetCommodity(list->account);
     gnc_numeric amount = double_to_gnc_numeric(0.0, xaccAccountGetCommoditySCU(list->account),
-                         GNC_HOW_RND_ROUND);
+                         GNC_HOW_RND_ROUND_HALF_UP);
 
     /* This flag is set to TRUE if we can use the "Deposit" or "Withdrawal" column. */
     gboolean amount_set = FALSE;
@@ -909,7 +909,7 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
                 amount = gnc_numeric_add(*((gnc_numeric*)(prop->value)),
                                          amount,
                                          xaccAccountGetCommoditySCU(list->account),
-                                         GNC_HOW_RND_ROUND);
+                                         GNC_HOW_RND_ROUND_HALF_UP);
                 amount_set = TRUE;
                 /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
                 trans_line->balance_set = FALSE;
@@ -922,7 +922,7 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
                 amount = gnc_numeric_add(gnc_numeric_neg(*((gnc_numeric*)(prop->value))),
                                          amount,
                                          xaccAccountGetCommoditySCU(list->account),
-                                         GNC_HOW_RND_ROUND);
+                                         GNC_HOW_RND_ROUND_HALF_UP);
                 amount_set = TRUE;
                 /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
                 trans_line->balance_set = FALSE;
@@ -1154,7 +1154,7 @@ int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account,
          * any given transaction. */
         gnc_numeric balance_offset = double_to_gnc_numeric(0.0,
                                      xaccAccountGetCommoditySCU(account),
-                                     GNC_HOW_RND_ROUND);
+                                     GNC_HOW_RND_ROUND_HALF_UP);
         while (transactions != NULL)
         {
             GncCsvTransLine* trans_line = (GncCsvTransLine*)transactions->data;
@@ -1165,13 +1165,13 @@ int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account,
                 gnc_numeric existing_balance = gnc_numeric_add(balance_offset,
                                                xaccAccountGetBalanceAsOfDate(account, date),
                                                xaccAccountGetCommoditySCU(account),
-                                               GNC_HOW_RND_ROUND);
+                                               GNC_HOW_RND_ROUND_HALF_UP);
 
                 /* The amount of the transaction is the difference between the new and existing balance. */
                 gnc_numeric amount = gnc_numeric_sub(trans_line->balance,
                                                      existing_balance,
                                                      xaccAccountGetCommoditySCU(account),
-                                                     GNC_HOW_RND_ROUND);
+                                                     GNC_HOW_RND_ROUND_HALF_UP);
 
                 SplitList* splits = xaccTransGetSplitList(trans_line->trans);
                 while (splits)
@@ -1187,7 +1187,7 @@ int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account,
                 balance_offset = gnc_numeric_add(balance_offset,
                                                  amount,
                                                  xaccAccountGetCommoditySCU(account),
-                                                 GNC_HOW_RND_ROUND);
+                                                 GNC_HOW_RND_ROUND_HALF_UP);
             }
             transactions = g_list_next(transactions);
         }

@@ -244,7 +244,7 @@ xaccSplitScrub (Split *split)
     scu = MIN (xaccAccountGetCommoditySCU (account),
                gnc_commodity_get_fraction (currency));
 
-    if (gnc_numeric_same (amount, value, scu, GNC_HOW_RND_ROUND))
+    if (gnc_numeric_same (amount, value, scu, GNC_HOW_RND_ROUND_HALF_UP))
     {
         LEAVE("(split=%p) different values", split);
         return;
@@ -566,7 +566,7 @@ add_balance_split (Transaction *trans, gnc_numeric imbalance,
       * of the denominators might already be reduced.  */
     new_value = gnc_numeric_sub (old_value, imbalance,
                                  gnc_commodity_get_fraction(currency),
-                                 GNC_HOW_RND_ROUND);
+                                 GNC_HOW_RND_ROUND_HALF_UP);
 
     xaccSplitSetValue (balance_split, new_value);
 
@@ -669,7 +669,7 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
                 new_value = gnc_numeric_div (xaccSplitGetAmount(balance_split),
                                              convrate,
                                              gnc_commodity_get_fraction(currency),
-                                             GNC_HOW_RND_ROUND);
+                                             GNC_HOW_RND_ROUND_HALF_UP);
                 if (! gnc_numeric_equal (old_value, new_value))
                 {
                     xaccTransBeginEdit (trans);
@@ -740,7 +740,7 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
             old_amount = xaccSplitGetAmount (balance_split);
             new_amount = gnc_numeric_sub (old_amount, gnc_monetary_value(*imbal_mon),
                                           gnc_commodity_get_fraction(commodity),
-                                          GNC_HOW_RND_ROUND);
+                                          GNC_HOW_RND_ROUND_HALF_UP);
 
             xaccSplitSetAmount (balance_split, new_amount);
 
@@ -755,7 +755,7 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
                 old_value = xaccSplitGetValue (balance_split);
                 new_value = gnc_numeric_sub (old_value, val_imbalance,
                                              gnc_commodity_get_fraction(currency),
-                                             GNC_HOW_RND_ROUND);
+                                             GNC_HOW_RND_ROUND_HALF_UP);
 
                 xaccSplitSetValue (balance_split, new_value);
             }
@@ -806,7 +806,7 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
                     old_value = xaccSplitGetValue (balance_split);
                     new_value = gnc_numeric_sub (old_value, xaccSplitGetValue(split),
                                                  gnc_commodity_get_fraction(currency),
-                                                 GNC_HOW_RND_ROUND);
+                                                 GNC_HOW_RND_ROUND_HALF_UP);
                     xaccSplitSetValue (balance_split, new_value);
 
                     /* Don't change the balance split's amount since the amount

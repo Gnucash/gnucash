@@ -393,7 +393,7 @@ func_op(const char *fname, int argc, void **argv)
     result = g_new0( gnc_numeric, 1 );
     *result = double_to_gnc_numeric( scm_num2dbl(scmTmp, G_STRFUNC),
                                      GNC_DENOM_AUTO,
-                                     GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND );
+                                     GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND_HALF_UP );
     /* FIXME: cleanup scmArgs = scm_list, cons'ed cells? */
     return (void*)result;
 }

@@ -1259,7 +1259,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
             amount = scm_num2dbl (scm, G_STRFUNC);
 
             val = double_to_gnc_numeric (amount, GNC_DENOM_AUTO,
-                                         GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND);
+                                         GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND_HALF_UP);
 
             if (!safe_strcmp (pr_type, "pr-price"))
             {
