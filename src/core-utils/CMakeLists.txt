@@ -40,6 +40,7 @@ FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/gncla-dir.h "
 #define DATADIR \"${CMAKE_INSTALL_PREFIX}/share\"
 #define SYSCONFDIR \"${CMAKE_INSTALL_PREFIX}/etc\"
 #define LIBDIR \"${CMAKE_INSTALL_PREFIX}/lib\"
+#define BINDIR \"${CMAKE_INSTALL_PREFIX}/bin\"
 #define LOCALE_DATADIRNAME \"share\"
 ")
 
