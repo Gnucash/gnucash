@@ -780,6 +780,7 @@ create_slots_tables( GncSqlBackend* be )
             }
         }
         (void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+        PINFO("Slots table upgraded from version %d to version %d\n", version, TABLE_VERSION);
     }
 }
 

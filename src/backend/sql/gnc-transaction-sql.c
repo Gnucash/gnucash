@@ -522,6 +522,7 @@ create_transaction_tables( GncSqlBackend* be )
         */
         gnc_sql_upgrade_table( be, TRANSACTION_TABLE, tx_col_table );
         (void)gnc_sql_set_table_version( be, TRANSACTION_TABLE, TX_TABLE_VERSION );
+        PINFO("Transactions table upgraded from version %d to version %d\n", version, TX_TABLE_VERSION);
     }
 
     version = gnc_sql_get_table_version( be, SPLIT_TABLE );
@@ -557,6 +558,7 @@ create_transaction_tables( GncSqlBackend* be )
             PERR( "Unable to create index\n" );
         }
         (void)gnc_sql_set_table_version( be, SPLIT_TABLE, SPLIT_TABLE_VERSION );
+        PINFO("Splits table upgraded from version %d to version %d\n", version, SPLIT_TABLE_VERSION);
     }
 }
 /* ================================================================= */

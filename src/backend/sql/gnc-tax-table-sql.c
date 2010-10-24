@@ -395,6 +395,7 @@ create_taxtable_tables( GncSqlBackend* be )
         /* Upgrade 64 bit int handling */
         gnc_sql_upgrade_table( be, TT_TABLE_NAME, tt_col_table );
         gnc_sql_set_table_version( be, TT_TABLE_NAME, TT_TABLE_VERSION );
+        PINFO("Taxtables table upgraded from version 1 to version %d\n", TT_TABLE_VERSION);
     }
 
     version = gnc_sql_get_table_version( be, TTENTRIES_TABLE_NAME );
@@ -407,6 +408,7 @@ create_taxtable_tables( GncSqlBackend* be )
         /* Upgrade 64 bit int handling */
         gnc_sql_upgrade_table( be, TTENTRIES_TABLE_NAME, ttentries_col_table );
         gnc_sql_set_table_version( be, TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION );
+        PINFO("Taxtable entries table upgraded from version 1 to version %d\n", TTENTRIES_TABLE_VERSION);
     }
 }
 

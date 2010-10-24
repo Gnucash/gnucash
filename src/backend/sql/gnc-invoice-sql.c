@@ -172,6 +172,8 @@ create_invoice_tables( GncSqlBackend* be )
         */
         gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
         gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+
+        PINFO("Invoices table upgraded from version %d to version %d\n", version, TABLE_VERSION);
     }
 }
 

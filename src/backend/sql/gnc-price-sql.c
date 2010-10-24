@@ -147,6 +147,8 @@ create_prices_tables( GncSqlBackend* be )
         /* Upgrade 64 bit int handling */
         gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
         (void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+
+        PINFO("Prices table upgraded from version 1 to version %d\n", TABLE_VERSION);
     }
 }
 
