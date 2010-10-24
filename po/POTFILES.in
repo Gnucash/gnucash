@@ -151,6 +151,7 @@ src/engine/gnc-associate-account.c
 src/engine/gncBillTerm.c
 src/engine/gnc-budget.c
 src/engine/gncBusGuile.c
+src/engine/gncBusiness.c
 src/engine/gnc-commodity.c
 src/engine/gncCustomer.c
 src/engine/gncEmployee.c
