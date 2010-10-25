@@ -1805,7 +1805,6 @@ gnc_tree_view_column_properties (GncTreeView *view,
     gboolean visible;
     int width = 0;
     gchar *key;
-    GtkTreeViewColumnSizing sizing = GTK_TREE_VIEW_COLUMN_FIXED;
 
     /* Set data used by other functions */
     if (pref_name)
@@ -1818,10 +1817,20 @@ gnc_tree_view_column_properties (GncTreeView *view,
     /* Get visibility */
     visible = gnc_tree_view_column_visible(view, NULL, pref_name);
 
+    /* Set column attributes (without the sizing) */
+    g_object_set(G_OBJECT(column),
+                 "visible",     visible,
+                 "resizable",   resizable && pref_name != NULL,
+                 "reorderable", pref_name != NULL,
+                 NULL);
+
     /* Get width */
     if (default_width == 0)
     {
-        sizing = GTK_TREE_VIEW_COLUMN_AUTOSIZE;
+        /* Set the sizing column attributes */
+        g_object_set(G_OBJECT(column),
+                     "sizing",      GTK_TREE_VIEW_COLUMN_AUTOSIZE,
+                     NULL);
     }
     else
     {
@@ -1840,16 +1849,13 @@ gnc_tree_view_column_properties (GncTreeView *view,
             width = default_width + 10;
         if (width == 0)
             width = 10;
-    }
 
-    /* Set column attributes */
-    g_object_set(G_OBJECT(column),
-                 "visible",     visible,
-                 "sizing",      sizing,
-                 "fixed-width", width,
-                 "resizable",   resizable && pref_name != NULL,
-                 "reorderable", pref_name != NULL,
-                 NULL);
+        /* Set the sizing column attributes (including fixed-width) */
+        g_object_set(G_OBJECT(column),
+                     "sizing",      GTK_TREE_VIEW_COLUMN_FIXED,
+                     "fixed-width", width,
+                     NULL);
+    }
 
     s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
     if (GTK_IS_TREE_SORTABLE(s_model))
