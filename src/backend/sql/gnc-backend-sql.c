@@ -521,15 +521,15 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     }
     if ( is_ok ) 
     {
-	(void)gnc_sql_connection_commit_transaction( be->conn );
-	be->is_pristine_db = FALSE;
+        (void)gnc_sql_connection_commit_transaction( be->conn );
+        be->is_pristine_db = FALSE;
 
-	// Mark the book as clean
-	qof_book_mark_saved( book );
+        // Mark the book as clean
+        qof_book_mark_saved( book );
     }
     else
     {
-	gnc_sql_connection_rollback_transaction( be->conn );
+        gnc_sql_connection_rollback_transaction( be->conn );
     }
     LEAVE( "book=%p", book );
 }
@@ -1030,8 +1030,8 @@ gnc_sql_run_query( QofBackend* pBEnd, gpointer pQuery )
     be->in_query = FALSE;
     qof_event_resume();
 //    if( be_data.is_ok ) {
-//		LEAVE( "" );
-//       	return;
+//        LEAVE( "" );
+//        return;
 //    }
 
     // Mark the book as clean
