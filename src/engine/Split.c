@@ -778,8 +778,9 @@ xaccSplitCommitEdit(Split *s)
        original and new transactions, for the _next_ begin/commit cycle. */
     s->orig_acc = s->acc;
     s->orig_parent = s->parent;
-    qof_commit_edit_part2(QOF_INSTANCE(s), commit_err, NULL,
-                          (void (*) (QofInstance *)) xaccFreeSplit);
+    if (!qof_commit_edit_part2(QOF_INSTANCE(s), commit_err, NULL,
+                               (void (*) (QofInstance *)) xaccFreeSplit))
+        return;
 
     if (acc)
     {

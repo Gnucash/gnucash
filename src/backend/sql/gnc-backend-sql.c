@@ -494,11 +494,14 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     be->obj_total += gnc_book_count_transactions( book );
     be->operations_done = 0;
 
-    (void)gnc_sql_connection_begin_transaction( be->conn );
+    is_ok = gnc_sql_connection_begin_transaction( be->conn );
 
     // FIXME: should write the set of commodities that are used
     //write_commodities( be, book );
-    is_ok = gnc_sql_save_book( be, QOF_INSTANCE(book) );
+    if ( is_ok )
+    {
+        is_ok = gnc_sql_save_book( be, QOF_INSTANCE(book) );
+    }
     if ( is_ok )
     {
         is_ok = write_accounts( be );
@@ -519,9 +522,12 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     {
         qof_object_foreach_backend( GNC_SQL_BACKEND, write_cb, be );
     }
-    if ( is_ok ) 
+    if ( is_ok )
     {
-        (void)gnc_sql_connection_commit_transaction( be->conn );
+        is_ok = gnc_sql_connection_commit_transaction( be->conn );
+    }
+    if ( is_ok )
+    {
         be->is_pristine_db = FALSE;
 
         // Mark the book as clean
@@ -529,7 +535,7 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     }
     else
     {
-        gnc_sql_connection_rollback_transaction( be->conn );
+        is_ok = gnc_sql_connection_rollback_transaction( be->conn );
     }
     LEAVE( "book=%p", book );
 }
@@ -623,7 +629,12 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
         return;
     }
 
-    (void)gnc_sql_connection_begin_transaction( be->conn );
+    if ( !gnc_sql_connection_begin_transaction( be->conn ) )
+    {
+        PERR( "gnc_sql_commit_edit(): begin_transaction failed\n" );
+        LEAVE( "Rolled back - database transaction begin error" );
+        return;
+    }
 
     be_data.is_known = FALSE;
     be_data.be = be;

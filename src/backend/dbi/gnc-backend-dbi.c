@@ -161,6 +161,7 @@ typedef struct
     dbi_conn conn;
     /*@ observer @*/
     provider_functions_t* provider;
+    gboolean conn_ok;       // Used by the error handler routines to flag if the connection is ok to use
     gint last_error;        // Code of the last error that occurred. This is set in the error callback function
     gint error_repeat;      // Used in case of transient errors. After such error, another attempt at the
     // original call is allowed. error_repeat tracks the number of attempts and can
@@ -191,6 +192,27 @@ static void
 gnc_dbi_init_error( GncDbiSqlConnection* dbi_conn )
 {
     gnc_dbi_set_error( dbi_conn, ERR_BACKEND_NO_ERR, 0, FALSE );
+}
+
+/* Check if the dbi connection is valid. If not attempt to re-establish it
+ * Returns TRUE is there is a valid connection in the end or FALSE otherwise
+ */
+static gboolean
+gnc_dbi_verify_conn( GncDbiSqlConnection* dbi_conn )
+{
+    if ( dbi_conn->conn_ok )
+        return TRUE;
+
+    /* We attempt to connect only once here. The error function will automatically
+     * re-attempt up until DBI_MAX_CONN_ATTEMPTS time to connect if this call fails.
+     * After all these attempts, conn_ok will indicate if there is a valid connection
+     * or not.
+     */
+    gnc_dbi_init_error( dbi_conn );
+    dbi_conn->conn_ok = TRUE;
+    (void)dbi_conn_connect( dbi_conn->conn );
+
+    return dbi_conn->conn_ok;
 }
 
 /* ================================================================= */
@@ -330,16 +352,24 @@ mysql_error_fn( dbi_conn conn, void* user_data )
     }
     else if ( err_num == 2006 )     // Server has gone away
     {
-        if (dbi_conn->error_repeat > DBI_MAX_CONN_ATTEMPTS )
+        PINFO( "DBI error: %s - Reconnecting...\n", msg );
+        gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CONN_LOST, 1, TRUE );
+        dbi_conn->conn_ok = TRUE;
+        (void)dbi_conn_connect( conn );
+    }
+    else if ( err_num == 2003 )     // Unable to connect
+    {
+        if (dbi_conn->error_repeat >= DBI_MAX_CONN_ATTEMPTS )
         {
-            PERR( "DBI error: %s - Failed to reconnect after %d attempts.\n", msg, DBI_MAX_CONN_ATTEMPTS );
+            PERR( "DBI error: %s - Giving up after %d consecutive attempts.\n", msg, DBI_MAX_CONN_ATTEMPTS );
             gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 0, FALSE );
+            dbi_conn->conn_ok = FALSE;
         }
         else
         {
             PINFO( "DBI error: %s - Reconnecting...\n", msg );
-            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CONN_LOST, 1, TRUE );
-
+            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 1, TRUE );
+            dbi_conn->conn_ok = TRUE;
             (void)dbi_conn_connect( conn );
         }
     }
@@ -570,6 +600,30 @@ pgsql_error_fn( dbi_conn conn, void* user_data )
         PINFO( "DBI error: %s\n", msg );
         be->exists = FALSE;
         gnc_dbi_set_error( dbi_conn, ERR_BACKEND_NO_SUCH_DB, 0, FALSE );
+    }
+    else if ( g_strrstr( msg, "server closed the connection unexpectedly" ) ) // Connection lost
+    {
+        PINFO( "DBI error: %s - Reconnecting...\n", msg );
+        gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CONN_LOST, 1, TRUE );
+        dbi_conn->conn_ok = TRUE;
+        (void)dbi_conn_connect( conn );
+    }
+    else if ( g_str_has_prefix( msg, "connection pointer is NULL" ) ||
+              g_str_has_prefix(msg, "could not connect to server" ) )     // No connection
+    {
+        if (dbi_conn->error_repeat >= DBI_MAX_CONN_ATTEMPTS )
+        {
+            PERR( "DBI error: %s - Giving up after %d consecutive attempts.\n", msg, DBI_MAX_CONN_ATTEMPTS );
+            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 0, FALSE );
+            dbi_conn->conn_ok = FALSE;
+        }
+        else
+        {
+            PINFO( "DBI error: %s - Reconnecting...\n", msg );
+            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 1, TRUE );
+            dbi_conn->conn_ok = TRUE;
+            (void)dbi_conn_connect( conn );
+        }
     }
     else
     {
@@ -1575,8 +1629,16 @@ conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     dbi_result result;
     gint status;
+    gboolean success = FALSE;
 
     DEBUG( "BEGIN\n" );
+
+    if ( !gnc_dbi_verify_conn (dbi_conn) )
+    {
+        PERR( "gnc_dbi_verify_conn() failed\n" );
+        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
+        return FALSE;
+    }
 
     do
     {
@@ -1585,14 +1647,20 @@ conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
     }
     while ( dbi_conn->retry );
 
+    success = ( result != NULL );
     status = dbi_result_free( result );
     if ( status < 0 )
     {
         PERR( "Error in dbi_result_free() result\n" );
         qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
     }
+    if ( !success )
+    {
+        PERR( "BEGIN transaction failed()\n" );
+        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
+    }
 
-    return TRUE;
+    return success;
 }
 
 static gboolean
@@ -1601,17 +1669,25 @@ conn_rollback_transaction( /*@ unused @*/ GncSqlConnection* conn )
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     dbi_result result;
     gint status;
+    gboolean success = FALSE;
 
     DEBUG( "ROLLBACK\n" );
     result = dbi_conn_queryf( dbi_conn->conn, "ROLLBACK" );
+    success = ( result != NULL );
+
     status = dbi_result_free( result );
     if ( status < 0 )
     {
         PERR( "Error in dbi_result_free() result\n" );
         qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
     }
+    if ( !success )
+    {
+        PERR( "Error in conn_rollback_transaction()\n" );
+        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
+    }
 
-    return TRUE;
+    return success;
 }
 
 static gboolean
@@ -1620,17 +1696,25 @@ conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     dbi_result result;
     gint status;
+    gboolean success = FALSE;
 
     DEBUG( "COMMIT\n" );
     result = dbi_conn_queryf( dbi_conn->conn, "COMMIT" );
+    success = ( result != NULL );
+
     status = dbi_result_free( result );
     if ( status < 0 )
     {
         PERR( "Error in dbi_result_free() result\n" );
         qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
     }
+    if ( !success )
+    {
+        PERR( "Error in conn_commit_transaction()\n" );
+        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
+    }
 
-    return TRUE;
+    return success;
 }
 
 static /*@ null @*/ gchar*
@@ -2171,6 +2255,7 @@ create_dbi_connection( /*@ observer @*/ provider_functions_t* provider,
     dbi_conn->qbe = qbe;
     dbi_conn->conn = conn;
     dbi_conn->provider = provider;
+    dbi_conn->conn_ok = TRUE;
 
     gnc_dbi_init_error(dbi_conn);
 
