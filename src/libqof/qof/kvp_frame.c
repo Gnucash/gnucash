@@ -605,6 +605,16 @@ kvp_frame_add_numeric(KvpFrame * frame, const char * path, gnc_numeric nval)
 }
 
 void
+kvp_frame_add_gdate(KvpFrame * frame, const char * path, GDate nval)
+{
+    KvpValue *value;
+    value = kvp_value_new_gdate (nval);
+    frame = kvp_frame_add_value_nc (frame, path, value);
+    if (!frame) kvp_value_delete (value);
+}
+
+
+void
 kvp_frame_add_string(KvpFrame * frame, const char * path, const char* str)
 {
     KvpValue *value;

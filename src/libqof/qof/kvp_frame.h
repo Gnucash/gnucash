@@ -279,6 +279,7 @@ Use kvp_frame_add_numeric instead of kvp_frame_add_gnc_numeric
 
 void kvp_frame_add_numeric(KvpFrame * frame, const gchar * path, gnc_numeric nval);
 void kvp_frame_add_timespec(KvpFrame * frame, const gchar * path, Timespec ts);
+void kvp_frame_add_gdate(KvpFrame * frame, const gchar * path, GDate date);
 
 /** \deprecated
 
