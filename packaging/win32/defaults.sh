@@ -340,7 +340,7 @@ else
 fi
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
-set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.24.tar.gz"
+set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.28.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
 if [ "$AQBANKING5" = "yes" ]; then
