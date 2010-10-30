@@ -64,7 +64,6 @@
 #define KEY_ACCOUNTING_LABELS	"use_accounting_labels"
 #define KEY_ACCOUNT_SEPARATOR	"account_separator"
 #define KEY_NEGATIVE_IN_RED	"negative_in_red"
-#define KEY_NUMBER_OF_ROWS	"number_of_rows"
 #define KEY_ENABLE_EURO		"enable_euro"
 #define KEY_DATE_FORMAT 	"date_format"
 #define KEY_SHOW_LEAF_ACCOUNT_NAMES "show_leaf_account_names"

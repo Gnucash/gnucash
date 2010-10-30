@@ -631,7 +631,6 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
     //  gnc_entry_ledger_load (entry_ledger, entries);
 
     /* Watch the order of operations, here... */
-    gnucash_register_set_initial_rows( 10 );
     regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger));
     gnc_table_init_gui( regWidget, entry_ledger );
     ow->reg = GNUCASH_REGISTER (regWidget);

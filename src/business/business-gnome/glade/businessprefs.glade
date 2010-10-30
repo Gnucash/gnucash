@@ -33,6 +33,8 @@
           </widget>
           <packing>
             <property name="right_attach">2</property>
+            <property name="top_attach">3</property>
+            <property name="bottom_attach">4</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
           </packing>
@@ -148,8 +150,8 @@
           </widget>
           <packing>
             <property name="right_attach">2</property>
-            <property name="top_attach">3</property>
-            <property name="bottom_attach">4</property>
+            <property name="top_attach">4</property>
+            <property name="bottom_attach">5</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
             <property name="x_padding">12</property>
@@ -172,40 +174,6 @@
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
             <property name="x_padding">12</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkLabel" id="label14">
-            <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Number of _rows:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">gconf/dialogs/business/invoice/number_of_rows</property>
-          </widget>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="right_attach">3</property>
-            <property name="top_attach">2</property>
-            <property name="bottom_attach">3</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkSpinButton" id="gconf/dialogs/business/invoice/number_of_rows">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip" translatable="yes">Default number of register rows to display in Invoices.</property>
-            <property name="adjustment">1 0 100 1 10 0</property>
-            <property name="climb_rate">1</property>
-          </widget>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="right_attach">4</property>
-            <property name="top_attach">2</property>
-            <property name="bottom_attach">3</property>
-            <property name="x_options"></property>
-            <property name="y_options"></property>
           </packing>
         </child>
         <child>
@@ -268,6 +236,25 @@
         </child>
         <child>
           <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0.47999998927116394</property>
+            <property name="label" translatable="yes">&lt;b&gt;General&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </widget>
+          <packing>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"></property>
+          </packing>
         </child>
       </widget>
     </child>

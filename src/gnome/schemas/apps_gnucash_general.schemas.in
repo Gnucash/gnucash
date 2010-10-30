@@ -302,21 +302,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnucash/general/show_splash_screen</key>
-      <applyto>/apps/gnucash/general/show_splash_screen</applyto>
-      <owner>gnucash</owner>
-      <type>bool</type>
-      <default>TRUE</default>
-      <locale name="C">
-        <short>Show splash screen</short>
-        <long>
-	  If active, a splash screen will be shown at
-	  startup. Otherwise no splash screen will be shown.
-	</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnucash/general/register/use_theme_colors</key>
       <applyto>/apps/gnucash/general/register/use_theme_colors</applyto>
       <owner>gnucash</owner>
@@ -489,23 +474,6 @@
           name, including the path in the account tree. Activating this option
           implies that you use unique leaf names.
         </long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnucash/general/register/number_of_rows</key>
-      <applyto>/apps/gnucash/general/register/number_of_rows</applyto>
-      <owner>gnucash</owner>
-      <type>float</type>
-      <default>10.0</default>
-      <locale name="C">
-        <short>The number of rows in an invoice</short>
-        <long>
-	  This field sets the number of rows to show in a register.
-	  It does not actually affect the display of the contents of
-	  the window.  It is only used to set the size of the window
-	  when first opened.
-	</long>
       </locale>
     </schema>
 

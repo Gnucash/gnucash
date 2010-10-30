@@ -45,6 +45,8 @@
 
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  400
+/* Used to calculate the minimum preferred height of the register window: */
+#define DEFAULT_REGISTER_INITIAL_ROWS 10
 
 
 /* Register signals */
@@ -61,7 +63,6 @@ enum
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_REGISTER;
-static guint gnucash_register_initial_rows = 15;
 static GnomeCanvasClass *sheet_parent_class;
 static GtkTableClass *register_parent_class;
 static guint register_signals[LAST_SIGNAL];
@@ -93,12 +94,6 @@ static gboolean gnucash_sheet_check_direct_update_cell(GnucashSheet *sheet,
         const VirtualLocation virt_loc);
 
 /** Implementation *****************************************************/
-
-void
-gnucash_register_set_initial_rows (guint num_rows)
-{
-    gnucash_register_initial_rows = num_rows;
-}
 
 G_INLINE_FUNC gboolean
 gnucash_sheet_virt_cell_out_of_bounds (GnucashSheet *sheet,
@@ -749,7 +744,7 @@ compute_optimal_width (GnucashSheet *sheet)
 }
 
 
-/* Compute the height needed to show DEFAULT_REGISTER_ROWS rows */
+/* Compute the height needed to show DEFAULT_REGISTER_INITIAL_ROWS rows */
 static gint
 compute_optimal_height (GnucashSheet *sheet)
 {
@@ -770,7 +765,7 @@ compute_optimal_height (GnucashSheet *sheet)
 
     row_height = cd->pixel_height;
 
-    return row_height * gnucash_register_initial_rows;
+    return row_height * DEFAULT_REGISTER_INITIAL_ROWS;
 }
 
 

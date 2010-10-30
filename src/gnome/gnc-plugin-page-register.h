@@ -114,21 +114,13 @@ gnc_plugin_page_register_new_gl (void);
  *
  *  @param plugin_page The "register" page to modify.
  *
- *  @param lines_opt_page The name of the options page containing the
- *  number of lines per register.
- *
- *  @param lines_opt_name The name of the options (within the page
- *  specified above) containing the number of lines per register.
- *
- *  @param lines_default The number of lines to use if the specified
- *  options cannot be found or has never been set.
+ *  @param lines_default Used to calculate the minimum preferred height of
+ *                       the plugin page.
  *
  *  @param read_only True if the register should be read-only.
  */
 void
 gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
-                                      const char *lines_opt_page,
-                                      const char *lines_opt_name,
                                       gint lines_default,
                                       gboolean read_only);
 

@@ -344,8 +344,7 @@ gnc_split_reg_init( GNCSplitReg *gsr )
     gsr->sort_type = BY_STANDARD;
     gsr->width = -1;
     gsr->height = -1;
-    gsr->numRows = gnc_gconf_get_float(GCONF_GENERAL_REGISTER,
-                                       KEY_NUMBER_OF_ROWS, NULL);
+    gsr->numRows = 10;
     gsr->read_only = FALSE;
 
     g_signal_connect( gsr, "destroy",
@@ -398,7 +397,6 @@ gsr_create_table( GNCSplitReg *gsr )
 
     /* FIXME: We'd really rather pass this down... */
     sr = gnc_ledger_display_get_split_register( gsr->ledger );
-    gnucash_register_set_initial_rows( gsr->numRows );
     register_widget = gnucash_register_new( sr->table );
     gsr->reg = GNUCASH_REGISTER( register_widget );
     gnc_table_init_gui( GTK_WIDGET(gsr->reg), sr );

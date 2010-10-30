@@ -2116,13 +2116,6 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     /* Create the register */
     {
         GtkWidget *regWidget, *frame, *window;
-        guint num_rows;
-
-        num_rows = gnc_gconf_get_float(GCONF_SECTION_INVOICE,
-                                       KEY_NUMBER_OF_ROWS, NULL);
-        if (num_rows == 0)
-            num_rows = 10;
-        gnucash_register_set_initial_rows( num_rows );
 
         /* Watch the order of operations, here... */
         regWidget = gnucash_register_new (gnc_entry_ledger_get_table
