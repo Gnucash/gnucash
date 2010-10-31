@@ -123,6 +123,9 @@ static /*@ null @*/ gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
         const GList* col_info_list );
 static GSList* conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname );
 static void append_pgsql_col_def( GString* ddl, GncSqlColumnInfo* info );
+static gboolean gnc_dbi_lock_database( QofBackend *qbe, gboolean ignore_lock );
+static void gnc_dbi_unlock( QofBackend *qbe );
+
 static provider_functions_t provider_pgsql =
 {
     conn_create_table_ddl_pgsql,
@@ -259,8 +262,7 @@ sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
 
 static void
 gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
-                               const gchar *book_id,
-                               /*@ unused @*/ gboolean ignore_lock,
+                               const gchar *book_id, gboolean ignore_lock,
                                gboolean create_if_nonexistent )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
@@ -331,13 +333,19 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     g_free( basename );
     g_free( dirname );
-/* Need some better error handling here. In particular, need to emit a QOF_ERROR_LOCKED if the database is in use by another process. */
     if ( result < 0 )
     {
         PERR( "Unable to connect to %s: %d\n", book_id, result );
         qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
         LEAVE( " " );
         return;
+    }
+
+    if ( !gnc_dbi_lock_database( qbe, ignore_lock ) )
+    {
+	qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
+	LEAVE( "Locked" );
+	return;
     }
 
     if ( be->sql_be.conn != NULL )
