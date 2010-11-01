@@ -58,19 +58,16 @@
 #include "splint-defs.h"
 #endif
 
-#ifdef WIN32
+#ifdef G_OS_WIN32
 #include <Winsock2.h>
-#define HOST_NAME_MAX 255
 #define GETPID() GetCurrentProcessId()
 #else
 #include <limits.h>
 #include <unistd.h>
-#ifdef DARWIN
-#define HOST_NAME_MAX _POSIX_HOST_NAME_MAX
-#endif
 #define GETPID() getpid()
 #endif
 
+#define GNC_HOST_NAME_MAX 255
 #define TRANSACTION_NAME "trans"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -333,6 +330,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     g_free( basename );
     g_free( dirname );
+/* Need some better error handling here. In particular, need to emit a QOF_ERROR_LOCKED if the database is in use by another process. */
     if ( result < 0 )
     {
         PERR( "Unable to connect to %s: %d\n", book_id, result );
@@ -478,8 +476,8 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
 	    dbi_result_free( result );
 	    result = NULL;
 	}
-	result = dbi_conn_queryf( dcon, "CREATE TABLE GNCLOCK ( Hostname varchar(%d), PID int )", HOST_NAME_MAX );
-	if ( dbi_conn_error_flag( dcon ) )
+	result = dbi_conn_queryf( dcon, "CREATE TABLE GNCLOCK ( Hostname varchar(%d), PID int )", GNC_HOST_NAME_MAX );
+	if ( dbi_conn_error( dcon, NULL ) )
 	{
 	    const gchar *errstr;
 	    dbi_conn_error( dcon, &errstr );
@@ -503,7 +501,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
     if ( (result = dbi_conn_query( dcon, "BEGIN" )) )
     {
 /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
-	gchar hostname[ HOST_NAME_MAX + 1 ];
+	gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
 	if (result)
 	{
 	    dbi_result_free( result );
@@ -541,7 +539,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
 	}
 /* Add an entry and commit the transaction */
 	memset( hostname, 0, sizeof(hostname) );
-	gethostname( hostname, HOST_NAME_MAX );
+	gethostname( hostname, GNC_HOST_NAME_MAX );
 	result = dbi_conn_queryf( dcon, 
 				  "INSERT INTO GNCLOCK VALUES ('%s', '%d')", 
 				  hostname, (int)GETPID() );
@@ -588,7 +586,7 @@ gnc_dbi_unlock( QofBackend *qbe )
     const gchar *dbname = NULL;
 
     g_return_if_fail( dcon != NULL );
-    g_return_if_fail( dbi_conn_error_flag( dcon ) == 0 );
+    g_return_if_fail( dbi_conn_error( dcon, NULL ) == 0 );
 
     dbname = dbi_conn_get_option( dcon, "dbname" );
 /* Check if the lock table exists */
@@ -607,14 +605,14 @@ gnc_dbi_unlock( QofBackend *qbe )
     if ( ( result = dbi_conn_query( dcon, "BEGIN" )) )
     {
 /* Delete the entry if it's our hostname and PID */
-	gchar hostname[ HOST_NAME_MAX + 1 ];
+	gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
 	if (result)
 	{
 	    dbi_result_free( result );
 	    result = NULL;
 	}
 	memset( hostname, 0, sizeof(hostname) );
-	gethostname( hostname, HOST_NAME_MAX );
+	gethostname( hostname, GNC_HOST_NAME_MAX );
 	result = dbi_conn_queryf( dcon, "SELECT * FROM GNCLOCK WHERE Hostname = '%s' AND PID = '%d'", hostname, (int)GETPID() );
 	if ( result && dbi_result_get_numrows( result ) )
 	{
