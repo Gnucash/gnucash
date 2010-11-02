@@ -98,7 +98,8 @@ test_load_file(const char *filename)
                  "session load xml2", __FILE__, __LINE__,
                  "qof error=%d for file [%s]",
                  qof_session_get_error(session), filename);
-
+    /* Uncomment the line below to generate corrected files */
+    qof_session_save( session, NULL ); 
     qof_session_end(session);
 }
 

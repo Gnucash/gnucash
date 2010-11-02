@@ -112,6 +112,11 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         }
         else if (safe_strcmp((char*)mark->name, "act:commodity") == 0)
         {
+	  /* This is somewhat BS, because if the commodity isn't a
+	     currency (and therefore built in) there isn't a
+	     corresponding currency in the XML, skip the test. jralls
+	     2010-11-02 */
+	    if (xaccAccountGetCommodity(act) == NULL) continue;
             if (!equals_node_val_vs_commodity(
                         mark, xaccAccountGetCommodity(act),
                         gnc_account_get_book(act)))
@@ -319,6 +324,7 @@ test_generation()
 
         xaccAccountSetCode(act, "");
         xaccAccountSetDescription(act, "");
+	g_print("Expect a critical assert here:\n");
         xaccAccountSetCommodity(act, NULL);
 
         test_account(-1, act);
