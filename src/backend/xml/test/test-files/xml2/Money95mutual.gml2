@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <gnc-v2
      xmlns:gnc="http://www.gnucash.org/XML/gnc"
      xmlns:act="http://www.gnucash.org/XML/act"
@@ -11,29 +11,55 @@
      xmlns:sx="http://www.gnucash.org/XML/sx"
      xmlns:trn="http://www.gnucash.org/XML/trn"
      xmlns:ts="http://www.gnucash.org/XML/ts"
-     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
      xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
      xmlns:addr="http://www.gnucash.org/XML/addr"
-     xmlns:owner="http://www.gnucash.org/XML/owner"
-     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
-     xmlns:tte="http://www.gnucash.org/XML/tte"
-     xmlns:employee="http://www.gnucash.org/XML/employee"
-     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
      xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
-     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
      xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
      xmlns:vendor="http://www.gnucash.org/XML/vendor">
-<gnc:count-data cd:type="commodity">1</gnc:count-data>
-<gnc:count-data cd:type="account">5</gnc:count-data>
+<gnc:count-data cd:type="book">1</gnc:count-data>
+<gnc:book version="2.0.0">
+<book:id type="guid">5ea6c914a73aec4d2257d55e033ea19e</book:id>
+<gnc:count-data cd:type="commodity">2</gnc:count-data>
+<gnc:count-data cd:type="account">6</gnc:count-data>
 <gnc:count-data cd:type="transaction">3</gnc:count-data>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>ISO4217</cmdty:space>
+  <cmdty:id>FRF</cmdty:id>
+  <cmdty:get_quotes/>
+  <cmdty:quote_source>currency</cmdty:quote_source>
+  <cmdty:quote_tz/>
+</gnc:commodity>
 <gnc:commodity version="2.0.0">
   <cmdty:space>NYSE</cmdty:space>
   <cmdty:id>O-Sicav Plus</cmdty:id>
   <cmdty:name>O-Sicav Plus</cmdty:name>
   <cmdty:fraction>100000</cmdty:fraction>
 </gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>template</cmdty:space>
+  <cmdty:id>template</cmdty:id>
+  <cmdty:name>template</cmdty:name>
+  <cmdty:xcode>template</cmdty:xcode>
+  <cmdty:fraction>1</cmdty:fraction>
+</gnc:commodity>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">be642bf654094e36e85a292e5926e1f0</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Livret bleu</act:name>
   <act:id type="guid">3bcb236af583d5bd7b6e0153fe97e7e3</act:id>
@@ -43,6 +69,7 @@
     <cmdty:id>FRF</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">be642bf654094e36e85a292e5926e1f0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Money95mfunds fr</act:name>
@@ -53,21 +80,17 @@
     <cmdty:id>FRF</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">be642bf654094e36e85a292e5926e1f0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>O-Sicav Plus</act:name>
   <act:id type="guid">e0e954412d6b31dfa1fcbb9937a125b0</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>FRF</cmdty:id>
-  </act:commodity>
-  <act:commodity-scu>100</act:commodity-scu>
-  <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>O-Sicav Plus</cmdty:id>
-  </act:security>
-  <act:security-scu>100000</act:security-scu>
+  </act:commodity>
+  <act:commodity-scu>100000</act:commodity-scu>
   <act:parent type="guid">89e091b3489a50957b400a868f101d59</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -79,6 +102,7 @@
     <cmdty:id>FRF</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">be642bf654094e36e85a292e5926e1f0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Money95mfunds fr</act:name>
@@ -93,11 +117,15 @@
 </gnc:account>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">88ed4f76d273256aaa05eab3010731bf</trn:id>
+  <trn:currency>
+    <cmdty:space>NYSE</cmdty:space>
+    <cmdty:id>O-Sicav Plus</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-24 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-23 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:30:31 -0500</ts:date>
+    <ts:date>2001-03-26 12:30:31 -0800</ts:date>
     <ts:ns>435420000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -105,33 +133,37 @@
     <trn:split>
       <split:id type="guid">df25dcb351c89a20062a5ea5d294e8e8</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>1828080/100</split:value>
+      <split:value>6000000/100000</split:value>
       <split:quantity>6000000/100000</split:quantity>
       <split:account type="guid">e0e954412d6b31dfa1fcbb9937a125b0</split:account>
     </trn:split>
     <trn:split>
-      <split:id type="guid">a44971f955fa03a9318fff369962820a</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-2461820/100</split:value>
-      <split:quantity>-2461820/100</split:quantity>
-      <split:account type="guid">3bcb236af583d5bd7b6e0153fe97e7e3</split:account>
-    </trn:split>
-    <trn:split>
       <split:id type="guid">1ec08747892bf80d01ff1dab46ccb150</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>633735/100</split:value>
+      <split:value>633735000/100000</split:value>
       <split:quantity>633735/100</split:quantity>
       <split:account type="guid">c7a4746248d0677c6421077833477bba</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">a44971f955fa03a9318fff369962820a</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-2461820000/100000</split:value>
+      <split:quantity>-2461820/100</split:quantity>
+      <split:account type="guid">3bcb236af583d5bd7b6e0153fe97e7e3</split:account>
     </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">21f58d6ddf8e529905db462291963e68</trn:id>
+  <trn:currency>
+    <cmdty:space>NYSE</cmdty:space>
+    <cmdty:id>O-Sicav Plus</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-08 00:00:00 -0400</ts:date>
+    <ts:date>1995-10-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:30:31 -0500</ts:date>
+    <ts:date>2001-03-26 12:30:31 -0800</ts:date>
     <ts:ns>436816000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -139,33 +171,37 @@
     <trn:split>
       <split:id type="guid">30f46d6ea24efb8f57ea386be57370c2</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>3051000/100</split:value>
+      <split:value>9000000/100000</split:value>
       <split:quantity>9000000/100000</split:quantity>
       <split:account type="guid">e0e954412d6b31dfa1fcbb9937a125b0</split:account>
     </trn:split>
     <trn:split>
-      <split:id type="guid">15160cb2e5b32864c451842cde8ffcd9</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-3254400/100</split:value>
-      <split:quantity>-3254400/100</split:quantity>
-      <split:account type="guid">3bcb236af583d5bd7b6e0153fe97e7e3</split:account>
-    </trn:split>
-    <trn:split>
       <split:id type="guid">66a01b46ebec63544ca133efa6706f6b</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>203400/100</split:value>
+      <split:value>203400000/100000</split:value>
       <split:quantity>203400/100</split:quantity>
       <split:account type="guid">c7a4746248d0677c6421077833477bba</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">15160cb2e5b32864c451842cde8ffcd9</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-3254400000/100000</split:value>
+      <split:quantity>-3254400/100</split:quantity>
+      <split:account type="guid">3bcb236af583d5bd7b6e0153fe97e7e3</split:account>
     </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">4cb943c207e102dbc22e5ef829bbc29d</trn:id>
+  <trn:currency>
+    <cmdty:space>NYSE</cmdty:space>
+    <cmdty:id>O-Sicav Plus</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-10 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:30:31 -0500</ts:date>
+    <ts:date>2001-03-26 12:30:31 -0800</ts:date>
     <ts:ns>437989000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -173,19 +209,20 @@
     <trn:split>
       <split:id type="guid">27a56b13c4d24744f3cbb53329120abc</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>2053200/100</split:value>
+      <split:value>6000000/100000</split:value>
       <split:quantity>6000000/100000</split:quantity>
       <split:account type="guid">e0e954412d6b31dfa1fcbb9937a125b0</split:account>
     </trn:split>
     <trn:split>
       <split:id type="guid">19355bfa2d1208dd144aa7c32de06aa5</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-2053200/100</split:value>
+      <split:value>-2053200000/100000</split:value>
       <split:quantity>-2053200/100</split:quantity>
       <split:account type="guid">3bcb236af583d5bd7b6e0153fe97e7e3</split:account>
     </trn:split>
   </trn:splits>
 </gnc:transaction>
+</gnc:book>
 </gnc-v2>
 
 <!-- Local variables: -->

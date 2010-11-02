@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <gnc-v2
      xmlns:gnc="http://www.gnucash.org/XML/gnc"
      xmlns:act="http://www.gnucash.org/XML/act"
@@ -11,22 +11,49 @@
      xmlns:sx="http://www.gnucash.org/XML/sx"
      xmlns:trn="http://www.gnucash.org/XML/trn"
      xmlns:ts="http://www.gnucash.org/XML/ts"
-     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
      xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
      xmlns:addr="http://www.gnucash.org/XML/addr"
-     xmlns:owner="http://www.gnucash.org/XML/owner"
-     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
-     xmlns:tte="http://www.gnucash.org/XML/tte"
-     xmlns:employee="http://www.gnucash.org/XML/employee"
-     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
      xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
-     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
      xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
      xmlns:vendor="http://www.gnucash.org/XML/vendor">
-<gnc:count-data cd:type="account">52</gnc:count-data>
+<gnc:count-data cd:type="book">1</gnc:count-data>
+<gnc:book version="2.0.0">
+<book:id type="guid">390c2c908e71686f3bda44bc5bcbcdfd</book:id>
+<gnc:count-data cd:type="commodity">1</gnc:count-data>
+<gnc:count-data cd:type="account">53</gnc:count-data>
 <gnc:count-data cd:type="transaction">143</gnc:count-data>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>ISO4217</cmdty:space>
+  <cmdty:id>USD</cmdty:id>
+  <cmdty:get_quotes/>
+  <cmdty:quote_source>currency</cmdty:quote_source>
+  <cmdty:quote_tz/>
+</gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>template</cmdty:space>
+  <cmdty:id>template</cmdty:id>
+  <cmdty:name>template</cmdty:name>
+  <cmdty:xcode>template</cmdty:xcode>
+  <cmdty:fraction>1</cmdty:fraction>
+</gnc:commodity>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Compte courant</act:name>
   <act:id type="guid">de3be9d4e8f598584db381c56092f351</act:id>
@@ -36,6 +63,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Livret bleu</act:name>
@@ -46,6 +74,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Salaire</act:name>
@@ -56,6 +85,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Primes</act:name>
@@ -88,6 +118,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Epicerie</act:name>
@@ -120,6 +151,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Automobile</act:name>
@@ -152,9 +184,10 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Cr&#233;dit auto</act:name>
+  <act:name>Crédit auto</act:name>
   <act:id type="guid">56c0e0eae313a1804d8d1183166a34af</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -184,6 +217,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Divers</act:name>
@@ -194,6 +228,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fournitures diverses</act:name>
@@ -207,7 +242,7 @@
   <act:parent type="guid">d9f9dda3d1a61bd15b3b4c67b40c2769</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>D&#233;placements prof.</act:name>
+  <act:name>Déplacements prof.</act:name>
   <act:id type="guid">3af7ef0f555aa2a41d75d034c6afd436</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -215,6 +250,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Frais de transport</act:name>
@@ -236,6 +272,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Personnels</act:name>
@@ -257,6 +294,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Autres frais</act:name>
@@ -278,9 +316,10 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Imp&#244;ts</act:name>
+  <act:name>Impôts</act:name>
   <act:id type="guid">0a5c854c367926d4ce7ffaa60f99a85a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -288,9 +327,10 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Imp&#244;ts sur le revenu</act:name>
+  <act:name>Impôts sur le revenu</act:name>
   <act:id type="guid">0a5d0546390d60dab623114e6f136d7a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -309,6 +349,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Loyer</act:name>
@@ -330,9 +371,10 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Canal Plus-C&#226;ble</act:name>
+  <act:name>Canal Plus-Câble</act:name>
   <act:id type="guid">6a2a8fed6fbad778df8a5292148d1582</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -343,7 +385,7 @@
   <act:parent type="guid">ae47cf420aa54ba58fb1906b4edba98f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Cin&#233;ma-Th&#233;&#226;tre</act:name>
+  <act:name>Cinéma-Théâtre</act:name>
   <act:id type="guid">b2a4e65fd87146b8199f46c31fa215f1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -406,6 +448,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Chauffage</act:name>
@@ -419,7 +462,7 @@
   <act:parent type="guid">a648b21f385e784fbe2b26cb3f718a79</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Electricit&#233;</act:name>
+  <act:name>Electricité</act:name>
   <act:id type="guid">a74cdda295ca3f404ca97a5e94a564c3</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -430,7 +473,7 @@
   <act:parent type="guid">a648b21f385e784fbe2b26cb3f718a79</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>T&#233;l&#233;phone</act:name>
+  <act:name>Téléphone</act:name>
   <act:id type="guid">3a6503c7c577f1beb48a620e905b207d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -449,6 +492,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Cuisine-Salle de bains</act:name>
@@ -473,7 +517,7 @@
   <act:parent type="guid">8f5104499ca8138b3c48f5c900d7b285</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Electro-m&#233;nager</act:name>
+  <act:name>Electro-ménager</act:name>
   <act:id type="guid">3b925233706cf676b2e8f40054f34a68</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -484,7 +528,7 @@
   <act:parent type="guid">8f5104499ca8138b3c48f5c900d7b285</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Sant&#233;</act:name>
+  <act:name>Santé</act:name>
   <act:id type="guid">1c3053f62d72017f9faacec828e3b874</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -492,6 +536,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dentiste</act:name>
@@ -524,6 +569,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Coiffeur</act:name>
@@ -545,6 +591,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Devises</act:name>
@@ -577,25 +624,23 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">392e8c33776bc4b9224e1d4d5fa1373c</act:parent>
 </gnc:account>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">9643f159a0522e203df526c2125ccdd4</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-01 00:00:00 -0500</ts:date>
+    <ts:date>1994-12-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>167565000</ts:ns>
   </trn:date-entered>
   <trn:description>Opening Balance</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">cb07c0c9643bbb7e16743e26928ccb18</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-576236/100</split:value>
-      <split:quantity>-576236/100</split:quantity>
-      <split:account type="guid">afe841ab5436faa629103cfbb93c6a74</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">b801cbac54167138bf1830bdfe2796ad</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -603,15 +648,26 @@
       <split:quantity>576236/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">cb07c0c9643bbb7e16743e26928ccb18</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-576236/100</split:value>
+      <split:quantity>-576236/100</split:quantity>
+      <split:account type="guid">afe841ab5436faa629103cfbb93c6a74</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ed5de8fcc01dc81be4c931546ed28b93</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-01 00:00:00 -0500</ts:date>
+    <ts:date>1994-12-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>183423000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -634,11 +690,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">b1ca331fcc284e01738c702211844ddb</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-03 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-02 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>186234000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -676,12 +736,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">58a662ebe98a022355d07b86f13ad55b</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6351</trn:num>
   <trn:date-posted>
-    <ts:date>1995-01-05 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>188671000</ts:ns>
   </trn:date-entered>
   <trn:description>MACIF</trn:description>
@@ -706,11 +770,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">067bfaa1146c6a98dc32f18c8deeea41</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-08 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-07 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>203492000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -733,44 +801,52 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">1892990631606792b4db6cb71caf4a5d</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-10 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>205833000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
     <trn:split>
-      <split:id type="guid">111dd486387133db464d5c39592bea71</split:id>
-      <split:memo>Prime de fin d&apos;ann&#233;e</split:memo>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-400000/100</split:value>
-      <split:quantity>-400000/100</split:quantity>
-      <split:account type="guid">4840ebbf3d52f81ad87acd6f79b4cb6d</split:account>
-    </trn:split>
-    <trn:split>
       <split:id type="guid">accbf5fbf4804eae2935da86449e2a34</split:id>
-      <split:memo>Prime de fin d&apos;ann&#233;e</split:memo>
+      <split:memo>Prime de fin d'année</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>400000/100</split:value>
       <split:quantity>400000/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">111dd486387133db464d5c39592bea71</split:id>
+      <split:memo>Prime de fin d'année</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-400000/100</split:value>
+      <split:quantity>-400000/100</split:quantity>
+      <split:account type="guid">4840ebbf3d52f81ad87acd6f79b4cb6d</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">d82af5e8d601582abbc4129959065253</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6352</trn:num>
   <trn:date-posted>
-    <ts:date>1995-01-10 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>208154000</ts:ns>
   </trn:date-entered>
-  <trn:description>Intermarch&#233;</trn:description>
+  <trn:description>Intermarché</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">a7bc6259cfc9b39e77c6d6b410ec11d9</split:id>
@@ -790,15 +866,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">df17330745d5a6e5052e60b53eee27aa</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6353</trn:num>
   <trn:date-posted>
-    <ts:date>1995-01-12 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>210949000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">aa083e6f07b56377db5d645ecef0d0c2</split:id>
@@ -818,14 +898,18 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">745b3a8912254f8573b35c5c83f25170</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-17 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-16 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>213577000</ts:ns>
   </trn:date-entered>
-  <trn:description>France T&#233;l&#233;com</trn:description>
+  <trn:description>France Télécom</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">e251d07209a3e92ff77b78eb5fe7b5dd</split:id>
@@ -845,11 +929,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">6d10f67b15184edc013326d5ea6fa77c</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-18 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-17 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>215972000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -874,12 +962,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">96b32acde3ad762189dcd1d50a34bcd4</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6354</trn:num>
   <trn:date-posted>
-    <ts:date>1995-01-22 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-21 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>218347000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -904,11 +996,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">0265712bd16817e7e4b32a69831f80d6</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-24 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-23 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>221853000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -933,22 +1029,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">99883512582728a299b53a30a70fd22a</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-25 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>224353000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">9e1efea30615ab86e4451725e50a1bbc</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">d1b101b3e5a3b7b4325b6a32af15b820</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -956,15 +1049,26 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">9e1efea30615ab86e4451725e50a1bbc</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ba3ef8eafa91005c6aafe34992d6c876</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>226714000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -989,11 +1093,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">b466968f727ac90afb88ac2afdef39c1</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-01 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>229067000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -1016,11 +1124,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">8d07b6b5b83036d3665f86b8abe9310e</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-02 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-01 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>232995000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1050,12 +1162,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ac9b873ae20a4cb77e2533d27917b1cd</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6355</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-07 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>235421000</ts:ns>
   </trn:date-entered>
   <trn:description>Restaurant Saint-Paul</trn:description>
@@ -1078,15 +1194,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">7781b87fc3ee84b2c16a173ae705b8c9</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6356</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-10 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>237851000</ts:ns>
   </trn:date-entered>
-  <trn:description>Centre des Imp&#244;ts</trn:description>
+  <trn:description>Centre des Impôts</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">6541a71714ce087f2ab837717606d620</split:id>
@@ -1108,15 +1228,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">aed0d7c65a9539e677ad6f612ff6c970</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6357</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-12 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>248545000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">20f24bcba69db1efa10312d2cba31827</split:id>
@@ -1136,11 +1260,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">f4e84f0e270f573810ee3c81ea8dcb2b</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-21 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-20 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>251624000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1170,12 +1298,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">697d53f57fd11d6b05f342fd73e90380</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6358</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-22 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-21 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>254112000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -1200,22 +1332,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">f0859433a7cf73cc85bd680e79596f5e</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-25 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>256503000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">4b3e39d494c3553530523f6f14e3abd5</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">730979124e6b32a5546e825c2b906015</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -1223,15 +1352,26 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">4b3e39d494c3553530523f6f14e3abd5</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">b1f807d8d972858334f6b7cd543d7949</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>258906000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1256,12 +1396,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">d385a9795d2853dee693d6027c33d383</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6359</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>263748000</ts:ns>
   </trn:date-entered>
   <trn:description>Carrefour</trn:description>
@@ -1284,12 +1428,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">08efefeff498f0a42009b3a46490d7e6</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6360</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>266339000</ts:ns>
   </trn:date-entered>
   <trn:description>SNCF</trn:description>
@@ -1312,11 +1460,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">2473301bd952ece04b6280ad3afee778</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-28 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-27 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>268792000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1341,11 +1493,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">8301607cbdb90859c1bced0a531e6891</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-01 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-28 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>271678000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -1368,11 +1524,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">6af8c26792ecd6cb00905893997bbe4e</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-08 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-07 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>274153000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -1395,15 +1555,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">10dadb1570d588282ad318bcbcb1aa85</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6361</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-12 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>276654000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">953ad1020f5c5671e086505c240cdac1</split:id>
@@ -1423,11 +1587,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">bbfb01e2de3b2d13044ac5d7bf05829b</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-14 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>279359000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1457,12 +1625,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">7c245360fc50657ac97c1665ba1cf7ff</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6362</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-15 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-14 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>282341000</ts:ns>
   </trn:date-entered>
   <trn:description>Senzo Alimentation</trn:description>
@@ -1485,14 +1657,18 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">d383f0a0676f4ffc80f72b6101c75f67</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-17 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-16 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>284285000</ts:ns>
   </trn:date-entered>
-  <trn:description>France T&#233;l&#233;com</trn:description>
+  <trn:description>France Télécom</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">3cb2fe62d682065c8e68601e9c436467</split:id>
@@ -1512,19 +1688,23 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">7c3db6a038d2911b42b923b36fa98af7</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6363</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-17 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-16 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>285984000</ts:ns>
   </trn:date-entered>
   <trn:description>Interflora</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">1cc7927b08860218d975045f48204f71</split:id>
-      <split:memo>Pour H&#233;l&#232;ne...</split:memo>
+      <split:memo>Pour Hélène...</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>16000/100</split:value>
       <split:quantity>16000/100</split:quantity>
@@ -1532,7 +1712,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">b726807deceb214465c4a8f462a6c06b</split:id>
-      <split:memo>Pour H&#233;l&#232;ne...</split:memo>
+      <split:memo>Pour Hélène...</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-16000/100</split:value>
       <split:quantity>-16000/100</split:quantity>
@@ -1542,11 +1722,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">54e7a97ba00d52e72ea6b96730afb238</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-21 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-20 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>287674000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1571,22 +1755,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">f2e2f7531e3eab3d2ae1c2416407e925</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-25 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>289339000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">470d2554d1c191d6977275af99e17671</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1005390/100</split:value>
-      <split:quantity>-1005390/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">7ad973a1af2ef78238f4ebe8659d0486</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -1594,15 +1775,26 @@
       <split:quantity>1005390/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">470d2554d1c191d6977275af99e17671</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1005390/100</split:value>
+      <split:quantity>-1005390/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">a27379eaf9cfa31587a4548863eca708</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>292612000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1627,12 +1819,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ea88fbe8a0d670ae76b492e47148fce3</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6365</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>294495000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -1657,12 +1853,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">55bbe99b34e19dfbba1c9141a8994db2</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6364</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-30 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-29 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>297133000</ts:ns>
   </trn:date-entered>
   <trn:description>Carrefour</trn:description>
@@ -1713,11 +1913,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">5caacfb0608ec06a252b4709ea524941</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-31 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>299253000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1748,11 +1952,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">3d7264cf91c1a92441799415e9e4ebdc</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-01 00:00:00 -0500</ts:date>
+    <ts:date>1995-03-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>301715000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -1775,11 +1983,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">0094a3b4076b9b8112a6d07b05a118ec</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-11 00:00:00 -0400</ts:date>
+    <ts:date>1995-04-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>303495000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1804,15 +2016,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ef75cabe8325a376f9461e60bc2c87d1</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6366</trn:num>
   <trn:date-posted>
-    <ts:date>1995-04-12 00:00:00 -0400</ts:date>
+    <ts:date>1995-04-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>305222000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">84a279b745056859c0946bd20f87c1ad</split:id>
@@ -1832,12 +2048,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">8baad80b1b4ee539229b8d3d8dad2f04</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6367</trn:num>
   <trn:date-posted>
-    <ts:date>1995-04-21 00:00:00 -0400</ts:date>
+    <ts:date>1995-04-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>307007000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -1862,11 +2082,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">5b2bf3a7f76b84597fb70125790a6a21</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-23 00:00:00 -0400</ts:date>
+    <ts:date>1995-04-22 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>309211000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1903,22 +2127,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">c04781886177cc54567d43d57e29e51d</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-25 00:00:00 -0400</ts:date>
+    <ts:date>1995-04-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>314980000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">d9b436a4f2a0d1bcf39f585176894fe1</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">a97844b69dfbd92abd7c249d5bcf8c84</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -1926,15 +2147,26 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">d9b436a4f2a0d1bcf39f585176894fe1</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">9e6dc1d3ed796ddf62dcfb7bc624cf99</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-26 00:00:00 -0400</ts:date>
+    <ts:date>1995-04-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>317563000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1959,11 +2191,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">94e1cae214f99ded0c496e35c6bb195a</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-01 00:00:00 -0400</ts:date>
+    <ts:date>1995-04-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>322056000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -1986,11 +2222,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ffa20aa7c8297db7dec4f3d956b72407</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-02 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>324996000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2020,11 +2260,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">9ab90db1ae4a9f94dcbbfe7ebf74e0bc</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-08 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>327622000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -2047,11 +2291,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">a569d012402a6f678b10baa2a2610413</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-09 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-08 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>332010000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2076,12 +2324,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">3b241208a447c421a2f141897e40e8d2</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6368</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-11 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>334793000</ts:ns>
   </trn:date-entered>
   <trn:description>Gaz de France</trn:description>
@@ -2106,15 +2358,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">14bcd23a9c272ba01c8790575d93195e</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6369</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-12 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>337431000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">916da32758c23c3d162805030dbd3e97</split:id>
@@ -2134,15 +2390,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">0bfb10b9c5ab2b53d26f319803b1cf4f</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6370</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-13 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>340082000</ts:ns>
   </trn:date-entered>
-  <trn:description>Intermarch&#233;</trn:description>
+  <trn:description>Intermarché</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">92e4346fe5c3ede19898c591030238f7</split:id>
@@ -2162,14 +2422,18 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">e95766339f5c1c31ecc1870a7f04dac3</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-17 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>356863000</ts:ns>
   </trn:date-entered>
-  <trn:description>France T&#233;l&#233;com</trn:description>
+  <trn:description>France Télécom</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">f645aea37c114f3a7cd87eebda33430c</split:id>
@@ -2189,11 +2453,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">d57af6327f7d3b06f6ffe074e768e09d</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-18 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>359576000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2218,12 +2486,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">9dcdd812d2419a8e6d649c5e95b62d61</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6371</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-18 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>362888000</ts:ns>
   </trn:date-entered>
   <trn:description>La Bonne Franquette</trn:description>
@@ -2246,22 +2518,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">fe95baf6d4e15b865e526720ec21d688</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-25 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>365525000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">d30fcdbc8e23f08100a5b5ee38146ad9</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">320d4de22b3d7600a8f653844eaf8b6c</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -2269,15 +2538,26 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">d30fcdbc8e23f08100a5b5ee38146ad9</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">49734566504a7358ab35af1ed41244e0</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-26 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>368171000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2302,12 +2582,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">93fd47f496bf5289b08d7e77c6818dc6</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6372</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-29 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>372900000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -2332,11 +2616,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">863bb8cd20e4f3ac904110903fab57db</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-30 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-29 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>375638000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2361,11 +2649,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">c29b96b9a0e2e2e7ae1aa00d66252f75</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-01 00:00:00 -0400</ts:date>
+    <ts:date>1995-05-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>378315000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -2388,12 +2680,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">346de50ad5b9d67e6772420ff190fe06</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6373</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-02 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>383273000</ts:ns>
   </trn:date-entered>
   <trn:description>FNAC</trn:description>
@@ -2416,11 +2712,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">3ee6837c82c4ee32be90497e1ca93e94</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-06 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-05 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>386246000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2450,19 +2750,23 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">bdb459884de124cc0e4785ce061199f1</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6375</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-10 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>389039000</ts:ns>
   </trn:date-entered>
-  <trn:description>Centre des Imp&#244;ts</trn:description>
+  <trn:description>Centre des Impôts</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">bcd1f96e743a3159b102da59b0b9c9d0</split:id>
-      <split:memo>2&#232;me tiers</split:memo>
+      <split:memo>2ème tiers</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>415869/100</split:value>
       <split:quantity>415869/100</split:quantity>
@@ -2470,7 +2774,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">54fd36753ee2647200e77958947777d3</split:id>
-      <split:memo>2&#232;me tiers</split:memo>
+      <split:memo>2ème tiers</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-415869/100</split:value>
       <split:quantity>-415869/100</split:quantity>
@@ -2480,12 +2784,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">6e6259844ab3bf7628dd1b629f569161</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6376</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-10 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>398857000</ts:ns>
   </trn:date-entered>
   <trn:description>Gaz de France</trn:description>
@@ -2510,11 +2818,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">357a6578f4bc97601f789a994956b651</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-11 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>402216000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2539,15 +2851,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">c2fa0f42fc76499c281e258c57d027c6</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6378</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-12 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>405222000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">31bf13f3c9f965700690600ffd1df95f</split:id>
@@ -2567,18 +2883,22 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">5b0f8e066bc92a2f7f25ed54c8da7ca6</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-20 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-19 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>407965000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">42237f22921e089ab2782688dd33dc4f</split:id>
-      <split:memo>Cr&#234;perie</split:memo>
+      <split:memo>Crêperie</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>15000/100</split:value>
       <split:quantity>15000/100</split:quantity>
@@ -2586,7 +2906,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">69eb2af803222be1dd3492475958d954</split:id>
-      <split:memo>Cr&#234;perie</split:memo>
+      <split:memo>Crêperie</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-15000/100</split:value>
       <split:quantity>-15000/100</split:quantity>
@@ -2596,12 +2916,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">1edabfb6b2a1211a7b7a9a69bf7bf070</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6380</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-20 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-19 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>413702000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -2626,12 +2950,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">28bc1c801c6c0aa16bb1bdcce27b5c1b</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6379</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-21 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>416534000</ts:ns>
   </trn:date-entered>
   <trn:description>Nasa Electronics</trn:description>
@@ -2656,22 +2984,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">d0ac192ea8d1aea0906d5c4779dc2290</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-25 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>419365000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">f35b431be099a4376bc9cb0e4b19c403</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">086d39be8ee372db1e748c743afd656b</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -2679,15 +3004,26 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">f35b431be099a4376bc9cb0e4b19c403</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">dfeaee9b9858f158bfa4cfa2fb82c082</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-26 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>422808000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2712,11 +3048,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">dc0ba8106381f550322e26cffdf7b1d5</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-01 00:00:00 -0400</ts:date>
+    <ts:date>1995-06-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>425562000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -2739,11 +3079,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">d721c6fb45b9fb1710fbd4a13fc8fccd</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-04 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-03 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>428365000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2768,12 +3112,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ed14be91c46bcd7d880da6b157276cc4</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6381</trn:num>
   <trn:date-posted>
-    <ts:date>1995-07-07 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>432394000</ts:ns>
   </trn:date-entered>
   <trn:description>U.G.C.</trn:description>
@@ -2798,11 +3146,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">66b5c99f72b1be0ba9426d38e076f8d7</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-08 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>435165000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -2825,15 +3177,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">8e0aca938ddc76a9ee590f6075c84eee</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6382</trn:num>
   <trn:date-posted>
-    <ts:date>1995-07-12 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>437958000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">fca544a05f29062d58ccb9cb71a078e5</split:id>
@@ -2853,12 +3209,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">1e2fb202b6ba42aed5d81e456215986d</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6383</trn:num>
   <trn:date-posted>
-    <ts:date>1995-07-13 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>442987000</ts:ns>
   </trn:date-entered>
   <trn:description>Gaz de France</trn:description>
@@ -2883,14 +3243,18 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">2a5d5f33fd190f683e2249cbb41fd601</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-17 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>445826000</ts:ns>
   </trn:date-entered>
-  <trn:description>France T&#233;l&#233;com</trn:description>
+  <trn:description>France Télécom</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">a40615dc6726c1b80fff5d1dea7926af</split:id>
@@ -2910,11 +3274,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">07d5f8168f78782b53a78e587e4b3baa</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-18 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>448887000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2944,12 +3312,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">cf0f388ab6e2e89c4dc39a2ff142e35f</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6384</trn:num>
   <trn:date-posted>
-    <ts:date>1995-07-21 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>453674000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -2974,22 +3346,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">82a2af377157b6ca5c98651469611526</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-25 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>456495000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">86c0122071730b21f67e407a7d1e96f1</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">c80b69ab4998dbd95168893af0fdfb8a</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -2997,22 +3366,33 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">86c0122071730b21f67e407a7d1e96f1</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">26049300752338235172eea036ac4f6c</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-25 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>459319000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">1fd9b0d80a0811bd367f3b1bd5cba11e</split:id>
-      <split:memo>Soir&#233;e entre amis</split:memo>
+      <split:memo>Soirée entre amis</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>25000/100</split:value>
       <split:quantity>25000/100</split:quantity>
@@ -3020,7 +3400,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">0f2fe8868576abf6d57f5ec055971fb3</split:id>
-      <split:memo>Soir&#233;e entre amis</split:memo>
+      <split:memo>Soirée entre amis</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-25000/100</split:value>
       <split:quantity>-25000/100</split:quantity>
@@ -3030,11 +3410,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">f4b99fc3e1cf46731d530696a44fc404</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-26 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>462946000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3059,18 +3443,22 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">fba574e0bac22371b60ce84a97280dc8</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-01 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>466061000</ts:ns>
   </trn:date-entered>
-  <trn:description>Cr&#233;dit Mutuel</trn:description>
+  <trn:description>Crédit Mutuel</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">69822db9b83e409a2d79d5e3c4c14b5a</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>14927/100</split:value>
       <split:quantity>14927/100</split:quantity>
@@ -3086,7 +3474,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">ee1ade23ed8dfe4ab537448bbb79baae</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-421314/100</split:value>
       <split:quantity>-421314/100</split:quantity>
@@ -3096,11 +3484,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">743cac2d56954e70925eff5a778d80df</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-01 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>468931000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -3123,11 +3515,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">a79f558531f48fedb938dcb597848ef5</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-03 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>473481000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3157,19 +3553,23 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">54777d757317cffd5224c7dd23fdfcd6</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6353</trn:num>
   <trn:date-posted>
-    <ts:date>1995-08-07 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>476473000</ts:ns>
   </trn:date-entered>
   <trn:description>MACIF</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">5654afa4b117d4ad1943f8dbc94c3439</split:id>
-      <split:memo>Jusqu&apos;au 01/07/96</split:memo>
+      <split:memo>Jusqu'au 01/07/96</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>46190/100</split:value>
       <split:quantity>46190/100</split:quantity>
@@ -3177,7 +3577,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">806ccc0a5cd736437cf9afccd375adc6</split:id>
-      <split:memo>Jusqu&apos;au 01/07/96</split:memo>
+      <split:memo>Jusqu'au 01/07/96</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-46190/100</split:value>
       <split:quantity>-46190/100</split:quantity>
@@ -3187,11 +3587,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">6513e90a2b2ade9397a40a9884b78531</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-09 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-08 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>479386000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3216,15 +3620,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">fa9d3ab8c2f224b484e44a4b3d598b44</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6385</trn:num>
   <trn:date-posted>
-    <ts:date>1995-08-12 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>482935000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">957eabe77ddbc56b250499b1acb47731</split:id>
@@ -3244,12 +3652,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">2160bafdee142a1c0cdcf93eb152ac70</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6386</trn:num>
   <trn:date-posted>
-    <ts:date>1995-08-13 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>486845000</ts:ns>
   </trn:date-entered>
   <trn:description>C &amp; A</trn:description>
@@ -3306,11 +3718,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">714a3365c041af7542479ef9eb1571a7</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-18 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>492331000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3340,12 +3756,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">c85c719889cf8ba5e5b674c40534b4ca</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6387</trn:num>
   <trn:date-posted>
-    <ts:date>1995-08-22 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-21 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>495542000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -3370,22 +3790,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">4c1aa5c5cd07ed557472ccbc6b09fbeb</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-25 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>498561000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">72924326be90e638bd35be6689bfa4de</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">dae5f1b1e1e42b23dcc25193a996b0f4</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -3393,15 +3810,26 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">72924326be90e638bd35be6689bfa4de</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">23a510b2080b450e71d3eeb66c3b59ba</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-25 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>504389000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3438,11 +3866,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">e93bd22645a2463539ff72b0fb002854</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-30 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-29 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>507381000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3467,18 +3899,22 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">770def13c9521414e8d9e9ff017a8ab6</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-01 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>511918000</ts:ns>
   </trn:date-entered>
-  <trn:description>Cr&#233;dit Mutuel</trn:description>
+  <trn:description>Crédit Mutuel</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">278373bc4ce1a55db5ec05ce41283292</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>12828/100</split:value>
       <split:quantity>12828/100</split:quantity>
@@ -3494,7 +3930,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">8f9f8bccf2658b122b1d0b07ce1e3153</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-421314/100</split:value>
       <split:quantity>-421314/100</split:quantity>
@@ -3504,11 +3940,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">49a39e961ec0b5cc2fad449908bb676a</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-01 00:00:00 -0400</ts:date>
+    <ts:date>1995-08-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>514903000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -3531,11 +3971,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">335c527135df465c5026c57a5085187a</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-08 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>517817000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -3558,11 +4002,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">3a153e5ad16b57608e0f75c8f353f9be</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-08 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>521727000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3592,15 +4040,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">553ebcbadf3b4f35116d797149387dac</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6388</trn:num>
   <trn:date-posted>
-    <ts:date>1995-09-12 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>524796000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">e7e74614eb04d0bcc653fe2adaa318b0</split:id>
@@ -3620,14 +4072,18 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">b054d81668877f2f0209094dd37c74b4</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-17 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>527753000</ts:ns>
   </trn:date-entered>
-  <trn:description>France T&#233;l&#233;com</trn:description>
+  <trn:description>France Télécom</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">3ed384570b0c557ef846cb6f61888ed1</split:id>
@@ -3647,11 +4103,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">9e78c8044b9bd816e9d0b0d1b9714ac3</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-17 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>533919000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3676,11 +4136,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">0c0126f159b22e90d6874ac4d74b3076</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-22 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-21 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>537055000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3705,22 +4169,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">bc7261e3e53d6a625791dba52e6cd72a</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-25 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>541242000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">151f292449fb9d5371b9e2f8ca4a5f26</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">150bbfc248bf92cd3dd82d1ea94fb338</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -3728,16 +4189,27 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">151f292449fb9d5371b9e2f8ca4a5f26</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">6709366f4970d47b02225b4126ce2946</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6389</trn:num>
   <trn:date-posted>
-    <ts:date>1995-09-26 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>544686000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -3762,11 +4234,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">858c8c15d01bb20b175e7511d0a338cc</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-29 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>547748000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3791,18 +4267,22 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">4586437067fd9c845c8c76d1f3dbff95</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-01 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>552274000</ts:ns>
   </trn:date-entered>
-  <trn:description>Cr&#233;dit Mutuel</trn:description>
+  <trn:description>Crédit Mutuel</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">a91b974f498517b5e062775734d85354</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>10717/100</split:value>
       <split:quantity>10717/100</split:quantity>
@@ -3818,7 +4298,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">67bd96955adb2962f330e4c68a71671a</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-421314/100</split:value>
       <split:quantity>-421314/100</split:quantity>
@@ -3828,11 +4308,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">dc4df550a92073ab26c373ec4be97395</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-01 00:00:00 -0400</ts:date>
+    <ts:date>1995-09-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>556896000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -3855,11 +4339,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">78091133ada4b45030448db72483d18a</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-03 00:00:00 -0400</ts:date>
+    <ts:date>1995-10-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>561884000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3889,11 +4377,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">afe9e93d68e876ac57767b055c5dccb5</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-10 00:00:00 -0400</ts:date>
+    <ts:date>1995-10-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>565406000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3923,15 +4415,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">2a0e299746191a713346f3d36f7d582e</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6390</trn:num>
   <trn:date-posted>
-    <ts:date>1995-10-12 00:00:00 -0400</ts:date>
+    <ts:date>1995-10-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>568517000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">f9eca05c03f31aed02ef84b25b12a7b8</split:id>
@@ -3951,15 +4447,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">7bbaa9d35599fb3d01fb994077781852</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6391</trn:num>
   <trn:date-posted>
-    <ts:date>1995-10-15 00:00:00 -0400</ts:date>
+    <ts:date>1995-10-14 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>573311000</ts:ns>
   </trn:date-entered>
-  <trn:description>Centre des Imp&#244;ts</trn:description>
+  <trn:description>Centre des Impôts</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">96304441c2ea5f99b9315a81239f126e</split:id>
@@ -3981,11 +4481,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">a704e168a1dcda16924cd39f49012e78</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-18 00:00:00 -0400</ts:date>
+    <ts:date>1995-10-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>576614000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4015,12 +4519,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">0fa57dae34554853891a3ad20b1792fc</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6392</trn:num>
   <trn:date-posted>
-    <ts:date>1995-10-24 00:00:00 -0400</ts:date>
+    <ts:date>1995-10-23 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>579799000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -4045,22 +4553,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">604b26f5e027d859363fafac298e629a</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-25 00:00:00 -0400</ts:date>
+    <ts:date>1995-10-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>583949000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">49bdd6d7c7e7adcc88629fe6aba7bbe0</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">a8e825d249adbd268640f158121f6c9b</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -4068,15 +4573,26 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">49bdd6d7c7e7adcc88629fe6aba7bbe0</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">644300b8dd43f4193801505ecc388189</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-26 00:00:00 -0400</ts:date>
+    <ts:date>1995-10-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>587324000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4106,11 +4622,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">bd90ec06cec68c8935a5e054a4f7d591</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-31 00:00:00 -0500</ts:date>
+    <ts:date>1995-10-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>592288000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4135,18 +4655,22 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">de35ca9402d2fdf8ba877d70861f4732</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-01 00:00:00 -0500</ts:date>
+    <ts:date>1995-10-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>597275000</ts:ns>
   </trn:date-entered>
-  <trn:description>Cr&#233;dit Mutuel</trn:description>
+  <trn:description>Crédit Mutuel</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">246a46e75b7459d80770f4403001deaf</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>8596/100</split:value>
       <split:quantity>8596/100</split:quantity>
@@ -4162,7 +4686,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">ca766b2283d60321d1deb3c55e4c6dcf</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-421314/100</split:value>
       <split:quantity>-421314/100</split:quantity>
@@ -4172,11 +4696,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">398743bf3c2f7e6dbee6a4f858837dfe</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-01 00:00:00 -0500</ts:date>
+    <ts:date>1995-10-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>601111000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -4199,11 +4727,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">661e393b9e181676766932984f8c7d33</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-06 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-05 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>604563000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4217,7 +4749,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">81f60490d84ff12f1f44896a8756d5c5</split:id>
-      <split:memo>Anniversaire H&#233;l&#232;ne</split:memo>
+      <split:memo>Anniversaire Hélène</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>40000/100</split:value>
       <split:quantity>40000/100</split:quantity>
@@ -4234,11 +4766,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">acaddb2bd6450ae1d37c98b1e6efdac6</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-08 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-07 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>607676000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -4261,44 +4797,52 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ab881f29254f18d36cb1f99249908fbf</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-12 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>612951000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
     <trn:split>
-      <split:id type="guid">84f80f973bcd0323a10f48f6abc9d4fd</split:id>
-      <split:memo>Pour &#233;quilibrage</split:memo>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-450000/100</split:value>
-      <split:quantity>-450000/100</split:quantity>
-      <split:account type="guid">cfb34c39585b58904baa3c1f9be9b8c4</split:account>
-    </trn:split>
-    <trn:split>
       <split:id type="guid">a356d43da70a3c0b9db41485f8155fb0</split:id>
-      <split:memo>Pour &#233;quilibrage</split:memo>
+      <split:memo>Pour équilibrage</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>450000/100</split:value>
       <split:quantity>450000/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">84f80f973bcd0323a10f48f6abc9d4fd</split:id>
+      <split:memo>Pour équilibrage</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-450000/100</split:value>
+      <split:quantity>-450000/100</split:quantity>
+      <split:account type="guid">cfb34c39585b58904baa3c1f9be9b8c4</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">df1e7b8eff998e08300f10747786bfc8</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6393</trn:num>
   <trn:date-posted>
-    <ts:date>1995-11-12 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>616130000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">9e7a280f7f3ad8d15c66233a72acd4b3</split:id>
@@ -4318,11 +4862,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">2c7d5688168cd5e77c63ec5d28ad5ef5</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-14 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>619305000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4347,19 +4895,23 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">c829367e2f2661cb9bfd00429daabd70</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6394</trn:num>
   <trn:date-posted>
-    <ts:date>1995-11-16 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-15 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>637291000</ts:ns>
   </trn:date-entered>
-  <trn:description>Toys&apos;R&apos;Us</trn:description>
+  <trn:description>Toys'R'Us</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">c46d6ecc5eb791fe9fc801288474d7d9</split:id>
-      <split:memo>Cadeaux de No&#235;l juniors</split:memo>
+      <split:memo>Cadeaux de Noël juniors</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>87500/100</split:value>
       <split:quantity>87500/100</split:quantity>
@@ -4367,7 +4919,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">957173f88373dad1bfb9b71a41870592</split:id>
-      <split:memo>Cadeaux de No&#235;l juniors</split:memo>
+      <split:memo>Cadeaux de Noël juniors</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-87500/100</split:value>
       <split:quantity>-87500/100</split:quantity>
@@ -4377,14 +4929,18 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">f347eea571aabef74c89e09168c2abe0</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-17 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-16 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>647476000</ts:ns>
   </trn:date-entered>
-  <trn:description>France T&#233;l&#233;com</trn:description>
+  <trn:description>France Télécom</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">3363e39ad18ebc386a755b4f547f30b5</split:id>
@@ -4404,18 +4960,22 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">553da78ac4e6d1fabff16549250ff3e0</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-20 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-19 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>653861000</ts:ns>
   </trn:date-entered>
-  <trn:description>Cr&#233;dit Mutuel</trn:description>
+  <trn:description>Crédit Mutuel</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">664dff9f268ca9d0710d7d50c7025050</split:id>
-      <split:memo>Dollars pour vacances &#224; Redmond</split:memo>
+      <split:memo>Dollars pour vacances à Redmond</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>150000/100</split:value>
       <split:quantity>150000/100</split:quantity>
@@ -4423,7 +4983,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">eb7917c873b0c104acf9c72e91481a2e</split:id>
-      <split:memo>Dollars pour vacances &#224; Redmond</split:memo>
+      <split:memo>Dollars pour vacances à Redmond</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-150000/100</split:value>
       <split:quantity>-150000/100</split:quantity>
@@ -4433,11 +4993,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">51a1a9f5090a9dbe8f347f79015f73ce</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-21 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-20 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>657132000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4462,12 +5026,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">b1e49deb289a12c6260f0c0eec4a8850</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6395</trn:num>
   <trn:date-posted>
-    <ts:date>1995-11-22 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-21 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>661081000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -4492,22 +5060,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">e6729c246af31c6dc1c4cba9aa5a6c98</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-25 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>664349000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">136441a6f02976dda9f774d3f06bbc0e</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">98d29f5e47c681b521fac8d95da80910</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -4515,15 +5080,26 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">136441a6f02976dda9f774d3f06bbc0e</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ca411b893bcb18140eba6258c737d86c</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-28 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-27 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>667602000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4548,18 +5124,22 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">7a548de962765c14800eca45a6f90523</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-01 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>672518000</ts:ns>
   </trn:date-entered>
-  <trn:description>Cr&#233;dit Mutuel</trn:description>
+  <trn:description>Crédit Mutuel</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">26dffc4e91d8d02a8c70290444138455</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>6463/100</split:value>
       <split:quantity>6463/100</split:quantity>
@@ -4575,7 +5155,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">330574ff34234aaeb2980a2e97098245</split:id>
-      <split:memo>Int&#233;r&#234;ts</split:memo>
+      <split:memo>Intérêts</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-421314/100</split:value>
       <split:quantity>-421314/100</split:quantity>
@@ -4585,11 +5165,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">f4062fbf5097fbd1cb9a0b10a1917922</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-01 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>675778000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -4612,12 +5196,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">b47c4349e3050b9ae28b1e120529349e</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6396</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-04 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-03 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>679388000</ts:ns>
   </trn:date-entered>
   <trn:description>C &amp; A</trn:description>
@@ -4647,11 +5235,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">28f562c4f190045d1811e9c45cf03399</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-05 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>684337000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4676,15 +5268,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">d5ff033a68daf33a8ab36479b9cfc562</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6397</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-12 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>687601000</ts:ns>
   </trn:date-entered>
-  <trn:description>Propri&#233;taire</trn:description>
+  <trn:description>Propriétaire</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">5f428015626116293b5cd6771243227f</split:id>
@@ -4704,11 +5300,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">061348767dc2f9f60a7702853c64039e</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-15 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-14 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>699051000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4733,12 +5333,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">3eb206827dd0099e0d7b4a982ddecf86</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:num>6398</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-20 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-19 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>703136000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -4763,11 +5367,15 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">7577789ff328119d6ba43ca3db4cd8c6</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-23 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-22 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>706639000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4797,22 +5405,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">b7a5b462216d49a02221c18ad1bb2bb2</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-25 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>710061000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">02bb2087bc17d3fcef028ce2a121d01b</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-1135120/100</split:value>
-      <split:quantity>-1135120/100</split:quantity>
-      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">00b35b728c22fdd59a27b1d31a620084</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -4820,15 +5425,26 @@
       <split:quantity>1135120/100</split:quantity>
       <split:account type="guid">de3be9d4e8f598584db381c56092f351</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">02bb2087bc17d3fcef028ce2a121d01b</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1135120/100</split:value>
+      <split:quantity>-1135120/100</split:quantity>
+      <split:account type="guid">6de38f0a8881dd2368610d32363fb463</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">943398a5d516ccc8384243a8987c1bc1</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>716695000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4853,18 +5469,22 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">cda659ff332c30b5767051f73426c886</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-31 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 00:40:27 -0500</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>719976000</ts:ns>
   </trn:date-entered>
-  <trn:description>Cr&#233;dit Mutuel</trn:description>
+  <trn:description>Crédit Mutuel</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">80b03ef24c38e447349f154d5a0f43e2</split:id>
-      <split:memo>Agios pour d&#233;couvert du 15/10 au 24/10</split:memo>
+      <split:memo>Agios pour découvert du 15/10 au 24/10</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>9763/100</split:value>
       <split:quantity>9763/100</split:quantity>
@@ -4872,7 +5492,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">6afa7b7aa4ca5f3eed94ab04cccaf4b1</split:id>
-      <split:memo>Agios pour d&#233;couvert du 15/10 au 24/10</split:memo>
+      <split:memo>Agios pour découvert du 15/10 au 24/10</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-9763/100</split:value>
       <split:quantity>-9763/100</split:quantity>
@@ -4880,6 +5500,7 @@
     </trn:split>
   </trn:splits>
 </gnc:transaction>
+</gnc:book>
 </gnc-v2>
 
 <!-- Local variables: -->

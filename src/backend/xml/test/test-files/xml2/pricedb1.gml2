@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <gnc-v2
      xmlns:gnc="http://www.gnucash.org/XML/gnc"
      xmlns:act="http://www.gnucash.org/XML/act"
@@ -11,21 +11,29 @@
      xmlns:sx="http://www.gnucash.org/XML/sx"
      xmlns:trn="http://www.gnucash.org/XML/trn"
      xmlns:ts="http://www.gnucash.org/XML/ts"
-     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
      xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
      xmlns:addr="http://www.gnucash.org/XML/addr"
-     xmlns:owner="http://www.gnucash.org/XML/owner"
-     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
-     xmlns:tte="http://www.gnucash.org/XML/tte"
-     xmlns:employee="http://www.gnucash.org/XML/employee"
-     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
      xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
-     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
      xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
      xmlns:vendor="http://www.gnucash.org/XML/vendor">
-<gnc:count-data cd:type="commodity">12</gnc:count-data>
+<gnc:count-data cd:type="book">1</gnc:count-data>
+<gnc:book version="2.0.0">
+<book:id type="guid">c612ab04f7ff1a29fef1a7ebaf455b35</book:id>
+<gnc:count-data cd:type="commodity">13</gnc:count-data>
+<gnc:count-data cd:type="account">1</gnc:count-data>
 <gnc:commodity version="2.0.0">
   <cmdty:space>AMEX</cmdty:space>
   <cmdty:id>stk</cmdty:id>
@@ -104,8 +112,16 @@
   <cmdty:name>AT&amp;T Corp</cmdty:name>
   <cmdty:fraction>32</cmdty:fraction>
 </gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>template</cmdty:space>
+  <cmdty:id>template</cmdty:id>
+  <cmdty:name>template</cmdty:name>
+  <cmdty:xcode>template</cmdty:xcode>
+  <cmdty:fraction>1</cmdty:fraction>
+</gnc:commodity>
 <gnc:pricedb version="1">
   <price>
+    <price:id type="guid">0aa1d888c252e19ad861753f83535a9e</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -115,13 +131,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">116b237865c365cac76581520a58f30a</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -131,13 +148,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">311847ace13f0fc08e18bb0be38473d5</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -147,13 +165,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">363d368c337023530f8485fad869f0f3</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -163,13 +182,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">36516c191a6cd33002550c877f4c6300</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -179,13 +199,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">570b1e7c591a0fcd69069f40a03ae62e</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -195,13 +216,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">681e6a0cc848b9a8638e7188a6e5c892</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -211,13 +233,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">6da751ca0174c9085b2d39344b900d8b</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -227,13 +250,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">6e70bce010257ff1e11097966a26f1c2</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -243,13 +267,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">801eb511320e04882a985f7d3e985606</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -259,13 +284,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">83fc147fb58ec7fa396c73418585a97a</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -275,13 +301,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">89e5b7b5565b587d9294b1fc78e69288</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -291,13 +318,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8b286aefa352a75133d2dac70aff777c</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -307,13 +335,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8e4a6097781d37b4102d09b07e8b2271</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -323,13 +352,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8eb84752bb12899f421cf6346d70f11d</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -339,13 +369,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">922bc49ed27a801bd563bfff7b4fb5fd</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -355,13 +386,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9dc7bf3ea6873b5b1f10a7f3367ca704</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -371,13 +403,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9f28eb55aede472fddf9f8b83e8dc8a9</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -387,13 +420,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a2db13ad8a84f717168cc0fcf9eaab1c</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -403,13 +437,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a3d49be2f529205240ead1a5c6536b4b</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -419,13 +454,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b6e0524dc378a111b33e7b0e43daf7e4</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -435,13 +471,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">bc6d96b5df48ed586fd03b620ce2f396</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -451,13 +488,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c691122a94204875825c80f9fe0659bb</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -467,13 +505,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c8fe6d1e8a63ae9f107abc857bd35325</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -483,13 +522,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ce2fc8bc98d2e9220f893aabff7a6864</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -499,13 +539,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d1e33528f3148370df75ece0a8390f3b</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -515,13 +556,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d6627745cf9072d8439d28ffbcf4f999</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -531,13 +573,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e3013803b5bf41818cc3cadc115faa98</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -547,13 +590,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e8656501ca8674a195e7667647d6b45e</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -563,13 +607,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e8aa311ad39b4a23e106b7e165466fe0</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -579,13 +624,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e9fad50db03be6a8e37eb26eb5908b72</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -595,13 +641,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f1824165da98c401bb6be5d472df61c0</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -611,13 +658,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f650598e3ed7fa9161a6d2a876baa92a</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -627,13 +675,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f9764be99207b51e130900dd634a8c81</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -643,13 +692,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ff250c3d01eb30235100a4e7b06b5ade</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -659,13 +709,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>237500000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">1d4c719e566779ad19a9f3b25a0e3582</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -675,13 +726,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:57:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>234375000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2abda117d7319f8c755df3761408d771</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -691,13 +743,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:57:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>234375000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3dc3c60e6c3af87f8c330ea51c6e2e45</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -707,13 +760,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:57:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>234375000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5a12cd1d5f0e119529e9bfa36f838861</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -723,13 +777,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:57:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>234375000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c6e8d8f0b11c13d4ac285e61bc7569c8</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -739,13 +794,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:57:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>234375000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c782d79ebc8d8879635a6fa386ab4297</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>CORL</cmdty:id>
@@ -755,13 +811,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:57:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>234375000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0fa037234246a1f730040aac7910e09b</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -771,13 +828,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">171c2509f90f701a5d28ae87288e35a8</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -787,13 +845,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">1fcdc2a50da190633bfe82c8824e5d2a</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -803,13 +862,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2237e770abf1e472a254f3eccfc31e58</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -819,13 +879,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2bdbca20fed22381faf4d71b0c46b13a</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -835,13 +896,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2caf7e2ce66d802f9248b2ef5c2490f8</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -851,13 +913,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2f7a907f5fefbab46686c82d9bc0bf50</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -867,13 +930,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">328d875304835c7bbfd1fb1028d4593b</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -883,13 +947,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">38d581ed087e36987044e6e1c81f18cd</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -899,13 +964,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">43adac154037aa1f3f9cb38049ca7ec0</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -915,13 +981,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">477da6de7fe69ceec30f160741b73446</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -931,13 +998,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">481fea45c22d7aecd593a092687ed4bd</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -947,13 +1015,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">4c1f8e0083f80f95048ff8f69b0f2cfc</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -963,13 +1032,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">4d7408e09c97d93747bd7db6615a1acb</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -979,13 +1049,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">4ee34c2961248d34ab3eda78090407a6</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -995,13 +1066,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">4fc2b40f2028971c16d8cf97a270733c</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1011,13 +1083,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5817d675bda2851916fc2622a36a4eb8</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1027,13 +1100,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5d21aac2c023129c005bd22e2b4edf0f</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1043,13 +1117,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">60f823417aae5c8dbb6b3d8eb03a7392</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1059,13 +1134,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">69850a7dea1595063dba90cd984e2c43</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1075,13 +1151,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">790389a3c90b4d2e29a57e0f5f881644</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1091,13 +1168,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7bd101c0dddde15142a92ae22b459ab4</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1107,13 +1185,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7d8998a4e504b0619c31623d5bd75fc0</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1123,13 +1202,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">80bbd833a07f787cdcf770cf917a8be3</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1139,13 +1219,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8a3b11f5f461e813b09bd1833dbf66a6</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1155,13 +1236,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">91e526905d9672de2f8896e307b89440</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1171,13 +1253,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">920d4626c55a36892872649ea6971565</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1187,13 +1270,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">991f218586c5fe2bf95c45f61c36a6d4</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1203,13 +1287,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9bf83058fadd1a12166bc0f7dbd4e06c</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1219,13 +1304,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9ebdfdfd0af7c0f1a8b8af2068e7322a</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1235,13 +1321,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a24fd5a041000dd0a1ea99cb3ebb0b78</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1251,13 +1338,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a80ab0a63e089b6c4803bad88db99a68</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1267,13 +1355,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b0455d986afc460ce2c9594fc24cce91</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1283,13 +1372,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b9917f86e3d163b84bb6b5b987d56842</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1299,13 +1389,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">cfdf84648a340d3e575c830d5defe0a2</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1315,13 +1406,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d321f20984905a3375ecebaa06699bef</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1331,13 +1423,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d9f27f967027987041e472d84c9996f3</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1347,13 +1440,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">edf67d894469a85bf8e4ae0a76f25eb6</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1363,13 +1457,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f8841ac29625879c6b47a1df2750de73</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1379,13 +1474,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">fb4fa3733553b5d0af753f8e8589e139</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1395,13 +1491,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">fdc10e6c726cadd491f05a86f972e2ef</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>GNSS</cmdty:id>
@@ -1411,13 +1508,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>120625000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">075cc041a1d5daa6c7ef3ab982a32eb1</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1427,13 +1525,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">09d3b31894569009ed57da3e835b55d2</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1443,13 +1542,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0e9204bbb8d7dfea3b24dfc593881c17</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1459,13 +1559,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">112288fb012cf1f5c90ed51d2ddb8913</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1475,13 +1576,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">13ad072f80e2611c20576887219a07c0</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1491,13 +1593,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">140896873a28d8fcee917ec8564f3063</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1507,13 +1610,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">14425ce037cefb430ebb5f5f52fd1c49</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1523,13 +1627,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">161e1103aec38f976de9b2c50662a906</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1539,13 +1644,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">1db53a9660a4a395acec12944323a54c</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1555,13 +1661,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">227412f239a00edd0bac94f61b593433</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1571,13 +1678,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">25f31c972b40b383cb1d6435ea79abbb</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1587,13 +1695,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">31e0b4de491dbceaf38e7240d508a876</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1603,13 +1712,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">32847bb7b8033f3440f3a5f9847c6bcb</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1619,13 +1729,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">43ab711216875afb9540ecd292ce42a3</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1635,13 +1746,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5748613b120559da2b84d59547f840db</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1651,13 +1763,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5cebda6d965217cb94c3faf4da9a9c49</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1667,13 +1780,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5fa3a0e177c5be04341eddc0db9b9500</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1683,13 +1797,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">6f464385c9b3613c52f11eb22c41cb83</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1699,13 +1814,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">76e8a50215a0bd8e9003b8e70fdba220</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1715,13 +1831,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">77e22364ce1374f9265d77a774bb1c46</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1731,13 +1848,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">79b5fe76bedadec83e317425d39bd1eb</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1747,13 +1865,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7b6680329713c25f0684082e50a0239e</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1763,13 +1882,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7c163751d441d7180ca72b3109f482d3</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1779,13 +1899,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8946360107909b48e9cf76cfc143003f</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1795,13 +1916,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8ace96cd71b83bca77590db1a16d2876</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1811,13 +1933,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8de467e0c6e7d29d0a0d12f58907b057</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1827,13 +1950,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b412ad4bb6f15fc00462f5513ae52eec</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1843,13 +1967,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b7ec8c94068ce9a2ef3be3a8c3d02b48</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1859,13 +1984,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">be1db257b004df4e19a38a1ac37ba3a9</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1875,13 +2001,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c56dd615eba25ac25caa2bf4723e10b4</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1891,13 +2018,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c825ae20a0abd7c99a722bbd53a4660a</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1907,13 +2035,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c8d3c466dafffb313af4e65ddcac0c25</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1923,13 +2052,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ca908de96d3ec3810c6054b3e6dd7aa4</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1939,13 +2069,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">cc013b1796fc06a56cfced2c78e254f3</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1955,13 +2086,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">cd95a8906cadcdd2f3f06d1f595807d5</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1971,13 +2103,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d5ea13a971d2e67d7a8b5de24b488663</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -1987,13 +2120,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e2ff395b691c7ce628ccdab9aaee79b7</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -2003,13 +2137,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">eb92bf9fce47b6792086a2c314096523</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -2019,13 +2154,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ef20053fa70fce4e1a4bbff87c91b374</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -2035,13 +2171,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f54e51038cc66872f0af745deaeed20d</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -2051,13 +2188,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f90554f00278500d62a65001d93d323f</price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -2067,13 +2205,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>609000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">019a4fa7c2770044cf345fec983ff47b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2083,13 +2222,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0955879da0121efe36cca859674a4d9a</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2099,13 +2239,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">17f38951df26b082ae5872dabbce0709</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2115,13 +2256,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">250b76e42cdcf75bc41132ed2595a72d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2131,13 +2273,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">27fd84dfb0dd9e685a49e9d2168670e8</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2147,13 +2290,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">28f552fb954a7db745e4049863c834eb</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2163,13 +2307,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2a0a15564e88758923068eac2257b6b6</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2179,13 +2324,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">480da0f17bde131000a12f192f4ba64d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2195,13 +2341,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">585b38cb9ce2d4bc50e073a05a637529</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2211,13 +2358,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5c19844d632f5ab552ab841fcf9c3d5b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2227,13 +2375,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">685507c737d7522ea6b2c74f08181d02</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2243,13 +2392,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">75f4fba2bc382d88145b22a2ec348da6</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2259,13 +2409,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">78bc92a896cad0efdff9b8d21538360d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2275,13 +2426,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7c1b5dadb2813869c7fedb31d7dce61c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2291,13 +2443,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">85521128a8a560ea79f428af84d61bbc</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2307,13 +2460,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">865555818c61c45c0aa5a5f34a8be73e</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2323,13 +2477,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">879cbec6bd2e3e01c9eaf7103cf458e4</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2339,13 +2494,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8d90092bf335bebf06e94a6dab1c7069</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2355,13 +2511,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">97067d667c03c0171d70a071515896a4</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2371,13 +2528,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9f84d8451e07c22a9ddf871bd56cdcd6</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2387,13 +2545,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a446b68b6e3253f8c4ecd799970cacd2</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2403,13 +2562,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">adeaed862b8bc80cf5d95a1c0223775e</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2419,13 +2579,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">af7f19c384c2aaccc58f53ee5d709c80</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2435,13 +2596,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c06ab06d3d7b203c573638491ba4aea2</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2451,13 +2613,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c48b3c9ee3c9ae261ec62c4946d523e3</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2467,13 +2630,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d9f9bc1dd2eb05a79858aa9d6ee37b92</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2483,13 +2647,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">da2bd8eea019951b1908cb2cdcaaccd8</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2499,13 +2664,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">df1b2a61ea883157fe20cdafa82388e6</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2515,13 +2681,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e106c34241412f7f94ade08239d2978a</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2531,13 +2698,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e58632db5e9489ea64cfb86674f70b18</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2547,13 +2715,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e8dc073d3260320a9fdf7745f851b9b6</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2563,13 +2732,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ede51e3dfcb6a310b3816fb1472fd733</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2579,13 +2749,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f6b60b46651b211527815e0fa017c635</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2595,13 +2766,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a77043b4d2e5080fbdad1ac053bf594e</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2611,13 +2783,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>286900000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e42848dcaf9ecc6ad030f37bf47189c5</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2627,13 +2800,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:58:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287000000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">1da2400d25f589b804b685fa9489553e</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2643,13 +2817,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3a6864727af5a02847ddc9b63b0f3e80</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2659,13 +2834,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">788f01d4bc2b13e076d8fac6e9be3163</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2675,13 +2851,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9b0d113e8ba9e9836cfc208c2b5f9e18</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2691,13 +2868,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c758709d233bce82adcdeb03f33c8e49</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2707,13 +2885,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">da37596e744a479f365b5d030d0d33ec</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>AMD</cmdty:id>
@@ -2723,13 +2902,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:01:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>287400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">06926e9b79597db0be14efa6dd2bd5b0</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2739,13 +2919,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">07aeb89cc1d22a224692e68f5b50d65c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2755,13 +2936,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2329b37974ec52f1bc076e2752fccdc7</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2771,13 +2953,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">247c40d64b59d4bbd8ad486d90c5079d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2787,13 +2970,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2b34c2cd92545df3d6fec38c9b2771d9</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2803,13 +2987,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2f3a0033c3a34b2566a61818e7b9d6a8</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2819,13 +3004,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2f538f4004b0c4262ab4359d8c935da1</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2835,13 +3021,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3519b77e1b218799fec083d3c24f2935</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2851,13 +3038,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">402c6835c8c33182e4d4a1a305bd28bf</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2867,13 +3055,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">4140ddffde7c2d266bee46b66efd88ad</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2883,13 +3072,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">503e90f2400bc2a698ecc15c3f275ff7</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2899,13 +3089,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5c26a9f1ff5e9e30d600d2ada5b6eb03</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2915,13 +3106,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">68d3dafb42f88bb786484e8bb36e4810</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2931,13 +3123,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">68e70bff6a11d35c181e866b7e3e454c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2947,13 +3140,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">6be6c97d8b275e6c7d1c68b23da7c3f7</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2963,13 +3157,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">6e69727de10c86d83637d53ca46603e6</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2979,13 +3174,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">6f36acff7521ee8f96ee5a2399ebf376</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -2995,13 +3191,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">888fc6da469cd1ff91e78305e6ba4509</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3011,13 +3208,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9a762b6a77c75a6069c9a9c2e405fa09</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3027,13 +3225,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a6d48f6dcdd4c31d4f409754aba9e9d1</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3043,13 +3242,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">acfb2a578b70110bec45549dbb13b152</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3059,13 +3259,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">af8e5f690074785392fe435c8564f6fa</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3075,13 +3276,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c048b61e8b554532d69e154183f41683</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3091,13 +3293,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c3187d2aca8e2a3b62cc0d68fa84f015</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3107,13 +3310,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c552cd9fcb92af98de690ef691f979a8</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3123,13 +3327,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c851e6810c952a3af872758b3893d322</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3139,13 +3344,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d38a4d02e75bf02b08f80b16cec48b2c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3155,13 +3361,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d494ea525ac6e608c4a6d0fe1c6249dd</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3171,13 +3378,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d8bfa1e47ea9f3925da37ec9667dd0be</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3187,13 +3395,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">df6a47abfbad183a6f5fd41490354880</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3203,13 +3412,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e9d07d220072bde2d14605699cb9afe5</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3219,13 +3429,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f5b2f52583e36c2bc08ffaf406d214c8</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3235,13 +3446,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">fea216a7c773cfd2f1524c7d327d361e</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3251,13 +3463,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c87ec31015a8c987a036ac42edbee0fc</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3267,13 +3480,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279100000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">1b9cf7f3359b2b13cc2ca372c5e2b3e6</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3283,13 +3497,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:58:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">043a25d52f4a00b97adf02be4f302ca6</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3299,13 +3514,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">07f5d560cf907db043256d9c4abd89fc</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3315,13 +3531,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">66828b4aef1548819276f7685f5ae03c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3331,13 +3548,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8094fd8d4a7ffe96d8bff91fb10e81ba</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3347,13 +3565,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9e3d20cbbc5d215defadc9dfecf6e5cc</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3363,13 +3582,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f04536a9445950f941362c78145fda2d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>DIS</cmdty:id>
@@ -3379,13 +3599,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:04:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>279200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">086857db62e8ec5e98a7bf061b946031</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3395,13 +3616,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0bccf992944421c9707a3b78c3ac0d42</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3411,13 +3633,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0dbb7a83a5c99fe2449ca4e9e392ffca</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3427,13 +3650,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0f6466772e496080fffe87d1374bf833</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3443,13 +3667,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">12880691a1cf01353b72eddeda36b30d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3459,13 +3684,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2cc937856bdaec72f6b1f39f01adb491</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3475,13 +3701,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">32b365471e946f7fce3affd35fbcc0ea</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3491,13 +3718,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3e78faf0ce294de107aa83c1cd462116</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3507,13 +3735,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">49aa65242cbd8a06e92944a992dab043</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3523,13 +3752,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">49af9899e3bff6c06f16a6aae5046fd6</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3539,13 +3769,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5029acb1df35f4c6162cbf1fb07fa56c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3555,13 +3786,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">54c746433cf7220198ea7100d8202a38</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3571,13 +3803,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">55792a95d7569ca477d515c6869fa0b3</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3587,13 +3820,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5e7ff876e9f7582c8b5f501ce3e8e98c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3603,13 +3837,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">5fe9a15ca060092cc9d7793cfec07399</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3619,13 +3854,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">6e106853670a17c0fd5b5ecb232763f7</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3635,13 +3871,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7afedf928542f1fb7f91db8810ee9843</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3651,13 +3888,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7c781f518ed47e0a09f727ae83216f3c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3667,13 +3905,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">90fcd691967a3a27723a1df40925c0fe</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3683,13 +3922,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">988b226556d3befc1fd514d79052af71</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3699,13 +3939,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9917600519fc7035d918e9644662db76</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3715,13 +3956,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a1586a84c8447186ea19e3339c3eb09f</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3731,13 +3973,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ac7d8b36bf20fa910184469d97d588b0</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3747,13 +3990,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b3f66e37e80a8a5e5754e2bf1508e4f3</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3763,13 +4007,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c10c632d73266773de8df378b04d2b82</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3779,13 +4024,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c5f8aef1a84a538ac8356914546331ac</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3795,13 +4041,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c85998726b41785a40583ad917b6da63</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3811,13 +4058,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d69085f5296227920d885922d78d3492</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3827,13 +4075,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d69912ea72968d8f6aaabe3b96679ce0</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3843,13 +4092,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e4d5801f4b2fc52a7e56f4dd306829ac</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3859,13 +4109,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f085f0312f6a5e15ec587a5aa3344b32</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3875,13 +4126,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">fd2338d9c3d70ee5c477a5094789146c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3891,13 +4143,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ff1a3d1787236fde089510d40639b4ef</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3907,13 +4160,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">65b08f5c706c9bd1a6db22ebb962986d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3923,13 +4177,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180000000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a8f3aa210ee484c09a2c0ffa53719676</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3939,13 +4194,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:58:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>179900000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">30396192c5061b9865a85b2c27317d13</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3955,13 +4211,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">6e924d79b02fab663136a1425b7b62b3</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3971,13 +4228,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7c93ba81ceae3423ce121fb4afa79574</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -3987,13 +4245,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7cac9fd23afe839b72a375637937ef7b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -4003,13 +4262,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">85d680ea7183931ad4429d5e5a424f81</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -4019,13 +4279,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b85b06a259f39b0517c818dac5ebf40c</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>MAT</cmdty:id>
@@ -4035,13 +4296,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>180700000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0533f6314a38b2c1b422bb70943d14cc</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4051,13 +4313,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0a7949f0c6201bd02bc701cd9f940504</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4067,13 +4330,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0ad036b50dc3af6195079232f4abc0cb</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4083,13 +4347,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0ba81c0c1fb1b8e61fb78f4c315a5f38</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4099,13 +4364,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">0c649758a5c14f69118ddb2dc02b5d90</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4115,13 +4381,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">122b99711554e864e1bc8b7d2b7423fd</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4131,13 +4398,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">14f19bdd06995047ff03ca01a4458ef9</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4147,13 +4415,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">1b19b8f7799aada5c7c07f7b32e2a897</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4163,13 +4432,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">2fc0c3100b40eab08d068cb4d5f122c7</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4179,13 +4449,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">30ce8deb8544fca996e12ec0e4b06e5d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4195,13 +4466,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">324ee4a4b695e7561671a3b2d6a51d3b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4211,13 +4483,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">36e5c1eab60335d58061b08e49bc9b0b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4227,13 +4500,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3e8f2f85a91fd9e3cd96843398919ab9</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4243,13 +4517,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3f388b4e78a9ce5c3e200d7f93735417</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4259,13 +4534,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">4195b1885227539b07ab1359ab17b5ab</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4275,13 +4551,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">464049b1c8a22a8cd9b6b8db7bf348d9</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4291,13 +4568,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">6d61db1480725076a13a64aa2d4a08c7</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4307,13 +4585,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7d1a3545e49583991d8ba0422f813ea2</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4323,13 +4602,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">7e47d47a7f9ba12e41e9dbdeb56d3bac</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4339,13 +4619,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">81cdf9ffab9707c20ee9b0395bbc766a</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4355,13 +4636,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">89867ce65161c742827523721d92b39e</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4371,13 +4653,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8c810b99a4c8d69e5cc1611e8ac7e2b9</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4387,13 +4670,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">91ad67e3972f313cbd0a70e597c6c831</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4403,13 +4687,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">91f84cfabb0e47d7048fabf5cd1a5f1f</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4419,13 +4704,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">92f2e6f44068ef36aeeb89de1ee3b0c4</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4435,13 +4721,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">93d1985a8a996cb6bfa409b9a6a509b0</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4451,13 +4738,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">9c875161ae227951240c8d1374b0579d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4467,13 +4755,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a513c6f927ecb9a27858afecb1a5f7bc</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4483,13 +4772,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b218130106ecdbc96f037b517cb0842b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4499,13 +4789,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b4ef93b758b0e48ac05eb06399601027</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4515,13 +4806,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ba265dfe0dd4195b5f55352cc8153480</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4531,13 +4823,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ba311c1a964e1bfdaa4de6314be1ccd1</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4547,13 +4840,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">cf045aadf608c4f40cda7d4bc731b1a2</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4563,13 +4857,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d03f026bdf570c66e938778ec529c712</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4579,13 +4874,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d27187acd9501b2b6df8184a44bd783a</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4595,13 +4891,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e64780e1654562022f7e984aa144bd21</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4611,13 +4908,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e7b68bb2ee7c1246a65decdc42df813b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4627,13 +4925,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f7c6a9dac13e88af7027d042f69d64fc</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4643,13 +4942,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f8c562393eed142756396453a6a1d9d1</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4659,13 +4959,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:00:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>405000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e902b1f530f19927a15a1768e328af89</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4675,13 +4976,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>404000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">bf2792943c448f8abf06362b15115c95</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>SGI</cmdty:id>
@@ -4691,13 +4993,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:58:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>403000000/100000000</price:value>
   </price>
   <price>
+    <price:id type="guid">088d4f98bae2995187b77cba7b114c07</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4707,13 +5010,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">1375f82a5a28bbd4821bab1b426e088f</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4723,13 +5027,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">23c1e9b183eb9fd879dd4253f0c08dec</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4739,13 +5044,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">28fa77feedd17ba6b1c4b4a6025b4ed5</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4755,13 +5061,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3c252b9ba73236bbe65650aec2b74ee4</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4771,13 +5078,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3d260cd1c3baa28de7bc21b2df5ff83b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4787,13 +5095,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3fd62977d86a4bd594b3633d5d14968e</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4803,13 +5112,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">458b0debc58a66d2b834635e9ecd7e73</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4819,13 +5129,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">4ae0de2476b15277da45106f88681e99</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4835,13 +5146,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">592667dc9b03bf2e7c1cfa5b529a6ba0</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4851,13 +5163,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">60a698fc3ab024d14e177ace466f0dfe</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4867,13 +5180,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">62b9f4822a964b6c5870137b28c716e7</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4883,13 +5197,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">64905fd9e34b4f85e639810f75897f44</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4899,13 +5214,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">673891f0c220af26d4368f0fe0b98840</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4915,13 +5231,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">68590fcd3e3e99322382a03166ae7a74</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4931,13 +5248,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">71ec1230b3debd3c3935c97e8346efc8</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4947,13 +5265,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">76af612967c4693e1f091a7a30820b03</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4963,13 +5282,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">76c4852e79cb8323684dd6f18cce2a98</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4979,13 +5299,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">855e44b977df7ad08494d5f4b4e4ccfe</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -4995,13 +5316,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">98bc6fc4bc7d23d1a80cfdcadbb3768d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5011,13 +5333,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">a5fe504ae4a586fdb516c43790f1ba3d</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5027,13 +5350,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ac64b7df99f40b3ead2481e41be16db1</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5043,13 +5367,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">b948af54d2f5eec9ea29f6b0dee6a8d9</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5059,13 +5384,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">bbb543e5e4306666a1311cfc829903df</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5075,13 +5401,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">bcde83d9a501b0349083f8eb475686f2</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5091,13 +5418,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">bcfdc065115f84cfda641127bb380174</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5107,13 +5435,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">c7a9a3b7bca8bc7b1ff2f75f2ae61fa7</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5123,13 +5452,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">cb4ccebd5fb79d0129cf59cddf8aa37b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5139,13 +5469,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">d3f37a660e204bd4ba8d6c5d22198599</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5155,13 +5486,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">ed9f29c20bfe12978301c158a2c97065</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5171,13 +5503,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f1f6ece0f94721ef9a67f1928197071b</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5187,13 +5520,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f69d9b0e9094144bcb9ed6d60bfc8455</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5203,13 +5537,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">f7b124550e5f666f2f6911eade3360c5</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5219,13 +5554,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">3cbcc03d2a5a56b116a319527237d1e3</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5235,13 +5571,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:59:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>224000000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e416bc9f7b3fbbcabec383bde060fec3</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5251,13 +5588,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 15:58:00 -0500</ts:date>
+      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>223400000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">1f6defa9bbe87ef35d245de5eed0975f</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5267,13 +5605,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">34a9b1204f53515592fec676376e22ad</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5283,13 +5622,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">492b60fb33a7d2548005a689b592176a</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5299,13 +5639,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">8429c33a77cdf4b40483e39fc7aa93cc</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5315,13 +5656,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">95e43b8e964c0da2bc19cad59a000eb9</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5331,13 +5673,14 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
   <price>
+    <price:id type="guid">e75d344a6384a7810086f7d468ee5b13</price:id>
     <price:commodity>
       <cmdty:space>NYSE</cmdty:space>
       <cmdty:id>T</cmdty:id>
@@ -5347,13 +5690,19 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 16:02:00 -0500</ts:date>
+      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
     <price:value>225200000/10000000</price:value>
   </price>
 </gnc:pricedb>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">0c1598778c1993807a3ab0f8191575cd</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
+</gnc:book>
 </gnc-v2>
 
 <!-- Local variables: -->

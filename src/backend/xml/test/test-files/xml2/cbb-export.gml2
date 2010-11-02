@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <gnc-v2
      xmlns:gnc="http://www.gnucash.org/XML/gnc"
      xmlns:act="http://www.gnucash.org/XML/act"
@@ -11,22 +11,49 @@
      xmlns:sx="http://www.gnucash.org/XML/sx"
      xmlns:trn="http://www.gnucash.org/XML/trn"
      xmlns:ts="http://www.gnucash.org/XML/ts"
-     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
      xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
      xmlns:addr="http://www.gnucash.org/XML/addr"
-     xmlns:owner="http://www.gnucash.org/XML/owner"
-     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
-     xmlns:tte="http://www.gnucash.org/XML/tte"
-     xmlns:employee="http://www.gnucash.org/XML/employee"
-     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
      xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
-     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
      xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
      xmlns:vendor="http://www.gnucash.org/XML/vendor">
-<gnc:count-data cd:type="account">12</gnc:count-data>
+<gnc:count-data cd:type="book">1</gnc:count-data>
+<gnc:book version="2.0.0">
+<book:id type="guid">84abe8dbad8acdbed2bbe725ed76d4ac</book:id>
+<gnc:count-data cd:type="commodity">1</gnc:count-data>
+<gnc:count-data cd:type="account">13</gnc:count-data>
 <gnc:count-data cd:type="transaction">9</gnc:count-data>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>ISO4217</cmdty:space>
+  <cmdty:id>HRK</cmdty:id>
+  <cmdty:get_quotes/>
+  <cmdty:quote_source>currency</cmdty:quote_source>
+  <cmdty:quote_tz/>
+</gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>template</cmdty:space>
+  <cmdty:id>template</cmdty:id>
+  <cmdty:name>template</cmdty:name>
+  <cmdty:xcode>template</cmdty:xcode>
+  <cmdty:fraction>1</cmdty:fraction>
+</gnc:commodity>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">0a168db1e6eb564840dbae50dcb3705e</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
 <gnc:account version="2.0.0">
   <act:name>cbb export</act:name>
   <act:id type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</act:id>
@@ -36,6 +63,7 @@
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gifts</act:name>
@@ -47,6 +75,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Gift Expenses</act:description>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reimbursements</act:name>
@@ -57,6 +86,7 @@
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Salary</act:name>
@@ -68,6 +98,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Salary Income</act:description>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Clothing</act:name>
@@ -79,6 +110,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Clothing</act:description>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Credit Card</act:name>
@@ -89,6 +121,7 @@
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dining-Out</act:name>
@@ -99,6 +132,7 @@
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Entertainment</act:name>
@@ -109,6 +143,7 @@
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Household</act:name>
@@ -120,6 +155,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Household Misc. Exp</act:description>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Personal Cash</act:name>
@@ -130,6 +166,7 @@
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Telephone</act:name>
@@ -141,6 +178,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Telephone Expense</act:description>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Textbooks</act:name>
@@ -151,15 +189,20 @@
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">0a168db1e6eb564840dbae50dcb3705e</act:parent>
 </gnc:account>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">9d2c18d552ab4a405bee914ca188eb70</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </trn:currency>
   <trn:num>323</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-23 00:00:00 -0400</ts:date>
+    <ts:date>1997-06-22 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:date>2001-03-26 12:37:09 -0800</ts:date>
     <ts:ns>256981000</ts:ns>
   </trn:date-entered>
   <trn:description>Eurest Dining</trn:description>
@@ -182,12 +225,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">7b855de3a9f29605b1d5e0cb63d4b4cf</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </trn:currency>
   <trn:num>331</trn:num>
   <trn:date-posted>
-    <ts:date>1997-07-12 00:00:00 -0400</ts:date>
+    <ts:date>1997-07-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:date>2001-03-26 12:37:09 -0800</ts:date>
     <ts:ns>251045000</ts:ns>
   </trn:date-entered>
   <trn:description>Sally Wood</trn:description>
@@ -212,12 +259,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">1964523ed04475405c7f841548c0ae75</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </trn:currency>
   <trn:num>ATM</trn:num>
   <trn:date-posted>
-    <ts:date>1997-09-20 00:00:00 -0400</ts:date>
+    <ts:date>1997-09-19 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:date>2001-03-26 12:37:09 -0800</ts:date>
     <ts:ns>252071000</ts:ns>
   </trn:date-entered>
   <trn:description>Withdrawal</trn:description>
@@ -242,16 +293,28 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">d32f7312b4970cde93b1814a69604c72</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </trn:currency>
   <trn:num>ATM</trn:num>
   <trn:date-posted>
-    <ts:date>1997-09-29 00:00:00 -0400</ts:date>
+    <ts:date>1997-09-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:date>2001-03-26 12:37:09 -0800</ts:date>
     <ts:ns>258296000</ts:ns>
   </trn:date-entered>
   <trn:description>Deposit</trn:description>
   <trn:splits>
+    <trn:split>
+      <split:id type="guid">18927d376a09bad9b06565df5402518d</split:id>
+      <split:memo>HMC Orientation -97</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>19342/100</split:value>
+      <split:quantity>19342/100</split:quantity>
+      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
+    </trn:split>
     <trn:split>
       <split:id type="guid">937572eea8894521984a6364b0a98128</split:id>
       <split:memo>HMC Orientation -97</split:memo>
@@ -268,24 +331,20 @@
       <split:quantity>-14300/100</split:quantity>
       <split:account type="guid">077894556323647344da06d5f5fe6449</split:account>
     </trn:split>
-    <trn:split>
-      <split:id type="guid">18927d376a09bad9b06565df5402518d</split:id>
-      <split:memo>HMC Orientation -97</split:memo>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>19342/100</split:value>
-      <split:quantity>19342/100</split:quantity>
-      <split:account type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</split:account>
-    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">6622109f3b62c5ccf1a95918c7a1c248</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </trn:currency>
   <trn:num>276</trn:num>
   <trn:date-posted>
-    <ts:date>1997-09-30 00:00:00 -0400</ts:date>
+    <ts:date>1997-09-29 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:date>2001-03-26 12:37:09 -0800</ts:date>
     <ts:ns>253063000</ts:ns>
   </trn:date-entered>
   <trn:description>TCI</trn:description>
@@ -310,12 +369,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">3048039143626c17d3109ff7fc37467e</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </trn:currency>
   <trn:num>277</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-11 00:00:00 -0400</ts:date>
+    <ts:date>1997-10-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:date>2001-03-26 12:37:09 -0800</ts:date>
     <ts:ns>248714000</ts:ns>
   </trn:date-entered>
   <trn:description>AT&amp;T/063</trn:description>
@@ -340,12 +403,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">8bf78f94bb539e8f904cc49ec7f99444</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </trn:currency>
   <trn:num>278</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-11 00:00:00 -0400</ts:date>
+    <ts:date>1997-10-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:date>2001-03-26 12:37:09 -0800</ts:date>
     <ts:ns>249996000</ts:ns>
   </trn:date-entered>
   <trn:description>BofA</trn:description>
@@ -378,12 +445,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">4097ea8244e81a99d5862a7313e51ff8</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </trn:currency>
   <trn:num>279</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-27 00:00:00 -0500</ts:date>
+    <ts:date>1997-10-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:date>2001-03-26 12:37:09 -0800</ts:date>
     <ts:ns>255798000</ts:ns>
   </trn:date-entered>
   <trn:description>Scripps College</trn:description>
@@ -408,12 +479,16 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">c1b75a304185a70beefd55f9f3b5cb17</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </trn:currency>
   <trn:num>283</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-24 00:00:00 -0500</ts:date>
+    <ts:date>1997-11-23 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:37:09 -0500</ts:date>
+    <ts:date>2001-03-26 12:37:09 -0800</ts:date>
     <ts:ns>254099000</ts:ns>
   </trn:date-entered>
   <trn:description>West Dorm</trn:description>
@@ -436,6 +511,7 @@
     </trn:split>
   </trn:splits>
 </gnc:transaction>
+</gnc:book>
 </gnc-v2>
 
 <!-- Local variables: -->

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <gnc-v2
      xmlns:gnc="http://www.gnucash.org/XML/gnc"
      xmlns:act="http://www.gnucash.org/XML/act"
@@ -11,22 +11,49 @@
      xmlns:sx="http://www.gnucash.org/XML/sx"
      xmlns:trn="http://www.gnucash.org/XML/trn"
      xmlns:ts="http://www.gnucash.org/XML/ts"
-     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
      xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
      xmlns:addr="http://www.gnucash.org/XML/addr"
-     xmlns:owner="http://www.gnucash.org/XML/owner"
-     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
-     xmlns:tte="http://www.gnucash.org/XML/tte"
-     xmlns:employee="http://www.gnucash.org/XML/employee"
-     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
      xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
-     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
      xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
      xmlns:vendor="http://www.gnucash.org/XML/vendor">
-<gnc:count-data cd:type="account">3</gnc:count-data>
+<gnc:count-data cd:type="book">1</gnc:count-data>
+<gnc:book version="2.0.0">
+<book:id type="guid">a307b179542fff404ab3a9bbafc42758</book:id>
+<gnc:count-data cd:type="commodity">1</gnc:count-data>
+<gnc:count-data cd:type="account">4</gnc:count-data>
 <gnc:count-data cd:type="transaction">10</gnc:count-data>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>ISO4217</cmdty:space>
+  <cmdty:id>USD</cmdty:id>
+  <cmdty:get_quotes/>
+  <cmdty:quote_source>currency</cmdty:quote_source>
+  <cmdty:quote_tz/>
+</gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>template</cmdty:space>
+  <cmdty:id>template</cmdty:id>
+  <cmdty:name>template</cmdty:name>
+  <cmdty:xcode>template</cmdty:xcode>
+  <cmdty:fraction>1</cmdty:fraction>
+</gnc:commodity>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">4e014e12e1f1a14b3df0243e82ee8dad</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Compte courant</act:name>
   <act:id type="guid">a68387e637bb8e7405bc949764b9aefd</act:id>
@@ -36,6 +63,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">4e014e12e1f1a14b3df0243e82ee8dad</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Livret bleu</act:name>
@@ -46,6 +74,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">4e014e12e1f1a14b3df0243e82ee8dad</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Retained Earnings</act:name>
@@ -56,26 +85,23 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">4e014e12e1f1a14b3df0243e82ee8dad</act:parent>
 </gnc:account>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ad7c592d0603871110acb8f2c7bcd215</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-01-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>31238000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">524f8a36ece0437ba8b27284a2b78e06</split:id>
-      <split:memo>Economies</split:memo>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-250000/100</split:value>
-      <split:quantity>-250000/100</split:quantity>
-      <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">4b93c9e41c978f00b3c4e0de5fa2fbef</split:id>
       <split:memo>Economies</split:memo>
@@ -84,27 +110,31 @@
       <split:quantity>250000/100</split:quantity>
       <split:account type="guid">cec92cd077aee62305910cfd929cc341</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">524f8a36ece0437ba8b27284a2b78e06</split:id>
+      <split:memo>Economies</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-250000/100</split:value>
+      <split:quantity>-250000/100</split:quantity>
+      <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">9c381dc6f595933f06ff11b574333f44</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-02-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>32417000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">85f79dde160ba7f2f021d95d190b34c3</split:id>
-      <split:memo>Economies</split:memo>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-300000/100</split:value>
-      <split:quantity>-300000/100</split:quantity>
-      <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">98b2c538910821d9cf37a9bff01ef60b</split:id>
       <split:memo>Economies</split:memo>
@@ -113,27 +143,31 @@
       <split:quantity>300000/100</split:quantity>
       <split:account type="guid">cec92cd077aee62305910cfd929cc341</split:account>
     </trn:split>
-  </trn:splits>
-</gnc:transaction>
-<gnc:transaction version="2.0.0">
-  <trn:id type="guid">3fd5cdd6a6772412d702124c1a786ef3</trn:id>
-  <trn:date-posted>
-    <ts:date>1995-03-26 00:00:00 -0500</ts:date>
-  </trn:date-posted>
-  <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
-    <ts:ns>33369000</ts:ns>
-  </trn:date-entered>
-  <trn:description></trn:description>
-  <trn:splits>
     <trn:split>
-      <split:id type="guid">535b36edb9230c04b575034bde669ea3</split:id>
+      <split:id type="guid">85f79dde160ba7f2f021d95d190b34c3</split:id>
       <split:memo>Economies</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>-300000/100</split:value>
       <split:quantity>-300000/100</split:quantity>
       <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
     </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">3fd5cdd6a6772412d702124c1a786ef3</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
+  <trn:date-posted>
+    <ts:date>1995-03-25 21:00:00 -0800</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
+    <ts:ns>33369000</ts:ns>
+  </trn:date-entered>
+  <trn:description></trn:description>
+  <trn:splits>
     <trn:split>
       <split:id type="guid">249fbfb7601774a1f089f030299c8a3f</split:id>
       <split:memo>Economies</split:memo>
@@ -142,27 +176,31 @@
       <split:quantity>300000/100</split:quantity>
       <split:account type="guid">cec92cd077aee62305910cfd929cc341</split:account>
     </trn:split>
-  </trn:splits>
-</gnc:transaction>
-<gnc:transaction version="2.0.0">
-  <trn:id type="guid">ebff5d6fbfd69632db47a362789035c0</trn:id>
-  <trn:date-posted>
-    <ts:date>1995-04-26 00:00:00 -0400</ts:date>
-  </trn:date-posted>
-  <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
-    <ts:ns>34356000</ts:ns>
-  </trn:date-entered>
-  <trn:description></trn:description>
-  <trn:splits>
     <trn:split>
-      <split:id type="guid">8f559a4b006fd31a238fc1c1819b911e</split:id>
+      <split:id type="guid">535b36edb9230c04b575034bde669ea3</split:id>
       <split:memo>Economies</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>-300000/100</split:value>
       <split:quantity>-300000/100</split:quantity>
       <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
     </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">ebff5d6fbfd69632db47a362789035c0</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
+  <trn:date-posted>
+    <ts:date>1995-04-25 21:00:00 -0700</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
+    <ts:ns>34356000</ts:ns>
+  </trn:date-entered>
+  <trn:description></trn:description>
+  <trn:splits>
     <trn:split>
       <split:id type="guid">adda51b98341607acccbe48bc1c37dff</split:id>
       <split:memo>Economies</split:memo>
@@ -171,27 +209,31 @@
       <split:quantity>300000/100</split:quantity>
       <split:account type="guid">cec92cd077aee62305910cfd929cc341</split:account>
     </trn:split>
-  </trn:splits>
-</gnc:transaction>
-<gnc:transaction version="2.0.0">
-  <trn:id type="guid">4d44e44e9b16a58c562e0d938e58a69d</trn:id>
-  <trn:date-posted>
-    <ts:date>1995-05-26 00:00:00 -0400</ts:date>
-  </trn:date-posted>
-  <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
-    <ts:ns>36554000</ts:ns>
-  </trn:date-entered>
-  <trn:description></trn:description>
-  <trn:splits>
     <trn:split>
-      <split:id type="guid">f7ff3dbb314786218f638276f8b3c3a8</split:id>
+      <split:id type="guid">8f559a4b006fd31a238fc1c1819b911e</split:id>
       <split:memo>Economies</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>-300000/100</split:value>
       <split:quantity>-300000/100</split:quantity>
       <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
     </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">4d44e44e9b16a58c562e0d938e58a69d</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
+  <trn:date-posted>
+    <ts:date>1995-05-25 21:00:00 -0700</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
+    <ts:ns>36554000</ts:ns>
+  </trn:date-entered>
+  <trn:description></trn:description>
+  <trn:splits>
     <trn:split>
       <split:id type="guid">e8a489904a8a4e684d7054fba8b288f2</split:id>
       <split:memo>Economies</split:memo>
@@ -200,27 +242,31 @@
       <split:quantity>300000/100</split:quantity>
       <split:account type="guid">cec92cd077aee62305910cfd929cc341</split:account>
     </trn:split>
-  </trn:splits>
-</gnc:transaction>
-<gnc:transaction version="2.0.0">
-  <trn:id type="guid">328e2319a21e15c8eaac3c5ae9e2f8d7</trn:id>
-  <trn:date-posted>
-    <ts:date>1995-06-26 00:00:00 -0400</ts:date>
-  </trn:date-posted>
-  <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
-    <ts:ns>37673000</ts:ns>
-  </trn:date-entered>
-  <trn:description></trn:description>
-  <trn:splits>
     <trn:split>
-      <split:id type="guid">15e631fad619fffe13e291ca187bd7c9</split:id>
+      <split:id type="guid">f7ff3dbb314786218f638276f8b3c3a8</split:id>
       <split:memo>Economies</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>-300000/100</split:value>
       <split:quantity>-300000/100</split:quantity>
       <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
     </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">328e2319a21e15c8eaac3c5ae9e2f8d7</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
+  <trn:date-posted>
+    <ts:date>1995-06-25 21:00:00 -0700</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
+    <ts:ns>37673000</ts:ns>
+  </trn:date-entered>
+  <trn:description></trn:description>
+  <trn:splits>
     <trn:split>
       <split:id type="guid">d2e699960572bca531413fd4fcd530a3</split:id>
       <split:memo>Economies</split:memo>
@@ -229,27 +275,31 @@
       <split:quantity>300000/100</split:quantity>
       <split:account type="guid">cec92cd077aee62305910cfd929cc341</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">15e631fad619fffe13e291ca187bd7c9</split:id>
+      <split:memo>Economies</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-300000/100</split:value>
+      <split:quantity>-300000/100</split:quantity>
+      <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">2f70aee8552b4929b9009a4cde3f3095</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-26 00:00:00 -0400</ts:date>
+    <ts:date>1995-07-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>38685000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">33b9ddd3fa6d915ce6d8b8440d4cd1b3</split:id>
-      <split:memo>Economies</split:memo>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-250000/100</split:value>
-      <split:quantity>-250000/100</split:quantity>
-      <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">53935088af8824f72ebcb29571443e2f</split:id>
       <split:memo>Economies</split:memo>
@@ -258,22 +308,34 @@
       <split:quantity>250000/100</split:quantity>
       <split:account type="guid">cec92cd077aee62305910cfd929cc341</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">33b9ddd3fa6d915ce6d8b8440d4cd1b3</split:id>
+      <split:memo>Economies</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-250000/100</split:value>
+      <split:quantity>-250000/100</split:quantity>
+      <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">4564825b74f81412d309a8eb8cc58222</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-12 00:00:00 -0500</ts:date>
+    <ts:date>1995-11-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>39707000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">912aa7c8f0c8c01fdedd4c44ac7c4ade</split:id>
-      <split:memo>Pour &#233;quilibrage</split:memo>
+      <split:memo>Pour équilibrage</split:memo>
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>450000/100</split:value>
       <split:quantity>450000/100</split:quantity>
@@ -281,7 +343,7 @@
     </trn:split>
     <trn:split>
       <split:id type="guid">d8d24b073589acfda00585b67e2a4bf0</split:id>
-      <split:memo>Pour &#233;quilibrage</split:memo>
+      <split:memo>Pour équilibrage</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:value>-450000/100</split:value>
       <split:quantity>-450000/100</split:quantity>
@@ -291,23 +353,19 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">ec6f0cc19c5651db2c2dc8ff93efe697</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-26 00:00:00 -0500</ts:date>
+    <ts:date>1995-12-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>40707000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">11d0b29b056fc64215dbb37d0dfdd062</split:id>
-      <split:memo>Economies</split:memo>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-350000/100</split:value>
-      <split:quantity>-350000/100</split:quantity>
-      <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">20dad7ae612bd303bc2d070bef3604ac</split:id>
       <split:memo>Economies</split:memo>
@@ -316,26 +374,31 @@
       <split:quantity>350000/100</split:quantity>
       <split:account type="guid">cec92cd077aee62305910cfd929cc341</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">11d0b29b056fc64215dbb37d0dfdd062</split:id>
+      <split:memo>Economies</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-350000/100</split:value>
+      <split:quantity>-350000/100</split:quantity>
+      <split:account type="guid">a68387e637bb8e7405bc949764b9aefd</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">f56c0707159f36caabc22df8ac71887a</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-01 00:00:00 -0500</ts:date>
+    <ts:date>1994-12-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 15:28:38 -0500</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>30261000</ts:ns>
   </trn:date-entered>
   <trn:description>Opening Balance</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">d20b8eff18aa85f3731145b77f0bc5de</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-14560800/100</split:value>
-      <split:quantity>-14560800/100</split:quantity>
-      <split:account type="guid">afed1334dfcdc53865cafe61edbb0fc6</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">9b4e17c7c367bf37367dda356a7e2670</split:id>
       <split:reconciled-state>y</split:reconciled-state>
@@ -343,8 +406,16 @@
       <split:quantity>14560800/100</split:quantity>
       <split:account type="guid">cec92cd077aee62305910cfd929cc341</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">d20b8eff18aa85f3731145b77f0bc5de</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-14560800/100</split:value>
+      <split:quantity>-14560800/100</split:quantity>
+      <split:account type="guid">afed1334dfcdc53865cafe61edbb0fc6</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
+</gnc:book>
 </gnc-v2>
 
 <!-- Local variables: -->

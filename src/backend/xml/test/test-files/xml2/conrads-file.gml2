@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <gnc-v2
      xmlns:gnc="http://www.gnucash.org/XML/gnc"
      xmlns:act="http://www.gnucash.org/XML/act"
@@ -11,22 +11,29 @@
      xmlns:sx="http://www.gnucash.org/XML/sx"
      xmlns:trn="http://www.gnucash.org/XML/trn"
      xmlns:ts="http://www.gnucash.org/XML/ts"
-     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
      xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
      xmlns:addr="http://www.gnucash.org/XML/addr"
-     xmlns:owner="http://www.gnucash.org/XML/owner"
-     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
-     xmlns:tte="http://www.gnucash.org/XML/tte"
-     xmlns:employee="http://www.gnucash.org/XML/employee"
-     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
      xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
-     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
      xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
      xmlns:vendor="http://www.gnucash.org/XML/vendor">
-<gnc:count-data cd:type="commodity">1</gnc:count-data>
-<gnc:count-data cd:type="account">6</gnc:count-data>
+<gnc:count-data cd:type="book">1</gnc:count-data>
+<gnc:book version="2.0.0">
+<book:id type="guid">922883b90c60f6fb7f03d61117761089</book:id>
+<gnc:count-data cd:type="commodity">2</gnc:count-data>
+<gnc:count-data cd:type="account">7</gnc:count-data>
 <gnc:count-data cd:type="transaction">12</gnc:count-data>
 <gnc:commodity version="2.0.0">
   <cmdty:space>AMEX</cmdty:space>
@@ -34,6 +41,25 @@
   <cmdty:name>Stock</cmdty:name>
   <cmdty:fraction>100</cmdty:fraction>
 </gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>ISO4217</cmdty:space>
+  <cmdty:id>AUD</cmdty:id>
+  <cmdty:get_quotes/>
+  <cmdty:quote_source>currency</cmdty:quote_source>
+  <cmdty:quote_tz/>
+</gnc:commodity>
+<gnc:commodity version="2.0.0">
+  <cmdty:space>template</cmdty:space>
+  <cmdty:id>template</cmdty:id>
+  <cmdty:name>template</cmdty:name>
+  <cmdty:xcode>template</cmdty:xcode>
+  <cmdty:fraction>1</cmdty:fraction>
+</gnc:commodity>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="guid">8a180f7b4fcd9b04ed65e36c6f3b23b1</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Imbalance-AUD</act:name>
   <act:id type="guid">ca36693eb25a602c171d07cb682b3e1b</act:id>
@@ -43,6 +69,7 @@
     <cmdty:id>AUD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="guid">8a180f7b4fcd9b04ed65e36c6f3b23b1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
@@ -54,34 +81,18 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>A0000</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>notes</slot:key>
-      <slot:value type="string"/>
-    </slot>
-  </act:slots>
+  <act:parent type="guid">8a180f7b4fcd9b04ed65e36c6f3b23b1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Stock1</act:name>
   <act:id type="guid">33181c172f50aaa24792256f2db4690e</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>AUD</cmdty:id>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>A0001</act:code>
-  <act:security>
-    <cmdty:space>AMEX</cmdty:space>
-    <cmdty:id>stk</cmdty:id>
-  </act:security>
-  <act:security-scu>100</act:security-scu>
-  <act:slots>
-    <slot>
-      <slot:key>notes</slot:key>
-      <slot:value type="string"/>
-    </slot>
-  </act:slots>
   <act:parent type="guid">a947017cbd3b26198484086f8d93863b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -89,22 +100,11 @@
   <act:id type="guid">4ca39e2f16ccf288ea0d956d2371bf82</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>AUD</cmdty:id>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>A0002</act:code>
-  <act:security>
-    <cmdty:space>AMEX</cmdty:space>
-    <cmdty:id>stk</cmdty:id>
-  </act:security>
-  <act:security-scu>100</act:security-scu>
-  <act:slots>
-    <slot>
-      <slot:key>notes</slot:key>
-      <slot:value type="string"/>
-    </slot>
-  </act:slots>
   <act:parent type="guid">a947017cbd3b26198484086f8d93863b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -117,12 +117,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>C0000</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>notes</slot:key>
-      <slot:value type="string"/>
-    </slot>
-  </act:slots>
+  <act:parent type="guid">8a180f7b4fcd9b04ed65e36c6f3b23b1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bank</act:name>
@@ -134,28 +129,56 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>C0001</act:code>
-  <act:slots>
-    <slot>
-      <slot:key>notes</slot:key>
-      <slot:value type="string"/>
-    </slot>
-  </act:slots>
   <act:parent type="guid">dd0cfd17078251ec6ef03da8a081f2a3</act:parent>
 </gnc:account>
 <gnc:transaction version="2.0.0">
-  <trn:id type="guid">5a77b2d61485f286aff878be6febef64</trn:id>
+  <trn:id type="guid">f9386ebc4654856d9f2c8d991f9060d8</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 00:04:14 -0500</ts:date>
+    <ts:date>2000-11-27 21:03:09 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 00:05:23 -0500</ts:date>
+    <ts:date>2000-11-27 21:03:58 -0800</ts:date>
+  </trn:date-entered>
+  <trn:description></trn:description>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">59d526f5b19077cded2e38a7726d69f7</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>100000000/100</split:value>
+      <split:quantity>100000000/100</split:quantity>
+      <split:account type="guid">6f8df62ae08403ee2a8eb5aa61cec772</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">615e1758e9b8c958e596747191ec3226</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>0/100</split:value>
+      <split:quantity>0/100</split:quantity>
+      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">5a77b2d61485f286aff878be6febef64</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
+  <trn:date-posted>
+    <ts:date>2000-11-27 21:04:14 -0800</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2000-11-27 21:05:23 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Initial purchase of stock</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">0c92275921282ef27f8ebf7389735ad2</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>15000/100</split:value>
+      <split:value>10000/100</split:value>
       <split:quantity>10000/100</split:quantity>
       <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
     </trn:split>
@@ -170,21 +193,18 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">edc6b34f5d5f2a571843eb6033f7b8d9</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 06:39:20 -0500</ts:date>
+    <ts:date>2000-11-28 03:39:20 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 07:31:28 -0500</ts:date>
+    <ts:date>2000-11-28 04:31:28 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Sale (1)</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">1dffcfc068e38f78ca5801e3487e6bdb</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-3600/100</split:value>
-      <split:quantity>-2000/100</split:quantity>
-      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">ce0457f98bf2e1f2db98cefa1e418631</split:id>
       <split:reconciled-state>n</split:reconciled-state>
@@ -192,26 +212,30 @@
       <split:quantity>3600/100</split:quantity>
       <split:account type="guid">6f8df62ae08403ee2a8eb5aa61cec772</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">1dffcfc068e38f78ca5801e3487e6bdb</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-2000/100</split:value>
+      <split:quantity>-2000/100</split:quantity>
+      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">e1382f1ac62f7c0d5e3be35b7c829a69</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 06:39:20 -0500</ts:date>
+    <ts:date>2000-11-28 03:39:20 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 07:31:30 -0500</ts:date>
+    <ts:date>2000-11-28 04:31:30 -0800</ts:date>
     <ts:ns>66309000</ts:ns>
   </trn:date-entered>
   <trn:description>Sale (1)</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">3146350195a33643ba3ab29a6cea463e</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-3600/100</split:value>
-      <split:quantity>-2000/100</split:quantity>
-      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">a2ab877a4ab0387538d08493402bd186</split:id>
       <split:reconciled-state>n</split:reconciled-state>
@@ -219,26 +243,30 @@
       <split:quantity>3600/100</split:quantity>
       <split:account type="guid">6f8df62ae08403ee2a8eb5aa61cec772</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">3146350195a33643ba3ab29a6cea463e</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-2000/100</split:value>
+      <split:quantity>-2000/100</split:quantity>
+      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">8243a16bf6e7baa7c3f03d1269b0af59</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 06:39:20 -0500</ts:date>
+    <ts:date>2000-11-28 03:39:20 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 07:31:46 -0500</ts:date>
+    <ts:date>2000-11-28 04:31:46 -0800</ts:date>
     <ts:ns>664262000</ts:ns>
   </trn:date-entered>
   <trn:description>Sale (1)</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">fc1ff0f23ef547885da036b1b9900a34</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-3600/100</split:value>
-      <split:quantity>-2000/100</split:quantity>
-      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">99e7f2948ccaf69b77d3f5179e2236eb</split:id>
       <split:reconciled-state>n</split:reconciled-state>
@@ -246,26 +274,30 @@
       <split:quantity>3600/100</split:quantity>
       <split:account type="guid">6f8df62ae08403ee2a8eb5aa61cec772</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">fc1ff0f23ef547885da036b1b9900a34</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-2000/100</split:value>
+      <split:quantity>-2000/100</split:quantity>
+      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">29d5624b4640a6020d9d37d9bc60b29b</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 06:39:20 -0500</ts:date>
+    <ts:date>2000-11-28 03:39:20 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 07:32:08 -0500</ts:date>
+    <ts:date>2000-11-28 04:32:08 -0800</ts:date>
     <ts:ns>413532000</ts:ns>
   </trn:date-entered>
   <trn:description>Sale (1)</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">e945659fa802e7b66a88674f1adc8cbb</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-6400/100</split:value>
-      <split:quantity>-3000/100</split:quantity>
-      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">e9b926f5a8a48b12048e274119c119d3</split:id>
       <split:reconciled-state>n</split:reconciled-state>
@@ -273,22 +305,33 @@
       <split:quantity>6400/100</split:quantity>
       <split:account type="guid">6f8df62ae08403ee2a8eb5aa61cec772</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">e945659fa802e7b66a88674f1adc8cbb</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-3000/100</split:value>
+      <split:quantity>-3000/100</split:quantity>
+      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">9dc249c5bbcea69ac8c7bf7c60ca34e0</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 19:01:14 -0500</ts:date>
+    <ts:date>2000-11-28 16:01:14 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 19:01:39 -0500</ts:date>
+    <ts:date>2000-11-28 16:01:39 -0800</ts:date>
   </trn:date-entered>
   <trn:description>buy more</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">7048bec4fcce79b3941de51944a48231</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>11000/100</split:value>
+      <split:value>10000/100</split:value>
       <split:quantity>10000/100</split:quantity>
       <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
     </trn:split>
@@ -303,21 +346,18 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">b585a0ac253ce4316fedab1b495a2006</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-29 19:18:25 -0500</ts:date>
+    <ts:date>2000-11-29 16:18:25 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-29 19:19:12 -0500</ts:date>
+    <ts:date>2000-11-29 16:19:12 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Sell lots</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">18c80178f75af440f5a1a87081b2fecb</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-50000/100</split:value>
-      <split:quantity>-40000/100</split:quantity>
-      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">5c96b06788eb8ab218c886ddb31dcd71</split:id>
       <split:reconciled-state>n</split:reconciled-state>
@@ -325,22 +365,33 @@
       <split:quantity>50000/100</split:quantity>
       <split:account type="guid">6f8df62ae08403ee2a8eb5aa61cec772</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">18c80178f75af440f5a1a87081b2fecb</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-40000/100</split:value>
+      <split:quantity>-40000/100</split:quantity>
+      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">507c9bcd04bb43dc96a58ba418fe86c5</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-29 19:43:12 -0500</ts:date>
+    <ts:date>2000-11-29 16:43:12 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-29 19:45:18 -0500</ts:date>
+    <ts:date>2000-11-29 16:45:18 -0800</ts:date>
   </trn:date-entered>
   <trn:description>some purchases</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">71ac0831a93fb732f93106f26a007469</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>32400/100</split:value>
+      <split:value>30000/100</split:value>
       <split:quantity>30000/100</split:quantity>
       <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
     </trn:split>
@@ -355,21 +406,18 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">791ce0217b5edf0c923f9cc3dc64c169</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-08 08:00:00 -0500</ts:date>
+    <ts:date>2001-01-08 05:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-08 23:56:02 -0500</ts:date>
+    <ts:date>2001-01-08 20:56:02 -0800</ts:date>
   </trn:date-entered>
   <trn:description>gargle</trn:description>
   <trn:splits>
-    <trn:split>
-      <split:id type="guid">46fac7edef736a1cf3c3411de467dc14</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-2800/100</split:value>
-      <split:quantity>-2000/100</split:quantity>
-      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
-    </trn:split>
     <trn:split>
       <split:id type="guid">234e1618beaaeb3dac31e931338020f2</split:id>
       <split:reconciled-state>n</split:reconciled-state>
@@ -377,22 +425,33 @@
       <split:quantity>2800/100</split:quantity>
       <split:account type="guid">6f8df62ae08403ee2a8eb5aa61cec772</split:account>
     </trn:split>
+    <trn:split>
+      <split:id type="guid">46fac7edef736a1cf3c3411de467dc14</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-2000/100</split:value>
+      <split:quantity>-2000/100</split:quantity>
+      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
+    </trn:split>
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">716b216f13e16d9e7afd49b3e8e4ffb6</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-08 08:00:00 -0500</ts:date>
+    <ts:date>2001-01-08 05:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-09 04:22:12 -0500</ts:date>
+    <ts:date>2001-01-09 01:22:12 -0800</ts:date>
   </trn:date-entered>
   <trn:description>fandangle</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">e673423c75e9eb1b9443aa40bed778d0</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>25000/100</split:value>
+      <split:value>20000/100</split:value>
       <split:quantity>20000/100</split:quantity>
       <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
     </trn:split>
@@ -407,56 +466,35 @@
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">b74ee5f973e0b477eddc968384d2a594</trn:id>
+  <trn:currency>
+    <cmdty:space>AMEX</cmdty:space>
+    <cmdty:id>stk</cmdty:id>
+  </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-08 08:00:00 -0500</ts:date>
+    <ts:date>2001-01-08 05:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-09 06:57:22 -0500</ts:date>
+    <ts:date>2001-01-09 03:57:22 -0800</ts:date>
   </trn:date-entered>
   <trn:description>A small sale</trn:description>
   <trn:splits>
     <trn:split>
-      <split:id type="guid">da6264665f23b934aa5913308bfeb172</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-38000/100</split:value>
-      <split:quantity>-19000/100</split:quantity>
-      <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
-    </trn:split>
-    <trn:split>
       <split:id type="guid">8c22cbc933e39c0c0226938c0eca8751</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>38000/100</split:value>
+      <split:value>24000/100</split:value>
       <split:quantity>24000/100</split:quantity>
       <split:account type="guid">4ca39e2f16ccf288ea0d956d2371bf82</split:account>
     </trn:split>
-  </trn:splits>
-</gnc:transaction>
-<gnc:transaction version="2.0.0">
-  <trn:id type="guid">f9386ebc4654856d9f2c8d991f9060d8</trn:id>
-  <trn:date-posted>
-    <ts:date>2000-11-28 00:03:09 -0500</ts:date>
-  </trn:date-posted>
-  <trn:date-entered>
-    <ts:date>2000-11-28 00:03:58 -0500</ts:date>
-  </trn:date-entered>
-  <trn:description></trn:description>
-  <trn:splits>
     <trn:split>
-      <split:id type="guid">59d526f5b19077cded2e38a7726d69f7</split:id>
+      <split:id type="guid">da6264665f23b934aa5913308bfeb172</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>100000000/100</split:value>
-      <split:quantity>100000000/100</split:quantity>
-      <split:account type="guid">6f8df62ae08403ee2a8eb5aa61cec772</split:account>
-    </trn:split>
-    <trn:split>
-      <split:id type="guid">615e1758e9b8c958e596747191ec3226</split:id>
-      <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-100000000000/100000</split:value>
-      <split:quantity>0/100000</split:quantity>
+      <split:value>-19000/100</split:value>
+      <split:quantity>-19000/100</split:quantity>
       <split:account type="guid">33181c172f50aaa24792256f2db4690e</split:account>
     </trn:split>
   </trn:splits>
 </gnc:transaction>
+</gnc:book>
 </gnc-v2>
 
 <!-- Local variables: -->
