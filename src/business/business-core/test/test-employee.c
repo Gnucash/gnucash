@@ -151,9 +151,11 @@ test_string_fcn (QofBook *book, const char *message,
     do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
     gncEmployeeBeginEdit (employee);
     set (employee, str);
+    /* Employee record should be dirty */
     do_test (gncEmployeeIsDirty (employee), "test dirty later");
     gncEmployeeCommitEdit (employee);
-    do_test (gncEmployeeIsDirty (employee), "test dirty after commit");
+    /* Employee record should be not dirty */
+    do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
     do_test (safe_strcmp (get (employee), str) == 0, message);
     gncEmployeeSetActive (employee, FALSE);
     count++;
@@ -170,9 +172,11 @@ test_numeric_fcn (QofBook *book, const char *message,
     do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
     gncEmployeeBeginEdit (employee);
     set (employee, num);
+    /* Employee record should be dirty */
     do_test (gncEmployeeIsDirty (employee), "test dirty later");
     gncEmployeeCommitEdit (employee);
-    do_test (gncEmployeeIsDirty (employee), "test dirty after commit");
+    /* Employee record should be not dirty */
+    do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
     do_test (gnc_numeric_equal (get (employee), num), message);
     gncEmployeeSetActive (employee, FALSE);
     count++;
@@ -191,9 +195,11 @@ test_bool_fcn (QofBook *book, const char *message,
     set (employee, FALSE);
     set (employee, TRUE);
     set (employee, num);
+    /* Employee record should be dirty */ 
     do_test (gncEmployeeIsDirty (employee), "test dirty later");
     gncEmployeeCommitEdit (employee);
-    do_test (gncEmployeeIsDirty (employee), "test dirty after commit");
+    /* Employee record should be not dirty */
+    do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
     do_test (get (employee) == num, message);
     gncEmployeeSetActive (employee, FALSE);
     count++;
@@ -211,8 +217,10 @@ test_gint_fcn (QofBook *book, const char *message,
     do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
     gncEmployeeBeginEdit (employee);
     set (employee, num);
+    /* Employee record should be dirty */
     do_test (gncEmployeeIsDirty (employee), "test dirty later");
     gncEmployeeCommitEdit (employee);
+    /* Employee record should be not dirty */
     do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
     do_test (get (employee) == num, message);
     gncEmployeeSetActive (employee, FALSE);

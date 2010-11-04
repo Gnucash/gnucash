@@ -171,9 +171,11 @@ test_string_fcn (QofBook *book, const char *message,
     do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test if start dirty");
     gncJobBeginEdit (job);
     set (job, str);
+    /* Job record should be dirty */
     do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty later");
     gncJobCommitEdit (job);
-    do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
+    /* Job record should be not dirty */
+    do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
     do_test (safe_strcmp (get (job), str) == 0, message);
     gncJobSetActive (job, FALSE);
     count++;
@@ -191,8 +193,10 @@ test_numeric_fcn (QofBook *book, const char *message,
     do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test if start dirty");
     gncJobBeginEdit (job);
     set (job, num);
+    /* Job record should be dirty */
     do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty later");
     gncJobCommitEdit (job);
+    /* Job record should be not dirty */
     do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
     do_test (gnc_numeric_equal (get (job), num), message);
     gncJobSetActive (job, FALSE);
@@ -213,9 +217,11 @@ test_bool_fcn (QofBook *book, const char *message,
     set (job, FALSE);
     set (job, TRUE);
     set (job, num);
+    /* Job record should be dirty */
     do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty later");
     gncJobCommitEdit (job);
-    do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
+    /* Job record should be not dirty */
+    do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
     do_test (get (job) == num, message);
     gncJobSetActive (job, FALSE);
     count++;
@@ -233,8 +239,10 @@ test_gint_fcn (QofBook *book, const char *message,
     do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test if start dirty");
     gncJobBeginEdit (job);
     set (job, num);
+    /* Job record should be dirty */
     do_test (qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty later");
     gncJobCommitEdit (job);
+    /* Job record should be not dirty */
     do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
     do_test (get (job) == num, message);
     gncJobSetActive (job, FALSE);

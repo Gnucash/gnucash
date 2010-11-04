@@ -161,9 +161,11 @@ test_string_fcn (QofBook *book, const char *message,
     do_test (!gncCustomerIsDirty (customer), "test if start dirty");
     gncCustomerBeginEdit (customer);
     set (customer, str);
+    /* Customer record should be dirty */
     do_test (gncCustomerIsDirty (customer), "test dirty later");
     gncCustomerCommitEdit (customer);
-    do_test (gncCustomerIsDirty (customer), "test dirty after commit");
+    /* Customer record should be not dirty */
+    do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
     do_test (safe_strcmp (get (customer), str) == 0, message);
     gncCustomerSetActive (customer, FALSE);
     count++;
@@ -180,9 +182,11 @@ test_numeric_fcn (QofBook *book, const char *message,
     do_test (!gncCustomerIsDirty (customer), "test if start dirty");
     gncCustomerBeginEdit (customer);
     set (customer, num);
+    /* Customer record should be dirty */
     do_test (gncCustomerIsDirty (customer), "test dirty later");
     gncCustomerCommitEdit (customer);
-    do_test (gncCustomerIsDirty (customer), "test dirty after commit");
+    /* Customer record should be not dirty */
+    do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
     do_test (gnc_numeric_equal (get (customer), num), message);
     gncCustomerSetActive (customer, FALSE);
     count++;
@@ -201,9 +205,11 @@ test_bool_fcn (QofBook *book, const char *message,
     set (customer, FALSE);
     set (customer, TRUE);
     set (customer, num);
+    /* Customer record should be dirty */
     do_test (gncCustomerIsDirty (customer), "test dirty later");
     gncCustomerCommitEdit (customer);
-    do_test (gncCustomerIsDirty (customer), "test dirty after commit");
+    /* Customer record should be not dirty */
+    do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
     do_test (get (customer) == num, message);
     gncCustomerSetActive (customer, FALSE);
     count++;
@@ -215,9 +221,13 @@ main (int argc, char **argv)
     qof_init();
     qof_load_backend_library ("../../../backend/xml/.libs/", GNC_LIB_NAME);
     do_test (cashobjects_register(), "Cannot register cash objects");
+    /* These three registrations are done during cashobjects_register,
+       so trying to register them again naturally fails. */
+#if 0
     do_test (gncInvoiceRegister(), "Cannot register GncInvoice");
     do_test (gncJobRegister (),  "Cannot register GncJob");
     do_test (gncCustomerRegister(), "Cannot register GncCustomer");
+#endif
     test_customer();
     print_test_results();
     qof_close ();

@@ -150,9 +150,11 @@ test_string_fcn (QofBook *book, const char *message,
     do_test (!gncVendorIsDirty (vendor), "test if start dirty");
     gncVendorBeginEdit (vendor);
     set (vendor, str);
+    /* Vendor record should be dirty */
     do_test (gncVendorIsDirty (vendor), "test dirty later");
     gncVendorCommitEdit (vendor);
-    do_test (gncVendorIsDirty (vendor), "test dirty after commit");
+    /* Vendor record should be not dirty */
+    do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
     do_test (safe_strcmp (get (vendor), str) == 0, message);
     gncVendorSetActive (vendor, FALSE);
     count++;
@@ -170,8 +172,10 @@ test_numeric_fcn (QofBook *book, const char *message,
     do_test (!gncVendorIsDirty (vendor), "test if start dirty");
     gncVendoryBeginEdit (vendor);
     set (vendor, num);
+    /* Vendor record should be dirty */
     do_test (gncVendorIsDirty (vendor), "test dirty later");
     gncVendorCommitEdit (vendor);
+    /* Vendor record should be not dirty */
     do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
     do_test (gnc_numeric_equal (get (vendor), num), message);
     gncVendorSetActive (vendor, FALSE);
@@ -192,9 +196,11 @@ test_bool_fcn (QofBook *book, const char *message,
     set (vendor, FALSE);
     set (vendor, TRUE);
     set (vendor, num);
+    /* Vendor record should be dirty */
     do_test (gncVendorIsDirty (vendor), "test dirty later");
     gncVendorCommitEdit (vendor);
-    do_test (gncVendorIsDirty (vendor), "test dirty after commit");
+    /* Vendor record should be not dirty */
+    do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
     do_test (get (vendor) == num, message);
     gncVendorSetActive (vendor, FALSE);
     count++;
@@ -212,8 +218,10 @@ test_gint_fcn (QofBook *book, const char *message,
     do_test (!gncVendorIsDirty (vendor), "test if start dirty");
     gncVendorBeginEdit (vendor);
     set (vendor, num);
+    /* Vendor record should be dirty */
     do_test (gncVendorIsDirty (vendor), "test dirty later");
     gncVendorCommitEdit (vendor);
+    /* Vendor record should be not dirty */
     do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
     do_test (get (vendor) == num, message);
     gncVendorSetActive (vendor, FALSE);
