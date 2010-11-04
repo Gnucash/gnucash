@@ -213,6 +213,7 @@ test_dbi_business_store_and_reload( const gchar* driver, QofSession* session_1, 
     qof_session_destroy( session_1 );
     qof_session_end( session_2 );
     qof_session_destroy( session_2 );
+    g_print(" You may ignore the warning about the lock file having no entries: We had to ignore locking to run two sessions on the same database\n");
     qof_session_end( session_3 );
     qof_session_destroy( session_3 );
 }

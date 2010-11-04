@@ -1418,9 +1418,9 @@ gnc_module_init_backend_dbi(void)
         qof_backend_register_provider( prov );
     }
 
-    /* For now, set log level to DEBUG so that SQl statements will be put into
+    /* If needed, set log level to DEBUG so that SQl statements will be put into
        the gnucash.trace file. */
-    qof_log_set_level( log_module, QOF_LOG_DEBUG );
+    /*    qof_log_set_level( log_module, QOF_LOG_DEBUG ); */
 }
 
 #ifndef GNC_NO_LOADABLE_MODULES

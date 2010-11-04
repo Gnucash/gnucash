@@ -2122,7 +2122,7 @@ add_gvalue_date_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
             date = (GDate*)(*getter)( pObject, NULL );
         }
     }
-    if ( g_date_valid( date ) )
+    if ( date && g_date_valid( date ) )
     {
         buf = g_strdup_printf( "%04d%02d%02d",
                                g_date_get_year( date ), g_date_get_month( date ), g_date_get_day( date ) );
