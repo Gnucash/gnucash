@@ -717,7 +717,7 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
     {
         /* SX has never occurred so far */
         gnc_sx_incr_temporal_state (sx, tmpState);
-        if (xaccSchedXactionHasOccurDef(sx) && tmpState->num_occur_rem <= 0)
+        if (xaccSchedXactionHasOccurDef(sx) && tmpState->num_occur_rem < 0)
         {
             gnc_sx_destroy_temporal_state (tmpState);
             return result;
@@ -730,7 +730,7 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
     while (g_date_compare(&tmpState->last_date, start_date) < 0)
     {
         gnc_sx_incr_temporal_state (sx, tmpState);
-        if (xaccSchedXactionHasOccurDef(sx) && tmpState->num_occur_rem <= 0)
+        if (xaccSchedXactionHasOccurDef(sx) && tmpState->num_occur_rem < 0)
         {
             gnc_sx_destroy_temporal_state (tmpState);
             return result;
