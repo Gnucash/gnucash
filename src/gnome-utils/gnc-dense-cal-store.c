@@ -200,7 +200,12 @@ gdcs_generic_update_recurrences(GncDenseCalStore *trans, GDate *start, GList *re
         date = next;
         recurrenceListNextInstance(recurrences, &date, &next);
     }
-    trans->num_real_marks = (i == 0 ? 0 : (i - 1));
+    trans->num_real_marks = i;
+    /* cstim: Previously this was i-1 but that's just plain wrong for
+     * occurrences which are coming to an end, because then i contains
+     * the number of (rest) occurrences exactly! Subtracting one means
+     * we will miss the last one. */
+
     g_signal_emit_by_name(trans, "update", GUINT_TO_POINTER(1));
 }
 
