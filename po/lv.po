@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-18 21:05+0300\n"
-"PO-Revision-Date: 2010-10-18 21:10+0300\n"
+"POT-Creation-Date: 2010-11-05 22:26+0200\n"
+"PO-Revision-Date: 2010-11-05 22:29+0300\n"
 "Last-Translator: Valdis Vītoliņš <valdis.vitolins@odo.lv>\n"
 "Language-Team: Latvian <translation-team-lv@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -386,7 +386,7 @@ msgstr "Rediģēt..."
 #. src/report/business-reports/fancy-invoice.scm
 #. src/app-utils/prefs.scm
 #: ../src/business/business-gnome/business-gnome-utils.c:225
-#: ../src/business/business-gnome/dialog-invoice.c:2624
+#: ../src/business/business-gnome/dialog-invoice.c:2617
 #: ../src/engine/gncInvoice.c:855
 #: ../intl-scm/guile-strings.c:7402
 #: ../intl-scm/guile-strings.c:7640
@@ -424,7 +424,7 @@ msgstr "Dokuments"
 #. src/report/business-reports/taxinvoice.eguile.scm
 #. src/app-utils/prefs.scm
 #: ../src/business/business-gnome/business-gnome-utils.c:231
-#: ../src/business/business-gnome/dialog-invoice.c:2636
+#: ../src/business/business-gnome/dialog-invoice.c:2629
 #: ../src/business/business-gnome/glade/invoice.glade.h:12
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:356
 #: ../src/engine/gncInvoice.c:853
@@ -643,10 +643,10 @@ msgstr "Klienta rēķini"
 
 #: ../src/business/business-gnome/dialog-customer.c:804
 #: ../src/business/business-gnome/dialog-employee.c:709
-#: ../src/business/business-gnome/dialog-invoice.c:2394
-#: ../src/business/business-gnome/dialog-invoice.c:2400
-#: ../src/business/business-gnome/dialog-invoice.c:2408
-#: ../src/business/business-gnome/dialog-invoice.c:2689
+#: ../src/business/business-gnome/dialog-invoice.c:2387
+#: ../src/business/business-gnome/dialog-invoice.c:2393
+#: ../src/business/business-gnome/dialog-invoice.c:2401
+#: ../src/business/business-gnome/dialog-invoice.c:2682
 #: ../src/business/business-gnome/dialog-job.c:538
 msgid "Process Payment"
 msgstr "Noformēt apmaksu"
@@ -687,10 +687,10 @@ msgstr "Kontakti"
 #. src/report/business-reports/gnucash/report/owner-report.scm
 #. src/report/business-reports/owner-report.scm
 #: ../src/business/business-gnome/dialog-customer.c:829
-#: ../src/business/business-gnome/dialog-invoice.c:2530
-#: ../src/business/business-gnome/dialog-invoice.c:2698
+#: ../src/business/business-gnome/dialog-invoice.c:2523
+#: ../src/business/business-gnome/dialog-invoice.c:2691
 #: ../src/business/business-gnome/dialog-job.c:564
-#: ../src/business/business-gnome/dialog-order.c:860
+#: ../src/business/business-gnome/dialog-order.c:859
 #: ../src/business/business-gnome/dialog-vendor.c:689
 #: ../intl-scm/guile-strings.c:7466
 #: ../intl-scm/guile-strings.c:7704
@@ -757,7 +757,7 @@ msgid "Employee Username"
 msgstr "Darbinieka lietotājvārds"
 
 #: ../src/business/business-gnome/dialog-employee.c:722
-#: ../src/business/business-gnome/dialog-invoice.c:2510
+#: ../src/business/business-gnome/dialog-invoice.c:2503
 msgid "Employee Name"
 msgstr "Darbinieka vārds"
 
@@ -769,7 +769,7 @@ msgstr "Lietotājvārds"
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/gnucash/report/aging.scm
 #: ../src/business/business-gnome/dialog-employee.c:733
-#: ../src/gnome/dialog-sx-editor.c:1798
+#: ../src/gnome/dialog-sx-editor.c:1797
 #: ../src/gnome/dialog-tax-info.c:1099
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:9
 #: ../src/gnome-utils/gnc-dense-cal.c:336
@@ -835,9 +835,9 @@ msgstr "Vai tiešām vēlaties nosūtīt rēķinu?"
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../src/business/business-gnome/dialog-invoice.c:667
-#: ../src/business/business-gnome/dialog-invoice.c:2439
-#: ../src/business/business-gnome/dialog-invoice.c:2473
-#: ../src/business/business-gnome/dialog-invoice.c:2507
+#: ../src/business/business-gnome/dialog-invoice.c:2432
+#: ../src/business/business-gnome/dialog-invoice.c:2466
+#: ../src/business/business-gnome/dialog-invoice.c:2500
 #: ../src/register/ledger-core/split-register-model.c:201
 #: ../intl-scm/guile-strings.c:7410
 #: ../intl-scm/guile-strings.c:7648
@@ -932,22 +932,22 @@ msgstr "Rediģēt izdevumu dokumentu"
 msgid "View Expense Voucher"
 msgstr "Skatīt izdevumu dokumentu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2393
+#: ../src/business/business-gnome/dialog-invoice.c:2386
 msgid "View/Edit Invoice"
 msgstr "Skatīt/rediģēt rēķinu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2399
-#: ../src/business/business-gnome/dialog-invoice.c:2688
+#: ../src/business/business-gnome/dialog-invoice.c:2392
+#: ../src/business/business-gnome/dialog-invoice.c:2681
 msgid "View/Edit Bill"
 msgstr "Skatīt/rediģēt rēķinu"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
-#: ../src/business/business-gnome/dialog-invoice.c:2407
+#: ../src/business/business-gnome/dialog-invoice.c:2400
 msgid "View/Edit Voucher"
 msgstr "Skatīt/rediģēt dokumentu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2418
+#: ../src/business/business-gnome/dialog-invoice.c:2411
 msgid "Invoice Owner"
 msgstr "Rēķina īpašnieks"
 
@@ -957,7 +957,7 @@ msgstr "Rēķina īpašnieks"
 #. src/report/business-reports/gnucash/report/fancy-invoice.scm
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
-#: ../src/business/business-gnome/dialog-invoice.c:2421
+#: ../src/business/business-gnome/dialog-invoice.c:2414
 #: ../intl-scm/guile-strings.c:7364
 #: ../intl-scm/guile-strings.c:7602
 #: ../intl-scm/guile-strings.c:8076
@@ -973,13 +973,13 @@ msgstr "Rēķina piezīmes"
 #. src/report/business-reports/gnucash/report/fancy-invoice.scm
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
-#: ../src/business/business-gnome/dialog-invoice.c:2424
-#: ../src/business/business-gnome/dialog-invoice.c:2458
-#: ../src/business/business-gnome/dialog-invoice.c:2492
-#: ../src/business/business-gnome/dialog-invoice.c:2521
+#: ../src/business/business-gnome/dialog-invoice.c:2417
+#: ../src/business/business-gnome/dialog-invoice.c:2451
+#: ../src/business/business-gnome/dialog-invoice.c:2485
+#: ../src/business/business-gnome/dialog-invoice.c:2514
 #: ../src/business/business-gnome/dialog-job.c:551
 #: ../src/business/business-gnome/dialog-job.c:562
-#: ../src/business/business-gnome/dialog-order.c:858
+#: ../src/business/business-gnome/dialog-order.c:857
 #: ../src/business/business-gnome/glade/invoice.glade.h:4
 #: ../src/business/business-gnome/glade/job.glade.h:2
 #: ../intl-scm/guile-strings.c:7358
@@ -993,66 +993,66 @@ msgstr "Rēķina piezīmes"
 msgid "Billing ID"
 msgstr "Maksājuma ID"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2427
-#: ../src/business/business-gnome/dialog-invoice.c:2461
-#: ../src/business/business-gnome/dialog-invoice.c:2495
+#: ../src/business/business-gnome/dialog-invoice.c:2420
+#: ../src/business/business-gnome/dialog-invoice.c:2454
+#: ../src/business/business-gnome/dialog-invoice.c:2488
 msgid "Is Paid?"
 msgstr "Ir apmaksāts?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2430
-#: ../src/business/business-gnome/dialog-invoice.c:2464
-#: ../src/business/business-gnome/dialog-invoice.c:2498
+#: ../src/business/business-gnome/dialog-invoice.c:2423
+#: ../src/business/business-gnome/dialog-invoice.c:2457
+#: ../src/business/business-gnome/dialog-invoice.c:2491
 #: ../src/business/business-gnome/glade/invoice.glade.h:9
 #: ../src/gnome/dialog-find-transactions.c:121
 msgid "Date Posted"
 msgstr "Nosūtīšanas datums"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2433
-#: ../src/business/business-gnome/dialog-invoice.c:2467
-#: ../src/business/business-gnome/dialog-invoice.c:2501
+#: ../src/business/business-gnome/dialog-invoice.c:2426
+#: ../src/business/business-gnome/dialog-invoice.c:2460
+#: ../src/business/business-gnome/dialog-invoice.c:2494
 msgid "Is Posted?"
 msgstr "Ir nosūtīts?"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2436
-#: ../src/business/business-gnome/dialog-invoice.c:2470
-#: ../src/business/business-gnome/dialog-invoice.c:2504
-#: ../src/business/business-gnome/dialog-order.c:847
+#: ../src/business/business-gnome/dialog-invoice.c:2429
+#: ../src/business/business-gnome/dialog-invoice.c:2463
+#: ../src/business/business-gnome/dialog-invoice.c:2497
+#: ../src/business/business-gnome/dialog-order.c:846
 #: ../src/business/business-gnome/glade/invoice.glade.h:8
 #: ../src/business/business-gnome/glade/order.glade.h:6
 msgid "Date Opened"
 msgstr "Datums"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2442
-#: ../src/business/business-gnome/dialog-invoice.c:2476
+#: ../src/business/business-gnome/dialog-invoice.c:2435
+#: ../src/business/business-gnome/dialog-invoice.c:2469
 msgid "Company Name "
 msgstr "Uzņēmuma nosaukums"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2446
+#: ../src/business/business-gnome/dialog-invoice.c:2439
 #: ../src/business/business-gnome/glade/invoice.glade.h:14
 msgid "Invoice ID"
 msgstr "Dokumenta ID"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2452
+#: ../src/business/business-gnome/dialog-invoice.c:2445
 msgid "Bill Owner"
 msgstr "Rēķina īpašnieks"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2455
+#: ../src/business/business-gnome/dialog-invoice.c:2448
 msgid "Bill Notes"
 msgstr "Rēķina piezīmes"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2480
+#: ../src/business/business-gnome/dialog-invoice.c:2473
 msgid "Bill ID"
 msgstr "Maksājuma ID"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2486
+#: ../src/business/business-gnome/dialog-invoice.c:2479
 msgid "Voucher Owner"
 msgstr "Dokumenta īpašnieks"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2489
+#: ../src/business/business-gnome/dialog-invoice.c:2482
 msgid "Voucher Notes"
 msgstr "Dokumenta piezīmes"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2514
+#: ../src/business/business-gnome/dialog-invoice.c:2507
 msgid "Voucher ID"
 msgstr "Dokumenta ID"
 
@@ -1062,7 +1062,7 @@ msgstr "Dokumenta ID"
 #. src/report/business-reports/gnucash/report/owner-report.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
-#: ../src/business/business-gnome/dialog-invoice.c:2523
+#: ../src/business/business-gnome/dialog-invoice.c:2516
 #: ../src/gnome/dialog-tax-info.c:1138
 #: ../src/gnome-utils/gnc-tree-view-account.c:519
 #: ../src/gnome-utils/gnc-tree-view-price.c:460
@@ -1076,26 +1076,26 @@ msgstr "Dokumenta ID"
 msgid "Type"
 msgstr "Tips"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2525
+#: ../src/business/business-gnome/dialog-invoice.c:2518
 #: ../src/register/ledger-core/split-register-model.c:247
 msgid "Paid"
 msgstr "Apmaksāts"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2528
+#: ../src/business/business-gnome/dialog-invoice.c:2521
 msgid "Posted"
 msgstr "Nosūtīts"
 
 #. src/report/business-reports/gnucash/report/easy-invoice.scm
 #. src/report/business-reports/easy-invoice.scm
-#: ../src/business/business-gnome/dialog-invoice.c:2533
-#: ../src/business/business-gnome/dialog-invoice.c:2700
+#: ../src/business/business-gnome/dialog-invoice.c:2526
+#: ../src/business/business-gnome/dialog-invoice.c:2693
 #: ../intl-scm/guile-strings.c:8128
 #: ../intl-scm/guile-strings.c:8882
 msgid "Due"
 msgstr "Termiņš"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2535
-#: ../src/business/business-gnome/dialog-order.c:865
+#: ../src/business/business-gnome/dialog-invoice.c:2528
+#: ../src/business/business-gnome/dialog-order.c:864
 #: ../src/gnome/lot-viewer.c:634
 msgid "Opened"
 msgstr "Atvērts"
@@ -1108,8 +1108,8 @@ msgstr "Atvērts"
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
-#: ../src/business/business-gnome/dialog-invoice.c:2537
-#: ../src/business/business-gnome/dialog-order.c:867
+#: ../src/business/business-gnome/dialog-invoice.c:2530
+#: ../src/business/business-gnome/dialog-order.c:866
 #: ../src/business/business-gnome/glade/payment.glade.h:4
 #: ../src/gnome/glade/lots.glade.h:15
 #: ../src/gnome/reconcile-list.c:226
@@ -1132,11 +1132,11 @@ msgstr "Atvērts"
 msgid "Num"
 msgstr "Nr."
 
-#: ../src/business/business-gnome/dialog-invoice.c:2623
+#: ../src/business/business-gnome/dialog-invoice.c:2616
 msgid "Find Bill"
 msgstr "Meklēt rēķinu"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2629
+#: ../src/business/business-gnome/dialog-invoice.c:2622
 msgid "Find Expense Voucher"
 msgstr "Meklēt izdevumu dokumentu"
 
@@ -1146,7 +1146,7 @@ msgstr "Meklēt izdevumu dokumentu"
 #. src/report/business-reports/gnucash/report/fancy-invoice.scm
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
-#: ../src/business/business-gnome/dialog-invoice.c:2630
+#: ../src/business/business-gnome/dialog-invoice.c:2623
 #: ../intl-scm/guile-strings.c:7404
 #: ../intl-scm/guile-strings.c:7642
 #: ../intl-scm/guile-strings.c:8122
@@ -1156,7 +1156,7 @@ msgstr "Meklēt izdevumu dokumentu"
 msgid "Expense Voucher"
 msgstr "Izdevumu dokuments"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2635
+#: ../src/business/business-gnome/dialog-invoice.c:2628
 msgid "Find Invoice"
 msgstr "Meklēt rēķinu"
 
@@ -1173,7 +1173,7 @@ msgstr "Meklēt rēķinu"
 #. src/report/business-reports/gnucash/report/owner-report.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
-#: ../src/business/business-gnome/dialog-invoice.c:2696
+#: ../src/business/business-gnome/dialog-invoice.c:2689
 #: ../src/business/business-gnome/glade/payment.glade.h:1
 #: ../src/gnome/glade/lots.glade.h:6
 #: ../src/gnome/reconcile-list.c:219
@@ -1211,7 +1211,7 @@ msgstr "Summa"
 
 #. Translators: %d is the number of bills due. This is a
 #. ngettext(3) message.
-#: ../src/business/business-gnome/dialog-invoice.c:2748
+#: ../src/business/business-gnome/dialog-invoice.c:2741
 #, c-format
 msgid "The following %d bill is due:"
 msgid_plural "The following %d bills are due:"
@@ -1219,7 +1219,7 @@ msgstr[0] "Sekojošā %d rēķina apmaksas termiņš:"
 msgstr[1] "Sekojošo %d rēķinu apmaksas termiņš:"
 msgstr[2] "Šekojošā %d rēķina apmaksas termiņš:"
 
-#: ../src/business/business-gnome/dialog-invoice.c:2754
+#: ../src/business/business-gnome/dialog-invoice.c:2747
 msgid "Due Bills Reminder"
 msgstr "Atgādinājums par apmaksu"
 
@@ -1295,38 +1295,38 @@ msgstr "Vai tiešām vēlaties aizvērt orderi?"
 msgid "Close Date"
 msgstr "Beigu datums"
 
-#: ../src/business/business-gnome/dialog-order.c:832
+#: ../src/business/business-gnome/dialog-order.c:831
 msgid "View/Edit Order"
 msgstr "Skatīt/rediģēt orderi"
 
-#: ../src/business/business-gnome/dialog-order.c:841
+#: ../src/business/business-gnome/dialog-order.c:840
 msgid "Order Notes"
 msgstr "Ordera piezīmes"
 
-#: ../src/business/business-gnome/dialog-order.c:843
+#: ../src/business/business-gnome/dialog-order.c:842
 #: ../src/business/business-gnome/glade/order.glade.h:5
 msgid "Date Closed"
 msgstr "Slēgšanas datums"
 
-#: ../src/business/business-gnome/dialog-order.c:845
+#: ../src/business/business-gnome/dialog-order.c:844
 msgid "Is Closed?"
 msgstr "Ir slēgts?"
 
-#: ../src/business/business-gnome/dialog-order.c:849
+#: ../src/business/business-gnome/dialog-order.c:848
 msgid "Owner Name "
 msgstr "Īpašnieka vārds"
 
-#: ../src/business/business-gnome/dialog-order.c:851
+#: ../src/business/business-gnome/dialog-order.c:850
 #: ../src/business/business-gnome/glade/order.glade.h:12
 msgid "Order ID"
 msgstr "Ordera ID"
 
-#: ../src/business/business-gnome/dialog-order.c:863
+#: ../src/business/business-gnome/dialog-order.c:862
 #: ../src/gnome/lot-viewer.c:639
 msgid "Closed"
 msgstr "Slēgts"
 
-#: ../src/business/business-gnome/dialog-order.c:921
+#: ../src/business/business-gnome/dialog-order.c:920
 msgid "Find Order"
 msgstr "Meklēt orderi"
 
@@ -1551,12 +1551,13 @@ msgid "<b>Bills</b>"
 msgstr "<b>Rēķini</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:2
-msgid "<b>Invoices</b>"
-msgstr "<b>Rēķini</b>"
+#: ../src/gnome-utils/glade/preferences.glade.h:15
+msgid "<b>General</b>"
+msgstr "<b>Vispārīgi</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:3
-msgid "Default number of register rows to display in Invoices."
-msgstr "Noklusēto rindu skaits rēķinā."
+msgid "<b>Invoices</b>"
+msgstr "<b>Rēķini</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:4
 msgid "How many days in the future to warn about Bills coming due."
@@ -1567,11 +1568,6 @@ msgid "If checked, each invoice will be opened in its own top level window.  If 
 msgstr "Ja atzīmēts, katrs rēķins tiks atvērts jauna līmeņa logā. Ja nav atzīmēts, rēķins tiks atvērts pašreizējā logā."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
-#: ../src/gnome-utils/glade/preferences.glade.h:99
-msgid "Number of _rows:"
-msgstr "_Rindu skaits:"
-
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:7
 #: ../src/gnome/glade/sched-xact.glade.h:132
 #: ../src/import-export/generic-import.glade.h:40
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:3
@@ -1579,43 +1575,43 @@ msgstr "_Rindu skaits:"
 msgid "Preferences"
 msgstr "Iestatījumi"
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:8
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:7
 msgid "Ta_x included"
 msgstr "Nodokli_s iekļauts"
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:9
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:8
 msgid "Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog."
 msgstr "Vai vairākus rēķina ierakstus, kas pārskaita uz to pašu kontu, ir nepieciešams automātiski saskaitīti vienā sadalījumā. Šo iestatījumu var mainīt dialoglogā Nosūtīt."
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:10
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:9
 msgid "Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors."
 msgstr "Vai nodoklis ir iekļauts rēķina ierakstos automātiski. Šis iestatījums ir mantots no jaunajiem klientiem un piegādātājiem."
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:11
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:10
 msgid "Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors."
 msgstr "Vai nodoklis ir iekļauts rēķina ierakstos automātiski. Šis iestatījums ir mantots no jaunajiem klientiem un piegādātājiem."
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:12
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:11
 msgid "Whether to display the list of Bills Due at startup."
 msgstr "Vai uzsākot rādīt rēķinus, kuriem ir pienācis termiņš."
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:13
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:12
 msgid "_Accumulate splits on post"
 msgstr "_Saskaitīt sadalījumus nosūtot"
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:14
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:13
 msgid "_Days in advance:"
 msgstr "_Dienas uz priekšu:"
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:15
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:14
 msgid "_Notify when due"
 msgstr "_Paziņot par izpildi"
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:16
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:15
 msgid "_Open in new window"
 msgstr "_Atvērt jaunā logā"
 
-#: ../src/business/business-gnome/glade/businessprefs.glade.h:17
+#: ../src/business/business-gnome/glade/businessprefs.glade.h:16
 msgid "_Tax included"
 msgstr "_Nodoklis iekļauts"
 
@@ -2258,9 +2254,9 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/payment.glade.h:16
 msgid ""
-"The invoice to be paid.\n"
+"The invoice being paid.\n"
 "\n"
-"Note that is field is optional. If you leave it blank, GnuCash will automatically assign the payment to the first unpaid invoice for this company."
+"Note that is field is optional. If you leave it blank, GnuCash will automatically assign the payment to the first unpaid invoice for this company.\t"
 msgstr ""
 "Apmaksājamais rēķins.\n"
 "\n"
@@ -2568,7 +2564,7 @@ msgid "Copy"
 msgstr "Kopēt"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:127
-#: ../src/gnome/gnc-plugin-page-register.c:193
+#: ../src/gnome/gnc-plugin-page-register.c:191
 #: ../src/gnome-utils/gnc-main-window.c:290
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1023
 msgid "_Paste"
@@ -2728,13 +2724,13 @@ msgstr "Kārtot pēc apraksta"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:230
 #: ../src/gnome/glade/register.glade.h:25
-#: ../src/gnome/gnc-plugin-page-register.c:422
+#: ../src/gnome/gnc-plugin-page-register.c:420
 msgid "Enter"
 msgstr "Ievadīt"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:231
 #: ../src/gnome/glade/register.glade.h:6
-#: ../src/gnome/gnc-plugin-page-register.c:423
+#: ../src/gnome/gnc-plugin-page-register.c:421
 msgid "Cancel"
 msgstr "Atcelt"
 
@@ -2742,19 +2738,19 @@ msgstr "Atcelt"
 #: ../src/gnome/glade/register.glade.h:16
 #: ../src/gnome/gnc-plugin-page-account-tree.c:266
 #: ../src/gnome/gnc-plugin-page-budget.c:179
-#: ../src/gnome/gnc-plugin-page-register.c:424
+#: ../src/gnome/gnc-plugin-page-register.c:422
 msgid "Delete"
 msgstr "Dzēst"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:233
 #: ../src/gnome/glade/register.glade.h:20
-#: ../src/gnome/gnc-plugin-page-register.c:425
+#: ../src/gnome/gnc-plugin-page-register.c:423
 msgid "Duplicate"
 msgstr "Kopija"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:234
 #: ../src/gnome/glade/register.glade.h:3
-#: ../src/gnome/gnc-plugin-page-register.c:428
+#: ../src/gnome/gnc-plugin-page-register.c:426
 msgid "Blank"
 msgstr "Neaizpildīts"
 
@@ -2812,23 +2808,14 @@ msgid "Show bills due within this many days"
 msgstr "Rādīt rēķinus ar apmaksu pēc tik dienām"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:12
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:58
-msgid "The number of rows in an invoice"
-msgstr "Rindu skaits rēķinā"
-
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
 msgid "This field defines the number of days in advance that GnuCash will check for due bills. Its value is only used if the \"Notify when due\" setting is active."
 msgstr "Šis lauks nosaka, cik dienas iepriekš GnuCash pārbaudīs rēķinus ar tuvojošos apmaksas termiņu. Tas ir aktīvs, ja \"Paziņot, kad jāmaksā\" iestatījums ir aktivizēts."
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
-msgid "This field sets the number of rows to show in an invoice. It does not actually affect the display of the contents of the window. It is only used to set the size of the window when first opened."
-msgstr "Šis lauks iestata rēķinā redzamo rindiņu skaitu. Tas neietekmē satura apskati logā. Tas tiek izmantots vienīgi loga lieluma iestatīšanai pirmajā atvēršanas reizē"
-
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:15
+#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
 msgid "This setting contains the coordinates describing the last location of the window. The numbers are the X and Y coordinates of the top left corner of the window, and the width and height of the window."
 msgstr "Šis iestatījumā ir koordinātes, kas apraksta pēdējo loga novietojumu. Skaitļi X un Y ir loga augšējā kreisā stūra koordinātes, un loga platums un augstums."
 
-#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:16
+#: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
 msgid "Window position and size"
 msgstr "Loga novietojums un lielums"
 
@@ -3745,8 +3732,8 @@ msgstr "Starpība"
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
-#: ../src/engine/Split.c:1494
-#: ../src/engine/Split.c:1511
+#: ../src/engine/Split.c:1495
+#: ../src/engine/Split.c:1512
 #: ../intl-scm/guile-strings.c:2270
 #: ../intl-scm/guile-strings.c:2600
 #: ../intl-scm/guile-strings.c:4202
@@ -3755,7 +3742,7 @@ msgid "-- Split Transaction --"
 msgstr "-- Sadalīts grāmatojums --"
 
 #. Translators: This string has a disambiguation prefix
-#: ../src/engine/Split.c:1528
+#: ../src/engine/Split.c:1529
 msgid "Displayed account code of the other account in a multi-split transaction|Split"
 msgstr "Sadalīts"
 
@@ -3868,7 +3855,7 @@ msgid "Balanced"
 msgstr "Sabalansēts"
 
 #: ../src/gnome/dialog-find-transactions.c:113
-#: ../src/gnome/gnc-plugin-page-register.c:429
+#: ../src/gnome/gnc-plugin-page-register.c:427
 #: ../src/gnome/window-reconcile.c:1226
 msgid "Reconcile"
 msgstr "Saskaņot"
@@ -4010,7 +3997,7 @@ msgstr "Pielāgot"
 
 # augšējais
 #: ../src/gnome/dialog-print-check.c:2512
-#: ../src/gnome-utils/glade/preferences.glade.h:135
+#: ../src/gnome-utils/glade/preferences.glade.h:131
 msgid "Top"
 msgstr "Augšā"
 
@@ -4101,15 +4088,15 @@ msgstr "Atlikušo gadījumu (%d) skaits ir lielāks nekā kopā esošo gadījumu
 msgid "You have attempted to create a Scheduled Transaction which will never run. Do you really want to do this?"
 msgstr "Jūs mēģinājāt izveidot plānoto grāmatojumu, kas nekad nedarbosies. Vai jūs to vēlaties darīt?"
 
-#: ../src/gnome/dialog-sx-editor.c:1411
+#: ../src/gnome/dialog-sx-editor.c:1410
 msgid "(never)"
 msgstr "(nekad)"
 
-#: ../src/gnome/dialog-sx-editor.c:1582
+#: ../src/gnome/dialog-sx-editor.c:1581
 msgid "The current template transaction has been changed. Would you like to record the changes?"
 msgstr "Pašreizēja grāmatojuma veidne ir izmanīta. Vai vēlaties saglabāt izmaiņas?"
 
-#: ../src/gnome/dialog-sx-editor.c:1819
+#: ../src/gnome/dialog-sx-editor.c:1818
 #: ../src/gnome/gnc-plugin-page-sx-list.c:204
 msgid "Scheduled Transactions"
 msgstr "Plānotie grāmatojumi"
@@ -4143,7 +4130,7 @@ msgid "Created"
 msgstr "Izveidots"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:451
-#: ../src/gnome-utils/glade/preferences.glade.h:97
+#: ../src/gnome-utils/glade/preferences.glade.h:96
 msgid "Never"
 msgstr "Nekad"
 
@@ -4598,7 +4585,7 @@ msgstr "Pabeigt konta iestatīšanu"
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/report-system/report.scm
 #: ../src/gnome/glade/account.glade.h:24
-#: ../src/gnome-utils/glade/preferences.glade.h:81
+#: ../src/gnome-utils/glade/preferences.glade.h:80
 #: ../intl-scm/guile-strings.c:66
 #: ../intl-scm/guile-strings.c:68
 #: ../intl-scm/guile-strings.c:492
@@ -5229,7 +5216,7 @@ msgstr "Pārrēķināt (vienu) tukšu ierakstu augšējos laukos."
 
 #: ../src/gnome/glade/fincalc.glade.h:33
 #: ../src/gnome/glade/register.glade.h:41
-#: ../src/gnome/gnc-plugin-page-register.c:427
+#: ../src/gnome/gnc-plugin-page-register.c:425
 msgid "Schedule"
 msgstr "Grafiks"
 
@@ -5670,7 +5657,7 @@ msgid "C_leared"
 msgstr "_Nokārtots"
 
 #: ../src/gnome/glade/register.glade.h:7
-#: ../src/gnome/gnc-plugin-page-register.c:247
+#: ../src/gnome/gnc-plugin-page-register.c:245
 msgid "Cancel the current transaction"
 msgstr "Atcelt pašreizējo grāmatojumu"
 
@@ -5687,7 +5674,7 @@ msgid "Copy the selected transaction"
 msgstr "Kopēt izvēlēto grāmatojumu"
 
 #: ../src/gnome/glade/register.glade.h:11
-#: ../src/gnome/gnc-plugin-page-register.c:322
+#: ../src/gnome/gnc-plugin-page-register.c:320
 msgid "Create a Scheduled Transaction with the current transaction as a template"
 msgstr "Izveidot plānoto grāmatojumu ar tekošo transakciju kā veidni"
 
@@ -5700,7 +5687,7 @@ msgid "Cut the selected transaction"
 msgstr "Izgriezt izvēlēto grāmatojumu"
 
 #: ../src/gnome/glade/register.glade.h:17
-#: ../src/gnome/gnc-plugin-page-register.c:232
+#: ../src/gnome/gnc-plugin-page-register.c:230
 msgid "Delete the current transaction"
 msgstr "Dzēst pašreizējo grāmatojumu"
 
@@ -5738,7 +5725,7 @@ msgid "Jump"
 msgstr "Pārlēkt"
 
 #: ../src/gnome/glade/register.glade.h:29
-#: ../src/gnome/gnc-plugin-page-register.c:317
+#: ../src/gnome/gnc-plugin-page-register.c:315
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "Pārlēkt uz saistīto grāmatojumu citā kontā"
 
@@ -5747,12 +5734,12 @@ msgid "Keep normal account order"
 msgstr "Uzturēt normālu kontu kārtību"
 
 #: ../src/gnome/glade/register.glade.h:31
-#: ../src/gnome/gnc-plugin-page-register.c:227
+#: ../src/gnome/gnc-plugin-page-register.c:225
 msgid "Make a copy of the current transaction"
 msgstr "Izveidot pašreizējā grāmatojuma kopiju"
 
 #: ../src/gnome/glade/register.glade.h:32
-#: ../src/gnome/gnc-plugin-page-register.c:307
+#: ../src/gnome/gnc-plugin-page-register.c:305
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr "Novietot reģistra apakšā tukšajā grāmatojumā"
 
@@ -5765,7 +5752,7 @@ msgid "Paste Transaction"
 msgstr "Ievietot grāmatojumu"
 
 #: ../src/gnome/glade/register.glade.h:35
-#: ../src/gnome/gnc-plugin-page-register.c:222
+#: ../src/gnome/gnc-plugin-page-register.c:220
 msgid "Paste the transaction from the clipboard"
 msgstr "Ievietot grāmatojumu no starpliktuves"
 
@@ -5774,7 +5761,7 @@ msgid "Reason for voiding transaction:"
 msgstr "Iemesls grāmatojuma anulēšanai:"
 
 #: ../src/gnome/glade/register.glade.h:37
-#: ../src/gnome/gnc-plugin-page-register.c:242
+#: ../src/gnome/gnc-plugin-page-register.c:240
 msgid "Record the current transaction"
 msgstr "Ierakstīt pašreizējo grāmatojumu"
 
@@ -5783,7 +5770,7 @@ msgid "Remove Transaction Splits"
 msgstr "Noņemt grāmatojuma sadalījumus"
 
 #: ../src/gnome/glade/register.glade.h:39
-#: ../src/gnome/gnc-plugin-page-register.c:358
+#: ../src/gnome/gnc-plugin-page-register.c:356
 #: ../src/gnome-utils/gnc-icons.c:23
 msgid "S_plit Transaction"
 msgstr "_Sadalīt grāmatojumu"
@@ -5809,28 +5796,28 @@ msgid "Show _All"
 msgstr "Rādīt _visu"
 
 #: ../src/gnome/glade/register.glade.h:46
-#: ../src/gnome/gnc-plugin-page-register.c:359
+#: ../src/gnome/gnc-plugin-page-register.c:357
 msgid "Show all splits in the current transaction"
 msgstr "Parādīt visus sadalījumus pašreizējā grāmatojumā"
 
 #: ../src/gnome/glade/register.glade.h:47
-#: ../src/gnome/gnc-plugin-page-register.c:380
+#: ../src/gnome/gnc-plugin-page-register.c:378
 msgid "Show expanded transactions with all splits"
 msgstr "Parādīt paplašinātos grāmatojumus ar visiem sadalījumiem"
 
 #: ../src/gnome/glade/register.glade.h:48
-#: ../src/gnome/gnc-plugin-page-register.c:370
+#: ../src/gnome/gnc-plugin-page-register.c:368
 msgid "Show transactions on one or two lines"
 msgstr "Parādīt visus grāmatojumus vienā vai divās rindās"
 
 #: ../src/gnome/glade/register.glade.h:49
-#: ../src/gnome/gnc-plugin-page-register.c:375
+#: ../src/gnome/gnc-plugin-page-register.c:373
 msgid "Show transactions on one or two lines and expand the current transaction"
 msgstr "Parādīt grāmatojumus vienā vai divās rindās un paplašināt pašreizējo grāmatojumu"
 
 #: ../src/gnome/glade/register.glade.h:50
-#: ../src/gnome/gnc-plugin-page-register.c:353
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:51
+#: ../src/gnome/gnc-plugin-page-register.c:351
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:49
 msgid "Show two lines of information for each transaction"
 msgstr "Parādīt divas informācijas rindas no katra grāmatojuma"
 
@@ -5891,7 +5878,7 @@ msgid "Sort register by..."
 msgstr "Kārtot reģistru pēc..."
 
 #: ../src/gnome/glade/register.glade.h:67
-#: ../src/gnome/gnc-plugin-page-register.c:426
+#: ../src/gnome/gnc-plugin-page-register.c:424
 msgid "Split"
 msgstr "Sadalīt"
 
@@ -5920,17 +5907,17 @@ msgid "_Amount"
 msgstr "_Summa"
 
 #: ../src/gnome/glade/register.glade.h:76
-#: ../src/gnome/gnc-plugin-page-register.c:374
+#: ../src/gnome/gnc-plugin-page-register.c:372
 msgid "_Auto-Split Ledger"
 msgstr "_Sadalīt grāmatojumu automātiski"
 
 #: ../src/gnome/glade/register.glade.h:77
-#: ../src/gnome/gnc-plugin-page-register.c:369
+#: ../src/gnome/gnc-plugin-page-register.c:367
 msgid "_Basic Ledger"
 msgstr "_Galvenā virsgrāmata"
 
 #: ../src/gnome/glade/register.glade.h:83
-#: ../src/gnome/gnc-plugin-page-register.c:352
+#: ../src/gnome/gnc-plugin-page-register.c:350
 msgid "_Double Line"
 msgstr "_Dubulta rinda"
 
@@ -5943,7 +5930,7 @@ msgid "_Frozen"
 msgstr "_Iesaldēts"
 
 #: ../src/gnome/glade/register.glade.h:88
-#: ../src/gnome/gnc-plugin-page-register.c:316
+#: ../src/gnome/gnc-plugin-page-register.c:314
 #: ../src/gnome-utils/gnc-icons.c:24
 msgid "_Jump"
 msgstr "_Pārlēkt"
@@ -6241,12 +6228,12 @@ msgstr ""
 "10/1 gads ARM"
 
 #: ../src/gnome/glade/sched-xact.glade.h:88
-#: ../src/gnome-utils/glade/preferences.glade.h:79
+#: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid "For:"
 msgstr "Katras:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:89
-#: ../src/gnome-utils/glade/preferences.glade.h:80
+#: ../src/gnome-utils/glade/preferences.glade.h:79
 msgid "Forever"
 msgstr "Vienmēr"
 
@@ -6552,7 +6539,7 @@ msgid "_Run when data file opened"
 msgstr "_Palaist, atverot datu failu"
 
 #: ../src/gnome/glade/sched-xact.glade.h:170
-#: ../src/gnome-utils/glade/preferences.glade.h:182
+#: ../src/gnome-utils/glade/preferences.glade.h:178
 msgid "days"
 msgstr "dienas"
 
@@ -6794,12 +6781,12 @@ msgid "Export the account hierarchy to a new GnuCash datafile"
 msgstr "Eksportēt kontu hierarhiju uz jaunu GnuCash datu failu"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:128
-#: ../src/gnome/gnc-plugin-page-register.c:203
+#: ../src/gnome/gnc-plugin-page-register.c:201
 msgid "_Find..."
 msgstr "_Meklēt..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:129
-#: ../src/gnome/gnc-plugin-page-register.c:204
+#: ../src/gnome/gnc-plugin-page-register.c:202
 msgid "Find transactions with a search"
 msgstr "Meklēt grāmatojumus ar meklētāju"
 
@@ -6949,12 +6936,12 @@ msgid "Open the selected account and all its subaccounts"
 msgstr "Atvērt izvēlēto kontu un visus tā analītiskos kontus"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:177
-#: ../src/gnome/gnc-plugin-page-register.c:198
+#: ../src/gnome/gnc-plugin-page-register.c:196
 msgid "Edit _Account"
 msgstr "_Rediģēt kontu"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:178
-#: ../src/gnome/gnc-plugin-page-register.c:199
+#: ../src/gnome/gnc-plugin-page-register.c:197
 msgid "Edit the selected account"
 msgstr "Rediģēt izvēlēto kontu"
 
@@ -6976,23 +6963,23 @@ msgstr "Pārnumurēt izvēlētā konta apakškontus"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
 #: ../src/gnome/gnc-plugin-page-budget.c:159
-#: ../src/gnome/gnc-plugin-page-register.c:274
+#: ../src/gnome/gnc-plugin-page-register.c:272
 #: ../src/gnome-utils/gnc-main-window.c:307
 msgid "_Filter By..."
 msgstr "_Atlasīt pēc..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:200
-#: ../src/gnome/gnc-plugin-page-register.c:286
+#: ../src/gnome/gnc-plugin-page-register.c:284
 msgid "_Reconcile..."
 msgstr "_Saskaņot..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:201
-#: ../src/gnome/gnc-plugin-page-register.c:287
+#: ../src/gnome/gnc-plugin-page-register.c:285
 msgid "Reconcile the selected account"
 msgstr "Saskaņot izvēlētos kontus"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:205
-#: ../src/gnome/gnc-plugin-page-register.c:291
+#: ../src/gnome/gnc-plugin-page-register.c:289
 msgid "_Auto-clear..."
 msgstr "_Nokārtot automātiski..."
 
@@ -7001,35 +6988,35 @@ msgid "Automatically clear individual transactions, given a cleared amount"
 msgstr "Ja norādīta nokārtošanas summa, automātiski nokārtot darījumu"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:210
-#: ../src/gnome/gnc-plugin-page-register.c:281
+#: ../src/gnome/gnc-plugin-page-register.c:279
 #: ../src/gnome-utils/gnc-icons.c:22
 #: ../src/gnome/window-reconcile.c:2148
 msgid "_Transfer..."
 msgstr "_Pārskaitīt..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:211
-#: ../src/gnome/gnc-plugin-page-register.c:282
+#: ../src/gnome/gnc-plugin-page-register.c:280
 #: ../src/gnome/window-reconcile.c:2149
 msgid "Transfer funds from one account to another"
 msgstr "Pārskaitīt naudu no viena konta uz citu"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:215
-#: ../src/gnome/gnc-plugin-page-register.c:296
+#: ../src/gnome/gnc-plugin-page-register.c:294
 msgid "Stoc_k Split..."
 msgstr "_Akciju sadalīšana..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:216
-#: ../src/gnome/gnc-plugin-page-register.c:297
+#: ../src/gnome/gnc-plugin-page-register.c:295
 msgid "Record a stock split or a stock merger"
 msgstr "Ierakstīt akciju sadalīšanu vai sapludināšanu"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:220
-#: ../src/gnome/gnc-plugin-page-register.c:301
+#: ../src/gnome/gnc-plugin-page-register.c:299
 msgid "View _Lots..."
 msgstr "Skatīt _partijas..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:221
-#: ../src/gnome/gnc-plugin-page-register.c:302
+#: ../src/gnome/gnc-plugin-page-register.c:300
 msgid "Bring up the lot viewer/editor window"
 msgstr "Iznest partiju apskatīšanas/rediģēšanas logu"
 
@@ -7265,158 +7252,158 @@ msgstr "Dzēst %s?"
 msgid "You must select at least one account to estimate."
 msgstr "Jāizvēlas vismaz vienu kontu novērtēšanai."
 
-#: ../src/gnome/gnc-plugin-page-register.c:176
+#: ../src/gnome/gnc-plugin-page-register.c:174
 msgid "_Print Checks..."
 msgstr "_Drukāt čekus..."
 
-#: ../src/gnome/gnc-plugin-page-register.c:183
+#: ../src/gnome/gnc-plugin-page-register.c:181
 #: ../src/gnome-utils/gnc-main-window.c:280
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1013
 msgid "Cu_t"
 msgstr "_Izgriezt"
 
-#: ../src/gnome/gnc-plugin-page-register.c:184
+#: ../src/gnome/gnc-plugin-page-register.c:182
 #: ../src/gnome-utils/gnc-main-window.c:281
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1014
 msgid "Cut the current selection and copy it to clipboard"
 msgstr "Izgriezt pašreizējo atlasi un iekopēt starpliktuvē"
 
-#: ../src/gnome/gnc-plugin-page-register.c:188
+#: ../src/gnome/gnc-plugin-page-register.c:186
 #: ../src/gnome-utils/gnc-main-window.c:285
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1018
 msgid "_Copy"
 msgstr "_Kopēt"
 
-#: ../src/gnome/gnc-plugin-page-register.c:189
+#: ../src/gnome/gnc-plugin-page-register.c:187
 #: ../src/gnome-utils/gnc-main-window.c:286
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1019
 msgid "Copy the current selection to clipboard"
 msgstr "Iekopēt pašreizējo atlasi starpliktuvē"
 
-#: ../src/gnome/gnc-plugin-page-register.c:194
+#: ../src/gnome/gnc-plugin-page-register.c:192
 #: ../src/gnome-utils/gnc-main-window.c:291
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1024
 msgid "Paste the clipboard content at the cursor position"
 msgstr "Ievietot saturu no starpliktuves kursora atrašanās vietā"
 
-#: ../src/gnome/gnc-plugin-page-register.c:211
+#: ../src/gnome/gnc-plugin-page-register.c:209
 msgid "Cu_t Transaction"
 msgstr "_Izgriezt grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:212
+#: ../src/gnome/gnc-plugin-page-register.c:210
 msgid "Cut the selected transaction into clipboard"
 msgstr "Izgriezt izvēlēto grāmatojumu starpliktuvē"
 
-#: ../src/gnome/gnc-plugin-page-register.c:216
+#: ../src/gnome/gnc-plugin-page-register.c:214
 msgid "_Copy Transaction"
 msgstr "_Kopēt grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:217
+#: ../src/gnome/gnc-plugin-page-register.c:215
 msgid "Copy the selected transaction into clipboard"
 msgstr "Iekopēt izvēlēto grāmatojumu starpliktuvē"
 
-#: ../src/gnome/gnc-plugin-page-register.c:221
+#: ../src/gnome/gnc-plugin-page-register.c:219
 msgid "_Paste Transaction"
 msgstr "_Ievietot grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:226
+#: ../src/gnome/gnc-plugin-page-register.c:224
 msgid "Dup_licate Transaction"
 msgstr "_Dublēt grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:231
-#: ../src/gnome/gnc-split-reg.c:1145
+#: ../src/gnome/gnc-plugin-page-register.c:229
+#: ../src/gnome/gnc-split-reg.c:1143
 msgid "_Delete Transaction"
 msgstr "D_zēst grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:236
+#: ../src/gnome/gnc-plugin-page-register.c:234
 msgid "Remo_ve Transaction Splits"
 msgstr "_Noņemt grāmatojuma sadalījumus"
 
-#: ../src/gnome/gnc-plugin-page-register.c:237
+#: ../src/gnome/gnc-plugin-page-register.c:235
 msgid "Remove all splits in the current transaction"
 msgstr "Noņemt visus sadalījumus pašreizējā grāmatojumā"
 
-#: ../src/gnome/gnc-plugin-page-register.c:241
+#: ../src/gnome/gnc-plugin-page-register.c:239
 msgid "_Enter Transaction"
 msgstr "_Ievadīt grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:246
+#: ../src/gnome/gnc-plugin-page-register.c:244
 msgid "Ca_ncel Transaction"
 msgstr "_Atcelt grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:251
+#: ../src/gnome/gnc-plugin-page-register.c:249
 msgid "_Void Transaction"
 msgstr "_Anulēt grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:255
+#: ../src/gnome/gnc-plugin-page-register.c:253
 msgid "_Unvoid Transaction"
 msgstr "_Neanulēt grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:259
+#: ../src/gnome/gnc-plugin-page-register.c:257
 msgid "Add _Reversing Transaction"
 msgstr "Pievienot _atpakaļejošu grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:263
+#: ../src/gnome/gnc-plugin-page-register.c:261
 msgid "_Shift Transaction Forward"
 msgstr "_Pārbīdīt grāmatojumu uz priekšu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:270
+#: ../src/gnome/gnc-plugin-page-register.c:268
 #: ../src/gnome-utils/gnc-main-window.c:303
 msgid "_Sort By..."
 msgstr "_Kārtot pēc..."
 
-#: ../src/gnome/gnc-plugin-page-register.c:292
+#: ../src/gnome/gnc-plugin-page-register.c:290
 msgid "Automatically clear individual transactions, so as to reach a certain cleared amount"
 msgstr "Automātiski nokārto darījumu līdz norādītajai summai"
 
-#: ../src/gnome/gnc-plugin-page-register.c:306
+#: ../src/gnome/gnc-plugin-page-register.c:304
 msgid "_Blank Transaction"
 msgstr "_Grāmatojuma veidlapa"
 
-#: ../src/gnome/gnc-plugin-page-register.c:311
+#: ../src/gnome/gnc-plugin-page-register.c:309
 msgid "Edit E_xchange Rate"
 msgstr "Rediģēt _valūtas kursu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:312
+#: ../src/gnome/gnc-plugin-page-register.c:310
 msgid "Edit the exchange rate for the current transaction"
 msgstr "Rediģēt valūtas kursu pašreizējam grāmatojumam"
 
-#: ../src/gnome/gnc-plugin-page-register.c:321
+#: ../src/gnome/gnc-plugin-page-register.c:319
 msgid "Sche_dule..."
 msgstr "_Grafiks..."
 
-#: ../src/gnome/gnc-plugin-page-register.c:326
+#: ../src/gnome/gnc-plugin-page-register.c:324
 msgid "_All transactions"
 msgstr "_Visi grāmatojumi"
 
-#: ../src/gnome/gnc-plugin-page-register.c:330
+#: ../src/gnome/gnc-plugin-page-register.c:328
 msgid "_This transaction"
 msgstr "_Šis grāmatojums"
 
-#: ../src/gnome/gnc-plugin-page-register.c:337
+#: ../src/gnome/gnc-plugin-page-register.c:335
 msgid "Account Report"
 msgstr "Konta pārskats"
 
-#: ../src/gnome/gnc-plugin-page-register.c:338
+#: ../src/gnome/gnc-plugin-page-register.c:336
 msgid "Open a register report for this Account"
 msgstr "Atvērt reģistra pārskatu šim kontam"
 
-#: ../src/gnome/gnc-plugin-page-register.c:342
+#: ../src/gnome/gnc-plugin-page-register.c:340
 msgid "Account Transaction Report"
 msgstr "Konta grāmatojumu pārskats"
 
-#: ../src/gnome/gnc-plugin-page-register.c:343
+#: ../src/gnome/gnc-plugin-page-register.c:341
 msgid "Open a register report for the selected Transaction"
 msgstr "Atvērt izvēlētā grāmatojuma reģistra pārskatu "
 
-#: ../src/gnome/gnc-plugin-page-register.c:379
-#: ../src/gnome-utils/glade/preferences.glade.h:136
+#: ../src/gnome/gnc-plugin-page-register.c:377
+#: ../src/gnome-utils/glade/preferences.glade.h:132
 msgid "Transaction _Journal"
 msgstr "Grā_matojumu žurnāls"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:421
+#: ../src/gnome/gnc-plugin-page-register.c:419
 #: ../src/register/ledger-core/split-register.c:2252
 #: ../src/register/ledger-core/split-register-layout.c:586
 #: ../src/register/ledger-core/split-register-model.c:279
@@ -7425,16 +7412,16 @@ msgstr "Grā_matojumu žurnāls"
 msgid "Transfer"
 msgstr "Pārskaitījums"
 
-#: ../src/gnome/gnc-plugin-page-register.c:430
+#: ../src/gnome/gnc-plugin-page-register.c:428
 #: ../src/gnome/window-autoclear.c:87
 msgid "Auto-clear"
 msgstr "Nokārtot automātiski"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/general-ledger.scm
-#: ../src/gnome/gnc-plugin-page-register.c:662
-#: ../src/gnome/gnc-plugin-page-register.c:1304
-#: ../src/gnome/gnc-plugin-page-register.c:1960
+#: ../src/gnome/gnc-plugin-page-register.c:658
+#: ../src/gnome/gnc-plugin-page-register.c:1290
+#: ../src/gnome/gnc-plugin-page-register.c:1946
 #: ../intl-scm/guile-strings.c:868
 #: ../intl-scm/guile-strings.c:2800
 msgid "General Ledger"
@@ -7442,27 +7429,27 @@ msgstr "Virsgrāmata"
 
 #. Translators: %s is the name
 #. of the tab page
-#: ../src/gnome/gnc-plugin-page-register.c:1240
+#: ../src/gnome/gnc-plugin-page-register.c:1226
 #, c-format
 msgid "Save changes to %s?"
 msgstr "Saglabāt izmaiņas uz %s?"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1244
+#: ../src/gnome/gnc-plugin-page-register.c:1230
 msgid "This register has pending changes to a transaction.  Would you like to save the changes to this transaction, discard the transaction, or cancel the operation?"
 msgstr "Šī reģistra izmaiņas grāmatojumā ir gaidīšanas režīmā. Vai saglabāt izmaiņas grāmatojumā, atcelt grāmatojumu, vai atcelt operāciju?"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1247
+#: ../src/gnome/gnc-plugin-page-register.c:1233
 msgid "_Discard Transaction"
 msgstr "_Atcelt grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1251
+#: ../src/gnome/gnc-plugin-page-register.c:1237
 msgid "_Save Transaction"
 msgstr "_Saglabāt grāmatojumu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1283
-#: ../src/gnome/gnc-plugin-page-register.c:1317
-#: ../src/gnome/gnc-plugin-page-register.c:1330
-#: ../src/gnome/gnc-plugin-page-register.c:1363
+#: ../src/gnome/gnc-plugin-page-register.c:1269
+#: ../src/gnome/gnc-plugin-page-register.c:1303
+#: ../src/gnome/gnc-plugin-page-register.c:1316
+#: ../src/gnome/gnc-plugin-page-register.c:1349
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:414
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:417
 #: ../src/import-export/hbci/gnc-hbci-utils.c:948
@@ -7470,25 +7457,25 @@ msgstr "_Saglabāt grāmatojumu"
 msgid "unknown"
 msgstr "nezināms"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1306
-#: ../src/gnome/gnc-plugin-page-register.c:1966
+#: ../src/gnome/gnc-plugin-page-register.c:1292
+#: ../src/gnome/gnc-plugin-page-register.c:1952
 msgid "Portfolio"
 msgstr "Portfelis"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1308
-#: ../src/gnome/gnc-plugin-page-register.c:1972
+#: ../src/gnome/gnc-plugin-page-register.c:1294
+#: ../src/gnome/gnc-plugin-page-register.c:1958
 msgid "Search Results"
 msgstr "Meklēšanas rezultāti"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1962
+#: ../src/gnome/gnc-plugin-page-register.c:1948
 msgid "General Ledger Report"
 msgstr "Virsgrāmatas pārskats"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1968
+#: ../src/gnome/gnc-plugin-page-register.c:1954
 msgid "Portfolio Report"
 msgstr "Portfeļa pārskats"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1974
+#: ../src/gnome/gnc-plugin-page-register.c:1960
 msgid "Search Results Report"
 msgstr "Meklēšanas rezultātu pārskats"
 
@@ -7496,8 +7483,8 @@ msgstr "Meklēšanas rezultātu pārskats"
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:1978
-#: ../src/gnome-utils/glade/preferences.glade.h:111
+#: ../src/gnome/gnc-plugin-page-register.c:1964
+#: ../src/gnome-utils/glade/preferences.glade.h:109
 #: ../intl-scm/guile-strings.c:2548
 #: ../intl-scm/guile-strings.c:2716
 #: ../intl-scm/guile-strings.c:4500
@@ -7507,49 +7494,49 @@ msgstr "Reģistrs"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:1980
+#: ../src/gnome/gnc-plugin-page-register.c:1966
 #: ../intl-scm/guile-strings.c:2612
 #: ../intl-scm/guile-strings.c:4564
 msgid "Register Report"
 msgstr "Reģistrēt pārskatu"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1996
+#: ../src/gnome/gnc-plugin-page-register.c:1982
 msgid "and subaccounts"
 msgstr "un analītiskos kontus"
 
-#: ../src/gnome/gnc-plugin-page-register.c:2135
+#: ../src/gnome/gnc-plugin-page-register.c:2121
 msgid "Print checks from multiple accounts?"
 msgstr "Drukāt čekus no vairākiem kontiem?"
 
-#: ../src/gnome/gnc-plugin-page-register.c:2137
+#: ../src/gnome/gnc-plugin-page-register.c:2123
 msgid "This search result contains splits from more than one account. Do you want to print the checks even though they are not all from the same account?"
 msgstr "Šī meklējuma rezultāti satur sadalītus grāmatojumus no vairākiem kontiem. Vai vēlaties drukāt čekus pat ja tie nav no viena konta?"
 
-#: ../src/gnome/gnc-plugin-page-register.c:2148
+#: ../src/gnome/gnc-plugin-page-register.c:2134
 msgid "_Print checks"
 msgstr "Drukāt čekus"
 
-#: ../src/gnome/gnc-plugin-page-register.c:2166
+#: ../src/gnome/gnc-plugin-page-register.c:2152
 msgid "You can only print checks from a bank account register or search results."
 msgstr "Jūs varat drukāt čekus tikai no meklējuma rezultātiem bankas kontā."
 
-#: ../src/gnome/gnc-plugin-page-register.c:2326
+#: ../src/gnome/gnc-plugin-page-register.c:2312
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr "Grāmatojumu nevar anulēt, ja ir saskaņoti vai nokārtoti sadalījumi."
 
-#: ../src/gnome/gnc-plugin-page-register.c:2396
-#: ../src/gnome/gnc-split-reg.c:879
+#: ../src/gnome/gnc-plugin-page-register.c:2382
+#: ../src/gnome/gnc-split-reg.c:877
 msgid "A reversing entry has already been created for this transaction."
 msgstr "Šim grāmatojumam ir jau izveidots atpakaļejošs ieraksts."
 
 #. Translations: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:2474
+#: ../src/gnome/gnc-plugin-page-register.c:2460
 #, c-format
 msgid "Sort %s by..."
 msgstr "Kārtot %s pēc..."
 
 #. Translators: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:2527
+#: ../src/gnome/gnc-plugin-page-register.c:2513
 #: ../src/gnome-utils/gnc-tree-view-account.c:1897
 #, c-format
 msgid "Filter %s by..."
@@ -7594,109 +7581,109 @@ msgstr "_Virsgrāmata"
 msgid "Open a general ledger window"
 msgstr "Atvērt virsgrāmatas logu"
 
-#: ../src/gnome/gnc-split-reg.c:630
+#: ../src/gnome/gnc-split-reg.c:628
 msgid "<No information>"
 msgstr "<Nav informācijas>"
 
-#: ../src/gnome/gnc-split-reg.c:906
+#: ../src/gnome/gnc-split-reg.c:904
 msgid "Cannot modify or delete this transaction."
 msgstr "Šo grāmatojumu nevar pārveidot vai izdzēst."
 
-#: ../src/gnome/gnc-split-reg.c:908
+#: ../src/gnome/gnc-split-reg.c:906
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "Šis grāmatojums ir atzīmēts kā tikai lasāmus ar komentāru: '%s'"
 
-#: ../src/gnome/gnc-split-reg.c:941
+#: ../src/gnome/gnc-split-reg.c:939
 msgid "Remove the splits from this transaction?"
 msgstr "Noņemt sadalījumus šajā grāmatojumā?"
 
-#: ../src/gnome/gnc-split-reg.c:942
+#: ../src/gnome/gnc-split-reg.c:940
 msgid "This transaction contains reconciled splits. Modifying it is not a good idea because that will cause your reconciled balance to be off."
 msgstr "Šajā grāmatojumā ir saskaņoti sadalījumi. Nav laba doma tos pārveidot, jo saskaņotā bilance tad vairs nesakritīs."
 
-#: ../src/gnome/gnc-split-reg.c:969
+#: ../src/gnome/gnc-split-reg.c:967
 msgid "_Remove Splits"
 msgstr "_Noņemt sadalījumus"
 
-#: ../src/gnome/gnc-split-reg.c:1044
+#: ../src/gnome/gnc-split-reg.c:1042
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
 msgstr "Dzēst sadalījumu '%s' no šī grāmatojuma '%s'?"
 
-#: ../src/gnome/gnc-split-reg.c:1045
+#: ../src/gnome/gnc-split-reg.c:1043
 msgid "You would be deleting a reconciled split! This is not a good idea as it will cause your reconciled balance to be off."
 msgstr "Jūs izdzēsīsiet saskaņotos sadalījumus. Tā nav laba doma, jo saskaņotā bilance tad vairs nesakritīs."
 
-#: ../src/gnome/gnc-split-reg.c:1048
+#: ../src/gnome/gnc-split-reg.c:1046
 msgid "You cannot delete this split."
 msgstr "Nevar dzēst šo sadalījumu."
 
-#: ../src/gnome/gnc-split-reg.c:1049
+#: ../src/gnome/gnc-split-reg.c:1047
 msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window.  You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
 msgstr "Šis ir sadalījums, kas novieto grāmatojumu reģistrā. To nevar dzēst no šī reģistra loga. No šī loga jūs varat dzēst visu grāmatojumu, vai arī doties uz reģistru, kur redzams grāmatojums no citas puses un dzēst sadalījumu no šī reģistra."
 
-#: ../src/gnome/gnc-split-reg.c:1077
+#: ../src/gnome/gnc-split-reg.c:1075
 msgid "(no memo)"
 msgstr "(nav atgādnes)"
 
-#: ../src/gnome/gnc-split-reg.c:1080
+#: ../src/gnome/gnc-split-reg.c:1078
 msgid "(no description)"
 msgstr "(nav apraksta)"
 
-#: ../src/gnome/gnc-split-reg.c:1105
+#: ../src/gnome/gnc-split-reg.c:1103
 msgid "_Delete Split"
 msgstr "D_zēst sadalījumu"
 
-#: ../src/gnome/gnc-split-reg.c:1121
+#: ../src/gnome/gnc-split-reg.c:1119
 msgid "Delete the current transaction?"
 msgstr "Dzēst pašreizējo grāmatojumu?"
 
-#: ../src/gnome/gnc-split-reg.c:1122
+#: ../src/gnome/gnc-split-reg.c:1120
 msgid "You would be deleting a transaction with reconciled splits! This is not a good idea as it will cause your reconciled balance to be off."
 msgstr "Jūs izdzēsīsiet grāmatojumu ar saskaņotiem sadalījumiem! Tā nav laba doma, jo saskaņotā bilance tad vairs nesakritīs."
 
-#: ../src/gnome/gnc-split-reg.c:1432
+#: ../src/gnome/gnc-split-reg.c:1430
 msgid "Balancing entry from reconcilation"
 msgstr "Ieraksta sabalansēšana no saskaņošanas"
 
-#: ../src/gnome/gnc-split-reg.c:1871
+#: ../src/gnome/gnc-split-reg.c:1869
 msgid "Present:"
 msgstr "Pašreiz:"
 
-#: ../src/gnome/gnc-split-reg.c:1872
+#: ../src/gnome/gnc-split-reg.c:1870
 msgid "Future:"
 msgstr "Nākotne:"
 
-#: ../src/gnome/gnc-split-reg.c:1873
+#: ../src/gnome/gnc-split-reg.c:1871
 msgid "Cleared:"
 msgstr "Nokārtots:"
 
-#: ../src/gnome/gnc-split-reg.c:1874
+#: ../src/gnome/gnc-split-reg.c:1872
 msgid "Reconciled:"
 msgstr "Saskaņots:"
 
-#: ../src/gnome/gnc-split-reg.c:1875
+#: ../src/gnome/gnc-split-reg.c:1873
 msgid "Projected Minimum:"
 msgstr "Plānotais minimums:"
 
-#: ../src/gnome/gnc-split-reg.c:1879
+#: ../src/gnome/gnc-split-reg.c:1877
 msgid "Shares:"
 msgstr "Akcijas:"
 
-#: ../src/gnome/gnc-split-reg.c:1880
+#: ../src/gnome/gnc-split-reg.c:1878
 msgid "Current Value:"
 msgstr "Pašreizējā vērtība:"
 
-#: ../src/gnome/gnc-split-reg.c:1954
+#: ../src/gnome/gnc-split-reg.c:1952
 msgid "This account register is read-only."
 msgstr "Šis konta reģistrs ir tikai lasāms."
 
-#: ../src/gnome/gnc-split-reg.c:1990
+#: ../src/gnome/gnc-split-reg.c:1988
 msgid "This account may not be edited.  If you want to edit transactions in this register, please open the account options and turn off the placeholder checkbox."
 msgstr "Šo kontu nevar rediģēt. Ja vēlaties rediģēt grāmatojumus šajā reģistrā, atvērt konta izvēlni un atzīmējiet viettura rūtiņā, ka izslēgts."
 
-#: ../src/gnome/gnc-split-reg.c:1997
+#: ../src/gnome/gnc-split-reg.c:1995
 msgid "One of the sub-accounts selected may not be edited.  If you want to edit transactions in this register, please open the sub-account options and turn off the placeholder checkbox. You may also open an individual account instead of a set of accounts."
 msgstr "Vienu no izvēlētajiem analītiskajiem kontiem nevar rediģēt. Ja vēlaties reģistrā rediģēt grāmatojumus, atvērt analītisko kontu izvēlni un izslēdziet viettura atzīmēto rūtiņu. Jūs varat atvērt arī individuālu kontu nevis kontu kopumu."
 
@@ -8033,7 +8020,7 @@ msgid "Pre-select cleared transactions"
 msgstr "Pirmsatlasīt nokārtotos grāmatojumus"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
-#: ../src/gnome-utils/glade/preferences.glade.h:108
+#: ../src/gnome-utils/glade/preferences.glade.h:106
 msgid "Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
 msgstr "Pirms konta, kurā ietur vai izmaksā procentus, saskaņošanas, mudināt lietotāju ievadīt grāmatojumu procentu ieturēšanai vai samaksāšanai. Pašreiz atļauts tikai Banka, Kredīts, Kopīgs, Aktīvi, Saņemtie, Apmaksājamie un Pasīvu konti."
 
@@ -8199,191 +8186,179 @@ msgid "If active, a \"close\" button will be displayed on any notebook tab that 
 msgstr "Ja ieslēgts, \"aizvērt\" poga tiks parādīta uz jebkuras piezīmju grāmatas cilnes, kuru var aizvērt. Ja ne, tāda poga nebūs uz cilnes redzama. Ja vien tas nav iestatījumos, lapas vienmēr var aizvērt caur \"aizvērt\" navigācijas izvēlnes posteni vai \"aizvērt\" pogu rīkjoslā."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:28
-msgid "If active, a splash screen will be shown at startup. Otherwise no splash screen will be shown."
-msgstr "Ja ieslēgts, uzsākot būs redzams uzplaiksnījuma ekrāns. Ja ne, tāds nebūs redzams."
-
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
 msgid "If active, closing a tab moves to the most recently visited tab. Otherwise closing a tab moves one tab to the left."
 msgstr "Ja ieslēgts, cilnes aizvēršana pāriet uz pēdējo apmeklēto cilni. Ja ne, cilnes aizvēršana pāriet uz nākošo cilni pa kreisi."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:30
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
 msgid "If active, each new register will be opened in a new window. Otherwise each new register will be opened as a tab in the main window."
 msgstr "Ja ieslēgts, katrs jauns reģistrs būs atvērts jaunā logā. Ja ne, katrs jauns reģistrs tiks atvērts kā cilne galvenajā logā."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:31
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:30
 msgid "If active, each new report will be opened in its own window. Otherwise new reports will be opened as tabs in the main window."
 msgstr "Ja ieslēgts, katrs jauns pārskats būs atvērts tajā pašā logā. Ja ne, jauns pārskats tiks atvērtas kā cilne galvenajā logā."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:32
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:31
 msgid "If active, formal accounting labels \"Credit\" and \"Debit\" will be used when designating fields on screen. Otherwise, informal labels such as Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
 msgstr "Ja ieslēgts, tiks izmantoti formālie grāmatvedības uzraksti \"Kredīts\" un \"Debets\", ja uz ekrāna norāda laukus. Ja ne, tiks izmantoti informējoši virsraksti, tādi kā Palielināt/Samazināt, \"Ienākošie līdzekļi\"/\"Izejošie līdzekļi\", u.c. "
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:32
 msgid "If active, gnucash will be allowed to intentionally break file compatibility with older versions, so that a data file saved in this version cannot be read by an older version again. Otherwise gnucash will write data files only in formats that can be read by older versions as well."
 msgstr "Ja ieslēgts, gnucash būs atļauts pārkāpt failu saderību ar vecākām versijām, tādējādi datu fails, kas saglabāts šajā versijā, vecajā versijā vairs nebūs lasāms. Ja ne, gnucash rakstīs datu failus tikai tajos formātos, kuri ir lasāmi arī vecākajās versijās."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:34
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
 msgid "If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line."
 msgstr "Ja ieslēgts, nospiežot enter taustiņu pāries uz reģistra apakšu. Ja ne, nospiežot enter taustiņu, pāries uz nākošo grāmatojuma rindu. "
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:35
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:34
 msgid "If active, the register will be colored as specified by the system theme. This can be overridden to provide custom colors by editing the gtkrc file in the users home directory. Otherwise the standard register colors will be used that GnuCash has always used."
 msgstr "Ja ieslēgts, reģistrs tiks iekrāsots kā norādīts sistēmas tēmā. To var ignorēt piedāvājot pielāgotas krāsas, ko veic rediģējot gtkrc failu lietotāju mājas direktorijā. Ja ne, tiks izmantotas standarta reģistra krāsas, kādas GnuCash vienmēr ir izmantojis."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:36
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:35
 msgid "If active, the size and location of each dialog window will be saved when it is closed. The sizes and locations of content windows will be remembered when you quit GnuCash. Otherwise the sizes will not be saved."
 msgstr "Ja ieslēgts, katra dialogloga lielums un novietojums aizverot tiks saglabāts. Satura logu lielumi un novietojums tiks iegaumēti izejot no GnuCash programmas. Ja ne, lielumi netiks saglabāti."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:36
 msgid "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
 msgstr "Ja ieslēgts, izmanto 24 stundu laika formātu. Ja ne - 12 stundu laika formāts."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:38
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
 msgid "Labels on toolbar buttons"
 msgstr "Pogu uzraksti rīkjoslā"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:38
 msgid "Move to Transfer field when memorised transaction auto filled"
 msgstr "Pāriet uz pārskaitījuma lauku kad darījums ir saglabāts"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
 msgid "Number of automatic decimal places"
 msgstr "Automātisks zīmju skaits aiz komata"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
 msgid "Only display leaf account names."
 msgstr "Rādīt tikai kontu nosaukumus."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
 msgid "Position of the notebook tabs"
 msgstr "Piezīmju grāmatas cilnes novietojums"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:43
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
 msgid "Position of the summary bar"
 msgstr "Kopsavilkuma joslas novietojums"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:44
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:43
 msgid "Save window sizes and locations"
 msgstr "Saglabāt logu lielumu un izvietojumu"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:45
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:44
 msgid "Show auto-save explanation"
 msgstr "Rādīt automātiskās saglabāšanas skaidrojumu"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:46
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:45
 msgid "Show close buttons on notebook tabs"
 msgstr "Rādīt aizvēršanas pogas uz piezīmju grāmatas cilnēm"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:47
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:46
 msgid "Show horizontal borders between rows in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked."
 msgstr "Rādīt reģistrā horizontālas malas starp rindām. Ja aktivizēts, malas starp šūnām būs izceltas ar biezu līniju. Ja ne, šūnu malas nebūs izceltas."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:48
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:47
 msgid "Show horizontal borders in a register"
 msgstr "Rādīt reģistrā horizontālas malas"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:49
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:48
 msgid "Show only the names of the leaf accounts in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Activating this option implies that you use unique leaf names."
 msgstr "Rādīt tikai kontu nosaukumus reģistrā un kontu izlasē. Noklusētā iestatījumā rāda pilnu nosaukumu, ieskaitot ceļu konta kokā. Aktivizējot, šī izvēlne norāda, ka jūs izmantojat unikālus nosaukumus."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:50
-msgid "Show splash screen"
-msgstr "Rādīt reklāmas logu"
-
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:52
 msgid "Show two lines of information for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the \"View->Double Line\" menu item."
 msgstr "Rādīt reģistrā katra grāmatojuma divas rindas ar informāciju. Šis ir noklusētais iestatījums pirmoreiz atverot reģistru. Iestatījums var tikt mainīts jebkurā laikā caur \"Skats->Dubulta rinda\"."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:53
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:51
 msgid "Show vertical borders between columns in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked."
 msgstr "Rādīt reģistrā vertikālas malas starp kolonnām. Ja aktivizēts, malas starp šūnām būs izceltas ar biezu līniju. Ja ne, šūnu malas nebūs izceltas."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:54
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:52
 msgid "Show vertical borders in a register"
 msgstr "Rādīt reģistrā vertikālas malas"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:55
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:53
 msgid "Source of default account currency"
 msgstr "Noklusētais kontu valūtas pirmsākums"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:56
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:54
 msgid "Source of default report currency"
 msgstr "Noklusētā pārskata primārā valūta"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:57
-#: ../src/gnome-utils/glade/preferences.glade.h:133
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:55
+#: ../src/gnome-utils/glade/preferences.glade.h:129
 msgid "The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically."
 msgstr "Minūšu skaits līdz automātiskai datu faila saglabāšanai cietajā diskā. Ja nulle, automātiska saglabāšana nesāksies."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:59
-msgid "This field sets the number of rows to show in a register. It does not actually affect the display of the contents of the window. It is only used to set the size of the window when first opened."
-msgstr "Šis lauks iestata redzamo rindiņu skaitu reģistrā. Tas nekādi neietekmē logā redzamo saturu. Tas tiek izmantots vienīgi, lai pirmajā atvēršanas reizē iestatītu loga lielumu."
-
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:60
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:56
 msgid "This field specifies the default view style when opening a new register window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The \"ledger\" setting says to show each transaction on one or two lines. The \"auto-ledger\" setting does the same, but also expands only the current transaction to show all splits. The \"journal\" setting shows all transactions in expanded form."
 msgstr "Šis lauks norāda noklusēto apskates veidu, atverot jaunu reģistra logu. Iespējamās vērtības ir \"virsgrāmata\", \"automātiskā virsgrāmata\" un \"žurnāls\". \"virsgrāmata\" iestatījumi nosaka, ka katrs grāmatojums būs redzams vienā vai divās rindās. \"automātiskā virsgrāmata\" iestatījumi nosaka tāpat un arī paplašina pašreizējo grāmatojumu, lai būtu redzami sadalījumi. \"žurnāls\" iestatījumi parāda visus grāmatojumus paplašinātā formā."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:61
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:57
 msgid "This field specifies the number of automatic decimal places that will be filled in."
 msgstr "Šis lauks norāda automātisko zīmju skaitu aiz komata, kas tiks ieliktas."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:62
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:58
 msgid "This key specifies the maximum width of notebook tabs. If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis."
 msgstr "Šī atslēga norāda piezīmju grāmatas cilnes maksimālo platumu. Ja teksts cilnē ir garāks par šo vērtību (tests ir aptuvens), tad cilnes uzraksts vidū tiks izgriezts un aizvietots ar daudzpunkti."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:63
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:59
 msgid "This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting \"income_expense\" is for users who like to see negative expenses and positive income. The setting of \"credit\" is for users who want to see balances reflect the debit/credit status of the account. The setting \"none\" doesn't reverse the sign on any balances."
 msgstr "Šis iestatījums noteiktos kontos pieļauj bilances ar pretējām zīmēm no pozitīvas līdz negatīvai un otrādi. Iestatījums \"ieņēmumi_izdevumi\" ir lietotājiem, kas vēlas redzēt izdevumus - negatīvus, ieņēmumus - pozitīvus. Iestatījums \"kredīts\" ir lietotājiem, kas vēlas redzēt bilancē konta debeta/kredīta statusu. Iestatījums \"neviens\" neveido reversas zīmes bilancē."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:64
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:60
 msgid "This setting chooses the way dates are displayed in GnuCash. Possible values for this setting are \"locale\" to use the system locale setting, \"ce\" for Continental Europe style dates, \"iso\" for ISO 8601 standard dates , \"uk\" for United Kingdom style dates, and \"us\" for United States style dates."
 msgstr "Šis iestatījums izvēlas, kā GnuCash ir redzams datums. Iespējamās vērtības šim iestatījumam ir \"vietējais\", lai izmantotu vietējās sistēmas iestatījumu, \"ce\" - kontinentālās Eiropas datuma stils, \"iso\" - ISO 8601 standarta datums, \"uk\" - UK datuma stils, un \"us\" - ASV datuma stils."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:61
 msgid "This setting controls how the labels on toolbar buttons are shown. If set to \"system\" then GnuCash will use the desktop setting for how to draw toolbar buttons. If set to \"icon\" then only icons will be show on toolbar buttons.. If set to \"text\" only the labels will be shown. If set to \"both\" then both icons and labels will be shown. If set to \"both-horiz\" then icons will be shown for all buttons with labels added on important buttons."
 msgstr "Šis iestatījums kontrolē, kā parādīt uzrakstus uz rīkjoslas pogām. Ja iestatīts \"sistēma\", tad GnuCash izmantos darbgalda iestatījumu, lai uzzīmētu rīkjoslas pogas. Ja iestatīts \"ikona\", tad tikai ikonas būs redzamas uz rīkjoslas pogām. Ja \"teksts\", tad tikai uzraksti būs redzami. Ja \"abi\", tad būs redzama gan ikona, gan uzraksts. Ja iestatīts \"abi-horiz\", tad visām pogām būs redzamas ikonas, bet uzraksti pievienoti svarīgām pogām."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:66
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:62
 msgid "This setting controls the default currency used for reports. If set to \"locale\" then GnuCash will retrieve the default currency from the user's locale setting. If set to \"other\", GnuCash will use the setting specified by the currency_other key."
 msgstr "Šis iestatījums kontrolē noklusētās valūtas izmantošanu pārskatā. Ja iestatīts \"darbības vieta\", tad GnuCash atjaunos noklusēto valūtu no lietotāja darbības vietas iestatījuma. Ja iestatīts \"cits\", GnuCash izmantos iestatījumu, ko norāda atslēga valūta_cita."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:67
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:63
 msgid "This setting controls the source of the default currency for new accounts. If set to \"locale\" then GnuCash will retrieve the default currency from the user's locale setting. If set to \"other\", GnuCash will use the setting specified by the currency_other key."
 msgstr "Šis iestatījums kontrolē noklusēto valūtu jaunajiem kontiem. Ja iestatīts \"darbības vieta\", tad GnuCash atjaunos noklusēto valūtu no lietotāja darbības vietas iestatījuma. Ja \"cits\", GnuCash izmantos iestatījumu, ko norāda taustiņš valūta_cita. "
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:68
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:64
 msgid "This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
 msgstr "Šis iestatījums nosaka simbolu, kas tiks izmantota starp konta nosaukuma komponentēm. Iespējamās vērtības ir jebkura viena unikoda simbols, izņemot alfabētu vai skaitļus, kā piem.:\"kols\", \"slīpstrīpa\", \"pretēja slīpsvītra , \"domuzīme\" un\"punkts\"."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:69
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
 msgid "This setting determines the edge at which the summary bar for various pages is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom\"."
 msgstr "Šis iestatījums nosaka to robežu, kur ir uzzīmēta dažādu lapu kopsavilkuma josla. Iespējamās vērtības ir \"augša\" un \"apakša\". Noklusēti ir \"apakša\"."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:70
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:66
 msgid "This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and \"right\". It defaults to \"top\"."
 msgstr "Šis iestatījums nosaka malu, kurā iezīmētas cilnes, pāriešanai no vienas piezīmju grāmatas lapas uz otru. Iespējamās vērtības ir \"augšā\", \"pa kreisi\", \"apakšā\" un \"pa labi\". Noklusēti ir \"augšā\"."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:71
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:67
 msgid "This setting specifies the default currency used for new accounts if the currency_choice setting is set to \"other\". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr "Šis iestatījums norāda jaunos kontos izmantoto noklusēto valūtu, ja valūta_izvēle iestatījums ir \"cits\". Šajā laukā valūtas apzīmēšanai jābūt trīs burtu kodam ISO 4217 (t.i. USD, GBP, RUB)."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:72
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:68
 msgid "This setting specifies the default currency used for reports if the currency_choice setting is set to \"other\". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr "Šis iestatījums norāda pārskatā izmantoto noklusēto valūtu, ja valūta_izvēle iestatījums ir \"cits\". Šajā laukā valūtas apzīmēšanai jābūt trīs burtu kodam ISO 4217 (t.i. USD, GBP, RUB)."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:73
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:69
 msgid "This setting specifies the number of days after which old log/backup files will be deleted (0 = never)."
 msgstr "Šis iestatījums norāda dienu skaitu, pēc cik vecais log/dublējuma faili tiks dzēsti (0=nekad)."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:74
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:70
 msgid "Use 24 hour time format"
 msgstr "Lietot 24 stundu formātu"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:75
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:71
 msgid "Use formal account labels"
 msgstr "Lietot formālos kontu uzrakstus"
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:76
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:72
 msgid "Width of notebook tabs"
 msgstr "Piezīmju grāmatas tabulu platums"
 
@@ -9381,6 +9356,7 @@ msgstr "Kļūda analizējot failu."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:810
 #: ../src/gnome-utils/gnc-file.c:1096
+#: ../src/gnome-utils/gnc-file.c:1321
 msgid "Writing file..."
 msgstr "Raksta failu..."
 
@@ -9840,7 +9816,7 @@ msgid "Months:"
 msgstr "Mēneši:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:11
-#: ../src/gnome-utils/glade/preferences.glade.h:116
+#: ../src/gnome-utils/glade/preferences.glade.h:114
 msgid "Sample:"
 msgstr "Paraugs:"
 
@@ -9938,10 +9914,6 @@ msgstr "<b>Noformēts datums</b>"
 #: ../src/gnome-utils/glade/preferences.glade.h:14
 msgid "<b>Files</b>"
 msgstr "<b>Faili</b>"
-
-#: ../src/gnome-utils/glade/preferences.glade.h:15
-msgid "<b>General</b>"
-msgstr "<b>Vispārīgi</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:16
 msgid "<b>Graphics</b>"
@@ -10152,410 +10124,398 @@ msgid "Display the summary bar at the top of the page."
 msgstr "Rādīt kopsavilkuma joslu lapas augšā."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:70
-msgid "Display this many rows when a register is created."
-msgstr "Rādīt tik daudz rindas, kad ir izveidots reģistrs."
-
-#: ../src/gnome-utils/glade/preferences.glade.h:71
 msgid "Display toolbar items as icons only."
 msgstr "Rādīt rīkjoslas posteņus tikai kā ikonas."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:72
+#: ../src/gnome-utils/glade/preferences.glade.h:71
 msgid "Display toolbar items as text only."
 msgstr "Rādīt rīkjoslas posteņus tikai kā tekstu."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:73
+#: ../src/gnome-utils/glade/preferences.glade.h:72
 msgid "Display toolbar items with the text label below the icon.  Labels are show for all items."
 msgstr "Rādīt rīkjoslas posteņus ar teksta uzrakstu zem ikonas. Uzraksti tiek rādīti visiem posteņiem."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:74
+#: ../src/gnome-utils/glade/preferences.glade.h:73
 msgid "Display toolbar items with the text label beside the icon.  Labels are only shown for the most important items."
 msgstr "Rādīt rīkjoslas posteņus ar teksta uzrakstu līdzās ikonai. Uzraksti tiek rādīti tikai svarīgākajiem posteņiem."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:75
+#: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid "Don't sign reverse any accounts."
 msgstr "Neapgriezt nevienu negatīvu kontu."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:76
+#: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid "Double _mode colors alternate with transactions"
 msgstr "Divu krāsu _mija grāmatojumos"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:77
+#: ../src/gnome-utils/glade/preferences.glade.h:76
 msgid "Draw _vertical lines between columns"
 msgstr "Zīmēt _vertikālas līnijas starp kolonnām"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:78
+#: ../src/gnome-utils/glade/preferences.glade.h:77
 msgid "Draw hori_zontal lines between rows"
 msgstr "Zīmēt _horizontālas līnijas starp rindām"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:82
+#: ../src/gnome-utils/glade/preferences.glade.h:81
 msgid "GnuCash Options"
 msgstr "GnuCash Izvēlnes"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:83
+#: ../src/gnome-utils/glade/preferences.glade.h:82
 msgid "GnuCash Preferences"
 msgstr "GnuCash Iestatījumi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:84
+#: ../src/gnome-utils/glade/preferences.glade.h:83
 msgid "How many automatic decimal places will be filled in."
 msgstr "Cik daudz zīmes aiz komata automātiski tiks ieliktas."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:85
+#: ../src/gnome-utils/glade/preferences.glade.h:84
 msgid "How many days to keep old log/backup files."
 msgstr "Cik dienas glabāt vecos žurnālu un rezerves kopiju failus?"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:86
+#: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "If active, GnuCash shows a confirmation question each time the auto-save feature is started. Otherwise no extra explanation is shown."
 msgstr "Ja aktivizēts, GnuCash rāda apstiprinājuma jautājumu katru reizi, kad uzsākta automātiskās saglabāšanas iespēja. Ja ne, papildus paskaidrojuma nebūs."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:87
+#: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid "If checked, each register will be opened in its own top level window.  If clear, the register will be opened in the current window."
 msgstr "Ja atzīmēts, katrs reģistrs tiks atvērts savā augšējā līmeņa logā. Ja ne, reģistrs tiks atvērts pašreizējā logā."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:88
+#: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid "If checked, each report will be opened in its own top level window.  If clear, the report will be opened in the current window."
 msgstr "Ja atzīmēts, katrs pārskats tiks atvērta savā augšējā līmeņa logā. Ja ne, pārskats tiks atvērta pašreizējā logā."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:89
+#: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid "If checked, non-currency commodities will be shown in the summary bar.  If clear, only currencies will be shown."
 msgstr "Ja atzīmēts, ne-valūtas preces tiks parādītas kopsummas joslā, Ja ne, būs redzama tikai valūta."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:90
+#: ../src/gnome-utils/glade/preferences.glade.h:89
 msgid "If checked, only the names of the leaf accounts are displayed in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Checking this option implies that you use unique leaf names."
 msgstr "Ja atzīmēts, tikai lapu kontu nosaukumi būs redzami reģistrā un kontu izvēlnes izlecošajā logā. Pēc noklusējuma redzams pilns nosaukums, ieskaitot kontu koka ceļu. Atzīmējot šo izvēlni norāda, ka jūs izmantojat unikālus lapu nosaukumus."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:91
+#: ../src/gnome-utils/glade/preferences.glade.h:90
 msgid "If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register.  If clear, pressing the 'Enter' key will move down one row."
 msgstr "Ja atzīmēts, nospiežot 'Enter' taustiņu pāries uz neaizpildītu grāmatojumu reģistra apakšā. Ja ne, nospiežot 'Enter' taustiņu pāries vienu rindu zemāk."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:92
+#: ../src/gnome-utils/glade/preferences.glade.h:91
 msgid "If checked, the system color theme will be applied to register windows.  If clear, the original GnuCash register colors will be used."
 msgstr "Ja atzīmēts, reģistra logiem tiks pielietota sistēmas krāsu tēma. Ja ne, tiks izmantotas oriģinālās GnuCash reģistru krāsas."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:93
+#: ../src/gnome-utils/glade/preferences.glade.h:92
 msgid "Include _grand total"
 msgstr "Iekļaut _gala kopsummu"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:94
+#: ../src/gnome-utils/glade/preferences.glade.h:93
 msgid "Include _non-currency totals"
 msgstr "Iekļaut _ne-valūtas kopsummu"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:95
+#: ../src/gnome-utils/glade/preferences.glade.h:94
 msgid "Loc_ale:"
 msgstr "Dar_bības vieta:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:96
+#: ../src/gnome-utils/glade/preferences.glade.h:95
 msgid "Move to Transfer field when memorised transaction auto filled."
 msgstr "Pāriet uz Pārskaitījums lauku kad saglabātais darījums ir automātiski aizpildīts."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:98
+#: ../src/gnome-utils/glade/preferences.glade.h:97
 msgid "New search _limit:"
 msgstr "Jauns meklēšanas _nosacījums:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:100
+#: ../src/gnome-utils/glade/preferences.glade.h:98
 msgid "Number of _transactions:"
 msgstr "_Grāmatojumu skaits:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:101
+#: ../src/gnome-utils/glade/preferences.glade.h:99
 msgid "Perform account list _setup on new file"
 msgstr "Palaist kontu vedni, veidojot jaunu failu"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:102
+#: ../src/gnome-utils/glade/preferences.glade.h:100
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr "Pirms izveidot saskaņošanas dialoglogu, iezīmēt nokārtotos grāmatojumus."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:103
+#: ../src/gnome-utils/glade/preferences.glade.h:101
 msgid "Present the new account list dialog when you choose \"New File\" from the \"File\" menu"
 msgstr "Uzrāda jaunu kontu saraksta dialoglogu, ja izvēlaties \"Jauns fails\" no \"Fails\" izvēlnes"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:104
+#: ../src/gnome-utils/glade/preferences.glade.h:102
 msgid "Print '***' before and after each text field on the check."
 msgstr "Drukāt čekā  '***' pirms un pēc katra teksta lauka."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:105
+#: ../src/gnome-utils/glade/preferences.glade.h:103
 msgid "Print _blocking chars"
 msgstr "Drukāt _bloķējošās rakstzīmes"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:106
+#: ../src/gnome-utils/glade/preferences.glade.h:104
 msgid "Print _date format"
 msgstr "Drukas _datuma formāts"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:107
+#: ../src/gnome-utils/glade/preferences.glade.h:105
 msgid "Printing"
 msgstr "Druka"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:109
+#: ../src/gnome-utils/glade/preferences.glade.h:107
 msgid "Priority text besi_de icons"
 msgstr "Prioritārais teksts _blakus ikonām"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:110
+#: ../src/gnome-utils/glade/preferences.glade.h:108
 msgid "Re_lative:"
 msgstr "_Relatīvs:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:112
+#: ../src/gnome-utils/glade/preferences.glade.h:110
 msgid "Register Defaults"
 msgstr "Reģistru noklusējumi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:113
+#: ../src/gnome-utils/glade/preferences.glade.h:111
 msgid "Register opens in a new _window"
 msgstr "Reģistrs atveras jaunā l_ogā"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:114
+#: ../src/gnome-utils/glade/preferences.glade.h:112
 msgid "Report opens in a new _window"
 msgstr "Pārskats atveras jaunā l_ogā"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:115
+#: ../src/gnome-utils/glade/preferences.glade.h:113
 msgid "Reports"
 msgstr "Pārskati"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:117
+#: ../src/gnome-utils/glade/preferences.glade.h:115
 msgid "Show a close button on each notebook tab.  These function identically to the 'Close' menu item."
 msgstr "Rādīt aizvēršanas pogu uz katras piezīmju grāmatas cilnes. Tās darbojas identiski kā 'Aizvērt' izvēlnē."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:118
+#: ../src/gnome-utils/glade/preferences.glade.h:116
 msgid "Show a grand total of all accounts converted to the default report currency."
 msgstr "Rādīt galīgo visu kontu kopsummu konvertētu noklusētajā pārskata valūtā."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:119
+#: ../src/gnome-utils/glade/preferences.glade.h:117
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr "Rādīt visus grāmatojumus vienā rindā. (Divas - dubultas rindas režīmā.)"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:120
+#: ../src/gnome-utils/glade/preferences.glade.h:118
 msgid "Show auto-save confirmation _question"
 msgstr "Rādīt automātiskās saglabāšanas apstiprināšanas _jautājumu"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:121
+#: ../src/gnome-utils/glade/preferences.glade.h:119
 msgid "Show close button on _notebook tabs"
 msgstr "Rādīt aizvēršanas pogu uz piezīmju grāmatas cilnēm"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:122
+#: ../src/gnome-utils/glade/preferences.glade.h:120
 msgid "Show horizontal borders on the cells."
 msgstr "Rādīt horizontālas šūnu malas."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:123
-msgid "Show splash scree_n"
-msgstr "Rādīt reklāmas _ekrānu"
-
-#: ../src/gnome-utils/glade/preferences.glade.h:124
-msgid "Show splash screen at startup."
-msgstr "Rādīt reklāmas ekrānu palaižot programmu."
-
-#: ../src/gnome-utils/glade/preferences.glade.h:125
+#: ../src/gnome-utils/glade/preferences.glade.h:121
 msgid "Show this many transactions in a register. A value of zero means show all transactions."
 msgstr "Rādīt tik grāmatojumu reģistrā. Vērtība nulle nozīmē rādīt visus grāmatojumus."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:126
+#: ../src/gnome-utils/glade/preferences.glade.h:122
 msgid "Show two lines of information for each transaction instead of one.  Does not affect expanded transactions."
 msgstr "Katrā grāmatojumā parādīt informāciju divas rindās vienas vietā. Neietekmē paplašinātos grāmatojumus."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:127
+#: ../src/gnome-utils/glade/preferences.glade.h:123
 msgid "Show vertical borders on the cells."
 msgstr "Rādīt šūnu vertikālās robežas."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:128
+#: ../src/gnome-utils/glade/preferences.glade.h:124
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "Atzīmēt reversās bilances ieņēmumu un izdevumu kontos."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:129
+#: ../src/gnome-utils/glade/preferences.glade.h:125
 msgid "Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income."
 msgstr "Atzīmēt reversās bilances uz sekojošo: Kredītkarte, Apmaksājams, Pasīvi, Pašu kapitāls un Ieņēmumi."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:130
+#: ../src/gnome-utils/glade/preferences.glade.h:126
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
 msgstr "Lauku secībā ie_kļaut Pārskaitījumu saglabātajiem darījumiem"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:131
+#: ../src/gnome-utils/glade/preferences.glade.h:127
 msgid "Text _below icons"
 msgstr "Teksts _zem ikonām"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:132
+#: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid "The character that will be used between components of an account name.  A legal value is any single character except letters and numbers, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
 msgstr "Simbols, kas tiks izmantots starp konta nosaukuma komponentēm. Ir derīgs jebkurš simbols, izņemot burtus un ciparus un kāds no sekojošiem simboliem: \"kols\" \"slīpstrīpa\", \"atpakaļ vērsta slīpstrīpa\", \"domuzīme\" un \"punkts\"."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:134
+#: ../src/gnome-utils/glade/preferences.glade.h:130
 msgid "To_p"
 msgstr "_Augšā"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:137
+#: ../src/gnome-utils/glade/preferences.glade.h:133
 msgid "US Dollars (USD)"
 msgstr "US dolāri (USD)"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:138
+#: ../src/gnome-utils/glade/preferences.glade.h:134
 msgid "U_K:"
 msgstr "U_K:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:139
+#: ../src/gnome-utils/glade/preferences.glade.h:135
 msgid "U_se 24-hour clock"
 msgstr "_Izmantot 24-stundu pulksteni"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:140
+#: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid "Use _formal accounting labels"
 msgstr "Izmantot _formālos uzskaites uzrakstus"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:141
+#: ../src/gnome-utils/glade/preferences.glade.h:137
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "Izmantot 24 stundu (nevis 12) laika formātu."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:142
+#: ../src/gnome-utils/glade/preferences.glade.h:138
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
 msgstr "Izmantot tikai 'debets' un 'kredīts' neformālo sinonīmu vietā"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:143
+#: ../src/gnome-utils/glade/preferences.glade.h:139
 msgid "Use s_ystem default"
 msgstr "Izmantot _sistēmas noklusēto iestatījumu"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:144
+#: ../src/gnome-utils/glade/preferences.glade.h:140
 msgid "Use the date format common in continental Europe."
 msgstr "Izmantot kontinentālās Eiropas datuma formātu."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:145
+#: ../src/gnome-utils/glade/preferences.glade.h:141
 msgid "Use the date format common in the United Kingdom."
 msgstr "Izmantot Apvienotās Karalistes datuma formātu."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:146
+#: ../src/gnome-utils/glade/preferences.glade.h:142
 msgid "Use the date format common in the United States."
 msgstr "Izmantot Amerikas datuma formātu."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:147
+#: ../src/gnome-utils/glade/preferences.glade.h:143
 msgid "Use the date format specified by the ISO-8601 standard."
 msgstr "Izmantot ISO-8601 datuma formātu."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:148
+#: ../src/gnome-utils/glade/preferences.glade.h:144
 msgid "Use the date format specified by the system locale."
 msgstr "Izmantot vietējās sistēmas datuma formātu."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:149
+#: ../src/gnome-utils/glade/preferences.glade.h:145
 msgid "Use the specified absolute ending date for profit/loss calculations.  Also use this date for net assets calculations."
 msgstr "Lietot norādīto absolūto beigu datumu peļņas/zaudējumu aprēķinam. Šo pašu datumu izmantot neto aktīvu aprēķinam."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:150
+#: ../src/gnome-utils/glade/preferences.glade.h:146
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "Lietot norādīto absolūto sākuma datumu peļņas/zaudējumu aprēķinam."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:151
+#: ../src/gnome-utils/glade/preferences.glade.h:147
 msgid "Use the specified currency for all newly created accounts."
 msgstr "Izmantot norādīto valūtu visiem no jauna izveidotajiem kontiem."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:152
+#: ../src/gnome-utils/glade/preferences.glade.h:148
 msgid "Use the specified currency for all newly created reports."
 msgstr "Izmantot norādīto valūtu visiem no jauna izveidotajām pārskatiem."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:153
+#: ../src/gnome-utils/glade/preferences.glade.h:149
 msgid "Use the specified relative ending date for profit/loss calculations.  Also use this date for net assets calculations."
 msgstr "Izmantot norādīto relatīvo baigu datumu peļņas/zaudējumu aprēķinam. Šo pašu datumu izmantot neto aktīvu aprēķinam."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:154
+#: ../src/gnome-utils/glade/preferences.glade.h:150
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr "Izmantot  norādīto relatīvo sākuma datumu peļņas/zaudējumu aprēķinam."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:155
+#: ../src/gnome-utils/glade/preferences.glade.h:151
 msgid "Use the system locale currency for all newly created accounts."
 msgstr "Izmantot  sistēmu vietējā valūta visiem no jauna izveidotajiem kontiem."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:156
+#: ../src/gnome-utils/glade/preferences.glade.h:152
 msgid "Use the system locale currency for all newly created reports."
 msgstr "Izmantot  sistēmu vietējā valūta visām no jauna izveidotajiem pārskatiem."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:157
+#: ../src/gnome-utils/glade/preferences.glade.h:153
 msgid "Use the system setting for displaying toolbar items."
 msgstr "Izmantot  sistēmas iestatījumu rīkjoslas posteņu izstādīšanai."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:158
+#: ../src/gnome-utils/glade/preferences.glade.h:154
 msgid "Windows"
 msgstr "Logi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:159
+#: ../src/gnome-utils/glade/preferences.glade.h:155
 msgid "_Absolute:"
 msgstr "_Absolūts:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:160
+#: ../src/gnome-utils/glade/preferences.glade.h:156
 msgid "_Auto-raise lists"
 msgstr "_Palielināt sarakstu automātiski"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:161
+#: ../src/gnome-utils/glade/preferences.glade.h:157
 msgid "_Auto-split ledger"
 msgstr "_Sadalīt grāmatojumu automātiski"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:162
+#: ../src/gnome-utils/glade/preferences.glade.h:158
 msgid "_Automatic decimal point"
 msgstr "_Automātisks komats"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:163
+#: ../src/gnome-utils/glade/preferences.glade.h:159
 msgid "_Basic ledger"
 msgstr "_Pamata virsgrāmata"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:164
+#: ../src/gnome-utils/glade/preferences.glade.h:160
 msgid "_Decimal places:"
 msgstr "_Zīmes aiz komata:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:165
+#: ../src/gnome-utils/glade/preferences.glade.h:161
 msgid "_Double line mode"
 msgstr "_Dubultrindu režīms:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:166
+#: ../src/gnome-utils/glade/preferences.glade.h:162
 msgid "_Europe:"
 msgstr "_Eiropa:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:167
+#: ../src/gnome-utils/glade/preferences.glade.h:163
 msgid "_ISO:"
 msgstr "_ISO:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:168
+#: ../src/gnome-utils/glade/preferences.glade.h:164
 msgid "_Icons only"
 msgstr "Tikai _ikonas"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:169
+#: ../src/gnome-utils/glade/preferences.glade.h:165
 msgid "_Income & expense"
 msgstr "_Ieņēmumi un izdevumi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:170
+#: ../src/gnome-utils/glade/preferences.glade.h:166
 msgid "_Left"
 msgstr "_Pa kreisi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:171
+#: ../src/gnome-utils/glade/preferences.glade.h:167
 msgid "_None"
 msgstr "_Nevienu"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:172
+#: ../src/gnome-utils/glade/preferences.glade.h:168
 msgid "_Only display leaf account names"
 msgstr "_Rādīt tikai kontu nosaukumu uzrakstus"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:173
+#: ../src/gnome-utils/glade/preferences.glade.h:169
 msgid "_Relative:"
 msgstr "_Relatīvs:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:174
+#: ../src/gnome-utils/glade/preferences.glade.h:170
 msgid "_Retain log files:"
 msgstr "_Paturēt žurnāla failus:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:175
+#: ../src/gnome-utils/glade/preferences.glade.h:171
 msgid "_Right"
 msgstr "_Pa labi"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:176
+#: ../src/gnome-utils/glade/preferences.glade.h:172
 msgid "_Save window size and position"
 msgstr "_Saglabāt logu lielumu un novietojumu"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:177
+#: ../src/gnome-utils/glade/preferences.glade.h:173
 msgid "_Text only"
 msgstr "Tikai _teksts"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:178
+#: ../src/gnome-utils/glade/preferences.glade.h:174
 msgid "_US:"
 msgstr "_US:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:179
+#: ../src/gnome-utils/glade/preferences.glade.h:175
 msgid "_Use system theme colors"
 msgstr "_Lietot sistēmas tēmu krāsas"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:180
+#: ../src/gnome-utils/glade/preferences.glade.h:176
 msgid "_Width:"
 msgstr "_Platums:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:181
+#: ../src/gnome-utils/glade/preferences.glade.h:177
 msgid "characters"
 msgstr "simboli"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:183
+#: ../src/gnome-utils/glade/preferences.glade.h:179
 msgid "minutes"
 msgstr "minūtes"
 
@@ -11944,21 +11904,21 @@ msgstr "Norādītais URL nav ielādējams."
 
 #: ../src/html/gnc-html-gtkhtml.c:414
 #: ../src/html/gnc-html-gtkhtml.c:772
-#: ../src/html/gnc-html-webkit.c:484
-#: ../src/html/gnc-html-webkit.c:885
+#: ../src/html/gnc-html-webkit.c:482
+#: ../src/html/gnc-html-webkit.c:880
 msgid "Secure HTTP access is disabled. You can enable it in the Network section of the Preferences dialog."
 msgstr "Droša HTTP pieeja ir noliegta. Jūs to varat atļaut Tīkla sadaļas Iestatījumu dialoglogā."
 
 #: ../src/html/gnc-html-gtkhtml.c:424
 #: ../src/html/gnc-html-gtkhtml.c:784
-#: ../src/html/gnc-html-webkit.c:494
-#: ../src/html/gnc-html-webkit.c:897
+#: ../src/html/gnc-html-webkit.c:492
+#: ../src/html/gnc-html-webkit.c:892
 msgid "Network HTTP access is disabled. You can enable it in the Network section of the Preferences dialog."
 msgstr "HTTP pieeja tīklam ir noliegta. Jūs to varat atļaut Tīkla sadaļas Iestatījumu dialoglogā."
 
 #. %s is a URL (some location somewhere).
 #: ../src/html/gnc-html-gtkhtml.c:702
-#: ../src/html/gnc-html-webkit.c:815
+#: ../src/html/gnc-html-webkit.c:813
 #, c-format
 msgid "There was an error accessing %s."
 msgstr "Notika kļūda pieejot %s."
@@ -13446,12 +13406,12 @@ msgstr ""
 "\n"
 "Izvēlieties šim failam datuma formātu. QIF failos, ko izveidojušas Eiropas programmatūras, tas parasti ir \"d-m-g\" vai diena-mēnesis-gads formātā, bet ASV QIF failos \"m-d-g\" vai mēnesis-diena-gads.  \n"
 
-#: ../src/import-export/log-replay/gnc-log-replay.c:562
+#: ../src/import-export/log-replay/gnc-log-replay.c:567
 msgid "Select a .log file to replay"
 msgstr "Izvēlieties atskaņojamo žurnāla failu"
 
 #. Translators: %s is the file name.
-#: ../src/import-export/log-replay/gnc-log-replay.c:582
+#: ../src/import-export/log-replay/gnc-log-replay.c:587
 #, c-format
 msgid "Cannot open the current log file: %s"
 msgstr "Nevar atvērt pašreizējo žurnāla failu: %s"
@@ -13460,24 +13420,24 @@ msgstr "Nevar atvērt pašreizējo žurnāla failu: %s"
 #. * First argument is the filename,
 #. * second argument is the error.
 #.
-#: ../src/import-export/log-replay/gnc-log-replay.c:598
+#: ../src/import-export/log-replay/gnc-log-replay.c:603
 #, c-format
 msgid "Failed to open log file: %s: %s"
 msgstr "Žurnāla faila atvēršana neizdevās: %s: %s"
 
-#: ../src/import-export/log-replay/gnc-log-replay.c:608
+#: ../src/import-export/log-replay/gnc-log-replay.c:613
 msgid "The log file you selected was empty."
 msgstr "Izvēlētais žurnāla fails ir tukšs."
 
-#: ../src/import-export/log-replay/gnc-log-replay.c:617
+#: ../src/import-export/log-replay/gnc-log-replay.c:622
 msgid "The log file you selected cannot be read.  The file header was not recognized."
 msgstr "Izvēlētais žurnāla fails nav izlasāms. Faila virsraksts nebija atpazīstams."
 
-#: ../src/import-export/log-replay/gnc-plugin-log-replay.c:47
+#: ../src/import-export/log-replay/gnc-plugin-log-replay.c:48
 msgid "_Replay GnuCash .log file..."
 msgstr "_Atskaņot GnuCash žurnāla failu..."
 
-#: ../src/import-export/log-replay/gnc-plugin-log-replay.c:48
+#: ../src/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
 msgstr "Atskaņot GnuCash žurnāla failu pēc avārijas. To nevar atcelt."
 
@@ -24554,7 +24514,7 @@ msgstr "Logo faila nosaukums, kas tiks izmantots šajā pārskatā"
 #: ../intl-scm/guile-strings.c:7902
 #: ../intl-scm/guile-strings.c:8656
 msgid "Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display the logo at its natural width.  The height of the logo will be scaled accordingly."
-msgstr "Logo platums CSS formātā, piem. 10% vai 32px. Atstājiet tukšu lai rādītu logo dabīgajā izmērā. Logo augstums tiks noteikts automātiski."
+msgstr "Logo platums CSS formātā, piem., 10% vai 32px. Atstājiet tukšu lai rādītu logo dabīgajā izmērā. Logo augstums tiks noteikts automātiski."
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -25803,6 +25763,53 @@ msgstr "Ar GnuCash izstrādātājiem ir viegli sazināties. Varat pievienoties v
 msgid "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable. There is another theory that this has already happened. Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr "Ir tāda teorija, ka, ja reiz kāds atklās, kam domāts Visums un, kādēļ tas te ir, tas momentā pazudīs un tiks aizvietots ar kaut ko vēl dīvaināku un neizprotamāku. Ir vēl cita teorija, ka tas jau reiz ir noticis. Duglass Adamss, \"Restorāns Visuma galā\""
 
+#~ msgid "Default number of register rows to display in Invoices."
+#~ msgstr "Noklusēto rindu skaits rēķinā."
+#~ msgid "Number of _rows:"
+#~ msgstr "_Rindu skaits:"
+#~ msgid ""
+#~ "The invoice to be paid.\n"
+#~ "\n"
+#~ "Note that is field is optional. If you leave it blank, GnuCash will "
+#~ "automatically assign the payment to the first unpaid invoice for this "
+#~ "company."
+#~ msgstr ""
+#~ "Apmaksājamais rēķins.\n"
+#~ "\n"
+#~ "Ievērojiet, ka tas ir neobligāts. Ja to atstāj tukšu, GnuCash automātiski "
+#~ "pievienos atlikušo summu pirmajam šī uzņēmuma neapmaksātajam rēķinam."
+#~ msgid "The number of rows in an invoice"
+#~ msgstr "Rindu skaits rēķinā"
+#~ msgid ""
+#~ "This field sets the number of rows to show in an invoice. It does not "
+#~ "actually affect the display of the contents of the window. It is only "
+#~ "used to set the size of the window when first opened."
+#~ msgstr ""
+#~ "Šis lauks iestata rēķinā redzamo rindiņu skaitu. Tas neietekmē satura "
+#~ "apskati logā. Tas tiek izmantots vienīgi loga lieluma iestatīšanai "
+#~ "pirmajā atvēršanas reizē"
+#~ msgid ""
+#~ "If active, a splash screen will be shown at startup. Otherwise no splash "
+#~ "screen will be shown."
+#~ msgstr ""
+#~ "Ja ieslēgts, uzsākot būs redzams uzplaiksnījuma ekrāns. Ja ne, tāds nebūs "
+#~ "redzams."
+#~ msgid "Show splash screen"
+#~ msgstr "Rādīt reklāmas logu"
+#~ msgid ""
+#~ "This field sets the number of rows to show in a register. It does not "
+#~ "actually affect the display of the contents of the window. It is only "
+#~ "used to set the size of the window when first opened."
+#~ msgstr ""
+#~ "Šis lauks iestata redzamo rindiņu skaitu reģistrā. Tas nekādi neietekmē "
+#~ "logā redzamo saturu. Tas tiek izmantots vienīgi, lai pirmajā atvēršanas "
+#~ "reizē iestatītu loga lielumu."
+#~ msgid "Display this many rows when a register is created."
+#~ msgstr "Rādīt tik daudz rindas, kad ir izveidots reģistrs."
+#~ msgid "Show splash scree_n"
+#~ msgstr "Rādīt reklāmas _ekrānu"
+#~ msgid "Show splash screen at startup."
+#~ msgstr "Rādīt reklāmas ekrānu palaižot programmu."
 #~ msgid ""
 #~ "Set as tax-related, but assigned tax code no longer valid for tax year"
 #~ msgstr ""
