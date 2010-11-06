@@ -1406,6 +1406,7 @@ AC_CONFIG_FILES(
   src/debug/Makefile
   src/debug/valgrind/Makefile 
   src/doc/Makefile
+  src/doc/design/Makefile
   src/doc/xml/Makefile
   src/engine/Makefile
   src/engine/test/Makefile
