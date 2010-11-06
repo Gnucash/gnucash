@@ -47,7 +47,8 @@ check_PROGRAMS = \
   test-load-backend
 
 EXTRA_DIST = \
-    test-dbi-stuff.h
+    test-dbi-stuff.h \
+    test-dbi-business-stuff.h
 
 LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/gnc-module/libgnc-module.la \
