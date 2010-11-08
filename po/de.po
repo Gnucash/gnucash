@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-24 21:27+0200\n"
-"PO-Revision-Date: 2010-10-05 21:53+0200\n"
+"PO-Revision-Date: 2010-11-08 21:25+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -626,7 +626,7 @@ msgid "View/Edit Invoice"
 msgstr "Rechnung anzeigen/bearbeiten"
 
 msgid "View/Edit Bill"
-msgstr "Lieferantenrechnung anzeigen/bearbeiten"
+msgstr "Rechnung anzeigen/bearbeiten"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
@@ -749,11 +749,11 @@ msgstr "Betrag"
 #, c-format
 msgid "The following %d bill is due:"
 msgid_plural "The following %d bills are due:"
-msgstr[0] "Die folgende %d Lieferantenrechnung ist fällig:"
-msgstr[1] "Die folgenden %d Lieferantenrechnungen sind fällig:"
+msgstr[0] "Die folgende %d Rechnung ist fällig:"
+msgstr[1] "Die folgenden %d Rechnungen sind fällig:"
 
 msgid "Due Bills Reminder"
-msgstr "Erinnerung an fällige Lieferantenrechnungen"
+msgstr "Erinnerung an fällige Rechnungen"
 
 msgid "The Job must be given a name."
 msgstr "Der Auftrag muss einen Namen erhalten."
@@ -1610,7 +1610,7 @@ msgid "View and edit the list of Billing Terms"
 msgstr "Liste der Zahlungsbedingungen anzeigen und bearbeiten"
 
 msgid "Bills _Due Reminder"
-msgstr "Erinnerung an fällige Lieferantenrechnungen"
+msgstr "Erinnerung an fällige Rechnungen"
 
 msgid "Open the Bills Due Reminder dialog"
 msgstr "Das Fenster mit Erinnerungen an fällige Rechnungen öffnen"
