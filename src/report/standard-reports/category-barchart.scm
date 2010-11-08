@@ -560,7 +560,7 @@ developing over time"))
                           all-data)
                      (if (> (gnc:html-table-num-columns table) 2)
                          (list (_ "Grand Total"))
-                         (list nil)
+                         '()
                          )
                      ))
 
