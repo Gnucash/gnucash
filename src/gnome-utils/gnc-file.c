@@ -704,6 +704,9 @@ gnc_post_file_open (const char * filename)
         }
         else if (rc == RESPONSE_OPEN)
         {
+            // re-enable the splash screen, file loading and display of
+            // reports may take some time
+            gnc_show_splash_screen();
             /* user told us to ignore locks. So ignore them. */
             qof_session_begin (new_session, newfile, TRUE, FALSE);
         }
