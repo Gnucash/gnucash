@@ -185,7 +185,8 @@ set_default GUILE_DIR $GLOBAL_DIR\\guile
 set_default OPENSSL_URL "http://www.openssl.org/source/openssl-0.9.8j.tar.gz"
 set_default OPENSSL_DIR $GLOBAL_DIR\\openssl
 
-set_default GNUTLS_URL "http://josefsson.org/gnutls4win/gnutls-2.8.1.zip"
+GNUTLS_VERSION="2.8.6"
+set_default GNUTLS_URL "http://josefsson.org/gnutls4win/gnutls-${GNUTLS_VERSION}.zip"
 set_default GNUTLS_DIR $GLOBAL_DIR\\gnutls
 
 set_default MINGW_UTILS_URL "$SF_MIRROR/mingw/mingw-utils-0.3.tar.gz"

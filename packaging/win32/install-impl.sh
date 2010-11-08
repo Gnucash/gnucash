@@ -953,7 +953,7 @@ function inst_gnutls() {
     add_to_env ${_GNUTLS_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
     add_to_env "-I${_GNUTLS_UDIR}/include" GNUTLS_CPPFLAGS
     add_to_env "-L${_GNUTLS_UDIR}/lib" GNUTLS_LDFLAGS
-    if quiet ${PKG_CONFIG} --exists gnutls
+    if quiet ${PKG_CONFIG} --exact-version=${GNUTLS_VERSION} gnutls
     then
         echo "GNUTLS already installed. skipping."
     else
