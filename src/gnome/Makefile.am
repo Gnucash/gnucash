@@ -122,7 +122,8 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
-  $(GLIB_CFLAGS)
+  $(GLIB_CFLAGS) \
+  ${IGE_MAC_CFLAGS}
 
 # We build this in an earlier directory.
 
