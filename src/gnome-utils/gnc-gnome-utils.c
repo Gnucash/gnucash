@@ -285,16 +285,19 @@ gnc_gnome_help (const char *dir, const char *detail)
 {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   NSString *subdir = [NSString stringWithUTF8String: dir];
-  NSString *help_dir = [NSString stringWithUTF8String: HF_HELP];
   NSString *tag;
   NSURL *url = NULL;
 
   if (detail)
       tag  = [NSString stringWithUTF8String: detail];
-  else if ([subdir compare: help_dir] == NSOrderedSame)
+  else if ([subdir compare: @HF_HELP] == NSOrderedSame)
       tag = @"help";
-  else
+  else if ([subdir compare: @HF_GUIDE] == NSOrderedSame)
       tag = @"index";
+  else {
+      PWARN("gnc_gnome_help called with unknown subdirectory %s", dir);
+      return;
+  }
 
   if (![[NSBundle mainBundle] bundleIdentifier]) {
 /* If bundleIdentifier is NULL, then we're running from the
@@ -345,31 +348,54 @@ gnc_gnome_help (const char *dir, const char *detail)
 			fileExistsAtPath: completed_path
 		   isDirectory: &dir])
 		  if (dir) {
-		      url = [NSURL fileURLWithPath:
-			     [[[completed_path
-				stringByAppendingPathComponent: subdir]
-			       stringByAppendingPathComponent: tag]
-			      stringByAppendingPathExtension: @"html"]];
+		      @try {
+			  url = [NSURL fileURLWithPath:
+				 [[[completed_path
+				    stringByAppendingPathComponent: subdir]
+				   stringByAppendingPathComponent: tag]
+				  stringByAppendingPathExtension: @"html"]];
+		      }
+		      @catch (NSException *e) {
+			  PWARN("fileURLWithPath threw %s: %s",
+				[[e name] UTF8String], [[e reason] UTF8String]);
+			  return;
+		      }
 		      break;
 		  }
+	      if ([this_lang compare:@"en"] == NSOrderedSame)
+		  break; /* Special case, forces use of "C" locale */
 	  }
       }
-      if (!url)
-	  url = [NSURL
-		 fileURLWithPath: [[[[docs_dir
-				      stringByAppendingPathComponent: @"C"]
-				     stringByAppendingPathComponent: subdir]
-				    stringByAppendingPathComponent: tag]
-				   stringByAppendingPathExtension: @"html"]];
-
+      if (!url) {
+	  @try {
+	      url = [NSURL
+		     fileURLWithPath: [[[[docs_dir
+					  stringByAppendingPathComponent: @"C"]
+					 stringByAppendingPathComponent: subdir]
+					stringByAppendingPathComponent: tag]
+				       stringByAppendingPathExtension: @"html"]];
+	  }
+	  @catch (NSException *e) {
+	      PWARN("fileURLWithPath threw %s: %s",
+		    [[e name] UTF8String], [[e reason] UTF8String]);
+	      return;
+	  }
+      }
   }
 /* It's a lot easier in a bundle! OSX finds the best translation for us. */
-  else
-      url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
-				     pathForResource: tag
-				     ofType: @"html"
-				     inDirectory: subdir ]];
-
+  else {
+      @try {
+	  url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
+					 pathForResource: tag
+					 ofType: @"html"
+					 inDirectory: subdir ]];
+      }
+      @catch (NSException *e) {
+	  PWARN("fileURLWithPath threw %s: %s",
+		[[e name] UTF8String], [[e reason] UTF8String]);
+	  return;
+      }
+  }
 /* Now just open the URL in the default app for opening URLs */
   if (url)
       [[NSWorkspace sharedWorkspace] openURL: url];
