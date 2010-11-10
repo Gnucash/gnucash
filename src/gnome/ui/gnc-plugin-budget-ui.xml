@@ -1,16 +1,12 @@
 <ui>
   <menubar>
-    <menu name="File" action="FileAction">
-      <menu name="FileNewMenu" action="FileNewMenuAction">
-        <placeholder name="FileNewBottonPlaceholder">
-          <menuitem name="FileNewBudget" action="NewBudgetAction"/>
-        </placeholder>
-      </menu>
-      <menu name="FileOpenMenu" action="FileOpenMenuAction">
-        <placeholder name="FileOpenBottomPlaceholder">
-          <menuitem name="FileOpenBudget" action="OpenBudgetAction"/>
-        </placeholder>
-      </menu>
+    <menu name="Actions" action="ActionsAction">
+      <placeholder name="ActionsPlaceholder">
+        <menu name="ActionsBudget" action="ActionsBudgetAction">
+          <menuitem name="BudgetNewBudget" action="NewBudgetAction"/>
+          <menuitem name="BudgetOpenBudget" action="OpenBudgetAction"/>
+        </menu>
+      </placeholder>
     </menu>
   </menubar>
 </ui>
