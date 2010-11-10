@@ -63,7 +63,7 @@ class Session(GnuCashCoreClass):
     Invoice..) is associated with a particular book where it is stored.
     """
 
-    def __init__(self, book_uri=None, is_new=False):
+    def __init__(self, book_uri=None, is_new=False, ignore_lock=False):
         """A convienent contructor that allows you to specify a book URI,
         begin the session, and load the book.
 
@@ -78,6 +78,8 @@ class Session(GnuCashCoreClass):
         is_new is passed to qof_session_begin as the
         argument create_if_nonexistent
 
+        ignore_lock is passed to qof_session
+
         This function can raise a GnuCashBackendException. If it does,
         you don't need to cleanup and call end() and destroy(), that is handled
         for you, and the exception is raised.
@@ -85,7 +87,7 @@ class Session(GnuCashCoreClass):
         GnuCashCoreClass.__init__(self)
         if book_uri is not None:
             try:
-                self.begin(book_uri, False, is_new)
+                self.begin(book_uri, ignore_lock, is_new)
                 if not is_new:
                     self.load()
             except GnuCashBackendException, backend_exception:
