@@ -651,7 +651,7 @@ gnc_post_file_open (const char * filename)
     /* but first, check to make sure we've got a session going. */
     new_session = qof_session_new ();
 
-    qof_session_begin (new_session, newfile, FALSE, FALSE);
+    qof_session_begin (new_session, newfile, FALSE, FALSE, FALSE);
     io_err = qof_session_get_error (new_session);
     /* if file appears to be locked, ask the user ... */
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
@@ -708,7 +708,7 @@ gnc_post_file_open (const char * filename)
             // reports may take some time
             gnc_show_splash_screen();
             /* user told us to ignore locks. So ignore them. */
-            qof_session_begin (new_session, newfile, TRUE, FALSE);
+            qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
         }
         else
         {
@@ -725,8 +725,10 @@ gnc_post_file_open (const char * filename)
     {
         if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN))
         {
-            /* user told us to create a new database. Do it. */
-            qof_session_begin (new_session, newfile, FALSE, TRUE);
+            /* user told us to create a new database. Do it. We
+	     * shouldn't have to worry about locking or clobbering,
+	     * it's supposed to be new. */
+            qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
         }
     }
 
@@ -1019,36 +1021,37 @@ gnc_file_do_export(const char * filename)
     /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
     new_session = qof_session_new ();
-    qof_session_begin (new_session, newfile, FALSE, TRUE);
+    qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
 
     io_err = qof_session_get_error (new_session);
+    /* If the file exists and would be clobbered, ask the user */
+    if (ERR_BACKEND_STORE_EXISTS == io_err) {
+        const char *format = _("The file %s already exists. "
+                               "Are you sure you want to overwrite it?");
 
+ 	const char *name;
+	if ( gnc_uri_is_file_uri ( newfile ) )
+	    name = gnc_uri_get_path ( newfile );
+	else
+	    name = gnc_uri_normalize_uri ( newfile, FALSE );
+       /* if user says cancel, we should break out */
+        if (!gnc_verify_dialog (NULL, FALSE, format, name))
+	{
+            return;
+        }
+	qof_session_begin (new_session, newfile, FALSE, TRUE, TRUE);
+    }
     /* if file appears to be locked, ask the user ... */
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
         if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_EXPORT))
         {
             /* user told us to ignore locks. So ignore them. */
-            qof_session_begin (new_session, newfile, TRUE, FALSE);
+            qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
         }
     }
 
     /* --------------- END CORE SESSION CODE -------------- */
-
-    /* oops ... file already exists ... ask user what to do... */
-    if (qof_session_save_may_clobber_data (new_session))
-    {
-        const char *format = _("The file %s already exists. "
-                               "Are you sure you want to overwrite it?");
-
-        /* if user says cancel, we should break out */
-        if (!gnc_verify_dialog (NULL, FALSE, format, newfile))
-        {
-            return;
-        }
-
-        /* Whoa-ok. Blow away the previous file. */
-    }
 
     /* use the current session to save to file */
     gnc_set_busy_cursor (NULL, TRUE);
@@ -1233,17 +1236,40 @@ gnc_file_do_save_as (const char* filename)
     save_in_progress++;
 
     new_session = qof_session_new ();
-    qof_session_begin (new_session, newfile, FALSE, FALSE);
+    qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
 
     io_err = qof_session_get_error (new_session);
 
     /* if file appears to be locked, ask the user ... */
-    if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
+    /* If the file exists and would be clobbered, ask the user */
+    if (ERR_BACKEND_STORE_EXISTS == io_err) {
+        const char *format = _("The file %s already exists. "
+                               "Are you sure you want to overwrite it?");
+
+	const char *name;
+	if ( gnc_uri_is_file_uri ( newfile ) )
+	    name = gnc_uri_get_path ( newfile );
+	else
+	    name = gnc_uri_normalize_uri ( newfile, FALSE );
+ 
+	/* if user says cancel, we should break out */
+        if (!gnc_verify_dialog (NULL, FALSE, format, name ))
+        {
+	    xaccLogDisable();
+            qof_session_destroy (new_session);
+            xaccLogEnable();
+            g_free (newfile);
+            save_in_progress--;
+            return;
+        }
+	qof_session_begin (new_session, newfile, FALSE, TRUE, TRUE);
+    }
+    else if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
         if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))
         {
             /* user told us to ignore locks. So ignore them. */
-            qof_session_begin (new_session, newfile, TRUE, FALSE);
+            qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
         }
     }
 
@@ -1255,7 +1281,7 @@ gnc_file_do_save_as (const char* filename)
         if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))
         {
             /* user told us to create a new database. Do it. */
-            qof_session_begin (new_session, newfile, FALSE, TRUE);
+            qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
         }
     }
 
@@ -1273,26 +1299,6 @@ gnc_file_do_save_as (const char* filename)
         g_free (newfile);
         save_in_progress--;
         return;
-    }
-
-    /* oops ... file already exists ... ask user what to do... */
-    if (qof_session_save_may_clobber_data (new_session))
-    {
-        const char *format = _("The file %s already exists. "
-                               "Are you sure you want to overwrite it?");
-
-        /* if user says cancel, we should break out */
-        if (!gnc_verify_dialog (NULL, FALSE, format, newfile))
-        {
-            xaccLogDisable();
-            qof_session_destroy (new_session);
-            xaccLogEnable();
-            g_free (newfile);
-            save_in_progress--;
-            return;
-        }
-
-        /* Whoa-ok. Blow away the previous file. */
     }
 
     /* If the new "file" is a database, attempt to store the password
@@ -1349,8 +1355,8 @@ gnc_file_do_save_as (const char* filename)
 	session = NULL;
 
 	xaccReopenLog();
-	gnc_add_history (session);
-	gnc_hook_run(HOOK_BOOK_SAVED, session);
+	gnc_add_history (new_session);
+	gnc_hook_run(HOOK_BOOK_SAVED, new_session);
     }
     /* --------------- END CORE SESSION CODE -------------- */
 

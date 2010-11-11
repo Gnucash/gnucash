@@ -627,7 +627,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     session = gnc_get_current_session();
     if (!session) goto fail;
 
-    qof_session_begin(session, add_quotes_file, FALSE, FALSE);
+    qof_session_begin(session, add_quotes_file, FALSE, FALSE, FALSE);
     if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
 
     qof_session_load(session, NULL);

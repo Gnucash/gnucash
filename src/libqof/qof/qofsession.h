@@ -131,20 +131,25 @@ void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
  *    obeyed.
  *
  *    If the datastore exists, can be reached (e.g over the net),
- *    connected to, opened and read, and a lock can be obtained then
- *    a lock will be obtained.   Note that multi-user datastores
- *    (e.g. the SQL backend) typically will not need to get a global
- *    lock, and thus, the user will not be locked out.  That's the
- *    whole point of 'multi-user'.
+ *    connected to, opened and read, and a lock can be obtained then a
+ *    lock will be obtained.  Note that while multi-user datastores
+ *    (e.g. the SQL backend) typically will have record-level locking
+ *    and therefor should not need to get a global lock, qof works by
+ *    having a local copy of the whole database and can't be trusted
+ *    to handle multiple users writing data, so we lock the database
+ *    anyway.
  *
- *    If the file/database doesn't exist, and the create_if_nonexistent
- *    flag is set to TRUE, then the database is created.
+ *    If qof_session_begin is called with create == TRUE, then it will
+ *    check for the existence of the file or database and return after
+ *    posting a QOF_BACKEND_STORE_EXISTS error if it exists, unless
+ *    force is also set to true.
  *
  *    If an error occurs, it will be pushed onto the session error
  *    stack, and that is where it should be examined.
  */
 void qof_session_begin (QofSession *session, const char * book_id,
-                        gboolean ignore_lock, gboolean create_if_nonexistent);
+                        gboolean ignore_lock, gboolean create,
+			gboolean force);
 
 
 /**
@@ -220,9 +225,6 @@ const char * qof_session_get_url (const QofSession *session);
  */
 /* gboolean qof_session_not_saved(const QofSession *session); <- unimplemented */
 gboolean qof_session_save_in_progress(const QofSession *session);
-
-/** Allows the backend to warn the user if a dataset already exists. */
-gboolean qof_session_save_may_clobber_data (const QofSession *session);
 
 /** The qof_session_save() method will commit all changes that have been
  *    made to the session. For the file backend, this is nothing

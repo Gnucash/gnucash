@@ -108,6 +108,8 @@ typedef enum
     GNC_BOOK_XML2_FILE_NO_ENCODING,
 } QofBookFileType;
 
+static gboolean save_may_clobber_data (QofBackend *bend);
+
 /* ================================================================= */
 
 static gboolean
@@ -232,8 +234,8 @@ gnc_xml_be_get_file_lock (FileBackend *be)
 
 static void
 xml_session_begin(QofBackend *be_start, QofSession *session,
-                  const char *book_id,
-                  gboolean ignore_lock, gboolean create_if_nonexistent)
+                  const char *book_id, gboolean ignore_lock,
+		  gboolean create, gboolean force)
 {
     FileBackend *be = (FileBackend*) be_start;
 
@@ -248,6 +250,13 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
         LEAVE("");
         return;
     }
+    if (create && !force && save_may_clobber_data( be_start ) )
+    {
+        qof_backend_set_error (be_start, ERR_BACKEND_STORE_EXISTS);
+        LEAVE("Might clobber, no force");
+        return;
+    }
+
     be->be.fullpath = be->fullpath;
     be->dirname = g_path_get_dirname (be->fullpath);
 
@@ -278,7 +287,7 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
 
         /* Now check whether we can g_stat the file itself */
         rc = g_stat (be->fullpath, &statbuf);
-        if ((rc != 0) && (!create_if_nonexistent))
+        if ((rc != 0) && (!create))
         {
             /* Error on stat means the file doesn't exist */
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
@@ -1084,7 +1093,7 @@ gnc_xml_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType l
 /* ---------------------------------------------------------------------- */
 
 static gboolean
-gnc_xml_be_save_may_clobber_data (QofBackend *bend)
+save_may_clobber_data (QofBackend *bend)
 {
     struct stat statbuf;
     if (!bend->fullpath) return FALSE;
@@ -1178,7 +1187,6 @@ gnc_backend_new(void)
     be->destroy_backend = xml_destroy_backend;
 
     be->load = gnc_xml_be_load_from_file;
-    be->save_may_clobber_data = gnc_xml_be_save_may_clobber_data;
 
     /* The file backend treats accounting periods transactionally. */
     be->begin = xml_begin_edit;

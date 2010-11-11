@@ -79,7 +79,7 @@ test_file(const char *filename)
 
         session = qof_session_new();
 
-        qof_session_begin(session, filename, TRUE, FALSE);
+        qof_session_begin(session, filename, TRUE, FALSE, FALSE);
         err = qof_session_pop_error (session);
         if (err)
         {
@@ -100,7 +100,7 @@ test_file(const char *filename)
 
         new_session = qof_session_new();
 
-        qof_session_begin(new_session, new_file, FALSE, FALSE);
+        qof_session_begin(new_session, new_file, FALSE, FALSE, FALSE);
         err = qof_session_pop_error (new_session);
         if (err)
         {

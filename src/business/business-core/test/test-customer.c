@@ -65,7 +65,7 @@ test_customer (void)
 
     session = qof_session_new();
     be = NULL;
-    qof_session_begin(session, FILE_NAME, FALSE, FALSE);
+    qof_session_begin(session, FILE_NAME, FALSE, FALSE, FALSE);
     book = qof_session_get_book(session);
     be = qof_book_get_backend(book);
 

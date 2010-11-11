@@ -1098,7 +1098,7 @@ qof_session_destroy_backend (QofSession *session)
 
 void
 qof_session_begin (QofSession *session, const char * book_id,
-                   gboolean ignore_lock, gboolean create_if_nonexistent)
+                   gboolean ignore_lock, gboolean create, gboolean force)
 {
     gchar **splituri;
 
@@ -1163,7 +1163,7 @@ qof_session_begin (QofSession *session, const char * book_id,
 
         (session->backend->session_begin)(session->backend, session,
                                           session->book_id, ignore_lock,
-                                          create_if_nonexistent);
+                                          create, force);
         PINFO("Done running session_begin on backend");
         err = qof_backend_get_error(session->backend);
         msg = qof_backend_get_message(session->backend);
@@ -1277,16 +1277,6 @@ qof_session_load (QofSession *session,
 
 /* ====================================================================== */
 
-gboolean
-qof_session_save_may_clobber_data (const QofSession *session)
-{
-    if (!session) return FALSE;
-    if (!session->backend) return FALSE;
-    if (!session->backend->save_may_clobber_data) return FALSE;
-
-    return (*(session->backend->save_may_clobber_data)) (session->backend);
-}
-
 static gboolean
 save_error_handler(QofBackend *be, QofSession *session)
 {
@@ -1373,11 +1363,11 @@ qof_session_save (QofSession *session,
                 {
                     /* Call begin - backend has been changed,
                        so make sure a file can be written,
-                       use ignore_lock and create_if_nonexistent */
+                       use ignore_lock and force create */
                     g_free(session->book_id);
                     session->book_id = NULL;
                     (session->backend->session_begin)(session->backend, session,
-                                                      book_id, TRUE, TRUE);
+                                                      book_id, TRUE, TRUE, TRUE);
                     PINFO("Done running session_begin on changed backend");
                     err = qof_backend_get_error(session->backend);
                     msg = qof_backend_get_message(session->backend);

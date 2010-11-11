@@ -1169,7 +1169,7 @@ test_recursion (QofSession *original, guint counter)
     if (debug)
     {
         /*         FIXME XML backend can't handle STDOUT
-         *         qof_session_begin(copy, QOF_STDOUT, TRUE, FALSE); */
+         *         qof_session_begin(copy, QOF_STDOUT, TRUE, FALSE, FALSE); */
     }
     /* TODO: implement QOF_TYPE_CHOICE testing. */
     qof_instance_copy_coll_r(copy, grand_coll);
@@ -1214,7 +1214,7 @@ main (int argc, const char *argv[])
         if (debug)
         {
             /*          FIXME XML backend can't handle STDOUT
-             *          qof_session_begin(original, QOF_STDOUT, TRUE, FALSE); */
+             *          qof_session_begin(original, QOF_STDOUT, TRUE, FALSE, FALSE); */
         }
         create_data(original, (counter % 5));
         test_recursion(original, (counter % 5));

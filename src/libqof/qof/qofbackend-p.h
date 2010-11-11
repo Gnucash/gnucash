@@ -298,7 +298,8 @@ struct QofBackend_s
                            QofSession *session,
                            const char *book_id,
                            gboolean ignore_lock,
-                           gboolean create_if_nonexistent);
+                           gboolean create,
+			   gboolean force);
     void (*session_end) (QofBackend *);
     void (*destroy_backend) (/*@ only @*/ QofBackend *);
 
@@ -324,20 +325,6 @@ struct QofBackend_s
     QofBePercentageFunc percentage;
 
     QofBackendProvider *provider;
-
-    /** Detect if the sync operation will overwrite data
-     *
-     * File based backends tend to consider the original file
-     * as 'stale' immediately the data finishes loading. New data
-     * only exists in memory and the data in the file is completely
-     * replaced when qof_session_save is called. e.g. this routine can be
-     * used to detect if a Save As... operation would overwrite a
-     * possibly unrelated file. Not all file backends use this function.
-     *
-     * @return TRUE if the user may need to be warned about possible
-     * data loss, otherwise FALSE.
-     */
-    gboolean (*save_may_clobber_data) (QofBackend *);
 
     QofBackendError last_err;
     char * error_msg;

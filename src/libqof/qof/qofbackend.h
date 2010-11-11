@@ -62,6 +62,7 @@ typedef enum
     ERR_BACKEND_CANT_CONNECT, /**< bad dbname/login/passwd or network failure */
     ERR_BACKEND_CONN_LOST,    /**< Lost connection to server */
     ERR_BACKEND_LOCKED,       /**< in use by another user (ETXTBSY) */
+    ERR_BACKEND_STORE_EXISTS, /**< File exists, data would be destroyed */
     ERR_BACKEND_READONLY,	    /**< cannot write to file/directory */
     ERR_BACKEND_TOO_NEW,      /**< file/db version newer than what we can read */
     ERR_BACKEND_DATA_CORRUPT, /**< data in db is corrupt */

@@ -198,13 +198,13 @@ test_dbi_business_store_and_reload( const gchar* driver, QofSession* session_1, 
 
     // Save the session data
     session_2 = qof_session_new();
-    qof_session_begin( session_2, url, FALSE, TRUE );
+    qof_session_begin( session_2, url, FALSE, TRUE, TRUE );
     qof_session_swap_data( session_1, session_2 );
     qof_session_save( session_2, NULL );
 
     // Reload the session data
     session_3 = qof_session_new();
-    qof_session_begin( session_3, url, TRUE, FALSE );
+    qof_session_begin( session_3, url, TRUE, FALSE, FALSE );
     qof_session_load( session_3, NULL );
 
     // Compare with the original data

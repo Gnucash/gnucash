@@ -52,7 +52,7 @@ int main (int argc, char ** argv)
 
     // Create a session with data
     session_1 = qof_session_new();
-    qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE );
+    qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE, FALSE );
     qof_session_load( session_1, NULL );
 
     filename = tempnam( "/tmp", "test-sqlite3-" );
@@ -63,7 +63,7 @@ int main (int argc, char ** argv)
     if ( strlen( TEST_MYSQL_URL ) > 0 )
     {
         session_1 = qof_session_new();
-        qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE );
+        qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE, FALSE );
         qof_session_load( session_1, NULL );
         test_dbi_store_and_reload( "mysql", session_1, TEST_MYSQL_URL );
     }
@@ -72,7 +72,7 @@ int main (int argc, char ** argv)
     if ( strlen( TEST_PGSQL_URL ) > 0 )
     {
         session_1 = qof_session_new();
-        qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE );
+        qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE, FALSE );
         qof_session_load( session_1, NULL );
         test_dbi_store_and_reload( "pgsql", session_1, TEST_PGSQL_URL );
     }

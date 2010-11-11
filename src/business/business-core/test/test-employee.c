@@ -71,7 +71,7 @@ test_employee (void)
     GncEmployee *employee;
 
     session = qof_session_new();
-    qof_session_begin(session, FILE_NAME, FALSE, FALSE);
+    qof_session_begin(session, FILE_NAME, FALSE, FALSE, FALSE);
     book = qof_session_get_book(session);
     be = qof_book_get_backend (book);
 

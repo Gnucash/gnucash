@@ -122,6 +122,7 @@ static GSList* conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname );
 static void append_pgsql_col_def( GString* ddl, GncSqlColumnInfo* info );
 static gboolean gnc_dbi_lock_database( QofBackend *qbe, gboolean ignore_lock );
 static void gnc_dbi_unlock( QofBackend *qbe );
+static gboolean save_may_clobber_data( QofBackend* qbe );
 
 static provider_functions_t provider_pgsql =
 {
@@ -260,7 +261,7 @@ sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
 static void
 gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
                                const gchar *book_id, gboolean ignore_lock,
-                               gboolean create_if_nonexistent )
+                               gboolean create, gboolean force )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
     gint result;
@@ -277,13 +278,22 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     /* Remove uri type if present */
     filepath = gnc_uri_get_path ( book_id );
 
-    if ( !create_if_nonexistent
-            && !g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
+    if ( !create &&
+	 !g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
     {
         qof_backend_set_error( qbe, ERR_FILEIO_FILE_NOT_FOUND );
         LEAVE(" ");
         return;
     }
+
+    if ( create && !force && 
+	 g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
+    {
+        qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
+        LEAVE("Might clobber, no force");
+        return;
+    }
+
 
     if ( be->conn != NULL )
     {
@@ -668,7 +678,7 @@ gnc_dbi_unlock( QofBackend *qbe )
 static void
 gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
                              const gchar *book_id, gboolean ignore_lock,
-                             gboolean create_if_nonexistent )
+                             gboolean create, gboolean force )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
     gchar* protocol = NULL;
@@ -692,7 +702,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     gnc_uri_get_components ( book_id, &protocol, &host, &portnum,
                              &username, &password, &dbname );
 
-    // Try to connect to the db.  If it doesn't exist and the create_if_nonexistent
+    // Try to connect to the db.  If it doesn't exist and the create
     // flag is TRUE, we'll need to connect to the 'mysql' db and execute the
     // CREATE DATABASE ddl statement there.
     if ( be->conn != NULL )
@@ -715,6 +725,13 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
+	if (create && !force && save_may_clobber_data( qbe ) )
+	{
+	    qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
+	    PWARN("Databse already exists, Might clobber it.");
+	    goto exit;
+	}
+
         success = gnc_dbi_lock_database ( qbe, ignore_lock );
     }
     else
@@ -728,7 +745,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
         }
 
         // The db does not already exist.  Connect to the 'mysql' db and try to create it.
-        if ( create_if_nonexistent )
+        if ( create )
         {
             dbi_result dresult;
             result = dbi_conn_set_option( be->conn, "dbname", "mysql" );
@@ -862,7 +879,7 @@ pgsql_error_fn( dbi_conn conn, void* user_data )
 static void
 gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                                 const gchar *book_id, gboolean ignore_lock,
-                                gboolean create_if_nonexistent )
+                                gboolean create, gboolean force )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
     gint result = 0;
@@ -888,7 +905,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     if ( portnum == 0 )
         portnum = PGSQL_DEFAULT_PORT;
 
-    // Try to connect to the db.  If it doesn't exist and the create_if_nonexistent
+    // Try to connect to the db.  If it doesn't exist and the create
     // flag is TRUE, we'll need to connect to the 'postgres' db and execute the
     // CREATE DATABASE ddl statement there.
     if ( be->conn != NULL )
@@ -911,6 +928,13 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
+	if (create && !force && save_may_clobber_data( qbe ) )
+	{
+	    qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
+	    PWARN("Databse already exists, Might clobber it.");
+	    goto exit;
+	}
+
         success = gnc_dbi_lock_database ( qbe, ignore_lock );
     }
     else
@@ -924,7 +948,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
         }
 
         // The db does not already exist.  Connect to the 'postgres' db and try to create it.
-        if ( create_if_nonexistent )
+        if ( create )
         {
             dbi_result dresult;
             result = dbi_conn_set_option( be->conn, "dbname", "postgres" );
@@ -1066,29 +1090,22 @@ gnc_dbi_load( QofBackend* qbe, /*@ dependent @*/ QofBook *book, QofBackendLoadTy
 /* ================================================================= */
 
 static gboolean
-gnc_dbi_save_may_clobber_data( QofBackend* qbe )
+save_may_clobber_data( QofBackend* qbe )
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
     const gchar* dbname;
-    GSList* table_name_list;
-    gint numTables = 0;
-    gint status;
+    dbi_result result;
+    gboolean retval = FALSE;
 
     /* Data may be clobbered iff the number of tables != 0 */
     dbname = dbi_conn_get_option( be->conn, "dbname" );
-    table_name_list = ((GncDbiSqlConnection*)(be->sql_be.conn))->provider->get_table_list( be->conn, dbname );
-    if ( table_name_list != NULL )
+    result = dbi_conn_get_table_list( be->conn, dbname, NULL );
+    if ( result )
     {
-        GSList* node;
-        numTables = g_slist_length( table_name_list );
-        for ( node = table_name_list; node != NULL; node = node->next )
-        {
-            g_free( node->data );
-        }
-        g_slist_free( table_name_list );
+      retval =  dbi_result_get_numrows( result ) > 0;
+      dbi_result_free( result );
     }
-
-    return (numTables != 0);
+    return retval;
 }
 
 static void
@@ -1195,7 +1212,6 @@ init_sql_backend( GncDbiBackend* dbi_be )
     be->destroy_backend = gnc_dbi_destroy_backend;
 
     be->load = gnc_dbi_load;
-    be->save_may_clobber_data = gnc_dbi_save_may_clobber_data;
 
     /* The gda backend treats accounting periods transactionally. */
     be->begin = gnc_dbi_begin_edit;
@@ -1223,7 +1239,9 @@ init_sql_backend( GncDbiBackend* dbi_be )
 
 static QofBackend*
 new_backend( void (*session_begin)( QofBackend *, QofSession *, const gchar *,
-                                    /*@ unused @*/ gboolean, /*@ unused @*/ gboolean ) )
+                                    /*@ unused @*/ gboolean,
+                                    /*@ unused @*/ gboolean,
+				    /*@ unused @*/ gboolean ) )
 {
     GncDbiBackend *dbi_be;
     QofBackend *be;
