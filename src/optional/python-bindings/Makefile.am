@@ -44,12 +44,43 @@ _gnucash_core_c_la_LIBADD = \
   ${top_builddir}/src/backend/xml/libgncmod-backend-xml.la \
   ${top_builddir}/src/backend/dbi/libgncmod-backend-dbi.la
 if BUILDING_FROM_SVN
-gnucash_core.c: $(SWIG_FILES) ${top_srcdir}/src/base-typemaps.i $(top_builddir)/config.h
+_gnucash_core_c_includes= \
+	${top_srcdir}/config.h \
+	${top_srcdir}/src/libqof/qof/qofsession.h \
+	${top_srcdir}/src/libqof/qof/qofbook.h \
+	${top_srcdir}/src/libqof/qof/qofbackend.h \
+	${top_srcdir}/src/libqof/qof/qoflog.h \
+	${top_srcdir}/src/libqof/qof/qofutil.h \
+	${top_srcdir}/src/libqof/qof/qofid.h \
+	${top_srcdir}/src/libqof/qof/guid.h \
+	${top_srcdir}/src/gnc-module/gnc-module.h \
+	${top_srcdir}/src/engine/gnc-engine.h \
+	${top_srcdir}/src/engine/Transaction.h \
+	${top_srcdir}/src/gnc/Transaction.hpp \
+	${top_srcdir}/src/engine/Split.h \
+	${top_srcdir}/src/engine/Account.h \
+	${top_srcdir}/src/engine/gnc-commodity.h \
+	${top_srcdir}/src/engine/gnc-lot.h \
+	${top_srcdir}/src/libqof/qof/gnc-numeric.h \
+	${top_srcdir}/src/engine/gncCustomer.h \
+	${top_srcdir}/src/engine/gncEmployee.h \
+	${top_srcdir}/src/engine/gncVendor.h \
+	${top_srcdir}/src/engine/gncAddress.h \
+	${top_srcdir}/src/engine/gncBillTerm.h \
+	${top_srcdir}/src/engine/gncOwner.h \
+	${top_srcdir}/src/engine/gncInvoice.h \
+	${top_srcdir}/src/engine/gncJob.h \
+	${top_srcdir}/src/engine/gncEntry.h \
+	${top_srcdir}/src/engine/gncTaxTable.h \
+	${top_srcdir}/src/engine/gncIDSearch.h
+
+
+gnucash_core.c: $(SWIG_FILES) ${top_srcdir}/src/base-typemaps.i $(_gnucash_core_c_includes)
 	swig -python -Wall -Werror \
-        -I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
-		-I$(top_srcdir)/src/business/business-core \
-        -I${top_srcdir}/src/libqof/qof \
-		-o $@ $<
+	-I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
+	-I$(top_srcdir)/src/business/business-core \
+	-I${top_srcdir}/src/libqof/qof \
+	-o $@ $<
 
 gnucash_core_c.py: gnucash_core.c $(SWIG_FILES)
 endif
@@ -68,5 +99,5 @@ EXTRA_DIST = \
   example_scripts/test_imbalance_transaction.py \
   glib.i
 
-MAINTAINERCLEANFILES = gnucash-core.c
+MAINTAINERCLEANFILES = gnucash_core.c
 
