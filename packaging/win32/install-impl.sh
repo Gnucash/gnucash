@@ -1018,7 +1018,7 @@ function inst_ktoblzcheck() {
     # GWENHYWFAR_DIR
     add_to_env "-I${_GWENHYWFAR_UDIR}/include" KTOBLZCHECK_CPPFLAGS
     add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
-    if quiet ${PKG_CONFIG} --exists ktoblzcheck
+    if quiet ${PKG_CONFIG} --exact-version=${KTOBLZCHECK_VERSION} ktoblzcheck
     then
         echo "Ktoblzcheck already installed. skipping."
     else
