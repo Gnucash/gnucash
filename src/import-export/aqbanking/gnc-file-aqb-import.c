@@ -219,6 +219,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
         if (gnc_ab_ieci_run_matcher(ieci))
         {
             /* FIXME */
+            g_error("Sorry, executing the list of imported jobs is not yet implemented.");
             /* gnc_hbci_multijob_execute(NULL, api, job_list, gui); */
         }
     }

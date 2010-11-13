@@ -918,7 +918,7 @@ gnc_ab_import_context(AB_IMEXPORTER_CONTEXT *context,
     data->execute_txns = execute_txns;
     data->api = api;
     data->parent = parent;
-    data->job_list = NULL;
+    data->job_list = AB_Job_List2_new();
     data->generic_importer = NULL;
 
     /* Import transactions */
