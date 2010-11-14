@@ -382,7 +382,7 @@ void MainWindow::loadFile(const QString &fileName)
     QofSession *new_session = qof_session_new ();
 
     bool we_are_in_error = false;
-    qof_session_begin (new_session, newfile, FALSE, FALSE);
+    qof_session_begin (new_session, newfile, FALSE, FALSE, FALSE);
     QofBackendError io_err = qof_session_get_error (new_session);
     /* if file appears to be locked, ask the user ... */
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
@@ -407,7 +407,7 @@ void MainWindow::loadFile(const QString &fileName)
         if (msgBox.clickedButton() == openAnyway)
         {
             /* user told us to ignore locks. So ignore them. */
-            qof_session_begin (new_session, newfile, TRUE, FALSE);
+            qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
         }
         else if (msgBox.clickedButton() == createNewFile)
         {
@@ -432,7 +432,7 @@ void MainWindow::loadFile(const QString &fileName)
         if (false == show_session_error (this, io_err, newfile, GNC_FILE_DIALOG_OPEN))
         {
             /* user told us to create a new database. Do it. */
-            qof_session_begin (new_session, newfile, FALSE, TRUE);
+            qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
         }
     }
 
@@ -597,7 +597,7 @@ bool MainWindow::saveFileAs(const QString &fileName)
 
     save_in_progress++;
     QofSession *new_session = qof_session_new ();
-    qof_session_begin (new_session, newfile, FALSE, FALSE);
+    qof_session_begin (new_session, newfile, FALSE, FALSE, FALSE);
 
     QofBackendError io_err = qof_session_get_error (new_session);
 
@@ -607,7 +607,7 @@ bool MainWindow::saveFileAs(const QString &fileName)
         if (false == show_session_error (this, io_err, newfile, GNC_FILE_DIALOG_SAVE))
         {
             /* user told us to ignore locks. So ignore them. */
-            qof_session_begin (new_session, newfile, TRUE, FALSE);
+            qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
         }
     }
 
@@ -619,7 +619,7 @@ bool MainWindow::saveFileAs(const QString &fileName)
         if (false == show_session_error (this, io_err, newfile, GNC_FILE_DIALOG_SAVE))
         {
             /* user told us to create a new database. Do it. */
-            qof_session_begin (new_session, newfile, FALSE, TRUE);
+            qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
         }
     }
 
@@ -639,7 +639,9 @@ bool MainWindow::saveFileAs(const QString &fileName)
     }
 
     /* oops ... file already exists ... ask user what to do... */
-    if (qof_session_save_may_clobber_data (new_session))
+    if (false) //qof_session_save_may_clobber_data (new_session))
+        // FIXME: Need to copy the other implementation from r19798 in
+        // gnc-file.c for overwrite-on-existing-file.
     {
         if (QMessageBox::question(this, tr("File Exists"),
                                   tr("The file %1 already exists. "

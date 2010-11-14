@@ -58,9 +58,9 @@ public:
 
     // Now the actual functions on the object
 
-    void begin(const QString& book_id, bool ignore_lock, bool create_if_nonexistent)
+    void begin(const QString& book_id, bool ignore_lock, bool create_if_nonexistent, bool force)
     {
-        qof_session_begin(get(), book_id.toUtf8(), ignore_lock, create_if_nonexistent);
+        qof_session_begin(get(), book_id.toUtf8(), ignore_lock, create_if_nonexistent, force);
     }
     void load (QofPercentageFunc percentage_func)
     {
@@ -93,10 +93,6 @@ public:
     bool save_in_progress() const
     {
         return qof_session_save_in_progress(get());
-    }
-    bool save_may_clobber_data () const
-    {
-        return qof_session_save_may_clobber_data(get());
     }
     void save (QofPercentageFunc percentage_func)
     {
