@@ -111,7 +111,7 @@ class Session(GnuCashCoreClass):
         if errors != ():
             raise GnuCashBackendException(
                 "call to %s resulted in the "
-                "following errors, %s" % (called_function, errors),
+                "following errors, %s" % (called_function, backend_error_dict[errors[0]]),
                 errors )        
 
     def generate_errors(self):
@@ -348,6 +348,12 @@ this_module_dict = globals()
 for error_name, error_value, error_name_after_prefix in \
     extract_attributes_with_prefix(gnucash_core_c, 'ERR_'):
     this_module_dict[ error_name ] = error_value
+
+#backend error codes used for reverse lookup
+backend_error_dict = {}
+for error_name, error_value, error_name_after_prefix in \
+    extract_attributes_with_prefix(gnucash_core_c, 'ERR_'):
+    backend_error_dict[ error_value ] = error_name
 
 # GncNumeric demoniminator computation schemes
 # Used for the denom argument in arithmetic functions like GncNumeric.add
