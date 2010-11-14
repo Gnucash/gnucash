@@ -1,35 +1,27 @@
 <ui>
   <menubar>
-    <menu name="File" action="FileAction">
-      <menu name="FileNewMenu" action="FileNewMenuAction">
-        <placeholder name="FileNewBottonPlaceholder">
-          <menuitem name="FileNewAccount" action="FileNewAccountAction"/>
-          <menuitem name="FileAddAccountHierarchyDruid" action="FileAddAccountHierarchyDruidAction"/>
-        </placeholder>
-      </menu>
-      <menu name="FileOpenMenu" action="FileOpenMenuAction">
-        <placeholder name="FileOpenBottomPlaceholder">
-          <menuitem name="FileOpenAccount" action="FileOpenAccountAction"/>
-          <menuitem name="FileOpenSubaccounts" action="FileOpenSubaccountsAction"/>
-        </placeholder>
-      </menu>
-    </menu>
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditAccount" action="EditEditAccountAction"/>
 	<menuitem name="EditDeleteAccount" action="EditDeleteAccountAction"/>
 	<menuitem name="EditRenumberSubaccounts" action="EditRenumberSubaccountsAction"/>
+        <separator name="EditSep2"/>
+        <menuitem name="FileOpenAccount" action="FileOpenAccountAction"/>
+        <menuitem name="FileOpenSubaccounts" action="FileOpenSubaccountsAction"/>
       </placeholder>
     </menu>
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">
-        <separator name="ActionsSep1"/>
+	<separator name="ActionsSep1"/>
+        <menuitem name="FileNewAccount" action="FileNewAccountAction"/>
+        <menuitem name="FileAddAccountHierarchyDruid" action="FileAddAccountHierarchyDruidAction"/>
+        <separator name="ActionsSep2"/>
 	<menuitem name="ActionsTransfer" action="ActionsTransferAction"/>
 	<menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
 	<menuitem name="ActionsAutoClear" action="ActionsAutoClearAction"/>
 	<menuitem name="ActionsStockSplit" action="ActionsStockSplitAction"/>
 	<menuitem name="ActionLots" action="ActionsLotsAction"/>
-	<separator name="ActionsSep2"/>
+	<separator name="ActionsSep3"/>
 	<menu name="ScrubMenu" action="ScrubMenuAction">
 	  <menuitem name="Scrub" action="ScrubAction"/>
 	  <menuitem name="ScrubSub" action="ScrubSubAction"/>

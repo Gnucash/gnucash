@@ -1,14 +1,5 @@
 <ui>
   <menubar>
-    <menu name="File" action="FileAction">
-      <menu name="FileNewMenu" action="FileNewMenuAction">
-        <placeholder name="FileNewTopPlaceholder">
-          <menuitem name="FileNewInvoice"         action="FileNewInvoiceAction"/>
-          <menuitem name="FileNewAccount"         action="FileNewAccountAction"/>
-        </placeholder>
-      </menu>
-    </menu>
-
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditInvoice"        action="EditEditInvoiceAction"/>
