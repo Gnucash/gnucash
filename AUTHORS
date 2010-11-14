@@ -144,7 +144,7 @@ Frank H. Ellenberger <f.ellenberger@online.de> Fix for IDR currency
 Christoph Ernst <C.Ernst72@googlemail.com> Small bugfixes and minor enhancements
 Jonathan Ernst <jonathan@ernstfamily.ch> Translations
 Stephen Evanchik <evanchsa@clarkson.edu> Logging improvements; gtk2 conversions
-Mike Evans <mikee@saxicola.co.uk> Big fixes and testing.
+Mike Evans <mikee@saxicola.co.uk> Bug fixes and testing.
 Joshua Facemyer / Impressus Art <faceman@impressusart.com>: New artwork.
 Paul Fenwick <pjf@schools.net.au> ASX support, Finance::Quote
 Hubert Figuiere <hfiguiere@teaser.fr> patch to gnc-prices
