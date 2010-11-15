@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.16\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-06 14:26-0400\n"
-"PO-Revision-Date: 2010-11-09 16:57+0100\n"
+"PO-Revision-Date: 2010-11-15 00:53+0100\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.0\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:655
 msgid "Illegal variable in expression."
@@ -275,11 +274,11 @@ msgstr "Extra/ontwikkeling/debugging-functionaliteiten inschakelen"
 
 #: ../src/bin/gnucash-bin.c:456
 msgid "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""
-msgstr "Log-niveau instellen, in de vorm \"com.po.nent={debug,info,warn,crit,error}\""
+msgstr "Log-niveau instellen, in de vorm “com.po.nent={debug,info,warn,crit,error}”"
 
 #: ../src/bin/gnucash-bin.c:462
 msgid "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."
-msgstr "Bestand voor logmeldingen; standaard is \"/tmp/gnucash.trace\"; mag ook \"stderr\" of \"stdout\" zijn."
+msgstr "Bestand voor logmeldingen; standaard is “/tmp/gnucash.trace”; mag ook “stderr” of “stdout” zijn."
 
 #: ../src/bin/gnucash-bin.c:468
 msgid "Do not load the last file opened"
@@ -341,11 +340,11 @@ msgstr "Geen koersen opgehaald. De module Finance::Quote is niet correct geïnst
 #. Install Price Quote Sources
 #: ../src/bin/gnucash-bin.c:702
 msgid "Checking Finance::Quote..."
-msgstr "Controleren van module Finance::Quote..."
+msgstr "Controleren van module Finance::Quote…"
 
 #: ../src/bin/gnucash-bin.c:710
 msgid "Loading data..."
-msgstr "Laden van gegevens..."
+msgstr "Laden van gegevens…"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:265
@@ -353,12 +352,12 @@ msgstr "Laden van gegevens..."
 #: ../src/business/business-gnome/dialog-invoice.c:1214
 #: ../src/gnome-utils/gnc-general-select.c:219
 msgid "Select..."
-msgstr "Selecteren..."
+msgstr "Selecteren…"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:77
 #: ../src/gnome-utils/gnc-general-select.c:221
 msgid "Edit..."
-msgstr "Bewerken..."
+msgstr "Bewerken…"
 
 #. src/report/business-reports/owner-report.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -509,7 +508,7 @@ msgstr "U moet aan deze betalingsvoorwaarde een naam toekennen."
 #: ../src/business/business-gnome/dialog-billterms.c:308
 #, c-format
 msgid "You must provide a unique name for this Billing Term. Your choice \"%s\" is already in use."
-msgstr "U dient een unieke naam aan deze betalingsvoorwaarde toe te kennen. Uw keuze \"%s\" is al in gebruik."
+msgstr "U dient een unieke naam aan deze betalingsvoorwaarde toe te kennen. Uw keuze ‘%s’ is al in gebruik."
 
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -539,13 +538,13 @@ msgstr "Onbekend"
 #: ../src/business/business-gnome/dialog-billterms.c:621
 #, c-format
 msgid "Term \"%s\" is in use.  You cannot delete it."
-msgstr "Voorwaarde \"%s\" is in gebruik. U kunt deze niet verwijderen."
+msgstr "Voorwaarde ‘%s’ is in gebruik. U kunt deze niet verwijderen."
 
 #: ../src/business/business-gnome/dialog-billterms.c:627
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:570
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr "Weet u zeker dat u \"%s\" wilt verwijderen?"
+msgstr "Weet u zeker dat u ‘%s’ wilt verwijderen?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:74
 msgid "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
@@ -557,7 +556,7 @@ msgstr "Deze boeking moet worden toegekend aan een leverancier. Kies een leveran
 
 #: ../src/business/business-gnome/dialog-customer.c:274
 msgid "You must enter a company name. If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
-msgstr "U moet een bedrijfsnaam opgeven. Als deze klant een privé-persoon is (en geen bedrijf), dan kunt u het beste dezelfde naam invullen bij \"bedrijfsnaam\" en \"contactpersoon\"."
+msgstr "U moet een bedrijfsnaam opgeven. Als deze klant een privé-persoon is (en geen bedrijf), dan kunt u het beste dezelfde naam invullen bij ‘bedrijfsnaam’ en ‘contactpersoon’."
 
 #: ../src/business/business-gnome/dialog-customer.c:286
 msgid "You must enter a billing address."
@@ -1273,11 +1272,11 @@ msgstr "De rekening en/of de tegenrekening heeft een afwijkende munteenheid. Gee
 #: ../src/business/business-gnome/dialog-payment.c:564
 #, c-format
 msgid "You have no valid \"Post To\" accounts.  Please create an account of type \"%s\" before you continue to process this payment.  Perhaps you want to create an Invoice or Bill first?"
-msgstr "U hebt geen geldige rekening om naartoe te boeken. Maak een rekening van het soort \"%s\" aan voordat u verder gaat met het verwerken van deze betaling. Mogelijk wilt u eerst een inkoop- of verkoopfactuur aanmaken?"
+msgstr "U hebt geen geldige rekening om naartoe te boeken. Maak een rekening van het soort ‘%s’ aan voordat u verder gaat met het verwerken van deze betaling. Mogelijk wilt u eerst een inkoop- of verkoopfactuur aanmaken?"
 
 #: ../src/business/business-gnome/dialog-vendor.c:208
 msgid "You must enter a company name. If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
-msgstr "U moet een bedrijfsnaam opgeven. Als deze klant een privé-persoon is (en geen bedrijf), dan kunt u het beste dezelfde naam invullen bij \"bedrijfsnaam\" en \"contactpersoon\"."
+msgstr "U moet een bedrijfsnaam opgeven. Als deze klant een privé-persoon is (en geen bedrijf), dan kunt u het beste dezelfde naam invullen bij ‘bedrijfsnaam’ en ‘contactpersoon’."
 
 #: ../src/business/business-gnome/dialog-vendor.c:220
 msgid "You must enter a payment address."
@@ -2159,15 +2158,15 @@ msgstr "_Klant"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:139
 msgid "_New Customer..."
-msgstr "Nieuwe k_lant..."
+msgstr "Nieuwe k_lant…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:140
 msgid "Open the New Customer dialog"
-msgstr "Het venster ‘Nieuwe klant' openen"
+msgstr "Het venster ‘Nieuwe klant’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:144
 msgid "_Find Customer..."
-msgstr "_Klant zoeken..."
+msgstr "_Klant zoeken…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:145
 msgid "Open the Find Customer dialog"
@@ -2175,7 +2174,7 @@ msgstr "Het venster ‘Klant zoeken’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:149
 msgid "New _Invoice..."
-msgstr "Nieuwe v_erkoopfactuur..."
+msgstr "Nieuwe v_erkoopfactuur…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:150
 msgid "Open the New Invoice dialog"
@@ -2183,7 +2182,7 @@ msgstr "Het venster ‘Nieuwe verkoopfactuur’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:154
 msgid "Find In_voice..."
-msgstr "_Verkoopfactuur zoeken..."
+msgstr "_Verkoopfactuur zoeken…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
 msgid "Open the Find Invoice dialog"
@@ -2192,7 +2191,7 @@ msgstr "Het venster ‘Verkoopfactuur zoeken’ openen"
 #: ../src/business/business-gnome/gnc-plugin-business.c:159
 #: ../src/business/business-gnome/gnc-plugin-business.c:197
 msgid "New _Job..."
-msgstr "Nieuwe o_pdracht..."
+msgstr "Nieuwe o_pdracht…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:160
 #: ../src/business/business-gnome/gnc-plugin-business.c:198
@@ -2213,7 +2212,7 @@ msgstr "Het venster ‘Opdracht zoeken’ openen"
 #: ../src/business/business-gnome/gnc-plugin-business.c:207
 #: ../src/business/business-gnome/gnc-plugin-business.c:235
 msgid "_Process Payment..."
-msgstr "_Betaling verwerken..."
+msgstr "_Betaling verwerken…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:170
 #: ../src/business/business-gnome/gnc-plugin-business.c:208
@@ -2228,7 +2227,7 @@ msgstr "_Leverancier"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:177
 msgid "_New Vendor..."
-msgstr "Nieuwe l_everancier..."
+msgstr "Nieuwe l_everancier…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:178
 msgid "Open the New Vendor dialog"
@@ -2236,7 +2235,7 @@ msgstr "Het venster ‘Nieuwe leverancier’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
 msgid "_Find Vendor..."
-msgstr "_Leverancier zoeken..."
+msgstr "_Leverancier zoeken…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:183
 msgid "Open the Find Vendor dialog"
@@ -2244,7 +2243,7 @@ msgstr "Het venster ‘Leverancier zoeken’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:187
 msgid "New _Bill..."
-msgstr "Nieuwe i_nkoopfactuur..."
+msgstr "Nieuwe i_nkoopfactuur…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:188
 msgid "Open the New Bill dialog"
@@ -2252,11 +2251,11 @@ msgstr "Het venster ‘Nieuwe inkoopfactuur’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:192
 msgid "Find Bi_ll..."
-msgstr "_Inkoopfactuur zoeken..."
+msgstr "_Inkoopfactuur zoeken…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:193
 msgid "Open the Find Bill dialog"
-msgstr "Het venster 'Inkoopfactuur zoeken’ openen"
+msgstr "Het venster ‘Inkoopfactuur zoeken’ openen"
 
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:213
@@ -2265,7 +2264,7 @@ msgstr "_Werknemer"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:215
 msgid "_New Employee..."
-msgstr "Nieuwe w_erknemer..."
+msgstr "Nieuwe w_erknemer…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:216
 msgid "Open the New Employee dialog"
@@ -2273,7 +2272,7 @@ msgstr "Het venster ‘Nieuwe werknemer’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:220
 msgid "_Find Employee..."
-msgstr "_Werknemer zoeken..."
+msgstr "_Werknemer zoeken…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:221
 msgid "Open the Find Employee dialog"
@@ -2281,7 +2280,7 @@ msgstr "Het venster ‘Werknemer zoeken’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:225
 msgid "New _Expense Voucher..."
-msgstr "Nieuwe o_nkostendeclaratie..."
+msgstr "Nieuwe o_nkostendeclaratie…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:226
 msgid "Open the New Expense Voucher dialog"
@@ -2289,7 +2288,7 @@ msgstr "Het venster ‘Nieuwe onkostendeclaratie’ openen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:230
 msgid "Find Expense _Voucher..."
-msgstr "_Onkostendeclaratie zoeken..."
+msgstr "_Onkostendeclaratie zoeken…"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:231
 msgid "Open the Find Expense Voucher dialog"
@@ -2373,7 +2372,7 @@ msgstr "Een nieuwe verkoopfactuur aanmaken"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:105
 #: ../src/gnome/gnc-plugin-page-account-tree.c:155
 msgid "New _Account..."
-msgstr "Nieuwe _rekening..."
+msgstr "Nieuwe _rekening…"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:106
 msgid "Create a new account"
@@ -2597,7 +2596,7 @@ msgstr "Meerdere boekregels tot één samenvoegen"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
 msgid "If active, at startup GnuCash will check to see whether any bills will become due soon. If so, it will present the user with a reminder dialog. The definition of \"soon\" is controlled by the \"Days in Advance\" setting. Otherwise GnuCash does not check for due bills."
-msgstr "Door activering van deze optie wordt tijdens het opstarten van GnuCash gecontroleerd of er binnenkort te betalen facturen vervallen. Zo ja, dan krijgt de gebruiker een betalingsherinnering te zien. De definitie van \"binnenkort\" wordt bepaald door de instelling \"Dagen van tevoren\". Zonder deze optie controleert GnuCash niet op het vervallen van facturen."
+msgstr "Door activering van deze optie wordt tijdens het opstarten van GnuCash gecontroleerd of er binnenkort te betalen facturen vervallen. Zo ja, dan krijgt de gebruiker een betalingsherinnering te zien. De definitie van ‘binnenkort’ wordt bepaald door de instelling ‘Dagen van tevoren’. Zonder deze optie controleert GnuCash niet op het vervallen van facturen."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
 msgid "If active, each new invoice will be opened in a new window. Otherwise a new invoice will be opened as a tab in the main window."
@@ -2605,7 +2604,7 @@ msgstr "Door activering van deze optie wordt iedere nieuwe factuur in een nieuw 
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:4
 msgid "If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched."
-msgstr "Door activering van deze optie worden alleen de 'actieve' elementen in de huidige klasse doorzocht in plaats van alle elementen."
+msgstr "Door activering van deze optie worden alleen de ‘actieve’ elementen in de huidige klasse doorzocht in plaats van alle elementen."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
 msgid "If set to active then tax is included by default in entries of this type. This setting is inherited by new customers and vendors."
@@ -2638,7 +2637,7 @@ msgstr "Facturen tonen die binnen dit aantal dagen vervallen"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:12
 msgid "This field defines the number of days in advance that GnuCash will check for due bills. Its value is only used if the \"Notify when due\" setting is active."
-msgstr "Dit veld definieert het aantal dagen vooruit dat GnuCash de vervaldatum van rekeningen controleert. Deze waarde wordt uitsluitend gebruikt als \"Herinneren aan vervaldatum\" is ingesteld."
+msgstr "Dit veld definieert het aantal dagen vooruit dat GnuCash de vervaldatum van rekeningen controleert. Deze waarde wordt uitsluitend gebruikt als ‘Herinneren aan vervaldatum’ is ingesteld."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
 msgid "This setting contains the coordinates describing the last location of the window. The numbers are the X and Y coordinates of the top left corner of the window, and the width and height of the window."
@@ -3094,7 +3093,7 @@ msgstr "U moet aan dit belastingtarief een naam toekennen"
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:125
 #, c-format
 msgid "You must provide a unique name for this Tax Table. Your choice \"%s\" is already in use."
-msgstr "U moet een unieke naam voor dit belastingtarief opgeven. Uw keuze \"%s\" is al in gebruik."
+msgstr "U moet een unieke naam voor dit belastingtarief opgeven. Uw keuze ‘%s’ is al in gebruik."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:139
 msgid "Percentage amount must be between -100 and 100."
@@ -3107,7 +3106,7 @@ msgstr "U moet een rekening voor belasting selecteren."
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:562
 #, c-format
 msgid "Tax table \"%s\" is in use.  You cannot delete it."
-msgstr "Belastingtarief \"%s\" is in gebruik. U kunt dit niet verwijderen."
+msgstr "Belastingtarief ‘%s’ is in gebruik. U kunt dit niet verwijderen."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:610
 msgid "You cannot remove the last entry from the tax table. Try deleting the tax table if you want to do that."
@@ -3183,7 +3182,7 @@ msgstr ""
 "Er is een fout opgetreden bij het aanmaken van de map:\n"
 "  %s\n"
 "Corrigeer het probleem en start GnuCash opnieuw.\n"
-"De gemelde fout was '%s' (foutnr %d).\n"
+"De gemelde fout was ‘%s’ (foutnr %d).\n"
 
 #: ../src/core-utils/gnc-filepath-utils.c:220
 #, c-format
@@ -3226,7 +3225,7 @@ msgstr ""
 "Er is een onbekende fout opgetreden bij de controle op bestaan en bruikbaarheid van de map:\n"
 "  %s\n"
 "Corrigeer het probleem en start GnuCash opnieuw.\n"
-"De gemelde fout was '%s' (foutnr %d)."
+"De gemelde fout was ‘%s’ (foutnr %d)."
 
 #: ../src/core-utils/gnc-filepath-utils.c:264
 #, c-format
@@ -3237,7 +3236,7 @@ msgid ""
 msgstr ""
 "De gebruiker heeft niet de juiste rechten op de map\n"
 "  %s\n"
-"Deze moeten ten minste 'rwx' zijn.\n"
+"Deze moeten ten minste ‘rwx’ zijn.\n"
 
 #: ../src/engine/Account.c:238
 #, c-format
@@ -3249,7 +3248,7 @@ msgid ""
 "Below you will find the list of invalid account names:\n"
 "%s"
 msgstr ""
-"Het scheidingsteken \"%s\" is al in gebruik bij ten minste één rekeningnaam. Dit heeft waarschijnlijk ongewenste gevolgen. U dient ofwel de betreffende rekeningnamen te wijzigen, ofwel een ander scheidingsteken te selecteren.\n"
+"Het scheidingsteken ‘%s’ is al in gebruik bij ten minste één rekeningnaam. Dit heeft waarschijnlijk ongewenste gevolgen. U dient ofwel de betreffende rekeningnamen te wijzigen, ofwel een ander scheidingsteken te selecteren.\n"
 "\n"
 "Hieronder treft u de lijst aan met de betreffende rekeningnamen:\n"
 "%s"
@@ -3698,7 +3697,7 @@ msgstr "Er is een dubbel chequeopmaak-bestand."
 #: ../src/gnome/dialog-print-check.c:1517
 #, c-format
 msgid "The GUIDs in the %s check format file '%s' and the %s check format file '%s' match."
-msgstr "De GUID's in het %s-chequeopmaak-bestand '%s' en het %s-chequeopmaak-bestand '%s' komen overeen."
+msgstr "De GUID's in het %s-chequeopmaak-bestand ‘%s’ en het %s-chequeopmaak-bestand ‘%s’ komen overeen."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3760,12 +3759,12 @@ msgstr "Deze vaste journaalpost is veranderd; weet u zeker dat u wilt annuleren?
 #: ../src/gnome/dialog-sx-editor.c:668
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
-msgstr "Kon de creditformule voor de boekregel \"%s\" niet ontleden."
+msgstr "Kon de creditformule voor de boekregel ‘%s’ niet ontleden."
 
 #: ../src/gnome/dialog-sx-editor.c:696
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
-msgstr "Kon de debetformule voor de boekregel \"%s\" niet ontleden."
+msgstr "Kon de debetformule voor de boekregel ‘%s’ niet ontleden."
 
 #: ../src/gnome/dialog-sx-editor.c:730 ../src/gnome/dialog-sx-from-trans.c:276
 msgid "The Scheduled Transaction Editor cannot automatically balance this transaction. Should it still be entered?"
@@ -3778,7 +3777,7 @@ msgstr "U moet aan deze vaste journaalpost een naam toekennen."
 #: ../src/gnome/dialog-sx-editor.c:779
 #, c-format
 msgid "A Scheduled Transaction with the name \"%s\" already exists. Are you sure you want to name this one the same?"
-msgstr "Er bestaat al een vaste journaalpost met de naam \"%s\". Weet u zeker dat u aan deze boeking dezelfde naam wilt toekennen?"
+msgstr "Er bestaat al een vaste journaalpost met de naam ‘%s’. Weet u zeker dat u aan deze boeking dezelfde naam wilt toekennen?"
 
 #: ../src/gnome/dialog-sx-editor.c:810
 msgid "Scheduled Transactions with variables cannot be automatically created."
@@ -3972,7 +3971,7 @@ msgstr "Rekeningsoorten"
 #: ../src/gnome/druid-hierarchy.c:493
 #, c-format
 msgid "Accounts in '%s'"
-msgstr "Rekeningen in '%s'"
+msgstr "Rekeningen in ‘%s’"
 
 #: ../src/gnome/druid-hierarchy.c:514
 msgid "Accounts in Category"
@@ -4035,7 +4034,7 @@ msgstr "Overige betaling"
 #: ../src/gnome/druid-loan.c:650
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr "... \"%s\" betalen?"
+msgstr "… ‘%s’ betalen?"
 
 #: ../src/gnome/druid-loan.c:662
 msgid "via Escrow account?"
@@ -4074,7 +4073,7 @@ msgstr "Een geldige renterekening selecteren."
 #: ../src/gnome/druid-loan.c:1494
 #, c-format
 msgid "Payment: \"%s\""
-msgstr "Betaling: \"%s\""
+msgstr "Betaling: ‘%s’"
 
 #: ../src/gnome/druid-loan.c:1873 ../src/gnome/druid-loan.c:2473
 msgid "Principal"
@@ -4260,7 +4259,7 @@ msgstr "Voorbeelden:"
 #: ../src/gnome/glade/account.glade.h:22 ../intl-scm/guile-strings.c:2788
 #: ../intl-scm/guile-strings.c:4230
 msgid "Filter By..."
-msgstr "Filteren op..."
+msgstr "Filteren op…"
 
 #: ../src/gnome/glade/account.glade.h:23
 msgid "Finish Account Setup"
@@ -4345,7 +4344,7 @@ msgid ""
 msgstr ""
 "Als u de naam van een rekening wilt aanpassen klikt u eerst op de rij van de betreffende rekening en daarna op de rekeningnaam, waarna u deze kunt aanpassen.\n"
 "\n"
-"Sommige rekeningen zijn aangemerkt als \"Aggregatie\". Aggregaties worden gebruikt om  hiërarchie binnen een rekeningschema aan te brengen. Meestal wordt er niet rechtstreeks op geboekt en kennen ze geen beginsaldo. Om een rekening als aggregatie aan te merken klikt u op het relevante keuzevakje.\n"
+"Sommige rekeningen zijn aangemerkt als ‘Aggregatie’. Aggregaties worden gebruikt om  hiërarchie binnen een rekeningschema aan te brengen. Meestal wordt er niet rechtstreeks op geboekt en kennen ze geen beginsaldo. Om een rekening als aggregatie aan te merken klikt u op het relevante keuzevakje.\n"
 "\n"
 "Als u aan een rekening een beginsaldo wilt toekennen klikt u op de rij van de betreffende rekening, vervolgens op het beginsaldo-veld en voert u het beginsaldo in.\n"
 "\n"
@@ -4465,7 +4464,7 @@ msgstr "Fiscaal relevant"
 
 #: ../src/gnome/glade/account.glade.h:63
 msgid "This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register.  To reset this option, you will first need to open the \"Filter By...\" dialog for the account tree and check the \"show hidden accounts\" option.  Doing so will allow you to select the account and reopen this dialog."
-msgstr "Deze rekening (met alle subrekeningen) wordt verborgen in het rekeningschema en verdwijnt als keuze uit het popup-scherm van de grootboekkaart. Om deze keuze ongedaan te maken, moet u bij de filterinstellingen van het rekeningschema de optie \"verborgen rekeningen weergeven\" aanvinken. Hierdoor kunt u de rekening selecteren en dit dialoogvenster heropenen."
+msgstr "Deze rekening (met alle subrekeningen) wordt verborgen in het rekeningschema en verdwijnt als keuze uit het popup-scherm van de grootboekkaart. Om deze keuze ongedaan te maken, moet u bij de filterinstellingen van het rekeningschema de optie ‘Verborgen rekeningen weergeven’ aanvinken. Hierdoor kunt u de rekening selecteren en dit dialoogvenster heropenen."
 
 #: ../src/gnome/glade/account.glade.h:64
 msgid "This account contains read-only transactions which may not be deleted."
@@ -4515,7 +4514,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:79
 msgid "Use Edit->Tax Report Options to set the tax-related flag and assign a tax code to this account."
-msgstr "Gebruik menukeuze \"Bewerken ‣ Fiscale instellingen\" om deze rekening als fiscaal relevant aan te merken en hier een belastingcode aan toe te wijzen."
+msgstr "Gebruik menukeuze ‘Bewerken ‣ Fiscale instellingen’ om deze rekening als fiscaal relevant aan te merken en hier een belastingcode aan toe te wijzen."
 
 #: ../src/gnome/glade/account.glade.h:80
 msgid "_Account code:"
@@ -4564,7 +4563,7 @@ msgstr "Tegenrekening _selecteren"
 
 #: ../src/gnome/glade/account.glade.h:90
 msgid "_Use equity 'Opening Balances' account"
-msgstr "_Eigen vermogen-rekening 'Beginsaldi' gebruiken"
+msgstr "_Eigen vermogen-rekening ‘Beginsaldi’ gebruiken"
 
 #: ../src/gnome/glade/acctperiod.glade.h:1
 msgid "Book Closing Dates"
@@ -4676,7 +4675,7 @@ msgstr "Gnucash zal een budgetwaarde voor de geselecteerde rekeningen inschatten
 
 #: ../src/gnome/glade/budget.glade.h:12
 msgid "Match the \"day of week\" and \"week of month\"?  (for example, the \"second Tuesday\" of every month)"
-msgstr "De \"dag van de week\" én de \"week van de maand\" koppelen? (bijvoorbeeld: de \"tweede dinsdag\" van elke maand)"
+msgstr "De ‘dag van de week’ én de ‘week van de maand’ koppelen? (bijvoorbeeld: de “tweede dinsdag” van elke maand)"
 
 #: ../src/gnome/glade/budget.glade.h:14
 msgid "Number of Periods:"
@@ -5142,7 +5141,7 @@ msgstr "Graden"
 
 #: ../src/gnome/glade/print.glade.h:11
 msgid "Enter a title for this custom format.  This title will appear in the \"Check format\" selector of the Print Check dialog.  Using the title of an existing custom format will cause that format to be overwritten."
-msgstr "Deze aangepaste opmaak een naam toekennen. Deze naam komt naar voren als cheque-opmaak in de \"Cheque afdrukken\"-venster. Door de naam van een bestaande aangepaste opmaak te gebruiken zal deze worden overschreven."
+msgstr "Deze aangepaste opmaak een naam toekennen. Deze naam komt naar voren als cheque-opmaak in het venster ‘Cheque afdrukken’. Door de naam van een bestaande aangepaste opmaak te gebruiken zal deze worden overschreven."
 
 #: ../src/gnome/glade/print.glade.h:12
 msgid ""
@@ -5258,7 +5257,7 @@ msgstr "y"
 
 #: ../src/gnome/glade/progress.glade.h:1
 msgid "Working..."
-msgstr "Bezig..."
+msgstr "Bezig…"
 
 #: ../src/gnome/glade/reconcile.glade.h:1
 msgid "<b>Reconcile Information</b>"
@@ -5266,7 +5265,7 @@ msgstr "<b>Afstemmingsgegevens</b>"
 
 #: ../src/gnome/glade/reconcile.glade.h:2 ../src/gnome/window-reconcile.c:741
 msgid "Enter _Interest Payment..."
-msgstr "De _rentebetaling invoeren..."
+msgstr "De _rentebetaling invoeren…"
 
 #: ../src/gnome/glade/reconcile.glade.h:3
 msgid "Include _subaccounts"
@@ -5334,7 +5333,7 @@ msgstr "De huidige boeking verwijderen"
 
 #: ../src/gnome/glade/register.glade.h:19
 msgid "Dup_licate Transaction..."
-msgstr "Boeking _dupliceren..."
+msgstr "Boeking _dupliceren…"
 
 #: ../src/gnome/glade/register.glade.h:21
 #: ../src/import-export/generic-import.glade.h:17
@@ -5359,7 +5358,7 @@ msgstr "Alle boekregels verwijderen (m.u.v. de boekregel voor deze rekening)"
 
 #: ../src/gnome/glade/register.glade.h:27
 msgid "Filter register by..."
-msgstr "Grootboekkaart filteren op..."
+msgstr "Grootboekkaart filteren op…"
 
 #: ../src/gnome/glade/register.glade.h:28
 msgid "Jump"
@@ -5422,7 +5421,7 @@ msgstr "_Afschriftdatum"
 
 #: ../src/gnome/glade/register.glade.h:42
 msgid "Schedule..."
-msgstr "Inroosteren..."
+msgstr "Inroosteren…"
 
 #: ../src/gnome/glade/register.glade.h:43
 msgid "Select Range:"
@@ -5514,7 +5513,7 @@ msgstr "Op afschriftdatum sorteren (niet afgestemde items achteraan)"
 
 #: ../src/gnome/glade/register.glade.h:66
 msgid "Sort register by..."
-msgstr "Grootboekkaart sorteren op..."
+msgstr "Grootboekkaart sorteren op…"
 
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:424
@@ -5628,7 +5627,7 @@ msgstr " dagen"
 
 #: ../src/gnome/glade/sched-xact.glade.h:4
 msgid "... utilize an escrow account for payments?"
-msgstr "... een geblokkeerde rekening gebruiken voor betalingen?"
+msgstr "… een geblokkeerde rekening gebruiken voor betalingen?"
 
 #: ../src/gnome/glade/sched-xact.glade.h:5
 msgid ""
@@ -5746,7 +5745,7 @@ msgstr "Verwijderen van rekening"
 
 #: ../src/gnome/glade/sched-xact.glade.h:53
 msgid "Advanced..."
-msgstr "Geavanceerd..."
+msgstr "Geavanceerd…"
 
 #: ../src/gnome/glade/sched-xact.glade.h:54
 #: ../src/gnome-utils/glade/transfer.glade.h:5
@@ -5821,7 +5820,7 @@ msgstr "Datumbereik"
 
 #: ../src/gnome/glade/sched-xact.glade.h:75
 msgid "Do you..."
-msgstr "Wilt u..."
+msgstr "Wilt u…"
 
 #: ../src/gnome/glade/sched-xact.glade.h:76
 msgid "Edit Scheduled Transaction"
@@ -6071,19 +6070,19 @@ msgstr "Halfmaandelijks"
 
 #: ../src/gnome/glade/sched-xact.glade.h:146
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
-msgstr "De optie 'automatisch aanmaken' standaard instellen bij nieuw aangemaakte vaste journaalposten."
+msgstr "De optie ‘automatisch aanmaken’ standaard instellen bij nieuw aangemaakte vaste journaalposten."
 
 #: ../src/gnome/glade/sched-xact.glade.h:147
 msgid "Set the 'notify' flag on newly created scheduled transactions."
-msgstr "De optie \"melding\" standaard instellen bij nieuw aangemaakte vaste journaalposten."
+msgstr "De optie ‘melding’ standaard instellen bij nieuw aangemaakte vaste journaalposten."
 
 #: ../src/gnome/glade/sched-xact.glade.h:148
 msgid "Show the \"since last run\" window when a file is opened."
-msgstr "Het venster \"vaste journaalposten uitvoeren\" weergeven wanneer een bestand wordt geopend."
+msgstr "Het venster ‘Vaste journaalposten uitvoeren’ weergeven wanneer een bestand wordt geopend."
 
 #: ../src/gnome/glade/sched-xact.glade.h:149
 msgid "Since Last Run..."
-msgstr "Vaste journaalposten uitvoeren..."
+msgstr "Vaste journaalposten uitvoeren…"
 
 #: ../src/gnome/glade/sched-xact.glade.h:150
 msgid "Specify Source Account"
@@ -6149,7 +6148,7 @@ msgstr "Woensdag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:166
 msgid "_Auto-create new transactions"
-msgstr "Nieuwe boekingen _automatisch aanmaken..."
+msgstr "Nieuwe boekingen _automatisch aanmaken…"
 
 #: ../src/gnome/glade/sched-xact.glade.h:167
 msgid "_Notify before transactions are created "
@@ -6379,7 +6378,7 @@ msgstr "Een nieuw bestand aanmaken"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:104
 msgid "_Open..."
-msgstr "_Openen..."
+msgstr "_Openen…"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:105
 msgid "Open an existing GnuCash file"
@@ -6395,7 +6394,7 @@ msgstr "Het huidige GnuCash-bestand opslaan"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:114
 msgid "Save _As..."
-msgstr "Opslaan _als..."
+msgstr "Opslaan _als…"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:120
 msgid "Export _Accounts"
@@ -6408,7 +6407,7 @@ msgstr "Het rekeningschema naar een nieuw GnuCashbestand exporteren"
 #: ../src/gnome/gnc-plugin-basic-commands.c:128
 #: ../src/gnome/gnc-plugin-page-register.c:201
 msgid "_Find..."
-msgstr "_Zoeken..."
+msgstr "_Zoeken…"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:129
 #: ../src/gnome/gnc-plugin-page-register.c:202
@@ -6442,7 +6441,7 @@ msgstr "Het overzicht met vaste journaalposten"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:152
 msgid "Since _Last Run..."
-msgstr "Vaste journaalposten _uitvoeren..."
+msgstr "Vaste journaalposten _uitvoeren…"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:153
 msgid "Create Scheduled Transactions since the last time run"
@@ -6450,7 +6449,7 @@ msgstr "Alle nog ontbrekende vaste journaalposten aanmaken"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:157
 msgid "_Mortgage & Loan Repayment..."
-msgstr "_Hypotheek- en lening-assistent..."
+msgstr "_Hypotheek- en lening-assistent…"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:158
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -6534,7 +6533,7 @@ msgstr "Een nieuwe rekening aanmaken"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:160
 msgid "New Account _Hierarchy..."
-msgstr "Nieuw rekening_schema..."
+msgstr "Nieuw rekening_schema…"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:161
 msgid "Extend the current book by merging with new account type categories"
@@ -6572,7 +6571,7 @@ msgstr "De geselecteerde rekening bewerken"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 msgid "_Delete Account..."
-msgstr "Rekening ver_wijderen..."
+msgstr "Rekening ver_wijderen…"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:183
 msgid "Delete selected account"
@@ -6580,7 +6579,7 @@ msgstr "De geselecteerde rekening verwijderen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:187
 msgid "_Renumber Subaccounts..."
-msgstr "Subrekeningen _hernummeren..."
+msgstr "Subrekeningen _hernummeren…"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:188
 msgid "Renumber the children of the selected account"
@@ -6591,12 +6590,12 @@ msgstr "Subrekeningen van geselecteerde rekening hernummeren"
 #: ../src/gnome/gnc-plugin-page-register.c:272
 #: ../src/gnome-utils/gnc-main-window.c:307
 msgid "_Filter By..."
-msgstr "_Filteren op ..."
+msgstr "_Filteren op…"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:200
 #: ../src/gnome/gnc-plugin-page-register.c:284
 msgid "_Reconcile..."
-msgstr "_Afstemmen..."
+msgstr "_Afstemmen…"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:201
 #: ../src/gnome/gnc-plugin-page-register.c:285
@@ -6606,7 +6605,7 @@ msgstr "De geselecteerde rekening afstemmen"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:205
 #: ../src/gnome/gnc-plugin-page-register.c:289
 msgid "_Auto-clear..."
-msgstr "_Automatisch bevestigen..."
+msgstr "_Automatisch bevestigen…"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:206
 msgid "Automatically clear individual transactions, given a cleared amount"
@@ -6616,7 +6615,7 @@ msgstr "Automatisch individuele boekregels bevestigen, gegeven een te bevestigen
 #: ../src/gnome/gnc-plugin-page-register.c:279
 #: ../src/gnome-utils/gnc-icons.c:22 ../src/gnome/window-reconcile.c:2148
 msgid "_Transfer..."
-msgstr "_Boeken..."
+msgstr "_Boeken…"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:211
 #: ../src/gnome/gnc-plugin-page-register.c:280
@@ -6627,7 +6626,7 @@ msgstr "Bedragen van één rekening naar een andere overboeken"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:215
 #: ../src/gnome/gnc-plugin-page-register.c:294
 msgid "Stoc_k Split..."
-msgstr "Aandelen_splitsing..."
+msgstr "Aandelen_splitsing…"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:216
 #: ../src/gnome/gnc-plugin-page-register.c:295
@@ -6637,7 +6636,7 @@ msgstr "Aandelensplitsing of -fusie verwerken"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:220
 #: ../src/gnome/gnc-plugin-page-register.c:299
 msgid "View _Lots..."
-msgstr "_Partijen bekijken..."
+msgstr "_Partijen bekijken…"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:221
 #: ../src/gnome/gnc-plugin-page-register.c:300
@@ -6851,7 +6850,7 @@ msgstr "U moet ten minste één in te schatten rekening selecteren."
 
 #: ../src/gnome/gnc-plugin-page-register.c:174
 msgid "_Print Checks..."
-msgstr "Cheques _afdrukken..."
+msgstr "Cheques _afdrukken…"
 
 #: ../src/gnome/gnc-plugin-page-register.c:181
 #: ../src/gnome-utils/gnc-main-window.c:280
@@ -6947,7 +6946,7 @@ msgstr "Transactie naar voren _schuiven"
 #: ../src/gnome/gnc-plugin-page-register.c:268
 #: ../src/gnome-utils/gnc-main-window.c:303
 msgid "_Sort By..."
-msgstr "_Sorteren op..."
+msgstr "_Sorteren op…"
 
 #: ../src/gnome/gnc-plugin-page-register.c:290
 msgid "Automatically clear individual transactions, so as to reach a certain cleared amount"
@@ -6967,7 +6966,7 @@ msgstr "De wisselkoers voor de huidige boeking bewerken"
 
 #: ../src/gnome/gnc-plugin-page-register.c:319
 msgid "Sche_dule..."
-msgstr "Inr_oosteren..."
+msgstr "Inr_oosteren…"
 
 #: ../src/gnome/gnc-plugin-page-register.c:324
 msgid "_All transactions"
@@ -7125,14 +7124,14 @@ msgstr "Deze boeking is al tegengeboekt."
 #: ../src/gnome/gnc-plugin-page-register.c:2460
 #, c-format
 msgid "Sort %s by..."
-msgstr "%s sorteren op..."
+msgstr "%s sorteren op…"
 
 #. Translators: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2513
 #: ../src/gnome-utils/gnc-tree-view-account.c:1897
 #, c-format
 msgid "Filter %s by..."
-msgstr "%s filteren op..."
+msgstr "%s filteren op…"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:118
 msgid "_Scheduled"
@@ -7184,7 +7183,7 @@ msgstr "Deze boeking kan niet worden bewerkt of verwijderd."
 #: ../src/gnome/gnc-split-reg.c:906
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr "Deze boeking is aangemerkt als alleen-lezen met als reden: '%s'"
+msgstr "Deze boeking is aangemerkt als alleen-lezen met als reden: ‘%s’"
 
 #: ../src/gnome/gnc-split-reg.c:939
 msgid "Remove the splits from this transaction?"
@@ -7201,7 +7200,7 @@ msgstr "Boekregels _verwijderen"
 #: ../src/gnome/gnc-split-reg.c:1042
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
-msgstr "De boekregel '%s' van boeking '%s' verwijderen?"
+msgstr "De boekregel ‘%s’ van boeking ‘%s’ verwijderen?"
 
 #: ../src/gnome/gnc-split-reg.c:1043
 msgid "You would be deleting a reconciled split! This is not a good idea as it will cause your reconciled balance to be off."
@@ -7273,11 +7272,11 @@ msgstr "Deze grootboekkaart is aangemerkt als alleen-lezen."
 
 #: ../src/gnome/gnc-split-reg.c:1988
 msgid "This account may not be edited.  If you want to edit transactions in this register, please open the account options and turn off the placeholder checkbox."
-msgstr "Deze rekening mag niet worden bewerkt. Wanneer u boekingen vanaf deze grootboekkaart wilt bewerken, dient u de rekeningoptie \"Aggregatie\" uit te vinken."
+msgstr "Deze rekening mag niet worden bewerkt. Wanneer u boekingen vanaf deze grootboekkaart wilt bewerken, dient u de rekeningoptie ‘Aggregatie’ uit te vinken."
 
 #: ../src/gnome/gnc-split-reg.c:1995
 msgid "One of the sub-accounts selected may not be edited.  If you want to edit transactions in this register, please open the sub-account options and turn off the placeholder checkbox. You may also open an individual account instead of a set of accounts."
-msgstr "Eén van de geselecteerde subrekeningen mag niet worden bewerkt. Wanneer u boekingen vanaf deze grootboekkaart wilt bewerken, dient u de rekeningoptie \"Aggregatie\" van deze subrekening uit te vinken. U kunt er ook voor kiezen om een individuele rekening te openen in plaats van een groep met rekeningen."
+msgstr "Eén van de geselecteerde subrekeningen mag niet worden bewerkt. Wanneer u boekingen vanaf deze grootboekkaart wilt bewerken, dient u de rekeningoptie ‘Aggregatie’ van deze subrekening uit te vinken. U kunt er ook voor kiezen om een individuele rekening te openen in plaats van een groep met rekeningen."
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
@@ -7316,47 +7315,47 @@ msgstr "Munteenheden in dit venster weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:3
 msgid "Show the Full Name column"
-msgstr "Kolom 'Volledige naam' weergeven"
+msgstr "Kolom ‘Volledige naam’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:4
 msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-msgstr "Kolom 'ISIN' weergeven"
+msgstr "Kolom ‘ISIN’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:5
 msgid "Show the Namespace column"
-msgstr "Kolom 'Naamruimte' weergeven"
+msgstr "Kolom ‘Naamruimte’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:6
 msgid "Show the Print Name column"
-msgstr "Kolom 'Afdruknaam' weergeven"
+msgstr "Kolom ‘Afdruknaam’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:7
 msgid "Show the Quote Flag column"
-msgstr "Kolom 'Koersmarker' weergeven"
+msgstr "Kolom ‘Koersmarker’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:8
 msgid "Show the Quote Source column"
-msgstr "Kolom 'Noteringsbron' weergeven"
+msgstr "Kolom ‘Noteringsbron’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:9
 msgid "Show the Quote Timezone column"
-msgstr "Kolom 'Tijdzone koers' weergeven"
+msgstr "Kolom ‘Tijdzone koers’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:10
 msgid "Show the Unique Name column"
-msgstr "Kolom 'Unieke naam' weergeven"
+msgstr "Kolom ‘Unieke naam’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:11
 msgid "Show the fraction column"
-msgstr "Kolom 'Coupure' weergeven"
+msgstr "Kolom ‘Coupure’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:12
 msgid "Show the name column"
-msgstr "Kolom 'Naam' weergeven"
+msgstr "Kolom ‘Naam’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:13
 msgid "Show the symbol column"
-msgstr "Kolom 'Symbool' weergeven"
+msgstr "Kolom ‘Symbool’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:14
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:8
@@ -7369,11 +7368,11 @@ msgstr "Kolommen waarop wordt gesorteerd"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:2
 msgid "Default to 'new search' if fewer than this number of items is returned"
-msgstr "Standaard een 'nieuwe zoekactie' opstarten indien een zoekactie minder dan dit aantal resultaten oplevert."
+msgstr "Standaard een ‘nieuwe zoekactie’ opstarten indien een zoekactie minder dan dit aantal resultaten oplevert."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:3
 msgid "If active, the \"New Hierarchy\" window will be shown whenever the \"New File\" menu item is chosen. Otherwise it will not be shown."
-msgstr "Bij activering van deze optie wordt het venster \"Nieuw rekeningschema instellen\" weergegeven zodra een \"Nieuw bestand\" wordt aangemaakt."
+msgstr "Bij activering van deze optie wordt het venster ‘Nieuw rekeningschema instellen’ weergegeven zodra een ‘Nieuw bestand’ wordt aangemaakt."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:4
 msgid "If active, the new user window will be shown. Otherwise it will not be shown."
@@ -7385,7 +7384,7 @@ msgstr "Laatst gebruikte padnaam"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:6
 msgid "New hierarchy window on \"New File\""
-msgstr "Nieuw rekeningschema instellen bij \"Nieuw bestand\""
+msgstr "Nieuw rekeningschema instellen bij ‘Nieuw bestand’"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:8
 msgid "Show the new user window"
@@ -7415,15 +7414,15 @@ msgstr "Dit veld betreft de laatste bestandsnaam die door dit venster is gebruik
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:13
 msgid "This setting indicates how the key column is sorted. Possible values for this setting are 'ascending' and 'descending'."
-msgstr "Deze instelling bepaalt de sorteervolgorde. Mogelijke waardes voor deze instelling zijn \"ascending\" (oplopend) en \"descending\" (aflopend)."
+msgstr "Deze instelling bepaalt de sorteervolgorde. Mogelijke waardes voor deze instelling zijn “ascending” (oplopend) en “descending” (aflopend)."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:14
 msgid "This setting indicates whether to search in all items in the current class, or only in 'active' items in the current class."
-msgstr "Door activering van deze optie worden alleen de 'actieve' elementen in de huidige klasse doorzocht in plaats van alle elementen."
+msgstr "Door activering van deze optie worden alleen de ‘actieve’ elementen in de huidige klasse doorzocht in plaats van alle elementen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:15
 msgid "This setting indicates which column in the tree is used for sorting. Possible values for this setting are the name of any column in this window (see the column_order key) or the keyword 'none'."
-msgstr "Deze instelling bepaalt de kolom waarop het rekeningschema wordt gesorteerd. Mogelijke waardes voor deze instelling zijn de naam van een willekeurige kolom uit het venster (zie tevens de sleutel \"column_order\") of het trefwoord \"none\" (geen)."
+msgstr "Deze instelling bepaalt de kolom waarop het rekeningschema wordt gesorteerd. Mogelijke waardes voor deze instelling zijn de naam van een willekeurige kolom uit het venster (zie tevens de sleutel ‘column_order’) of het trefwoord “none” (geen)."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:16
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:17
@@ -7441,51 +7440,51 @@ msgstr "Vensterpositie"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:2
 msgid "Show the Price column"
-msgstr "Kolom 'Koers' weergeven"
+msgstr "Kolom ‘Koers’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:3
 msgid "Show the Source column"
-msgstr "Kolom 'Bron' weergeven"
+msgstr "Kolom ‘Bron’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:4
 msgid "Show the Type column"
-msgstr "Kolom 'Soort' weergeven"
+msgstr "Kolom ‘Soort’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:5
 msgid "Show the commodity column"
-msgstr "Kolom 'Goed (effect/valuta)' weergeven"
+msgstr "Kolom ‘Goed (effect/valuta)’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:6
 msgid "Show the currency column"
-msgstr "Kolom 'Munteenheid' weergeven"
+msgstr "Kolom ‘Munteenheid’ weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:7
 msgid "Show the date column"
-msgstr "Kolom 'Datum' tonen"
+msgstr "Kolom ‘Datum’ tonen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:9
 msgid "This setting enables the Price column."
-msgstr "Deze instelling activeert de kolom \"Koers\"."
+msgstr "Deze instelling activeert de kolom ‘Koers’."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:10
 msgid "This setting enables the Source column."
-msgstr "Deze instelling activeert de kolom \"Bron\"."
+msgstr "Deze instelling activeert de kolom ‘Bron’."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:11
 msgid "This setting enables the Type column."
-msgstr "Deze instelling activeert de kolom \"Soort\"."
+msgstr "Deze instelling activeert de kolom ‘Soort’."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:12
 msgid "This setting enables the commodity column."
-msgstr "Deze instelling activeert de kolom \"Goed (effect/valuta)\"."
+msgstr "Deze instelling activeert de kolom ‘Goed (effect/valuta)’."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:13
 msgid "This setting enables the currency column."
-msgstr "Deze instelling activeert de kolom \"Munteenheid\"."
+msgstr "Deze instelling activeert de kolom ‘Munteenheid’."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:14
 msgid "This setting enables the date column."
-msgstr "Deze instelling activeert de kolom \"Datum\"."
+msgstr "Deze instelling activeert de kolom ‘Datum’."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:1
 msgid "Custom date format"
@@ -7537,7 +7536,7 @@ msgstr "Positie van de begunstigdenaam"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:13
 msgid "Print '***' before and after text."
-msgstr "Voor en na elk tekstveld telkens \"***\" afdrukken."
+msgstr "Voor en na elk tekstveld telkens “***” afdrukken."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:14
 msgid "Print the date format below the date."
@@ -7630,35 +7629,35 @@ msgstr "Hoeveel dagen van tevoren de gebruiker herinnerd moet worden."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
 msgid "If active, any newly created scheduled transaction will have its 'auto create' flag set active by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction."
-msgstr "Door activering van deze optie zal bij nieuw aangemaakte vaste journaalposten standaard de optie \"automatisch aanmaken\" worden ingesteld. De gebruiker kan deze optie op elk moment zelf aanpassen (hetzij bij aanmaak van de VJP, hetzij door de VJP later te bewerken)."
+msgstr "Door activering van deze optie zal bij nieuw aangemaakte vaste journaalposten standaard de optie ‘automatisch aanmaken’ worden ingesteld. De gebruiker kan deze optie op elk moment zelf aanpassen (hetzij bij aanmaak van de VJP, hetzij door de VJP later te bewerken)."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:4
 msgid "If active, any newly created scheduled transaction will have its 'notify' flag set by default. The user can change this flag during transaction creation, or at any later time by editing the scheduled transaction. This setting only has meaning if the create_auto setting is active."
-msgstr "Door activering van deze optie zal bij nieuw aangemaakte vaste journaalposten standaard de optie \"melding\" worden ingesteld. De gebruiker kan deze optie op elk moment zelf aanpassen (hetzij bij aanmaak van de VJP, hetzij door de VJP later te bewerken). Deze optie heeft alleen effect indien de optie \"automatisch aanmaken\" is ingesteld."
+msgstr "Door activering van deze optie zal bij nieuw aangemaakte vaste journaalposten standaard de optie ‘melding’ worden ingesteld. De gebruiker kan deze optie op elk moment zelf aanpassen (hetzij bij aanmaak van de VJP, hetzij door de VJP later te bewerken). Deze optie heeft alleen effect indien de optie ‘Automatisch aanmaken’ is ingesteld."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:5
 msgid "Set the \"auto create\" flag by default"
-msgstr "De optie 'automatisch aanmaken' standaard instellen bij nieuw aangemaakte vaste journaalposten."
+msgstr "De optie ‘Automatisch aanmaken’ standaard instellen bij nieuw aangemaakte vaste journaalposten."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:6
 msgid "Set the \"notify\" flag by default"
-msgstr "De optie \"melding\" standaard instellen."
+msgstr "De optie ‘Melding’ standaard instellen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:7
 msgid "Show \"since last run\" dialog when a file is opened."
-msgstr "Het venster \"vaste journaalposten uitvoeren\" weergeven wanneer een bestand wordt geopend."
+msgstr "Het venster ‘Vaste journaalposten uitvoeren’ weergeven wanneer een bestand wordt geopend."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:8
 msgid "This setting controls whether the scheduled transactions \"since last run\" dialog is shown automatically when a data file is opened. This includes the initial opening of the data file when GnuCash starts. If this setting is active, show the dialog, otherwise it is not shown."
-msgstr "Deze instelling bepaalt of het venster \"vaste journaalposten uitvoeren\" automatisch wordt getoond wanneer een databestand wordt geopend (o.a. de initiële opening van het bestand bij het opstarten van GnuCash). Als deze instelling actief is, wordt het venster getoond, anders niet."
+msgstr "Deze instelling bepaalt of het venster ‘Vaste journaalposten uitvoeren’ automatisch wordt getoond wanneer een databestand wordt geopend (o.a. de initiële opening van het bestand bij het opstarten van GnuCash). Als deze instelling actief is, wordt het venster getoond, anders niet."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:1
 msgid "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog will be shown. Otherwise it will not be shown."
-msgstr "Door activering van deze optie zal bij het opstarten van GnuCash een \"tip van de dag\"-venster worden weergegeven."
+msgstr "Door activering van deze optie zal bij het opstarten van GnuCash een ‘tip van de dag’-venster worden weergegeven."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:2
 msgid "Show \"Tip Of The Day\" at GnuCash start"
-msgstr "Bij het opstarten van GnuCash het \"Tip van de dag\"-venster weergeven"
+msgstr "Bij het opstarten van GnuCash het ‘Tip van de dag’-venster weergeven"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:3
 msgid "The next tip to show."
@@ -7771,7 +7770,7 @@ msgstr "Door activering van deze optie zal GnuCash automatisch een decimaalteken
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
 msgid "If active, a \"close\" button will be displayed on any notebook tab that may be closed. Otherwise, no such button will be shown on the tab. Regardless of this setting, pages can always be closed via the \"close\" menu item or the \"close\" button on toolbar."
-msgstr "Door activering van deze optie zal een sluitknop worden toegevoegd aan elk tabblad dat kan worden afgesloten. Zonder deze optie ontbreken deze knoppen. Onafhankelijk hiervan kan een tabblad altijd worden afgesloten via de knop \"Sluiten\" in de werkbalk of de menukeuze \"Bestand ‣ Sluiten\"."
+msgstr "Door activering van deze optie zal een sluitknop worden toegevoegd aan elk tabblad dat kan worden afgesloten. Zonder deze optie ontbreken deze knoppen. Onafhankelijk hiervan kan een tabblad altijd worden afgesloten via de knop ‘Sluiten’ in de werkbalk of de menukeuze ‘Bestand ‣ Sluiten’."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:28
 msgid "If active, closing a tab moves to the most recently visited tab. Otherwise closing a tab moves one tab to the left."
@@ -7787,7 +7786,7 @@ msgstr "Door activering van deze optie wordt elke nieuw rapport geopend in een n
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:31
 msgid "If active, formal accounting labels \"Credit\" and \"Debit\" will be used when designating fields on screen. Otherwise, informal labels such as Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
-msgstr "Door activering van deze optie worden de boekhoudkundige termen \"Debet\" en \"Credit\" als label gebruikt. Zonder deze optie wordt in plaats hiervan gebruik gemaakt van informele beschrijvingen (Opname/Storting, Verhogen/Verlagen, enzovoorts)."
+msgstr "Door activering van deze optie worden de boekhoudkundige termen ‘Debet’ en ‘Credit’ als label gebruikt. Zonder deze optie wordt in plaats hiervan gebruik gemaakt van informele beschrijvingen (Opname/Storting, Verhogen/Verlagen, enzovoorts)."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:32
 msgid "If active, gnucash will be allowed to intentionally break file compatibility with older versions, so that a data file saved in this version cannot be read by an older version again. Otherwise gnucash will write data files only in formats that can be read by older versions as well."
@@ -7795,7 +7794,7 @@ msgstr "Door activering van deze optie doorbreekt GnuCash de bestandscompatibili
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
 msgid "If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line."
-msgstr "Door activering van deze optie wordt bij het indrukken van de \"Enter\"-toets naar de laatste (lege) boekregel van de grootboekkaart gegaan. Zonder deze optie wordt de naar volgende regel in de boeking gegaan."
+msgstr "Door activering van deze optie wordt bij het indrukken van de ‘Enter’-toets naar de laatste (lege) boekregel van de grootboekkaart gegaan. Zonder deze optie wordt de naar volgende regel in de boeking gegaan."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:34
 msgid "If active, the register will be colored as specified by the system theme. This can be overridden to provide custom colors by editing the gtkrc file in the users home directory. Otherwise the standard register colors will be used that GnuCash has always used."
@@ -7859,7 +7858,7 @@ msgstr "Uitsluitend het laatste onderdeel van rekeningnamen op de grootboekkaart
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:50
 msgid "Show two lines of information for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the \"View->Double Line\" menu item."
-msgstr "Per boeking twee regels weergeven op de grootboekkaart. Dit is de standaard instelling wanneer een grootboekkaart voor het eerst wordt geopend. Deze instelling kan worden aangepast via menukeuze \"Beeld ‣ Tweeregelig\"."
+msgstr "Per boeking twee regels weergeven op de grootboekkaart. Dit is de standaard instelling wanneer een grootboekkaart voor het eerst wordt geopend. Deze instelling kan worden aangepast via menukeuze ‘Beeld ‣ Tweeregelig’."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:51
 msgid "Show vertical borders between columns in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked."
@@ -7880,11 +7879,11 @@ msgstr "Bron voor standaard munteenheid rapporten"
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:55
 #: ../src/gnome-utils/glade/preferences.glade.h:129
 msgid "The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically."
-msgstr "Het aantal minuten waarna het automatisch opslaan van het bestand wordt gestart. Voer hier als waarde '0' in om niet automatisch op te slaan."
+msgstr "Het aantal minuten waarna het automatisch opslaan van het bestand wordt gestart. Voer hier als waarde ‘0’ in om niet automatisch op te slaan."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:56
 msgid "This field specifies the default view style when opening a new register window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The \"ledger\" setting says to show each transaction on one or two lines. The \"auto-ledger\" setting does the same, but also expands only the current transaction to show all splits. The \"journal\" setting shows all transactions in expanded form."
-msgstr "Dit veld bepaalt de standaard weergavestijl wanneer een grootboekkaart wordt geopend. De mogelijke waarden zijn \"ledger\" (eenvoudig dagboek), \"auto-ledger\" (automatisch dagboek) en \"journal\" (journaalposten). De optie \"ledger\" toont elke boeking als één regel. De optie \"auto-ledger\" doet hetzelfde, maar klapt de geselecteerde regel uit tot de volledige boeking. Bij de optie \"journal\" worden alle regels automatisch uitgeklapt."
+msgstr "Dit veld bepaalt de standaard weergavestijl wanneer een grootboekkaart wordt geopend. De mogelijke waarden zijn “ledger” (eenvoudig dagboek), “auto-ledger” (automatisch dagboek) en “journal” (journaalposten). De optie “ledger” toont elke boeking als één regel. De optie “auto-ledger” doet hetzelfde, maar klapt de geselecteerde regel uit tot de volledige boeking. Bij de optie “journal” worden alle regels automatisch uitgeklapt."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:57
 msgid "This field specifies the number of automatic decimal places that will be filled in."
@@ -7896,43 +7895,43 @@ msgstr "Deze instelling bepaalt de maximale breedte van de tabs. Als een tabteks
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:59
 msgid "This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting \"income_expense\" is for users who like to see negative expenses and positive income. The setting of \"credit\" is for users who want to see balances reflect the debit/credit status of the account. The setting \"none\" doesn't reverse the sign on any balances."
-msgstr "Deze instelling bepaalt of bij welke rekeningsoorten het saldo van teken wordt gewisseld (van positief naar negatief - of omgekeerd). De waarde \"income_expense\" is voor gebruikers die graag positieve opbrengsten en negatieve kosten zien. De waarde \"credit\" is voor gebruikers die graag zien dat de saldi de intrinsieke debet- of creditstatus van een rekening in ogenschouw nemen. De waarde \"none\" schakelt alle tekenomkering uit."
+msgstr "Deze instelling bepaalt of bij welke rekeningsoorten het saldo van teken wordt gewisseld (van positief naar negatief - of omgekeerd). De waarde “income_expense” is voor gebruikers die graag positieve opbrengsten en negatieve kosten zien. De waarde “credit” is voor gebruikers die graag zien dat de saldi de intrinsieke debet- of creditstatus van een rekening in ogenschouw nemen. De waarde “none” schakelt alle tekenomkering uit."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:60
 msgid "This setting chooses the way dates are displayed in GnuCash. Possible values for this setting are \"locale\" to use the system locale setting, \"ce\" for Continental Europe style dates, \"iso\" for ISO 8601 standard dates , \"uk\" for United Kingdom style dates, and \"us\" for United States style dates."
-msgstr "Deze instelling bepaalt de wijze waarop datums worden weergegeven binnen GnuCash. Mogelijke waardes zijn: \"locale\" om de opmaak uit de landinstelling van uw systeem te hanteren; \"ce\" voor opmaak uit continentaal Europa; \"iso\" voor datums conform de ISO 8601-standaard; \"uk\" voor opmaak uit het Verenigd Koninkrijk; \"us\" voor opmaak uit de Verenigde Staten."
+msgstr "Deze instelling bepaalt de wijze waarop datums worden weergegeven binnen GnuCash. Mogelijke waardes zijn: “locale” om de opmaak uit de landinstelling van uw systeem te hanteren; “ce” voor opmaak uit continentaal Europa; “iso” voor datums conform de ISO 8601-standaard; “uk” voor opmaak uit het Verenigd Koninkrijk; “us” voor opmaak uit de Verenigde Staten."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:61
 msgid "This setting controls how the labels on toolbar buttons are shown. If set to \"system\" then GnuCash will use the desktop setting for how to draw toolbar buttons. If set to \"icon\" then only icons will be show on toolbar buttons.. If set to \"text\" only the labels will be shown. If set to \"both\" then both icons and labels will be shown. If set to \"both-horiz\" then icons will be shown for all buttons with labels added on important buttons."
-msgstr "Deze instelling bepaalt hoe de werkbalkknoppen worden weergegeven. Bij de instelling \"system\" neemt GnuCash de systeeminstelling voor het weergeven van knoppenbalken over. Bij de instellingen \"icon\" of \"text\" worden uitsluitend iconen respectievelijk tekstlabels op de knoppenbalk weergegeven. De instelling \"both\" zorgt ervoor dat de knoppen als icoon met tekstlabel worden weergegeven. Indien deze instelling op \"both-horiz\" wordt ingesteld wordt bij alle knoppen het icoon weergegeven en krijgen de belangrijke knoppen een tekstlabel ernaast."
+msgstr "Deze instelling bepaalt hoe de werkbalkknoppen worden weergegeven. Bij de instelling “system” neemt GnuCash de systeeminstelling voor het weergeven van knoppenbalken over. Bij de instellingen “icon” of “text” worden uitsluitend iconen respectievelijk tekstlabels op de knoppenbalk weergegeven. De instelling “both” zorgt ervoor dat de knoppen als icoon met tekstlabel worden weergegeven. Indien deze instelling op “both-horiz” wordt ingesteld wordt bij alle knoppen het icoon weergegeven en krijgen de belangrijke knoppen een tekstlabel ernaast."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:62
 msgid "This setting controls the default currency used for reports. If set to \"locale\" then GnuCash will retrieve the default currency from the user's locale setting. If set to \"other\", GnuCash will use the setting specified by the currency_other key."
-msgstr "Deze instelling bepaalt de munteenheid die standaard in rapporten wordt gehanteerd. Indien deze is ingesteld op \"locale\" neemt GnuCash de munteenheid-waarde uit de landinstelling van uw systeem over. Indien deze is ingesteld op \"other\" neemt GnuCash de waarde uit de sleutel \"currency_other\" over."
+msgstr "Deze instelling bepaalt de munteenheid die standaard in rapporten wordt gehanteerd. Indien deze is ingesteld op “locale” neemt GnuCash de munteenheid-waarde uit de landinstelling van uw systeem over. Indien deze is ingesteld op “other” neemt GnuCash de waarde uit de sleutel ‘currency_other’ over."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:63
 msgid "This setting controls the source of the default currency for new accounts. If set to \"locale\" then GnuCash will retrieve the default currency from the user's locale setting. If set to \"other\", GnuCash will use the setting specified by the currency_other key."
-msgstr "Deze instelling bepaalt de munteenheid die standaard bij nieuwe rekeningen wordt gehanteerd. Indien deze is ingesteld op \"locale\" neemt GnuCash de munteenheid-waarde uit de landinstelling van uw systeem over. Indien deze is ingesteld op \"other\" neemt GnuCash de waarde uit de sleutel \"currency_other\" over."
+msgstr "Deze instelling bepaalt de munteenheid die standaard bij nieuwe rekeningen wordt gehanteerd. Indien deze is ingesteld op “locale” neemt GnuCash de munteenheid-waarde uit de landinstelling van uw systeem over. Indien deze is ingesteld op “other” neemt GnuCash de waarde uit de sleutel ‘currency_other’ over."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:64
 msgid "This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
-msgstr "Het teken dat gebruikt wordt tussen de componenten van een (volledige) rekeningnaam. U kunt hier een willekeurig individueel Unicode-karakter (mits geen cijfer of letter) of een van de tekenreeksen \"colon\", \"slash\", \"backslash\", \"dash\" en \"period\" invoeren."
+msgstr "Het teken dat gebruikt wordt tussen de componenten van een (volledige) rekeningnaam. U kunt hier een willekeurig individueel Unicode-karakter (mits geen cijfer of letter) of een van de tekenreeksen “colon”, “slash”, “backslash”, “dash” en “period” invoeren."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
 msgid "This setting determines the edge at which the summary bar for various pages is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom\"."
-msgstr "Deze instelling bepaalt de vensterrand waar de samenvattingsbalk wordt getoond. Mogelijke waardes zijn \"top\" en \"bottom\"; de standaardinstelling is \"bottom\"."
+msgstr "Deze instelling bepaalt de vensterrand waar de samenvattingsbalk wordt getoond. Mogelijke waardes zijn “top” en “bottom”; de standaardinstelling is “bottom”."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:66
 msgid "This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and \"right\". It defaults to \"top\"."
-msgstr "Deze instelling bepaalt de vensterrand waar de tabbladen wordt weergegeven. Mogelijke waardes zijn \"top\", \"left\", \"bottom\" en \"right\"; de standaardinstelling is \"top\"."
+msgstr "Deze instelling bepaalt de vensterrand waar de tabbladen wordt weergegeven. Mogelijke waardes zijn “top”, “left”, “bottom” en “right”; de standaardinstelling is “top”."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:67
 msgid "This setting specifies the default currency used for new accounts if the currency_choice setting is set to \"other\". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
-msgstr "Deze instelling bepaalt de munteenheid die standaard bij nieuwe rekeningen wordt gehanteerd indien de sleutel \"currency_choice\" op \"other\" is ingesteld. Dit veld moet de drieletterige ISO 4217-code voor de munteenheid (bijvoorbeeld USD, GBP of EUR)."
+msgstr "Deze instelling bepaalt de munteenheid die standaard bij nieuwe rekeningen wordt gehanteerd indien de sleutel ‘currency_choice’ op “other” is ingesteld. Dit veld moet de drieletterige ISO 4217-code voor de munteenheid (bijvoorbeeld USD, GBP of EUR)."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:68
 msgid "This setting specifies the default currency used for reports if the currency_choice setting is set to \"other\". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
-msgstr "Deze instelling bepaalt de munteenheid die standaard in rapporten wordt gehanteerd indien de sleutel \"currency_choice\" op \"other\" is ingesteld. Dit veld moet de drieletterige ISO 4217-code voor de munteenheid (bijvoorbeeld USD, GBP of EUR)."
+msgstr "Deze instelling bepaalt de munteenheid die standaard in rapporten wordt gehanteerd indien de sleutel ‘currency_choice’ op “other” is ingesteld. Dit veld moet de drieletterige ISO 4217-code voor de munteenheid (bijvoorbeeld USD, GBP of EUR)."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:69
 msgid "This setting specifies the number of days after which old log/backup files will be deleted (0 = never)."
@@ -8116,27 +8115,27 @@ msgstr "Index voor relatieve begindatum"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:10
 msgid "This setting controls the ending date set in profit/loss calculations if the end_choice setting is set to \"absolute\". This field should contain a date as represented in seconds from January 1st, 1970."
-msgstr "Deze instelling bepaalt de einddatum bij de berekening van het resultaatindien de sleutel \"end_choice\" is ingesteld op \"absolute\". Dit veld bevat een datumwaarde, weergegeven in secondes vanaf 1 januari 1970."
+msgstr "Deze instelling bepaalt de einddatum bij de berekening van het resultaatindien de sleutel ‘end_choice’ is ingesteld op “absolute”. Dit veld bevat een datumwaarde, weergegeven in secondes vanaf 1 januari 1970."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:11
 msgid "This setting controls the ending date set in profit/loss calculations if the end_choice setting is set to anything other than \"absolute\". This field should contain a value between 0 and 8."
-msgstr "Deze instelling bepaalt de einddatum bij de berekening van het resultaatindien de sleutel \"end_choice\" niet is ingesteld op \"absolute\". Dit veld bevat een indexwaarde tussen 0 en 8."
+msgstr "Deze instelling bepaalt de einddatum bij de berekening van het resultaatindien de sleutel ‘end_choice’ niet is ingesteld op “absolute”. Dit veld bevat een indexwaarde tussen 0 en 8."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:12
 msgid "This setting controls the starting date set in profit/loss calculations if the start_choice setting is set to \"absolute\". This field should contain a date as represented in seconds from January 1st, 1970."
-msgstr "Deze instelling bepaalt de begindatum bij de berekening van het resultaatindien de sleutel \"start_choice\" is ingesteld op \"absolute\". Dit veld bevat een datumwaarde, weergegeven in secondes vanaf 1 januari 1970."
+msgstr "Deze instelling bepaalt de begindatum bij de berekening van het resultaatindien de sleutel ‘start_choice’ is ingesteld op “absolute”. Dit veld bevat een datumwaarde, weergegeven in secondes vanaf 1 januari 1970."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:13
 msgid "This setting controls the starting date set in profit/loss calculations if the start_choice setting is set to anything other than \"absolute\". This field should contain a value between 0 and 8."
-msgstr "Deze instelling bepaalt de begindatum bij de berekening van het resultaatindien de sleutel \"start_choice\" niet is ingesteld op \"absolute\". Dit veld bevat een indexwaarde tussen 0 en 8."
+msgstr "Deze instelling bepaalt de begindatum bij de berekening van het resultaatindien de sleutel ‘start_choice’ niet is ingesteld op “absolute”. Dit veld bevat een indexwaarde tussen 0 en 8."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:14
 msgid "This setting controls the type of ending date used in profit/loss calculations. If set to \"absolute\" then GnuCash will retrieve the ending date specified by the end_date key. If set to anything else, GnuCash will retrieve the ending date specified by the end_period key."
-msgstr "Deze instelling bepaalt het soort einddatum voor bij de berekening van het resultaat. Als dit veld wordt ingesteld op \"absolute\" dan wordt de absolute einddatum uit de instelling \"end_date\" gebruikt, anders wordt een relatieve einddatum bepaald aan de hand van de instelling \"end_period\"."
+msgstr "Deze instelling bepaalt het soort einddatum voor bij de berekening van het resultaat. Als dit veld wordt ingesteld op “absolute” dan wordt de absolute einddatum uit de instelling ‘end_date’ gebruikt, anders wordt een relatieve einddatum bepaald aan de hand van de instelling ‘end_period’."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:15
 msgid "This setting controls the type of starting date used in profit/loss calculations. If set to \"absolute\" then GnuCash will retrieve the starting date specified by the start_date key. If set to anything else, GnuCash will retrieve the starting date specified by the start_period key."
-msgstr "Deze instelling bepaalt het soort begindatum voor bij de berekening van het resultaat. Als dit veld wordt ingesteld op \"absolute\" dan wordt de absolute begindatum uit de instelling \"start_date\" gebruikt, anders wordt een relatieve begindatum bepaald aan de hand van de instelling \"start_period\"."
+msgstr "Deze instelling bepaalt het soort begindatum voor bij de berekening van het resultaat. Als dit veld wordt ingesteld op “absolute” dan wordt de absolute begindatum uit de instelling ‘start_date’ gebruikt, anders wordt een relatieve begindatum bepaald aan de hand van de instelling ‘start_period’."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_register.schemas.in.h:1
 msgid "This setting contains the width of the named column in the most recently closed register window. Changing these values will change the sizes of the columns in the next opened register"
@@ -8220,7 +8219,7 @@ msgstr "De rekeningen om te vergelijken selecteren"
 #. Build and connect the toggle
 #: ../src/gnome-search/search-boolean.c:205
 msgid "set true"
-msgstr "instellen als 'waar'"
+msgstr "instellen als ‘waar’"
 
 #: ../src/gnome-search/search-date.c:195
 msgid "is before"
@@ -8300,7 +8299,7 @@ msgstr "Resultaten aan huidige zoekopdracht toevoegen"
 
 #: ../src/gnome-search/search.glade.h:5
 msgid "Choose whether to search all your data or only that marked as \"active\""
-msgstr "Selecteren of u alle gegevens of uitsluitend \"actieve\" gegevens wilt doorzoeken"
+msgstr "Selecteren of u alle gegevens of uitsluitend ‘actieve’ gegevens wilt doorzoeken"
 
 #: ../src/gnome-search/search.glade.h:6
 msgid "Delete results from current search"
@@ -8332,7 +8331,7 @@ msgstr "Soort zoekactie"
 
 #: ../src/gnome-search/search.glade.h:13
 msgid "_New item..."
-msgstr "_Nieuw item..."
+msgstr "_Nieuw item…"
 
 #: ../src/gnome-search/search-numeric.c:220
 msgid "less than"
@@ -8403,7 +8402,7 @@ msgid ""
 "Error in regular expression '%s':\n"
 "%s"
 msgstr ""
-"Fout in reguliere expressie '%s':\n"
+"Fout in reguliere expressie ‘%s’:\n"
 "%s"
 
 #: ../src/gnome-search/search-string.c:264
@@ -8465,7 +8464,7 @@ msgstr "Aan subrekeningen dezelfde rekeningsoort toekennen?"
 #: ../src/gnome-utils/dialog-account.c:670
 #, c-format
 msgid "The children of the edited account have to be changed to type \"%s\" to make them compatible."
-msgstr "De subrekeningen van de bewerkte rekening moeten worden aangepast naar rekeningsoort \"%s\" om deze verenigbaar te maken."
+msgstr "De subrekeningen van de bewerkte rekening moeten worden aangepast naar rekeningsoort ‘%s’ om deze verenigbaar te maken."
 
 #. children
 #: ../src/gnome-utils/dialog-account.c:681
@@ -8502,7 +8501,7 @@ msgstr "U moet een geldig beginsaldo invoeren of het veld leeg laten."
 
 #: ../src/gnome-utils/dialog-account.c:899
 msgid "You must select a transfer account or choose the opening balances equity account."
-msgstr "U moet ofwel een tegenrekening, ofwel de eigen vermogen-rekening 'Beginsaldi'  selecteren."
+msgstr "U moet ofwel een tegenrekening, ofwel de eigen vermogen-rekening ‘Beginsaldi’  selecteren."
 
 #: ../src/gnome-utils/dialog-account.c:1455
 msgid "Edit Account"
@@ -8576,7 +8575,7 @@ msgstr "Munteenheid selecteren"
 
 #: ../src/gnome-utils/dialog-commodity.c:529
 msgid "You must select a commodity. To create a new one, click \"New\""
-msgstr "U moet een goed (effect/valuta) selecteren. Om een nieuw goed aan te maken klikt u op \"Nieuw\""
+msgstr "U moet een goed (effect/valuta) selecteren. Om een nieuw goed aan te maken klikt u op ‘Nieuw’"
 
 #: ../src/gnome-utils/dialog-commodity.c:878
 msgid "Use local time"
@@ -8612,15 +8611,15 @@ msgstr "Dat goed (effect/valuta) bestaat al."
 
 #: ../src/gnome-utils/dialog-commodity.c:1328
 msgid "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type\" for the commodity."
-msgstr "U moet een \"Volledige naam\", \"Symbool/afkorting\" en \"Soort\" voor dit goed (effect/valuta) opgeven."
+msgstr "U moet een ‘Volledige naam’, ‘Symbool/afkorting’ en ‘Soort’ voor dit goed (effect/valuta) opgeven."
 
 #: ../src/gnome-utils/dialog-file-access.c:283
 msgid "Open..."
-msgstr "Openen..."
+msgstr "Openen…"
 
 #: ../src/gnome-utils/dialog-file-access.c:290
 msgid "Save As..."
-msgstr "Opslaan als..."
+msgstr "Opslaan als…"
 
 #: ../src/gnome-utils/dialog-file-access.c:297
 #: ../src/gnome-utils/gnc-file.c:117 ../src/gnome-utils/gnc-file.c:287
@@ -8733,7 +8732,7 @@ msgstr "U kunt niet van en naar dezelfde rekening boeken!"
 
 #: ../src/gnome-utils/dialog-transfer.c:1342
 msgid "You can't transfer from a non-currency account.  Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
-msgstr "U kunt niet boeken vanaf een niet-monetaire rekening. Probeer de \"van\"- en \"naar\"-rekeningen om te draaien en het \"aantal\" negatief te maken."
+msgstr "U kunt niet boeken vanaf een niet-monetaire rekening. Probeer de ‘van’- en ‘naar’-rekeningen om te draaien en het ‘aantal’ negatief te maken."
 
 #: ../src/gnome-utils/dialog-transfer.c:1367
 msgid "You must enter an amount to transfer."
@@ -8766,7 +8765,7 @@ msgstr "Debetbedrag:"
 #: ../src/gnome-utils/dialog-transfer.c:1850
 #: ../src/gnome-utils/glade/transfer.glade.h:13
 msgid "To Amount:"
-msgstr "Bedrag 'naar':"
+msgstr "Bedrag ‘naar’:"
 
 #: ../src/gnome-utils/dialog-utils.c:967
 msgid "Remember and don't _ask me again."
@@ -8795,7 +8794,7 @@ msgstr "Zodra u op [Toepassen] klikt, zal GnuCash de configuratiegegevens in uw 
 
 #: ../src/gnome-utils/druid-gconf-setup.c:435
 msgid "You have chosen to correct the problem by yourself.  When you click Apply, GnuCash will exit.  Please correct the problem and restart the gconf backend with the command 'gconftool-2 --shutdown' before restarting GnuCash.  If you have not already done so, you can click the Back button and copy the necessary text from the dialog."
-msgstr "U hebt ervoor gekozen dit probleem zelf op te lossen. GnuCash zal zich afsluiten zodra u op [Toepassen] klikt. Hierna dient u het probleem op te lossen en de gconf-daemon te herstarten met het commando \"gconftool-2 --shutdown\" voordat u GnuCash opnieuw opstart. U kunt op [Terug] klikken om de benodigde informatie nogmaals op het scherm getoond te krijgen."
+msgstr "U hebt ervoor gekozen dit probleem zelf op te lossen. GnuCash zal zich afsluiten zodra u op [Toepassen] klikt. Hierna dient u het probleem op te lossen en de gconf-daemon te herstarten met het commando ‘gconftool-2 --shutdown’ voordat u GnuCash opnieuw opstart. U kunt op [Terug] klikken om de benodigde informatie nogmaals op het scherm getoond te krijgen."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:441
 #, c-format
@@ -8804,7 +8803,7 @@ msgstr "U hebt ervoor gekozen dit probleem zelf op te lossen. GnuCash zal zich a
 
 #: ../src/gnome-utils/druid-gconf-setup.c:445
 msgid "You have already corrected the problem and restarted the gconf backend with the command 'gconftool-2 --shutdown'.  When you click Apply, GnuCash will continue loading."
-msgstr "U hebt dit probleem inmiddels zelf gecorrigeerd en de gconf-daemon opnieuw gestart met het commando 'gconftool-2 --shutdown'. Zodra u op [Toepassen] klikt zal GnuCash het laden hervatten."
+msgstr "U hebt dit probleem inmiddels zelf gecorrigeerd en de gconf-daemon opnieuw gestart met het commando ‘gconftool-2 --shutdown’. Zodra u op [Toepassen] klikt zal GnuCash het laden hervatten."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:196
 msgid ""
@@ -8931,11 +8930,11 @@ msgstr "Het bestand kon niet worden heropend."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:755
 msgid "Reading file..."
-msgstr "Bestand aan het lezen..."
+msgstr "Bestand aan het lezen…"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:778
 msgid "Parsing file..."
-msgstr "Bestand wordt verwerkt..."
+msgstr "Bestand wordt verwerkt…"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:785
 msgid "There was an error parsing the file."
@@ -8944,7 +8943,7 @@ msgstr "Er is een fout opgetreden bij het verwerken van het bestand."
 #: ../src/gnome-utils/druid-gnc-xml-import.c:810
 #: ../src/gnome-utils/gnc-file.c:1096 ../src/gnome-utils/gnc-file.c:1321
 msgid "Writing file..."
-msgstr "Bestand aan het opslaan..."
+msgstr "Bestand aan het opslaan…"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:898
 #, c-format
@@ -9015,7 +9014,7 @@ msgstr "Fonds of munteenheid selecteren "
 
 #: ../src/gnome-utils/glade/commodity.glade.h:10
 msgid "Select user information here..."
-msgstr "Gebruikersinformatie hier selecteren..."
+msgstr "Gebruikersinformatie hier selecteren…"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:11
 msgid "Si_ngle:"
@@ -9226,7 +9225,7 @@ msgid ""
 "command 'gconftool-2 --shutdown'."
 msgstr ""
 "Hierna moet u de gconf-daemon opnieuw starten met het\n"
-"commando 'gconftool-2 --shutdown'."
+"commando ‘gconftool-2 --shutdown’."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:25
 msgid "_GnuCash installs the data"
@@ -9356,7 +9355,7 @@ msgstr "<b>Boekingsgegevens</b>"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:3
 msgid "To A_mount:"
-msgstr "Bedrag '_naar':"
+msgstr "Bedrag ‘_naar’:"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:6
 msgid "_Exchange Rate:"
@@ -9670,11 +9669,11 @@ msgstr "Standaard_lettertype: "
 
 #: ../src/gnome-utils/glade/preferences.glade.h:59
 msgid "Default to 'new search' if fewer than this number of items is returned."
-msgstr "Standaard een 'nieuwe zoekactie' opstarten indien een zoekactie minder dan dit aantal resultaten oplevert."
+msgstr "Standaard een ‘nieuwe zoekactie’ opstarten indien een zoekactie minder dan dit aantal resultaten oplevert."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:60
 msgid "Display \"_tip of the day\" dialog"
-msgstr "\"Tip van de dag\"-venster weergeven"
+msgstr "‘Tip van de dag’-venster weergeven"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:61
 msgid "Display hints for using GnuCash at startup"
@@ -9778,7 +9777,7 @@ msgstr "Door activering van deze optie wordt uitsluitend het laatste onderdeel v
 
 #: ../src/gnome-utils/glade/preferences.glade.h:90
 msgid "If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register.  If clear, pressing the 'Enter' key will move down one row."
-msgstr "Door activering van deze optie wordt bij het indrukken van de \"Enter\"-toets naar de lege boeking onderaan de grootboekkaart gegaan. Zonder deze optie wordt de naar volgende regel gegaan."
+msgstr "Door activering van deze optie wordt bij het indrukken van de ‘Enter’-toets naar de lege boeking onderaan de grootboekkaart gegaan. Zonder deze optie wordt de naar volgende regel gegaan."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:91
 msgid "If checked, the system color theme will be applied to register windows.  If clear, the original GnuCash register colors will be used."
@@ -9818,11 +9817,11 @@ msgstr "Automatisch tijdens het afstemmen bevestigde boekingen selecteren."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:101
 msgid "Present the new account list dialog when you choose \"New File\" from the \"File\" menu"
-msgstr "Het venster \"Nieuw rekeningschema\" weergegeven na menukeuze \"Bestand ‣ Nieuw bestand\". "
+msgstr "Het venster ‘Nieuw rekeningschema’ weergegeven na menukeuze ‘Bestand ‣ Nieuw bestand’. "
 
 #: ../src/gnome-utils/glade/preferences.glade.h:102
 msgid "Print '***' before and after each text field on the check."
-msgstr "Voor en na elk tekstveld op een cheque telkens \"***\" afdrukken."
+msgstr "Voor en na elk tekstveld op een cheque telkens “***” afdrukken."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:103
 msgid "Print _blocking chars"
@@ -9862,7 +9861,7 @@ msgstr "Rapporten"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:115
 msgid "Show a close button on each notebook tab.  These function identically to the 'Close' menu item."
-msgstr "Aan elk tabblad een sluitknop toevoegen. Deze heeft dezelfde functie als menukeuze \"Bestand ‣ Sluiten\"."
+msgstr "Aan elk tabblad een sluitknop toevoegen. Deze heeft dezelfde functie als menukeuze ‘Bestand ‣ Sluiten’."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:116
 msgid "Show a grand total of all accounts converted to the default report currency."
@@ -9914,7 +9913,7 @@ msgstr "Tekstlabel _onder iconen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid "The character that will be used between components of an account name.  A legal value is any single character except letters and numbers, or any of the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and \"period\"."
-msgstr "Het teken dat gebruikt wordt tussen de componenten van een (volledige) rekeningnaam. U kunt hier een willekeurig individueel Unicode-karakter (mits geen cijfer of letter) of een van de tekenreeksen \"colon\", \"slash\", \"backslash\", \"dash\" en \"period\" invoeren."
+msgstr "Het teken dat gebruikt wordt tussen de componenten van een (volledige) rekeningnaam. U kunt hier een willekeurig individueel Unicode-karakter (mits geen cijfer of letter) of een van de tekenreeksen “colon”, “slash”, “backslash”, “dash” en “period” invoeren."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:130
 msgid "To_p"
@@ -9942,7 +9941,7 @@ msgstr "Een 24-uurs tijdweergave gebruiken (in plaats van een 12-uurs)."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:138
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
-msgstr "Uitsluitend 'debet' en 'credit' gebruiken in plaats van informele synoniemen"
+msgstr "Uitsluitend ‘debet’ en ‘credit’ gebruiken in plaats van informele synoniemen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:139
 msgid "Use s_ystem default"
@@ -10173,7 +10172,7 @@ msgstr "_Wisselkoers opvragen"
 #. create the button.
 #: ../src/gnome-utils/gnc-account-sel.c:454
 msgid "New..."
-msgstr "Nieuw..."
+msgstr "Nieuw…"
 
 #: ../src/gnome-utils/gnc-autosave.c:99
 msgid "Save file automatically?"
@@ -10500,7 +10499,7 @@ msgstr "_Nieuw bestand aanmaken"
 #. try to load once again
 #: ../src/gnome-utils/gnc-file.c:758 ../src/gnome-utils/gnc-file.c:772
 msgid "Loading user data..."
-msgstr "Laden van gebruikersgegevens..."
+msgstr "Laden van gebruikersgegevens…"
 
 #: ../src/gnome-utils/gnc-file.c:1038 ../src/gnome-utils/gnc-file.c:1278
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1448
@@ -10510,7 +10509,7 @@ msgstr "Het bestand %s bestaat al. Weet u zeker dat u het wilt overschrijven?"
 
 #: ../src/gnome-utils/gnc-file.c:1052
 msgid "Exporting file..."
-msgstr "Bestand exporteren..."
+msgstr "Bestand exporteren…"
 
 #. %s is the strerror(3) error string of the error that occurred.
 #: ../src/gnome-utils/gnc-file.c:1065
@@ -10526,13 +10525,13 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-general-select.c:223
 msgid "View..."
-msgstr "Bekijken..."
+msgstr "Bekijken…"
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:320
 #: ../src/gnome-utils/gnc-gnome-utils.c:378
 #: ../src/gnome-utils/gnc-gnome-utils.c:431
 msgid "GnuCash could not find the files for the help documentation.  This is likely because the 'gnucash-docs' package is not installed."
-msgstr "GnuCash kon de bestanden met hulp-documentatie niet vinden. Dit komt waarschijnlijk doordat het pakket 'gnucash-docs' niet is geïnstalleerd."
+msgstr "GnuCash kon de bestanden met hulp-documentatie niet vinden. Dit komt waarschijnlijk doordat het pakket ‘gnucash-docs’ niet is geïnstalleerd."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:409
 msgid "GnuCash could not find the files for the help documentation."
@@ -10597,7 +10596,7 @@ msgstr "_Openen"
 
 #: ../src/gnome-utils/gnc-main-window.c:250
 msgid "_Print..."
-msgstr "Af_drukken..."
+msgstr "Af_drukken…"
 
 #: ../src/gnome-utils/gnc-main-window.c:251
 msgid "Print the currently active page"
@@ -10605,7 +10604,7 @@ msgstr "De actieve pagina afdrukken"
 
 #: ../src/gnome-utils/gnc-main-window.c:257
 msgid "Pa_ge Setup..."
-msgstr "Pag_ina-instellingen..."
+msgstr "Pag_ina-instellingen…"
 
 #: ../src/gnome-utils/gnc-main-window.c:258
 msgid "Specify the page size and orientation for printing"
@@ -10669,7 +10668,7 @@ msgstr "_Controleren & repareren"
 
 #: ../src/gnome-utils/gnc-main-window.c:320
 msgid "Reset _Warnings..."
-msgstr "_Waarschuwingen opnieuw instellen..."
+msgstr "_Waarschuwingen opnieuw instellen…"
 
 #: ../src/gnome-utils/gnc-main-window.c:321
 msgid "Reset the state of all warning messages so they will be shown again."
@@ -10832,19 +10831,19 @@ msgstr "%s  Dit exemplaar is gecompileerd uit r%s op %s."
 #: ../src/gnome-utils/gnc-main-window.c:3989
 msgid "translator_credits"
 msgstr ""
-"- Current -\n"
-"Mark Haanen <i18n@haanen.net>, 2009-present\n"
+"Huidige vertaling door\n"
+"• Mark Haanen <i18n@haanen.net>, 2009-heden.\n"
 "\n"
-"- Past -\n"
-"Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002.\n"
-"Hendrik-Jan Heins <hjh@passys.nl>, 2003.\n"
-"Jeroen ten Berge <twinbit@home.nl>, 2004.\n"
-"Benno Schulenberg <benno@vertaalt.nl>, 2007.\n"
-"Erwin Poeze <erwin.poeze@gmail.com>, 2009.\n"
+"met bijdrages afkomstig van\n"
+"• Tom van Braeckel <tomvanbraeckel@gmail.com>, 2010.\n"
+"• Benno Schulenberg <benno@vertaalt.nl>, 2010.\n"
 "\n"
-"- Contributions -\n"
-"Tom van Braeckel <tomvanbraeckel@gmail.com>, 2010.\n"
-"Benno Schulenberg <benno@vertaalt.nl>, 2010."
+"voortbouwend op eerdere vertalingen door\n"
+"• Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002.\n"
+"• Hendrik-Jan Heins <hjh@passys.nl>, 2003.\n"
+"• Jeroen ten Berge <twinbit@home.nl>, 2004.\n"
+"• Benno Schulenberg <benno@vertaalt.nl>, 2007.\n"
+"• Erwin Poeze <erwin.poeze@gmail.com>, 2009."
 
 #. CY Strings
 #. src/app-utils/date-utilities.scm
@@ -10943,7 +10942,7 @@ msgstr "Versie: GnuCash-%s (r%s, gecompileerd op %s)"
 
 #: ../src/gnome-utils/gnc-splash.c:120
 msgid "Loading..."
-msgstr "Aan het laden..."
+msgstr "Aan het laden…"
 
 #: ../src/gnome-utils/gnc-sx-list-tree-model-adapter.c:490
 msgid "never"
@@ -11243,7 +11242,7 @@ msgstr "Dit veld bevat het volledige pad naar het voorlaatst geopende bestand."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:6
 msgid "This setting contains the number of files to keep in the Recently Opened Files menu. This value may be set to zero to disable the file history. This number has a maximum value of 10."
-msgstr "Deze instelling betreft het aantal bestanden dat in menu \"Bestand\" als laatst geopend bestand bewaard blijft. Een waarde van 0 betekent dat er géén bestandshistorie wordt bijgehouden. De maximale waarde is 10."
+msgstr "Deze instelling betreft het aantal bestanden dat in menu ‘Bestand’ als laatst geopend bestand bewaard blijft. Een waarde van 0 betekent dat er géén bestandshistorie wordt bijgehouden. De maximale waarde is 10."
 
 #: ../src/gnome-utils/window-main-summarybar.c:333
 #, c-format
@@ -11303,7 +11302,7 @@ msgstr "Geen automatische rentekosten voor deze rekening"
 
 #: ../src/gnome/window-reconcile.c:743
 msgid "Enter _Interest Charge..."
-msgstr "_Rentekosten invoeren..."
+msgstr "_Rentekosten invoeren…"
 
 #: ../src/gnome/window-reconcile.c:1004
 msgid "Debits"
@@ -11361,7 +11360,7 @@ msgstr "_Rekening"
 
 #: ../src/gnome/window-reconcile.c:2114
 msgid "_Reconcile Information..."
-msgstr "_Afstemmingsgegevens..."
+msgstr "_Afstemmingsgegevens…"
 
 #: ../src/gnome/window-reconcile.c:2115
 msgid "Change the reconcile information including statement date and ending balance."
@@ -11493,7 +11492,7 @@ msgstr "Bankcode"
 #: ../src/import-export/aqbanking/aqbanking.glade.h:11
 #: ../src/import-export/hbci/glade/hbci.glade.h:11
 msgid "Click on the line of an Online Banking account name if you want to match it to a GnuCash account. Click \"Forward\" when all desired accounts are matching."
-msgstr "Klik op de regel van een Online bankieren-rekeningnaam wanneer u deze wilt koppelen aan een GnuCash-rekening. Klik op \"Volgende\" als alle gewenste rekeningen gekoppeld zijn."
+msgstr "Klik op de regel van een Online bankieren-rekeningnaam wanneer u deze wilt koppelen aan een GnuCash-rekening. Klik op [Volgende] als alle gewenste rekeningen gekoppeld zijn."
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:12
 #: ../src/import-export/hbci/glade/hbci.glade.h:12
@@ -11683,7 +11682,7 @@ msgstr "Online bankieren-assistent starten"
 #: ../src/import-export/aqbanking/aqbanking.glade.h:49
 #: ../src/import-export/hbci/glade/hbci.glade.h:46
 msgid "The Setup of your Online Banking connection is handled by the external program \"AqBanking Setup Wizard\". Please press the button below to start this program."
-msgstr "De configuratie van uw Online bankieren-verbinding wordt verzorgd door het externe programma \"AqBanking configuratie-assistent\". Klik op de knop hieronder om dit programma te starten."
+msgstr "De configuratie van uw Online bankieren-verbinding wordt verzorgd door het externe programma ‘AqBanking configuratie-assistent’. Klik op de knop hieronder om dit programma te starten."
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:50
 #: ../src/import-export/hbci/glade/hbci.glade.h:47
@@ -11838,7 +11837,7 @@ msgstr "Bankcode gecrediteerde rekening"
 #: ../src/import-export/hbci/dialog-hbcitrans.c:728
 #, c-format
 msgid "The internal check of the destination account number '%s' at the specified bank with bank code '%s' failed. This means the account number might contain an error. Should the online transfer job be sent with this account number anyway?"
-msgstr "De interne controle van het doelrekeningnummer '%s' bij de aangegeven bank met bankcode '%s' is mislukt. Dit betekent dat het rekeningnummer misschien een fout bevat. Moet de online overboekingsopdracht toch naar dit rekeningnummer worden gestuurd?"
+msgstr "De interne controle van het doelrekeningnummer ‘%s’ bij de aangegeven bank met bankcode ‘%s’ is mislukt. Dit betekent dat het rekeningnummer misschien een fout bevat. Moet de online overboekingsopdracht toch naar dit rekeningnummer worden gestuurd?"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:464
 #: ../src/import-export/hbci/dialog-hbcitrans.c:540
@@ -11876,7 +11875,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:757
 #, c-format
 msgid "Do you really want to overwrite your changes with the contents of the template \"%s\"?"
-msgstr "Weet u zeker dat u uw wijzigingen wilt overschrijven met de inhoud van sjabloon \"%s\"?"
+msgstr "Weet u zeker dat u uw wijzigingen wilt overschrijven met de inhoud van sjabloon ‘%s’?"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:912
 msgid "A template with the given name already exists.  Please enter another name."
@@ -11885,7 +11884,7 @@ msgstr "Er bestaat al een sjabloon met deze naam. Voer een andere naam in."
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:1045
 #, c-format
 msgid "Do you really want to delete the template with the name \"%s\"?"
-msgstr "Weet u zeker dat u het sjabloon met de naam \"%s\" wilt verwijderen?"
+msgstr "Weet u zeker dat u het sjabloon met de naam ‘%s’ wilt verwijderen?"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:361
 #: ../src/import-export/hbci/druid-hbci-initial.c:719
@@ -11895,9 +11894,9 @@ msgid ""
 "\n"
 "The %s package should include the program \"qt3-wizard\".  Please check your installation to ensure this program is present.  On some distributions this may require installing additional packages."
 msgstr ""
-"Het externe programma \"AqBanking configuratie-assistent\" is niet aangetroffen.\n"
+"Het externe programma ‘AqBanking configuratie-assistent’ is niet aangetroffen.\n"
 "\n"
-"Het pakket \"%s\" zou het programma \"qt3-wizard\" moeten bevatten. Controleer of dit programma op uw computer aanwezig is. Bij sommige distributies dient u hiervoor aanvullende pakketten te installeren."
+"Het pakket ‘%s’ zou het programma ‘qt3-wizard’ moeten bevatten. Controleer of dit programma op uw computer aanwezig is. Bij sommige distributies dient u hiervoor aanvullende pakketten te installeren."
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:527
 #: ../src/import-export/hbci/druid-hbci-initial.c:687
@@ -11908,16 +11907,16 @@ msgid ""
 "\n"
 "Online Banking cannot be setup without Qt.  Press \"Close\" now, then \"Cancel\" to cancel the Online Banking setup."
 msgstr ""
-"Het externe programma \"AqBanking configuratie-assistent\" kon niet worden gestart doordat de benodigde programmabibliotheek \"Qt\" niet is aangetroffen. Installeer de \"Qt/Windows Open Source Edition\" van Trolltech door deze te downloaden vanaf de site www.trolltech.com\n"
+"Het externe programma ‘AqBanking configuratie-assistent’ kon niet worden gestart doordat de benodigde programmabibliotheek ‘Qt’ niet is aangetroffen. Installeer de ‘Qt/Windows Open Source Edition’ van Trolltech door deze te downloaden vanaf de site www.trolltech.com\n"
 "\n"
 "Als u Qt reeds hebt geïnstalleerd, dient u het zoekpad (\"PATH\") van uw systeem nog bij te werken. Neem contact op met de GnuCash-ontwikkelaars als u aanvullende hulp nodig hebt bij het correct installeren van Qt.\n"
 "\n"
-"Online bankieren kan niet worden ingesteld zonder Qt. Klik nu op \"Sluiten\" en vervolgens op \"Annuleren\" om het configureren van Online bankieren af te breken."
+"Online bankieren kan niet worden ingesteld zonder Qt. Klik nu op [Sluiten] en vervolgens op [Annuleren] om het configureren van Online bankieren af te breken."
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:548
 #: ../src/import-export/hbci/druid-hbci-initial.c:706
 msgid "The external program \"AqBanking Setup Wizard\" failed to run successfully.  Online Banking can only be setup if this wizard has run successfully.  Please try running the \"AqBanking Setup Wizard\" again."
-msgstr "Het externe programma \"AqBanking configuratie-assistent\" is niet succesvol doorlopen, terwijl dit wel een noodzakelijke voorwaarde is om Online bankieren te configureren. Probeer opnieuw de \"AqBanking configuratie-assistent\" te doorlopen."
+msgstr "Het externe programma ‘AqBanking configuratie-assistent’ is niet succesvol doorlopen, terwijl dit wel een noodzakelijke voorwaarde is om Online bankieren te configureren. Probeer opnieuw de ‘AqBanking configuratie-assistent’ te doorlopen."
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:578
 #: ../src/import-export/hbci/druid-hbci-initial.c:145
@@ -12048,7 +12047,7 @@ msgid ""
 msgstr ""
 "Het opgevraagde Online bankieren-saldo bedroeg nul.\n"
 "\n"
-"Ofwel dit is het correcte saldo, ofwel uw bank ondersteunt geen saldo-informatie voor deze versie van Online bankieren. In het laatste geval dient u via \"Online bankieren configureren\" een ander versienummer in te stellen. Daarna kunt u opnieuw proberen het saldo te downloaden."
+"Ofwel dit is het correcte saldo, ofwel uw bank ondersteunt geen saldo-informatie voor deze versie van Online bankieren. In het laatste geval dient u via ‘Online bankieren configureren’ een ander versienummer in te stellen. Daarna kunt u opnieuw proberen het saldo te downloaden."
 
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:851
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:302
@@ -12114,7 +12113,7 @@ msgstr "_Online acties"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:87
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:94
 msgid "_Online Banking Setup..."
-msgstr "_Online bankieren configureren..."
+msgstr "_Online bankieren configureren…"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:88
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:95
@@ -12134,7 +12133,7 @@ msgstr "Het saldo van de rekening via Online bankieren opvragen"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:97
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:104
 msgid "Get _Transactions..."
-msgstr "_Boekingen opvragen..."
+msgstr "_Boekingen opvragen…"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:98
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:105
@@ -12144,7 +12143,7 @@ msgstr "De boekingen op de rekening via Online bankieren opvragen"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:102
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:109
 msgid "_Issue Transaction..."
-msgstr "Boeking _doorgeven..."
+msgstr "Boeking _doorgeven…"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:103
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:110
@@ -12154,7 +12153,7 @@ msgstr "Een nieuwe transactie-opdracht via Online bankieren doorgeven"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:107
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:114
 msgid "I_nternal Transaction..."
-msgstr "_Intrabank-boeking..."
+msgstr "_Intrabank-boeking…"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:108
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:115
@@ -12164,7 +12163,7 @@ msgstr "Een nieuwe intrabank-overboekingsopdracht via Online bankieren doorgeven
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:112
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:119
 msgid "_Direct Debit..."
-msgstr "_Eenmalige machtiging..."
+msgstr "_Eenmalige machtiging…"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:113
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:120
@@ -12204,7 +12203,7 @@ msgstr "Een DTAUS-bestand importeren in GnuCash"
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:142
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:153
 msgid "Import DTAUS and _send..."
-msgstr "DTAUS importeren en _verzenden..."
+msgstr "DTAUS importeren en _verzenden…"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:143
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:154
@@ -12435,7 +12434,7 @@ msgstr "Tab"
 
 #: ../src/import-export/csv/gnc-plugin-csv.c:47
 msgid "Import _CSV/Fixed-Width..."
-msgstr "_CSV-bestand (kommagescheiden of vaste kolombreedte) importeren..."
+msgstr "_CSV-bestand (kommagescheiden of vaste kolombreedte) importeren…"
 
 #: ../src/import-export/csv/gnc-plugin-csv.c:48
 msgid " a CSV/Fixed-Width file"
@@ -12443,15 +12442,15 @@ msgstr " een CSV-bestand (kommagescheiden of vaste kolombreedte)"
 
 #: ../src/import-export/generic-import.glade.h:1
 msgid "\"A\""
-msgstr "\"T\""
+msgstr "“T”"
 
 #: ../src/import-export/generic-import.glade.h:2
 msgid "\"R\""
-msgstr "\"A\""
+msgstr "“A”"
 
 #: ../src/import-export/generic-import.glade.h:3
 msgid "\"Select Import Action\" allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
-msgstr "Met \"Importactie selecteren\" kunt u de boeking met een bestaande boeking afstemmen of, indien nodig, als nieuwe boeking op een nader te specificeren tegenrekening aanmerken."
+msgstr "Met ‘Importactie selecteren’ kunt u de boeking met een bestaande boeking afstemmen of, indien nodig, als nieuwe boeking op een nader te specificeren tegenrekening aanmerken."
 
 #: ../src/import-export/generic-import.glade.h:4
 msgid "(none)"
@@ -12491,19 +12490,19 @@ msgstr "Drempelwaarde _transactiekosten geldautomaten"
 
 #: ../src/import-export/generic-import.glade.h:18
 msgid "Enable edit match action"
-msgstr "Actie 'boeking bewerken' activeren"
+msgstr "Actie ‘boeking bewerken’ activeren"
 
 #: ../src/import-export/generic-import.glade.h:19
 msgid "Enable skip transaction action"
-msgstr "Actie 'boeking overslaan' activeren"
+msgstr "Actie ‘boeking overslaan’ activeren"
 
 #: ../src/import-export/generic-import.glade.h:20
 msgid "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
-msgstr "De actie 'boeking BEWERKEN' bij het herkennen van bestaande boekingen activeren. NOG NIET ONDERSTEUND."
+msgstr "De actie ‘boeking BEWERKEN’ bij het herkennen van bestaande boekingen activeren. NOG NIET ONDERSTEUND."
 
 #: ../src/import-export/generic-import.glade.h:21
 msgid "Enable the SKIP action in the transaction matcher.  If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default."
-msgstr "De actie 'boeking OVERSLAAN' bij het herkennen van bestaande boekingen activeren. Een boeking met een mate van overeenkomst binnen de gele zone (boven de drempelwaarde voor TOEVOEGING maar kleiner dan of gelijk aan de drempelwaarde voor BEVESTIGING) wordt standaard (automatisch) OVERGESLAGEN."
+msgstr "De actie ‘boeking OVERSLAAN’ bij het herkennen van bestaande boekingen activeren. Een boeking met een mate van overeenkomst binnen de gele zone (boven de drempelwaarde voor TOEVOEGING maar kleiner dan of gelijk aan de drempelwaarde voor BEVESTIGING) wordt standaard (automatisch) OVERGESLAGEN."
 
 #: ../src/import-export/generic-import.glade.h:22
 msgid ""
@@ -12516,7 +12515,7 @@ msgid ""
 msgstr ""
 "Klik bij nieuwe boekingen op [Andere rekening] om de juiste tegenrekening voor de boeking te selecteren.\n"
 "Klik bij reeds bestaande boekingen op [Andere rekening] of op [Omschrijving] om te toetsen of GnuCash de juiste boeking heeft uitgekozen.\n"
-"Om tussen beide mogelijkheden om te schakelen klikt u op het keuzevak in kolom \"Nieuw\".\n"
+"Om tussen beide mogelijkheden om te schakelen klikt u op het keuzevak in kolom ‘Nieuw’.\n"
 "Klik op [OK] wanneer alle boekingen de juiste bestemmingsrekening hebben en alle reeds bestaande boekingen op de juiste wijze zijn gekoppeld."
 
 #: ../src/import-export/generic-import.glade.h:29
@@ -12533,7 +12532,7 @@ msgstr "Eerste boekregel van geïmporteerde boeking:"
 
 #: ../src/import-export/generic-import.glade.h:32
 msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores.  These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw $100, and you are charged $101,50 plus Interac fees.  If you manually entered that $100, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "Op sommige plaatsen staan commerciële 'in-store' geldautomaten die hun transactiekosten optellen op bij het opgenomen bedrag (in plaats van deze als losse transactie c.q. via de afrekening van uw bankkosten te verantwoorden). Een voorbeeld: wanneer u € 100 opneemt en de kosten zijn € 1,50, wordt een bedrag van € 101,50 van uw rekening afgeschreven. Als u vervolgens handmatig heeft ingevoerd dat u € 100 heeft opgenomen, komen de bedragen niet overeen. U moet deze waarde instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de overeenkomst herkend kan worden."
+msgstr "Op sommige plaatsen staan commerciële ‘in-store’ geldautomaten die hun transactiekosten optellen op bij het opgenomen bedrag (in plaats van deze als losse transactie c.q. via de afrekening van uw bankkosten te verantwoorden). Een voorbeeld: wanneer u € 100 opneemt en de kosten zijn € 1,50, wordt een bedrag van € 101,50 van uw rekening afgeschreven. Als u vervolgens handmatig heeft ingevoerd dat u € 100 heeft opgenomen, komen de bedragen niet overeen. U moet deze waarde instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de overeenkomst herkend kan worden."
 
 #: ../src/import-export/generic-import.glade.h:33
 msgid "List of downloaded transactions (source split shown):"
@@ -12545,7 +12544,7 @@ msgstr "Drempelwaarde _weergave overeenkomst"
 
 #: ../src/import-export/generic-import.glade.h:36
 msgid "Online account ID here..."
-msgstr "Het online rekeningnummer..."
+msgstr "Het online rekeningnummer…"
 
 #: ../src/import-export/generic-import.glade.h:37
 msgid "Other Account"
@@ -12565,11 +12564,11 @@ msgstr "Rood"
 
 #: ../src/import-export/generic-import.glade.h:42
 msgid "Select \"A\" to add the transaction as new."
-msgstr "Kies \"T\" om de boeking als nieuwe boeking toe te voegen."
+msgstr "Kies ‘T’ om de boeking als nieuwe boeking toe te voegen."
 
 #: ../src/import-export/generic-import.glade.h:43
 msgid "Select \"R\" to reconcile a matching transaction."
-msgstr "Kies \"A\" om met een overeenkomende (bestaande) boeking af te stemmen."
+msgstr "Kies ‘A’ om met een overeenkomende (bestaande) boeking af te stemmen."
 
 #: ../src/import-export/generic-import.glade.h:45
 msgid "Select matching existing transaction"
@@ -12740,10 +12739,10 @@ msgid ""
 "Value: \"%s\"\n"
 msgstr ""
 "De bank heeft een incasso geweigerd. Het geweigerde incasso heeft de volgende gegevens:\n"
-"Bankcode wederpartij: \"%s\"\n"
-"Rekeningnummer wederpartij: \"%s\"\n"
-"Omschrijving en naam wederpartij: \"%s\"\n"
-"Bedrag: \"%s\"\n"
+"Bankcode wederpartij: ‘%s’\n"
+"Rekeningnummer wederpartij: ‘%s’\n"
+"Omschrijving en naam wederpartij: ‘%s’\n"
+"Bedrag: ‘%s’\n"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:639
 msgid ""
@@ -12765,7 +12764,7 @@ msgstr "Een CSV-bestand in GnuCash importeren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:147
 msgid "Import CSV and s_end..."
-msgstr "CSV importeren en _verzenden..."
+msgstr "CSV importeren en _verzenden…"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:148
 msgid "Import a CSV file into GnuCash and send the transfers online through Online Banking"
@@ -12857,14 +12856,14 @@ msgstr "Nieuw, reeds in balans"
 #: ../src/import-export/import-main-matcher.c:646
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
-msgstr "Nieuw, (handmatig) %s naar \"%s\" overboeken"
+msgstr "Nieuw, (handmatig) %s naar ‘%s’ overboeken"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
 #: ../src/import-export/import-main-matcher.c:654
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
-msgstr "Nieuw, (automatisch) %s naar \"%s\" overboeken"
+msgstr "Nieuw, (automatisch) %s naar ‘%s’ overboeken"
 
 #. Translators: %s is the amount to be transferred.
 #: ../src/import-export/import-main-matcher.c:665
@@ -12919,7 +12918,7 @@ msgid ""
 msgstr ""
 "De QIF-bestandsindeling geeft niet aan in welke volgorde de dag, maand en jaar van een datum zijn geplaatst. Meestal kan automatisch worden vastgesteld welke indeling binnen een bepaald bestand wordt gehanteerd, maar voor het bestand dat u nu probeert te importeren zijn er meerdere volgordes mogelijk.\n"
 "\n"
-"Selecteer een datumopmaak voor het bestand. Europese QIF-bestanden hebben meestal als datumopmaak \"d-m-y\" (dag-maand-jaar), terwijl Amerikaanse QIF-bestanden meestal als opmaak \"m-d-y\" (maand-dag-jaar) hebben.\n"
+"Selecteer een datumopmaak voor het bestand. Europese QIF-bestanden hebben meestal als datumopmaak ‘d-m-y’ (dag-maand-jaar), terwijl Amerikaanse QIF-bestanden meestal als opmaak ‘m-d-y’ (maand-dag-jaar) hebben.\n"
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:567
 msgid "Select a .log file to replay"
@@ -12950,7 +12949,7 @@ msgstr "Het door u geselecteerde logbestand kon niet worden gelezen. De bestands
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:48
 msgid "_Replay GnuCash .log file..."
-msgstr "GnuCash logbestand _opnieuw uitvoeren"
+msgstr "GnuCash logbestand _opnieuw uitvoeren…"
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
@@ -12963,7 +12962,7 @@ msgstr "De inhoud van een GnuCash logbestand na een crash opnieuw uitvoeren. Dez
 #: ../src/import-export/ofx/gnc-ofx-import.c:419
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "Effectenrekening voor fonds \"%s\""
+msgstr "Effectenrekening voor fonds ‘%s’"
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -12972,7 +12971,7 @@ msgstr "Effectenrekening voor fonds \"%s\""
 #: ../src/import-export/ofx/gnc-ofx-import.c:489
 #, c-format
 msgid "Income account for security \"%s\""
-msgstr "Opbrengstenrekening voor fonds \"%s\""
+msgstr "Opbrengstenrekening voor fonds ‘%s’"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:628
 msgid "Unknown OFX account"
@@ -13012,7 +13011,7 @@ msgstr "Een te verwerken OFX/QFX-bestand selecteren"
 
 #: ../src/import-export/ofx/gnc-plugin-ofx.c:46
 msgid "Import _OFX/QFX..."
-msgstr "_OFX/QFX importeren..."
+msgstr "_OFX/QFX importeren…"
 
 #: ../src/import-export/ofx/gnc-plugin-ofx.c:47
 msgid "Process an OFX/QFX response file"
@@ -13107,7 +13106,7 @@ msgstr "GnuCash-rekeningnaam"
 #: ../src/import-export/qif-import/druid-qif-import.c:2115
 #: ../src/import-export/qif-import/druid-qif-import.c:2190
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
-msgstr "Een naam of korte beschrijving invoeren, zoals \"Aandelen KPN\"."
+msgstr "Een naam of korte beschrijving invoeren, zoals ‘Aandelen KPN’."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2122
 #: ../src/import-export/qif-import/druid-qif-import.c:2192
@@ -13126,7 +13125,7 @@ msgstr "U moet ofwel een bestaande (nationale) munteenheid, ofwel een andere soo
 #: ../src/import-export/qif-import/druid-qif-import.c:2219
 #, c-format
 msgid "Enter information about \"%s\""
-msgstr "Gegevens over \"%s\" invoeren"
+msgstr "Gegevens over ‘%s’ invoeren"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2239
 msgid "_Name or description:"
@@ -13192,7 +13191,7 @@ msgstr "Overeenkomst?"
 
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:50
 msgid "Import _QIF..."
-msgstr "_QIF importeren..."
+msgstr "_QIF importeren…"
 
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:51
 msgid "Import a Quicken QIF file"
@@ -13212,7 +13211,7 @@ msgstr "Rekeningen en aandelenbezit"
 
 #: ../src/import-export/qif-import/qif.glade.h:4
 msgid "Change GnuCash _Account..."
-msgstr "GnuCash-_rekening wijzigen..."
+msgstr "GnuCash-_rekening wijzigen…"
 
 #: ../src/import-export/qif-import/qif.glade.h:5
 msgid ""
@@ -13280,7 +13279,7 @@ msgid ""
 msgstr ""
 "Als u een QIF-bestand van een bank of andere financiële instelling importeert, is het mogelijk dat bepaalde boekingen reeds voorkomen binnen GnuCash. Om duplicaten te vermijden heeft GnuCash geprobeerd om deze te herkennen, maar deze moeten nog wel gecontroleerd worden.\n"
 "\n"
-"Op de volgende pagina staat een lijst met geïmporteerde boekingen. Als u er een selecteert, zal daaronder een lijst met mogelijk overeenkomstige boekingen worden weergegeven. Een eventuele overeenkomst geeft u aan door hierop te klikken; hierdoor zal in de kolom \"Overeenkomst?\" een vinkje verschijnen.\n"
+"Op de volgende pagina staat een lijst met geïmporteerde boekingen. Als u er een selecteert, zal daaronder een lijst met mogelijk overeenkomstige boekingen worden weergegeven. Een eventuele overeenkomst geeft u aan door hierop te klikken; hierdoor zal in de kolom ‘Overeenkomst?’ een vinkje verschijnen.\n"
 "\n"
 "Klik op [Verder] om de mogelijke overeenkomsten te beoordelen."
 
@@ -13308,7 +13307,7 @@ msgstr "Opbrengsten- en kostencategorieën"
 
 #: ../src/import-export/qif-import/qif.glade.h:37
 msgid "Load QIF files"
-msgstr "QIF-bestanden laden..."
+msgstr "QIF-bestanden laden…"
 
 #: ../src/import-export/qif-import/qif.glade.h:38
 msgid "Match QIF accounts with GnuCash accounts"
@@ -13338,7 +13337,7 @@ msgid ""
 msgstr ""
 "Op de volgende pagina worden de rekeningen uit uw QIF-bestanden en eventuele aandelen c.q. beleggingsfondsen die u bezit, gekoppeld aan GnuCash-rekeningen. Als er al een GnuCash-rekening bestaat met dezelfde naam (of met een gelijkende naam en een overeenkomende rekeningsoort), dan wordt die rekening gekoppeld. Anders zal GnuCash een nieuwe rekening aanmaken met dezelfde naam en hetzelfde type als de QIF-rekening. Indien de voorgestelde suggestie u niet bevalt, dubbelklikt u erop om deze aan te passen.\n"
 "\n"
-"Merk op dat GnuCash veel grootboekrekeningen zal aanmaken die in uw andere financiële programma niet bestonden, waaronder aparte rekeningen voor ieder type aandeel dat u bezit, aparte rekeningen voor handelscommissies, speciale \"Eigen vermogen\"-rekeningen voor uw openingssaldi, enzovoorts. Al deze rekeningen worden op de volgende pagina weergegeven zodat u ze naar believen kunt wijzigen, maar u kunt deze veilig ongewijzigd laten.\n"
+"Merk op dat GnuCash veel grootboekrekeningen zal aanmaken die in uw andere financiële programma niet bestonden, waaronder aparte rekeningen voor ieder type aandeel dat u bezit, aparte rekeningen voor handelscommissies, speciale ‘Eigen vermogen’-rekeningen voor uw openingssaldi, enzovoorts. Al deze rekeningen worden op de volgende pagina weergegeven zodat u ze naar believen kunt wijzigen, maar u kunt deze veilig ongewijzigd laten.\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:47
 msgid "Payees and memos"
@@ -13366,7 +13365,7 @@ msgid ""
 msgstr ""
 "QIF-bestanden die zijn opgehaald bij banken of andere financiële instellingen bevatten waarschijnlijk geen gegevens over rekeningen en categorieën waardoor deze correct aan GnuCash-rekeningen toegewezen kunnen worden.\n"
 "\n"
-"Op de volgende pagina ziet u de tekst die verschijnt in de begunstigden- en notitievelden van transacties zonder QIF-rekening of -categorie. Standaard worden deze transacties toegewezen aan de GnuCash-rekening 'Niet-gespecificeerd'. Als u een andere rekening selecteert, wordt dit voor toekomstige QIF-bestanden onthouden."
+"Op de volgende pagina ziet u de tekst die verschijnt in de begunstigden- en notitievelden van transacties zonder QIF-rekening of -categorie. Standaard worden deze transacties toegewezen aan de GnuCash-rekening ‘Niet-gespecificeerd’. Als u een andere rekening selecteert, wordt dit voor toekomstige QIF-bestanden onthouden."
 
 #: ../src/import-export/qif-import/qif.glade.h:57
 msgid "QIF files you have loaded"
@@ -13433,7 +13432,7 @@ msgstr "De te wijzigen overeenkomsten _selecteren:"
 
 #: ../src/import-export/qif-import/qif.glade.h:82
 msgid "_Select..."
-msgstr "_Selecteren..."
+msgstr "_Selecteren…"
 
 #: ../src/import-export/qif-import/qif.glade.h:83
 msgid "_Show documentation"
@@ -13453,19 +13452,19 @@ msgstr "Overeenkomende boekingen boven deze score bevestigen"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:3
 msgid "Enable EDIT transaction action"
-msgstr "Actie 'boeking BEWERKEN' activeren"
+msgstr "Actie ‘boeking BEWERKEN’ activeren"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:4
 msgid "Enable SKIP transaction action"
-msgstr "Actie 'boeking OVERSLAAN' activeren"
+msgstr "Actie ‘boeking OVERSLAAN’ activeren"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
 msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
-msgstr "De actie 'boeking BEWERKEN' bij het herkennen van bestaande boekingen activeren. NOG NIET ONDERSTEUND."
+msgstr "De actie ‘boeking BEWERKEN’ bij het herkennen van bestaande boekingen activeren. NOG NIET ONDERSTEUND."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
 msgid "Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default."
-msgstr "De actie 'boeking OVERSLAAN' bij het herkennen van bestaande boekingen activeren. Een boeking met een mate van overeenkomst binnen de gele zone (boven de drempelwaarde voor TOEVOEGING maar kleiner dan of gelijk aan de drempelwaarde voor BEVESTIGING) wordt standaard (automatisch) overgeslagen."
+msgstr "De actie ‘boeking OVERSLAAN’ bij het herkennen van bestaande boekingen activeren. Een boeking met een mate van overeenkomst binnen de gele zone (boven de drempelwaarde voor TOEVOEGING maar kleiner dan of gelijk aan de drempelwaarde voor BEVESTIGING) wordt standaard (automatisch) overgeslagen."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
 msgid "Enables bayesian matching when matching imported transaction against existing transactions. Otherwise a less sophisticated rule-based matching mechanism will be used."
@@ -13481,7 +13480,7 @@ msgstr "Weergavedrempel"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:12
 msgid "This field specifies the extra fee that is taken into account when matching imported transactions. In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "De aanvullende transactiekosten waarmee bij het koppelen van geïmporteerde boekingen rekening wordt gehouden. Op sommige plaatsen staan commerciële 'in-store' geldautomaten die hun transactiekosten optellen op bij het opgenomen bedrag (in plaats van deze als losse transactie c.q. via de afrekening van uw bankkosten te verantwoorden). Een voorbeeld: wanneer u € 100 opneemt en de kosten zijn € 1,50, wordt een bedrag van € 101,50 van uw rekening afgeschreven. Als u vervolgens handmatig heeft ingevoerd dat u € 100 heeft opgenomen, komen de bedragen niet overeen. U moet deze waarde instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de koppeling herkend kan worden."
+msgstr "De aanvullende transactiekosten waarmee bij het koppelen van geïmporteerde boekingen rekening wordt gehouden. Op sommige plaatsen staan commerciële ‘in-store’ geldautomaten die hun transactiekosten optellen op bij het opgenomen bedrag (in plaats van deze als losse transactie c.q. via de afrekening van uw bankkosten te verantwoorden). Een voorbeeld: wanneer u € 100 opneemt en de kosten zijn € 1,50, wordt een bedrag van € 101,50 van uw rekening afgeschreven. Als u vervolgens handmatig heeft ingevoerd dat u € 100 heeft opgenomen, komen de bedragen niet overeen. U moet deze waarde instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de koppeling herkend kan worden."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:13
 msgid "This field specifies the minimum matching score a potential matching transaction must have to be displayed in the match list."
@@ -13942,7 +13941,7 @@ msgid ""
 msgstr ""
 "Kan deze boeking niet bewerken of verwijderen. Deze boeking is gemarkeerd als alleen-lezen vanwege:\n"
 "\n"
-"'%s'"
+"‘%s’"
 
 #: ../src/register/ledger-core/split-register-model.c:1942
 msgid "Change reconciled split?"
@@ -13974,7 +13973,7 @@ msgstr "Het geselecteerde rapport verwijderen"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:2
 msgid "Exit the custom report dialog"
-msgstr "Het venster 'Aangepast rapporten' verlaten"
+msgstr "Het venster ‘Aangepast rapporten’ verlaten"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:3
 msgid "Run the currently selected report"
@@ -14033,7 +14032,7 @@ msgstr "De identificatienummer van het rapport."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1008
 msgid "_Print Report..."
-msgstr "Rapport _afdrukken..."
+msgstr "Rapport _afdrukken…"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1009
 msgid "Print the current report"
@@ -14045,7 +14044,7 @@ msgstr "_Rapport toevoegen"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1034
 msgid "Add the current report to the `Custom' menu for later use. The report will be saved in the file ~/.gnucash/saved-reports-2.4. It will be accessible as menu entry in the report menu at the next startup of GnuCash."
-msgstr "Het rapport aan het menu \"Rapporten ‣ Aangepaste rapporten\" toevoegen voor later gebruik. Het rapport zal worden opgeslagen in het bestand ~/.gnucash/saved-reports-2.4. Het is als menukeuze beschikbaar zodra GnuCash de volgende keer wordt opgestart."
+msgstr "Het rapport aan het menu ‘Rapporten ‣ Aangepaste rapporten’ toevoegen voor later gebruik. Het rapport zal worden opgeslagen in het bestand ~/.gnucash/saved-reports-2.4. Het is als menukeuze beschikbaar zodra GnuCash de volgende keer wordt opgestart."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1041
 msgid "Export _Report"
@@ -14142,7 +14141,7 @@ msgstr "U kunt niet als dat bestand opslaan."
 #: ../intl-scm/guile-strings.c:5798
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
-msgstr "Kon het bestand '%s' niet openen. De foutmelding luidt: %s"
+msgstr "Kon het bestand ‘%s’ niet openen. De foutmelding luidt: %s"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1561
 msgid "There are no options for this report."
@@ -14208,7 +14207,7 @@ msgstr "HTML opmaaksjabloon selecteren"
 
 #: ../src/report/report-gnome/report.glade.h:15
 msgid "Si_ze..."
-msgstr "_Grootte..."
+msgstr "_Grootte…"
 
 #: ../src/report/report-gnome/report.glade.h:16
 msgid "_Column span:"
@@ -14363,21 +14362,21 @@ msgstr "Kosten"
 #: ../intl-scm/guile-strings.c:66 ../intl-scm/guile-strings.c:198
 #, c-format
 msgid "Unrecognized account type '%s'. Defaulting to Bank."
-msgstr "Niet-herkende rekeningsoort '%s'. In plaats daarvan 'Bank' gebruikt."
+msgstr "Niet-herkende rekeningsoort ‘%s’. In plaats daarvan ‘Bank’ gebruikt."
 
 #. src/import-export/qif-import/qif-parse.scm
 #. src/import-export/qif-import/qif-import/qif-parse.scm
 #: ../intl-scm/guile-strings.c:68 ../intl-scm/guile-strings.c:200
 #, c-format
 msgid "Unrecognized action '%s'."
-msgstr "Niet-herkende actie '%s'."
+msgstr "Niet-herkende actie ‘%s’."
 
 #. src/import-export/qif-import/qif-parse.scm
 #. src/import-export/qif-import/qif-import/qif-parse.scm
 #: ../intl-scm/guile-strings.c:70 ../intl-scm/guile-strings.c:202
 #, c-format
 msgid "Unrecognized status '%s'. Defaulting to uncleared."
-msgstr "Niet-herkende status '%s'. In plaats daarvan 'niet goedgekeurd' gebruikt."
+msgstr "Niet-herkende status ‘%s’. In plaats daarvan ‘niet goedgekeurd’ gebruikt."
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-import/qif-to-gnc.scm
@@ -14620,7 +14619,7 @@ msgstr "Niet-eenduidige opmaak verwerken"
 #: ../intl-scm/guile-strings.c:154 ../intl-scm/guile-strings.c:286
 #, c-format
 msgid "Value '%s' could be %s or %s."
-msgstr "Waarde '%s' kan zowel %s als %s zijn."
+msgstr "Waarde ‘%s’ kan zowel %s als %s zijn."
 
 #. src/tax/us/txf-de_DE.scm
 #. src/tax/us/txf.scm
@@ -17870,7 +17869,7 @@ msgstr "1- of 2-kolomsrapport"
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:1632 ../intl-scm/guile-strings.c:2548
 msgid "The balance sheet can be displayed with either 1 or 2 columns.  'auto' means that the layout will be adjusted to fit the width of the page."
-msgstr "De balans kan worden weergegeven in 1 of 2 kolommen. 'auto' betekent dat de opmaak wordt aangepast aan de breedte van de pagina."
+msgstr "De balans kan worden weergegeven in 1 of 2 kolommen. ‘auto’ betekent dat de opmaak wordt aangepast aan de breedte van de pagina."
 
 #. src/report/standard-reports/balsheet-eg.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
@@ -17906,7 +17905,7 @@ msgstr "Lettertypefamilie"
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:1656 ../intl-scm/guile-strings.c:2572
 msgid "Font definition in CSS font-family format"
-msgstr "Lettertype-definitie in CSS 'font-family' opmaak"
+msgstr "Lettertype-definitie in CSS ‘font-family’ opmaak"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
@@ -17918,7 +17917,7 @@ msgstr "Tekengrootte"
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:1660 ../intl-scm/guile-strings.c:2576
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\""
-msgstr "Tekengrootte in CSS 'font-size' opmaak (bijv. \"medium\" of \"10pt\")"
+msgstr "Tekengrootte in CSS ‘font-size’ opmaak (bijv. “medium” of “10pt”)"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
@@ -18038,7 +18037,7 @@ msgstr "Negatieve bedragen tussen haakjes presenteren, bijvoorbeeld (€100,00)"
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:1706 ../intl-scm/guile-strings.c:2622
 msgid "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)"
-msgstr "(Ontwikkelversie -- vertrouw de cijfers uit dit rapport niet zonder extra controle.<br>Via de optie \"Extra toelichting\" kunt u deze waarschuwing verwijderen)"
+msgstr "(Ontwikkelversie -- vertrouw de cijfers uit dit rapport niet zonder extra controle.<br>Via de optie ‘Extra toelichting’ kunt u deze waarschuwing verwijderen)"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balsheet-eg.scm
@@ -18899,7 +18898,7 @@ msgstr "FIFO"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3110 ../intl-scm/guile-strings.c:4552
 msgid "Use first-in first-out method for basis"
-msgstr "Het \"first in - first out\"-principe hanteren"
+msgstr "Het ‘first in - first out’-principe hanteren"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -18911,13 +18910,13 @@ msgstr "LIFO"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3114 ../intl-scm/guile-strings.c:4556
 msgid "Use first-in last-out method for basis"
-msgstr "Het \"last in - first out\"-principe hanteren"
+msgstr "Het ‘last in - first out’-principe hanteren"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3116 ../intl-scm/guile-strings.c:4558
 msgid "Prefer use of price editor pricing over transactions, where applicable."
-msgstr "Waar nodig met \"Koersen bewerken\" aangepaste koersen laten prevaleren boven koersen uit boekingen."
+msgstr "Waar nodig met ‘Koersen bewerken’ aangepaste koersen laten prevaleren boven koersen uit boekingen."
 
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -20006,13 +20005,13 @@ msgstr "Kredieten"
 #: ../intl-scm/guile-strings.c:5594
 #, c-format
 msgid "Building '%s' report ..."
-msgstr "Samenstellen van rapport '%s'..."
+msgstr "Samenstellen van rapport ‘%s’…"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:5596
 #, c-format
 msgid "Rendering '%s' report ..."
-msgstr "Weergeven van rapport '%s'..."
+msgstr "Weergeven van rapport ‘%s’…"
 
 #. src/report/report-system/eguile-gnc.scm
 #. src/report/report-system/gnucash/report/eguile-gnc.scm
@@ -20025,7 +20024,7 @@ msgstr "Er is een fout opgetreden tijdens het verwerken van het sjabloon:"
 #: ../intl-scm/guile-strings.c:5600 ../intl-scm/guile-strings.c:5804
 #, c-format
 msgid "Template file \"%s\" can not be read"
-msgstr "Sjabloonbestand \"%s\" kan niet worden gelezen"
+msgstr "Sjabloonbestand ‘%s’ kan niet worden gelezen"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:5602
@@ -20366,7 +20365,7 @@ msgstr "Een opmaaksjabloon voor dit rapport selecteren"
 #: ../intl-scm/guile-strings.c:5800
 #, c-format
 msgid "Your report \"%s\" has been saved into the configuration file \"%s\"."
-msgstr "Uw rapport \"%s\" is opgeslagen in het configuratiebestand \"%s\"."
+msgstr "Uw rapport ‘%s’ is opgeslagen in het configuratiebestand ‘%s’."
 
 #. src/report/report-system/html-style-sheet.scm
 #: ../intl-scm/guile-strings.c:5806
@@ -20772,7 +20771,7 @@ msgstr "De blauwe items zijn exporteerbaar naar een XML-bestand voor de Duitse b
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:5964 ../intl-scm/guile-strings.c:6162
 msgid "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to set up tax-related accounts."
-msgstr "Er zijn geen fiscaal relevante rekeningen gevonden. Deze kunt u instellen via menukeuze \"Bewerken ‣ Fiscale instellingen\"."
+msgstr "Er zijn geen fiscaal relevante rekeningen gevonden. Deze kunt u instellen via menukeuze ‘Bewerken ‣ Fiscale instellingen’."
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -21330,7 +21329,7 @@ msgstr "Nulsaldi weergeven"
 #: ../intl-scm/guile-strings.c:6432 ../intl-scm/guile-strings.c:7044
 #, c-format
 msgid "Transactions relating to '%s' contain more than one currency.  This report is not designed to cope with this possibility."
-msgstr "De boekingen die betrekking hebben op '%s' bevatten meerdere valuta. Dit rapport is niet op die mogelijkheid toegerust."
+msgstr "De boekingen die betrekking hebben op ‘%s’ bevatten meerdere valuta. Dit rapport is niet op die mogelijkheid toegerust."
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/gnucash/report/aging.scm
@@ -21897,7 +21896,7 @@ msgstr "%s&nbsp;#"
 #: ../intl-scm/guile-strings.c:7286 ../intl-scm/guile-strings.c:7522
 #: ../intl-scm/guile-strings.c:7702 ../intl-scm/guile-strings.c:8082
 msgid "Invoice in progress..."
-msgstr "Factuur wordt verwerkt..."
+msgstr "Factuur wordt verwerkt…"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/gnucash/report/fancy-invoice.scm
@@ -23238,7 +23237,7 @@ msgid ""
 "Run 'gnc-fq-update' as root to install them."
 msgstr ""
 "U mist enkele noodzakelijke Perl-bibliotheken.\n"
-"Start 'gnc-fq-update' als root om deze te installeren."
+"Start ‘gnc-fq-update’ als root om deze te installeren."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -23310,11 +23309,11 @@ msgstr "Waarschuwing! Dit is een ONTWIKKELVERSIE van GnuCash die waarschijnlijk 
 
 #: ../doc/tip_of_the_day.list.in:6
 msgid "The GnuCash online manual has lots of helpful information. If you are upgrading from earlier versions of GnuCash, the section \"What's new in GnuCash 2.0\" is particularly interesting. You can access the manual under the Help menu."
-msgstr "De GnuCash online handleiding bevat veel handige informatie. Wanneer u vanuit een oudere versie van GnuCash een upgrade pleegt, is vooral de sectie \"wat is er nieuw in GnuCash 2.0\" interessant. U kunt de handleiding vinden via het Help-menu."
+msgstr "De GnuCash online handleiding bevat veel handige informatie. Wanneer u vanuit een oudere versie van GnuCash een upgrade pleegt, is vooral de sectie ‘wat is er nieuw in GnuCash 2.0’ interessant. U kunt de handleiding vinden via het Help-menu."
 
 #: ../doc/tip_of_the_day.list.in:11
 msgid "You can easily import your existing financial data from Quicken, MS Money or other programs that export QIF files or OFX files.  In the File menu, click on the sub-menu Import and click on QIF or OFX file, respectively. Then, follow the instructions provided."
-msgstr "U kunt eenvoudig uw bestaande financiële gegevens importeren uit programma's die hun gegevens in QIF- of OFX-bestandsindeling kunnen opslaan (bijvoorbeeld Quicken of MS Money). In het submenu \"Bestand ‣ Importeren\" kiest u voor respectievelijk \"QIF importeren\" of \"OFX/QFX importeren\", waarna u de instructies op het scherm kunt volgen."
+msgstr "U kunt eenvoudig uw bestaande financiële gegevens importeren uit programma's die hun gegevens in QIF- of OFX-bestandsindeling kunnen opslaan (bijvoorbeeld Quicken of MS Money). In het submenu ‘Bestand ‣ Importeren’ kiest u voor respectievelijk ‘QIF importeren’ of ‘OFX/QFX importeren’, waarna u de instructies op het scherm kunt volgen."
 
 #: ../doc/tip_of_the_day.list.in:16
 msgid "If you are familiar with other financial programs such as Quicken, note that GnuCash uses accounts instead of categories to track income and expenses.  For more information on income and expense accounts, please see the GnuCash online manual."
@@ -23330,11 +23329,11 @@ msgstr "Gebruik de rechtermuisknop in het hoofdvenster om de menukeuzes voor rek
 
 #: ../doc/tip_of_the_day.list.in:31
 msgid "To enter multiple-split transactions such as a paycheck with multiple deductions, click the Split button in the tool bar. Alternatively, in the View menu, you can choose the register style Auto-Split Ledger or Transaction Journal."
-msgstr "Om een boeking met meer dan twee boekregels (zoals het salaris met alle individuele inhoudingen) in te voeren, klikt u op de knop [Meer boekregels] in de werkbalk. Ook kunt u menukeuze \"Beeld ‣ Geavanceerd dagboek\" of menukeuze \"Beeld ‣ Journaalposten\" gebruiken om een andere weergavestijl voor de grootboekkaart te selecteren."
+msgstr "Om een boeking met meer dan twee boekregels (zoals het salaris met alle individuele inhoudingen) in te voeren, klikt u op de knop [Meer boekregels] in de werkbalk. Ook kunt u menukeuze ‘Beeld ‣ Geavanceerd dagboek’ of menukeuze ‘Beeld ‣ Journaalposten’ gebruiken om een andere weergavestijl voor de grootboekkaart te selecteren."
 
 #: ../doc/tip_of_the_day.list.in:36
 msgid "As you enter amounts in the register, you can use the GnuCash calculator to add, subtract, multiply and divide .  Simply type the first value, then select '+', '-','*', or '/'.  Type the second value and press Enter to record the calculated amount."
-msgstr "Als u bedragen boekt in de grootboekkaart, kunt u GnuCash gebruiken als rekenmachine voor optellen, aftrekken, vermenigvuldigen en delen. Dit doet u door eerst de eerste waarde, vervolgens '+', '-', '*' of '/' en ten slotte de tweede waarde in te voeren. Na 'Enter' wordt de berekende waarde als bedrag vastgelegd."
+msgstr "Als u bedragen boekt in de grootboekkaart, kunt u GnuCash gebruiken als rekenmachine voor optellen, aftrekken, vermenigvuldigen en delen. Dit doet u door eerst de eerste waarde, vervolgens ‘+’, ‘-’, ‘*’ of ‘/’ en ten slotte de tweede waarde in te voeren. Na ‘Enter’ wordt de berekende waarde als bedrag vastgelegd."
 
 #: ../doc/tip_of_the_day.list.in:41
 msgid "Quick-fill makes it easy to enter common transactions.  When you type the first letter(s) of a common transaction description, then press the Tab key, GnuCash will automatically complete the remainder of the transaction as it was last entered."
@@ -23342,15 +23341,15 @@ msgstr "Auto-aanvullen vereenvoudigt de invoer van terugkerende boekingen. Wanne
 
 #: ../doc/tip_of_the_day.list.in:46
 msgid "Type the first letter(s) of an existing account name in the Transfer register column, and GnuCash will complete the name from your list of accounts. For subaccounts, type the first letter(s) of the parent account, followed by ':' and the first letter(s) of the subaccount (e.g. A:C for Assets:Cash.)"
-msgstr "Door de beginletter(s) van een bestaande rekeningnaam in de kolom Tegenrekening op de grootboekkaart in te voeren, zal GnuCash proberen de naam af te maken. Voor subrekeningen moet u eerst de beginletter(s) van de hoofdrekening invoeren, gevolgd door het scheidingsteken (meestal ':') en de beginletter(s) van de subrekening (bijvoorbeeld A:B voor Activa:Bank)."
+msgstr "Door de beginletter(s) van een bestaande rekeningnaam in de kolom Tegenrekening op de grootboekkaart in te voeren, zal GnuCash proberen de naam af te maken. Voor subrekeningen moet u eerst de beginletter(s) van de hoofdrekening invoeren, gevolgd door het scheidingsteken (meestal ‘:’) en de beginletter(s) van de subrekening (bijvoorbeeld A:B voor Activa:Bank)."
 
 #: ../doc/tip_of_the_day.list.in:52
 msgid "Want to see all your subaccount transactions in one register? From the main menu, highlight the parent account and select Accounts -> Open Subaccounts from the menu."
-msgstr "U kunt de boekingen van alle subrekeningen op één grootboekkaart weergeven door de betreffende hoofdrekening te selecteren en te kiezen voor menuoptie \"Bestand ‣ Openen ‣ Subrekeningen openen\"."
+msgstr "U kunt de boekingen van alle subrekeningen op één grootboekkaart weergeven door de betreffende hoofdrekening te selecteren en te kiezen voor menuoptie ‘Bestand ‣ Openen ‣ Subrekeningen openen’."
 
 #: ../doc/tip_of_the_day.list.in:56
 msgid "When entering dates, you can type '+' or '-' to increment or decrement the selected date. You can use '+' and '-' to increment and decrement check numbers as well."
-msgstr "Wanneer u datums invoert, kunt u de toetsen '+' of '-' gebruiken om een eerdere c.q. latere datum te selecteren. Ook bij het invoeren van boekstuknummers in de grootboekkaart kunt u met '+' en '-' het betreffende nummer verhogen of verlagen."
+msgstr "Wanneer u datums invoert, kunt u de toetsen ‘+’ of ‘-’ gebruiken om een eerdere c.q. latere datum te selecteren. Ook bij het invoeren van boekstuknummers in de grootboekkaart kunt u met ‘+’ en ‘-’ het betreffende nummer verhogen of verlagen."
 
 #: ../doc/tip_of_the_day.list.in:60
 msgid "To switch between multiple tabs in the main window, press Control+Alt+Page Up/Down."
@@ -23366,11 +23365,11 @@ msgstr "Om geld over te boeken tussen rekeningen met verschillende munteenheden 
 
 #: ../doc/tip_of_the_day.list.in:72
 msgid "You can pack multiple reports into a single window,  providing all the financial information you want at a glance. To do so, use the Sample & Custom -> \"Custom Multicolumn Report\" report."
-msgstr "U kunt meerdere rapporten in één venster samenvoegen via menukeuze \"Voorbeeld & Aangepast ‣ Aangepast multi-kolom rapport\", zodat u alle gewenste financiële gegevens in één oogopslag kunt raadplegen."
+msgstr "U kunt meerdere rapporten in één venster samenvoegen via menukeuze ‘Voorbeeld & Aangepast ‣ Aangepast multi-kolom rapport’, zodat u alle gewenste financiële gegevens in één oogopslag kunt raadplegen."
 
 #: ../doc/tip_of_the_day.list.in:77
 msgid "Style Sheets affect how reports are displayed.  Choose a style sheet for your report as a report option, and use the Edit -> Style Sheets menu to customize style sheets."
-msgstr "Opmaaksjablonen bepalen de weergave van uw rapporten. U kunt per rapport een opmaaksjabloon toekennen via de rapportopties. Via menukeuze \"Bewerken ‣ Opmaaksjablonen\" kunt u deze sjablonen aanpassen."
+msgstr "Opmaaksjablonen bepalen de weergave van uw rapporten. U kunt per rapport een opmaaksjabloon toekennen via de rapportopties. Via menukeuze ‘Bewerken ‣ Opmaaksjablonen’ kunt u deze sjablonen aanpassen."
 
 #: ../doc/tip_of_the_day.list.in:81
 msgid "To raise the accounts menu in the transfer field of a register page, press the Menu key or the Ctrl-Down key combination."
@@ -23382,7 +23381,7 @@ msgstr "U kunt eenvoudig contact opnemen met de ontwikkelaars van GnuCash via de
 
 #: ../doc/tip_of_the_day.list.in:88
 msgid "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable. There is another theory that this has already happened. Douglas Adams, \"The Restaurant at the End of the Universe\""
-msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal voor dient en waarom het er is, het onmiddellijk zal verdwijnen en zal worden vervangen door iets wat nog bizarder en onbegrijpelijker is. Er is een andere theorie die stelt dat dit reeds gebeurd is. ― Douglas Adams, \"Het restaurant aan het eind van het heelal\""
+msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal voor dient en waarom het er is, het onmiddellijk zal verdwijnen en zal worden vervangen door iets wat nog bizarder en onbegrijpelijker is. Er is een andere theorie die stelt dat dit reeds gebeurd is. ― Douglas Adams, “Het restaurant aan het eind van het heelal”"
 
 #~ msgid "Set configuration path"
 #~ msgstr "Configuratiepad instellen"
@@ -23463,7 +23462,7 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 #~ msgstr "<b>Standaard munteenheid nieuwe rekeningen</b>"
 
 #~ msgid "If you would like an account to have an opening balance, click on the account and enter the starting balance in the box on the right. All accounts except Equity and placeholder accounts may have an opening balance."
-#~ msgstr "Een eventueel beginsaldo op een rekening voert u in door op de rekening te klikken en het saldo in het veld rechts in te voeren. Dit is mogelijk bij alle rekeningen, behalve rekeningen met de rekeningsoort \"Eigen vermogen\" of met de rekeningoptie \"Aggregatie\"."
+#~ msgstr "Een eventueel beginsaldo op een rekening voert u in door op de rekening te klikken en het saldo in het veld rechts in te voeren. Dit is mogelijk bij alle rekeningen, behalve rekeningen met de rekeningsoort ‘Eigen vermogen’ of met de rekeningoptie ‘Aggregatie’."
 
 #~ msgid "This is Sample2."
 #~ msgstr "Dit is Voorbeeld2."
@@ -23502,10 +23501,10 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 #~ msgstr "Aangemaakte boekingen beoordelen"
 
 #~ msgid "Creating transactions..."
-#~ msgstr "Boekingen aan het aanmaken..."
+#~ msgstr "Boekingen aan het aanmaken…"
 
 #~ msgid "Days Away"
-#~ msgstr "Over ... dagen"
+#~ msgstr "Over … dagen"
 
 #~ msgid "Disposition?"
 #~ msgstr "Voorbereiding?"
@@ -23565,7 +23564,7 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 #~ msgstr "Variabelen"
 
 #~ msgid "What to do, what to do?"
-#~ msgstr "Wat nu toch te doen...?"
+#~ msgstr "Wat nu toch te doen…?"
 
 #~ msgid "Defaults"
 #~ msgstr "Standaardwaarden"
@@ -23640,25 +23639,25 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 #~ msgstr "Eind van het lopende boekhoudkundige kwartaal"
 
 #~ msgid "QSF _Invoice..."
-#~ msgstr "QSF-_factuur..."
+#~ msgstr "QSF-_factuur…"
 
 #~ msgid "Export one or more invoices to QSF"
 #~ msgstr "Eén of meer facturen als QSF-bestand exporteren"
 
 #~ msgid "QSF _Customer..."
-#~ msgstr "QSF-_klant..."
+#~ msgstr "QSF-_klant…"
 
 #~ msgid "Export one or more customers to QSF"
 #~ msgstr "Eén of meer klanten als QSF-bestand exporteren"
 
 #~ msgid "QSF _Vendor..."
-#~ msgstr "QSF-_leverancier..."
+#~ msgstr "QSF-_leverancier…"
 
 #~ msgid "Export one or more vendors to QSF"
 #~ msgstr "Eén of meer leveranciers als QSF-bestand exporteren"
 
 #~ msgid "QSF _Employee..."
-#~ msgstr "QSF-_werknemer..."
+#~ msgstr "QSF-_werknemer…"
 
 #~ msgid "Export one or more employees to QSF"
 #~ msgstr "Eén of meer werknemers als QSF-bestand exporteren"
@@ -23694,8 +23693,8 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 
 #~ msgid "%i parameter value for this \"%s\" object."
 #~ msgid_plural "%i parameter values for this \"%s\" object."
-#~ msgstr[0] "%i parameterwaarde voor dit \"%s\" object."
-#~ msgstr[1] "%i parameterwaarden voor dit \"%s\" object."
+#~ msgstr[0] "%i parameterwaarde voor dit ‘%s’ object."
+#~ msgstr[1] "%i parameterwaarden voor dit ‘%s’ object."
 
 #~ msgid "%i: Parameter name: %s "
 #~ msgstr "%i: Parameternaam: %s "
@@ -23777,11 +23776,11 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 #~ msgstr ""
 #~ "Deze assistent zal uw QSF-gegevens aan het geopende GnuCash-bestand toevoegen. Indien hierbij een conflict optreedt tussen bepaalde QSF-gegevens en de bestaande GnuCash-gegevens, zal u worden gevraagd hoe hiermee om te gaan.\n"
 #~ "\n"
-#~ "Het samenvoegen is later NIET ongedaan te maken. Zorg ervoor dat u over een reservekopie van het bestand beschikt VOORDAT u verder gaat! Bij elke stap vóór de uiteindelijke samenvoeging zal deze assistent u de mogelijkheid geven het samenvoegen af te breken. De QSF-gegevens worden pas aan uw huidige (GnuCash-)bestand toegevoegd zodra u op de knop \"Afronden\" klikt.\n"
+#~ "Het samenvoegen is later NIET ongedaan te maken. Zorg ervoor dat u over een reservekopie van het bestand beschikt VOORDAT u verder gaat! Bij elke stap vóór de uiteindelijke samenvoeging zal deze assistent u de mogelijkheid geven het samenvoegen af te breken. De QSF-gegevens worden pas aan uw huidige (GnuCash-)bestand toegevoegd zodra u op de knop [Afronden] klikt.\n"
 #~ "\n"
 #~ "Er is op dit moment geen ondersteuning voor vreemde valuta of wisselkoersen. De nieuwe gegevens krijgen de standaard munteenheid toegekend; deze is na afronding van het samenvoegen aan te passen. \n"
 #~ "\n"
-#~ "Kies voor \"Annuleren\" als u op dit moment geen QSF-gegevens wenst toe te voegen."
+#~ "Kies voor [Annuleren] als u op dit moment geen QSF-gegevens wenst toe te voegen."
 
 #~ msgid ""
 #~ "You have three choices for each collision: \n"
@@ -23812,7 +23811,6 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 #~ msgid "Export the chart of accounts for a date with balances as QSF"
 #~ msgstr "Het rekeningschema met de saldi op een bepaalde balansdatum als QSF-bestand exporteren"
 
-#, fuzzy
 #~ msgid "Error: Loading failed, error code %d - %s."
 #~ msgstr "Fout: Laden mislukt, foutcode %d - %s."
 
@@ -23843,11 +23841,9 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 #~ msgid "Invoice number:"
 #~ msgstr "Verkoopfactuurnummer:"
 
-#, fuzzy
 #~ msgid "Due date:"
 #~ msgstr "Vervaldatum:"
 
-#, fuzzy
 #~ msgid "<h2>Tax Invoice</h2>"
 #~ msgstr "<h2>Belastingfactuur</h2>"
 
@@ -23866,11 +23862,9 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 #~ msgid "Total "
 #~ msgstr "Totaal "
 
-#, fuzzy
 #~ msgid "Retained earnings"
 #~ msgstr "Ingehouden winst"
 
-#, fuzzy
 #~ msgid "Retained loss"
 #~ msgstr "Ingehouden verlies"
 
