@@ -598,7 +598,11 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
         job = gnc_ab_get_trans_job(data->ab_acc, ab_trans, SINGLE_DEBITNOTE);
 
         /* Check whether we really got a job */
-        if (!job)
+        if (!job || AB_Job_CheckAvailability(job
+#ifndef AQBANKING_VERSION_5_PLUS
+                                             , 0
+#endif
+                                             ))
         {
             /* Oops, no job, probably not supported by bank */
             if (gnc_verify_dialog(
@@ -613,7 +617,7 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
                           "\n"
                           "Do you want to enter the job again?")))
             {
-                gnc_error_dialog(NULL, "Sorry, not implemented yet.");
+                gnc_error_dialog(NULL, "Sorry, not implemented yet. Please check the console or trace file logs to see which job was rejected.");
             }
             /* else */
         }
