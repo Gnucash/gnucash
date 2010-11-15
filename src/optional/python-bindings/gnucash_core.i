@@ -38,8 +38,6 @@
 #include "guid.h"
 #include "gnc-module/gnc-module.h"
 #include "engine/gnc-engine.h"
-#include "backend/xml/gnc-backend-xml.h"
-#include "backend/dbi/gnc-backend-dbi.h"
 #include "Transaction.h"
 #include "Split.h"
 #include "Account.h"
@@ -185,10 +183,6 @@ qof_log_init();
 qof_init();
 gnc_module_system_init();
 char * no_args[1] = { NULL };
-gnc_engine_init_static(0, no_args);
-
-
-gnc_module_init_backend_xml();
-gnc_module_init_backend_dbi();
+gnc_engine_init(0, no_args);
 %}
 

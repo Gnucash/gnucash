@@ -63,7 +63,7 @@ class Session(GnuCashCoreClass):
     Invoice..) is associated with a particular book where it is stored.
     """
 
-    def __init__(self, book_uri=None, is_new=False, ignore_lock=False, 
+    def __init__(self, book_uri=None, ignore_lock=False, is_new=False, 
                  force_new= False):
         """A convienent contructor that allows you to specify a book URI,
         begin the session, and load the book.
