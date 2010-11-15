@@ -242,8 +242,6 @@ static GtkActionEntry gnc_menu_actions [] =
 
     /* File menu */
 
-    { "FileNewMenuAction", GTK_STOCK_NEW, N_("_New"), "", NULL, NULL },
-    { "FileOpenMenuAction", GTK_STOCK_OPEN, N_("_Open"), "", NULL, NULL },
     { "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
     { "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
     {
