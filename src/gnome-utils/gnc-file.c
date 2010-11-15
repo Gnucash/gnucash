@@ -1240,7 +1240,6 @@ gnc_file_do_save_as (const char* filename)
 
     io_err = qof_session_get_error (new_session);
 
-    /* if file appears to be locked, ask the user ... */
     /* If the file exists and would be clobbered, ask the user */
     if (ERR_BACKEND_STORE_EXISTS == io_err) {
         const char *format = _("The file %s already exists. "
@@ -1264,6 +1263,7 @@ gnc_file_do_save_as (const char* filename)
         }
 	qof_session_begin (new_session, newfile, FALSE, TRUE, TRUE);
     }
+    /* if file appears to be locked, ask the user ... */
     else if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
         if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))
