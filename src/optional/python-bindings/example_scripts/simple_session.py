@@ -16,7 +16,7 @@ except GnuCashBackendException, backend_exception:
 
 
 # create a new file
-session = Session("xml://%s" % FILE_2, True)
+session = Session("xml://%s" % FILE_2, is_new=True)
 session.save()
 session.end()
 session.destroy()

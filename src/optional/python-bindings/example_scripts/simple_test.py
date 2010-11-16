@@ -5,7 +5,7 @@ from gnucash import Session, Account, Transaction, Split, GncNumeric
 
 FILE_1 = "/tmp/example.gnucash"
 
-session = Session("xml://%s" % FILE_1, True)
+session = Session("xml://%s" % FILE_1, is_new=True)
 
 book = session.book
 root_acct = Account(book)

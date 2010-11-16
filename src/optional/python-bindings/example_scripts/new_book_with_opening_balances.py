@@ -262,8 +262,8 @@ def create_opening_balance_transaction(commodtable, namespace, mnemonic,
     return simple_opening_name_used
         
 def main():
-    original_book_session = Session(argv[1], False)
-    new_book_session = Session(argv[2], True)
+    original_book_session = Session(argv[1], is_new=False)
+    new_book_session = Session(argv[2], in_new=True)
     new_book = new_book_session.get_book()
     new_book_root = new_book.get_root_account()
 

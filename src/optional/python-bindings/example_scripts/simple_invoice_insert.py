@@ -73,7 +73,7 @@ def gnc_numeric_from_decimal(decimal_value):
     return GncNumeric(numerator, denominator)
 
 
-s = Session(argv[1], False)
+s = Session(argv[1], is_new=False)
 # this seems to make a difference in more complex cases
 s.save()
 

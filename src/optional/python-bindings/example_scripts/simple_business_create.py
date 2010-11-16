@@ -46,7 +46,7 @@ from gnucash.gnucash_core_c import \
     GNC_OWNER_CUSTOMER, ACCT_TYPE_LIABILITY
 
 
-s = Session(argv[1], True)
+s = Session(argv[1], is_new=True)
 # this seems to make a difference in more complex cases
 s.save()
 

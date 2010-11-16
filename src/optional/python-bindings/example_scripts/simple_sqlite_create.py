@@ -4,7 +4,7 @@ from gnucash import Session, Account
 from os.path import abspath
 from gnucash.gnucash_core_c import ACCT_TYPE_ASSET
 
-s = Session('sqlite3://%s' % abspath('test.blob'), True)
+s = Session('sqlite3://%s' % abspath('test.blob'), is_new=True)
 # this seems to make a difference in more complex cases
 s.save()
 
