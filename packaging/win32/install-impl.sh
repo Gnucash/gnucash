@@ -1543,10 +1543,9 @@ function inst_docs() {
         make_chm guide de_DE
         make_chm guide it_IT
         make_chm guide ja_JP "--stringparam chunker.output.encoding Shift_JIS --stringparam htmlhelp.encoding Shift_JIS"
-# FIXME: C help is temporarily disabled because it crashes the hhc.exe compiler!
-#        make_chm help C
+        make_chm help C
         make_chm help de_DE
-#        make_chm help it_IT
+        make_chm help it_IT
     qpopd
 }
 
