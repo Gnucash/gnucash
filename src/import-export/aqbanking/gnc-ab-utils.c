@@ -573,6 +573,7 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
 {
     GncABImExContextImport *data = user_data;
     Transaction *gnc_trans;
+    GncABTransType trans_type;
 
     g_return_val_if_fail(element && data, NULL);
 
@@ -595,7 +596,22 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
             ab_trans, AB_Account_GetAccountNumber(data->ab_acc));
         AB_Transaction_SetLocalCountry(ab_trans, "DE");
 
-        job = gnc_ab_get_trans_job(data->ab_acc, ab_trans, SINGLE_DEBITNOTE);
+
+        switch(AB_Transaction_GetType(ab_trans))
+        {
+          case AB_Transaction_TypeDebitNote:
+            trans_type = SINGLE_DEBITNOTE;
+            break;
+          case AB_Transaction_TypeTransaction:
+            /* trans_type = SINGLE_INTERNAL_TRANSFER;
+             * break; */
+          case AB_Transaction_TypeEuTransfer:
+          case AB_Transaction_TypeTransfer:
+          default:
+            trans_type = SINGLE_TRANSFER;
+        } /* switch */
+
+        job = gnc_ab_get_trans_job(data->ab_acc, ab_trans, trans_type);
 
         /* Check whether we really got a job */
         if (!job || AB_Job_CheckAvailability(job
