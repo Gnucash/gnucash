@@ -891,7 +891,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     gint result = 0;
     gchar* protocol = NULL;
     gchar* host = NULL;
-    gchar* dbname = NULL;
+    gchar *dbname = NULL, *dbnamelc = NULL;
     gchar* username = NULL;
     gchar* password = NULL;
     gboolean success = FALSE;
@@ -910,6 +910,11 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                              &username, &password, &dbname );
     if ( portnum == 0 )
         portnum = PGSQL_DEFAULT_PORT;
+/* Postgres's SQL interface coerces identifiers to lower case, but the
+ * C interface is case-sensitive. This results in a mixed-case dbname
+ * being created (with a lower case name) but then dbi can't conect to
+ * it. To work around this, coerce the name to lowercase first. */
+    dbnamelc = g_utf8_strdown( dbname, -1 );
 
     // Try to connect to the db.  If it doesn't exist and the create
     // flag is TRUE, we'll need to connect to the 'postgres' db and execute the
@@ -926,7 +931,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
         goto exit;
     }
     dbi_conn_error_handler( be->conn, pgsql_error_fn, be );
-    if ( !set_standard_connection_options( qbe, be->conn, host, portnum, dbname, username, password ) )
+    if ( !set_standard_connection_options( qbe, be->conn, host, portnum, dbnamelc, username, password ) )
     {
         goto exit;
     }
@@ -957,7 +962,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
         if ( create )
         {
             dbi_result dresult;
-            result = dbi_conn_set_option( be->conn, "dbname", "postgres" );
+            result = dbi_conn_set_option( be->conn, "dbnamelc", "postgres" );
             if ( result < 0 )
             {
                 PERR( "Error setting 'dbname' option\n" );
@@ -971,14 +976,14 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
-            dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s WITH ENCODING 'UTF8'", dbname );
+            dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s WITH ENCODING 'UTF8'", dbnamelc );
             if ( dresult == NULL )
             {
                 PERR( "Unable to create database '%s'\n", dbname );
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
-	    dbi_conn_queryf( be->conn, "ALTER DATABASE %s SET standard_conforming_strings TO on", dbname );
+	    dbi_conn_queryf( be->conn, "ALTER DATABASE %s SET standard_conforming_strings TO on", dbnamelc );
             dbi_conn_close( be->conn );
 
             // Try again to connect to the db
@@ -990,7 +995,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                 goto exit;
             }
             dbi_conn_error_handler( be->conn, pgsql_error_fn, be );
-            if ( !set_standard_connection_options( qbe, be->conn, host, PGSQL_DEFAULT_PORT, dbname, username, password ) )
+            if ( !set_standard_connection_options( qbe, be->conn, host, PGSQL_DEFAULT_PORT, dbnamelc, username, password ) )
             {
                 goto exit;
             }
@@ -1024,6 +1029,7 @@ exit:
     g_free( username );
     g_free( password );
     g_free( dbname );
+    g_free( dbnamelc );
 
     LEAVE (" ");
 }
