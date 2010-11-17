@@ -847,13 +847,19 @@ pgsql_error_fn( dbi_conn conn, void* user_data )
     }
     else if ( g_strrstr( msg, "server closed the connection unexpectedly" ) ) // Connection lost
     {
+	if ( dbi_conn == NULL )
+	{
+	    PWARN( "DBI Error: Connection lost, connection pointer invalid");
+	    return;
+	}
         PINFO( "DBI error: %s - Reconnecting...\n", msg );
         gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CONN_LOST, 1, TRUE );
         dbi_conn->conn_ok = TRUE;
         (void)dbi_conn_connect( conn );
     }
-    else if ( g_str_has_prefix( msg, "connection pointer is NULL" ) ||
-              g_str_has_prefix(msg, "could not connect to server" ) )     // No connection
+    else if ( dbi_conn && 
+	      ( g_str_has_prefix( msg, "connection pointer is NULL" ) ||
+		g_str_has_prefix(msg, "could not connect to server" ) ) )     // No connection
     {
         if (dbi_conn->error_repeat >= DBI_MAX_CONN_ATTEMPTS )
         {
