@@ -978,6 +978,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
+	    dbi_conn_queryf( be->conn, "ALTER DATABASE %s SET standard_conforming_strings TO on", dbname );
             dbi_conn_close( be->conn );
 
             // Try again to connect to the db
