@@ -976,7 +976,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
-            dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s WITH ENCODING 'UTF8'", dbnamelc );
+            dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s WITH TEMPLATE template0 ENCODING 'UTF8'", dbnamelc );
             if ( dresult == NULL )
             {
                 PERR( "Unable to create database '%s'\n", dbname );
