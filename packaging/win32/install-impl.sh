@@ -1493,7 +1493,7 @@ function make_chm() {
     _XSLTPROC_OPTS=$3
     echo "Processing $_CHM_TYPE ($_CHM_LANG) ..."
     qpushd $_CHM_TYPE/$_CHM_LANG
-        xsltproc $XSLTPROCFLAGS $_XSLTPROC_OPTS ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
+        xsltproc $XSLTPROCFLAGS $_XSLTPROC_OPTS --path ../../../docbookx-dtd ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
         count=0
         echo >> htmlhelp.hhp
         echo "[ALIAS]" >> htmlhelp.hhp
@@ -1518,13 +1518,23 @@ function make_chm() {
 }
 
 function inst_docs() {
+    setup "Docbook xsl and dtd"
     _DOCS_UDIR=`unix_path $DOCS_DIR`
     if [ ! -d $_DOCS_UDIR/docbook-xsl ] ; then
         wget_unpacked $DOCBOOK_XSL_URL $DOWNLOAD_DIR $DOCS_DIR
         # add a pause to allow windows to realize that the files now exist
         sleep 1
         mv $_DOCS_UDIR/docbook-xsl-* $_DOCS_UDIR/docbook-xsl
+    else
+        echo "Docbook xsl already installed. Skipping."
     fi
+    if [ ! -d $_DOCS_UDIR/docbookx-dtd ] ; then
+        mkdir -p $_DOCS_UDIR/docbookx-dtd
+        wget_unpacked $DOCBOOK_DTD_URL $DOWNLOAD_DIR $DOCS_DIR/docbookx-dtd
+    else
+        echo "Docbook dtd already installed. Skipping."
+    fi
+
     mkdir -p $_DOCS_UDIR/repos
     qpushd $DOCS_DIR/repos
         if [ "$UPDATE_DOCS" = "yes" ]; then
