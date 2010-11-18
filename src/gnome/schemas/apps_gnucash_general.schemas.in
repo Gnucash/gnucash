@@ -302,6 +302,21 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/show_splash_screen</key>
+      <applyto>/apps/gnucash/general/show_splash_screen</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show splash screen</short>
+        <long>
+	  If active, a splash screen will be shown at
+	  startup. Otherwise no splash screen will be shown.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/register/use_theme_colors</key>
       <applyto>/apps/gnucash/general/register/use_theme_colors</applyto>
       <owner>gnucash</owner>
