@@ -28,28 +28,18 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-splash.h"
 #include "gnc-version.h"
+#include "gnc-gconf-utils.h"
 
 #define MARKUP_STRING "<span size='small'>%s</span>"
 
 static GtkWidget * splash = NULL;
 static GtkWidget * progress = NULL;
 static GtkWidget * progress_bar = NULL;
-static int splash_is_initialized = FALSE;
 
 static void
 splash_destroy_cb (GtkObject *object, gpointer user_data)
 {
     splash = NULL;
-}
-
-void
-gnc_gui_init_splash (void)
-{
-    if (!splash_is_initialized)
-    {
-        splash_is_initialized = TRUE;
-        gnc_show_splash_screen ();
-    }
 }
 
 static gboolean
@@ -71,6 +61,7 @@ gnc_show_splash_screen (void)
     gchar *ver_string, *markup;
 
     if (splash) return;
+    if (!gnc_gconf_get_bool(GCONF_GENERAL, "show_splash_screen", NULL)) return;
 
     splash = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_type_hint (GTK_WINDOW (splash), GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);

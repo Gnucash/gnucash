@@ -622,8 +622,7 @@ gnc_gui_init(void)
 
     g_set_application_name(PACKAGE_NAME);
 
-    if (gnc_gconf_get_bool(GCONF_GENERAL, "show_splash_screen", NULL))
-        gnc_gui_init_splash();
+    gnc_show_splash_screen();
 
     gnome_is_initialized = TRUE;
 

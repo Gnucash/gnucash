@@ -143,7 +143,6 @@ GdkPixbuf * gnc_gnome_get_gdkpixbuf (const char *name);
  */
 void gnc_shutdown (int exit_status);
 
-void gnc_gui_init_splash (void);
 GncMainWindow *gnc_gui_init (void);
 int gnc_ui_start_event_loop (void);
 gboolean gnucash_ui_is_running (void);
