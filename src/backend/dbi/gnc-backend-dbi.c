@@ -962,7 +962,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
         if ( create )
         {
             dbi_result dresult;
-            result = dbi_conn_set_option( be->conn, "dbnamelc", "postgres" );
+            result = dbi_conn_set_option( be->conn, "dbname", "postgres" );
             if ( result < 0 )
             {
                 PERR( "Error setting 'dbname' option\n" );
