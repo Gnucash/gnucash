@@ -167,7 +167,7 @@ CellBlock * gnc_split_register_get_active_cursor (SplitRegister *reg);
 void gnc_split_register_set_last_num (SplitRegister *reg, const char *num);
 
 Account * gnc_split_register_get_account_by_name(
-    SplitRegister *reg, BasicCell * cell, const char *name, gboolean *new);
+    SplitRegister *reg, BasicCell * cell, const char *name);
 Account * gnc_split_register_get_account (SplitRegister *reg,
         const char *cell_name);
 

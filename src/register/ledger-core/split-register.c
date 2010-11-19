@@ -1699,7 +1699,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 
 Account *
 gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
-                                        const char *name, gboolean *refresh)
+                                        const char *name)
 {
     const char *placeholder = _("The account %s does not allow transactions.");
     const char *missing = _("The account %s does not exist. "
@@ -1724,7 +1724,6 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
             return NULL;
 
         /* User said yes, they want to create a new account. */
-        *refresh = FALSE;
         account = gnc_ui_new_accounts_from_name_window (name);
         if (!account)
             return NULL;
@@ -1737,7 +1736,6 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
         /* The name has changed. Update the cell. */
         gnc_combo_cell_set_value (cell, account_name);
         gnc_basic_cell_set_changed (&cell->cell, TRUE);
-        *refresh = TRUE;
     }
     g_free (account_name);
 
@@ -1757,7 +1755,6 @@ gnc_split_register_get_account (SplitRegister *reg, const char * cell_name)
 {
     BasicCell *cell;
     const char *name;
-    gboolean dummy;
 
     if (!gnc_table_layout_get_cell_changed (reg->table->layout, cell_name, TRUE))
         return NULL;
@@ -1766,7 +1763,7 @@ gnc_split_register_get_account (SplitRegister *reg, const char * cell_name)
     if (!cell)
         return NULL;
     name = gnc_basic_cell_get_value (cell);
-    return gnc_split_register_get_account_by_name (reg, cell, name, &dummy);
+    return gnc_split_register_get_account_by_name (reg, cell, name);
 }
 
 static gboolean

@@ -265,8 +265,7 @@ gnc_split_register_check_account (SplitRegister *reg,
     info = gnc_split_register_get_info (reg);
     new_acct = gnc_split_register_get_account_by_name (reg,
                (BasicCell *) cell,
-               cell->cell.value,
-               &info->full_refresh);
+               cell->cell.value);
     if (!new_acct)
         return FALSE;
 
@@ -1142,7 +1141,6 @@ gnc_split_register_get_account_always (SplitRegister *reg,
 {
     BasicCell *cell;
     const char *name;
-    gboolean dummy;
 
     cell = gnc_table_layout_get_cell (reg->table->layout, cell_name);
     if (!cell)
@@ -1156,7 +1154,7 @@ gnc_split_register_get_account_always (SplitRegister *reg,
         return NULL;
     }
 
-    return gnc_split_register_get_account_by_name (reg, cell, name, &dummy);
+    return gnc_split_register_get_account_by_name (reg, cell, name);
 }
 
 static const char *
