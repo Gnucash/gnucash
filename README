@@ -444,9 +444,10 @@ Submitting a Patch:
 
       svn diff > /tmp/mypatch
 
-  and send /tmp/mypatch to gnucash-devel@gnucash.org with `[PATCH]'
-  prefixed to the Subject: of the email.  Note that this
-  ONLY WORKS if you have NOT added any new files to the source tree.
+  and attach it to the appropriate bug or enhancement request in
+  Bugzilla (https://bugzilla.gnome.org). Create a new bug if you don't
+  find one that's applicable. Please don't submit patches to either of
+  the mailing lists, as they tend to be forgotten.
 
   If your patch adds new files, use the `-N' flag to diff between a
   clean directory and your development directory.  E.g.
