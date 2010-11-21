@@ -463,8 +463,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 
     /*
      * Find an existing payment window.  If found, bring it to
-     * the front.  If we have an actual owner, then set it in
-     * the window.
+     * the front.  If we have an actual owner and/or invoice, then set
+     * it in the window.
      */
 
     pw = gnc_find_first_gui_component (cm_class, find_handler, NULL);
@@ -472,6 +472,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     {
         if (owner->owner.undefined)
             gnc_payment_set_owner (pw, owner);
+        if (invoice)
+            gnc_invoice_set_invoice (pw->invoice_choice, invoice);
 
         gtk_window_present (GTK_WINDOW(pw->dialog));
         return(pw);
