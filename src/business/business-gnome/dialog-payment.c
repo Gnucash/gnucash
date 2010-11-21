@@ -96,17 +96,29 @@ gnc_payment_window_close_handler (gpointer data)
         gtk_widget_destroy (pw->dialog);
 }
 
+/* Forward declaration */
+static void gnc_payment_set_owner (PaymentWindow *pw, GncOwner *owner);
+
 static void
 gnc_payment_dialog_invoice_changed(PaymentWindow *pw)
 {
     GNCLot *lot;
     gnc_numeric val;
+    GncOwner *owner;
 
     /* Set the payment amount in the dialog */
     if (pw->invoice)
     {
         lot = gncInvoiceGetPostedLot (pw->invoice);
         val = gnc_numeric_abs (gnc_lot_get_balance (lot));
+        /* If a invoice is selected without selecting an owner first, or
+         * if the owner for the selected invoice is different from the
+         * previously selected owner, make sure the right owner is
+         * selected. */
+        owner = gncInvoiceGetOwner (pw->invoice);
+        if (pw->owner.owner.undefined == NULL || pw->owner.owner.undefined != owner->owner.undefined) {
+            gnc_payment_set_owner (pw, gncInvoiceGetOwner (pw->invoice));
+        }
     }
     else
     {
@@ -124,17 +136,18 @@ gnc_payment_dialog_owner_changed(PaymentWindow *pw)
     KvpValue* value;
     KvpFrame* slots;
 
-    /* If the owner changed, the invoice selection is invalid */
-    pw->invoice = NULL;
+    /* The selected invoice has a different owner than the newly
+     * selected owner, reset it */
+    if (pw->invoice != NULL && !gncOwnerEqual(gncInvoiceGetOwner(pw->invoice), &pw->owner)) {
+        pw->invoice = NULL;
+        gnc_invoice_set_invoice(pw->invoice_choice, NULL);
+    }
+
+    /* Limit the invoice selection to this owner */
     gnc_invoice_set_owner(pw->invoice_choice, &pw->owner);
-    /* note that set_owner implies ...set_invoice(...,NULL); */
 
     /* in case we don't get the callback */
     gnc_payment_dialog_invoice_changed(pw);
-
-    /* XXX: We should set the sensitive flag on the invoice_choice
-     * based on whether 'owner' is NULL or not...
-     */
 
     /* Now handle the account tree */
     slots = gncOwnerGetSlots(&pw->owner);

@@ -310,7 +310,6 @@ void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner)
 
     gncOwnerCopy(owner, &isi->owner);
     isi->have_owner = TRUE;
-    gnc_general_search_set_selected(GNC_GENERAL_SEARCH(widget), NULL);
 
     /* Reset the label */
     gnc_invoice_select_search_set_label(isi);
