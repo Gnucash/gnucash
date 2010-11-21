@@ -148,7 +148,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                                 <property name="visible">True</property>
                                 <property name="tooltip" translatable="yes">The invoice being paid.
 
-Note that is field is optional. If you leave it blank, GnuCash will automatically assign the payment to the first unpaid invoice for this company.	</property>
+Note that is field is optional. If you leave it blank, GnuCash will automatically assign the payment to the first unpaid invoice for this company.</property>
                                 <child>
                                   <placeholder/>
                                 </child>
