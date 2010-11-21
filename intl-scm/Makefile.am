@@ -10,7 +10,7 @@ noinst_HEADERS = guile-strings.c
 
 BUILT_SOURCES = guile-strings.c
 
-SCMFILES = $(shell find ${abs_top_srcdir}/src -name test -prune -o -name '*.scm' -print )
+SCMFILES = $(shell find ${abs_top_srcdir}/src -name test -prune -o -name '*.scm' -print | sort)
 
 # This needs to be generated in srcdir
 guile-strings.c: $(SCMFILES)
