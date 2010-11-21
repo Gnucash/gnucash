@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-21 21:38+0100\n"
-"PO-Revision-Date: 2010-11-08 21:25+0100\n"
+"PO-Revision-Date: 2010-11-21 21:43+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -12142,24 +12142,20 @@ msgid "Last day of the previous calendar year"
 msgstr "Ende des vorigen Kalenderjahres"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "Start of next year"
-msgstr "Anfang dieses Jahres"
+msgstr "Anfang nächsten Jahres"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "First day of the next calendar year"
-msgstr "Anfang des Kalenderjahres"
+msgstr "Der erste Tag des nächsten Kalenderjahres"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "End of next year"
-msgstr "Ende dieses Jahres"
+msgstr "Ende nächsten Jahres"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "Last day of the next calendar year"
-msgstr "Ende des Kalenderjahres"
+msgstr "Der letzte Tag des nächsten Kalenderjahres"
 
 #. src/app-utils/date-utilities.scm
 msgid "Start of accounting period"
@@ -12198,24 +12194,20 @@ msgid "Last day of previous month"
 msgstr "Ende des vorigen Monats"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "Start of next month"
-msgstr "Anfang dieses Monats"
+msgstr "Anfang nächsten Monats"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "First day of the next month"
-msgstr "Anfang des Monats"
+msgstr "Der erste Tag des nächsten Monats"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "End of next month"
-msgstr "Ende dieses Monats"
+msgstr "Ende nächsten Monats"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "Last day of next month"
-msgstr "Ende des vorigen Monats"
+msgstr "Der letzte Tag des nächsten Monats"
 
 #. src/app-utils/date-utilities.scm
 msgid "Start of current quarter"
@@ -12242,24 +12234,20 @@ msgid "Last day of previous quarterly accounting period"
 msgstr "Ende des vorigen Buchführungs-Quartals"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "Start of next quarter"
-msgstr "Anfang dieses Quartals"
+msgstr "Anfang nächsten Quartals"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "First day of the next quarterly accounting period"
-msgstr "Anfang des momentanen Buchführungs-Quartals"
+msgstr "Der erste Tag des nächsten Kalender-Quartals"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "End of next quarter"
-msgstr "Ende dieses Quartals"
+msgstr "Ende nächsten Quartals"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "Last day of next quarterly accounting period"
-msgstr "Ende des vorigen Buchführungs-Quartals"
+msgstr "Der letzte Tag des nächsten Kalender-Quartals"
 
 #. src/app-utils/date-utilities.scm
 msgid "The current date"
@@ -12286,29 +12274,24 @@ msgid "One Year Ago"
 msgstr "Ein Jahr zuvor"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "One Month Ahead"
-msgstr "Einen Monat zuvor"
+msgstr "Einen Monat voraus"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "One Week Ahead"
-msgstr "Eine Woche zuvor"
+msgstr "Eine Woche voraus"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "Three Months Ahead"
-msgstr "Drei Monate zuvor"
+msgstr "Drei Monate voraus"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "Six Months Ahead"
-msgstr "sechs Monate zuvor"
+msgstr "Sechs Monate voraus"
 
 #. src/app-utils/date-utilities.scm
-#, fuzzy
 msgid "One Year Ahead"
-msgstr "Ein Jahr zuvor"
+msgstr "Ein Jahr voraus"
 
 #. src/app-utils/prefs.scm
 msgid "Funds In"
@@ -17856,64 +17839,3 @@ msgstr ""
 
 #~ msgid "Number of _rows:"
 #~ msgstr "Anzahl der _Zeilen:"
-
-#~ msgid ""
-#~ "The invoice to be paid.\n"
-#~ "\n"
-#~ "Note that is field is optional. If you leave it blank, GnuCash will "
-#~ "automatically assign the payment to the first unpaid invoice for this "
-#~ "company."
-#~ msgstr ""
-#~ "Die zu begleichende Rechnung.\n"
-#~ "\n"
-#~ "Dieses Feld ist optional. Wird es leer gelassen, ordnet GnuCash die "
-#~ "Zahlung automatisch der ersten noch offenen Rechnung dieses Lieferanten "
-#~ "zu."
-
-#~ msgid "The number of rows in an invoice"
-#~ msgstr ""
-#~ "Standardanzahl von Zeilen, die in Rechnungen angezeigt werden sollen"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in an invoice. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "Mit dieser Einstellung geben Sie die Anzahl Zeilen in der Anzeige einer "
-#~ "Rechnung an. Die tatsächliche Fenstergröße kann dann beliebig variiert "
-#~ "werden. Diese Einstellung wird nur beim allerersten Öffnen eines Fensters "
-#~ "verwendet."
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in a register. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "Diese Zahl gibt die angezeigten Zeilen an, die in einem neu geöffneten "
-#~ "Kontofenster gezeigt werden. Diese Zahl wird nur verwendet, wenn das "
-#~ "Fenster das erste Mal neu geöffnet wird."
-
-#~ msgid "Display this many rows when a register is created."
-#~ msgstr ""
-#~ "Anzahl der Zeilen, die beim Öffnen eines neuen Kontofensters angezeigt "
-#~ "werden."
-
-#~ msgid "_Open"
-#~ msgstr "Ö_ffnen"
-
-#~ msgid ""
-#~ "Set as tax-related, but assigned tax code no longer valid for tax year"
-#~ msgstr ""
-#~ "Als steuerrelevant markiert, doch ist die zugewiesene Kennziffer nicht "
-#~ "länger gültig für das Steuerjahr"
-
-#~ msgid "Set as tax-related, tax code assigned for different tax entity type"
-#~ msgstr ""
-#~ "Als steuerrelevant markiert, doch Kennziffer für anderen Steuertyp "
-#~ "zugewiesen"
-
-#~ msgid ""
-#~ "Set as not tax-related, tax code assigned for different tax entity type"
-#~ msgstr ""
-#~ "Als nicht steuerrelevant markiert, doch Kennziffer für anderen Steuertyp "
-#~ "zugewiesen"
