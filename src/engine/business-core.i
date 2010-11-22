@@ -76,6 +76,7 @@ static GncEmployee * gncEmployeeLookupFlip(GncGUID g, QofBook *b)
 
 %}
 
+GLIST_HELPER_INOUT(GncInvoiceList, SWIGTYPE_p__gncInvoice);
 GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
 GLIST_HELPER_INOUT(GncTaxTableEntryList, SWIGTYPE_p__gncTaxTableEntry);
 GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
@@ -127,6 +128,7 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 %include <gncTaxTable.h>
 %include <gncVendor.h>
 %include <gncBusGuile.h>
+%include <libqof/qof/qofquery.h>
 
 #define URL_TYPE_CUSTOMER GNC_ID_CUSTOMER
 #define URL_TYPE_VENDOR GNC_ID_VENDOR
@@ -135,6 +137,16 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 #define URL_TYPE_INVOICE GNC_ID_INVOICE
 // not exactly clean
 #define URL_TYPE_OWNERREPORT "owner-report"
+
+%inline %{
+static QofQuery * qof_query_create_for_invoices(void) {
+  return qof_query_create_for(GNC_ID_INVOICE);
+}
+
+static GncInvoiceList * qof_query_run_for_invoices(QofQuery *q) {
+    return qof_query_run(q);
+}
+%}
 
 %init {
   {

@@ -39,6 +39,7 @@ transaction and lot for the posted invoice.
 struct _gncInvoice;
 typedef struct _gncInvoice GncInvoice;
 typedef struct _gncInvoiceClass GncInvoiceClass;
+typedef GList GncInvoiceList;
 
 #include "gncBillTerm.h"
 #include "gncEntry.h"
