@@ -1976,7 +1976,7 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
     adj = GTK_ADJUSTMENT(gtk_adjustment_new(lower_bound, lower_bound,
                                             upper_bound, step_size,
                                             step_size * 5.0,
-                                            step_size * 5.0));
+                                            0));
     value = gtk_spin_button_new(adj, step_size, num_decimals);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value), TRUE);
 
