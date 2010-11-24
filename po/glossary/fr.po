@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
-"POT-Creation-Date: 2006-04-16 12:55+0200\n"
+"POT-Creation-Date: 2010-11-24 02:25+0100\n"
 "PO-Revision-Date: 2006-04-16 12:55+0200\n"
 "Last-Translator: Jonathan Ernst <jonathan@ernstfamily.ch>\n"
 "Language-Team: FR\n"
@@ -189,7 +189,7 @@ msgstr ""
 msgid "bank"
 msgstr "banque"
 
-#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
 msgstr ""
 
@@ -313,6 +313,11 @@ msgstr ""
 msgid "Description (column in register)"
 msgstr ""
 
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+#, fuzzy
+msgid "discount"
+msgstr "compte"
+
 #. "Important Buzzword :)"
 msgid "double entry"
 msgstr ""
@@ -377,11 +382,11 @@ msgstr ""
 msgid "interest"
 msgstr ""
 
-#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
 msgstr "facture"
 
-#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+#. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr "tâche"
 
@@ -469,7 +474,7 @@ msgstr ""
 msgid "options"
 msgstr ""
 
-#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+#. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
 msgstr ""
 
@@ -712,4 +717,3 @@ msgstr "bon"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "débit"
-

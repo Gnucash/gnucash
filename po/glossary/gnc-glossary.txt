@@ -73,6 +73,7 @@
 "deposit (in the reconcile dialog)"	"see credit"
 "depreciation"	"The process of something becoming less valuable"
 "Description (column in register)"	"1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
+"discount"	"Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 "double entry"	"Important Buzzword :)"
 "employee"	"a person who works for somebody or a company in return for wages"
 "equity"	"1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."

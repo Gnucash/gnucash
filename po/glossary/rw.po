@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
-"POT-Creation-Date: 2005-11-14 21:55+0100\n"
+"POT-Creation-Date: 2010-11-24 02:25+0100\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -22,9 +22,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. "English Definition"
-msgid "Term"
-msgstr "Ijambo"
+#. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
+msgid "Term (Dear translator: This file will never be visible to the user!)"
+msgstr ""
 
 # svtools/source\dialogs\logindlg.src:DLG_LOGIN.FT_LOGIN_ACCOUNT.text
 #. "A detailed record of money spent and received"
@@ -244,7 +244,7 @@ msgstr "Kuri"
 msgid "bank"
 msgstr ""
 
-#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
 msgstr ""
 
@@ -394,6 +394,12 @@ msgstr ""
 msgid "Description (column in register)"
 msgstr "Inkingi in Kwiyandikisha"
 
+# svtools/source\dialogs\logindlg.src:DLG_LOGIN.FT_LOGIN_ACCOUNT.text
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+#, fuzzy
+msgid "discount"
+msgstr "Aderesi"
+
 #. "Important Buzzword :)"
 #, fuzzy
 msgid "double entry"
@@ -405,6 +411,10 @@ msgstr ""
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
+msgstr ""
+
+#. "Report that ... FIXME: Add description."
+msgid "equity statement"
 msgstr ""
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
@@ -457,15 +467,19 @@ msgstr ""
 msgid "import"
 msgstr "Kuzana"
 
+#. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
+msgid "income statement"
+msgstr ""
+
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
 msgstr ""
 
-#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
 msgstr ""
 
-#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+#. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr ""
 
@@ -567,7 +581,7 @@ msgstr "Gufungura%S"
 msgid "options"
 msgstr "Amahitamo"
 
-#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+#. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 #, fuzzy
 msgid "order"
 msgstr "Itondekanya"
@@ -638,7 +652,7 @@ msgstr "Igiciro"
 msgid "profit"
 msgstr ""
 
-#. "(rather: profit and loss account!?) A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
+#. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
 msgstr ""
 
@@ -706,6 +720,11 @@ msgstr "Kongera Gutangiza Kuri"
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
 msgstr ""
+
+#. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
+#, fuzzy
+msgid "reverse transaction, to (Action in the register)"
+msgstr "Inkingi in Kwiyandikisha"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 #, fuzzy
@@ -826,6 +845,11 @@ msgstr "Aderesi"
 msgid "transfer, to (register toolbar)"
 msgstr "Kuri Kwiyandikisha Umwanyabikoresho"
 
+#. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
+#, fuzzy
+msgid "trial balance (report)"
+msgstr "Izina"
+
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
@@ -851,7 +875,15 @@ msgstr "Agaciro in a Gutandukanya"
 msgid "vendor"
 msgstr "Umucuruzi"
 
+#. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
+#, fuzzy
+msgid "voucher"
+msgstr "Inkomoko"
+
 #. "see debit"
 #, fuzzy
 msgid "withdraw (in the reconcile dialog)"
 msgstr "in i Ikiganiro"
+
+#~ msgid "Term"
+#~ msgstr "Ijambo"

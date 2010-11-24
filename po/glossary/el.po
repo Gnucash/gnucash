@@ -1,11 +1,11 @@
 # Greek translation of gnucash-glossary.
 # Copyright (C) 2001 Free Software Foundation.
 # Simos Xenitellis <simos@hellug.gr>, 2001.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.0\n"
-"POT-Creation-Date: 2005-11-14 21:55+0100\n"
+"POT-Creation-Date: 2010-11-24 02:25+0100\n"
 "PO-Revision-Date: 2001-12-28 00:17+0000\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -13,9 +13,9 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-7\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. "English Definition"
-msgid "Term"
-msgstr "Ορισμός"
+#. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
+msgid "Term (Dear translator: This file will never be visible to the user!)"
+msgstr ""
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -218,7 +218,7 @@ msgstr "Ισορροπία"
 msgid "bank"
 msgstr "Βαθμός"
 
-#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
 msgstr ""
 
@@ -363,6 +363,11 @@ msgstr "Έντονη ατμοσφαιρική κατακρήμνιση"
 msgid "Description (column in register)"
 msgstr "Η περιγραφή περιέχει"
 
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+#, fuzzy
+msgid "discount"
+msgstr "λογαριασμός"
+
 #. "Important Buzzword :)"
 #, fuzzy
 msgid "double entry"
@@ -377,6 +382,10 @@ msgstr "Πρότυπο"
 #, fuzzy
 msgid "equity"
 msgstr "Ασφάλεια"
+
+#. "Report that ... FIXME: Add description."
+msgid "equity statement"
+msgstr ""
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 #, fuzzy
@@ -426,17 +435,21 @@ msgstr "Ισορροπία"
 msgid "import"
 msgstr "Εισαγωγή"
 
+#. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
+msgid "income statement"
+msgstr ""
+
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 #, fuzzy
 msgid "interest"
 msgstr "Δίκτυο"
 
-#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 #, fuzzy
 msgid "invoice"
 msgstr "αρχάριος"
 
-#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+#. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr ""
 
@@ -547,7 +560,7 @@ msgstr "Σφάλμα ανοίγματος αρχείου"
 msgid "options"
 msgstr "επιλογές:\n"
 
-#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+#. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
 msgstr ""
 
@@ -618,7 +631,7 @@ msgstr "Απόκρυψη Σημειώματων"
 msgid "profit"
 msgstr "στιγμή"
 
-#. "(rather: profit and loss account!?) A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
+#. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
 msgstr ""
 
@@ -684,6 +697,11 @@ msgstr "Ανανέωση"
 #, fuzzy
 msgid "Retained Earnings"
 msgstr "Απομένουν"
+
+#. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
+#, fuzzy
+msgid "reverse transaction, to (Action in the register)"
+msgstr "Η περιγραφή περιέχει"
 
 #
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
@@ -802,6 +820,10 @@ msgstr "προσωρινά"
 msgid "transfer, to (register toolbar)"
 msgstr ""
 
+#. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
+msgid "trial balance (report)"
+msgstr ""
+
 #
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -824,6 +846,14 @@ msgstr ""
 msgid "vendor"
 msgstr ""
 
+#. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
+#, fuzzy
+msgid "voucher"
+msgstr "Πόρος"
+
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr ""
+
+#~ msgid "Term"
+#~ msgstr "Ορισμός"

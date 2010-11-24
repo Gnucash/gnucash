@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: @gnucash@\n"
-"POT-Creation-Date: 2007-07-19 00:57+0200\n"
+"POT-Creation-Date: 2010-11-24 02:25+0100\n"
 "PO-Revision-Date: 2007-07-31 22:59+0200\n"
 "Last-Translator: Kornel Tako <takokornel@gmail.com>\n"
 "Language-Team: Hungarian <gnucash-devel-request@gnucash.org>\n"
@@ -17,7 +17,8 @@ msgstr ""
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr "Leírás (Kedves fordító. Ez a fájl a felhasználóknak soha nem lesz látható.)"
+msgstr ""
+"Leírás (Kedves fordító. Ez a fájl a felhasználóknak soha nem lesz látható.)"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -314,6 +315,11 @@ msgstr "Értékcsökkenés"
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
 msgstr "Magyarázat, Leírás"
+
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+#, fuzzy
+msgid "discount"
+msgstr "Számla "
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -616,7 +622,7 @@ msgstr "Osztalék egyenleg"
 msgid "shares"
 msgstr "Osztalék"
 
-#. "(of a price) A place from which sth comes or is obtained"
+#. "(of a price) A place wfrom which sth comes or is obtained"
 msgid "source"
 msgstr "Forrás"
 
@@ -715,4 +721,3 @@ msgstr "Nyugta"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "kivét"
-

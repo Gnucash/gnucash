@@ -2,11 +2,10 @@
 # Copyright (C) 2006 Free Software Foundation, Inc.
 # Bernard Meens <meensb@xs4all.nl>, 2006.
 #
-
 msgid ""
 msgstr ""
 "Project-Id-Version: GNUCasg 1.9.4 svn\n"
-"POT-Creation-Date: 2006-04-16 18:11+0200\n"
+"POT-Creation-Date: 2010-11-24 02:25+0100\n"
 "PO-Revision-Date: 2006-04-16 20:08+0200\n"
 "Last-Translator: Bernard Meens <meensb@xs4all.nl>\n"
 "Language-Team: NONE\n"
@@ -190,7 +189,7 @@ msgstr "balanceren"
 msgid "bank"
 msgstr "bank"
 
-#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
 msgstr "rekening"
 
@@ -314,6 +313,11 @@ msgstr "afschrijving"
 msgid "Description (column in register)"
 msgstr "beschrijving"
 
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+#, fuzzy
+msgid "discount"
+msgstr "dagboek"
+
 #. "Important Buzzword :)"
 msgid "double entry"
 msgstr "dubbele boekhouding"
@@ -378,11 +382,11 @@ msgstr "inkomensverklaring"
 msgid "interest"
 msgstr "interest"
 
-#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
 msgstr "factuur"
 
-#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+#. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr "opdracht"
 
@@ -470,7 +474,7 @@ msgstr "openingsbalans"
 msgid "options"
 msgstr "opties"
 
-#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+#. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
 msgstr "opdracht"
 
@@ -713,4 +717,3 @@ msgstr "voucher"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "opname"
-

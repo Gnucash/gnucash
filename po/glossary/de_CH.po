@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2006-04-29 15:14+0200\n"
+"POT-Creation-Date: 2010-11-24 02:25+0100\n"
 "PO-Revision-Date: 2008-03-03 00:47+0100\n"
 "Last-Translator: Raffael Luthiger <r.luthiger@huanga.com>\n"
 "Language-Team: DE\n"
@@ -203,7 +203,8 @@ msgstr "Geschäftsbuch (Bücher, Buch, Handelsbuch)"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr "Buchabschluss (Jahresabschluss; die Bücher abschliessen; Jahresendabrechnung)"
+msgstr ""
+"Buchabschluss (Jahresabschluss; die Bücher abschliessen; Jahresendabrechnung)"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -259,7 +260,8 @@ msgstr "Symbol"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr "Haben (ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?)"
+msgstr ""
+"Haben (ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?)"
 
 #. "-"
 msgid "Credit Card"
@@ -295,7 +297,8 @@ msgstr "Zeitraum"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
+msgstr ""
+"Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -312,6 +315,11 @@ msgstr "Abschreibung"
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
 msgstr "Beschreibung (Verwendungszweck, Buchungstext, Text?)"
+
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+#, fuzzy
+msgid "discount"
+msgstr "Konto"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -563,7 +571,8 @@ msgstr "Aktienteilung"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "Buchungsansicht: Aktive vollständig (bis 1.8.7: Auto-Mehrteiliges Hauptbuch)"
+msgstr ""
+"Buchungsansicht: Aktive vollständig (bis 1.8.7: Auto-Mehrteiliges Hauptbuch)"
 
 #. "another form of register"
 msgid "register: basic ledger"
@@ -712,4 +721,3 @@ msgstr "Auslagenerstattung"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "Belastung"
-
