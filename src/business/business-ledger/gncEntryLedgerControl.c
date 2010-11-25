@@ -238,6 +238,41 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
     *p_new_virt_loc = new_virt_loc;
 }
 
+static GncEntry*
+gnc_find_entry_in_reg_by_desc(GncEntryLedger *reg, const char* desc)
+{
+    int virt_row, virt_col;
+    int num_rows, num_cols;
+    GncEntry *last_entry;
+
+    if (!reg || !reg->table)
+        return NULL;
+
+    num_rows = reg->table->num_virt_rows;
+    num_cols = reg->table->num_virt_cols;
+
+    last_entry = NULL;
+
+    for (virt_row = num_rows - 1; virt_row >= 0; virt_row--)
+        for (virt_col = num_cols - 1; virt_col >= 0; virt_col--)
+        {
+            GncEntry *entry;
+            VirtualCellLocation vcell_loc = { virt_row, virt_col };
+
+            entry = gnc_entry_ledger_get_entry(reg, vcell_loc);
+
+            if (entry == last_entry)
+                continue;
+
+            if (safe_strcmp (desc, gncEntryGetDescription (entry)) == 0)
+                return entry;
+
+            last_entry = entry;
+        }
+
+    return NULL;
+}
+
 static gboolean
 gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
                                   gncTableTraversalDir dir,
@@ -245,6 +280,9 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
 {
     GncEntry *entry;
     GncEntry *blank_entry;
+    GncEntry *auto_entry;
+    const char* cell_name;
+    const char *desc;
 
     blank_entry = gnc_entry_ledger_get_blank_entry (ledger);
 
@@ -255,6 +293,8 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
     entry = gnc_entry_ledger_get_current_entry (ledger);
     if (entry == NULL)
         return FALSE;
+
+    cell_name = gnc_table_get_current_cell_name (ledger->table);
 
     switch (ledger->type)
     {
@@ -271,7 +311,50 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
         if (entry != blank_entry)
             return FALSE;
 
-        /* XXX: No other autocompletion, yet */
+        /* and leaving the description cell */
+        if (!gnc_cell_name_equal (cell_name, ENTRY_DESC_CELL))
+            return FALSE;
+
+        /* nothing but the date, num, and description should be changed */
+        /* FIXME, this should be refactored. */
+        if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+                                               ENTRY_INV_CELL, TRUE)  ||
+                gnc_table_layout_get_cell_changed (ledger->table->layout,
+                        ENTRY_ACTN_CELL, TRUE) ||
+                gnc_table_layout_get_cell_changed (ledger->table->layout,
+                        ENTRY_IACCT_CELL, TRUE)  ||
+                gnc_table_layout_get_cell_changed (ledger->table->layout,
+                        ENTRY_BACCT_CELL, TRUE))
+            return FALSE;
+
+        /* and the description should be changed */
+        if (!gnc_table_layout_get_cell_changed (ledger->table->layout,
+                                                ENTRY_DESC_CELL, TRUE))
+            return FALSE;
+
+        /* to a non-empty value */
+        desc = gnc_table_layout_get_cell_value (ledger->table->layout, ENTRY_DESC_CELL);
+        if ((desc == NULL) || (*desc == '\0'))
+            return FALSE;
+
+        /* find an entry to auto-complete on; FIXME: Get this from somewhere else */
+        auto_entry = gnc_find_entry_in_reg_by_desc(ledger, desc);
+
+        if (auto_entry == NULL)
+            return FALSE;
+#if 0
+        gnc_suspend_gui_refresh ();
+
+        /* now perform the completion */
+
+        /* FIXME: only first shot */
+        gncEntrySetInvAccount(entry, gncEntryGetInvAccount(auto_entry));
+        gncEntrySetInvPrice(entry, gncEntryGetInvPrice(auto_entry));
+
+        gnc_resume_gui_refresh ();
+
+        /* FIXME: now move to the non-empty amount column unless config setting says not */
+#endif
         break;
 
     default:
