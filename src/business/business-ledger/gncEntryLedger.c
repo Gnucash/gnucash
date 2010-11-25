@@ -714,7 +714,7 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
 }
 
 gboolean
-gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger, GncEntry *entry,
+gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger, const GncEntry *entry,
                                      VirtualCellLocation *vcell_loc)
 {
     Table *table;
@@ -723,6 +723,7 @@ gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger, GncEntry *entry,
 
     if ((ledger == NULL) || (entry == NULL))
         return FALSE;
+    g_assert(vcell_loc);
 
     table = ledger->table;
 
