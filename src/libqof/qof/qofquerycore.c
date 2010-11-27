@@ -1244,7 +1244,7 @@ static void
 kvp_free_pdata (QofQueryPredData *pd)
 {
     query_kvp_t pdata = (query_kvp_t)pd;
-    GSList *node;
+    QofQueryParamList *node;
 
     VERIFY_PDATA (query_kvp_type);
     kvp_value_delete (pdata->value);
@@ -1270,7 +1270,7 @@ kvp_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
 {
     const query_kvp_t pd1 = (const query_kvp_t) p1;
     const query_kvp_t pd2 = (const query_kvp_t) p2;
-    GSList *n1, *n2;
+    QofQueryParamList *n1, *n2;
 
     n1 = pd1->path;
     n2 = pd2->path;
@@ -1289,10 +1289,10 @@ kvp_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
 
 QofQueryPredData *
 qof_query_kvp_predicate (QofQueryCompare how,
-                         GSList *path, const KvpValue *value)
+                         QofQueryParamList *path, const KvpValue *value)
 {
     query_kvp_t pdata;
-    GSList *node;
+    QofQueryParamList *node;
 
     g_return_val_if_fail (path && value, NULL);
 
@@ -1312,7 +1312,7 @@ qof_query_kvp_predicate_path (QofQueryCompare how,
                               const char *path, const KvpValue *value)
 {
     QofQueryPredData *pd;
-    GSList *spath = NULL;
+    QofQueryParamList *spath = NULL;
     char *str, *p;
 
     if (!path) return NULL;

@@ -140,6 +140,9 @@ struct _QofQueryPredData
     QofQueryCompare       how;
 };
 
+/** A list of parameters (::QofIdType) used to describe a parameter to
+ * use in a predicate or when sorting */
+typedef GSList QofQueryParamList;
 
 /** @name Core Data Type Predicates
     @{ */
@@ -172,7 +175,7 @@ QofQueryPredData *qof_query_choice_predicate  (QofGuidMatch options, GList *guid
  *  sense, the 'path' is handled as if it were a paramter.
  */
 QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
-        GSList *path,
+        QofQueryParamList *path,
         const KvpValue *value);
 
 /** Same predicate as above, except that 'path' is assumed to be

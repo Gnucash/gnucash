@@ -40,7 +40,7 @@ static QofLogModule log_module = QOF_MOD_QUERY;
 
 struct _QofQueryTerm
 {
-    GSList *                param_list;
+    QofQueryParamList *     param_list;
     QofQueryPredData        *pdata;
     gboolean                invert;
 
@@ -55,7 +55,7 @@ struct _QofQueryTerm
 
 struct _QofQuerySort
 {
-    GSList *            param_list;
+    QofQueryParamList * param_list;
     gint                options;
     gboolean            increasing;
 
@@ -419,7 +419,7 @@ check_object (const QofQuery *q, gpointer object)
  * returns NULL if the first parameter is bad (and final is unchanged).
  */
 static GSList *
-compile_params (GSList *param_list, QofIdType start_obj,
+compile_params (QofQueryParamList *param_list, QofIdType start_obj,
                 QofParam const **final)
 {
     const QofParam *objDef = NULL;
@@ -569,7 +569,7 @@ static void check_item_cb (gpointer object, gpointer user_data)
     return;
 }
 
-static int param_list_cmp (const GSList *l1, const GSList *l2)
+static int param_list_cmp (const QofQueryParamList *l1, const QofQueryParamList *l2)
 {
     while (1)
     {
@@ -626,10 +626,10 @@ static void query_clear_compiles (QofQuery *q)
 /********************************************************************/
 /* PUBLISHED API FUNCTIONS */
 
-GSList *
+QofQueryParamList *
 qof_query_build_param_list (char const *param, ...)
 {
-    GSList *param_list = NULL;
+    QofQueryParamList *param_list = NULL;
     char const *this_param;
     va_list ap;
 
@@ -646,7 +646,7 @@ qof_query_build_param_list (char const *param, ...)
     return g_slist_reverse (param_list);
 }
 
-void qof_query_add_term (QofQuery *q, GSList *param_list,
+void qof_query_add_term (QofQuery *q, QofQueryParamList *param_list,
                          QofQueryPredData *pred_data, QofQueryOp op)
 {
     QofQueryTerm *qt;
@@ -670,7 +670,7 @@ void qof_query_add_term (QofQuery *q, GSList *param_list,
     qof_query_destroy (qr);
 }
 
-void qof_query_purge_terms (QofQuery *q, GSList *param_list)
+void qof_query_purge_terms (QofQuery *q, QofQueryParamList *param_list)
 {
     QofQueryTerm *qt;
     GList *or, *and;
@@ -927,7 +927,7 @@ int qof_query_num_terms (QofQuery *q)
     return n;
 }
 
-gboolean qof_query_has_term_type (QofQuery *q, GSList *term_param)
+gboolean qof_query_has_term_type (QofQuery *q, QofQueryParamList *term_param)
 {
     GList *or;
     GList *and;
@@ -948,7 +948,7 @@ gboolean qof_query_has_term_type (QofQuery *q, GSList *term_param)
     return FALSE;
 }
 
-GSList * qof_query_get_term_type (QofQuery *q, GSList *term_param)
+GSList * qof_query_get_term_type (QofQuery *q, QofQueryParamList *term_param)
 {
     GList *or;
     GList *and;
@@ -1210,7 +1210,7 @@ qof_query_merge_in_place(QofQuery *q1, QofQuery *q2, QofQueryOp op)
 
 void
 qof_query_set_sort_order (QofQuery *q,
-                          GSList *params1, GSList *params2, GSList *params3)
+                          QofQueryParamList *params1, QofQueryParamList *params2, QofQueryParamList *params3)
 {
     if (!q) return;
     if (q->primary_sort.param_list)
@@ -1255,7 +1255,7 @@ void qof_query_set_max_results (QofQuery *q, int n)
     q->max_results = n;
 }
 
-void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
+void qof_query_add_guid_list_match (QofQuery *q, QofQueryParamList *param_list,
                                     GList *guid_list, QofGuidMatch options,
                                     QofQueryOp op)
 {
@@ -1270,7 +1270,7 @@ void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
     qof_query_add_term (q, param_list, pdata, op);
 }
 
-void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
+void qof_query_add_guid_match (QofQuery *q, QofQueryParamList *param_list,
                                const GncGUID *guid, QofQueryOp op)
 {
     GList *g = NULL;
@@ -1288,7 +1288,7 @@ void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
 
 void qof_query_set_book (QofQuery *q, QofBook *book)
 {
-    GSList *slist = NULL;
+    QofQueryParamList *slist = NULL;
     if (!q || !book) return;
 
     /* Make sure this book is only in the list once */
@@ -1307,7 +1307,7 @@ GList * qof_query_get_books (QofQuery *q)
     return q->books;
 }
 
-void qof_query_add_boolean_match (QofQuery *q, GSList *param_list, gboolean value,
+void qof_query_add_boolean_match (QofQuery *q, QofQueryParamList *param_list, gboolean value,
                                   QofQueryOp op)
 {
     QofQueryPredData *pdata;
@@ -1352,7 +1352,7 @@ GList * qof_query_get_terms (const QofQuery *q)
     return q->terms;
 }
 
-GSList * qof_query_term_get_param_path (const QofQueryTerm *qt)
+QofQueryParamList * qof_query_term_get_param_path (const QofQueryTerm *qt)
 {
     if (!qt)
         return NULL;
@@ -1386,7 +1386,7 @@ void qof_query_get_sorts (QofQuery *q, QofQuerySort **primary,
         *tertiary = &(q->tertiary_sort);
 }
 
-GSList * qof_query_sort_get_param_path (const QofQuerySort *qs)
+QofQueryParamList * qof_query_sort_get_param_path (const QofQuerySort *qs)
 {
     if (!qs)
         return NULL;
@@ -1484,7 +1484,7 @@ static gchar *qof_query_printNumericMatch (QofNumericMatch n);
 static gchar *qof_query_printGuidMatch (QofGuidMatch g);
 static gchar *qof_query_printCharMatch (QofCharMatch c);
 static GList *qof_query_printPredData (QofQueryPredData *pd, GList *lst);
-static GString *qof_query_printParamPath (GSList * parmList);
+static GString *qof_query_printParamPath (QofQueryParamList * parmList);
 static void qof_query_printValueForParam (QofQueryPredData *pd, GString * gs);
 static void qof_query_printOutput (GList * output);
 
@@ -1606,7 +1606,7 @@ qof_query_printTerms (QofQuery * query, GList * output)
 static GList *
 qof_query_printSorts (QofQuerySort *s[], const gint numSorts, GList * output)
 {
-    GSList *gsl, *n = NULL;
+    QofQueryParamList *gsl, *n = NULL;
     gint curSort;
     GString *gs = g_string_new ("Sort Parameters:   ");
 
@@ -1649,7 +1649,7 @@ qof_query_printAndTerms (GList * terms, GList * output)
     const char *prefix = "AND Terms:";
     QofQueryTerm *qt;
     QofQueryPredData *pd;
-    GSList *path;
+    QofQueryParamList *path;
     GList *lst;
     gboolean invert;
 
@@ -1675,9 +1675,9 @@ qof_query_printAndTerms (GList * terms, GList * output)
         Process the parameter types of the predicate data
 */
 static GString *
-qof_query_printParamPath (GSList * parmList)
+qof_query_printParamPath (QofQueryParamList * parmList)
 {
-    GSList *list = NULL;
+    QofQueryParamList *list = NULL;
     GString *gs = g_string_new ("Param List: ");
     g_string_append (gs, " ");
     for (list = parmList; list; list = list->next)

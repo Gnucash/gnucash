@@ -99,21 +99,14 @@ static QofQuery * qof_query_create_for_splits(void) {
   return qof_query_create_for(GNC_ID_SPLIT);
 }
 }
-%typemap(in) GSList * "$1 = gnc_query_scm2path($input);"
 
-void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
-                           const GncGUID *guid, QofQueryOp op);
-void qof_query_set_sort_order (QofQuery *q, GSList *params1,
-                           GSList *params2, GSList *params3);
-
-%clear GSList *;
 SplitList * qof_query_run (QofQuery *q);
 SplitList * qof_query_last_run (QofQuery *q);
 SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 
+%typemap(in) QofQueryParamList * "$1 = gnc_query_scm2path($input);"
+
 %include <Query.h>
-%ignore qof_query_add_guid_match;
-%ignore qof_query_set_sort_order;
 %ignore qof_query_run;
 %ignore qof_query_last_run;
 %ignore qof_query_run_subquery;

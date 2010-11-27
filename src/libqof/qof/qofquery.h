@@ -126,7 +126,7 @@ void qof_query_shutdown (void);
 /** \name Low-Level API Functions */
 // @{
 
-GSList * qof_query_build_param_list (char const *param, ...);
+QofQueryParamList * qof_query_build_param_list (char const *param, ...);
 
 /** Create a new query.
  *  Before running the query, a 'search-for' type must be set
@@ -184,14 +184,14 @@ void qof_query_set_book (QofQuery *q, QofBook *book);
  *   obja->thingy == objb->stuff
  */
 
-void qof_query_add_term (QofQuery *query, GSList *param_list,
+void qof_query_add_term (QofQuery *query, QofQueryParamList *param_list,
                          QofQueryPredData *pred_data, QofQueryOp op);
 
 /** DOCUMENT ME !! */
-void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
+void qof_query_add_guid_match (QofQuery *q, QofQueryParamList *param_list,
                                const GncGUID *guid, QofQueryOp op);
 /** DOCUMENT ME !! */
-void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
+void qof_query_add_guid_list_match (QofQuery *q, QofQueryParamList *param_list,
                                     GList *guid_list, QofGuidMatch options,
                                     QofQueryOp op);
 
@@ -200,7 +200,7 @@ void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
  * create handy-dandy sugar routines for the other predicate types
  * as well. */
 void qof_query_add_boolean_match (QofQuery *q,
-                                  GSList *param_list,
+                                  QofQueryParamList *param_list,
                                   gboolean value,
                                   QofQueryOp op);
 
@@ -243,7 +243,7 @@ void qof_query_clear (QofQuery *query);
  * XXX ??? Huh? remove anything of that predicate type, or just
  * the particular predicate ?
  */
-void qof_query_purge_terms (QofQuery *q, GSList *param_list);
+void qof_query_purge_terms (QofQuery *q, QofQueryParamList *param_list);
 
 /** Return boolean FALSE if there are no terms in the query
  *  Can be used as a predicate to see if the query has been
@@ -256,8 +256,8 @@ int qof_query_has_terms (QofQuery *q);
 int qof_query_num_terms (QofQuery *q);
 
 /** DOCUMENT ME !! */
-gboolean qof_query_has_term_type (QofQuery *q, GSList *term_param);
-GSList * qof_query_get_term_type (QofQuery *q, GSList *term_param);
+gboolean qof_query_has_term_type (QofQuery *q, QofQueryParamList *term_param);
+GSList * qof_query_get_term_type (QofQuery *q, QofQueryParamList *term_param);
 
 /** Make a copy of the indicated query */
 QofQuery * qof_query_copy (QofQuery *q);
@@ -321,9 +321,9 @@ void qof_query_merge_in_place(QofQuery *q1, QofQuery *q2, QofQueryOp op);
  * new lists are set).
  */
 void qof_query_set_sort_order (QofQuery *q,
-                               GSList *primary_sort_params,
-                               GSList *secondary_sort_params,
-                               GSList *tertiary_sort_params);
+                               QofQueryParamList *primary_sort_params,
+                               QofQueryParamList *secondary_sort_params,
+                               QofQueryParamList *tertiary_sort_params);
 
 void qof_query_set_sort_options (QofQuery *q, gint prim_op, gint sec_op,
                                  gint tert_op);

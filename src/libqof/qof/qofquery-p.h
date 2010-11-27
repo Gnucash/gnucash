@@ -47,7 +47,7 @@ int qof_query_get_max_results (const QofQuery *q);
 GList * qof_query_get_terms (const QofQuery *q);
 
 /*@ dependent @*/
-GSList * qof_query_term_get_param_path (const QofQueryTerm *queryterm);
+QofQueryParamList * qof_query_term_get_param_path (const QofQueryTerm *queryterm);
 /*@ dependent @*/
 QofQueryPredData *qof_query_term_get_pred_data (const QofQueryTerm *queryterm);
 gboolean qof_query_term_is_inverted (const QofQueryTerm *queryterm);
@@ -62,7 +62,7 @@ void qof_query_get_sorts (QofQuery *q, QofQuerySort **primary,
                           QofQuerySort **secondary, QofQuerySort **tertiary);
 
 /*@ dependent @*/
-GSList * qof_query_sort_get_param_path (const QofQuerySort *querysort);
+QofQueryParamList * qof_query_sort_get_param_path (const QofQuerySort *querysort);
 gint qof_query_sort_get_sort_options (const QofQuerySort *querysort);
 gboolean qof_query_sort_get_increasing (const QofQuerySort *querysort);
 
