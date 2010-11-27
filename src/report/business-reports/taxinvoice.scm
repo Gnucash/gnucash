@@ -55,8 +55,7 @@
            (entries (gncTaxTableGetEntries taxtable))
            (amt?    #f)  ; becomes #t if any entries are amounts
            (pc?     #f)) ; becomes #t if any entries are percentages
-      (for-each
-        (lambda (entry) 
+      (for entry in entries do
           (let ((tttype (gncTaxTableEntryGetType   entry))
                 (ttamt  (gncTaxTableEntryGetAmount entry)))
             (if (equal? tttype GNC-AMT-TYPE-VALUE)
@@ -66,7 +65,6 @@
               (begin
                 (set! pc? #t)
                 (pctot 'add ttamt)))))
-        entries)
       (if pc? (begin (display (fmtnumeric (pctot 'total #f))) (display "%")))
       (if (and amt? pc?) (display " +&nbsp;"))        ; both - this seems unlikely in practice
       (if amt?

@@ -76,8 +76,7 @@
                             (car (gnc-transaction-get-date-posted t2))))))))
 
       ; pre-scan invoice entries to look for discounts and taxes
-      (for-each 
-        (lambda (entry) 
+      (for entry in entries do
           (let ((action    (gncEntryGetAction entry)) 
                 (qty       (gncEntryGetQuantity entry))
                 (discount  (gncEntryGetInvDiscount entry))   
@@ -96,15 +95,12 @@
                     ; error in SWIG binding -- disable display of tax details
                     ; (see http://bugzilla.gnome.org/show_bug.cgi?id=573645)
                     (set! taxtables? #f))))))) ; hack required until Swig is fixed
-        entries)
 
       ; pre-scan invoice splits to see if any payments have been made
-      (for-each
-        (lambda (split)  
+      (for split in splits do
           (let* ((t (xaccSplitGetParent split)))
             (if (not (equal? t txn))
               (set! payments? #t))))
-        splits) 
 
 ?>
 
@@ -285,8 +281,7 @@
             (sub-total (gnc:make-commodity-collector))
             (dsc-total (gnc:make-commodity-collector))
             (inv-total (gnc:make-commodity-collector)))
-        (for-each ; entry in entries
-          (lambda (entry) 
+        (for entry in entries do
             (let ((qty       (gncEntryGetQuantity entry))
                   (each      (gncEntryGetInvPrice entry)) 
                   (action    (gncEntryGetAction entry)) 
@@ -333,7 +328,7 @@
       <!-- TO DO: need an option about whether to display the tax-inclusive total? -->
       <td align="right"><?scm:d (fmtmoney currency (gnc-numeric-add rval rtaxval GNC-DENOM-AUTO GNC-RND-ROUND)) ?></td>
     </tr>
-    <?scm )) entries) ?>
+    <?scm )) ?>
 
     <!-- display subtotals row -->
     <?scm (if (or tax? discount? payments?) (begin ?>
@@ -354,8 +349,7 @@
     <!-- payments -->
     <?scm 
       (if payments? 
-        (for-each
-          (lambda (split)  
+        (for split in splits do
             (let ((t (xaccSplitGetParent split)))
               (if (not (equal? t txn)) ; don't process the entry itself as a split
                 (let ((c (xaccTransGetCurrency t))
@@ -367,7 +361,7 @@
       <td align="left" colspan="<?scm:d (- spancols1 1) ?>"><?scm:d opt-payment-recd-heading ?></td> 
       <td align="right"><?scm:d (fmtmoney c a) ?></td>
     </tr>
-    <?scm )))) splits)) ?>
+    <?scm ))))) ?>
 
     <!-- total row -->
     <tr valign="top">

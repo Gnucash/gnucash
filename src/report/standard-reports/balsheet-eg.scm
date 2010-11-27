@@ -80,12 +80,11 @@
 
 (define (debug . args)
   (if debugging?
-    (for-each
-      (lambda (arg)
+    (for arg in args do
         (if (string? arg)
           (display (string-append arg " "))
           (display (string-append (dump arg) " "))))
-      args)))
+      ))
 
 (define (hrule cols) ; in fact just puts in an empty row for spacing
   (display "<tr valign=\"center\"><td colspan=\"")
@@ -164,12 +163,10 @@
   (display " sublist: ")     (if (accrec-sublist accrec)
                                (begin
                                  (display "\n<ul>")
-                                 (for-each
-                                   (lambda (sub-accrec)
+                                 (for sub-accrec in (accrec-sublist accrec) do
                                      (display "\n<li>")
                                      (accrec-printer sub-accrec port)
                                      (display "</li>"))
-                                   (accrec-sublist accrec))
                                  (display "</ul>"))
                                (display "#f")))
 (define accrectype (make-record-type "accrecc"

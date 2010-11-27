@@ -76,8 +76,7 @@
             onedepth1)
     ;; Recursively display the accounts table from the given tree
     ;; (as returned by process-acc-list)
-    (for-each
-      (lambda (accrec)
+    (for accrec in tree do
         (let ((rshift2 0)    ; adjust the amount column by this much
               (showamt? #t)) ; whether to show the amount (e.g. not if zero)
           (if (and (accrec-sublist accrec)
@@ -122,8 +121,7 @@
                   (format-comm-coll-total (accrec-subtotal-cc accrec))
                   (<= (accrec-depth accrec) 1)        ; total?
                   (> (accrec-depth accrec) 0)))))))   ; leftoverrule?
-      tree
-      ))
+      )
 ?>
 
 <!-- The HTML starts here... -->
@@ -288,8 +286,7 @@
 <p><?scm:d (_ "<strong>Exchange Rates</strong> used for this report") ?>
 <table border="0">
 <?scm
-      (for-each
-        (lambda (xpair)
+      (for xpair in xlist do
           (let* ((comm (car xpair))
                  (one-num (gnc:make-gnc-numeric 10000 1))
                  (one-foreign-mny (gnc:make-gnc-monetary comm one-num))
@@ -308,7 +305,6 @@
 </tr>
 <?scm
           ))
-        xlist)
 ?>
 </table>
 <?scm
