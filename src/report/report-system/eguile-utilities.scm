@@ -35,6 +35,7 @@
 (gnc:module-load "gnucash/business-utils" 0)
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
+(use-modules (ice-9 syncase)) ; for define-syntax
 
 
 ;(use-modules (srfi srfi-13)) ; for extra string functions
@@ -88,4 +89,32 @@
         (if (access? syspath R_OK)
           syspath
           fname))))
-  
+
+; Define syntax for more readable for loops (the built-in for-each requires an
+; explicit lambda and has the list expression all the way at the end).
+(define-syntax for
+  (syntax-rules (for in => do hash)
+		; Multiple variables and and equal number of lists (in
+		; parenthesis). e.g.:
+		;
+		;   (for (a b) in (lsta lstb) do (display (+ a b)))
+		;
+		; Note that this template must be defined before the
+		; next one, since the template are evaluated in-order.
+                ((for (<var> ...) in (<list> ...) do <expr> ...)
+                 (for-each (lambda (<var> ...) <expr> ...) <list> ...))
+		; Single variable and list. e.g.:
+		;
+		; (for a in lst do (display a))
+                ((for <var> in <list> do <expr> ...)
+                 (for-each (lambda (<var>) <expr> ...) <list>))
+		; Iterate over key & values in a hash. e.g.:
+		;
+		; (for key => value in hash do (display (* key value)))
+                ((for <key> => <value> in <hash> do <expr> ...)
+		 ; We use fold to iterate over the hash (instead of
+		 ; hash-for-each, since that is not present in guile
+		 ; 1.6).
+                 (hash-fold (lambda (<key> <value> accum) (begin <expr> ... accum)) *unspecified* <hash>))
+                ))
+(export for)
