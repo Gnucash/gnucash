@@ -375,16 +375,38 @@ mysql_error_fn( dbi_conn conn, void* user_data )
     gint err_num;
 
     err_num = dbi_conn_error( conn, &msg );
+
+    /* Note: the sql connection may not have been initialized yet
+     *       so let's be careful with using it
+     */
+
+    /* Database doesn't exist. When this error is triggered the
+     * GncDbiSqlConnection may not exist yet either, so don't use it here
+     */
     if ( err_num == 1049 )          // Database doesn't exist
     {
         PINFO( "DBI error: %s\n", msg );
         be->exists = FALSE;
-        gnc_dbi_set_error( dbi_conn, ERR_BACKEND_NO_SUCH_DB, 0, FALSE );
+        return;
     }
-    else if ( err_num == 2006 )     // Server has gone away
+
+    /* All the other error handling code assumes the GncDbiSqlConnection
+     *  has been initialized. So let's assert it exits here, otherwise
+     * simply return.
+     */
+    if (!dbi_conn)
+    {
+        PINFO( "DBI error: %s\n", msg );
+        PINFO( "Note: GbcDbiSqlConnection not yet initialized. Skipping further error processing." );
+        return;
+    }
+
+    /* Test for other errors */
+    if ( err_num == 2006 )     // Server has gone away
     {
         PINFO( "DBI error: %s - Reconnecting...\n", msg );
-        gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CONN_LOST, 1, TRUE );
+        if (dbi_conn)
+            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CONN_LOST, 1, TRUE );
         dbi_conn->conn_ok = TRUE;
         (void)dbi_conn_connect( conn );
     }
@@ -393,13 +415,15 @@ mysql_error_fn( dbi_conn conn, void* user_data )
         if (dbi_conn->error_repeat >= DBI_MAX_CONN_ATTEMPTS )
         {
             PERR( "DBI error: %s - Giving up after %d consecutive attempts.\n", msg, DBI_MAX_CONN_ATTEMPTS );
-            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 0, FALSE );
+            if (dbi_conn)
+                    gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 0, FALSE );
             dbi_conn->conn_ok = FALSE;
         }
         else
         {
             PINFO( "DBI error: %s - Reconnecting...\n", msg );
-            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 1, TRUE );
+            if (dbi_conn)
+                    gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 1, TRUE );
             dbi_conn->conn_ok = TRUE;
             (void)dbi_conn_connect( conn );
         }
@@ -407,7 +431,8 @@ mysql_error_fn( dbi_conn conn, void* user_data )
     else                            // Any other error
     {
         PERR( "DBI error: %s\n", msg );
-        gnc_dbi_set_error( dbi_conn, ERR_BACKEND_MISC, 0, FALSE );
+        if (dbi_conn)
+            gnc_dbi_set_error( dbi_conn, ERR_BACKEND_MISC, 0, FALSE );
     }
 }
 
@@ -1248,6 +1273,9 @@ init_sql_backend( GncDbiBackend* dbi_be )
     be->export_fn = NULL;
 
     gnc_sql_init( &dbi_be->sql_be );
+
+    dbi_be->sql_be.conn = NULL;
+    dbi_be->sql_be.primary_book = NULL;
 }
 
 static QofBackend*
