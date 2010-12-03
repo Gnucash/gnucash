@@ -171,12 +171,13 @@ get_key_from_path( GString *path )
 
 /* Remove trailing /es */
     if ( key == NULL ) return str;
-    while ( str - key == 0 )
+    while ( str + strlen(str) - key == 1 )
     {
 	*key = '\0';
 	key = strrchr( str, '/' );
     }
     if ( key == NULL ) return str;
+/* Now advance key past the last intermediate / to get the post-delimiter string */
     while ( *key == '/') ++key;
 
     ret = strdup( key );

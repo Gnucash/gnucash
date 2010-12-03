@@ -36,6 +36,7 @@
 #include "gnc-version.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
+#include "gnc-ui-util.h"
 #include "gnc-file.h"
 #include "gnc-hooks.h"
 #include "top-level.h"
@@ -286,7 +287,7 @@ set_mac_locale()
 	NSString *this_locale;
 	NSString *currency = [locale objectForKey: NSLocaleCurrencyCode];
 	NSString *money_locale = nil;
-	while (this_locale = (NSString*)[locale_iter nextObject])
+	while ((this_locale = (NSString*)[locale_iter nextObject]))
 	    if ([[[[NSLocale alloc] initWithLocaleIdentifier: this_locale]
 		   objectForKey: NSLocaleCurrencyCode]
 		 isEqualToString: currency]) {
@@ -321,17 +322,18 @@ set_mac_locale()
 	NSString *this_lang;
 	NSArray *elements;
 	NSArray *new_languages = [NSArray array];
-	while (this_lang = [lang_iter nextObject]) {
+	while ((this_lang = [lang_iter nextObject])) {
 	    this_lang = [this_lang stringByTrimmingCharactersInSet:
 			 [NSCharacterSet characterSetWithCharactersInString:
 			  @"\""]];
 	    elements = [this_lang componentsSeparatedByString: @"-"];
 	    if ([elements count] > 1) {
-		if ([[elements objectAtIndex: 0] isEqualToString: @"zh"])
+		if ([[elements objectAtIndex: 0] isEqualToString: @"zh"]) {
 		    if ([[elements objectAtIndex: 1] isEqualToString: @"Hans"])
 			this_lang = [NSString stringWithString: @"zh_CN"];
 		    else
 			this_lang = [NSString stringWithString: @"zh_TW"];
+		}
 	    }
 	    else
 		this_lang = [elements componentsJoinedByString: @"_"];

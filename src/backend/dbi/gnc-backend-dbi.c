@@ -1522,7 +1522,10 @@ row_dispose( /*@ only @*/ GncSqlRow* row )
     {
         for ( node = dbi_row->gvalue_list; node != NULL; node = node->next )
         {
-            GValue* value = (GValue*)node->data;
+	    GValue* value;
+	    if ( !G_IS_VALUE(node->data) )
+		continue;
+            value = (GValue*)node->data;
             if ( G_VALUE_HOLDS_STRING(value) )
             {
                 g_free( (gpointer)g_value_get_string( value ) );

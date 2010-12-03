@@ -330,7 +330,7 @@ gnc_gnome_help (const char *dir, const char *detail)
 	  NSEnumerator *lang_iter = [languages objectEnumerator];
 	  NSString *path;
 	  NSString *this_lang;
-	  while(this_lang = [lang_iter nextObject]) {
+	  while((this_lang = [lang_iter nextObject])) {
 	      NSArray *elements;
 	      unsigned int paths;
 	      NSString *completed_path = [NSString alloc];
