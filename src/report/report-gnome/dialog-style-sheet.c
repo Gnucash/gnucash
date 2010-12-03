@@ -181,8 +181,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     GtkTreeModel     * template_model;
     GtkWidget        * name_entry;
     gint             dialog_retval;
-    char             * template_str = NULL;
-    const char       * name_str = NULL;
+    GList *template_names = NULL;
 
     /* get the new name for the style sheet */
     GladeXML *xml = gnc_glade_xml_new ("report.glade",
@@ -190,6 +189,8 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     GtkWidget * dlg = glade_xml_get_widget (xml, "New Style Sheet Dialog");
     template_combo = glade_xml_get_widget (xml, "template_combobox");
     name_entry     = glade_xml_get_widget (xml, "name_entry");
+
+    g_assert(ssd);
 
     /* Erase the initial dummy entry. */
     template_model = gtk_combo_box_get_model(GTK_COMBO_BOX(template_combo));
@@ -199,8 +200,14 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     for (; !scm_is_null(templates); templates = SCM_CDR(templates))
     {
         SCM t = SCM_CAR(templates);
-        gtk_combo_box_append_text(GTK_COMBO_BOX(template_combo),
-                                  scm_to_locale_string(scm_call_1(t_name, t)));
+        const char* orig_name = scm_to_locale_string(scm_call_1(t_name, t));
+    
+        /* Store the untranslated names for lookup later */
+        template_names = g_list_prepend (template_names, (gpointer)orig_name);
+
+        /* The displayed name should be translated */
+        gtk_combo_box_prepend_text(GTK_COMBO_BOX(template_combo),
+                                   _(orig_name));
     }
     gtk_combo_box_set_active(GTK_COMBO_BOX(template_combo), 0);
 
@@ -210,8 +217,9 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
 
     if (dialog_retval == GTK_RESPONSE_OK)
     {
-        template_str = gtk_combo_box_get_active_text(GTK_COMBO_BOX(template_combo));
-        name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
+        gint choice = gtk_combo_box_get_active (GTK_COMBO_BOX(template_combo));
+        const char *template_str = g_list_nth_data (template_names, choice);
+        const char *name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
         if (name_str && strlen(name_str) == 0)
         {
             /* If the name is empty, we display an error dialog but
@@ -225,9 +233,9 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
                                 scm_makfrom0str(template_str),
                                 scm_makfrom0str(name_str));
         }
-        g_free(template_str);
     }
 
+    g_list_free (template_names);
     gtk_widget_destroy(dlg);
     return(new_ss);
 }
@@ -256,9 +264,12 @@ gnc_style_sheet_select_dialog_add_one(StyleSheetDialog * ss,
     scm_gc_protect_object(sheet_info);
     gtk_list_store_append (ss->list_store, &iter);
     gtk_list_store_set (ss->list_store, &iter,
-                        COLUMN_NAME, c_name,
+                        /* Translate the displayed name */
+                        COLUMN_NAME, _(c_name),
                         COLUMN_STYLESHEET, sheet_info,
                         -1);
+    /* The translation of the name fortunately doesn't affect the
+     * lookup because that is done through the sheet_info argument. */
 
     if (select)
     {
