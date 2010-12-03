@@ -212,6 +212,13 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     {
         template_str = gtk_combo_box_get_active_text(GTK_COMBO_BOX(template_combo));
         name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
+        if (name_str && strlen(name_str) == 0)
+        {
+            /* If the name is empty, we display an error dialog but
+             * refuse to create the new style sheet. */
+            gnc_error_dialog (ssd->toplevel, "%s", _("You must provide a name for the new style sheet."));
+            name_str = NULL;
+        }
         if (template_str && name_str)
         {
             new_ss = scm_call_2(make_ss,
