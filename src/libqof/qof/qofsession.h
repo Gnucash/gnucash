@@ -149,7 +149,7 @@ void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
  */
 void qof_session_begin (QofSession *session, const char * book_id,
                         gboolean ignore_lock, gboolean create,
-			gboolean force);
+                        gboolean force);
 
 
 /**

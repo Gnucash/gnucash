@@ -720,9 +720,9 @@ gnc_query_list_set_query_sort (GNCQueryList *list, gboolean new_column)
     }
 
     qof_query_set_sort_increasing (list->query,
-                                sort_order,
-                                sort_order,
-                                sort_order);
+                                   sort_order,
+                                   sort_order,
+                                   sort_order);
 
     /*
      * Recompute the list. Is this really necessary? Why not just sort

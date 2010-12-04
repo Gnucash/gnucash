@@ -302,7 +302,7 @@ deprecated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
     gnc_commodity *ref;
 
     PWARN("Account %s: Obsolete xml tag 'act:currency' will not be preserved.",
-	  xaccAccountGetName( pdata->account ));
+          xaccAccountGetName( pdata->account ));
     ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
     DxaccAccountSetCurrency(pdata->account, ref);
 
@@ -314,7 +314,7 @@ deprecated_account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
     PWARN("Account %s: Obsolete xml tag 'act:currency-scu' will not be preserved.",
-	  xaccAccountGetName( pdata->account ));
+          xaccAccountGetName( pdata->account ));
     return TRUE;
 }
 
@@ -325,7 +325,7 @@ deprecated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
     gnc_commodity *ref, *orig = xaccAccountGetCommodity(pdata->account);
 
     PWARN("Account %s: Obsolete xml tag 'act:security' will not be preserved.",
-	  xaccAccountGetName( pdata->account ));
+          xaccAccountGetName( pdata->account ));
     /* If the account has both a commodity and a security elemet, and
        the commodity is a currecny, then the commodity is probably
        wrong. In that case we want to replace it with the
@@ -334,9 +334,9 @@ deprecated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
     {
         ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
         xaccAccountSetCommodity(pdata->account, ref);
-	/* If the SCU was set, it was probably wrong, so zero it out
-	   so that the SCU handler can fix it if there's a
-	   security-scu element. jralls 2010-11-02 */
+        /* If the SCU was set, it was probably wrong, so zero it out
+           so that the SCU handler can fix it if there's a
+           security-scu element. jralls 2010-11-02 */
         xaccAccountSetCommoditySCU(pdata->account, 0);
     }
 
@@ -350,7 +350,7 @@ deprecated_account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
     gint64 val;
 
     PWARN("Account %s: Obsolete xml tag 'act:security-scu' will not be preserved.",
-	  xaccAccountGetName( pdata->account ));
+          xaccAccountGetName( pdata->account ));
     if (!xaccAccountGetCommoditySCU(pdata->account))
     {
         dom_tree_to_integer(node, &val);

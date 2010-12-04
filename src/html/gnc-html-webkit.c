@@ -461,7 +461,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                 {
                     gtk_main_iteration();
                 }
-		/* No action required: Webkit jumps to the anchor on its own. */
+                /* No action required: Webkit jumps to the anchor on its own. */
             }
 
             return;
@@ -863,7 +863,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
     }
     else if ( safe_strcmp( type, URL_TYPE_JUMP ) == 0 )
     {
-      /* Webkit jumps to the anchor on its own */
+        /* Webkit jumps to the anchor on its own */
     }
     else if ( safe_strcmp( type, URL_TYPE_SECURE ) == 0 ||
               safe_strcmp( type, URL_TYPE_HTTP ) == 0 ||

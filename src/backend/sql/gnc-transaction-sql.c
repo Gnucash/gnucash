@@ -721,20 +721,20 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
         gnc_commodity *commodity = xaccTransGetCurrency( pTx );
         // Ensure the commodity is in the db
         is_ok = gnc_sql_save_commodity( be, commodity );
-	if ( ! is_ok )
-	{
-	  err = "Commodity save failed: Probably an invalid or missing currency";
-	  qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
-	}
+        if ( ! is_ok )
+        {
+            err = "Commodity save failed: Probably an invalid or missing currency";
+            qof_backend_set_error( &be->be, ERR_BACKEND_DATA_CORRUPT);
+        }
     }
 
     if ( is_ok )
     {
         is_ok = gnc_sql_do_db_operation( be, op, TRANSACTION_TABLE, GNC_ID_TRANS, pTx, tx_col_table );
-	if ( ! is_ok )
-	  {
-	    err = "Transaction header save failed. Check trace log for SQL errors";
-	  }
+        if ( ! is_ok )
+        {
+            err = "Transaction header save failed. Check trace log for SQL errors";
+        }
     }
 
     if ( is_ok )
@@ -744,57 +744,57 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
         if ( !qof_instance_get_destroying(inst) )
         {
             is_ok = gnc_sql_slots_save( be, guid, is_infant, qof_instance_get_slots( inst ) );
-	    if ( ! is_ok )
-	      {
-		err = "Slots save failed. Check trace log for SQL errors";
-	      }
-           if ( is_ok && do_save_splits )
+            if ( ! is_ok )
+            {
+                err = "Slots save failed. Check trace log for SQL errors";
+            }
+            if ( is_ok && do_save_splits )
             {
                 is_ok = save_splits( be, guid, xaccTransGetSplitList( pTx ) );
-		if ( ! is_ok )
-		  {
-		    err = "Split save failed. Check trace log for SQL errors";
-		  }
+                if ( ! is_ok )
+                {
+                    err = "Split save failed. Check trace log for SQL errors";
+                }
             }
         }
         else
         {
             is_ok = gnc_sql_slots_delete( be, guid );
-	    if ( ! is_ok )
-	      {
-		err = "Slots delete failed. Check trace log for SQL errors";
-	      }
+            if ( ! is_ok )
+            {
+                err = "Slots delete failed. Check trace log for SQL errors";
+            }
             if ( is_ok )
             {
                 is_ok = delete_splits( be, pTx );
-		if ( ! is_ok )
-		  {
-		    err = "Split delete failed. Check trace log for SQL errors";
-		  }
-             }
+                if ( ! is_ok )
+                {
+                    err = "Split delete failed. Check trace log for SQL errors";
+                }
+            }
         }
     }
     if (! is_ok )
-      {
-	gchar *message1 = "Transaction %s dated %s in account %s not saved due to %s.%s";
-	gchar *message2 = "\nDatabase may be corrupted, check your data carefully.";
-	Split* split = xaccTransGetSplit( pTx, 0);
-	Account *acc = xaccSplitGetAccount( split );
-	/* FIXME: This needs to be implemented
-	qof_error_format_secondary_text( GTK_MESSAGE_DIALOG( msg ),
-						  message1,
-						 xaccTransGetDescription( pTx ),
-						  qof_print_date( xaccTransGetDate( pTx ) ), 
-						  xaccAccountGetName( acc ),
-						  err,
-						  message2 );
-	*/
-	PERR( "Transaction %s dated %s in account %s not saved due to %s.\n", 
-	      xaccTransGetDescription( pTx ),
-	      qof_print_date( xaccTransGetDate( pTx ) ), 
-	      xaccAccountGetName( acc ),
-	      err );
-      }
+    {
+        gchar *message1 = "Transaction %s dated %s in account %s not saved due to %s.%s";
+        gchar *message2 = "\nDatabase may be corrupted, check your data carefully.";
+        Split* split = xaccTransGetSplit( pTx, 0);
+        Account *acc = xaccSplitGetAccount( split );
+        /* FIXME: This needs to be implemented
+        qof_error_format_secondary_text( GTK_MESSAGE_DIALOG( msg ),
+        					  message1,
+        					 xaccTransGetDescription( pTx ),
+        					  qof_print_date( xaccTransGetDate( pTx ) ),
+        					  xaccAccountGetName( acc ),
+        					  err,
+        					  message2 );
+        */
+        PERR( "Transaction %s dated %s in account %s not saved due to %s.\n",
+              xaccTransGetDescription( pTx ),
+              qof_print_date( xaccTransGetDate( pTx ) ),
+              xaccAccountGetName( acc ),
+              err );
+    }
     return is_ok;
 }
 

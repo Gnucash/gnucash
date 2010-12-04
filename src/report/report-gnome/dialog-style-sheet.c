@@ -201,7 +201,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     {
         SCM t = SCM_CAR(templates);
         const char* orig_name = scm_to_locale_string(scm_call_1(t_name, t));
-    
+
         /* Store the untranslated names for lookup later */
         template_names = g_list_prepend (template_names, (gpointer)orig_name);
 

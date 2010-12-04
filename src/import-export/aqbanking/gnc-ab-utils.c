@@ -597,17 +597,17 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
         AB_Transaction_SetLocalCountry(ab_trans, "DE");
 
 
-        switch(AB_Transaction_GetType(ab_trans))
+        switch (AB_Transaction_GetType(ab_trans))
         {
-          case AB_Transaction_TypeDebitNote:
+        case AB_Transaction_TypeDebitNote:
             trans_type = SINGLE_DEBITNOTE;
             break;
-          case AB_Transaction_TypeTransaction:
+        case AB_Transaction_TypeTransaction:
             /* trans_type = SINGLE_INTERNAL_TRANSFER;
              * break; */
-          case AB_Transaction_TypeEuTransfer:
-          case AB_Transaction_TypeTransfer:
-          default:
+        case AB_Transaction_TypeEuTransfer:
+        case AB_Transaction_TypeTransfer:
+        default:
             trans_type = SINGLE_TRANSFER;
         } /* switch */
 
@@ -618,7 +618,7 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
 #ifndef AQBANKING_VERSION_5_PLUS
                                              , 0
 #endif
-                                             ))
+                                            ))
         {
             /* Oops, no job, probably not supported by bank */
             if (gnc_verify_dialog(

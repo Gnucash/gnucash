@@ -281,7 +281,8 @@ gboolean gnc_price_list_equal(PriceList *prices1, PriceList *prices2);
 typedef struct gnc_price_db_s GNCPriceDB;
 
 /** return the pricedb associated with the book */
-/*@ dependent @*/ GNCPriceDB * gnc_pricedb_get_db(QofBook *book);
+/*@ dependent @*/
+GNCPriceDB * gnc_pricedb_get_db(QofBook *book);
 GNCPriceDB * gnc_collection_get_pricedb(QofCollection *col);
 
 /** gnc_pricedb_destroy - destroy the given pricedb and unref all of

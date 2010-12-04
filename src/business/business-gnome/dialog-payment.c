@@ -116,7 +116,8 @@ gnc_payment_dialog_invoice_changed(PaymentWindow *pw)
          * previously selected owner, make sure the right owner is
          * selected. */
         owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (pw->invoice));
-        if (pw->owner.owner.undefined == NULL || pw->owner.owner.undefined != owner->owner.undefined) {
+        if (pw->owner.owner.undefined == NULL || pw->owner.owner.undefined != owner->owner.undefined)
+        {
             gnc_payment_set_owner (pw, owner);
         }
     }
@@ -138,7 +139,8 @@ gnc_payment_dialog_owner_changed(PaymentWindow *pw)
 
     /* The selected invoice has a different owner than the newly
      * selected owner, reset it */
-    if (pw->invoice != NULL && !gncOwnerEqual(gncOwnerGetEndOwner(gncInvoiceGetOwner(pw->invoice)), &pw->owner)) {
+    if (pw->invoice != NULL && !gncOwnerEqual(gncOwnerGetEndOwner(gncInvoiceGetOwner(pw->invoice)), &pw->owner))
+    {
         pw->invoice = NULL;
         gnc_invoice_set_invoice(pw->invoice_choice, NULL);
     }

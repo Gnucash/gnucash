@@ -1016,7 +1016,7 @@ gnc_locale_default_currency (void)
 
 static gnc_commodity *
 gnc_default_currency_common (gchar *requested_currency,
-                      const gchar *gconf_section)
+                             const gchar *gconf_section)
 {
     gnc_commodity *currency = NULL;
     gchar *choice, *mnemonic;

@@ -235,7 +235,7 @@ gnc_xml_be_get_file_lock (FileBackend *be)
 static void
 xml_session_begin(QofBackend *be_start, QofSession *session,
                   const char *book_id, gboolean ignore_lock,
-		  gboolean create, gboolean force)
+                  gboolean create, gboolean force)
 {
     FileBackend *be = (FileBackend*) be_start;
 
@@ -812,9 +812,9 @@ gnc_xml_be_remove_old_files(FileBackend *be)
 
         /* Ensure we only evaluate GnuCash related files. */
         if ( !(g_str_has_suffix(dent, ".LNK") ||
-               g_str_has_suffix(dent, ".xac") /* old data file extension */ ||
-               g_str_has_suffix(dent, GNC_DATAFILE_EXT) ||
-               g_str_has_suffix(dent, GNC_LOGFILE_EXT)) )
+                g_str_has_suffix(dent, ".xac") /* old data file extension */ ||
+                g_str_has_suffix(dent, GNC_DATAFILE_EXT) ||
+                g_str_has_suffix(dent, GNC_LOGFILE_EXT)) )
             continue;
 
         name = g_build_filename(be->dirname, dent, (gchar*)NULL);
@@ -882,7 +882,7 @@ gnc_xml_be_remove_old_files(FileBackend *be)
             g_unlink(name);
         }
         else if ((be->file_retention_type == XML_RETAIN_DAYS) &&
-                (be->file_retention_days > 0))
+                 (be->file_retention_days > 0))
         {
             int days;
 

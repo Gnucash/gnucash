@@ -1883,9 +1883,9 @@ get_random_query(void)
     set_query_sort (q, get_random_int_in_range (1, BY_NONE));
 
     qof_query_set_sort_increasing (q,
-                                get_random_boolean (),
-                                get_random_boolean (),
-                                get_random_boolean ());
+                                   get_random_boolean (),
+                                   get_random_boolean (),
+                                   get_random_boolean ());
 
     qof_query_set_max_results (q, get_random_int_in_range (-50000, 50000));
 

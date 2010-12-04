@@ -108,13 +108,13 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 g_free(txt);
             }
         }
-/* Legitimate tags which we don't yet have tests */
+        /* Legitimate tags which we don't yet have tests */
         else if (safe_strcmp((char*)mark->name, "cmdty:get_quotes") == 0 ||
-		 safe_strcmp((char*)mark->name, "cmdty:quote_source") == 0 ||
-		 safe_strcmp((char*)mark->name, "cmdty:quote_tz") == 0)
-	{
-	    continue;
-	}
+                 safe_strcmp((char*)mark->name, "cmdty:quote_source") == 0 ||
+                 safe_strcmp((char*)mark->name, "cmdty:quote_tz") == 0)
+        {
+            continue;
+        }
         else
         {
             return "unknown node";

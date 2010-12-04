@@ -195,7 +195,7 @@ test_bool_fcn (QofBook *book, const char *message,
     set (employee, FALSE);
     set (employee, TRUE);
     set (employee, num);
-    /* Employee record should be dirty */ 
+    /* Employee record should be dirty */
     do_test (gncEmployeeIsDirty (employee), "test dirty later");
     gncEmployeeCommitEdit (employee);
     /* Employee record should be not dirty */

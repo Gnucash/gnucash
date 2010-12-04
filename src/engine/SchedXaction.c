@@ -742,14 +742,14 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
      * interval. Make sure to check for invalid dates here: It means
      * the SX has ended. */
     while (g_date_valid(&tmpState->last_date)
-           && (g_date_compare(&tmpState->last_date, end_date) <= 0)
-           && (!xaccSchedXactionHasEndDate(sx)
-               || g_date_compare(&tmpState->last_date, xaccSchedXactionGetEndDate(sx)) <= 0)
-           && (!xaccSchedXactionHasOccurDef(sx)
-               /* The >=0 (i.e. the ==) is important here, otherwise
-                * we miss the last valid occurrence of a SX which is
-                * limited by num_occur */
-               || tmpState->num_occur_rem >= 0))
+            && (g_date_compare(&tmpState->last_date, end_date) <= 0)
+            && (!xaccSchedXactionHasEndDate(sx)
+                || g_date_compare(&tmpState->last_date, xaccSchedXactionGetEndDate(sx)) <= 0)
+            && (!xaccSchedXactionHasOccurDef(sx)
+                /* The >=0 (i.e. the ==) is important here, otherwise
+                 * we miss the last valid occurrence of a SX which is
+                 * limited by num_occur */
+                || tmpState->num_occur_rem >= 0))
     {
         ++result;
         gnc_sx_incr_temporal_state (sx, tmpState);

@@ -728,7 +728,7 @@ void gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
  * @return TRUE if successful, FALSE if unsuccessful
  */
 gboolean gnc_sql_add_columns_to_table( GncSqlBackend* be, const gchar* table_name,
-                            const GncSqlColumnTableEntry* new_col_table );
+                                       const GncSqlColumnTableEntry* new_col_table );
 
 /**
  * Specifies the load order for a set of objects.  When loading from a database, the

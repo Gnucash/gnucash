@@ -279,15 +279,15 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     filepath = gnc_uri_get_path ( book_id );
 
     if ( !create &&
-	 !g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
+            !g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
     {
         qof_backend_set_error( qbe, ERR_FILEIO_FILE_NOT_FOUND );
         LEAVE(" ");
         return;
     }
 
-    if ( create && !force && 
-	 g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
+    if ( create && !force &&
+            g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
     {
         qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
         LEAVE("Might clobber, no force");
@@ -312,7 +312,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     basename = g_path_get_basename( filepath );
     g_free ( filepath );
     dbi_conn_error_handler( be->conn, sqlite3_error_fn, be );
-/* dbi-sqlite3 documentation says that sqlite3 doesn't take a "host" option */
+    /* dbi-sqlite3 documentation says that sqlite3 doesn't take a "host" option */
     result = dbi_conn_set_option( be->conn, "host", "localhost" );
     if ( result < 0 )
     {
@@ -340,7 +340,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     g_free( basename );
     g_free( dirname );
-/* Need some better error handling here. In particular, need to emit a QOF_ERROR_LOCKED if the database is in use by another process. */
+    /* Need some better error handling here. In particular, need to emit a QOF_ERROR_LOCKED if the database is in use by another process. */
     if ( result < 0 )
     {
         PERR( "Unable to connect to %s: %d\n", book_id, result );
@@ -351,9 +351,9 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 
     if ( !gnc_dbi_lock_database( qbe, ignore_lock ) )
     {
-	qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
-	LEAVE( "Locked" );
-	return;
+        qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
+        LEAVE( "Locked" );
+        return;
     }
 
     if ( be->sql_be.conn != NULL )
@@ -416,14 +416,14 @@ mysql_error_fn( dbi_conn conn, void* user_data )
         {
             PERR( "DBI error: %s - Giving up after %d consecutive attempts.\n", msg, DBI_MAX_CONN_ATTEMPTS );
             if (dbi_conn)
-                    gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 0, FALSE );
+                gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 0, FALSE );
             dbi_conn->conn_ok = FALSE;
         }
         else
         {
             PINFO( "DBI error: %s - Reconnecting...\n", msg );
             if (dbi_conn)
-                    gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 1, TRUE );
+                gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CANT_CONNECT, 1, TRUE );
             dbi_conn->conn_ok = TRUE;
             (void)dbi_conn_connect( conn );
         }
@@ -502,112 +502,112 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
     dbi_conn dcon = qe->conn;
     dbi_result result;
     const gchar *dbname = dbi_conn_get_option( dcon, "dbname" );
-/* Create the table if it doesn't exist */
+    /* Create the table if it doesn't exist */
     result = dbi_conn_get_table_list( dcon, dbname, "GNCLOCK");
     if (!( result && dbi_result_get_numrows( result ) ))
     {
         if ( result )
-	{
-	    dbi_result_free( result );
-	    result = NULL;
-	}
-	result = dbi_conn_queryf( dcon, "CREATE TABLE GNCLOCK ( Hostname varchar(%d), PID int )", GNC_HOST_NAME_MAX );
-	if ( dbi_conn_error( dcon, NULL ) )
-	{
-	    const gchar *errstr;
-	    dbi_conn_error( dcon, &errstr );
-	    PERR( "Error %s creating lock table", errstr );
-	    qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-	    return FALSE;
-	}
-	if ( result )
-	{
-	    dbi_result_free( result );
-	    result = NULL;
-	}
+        {
+            dbi_result_free( result );
+            result = NULL;
+        }
+        result = dbi_conn_queryf( dcon, "CREATE TABLE GNCLOCK ( Hostname varchar(%d), PID int )", GNC_HOST_NAME_MAX );
+        if ( dbi_conn_error( dcon, NULL ) )
+        {
+            const gchar *errstr;
+            dbi_conn_error( dcon, &errstr );
+            PERR( "Error %s creating lock table", errstr );
+            qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+            return FALSE;
+        }
+        if ( result )
+        {
+            dbi_result_free( result );
+            result = NULL;
+        }
     }
     if (result)
     {
         dbi_result_free( result );
-	result = NULL;
+        result = NULL;
     }
 
-/* Protect everything with a single transaction to prevent races */
+    /* Protect everything with a single transaction to prevent races */
     if ( (result = dbi_conn_query( dcon, "BEGIN" )) )
     {
-/* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
-	gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
-	if (result)
-	{
-	    dbi_result_free( result );
-	    result = NULL;
-	}
-	result = dbi_conn_query( dcon, "SELECT * FROM GNCLOCK" );
-	if ( result && dbi_result_get_numrows( result ) )
-	{
-	    dbi_result_free( result );
-	    result = NULL;
-	    if ( !ignore_lock )
-	    {
-		qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
-/* FIXME: After enhancing the qof_backend_error mechanism, report in the dialog what is the hostname of the machine holding the lock. */
-		dbi_conn_query( dcon, "ROLLBACK" );
-		return FALSE;
-	    }
-	    result = dbi_conn_query( dcon, "DELETE FROM GNCLOCK" );
-	    if ( !result)
-	    {
-		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-		result = dbi_conn_query( dcon, "ROLLBACK" );
-		if (result)
-		{
-		    dbi_result_free( result );
-		    result = NULL;
-		}
-		return FALSE;
-	    }
-	    if (result)
-	    {
-		dbi_result_free( result );
-		result = NULL;
-	    }
-	}
-/* Add an entry and commit the transaction */
-	memset( hostname, 0, sizeof(hostname) );
-	gethostname( hostname, GNC_HOST_NAME_MAX );
-	result = dbi_conn_queryf( dcon, 
-				  "INSERT INTO GNCLOCK VALUES ('%s', '%d')", 
-				  hostname, (int)GETPID() );
-	if ( !result)
-	{
-	    qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-	    result = dbi_conn_query( dcon, "ROLLBACK" );
-	    if (result)
-	    {
-		dbi_result_free( result );
-		result = NULL;
-	    }
-	    return FALSE;
-	}
-	if (result)
-	{
-	    dbi_result_free( result );
-	    result = NULL;
-	}
-	result = dbi_conn_query( dcon, "COMMIT" );
-	if (result)
-	{
-	    dbi_result_free( result );
-	    result = NULL;
-	}
-	return TRUE;
+        /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
+        gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
+        if (result)
+        {
+            dbi_result_free( result );
+            result = NULL;
+        }
+        result = dbi_conn_query( dcon, "SELECT * FROM GNCLOCK" );
+        if ( result && dbi_result_get_numrows( result ) )
+        {
+            dbi_result_free( result );
+            result = NULL;
+            if ( !ignore_lock )
+            {
+                qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
+                /* FIXME: After enhancing the qof_backend_error mechanism, report in the dialog what is the hostname of the machine holding the lock. */
+                dbi_conn_query( dcon, "ROLLBACK" );
+                return FALSE;
+            }
+            result = dbi_conn_query( dcon, "DELETE FROM GNCLOCK" );
+            if ( !result)
+            {
+                qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+                result = dbi_conn_query( dcon, "ROLLBACK" );
+                if (result)
+                {
+                    dbi_result_free( result );
+                    result = NULL;
+                }
+                return FALSE;
+            }
+            if (result)
+            {
+                dbi_result_free( result );
+                result = NULL;
+            }
+        }
+        /* Add an entry and commit the transaction */
+        memset( hostname, 0, sizeof(hostname) );
+        gethostname( hostname, GNC_HOST_NAME_MAX );
+        result = dbi_conn_queryf( dcon,
+                                  "INSERT INTO GNCLOCK VALUES ('%s', '%d')",
+                                  hostname, (int)GETPID() );
+        if ( !result)
+        {
+            qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+            result = dbi_conn_query( dcon, "ROLLBACK" );
+            if (result)
+            {
+                dbi_result_free( result );
+                result = NULL;
+            }
+            return FALSE;
+        }
+        if (result)
+        {
+            dbi_result_free( result );
+            result = NULL;
+        }
+        result = dbi_conn_query( dcon, "COMMIT" );
+        if (result)
+        {
+            dbi_result_free( result );
+            result = NULL;
+        }
+        return TRUE;
     }
-/* Couldn't get a transaction (probably couldn't get a lock), so fail */
+    /* Couldn't get a transaction (probably couldn't get a lock), so fail */
     qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
     if (result)
     {
-	dbi_result_free( result );
-	result = NULL;
+        dbi_result_free( result );
+        result = NULL;
     }
     return FALSE;
 }
@@ -624,77 +624,77 @@ gnc_dbi_unlock( QofBackend *qbe )
     g_return_if_fail( dbi_conn_error( dcon, NULL ) == 0 );
 
     dbname = dbi_conn_get_option( dcon, "dbname" );
-/* Check if the lock table exists */
+    /* Check if the lock table exists */
     result = dbi_conn_get_table_list( dcon, dbname, "GNCLOCK");
     if (!( result && dbi_result_get_numrows( result ) ))
     {
-	if (result)
-	{
-	    dbi_result_free( result );
-	    result = NULL;
-	}
-	PWARN("No lock table in database, so not unlocking it.");
-	return;
+        if (result)
+        {
+            dbi_result_free( result );
+            result = NULL;
+        }
+        PWARN("No lock table in database, so not unlocking it.");
+        return;
     }
 
     if ( ( result = dbi_conn_query( dcon, "BEGIN" )) )
     {
-/* Delete the entry if it's our hostname and PID */
-	gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
-	if (result)
-	{
-	    dbi_result_free( result );
-	    result = NULL;
-	}
-	memset( hostname, 0, sizeof(hostname) );
-	gethostname( hostname, GNC_HOST_NAME_MAX );
-	result = dbi_conn_queryf( dcon, "SELECT * FROM GNCLOCK WHERE Hostname = '%s' AND PID = '%d'", hostname, (int)GETPID() );
-	if ( result && dbi_result_get_numrows( result ) )
-	{
-	    if (result)
-	    {
-		dbi_result_free( result );
-		result = NULL;
-	    }
-	    result = dbi_conn_query( dcon, "DELETE FROM GNCLOCK" );
-	    if ( !result)
-	    {
-		PERR("Failed to delete the lock entry");
-		qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-		result = dbi_conn_query( dcon, "ROLLBACK" );
-		if (result)
-		{
-		    dbi_result_free( result );
-		    result = NULL;
-		}
-		return;
-	    }
-	    if (result)
-	    {
-		dbi_result_free( result );
-		result = NULL;
-	    }
-	    result = dbi_conn_query( dcon, "COMMIT" );
-	    if (result)
-	    {
-		dbi_result_free( result );
-		result = NULL;
-	    }
-	    return;
-	}
-	result = dbi_conn_query( dcon, "ROLLBACK" );
-	if (result)
-	{
-	    dbi_result_free( result );
-	    result = NULL;
-	}
-	PWARN("There was no lock entry in the Lock table");
-	return;
+        /* Delete the entry if it's our hostname and PID */
+        gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
+        if (result)
+        {
+            dbi_result_free( result );
+            result = NULL;
+        }
+        memset( hostname, 0, sizeof(hostname) );
+        gethostname( hostname, GNC_HOST_NAME_MAX );
+        result = dbi_conn_queryf( dcon, "SELECT * FROM GNCLOCK WHERE Hostname = '%s' AND PID = '%d'", hostname, (int)GETPID() );
+        if ( result && dbi_result_get_numrows( result ) )
+        {
+            if (result)
+            {
+                dbi_result_free( result );
+                result = NULL;
+            }
+            result = dbi_conn_query( dcon, "DELETE FROM GNCLOCK" );
+            if ( !result)
+            {
+                PERR("Failed to delete the lock entry");
+                qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+                result = dbi_conn_query( dcon, "ROLLBACK" );
+                if (result)
+                {
+                    dbi_result_free( result );
+                    result = NULL;
+                }
+                return;
+            }
+            if (result)
+            {
+                dbi_result_free( result );
+                result = NULL;
+            }
+            result = dbi_conn_query( dcon, "COMMIT" );
+            if (result)
+            {
+                dbi_result_free( result );
+                result = NULL;
+            }
+            return;
+        }
+        result = dbi_conn_query( dcon, "ROLLBACK" );
+        if (result)
+        {
+            dbi_result_free( result );
+            result = NULL;
+        }
+        PWARN("There was no lock entry in the Lock table");
+        return;
     }
     if (result)
     {
-	dbi_result_free( result );
-	result = NULL;
+        dbi_result_free( result );
+        result = NULL;
     }
     PWARN("Unable to get a lock on LOCK, so failed to clear the lock entry.");
     qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
@@ -750,12 +750,12 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
-	if (create && !force && save_may_clobber_data( qbe ) )
-	{
-	    qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
-	    PWARN("Databse already exists, Might clobber it.");
-	    goto exit;
-	}
+        if (create && !force && save_may_clobber_data( qbe ) )
+        {
+            qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
+            PWARN("Databse already exists, Might clobber it.");
+            goto exit;
+        }
 
         success = gnc_dbi_lock_database ( qbe, ignore_lock );
     }
@@ -872,19 +872,19 @@ pgsql_error_fn( dbi_conn conn, void* user_data )
     }
     else if ( g_strrstr( msg, "server closed the connection unexpectedly" ) ) // Connection lost
     {
-	if ( dbi_conn == NULL )
-	{
-	    PWARN( "DBI Error: Connection lost, connection pointer invalid");
-	    return;
-	}
+        if ( dbi_conn == NULL )
+        {
+            PWARN( "DBI Error: Connection lost, connection pointer invalid");
+            return;
+        }
         PINFO( "DBI error: %s - Reconnecting...\n", msg );
         gnc_dbi_set_error( dbi_conn, ERR_BACKEND_CONN_LOST, 1, TRUE );
         dbi_conn->conn_ok = TRUE;
         (void)dbi_conn_connect( conn );
     }
-    else if ( dbi_conn && 
-	      ( g_str_has_prefix( msg, "connection pointer is NULL" ) ||
-		g_str_has_prefix(msg, "could not connect to server" ) ) )     // No connection
+    else if ( dbi_conn &&
+              ( g_str_has_prefix( msg, "connection pointer is NULL" ) ||
+                g_str_has_prefix(msg, "could not connect to server" ) ) )     // No connection
     {
         if (dbi_conn->error_repeat >= DBI_MAX_CONN_ATTEMPTS )
         {
@@ -935,10 +935,10 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                              &username, &password, &dbname );
     if ( portnum == 0 )
         portnum = PGSQL_DEFAULT_PORT;
-/* Postgres's SQL interface coerces identifiers to lower case, but the
- * C interface is case-sensitive. This results in a mixed-case dbname
- * being created (with a lower case name) but then dbi can't conect to
- * it. To work around this, coerce the name to lowercase first. */
+    /* Postgres's SQL interface coerces identifiers to lower case, but the
+     * C interface is case-sensitive. This results in a mixed-case dbname
+     * being created (with a lower case name) but then dbi can't conect to
+     * it. To work around this, coerce the name to lowercase first. */
     dbnamelc = g_utf8_strdown( dbname, -1 );
 
     // Try to connect to the db.  If it doesn't exist and the create
@@ -964,12 +964,12 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
-	if (create && !force && save_may_clobber_data( qbe ) )
-	{
-	    qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
-	    PWARN("Databse already exists, Might clobber it.");
-	    goto exit;
-	}
+        if (create && !force && save_may_clobber_data( qbe ) )
+        {
+            qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
+            PWARN("Databse already exists, Might clobber it.");
+            goto exit;
+        }
 
         success = gnc_dbi_lock_database ( qbe, ignore_lock );
     }
@@ -1008,7 +1008,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
-	    dbi_conn_queryf( be->conn, "ALTER DATABASE %s SET standard_conforming_strings TO on", dbnamelc );
+            dbi_conn_queryf( be->conn, "ALTER DATABASE %s SET standard_conforming_strings TO on", dbnamelc );
             dbi_conn_close( be->conn );
 
             // Try again to connect to the db
@@ -1072,7 +1072,7 @@ gnc_dbi_session_end( QofBackend *be_start )
 
     if ( be->conn != NULL )
     {
-	gnc_dbi_unlock( be_start );
+        gnc_dbi_unlock( be_start );
         dbi_conn_close( be->conn );
         be->conn = NULL;
     }
@@ -1140,8 +1140,8 @@ save_may_clobber_data( QofBackend* qbe )
     result = dbi_conn_get_table_list( be->conn, dbname, NULL );
     if ( result )
     {
-      retval =  dbi_result_get_numrows( result ) > 0;
-      dbi_result_free( result );
+        retval =  dbi_result_get_numrows( result ) > 0;
+        dbi_result_free( result );
     }
     return retval;
 }
@@ -1171,10 +1171,10 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
             const gchar* table_name = (const gchar*)node->data;
             dbi_result result;
             /* Don't delete the lock table */
-	    if ( g_strcmp0(table_name, "GNCLOCK") == 0)
-	    {
-		continue;
-	    }
+            if ( g_strcmp0(table_name, "GNCLOCK") == 0)
+            {
+                continue;
+            }
             do
             {
                 gnc_dbi_init_error( ((GncDbiSqlConnection*)(be->sql_be.conn)) );
@@ -1282,7 +1282,7 @@ static QofBackend*
 new_backend( void (*session_begin)( QofBackend *, QofSession *, const gchar *,
                                     /*@ unused @*/ gboolean,
                                     /*@ unused @*/ gboolean,
-				    /*@ unused @*/ gboolean ) )
+                                    /*@ unused @*/ gboolean ) )
 {
     GncDbiBackend *dbi_be;
     QofBackend *be;
@@ -1522,9 +1522,9 @@ row_dispose( /*@ only @*/ GncSqlRow* row )
     {
         for ( node = dbi_row->gvalue_list; node != NULL; node = node->next )
         {
-	    GValue* value;
-	    if ( !G_IS_VALUE(node->data) )
-		continue;
+            GValue* value;
+            if ( !G_IS_VALUE(node->data) )
+                continue;
             value = (GValue*)node->data;
             if ( G_VALUE_HOLDS_STRING(value) )
             {
@@ -2416,7 +2416,7 @@ conn_create_index( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/ const g
 
 static gboolean
 conn_add_columns_to_table( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/ const gchar* table_name,
-                  GList* col_info_list )
+        GList* col_info_list )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     gchar* ddl;

@@ -958,7 +958,8 @@ xaccTransFindOldCommonCurrency (Transaction *trans, QofBook *book)
  * it, or NULL if there is no currency more common than the
  * others -- or none at all.
  */
-typedef struct {
+typedef struct
+{
     gnc_commodity *commodity;
     unsigned int count;
 } CommodityCount;
@@ -968,11 +969,11 @@ commodity_equal (gconstpointer a, gconstpointer b)
 {
     CommodityCount *cc = (CommodityCount*)a;
     gnc_commodity *com = (gnc_commodity*)b;
-    if ( cc == NULL || cc->commodity == NULL || 
-	 !GNC_IS_COMMODITY( cc->commodity ) ) return -1;
+    if ( cc == NULL || cc->commodity == NULL ||
+            !GNC_IS_COMMODITY( cc->commodity ) ) return -1;
     if ( com == NULL || !GNC_IS_COMMODITY( com ) ) return 1;
     if ( gnc_commodity_equal(cc->commodity, com) )
-	return 0;
+        return 0;
     return 1;
 }
 
@@ -981,18 +982,18 @@ commodity_compare( gconstpointer a, gconstpointer b)
 {
     CommodityCount *ca = (CommodityCount*)a, *cb = (CommodityCount*)b;
     if (ca == NULL || ca->commodity == NULL ||
-	!GNC_IS_COMMODITY( ca->commodity ) )
+            !GNC_IS_COMMODITY( ca->commodity ) )
     {
-	if (cb == NULL || cb->commodity == NULL ||
-	    !GNC_IS_COMMODITY( cb->commodity ) )
-	    return 0;
-	return -1;
+        if (cb == NULL || cb->commodity == NULL ||
+                !GNC_IS_COMMODITY( cb->commodity ) )
+            return 0;
+        return -1;
     }
     if (cb == NULL || cb->commodity == NULL ||
-	    !GNC_IS_COMMODITY( cb->commodity ) )
-	return 1;
+            !GNC_IS_COMMODITY( cb->commodity ) )
+        return 1;
     if (ca->count == cb->count)
-	return 0;
+        return 0;
     return ca->count > cb->count ? 1 : -1;
 }
 
@@ -1002,7 +1003,7 @@ commodity_compare( gconstpointer a, gconstpointer b)
  * aren't, because for simple buy and sell transactions it makes
  * slightly more sense for the transaction commodity to be the
  * currency -- to the extent that it makes sense for a transaction to
- * have a currency at all. jralls, 2010-11-02 */ 
+ * have a currency at all. jralls, 2010-11-02 */
 
 static gnc_commodity *
 xaccTransFindCommonCurrency (Transaction *trans, QofBook *book)
@@ -1021,33 +1022,33 @@ xaccTransFindCommonCurrency (Transaction *trans, QofBook *book)
     for (node = trans->splits; node; node = node->next)
     {
         Split *s = node->data;
-	if (s == NULL || s->acc == NULL) continue;
-	com_scratch = xaccAccountGetCommodity(s->acc);
-	if ( comlist )
-	{
-	    found = g_slist_find_custom(comlist, com_scratch, commodity_equal);
-	}
-	if (comlist == NULL || found == NULL) 
-	{
-	    CommodityCount *count = g_slice_new0(CommodityCount);
-	    count->commodity = com_scratch;
-	    count->count = ( gnc_commodity_is_currency( com_scratch ) ? 3 : 2 );
-	    comlist = g_slist_append(comlist, count);
-	}
-	else
-	{
-	  CommodityCount *count = (CommodityCount*)(found->data);
-	  count->count += ( gnc_commodity_is_currency( com_scratch ) ? 3 : 2 );
-	}
+        if (s == NULL || s->acc == NULL) continue;
+        com_scratch = xaccAccountGetCommodity(s->acc);
+        if ( comlist )
+        {
+            found = g_slist_find_custom(comlist, com_scratch, commodity_equal);
+        }
+        if (comlist == NULL || found == NULL)
+        {
+            CommodityCount *count = g_slice_new0(CommodityCount);
+            count->commodity = com_scratch;
+            count->count = ( gnc_commodity_is_currency( com_scratch ) ? 3 : 2 );
+            comlist = g_slist_append(comlist, count);
+        }
+        else
+        {
+            CommodityCount *count = (CommodityCount*)(found->data);
+            count->count += ( gnc_commodity_is_currency( com_scratch ) ? 3 : 2 );
+        }
     }
     found = g_slist_sort( comlist, commodity_compare);
 
     if ( ((CommodityCount*)(found->data))->commodity != NULL)
     {
-	return ((CommodityCount*)(found->data))->commodity;
+        return ((CommodityCount*)(found->data))->commodity;
     }
-/* We didn't find a currency in the current account structure, so try
- * an old one. */
+    /* We didn't find a currency in the current account structure, so try
+     * an old one. */
     return xaccTransFindOldCommonCurrency( trans, book );
 }
 
@@ -1136,9 +1137,9 @@ xaccTransScrubCurrency (Transaction *trans)
                  * 'other' transaction, which is going to keep that
                  * information. So I don't bother with that here. -- cstim,
                  * 2002/11/20. */
-		/* But if the commodity *isn't* a currency, then it's
-		 * the value that should be changed to the
-		 * amount. jralls, 2010-11-02 */
+                /* But if the commodity *isn't* a currency, then it's
+                 * the value that should be changed to the
+                 * amount. jralls, 2010-11-02 */
 
                 PWARN ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\""
                        " old amount %s %s, new amount %s",
@@ -1147,14 +1148,14 @@ xaccTransScrubCurrency (Transaction *trans)
                        gnc_commodity_get_mnemonic (currency),
                        gnc_num_dbg_to_string (xaccSplitGetValue(sp)));
                 xaccTransBeginEdit (trans);
-		if ( gnc_commodity_is_currency( currency))
-		{
-		    xaccSplitSetAmount (sp, xaccSplitGetValue(sp));
-		}
-		else 
-		{
-		    xaccSplitSetValue(sp, xaccSplitGetAmount(sp));
-		}
+                if ( gnc_commodity_is_currency( currency))
+                {
+                    xaccSplitSetAmount (sp, xaccSplitGetValue(sp));
+                }
+                else
+                {
+                    xaccSplitSetValue(sp, xaccSplitGetAmount(sp));
+                }
                 xaccTransCommitEdit (trans);
             }
             /*else

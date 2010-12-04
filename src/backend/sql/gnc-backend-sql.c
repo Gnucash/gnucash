@@ -3154,7 +3154,7 @@ gnc_sql_upgrade_table( GncSqlBackend* be, const gchar* table_name,
 
 /* Adds one or more columns to an existing table. */
 gboolean gnc_sql_add_columns_to_table( GncSqlBackend* be, const gchar* table_name,
-                            const GncSqlColumnTableEntry* new_col_table )
+                                       const GncSqlColumnTableEntry* new_col_table )
 {
     GList* col_info_list = NULL;
     gboolean ok = FALSE;

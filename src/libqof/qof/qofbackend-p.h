@@ -299,7 +299,7 @@ struct QofBackend_s
                            const char *book_id,
                            gboolean ignore_lock,
                            gboolean create,
-			   gboolean force);
+                           gboolean force);
     void (*session_end) (QofBackend *);
     void (*destroy_backend) (/*@ only @*/ QofBackend *);
 
