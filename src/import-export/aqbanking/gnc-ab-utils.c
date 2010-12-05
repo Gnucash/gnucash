@@ -79,6 +79,7 @@ struct _GncABImExContextImport
     GtkWidget *parent;
     AB_JOB_LIST2 *job_list;
     GNCImportMainMatcher *generic_importer;
+    GData *tmp_job_list;
 };
 
 void
@@ -580,9 +581,6 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
     /* Create a GnuCash transaction from ab_trans */
     gnc_trans = gnc_ab_trans_to_gnc(element, data->gnc_acc);
 
-    /* Instead of xaccTransCommitEdit(gnc_trans)  */
-    gnc_gen_trans_list_add_trans(data->generic_importer, gnc_trans);
-
     if (data->execute_txns && data->ab_acc)
     {
         AB_TRANSACTION *ab_trans = AB_Transaction_dup(element);
@@ -635,15 +633,64 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
             {
                 gnc_error_dialog(NULL, "Sorry, not implemented yet. Please check the console or trace file logs to see which job was rejected.");
             }
-            /* else */
         }
-        AB_Job_List2_PushBack(data->job_list, job);
+        else
+        {
+            gnc_gen_trans_list_add_trans_with_ref_id(data->generic_importer, gnc_trans, AB_Job_GetJobId(job));
 
+            /* AB_Job_List2_PushBack(data->job_list, job); -> delayed until trans is successfully imported */
+            g_datalist_set_data(&data->tmp_job_list, gnc_AB_JOB_to_readable_string(job), job);
+        }
         AB_Transaction_free(ab_trans);
+    }
+    else
+    {
+        /* Instead of xaccTransCommitEdit(gnc_trans)  */
+        gnc_gen_trans_list_add_trans(data->generic_importer, gnc_trans);
     }
 
     return NULL;
 }
+
+static void gnc_ab_trans_processed_cb(GNCImportTransInfo *trans_info,
+                                      gboolean imported,
+                                      gpointer user_data)
+{
+    GncABImExContextImport *data = user_data;
+    gchar *jobname = gnc_AB_JOB_ID_to_string(gnc_import_TransInfo_get_ref_id(trans_info));
+    AB_JOB *job = g_datalist_get_data(&data->tmp_job_list, jobname);
+
+    if (imported)
+    {
+        AB_Job_List2_PushBack(data->job_list, job);
+    }
+    else
+    {
+        AB_Job_free(job);
+    }
+
+    g_datalist_remove_data(&data->tmp_job_list, jobname);
+}
+
+gchar *
+gnc_AB_JOB_to_readable_string(const AB_JOB *job)
+{
+    if (job)
+    {
+        return gnc_AB_JOB_ID_to_string(AB_Job_GetJobId(job));
+    }
+    else
+    {
+        return gnc_AB_JOB_ID_to_string(0);
+    }
+}
+gchar *
+gnc_AB_JOB_ID_to_string(gulong job_id)
+{
+    return g_strdup_printf("job_%lu", job_id);
+}
+
+
 
 static AB_IMEXPORTER_ACCOUNTINFO *
 txn_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
@@ -704,8 +751,15 @@ txn_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     }
 
     if (!data->generic_importer)
+    {
         data->generic_importer = gnc_gen_trans_list_new(data->parent, NULL,
                                  TRUE, 14);
+        if (data->execute_txns)
+        {
+            gnc_gen_trans_list_add_tp_cb(data->generic_importer,
+                                         gnc_ab_trans_processed_cb, data);
+        }
+    }
 
     /* Iterate through all transactions */
     AB_ImExporterAccountInfo_TransactionsForEach(element, txn_transaction_cb,
@@ -939,7 +993,10 @@ gnc_ab_import_context(AB_IMEXPORTER_CONTEXT *context,
     data->api = api;
     data->parent = parent;
     data->job_list = AB_Job_List2_new();
+    data->tmp_job_list = NULL;
     data->generic_importer = NULL;
+
+    g_datalist_init(&data->tmp_job_list);
 
     /* Import transactions */
     if (!(awaiting & IGNORE_TRANSACTIONS))

@@ -28,8 +28,13 @@
 #define GNC_IMPORT_MAIN_MATCHER_H
 
 #include "Transaction.h"
+#include "import-backend.h"
 
 typedef struct _main_matcher_info GNCImportMainMatcher;
+
+typedef void (*GNCTransactionProcessedCB) (GNCImportTransInfo *trans_info,
+        gboolean imported, gpointer user_data);
+
 
 /** Create a new generic transaction dialog window and return it.
  *
@@ -56,6 +61,16 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
         gboolean all_from_same_account,
         gint match_date_hardlimit);
 
+/** Add transaction processed callback to the transaction importer.
+ *
+ * @param info The Transaction Importer to use.
+ *
+ * @param trans_processed_cb The callback function.
+ */
+void gnc_gen_trans_list_add_tp_cb(GNCImportMainMatcher *info,
+                                  GNCTransactionProcessedCB trans_processed_cb,
+                                  gpointer user_data);
+
 /** Deletes the given object. */
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info);
 
@@ -70,6 +85,22 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info);
  * passed transaction.
  */
 void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans);
+
+/** Add a newly imported Transaction to the Transaction Importer and provide an
+ * external reference id for it.
+ * The Importer takes over ownership of the passed transaction.
+ *
+ * @param gui The Transaction Importer to use.
+ *
+ * @param trans The Transaction to add.  The must contain at least one
+ * split, and this split must have been associated with an account
+ * Only the first split will be used for matching.  The transaction
+ * must NOT be commited. The Importer takes over ownership of the
+ * passed transaction.
+ *
+ * @param ref_id Reference id which links an external object to the transaction.
+ */
+void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transaction *trans, guint32 ref_id);
 
 /** Run this dialog and return only after the user pressed Ok, Cancel,
   or closed the window. This means that all actual importing will

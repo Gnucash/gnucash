@@ -226,6 +226,16 @@ gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
 gboolean
 gnc_import_TransInfo_get_destacc_selected_manually (const GNCImportTransInfo *info);
 
+
+/** Returns the reference id for this TransInfo. */
+guint32
+gnc_import_TransInfo_get_ref_id (const GNCImportTransInfo *info);
+
+/** Set the reference id for this TransInfo. */
+void
+gnc_import_TransInfo_set_ref_id (GNCImportTransInfo *info,
+                                 guint32 ref_id);
+
 /**@}*/
 
 /** @name Getters/Setters for GNCImportMatchInfo */

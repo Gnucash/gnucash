@@ -53,6 +53,8 @@ struct _main_matcher_info
     GdkColor color_back_green;
     GdkColor color_back_yellow;
     int selected_row;
+    GNCTransactionProcessedCB transaction_processed_cb;
+    gpointer user_data;
 };
 
 enum downloaded_cols
@@ -105,6 +107,14 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
             gtk_tree_model_get(model, &iter,
                                DOWNLOADED_COL_DATA, &trans_info,
                                -1);
+
+            if (info->transaction_processed_cb)
+            {
+                info->transaction_processed_cb(trans_info,
+                                               FALSE,
+                                               info->user_data);
+            }
+
             gnc_import_TransInfo_delete(trans_info);
         }
         while (gtk_tree_model_iter_next (model, &iter));
@@ -140,13 +150,30 @@ on_matcher_ok_clicked (GtkButton *button,
         gtk_tree_model_get(model, &iter,
                            DOWNLOADED_COL_DATA, &trans_info,
                            -1);
-        if (gnc_import_process_trans_item (NULL, trans_info))
+
+        if (gnc_import_process_trans_item(NULL, trans_info))
         {
             path = gtk_tree_model_get_path(model, &iter);
             ref = gtk_tree_row_reference_new(model, path);
             refs_list = g_slist_append(refs_list, ref);
             gtk_tree_path_free(path);
+
+            if (info->transaction_processed_cb)
+            {
+                info->transaction_processed_cb(trans_info,
+                                               TRUE,
+                                               info->user_data);
+            }
         }
+        else
+        {
+            /* transaction skipped -> destroy
+             * Otherwise temporary transactions remains visible if account is open
+             * (see gnc_import_process_trans_item() case GNCImport_CLEAR) */
+            xaccTransDestroy(gnc_import_TransInfo_get_trans(trans_info));
+            xaccTransCommitEdit(gnc_import_TransInfo_get_trans(trans_info));
+        }
+
     }
     while (gtk_tree_model_iter_next (model, &iter));
 
@@ -544,21 +571,32 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
 
     gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
     gtk_widget_show_all (GTK_WIDGET (info->dialog));
+
+    info->transaction_processed_cb = NULL;
+
     return info;
 }
+
+void gnc_gen_trans_list_add_tp_cb(GNCImportMainMatcher *info,
+                                  GNCTransactionProcessedCB trans_processed_cb,
+                                  gpointer user_data)
+{
+    info->user_data = user_data;
+    info->transaction_processed_cb = trans_processed_cb;
+}
+
 
 gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info)
 {
     gboolean result;
 
     /* DEBUG("Begin"); */
-
     result = gtk_dialog_run (GTK_DIALOG (info->dialog));
-
     /* DEBUG("Result was %d", result); */
 
     /* No destroying here since the dialog was already destroyed through
        the ok_clicked handlers. */
+
     return result;
 }
 
@@ -752,6 +790,12 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
 void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans)
 {
+    gnc_gen_trans_list_add_trans_with_ref_id(gui, trans, 0);
+    return;
+}/* end gnc_import_add_trans() */
+
+void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transaction *trans, guint32 ref_id)
+{
     GNCImportTransInfo * transaction_info = NULL;
     GtkTreeModel *model;
     GtkTreeIter iter;
@@ -764,16 +808,17 @@ void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans)
     else
     {
         transaction_info = gnc_import_TransInfo_new(trans, NULL);
+        gnc_import_TransInfo_set_ref_id(transaction_info, ref_id);
 
-        gnc_import_TransInfo_init_matches (transaction_info,
-                                           gui->user_settings);
+        gnc_import_TransInfo_init_matches(transaction_info,
+                                          gui->user_settings);
 
         model = gtk_tree_view_get_model(gui->view);
         gtk_list_store_append(GTK_LIST_STORE(model), &iter);
         refresh_model_row (gui, model, &iter, transaction_info);
     }
     return;
-}/* end gnc_import_add_trans() */
+}/* end gnc_import_add_trans_with_ref_id() */
 
 /* Iterate through the rows of the clist and try to automatch each of them */
 static void

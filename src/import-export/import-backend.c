@@ -92,6 +92,9 @@ struct _transactioninfo
     /* In case of a single destination account it is stored here. */
     Account *dest_acc;
     gboolean dest_acc_selected_manually;
+
+    /* Reference id to link gnc transaction to external object. E.g. aqbanking job id. */
+    guint32 ref_id;
 };
 
 struct _matchinfo
@@ -212,6 +215,22 @@ gnc_import_TransInfo_get_destacc_selected_manually (const GNCImportTransInfo *in
     g_assert (info);
     return info->dest_acc_selected_manually;
 }
+
+guint32
+gnc_import_TransInfo_get_ref_id (const GNCImportTransInfo *info)
+{
+    g_assert (info);
+    return info->ref_id;
+}
+
+void
+gnc_import_TransInfo_set_ref_id (GNCImportTransInfo *info,
+                                 guint32 ref_id)
+{
+    g_assert (info);
+    info->ref_id = ref_id;
+}
+
 
 Split *
 gnc_import_MatchInfo_get_split (const GNCImportMatchInfo * info)
@@ -891,8 +910,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
         xaccSplitSetDateReconciledSecs(gnc_import_TransInfo_get_fsplit (trans_info),
                                        time(NULL));
         /* Done editing. */
-        xaccTransCommitEdit
-        (gnc_import_TransInfo_get_trans (trans_info));
+        xaccTransCommitEdit(gnc_import_TransInfo_get_trans (trans_info));
         return TRUE;
     case GNCImport_CLEAR:
     {

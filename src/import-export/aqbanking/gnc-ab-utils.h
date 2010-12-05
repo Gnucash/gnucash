@@ -146,6 +146,22 @@ AB_ACCOUNT *gnc_ab_get_ab_account(const AB_BANKING *api, Account *gnc_acc);
 gchar *gnc_AB_VALUE_to_readable_string(const AB_VALUE *value);
 
 /**
+ * Return the job as string.
+ *
+ * @param value AB_JOB or NULL
+ * @return A newly allocated string
+ */
+gchar *gnc_AB_JOB_to_readable_string(const AB_JOB *job);
+
+/**
+ * Return the job_id as string.
+ *
+ * @param job_id
+ * @return A newly allocated string
+ */
+gchar *gnc_AB_JOB_ID_to_string(gulong job_id);
+
+/**
  * Retrieve the merged "remote name" fields from a transaction.  The returned
  * string must be g_free'd by the caller.  If there was no "remote name" field,
  * NULL (!) is returned.
