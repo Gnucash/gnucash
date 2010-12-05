@@ -94,6 +94,19 @@ static void slots_load_info( slot_info_t *pInfo );
 
 #define SLOT_MAX_PATHNAME_LEN 4096
 #define SLOT_MAX_STRINGVAL_LEN 4096
+enum {
+    id_col = 0,
+    obj_guid_col,
+    name_col,
+    slot_type_col,
+    int64_val_col,
+    string_val_col,
+    double_val_col,
+    timespec_val_col,
+    guid_val_col,
+    numeric_val_col,
+    gdate_val_col
+};
 
 static const GncSqlColumnTableEntry col_table[] =
 {
@@ -692,10 +705,45 @@ gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid, gboolean is_infant, 
 gboolean
 gnc_sql_slots_delete( GncSqlBackend* be, const GncGUID* guid )
 {
+    gchar* buf;
+    GncSqlResult* result;
+    gchar guid_buf[GUID_ENCODING_LENGTH+1];
+    GncSqlStatement* stmt;
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new('\0') };
 
     g_return_val_if_fail( be != NULL, FALSE );
     g_return_val_if_fail( guid != NULL, FALSE );
+
+    (void)guid_to_string_buff( guid, guid_buf );
+
+    buf = g_strdup_printf( "SELECT * FROM %s WHERE obj_guid='%s' and slot_type in ('%d', '%d') and not guid_val is null",
+			   TABLE_NAME, guid_buf, KVP_TYPE_FRAME, KVP_TYPE_GLIST );
+    stmt = gnc_sql_create_statement_from_sql( be, buf );
+    g_free( buf );
+    if ( stmt != NULL )
+    {
+        result = gnc_sql_execute_select_statement( be, stmt );
+        gnc_sql_statement_dispose( stmt );
+        if ( result != NULL )
+        {
+            GncSqlRow* row = gnc_sql_result_get_first_row( result );
+
+            while ( row != NULL )
+            {
+		GncSqlColumnTableEntry table_row = col_table[guid_val_col];
+		GncGUID child_guid;
+		const GValue* val =
+		    gnc_sql_row_get_value_at_col_name( row, table_row.col_name);
+		if ( val == NULL )
+		    continue;
+
+		(void)string_to_guid( g_value_get_string( val ), &child_guid );
+		gnc_sql_slots_delete( be, &child_guid );
+                row = gnc_sql_result_get_next_row( result );
+            }
+            gnc_sql_result_dispose( result );
+        }
+    }
 
     slot_info.be = be;
     slot_info.guid = guid;
