@@ -72,6 +72,8 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
+static gchar lock_table[] = "gnclock";
+
 #define FILE_URI_TYPE "file"
 #define FILE_URI_PREFIX (FILE_URI_TYPE "://")
 #define SQLITE3_URI_TYPE "sqlite3"
@@ -503,7 +505,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
     dbi_result result;
     const gchar *dbname = dbi_conn_get_option( dcon, "dbname" );
     /* Create the table if it doesn't exist */
-    result = dbi_conn_get_table_list( dcon, dbname, "GNCLOCK");
+    result = dbi_conn_get_table_list( dcon, dbname, lock_table);
     if (!( result && dbi_result_get_numrows( result ) ))
     {
         if ( result )
@@ -511,7 +513,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
             dbi_result_free( result );
             result = NULL;
         }
-        result = dbi_conn_queryf( dcon, "CREATE TABLE GNCLOCK ( Hostname varchar(%d), PID int )", GNC_HOST_NAME_MAX );
+        result = dbi_conn_queryf( dcon, "CREATE TABLE %s ( Hostname varchar(%d), PID int )", lock_table, GNC_HOST_NAME_MAX );
         if ( dbi_conn_error( dcon, NULL ) )
         {
             const gchar *errstr;
@@ -542,7 +544,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
             dbi_result_free( result );
             result = NULL;
         }
-        result = dbi_conn_query( dcon, "SELECT * FROM GNCLOCK" );
+        result = dbi_conn_queryf( dcon, "SELECT * FROM %s", lock_table );
         if ( result && dbi_result_get_numrows( result ) )
         {
             dbi_result_free( result );
@@ -554,7 +556,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
                 dbi_conn_query( dcon, "ROLLBACK" );
                 return FALSE;
             }
-            result = dbi_conn_query( dcon, "DELETE FROM GNCLOCK" );
+            result = dbi_conn_queryf( dcon, "DELETE FROM %s", lock_table );
             if ( !result)
             {
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
@@ -576,8 +578,8 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
         memset( hostname, 0, sizeof(hostname) );
         gethostname( hostname, GNC_HOST_NAME_MAX );
         result = dbi_conn_queryf( dcon,
-                                  "INSERT INTO GNCLOCK VALUES ('%s', '%d')",
-                                  hostname, (int)GETPID() );
+                                  "INSERT INTO %s VALUES ('%s', '%d')",
+                                  lock_table, hostname, (int)GETPID() );
         if ( !result)
         {
             qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
@@ -625,7 +627,7 @@ gnc_dbi_unlock( QofBackend *qbe )
 
     dbname = dbi_conn_get_option( dcon, "dbname" );
     /* Check if the lock table exists */
-    result = dbi_conn_get_table_list( dcon, dbname, "GNCLOCK");
+    result = dbi_conn_get_table_list( dcon, dbname, lock_table);
     if (!( result && dbi_result_get_numrows( result ) ))
     {
         if (result)
@@ -648,7 +650,7 @@ gnc_dbi_unlock( QofBackend *qbe )
         }
         memset( hostname, 0, sizeof(hostname) );
         gethostname( hostname, GNC_HOST_NAME_MAX );
-        result = dbi_conn_queryf( dcon, "SELECT * FROM GNCLOCK WHERE Hostname = '%s' AND PID = '%d'", hostname, (int)GETPID() );
+        result = dbi_conn_queryf( dcon, "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", lock_table, hostname, (int)GETPID() );
         if ( result && dbi_result_get_numrows( result ) )
         {
             if (result)
@@ -656,7 +658,7 @@ gnc_dbi_unlock( QofBackend *qbe )
                 dbi_result_free( result );
                 result = NULL;
             }
-            result = dbi_conn_query( dcon, "DELETE FROM GNCLOCK" );
+            result = dbi_conn_queryf( dcon, "DELETE FROM %s", lock_table );
             if ( !result)
             {
                 PERR("Failed to delete the lock entry");
@@ -1171,7 +1173,7 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
             const gchar* table_name = (const gchar*)node->data;
             dbi_result result;
             /* Don't delete the lock table */
-            if ( g_strcmp0(table_name, "GNCLOCK") == 0)
+            if ( g_strcmp0(table_name, lock_table) == 0)
             {
                 continue;
             }
