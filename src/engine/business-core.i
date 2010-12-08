@@ -128,7 +128,9 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 %include <gncTaxTable.h>
 %include <gncVendor.h>
 %include <gncBusGuile.h>
-%include <libqof/qof/qofquery.h>
+/* Import query bindings for the below invoice query functions (but
+ * don't generate bindings for them). */
+%import <libqof/qof/qofquery.h>
 
 #define URL_TYPE_CUSTOMER GNC_ID_CUSTOMER
 #define URL_TYPE_VENDOR GNC_ID_VENDOR
