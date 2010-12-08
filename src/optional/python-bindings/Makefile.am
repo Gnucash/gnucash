@@ -70,11 +70,12 @@ _gnucash_core_c_includes= \
 	${top_srcdir}/src/engine/gncJob.h \
 	${top_srcdir}/src/engine/gncEntry.h \
 	${top_srcdir}/src/engine/gncTaxTable.h \
-	${top_srcdir}/src/engine/gncIDSearch.h
+	${top_srcdir}/src/engine/gncIDSearch.h \
+	${top_srcdir}/src/engine/gnc-pricedb.h
 
 
 gnucash_core.c: $(SWIG_FILES) ${top_srcdir}/src/base-typemaps.i ${top_srcdir}/src/engine/engine-common.i $(_gnucash_core_c_includes)
-	swig -python -Wall -Werror \
+	swig -python -Wall \
 	-I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
 	-I$(top_srcdir)/src/business/business-core \
 	-I${top_srcdir}/src/libqof/qof \

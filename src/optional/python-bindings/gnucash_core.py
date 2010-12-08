@@ -26,14 +26,13 @@ import gnucash_core_c
 from function_class import \
      ClassFromFunctions, extract_attributes_with_prefix, \
      default_arguments_decorator, method_function_returns_instance, \
-     methods_return_instance
+     methods_return_instance, process_list_convert_to_instance
 
 from gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
     gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
     gncCustomerLookup, gncVendorLookup, gncJobLookup, gncEmployeeLookup, \
     gncTaxTableLookup, gncTaxTableLookupByName, gnc_search_invoice_on_id, \
     gnc_search_customer_on_id, gnc_search_bill_on_id , gnc_search_vendor_on_id
-    
 
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
@@ -55,7 +54,7 @@ class Session(GnuCashCoreClass):
 
     To commit changes to the session you may need to call save,
     (this is allways the case with the file backend).
-    
+
     When you're down with a session you may need to call end()
 
     Every Session has a Book in the book attribute, which you'll definetely
@@ -63,7 +62,7 @@ class Session(GnuCashCoreClass):
     Invoice..) is associated with a particular book where it is stored.
     """
 
-    def __init__(self, book_uri=None, ignore_lock=False, is_new=False, 
+    def __init__(self, book_uri=None, ignore_lock=False, is_new=False,
                  force_new= False):
         """A convienent contructor that allows you to specify a book URI,
         begin the session, and load the book.
@@ -112,10 +111,10 @@ class Session(GnuCashCoreClass):
             raise GnuCashBackendException(
                 "call to %s resulted in the "
                 "following errors, %s" % (called_function, backend_error_dict[errors[0]]),
-                errors )        
+                errors )
 
     def generate_errors(self):
-        """A generator that yeilds any outstanding QofBackend errors 
+        """A generator that yeilds any outstanding QofBackend errors
         """
         while self.get_error() is not ERR_BACKEND_NO_ERR:
             error = self.pop_error()
@@ -129,7 +128,7 @@ class Session(GnuCashCoreClass):
     # STATIC METHODS
     @staticmethod
     def raise_backend_errors_after_call(function):
-        """A function decorator that results in a call to  
+        """A function decorator that results in a call to
         raise_backend_errors after execution.
         """
         def new_function(self, *args):
@@ -170,7 +169,7 @@ class Book(GnuCashCoreClass):
     def CustomerLookup(self, guid):
         from gnucash_business import Customer
         return self.do_lookup_create_oo_instance(
-            gncCustomerLookup, Customer, guid.get_instance()) 
+            gncCustomerLookup, Customer, guid.get_instance())
 
     def JobLookup(self, guid):
         from gnucash_business import Job
@@ -221,14 +220,14 @@ class GncNumeric(GnuCashCoreClass):
     """Object used by GnuCash to store all numbers. Always consists of a
     numerator and denominator.
 
-    The constants GNC_DENOM_AUTO, 
-    GNC_HOW_RND_FLOOR, GNC_HOW_RND_CEIL, GNC_HOW_RND_TRUNC, 
-    GNC_HOW_RND_PROMOTE, GNC_HOW_RND_ROUND_HALF_DOWN, 
+    The constants GNC_DENOM_AUTO,
+    GNC_HOW_RND_FLOOR, GNC_HOW_RND_CEIL, GNC_HOW_RND_TRUNC,
+    GNC_HOW_RND_PROMOTE, GNC_HOW_RND_ROUND_HALF_DOWN,
     GNC_HOW_RND_ROUND_HALF_UP, GNC_HOW_RND_ROUND, GNC_HOW_RND_NEVER,
-    GNC_HOW_DENOM_EXACT, GNC_HOW_DENOM_REDUCE, GNC_HOW_DENOM_LCD, 
+    GNC_HOW_DENOM_EXACT, GNC_HOW_DENOM_REDUCE, GNC_HOW_DENOM_LCD,
     and GNC_HOW_DENOM_FIXED are available for arithmetic
     functions like GncNumeric.add
-    
+
     Look at gnc-numeric.h to see how ot use these
     """
 
@@ -244,6 +243,62 @@ class GncNumeric(GnuCashCoreClass):
         #    self.set_denom(denom) # currently undefined
         #    self.set_num(num)     # currently undefined
 
+class GncPrice(GnuCashCoreClass):
+  '''
+  Each priceEach price in the database represents an "instantaneous"
+  quote for a given commodity with respect to another commodity.
+  For example, a given price might represent the value of LNUX in USD on 2001-02-03.
+
+  Fields:
+    * commodity: the item being priced.
+    * currency: the denomination of the value of the item being priced.
+    * value: the value of the item being priced.
+    * time: the time the price was valid.
+    * source: a string describing the source of the quote. These strings will be something like this:
+    "Finance::Quote", "user:misc", "user:foo", etc. If the quote came from a user, as a matter of policy,
+    you *must* prefix the string you give with "user:". For now, the only other reserved values are
+    "Finance::Quote" and "old-file-import". Any string used must be added to the source_list array in
+    dialog-price-edit-db.c so that it can be properly translated. (There are unfortunately many strings
+    in users' databases, so this string must be translated on output instead of always being used in untranslated form).
+    * type: the type of quote - types possible right now are bid, ask, last, nav, and
+    unknown.Each price in the database represents an "instantaneous" quote for a given
+    commodity with respect to another commodity.
+    For example, a given price might represent the value of LNUX in USD on 2001-02-03.
+
+    See also http://svn.gnucash.org/docs/head/group__Price.html
+  '''
+  pass
+GncPrice.add_methods_with_prefix('gnc_price_')
+
+
+class GncPriceDB(GnuCashCoreClass):
+  '''
+  a simple price database for gnucash.
+  The PriceDB is intended to be a database of price quotes, or more specifically,
+  a database of GNCPrices. For the time being, it is still a fairly simple
+  database supporting only fairly simple queries. It is expected that new
+  queries will be added as needed, and that there is some advantage to delaying
+  complex queries for now in the hope that we get a real DB implementation
+  before they're really needed.
+
+  Every QofBook contains a GNCPriceDB, accessible via gnc_pricedb_get_db.
+
+  Definition in file gnc-pricedb.h.
+  See also http://svn.gnucash.org/docs/head/gnc-pricedb_8h.html
+  '''
+
+GncPriceDB.add_methods_with_prefix('gnc_pricedb_')
+PriceDB_dict =  {
+                'lookup_latest' : GncPrice,
+                'lookup_nearest_in_time' : GncPrice,
+                'lookup_latest_before' : GncPrice,
+                'convert_balance_latest_price' : GncNumeric,
+                'convert_balance_nearest_price' : GncNumeric,
+                'convert_balance_latest_before' : GncNumeric,
+                }
+methods_return_instance(GncPriceDB,PriceDB_dict)
+
+
 class GncCommodity(GnuCashCoreClass): pass
 
 class GncCommodityTable(GnuCashCoreClass):
@@ -257,6 +312,7 @@ class GncCommodityTable(GnuCashCoreClass):
     This table is automatically populated with the GnuCash default commodity's
     which includes most of the world's currencies.
     """
+
     pass
 
 class GncLot(GnuCashCoreClass):
@@ -267,7 +323,7 @@ class GncLot(GnuCashCoreClass):
 
 class Transaction(GnuCashCoreClass):
     """A GnuCash Transaction
-    
+
     Consists of at least one (generally two) splits to represent a transaction
     between two accounts.
 
@@ -384,32 +440,37 @@ Book.add_constructor_and_methods_with_prefix('qof_book_', 'new')
 Book.add_method('gnc_book_get_root_account', 'get_root_account')
 Book.add_method('gnc_book_set_root_account', 'set_root_account')
 Book.add_method('gnc_commodity_table_get_table', 'get_table')
+Book.add_method('gnc_pricedb_get_db', 'get_price_db')
+
 #Functions that return Account
 Book.get_root_account = method_function_returns_instance(
     Book.get_root_account, Account )
 #Functions that return GncCommodityTable
 Book.get_table = method_function_returns_instance(
-    Book.get_table, GncCommodityTable ) 
+    Book.get_table, GncCommodityTable )
+#Functions that return GNCPriceDB
+Book.get_price_db = method_function_returns_instance(
+    Book.get_price_db, GncPriceDB)
 
 # GncNumeric
 GncNumeric.add_constructor_and_methods_with_prefix('gnc_numeric_', 'create')
 
-gncnumeric_dict =   { 
-                        'same' : GncNumeric, 
-                        'add' : GncNumeric, 
-                        'sub' : GncNumeric, 
-                        'mul' : GncNumeric, 
-                        'div' : GncNumeric, 
-                        'neg' : GncNumeric, 
-                        'abs' : GncNumeric, 
-                        'add_fixed' : GncNumeric, 
-                        'sub_fixed' : GncNumeric, 
-                        'add_with_error' : GncNumeric, 
-                        'sub_with_error' : GncNumeric, 
-                        'mul_with_error' : GncNumeric, 
-                        'div_with_error' : GncNumeric, 
-                        'convert' : GncNumeric, 
-                        'reduce' : GncNumeric 
+gncnumeric_dict =   {
+                        'same' : GncNumeric,
+                        'add' : GncNumeric,
+                        'sub' : GncNumeric,
+                        'mul' : GncNumeric,
+                        'div' : GncNumeric,
+                        'neg' : GncNumeric,
+                        'abs' : GncNumeric,
+                        'add_fixed' : GncNumeric,
+                        'sub_fixed' : GncNumeric,
+                        'add_with_error' : GncNumeric,
+                        'sub_with_error' : GncNumeric,
+                        'mul_with_error' : GncNumeric,
+                        'div_with_error' : GncNumeric,
+                        'convert' : GncNumeric,
+                        'reduce' : GncNumeric
                     }
 methods_return_instance(GncNumeric, gncnumeric_dict)
 
@@ -421,25 +482,25 @@ GncCommodity.clone = method_function_returns_instance(
 
 # GncCommodityTable
 GncCommodityTable.add_methods_with_prefix('gnc_commodity_table_')
-commoditytable_dict =   { 
-                            'lookup' : GncCommodity, 
-                            'lookup_unique' : GncCommodity, 
-                            'find_full' : GncCommodity, 
-                            'insert' : GncCommodity 
+commoditytable_dict =   {
+                            'lookup' : GncCommodity,
+                            'lookup_unique' : GncCommodity,
+                            'find_full' : GncCommodity,
+                            'insert' : GncCommodity
                         }
 methods_return_instance(GncCommodityTable, commoditytable_dict)
 
 # GncLot
 GncLot.add_constructor_and_methods_with_prefix('gnc_lot_', 'new')
 
-gnclot_dict =   { 
-                    'get_account' : Account, 
-                    'get_book' : Book, 
-                    'get_earliest_split' : Split, 
-                    'get_latest_split' : Split, 
-                    'get_balance' : GncNumeric, 
-                    'lookup' : GncLot, 
-                    'make_default' : GncLot 
+gnclot_dict =   {
+                    'get_account' : Account,
+                    'get_book' : Book,
+                    'get_earliest_split' : Split,
+                    'get_latest_split' : Split,
+                    'get_balance' : GncNumeric,
+                    'lookup' : GncLot,
+                    'make_default' : GncLot
                 }
 methods_return_instance(GncLot, gnclot_dict)
 
@@ -448,17 +509,17 @@ Transaction.add_methods_with_prefix('xaccTrans')
 Transaction.add_method('gncTransGetGUID', 'GetGUID');
 
 trans_dict =    {
-                    'GetSplit': Split, 
-                    'FindSplitByAccount': Split, 
-                    'GetNthSplit': Split, 
-                    'Clone': Transaction, 
-                    'Reverse': Transaction, 
-                    'GetReversedBy': Transaction, 
-                    'GetImbalanceValue': GncNumeric, 
-                    'GetAccountValue': GncNumeric, 
-                    'GetAccountAmount': GncNumeric, 
-                    'GetAccountConvRate': GncNumeric, 
-                    'GetAccountBalance': GncNumeric, 
+                    'GetSplit': Split,
+                    'FindSplitByAccount': Split,
+                    'GetNthSplit': Split,
+                    'Clone': Transaction,
+                    'Reverse': Transaction,
+                    'GetReversedBy': Transaction,
+                    'GetImbalanceValue': GncNumeric,
+                    'GetAccountValue': GncNumeric,
+                    'GetAccountAmount': GncNumeric,
+                    'GetAccountConvRate': GncNumeric,
+                    'GetAccountBalance': GncNumeric,
                     'GetCurrency': GncCommodity,
                     'GetGUID': GUID
                 }
@@ -471,20 +532,20 @@ Split.add_methods_with_prefix('xaccSplit')
 Split.add_method('gncSplitGetGUID', 'GetGUID');
 
 split_dict =    {
-                    'GetBook': Book, 
-                    'GetAccount': Account, 
-                    'GetParent': Transaction, 
-                    'Lookup': Split, 
-                    'GetOtherSplit': Split, 
-                    'GetAmount': GncNumeric, 
-                    'GetValue': GncNumeric, 
-                    'GetSharePrice': GncNumeric, 
-                    'ConvertAmount': GncNumeric, 
-                    'GetBaseValue': GncNumeric, 
-                    'GetBalance': GncNumeric, 
-                    'GetClearedBalance': GncNumeric, 
-                    'GetReconciledBalance': GncNumeric, 
-                    'VoidFormerAmount': GncNumeric, 
+                    'GetBook': Book,
+                    'GetAccount': Account,
+                    'GetParent': Transaction,
+                    'Lookup': Split,
+                    'GetOtherSplit': Split,
+                    'GetAmount': GncNumeric,
+                    'GetValue': GncNumeric,
+                    'GetSharePrice': GncNumeric,
+                    'ConvertAmount': GncNumeric,
+                    'GetBaseValue': GncNumeric,
+                    'GetBalance': GncNumeric,
+                    'GetClearedBalance': GncNumeric,
+                    'GetReconciledBalance': GncNumeric,
+                    'VoidFormerAmount': GncNumeric,
                     'VoidFormerValue': GncNumeric,
                     'GetGUID': GUID
                 }
@@ -498,36 +559,36 @@ Account.add_methods_with_prefix('xaccAccount')
 Account.add_methods_with_prefix('gnc_account_')
 Account.add_method('gncAccountGetGUID', 'GetGUID');
 
-account_dict =  {   
-                    'get_book' : Book, 
-                    'Lookup' : Account, 
-                    'get_parent' : Account, 
-                    'get_root' : Account, 
-                    'nth_child' : Account, 
+account_dict =  {
+                    'get_book' : Book,
+                    'Lookup' : Account,
+                    'get_parent' : Account,
+                    'get_root' : Account,
+                    'nth_child' : Account,
                     'lookup_by_code' : Account,
-                    'lookup_by_name' : Account, 
-                    'lookup_by_full_name' : Account, 
-                    'FindTransByDesc' : Transaction, 
-                    'FindSplitByDesc' : Split, 
-                    'get_start_balance' : GncNumeric, 
-                    'get_start_cleared_balance' : GncNumeric, 
-                    'GetBalance' : GncNumeric, 
-                    'GetClearedBalance' : GncNumeric, 
-                    'GetReconciledBalance' : GncNumeric, 
-                    'GetPresentBalance' : GncNumeric, 
-                    'GetProjectedMinimumBalance' : GncNumeric, 
-                    'GetBalanceAsOfDate' : GncNumeric, 
-                    'ConvertBalanceToCurrency' : GncNumeric, 
-                    'ConvertBalanceToCurrencyAsOfDate' : GncNumeric, 
-                    'GetBalanceInCurrency' : GncNumeric, 
-                    'GetClearedBalanceInCurrency' : GncNumeric, 
-                    'GetReconciledBalanceInCurrency' : GncNumeric, 
-                    'GetPresentBalanceInCurrency' : GncNumeric, 
-                    'GetProjectedMinimumBalanceInCurrency' : GncNumeric, 
-                    'GetBalanceAsOfDateInCurrency' : GncNumeric, 
-                    'GetBalanceChangeForPeriod' : GncNumeric, 
+                    'lookup_by_name' : Account,
+                    'lookup_by_full_name' : Account,
+                    'FindTransByDesc' : Transaction,
+                    'FindSplitByDesc' : Split,
+                    'get_start_balance' : GncNumeric,
+                    'get_start_cleared_balance' : GncNumeric,
+                    'GetBalance' : GncNumeric,
+                    'GetClearedBalance' : GncNumeric,
+                    'GetReconciledBalance' : GncNumeric,
+                    'GetPresentBalance' : GncNumeric,
+                    'GetProjectedMinimumBalance' : GncNumeric,
+                    'GetBalanceAsOfDate' : GncNumeric,
+                    'ConvertBalanceToCurrency' : GncNumeric,
+                    'ConvertBalanceToCurrencyAsOfDate' : GncNumeric,
+                    'GetBalanceInCurrency' : GncNumeric,
+                    'GetClearedBalanceInCurrency' : GncNumeric,
+                    'GetReconciledBalanceInCurrency' : GncNumeric,
+                    'GetPresentBalanceInCurrency' : GncNumeric,
+                    'GetProjectedMinimumBalanceInCurrency' : GncNumeric,
+                    'GetBalanceAsOfDateInCurrency' : GncNumeric,
+                    'GetBalanceChangeForPeriod' : GncNumeric,
                     'GetCommodity' : GncCommodity,
-                    'GetGUID': GUID 
+                    'GetGUID': GUID
                 }
 methods_return_instance(Account, account_dict)
 
@@ -546,4 +607,4 @@ guid_dict = {
                 'SplitLookup': Split
             }
 methods_return_instance(GUID, guid_dict)
-                
+

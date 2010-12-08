@@ -23,7 +23,8 @@
  * @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
  * @author Jeff Green, ParIT Worker Co-operative <jeff@parit.ca>
  */
-
+/* Autodoc emits warnings so need to turn off -Werror in Makefile.am */
+%feature("autodoc", "1");
 %module(package="gnucash") gnucash_core_c
 
 %{
@@ -49,14 +50,13 @@
 #include "gncVendor.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
-
 #include "gncOwner.h"
 #include "gncInvoice.h"
 #include "gncJob.h"
 #include "gncEntry.h"
 #include "gncTaxTable.h"
 #include "gncIDSearch.h"
-
+#include "engine/gnc-pricedb.h"
 %}
 
 %include <timespec.i>
@@ -176,6 +176,9 @@
 %include <gncEntry.h>
 %include <gncTaxTable.h>
 %include <gncIDSearch.h>
+
+// Commodity prices includes and stuff
+%include <gnc-pricedb.h>
 
 
 %init %{
