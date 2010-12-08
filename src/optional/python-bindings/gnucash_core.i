@@ -23,8 +23,7 @@
  * @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
  * @author Jeff Green, ParIT Worker Co-operative <jeff@parit.ca>
  */
-/* Autodoc emits warnings so need to turn off -Werror in Makefile.am */
-%feature("autodoc", "1");
+
 %module(package="gnucash") gnucash_core_c
 
 %{
