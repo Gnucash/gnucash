@@ -39,6 +39,7 @@
 #include "gnc-ab-gettrans.h"
 #include "gnc-ab-transfer.h"
 #include "gnc-ab-utils.h"
+#include "gnc-ab-kvp.h"
 #include "gnc-file-aqb-import.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-plugin-aqbanking.h"
@@ -250,6 +251,9 @@ gnc_plugin_ab_main_window_page_added(GncMainWindow *window, GncPluginPage *page,
         g_signal_connect(page, "account_selected",
                          G_CALLBACK(gnc_plugin_ab_account_selected), NULL);
     }
+
+    gnc_plugin_ab_main_window_page_changed(window, page, user_data);
+
     LEAVE(" ");
 }
 
@@ -261,26 +265,49 @@ static void
 gnc_plugin_ab_main_window_page_changed(GncMainWindow *window,
                                        GncPluginPage *page, gpointer user_data)
 {
+    Account *account = main_window_to_account(window);
+
+    gnc_plugin_ab_account_selected(page, account, user_data);
 }
 
 /**
- * An account had been (de)selected in an "account tree" page.  Update the hbci
- * menus appropriately.
+ * An account had been (de)selected either in an "account tree" page or by
+ * selecting another register page. Update the aqbanking menus appropriately.
  */
 static void
 gnc_plugin_ab_account_selected(GncPluginPage *plugin_page, Account *account,
                                gpointer user_data)
 {
-    GtkActionGroup *action_group;
     GncMainWindow  *window;
+    GtkActionGroup *action_group;
+    const gchar *bankcode = NULL;
+    const gchar *accountid = NULL;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE(plugin_page));
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
     action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
     g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
-    gnc_plugin_update_actions(action_group, need_account_actions,
-                              "sensitive", account != NULL);
+
+    if (account)
+    {
+        bankcode = gnc_ab_get_account_bankcode(account);
+        accountid = gnc_ab_get_account_accountid(account);
+
+        gnc_plugin_update_actions(action_group, need_account_actions,
+                                  "sensitive",
+                                 (account && bankcode && *bankcode
+                                  && accountid && *accountid));
+        gnc_plugin_update_actions(action_group, need_account_actions,
+                                  "visible",TRUE);
+    }
+    else
+    {
+        gnc_plugin_update_actions(action_group, need_account_actions,
+                                  "sensitive",FALSE);
+        gnc_plugin_update_actions(action_group, need_account_actions,
+                                  "visible", FALSE);
+    }
 
 }
 
