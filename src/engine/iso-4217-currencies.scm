@@ -209,7 +209,7 @@
 ( "Manat" "manat" "teňňe" "ISO4217" "TMT" "934" 100 100 "m" )
 ( "Tunisian Dinar" "dinar" "milim" "ISO4217" "TND" "788" 1000 1000 "د.ت" )
 ( "Pa'anga" "Pa'anga" "seniti" "ISO4217" "TOP" "776" 100 100 "T$" )
-( "New Turkish Lira" "lira" "kuruş" "ISO4217" "TRY" "949" 100 100 "₤" )
+( "Turkish Lira" "lira" "kuruş" "ISO4217" "TRY" "949" 100 100 "₤" )
 ( "Trinidad and Tobago Dollar" "dollar" "cent" "ISO4217" "TTD" "780" 100 100 "TT$" )
 ( "New Taiwan Dollar" "dollar" "cent" "ISO4217" "TWD" "901" 100 100 "NT$" )
 ( "Tanzanian Shilling" "shilling" "senti"  "ISO4217" "TZS" "834" 100 100 "/" )
