@@ -179,7 +179,7 @@ Account * gnc_account_create_root (QofBook *book);
  *    The guid pointers are stored under the under the kvp
  *    path "gemini".
  */
-Account * xaccCloneAccount (const Account *from, QofBook *book);
+Account * xaccCloneAccount (const Account *source, QofBook *book);
 
 /** The xaccCloneAccountSimple() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies
@@ -191,7 +191,7 @@ Account * xaccCloneAccount (const Account *from, QofBook *book);
  *  Note that this routines does *NOT* use the 'gemini' kvp value
  *  to indicate where it was copied from.
  */
-Account * xaccCloneAccountSimple (const Account *from, QofBook *book);
+Account * xaccCloneAccountSimple (const Account *source, QofBook *book);
 
 /** The xaccAccountBeginEdit() subroutine is the first phase of
  *    a two-phase-commit wrapper for account updates. */

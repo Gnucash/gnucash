@@ -263,7 +263,7 @@ gnc_numeric gnc_numeric_zero(void)
  *  but GNC_DENOM_AUTO is not recognized; a denominator
  *  must be specified either explicitctly or through sigfigs.
  */
-gnc_numeric double_to_gnc_numeric(double in, gint64 denom,
+gnc_numeric double_to_gnc_numeric(double n, gint64 denom,
                                   gint how);
 
 /** Read a gnc_numeric from str, skipping any leading whitespace.
@@ -294,7 +294,7 @@ gint64 gnc_numeric_denom(gnc_numeric a)
 }
 
 /** Convert numeric to floating-point value. */
-gdouble      gnc_numeric_to_double(gnc_numeric in);
+gdouble      gnc_numeric_to_double(gnc_numeric n);
 
 /** Convert to string. The returned buffer is to be g_free'd by the
  *  caller (it was allocated through g_strdup) */
@@ -447,7 +447,7 @@ gnc_numeric gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
  *  specified denominator under standard arguments
  *  'denom' and 'how'.
  */
-gnc_numeric gnc_numeric_convert(gnc_numeric in, gint64 denom,
+gnc_numeric gnc_numeric_convert(gnc_numeric n, gint64 denom,
                                 gint how);
 
 #if 0
@@ -455,14 +455,14 @@ gnc_numeric gnc_numeric_convert(gnc_numeric in, gint64 denom,
 /* Same as gnc_numeric_convert, but return a remainder
  *  value for accumulating conversion error.
 */
-gnc_numeric gnc_numeric_convert_with_error(gnc_numeric in, gint64 denom,
+gnc_numeric gnc_numeric_convert_with_error(gnc_numeric n, gint64 denom,
         gint how,
         gnc_numeric * error);
 #endif
 
 /** Return input after reducing it by Greated Common Factor (GCF)
  *  elimination */
-gnc_numeric gnc_numeric_reduce(gnc_numeric in);
+gnc_numeric gnc_numeric_reduce(gnc_numeric n);
 
 /** Attempt to convert the denominator to an exact power of ten without
  *  rounding.

@@ -941,12 +941,12 @@ gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table
 gnc_commodity_table * gnc_commodity_table_new(void);
 void          gnc_commodity_table_destroy(gnc_commodity_table * table);
 
-/** Given the commodity 'from', this routine will find and return the
+/** Given the commodity 'findlike', this routine will find and return the
  *   equivalent commodity (commodity with the same 'unique name') in
  *   the indicated book.  This routine is primarily useful for setting
  *   up clones of things across multiple books.
  */
-gnc_commodity * gnc_commodity_obtain_twin (const gnc_commodity *from, QofBook *book);
+gnc_commodity * gnc_commodity_obtain_twin (const gnc_commodity *findlike, QofBook *book);
 
 /** You should probably not be using gnc_commodity_table_register()
  * It is an internal routine for registering the gncObject for the
