@@ -24,6 +24,7 @@
  * @author Jeff Green, ParIT Worker Co-operative <jeff@parit.ca>
  */
 
+%feature("autodoc", "1");
 %module(package="gnucash") gnucash_core_c
 
 %{
