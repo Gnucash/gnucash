@@ -15,7 +15,6 @@ doc_DATA = \
   projects.html 
 
 man_MANS = \
-  gnc-prices.1 \
   gnucash.1
 
 tipsdir = $(GNC_SHAREDIR)
