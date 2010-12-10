@@ -73,6 +73,8 @@
 #include "gnc-tax-table-sql.h"
 #include "gnc-vendor-sql.h"
 
+#include "gnc-main.h"
+
 #if defined( S_SPLINT_S )
 #include "splint-defs.h"
 #endif
@@ -482,6 +484,7 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     ENTER( "book=%p, primary=%p", book, be->primary_book );
 
     (void)reset_version_info( be );
+    gnc_sql_set_table_version( be, "Gnucash", gnc_get_svn_version() );
 
     /* Create new tables */
     be->is_pristine_db = TRUE;
@@ -593,6 +596,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
     gboolean is_dirty;
     gboolean is_destroying;
     gboolean is_infant;
+    const gint gnc_version = gnc_get_svn_version();
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( inst != NULL );
@@ -640,6 +644,10 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
     be_data.be = be;
     be_data.inst = inst;
     be_data.is_ok = TRUE;
+    /* Set/update the application version in the database */
+    if (gnc_sql_get_table_version( be, "Gnucash") != gnc_version )
+	gnc_sql_set_table_version( be, "Gnucash", gnc_version );
+
     qof_object_foreach_backend( GNC_SQL_BACKEND, commit_cb, &be_data );
 
     if ( !be_data.is_known )

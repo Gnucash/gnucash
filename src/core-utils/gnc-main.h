@@ -40,4 +40,6 @@ void gnc_set_extra(gboolean enabled);
 void gnc_set_gconf_path(const gchar *prefix);
 const gchar *gnc_get_gconf_path(void);
 
+gint gnc_get_svn_version(void);
+
 #endif /* GNC_MAIN_H */
