@@ -151,7 +151,7 @@ Either that or contact gnucash-devel@gnucash.org because
 the tarball you downloaded is broken.
 
     ])])
-  AC_CHECK_FILE(${srcdir}/src/gnome-utils/gnc-svninfo.h, [],
+  AC_CHECK_FILE(${srcdir}/src/core-utils/gnc-svninfo.h, [],
     [AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion

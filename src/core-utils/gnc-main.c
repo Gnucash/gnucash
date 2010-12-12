@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include "config.h"
 #include "gnc-main.h"
-#include "gnome-utils/gnc-version.h"
+#include "gnc-version.h"
 
 static gchar *namespace_regexp = NULL;
 static gboolean is_debugging = 0;

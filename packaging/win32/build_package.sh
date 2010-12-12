@@ -47,7 +47,7 @@ rm -rf ${_DIST_UDIR}
 _BUILD_UDIR=`unix_path $BUILD_DIR`
 _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
 PKG_VERSION=`grep PACKAGE_VERSION ${_BUILD_UDIR}/config.h | cut -d" " -f3 | cut -d\" -f2 `
-SVN_REV=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/gnome-utils/gnc-svninfo.h | cut -d" " -f3 | cut -d\" -f2 `
+SVN_REV=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/core-utils/gnc-svninfo.h | cut -d" " -f3 | cut -d\" -f2 `
 
 # Choose the output filename based on our "build_from_tarball" setting
 # Make sure this logic matches the logic in dist.sh!
