@@ -360,16 +360,13 @@ gnc_split_register_set_cell_fractions (SplitRegister *reg, Split *split)
 
     account = xaccSplitGetAccount (split);
 
-    if (account == NULL)
-        account = gnc_split_register_get_default_account (reg);
-
     cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
             SHRS_CELL);
 
     if (account)
         gnc_price_cell_set_fraction (cell, xaccAccountGetCommoditySCU (account));
     else
-        gnc_price_cell_set_fraction (cell, 100000);
+        gnc_price_cell_set_fraction (cell, 1000000);
 }
 
 CellBlock *
