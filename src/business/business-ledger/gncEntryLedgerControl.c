@@ -241,6 +241,71 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
     *p_new_virt_loc = new_virt_loc;
 }
 
+/** Creates a new query that searches for an GncEntry item with
+ * description string equal to the given "desc" argument. The query
+ * will find the single GncEntry with the latest (=newest)
+ * DATE_ENTERED. */
+static QofQuery *new_query_for_entry_desc(GncEntryLedger *reg, const char* desc)
+{
+    QofQuery *query = NULL;
+    QofQueryPredData *predData = NULL;
+    GSList *param_list = NULL;
+    GSList *primary_sort_params = NULL;
+
+    g_assert(reg);
+    g_assert(desc);
+
+    /* The query itself and its book */
+    query = gncQueryCreateFor (GNC_ID_ENTRY);
+    gncQuerySetBook (query, reg->book);
+
+    /* Predicate data: We want to compare one string, namely the given
+     * argument */
+    predData =
+        qof_query_string_predicate (QOF_COMPARE_EQUAL, desc,
+                                    QOF_STRING_MATCH_CASEINSENSITIVE, FALSE);
+
+    /* Search Parameter: We want to query on the ENTRY_DESC column */
+    param_list = qof_query_build_param_list (ENTRY_DESC, NULL);
+
+    /* Register this in the query */
+    qof_query_add_term (query, param_list, predData, QOF_QUERY_FIRST_TERM);
+
+    /* Set the sort order: By DATE_ENTERED, increasing, and returning
+     * only one single resulting item. */
+    primary_sort_params = qof_query_build_param_list(ENTRY_DATE_ENTERED, NULL);
+    qof_query_set_sort_order (query, primary_sort_params, NULL, NULL);
+    qof_query_set_sort_increasing (query, TRUE, TRUE, TRUE);
+
+    qof_query_set_max_results(query, 1);
+
+    return query;
+}
+
+/** Finds the GncEntry with the matching description string as given
+ * in "desc", but searches this in the whole book. */
+static GncEntry*
+find_entry_in_book_by_desc(GncEntryLedger *reg, const char* desc)
+{
+    GncEntry *result = NULL;
+    QofQuery *query = new_query_for_entry_desc(reg, desc);
+    GList *entries = qof_query_run(query);
+
+    /* Do we have a non-empty result? */
+    if (entries)
+    {
+        /* That's the result. */
+        result = (GncEntry*) entries->data;
+        /*g_warning("Found %d GncEntry items", g_list_length (entries));*/
+    }
+
+    qof_query_destroy(query);
+    return result;
+}
+
+/** Finds the GncEntry with the matching description string as given
+ * in "desc", but searches this only in the given entry ledger
+ * (i.e. the currently opened ledger window). */
 static GncEntry*
 gnc_find_entry_in_reg_by_desc(GncEntryLedger *reg, const char* desc)
 {
@@ -402,7 +467,13 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
      * entry to copy the values from.  FIXME: Currently we only use
      * the entries from the current invoice/bill, but it would be
      * better to draw this from a larger set of entries. */
-    auto_entry = gnc_find_entry_in_reg_by_desc(ledger, desc);
+    auto_entry =
+#if 0
+        /* Activate this for book-wide auto-completion of the invoice entries */
+        find_entry_in_book_by_desc(ledger, desc);
+#else
+    gnc_find_entry_in_reg_by_desc(ledger, desc);
+#endif
 
     if (auto_entry == NULL)
         return FALSE;
