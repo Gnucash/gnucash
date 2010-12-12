@@ -32,7 +32,6 @@ EXTRA_DIST = \
   build-solaris.txt \
   generic_objects.txt \
   gnome-hackers.txt \
-  gnc-prices.1.in \
   gnucash.1.in \
   gtkrc-2.0.gnucash \
   tip_of_the_day.list.in
@@ -41,14 +40,6 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnc-prices.1: gnc-prices.1.in Makefile
-	rm -f $@.tmp
-	${SED} < $< > $@.tmp \
-            -e 's:@-VERSION-@:${VERSION}:g' \
-            -e 's:@-DATE-@:$(shell date +'%B %Y'):g'
-	chmod +x $@.tmp
-	mv $@.tmp $@
-
 gnucash.1: gnucash.1.in Makefile
 	rm -f $@.tmp
 	${SED} < $< > $@.tmp \
