@@ -384,7 +384,7 @@ create_children (GNCGeneralSearch *gsl,
                  QofBook          *book)
 {
     GtkListStore *	list_store;
-    QueryNew *	q;
+    QofQuery *	q;
     GtkTreeIter iter;
     GList * list, * it;
     GtkEntryCompletion *completion;
@@ -427,7 +427,7 @@ create_children (GNCGeneralSearch *gsl,
 
     }
 
-    gncQueryDestroy(q);
+    qof_query_destroy(q);
 
     /* Add the GtkEntryCompletion widget */
     completion = gtk_entry_completion_new();

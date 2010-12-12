@@ -66,7 +66,7 @@ main (int argc, char *argv[])
     /* In real life, we would use a query as specified by the user */
     xaccQueryAddDateMatch (q, TRUE, 28, 2, 1982,
                            FALSE, 16, 10, 2010,
-                           QUERY_OR);
+                           QOF_QUERY_OR);
 
     split_list = qof_query_run (q);
 

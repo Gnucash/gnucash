@@ -68,7 +68,7 @@ typedef enum
 struct _employee_select_window
 {
     QofBook *	book;
-    QueryNew *	q;
+    QofQuery *	q;
 };
 
 struct _employee_window
@@ -690,7 +690,7 @@ free_employee_cb (gpointer user_data)
 
     g_return_if_fail (sw);
 
-    gncQueryDestroy (sw->q);
+    qof_query_destroy (sw->q);
     g_free (sw);
 }
 
@@ -699,7 +699,7 @@ gnc_employee_search (GncEmployee *start, QofBook *book)
 {
     GNCIdType type = GNC_EMPLOYEE_MODULE_NAME;
     struct _employee_select_window *sw;
-    QueryNew *q, *q2 = NULL;
+    QofQuery *q, *q2 = NULL;
     static GList *params = NULL;
     static GList *columns = NULL;
     static GNCSearchCallbackButton buttons[] =
@@ -735,15 +735,15 @@ gnc_employee_search (GncEmployee *start, QofBook *book)
     }
 
     /* Build the queries */
-    q = gncQueryCreateFor (type);
-    gncQuerySetBook (q, book);
+    q = qof_query_create_for (type);
+    qof_query_set_book (q, book);
 
 #if 0
     if (start)
     {
-        q2 = gncQueryCopy (q);
-        gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
-                              gncEmployeeGetGUID (start), QUERY_AND);
+        q2 = qof_query_copy (q);
+        qof_query_add_guid_match (q2, g_slist_prepend (NULL, QOF_PARAM_GUID),
+                                  gncEmployeeGetGUID (start), QOF_QUERY_AND);
     }
 #endif
 

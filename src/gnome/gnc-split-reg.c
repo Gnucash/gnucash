@@ -34,7 +34,7 @@
 #include "gnc-split-reg.h"
 
 #include "Account.h"
-#include "QueryNew.h"
+#include "qof.h"
 #include "SX-book.h"
 #include "dialog-account.h"
 #include "dialog-sx-editor.h"
@@ -1612,7 +1612,7 @@ gnc_split_reg_sort( GNCSplitReg *gsr, SortType sort_code )
         g_return_if_fail (FALSE);
     }
 
-    gncQuerySetSortOrder( query, p1, p2, p3 );
+    qof_query_set_sort_order( query, p1, p2, p3 );
     reg = gnc_ledger_display_get_split_register( gsr->ledger );
     gnc_split_register_show_present_divider( reg, show_present_divider );
     gsr->sort_type = sort_code;

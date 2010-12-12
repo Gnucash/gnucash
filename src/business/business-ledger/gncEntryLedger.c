@@ -376,7 +376,7 @@ void gnc_entry_ledger_destroy (GncEntryLedger *ledger)
     gnc_entry_ledger_clear_blank_entry (ledger);
     gnc_entry_ledger_display_fini (ledger);
     gnc_table_destroy (ledger->table);
-    gncQueryDestroy (ledger->query);
+    qof_query_destroy (ledger->query);
     g_free (ledger);
 }
 
@@ -394,27 +394,27 @@ void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
 
     if (!ledger->query && order)
     {
-        ledger->query = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
-        gncQuerySetBook (ledger->query, gncOrderGetBook (order));
-        gncQueryAddGUIDMatch (ledger->query,
-                              g_slist_prepend (g_slist_prepend (NULL,
-                                               QUERY_PARAM_GUID),
-                                               ENTRY_ORDER),
-                              gncOrderGetGUID (order), QUERY_AND);
+        ledger->query = qof_query_create_for (GNC_ENTRY_MODULE_NAME);
+        qof_query_set_book (ledger->query, gncOrderGetBook (order));
+        qof_query_add_guid_match (ledger->query,
+                                  g_slist_prepend (g_slist_prepend (NULL,
+                                          QOF_PARAM_GUID),
+                                          ENTRY_ORDER),
+                                  gncOrderGetGUID (order), QOF_QUERY_AND);
     }
     gnc_entry_ledger_display_refresh (ledger);
 }
 
 static void create_invoice_query (GncEntryLedger *ledger)
 {
-    QueryNew *q, *q1;
+    QofQuery *q, *q1;
     char * type = NULL;
 
     if (!ledger->invoice)
         return;
 
     if (ledger->query)
-        gncQueryDestroy (ledger->query);
+        qof_query_destroy (ledger->query);
 
     /* Match:   (where I-TYPE == Invoice or Bill)
      *
@@ -436,8 +436,8 @@ static void create_invoice_query (GncEntryLedger *ledger)
      */
 
     /* Term 1 */
-    ledger->query = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
-    gncQuerySetBook (ledger->query, gncInvoiceGetBook (ledger->invoice));
+    ledger->query = qof_query_create_for (GNC_ENTRY_MODULE_NAME);
+    qof_query_set_book (ledger->query, gncInvoiceGetBook (ledger->invoice));
 
     /* Term 2 */
     switch (ledger->type)
@@ -458,9 +458,9 @@ static void create_invoice_query (GncEntryLedger *ledger)
         break;
     }
 
-    q = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
-    gncQueryAddGUIDMatch (q, gncQueryBuildParamList (type, QUERY_PARAM_GUID, NULL),
-                          gncInvoiceGetGUID (ledger->invoice), QUERY_OR);
+    q = qof_query_create_for (GNC_ENTRY_MODULE_NAME);
+    qof_query_add_guid_match (q, qof_query_build_param_list (type, QOF_PARAM_GUID, NULL),
+                              gncInvoiceGetGUID (ledger->invoice), QOF_QUERY_OR);
 
     /* Term 3 */
     if (ledger->type == GNCENTRY_INVOICE_ENTRY &&
@@ -469,52 +469,52 @@ static void create_invoice_query (GncEntryLedger *ledger)
 
         const GncGUID *invoice_parent =
             gncOwnerGetGUID (gncInvoiceGetOwner (ledger->invoice));
-        QueryNew *q2 = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
+        QofQuery *q2 = qof_query_create_for (GNC_ENTRY_MODULE_NAME);
 
         /*
          * Entry->BillTo == Invoice->parent OR
          * ( Entry->BillTo == NULL AND Entry->Bill->BillTo == Invoice->parent )
          */
 
-        gncQueryAddGUIDMatch (q2, gncQueryBuildParamList (ENTRY_BILLTO,
-                              QUERY_PARAM_GUID, NULL),
-                              NULL, QUERY_AND);
-        gncQueryAddGUIDMatch (q2, gncQueryBuildParamList (ENTRY_BILL, INVOICE_BILLTO,
-                              QUERY_PARAM_GUID, NULL),
-                              invoice_parent, QUERY_AND);
-        gncQueryAddGUIDMatch (q2, gncQueryBuildParamList (ENTRY_BILLTO,
-                              QUERY_PARAM_GUID, NULL),
-                              invoice_parent, QUERY_OR);
+        qof_query_add_guid_match (q2, qof_query_build_param_list (ENTRY_BILLTO,
+                                  QOF_PARAM_GUID, NULL),
+                                  NULL, QOF_QUERY_AND);
+        qof_query_add_guid_match (q2, qof_query_build_param_list (ENTRY_BILL, INVOICE_BILLTO,
+                                  QOF_PARAM_GUID, NULL),
+                                  invoice_parent, QOF_QUERY_AND);
+        qof_query_add_guid_match (q2, qof_query_build_param_list (ENTRY_BILLTO,
+                                  QOF_PARAM_GUID, NULL),
+                                  invoice_parent, QOF_QUERY_OR);
 
         /* Entry->Billable == TRUE AND Entry->Bill->Is-Posted? == TRUE */
-        gncQueryAddBooleanMatch (q2, gncQueryBuildParamList (ENTRY_BILLABLE, NULL),
-                                 TRUE, QUERY_AND);
-        gncQueryAddBooleanMatch (q2, gncQueryBuildParamList (ENTRY_BILL,
-                                 INVOICE_IS_POSTED, NULL),
-                                 TRUE, QUERY_AND);
+        qof_query_add_boolean_match (q2, qof_query_build_param_list (ENTRY_BILLABLE, NULL),
+                                     TRUE, QOF_QUERY_AND);
+        qof_query_add_boolean_match (q2, qof_query_build_param_list (ENTRY_BILL,
+                                     INVOICE_IS_POSTED, NULL),
+                                     TRUE, QOF_QUERY_AND);
 
         /* Entry->Order->real-parent == Invoice->parent */
-        gncQueryAddGUIDMatch (q2, gncQueryBuildParamList (ENTRY_ORDER, ORDER_OWNER,
-                              OWNER_PARENTG, NULL),
-                              invoice_parent, QUERY_OR);
+        qof_query_add_guid_match (q2, qof_query_build_param_list (ENTRY_ORDER, ORDER_OWNER,
+                                  OWNER_PARENTG, NULL),
+                                  invoice_parent, QOF_QUERY_OR);
 
         /* Entry->Invoice == NULL */
-        gncQueryAddGUIDMatch (q2, gncQueryBuildParamList (ENTRY_INVOICE,
-                              QUERY_PARAM_GUID, NULL),
-                              NULL, QUERY_AND);
+        qof_query_add_guid_match (q2, qof_query_build_param_list (ENTRY_INVOICE,
+                                  QOF_PARAM_GUID, NULL),
+                                  NULL, QOF_QUERY_AND);
 
 
         /* Combine terms 2 and 3 */
-        q1 = gncQueryMerge (q, q2, QUERY_OR);
-        gncQueryDestroy (q);
-        gncQueryDestroy (q2);
+        q1 = qof_query_merge (q, q2, QOF_QUERY_OR);
+        qof_query_destroy (q);
+        qof_query_destroy (q2);
         q = q1;
     }
 
     /* Combine terms 1 and 2 */
-    q1 = gncQueryMerge (ledger->query, q, QUERY_AND);
-    gncQueryDestroy (q);
-    gncQueryDestroy (ledger->query);
+    q1 = qof_query_merge (ledger->query, q, QOF_QUERY_AND);
+    qof_query_destroy (q);
+    qof_query_destroy (ledger->query);
     ledger->query = q1;
 }
 
@@ -882,7 +882,7 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
     return;
 }
 
-QueryNew *
+QofQuery *
 gnc_entry_ledger_get_query (GncEntryLedger *ledger)
 {
     if (!ledger)

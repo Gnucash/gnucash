@@ -29,7 +29,7 @@
 #include "gnc-ui-util.h"
 #include "Query.h"
 #include "QueryCore.h"
-#include "QueryNew.h"
+#include "qof.h"
 #include "QueryObject.h"
 #include "SX-book.h"
 #include "Transaction.h"
@@ -42,13 +42,13 @@
 
 struct _ftd_data
 {
-    QueryNew *		q;
-    QueryNew *		ledger_q;
+    QofQuery *		q;
+    QofQuery *		ledger_q;
     GNCSearchWindow *	sw;
 };
 
 static void
-do_find_cb (QueryNew *query, gpointer user_data, gpointer *result)
+do_find_cb (QofQuery *query, gpointer user_data, gpointer *result)
 {
     struct _ftd_data *ftd = user_data;
     GNCLedgerDisplay *ledger;
@@ -73,7 +73,7 @@ do_find_cb (QueryNew *query, gpointer user_data, gpointer *result)
         gnc_main_window_open_page (NULL, page);
     }
 
-    gncQueryDestroy (ftd->q);
+    qof_query_destroy (ftd->q);
 
     gnc_search_dialog_destroy (ftd->sw);
 }
@@ -95,7 +95,7 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
     GNCIdType type = GNC_ID_SPLIT;
     struct _ftd_data *ftd;
     static GList *params = NULL;
-    QueryNew *start_q, *show_q = NULL;
+    QofQuery *start_q, *show_q = NULL;
 
     /* Build parameter list in reverse order */
     if (params == NULL)
@@ -105,7 +105,7 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
                                            type, SPLIT_TRANS, TRANS_SPLITLIST,
                                            SPLIT_ACCOUNT_GUID, NULL);
         params = gnc_search_param_prepend (params, N_("Account"), GNC_ID_ACCOUNT,
-                                           type, SPLIT_ACCOUNT, QUERY_PARAM_GUID,
+                                           type, SPLIT_ACCOUNT, QOF_PARAM_GUID,
                                            NULL);
         params = gnc_search_param_prepend (params, N_("Balanced"), NULL,
                                            type, SPLIT_TRANS, TRANS_IS_BALANCED,
@@ -139,12 +139,12 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
     if (orig_ledg)
     {
         ftd->ledger_q = gnc_ledger_display_get_query (orig_ledg);
-        start_q = show_q = gncQueryCopy (ftd->ledger_q);
+        start_q = show_q = qof_query_copy (ftd->ledger_q);
     }
     else
     {
-        start_q = gncQueryCreate ();
-        gncQuerySetBook (start_q, gnc_get_current_book ());
+        start_q = qof_query_create ();
+        qof_query_set_book (start_q, gnc_get_current_book ());
 
         /* In lieu of not "mis-using" some portion of the infrastructure by writing
          * a bunch of new code, we just filter out the accounts of the template
@@ -164,7 +164,7 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
 
             tRoot = gnc_book_get_template_root( gnc_get_current_book() );
             al = gnc_account_get_descendants( tRoot );
-            xaccQueryAddAccountMatch( start_q, al, GUID_MATCH_NONE, QUERY_AND );
+            xaccQueryAddAccountMatch( start_q, al, GUID_MATCH_NONE, QOF_QUERY_AND );
             g_list_free (al);
             al = NULL;
             tRoot = NULL;

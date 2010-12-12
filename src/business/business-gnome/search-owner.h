@@ -23,7 +23,7 @@
 #define _GNCSEARCH_OWNER_H
 
 #include "search-core-type.h"
-#include "QueryNew.h"
+#include "qof.h"
 
 #define GNC_TYPE_SEARCH_OWNER (gnc_search_owner_get_type ())
 #define GNCSEARCH_OWNER(obj)	GTK_CHECK_CAST (obj, gnc_search_owner_get_type (), GNCSearchOwner)

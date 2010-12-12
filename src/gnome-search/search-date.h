@@ -23,7 +23,7 @@
 #define _GNCSEARCH_DATE_H
 
 #include "search-core-type.h"
-#include "QueryNew.h"
+#include "qof.h"
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_DATE		(gnc_search_date_get_type ())

@@ -23,7 +23,7 @@
 #define _GNCSEARCH_ACCOUNT_H
 
 #include "search-core-type.h"
-#include "QueryNew.h"
+#include "qof.h"
 
 #define GNC_TYPE_SEARCH_ACCOUNT 	(gnc_search_account_get_type ())
 #define GNCSEARCH_ACCOUNT(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccount)

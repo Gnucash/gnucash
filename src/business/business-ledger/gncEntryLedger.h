@@ -24,7 +24,7 @@
 #ifndef GNC_ENTRY_LEDGER_H
 #define GNC_ENTRY_LEDGER_H
 
-#include "QueryNew.h"
+#include "qof.h"
 #include "gncEntry.h"
 #include "gncOrder.h"
 #include "table-allgui.h"
@@ -138,7 +138,7 @@ gboolean gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger,
 void gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger);
 void gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger);
 
-QueryNew * gnc_entry_ledger_get_query (GncEntryLedger *ledger);
+QofQuery * gnc_entry_ledger_get_query (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string);
 

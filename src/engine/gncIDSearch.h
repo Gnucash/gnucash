@@ -33,7 +33,7 @@
 #include "gncBusiness.h"
 // query
 #include "QueryCore.h"
-#include "QueryNew.h"
+#include "qof.h"
 #include "GNCId.h"
 
 

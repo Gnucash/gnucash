@@ -31,7 +31,7 @@
 #include "gnc-query-list.h"
 #include "search-param.h"
 #include "QueryCore.h"
-#include "QueryNew.h"
+#include "qof.h"
 #include "QueryObject.h"
 
 /* Signal codes */
@@ -129,7 +129,7 @@ gnc_query_list_construct (GNCQueryList *list, GList *param_list, Query *query)
     g_return_if_fail(IS_GNC_QUERY_LIST(list));
 
     /* more configuration */
-    list->query = gncQueryCopy(query);
+    list->query = qof_query_copy(query);
     list->column_params = param_list;
 
     /* cache the function to get the guid of this query type */
@@ -170,8 +170,8 @@ void gnc_query_list_reset_query (GNCQueryList *list, Query *query)
     g_return_if_fail(query);
     g_return_if_fail (IS_GNC_QUERY_LIST(list));
 
-    gncQueryDestroy(list->query);
-    list->query = gncQueryCopy(query);
+    qof_query_destroy(list->query);
+    list->query = qof_query_copy(query);
     gnc_query_list_set_query_sort(list, TRUE);
 }
 
@@ -716,7 +716,7 @@ gnc_query_list_set_query_sort (GNCQueryList *list, gboolean new_column)
 
         p1 = gnc_search_param_get_param_path(param);
         p2 = g_slist_prepend(NULL, QUERY_DEFAULT_SORT);
-        gncQuerySetSortOrder (list->query, p1, p2, NULL);
+        qof_query_set_sort_order (list->query, p1, p2, NULL);
     }
 
     qof_query_set_sort_increasing (list->query,
@@ -794,7 +794,7 @@ gnc_query_list_fill(GNCQueryList *list)
     gnc_gui_component_clear_watches (priv->component_id);
 
     /* Reverse the list now because 'append()' takes too long */
-    entries = gncQueryRun(list->query);
+    entries = qof_query_run(list->query);
 
     for (item = entries; item; item = item->next)
     {

@@ -25,7 +25,6 @@ SET (libgncmod_engine_HEADERS
   SX-book.h
   SX-ttinfo.h
   Query.h
-  QueryNew.h
   QueryObject.h
   QueryCore.h
   Scrub.h

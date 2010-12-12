@@ -43,7 +43,7 @@
 
 #include "gnc-ui-util.h"
 #include "Query.h"
-#include "QueryNew.h"
+#include "qof.h"
 #include "gnc-ledger-display.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-main-window.h"
@@ -1005,9 +1005,9 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
     qof_query_set_book(book_query, gnc_get_current_book());
     for (guid_iter = created_txn_guids; guid_iter != NULL; guid_iter = guid_iter->next)
     {
-        xaccQueryAddGUIDMatch(guid_query, (GncGUID*)guid_iter->data, GNC_ID_TRANS, QUERY_OR);
+        xaccQueryAddGUIDMatch(guid_query, (GncGUID*)guid_iter->data, GNC_ID_TRANS, QOF_QUERY_OR);
     }
-    query = qof_query_merge(book_query, guid_query, QUERY_AND);
+    query = qof_query_merge(book_query, guid_query, QOF_QUERY_AND);
 
     // inspired by dialog-find-transactions:do_find_cb:
     ledger = gnc_ledger_display_query(query, SEARCH_LEDGER, REG_STYLE_JOURNAL);

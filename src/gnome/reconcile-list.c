@@ -29,7 +29,7 @@
 
 #include "gnc-date.h"
 #include "QueryCore.h"
-#include "QueryNew.h"
+#include "qof.h"
 #include "Transaction.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
@@ -151,7 +151,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type,
     /* match the account */
     accounts = g_list_prepend (accounts, account);
 
-    xaccQueryAddAccountMatch (query, accounts, GUID_MATCH_ANY, QUERY_AND);
+    xaccQueryAddAccountMatch (query, accounts, GUID_MATCH_ANY, QOF_QUERY_AND);
 
     g_list_free (accounts);
 
@@ -159,14 +159,14 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type,
     if (type == RECLIST_CREDIT)
         xaccQueryAddValueMatch(query, gnc_numeric_zero (),
                                NUMERIC_MATCH_CREDIT,
-                               COMPARE_GTE, QUERY_AND);
+                               COMPARE_GTE, QOF_QUERY_AND);
     else
         xaccQueryAddValueMatch(query, gnc_numeric_zero (),
                                NUMERIC_MATCH_DEBIT,
-                               COMPARE_GTE, QUERY_AND);
+                               COMPARE_GTE, QOF_QUERY_AND);
 
     /* limit the matches only to Cleared and Non-reconciled splits */
-    xaccQueryAddClearedMatch(query, CLEARED_NO | CLEARED_CLEARED, QUERY_AND);
+    xaccQueryAddClearedMatch(query, CLEARED_NO | CLEARED_CLEARED, QOF_QUERY_AND);
 
     /* initialize the QueryList */
     gnc_reconcile_list_construct (list, query);

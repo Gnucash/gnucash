@@ -256,8 +256,8 @@ static QofQuery *new_query_for_entry_desc(GncEntryLedger *reg, const char* desc)
     g_assert(desc);
 
     /* The query itself and its book */
-    query = gncQueryCreateFor (GNC_ID_ENTRY);
-    gncQuerySetBook (query, reg->book);
+    query = qof_query_create_for (GNC_ID_ENTRY);
+    qof_query_set_book (query, reg->book);
 
     /* Predicate data: We want to compare one string, namely the given
      * argument */

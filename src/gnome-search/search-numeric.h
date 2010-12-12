@@ -24,7 +24,7 @@
 
 #include "search-core-type.h"
 #include "qof.h"
-#include "QueryNew.h"
+#include "qof.h"
 
 #define GNC_TYPE_SEARCH_NUMERIC		(gnc_search_numeric_get_type ())
 #define GNCSEARCH_NUMERIC(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumeric)

@@ -28,7 +28,7 @@
 #include "Account.h"
 #include "Query.h"
 #include "QueryCore.h"
-#include "QueryNew.h"
+#include "qof.h"
 #include "SX-book.h"
 #include "Transaction.h"
 #include "gnc-component-manager.h"
@@ -429,7 +429,7 @@ gnc_ledger_display_gl (void)
 
         tRoot = gnc_book_get_template_root( gnc_get_current_book() );
         al = gnc_account_get_descendants( tRoot );
-        xaccQueryAddAccountMatch( query, al, GUID_MATCH_NONE, QUERY_AND );
+        xaccQueryAddAccountMatch( query, al, GUID_MATCH_NONE, QOF_QUERY_AND );
         g_list_free (al);
         al = NULL;
         tRoot = NULL;
@@ -441,7 +441,7 @@ gnc_ledger_display_gl (void)
     xaccQueryAddDateMatchTT (query,
                              TRUE, start,
                              FALSE, 0,
-                             QUERY_AND);
+                             QOF_QUERY_AND);
 
     ld = gnc_ledger_display_internal (NULL, query, LD_GL, GENERAL_LEDGER,
                                       REG_STYLE_JOURNAL, FALSE, FALSE);
@@ -482,7 +482,7 @@ gnc_ledger_display_template_gl (char *id)
         root = gnc_book_get_template_root (book);
         acct = gnc_account_lookup_by_name(root, id);
         g_assert( acct );
-        xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
+        xaccQueryAddSingleAccountMatch (q, acct, QOF_QUERY_AND);
     }
 
     ld = gnc_ledger_display_internal (NULL, q, LD_GL,
@@ -665,7 +665,7 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
     accounts = g_list_prepend (accounts, leader);
 
     xaccQueryAddAccountMatch (ld->query, accounts,
-                              GUID_MATCH_ANY, QUERY_AND);
+                              GUID_MATCH_ANY, QOF_QUERY_AND);
 
     g_list_free (accounts);
 }

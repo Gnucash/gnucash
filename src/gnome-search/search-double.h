@@ -23,7 +23,7 @@
 #define _GNCSEARCH_DOUBLE_H
 
 #include "search-core-type.h"
-#include "QueryNew.h"
+#include "qof.h"
 
 #define GNC_TYPE_SEARCH_DOUBLE		(gnc_search_double_get_type ())
 #define GNCSEARCH_DOUBLE(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_DOUBLE, GNCSearchDouble)

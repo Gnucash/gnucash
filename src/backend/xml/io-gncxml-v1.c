@@ -2363,7 +2363,7 @@ query_restore_end_handler(gpointer data_for_children,
     g_return_val_if_fail(qand, FALSE);
 
     /* append the and terms by or'ing them in ... */
-    qret = qof_query_merge (q, qand, QUERY_OR);
+    qret = qof_query_merge (q, qand, QOF_QUERY_OR);
     if (!qret)
     {
         qof_query_destroy(qand);
@@ -2509,7 +2509,7 @@ qrestore_genericpred_end_handler(gpointer data_for_children,
     g_return_val_if_fail(q, FALSE);
     g_return_val_if_fail(dp, FALSE);
 
-    xaccQueryAddPredicate (q, dp, QUERY_AND);
+    xaccQueryAddPredicate (q, dp, QOF_QUERY_AND);
 
     return(TRUE);
 }

@@ -64,7 +64,7 @@ struct _job_select_window
 {
     QofBook *	book;
     GncOwner *	owner;
-    QueryNew *	q;
+    QofQuery *	q;
     GncOwner	owner_def;
 };
 
@@ -519,14 +519,14 @@ free_userdata_cb (gpointer user_data)
 
     g_return_if_fail (sw);
 
-    gncQueryDestroy (sw->q);
+    qof_query_destroy (sw->q);
     g_free (sw);
 }
 
 GNCSearchWindow *
 gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
 {
-    QueryNew *q, *q2 = NULL;
+    QofQuery *q, *q2 = NULL;
     GNCIdType type = GNC_JOB_MODULE_NAME;
     struct _job_select_window *sw;
     static GList *params = NULL;
@@ -570,8 +570,8 @@ gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
     }
 
     /* Build the queries */
-    q = gncQueryCreateFor (type);
-    gncQuerySetBook (q, book);
+    q = qof_query_create_for (type);
+    qof_query_set_book (q, book);
 
     /* If we have a start job but, for some reason, not an owner -- grab
      * the owner from the starting job.
@@ -584,22 +584,22 @@ gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
      */
     if (owner && gncOwnerGetGUID (owner))
     {
-        gncQueryAddGUIDMatch (q, g_slist_prepend
-                              (g_slist_prepend (NULL, QUERY_PARAM_GUID),
-                               JOB_OWNER),
-                              gncOwnerGetGUID (owner), QUERY_AND);
+        qof_query_add_guid_match (q, g_slist_prepend
+                                  (g_slist_prepend (NULL, QOF_PARAM_GUID),
+                                   JOB_OWNER),
+                                  gncOwnerGetGUID (owner), QOF_QUERY_AND);
 
-        q2 = gncQueryCopy (q);
+        q2 = qof_query_copy (q);
     }
 
 #if 0
     if (start)
     {
         if (q2 == NULL)
-            q2 = gncQueryCopy (q);
+            q2 = qof_query_copy (q);
 
-        gncQueryAddGUIDMatch (q2, g_slist_prepend (NULL, QUERY_PARAM_GUID),
-                              gncJobGetGUID (start), QUERY_AND);
+        qof_query_add_guid_match (q2, g_slist_prepend (NULL, QOF_PARAM_GUID),
+                                  gncJobGetGUID (start), QOF_QUERY_AND);
     }
 #endif
 

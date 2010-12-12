@@ -23,7 +23,7 @@
 #define _GNCSEARCH_BOOLEAN_H
 
 #include "search-core-type.h"
-#include "QueryNew.h"
+#include "qof.h"
 
 #define GNC_TYPE_SEARCH_BOOLEAN		(gnc_search_boolean_get_type ())
 #define GNCSEARCH_BOOLEAN(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_BOOLEAN, GNCSearchBoolean)

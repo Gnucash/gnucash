@@ -25,7 +25,7 @@
 #define _GNC_DIALOG_SEARCH_H
 
 #include "GNCId.h"
-#include "QueryNew.h"
+#include "qof.h"
 
 typedef struct _GNCSearchWindow GNCSearchWindow;
 
@@ -42,7 +42,7 @@ typedef struct _GNCSearchWindow GNCSearchWindow;
  * and the callback may change the value.
  */
 typedef void (*GNCSearchCallback) (gpointer *obj_p, gpointer user_data);
-typedef void (*GNCSearchResultCB) (QueryNew *query, gpointer user_data,
+typedef void (*GNCSearchResultCB) (QofQuery *query, gpointer user_data,
                                    gpointer *result);
 
 /*
@@ -93,7 +93,7 @@ GNCSearchWindow *
 gnc_search_dialog_create (GNCIdTypeConst obj_type, const gchar *title,
                           GList *param_list,
                           GList *display_list,
-                          QueryNew *start_query, QueryNew *show_start_query,
+                          QofQuery *start_query, QofQuery *show_start_query,
                           GNCSearchCallbackButton *callbacks,
                           GNCSearchResultCB result_callback,
                           GNCSearchNewItemCB new_item_cb,

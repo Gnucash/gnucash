@@ -70,7 +70,7 @@
 #include "gnucash-sheet.h"
 #include "lot-viewer.h"
 #include "Scrub.h"
-#include "QueryNew.h"
+#include "qof.h"
 #include "window-reconcile.h"
 #include "window-autoclear.h"
 #include "window-report.h"
@@ -1497,16 +1497,16 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page)
     }
 
     /* Remove the old status match */
-    param_list = gncQueryBuildParamList (SPLIT_RECONCILE, NULL);
+    param_list = qof_query_build_param_list (SPLIT_RECONCILE, NULL);
     if (param_list)
     {
-        gncQueryPurgeTerms (query, param_list);
+        qof_query_purge_terms (query, param_list);
         g_slist_free(param_list);
     }
 
     /* Install the new status match */
     if (priv->fd.cleared_match != CLEARED_ALL)
-        xaccQueryAddClearedMatch(query, priv->fd.cleared_match, QUERY_AND);
+        xaccQueryAddClearedMatch(query, priv->fd.cleared_match, QOF_QUERY_AND);
 
     gnc_ledger_display_refresh (priv->ledger);
     LEAVE(" ");
@@ -1548,10 +1548,10 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page)
     }
 
     /* Delete any existing old date spec. */
-    param_list = gncQueryBuildParamList(SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+    param_list = qof_query_build_param_list(SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
     if (param_list)
     {
-        gncQueryPurgeTerms (query, param_list);
+        qof_query_purge_terms (query, param_list);
         g_slist_free(param_list);
     }
 
@@ -1561,7 +1561,7 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page)
         xaccQueryAddDateMatchTT(query,
                                 priv->fd.start_time != 0, priv->fd.start_time,
                                 priv->fd.end_time != 0,   priv->fd.end_time,
-                                QUERY_AND);
+                                QOF_QUERY_AND);
     }
 
     gnc_ledger_display_refresh (priv->ledger);
@@ -3103,7 +3103,7 @@ gnc_plugin_page_register_cmd_transaction_report (GtkAction *action,
     qof_query_set_book (query, gnc_get_current_book ());
 
     xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split),
-                           GNC_ID_SPLIT, QUERY_AND);
+                           GNC_ID_SPLIT, QOF_QUERY_AND);
 
     window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
     id = report_helper (priv->ledger, split, query);
