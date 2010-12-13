@@ -58,7 +58,7 @@ dql_clear_booklist (DialogQueryList *dql)
     g_return_if_fail (dql);
 
     for (node = dql->books; node; node = node->next)
-        xaccGUIDFree ((GncGUID*)node->data);
+        guid_free ((GncGUID*)node->data);
     g_list_free (dql->books);
     dql->books = NULL;
 }
@@ -73,7 +73,7 @@ dql_build_booklist (DialogQueryList *dql, Query *q)
     for (node = qof_query_get_books(q); node; node = node->next)
     {
         QofBook *book = node->data;
-        GncGUID *guid = xaccGUIDMalloc();
+        GncGUID *guid = guid_malloc();
         *guid = *(qof_book_get_guid(book));
         dql->books = g_list_prepend(dql->books, guid);
     }

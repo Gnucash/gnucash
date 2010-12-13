@@ -419,7 +419,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
             break;
         default:
-            ledger->blank_entry_guid = *xaccGUIDNULL ();
+            ledger->blank_entry_guid = *guid_null ();
             break;
         }
         ledger->blank_entry_edited = FALSE;

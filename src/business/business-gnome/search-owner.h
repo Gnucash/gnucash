@@ -37,7 +37,7 @@ struct _GNCSearchOwner
 {
     GNCSearchCoreType parent;
 
-    guid_match_t	how;
+    QofGuidMatch	how;
 };
 
 struct _GNCSearchOwnerClass

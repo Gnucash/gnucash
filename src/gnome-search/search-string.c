@@ -338,8 +338,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
 static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchString *ss = (GNCSearchString *)fe;
-    query_compare_t how;
-    string_match_t options = STRING_MATCH_NORMAL;
+    QofQueryCompare how;
+    QofStringMatch options = QOF_STRING_MATCH_NORMAL;
     gboolean is_regex = FALSE;
 
     g_return_val_if_fail (ss, NULL);
@@ -351,13 +351,13 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
         is_regex = TRUE;
         /* FALLTHROUGH */
     case SEARCH_STRING_CONTAINS:
-        how = COMPARE_EQUAL;
+        how = QOF_COMPARE_EQUAL;
         break;
     case SEARCH_STRING_NOT_MATCHES_REGEX:
         is_regex = TRUE;
         /* FALLTHROUGH */
     case SEARCH_STRING_NOT_CONTAINS:
-        how = COMPARE_NEQ;
+        how = QOF_COMPARE_NEQ;
         break;
     default:
         g_warning ("invalid string choice: %d", ss->how);
@@ -365,9 +365,9 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
     }
 
     if (ss->ign_case)
-        options = STRING_MATCH_CASEINSENSITIVE;
+        options = QOF_STRING_MATCH_CASEINSENSITIVE;
 
-    return gncQueryStringPredicate (how, ss->value, options, is_regex);
+    return qof_query_string_predicate (how, ss->value, options, is_regex);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)

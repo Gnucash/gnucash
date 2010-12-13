@@ -39,9 +39,9 @@ struct _GNCSearchNumeric
     GNCSearchCoreType parent;
     struct _GNCSearchNumericPrivate *priv;
 
-    query_compare_t	how;
+    QofQueryCompare	how;
     gnc_numeric		value;
-    numeric_match_t	option;
+    QofNumericMatch	option;
 };
 
 struct _GNCSearchNumericClass
@@ -59,8 +59,8 @@ GNCSearchNumeric	*gnc_search_numeric_debcred_new (void);
 
 /* methods */
 void	gnc_search_numeric_set_value (GNCSearchNumeric *fi, gnc_numeric val);
-void	gnc_search_numeric_set_how (GNCSearchNumeric *fi, query_compare_t how);
-void	gnc_search_numeric_set_option (GNCSearchNumeric *fi, numeric_match_t option);
+void	gnc_search_numeric_set_how (GNCSearchNumeric *fi, QofQueryCompare how);
+void	gnc_search_numeric_set_option (GNCSearchNumeric *fi, QofNumericMatch option);
 
 #endif /* ! _GNCSEARCH_NUMERIC_H */
 

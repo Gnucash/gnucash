@@ -255,7 +255,7 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
             gnc_ui_to_employee (ew, employee);
         }
         ew->created_employee = employee;
-        ew->employee_guid = *xaccGUIDNULL ();
+        ew->employee_guid = *guid_null ();
     }
 
     gnc_close_gui_component (ew->component_id);
@@ -287,7 +287,7 @@ gnc_employee_window_destroy_cb (GtkWidget *widget, gpointer data)
     {
         gncEmployeeBeginEdit (employee);
         gncEmployeeDestroy (employee);
-        ew->employee_guid = *xaccGUIDNULL ();
+        ew->employee_guid = *guid_null ();
     }
 
     gnc_unregister_gui_component (ew->component_id);
@@ -697,7 +697,7 @@ free_employee_cb (gpointer user_data)
 GNCSearchWindow *
 gnc_employee_search (GncEmployee *start, QofBook *book)
 {
-    GNCIdType type = GNC_EMPLOYEE_MODULE_NAME;
+    QofIdType type = GNC_EMPLOYEE_MODULE_NAME;
     struct _employee_select_window *sw;
     QofQuery *q, *q2 = NULL;
     static GList *params = NULL;

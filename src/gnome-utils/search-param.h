@@ -63,12 +63,12 @@ GNCSearchParam *	gnc_search_param_clone (GNCSearchParam *param);
  * compute the parameter type and the converter functions.
  */
 void			gnc_search_param_set_param_path (GNCSearchParam *param,
-        GNCIdTypeConst search_type,
+        QofIdTypeConst search_type,
         GSList *param_path);
 
 /* List is property of the caller */
 GSList *		gnc_search_param_get_param_path (GNCSearchParam *param);
-GNCIdTypeConst		gnc_search_param_get_param_type (GNCSearchParam *param);
+QofIdTypeConst		gnc_search_param_get_param_type (GNCSearchParam *param);
 void			gnc_search_param_set_title (GNCSearchParam *param,
         const char *title);
 void			gnc_search_param_set_justify (GNCSearchParam *param,
@@ -80,7 +80,7 @@ void			gnc_search_param_set_non_resizeable (GNCSearchParam *param,
 gboolean		gnc_search_param_type_match (GNCSearchParam *a,
         GNCSearchParam *b);
 
-/* Return the list of QueryAccess functions for this parameter.  This list
+/* Return the list of QofAccessFunc functions for this parameter.  This list
  * is owned by the param object -- users should not change it */
 GSList *		gnc_search_param_get_converters (GNCSearchParam *param);
 
@@ -91,7 +91,7 @@ GSList *		gnc_search_param_get_converters (GNCSearchParam *param);
  * don't match types properly.
  */
 void			gnc_search_param_override_param_type (GNCSearchParam *param,
-        GNCIdTypeConst param_type);
+        QofIdTypeConst param_type);
 
 
 /*************************************************************
@@ -100,15 +100,15 @@ void			gnc_search_param_override_param_type (GNCSearchParam *param,
 
 /* Create a paramter and prepend it to a GSList */
 GList *			gnc_search_param_prepend (GList *list, char const *title,
-        GNCIdTypeConst type_override,
-        GNCIdTypeConst search_type,
+        QofIdTypeConst type_override,
+        QofIdTypeConst search_type,
         const char *param, ...);
 
 
 GList *			gnc_search_param_prepend_with_justify (GList *list, char const *title,
         GtkJustification justify,
-        GNCIdTypeConst type_override,
-        GNCIdTypeConst search_type,
+        QofIdTypeConst type_override,
+        QofIdTypeConst search_type,
         const char *param, ...);
 
 /* set a lookup function for this parameter (in lieu of setting the
@@ -119,7 +119,7 @@ GList *			gnc_search_param_prepend_with_justify (GList *list, char const *title,
  */
 typedef gpointer (*GNCSearchParamFcn)(gpointer object, gpointer arg);
 void		gnc_search_param_set_param_fcn (GNCSearchParam *param,
-        GNCIdTypeConst param_type,
+        QofIdTypeConst param_type,
         GNCSearchParamFcn fcn,
         gpointer arg);
 

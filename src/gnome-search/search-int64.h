@@ -37,7 +37,7 @@ struct _GNCSearchInt64
 {
     GNCSearchCoreType parent;
 
-    query_compare_t	how;
+    QofQueryCompare	how;
     gint64		value;
 };
 
@@ -55,7 +55,7 @@ GNCSearchInt64	*gnc_search_int64_new	(void);
 
 /* methods */
 void	gnc_search_int64_set_value (GNCSearchInt64 *fi, gint64 val);
-void	gnc_search_int64_set_how (GNCSearchInt64 *fi, query_compare_t how);
+void	gnc_search_int64_set_how (GNCSearchInt64 *fi, QofQueryCompare how);
 
 #endif /* ! _GNCSEARCH_INT64_H */
 

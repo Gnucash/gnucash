@@ -112,7 +112,7 @@ gnc_search_account_class_init (GNCSearchAccountClass *class)
 static void
 gnc_search_account_init (GNCSearchAccount *o)
 {
-    o->how = GUID_MATCH_ANY;
+    o->how = QOF_GUID_MATCH_ANY;
 }
 
 static void
@@ -154,7 +154,7 @@ gnc_search_account_matchall_new (void)
     o = g_object_new(GNC_TYPE_SEARCH_ACCOUNT, NULL);
     priv = _PRIVATE(o);
     priv->match_all = TRUE;
-    o->how = GUID_MATCH_ALL;
+    o->how = QOF_GUID_MATCH_ALL;
     return o;
 }
 
@@ -193,14 +193,14 @@ make_menu (GNCSearchCoreType *fe)
     priv = _PRIVATE(fi);
     if (priv->match_all)
     {
-        gnc_combo_box_search_add(combo, _("matches all accounts"), GUID_MATCH_ALL);
-        initial = GUID_MATCH_ALL;
+        gnc_combo_box_search_add(combo, _("matches all accounts"), QOF_GUID_MATCH_ALL);
+        initial = QOF_GUID_MATCH_ALL;
     }
     else
     {
-        gnc_combo_box_search_add(combo, _("matches any account"), GUID_MATCH_ANY);
-        gnc_combo_box_search_add(combo, _("matches no accounts"), GUID_MATCH_NONE);
-        initial = GUID_MATCH_ANY;
+        gnc_combo_box_search_add(combo, _("matches any account"), QOF_GUID_MATCH_ANY);
+        gnc_combo_box_search_add(combo, _("matches no accounts"), QOF_GUID_MATCH_NONE);
+        initial = QOF_GUID_MATCH_ANY;
     }
 
     gnc_combo_box_search_changed(combo, &fi->how);
@@ -334,7 +334,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
     }
     l = g_list_reverse (l);
 
-    return gncQueryGUIDPredicate (fi->how, l);
+    return qof_query_guid_predicate (fi->how, l);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)

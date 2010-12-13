@@ -67,7 +67,7 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
             if (ledger->blank_entry_edited)
             {
                 ledger->last_date_entered = gncEntryGetDate (entry);
-                ledger->blank_entry_guid = *xaccGUIDNULL ();
+                ledger->blank_entry_guid = *guid_null ();
                 ledger->blank_entry_edited = FALSE;
                 blank_entry = NULL;
             }
@@ -117,7 +117,7 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
     {
         if (do_commit)
         {
-            ledger->blank_entry_guid = *xaccGUIDNULL ();
+            ledger->blank_entry_guid = *guid_null ();
             blank_entry = NULL;
             ledger->last_date_entered = gncEntryGetDate (entry);
         }

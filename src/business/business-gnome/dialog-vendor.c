@@ -239,7 +239,7 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
             gnc_ui_to_vendor (vw, vendor);
         }
         vw->created_vendor = vendor;
-        vw->vendor_guid = *xaccGUIDNULL ();
+        vw->vendor_guid = *guid_null ();
     }
 
     gnc_close_gui_component (vw->component_id);
@@ -271,7 +271,7 @@ gnc_vendor_window_destroy_cb (GtkWidget *widget, gpointer data)
     {
         gncVendorBeginEdit (vendor);
         gncVendorDestroy (vendor);
-        vw->vendor_guid = *xaccGUIDNULL ();
+        vw->vendor_guid = *guid_null ();
     }
 
     gnc_unregister_gui_component (vw->component_id);
@@ -652,7 +652,7 @@ free_vendor_cb (gpointer user_data)
 GNCSearchWindow *
 gnc_vendor_search (GncVendor *start, QofBook *book)
 {
-    GNCIdType type = GNC_VENDOR_MODULE_NAME;
+    QofIdType type = GNC_VENDOR_MODULE_NAME;
     struct _vendor_select_window *sw;
     QofQuery *q, *q2 = NULL;
     static GList *params = NULL;

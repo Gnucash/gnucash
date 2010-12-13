@@ -32,7 +32,7 @@
 
 typedef struct
 {
-    GNCIdType entity_type;
+    QofIdType entity_type;
     QofEventId event_mask;
 } EntityTypeEventInfo;
 
@@ -143,7 +143,7 @@ destroy_event_hash_helper (gpointer key, gpointer value, gpointer user_data)
     GncGUID *guid = key;
     EventInfo *ei = value;
 
-    xaccGUIDFree (guid);
+    guid_free (guid);
     g_free (ei);
 
     return TRUE;
@@ -199,7 +199,7 @@ add_event (ComponentEventInfo *cei, const GncGUID *entity,
         if (g_hash_table_lookup_extended (hash, entity, &key, &value))
         {
             g_hash_table_remove (hash, entity);
-            xaccGUIDFree (key);
+            guid_free (key);
             g_free (value);
         }
     }
@@ -212,7 +212,7 @@ add_event (ComponentEventInfo *cei, const GncGUID *entity,
         {
             GncGUID *key;
 
-            key = xaccGUIDMalloc ();
+            key = guid_malloc ();
             *key = *entity;
 
             ei = g_new (EventInfo, 1);
@@ -229,7 +229,7 @@ add_event (ComponentEventInfo *cei, const GncGUID *entity,
 }
 
 static void
-add_event_type (ComponentEventInfo *cei, GNCIdTypeConst entity_type,
+add_event_type (ComponentEventInfo *cei, QofIdTypeConst entity_type,
                 QofEventId event_mask, gboolean or_in)
 {
     QofEventId *mask;
@@ -476,7 +476,7 @@ gnc_gui_component_watch_entity_direct (gint component_id,
 
 void
 gnc_gui_component_watch_entity_type (gint component_id,
-                                     GNCIdTypeConst entity_type,
+                                     QofIdTypeConst entity_type,
                                      QofEventId event_mask)
 {
     ComponentInfo *ci;
@@ -606,7 +606,7 @@ static void
 match_type_helper (gpointer key, gpointer value, gpointer user_data)
 {
     ComponentEventInfo *cei = user_data;
-    GNCIdType id_type = key;
+    QofIdType id_type = key;
     QofEventId * et = value;
     QofEventId * et_2;
 

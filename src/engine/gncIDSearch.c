@@ -23,7 +23,7 @@
 
 #include "gncIDSearch.h"
 
-static void * search(QofBook * book, const gchar *id, void * object, GNCIdType type);
+static void * search(QofBook * book, const gchar *id, void * object, QofIdType type);
 /***********************************************************************
  * Search the book for a Customer/Invoice/Bill with the same ID.
  * If it exists return a valid object, if not then returns NULL.
@@ -35,7 +35,7 @@ GncCustomer *
 gnc_search_customer_on_id (QofBook * book, const gchar *id)
 {
     GncCustomer *customer = NULL;
-    GNCIdType type = GNC_CUSTOMER_MODULE_NAME;
+    QofIdType type = GNC_CUSTOMER_MODULE_NAME;
     customer = (GncCustomer*)search(book, id, customer, type);
     return customer;
 }
@@ -44,7 +44,7 @@ GncInvoice *
 gnc_search_invoice_on_id (QofBook * book, const gchar *id)
 {
     GncInvoice *invoice = NULL;
-    GNCIdType type = GNC_INVOICE_MODULE_NAME;
+    QofIdType type = GNC_INVOICE_MODULE_NAME;
     invoice = (GncInvoice*)search(book, id, invoice, type);
     return invoice;
 }
@@ -54,7 +54,7 @@ GncInvoice *
 gnc_search_bill_on_id (QofBook * book, const gchar *id)
 {
     GncInvoice *bill =  NULL;
-    GNCIdType type = GNC_INVOICE_MODULE_NAME;
+    QofIdType type = GNC_INVOICE_MODULE_NAME;
     bill = (GncInvoice*)search(book, id, bill, type);
     return bill;
 }
@@ -63,7 +63,7 @@ GncVendor *
 gnc_search_vendor_on_id (QofBook * book, const gchar *id)
 {
     GncVendor *vendor =  NULL;
-    GNCIdType type = GNC_VENDOR_MODULE_NAME;
+    QofIdType type = GNC_VENDOR_MODULE_NAME;
     vendor = (GncVendor*)search(book, id, vendor, type);
     return vendor;
 }
@@ -73,7 +73,7 @@ gnc_search_vendor_on_id (QofBook * book, const gchar *id)
  * Generic search called after setting up stuff
  * DO NOT call directly but type tests should fail anyway
  ****************************************************************/
-static void * search(QofBook * book, const gchar *id, void * object, GNCIdType type)
+static void * search(QofBook * book, const gchar *id, void * object, QofIdType type)
 {
     void *c;
     GList *result;
@@ -88,7 +88,7 @@ static void * search(QofBook * book, const gchar *id, void * object, GNCIdType t
     q = qof_query_create_for (type);
     qof_query_set_book (q, book);
     // Search only the id field
-    string_pred_data = gncQueryStringPredicate (COMPARE_EQUAL, id, STRING_MATCH_NORMAL, FALSE);
+    string_pred_data = qof_query_string_predicate (QOF_COMPARE_EQUAL, id, QOF_STRING_MATCH_NORMAL, FALSE);
 
     if (strcmp(type, GNC_CUSTOMER_MODULE_NAME))
     {

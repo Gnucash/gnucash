@@ -105,7 +105,7 @@ struct _GNCSearchWindow
 
     /* What we're searching for, and how */
     const gchar *  type_label;
-    GNCIdTypeConst search_for;
+    QofIdTypeConst search_for;
     GNCSearchType	grouping;	/* Match Any, Match All */
     const QofParam * get_guid;	/* Function to GetGUID from the object */
     int		search_type;	/* New, Narrow, Add, Delete */
@@ -898,7 +898,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     if (sw->type_label)
         type_label = sw->type_label;
     else
-        type_label = _(gncObjectGetTypeLabel (sw->search_for));
+        type_label = _(qof_object_get_type_label (sw->search_for));
     gtk_label_set_text (GTK_LABEL (label), type_label);
 
     /* Set the 'add criterion' button */
@@ -939,7 +939,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     /* Figure out if we this object-type has an "active" parameter, and
      * if not, then set the active-check button insensitive
      */
-    if (gncQueryObjectGetParameter (sw->search_for, QOF_PARAM_ACTIVE) == NULL)
+    if (qof_class_get_parameter (sw->search_for, QOF_PARAM_ACTIVE) == NULL)
         gtk_widget_set_sensitive (sw->active_only_check, FALSE);
 
     /* Deal with the cancel button */
@@ -1023,7 +1023,7 @@ gnc_search_dialog_raise (GNCSearchWindow *sw)
 }
 
 GNCSearchWindow *
-gnc_search_dialog_create (GNCIdTypeConst obj_type, const gchar *title,
+gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
                           GList *param_list,
                           GList *display_list,
                           QofQuery *start_query, QofQuery *show_start_query,
@@ -1131,7 +1131,7 @@ void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
 /* TEST CODE BELOW HERE */
 
 static GList *
-get_params_list (GNCIdTypeConst type)
+get_params_list (QofIdTypeConst type)
 {
     GList *list = NULL;
 
@@ -1161,7 +1161,7 @@ get_params_list (GNCIdTypeConst type)
 }
 
 static GList *
-get_display_list (GNCIdTypeConst type)
+get_display_list (QofIdTypeConst type)
 {
     GList *list = NULL;
 

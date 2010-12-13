@@ -37,7 +37,7 @@ struct _GNCSearchDouble
 {
     GNCSearchCoreType parent;
 
-    query_compare_t	how;
+    QofQueryCompare	how;
     double		value;
 };
 
@@ -55,7 +55,7 @@ GNCSearchDouble	*gnc_search_double_new	(void);
 
 /* methods */
 void	gnc_search_double_set_value (GNCSearchDouble *fi, double val);
-void	gnc_search_double_set_how (GNCSearchDouble *fi, query_compare_t how);
+void	gnc_search_double_set_how (GNCSearchDouble *fi, QofQueryCompare how);
 
 #endif /* ! _GNCSEARCH_DOUBLE_H */
 

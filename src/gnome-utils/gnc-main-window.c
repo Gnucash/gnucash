@@ -1371,7 +1371,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     }
     if (gnc_current_session_exist())
     {
-        book_id = gnc_session_get_url (gnc_get_current_session ());
+        book_id = qof_session_get_url (gnc_get_current_session ());
         book = gnc_get_current_book();
         if (qof_instance_is_dirty(QOF_INSTANCE(book)))
         {

@@ -115,8 +115,8 @@ static void
 gnc_search_numeric_init (GNCSearchNumeric *o)
 {
     o->value = gnc_numeric_zero ();
-    o->how = COMPARE_EQUAL;
-    o->option = NUMERIC_MATCH_ANY;
+    o->how = QOF_COMPARE_EQUAL;
+    o->option = QOF_NUMERIC_MATCH_ANY;
 }
 
 static void
@@ -171,7 +171,7 @@ gnc_search_numeric_set_value (GNCSearchNumeric *fi, gnc_numeric value)
 }
 
 void
-gnc_search_numeric_set_how (GNCSearchNumeric *fi, query_compare_t how)
+gnc_search_numeric_set_how (GNCSearchNumeric *fi, QofQueryCompare how)
 {
     g_return_if_fail (fi);
     g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
@@ -179,7 +179,7 @@ gnc_search_numeric_set_how (GNCSearchNumeric *fi, query_compare_t how)
 }
 
 void
-gnc_search_numeric_set_option (GNCSearchNumeric *fi, numeric_match_t option)
+gnc_search_numeric_set_option (GNCSearchNumeric *fi, QofNumericMatch option)
 {
     g_return_if_fail (fi);
     g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
@@ -218,27 +218,27 @@ make_how_menu (GNCSearchCoreType *fe)
     combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
     gnc_combo_box_search_add(combo, (priv->is_debcred ?
                                      _("less than") : _("is less than")),
-                             COMPARE_LT);
+                             QOF_COMPARE_LT);
     gnc_combo_box_search_add(combo, (priv->is_debcred ?
                                      _("less than or equal to") :
                                      _("is less than or equal to")),
-                             COMPARE_LTE);
+                             QOF_COMPARE_LTE);
     gnc_combo_box_search_add(combo, (priv->is_debcred ?
                                      _("equal to") : _("equals")),
-                             COMPARE_EQUAL);
+                             QOF_COMPARE_EQUAL);
     gnc_combo_box_search_add(combo, (priv->is_debcred ?
                                      _("not equal to") : _("does not equal")),
-                             COMPARE_NEQ);
+                             QOF_COMPARE_NEQ);
     gnc_combo_box_search_add(combo, (priv->is_debcred ?
                                      _("greater than") : _("is greater than")),
-                             COMPARE_GT);
+                             QOF_COMPARE_GT);
     gnc_combo_box_search_add(combo, (priv->is_debcred ?
                                      _("greater than or equal to") :
                                      _("is greater than or equal to")),
-                             COMPARE_GTE);
+                             QOF_COMPARE_GTE);
 
     gnc_combo_box_search_changed(combo, &fi->how);
-    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : COMPARE_LT);
+    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_COMPARE_LT);
 
     return GTK_WIDGET(combo);
 }
@@ -250,11 +250,11 @@ make_option_menu (GNCSearchCoreType *fe)
     GtkComboBox *combo;
 
     combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, _("has credits or debits"), NUMERIC_MATCH_ANY);
-    gnc_combo_box_search_add(combo, _("has debits"), NUMERIC_MATCH_DEBIT);
-    gnc_combo_box_search_add(combo, _("has credits"), NUMERIC_MATCH_CREDIT);
+    gnc_combo_box_search_add(combo, _("has credits or debits"), QOF_NUMERIC_MATCH_ANY);
+    gnc_combo_box_search_add(combo, _("has debits"), QOF_NUMERIC_MATCH_DEBIT);
+    gnc_combo_box_search_add(combo, _("has credits"), QOF_NUMERIC_MATCH_CREDIT);
     gnc_combo_box_search_changed(combo, &fi->option);
-    gnc_combo_box_search_set_active(combo, fi->option ? fi->option : NUMERIC_MATCH_ANY);
+    gnc_combo_box_search_set_active(combo, fi->option ? fi->option : QOF_NUMERIC_MATCH_ANY);
 
     return GTK_WIDGET(combo);
 }
@@ -334,7 +334,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
     priv = _PRIVATE(fi);
     entry_changed (priv->gae, fi);
 
-    return gncQueryNumericPredicate (fi->how, fi->option, fi->value);
+    return qof_query_numeric_predicate (fi->how, fi->option, fi->value);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)

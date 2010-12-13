@@ -129,7 +129,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
                                      owner->owner.undefined);
     gtk_box_pack_start (GTK_BOX (hbox), edit, FALSE, FALSE, 0);
     if (label)
-        gtk_label_set_text (GTK_LABEL (label), _(gncObjectGetTypeLabel (type_name)));
+        gtk_label_set_text (GTK_LABEL (label), _(qof_object_get_type_label (type_name)));
 
     return edit;
 }
@@ -510,7 +510,7 @@ generic_omenu_refresh_handler (GHashTable *changes, gpointer user_data)
 
 static OpMenuData *
 make_generic_optionmenu (GtkWidget *omenu, QofBook *book,
-                         gboolean none_ok, GNCIdType type_name,
+                         gboolean none_ok, QofIdType type_name,
                          GList * (*get_list)(QofBook*),
                          GenericLookup_t get_name,
                          gpointer *result)

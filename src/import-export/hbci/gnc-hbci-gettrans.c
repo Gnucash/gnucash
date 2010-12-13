@@ -282,7 +282,7 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
 
     /* Date / Time */
     if (valutaDate)
-        xaccTransSetDateSecs
+        xaccTransSetDatePostedSecs
         (gnc_trans, GWEN_Time_toTime_t (valutaDate));
     else
         g_warning("trans_list_cb: Oops, date 'valutaDate' was NULL.\n");

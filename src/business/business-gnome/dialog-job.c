@@ -181,7 +181,7 @@ gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
 
     /* Now save off the job so we can return it */
     jw->created_job = jw_get_job (jw);
-    jw->job_guid = *xaccGUIDNULL ();
+    jw->job_guid = *guid_null ();
 
     gnc_close_gui_component (jw->component_id);
 }
@@ -213,7 +213,7 @@ gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data)
     {
         gncJobBeginEdit (job);
         gncJobDestroy (job);
-        jw->job_guid = *xaccGUIDNULL ();
+        jw->job_guid = *guid_null ();
     }
 
     gnc_unregister_gui_component (jw->component_id);
@@ -527,7 +527,7 @@ GNCSearchWindow *
 gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
 {
     QofQuery *q, *q2 = NULL;
-    GNCIdType type = GNC_JOB_MODULE_NAME;
+    QofIdType type = GNC_JOB_MODULE_NAME;
     struct _job_select_window *sw;
     static GList *params = NULL;
     static GList *columns = NULL;

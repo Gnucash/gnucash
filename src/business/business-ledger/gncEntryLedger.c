@@ -62,7 +62,7 @@ gnc_entry_ledger_clear_blank_entry (GncEntryLedger *ledger)
         gncEntryDestroy (entry);
     }
 
-    ledger->blank_entry_guid = *xaccGUIDNULL ();
+    ledger->blank_entry_guid = *guid_null ();
     ledger->blank_entry_edited = FALSE;
 }
 
@@ -309,7 +309,7 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
         break;
     }
 
-    ledger->blank_entry_guid = *xaccGUIDNULL();
+    ledger->blank_entry_guid = *guid_null();
     ledger->blank_entry_edited = FALSE;
 
     {

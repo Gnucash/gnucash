@@ -37,7 +37,7 @@ struct _GNCSearchBoolean
 {
     GNCSearchCoreType parent;
 
-    query_compare_t	how;
+    QofQueryCompare	how;
     gboolean		value;
 };
 
@@ -55,7 +55,7 @@ GNCSearchBoolean	*gnc_search_boolean_new	(void);
 
 /* methods */
 void	gnc_search_boolean_set_value (GNCSearchBoolean *fi, gboolean val);
-void	gnc_search_boolean_set_how (GNCSearchBoolean *fi, query_compare_t how);
+void	gnc_search_boolean_set_how (GNCSearchBoolean *fi, QofQueryCompare how);
 
 #endif /* ! _GNCSEARCH_BOOLEAN_H */
 

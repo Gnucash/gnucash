@@ -2134,7 +2134,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
         GList * list;
         GList * node;
 
-        /* GUID_MATCH_ALL */
+        /* QOF_GUID_MATCH_ALL */
         list = NULL;
         for (node = xaccTransGetSplitList (trans); node; node = node->next)
         {
@@ -2144,14 +2144,14 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
         xaccQueryAddAccountMatch (q, list, QOF_GUID_MATCH_ALL, QOF_QUERY_AND);
         g_list_free (list);
 
-        /* GUID_MATCH_NONE */
+        /* QOF_GUID_MATCH_NONE */
         list = NULL;
         list = g_list_prepend (list, get_random_guid ());
         list = g_list_prepend (list, get_random_guid ());
         list = g_list_prepend (list, get_random_guid ());
         xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_NONE, QOF_QUERY_AND);
 
-        /* GUID_MATCH_ANY */
+        /* QOF_GUID_MATCH_ANY */
         {
             GncGUID * guid = get_random_guid ();
             *guid = *xaccAccountGetGUID (a);

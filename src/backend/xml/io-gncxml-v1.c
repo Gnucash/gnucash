@@ -1432,8 +1432,8 @@ account_restore_after_child_handler(gpointer data_for_children,
     {
         gnc_commodity *com = (gnc_commodity *) child_result->data;
         g_return_val_if_fail(com, FALSE);
-        if (DxaccAccountGetSecurity(a)) return FALSE;
-        DxaccAccountSetSecurity(a, com);
+        if (xaccAccountGetCommodity(a)) return FALSE;
+        xaccAccountSetCommodity(a, com);
         /* let the normal child_result handler clean up com */
     }
 

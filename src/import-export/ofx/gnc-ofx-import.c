@@ -143,11 +143,11 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 
             if (data.date_initiated_valid == true)
             {
-                xaccTransSetDateSecs(transaction, data.date_initiated);
+                xaccTransSetDatePostedSecs(transaction, data.date_initiated);
             }
             else if (data.date_posted_valid == true)
             {
-                xaccTransSetDateSecs(transaction, data.date_posted);
+                xaccTransSetDatePostedSecs(transaction, data.date_posted);
             }
 
             if (data.date_posted_valid == true)

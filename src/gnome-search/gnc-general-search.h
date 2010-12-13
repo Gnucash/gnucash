@@ -73,7 +73,7 @@ typedef struct
 } GNCGeneralSearchClass;
 
 
-GtkWidget *gnc_general_search_new            (GNCIdTypeConst type,
+GtkWidget *gnc_general_search_new            (QofIdTypeConst type,
         const char *label,
         gboolean text_editable,
         GNCSearchCB search_cb,

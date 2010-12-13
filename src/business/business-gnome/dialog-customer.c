@@ -319,7 +319,7 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
             gnc_ui_to_customer (cw, customer);
         }
         cw->created_customer = customer;
-        cw->customer_guid = *xaccGUIDNULL ();
+        cw->customer_guid = *guid_null ();
     }
 
     gnc_close_gui_component (cw->component_id);
@@ -351,7 +351,7 @@ gnc_customer_window_destroy_cb (GtkWidget *widget, gpointer data)
     {
         gncCustomerBeginEdit (customer);
         gncCustomerDestroy (customer);
-        cw->customer_guid = *xaccGUIDNULL ();
+        cw->customer_guid = *guid_null ();
     }
 
     gnc_unregister_gui_component (cw->component_id);
@@ -791,7 +791,7 @@ GNCSearchWindow *
 gnc_customer_search (GncCustomer *start, QofBook *book)
 {
     QofQuery *q, *q2 = NULL;
-    GNCIdType type = GNC_CUSTOMER_MODULE_NAME;
+    QofIdType type = GNC_CUSTOMER_MODULE_NAME;
     struct _customer_select_window *sw;
     static GList *params = NULL;
     static GList *columns = NULL;

@@ -851,7 +851,7 @@ gnc_account_create_opening_balance (Account *account,
     xaccTransBeginEdit (trans);
 
     xaccTransSetCurrency (trans, xaccAccountGetCommodity (account));
-    xaccTransSetDateSecs (trans, date);
+    xaccTransSetDatePostedSecs (trans, date);
     xaccTransSetDescription (trans, _("Opening Balance"));
 
     split = xaccMallocSplit (book);

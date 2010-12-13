@@ -45,7 +45,7 @@ struct _GNCSearchParamPrivate
 {
     GSList *		converters;
     GSList *		param_path;
-    GNCIdTypeConst	type;
+    QofIdTypeConst	type;
 
     GNCSearchParamFcn	lookup_fcn;
     gpointer		lookup_arg;
@@ -163,11 +163,11 @@ gnc_search_param_clone (GNCSearchParam *param)
 
 void
 gnc_search_param_set_param_path (GNCSearchParam *param,
-                                 GNCIdTypeConst search_type,
+                                 QofIdTypeConst search_type,
                                  GSList *param_path)
 {
     GNCSearchParamPrivate *priv;
-    GNCIdTypeConst type = NULL;
+    QofIdTypeConst type = NULL;
     GSList *converters = NULL;
 
     g_return_if_fail (GNC_IS_SEARCH_PARAM (param));
@@ -182,9 +182,9 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
     /* Compute the parameter type */
     for (; param_path; param_path = param_path->next)
     {
-        GNCIdType param_name = param_path->data;
+        QofIdType param_name = param_path->data;
         const QueryObjectDef *objDef =
-            gncQueryObjectGetParameter (search_type, param_name);
+            qof_class_get_parameter (search_type, param_name);
 
         /* If it doesn't exist, then we've reached the end */
         if (objDef == NULL)
@@ -210,7 +210,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
 
 void
 gnc_search_param_override_param_type (GNCSearchParam *param,
-                                      GNCIdTypeConst param_type)
+                                      QofIdTypeConst param_type)
 {
     GNCSearchParamPrivate *priv;
 
@@ -244,7 +244,7 @@ gnc_search_param_get_converters (GNCSearchParam *param)
     return priv->converters;
 }
 
-GNCIdTypeConst
+QofIdTypeConst
 gnc_search_param_get_param_type (GNCSearchParam *param)
 {
     GNCSearchParamPrivate *priv;
@@ -307,8 +307,8 @@ gnc_search_param_type_match (GNCSearchParam *a, GNCSearchParam *b)
 static GList *
 gnc_search_param_prepend_internal (GList *list, char const *title,
                                    GtkJustification justify,
-                                   GNCIdTypeConst type_override,
-                                   GNCIdTypeConst search_type,
+                                   QofIdTypeConst type_override,
+                                   QofIdTypeConst search_type,
                                    const char *param, va_list args)
 {
     GNCSearchParam *p;
@@ -341,8 +341,8 @@ gnc_search_param_prepend_internal (GList *list, char const *title,
 GList *
 gnc_search_param_prepend_with_justify (GList *list, char const *title,
                                        GtkJustification justify,
-                                       GNCIdTypeConst type_override,
-                                       GNCIdTypeConst search_type,
+                                       QofIdTypeConst type_override,
+                                       QofIdTypeConst search_type,
                                        const char *param, ...)
 {
     GList *result;
@@ -363,8 +363,8 @@ gnc_search_param_prepend_with_justify (GList *list, char const *title,
 
 GList *
 gnc_search_param_prepend (GList *list, char const *title,
-                          GNCIdTypeConst type_override,
-                          GNCIdTypeConst search_type,
+                          QofIdTypeConst type_override,
+                          QofIdTypeConst search_type,
                           const char *param, ...)
 {
     GList *result;
@@ -385,7 +385,7 @@ gnc_search_param_prepend (GList *list, char const *title,
 
 void
 gnc_search_param_set_param_fcn (GNCSearchParam *param,
-                                GNCIdTypeConst param_type,
+                                QofIdTypeConst param_type,
                                 GNCSearchParamFcn fcn,
                                 gpointer arg)
 {

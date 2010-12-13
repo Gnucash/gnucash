@@ -1187,7 +1187,7 @@ xaccAccountScrubCommodity (Account *account)
 
     /* Use the 'obsolete' routines to try to figure out what the
      * account commodity should have been. */
-    commodity = DxaccAccountGetSecurity (account);
+    commodity = xaccAccountGetCommodity (account);
     if (commodity)
     {
         xaccAccountSetCommodity (account, commodity);

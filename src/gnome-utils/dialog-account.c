@@ -289,7 +289,7 @@ gnc_account_create_transfer_balance (QofBook *book,
     xaccTransBeginEdit (trans);
 
     xaccTransSetCurrency (trans, xaccAccountGetCommodity (account));
-    xaccTransSetDateSecs (trans, date);
+    xaccTransSetDatePostedSecs (trans, date);
     xaccTransSetDescription (trans, _("Opening Balance"));
 
     split = xaccMallocSplit (book);
@@ -573,7 +573,7 @@ gnc_finish_ok (AccountWindow *aw)
     aw->created_account = aw_get_account (aw);
 
     /* so it doesn't get freed on close */
-    aw->account = *xaccGUIDNULL ();
+    aw->account = *guid_null ();
 
     gnc_close_gui_component (aw->component_id);
     LEAVE("2");
@@ -978,7 +978,7 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
         {
             xaccAccountBeginEdit (account);
             xaccAccountDestroy (account);
-            aw->account = *xaccGUIDNULL ();
+            aw->account = *guid_null ();
         }
 
         DEBUG ("account add window destroyed\n");

@@ -93,7 +93,7 @@ static void
 gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
 {
     GList *node;
-    GNCIdType type = NULL;
+    QofIdType type = NULL;
 
     gnc_gui_component_clear_watches (ledger->component_id);
 

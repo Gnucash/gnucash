@@ -1426,7 +1426,7 @@ create_balancing_transaction(QofBook *book, Account *account,
 
     // fill Transaction
     xaccTransSetCurrency(trans, xaccAccountGetCommodity(account));
-    xaccTransSetDateSecs(trans, statement_date);
+    xaccTransSetDatePostedSecs(trans, statement_date);
     xaccTransSetDescription(trans, _("Balancing entry from reconcilation"));
 
     // 1. Split

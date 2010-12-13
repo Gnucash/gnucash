@@ -68,7 +68,7 @@ typedef struct _GNCGeneralSearchPrivate GNCGeneralSearchPrivate;
 struct _GNCGeneralSearchPrivate
 {
     GncGUID			guid;
-    GNCIdTypeConst		type;
+    QofIdTypeConst		type;
     GNCSearchCB		search_cb;
     gpointer		user_data;
     GNCSearchWindow *	sw;
@@ -191,7 +191,7 @@ reset_selection_text (GNCGeneralSearch *gsl)
     if (gsl->selected_item == NULL)
         text = "";
     else
-        text = gncObjectPrintable (priv->type, gsl->selected_item);
+        text = qof_object_printable (priv->type, gsl->selected_item);
 
     gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
 }
@@ -380,7 +380,7 @@ static void
 create_children (GNCGeneralSearch *gsl,
                  const char       *label,
                  gboolean          text_editable,
-                 GNCIdTypeConst    type,
+                 QofIdTypeConst    type,
                  QofBook          *book)
 {
     GtkListStore *	list_store;
@@ -459,7 +459,7 @@ create_children (GNCGeneralSearch *gsl,
  * an easy way to choose selections.
  *
  * @param type The type of object that this widget will be used for.
- * This parameter is a GNCIdTypeConst.
+ * This parameter is a QofIdTypeConst.
  * @param label The label for the GtkButton child widget.
  * @param text_editable switch to enable or disable direct text entry
  * @param search_cb The callback function to use when an object has been
@@ -474,7 +474,7 @@ create_children (GNCGeneralSearch *gsl,
  * @return a GNCGeneralSearch widget.
  */
 GtkWidget *
-gnc_general_search_new (GNCIdTypeConst type,
+gnc_general_search_new (QofIdTypeConst type,
                         const char    *label,
                         gboolean       text_editable,
                         GNCSearchCB    search_cb,
@@ -544,7 +544,7 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
     }
     else
-        priv->guid = *xaccGUIDNULL ();
+        priv->guid = *guid_null ();
 }
 
 /**

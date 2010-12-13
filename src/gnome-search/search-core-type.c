@@ -260,20 +260,20 @@ gnc_search_core_register_type (const char *type_name, GNCSearchCoreNew fcn)
 static void
 init_table (void)
 {
-    gnc_search_core_register_type (QUERYCORE_STRING,
+    gnc_search_core_register_type (QOF_TYPE_STRING,
                                    (GNCSearchCoreNew) gnc_search_string_new);
-    gnc_search_core_register_type (QUERYCORE_DATE,
+    gnc_search_core_register_type (QOF_TYPE_DATE,
                                    (GNCSearchCoreNew) gnc_search_date_new);
-    gnc_search_core_register_type (QUERYCORE_INT64,
+    gnc_search_core_register_type (QOF_TYPE_INT64,
                                    (GNCSearchCoreNew) gnc_search_int64_new);
-    gnc_search_core_register_type (QUERYCORE_DOUBLE,
+    gnc_search_core_register_type (QOF_TYPE_DOUBLE,
                                    (GNCSearchCoreNew) gnc_search_double_new);
-    gnc_search_core_register_type (QUERYCORE_NUMERIC,
+    gnc_search_core_register_type (QOF_TYPE_NUMERIC,
                                    (GNCSearchCoreNew) gnc_search_numeric_new);
-    gnc_search_core_register_type (QUERYCORE_DEBCRED,
+    gnc_search_core_register_type (QOF_TYPE_DEBCRED,
                                    (GNCSearchCoreNew)
                                    gnc_search_numeric_debcred_new);
-    gnc_search_core_register_type (QUERYCORE_BOOLEAN,
+    gnc_search_core_register_type (QOF_TYPE_BOOLEAN,
                                    (GNCSearchCoreNew) gnc_search_boolean_new);
     gnc_search_core_register_type (GNC_ID_ACCOUNT,
                                    (GNCSearchCoreNew) gnc_search_account_new);

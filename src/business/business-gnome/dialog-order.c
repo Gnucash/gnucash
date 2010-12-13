@@ -213,7 +213,7 @@ gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Ok, we don't need this anymore */
-    ow->order_guid = *xaccGUIDNULL ();
+    ow->order_guid = *guid_null ();
 
     gnc_close_gui_component (ow->component_id);
 }
@@ -334,7 +334,7 @@ gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data)
     {
         gncOrderBeginEdit (order);
         gncOrderDestroy (order);
-        ow->order_guid = *xaccGUIDNULL ();
+        ow->order_guid = *guid_null ();
     }
 
     if (ow->ledger)
@@ -821,7 +821,7 @@ free_order_cb (gpointer user_data)
 GNCSearchWindow *
 gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
 {
-    GNCIdType type = GNC_ORDER_MODULE_NAME;
+    QofIdType type = GNC_ORDER_MODULE_NAME;
     struct _order_select_window *sw;
     QofQuery *q, *q2 = NULL;
     static GList *params = NULL;

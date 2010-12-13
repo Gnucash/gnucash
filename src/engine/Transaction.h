@@ -455,7 +455,6 @@ void xaccTransSetDatePostedGDate (Transaction *trans, GDate date);
     date of the transaction, specified by a time_t (see ctime(3)). The
     posted date is the date when this transaction was posted at the
     bank. */
-#define xaccTransSetDateSecs xaccTransSetDatePostedSecs
 void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
 
 /**  The xaccTransSetDatePostedTS() method does the same thing as

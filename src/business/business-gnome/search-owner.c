@@ -261,10 +261,10 @@ make_how_menu (GNCSearchCoreType *fe)
     GtkComboBox *combo;
 
     combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, _("is"), GUID_MATCH_ANY);
-    gnc_combo_box_search_add(combo, _("is not"), GUID_MATCH_NONE);
+    gnc_combo_box_search_add(combo, _("is"), QOF_GUID_MATCH_ANY);
+    gnc_combo_box_search_add(combo, _("is not"), QOF_GUID_MATCH_NONE);
     gnc_combo_box_search_changed(combo, &fi->how);
-    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : GUID_MATCH_ANY);
+    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_GUID_MATCH_ANY);
 
     return GTK_WIDGET(combo);
 }
@@ -317,7 +317,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
     guid = gncOwnerGetGUID (&(priv->owner));
     l = g_list_prepend (l, (gpointer)guid);
 
-    return gncQueryGUIDPredicate (fi->how, l);
+    return qof_query_guid_predicate (fi->how, l);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)

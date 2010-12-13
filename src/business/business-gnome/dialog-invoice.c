@@ -403,7 +403,7 @@ gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Ok, we don't need this anymore */
-    iw->invoice_guid = *xaccGUIDNULL ();
+    iw->invoice_guid = *guid_null ();
 
     /* if this is a NEW_INVOICE, and created_invoice is NON-NULL, the
      * open up a new window with the invoice.  This used to be done
@@ -441,7 +441,7 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
     {
         gncInvoiceBeginEdit (invoice);
         gncInvoiceDestroy (invoice);
-        iw->invoice_guid = *xaccGUIDNULL ();
+        iw->invoice_guid = *guid_null ();
     }
 
     gnc_entry_ledger_destroy (iw->ledger);
@@ -2373,7 +2373,7 @@ free_invoice_cb (gpointer user_data)
 GNCSearchWindow *
 gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
 {
-    GNCIdType type = GNC_INVOICE_MODULE_NAME;
+    QofIdType type = GNC_INVOICE_MODULE_NAME;
     struct _invoice_select_window *sw;
     QofQuery *q, *q2 = NULL;
     GncOwnerType owner_type = GNC_OWNER_CUSTOMER;
@@ -2668,7 +2668,7 @@ gnc_invoice_search_edit (gpointer start, gpointer book)
 DialogQueryList *
 gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
 {
-    GNCIdType type = GNC_INVOICE_MODULE_NAME;
+    QofIdType type = GNC_INVOICE_MODULE_NAME;
     Query *q;
     QueryPredData_t pred_data;
     time_t end_date;
@@ -2715,8 +2715,8 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     /* Watch out: Do *not* translate the string "Invoice" here because
        it must match the QofObject.type_label string exactly, which
        implies it is used in untranslated form! */
-    pred_data = gncQueryStringPredicate (COMPARE_NEQ, "Invoice",
-                                         STRING_MATCH_NORMAL, FALSE);
+    pred_data = qof_query_string_predicate (QOF_COMPARE_NEQ, "Invoice",
+                                            QOF_STRING_MATCH_NORMAL, FALSE);
     qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
 
     end_date = time(NULL);
@@ -2726,7 +2726,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
 
     ts.tv_sec = (gint64) end_date;
     ts.tv_nsec = 0;
-    pred_data = gncQueryDatePredicate (COMPARE_LTE, DATE_MATCH_NORMAL, ts);
+    pred_data = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ts);
     qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_DUE), pred_data, QOF_QUERY_AND);
 
     res = qof_query_run(q);

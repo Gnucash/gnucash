@@ -38,7 +38,7 @@ struct _GNCSearchDate
 {
     GNCSearchCoreType parent;
 
-    query_compare_t	how;
+    QofQueryCompare	how;
     Timespec		ts;
 };
 
@@ -56,7 +56,7 @@ GNCSearchDate	*gnc_search_date_new	(void);
 
 /* methods */
 void	gnc_search_date_set_date (GNCSearchDate *fi, Timespec ts);
-void	gnc_search_date_set_how (GNCSearchDate *fi, query_compare_t how);
+void	gnc_search_date_set_how (GNCSearchDate *fi, QofQueryCompare how);
 
 #endif /* ! _GNCSEARCH_DATE_H */
 

@@ -469,7 +469,7 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
             valuta_date = normal_date;
     }
     if (valuta_date)
-        xaccTransSetDateSecs(gnc_trans, GWEN_Time_toTime_t(valuta_date));
+        xaccTransSetDatePostedSecs(gnc_trans, GWEN_Time_toTime_t(valuta_date));
     else
         g_warning("transaction_cb: Oops, date 'valuta_date' was NULL");
 

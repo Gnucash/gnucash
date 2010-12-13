@@ -191,7 +191,7 @@ update_booleans (GNCQueryList *list, gint row)
         const char *type = gnc_search_param_get_param_type (param);
 
         /* if this is a boolean, ignore it now -- we'll use a checkmark later */
-        if (safe_strcmp (type, QUERYCORE_BOOLEAN))
+        if (safe_strcmp (type, QOF_TYPE_BOOLEAN))
             continue;
 
         result = (gboolean) GPOINTER_TO_INT(gnc_search_param_compute_value(param, entry));
@@ -704,8 +704,8 @@ gnc_query_list_set_query_sort (GNCQueryList *list, gboolean new_column)
     if (list->numeric_inv_sort)
     {
         const char *type = gnc_search_param_get_param_type (param);
-        if (!safe_strcmp(type, QUERYCORE_NUMERIC) ||
-                !safe_strcmp(type, QUERYCORE_DEBCRED))
+        if (!safe_strcmp(type, QOF_TYPE_NUMERIC) ||
+                !safe_strcmp(type, QOF_TYPE_DEBCRED))
             sort_order = !sort_order;
     }
 
@@ -811,7 +811,7 @@ gnc_query_list_fill(GNCQueryList *list)
             gpointer res = item->data;
 
             /* if this is a boolean, ignore it now -- we'll use a checkmark later */
-            if (!safe_strcmp (type, QUERYCORE_BOOLEAN))
+            if (!safe_strcmp (type, QOF_TYPE_BOOLEAN))
             {
                 strings[i++] = g_strdup("");
                 continue;
@@ -828,8 +828,8 @@ gnc_query_list_fill(GNCQueryList *list)
             }
 
             /* Now convert this to a text value for the row */
-            if (!safe_strcmp(type, QUERYCORE_DEBCRED) ||
-                    !safe_strcmp(type, QUERYCORE_NUMERIC))
+            if (!safe_strcmp(type, QOF_TYPE_DEBCRED) ||
+                    !safe_strcmp(type, QOF_TYPE_NUMERIC))
             {
                 gnc_numeric (*nfcn)(gpointer, QofParam *) =
                     (gnc_numeric(*)(gpointer, QofParam *))(qp->param_getfcn);
@@ -839,7 +839,7 @@ gnc_query_list_fill(GNCQueryList *list)
                 strings[i++] = g_strdup(xaccPrintAmount(value, gnc_default_print_info(FALSE)));
             }
             else
-                strings[i++] = gncQueryCoreToString (type, res, qp);
+                strings[i++] = qof_query_core_to_string (type, res, qp);
         }
 
         row = gtk_clist_append (GTK_CLIST(list), (gchar **) strings);

@@ -509,14 +509,8 @@ void xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 /** Set the account's commodity */
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 
-/** @deprecated do not use */
-#define DxaccAccountSetSecurity xaccAccountSetCommodity
-
 /** Get the account's commodity  */
 /*@ dependent @*/ gnc_commodity * xaccAccountGetCommodity (const Account *account);
-
-/** @deprecated do not use */
-#define DxaccAccountGetSecurity xaccAccountGetCommodity
 
 /** Return the SCU for the account.  If a non-standard SCU has been
  *   set for the account, that is returned; else the default SCU for
@@ -533,9 +527,6 @@ int xaccAccountGetCommoditySCUi (const Account *account);
  *   commodity.
  */
 void xaccAccountSetCommoditySCU (Account *account, int frac);
-
-/** @deprecated -- do not use for future development */
-#define xaccAccountSetCommoditySCUandFlag xaccAccountSetCommoditySCU
 
 /** Set the flag indicating that this account uses a non-standard SCU. */
 void xaccAccountSetNonStdSCU (Account *account, gboolean flag);

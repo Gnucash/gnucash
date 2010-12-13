@@ -107,7 +107,7 @@ gnc_search_boolean_class_init (GNCSearchBooleanClass *class)
 static void
 gnc_search_boolean_init (GNCSearchBoolean *o)
 {
-    o->how = COMPARE_EQUAL;
+    o->how = QOF_COMPARE_EQUAL;
     o->value = TRUE;
 }
 
@@ -144,7 +144,7 @@ gnc_search_boolean_set_value (GNCSearchBoolean *fi, gboolean value)
 }
 
 void
-gnc_search_boolean_set_how (GNCSearchBoolean *fi, query_compare_t how)
+gnc_search_boolean_set_how (GNCSearchBoolean *fi, QofQueryCompare how)
 {
     g_return_if_fail (fi);
     g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
@@ -178,10 +178,10 @@ make_menu (GNCSearchCoreType *fe)
     GtkComboBox *combo;
 
     combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, _("is"), COMPARE_EQUAL);
-    gnc_combo_box_search_add(combo, _("is not"), COMPARE_NEQ);
+    gnc_combo_box_search_add(combo, _("is"), QOF_COMPARE_EQUAL);
+    gnc_combo_box_search_add(combo, _("is not"), QOF_COMPARE_NEQ);
     gnc_combo_box_search_changed(combo, &fi->how);
-    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : COMPARE_EQUAL);
+    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_COMPARE_EQUAL);
 
     return GTK_WIDGET(combo);
 }
@@ -218,7 +218,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), NULL);
 
-    return gncQueryBooleanPredicate (fi->how, fi->value);
+    return qof_query_boolean_predicate (fi->how, fi->value);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)

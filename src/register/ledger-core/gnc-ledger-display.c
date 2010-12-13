@@ -429,7 +429,7 @@ gnc_ledger_display_gl (void)
 
         tRoot = gnc_book_get_template_root( gnc_get_current_book() );
         al = gnc_account_get_descendants( tRoot );
-        xaccQueryAddAccountMatch( query, al, GUID_MATCH_NONE, QOF_QUERY_AND );
+        xaccQueryAddAccountMatch( query, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND );
         g_list_free (al);
         al = NULL;
         tRoot = NULL;
@@ -665,7 +665,7 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
     accounts = g_list_prepend (accounts, leader);
 
     xaccQueryAddAccountMatch (ld->query, accounts,
-                              GUID_MATCH_ANY, QOF_QUERY_AND);
+                              QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
 
     g_list_free (accounts);
 }

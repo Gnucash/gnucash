@@ -196,7 +196,7 @@ void gnc_gui_component_watch_entity_direct (gint component_id,
  *               setting the mask to 0 turns off watching for the entity type
  */
 void gnc_gui_component_watch_entity_type (gint component_id,
-        GNCIdTypeConst entity_type,
+        QofIdTypeConst entity_type,
         QofEventId event_mask);
 
 /* gnc_gui_get_entity_events
