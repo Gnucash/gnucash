@@ -158,8 +158,8 @@ gnc_amount_edit_key_press(GtkWidget *widget, GdkEventKey *event)
         if (gae->print_info.monetary)
         {
             struct lconv *lc = gnc_localeconv ();
-            event->keyval = lc->decimal_point[0];
-            event->string[0] = lc->decimal_point[0];
+            event->keyval = lc->mon_decimal_point[0];
+            event->string[0] = lc->mon_decimal_point[0];
         }
     }
 
