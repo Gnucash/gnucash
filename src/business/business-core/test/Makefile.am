@@ -33,7 +33,7 @@ GNC_TEST_DEPS = \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/business/business-core \
-  --library-dir    ${top_builddir}/lib/libqof/qof \
+  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \

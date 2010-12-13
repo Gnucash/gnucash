@@ -22,7 +22,7 @@ TESTS = \
   test-resolve-file-path
 
 GNC_TEST_DEPS = \
-  --library-dir    ${top_builddir}/lib/libqof/qof \
+  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils
 
 TESTS_ENVIRONMENT = \

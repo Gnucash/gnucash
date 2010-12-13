@@ -25,7 +25,7 @@ TESTS = \
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/lib/libqof/qof \
+  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine
@@ -77,3 +77,8 @@ AM_CFLAGS = \
   ${GCONF_CFLAGS}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
+
+# If you let make run parallel builds it complains that there is no rule to make
+# libgncmod-test-dbi.la.  This is wrong, but I can't figure out how to fix it
+# so I'll turn off parallel builds
+.NOTPARALLEL:

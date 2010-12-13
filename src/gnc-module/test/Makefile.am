@@ -32,6 +32,7 @@ GNC_TEST_DEPS = \
   --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-foo \
   --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-baz \
   --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-bar \
+  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/gnc-module/test/mod-foo \
