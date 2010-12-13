@@ -284,6 +284,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
             !g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
     {
         qof_backend_set_error( qbe, ERR_FILEIO_FILE_NOT_FOUND );
+        qof_backend_set_message(qbe, "Sqlite3 file %s not found", filepath);
         LEAVE(" ");
         return;
     }
@@ -560,6 +561,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
             if ( !result)
             {
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+                qof_backend_set_message( qbe, "Failed to delete lock record" );
                 result = dbi_conn_query( dcon, "ROLLBACK" );
                 if (result)
                 {
@@ -583,6 +585,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
         if ( !result)
         {
             qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+            qof_backend_set_message( qbe, "Failed to create lock record" );
             result = dbi_conn_query( dcon, "ROLLBACK" );
             if (result)
             {
@@ -606,6 +609,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
     }
     /* Couldn't get a transaction (probably couldn't get a lock), so fail */
     qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+    qof_backend_set_message( qbe, "SQL Backend failed to obtain a transaction" );
     if (result)
     {
         dbi_result_free( result );
@@ -823,6 +827,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
         else
         {
             qof_backend_set_error( qbe, ERR_BACKEND_NO_SUCH_DB );
+            qof_backend_set_message( qbe, "Database %s not found", dbname );
         }
     }
 
@@ -1038,6 +1043,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
         else
         {
             qof_backend_set_error( qbe, ERR_BACKEND_NO_SUCH_DB );
+            qof_backend_set_message( qbe, "Database %s not found", dbname );
         }
     }
 

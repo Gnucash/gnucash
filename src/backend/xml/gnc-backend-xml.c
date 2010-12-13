@@ -140,6 +140,8 @@ gnc_xml_be_get_file_lock (FileBackend *be)
         case EACCES:
         case EROFS:
         case ENOSPC:
+            PWARN( "Unable to create the lockfile %s; may not have write priv",
+                   be->lockfile );
             be_err = ERR_BACKEND_READONLY;
             break;
         default:
@@ -201,6 +203,8 @@ gnc_xml_be_get_file_lock (FileBackend *be)
     {
         /* oops .. stat failed!  This can't happen! */
         qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_LOCKED);
+        qof_backend_set_message ((QofBackend*)be, "Failed to stat lockfile %s",
+                                 be->lockfile );
         g_unlink (pathbuf);
         close (be->lockfd);
         g_unlink (be->lockfile);
@@ -247,6 +251,7 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
     if (NULL == be->fullpath)
     {
         qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
+        qof_backend_set_message (be_start, "No path specified");
         LEAVE("");
         return;
     }
@@ -277,6 +282,7 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
             /* Error on stat or if it isn't a directory means we
                cannot find this filename */
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
+            qof_backend_set_message (be_start, "Couldn't find directory for %s", be->fullpath);
             g_free (be->fullpath);
             be->fullpath = NULL;
             g_free (be->dirname);
@@ -291,6 +297,7 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
         {
             /* Error on stat means the file doesn't exist */
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
+            qof_backend_set_message (be_start, "Couldn't find %s", be->fullpath);
             g_free (be->fullpath);
             be->fullpath = NULL;
             g_free (be->dirname);
@@ -306,11 +313,9 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
 #endif
            )
         {
-            /* FIXME: What is actually checked here? Whether the
-               fullpath erroneously points to a directory or what?
-               Then the error message should be changed into something
-               much more clear! */
             qof_backend_set_error (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
+            qof_backend_set_message(be_start, "Path %s is a directory",
+                                    be->fullpath);
             g_free (be->fullpath);
             be->fullpath = NULL;
             g_free (be->dirname);
@@ -659,6 +664,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
     if (!mktemp(tmp_name))
     {
         qof_backend_set_error(be, ERR_BACKEND_MISC);
+        qof_backend_set_message( be, "Failed to make temp file" );
         LEAVE("");
         return FALSE;
     }
@@ -682,6 +688,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
             if (g_chmod(tmp_name, statbuf.st_mode) != 0)
             {
                 /* qof_backend_set_error(be, ERR_BACKEND_PERM); */
+                /* qof_backend_set_message( be, "Failed to chmod filename %s", tmp_name ); */
                 /* Even if the chmod did fail, the save
                    nevertheless completed successfully. It is
                    therefore wrong to signal the ERR_BACKEND_PERM
@@ -701,6 +708,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
             if (chown(tmp_name, -1, statbuf.st_gid) != 0)
             {
                 /* qof_backend_set_error(be, ERR_BACKEND_PERM); */
+                /* qof_backend_set_message( be, "Failed to chown filename %s", tmp_name ); */
                 /* A failed chown doesn't mean that the saving itself
                 failed. So don't abort with an error here! */
                 PWARN("unable to chown filename %s: %s",
@@ -726,6 +734,8 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
         if (!gnc_int_link_or_make_backup(fbe, tmp_name, datafile))
         {
             qof_backend_set_error(be, ERR_FILEIO_BACKUP_ERROR);
+            qof_backend_set_message( be, "Failed to make backup file %s",
+                                     datafile ? datafile : "NULL" );
             g_free(tmp_name);
             LEAVE("");
             return FALSE;
@@ -774,6 +784,8 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
         {
             /* Use a generic write error code */
             qof_backend_set_error(be, ERR_FILEIO_WRITE_ERROR);
+            qof_backend_set_message( be, "Unable to write to temp file %s",
+                                     tmp_name ? tmp_name : "NULL" );
         }
         g_free(tmp_name);
         LEAVE("");
@@ -1049,15 +1061,24 @@ gnc_xml_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType l
     {
     case GNC_BOOK_XML2_FILE:
         rc = qof_session_load_from_xml_file_v2 (be, book);
-        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
+        if (FALSE == rc)
+        {
+            PWARN( "Syntax error in Xml File %s", be->fullpath );
+            error = ERR_FILEIO_PARSE_ERROR;
+        }
         break;
 
     case GNC_BOOK_XML2_FILE_NO_ENCODING:
         error = ERR_FILEIO_NO_ENCODING;
+        PWARN( "No character encoding in Xml File %s", be->fullpath );
         break;
     case GNC_BOOK_XML1_FILE:
         rc = qof_session_load_from_xml_file (book, be->fullpath);
-        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
+        if (FALSE == rc)
+        {
+            PWARN( "Syntax error in Xml File %s", be->fullpath );
+            error = ERR_FILEIO_PARSE_ERROR;
+        }
         break;
     default:
         /* If file type wasn't known, check errno again to give the
