@@ -36,7 +36,7 @@ test_trans_query (Transaction *trans, gpointer data)
 {
     QofBook *book = data;
     GList *list;
-    Query *q;
+    QofQuery *q;
 
     q = make_trans_query (trans, ALL_QT);
     qof_query_set_book (q, book);

@@ -36,7 +36,6 @@
 #include "Account.h"
 #include "AccountP.h"
 #include "Query.h"
-#include "QueryP.h"
 #include "Scrub.h"
 #include "Transaction.h"
 #include "TransactionP.h"

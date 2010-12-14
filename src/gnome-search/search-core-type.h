@@ -22,7 +22,7 @@
 #ifndef _GNCSEARCH_CORE_TYPE_H
 #define _GNCSEARCH_CORE_TYPE_H
 
-#include "QueryCore.h"
+#include "qof.h"
 #include "qof.h"
 #include "search-param.h"
 
@@ -49,7 +49,7 @@ typedef struct
     gboolean		(*validate) (GNCSearchCoreType *fe);
     GNCSearchCoreType *	(*clone) (GNCSearchCoreType *fe);
     GtkWidget *		(*get_widget) (GNCSearchCoreType *);
-    QueryPredData_t	(*get_predicate) (GNCSearchCoreType *);
+    QofQueryPredData*	(*get_predicate) (GNCSearchCoreType *);
 
     /* signals */
 } GNCSearchCoreTypeClass;
@@ -67,7 +67,7 @@ void			gnc_search_core_type_editable_enters (GNCSearchCoreType *fe);
 gboolean        	gnc_search_core_type_validate (GNCSearchCoreType *fe);
 GNCSearchCoreType *	gnc_search_core_type_clone (GNCSearchCoreType *fe);
 GtkWidget *		gnc_search_core_type_get_widget (GNCSearchCoreType *fe);
-QueryPredData_t		gnc_search_core_type_get_predicate (GNCSearchCoreType *fe);
+QofQueryPredData*		gnc_search_core_type_get_predicate (GNCSearchCoreType *fe);
 
 /* Register a new type in the Core Type Database */
 typedef GNCSearchCoreType * (*GNCSearchCoreNew) (void);

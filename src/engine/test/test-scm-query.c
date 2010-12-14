@@ -12,10 +12,10 @@
 
 
 static void
-test_query (Query *q)
+test_query (QofQuery *q)
 {
     SCM scm_q;
-    Query *q2;
+    QofQuery *q2;
 
     scm_q = gnc_query2scm (q);
 
@@ -42,7 +42,7 @@ test_query (Query *q)
 static void
 run_tests (void)
 {
-    Query *q;
+    QofQuery *q;
     int i;
 
     test_query (NULL);

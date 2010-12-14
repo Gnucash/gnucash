@@ -1124,7 +1124,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
         qof_query_add_term (q, path, pd, QOF_QUERY_OR);
         if (inverted)
         {
-            Query *outq = qof_query_invert (q);
+            QofQuery *outq = qof_query_invert (q);
             qof_query_destroy (q);
             q = outq;
         }
@@ -1491,7 +1491,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
     if (ok)
     {
-        Query *out_q;
+        QofQuery *out_q;
 
         if (sense)
             out_q = q;
@@ -1508,7 +1508,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
     return NULL;
 }
 
-static Query *
+static QofQuery *
 gnc_scm2query_term_query (SCM query_term_scm, query_version_t vers)
 {
     switch (vers)
@@ -1551,10 +1551,10 @@ gnc_query_terms2scm (const GList *terms)
     return scm_reverse (or_terms);
 }
 
-static Query *
+static QofQuery *
 gnc_scm2query_and_terms (SCM and_terms, query_version_t vers)
 {
-    Query *q = NULL;
+    QofQuery *q = NULL;
 
     if (!scm_is_list (and_terms))
         return NULL;
@@ -1570,8 +1570,8 @@ gnc_scm2query_and_terms (SCM and_terms, query_version_t vers)
             q = gnc_scm2query_term_query (term, vers);
         else
         {
-            Query *q_and;
-            Query *q_new;
+            QofQuery *q_and;
+            QofQuery *q_new;
 
             q_and = gnc_scm2query_term_query (term, vers);
 
@@ -1591,10 +1591,10 @@ gnc_scm2query_and_terms (SCM and_terms, query_version_t vers)
     return q;
 }
 
-static Query *
+static QofQuery *
 gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
 {
-    Query *q = NULL;
+    QofQuery *q = NULL;
 
     if (!scm_is_list (or_terms))
         return NULL;
@@ -1612,8 +1612,8 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
             q = gnc_scm2query_and_terms (and_terms, vers);
         else
         {
-            Query *q_or;
-            Query *q_new;
+            QofQuery *q_or;
+            QofQuery *q_new;
 
             q_or = gnc_scm2query_and_terms (and_terms, vers);
 
@@ -1856,10 +1856,10 @@ gnc_query_sort_to_list (const gchar * symbol)
     return path;
 }
 
-static Query *
+static QofQuery *
 gnc_scm2query_v1 (SCM query_scm)
 {
-    Query *q = NULL;
+    QofQuery *q = NULL;
     gboolean ok = TRUE;
     const gchar * primary_sort = NULL;
     const gchar * secondary_sort = NULL;
@@ -2008,10 +2008,10 @@ gnc_scm2query_v1 (SCM query_scm)
     return NULL;
 }
 
-static Query *
+static QofQuery *
 gnc_scm2query_v2 (SCM query_scm)
 {
-    Query *q = NULL;
+    QofQuery *q = NULL;
     gboolean ok = TRUE;
     const gchar * search_for = NULL;
     GSList *sp1 = NULL, *sp2 = NULL, *sp3 = NULL;
@@ -2142,12 +2142,12 @@ gnc_scm2query_v2 (SCM query_scm)
     return NULL;
 }
 
-Query *
+QofQuery *
 gnc_scm2query (SCM query_scm)
 {
     SCM q_type;
     const gchar *type;
-    Query *q = NULL;
+    QofQuery *q = NULL;
 
     /* Not a list or NULL?  No need to go further */
     if (!scm_is_list (query_scm) || scm_is_null (query_scm))

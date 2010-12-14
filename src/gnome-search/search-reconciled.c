@@ -28,7 +28,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "QueryCore.h"
+#include "qof.h"
 #include "Transaction.h"	/* for ?REC */
 
 #include "search-reconciled.h"
@@ -39,7 +39,7 @@
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_reconciled_class_init	(GNCSearchReconciledClass *class);
 static void gnc_search_reconciled_init	(GNCSearchReconciled *gspaper);
@@ -242,7 +242,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     return box;
 }
 
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchReconciled *fi = (GNCSearchReconciled *)fe;
     char chars[6];

@@ -79,7 +79,7 @@ static void * search(QofBook * book, const gchar *id, void * object, QofIdType t
     GList *result;
     QofQuery *q;
     gint len;
-    QueryPredData_t string_pred_data;
+    QofQueryPredData* string_pred_data;
     g_return_val_if_fail (type, NULL);
     g_return_val_if_fail (id, NULL);
     g_return_val_if_fail (book, NULL);

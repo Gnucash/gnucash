@@ -33,7 +33,7 @@
 
 #include "search-string.h"
 #include "search-core-utils.h"
-#include "QueryCore.h"
+#include "qof.h"
 
 #define d(x)
 
@@ -42,7 +42,7 @@ static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_string_class_init	(GNCSearchStringClass *class);
 static void gnc_search_string_init	(GNCSearchString *gspaper);
@@ -335,7 +335,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     return box;
 }
 
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchString *ss = (GNCSearchString *)fe;
     QofQueryCompare how;

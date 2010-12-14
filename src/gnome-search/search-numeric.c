@@ -29,7 +29,7 @@
 #include <glib/gi18n.h>
 
 #include "gnc-amount-edit.h"
-#include "QueryCore.h"
+#include "qof.h"
 
 #include "search-numeric.h"
 #include "search-core-utils.h"
@@ -41,7 +41,7 @@ static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_numeric_class_init	(GNCSearchNumericClass *class);
 static void gnc_search_numeric_init	(GNCSearchNumeric *gspaper);
@@ -322,7 +322,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     return box;
 }
 
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
     GNCSearchNumericPrivate *priv;

@@ -28,7 +28,7 @@
 #include <glib/gi18n.h>
 
 #include "gnc-date.h"
-#include "QueryCore.h"
+#include "qof.h"
 #include "qof.h"
 #include "Transaction.h"
 #include "gnc-ui-util.h"

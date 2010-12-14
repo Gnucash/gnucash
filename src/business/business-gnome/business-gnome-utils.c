@@ -41,7 +41,7 @@
 #include "gncInvoice.h"
 
 #include "gnc-general-search.h"
-#include "gncObject.h"
+#include "qof.h"
 #include "business-gnome-utils.h"
 #include "dialog-customer.h"
 #include "dialog-job.h"

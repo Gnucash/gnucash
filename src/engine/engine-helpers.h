@@ -60,8 +60,8 @@ GSList * gnc_query_scm2path (SCM path_scm);
 /* These two functions convert a query object into a scheme
  * representation of the query and vice-versa. They do not
  * simply convert a query pointer to a guile query pointer! */
-SCM gnc_query2scm (Query * q);
-Query * gnc_scm2query (SCM query_scm);
+SCM gnc_query2scm (QofQuery * q);
+QofQuery * gnc_scm2query (SCM query_scm);
 
 SCM gnc_gint64_to_scm(const gint64 x);
 gint64 gnc_scm_to_gint64(SCM num);

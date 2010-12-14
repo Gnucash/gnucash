@@ -72,8 +72,6 @@ gncinclude_HEADERS = \
   SX-book.h \
   SX-ttinfo.h \
   Query.h \
-  QueryObject.h \
-  QueryCore.h \
   Scrub.h \
   Scrub2.h \
   Scrub3.h \
@@ -93,7 +91,6 @@ gncinclude_HEADERS = \
   gnc-pricedb.h \
   gnc-session.h \
   gnc-session-scm.h \
-  gncObject.h \
   kvp-scm.h \
   policy.h \
   gncAddress.h \
@@ -124,7 +121,6 @@ gncinclude_HEADERS = \
 
 noinst_HEADERS = \
   AccountP.h \
-  QueryP.h \
   ScrubP.h \
   SplitP.h \
   SX-book.h \

@@ -35,10 +35,10 @@
 #include "gnc-gui-query.h"
 #include "gnc-query-list.h"
 #include "gnc-gconf-utils.h"
-#include "gncObject.h"
 #include "qof.h"
-#include "QueryObject.h"
-#include "QueryCore.h"
+#include "qof.h"
+#include "qof.h"
+#include "qof.h"
 
 #include "Transaction.h"	/* for the SPLIT_* and TRANS_* */
 
@@ -352,7 +352,7 @@ search_update_query (GNCSearchWindow *sw)
     QofQuery *q, *q2, *new_q;
     GList *node;
     QofQueryOp op;
-    QueryPredData_t pdata;
+    QofQueryPredData* pdata;
 
     if (sw->grouping == GNC_SEARCH_MATCH_ANY)
         op = QOF_QUERY_OR;

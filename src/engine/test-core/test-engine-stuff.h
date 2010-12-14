@@ -64,8 +64,8 @@ typedef enum
     ALL_QT         = (1 << 8) - 1
 } TestQueryTypes;
 
-Query * get_random_query(void);
-Query * make_trans_query (Transaction *trans, TestQueryTypes query_types);
+QofQuery * get_random_query(void);
+QofQuery * make_trans_query (Transaction *trans, TestQueryTypes query_types);
 TestQueryTypes get_random_query_type (void);
 void trans_query_include_price (gboolean include_amounts);
 

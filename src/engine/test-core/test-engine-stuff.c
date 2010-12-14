@@ -1657,7 +1657,7 @@ typedef enum
 } sort_type_t;
 
 static void
-set_query_sort (Query *q, sort_type_t sort_code)
+set_query_sort (QofQuery *q, sort_type_t sort_code)
 {
     GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
 
@@ -1712,10 +1712,10 @@ set_query_sort (Query *q, sort_type_t sort_code)
     qof_query_set_sort_order (q, p1, p2, p3);
 }
 
-Query *
+QofQuery *
 get_random_query(void)
 {
-    Query *q;
+    QofQuery *q;
     int num_terms;
 
     num_terms = get_random_int_in_range (1, 3);
@@ -1972,7 +1972,7 @@ typedef struct
 {
     QofIdType where;
     GSList *path;
-    Query *q;
+    QofQuery *q;
 } KVPQueryData;
 
 static void
@@ -1997,7 +1997,7 @@ add_kvp_value_query (const char *key, KvpValue *value, gpointer data)
 }
 
 static void
-add_kvp_query (Query *q, KvpFrame *frame, QofIdType where)
+add_kvp_query (QofQuery *q, KvpFrame *frame, QofIdType where)
 {
     KVPQueryData kqd;
 
@@ -2036,12 +2036,12 @@ get_random_query_type (void)
     }
 }
 
-Query *
+QofQuery *
 make_trans_query (Transaction *trans, TestQueryTypes query_types)
 {
     Account *a;
     gnc_numeric n;
-    Query *q;
+    QofQuery *q;
     Split *s;
 
     if (query_types == RANDOM_QT)

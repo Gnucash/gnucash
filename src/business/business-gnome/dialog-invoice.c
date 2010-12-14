@@ -30,8 +30,8 @@
 #include <libguile.h>
 #include "swig-runtime.h"
 
-#include "gncObject.h"
-#include "QueryCore.h"
+#include "qof.h"
+#include "qof.h"
 #include "qof.h"
 
 #include "dialog-utils.h"
@@ -2670,7 +2670,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
 {
     QofIdType type = GNC_INVOICE_MODULE_NAME;
     Query *q;
-    QueryPredData_t pred_data;
+    QofQueryPredData* pred_data;
     time_t end_date;
     GList *res;
     gint len;

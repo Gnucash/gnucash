@@ -30,9 +30,9 @@
 #include "gnc-component-manager.h"
 #include "gnc-query-list.h"
 #include "search-param.h"
-#include "QueryCore.h"
 #include "qof.h"
-#include "QueryObject.h"
+#include "qof.h"
+#include "qof.h"
 
 /* Signal codes */
 enum

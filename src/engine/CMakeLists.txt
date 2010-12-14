@@ -25,8 +25,6 @@ SET (libgncmod_engine_HEADERS
   SX-book.h
   SX-ttinfo.h
   Query.h
-  QueryObject.h
-  QueryCore.h
   Scrub.h
   Scrub2.h
   Scrub3.h
@@ -46,7 +44,6 @@ SET (libgncmod_engine_HEADERS
   gnc-pricedb.h
   gnc-session-scm.h
   gnc-session.h
-  gncObject.h
   kvp-scm.h
   policy.h
   gncAddress.h

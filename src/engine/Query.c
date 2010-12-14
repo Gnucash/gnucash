@@ -63,7 +63,7 @@ build_param_list_internal (const char *first, va_list rest)
  ********************************************************************/
 
 SplitList *
-xaccQueryGetSplitsUniqueTrans(Query *q)
+xaccQueryGetSplitsUniqueTrans(QofQuery *q)
 {
     GList       * splits = qof_query_run(q);
     GList       * current;
@@ -115,7 +115,7 @@ query_match_any_filter_func(gpointer key, gpointer value, gpointer user_data)
 }
 
 TransList *
-xaccQueryGetTransactions (Query * q, query_txn_match_t runtype)
+xaccQueryGetTransactions (QofQuery * q, query_txn_match_t runtype)
 {
     GList       * splits = qof_query_run(q);
     GList       * current = NULL;
@@ -186,7 +186,7 @@ query_match_any_lot_filter_func(gpointer key, gpointer value, gpointer user_data
 }
 
 LotList *
-xaccQueryGetLots (Query * q, query_txn_match_t runtype)
+xaccQueryGetLots (QofQuery * q, query_txn_match_t runtype)
 {
     GList       * splits = qof_query_run(q);
     GList       * current = NULL;
@@ -234,7 +234,7 @@ xaccQueryGetLots (Query * q, query_txn_match_t runtype)
  *******************************************************************/
 
 void
-xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
+xaccQueryAddAccountMatch(QofQuery *q, AccountList *acct_list,
                          QofGuidMatch how, QofQueryOp op)
 {
     GList *list = NULL;
@@ -265,7 +265,7 @@ xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
 }
 
 void
-xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
+xaccQueryAddAccountGUIDMatch(QofQuery *q, AccountGUIDList *guid_list,
                              QofGuidMatch how, QofQueryOp op)
 {
     QofQueryPredData *pred_data;
@@ -295,7 +295,7 @@ xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
 }
 
 void
-xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QofQueryOp op)
+xaccQueryAddSingleAccountMatch(QofQuery *q, Account *acc, QofQueryOp op)
 {
     GList *list;
     const GncGUID *guid;
@@ -312,7 +312,7 @@ xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QofQueryOp op)
 }
 
 void
-xaccQueryAddStringMatch (Query* q, const char *matchstring,
+xaccQueryAddStringMatch (QofQuery* q, const char *matchstring,
                          gboolean case_sens, gboolean use_regexp,
                          QofQueryOp op,
                          const char * path, ...)
@@ -339,7 +339,7 @@ xaccQueryAddStringMatch (Query* q, const char *matchstring,
 }
 
 void
-xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, QofNumericMatch sign,
+xaccQueryAddNumericMatch (QofQuery *q, gnc_numeric amount, QofNumericMatch sign,
                           QofQueryCompare how, QofQueryOp op,
                           const char * path, ...)
 {
@@ -371,12 +371,12 @@ xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, QofNumericMatch sign,
  */
 
 void
-xaccQueryAddDateMatchTS (Query * q,
+xaccQueryAddDateMatchTS (QofQuery * q,
                          gboolean use_start, Timespec sts,
                          gboolean use_end, Timespec ets,
                          QofQueryOp op)
 {
-    Query *tmp_q = NULL;
+    QofQuery *tmp_q = NULL;
     QofQueryPredData *pred_data;
     GSList *param_list;
 
@@ -416,7 +416,7 @@ xaccQueryAddDateMatchTS (Query * q,
 }
 
 void
-xaccQueryGetDateMatchTS (Query * q,
+xaccQueryGetDateMatchTS (QofQuery * q,
                          Timespec * sts,
                          Timespec * ets)
 {
@@ -448,7 +448,7 @@ xaccQueryGetDateMatchTS (Query * q,
  ********************************************************************/
 
 void
-xaccQueryAddDateMatch(Query * q,
+xaccQueryAddDateMatch(QofQuery * q,
                       gboolean use_start, int sday, int smonth, int syear,
                       gboolean use_end, int eday, int emonth, int eyear,
                       QofQueryOp op)
@@ -467,7 +467,7 @@ xaccQueryAddDateMatch(Query * q,
  ********************************************************************/
 
 void
-xaccQueryAddDateMatchTT(Query * q,
+xaccQueryAddDateMatchTT(QofQuery * q,
                         gboolean use_start,
                         time_t stt,
                         gboolean use_end,
@@ -490,7 +490,7 @@ xaccQueryAddDateMatchTT(Query * q,
 }
 
 void
-xaccQueryGetDateMatchTT (Query * q,
+xaccQueryGetDateMatchTT (QofQuery * q,
                          time_t * stt,
                          time_t * ett)
 {
@@ -504,7 +504,7 @@ xaccQueryGetDateMatchTT (Query * q,
 }
 
 void
-xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QofQueryOp op)
+xaccQueryAddClearedMatch(QofQuery * q, cleared_match_t how, QofQueryOp op)
 {
     QofQueryPredData *pred_data;
     GSList *param_list;
@@ -536,7 +536,7 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QofQueryOp op)
 }
 
 void
-xaccQueryAddGUIDMatch(Query * q, const GncGUID *guid,
+xaccQueryAddGUIDMatch(QofQuery * q, const GncGUID *guid,
                       QofIdType id_type, QofQueryOp op)
 {
     GSList *param_list = NULL;
@@ -588,7 +588,7 @@ xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
  *******************************************************************/
 
 time_t
-xaccQueryGetEarliestDateFound(Query * q)
+xaccQueryGetEarliestDateFound(QofQuery * q)
 {
     GList * spl;
     Split * sp;
@@ -617,7 +617,7 @@ xaccQueryGetEarliestDateFound(Query * q)
  *******************************************************************/
 
 time_t
-xaccQueryGetLatestDateFound(Query * q)
+xaccQueryGetLatestDateFound(QofQuery * q)
 {
     Split  * sp;
     GList  * spl;
@@ -639,7 +639,7 @@ xaccQueryGetLatestDateFound(Query * q)
 }
 
 void
-xaccQueryAddDescriptionMatch(Query *q, const char *m, gboolean c, gboolean r,
+xaccQueryAddDescriptionMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
                              QofQueryOp o)
 {
     xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS,
@@ -647,7 +647,7 @@ xaccQueryAddDescriptionMatch(Query *q, const char *m, gboolean c, gboolean r,
 }
 
 void
-xaccQueryAddNumberMatch(Query *q, const char *m, gboolean c, gboolean r,
+xaccQueryAddNumberMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
                         QofQueryOp o)
 {
     xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS,
@@ -655,21 +655,21 @@ xaccQueryAddNumberMatch(Query *q, const char *m, gboolean c, gboolean r,
 }
 
 void
-xaccQueryAddActionMatch(Query *q, const char *m, gboolean c, gboolean r,
+xaccQueryAddActionMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
                         QofQueryOp o)
 {
     xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_ACTION, NULL);
 }
 
 void
-xaccQueryAddMemoMatch(Query *q, const char *m, gboolean c, gboolean r,
+xaccQueryAddMemoMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
                       QofQueryOp o)
 {
     xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_MEMO, NULL);
 }
 
 void
-xaccQueryAddValueMatch(Query *q, gnc_numeric amt, QofNumericMatch sgn,
+xaccQueryAddValueMatch(QofQuery *q, gnc_numeric amt, QofNumericMatch sgn,
                        QofQueryCompare how, QofQueryOp op)
 {
     xaccQueryAddNumericMatch ((q), (amt), (sgn), (how), (op),
@@ -677,7 +677,7 @@ xaccQueryAddValueMatch(Query *q, gnc_numeric amt, QofNumericMatch sgn,
 }
 
 void
-xaccQueryAddSharePriceMatch(Query *q, gnc_numeric amt, QofQueryCompare how,
+xaccQueryAddSharePriceMatch(QofQuery *q, gnc_numeric amt, QofQueryCompare how,
                             QofQueryOp op)
 {
     xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op),
@@ -685,7 +685,7 @@ xaccQueryAddSharePriceMatch(Query *q, gnc_numeric amt, QofQueryCompare how,
 }
 
 void
-xaccQueryAddSharesMatch(Query *q, gnc_numeric amt, QofQueryCompare how,
+xaccQueryAddSharesMatch(QofQuery *q, gnc_numeric amt, QofQueryCompare how,
                         QofQueryOp op)
 {
     xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op),
@@ -693,7 +693,7 @@ xaccQueryAddSharesMatch(Query *q, gnc_numeric amt, QofQueryCompare how,
 }
 
 void
-xaccQueryAddBalanceMatch(Query *q, QofQueryCompare bal, QofQueryOp op)
+xaccQueryAddBalanceMatch(QofQuery *q, QofQueryCompare bal, QofQueryOp op)
 {
     xaccQueryAddNumericMatch(
         (q), gnc_numeric_zero(), QOF_NUMERIC_MATCH_ANY,

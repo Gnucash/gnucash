@@ -30,7 +30,7 @@
 
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
-#include "QueryCore.h"
+#include "qof.h"
 
 #include "search-date.h"
 #include "search-core-utils.h"
@@ -42,7 +42,7 @@ static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_date_class_init	(GNCSearchDateClass *class);
 static void gnc_search_date_init	(GNCSearchDate *gspaper);
@@ -260,7 +260,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     return box;
 }
 
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchDate *fi = (GNCSearchDate *)fe;
     GNCSearchDatePrivate *priv;

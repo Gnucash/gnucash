@@ -30,8 +30,8 @@
 
 #include "gnc-engine.h"
 #include "GNCId.h"
-#include "QueryCore.h"
-#include "QueryObject.h"
+#include "qof.h"
+#include "qof.h"
 
 #include "search-param.h"
 
@@ -183,7 +183,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
     for (; param_path; param_path = param_path->next)
     {
         QofIdType param_name = param_path->data;
-        const QueryObjectDef *objDef =
+        const QofParam *objDef =
             qof_class_get_parameter (search_type, param_name);
 
         /* If it doesn't exist, then we've reached the end */

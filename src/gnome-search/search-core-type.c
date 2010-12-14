@@ -26,7 +26,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-#include "QueryCore.h"
+#include "qof.h"
 #include "qof.h"
 #include "Account.h"		/* for ACCOUNT_MATCH_ALL_TYPE */
 #include "Transaction.h"	/* for RECONCILED_MATCH_TYPE */
@@ -193,7 +193,7 @@ gnc_search_core_type_get_widget (GNCSearchCoreType *fe)
  *
  * Return value:
  **/
-QueryPredData_t
+QofQueryPredData*
 gnc_search_core_type_get_predicate (GNCSearchCoreType *fe)
 {
     return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->get_predicate(fe);

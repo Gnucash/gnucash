@@ -28,7 +28,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "QueryCore.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 #include "gnc-gui-query.h"
 #include "gncOwner.h"
@@ -42,7 +42,7 @@
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_owner_class_init	(GNCSearchOwnerClass *class);
 static void gnc_search_owner_init	(GNCSearchOwner *gspaper);
@@ -303,7 +303,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     return box;
 }
 
-static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
+static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchOwner *fi = (GNCSearchOwner *)fe;
     GNCSearchOwnerPrivate *priv;
