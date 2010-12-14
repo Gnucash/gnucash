@@ -59,6 +59,8 @@ typedef struct
                         * default is QUICKFILL_LIFO. */
 
     char *original;  /* original string entered in original case */
+
+    gboolean use_quickfill_cache;  /* If TRUE, we don't own the qf */
 } QuickFillCell;
 
 BasicCell *      gnc_quickfill_cell_new (void);
@@ -71,5 +73,11 @@ void             gnc_quickfill_cell_set_sort (QuickFillCell *cell,
 
 void             gnc_quickfill_cell_add_completion (QuickFillCell *cell,
         const char *completion);
+
+/** Lets the cell use the given shared quickfill object instead of the
+ * one it owns internally. The cell will not delete the shared
+ * quickfill upon destruction. */
+void
+gnc_quickfill_cell_use_quickfill_cache (QuickFillCell *cell, QuickFill *shared_qf);
 
 #endif

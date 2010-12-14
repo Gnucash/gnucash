@@ -259,7 +259,10 @@ gnc_quickfill_cell_destroy (BasicCell *bcell)
 {
     QuickFillCell *cell = (QuickFillCell *) bcell;
 
-    gnc_quickfill_destroy (cell->qf);
+    if (!cell->use_quickfill_cache)
+    {
+        gnc_quickfill_destroy (cell->qf);
+    }
     cell->qf = NULL;
 
     g_free (cell->original);
@@ -277,6 +280,7 @@ gnc_quickfill_cell_init (QuickFillCell *cell)
     gnc_basic_cell_init (&(cell->cell));
 
     cell->qf = gnc_quickfill_new ();
+    cell->use_quickfill_cache = FALSE;
     cell->sort = QUICKFILL_LIFO;
     cell->original = NULL;
 
@@ -340,4 +344,18 @@ gnc_quickfill_cell_add_completion (QuickFillCell *cell, const char *completion)
         return;
 
     gnc_quickfill_insert (cell->qf, completion, cell->sort);
+}
+
+void
+gnc_quickfill_cell_use_quickfill_cache (QuickFillCell *cell, QuickFill *shared_qf)
+{
+    g_assert(cell);
+    g_assert(shared_qf);
+
+    if (!cell->use_quickfill_cache)
+    {
+        cell->use_quickfill_cache = TRUE;
+        gnc_quickfill_destroy (cell->qf);
+    }
+    cell->qf = shared_qf;
 }

@@ -63,6 +63,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-druid-provider-file-gnome.c \
   gnc-druid-provider-multifile-gnome.c \
   gnc-embedded-window.c \
+  gnc-entry-quickfill.c \
   gnc-file.c \
   gnc-frequency.c \
   gnc-recurrence.c \
@@ -135,6 +136,7 @@ gncinclude_HEADERS = \
   gnc-dense-cal-store.h \
   gnc-druid-gnome-ui.h \
   gnc-embedded-window.h \
+  gnc-entry-quickfill.h \
   gnc-file.h \
   gnc-frequency.h \
   gnc-recurrence.h \
