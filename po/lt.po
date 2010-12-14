@@ -2699,7 +2699,7 @@ msgstr "Į_rašyti"
 
 #. Translators: %s is the string "an Account" i.e. its translation.
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:150
-#, c-format
+#, c-format, fuzzy
 msgid "Invalid Entry:  You need to supply %s."
 msgstr "Neteisingas įrašas: reikia pateikti"
 
