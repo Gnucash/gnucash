@@ -31,8 +31,6 @@
 #include "swig-runtime.h"
 
 #include "qof.h"
-#include "qof.h"
-#include "qof.h"
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -40,7 +38,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "qof.h"
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
 #include "gnucash-sheet.h"

@@ -36,9 +36,6 @@
 #include "gnc-query-list.h"
 #include "gnc-gconf-utils.h"
 #include "qof.h"
-#include "qof.h"
-#include "qof.h"
-#include "qof.h"
 
 #include "Transaction.h"	/* for the SPLIT_* and TRANS_* */
 

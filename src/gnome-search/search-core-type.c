@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 
 #include "qof.h"
-#include "qof.h"
 #include "Account.h"		/* for ACCOUNT_MATCH_ALL_TYPE */
 #include "Transaction.h"	/* for RECONCILED_MATCH_TYPE */
 

@@ -31,7 +31,6 @@
 #include "gnc-engine.h"
 #include "GNCId.h"
 #include "qof.h"
-#include "qof.h"
 
 #include "search-param.h"
 

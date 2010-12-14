@@ -29,7 +29,6 @@
 
 #include "gnc-date.h"
 #include "qof.h"
-#include "qof.h"
 #include "Transaction.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"

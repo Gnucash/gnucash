@@ -28,7 +28,6 @@
 #include "Account.h"
 #include "Query.h"
 #include "qof.h"
-#include "qof.h"
 #include "SX-book.h"
 #include "Transaction.h"
 #include "gnc-component-manager.h"

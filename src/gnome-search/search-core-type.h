@@ -23,7 +23,6 @@
 #define _GNCSEARCH_CORE_TYPE_H
 
 #include "qof.h"
-#include "qof.h"
 #include "search-param.h"
 
 #define GNC_TYPE_SEARCH_CORE_TYPE		(gnc_search_core_type_get_type ())

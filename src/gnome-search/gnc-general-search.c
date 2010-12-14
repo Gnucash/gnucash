@@ -38,8 +38,6 @@
 
 #include "gnc-component-manager.h"
 #include "qof.h"
-#include "qof.h"
-#include "qof.h"
 #include "gnc-general-search.h"
 
 #define GNCGENERALSEARCH_CLASS	"gnc-general-search-widget"

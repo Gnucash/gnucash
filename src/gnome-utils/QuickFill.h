@@ -50,7 +50,6 @@
 #ifndef QUICKFILL_H
 #define QUICKFILL_H
 
-#include <gdk/gdk.h>
 #include <glib.h>
 
 typedef enum
