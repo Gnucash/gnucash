@@ -244,48 +244,48 @@ class GncNumeric(GnuCashCoreClass):
         #    self.set_num(num)     # currently undefined
 
 class GncPrice(GnuCashCoreClass):
-  '''
-  Each priceEach price in the database represents an "instantaneous"
-  quote for a given commodity with respect to another commodity.
-  For example, a given price might represent the value of LNUX in USD on 2001-02-03.
-
-  Fields:
-    * commodity: the item being priced.
-    * currency: the denomination of the value of the item being priced.
-    * value: the value of the item being priced.
-    * time: the time the price was valid.
-    * source: a string describing the source of the quote. These strings will be something like this:
-    "Finance::Quote", "user:misc", "user:foo", etc. If the quote came from a user, as a matter of policy,
-    you *must* prefix the string you give with "user:". For now, the only other reserved values are
-    "Finance::Quote" and "old-file-import". Any string used must be added to the source_list array in
-    dialog-price-edit-db.c so that it can be properly translated. (There are unfortunately many strings
-    in users' databases, so this string must be translated on output instead of always being used in untranslated form).
-    * type: the type of quote - types possible right now are bid, ask, last, nav, and
-    unknown.Each price in the database represents an "instantaneous" quote for a given
-    commodity with respect to another commodity.
+    '''
+    Each priceEach price in the database represents an "instantaneous"
+    quote for a given commodity with respect to another commodity.
     For example, a given price might represent the value of LNUX in USD on 2001-02-03.
 
-    See also http://svn.gnucash.org/docs/head/group__Price.html
-  '''
-  pass
+    Fields:
+      * commodity: the item being priced.
+      * currency: the denomination of the value of the item being priced.
+      * value: the value of the item being priced.
+      * time: the time the price was valid.
+      * source: a string describing the source of the quote. These strings will be something like this:
+      "Finance::Quote", "user:misc", "user:foo", etc. If the quote came from a user, as a matter of policy,
+      you *must* prefix the string you give with "user:". For now, the only other reserved values are
+      "Finance::Quote" and "old-file-import". Any string used must be added to the source_list array in
+      dialog-price-edit-db.c so that it can be properly translated. (There are unfortunately many strings
+      in users' databases, so this string must be translated on output instead of always being used in untranslated form).
+      * type: the type of quote - types possible right now are bid, ask, last, nav, and
+      unknown.Each price in the database represents an "instantaneous" quote for a given
+      commodity with respect to another commodity.
+      For example, a given price might represent the value of LNUX in USD on 2001-02-03.
+
+      See also http://svn.gnucash.org/docs/head/group__Price.html
+    '''
+    pass
 GncPrice.add_methods_with_prefix('gnc_price_')
 
 
 class GncPriceDB(GnuCashCoreClass):
-  '''
-  a simple price database for gnucash.
-  The PriceDB is intended to be a database of price quotes, or more specifically,
-  a database of GNCPrices. For the time being, it is still a fairly simple
-  database supporting only fairly simple queries. It is expected that new
-  queries will be added as needed, and that there is some advantage to delaying
-  complex queries for now in the hope that we get a real DB implementation
-  before they're really needed.
+    '''
+    a simple price database for gnucash.
+    The PriceDB is intended to be a database of price quotes, or more specifically,
+    a database of GNCPrices. For the time being, it is still a fairly simple
+    database supporting only fairly simple queries. It is expected that new
+    queries will be added as needed, and that there is some advantage to delaying
+    complex queries for now in the hope that we get a real DB implementation
+    before they're really needed.
 
-  Every QofBook contains a GNCPriceDB, accessible via gnc_pricedb_get_db.
+    Every QofBook contains a GNCPriceDB, accessible via gnc_pricedb_get_db.
 
-  Definition in file gnc-pricedb.h.
-  See also http://svn.gnucash.org/docs/head/gnc-pricedb_8h.html
-  '''
+    Definition in file gnc-pricedb.h.
+    See also http://svn.gnucash.org/docs/head/gnc-pricedb_8h.html
+    '''
 
 GncPriceDB.add_methods_with_prefix('gnc_pricedb_')
 PriceDB_dict =  {
