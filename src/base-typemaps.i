@@ -147,6 +147,8 @@ typedef char gchar;
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Transaction, 0));
         else if (GNC_IS_COMMODITY(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_gnc_commodity, 0));
+        else if (GNC_IS_COMMODITY_NAMESPACE(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_gnc_commodity_namespace, 0));
         else if (GNC_IS_LOT(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCLot, 0));
         else if (GNC_IS_PRICE(data))
