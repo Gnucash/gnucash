@@ -290,6 +290,7 @@ GncInvoice * gnc_invoice_get_invoice (GtkWidget *widget)
 void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice)
 {
     g_return_if_fail (widget != NULL);
+    g_return_if_fail (invoice != NULL);
 
     gnc_general_search_set_selected (GNC_GENERAL_SEARCH (widget), invoice);
 }
@@ -309,6 +310,7 @@ void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner)
 
     gncOwnerCopy(owner, &isi->owner);
     isi->have_owner = TRUE;
+    gnc_general_search_set_selected(GNC_GENERAL_SEARCH(widget), NULL);
 
     /* Reset the label */
     gnc_invoice_select_search_set_label(isi);
