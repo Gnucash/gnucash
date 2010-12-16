@@ -33,7 +33,7 @@
 #include "gnc-module.h"
 #include "gnc-path.h"
 #include "binreloc.h"
-#include "gnc-version.h"
+#include "core-utils/gnc-version.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-ui-util.h"

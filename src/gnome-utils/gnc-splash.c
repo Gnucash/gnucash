@@ -27,7 +27,7 @@
 
 #include "gnc-gnome-utils.h"
 #include "gnc-splash.h"
-#include "gnc-version.h"
+#include "core-utils/gnc-version.h"
 #include "gnc-gconf-utils.h"
 
 #define MARKUP_STRING "<span size='small'>%s</span>"

@@ -60,7 +60,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-uri-utils.h"
-#include "gnc-version.h"
+#include "core-utils/gnc-version.h"
 #include "gnc-window.h"
 #include "gnc-main.h"
 #include "gnc-gconf-utils.h"

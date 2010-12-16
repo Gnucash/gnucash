@@ -48,6 +48,7 @@ AM_CPPFLAGS = \
   ${IGE_MAC_CFLAGS} \
   ${QOF_CFLAGS} \
   -I${top_srcdir}/src/libqof/qof \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
