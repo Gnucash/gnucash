@@ -175,6 +175,7 @@ const char *trans_notes_str = "notes";
 const char *void_reason_str = "void-reason";
 const char *void_time_str = "void-time";
 const char *void_former_notes_str = "void-former-notes";
+const char *trans_is_closing_str = "book_closing";
 
 /* KVP entry for date-due value */
 #define TRANS_DATE_DUE_KVP       "trans-date-due"
@@ -1785,6 +1786,21 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
     xaccTransCommitEdit(trans);
 }
 
+void
+xaccTransSetIsClosingTxn (Transaction *trans, gboolean is_closing)
+{
+    if (!trans) return;
+    xaccTransBeginEdit(trans);
+
+    if (is_closing)
+      kvp_frame_set_gint64 (trans->inst.kvp_data, trans_is_closing_str, 1);
+    else
+      kvp_frame_replace_value_nc (trans->inst.kvp_data, trans_is_closing_str, NULL);
+    qof_instance_set_dirty(QOF_INSTANCE(trans));
+    xaccTransCommitEdit(trans);
+}
+
+
 /********************************************************************\
 \********************************************************************/
 
@@ -1839,6 +1855,14 @@ xaccTransGetNotes (const Transaction *trans)
 {
     return trans ?
            kvp_frame_get_string (trans->inst.kvp_data, trans_notes_str) : NULL;
+}
+
+gboolean
+xaccTransGetIsClosingTxn (const Transaction *trans)
+{
+    return trans ?
+        kvp_frame_get_gint64 (trans->inst.kvp_data, trans_is_closing_str)
+        : FALSE;
 }
 
 /********************************************************************\
@@ -2339,6 +2363,10 @@ gboolean xaccTransRegister (void)
             TRANS_NOTES, QOF_TYPE_STRING,
             (QofAccessFunc)xaccTransGetNotes,
             (QofSetterFunc)qofTransSetNotes
+        },
+        {
+            TRANS_IS_CLOSING, QOF_TYPE_BOOLEAN,
+            (QofAccessFunc)xaccTransGetIsClosingTxn, NULL
         },
         {
             TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN,

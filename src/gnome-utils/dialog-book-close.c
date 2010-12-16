@@ -104,12 +104,7 @@ find_or_create_txn(struct CloseAccountsCB* cacb, gnc_commodity* cmdty)
         xaccTransSetDatePostedSecs(txn->txn, cacb->cbw->close_date);
         xaccTransSetDescription(txn->txn, cacb->cbw->desc);
         xaccTransSetCurrency(txn->txn, cmdty);
-        frame = xaccTransGetSlots(txn->txn);
-        /* Add a bool flag to indicate this txn was created automatically
-           by the book closing feature. See
-           https://lists.gnucash.org/pipermail/gnucash-devel/2008-August/023757.html */
-        kvp_frame_set_gint64(frame, "book_closing", 1);
-
+	xaccTransSetIsClosingTxn(txn->txn, TRUE);
         g_hash_table_insert(cacb->txns, cmdty, txn);
     }
 

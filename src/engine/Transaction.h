@@ -283,6 +283,13 @@ const char *  xaccTransGetDescription (const Transaction *trans);
 const char *  xaccTransGetNotes (const Transaction *trans);
 
 
+/** Sets whether or not this transaction is a "closing transaction" */
+void          xaccTransSetIsClosingTxn (Transaction *trans, gboolean is_closing);
+
+/** Returns whether this transaction is a "closing transaction" */
+gboolean      xaccTransGetIsClosingTxn (const Transaction *trans);
+
+
 /** Add a split to the transaction
  *
  The xaccTransAppendSplit() method will append the indicated
@@ -597,6 +604,7 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 #define TRANS_DATE_DUE		"date-due"
 #define TRANS_IMBALANCE		"trans-imbalance"
 #define TRANS_IS_BALANCED	"trans-balanced?"
+#define TRANS_IS_CLOSING        "trans-is-closing?"
 #define TRANS_NOTES		"notes"
 #define TRANS_TYPE		"type"
 #define TRANS_VOID_STATUS	"void-p"
