@@ -20,6 +20,13 @@
  *                                                                  *
  ********************************************************************/
 
+/** @addtogroup Event
+@{
+*/
+/** @file
+    @brief Additional event handling code
+*/
+
 #ifndef GNC_EVENT_H
 #define GNC_EVENT_H
 
@@ -32,11 +39,16 @@ typedef struct
     gint idx;
 } GncEventData;
 
-/* These events are used when a split is added to an account.
+/** These events are used when a split is added to an account.
  * The event subject is the Account, the Object is the Split.
  */
 #define GNC_EVENT_ITEM_ADDED	QOF_MAKE_EVENT(QOF_EVENT_BASE+0)
 #define GNC_EVENT_ITEM_REMOVED	QOF_MAKE_EVENT(QOF_EVENT_BASE+1)
 #define GNC_EVENT_ITEM_CHANGED	QOF_MAKE_EVENT(QOF_EVENT_BASE+2)
 
+/** Convert the given QofEventId (an integer number) to a string that
+ * is usable in debugging output. */
+const char* qofeventid_to_string(QofEventId id);
+
 #endif
+/** @} */

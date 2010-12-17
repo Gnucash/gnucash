@@ -32,6 +32,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-budget.c \
   gnc-commodity.c \
   gnc-engine.c \
+  gnc-event.c \
   gnc-hooks.c \
   gnc-lot.c \
   gnc-pricedb.c \
