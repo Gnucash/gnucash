@@ -22,6 +22,13 @@
  *
  * @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
  */
+/** @file
+    @brief SWIG interface file for type translation of glib types
+        This file may be obsolete, because the same definitions are also in base-typemaps.i.
+    @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
+    @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
+    @ingroup python-bindings */
+
 
 %typemap(in) gint8, gint16, gint32, gint64, gint, gshort, glong {
     $1 = ($1_type)PyInt_AsLong($input);

@@ -20,6 +20,11 @@
 #
 # @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 # @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
+##  @file
+#   @brief High level python wrapper classes for the business parts of GnuCash
+#   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
+#   @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
+#   @ingroup python-bindings
 
 import gnucash_core_c
 

@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+##  @file
+#   @brief Example Script simple session
+#   @ingroup python-bindings-examples
 
 from gnucash import \
      Session, GnuCashBackendException, \

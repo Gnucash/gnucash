@@ -22,6 +22,11 @@
 #
 # @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 
+##  @file
+#   @brief Test the transaction imbalace viewing mechanisms
+#   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
+#   @ingroup python-bindings-examples
+
 from sys import argv
 
 from gnucash import Session, Transaction, Split, Account, GncNumeric, \

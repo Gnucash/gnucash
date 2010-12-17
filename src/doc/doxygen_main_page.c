@@ -56,6 +56,7 @@ in relation to existing code.
 - \ref taxnotes
 - \ref todo
 - \ref userprefs
+- \ref python-bindings-page
 
 Each overview in this section is generated directly from the
 source files using Doxygen but some topics need updating.

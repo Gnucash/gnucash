@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+##  @file
+#   @brief Simple example for a book 
+#   @ingroup python-bindings-examples
+
 import sys
 from gnucash import Session
 

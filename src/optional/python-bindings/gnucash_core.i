@@ -24,6 +24,21 @@
  * @author Jeff Green, ParIT Worker Co-operative <jeff@parit.ca>
  */
 
+/** @file
+    @brief SWIG interface file for the core parts of GnuCash
+        This file is processed by SWIG and the resulting files are gnucash_core.c and gnucash_core_c.py
+    @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
+    @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
+    @ingroup python-bindings 
+
+    @file gnucash_core.c
+    @brief SWIG output file.
+    @ingroup python-bindings
+    @file gnucash_core_c.py
+    @brief SWIG output file.
+    @ingroup python-bindings
+*/
+
 %feature("autodoc", "1");
 %module(package="gnucash") gnucash_core_c
 
@@ -68,7 +83,7 @@
 %include <qofbackend.h>
 
 // this function is defined in qofsession.h, but isnt found in the libraries,
-// ignoroed because SWIG attempts to link against (to create language bindings)
+// ignored because SWIG attempts to link against (to create language bindings)
 %ignore qof_session_not_saved;
 %include <qofsession.h>
 

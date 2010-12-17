@@ -1,3 +1,8 @@
+/** @file 
+    @brief interface file for SWIG, used by python-bindings and scheme(?).
+    @addtogroup python-bindings
+*/
+
 /* Not sure why SWIG doesn't figure this out. */
 typedef int gint;
 typedef int time_t;

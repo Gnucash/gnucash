@@ -10,6 +10,10 @@
 # The account file is not saved but always use a disposable copy.
 # Change, FILE, CURRENCY and STOCK to those defined in your test account.
 
+##  @file
+#   @brief Test file for price database stuff
+#   @author Mike Evans 
+#   @ingroup python-bindings-examples
 
 from gnucash import Session
 FILE = "PATH_TO_YOUR_TEST_FILE"  ## Fail is no saved but use a copy anyway

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-# Creates a basic set of accounts and a couple of transactions
+## @file
+# @brief Creates a basic set of accounts and a couple of transactions
+# @ingroup python-bindings-example
 
 from gnucash import Session, Account, Transaction, Split, GncNumeric
 

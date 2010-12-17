@@ -33,6 +33,11 @@
 #          sqlite3:///home/blah/blah.gnucash
 #          dda2ec8e3e63c7715097f852851d6b22 1001 'The Goods' 201.43 
 
+##  @file
+#   @brief Add an invoice to a set of books
+#   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
+#   @ingroup python-bindings-examples
+
 from gnucash import Session, GUID, GncNumeric
 from gnucash.gnucash_business import Customer, Invoice, Entry
 from gnucash.gnucash_core_c import string_to_guid

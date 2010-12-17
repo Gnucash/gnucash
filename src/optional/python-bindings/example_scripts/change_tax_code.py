@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+##  @file
+#   @brief Output all the credits and debits on an account
+#   @ingroup python-bindings-examples
+
 from gnucash import Session, Account
 
 # choose the account code to select

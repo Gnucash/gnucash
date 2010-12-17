@@ -33,6 +33,11 @@
 #
 # You may also want to look at simple_invoice_insert.py
 
+##  @file
+#   @brief Set up a set of books for business feature use
+#   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
+#   @ingroup python-bindings-examples
+
 from os.path import abspath
 from sys import argv
 import datetime
