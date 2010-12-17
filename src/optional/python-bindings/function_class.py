@@ -124,6 +124,18 @@ def method_function_returns_instance(method_function, cls):
     
     return new_function
 
+def method_function_returns_instance_list(method_function, cls):
+    def new_function(*args):
+        return [ cls( **{INSTANCE_ARGUMENT: item} )
+                 for item in method_function(*args) ]
+    return new_function
+
+def methods_return_instance_lists(cls, function_dict):
+    for func_name, instance_name in function_dict.iteritems():
+        setattr(cls, func_name,
+                method_function_returns_instance_list(
+                getattr(cls, func_name), instance_name))
+
 def default_arguments_decorator(function, *args):
     """Decorates a function to give it default, positional arguments
 

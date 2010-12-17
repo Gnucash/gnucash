@@ -26,7 +26,8 @@ import gnucash_core_c
 from function_class import \
      ClassFromFunctions, extract_attributes_with_prefix, \
      default_arguments_decorator, method_function_returns_instance, \
-     methods_return_instance, process_list_convert_to_instance
+     methods_return_instance, process_list_convert_to_instance, \
+     method_function_returns_instance_list, methods_return_instance_lists
 
 from gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
     gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
@@ -297,6 +298,8 @@ PriceDB_dict =  {
                 'convert_balance_latest_before' : GncNumeric,
                 }
 methods_return_instance(GncPriceDB,PriceDB_dict)
+GncPriceDB.get_prices = method_function_returns_instance_list(
+    GncPriceDB.get_prices, GncPrice )
 
 
 class GncCommodity(GnuCashCoreClass): pass
@@ -313,6 +316,9 @@ class GncCommodityTable(GnuCashCoreClass):
     which includes most of the world's currencies.
     """
 
+    pass
+
+class GncCommodityNamespace(GnuCashCoreClass):
     pass
 
 class GncLot(GnuCashCoreClass):
@@ -486,9 +492,25 @@ commoditytable_dict =   {
                             'lookup' : GncCommodity,
                             'lookup_unique' : GncCommodity,
                             'find_full' : GncCommodity,
-                            'insert' : GncCommodity
+                            'insert' : GncCommodity,
+                            'add_namespace': GncCommodityNamespace,
+                            'find_namespace': GncCommodityNamespace,
                         }
 methods_return_instance(GncCommodityTable, commoditytable_dict)
+
+methods_return_instance_lists(
+    GncCommodityTable, { 'get_namespaces': GncCommodityNamespace,
+                         'get_namespaces_list': GncCommodityNamespace,
+                         'get_commodities': GncCommodity,
+                         'get_quotable_commodities': GncCommodity,
+                         
+                       } )
+
+# GncCommodityNamespace
+GncCommodityNamespace.add_methods_with_prefix('gnc_commodity_namespace_')
+GncCommodityNamespace.get_commodity_list = \
+    method_function_returns_instance_list(
+    GncCommodityNamespace.get_commodity_list, GncCommodity )
 
 # GncLot
 GncLot.add_constructor_and_methods_with_prefix('gnc_lot_', 'new')
