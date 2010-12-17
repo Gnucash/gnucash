@@ -39,6 +39,12 @@
  *  Multiple, distinct quickfills, for different uses, are allowed.
  *  Each is identified with the 'key'.  Be sure to use distinct,
  *  unique keys that don't conflict with other users of QofBook.
+ *
+ *  This code listens to entry creation events, and automatically adds
+ *  new entry's descriptions to the quickfill list.  This code also
+ *  listens to the entry's deletion events and removes those
+ *  descriptions from the quickfill; however, this does not yet seem
+ *  to fully remove them from the GUI.
  */
 QuickFill * gnc_get_shared_entry_desc_quickfill (QofBook *book,
         const char * key);

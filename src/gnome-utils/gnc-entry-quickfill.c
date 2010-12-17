@@ -23,20 +23,67 @@
 
 #include "config.h"
 #include "gnc-entry-quickfill.h"
+#include "engine/gnc-event.h"
+
+/* This static indicates the debugging module that this .o belongs to. */
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 typedef struct
 {
     QuickFill *qf;
     QuickFillSort qf_sort;
     QofBook *book;
+    gint  listener;
 } EntryQF;
+
+static void
+listen_for_gncentry_events(QofInstance *entity,  QofEventId event_type,
+                           gpointer user_data, gpointer event_data)
+{
+    EntryQF *qfb = user_data;
+    QuickFill *qf = qfb->qf;
+    const char *desc;
+
+    /* We only listen for GncEntry events */
+    if (!GNC_IS_ENTRY (entity))
+        return;
+
+    /* We listen for MODIFY (if the description was changed into
+     * something non-empty, so we add the string to the quickfill) and
+     * DESTROY (to remove the description from the quickfill). */
+    if (0 == (event_type & (QOF_EVENT_MODIFY | QOF_EVENT_DESTROY)))
+        return;
+
+/*     g_warning("entity %p, entity type %s, event type %s, user data %p, ecent data %p", */
+/*               entity, entity->e_type, qofeventid_to_string(event_type), user_data, event_data); */
+
+    desc = gncEntryGetDescription(GNC_ENTRY(entity));
+    if (event_type & QOF_EVENT_MODIFY)
+    {
+        /* If the description was changed into something non-empty, so
+         * we add the string to the quickfill */
+        if (!desc || strlen(desc) == 0)
+            return;
+
+        /* Add the new string to the quickfill */
+        gnc_quickfill_insert (qf, desc, QUICKFILL_LIFO);
+    }
+    else if (event_type & QOF_EVENT_DESTROY)
+    {
+        if (!desc || strlen(desc) == 0)
+            return;
+
+        /* Remove the description from the quickfill */
+        gnc_quickfill_insert (qf, desc, QUICKFILL_LIFO);
+    }
+}
 
 static void
 shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
 {
     EntryQF *qfb = user_data;
     gnc_quickfill_destroy (qfb->qf);
-    /* qof_event_unregister_handler (qfb->listener); */
+    qof_event_unregister_handler (qfb->listener);
     g_free (qfb);
 }
 
@@ -74,6 +121,10 @@ static EntryQF* build_shared_quickfill (QofBook *book, const char * key)
     g_list_foreach (entries, entry_cb, result);
 
     qof_query_destroy(query);
+
+    result->listener =
+        qof_event_register_handler (listen_for_gncentry_events,
+                                    result);
 
     qof_book_set_data_fin (book, key, result, shared_quickfill_destroy);
 
