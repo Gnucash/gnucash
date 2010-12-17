@@ -34,6 +34,7 @@
 #include "Split.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
+#include "../gnc-backend-dbi-priv.h"
 
 static QofLogModule log_module = "test-dbi";
 
@@ -132,14 +133,32 @@ compare_lots( QofBook* book_1, QofBook* book_2 )
 }
 
 static void
+test_conn_get_index_list( QofBackend *qbe )
+{
+    GncDbiBackend *be = (GncDbiBackend*)qbe;
+    GSList *index_list = ((GncDbiSqlConnection*)(be->sql_be.conn))->provider->get_index_list( be->conn );
+    g_print ( "Returned from index list\n");
+    if ( index_list == NULL )
+    {
+	do_test( FALSE, "Index List Test -- No List" );
+	return;
+    }
+    do_test( g_slist_length( index_list ) == 4, "Index List Test" );
+    g_slist_free( index_list );
+}
+
+static void
 compare_books( QofBook* book_1, QofBook* book_2 )
 {
+    QofBackend *be = qof_book_get_backend( book_2 );
     compare_account_trees( book_1, book_2 );
     compare_pricedbs( book_1, book_2 );
     compare_txs( book_1, book_2 );
     compare_sxs( book_1, book_2 );
     compare_lots( book_1, book_2 );
+    test_conn_get_index_list( be );
 }
+
 
 void
 test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gchar* url )
@@ -152,14 +171,37 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     // Save the session data
     session_2 = qof_session_new();
     qof_session_begin( session_2, url, FALSE, TRUE, TRUE );
+    if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
+    {
+        g_warning("Session Error: %d, %s", qof_session_get_error(session_2), qof_session_get_error_message(session_2));
+	do_test( FALSE, "First DB Session Creation Failed");
+	return;
+    }
     qof_session_swap_data( session_1, session_2 );
     qof_session_save( session_2, NULL );
+    if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
+    {
+        g_warning("Session Error: %s", qof_session_get_error_message(session_2));
+	do_test( FALSE, "First DB Session Save Failed");
+	return;
+    }
 
     // Reload the session data
     session_3 = qof_session_new();
     qof_session_begin( session_3, url, TRUE, FALSE, FALSE );
+    if (session_3 && qof_session_get_error(session_3) != ERR_BACKEND_NO_ERR)
+    {
+        g_warning("Session Error: %s", qof_session_get_error_message(session_3));
+	do_test( FALSE, "Second DB Session Creation Failed");
+	return;
+    }
     qof_session_load( session_3, NULL );
-
+     if (session_3 && qof_session_get_error(session_3) != ERR_BACKEND_NO_ERR)
+    {
+        g_warning("Session Error: %s", qof_session_get_error_message(session_3));
+	do_test( FALSE, "Second DBI Session Load Failed");
+	return;
+    }
     // Compare with the original data
     compare_books( qof_session_get_book( session_2 ), qof_session_get_book( session_3 ) );
     qof_session_end( session_1 );

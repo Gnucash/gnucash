@@ -36,9 +36,8 @@
 #include "gmtime_r.h"
 #endif
 
-#include <dbi/dbi.h>
 
-#include "gnc-backend-sql.h"
+#include "gnc-backend-dbi-priv.h"
 
 #include "qof.h"
 #include "qofquery-p.h"
@@ -80,28 +79,18 @@ static gchar lock_table[] = "gnclock";
 #define SQLITE3_URI_PREFIX (SQLITE3_URI_TYPE "://")
 #define PGSQL_DEFAULT_PORT 5432
 
-typedef gchar* (*CREATE_TABLE_DDL_FN)( GncSqlConnection* conn,
-                                       const gchar* table_name,
-                                       const GList* col_info_list );
-typedef GSList* (*GET_TABLE_LIST_FN)( dbi_conn conn, const gchar* dbname );
-typedef void (*APPEND_COLUMN_DEF_FN)( GString* ddl, GncSqlColumnInfo* info );
-typedef struct
-{
-    CREATE_TABLE_DDL_FN		create_table_ddl;
-    GET_TABLE_LIST_FN		get_table_list;
-    APPEND_COLUMN_DEF_FN    append_col_def;
-} provider_functions_t;
-
 static /*@ null @*/ gchar* conn_create_table_ddl_sqlite3( GncSqlConnection* conn,
         const gchar* table_name,
         const GList* col_info_list );
 static GSList* conn_get_table_list( dbi_conn conn, const gchar* dbname );
 static void append_sqlite3_col_def( GString* ddl, GncSqlColumnInfo* info );
+static GSList *conn_get_index_list_sqlite3( dbi_conn conn );
 static provider_functions_t provider_sqlite3 =
 {
     conn_create_table_ddl_sqlite3,
     conn_get_table_list,
-    append_sqlite3_col_def
+    append_sqlite3_col_def,
+    conn_get_index_list_sqlite3
 };
 #define SQLITE3_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
@@ -109,11 +98,13 @@ static /*@ null @*/ gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
         const gchar* table_name,
         const GList* col_info_list );
 static void append_mysql_col_def( GString* ddl, GncSqlColumnInfo* info );
+static GSList *conn_get_index_list_mysql( dbi_conn conn );
 static provider_functions_t provider_mysql =
 {
     conn_create_table_ddl_mysql,
     conn_get_table_list,
-    append_mysql_col_def
+    append_mysql_col_def,
+    conn_get_index_list_mysql
 };
 #define MYSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
@@ -122,17 +113,20 @@ static /*@ null @*/ gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
         const GList* col_info_list );
 static GSList* conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname );
 static void append_pgsql_col_def( GString* ddl, GncSqlColumnInfo* info );
-static gboolean gnc_dbi_lock_database( QofBackend *qbe, gboolean ignore_lock );
-static void gnc_dbi_unlock( QofBackend *qbe );
-static gboolean save_may_clobber_data( QofBackend* qbe );
+static GSList *conn_get_index_list_pgsql( dbi_conn conn );
 
 static provider_functions_t provider_pgsql =
 {
     conn_create_table_ddl_pgsql,
     conn_get_table_list_pgsql,
-    append_pgsql_col_def
+    append_pgsql_col_def,
+    conn_get_index_list_pgsql
 };
 #define PGSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d %02d%02d%02d"
+
+static gboolean gnc_dbi_lock_database( QofBackend *qbe, gboolean ignore_lock );
+static void gnc_dbi_unlock( QofBackend *qbe );
+static gboolean save_may_clobber_data( QofBackend* qbe );
 
 static /*@ null @*/ gchar* create_index_ddl( GncSqlConnection* conn,
         const gchar* index_name,
@@ -147,44 +141,6 @@ static GncSqlConnection* create_dbi_connection( /*@ observer @*/ provider_functi
 #define GNC_DBI_PROVIDER_MYSQL (&provider_mysql)
 #define GNC_DBI_PROVIDER_PGSQL (&provider_pgsql)
 
-struct GncDbiBackend_struct
-{
-    GncSqlBackend sql_be;
-
-    dbi_conn conn;
-
-    /*@ dependent @*/
-    QofBook *primary_book;	/* The primary, main open book */
-    gboolean	loading;		/* We are performing an initial load */
-    gboolean  in_query;
-    gboolean  supports_transactions;
-    gboolean  is_pristine_db;	// Are we saving to a new pristine db?
-    gboolean  exists;         // Does the database exist?
-
-    gint obj_total;			// Total # of objects (for percentage calculation)
-    gint operations_done;		// Number of operations (save/load) done
-//  GHashTable* versions;		// Version number for each table
-};
-typedef struct GncDbiBackend_struct GncDbiBackend;
-
-typedef struct
-{
-    GncSqlConnection base;
-
-    /*@ observer @*/
-    QofBackend* qbe;
-    /*@ observer @*/
-    dbi_conn conn;
-    /*@ observer @*/
-    provider_functions_t* provider;
-    gboolean conn_ok;       // Used by the error handler routines to flag if the connection is ok to use
-    gint last_error;        // Code of the last error that occurred. This is set in the error callback function
-    gint error_repeat;      // Used in case of transient errors. After such error, another attempt at the
-    // original call is allowed. error_repeat tracks the number of attempts and can
-    // be used to prevent infinite loops.
-    gboolean retry;         // Signals the calling function that it should retry (the error handler detected
-    // transient error and managed to resolve it, but it can't run the original query)
-} GncDbiSqlConnection;
 
 #define DBI_MAX_CONN_ATTEMPTS 5
 
@@ -367,6 +323,28 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     be->sql_be.timespec_format = SQLITE3_TIMESPEC_STR_FORMAT;
 
     LEAVE (" ");
+}
+
+static GSList*
+conn_get_index_list_sqlite3( dbi_conn conn )
+{
+    GSList *list = NULL;
+    const gchar *errmsg;
+    dbi_result result = dbi_conn_query( conn, "SELECT name FROM sqlite_master WHERE type = 'index' AND name NOT LIKE 'sqlite_autoindex%'" );
+    if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
+    {
+	g_print( "Index Table Retrieval Error: %s\n", errmsg );
+	return NULL;
+    }
+    while ( dbi_result_next_row( result ) != 0 )
+    {
+        const gchar* index_name;
+
+        index_name = dbi_result_get_string_idx( result, 1 );
+        list = g_slist_prepend( list, strdup( index_name ) );
+    }
+    dbi_result_free( result );
+    return list;
 }
 
 static void
@@ -862,6 +840,44 @@ exit:
     LEAVE (" ");
 }
 
+static GSList*
+conn_get_index_list_mysql( dbi_conn conn )
+{
+    GSList *index_list = NULL;
+    dbi_result table_list;
+    const char *errmsg;
+    const gchar *dbname = dbi_conn_get_option( conn, "dbname" );
+    g_return_val_if_fail( conn != NULL, NULL );
+    table_list = dbi_conn_get_table_list( conn, dbname, NULL );
+    if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
+    {
+	g_print( "Table Retrieval Error: %s\n", errmsg );
+	return NULL;
+    }
+    while ( dbi_result_next_row( table_list ) != 0 )
+    {
+	dbi_result result;
+	const gchar *table_name = dbi_result_get_string_idx( table_list, 1 );
+	result = dbi_conn_queryf( conn,
+				  "SHOW INDEXES IN %s WHERE Key_name != 'PRIMARY'",
+				  table_name );
+	if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
+	{
+	    g_print( "Index Table Retrieval Error: %s\n", errmsg );
+	    continue;
+	}
+
+	while ( dbi_result_next_row( result ) != 0 )
+	{
+	    const gchar*  index_name = dbi_result_get_string_idx( result, 3 );
+	    index_list = g_slist_prepend( index_list, strdup( index_name ) );
+	}
+	dbi_result_free( result );
+    }
+
+    return index_list;
+}
+
 static void
 pgsql_error_fn( dbi_conn conn, void* user_data )
 {
@@ -1066,6 +1082,31 @@ exit:
 
     LEAVE (" ");
 }
+
+static GSList*
+conn_get_index_list_pgsql( dbi_conn conn )
+{
+    GSList *list = NULL;
+    const gchar *errmsg;
+    dbi_result result;
+    g_print( "Retrieving postgres index list\n");
+    result = dbi_conn_query( conn, "SELECT relname FROM pg_class AS a INNER JOIN pg_index AS b ON (b.indexrelid = a.oid) INNER JOIN pg_namespace AS c ON (a.relnamespace = c.oid) WHERE reltype = '0' AND indisprimary = 'f' AND nspname = 'public'" );
+    if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
+    {
+	g_print( "Index Table Retrieval Error: %s\n", errmsg );
+	return NULL;
+    }
+    while ( dbi_result_next_row( result ) != 0 )
+    {
+        const gchar* index_name;
+
+        index_name = dbi_result_get_string_idx( result, 1 );
+        list = g_slist_prepend( list, strdup( index_name ) );
+    }
+    dbi_result_free( result );
+    return list;
+}
+
 
 /* ================================================================= */
 

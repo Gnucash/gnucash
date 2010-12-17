@@ -112,13 +112,15 @@ int main (int argc, char ** argv)
     filename = tempnam( "/tmp", "test-sqlite3-" );
     printf( "Using filename: %s\n", filename );
     test_dbi_store_and_reload( "sqlite3", session_1, filename );
-#if 0
+#ifdef TEST_MYSQL_URL
     printf( "TEST_MYSQL_URL='%s'\n", TEST_MYSQL_URL );
     if ( strlen( TEST_MYSQL_URL ) > 0 )
     {
         session_1 = create_session();
         test_dbi_store_and_reload( "mysql", session_1, TEST_MYSQL_URL );
     }
+#endif
+#ifdef TEST_PGSQL_URL
     printf( "TEST_PGSQL_URL='%s'\n", TEST_PGSQL_URL );
     if ( strlen( TEST_PGSQL_URL ) > 0 )
     {
