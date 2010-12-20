@@ -86,8 +86,8 @@ gnc_print_unstable_message(void)
             _("This is a development version. It may or may not work.\n"),
             _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
             _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-            _("The last stable version was "), PACKAGE_NAME, " 2.2.9",
-            _("The next stable version will be "), PACKAGE_NAME, " 2.4");
+            _("The last stable version was "), PACKAGE_NAME, " 2.4.0",
+            _("The next stable version will be "), PACKAGE_NAME, " 2.6");
 }
 
 static gchar  *environment_expand(gchar *param)
