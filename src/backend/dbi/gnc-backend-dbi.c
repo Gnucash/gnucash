@@ -2231,7 +2231,7 @@ append_mysql_col_def( GString* ddl, GncSqlColumnInfo* info )
     else if ( info->type == BCT_DATETIME )
     {
         info->size = 0;
-        type_name = "timestamp";
+        type_name = "TIMESTAMP NULL DEFAULT 0";
     }
     else
     {
