@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-backend-dbi.c: load and save data to SQL via libdbi          *
+ * gnc-backend-dbi-priv.h: load and save data to SQL via libdbi     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,9 +18,11 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
+
 /* Private structures and variables for gnc-backend-dbi.c and its unit tests */
 #ifndef GNC_BACKEND_DBI_PRIV_H
 #define GNC_BACKEND_DBI_PRIV_H
+
 #include <dbi/dbi.h>
 #include "gnc-backend-sql.h"
 
