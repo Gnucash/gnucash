@@ -157,6 +157,7 @@ src/engine/gncCustomer.c
 src/engine/gncEmployee.c
 src/engine/gnc-engine.c
 src/engine/gncEntry.c
+src/engine/gnc-event.c
 src/engine/gnc-hooks.c
 src/engine/gncIDSearch.c
 src/engine/gncInvoice.c
@@ -305,6 +306,7 @@ src/gnome-utils/gnc-druid-provider-edge-gnome.c
 src/gnome-utils/gnc-druid-provider-file-gnome.c
 src/gnome-utils/gnc-druid-provider-multifile-gnome.c
 src/gnome-utils/gnc-embedded-window.c
+src/gnome-utils/gnc-entry-quickfill.c
 src/gnome-utils/gnc-file.c
 src/gnome-utils/gnc-frequency.c
 src/gnome-utils/gnc-general-select.c
