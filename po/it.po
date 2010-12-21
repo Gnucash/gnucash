@@ -54,7 +54,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-20 14:33+0100\n"
-"PO-Revision-Date: 2010-12-20 17:04+0100\n"
+"PO-Revision-Date: 2010-12-21 21:02+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -11655,7 +11655,7 @@ msgstr "Fine del precedente periodo contabile"
 #: ../src/gnome-utils/gnc-splash.c:90
 #, c-format
 msgid "Version: GnuCash-%s svn (r%s built %s)"
-msgstr "Versione: GnuCash-%s svn (r%s built %s)"
+msgstr "Versione: GnuCash-%s svn (r%s compilata il %s)"
 
 #. Dist Tarball
 #: ../src/gnome-utils/gnc-splash.c:94
@@ -26299,10 +26299,8 @@ msgstr "C'è una teoria secondo la quale, se qualcuno dovesse mai scoprire a cos
 
 #~ msgid "Crea_te in advance, days:"
 #~ msgstr "Cr_ea in anticipo di:"
-
 #~ msgid "R_emind in advance, days:"
 #~ msgstr "_Ricorda in anticipo di:"
-
 #~ msgid "_Open"
 #~ msgstr "_Apri"
 
@@ -26851,63 +26849,50 @@ msgstr "C'è una teoria secondo la quale, se qualcuno dovesse mai scoprire a cos
 #~ msgid "Setup income tax information for relevant accounts"
 #~ msgstr ""
 #~ "Imposta le informazioni sulle tasse per tutti i conti di entrate e uscite"
-
 #~ msgid "Print GnuCash Document"
 #~ msgstr "Stampa documento di GnuCash"
 
 #, fuzzy
 #~ msgid "Enter the transaction date"
 #~ msgstr "Data più vicina della transazione"
-
 #~ msgid "Notes/Action:Memo"
 #~ msgstr "Note/Azione:Promemoria"
-
 #~ msgid "Transfer To/From Account(s)"
 #~ msgstr "Trasferisci da/a conti"
-
 #~ msgid "(Converted "
 #~ msgstr "(Convertito"
-
 #~ msgid " on "
 #~ msgstr " il"
-
 #~ msgid " (Account Commodity: "
 #~ msgstr " (Commodity del conto: "
 
 #, fuzzy
 #~ msgid "Item "
 #~ msgstr "voce"
-
 #~ msgid " (TXF Parameter: "
 #~ msgstr "(Parametro TXF:"
-
 #~ msgid " (TXF Parameters: "
 #~ msgstr " (parametri TXF:"
 
 #, fuzzy
 #~ msgid "Balance on "
 #~ msgstr "Saldo"
-
 #~ msgid "Account: "
 #~ msgstr "Conto:"
 
 #, fuzzy
 #~ msgid " For "
 #~ msgstr "Maschera"
-
 #~ msgid ": Parameters"
 #~ msgstr ": Parametri"
-
 #~ msgid ") / Account Name"
 #~ msgstr ") / Nome del conto"
 
 #, fuzzy
 #~ msgid " Line "
 #~ msgstr "Linea"
-
 #~ msgid ": Payer Name Option "
 #~ msgstr ": Opzione nome pagante"
-
 #~ msgid ", TXF Format "
 #~ msgstr ", formato TXF"
 
@@ -26936,69 +26921,48 @@ msgstr "C'è una teoria secondo la quale, se qualcuno dovesse mai scoprire a cos
 #~ "Non è stato trovato alcun conto relativo alle tasse nella selezione "
 #~ "attuale. Cambiare la selezione o andare in «Modifica->Opzioni tasse» per "
 #~ "impostare i conti relativi alle tasse."
-
 #~ msgid "Selected Report Options:<BR>"
 #~ msgstr "Opzioni del resoconto selezionato:<BR>"
-
 #~ msgid "Subset of accounts"
 #~ msgstr "Sottoinsieme di conti"
-
 #~ msgid "No accounts (none = all accounts)"
 #~ msgstr "Nessun conto (nessuno=tutti i conti)"
-
 #~ msgid "Display full account names"
 #~ msgstr "Visualizza i nomi completi dei conti"
-
 #~ msgid "Do not display full account names"
 #~ msgstr "Non visualizzare i nomi completi dei conti"
-
 #~ msgid "Display all Transfer To/From Accounts"
 #~ msgstr "Visualizzare tutti i trasferimenti da/a"
-
 #~ msgid "Do not display all Transfer To/From Accounts"
 #~ msgstr "Non visualizzare tutti i trasferimenti da/a"
-
 #~ msgid "Do not Print TXF export parameters"
 #~ msgstr "Non stampare i parametri di esportazione TXF"
-
 #~ msgid "Do not display Action:Memo data"
 #~ msgstr "Non visualizzare i dati del campo \"Azione:Promemoria\""
-
 #~ msgid "Display Action:Memo data"
 #~ msgstr "Visualizzare i dati del campo \"Azione:Promemoria\""
-
 #~ msgid "Display transactions for selected accounts"
 #~ msgstr "Visualizzare le transazioni per i conti selezionati"
-
 #~ msgid "Do not display transactions for selected accounts"
 #~ msgstr "Non visualizzare le transazioni per i conti selezionati"
-
 #~ msgid "Do not include transactions outside of selected dates"
 #~ msgstr "Non includere le transazioni al di fuori delle date selezionate"
-
 #~ msgid "Include some transactions outside of selected dates"
 #~ msgstr "Includi alcune delle transazioni al di fuori delle date selezionate"
-
 #~ msgid "The following bills are due"
 #~ msgstr "Le ricevute seguenti sono scadute:"
-
 #~ msgid "Escrow "
 #~ msgstr "Deposito a garanzia"
-
 #~ msgid "Show Hidden"
 #~ msgstr "Mostra nascosti"
-
 #~ msgid "Show hidden accounts."
 #~ msgstr "Visualizza i conti nascosti"
-
 #~ msgid "<no file>"
 #~ msgstr "<nessun file>"
-
 #~ msgid "A bug was detected while reading the QIF file."
 #~ msgstr "E' stato rilevato un problema leggendo il file QIF."
-
 #~ msgid "Div"
 #~ msgstr "Div"
-
 #~ msgid "Compute unrealized gains and losses"
 #~ msgstr "Calcola guadagni e perdite non realizzati"
+
