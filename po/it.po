@@ -54,7 +54,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-11-20 14:33+0100\n"
-"PO-Revision-Date: 2010-11-20 14:55+0100\n"
+"PO-Revision-Date: 2010-12-20 17:04+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -128,7 +128,7 @@ msgstr ""
 #: ../src/app-utils/gnc-ui-util.c:580
 #, c-format
 msgid "Invalid code %s for tax type %s"
-msgstr ""
+msgstr "Codice imposta \"%s\" non valido per il tipo di imposta \"%s\""
 
 #: ../src/app-utils/gnc-ui-util.c:583
 #, c-format
@@ -401,7 +401,7 @@ msgstr "GnuCash %s"
 #: ../src/bin/gnucash-bin.c:524
 #, c-format
 msgid "Built %s from r%s"
-msgstr "Compilato %s da r%s"
+msgstr "Compilato il %s da r%s"
 
 #: ../src/bin/gnucash-bin.c:621
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
@@ -4370,7 +4370,7 @@ msgstr "Tipi di conto"
 #: ../src/gnome/druid-hierarchy.c:493
 #, c-format
 msgid "Accounts in '%s'"
-msgstr "Conti in %s"
+msgstr "Conti in \"%s\""
 
 #: ../src/gnome/druid-hierarchy.c:514
 msgid "Accounts in Category"
@@ -4433,7 +4433,7 @@ msgstr "Pagamneti vari"
 #: ../src/gnome/druid-loan.c:650
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr "... pagare «%s»?"
+msgstr "... pagare \"%s\"?"
 
 #: ../src/gnome/druid-loan.c:662
 msgid "via Escrow account?"
@@ -4474,7 +4474,7 @@ msgstr "Selezionare un conto «interessi» valido."
 #: ../src/gnome/druid-loan.c:1494
 #, c-format
 msgid "Payment: \"%s\""
-msgstr "Pagamento: «%s»"
+msgstr "Pagamento: \"%s\""
 
 #: ../src/gnome/druid-loan.c:1873
 #: ../src/gnome/druid-loan.c:2473
@@ -11272,7 +11272,7 @@ msgstr "Apri _conto"
 #: ../src/gnome-utils/gnc-keyring.c:193
 #, c-format
 msgid "Enter a user name and password to connect to: %s"
-msgstr "Immettere il nome utente e la password per connettersi a: %s"
+msgstr "Immettere il nome utente e la password per connettersi a «%s»"
 
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:232
@@ -12223,7 +12223,7 @@ msgstr ""
 #: ../src/html/gnc-html-webkit.c:813
 #, c-format
 msgid "There was an error accessing %s."
-msgstr "Si è verificato un errore accedendo a %s"
+msgstr "Si è verificato un errore accedendo a «%s»"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:1
 #: ../src/import-export/hbci/glade/hbci.glade.h:1
@@ -13669,14 +13669,14 @@ msgstr "Nuova, già bilanciata"
 #: ../src/import-export/import-main-matcher.c:646
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
-msgstr "Nuova, trasferimento di %s verso «%s» (manuale)"
+msgstr "Nuova, trasferimento di %s verso \"%s\" (manuale)"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
 #: ../src/import-export/import-main-matcher.c:654
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
-msgstr "Nuova, trasferimento di %s verso «%s» (automatica)"
+msgstr "Nuova, trasferimento di %s verso \"%s\" (automatica)"
 
 #. Translators: %s is the amount to be transferred.
 #: ../src/import-export/import-main-matcher.c:665
@@ -13741,7 +13741,7 @@ msgstr "Scegliere un file di log da ripetere"
 #: ../src/import-export/log-replay/gnc-log-replay.c:587
 #, c-format
 msgid "Cannot open the current log file: %s"
-msgstr "Impossibile aprire il file di log: %s"
+msgstr "Impossibile aprire il file di log «%s»"
 
 #. Translation note:
 #. * First argument is the filename,
@@ -13750,7 +13750,7 @@ msgstr "Impossibile aprire il file di log: %s"
 #: ../src/import-export/log-replay/gnc-log-replay.c:603
 #, c-format
 msgid "Failed to open log file: %s: %s"
-msgstr "Impossibile aprire il file di log: %s: %s"
+msgstr "Impossibile aprire il file di log «%s»: %s"
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:613
 msgid "The log file you selected was empty."
@@ -14323,7 +14323,7 @@ msgstr "Utilizza la corrispondenza Bayesiana"
 #. The default date format for use with strftime in Win32.
 #: ../src/libqof/qof/gnc-date.c:76
 msgid "%B %#d, %Y"
-msgstr "%B %#d, %Y"
+msgstr "%#d %B %Y"
 
 #. The default date format for use with strftime in other OS.
 #. Translators: call "man strftime" for possible values.
@@ -14630,11 +14630,11 @@ msgstr "_Procedi"
 #. leave the rest ("sample:") as is.
 #: ../src/register/ledger-core/split-register-layout.c:546
 msgid "sample:99999"
-msgstr "esempio:99999"
+msgstr "sample:99999"
 
 #: ../src/register/ledger-core/split-register-layout.c:554
 msgid "sample:Description of a transaction"
-msgstr "esempio: descrizione di una transazione"
+msgstr "sample:Descrizione di una transazione"
 
 #: ../src/register/ledger-core/split-register-layout.c:578
 #: ../src/register/ledger-core/split-register-layout.c:618
@@ -14647,11 +14647,11 @@ msgstr "esempio: descrizione di una transazione"
 #: ../src/register/ledger-core/split-register-layout.c:676
 #: ../src/register/ledger-core/split-register-layout.c:724
 msgid "sample:999,999.000"
-msgstr "esempio:999,999.000"
+msgstr "sample:999,999.000"
 
 #: ../src/register/ledger-core/split-register-layout.c:610
 msgid "sample:Memo field sample text string"
-msgstr "esempio: stringa di testo per il campo promemoria"
+msgstr "sample:Stringa di testo per il campo promemoria"
 
 #: ../src/register/ledger-core/split-register-layout.c:684
 msgid "Type:T"
@@ -14659,16 +14659,16 @@ msgstr "Tipo:T"
 
 #: ../src/register/ledger-core/split-register-layout.c:692
 msgid "sample:Notes field sample text string"
-msgstr "esempio: stringa di testo per il campo delle note"
+msgstr "sample:Stringa di testo per il campo delle note"
 
 #: ../src/register/ledger-core/split-register-layout.c:700
 msgid "sample:No Particular Reason"
-msgstr "esempio: nessuna ragione particolare"
+msgstr "sample:Nessuna ragione particolare"
 
 #: ../src/register/ledger-core/split-register-layout.c:708
 #: ../src/register/ledger-core/split-register-layout.c:716
 msgid "sample:(x + 0.33 * y + (x+y) )"
-msgstr "esempio:(x + 0.33 * y + (x+y) )"
+msgstr "sampe:(x + 0.33 * y + (x+y) )"
 
 #: ../src/register/ledger-core/split-register-load.c:335
 msgid "Could not determine the account currency.  Using the default currency provided by your system."
@@ -14975,20 +14975,20 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Non è possibile salvare con questo nome del file.\n"
+"Non è possibile salvare il file con questo nome.\n"
 "\n"
 "%s"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1439
 msgid "You cannot save to that file."
-msgstr "Non puoi salvare in quel file."
+msgstr "Non è possibile salvare in quel file."
 
 #. src/report/report-system/report.scm
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1529
 #: ../intl-scm/guile-strings.c:5208
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
-msgstr "Non è possibile aprire il file «%s». L'errore è:%s"
+msgstr "Non è possibile aprire il file «%s». L'errore è: %s"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1561
 msgid "There are no options for this report."
@@ -15113,7 +15113,7 @@ msgstr "Gestore delle finanze GnuCash"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:2
 msgid "Manage your finances, accounts, and investments"
-msgstr "Gestisce le proprie finanze, i conti e gli inevstimenti"
+msgstr "Gestisce le proprie finanze, i conti e gli investimenti"
 
 #: ../src/libqof/qof/qofbookslots.h:66
 msgid "Use Trading Accounts"
@@ -24239,7 +24239,7 @@ msgstr "91+ giorni"
 #: ../intl-scm/guile-strings.c:8482
 #: ../intl-scm/guile-strings.c:8586
 msgid "No valid account selected.  Click on the Options button and select the account to use."
-msgstr "Non è stato selezionato un conto valido. Premere il pulsante delle opzioni e selezionare il conto da utilizzare."
+msgstr "Non è stato selezionato un conto valido. Premere il pulsante «Opzioni» e selezionare il conto da utilizzare."
 
 #. src/report/business-reports/gnucash/report/job-report.scm
 #. src/report/business-reports/gnucash/report/owner-report.scm
@@ -24538,7 +24538,7 @@ msgstr "Resoconto:"
 #: ../intl-scm/guile-strings.c:8592
 #, c-format
 msgid "No valid %s selected.  Click on the Options button to select a company."
-msgstr "il %s selezionato non è valido. Premere il pulsante opzioni per selezionare un'impresa."
+msgstr "il %s selezionato non è valido. Premere il pulsante «Opzioni» per selezionare un'impresa."
 
 #. src/report/business-reports/gnucash/report/job-report.scm
 #. src/report/business-reports/job-report.scm
@@ -25175,7 +25175,7 @@ msgstr "Sito:"
 #: ../intl-scm/guile-strings.c:8824
 #, c-format
 msgid "%s&nbsp;#"
-msgstr ""
+msgstr "%s&nbsp;#"
 
 #. src/report/business-reports/gnucash/report/fancy-invoice.scm
 #. src/report/business-reports/gnucash/report/easy-invoice.scm
@@ -25190,7 +25190,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:9038
 #: ../intl-scm/guile-strings.c:9216
 msgid "No valid invoice selected.  Click on the Options button and select the invoice to use."
-msgstr "Nessuna fattura valida è stata selezionata. Premere il pulsante opzioni e selezionare la fattura da utilizzare."
+msgstr "Nessuna fattura valida è stata selezionata. Premere il pulsante «Opzioni» e selezionare la fattura da utilizzare."
 
 #. src/report/business-reports/gnucash/report/fancy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -25606,9 +25606,8 @@ msgstr "Inizio del prossimo trimestre"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9450
-#, fuzzy
 msgid "First day of the next quarterly accounting period"
-msgstr "Il primo giorno del trimestre contabile corrente"
+msgstr "Il primo giorno del prossimo trimestre contabile"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9452
@@ -25617,9 +25616,8 @@ msgstr "Fine del prossimo trimestre"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9454
-#, fuzzy
 msgid "Last day of next quarterly accounting period"
-msgstr "L'ultimo giorno del trimestre contabile precedente"
+msgstr "L'ultimo giorno del prossimo trimestre contabile"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9458
@@ -25660,31 +25658,31 @@ msgstr "Un anno fa"
 #: ../intl-scm/guile-strings.c:9480
 #: ../intl-scm/guile-strings.c:9482
 msgid "One Month Ahead"
-msgstr ""
+msgstr "Tra un mese"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9484
 #: ../intl-scm/guile-strings.c:9486
 msgid "One Week Ahead"
-msgstr ""
+msgstr "Tra una settimana"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9488
 #: ../intl-scm/guile-strings.c:9490
 msgid "Three Months Ahead"
-msgstr ""
+msgstr "Fra tre mesi"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9492
 #: ../intl-scm/guile-strings.c:9494
 msgid "Six Months Ahead"
-msgstr ""
+msgstr "Tra sei mesi"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:9496
 #: ../intl-scm/guile-strings.c:9498
 msgid "One Year Ahead"
-msgstr ""
+msgstr "Tra un anno"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
@@ -26277,7 +26275,7 @@ msgstr "Nella finestra di riconciliazione, si può premere la barra spaziatrice 
 
 #: ../doc/tip_of_the_day.list.in:67
 msgid "To transfer funds between accounts with different currencies, click on the Transfer button in the register toolbar, select the accounts, and the Currency Transfer options for entering the exchange rate or the other currency's amount will be available."
-msgstr "Per trasferire fondi fra conti con valute differenti, fare clic sul pulsante «Movimenta» nella barra degli strumenti dei registri e selezionare i conti. Saranno disponibili le opzioni di transazione valute per l'immissione del tasso di cambio o dell'importo dell'altra valuta."
+msgstr "Per trasferire fondi fra conti con valute differenti, fare clic sul pulsante «Trasferisci» nella barra degli strumenti dei registri e selezionare i conti. Saranno disponibili le opzioni di transazione valute per l'immissione del tasso di cambio o dell'importo dell'altra valuta."
 
 #: ../doc/tip_of_the_day.list.in:72
 msgid "You can pack multiple reports into a single window,  providing all the financial information you want at a glance. To do so, use the Sample & Custom -> \"Custom Multicolumn Report\" report."
@@ -26301,8 +26299,10 @@ msgstr "C'è una teoria secondo la quale, se qualcuno dovesse mai scoprire a cos
 
 #~ msgid "Crea_te in advance, days:"
 #~ msgstr "Cr_ea in anticipo di:"
+
 #~ msgid "R_emind in advance, days:"
 #~ msgstr "_Ricorda in anticipo di:"
+
 #~ msgid "_Open"
 #~ msgstr "_Apri"
 
@@ -26851,50 +26851,63 @@ msgstr "C'è una teoria secondo la quale, se qualcuno dovesse mai scoprire a cos
 #~ msgid "Setup income tax information for relevant accounts"
 #~ msgstr ""
 #~ "Imposta le informazioni sulle tasse per tutti i conti di entrate e uscite"
+
 #~ msgid "Print GnuCash Document"
 #~ msgstr "Stampa documento di GnuCash"
 
 #, fuzzy
 #~ msgid "Enter the transaction date"
 #~ msgstr "Data più vicina della transazione"
+
 #~ msgid "Notes/Action:Memo"
 #~ msgstr "Note/Azione:Promemoria"
+
 #~ msgid "Transfer To/From Account(s)"
 #~ msgstr "Trasferisci da/a conti"
+
 #~ msgid "(Converted "
 #~ msgstr "(Convertito"
+
 #~ msgid " on "
 #~ msgstr " il"
+
 #~ msgid " (Account Commodity: "
 #~ msgstr " (Commodity del conto: "
 
 #, fuzzy
 #~ msgid "Item "
 #~ msgstr "voce"
+
 #~ msgid " (TXF Parameter: "
 #~ msgstr "(Parametro TXF:"
+
 #~ msgid " (TXF Parameters: "
 #~ msgstr " (parametri TXF:"
 
 #, fuzzy
 #~ msgid "Balance on "
 #~ msgstr "Saldo"
+
 #~ msgid "Account: "
 #~ msgstr "Conto:"
 
 #, fuzzy
 #~ msgid " For "
 #~ msgstr "Maschera"
+
 #~ msgid ": Parameters"
 #~ msgstr ": Parametri"
+
 #~ msgid ") / Account Name"
 #~ msgstr ") / Nome del conto"
 
 #, fuzzy
 #~ msgid " Line "
 #~ msgstr "Linea"
+
 #~ msgid ": Payer Name Option "
 #~ msgstr ": Opzione nome pagante"
+
 #~ msgid ", TXF Format "
 #~ msgstr ", formato TXF"
 
@@ -26923,48 +26936,69 @@ msgstr "C'è una teoria secondo la quale, se qualcuno dovesse mai scoprire a cos
 #~ "Non è stato trovato alcun conto relativo alle tasse nella selezione "
 #~ "attuale. Cambiare la selezione o andare in «Modifica->Opzioni tasse» per "
 #~ "impostare i conti relativi alle tasse."
+
 #~ msgid "Selected Report Options:<BR>"
 #~ msgstr "Opzioni del resoconto selezionato:<BR>"
+
 #~ msgid "Subset of accounts"
 #~ msgstr "Sottoinsieme di conti"
+
 #~ msgid "No accounts (none = all accounts)"
 #~ msgstr "Nessun conto (nessuno=tutti i conti)"
+
 #~ msgid "Display full account names"
 #~ msgstr "Visualizza i nomi completi dei conti"
+
 #~ msgid "Do not display full account names"
 #~ msgstr "Non visualizzare i nomi completi dei conti"
+
 #~ msgid "Display all Transfer To/From Accounts"
 #~ msgstr "Visualizzare tutti i trasferimenti da/a"
+
 #~ msgid "Do not display all Transfer To/From Accounts"
 #~ msgstr "Non visualizzare tutti i trasferimenti da/a"
+
 #~ msgid "Do not Print TXF export parameters"
 #~ msgstr "Non stampare i parametri di esportazione TXF"
+
 #~ msgid "Do not display Action:Memo data"
 #~ msgstr "Non visualizzare i dati del campo \"Azione:Promemoria\""
+
 #~ msgid "Display Action:Memo data"
 #~ msgstr "Visualizzare i dati del campo \"Azione:Promemoria\""
+
 #~ msgid "Display transactions for selected accounts"
 #~ msgstr "Visualizzare le transazioni per i conti selezionati"
+
 #~ msgid "Do not display transactions for selected accounts"
 #~ msgstr "Non visualizzare le transazioni per i conti selezionati"
+
 #~ msgid "Do not include transactions outside of selected dates"
 #~ msgstr "Non includere le transazioni al di fuori delle date selezionate"
+
 #~ msgid "Include some transactions outside of selected dates"
 #~ msgstr "Includi alcune delle transazioni al di fuori delle date selezionate"
+
 #~ msgid "The following bills are due"
 #~ msgstr "Le ricevute seguenti sono scadute:"
+
 #~ msgid "Escrow "
 #~ msgstr "Deposito a garanzia"
+
 #~ msgid "Show Hidden"
 #~ msgstr "Mostra nascosti"
+
 #~ msgid "Show hidden accounts."
 #~ msgstr "Visualizza i conti nascosti"
+
 #~ msgid "<no file>"
 #~ msgstr "<nessun file>"
+
 #~ msgid "A bug was detected while reading the QIF file."
 #~ msgstr "E' stato rilevato un problema leggendo il file QIF."
+
 #~ msgid "Div"
 #~ msgstr "Div"
+
 #~ msgid "Compute unrealized gains and losses"
 #~ msgstr "Calcola guadagni e perdite non realizzati"
-
