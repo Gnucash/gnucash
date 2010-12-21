@@ -4018,7 +4018,6 @@ gnc_main_window_show_all_windows(void)
 #ifdef MAC_INTEGRATION
     g_signal_connect(theApp, "NSApplicationWillTerminate",
                      G_CALLBACK(gtk_quartz_shutdown), NULL);
-    gtk_osxapplication_set_use_quartz_accelerators(theApp, FALSE);
     gtk_osxapplication_ready(theApp);
 #endif
 }
