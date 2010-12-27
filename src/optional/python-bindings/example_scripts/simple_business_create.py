@@ -36,7 +36,7 @@
 ##  @file
 #   @brief Set up a set of books for business feature use
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
-#   @ingroup python-bindings-examples
+#   @ingroup python_bindings_examples
 
 from os.path import abspath
 from sys import argv

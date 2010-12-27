@@ -26,7 +26,7 @@
 #   @brief Replicate the account structure of a
 #   book and apply basis opening balances from the original
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
-#   @ingroup python-bindings-examples
+#   @ingroup python_bindings_examples
 
 from gnucash import Session, Account, Transaction, Split, GncNumeric
 from gnucash.gnucash_core_c import \

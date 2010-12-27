@@ -50,13 +50,13 @@ in relation to existing code.
 - \ref plugindesign
 - \ref pricedocs
 - \ref gnucashextension
+- \ref python_bindings_page
 - \ref qif
 - \ref backendapi
 - \ref budgetplan
 - \ref taxnotes
 - \ref todo
 - \ref userprefs
-- \ref python-bindings-page
 
 Each overview in this section is generated directly from the
 source files using Doxygen but some topics need updating.

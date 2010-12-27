@@ -27,7 +27,7 @@
         This file may be obsolete, because the same definitions are also in base-typemaps.i.
     @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
     @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
-    @ingroup python-bindings */
+    @ingroup python_bindings */
 
 
 %typemap(in) gint8, gint16, gint32, gint64, gint, gshort, glong {

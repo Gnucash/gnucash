@@ -26,78 +26,7 @@
 #  @brief High level python wrapper classes for the core parts of GnuCash
 #  @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 #  @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
-#  @ingroup python-bindings
-
-## @defgroup python-bindings
-#  Also have a look at the page @ref python-bindings-page.
-
-## @defgroup python-bindings-examples
-#  @ingroup python-bindings
-#  The python-bindings come with quite a lot of example scripts.
-
-##  @page python-bindings-page Python bindings
-#   Also have a look at group @ref python-bindings.
-#
-#   For the moment the python-bindings are only available via svn. They may be included
-#   in GnuCash 2.4.
-#
-#   To enable them in the compilation process you have to add --enable-python-bindings
-#   to the call of ./configure.
-#
-#   As a starting point have a look at the \link #python-bindings-examples example-scripts\endlink.
-#
-#   @section python-bindings-section Principles
-#   The python-bindings are generated using SWIG from the c-source-files of gnucash.
-#   It is possible to access a wide range of the functions of GnuCash in this way.
-#   SWIG extracts informations from the c-sources and provides access to the structures
-#   from python.
-#  
-#   SWIG reads gnucash_core.i and outputs gnucash_core.c and gnucash_core_c.py.
-#
-#   This leads to the bottom layer of funtions which is a quite raw extract and close to the original source.
-#   This yields access using the c-style-api.
-#   You will find a lot of pointers here which you can just ignore if input and output of the function have the
-#   same type.
-#   As a second layer there are some structures where a nice pythonic interface has been added.
-#   @section highlevel High level python wrapper classes
-#   If you
-# 
-#   @code >> import gnucash @endcode
-#
-#   You can access the structures of the high level api. For Example you get a Session object by
-#
-#   @code >> session=gnucash.Session() @endcode
-#
-#   @section c_style_api C-style-api
-#
-#   If you
-#
-#   @code >> import gnucash @endcode
-#
-#   The c-style-api can be accessed via gnucash.gnucash_core_c. You can have a look at all the possibilities
-#   at gnucash_core_c.py.
-#
-#   For example you could start a session by gnucash.gnucash_core_c.qof_session_begin(). But if you just try
-#
-#   @code session=gnucash.gnucash_core_c.qof_session_begin() @endcode
-#
-#   you will get an error message and realize the lack of convenience for you have to add the correct function parameters.
-#
-#   Not all of the available structures will work. SWIG just takes everything from the sources and translates it. Not everything
-#   is a working translation. At this point you are getting close to the developers whom you can contact at the mailing-list gnucash-devel@gnucash.org.
-#   A step further would be to fix the problem by changing SWIGs input files to correctly reflect the c-structure.
-#
-#   @section Thisorthat When to use which api ?
-#
-#   The start would surely be the high-level api for you can be quite sure to have something working and you will maybe find
-#   explanations in the example-scripts. If you search for something that is not yet implemented in that way you will have to
-#   take your way to the c-style-api.
-#
-#   @section pydoc Documentation
-#
-#   The documentation you just read uses doxygen. It collects documentation in GnuCash's sources. Besides that there is
-#   the classic python-documentation using help() and docstrings. Have a look at both.
-
+#  @ingroup python_bindings
 
 import gnucash_core_c
 
@@ -143,7 +72,7 @@ class Session(GnuCashCoreClass):
 
     def __init__(self, book_uri=None, ignore_lock=False, is_new=False,
                  force_new= False):
-        """A convenient contructor that allows you to specify a book URI,
+        """A convenient constructor that allows you to specify a book URI,
         begin the session, and load the book.
 
         This can give you the power of calling
@@ -157,7 +86,7 @@ class Session(GnuCashCoreClass):
         is_new is passed to qof_session_begin as the argument create,
         and force_new as the argument force. Is_new will create a new
         database or file; force will force creation even if it will
-        destroy and existing dataset.
+        destroy an existing dataset.
 
         ignore_lock is passed to qof_session_begin's argument of the
         same name and is used to break an existing lock on a dataset.

@@ -1,6 +1,6 @@
 /** @file 
-    @brief interface file for SWIG, used by python-bindings and scheme(?).
-    @addtogroup python-bindings
+    @brief interface file for SWIG, used by python-bindings and scheme/guile.
+    @addtogroup python_bindings
 */
 
 /* Not sure why SWIG doesn't figure this out. */

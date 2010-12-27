@@ -8,7 +8,12 @@
 #  OR:  export PYTHONPATH=$HOME/progs/lib/python2.6/site-packages
 # Then: gnucash-env ipython
 # The account file is not saved but always use a disposable copy.
-# Thanks for contributions by Christoph Holtermann
+# Thanks for contributions by Christoph Holtermann and Mark Jenkins
+
+##  @file
+#   @brief Test file for price database stuff
+#   @author Mike Evans, Christoph Holtermann, Mark Jenkins
+#   @ingroup python_bindings_examples
 
 from gnucash import Session
 

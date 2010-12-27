@@ -28,7 +28,8 @@ EXTRA_DIST = \
   guid.txt \
   qif.txt \
   generic-druid-framework.txt \
-  user-prefs-howto.txt
+  user-prefs-howto.txt \
+  python-bindings-doxygen.py
 
 
 docdir = ${GNC_DOC_INSTALL_DIR}

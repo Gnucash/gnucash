@@ -24,7 +24,7 @@
 ##  @file
 #   @brief Output all the credits and debits on an account
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
-#   @ingroup python-bindings-examples
+#   @ingroup python_bindings_examples
 
 # python imports
 from sys import argv, stdout

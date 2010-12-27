@@ -26,17 +26,19 @@
 
 /** @file
     @brief SWIG interface file for the core parts of GnuCash
-        This file is processed by SWIG and the resulting files are gnucash_core.c and gnucash_core_c.py
+
+        This file is processed by SWIG and the resulting files are gnucash_core.c and gnucash_core_c.py.
+        Have a look at the includes to see which parts of the GnuCash source SWIG takes as input.
     @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
     @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
-    @ingroup python-bindings 
+    @ingroup python_bindings 
 
     @file gnucash_core.c
     @brief SWIG output file.
-    @ingroup python-bindings
+    @ingroup python_bindings
     @file gnucash_core_c.py
     @brief SWIG output file.
-    @ingroup python-bindings
+    @ingroup python_bindings
 */
 
 %feature("autodoc", "1");

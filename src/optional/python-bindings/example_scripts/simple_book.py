@@ -2,7 +2,7 @@
 
 ##  @file
 #   @brief Simple example for a book 
-#   @ingroup python-bindings-examples
+#   @ingroup python_bindings_examples
 
 import sys
 from gnucash import Session

@@ -8,4 +8,4 @@ from gnucash_core import *
 #   @brief helper file for the importing of gnucash
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 #   @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
-#   @ingroup python-bindings
+#   @ingroup python_bindings

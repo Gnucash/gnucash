@@ -24,7 +24,7 @@
 #   @brief Library for making python classes from a set of functions.
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 #   @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
-#   @ingroup python-bindings
+#   @ingroup python_bindings
 
 INSTANCE_ARGUMENT = "instance"
 

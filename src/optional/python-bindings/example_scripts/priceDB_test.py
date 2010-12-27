@@ -13,7 +13,7 @@
 ##  @file
 #   @brief Test file for price database stuff
 #   @author Mike Evans 
-#   @ingroup python-bindings-examples
+#   @ingroup python_bindings_examples
 
 from gnucash import Session
 FILE = "PATH_TO_YOUR_TEST_FILE"  ## Fail is no saved but use a copy anyway

@@ -25,7 +25,7 @@
 ##  @file
 #   @brief Test the transaction imbalace viewing mechanisms
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
-#   @ingroup python-bindings-examples
+#   @ingroup python_bindings_examples
 
 from sys import argv
 

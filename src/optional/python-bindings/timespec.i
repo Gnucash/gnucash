@@ -27,7 +27,7 @@
     @brief SWIG interface file for type translation of Timespec types
     @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
     @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
-    @ingroup python-bindings */
+    @ingroup python_bindings */
 
 // A typemap for converting python dates to Timespec in functions that
 // require Timespec as an argument

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ##  @file
 #   @brief Example Script simple sqlite create 
-#   @ingroup python-bindings-examples
+#   @ingroup python_bindings_examples
 
 from gnucash import Session, Account
 from os.path import abspath
