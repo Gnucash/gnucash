@@ -45,9 +45,22 @@
  *  listens to the entry's deletion events and removes those
  *  descriptions from the quickfill; however, this does not yet seem
  *  to fully remove them from the GUI.
+ *
+ * \param book The book
+ * \param key The identifier to look up the shared object in the book
+ *
+ * \param use_invoices If TRUE, this quickfill considers only the
+ * entries from GncInvoice objects. If FALSE, this quickfill considers
+ * only the entries from bills/expense vouchers. Watch out: This
+ * parameter must be identical each time the same key is used for
+ * lookup, or otherwise an assertion will fail.
+ *
+ * \return The shared QuickFill object which is created on first
+ * calling of this function and subsequently looked up in the book by
+ * using the key.
  */
 QuickFill * gnc_get_shared_entry_desc_quickfill (QofBook *book,
-        const char * key);
+        const char * key, gboolean use_invoices);
 
 #endif
 

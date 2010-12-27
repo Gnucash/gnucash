@@ -34,6 +34,7 @@ typedef struct
     QuickFillSort qf_sort;
     QofBook *book;
     gint  listener;
+    gboolean using_invoices;
 } EntryQF;
 
 static void
@@ -91,7 +92,12 @@ static void entry_cb(gpointer data, gpointer user_data)
 {
     const GncEntry* entry = data;
     EntryQF *s = (EntryQF *) user_data;
-    gnc_quickfill_insert (s->qf, gncEntryGetDescription(entry), s->qf_sort);
+    if (s->using_invoices == (gncEntryGetInvAccount(entry) != NULL))
+    {
+        gnc_quickfill_insert (s->qf,
+                              gncEntryGetDescription(entry),
+                              s->qf_sort);
+    }
 }
 
 /** Creates a new query that searches for all GncEntry items in the
@@ -104,7 +110,7 @@ static QofQuery *new_query_for_entrys(QofBook *book)
     return query;
 }
 
-static EntryQF* build_shared_quickfill (QofBook *book, const char * key)
+static EntryQF* build_shared_quickfill (QofBook *book, const char * key, gboolean use_invoices)
 {
     EntryQF *result;
     QofQuery *query = new_query_for_entrys(book);
@@ -114,6 +120,7 @@ static EntryQF* build_shared_quickfill (QofBook *book, const char * key)
 
     result = g_new0(EntryQF, 1);
 
+    result->using_invoices = use_invoices;
     result->qf = gnc_quickfill_new();
     result->qf_sort = QUICKFILL_LIFO;
     result->book = book;
@@ -132,7 +139,7 @@ static EntryQF* build_shared_quickfill (QofBook *book, const char * key)
 }
 
 QuickFill * gnc_get_shared_entry_desc_quickfill (QofBook *book,
-        const char * key)
+        const char * key, gboolean use_invoices)
 {
     EntryQF *qfb;
 
@@ -142,8 +149,11 @@ QuickFill * gnc_get_shared_entry_desc_quickfill (QofBook *book,
     qfb = qof_book_get_data (book, key);
 
     if (qfb)
+    {
+        g_assert(use_invoices == qfb->using_invoices);
         return qfb->qf;
+    }
 
-    qfb = build_shared_quickfill(book, key);
+    qfb = build_shared_quickfill(book, key, use_invoices);
     return qfb->qf;
 }
