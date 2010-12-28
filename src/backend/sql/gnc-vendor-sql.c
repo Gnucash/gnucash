@@ -138,6 +138,7 @@ load_all_vendors( GncSqlBackend* be )
         if ( list != NULL )
         {
             gnc_sql_slots_load_for_list( be, list );
+            g_list_free( list );
         }
     }
 }

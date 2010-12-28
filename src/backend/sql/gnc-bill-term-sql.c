@@ -255,6 +255,7 @@ load_all_billterms( GncSqlBackend* be )
         if ( list != NULL )
         {
             gnc_sql_slots_load_for_list( be, list );
+            g_list_free( list );
         }
 
         /* While there are items on the list of billterms needing parents,

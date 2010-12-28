@@ -253,28 +253,39 @@ load_all_accounts( GncSqlBackend* be )
             while ( progress_made )
             {
                 progress_made = FALSE;
-                for ( elem = l_accounts_needing_parents; elem != NULL; elem = g_list_next( elem ) )
+                for ( elem = l_accounts_needing_parents; elem != NULL; )
                 {
                     account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
                     pParent = xaccAccountLookup( &s->guid, be->primary_book );
                     if ( pParent != NULL )
                     {
+                        GList* next_elem;
+
                         gnc_account_append_child( pParent, s->pAccount );
+                        next_elem = g_list_next( elem );
                         l_accounts_needing_parents = g_list_delete_link( l_accounts_needing_parents, elem );
+                        elem = next_elem;
                         progress_made = TRUE;
+                    }
+                    else
+                    {
+                        /* Can't be up in the for loop because the 'then' clause reads inside a node freed
+                           by g_list_delete_link(). */
+                        elem = g_list_next( elem );
                     }
                 }
             }
 
             /* Any non-ROOT accounts left over must be parented by the root account */
             root = gnc_book_get_root_account( pBook );
-            for ( elem = l_accounts_needing_parents; elem != NULL; elem = g_list_next( elem ) )
+            while ( l_accounts_needing_parents != NULL )
             {
-                account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
+                account_parent_guid_struct* s = (account_parent_guid_struct*)l_accounts_needing_parents->data;
                 if ( xaccAccountGetType( s->pAccount ) != ACCT_TYPE_ROOT )
                 {
                     gnc_account_append_child( root, s->pAccount );
                 }
+                l_accounts_needing_parents = g_list_delete_link( l_accounts_needing_parents, l_accounts_needing_parents );
             }
         }
 

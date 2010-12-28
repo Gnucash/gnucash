@@ -183,7 +183,9 @@ static gchar *
 get_key_from_path( GString *path )
 {
     gchar *str = NULL, *key = NULL, *ret = NULL;
+
     g_return_val_if_fail( path != NULL, strdup("") );
+
     if ( path->str == NULL ) return strdup("");
     str = g_strdup( path->str );
     key = strrchr( str, '/');
@@ -208,7 +210,9 @@ static gchar *
 get_path_from_path( GString *path )
 {
     gchar *str = NULL, *key = NULL, *ret = NULL;
+
     g_return_val_if_fail( path != NULL, NULL );
+
     if ( path->str == NULL ) return NULL;
     str = g_strdup( path->str );
     key = strrchr( str, '/');
@@ -240,6 +244,7 @@ set_slot_from_value( slot_info_t *pInfo, KvpValue *pValue)
 {
     g_return_if_fail( pInfo != NULL );
     g_return_if_fail( pValue != NULL );
+
     switch ( pInfo->context)
     {
     case FRAME:
@@ -613,8 +618,7 @@ slot_info_copy( slot_info_t *pInfo, GncGUID *guid )
     newSlot->pList = pInfo->pList;
     newSlot->context = pInfo->context;
     newSlot->pKvpValue = pInfo->pKvpValue;
-    newSlot->path = g_string_new('\0');
-    g_string_assign( newSlot->path, pInfo->path->str);
+    newSlot->path = g_string_new(pInfo->path->str);
     return newSlot;
 }
 
@@ -873,7 +877,7 @@ load_obj_guid( const GncSqlBackend* be, GncSqlRow* row )
 static void
 load_slot_for_list_item( GncSqlBackend* be, GncSqlRow* row, QofCollection* coll )
 {
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new('\0') };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, NULL };
     const GncGUID* guid;
     QofInstance* inst;
 
@@ -887,7 +891,6 @@ load_slot_for_list_item( GncSqlBackend* be, GncSqlRow* row, QofCollection* coll 
 
     slot_info.be = be;
     slot_info.pKvpFrame = qof_instance_get_slots( inst );
-    slot_info.path = NULL;
     slot_info.context = NONE;
 
     gnc_sql_load_object( be, row, TABLE_NAME, &slot_info, col_table );
@@ -960,7 +963,7 @@ gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list )
 static void
 load_slot_for_book_object( GncSqlBackend* be, GncSqlRow* row, BookLookupFn lookup_fn )
 {
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, g_string_new('\0') };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, 0, NULL, FRAME, NULL, NULL };
     const GncGUID* guid;
     QofInstance* inst;
 
