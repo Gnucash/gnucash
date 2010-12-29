@@ -150,7 +150,7 @@ initialize_scm_functions()
  *                                                                  *
  * Args: func - the guile function to call                          *
  *       arg  - the single function argument                        *
- * Returns: malloc'ed char * or NULL                                *
+ * Returns: g_malloc'ed char * or NULL                              *
 \********************************************************************/
 char *
 gnc_guile_call1_to_string(SCM func, SCM arg)
@@ -162,7 +162,18 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
         value = scm_call_1(func, arg);
 
         if (scm_is_string(value))
-            return scm_to_locale_string(value);
+        {
+            char* x;
+            gchar* s;
+
+            x = scm_to_locale_string(value);
+
+            /* scm_to_locale_string() returns a malloc'ed string.
+               Copy to a g_malloc'ed one. */
+            s = g_strdup(x);
+            free(x);
+            return s;
+        }
         else
         {
             PERR("bad value\n");
@@ -650,6 +661,8 @@ char *
 gnc_split_scm_get_memo(SCM split_scm)
 {
     SCM result;
+    char* x;
+    gchar* s;
 
     initialize_scm_functions();
 
@@ -660,7 +673,13 @@ gnc_split_scm_get_memo(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return scm_to_locale_string(result);
+    x = scm_to_locale_string(result);
+
+    /* scm_to_locale_string() returns a malloc'ed string.
+       Copy to a g_malloc'ed one. */
+    s = g_strdup(x);
+    free(x);
+    return s;
 }
 
 
@@ -675,6 +694,8 @@ char *
 gnc_split_scm_get_action(SCM split_scm)
 {
     SCM result;
+    char* x;
+    gchar* s;
 
     initialize_scm_functions();
 
@@ -685,7 +706,13 @@ gnc_split_scm_get_action(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return scm_to_locale_string(result);
+    x = scm_to_locale_string(result);
+
+    /* scm_to_locale_string() returns a malloc'ed string.
+       Copy to a g_malloc'ed one. */
+    s = g_strdup(x);
+    free(x);
+    return s;
 }
 
 
@@ -1100,6 +1127,8 @@ gnc_get_debit_string(GNCAccountType account_type)
     const gchar *string;
     SCM result;
     SCM arg;
+    char* x;
+    gchar* s;
 
     initialize_scm_functions();
 
@@ -1115,7 +1144,13 @@ gnc_get_debit_string(GNCAccountType account_type)
     if (!scm_is_string(result))
         return NULL;
 
-    return scm_to_locale_string(result);
+    x = scm_to_locale_string(result);
+
+    /* scm_to_locale_string() returns a malloc'ed string.
+       Copy to a g_malloc'ed one. */
+    s = g_strdup(x);
+    free(x);
+    return s;
 }
 
 
@@ -1132,6 +1167,8 @@ gnc_get_credit_string(GNCAccountType account_type)
     const gchar *string;
     SCM result;
     SCM arg;
+    char* x;
+    gchar* s;
 
     initialize_scm_functions();
 
@@ -1147,7 +1184,13 @@ gnc_get_credit_string(GNCAccountType account_type)
     if (!scm_is_string(result))
         return NULL;
 
-    return scm_to_locale_string(result);
+    x = scm_to_locale_string(result);
+
+    /* scm_to_locale_string() returns a malloc'ed string.
+       Copy to a g_malloc'ed one. */
+    s = g_strdup(x);
+    free(x);
+    return s;
 }
 
 
