@@ -49,6 +49,7 @@ gncscmreportmod_DATA = \
    general-journal.scm \
    general-ledger.scm \
    transaction.scm \
+   sx-summary.scm \
    balsheet-eg.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
