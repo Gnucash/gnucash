@@ -162,7 +162,7 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
         value = scm_call_1(func, arg);
 
         if (scm_is_string(value))
-            return g_strdup(scm_to_locale_string(value));
+            return scm_to_locale_string(value);
         else
         {
             PERR("bad value\n");
@@ -660,7 +660,7 @@ gnc_split_scm_get_memo(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return g_strdup(scm_to_locale_string(result));
+    return scm_to_locale_string(result);
 }
 
 
@@ -685,7 +685,7 @@ gnc_split_scm_get_action(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return g_strdup(scm_to_locale_string(result));
+    return scm_to_locale_string(result);
 }
 
 
@@ -1115,10 +1115,7 @@ gnc_get_debit_string(GNCAccountType account_type)
     if (!scm_is_string(result))
         return NULL;
 
-    string = scm_to_locale_string(result);
-    if (string)
-        return g_strdup(string);
-    return NULL;
+    return scm_to_locale_string(result);
 }
 
 
@@ -1150,10 +1147,7 @@ gnc_get_credit_string(GNCAccountType account_type)
     if (!scm_is_string(result))
         return NULL;
 
-    string = scm_to_locale_string(result);
-    if (string)
-        return g_strdup(string);
-    return NULL;
+    return scm_to_locale_string(result);
 }
 
 
