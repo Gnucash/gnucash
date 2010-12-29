@@ -635,6 +635,27 @@ gnc_budget_get_default (QofBook *book)
     return bgt;
 }
 
+static void
+destroy_budget_on_book_close(QofInstance *ent, gpointer data)
+{
+    GncBudget* bgt = GNC_BUDGET(ent);
+
+    gnc_budget_destroy(bgt);
+}
+
+/** Handles book end - frees all budgets from the book
+ *
+ * @param book Book being closed
+ */
+static void
+gnc_budget_book_end(QofBook* book)
+{
+    QofCollection *col;
+
+    col = qof_book_get_collection(book, GNC_ID_BUDGET);
+    qof_collection_foreach(col, destroy_budget_on_book_close, NULL);
+}
+
 #ifdef _MSC_VER
 /* MSVC compiler doesn't have C99 "designated initializers"
  * so we wrap them in a macro that is empty on MSVC. */
@@ -651,7 +672,7 @@ static QofObject budget_object_def =
     DI(.type_label        = ) "Budget",
     DI(.create            = ) (gpointer)gnc_budget_new,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_budget_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,

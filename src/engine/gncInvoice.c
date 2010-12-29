@@ -2014,6 +2014,24 @@ static const char * _gncInvoicePrintable (gpointer obj)
     return invoice->printname;
 }
 
+static void
+destroy_invoice_on_book_close(QofInstance *ent, gpointer data)
+{
+    GncInvoice* invoice = GNC_INVOICE(ent);
+
+    gncInvoiceBeginEdit(invoice);
+    gncInvoiceDestroy(invoice);
+}
+
+static void
+gnc_invoice_book_end(QofBook* book)
+{
+    QofCollection *col;
+
+    col = qof_book_get_collection(book, GNC_ID_INVOICE);
+    qof_collection_foreach(col, destroy_invoice_on_book_close, NULL);
+}
+
 static QofObject gncInvoiceDesc =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,
@@ -2021,7 +2039,7 @@ static QofObject gncInvoiceDesc =
     DI(.type_label        = ) "Invoice",
     DI(.create            = ) (gpointer)gncInvoiceCreate,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_invoice_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,
