@@ -69,6 +69,7 @@ balance at a given time"))
 
 (define optname-fullname (N_ "Show long account names"))
 (define optname-show-total (N_ "Show Totals"))
+(define optname-show-percent (N_ "Show Percents"))
 (define optname-slices (N_ "Maximum Slices"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
@@ -162,6 +163,13 @@ balance at a given time"))
       gnc:pagename-display optname-show-total
       "b" (N_ "Show the total balance in legend?") #t))
 
+
+     (add-option
+      (gnc:make-simple-boolean-option
+       gnc:pagename-display optname-show-percent
+       "b" (N_ "Show the percentage in legend?") #t))
+
+
     (add-option
      (gnc:make-number-range-option
       gnc:pagename-display optname-slices
@@ -221,6 +229,7 @@ balance at a given time"))
 
         (show-fullname? (get-option gnc:pagename-display optname-fullname))
         (show-total? (get-option gnc:pagename-display optname-show-total))
+        (show-percent? (get-option gnc:pagename-display optname-show-percent))
         (max-slices (inexact->exact
 		     (get-option gnc:pagename-display optname-slices)))
         (height (get-option gnc:pagename-display optname-plot-height))
@@ -499,8 +508,15 @@ balance at a given time"))
 				  (car pair)
 				  (gnc-commodity-get-fraction report-currency)
 				  GNC-RND-ROUND)
-				 print-info))
-			       "")))
+ 				 print-info)
+ 				 )
+ 			       "")
+ 			   (if show-percent?
+ 				(sprintf
+ 				 #f "   (%2.2f %%)"
+ 				 (* 100.0 (/ (car pair) (apply + (unzip1 combined)))))
+ 			       "")
+ 			       ))
                        combined)))
                  (gnc:html-piechart-set-labels! chart legend-labels))
 
