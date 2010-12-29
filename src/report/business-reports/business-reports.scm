@@ -107,7 +107,6 @@
 (use-modules (gnucash report job-report))
 (use-modules (gnucash report payables))
 (use-modules (gnucash report receivables))
-(use-modules (gnucash report customer-summary))
 
 (define gnc:invoice-report-create gnc:invoice-report-create-internal)
 
