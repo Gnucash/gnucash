@@ -172,9 +172,17 @@ gnc_extension_path (SCM extension, char **fullpath)
         if (scm_is_string(item))
         {
             if (i == 1)
-                strings[i] = g_strdup(scm_to_locale_string(item));
+            {
+                strings[i] = scm_to_locale_string(item);
+            }
             else
-                strings[i] = g_strdup(gettext(scm_to_locale_string(item)));
+            {
+                gchar* s;
+
+                s = scm_to_locale_string(item);
+                strings[i] = g_strdup(gettext(s));
+                free(s);
+            }
         }
         else
         {
@@ -253,7 +261,8 @@ gnc_create_extension_info (SCM extension)
 {
     ExtensionInfo *ext_info;
     gchar *typeStr, *tmp;
-    const gchar *name, *guid;
+    gchar* name;
+    gchar* guid;
 
     ext_info = g_new0(ExtensionInfo, 1);
     ext_info->extension = extension;
@@ -274,6 +283,8 @@ gnc_create_extension_info (SCM extension)
     ext_info->ae.stock_id = NULL;
     ext_info->ae.accelerator = NULL;
     ext_info->ae.callback = NULL;
+    free(name);
+    free(guid);
 
     tmp = g_strdup_printf("%s/%s", ext_info->path, ext_info->ae.label);
     ext_info->sort_key = g_utf8_collate_key(tmp, -1);
