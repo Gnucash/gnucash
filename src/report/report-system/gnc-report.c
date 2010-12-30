@@ -206,6 +206,7 @@ gnc_get_default_report_font_family(void)
 
     top_list = gtk_window_list_toplevels();
     top_widget = GTK_WIDGET(top_list->data);
+    g_list_free(top_list);
     top_widget_style = gtk_rc_get_style(top_widget);
     default_font_family = pango_font_description_get_family(top_widget_style->font_desc);
 
