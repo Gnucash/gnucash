@@ -469,6 +469,7 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
     gnc_main_window_manual_merge_actions (window, PLUGIN_ACTIONS_NAME,
                                           per_window.group, per_window.merge_id);
 
+    g_slist_free(menu_list);
     LEAVE(" ");
 }
 
