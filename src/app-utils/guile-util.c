@@ -168,10 +168,11 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
 
             x = scm_to_locale_string(value);
 
-            /* scm_to_locale_string() returns a malloc'ed string.
-               Copy to a g_malloc'ed one. */
+            /* scm_to_locale_string() returns a malloc'ed string in
+               guile-1.8 (but not in guile-1.6).  Copy to a
+               g_malloc'ed one. */
             s = g_strdup(x);
-            free(x);
+            gnc_free_scm_locale_string(x);
             return s;
         }
         else
@@ -675,10 +676,11 @@ gnc_split_scm_get_memo(SCM split_scm)
 
     x = scm_to_locale_string(result);
 
-    /* scm_to_locale_string() returns a malloc'ed string.
+    /* scm_to_locale_string() returns a malloc'ed string in
+       guile-1.8 (but not in guile-1.6).
        Copy to a g_malloc'ed one. */
     s = g_strdup(x);
-    free(x);
+    gnc_free_scm_locale_string(x);
     return s;
 }
 
@@ -708,10 +710,11 @@ gnc_split_scm_get_action(SCM split_scm)
 
     x = scm_to_locale_string(result);
 
-    /* scm_to_locale_string() returns a malloc'ed string.
+    /* scm_to_locale_string() returns a malloc'ed string in
+       guile-1.8 (but not in guile-1.6).
        Copy to a g_malloc'ed one. */
     s = g_strdup(x);
-    free(x);
+    gnc_free_scm_locale_string(x);
     return s;
 }
 
@@ -1146,10 +1149,11 @@ gnc_get_debit_string(GNCAccountType account_type)
 
     x = scm_to_locale_string(result);
 
-    /* scm_to_locale_string() returns a malloc'ed string.
+    /* scm_to_locale_string() returns a malloc'ed string in
+       guile-1.8 (but not in guile-1.6).
        Copy to a g_malloc'ed one. */
     s = g_strdup(x);
-    free(x);
+    gnc_free_scm_locale_string(x);
     return s;
 }
 
@@ -1186,10 +1190,11 @@ gnc_get_credit_string(GNCAccountType account_type)
 
     x = scm_to_locale_string(result);
 
-    /* scm_to_locale_string() returns a malloc'ed string.
+    /* scm_to_locale_string() returns a malloc'ed string in
+       guile-1.8 (but not in guile-1.6).
        Copy to a g_malloc'ed one. */
     s = g_strdup(x);
-    free(x);
+    gnc_free_scm_locale_string(x);
     return s;
 }
 

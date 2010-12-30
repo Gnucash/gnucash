@@ -30,11 +30,22 @@
 # define scm_is_symbol SCM_SYMBOLP
 # define scm_is_true SCM_NFALSEP
 # define scm_is_vector SCM_VECTORP
-# define scm_to_locale_string SCM_STRING_CHARS
 # define scm_c_string_length SCM_STRING_LENGTH
 #elif (SCM_MAJOR_VERSION == 1) && (SCM_MINOR_VERSION <= 8)
 # define scm_c_string_length scm_i_string_length
 #endif
+
+/* The result of SCM_STRING_CHARS must not be free'd, but the result
+ * of scm_to_locale_string must. That's bad. We define the macro
+ * gnc_free_scm_locale_string to wrap around free() for that
+ * reason. */
+#if (SCM_MAJOR_VERSION == 1) && (SCM_MINOR_VERSION <= 6)
+# define scm_to_locale_string SCM_STRING_CHARS
+# define gnc_free_scm_locale_string (void)
+#else
+# define gnc_free_scm_locale_string free
+#endif
+
 /* Convenience macros */
 
 #define scm_is_equal(obj1,obj2)	scm_is_true(scm_equal_p(obj1,obj2))
