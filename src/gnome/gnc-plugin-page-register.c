@@ -1003,11 +1003,13 @@ gnc_plugin_page_register_save_page (GncPluginPage *plugin_page,
     if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
     {
         const gchar *label;
+        gchar* name;
         label = (ledger_type == LD_SINGLE) ? LABEL_ACCOUNT : LABEL_SUBACCOUNT;
         leader = gnc_ledger_display_leader(priv->ledger);
         g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE, label);
-        g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME,
-                              gnc_account_get_full_name(leader));
+        name = gnc_account_get_full_name(leader);
+        g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME, name);
+        g_free(name);
     }
     else if (reg->type == GENERAL_LEDGER)
     {
