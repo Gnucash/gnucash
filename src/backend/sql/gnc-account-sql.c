@@ -264,6 +264,7 @@ load_all_accounts( GncSqlBackend* be )
                         gnc_account_append_child( pParent, s->pAccount );
                         next_elem = g_list_next( elem );
                         l_accounts_needing_parents = g_list_delete_link( l_accounts_needing_parents, elem );
+                        g_free( s );
                         elem = next_elem;
                         progress_made = TRUE;
                     }
@@ -285,6 +286,7 @@ load_all_accounts( GncSqlBackend* be )
                 {
                     gnc_account_append_child( root, s->pAccount );
                 }
+                g_free( s );
                 l_accounts_needing_parents = g_list_delete_link( l_accounts_needing_parents, l_accounts_needing_parents );
             }
         }

@@ -620,16 +620,16 @@ gnc_dbi_unlock( QofBackend *qbe )
         PWARN("No lock table in database, so not unlocking it.");
         return;
     }
+    dbi_result_free( result );
 
-    if ( ( result = dbi_conn_query( dcon, "BEGIN" )) )
+    result = dbi_conn_query( dcon, "BEGIN" );
+    if ( result )
     {
         /* Delete the entry if it's our hostname and PID */
         gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
-        if (result)
-        {
-            dbi_result_free( result );
-            result = NULL;
-        }
+
+        dbi_result_free( result );
+        result = NULL;
         memset( hostname, 0, sizeof(hostname) );
         gethostname( hostname, GNC_HOST_NAME_MAX );
         result = dbi_conn_queryf( dcon, "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", lock_table, hostname, (int)GETPID() );
@@ -653,7 +653,7 @@ gnc_dbi_unlock( QofBackend *qbe )
                 }
                 return;
             }
-            if (result)
+            else
             {
                 dbi_result_free( result );
                 result = NULL;
