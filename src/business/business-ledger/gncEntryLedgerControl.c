@@ -245,12 +245,13 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
  * description string equal to the given "desc" argument. The query
  * will find the single GncEntry with the latest (=newest)
  * DATE_ENTERED. */
-static QofQuery *new_query_for_entry_desc(GncEntryLedger *reg, const char* desc)
+static QofQuery *new_query_for_entry_desc(GncEntryLedger *reg, const char* desc, gboolean use_invoice)
 {
     QofQuery *query = NULL;
     QofQueryPredData *predData = NULL;
     GSList *param_list = NULL;
     GSList *primary_sort_params = NULL;
+    const char* should_be_null = (use_invoice ? ENTRY_BILL : ENTRY_INVOICE);
 
     g_assert(reg);
     g_assert(desc);
@@ -271,6 +272,12 @@ static QofQuery *new_query_for_entry_desc(GncEntryLedger *reg, const char* desc)
     /* Register this in the query */
     qof_query_add_term (query, param_list, predData, QOF_QUERY_FIRST_TERM);
 
+    /* For invoice entries, Entry->Bill must be NULL, and vice versa */
+    qof_query_add_guid_match (query,
+                              qof_query_build_param_list (should_be_null,
+                                                          QOF_PARAM_GUID, NULL),
+                              NULL, QOF_QUERY_AND);
+
     /* Set the sort order: By DATE_ENTERED, increasing, and returning
      * only one single resulting item. */
     primary_sort_params = qof_query_build_param_list(ENTRY_DATE_ENTERED, NULL);
@@ -288,8 +295,22 @@ static GncEntry*
 find_entry_in_book_by_desc(GncEntryLedger *reg, const char* desc)
 {
     GncEntry *result = NULL;
-    QofQuery *query = new_query_for_entry_desc(reg, desc);
-    GList *entries = qof_query_run(query);
+    gboolean use_invoice;
+    QofQuery *query;
+    GList *entries = NULL;
+
+    switch (reg->type)
+    {
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+        use_invoice = TRUE;
+        break;
+    default:
+        use_invoice = FALSE;
+    };
+
+    query = new_query_for_entry_desc(reg, desc, use_invoice);
+    entries = qof_query_run(query);
 
     /* Do we have a non-empty result? */
     if (entries)
@@ -303,6 +324,7 @@ find_entry_in_book_by_desc(GncEntryLedger *reg, const char* desc)
     return result;
 }
 
+#if 0
 /** Finds the GncEntry with the matching description string as given
  * in "desc", but searches this only in the given entry ledger
  * (i.e. the currently opened ledger window). */
@@ -342,6 +364,7 @@ gnc_find_entry_in_reg_by_desc(GncEntryLedger *reg, const char* desc)
 
     return NULL;
 }
+#endif
 
 static void set_value_combo_cell(BasicCell *cell, const char *new_value)
 {
@@ -468,12 +491,11 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
      * the entries from the current invoice/bill, but it would be
      * better to draw this from a larger set of entries. */
     auto_entry =
-#if 0
-        /* Activate this for book-wide auto-completion of the invoice entries */
+        /* Use this for book-wide auto-completion of the invoice entries */
         find_entry_in_book_by_desc(ledger, desc);
-#else
-    gnc_find_entry_in_reg_by_desc(ledger, desc);
-#endif
+/* #else */
+/*     gnc_find_entry_in_reg_by_desc(ledger, desc); */
+/* #endif */
 
     if (auto_entry == NULL)
         return FALSE;

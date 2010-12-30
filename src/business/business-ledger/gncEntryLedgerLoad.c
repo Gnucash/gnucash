@@ -40,6 +40,8 @@
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
 #include "gncEntryLedgerP.h"
+#include "quickfillcell.h"
+#include "gnome-utils/gnc-entry-quickfill.h"
 
 
 /* XXX: This should go elsewhere */
@@ -269,11 +271,36 @@ gnc_entry_ledger_show_entry (GncEntryLedger *ledger,
     gnc_table_show_range (ledger->table, start_loc, end_loc);
 }
 
+#define DESC_QF_KEY_INVOICES "ENTRY_DESC_CELL_QF_INVOICES"
+#define DESC_QF_KEY_BILLS "ENTRY_DESC_CELL_QF_BILLS"
+
+static void
+load_description_cell (GncEntryLedger *ledger)
+{
+    QuickFill *shared_quickfill;
+    QuickFillCell *cell;
+
+    switch (ledger->type)
+    {
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+        shared_quickfill = gnc_get_shared_entry_desc_quickfill(ledger->book, DESC_QF_KEY_INVOICES, TRUE);
+        break;
+    default:
+        shared_quickfill = gnc_get_shared_entry_desc_quickfill(ledger->book, DESC_QF_KEY_BILLS, FALSE);
+    };
+
+    cell = (QuickFillCell *)
+           gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DESC_CELL);
+    gnc_quickfill_cell_use_quickfill_cache (cell, shared_quickfill);
+}
+
 void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
 {
     load_xfer_type_cells (ledger);
     load_taxtable_type_cells (ledger);
     load_payment_type_cells (ledger);
+    load_description_cell (ledger);
 }
 
 /* XXX (FIXME): This should be in a config file! */
