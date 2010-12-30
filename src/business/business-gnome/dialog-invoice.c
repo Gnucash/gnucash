@@ -2729,12 +2729,15 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     res = qof_query_run(q);
     len = g_list_length (res);
     if (!res || len <= 0)
+    {
+        qof_query_destroy(q);
         return NULL;
+    }
 
     {
         gchar *message = g_strdup_printf
                          (/* Translators: %d is the number of bills due. This is a
-	  ngettext(3) message. */
+	                         ngettext(3) message. */
                              ngettext("The following %d bill is due:",
                                       "The following %d bills are due:",
                                       len),
@@ -2746,6 +2749,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
                                          TRUE, FALSE,
                                          buttons, NULL);
         g_free(message);
+        qof_query_destroy(q);
         return dialog;
     }
 }
