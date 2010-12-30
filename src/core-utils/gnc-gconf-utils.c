@@ -691,6 +691,7 @@ gnc_gconf_client_all_entries (const gchar *name)
 
     section = gnc_gconf_section_name(name);
     value = gconf_client_all_entries(our_client, section, &error);
+    g_free(section);
     if (error != NULL)
     {
         printf("Failed to get list of all gconf keys: %s", error->message);
