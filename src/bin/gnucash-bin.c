@@ -216,7 +216,10 @@ environment_override()
     g_free (config_path);
     g_free (env_file);
     if ( !got_keyfile )
+    {
+        g_key_file_free(keyfile);
         return;
+    }
 
     /* Read the environment overrides and apply them */
     env_vars = g_key_file_get_keys(keyfile, "Variables", &param_count, &error);
@@ -242,6 +245,7 @@ environment_override()
                 gchar *expanded = environment_expand (val_list[j]);
                 new_val = g_build_path (G_SEARCHPATH_SEPARATOR_S, tmp_val, expanded, NULL);
                 g_free (tmp_val);
+                g_free(expanded);
                 tmp_val = new_val;
             }
             g_strfreev (val_list);
@@ -254,11 +258,12 @@ environment_override()
             if (!g_setenv (env_vars[i], new_val, TRUE))
                 g_warning ("Couldn't properly override environment variable \"%s\". "
                            "This may lead to unexpected results", env_vars[i]);
+            g_free(new_val);
         }
     }
 
     g_strfreev(env_vars);
-
+    g_key_file_free(keyfile);
 }
 
 #ifdef MAC_INTEGRATION
