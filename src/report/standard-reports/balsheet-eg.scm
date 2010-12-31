@@ -274,7 +274,7 @@
 (define optname-font-family    (N_ "Font family"))
 (define opthelp-font-family    (N_ "Font definition in CSS font-family format"))
 (define optname-font-size      (N_ "Font size"))
-(define opthelp-font-size      (N_ "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\""))
+(define opthelp-font-size      (N_ "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")"))
 (define optname-template-file  (N_ "Template file"))
 (define opthelp-template-file
   (N_ "The file name of the eguile template part of this report.  This file must be in your .gnucash directory, or else in its proper place within the GnuCash installation directories."))

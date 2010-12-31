@@ -947,18 +947,6 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     new_item_button = glade_xml_get_widget (xml, "new_item_button");
     gtk_button_set_label (GTK_BUTTON(new_item_button),
                           type_label_to_new_button(type_label));
-#if 1
-    /* This old implementation part will be de-activated and removed
-     * once the string freeze is lifted again after 2.4.0 release. */
-    {
-        char *desc =
-            /* Translators: %s is either "item" or the name of some other
-             * item, e.g. "Customer" or "Invoice". */
-            g_strdup_printf (_("New %s"), type_label ? type_label : _("item"));
-        gtk_button_set_label (GTK_BUTTON(new_item_button), desc);
-        g_free (desc);
-    }
-#endif
 
     /* add the first criterion */
     gnc_search_dialog_add_criterion (sw);
