@@ -499,6 +499,11 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
             dbi_conn_error( dcon, &errstr );
             PERR( "Error %s creating lock table", errstr );
             qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+            if ( result )
+            {
+                dbi_result_free( result );
+                result = NULL;
+            }
             return FALSE;
         }
         if ( result )
