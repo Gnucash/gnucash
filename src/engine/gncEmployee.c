@@ -671,6 +671,28 @@ listen_for_address_events(QofInstance *entity, QofEventId event_type,
     gncEmployeeCommitEdit(empl);
 }
 
+static void
+destroy_employee_on_book_close(QofInstance *ent, gpointer data)
+{
+    GncEmployee* e = GNC_EMPLOYEE(ent);
+
+    gncEmployeeBeginEdit(e);
+    gncEmployeeDestroy(e);
+}
+
+/** Handles book end - frees all employees from the book
+ *
+ * @param book Book being closed
+ */
+static void
+gnc_employee_book_end(QofBook* book)
+{
+    QofCollection *col;
+
+    col = qof_book_get_collection(book, GNC_ID_EMPLOYEE);
+    qof_collection_foreach(col, destroy_employee_on_book_close, NULL);
+}
+
 static QofObject gncEmployeeDesc =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,
@@ -678,7 +700,7 @@ static QofObject gncEmployeeDesc =
     DI(.type_label        = ) "Employee",
     DI(.create            = ) (gpointer)gncEmployeeCreate,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_employee_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,

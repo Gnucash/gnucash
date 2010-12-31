@@ -781,6 +781,28 @@ static const char * _gncVendorPrintable (gpointer item)
     return v->name;
 }
 
+static void
+destroy_vendor_on_book_close(QofInstance *ent, gpointer data)
+{
+    GncVendor* v = GNC_VENDOR(ent);
+
+    gncVendorBeginEdit(v);
+    gncVendorDestroy(v);
+}
+
+/** Handles book end - frees all vendors from the book
+ *
+ * @param book Book being closed
+ */
+static void
+gnc_vendor_book_end(QofBook* book)
+{
+    QofCollection *col;
+
+    col = qof_book_get_collection(book, GNC_ID_VENDOR);
+    qof_collection_foreach(col, destroy_vendor_on_book_close, NULL);
+}
+
 static QofObject gncVendorDesc =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,
@@ -788,7 +810,7 @@ static QofObject gncVendorDesc =
     DI(.type_label        = ) "Vendor",
     DI(.create            = ) (gpointer)gncVendorCreate,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_vendor_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,

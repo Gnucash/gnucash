@@ -865,6 +865,28 @@ static const char * _gncCustomerPrintable (gpointer item)
     return gncCustomerGetName((GncCustomer*)item);
 }
 
+static void
+destroy_customer_on_book_close(QofInstance *ent, gpointer data)
+{
+    GncCustomer* c = GNC_CUSTOMER(ent);
+
+    gncCustomerBeginEdit(c);
+    gncCustomerDestroy(c);
+}
+
+/** Handles book end - frees all customers from the book
+ *
+ * @param book Book being closed
+ */
+static void
+gnc_customer_book_end(QofBook* book)
+{
+    QofCollection *col;
+
+    col = qof_book_get_collection(book, GNC_ID_CUSTOMER);
+    qof_collection_foreach(col, destroy_customer_on_book_close, NULL);
+}
+
 static QofObject gncCustomerDesc =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,
@@ -872,7 +894,7 @@ static QofObject gncCustomerDesc =
     DI(.type_label        = ) "Customer",
     DI(.create            = ) (gpointer)gncCustomerCreate,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_customer_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,

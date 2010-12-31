@@ -1533,6 +1533,28 @@ gboolean gncEntryEqual(const GncEntry *a, const GncEntry *b)
 /* ============================================================= */
 /* Object declaration */
 
+static void
+destroy_entry_on_book_close(QofInstance *ent, gpointer data)
+{
+    GncEntry* entry = GNC_ENTRY(ent);
+
+    gncEntryBeginEdit(entry);
+    gncEntryDestroy(entry);
+}
+
+/** Handles book end - frees all entries from the book
+ *
+ * @param book Book being closed
+ */
+static void
+gnc_entry_book_end(QofBook* book)
+{
+    QofCollection *col;
+
+    col = qof_book_get_collection(book, GNC_ID_ENTRY);
+    qof_collection_foreach(col, destroy_entry_on_book_close, NULL);
+}
+
 static QofObject gncEntryDesc =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,
@@ -1540,7 +1562,7 @@ static QofObject gncEntryDesc =
     DI(.type_label        = ) "Order/Invoice/Bill Entry",
     DI(.create            = ) (gpointer)gncEntryCreate,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_entry_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,
