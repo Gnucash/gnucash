@@ -500,6 +500,7 @@ set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
         slots_load_info( newInfo );
         pValue = kvp_value_new_glist_nc( newInfo->pList );
         kvp_frame_set_slot_nc(pInfo->pKvpFrame, key, pValue);
+        g_string_free( newInfo->path, TRUE );
         g_slice_free( slot_info_t, newInfo );
         g_free( key );
         break;
@@ -533,6 +534,7 @@ set_guid_val( gpointer pObject, /*@ null @*/ gpointer pValue )
 
         newInfo->context = FRAME;
         slots_load_info ( newInfo );
+        g_string_free( newInfo->path, TRUE );
         g_slice_free( slot_info_t, newInfo );
         break;
     }
@@ -664,6 +666,7 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
         kvp_frame_for_each_slot( pKvpFrame, save_slot, pNewInfo );
         kvp_value_delete( pSlot_info->pKvpValue );
         pSlot_info->pKvpValue = oldValue;
+        g_string_free( pNewInfo->path, TRUE );
         g_slice_free( slot_info_t, pNewInfo );
     }
     break;
@@ -686,6 +689,7 @@ save_slot( const gchar* key, KvpValue* value, gpointer data )
         }
         kvp_value_delete( pSlot_info->pKvpValue );
         pSlot_info->pKvpValue = oldValue;
+        g_string_free( pNewInfo->path, TRUE );
         g_slice_free( slot_info_t, pNewInfo );
     }
     break;
@@ -780,13 +784,15 @@ gnc_sql_slots_delete( GncSqlBackend* be, const GncGUID* guid )
 static void
 load_slot( slot_info_t *pInfo, GncSqlRow* row )
 {
-    slot_info_t *slot_info = slot_info_copy( pInfo, NULL );
+    slot_info_t *slot_info;
 
     g_return_if_fail( pInfo != NULL );
     g_return_if_fail( pInfo->be != NULL );
     g_return_if_fail( row != NULL );
     g_return_if_fail( pInfo->pKvpFrame != NULL );
 
+    slot_info = slot_info_copy( pInfo, NULL );
+    g_string_free( slot_info->path, TRUE );
     slot_info->path = NULL;
 
     gnc_sql_load_object( pInfo->be, row, TABLE_NAME, slot_info, col_table );

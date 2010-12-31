@@ -1778,9 +1778,10 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
                           const gpointer pObject, const GncSqlColumnTableEntry* table_row, GSList** pList )
 {
     QofAccessFunc getter;
-    const GncGUID* guid = NULL;
+    GncGUID* guid = NULL;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
     GValue* value;
+    gboolean free_guid = FALSE;
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( obj_name != NULL );
@@ -1792,6 +1793,7 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     if ( table_row->gobj_param_name != NULL )
     {
         g_object_get( pObject, table_row->gobj_param_name, &guid, NULL );
+        free_guid = TRUE;
     }
     else
     {
@@ -1809,6 +1811,11 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     }
 
     (*pList) = g_slist_append( (*pList), value );
+
+    if ( free_guid )
+    {
+        g_free( guid );
+    }
 }
 
 static GncSqlColumnTypeHandler guid_handler
