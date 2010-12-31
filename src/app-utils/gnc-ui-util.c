@@ -1042,7 +1042,8 @@ gnc_default_currency_common (gchar *requested_currency,
     if (currency)
     {
         mnemonic = requested_currency;
-        requested_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
+// ??? Does anyone know what this is supposed to be doing?
+//        requested_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
         g_free(mnemonic);
     }
     return currency;
