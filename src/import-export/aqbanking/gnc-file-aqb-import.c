@@ -79,6 +79,14 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     GWEN_IO_LAYER *io;
     GncABImExContextImport *ieci = NULL;
     AB_JOB_LIST2 *job_list = NULL;
+    AB_JOB_LIST2_ITERATOR *jit;
+    AB_JOB *job;
+    AB_JOB_STATUS job_status;
+    gboolean successful = TRUE;
+    int num_jobs = 0;
+    int num_jobs_failed = 0;
+    int max_failures = 5;
+    GString *errstr = NULL;
 
     /* Select a file */
     default_dir = gnc_get_default_directory(GCONF_SECTION_AQBANKING);
@@ -121,14 +129,6 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
         goto cleanup;
     }
     online = TRUE;
-
-    /* Get a GUI object */
-    gui = gnc_GWEN_Gui_get(NULL);
-    if (!gui)
-    {
-        g_warning("gnc_ab_getbalance: Couldn't initialize Gwenhywfar GUI");
-        goto cleanup;
-    }
 
     /* Get import module */
     importer = AB_Banking_GetImExporter(api, aqbanking_importername);
@@ -211,16 +211,113 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
                                  execute_transactions ? api : NULL,
                                  NULL);
 
-    /* Extract the list of jobs */
-    job_list = gnc_ab_ieci_get_job_list(ieci);
-
     if (execute_transactions)
     {
         if (gnc_ab_ieci_run_matcher(ieci))
         {
-            /* FIXME */
-            g_error("Sorry, executing the list of imported jobs is not yet implemented.");
-            /* gnc_hbci_multijob_execute(NULL, api, job_list, gui); */
+            AB_IMEXPORTER_CONTEXT *execution_context;
+
+            /* Extract the list of jobs */
+            job_list = gnc_ab_ieci_get_job_list(ieci);
+
+            /* Create a context to store possible results */
+            execution_context = AB_ImExporterContext_new();
+
+            /* Get a GUI object */
+            gui = gnc_GWEN_Gui_get(NULL);
+            if (!gui)
+            {
+                g_warning("gnc_file_aqbanking_import: Couldn't initialize Gwenhywfar GUI");
+                goto cleanup;
+            }
+
+            /* And execute the jobs */
+            AB_Banking_ExecuteJobs(api, job_list, execution_context
+#ifndef AQBANKING_VERSION_5_PLUS
+                                   , 0
+#endif
+                                  );
+
+            /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
+             * status always describes better whether the job was actually
+             * transferred to and accepted by the bank.  See also
+             * http://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
+             */
+
+            /* So we must go through all jobs and check AB_Job_GetStatus(job)
+             * to give the appropriate feedback if any of the jobs didn't
+             * work. */
+
+            jit = AB_Job_List2_First(job_list);
+            if (jit)
+            {
+
+                job = AB_Job_List2Iterator_Data(jit);
+                while (job)
+                {
+                    num_jobs += 1;
+                    job_status = AB_Job_GetStatus(job);
+                    if (job_status != AB_Job_StatusFinished
+                            && job_status != AB_Job_StatusPending)
+                    {
+                        successful = FALSE;
+                        num_jobs_failed += 1;
+
+                        if (num_jobs_failed <= max_failures)
+                        {
+                            if (num_jobs_failed == 1)
+                            {
+                                errstr = g_string_new("Failed jobs:\n");
+                            }
+                            g_string_append_printf(errstr, _("Job %d status %d - %s: %s \n")
+                                                   , num_jobs
+                                                   , job_status
+                                                   , AB_Job_Status2Char(job_status)
+                                                   , AB_Job_GetResultText(job));
+                        }
+                        else
+                        {
+                            if (num_jobs_failed == (max_failures + 1) )
+                            {
+                                /* indicate that additional failures exist */
+                                g_string_append(errstr, _("...\n"));
+                            }
+                        }
+                    }
+                    job = AB_Job_List2Iterator_Next(jit);
+                } /* while */
+
+                AB_Job_List2Iterator_free(jit);
+            }
+
+            if (!successful)
+            {
+                g_warning("%s", errstr->str);
+                gnc_error_dialog(NULL,
+                                 _("An error occurred while executing jobs: %d of %d failed. "
+                                   "Please check the log window or gnucash.trace for the exact"
+                                   "error message.\n\n%s")
+                                 , num_jobs_failed, num_jobs, errstr->str);
+            }
+            else
+            {
+                if (num_jobs == 0)
+                {
+                    gnc_info_dialog(NULL,
+                                    _("No jobs to be send.")
+                                   );
+                }
+                else
+                {
+                    gnc_info_dialog(NULL, ngettext
+                                    ("The job was executed successfully, but as a precaution "
+                                     "please check the log window for potential errors.",
+                                     "All %d jobs were executed successfully, but as a precaution "
+                                     "please check the log window for potential errors.",
+                                     num_jobs), num_jobs);
+                }
+            }
+            AB_ImExporterContext_free(execution_context);
         }
     }
 
@@ -247,4 +344,7 @@ cleanup:
         close(dtaus_fd);
     if (selected_filename)
         g_free(selected_filename);
+    if (errstr)
+        g_string_free(errstr, TRUE);
+
 }
