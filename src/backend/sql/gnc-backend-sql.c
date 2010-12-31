@@ -1812,10 +1812,12 @@ add_gvalue_guid_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
 
     (*pList) = g_slist_append( (*pList), value );
 
+#if 0
     if ( free_guid )
     {
         g_free( guid );
     }
+#endif
 }
 
 static GncSqlColumnTypeHandler guid_handler
