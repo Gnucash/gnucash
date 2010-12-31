@@ -644,19 +644,19 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_PRESENT:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetPresentBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_report_balance(xaccAccountGetPresentBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetPresentBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         gnc_tree_model_account_set_color(model, negative, value);
         g_free(string);
         break;
@@ -664,19 +664,19 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_report_balance(xaccAccountGetBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         gnc_tree_model_account_set_color(model, negative, value);
         g_free(string);
         break;
@@ -715,13 +715,13 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetReconciledBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_REPORT:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_report_balance(xaccAccountGetReconciledBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_DATE:
@@ -735,7 +735,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetReconciledBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         gnc_tree_model_account_set_color(model, negative, value);
         g_free (string);
         break;
@@ -743,19 +743,19 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetProjectedMinimumBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_report_balance(xaccAccountGetProjectedMinimumBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetProjectedMinimumBalanceInCurrency,
-                 account, FALSE, &negative);
+                 account, TRUE, &negative);
         gnc_tree_model_account_set_color(model, negative, value);
         g_free (string);
         break;

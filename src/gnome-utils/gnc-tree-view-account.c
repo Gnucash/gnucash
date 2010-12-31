@@ -338,7 +338,7 @@ sort_by_present_value (GtkTreeModel *f_model,
                        GtkTreeIter *f_iter_b,
                        gpointer user_data)
 {
-    return sort_by_xxx_value (xaccAccountGetPresentBalanceInCurrency, FALSE,
+    return sort_by_xxx_value (xaccAccountGetPresentBalanceInCurrency, TRUE,
                               f_model, f_iter_a, f_iter_b, user_data);
 }
 
@@ -348,7 +348,7 @@ sort_by_balance_value (GtkTreeModel *f_model,
                        GtkTreeIter *f_iter_b,
                        gpointer user_data)
 {
-    return sort_by_xxx_value (xaccAccountGetBalanceInCurrency, FALSE,
+    return sort_by_xxx_value (xaccAccountGetBalanceInCurrency, TRUE,
                               f_model, f_iter_a, f_iter_b, user_data);
 }
 
@@ -358,7 +358,7 @@ sort_by_cleared_value (GtkTreeModel *f_model,
                        GtkTreeIter *f_iter_b,
                        gpointer user_data)
 {
-    return sort_by_xxx_value (xaccAccountGetClearedBalanceInCurrency, FALSE,
+    return sort_by_xxx_value (xaccAccountGetClearedBalanceInCurrency, TRUE,
                               f_model, f_iter_a, f_iter_b, user_data);
 }
 
@@ -368,7 +368,7 @@ sort_by_reconciled_value (GtkTreeModel *f_model,
                           GtkTreeIter *f_iter_b,
                           gpointer user_data)
 {
-    return sort_by_xxx_value (xaccAccountGetReconciledBalanceInCurrency, FALSE,
+    return sort_by_xxx_value (xaccAccountGetReconciledBalanceInCurrency, TRUE,
                               f_model, f_iter_a, f_iter_b, user_data);
 }
 
@@ -378,7 +378,7 @@ sort_by_future_min_value (GtkTreeModel *f_model,
                           GtkTreeIter *f_iter_b,
                           gpointer user_data)
 {
-    return sort_by_xxx_value (xaccAccountGetProjectedMinimumBalanceInCurrency, FALSE,
+    return sort_by_xxx_value (xaccAccountGetProjectedMinimumBalanceInCurrency, TRUE,
                               f_model, f_iter_a, f_iter_b, user_data);
 }
 
