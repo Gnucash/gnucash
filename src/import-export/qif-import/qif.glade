@@ -1380,7 +1380,74 @@ Click "Cancel" to abort the QIF import process.</property>
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <widget class="GtkRadioButton" id="gconf/dialogs/import/qif/default_status/reconciled">
+            <property name="label" translatable="yes">_Reconciled</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip" translatable="yes">When the status is not specified in a QIF file, the transactions are marked as reconciled.</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </widget>
+          <packing>
+            <property name="top_attach">6</property>
+            <property name="bottom_attach">7</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"></property>
+            <property name="x_padding">12</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkRadioButton" id="gconf/dialogs/import/qif/default_status/cleared">
+            <property name="label" translatable="yes">_Cleared</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip" translatable="yes">When the status is not specified in a QIF file, the transactions are marked as cleared.</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+            <property name="group">gconf/dialogs/import/qif/default_status/reconciled</property>
+          </widget>
+          <packing>
+            <property name="top_attach">5</property>
+            <property name="bottom_attach">6</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"></property>
+            <property name="x_padding">12</property>
+          </packing>
+        </child>
+         <child>
+             <widget class="GtkRadioButton" id="gconf/dialogs/import/qif/default_status/not_cleared">
+            <property name="label" translatable="yes">_Not cleared</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip" translatable="yes">When the status is not specified in a QIF file, the transactions are marked as not cleared.</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+            <property name="group">gconf/dialogs/import/qif/default_status/reconciled</property>
+          </widget>
+          <packing>
+            <property name="top_attach">4</property>
+            <property name="bottom_attach">5</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"></property>
+            <property name="x_padding">12</property>
+          </packing>
+        </child>
+        <child>
+           <widget class="GtkLabel" id="qif_default_transation_status">
+             <property name="visible">True</property>
+             <property name="xalign">0</property>
+             <property name="label" translatable="yes">Default transaction status (overridden by the status given by the QIF file):</property>
+           </widget>
+           <packing>
+             <property name="right_attach">4</property>
+             <property name="top_attach">2</property>
+             <property name="bottom_attach">3</property>
+             <property name="x_options">GTK_FILL</property>
+             <property name="y_options"></property>
+           </packing>
         </child>
         <child>
           <placeholder/>

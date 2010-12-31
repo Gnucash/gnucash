@@ -56,6 +56,7 @@
 #define DRUID_QIF_IMPORT_CM_CLASS "druid-qif-import"
 #define GCONF_SECTION "dialogs/import/qif"
 #define GCONF_NAME_SHOW_DOC "show_doc"
+#define GCONF_NAME_DEFAULT_TRANSACTION_STATUS "default_status"
 
 #define PREV_ROW "prev_row"
 
@@ -165,6 +166,7 @@ struct _qifimportwindow
 
     SCM       imported_account_tree;
     SCM       match_transactions;
+    SCM       transaction_status;
     int       selected_transaction;
 };
 
@@ -2637,12 +2639,13 @@ gnc_ui_qif_import_convert_progress_show_cb(GtkWidget *widget,
     /* This step will fill 70% of the bar. */
     gnc_progress_dialog_push(wind->convert_progress, 0.7);
     retval = scm_apply(qif_to_gnc,
-                       SCM_LIST7(wind->imported_files,
+                       SCM_LIST8(wind->imported_files,
                                  wind->acct_map_info,
                                  wind->cat_map_info,
                                  wind->memo_map_info,
                                  wind->security_hash,
                                  scm_makfrom0str(currname),
+                                 wind->transaction_status, 
                                  progress),
                        SCM_EOL);
     gnc_progress_dialog_pop(wind->convert_progress);
@@ -3214,6 +3217,8 @@ static void
 get_preferences(QIFImportWindow *wind)
 {
     GError * err = NULL;
+    gchar *status_pref = NULL;
+    gchar tmp_transaction_status = 'n';
 
     g_return_if_fail(wind);
 
@@ -3231,6 +3236,27 @@ get_preferences(QIFImportWindow *wind)
         g_warning("QIF import: Documentation pages will be shown by default.");
         wind->show_doc_pages = TRUE;
     }
+
+    /* Clear / Reconcile transaction if not specified in QIF file. */
+    status_pref = gnc_gconf_get_string(
+                    GCONF_SECTION, GCONF_NAME_DEFAULT_TRANSACTION_STATUS, &err);
+    if (err != NULL)
+    {
+        g_warning("QIF import: gnc_gconf_get_string error: %s", err->message);
+        g_error_free(err);
+        g_warning("QIF import: Couldn't get %s setting from gconf.",
+                  GCONF_NAME_DEFAULT_TRANSACTION_STATUS);
+    } else {
+        if (g_strcmp0(status_pref, "cleared") == 0)
+        {
+            tmp_transaction_status = 'c';
+        } else if (g_strcmp0(status_pref, "reconciled") == 0)
+        {
+            tmp_transaction_status = 'y';
+        }
+    }
+    g_free(status_pref);
+    wind->transaction_status = SCM_MAKE_CHAR(tmp_transaction_status);
 }
 
 
