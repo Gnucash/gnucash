@@ -39,6 +39,7 @@
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
 #include "gnc-gwen-gui.h"
+#include "gnc-ui.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -106,6 +107,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     GncGWENGui *gui = NULL;
     AB_IMEXPORTER_CONTEXT *context = NULL;
     GncABImExContextImport *ieci = NULL;
+    AB_JOB_STATUS job_status;
 
     g_return_if_fail(parent && gnc_acc);
 
@@ -132,6 +134,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     if (!ab_acc)
     {
         g_warning("gnc_ab_gettrans: No AqBanking account found");
+        gnc_error_dialog(parent, _("No valid online banking account assigned."));
         goto cleanup;
     }
 
@@ -154,6 +157,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     {
         g_warning("gnc_ab_gettrans: JobGetTransactions not available for this "
                   "account");
+        gnc_error_dialog(parent, _("Online action \"Get Transactions\" not available for this account."));
         goto cleanup;
     }
     AB_JobGetTransactions_SetFromTime(job, from_date);
@@ -173,13 +177,24 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     context = AB_ImExporterContext_new();
 
     /* Execute the job */
-    if (AB_Banking_ExecuteJobs(api, job_list, context
+    AB_Banking_ExecuteJobs(api, job_list, context
 #ifndef AQBANKING_VERSION_5_PLUS
-                               , 0
+                           , 0
 #endif
-                              ))
+                          );
+    /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
+     * status always describes better whether the job was actually
+     * transferred to and accepted by the bank.  See also
+     * http://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
+     */
+    job_status = AB_Job_GetStatus(job);
+    if (job_status != AB_Job_StatusFinished
+            && job_status != AB_Job_StatusPending)
     {
         g_warning("gnc_ab_gettrans: Error on executing job");
+        gnc_error_dialog(parent, _("Error on executing job.\n\nStatus: %s - %s")
+                               , AB_Job_Status2Char(job_status)
+                               , AB_Job_GetResultText(job));
         goto cleanup;
     }
 

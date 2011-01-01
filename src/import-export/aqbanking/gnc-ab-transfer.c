@@ -115,6 +115,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
     if (!ab_acc)
     {
         g_warning("gnc_ab_gettrans: No AqBanking account found");
+        gnc_error_dialog(parent, _("No valid online banking account assigned."));
         goto cleanup;
     }
 
