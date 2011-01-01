@@ -100,3 +100,9 @@ EXTRA_DIST = \
 
 MAINTAINERCLEANFILES = gnucash_core.c
 
+
+check_PROGRAMS = sqlite3test
+sqlite3test_SOURCES = sqlite3test.c
+sqlite3test_LDADD = ${_gnucash_core_c_la_LIBADD}
+sqlite3test_CPPFLAGS = ${_gnucash_core_c_la_CPPFLAGS}
+
