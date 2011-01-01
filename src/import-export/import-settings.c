@@ -49,7 +49,7 @@ struct _genimportsettings
 {
 
     gboolean action_skip_enabled;
-    gboolean action_edit_enabled;
+    gboolean action_update_enabled;
     gboolean action_add_enabled;
     gboolean action_clear_enabled;
 
@@ -85,8 +85,8 @@ gnc_import_Settings_new (void)
 
     settings->action_skip_enabled =
         gnc_gconf_get_bool(GCONF_SECTION, "enable_skip", NULL);
-    settings->action_edit_enabled =
-        gnc_gconf_get_bool(GCONF_SECTION, "enable_edit", NULL);
+    settings->action_update_enabled =
+        gnc_gconf_get_bool(GCONF_SECTION, "enable_update", NULL);
     settings->action_add_enabled = DEFAULT_ACTION_ADD_ENABLED;
     settings->action_clear_enabled = DEFAULT_ACTION_CLEAR_ENABLED;
     settings->clear_threshold =
@@ -131,10 +131,10 @@ gboolean gnc_import_Settings_get_action_add_enabled (GNCImportSettings *settings
     return settings->action_add_enabled;
 };
 
-gboolean gnc_import_Settings_get_action_edit_enabled (GNCImportSettings *settings)
+gboolean gnc_import_Settings_get_action_update_enabled (GNCImportSettings *settings)
 {
     g_assert (settings);
-    return settings->action_edit_enabled;
+    return settings->action_update_enabled;
 };
 
 gboolean gnc_import_Settings_get_action_clear_enabled (GNCImportSettings *settings)

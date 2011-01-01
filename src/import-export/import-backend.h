@@ -40,7 +40,7 @@ typedef enum _action
     GNCImport_SKIP,
     GNCImport_ADD,
     GNCImport_CLEAR,
-    GNCImport_EDIT,
+    GNCImport_UPDATE,
     GNCImport_LAST_ACTION,
     GNCImport_INVALID_ACTION
 } GNCImportAction;

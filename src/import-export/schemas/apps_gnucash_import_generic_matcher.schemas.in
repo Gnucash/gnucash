@@ -51,16 +51,19 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/enable_edit</key>
-      <applyto>/apps/gnucash/dialogs/import/generic_matcher/enable_edit</applyto>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/enable_update</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/enable_update</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
       <default>FALSE</default>
       <locale name="C">
-        <short>Enable EDIT transaction action</short>
+        <short>Enable UPDATE match action</short>
         <long>
-          Enable the EDIT action in the transaction matcher.  NOT YET
-          SUPPORTED.
+          Enable the UPDATE AND RECONCILE action in the transaction matcher.
+          If enabled, a transaction whose best match's score is above the
+          Auto-CLEAR threshold and has a different date or amount than the
+          matching existing transaction will cause the existing transaction
+          to be updated and cleared by default.
 	</long>
       </locale>
     </schema>

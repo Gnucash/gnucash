@@ -66,7 +66,7 @@ gboolean gnc_import_Settings_get_action_add_enabled (GNCImportSettings *settings
 
 /** Return the selected action is enable state.
 */
-gboolean gnc_import_Settings_get_action_edit_enabled (GNCImportSettings *settings);
+gboolean gnc_import_Settings_get_action_update_enabled (GNCImportSettings *settings);
 
 /** Return the selected action is enable state.
 */

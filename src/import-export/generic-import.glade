@@ -735,6 +735,7 @@ click "OK".</property>
         <child>
           <widget class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/enable_skip">
             <property name="label" translatable="yes">Enable skip transaction action</property>
+            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="tooltip" translatable="yes">Enable the SKIP action in the transaction matcher.  If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default.</property>
@@ -751,11 +752,12 @@ click "OK".</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/enable_edit">
-            <property name="label" translatable="yes">Enable edit match action</property>
+          <widget class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/enable_update">
+            <property name="label" translatable="yes">Enable update match action</property>
+            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip" translatable="yes">Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED</property>
+            <property name="tooltip" translatable="yes">Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match's score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </widget>
@@ -987,7 +989,7 @@ click "OK".</property>
         <child>
           <widget class="GtkTable" id="table1">
             <property name="visible">True</property>
-            <property name="n_rows">12</property>
+            <property name="n_rows">13</property>
             <property name="n_columns">2</property>
             <property name="column_spacing">12</property>
             <property name="row_spacing">6</property>
@@ -1128,7 +1130,7 @@ click "OK".</property>
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="xpad">12</property>
-                <property name="label" translatable="yes">"R"</property>
+                <property name="label" translatable="yes">"U+R"</property>
               </widget>
               <packing>
                 <property name="top_attach">7</property>
@@ -1139,6 +1141,20 @@ click "OK".</property>
             </child>
             <child>
               <widget class="GtkLabel" id="label847798">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="xpad">12</property>
+                <property name="label" translatable="yes">"R"</property>
+              </widget>
+              <packing>
+                <property name="top_attach">8</property>
+                <property name="bottom_attach">9</property>
+                <property name="x_options">GTK_FILL</property>
+                <property name="y_options"></property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label847799">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Select "A" to add the transaction as new.</property>
@@ -1153,7 +1169,22 @@ click "OK".</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="label847799">
+              <widget class="GtkLabel" id="label847780">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Select "U+R" to update and reconcile a matching transaction.</property>
+              </widget>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">7</property>
+                <property name="bottom_attach">8</property>
+                <property name="x_options">GTK_FILL</property>
+                <property name="y_options"></property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label847781">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Select "R" to reconcile a matching transaction.</property>
@@ -1161,8 +1192,8 @@ click "OK".</property>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
-                <property name="top_attach">7</property>
-                <property name="bottom_attach">8</property>
+                <property name="top_attach">8</property>
+                <property name="bottom_attach">9</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
               </packing>
@@ -1176,8 +1207,8 @@ click "OK".</property>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
-                <property name="top_attach">8</property>
-                <property name="bottom_attach">9</property>
+                <property name="top_attach">9</property>
+                <property name="bottom_attach">10</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
               </packing>
@@ -1190,8 +1221,8 @@ click "OK".</property>
                 <property name="label" translatable="yes">(none)</property>
               </widget>
               <packing>
-                <property name="top_attach">8</property>
-                <property name="bottom_attach">9</property>
+                <property name="top_attach">9</property>
+                <property name="bottom_attach">10</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
               </packing>
@@ -1210,14 +1241,14 @@ click "OK".</property>
                     <property name="wrap_mode">word</property>
                     <property name="cursor_visible">False</property>
                     <property name="accepts_tab">False</property>
-                    <property name="text" translatable="yes">"Select Import Action" allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
+                    <property name="text" translatable="yes">Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
                   </widget>
                 </child>
               </widget>
               <packing>
                 <property name="right_attach">2</property>
-                <property name="top_attach">9</property>
-                <property name="bottom_attach">10</property>
+                <property name="top_attach">10</property>
+                <property name="bottom_attach">11</property>
                 <property name="x_options">GTK_FILL</property>
               </packing>
             </child>

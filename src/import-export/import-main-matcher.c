@@ -66,7 +66,7 @@ enum downloaded_cols
     DOWNLOADED_COL_MEMO,
     DOWNLOADED_COL_ACTION_ADD,
     DOWNLOADED_COL_ACTION_CLEAR,
-    DOWNLOADED_COL_ACTION_EDIT,
+    DOWNLOADED_COL_ACTION_UPDATE,
     DOWNLOADED_COL_ACTION_INFO,
     DOWNLOADED_COL_ACTION_PIXBUF,
     DOWNLOADED_COL_DATA,
@@ -330,7 +330,7 @@ gnc_gen_trans_clear_toggled_cb (GtkCellRendererToggle *cell_renderer,
 }
 
 static void
-gnc_gen_trans_edit_toggled_cb (GtkCellRendererToggle *cell_renderer,
+gnc_gen_trans_update_toggled_cb (GtkCellRendererToggle *cell_renderer,
                                gchar                 *path,
                                GNCImportMainMatcher  *gui)
 {
@@ -343,14 +343,14 @@ gnc_gen_trans_edit_toggled_cb (GtkCellRendererToggle *cell_renderer,
         return;
     gtk_tree_model_get(model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
 
-    if ( gnc_import_TransInfo_get_action(trans_info) == GNCImport_EDIT
+    if ( gnc_import_TransInfo_get_action(trans_info) == GNCImport_UPDATE
             && gnc_import_Settings_get_action_skip_enabled (gui->user_settings) == TRUE)
     {
         gnc_import_TransInfo_set_action(trans_info, GNCImport_SKIP);
     }
     else
     {
-        gnc_import_TransInfo_set_action(trans_info, GNCImport_EDIT);
+        gnc_import_TransInfo_set_action(trans_info, GNCImport_UPDATE);
     }
     refresh_model_row(gui, model, &iter, trans_info);
 }
@@ -379,6 +379,7 @@ gnc_gen_trans_row_activated_cb (GtkTreeView           *view,
         }
         break;
     case GNCImport_CLEAR:
+    case GNCImport_UPDATE:
         run_match_dialog (gui, trans_info);
         break;
     case GNCImport_SKIP:
@@ -452,7 +453,7 @@ add_toggle_column(GtkTreeView *view, const gchar *title, int col_num,
 static void
 gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                          gboolean show_account,
-                         gboolean show_edit)
+                         gboolean show_update)
 {
     GtkTreeView *view;
     GtkListStore *store;
@@ -478,12 +479,11 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     add_text_column(view, _("Memo"), DOWNLOADED_COL_MEMO);
     add_toggle_column(view, _("A"), DOWNLOADED_COL_ACTION_ADD,
                       G_CALLBACK(gnc_gen_trans_add_toggled_cb), info);
+    column = add_toggle_column(view, _("U+R"), DOWNLOADED_COL_ACTION_UPDATE,
+                               G_CALLBACK(gnc_gen_trans_update_toggled_cb), info);
+    gtk_tree_view_column_set_visible(column, show_update);
     add_toggle_column(view, _("R"), DOWNLOADED_COL_ACTION_CLEAR,
                       G_CALLBACK(gnc_gen_trans_clear_toggled_cb), info);
-    column = add_toggle_column(view, _("Edit"), DOWNLOADED_COL_ACTION_EDIT,
-                               G_CALLBACK(gnc_gen_trans_edit_toggled_cb), info);
-    gtk_tree_view_column_set_visible(column, show_edit);
-
 
     /* The last column has multiple renderers */
     renderer = gtk_cell_renderer_pixbuf_new();
@@ -525,7 +525,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     GNCImportMainMatcher *info;
     GladeXML *xml;
     GtkWidget *heading_label;
-    gboolean show_edit;
+    gboolean show_update;
 
     info = g_new0 (GNCImportMainMatcher, 1);
 
@@ -541,8 +541,8 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     info->view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "downloaded_view"));
     g_assert (info->view != NULL);
 
-    show_edit = gnc_import_Settings_get_action_edit_enabled (info->user_settings);
-    gnc_gen_trans_init_view(info, all_from_same_account, show_edit);
+    show_update = gnc_import_Settings_get_action_update_enabled(info->user_settings);
+    gnc_gen_trans_init_view(info, all_from_same_account, show_update);
     heading_label = glade_xml_get_widget (xml, "heading_label");
     g_assert (heading_label != NULL);
 
@@ -725,9 +725,24 @@ refresh_model_row (GNCImportMainMatcher *gui,
             ro_text = _("Match missing!");
         }
         break;
-    case GNCImport_EDIT:
-        color = "white";
-        ro_text = "NOT SUPPORTED YET!";
+    case GNCImport_UPDATE:
+        if (gnc_import_TransInfo_get_selected_match(info))
+        {
+            color = COLOR_GREEN;
+            if (gnc_import_TransInfo_get_match_selected_manually(info) == TRUE)
+            {
+                ro_text = _("Update and reconcile (manual) match");
+            }
+            else
+            {
+                ro_text = _("Update and reconcile (auto) match");
+            }
+        }
+        else
+        {
+            color = COLOR_RED;
+            ro_text = _("Match missing!");
+        }
         break;
     case GNCImport_SKIP:
         color = COLOR_RED;
@@ -779,9 +794,20 @@ refresh_model_row (GNCImportMainMatcher *gui,
     }
 
     gtk_list_store_set(store, iter,
-                       DOWNLOADED_COL_ACTION_EDIT,
-                       gnc_import_TransInfo_get_action(info) == GNCImport_EDIT,
+                       DOWNLOADED_COL_ACTION_UPDATE,
+                       gnc_import_TransInfo_get_action(info) == GNCImport_UPDATE,
                        -1);
+    if (gnc_import_TransInfo_get_action(info) == GNCImport_UPDATE)
+    {
+        /*Show the best match's confidence pixmap in the info column*/
+        gtk_list_store_set(store, iter,
+                           DOWNLOADED_COL_ACTION_PIXBUF,
+                           gen_probability_pixbuf( gnc_import_MatchInfo_get_probability
+                                   ( gnc_import_TransInfo_get_selected_match (info)),
+                                   gui->user_settings,
+                                   GTK_WIDGET(gui->view)),
+                           -1);
+    }
 
     selection = gtk_tree_view_get_selection(gui->view);
     gtk_tree_selection_unselect_all(selection);
