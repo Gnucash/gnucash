@@ -240,7 +240,7 @@ update to latest  darwin])
     AC_MSG_CHECKING(For GDK-Quartz)
     platform=osx
     _gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
-    if test "x$_gdk_tgt" = xquartz; then 
+    if test "x$_gdk_tgt" = xquartz; then
       platform=darwin/quartz
       AC_MSG_RESULT(yes)
       AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
@@ -311,8 +311,8 @@ AM_CONDITIONAL(OS_WIN32, test "x$native_win32" = "xyes")
 
 # These are unavailable on windows/mingw32 and X11 isn't desired or
 # required for MacOSX Quartz
-if test "x$_gdk_tgt" = xquartz; 
-then 
+if test "x$_gdk_tgt" = xquartz;
+then
     AC_CHECK_HEADERS(glob.h)
 else
     AC_CHECK_HEADERS(X11/Xlib.h glob.h)
@@ -321,7 +321,7 @@ AM_CONDITIONAL(HAVE_X11_XLIB_H, test "x$ac_cv_header_X11_Xlib_h" = "xyes")
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
 AC_CHECK_FUNCS(gethostid link)
 ##################################################
-  
+
 
 
 ### --------------------------------------------------------------------------
@@ -663,7 +663,7 @@ case "${want_ofx}" in
 esac
 if test x${want_ofx} != xno ;
 then
-  AC_ARG_WITH( ofx-prefix, 
+  AC_ARG_WITH( ofx-prefix,
     [AS_HELP_STRING([--with-ofx-prefix=DIR],[specify where to look for libOFX])],
     OFXPREFIX="$with_ofx_prefix" )
 
@@ -698,7 +698,7 @@ then
           ] )
     fi
 
-    if test "x${want_ofx}" != xno ; then 
+    if test "x${want_ofx}" != xno ; then
       LIBOFX_LIBS="${LIBOFX_LIBS} -lofx"
       AC_MSG_CHECKING(for libofx)
       save_LIBS="${LIBS}"
@@ -896,11 +896,11 @@ AC_DEFUN([BB_ENABLE_DOXYGEN],
   [
     AC_ARG_ENABLE(doxygen, [AS_HELP_STRING([--enable-doxygen],[enable documentation generation with doxygen (auto)])])
     AC_ARG_ENABLE(dot, [AS_HELP_STRING([--enable-dot],[use 'dot' to generate graphs in doxygen (auto)])])
-    AC_ARG_ENABLE(html-docs, [AS_HELP_STRING([--enable-html-docs],[enable HTML generation with doxygen (yes)])], [], [ enable_html_docs=yes])              
-    AC_ARG_ENABLE(latex-docs, [AS_HELP_STRING([--enable-latex-docs],[enable LaTeX documentation generation with doxygen (no)])], [], [ enable_latex_docs=no])              
+    AC_ARG_ENABLE(html-docs, [AS_HELP_STRING([--enable-html-docs],[enable HTML generation with doxygen (yes)])], [], [ enable_html_docs=yes])
+    AC_ARG_ENABLE(latex-docs, [AS_HELP_STRING([--enable-latex-docs],[enable LaTeX documentation generation with doxygen (no)])], [], [ enable_latex_docs=no])
     if test "x$enable_doxygen" = xno; then
       enable_doc=no
-    else 
+    else
       AC_PATH_PROG(DOXYGEN, doxygen, , $PATH)
       if test x$DOXYGEN = x; then
         if test "x$enable_doxygen" = xyes; then
@@ -942,7 +942,7 @@ LIBS="$LIBS -lm"
 ### When disabled, we don't even need to check for them!
 ### --------------------------------------------------------------------------
 
-AC_ARG_ENABLE(gui, 
+AC_ARG_ENABLE(gui,
   [AS_HELP_STRING([--disable-gui],[build without the GNOME GUI components of Gnucash])],
   [case "${enableval}" in
      yes) gnc_build_gui=true ;;
@@ -955,7 +955,7 @@ AM_CONDITIONAL(GNUCASH_ENABLE_GUI, test x${gnc_build_gui} = xtrue)
 
 ### --------------------------------------------------------------------------
 ### GNOME gui components -- built by default, but not if --enable-gui=no
-### or --disable-gui is passed to autogen 
+### or --disable-gui is passed to autogen
 ### --------------------------------------------------------------------------
 
 if test x${gnc_build_gui} = xtrue ;
@@ -1118,7 +1118,7 @@ then
   esac
 
   ### ----------------------------------------------------------------------
-    
+
   AC_ARG_ENABLE( efence,
     [AS_HELP_STRING([--enable-efence],[link using efence])],
     if test x$enableval = xyes; then
@@ -1134,7 +1134,7 @@ then
   ## For now, we just presume you're using the GNOME version.  The other
   ## UI's haven't been carried over during the automake transition.  At
   ## some point, if it's deemed worthwhile, they can be resurrected...
-    
+
   GNOME=1
   AC_DEFINE(GNOME,,using GNOME)
 
@@ -1293,7 +1293,7 @@ then
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
      esac],
     [ if test "${error_on_warning_as_default}" = "yes"; then
-        warnFLAGS="${warnFLAGS} -Werror"; 
+        warnFLAGS="${warnFLAGS} -Werror";
         gnc_error_on_warning=auto
       else
         gnc_error_on_warning=no
@@ -1401,10 +1401,10 @@ AC_CONFIG_FILES(
   src/bin/test/Makefile
   src/core-utils/Makefile
   src/core-utils/test/Makefile
-  src/calculation/Makefile 
+  src/calculation/Makefile
   src/calculation/test/Makefile
   src/debug/Makefile
-  src/debug/valgrind/Makefile 
+  src/debug/valgrind/Makefile
   src/doc/Makefile
   src/doc/design/Makefile
   src/doc/xml/Makefile
@@ -1495,6 +1495,11 @@ AC_CONFIG_FILES(
   src/business/business-gnome/ui/Makefile
   src/business/business-ledger/Makefile
 
+  dnl # Stuff for bill/invoice import plugin
+  src/plugins/Makefile
+  src/plugins/bi_import/Makefile
+  src/plugins/bi_import/glade/Makefile
+  src/plugins/bi_import/ui/Makefile
   dnl # non-makefiles
   dnl # Please read doc/build-system before adding *anything* here
 
