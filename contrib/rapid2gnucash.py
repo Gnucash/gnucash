@@ -29,7 +29,7 @@ We need to remove first line and totals
 
 Format needs to be:
 #id,date_opened,vendor_id,billing_id,notes,date,desc,action,account,quantity,price,disc_type,disc_how,discount,taxable,taxincluded,tax_table,date_posted,due_date,account_posted,memo_posted,accu_splits,
-Not all fields need to have values but the delimiters (,) do.
+Not all fields need to have values but the delimiters (,) do have to be present.
 Some fields are compulsory: id, vendor_id, action, quantity, price, taxable
 '''
 import sys
@@ -40,13 +40,13 @@ try:
 	INFILE=sys.argv[1]
 except:
 	print "No input files specified."
-	print "Useage: Useage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\""
+	print "Usage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\""
 	quit(1)
 try:
 	INV_ID=sys.argv[2]
 except:
 	print "No order number  specified."
-	print "Useage: Useage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\""
+	print "Useage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\""
 	quit(1)
 try:
 	ACCOUNT=sys.argv[3]
