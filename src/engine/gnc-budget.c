@@ -307,6 +307,61 @@ gnc_budget_destroy(GncBudget *budget)
     gnc_budget_commit_edit(budget);
 }
 
+/** Data structure for containing info while cloning budget values */
+typedef struct
+{
+    const GncBudget* old_b;
+    GncBudget* new_b;
+    guint num_periods;
+} CloneBudgetData_t;
+
+static void
+clone_budget_values_cb(Account* a, gpointer user_data)
+{
+    CloneBudgetData_t* data = (CloneBudgetData_t*)user_data;
+    guint i;
+
+    for ( i = 0; i < data->num_periods; ++i )
+    {
+        if ( gnc_budget_is_account_period_value_set(data->old_b, a, i) )
+        {
+            gnc_budget_set_account_period_value(data->new_b, a, i,
+                    gnc_budget_get_account_period_value(data->old_b, a, i));
+        }
+    }
+}
+
+GncBudget*
+gnc_budget_clone(const GncBudget* old_b)
+{
+    GncBudget* new_b;
+    Account* root;
+    CloneBudgetData_t clone_data;
+
+    g_return_val_if_fail(old_b != NULL, NULL);
+
+    ENTER(" ");
+
+    new_b = gnc_budget_new(qof_instance_get_book(old_b));
+    gnc_budget_begin_edit(new_b);
+    gnc_budget_set_name(new_b, gnc_budget_get_name(old_b));
+    gnc_budget_set_description(new_b, gnc_budget_get_description(old_b));
+    gnc_budget_set_recurrence(new_b, gnc_budget_get_recurrence(old_b));
+    gnc_budget_set_num_periods(new_b, gnc_budget_get_num_periods(old_b));
+
+    root = gnc_book_get_root_account(qof_instance_get_book(old_b));
+    clone_data.old_b = old_b;
+    clone_data.new_b = new_b;
+    clone_data.num_periods = gnc_budget_get_num_periods(new_b);
+    gnc_account_foreach_descendant(root, clone_budget_values_cb, &clone_data);
+
+    gnc_budget_commit_edit(new_b);
+
+    LEAVE(" ");
+
+    return new_b;
+}
+
 void
 gnc_budget_set_name(GncBudget* budget, const gchar* name)
 {
@@ -326,7 +381,7 @@ gnc_budget_set_name(GncBudget* budget, const gchar* name)
 }
 
 const gchar*
-gnc_budget_get_name(GncBudget* budget)
+gnc_budget_get_name(const GncBudget* budget)
 {
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
     return GET_PRIVATE(budget)->name;
@@ -351,7 +406,7 @@ gnc_budget_set_description(GncBudget* budget, const gchar* description)
 }
 
 const gchar*
-gnc_budget_get_description(GncBudget* budget)
+gnc_budget_get_description(const GncBudget* budget)
 {
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
     return GET_PRIVATE(budget)->description;
@@ -374,14 +429,14 @@ gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r)
 }
 
 const Recurrence *
-gnc_budget_get_recurrence(GncBudget *budget)
+gnc_budget_get_recurrence(const GncBudget *budget)
 {
     g_return_val_if_fail(budget, NULL);
     return (&GET_PRIVATE(budget)->recurrence);
 }
 
 const GncGUID*
-gnc_budget_get_guid(GncBudget* budget)
+gnc_budget_get_guid(const GncBudget* budget)
 {
     g_return_val_if_fail(budget, NULL);
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
@@ -407,7 +462,7 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
 }
 
 guint
-gnc_budget_get_num_periods(GncBudget* budget)
+gnc_budget_get_num_periods(const GncBudget* budget)
 {
     g_return_val_if_fail(GNC_IS_BUDGET(budget), 0);
     return GET_PRIVATE(budget)->num_periods;
@@ -419,7 +474,7 @@ gnc_budget_get_num_periods(GncBudget* budget)
 /* period_num is zero-based */
 /* What happens when account is deleted, after we have an entry for it? */
 void
-gnc_budget_unset_account_period_value(GncBudget *budget, Account *account,
+gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
                                       guint period_num)
 {
     const GncGUID *guid;
@@ -444,7 +499,7 @@ gnc_budget_unset_account_period_value(GncBudget *budget, Account *account,
 /* period_num is zero-based */
 /* What happens when account is deleted, after we have an entry for it? */
 void
-gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
+gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
                                     guint period_num, gnc_numeric val)
 {
     const GncGUID *guid;
@@ -501,7 +556,7 @@ xaccAccountChildrenHaveSameCommodity(Account *account)
 
 
 gboolean
-gnc_budget_is_account_period_value_set(GncBudget *budget, Account *account,
+gnc_budget_is_account_period_value_set(const GncBudget *budget, const Account *account,
                                        guint period_num)
 {
     gchar path[BUF_SIZE];
@@ -518,7 +573,7 @@ gnc_budget_is_account_period_value_set(GncBudget *budget, Account *account,
 }
 
 gnc_numeric
-gnc_budget_get_account_period_value(GncBudget *budget, Account *account,
+gnc_budget_get_account_period_value(const GncBudget *budget, const Account *account,
                                     guint period_num)
 {
     gnc_numeric numeric;
@@ -541,7 +596,7 @@ gnc_budget_get_account_period_value(GncBudget *budget, Account *account,
 
 
 Timespec
-gnc_budget_get_period_start_date(GncBudget *budget, guint period_num)
+gnc_budget_get_period_start_date(const GncBudget *budget, guint period_num)
 {
     Timespec ts;
     timespecFromTime_t(
@@ -550,7 +605,7 @@ gnc_budget_get_period_start_date(GncBudget *budget, guint period_num)
 }
 
 Timespec
-gnc_budget_get_period_end_date(GncBudget *budget, guint period_num)
+gnc_budget_get_period_end_date(const GncBudget *budget, guint period_num)
 {
     Timespec ts;
     timespecFromTime_t(
@@ -560,7 +615,7 @@ gnc_budget_get_period_end_date(GncBudget *budget, guint period_num)
 
 gnc_numeric
 gnc_budget_get_account_period_actual_value(
-    GncBudget *budget, Account *acc, guint period_num)
+    const GncBudget *budget, Account *acc, guint period_num)
 {
     // FIXME: maybe zero is not best error return val.
     g_return_val_if_fail(GNC_IS_BUDGET(budget) && acc, gnc_numeric_zero());
@@ -569,14 +624,14 @@ gnc_budget_get_account_period_actual_value(
 }
 
 QofBook*
-gnc_budget_get_book(GncBudget* budget)
+gnc_budget_get_book(const GncBudget* budget)
 {
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
     return qof_instance_get_book(&budget->inst);
 }
 
 GncBudget*
-gnc_budget_lookup (const GncGUID *guid, QofBook *book)
+gnc_budget_lookup (const GncGUID *guid, const QofBook *book)
 {
     QofCollection *col;
 
