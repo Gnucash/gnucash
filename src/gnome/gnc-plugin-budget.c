@@ -50,6 +50,8 @@ static void gnc_plugin_budget_cmd_new_budget (GtkAction *action,
         GncMainWindowActionData *data);
 static void gnc_plugin_budget_cmd_open_budget (GtkAction *action,
         GncMainWindowActionData *data);
+static void gnc_plugin_budget_cmd_copy_budget (GtkAction *action,
+        GncMainWindowActionData *data);
 
 static GtkActionEntry gnc_plugin_actions [] =
 {
@@ -63,6 +65,12 @@ static GtkActionEntry gnc_plugin_actions [] =
         "OpenBudgetAction", NULL, N_("Open Budget"), NULL,
         N_("Open an existing Budget"),
         G_CALLBACK (gnc_plugin_budget_cmd_open_budget)
+    },
+
+    {
+        "CopyBudgetAction", NULL, N_("Copy Budget"), NULL,
+        N_("Copy an existing Budget"),
+        G_CALLBACK (gnc_plugin_budget_cmd_copy_budget)
     },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -206,6 +214,51 @@ gnc_plugin_budget_cmd_open_budget (GtkAction *action,
 
         if (bgt) gnc_main_window_open_page(
                 data->window, gnc_plugin_page_budget_new(bgt));
+    }
+    else     /* if no budgets exist yet, just open a new budget */
+    {
+        gnc_plugin_budget_cmd_new_budget(action, data);
+    }
+}
+
+/* If only one budget exists, create a copy of it; otherwise user selects one to copy */
+static void
+gnc_plugin_budget_cmd_copy_budget (GtkAction *action,
+                                   GncMainWindowActionData *data)
+{
+    guint count;
+    QofBook *book;
+    GncBudget *bgt = NULL;
+    QofCollection *col;
+    g_return_if_fail (data != NULL);
+
+    book = gnc_get_current_book();
+    col = qof_book_get_collection(book, GNC_ID_BUDGET);
+    count = qof_collection_count(col);
+    if (count > 0)
+    {
+        if (count == 1)
+        {
+            bgt = gnc_budget_get_default(book);
+        }
+        else
+        {
+            bgt = gnc_budget_gui_select_budget(book);
+        }
+
+        if (bgt)
+        {
+            GncBudget* copy;
+            gchar* name;
+
+            copy = gnc_budget_clone(bgt);
+            name = g_strdup_printf("Copy of %s", gnc_budget_get_name(bgt));
+            gnc_budget_set_name(copy, name);
+            g_free(name);
+
+            gnc_main_window_open_page(
+                data->window, gnc_plugin_page_budget_new(copy));
+        }
     }
     else     /* if no budgets exist yet, just open a new budget */
     {

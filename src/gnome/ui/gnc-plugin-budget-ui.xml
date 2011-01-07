@@ -5,6 +5,7 @@
         <menu name="ActionsBudget" action="ActionsBudgetAction">
           <menuitem name="BudgetNewBudget" action="NewBudgetAction"/>
           <menuitem name="BudgetOpenBudget" action="OpenBudgetAction"/>
+          <menuitem name="BudgetCopyBudget" action="CopyBudgetAction"/>
         </menu>
       </placeholder>
     </menu>
