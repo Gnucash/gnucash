@@ -105,12 +105,7 @@ balance at a given time"))
      options gnc:pagename-general
      optname-price-source "c" 'average-cost)
 
-    (if #f
-;; Option deactivated before 2.4.0 is out in order not to have
-;; untranslated strings show up for the user (string freeze). Will be
-;; activated in 2.4.1 or so by un-commenting the line below and
-;; removing the line above, and changing line 217 accordingly.
-    ;;(if do-intervals?
+    (if do-intervals?
         (add-option
          (gnc:make-multichoice-option
           gnc:pagename-general optname-averaging
@@ -222,7 +217,7 @@ balance at a given time"))
                                   optname-price-source))
         (report-title (get-option gnc:pagename-general 
 				  gnc:optname-reportname))
-        (averaging-selection (if #f ;;do-intervals?
+        (averaging-selection (if do-intervals?
                                  (get-option gnc:pagename-general
                                              optname-averaging)
                                  'None))
