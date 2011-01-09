@@ -97,10 +97,13 @@ void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
   {
     SCM key_scm = SCM_CAR (path_scm);
     char *key;
+    gchar* gkey;
     if (!scm_is_string (key_scm))
       break;
-    key = g_strdup (scm_to_locale_string (key_scm));
-    path = g_list_prepend (path, key);
+    key = scm_to_locale_string (key_scm);
+    gkey = g_strdup (key);
+    gnc_free_scm_locale_string(key);
+    path = g_list_prepend (path, gkey);
     path_scm = SCM_CDR (path_scm);
   }
   $1 = g_list_reverse (path);
