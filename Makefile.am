@@ -40,7 +40,6 @@ dist_doc_DATA = \
 
 EXTRA_DIST = \
   make-gnucash-potfiles.in \
-  macros/aqbanking.m4 \
   macros/as-scrub-include.m4 \
   macros/binreloc.m4 \
   macros/compiler-flags.m4 \
