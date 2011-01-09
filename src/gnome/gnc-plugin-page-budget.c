@@ -243,6 +243,7 @@ gnc_plugin_page_budget_new (GncBudget *budget)
 {
     GncPluginPageBudget *plugin_page;
     GncPluginPageBudgetPrivate *priv;
+    gchar* label;
 
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
     ENTER(" ");
@@ -250,6 +251,9 @@ gnc_plugin_page_budget_new (GncBudget *budget)
 
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
     priv->budget = budget;
+    label = g_strdup_printf("%s: %s", _("Budget"), gnc_budget_get_name(budget));
+    g_object_set(G_OBJECT(plugin_page), "page-name", label, NULL);
+    g_free(label);
     priv->key = *gnc_budget_get_guid(budget);
     LEAVE("new budget page %p", plugin_page);
     return GNC_PLUGIN_PAGE(plugin_page);
@@ -753,21 +757,28 @@ static gboolean
 gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
         gpointer user_data)
 {
-    GncPluginPageBudgetPrivate *priv = user_data;
+    GncPluginPageBudget *page = user_data;
+    GncPluginPageBudgetPrivate *priv;
     gchar *name;
     gchar *desc;
     gint num_periods;
     GncRecurrence *gr;
     const Recurrence *r;
 
-    if (!priv)
+    if (!page)
         return TRUE;
 
     ENTER(" ");
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
     name = gnc_dialog_get_string(d, "BudgetName");
     if (name)
     {
+        gchar* label;
+
         gnc_budget_set_name(priv->budget, name);
+        label = g_strdup_printf("%s: %s", _("Budget"), name);
+        g_object_set(G_OBJECT(page), "page-name", label, NULL);
+        g_free(label);
         DEBUG("%s", name);
         g_free(name);
     }
@@ -809,10 +820,12 @@ static gboolean
 gnc_plugin_page_budget_options_close_cb (GncDialog *d,
         gpointer user_data)
 {
-    GncPluginPageBudgetPrivate *priv = user_data;
+    GncPluginPageBudget *page = user_data;
+    GncPluginPageBudgetPrivate *priv;
 
-    g_return_val_if_fail(priv, TRUE);
+    g_return_val_if_fail(page, TRUE);
 
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
     gtk_widget_destroy(GTK_WIDGET(d));
     priv->d = NULL;
     return TRUE;
@@ -859,7 +872,7 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
                           gnc_plugin_page_budget_options_apply_cb,
                           gnc_plugin_page_budget_options_close_cb,
                           gnc_plugin_page_budget_options_help_cb,
-                          priv);
+                          page);
     }
 
     gnc_budget_gui_show_options(priv->d, priv->budget, page);
