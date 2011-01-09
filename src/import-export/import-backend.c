@@ -1184,7 +1184,7 @@ void
 gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
                                    GNCImportSettings *settings)
 {
-    GNCImportMatchInfo * best_match;
+    GNCImportMatchInfo * best_match = NULL;
     g_assert (trans_info);
 
 
