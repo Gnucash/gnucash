@@ -541,9 +541,9 @@ recurrenceListIsSemiMonthly(GList *recurrences)
 }
 
 gboolean
-recurrenceListIsWeeklyMultiple(GList *recurrences)
+recurrenceListIsWeeklyMultiple(const GList *recurrences)
 {
-    GList *r_iter;
+    const GList *r_iter;
 
     for (r_iter = recurrences; r_iter != NULL; r_iter = r_iter->next)
     {

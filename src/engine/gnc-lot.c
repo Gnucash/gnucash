@@ -614,6 +614,23 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
 /* ============================================================= */
 
+static void
+destroy_lot_on_book_close(QofInstance *ent, gpointer data)
+{
+    GNCLot* lot = GNC_LOT(ent);
+
+    gnc_lot_destroy(lot);
+}
+
+static void
+gnc_lot_book_end(QofBook* book)
+{
+    QofCollection *col;
+
+    col = qof_book_get_collection(book, GNC_ID_LOT);
+    qof_collection_foreach(col, destroy_lot_on_book_close, NULL);
+}
+
 #ifdef _MSC_VER
 /* MSVC compiler doesn't have C99 "designated initializers"
  * so we wrap them in a macro that is empty on MSVC. */
@@ -628,7 +645,7 @@ static QofObject gncLotDesc =
     DI(.type_label        = ) "Lot",
     DI(.create            = ) (gpointer)gnc_lot_new,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_lot_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,

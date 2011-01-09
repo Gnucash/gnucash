@@ -266,6 +266,10 @@ GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)
         else
             g_free ( acct_name );
     }
+    if (accounts != NULL)
+    {
+        g_list_free(accounts);
+    }
 
     return invalid_list;
 }
@@ -1230,13 +1234,26 @@ xaccAccountCommitEdit (Account *acc)
         PINFO ("freeing splits for account %p (%s)",
                acc, priv->accountName ? priv->accountName : "(null)");
 
-        slist = g_list_copy(priv->splits);
-        for (lp = slist; lp; lp = lp->next)
+        book = qof_instance_get_book(acc);
+
+        /* If book is shutting down, just clear the split list.  The splits
+           themselves will be destroyed by the transaction code */
+        if (!qof_book_shutting_down(book))
         {
-            Split *s = lp->data;
-            xaccSplitDestroy (s);
+            slist = g_list_copy(priv->splits);
+            for (lp = slist; lp; lp = lp->next)
+            {
+                Split *s = lp->data;
+                xaccSplitDestroy (s);
+            }
+            g_list_free(slist);
         }
-        g_list_free(slist);
+        else
+        {
+            g_list_free(priv->splits);
+            priv->splits = NULL;
+        }
+
         /* It turns out there's a case where this assertion does not hold:
            When the user tries to delete an Imbalance account, while also
            deleting all the splits in it.  The splits will just get
@@ -1245,18 +1262,17 @@ xaccAccountCommitEdit (Account *acc)
            g_assert(priv->splits == NULL || qof_book_shutting_down(acc->inst.book));
         */
 
-        book = qof_instance_get_book(acc);
         if (!qof_book_shutting_down(book))
         {
             col = qof_book_get_collection(book, GNC_ID_TRANS);
             qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
-        }
 
-        /* the lots should be empty by now */
-        for (lp = priv->lots; lp; lp = lp->next)
-        {
-            GNCLot *lot = lp->data;
-            gnc_lot_destroy (lot);
+            /* the lots should be empty by now */
+            for (lp = priv->lots; lp; lp = lp->next)
+            {
+                GNCLot *lot = lp->data;
+                gnc_lot_destroy (lot);
+            }
         }
         g_list_free(priv->lots);
         priv->lots = NULL;
@@ -4807,6 +4823,16 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
 
 /* ================================================================ */
 /* QofObject function implementation and registration */
+
+static void
+gnc_account_book_end(QofBook* book)
+{
+    Account *root_account = gnc_book_get_root_account(book);
+
+    xaccAccountBeginEdit(root_account);
+    xaccAccountDestroy(root_account);
+}
+
 #ifdef _MSC_VER
 /* MSVC compiler doesn't have C99 "designated initializers"
  * so we wrap them in a macro that is empty on MSVC. */
@@ -4821,7 +4847,7 @@ static QofObject account_object_def =
     DI(.type_label        = ) "Account",
     DI(.create            = ) (gpointer)xaccMallocAccount,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_account_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,

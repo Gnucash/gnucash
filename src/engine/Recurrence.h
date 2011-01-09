@@ -161,7 +161,7 @@ gchar *recurrenceListToString(const GList *rlist);
 /** @return True if the recurrence list is a common "semi-monthly" recurrence. **/
 gboolean recurrenceListIsSemiMonthly(GList *recurrences);
 /** @return True if the recurrence list is a common "weekly" recurrence. **/
-gboolean recurrenceListIsWeeklyMultiple(GList *recurrences);
+gboolean recurrenceListIsWeeklyMultiple(const GList *recurrences);
 
 /**
  * Pretty-print an intentionally-short summary of the period of a (GList of)

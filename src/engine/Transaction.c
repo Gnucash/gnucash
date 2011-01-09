@@ -1182,14 +1182,26 @@ do_destroy (Transaction *trans)
 
     qof_event_gen (&trans->inst, QOF_EVENT_DESTROY, NULL);
 
-    /* We only own the splits that still think they belong to us. */
-    trans->splits = g_list_copy(trans->splits);
+    /* We only own the splits that still think they belong to us.   This is done
+       in 2 steps.  In the first, the splits are marked as being destroyed, but they
+       are not destroyed yet.  In the second, the destruction is committed which will
+       do the actual destruction.  If both steps are done for a split before they are
+       done for the next split, then a split will still be on the split list after it
+       has been freed.  This can cause other parts of the code (e.g. in xaccSplitDestroy())
+       to reference the split after it has been freed. */
     for (node = trans->splits; node; node = node->next)
     {
         Split *s = node->data;
         if (s->parent == trans)
         {
             xaccSplitDestroy(s);
+        }
+    }
+    for (node = trans->splits; node; node = node->next)
+    {
+        Split *s = node->data;
+        if (s->parent == trans)
+        {
             xaccSplitCommitEdit(s);
         }
     }
@@ -2296,6 +2308,27 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
 \********************************************************************/
 /* QofObject function implementation */
 
+static void
+destroy_tx_on_book_close(QofInstance *ent, gpointer data)
+{
+    Transaction* tx = GNC_TRANSACTION(ent);
+
+    xaccTransDestroy(tx);
+}
+
+/** Handles book end - frees all transactions from the book
+ *
+ * @param book Book being closed
+ */
+static void
+gnc_transaction_book_end(QofBook* book)
+{
+    QofCollection *col;
+
+    col = qof_book_get_collection(book, GNC_ID_TRANS);
+    qof_collection_foreach(col, destroy_tx_on_book_close, NULL);
+}
+
 #ifdef _MSC_VER
 /* MSVC compiler doesn't have C99 "designated initializers"
  * so we wrap them in a macro that is empty on MSVC. */
@@ -2312,7 +2345,7 @@ static QofObject trans_object_def =
     DI(.type_label        = ) "Transaction",
     DI(.create            = ) (gpointer)xaccMallocTransaction,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_transaction_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,

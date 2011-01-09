@@ -483,11 +483,15 @@ xaccSchedXactionFree( SchedXaction *sx )
 
     /*
      * xaccAccountDestroy removes the account from
-     * its group for us AFAICT
+     * its group for us AFAICT.  If shutting down,
+     * the account is being deleted separately.
      */
 
-    xaccAccountBeginEdit(sx->template_acct);
-    xaccAccountDestroy(sx->template_acct);
+    if (!qof_book_shutting_down(qof_instance_get_book(sx)))
+    {
+        xaccAccountBeginEdit(sx->template_acct);
+        xaccAccountDestroy(sx->template_acct);
+    }
 
     for ( l = sx->deferredList; l; l = l->next )
     {
@@ -1248,11 +1252,37 @@ gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
  * temporal-state-data instance list.  The list should not be modified by the
  * caller; use the gnc_sx_{add,remove}_defer_instance() functions to modifiy
  * the list.
+ *
+ * @param sx Scheduled transaction
+ * @return Defer list which must not be modified by the caller
  **/
 GList*
 gnc_sx_get_defer_instances( SchedXaction *sx )
 {
     return sx->deferredList;
+}
+
+static void
+destroy_sx_on_book_close(QofInstance *ent, gpointer data)
+{
+    SchedXaction* sx = GNC_SCHEDXACTION(ent);
+
+    gnc_sx_begin_edit(sx);
+    xaccSchedXactionDestroy(sx);
+}
+
+/**
+ * Destroys all SXes in the book because the book is being destroyed.
+ *
+ * @param book Book being destroyed
+ */
+static void
+gnc_sx_book_end(QofBook* book)
+{
+    QofCollection *col;
+
+    col = qof_book_get_collection(book, GNC_ID_SCHEDXACTION);
+    qof_collection_foreach(col, destroy_sx_on_book_close, NULL);
 }
 
 #ifdef _MSC_VER
@@ -1269,7 +1299,7 @@ static QofObject SXDesc =
     DI(.type_label        = ) "Scheduled Transaction",
     DI(.create            = ) (gpointer)xaccSchedXactionMalloc,
     DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_end          = ) gnc_sx_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,

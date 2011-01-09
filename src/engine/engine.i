@@ -134,11 +134,14 @@ gchar * gnc_build_book_path (const gchar *filename);
   {
     SCM key_scm = SCM_CAR (path_scm);
     char *key;
+    gchar* gkey;
 
     if (!scm_is_string (key_scm))
       break;
 
-    key = g_strdup (scm_to_locale_string (key_scm));
+    key = scm_to_locale_string (key_scm);
+    gkey = g_strdup (key);
+    gnc_free_scm_locale_string(key);
 
     path = g_list_prepend (path, key);
 
