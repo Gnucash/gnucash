@@ -149,8 +149,7 @@ gnc_job_verify_ok (JobWindow *jw)
     res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
     if (safe_strcmp (res, "") == 0)
     {
-        string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
-                                  gncJobNextID(jw->book));
+        string = gncJobNextID(jw->book);
         gtk_entry_set_text (GTK_ENTRY (jw->id_entry), string);
         g_free(string);
     }

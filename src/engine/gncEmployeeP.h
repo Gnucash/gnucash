@@ -32,7 +32,7 @@
 #include "gncEmployee.h"
 
 gboolean gncEmployeeRegister (void);
-gint64 gncEmployeeNextID (QofBook *book);
+gchar *gncEmployeeNextID (QofBook *book);
 
 /** The gncCloneEmployee() routine makes a copy of the indicated
  *  employee, placing it in the indicated book.  It copies

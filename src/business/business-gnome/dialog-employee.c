@@ -241,8 +241,7 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
     /* Set the employee id if one has not been chosen */
     if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0)
     {
-        string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
-                                  gncEmployeeNextID (ew->book));
+        string = gncEmployeeNextID (ew->book);
         gtk_entry_set_text (GTK_ENTRY (ew->id_entry), string);
         g_free(string);
     }

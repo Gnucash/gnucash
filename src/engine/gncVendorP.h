@@ -31,7 +31,7 @@
 #include "gncVendor.h"
 
 gboolean gncVendorRegister (void);
-gint64 gncVendorNextID (QofBook *book);
+gchar *gncVendorNextID (QofBook *book);
 
 /** The gncCloneVendor() routine makes a copy of the indicated
  *  vendor, placing it in the indicated book.  It copies

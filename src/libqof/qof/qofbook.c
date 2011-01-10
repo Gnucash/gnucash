@@ -429,8 +429,8 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
     }
 }
 
-gint64
-qof_book_increment_and_get_counter (QofBook *book, const char *counter_name)
+gchar *
+qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
 {
     QofBackend *be;
     KvpFrame *kvp;
@@ -440,13 +440,13 @@ qof_book_increment_and_get_counter (QofBook *book, const char *counter_name)
     if (!book)
     {
         PWARN ("No book!!!");
-        return -1;
+        return NULL;
     }
 
     if (!counter_name || *counter_name == '\0')
     {
         PWARN ("Invalid counter name.");
-        return -1;
+        return NULL;
     }
 
     /* Get the current counter value from the KVP in the book. */
@@ -454,7 +454,7 @@ qof_book_increment_and_get_counter (QofBook *book, const char *counter_name)
 
     /* Check if an error occured */
     if (counter < 0)
-	return -1;
+	return NULL;
 
     /* Increment the counter */
     counter++;
@@ -465,7 +465,7 @@ qof_book_increment_and_get_counter (QofBook *book, const char *counter_name)
     if (!kvp)
     {
 	PWARN ("Book has no KVP_Frame");
-	return -1;
+	return NULL;
     }
 
     /* Save off the new counter */
@@ -476,7 +476,8 @@ qof_book_increment_and_get_counter (QofBook *book, const char *counter_name)
     qof_book_mark_dirty(book);
     qof_book_commit_edit(book);
 
-    return counter;
+    /* Generate a string version of the counter */
+    return g_strdup_printf ("%.6" G_GINT64_FORMAT, counter);
 }
 
 /* Determine whether this book uses trading accounts */

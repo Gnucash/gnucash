@@ -283,11 +283,11 @@ gboolean qof_book_equal (const QofBook *book_1, const QofBook *book_2);
  */
 gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 
-/** This will increment the named counter for this book and return it.
- *    The return value is -1 on error or the (new) value of the
- *    counter.
+/** This will increment the named counter for this book and format it.
+ *    The return value is NULL on error or the formatted (new) value of
+ *    the counter. The caller should free the result with g_gree.
  */
-gint64 qof_book_increment_and_get_counter (QofBook *book, const char *counter_name);
+gchar *qof_book_increment_and_format_counter (QofBook *book, const char *counter_name);
 
 const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
 void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);

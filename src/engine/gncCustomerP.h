@@ -32,7 +32,7 @@
 #include "gncCustomer.h"
 
 gboolean gncCustomerRegister (void);
-gint64 gncCustomerNextID (QofBook *book);
+gchar *gncCustomerNextID (QofBook *book);
 
 /** The gncCloneCustomer() routine makes a copy of the indicated
  *  customer, placing it in the indicated book.  It copies

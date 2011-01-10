@@ -32,7 +32,7 @@
 #include "gncJob.h"
 
 gboolean gncJobRegister (void);
-gint64 gncJobNextID (QofBook *book);
+gchar *gncJobNextID (QofBook *book);
 
 /** The gncCloneTaxTable() routine makes a copy of the indicated
  *  tax table, placing it in the indicated book.  It copies

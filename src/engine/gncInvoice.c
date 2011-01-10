@@ -2125,22 +2125,22 @@ gboolean gncInvoiceRegister (void)
     return qof_object_register (&gncInvoiceDesc);
 }
 
-gint64 gncInvoiceNextID (QofBook *book, GncOwner *owner)
+gchar *gncInvoiceNextID (QofBook *book, GncOwner *owner)
 {
-    gint64 nextID;
+    gchar *nextID;
     switch (gncOwnerGetType(gncOwnerGetEndOwner(owner)))
     {
     case GNC_OWNER_CUSTOMER:
-        nextID = qof_book_increment_and_get_counter (book, "gncInvoice");
+        nextID = qof_book_increment_and_format_counter (book, "gncInvoice");
         break;
     case GNC_OWNER_VENDOR:
-        nextID = qof_book_increment_and_get_counter (book, "gncBill");
+        nextID = qof_book_increment_and_format_counter (book, "gncBill");
         break;
     case GNC_OWNER_EMPLOYEE:
-        nextID = qof_book_increment_and_get_counter (book, "gncExpVoucher");
+        nextID = qof_book_increment_and_format_counter (book, "gncExpVoucher");
         break;
     default:
-        nextID = qof_book_increment_and_get_counter (book, _GNC_MOD_NAME);
+        nextID = qof_book_increment_and_format_counter (book, _GNC_MOD_NAME);
         break;
     }
     return nextID;

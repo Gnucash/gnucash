@@ -225,8 +225,7 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
     /* Check for valid id and set one if necessary */
     if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
     {
-        string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
-                                  gncVendorNextID(vw->book));
+        string = gncVendorNextID(vw->book);
         gtk_entry_set_text (GTK_ENTRY (vw->id_entry), string);
         g_free(string);
     }

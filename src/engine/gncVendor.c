@@ -859,7 +859,7 @@ gboolean gncVendorRegister (void)
     return qof_object_register (&gncVendorDesc);
 }
 
-gint64 gncVendorNextID (QofBook *book)
+gchar *gncVendorNextID (QofBook *book)
 {
-    return qof_book_increment_and_get_counter (book, _GNC_MOD_NAME);
+    return qof_book_increment_and_format_counter (book, _GNC_MOD_NAME);
 }

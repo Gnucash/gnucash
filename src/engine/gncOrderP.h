@@ -32,7 +32,7 @@
 #include "gncOrder.h"
 
 gboolean gncOrderRegister (void);
-gint64 gncOrderNextID (QofBook *book);
+gchar *gncOrderNextID (QofBook *book);
 
 /** The gncCloneOrder() routine makes a copy of the indicated
  *  order, placing it in the indicated book.  It copies

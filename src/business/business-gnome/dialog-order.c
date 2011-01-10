@@ -705,8 +705,7 @@ gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
                                        ow);
     /* Setup initial values */
     ow->order_guid = *gncOrderGetGUID (order);
-    string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
-                              gncOrderNextID(bookp));
+    string = gncOrderNextID(bookp);
     gtk_entry_set_text (GTK_ENTRY (ow->id_entry), string);
     g_free(string);
 
