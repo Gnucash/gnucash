@@ -19,6 +19,47 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(define gnc:*option-section-counters* (N_ "Counters"))
+
+;; This defines all available counter types to show options for. This a
+;; list that contains a sublist for each counter type, containing: The
+;; (untranslated) counter name, the format label, the previous number
+;; label, the format help text and the previous number help text.
+(define counter-types
+  (list (list "gncCustomer"     (N_ "Customer number format")
+                                (N_ "Customer number")
+                                (N_ "The format string to use for generating customer numbers. This is a printf-style format string.")
+                                (N_ "The previous customer number generated. This number will be incremented to generate the next customer number."))
+        (list "gncEmployee"     (N_ "Employee number format")
+                                (N_ "Employee number")
+                                (N_ "The format string to use for generating employee numbers. This is a printf-style format string.")
+                                (N_ "The previous employee number generated. This number will be incremented to generate the next employee number."))
+        (list "gncInvoice"      (N_ "Invoice number format")
+                                (N_ "Invoice number")
+                                (N_ "The format string to use for generating invoice numbers. This is a printf-style format string.")
+                                (N_ "The previous invoice number generated. This number will be incremented to generate the next invoice number."))
+        (list "gncBill"         (N_ "Bill number format")
+                                (N_ "Bill number")
+                                (N_ "The format string to use for generating bill numbers. This is a printf-style format string.")
+                                (N_ "The previous bill number generated. This number will be incremented to generate the next bill number."))
+        (list "gncExpVoucher"   (N_ "Expense voucher number format")
+                                (N_ "Expense voucher number")
+                                (N_ "The format string to use for generating expense voucher numbers. This is a printf-style format string.")
+                                (N_ "The previous expense voucher number generated. This number will be incremented to generate the next voucher number."))
+        (list "gncJob"          (N_ "Job number format")
+                                (N_ "Job number")
+                                (N_ "The format string to use for generating job numbers. This is a printf-style format string.")
+                                (N_ "The previous job number generated. This number will be incremented to generate the next job number."))
+        (list "gncOrder"        (N_ "Order number format")
+                                (N_ "Order number")
+                                (N_ "The format string to use for generating order numbers. This is a printf-style format string.")
+                                (N_ "The previous order number generated. This number will be incremented to generate the next order number."))
+        (list "gncVendor"       (N_ "Vendor number format")
+                                (N_ "Vendor number")
+                                (N_ "The format string to use for generating vendor numbers. This is a printf-style format string.")
+                                (N_ "The previous vendor number generated. This number will be incremented to generate the next vendor number."))
+))
+
 (define (book-options-generator options)
   (define (reg-option new-option)
     (gnc:register-option options new-option))
@@ -81,7 +122,9 @@
     gnc:*business-label* (N_ "Fancy Date Format")
     "g" (N_ "The default date format used for fancy printed dates")
     #f))
-    
+
+  ;; Accounts tab
+
   (reg-option 
    (gnc:make-simple-boolean-option
     gnc:*option-section-accounts* gnc:*option-name-trading-accounts*
@@ -95,6 +138,35 @@
     gnc:*option-section-budgeting* gnc:*option-name-default-budget*
     "a" (N_ "Budget to be used when none has been otherwise specified")))
 
+  ;; Counters Tab
+  (map (lambda (vals)
+               (let* (
+		      ; Unpack the list of strings for this counter type
+                      (key (car vals))
+                      (sort-string key)
+                      (format-label (cadr vals))
+                      (number-label (caddr vals))
+                      (format-description (cadddr vals))
+                      (number-description (cadddr (cdr vals)))
+                     )
+                     (begin
+		      ; For each counter-type we create an option for
+		      ; the last used number and the format string to
+		      ; use.
+                      (reg-option
+                       (gnc:make-counter-option
+                        gnc:*option-section-counters* number-label key
+                        (string-append sort-string "a") number-description 0))
+                      (reg-option
+                       (gnc:make-counter-format-option
+                        gnc:*option-section-counters* format-label key
+                        (string-append sort-string "b") format-description ""))
+                      )
+               )
+       )
+       ;; Make counter and format option for each defined counter
+       counter-types
+  )
 )
 
 
