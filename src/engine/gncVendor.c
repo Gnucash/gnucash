@@ -861,5 +861,5 @@ gboolean gncVendorRegister (void)
 
 gint64 gncVendorNextID (QofBook *book)
 {
-    return qof_book_get_counter (book, _GNC_MOD_NAME);
+    return qof_book_increment_and_get_counter (book, _GNC_MOD_NAME);
 }

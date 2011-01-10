@@ -392,10 +392,8 @@ void qof_book_set_version (QofBook *book, gint32 version)
 gint64
 qof_book_get_counter (QofBook *book, const char *counter_name)
 {
-    QofBackend *be;
     KvpFrame *kvp;
     KvpValue *value;
-    gint64 counter;
 
     if (!book)
     {
@@ -422,16 +420,53 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
     if (value)
     {
         /* found it */
-        counter = kvp_value_get_gint64 (value);
+        return kvp_value_get_gint64 (value);
     }
     else
     {
         /* New counter */
-        counter = 0;
+        return 0;
+    }
+}
+
+gint64
+qof_book_increment_and_get_counter (QofBook *book, const char *counter_name)
+{
+    QofBackend *be;
+    KvpFrame *kvp;
+    KvpValue *value;
+    gint64 counter;
+
+    if (!book)
+    {
+        PWARN ("No book!!!");
+        return -1;
     }
 
-    /* Counter is now valid; increment it */
+    if (!counter_name || *counter_name == '\0')
+    {
+        PWARN ("Invalid counter name.");
+        return -1;
+    }
+
+    /* Get the current counter value from the KVP in the book. */
+    counter = qof_book_get_counter(book, counter_name);
+
+    /* Check if an error occured */
+    if (counter < 0)
+	return -1;
+
+    /* Increment the counter */
     counter++;
+
+    /* Get the KVP from the current book */
+    kvp = qof_book_get_slots (book);
+
+    if (!kvp)
+    {
+	PWARN ("Book has no KVP_Frame");
+	return -1;
+    }
 
     /* Save off the new counter */
     qof_book_begin_edit(book);
@@ -441,7 +476,6 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
     qof_book_mark_dirty(book);
     qof_book_commit_edit(book);
 
-    /* and return the value */
     return counter;
 }
 
