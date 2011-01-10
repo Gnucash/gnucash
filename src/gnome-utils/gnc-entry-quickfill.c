@@ -104,9 +104,17 @@ static void entry_cb(gpointer data, gpointer user_data)
  * current book. */
 static QofQuery *new_query_for_entrys(QofBook *book)
 {
+    GSList *primary_sort_params = NULL;
     QofQuery *query = qof_query_create_for (GNC_ID_ENTRY);
     g_assert(book);
     qof_query_set_book (query, book);
+
+    /* Set the sort order: By DATE_ENTERED, increasing, and returning
+     * only one single resulting item. */
+    primary_sort_params = qof_query_build_param_list(ENTRY_DATE_ENTERED, NULL);
+    qof_query_set_sort_order (query, primary_sort_params, NULL, NULL);
+    qof_query_set_sort_increasing (query, TRUE, TRUE, TRUE);
+
     return query;
 }
 
