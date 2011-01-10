@@ -495,6 +495,7 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
     KvpFrame *kvp;
     gchar *format;
     KvpValue *value;
+    gchar *error;
 
     if (!book)
     {
@@ -517,18 +518,122 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
         return NULL;
     }
 
+    format = NULL;
+
     /* Get the format string */
     value = kvp_frame_get_slot_path (kvp, "counter_formats", counter_name, NULL);
     if (value)
     {
         format = kvp_value_get_string (value);
+        error = qof_book_validate_counter_format(format);
+        if (error != NULL)
+        {
+            PWARN("Invalid counter format string. Format string: '%s' Counter: '%s' Erorr: '%s')", format, counter_name, error);
+            /* Invalid format string */
+            format = NULL;
+            g_free(error);
+        }
     }
-    else
+
+    /* If no (valid) format string was found, use the default format
+     * string */
+    if (!format)
     {
         /* Use the default format */
         format = "%.6" G_GINT64_FORMAT;
     }
     return format;
+}
+
+gchar *
+qof_book_validate_counter_format(const gchar *p)
+{
+    const gchar *conv_start, *tmp;
+
+    /* Validate a counter format. This is a very simple "parser" that
+     * simply checks for a single gint64 conversion specification,
+     * allowing all modifiers and flags that printf(3) specifies (except
+     * for the * width and precision, which need an extra argument). */
+
+    /* Skip a prefix of any character except % */
+    while (*p)
+    {
+        /* Skip two adjacent percent marks, which are literal percent
+         * marks */
+        if (p[0] == '%' && p[1] == '%')
+	{
+            p += 2;
+	    continue;
+	}
+        /* Break on a single percent mark, which is the start of the
+         * conversion specification */
+        if (*p == '%')
+            break;
+        /* Skip all other characters */
+        p++;
+    }
+
+    if (!*p)
+        return g_strdup("Format string ended without any conversion specification");
+
+    /* Store the start of the conversion for error messages */
+    conv_start = p;
+
+    /* Skip the % */
+    p++;
+
+    /* Skip any number of flag characters */
+    while (*p && strchr("#0- +'I", *p)) p++;
+
+    /* Skip any number of field width digits */
+    while (*p && strchr("0123456789", *p)) p++;
+
+    /* A precision specifier always starts with a dot */
+    if (*p && *p == '.')
+    {
+        /* Skip the . */
+        p++;
+        /* Skip any number of precision digits */
+        while (*p && strchr("0123456789", *p)) p++;
+    }
+
+    if (!*p)
+        return g_strdup_printf("Format string ended during the conversion specification. Conversion seen so far: %s", conv_start);
+
+    /* See if the format string starts with the correct format
+     * specification. */
+    tmp = strstr(p, G_GINT64_FORMAT);
+    if (tmp == NULL)
+    {
+        return g_strdup_printf("Invalid length modifier and/or conversion specifier ('%.2s'), it should be: " G_GINT64_FORMAT, p);
+    } else if (tmp != p) {
+        return g_strdup_printf("Garbage before length modifier and/or conversion specifier: '%*s'", (int)(tmp - p), p);
+    }
+
+    /* Skip length modifier / conversion specifier */
+    p += strlen(G_GINT64_FORMAT);
+
+    /* Skip a suffix of any character except % */
+    while (*p)
+    {
+        /* Skip two adjacent percent marks, which are literal percent
+         * marks */
+        if (p[0] == '%' && p[1] == '%')
+	{
+            p += 2;
+	    continue;
+	}
+        /* Break on a single percent mark, which is the start of the
+         * conversion specification */
+        if (*p == '%')
+            return g_strdup_printf("Format string contains unescaped %% signs (or multiple conversion specifications) at '%s'", p);
+        /* Skip all other characters */
+        p++;
+    }
+
+    /* If we end up here, the string was valid, so return no error
+     * message */
+    return NULL;
 }
 
 /* Determine whether this book uses trading accounts */
