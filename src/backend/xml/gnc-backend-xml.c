@@ -1219,8 +1219,6 @@ gnc_backend_new(void)
     be->free_query = NULL;
     be->run_query = NULL;
 
-    be->counter = NULL;
-
     /* The file backend will never be multi-user... */
     be->events_pending = NULL;
     be->process_events = NULL;

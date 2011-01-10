@@ -409,12 +409,7 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
         return -1;
     }
 
-    /* If we've got a backend with a counter method, call it */
-    be = book->backend;
-    if (be && be->counter)
-        return ((be->counter)(be, counter_name));
-
-    /* If not, then use the KVP in the book */
+    /* Use the KVP in the book */
     kvp = qof_book_get_slots (book);
 
     if (!kvp)

@@ -1310,8 +1310,6 @@ init_sql_backend( GncDbiBackend* dbi_be )
     be->commit = gnc_dbi_commit_edit;
     be->rollback = gnc_dbi_rollback_edit;
 
-    be->counter = NULL;
-
     /* The gda backend will not be multi-user (for now)... */
     be->events_pending = NULL;
     be->process_events = NULL;
