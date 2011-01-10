@@ -436,6 +436,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     KvpFrame *kvp;
     KvpValue *value;
     gint64 counter;
+    gchar* format;
 
     if (!book)
     {
@@ -476,8 +477,58 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     qof_book_mark_dirty(book);
     qof_book_commit_edit(book);
 
+    format = qof_book_get_counter_format(book, counter_name);
+
+    if (!format)
+    {
+        PWARN("Cannot get format for counter");
+        return NULL;
+    }
+
     /* Generate a string version of the counter */
-    return g_strdup_printf ("%.6" G_GINT64_FORMAT, counter);
+    return g_strdup_printf(format, counter);
+}
+
+gchar *
+qof_book_get_counter_format(const QofBook *book, const char *counter_name)
+{
+    KvpFrame *kvp;
+    gchar *format;
+    KvpValue *value;
+
+    if (!book)
+    {
+        PWARN ("No book!!!");
+        return NULL;
+    }
+
+    if (!counter_name || *counter_name == '\0')
+    {
+        PWARN ("Invalid counter name.");
+        return NULL;
+    }
+
+    /* Get the KVP from the current book */
+    kvp = qof_book_get_slots (book);
+
+    if (!kvp)
+    {
+        PWARN ("Book has no KVP_Frame");
+        return NULL;
+    }
+
+    /* Get the format string */
+    value = kvp_frame_get_slot_path (kvp, "counter_formats", counter_name, NULL);
+    if (value)
+    {
+        format = kvp_value_get_string (value);
+    }
+    else
+    {
+        /* Use the default format */
+        format = "%.6" G_GINT64_FORMAT;
+    }
+    return format;
 }
 
 /* Determine whether this book uses trading accounts */

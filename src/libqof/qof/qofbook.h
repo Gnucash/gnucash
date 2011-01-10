@@ -289,6 +289,12 @@ gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
  */
 gchar *qof_book_increment_and_format_counter (QofBook *book, const char *counter_name);
 
+/** Get the format string to use for the named counter.
+ *    The return value is NULL on error or the format string of the
+ *    counter. The string should not be freed.
+ */
+gchar *qof_book_get_counter_format (const QofBook *book, const char *counter_name);
+
 const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
 void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);
 
