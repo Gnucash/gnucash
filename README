@@ -1,13 +1,7 @@
 ############################################################
-          GnuCash 2.1.x README file.
+          GnuCash 2.4.x README file.
 
-NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT 
-BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!   
-
-USE AT YOUR OWN RISK (AND KEEP *LOTS* OF BACKUPS) 
-
-If you want something a bit more tested, please use the 
-2.0 stable series. 
+The last known stable series is the 2.4.0 series.
 ------------------------------------------------------------
 
 ##################
@@ -15,7 +9,6 @@ Table of Contents:
 ------------------
 
   - Overview
-  - Upgrading from 2.0.x
   - Dependencies
   - Invocation/running
   - Internationalization
@@ -135,28 +128,6 @@ http://www.gnucash.org/pub/gnucash/
 Development versions:
 http://www.gnucash.org/en/hacking.phtml
 
-###############################
-Upgrading from earlier versions
--------------------------------
-
-There are many changes from the 2.0 series - have a look at the
-NEWS file if you want more details. In particular:
-
-- GnuCash now uses SWIG 1.3.28 instead of g-wrap for the
-inter-language bindings. g-wrap has been dropped completely in
-gnucash 2.2.0. See the "dependencies" section of this file for
-more detail.
-
-- The data files are not able to be accessed by 1.6 once the new
-features are used and saved, i.e. they are not backwards-compatible! 
-So backup your data!
-
-- The help documentation of gnucash has been moved to the separate
-package gnucash-docs. If you see error messages like "URL not found"
-when clicking on the "Help" menu item, you need to install the
-separate package gnucash-docs.
-
-We hope you enjoy all the new features!
 
 
 ############
@@ -184,11 +155,6 @@ the following;
     or newer. Sources can be found at
     http://sourceforge.net/projects/libofx/
   aqbanking: This library provide support for HBCI online actions.
-    GnuCash has mostly been tested against the 1.3.0 version, though
-    any newer version should also work. Sources can be found at
-    http://sourceforge.net/projects/aqbanking . Requires
-    gwenhywfar, http://sourceforge.net/projects/gwenhywfar . More
-    info in doc/README.HBCI.
 
 #######
 Running
