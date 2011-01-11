@@ -46,6 +46,7 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-multicurrency-totals (N_ "Show Multi-currency Totals"))
 (define optname-show-zeros (N_ "Show zero balance items"))
+(define optname-date-driver (N_ "Due or Post Date"))
 
 ;; The idea is:  have a hash with the key being the contact name
 ;; (In future this might be GUID'ed, but for now it's a string
@@ -65,7 +66,7 @@
 					 overpayment
 					 owner-obj)))
 
-(define num-buckets 4)
+(define num-buckets 5)
 (define (new-bucket-vector)
   (make-vector num-buckets (gnc-numeric-zero)))
 
@@ -168,15 +169,18 @@
 	      (gnc:debug "payment-driver processed.  new overpayment: " result)
 	      (company-set-overpayment company result)))))
 		  
-		    
-    
+;; determine date function to use 
+(define (get-selected-date-from-txn transaction date-type)
+  (if (eq? date-type 'postdate)
+      (gnc-transaction-get-date-posted transaction)
+      (xaccTransRetDateDueTS transaction)))		    
   
 ;; deal with a transaction - figure out if we've seen the company before
 ;; if so, either process it as a bill or a payment, if not, create
 ;; a new company record in the hash
 
 (define (update-company-hash hash split bucket-intervals
-			     reverse? show-zeros)
+			     reverse? show-zeros date-type)
 
   (define (do-update value)
     (let* ((transaction (xaccSplitGetParent split))
@@ -186,7 +190,7 @@
       (if (not (null? owner))
        (let* ((guid (gncOwnerReturnGUID owner))
 	      (this-currency (xaccTransGetCurrency transaction))
-	      (this-date (gnc-transaction-get-date-posted transaction))
+	      (this-date (get-selected-date-from-txn transaction date-type))
 	      (company-info (hash-ref hash guid)))
 
 	 (gnc:debug "update-company-hash called")
@@ -379,6 +383,17 @@ totals to report currency")
       (N_ "Show all vendors/customers even if they have a zero balance.")
       #f))
 
+    (add-option
+      (gnc:make-multichoice-option
+       gnc:pagename-general
+       optname-date-driver
+       "k"
+       (N_ "Leading date")
+       'duedate
+       (list
+         (vector 'duedate (N_ "Due date") (N_ "Due date is leading")) ;; Should be using standard label for due date?
+	 (vector 'postdate (N_ "Post date") (N_ "Post date is leading"))))) ;; Should be using standard label for post date?
+    
     (gnc:options-set-default-section options "General")      
     options))
 
@@ -388,6 +403,12 @@ totals to report currency")
     (set! begindate (decdate begindate ThirtyDayDelta))
     (set! begindate (decdate begindate ThirtyDayDelta))
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
+
+;; Have make-list create a stepped list, then add a date in the future for the "current" bucket
+(define (make-extended-interval-list to-date)
+    (define dayforcurrent (incdate to-date YearDelta)) ;; MAGIC CONSTANT
+    (define oldintervalreversed (reverse (make-interval-list to-date)))		
+  (reverse (cons dayforcurrent oldintervalreversed)))
 
 (define (aging-renderer report-obj reportname account reverse?)
 
@@ -442,6 +463,7 @@ totals to report currency")
   (define (make-heading-list)
     (list 
      (N_ "Company")
+     (N_ "Current")
      (N_ "0-30 days")
      (N_ "31-60 days")
      (N_ "61-90 days")
@@ -528,7 +550,7 @@ totals to report currency")
 	(report-date (gnc:timepair-end-day-time 
 		      (gnc:date-option-absolute-time
 		       (op-value gnc:pagename-general optname-to-date))))
-	(interval-vec (list->vector (make-interval-list report-date)))
+	(interval-vec (list->vector (make-extended-interval-list report-date)))
 	(sort-pred (get-sort-pred 
 		    (op-value gnc:pagename-general optname-sort-by)
 		    (op-value gnc:pagename-general optname-sort-order)))
@@ -536,6 +558,7 @@ totals to report currency")
 	(price-source (op-value gnc:pagename-general optname-price-source))
 	(multi-totals-p (op-value gnc:pagename-general optname-multicurrency-totals))
 	(show-zeros (op-value gnc:pagename-general optname-show-zeros))
+        (date-type (op-value gnc:pagename-general optname-date-driver))        
 	(heading-list (make-heading-list))
 	(exchange-fn (gnc:case-exchange-fn price-source report-currency report-date))
 	(total-collector-list (make-collector-list))
@@ -581,7 +604,8 @@ totals to report currency")
 			(update-company-hash companys 
 					      split 
 					      interval-vec 
-					      reverse? show-zeros))
+					      reverse? show-zeros
+                                              date-type))
 			splits)
 ;	    (gnc:debug "companys" companys)
 	    ;; turn the hash into a list
