@@ -489,7 +489,7 @@ xml_add_taxtable (QofInstance * table_p, gpointer out_p)
 static gboolean
 taxtable_write (FILE *out, QofBook *book)
 {
-    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
     return ferror(out) == 0;
 }
 

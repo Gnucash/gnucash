@@ -436,7 +436,7 @@ xml_add_employee (QofInstance * employee_p, gpointer out_p)
 static gboolean
 employee_write (FILE *out, QofBook *book)
 {
-    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_employee, (gpointer) out);
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_employee, (gpointer) out);
     return ferror(out) == 0;
 }
 

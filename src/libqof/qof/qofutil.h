@@ -166,6 +166,12 @@ void qof_close (void);
 
 /* **** Prototypes *********************************************/
 
+/** Calls the given function for each of the key/value pairs in the
+ *  GHashTable in an order determined by the GCompareFunc applied to
+ *  the keys. The function is passed the key and value of each pair,
+ *  and the given user_data parameter. */
+void g_hash_table_foreach_sorted(GHashTable *hash_table, GHFunc func, gpointer user_data, GCompareFunc compare_func);
+
 /** Search for an occurence of the substring needle in the string
  * haystack, ignoring case. Return TRUE if one is found or FALSE
  * otherwise. */

@@ -832,7 +832,7 @@ xml_add_entry (QofInstance * entry_p, gpointer out_p)
 static gboolean
 entry_write (FILE *out, QofBook *book)
 {
-    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
     return ferror(out) == 0;
 }
 

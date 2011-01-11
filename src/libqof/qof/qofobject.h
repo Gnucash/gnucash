@@ -162,6 +162,10 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
                          QofInstanceForeachCB cb, gpointer user_data);
 
+/** Invoke callback 'cb' on each instance in guid orted order */
+void qof_object_foreach_sorted (QofIdTypeConst type_name, QofBook *book,
+                                QofInstanceForeachCB cb, gpointer user_data);
+
 /** Register and lookup backend-specific data for this particular object */
 gboolean qof_object_register_backend (QofIdTypeConst type_name,
                                       const char *backend_name,

@@ -372,7 +372,7 @@ xml_add_order (QofInstance * order_p, gpointer out_p)
 static gboolean
 order_write (FILE *out, QofBook *book)
 {
-    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_order, (gpointer) out);
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_order, (gpointer) out);
     return ferror(out) == 0;
 }
 

@@ -189,6 +189,31 @@ qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
     return;
 }
 
+static void
+do_append (QofInstance *qof_p, gpointer list_p)
+{
+    GList **list = list_p;
+    *list = g_list_append(*list, qof_p);
+}
+
+void
+qof_object_foreach_sorted (QofIdTypeConst type_name, QofBook *book, QofInstanceForeachCB cb, gpointer user_data)
+{
+    GList *list = NULL;
+    GList *iter;
+
+    qof_object_foreach(type_name, book, do_append, &list);
+
+    list = g_list_sort(list, qof_instance_guid_compare);
+
+    for (iter = list; iter; iter = iter->next)
+    {
+        cb(iter->data, user_data);
+    }
+
+    g_list_free(list);
+}
+
 const char *
 qof_object_printable (QofIdTypeConst type_name, gpointer obj)
 {
@@ -370,7 +395,7 @@ void qof_object_foreach_backend (const char *backend_name,
     cb_data.cb = cb;
     cb_data.user_data = user_data;
 
-    g_hash_table_foreach (ht, foreach_backend, &cb_data);
+    g_hash_table_foreach_sorted (ht, foreach_backend, &cb_data, (GCompareFunc)strcmp);
 }
 
 /* ========================= END OF FILE =================== */

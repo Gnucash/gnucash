@@ -158,6 +158,8 @@ gnc_account_dom_tree_create(Account *act,
     {
         xmlNodePtr toaddto = xmlNewChild(ret, NULL, BAD_CAST act_lots_string, NULL);
 
+        lots = g_list_sort(lots, qof_instance_guid_compare);
+
         for (n = lots; n; n = n->next)
         {
             GNCLot * lot = n->data;

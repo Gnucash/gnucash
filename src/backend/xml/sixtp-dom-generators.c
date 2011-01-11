@@ -334,13 +334,15 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     case KVP_TYPE_GLIST:
     {
         GList *cursor;
+        GList *sorted = g_list_sort(g_list_copy(kvp_value_get_glist(val)), (GCompareFunc)strcmp);
 
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "list");
-        for (cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
+        for (cursor = sorted; cursor; cursor = cursor->next)
         {
             kvp_value *val = (kvp_value*)cursor->data;
             add_kvp_value_node(val_node, "slot:value", val);
         }
+        g_list_free(sorted);
     }
 
     break;
@@ -354,8 +356,8 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         if (!frame || !kvp_frame_get_hash (frame))
             break;
 
-        g_hash_table_foreach(kvp_frame_get_hash(frame),
-                             add_kvp_slot, val_node);
+        g_hash_table_foreach_sorted(kvp_frame_get_hash(frame),
+                                    add_kvp_slot, val_node, (GCompareFunc)strcmp);
     }
     break;
 
@@ -397,7 +399,8 @@ kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
 
     ret = xmlNewNode(NULL, BAD_CAST tag);
 
-    g_hash_table_foreach(kvp_frame_get_hash(frame), add_kvp_slot, ret);
+    g_hash_table_foreach_sorted(kvp_frame_get_hash(frame),
+                                add_kvp_slot, ret, (GCompareFunc)strcmp);
 
     return ret;
 }

@@ -513,7 +513,7 @@ xml_add_customer (QofInstance * cust_p, gpointer out_p)
 static gboolean
 customer_write (FILE *out, QofBook *book)
 {
-    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
     return ferror(out) == 0;
 }
 

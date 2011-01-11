@@ -542,7 +542,7 @@ xml_add_invoice (QofInstance * invoice_p, gpointer out_p)
 static gboolean
 invoice_write (FILE *out, QofBook *book)
 {
-    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_invoice, (gpointer) out);
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_invoice, (gpointer) out);
     return ferror(out) == 0;
 }
 

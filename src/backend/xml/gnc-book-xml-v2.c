@@ -69,6 +69,7 @@ append_account_tree (xmlNodePtr parent,
     GList *children, *node;
 
     children = gnc_account_get_children(account);
+    children = g_list_sort(children, qof_instance_guid_compare);
     for (node = children; node; node = node->next)
     {
         xmlNodePtr accnode;

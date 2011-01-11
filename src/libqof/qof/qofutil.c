@@ -36,6 +36,20 @@
 
 static QofLogModule log_module = QOF_MOD_UTIL;
 
+void
+g_hash_table_foreach_sorted(GHashTable *hash_table, GHFunc func, gpointer user_data, GCompareFunc compare_func)
+{
+    GList *iter;
+    GList *keys = g_list_sort(g_hash_table_get_keys(hash_table), compare_func);
+
+    for (iter = keys; iter; iter = iter->next)
+    {
+        func(iter->data, g_hash_table_lookup(hash_table, iter->data), user_data);
+    }
+
+    g_list_free(keys);
+}
+
 gboolean
 qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle)
 {

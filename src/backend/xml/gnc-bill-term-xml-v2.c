@@ -527,7 +527,7 @@ xml_add_billterm (QofInstance *term_p, gpointer out_p)
 static gboolean
 billterm_write (FILE *out, QofBook *book)
 {
-    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
     return ferror(out) == 0;
 }
 

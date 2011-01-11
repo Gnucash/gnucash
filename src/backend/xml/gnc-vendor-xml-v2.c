@@ -457,7 +457,7 @@ xml_add_vendor (QofInstance * vendor_p, gpointer out_p)
 static gboolean
 vendor_write (FILE *out, QofBook *book)
 {
-    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_vendor, (gpointer) out);
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_vendor, (gpointer) out);
     return ferror(out) == 0;
 }
 

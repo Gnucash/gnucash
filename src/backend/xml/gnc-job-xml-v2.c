@@ -329,7 +329,7 @@ xml_add_job (QofInstance * job_p, gpointer out_p)
 static gboolean
 job_write (FILE *out, QofBook *book)
 {
-    qof_object_foreach (_GNC_MOD_NAME, book, xml_add_job, (gpointer) out);
+    qof_object_foreach_sorted (_GNC_MOD_NAME, book, xml_add_job, (gpointer) out);
     return ferror(out) == 0;
 }
 
