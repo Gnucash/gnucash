@@ -528,7 +528,7 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
         error = qof_book_validate_counter_format(format);
         if (error != NULL)
         {
-            PWARN("Invalid counter format string. Format string: '%s' Counter: '%s' Erorr: '%s')", format, counter_name, error);
+            PWARN("Invalid counter format string. Format string: '%s' Counter: '%s' Error: '%s')", format, counter_name, error);
             /* Invalid format string */
             format = NULL;
             g_free(error);
