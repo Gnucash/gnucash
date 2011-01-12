@@ -314,6 +314,61 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
     return invoice;
 }
 
+GncInvoice *gncInvoiceCopy (const GncInvoice *from)
+{
+    GncInvoice *invoice;
+    QofBook* book;
+    GList *node;
+
+    g_assert(from);
+    book = qof_instance_get_book(from);
+    g_assert(book);
+
+    invoice = g_object_new (GNC_TYPE_INVOICE, NULL);
+    qof_instance_init_data (&invoice->inst, _GNC_MOD_NAME, book);
+
+    gncInvoiceBeginEdit(invoice);
+
+    invoice->id = CACHE_INSERT (from->id);
+    invoice->notes = CACHE_INSERT (from->notes);
+    invoice->billing_id = CACHE_INSERT (from->billing_id);
+    invoice->active = from->active;
+
+    invoice->terms = from->terms;
+    gncBillTermIncRef (invoice->terms);
+
+    gncOwnerCopy(&from->billto, &invoice->billto);
+    gncOwnerCopy(&from->owner, &invoice->owner);
+    invoice->job = from->job; // FIXME: Need IncRef or similar here?!?
+
+    invoice->to_charge_amount = from->to_charge_amount;
+    invoice->date_opened = from->date_opened;
+    invoice->date_posted = from->date_posted;
+
+    // Copy all invoice->entries
+    for (node = from->entries; node; node = node->next)
+    {
+        GncEntry *from_entry = node->data;
+        GncEntry *to_entry = gncEntryCreate(book);
+        gncEntryCopy(from_entry, to_entry);
+
+        if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR)
+        {
+            // this is a vendor bill
+            gncBillAddEntry(invoice, to_entry);
+        }
+        else
+        {
+            // this is an invoice
+            gncInvoiceAddEntry(invoice, to_entry);
+        }
+    }
+
+    gncInvoiceCommitEdit(invoice);
+
+    return invoice;
+}
+
 void gncInvoiceDestroy (GncInvoice *invoice)
 {
     if (!invoice) return;
@@ -594,6 +649,8 @@ void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry)
 {
     GncInvoice *old;
 
+    g_assert(invoice);
+    g_assert(entry);
     if (!invoice || !entry) return;
 
     old = gncEntryGetInvoice (entry);
@@ -635,6 +692,8 @@ void gncBillAddEntry (GncInvoice *bill, GncEntry *entry)
 {
     GncInvoice *old;
 
+    g_assert(bill);
+    g_assert(entry);
     if (!bill || !entry) return;
 
     old = gncEntryGetBill (entry);

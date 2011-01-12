@@ -68,7 +68,16 @@ GType gnc_invoice_get_type(void);
 /** @name Create/Destroy Functions
  @{ */
 GncInvoice *gncInvoiceCreate (QofBook *book);
+
 void gncInvoiceDestroy (GncInvoice *invoice);
+
+/** Create a new GncInvoice object as a deep copy of the given other
+ * invoice.
+ *
+ * The returned new invoice has everything copied from the other
+ * invoice, including the ID string field. All GncEntries are newly
+ * allocated copies of the original invoice's entries. */
+GncInvoice *gncInvoiceCopy (const GncInvoice *other_invoice);
 /** @} */
 
 /** @name Set Functions
