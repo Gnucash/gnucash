@@ -81,7 +81,10 @@ developing over time"))
 (define optname-plot-height (N_ "Plot Height"))
 (define optname-sort-method (N_ "Sort Method"))
 
-(define (options-generator account-types reverse-balance?)
+(define optname-averaging (N_ "Show Average"))
+(define opthelp-averaging (N_ "Select whether the amounts should be shown over the full time period or rather as the average e.g. per month"))
+
+(define (options-generator account-types reverse-balance? do-intervals?)
   (let* ((options (gnc:new-options)) 
          (add-option 
           (lambda (new-option)
@@ -105,6 +108,29 @@ developing over time"))
     (gnc:options-add-price-source! 
      options gnc:pagename-general
      optname-price-source "d" 'weighted-average)
+
+    (if do-intervals?
+        (add-option
+         (gnc:make-multichoice-option
+          gnc:pagename-general optname-averaging
+          "e" opthelp-averaging
+          'None
+          (list (vector 'None
+                        (N_ "No Averaging")
+                        (N_ "Just show the amounts, without any averaging"))
+                (vector 'MonthDelta
+                        (N_ "Monthly")
+                        (N_ "Show the average monthly amount during the reporting period"))
+                (vector 'WeekDelta
+                        (N_ "Weekly")
+                        (N_ "Show the average weekly amount during the reporting period"))
+                (vector 'DayDelta
+                        (N_ "Dayly")
+                        (N_ "Show the average dayly amount during the reporting period"))
+                )
+          ))
+        )
+
 
     ;; Accounts tab
     (add-option
@@ -200,6 +226,10 @@ developing over time"))
                                   optname-price-source))
         (report-title (get-option gnc:pagename-general 
                                   gnc:optname-reportname))
+        (averaging-selection (if do-intervals?
+                                 (get-option gnc:pagename-general
+                                             optname-averaging)
+                                 'None))
 
         (accounts (get-option gnc:pagename-accounts optname-accounts))
         (account-levels (get-option gnc:pagename-accounts optname-levels))
@@ -238,6 +268,32 @@ developing over time"))
                (tree-depth (if (equal? account-levels 'all)
                                (gnc:get-current-account-tree-depth)
                                account-levels))
+               (averaging-fraction-func (gnc:date-get-fraction-func averaging-selection))
+               (interval-fraction-func (gnc:date-get-fraction-func interval))
+               (averaging-multiplier
+                 (if averaging-fraction-func
+                     ;; Calculate the divisor of the amounts so that an
+                     ;; average is shown
+                     (let* ((start-frac-avg (averaging-fraction-func (gnc:timepair->secs from-date-tp)))
+                             (end-frac-avg (averaging-fraction-func (+ 1 (gnc:timepair->secs to-date-tp))))
+                             (diff-avg (- end-frac-avg start-frac-avg))
+                             (start-frac-int (interval-fraction-func (gnc:timepair->secs from-date-tp)))
+                             (end-frac-int (interval-fraction-func (+ 1 (gnc:timepair->secs to-date-tp))))
+                             (diff-int (- end-frac-int start-frac-int))
+                            )
+                     ;; Extra sanity check to ensure a number smaller than 1
+                     (if (> diff-avg diff-int)
+                         (/ diff-int diff-avg)
+                         1))
+                     1))
+               ;; If there is averaging, the report-title is extended
+               ;; accordingly.
+               (report-title
+                 (case averaging-selection
+                   ((MonthDelta) (string-append report-title " " (_ "Monthly Average")))
+                   ((WeekDelta) (string-append report-title " " (_ "Weekly Average")))
+                   ((DayDelta) (string-append report-title " " (_ "Dayly Average")))
+                   (else report-title)))
                ;; This is the list of date intervals to calculate.
                (dates-list (if do-intervals?
                                (gnc:make-date-interval-list
@@ -262,16 +318,21 @@ developing over time"))
           
           ;; Converts a commodity-collector into one single double
           ;; number, depending on the report's currency and the
-          ;; exchange-fn calculated above. Returns a double.
+          ;; exchange-fn calculated above. Returns a double, multiplied
+          ;; by the averaging-multiplies (smaller than one; multiplication
+          ;; instead of division to avoid division-by-zero issues) in case
+          ;; the user wants to see the amounts averaged over some value.
           (define (collector->double c date)
             ;; Future improvement: Let the user choose which kind of
             ;; currency combining she want to be done. 
-            (gnc-numeric-to-double
-             (gnc:gnc-monetary-amount
-              (gnc:sum-collector-commodity 
-               c report-currency 
-               (lambda (a b) (exchange-fn a b date))))))
-          
+            (*
+              (gnc-numeric-to-double
+              (gnc:gnc-monetary-amount
+                (gnc:sum-collector-commodity
+                c report-currency
+                (lambda (a b) (exchange-fn a b date)))))
+             averaging-multiplier))
+
           ;; Calculates the net balance (profit or loss) of an account in
           ;; the given time interval. date-list-entry is a pair containing
           ;; the start- and end-date of that interval. If subacct?==#t,
@@ -627,7 +688,9 @@ developing over time"))
 		     (list gnc:menuname-asset-liability))
       'menu-name (cadddr l)
       'menu-tip (car tip-and-rev)
-      'options-generator (lambda () (options-generator (cadr l) (cadr tip-and-rev)))
+      'options-generator (lambda () (options-generator (cadr l) 
+                                                       (cadr tip-and-rev)
+                                                       (caddr l)))
       'renderer (lambda (report-obj)
 		  (category-barchart-renderer report-obj 
 					      (car l)
