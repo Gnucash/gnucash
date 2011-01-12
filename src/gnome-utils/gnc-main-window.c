@@ -150,7 +150,6 @@ static void gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *wi
 static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
 static gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget, GncPluginPage *page);
 
-static GtkAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
 #ifdef MAC_INTEGRATION
 static void gtk_quartz_shutdown(GtkOSXApplication *theApp, gpointer data);
 static gboolean gtk_quartz_should_quit(GtkOSXApplication *theApp, GncMainWindow *window);
@@ -2774,6 +2773,8 @@ gnc_main_window_merge_actions (GncMainWindow *window,
                                const gchar *group_name,
                                GtkActionEntry *actions,
                                guint n_actions,
+                               GtkToggleActionEntry *toggle_actions,
+                               guint n_toggle_actions,
                                const gchar *filename,
                                gpointer user_data)
 {
@@ -2802,6 +2803,12 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     entry->action_group = gtk_action_group_new (group_name);
     gnc_gtk_action_group_set_translation_domain (entry->action_group, GETTEXT_PACKAGE);
     gtk_action_group_add_actions (entry->action_group, actions, n_actions, data);
+    if (toggle_actions != NULL && n_toggle_actions > 0)
+    {
+        gtk_action_group_add_toggle_actions (entry->action_group,
+                                             toggle_actions, n_toggle_actions,
+                                             data);
+    }
     gtk_ui_manager_insert_action_group (window->ui_merge, entry->action_group, 0);
     entry->merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge, pathname, &error);
     g_assert(entry->merge_id || error);
@@ -2876,7 +2883,7 @@ gnc_main_window_actions_updated (GncMainWindow *window)
 }
 
 
-static GtkAction *
+GtkAction *
 gnc_main_window_find_action (GncMainWindow *window, const gchar *name)
 {
     GtkAction *action = NULL;

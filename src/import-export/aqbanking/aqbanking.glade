@@ -1131,6 +1131,7 @@ Press "Apply" now.</property>
                 <property name="use_underline">True</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="ggg_close_toggled_cb"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -1745,8 +1746,8 @@ Press "Apply" now.</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="gconf/dialogs/import/hbci/remember_pin">
-            <property name="label" translatable="yes">Remember _PIN</property>
+          <widget class="GtkCheckButton" id="gconf/dialogs/import/hbci/close_on_finish">
+            <property name="label" translatable="yes">_Close log window when finished</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -1763,8 +1764,8 @@ Press "Apply" now.</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="checkbutton3">
-            <property name="label" translatable="yes">_Verbose debug messages</property>
+          <widget class="GtkCheckButton" id="gconf/dialogs/import/hbci/remember_pin">
+            <property name="label" translatable="yes">Remember _PIN</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -1775,6 +1776,24 @@ Press "Apply" now.</property>
             <property name="right_attach">4</property>
             <property name="top_attach">2</property>
             <property name="bottom_attach">3</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"></property>
+            <property name="x_padding">12</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkCheckButton" id="checkbutton3">
+            <property name="label" translatable="yes">_Verbose debug messages</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </widget>
+          <packing>
+            <property name="right_attach">4</property>
+            <property name="top_attach">3</property>
+            <property name="bottom_attach">4</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
             <property name="x_padding">12</property>

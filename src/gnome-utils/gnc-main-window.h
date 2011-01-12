@@ -221,6 +221,11 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *
  *  @param n_entries The number of actions in the array.
  *
+ *  @param toggle_entries A pointer to an array of GtkToggleActionEntry.
+ *  These are the toggle actions that will be added to the user interface.
+ *
+ *  @param n_toggle_entries The number of toggle actions in the array.
+ *
  *  @param filename The filename containing the user interface
  *  definition that goes with this set of actions.
  *
@@ -231,6 +236,8 @@ void gnc_main_window_merge_actions (GncMainWindow *window,
                                     const gchar *group_name,
                                     GtkActionEntry *entries,
                                     guint n_entries,
+                                    GtkToggleActionEntry *toggle_entries,
+                                    guint n_toggle_entries,
                                     const gchar *filename,
                                     gpointer user_data);
 
@@ -380,6 +387,18 @@ gboolean gnc_main_window_all_finish_pending (void);
  *  @param sensitive Whether or not the user should be able to invoke
  *  this action. */
 void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolean sensitive);
+
+/** Find action in main window.
+ *
+ *  @param window Whe window which should be checked for the action.
+ *
+ *  @param name The name of the command to be retrieved.
+ *
+ *  @return A pointer to a GtkAction that was added with the
+ *  specified name. If the name cannot be found, then NULL will be
+ *  returned.
+ */
+GtkAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
 
 /**
  * Shows all main windows.

@@ -77,6 +77,11 @@ GncPlugin* gnc_plugin_aqbanking_new(void);
  */
 void gnc_plugin_aqbanking_create_plugin(void);
 
+/**
+ * Set MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW
+ */
+void gnc_plugin_aqbanking_set_logwindow_visible(gboolean logwindow_visible);
+
 G_END_DECLS
 
 /** @} */

@@ -40,12 +40,14 @@
 #include "gnc-ab-transfer.h"
 #include "gnc-ab-utils.h"
 #include "gnc-ab-kvp.h"
+#include "gnc-gwen-gui.h"
 #include "gnc-file-aqb-import.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-plugin-aqbanking.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
+#include "gnc-main-window.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -70,6 +72,7 @@ static void gnc_plugin_ab_cmd_get_transactions(GtkAction *action, GncMainWindowA
 static void gnc_plugin_ab_cmd_issue_transaction(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_view_logwindow(GtkToggleAction *action, GncMainWindow *window);
 static void gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_dtaus_import(GtkAction *action, GncMainWindowActionData *data);
@@ -77,6 +80,9 @@ static void gnc_plugin_ab_cmd_dtaus_importsend(GtkAction *action, GncMainWindowA
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-aqbanking-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-aqbanking-ui.xml"
+
+#define MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW "ABViewLogwindowAction"
+
 
 static GtkActionEntry gnc_plugin_actions [] =
 {
@@ -147,6 +153,17 @@ static GtkActionEntry gnc_plugin_actions [] =
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
+static GtkToggleActionEntry gnc_plugin_toggle_actions [] =
+{
+    {
+        MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW, NULL,
+        N_("Show _log window"), NULL,
+        N_("Show the online banking log window."),
+        G_CALLBACK(gnc_plugin_ab_cmd_view_logwindow), TRUE
+    },
+};
+static guint gnc_plugin_n_toggle_actions = G_N_ELEMENTS(gnc_plugin_toggle_actions);
+
 static const gchar *need_account_actions[] =
 {
     "ABGetBalanceAction",
@@ -156,6 +173,8 @@ static const gchar *need_account_actions[] =
     "ABIssueDirectDebitAction",
     NULL
 };
+
+static GncMainWindow *gnc_main_window = NULL;
 
 /************************************************************
  *                   Object Implementation                  *
@@ -181,6 +200,8 @@ gnc_plugin_aqbanking_class_init(GncPluginAqBankingClass *klass)
     plugin_class->actions_name       = PLUGIN_ACTIONS_NAME;
     plugin_class->actions            = gnc_plugin_actions;
     plugin_class->n_actions          = gnc_plugin_n_actions;
+    plugin_class->toggle_actions     = gnc_plugin_toggle_actions;
+    plugin_class->n_toggle_actions   = gnc_plugin_n_toggle_actions;
     plugin_class->ui_filename        = PLUGIN_UI_FILENAME;
     plugin_class->add_to_window      = gnc_plugin_aqbanking_add_to_window;
     plugin_class->remove_from_window = gnc_plugin_aqbanking_remove_from_window;
@@ -199,12 +220,20 @@ static void
 gnc_plugin_aqbanking_add_to_window(GncPlugin *plugin, GncMainWindow *window,
                                    GQuark type)
 {
+    GtkAction *action;
+
+    gnc_main_window = window;
+
     g_signal_connect(window, "page_added",
                      G_CALLBACK(gnc_plugin_ab_main_window_page_added),
                      plugin);
     g_signal_connect(window, "page_changed",
                      G_CALLBACK(gnc_plugin_ab_main_window_page_changed),
                      plugin);
+
+    action = gnc_main_window_find_action(window, MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
+
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), FALSE);
 }
 
 static void
@@ -375,6 +404,20 @@ main_window_to_account(GncMainWindow *window)
     return account;
 }
 
+void
+gnc_plugin_aqbanking_set_logwindow_visible(gboolean logwindow_visible)
+{
+    GtkAction *action;
+
+    action = gnc_main_window_find_action(gnc_main_window,
+                                         MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW);
+    if (action)
+    {
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),
+                                     logwindow_visible);
+    }
+}
+
 /************************************************************
  *                    Command Callbacks                     *
  ************************************************************/
@@ -486,6 +529,24 @@ gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action,
 
     LEAVE(" ");
 }
+
+static void
+gnc_plugin_ab_cmd_view_logwindow(GtkToggleAction *action, GncMainWindow *window)
+{
+    if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action)))
+    {
+        if (!gnc_GWEN_Gui_show_dialog())
+        {
+            /* Log window could not be made visible */
+            gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), FALSE);
+        }
+    }
+    else
+    {
+        gnc_GWEN_Gui_hide_dialog();
+    }
+}
+
 
 static void
 gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data)

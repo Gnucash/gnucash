@@ -42,6 +42,7 @@
 #include "gnc-gwen-gui.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
+#include "gnc-plugin-aqbanking.h"
 #include "md5.h"
 #include "qof.h"
 
@@ -93,6 +94,30 @@ void gnc_GWEN_Gui_shutdown(void)
         gwen_gui = NULL;
         GWEN_Gui_SetGui(NULL);
     }
+}
+void
+gnc_GWEN_Gui_set_close_flag(gboolean close_when_finished)
+{
+    gnc_gconf_set_bool(
+        GCONF_SECTION_AQBANKING, KEY_CLOSE_ON_FINISH,
+        close_when_finished,
+        NULL);
+}
+gboolean
+gnc_GWEN_Gui_get_close_flag()
+{
+    return gnc_gconf_get_bool(GCONF_SECTION_AQBANKING, KEY_CLOSE_ON_FINISH, NULL);
+}
+
+gboolean
+gnc_GWEN_Gui_show_dialog()
+{
+    return
+}
+
+void
+gnc_GWEN_Gui_hide_dialog()
+{
 }
 
 #else
@@ -191,6 +216,7 @@ gboolean ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event,
                              gpointer user_data);
 void ggg_abort_clicked_cb(GtkButton *button, gpointer user_data);
 void ggg_close_clicked_cb(GtkButton *button, gpointer user_data);
+void ggg_close_toggled_cb(GtkToggleButton *button, gpointer user_data);
 
 enum _GuiState
 {
@@ -362,6 +388,71 @@ gnc_GWEN_Gui_shutdown(void)
     full_gui = NULL;
 
     LEAVE(" ");
+}
+
+void
+gnc_GWEN_Gui_set_close_flag(gboolean close_when_finished)
+{
+    gnc_gconf_set_bool(
+        GCONF_SECTION_AQBANKING, KEY_CLOSE_ON_FINISH,
+        close_when_finished,
+        NULL);
+
+    if (full_gui)
+    {
+        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(full_gui->close_checkbutton))
+            != close_when_finished)
+        {
+            gtk_toggle_button_set_active(
+                GTK_TOGGLE_BUTTON(full_gui->close_checkbutton),
+                close_when_finished);
+        }
+    }
+}
+
+gboolean
+gnc_GWEN_Gui_get_close_flag()
+{
+    return gnc_gconf_get_bool(GCONF_SECTION_AQBANKING, KEY_CLOSE_ON_FINISH, NULL);
+}
+
+gboolean
+gnc_GWEN_Gui_show_dialog()
+{
+    GncGWENGui *gui = full_gui;
+
+    if (!gui)
+    {
+        gnc_GWEN_Gui_get(NULL);
+    }
+
+    if (gui)
+    {
+        if (gui->state == HIDDEN)
+        {
+            gui->state = FINISHED;
+        }
+        gtk_toggle_button_set_active(
+            GTK_TOGGLE_BUTTON(gui->close_checkbutton),
+            gnc_gconf_get_bool(GCONF_SECTION_AQBANKING, KEY_CLOSE_ON_FINISH, NULL));
+
+        show_dialog(gui, FALSE);
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+void
+gnc_GWEN_Gui_hide_dialog()
+{
+    GncGWENGui *gui = full_gui;
+
+    if (gui)
+    {
+        hide_dialog(gui);
+    }
 }
 
 static void
@@ -599,6 +690,8 @@ show_dialog(GncGWENGui *gui, gboolean clear_log)
 
     gtk_widget_show(gui->dialog);
 
+    gnc_plugin_aqbanking_set_logwindow_visible(TRUE);
+
     /* Clear the log window */
     if (clear_log)
     {
@@ -618,6 +711,8 @@ hide_dialog(GncGWENGui *gui)
 
     /* Hide the dialog */
     gtk_widget_hide(gui->dialog);
+
+    gnc_plugin_aqbanking_set_logwindow_visible(FALSE);
 
     /* Remember whether the dialog is to be closed when finished */
     gnc_gconf_set_bool(
@@ -1508,6 +1603,24 @@ ggg_close_clicked_cb(GtkButton *button, gpointer user_data)
     ENTER("gui=%p", gui);
 
     hide_dialog(gui);
+
+    LEAVE(" ");
+}
+
+void
+ggg_close_toggled_cb(GtkToggleButton *button, gpointer user_data)
+{
+    GncGWENGui *gui = user_data;
+
+    g_return_if_fail(gui);
+    g_return_if_fail(gui->parent);
+
+    ENTER("gui=%p", gui);
+
+    gnc_gconf_set_bool(
+        GCONF_SECTION_AQBANKING, KEY_CLOSE_ON_FINISH,
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)),
+        NULL);
 
     LEAVE(" ");
 }
