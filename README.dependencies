@@ -78,14 +78,15 @@ swig
 
   alternatives
   ------------
-[lib]gtkhtml3
-webkit
+[lib]gtkhtml3: old html renderer
+webkit: new html renderer
 
   optional
   --------
 aqbanking: online banking
-libdbi + desired database layer
+libdbi + desired database layer: SQL backend
 libofx
+python: python bindings
 
   at runtime, suggested
   ---------------------
