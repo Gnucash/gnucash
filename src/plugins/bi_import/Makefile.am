@@ -19,6 +19,7 @@ libgncmod_bi_import_la_LDFLAGS = -avoid-version
 
 libgncmod_bi_import_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \
@@ -35,6 +36,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/lib/libc \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${QOF_CFLAGS} \

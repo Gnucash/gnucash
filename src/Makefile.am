@@ -25,6 +25,7 @@ GUI_SUBDIRS_2 = \
   import-export \
   business \
   optional \
+  plugins \
   bin
 
 DIST_SUBDIRS = $(NONGUI_SUBDIRS) $(GUI_SUBDIRS_1) report $(GUI_SUBDIRS_2)

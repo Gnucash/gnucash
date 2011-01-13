@@ -34,6 +34,10 @@
 #include "config.h"
 #endif
 
+#ifndef HAVE_LOCALTIME_R
+#include "localtime_r.h"
+#endif
+
 #include <glib/gi18n.h>
 #include <regex.h>
 #include <glib.h>
