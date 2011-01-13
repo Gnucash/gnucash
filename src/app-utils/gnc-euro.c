@@ -47,6 +47,7 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
     { "CYP",  .585274 },  /* cyprus pound */
     { "DEM",  1.95583 },  /* german mark */
     { "DM",   1.95583 },  /* german mark */
+    { "EEK",  15.6466 },  /* Estonian Kroon */
     { "ESC",  200.482 },  /* portugese escudo */
     { "ESP",  166.386 },  /* spanish peseta */
     { "EUR",  1.00000 },  /* euro */

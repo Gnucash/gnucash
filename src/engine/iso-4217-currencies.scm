@@ -86,7 +86,7 @@
 ( "Dominican Peso" "peso" "centavo"  "ISO4217" "DOP" "214" 100 100 "RD$" )
 ( "Algerian Dinar" "dinar" "santeem"  "ISO4217" "DZD" "012" 100 100 "DA" ) ;; ar.: 	دج
 ( "Ecuador Sucre" "sucre" "centavo" "ISO4217" "ECS" "218" 100 100 "S/." ) ;; 2000-09-15 "USD" 25000
-( "Kroon" "kroon" "sent" "ISO4217" "EEK" "233" 100 100 "kr" )
+( "Kroon" "kroon" "sent" "ISO4217" "EEK" "233" 100 100 "kr" ) ;; 2011-01-01 "EUR" 15.6466
 ( "Egyptian Pound" "pound" "qirsh"  "ISO4217" "EGP" "818" 100 100 "£E" ) ;; ar.:ج.م maleem=0.001 £E for accounting?
 ( "Nakfa" "nakfa" "cent" "ISO4217" "ERN" "232" 100 100 "Nfa" )
 ( "Spanish Peseta" "peseta" "centimo"  "ISO4217" "ESP" "724" 100 100 "₧" ) ;; 2002-01-01 "EUR" 166.386
