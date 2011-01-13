@@ -1,9 +1,10 @@
-/*
- * gncEntryLedgerControl.c -- Control for GncEntry ledger
+/** \file gncEntryLedgerControl.c
+ * \brief Control for GncEntry ledger
+ *
  * Copyright (C) 2001, 2002, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
- * Copyright (C) 2010 Christian Stimming <christian@cstimming.de>
- *
+ * Copyright (C) 2010 Christian Stimming <christian@cstimming.de> */
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -149,16 +150,16 @@ gnc_entry_ledger_verify_acc_cell_ok (GncEntryLedger *ledger,
     name = cell->cell.value;
     if (!name || *name == '\0')
     {
-        /* Translators: %s is the string "an Account" i.e. its translation. */
-        const char *format = _("Invalid Entry:  You need to supply %s.");
+        const char *format = ("%s %s");
+        const char *gen_msg = _("Invalid Entry: You need to supply an account in the right currency for this position.");
 
-        gnc_error_dialog (ledger->parent, format, cell_msg);
+        gnc_error_dialog (ledger->parent, format, gen_msg, cell_msg);
         return FALSE;
     }
     return TRUE;
 }
 
-/* Verify whether we can save the entry, or warn the user when we can't
+/** Verify whether we can save the entry, or warn the user when we can't
  * return TRUE if we can save, FALSE if there is a problem
  */
 static gboolean
@@ -176,13 +177,13 @@ gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger)
         {
         case GNCENTRY_INVOICE_ENTRY:
             if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_IACCT_CELL,
-                    _("an Account")))
+                    _("This account should usually be of type income.")))
                 return FALSE;
             break;
         case GNCENTRY_BILL_ENTRY:
         case GNCENTRY_EXPVOUCHER_ENTRY:
             if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_BACCT_CELL,
-                    _("an Account")))
+                    _("This account should usually be of type expense or asset.")))
                 return FALSE;
             break;
         default:
