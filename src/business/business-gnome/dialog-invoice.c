@@ -2698,7 +2698,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     /* we want to find all invoices where:
      *      invoice -> is_posted == TRUE
      * AND  invoice -> lot -> is_closed? == FALSE
-     * AND  invoice -> type != "Invoice"
+     * AND  invoice -> type != _("Invoice") // note: currently the translated form
      * AND  invoice -> due >= (today - days_in_advance)
      */
 
@@ -2708,10 +2708,12 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     qof_query_add_boolean_match (q, g_slist_prepend(g_slist_prepend(NULL, LOT_IS_CLOSED),
                                  INVOICE_POST_LOT), FALSE, QOF_QUERY_AND);
 
-    /* Watch out: Do *not* translate the string "Invoice" here because
-       it must match the QofObject.type_label string exactly, which
-       implies it is used in untranslated form! */
-    pred_data = qof_query_string_predicate (QOF_COMPARE_NEQ, "Invoice",
+    /* Bug#602091, #639365: The INVOICE_TYPE string unfortunately is
+     * stored in translated form due to the usage of gncInvoiceGetType
+     * for user-visible strings as well. Hence, as an exception we
+     * must also search for the translated here even though it's an
+     * internal flag. */
+    pred_data = qof_query_string_predicate (QOF_COMPARE_NEQ, _("Invoice"),
                                             QOF_STRING_MATCH_NORMAL, FALSE);
     qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
 
