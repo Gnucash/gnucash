@@ -95,6 +95,7 @@ gint64 gnc_getline (gchar **line, FILE *file);
 /* Definitions shared by file-utils.c and gnc-main-window.c */
 #define STATE_FILE_TOP           "Top"
 #define STATE_FILE_BOOK_GUID     "BookGuid"
+#define STATE_FILE_EXT           ".gcm"
 
 /** Find the state file that corresponds to this URL and guid.
  *
