@@ -107,6 +107,7 @@ typedef enum
     /* database errors */
     ERR_SQL_MISSING_DATA = 3000,  /**< database doesn't contain expected data */
     ERR_SQL_DB_TOO_OLD,           /**< database is old and needs upgrading */
+    ERR_SQL_DB_TOO_NEW,		  /**< database is newer, we can't write to it */
     ERR_SQL_DB_BUSY,              /**< database is busy, cannot upgrade version */
 
     /* RPC errors */

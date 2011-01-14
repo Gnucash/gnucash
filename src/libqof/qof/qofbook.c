@@ -76,6 +76,7 @@ qof_book_init (QofBook *book)
     book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
 
     book->book_open = 'y';
+    book->read_only = FALSE;
     book->version = 0;
 }
 
@@ -301,6 +302,20 @@ qof_book_get_data (const QofBook *book, const char *key)
     return g_hash_table_lookup (book->data_tables, (gpointer)key);
 }
 
+/* ====================================================================== */
+gboolean
+qof_book_is_readonly(const QofBook *book)
+{
+    g_return_val_if_fail( book != NULL, TRUE );
+    return book->read_only;
+}
+
+void
+qof_book_mark_readonly(QofBook *book)
+{
+    g_return_if_fail( book != NULL );
+    book->read_only = TRUE;
+}
 /* ====================================================================== */
 
 QofCollection *

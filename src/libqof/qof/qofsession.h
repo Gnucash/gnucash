@@ -234,6 +234,17 @@ gboolean qof_session_save_in_progress(const QofSession *session);
  */
 void     qof_session_save (QofSession *session,
                            QofPercentageFunc percentage_func);
+
+/**
+ * A special version of save used in the sql backend which moves the
+ * existing tables aside, then saves everything to new tables, then
+ * deletes the old tables after the save is completed without
+ * error. If there are errors, it removes the old tables and renames
+ * the new tables back.
+ */
+void     qof_session_safe_save (QofSession *session,
+				QofPercentageFunc percentage_func);
+
 /**
  * The qof_session_end() method will release the session lock. For the
  *    file backend, it will *not* save the data to a file. Thus,

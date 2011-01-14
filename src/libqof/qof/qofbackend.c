@@ -129,6 +129,7 @@ qof_backend_init(QofBackend *be)
     be->run_query = NULL;
 
     be->sync = NULL;
+    be->safe_sync = NULL;
     be->load_config = NULL;
 
     be->events_pending = NULL;

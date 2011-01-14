@@ -96,6 +96,12 @@ struct _QofBook
     /* Hash table of destroy callbacks for the data table. */
     GHashTable *data_table_finalizers;
 
+    /* Boolean indicates whether book is safe to write to (true means
+     * that it isn't. The usual reason will be a database version
+     * mismatch with the running instance of Gnucash.
+     */
+    gboolean read_only;
+
     /* state flag: 'y' means 'open for editing',
      * 'n' means 'book is closed'
      * xxxxx shouldn't this be replaced by the instance editlevel ???
@@ -220,6 +226,12 @@ void qof_book_set_data_fin (QofBook *book, const gchar *key, gpointer data,
 
 /** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (const QofBook *book, const gchar *key);
+
+/** Return whether the book is read only. */
+gboolean qof_book_is_readonly(const QofBook *book);
+
+/** Mark the book as read only. */
+void qof_book_mark_readonly(QofBook *book);
 
 #endif /* SWIG */
 

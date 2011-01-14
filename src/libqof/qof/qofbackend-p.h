@@ -311,6 +311,7 @@ struct QofBackend_s
     void (*run_query) (QofBackend *, gpointer);
 
     void (*sync) (QofBackend *, /*@ dependent @*/ QofBook *);
+    void (*safe_sync) (QofBackend *, /*@ dependent @*/ QofBook *);
     void (*load_config) (QofBackend *, KvpFrame *);
     /*@ observer @*/
     KvpFrame* (*get_config) (QofBackend *);

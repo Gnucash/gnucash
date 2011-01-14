@@ -1250,9 +1250,10 @@ qof_session_load (QofSession *session,
     */
     err = qof_session_get_error(session);
     if ((err != ERR_BACKEND_NO_ERR) &&
-            (err != ERR_FILEIO_FILE_TOO_OLD) &&
-            (err != ERR_FILEIO_NO_ENCODING) &&
-            (err != ERR_SQL_DB_TOO_OLD))
+	(err != ERR_FILEIO_FILE_TOO_OLD) &&
+	(err != ERR_FILEIO_NO_ENCODING) &&
+	(err != ERR_SQL_DB_TOO_OLD) &&
+	(err != ERR_SQL_DB_TOO_NEW))
     {
         /* Something broke, put back the old stuff */
         qof_book_set_backend (newbook, NULL);
@@ -1262,7 +1263,6 @@ qof_session_load (QofSession *session,
         LEAVE("error from backend %d", qof_session_get_error(session));
         return;
     }
-
     for (node = oldbooks; node; node = node->next)
     {
         ob = node->data;
@@ -1449,6 +1449,27 @@ leave:
     g_atomic_int_inc(&session->lock);
     return;
 }
+
+void
+qof_session_safe_save(QofSession *session, QofPercentageFunc percentage_func)
+{
+    QofBackend *be = session->backend;
+    gint err;
+    char *msg = NULL;
+    g_return_if_fail( be != NULL );
+    g_return_if_fail( be->safe_sync != NULL );
+    be->percentage = percentage_func;
+    (be->safe_sync)( be, qof_session_get_book( session ));
+    err = qof_backend_get_error(session->backend);
+    msg = qof_backend_get_message(session->backend);
+    if (err != ERR_BACKEND_NO_ERR)
+    {
+	g_free(session->book_id);
+	session->book_id = NULL;
+	qof_session_push_error (session, err, msg);
+    }
+}
+
 
 /* ====================================================================== */
 gboolean
