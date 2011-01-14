@@ -244,7 +244,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
     QofBook *book;
     const GncGUID *guid;
     const gchar *url, *guid_string;
-    gchar *file_guid, *filename = NULL;
+    gchar *file_guid;
     GError *error = NULL;
 
     url = qof_session_get_url(session);
@@ -260,9 +260,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
     guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_string = guid_to_string(guid);
 
-    keyfile = gnc_find_state_file(url, guid_string, &filename);
-    if (filename)
-        g_free(filename);
+    keyfile = gnc_find_state_file(url, guid_string, NULL);
 
     if (!keyfile)
     {
