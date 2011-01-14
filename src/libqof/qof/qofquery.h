@@ -28,7 +28,7 @@ queries to find sets of arbitrary object.  To make simple
 queries (1 term, such as a search for a parameter with one value),
 create the appropriate
 QueryTerm structure and stick it in a Query object using
-xaccInitQuery. The QueryTerm should be malloced but the Query object
+xaccInitQuery. The QueryTerm should be malloc'd but the Query object
 will handle freeing it.  To make compound queries, make multiple
 simple queries and combine them using qof_query_merge() and the logical
 operations of your choice.
@@ -42,7 +42,7 @@ core representation, and execute it.
 STRUCTURE OF A QUERY: A Query is a logical function of any number of
 QueryTerms.  A QueryTerm consists of a C function pointer (the
 Predicate) and a PredicateData structure containing data passed to the
-predicate funtion.  The PredicateData structure is a constant
+predicate function.  The PredicateData structure is a constant
 associated with the Term and is identical for every object that is
 tested.
 
@@ -113,7 +113,7 @@ typedef enum
 /** \name Query Subsystem Initialization and Shudown  */
 // @{
 /** Subsystem initialization and shutdown. Call init() once
- *  to initalize the query subsystem; call shutdown() to free
+ *  to initialize the query subsystem; call shutdown() to free
  *  up any resources associated with the query subsystem.
  *  Typically called during application startup, shutdown.
  */
@@ -162,7 +162,7 @@ void qof_query_set_book (QofQuery *q, QofBook *book);
 
 /** This is the general function that adds a new Query Term to a query.
  * It will find the 'obj_type' object of the search item and compare
- * the 'param_list' parameter to the predicate data via the comparitor.
+ * the 'param_list' parameter to the predicate data via the comparator.
  *
  * The param_list is a recursive list of parameters.  For example, you
  * can say 'split->memo' by creating a list of one element, "SPLIT_MEMO".
@@ -208,7 +208,7 @@ void qof_query_add_boolean_match (QofQuery *q,
  *  The returned list is a list of the 'search-for' type that was
  *  previously set with the qof_query_search_for() or the
  *  qof_query_create_for() routines.  The returned list will have
- *  been sorted using the indicated sort order, and trimed to the
+ *  been sorted using the indicated sort order, and trimmed to the
  *  max_results length.
  *
  *  Do NOT free the resulting list.  This list is managed internally
@@ -302,12 +302,12 @@ void qof_query_merge_in_place(QofQuery *q1, QofQuery *q2, QofQueryOp op);
 
 /**
  * When a query is run, the results are sorted before being returned.
- * This routine can be used to set the paramters on which the sort will
+ * This routine can be used to set the parameters on which the sort will
  * be performed.  Two objects in the result list will be compared using
  * the 'primary_sort_params', and sorted based on that order.  If the
  * comparison shows that they are equal, then the
  * 'secondary_sort_params' will be used.  If still equal, then the
- * tertiary params will be compared.  Any or all of these parameter
+ * tertiary parameters will be compared.  Any or all of these parameter
  * lists may be NULL.  Any of these parameter lists may be set to
  * QUERY_DEFAULT_SORT.
  *

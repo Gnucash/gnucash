@@ -44,8 +44,8 @@
  */
 typedef struct _QofQueryPredData QofQueryPredData;
 
-/** Standard Query comparitors, for how to compare objects in a predicate.
- *  Note that not all core types implement all comparitors
+/** Standard Query comparators, for how to compare objects in a predicate.
+ *  Note that not all core types implement all comparators
  */
 typedef enum
 {
@@ -58,7 +58,7 @@ typedef enum
 } QofQueryCompare;
 
 /** List of known core query data-types...
- *  Each core query type defines it's set of optional "comparitor qualifiers".
+ *  Each core query type defines it's set of optional "comparator qualifiers".
  */
 /* Comparisons for QOF_TYPE_STRING */
 typedef enum
@@ -172,7 +172,7 @@ QofQueryPredData *qof_query_choice_predicate  (QofGuidMatch options, GList *guid
 
 /** The qof_query_kvp_predicate() matches the object that has
  *  the value 'value' located at the path 'path'.  In a certain
- *  sense, the 'path' is handled as if it were a paramter.
+ *  sense, the 'path' is handled as if it were a parameter.
  */
 QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
         QofQueryParamList *path,
