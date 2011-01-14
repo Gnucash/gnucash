@@ -34,6 +34,7 @@
 #include "gnc-engine.h"
 #include "Account.h"
 #include "gnc-file.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
 #include "gnc-keyring.h"
@@ -396,6 +397,13 @@ show_session_error (QofBackendError io_error,
     case ERR_FILEIO_FILE_EACCES:
         fmt = _("No read permission to read from file %s.");
         gnc_error_dialog (parent, fmt, displayname);
+        break;
+
+    case ERR_FILEIO_RESERVED_WRITE:
+        fmt = _("You attempted to save in\n%s\nor a subdirectory thereof.  "
+                "This is not allowed as %s reserves that directory for internal use.\n\n"
+                "Please try again in a different directory.");
+        gnc_error_dialog (parent, fmt, gnc_dotgnucash_dir(), PACKAGE_NAME);
         break;
 
     case ERR_SQL_DB_TOO_OLD:
@@ -1210,12 +1218,23 @@ gnc_file_do_save_as (const char* filename)
         newfile = norm_file;
     }
 
-    /* For file based uri's, remember the directory as the default. */
+    /* Some extra steps for file based uri's only */
     if (gnc_uri_is_file_protocol(protocol))
     {
+        /* Remember the directory as the default. */
         gchar *default_dir = g_path_get_dirname(path);
         gnc_set_default_directory (GCONF_DIR_OPEN_SAVE, default_dir);
         g_free(default_dir);
+
+        /* Prevent user to store file in GnuCash' private configuration
+         * directory (~/.gnucash by default in linux, but can be overridden)
+         */
+        DEBUG("User path: %s, dotgnucash_dir: %s", path, gnc_dotgnucash_dir());
+        if (g_str_has_prefix(path, gnc_dotgnucash_dir()))
+        {
+            show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile, GNC_FILE_DIALOG_SAVE);
+            return;
+        }
     }
 
     /* Check to see if the user specified the same file as the current

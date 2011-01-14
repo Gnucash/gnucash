@@ -96,6 +96,8 @@ typedef enum
     ERR_FILEIO_READ_ERROR,     /**< Could not open the file for reading. */
     ERR_FILEIO_NO_ENCODING,    /**< file does not specify encoding */
     ERR_FILEIO_FILE_EACCES,    /**< No read access permission for the given file */
+    ERR_FILEIO_RESERVED_WRITE, /**< User attempt to write to a directory reserved
+                                    for internal use by GnuCash */
 
     /* network errors */
     ERR_NETIO_SHORT_READ = 2000,  /**< not enough bytes received */
