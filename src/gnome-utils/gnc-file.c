@@ -400,6 +400,9 @@ show_session_error (QofBackendError io_error,
         break;
 
     case ERR_FILEIO_RESERVED_WRITE:
+        /* Translators: the first %s is a path in the filesystem,
+         * the second %s is PACKAGE_NAME, which by default is "GnuCash"
+         */
         fmt = _("You attempted to save in\n%s\nor a subdirectory thereof.  "
                 "This is not allowed as %s reserves that directory for internal use.\n\n"
                 "Please try again in a different directory.");
@@ -1004,12 +1007,23 @@ gnc_file_do_export(const char * filename)
         newfile = norm_file;
     }
 
-    /* For file based uri's, remember the directory as the default. */
+    /* Some extra steps for file based uri's only */
     if (gnc_uri_is_file_protocol(protocol))
     {
+        /* Remember the directory as the default. */
         gchar *default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GCONF_DIR_EXPORT, default_dir);
+        gnc_set_default_directory (GCONF_DIR_OPEN_SAVE, default_dir);
         g_free(default_dir);
+
+        /* Prevent user to store file in GnuCash' private configuration
+         * directory (~/.gnucash by default in linux, but can be overridden)
+         */
+        DEBUG("User path: %s, dotgnucash_dir: %s", path, gnc_dotgnucash_dir());
+        if (g_str_has_prefix(path, gnc_dotgnucash_dir()))
+        {
+            show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile, GNC_FILE_DIALOG_SAVE);
+            return;
+        }
     }
 
     /* Check to see if the user specified the same file as the current
