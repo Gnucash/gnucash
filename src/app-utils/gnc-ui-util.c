@@ -183,7 +183,11 @@ gnc_get_default_directory (const gchar *gconf_section)
 
     dir = gnc_gconf_get_string (gconf_section, KEY_LAST_PATH, NULL);
     if (!dir)
+#ifdef G_OS_WIN32
+        dir = g_strdup (g_get_user_data_dir ()); /* equivalent of "My Documents" */
+#else
         dir = g_strdup (g_get_home_dir ());
+#endif
 
     return dir;
 }
