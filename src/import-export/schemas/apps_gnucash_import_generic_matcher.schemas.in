@@ -55,7 +55,7 @@
       <applyto>/apps/gnucash/dialogs/import/generic_matcher/enable_update</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
-      <default>FALSE</default>
+      <default>TRUE</default>
       <locale name="C">
         <short>Enable UPDATE match action</short>
         <long>
