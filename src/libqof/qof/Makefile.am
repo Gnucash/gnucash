@@ -1,4 +1,4 @@
-SUBDIRS = test
+#SUBDIRS = test
 
 lib_LTLIBRARIES = libgnc-qof.la
 
