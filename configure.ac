@@ -1444,10 +1444,6 @@ AC_CONFIG_FILES(
   src/import-export/log-replay/Makefile
   src/import-export/aqbanking/Makefile
   src/import-export/aqbanking/schemas/Makefile
-  src/import-export/hbci/Makefile
-  src/import-export/hbci/glade/Makefile
-  src/import-export/hbci/schemas/Makefile
-  src/import-export/hbci/test/Makefile
   src/libqof/Makefile
   src/libqof/qof/Makefile
   src/optional/Makefile
