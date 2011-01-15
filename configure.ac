@@ -744,19 +744,18 @@ AC_ARG_ENABLE( aqbanking,
     want_aqbanking=yes
   fi)
 AC_ARG_ENABLE( hbci,
-  [AS_HELP_STRING([--enable-hbci],[an alias for --enable-aqbanking])],
+  [AS_HELP_STRING([--enable-hbci],[obsolete, replaced by --enable-aqbanking])],
   if test "x$enableval" != "xno" ; then
-    want_aqbanking=yes
+    AC_MSG_ERROR([--enable-hbci is obsolete -- the option has been renamed into --enable-aqbanking])
   fi)
 if test x${want_aqbanking} = xyes ;
 then
   # Check for Aqbanking library
-  # aqbanking-1.6.1 was released on 2005-11-04; aqbanking ships with
-  # a pkg-config file since 1.6.1.
-  PKG_CHECK_MODULES(AQBANKING, aqbanking >= 3.0.0 gwenhywfar, [AQBANKING_DIR=aqbanking], [
-    PKG_CHECK_MODULES(AQBANKING, aqbanking >= 1.6.1 aqbanking < 2.9.0 gwenhywfar, [AQBANKING_DIR=hbci], [
-      AC_MSG_ERROR([Could not find aqbanking > 1.6.0. If you use --enable-aqbanking or --enable-hbci, you *have* to have aqbanking installed!])
-    ])
+  # We require aqbanking-4.0.0 because our implementation doesn't run
+  # with earlier version anymore. (libaqbanking ships with a pkgconfig
+  # file since its version 1.6.1.)
+  PKG_CHECK_MODULES(AQBANKING, aqbanking >= 4.0.0 gwenhywfar, [AQBANKING_DIR=aqbanking], [
+    AC_MSG_ERROR([Could not find aqbanking >= 4.0.0. If you use --enable-aqbanking, you *have* to have aqbanking installed!])
   ])
   # For libgwenhywfar > 3.99.20, look for its library gwengui-gtk2.
   PKG_CHECK_MODULES([GWENGUI_GTK2], [gwengui-gtk2 gwenhywfar], [has_gwengui_gtk2=1], [has_gwengui_gtk2=0])
