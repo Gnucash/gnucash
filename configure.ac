@@ -200,6 +200,17 @@ else
   AC_MSG_RESULT(no)
 fi
 
+AC_MSG_CHECKING([for GLib testing (glib >= 2.16.0)])
+if $PKG_CONFIG 'glib-2.0 >= 2.16.0'
+then
+  AC_MSG_RESULT(yes)
+  _have_glib_testing=yes
+else
+  AC_MSG_RESULT(no)
+  _have_glib_testing=no
+fi
+AM_CONDITIONAL(HAVE_GLIB_TESTING, test "x$_have_glib_testing" = "xyes")
+
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 # Gnucash replaced dlopen/dlsym by the g_module functions; dlsym
@@ -1446,6 +1457,7 @@ AC_CONFIG_FILES(
   src/import-export/aqbanking/schemas/Makefile
   src/libqof/Makefile
   src/libqof/qof/Makefile
+  src/libqof/qof/test/Makefile
   src/optional/Makefile
   src/optional/python-bindings/Makefile
   src/optional/python-bindings/tests/Makefile

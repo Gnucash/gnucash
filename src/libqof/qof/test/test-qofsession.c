@@ -27,6 +27,7 @@
 #include <qofsession-p.h>
 
 static const gchar *suitename = "/qof/qofsession";
+void test_suite_qofsession ( void );
 
 typedef struct
 {
@@ -69,7 +70,7 @@ test_session_safe_save( Fixture *fixture, gconstpointer pData )
     g_assert( NULL == qof_session_get_url( fixture->session ));
 }
 
-GTestSuite*
+void
 test_suite_qofsession ( void )
 {
     g_test_add( suitename, Fixture, NULL, setup, test_session_safe_save, teardown );

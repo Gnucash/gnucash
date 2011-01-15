@@ -25,6 +25,7 @@
 #include <qof.h>
 
 static const gchar *suitename = "/qof/qofbook";
+void test_suite_qofbook ( void );
 
 typedef struct
 {

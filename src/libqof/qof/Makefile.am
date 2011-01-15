@@ -1,4 +1,8 @@
-#SUBDIRS = test
+if HAVE_GLIB_TESTING
+SUBDIRS = . test
+else
+SUBDIRS = .
+endif
 
 lib_LTLIBRARIES = libgnc-qof.la
 
