@@ -3,6 +3,7 @@
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditInvoice"        action="EditEditInvoiceAction"/>
+        <menuitem name="EditDuplicateInvoice"   action="EditDuplicateInvoiceAction"/>
         <menuitem name="EditPostInvoice"        action="EditPostInvoiceAction"/>
         <menuitem name="EditUnpostInvoice"      action="EditUnpostInvoiceAction"/>
       </placeholder>
@@ -51,6 +52,7 @@
   <toolbar name="DefaultToolbar">
     <placeholder name="DefaultToolbarPlaceholder">
       <toolitem name="ToolbarEditInvoice"       action="EditEditInvoiceAction"/>
+      <toolitem name="ToolbarDuplicateInvoice"  action="EditDuplicateInvoiceAction"/>
       <toolitem name="ToolbarRecordEntry"    	action="RecordEntryAction"/>
       <toolitem name="ToolbarCancelEntry"    	action="CancelEntryAction"/>
       <toolitem name="ToolbarDeleteEntry"    	action="DeleteEntryAction"/>

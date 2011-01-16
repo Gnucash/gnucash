@@ -465,6 +465,16 @@ gnc_invoice_window_editCB (GtkWidget *widget, gpointer data)
 }
 
 void
+gnc_invoice_window_duplicateInvoiceCB (GtkWidget *widget, gpointer data)
+{
+    InvoiceWindow *iw = data;
+    GncInvoice *invoice = iw_get_invoice (iw);
+
+    if (invoice)
+        gnc_ui_invoice_duplicate (invoice);
+}
+
+void
 gnc_invoice_window_recordCB (GtkWidget *widget, gpointer data)
 {
     InvoiceWindow *iw = data;
