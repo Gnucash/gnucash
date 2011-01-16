@@ -2285,6 +2285,70 @@ gnc_ui_invoice_modify (GncInvoice *invoice)
     return iw;
 }
 
+static void
+set_gncEntry_date(gpointer data, gpointer user_data)
+{
+    GncEntry *entry = data;
+    const Timespec* new_date = user_data;
+    //g_warning("Modifying date for entry with desc=\"%s\"", gncEntryGetDescription(entry));
+
+    gncEntrySetDate(entry, *new_date);
+    gncEntrySetDateEntered(entry, *new_date);
+}
+
+
+InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice)
+{
+    InvoiceWindow *iw;
+    GncInvoice *new_invoice = NULL;
+    Timespec new_date;
+    gchar *new_id;
+    GList *node;
+
+    g_assert(old_invoice);
+
+    // Create a deep copy of the old invoice
+    new_invoice = gncInvoiceCopy(old_invoice);
+
+    // The new invoice is for sure active
+    gncInvoiceSetActive(new_invoice, TRUE);
+
+    // and unposted
+    if (gncInvoiceIsPosted (new_invoice))
+    {
+        gboolean result = gncInvoiceUnpost(new_invoice, TRUE);
+        if (!result)
+        {
+            g_warning("Oops, error when unposting the copied invoice; ignoring.");
+        }
+    }
+
+    // Set a new id from the respective counter
+    new_id = gncInvoiceNextID(gnc_get_current_book(),
+                              gncInvoiceGetOwner(new_invoice));
+    gncInvoiceSetID(new_invoice, new_id);
+    g_free(new_id);
+
+    // Modify the date to today
+    timespecFromTime_t(&new_date, gnc_timet_get_today_start());
+    gncInvoiceSetDateOpened(new_invoice, new_date);
+
+    // Also modify the date of all entries to today
+    //g_warning("We have %d entries", g_list_length(gncInvoiceGetEntries(new_invoice)));
+    g_list_foreach(gncInvoiceGetEntries(new_invoice),
+                   &set_gncEntry_date, &new_date);
+
+    // Now open that newly created invoice in the "edit" window
+    iw = gnc_ui_invoice_edit (new_invoice);
+
+    // And also open the "properties" pop-up... however, changing the
+    // invoice ID won't be copied over to the tab title even though
+    // it's correctly copied into the invoice.
+    iw = gnc_invoice_window_new_invoice (NULL, NULL, new_invoice);
+
+    return iw;
+}
+
 InvoiceWindow *
 gnc_ui_invoice_new (GncOwner *ownerp, QofBook *bookp)
 {
@@ -2343,6 +2407,22 @@ pay_invoice_cb (gpointer *invoice_p, gpointer user_data)
     pay_invoice_direct (*invoice_p, user_data);
 }
 
+static void
+duplicate_invoice_direct (gpointer invoice, gpointer user_data)
+{
+    g_return_if_fail (invoice);
+    gnc_ui_invoice_duplicate (invoice);
+}
+
+static void
+duplicate_invoice_cb (gpointer *invoice_p, gpointer user_data)
+{
+    g_return_if_fail (invoice_p && user_data);
+    if (! *invoice_p)
+        return;
+    duplicate_invoice_direct (*invoice_p, user_data);
+}
+
 static gpointer
 new_invoice_cb (gpointer user_data)
 {
@@ -2381,12 +2461,14 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     {
         { N_("View/Edit Invoice"), edit_invoice_cb},
         { N_("Process Payment"), pay_invoice_cb},
+        { N_("Duplicate"), duplicate_invoice_cb},
         { NULL },
     };
     static GNCSearchCallbackButton bill_buttons[] =
     {
         { N_("View/Edit Bill"), edit_invoice_cb},
         { N_("Process Payment"), pay_invoice_cb},
+        { N_("Duplicate"), duplicate_invoice_cb},
         { NULL },
     };
     static GNCSearchCallbackButton emp_buttons[] =
@@ -2395,6 +2477,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
            interchangeably in gnucash and mean the same thing. */
         { N_("View/Edit Voucher"), edit_invoice_cb},
         { N_("Process Payment"), pay_invoice_cb},
+        { N_("Duplicate"), duplicate_invoice_cb},
         { NULL },
     };
 

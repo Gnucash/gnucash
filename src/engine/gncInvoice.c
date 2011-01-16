@@ -343,7 +343,6 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
 
     invoice->to_charge_amount = from->to_charge_amount;
     invoice->date_opened = from->date_opened;
-    invoice->date_posted = from->date_posted;
 
     // Copy all invoice->entries
     for (node = from->entries; node; node = node->next)
@@ -363,6 +362,11 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
             gncInvoiceAddEntry(invoice, to_entry);
         }
     }
+
+    // FIXME: The prices are not (yet) copied; is this a problem?
+
+    // Posted-date and the posted Txn is intentionally not copied; the
+    // copy isn't "posted" but needs to be posted by the user.
 
     gncInvoiceCommitEdit(invoice);
 

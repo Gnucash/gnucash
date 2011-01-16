@@ -54,6 +54,7 @@ typedef enum
 /* Create and edit an invoice */
 InvoiceWindow * gnc_ui_invoice_edit (GncInvoice *invoice);
 InvoiceWindow * gnc_ui_invoice_new (GncOwner *owner, QofBook *book);
+InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *invoice);
 
 /* Search for invoices */
 GNCSearchWindow * gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book);
