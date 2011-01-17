@@ -334,15 +334,13 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     case KVP_TYPE_GLIST:
     {
         GList *cursor;
-        GList *sorted = g_list_sort(g_list_copy(kvp_value_get_glist(val)), (GCompareFunc)strcmp);
 
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "list");
-        for (cursor = sorted; cursor; cursor = cursor->next)
+        for (cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
         {
             kvp_value *val = (kvp_value*)cursor->data;
             add_kvp_value_node(val_node, "slot:value", val);
         }
-        g_list_free(sorted);
     }
 
     break;

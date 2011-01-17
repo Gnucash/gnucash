@@ -349,6 +349,7 @@ test_add_transaction(const char *tag, gpointer globaldata, gpointer data)
 {
     Transaction *trans = data;
     tran_data *gdata = (tran_data*)globaldata;
+    gboolean retval = TRUE;
 
     xaccTransBeginEdit (trans);
     xaccTransSetCurrency (trans, gdata->com);
@@ -358,11 +359,11 @@ test_add_transaction(const char *tag, gpointer globaldata, gpointer data)
                       "gnc_transaction_sixtp_parser_create",
                       __FILE__, __LINE__,
                       "%d", gdata->value))
-        return FALSE;
+        retval = FALSE;
 
     gdata->new_trn = trans;
 
-    return TRUE;
+    return retval;
 }
 
 static void
