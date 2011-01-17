@@ -18,7 +18,12 @@ noinst_HEADERS = \
 libgncmod_bi_import_la_LDFLAGS = -avoid-version
 
 libgncmod_bi_import_la_LIBADD = \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
