@@ -6,7 +6,7 @@ include $(top_srcdir)/test-templates/Makefile.decl
 
 #You will only need one of these: It points to the module directory
 #after $(top_srcdir) or ${top_builddir}:
-MODULEPATH = path/to/foo/
+MODULEPATH = path/to/foo
 
 #The libtool convenience library to assemble the common test code
 #(fixture code, setup and teardown routines, mocks, etc.). Use it only
@@ -34,15 +34,16 @@ test_foo_SOURCES = \
 	#etc.
 
 test_foo_HEADERSS = \
-	$(top_srcdir)${MODULEPATH}module1.h \
-	$(top_srcdir)${MODULEPATH}module2.h \
+	$(top_srcdir)/${MODULEPATH}/module1.h \
+	$(top_srcdir)/${MODULEPATH}/module2.h \
 	#etc.
 
 
 #The tests might require more libraries, but try to keep them
 #as independent as possible.
-test_foo_LDADD = ${top_buildir}${MODULEPATH}libgnc_foo.la
+test_foo_LDADD = ${top_buildir}/${MODULEPATH}/libgnc_foo.la
 
 test_foo_CFLAGS = \
-	-I$(top_srcdir)${MODULEPATH} \
+	${DEFAULT_INCLUDES} \
+	-I$(top_srcdir)/${MODULEPATH}/ \
 	${GLIB_CFLAGS}

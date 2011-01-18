@@ -37,7 +37,7 @@ main (int   argc,
     g_type_init();     /* You may or may not need this, depending on
 			* whether the module you're testing or any
 			* dependencies use GObject. */
-    g_test_init ( &argc, &argv ); /* initialize test program */
+    g_test_init ( &argc, &argv, NULL ); /* initialize test program */
     qof_log_init_filename_special("/dev/null");    /* Initialize the
 			* gnucash logging system. Your tests will
 			* crash on the first logging call otherwise */

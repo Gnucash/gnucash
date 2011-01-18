@@ -34,7 +34,7 @@ main (int   argc,
       char *argv[])
 {
     g_type_init(); 			/* Initialize the GObject system */
-    g_test_init ( &argc, &argv ); 		/* initialize test program */
+    g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
     qof_log_init_filename_special("/dev/null"); /* Init the log system */
 
     test_suite_qofbook();
