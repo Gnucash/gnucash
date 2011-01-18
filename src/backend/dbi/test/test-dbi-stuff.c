@@ -212,3 +212,52 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     qof_session_end( session_3 );
     qof_session_destroy( session_3 );
 }
+
+void
+test_dbi_safe_save( const gchar* driver,  const gchar* url )
+{
+    QofSession *session_1, *session_2;
+
+    printf( "Testing safe save %s\n", driver );
+
+    // Load the session data
+    session_1 = qof_session_new();
+    qof_session_begin( session_1, url, TRUE, FALSE, FALSE );
+    if (session_1 && qof_session_get_error(session_1) != ERR_BACKEND_NO_ERR)
+    {
+        g_warning("Session Error: %d, %s", qof_session_get_error(session_1),
+		  qof_session_get_error_message(session_1));
+	do_test( FALSE, "DB Session Creation Failed");
+	goto cleanup;
+    }
+    qof_session_load( session_1, NULL );
+     /* Do a safe save */
+    qof_session_safe_save( session_1, NULL );
+    if (session_1 && qof_session_get_error(session_1) != ERR_BACKEND_NO_ERR)
+    {
+        g_warning("Session Error: %s", qof_session_get_error_message(session_1));
+	do_test( FALSE, "DB Session Safe Save Failed");
+	goto cleanup;
+    }
+    /* Destroy the session and reload it */
+
+    session_2 = qof_session_new();
+    qof_session_begin( session_2, url, TRUE, FALSE, FALSE );
+    if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
+    {
+        g_warning("Session Error: %d, %s", qof_session_get_error(session_2),
+		  qof_session_get_error_message(session_2));
+	do_test( FALSE, "DB Session re-creation Failed");
+	goto cleanup;
+    }
+    qof_session_load( session_2, NULL );
+     compare_books( qof_session_get_book( session_1 ),
+		   qof_session_get_book( session_2 ) );
+
+cleanup:
+    qof_session_end( session_2 );
+    qof_session_destroy( session_2 );
+    qof_session_end( session_1 );
+    qof_session_destroy( session_1 );
+    return;
+}

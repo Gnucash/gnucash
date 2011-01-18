@@ -26,6 +26,23 @@
 #include <dbi/dbi.h>
 #include "gnc-backend-sql.h"
 
+/**
+ * Options to conn_table_operation
+ * @var drop Drop (remove without recourse) the table from the database
+ * @var empty Delete all of the records from the table
+ * @var backup Rename the table "name" to "name_back"
+ * @var rollback drop the name table if it exists and rename name_back to name
+ * @var drop_backup Drop the backup table
+ */
+typedef enum
+{
+    drop = 0,
+    empty,
+    backup,
+    rollback,
+    drop_backup
+} TableOpType;
+
 typedef gchar* (*CREATE_TABLE_DDL_FN)( GncSqlConnection* conn,
                                        const gchar* table_name,
                                        const GList* col_info_list );
@@ -79,6 +96,7 @@ typedef struct
     // be used to prevent infinite loops.
     gboolean retry;         // Signals the calling function that it should retry (the error handler detected
     // transient error and managed to resolve it, but it can't run the original query)
+
 } GncDbiSqlConnection;
 
 #endif //GNC_BACKEND_DBI_PRIV_H

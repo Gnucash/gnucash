@@ -83,12 +83,13 @@ static /*@ null @*/ gchar* conn_create_table_ddl_sqlite3( GncSqlConnection* conn
         const gchar* table_name,
         const GList* col_info_list );
 static GSList* conn_get_table_list( dbi_conn conn, const gchar* dbname );
+static GSList* conn_get_table_list_sqlite3( dbi_conn conn, const gchar* dbname );
 static void append_sqlite3_col_def( GString* ddl, GncSqlColumnInfo* info );
 static GSList *conn_get_index_list_sqlite3( dbi_conn conn );
 static provider_functions_t provider_sqlite3 =
 {
     conn_create_table_ddl_sqlite3,
-    conn_get_table_list,
+    conn_get_table_list_sqlite3,
     append_sqlite3_col_def,
     conn_get_index_list_sqlite3
 };
@@ -145,6 +146,19 @@ static GncSqlConnection* create_dbi_connection( /*@ observer @*/ provider_functi
 #define DBI_MAX_CONN_ATTEMPTS 5
 
 /* ================================================================= */
+
+/* Free the contents of a GSList, then free the list. Don't use this
+ * if the elements of the list weren't created with g_new! */
+static void
+gnc_table_slist_free( GSList *table_list )
+{
+    GSList *list;
+    for ( list = table_list; list !=NULL; list = g_slist_next( list ))
+    {
+	g_free( list->data );
+    }
+    g_slist_free( table_list );
+}
 
 static void
 gnc_dbi_set_error( GncDbiSqlConnection* dbi_conn, gint last_error,
@@ -1200,10 +1214,136 @@ save_may_clobber_data( QofBackend* qbe )
     return retval;
 }
 
+static dbi_result
+conn_table_manage_backup (GncDbiSqlConnection *conn,
+			  gchar *table_name, TableOpType op )
+{
+    gchar *new_name = g_strdup_printf( "%s_%s", table_name, "back" );
+    dbi_result result;
+    switch ( op )
+    {
+    case backup:
+	result = dbi_conn_queryf( conn->conn, "ALTER TABLE %s RENAME TO %s",
+				  table_name, new_name );
+	break;
+    case rollback:
+	result = dbi_conn_queryf( conn->conn,
+				  "ALTER TABLE %s RENAME TO %s",
+				  new_name, table_name );
+	break;
+    case drop_backup:
+		result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
+					  new_name );
+    default:
+	break;
+    }
+    g_free( new_name );
+    return result;
+}
+
+/**
+ * Perform a specified SQL operation on every table in a
+ * database. Possible operations are:
+ * * drop: to DROP all tables from the database
+ * * empty: to DELETE all records from each table in the database.
+ * * backup: Rename every table from "name" to "name_back"
+ * * drop_backup: DROP the backup tables.
+ * * rollback: DROP the new table "name" and rename "name_back" to
+ *   "name", restoring the database to its previous state.
+ *
+ * The intent of the last two is to be able to move an existing table
+ * aside, query its contents with a transformation (in 2.4.x this is
+ * already done as the contents are loaded completely when a Qof
+ * session is started), save them to a new table according to a new
+ * database format, and finally drop the backup table; if there's an
+ * error during the process, rollback allows returning the table to
+ * its original state.
+ *
+ * @param sql_conn: The sql connection (via dbi) to which the
+ * transactions will be sent
+ * @param tables: GList of tables to operate on.
+ * @param op: The operation to perform.
+ * @return Success (TRUE) or failure.
+ */
+
+static gboolean
+conn_table_operation( GncSqlConnection *sql_conn, GSList *table_name_list,
+		      TableOpType op )
+{
+    GSList* node;
+    gboolean result = TRUE;
+    GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(sql_conn);
+    GSList *full_table_name_list = NULL;
+    const gchar *dbname = dbi_conn_get_option( conn->conn, "dbname" );
+
+    g_return_val_if_fail( table_name_list != NULL, FALSE );
+    if ( op == rollback )
+	full_table_name_list =
+	    conn->provider->get_table_list( conn->conn, dbname );
+
+    for ( node = table_name_list; node != NULL && result; node = node->next )
+    {
+	gchar* table_name = (gchar*)node->data;
+	dbi_result result;
+	/* Ignore the lock table */
+	if ( g_strcmp0(table_name, lock_table) == 0)
+	{
+	    continue;
+	}
+	do
+	{
+	    gnc_dbi_init_error( conn );
+	    switch( op ) {
+	    case rollback:
+		if (g_slist_find(full_table_name_list, table_name))
+		{
+		    result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
+					      table_name );
+		    if ( result )
+			break;
+		}
+	    /* Note fall-through */
+	    case backup:
+	    case drop_backup:
+		result = conn_table_manage_backup( conn, table_name, op );
+		break;
+	    case empty:
+		result = dbi_conn_queryf( conn->conn, "DELETE FROM TABLE %s",
+					  table_name );
+		break;
+	    case drop:
+	    default:
+		result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
+					  table_name );
+		break;
+	    }
+	}
+	while ( conn->retry );
+	if ( result != NULL )
+	{
+	    if ( dbi_result_free( result ) < 0 )
+	    {
+		PERR( "Error in dbi_result_free() result\n" );
+		result = FALSE;
+	    }
+	}
+    }
+    gnc_table_slist_free( full_table_name_list );
+    return result;
+}
+
+/**
+ * Really a bit of an understatement. More like "delete everything in
+ * storage and replace with what's in memory".
+ *
+ * @param qbe: QofBackend for the session.
+ * @param book: QofBook to be saved in the database.
+ */
 static void
 gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(((GncSqlBackend*)be)->conn);
     GSList* table_name_list;
     const gchar* dbname;
     gint status;
@@ -1215,40 +1355,14 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
 
     /* Destroy the current contents of the database */
     dbname = dbi_conn_get_option( be->conn, "dbname" );
-    table_name_list = ((GncDbiSqlConnection*)(be->sql_be.conn))->provider->get_table_list( be->conn, dbname );
-    if ( table_name_list != NULL )
+    table_name_list = conn->provider->get_table_list( conn->conn, dbname );
+    if ( !conn_table_operation( (GncSqlConnection*)conn, table_name_list,
+				drop ) )
     {
-        GSList* node;
-
-        for ( node = table_name_list; node != NULL; node = node->next )
-        {
-            const gchar* table_name = (const gchar*)node->data;
-            dbi_result result;
-            /* Don't delete the lock table */
-            if ( g_strcmp0(table_name, lock_table) == 0)
-            {
-                continue;
-            }
-            do
-            {
-                gnc_dbi_init_error( ((GncDbiSqlConnection*)(be->sql_be.conn)) );
-                result = dbi_conn_queryf( be->conn, "DROP TABLE %s", table_name );
-            }
-            while ( ((GncDbiSqlConnection*)(be->sql_be.conn))->retry );
-            if ( result != NULL )
-            {
-                status = dbi_result_free( result );
-                if ( status < 0 )
-                {
-                    PERR( "Error in dbi_result_free() result\n" );
-                    qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-                }
-            }
-            g_free( node->data );
-        }
-        g_slist_free( table_name_list );
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        return;
     }
-
+    gnc_table_slist_free( table_name_list );
     /* Save all contents */
     be->is_pristine_db = TRUE;
     be->primary_book = book;
@@ -1257,6 +1371,77 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
     LEAVE( "book=%p", book );
 }
 
+/**
+ * Safely resave a database by renaming all of its tables, recreating
+ * everything, and then dropping the backup tables only if there were
+ * no errors. If there are errors, drop the new tables and restore the
+ * originals.
+ *
+ * @param qbe: QofBackend for the session.
+ * @param book: QofBook to be saved in the database.
+ */
+static void
+gnc_dbi_safe_sync_all( QofBackend *qbe, QofBook *book )
+{
+    GncDbiBackend *be = (GncDbiBackend*)qbe;
+    GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(((GncSqlBackend*)be)->conn);
+    GSList *table_list, *index_list, *iter;
+    const gchar* dbname = NULL;
+    gint status;
+
+    g_return_if_fail( be != NULL );
+    g_return_if_fail( book != NULL );
+
+    ENTER( "book=%p, primary=%p", book, be->primary_book );
+    dbname = dbi_conn_get_option( be->conn, "dbname" );
+    table_list = conn->provider->get_table_list( conn->conn, dbname );
+    if ( !conn_table_operation( (GncSqlConnection*)conn, table_list,
+				backup ) )
+    {
+	qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+	conn_table_operation( (GncSqlConnection*)conn, table_list,
+			      rollback );
+	LEAVE( "Failed to rename tables" );
+	gnc_table_slist_free( table_list );
+	return;
+    }
+    index_list = conn->provider->get_index_list( conn->conn );
+    for ( iter = index_list; iter != NULL; iter = g_slist_next( iter) )
+    {
+	const char *errmsg;
+	dbi_result result =
+	    dbi_conn_queryf( conn->conn, "DROP INDEX %s", iter->data );
+	if ( result )
+	    dbi_result_free( result );
+	if ( DBI_ERROR_NONE != dbi_conn_error( conn->conn, &errmsg ) )
+	{
+	    qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+	    gnc_table_slist_free( index_list );
+	    conn_table_operation( (GncSqlConnection*)conn, table_list,
+				  rollback );
+	    gnc_table_slist_free( table_list );
+	    LEAVE( "Failed to drop indexes %s", errmsg  );
+	    return;
+	}
+    }
+    gnc_table_slist_free( index_list );
+
+    be->is_pristine_db = TRUE;
+    be->primary_book = book;
+
+    gnc_sql_sync_all( &be->sql_be, book );
+    if ( ERR_BACKEND_NO_ERR != qof_backend_get_error( qbe ) )
+    {
+	conn_table_operation( (GncSqlConnection*)conn, table_list,
+			      rollback );
+	LEAVE( "Failed to create new database tables" );
+	return;
+    }
+    conn_table_operation( (GncSqlConnection*)conn, table_list,
+			  drop_backup );
+    gnc_table_slist_free( table_list );
+    LEAVE("book=%p", book);
+}
 /* ================================================================= */
 static void
 gnc_dbi_begin_edit( QofBackend *qbe, QofInstance *inst )
@@ -1315,6 +1500,7 @@ init_sql_backend( GncDbiBackend* dbi_be )
     be->process_events = NULL;
 
     be->sync = gnc_dbi_sync_all;
+    be->safe_sync = gnc_dbi_safe_sync_all;
     be->load_config = NULL;
     be->get_config = NULL;
 
@@ -2541,6 +2727,36 @@ conn_get_table_list( dbi_conn conn, const gchar* dbname )
 }
 
 static GSList*
+conn_get_table_list_sqlite3( dbi_conn conn, const gchar* dbname )
+{
+    gboolean change_made;
+
+    /* Return the list, but remove the tables that sqlite3 adds for
+     * its own use. */
+    GSList* list = conn_get_table_list( conn, dbname );
+    change_made = TRUE;
+    while ( list != NULL && change_made )
+    {
+        GSList* node;
+
+        change_made = FALSE;
+        for ( node = list; node != NULL; node = node->next )
+        {
+            const gchar* table_name = (const gchar*)node->data;
+
+            if ( strcmp( table_name, "sqlite_sequence" ) == 0 )
+            {
+                g_free( node->data );
+                list = g_slist_delete_link( list, node );
+                change_made = TRUE;
+                break;
+            }
+        }
+    }
+    return list;
+}
+
+static GSList*
 conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname )
 {
     gboolean change_made;
@@ -2601,7 +2817,6 @@ create_dbi_connection( /*@ observer @*/ provider_functions_t* provider,
     dbi_conn->conn = conn;
     dbi_conn->provider = provider;
     dbi_conn->conn_ok = TRUE;
-
     gnc_dbi_init_error(dbi_conn);
 
     return (GncSqlConnection*)dbi_conn;

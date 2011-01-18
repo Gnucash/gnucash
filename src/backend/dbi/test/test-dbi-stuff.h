@@ -44,5 +44,5 @@ typedef struct
 } CompareInfoStruct;
 
 void do_compare( QofBook* book_1, QofBook* book_2, const gchar* id, QofInstanceForeachCB cb, const gchar* msg );
-
+void test_dbi_safe_save( const gchar* driver, const gchar* url );
 #endif
