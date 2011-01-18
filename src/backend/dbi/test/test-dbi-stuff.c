@@ -25,6 +25,7 @@
 
 #include "config.h"
 #include "qof.h"
+#include "qofsession-p.h"
 #include "cashobjects.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
@@ -159,7 +160,9 @@ compare_books( QofBook* book_1, QofBook* book_2 )
     test_conn_get_index_list( be );
 }
 
-
+/* Given a synthetic session, use the same logic as
+ * QofSession::save_as to save it to a specified sql url, then load it
+ * back and compare. */
 void
 test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gchar* url )
 {
@@ -213,6 +216,13 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     qof_session_destroy( session_3 );
 }
 
+/* Given an already-created url (yeah, bad testing practice: Should
+ * start fresh from a synthetic session) load and safe-save it, then
+ * load it again into a new session and compare the two. Since
+ * safe-save is a more-or-less atomic function call, there's no way to
+ * be sure that it's actually doing what it's supposed to without
+ * running this test in a debugger and stopping in the middle of the
+ * safe-save and inspecting the database. */
 void
 test_dbi_safe_save( const gchar* driver,  const gchar* url )
 {
@@ -260,4 +270,65 @@ cleanup:
     qof_session_end( session_1 );
     qof_session_destroy( session_1 );
     return;
+}
+
+/* Test the gnc_dbi_load logic that forces a newer database to be
+ * opened read-only and an older one to be safe-saved. Again, it would
+ * be better to do this starting from a fresh file, but instead we're
+ * being lazy and using an existing one. */
+void
+test_dbi_version_control( const gchar* driver,  const gchar* url )
+{
+
+    QofSession *sess;
+    QofBook *book;
+    QofBackend *qbe;
+    QofBackendError err;
+    gint ourversion = gnc_get_svn_version();
+
+    printf( "Testing safe save %s\n", driver );
+
+    // Load the session data
+    sess = qof_session_new();
+    qof_session_begin( sess, url, TRUE, FALSE, FALSE );
+    if (sess && qof_session_get_error(sess) != ERR_BACKEND_NO_ERR)
+    {
+        g_warning("Session Error: %d, %s", qof_session_get_error(sess),
+		  qof_session_get_error_message(sess));
+	do_test( FALSE, "DB Session Creation Failed");
+	goto cleanup;
+    }
+    qof_session_load( sess, NULL );
+    qbe = qof_session_get_backend( sess );
+    book = qof_session_get_book( sess );
+    qof_book_begin_edit( book );
+    gnc_sql_set_table_version( (GncSqlBackend*)qbe,
+			       "Gnucash", GNC_RESAVE_VERSION - 1 );
+    qof_book_commit_edit( book );
+    qof_session_end( sess );
+    qof_session_destroy( sess );
+    sess = qof_session_new();
+    qof_session_begin( sess, url, TRUE, FALSE, FALSE );
+    qof_session_load( sess, NULL );
+    err = qof_session_pop_error( sess );
+    do_test( err == ERR_SQL_DB_TOO_OLD, "DB Failed to flag too old" );
+    qbe = qof_session_get_backend( sess );
+    book = qof_session_get_book( sess );
+    qof_book_begin_edit( book );
+    gnc_sql_set_table_version( (GncSqlBackend*)qbe,
+			       "Gnucash", ourversion );
+    gnc_sql_set_table_version( (GncSqlBackend*)qbe,
+			       "Gnucash-Resave", ourversion + 1 );
+    qof_book_commit_edit( book );
+    qof_session_end( sess );
+    qof_session_destroy( sess );
+    sess = qof_session_new();
+    qof_session_begin( sess, url, TRUE, FALSE, FALSE );
+    qof_session_load( sess, NULL );
+    qof_session_ensure_all_data_loaded( sess );
+    err = qof_session_pop_error( sess );
+    do_test( err == ERR_SQL_DB_TOO_NEW, "DB Failed to flag too new" );
+cleanup:
+    qof_session_end( sess );
+    qof_session_destroy( sess );
 }

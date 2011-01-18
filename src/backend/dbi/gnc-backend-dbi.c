@@ -1190,6 +1190,24 @@ gnc_dbi_load( QofBackend* qbe, /*@ dependent @*/ QofBook *book, QofBackendLoadTy
 
     gnc_sql_load( &be->sql_be, book, loadType );
 
+    if ( GNC_RESAVE_VERSION > gnc_sql_get_table_version( &be->sql_be, "Gnucash" ) )
+    {
+	/* The database was loaded with an older database schema or
+	 * data semantics. In order to ensure consistency, the whole
+	 * thing needs to be saved anew. */
+	qof_backend_set_error( qbe, ERR_SQL_DB_TOO_OLD );
+    }
+    else if ( GNC_RESAVE_VERSION < gnc_sql_get_table_version( &be->sql_be,
+							      "Gnucash-Resave"))
+    {
+	/* Worse, the database was created with a newer version. We
+	 * can't safely write to this database, so the user will have
+	 * to do a "save as" to make one that we can write to.
+	 */
+	qof_backend_set_error( qbe, ERR_SQL_DB_TOO_NEW );
+    }
+
+
     LEAVE( "" );
 }
 

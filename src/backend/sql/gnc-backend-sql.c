@@ -485,6 +485,7 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
 
     (void)reset_version_info( be );
     gnc_sql_set_table_version( be, "Gnucash", gnc_get_svn_version() );
+    gnc_sql_set_table_version( be, "Gnucash-Resave", GNC_RESAVE_VERSION );
 
     /* Create new tables */
     be->is_pristine_db = TRUE;
@@ -538,6 +539,7 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     }
     else
     {
+	qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_SERVER_ERR );
         is_ok = gnc_sql_connection_rollback_transaction( be->conn );
     }
     LEAVE( "book=%p", book );

@@ -114,6 +114,7 @@ int main (int argc, char ** argv)
     test_dbi_store_and_reload( "sqlite3", session_1, filename );
     session_1 = create_session();
     test_dbi_safe_save( "sqlite3", filename );
+    test_dbi_version_control( "sqlite3", filename );
 #ifdef TEST_MYSQL_URL
     printf( "TEST_MYSQL_URL='%s'\n", TEST_MYSQL_URL );
     if ( strlen( TEST_MYSQL_URL ) > 0 )
@@ -121,7 +122,8 @@ int main (int argc, char ** argv)
         session_1 = create_session();
         test_dbi_store_and_reload( "mysql", session_1, TEST_MYSQL_URL );
 	session_1 = create_session();
-	test_dbi_safe_save( "msql", filename );
+	test_dbi_safe_save( "mysql", filename );
+	test_dbi_version_control( "mysql", filename );
     }
 #endif
 #ifdef TEST_PGSQL_URL
@@ -132,6 +134,7 @@ int main (int argc, char ** argv)
         test_dbi_store_and_reload( "pgsql", session_1, TEST_PGSQL_URL );
 	session_1 = create_session();
 	test_dbi_safe_save( "pgsql", filename );
+	test_dbi_version_control( "pgsql", filename );
     }
 #endif
     print_test_results();
