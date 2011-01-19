@@ -143,7 +143,7 @@ gchar * gnc_build_book_path (const gchar *filename);
     gkey = g_strdup (key);
     gnc_free_scm_locale_string(key);
 
-    path = g_list_prepend (path, key);
+    path = g_list_prepend (path, gkey);
 
     path_scm = SCM_CDR (path_scm);
   }
