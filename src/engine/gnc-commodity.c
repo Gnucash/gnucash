@@ -1348,13 +1348,17 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
 {
     CommodityPrivate* priv;
 
-    ENTER ("(cm=%p, tz=%s)", cm, tz ? tz : "(null)");
-
     if (!cm) return;
+
+    ENTER ("(cm=%p, tz=%s)", cm, tz ? tz : "(null)");
 
     priv = GET_PRIVATE(cm);
 
-    if (tz == priv->quote_tz) return;
+    if (tz == priv->quote_tz) 
+    {
+       LEAVE("Already correct TZ");
+       return;
+    }
 
     gnc_commodity_begin_edit(cm);
     CACHE_REMOVE (priv->quote_tz);
