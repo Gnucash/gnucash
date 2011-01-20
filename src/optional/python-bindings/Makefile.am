@@ -95,8 +95,7 @@ EXTRA_DIST = \
   example_scripts/change_tax_code.py \
   example_scripts/account_analysis.py \
   example_scripts/new_book_with_opening_balances.py \
-  example_scripts/test_imbalance_transaction.py \
-  glib.i
+  example_scripts/test_imbalance_transaction.py
 
 MAINTAINERCLEANFILES = gnucash_core.c
 
