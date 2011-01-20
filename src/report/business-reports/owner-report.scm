@@ -47,15 +47,43 @@
 (define customer-report-guid "c146317be32e4948a561ec7fc89d15c1")
 
 (define acct-string (N_ "Account"))
-(define owner-string (N_ "Company"))
 (define owner-page gnc:pagename-general)
-
 (define date-header (N_ "Date"))
 (define due-date-header (N_ "Due Date"))
 (define reference-header (N_ "Reference"))
 (define type-header (N_ "Type"))
 (define desc-header (N_ "Description"))
 (define amount-header (N_ "Amount"))
+
+;; Depending on the report type we want to set up some lists/cases 
+;; with strings to ease overview and translation
+;; note: we default to company
+
+;; owner-string & doctype-str are nearly equivalent, report is vendor report
+;; but default option naming was Company. 
+
+;; Names in Option panel (Untranslated! Because it is used for option
+;; naming and lookup only, and the display of the option name will be
+;; translated somewhere else.)
+(define (owner-string owner-type)
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
+        ;; FALLTHROUGH
+        (else (N_ "Company")))) 
+
+;; Error strings in case there is no (valid) selection (translated)
+(define (invalid-selection-string owner-type)
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "No valid customer selected. Click on the Options button to select a customer."))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "No valid employee selected. Click on the Options button to select an employee."))
+        ;; FALLTHROUGH
+        (else (_ "No valid company selected. Click on the Options button to select a company."))))
+
+;; Document names, used in report names (translated)
+(define (doctype-str owner-type)
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "Customer"))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "Employee"))
+        ;; FALLTHROUGH
+        (else (_ "Vendor")))) 
 
 (define-macro (addto! alist element)
   `(set! ,alist (cons ,element ,alist)))
@@ -372,7 +400,7 @@
    (gnc:make-simple-boolean-option "__reg" "reverse?" "" "" reverse?))
 
   (gnc:register-inv-option
-   (gnc:make-owner-option owner-page owner-string "v"
+   (gnc:make-owner-option owner-page (owner-string owner-type) "v"
 			  (N_ "The company for this report")
 			  (lambda () '()) #f owner-type))
 
@@ -567,27 +595,19 @@
 	 (orders '())
 	 (query (qof-query-create-for-splits))
 	 (account (opt-val owner-page acct-string))
-	 (owner (opt-val owner-page owner-string))
-	 (start-date (gnc:timepair-start-day-time 
+         (start-date (gnc:timepair-start-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general optname-from-date))))
 	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general optname-to-date))))
 	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
-	 (type (opt-val "__reg" "owner-type"))
-	 (type-str ""))
-
-    (cond
-      ((eqv? type GNC-OWNER-CUSTOMER)
-       (set! type-str (N_ "Customer")))
-      ((eqv? type GNC-OWNER-VENDOR)
-       (set! type-str (N_ "Vendor")))
-      ((eqv? type GNC-OWNER-EMPLOYEE)
-       (set! type-str (N_ "Employee"))))
+         (type (opt-val "__reg" "owner-type"))
+         (owner-descr (owner-string type))
+	 (owner (opt-val owner-page owner-descr)))
 
     (gnc:html-document-set-title!
-     document (string-append (_ type-str) " " (_ "Report")))
+     document (string-append (doctype-str type) " " (_ "Report")))
 
     (if (gncOwnerIsValid owner)
 	(begin
@@ -595,12 +615,12 @@
 
 	  (gnc:html-document-set-title!
 	   document
-           (string-append (_ type-str ) " " (_ "Report:") " " (gncOwnerGetName owner)))
+           (string-append (doctype-str type) " " (_ "Report:") " " (gncOwnerGetName owner)))
 
            (gnc:html-document-set-headline!
             document (gnc:html-markup
                       "!" 
-                      (_ type-str )
+                      (doctype-str type)
                       " " (_ "Report:") " "
                       (gnc:html-markup-anchor
                        (gnc:owner-anchor-text owner)
@@ -649,10 +669,7 @@
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (sprintf #f 
-		   (_ "No valid %s selected.  Click on the Options button to select a company.")
-		   (_ type-str))))) ;; FIXME because of translations: Please change this string into full sentences instead of sprintf, because in non-english languages the "no valid" has different forms depending on the grammatical gender of the "%s".
-
+	  (invalid-selection-string type)))) 
     (qof-query-destroy query)
     document))
 
@@ -717,9 +734,9 @@
  'renderer reg-renderer
  'in-menu? #t)
 
-(define (owner-report-create-internal report-guid owner account)
+(define (owner-report-create-internal report-guid owner account owner-type)
   (let* ((options (gnc:make-report-options report-guid))
-	 (owner-op (gnc:lookup-option options owner-page owner-string))
+	 (owner-op (gnc:lookup-option options owner-page (owner-string owner-type))) 
 	 (account-op (gnc:lookup-option options owner-page acct-string)))
 
     (gnc:option-set-value owner-op owner)
@@ -730,13 +747,13 @@
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
       ((eqv? type GNC-OWNER-CUSTOMER)
-       (owner-report-create-internal customer-report-guid owner account))
+       (owner-report-create-internal customer-report-guid owner account type)) ;; Not sure whether to pass type, or to use the guid in the report function
 
       ((eqv? type GNC-OWNER-VENDOR)
-       (owner-report-create-internal vendor-report-guid owner account))
+       (owner-report-create-internal vendor-report-guid owner account type))
 
       ((eqv? type GNC-OWNER-EMPLOYEE)
-       (owner-report-create-internal employee-report-guid owner account))
+       (owner-report-create-internal employee-report-guid owner account type))
 
       (else #f))))
 
