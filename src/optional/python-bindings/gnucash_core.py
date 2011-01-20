@@ -236,7 +236,7 @@ class GncNumeric(GnuCashCoreClass):
     and GNC_HOW_DENOM_FIXED are available for arithmetic
     functions like GncNumeric.add
 
-    Look at gnc-numeric.h to see how ot use these
+    Look at gnc-numeric.h to see how to use these
     """
 
     def __init__(self, num=0, denom=1, **kargs):
@@ -250,6 +250,19 @@ class GncNumeric(GnuCashCoreClass):
         #else:
         #    self.set_denom(denom) # currently undefined
         #    self.set_num(num)     # currently undefined
+
+    def __unicode__(self):
+        """Returns a human readable numeric value string as UTF8."""
+        if self.denom() == 0:
+            return "Division by zero"
+        else:
+            value_float = self.to_double() 
+            value_str   = u"{0:.{1}f}".format(value_float,2) ## The second argument is the precision. It would be nice to be able to make it configurable.
+            return value_str
+
+    def __str__(self):
+        """returns a human readable numeric value string as bytes."""
+        return unicode(self).encode('utf-8')
 
 class GncPrice(GnuCashCoreClass):
     '''
