@@ -137,7 +137,7 @@ typedef char gchar;
 }
 
 %typemap(out) GList *, CommodityList *, SplitList *, AccountList *, LotList *,
-    MonetaryList *, PriceList * {
+    MonetaryList *, PriceList *, EntryList * {
     guint i;
     gpointer data;
     PyObject *list = PyList_New(0);
@@ -158,6 +158,8 @@ typedef char gchar;
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCLot, 0));
         else if (GNC_IS_PRICE(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCPrice, 0));
+        else if (GNC_IS_ENTRY(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEntry, 0));
         else if ($1_descriptor == $descriptor(MonetaryList *))
             PyList_Append(list, SWIG_NewPointerObj(data, $descriptor(gnc_monetary *), 0));
         else
