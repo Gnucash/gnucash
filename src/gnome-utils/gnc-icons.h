@@ -23,6 +23,7 @@ G_BEGIN_DECLS
 #define GNC_STOCK_INVOICE_UNPOST "gnc-invoice-unpost"
 #define GNC_STOCK_INVOICE_PAY "gnc-invoice-pay"
 #define GNC_STOCK_INVOICE_EDIT "gnc-invoice-edit"
+#define GNC_STOCK_INVOICE_DUPLICATE "gnc-invoice-duplicate"
 
 //FIXME: use own budget icons?
 #define GNC_STOCK_BUDGET "gnc-budget"

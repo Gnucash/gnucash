@@ -135,9 +135,8 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_edit)
     },
     {
-        "EditDuplicateInvoiceAction", GTK_STOCK_COPY, N_("_Duplicate Invoice"),
-        "", /* empty accelerator string to avoid Ctrl+C here! */
-        N_("Create a new invoice as a duplicate of the current one"),
+        "EditDuplicateInvoiceAction", GNC_STOCK_INVOICE_DUPLICATE, N_("_Duplicate Invoice"),
+        NULL, N_("Create a new invoice as a duplicate of the current one"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_duplicateInvoice)
     },
     {
