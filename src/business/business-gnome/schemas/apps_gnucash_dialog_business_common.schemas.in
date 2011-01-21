@@ -19,11 +19,11 @@
       <locale name="C">
         <short>Window position and size</short>
         <long>
-	  This setting contains the coordinates describing the last
-	  location of the window.  The numbers are the X and Y
-	  coordinates of the top left corner of the window, and the
-	  width and height of the window.
-	</long>
+          This setting contains the coordinates describing the last
+          location of the window.  The numbers are the X and Y
+          coordinates of the top left corner of the window, and the
+          width and height of the window.
+        </long>
       </locale>
     </schema>
 
@@ -40,10 +40,10 @@
       <locale name="C">
         <short>Search only in active items</short>
         <long>
-	  If active, only the 'active' items in the current class will
-	  be searched. Otherwise all items in the current class will
-	  be searched.
-	</long>
+          If active, only the 'active' items in the current class will
+          be searched. Otherwise all items in the current class will
+          be searched.
+        </long>
       </locale>
     </schema>
 
@@ -56,10 +56,10 @@
       <locale name="C">
         <short>Open new invoice in new window</short>
         <long>
-	  If active, each new invoice will be opened in a new
-	  window. Otherwise a new invoice will be opened as a tab in
-	  the main window.
-	</long>
+          If active, each new invoice will be opened in a new
+          window. Otherwise a new invoice will be opened as a tab in
+          the main window.
+        </long>
       </locale>
     </schema>
 
@@ -72,11 +72,11 @@
       <locale name="C">
         <short>Accumulate multiple splits into one</short>
         <long>
-	  If this field is active then multiple entries in an invoice
-	  that transfer to the same account will be accumulated into a
-	  single split.  This field can be overridden per invoice in
-	  the Posting dialog.
-	</long>
+          If this field is active then multiple entries in an invoice
+          that transfer to the same account will be accumulated into a
+          single split.  This field can be overridden per invoice in
+          the Posting dialog.
+        </long>
       </locale>
     </schema>
 
@@ -90,10 +90,10 @@
       <locale name="C">
         <short>Is tax included in this type of business entry?</short>
         <long>
-	  If set to active then tax is included by default in entries of
-	  this type.  This setting is inherited by new customers and
-	  vendors.
-	</long>
+          If set to active then tax is included by default in entries of
+          this type.  This setting is inherited by new customers and
+          vendors.
+        </long>
       </locale>
     </schema>
 
@@ -106,12 +106,12 @@
       <locale name="C">
         <short>Show bills due reminder at startup</short>
         <long>
-	  If active, at startup GnuCash will check to see whether any
-	  bills will become due soon.  If so, it will present the user
-	  with a reminder dialog.  The definition of "soon" is
-	  controlled by the "Days in Advance" setting.  Otherwise
-	  GnuCash does not check for due bills.
-	</long>
+          If active, at startup GnuCash will check to see whether any
+          bills will become due soon.  If so, it will present the user
+          with a reminder dialog.  The definition of "soon" is
+          controlled by the "Days in Advance" setting.  Otherwise
+          GnuCash does not check for due bills.
+        </long>
       </locale>
     </schema>
 
@@ -124,10 +124,10 @@
       <locale name="C">
         <short>Show bills due within this many days</short>
         <long>
-	  This field defines the number of days in advance that
-	  GnuCash will check for due bills.  Its value is only used if
-	  the "Notify when due" setting is active.
-	</long>
+          This field defines the number of days in advance that
+          GnuCash will check for due bills.  Its value is only used if
+          the "Notify when due" setting is active.
+        </long>
       </locale>
     </schema>
 

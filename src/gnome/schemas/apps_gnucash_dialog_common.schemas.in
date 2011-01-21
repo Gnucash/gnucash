@@ -21,9 +21,9 @@
       <locale name="C">
         <short>Window position</short>
         <long>
-	  The X,Y coordinates of the top left corner of the window
-	  when it was last closed.
-	</long>
+          The X,Y coordinates of the top left corner of the window
+          when it was last closed.
+        </long>
       </locale>
     </schema>
 
@@ -46,8 +46,8 @@
       <locale name="C">
         <short>Window geometry</short>
         <long>
-	  The width and size of the window when it was last closed.
-	</long>
+          The width and size of the window when it was last closed.
+        </long>
       </locale>
     </schema>
 
@@ -59,10 +59,10 @@
       <locale name="C">
         <short>Search only in active items</short>
         <long>
-	  This setting indicates whether to search in all items in the
-	  current class, or only in 'active' items in the current
-	  class.
-	</long>
+          This setting indicates whether to search in all items in the
+          current class, or only in 'active' items in the current
+          class.
+        </long>
       </locale>
     </schema>
 
@@ -78,10 +78,10 @@
       <locale name="C">
         <short>Last pathname used</short>
         <long>
-	  This field contains the last pathname used by this window.
-	  It will be used as the initial filename/pathname the next
-	  time this window is opened.
-	</long>
+          This field contains the last pathname used by this window.
+          It will be used as the initial filename/pathname the next
+          time this window is opened.
+        </long>
       </locale>
     </schema>
 
@@ -96,11 +96,11 @@
       <locale name="C">
         <short>Columns used for sorting</short>
         <long>
-	  This setting indicates which column in the tree is used for
-	  sorting.  Possible values for this setting are the name of any
-	  column in this window (see the column_order key) or the
-	  keyword 'none'.
-	</long>
+          This setting indicates which column in the tree is used for
+          sorting.  Possible values for this setting are the name of any
+          column in this window (see the column_order key) or the
+          keyword 'none'.
+        </long>
       </locale>
     </schema>
 
@@ -115,9 +115,9 @@
       <locale name="C">
         <short>Sort column ascending or descending</short>
         <long>
-	  This setting indicates how the key column is sorted.  Possible
-	  values for this setting are 'ascending' and 'descending'.
-	</long>
+          This setting indicates how the key column is sorted.  Possible
+          values for this setting are 'ascending' and 'descending'.
+        </long>
       </locale>
     </schema>
 
@@ -130,9 +130,9 @@
       <locale name="C">
         <short>Show the new user window</short>
         <long>
-	 If active, the new user window will be shown. Otherwise it
-	 will not be shown.
-	</long>
+         If active, the new user window will be shown. Otherwise it
+         will not be shown.
+        </long>
       </locale>
     </schema>
 
@@ -145,10 +145,10 @@
       <locale name="C">
         <short>New hierarchy window on "New File"</short>
         <long>
-	 If active, the "New Hierarchy" window will be shown whenever
-	 the "New File" menu item is chosen. Otherwise it will not be
-	 shown.
-	</long>
+         If active, the "New Hierarchy" window will be shown whenever
+         the "New File" menu item is chosen. Otherwise it will not be
+         shown.
+        </long>
       </locale>
     </schema>
 

@@ -11,11 +11,11 @@
       <locale name="C">
         <short>Save window sizes and locations</short>
         <long>
-	  If active, the size and location of each dialog window will
-	  be saved when it is closed.  The sizes and locations of
-	  content windows will be remembered when you quit
-	  GnuCash. Otherwise the sizes will not be saved.
-	</long>
+          If active, the size and location of each dialog window will
+          be saved when it is closed.  The sizes and locations of
+          content windows will be remembered when you quit
+          GnuCash. Otherwise the sizes will not be saved.
+        </long>
       </locale>
     </schema>
 
@@ -101,10 +101,10 @@
       <locale name="C">
         <short>Automatically insert a decimal point</short>
         <long>
-	  If active, GnuCash will automatically insert a decimal point
-	  into values that are entered without one.  Otherwise GnuCash
-	  will not modify entered numbers.
-	</long>
+          If active, GnuCash will automatically insert a decimal point
+          into values that are entered without one.  Otherwise GnuCash
+          will not modify entered numbers.
+        </long>
       </locale>
     </schema>
 
@@ -153,14 +153,14 @@
       <locale name="C">
         <short>Accounts to reverse the balance</short>
         <long>
-	  This setting allows certain accounts to have their balances
-	  reversed in sign from positive to negative, or vice versa.
-	  The setting "income_expense" is for users who like to see
-	  negative expenses and positive income.  The setting of
-	  "credit" is for users who want to see balances reflect the
-	  debit/credit status of the account.  The setting "none"
-	  doesn't reverse the sign on any balances.
-	</long>
+          This setting allows certain accounts to have their balances
+          reversed in sign from positive to negative, or vice versa.
+          The setting "income_expense" is for users who like to see
+          negative expenses and positive income.  The setting of
+          "credit" is for users who want to see balances reflect the
+          debit/credit status of the account.  The setting "none"
+          doesn't reverse the sign on any balances.
+        </long>
       </locale>
     </schema>
 
@@ -173,15 +173,15 @@
       <locale name="C">
         <short>Labels on toolbar buttons</short>
         <long>
-	  This setting controls how the labels on toolbar buttons are
-	  shown.  If set to "system" then GnuCash will use the desktop
-	  setting for how to draw toolbar buttons.  If set to "icon"
-	  then only icons will be show on toolbar buttons..  If set to
-	  "text" only the labels will be shown.  If set to "both" then
-	  both icons and labels will be shown.  If set to "both-horiz"
-	  then icons will be shown for all buttons with labels added
-	  on important buttons.
-	</long>
+          This setting controls how the labels on toolbar buttons are
+          shown.  If set to "system" then GnuCash will use the desktop
+          setting for how to draw toolbar buttons.  If set to "icon"
+          then only icons will be show on toolbar buttons..  If set to
+          "text" only the labels will be shown.  If set to "both" then
+          both icons and labels will be shown.  If set to "both-horiz"
+          then icons will be shown for all buttons with labels added
+          on important buttons.
+        </long>
       </locale>
     </schema>
 
@@ -194,11 +194,11 @@
       <locale name="C">
         <short>Use formal account labels</short>
         <long>
-	  If active, formal accounting labels "Credit" and "Debit"
-	  will be used when designating fields on screen.  Otherwise,
-	  informal labels such as Increase/Decrease, "Funds In"/"Funds
-	  Out", etc. will be used.
-	</long>
+          If active, formal accounting labels "Credit" and "Debit"
+          will be used when designating fields on screen.  Otherwise,
+          informal labels such as Increase/Decrease, "Funds In"/"Funds
+          Out", etc. will be used.
+        </long>
       </locale>
     </schema>
 
@@ -211,12 +211,12 @@
       <locale name="C">
         <short>Show close buttons on notebook tabs</short>
         <long>
-	  If active, a "close" button will be displayed on any
-	  notebook tab that may be closed.  Otherwise, no such button
-	  will be shown on the tab. Regardless of this setting, pages
-	  can always be closed via the "close" menu item or the
-	  "close" button on toolbar.
-	</long>
+          If active, a "close" button will be displayed on any
+          notebook tab that may be closed.  Otherwise, no such button
+          will be shown on the tab. Regardless of this setting, pages
+          can always be closed via the "close" menu item or the
+          "close" button on toolbar.
+        </long>
       </locale>
     </schema>
 
@@ -229,11 +229,11 @@
       <locale name="C">
         <short>Width of notebook tabs</short>
         <long>
-	  This key specifies the maximum width of notebook tabs.
-	  If the text in the tab is longer than this value (the test
-	  is approximate) then the tab label will have the middle cut
-	  and replaced with an ellipsis.
-	</long>
+          This key specifies the maximum width of notebook tabs.
+          If the text in the tab is longer than this value (the test
+          is approximate) then the tab label will have the middle cut
+          and replaced with an ellipsis.
+        </long>
       </locale>
     </schema>
 
@@ -246,12 +246,12 @@
       <locale name="C">
         <short>Source of default account currency</short>
         <long>
-	  This setting controls the source of the default currency for
-	  new accounts.  If set to "locale" then GnuCash will retrieve
-	  the default currency from the user's locale setting.  If set
-	  to "other", GnuCash will use the setting specified by the
-	  currency_other key.
-	</long>
+          This setting controls the source of the default currency for
+          new accounts.  If set to "locale" then GnuCash will retrieve
+          the default currency from the user's locale setting.  If set
+          to "other", GnuCash will use the setting specified by the
+          currency_other key.
+        </long>
       </locale>
     </schema>
 
@@ -263,11 +263,11 @@
       <locale name="C">
         <short>Default currency for new accounts</short>
         <long>
-	  This setting specifies the default currency used for new
-	  accounts if the currency_choice setting is set to "other".
-	  This field must contain the three letter ISO 4217 code for a
-	  currency (e.g. USD, GBP, RUB).
-	</long>
+          This setting specifies the default currency used for new
+          accounts if the currency_choice setting is set to "other".
+          This field must contain the three letter ISO 4217 code for a
+          currency (e.g. USD, GBP, RUB).
+        </long>
       </locale>
     </schema>
 
@@ -292,12 +292,12 @@
       <locale name="C">
         <short>Date format choice</short>
         <long>
-	  This setting chooses the way dates are displayed in GnuCash.
-	  Possible values for this setting are "locale" to use the
-	  system locale setting, "ce" for Continental Europe style
-	  dates, "iso" for ISO 8601 standard dates , "uk" for United
-	  Kingdom style dates, and "us" for United States style dates.
-	</long>
+          This setting chooses the way dates are displayed in GnuCash.
+          Possible values for this setting are "locale" to use the
+          system locale setting, "ce" for Continental Europe style
+          dates, "iso" for ISO 8601 standard dates , "uk" for United
+          Kingdom style dates, and "us" for United States style dates.
+        </long>
       </locale>
     </schema>
 
@@ -343,9 +343,9 @@
       <locale name="C">
         <short>Show splash screen</short>
         <long>
-	  If active, a splash screen will be shown at
-	  startup. Otherwise no splash screen will be shown.
-	</long>
+          If active, a splash screen will be shown at
+          startup. Otherwise no splash screen will be shown.
+        </long>
       </locale>
     </schema>
 
@@ -358,12 +358,12 @@
       <locale name="C">
         <short>Color the register as specified by the system theme</short>
         <long>
-	  If active, the register will be colored as specified by the
-	  system theme.  This can be overridden to provide custom
-	  colors by editing the gtkrc file in the users home
-	  directory.  Otherwise the standard register colors will be
-	  used that GnuCash has always used.
-	</long>
+          If active, the register will be colored as specified by the
+          system theme.  This can be overridden to provide custom
+          colors by editing the gtkrc file in the users home
+          directory.  Otherwise the standard register colors will be
+          used that GnuCash has always used.
+        </long>
       </locale>
     </schema>
 
@@ -376,10 +376,10 @@
       <locale name="C">
         <short>"Enter" key moves to bottom of register</short>
         <long>
-	  If active, pressing the enter key will move to the bottom of
-	  the register. Otherwise pressing the enter key will move to
-	  the next transaction line.
-	</long>
+          If active, pressing the enter key will move to the bottom of
+          the register. Otherwise pressing the enter key will move to
+          the next transaction line.
+        </long>
       </locale>
     </schema>
 
@@ -416,10 +416,10 @@
       <locale name="C">
         <short>Create a new window for each new register</short>
         <long>
-	  If active, each new register will be opened in a new
-	  window. Otherwise each new register will be opened as a tab
-	  in the main window.
-	</long>
+          If active, each new register will be opened in a new
+          window. Otherwise each new register will be opened as a tab
+          in the main window.
+        </long>
       </locale>
     </schema>
 
@@ -432,10 +432,10 @@
       <locale name="C">
         <short>Color all lines of a transaction the same</short>
         <long>
-	 If active all lines that make up a single transaction will use
-	 the same color for their background.  Otherwise the
-	 background colors are alternated on each line.
-	</long>
+          If active all lines that make up a single transaction will use
+          the same color for their background.  Otherwise the
+          background colors are alternated on each line.
+        </long>
       </locale>
     </schema>
 
@@ -448,10 +448,10 @@
       <locale name="C">
         <short>Show horizontal borders in a register</short>
         <long>
-	 Show horizontal borders between rows in a register.  If active
-	 the border between cells will be indicated with a heavy line.
-	 Otherwise the border between cells will not be marked.
-	</long>
+          Show horizontal borders between rows in a register.  If active
+          the border between cells will be indicated with a heavy line.
+          Otherwise the border between cells will not be marked.
+        </long>
       </locale>
     </schema>
 
@@ -464,10 +464,10 @@
       <locale name="C">
         <short>Show vertical borders in a register</short>
         <long>
-	 Show vertical borders between columns in a register.  If active
-	 the border between cells will be indicated with a heavy line.
-	 Otherwise the border between cells will not be marked.
-	</long>
+          Show vertical borders between columns in a register.  If active
+          the border between cells will be indicated with a heavy line.
+          Otherwise the border between cells will not be marked.
+        </long>
       </locale>
     </schema>
 
@@ -480,14 +480,14 @@
       <locale name="C">
         <short>Default view style for new register</short>
         <long>
-	  This field specifies the default view style when opening a
-	  new register window.  Possible values are "ledger",
-	  "auto-ledger" and "journal".  The "ledger" setting says to
-	  show each transaction on one or two lines.  The
-	  "auto-ledger" setting does the same, but also expands only
-	  the current transaction to show all splits.  The "journal"
-	  setting shows all transactions in expanded form.
-	</long>
+          This field specifies the default view style when opening a
+          new register window.  Possible values are "ledger",
+          "auto-ledger" and "journal".  The "ledger" setting says to
+          show each transaction on one or two lines.  The
+          "auto-ledger" setting does the same, but also expands only
+          the current transaction to show all splits.  The "journal"
+          setting shows all transactions in expanded form.
+        </long>
       </locale>
     </schema>
 
@@ -500,11 +500,11 @@
       <locale name="C">
         <short>Show two lines of information for each transaction</short>
         <long>
-	  Show two lines of information for each transaction in a
-	  register.  This is the default setting for when a register
-	  is first opened.  The setting can be changed at any time via
-	  the "View->Double Line" menu item.
-	</long>
+          Show two lines of information for each transaction in a
+          register.  This is the default setting for when a register
+          is first opened.  The setting can be changed at any time via
+          the "View->Double Line" menu item.
+        </long>
       </locale>
     </schema>
 
@@ -534,10 +534,10 @@
       <locale name="C">
         <short>Create a new window for each new report</short>
         <long>
-	  If active, each new report will be opened in its own window.
-	  Otherwise new reports will be opened as tabs in the main
-	  window.
-	</long>
+          If active, each new report will be opened in its own window.
+          Otherwise new reports will be opened as tabs in the main
+          window.
+        </long>
       </locale>
     </schema>
 
@@ -550,12 +550,12 @@
       <locale name="C">
         <short>Source of default report currency</short>
         <long>
-	  This setting controls the default currency used for
-	  reports. If set to "locale" then GnuCash will retrieve the
-	  default currency from the user's locale setting.  If set to
-	  "other", GnuCash will use the setting specified by the
-	  currency_other key.
-	</long>
+          This setting controls the default currency used for
+          reports. If set to "locale" then GnuCash will retrieve the
+          default currency from the user's locale setting.  If set to
+          "other", GnuCash will use the setting specified by the
+          currency_other key.
+        </long>
       </locale>
     </schema>
 
@@ -567,11 +567,11 @@
       <locale name="C">
         <short>Default currency for new reports</short>
         <long>
-	  This setting specifies the default currency used for reports
-	  if the currency_choice setting is set to "other".  This field
-	  must contain the three letter ISO 4217 code for a currency
-	  (e.g. USD, GBP, RUB).
-	</long>
+          This setting specifies the default currency used for reports
+          if the currency_choice setting is set to "other".  This field
+          must contain the three letter ISO 4217 code for a currency
+          (e.g. USD, GBP, RUB).
+        </long>
       </locale>
     </schema>
 
@@ -584,11 +584,11 @@
       <locale name="C">
         <short>Position of the notebook tabs</short>
         <long>
-	  This setting determines the edge at which the tabs for
-	  switching pages in notebooks are drawn. Possible values
-	  are "top", "left", "bottom" and "right".
-	  It defaults to "top".
-	</long>
+          This setting determines the edge at which the tabs for
+          switching pages in notebooks are drawn. Possible values
+          are "top", "left", "bottom" and "right".
+          It defaults to "top".
+        </long>
       </locale>
     </schema>
 
@@ -601,11 +601,11 @@
       <locale name="C">
         <short>Position of the summary bar</short>
         <long>
-	  This setting determines the edge at which the summary bar
-	  for various pages is drawn.  Possible values are "top"
-	  and "bottom".
-	  It defaults to "bottom".
-	</long>
+          This setting determines the edge at which the summary bar
+          for various pages is drawn.  Possible values are "top"
+          and "bottom".
+          It defaults to "bottom".
+        </long>
       </locale>
     </schema>
 
@@ -634,8 +634,8 @@
       <locale name="C">
         <short>Closing a tab moves to the most recently visited tab.</short>
         <long>
-	  If active, closing a tab moves to the most recently visited tab.  Otherwise closing a tab moves one tab to the left.
-	</long>
+          If active, closing a tab moves to the most recently visited tab.  Otherwise closing a tab moves one tab to the left.
+        </long>
       </locale>
     </schema>
 

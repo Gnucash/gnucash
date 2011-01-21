@@ -11,11 +11,11 @@
       <locale name="C">
         <short>Pre-select cleared transactions</short>
         <long>
-	  If active, all transactions marked as cleared in the
-	  register will appear already selected in the reconcile
-	  dialog.  Otherwise no transactions will be initially
-	  selected.
-	</long>
+          If active, all transactions marked as cleared in the
+          register will appear already selected in the reconcile
+          dialog.  Otherwise no transactions will be initially
+          selected.
+        </long>
       </locale>
     </schema>
 
@@ -28,12 +28,12 @@
       <locale name="C">
         <short>Prompt for interest charges</short>
         <long>
-	  Prior to reconciling an account which charges or pays
-	  interest, prompt the user to enter a transaction for the
-	  interest charge or payment.  Currently only enabled for
-	  Bank, Credit, Mutual, Asset, Receivable, Payable, and
-	  Liability accounts.
-	</long>
+          Prior to reconciling an account which charges or pays
+          interest, prompt the user to enter a transaction for the
+          interest charge or payment.  Currently only enabled for
+          Bank, Credit, Mutual, Asset, Receivable, Payable, and
+          Liability accounts.
+        </long>
       </locale>
     </schema>
 
@@ -46,10 +46,10 @@
       <locale name="C">
         <short>Prompt for credit card payment</short>
         <long>
-	  If active, after reconciling a credit card account, prompt
-	  the user to enter a credit card payment. Otherwise do not
-	  prompt the user for this.
-	</long>
+          If active, after reconciling a credit card account, prompt
+          the user to enter a credit card payment. Otherwise do not
+          prompt the user for this.
+        </long>
       </locale>
     </schema>
 
@@ -62,10 +62,10 @@
       <locale name="C">
         <short>Always reconcile to today</short>
         <long>
-	  If active, always open the reconcile dialog using today's
-	  date for the statement date, regardless of previous
-	  reconciliations.
-	</long>
+          If active, always open the reconcile dialog using today's
+          date for the statement date, regardless of previous
+          reconciliations.
+        </long>
       </locale>
     </schema>
 

@@ -11,12 +11,12 @@
       <locale name="C">
         <short>Show "since last run" dialog when a file is opened.</short>
         <long>
-	  This setting controls whether the scheduled transactions
-	  "since last run" dialog is shown automatically when a data file is
-	  opened.  This includes the initial opening of the data
-	  file when GnuCash starts.  If this setting is active,
-	  show the dialog, otherwise it is not shown.
-	</long>
+          This setting controls whether the scheduled transactions
+          "since last run" dialog is shown automatically when a data file is
+          opened.  This includes the initial opening of the data
+          file when GnuCash starts.  If this setting is active,
+          show the dialog, otherwise it is not shown.
+        </long>
       </locale>
     </schema>
 
@@ -29,11 +29,11 @@
       <locale name="C">
         <short>Set the "auto create" flag by default</short>
         <long>
-	  If active, any newly created scheduled transaction will
-	  have its 'auto create' flag set active by default. The user
-	  can change this flag during transaction creation, or at
-	  any later time by editing the scheduled transaction.
-	</long>
+          If active, any newly created scheduled transaction will
+          have its 'auto create' flag set active by default. The user
+          can change this flag during transaction creation, or at
+          any later time by editing the scheduled transaction.
+        </long>
       </locale>
     </schema>
 
@@ -58,13 +58,13 @@
       <locale name="C">
         <short>Set the "notify" flag by default</short>
         <long>
-	  If active, any newly created scheduled transaction will
-	  have its 'notify' flag set by default.  The user can
-	  change this flag during transaction creation, or at any
-	  later time by editing the scheduled transaction. This
-	  setting only has meaning if the create_auto setting is
-	  active.
-	</long>
+          If active, any newly created scheduled transaction will
+          have its 'notify' flag set by default.  The user can
+          change this flag during transaction creation, or at any
+          later time by editing the scheduled transaction. This
+          setting only has meaning if the create_auto setting is
+          active.
+        </long>
       </locale>
     </schema>
 

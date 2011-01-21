@@ -36,12 +36,12 @@
       <locale name="C">
         <short>Profit/loss starting date type</short>
         <long>
-	  This setting controls the type of starting date used in
-	  profit/loss calculations.  If set to "absolute" then GnuCash
-	  will retrieve the starting date specified by the start_date
-	  key.  If set to anything else, GnuCash will retrieve the
-	  starting date specified by the start_period key.
-	</long>
+          This setting controls the type of starting date used in
+          profit/loss calculations.  If set to "absolute" then GnuCash
+          will retrieve the starting date specified by the start_date
+          key.  If set to anything else, GnuCash will retrieve the
+          starting date specified by the start_period key.
+        </long>
       </locale>
     </schema>
 
@@ -54,10 +54,10 @@
       <locale name="C">
         <short>Starting date (in seconds from Jan 1, 1970)</short>
         <long>
-	  This setting controls the starting date set in profit/loss
-	  calculations if the start_choice setting is set to "absolute".
-	  This field should contain a date as represented in seconds
-	  from January 1st, 1970.
+          This setting controls the starting date set in profit/loss
+          calculations if the start_choice setting is set to "absolute".
+          This field should contain a date as represented in seconds
+          from January 1st, 1970.
         </long>
       </locale>
     </schema>
@@ -71,10 +71,10 @@
       <locale name="C">
         <short>Starting time period identifier</short>
         <long>
-	  This setting controls the starting date set in profit/loss
-	  calculations if the start_choice setting is set to anything
-	  other than "absolute".  This field should contain a value
-	  between 0 and 8.
+          This setting controls the starting date set in profit/loss
+          calculations if the start_choice setting is set to anything
+          other than "absolute".  This field should contain a value
+          between 0 and 8.
         </long>
       </locale>
     </schema>
@@ -88,12 +88,12 @@
       <locale name="C">
         <short>Profit/loss ending date type</short>
         <long>
-	  This setting controls the type of ending date used in
-	  profit/loss calculations.  If set to "absolute" then GnuCash
-	  will retrieve the ending date specified by the end_date
-	  key.  If set to anything else, GnuCash will retrieve the
-	  ending date specified by the end_period key.
-	</long>
+          This setting controls the type of ending date used in
+          profit/loss calculations.  If set to "absolute" then GnuCash
+          will retrieve the ending date specified by the end_date
+          key.  If set to anything else, GnuCash will retrieve the
+          ending date specified by the end_period key.
+        </long>
       </locale>
     </schema>
 
@@ -106,10 +106,10 @@
       <locale name="C">
         <short>Ending date (in seconds from Jan 1, 1970)</short>
         <long>
-	  This setting controls the ending date set in profit/loss
-	  calculations if the end_choice setting is set to "absolute".
-	  This field should contain a date as represented in seconds
-	  from January 1st, 1970.
+          This setting controls the ending date set in profit/loss
+          calculations if the end_choice setting is set to "absolute".
+          This field should contain a date as represented in seconds
+          from January 1st, 1970.
         </long>
       </locale>
     </schema>
@@ -123,10 +123,10 @@
       <locale name="C">
         <short>Ending time period identifier</short>
         <long>
-	  This setting controls the ending date set in profit/loss
-	  calculations if the end_choice setting is set to anything
-	  other than "absolute".  This field should contain a value
-	  between 0 and 8.
+          This setting controls the ending date set in profit/loss
+          calculations if the end_choice setting is set to anything
+          other than "absolute".  This field should contain a value
+          between 0 and 8.
         </long>
       </locale>
     </schema>

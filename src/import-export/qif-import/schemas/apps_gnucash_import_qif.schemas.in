@@ -12,7 +12,7 @@
         <short>Show documentation</short>
         <long>
           Show some documentation-only pages in QIF Import assistant.
-	</long>
+        </long>
       </locale>
     </schema>
 

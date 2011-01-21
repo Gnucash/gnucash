@@ -335,129 +335,144 @@ gnc_gnome_init (int argc, char **argv, const char * version)
 void
 gnc_gnome_help (const char *dir, const char *detail)
 {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  NSString *subdir = [NSString stringWithUTF8String: dir];
-  NSString *tag;
-  NSURL *url = NULL;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+NSString *subdir = [NSString stringWithUTF8String: dir];
+    NSString *tag;
+    NSURL *url = NULL;
 
-  if (detail)
-      tag  = [NSString stringWithUTF8String: detail];
-  else if ([subdir compare: @HF_HELP] == NSOrderedSame)
-      tag = @"help";
-  else if ([subdir compare: @HF_GUIDE] == NSOrderedSame)
-      tag = @"index";
-  else {
-      PWARN("gnc_gnome_help called with unknown subdirectory %s", dir);
-      return;
-  }
+    if (detail)
+tag  = [NSString stringWithUTF8String: detail];
+else if ([subdir compare: @HF_HELP] == NSOrderedSame)
+        tag = @"help";
+else if ([subdir compare: @HF_GUIDE] == NSOrderedSame)
+        tag = @"index";
+    else
+    {
+        PWARN("gnc_gnome_help called with unknown subdirectory %s", dir);
+        return;
+    }
 
-  if (![[NSBundle mainBundle] bundleIdentifier]) {
-/* If bundleIdentifier is NULL, then we're running from the
- * commandline and must construct a file path to the resource. We can
- * still get the resource path, but it will point to the "bin"
- * directory so we chop that off, break up what's left into pieces,
- * add some more pieces, and put it all back together again. Then,
- * because the gettext way of handling localizations is different from
- * OSX's, we have to figure out which translation to use. */
-      NSArray *components = [NSArray arrayWithObjects: @"share", @"gnome", @"help", @"gnucash", nil ];
-      NSString *prefix = [[[NSBundle mainBundle] resourcePath]
-			   stringByDeletingLastPathComponent];
-      NSArray *prefix_comps = [[prefix pathComponents]
-			       arrayByAddingObjectsFromArray: components];
-      NSString *docs_dir = [NSString pathWithComponents: prefix_comps];
-      NSArray *languages = [[NSUserDefaults standardUserDefaults]
-			    objectForKey: @"AppleLanguages"];
-      BOOL dir;
-      subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "]
-		componentsJoinedByString: @"-"];
-      if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir]) {
+    if (![[NSBundle mainBundle] bundleIdentifier])
+    {
+        /* If bundleIdentifier is NULL, then we're running from the
+         * commandline and must construct a file path to the resource. We can
+         * still get the resource path, but it will point to the "bin"
+         * directory so we chop that off, break up what's left into pieces,
+         * add some more pieces, and put it all back together again. Then,
+         * because the gettext way of handling localizations is different from
+         * OSX's, we have to figure out which translation to use. */
+NSArray *components = [NSArray arrayWithObjects: @"share", @"gnome", @"help", @"gnucash", nil ];
+        NSString *prefix = [[[NSBundle mainBundle] resourcePath]
+                            stringByDeletingLastPathComponent];
+        NSArray *prefix_comps = [[prefix pathComponents]
+                         arrayByAddingObjectsFromArray: components];
+NSString *docs_dir = [NSString pathWithComponents: prefix_comps];
+        NSArray *languages = [[NSUserDefaults standardUserDefaults]
+                      objectForKey: @"AppleLanguages"];
+        BOOL dir;
+subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "]
+          componentsJoinedByString: @"-"];
+if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
+        {
+            const gchar *message =
+                _("GnuCash could not find the files for the help documentation.  "
+                  "This is likely because the 'gnucash-docs' package is not installed.");
+            gnc_error_dialog(NULL, "%s", message);
+            [pool release];
+            return;
+        }
+        if ([languages count] > 0)
+        {
+            NSEnumerator *lang_iter = [languages objectEnumerator];
+            NSString *path;
+            NSString *this_lang;
+            while ((this_lang = [lang_iter nextObject]))
+            {
+                NSArray *elements;
+                unsigned int paths;
+                NSString *completed_path = [NSString alloc];
+this_lang = [this_lang stringByTrimmingCharactersInSet:
+             [NSCharacterSet characterSetWithCharactersInString:
+                              @"\""]];
+elements = [this_lang componentsSeparatedByString: @"-"];
+                this_lang = [elements objectAtIndex: 0];
+path = [docs_dir stringByAppendingPathComponent: this_lang];
+paths = [path completePathIntoString: &completed_path
+         caseSensitive: FALSE
+         matchesIntoArray: NULL filterTypes: NULL];
+                if (paths > 1 &&
+                        [[NSFileManager defaultManager]
+         fileExistsAtPath: completed_path
+         isDirectory: &dir])
+                    if (dir)
+                    {
+                        @try
+                        {
+url = [NSURL fileURLWithPath:
+                                   [[[completed_path
+          stringByAppendingPathComponent: subdir]
+         stringByAppendingPathComponent: tag]
+        stringByAppendingPathExtension: @"html"]];
+                        }
+                        @catch (NSException *e)
+                        {
+                            PWARN("fileURLWithPath threw %s: %s",
+                                  [[e name] UTF8String], [[e reason] UTF8String]);
+                            return;
+                        }
+                        break;
+                    }
+if ([this_lang compare: @"en"] == NSOrderedSame)
+                    break; /* Special case, forces use of "C" locale */
+            }
+        }
+        if (!url)
+        {
+            @try
+            {
+                url = [NSURL
+       fileURLWithPath: [[[[docs_dir
+                            stringByAppendingPathComponent: @"C"]
+                           stringByAppendingPathComponent: subdir]
+                          stringByAppendingPathComponent: tag]
+                         stringByAppendingPathExtension: @"html"]];
+            }
+            @catch (NSException *e)
+            {
+                PWARN("fileURLWithPath threw %s: %s",
+                      [[e name] UTF8String], [[e reason] UTF8String]);
+                return;
+            }
+        }
+    }
+    /* It's a lot easier in a bundle! OSX finds the best translation for us. */
+    else
+    {
+        @try
+        {
+url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
+                               pathForResource: tag
+                               ofType: @"html"
+                               inDirectory: subdir ]];
+        }
+        @catch (NSException *e)
+        {
+            PWARN("fileURLWithPath threw %s: %s",
+                  [[e name] UTF8String], [[e reason] UTF8String]);
+            return;
+        }
+    }
+    /* Now just open the URL in the default app for opening URLs */
+    if (url)
+[[NSWorkspace sharedWorkspace] openURL: url];
+    else
+    {
         const gchar *message =
             _("GnuCash could not find the files for the help documentation.  "
               "This is likely because the 'gnucash-docs' package is not installed.");
         gnc_error_dialog(NULL, "%s", message);
-	[pool release];
-	return;
-      }
-      if ([languages count] > 0) {
-	  NSEnumerator *lang_iter = [languages objectEnumerator];
-	  NSString *path;
-	  NSString *this_lang;
-	  while((this_lang = [lang_iter nextObject])) {
-	      NSArray *elements;
-	      unsigned int paths;
-	      NSString *completed_path = [NSString alloc];
-	      this_lang = [this_lang stringByTrimmingCharactersInSet:
-			   [NSCharacterSet characterSetWithCharactersInString:
-			    @"\""]];
-	      elements = [this_lang componentsSeparatedByString: @"-"];
-	      this_lang = [elements objectAtIndex: 0];
-	      path = [docs_dir stringByAppendingPathComponent: this_lang];
-	      paths = [path completePathIntoString: &completed_path
-		       caseSensitive: FALSE
-		       matchesIntoArray: NULL filterTypes: NULL];
-	      if (paths > 1 &&
-		  [[NSFileManager defaultManager]
-			fileExistsAtPath: completed_path
-		   isDirectory: &dir])
-		  if (dir) {
-		      @try {
-			  url = [NSURL fileURLWithPath:
-				 [[[completed_path
-				    stringByAppendingPathComponent: subdir]
-				   stringByAppendingPathComponent: tag]
-				  stringByAppendingPathExtension: @"html"]];
-		      }
-		      @catch (NSException *e) {
-			  PWARN("fileURLWithPath threw %s: %s",
-				[[e name] UTF8String], [[e reason] UTF8String]);
-			  return;
-		      }
-		      break;
-		  }
-	      if ([this_lang compare:@"en"] == NSOrderedSame)
-		  break; /* Special case, forces use of "C" locale */
-	  }
-      }
-      if (!url) {
-	  @try {
-	      url = [NSURL
-		     fileURLWithPath: [[[[docs_dir
-					  stringByAppendingPathComponent: @"C"]
-					 stringByAppendingPathComponent: subdir]
-					stringByAppendingPathComponent: tag]
-				       stringByAppendingPathExtension: @"html"]];
-	  }
-	  @catch (NSException *e) {
-	      PWARN("fileURLWithPath threw %s: %s",
-		    [[e name] UTF8String], [[e reason] UTF8String]);
-	      return;
-	  }
-      }
-  }
-/* It's a lot easier in a bundle! OSX finds the best translation for us. */
-  else {
-      @try {
-	  url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
-					 pathForResource: tag
-					 ofType: @"html"
-					 inDirectory: subdir ]];
-      }
-      @catch (NSException *e) {
-	  PWARN("fileURLWithPath threw %s: %s",
-		[[e name] UTF8String], [[e reason] UTF8String]);
-	  return;
-      }
-  }
-/* Now just open the URL in the default app for opening URLs */
-  if (url)
-      [[NSWorkspace sharedWorkspace] openURL: url];
-  else {
-        const gchar *message =
-            _("GnuCash could not find the files for the help documentation.  "
-              "This is likely because the 'gnucash-docs' package is not installed.");
-        gnc_error_dialog(NULL, "%s", message);
-  }
-  [pool release];
+    }
+    [pool release];
 }
 #elif defined G_OS_WIN32 /* G_OS_WIN32 */
 void

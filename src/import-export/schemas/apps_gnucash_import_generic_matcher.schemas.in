@@ -12,9 +12,9 @@
       <locale name="C">
         <short>Window position</short>
         <long>
-	  The X,Y coordinates of the top left corner of the window
-	  when it was last closed.
-	</long>
+          The X,Y coordinates of the top left corner of the window
+          when it was last closed.
+        </long>
       </locale>
     </schema>
 
@@ -28,8 +28,8 @@
       <locale name="C">
         <short>Window geometry</short>
         <long>
-	  The width and size of the window when it was last closed.
-	</long>
+          The width and size of the window when it was last closed.
+        </long>
       </locale>
     </schema>
 
@@ -46,7 +46,7 @@
           enabled, a transaction whose best match's score is in the
           yellow zone (above the Auto-ADD threshold but below the
           Auto-CLEAR threshold) will be skipped by default.
-	</long>
+        </long>
       </locale>
     </schema>
 
@@ -64,7 +64,7 @@
           Auto-CLEAR threshold and has a different date or amount than the
           matching existing transaction will cause the existing transaction
           to be updated and cleared by default.
-	</long>
+        </long>
       </locale>
     </schema>
 

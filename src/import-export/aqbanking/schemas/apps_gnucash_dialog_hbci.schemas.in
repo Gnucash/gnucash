@@ -11,9 +11,9 @@
       <locale name="C">
         <short>Window position</short>
         <long>
-	  The X,Y coordinates of the top left corner of the window
-	  when it was last closed.
-	</long>
+          The X,Y coordinates of the top left corner of the window
+          when it was last closed.
+        </long>
       </locale>
     </schema>
 
@@ -26,8 +26,8 @@
       <locale name="C">
         <short>Window geometry</short>
         <long>
-	  The width and size of the window when it was last closed.
-	</long>
+          The width and size of the window when it was last closed.
+        </long>
       </locale>
     </schema>
 
@@ -40,10 +40,10 @@
       <locale name="C">
         <short>Close window when finished</short>
         <long>
-	  If active, the window will be closed automatically when you
-	  finish the HBCI/AqBanking import process. Otherwise it will
-	  stay open.
-	</long>
+          If active, the window will be closed automatically when you
+          finish the HBCI/AqBanking import process. Otherwise it will
+          stay open.
+        </long>
       </locale>
     </schema>
 
@@ -84,10 +84,10 @@
       <locale name="C">
         <short>DTAUS import data format</short>
         <long>
-	  This setting specifies the data format when importing DTAUS
-	  files.  The AqBanking library offers various import formats
-	  (called "profiles") of which you can choose one here.
-	</long>
+          This setting specifies the data format when importing DTAUS
+          files.  The AqBanking library offers various import formats
+          (called "profiles") of which you can choose one here.
+        </long>
       </locale>
     </schema>
 
@@ -100,10 +100,10 @@
       <locale name="C">
         <short>CSV import data format</short>
         <long>
-	  This setting specifies the data format when importing CSV
-	  files.  The AqBanking library offers various import formats
-	  (called "profiles") of which you can choose one here.
-	</long>
+          This setting specifies the data format when importing CSV
+          files.  The AqBanking library offers various import formats
+          (called "profiles") of which you can choose one here.
+        </long>
       </locale>
     </schema>
 
@@ -116,10 +116,10 @@
       <locale name="C">
         <short>SWIFT MT940 import data format</short>
         <long>
-	  This setting specifies the data format when importing SWIFT
-	  MT940 files.  The AqBanking library offers various import
-	  formats (called "profiles") of which you can choose one here.
-	</long>
+          This setting specifies the data format when importing SWIFT
+          MT940 files.  The AqBanking library offers various import
+          formats (called "profiles") of which you can choose one here.
+        </long>
       </locale>
     </schema>
 
@@ -132,10 +132,10 @@
       <locale name="C">
         <short>SWIFT MT942 import data format</short>
         <long>
-	  This setting specifies the data format when importing SWIFT
-	  MT942 files.  The AqBanking library offers various import
-	  formats (called "profiles") of which you can choose one here.
-	</long>
+          This setting specifies the data format when importing SWIFT
+          MT942 files.  The AqBanking library offers various import
+          formats (called "profiles") of which you can choose one here.
+        </long>
       </locale>
     </schema>
 
