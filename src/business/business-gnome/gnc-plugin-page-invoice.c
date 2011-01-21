@@ -98,11 +98,6 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 
     /* File menu */
     {
-        "FileNewInvoiceAction", GTK_STOCK_NEW, N_("New _Invoice"), "",
-        N_("Create a new invoice"),
-        G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
-    },
-    {
         "FileNewAccountAction", GNC_STOCK_NEW_ACCOUNT, N_("New _Account..."), NULL,
         N_("Create a new account"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_account)
@@ -178,6 +173,11 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
     },
 
     /* Business menu */
+    {
+        "BusinessNewInvoiceAction", GNC_STOCK_INVOICE_NEW, N_("New _Invoice"), "",
+        N_("Create a new invoice for the same owner as the current one"),
+        G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
+    },
     {
         "ToolsProcessPaymentAction", GNC_STOCK_INVOICE_PAY, N_("_Pay Invoice"), NULL,
         N_("Enter a payment for the owner of this Invoice"),

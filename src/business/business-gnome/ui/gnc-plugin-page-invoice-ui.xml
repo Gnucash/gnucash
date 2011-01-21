@@ -51,12 +51,13 @@
 
   <toolbar name="DefaultToolbar">
     <placeholder name="DefaultToolbarPlaceholder">
+      <toolitem name="ToolbarNewInvoice"       action="BusinessNewInvoiceAction"/>
       <toolitem name="ToolbarEditInvoice"       action="EditEditInvoiceAction"/>
       <toolitem name="ToolbarDuplicateInvoice"  action="EditDuplicateInvoiceAction"/>
+      <separator name="ToolbarSep65"/>
       <toolitem name="ToolbarRecordEntry"    	action="RecordEntryAction"/>
       <toolitem name="ToolbarCancelEntry"    	action="CancelEntryAction"/>
       <toolitem name="ToolbarDeleteEntry"    	action="DeleteEntryAction"/>
-      <separator name="ToolbarSep66"/>
       <toolitem name="ToolbarDuplicateEntry" 	action="DuplicateEntryAction"/>
       <toolitem name="ToolbarBlankEntry"     	action="BlankEntryAction"/>
       <separator name="ToolbarSep68"/>

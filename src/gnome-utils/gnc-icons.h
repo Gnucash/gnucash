@@ -22,6 +22,7 @@ G_BEGIN_DECLS
 #define GNC_STOCK_INVOICE_POST "gnc-invoice-post"
 #define GNC_STOCK_INVOICE_UNPOST "gnc-invoice-unpost"
 #define GNC_STOCK_INVOICE_PAY "gnc-invoice-pay"
+#define GNC_STOCK_INVOICE_NEW "gnc-invoice-new"
 #define GNC_STOCK_INVOICE_EDIT "gnc-invoice-edit"
 #define GNC_STOCK_INVOICE_DUPLICATE "gnc-invoice-duplicate"
 
