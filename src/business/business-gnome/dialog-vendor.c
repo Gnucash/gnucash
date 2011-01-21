@@ -207,8 +207,8 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
     if (check_entry_nonempty (vw->dialog, vw->company_entry,
                               _("You must enter a company name. "
                                 "If this vendor is an individual (and not a company) "
-                                "you should set the \"company name\" and \"contact name\" "
-                                "the same.")))
+                                "you should enter the same value for:\nIdentification "
+                                "- Company Name, and\nPayment Address - Name.")))
         return;
 
     /* Make sure we have an address */
