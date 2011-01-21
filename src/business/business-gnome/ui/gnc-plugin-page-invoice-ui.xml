@@ -50,6 +50,9 @@
   </menubar>
 
   <toolbar name="DefaultToolbar">
+    <placeholder name="ToolbarSavePlaceholder">
+      <toolitem name="ToolbarPrintInvoice" action="FilePrintAction"/>
+    </placeholder>
     <placeholder name="DefaultToolbarPlaceholder">
       <toolitem name="ToolbarNewInvoice"       action="BusinessNewInvoiceAction"/>
       <toolitem name="ToolbarEditInvoice"       action="EditEditInvoiceAction"/>
