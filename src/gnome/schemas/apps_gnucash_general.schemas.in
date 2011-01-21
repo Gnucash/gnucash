@@ -302,6 +302,39 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/date_completion</key>
+      <applyto>/apps/gnucash/general/date_completion</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>thisyear</default>
+      <locale name="C">
+        <short>How to interpret dates without a year</short>
+        <long>
+          When a date is entered without year it can be completed so
+          that it will be within the current calendar year or close to
+          the current date based on a sliding window starting a set
+          number of months backwards in time.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/date_backmonths</key>
+      <applyto>/apps/gnucash/general/date_backmonths</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>6.0</default>
+      <locale name="C">
+        <short>Maximum number of months to go back.</short>
+        <long>
+          Dates will be completed so that they are close to the current
+          date. Enter the maximum number of months to go backwards in
+          time when completing dates.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/show_splash_screen</key>
       <applyto>/apps/gnucash/general/show_splash_screen</applyto>
       <owner>gnucash</owner>

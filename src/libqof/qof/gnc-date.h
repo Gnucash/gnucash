@@ -110,6 +110,13 @@ typedef enum
 #define DATE_FORMAT_FIRST QOF_DATE_FORMAT_US
 #define DATE_FORMAT_LAST  QOF_DATE_FORMAT_LOCALE
 
+/** Enum for date completion modes (for dates entered without year) */
+typedef enum
+{
+    QOF_DATE_COMPLETION_THISYEAR, /**< use current year */
+    QOF_DATE_COMPLETION_SLIDING,  /**< use sliding 12-month window */
+} QofDateCompletion;
+
 /** \deprecated qof_date_format_get_format has been replaced
 by qof_date_text_format_get_string */
 #define qof_date_format_get_format qof_date_text_format_get_string
@@ -325,6 +332,14 @@ const gchar *qof_date_format_get_string(QofDateFormat df);
  *  requested style  */
 const gchar *qof_date_text_format_get_string(QofDateFormat df);
 // @}
+
+/**
+ * The qof_date_completion_set() routing sets the date completion method to
+ *    one of QOF_DATE_COMPLETION_THISYEAR (for completing the year to
+ *    the current calendar year) or QOF_DATE_COMPLETION_SLIDING (for
+ *    using a sliding 12-month window). The sliding window starts
+ *    'backmonth' months before the current month (0-11) */
+void qof_date_completion_set(QofDateCompletion dc, int backmonths);
 
 /** dateSeparator
  *    Return the field separator for the current date format

@@ -66,6 +66,8 @@
 #define KEY_NEGATIVE_IN_RED	"negative_in_red"
 #define KEY_ENABLE_EURO		"enable_euro"
 #define KEY_DATE_FORMAT 	"date_format"
+#define KEY_DATE_COMPLETION 	"date_completion"
+#define KEY_DATE_BACKMONTHS 	"date_backmonths"
 #define KEY_SHOW_LEAF_ACCOUNT_NAMES "show_leaf_account_names"
 
 typedef void (*GncGconfGeneralCb)    (GConfEntry *entry, gpointer user_data);

@@ -118,6 +118,58 @@ gnc_configure_date_format (void)
         free(format_code);
 }
 
+/* gnc_configure_date_completion
+ *    sets dateCompletion to the current value on the scheme side.
+ *    QOF_DATE_COMPLETION_THISYEAR: use current year
+ *    QOF_DATE_COMPLETION_SLIDING: use a sliding 12-month window
+ *    backmonths 0-11: windows starts this many months before current month
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_date_completion (void)
+{
+    char *date_completion = gnc_gconf_get_string(GCONF_GENERAL,
+                            KEY_DATE_COMPLETION, NULL);
+    int backmonths = gnc_gconf_get_float(GCONF_GENERAL,
+                                         KEY_DATE_BACKMONTHS, NULL);
+    QofDateCompletion dc;
+
+    if (backmonths < 0)
+    {
+        backmonths = 0;
+    }
+    else if (backmonths > 11)
+    {
+        backmonths = 11;
+    }
+
+    if (date_completion && strcmp(date_completion, "sliding") == 0)
+    {
+        dc = QOF_DATE_COMPLETION_SLIDING;
+    }
+    else if (date_completion && strcmp(date_completion, "thisyear") == 0)
+    {
+        dc = QOF_DATE_COMPLETION_THISYEAR;
+    }
+    else
+    {
+        /* No preference has been set yet */
+        PINFO("Incorrect date completion code, using defaults");
+        dc = QOF_DATE_COMPLETION_THISYEAR;
+        backmonths = 6;
+        gnc_gconf_set_string (GCONF_GENERAL, KEY_DATE_COMPLETION, "thisyear", NULL);
+        gnc_gconf_set_float (GCONF_GENERAL, KEY_DATE_BACKMONTHS, 6.0, NULL);
+    }
+    qof_date_completion_set(dc, backmonths);
+
+    if (date_completion != NULL)
+    {
+        free(date_completion);
+    }
+}
+
 char *
 gnc_gnome_locate_pixmap (const char *name)
 {
@@ -628,9 +680,14 @@ gnc_gui_init(void)
 
     gnc_ui_util_init();
     gnc_configure_date_format();
+    gnc_configure_date_completion();
 
     gnc_gconf_general_register_cb(
         KEY_DATE_FORMAT, (GncGconfGeneralCb)gnc_configure_date_format, NULL);
+    gnc_gconf_general_register_cb(
+        KEY_DATE_COMPLETION, (GncGconfGeneralCb)gnc_configure_date_completion, NULL);
+    gnc_gconf_general_register_cb(
+        KEY_DATE_BACKMONTHS, (GncGconfGeneralCb)gnc_configure_date_completion, NULL);
     gnc_gconf_general_register_any_cb(
         (GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
 

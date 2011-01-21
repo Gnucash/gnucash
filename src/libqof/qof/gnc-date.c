@@ -85,6 +85,9 @@ const char *gnc_default_strftime_date_format =
 static QofDateFormat dateFormat = QOF_DATE_FORMAT_LOCALE;
 static QofDateFormat prevQofDateFormat = QOF_DATE_FORMAT_LOCALE;
 
+static QofDateCompletion dateCompletion = QOF_DATE_COMPLETION_THISYEAR;
+static int dateCompletionBackMonths = 6;
+
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
@@ -352,6 +355,48 @@ void qof_date_format_set(QofDateFormat df)
     return;
 }
 
+/* set date completion method
+
+set dateCompletion to one of QOF_DATE_COMPLETION_THISYEAR (for
+completing the year to the current calendar year) or
+QOF_DATE_COMPLETION_SLIDING (for using a sliding 12-month window). The
+sliding window starts 'backmonth' months before the current month (0-11).
+checks to make sure it's a legal value
+
+param QofDateCompletion: indicates preferred completion method
+param int: the number of months to go back in time (0-11)
+
+return void
+
+Globals: dateCompletion dateCompletionBackMonths
+*/
+void qof_date_completion_set(QofDateCompletion dc, int backmonths)
+{
+    if (dc == QOF_DATE_COMPLETION_THISYEAR ||
+        dc == QOF_DATE_COMPLETION_SLIDING)
+    {
+        dateCompletion = dc;
+    }
+    else
+    {
+        /* hack alert - Use a neutral default. */
+        PERR("non-existent date completion set attempted. Setting current year completion as default");
+        dateCompletion = QOF_DATE_COMPLETION_THISYEAR;
+    }
+
+    if (backmonths < 0)
+    {
+        backmonths = 0;
+    }
+    else if (backmonths > 11)
+    {
+        backmonths = 11;
+    }
+    dateCompletionBackMonths = backmonths;
+
+    return;
+}
+
 /*
  qof_date_format_get_string
  get the date format string for the current format
@@ -599,6 +644,21 @@ qof_print_time_buff (char * buff, size_t len, time_t secs)
 
 /* ============================================================== */
 
+/* return the greatest integer <= a/b; works for b > 0 and positive or
+   negative a. */
+static int
+floordiv(int a, int b)
+{
+    if (a >= 0)
+    {
+        return a / b;
+    }
+    else
+    {
+        return - ((-a-1) / b) - 1;
+    }
+}
+
 /* Convert a string into  day, month and year integers
 
     Convert a string into  day / month / year integers according to
@@ -627,6 +687,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
 {
     char *dupe, *tmp, *first_field, *second_field, *third_field;
     int iday, imonth, iyear;
+    int now_day, now_month, now_year;
     struct tm *now, utc;
     time_t secs;
 
@@ -669,12 +730,17 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
         }
     }
 
-    /* If any fields appear to be blank, use today's date */
+    /* today's date */
     time (&secs);
     now = localtime (&secs);
-    iday = now->tm_mday;
-    imonth = now->tm_mon + 1;
-    iyear = now->tm_year + 1900;
+    now_day = now->tm_mday;
+    now_month = now->tm_mon + 1;
+    now_year = now->tm_year + 1900;
+
+    /* set defaults: if day or month appear to be blank, use today's date */
+    iday = now_day;
+    imonth = now_month;
+    iyear = -1;
 
     /* get numeric values */
     switch (which_format)
@@ -812,10 +878,33 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
         }
     }
 
+    /* if no year was entered, choose a year according to the
+       dateCompletion preference. If it is
+       QOF_DATE_COMPLETION_THISYEAR, use the current year, else if it
+       is QOF_DATE_COMPLETION_SLIDING, use a sliding window that
+       starts dateCompletionBackMonths before the current month.
+
+       We go by whole months, rather than days, because presumably
+       this is less confusing.
+    */
+
+    if (iyear == -1)
+    {
+        if (dateCompletion == QOF_DATE_COMPLETION_THISYEAR)
+        {
+            iyear = now_year;  /* use the current year */
+        }
+        else
+        {
+            iyear = now_year - floordiv(imonth - now_month +
+                                        dateCompletionBackMonths, 12);
+        }
+    }
+
     /* If the year entered is smaller than 100, assume we mean the current
        century (and are not revising some roman emperor's books) */
     if (iyear < 100)
-        iyear += ((int) ((now->tm_year + 1950 - iyear) / 100)) * 100;
+        iyear += ((int) ((now_year + 50 - iyear) / 100)) * 100;
 
     if (year) *year = iyear;
     if (month) *month = imonth;
