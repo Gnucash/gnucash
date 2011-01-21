@@ -47,7 +47,17 @@ fi
 #   If this is an svn checkout we assume you have svnversion!
 if test -d "${real_srcdir}"/.svn
 then
-  svnversion "$real_srcdir"
+  # svnversion without options returns the most recent revision in the repo
+  # at the time of the last svn update/checkout even if that revision
+  # didn't hold any changes in the current path. Not very useful as a
+  # reference. Better is to ask for the last changed revision with -c.
+  # BUT: -c option for some reason always considers svn working copy
+  # as having mixed sources. We're only interested in the last part so
+  # we strip the beginning revision if it's there.
+  # As a result if your WC really has mixed sources, that will not be
+  # visible in the version number...
+  svn_mixed_version=$(svnversion -c "$real_srcdir")
+  echo ${svn_mixed_version#*:}
   exit $?
 fi
 
