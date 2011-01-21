@@ -133,7 +133,7 @@
             <child>
               <widget class="GtkLabel" id="label4">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">2, Select import type</property>
+                <property name="label" translatable="yes">2. Select import type</property>
                 <property name="use_markup">True</property>
               </widget>
               <packing>
