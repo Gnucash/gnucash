@@ -340,7 +340,7 @@ procedure MyAfterInstallEnvironment();
 var
   EnvFile, EtcDir: String;
   iLineCounter, iSize : Integer;
-  EnvStringList: TArrayOfString;
+  EnvStrList: TArrayOfString;
   Res: Boolean;
 begin
   { Make some Windows-only changes to the etc/@PACKAGE@/environment file }
@@ -353,19 +353,24 @@ begin
   EtcDir := ExtractFileDir(EnvFile); 
 
   { Load the current contents of the environment file }
-  Res := LoadStringsFromFile(EnvFile, EnvStringList);
+  Res := LoadStringsFromFile(EnvFile, EnvStrList);
   if Res = False then
     MsgBox('Error on reading ' + EnvFile + ' for completing the installation', mbInformation, MB_OK);
 
-  iSize := GetArrayLength(EnvStringList);
+  iSize := GetArrayLength(EnvStrList);
   for iLineCounter := 0 to iSize-1 do
     begin
-      { Adapt GUILE_LOAD_PATH parameter }
-      if (Pos('GUILE_LOAD_PATH', EnvStringList[iLineCounter]) = 1) then
-        StringChangeEx(EnvStringList[iLineCounter], '{GUILE_LOAD_PATH}', '{GNC_HOME}/share/guile/1.6;{GUILE_LOAD_PATH}', True);
+      { Adapt GUILE_LOAD_PATH parameter and prevent cygwin interference in SCHEME_LIBRARY_PATH }
+      if (Pos('GUILE_LOAD_PATH', EnvStrList[iLineCounter]) = 1) then
+      begin
+        StringChangeEx(EnvStrList[iLineCounter], '{GUILE_LOAD_PATH}', '{GNC_HOME}/share/guile/1.6;{GUILE_LOAD_PATH}', True);
+
+        EnvStrList[iLineCounter] := EnvStrList[iLineCounter] + #13#10 + '# Clear SCHEME_LIBRARY_PATH to prevent interference from other guile installations (like cygwin)' + #13#10;
+        EnvStrList[iLineCounter] := EnvStrList[iLineCounter] + 'SCHEME_LIBRARY_PATH=' + #13#10;
+      end;
       { Adapt GNC_DBD_DIR parameter }
-      if (Pos('GNC_DBD_DIR', EnvStringList[iLineCounter]) > 0) then
-        EnvStringList[iLineCounter] := 'GNC_DBD_DIR={GNC_HOME}/lib/dbd';
+      if (Pos('GNC_DBD_DIR', EnvStrList[iLineCounter]) > 0) then
+        EnvStrList[iLineCounter] := 'GNC_DBD_DIR={GNC_HOME}/lib/dbd';
     end;
 
   { Save the final file }
@@ -373,7 +378,7 @@ begin
   if Res = False then
     MsgBox('Error on creating ' + EtcDir + ' for completing the installation', mbInformation, MB_OK);
 
-  Res := SaveStringsToFile(EnvFile, EnvStringList, False);
+  Res := SaveStringsToFile(EnvFile, EnvStrList, False);
   if Res = False then
     MsgBox('Error on saving ' + EnvFile + ' for completing the installation', mbInformation, MB_OK);
 end;
