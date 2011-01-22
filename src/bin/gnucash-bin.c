@@ -320,9 +320,7 @@ set_mac_locale()
  * traditional Chinese (zh-Hant), which are normally assigned the
  * locales zh_CN and zh_TW, respectively. Those are handled
  * specially.*/
-    if ([languages count] > 0 &&
-	!([[languages objectAtIndex: 0] isEqualToString: @"en"] ||
-	  [[languages objectAtIndex: 0] isEqualToString: @"\"en-US\""])) {
+    if ([languages count] > 0) {
 	NSEnumerator *lang_iter = [languages objectEnumerator];
 	NSString *this_lang;
 	NSArray *elements;
@@ -339,9 +337,15 @@ set_mac_locale()
 		    else
 			this_lang = [NSString stringWithString: @"zh_TW"];
 		}
+
+	    /* Gnucash has 3 translations with country specifications (other than chinese): en_GB, es_NI, and pt_BR. All of the rest are plain. Since gettext is too stupid on its own to look for pt if pt_PT isn't available, we'll special case those three and */
+		else if ([this_lang isEqualToString: @"en-GB"] ||
+			 [this_lang isEqualToString: @"es-NI"] ||
+			 [this_lang isEqualToString: @"pt-BR"] )
+		  this_lang = [elements componentsJoinedByString: @"_"];
+		else
+		  this_lang = [elements objectAtIndex: 0];
 	    }
-	    else
-		this_lang = [elements componentsJoinedByString: @"_"];
 	    new_languages = [new_languages arrayByAddingObject: this_lang];
 	}
 	langs = [[new_languages componentsJoinedByString:@":"] UTF8String];
