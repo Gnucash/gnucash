@@ -362,8 +362,10 @@ gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
 {
     GList *rtn = NULL;
     const GncGUID *acct_guid = qof_entity_get_guid(QOF_INSTANCE(acct));
-    GList *sx_list = gnc_book_get_schedxactions(book)->sx_list;
-    for (; sx_list != NULL; sx_list = sx_list->next)
+    GList *sx_list;
+    SchedXactions *sxactions = gnc_book_get_schedxactions(book);
+    g_return_val_if_fail( sxactions != NULL, rtn);
+    for (sx_list = sxactions->sx_list; sx_list != NULL; sx_list = sx_list->next)
     {
         SchedXaction *sx = (SchedXaction*)sx_list->data;
         GList *splits = xaccSchedXactionGetSplits(sx);
