@@ -137,7 +137,7 @@ static /*@ null @*/ gchar* add_columns_ddl( GncSqlConnection* conn,
         const gchar* table_name,
         GList* col_info_list );
 static GncSqlConnection* create_dbi_connection( /*@ observer @*/ provider_functions_t* provider, /*@ observer @*/ QofBackend* qbe, /*@ observer @*/ dbi_conn conn );
-
+static gboolean conn_test_dbi_library( dbi_conn conn );
 #define GNC_DBI_PROVIDER_SQLITE (&provider_sqlite3)
 #define GNC_DBI_PROVIDER_MYSQL (&provider_mysql)
 #define GNC_DBI_PROVIDER_PGSQL (&provider_pgsql)
@@ -227,7 +227,7 @@ sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
 
     (void)dbi_conn_error( conn, &msg );
     PERR( "DBI error: %s\n", msg );
-    gnc_dbi_set_error( dbi_conn, ERR_BACKEND_MISC, 0, FALSE );
+    gnc_dbi_set_error( conn, ERR_BACKEND_MISC, 0, FALSE );
 }
 
 static void
@@ -237,9 +237,11 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
     gint result;
-    gchar* dirname;
-    gchar* basename;
+    gchar* dirname = NULL;
+    gchar* basename = NULL;
     gchar *filepath = NULL;
+    gchar *msg = " ";
+    gboolean file_exists;
 
     g_return_if_fail( qbe != NULL );
     g_return_if_fail( session != NULL );
@@ -249,22 +251,20 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
 
     /* Remove uri type if present */
     filepath = gnc_uri_get_path ( book_id );
-
-    if ( !create &&
-            !g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
+    file_exists = g_file_test( filepath,
+			       G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS );
+    if ( !create && !file_exists )
     {
         qof_backend_set_error( qbe, ERR_FILEIO_FILE_NOT_FOUND );
         qof_backend_set_message(qbe, "Sqlite3 file %s not found", filepath);
-        LEAVE(" ");
-        return;
+	goto exit;
     }
 
-    if ( create && !force &&
-            g_file_test( filepath, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS ) )
+    if ( create && !force && file_exists )
     {
         qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
-        LEAVE("Might clobber, no force");
-        return;
+        msg = "Might clobber, no force";
+	goto exit;
     }
 
 
@@ -277,13 +277,11 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     {
         PERR( "Unable to create sqlite3 dbi connection\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
-        LEAVE( " " );
-        return;
+	goto exit;
     }
 
     dirname = g_path_get_dirname( filepath );
     basename = g_path_get_basename( filepath );
-    g_free ( filepath );
     dbi_conn_error_handler( be->conn, sqlite3_error_fn, be );
     /* dbi-sqlite3 documentation says that sqlite3 doesn't take a "host" option */
     result = dbi_conn_set_option( be->conn, "host", "localhost" );
@@ -291,42 +289,48 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     {
         PERR( "Error setting 'host' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
+	goto exit;
     }
     result = dbi_conn_set_option( be->conn, "dbname", basename );
     if ( result < 0 )
     {
         PERR( "Error setting 'dbname' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
+	goto exit;
     }
     result = dbi_conn_set_option( be->conn, "sqlite3_dbdir", dirname );
     if ( result < 0 )
     {
         PERR( "Error setting 'sqlite3_dbdir' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        LEAVE( " " );
-        return;
+	goto exit;
     }
     result = dbi_conn_connect( be->conn );
-    g_free( basename );
-    g_free( dirname );
-    /* Need some better error handling here. In particular, need to emit a QOF_ERROR_LOCKED if the database is in use by another process. */
+
     if ( result < 0 )
     {
         PERR( "Unable to connect to %s: %d\n", book_id, result );
         qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
-        LEAVE( " " );
-        return;
+	goto exit;
     }
 
+    if ( !conn_test_dbi_library( be->conn ) ) {
+	qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+	qof_backend_set_message( qbe, "DBI library fails large number test" );
+	if ( create && !file_exists ) /* File didn't exist before, but it */
+	{     			      /* does now, and we don't want to */
+	    dbi_conn_close( be->conn );/* leave it lying around. */
+	    be->conn = NULL;
+	    g_unlink( filepath );
+	}
+	msg = "Bad DBI Library";
+	goto exit;
+    }
     if ( !gnc_dbi_lock_database( qbe, ignore_lock ) )
     {
         qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
-        LEAVE( "Locked" );
-        return;
+        msg = "Locked";
+	goto exit;
     }
 
     if ( be->sql_be.conn != NULL )
@@ -335,8 +339,11 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     }
     be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_SQLITE, qbe, be->conn );
     be->sql_be.timespec_format = SQLITE3_TIMESPEC_STR_FORMAT;
-
-    LEAVE (" ");
+exit:
+    if ( filepath != NULL ) g_free ( filepath );
+    if ( basename != NULL ) g_free( basename );
+    if ( dirname != NULL ) g_free( dirname );
+    LEAVE ( "%s", msg );
 }
 
 static GSList*
@@ -628,6 +635,7 @@ gnc_dbi_unlock( QofBackend *qbe )
 
     dbname = dbi_conn_get_option( dcon, "dbname" );
     /* Check if the lock table exists */
+    g_return_if_fail( dbname != NULL );
     result = dbi_conn_get_table_list( dcon, dbname, lock_table);
     if (!( result && dbi_result_get_numrows( result ) ))
     {
@@ -753,6 +761,12 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
+	if ( !conn_test_dbi_library( be->conn ) ) {
+	    qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+	    qof_backend_set_message( qbe,
+				     "DBI library fails large number test" );
+	    goto exit;
+	}
         if (create && !force && save_may_clobber_data( qbe ) )
         {
             qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
@@ -819,6 +833,13 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
+	    if ( !conn_test_dbi_library( be->conn ) ) {
+		qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+		qof_backend_set_message( qbe,
+					 "DBI library fails large number test" );
+		dbi_conn_queryf( be->conn, "DROP DATABASE %s", dbname );
+		goto exit;
+	    }
             success = gnc_dbi_lock_database ( qbe, ignore_lock );
         }
         else
@@ -1006,6 +1027,12 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
+	if ( !conn_test_dbi_library( be->conn ) ) {
+	    qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+	    qof_backend_set_message( qbe,
+				     "DBI library fails large number test" );
+	    goto exit;
+	}
         if (create && !force && save_may_clobber_data( qbe ) )
         {
             qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
@@ -1073,6 +1100,14 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
+	    if ( !conn_test_dbi_library( be->conn ) ) {
+		qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+		qof_backend_set_message( qbe,
+					 "DBI library fails large number test" );
+		dbi_conn_select_db( be->conn, "template1" );
+		dbi_conn_queryf( be->conn, "DROP DATABASE %s", dbnamelc );
+		goto exit;
+	    }
             success = gnc_dbi_lock_database ( qbe, ignore_lock );
         }
         else
@@ -1081,7 +1116,6 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
             qof_backend_set_message( qbe, "Database %s not found", dbname );
         }
     }
-
     if ( success )
     {
         if ( be->sql_be.conn != NULL )
@@ -2808,6 +2842,80 @@ conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname )
     }
     return list;
 }
+
+/** Users discovered a bug in some distributions of libdbi, where if
+ * it is compiled on certain versions of gcc with the -ffast-math
+ * compiler option it fails to correctly handle saving of 64-bit
+ * values. This function tests for the problem.
+ * @param: conn: The just-opened dbi_conn
+ * @returns: TRUE if the dbi library is safe to use, FALSE otherwise.
+ */
+static gboolean
+conn_test_dbi_library( dbi_conn conn )
+{
+    gint64 testlonglong = -9223372036854775807LL, resultlonglong = 0;
+    guint64 testulonglong = 9223372036854775807LLU, resultulonglong = 0;
+    gdouble testdouble = 1.7976921348623157E+307, resultdouble = 0.0;
+    dbi_result result;
+    gboolean retval = TRUE;
+
+    result = dbi_conn_query( conn, "CREATE TEMPORARY TABLE numtest "
+			     "( test_int BIGINT, test_unsigned BIGINT,"
+			     " test_double FLOAT8 )" );
+    if ( result == NULL )
+    {
+	PWARN("Test_DBI_Library: Create table failed");
+	return FALSE;
+    }
+    dbi_result_free( result );
+    result = dbi_conn_queryf( conn,
+			      "INSERT INTO numtest VALUES (%lld, %llu, %17e)",
+			      testlonglong, testulonglong, testdouble );
+    if ( result == NULL )
+    {
+	PWARN("Test_DBI_Library: Failed to insert test row into table" );
+	return FALSE;
+    }
+    dbi_result_free( result );
+    result = dbi_conn_query( conn, "SELECT * FROM numtest" );
+    if ( result == NULL )
+    {
+	const char *errmsg;
+	dbi_conn_error( conn, &errmsg );
+	PWARN("Test_DBI_Library: Failed to retrieve test row into table: %s",
+	      errmsg );
+	result = dbi_conn_query( conn, "DROP TABLE numtest" );
+	return FALSE;
+    }
+    while ( dbi_result_next_row( result ))
+    {
+	resultlonglong = dbi_result_get_longlong( result, "test_int" );
+	resultulonglong = dbi_result_get_ulonglong( result, "test_unsigned" );
+	resultdouble = dbi_result_get_double( result, "test_double" );
+    }
+    if ( testlonglong != resultlonglong )
+    {
+	PWARN( "Test_DBI_Library: LongLong Failed %lld != %lld",
+	       testlonglong, resultlonglong );
+	retval = FALSE;
+    }
+    if ( testulonglong != resultulonglong )
+    {
+	PWARN( "Test_DBI_Library: Unsigned longlong Failed %llu != %llu",
+	       testulonglong, resultulonglong );
+	retval = FALSE;
+    }
+    /* A bug in libdbi stores only 7 digits of precision */
+    if ( testdouble >= resultdouble + 0.000001e307 ||
+	 testdouble <= resultdouble - 0.000001e307 )
+    {
+	PWARN( "Test_DBI_Library: Double Failed %17e != %17e",
+	       testdouble, resultdouble );
+	retval = FALSE;
+    }
+    return retval;
+}
+
 
 static GncSqlConnection*
 create_dbi_connection( /*@ observer @*/ provider_functions_t* provider,

@@ -109,6 +109,7 @@ typedef enum
     ERR_SQL_DB_TOO_OLD,           /**< database is old and needs upgrading */
     ERR_SQL_DB_TOO_NEW,		  /**< database is newer, we can't write to it */
     ERR_SQL_DB_BUSY,              /**< database is busy, cannot upgrade version */
+    ERR_SQL_BAD_DBI,		  /**< LibDBI has numeric errors */
 
     /* RPC errors */
     ERR_RPC_HOST_UNK = 4000,      /**< Host unknown */

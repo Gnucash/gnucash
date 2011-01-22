@@ -428,6 +428,15 @@ show_session_error (QofBackendError io_error,
         gnc_error_dialog (parent, "%s", fmt);
         break;
 
+    case ERR_SQL_BAD_DBI:
+	fmt = _("The libdbi installed on your system doesn't correctly store "
+		"large numbers. This is fatal, and Gnucash will not open or "
+		"save to SQL databases until it is fixed. Please see "
+		"https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more "
+		"information.");
+	gnc_error_dialog (parent, "%s", fmt);
+	break;
+
     default:
         PERR("FIXME: Unhandled error %d", io_error);
         fmt = _("An unknown I/O error (%d) occurred.");
