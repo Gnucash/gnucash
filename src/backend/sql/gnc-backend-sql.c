@@ -83,7 +83,8 @@
 static const gchar* convert_search_obj( QofIdType objType );
 #endif
 static void gnc_sql_init_object_handlers( void );
-static void update_save_progress( GncSqlBackend* be );
+static void update_progress( GncSqlBackend* be );
+static void finish_progress( GncSqlBackend* be );
 static void register_standard_col_type_handlers( void );
 static gboolean reset_version_info( GncSqlBackend* be );
 /*@ null @*/
@@ -160,6 +161,7 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 
     if ( pData->create_tables != NULL )
     {
+	update_progress( be );
         (pData->create_tables)( be );
     }
 }
@@ -192,12 +194,14 @@ initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
     // Don't need to load anything if it has already been loaded with the fixed order
     for ( i = 0; fixed_load_order[i] != NULL; i++ )
     {
+	update_progress( be );
         if ( g_ascii_strcasecmp( type, fixed_load_order[i] ) == 0 ) return;
     }
     if ( other_load_order != NULL )
     {
         for ( i = 0; other_load_order[i] != NULL; i++ )
         {
+	    update_progress( be );
             if ( g_ascii_strcasecmp( type, other_load_order[i] ) == 0 ) return;
         }
     }
@@ -233,6 +237,7 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
             pData = qof_object_lookup_backend( fixed_load_order[i], GNC_SQL_BACKEND );
             if ( pData->initial_load != NULL )
             {
+		update_progress( be );
                 (pData->initial_load)( be );
             }
         }
@@ -243,6 +248,7 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
                 pData = qof_object_lookup_backend( other_load_order[i], GNC_SQL_BACKEND );
                 if ( pData->initial_load != NULL )
                 {
+		    update_progress( be );
                     (pData->initial_load)( be );
                 }
             }
@@ -265,6 +271,7 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
 
     // Mark the book as clean
     qof_book_mark_saved( book );
+    finish_progress( be );
 
     LEAVE( "" );
 }
@@ -320,6 +327,7 @@ write_commodities( GncSqlBackend* be, QofBook* book )
             gnc_sql_save_commodity( be, GNC_COMMODITY(lp2->data) );
         }
     }
+    update_progress( be );
 }
 #endif
 
@@ -342,10 +350,10 @@ write_account_tree( GncSqlBackend* be, Account* root )
         {
             is_ok = gnc_sql_save_account( be, QOF_INSTANCE(GNC_ACCOUNT(node->data)) );
             if ( !is_ok ) break;
-            update_save_progress( be );
-        }
+         }
         g_list_free( descendants );
     }
+    update_progress( be );
 
     return is_ok;
 }
@@ -357,9 +365,11 @@ write_accounts( GncSqlBackend* be )
 
     g_return_val_if_fail( be != NULL, FALSE );
 
+    update_progress( be );
     is_ok = write_account_tree( be, gnc_book_get_root_account( be->primary_book ) );
     if ( is_ok )
     {
+	update_progress( be );
         is_ok = write_account_tree( be, gnc_book_get_template_root( be->primary_book ) );
     }
 
@@ -375,7 +385,7 @@ write_tx( Transaction* tx, gpointer data )
     g_return_val_if_fail( data != NULL, 0 );
 
     s->is_ok = gnc_sql_save_transaction( s->be, QOF_INSTANCE(tx) );
-    update_save_progress( s->be );
+    update_progress( s->be );
 
     if ( s->is_ok )
     {
@@ -396,9 +406,9 @@ write_transactions( GncSqlBackend* be )
 
     data.be = be;
     data.is_ok = TRUE;
-    (void)xaccAccountTreeForEachTransaction( gnc_book_get_root_account( be->primary_book ),
-    write_tx,
-    &data );
+    (void)xaccAccountTreeForEachTransaction(
+	gnc_book_get_root_account( be->primary_book ), write_tx, &data );
+    update_progress( be );
     return data.is_ok;
 }
 
@@ -416,6 +426,7 @@ write_template_transactions( GncSqlBackend* be )
     if ( gnc_account_n_descendants( ra ) > 0 )
     {
         (void)xaccAccountTreeForEachTransaction( ra, write_tx, &data );
+	update_progress( be );
     }
 
     return data.is_ok;
@@ -437,6 +448,7 @@ write_schedXactions( GncSqlBackend* be )
         tmpSX = schedXactions->data;
         is_ok = gnc_sql_save_schedxaction( be, QOF_INSTANCE( tmpSX ) );
     }
+    update_progress( be );
 
     return is_ok;
 }
@@ -453,24 +465,22 @@ write_cb( const gchar* type, gpointer data_p, gpointer be_p )
     if ( pData->write != NULL )
     {
         (void)(pData->write)( be );
+	update_progress( be );
     }
 }
 
 static void
-update_save_progress( GncSqlBackend* be )
+update_progress( GncSqlBackend* be )
 {
     if ( be->be.percentage != NULL )
-    {
-        double percent_done;
+        (be->be.percentage)( NULL, 101.0 );
+}
 
-        be->operations_done++;
-        percent_done = be->operations_done * 100.0 / be->obj_total;
-        if ( percent_done > 100 )
-        {
-            percent_done = 100;
-        }
-        (be->be.percentage)( NULL, percent_done );
-    }
+static void
+finish_progress( GncSqlBackend* be )
+{
+    if ( be->be.percentage != NULL )
+        (be->be.percentage)( NULL, -1.0 );
 }
 
 void
@@ -482,7 +492,7 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     g_return_if_fail( book != NULL );
 
     ENTER( "book=%p, primary=%p", book, be->primary_book );
-
+    update_progress( be );
     (void)reset_version_info( be );
     gnc_sql_set_table_version( be, "Gnucash", gnc_get_svn_version() );
     gnc_sql_set_table_version( be, "Gnucash-Resave", GNC_RESAVE_VERSION );
@@ -542,6 +552,7 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
 	qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_SERVER_ERR );
         is_ok = gnc_sql_connection_rollback_transaction( be->conn );
     }
+    finish_progress( be );
     LEAVE( "book=%p", book );
 }
 
