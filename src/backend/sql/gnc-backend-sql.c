@@ -603,6 +603,12 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
     g_return_if_fail( be != NULL );
     g_return_if_fail( inst != NULL );
 
+    if ( qof_book_is_readonly( be->primary_book ) )
+    {
+	qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_READONLY );
+        (void)gnc_sql_connection_rollback_transaction( be->conn );
+	return;
+    }
     /* During initial load where objects are being created, don't commit
     anything, but do mark the object as clean. */
     if ( be->loading )
@@ -647,7 +653,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
     be_data.inst = inst;
     be_data.is_ok = TRUE;
     /* Set/update the application version in the database */
-    if (gnc_sql_get_table_version( be, "Gnucash") != gnc_version )
+    if ( gnc_sql_get_table_version( be, "Gnucash") != gnc_version )
 	gnc_sql_set_table_version( be, "Gnucash", gnc_version );
 
     qof_object_foreach_backend( GNC_SQL_BACKEND, commit_cb, &be_data );
