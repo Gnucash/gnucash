@@ -1055,7 +1055,6 @@ qof_begin_edit (QofInstance *inst)
     if (!inst) return FALSE;
 
     priv = GET_PRIVATE(inst);
-    if (qof_book_is_readonly(priv->book)) return FALSE;
     priv->editlevel++;
     if (1 < priv->editlevel) return FALSE;
     if (0 >= priv->editlevel)
