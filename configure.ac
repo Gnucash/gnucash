@@ -79,7 +79,7 @@ AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES"
     [Most recent stable GnuCash series])
 
 dnl Set of available languages.
-ALL_LINGUAS="bg ca cs da de el en_GB es_NI es eu fa fi fr he hu it ja ko lt lv nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
+ALL_LINGUAS="bg ca cs da de el en en_GB es_NI es eu fa fi fr he hu it ja ko lt lv nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)

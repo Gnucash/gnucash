@@ -411,12 +411,19 @@ show_session_error (QofBackendError io_error,
 
     case ERR_SQL_DB_TOO_OLD:
         fmt = _("This database is from an older version of GnuCash. "
-                "Do you want to want to upgrade the database "
-                "to the current version?");
-        if (gnc_verify_dialog (parent, TRUE, "%s", fmt))
-        {
-            uh_oh = FALSE;
-        }
+                "Select OK to upgrade it to the current version, Cancel "
+		"to mark it read-only.");
+
+        response = gnc_ok_cancel_dialog(parent, GTK_RESPONSE_CANCEL, "%s", fmt);
+	uh_oh = (response == GTK_RESPONSE_CANCEL);
+        break;
+
+    case ERR_SQL_DB_TOO_NEW:
+        fmt = _("This database is from a newer version of GnuCash. "
+                "This version can read it, but cannot safely save to it. "
+		"It will be marked read-only until you do File>Save As.");
+        gnc_warning_dialog (parent, "%s", fmt);
+	uh_oh = TRUE;
         break;
 
     case ERR_SQL_DB_BUSY:
@@ -740,8 +747,7 @@ gnc_post_file_open (const char * filename)
         }
     }
     /* if the database doesn't exist, ask the user ... */
-    else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
-             (ERR_SQL_DB_TOO_OLD == io_err))
+    else if ((ERR_BACKEND_NO_SUCH_DB == io_err))
     {
         if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN))
         {
@@ -757,12 +763,12 @@ gnc_post_file_open (const char * filename)
      * don't bother with the message, just die. */
     io_err = qof_session_get_error (new_session);
     if ((ERR_BACKEND_LOCKED == io_err) ||
-            (ERR_BACKEND_READONLY == io_err) ||
-            (ERR_BACKEND_NO_SUCH_DB == io_err) ||
-            (ERR_SQL_DB_TOO_OLD == io_err))
+	(ERR_BACKEND_READONLY == io_err) ||
+	(ERR_BACKEND_NO_SUCH_DB == io_err))
     {
         uh_oh = TRUE;
     }
+
     else
     {
         uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
@@ -786,11 +792,10 @@ gnc_post_file_open (const char * filename)
         xaccLogEnable();
 
         /* check for i/o error, put up appropriate error dialog */
-        io_err = qof_session_get_error (new_session);
+        io_err = qof_session_pop_error (new_session);
 
         if (io_err == ERR_FILEIO_NO_ENCODING)
         {
-            qof_session_pop_error (new_session);
             if (gnc_xml_convert_single_file (newfile))
             {
                 /* try to load once again */
@@ -807,7 +812,24 @@ gnc_post_file_open (const char * filename)
         }
 
         uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
-
+	/* Attempt to update the database if it's too old */
+	if ( !uh_oh && io_err == ERR_SQL_DB_TOO_OLD )
+	{
+	    gnc_window_show_progress(_("Re-saving user data..."), 0.0);
+	    qof_session_safe_save(new_session, gnc_window_show_progress);
+	    io_err = qof_session_get_error(new_session);
+	    uh_oh = show_session_error(io_err, newfile, GNC_FILE_DIALOG_SAVE);
+	}
+	/* Database is either too old and couldn't (or user didn't
+	 * want it to) be updated or it's too new. Mark it as
+	 * read-only
+	 */
+	if (uh_oh &&  io_err == ERR_SQL_DB_TOO_OLD ||
+	    io_err == ERR_SQL_DB_TOO_NEW)
+	{
+	    qof_book_mark_readonly(qof_session_get_book(new_session));
+	    uh_oh = FALSE;
+	}
         new_root = gnc_book_get_root_account (qof_session_get_book (new_session));
         if (uh_oh) new_root = NULL;
 
