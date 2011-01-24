@@ -827,8 +827,8 @@ gnc_post_file_open (const char * filename)
 	 * want it to) be updated or it's too new. Mark it as
 	 * read-only
 	 */
-	if (uh_oh &&  io_err == ERR_SQL_DB_TOO_OLD ||
-	    io_err == ERR_SQL_DB_TOO_NEW)
+	if (uh_oh && (io_err == ERR_SQL_DB_TOO_OLD ||
+                      io_err == ERR_SQL_DB_TOO_NEW))
 	{
 	    qof_book_mark_readonly(qof_session_get_book(new_session));
 	    uh_oh = FALSE;

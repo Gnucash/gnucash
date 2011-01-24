@@ -2895,13 +2895,13 @@ conn_test_dbi_library( dbi_conn conn )
     }
     if ( testlonglong != resultlonglong )
     {
-	PWARN( "Test_DBI_Library: LongLong Failed %lld != %lld",
+	PWARN( "Test_DBI_Library: LongLong Failed %" G_GINT64_FORMAT " != % " G_GINT64_FORMAT,
 	       testlonglong, resultlonglong );
 	retval = FALSE;
     }
     if ( testulonglong != resultulonglong )
     {
-	PWARN( "Test_DBI_Library: Unsigned longlong Failed %llu != %llu",
+	PWARN( "Test_DBI_Library: Unsigned longlong Failed %" G_GUINT64_FORMAT " != %" G_GUINT64_FORMAT,
 	       testulonglong, resultulonglong );
 	retval = FALSE;
     }
