@@ -1250,10 +1250,10 @@ qof_session_load (QofSession *session,
     */
     err = qof_session_get_error(session);
     if ((err != ERR_BACKEND_NO_ERR) &&
-	(err != ERR_FILEIO_FILE_TOO_OLD) &&
-	(err != ERR_FILEIO_NO_ENCODING) &&
-	(err != ERR_SQL_DB_TOO_OLD) &&
-	(err != ERR_SQL_DB_TOO_NEW))
+            (err != ERR_FILEIO_FILE_TOO_OLD) &&
+            (err != ERR_FILEIO_NO_ENCODING) &&
+            (err != ERR_SQL_DB_TOO_OLD) &&
+            (err != ERR_SQL_DB_TOO_NEW))
     {
         /* Something broke, put back the old stuff */
         qof_book_set_backend (newbook, NULL);
@@ -1464,9 +1464,9 @@ qof_session_safe_save(QofSession *session, QofPercentageFunc percentage_func)
     msg = qof_backend_get_message(session->backend);
     if (err != ERR_BACKEND_NO_ERR)
     {
-	g_free(session->book_id);
-	session->book_id = NULL;
-	qof_session_push_error (session, err, msg);
+        g_free(session->book_id);
+        session->book_id = NULL;
+        qof_session_push_error (session, err, msg);
     }
 }
 

@@ -37,23 +37,26 @@
 G_BEGIN_DECLS
 
 // model
-enum bi_import_model_columns {
-	 ID, DATE_OPENED, OWNER_ID, BILLING_ID, NOTES, // invoice settings
-	 DATE, DESC, ACTION, ACCOUNT, QUANTITY, PRICE, DISC_TYPE, DISC_HOW, DISCOUNT, TAXABLE, TAXINCLUDED, TAX_TABLE, // entry settings
-	 DATE_POSTED, DUE_DATE, ACCOUNT_POSTED, MEMO_POSTED, ACCU_SPLITS, // autopost settings
-	 N_COLUMNS
+enum bi_import_model_columns
+{
+    ID, DATE_OPENED, OWNER_ID, BILLING_ID, NOTES, // invoice settings
+    DATE, DESC, ACTION, ACCOUNT, QUANTITY, PRICE, DISC_TYPE, DISC_HOW, DISCOUNT, TAXABLE, TAXINCLUDED, TAX_TABLE, // entry settings
+    DATE_POSTED, DUE_DATE, ACCOUNT_POSTED, MEMO_POSTED, ACCU_SPLITS, // autopost settings
+    N_COLUMNS
 };
 
-enum _bi_import_result {
-	 RESULT_OK,
-	 RESULT_OPEN_FAILED,
-	 RESULT_ERROR_IN_REGEXP,
+enum _bi_import_result
+{
+    RESULT_OK,
+    RESULT_OPEN_FAILED,
+    RESULT_ERROR_IN_REGEXP,
 };
 typedef enum _bi_import_result bi_import_result;
 
-struct _bi_import_stats {
-	int n_imported, n_ignored;
-	GString *ignored_lines;
+struct _bi_import_stats
+{
+    int n_imported, n_ignored;
+    GString *ignored_lines;
 };
 typedef struct _bi_import_stats bi_import_stats;
 

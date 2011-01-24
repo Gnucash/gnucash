@@ -47,11 +47,13 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_bi_import_NAME "gnc-plugin-bi_import"
 
 /* typedefs & structures */
-typedef struct {
+typedef struct
+{
     GncPlugin gnc_plugin;
 } GncPluginbi_import;
 
-typedef struct {
+typedef struct
+{
     GncPluginClass gnc_plugin;
 } GncPluginbi_importClass;
 

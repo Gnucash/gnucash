@@ -435,11 +435,11 @@ gnc_ab_memo_to_gnc(const AB_TRANSACTION *ab_trans)
     {
         retval = g_strdup_printf("%s %s %s %s",
                                  have_accountid ? _("Account") : "",
-				 have_accountid ? ab_other_accountid : "",
-                                 have_bankcode  ? _("Bank") : "", 
-				 have_bankcode  ? ab_other_bankcode : ""
-				 );
-	g_strstrip(retval);
+                                 have_accountid ? ab_other_accountid : "",
+                                 have_bankcode  ? _("Bank") : "",
+                                 have_bankcode  ? ab_other_bankcode : ""
+                                );
+        g_strstrip(retval);
     }
     else
     {

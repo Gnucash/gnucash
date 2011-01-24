@@ -243,7 +243,7 @@ void     qof_session_save (QofSession *session,
  * the new tables back.
  */
 void     qof_session_safe_save (QofSession *session,
-				QofPercentageFunc percentage_func);
+                                QofPercentageFunc percentage_func);
 
 /**
  * The qof_session_end() method will release the session lock. For the

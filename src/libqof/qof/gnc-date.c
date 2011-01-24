@@ -373,7 +373,7 @@ Globals: dateCompletion dateCompletionBackMonths
 void qof_date_completion_set(QofDateCompletion dc, int backmonths)
 {
     if (dc == QOF_DATE_COMPLETION_THISYEAR ||
-        dc == QOF_DATE_COMPLETION_SLIDING)
+            dc == QOF_DATE_COMPLETION_SLIDING)
     {
         dateCompletion = dc;
     }
@@ -655,7 +655,7 @@ floordiv(int a, int b)
     }
     else
     {
-        return - ((-a-1) / b) - 1;
+        return - ((-a - 1) / b) - 1;
     }
 }
 

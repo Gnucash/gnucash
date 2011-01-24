@@ -946,8 +946,8 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
             xaccTransBeginEdit(selected_match->trans);
 
             xaccTransSetDatePostedSecs(selected_match->trans,
-                                 xaccTransGetDate(xaccSplitGetParent(
-                                     gnc_import_TransInfo_get_fsplit(trans_info))));
+                                       xaccTransGetDate(xaccSplitGetParent(
+                                                   gnc_import_TransInfo_get_fsplit(trans_info))));
 
             xaccSplitSetAmount(selected_match->split,
                                xaccSplitGetAmount(
@@ -988,7 +988,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
             if (gnc_import_split_has_online_id(trans_info->first_split))
             {
                 gnc_import_set_split_online_id(selected_match->split,
-                     gnc_import_get_split_online_id(trans_info->first_split));
+                                               gnc_import_get_split_online_id(trans_info->first_split));
             }
 
             /* Done editing. */
@@ -1231,8 +1231,8 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
         trans_info->action = GNCImport_ADD;
     }
     if (best_match &&
-        trans_info->action == GNCImport_CLEAR &&
-        gnc_import_Settings_get_action_update_enabled(settings))
+            trans_info->action == GNCImport_CLEAR &&
+            gnc_import_Settings_get_action_update_enabled(settings))
     {
         if (best_match->update_proposed)
         {

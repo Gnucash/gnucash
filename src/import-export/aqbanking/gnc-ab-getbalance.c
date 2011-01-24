@@ -128,8 +128,8 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
     {
         g_warning("gnc_ab_getbalance: Error on executing job");
         gnc_error_dialog(parent, _("Error on executing job.\n\nStatus: %s - %s")
-                               , AB_Job_Status2Char(job_status)
-                               , AB_Job_GetResultText(job));
+                         , AB_Job_Status2Char(job_status)
+                         , AB_Job_GetResultText(job));
         goto cleanup;
     }
 

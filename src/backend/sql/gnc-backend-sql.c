@@ -161,7 +161,7 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 
     if ( pData->create_tables != NULL )
     {
-	update_progress( be );
+        update_progress( be );
         (pData->create_tables)( be );
     }
 }
@@ -194,14 +194,14 @@ initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
     // Don't need to load anything if it has already been loaded with the fixed order
     for ( i = 0; fixed_load_order[i] != NULL; i++ )
     {
-	update_progress( be );
+        update_progress( be );
         if ( g_ascii_strcasecmp( type, fixed_load_order[i] ) == 0 ) return;
     }
     if ( other_load_order != NULL )
     {
         for ( i = 0; other_load_order[i] != NULL; i++ )
         {
-	    update_progress( be );
+            update_progress( be );
             if ( g_ascii_strcasecmp( type, other_load_order[i] ) == 0 ) return;
         }
     }
@@ -237,7 +237,7 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
             pData = qof_object_lookup_backend( fixed_load_order[i], GNC_SQL_BACKEND );
             if ( pData->initial_load != NULL )
             {
-		update_progress( be );
+                update_progress( be );
                 (pData->initial_load)( be );
             }
         }
@@ -248,7 +248,7 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
                 pData = qof_object_lookup_backend( other_load_order[i], GNC_SQL_BACKEND );
                 if ( pData->initial_load != NULL )
                 {
-		    update_progress( be );
+                    update_progress( be );
                     (pData->initial_load)( be );
                 }
             }
@@ -350,7 +350,7 @@ write_account_tree( GncSqlBackend* be, Account* root )
         {
             is_ok = gnc_sql_save_account( be, QOF_INSTANCE(GNC_ACCOUNT(node->data)) );
             if ( !is_ok ) break;
-         }
+        }
         g_list_free( descendants );
     }
     update_progress( be );
@@ -369,7 +369,7 @@ write_accounts( GncSqlBackend* be )
     is_ok = write_account_tree( be, gnc_book_get_root_account( be->primary_book ) );
     if ( is_ok )
     {
-	update_progress( be );
+        update_progress( be );
         is_ok = write_account_tree( be, gnc_book_get_template_root( be->primary_book ) );
     }
 
@@ -407,7 +407,7 @@ write_transactions( GncSqlBackend* be )
     data.be = be;
     data.is_ok = TRUE;
     (void)xaccAccountTreeForEachTransaction(
-	gnc_book_get_root_account( be->primary_book ), write_tx, &data );
+        gnc_book_get_root_account( be->primary_book ), write_tx, &data );
     update_progress( be );
     return data.is_ok;
 }
@@ -426,7 +426,7 @@ write_template_transactions( GncSqlBackend* be )
     if ( gnc_account_n_descendants( ra ) > 0 )
     {
         (void)xaccAccountTreeForEachTransaction( ra, write_tx, &data );
-	update_progress( be );
+        update_progress( be );
     }
 
     return data.is_ok;
@@ -465,7 +465,7 @@ write_cb( const gchar* type, gpointer data_p, gpointer be_p )
     if ( pData->write != NULL )
     {
         (void)(pData->write)( be );
-	update_progress( be );
+        update_progress( be );
     }
 }
 
@@ -549,7 +549,7 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     }
     else
     {
-	qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_SERVER_ERR );
+        qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_SERVER_ERR );
         is_ok = gnc_sql_connection_rollback_transaction( be->conn );
     }
     finish_progress( be );
@@ -616,9 +616,9 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 
     if ( qof_book_is_readonly( be->primary_book ) )
     {
-	qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_READONLY );
+        qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_READONLY );
         (void)gnc_sql_connection_rollback_transaction( be->conn );
-	return;
+        return;
     }
     /* During initial load where objects are being created, don't commit
     anything, but do mark the object as clean. */
@@ -665,7 +665,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
     be_data.is_ok = TRUE;
     /* Set/update the application version in the database */
     if ( gnc_sql_get_table_version( be, "Gnucash") != gnc_version )
-	gnc_sql_set_table_version( be, "Gnucash", gnc_version );
+        gnc_sql_set_table_version( be, "Gnucash", gnc_version );
 
     qof_object_foreach_backend( GNC_SQL_BACKEND, commit_cb, &be_data );
 

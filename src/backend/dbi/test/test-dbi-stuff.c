@@ -141,8 +141,8 @@ test_conn_get_index_list( QofBackend *qbe )
     g_print ( "Returned from index list\n");
     if ( index_list == NULL )
     {
-	do_test( FALSE, "Index List Test -- No List" );
-	return;
+        do_test( FALSE, "Index List Test -- No List" );
+        return;
     }
     do_test( g_slist_length( index_list ) == 4, "Index List Test" );
     g_slist_free( index_list );
@@ -177,16 +177,16 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
     {
         g_warning("Session Error: %d, %s", qof_session_get_error(session_2), qof_session_get_error_message(session_2));
-	do_test( FALSE, "First DB Session Creation Failed");
-	return;
+        do_test( FALSE, "First DB Session Creation Failed");
+        return;
     }
     qof_session_swap_data( session_1, session_2 );
     qof_session_save( session_2, NULL );
     if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
     {
         g_warning("Session Error: %s", qof_session_get_error_message(session_2));
-	do_test( FALSE, "First DB Session Save Failed");
-	return;
+        do_test( FALSE, "First DB Session Save Failed");
+        return;
     }
 
     // Reload the session data
@@ -195,15 +195,15 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     if (session_3 && qof_session_get_error(session_3) != ERR_BACKEND_NO_ERR)
     {
         g_warning("Session Error: %s", qof_session_get_error_message(session_3));
-	do_test( FALSE, "Second DB Session Creation Failed");
-	return;
+        do_test( FALSE, "Second DB Session Creation Failed");
+        return;
     }
     qof_session_load( session_3, NULL );
-     if (session_3 && qof_session_get_error(session_3) != ERR_BACKEND_NO_ERR)
+    if (session_3 && qof_session_get_error(session_3) != ERR_BACKEND_NO_ERR)
     {
         g_warning("Session Error: %s", qof_session_get_error_message(session_3));
-	do_test( FALSE, "Second DBI Session Load Failed");
-	return;
+        do_test( FALSE, "Second DBI Session Load Failed");
+        return;
     }
     // Compare with the original data
     compare_books( qof_session_get_book( session_2 ), qof_session_get_book( session_3 ) );
@@ -236,18 +236,18 @@ test_dbi_safe_save( const gchar* driver,  const gchar* url )
     if (session_1 && qof_session_get_error(session_1) != ERR_BACKEND_NO_ERR)
     {
         g_warning("Session Error: %d, %s", qof_session_get_error(session_1),
-		  qof_session_get_error_message(session_1));
-	do_test( FALSE, "DB Session Creation Failed");
-	goto cleanup;
+                  qof_session_get_error_message(session_1));
+        do_test( FALSE, "DB Session Creation Failed");
+        goto cleanup;
     }
     qof_session_load( session_1, NULL );
-     /* Do a safe save */
+    /* Do a safe save */
     qof_session_safe_save( session_1, NULL );
     if (session_1 && qof_session_get_error(session_1) != ERR_BACKEND_NO_ERR)
     {
         g_warning("Session Error: %s", qof_session_get_error_message(session_1));
-	do_test( FALSE, "DB Session Safe Save Failed");
-	goto cleanup;
+        do_test( FALSE, "DB Session Safe Save Failed");
+        goto cleanup;
     }
     /* Destroy the session and reload it */
 
@@ -256,13 +256,13 @@ test_dbi_safe_save( const gchar* driver,  const gchar* url )
     if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
     {
         g_warning("Session Error: %d, %s", qof_session_get_error(session_2),
-		  qof_session_get_error_message(session_2));
-	do_test( FALSE, "DB Session re-creation Failed");
-	goto cleanup;
+                  qof_session_get_error_message(session_2));
+        do_test( FALSE, "DB Session re-creation Failed");
+        goto cleanup;
     }
     qof_session_load( session_2, NULL );
-     compare_books( qof_session_get_book( session_1 ),
-		   qof_session_get_book( session_2 ) );
+    compare_books( qof_session_get_book( session_1 ),
+                   qof_session_get_book( session_2 ) );
 
 cleanup:
     qof_session_end( session_2 );
@@ -294,16 +294,16 @@ test_dbi_version_control( const gchar* driver,  const gchar* url )
     if (sess && qof_session_get_error(sess) != ERR_BACKEND_NO_ERR)
     {
         g_warning("Session Error: %d, %s", qof_session_get_error(sess),
-		  qof_session_get_error_message(sess));
-	do_test( FALSE, "DB Session Creation Failed");
-	goto cleanup;
+                  qof_session_get_error_message(sess));
+        do_test( FALSE, "DB Session Creation Failed");
+        goto cleanup;
     }
     qof_session_load( sess, NULL );
     qbe = qof_session_get_backend( sess );
     book = qof_session_get_book( sess );
     qof_book_begin_edit( book );
     gnc_sql_set_table_version( (GncSqlBackend*)qbe,
-			       "Gnucash", GNC_RESAVE_VERSION - 1 );
+                               "Gnucash", GNC_RESAVE_VERSION - 1 );
     qof_book_commit_edit( book );
     qof_session_end( sess );
     qof_session_destroy( sess );
@@ -316,9 +316,9 @@ test_dbi_version_control( const gchar* driver,  const gchar* url )
     book = qof_session_get_book( sess );
     qof_book_begin_edit( book );
     gnc_sql_set_table_version( (GncSqlBackend*)qbe,
-			       "Gnucash", ourversion );
+                               "Gnucash", ourversion );
     gnc_sql_set_table_version( (GncSqlBackend*)qbe,
-			       "Gnucash-Resave", ourversion + 1 );
+                               "Gnucash-Resave", ourversion + 1 );
     qof_book_commit_edit( book );
     qof_session_end( sess );
     qof_session_destroy( sess );

@@ -1805,9 +1805,9 @@ xaccTransSetIsClosingTxn (Transaction *trans, gboolean is_closing)
     xaccTransBeginEdit(trans);
 
     if (is_closing)
-      kvp_frame_set_gint64 (trans->inst.kvp_data, trans_is_closing_str, 1);
+        kvp_frame_set_gint64 (trans->inst.kvp_data, trans_is_closing_str, 1);
     else
-      kvp_frame_replace_value_nc (trans->inst.kvp_data, trans_is_closing_str, NULL);
+        kvp_frame_replace_value_nc (trans->inst.kvp_data, trans_is_closing_str, NULL);
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
 }
@@ -1873,8 +1873,8 @@ gboolean
 xaccTransGetIsClosingTxn (const Transaction *trans)
 {
     return trans ?
-        kvp_frame_get_gint64 (trans->inst.kvp_data, trans_is_closing_str)
-        : FALSE;
+           kvp_frame_get_gint64 (trans->inst.kvp_data, trans_is_closing_str)
+           : FALSE;
 }
 
 /********************************************************************\

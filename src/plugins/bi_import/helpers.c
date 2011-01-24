@@ -28,53 +28,53 @@
 //! \brief helper function
 gboolean text2bool( const gchar *text )
 {
-	gboolean erg = FALSE;
-	gchar *temp;
+    gboolean erg = FALSE;
+    gchar *temp;
 
-	if (!text)
-		return erg;
+    if (!text)
+        return erg;
 
-	temp = g_strdup( text );
-	g_strstrip( temp );
-	if ((g_ascii_strcasecmp( temp, "yes" ) == 0) || (g_ascii_strcasecmp( temp, "true" ) == 0) ||
-	    (g_ascii_strcasecmp( temp, "1" ) == 0) || (g_ascii_strcasecmp( temp, "x" ) == 0))
-		erg = TRUE;
-	g_free( temp );
-	return erg;
+    temp = g_strdup( text );
+    g_strstrip( temp );
+    if ((g_ascii_strcasecmp( temp, "yes" ) == 0) || (g_ascii_strcasecmp( temp, "true" ) == 0) ||
+            (g_ascii_strcasecmp( temp, "1" ) == 0) || (g_ascii_strcasecmp( temp, "x" ) == 0))
+        erg = TRUE;
+    g_free( temp );
+    return erg;
 }
 
 //! \brief helper function
 GncAmountType text2disc_type( const gchar *text )
 {
-	GncAmountType type = GNC_AMT_TYPE_PERCENT;
-	gchar *temp;
+    GncAmountType type = GNC_AMT_TYPE_PERCENT;
+    gchar *temp;
 
-	if (!text)
-		return type;
+    if (!text)
+        return type;
 
-	temp = g_strdup( text );
-	g_strstrip( temp );
-	if ((strlen(temp) > 0) && (g_ascii_strcasecmp( temp, "%" ) != 0))
-		type = GNC_AMT_TYPE_VALUE;
-	g_free( temp );
-	return type;
+    temp = g_strdup( text );
+    g_strstrip( temp );
+    if ((strlen(temp) > 0) && (g_ascii_strcasecmp( temp, "%" ) != 0))
+        type = GNC_AMT_TYPE_VALUE;
+    g_free( temp );
+    return type;
 }
 
 //! \brief helper function
 GncDiscountHow text2disc_how( const gchar *text )
 {
-	GncDiscountHow how = GNC_DISC_PRETAX;
-	gchar *temp;
+    GncDiscountHow how = GNC_DISC_PRETAX;
+    gchar *temp;
 
-	if (!text)
-		return how;
+    if (!text)
+        return how;
 
-	temp = g_strdup( text );
-	g_strstrip( temp );
-	if (g_ascii_strcasecmp( temp, "=" ) == 0)
-		how = GNC_DISC_SAMETIME;
-	else if (g_ascii_strcasecmp( temp, ">" ) == 0)
-		how = GNC_DISC_POSTTAX;
-	g_free( temp );
-	return how;
+    temp = g_strdup( text );
+    g_strstrip( temp );
+    if (g_ascii_strcasecmp( temp, "=" ) == 0)
+        how = GNC_DISC_SAMETIME;
+    else if (g_ascii_strcasecmp( temp, ">" ) == 0)
+        how = GNC_DISC_POSTTAX;
+    g_free( temp );
+    return how;
 }

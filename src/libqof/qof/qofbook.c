@@ -470,7 +470,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
 
     /* Check if an error occured */
     if (counter < 0)
-	return NULL;
+        return NULL;
 
     /* Increment the counter */
     counter++;
@@ -480,8 +480,8 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
 
     if (!kvp)
     {
-	PWARN ("Book has no KVP_Frame");
-	return NULL;
+        PWARN ("Book has no KVP_Frame");
+        return NULL;
     }
 
     /* Save off the new counter */
@@ -576,10 +576,10 @@ qof_book_validate_counter_format(const gchar *p)
         /* Skip two adjacent percent marks, which are literal percent
          * marks */
         if (p[0] == '%' && p[1] == '%')
-	{
+        {
             p += 2;
-	    continue;
-	}
+            continue;
+        }
         /* Break on a single percent mark, which is the start of the
          * conversion specification */
         if (*p == '%')
@@ -621,7 +621,9 @@ qof_book_validate_counter_format(const gchar *p)
     if (tmp == NULL)
     {
         return g_strdup_printf("Invalid length modifier and/or conversion specifier ('%.2s'), it should be: " G_GINT64_FORMAT, p);
-    } else if (tmp != p) {
+    }
+    else if (tmp != p)
+    {
         return g_strdup_printf("Garbage before length modifier and/or conversion specifier: '%*s'", (int)(tmp - p), p);
     }
 
@@ -634,10 +636,10 @@ qof_book_validate_counter_format(const gchar *p)
         /* Skip two adjacent percent marks, which are literal percent
          * marks */
         if (p[0] == '%' && p[1] == '%')
-	{
+        {
             p += 2;
-	    continue;
-	}
+            continue;
+        }
         /* Break on a single percent mark, which is the start of the
          * conversion specification */
         if (*p == '%')

@@ -51,9 +51,10 @@ static void gnc_plugin_bi_import_cmd_test (GtkAction *action, GncMainWindowActio
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-bi_import-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-bi_import-ui.xml"
 
-static GtkActionEntry gnc_plugin_actions [] = {
+static GtkActionEntry gnc_plugin_actions [] =
+{
     /* Menu Items */
-	{ "ImportMenuAction", NULL, N_("_Import"), NULL, NULL, NULL },
+    { "ImportMenuAction", NULL, N_("_Import"), NULL, NULL, NULL },
     { "bi_importAction", NULL, N_("Import Bills & Invoices..."), NULL, N_("bi_import tooltip"),  G_CALLBACK(gnc_plugin_bi_import_cmd_test) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);

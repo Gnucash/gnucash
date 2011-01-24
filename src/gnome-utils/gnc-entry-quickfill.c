@@ -55,8 +55,8 @@ listen_for_gncentry_events(QofInstance *entity,  QofEventId event_type,
     if (0 == (event_type & (QOF_EVENT_MODIFY | QOF_EVENT_DESTROY)))
         return;
 
-/*     g_warning("entity %p, entity type %s, event type %s, user data %p, ecent data %p", */
-/*               entity, entity->e_type, qofeventid_to_string(event_type), user_data, event_data); */
+    /*     g_warning("entity %p, entity type %s, event type %s, user data %p, ecent data %p", */
+    /*               entity, entity->e_type, qofeventid_to_string(event_type), user_data, event_data); */
 
     desc = gncEntryGetDescription(GNC_ENTRY(entity));
     if (event_type & QOF_EVENT_MODIFY)
@@ -124,7 +124,7 @@ static EntryQF* build_shared_quickfill (QofBook *book, const char * key, gboolea
     QofQuery *query = new_query_for_entrys(book);
     GList *entries = qof_query_run(query);
 
-/*     g_warning("Found %d GncEntry items", g_list_length (entries)); */
+    /*     g_warning("Found %d GncEntry items", g_list_length (entries)); */
 
     result = g_new0(EntryQF, 1);
 

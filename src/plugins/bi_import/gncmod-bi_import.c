@@ -66,24 +66,29 @@ libgncmod_bi_import_gnc_module_description (void)
 int
 libgncmod_bi_import_gnc_module_init (int refcount)
 {
-    if (!gnc_module_load ("gnucash/app-utils", 0)) {
+    if (!gnc_module_load ("gnucash/app-utils", 0))
+    {
         return FALSE;
     }
-    if (!gnc_module_load ("gnucash/gnome-utils", 0)) {
+    if (!gnc_module_load ("gnucash/gnome-utils", 0))
+    {
         return FALSE;
     }
-    if (!gnc_module_load ("gnucash/business-core", 0)) {
+    if (!gnc_module_load ("gnucash/business-core", 0))
+    {
         return FALSE;
     }
-    if (!gnc_module_load ("gnucash/engine", 0)) {
+    if (!gnc_module_load ("gnucash/engine", 0))
+    {
         return FALSE;
     }
 
-    if (refcount == 0) {
+    if (refcount == 0)
+    {
         /* this is the first time the module is loaded */
 
         gnc_plugin_manager_add_plugin ( gnc_plugin_manager_get (),
-                   gnc_plugin_bi_import_new ());
+                                        gnc_plugin_bi_import_new ());
     }
 
     return TRUE;
@@ -92,7 +97,8 @@ libgncmod_bi_import_gnc_module_init (int refcount)
 int
 libgncmod_bi_import_gnc_module_end (int refcount)
 {
-    if (refcount == 0) {
+    if (refcount == 0)
+    {
         /* this is the last time the module is unloaded */
     }
 

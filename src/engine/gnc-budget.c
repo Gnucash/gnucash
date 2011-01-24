@@ -326,7 +326,7 @@ clone_budget_values_cb(Account* a, gpointer user_data)
         if ( gnc_budget_is_account_period_value_set(data->old_b, a, i) )
         {
             gnc_budget_set_account_period_value(data->new_b, a, i,
-                    gnc_budget_get_account_period_value(data->old_b, a, i));
+                                                gnc_budget_get_account_period_value(data->old_b, a, i));
         }
     }
 }

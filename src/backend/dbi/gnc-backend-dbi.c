@@ -153,9 +153,9 @@ static void
 gnc_table_slist_free( GSList *table_list )
 {
     GSList *list;
-    for ( list = table_list; list !=NULL; list = g_slist_next( list ))
+    for ( list = table_list; list != NULL; list = g_slist_next( list ))
     {
-	g_free( list->data );
+        g_free( list->data );
     }
     g_slist_free( table_list );
 }
@@ -252,19 +252,19 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     /* Remove uri type if present */
     filepath = gnc_uri_get_path ( book_id );
     file_exists = g_file_test( filepath,
-			       G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS );
+                               G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS );
     if ( !create && !file_exists )
     {
         qof_backend_set_error( qbe, ERR_FILEIO_FILE_NOT_FOUND );
         qof_backend_set_message(qbe, "Sqlite3 file %s not found", filepath);
-	goto exit;
+        goto exit;
     }
 
     if ( create && !force && file_exists )
     {
         qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
         msg = "Might clobber, no force";
-	goto exit;
+        goto exit;
     }
 
 
@@ -277,7 +277,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     {
         PERR( "Unable to create sqlite3 dbi connection\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
-	goto exit;
+        goto exit;
     }
 
     dirname = g_path_get_dirname( filepath );
@@ -289,21 +289,21 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     {
         PERR( "Error setting 'host' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-	goto exit;
+        goto exit;
     }
     result = dbi_conn_set_option( be->conn, "dbname", basename );
     if ( result < 0 )
     {
         PERR( "Error setting 'dbname' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-	goto exit;
+        goto exit;
     }
     result = dbi_conn_set_option( be->conn, "sqlite3_dbdir", dirname );
     if ( result < 0 )
     {
         PERR( "Error setting 'sqlite3_dbdir' option\n" );
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-	goto exit;
+        goto exit;
     }
     result = dbi_conn_connect( be->conn );
 
@@ -311,26 +311,28 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     {
         PERR( "Unable to connect to %s: %d\n", book_id, result );
         qof_backend_set_error( qbe, ERR_BACKEND_BAD_URL );
-	goto exit;
+        goto exit;
     }
 
-    if ( !conn_test_dbi_library( be->conn ) ) {
-	qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-	qof_backend_set_message( qbe, "DBI library fails large number test" );
-	if ( create && !file_exists ) /* File didn't exist before, but it */
-	{     			      /* does now, and we don't want to */
-	    dbi_conn_close( be->conn );/* leave it lying around. */
-	    be->conn = NULL;
-	    g_unlink( filepath );
-	}
-	msg = "Bad DBI Library";
-	goto exit;
+    if ( !conn_test_dbi_library( be->conn ) )
+    {
+        qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+        qof_backend_set_message( qbe, "DBI library fails large number test" );
+        if ( create && !file_exists ) /* File didn't exist before, but it */
+        {
+            /* does now, and we don't want to */
+            dbi_conn_close( be->conn );/* leave it lying around. */
+            be->conn = NULL;
+            g_unlink( filepath );
+        }
+        msg = "Bad DBI Library";
+        goto exit;
     }
     if ( !gnc_dbi_lock_database( qbe, ignore_lock ) )
     {
         qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
         msg = "Locked";
-	goto exit;
+        goto exit;
     }
 
     if ( be->sql_be.conn != NULL )
@@ -354,8 +356,8 @@ conn_get_index_list_sqlite3( dbi_conn conn )
     dbi_result result = dbi_conn_query( conn, "SELECT name FROM sqlite_master WHERE type = 'index' AND name NOT LIKE 'sqlite_autoindex%'" );
     if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
     {
-	g_print( "Index Table Retrieval Error: %s\n", errmsg );
-	return NULL;
+        g_print( "Index Table Retrieval Error: %s\n", errmsg );
+        return NULL;
     }
     while ( dbi_result_next_row( result ) != 0 )
     {
@@ -761,12 +763,13 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
-	if ( !conn_test_dbi_library( be->conn ) ) {
-	    qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-	    qof_backend_set_message( qbe,
-				     "DBI library fails large number test" );
-	    goto exit;
-	}
+        if ( !conn_test_dbi_library( be->conn ) )
+        {
+            qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+            qof_backend_set_message( qbe,
+                                     "DBI library fails large number test" );
+            goto exit;
+        }
         if (create && !force && save_may_clobber_data( qbe ) )
         {
             qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
@@ -833,13 +836,14 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
-	    if ( !conn_test_dbi_library( be->conn ) ) {
-		qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-		qof_backend_set_message( qbe,
-					 "DBI library fails large number test" );
-		dbi_conn_queryf( be->conn, "DROP DATABASE %s", dbname );
-		goto exit;
-	    }
+            if ( !conn_test_dbi_library( be->conn ) )
+            {
+                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+                qof_backend_set_message( qbe,
+                                         "DBI library fails large number test" );
+                dbi_conn_queryf( be->conn, "DROP DATABASE %s", dbname );
+                goto exit;
+            }
             success = gnc_dbi_lock_database ( qbe, ignore_lock );
         }
         else
@@ -891,28 +895,28 @@ conn_get_index_list_mysql( dbi_conn conn )
     table_list = dbi_conn_get_table_list( conn, dbname, NULL );
     if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
     {
-	g_print( "Table Retrieval Error: %s\n", errmsg );
-	return NULL;
+        g_print( "Table Retrieval Error: %s\n", errmsg );
+        return NULL;
     }
     while ( dbi_result_next_row( table_list ) != 0 )
     {
-	dbi_result result;
-	const gchar *table_name = dbi_result_get_string_idx( table_list, 1 );
-	result = dbi_conn_queryf( conn,
-				  "SHOW INDEXES IN %s WHERE Key_name != 'PRIMARY'",
-				  table_name );
-	if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
-	{
-	    g_print( "Index Table Retrieval Error: %s\n", errmsg );
-	    continue;
-	}
+        dbi_result result;
+        const gchar *table_name = dbi_result_get_string_idx( table_list, 1 );
+        result = dbi_conn_queryf( conn,
+                                  "SHOW INDEXES IN %s WHERE Key_name != 'PRIMARY'",
+                                  table_name );
+        if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
+        {
+            g_print( "Index Table Retrieval Error: %s\n", errmsg );
+            continue;
+        }
 
-	while ( dbi_result_next_row( result ) != 0 )
-	{
-	    const gchar*  index_name = dbi_result_get_string_idx( result, 3 );
-	    index_list = g_slist_prepend( index_list, strdup( index_name ) );
-	}
-	dbi_result_free( result );
+        while ( dbi_result_next_row( result ) != 0 )
+        {
+            const gchar*  index_name = dbi_result_get_string_idx( result, 3 );
+            index_list = g_slist_prepend( index_list, strdup( index_name ) );
+        }
+        dbi_result_free( result );
     }
 
     return index_list;
@@ -1027,12 +1031,13 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
-	if ( !conn_test_dbi_library( be->conn ) ) {
-	    qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-	    qof_backend_set_message( qbe,
-				     "DBI library fails large number test" );
-	    goto exit;
-	}
+        if ( !conn_test_dbi_library( be->conn ) )
+        {
+            qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+            qof_backend_set_message( qbe,
+                                     "DBI library fails large number test" );
+            goto exit;
+        }
         if (create && !force && save_may_clobber_data( qbe ) )
         {
             qof_backend_set_error ( qbe, ERR_BACKEND_STORE_EXISTS );
@@ -1100,14 +1105,15 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
-	    if ( !conn_test_dbi_library( be->conn ) ) {
-		qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-		qof_backend_set_message( qbe,
-					 "DBI library fails large number test" );
-		dbi_conn_select_db( be->conn, "template1" );
-		dbi_conn_queryf( be->conn, "DROP DATABASE %s", dbnamelc );
-		goto exit;
-	    }
+            if ( !conn_test_dbi_library( be->conn ) )
+            {
+                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+                qof_backend_set_message( qbe,
+                                         "DBI library fails large number test" );
+                dbi_conn_select_db( be->conn, "template1" );
+                dbi_conn_queryf( be->conn, "DROP DATABASE %s", dbnamelc );
+                goto exit;
+            }
             success = gnc_dbi_lock_database ( qbe, ignore_lock );
         }
         else
@@ -1146,8 +1152,8 @@ conn_get_index_list_pgsql( dbi_conn conn )
     result = dbi_conn_query( conn, "SELECT relname FROM pg_class AS a INNER JOIN pg_index AS b ON (b.indexrelid = a.oid) INNER JOIN pg_namespace AS c ON (a.relnamespace = c.oid) WHERE reltype = '0' AND indisprimary = 'f' AND nspname = 'public'" );
     if ( dbi_conn_error( conn, &errmsg ) != DBI_ERROR_NONE )
     {
-	g_print( "Index Table Retrieval Error: %s\n", errmsg );
-	return NULL;
+        g_print( "Index Table Retrieval Error: %s\n", errmsg );
+        return NULL;
     }
     while ( dbi_result_next_row( result ) != 0 )
     {
@@ -1226,19 +1232,19 @@ gnc_dbi_load( QofBackend* qbe, /*@ dependent @*/ QofBook *book, QofBackendLoadTy
 
     if ( GNC_RESAVE_VERSION > gnc_sql_get_table_version( &be->sql_be, "Gnucash" ) )
     {
-	/* The database was loaded with an older database schema or
-	 * data semantics. In order to ensure consistency, the whole
-	 * thing needs to be saved anew. */
-	qof_backend_set_error( qbe, ERR_SQL_DB_TOO_OLD );
+        /* The database was loaded with an older database schema or
+         * data semantics. In order to ensure consistency, the whole
+         * thing needs to be saved anew. */
+        qof_backend_set_error( qbe, ERR_SQL_DB_TOO_OLD );
     }
     else if ( GNC_RESAVE_VERSION < gnc_sql_get_table_version( &be->sql_be,
-							      "Gnucash-Resave"))
+              "Gnucash-Resave"))
     {
-	/* Worse, the database was created with a newer version. We
-	 * can't safely write to this database, so the user will have
-	 * to do a "save as" to make one that we can write to.
-	 */
-	qof_backend_set_error( qbe, ERR_SQL_DB_TOO_NEW );
+        /* Worse, the database was created with a newer version. We
+         * can't safely write to this database, so the user will have
+         * to do a "save as" to make one that we can write to.
+         */
+        qof_backend_set_error( qbe, ERR_SQL_DB_TOO_NEW );
     }
 
 
@@ -1268,26 +1274,26 @@ save_may_clobber_data( QofBackend* qbe )
 
 static dbi_result
 conn_table_manage_backup (GncDbiSqlConnection *conn,
-			  gchar *table_name, TableOpType op )
+                          gchar *table_name, TableOpType op )
 {
     gchar *new_name = g_strdup_printf( "%s_%s", table_name, "back" );
     dbi_result result;
     switch ( op )
     {
     case backup:
-	result = dbi_conn_queryf( conn->conn, "ALTER TABLE %s RENAME TO %s",
-				  table_name, new_name );
-	break;
+        result = dbi_conn_queryf( conn->conn, "ALTER TABLE %s RENAME TO %s",
+                                  table_name, new_name );
+        break;
     case rollback:
-	result = dbi_conn_queryf( conn->conn,
-				  "ALTER TABLE %s RENAME TO %s",
-				  new_name, table_name );
-	break;
+        result = dbi_conn_queryf( conn->conn,
+                                  "ALTER TABLE %s RENAME TO %s",
+                                  new_name, table_name );
+        break;
     case drop_backup:
-		result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
-					  new_name );
+        result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
+                                  new_name );
     default:
-	break;
+        break;
     }
     g_free( new_name );
     return result;
@@ -1320,7 +1326,7 @@ conn_table_manage_backup (GncDbiSqlConnection *conn,
 
 static gboolean
 conn_table_operation( GncSqlConnection *sql_conn, GSList *table_name_list,
-		      TableOpType op )
+                      TableOpType op )
 {
     GSList* node;
     gboolean result = TRUE;
@@ -1330,55 +1336,56 @@ conn_table_operation( GncSqlConnection *sql_conn, GSList *table_name_list,
 
     g_return_val_if_fail( table_name_list != NULL, FALSE );
     if ( op == rollback )
-	full_table_name_list =
-	    conn->provider->get_table_list( conn->conn, dbname );
+        full_table_name_list =
+            conn->provider->get_table_list( conn->conn, dbname );
 
     for ( node = table_name_list; node != NULL && result; node = node->next )
     {
-	gchar* table_name = (gchar*)node->data;
-	dbi_result result;
-	/* Ignore the lock table */
-	if ( g_strcmp0(table_name, lock_table) == 0)
-	{
-	    continue;
-	}
-	do
-	{
-	    gnc_dbi_init_error( conn );
-	    switch( op ) {
-	    case rollback:
-		if (g_slist_find(full_table_name_list, table_name))
-		{
-		    result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
-					      table_name );
-		    if ( result )
-			break;
-		}
-	    /* Note fall-through */
-	    case backup:
-	    case drop_backup:
-		result = conn_table_manage_backup( conn, table_name, op );
-		break;
-	    case empty:
-		result = dbi_conn_queryf( conn->conn, "DELETE FROM TABLE %s",
-					  table_name );
-		break;
-	    case drop:
-	    default:
-		result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
-					  table_name );
-		break;
-	    }
-	}
-	while ( conn->retry );
-	if ( result != NULL )
-	{
-	    if ( dbi_result_free( result ) < 0 )
-	    {
-		PERR( "Error in dbi_result_free() result\n" );
-		result = FALSE;
-	    }
-	}
+        gchar* table_name = (gchar*)node->data;
+        dbi_result result;
+        /* Ignore the lock table */
+        if ( g_strcmp0(table_name, lock_table) == 0)
+        {
+            continue;
+        }
+        do
+        {
+            gnc_dbi_init_error( conn );
+            switch ( op )
+            {
+            case rollback:
+                if (g_slist_find(full_table_name_list, table_name))
+                {
+                    result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
+                                              table_name );
+                    if ( result )
+                        break;
+                }
+                /* Note fall-through */
+            case backup:
+            case drop_backup:
+                result = conn_table_manage_backup( conn, table_name, op );
+                break;
+            case empty:
+                result = dbi_conn_queryf( conn->conn, "DELETE FROM TABLE %s",
+                                          table_name );
+                break;
+            case drop:
+            default:
+                result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
+                                          table_name );
+                break;
+            }
+        }
+        while ( conn->retry );
+        if ( result != NULL )
+        {
+            if ( dbi_result_free( result ) < 0 )
+            {
+                PERR( "Error in dbi_result_free() result\n" );
+                result = FALSE;
+            }
+        }
     }
     gnc_table_slist_free( full_table_name_list );
     return result;
@@ -1409,7 +1416,7 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
     dbname = dbi_conn_get_option( be->conn, "dbname" );
     table_name_list = conn->provider->get_table_list( conn->conn, dbname );
     if ( !conn_table_operation( (GncSqlConnection*)conn, table_name_list,
-				drop ) )
+                                drop ) )
     {
         qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
         return;
@@ -1448,33 +1455,33 @@ gnc_dbi_safe_sync_all( QofBackend *qbe, QofBook *book )
     dbname = dbi_conn_get_option( be->conn, "dbname" );
     table_list = conn->provider->get_table_list( conn->conn, dbname );
     if ( !conn_table_operation( (GncSqlConnection*)conn, table_list,
-				backup ) )
+                                backup ) )
     {
-	qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-	conn_table_operation( (GncSqlConnection*)conn, table_list,
-			      rollback );
-	LEAVE( "Failed to rename tables" );
-	gnc_table_slist_free( table_list );
-	return;
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        conn_table_operation( (GncSqlConnection*)conn, table_list,
+                              rollback );
+        LEAVE( "Failed to rename tables" );
+        gnc_table_slist_free( table_list );
+        return;
     }
     index_list = conn->provider->get_index_list( conn->conn );
     for ( iter = index_list; iter != NULL; iter = g_slist_next( iter) )
     {
-	const char *errmsg;
-	dbi_result result =
-	    dbi_conn_queryf( conn->conn, "DROP INDEX %s", iter->data );
-	if ( result )
-	    dbi_result_free( result );
-	if ( DBI_ERROR_NONE != dbi_conn_error( conn->conn, &errmsg ) )
-	{
-	    qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-	    gnc_table_slist_free( index_list );
-	    conn_table_operation( (GncSqlConnection*)conn, table_list,
-				  rollback );
-	    gnc_table_slist_free( table_list );
-	    LEAVE( "Failed to drop indexes %s", errmsg  );
-	    return;
-	}
+        const char *errmsg;
+        dbi_result result =
+            dbi_conn_queryf( conn->conn, "DROP INDEX %s", iter->data );
+        if ( result )
+            dbi_result_free( result );
+        if ( DBI_ERROR_NONE != dbi_conn_error( conn->conn, &errmsg ) )
+        {
+            qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+            gnc_table_slist_free( index_list );
+            conn_table_operation( (GncSqlConnection*)conn, table_list,
+                                  rollback );
+            gnc_table_slist_free( table_list );
+            LEAVE( "Failed to drop indexes %s", errmsg  );
+            return;
+        }
     }
     gnc_table_slist_free( index_list );
 
@@ -1484,13 +1491,13 @@ gnc_dbi_safe_sync_all( QofBackend *qbe, QofBook *book )
     gnc_sql_sync_all( &be->sql_be, book );
     if ( ERR_BACKEND_NO_ERR != qof_backend_get_error( qbe ) )
     {
-	conn_table_operation( (GncSqlConnection*)conn, table_list,
-			      rollback );
-	LEAVE( "Failed to create new database tables" );
-	return;
+        conn_table_operation( (GncSqlConnection*)conn, table_list,
+                              rollback );
+        LEAVE( "Failed to create new database tables" );
+        return;
     }
     conn_table_operation( (GncSqlConnection*)conn, table_list,
-			  drop_backup );
+                          drop_backup );
     gnc_table_slist_free( table_list );
     LEAVE("book=%p", book);
 }
@@ -2860,58 +2867,58 @@ conn_test_dbi_library( dbi_conn conn )
     gboolean retval = TRUE;
 
     result = dbi_conn_query( conn, "CREATE TEMPORARY TABLE numtest "
-			     "( test_int BIGINT, test_unsigned BIGINT,"
-			     " test_double FLOAT8 )" );
+                             "( test_int BIGINT, test_unsigned BIGINT,"
+                             " test_double FLOAT8 )" );
     if ( result == NULL )
     {
-	PWARN("Test_DBI_Library: Create table failed");
-	return FALSE;
+        PWARN("Test_DBI_Library: Create table failed");
+        return FALSE;
     }
     dbi_result_free( result );
     result = dbi_conn_queryf( conn,
-			      "INSERT INTO numtest VALUES (%lld, %llu, %17e)",
-			      testlonglong, testulonglong, testdouble );
+                              "INSERT INTO numtest VALUES (%lld, %llu, %17e)",
+                              testlonglong, testulonglong, testdouble );
     if ( result == NULL )
     {
-	PWARN("Test_DBI_Library: Failed to insert test row into table" );
-	return FALSE;
+        PWARN("Test_DBI_Library: Failed to insert test row into table" );
+        return FALSE;
     }
     dbi_result_free( result );
     result = dbi_conn_query( conn, "SELECT * FROM numtest" );
     if ( result == NULL )
     {
-	const char *errmsg;
-	dbi_conn_error( conn, &errmsg );
-	PWARN("Test_DBI_Library: Failed to retrieve test row into table: %s",
-	      errmsg );
-	result = dbi_conn_query( conn, "DROP TABLE numtest" );
-	return FALSE;
+        const char *errmsg;
+        dbi_conn_error( conn, &errmsg );
+        PWARN("Test_DBI_Library: Failed to retrieve test row into table: %s",
+              errmsg );
+        result = dbi_conn_query( conn, "DROP TABLE numtest" );
+        return FALSE;
     }
     while ( dbi_result_next_row( result ))
     {
-	resultlonglong = dbi_result_get_longlong( result, "test_int" );
-	resultulonglong = dbi_result_get_ulonglong( result, "test_unsigned" );
-	resultdouble = dbi_result_get_double( result, "test_double" );
+        resultlonglong = dbi_result_get_longlong( result, "test_int" );
+        resultulonglong = dbi_result_get_ulonglong( result, "test_unsigned" );
+        resultdouble = dbi_result_get_double( result, "test_double" );
     }
     if ( testlonglong != resultlonglong )
     {
-	PWARN( "Test_DBI_Library: LongLong Failed %" G_GINT64_FORMAT " != % " G_GINT64_FORMAT,
-	       testlonglong, resultlonglong );
-	retval = FALSE;
+        PWARN( "Test_DBI_Library: LongLong Failed %" G_GINT64_FORMAT " != % " G_GINT64_FORMAT,
+               testlonglong, resultlonglong );
+        retval = FALSE;
     }
     if ( testulonglong != resultulonglong )
     {
-	PWARN( "Test_DBI_Library: Unsigned longlong Failed %" G_GUINT64_FORMAT " != %" G_GUINT64_FORMAT,
-	       testulonglong, resultulonglong );
-	retval = FALSE;
+        PWARN( "Test_DBI_Library: Unsigned longlong Failed %" G_GUINT64_FORMAT " != %" G_GUINT64_FORMAT,
+               testulonglong, resultulonglong );
+        retval = FALSE;
     }
     /* A bug in libdbi stores only 7 digits of precision */
     if ( testdouble >= resultdouble + 0.000001e307 ||
-	 testdouble <= resultdouble - 0.000001e307 )
+            testdouble <= resultdouble - 0.000001e307 )
     {
-	PWARN( "Test_DBI_Library: Double Failed %17e != %17e",
-	       testdouble, resultdouble );
-	retval = FALSE;
+        PWARN( "Test_DBI_Library: Double Failed %17e != %17e",
+               testdouble, resultdouble );
+        retval = FALSE;
     }
     return retval;
 }

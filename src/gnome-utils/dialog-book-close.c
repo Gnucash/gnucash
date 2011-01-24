@@ -104,7 +104,7 @@ find_or_create_txn(struct CloseAccountsCB* cacb, gnc_commodity* cmdty)
         xaccTransSetDatePostedSecs(txn->txn, cacb->cbw->close_date);
         xaccTransSetDescription(txn->txn, cacb->cbw->desc);
         xaccTransSetCurrency(txn->txn, cmdty);
-	xaccTransSetIsClosingTxn(txn->txn, TRUE);
+        xaccTransSetIsClosingTxn(txn->txn, TRUE);
         g_hash_table_insert(cacb->txns, cmdty, txn);
     }
 

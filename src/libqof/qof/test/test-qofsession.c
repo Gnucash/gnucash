@@ -65,8 +65,8 @@ static void
 test_session_safe_save( Fixture *fixture, gconstpointer pData )
 {
     qof_session_safe_save( fixture->session, percentage_fn );
-    g_assert_cmpint( ERR_BACKEND_DATA_CORRUPT, ==,
-		     qof_session_get_error( fixture->session ));
+    g_assert_cmpint( ERR_BACKEND_DATA_CORRUPT, == ,
+                     qof_session_get_error( fixture->session ));
     g_assert( NULL == qof_session_get_url( fixture->session ));
 }
 

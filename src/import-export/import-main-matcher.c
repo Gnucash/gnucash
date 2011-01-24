@@ -331,8 +331,8 @@ gnc_gen_trans_clear_toggled_cb (GtkCellRendererToggle *cell_renderer,
 
 static void
 gnc_gen_trans_update_toggled_cb (GtkCellRendererToggle *cell_renderer,
-                               gchar                 *path,
-                               GNCImportMainMatcher  *gui)
+                                 gchar                 *path,
+                                 GNCImportMainMatcher  *gui)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;

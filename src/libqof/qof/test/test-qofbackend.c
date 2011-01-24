@@ -27,5 +27,5 @@ static const gchar *suitename = "qof/qofbackend";
 GTestSuite*
 test_suite_qofbackend ( void )
 {
- 
+
 }

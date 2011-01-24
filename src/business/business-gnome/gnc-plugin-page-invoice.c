@@ -705,7 +705,7 @@ gnc_plugin_page_invoice_cmd_edit (GtkAction *action,
 
 static void
 gnc_plugin_page_invoice_cmd_duplicateInvoice (GtkAction *action,
-                                              GncPluginPageInvoice *plugin_page)
+        GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -828,7 +828,7 @@ gnc_plugin_page_invoice_cmd_blank (GtkAction *action,
 
 static void
 gnc_plugin_page_invoice_cmd_duplicateEntry (GtkAction *action,
-                                       GncPluginPageInvoice *plugin_page)
+        GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 

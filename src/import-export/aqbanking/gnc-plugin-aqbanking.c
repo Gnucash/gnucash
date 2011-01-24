@@ -325,15 +325,15 @@ gnc_plugin_ab_account_selected(GncPluginPage *plugin_page, Account *account,
 
         gnc_plugin_update_actions(action_group, need_account_actions,
                                   "sensitive",
-                                 (account && bankcode && *bankcode
-                                  && accountid && *accountid));
+                                  (account && bankcode && *bankcode
+                                   && accountid && *accountid));
         gnc_plugin_update_actions(action_group, need_account_actions,
-                                  "visible",TRUE);
+                                  "visible", TRUE);
     }
     else
     {
         gnc_plugin_update_actions(action_group, need_account_actions,
-                                  "sensitive",FALSE);
+                                  "sensitive", FALSE);
         gnc_plugin_update_actions(action_group, need_account_actions,
                                   "visible", FALSE);
     }

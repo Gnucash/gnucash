@@ -2645,7 +2645,7 @@ gnc_ui_qif_import_convert_progress_show_cb(GtkWidget *widget,
                                  wind->memo_map_info,
                                  wind->security_hash,
                                  scm_makfrom0str(currname),
-                                 wind->transaction_status, 
+                                 wind->transaction_status,
                                  progress),
                        SCM_EOL);
     gnc_progress_dialog_pop(wind->convert_progress);
@@ -3239,18 +3239,21 @@ get_preferences(QIFImportWindow *wind)
 
     /* Clear / Reconcile transaction if not specified in QIF file. */
     status_pref = gnc_gconf_get_string(
-                    GCONF_SECTION, GCONF_NAME_DEFAULT_TRANSACTION_STATUS, &err);
+                      GCONF_SECTION, GCONF_NAME_DEFAULT_TRANSACTION_STATUS, &err);
     if (err != NULL)
     {
         g_warning("QIF import: gnc_gconf_get_string error: %s", err->message);
         g_error_free(err);
         g_warning("QIF import: Couldn't get %s setting from gconf.",
                   GCONF_NAME_DEFAULT_TRANSACTION_STATUS);
-    } else {
+    }
+    else
+    {
         if (g_strcmp0(status_pref, "cleared") == 0)
         {
             tmp_transaction_status = 'c';
-        } else if (g_strcmp0(status_pref, "reconciled") == 0)
+        }
+        else if (g_strcmp0(status_pref, "reconciled") == 0)
         {
             tmp_transaction_status = 'y';
         }

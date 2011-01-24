@@ -2353,13 +2353,13 @@ gnc_main_window_engine_commit_error_callback( gpointer data,
     GtkWidget* dialog;
     gchar *reason = ".";
     if ( errcode == ERR_BACKEND_READONLY )
-	reason = _(": Book is marked read-only.");
+        reason = _(": Book is marked read-only.");
     dialog = gtk_message_dialog_new( GTK_WINDOW(window),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_ERROR,
                                      GTK_BUTTONS_CLOSE,
                                      _("Unable to save to database%s"),
-				     reason );
+                                     reason );
     gtk_dialog_run(GTK_DIALOG (dialog));
     gtk_widget_destroy(dialog);
 

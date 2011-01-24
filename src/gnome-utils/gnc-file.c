@@ -412,18 +412,18 @@ show_session_error (QofBackendError io_error,
     case ERR_SQL_DB_TOO_OLD:
         fmt = _("This database is from an older version of GnuCash. "
                 "Select OK to upgrade it to the current version, Cancel "
-		"to mark it read-only.");
+                "to mark it read-only.");
 
         response = gnc_ok_cancel_dialog(parent, GTK_RESPONSE_CANCEL, "%s", fmt);
-	uh_oh = (response == GTK_RESPONSE_CANCEL);
+        uh_oh = (response == GTK_RESPONSE_CANCEL);
         break;
 
     case ERR_SQL_DB_TOO_NEW:
         fmt = _("This database is from a newer version of GnuCash. "
                 "This version can read it, but cannot safely save to it. "
-		"It will be marked read-only until you do File>Save As.");
+                "It will be marked read-only until you do File>Save As.");
         gnc_warning_dialog (parent, "%s", fmt);
-	uh_oh = TRUE;
+        uh_oh = TRUE;
         break;
 
     case ERR_SQL_DB_BUSY:
@@ -437,15 +437,15 @@ show_session_error (QofBackendError io_error,
 
     case ERR_SQL_BAD_DBI:
 
-	fmt = _("The library \"libdbi\" installed on your system doesn't correctly "
+        fmt = _("The library \"libdbi\" installed on your system doesn't correctly "
                 "store large numbers.  This means GnuCash cannot use SQL databases "
                 "correctly.  Gnucash will not open or save to SQL databases until this is "
                 "fixed by installing a different version of \"libdbi\".  Please see "
                 "https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more "
                 "information.");
 
-	gnc_error_dialog (parent, "%s", fmt);
-	break;
+        gnc_error_dialog (parent, "%s", fmt);
+        break;
 
     default:
         PERR("FIXME: Unhandled error %d", io_error);
@@ -766,8 +766,8 @@ gnc_post_file_open (const char * filename)
      * don't bother with the message, just die. */
     io_err = qof_session_get_error (new_session);
     if ((ERR_BACKEND_LOCKED == io_err) ||
-	(ERR_BACKEND_READONLY == io_err) ||
-	(ERR_BACKEND_NO_SUCH_DB == io_err))
+            (ERR_BACKEND_READONLY == io_err) ||
+            (ERR_BACKEND_NO_SUCH_DB == io_err))
     {
         uh_oh = TRUE;
     }
@@ -815,24 +815,24 @@ gnc_post_file_open (const char * filename)
         }
 
         uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
-	/* Attempt to update the database if it's too old */
-	if ( !uh_oh && io_err == ERR_SQL_DB_TOO_OLD )
-	{
-	    gnc_window_show_progress(_("Re-saving user data..."), 0.0);
-	    qof_session_safe_save(new_session, gnc_window_show_progress);
-	    io_err = qof_session_get_error(new_session);
-	    uh_oh = show_session_error(io_err, newfile, GNC_FILE_DIALOG_SAVE);
-	}
-	/* Database is either too old and couldn't (or user didn't
-	 * want it to) be updated or it's too new. Mark it as
-	 * read-only
-	 */
-	if (uh_oh && (io_err == ERR_SQL_DB_TOO_OLD ||
+        /* Attempt to update the database if it's too old */
+        if ( !uh_oh && io_err == ERR_SQL_DB_TOO_OLD )
+        {
+            gnc_window_show_progress(_("Re-saving user data..."), 0.0);
+            qof_session_safe_save(new_session, gnc_window_show_progress);
+            io_err = qof_session_get_error(new_session);
+            uh_oh = show_session_error(io_err, newfile, GNC_FILE_DIALOG_SAVE);
+        }
+        /* Database is either too old and couldn't (or user didn't
+         * want it to) be updated or it's too new. Mark it as
+         * read-only
+         */
+        if (uh_oh && (io_err == ERR_SQL_DB_TOO_OLD ||
                       io_err == ERR_SQL_DB_TOO_NEW))
-	{
-	    qof_book_mark_readonly(qof_session_get_book(new_session));
-	    uh_oh = FALSE;
-	}
+        {
+            qof_book_mark_readonly(qof_session_get_book(new_session));
+            uh_oh = FALSE;
+        }
         new_root = gnc_book_get_root_account (qof_session_get_book (new_session));
         if (uh_oh) new_root = NULL;
 

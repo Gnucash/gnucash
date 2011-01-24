@@ -276,7 +276,7 @@ static QofQuery *new_query_for_entry_desc(GncEntryLedger *reg, const char* desc,
     /* For invoice entries, Entry->Bill must be NULL, and vice versa */
     qof_query_add_guid_match (query,
                               qof_query_build_param_list (should_be_null,
-                                                          QOF_PARAM_GUID, NULL),
+                                      QOF_PARAM_GUID, NULL),
                               NULL, QOF_QUERY_AND);
 
     /* Set the sort order: By DATE_ENTERED, increasing, and returning
@@ -494,9 +494,9 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
     auto_entry =
         /* Use this for book-wide auto-completion of the invoice entries */
         find_entry_in_book_by_desc(ledger, desc);
-/* #else */
-/*     gnc_find_entry_in_reg_by_desc(ledger, desc); */
-/* #endif */
+    /* #else */
+    /*     gnc_find_entry_in_reg_by_desc(ledger, desc); */
+    /* #endif */
 
     if (auto_entry == NULL)
         return FALSE;

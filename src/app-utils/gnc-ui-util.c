@@ -479,28 +479,28 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     account_descendants = gnc_account_get_descendants (account);
     if (account_descendants)
     {
-       gint sub_acct_tax_number = 0;
-       for (descendant = account_descendants; descendant;
-                             descendant = g_list_next(descendant))
-       {
+        gint sub_acct_tax_number = 0;
+        for (descendant = account_descendants; descendant;
+                descendant = g_list_next(descendant))
+        {
             if (xaccAccountGetTaxRelated (descendant->data))
-               sub_acct_tax_number++;
-       }
-      /* Translators: This and the following strings appear on
-       * the account tab if the Tax Info column is displayed,
-       * i.e. if the user wants to record the tax form number
-       * and location on that tax form which corresponds to this
-       * gnucash account. For the US Income Tax support in
-       * gnucash, each tax code that can be assigned to an
-       * account generally corresponds to a specific line number
-       * on a paper form and each form has a unique
-       * identification (e.g., Form 1040, Schedule A). */
-       descendant_txt = (sub_acct_tax_number == 0) ? "" :
-                 g_strdup_printf (_("(Tax-related subaccounts: %d)"),
-                                                 sub_acct_tax_number);
+                sub_acct_tax_number++;
+        }
+        /* Translators: This and the following strings appear on
+         * the account tab if the Tax Info column is displayed,
+         * i.e. if the user wants to record the tax form number
+         * and location on that tax form which corresponds to this
+         * gnucash account. For the US Income Tax support in
+         * gnucash, each tax code that can be assigned to an
+         * account generally corresponds to a specific line number
+         * on a paper form and each form has a unique
+         * identification (e.g., Form 1040, Schedule A). */
+        descendant_txt = (sub_acct_tax_number == 0) ? "" :
+                         g_strdup_printf (_("(Tax-related subaccounts: %d)"),
+                                          sub_acct_tax_number);
     }
     else
-       descendant_txt = "";
+        descendant_txt = "";
 
     tax_related = xaccAccountGetTaxRelated (account);
     code = xaccAccountGetTaxUSCode (account);
@@ -509,19 +509,19 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     {
         if (!tax_related)
         {
-           if (safe_strcmp (descendant_txt, "") == 0)
-              return NULL;
-           else
-              return g_strdup_printf ("%s", descendant_txt);
+            if (safe_strcmp (descendant_txt, "") == 0)
+                return NULL;
+            else
+                return g_strdup_printf ("%s", descendant_txt);
         }
         /* tax_related && !code */
         else
         {
-           if (safe_strcmp (descendant_txt, "") == 0)
-              return g_strdup (_("Tax-related but has no tax code"));
-           else
-              return g_strdup_printf
-                 (_("Tax-related but has no tax code; %s"), descendant_txt);
+            if (safe_strcmp (descendant_txt, "") == 0)
+                return g_strdup (_("Tax-related but has no tax code"));
+            else
+                return g_strdup_printf
+                       (_("Tax-related but has no tax code; %s"), descendant_txt);
         }
     }
     else  /* with tax code */
@@ -532,11 +532,11 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         tax_type = gnc_get_current_book_tax_type ();
         if (tax_type == NULL || (safe_strcmp (tax_type, "") == 0))
         {
-           if (safe_strcmp (descendant_txt, "") == 0)
-              return g_strdup (_("Tax entity type not specified"));
-           else
-              return g_strdup_printf
-                   (_("Tax entity type not specified; %s"), descendant_txt);
+            if (safe_strcmp (descendant_txt, "") == 0)
+                return g_strdup (_("Tax entity type not specified"));
+            else
+                return g_strdup_printf
+                       (_("Tax entity type not specified; %s"), descendant_txt);
         }
         atype = xaccAccountGetType (account);
         /*    tax_entity_type = scm_from_locale_string (tax_type); <- requires guile 1.8*/
@@ -603,25 +603,25 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         {
             if (tax_related)
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                       (_("Tax type %s: invalid code %s for account type"),
-                                                        tax_type, num_code);
-               else
-                  return g_strdup_printf
-                    (_("Tax type %s: invalid code %s for account type; %s"),
-                                        tax_type, num_code, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("Tax type %s: invalid code %s for account type"),
+                            tax_type, num_code);
+                else
+                    return g_strdup_printf
+                           (_("Tax type %s: invalid code %s for account type; %s"),
+                            tax_type, num_code, descendant_txt);
             }
             else
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                       (_("Not tax-related; tax type %s: invalid code %s for account type"),
-                                                       tax_type, num_code);
-               else
-                  return g_strdup_printf
-                       (_("Not tax-related; tax type %s: invalid code %s for account type; %s"),
-                                        tax_type, num_code, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("Not tax-related; tax type %s: invalid code %s for account type"),
+                            tax_type, num_code);
+                else
+                    return g_strdup_printf
+                           (_("Not tax-related; tax type %s: invalid code %s for account type; %s"),
+                            tax_type, num_code, descendant_txt);
             }
         }
 
@@ -631,25 +631,25 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         {
             if (tax_related)
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                       (_("Invalid code %s for tax type %s"),
-                                                        num_code, tax_type);
-               else
-                  return g_strdup_printf
-                       (_("Invalid code %s for tax type %s; %s"),
-                                        num_code, tax_type, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("Invalid code %s for tax type %s"),
+                            num_code, tax_type);
+                else
+                    return g_strdup_printf
+                           (_("Invalid code %s for tax type %s; %s"),
+                            num_code, tax_type, descendant_txt);
             }
             else
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                     (_("Not tax-related; invalid code %s for tax type %s"),
-                                                        num_code, tax_type);
-               else
-                  return g_strdup_printf
-                 (_("Not tax-related; invalid code %s for tax type %s; %s"),
-                                        num_code, tax_type, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("Not tax-related; invalid code %s for tax type %s"),
+                            num_code, tax_type);
+                else
+                    return g_strdup_printf
+                           (_("Not tax-related; invalid code %s for tax type %s; %s"),
+                            num_code, tax_type, descendant_txt);
             }
         }
 
@@ -658,24 +658,24 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         {
             if (tax_related)
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                   (_("No form: code %s, tax type %s"), num_code, tax_type);
-               else
-                  return g_strdup_printf
-                   (_("No form: code %s, tax type %s; %s"),
-                                        num_code, tax_type, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("No form: code %s, tax type %s"), num_code, tax_type);
+                else
+                    return g_strdup_printf
+                           (_("No form: code %s, tax type %s; %s"),
+                            num_code, tax_type, descendant_txt);
             }
             else
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                       (_("Not tax-related; no form: code %s, tax type %s"),
-                                                        num_code, tax_type);
-               else
-                  return g_strdup_printf
-                   (_("Not tax-related; no form: code %s, tax type %s; %s"),
-                                        num_code, tax_type, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("Not tax-related; no form: code %s, tax type %s"),
+                            num_code, tax_type);
+                else
+                    return g_strdup_printf
+                           (_("Not tax-related; no form: code %s, tax type %s; %s"),
+                            num_code, tax_type, descendant_txt);
             }
         }
 
@@ -684,25 +684,25 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         {
             if (tax_related)
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                   (_("No description: form %s, code %s, tax type %s"),
-                                                  form, num_code, tax_type);
-               else
-                  return g_strdup_printf
-                    (_("No description: form %s, code %s, tax type %s; %s"),
-                                  form, num_code, tax_type, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("No description: form %s, code %s, tax type %s"),
+                            form, num_code, tax_type);
+                else
+                    return g_strdup_printf
+                           (_("No description: form %s, code %s, tax type %s; %s"),
+                            form, num_code, tax_type, descendant_txt);
             }
             else
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                     (_("Not tax-related; no description: form %s, code %s, tax type %s"),
-                                                 form, num_code, tax_type);
-               else
-                  return g_strdup_printf
-                     (_("Not tax-related; no description: form %s, code %s, tax type %s; %s"),
-                                 form, num_code, tax_type, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("Not tax-related; no description: form %s, code %s, tax type %s"),
+                            form, num_code, tax_type);
+                else
+                    return g_strdup_printf
+                           (_("Not tax-related; no description: form %s, code %s, tax type %s; %s"),
+                            form, num_code, tax_type, descendant_txt);
             }
         }
 
@@ -711,25 +711,25 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         {
             if (tax_related)
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                   (_("No description: form %s, code %s, tax type %s"),
-                                                  form, num_code, tax_type);
-               else
-                  return g_strdup_printf
-                    (_("No description: form %s, code %s, tax type %s; %s"),
-                                  form, num_code, tax_type, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("No description: form %s, code %s, tax type %s"),
+                            form, num_code, tax_type);
+                else
+                    return g_strdup_printf
+                           (_("No description: form %s, code %s, tax type %s; %s"),
+                            form, num_code, tax_type, descendant_txt);
             }
             else
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                     (_("Not tax-related; no description: form %s, code %s, tax type %s"),
-                                                 form, num_code, tax_type);
-               else
-                  return g_strdup_printf
-                     (_("Not tax-related; no description: form %s, code %s, tax type %s; %s"),
-                                 form, num_code, tax_type, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf
+                           (_("Not tax-related; no description: form %s, code %s, tax type %s"),
+                            form, num_code, tax_type);
+                else
+                    return g_strdup_printf
+                           (_("Not tax-related; no description: form %s, code %s, tax type %s; %s"),
+                            form, num_code, tax_type, descendant_txt);
             }
         }
 
@@ -741,31 +741,31 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         {
             if (safe_strcmp (form, "") == 0)
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf ("%s", desc);
-               else
-                  return g_strdup_printf ("%s; %s", desc, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf ("%s", desc);
+                else
+                    return g_strdup_printf ("%s; %s", desc, descendant_txt);
             }
             else
             {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf ("%s%s: %s", form, copy_txt, desc);
-               else
-                  return g_strdup_printf ("%s%s: %s; %s",
-                                      form, copy_txt, desc, descendant_txt);
+                if (safe_strcmp (descendant_txt, "") == 0)
+                    return g_strdup_printf ("%s%s: %s", form, copy_txt, desc);
+                else
+                    return g_strdup_printf ("%s%s: %s; %s",
+                                            form, copy_txt, desc, descendant_txt);
             }
         }
         else
-            {
-               if (safe_strcmp (descendant_txt, "") == 0)
-                  return g_strdup_printf
-                   (_("Not tax-related; %s%s: %s (code %s, tax type %s)"),
-                    form, copy_txt, desc, num_code, tax_type);
-               else
-                  return g_strdup_printf
-                 (_("Not tax-related; %s%s: %s (code %s, tax type %s); %s"),
-                  form, copy_txt, desc, num_code, tax_type, descendant_txt);
-            }
+        {
+            if (safe_strcmp (descendant_txt, "") == 0)
+                return g_strdup_printf
+                       (_("Not tax-related; %s%s: %s (code %s, tax type %s)"),
+                        form, copy_txt, desc, num_code, tax_type);
+            else
+                return g_strdup_printf
+                       (_("Not tax-related; %s%s: %s (code %s, tax type %s); %s"),
+                        form, copy_txt, desc, num_code, tax_type, descendant_txt);
+        }
     }
 }
 
