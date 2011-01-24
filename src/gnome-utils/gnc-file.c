@@ -436,11 +436,14 @@ show_session_error (QofBackendError io_error,
         break;
 
     case ERR_SQL_BAD_DBI:
-	fmt = _("The libdbi installed on your system doesn't correctly store "
-		"large numbers. This is fatal, and Gnucash will not open or "
-		"save to SQL databases until it is fixed. Please see "
-		"https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more "
-		"information.");
+
+	fmt = _("The library \"libdbi\" installed on your system doesn't correctly "
+                "store large numbers.  This means GnuCash cannot use SQL databases "
+                "correctly.  Gnucash will not open or save to SQL databases until this is "
+                "fixed by installing a different version of \"libdbi\".  Please see "
+                "https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more "
+                "information.");
+
 	gnc_error_dialog (parent, "%s", fmt);
 	break;
 
