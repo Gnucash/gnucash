@@ -52,7 +52,6 @@ test_book_readonly( Fixture *fixture, gconstpointer pData )
     g_assert( !qof_book_is_readonly( book ) );
     qof_book_mark_readonly( book );
     g_assert( qof_book_is_readonly( book ) );
-    g_assert( !qof_begin_edit( fixture->instance ) );
 }
 
 
