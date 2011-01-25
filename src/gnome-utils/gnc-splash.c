@@ -64,7 +64,7 @@ gnc_show_splash_screen (void)
     if (!gnc_gconf_get_bool(GCONF_GENERAL, "show_splash_screen", NULL)) return;
 
     splash = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_type_hint (GTK_WINDOW (splash), GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
+    gtk_window_set_decorated(GTK_WINDOW (splash), FALSE);
     gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
 
     g_signal_connect (splash, "destroy",
