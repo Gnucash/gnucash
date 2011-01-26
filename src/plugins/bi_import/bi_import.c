@@ -61,8 +61,9 @@
 #include "bi_import.h"
 #include "helpers.h"
 
-
-
+// To open the incoices for editing
+#include "gnc-plugin-page.h"
+#include "dialog-invoice.c"
 
 
 //#ifdef HAVE_GLIB_2_14
@@ -488,7 +489,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     enum update {YES = GTK_RESPONSE_YES, NO = GTK_RESPONSE_NO} update;
     GtkWidget *dialog;
     Timespec today;
-
+    GncPluginPage *new_page;
+    InvoiceWindow *iw;
 
     // these arguments are needed
     g_return_if_fail (store && book);
@@ -575,6 +577,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             //if (g_ascii_strcasecmp(type,"INVOICE"))gncInvoiceSetBillTo( invoice, billto );
             (*n_invoices_created)++;
             update = YES;
+            // Open the newly created invoice(s) in a tab.  Could be made optional?
+            iw =  gnc_ui_invoice_edit (invoice);
+			new_page = gnc_plugin_page_invoice_new (iw);
         }
 // I want to warn the user that an existing billvoice exists, but not every
 // time.

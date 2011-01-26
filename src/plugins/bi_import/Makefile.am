@@ -33,9 +33,14 @@ libgncmod_bi_import_la_LIBADD = \
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnome \
+  -I${top_srcdir}/src/business/business-gnome/ \
+  -I${top_srcdir}/src/report/report-gnome \
+  -I${top_srcdir}/src/gnome-search/ \
   -I${top_srcdir}/src/register/ledger-core \
+  -I${top_srcdir}/src/business/business-ledger/ \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/register/register-core \
+  -I${top_srcdir}/src/business/dialog-tax-table \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/engine \
