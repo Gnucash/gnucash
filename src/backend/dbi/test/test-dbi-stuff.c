@@ -25,6 +25,7 @@
 
 #include "config.h"
 #include "qof.h"
+#include "gnc-main.h"
 #include "qofsession-p.h"
 #include "cashobjects.h"
 #include "test-engine-stuff.h"
