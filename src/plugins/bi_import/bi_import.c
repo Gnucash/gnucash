@@ -61,9 +61,9 @@
 #include "bi_import.h"
 #include "helpers.h"
 
-// To open the incoices for editing
-#include "gnc-plugin-page.h"
-#include "dialog-invoice.c"
+// To open the invoices for editing
+#include "business/business-gnome/gnc-plugin-page-invoice.h"
+#include "business/business-gnome/dialog-invoice.h"
 
 
 //#ifdef HAVE_GLIB_2_14

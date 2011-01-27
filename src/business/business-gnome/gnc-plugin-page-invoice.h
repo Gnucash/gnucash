@@ -38,6 +38,7 @@
 #include "Account.h"
 #include "gnc-ledger-display.h"
 #include "gnc-plugin-page.h"
+#include "dialog-invoice.h" /* for InvoiceWindow */
 
 G_BEGIN_DECLS
 
