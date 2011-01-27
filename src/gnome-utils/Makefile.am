@@ -26,7 +26,6 @@ AM_CPPFLAGS = \
   ${IGE_MAC_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
-  QuickFill.c \
   account-quickfill.c \
   cursors.c \
   dialog-account.c \
@@ -62,7 +61,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-druid-provider-file-gnome.c \
   gnc-druid-provider-multifile-gnome.c \
   gnc-embedded-window.c \
-  gnc-entry-quickfill.c \
   gnc-file.c \
   gnc-frequency.c \
   gnc-recurrence.c \
@@ -106,7 +104,6 @@ libgncmod_gnome_utils_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  QuickFill.h \
   account-quickfill.h \
   dialog-account.h \
   dialog-book-close.h \
@@ -135,7 +132,6 @@ gncinclude_HEADERS = \
   gnc-dense-cal-store.h \
   gnc-druid-gnome-ui.h \
   gnc-embedded-window.h \
-  gnc-entry-quickfill.h \
   gnc-file.h \
   gnc-frequency.h \
   gnc-recurrence.h \

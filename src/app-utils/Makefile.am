@@ -35,6 +35,7 @@ AM_CPPFLAGS = \
 
 libgncmod_app_utils_la_SOURCES = \
   swig-app-utils.c \
+  QuickFill.c \
   file-utils.c \
   gfec.c \
   gnc-account-merge.c \
@@ -48,6 +49,7 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-druid-provider-desc-file.c \
   gnc-druid-provider-desc-multifile.c \
   gnc-druid-provider-file-cb.c \
+  gnc-entry-quickfill.c \
   gnc-euro.c \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
@@ -60,6 +62,7 @@ libgncmod_app_utils_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
+  QuickFill.h \
   file-utils.h \
   gfec.h \
   gnc-basic-gobject.h \
@@ -74,6 +77,7 @@ gncinclude_HEADERS = \
   gnc-druid-provider-desc-file.h \
   gnc-druid-provider-desc-multifile.h \
   gnc-druid-provider-file-cb.h \
+  gnc-entry-quickfill.h \
   gnc-euro.h \
   gnc-exp-parser.h \
   gnc-gettext-util.h \

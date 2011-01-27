@@ -41,7 +41,7 @@
 #include "gncEntryLedger.h"
 #include "gncEntryLedgerP.h"
 #include "quickfillcell.h"
-#include "gnome-utils/gnc-entry-quickfill.h"
+#include "app-utils/gnc-entry-quickfill.h"
 
 
 /* XXX: This should go elsewhere */

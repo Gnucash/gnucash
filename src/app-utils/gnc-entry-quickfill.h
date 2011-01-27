@@ -32,7 +32,7 @@
 
 #include "qof.h"
 #include "engine/gncEntry.h"
-#include "gnome-utils/QuickFill.h"
+#include "app-utils/QuickFill.h"
 
 /** Create/fetch a quickfill GncEntry description strings.
  *

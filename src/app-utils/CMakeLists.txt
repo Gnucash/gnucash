@@ -20,6 +20,7 @@ INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/src/engine) # for swig-runtime.h
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}) # for <option-util.h>
 
 SET (app_utils_HEADERS
+  QuickFill.h
   file-utils.h
   gfec.h
   gnc-basic-gobject.h
@@ -34,6 +35,7 @@ SET (app_utils_HEADERS
   gnc-druid-provider-desc-file.h
   gnc-druid-provider-desc-multifile.h
   gnc-druid-provider-file-cb.h
+  gnc-entry-quickfill.h
   gnc-euro.h
   gnc-exp-parser.h
   gnc-gettext-util.h
@@ -51,6 +53,7 @@ SET (SWIG_APP_UTILS_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils.c)
 GNC_ADD_SWIG_COMMAND (${SWIG_APP_UTILS_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
 
 SET (app_utils_SOURCES
+  QuickFill.c
   file-utils.c
   gfec.c
   gnc-account-merge.c
@@ -64,6 +67,7 @@ SET (app_utils_SOURCES
   gnc-druid-provider-desc-file.c
   gnc-druid-provider-desc-multifile.c
   gnc-druid-provider-file-cb.c
+  gnc-entry-quickfill.c
   gnc-euro.c
   gnc-exp-parser.c
   gnc-gettext-util.c
