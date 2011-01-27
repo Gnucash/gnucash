@@ -2864,6 +2864,7 @@ conn_test_dbi_library( dbi_conn conn )
     guint64 testulonglong = 9223372036854775807LLU, resultulonglong = 0;
     gdouble testdouble = 1.7976921348623157E+307, resultdouble = 0.0;
     dbi_result result;
+    gchar doublestr[G_ASCII_DTOSTR_BUF_SIZE];
     gboolean retval = TRUE;
 
     result = dbi_conn_query( conn, "CREATE TEMPORARY TABLE numtest "
@@ -2875,9 +2876,11 @@ conn_test_dbi_library( dbi_conn conn )
         return FALSE;
     }
     dbi_result_free( result );
+    g_ascii_dtostr( doublestr, sizeof(doublestr), testdouble );
     result = dbi_conn_queryf( conn,
-                              "INSERT INTO numtest VALUES (%lld, %llu, %17e)",
-                              testlonglong, testulonglong, testdouble );
+                              "INSERT INTO numtest VALUES (%" G_GINT64_FORMAT
+			      ", %" G_GUINT64_FORMAT ", %s)",
+                              testlonglong, testulonglong, doublestr );
     if ( result == NULL )
     {
         PWARN("Test_DBI_Library: Failed to insert test row into table" );

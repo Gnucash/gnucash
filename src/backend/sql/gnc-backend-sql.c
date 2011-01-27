@@ -707,7 +707,7 @@ handle_and_term( QofQueryTerm* pTerm, GString* sql )
     QofQueryPredData* pPredData;
     gboolean isInverted;
     GSList* name;
-    gchar val[GUID_ENCODING_LENGTH+1];
+    gchar val[G_ASCII_DTOSTR_BUF_SIZE];
 
     g_return_if_fail( pTerm != NULL );
     g_return_if_fail( sql != NULL );
@@ -830,7 +830,7 @@ handle_and_term( QofQueryTerm* pTerm, GString* sql )
     {
         query_double_t pData = (query_double_t)pPredData;
 
-        sprintf( val, "%f", pData->val );
+        g_ascii_dtostr( val, sizeof(val), pData->val );
         g_string_append( sql, val );
     }
     else if ( strcmp( pPredData->type_name, "boolean" ) == 0 )
@@ -2793,7 +2793,10 @@ gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
         }
         else if ( type == G_TYPE_DOUBLE )
         {
-            return g_strdup_printf( "%g", g_value_get_double( value ) );
+	    gchar doublestr[G_ASCII_DTOSTR_BUF_SIZE];
+	    g_ascii_dtostr( doublestr, sizeof(doublestr),
+			    g_value_get_double( value ));
+            return g_strdup_printf( "%s", doublestr );
 
         }
         else if ( g_value_type_transformable( type, G_TYPE_STRING ) )
