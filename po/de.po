@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-21 21:38+0100\n"
-"PO-Revision-Date: 2010-11-21 21:43+0100\n"
+"POT-Creation-Date: 2011-01-27 22:00+0100\n"
+"PO-Revision-Date: 2011-01-27 22:01+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -48,23 +48,30 @@ msgstr "Kein Speicher mehr verfügbar"
 msgid "Numeric error"
 msgstr "Numerischer Fehler"
 
-#. Translators: This and the following strings appear on
-#. * the account tab if the Tax Info column is displayed,
-#. * i.e. if the user wants to record the tax form number
-#. * and location on that tax form which corresponds to this
-#. * gnucash account. For the US Income Tax support in
-#. * gnucash, each tax code that can be assigned to an
-#. * account generally corresponds to a specific line number
-#. * on a paper form and each form has a unique
-#. * identification (e.g., Form 1040, Schedule A).
+#, fuzzy, c-format
+msgid "(Tax-related subaccounts: %d)"
+msgstr "%s und ausgewählte Unterkonten"
+
 msgid "Tax-related but has no tax code"
+msgstr "Steuerrelevant, aber ohne Zuordnung"
+
+#, fuzzy, c-format
+msgid "Tax-related but has no tax code; %s"
 msgstr "Steuerrelevant, aber ohne Zuordnung"
 
 msgid "Tax entity type not specified"
 msgstr "Art der Steuer nicht spezifiziert"
 
+#, fuzzy, c-format
+msgid "Tax entity type not specified; %s"
+msgstr "Art der Steuer nicht spezifiziert"
+
 #, c-format
 msgid "Tax type %s: invalid code %s for account type"
+msgstr "Steuerart %s: ungültiger Schlüssel %s für diese Kontenart"
+
+#, fuzzy, c-format
+msgid "Tax type %s: invalid code %s for account type; %s"
 msgstr "Steuerart %s: ungültiger Schlüssel %s für diese Kontenart"
 
 #, c-format
@@ -73,24 +80,50 @@ msgstr ""
 "Nicht steuerrelevant; Steuerart %s: ungültiger Schlüssel %s für diese "
 "Kontenart"
 
+#, fuzzy, c-format
+msgid "Not tax-related; tax type %s: invalid code %s for account type; %s"
+msgstr ""
+"Nicht steuerrelevant; Steuerart %s: ungültiger Schlüssel %s für diese "
+"Kontenart"
+
 #, c-format
 msgid "Invalid code %s for tax type %s"
+msgstr "ungültiger Schlüssel %s für Steuerart %s"
+
+#, fuzzy, c-format
+msgid "Invalid code %s for tax type %s; %s"
 msgstr "ungültiger Schlüssel %s für Steuerart %s"
 
 #, c-format
 msgid "Not tax-related; invalid code %s for tax type %s"
 msgstr "Nicht steuerrelevant; ungültiger Schlüssel %s für Steuerart %s"
 
+#, fuzzy, c-format
+msgid "Not tax-related; invalid code %s for tax type %s; %s"
+msgstr "Nicht steuerrelevant; ungültiger Schlüssel %s für Steuerart %s"
+
 #, c-format
 msgid "No form: code %s, tax type %s"
+msgstr "Kein Formular: Schlüssel %s, Steuerart %s"
+
+#, fuzzy, c-format
+msgid "No form: code %s, tax type %s; %s"
 msgstr "Kein Formular: Schlüssel %s, Steuerart %s"
 
 #, c-format
 msgid "Not tax-related; no form: code %s, tax type %s"
 msgstr "Nicht steuerrelevant; kein Formular: Schlüssel %s, Steuerart %s"
 
+#, fuzzy, c-format
+msgid "Not tax-related; no form: code %s, tax type %s; %s"
+msgstr "Nicht steuerrelevant; kein Formular: Schlüssel %s, Steuerart %s"
+
 #, c-format
 msgid "No description: form %s, code %s, tax type %s"
+msgstr "Keine Beschreibung: Formular %s, Schlüssel %s, Steuerart %s"
+
+#, fuzzy, c-format
+msgid "No description: form %s, code %s, tax type %s; %s"
 msgstr "Keine Beschreibung: Formular %s, Schlüssel %s, Steuerart %s"
 
 #, c-format
@@ -99,8 +132,18 @@ msgstr ""
 "Nicht steuerrelevant; keine Beschreibung: Formular %s, Schlüssel %s, "
 "Steuerart %s"
 
-#, c-format
-msgid "Not tax-related; %s%s %s (code %s, tax type %s)"
+#, fuzzy, c-format
+msgid "Not tax-related; no description: form %s, code %s, tax type %s; %s"
+msgstr ""
+"Nicht steuerrelevant; keine Beschreibung: Formular %s, Schlüssel %s, "
+"Steuerart %s"
+
+#, fuzzy, c-format
+msgid "Not tax-related; %s%s: %s (code %s, tax type %s)"
+msgstr "Nicht steuerrelevant; %s%s %s (Schlüssel %s, Steuerart %s)"
+
+#, fuzzy, c-format
+msgid "Not tax-related; %s%s: %s (code %s, tax type %s); %s"
 msgstr "Nicht steuerrelevant; %s%s %s (Schlüssel %s, Steuerart %s)"
 
 #. Translators: For the following strings, the single letters
@@ -272,6 +315,7 @@ msgid "Edit..."
 msgstr "Bearbeiten..."
 
 #. src/app-utils/prefs.scm
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -283,7 +327,13 @@ msgstr "Lieferantenrechnung"
 msgid "Voucher"
 msgstr "Auslagenerstattung"
 
+#. Bug#602091, #639365: The INVOICE_TYPE string unfortunately is
+#. * stored in translated form due to the usage of gncInvoiceGetType
+#. * for user-visible strings as well. Hence, as an exception we
+#. * must also search for the translated here even though it's an
+#. * internal flag.
 #. src/app-utils/prefs.scm
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -362,6 +412,7 @@ msgstr "Tage"
 msgid "Proximo"
 msgstr "Im nächsten Monat"
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 msgid "Unknown"
@@ -389,9 +440,12 @@ msgstr ""
 "Diese Buchung muss einem Lieferanten zugeordnet sein.  Bitte wählen Sie "
 "unten einen Lieferanten."
 
+#, fuzzy
 msgid ""
 "You must enter a company name. If this customer is an individual (and not a "
-"company) you should set the \"company name\" and \"contact name\" the same."
+"company) you should enter the same value for:\n"
+"Identification - Company Name, and\n"
+"Payment Address - Name."
 msgstr ""
 "Sie müssen einen Firmennamen eingeben. Wenn dieser Kunde eine Person ist "
 "(und keine Firma), sollten Sie bei »Firmenname« und »Kontaktadresse« das "
@@ -538,6 +592,7 @@ msgstr ""
 msgid "Do you really want to post the invoice?"
 msgstr "Wollen Sie diese Rechnung wirklich buchen?"
 
+#. src/report/business-reports/aging.scm
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -547,6 +602,7 @@ msgstr "Wollen Sie diese Rechnung wirklich buchen?"
 msgid "Due Date"
 msgstr "Fälligkeitsdatum"
 
+#. src/report/business-reports/aging.scm
 msgid "Post Date"
 msgstr "Buchungsdatum"
 
@@ -610,6 +666,9 @@ msgstr "Auslagenerstattung anzeigen"
 msgid "View/Edit Invoice"
 msgstr "Rechnung anzeigen/bearbeiten"
 
+msgid "Duplicate"
+msgstr "Duplizieren"
+
 msgid "View/Edit Bill"
 msgstr "Rechnung anzeigen/bearbeiten"
 
@@ -669,9 +728,11 @@ msgstr "Bemerkungen Auslagenerstattung"
 msgid "Voucher ID"
 msgstr "Nummer Auslagenerstattung"
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Type"
 msgstr "Art"
 
@@ -710,6 +771,7 @@ msgstr "Auslagenerstattung"
 msgid "Find Invoice"
 msgstr "Rechnung suchen"
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 #. src/report/report-system/options-utilities.scm
@@ -848,9 +910,12 @@ msgstr ""
 "der Kontoart »%s« erstellen, bevor Sie hier fortfahren. Möchten Sie "
 "vielleicht zuerst eine Rechnung erstellen?"
 
+#, fuzzy
 msgid ""
 "You must enter a company name. If this vendor is an individual (and not a "
-"company) you should set the \"company name\" and \"contact name\" the same."
+"company) you should enter the same value for:\n"
+"Identification - Company Name, and\n"
+"Payment Address - Name."
 msgstr ""
 "Sie müssen einen Firmennamen eingeben. Wenn dieser Lieferant eine Person ist "
 "(und keine Firma), sollten Sie bei »Firmenname« und »Kontaktadresse« das "
@@ -1070,6 +1135,7 @@ msgstr "Inklusive _Steuern"
 msgid "Choose Owner Dialog"
 msgstr "Auswahl des Besitzers"
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -1080,6 +1146,7 @@ msgstr "Auswahl des Besitzers"
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/register.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
 msgid "Description"
 msgstr "Beschreibung"
@@ -1105,6 +1172,7 @@ msgstr "Kreditrahmen: "
 msgid "Currency: "
 msgstr "Währung: "
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 msgid "Customer"
@@ -1131,6 +1199,7 @@ msgstr "Name: "
 #. src/report/business-reports/taxinvoice.scm
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balsheet-eg.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
 msgid "Notes"
 msgstr "Bemerkung"
@@ -1199,6 +1268,7 @@ msgstr "Voreinstellung Stunden pro Tag: "
 msgid "Default Rate: "
 msgstr "Voreinstellung Stundenlohn: "
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 msgid "Employee"
@@ -1316,6 +1386,7 @@ msgstr "Bestellungsposten"
 msgid "Order Information"
 msgstr "Bestellungsinformationen"
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
 #. src/report/business-reports/job-report.scm
@@ -1331,6 +1402,7 @@ msgstr ""
 "sinnvoller Wert gewählt."
 
 #. Add the columns
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -1413,6 +1485,7 @@ msgstr ""
 "Die Lieferantennummer. Falls keine angegeben wird, wird automatisch ein "
 "sinnvoller Wert gewählt."
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 msgid "Vendor"
@@ -1587,12 +1660,6 @@ msgstr "Testdaten zurücksetzen"
 msgid "Sort _Order"
 msgstr "S_ortierreihenfolge"
 
-msgid "New _Invoice"
-msgstr "Neue _Rechnung..."
-
-msgid "Create a new invoice"
-msgstr "Eine neue Rechnung anlegen"
-
 msgid "New _Account..."
 msgstr "Neues _Konto..."
 
@@ -1619,6 +1686,12 @@ msgstr "Rechnung bearbeiten"
 
 msgid "Edit this invoice"
 msgstr "Diese Rechnung bearbeiten"
+
+msgid "_Duplicate Invoice"
+msgstr "Rechnung _duplizieren"
+
+msgid "Create a new invoice as a duplicate of the current one"
+msgstr "Eine neue Rechnung als Kopie der aktuellen Rechnung erstellen"
 
 msgid "_Post Invoice"
 msgstr "Rechnung _buchen"
@@ -1663,6 +1736,13 @@ msgstr "Eintrag _duplizieren"
 
 msgid "Make a copy of the current entry"
 msgstr "Kopie des aktuellen Postens erstellen"
+
+msgid "New _Invoice"
+msgstr "Neue _Rechnung..."
+
+#, fuzzy
+msgid "Create a new invoice for the same owner as the current one"
+msgstr "Ein neues Fenster für jedes Kontofenster öffnen"
 
 msgid "_Pay Invoice"
 msgstr "Rechnung be_zahlen"
@@ -1722,9 +1802,6 @@ msgstr "Abbrechen"
 
 msgid "Delete"
 msgstr "Löschen"
-
-msgid "Duplicate"
-msgstr "Duplizieren"
 
 msgid "Blank"
 msgstr "Neu"
@@ -1860,13 +1937,18 @@ msgstr ""
 msgid "_Record"
 msgstr "_Speichern"
 
-#. Translators: %s is the string "an Account" i.e. its translation.
-#, c-format
-msgid "Invalid Entry:  You need to supply %s."
-msgstr "Ungültiger Posten: Sie müssen %s angeben."
+msgid ""
+"Invalid Entry: You need to supply an account in the right currency for this "
+"position."
+msgstr ""
+"Der Eintrag kann nicht verwendet werden: Sie müssen ein Konto in der "
+"richtigen Währung oder Wertpapier für diesen Posten angeben."
 
-msgid "an Account"
-msgstr "ein Konto"
+msgid "This account should usually be of type income."
+msgstr "Dieses Konto sollte vom Typ »Erträge« sein."
+
+msgid "This account should usually be of type expense or asset."
+msgstr "Dieses Konto sollte vom Typ »Aufwendungen« oder »Aktiva« sein."
 
 #, c-format
 msgid "The tax table %s does not exist. Would you like to create it?"
@@ -2017,6 +2099,7 @@ msgstr "Zwischensumme"
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
 #. src/tax/us/de_DE.scm
+#. src/tax/us/gnucash/tax/de_DE.scm
 msgid "Tax"
 msgstr "Steuern"
 
@@ -2024,6 +2107,7 @@ msgid "Billable?"
 msgstr "In Rechnung gestellt?"
 
 #. src/app-utils/prefs.scm
+#. src/report/business-reports/customer-summary.scm
 msgid "Payment"
 msgstr "Zahlung"
 
@@ -2293,6 +2377,7 @@ msgstr "Erträge"
 
 #  should be prefixed: "employee|Auslagen" "Aufwendungen" sonst?
 #. src/app-utils/prefs.scm
+#. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/net-barchart.scm
 msgid "Expense"
 msgstr "Aufwendungen"
@@ -2306,6 +2391,7 @@ msgstr "Offene Verbindlichkeiten"
 msgid "Root"
 msgstr "Oberkonto"
 
+#. src/report/standard-reports/income-statement.scm
 msgid "Trading"
 msgstr "Devisenhandel"
 
@@ -2359,6 +2445,7 @@ msgid " + "
 msgstr " + "
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/transaction.scm
 msgid "Weekly"
 msgstr "Wöchentlich"
@@ -2387,10 +2474,12 @@ msgstr "Unbekannt, Liste mit %d Einträgen."
 msgid "Once"
 msgstr "Einmal"
 
+#. src/report/standard-reports/category-barchart.scm
 msgid "Daily"
 msgstr "Täglich"
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/transaction.scm
 msgid "Monthly"
 msgstr "Monatlich"
@@ -2589,13 +2678,6 @@ msgstr "_Ansicht"
 msgid "_Actions"
 msgstr "A_ktionen"
 
-msgid "This SX has changed; are you sure you want to cancel?"
-msgstr ""
-"Diese terminierte Buchung wurde geändert. Sind Sie sicher, dass Sie\n"
-"abbrechen wollen?"
-
-#. Translators: This message is currently not yet used; it
-#. * will be used once the 2.4.0 string freeze is lifted.
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr ""
@@ -2744,6 +2826,7 @@ msgid "Form Line Data: "
 msgstr "Daten der Formularzeilen:"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Code"
 msgstr "Code"
 
@@ -2996,6 +3079,7 @@ msgid "<b>_Parent Account</b>"
 msgstr "<b>Ha_uptkonto</b>"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Account Type"
 msgstr "Kontoart"
 
@@ -3588,11 +3672,13 @@ msgstr "<b>_Name</b>"
 msgid "A summary of all of the transactions in the selected lot"
 msgstr "Eine Zusammenfassung aller Buchungen in dem gewählten Posten"
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 #. src/report/report-system/html-utilities.scm
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/register.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
 msgid "Balance"
 msgstr "Saldo"
@@ -4261,8 +4347,9 @@ msgstr ""
 msgid "Conditional on splits not having variables"
 msgstr "Abhängig davon, dass Buchungen keine Variablen haben"
 
-msgid "Crea_te in advance, days:"
-msgstr "Anzahl Tage, um im _Voraus zu erstellen:"
+#, fuzzy
+msgid "Crea_te in advance:"
+msgstr "Im Voraus erstellen:"
 
 msgid "Create automatically"
 msgstr "Automatisch erstellen"
@@ -4462,8 +4549,9 @@ msgstr "Klicken Sie »Anwenden«, um die Änderungen zu speichern."
 msgid "Principal To:"
 msgstr "Endbetrag Kapital an:"
 
-msgid "R_emind in advance, days:"
-msgstr "Anzahl Tage, um im v_oraus zu erinnern:"
+#, fuzzy
+msgid "R_emind in advance:"
+msgstr "Im Voraus erinnern:"
 
 msgid "Range: "
 msgstr "Bereich: "
@@ -4885,6 +4973,12 @@ msgstr "Budget öffnen"
 msgid "Open an existing Budget"
 msgstr "Existierendes Budget öffnen"
 
+msgid "Copy Budget"
+msgstr "Budget duplizieren"
+
+msgid "Copy an existing Budget"
+msgstr "Existierendes Budget duplizieren"
+
 msgid "Select a Budget"
 msgstr "Budget auswählen"
 
@@ -5017,6 +5111,7 @@ msgstr "Neu"
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/portfolio.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Accounts"
@@ -5916,6 +6011,14 @@ msgstr "Ein neues Fenster für jeden Bericht öffnen"
 msgid "Date format choice"
 msgstr "Datumsformat"
 
+msgid ""
+"Dates will be completed so that they are close to the current date. Enter "
+"the maximum number of months to go backwards in time when completing dates."
+msgstr ""
+"Beim Auto-Vervollständigen eines Datums wird das nächstgelegene Datum "
+"gewählt. Wählen Sie hier die maximale Anzahl Monate, die das "
+"vervollständigte Datum in der Vergangenheit liegen kann."
+
 msgid "Default currency for new accounts"
 msgstr "Standardwährung für neue Konten"
 
@@ -5939,6 +6042,9 @@ msgstr "Aktiviert die Unterstützung der Währung EURO"
 
 msgid "Enables file compression when writing the data file."
 msgstr "Dateikompression beim Schreiben der Datei einschalten."
+
+msgid "How to interpret dates without a year"
+msgstr "Auto-Vervollständigen von Datumseingaben ohne Jahreszahl"
 
 msgid ""
 "If active all lines that make up a single transaction will use the same "
@@ -6066,6 +6172,9 @@ msgstr "24 Stunden-Format statt 12 Stunden-Format"
 
 msgid "Labels on toolbar buttons"
 msgstr "Werkzeugleisten-Knöpfe"
+
+msgid "Maximum number of months to go back."
+msgstr ""
 
 msgid "Move to Transfer field when memorised transaction auto filled"
 msgstr "Bei Auto-Vervollständigen zum Gegenkonto-Feld weitergehen"
@@ -6298,6 +6407,16 @@ msgstr "24-Stunden-Format zur Zeitanzeige"
 
 msgid "Use formal account labels"
 msgstr "Überschriften aus Rechnungswesen verwenden"
+
+msgid ""
+"When a date is entered without year it can be completed so that it will be "
+"within the current calendar year or close to the current date based on a "
+"sliding window starting a set number of months backwards in time."
+msgstr ""
+"Wenn ein Datum ohne Jahreszahl eingegeben wurde, wird das Jahr so gewählt, "
+"dass das resultierende Datum in einem bestimmten Zeitfenster liegt.  Dieser "
+"Wert gibt an, wie viele Monate der Anfang dieses Zeitfensters in der "
+"Vergangenheit liegt."
 
 msgid "Width of notebook tabs"
 msgstr "Breite der Karteikartenreiter"
@@ -6596,15 +6715,6 @@ msgstr "Alle Kriterien werden erfüllt"
 
 msgid "any criteria are met"
 msgstr "Irgendeines der Kriterien wird erfüllt"
-
-#. Translators: %s is either "item" or the name of some other
-#. * item, e.g. "Customer" or "Invoice".
-#, c-format
-msgid "New %s"
-msgstr "Neu: %s"
-
-msgid "item"
-msgstr "Kriterium"
 
 msgid "You have not selected any accounts"
 msgstr "Sie haben keine Konten ausgewählt"
@@ -7792,6 +7902,9 @@ msgstr "<b>Aktionen</b>"
 msgid "<b>Checks</b>"
 msgstr "<b>Scheckformulare drucken</b>"
 
+msgid "<b>Date Completion</b>"
+msgstr "<b>Datum vervollständigen</b>"
+
 msgid "<b>Date Format</b>"
 msgstr "<b>Datum</b>"
 
@@ -7962,6 +8075,12 @@ msgstr "Die Datei mit den Kontodaten mit gzip komprimiert speichern."
 msgid "Date/Time"
 msgstr "Datum und Zeit"
 
+msgid ""
+"Dates will be completed so that they are within the current calendar year."
+msgstr ""
+"Datumseingaben werden vervollständigt, so dass sie im aktuellen Kalenderjahr "
+"liegen."
+
 msgid "Default _font:"
 msgstr "Voreingestellte _Schrift:"
 
@@ -8028,6 +8147,9 @@ msgstr "_Vertikale Linien zwischen Spalten zeichnen"
 
 msgid "Draw hori_zontal lines between rows"
 msgstr "_Horizontale Linien zwischen Zeilen zeichnen"
+
+msgid "Enter number of months."
+msgstr "Geben Sie die Anzahl Monate ein."
 
 msgid "GnuCash Options"
 msgstr "GnuCash Optionen"
@@ -8099,6 +8221,17 @@ msgstr ""
 "Wenn aktiviert, werden die systemweiten Farbeinstellungen in den "
 "Kontofenstern verwendet. Wenn nicht aktiviert, werden GnuCash-spezifische "
 "Farben in den Kontofenstern verwendet."
+
+msgid ""
+"In a sliding 12-month window starting this \n"
+"many months before the current month:"
+msgstr ""
+"In einem Zwölf-Monats-Zeitfenster, welches diese\n"
+"Anzahl Monate vor dem aktuellen Monat beginnt:"
+
+#, fuzzy
+msgid "In the current calendar year"
+msgstr "Ende des Kalenderjahres"
 
 msgid "Include _grand total"
 msgstr "_Gesamtsumme anzeigen"
@@ -8310,6 +8443,9 @@ msgid "Use the system setting for displaying toolbar items."
 msgstr ""
 "Die GNOME-Voreinstellung für die Anzeige der Icons in der Werkzeugleiste "
 "benutzen"
+
+msgid "When a date is entered without year, it should be taken:"
+msgstr ""
 
 msgid "Windows"
 msgstr "Fenster"
@@ -8534,6 +8670,7 @@ msgid "Failed to open file: %s: %s"
 msgstr "Kann Datei %s nicht öffnen: %s"
 
 #. File menu
+#. Menu Items
 msgid "_Import"
 msgstr "_Importieren"
 
@@ -8707,12 +8844,32 @@ msgstr ""
 msgid "No read permission to read from file %s."
 msgstr "Sie haben keine Leseberechtigung für die Datei »%s«."
 
+#. Translators: the first %s is a path in the filesystem,
+#. * the second %s is PACKAGE_NAME, which by default is "GnuCash"
+#.
+#, c-format
 msgid ""
-"This database is from an older version of GnuCash. Do you want to want to "
-"upgrade the database to the current version?"
+"You attempted to save in\n"
+"%s\n"
+"or a subdirectory thereof.  This is not allowed as %s reserves that "
+"directory for internal use.\n"
+"\n"
+"Please try again in a different directory."
 msgstr ""
-"Diese Datei ist von einer älteren Version von GnuCash.  Möchten Sie die "
-"Datei zur aktuellen GnuCash-Version aktualisieren?"
+
+msgid ""
+"This database is from an older version of GnuCash. Select OK to upgrade it "
+"to the current version, Cancel to mark it read-only."
+msgstr ""
+"Diese Datei ist von einer älteren Version von GnuCash.  Wählen Sie »Ok«, um "
+"die Datei zur aktuellen GnuCash-Version aktualisieren oder »Abbrechen«, um "
+"sie schreibgeschützt zu öffnen."
+
+msgid ""
+"This database is from a newer version of GnuCash. This version can read it, "
+"but cannot safely save to it. It will be marked read-only until you do "
+"File>Save As."
+msgstr ""
 
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
@@ -8725,6 +8882,14 @@ msgstr ""
 "\n"
 "Wenn keine anderen Anwender mehr im System sind, konsultieren Sie bitte das "
 "Handbuch, um Anweisungen zum Löschen von 'dangling login sessions' zu finden."
+
+msgid ""
+"The library \"libdbi\" installed on your system doesn't correctly store "
+"large numbers.  This means GnuCash cannot use SQL databases correctly.  "
+"Gnucash will not open or save to SQL databases until this is fixed by "
+"installing a different version of \"libdbi\".  Please see https://bugzilla."
+"gnome.org/show_bug.cgi?id=611936 for more information."
+msgstr ""
 
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
@@ -8781,6 +8946,10 @@ msgstr "_Neue Datei anlegen"
 
 #. try to load once again
 msgid "Loading user data..."
+msgstr "Daten laden..."
+
+#, fuzzy
+msgid "Re-saving user data..."
 msgstr "Daten laden..."
 
 #, c-format
@@ -9030,6 +9199,13 @@ msgstr "Schließen _ohne zu speichern"
 msgid "Unsaved Book"
 msgstr "Nicht gespeicherte Daten"
 
+msgid ": Book is marked read-only."
+msgstr ": Buch ist schreibgeschützt."
+
+#, c-format
+msgid "Unable to save to database%s"
+msgstr ""
+
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
@@ -9143,6 +9319,7 @@ msgstr "Devise/Wertpapier"
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/general-ledger.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
 msgid "Account Code"
 msgstr "Kontonummer"
@@ -9178,6 +9355,7 @@ msgid "Future Minimum (Report)"
 msgstr "Zukünftiges Minimum (als Bericht)"
 
 #. src/report/business-reports/aging.scm
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -9292,7 +9470,6 @@ msgstr "Letztes Auftreten"
 msgid "Next Occur"
 msgstr "Nächstes Auftreten"
 
-#. ********************* END OF FILE *********************************   \*******************************************************************
 msgid "Most recently opened file"
 msgstr "Zuletzt geöffnete Datei"
 
@@ -9337,8 +9514,8 @@ msgstr "%s, Gesamt:"
 msgid "%s:"
 msgstr "%s:"
 
-msgid "Assets:"
-msgstr "Aktiva:"
+msgid "Net Assets:"
+msgstr "Eigenkapitel:"
 
 msgid "Profits:"
 msgstr "Gewinn:"
@@ -9717,6 +9894,10 @@ msgstr ""
 msgid "Use Transaction Template"
 msgstr "Überweisungsvorlage:"
 
+#, fuzzy
+msgid "_Close log window when finished"
+msgstr "Fenster nach Verbindungsende schließen"
+
 msgid "_Earliest possible date"
 msgstr "_Frühestes mögliches Datum"
 
@@ -9752,13 +9933,6 @@ msgstr "(unbekannt)"
 #. * country, you may safely ignore strings
 #. * from the import-export/hbci
 #. * subdirectory.
-#. Translators: Strings from this file are needed only in
-#. * countries that have one of aqbanking's Online Banking
-#. * techniques available. This is 'OFX DirectConnect'
-#. * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
-#. * (Switzerland). If none of these techniques are available
-#. * in your country, you may safely ignore strings from the
-#. * import-export/hbci subdirectory.
 msgid "Enter an Online Direct Debit Note"
 msgstr "Online-Lastschrift eingeben"
 
@@ -9918,6 +10092,24 @@ msgstr "GnuCash Kontoname"
 msgid "New?"
 msgstr "Neu?"
 
+#, fuzzy
+msgid "No valid online banking account assigned."
+msgstr "Online-Banking Kontoname"
+
+msgid "Online action \"Get Balance\" not available for this account."
+msgstr ""
+
+#, c-format
+msgid ""
+"Error on executing job.\n"
+"\n"
+"Status: %s - %s"
+msgstr ""
+
+#, fuzzy
+msgid "Online action \"Get Transactions\" not available for this account."
+msgstr "Den Buchungsbericht zu diesem Konto erstellen"
+
 msgid ""
 "The Online Banking import returned no transactions for the selected time "
 "period."
@@ -10051,6 +10243,40 @@ msgid "Import module for DTAUS import not found."
 msgstr "Importer-Modul für DTAUS nicht gefunden."
 
 #, c-format
+msgid "Job %d status %d - %s: %s \n"
+msgstr ""
+
+#. indicate that additional failures exist
+#, fuzzy
+msgid "...\n"
+msgstr "Neu..."
+
+#, fuzzy, c-format
+msgid ""
+"An error occurred while executing jobs: %d of %d failed. Please check the "
+"log window or gnucash.trace for the exacterror message.\n"
+"\n"
+"%s"
+msgstr ""
+"Ein Fehler ist bei der Ausführung des Auftrags aufgetreten.  Bitte prüfen "
+"Sie die Ausgaben im Verlaufsfenster für eine exakte Fehlermeldung.\n"
+"\n"
+"Wollen Sie den Auftrag erneut abschicken?"
+
+msgid "No jobs to be send."
+msgstr "Keine Aufträge zu senden."
+
+#, c-format
+msgid ""
+"The job was executed successfully, but as a precaution please check the log "
+"window for potential errors."
+msgid_plural ""
+"All %d jobs were executed successfully, but as a precaution please check the "
+"log window for potential errors."
+msgstr[0] ""
+msgstr[1] ""
+
+#, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
 "long. Do you want to try again?"
@@ -10137,6 +10363,12 @@ msgid ""
 msgstr ""
 "Buchungen aus einer DTAUS Datei importieren und als Online-Banking Aufträge "
 "an die Bank schicken"
+
+msgid "Show _log window"
+msgstr "Verlaufs_fenster anzeigen"
+
+msgid "Show the online banking log window."
+msgstr "Online-Banking Verlaufsfenster anzeigen"
 
 msgid "CSV import data format"
 msgstr "CSV-Import Dateiformat"
@@ -10348,13 +10580,8 @@ msgstr "»Neu«"
 msgid "\"R\""
 msgstr "»Abgl«"
 
-msgid ""
-"\"Select Import Action\" allows you to change the matching transaction to "
-"reconcile, or the destination account of the auto-balance split (if "
-"required)."
-msgstr ""
-"Mit »Import-Aktion auswählen« können Sie das Gegenkonto dieser neuen Buchung "
-"wählen oder die abzugleichende existierende Buchung auswählen."
+msgid "\"U+R\""
+msgstr "»Abgl+Ü«"
 
 msgid "(none)"
 msgstr "(keine)"
@@ -10394,15 +10621,17 @@ msgstr "Wählen Sie das Export-Format"
 msgid "Commercial ATM _fees threshold"
 msgstr "Auszahlungsgebühren"
 
-msgid "Enable edit match action"
-msgstr "»Bearbeiten«-Aktion aktivieren"
+#, fuzzy
+msgid ""
+"Double click on the transaction to change the matching transaction to "
+"reconcile, or the destination account of the auto-balance split (if "
+"required)."
+msgstr ""
+"Mit »Import-Aktion auswählen« können Sie das Gegenkonto dieser neuen Buchung "
+"wählen oder die abzugleichende existierende Buchung auswählen."
 
 msgid "Enable skip transaction action"
 msgstr "»Überspringen«-Aktion aktivieren "
-
-msgid "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
-msgstr ""
-"»Bearbeiten«-Aktion im Buchungsimporter aktivieren. Noch nicht implementiert"
 
 msgid ""
 "Enable the SKIP action in the transaction matcher.  If enabled, a "
@@ -10413,6 +10642,22 @@ msgstr ""
 "Buchung, deren am besten bewertete existierende Buchung im gelben Bereich "
 "liegt (größer als die Auto-Hinzufügen-Schwelle, aber kleiner als die Auto-"
 "Abgleichen-Schwelle), hat als Voreinstellung »Überspringen«."
+
+#, fuzzy
+msgid ""
+"Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
+"enabled, a transaction whose best match's score is above the Auto-CLEAR "
+"threshold and has a different date or amount than the matching existing "
+"transaction will cause the existing transaction to be updated and cleared by "
+"default."
+msgstr ""
+"»Überspringen«-Aktion beim Buchungsimport aktivieren. Eine importierte "
+"Buchung, deren am besten bewertete existierende Buchung im gelben Bereich "
+"liegt (größer als die Auto-Hinzufügen-Schwelle, aber kleiner als die Auto-"
+"Abgleichen-Schwelle), hat als Voreinstellung »Überspringen«."
+
+msgid "Enable update match action"
+msgstr "»Abgleichen und Datenübernahme«-Aktion aktivieren"
 
 msgid ""
 "For a new transaction, click on the \"Other Account\" entry to choose the "
@@ -10487,6 +10732,11 @@ msgstr "Wählen Sie »Neu«, um die Buchung als neue Buchung zu importieren."
 msgid "Select \"R\" to reconcile a matching transaction."
 msgstr "Wählen Sie »Abgl«, um eine existierende Buchung abzugleichen"
 
+msgid "Select \"U+R\" to update and reconcile a matching transaction."
+msgstr ""
+"Wählen Sie »Abgl+Ü«, um eine existierende Buchung abzugleichen und die Daten "
+"zu übernehmen."
+
 msgid "Select matching existing transaction"
 msgstr "Wählen Sie die zugeordnete, schon existierende Buchung"
 
@@ -10541,193 +10791,6 @@ msgstr "Komma als Kommastelle (1.000,00)"
 msgid "y-d-m"
 msgstr "Jahr-Tag-Monat"
 
-msgid ""
-"The job was sent to the bank successfully, but the bank is refusing to "
-"execute the job. Please check the log window for the exact error message of "
-"the bank. The line with the error message contains a code number that is "
-"greater than 9000.\n"
-"\n"
-"Do you want to enter the job again?"
-msgstr ""
-"Der Auftrag wurde erfolgreich an die Bank geschickt, aber die Bank "
-"verweigert die Ausführung. Bitte überprüfen Sie die Ausgaben im Protokoll-"
-"Fenster, um die genaue Fehlermeldung zu lesen. Die Zeile mit der genauen "
-"Fehlermeldung enthält eine Code-Nummer, die größer als 9000 ist.\n"
-"\n"
-"Wollen Sie den Auftrag erneut eingeben?"
-
-msgid "The two passwords didn't match. Please try again."
-msgstr "Die beiden PINs haben nicht übereingestimmt. Bitte erneut eingeben."
-
-msgid "Choose AqBanking Backend"
-msgstr "AqBanking-Modul wählen"
-
-msgid "Please choose an AqBanking backend to be configured"
-msgstr "Wählen Sie das Modul von AqBanking, das Sie einrichten möchten."
-
-msgid "Co_nfigure"
-msgstr "_Einrichten"
-
-#, c-format
-msgid "The file %s does not exist. Would you like to create it now?"
-msgstr "Die Datei »%s« existiert noch nicht. Möchten Sie sie jetzt erstellen?"
-
-#, c-format
-msgid ""
-"The directory for file %s does not exist. Please choose another place for "
-"this file."
-msgstr ""
-"Das Verzeichnis für Datei »%s« existiert nicht. Bitte wählen Sie einen "
-"anderen Ort für diese Datei."
-
-msgid "Choose an Online Banking Version to use with the selected bank:"
-msgstr ""
-"Wählen Sie eine Online-Banking- oder HBCI-Version, die benutzt werden soll:"
-
-msgid "Online Banking Version"
-msgstr "Online-Banking Version"
-
-msgid "Start AqBanking Setup Wizard"
-msgstr "AqBanking Einrichtungs-Assistent starten"
-
-msgid "Version"
-msgstr "Version"
-
-msgid "Enter and confirm your new password"
-msgstr "Geben Sie Ihr neues Passwort zweimal ein"
-
-msgid "Enter new Password"
-msgstr "Neues Passwort eingeben"
-
-msgid "Activate verbose debug messages for Online Banking."
-msgstr "Ausführliche Fehlermeldungen für Onlinebanking aktivieren."
-
-msgid "Remember the Online Banking PIN in memory during a session."
-msgstr ""
-"Die PIN für Onlinebanking während einer GnuCash-Sitzung im Speicher merken."
-
-msgid ""
-"The PIN you entered was wrong.\n"
-"Do you want to try again?"
-msgstr ""
-"Die eingegebene PIN war falsch.\n"
-"Möchten Sie erneut versuchen?"
-
-msgid ""
-"The PIN you entered was wrong.\n"
-"ATTENTION: You have zero further wrong retries left!\n"
-"Do you want to try again?"
-msgstr ""
-"Die eingegebene PIN war falsch.\n"
-"VORSICHT: Es ist kein weiterer Fehlversuch möglich!\n"
-"Möchten Sie erneut versuchen?"
-
-msgid ""
-"Unfortunately you entered a wrong PIN for too many times. Your chip card is "
-"therefore destroyed. Aborting."
-msgstr ""
-"Sie haben zu oft eine falsche PIN eingegeben. Ihre Chipkarte ist damit "
-"leider unbrauchbar geworden. Aktion wird abgebrochen."
-
-msgid ""
-"No chip card has been found in the chip card reader. Do you want to try "
-"again?"
-msgstr ""
-"Im Kartenleser wurde keine Chipkarte erkannt. Möchten Sie erneut versuchen?"
-
-msgid ""
-"Unfortunately this Online Banking job is not supported by your bank or for "
-"your account. Aborting."
-msgstr ""
-"Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht unterstützt "
-"oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
-
-msgid ""
-"The server of your bank refused the Online Banking connection. Please try "
-"again later. Aborting."
-msgstr ""
-"Der Onlinebanking-Server der Bank hat die Verbindung abgewiesen. Bitte "
-"versuchen Sie es später noch einmal. Aktion wird abgebrochen."
-
-msgid ""
-"Executing the Online Banking outbox failed. Please check the log window."
-msgstr ""
-"Das Abschicken der Online-Banking Aufträge schlug fehl. Bitte prüfen Sie das "
-"Protokollfenster auf weitere Fehlermeldungen."
-
-#, c-format
-msgid ""
-"A debit note has been refused by the bank. The refused debit note has the "
-"following data:\n"
-"Remote bank code: \"%s\"\n"
-"Remote account number: \"%s\"\n"
-"Description and remote name: \"%s\"\n"
-"Value: \"%s\"\n"
-msgstr ""
-"Eine Lastschrift ist von der Bank zurückgewiesen worden. Die zurückgewiesene "
-"Lastschrift hat folgende Daten:\n"
-"BLZ Empfänger: \"%s\"\n"
-"Kontonummer Empfänger: \"%s\"\n"
-"Verwendungszweck und Name des Empfängers: \"%s\"\n"
-"Betrag: \"%s\"\n"
-
-msgid ""
-"One of the jobs was sent to the bank successfully, but the bank is refusing "
-"to execute the job. Please check the log window for the exact error message "
-"of the bank. The line with the error message contains a code number that is "
-"greater than 9000.\n"
-"\n"
-"The job has been removed from the queue."
-msgstr ""
-"Der Auftrag wurde erfolgreich an die Bank geschickt, aber die Bank "
-"verweigert die Ausführung. Bitte überprüfen Sie die Ausgaben im Protokoll-"
-"Fenster, um die genaue Fehlermeldung zu lesen. Die Zeile mit der genauen "
-"Fehlermeldung enthält eine Code-Nummer, die größer als 9000 ist.\n"
-"\n"
-"Wollen Sie den Auftrag erneut eingeben?"
-
-msgid "Import _CSV"
-msgstr "_CSV importieren"
-
-msgid "Import a CSV file into GnuCash"
-msgstr "Buchungen aus einer CSV Datei importieren"
-
-msgid "Import CSV and s_end..."
-msgstr "CSV importieren und _senden..."
-
-msgid ""
-"Import a CSV file into GnuCash and send the transfers online through Online "
-"Banking"
-msgstr ""
-"Buchungen aus einer CSV Datei importieren und als Online-Banking Aufträge an "
-"die Bank schicken"
-
-#, c-format
-msgid ""
-"The PIN needs to be at least %d characters long. Do you want to try again?"
-msgstr "Die PIN muss mindestens %d Zeichen lang sein.  Erneut versuchen?"
-
-#, c-format
-msgid ""
-"You entered %ld characters, but the PIN must be no longer than %d "
-"characters. Do you want to try again?"
-msgstr ""
-"Sie haben %ld Zeichen eingegeben, aber die PIN darf nicht länger als %d "
-"Zeichen sein.  Erneut versuchen?"
-
-#, c-format
-msgid ""
-"This TAN needs to be at least %d characters long. Do you want to try again?"
-msgstr "Diese TAN muss mindestens %d Zeichen lang sein.  Erneut versuchen?"
-
-#, c-format
-msgid ""
-"You entered %ld characters, but the TAN must be no longer than %d "
-"characters. Do you want to try again?"
-msgstr ""
-"Sie haben %ld Zeichen eingegeben, aber die TAN darf nicht länger als %d "
-"Zeichen sein.  Erneut versuchen?"
-
 msgid "Account ID"
 msgstr "Kontonummer"
 
@@ -10775,6 +10838,9 @@ msgstr "Gegenkonto für Ausgleichsbuchung."
 msgid "A"
 msgstr "Neu"
 
+msgid "U+R"
+msgstr "Abgl+Ü"
+
 msgid "R"
 msgstr "Abgl"
 
@@ -10809,6 +10875,12 @@ msgstr "Abgleichen (mit automatisch gewählter Zuordnung)"
 
 msgid "Match missing!"
 msgstr "Zuordnung fehlt"
+
+msgid "Update and reconcile (manual) match"
+msgstr "Abgleichen und Datenübernahme (mit manuell gewählter Zuordnung)"
+
+msgid "Update and reconcile (auto) match"
+msgstr "Abgleichen und Datenübernahme (mit automatisch gewählter Zuordnung)"
 
 msgid "Do not import (no action selected)"
 msgstr "Nicht importieren (keine Import-Aktion gewählt)"
@@ -11132,6 +11204,10 @@ msgstr ""
 "Klicken Sie auf »Vor«, um das Laden von Dateien zu beenden und zum nächsten "
 "Schritt des QIF-Importprozesses zu gehen."
 
+msgid ""
+"Default transaction status (overridden by the status given by the QIF file):"
+msgstr ""
+
 msgid "Enter the QIF file currency"
 msgstr "Geben Sie die Währung der QIF-Datei an"
 
@@ -11381,8 +11457,29 @@ msgstr "Handelbare Währungen/Aktien"
 msgid "Update your GnuCash accounts"
 msgstr "Aktualisieren Ihrer GnuCash Konten"
 
+msgid ""
+"When the status is not specified in a QIF file, the transactions are marked "
+"as cleared."
+msgstr ""
+
+msgid ""
+"When the status is not specified in a QIF file, the transactions are marked "
+"as not cleared."
+msgstr ""
+
+msgid ""
+"When the status is not specified in a QIF file, the transactions are marked "
+"as reconciled."
+msgstr ""
+
+msgid "_Cleared"
+msgstr "_Bestätigt"
+
 msgid "_Imported transactions needing review:"
 msgstr "_Importierte Buchungen, die durchgesehen werden müssen:"
+
+msgid "_Not cleared"
+msgstr "_Unbestätigt"
 
 msgid "_Possible matches for the selected transaction:"
 msgstr "Mögliche Duplikate für ausgewählte neue Buchungen"
@@ -11403,6 +11500,13 @@ msgstr "_Auswählen..."
 msgid "_Show documentation"
 msgstr "_Erklärungsseiten anzeigen"
 
+#, fuzzy
+msgid "Default QIF transaction status"
+msgstr "Eine Buchung löschen"
+
+msgid "Default status for QIF transaction when not specified in QIF file."
+msgstr ""
+
 msgid "Show documentation"
 msgstr "Erklärungsseiten anzeigen"
 
@@ -11412,15 +11516,12 @@ msgstr "Buchungen unterhalb dieser Schwelle hinzufügen"
 msgid "Clear matching transactions above this score"
 msgstr "Buchungen oberhalb dieser Schwelle abgleichen"
 
-msgid "Enable EDIT transaction action"
-msgstr "»Bearbeiten«-Aktion aktivieren "
-
 msgid "Enable SKIP transaction action"
 msgstr "»Überspringen«-Aktion aktivieren "
 
-msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
-msgstr ""
-"»Bearbeiten«-Aktion im Buchungsimporter aktivieren. Noch nicht implementiert"
+#, fuzzy
+msgid "Enable UPDATE match action"
+msgstr "»Bearbeiten«-Aktion aktivieren"
 
 msgid ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
@@ -11504,6 +11605,122 @@ msgstr "%#d. %B %Y"
 #. Translators: call "man strftime" for possible values.
 msgid "%B %e, %Y"
 msgstr "%e. %B %Y"
+
+#, fuzzy
+msgid "id"
+msgstr "Bezahlt"
+
+#, c-format
+msgid "ROW DELETED, PRICE_NOT_SET: id=%s\n"
+msgstr ""
+
+#, c-format
+msgid "ROW DELETED, QTY_NOT_SET: id=%s\n"
+msgstr ""
+
+#, c-format
+msgid "ROW DELETED, ID_NOT_SET\n"
+msgstr ""
+
+#, c-format
+msgid "ROW DELETED, VENDOR_NOT_SET: id=%s\n"
+msgstr ""
+
+#, c-format
+msgid "ROW DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
+msgstr ""
+
+msgid ""
+"These rows were deleted:\n"
+"\n"
+msgstr ""
+
+#, fuzzy
+msgid "Are you sure you have bills/invoices to update?"
+msgstr "Soll diese Aktion durchgeführt werden?"
+
+#, fuzzy
+msgid "1. Choose the file to import"
+msgstr "Wählen Sie eine Datei, die importiert werden soll"
+
+#, fuzzy
+msgid "2. Select import type"
+msgstr "Wählen Sie die Nachlassart"
+
+#, fuzzy
+msgid "3. Select import options"
+msgstr "Berichtsoptionen ändern"
+
+#, fuzzy
+msgid "4. Preview"
+msgstr "Kontrolle"
+
+#, fuzzy
+msgid "Comma separated"
+msgstr "Getrennt"
+
+msgid "Comma separated with quotes"
+msgstr ""
+
+#, fuzzy
+msgid "Custom regular expression"
+msgstr ""
+"Fehler im regulären Ausdruck '%s':\n"
+"%s"
+
+#, fuzzy
+msgid "Import bill CSV data"
+msgstr "_CSV importieren"
+
+msgid "Import invoice CSV data"
+msgstr ""
+
+#, fuzzy
+msgid "Import transactions from text file"
+msgstr "Erster Teil der importierten Buchung"
+
+#, fuzzy
+msgid "Semicolon separated"
+msgstr "Getrennt"
+
+msgid "Semicolon separated with quotes"
+msgstr ""
+
+msgid "Import Bills & Invoices..."
+msgstr ""
+
+msgid "bi_import tooltip"
+msgstr ""
+
+msgid "Import Bills or Invoices from csv"
+msgstr ""
+
+#, c-format
+msgid ""
+"Import results:\n"
+"%i lines were ignored\n"
+"%i lines imported:\n"
+"   %u fixes\n"
+"   %u ignored (not fixable)\n"
+"\n"
+"   %u created\n"
+"   %u updated (based on id)"
+msgstr ""
+
+msgid "These lines were ignored during import"
+msgstr ""
+
+#, fuzzy
+msgid "The input file can not be opened."
+msgstr "Die Datei konnte nicht neu geöffnet werden."
+
+msgid "Adjust regular expression used for import"
+msgstr ""
+
+msgid ""
+"This regular expression is used to parse the import file. Modify according "
+"to your needs.\n"
+msgstr ""
 
 msgid ""
 "This transaction is already being edited in another register. Please finish "
@@ -11884,9 +12101,9 @@ msgstr "_Erstellen"
 msgid "Contents"
 msgstr "Inhalt"
 
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
-#. src/report/report-gnome/gnucash/report/report-gnome.scm
 #. src/report/report-gnome/report-gnome.scm
 msgid "Report"
 msgstr "Bericht"
@@ -11906,6 +12123,11 @@ msgstr "Sie müssen einen Bericht auswählen, den Sie erstellen wollen."
 #, c-format
 msgid "HTML Style Sheet Properties: %s"
 msgstr "Eigenschaften HTML-Stilvorlage %s"
+
+#. If the name is empty, we display an error dialog but
+#. * refuse to create the new style sheet.
+msgid "You must provide a name for the new style sheet."
+msgstr "Sie müssen einen Namen für diese Stilvorlage angeben."
 
 msgid "Style Sheet Name"
 msgstr "Name der Stilvorlage"
@@ -12310,6 +12532,171 @@ msgid "Spend"
 msgstr "Ausgabe"
 
 #. src/business/business-utils/business-prefs.scm
+msgid "Counters"
+msgstr "Nummern-Zähler"
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Customer number format"
+msgstr "Format Kundennummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Customer number"
+msgstr "Kundennummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The format string to use for generating customer numbers. This is a printf-"
+"style format string."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The previous customer number generated. This number will be incremented to "
+"generate the next customer number."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Employee number format"
+msgstr "Format Mitarbeiternummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Employee number"
+msgstr "Mitarbeiternummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The format string to use for generating employee numbers. This is a printf-"
+"style format string."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The previous employee number generated. This number will be incremented to "
+"generate the next employee number."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Invoice number format"
+msgstr "Format Rechnungsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+#. src/report/business-reports/taxinvoice.scm
+msgid "Invoice number"
+msgstr "Rechnungsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The format string to use for generating invoice numbers. This is a printf-"
+"style format string."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The previous invoice number generated. This number will be incremented to "
+"generate the next invoice number."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Bill number format"
+msgstr "Format Lieferantenrechnungsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Bill number"
+msgstr "Lieferantenrechnungsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The format string to use for generating bill numbers. This is a printf-style "
+"format string."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The previous bill number generated. This number will be incremented to "
+"generate the next bill number."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Expense voucher number format"
+msgstr "Format Auslagenerstattungsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Expense voucher number"
+msgstr "Auslagenerstattungsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The format string to use for generating expense voucher numbers. This is a "
+"printf-style format string."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The previous expense voucher number generated. This number will be "
+"incremented to generate the next voucher number."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Job number format"
+msgstr "Format Auftragsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Job number"
+msgstr "Auftragsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The format string to use for generating job numbers. This is a printf-style "
+"format string."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The previous job number generated. This number will be incremented to "
+"generate the next job number."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Order number format"
+msgstr "Format Bestellungsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Order number"
+msgstr "Bestellungsnummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The format string to use for generating order numbers. This is a printf-"
+"style format string."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The previous order number generated. This number will be incremented to "
+"generate the next order number."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Vendor number format"
+msgstr "Format Lieferantennummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid "Vendor number"
+msgstr "Lieferantennummer"
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The format string to use for generating vendor numbers. This is a printf-"
+"style format string."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
+msgid ""
+"The previous vendor number generated. This number will be incremented to "
+"generate the next vendor number."
+msgstr ""
+
+#. src/business/business-utils/business-prefs.scm
 msgid "The name of your business"
 msgstr "Der Name Ihres Geschäfts"
 
@@ -12632,6 +13019,7 @@ msgid "Dates earlier than 1970 are not supported."
 msgstr "Ein Datum vor 1970 wird nicht unterstützt"
 
 #. src/report/business-reports/aging.scm
+#. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -12644,6 +13032,7 @@ msgid "Sort By"
 msgstr "Sortiere nach"
 
 #. src/report/business-reports/aging.scm
+#. src/report/business-reports/customer-summary.scm
 msgid "Sort Order"
 msgstr "Sortierreihenfolge"
 
@@ -12665,6 +13054,7 @@ msgstr "Sortierreihenfolge"
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/price-scatter.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Report's currency"
@@ -12689,6 +13079,7 @@ msgstr "Währung des Berichts"
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/price-scatter.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Price Source"
 msgstr "Preisberechnungsquelle"
@@ -12700,6 +13091,10 @@ msgstr "Multi-Währung Gesamt anzeigen"
 #. src/report/business-reports/aging.scm
 msgid "Show zero balance items"
 msgstr "Nullsalden anzeigen"
+
+#. src/report/business-reports/aging.scm
+msgid "Due or Post Date"
+msgstr "Fälligkeits- oder Buchungsdatum"
 
 #. src/report/business-reports/aging.scm
 #, c-format
@@ -12769,6 +13164,22 @@ msgid "Show all vendors/customers even if they have a zero balance."
 msgstr "Alle Kunden/Lieferanten anzeigen, auch wenn sie den Saldo Null haben."
 
 #. src/report/business-reports/aging.scm
+msgid "Leading date"
+msgstr "Datum für Stichtag"
+
+#. src/report/business-reports/aging.scm
+msgid "Due date is leading"
+msgstr "Fälligkeitsdatum wird als Stichtag verwendet"
+
+#. src/report/business-reports/aging.scm
+msgid "Post date is leading"
+msgstr "Buchungsdatum wird als Stichtag verwendet"
+
+#. src/report/business-reports/aging.scm
+msgid "Current"
+msgstr "Jetzt"
+
+#. src/report/business-reports/aging.scm
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 msgid "0-30 days"
@@ -12801,6 +13212,170 @@ msgid ""
 msgstr ""
 "Kein gültiges Konto gewählt.  Klicken Sie auf »Optionen«, um ein Konto zu "
 "wählen."
+
+#. src/report/business-reports/customer-summary.scm
+#. src/report/business-reports/job-report.scm
+#. src/report/business-reports/owner-report.scm
+#. src/report/locale-specific/us/taxtxf-de_DE.scm
+#. src/report/locale-specific/us/taxtxf.scm
+msgid "From"
+msgstr "Von"
+
+#. src/report/business-reports/customer-summary.scm
+#. src/report/standard-reports/account-piecharts.scm
+msgid "Income Accounts"
+msgstr "Ertragskonten"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "The income accounts where the sales and income was recorded."
+msgstr ""
+"Wählen Sie hier die Ertagskonten, wo der Umsatz und die Erträge gebucht "
+"wurden."
+
+#. src/report/business-reports/customer-summary.scm
+#. src/report/standard-reports/account-piecharts.scm
+msgid "Expense Accounts"
+msgstr "Aufwandskonten"
+
+#. src/report/business-reports/customer-summary.scm
+msgid ""
+"The expense accounts where the expenses are recorded which are subtracted "
+"from the sales to give the profit."
+msgstr ""
+"Wählen Sie hier die Aufwandskonten, wo die Kosten gebucht wurden.  Umsatz "
+"minus Kosten ergibt dann den Gewinn."
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Show Expense Column"
+msgstr "Kostenspalte anzeigen"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Show the column with the expenses per customer"
+msgstr "Die Spalte mit den Kosten pro Kunde anzeigen"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Show Company Address"
+msgstr "Geschäftsadresse anzeigen"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Show your own company's address and the date of printing"
+msgstr "Ihre eigene Geschäftsadresse und das Druckdatum anzeigen"
+
+#. src/report/business-reports/customer-summary.scm
+#. src/report/business-reports/easy-invoice.scm
+#. src/report/business-reports/fancy-invoice.scm
+#. src/report/business-reports/invoice.scm
+#. src/report/business-reports/job-report.scm
+#. src/report/business-reports/owner-report.scm
+msgid "Display Columns"
+msgstr "Spalten anzeigen"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Show Lines with All Zeros"
+msgstr "Zeilen mit ausschließlich Nullen anzeigen"
+
+#. src/report/business-reports/customer-summary.scm
+msgid ""
+"Show the table lines with customers which did not have any transactions in "
+"the reporting period, hence would show all zeros in the columns."
+msgstr ""
+"Tabellenzeilen auch für Kunden anzeigen, die im Berichtszeitraum keine "
+"Buchungen hatten, so dass alle Zahlen Null betragen."
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Sort Column"
+msgstr "Sortierspalte"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Choose the column by which the result table is sorted"
+msgstr "Wählen Sie die Spalte, nach der die Tabelle sortiert werden soll"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Choose the ordering of the column sort: Either ascending or descending"
+msgstr ""
+"Die Sortierreihenfolge für die Spalten wählen: Aufsteigend oder absteigend"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Customer Name"
+msgstr "Kundenname"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Sort alphabetically by customer name"
+msgstr "Alphabetisch nach Kundennamen sortieren"
+
+#. src/report/business-reports/customer-summary.scm
+#. src/report/standard-reports/average-balance.scm
+msgid "Profit"
+msgstr "Gewinn"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Sort by profit amount"
+msgstr "Sortieren nach Gewinn"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Markup"
+msgstr "Bruttogewinn"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Sort by markup (which is profit amount divided by sales)"
+msgstr "Sortieren nach Bruttogewinn (Gewinn pro Umsatz)"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Sales"
+msgstr "Umsatz"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Sort by sales amount"
+msgstr "Sortieren nach Umsatz"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Sort by expense amount"
+msgstr "Sortieren nach Kosten"
+
+#. src/report/business-reports/customer-summary.scm
+#. src/report/standard-reports/transaction.scm
+msgid "Ascending"
+msgstr "Aufsteigend"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "A to Z, smallest to largest"
+msgstr "Von A bis Z, von klein zu groß"
+
+#. src/report/business-reports/customer-summary.scm
+#. src/report/standard-reports/transaction.scm
+msgid "Descending"
+msgstr "Absteigend"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Z to A, largest to smallest"
+msgstr "Von Z bis A, von groß nach klein"
+
+#. src/report/business-reports/customer-summary.scm
+#. src/report/business-reports/job-report.scm
+#. src/report/business-reports/owner-report.scm
+msgid "Expense Report"
+msgstr "Bericht Aufwendungen"
+
+#. src/report/business-reports/customer-summary.scm
+msgid "No Customer"
+msgstr "Kein Kunde"
+
+#. src/report/business-reports/customer-summary.scm
+#, c-format
+msgid "%s %s - %s"
+msgstr "%s: %s - %s"
+
+#. src/report/business-reports/customer-summary.scm
+#. src/report/business-reports/job-report.scm
+#, c-format
+msgid "No valid %s selected.  Click on the Options button to select a company."
+msgstr ""
+"Keine gültige %s gewählt.  Klicken Sie auf »Optionen«, um eine Firma zu "
+"wählen."
+
+#. src/report/business-reports/customer-summary.scm
+msgid "Customer Summary"
+msgstr "Kundenübersicht"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -12845,14 +13420,6 @@ msgstr "Eigener Titel"
 #. src/report/business-reports/invoice.scm
 msgid "A custom string to replace Invoice, Bill or Expense Voucher"
 msgstr "Benutzerdefinierte Überschrift anstelle »Rechnung«"
-
-#. src/report/business-reports/easy-invoice.scm
-#. src/report/business-reports/fancy-invoice.scm
-#. src/report/business-reports/invoice.scm
-#. src/report/business-reports/job-report.scm
-#. src/report/business-reports/owner-report.scm
-msgid "Display Columns"
-msgstr "Spalten anzeigen"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -13240,13 +13807,6 @@ msgstr "Das Konto, in dem nach Buchungen gesucht werden soll"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
-#. src/report/locale-specific/us/taxtxf-de_DE.scm
-#. src/report/locale-specific/us/taxtxf.scm
-msgid "From"
-msgstr "Von"
-
-#. src/report/business-reports/job-report.scm
-#. src/report/business-reports/owner-report.scm
 msgid "Display the transaction date?"
 msgstr "Anzeigen des Buchungsdatum?"
 
@@ -13272,25 +13832,34 @@ msgstr "Anzeigen des Buchungsbetrags?"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
-msgid "Expense Report"
-msgstr "Bericht Aufwendungen"
-
-#. src/report/business-reports/job-report.scm
-#. src/report/business-reports/owner-report.scm
 msgid "Report:"
 msgstr "Bericht:"
 
 #. src/report/business-reports/job-report.scm
-#. src/report/business-reports/owner-report.scm
-#, c-format
-msgid "No valid %s selected.  Click on the Options button to select a company."
-msgstr ""
-"Keine gültige %s gewählt.  Klicken Sie auf »Optionen«, um eine Firma zu "
-"wählen."
-
-#. src/report/business-reports/job-report.scm
 msgid "Job Report"
 msgstr "Auftragsbericht"
+
+#. src/report/business-reports/owner-report.scm
+msgid ""
+"No valid customer selected. Click on the Options button to select a customer."
+msgstr ""
+"Keine gültiger Kunde gewählt.  Klicken Sie auf »Optionen«, um einen Kunden zu "
+"wählen."
+
+#. src/report/business-reports/owner-report.scm
+msgid ""
+"No valid employee selected. Click on the Options button to select an "
+"employee."
+msgstr ""
+"Kein gültiger Mitarbeiter gewählt.  Klicken Sie auf »Optionen«, um einen "
+"Mitarbeiter zu wählen."
+
+#. src/report/business-reports/owner-report.scm
+msgid ""
+"No valid company selected. Click on the Options button to select a company."
+msgstr ""
+"Keine gültige Firma gewählt.  Klicken Sie auf »Optionen«, um eine Firma zu "
+"wählen."
 
 #. src/report/business-reports/owner-report.scm
 msgid "The company for this report"
@@ -13384,10 +13953,6 @@ msgstr "Überschriften 2"
 #. src/report/business-reports/taxinvoice.scm
 msgid "Report title"
 msgstr "Berichtstitel"
-
-#. src/report/business-reports/taxinvoice.scm
-msgid "Invoice number"
-msgstr "Rechnungsnummer"
 
 #. src/report/business-reports/taxinvoice.scm
 #. src/report/standard-reports/balsheet-eg.scm
@@ -13817,44 +14382,36 @@ msgstr ""
 msgid "This page shows transaction detail for relevant Income Tax accounts."
 msgstr "Diese Seite zeigt Ihnen Details zu steuerrelevanten Konten."
 
-#. src/report/report-gnome/gnucash/report/report-gnome.scm
 #. src/report/report-gnome/report-gnome.scm
 msgid "This report has no options."
 msgstr "Dieser Bericht hat keine Optionen."
 
-#. src/report/report-gnome/gnucash/report/report-gnome.scm
 #. src/report/report-gnome/report-gnome.scm
 #, c-format
 msgid "Display the %s report"
 msgstr "%s-Bericht anzeigen"
 
-#. src/report/report-gnome/gnucash/report/report-gnome.scm
 #. src/report/report-gnome/report-gnome.scm
 msgid "Custom Reports"
 msgstr "_Benutzerdefinierte Berichte"
 
-#. src/report/report-gnome/gnucash/report/report-gnome.scm
 #. src/report/report-gnome/report-gnome.scm
 msgid "Manage and run custom reports"
 msgstr "Benutzerdefinierte Berichte bearbeiten und erstellen"
 
-#. src/report/report-gnome/gnucash/report/report-gnome.scm
 #. src/report/report-gnome/report-gnome.scm
 msgid "Welcome Sample Report"
 msgstr "Einführungs-Beispielbericht"
 
-#. src/report/report-gnome/gnucash/report/report-gnome.scm
 #. src/report/report-gnome/report-gnome.scm
 msgid "Welcome-to-GnuCash report screen"
 msgstr "Eine Demonstration verschiedener Berichte als Begrüßung"
 
 #. src/report/report-system/eguile-gnc.scm
-#. src/report/report-system/gnucash/report/eguile-gnc.scm
 msgid "An error occurred when processing the template:"
 msgstr "Fehler aufgetreten beim Verarbeiten der Vorlage:"
 
 #. src/report/report-system/eguile-gnc.scm
-#. src/report/report-system/gnucash/report/eguile-gnc.scm
 #, c-format
 msgid "Template file \"%s\" can not be read"
 msgstr "Die Vorlagen-Datei »%s« konnte nicht gelesen werden."
@@ -14087,6 +14644,7 @@ msgstr ""
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Report on these accounts, if display depth allows."
 msgstr ""
 "Bericht für diese Konten erstellen, solange die Verschachtelungstiefe "
@@ -14226,6 +14784,7 @@ msgstr "Anzeige der Salden von übergeordneten Konten"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Account Balance"
 msgstr "Kontosaldo"
 
@@ -14445,14 +15004,6 @@ msgid "Shows a piechart with the Liabilities balance at a given time"
 msgstr "Tortendiagramm der Verbindlichkeiten eines Zeitpunkts anzeigen"
 
 #. src/report/standard-reports/account-piecharts.scm
-msgid "Income Accounts"
-msgstr "Ertragskonten"
-
-#. src/report/standard-reports/account-piecharts.scm
-msgid "Expense Accounts"
-msgstr "Aufwandskonten"
-
-#. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -14461,6 +15012,7 @@ msgstr "Aufwandskonten"
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/price-scatter.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
 msgid "Start Date"
 msgstr "Anfangsdatum"
@@ -14474,6 +15026,7 @@ msgstr "Anfangsdatum"
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/price-scatter.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
 msgid "End Date"
 msgstr "Enddatum"
@@ -14494,6 +15047,10 @@ msgstr "Lange Kontennamen anzeigen"
 #. src/report/standard-reports/daily-reports.scm
 msgid "Show Totals"
 msgstr "Beträge anzeigen"
+
+#. src/report/standard-reports/account-piecharts.scm
+msgid "Show Percents"
+msgstr "Prozent anzeigen"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -14525,10 +15082,12 @@ msgid "Sort Method"
 msgstr "Sortierreihenfolge"
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 msgid "Show Average"
 msgstr "Durchschnitt anzeigen"
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 msgid ""
 "Select whether the amounts should be shown over the full time period or "
 "rather as the average e.g. per month"
@@ -14537,10 +15096,12 @@ msgstr ""
 "B. Monat."
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 msgid "No Averaging"
 msgstr "Kein Durchschnitt"
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 msgid "Just show the amounts, without any averaging"
 msgstr "Nur die Beträge anzeigen ohne weitere Durchschnittberechnung"
 
@@ -14549,10 +15110,12 @@ msgid "Show the average yearly amount during the reporting period"
 msgstr "Jährlichen Durchschnitt anzeigen"
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 msgid "Show the average monthly amount during the reporting period"
 msgstr "Monatlichen Durchschnitt anzeigen"
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 msgid "Show the average weekly amount during the reporting period"
 msgstr "Wöchentlichen Durchschnitt anzeigen"
 
@@ -14583,6 +15146,10 @@ msgid "Show the total balance in legend?"
 msgstr "Gesamtbeträge in der Legende anzeigen?"
 
 #. src/report/standard-reports/account-piecharts.scm
+msgid "Show the percentage in legend?"
+msgstr "Prozentangabe in der Legende anzeigen?"
+
+#. src/report/standard-reports/account-piecharts.scm
 msgid "Maximum number of slices in pie"
 msgstr "Maximale Anzahl Segmente (Tortenstücke) im Diagramm"
 
@@ -14591,10 +15158,12 @@ msgid "Yearly Average"
 msgstr "Durchschnitt pro Jahr"
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 msgid "Monthly Average"
 msgstr "Durchschnitt pro Monat"
 
 #. src/report/standard-reports/account-piecharts.scm
+#. src/report/standard-reports/category-barchart.scm
 msgid "Weekly Average"
 msgstr "Durchschnitt pro Woche"
 
@@ -14619,6 +15188,7 @@ msgstr "Kontenübersicht"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Report Title"
 msgstr "Berichtstitel"
@@ -14630,6 +15200,7 @@ msgstr "Berichtstitel"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Title for this report"
 msgstr "Titel des Berichts"
@@ -14640,6 +15211,7 @@ msgstr "Titel des Berichts"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Company name"
 msgstr "Firmenname"
@@ -14650,6 +15222,7 @@ msgstr "Firmenname"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Name of company/individual"
 msgstr "Name der Organisation/Firma"
@@ -14660,6 +15233,7 @@ msgstr "Name der Organisation/Firma"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Levels of Subaccounts"
 msgstr "Verschachtelungstiefe Unterkonten"
@@ -14670,15 +15244,18 @@ msgstr "Verschachtelungstiefe Unterkonten"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Maximum number of levels in the account tree displayed"
 msgstr "Maximale Verschachtelungstiefe in der Kontenhierarchie"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Depth limit behavior"
 msgstr "Tiefenlimit Verwendung"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "How to treat accounts which exceed the specified depth limit (if any)"
 msgstr ""
 "Festlegen, wie das Tiefenlimit für Konten in der Baumstruktur verwendet "
@@ -14689,6 +15266,7 @@ msgstr ""
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Parent account balances"
 msgstr "Saldo übergeordneter Konten"
 
@@ -14697,6 +15275,7 @@ msgstr "Saldo übergeordneter Konten"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Parent account subtotals"
 msgstr "Zwischensummen für übergeordnete Konten"
 
@@ -14705,6 +15284,7 @@ msgstr "Zwischensummen für übergeordnete Konten"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Include accounts with zero total balances"
 msgstr "Unterkonten, die Kontostand Null haben, mit einbeziehen."
@@ -14714,6 +15294,7 @@ msgstr "Unterkonten, die Kontostand Null haben, mit einbeziehen."
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Include accounts with zero total (recursive) balances in this report"
 msgstr "Unterkonten, die Kontostand Null haben, mit einbeziehen."
@@ -14723,6 +15304,7 @@ msgstr "Unterkonten, die Kontostand Null haben, mit einbeziehen."
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Omit zero balance figures"
 msgstr "Salden ignorieren, die Null betragen"
 
@@ -14731,6 +15313,7 @@ msgstr "Salden ignorieren, die Null betragen"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Show blank space in place of any zero balances which would be shown"
 msgstr "Leerstellen anstatt Nullen bei Null-Salden anzeigen"
 
@@ -14740,6 +15323,7 @@ msgstr "Leerstellen anstatt Nullen bei Null-Salden anzeigen"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Show accounting-style rules"
 msgstr "Linien aus Rechnungswesen anzeigen"
 
@@ -14749,6 +15333,7 @@ msgstr "Linien aus Rechnungswesen anzeigen"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Use rules beneath columns of added numbers like accountants do"
 msgstr "Linien neben Spalten mit Salden anzeigen, wie im Rechnungswesen üblich"
 
@@ -14758,6 +15343,7 @@ msgstr "Linien neben Spalten mit Salden anzeigen, wie im Rechnungswesen üblich"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Display accounts as hyperlinks"
 msgstr "Kontonamen anklickbar anzeigen"
@@ -14768,6 +15354,7 @@ msgstr "Kontonamen anklickbar anzeigen"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Shows each account in the table as a hyperlink to its register window"
 msgstr ""
@@ -14775,30 +15362,37 @@ msgstr ""
 "öffnet"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Show an account's balance"
 msgstr "Kontensaldo anzeigen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Show an account's account code"
 msgstr "Kontonummer anzeigen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Show an account's account type"
 msgstr "Kontoart anzeigen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Account Description"
 msgstr "Kontenbeschreibung"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Show an account's description"
 msgstr "Kontenbeschreibung anzeigen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Account Notes"
 msgstr "Kontennotizen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Show an account's notes"
 msgstr "Kontennotizen anzeigen"
 
@@ -14809,6 +15403,7 @@ msgstr "Kontennotizen anzeigen"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Commodities"
 msgstr "Währungen/Wertpapiere"
@@ -14820,6 +15415,7 @@ msgstr "Währungen/Wertpapiere"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Show Foreign Currencies"
 msgstr "Fremdwährungen anzeigen"
@@ -14831,6 +15427,7 @@ msgstr "Fremdwährungen anzeigen"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Display any foreign currency amount in an account"
 msgstr "Fremdwährungen in Konten anzeigen"
@@ -14843,6 +15440,7 @@ msgstr "Fremdwährungen in Konten anzeigen"
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Show Exchange Rates"
 msgstr "Wechselkurse anzeigen"
@@ -14854,15 +15452,18 @@ msgstr "Wechselkurse anzeigen"
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 msgid "Show the exchange rates used"
 msgstr "Aktuelle Wechselkurse anzeigen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Recursive Balance"
 msgstr "Rekursiver Saldo"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit"
@@ -14871,24 +15472,29 @@ msgstr ""
 "vom Tiefenlimit"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Raise Accounts"
 msgstr "Konten höher anzeigen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Shows accounts deeper than the depth limit at the depth limit"
 msgstr ""
 "Konten anzeigen, die in der Baumstruktur tiefer als das Tiefenlimit liegen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Omit Accounts"
 msgstr "Konten überspringen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Disregard completely any accounts deeper than the depth limit"
 msgstr ""
 "Konten ignorieren, die in der Baumstruktur tiefer als das Tiefenlimit liegen"
 
 #. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/sx-summary.scm
 msgid "Account title"
 msgstr "Kontobezeichnung"
 
@@ -15122,10 +15728,6 @@ msgstr "Diagrammtyp"
 #. src/report/standard-reports/average-balance.scm
 msgid "The type of graph to generate"
 msgstr "Die Art von Diagramm, das angezeigt werden soll."
-
-#. src/report/standard-reports/average-balance.scm
-msgid "Profit"
-msgstr "Ergebnis"
 
 #. src/report/standard-reports/average-balance.scm
 msgid "Profit (Gain minus Loss)"
@@ -15384,7 +15986,7 @@ msgid "Font size"
 msgstr "Schriftgröße"
 
 #. src/report/standard-reports/balsheet-eg.scm
-msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\""
+msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")"
 msgstr "Schriftgröße im CSS-font-size-Format, z.B. \"medium\" oder \"10pt\""
 
 #. src/report/standard-reports/balsheet-eg.scm
@@ -15926,12 +16528,20 @@ msgid "Maximum Bars"
 msgstr "Maximale Anzahl Segmente"
 
 #. src/report/standard-reports/category-barchart.scm
+msgid "Show the average daily amount during the reporting period"
+msgstr "Den durchschnittlichen Betrag pro Tag anzeigen"
+
+#. src/report/standard-reports/category-barchart.scm
 msgid "Show barchart as stacked barchart?"
 msgstr "Balkendiagram mit gestapelten Balken anzeigen?"
 
 #. src/report/standard-reports/category-barchart.scm
 msgid "Maximum number of bars in the chart"
 msgstr "Maximale Anzahl Segmente im Diagramm"
+
+#. src/report/standard-reports/category-barchart.scm
+msgid "Daily Average"
+msgstr "Durchschnitt pro Tag"
 
 #. src/report/standard-reports/category-barchart.scm
 #, c-format
@@ -16013,6 +16623,7 @@ msgstr "Lässt das Muster für Abschlussbuchungen ein regulärer Ausdruck sein"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/trial-balance.scm
 #, c-format
 msgid "For Period Covering %s to %s"
@@ -16154,6 +16765,29 @@ msgstr "Sekundäre Zwischensumme für Datumsschlüssel"
 #. src/report/standard-reports/transaction.scm
 msgid "Secondary Sort Order"
 msgstr "Sekundäre Sortierreihenfolge"
+
+#. src/report/standard-reports/income-statement.scm
+#, fuzzy
+msgid "Label the trading accounts section"
+msgstr "Abschnitt Aktiva beschriften"
+
+#. src/report/standard-reports/income-statement.scm
+#, fuzzy
+msgid "Whether or not to include a label for the trading accounts section"
+msgstr "Beschriftung für den Abschnitt mit Aktivakonten anzeigen"
+
+#. src/report/standard-reports/income-statement.scm
+msgid "Include trading accounts total"
+msgstr ""
+
+#. src/report/standard-reports/income-statement.scm
+msgid ""
+"Whether or not to include a line indicating total trading accounts balance"
+msgstr ""
+
+#. src/report/standard-reports/income-statement.scm
+msgid "Total Trading"
+msgstr "Gesamt Devisenhandel"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -16451,6 +17085,10 @@ msgstr "Gesamtwert Änderung"
 msgid "Client"
 msgstr "Kunde"
 
+#. src/report/standard-reports/sx-summary.scm
+msgid "Future Scheduled Transactions Summary"
+msgstr "Zukünftige Terminierte Buchungen"
+
 #. src/report/standard-reports/transaction.scm
 msgid "Transaction Report"
 msgstr "Buchungsbericht"
@@ -16602,16 +17240,8 @@ msgid "Sort by check/transaction number"
 msgstr "Sortieren nach Scheck-/Buchungsnr."
 
 #. src/report/standard-reports/transaction.scm
-msgid "Ascending"
-msgstr "Aufsteigend"
-
-#. src/report/standard-reports/transaction.scm
 msgid "smallest to largest, earliest to latest"
 msgstr "kleinster zu grösstem, ältester zu jüngstem"
-
-#. src/report/standard-reports/transaction.scm
-msgid "Descending"
-msgstr "Absteigend"
 
 #. src/report/standard-reports/transaction.scm
 msgid "largest to smallest, latest to earliest"
@@ -17531,13 +18161,13 @@ msgid "Welcome to GnuCash"
 msgstr "Willkommen zu GnuCash"
 
 #. src/report/utility-reports/welcome-to-gnucash.scm
-msgid "Welcome to GnuCash 2.0!"
-msgstr "Willkommen zu GnuCash 2.0"
+msgid "Welcome to GnuCash 2.4!"
+msgstr "Willkommen zu GnuCash 2.4"
 
 #. src/report/utility-reports/welcome-to-gnucash.scm
-msgid "GnuCash 2.0 has lots of nice features. Here are a few."
+msgid "GnuCash 2.4 has lots of nice features. Here are a few."
 msgstr ""
-"GnuCash 2.0 hat viele neue Funktionen. Hier werden einige Beispiele gegeben."
+"GnuCash 2.4 hat viele neue Funktionen. Hier werden einige Beispiele gegeben."
 
 #. src/scm/command-line.scm
 msgid ""
@@ -17613,6 +18243,7 @@ msgid "Adding remaining good quotes."
 msgstr "Benutzbare Kurse werden eingetragen."
 
 #. src/tax/us/de_DE.scm
+#. src/tax/us/gnucash/tax/de_DE.scm
 msgid "Tax Number"
 msgstr "Steuernummer"
 
@@ -17625,27 +18256,12 @@ msgstr "Keine Hilfe verfügbar."
 msgid "The electronic tax number of your business"
 msgstr "Die Elster-Steuernummer Ihrer Unternehmung"
 
-#, c-format
 msgid ""
-"Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots of "
-"bugs and unstable features! If you are looking for a stable personal finance "
-"application, you should use the latest release of GnuCash %s."
+"The GnuCash online manual has lots of helpful information. You can access "
+"the manual under the Help menu."
 msgstr ""
-"Warnung! Dies ist eine Entwicklerversion von GnuCash. Sie enthält "
-"möglicherweise eine Menge Fehler und instabile Merkmale! Falls Sie nach "
-"einer stabilen Anwendung für Ihre persönlichen Finanzen suchen, sollten sie "
-"die letzte stabile Ausgabe GnuCash %s verwenden."
-
-msgid ""
-"The GnuCash online manual has lots of helpful information. If you are "
-"upgrading from earlier versions of GnuCash, the section \"What's new in "
-"GnuCash 2.0\" is particularly interesting. You can access the manual under "
-"the Help menu."
-msgstr ""
-"Das GnuCash Online-Handbuch bietet jede Menge hilfreicher Informationen. "
-"Falls Sie von früheren GnuCash-Versionen umgestiegen sind, ist der Abschnitt "
-"»Was ist neu in GnuCash 2.0« besonders interessant für Sie. Das Handbuch "
-"befindet sich unter dem Hilfe-Menü."
+"Das GnuCash Online-Handbuch bietet jede Menge hilfreicher Informationen.  "
+"Das Handbuch befindet sich unter dem Hilfe-Menü."
 
 msgid ""
 "You can easily import your existing financial data from Quicken, MS Money or "
@@ -17812,6 +18428,12 @@ msgstr ""
 "drückt."
 
 msgid ""
+"If you work overnight, you should close and reopen your working register "
+"after midnight, to get the new date as default for new transactions. It is "
+"not necessary to restart GnuCash therefore."
+msgstr ""
+
+msgid ""
 "The GnuCash developers are easy to contact.  As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
@@ -17833,9 +18455,12 @@ msgstr ""
 "Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
 "Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
 
-#~ msgid "Default number of register rows to display in Invoices."
+#~ msgid ""
+#~ "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots "
+#~ "of bugs and unstable features! If you are looking for a stable personal "
+#~ "finance application, you should use the latest release of GnuCash %s."
 #~ msgstr ""
-#~ "Standardanzahl von Zeilen, die in Rechnungen angezeigt werden sollen"
-
-#~ msgid "Number of _rows:"
-#~ msgstr "Anzahl der _Zeilen:"
+#~ "Warnung! Dies ist eine Entwicklerversion von GnuCash. Sie enthält "
+#~ "möglicherweise eine Menge Fehler und instabile Merkmale! Falls Sie nach "
+#~ "einer stabilen Anwendung für Ihre persönlichen Finanzen suchen, sollten "
+#~ "sie die letzte stabile Ausgabe GnuCash %s verwenden."
