@@ -2796,7 +2796,7 @@ gnc_sql_get_sql_value( const GncSqlConnection* conn, const GValue* value )
 	    gchar doublestr[G_ASCII_DTOSTR_BUF_SIZE];
 	    g_ascii_dtostr( doublestr, sizeof(doublestr),
 			    g_value_get_double( value ));
-            return g_strdup_printf( "%s", doublestr );
+            return g_strdup( doublestr );
 
         }
         else if ( g_value_type_transformable( type, G_TYPE_STRING ) )
