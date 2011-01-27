@@ -448,7 +448,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
             total_mode_label = get_total_mode_label(mnemonic, currency_accum->total_mode);
             gtk_list_store_set(summary->datamodel, &iter,
                                COLUMN_MNEMONIC_TYPE, total_mode_label,
-                               COLUMN_ASSETS,        _("Assets:"),
+                               COLUMN_ASSETS,        _("Net Assets:"),
                                COLUMN_ASSETS_VALUE,  asset_amount_string,
                                COLUMN_PROFITS,       _("Profits:"),
                                COLUMN_PROFITS_VALUE, profit_amount_string,
