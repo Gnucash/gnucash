@@ -321,7 +321,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
 
     gnc_item_edit_update_offset (item_edit, info);
 
-    /* Calcurate IMContext aux window position */
+    /* Calculate IMContext aux window position */
     {
         gint xoff, yoff;
         GdkRectangle rect;

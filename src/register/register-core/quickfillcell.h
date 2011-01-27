@@ -27,7 +27,7 @@
  * FUNCTION:
  * The QuickFillCell implements a text cell with quick-fill
  * capabilities.  By "quick fill" we mean a cell that will
- * automatically sentance-complete the entry after the user
+ * automatically sentence-complete the entry after the user
  * typed a sufficient number of letters to identify a unique
  * entry.
  *
