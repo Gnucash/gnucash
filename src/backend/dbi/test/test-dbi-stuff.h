@@ -26,6 +26,14 @@
 #ifndef _TEST_DBI_STUFF_H_
 #define _TEST_DBI_STUFF_H_
 
+typedef struct
+{
+    QofBook* book_1;
+    QofBook* book_2;
+    gboolean result;
+} CompareInfoStruct;
+
+void do_compare( QofBook* book_1, QofBook* book_2, const gchar* id, QofInstanceForeachCB cb, const gchar* msg );
 /**
  * Test storing a session contents to a db, reloading into a new session, then comparing the
  * two sessions.
@@ -36,13 +44,17 @@
  */
 void test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gchar* url );
 
-typedef struct
-{
-    QofBook* book_1;
-    QofBook* book_2;
-    gboolean result;
-} CompareInfoStruct;
-
-void do_compare( QofBook* book_1, QofBook* book_2, const gchar* id, QofInstanceForeachCB cb, const gchar* msg );
+/** Test the safe_save mechanism.  Beware that this test used on its
+ * own doesn't ensure that the resave is done safely, only that the
+ * database is intact and unchanged after the save. To observe the
+ * safety one must run the test in a debugger and break after the
+ * rename step of gnc_dbi_safe_sync, then examine the database in the
+ * appropriate shell.
+ */
 void test_dbi_safe_save( const gchar* driver, const gchar* url );
+
+/** Test the version control mechanism.
+ */
+void test_dbi_version_control( const gchar* driver,  const gchar* url );
+
 #endif
