@@ -292,7 +292,7 @@ developing over time"))
                  (case averaging-selection
                    ((MonthDelta) (string-append report-title " " (_ "Monthly Average")))
                    ((WeekDelta) (string-append report-title " " (_ "Weekly Average")))
-                   ((DayDelta) (string-append report-title " " (_ "Dayly Average")))
+                   ((DayDelta) (string-append report-title " " (_ "Daily Average")))
                    (else report-title)))
                ;; This is the list of date intervals to calculate.
                (dates-list (if do-intervals?

@@ -261,13 +261,12 @@
 	(inv-str (opt-val "__reg" "inv-str"))
 	(reverse? (opt-val "__reg" "reverse?"))
         (print-invoices? #t) ;;(opt-val gnc:pagename-general optname-invoicelines))
-        (print-payments? #f) ;;(opt-val gnc:pagename-display optname-paymentlines))
         )
 
     (define (should-print-txn? txn-type)
       (or (and print-invoices?
                (equal? txn-type TXN-TYPE-INVOICE))
-          (and print-payments?
+          (and #f
                (equal? txn-type TXN-TYPE-PAYMENT))))
 
     (gnc:html-table-set-col-headers!
@@ -295,7 +294,7 @@
        txns)
       ;; Balance row may not have been added if all transactions were before
       ;; start-date (and no other rows would be added either) so add it now
-      (if (and (not (null? txns)) (and print-invoices? print-payments?))
+      (if (and (not (null? txns)) (and print-invoices? #f))
 	  (add-balance-row table used-columns (car txns) odd-row? printed? start-date total)
           ))
 
@@ -693,7 +692,6 @@
                     (gnc:date-option-absolute-time
                      (opt-val gnc:pagename-general optname-to-date))))
          (print-invoices? #t);;(opt-val gnc:pagename-general optname-invoicelines))
-         (print-payments? #f) ;;(opt-val gnc:pagename-display optname-paymentlines))
 ;         (show-txn-table? (opt-val gnc:pagename-display optname-show-txn-table))
 	 (show-zero-lines? (opt-val gnc:pagename-display optname-show-zero-lines))
          (show-column-expense? (opt-val gnc:pagename-display optname-show-column-expense))
@@ -998,18 +996,6 @@
           ;; Check the settings for taking invoice/payment lines into
           ;; account and print the ch
           (make-break! document)
-          (if print-invoices?
-              (if print-payments?
-                  ;; Print a notification for invoices=yes, payments=yes
-                  (set! notification-str (_ "(Invoice and Payment transactions)"))
-                  ;; Print a notification for invoices=yes, payments=no
-		  ;;;(set! notification-str (_ "(Invoice transactions only)"))
-		  )
-              (if print-payments?
-                  ;; Print a notification for invoices=no, payments=yes
-                  (set! notification-str (_ "(Payment transactions only)"))
-                  ;; invoices=no, payments=no? Does not make sense.
-                  (set! notification-str (_ "Neither invoice nor payment transactions are activated. This will result in zeros everywhere. Please change those options on the \"General\" page."))))
           (gnc:html-document-add-object!
            document
            (gnc:make-html-text notification-str))
