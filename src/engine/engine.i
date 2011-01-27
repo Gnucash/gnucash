@@ -175,7 +175,7 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
 
 %clear GSList *key_path;
 
-
+#if defined(SWIGGUILE)
 %init {
   {
     char tmp[100];
@@ -295,4 +295,4 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
   }
 
 }
-
+#endif

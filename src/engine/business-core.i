@@ -2,7 +2,6 @@
 %{
 /* Includes the header in the wrapper code */
 #include <config.h>
-#include <guile-mappings.h>
 #include <gncAddress.h>
 #include <gncBillTerm.h>
 #include <gncCustomer.h>
@@ -14,6 +13,11 @@
 #include <gncOwner.h>
 #include <gncTaxTable.h>
 #include <gncVendor.h>
+%}
+
+#if defined(SWIGGUILE)
+%{
+#include <guile-mappings.h>
 #include <gncBusGuile.h>
 #ifdef _MSC_VER
 # define snprintf _snprintf
@@ -32,6 +36,7 @@
 
 SCM scm_init_sw_business_core_module (void);
 %}
+#endif
 
 %import "base-typemaps.i"
 
@@ -81,6 +86,7 @@ GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
 GLIST_HELPER_INOUT(GncTaxTableEntryList, SWIGTYPE_p__gncTaxTableEntry);
 GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 
+#if defined(SWIGGUILE)
 %typemap(in) GncAccountValue * "$1 = gnc_scm_to_account_value_ptr($input);"
 %typemap(out) GncAccountValue * "$result = gnc_account_value_ptr_to_scm($1);"
 %typemap(in) AccountValueList * {
@@ -111,7 +117,7 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 
   $result = scm_reverse(list);
 }
-
+#endif
 
 
 /* Parse the header files to generate wrappers */
@@ -127,7 +133,9 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 %include <gncOwner.h>
 %include <gncTaxTable.h>
 %include <gncVendor.h>
+#if defined(SWIGGUILE)
 %include <gncBusGuile.h>
+#endif
 /* Import query bindings for the below invoice query functions (but
  * don't generate bindings for them). */
 %import <libqof/qof/qofquery.h>
@@ -150,6 +158,7 @@ static GncInvoiceList * qof_query_run_for_invoices(QofQuery *q) {
 }
 %}
 
+#if defined(SWIGGUILE)
 %init {
   {
     char tmp[100];
@@ -183,3 +192,4 @@ static GncInvoiceList * qof_query_run_for_invoices(QofQuery *q) {
   }
 
 }
+#endif

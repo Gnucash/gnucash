@@ -16,9 +16,13 @@
 #include <app-utils/gnc-sx-instance-model.h>
 
 #include "engine-helpers.h"
+%}
 
+#if defined(SWIGGUILE)
+%{
 SCM scm_init_sw_app_utils_module (void);
 %}
+#endif
 
 %import "base-typemaps.i"
 
@@ -39,6 +43,7 @@ void gnc_option_db_destroy(GNCOptionDB *odb);
 void gnc_option_db_set_option_selectable_by_name(SCM guile_option,
       const char *section, const char *name, gboolean selectable);
 
+#if defined(SWIGGUILE)
 %typemap(out) GncCommodityList * {
   SCM list = SCM_EOL;
   GList *node;
@@ -135,3 +140,4 @@ time_t gnc_parse_time_to_timet(const gchar *s, const gchar *format);
 }
 GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_end);
 %clear GHashTable *;
+#endif
