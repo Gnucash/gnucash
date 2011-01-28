@@ -305,13 +305,7 @@ set_mac_locale()
 /* Now call gnc_localeconv() to force creation of the app locale
  * before another call to setlocale messes it up. */
     gnc_localeconv ();
-/* Process the language list. Since all of the packages we depend on
- * are written in US english, they depend on gettext falling through
- * to the C locale. Unfortunately, if we set a language list in that
- * case with en or en_US as the first element, gettext will try the
- * second language in the list (there being no en or en_US mo
- * file). We work around that by not creating a language list if en or
- * en_US is the first item.
+/* Process the language list.
  *
  * Language subgroups (e.g., US English) are reported in the form
  * "ll-SS" (e.g. again, "en-US"), not what gettext wants. We convert
@@ -337,16 +331,15 @@ set_mac_locale()
 		    else
 			this_lang = [NSString stringWithString: @"zh_TW"];
 		}
-
-	    /* Gnucash has 3 translations with country specifications (other than chinese): en_GB, es_NI, and pt_BR. All of the rest are plain. Since gettext is too stupid on its own to look for pt if pt_PT isn't available, we'll special case those three and */
-		else if ([this_lang isEqualToString: @"en-GB"] ||
-			 [this_lang isEqualToString: @"es-NI"] ||
-			 [this_lang isEqualToString: @"pt-BR"] )
-		  this_lang = [elements componentsJoinedByString: @"_"];
 		else
-		  this_lang = [elements objectAtIndex: 0];
+		  this_lang = [elements componentsJoinedByString: @"_"];
 	    }
 	    new_languages = [new_languages arrayByAddingObject: this_lang];
+/* If it's an english language, add the "C" locale after it so that
+ * any messages can default to it */
+	    if ( [[elements objectAtIndex: 0] isEqualToString: @"en"])
+		new_languages = [new_languages arrayByAddingObject: @"C"];
+
 	}
 	langs = [[new_languages componentsJoinedByString:@":"] UTF8String];
     }
