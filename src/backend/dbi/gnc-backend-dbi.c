@@ -2899,9 +2899,12 @@ conn_test_dbi_library( dbi_conn conn )
     }
     while ( dbi_result_next_row( result ))
     {
+	const char *locale = setlocale( LC_NUMERIC, "" );
+	setlocale( LC_NUMERIC, "C");
         resultlonglong = dbi_result_get_longlong( result, "test_int" );
         resultulonglong = dbi_result_get_ulonglong( result, "test_unsigned" );
         resultdouble = dbi_result_get_double( result, "test_double" );
+	setlocale (LC_NUMERIC, locale );
     }
     if ( testlonglong != resultlonglong )
     {
