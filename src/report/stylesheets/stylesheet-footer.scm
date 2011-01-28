@@ -74,7 +74,7 @@
      (gnc:make-text-option
       (N_ "General")
       (N_ "Footer") "e"
-      (N_ "String to placed as a footer")
+      (N_ "String to be placed as a footer")
       ""))
 
     (opt-register
