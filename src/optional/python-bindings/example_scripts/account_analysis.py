@@ -160,7 +160,7 @@ def main():
 
     account_path = argv[8:]
 
-    gnucash_session = Session("sqlite3://%s" % gnucash_file, is_new=False)
+    gnucash_session = Session(gnucash_file, is_new=False)
     root_account = gnucash_session.book.get_root_account()
     account_of_interest = account_from_path(root_account, account_path)
 
