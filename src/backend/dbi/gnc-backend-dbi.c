@@ -1842,11 +1842,13 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
     guint attrs;
     GValue* value;
     time_t time;
+    char *locale = setlocale( LC_NUMERIC, "" );
     struct tm tm_struct;
 
     type = dbi_result_get_field_type( dbi_row->result, col_name );
     attrs = dbi_result_get_field_attribs( dbi_row->result, col_name );
     value = g_new0( GValue, 1 );
+    setlocale( LC_NUMERIC, "C" );
     g_assert( value != NULL );
 
     switch ( type )
@@ -1898,6 +1900,7 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
     }
 
     dbi_row->gvalue_list = g_list_prepend( dbi_row->gvalue_list, value );
+    setlocale( LC_NUMERIC, locale );
     return value;
 }
 
