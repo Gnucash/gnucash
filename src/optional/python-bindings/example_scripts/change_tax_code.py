@@ -27,7 +27,7 @@ def mark_account_with_code_as_tax_related(account, target_code):
         return False
             
 # Change this path to your own
-gnucash_session = Session("xml:///home/mark/python-bindings-help/test.xac")
+gnucash_session = Session("/home/mark/python-bindings-help/test.xac")
 
 mark_account_with_code_as_tax_related(
     gnucash_session.book.get_root_account(),

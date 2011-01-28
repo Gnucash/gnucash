@@ -25,12 +25,11 @@ namespace_name = ""                     # If no namespace_name is set, all names
 show_prices = True                      # If True, all prices for commodity are shown
 commodity_fullname = ""                 # If no name is given, all commoditys in namespace will be shown
 FILE = "PATH_TO_YOUR_TEST_FILE"         # File is not saved but use a copy anyway
-url = "xml://"+FILE
 
 # Configuration end
 # -------------------------------------------
 
-session = Session(url, True, False, False)
+session = Session(FILE, True, False, False)
 
 root = session.book.get_root_account()
 book = session.book

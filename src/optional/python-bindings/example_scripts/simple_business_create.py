@@ -31,6 +31,17 @@
 # employee and vendor, creates an unposted invoice for each,
 # and posts the customer invoice with a few entries and a tax table.
 #
+# argv[1] should be the path the new or to overwrite gnucash file/database
+# for a file, simply pass the pathname prefixed with the requested data format
+# like:
+#   xml:///home/blah/blah.gnucash
+#   sqlite3:///home/blah/blah.gnucash
+# Paths can also be relative, for example:
+#   xml://from-here/to/there/blah.gnucash
+# For a database you can use these forms:
+#   mysql://user:password@host/dbname
+#   postgres://user:password@host[:port]/dbname (the port is optional)
+#
 # You may also want to look at simple_invoice_insert.py
 
 ##  @file

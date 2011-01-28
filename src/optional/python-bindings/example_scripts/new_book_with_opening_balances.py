@@ -52,17 +52,35 @@ from datetime import date
 #
 # Invocation examples:
 # gnucash-env python new_book_with_opening_balances.py \
-#   'sqlite3:///home/mark/test.gnucash'
+#   '/home/mark/test.gnucash'
 #   'sqlite3:///home/mark/new_test.gnucash'
 #
 # gnucash-env python new_book_with_opening_balances.py \
-#   'sqlite3:///home/mark/test.gnucash' \
-#   'xml:///crypthome/mark/parit-financial-system/new_test.gnucashxml'
+#   '/home/mark/test.gnucash' \
+#   'xml:///crypthome/mark/parit-financial-system/new_test.gnucash'
 #
 # Remember that the gnucash python package has to be in your PYTHONPATH
 # if you're installed GnuCash in a non-standard location, you'll have to do
 # something like this
 # export PYTHONPATH=gnucash_install_path/lib/python2.x/site-packages/
+
+# argv[1] should be the path to an existing gnucash file/database
+# For a file, simply pass the pathname. GnuCash will determine the data format
+# xml or sqlite3 automatically.
+# For a database you can use these forms:
+#   mysql://user:password@host/dbname
+#   postgres://user:password@host[:port]/dbname (the port is optional)
+#
+# argv[2] should be the path for the new gnucash file/database
+# For a file, simply pass the pathname prefixed with the requested data format
+# like:
+#   xml:///home/blah/blah.gnucash
+#   sqlite3:///home/blah/blah.gnucash
+# Paths can also be relative, for example:
+#   xml://from-here/to/there/blah.gnucash
+# For a database you can use these forms:
+#   mysql://user:password@host/dbname
+#   postgres://user:password@host[:port]/dbname (the port is optional)
 
 
 OPENING_DATE = (1, 1, 2011) # day, month, year

@@ -16,9 +16,16 @@
 #   @ingroup python_bindings_examples
 
 from gnucash import Session
-FILE = "PATH_TO_YOUR_TEST_FILE"  ## Fail is no saved but use a copy anyway
 
-session = Session("xml://%s" % FILE, True, False, False)
+# FILE should be the path to your existing gnucash file/database
+# For a file, simply pass the pathname, for a database you can use
+# these forms:
+# mysql://user:password@host/dbname
+# postgres://user:password@host[:port]/dbname (the port is optional)
+#
+FILE = "PATH_TO_YOUR_TEST_FILE"  ## Fail is not saved but use a copy anyway
+
+session = Session(FILE, True, False, False)
 
 root = session.book.get_root_account()
 book = session.book
