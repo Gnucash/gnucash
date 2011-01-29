@@ -37,8 +37,7 @@ SUBDIRS = . $(NONGUI_SUBDIRS) report
 endif
 
 noinst_HEADERS = \
-  swig-runtime.h \
-  gnc-ui.h
+  swig-runtime.h
 
 bin_SCRIPTS = gnc-test-env
 

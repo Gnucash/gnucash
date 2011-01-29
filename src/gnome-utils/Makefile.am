@@ -163,6 +163,7 @@ gncinclude_HEADERS = \
   gnc-tree-view-price.h \
   gnc-tree-view-sx-list.h \
   gnc-tree-view.h \
+  gnc-ui.h \
   gnc-window.h \
   misc-gnome-utils.h \
   print-session.h \
