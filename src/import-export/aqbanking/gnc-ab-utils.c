@@ -33,7 +33,7 @@
 #include <gwenhywfar/gwenhywfar.h>
 #include <aqbanking/banking.h>
 
-#include "RecnWindow.h"
+#include "window-reconcile.h"
 #include "Transaction.h"
 #include "dialog-ab-trans.h"
 #include "gnc-ab-kvp.h"

@@ -37,7 +37,6 @@ SUBDIRS = . $(NONGUI_SUBDIRS) report
 endif
 
 noinst_HEADERS = \
-  RecnWindow.h \
   swig-runtime.h \
   gnc-ui.h
 
