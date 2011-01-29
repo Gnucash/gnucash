@@ -29,13 +29,10 @@
 #include "config.h"
 
 #include <errno.h>
-#include <glib.h>
-#include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #if !HAVE_GMTIME_R
 #include "gmtime_r.h"
 #endif
-#include <locale.h>
 
 #include "gnc-backend-dbi-priv.h"
 
@@ -50,6 +47,7 @@
 
 #include "gnc-gconf-utils.h"
 #include "gnc-uri-utils.h"
+#include "gnc-ui-util.h"
 
 #include "gnc-backend-dbi.h"
 
@@ -1842,13 +1840,11 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
     guint attrs;
     GValue* value;
     time_t time;
-    char *locale = setlocale( LC_NUMERIC, "" );
     struct tm tm_struct;
 
     type = dbi_result_get_field_type( dbi_row->result, col_name );
     attrs = dbi_result_get_field_attribs( dbi_row->result, col_name );
     value = g_new0( GValue, 1 );
-    setlocale( LC_NUMERIC, "C" );
     g_assert( value != NULL );
 
     switch ( type )
@@ -1858,6 +1854,7 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
         g_value_set_int64( value, dbi_result_get_longlong( dbi_row->result, col_name ) );
         break;
     case DBI_TYPE_DECIMAL:
+	gnc_push_locale( LC_NUMERIC, "C" );
         if ( (attrs & DBI_DECIMAL_SIZEMASK) == DBI_DECIMAL_SIZE4 )
         {
             (void)g_value_init( value, G_TYPE_FLOAT );
@@ -1872,6 +1869,7 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
         {
             PERR( "Field %s: strange decimal length attrs=%d\n", col_name, attrs );
         }
+	gnc_pop_locale( LC_NUMERIC );
         break;
     case DBI_TYPE_STRING:
         (void)g_value_init( value, G_TYPE_STRING );
@@ -1900,7 +1898,6 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
     }
 
     dbi_row->gvalue_list = g_list_prepend( dbi_row->gvalue_list, value );
-    setlocale( LC_NUMERIC, locale );
     return value;
 }
 
@@ -2902,12 +2899,11 @@ conn_test_dbi_library( dbi_conn conn )
     }
     while ( dbi_result_next_row( result ))
     {
-	const char *locale = setlocale( LC_NUMERIC, "" );
-	setlocale( LC_NUMERIC, "C");
+	gnc_push_locale( LC_NUMERIC, "C");
         resultlonglong = dbi_result_get_longlong( result, "test_int" );
         resultulonglong = dbi_result_get_ulonglong( result, "test_unsigned" );
         resultdouble = dbi_result_get_double( result, "test_double" );
-	setlocale (LC_NUMERIC, locale );
+	gnc_pop_locale( LC_NUMERIC );
     }
     if ( testlonglong != resultlonglong )
     {

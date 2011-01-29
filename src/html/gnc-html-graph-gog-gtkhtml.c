@@ -97,7 +97,7 @@ read_doubles(const char * string, int nvalues)
     // guile is going to (puts ...) the elements of the double array
     // together. In non-POSIX locales, that will be in a format that
     // the locale-specific sscanf will not be able to parse.
-    gnc_push_locale("C");
+    gnc_push_locale(LC_NUMERIC, "C");
     {
         for (n = 0; n < nvalues; n++)
         {
@@ -105,7 +105,7 @@ read_doubles(const char * string, int nvalues)
             string = next;
         }
     }
-    gnc_pop_locale();
+    gnc_pop_locale(LC_NUMERIC);
 
     return retval;
 }

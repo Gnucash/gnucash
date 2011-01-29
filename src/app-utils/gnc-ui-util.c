@@ -1226,19 +1226,26 @@ gnc_locale_decimal_places (void)
 static GList *locale_stack = NULL;
 
 void
-gnc_push_locale (const char *locale)
+gnc_push_locale (int category, const char *locale)
 {
     char *saved_locale;
 
     g_return_if_fail (locale != NULL);
 
-    saved_locale = g_strdup (setlocale (LC_ALL, NULL));
+# ifdef G_OS_WIN32
+    /* On win32, setlocale() doesn't say anything useful. Use
+       glib's function instead. */
+    saved_locale = g_win32_getlocale();
+# else
+    saved_locale = g_strdup(setlocale(category, NULL) ?
+			    setlocale(category, NULL) : "C");
+#endif
     locale_stack = g_list_prepend (locale_stack, saved_locale);
-    setlocale (LC_ALL, locale);
+    setlocale (category, locale);
 }
 
 void
-gnc_pop_locale (void)
+gnc_pop_locale (int category)
 {
     char *saved_locale;
     GList *node;
@@ -1248,7 +1255,7 @@ gnc_pop_locale (void)
     node = locale_stack;
     saved_locale = node->data;
 
-    setlocale (LC_ALL, saved_locale);
+    setlocale (category, saved_locale);
 
     locale_stack = g_list_remove_link (locale_stack, node);
     g_list_free_1 (node);
