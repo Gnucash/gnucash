@@ -112,7 +112,7 @@ gnc_GWEN_Gui_get_close_flag()
 gboolean
 gnc_GWEN_Gui_show_dialog()
 {
-    return
+    return;
 }
 
 void
@@ -401,7 +401,7 @@ gnc_GWEN_Gui_set_close_flag(gboolean close_when_finished)
     if (full_gui)
     {
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(full_gui->close_checkbutton))
-            != close_when_finished)
+                != close_when_finished)
         {
             gtk_toggle_button_set_active(
                 GTK_TOGGLE_BUTTON(full_gui->close_checkbutton),

@@ -1238,7 +1238,7 @@ gnc_push_locale (int category, const char *locale)
     saved_locale = g_win32_getlocale();
 # else
     saved_locale = g_strdup(setlocale(category, NULL) ?
-			    setlocale(category, NULL) : "C");
+                            setlocale(category, NULL) : "C");
 #endif
     locale_stack = g_list_prepend (locale_stack, saved_locale);
     setlocale (category, locale);

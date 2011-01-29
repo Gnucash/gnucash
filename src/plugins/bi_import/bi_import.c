@@ -579,7 +579,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             update = YES;
             // Open the newly created invoice(s) in a tab.  Could be made optional?
             iw =  gnc_ui_invoice_edit (invoice);
-			new_page = gnc_plugin_page_invoice_new (iw);
+            new_page = gnc_plugin_page_invoice_new (iw);
         }
 // I want to warn the user that an existing billvoice exists, but not every
 // time.

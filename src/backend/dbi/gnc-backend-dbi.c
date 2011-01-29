@@ -1854,7 +1854,7 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
         g_value_set_int64( value, dbi_result_get_longlong( dbi_row->result, col_name ) );
         break;
     case DBI_TYPE_DECIMAL:
-	gnc_push_locale( LC_NUMERIC, "C" );
+        gnc_push_locale( LC_NUMERIC, "C" );
         if ( (attrs & DBI_DECIMAL_SIZEMASK) == DBI_DECIMAL_SIZE4 )
         {
             (void)g_value_init( value, G_TYPE_FLOAT );
@@ -1869,7 +1869,7 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
         {
             PERR( "Field %s: strange decimal length attrs=%d\n", col_name, attrs );
         }
-	gnc_pop_locale( LC_NUMERIC );
+        gnc_pop_locale( LC_NUMERIC );
         break;
     case DBI_TYPE_STRING:
         (void)g_value_init( value, G_TYPE_STRING );
@@ -2879,7 +2879,7 @@ conn_test_dbi_library( dbi_conn conn )
     g_ascii_dtostr( doublestr, sizeof(doublestr), testdouble );
     result = dbi_conn_queryf( conn,
                               "INSERT INTO numtest VALUES (%" G_GINT64_FORMAT
-			      ", %" G_GUINT64_FORMAT ", %s)",
+                              ", %" G_GUINT64_FORMAT ", %s)",
                               testlonglong, testulonglong, doublestr );
     if ( result == NULL )
     {
@@ -2899,11 +2899,11 @@ conn_test_dbi_library( dbi_conn conn )
     }
     while ( dbi_result_next_row( result ))
     {
-	gnc_push_locale( LC_NUMERIC, "C");
+        gnc_push_locale( LC_NUMERIC, "C");
         resultlonglong = dbi_result_get_longlong( result, "test_int" );
         resultulonglong = dbi_result_get_ulonglong( result, "test_unsigned" );
         resultdouble = dbi_result_get_double( result, "test_double" );
-	gnc_pop_locale( LC_NUMERIC );
+        gnc_pop_locale( LC_NUMERIC );
     }
     if ( testlonglong != resultlonglong )
     {
