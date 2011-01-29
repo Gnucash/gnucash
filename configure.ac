@@ -24,6 +24,10 @@ AC_INIT([GnuCash], [2.4.0], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
+#Change this in development versions when changing anything that
+#affects stored data structures. Reset to zero when bumping version.
+GNUCASH_NANO_VERSION=0
+
 # Initialize automake -- make sure we have at least version 1.9
 AM_INIT_AUTOMAKE([1.9 dist-bzip2])
 
@@ -67,6 +71,7 @@ AC_SUBST(GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY)
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
 AC_SUBST(GNUCASH_MICRO_VERSION)
+AC_SUBST(GNUCASH_NANO_VERSION)
 AC_SUBST(GNUCASH_LATEST_STABLE_SERIES)
 
 AC_DEFINE_UNQUOTED(GNUCASH_MAJOR_VERSION, $GNUCASH_MAJOR_VERSION,
@@ -75,6 +80,8 @@ AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION,
     [GnuCash Minor version number])
 AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION,
     [GnuCash Micro version number])
+AC_DEFINE_UNQUOTED(GNUCASH_NANO_VERSION, $GNUCASH_NANO_VERSION,
+    [GnuCash Nano version number])
 AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES",
     [Most recent stable GnuCash series])
 

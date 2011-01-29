@@ -285,7 +285,7 @@ test_dbi_version_control( const gchar* driver,  const gchar* url )
     QofBook *book;
     QofBackend *qbe;
     QofBackendError err;
-    gint ourversion = gnc_get_svn_version();
+    gint ourversion = gnc_get_long_version();
 
     printf( "Testing safe save %s\n", driver );
 

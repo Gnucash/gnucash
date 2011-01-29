@@ -494,7 +494,7 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     ENTER( "book=%p, primary=%p", book, be->primary_book );
     update_progress( be );
     (void)reset_version_info( be );
-    gnc_sql_set_table_version( be, "Gnucash", gnc_get_svn_version() );
+    gnc_sql_set_table_version( be, "Gnucash", gnc_get_long_version() );
     gnc_sql_set_table_version( be, "Gnucash-Resave", GNC_RESAVE_VERSION );
 
     /* Create new tables */
@@ -609,7 +609,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
     gboolean is_dirty;
     gboolean is_destroying;
     gboolean is_infant;
-    const gint gnc_version = gnc_get_svn_version();
+    const gint gnc_version = gnc_get_long_version();
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( inst != NULL );
