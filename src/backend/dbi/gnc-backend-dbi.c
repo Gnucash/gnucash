@@ -35,7 +35,7 @@
 #if !HAVE_GMTIME_R
 #include "gmtime_r.h"
 #endif
-
+#include <locale.h>
 
 #include "gnc-backend-dbi-priv.h"
 
