@@ -143,12 +143,5 @@ GtkWidget *gnc_ui_get_toplevel (void);
 void gnc_set_busy_cursor(GtkWidget *w, gboolean update_now);
 void gnc_unset_busy_cursor(GtkWidget *w);
 
-/* QIF Import Windows ***********************************************/
-
-typedef struct _qifimportwindow QIFImportWindow;
-
-QIFImportWindow * gnc_ui_qif_import_dialog_make(void);
-void              gnc_ui_qif_import_dialog_destroy(QIFImportWindow * window);
-
 
 #endif

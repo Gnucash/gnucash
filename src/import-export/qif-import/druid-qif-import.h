@@ -25,8 +25,11 @@
 #define DIALOG_QIF_IMPORT_H
 
 #include <libguile.h>
+#include <gtk/gtk.h> /* For GtkWidget */
 
-#include "gnc-ui.h"
+/* QIF Import Windows ***********************************************/
+
+typedef struct _qifimportwindow QIFImportWindow;
 
 QIFImportWindow * gnc_ui_qif_import_druid_make(void);
 void              gnc_ui_qif_import_druid_destroy (QIFImportWindow * window);

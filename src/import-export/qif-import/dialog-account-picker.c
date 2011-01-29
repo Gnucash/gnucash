@@ -34,6 +34,8 @@
 #include "druid-qif-import.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
+#include "guile-mappings.h"
+#include "gnc-ui.h" /* for GNC_RESPONSE_NEW */
 
 enum account_cols
 {

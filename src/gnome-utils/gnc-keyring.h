@@ -40,8 +40,8 @@
 #define KEYRING_H_
 
 #include <glib.h>
+#include <gtk/gtk.h> /* For GtkWidget */
 
-#include "gnc-ui.h"
 
 /** Attempt to store a password in some trusted keystore. At this point
  *  that can be Gnome's keyring or Mac OS X' keychain. If no
