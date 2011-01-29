@@ -219,13 +219,6 @@ typedef void (* gnc_engine_init_hook_t)(int, char **);
 
 /** PROTOTYPES ******************************************************/
 
-/** GnuCash version number information. */
-unsigned int gnucash_major_version (void);
-/** GnuCash version number information. */
-unsigned int gnucash_minor_version (void);
-/** GnuCash version number information. */
-unsigned int gnucash_micro_version (void);
-
 /** gnc_engine_init should be called before gnc engine
  * functions can be used - see also ::qof_init for a
  * method that does not require Guile. */

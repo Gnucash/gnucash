@@ -48,25 +48,6 @@ gpointer g_error_cb_data;
 
 // static QofLogModule log_module = GNC_MOD_ENGINE;
 
-/* GnuCash version functions */
-unsigned int
-gnucash_major_version (void)
-{
-    return GNUCASH_MAJOR_VERSION;
-}
-
-unsigned int
-gnucash_minor_version (void)
-{
-    return GNUCASH_MINOR_VERSION;
-}
-
-unsigned int
-gnucash_micro_version (void)
-{
-    return GNUCASH_MICRO_VERSION;
-}
-
 /********************************************************************
  * gnc_engine_init
  * initialize backend, load any necessary databases, etc.
