@@ -33,10 +33,10 @@
 
 #include <glib.h>
 
-#include "gnc-ui-common.h"
 #include "Account.h"
 #include "gnc-pricedb.h"
 #include "guile-mappings.h"
+#include <gtk/gtk.h> /* For GtkWidget */
 
 
 /** Help Files ******************************************************/
@@ -72,17 +72,17 @@
 /* Dialog windows ***************************************************/
 
 extern gboolean
-gnc_verify_dialog(gncUIWidget parent,
+gnc_verify_dialog(GtkWidget *parent,
                   gboolean yes_is_default,
                   const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 extern gint
-gnc_ok_cancel_dialog(gncUIWidget parent,
+gnc_ok_cancel_dialog(GtkWidget *parent,
                      gint default_result,
                      const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 extern void
-gnc_warning_dialog(gncUIWidget parent,
+gnc_warning_dialog(GtkWidget *parent,
                    const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 extern void
@@ -97,17 +97,17 @@ gnc_error_dialog(GtkWidget *parent,
 extern void
 gnc_gnome_help (const char *file_name, const char *target_link);
 
-int      gnc_choose_radio_option_dialog (gncUIWidget parent,
+int      gnc_choose_radio_option_dialog (GtkWidget *parent,
         const char *title,
         const char *msg,
         const char *button_name,
         int default_value,
         GList *radio_list);
 
-gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
+gboolean gnc_dup_trans_dialog (GtkWidget *parent, time_t *date_p,
                                const char *num, char **out_num);
-void     gnc_tax_info_dialog (gncUIWidget parent);
-void     gnc_stock_split_dialog (gncUIWidget parent, Account * initial);
+void     gnc_tax_info_dialog (GtkWidget *parent);
+void     gnc_stock_split_dialog (GtkWidget *parent, Account * initial);
 
 typedef enum
 {
@@ -115,11 +115,11 @@ typedef enum
     GNC_PRICE_NEW,
 } GNCPriceEditType;
 
-void gnc_price_edit_dialog (gncUIWidget parent, QofSession *session,
+void gnc_price_edit_dialog (GtkWidget *parent, QofSession *session,
                             GNCPrice *price, GNCPriceEditType type);
 GNCPrice* gnc_price_edit_by_guid (GtkWidget * parent, const GncGUID * guid);
-void     gnc_prices_dialog (gncUIWidget parent);
-void     gnc_commodities_dialog (gncUIWidget parent);
+void     gnc_prices_dialog (GtkWidget *parent);
+void     gnc_commodities_dialog (GtkWidget *parent);
 
 /* Open a dialog asking for username and password. The heading and
  * either 'initial_*' arguments may be NULL. If the dialog returns
@@ -127,7 +127,7 @@ void     gnc_commodities_dialog (gncUIWidget parent);
  * output variables. They should be g_freed when no longer needed. If
  * the dialog returns FALSE, the user pressed CANCEL and NULL was
  * stored in username and password. */
-gboolean gnc_get_username_password (gncUIWidget parent,
+gboolean gnc_get_username_password (GtkWidget *parent,
                                     const char *heading,
                                     const char *initial_username,
                                     const char *initial_password,
@@ -136,12 +136,12 @@ gboolean gnc_get_username_password (gncUIWidget parent,
 
 /* Managing the GUI Windows *****************************************/
 
-gncUIWidget gnc_ui_get_toplevel (void);
+GtkWidget *gnc_ui_get_toplevel (void);
 
 /* Changing the GUI Cursor ******************************************/
 
-void gnc_set_busy_cursor(gncUIWidget w, gboolean update_now);
-void gnc_unset_busy_cursor(gncUIWidget w);
+void gnc_set_busy_cursor(GtkWidget *w, gboolean update_now);
+void gnc_unset_busy_cursor(GtkWidget *w);
 
 /* QIF Import Windows ***********************************************/
 

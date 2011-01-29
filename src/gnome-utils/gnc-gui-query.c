@@ -52,7 +52,7 @@
  * Return: the result the user selected                             *
 \********************************************************************/
 gint
-gnc_ok_cancel_dialog(gncUIWidget parent,
+gnc_ok_cancel_dialog(GtkWidget *parent,
                      gint default_result,
                      const gchar *format, ...)
 {
@@ -98,7 +98,7 @@ gnc_ok_cancel_dialog(gncUIWidget parent,
  *                string.                                           *
 \********************************************************************/
 gboolean
-gnc_verify_dialog(gncUIWidget parent, gboolean yes_is_default,
+gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,
                   const gchar *format, ...)
 {
     GtkWidget *dialog;
@@ -269,7 +269,7 @@ gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
 */
 
 int
-gnc_choose_radio_option_dialog(gncUIWidget parent,
+gnc_choose_radio_option_dialog(GtkWidget *parent,
                                const char *title,
                                const char *msg,
                                const char *button_name,

@@ -84,7 +84,6 @@ gncinclude_HEADERS = \
   gnc-help-utils.h \
   gnc-helpers.h \
   gnc-sx-instance-model.h \
-  gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
   option-util.h

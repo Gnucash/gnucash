@@ -72,7 +72,7 @@ gnc_split_register_get_info (SplitRegister *reg)
     return reg->sr_info;
 }
 
-gncUIWidget
+GtkWidget *
 gnc_split_register_get_parent (SplitRegister *reg)
 {
     SRInfo *info = gnc_split_register_get_info (reg);

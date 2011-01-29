@@ -42,7 +42,7 @@ struct GncEntryLedger_s
 
     GncEntry *	hint_entry;	/* A Hint for where to display */
 
-    gncUIWidget	parent;
+    GtkWidget *	parent;
     QofBook *	book;
     Table *	table;
     GncOrder *	order;

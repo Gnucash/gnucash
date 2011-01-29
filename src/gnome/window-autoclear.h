@@ -25,7 +25,7 @@
 
 typedef struct _AutoClearWindow AutoClearWindow;
 
-AutoClearWindow *autoClearWindow (gncUIWidget parent, Account *account);
+AutoClearWindow *autoClearWindow (GtkWidget *parent, Account *account);
 void gnc_ui_autoclear_window_raise(AutoClearWindow * autoClearData);
 
 #endif

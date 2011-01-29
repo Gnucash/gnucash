@@ -540,7 +540,7 @@ void gnc_entry_ledger_reset_query (GncEntryLedger *ledger)
     gnc_entry_ledger_display_refresh (ledger);
 }
 
-void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent)
+void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, GtkWidget *parent)
 {
     if (!ledger) return;
     ledger->parent = parent;

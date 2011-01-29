@@ -141,8 +141,7 @@
 
 #include <gdk/gdk.h>
 #include <glib.h>
-
-#include "gnc-ui-common.h"
+#include <gtk/gtk.h> /* For GtkWidget */
 
 
 typedef struct basic_cell BasicCell;

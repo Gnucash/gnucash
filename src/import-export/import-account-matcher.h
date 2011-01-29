@@ -26,7 +26,7 @@
 #define ACCOUNT_MATCHER_H
 
 #include "Account.h"
-#include "gnc-ui-common.h"
+#include <gtk/gtk.h> /* For GtkWidget */
 
 /**  Must be called with a string containing a unique identifier for the
   account.  If an account with a matching online_id kvp_frame is
@@ -89,7 +89,7 @@
   @return A pointer to the found or created Account, or NULL if no
   account was found or created.
 */
-Account * gnc_import_select_account(gncUIWidget parent,
+Account * gnc_import_select_account(GtkWidget *parent,
                                     const gchar * account_online_id_value,
                                     gboolean auto_create,
                                     const gchar * account_human_description,

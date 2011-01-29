@@ -56,7 +56,7 @@ struct gnc_option
     gboolean changed;
 
     /* The widget which is holding this option */
-    gncUIWidget widget;
+    GncOptionWidgetPtr widget;
 
     /* The option db which holds this option */
     GNCOptionDB *odb;
@@ -140,7 +140,7 @@ gnc_option_set_changed (GNCOption *option, gboolean changed)
     option->changed = changed;
 }
 
-gncUIWidget
+GncOptionWidgetPtr
 gnc_option_get_widget (GNCOption *option)
 {
     if (!option) return NULL;
@@ -148,7 +148,7 @@ gnc_option_get_widget (GNCOption *option)
 }
 
 void
-gnc_option_set_widget (GNCOption *option, gncUIWidget widget)
+gnc_option_set_widget (GNCOption *option, GncOptionWidgetPtr widget)
 {
     g_return_if_fail (option != NULL);
     option->widget = widget;

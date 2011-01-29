@@ -27,8 +27,8 @@
 #ifndef RECONCILE_H
 #define RECONCILE_H
 
-#include "gnc-ui-common.h"
 #include "Account.h"
+#include <gtk/gtk.h> /* For GtkWidget */
 
 
 /** STRUCTS *********************************************************/
@@ -47,7 +47,7 @@ typedef struct _RecnWindow RecnWindow;
  * Return: recnData - the instance of this RecnWindow, or NULL if the
  * user pressed Cancel in the initial date query.
 \********************************************************************/
-RecnWindow *recnWindow (gncUIWidget parent, Account *account);
+RecnWindow *recnWindow (GtkWidget *parent, Account *account);
 
 /********************************************************************\
  * recnWindowWithBalance

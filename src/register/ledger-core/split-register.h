@@ -268,7 +268,7 @@ struct split_register
 };
 
 /** Callback function type */
-typedef gncUIWidget (*SRGetParentCallback) (gpointer user_data);
+typedef GtkWidget *(*SRGetParentCallback) (gpointer user_data);
 
 
 /* Prototypes ******************************************************/

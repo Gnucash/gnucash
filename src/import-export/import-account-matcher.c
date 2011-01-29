@@ -142,7 +142,7 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_i
     }
 }
 
-Account * gnc_import_select_account(gncUIWidget parent,
+Account * gnc_import_select_account(GtkWidget *parent,
                                     const gchar * account_online_id_value,
                                     gboolean auto_create,
                                     const gchar * account_human_description,

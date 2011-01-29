@@ -500,7 +500,7 @@ gnc_ledger_display_template_gl (char *id)
     return ld;
 }
 
-gncUIWidget
+GtkWidget *
 gnc_ledger_display_get_parent( GNCLedgerDisplay *ld )
 {
     if ( ld == NULL )
@@ -512,7 +512,7 @@ gnc_ledger_display_get_parent( GNCLedgerDisplay *ld )
     return ld->get_parent( ld );
 }
 
-static gncUIWidget
+static GtkWidget *
 gnc_ledger_display_parent (void *user_data)
 {
     GNCLedgerDisplay *ld = user_data;

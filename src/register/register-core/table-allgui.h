@@ -303,7 +303,7 @@ gboolean    gnc_table_find_close_valid_cell (Table *table,
 /** UI-specific functions *******************************/
 
 /* Initialize the GUI from a table */
-void        gnc_table_init_gui (gncUIWidget widget, gpointer data);
+void        gnc_table_init_gui (GtkWidget *widget, gpointer data);
 
 void        gnc_table_realize_gui (Table *table);
 

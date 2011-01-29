@@ -122,7 +122,7 @@ struct sr_info
 
 SRInfo * gnc_split_register_get_info (SplitRegister *reg);
 
-gncUIWidget gnc_split_register_get_parent (SplitRegister *reg);
+GtkWidget *gnc_split_register_get_parent (SplitRegister *reg);
 
 Split * gnc_split_register_get_split (SplitRegister *reg,
                                       VirtualCellLocation vcell_loc);

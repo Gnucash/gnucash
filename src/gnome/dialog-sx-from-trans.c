@@ -271,7 +271,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     }
 
     if ( ! gnc_numeric_zero_p( runningBalance )
-            && !gnc_verify_dialog( (gncUIWidget)sxfti->dialog,
+            && !gnc_verify_dialog( (GtkWidget *)sxfti->dialog,
                                    FALSE, "%s",
                                    _("The Scheduled Transaction Editor "
                                      "cannot automatically balance "

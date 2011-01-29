@@ -67,7 +67,7 @@ static GtkWidget* add_summary_label( GtkWidget *summarybar,
 static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
-static gncUIWidget gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
+static GtkWidget *gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
 
 static void gsr_create_table( GNCSplitReg *gsr );
 static void gsr_setup_table( GNCSplitReg *gsr );
@@ -2013,7 +2013,7 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
 }
 
 static
-gncUIWidget
+GtkWidget *
 gnc_split_reg_get_parent( GNCLedgerDisplay *ledger )
 {
     GNCSplitReg *gsr =

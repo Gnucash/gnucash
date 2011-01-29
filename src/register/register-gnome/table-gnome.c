@@ -148,7 +148,7 @@ table_destroy_cb (Table *table)
    Weird.  Also, since this function only works with a GnucashRegister
    widget, maybe some of it should be moved to gnucash-sheet.c. */
 void
-gnc_table_init_gui (gncUIWidget widget, void *data)
+gnc_table_init_gui (GtkWidget *widget, void *data)
 {
     GNCHeaderWidths widths;
     GnucashSheet *sheet;

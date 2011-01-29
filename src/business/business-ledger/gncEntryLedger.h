@@ -103,7 +103,7 @@ void gnc_entry_ledger_display_refresh (GncEntryLedger *ledger);
 /* Get the Table */
 Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger);
 
-void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent);
+void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, GtkWidget *parent);
 
 void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly);
 

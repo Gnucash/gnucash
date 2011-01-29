@@ -2315,7 +2315,7 @@ GncMainWindow *
 gnc_main_window_new (void)
 {
     GncMainWindow *window;
-    gncUIWidget old_window;
+    GtkWidget *old_window;
 
     window = g_object_new (GNC_TYPE_MAIN_WINDOW, NULL);
     gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
@@ -4036,7 +4036,7 @@ gnc_main_window_show_all_windows(void)
  *  if there is none.
  *
  *  @return A pointer to a GtkWindow object. */
-gncUIWidget
+GtkWidget *
 gnc_ui_get_toplevel (void)
 {
     GList *window;

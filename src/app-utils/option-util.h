@@ -31,7 +31,31 @@
 #include "gnc-commodity.h"
 #include "qof.h"
 #include "GNCId.h"
-#include "gnc-ui-common.h"
+
+#if defined(GNOME)
+# include <gtk/gtk.h>
+#endif
+
+/** This is the opaque pointer to this option's widget.
+ *
+ * Note: This option code is still almost GUI-independent because it
+ * does not deal with the UI implementation of the option's widgets,
+ * but it stores a pointer to a widget (and incidentally some of the
+ * implementation might show an error message through the gtk-specific
+ * message box). Hence, the option code just stores a pointer
+ * transparently, which is where the GncOptionWidgetPtr typedef comes
+ * from. We keep this typedef just in this file to underline that the
+ * code of option-utils.[hc] might still be re-usable in a
+ * UI-independent usage, even though the only implementation is a gtk
+ * one. */
+typedef
+#if defined(GNOME)
+GtkWidget *
+#else
+/* **** No GUI selected *** */
+void *
+#endif
+GncOptionWidgetPtr;
 
 
 typedef struct gnc_option GNCOption;
@@ -52,8 +76,8 @@ typedef void (*GNCOptionChangeCallback) (gpointer user_data);
 gboolean gnc_option_get_changed (GNCOption *option);
 void gnc_option_set_changed (GNCOption *option, gboolean changed);
 
-gncUIWidget gnc_option_get_widget (GNCOption *option);
-void gnc_option_set_widget (GNCOption *option, gncUIWidget widget);
+GncOptionWidgetPtr gnc_option_get_widget (GNCOption *option);
+void gnc_option_set_widget (GNCOption *option, GncOptionWidgetPtr widget);
 
 SCM  gnc_option_get_ui_value(GNCOption *option);
 void gnc_option_set_ui_value(GNCOption *option, gboolean use_default);
