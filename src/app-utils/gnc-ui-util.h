@@ -177,6 +177,8 @@ gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
 
 char *gnc_ui_account_get_tax_info_string (const Account *account);
 
+char *gnc_ui_account_get_tax_info_sub_acct_string (const Account *account);
+
 gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
         time_t date,
         gboolean include_children);
