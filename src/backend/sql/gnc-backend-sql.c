@@ -44,6 +44,7 @@
 #include "Recurrence.h"
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
+#include "gncInvoice.h"
 
 #include "gnc-gconf-utils.h"
 
@@ -1083,7 +1084,7 @@ gnc_sql_run_query( QofBackend* pBEnd, gpointer pQuery )
 /* ================================================================= */
 /* Order in which business objects need to be loaded */
 static const gchar* business_fixed_load_order[] =
-{ GNC_ID_BILLTERM, GNC_ID_TAXTABLE, NULL };
+{ GNC_ID_BILLTERM, GNC_ID_TAXTABLE, GNC_ID_INVOICE, NULL };
 
 static void
 business_core_sql_init(void)
