@@ -2114,6 +2114,7 @@ conn_execute_select_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
     dbi_result result;
 
     DEBUG( "SQL: %s\n", dbi_stmt->sql->str );
+    gnc_push_locale( LC_NUMERIC, "C" );
     do
     {
         gnc_dbi_init_error( dbi_conn );
@@ -2125,6 +2126,7 @@ conn_execute_select_statement( GncSqlConnection* conn, GncSqlStatement* stmt )
         PERR( "Error executing SQL %s\n", dbi_stmt->sql->str );
         return NULL;
     }
+    gnc_pop_locale( LC_NUMERIC );
     return create_dbi_result( dbi_conn, result );
 }
 
@@ -2887,6 +2889,7 @@ conn_test_dbi_library( dbi_conn conn )
         return FALSE;
     }
     dbi_result_free( result );
+    gnc_push_locale( LC_NUMERIC, "C");
     result = dbi_conn_query( conn, "SELECT * FROM numtest" );
     if ( result == NULL )
     {
@@ -2899,12 +2902,11 @@ conn_test_dbi_library( dbi_conn conn )
     }
     while ( dbi_result_next_row( result ))
     {
-        gnc_push_locale( LC_NUMERIC, "C");
         resultlonglong = dbi_result_get_longlong( result, "test_int" );
         resultulonglong = dbi_result_get_ulonglong( result, "test_unsigned" );
         resultdouble = dbi_result_get_double( result, "test_double" );
-        gnc_pop_locale( LC_NUMERIC );
     }
+    gnc_pop_locale( LC_NUMERIC );
     if ( testlonglong != resultlonglong )
     {
         PWARN( "Test_DBI_Library: LongLong Failed %" G_GINT64_FORMAT " != % " G_GINT64_FORMAT,
