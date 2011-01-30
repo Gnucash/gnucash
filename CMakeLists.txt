@@ -11,6 +11,10 @@ SET (CUTECASH_VERSION_MAJOR "0")
 SET (CUTECASH_VERSION_MINOR "1")
 SET (CUTECASH_VERSION_PATCH "0")
 
+# Change this in development versions when changing anything that
+# affects stored data structures. Reset to zero when bumping version.
+SET (CUTECASH_VERSION_NANO "0")
+
 # Extra cmake macros
 SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/src/cmake_modules;${CMAKE_MODULE_PATH}")
 INCLUDE (MacroAppendForeach)
