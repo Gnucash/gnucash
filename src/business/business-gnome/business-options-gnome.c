@@ -149,7 +149,7 @@ owner_set_value (GNCOption *option, gboolean use_default,
         owner = &owner_def;
     }
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     gnc_owner_set_owner (widget, owner);
     return FALSE;
 }
@@ -211,7 +211,7 @@ customer_set_value (GNCOption *option, gboolean use_default,
     customer = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncCustomer"), 1, 0);
     gncOwnerInitCustomer (&owner, customer);
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     gnc_owner_set_owner (widget, &owner);
     return FALSE;
 }
@@ -270,7 +270,7 @@ vendor_set_value (GNCOption *option, gboolean use_default,
     vendor = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncVendor"), 1, 0);
     gncOwnerInitVendor (&owner, vendor);
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     gnc_owner_set_owner (widget, &owner);
     return FALSE;
 }
@@ -328,7 +328,7 @@ employee_set_value (GNCOption *option, gboolean use_default,
     employee = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncEmployee"), 1, 0);
     gncOwnerInitEmployee (&owner, employee);
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     gnc_owner_set_owner (widget, &owner);
     return FALSE;
 }
@@ -401,7 +401,7 @@ invoice_set_value (GNCOption *option, gboolean use_default,
 
     invoice = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncInvoice"), 1, 0);
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     gnc_general_search_set_selected (GNC_GENERAL_SEARCH (widget), invoice);
     return FALSE;
 }
@@ -476,7 +476,7 @@ taxtable_set_value (GNCOption *option, gboolean use_default,
 
     taxtable = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncTaxTable"), 1, 0);
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     gnc_ui_optionmenu_set_value (widget, taxtable);
     return FALSE;
 }

@@ -24,8 +24,12 @@
 #define OPTIONS_DIALOG_H
 
 #include <libguile.h>
-
 #include "option-util.h"
+#include <gtk/gtk.h>
+
+/** A simple wrapper that casts the gpointer result of
+ * gnc_option_get_widget() already into a GtkWidget*. */
+GtkWidget *gnc_option_get_gtk_widget (GNCOption *option);
 
 typedef struct gnc_option_win GNCOptionWin;
 

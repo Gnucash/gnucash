@@ -117,6 +117,12 @@ void gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
                                        gpointer data);
 
 
+GtkWidget *
+gnc_option_get_gtk_widget (GNCOption *option)
+{
+    return (GtkWidget *)gnc_option_get_widget(option);
+}
+
 static inline gint
 color_d_to_i16 (double d)
 {
@@ -165,7 +171,7 @@ gnc_option_changed_option_cb(GtkWidget *dummy, GNCOption *option)
 {
     GtkWidget *widget;
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     gnc_option_changed_widget_cb(widget, option);
 }
 
@@ -177,7 +183,7 @@ gnc_date_option_set_select_method(GNCOption *option, gboolean use_absolute,
     GtkWidget *ab_button, *rel_button, *rel_widget, *ab_widget;
     GtkWidget *widget;
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
 
     widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
     ab_button = g_list_nth_data(widget_list, GNC_RD_WID_AB_BUTTON_POS);
@@ -294,7 +300,7 @@ gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
     SCM value;
     GNCOptionDef_t *option_def;
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     if (!widget)
         return;
 
@@ -340,7 +346,7 @@ gnc_option_get_ui_value_internal (GNCOption *option)
     char *type;
     GNCOptionDef_t *option_def;
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     if (!widget)
         return result;
 
@@ -378,7 +384,7 @@ gnc_option_set_selectable_internal (GNCOption *option, gboolean selectable)
 {
     GtkWidget *widget;
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
     if (!widget)
         return;
 
@@ -399,7 +405,7 @@ gnc_option_show_hidden_toggled_cb(GtkWidget *widget, GNCOption* option)
     AccountViewInfo avi;
     GncTreeViewAccount *tree_view;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_widget (option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
     gnc_tree_view_account_get_view_info (tree_view, &avi);
     avi.show_hidden = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
     gnc_tree_view_account_set_view_info (tree_view, &avi);
@@ -424,7 +430,7 @@ gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
     gint current;
     char *type;
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
 
     /* the option menu may be part of a date option widget, so we need to
        decomposit the enclosing hbox then */
@@ -471,7 +477,7 @@ gnc_option_radiobutton_cb(GtkWidget *w, gpointer data)
     gpointer _current, _new_value;
     gint current, new_value;
 
-    widget = gnc_option_get_widget (option);
+    widget = gnc_option_get_gtk_widget (option);
 
     _current = g_object_get_data(G_OBJECT(widget), "gnc_radiobutton_index");
     current = GPOINTER_TO_INT (_current);
@@ -809,7 +815,7 @@ gnc_option_account_select_all_cb(GtkWidget *widget, gpointer data)
     GncTreeViewAccount *tree_view;
     GtkTreeSelection *selection;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_widget (option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
     gtk_tree_selection_select_all(selection);
     gnc_option_changed_widget_cb(widget, option);
@@ -822,7 +828,7 @@ gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
     GncTreeViewAccount *tree_view;
     GtkTreeSelection *selection;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_widget (option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
     gtk_tree_selection_unselect_all(selection);
     gnc_option_changed_widget_cb(widget, option);
@@ -835,7 +841,7 @@ gnc_option_account_select_children_cb(GtkWidget *widget, gpointer data)
     GncTreeViewAccount *tree_view;
     Account *account;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_widget (option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
     account = gnc_tree_view_account_get_cursor_account(tree_view);
     if (!account)
         return;
@@ -988,7 +994,7 @@ gnc_option_list_select_all_cb(GtkWidget *widget, gpointer data)
     GtkTreeView *view;
     GtkTreeSelection *selection;
 
-    view = GTK_TREE_VIEW(gnc_option_get_widget (option));
+    view = GTK_TREE_VIEW(gnc_option_get_gtk_widget (option));
     selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_select_all(selection);
     gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
@@ -1001,7 +1007,7 @@ gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
     GtkTreeView *view;
     GtkTreeSelection *selection;
 
-    view = GTK_TREE_VIEW(gnc_option_get_widget (option));
+    view = GTK_TREE_VIEW(gnc_option_get_gtk_widget (option));
     selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_unselect_all(selection);
     gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
@@ -1864,7 +1870,7 @@ gnc_option_set_ui_widget_account_list (GNCOption *option, GtkBox *page_box,
     GtkTreeSelection *selection;
 
     *enclosing = gnc_option_create_account_widget(option, name, tooltips);
-    value = gnc_option_get_widget (option);
+    value = gnc_option_get_gtk_widget (option);
 
     gtk_tooltips_set_tip(tooltips, *enclosing, documentation, NULL);
 
@@ -1932,7 +1938,7 @@ gnc_option_set_ui_widget_list (GNCOption *option, GtkBox *page_box,
     GtkWidget *eventbox;
 
     *enclosing = gnc_option_create_list_widget(option, name, tooltips);
-    value = gnc_option_get_widget (option);
+    value = gnc_option_get_gtk_widget (option);
 
     /* Pack option widget into an extra eventbox because otherwise the
        "documentation" tooltip is not displayed. */
