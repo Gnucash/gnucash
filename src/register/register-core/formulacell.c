@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 
 #include "gnc-exp-parser.h"
+#include "gnc-locale-utils.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"

@@ -31,6 +31,7 @@
 #include <gnome.h>
 #include <locale.h>
 
+#include "gnc-locale-utils.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
 #include "pricecell.h"

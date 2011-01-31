@@ -34,6 +34,7 @@
 #include "gnc-euro.h"
 #include "gnc-event.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-locale-utils.h"
 #include "gnc-ui-util.h"
 #include "window-main-summarybar.h"
 

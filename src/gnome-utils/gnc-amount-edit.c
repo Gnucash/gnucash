@@ -39,6 +39,7 @@
 
 #include "gnc-amount-edit.h"
 #include "gnc-exp-parser.h"
+#include "gnc-locale-utils.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
 
