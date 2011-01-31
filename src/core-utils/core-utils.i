@@ -5,6 +5,7 @@
 #include <gnc-main.h>
 #include <gnc-path.h>
 #include <gnc-filepath-utils.h>
+#include <gnc-locale-utils.h>
 #include <glib.h>
 
 SCM scm_init_sw_core_utils_module (void);
@@ -37,6 +38,8 @@ gchar * gnc_locale_from_utf8(const gchar *);
 
 %newobject gnc_locale_to_utf8;
 gchar * gnc_locale_to_utf8(const gchar *);
+
+const char * gnc_locale_default_iso_currency_code (void);
 
 %rename ("gnc-utf8?") wrap_gnc_utf8_validate;
 %inline %{

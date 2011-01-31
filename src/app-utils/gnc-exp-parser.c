@@ -34,6 +34,7 @@
 #include "gnc-gkeyfile-utils.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
+#include "gnc-locale-utils.h"
 #include "guile-mappings.h"
 
 #define GROUP_NAME "Variables"

@@ -29,7 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "gnc-ui-util.h"
+#include "gnc-locale-utils.h"
 #include "gnc-html-graph-gog.h"
 #include "gnc-html-graph-gog-webkit.h"
 #include "gnc-html-graph-gog-extras.h"

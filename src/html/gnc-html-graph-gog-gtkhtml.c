@@ -28,7 +28,7 @@
 #include <gtkhtml/gtkhtml-embedded.h>
 #include <string.h>
 
-#include "gnc-ui-util.h"
+#include "gnc-locale-utils.h"
 #include "gnc-html-graph-gog.h"
 #include "gnc-html-graph-gog-gtkhtml.h"
 #include "gnc-html-graph-gog-extras.h"

@@ -68,8 +68,6 @@ void gncp_option_invoke_callback(GNCOptionChangeCallback callback, void *data);
 void gnc_option_db_register_option(GNCOptionDBHandle handle,
         SCM guile_option);
 
-const char * gnc_locale_default_iso_currency_code (void);
-
 GNCPrintAmountInfo gnc_default_print_info (gboolean use_symbol);
 GNCPrintAmountInfo gnc_account_print_info (const Account *account,
         gboolean use_symbol);

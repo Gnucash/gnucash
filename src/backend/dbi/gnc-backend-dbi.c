@@ -47,7 +47,7 @@
 
 #include "gnc-gconf-utils.h"
 #include "gnc-uri-utils.h"
-#include "gnc-ui-util.h"
+#include "gnc-locale-utils.h"
 
 #include "gnc-backend-dbi.h"
 

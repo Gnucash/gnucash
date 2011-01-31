@@ -51,6 +51,7 @@
 #include "app-utils/gnc-euro.h"
 #include "engine/gnc-hooks.h"
 #include "engine/gnc-session.h"
+#include "gnc-locale-utils.h"
 
 #define KEY_CURRENCY_CHOICE "currency_choice"
 #define KEY_CURRENCY_OTHER  "currency_other"
@@ -966,63 +967,6 @@ gnc_lconv_set_char (char *p_value, char default_value)
         *p_value = default_value;
 }
 
-struct lconv *
-gnc_localeconv (void)
-{
-    static struct lconv lc;
-    static gboolean lc_set = FALSE;
-
-    if (lc_set)
-        return &lc;
-
-    lc = *localeconv();
-
-    gnc_lconv_set_utf8(&lc.decimal_point, ".");
-    gnc_lconv_set_utf8(&lc.thousands_sep, ",");
-    gnc_lconv_set_utf8(&lc.grouping, "\003");
-    gnc_lconv_set_utf8(&lc.int_curr_symbol, "USD ");
-    gnc_lconv_set_utf8(&lc.currency_symbol, "$");
-    gnc_lconv_set_utf8(&lc.mon_decimal_point, ".");
-    gnc_lconv_set_utf8(&lc.mon_thousands_sep, ",");
-    gnc_lconv_set_utf8(&lc.mon_grouping, "\003");
-    gnc_lconv_set_utf8(&lc.negative_sign, "-");
-    gnc_lconv_set_utf8(&lc.positive_sign, "");
-
-    gnc_lconv_set_char(&lc.frac_digits, 2);
-    gnc_lconv_set_char(&lc.int_frac_digits, 2);
-    gnc_lconv_set_char(&lc.p_cs_precedes, 1);
-    gnc_lconv_set_char(&lc.p_sep_by_space, 0);
-    gnc_lconv_set_char(&lc.n_cs_precedes, 1);
-    gnc_lconv_set_char(&lc.n_sep_by_space, 0);
-    gnc_lconv_set_char(&lc.p_sign_posn, 1);
-    gnc_lconv_set_char(&lc.n_sign_posn, 1);
-
-    lc_set = TRUE;
-
-    return &lc;
-}
-
-const char *
-gnc_locale_default_iso_currency_code (void)
-{
-    static char *code = NULL;
-    struct lconv *lc;
-
-    if (code)
-        return code;
-
-    lc = gnc_localeconv ();
-
-    code = g_strdup (lc->int_curr_symbol);
-
-    /* The int_curr_symbol includes a space at the end! Note: you
-     * can't just change "USD " to "USD" in gnc_localeconv, because
-     * that is only used if int_curr_symbol was not defined in the
-     * current locale. If it was, it will have the space! */
-    g_strstrip (code);
-
-    return code;
-}
 
 gnc_commodity *
 gnc_locale_default_currency_nodefault (void)
@@ -1112,67 +1056,6 @@ gnc_currency_changed_cb (GConfEntry *entry, gpointer user_data)
     gnc_hook_run(HOOK_CURRENCY_CHANGED, NULL);
 }
 
-
-/* Return the number of decimal places for this locale. */
-int
-gnc_locale_decimal_places (void)
-{
-    static gboolean got_it = FALSE;
-    static int places;
-    struct lconv *lc;
-
-    if (got_it)
-        return places;
-
-    lc = gnc_localeconv();
-    places = lc->frac_digits;
-
-    /* frac_digits is already initialized by gnc_localeconv, hopefully
-     * to a reasonable default. */
-    got_it = TRUE;
-
-    return places;
-}
-
-
-static GList *locale_stack = NULL;
-
-void
-gnc_push_locale (int category, const char *locale)
-{
-    char *saved_locale;
-
-    g_return_if_fail (locale != NULL);
-
-# ifdef G_OS_WIN32
-    /* On win32, setlocale() doesn't say anything useful. Use
-       glib's function instead. */
-    saved_locale = g_win32_getlocale();
-# else
-    saved_locale = g_strdup(setlocale(category, NULL) ?
-                            setlocale(category, NULL) : "C");
-#endif
-    locale_stack = g_list_prepend (locale_stack, saved_locale);
-    setlocale (category, locale);
-}
-
-void
-gnc_pop_locale (int category)
-{
-    char *saved_locale;
-    GList *node;
-
-    g_return_if_fail (locale_stack != NULL);
-
-    node = locale_stack;
-    saved_locale = node->data;
-
-    setlocale (category, saved_locale);
-
-    locale_stack = g_list_remove_link (locale_stack, node);
-    g_list_free_1 (node);
-    g_free (saved_locale);
-}
 
 GNCPrintAmountInfo
 gnc_default_print_info (gboolean use_symbol)
