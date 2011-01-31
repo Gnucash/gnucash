@@ -9,6 +9,8 @@ libgncmod_locale_reports_us_la_LDFLAGS = -avoid-version
 
 libgncmod_locale_reports_us_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  $(top_builddir)/src/app-utils/libgncmod-app-utils.la \
+  $(top_builddir)/src/gnome-utils/libgncmod-gnome-utils.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} 
 

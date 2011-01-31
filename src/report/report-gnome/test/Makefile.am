@@ -21,6 +21,7 @@ TESTS_ENVIRONMENT = \
 
 LDADD = \
     ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+        $(top_builddir)/src/app-utils/libgncmod-app-utils.la \
 	${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la
 
 check_PROGRAMS = test-link-module

@@ -38,6 +38,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
+#include "gnc-locale-utils.h"
 
 
 #define DIALOG_FINCALC_CM_CLASS "dialog-fincalc"
