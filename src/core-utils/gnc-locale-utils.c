@@ -26,6 +26,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <stdlib.h> /* for mbstowcs() */
 
 static void
 gnc_lconv_set_utf8 (char **p_value, char *default_value)
