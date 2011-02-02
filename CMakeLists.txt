@@ -14,6 +14,7 @@ SET (CUTECASH_VERSION_PATCH "0")
 # Change this in development versions when changing anything that
 # affects stored data structures. Reset to zero when bumping version.
 SET (CUTECASH_VERSION_NANO "0")
+SET (GNUCASH_RESAVE_VERSION "19920")
 
 # Extra cmake macros
 SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/src/cmake_modules;${CMAKE_MODULE_PATH}")

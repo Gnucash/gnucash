@@ -25,6 +25,7 @@ SET (libgnc_core_utils_SOURCES
   gnc-gkeyfile-utils.c
   gnc-glib-utils.c
   gnc-jalali.c
+  gnc-locale-utils.c
   gnc-main.c
   gnc-path.c
   gnc-uri-utils.c
@@ -64,6 +65,7 @@ SET (libgnc_core_utils_HEADERS
   gnc-gkeyfile-utils.h
   gnc-glib-utils.h
   gnc-jalali.h
+  gnc-locale-utils.h
   gnc-main.h
   gnc-path.h
   gnc-uri-utils.h
