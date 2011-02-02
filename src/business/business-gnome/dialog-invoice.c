@@ -2303,7 +2303,9 @@ set_gncEntry_date(gpointer data, gpointer user_data)
     //g_warning("Modifying date for entry with desc=\"%s\"", gncEntryGetDescription(entry));
 
     gncEntrySetDate(entry, *new_date);
-    gncEntrySetDateEntered(entry, *new_date);
+    /*gncEntrySetDateEntered(entry, *new_date); - don't modify this
+     * because apparently it implies the ordering of the entries,
+     * which we don't want to change. */
 }
 
 
