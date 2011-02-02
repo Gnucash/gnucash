@@ -304,7 +304,7 @@ test_dbi_version_control( const gchar* driver,  const gchar* url )
     book = qof_session_get_book( sess );
     qof_book_begin_edit( book );
     gnc_sql_set_table_version( (GncSqlBackend*)qbe,
-                               "Gnucash", GNC_RESAVE_VERSION - 1 );
+                               "Gnucash", GNUCASH_RESAVE_VERSION - 1 );
     qof_book_commit_edit( book );
     qof_session_end( sess );
     qof_session_destroy( sess );

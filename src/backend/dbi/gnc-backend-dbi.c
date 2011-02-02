@@ -1204,6 +1204,15 @@ gnc_dbi_destroy_backend( /*@ only @*/ QofBackend *be )
 
 /* ================================================================= */
 
+/* GNUCASH_RESAVE_VERSION indicates the earliest database version
+ * compatible with this version of Gnucash; the stored value is the
+ * earliest version of Gnucash conpatible with the database. If the
+ * GNUCASH_RESAVE_VERSION for this Gnucash is newer than the Gnucash
+ * version which created the database, a resave is offered. If the
+ * version of this Gnucash is older than the saved resave version,
+ * then the database will be loaded read-only. A resave will update
+ * both values to match this version of Gnucash.
+ */
 static void
 gnc_dbi_load( QofBackend* qbe, /*@ dependent @*/ QofBook *book, QofBackendLoadType loadType )
 {
@@ -1228,14 +1237,14 @@ gnc_dbi_load( QofBackend* qbe, /*@ dependent @*/ QofBook *book, QofBackendLoadTy
 
     gnc_sql_load( &be->sql_be, book, loadType );
 
-    if ( GNC_RESAVE_VERSION > gnc_sql_get_table_version( &be->sql_be, "Gnucash" ) )
+    if ( GNUCASH_RESAVE_VERSION > gnc_sql_get_table_version( &be->sql_be, "Gnucash" ) )
     {
         /* The database was loaded with an older database schema or
          * data semantics. In order to ensure consistency, the whole
          * thing needs to be saved anew. */
         qof_backend_set_error( qbe, ERR_SQL_DB_TOO_OLD );
     }
-    else if ( GNC_RESAVE_VERSION < gnc_sql_get_table_version( &be->sql_be,
+    else if ( GNUCASH_RESAVE_VERSION < gnc_sql_get_table_version( &be->sql_be,
               "Gnucash-Resave"))
     {
         /* Worse, the database was created with a newer version. We

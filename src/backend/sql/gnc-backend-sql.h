@@ -43,25 +43,6 @@
 #include "qofbackend-p.h"
 #include <gmodule.h>
 
-/**
- * \def GNC_RESAVE_VERSION
- *
- * Defines the oldest svn revision of Gnucash which stores data in a
- * way compatible with the current version. Data stored with an older
- * version (or with no version indicated) of Gnucash will cause all
- * tables to be moved aside, new tables saved with the current storage
- * routines, and the old tables dropped. Any failures will trigger a
- * rollback to the original tables.
- *
- * Encountering a database with a newer resave version will put the
- * database in "read only" mode; a "save as" will be required to
- * obtain a new database for storing from this instance, and the user
- * will be warned of data loss.
- *
- */
-
-#define GNC_RESAVE_VERSION 19920
-
 typedef struct GncSqlConnection GncSqlConnection;
 
 /**

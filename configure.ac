@@ -27,7 +27,11 @@ AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 #Change this in development versions when changing anything that
 #affects stored data structures. Reset to zero when bumping version.
 GNUCASH_NANO_VERSION=0
-
+#This should be the earliest version in the form XXMMUUNN (XX=MAJOR,
+#MM=MINOR, UU=MICRO, NN=NANO) or SVN revision if before 2.4.1 which is
+#storage-compatible with the current version. See the comments in
+#src/backend/dbi/gnc-backend-dbi.c:gnc_dbi_load.
+GNUCASH_RESAVE_VERSION=19920
 # Initialize automake -- make sure we have at least version 1.9
 AM_INIT_AUTOMAKE([1.9 dist-bzip2])
 
@@ -82,6 +86,8 @@ AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION,
     [GnuCash Micro version number])
 AC_DEFINE_UNQUOTED(GNUCASH_NANO_VERSION, $GNUCASH_NANO_VERSION,
     [GnuCash Nano version number])
+AC_DEFINE_UNQUOTED(GNUCASH_RESAVE_VERSION, $GNUCASH_RESAVE_VERSION,
+    [GnuCash earliest compatible databaseversion number])
 AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES",
     [Most recent stable GnuCash series])
 
