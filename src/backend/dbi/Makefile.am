@@ -12,7 +12,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/backend/sql \
   -I${top_srcdir}/src/debug \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src/libqof/qof \
@@ -33,7 +32,7 @@ libgncmod_backend_dbi_la_LIBADD = \
    ${GCONF_LIBS} \
    ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
    ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    ${top_builddir}/src/libqof/qof/libgnc-qof.la \
    ${LIBDBI_LIBS}
 
