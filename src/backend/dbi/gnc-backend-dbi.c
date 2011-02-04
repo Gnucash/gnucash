@@ -1284,7 +1284,7 @@ conn_table_manage_backup (GncDbiSqlConnection *conn,
                           gchar *table_name, TableOpType op )
 {
     gchar *new_name = g_strdup_printf( "%s_%s", table_name, "back" );
-    dbi_result result;
+    dbi_result result = NULL;
     switch ( op )
     {
     case backup:
