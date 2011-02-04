@@ -227,7 +227,7 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
 void
 test_dbi_safe_save( const gchar* driver,  const gchar* url )
 {
-    QofSession *session_1, *session_2;
+    QofSession *session_1 = NULL, *session_2 = NULL;
 
     printf( "Testing safe save %s\n", driver );
 
@@ -266,10 +266,16 @@ test_dbi_safe_save( const gchar* driver,  const gchar* url )
                    qof_session_get_book( session_2 ) );
 
 cleanup:
-    qof_session_end( session_2 );
-    qof_session_destroy( session_2 );
-    qof_session_end( session_1 );
-    qof_session_destroy( session_1 );
+    if (session_2 != NULL)
+    {
+        qof_session_end( session_2 );
+        qof_session_destroy( session_2 );
+    }
+    if (session_1 != NULL)
+    {
+        qof_session_end( session_1 );
+        qof_session_destroy( session_1 );
+    }
     return;
 }
 
