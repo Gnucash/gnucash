@@ -335,7 +335,13 @@ test_dbi_version_control( const gchar* driver,  const gchar* url )
     qof_session_ensure_all_data_loaded( sess );
     err = qof_session_pop_error( sess );
     do_test( err == ERR_SQL_DB_TOO_NEW, "DB Failed to flag too new" );
-cleanup:
+ cleanup:
+    qbe = qof_session_get_backend( sess );
+    book = qof_session_get_book( sess );
+    qof_book_begin_edit( book );
+    gnc_sql_set_table_version( (GncSqlBackend*)qbe,
+                               "Gnucash-Resave", GNUCASH_RESAVE_VERSION );
+    qof_book_commit_edit( book );
     qof_session_end( sess );
     qof_session_destroy( sess );
 }
