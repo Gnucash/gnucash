@@ -21,9 +21,9 @@ GnuCash Manual and the Concepts Guide in various formats.
 
 \subsection texihtml Documentation elsewhere in the source tree.
 
-See also <a href="http://code.neil.williamsleesmill.me.uk/texi/gnucash-design.html">
-GnuCash Design Overview</a> which can be generated from the source using texi2html
-from the texinfo files in src/doc/design.
+There is also the "GnuCash Design Overview" which can be generated
+from the source using texi2html from the texinfo files in
+src/doc/design, but this is even more outdated.
 
 \section doxylist Doxygen overviews.
 
