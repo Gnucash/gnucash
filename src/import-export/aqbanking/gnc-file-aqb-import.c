@@ -295,7 +295,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
                 g_warning("%s", errstr->str);
                 gnc_error_dialog(NULL,
                                  _("An error occurred while executing jobs: %d of %d failed. "
-                                   "Please check the log window or gnucash.trace for the exact"
+                                   "Please check the log window or gnucash.trace for the exact "
                                    "error message.\n\n%s")
                                  , num_jobs_failed, num_jobs, errstr->str);
             }
