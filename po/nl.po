@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.4.1-pre1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-27 22:00+0100\n"
-"PO-Revision-Date: 2011-02-03 21:28+0100\n"
+"PO-Revision-Date: 2011-02-05 21:02+0100\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -1751,7 +1751,7 @@ msgstr "Werknemer"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:12
 msgid "Employee Number: "
-msgstr "Werknemersnummer: "
+msgstr "Werknemernummer: "
 
 #: ../src/business/business-gnome/glade/employee.glade.h:15
 msgid "Interface"
@@ -2033,7 +2033,7 @@ msgstr "Leverancier"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:20
 msgid "Vendor Number: "
-msgstr "Leveranciersnummer: "
+msgstr "Leveranciernummer: "
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:21
 msgid "What Tax Table should be applied to this vendor?"
@@ -2761,7 +2761,7 @@ msgstr "Kostenrekening"
 #: ../src/register/ledger-core/split-register-model.c:265
 #: ../intl-scm/guile-strings.c:898 ../intl-scm/guile-strings.c:1104
 msgid "Action"
-msgstr "Actie"
+msgstr "Declaratietype"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -10209,13 +10209,12 @@ msgstr ""
 "Probeer het nogmaals in een andere map."
 
 #: ../src/gnome-utils/gnc-file.c:413
-#, fuzzy
 msgid "This database is from an older version of GnuCash. Select OK to upgrade it to the current version, Cancel to mark it read-only."
-msgstr "Deze databank is afkomstig van een oudere versie van GnuCash. Wilt u de databank upgraden naar de huidige versie?"
+msgstr "Deze databank is afkomstig van een oudere versie van GnuCash. Kies [OK] om de databank te upgraden naar de huidige versie of [Annuleren] om deze als alleen-lezen te markeren."
 
 #: ../src/gnome-utils/gnc-file.c:422
 msgid "This database is from a newer version of GnuCash. This version can read it, but cannot safely save to it. It will be marked read-only until you do File>Save As."
-msgstr ""
+msgstr "Deze databank is afkomstig van een nieuwere versie van GnuCash. De huidige versie kan de databank wel lezen, maar er niet veilig in opslaan; de databank wordt gemarkeerd als alleen-lezen tot u de opdracht ‘Bestand ‣ Opslaan als…’ uitvoert."
 
 #: ../src/gnome-utils/gnc-file.c:430
 msgid "The SQL database is in use by other users, and the upgrade cannot be performed until they logoff. If there are currently no other users, consult the  documentation to learn how to clear out dangling login sessions."
@@ -10940,7 +10939,7 @@ msgstr "Fonds"
 #: ../intl-scm/guile-strings.c:3910 ../intl-scm/guile-strings.c:4136
 #: ../intl-scm/guile-strings.c:4198 ../intl-scm/guile-strings.c:4422
 msgid "Price"
-msgstr "Koers"
+msgstr "Prijs"
 
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
@@ -12152,9 +12151,8 @@ msgid "Commercial ATM _fees threshold"
 msgstr "Drempelwaarde _transactiekosten geldautomaten"
 
 #: ../src/import-export/generic-import.glade.h:17
-#, fuzzy
 msgid "Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
-msgstr "Met ‘Importactie selecteren’ kunt u de boeking met een bestaande boeking afstemmen of, indien nodig, als nieuwe boeking op een nader te specificeren tegenrekening aanmerken."
+msgstr "Dubbelklik op de boeking om deze met de bestaande boeking af te stemmen of, indien nodig, als nieuwe boeking op een nader te specificeren tegenrekening aan te merken."
 
 #: ../src/import-export/generic-import.glade.h:19
 msgid "Enable skip transaction action"
@@ -12170,9 +12168,8 @@ msgid "Enable the UPDATE AND RECONCILE action in the transaction matcher. If ena
 msgstr "De actie ‘boeking BIJWERKEN EN AFSTEMMEN’ bij het herkennen van bestaande boekingen activeren. Hierdoor wordt bij boekingen met een mate van overeenkomst boven de drempelwaarde voor BEVESTIGING een eventueel afwijkende afwijkende datum of bedrag standaard (automatisch) aangepast en afgestemd."
 
 #: ../src/import-export/generic-import.glade.h:22
-#, fuzzy
 msgid "Enable update match action"
-msgstr "Actie ‘boeking bewerken’ activeren"
+msgstr "Actie ‘overeenkomende boeking bijwerken’ activeren"
 
 #: ../src/import-export/generic-import.glade.h:23
 msgid ""
@@ -12759,7 +12756,7 @@ msgstr ""
 
 #: ../src/import-export/qif-import/qif.glade.h:14
 msgid "Default transaction status (overridden by the status given by the QIF file):"
-msgstr ""
+msgstr "Standaard boekingstatus (indien niet gespecificeerd in het QIF-bestand):"
 
 #: ../src/import-export/qif-import/qif.glade.h:15
 msgid "Enter the QIF file currency"
@@ -12936,15 +12933,15 @@ msgstr "Uw GnuCash-rekeningen bijwerken"
 
 #: ../src/import-export/qif-import/qif.glade.h:77
 msgid "When the status is not specified in a QIF file, the transactions are marked as cleared."
-msgstr ""
+msgstr "Als de status niet wordt gespecificeerd in een QIF-bestand, wordt de boeking gemarkeerd als ‘bevestigd’."
 
 #: ../src/import-export/qif-import/qif.glade.h:78
 msgid "When the status is not specified in a QIF file, the transactions are marked as not cleared."
-msgstr ""
+msgstr "Als de status niet wordt gespecificeerd in een QIF-bestand, wordt de boeking gemarkeerd als ‘niet bevestigd’."
 
 #: ../src/import-export/qif-import/qif.glade.h:79
 msgid "When the status is not specified in a QIF file, the transactions are marked as reconciled."
-msgstr ""
+msgstr "Als de status niet wordt gespecificeerd in een QIF-bestand, wordt de boeking gemarkeerd als ‘afgestemd’."
 
 #: ../src/import-export/qif-import/qif.glade.h:80
 msgid "_Cleared"
@@ -12983,13 +12980,12 @@ msgid "_Show documentation"
 msgstr "_Documentatie weergeven"
 
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:1
-#, fuzzy
 msgid "Default QIF transaction status"
-msgstr "Een boeking verwijderen"
+msgstr "Standaard QIF boekingstatus"
 
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:2
 msgid "Default status for QIF transaction when not specified in QIF file."
-msgstr ""
+msgstr "De standaard status voor een QIF-boeking indien deze niet is gespecificeerd in het QIF-bestand."
 
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:3
 msgid "Show documentation"
@@ -13008,9 +13004,8 @@ msgid "Enable SKIP transaction action"
 msgstr "Actie ‘boeking OVERSLAAN’ activeren"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:4
-#, fuzzy
 msgid "Enable UPDATE match action"
-msgstr "Actie ‘boeking bewerken’ activeren"
+msgstr "Actie ‘overeenkomende boeking BIJWERKEN’ activeren"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
 msgid "Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default."
@@ -13060,116 +13055,105 @@ msgid "%B %e, %Y"
 msgstr "%e %B %Y"
 
 #: ../src/plugins/bi_import/bi_import.c:172
-#, fuzzy
 msgid "id"
-msgstr "Betaald"
+msgstr "id"
 
 #: ../src/plugins/bi_import/bi_import.c:279
 #, c-format
 msgid "ROW DELETED, PRICE_NOT_SET: id=%s\n"
-msgstr ""
+msgstr "RIJ VERWIJDERD, PRIJS_NIET_INGESTELD: id=%s\n"
 
 #: ../src/plugins/bi_import/bi_import.c:288
 #, c-format
 msgid "ROW DELETED, QTY_NOT_SET: id=%s\n"
-msgstr ""
+msgstr "RIJ VERWIJDERD, HOEVEELHEID_NIET_INGESTELD: id=%s\n"
 
 #: ../src/plugins/bi_import/bi_import.c:302
 #, c-format
 msgid "ROW DELETED, ID_NOT_SET\n"
-msgstr ""
+msgstr "RIJ VERWIJDERD, ID_NIET_INGESTELD\n"
 
 #: ../src/plugins/bi_import/bi_import.c:397
 #, c-format
 msgid "ROW DELETED, VENDOR_NOT_SET: id=%s\n"
-msgstr ""
+msgstr "RIJ VERWIJDERD, LEVERANCIER_NIET_INGESTELD: id=%s\n"
 
 #: ../src/plugins/bi_import/bi_import.c:420
 #, c-format
 msgid "ROW DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
-msgstr ""
+msgstr "RIJ VERWIJDERD, LEVERANCIER_BESTAAT_NIET: id=%s\n"
 
 #: ../src/plugins/bi_import/bi_import.c:457
 msgid ""
 "These rows were deleted:\n"
 "\n"
 msgstr ""
+"Deze rijen zijn verwijderd:\n"
+"\n"
 
 #: ../src/plugins/bi_import/bi_import.c:603
-#, fuzzy
 msgid "Are you sure you have bills/invoices to update?"
-msgstr "Weet u zeker dat u dit wilt doen?"
+msgstr "Weet u zeker dat u bij te werken facturen heeft?"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:1
-#, fuzzy
 msgid "1. Choose the file to import"
-msgstr "Een bestand om te importeren selecteren"
+msgstr "1. Het bestand om te importeren selecteren"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:2
-#, fuzzy
 msgid "2. Select import type"
-msgstr "Het soort korting selecteren"
+msgstr "2. Het type import selecteren"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:3
-#, fuzzy
 msgid "3. Select import options"
-msgstr "Rapportopties bewerken"
+msgstr "3. De importopties selecteren"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:4
-#, fuzzy
 msgid "4. Preview"
-msgstr "Beoordelen"
+msgstr "4. De resultaten vooraf beoordelen"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:6
-#, fuzzy
 msgid "Comma separated"
-msgstr "Gescheiden"
+msgstr "Kommagescheiden"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:7
 msgid "Comma separated with quotes"
-msgstr ""
+msgstr "Kommagescheiden met aanhalingstekens"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:8
-#, fuzzy
 msgid "Custom regular expression"
-msgstr ""
-"Fout in reguliere expressie ‘%s’:\n"
-"%s"
+msgstr "Aangepaste reguliere expressie"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:9
-#, fuzzy
 msgid "Import bill CSV data"
-msgstr "_CSV importeren"
+msgstr "CSV-gegevens inkoopfactuur importeren"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:10
 msgid "Import invoice CSV data"
-msgstr ""
+msgstr "CSV-gegevens verkoopfactuur importeren"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:11
-#, fuzzy
 msgid "Import transactions from text file"
-msgstr "Eerste boekregel van geïmporteerde boeking:"
+msgstr "Boekingen uit een tekstbestand importeren"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:13
-#, fuzzy
 msgid "Semicolon separated"
-msgstr "Gescheiden"
+msgstr "Puntkomma-gescheiden"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:14
 msgid "Semicolon separated with quotes"
-msgstr ""
+msgstr "Puntkomma-gescheiden met aanhalingstekens"
 
 #: ../src/plugins/bi_import/gnc-plugin-bi_import.c:58
 msgid "Import Bills & Invoices..."
-msgstr ""
+msgstr "Facturen importeren…"
 
 #: ../src/plugins/bi_import/gnc-plugin-bi_import.c:58
 msgid "bi_import tooltip"
-msgstr ""
+msgstr "bi_import hulptekst"
 
 #: ../src/plugins/bi_import/gui.c:181
 msgid "Import Bills or Invoices from csv"
-msgstr ""
+msgstr "Facturen uit een CSV-bestand importeren"
 
 #: ../src/plugins/bi_import/gui.c:208
 #, c-format
@@ -13183,23 +13167,30 @@ msgid ""
 "   %u created\n"
 "   %u updated (based on id)"
 msgstr ""
+"Resultaten import:\n"
+"%i regels genegeerd\n"
+"%i regels geïmporteerd:\n"
+"   %u hersteld\n"
+"   %u genegeerd (niet te herstellen)\n"
+"\n"
+"   %u aangemaakt\n"
+"   %u bijgewerkt (op basis van id)"
 
 #: ../src/plugins/bi_import/gui.c:211
 msgid "These lines were ignored during import"
-msgstr ""
+msgstr "Deze regels zijn bij het importeren genegeerd"
 
 #: ../src/plugins/bi_import/gui.c:218
-#, fuzzy
 msgid "The input file can not be opened."
-msgstr "Het bestand kon niet worden heropend."
+msgstr "Het invoerbestand kon niet worden geopend."
 
 #: ../src/plugins/bi_import/gui.c:329
 msgid "Adjust regular expression used for import"
-msgstr ""
+msgstr "Reguliere expressie voor importeren aanpassen"
 
 #: ../src/plugins/bi_import/gui.c:329
 msgid "This regular expression is used to parse the import file. Modify according to your needs.\n"
-msgstr ""
+msgstr "Deze reguliere expressie wordt gebruikt om het import-bestand te ontleden en is naar behoefte aan te passen.\n"
 
 #: ../src/register/ledger-core/split-register.c:179
 msgid "This transaction is already being edited in another register. Please finish editing it there first."
@@ -14240,7 +14231,7 @@ msgstr "Klantnummer"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:194
 msgid "The format string to use for generating customer numbers. This is a printf-style format string."
-msgstr ""
+msgstr "De ‘printf’-opmaak voor het genereren van klantnummers."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:196
@@ -14250,22 +14241,22 @@ msgstr "Het laatst gegenereerde klantnummer. Dit nummer zal worden opgehoogd om 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:198
 msgid "Employee number format"
-msgstr "Opmaak werknemersnummer"
+msgstr "Opmaak werknemernummer"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:200
 msgid "Employee number"
-msgstr "Werknemersnummer"
+msgstr "Werknemernummer"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:202
 msgid "The format string to use for generating employee numbers. This is a printf-style format string."
-msgstr ""
+msgstr "De ‘printf’-opmaak voor het genereren van werknemernummers."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:204
 msgid "The previous employee number generated. This number will be incremented to generate the next employee number."
-msgstr "Het laatst gegenereerde werknemersnummer. Dit nummer zal worden opgehoogd om het volgende werknemersnummer te genereren."
+msgstr "Het laatst gegenereerde werknemernummer. Dit nummer zal worden opgehoogd om het volgende werknemernummer te genereren."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:206
@@ -14281,7 +14272,7 @@ msgstr "Verkoopfactuurnummer"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:210
 msgid "The format string to use for generating invoice numbers. This is a printf-style format string."
-msgstr ""
+msgstr "De ‘printf’-opmaak voor het genereren van verkoopfactuurnummers."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:212
@@ -14301,7 +14292,7 @@ msgstr "Inkoopfactuurnummer"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:218
 msgid "The format string to use for generating bill numbers. This is a printf-style format string."
-msgstr ""
+msgstr "De ‘printf’-opmaak voor het genereren van inkoopfactuurnummers."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:220
@@ -14321,7 +14312,7 @@ msgstr "Onkostendeclaratienummer"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:226
 msgid "The format string to use for generating expense voucher numbers. This is a printf-style format string."
-msgstr ""
+msgstr "De ‘printf’-opmaak voor het genereren van onkostendeclaratienummers."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:228
@@ -14341,7 +14332,7 @@ msgstr "Opdrachtnummer"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:234
 msgid "The format string to use for generating job numbers. This is a printf-style format string."
-msgstr ""
+msgstr "De ‘printf’-opmaak voor het genereren van opdrachtnummers."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:236
@@ -14361,7 +14352,7 @@ msgstr "Ordernummer"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:242
 msgid "The format string to use for generating order numbers. This is a printf-style format string."
-msgstr ""
+msgstr "De ‘printf’-opmaak voor het genereren van ordernummers."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:244
@@ -14371,22 +14362,22 @@ msgstr "Het laatst gegenereerde ordernummer. Dit nummer zal worden opgehoogd om 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:246
 msgid "Vendor number format"
-msgstr "Opmaak leveranciersnummer"
+msgstr "Opmaak leveranciernummer"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:248
 msgid "Vendor number"
-msgstr "Leveranciersnummer"
+msgstr "Leveranciernummer"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:250
 msgid "The format string to use for generating vendor numbers. This is a printf-style format string."
-msgstr ""
+msgstr "De ‘printf’-opmaak voor het genereren van leveranciernummers."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:252
 msgid "The previous vendor number generated. This number will be incremented to generate the next vendor number."
-msgstr "Het laatst gegenereerde leveranciersnummer. Dit nummer zal worden opgehoogd om het volgende leveranciersnummer te genereren."
+msgstr "Het laatst gegenereerde leveranciernummer. Dit nummer zal worden opgehoogd om het volgende leveranciernummer te genereren."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:254
@@ -15035,7 +15026,7 @@ msgstr "Opbrengstenrekeningen"
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:542
 msgid "The income accounts where the sales and income was recorded."
-msgstr ""
+msgstr "De opbrengstenrekeningen waar de verkoopomzet is vastgelegd."
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -15047,30 +15038,27 @@ msgstr "Kostenrekeningen"
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:548
 msgid "The expense accounts where the expenses are recorded which are subtracted from the sales to give the profit."
-msgstr ""
+msgstr "De kostenrekeningen waar de kostprijs van de verkopen is vastgelegd."
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:550
-#, fuzzy
 msgid "Show Expense Column"
-msgstr "Kolom ‘Naam’ weergeven"
+msgstr "Kolom ‘Kosten’ weergeven"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:552
-#, fuzzy
 msgid "Show the column with the expenses per customer"
-msgstr "Een cirkeldiagram met de kosten binnen een bepaalde tijdspanne weergeven"
+msgstr "De kolom met de kosten per klant weergeven"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:554
-#, fuzzy
 msgid "Show Company Address"
-msgstr "Bedrijfsadres"
+msgstr "Bedrijfsadres weergeven"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:556
 msgid "Show your own company's address and the date of printing"
-msgstr ""
+msgstr "Het eigen bedrijfsadres en de afdrukdatum weergeven"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/easy-invoice.scm
@@ -15104,83 +15092,74 @@ msgstr "Kolommen weergeven"
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:570
 msgid "Show Lines with All Zeros"
-msgstr ""
+msgstr "Regels met alleen nullen weergeven"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:572
 msgid "Show the table lines with customers which did not have any transactions in the reporting period, hence would show all zeros in the columns."
-msgstr ""
+msgstr "Ook regels weergeven van klanten die tijdens de rapportageperiode geen enkele boeking hadden (en dus in elke kolom de waarde nul tonen)."
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:574
-#, fuzzy
 msgid "Sort Column"
-msgstr "Kolommen selecteren"
+msgstr "Sorteerkolom"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:576
 msgid "Choose the column by which the result table is sorted"
-msgstr ""
+msgstr "De kolom waarop het overzicht moet wordt gesorteerd selecteren"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:580
-#, fuzzy
 msgid "Choose the ordering of the column sort: Either ascending or descending"
-msgstr "Kolom oplopend of aflopend sorteren"
+msgstr "De sorteervolgorde van de sorteerkolom selecteren: oplopend of aflopend"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:592
-#, fuzzy
 msgid "Customer Name"
-msgstr "Klantnummer:"
+msgstr "Klantnaam"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:594
-#, fuzzy
 msgid "Sort alphabetically by customer name"
-msgstr "Alfabetisch op rekeningnaam"
+msgstr "Alfabetisch op klantnaam sorteren"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:596 ../intl-scm/guile-strings.c:636
 #: ../intl-scm/guile-strings.c:2482 ../intl-scm/guile-strings.c:2508
 msgid "Profit"
-msgstr "Resultaat"
+msgstr "Winst"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:598
-#, fuzzy
 msgid "Sort by profit amount"
-msgstr "Op bedrag sorteren"
+msgstr "Op winstbedrag sorteren"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:600 ../intl-scm/guile-strings.c:638
-#, fuzzy
 msgid "Markup"
-msgstr "Markering"
+msgstr "Winstopslag"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:602
 msgid "Sort by markup (which is profit amount divided by sales)"
-msgstr ""
+msgstr "Op winstopslag (winst gedeeld door omzet) sorteren"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:604 ../intl-scm/guile-strings.c:640
-#, fuzzy
 msgid "Sales"
-msgstr "Aandelen"
+msgstr "Omzet"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:606
-#, fuzzy
 msgid "Sort by sales amount"
-msgstr "Op bedrag sorteren"
+msgstr "Op omzetbedrag sorteren"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:610
-#, fuzzy
 msgid "Sort by expense amount"
-msgstr "Op bedrag sorteren"
+msgstr "Op kostenbedrag sorteren"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -15190,9 +15169,8 @@ msgstr "Oplopend"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:614
-#, fuzzy
 msgid "A to Z, smallest to largest"
-msgstr "grootste naar kleinste, jongste naar oudste"
+msgstr "A tot Z, de kleinste tot de grootste"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -15202,9 +15180,8 @@ msgstr "Aflopend"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:618
-#, fuzzy
 msgid "Z to A, largest to smallest"
-msgstr "Op bedrag, van groot naar klein"
+msgstr "Z tot A, de grootste tot de kleinste"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
@@ -15216,9 +15193,8 @@ msgstr "Kostenrapport"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:644
-#, fuzzy
 msgid "No Customer"
-msgstr "Nieuwe klant"
+msgstr "Geen klant"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:648
@@ -15340,7 +15316,7 @@ msgstr "Het aantal eenheden weergeven?"
 #: ../intl-scm/guile-strings.c:710 ../intl-scm/guile-strings.c:912
 #: ../intl-scm/guile-strings.c:1118
 msgid "Display the price per item?"
-msgstr "De koers per eenheid weergeven?"
+msgstr "De prijs per eenheid weergeven?"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -15727,7 +15703,7 @@ msgstr "Het tekstfragment dat aangeeft aan wie betalingen moeten worden gedaan"
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1006
 msgid "Make all cheques Payable to"
-msgstr "Alle cheques uitschrijven aan"
+msgstr "Gelieve het bedrag over te maken op rekening xxxx.xxx.xxx ten name van"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1010
@@ -15769,11 +15745,12 @@ msgstr "Fax:"
 msgid "Web:"
 msgstr "Web:"
 
+#  Used in 'fancy-invoice.scm' as a row header (instead of #%d)
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1046
 #, c-format
 msgid "%s&nbsp;#"
-msgstr "%s&nbsp;#"
+msgstr "%snummer:"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -15781,7 +15758,7 @@ msgstr "%s&nbsp;#"
 #: ../intl-scm/guile-strings.c:1052 ../intl-scm/guile-strings.c:1224
 #: ../intl-scm/guile-strings.c:1476
 msgid "Invoice in progress..."
-msgstr "Factuur wordt verwerkt…"
+msgstr "Document in behandeling…"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1060
@@ -17029,7 +17006,7 @@ msgstr "Rapportnaam"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2076 ../intl-scm/guile-strings.c:2088
 msgid "Stylesheet"
-msgstr "opmaaksjabloon"
+msgstr "Opmaaksjabloon"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2078
@@ -19324,13 +19301,12 @@ msgstr "Handelsportefeuille-totaal weergeven"
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:3548
 msgid "Whether or not to include a line indicating total trading accounts balance"
-msgstr "Een regel met de totaaltelling van de handelsportefeuilles weergeven"
+msgstr "Een regel met de totaaltelling van de handelsportefeuille weergeven"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:3612
-#, fuzzy
 msgid "Total Trading"
-msgstr "Totale winst"
+msgstr "Totaal handelsportefeuille"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -19669,9 +19645,8 @@ msgstr "Klant"
 
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:3970
-#, fuzzy
 msgid "Future Scheduled Transactions Summary"
-msgstr "Vaste journaalposten"
+msgstr "Samenvatting toekomstige vaste journaalposten"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4076
@@ -21150,9 +21125,8 @@ msgid "The electronic tax number of your business"
 msgstr "Het (electronisch) fiscaal nummer van uw bedrijf"
 
 #: ../doc/tip_of_the_day.list.in:1
-#, fuzzy
 msgid "The GnuCash online manual has lots of helpful information. You can access the manual under the Help menu."
-msgstr "De GnuCash online handleiding bevat veel handige informatie. Wanneer u vanuit een oudere versie van GnuCash een upgrade pleegt, is vooral de sectie ‘wat is er nieuw in GnuCash 2.0’ interessant. U kunt de handleiding vinden via het Help-menu."
+msgstr "De GnuCash online handleiding bevat veel handige informatie. U kunt de handleiding vinden via het Help-menu."
 
 #: ../doc/tip_of_the_day.list.in:4
 msgid "You can easily import your existing financial data from Quicken, MS Money or other programs that export QIF files or OFX files.  In the File menu, click on the sub-menu Import and click on QIF or OFX file, respectively. Then, follow the instructions provided."
@@ -21220,7 +21194,7 @@ msgstr "Gebruik de toetscombinatie Ctrl+PijlOmlaag om op een boekregel in een gr
 
 #: ../doc/tip_of_the_day.list.in:77
 msgid "If you work overnight, you should close and reopen your working register after midnight, to get the new date as default for new transactions. It is not necessary to restart GnuCash therefore."
-msgstr ""
+msgstr "Indien u ’s avonds werkt, kunt u na middernacht de nieuwe datum als standaardwaarde voor nieuwe boekingen krijgen door de actieve grootboekkaart te sluiten en weer opnieuw te openen. Het is dus niet nodig om GnuCash volledig opnieuw te starten."
 
 #: ../doc/tip_of_the_day.list.in:81
 msgid "The GnuCash developers are easy to contact.  As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
