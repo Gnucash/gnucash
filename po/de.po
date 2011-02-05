@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-27 22:00+0100\n"
-"PO-Revision-Date: 2011-01-27 22:01+0100\n"
+"PO-Revision-Date: 2011-02-05 17:13+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -48,31 +48,31 @@ msgstr "Kein Speicher mehr verfügbar"
 msgid "Numeric error"
 msgstr "Numerischer Fehler"
 
-#, fuzzy, c-format
+#, c-format
 msgid "(Tax-related subaccounts: %d)"
-msgstr "%s und ausgewählte Unterkonten"
+msgstr "(Steuerrelevante Unterkonten: %d)"
 
 msgid "Tax-related but has no tax code"
 msgstr "Steuerrelevant, aber ohne Zuordnung"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Tax-related but has no tax code; %s"
-msgstr "Steuerrelevant, aber ohne Zuordnung"
+msgstr "Steuerrelevant, aber ohne Steuerschlüssel; %s"
 
 msgid "Tax entity type not specified"
 msgstr "Art der Steuer nicht spezifiziert"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Tax entity type not specified; %s"
-msgstr "Art der Steuer nicht spezifiziert"
+msgstr "Art der Steuer nicht spezifiziert; %s"
 
 #, c-format
 msgid "Tax type %s: invalid code %s for account type"
 msgstr "Steuerart %s: ungültiger Schlüssel %s für diese Kontenart"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Tax type %s: invalid code %s for account type; %s"
-msgstr "Steuerart %s: ungültiger Schlüssel %s für diese Kontenart"
+msgstr "Steuerart %s: ungültiger Schlüssel %s für diese Kontenart; %s"
 
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
@@ -80,51 +80,49 @@ msgstr ""
 "Nicht steuerrelevant; Steuerart %s: ungültiger Schlüssel %s für diese "
 "Kontenart"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type; %s"
-msgstr ""
-"Nicht steuerrelevant; Steuerart %s: ungültiger Schlüssel %s für diese "
-"Kontenart"
+msgstr "Nicht steuerrelevant; Steuerart %s: ungültiger Schlüssel %s für diese Kontenart; %s"
 
 #, c-format
 msgid "Invalid code %s for tax type %s"
 msgstr "ungültiger Schlüssel %s für Steuerart %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid code %s for tax type %s; %s"
-msgstr "ungültiger Schlüssel %s für Steuerart %s"
+msgstr "ungültiger Schlüssel %s für Steuerart %s; %s"
 
 #, c-format
 msgid "Not tax-related; invalid code %s for tax type %s"
 msgstr "Nicht steuerrelevant; ungültiger Schlüssel %s für Steuerart %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Not tax-related; invalid code %s for tax type %s; %s"
-msgstr "Nicht steuerrelevant; ungültiger Schlüssel %s für Steuerart %s"
+msgstr "Nicht steuerrelevant; ungültiger Schlüssel %s für Steuerart %s; %s"
 
 #, c-format
 msgid "No form: code %s, tax type %s"
 msgstr "Kein Formular: Schlüssel %s, Steuerart %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "No form: code %s, tax type %s; %s"
-msgstr "Kein Formular: Schlüssel %s, Steuerart %s"
+msgstr "Kein Formular: Schlüssel %s, Steuerart %s; %s"
 
 #, c-format
 msgid "Not tax-related; no form: code %s, tax type %s"
 msgstr "Nicht steuerrelevant; kein Formular: Schlüssel %s, Steuerart %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Not tax-related; no form: code %s, tax type %s; %s"
-msgstr "Nicht steuerrelevant; kein Formular: Schlüssel %s, Steuerart %s"
+msgstr "Nicht steuerrelevant; kein Formular: Schlüssel %s, Steuerart %s; %s"
 
 #, c-format
 msgid "No description: form %s, code %s, tax type %s"
 msgstr "Keine Beschreibung: Formular %s, Schlüssel %s, Steuerart %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "No description: form %s, code %s, tax type %s; %s"
-msgstr "Keine Beschreibung: Formular %s, Schlüssel %s, Steuerart %s"
+msgstr "Keine Beschreibung: Formular %s, Schlüssel %s, Steuerart %s; %s"
 
 #, c-format
 msgid "Not tax-related; no description: form %s, code %s, tax type %s"
@@ -132,19 +130,17 @@ msgstr ""
 "Nicht steuerrelevant; keine Beschreibung: Formular %s, Schlüssel %s, "
 "Steuerart %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Not tax-related; no description: form %s, code %s, tax type %s; %s"
-msgstr ""
-"Nicht steuerrelevant; keine Beschreibung: Formular %s, Schlüssel %s, "
-"Steuerart %s"
+msgstr "Nicht steuerrelevant; keine Beschreibung: Formular %s, Schlüssel %s, Steuerart %s; %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Not tax-related; %s%s: %s (code %s, tax type %s)"
-msgstr "Nicht steuerrelevant; %s%s %s (Schlüssel %s, Steuerart %s)"
+msgstr "Nicht steuerrelevant; %s%s: %s (Schlüssel %s, Steuerart %s)"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Not tax-related; %s%s: %s (code %s, tax type %s); %s"
-msgstr "Nicht steuerrelevant; %s%s %s (Schlüssel %s, Steuerart %s)"
+msgstr "Nicht steuerrelevant; %s%s: %s (Schlüssel %s, Steuerart %s); %s"
 
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
@@ -440,16 +436,12 @@ msgstr ""
 "Diese Buchung muss einem Lieferanten zugeordnet sein.  Bitte wählen Sie "
 "unten einen Lieferanten."
 
-#, fuzzy
 msgid ""
 "You must enter a company name. If this customer is an individual (and not a "
 "company) you should enter the same value for:\n"
 "Identification - Company Name, and\n"
 "Payment Address - Name."
-msgstr ""
-"Sie müssen einen Firmennamen eingeben. Wenn dieser Kunde eine Person ist "
-"(und keine Firma), sollten Sie bei »Firmenname« und »Kontaktadresse« das "
-"gleiche eintragen."
+msgstr "Sie müssen einen Firmennamen eingeben. Wenn dieser Kunde eine Person ist (und keine Firma), sollten Sie bei »Identifizierung« - »Firmenname« und »bei »Zahlungsanschrift« - »Name« das gleiche eintragen."
 
 msgid "You must enter a billing address."
 msgstr "Sie müssen eine Rechnungsadresse eingeben."
@@ -910,16 +902,12 @@ msgstr ""
 "der Kontoart »%s« erstellen, bevor Sie hier fortfahren. Möchten Sie "
 "vielleicht zuerst eine Rechnung erstellen?"
 
-#, fuzzy
 msgid ""
 "You must enter a company name. If this vendor is an individual (and not a "
 "company) you should enter the same value for:\n"
 "Identification - Company Name, and\n"
 "Payment Address - Name."
-msgstr ""
-"Sie müssen einen Firmennamen eingeben. Wenn dieser Lieferant eine Person ist "
-"(und keine Firma), sollten Sie bei »Firmenname« und »Kontaktadresse« das "
-"gleiche eintragen."
+msgstr "Sie müssen einen Firmennamen eingeben. Wenn dieser Lieferant eine Person ist (und keine Firma), sollten Sie bei »Identifizierung« - »Firmenname« und »bei »Zahlungsanschrift« - »Name« das gleiche eintragen."
 
 msgid "You must enter a payment address."
 msgstr "Sie müssen eine Zahlungsadresse eingeben."
@@ -1740,9 +1728,8 @@ msgstr "Kopie des aktuellen Postens erstellen"
 msgid "New _Invoice"
 msgstr "Neue _Rechnung..."
 
-#, fuzzy
 msgid "Create a new invoice for the same owner as the current one"
-msgstr "Ein neues Fenster für jedes Kontofenster öffnen"
+msgstr "Eine neue Rechnung für den gleichen Mandanten wie bei der aktuellen Rechnung erstellen"
 
 msgid "_Pay Invoice"
 msgstr "Rechnung be_zahlen"
@@ -4347,9 +4334,8 @@ msgstr ""
 msgid "Conditional on splits not having variables"
 msgstr "Abhängig davon, dass Buchungen keine Variablen haben"
 
-#, fuzzy
 msgid "Crea_te in advance:"
-msgstr "Im Voraus erstellen:"
+msgstr "Im Voraus _erstellen:"
 
 msgid "Create automatically"
 msgstr "Automatisch erstellen"
@@ -4549,9 +4535,8 @@ msgstr "Klicken Sie »Anwenden«, um die Änderungen zu speichern."
 msgid "Principal To:"
 msgstr "Endbetrag Kapital an:"
 
-#, fuzzy
 msgid "R_emind in advance:"
-msgstr "Im Voraus erinnern:"
+msgstr "Im Voraus er_innern:"
 
 msgid "Range: "
 msgstr "Bereich: "
@@ -6174,7 +6159,7 @@ msgid "Labels on toolbar buttons"
 msgstr "Werkzeugleisten-Knöpfe"
 
 msgid "Maximum number of months to go back."
-msgstr ""
+msgstr "Maximale Anzahl an Monaten, die rückwärts gegangen werden."
 
 msgid "Move to Transfer field when memorised transaction auto filled"
 msgstr "Bei Auto-Vervollständigen zum Gegenkonto-Feld weitergehen"
@@ -8229,9 +8214,8 @@ msgstr ""
 "In einem Zwölf-Monats-Zeitfenster, welches diese\n"
 "Anzahl Monate vor dem aktuellen Monat beginnt:"
 
-#, fuzzy
 msgid "In the current calendar year"
-msgstr "Ende des Kalenderjahres"
+msgstr "Im aktuellen Kalenderjahr"
 
 msgid "Include _grand total"
 msgstr "_Gesamtsumme anzeigen"
@@ -8445,7 +8429,7 @@ msgstr ""
 "benutzen"
 
 msgid "When a date is entered without year, it should be taken:"
-msgstr ""
+msgstr "Wenn ein Datum ohne Jahreszahl eingegeben wird, soll folgendermaßen vervollständigt werden:"
 
 msgid "Windows"
 msgstr "Fenster"
@@ -8856,6 +8840,11 @@ msgid ""
 "\n"
 "Please try again in a different directory."
 msgstr ""
+"Sie haben versucht, im Ordner\n"
+"%s\n"
+"oder einem Unterordner davon zu speichern.  Das ist nicht erlaubt, weil %s diesen Ordner für interne Daten benutzt.\n"
+"\n"
+"Bitte wählen Sie einen Dateinamen in einem anderen Ordner."
 
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
@@ -8869,7 +8858,7 @@ msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
 "File>Save As."
-msgstr ""
+msgstr "Diese Datenbank ist von einer neueren Version von GnuCash. Diese Version kann das lesen, aber kann nicht alle Daten schreiben. Die Datenbank wird als schreibgeschützt geöffnet, bis Sie »Datei -> Speichern unter« auswählen."
 
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
@@ -8889,7 +8878,7 @@ msgid ""
 "Gnucash will not open or save to SQL databases until this is fixed by "
 "installing a different version of \"libdbi\".  Please see https://bugzilla."
 "gnome.org/show_bug.cgi?id=611936 for more information."
-msgstr ""
+msgstr "Die Bibliothek »libdbi« auf Ihrem System ist fehlerhaft und kann große Zahlen nicht korrekt speichern.  Dadurch kann GnuCash keine SQL-Datenbank benutzen.  GnuCash kann keine SQL-Datenbank öffnen oder dahin speichern, bis eine andere Version von »libdbi« installiert ist. Siehe auch https://bugzilla.gnome.org/show_bug.cgi?id=611936 "
 
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
@@ -8948,9 +8937,8 @@ msgstr "_Neue Datei anlegen"
 msgid "Loading user data..."
 msgstr "Daten laden..."
 
-#, fuzzy
 msgid "Re-saving user data..."
-msgstr "Daten laden..."
+msgstr "Daten erneut speichern..."
 
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -9894,9 +9882,8 @@ msgstr ""
 msgid "Use Transaction Template"
 msgstr "Überweisungsvorlage:"
 
-#, fuzzy
 msgid "_Close log window when finished"
-msgstr "Fenster nach Verbindungsende schließen"
+msgstr "Fenster nach Verbindungsende _schließen"
 
 msgid "_Earliest possible date"
 msgstr "_Frühestes mögliches Datum"
@@ -10092,12 +10079,11 @@ msgstr "GnuCash Kontoname"
 msgid "New?"
 msgstr "Neu?"
 
-#, fuzzy
 msgid "No valid online banking account assigned."
-msgstr "Online-Banking Kontoname"
+msgstr "Kein gültiges Online-Banking-Konto zugewiesen."
 
 msgid "Online action \"Get Balance\" not available for this account."
-msgstr ""
+msgstr "Die Online-Aktion »Saldenabruf« is für dieses Konto nicht verfügbar."
 
 #, c-format
 msgid ""
@@ -10105,10 +10091,12 @@ msgid ""
 "\n"
 "Status: %s - %s"
 msgstr ""
+"Fehler beim Ausführen des Auftrags.\n"
+"\n"
+"Status: %s - %s"
 
-#, fuzzy
 msgid "Online action \"Get Transactions\" not available for this account."
-msgstr "Den Buchungsbericht zu diesem Konto erstellen"
+msgstr "Die Online-Aktion »Umsatzabruf« is für dieses Konto nicht verfügbar."
 
 msgid ""
 "The Online Banking import returned no transactions for the selected time "
@@ -10244,24 +10232,22 @@ msgstr "Importer-Modul für DTAUS nicht gefunden."
 
 #, c-format
 msgid "Job %d status %d - %s: %s \n"
-msgstr ""
+msgstr "Auftrag %d Status %d - %s: %s \n"
 
 #. indicate that additional failures exist
-#, fuzzy
 msgid "...\n"
-msgstr "Neu..."
+msgstr "...\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "An error occurred while executing jobs: %d of %d failed. Please check the "
 "log window or gnucash.trace for the exacterror message.\n"
 "\n"
 "%s"
 msgstr ""
-"Ein Fehler ist bei der Ausführung des Auftrags aufgetreten.  Bitte prüfen "
-"Sie die Ausgaben im Verlaufsfenster für eine exakte Fehlermeldung.\n"
+"Ein Fehler ist bei der Ausführung der Aufträge aufgetreten: %d von %d fehlgeschlagen.  Bitte prüfen Sie die Ausgaben im Verlaufsfenster für eine exakte Fehlermeldung.\n"
 "\n"
-"Wollen Sie den Auftrag erneut abschicken?"
+"%s"
 
 msgid "No jobs to be send."
 msgstr "Keine Aufträge zu senden."
@@ -10621,14 +10607,11 @@ msgstr "Wählen Sie das Export-Format"
 msgid "Commercial ATM _fees threshold"
 msgstr "Auszahlungsgebühren"
 
-#, fuzzy
 msgid ""
 "Double click on the transaction to change the matching transaction to "
 "reconcile, or the destination account of the auto-balance split (if "
 "required)."
-msgstr ""
-"Mit »Import-Aktion auswählen« können Sie das Gegenkonto dieser neuen Buchung "
-"wählen oder die abzugleichende existierende Buchung auswählen."
+msgstr "Mit Doppelklick auf die Buchung können Sie die abzugleichende existierende Buchung auswählen, oder ein gewünschtes Gegenkonto für die neue Buchung auswählen."
 
 msgid "Enable skip transaction action"
 msgstr "»Überspringen«-Aktion aktivieren "
@@ -10643,18 +10626,13 @@ msgstr ""
 "liegt (größer als die Auto-Hinzufügen-Schwelle, aber kleiner als die Auto-"
 "Abgleichen-Schwelle), hat als Voreinstellung »Überspringen«."
 
-#, fuzzy
 msgid ""
 "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
 "enabled, a transaction whose best match's score is above the Auto-CLEAR "
 "threshold and has a different date or amount than the matching existing "
 "transaction will cause the existing transaction to be updated and cleared by "
 "default."
-msgstr ""
-"»Überspringen«-Aktion beim Buchungsimport aktivieren. Eine importierte "
-"Buchung, deren am besten bewertete existierende Buchung im gelben Bereich "
-"liegt (größer als die Auto-Hinzufügen-Schwelle, aber kleiner als die Auto-"
-"Abgleichen-Schwelle), hat als Voreinstellung »Überspringen«."
+msgstr "»Abgleichen und Datenübernahme«-Aktion beim Buchungsimport aktivieren.  Wenn aktiviert, wird versucht, eine importierte Buchung zu einer existierenden zuzuordnen, damit die existierende Buchung als »Abgeglichen« markiert wird. Zusätzlich werden die Datenfelder Buchungsdatum, -text und -betrag von der importierten Buchung übernommen."
 
 msgid "Enable update match action"
 msgstr "»Abgleichen und Datenübernahme«-Aktion aktivieren"
@@ -11500,9 +11478,8 @@ msgstr "_Auswählen..."
 msgid "_Show documentation"
 msgstr "_Erklärungsseiten anzeigen"
 
-#, fuzzy
 msgid "Default QIF transaction status"
-msgstr "Eine Buchung löschen"
+msgstr "Voreingestellter Buchungsstatus bei QIF Import"
 
 msgid "Default status for QIF transaction when not specified in QIF file."
 msgstr ""
@@ -11519,9 +11496,8 @@ msgstr "Buchungen oberhalb dieser Schwelle abgleichen"
 msgid "Enable SKIP transaction action"
 msgstr "»Überspringen«-Aktion aktivieren "
 
-#, fuzzy
 msgid "Enable UPDATE match action"
-msgstr "»Bearbeiten«-Aktion aktivieren"
+msgstr "»Übernehmen«-Aktion aktivieren"
 
 msgid ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
@@ -11606,9 +11582,8 @@ msgstr "%#d. %B %Y"
 msgid "%B %e, %Y"
 msgstr "%e. %B %Y"
 
-#, fuzzy
 msgid "id"
-msgstr "Bezahlt"
+msgstr "Nr."
 
 #, c-format
 msgid "ROW DELETED, PRICE_NOT_SET: id=%s\n"
@@ -11635,65 +11610,53 @@ msgid ""
 "\n"
 msgstr ""
 
-#, fuzzy
 msgid "Are you sure you have bills/invoices to update?"
-msgstr "Soll diese Aktion durchgeführt werden?"
+msgstr "Sind Sie sicher, dass Rechnungen aktualisiert werden sollen?"
 
-#, fuzzy
 msgid "1. Choose the file to import"
-msgstr "Wählen Sie eine Datei, die importiert werden soll"
+msgstr "1. Wählen Sie eine Datei, die importiert werden soll"
 
-#, fuzzy
 msgid "2. Select import type"
-msgstr "Wählen Sie die Nachlassart"
+msgstr "2. Wählen Sie die Import-Art"
 
-#, fuzzy
 msgid "3. Select import options"
-msgstr "Berichtsoptionen ändern"
+msgstr "2. Wählen Sie die Importoptionen"
 
-#, fuzzy
 msgid "4. Preview"
-msgstr "Kontrolle"
+msgstr "4. Vorschau"
 
-#, fuzzy
 msgid "Comma separated"
-msgstr "Getrennt"
+msgstr "Komma-getrennt"
 
 msgid "Comma separated with quotes"
-msgstr ""
+msgstr "Komma-getrennt mit Anführungszeichen"
 
-#, fuzzy
 msgid "Custom regular expression"
-msgstr ""
-"Fehler im regulären Ausdruck '%s':\n"
-"%s"
+msgstr "Benutzerdefinierter Regulärer Ausdruck"
 
-#, fuzzy
 msgid "Import bill CSV data"
-msgstr "_CSV importieren"
+msgstr "CSV-Lieferantenrechnungen importieren"
 
 msgid "Import invoice CSV data"
-msgstr ""
+msgstr "CSV-Rechnungen importieren"
 
-#, fuzzy
 msgid "Import transactions from text file"
-msgstr "Erster Teil der importierten Buchung"
+msgstr "Buchungen aus Textdatei importieren"
 
-#, fuzzy
 msgid "Semicolon separated"
-msgstr "Getrennt"
+msgstr "Semikolon-getrennt"
 
 msgid "Semicolon separated with quotes"
-msgstr ""
+msgstr "Semikolon-getrennt mit Anführungszeichen"
 
 msgid "Import Bills & Invoices..."
-msgstr ""
+msgstr "Rechnungen importieren..."
 
 msgid "bi_import tooltip"
 msgstr ""
 
 msgid "Import Bills or Invoices from csv"
-msgstr ""
+msgstr "Rechnungen oder Lieferantenrechnungen aus CSV-Datei importieren"
 
 #, c-format
 msgid ""
@@ -11708,11 +11671,10 @@ msgid ""
 msgstr ""
 
 msgid "These lines were ignored during import"
-msgstr ""
+msgstr "Diese Zeilen wurden beim Importieren ignoriert"
 
-#, fuzzy
 msgid "The input file can not be opened."
-msgstr "Die Datei konnte nicht neu geöffnet werden."
+msgstr "Die Datei konnte nicht geöffnet werden."
 
 msgid "Adjust regular expression used for import"
 msgstr ""
@@ -16767,18 +16729,16 @@ msgid "Secondary Sort Order"
 msgstr "Sekundäre Sortierreihenfolge"
 
 #. src/report/standard-reports/income-statement.scm
-#, fuzzy
 msgid "Label the trading accounts section"
-msgstr "Abschnitt Aktiva beschriften"
+msgstr "Abschnitt Devisenhandel beschriften"
 
 #. src/report/standard-reports/income-statement.scm
-#, fuzzy
 msgid "Whether or not to include a label for the trading accounts section"
-msgstr "Beschriftung für den Abschnitt mit Aktivakonten anzeigen"
+msgstr "Beschriftung für den Abschnitt mit Devisenhandel-Konten anzeigen"
 
 #. src/report/standard-reports/income-statement.scm
 msgid "Include trading accounts total"
-msgstr ""
+msgstr "Summe Devisenhandel anzeigen"
 
 #. src/report/standard-reports/income-statement.scm
 msgid ""
