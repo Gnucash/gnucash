@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-27 22:00+0100\n"
-"PO-Revision-Date: 2011-02-05 17:13+0100\n"
+"POT-Creation-Date: 2011-02-06 11:13+0100\n"
+"PO-Revision-Date: 2011-02-06 11:19+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -48,31 +48,24 @@ msgstr "Kein Speicher mehr verfügbar"
 msgid "Numeric error"
 msgstr "Numerischer Fehler"
 
-#, c-format
-msgid "(Tax-related subaccounts: %d)"
-msgstr "(Steuerrelevante Unterkonten: %d)"
-
+#. Translators: This and the following strings appear on
+#. * the account tab if the Tax Info column is displayed,
+#. * i.e. if the user wants to record the tax form number
+#. * and location on that tax form which corresponds to this
+#. * gnucash account. For the US Income Tax support in
+#. * gnucash, each tax code that can be assigned to an
+#. * account generally corresponds to a specific line number
+#. * on a paper form and each form has a unique
+#. * identification (e.g., Form 1040, Schedule A).
 msgid "Tax-related but has no tax code"
 msgstr "Steuerrelevant, aber ohne Zuordnung"
-
-#, c-format
-msgid "Tax-related but has no tax code; %s"
-msgstr "Steuerrelevant, aber ohne Steuerschlüssel; %s"
 
 msgid "Tax entity type not specified"
 msgstr "Art der Steuer nicht spezifiziert"
 
 #, c-format
-msgid "Tax entity type not specified; %s"
-msgstr "Art der Steuer nicht spezifiziert; %s"
-
-#, c-format
 msgid "Tax type %s: invalid code %s for account type"
 msgstr "Steuerart %s: ungültiger Schlüssel %s für diese Kontenart"
-
-#, c-format
-msgid "Tax type %s: invalid code %s for account type; %s"
-msgstr "Steuerart %s: ungültiger Schlüssel %s für diese Kontenart; %s"
 
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
@@ -81,48 +74,24 @@ msgstr ""
 "Kontenart"
 
 #, c-format
-msgid "Not tax-related; tax type %s: invalid code %s for account type; %s"
-msgstr "Nicht steuerrelevant; Steuerart %s: ungültiger Schlüssel %s für diese Kontenart; %s"
-
-#, c-format
 msgid "Invalid code %s for tax type %s"
 msgstr "ungültiger Schlüssel %s für Steuerart %s"
-
-#, c-format
-msgid "Invalid code %s for tax type %s; %s"
-msgstr "ungültiger Schlüssel %s für Steuerart %s; %s"
 
 #, c-format
 msgid "Not tax-related; invalid code %s for tax type %s"
 msgstr "Nicht steuerrelevant; ungültiger Schlüssel %s für Steuerart %s"
 
 #, c-format
-msgid "Not tax-related; invalid code %s for tax type %s; %s"
-msgstr "Nicht steuerrelevant; ungültiger Schlüssel %s für Steuerart %s; %s"
-
-#, c-format
 msgid "No form: code %s, tax type %s"
 msgstr "Kein Formular: Schlüssel %s, Steuerart %s"
-
-#, c-format
-msgid "No form: code %s, tax type %s; %s"
-msgstr "Kein Formular: Schlüssel %s, Steuerart %s; %s"
 
 #, c-format
 msgid "Not tax-related; no form: code %s, tax type %s"
 msgstr "Nicht steuerrelevant; kein Formular: Schlüssel %s, Steuerart %s"
 
 #, c-format
-msgid "Not tax-related; no form: code %s, tax type %s; %s"
-msgstr "Nicht steuerrelevant; kein Formular: Schlüssel %s, Steuerart %s; %s"
-
-#, c-format
 msgid "No description: form %s, code %s, tax type %s"
 msgstr "Keine Beschreibung: Formular %s, Schlüssel %s, Steuerart %s"
-
-#, c-format
-msgid "No description: form %s, code %s, tax type %s; %s"
-msgstr "Keine Beschreibung: Formular %s, Schlüssel %s, Steuerart %s; %s"
 
 #, c-format
 msgid "Not tax-related; no description: form %s, code %s, tax type %s"
@@ -131,16 +100,12 @@ msgstr ""
 "Steuerart %s"
 
 #, c-format
-msgid "Not tax-related; no description: form %s, code %s, tax type %s; %s"
-msgstr "Nicht steuerrelevant; keine Beschreibung: Formular %s, Schlüssel %s, Steuerart %s; %s"
-
-#, c-format
 msgid "Not tax-related; %s%s: %s (code %s, tax type %s)"
 msgstr "Nicht steuerrelevant; %s%s: %s (Schlüssel %s, Steuerart %s)"
 
 #, c-format
-msgid "Not tax-related; %s%s: %s (code %s, tax type %s); %s"
-msgstr "Nicht steuerrelevant; %s%s: %s (Schlüssel %s, Steuerart %s); %s"
+msgid "(Tax-related subaccounts: %d)"
+msgstr "(Steuerrelevante Unterkonten: %d)"
 
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
@@ -441,7 +406,10 @@ msgid ""
 "company) you should enter the same value for:\n"
 "Identification - Company Name, and\n"
 "Payment Address - Name."
-msgstr "Sie müssen einen Firmennamen eingeben. Wenn dieser Kunde eine Person ist (und keine Firma), sollten Sie bei »Identifizierung« - »Firmenname« und »bei »Zahlungsanschrift« - »Name« das gleiche eintragen."
+msgstr ""
+"Sie müssen einen Firmennamen eingeben. Wenn dieser Kunde eine Person ist "
+"(und keine Firma), sollten Sie bei »Identifizierung« - »Firmenname« und »bei "
+"»Zahlungsanschrift« - »Name« das gleiche eintragen."
 
 msgid "You must enter a billing address."
 msgstr "Sie müssen eine Rechnungsadresse eingeben."
@@ -907,7 +875,10 @@ msgid ""
 "company) you should enter the same value for:\n"
 "Identification - Company Name, and\n"
 "Payment Address - Name."
-msgstr "Sie müssen einen Firmennamen eingeben. Wenn dieser Lieferant eine Person ist (und keine Firma), sollten Sie bei »Identifizierung« - »Firmenname« und »bei »Zahlungsanschrift« - »Name« das gleiche eintragen."
+msgstr ""
+"Sie müssen einen Firmennamen eingeben. Wenn dieser Lieferant eine Person ist "
+"(und keine Firma), sollten Sie bei »Identifizierung« - »Firmenname« und »bei "
+"»Zahlungsanschrift« - »Name« das gleiche eintragen."
 
 msgid "You must enter a payment address."
 msgstr "Sie müssen eine Zahlungsadresse eingeben."
@@ -1729,7 +1700,9 @@ msgid "New _Invoice"
 msgstr "Neue _Rechnung..."
 
 msgid "Create a new invoice for the same owner as the current one"
-msgstr "Eine neue Rechnung für den gleichen Mandanten wie bei der aktuellen Rechnung erstellen"
+msgstr ""
+"Eine neue Rechnung für den gleichen Mandanten wie bei der aktuellen Rechnung "
+"erstellen"
 
 msgid "_Pay Invoice"
 msgstr "Rechnung be_zahlen"
@@ -8429,7 +8402,9 @@ msgstr ""
 "benutzen"
 
 msgid "When a date is entered without year, it should be taken:"
-msgstr "Wenn ein Datum ohne Jahreszahl eingegeben wird, soll folgendermaßen vervollständigt werden:"
+msgstr ""
+"Wenn ein Datum ohne Jahreszahl eingegeben wird, soll folgendermaßen "
+"vervollständigt werden:"
 
 msgid "Windows"
 msgstr "Fenster"
@@ -8842,7 +8817,8 @@ msgid ""
 msgstr ""
 "Sie haben versucht, im Ordner\n"
 "%s\n"
-"oder einem Unterordner davon zu speichern.  Das ist nicht erlaubt, weil %s diesen Ordner für interne Daten benutzt.\n"
+"oder einem Unterordner davon zu speichern.  Das ist nicht erlaubt, weil %s "
+"diesen Ordner für interne Daten benutzt.\n"
 "\n"
 "Bitte wählen Sie einen Dateinamen in einem anderen Ordner."
 
@@ -8858,7 +8834,10 @@ msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
 "File>Save As."
-msgstr "Diese Datenbank ist von einer neueren Version von GnuCash. Diese Version kann das lesen, aber kann nicht alle Daten schreiben. Die Datenbank wird als schreibgeschützt geöffnet, bis Sie »Datei -> Speichern unter« auswählen."
+msgstr ""
+"Diese Datenbank ist von einer neueren Version von GnuCash. Diese Version "
+"kann das lesen, aber kann nicht alle Daten schreiben. Die Datenbank wird als "
+"schreibgeschützt geöffnet, bis Sie »Datei -> Speichern unter« auswählen."
 
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
@@ -8878,7 +8857,12 @@ msgid ""
 "Gnucash will not open or save to SQL databases until this is fixed by "
 "installing a different version of \"libdbi\".  Please see https://bugzilla."
 "gnome.org/show_bug.cgi?id=611936 for more information."
-msgstr "Die Bibliothek »libdbi« auf Ihrem System ist fehlerhaft und kann große Zahlen nicht korrekt speichern.  Dadurch kann GnuCash keine SQL-Datenbank benutzen.  GnuCash kann keine SQL-Datenbank öffnen oder dahin speichern, bis eine andere Version von »libdbi« installiert ist. Siehe auch https://bugzilla.gnome.org/show_bug.cgi?id=611936 "
+msgstr ""
+"Die Bibliothek »libdbi« auf Ihrem System ist fehlerhaft und kann große Zahlen "
+"nicht korrekt speichern.  Dadurch kann GnuCash keine SQL-Datenbank "
+"benutzen.  GnuCash kann keine SQL-Datenbank öffnen oder dahin speichern, bis "
+"eine andere Version von »libdbi« installiert ist. Siehe auch https://bugzilla."
+"gnome.org/show_bug.cgi?id=611936 "
 
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
@@ -9187,12 +9171,12 @@ msgstr "Schließen _ohne zu speichern"
 msgid "Unsaved Book"
 msgstr "Nicht gespeicherte Daten"
 
-msgid ": Book is marked read-only."
-msgstr ": Buch ist schreibgeschützt."
+msgid "Unable to save to database."
+msgstr "Datenbank konnte nicht gespeichert werden."
 
-#, c-format
-msgid "Unable to save to database%s"
+msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
+"Datenbank konnte nicht gespeichert werden: Dieses Buch ist schreibgeschützt."
 
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
@@ -10241,11 +10225,13 @@ msgstr "...\n"
 #, c-format
 msgid ""
 "An error occurred while executing jobs: %d of %d failed. Please check the "
-"log window or gnucash.trace for the exacterror message.\n"
+"log window or gnucash.trace for the exact error message.\n"
 "\n"
 "%s"
 msgstr ""
-"Ein Fehler ist bei der Ausführung der Aufträge aufgetreten: %d von %d fehlgeschlagen.  Bitte prüfen Sie die Ausgaben im Verlaufsfenster für eine exakte Fehlermeldung.\n"
+"Ein Fehler ist bei der Ausführung der Aufträge aufgetreten: %d von %d "
+"fehlgeschlagen.  Bitte prüfen Sie die Ausgaben im Verlaufsfenster oder in "
+"der »Trace-Datei« für eine exakte Fehlermeldung.\n"
 "\n"
 "%s"
 
@@ -10611,7 +10597,10 @@ msgid ""
 "Double click on the transaction to change the matching transaction to "
 "reconcile, or the destination account of the auto-balance split (if "
 "required)."
-msgstr "Mit Doppelklick auf die Buchung können Sie die abzugleichende existierende Buchung auswählen, oder ein gewünschtes Gegenkonto für die neue Buchung auswählen."
+msgstr ""
+"Mit Doppelklick auf die Buchung können Sie die abzugleichende existierende "
+"Buchung auswählen, oder ein gewünschtes Gegenkonto für die neue Buchung "
+"auswählen."
 
 msgid "Enable skip transaction action"
 msgstr "»Überspringen«-Aktion aktivieren "
@@ -10632,7 +10621,12 @@ msgid ""
 "threshold and has a different date or amount than the matching existing "
 "transaction will cause the existing transaction to be updated and cleared by "
 "default."
-msgstr "»Abgleichen und Datenübernahme«-Aktion beim Buchungsimport aktivieren.  Wenn aktiviert, wird versucht, eine importierte Buchung zu einer existierenden zuzuordnen, damit die existierende Buchung als »Abgeglichen« markiert wird. Zusätzlich werden die Datenfelder Buchungsdatum, -text und -betrag von der importierten Buchung übernommen."
+msgstr ""
+"»Abgleichen und Datenübernahme«-Aktion beim Buchungsimport aktivieren.  Wenn "
+"aktiviert, wird versucht, eine importierte Buchung zu einer existierenden "
+"zuzuordnen, damit die existierende Buchung als »Abgeglichen« markiert wird. "
+"Zusätzlich werden die Datenfelder Buchungsdatum, -text und -betrag von der "
+"importierten Buchung übernommen."
 
 msgid "Enable update match action"
 msgstr "»Abgleichen und Datenübernahme«-Aktion aktivieren"
@@ -13735,6 +13729,11 @@ msgid "%s&nbsp;#"
 msgstr "%s&nbsp;Nr."
 
 #. src/report/business-reports/fancy-invoice.scm
+#, c-format
+msgid "%s&nbsp;Date"
+msgstr "%ssdatum"
+
+#. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
 #. src/report/business-reports/taxinvoice.eguile.scm
 msgid "Invoice in progress..."
@@ -16743,7 +16742,7 @@ msgstr "Summe Devisenhandel anzeigen"
 #. src/report/standard-reports/income-statement.scm
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance"
-msgstr ""
+msgstr "Summenzeile für die Devisenhandel-Konten anzeigen"
 
 #. src/report/standard-reports/income-statement.scm
 msgid "Total Trading"
@@ -17783,7 +17782,7 @@ msgid "Footer"
 msgstr "Fußzeile"
 
 #. src/report/stylesheets/stylesheet-footer.scm
-msgid "String to placed as a footer"
+msgid "String to be placed as a footer"
 msgstr "Als Fußzeile auszugebender Text"
 
 #. src/report/stylesheets/stylesheet-plain.scm
@@ -18335,11 +18334,11 @@ msgstr ""
 "ebenfalls mit '+' und '-' die nächstfolgende oder vorige Nummer auswählen."
 
 msgid ""
-"To switch between multiple tabs in the main window, press Control+Alt+Page "
-"Up/Down."
+"To switch between multiple tabs in the main window, press Control+Page Up/"
+"Down."
 msgstr ""
 "Um zwischen verschiedenen Karteikarten (Tabs) zu wechseln, kann man die "
-"Tastenkombination Strg+Alt+Bild hoch/runter verwenden."
+"Tastenkombination Strg+Bild hoch/runter verwenden."
 
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
@@ -18414,13 +18413,3 @@ msgstr ""
 "Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des HBCI-Zugangs. "
 "Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
 "Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
-
-#~ msgid ""
-#~ "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots "
-#~ "of bugs and unstable features! If you are looking for a stable personal "
-#~ "finance application, you should use the latest release of GnuCash %s."
-#~ msgstr ""
-#~ "Warnung! Dies ist eine Entwicklerversion von GnuCash. Sie enthält "
-#~ "möglicherweise eine Menge Fehler und instabile Merkmale! Falls Sie nach "
-#~ "einer stabilen Anwendung für Ihre persönlichen Finanzen suchen, sollten "
-#~ "sie die letzte stabile Ausgabe GnuCash %s verwenden."
