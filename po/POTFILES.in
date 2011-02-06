@@ -139,6 +139,7 @@ src/core-utils/gnc-gdate-utils.c
 src/core-utils/gnc-gkeyfile-utils.c
 src/core-utils/gnc-glib-utils.c
 src/core-utils/gnc-jalali.c
+src/core-utils/gnc-locale-utils.c
 src/core-utils/gnc-main.c
 src/core-utils/gnc-path.c
 src/core-utils/gnc-uri-utils.c
