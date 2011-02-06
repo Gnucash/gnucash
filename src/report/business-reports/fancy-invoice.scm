@@ -896,7 +896,7 @@
 		(gnc:make-html-text
 		  ;; oli-custom - FIXME: I have a feeling I broke a
 		 ;; translation by not using string-expand for &nbsp;
-		  (string-append title "<br>" (N_ "Invoice in progress..."))))))
+		  (string-append title "<br>" (_ "Invoice in progress..."))))))
 
 	  (gnc:html-table-append-row!
 	  	helper-table

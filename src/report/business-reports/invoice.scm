@@ -719,7 +719,7 @@
 		(gnc:html-document-add-object!
 		 document
 		 (gnc:make-html-text
-		  (N_ "Invoice in progress...")))))
+		  (_ "Invoice in progress...")))))
 
 	  (make-break! document)
 	  (make-break! document)
