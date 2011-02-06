@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-06 11:13+0100\n"
-"PO-Revision-Date: 2011-02-06 11:19+0100\n"
+"POT-Creation-Date: 2011-02-06 22:15+0100\n"
+"PO-Revision-Date: 2011-02-06 22:16+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -11179,6 +11179,8 @@ msgstr ""
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file):"
 msgstr ""
+"Voreingestellter Buchungsstatus (wird überschrieben vom Status aus der QIF-"
+"Datei):"
 
 msgid "Enter the QIF file currency"
 msgstr "Geben Sie die Währung der QIF-Datei an"
@@ -11433,16 +11435,22 @@ msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
 msgstr ""
+"Wenn der Status nicht in der QIF-Datei angegeben ist, werden die Buchungen "
+"als »Bestätigt« markiert."
 
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as not cleared."
 msgstr ""
+"Wenn der Status nicht in der QIF-Datei angegeben ist, werden die Buchungen "
+"als »Unbestätigt« markiert."
 
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
 msgstr ""
+"Wenn der Status nicht in der QIF-Datei angegeben ist, werden die Buchungen "
+"als »Abgeglichen« markiert."
 
 msgid "_Cleared"
 msgstr "_Bestätigt"
@@ -11477,6 +11485,8 @@ msgstr "Voreingestellter Buchungsstatus bei QIF Import"
 
 msgid "Default status for QIF transaction when not specified in QIF file."
 msgstr ""
+"Voreingestellter Buchungsstatus bei QIF Import, wenn die Buchungen in der "
+"QIF-Datei keinen Status enthalten."
 
 msgid "Show documentation"
 msgstr "Erklärungsseiten anzeigen"
@@ -11576,33 +11586,28 @@ msgstr "%#d. %B %Y"
 msgid "%B %e, %Y"
 msgstr "%e. %B %Y"
 
-msgid "id"
-msgstr "Nr."
-
 #, c-format
 msgid "ROW DELETED, PRICE_NOT_SET: id=%s\n"
-msgstr ""
+msgstr "Zeile GELÖSCHT, Preis fehlt: id=%s\n"
 
 #, c-format
 msgid "ROW DELETED, QTY_NOT_SET: id=%s\n"
-msgstr ""
+msgstr "Zeile GELÖSCHT, Anzahl fehlt: id=%s\n"
 
 #, c-format
 msgid "ROW DELETED, ID_NOT_SET\n"
-msgstr ""
+msgstr "Zeile GELÖSCHT, ID fehlt\n"
 
 #, c-format
 msgid "ROW DELETED, VENDOR_NOT_SET: id=%s\n"
-msgstr ""
+msgstr "Zeile GELÖSCHT, Lieferant fehlt: id=%s\n"
 
 #, c-format
 msgid "ROW DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
-msgstr ""
+msgstr "Zeile GELÖSCHT, Lieferant existiert nicht: id=%s\n"
 
-msgid ""
-"These rows were deleted:\n"
-"\n"
-msgstr ""
+msgid "These rows were deleted:"
+msgstr "Diese Zeilen wurden gelöscht:"
 
 msgid "Are you sure you have bills/invoices to update?"
 msgstr "Sind Sie sicher, dass Rechnungen aktualisiert werden sollen?"
@@ -11646,8 +11651,8 @@ msgstr "Semikolon-getrennt mit Anführungszeichen"
 msgid "Import Bills & Invoices..."
 msgstr "Rechnungen importieren..."
 
-msgid "bi_import tooltip"
-msgstr ""
+msgid "Import bills and invoices from a CSV text file"
+msgstr "Rechnungen oder Lieferantenrechnungen aus CSV-Datei importieren"
 
 msgid "Import Bills or Invoices from csv"
 msgstr "Rechnungen oder Lieferantenrechnungen aus CSV-Datei importieren"
@@ -11663,6 +11668,14 @@ msgid ""
 "   %u created\n"
 "   %u updated (based on id)"
 msgstr ""
+"Import-Ergebnis:\n"
+"%i Zeilen wurden ignoriert\n"
+"%i Zeilen wurden importiert:\n"
+"   %u repariert\n"
+"   %u ignoriert (reparieren nicht möglich)\n"
+"\n"
+"   %u neu angelegt\n"
+"   %u aktualisiert (gemäß ID)"
 
 msgid "These lines were ignored during import"
 msgstr "Diese Zeilen wurden beim Importieren ignoriert"
@@ -11671,12 +11684,14 @@ msgid "The input file can not be opened."
 msgstr "Die Datei konnte nicht geöffnet werden."
 
 msgid "Adjust regular expression used for import"
-msgstr ""
+msgstr "Regulären Ausdruck für Import anpassen"
 
 msgid ""
 "This regular expression is used to parse the import file. Modify according "
 "to your needs.\n"
 msgstr ""
+"Dieser Reguläre Ausdruck wird benutzt, um die importierte Datei zu "
+"verarbeiten. Sie müssen diesen Ausdruck an ihr Dateiformat anpassen.\n"
 
 msgid ""
 "This transaction is already being edited in another register. Please finish "
@@ -12504,12 +12519,16 @@ msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Das Zahlenformat für die automatische Kundennummer. Dies ist ein »printf« "
+"Formatstring."
 
 #. src/business/business-utils/business-prefs.scm
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
 msgstr ""
+"Die zuletzt verwendete Kundennummer. Diese Zahl wird um eins erhöht, wenn "
+"die nächste Kundennummer vergeben wird."
 
 #. src/business/business-utils/business-prefs.scm
 msgid "Employee number format"
@@ -12524,12 +12543,16 @@ msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Das Zahlenformat für die automatische Mitarbeiternummer. Dies ist ein "
+"»printf« Formatstring."
 
 #. src/business/business-utils/business-prefs.scm
 msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
 msgstr ""
+"Die zuletzt verwendete Mitarbeiternummer. Diese Zahl wird um eins erhöht, "
+"wenn die nächste Mitarbeiternummer vergeben wird."
 
 #. src/business/business-utils/business-prefs.scm
 msgid "Invoice number format"
@@ -12545,12 +12568,16 @@ msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Das Zahlenformat für die automatische Rechnungsnummer. Dies ist ein »printf« "
+"Formatstring."
 
 #. src/business/business-utils/business-prefs.scm
 msgid ""
 "The previous invoice number generated. This number will be incremented to "
 "generate the next invoice number."
 msgstr ""
+"Die zuletzt verwendete Rechnungsnummer. Diese Zahl wird um eins erhöht, wenn "
+"die nächste Rechnungsnummer vergeben wird."
 
 #. src/business/business-utils/business-prefs.scm
 msgid "Bill number format"
@@ -12565,12 +12592,16 @@ msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
 msgstr ""
+"Das Zahlenformat für die automatische Lieferantenrechnungsnummer. Dies ist "
+"ein »printf« Formatstring."
 
 #. src/business/business-utils/business-prefs.scm
 msgid ""
 "The previous bill number generated. This number will be incremented to "
 "generate the next bill number."
 msgstr ""
+"Die zuletzt verwendete Lieferantenrechnungsnummer. Diese Zahl wird um eins "
+"erhöht, wenn die nächste Lieferantenrechnungsnummer vergeben wird."
 
 #. src/business/business-utils/business-prefs.scm
 msgid "Expense voucher number format"
@@ -12585,12 +12616,16 @@ msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
+"Das Zahlenformat für die automatische Auslagenerstattungsnummer. Dies ist "
+"ein »printf« Formatstring."
 
 #. src/business/business-utils/business-prefs.scm
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
 msgstr ""
+"Die zuletzt verwendete Auslagenerstattungsnummer. Diese Zahl wird um eins "
+"erhöht, wenn die nächste Auslagenerstattungsnummer vergeben wird."
 
 #. src/business/business-utils/business-prefs.scm
 msgid "Job number format"
@@ -12605,12 +12640,16 @@ msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
 msgstr ""
+"Das Zahlenformat für die automatische Auftragsnummer. Dies ist ein »printf« "
+"Formatstring."
 
 #. src/business/business-utils/business-prefs.scm
 msgid ""
 "The previous job number generated. This number will be incremented to "
 "generate the next job number."
 msgstr ""
+"Die zuletzt verwendete Auftragsnummer. Diese Zahl wird um eins erhöht, wenn "
+"die nächste Auftragsnummer vergeben wird."
 
 #. src/business/business-utils/business-prefs.scm
 msgid "Order number format"
@@ -12625,12 +12664,16 @@ msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Das Zahlenformat für die automatische Bestellungsnummer. Dies ist ein "
+"»printf« Formatstring."
 
 #. src/business/business-utils/business-prefs.scm
 msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
 msgstr ""
+"Die zuletzt verwendete Bestellungsnummer. Diese Zahl wird um eins erhöht, "
+"wenn die nächste Bestellungsnummer vergeben wird."
 
 #. src/business/business-utils/business-prefs.scm
 msgid "Vendor number format"
@@ -12645,12 +12688,16 @@ msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
 msgstr ""
+"Das Zahlenformat für die automatische Lieferantennummer. Dies ist ein "
+"»printf« Formatstring."
 
 #. src/business/business-utils/business-prefs.scm
 msgid ""
 "The previous vendor number generated. This number will be incremented to "
 "generate the next vendor number."
 msgstr ""
+"Die zuletzt verwendete Lieferantennummer. Diese Zahl wird um eins erhöht, "
+"wenn die nächste Lieferantennummer vergeben wird."
 
 #. src/business/business-utils/business-prefs.scm
 msgid "The name of your business"
@@ -18391,6 +18438,10 @@ msgid ""
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash therefore."
 msgstr ""
+"Wenn Sie GnuCash über Mitternacht hinaus geöffnet halten, sollten Sie "
+"entweder das ganze Programm oder die verwendeten Kontofenster einmal "
+"schließen und wieder öffnen, damit das neue Datum als voreingestelltes "
+"Buchungsdatum vorhanden ist."
 
 msgid ""
 "The GnuCash developers are easy to contact.  As well as several mailing "
