@@ -71,12 +71,6 @@ static void gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_vie
         GtkCellRenderer *renderer,
         GncTreeViewAccountColumnTextEdited col_edited_cb);
 
-static void tax_info_data_func (GtkTreeViewColumn *col,
-        GtkCellRenderer   *renderer,
-        GtkTreeModel      *model,
-        GtkTreeIter       *iter,
-        gpointer           view);
-
 typedef struct GncTreeViewAccountPrivate
 {
     AccountViewInfo avi;
@@ -466,66 +460,6 @@ sort_by_total_period_value (GtkTreeModel *f_model,
 }
 
 /************************************************************/
-/*                 Tax_Info data function                   */
-/************************************************************/
-
-/*
- * The tax-info column in the account tree view is based on the
- * combination of two columns in the account tree model. The data
- * function displays only the the data in the
- * GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO model column if the row is 
- * expanded; otherwise it combines it with the data
- * in the GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO_SUB_ACCT model column.
- */
-static void
-tax_info_data_func (GtkTreeViewColumn *col,
-                    GtkCellRenderer   *renderer,
-                    GtkTreeModel      *model,
-                    GtkTreeIter       *iter,
-                    gpointer           view)
-{
-    const gchar *tax_info, *tax_info_sub_acct;
-    GtkTreePath *path;
-
-    gtk_tree_model_get(model,
-                       iter, 
-                       GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
-                       &tax_info,
-                       -1);
-
-    if (tax_info == NULL)
-        tax_info = "";
-    path = gtk_tree_model_get_path(model, iter);
-    if (gtk_tree_view_row_expanded(GTK_TREE_VIEW(view), path))
-        g_object_set(renderer, "text", tax_info, NULL);
-    else
-    {
-        gtk_tree_model_get(model,
-                           iter, 
-                           GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO_SUB_ACCT,
-                           &tax_info_sub_acct,
-                           -1);
-        if (tax_info_sub_acct == NULL)
-            tax_info_sub_acct = "";
-        if (safe_strcmp (tax_info_sub_acct, "") == 0)
-            g_object_set(renderer, "text", tax_info, NULL);
-        else
-        {
-            if (safe_strcmp (tax_info, "") == 0)
-                g_object_set(renderer, "text", tax_info_sub_acct, NULL);
-            else
-            {
-                const gchar *combined_tax_info;
-                combined_tax_info = g_strdup_printf ("%s; %s", tax_info,
-                       tax_info_sub_acct);
-                g_object_set(renderer, "text", combined_tax_info, NULL);
-            }
-        }
-    }
-    gtk_tree_path_free(path);
-}
-
-/************************************************************/
 /*                    New View Creation                     */
 /************************************************************/
 
@@ -543,8 +477,6 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     GtkTreePath *virtual_root_path = NULL;
     const gchar *sample_type, *sample_commodity;
     GncTreeViewAccountPrivate *priv;
-    GtkTreeViewColumn *tax_info_column;
-    GtkCellRenderer *renderer;
 
     ENTER(" ");
     /* Create our view */
@@ -712,18 +644,11 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                     GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                     sort_by_string);
-    tax_info_column
-    = gnc_tree_view_add_text_column(view, _("Tax Info"), "tax-info", NULL,
+    gnc_tree_view_add_text_column(view, _("Tax Info"), "tax-info", NULL,
                                   "Sample tax info.",
-                                  GNC_TREE_VIEW_COLUMN_DATA_NONE,
+                                  GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    renderer = gnc_tree_view_column_get_renderer(tax_info_column);
-    gtk_tree_view_column_set_cell_data_func(tax_info_column,
-                                            renderer,
-                                            tax_info_data_func,
-                                            GTK_TREE_VIEW(view),
-                                            NULL);
     gnc_tree_view_add_toggle_column(view, _("Placeholder"),
                                     /* Translators: This string has a context prefix; the translation
                                     	must only contain the part after the | character. */
