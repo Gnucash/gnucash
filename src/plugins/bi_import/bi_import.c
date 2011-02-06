@@ -169,7 +169,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 
             // fill in the values
             gtk_list_store_append (store, &iter);
-            FILL_IN_HELPER (_("id"), ID);
+            FILL_IN_HELPER ("id", ID); /* FIXME: Should "id" be translated? I don't think so. */
             FILL_IN_HELPER ("date_opened", DATE_OPENED);
             FILL_IN_HELPER ("owner_id", OWNER_ID);
             FILL_IN_HELPER ("biing_id", BILLING_ID);
@@ -454,7 +454,10 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
     g_string_free (prev_date, TRUE);
 
     if (info && (info->len > 0))
-        g_string_prepend (info, _("These rows were deleted:\n\n"));
+    {
+        g_string_prepend (info, "\n\n");
+        g_string_prepend (info, _("These rows were deleted:"));
+    }
 }
 
 
