@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.4.1-pre1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-27 22:00+0100\n"
-"PO-Revision-Date: 2011-02-05 21:02+0100\n"
+"PO-Revision-Date: 2011-02-06 09:12+0100\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -15750,7 +15750,7 @@ msgstr "Web:"
 #: ../intl-scm/guile-strings.c:1046
 #, c-format
 msgid "%s&nbsp;#"
-msgstr "%snummer:"
+msgstr "%snummer:&nbsp;"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -21873,3 +21873,6 @@ msgstr "Er is een theorie die stelt dat, als iemand ooit ontdekt waar het heelal
 
 #~ msgid "Default CSS"
 #~ msgstr "Standaard CSS"
+
+#~ msgid "%s&nbsp;Date"
+#~ msgstr "%sdatum"
