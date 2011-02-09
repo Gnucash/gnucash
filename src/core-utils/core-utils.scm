@@ -23,3 +23,4 @@
 (re-export gnc-scm-log-error)
 (re-export gnc-scm-log-msg)
 (re-export gnc-scm-log-debug)
+(re-export gnc-locale-default-iso-currency-code)
