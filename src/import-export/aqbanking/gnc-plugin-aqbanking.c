@@ -296,7 +296,11 @@ gnc_plugin_ab_main_window_page_changed(GncMainWindow *window,
 {
     Account *account = main_window_to_account(window);
 
-    gnc_plugin_ab_account_selected(page, account, user_data);
+    /* Make sure not to call this with a NULL GncPluginPage */
+    if (page)
+    {
+        gnc_plugin_ab_account_selected(page, account, user_data);
+    }
 }
 
 /**
