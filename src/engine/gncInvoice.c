@@ -344,6 +344,9 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     invoice->to_charge_amount = from->to_charge_amount;
     invoice->date_opened = from->date_opened;
 
+    // Oops. Do not forget to copy the pointer to the correct currency here.
+    invoice->currency = from->currency;
+
     // Copy all invoice->entries
     for (node = from->entries; node; node = node->next)
     {
