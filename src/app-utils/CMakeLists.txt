@@ -26,6 +26,7 @@ SET (app_utils_HEADERS
   gnc-basic-gobject.h
   gnc-account-merge.h
   gnc-accounting-period.h
+  gnc-addr-quickfill.h
   gnc-component-manager.h
   gnc-druid.h
   gnc-druid-cb.h
@@ -57,6 +58,7 @@ SET (app_utils_SOURCES
   gfec.c
   gnc-account-merge.c
   gnc-accounting-period.c
+  gnc-addr-quickfill.c
   gnc-component-manager.c
   gnc-druid.c
   gnc-druid-cb.c
