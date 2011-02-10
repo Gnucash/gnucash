@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
-
+##@file
+#@cond Perl
 use strict;
 
 my $tag = shift @ARGV;
@@ -49,3 +50,4 @@ while (<XMLFILE>) {
 }
 
 print $files_written
+##@endcond Perl

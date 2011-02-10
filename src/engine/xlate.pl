@@ -1,11 +1,15 @@
 #! /usr/bin/perl
-#
-# FUNCTION: this utility script converts old code to the new
-#           QOF routine names, and does other related cleanup
+##  @file
+#   @brief  
+#   FUNCTION: this utility script converts old code to the new
+#      	      QOF routine names, and does other related cleanup
 #
 # USAGE: ls *.c *.h | ./xlate.pl ; make ; cvs commit
 #        
 # AUTHOR: Linas Vepstas <linas@linas.org> June 2003
+# @author Linas Vepstas <linas@linas.org>
+# @date June 2003
+# @cond Perl
 
 @files = <STDIN>;
 
@@ -265,3 +269,4 @@ foreach (@files)
 	$rn = "mv " . $afile . ".tmp " . $afile;
 	system ($rn);
 }
+## @endcond Perl
