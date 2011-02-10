@@ -25,7 +25,6 @@
 #define DIALOG_TRANSFER_H
 
 #include "Account.h"
-#include "QuickFill.h"
 
 typedef struct _xferDialog XferDialog;
 

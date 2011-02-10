@@ -24,6 +24,7 @@
 #include "config.h"
 #include "gnc-entry-quickfill.h"
 #include "engine/gnc-event.h"
+#include "engine/gncEntry.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_REGISTER;
@@ -156,12 +157,11 @@ QuickFill * gnc_get_shared_entry_desc_quickfill (QofBook *book,
 
     qfb = qof_book_get_data (book, key);
 
-    if (qfb)
+    if (!qfb)
     {
-        g_assert(use_invoices == qfb->using_invoices);
-        return qfb->qf;
+        qfb = build_shared_quickfill(book, key, use_invoices);
     }
 
-    qfb = build_shared_quickfill(book, key, use_invoices);
+    g_assert(use_invoices == qfb->using_invoices);
     return qfb->qf;
 }

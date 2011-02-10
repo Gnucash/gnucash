@@ -31,7 +31,6 @@
 #define GNC_ENTRY_QUICKFILL_H
 
 #include "qof.h"
-#include "engine/gncEntry.h"
 #include "app-utils/QuickFill.h"
 
 /** Create/fetch a quickfill GncEntry description strings.

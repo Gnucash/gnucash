@@ -47,6 +47,7 @@
 #include "swig-runtime.h"
 #include "guile-mappings.h"
 #include "engine-helpers.h"
+#include "app-utils/QuickFill.h"
 
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
