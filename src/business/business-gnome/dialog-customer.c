@@ -71,12 +71,24 @@ void gnc_customer_addr2_insert_cb(GtkEditable *editable,
 void gnc_customer_addr3_insert_cb(GtkEditable *editable,
                                   gchar *new_text, gint new_text_length,
                                   gint *position, gpointer user_data);
+void gnc_customer_shipaddr2_insert_cb(GtkEditable *editable,
+                                      gchar *new_text, gint new_text_length,
+                                      gint *position, gpointer user_data);
+void gnc_customer_shipaddr3_insert_cb(GtkEditable *editable,
+                                      gchar *new_text, gint new_text_length,
+                                      gint *position, gpointer user_data);
 gboolean
 gnc_customer_addr2_key_press_cb( GtkEntry *entry, GdkEventKey *event,
                                  gpointer user_data );
 gboolean
 gnc_customer_addr3_key_press_cb( GtkEntry *entry, GdkEventKey *event,
                                  gpointer user_data );
+gboolean
+gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry, GdkEventKey *event,
+                                     gpointer user_data );
+gboolean
+gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry, GdkEventKey *event,
+                                     gpointer user_data );
 
 #define ADDR_QUICKFILL "GncAddress-Quickfill"
 
@@ -938,6 +950,34 @@ idle_select_region_addr3(gpointer user_data)
     return FALSE;
 }
 
+static gboolean
+idle_select_region_shipaddr2(gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    g_return_val_if_fail(user_data, FALSE);
+
+    gtk_editable_select_region(GTK_EDITABLE(wdata->shipaddr2_entry),
+                               wdata->addr2_start_selection,
+                               wdata->addr2_end_selection);
+
+    wdata->addr2_selection_source_id = 0;
+    return FALSE;
+}
+
+static gboolean
+idle_select_region_shipaddr3(gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    g_return_val_if_fail(user_data, FALSE);
+
+    gtk_editable_select_region(GTK_EDITABLE(wdata->shipaddr3_entry),
+                               wdata->addr3_start_selection,
+                               wdata->addr3_end_selection);
+
+    wdata->addr3_selection_source_id = 0;
+    return FALSE;
+}
+
 /* Implementation of the steps common to all address lines. Returns
  * TRUE if anything was inserted by quickfill, otherwise FALSE. */
 static gboolean
@@ -1016,8 +1056,6 @@ void gnc_customer_addr2_insert_cb(GtkEditable *editable,
     CustomerWindow *wdata = user_data;
     gboolean r;
 
-    /*g_warning("In gnc_customer_addr2_insert_cb");*/
-
     /* The handling common to all address lines is done in this other
      * function. */
     r = gnc_customer_addr_common_insert_cb(editable, new_text, new_text_length,
@@ -1042,7 +1080,49 @@ void gnc_customer_addr3_insert_cb(GtkEditable *editable,
     CustomerWindow *wdata = user_data;
     gboolean r;
 
-    /*g_warning("In gnc_customer_addr3_insert_cb");*/
+    /* The handling common to all address lines is done in this other
+     * function. */
+    r = gnc_customer_addr_common_insert_cb(editable, new_text, new_text_length,
+                                           position, user_data, wdata->addr3_quickfill);
+
+    /* Did we insert something? Then set up the correct idle handler */
+    if (r)
+    {
+        wdata->addr3_start_selection = *position;
+        wdata->addr3_end_selection = -1;
+        wdata->addr3_selection_source_id = g_idle_add(idle_select_region_addr3,
+                                           user_data);
+    }
+}
+
+void gnc_customer_shipaddr2_insert_cb(GtkEditable *editable,
+                                      gchar *new_text, gint new_text_length,
+                                      gint *position, gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    gboolean r;
+
+    /* The handling common to all address lines is done in this other
+     * function. */
+    r = gnc_customer_addr_common_insert_cb(editable, new_text, new_text_length,
+                                           position, user_data, wdata->addr2_quickfill);
+
+    /* Did we insert something? Then set up the correct idle handler */
+    if (r)
+    {
+        wdata->addr2_start_selection = *position;
+        wdata->addr2_end_selection = -1;
+        wdata->addr2_selection_source_id = g_idle_add(idle_select_region_shipaddr2,
+                                           user_data);
+    }
+}
+
+void gnc_customer_shipaddr3_insert_cb(GtkEditable *editable,
+                                      gchar *new_text, gint new_text_length,
+                                      gint *position, gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    gboolean r;
 
     /* The handling common to all address lines is done in this other
      * function. */
@@ -1052,11 +1132,9 @@ void gnc_customer_addr3_insert_cb(GtkEditable *editable,
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
     {
-        /* select region on idle, because it would be reset once this function
-           finishes */
         wdata->addr3_start_selection = *position;
         wdata->addr3_end_selection = -1;
-        wdata->addr3_selection_source_id = g_idle_add(idle_select_region_addr3,
+        wdata->addr3_selection_source_id = g_idle_add(idle_select_region_shipaddr3,
                                            user_data);
     }
 }
@@ -1107,4 +1185,22 @@ gnc_customer_addr3_key_press_cb( GtkEntry *entry,
     CustomerWindow *wdata = user_data;
     return gnc_customer_common_key_press_cb(entry, event, user_data,
                                             wdata->addr3_entry);
+}
+gboolean
+gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry,
+                                     GdkEventKey *event,
+                                     gpointer user_data )
+{
+    CustomerWindow *wdata = user_data;
+    return gnc_customer_common_key_press_cb(entry, event, user_data,
+                                            wdata->shipaddr2_entry);
+}
+gboolean
+gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry,
+                                     GdkEventKey *event,
+                                     gpointer user_data )
+{
+    CustomerWindow *wdata = user_data;
+    return gnc_customer_common_key_press_cb(entry, event, user_data,
+                                            wdata->shipaddr3_entry);
 }

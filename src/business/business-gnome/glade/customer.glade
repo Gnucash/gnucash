@@ -883,6 +883,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <signal name="insert_text" handler="gnc_customer_shipaddr2_insert_cb"/>
+                                <signal name="key_press_event" handler="gnc_customer_shipaddr2_key_press_cb"/>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -895,6 +897,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <signal name="insert_text" handler="gnc_customer_shipaddr3_insert_cb"/>
+                                <signal name="key_press_event" handler="gnc_customer_shipaddr3_key_press_cb"/>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
