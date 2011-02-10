@@ -565,7 +565,11 @@ trans_dict =    {
                     'GetCurrency': GncCommodity,
                     'GetGUID': GUID
                 }
+ 
 methods_return_instance(Transaction, trans_dict)
+methods_return_instance_lists(
+    Transaction, { 'GetSplitList': Split,
+                       })
 Transaction.decorate_functions(
     decorate_monetary_list_returning_function, 'GetImbalance')
 
@@ -633,7 +637,9 @@ account_dict =  {
                     'GetGUID': GUID
                 }
 methods_return_instance(Account, account_dict)
-
+methods_return_instance_lists(
+    Account, { 'GetSplitList': Split,
+                       })
 Account.name = property( Account.GetName, Account.SetName )
 
 #GUID

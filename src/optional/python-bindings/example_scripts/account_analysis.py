@@ -182,7 +182,6 @@ def main():
     
     # insert and add all splits in the periods of interest
     for split in account_of_interest.GetSplitList():
-        split = Split(instance=split)
         trans = split.parent
         trans_date = date.fromtimestamp(trans.GetDate())
 
