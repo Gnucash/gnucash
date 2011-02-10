@@ -25,6 +25,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
@@ -37,6 +38,8 @@
 
 #include "dialog-search.h"
 #include "search-param.h"
+#include "app-utils/QuickFill.h"
+#include "app-utils/gnc-addr-quickfill.h"
 
 #include "gncAddress.h"
 #include "gncCustomer.h"
@@ -62,6 +65,20 @@ void gnc_customer_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_customer_addr2_insert_cb(GtkEditable *editable,
+                                  gchar *new_text, gint new_text_length,
+                                  gint *position, gpointer user_data);
+void gnc_customer_addr3_insert_cb(GtkEditable *editable,
+                                  gchar *new_text, gint new_text_length,
+                                  gint *position, gpointer user_data);
+gboolean
+gnc_customer_addr2_key_press_cb( GtkEntry *entry, GdkEventKey *event,
+                                 gpointer user_data );
+gboolean
+gnc_customer_addr3_key_press_cb( GtkEntry *entry, GdkEventKey *event,
+                                 gpointer user_data );
+
+#define ADDR_QUICKFILL "GncAddress-Quickfill"
 
 typedef enum
 {
@@ -121,6 +138,17 @@ struct _customer_window
     GncCustomer *	created_customer;
 
     GncTaxTable *	taxtable;
+
+    /* stored data for the description quickfill selection function */
+    QuickFill *addr2_quickfill;
+    gint addr2_start_selection;
+    gint addr2_end_selection;
+    guint addr2_selection_source_id;
+
+    QuickFill *addr3_quickfill;
+    gint addr3_start_selection;
+    gint addr3_end_selection;
+    guint addr3_selection_source_id;
 };
 
 void
@@ -352,6 +380,11 @@ gnc_customer_window_destroy_cb (GtkWidget *widget, gpointer data)
         gncCustomerDestroy (customer);
         cw->customer_guid = *guid_null ();
     }
+
+    if (cw->addr2_selection_source_id)
+        g_source_remove (cw->addr2_selection_source_id);
+    if (cw->addr3_selection_source_id)
+        g_source_remove (cw->addr3_selection_source_id);
 
     gnc_unregister_gui_component (cw->component_id);
     gnc_resume_gui_refresh ();
@@ -629,6 +662,10 @@ gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
                                   gncCustomerGetTaxTableOverride (cust));
     gnc_customer_taxtable_check_cb (GTK_TOGGLE_BUTTON (cw->taxtable_check), cw);
 
+    /* Set up the addr line quickfill */
+    cw->addr2_quickfill = gnc_get_shared_address_addr2_quickfill(cw->book, ADDR_QUICKFILL);
+    cw->addr3_quickfill = gnc_get_shared_address_addr3_quickfill(cw->book, ADDR_QUICKFILL);
+
     /* Set the Discount, and Credit amounts */
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->discount_amount),
                                 gncCustomerGetDiscount (cust));
@@ -871,4 +908,203 @@ gnc_customer_search_edit (gpointer start, gpointer book)
         gnc_ui_customer_edit (start);
 
     return NULL;
+}
+
+static gboolean
+idle_select_region_addr2(gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    g_return_val_if_fail(user_data, FALSE);
+
+    gtk_editable_select_region(GTK_EDITABLE(wdata->addr2_entry),
+                               wdata->addr2_start_selection,
+                               wdata->addr2_end_selection);
+
+    wdata->addr2_selection_source_id = 0;
+    return FALSE;
+}
+
+static gboolean
+idle_select_region_addr3(gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    g_return_val_if_fail(user_data, FALSE);
+
+    gtk_editable_select_region(GTK_EDITABLE(wdata->addr3_entry),
+                               wdata->addr3_start_selection,
+                               wdata->addr3_end_selection);
+
+    wdata->addr3_selection_source_id = 0;
+    return FALSE;
+}
+
+/* Implementation of the steps common to all address lines. Returns
+ * TRUE if anything was inserted by quickfill, otherwise FALSE. */
+static gboolean
+gnc_customer_addr_common_insert_cb(GtkEditable *editable,
+                                   gchar *new_text, gint new_text_length,
+                                   gint *position, gpointer user_data, QuickFill *qf)
+{
+    CustomerWindow *wdata = user_data;
+    gchar *concatenated_text;
+    QuickFill *match;
+    const gchar *match_str;
+    gint prefix_len, concatenated_text_len;
+
+    if (new_text_length <= 0)
+        return FALSE;
+
+    /*g_warning("In gnc_customer_addr_common_insert_cb");*/
+
+    {
+        gchar *suffix = gtk_editable_get_chars(editable, *position, -1);
+        /* If we are inserting in the middle, do nothing */
+        if (*suffix)
+        {
+            g_free(suffix);
+            return FALSE;
+        }
+        g_free(suffix);
+    }
+
+    {
+        gchar *prefix = gtk_editable_get_chars(editable, 0, *position);
+        prefix_len = strlen(prefix);
+        concatenated_text = g_strconcat(prefix, new_text, (gchar*) NULL);
+        concatenated_text_len = prefix_len + new_text_length;
+        g_free(prefix);
+    }
+
+    match = gnc_quickfill_get_string_match(qf, concatenated_text);
+    g_free(concatenated_text);
+    if (match)
+    {
+        const char* match_str = gnc_quickfill_string(match);
+        if (match_str)
+        {
+            gint match_str_len = strlen(match_str);
+            if (match_str_len > concatenated_text_len)
+            {
+                g_signal_handlers_block_matched (G_OBJECT (editable),
+                                                 G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, user_data);
+
+                gtk_editable_insert_text(editable,
+                                         match_str + prefix_len,
+                                         match_str_len - prefix_len,
+                                         position);
+
+                g_signal_handlers_unblock_matched (G_OBJECT (editable),
+                                                   G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, user_data);
+
+                /* stop the current insert */
+                g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
+
+                /* set the position */
+                *position = g_utf8_strlen(concatenated_text, -1);
+
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
+void gnc_customer_addr2_insert_cb(GtkEditable *editable,
+                                  gchar *new_text, gint new_text_length,
+                                  gint *position, gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    gboolean r;
+
+    /*g_warning("In gnc_customer_addr2_insert_cb");*/
+
+    /* The handling common to all address lines is done in this other
+     * function. */
+    r = gnc_customer_addr_common_insert_cb(editable, new_text, new_text_length,
+                                           position, user_data, wdata->addr2_quickfill);
+
+    /* Did we insert something? Then set up the correct idle handler */
+    if (r)
+    {
+        /* select region on idle, because it would be reset once this function
+           finishes */
+        wdata->addr2_start_selection = *position;
+        wdata->addr2_end_selection = -1;
+        wdata->addr2_selection_source_id = g_idle_add(idle_select_region_addr2,
+                                           user_data);
+    }
+}
+
+void gnc_customer_addr3_insert_cb(GtkEditable *editable,
+                                  gchar *new_text, gint new_text_length,
+                                  gint *position, gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    gboolean r;
+
+    /*g_warning("In gnc_customer_addr3_insert_cb");*/
+
+    /* The handling common to all address lines is done in this other
+     * function. */
+    r = gnc_customer_addr_common_insert_cb(editable, new_text, new_text_length,
+                                           position, user_data, wdata->addr3_quickfill);
+
+    /* Did we insert something? Then set up the correct idle handler */
+    if (r)
+    {
+        /* select region on idle, because it would be reset once this function
+           finishes */
+        wdata->addr3_start_selection = *position;
+        wdata->addr3_end_selection = -1;
+        wdata->addr3_selection_source_id = g_idle_add(idle_select_region_addr3,
+                                           user_data);
+    }
+}
+
+static gboolean
+gnc_customer_common_key_press_cb( GtkEntry *entry,
+                                  GdkEventKey *event,
+                                  gpointer user_data, GtkWidget* editable )
+{
+    gboolean done_with_input = FALSE;
+
+    /* Most "special" keys are allowed to be handled directly by
+     * the entry's key press handler, but in some cases that doesn't
+     * seem to work right, so handle them here.
+     */
+    switch ( event->keyval )
+    {
+    case GDK_Tab:
+    case GDK_ISO_Left_Tab:
+        if ( !( event->state & GDK_SHIFT_MASK) )    /* Complete on Tab,
+                                                  * but not Shift-Tab */
+        {
+            /* NOT done with input, though, since we need to focus to the next
+             * field.  Unselect the current field, though.
+             */
+            gtk_editable_select_region( GTK_EDITABLE(editable),
+                                        0, 0 );
+        }
+        break;
+    }
+
+    return( done_with_input );
+}
+gboolean
+gnc_customer_addr2_key_press_cb( GtkEntry *entry,
+                                 GdkEventKey *event,
+                                 gpointer user_data )
+{
+    CustomerWindow *wdata = user_data;
+    return gnc_customer_common_key_press_cb(entry, event, user_data,
+                                            wdata->addr2_entry);
+}
+gboolean
+gnc_customer_addr3_key_press_cb( GtkEntry *entry,
+                                 GdkEventKey *event,
+                                 gpointer user_data )
+{
+    CustomerWindow *wdata = user_data;
+    return gnc_customer_common_key_press_cb(entry, event, user_data,
+                                            wdata->addr3_entry);
 }
