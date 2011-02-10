@@ -180,8 +180,8 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_tools_commodity_editor)
     },
     {
-        "ToolsFinancialCalculatorAction", NULL, N_("_Financial Calculator"), NULL,
-        N_("Use the financial calculator"),
+        "ToolsFinancialCalculatorAction", NULL, N_("_Loan Repayment Calculator"), NULL,
+        N_("Use the loan/mortgage repayment calculator"),
         G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator)
     },
     {

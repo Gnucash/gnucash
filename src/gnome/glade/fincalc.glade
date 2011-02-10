@@ -4,7 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkDialog" id="Financial Calculator Dialog">
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Financial Calculator</property>
+    <property name="title" translatable="yes">Loan Repayment Calculator</property>
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
