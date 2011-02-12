@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-12 17:08+0100\n"
-"PO-Revision-Date: 2011-02-06 22:16+0100\n"
+"PO-Revision-Date: 2011-02-12 17:29+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -3578,9 +3578,8 @@ msgstr "Zukünftiger Wert"
 msgid "Interest rate"
 msgstr "Zinssatz"
 
-#, fuzzy
 msgid "Loan Repayment Calculator"
-msgstr "Finanzrechner"
+msgstr "Darlehensrechner"
 
 msgid "Payment Total:"
 msgstr "Zahlungsbetrag:"
@@ -4899,13 +4898,11 @@ msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 "Wertpapiere für Aktienkonten und Investmentfonds anzeigen und bearbeiten"
 
-#, fuzzy
 msgid "_Loan Repayment Calculator"
-msgstr "_Finanzrechner"
+msgstr "_Darlehensrechner"
 
-#, fuzzy
 msgid "Use the loan/mortgage repayment calculator"
-msgstr "Den Finanzrechner benutzen"
+msgstr "Den Darlehensrechner benutzen"
 
 msgid "_Close Book"
 msgstr "_Buchabschluss"
