@@ -212,6 +212,9 @@ Timespec timespec_abs(const Timespec *t);
  * the timepair representing midday on that day */
 Timespec timespecCanonicalDayTime(Timespec t);
 
+/** Returns the current clock time as a Timespec, taken from time(2). */
+Timespec timespec_now (void);
+
 /** Turns a time_t into a Timespec */
 void timespecFromTime_t( Timespec *ts, time_t t );
 

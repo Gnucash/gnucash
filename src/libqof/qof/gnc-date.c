@@ -1535,6 +1535,15 @@ timespecFromTime_t( Timespec *ts, time_t t )
     ts->tv_nsec = 0;
 }
 
+Timespec
+timespec_now()
+{
+    Timespec ts;
+    ts.tv_sec = time(NULL);
+    ts.tv_nsec = 0;
+    return ts;
+}
+
 time_t
 timespecToTime_t (Timespec ts)
 {
