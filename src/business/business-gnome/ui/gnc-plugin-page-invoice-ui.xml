@@ -31,6 +31,8 @@
         <menuitem name="BlankEntry"        	action="BlankEntryAction"/>
         <separator name="ActionsSep4"/>
         <menuitem name="DuplicateEntry"    	action="DuplicateEntryAction"/>
+        <menuitem name="UpEntry"    	action="EntryUpAction"/>
+        <menuitem name="DownEntry"    	action="EntryDownAction"/>
       </placeholder>
     </menu>
 
@@ -62,6 +64,8 @@
       <toolitem name="ToolbarCancelEntry"    	action="CancelEntryAction"/>
       <toolitem name="ToolbarDeleteEntry"    	action="DeleteEntryAction"/>
       <toolitem name="ToolbarDuplicateEntry" 	action="DuplicateEntryAction"/>
+        <toolitem name="ToolbarUpEntry"    	action="EntryUpAction"/>
+        <toolitem name="ToolbarDownEntry"    	action="EntryDownAction"/>
       <toolitem name="ToolbarBlankEntry"     	action="BlankEntryAction"/>
       <separator name="ToolbarSep68"/>
       <toolitem name="ToolbarPostInvoice"       action="EditPostInvoiceAction"/>
@@ -77,6 +81,8 @@
       <menuitem name="DeleteEntry"       		action="DeleteEntryAction"/>
       <separator name="PopupSep1"/>
       <menuitem name="DuplicateEntry"    		action="DuplicateEntryAction"/>
+      <menuitem name="UpEntry"    	action="EntryUpAction"/>
+      <menuitem name="DownEntry"  	action="EntryDownAction"/>
       <menuitem name="BlankEntry"        		action="BlankEntryAction"/>
     </placeholder>
   </popup>

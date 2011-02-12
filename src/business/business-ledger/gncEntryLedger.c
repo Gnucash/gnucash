@@ -874,6 +874,10 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
         gncEntryCopy (entry, new_entry);
         gncEntrySetDate (new_entry, ledger->last_date_entered);
 
+        /* We also must set a new DateEntered on the new entry
+         * because otherwise the ordering is not deterministic */
+        gncEntrySetDateEntered (new_entry, timespec_now());
+
         /* Set the hint for where to display on the refresh */
         ledger->hint_entry = new_entry;
     }
@@ -898,4 +902,76 @@ gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string)
         return;
 
     ledger->gconf_section = string;
+}
+
+void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
+        gboolean move_up)
+{
+    GncEntry *blank, *current, *target;
+    VirtualCellLocation vcell_loc;
+
+    g_assert(ledger);
+
+    blank = gnc_entry_ledger_get_blank_entry(ledger);
+    if (!blank)
+        return;
+
+    /* Ensure we have a valid current GncEntry and it isn't the blank
+     * entry */
+    current = gnc_entry_ledger_get_current_entry(ledger);
+    if (!current || current == blank)
+        return;
+
+    /* Obtain the GncEntry at the up or down virtual table location */
+    vcell_loc = ledger->table->current_cursor_loc.vcell_loc;
+    if (move_up)
+    {
+        if (vcell_loc.virt_row == 0)
+            return;
+        vcell_loc.virt_row--;
+    }
+    else
+    {
+        vcell_loc.virt_row++;
+    }
+
+    /* Ensure we have a valid other GncEntry and it isn't the blank
+     * entry */
+    target = gnc_entry_ledger_get_entry(ledger, vcell_loc);
+    if (!target || target == blank)
+        return;
+
+    /*g_warning("Ok, current desc='%s' target desc='%s'",
+              gncEntryGetDescription(current),
+              gncEntryGetDescription(target));*/
+
+    gnc_suspend_gui_refresh ();
+
+    /* Swap the date-entered of both entries. That's already
+     * sufficient! */
+    {
+        Timespec time_current = gncEntryGetDateEntered(current);
+        Timespec time_target = gncEntryGetDateEntered(target);
+
+        /* Special treatment for identical times (potentially caused
+         * by the "duplicate entry" command) */
+        if (timespec_equal(&time_current, &time_target))
+        {
+            /*g_warning("Surprise - both DateEntered are equal.");*/
+            /* We just increment the DateEntered of the previously
+             * lower of the two by one second. This might still cause
+             * issues if multiple entries had this problem, but
+             * whatever. */
+            if (move_up)
+                time_current.tv_sec++;
+            else
+                time_target.tv_sec++;
+        }
+
+        /* Write the new DateEntered. */
+        gncEntrySetDateEntered(current, time_target);
+        gncEntrySetDateEntered(target, time_current);
+    }
+
+    gnc_resume_gui_refresh ();
 }

@@ -86,6 +86,9 @@ static void gnc_plugin_page_invoice_cmd_company_report (GtkAction *action, GncPl
 static void gnc_plugin_page_redraw_help_cb( GnucashRegister *gsr, GncPluginPageInvoice *invoice_page );
 static void gnc_plugin_page_invoice_refresh_cb (GHashTable *changes, gpointer user_data);
 
+static void gnc_plugin_page_invoice_cmd_entryUp (GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_entryDown (GtkAction *action, GncPluginPageInvoice *plugin_page);
+
 /************************************************************
  *                          Actions                         *
  ************************************************************/
@@ -171,6 +174,16 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         N_("Make a copy of the current entry"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_duplicateEntry)
     },
+    {
+        "EntryUpAction", GTK_STOCK_GO_UP, N_("Move Entry _Up"), NULL,
+        N_("Move the current entry one row upwards"),
+        G_CALLBACK (gnc_plugin_page_invoice_cmd_entryUp)
+    },
+    {
+        "EntryDownAction", GTK_STOCK_GO_DOWN, N_("Move Entry Do_wn"), NULL,
+        N_("Move the current entry one row downwards"),
+        G_CALLBACK (gnc_plugin_page_invoice_cmd_entryDown)
+    },
 
     /* Business menu */
     {
@@ -220,6 +233,8 @@ static const gchar *unposted_actions[] =
     "CancelEntryAction",
     "DeleteEntryAction",
     "DuplicateEntryAction",
+    "EntryUpAction",
+    "EntryDownAction",
     "BlankEntryAction",
     NULL
 };
@@ -237,6 +252,8 @@ static action_toolbar_labels toolbar_labels[] =
     { "CancelEntryAction", 	  N_("Cancel") },
     { "DeleteEntryAction", 	  N_("Delete") },
     { "DuplicateEntryAction",       N_("Duplicate") },
+    { "EntryUpAction", N_("Up") },
+    { "EntryDownAction", N_("Down") },
     { "BlankEntryAction",           N_("Blank") },
     { "EditPostInvoiceAction",      N_("Post") },
     { "EditUnpostInvoiceAction",    N_("Unpost") },
@@ -837,6 +854,32 @@ gnc_plugin_page_invoice_cmd_duplicateEntry (GtkAction *action,
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
     gnc_invoice_window_duplicateCB(NULL, priv->iw);
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_invoice_cmd_entryUp (GtkAction *action,
+                                     GncPluginPageInvoice *plugin_page)
+{
+    GncPluginPageInvoicePrivate *priv;
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
+
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
+    gnc_invoice_window_entryUpCB(NULL, priv->iw);
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_invoice_cmd_entryDown (GtkAction *action,
+                                       GncPluginPageInvoice *plugin_page)
+{
+    GncPluginPageInvoicePrivate *priv;
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
+
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
+    gnc_invoice_window_entryDownCB(NULL, priv->iw);
     LEAVE(" ");
 }
 

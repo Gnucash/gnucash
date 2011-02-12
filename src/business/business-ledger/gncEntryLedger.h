@@ -138,6 +138,16 @@ gboolean gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger,
 void gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger);
 void gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger);
 
+/** This implements the command of moving the current entry (where the
+ * cursor is currently located) one row upwards or downwards,
+ * effectively swapping this row and the other row. If the other row
+ * is empty (or it is the blank entry), nothing will happen.
+ *
+ * \param move_up If TRUE, the current entry is moved upwards,
+ * otherwise downwards. */
+void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
+        gboolean move_up);
+
 QofQuery * gnc_entry_ledger_get_query (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string);

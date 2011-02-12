@@ -112,4 +112,7 @@ void gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_payment_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_report_owner_cb (GtkWidget *widget, gpointer data);
 
+void gnc_invoice_window_entryUpCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_entryDownCB (GtkWidget *widget, gpointer data);
+
 #endif /* GNC_DIALOG_INVOICE_H_ */

@@ -474,6 +474,23 @@ gnc_invoice_window_duplicateInvoiceCB (GtkWidget *widget, gpointer data)
         gnc_ui_invoice_duplicate (invoice);
 }
 
+void gnc_invoice_window_entryUpCB (GtkWidget *widget, gpointer data)
+{
+    InvoiceWindow *iw = data;
+    if (!iw || !iw->ledger)
+        return;
+
+    gnc_entry_ledger_move_current_entry_updown(iw->ledger, TRUE);
+}
+void gnc_invoice_window_entryDownCB (GtkWidget *widget, gpointer data)
+{
+    InvoiceWindow *iw = data;
+    if (!iw || !iw->ledger)
+        return;
+
+    gnc_entry_ledger_move_current_entry_updown(iw->ledger, FALSE);
+}
+
 void
 gnc_invoice_window_recordCB (GtkWidget *widget, gpointer data)
 {
