@@ -4,6 +4,7 @@ src/app-utils/file-utils.c
 src/app-utils/gfec.c
 src/app-utils/gnc-accounting-period.c
 src/app-utils/gnc-account-merge.c
+src/app-utils/gnc-addr-quickfill.c
 src/app-utils/gnc-component-manager.c
 src/app-utils/gnc-druid.c
 src/app-utils/gnc-druid-cb.c
