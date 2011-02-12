@@ -34,6 +34,7 @@ typedef struct
 {
     QuickFill *qf_addr2;
     QuickFill *qf_addr3;
+    QuickFill *qf_addr4;
     QuickFillSort qf_sort;
     QofBook *book;
     gint  listener;
@@ -44,7 +45,7 @@ listen_for_gncaddress_events(QofInstance *entity,  QofEventId event_type,
                              gpointer user_data, gpointer event_data)
 {
     AddressQF *qfb = user_data;
-    const char *addr2, *addr3;
+    const char *addr2, *addr3, *addr4;
 
     /* We only listen for GncAddress events */
     if (!GNC_IS_ADDRESS (entity))
@@ -61,6 +62,7 @@ listen_for_gncaddress_events(QofInstance *entity,  QofEventId event_type,
 
     addr2 = gncAddressGetAddr2(GNC_ADDRESS(entity));
     addr3 = gncAddressGetAddr3(GNC_ADDRESS(entity));
+    addr4 = gncAddressGetAddr4(GNC_ADDRESS(entity));
     if (event_type & QOF_EVENT_MODIFY)
     {
         /* If the description was changed into something non-empty, so
@@ -75,6 +77,11 @@ listen_for_gncaddress_events(QofInstance *entity,  QofEventId event_type,
             /* Add the new string to the quickfill */
             gnc_quickfill_insert (qfb->qf_addr3, addr3, QUICKFILL_LIFO);
         }
+        if (addr4 && strlen(addr4) > 0)
+        {
+            /* Add the new string to the quickfill */
+            gnc_quickfill_insert (qfb->qf_addr4, addr4, QUICKFILL_LIFO);
+        }
     }
     else if (event_type & QOF_EVENT_DESTROY)
     {
@@ -88,6 +95,11 @@ listen_for_gncaddress_events(QofInstance *entity,  QofEventId event_type,
             /* Remove the description from the quickfill */
             gnc_quickfill_insert (qfb->qf_addr3, addr3, QUICKFILL_LIFO);
         }
+        if (addr4 && strlen(addr4) > 0)
+        {
+            /* Remove the description from the quickfill */
+            gnc_quickfill_insert (qfb->qf_addr4, addr4, QUICKFILL_LIFO);
+        }
     }
 }
 
@@ -97,6 +109,7 @@ shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
     AddressQF *qfb = user_data;
     gnc_quickfill_destroy (qfb->qf_addr2);
     gnc_quickfill_destroy (qfb->qf_addr3);
+    gnc_quickfill_destroy (qfb->qf_addr4);
     qof_event_unregister_handler (qfb->listener);
     g_free (qfb);
 }
@@ -112,6 +125,10 @@ static void address_cb(gpointer data, gpointer user_data)
 
     gnc_quickfill_insert (s->qf_addr3,
                           gncAddressGetAddr3(address),
+                          s->qf_sort);
+
+    gnc_quickfill_insert (s->qf_addr4,
+                          gncAddressGetAddr4(address),
                           s->qf_sort);
 }
 
@@ -141,7 +158,8 @@ static AddressQF* build_shared_quickfill (QofBook *book, const char * key)
 
     result->qf_addr2 = gnc_quickfill_new();
     result->qf_addr3 = gnc_quickfill_new();
-    result->qf_sort = QUICKFILL_LIFO;
+    result->qf_addr4 = gnc_quickfill_new();
+    result->qf_sort = QUICKFILL_ALPHA;
     result->book = book;
 
     g_list_foreach (entries, address_cb, result);
@@ -189,4 +207,21 @@ QuickFill * gnc_get_shared_address_addr3_quickfill (QofBook *book, const char * 
     }
 
     return qfb->qf_addr3;
+}
+
+QuickFill * gnc_get_shared_address_addr4_quickfill (QofBook *book, const char * key)
+{
+    AddressQF *qfb;
+
+    g_assert(book);
+    g_assert(key);
+
+    qfb = qof_book_get_data (book, key);
+
+    if (!qfb)
+    {
+        qfb = build_shared_quickfill(book, key);
+    }
+
+    return qfb->qf_addr4;
 }

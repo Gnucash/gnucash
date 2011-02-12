@@ -65,6 +65,16 @@ QuickFill * gnc_get_shared_address_addr2_quickfill (QofBook *book,
 QuickFill * gnc_get_shared_address_addr3_quickfill (QofBook *book,
         const char * key);
 
+/** Create/fetch a quickfill GncAddress description strings on the
+ * Addr4 part.
+ *
+ * Identical to gnc_get_shared_address_addr2_quickfill(). You should
+ * also use the same key as for the other function because the
+ * internal quickfills are updated simultaneously.
+ */
+QuickFill * gnc_get_shared_address_addr4_quickfill (QofBook *book,
+        const char * key);
+
 #endif
 
 /** @} */

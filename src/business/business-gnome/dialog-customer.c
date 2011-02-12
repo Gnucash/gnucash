@@ -71,10 +71,16 @@ void gnc_customer_addr2_insert_cb(GtkEditable *editable,
 void gnc_customer_addr3_insert_cb(GtkEditable *editable,
                                   gchar *new_text, gint new_text_length,
                                   gint *position, gpointer user_data);
+void gnc_customer_addr4_insert_cb(GtkEditable *editable,
+                                  gchar *new_text, gint new_text_length,
+                                  gint *position, gpointer user_data);
 void gnc_customer_shipaddr2_insert_cb(GtkEditable *editable,
                                       gchar *new_text, gint new_text_length,
                                       gint *position, gpointer user_data);
 void gnc_customer_shipaddr3_insert_cb(GtkEditable *editable,
+                                      gchar *new_text, gint new_text_length,
+                                      gint *position, gpointer user_data);
+void gnc_customer_shipaddr4_insert_cb(GtkEditable *editable,
                                       gchar *new_text, gint new_text_length,
                                       gint *position, gpointer user_data);
 gboolean
@@ -84,10 +90,16 @@ gboolean
 gnc_customer_addr3_key_press_cb( GtkEntry *entry, GdkEventKey *event,
                                  gpointer user_data );
 gboolean
+gnc_customer_addr4_key_press_cb( GtkEntry *entry, GdkEventKey *event,
+                                 gpointer user_data );
+gboolean
 gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry, GdkEventKey *event,
                                      gpointer user_data );
 gboolean
 gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry, GdkEventKey *event,
+                                     gpointer user_data );
+gboolean
+gnc_customer_shipaddr4_key_press_cb( GtkEntry *entry, GdkEventKey *event,
                                      gpointer user_data );
 
 #define ADDR_QUICKFILL "GncAddress-Quickfill"
@@ -153,11 +165,11 @@ struct _customer_window
 
     /* stored data for the description quickfill selection function */
     QuickFill *addr2_quickfill;
+    QuickFill *addr3_quickfill;
+    QuickFill *addr4_quickfill;
     gint addrX_start_selection;
     gint addrX_end_selection;
     guint addrX_selection_source_id;
-
-    QuickFill *addr3_quickfill;
 };
 
 void
@@ -672,6 +684,7 @@ gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
     /* Set up the addr line quickfill */
     cw->addr2_quickfill = gnc_get_shared_address_addr2_quickfill(cw->book, ADDR_QUICKFILL);
     cw->addr3_quickfill = gnc_get_shared_address_addr3_quickfill(cw->book, ADDR_QUICKFILL);
+    cw->addr4_quickfill = gnc_get_shared_address_addr4_quickfill(cw->book, ADDR_QUICKFILL);
 
     /* Set the Discount, and Credit amounts */
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->discount_amount),
@@ -946,6 +959,18 @@ idle_select_region_addr3(gpointer user_data)
     wdata->addrX_selection_source_id = 0;
     return FALSE;
 }
+static gboolean
+idle_select_region_addr4(gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    g_return_val_if_fail(user_data, FALSE);
+
+    gtk_editable_select_region(GTK_EDITABLE(wdata->addr4_entry),
+                               wdata->addrX_start_selection,
+                               wdata->addrX_end_selection);
+    wdata->addrX_selection_source_id = 0;
+    return FALSE;
+}
 
 static gboolean
 idle_select_region_shipaddr2(gpointer user_data)
@@ -971,6 +996,18 @@ idle_select_region_shipaddr3(gpointer user_data)
                                wdata->addrX_start_selection,
                                wdata->addrX_end_selection);
 
+    wdata->addrX_selection_source_id = 0;
+    return FALSE;
+}
+static gboolean
+idle_select_region_shipaddr4(gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    g_return_val_if_fail(user_data, FALSE);
+
+    gtk_editable_select_region(GTK_EDITABLE(wdata->shipaddr4_entry),
+                               wdata->addrX_start_selection,
+                               wdata->addrX_end_selection);
     wdata->addrX_selection_source_id = 0;
     return FALSE;
 }
@@ -1095,6 +1132,26 @@ void gnc_customer_addr3_insert_cb(GtkEditable *editable,
     }
 }
 
+void gnc_customer_addr4_insert_cb(GtkEditable *editable,
+                                  gchar *new_text, gint new_text_length,
+                                  gint *position, gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    gboolean r;
+
+    /* The handling common to all address lines is done in this other
+     * function. */
+    r = gnc_customer_addr_common_insert_cb(editable, new_text, new_text_length,
+                                           position, user_data, wdata->addr4_quickfill);
+
+    /* Did we insert something? Then set up the correct idle handler */
+    if (r)
+    {
+        wdata->addrX_selection_source_id = g_idle_add(idle_select_region_addr4,
+                                           user_data);
+    }
+}
+
 void gnc_customer_shipaddr2_insert_cb(GtkEditable *editable,
                                       gchar *new_text, gint new_text_length,
                                       gint *position, gpointer user_data)
@@ -1131,6 +1188,26 @@ void gnc_customer_shipaddr3_insert_cb(GtkEditable *editable,
     if (r)
     {
         wdata->addrX_selection_source_id = g_idle_add(idle_select_region_shipaddr3,
+                                           user_data);
+    }
+}
+
+void gnc_customer_shipaddr4_insert_cb(GtkEditable *editable,
+                                      gchar *new_text, gint new_text_length,
+                                      gint *position, gpointer user_data)
+{
+    CustomerWindow *wdata = user_data;
+    gboolean r;
+
+    /* The handling common to all address lines is done in this other
+     * function. */
+    r = gnc_customer_addr_common_insert_cb(editable, new_text, new_text_length,
+                                           position, user_data, wdata->addr4_quickfill);
+
+    /* Did we insert something? Then set up the correct idle handler */
+    if (r)
+    {
+        wdata->addrX_selection_source_id = g_idle_add(idle_select_region_shipaddr4,
                                            user_data);
     }
 }
@@ -1183,6 +1260,15 @@ gnc_customer_addr3_key_press_cb( GtkEntry *entry,
                                             wdata->addr3_entry);
 }
 gboolean
+gnc_customer_addr4_key_press_cb( GtkEntry *entry,
+                                 GdkEventKey *event,
+                                 gpointer user_data )
+{
+    CustomerWindow *wdata = user_data;
+    return gnc_customer_common_key_press_cb(entry, event, user_data,
+                                            wdata->addr4_entry);
+}
+gboolean
 gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry,
                                      GdkEventKey *event,
                                      gpointer user_data )
@@ -1199,4 +1285,13 @@ gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry,
     CustomerWindow *wdata = user_data;
     return gnc_customer_common_key_press_cb(entry, event, user_data,
                                             wdata->shipaddr3_entry);
+}
+gboolean
+gnc_customer_shipaddr4_key_press_cb( GtkEntry *entry,
+                                     GdkEventKey *event,
+                                     gpointer user_data )
+{
+    CustomerWindow *wdata = user_data;
+    return gnc_customer_common_key_press_cb(entry, event, user_data,
+                                            wdata->shipaddr4_entry);
 }
