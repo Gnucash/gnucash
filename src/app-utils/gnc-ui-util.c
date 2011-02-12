@@ -1297,7 +1297,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
     if (gnc_numeric_check (val))
     {
-        PWARN ("Bad numeric.");
+        PWARN ("Bad numeric: %s.",
+               gnc_numeric_errorCode_to_string(gnc_numeric_check (val)));
         *buf = '\0';
         return 0;
     }
@@ -1335,7 +1336,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
         /* Yes, rounding up can cause overflow.  Check for it. */
         if (gnc_numeric_check(val))
         {
-            PWARN("Bad numeric from rounding.");
+            PWARN ("Bad numeric from rounding: %s.",
+                   gnc_numeric_errorCode_to_string(gnc_numeric_check (val)));
             *buf = '\0';
             return 0;
         }
@@ -1346,7 +1348,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     val = gnc_numeric_sub (val, whole, GNC_DENOM_AUTO, GNC_HOW_RND_NEVER);
     if (gnc_numeric_check (val))
     {
-        PWARN ("Problem with remainder.");
+        PWARN ("Problem with remainder: %s.",
+               gnc_numeric_errorCode_to_string(gnc_numeric_check (val)));
         *buf = '\0';
         return 0;
     }

@@ -1507,4 +1507,23 @@ main(int argc, char ** argv)
 }
 #endif
 
+const char* gnc_numeric_errorCode_to_string(GNCNumericErrorCode error_code)
+{
+    switch (error_code)
+    {
+    case GNC_ERROR_OK:
+        return "GNC_ERROR_OK";
+    case GNC_ERROR_ARG:
+        return "GNC_ERROR_ARG";
+    case GNC_ERROR_OVERFLOW:
+        return "GNC_ERROR_OVERFLOW";
+    case GNC_ERROR_DENOM_DIFF:
+        return "GNC_ERROR_DENOM_DIFF";
+    case GNC_ERROR_REMAINDER:
+        return "GNC_ERROR_REMAINDER";
+    default:
+        return "<unknown>";
+    }
+}
+
 /* ======================== END OF FILE =================== */

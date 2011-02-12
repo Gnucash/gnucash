@@ -275,6 +275,10 @@ gboolean string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
  *  noted by error_code, rather than a number.
  */
 gnc_numeric gnc_numeric_error(GNCNumericErrorCode error_code);
+
+/** Returns a string representation of the given GNCNumericErrorCode.
+ */
+const char* gnc_numeric_errorCode_to_string(GNCNumericErrorCode error_code);
 /** @} */
 
 /** @name Value Accessors
