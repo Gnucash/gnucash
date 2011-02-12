@@ -273,6 +273,12 @@ xaccQueryAddAccountGUIDMatch(QofQuery *q, AccountGUIDList *guid_list,
 
     if (!q) return;
 
+    if (!guid_list && how != QOF_GUID_MATCH_NULL)
+    {
+        g_warning("Got a NULL guid_list but the QofGuidMatch is not MATCH_NULL (but instead %d). In other words, the list of GUID matches is empty but it must contain something non-empty.", how);
+        /* qof_query_guid_predicate() would trigger a g_warning as well */
+        return;
+    }
     pred_data = qof_query_guid_predicate (how, guid_list);
     if (!pred_data)
         return;
