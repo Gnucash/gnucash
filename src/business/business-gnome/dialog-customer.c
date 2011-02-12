@@ -153,14 +153,11 @@ struct _customer_window
 
     /* stored data for the description quickfill selection function */
     QuickFill *addr2_quickfill;
-    gint addr2_start_selection;
-    gint addr2_end_selection;
-    guint addr2_selection_source_id;
+    gint addrX_start_selection;
+    gint addrX_end_selection;
+    guint addrX_selection_source_id;
 
     QuickFill *addr3_quickfill;
-    gint addr3_start_selection;
-    gint addr3_end_selection;
-    guint addr3_selection_source_id;
 };
 
 void
@@ -393,10 +390,8 @@ gnc_customer_window_destroy_cb (GtkWidget *widget, gpointer data)
         cw->customer_guid = *guid_null ();
     }
 
-    if (cw->addr2_selection_source_id)
-        g_source_remove (cw->addr2_selection_source_id);
-    if (cw->addr3_selection_source_id)
-        g_source_remove (cw->addr3_selection_source_id);
+    if (cw->addrX_selection_source_id)
+        g_source_remove (cw->addrX_selection_source_id);
 
     gnc_unregister_gui_component (cw->component_id);
     gnc_resume_gui_refresh ();
@@ -928,11 +923,13 @@ idle_select_region_addr2(gpointer user_data)
     CustomerWindow *wdata = user_data;
     g_return_val_if_fail(user_data, FALSE);
 
-    gtk_editable_select_region(GTK_EDITABLE(wdata->addr2_entry),
-                               wdata->addr2_start_selection,
-                               wdata->addr2_end_selection);
+    /* g_warning("Selection start=%d end=%d",wdata->addrX_start_selection, wdata->addrX_end_selection); */
 
-    wdata->addr2_selection_source_id = 0;
+    gtk_editable_select_region(GTK_EDITABLE(wdata->addr2_entry),
+                               wdata->addrX_start_selection,
+                               wdata->addrX_end_selection);
+
+    wdata->addrX_selection_source_id = 0;
     return FALSE;
 }
 
@@ -943,10 +940,10 @@ idle_select_region_addr3(gpointer user_data)
     g_return_val_if_fail(user_data, FALSE);
 
     gtk_editable_select_region(GTK_EDITABLE(wdata->addr3_entry),
-                               wdata->addr3_start_selection,
-                               wdata->addr3_end_selection);
+                               wdata->addrX_start_selection,
+                               wdata->addrX_end_selection);
 
-    wdata->addr3_selection_source_id = 0;
+    wdata->addrX_selection_source_id = 0;
     return FALSE;
 }
 
@@ -957,10 +954,10 @@ idle_select_region_shipaddr2(gpointer user_data)
     g_return_val_if_fail(user_data, FALSE);
 
     gtk_editable_select_region(GTK_EDITABLE(wdata->shipaddr2_entry),
-                               wdata->addr2_start_selection,
-                               wdata->addr2_end_selection);
+                               wdata->addrX_start_selection,
+                               wdata->addrX_end_selection);
 
-    wdata->addr2_selection_source_id = 0;
+    wdata->addrX_selection_source_id = 0;
     return FALSE;
 }
 
@@ -971,10 +968,10 @@ idle_select_region_shipaddr3(gpointer user_data)
     g_return_val_if_fail(user_data, FALSE);
 
     gtk_editable_select_region(GTK_EDITABLE(wdata->shipaddr3_entry),
-                               wdata->addr3_start_selection,
-                               wdata->addr3_end_selection);
+                               wdata->addrX_start_selection,
+                               wdata->addrX_end_selection);
 
-    wdata->addr3_selection_source_id = 0;
+    wdata->addrX_selection_source_id = 0;
     return FALSE;
 }
 
@@ -1025,6 +1022,8 @@ gnc_customer_addr_common_insert_cb(GtkEditable *editable,
             gint match_str_len = strlen(match_str);
             if (match_str_len > concatenated_text_len)
             {
+                /* g_warning("Got match \"%s\" match_str_len=%d new_text=%s position=%d prefix_len=%d", match_str, match_str_len, new_text, *position, prefix_len); */
+
                 g_signal_handlers_block_matched (G_OBJECT (editable),
                                                  G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, user_data);
 
@@ -1040,7 +1039,12 @@ gnc_customer_addr_common_insert_cb(GtkEditable *editable,
                 g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
 
                 /* set the position */
-                *position = g_utf8_strlen(concatenated_text, -1);
+                *position = concatenated_text_len;
+
+                /* select region on idle, because it would be reset once this function
+                   finishes */
+                wdata->addrX_start_selection = *position;
+                wdata->addrX_end_selection = -1;
 
                 return TRUE;
             }
@@ -1066,9 +1070,7 @@ void gnc_customer_addr2_insert_cb(GtkEditable *editable,
     {
         /* select region on idle, because it would be reset once this function
            finishes */
-        wdata->addr2_start_selection = *position;
-        wdata->addr2_end_selection = -1;
-        wdata->addr2_selection_source_id = g_idle_add(idle_select_region_addr2,
+        wdata->addrX_selection_source_id = g_idle_add(idle_select_region_addr2,
                                            user_data);
     }
 }
@@ -1088,9 +1090,7 @@ void gnc_customer_addr3_insert_cb(GtkEditable *editable,
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
     {
-        wdata->addr3_start_selection = *position;
-        wdata->addr3_end_selection = -1;
-        wdata->addr3_selection_source_id = g_idle_add(idle_select_region_addr3,
+        wdata->addrX_selection_source_id = g_idle_add(idle_select_region_addr3,
                                            user_data);
     }
 }
@@ -1110,9 +1110,7 @@ void gnc_customer_shipaddr2_insert_cb(GtkEditable *editable,
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
     {
-        wdata->addr2_start_selection = *position;
-        wdata->addr2_end_selection = -1;
-        wdata->addr2_selection_source_id = g_idle_add(idle_select_region_shipaddr2,
+        wdata->addrX_selection_source_id = g_idle_add(idle_select_region_shipaddr2,
                                            user_data);
     }
 }
@@ -1132,9 +1130,7 @@ void gnc_customer_shipaddr3_insert_cb(GtkEditable *editable,
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
     {
-        wdata->addr3_start_selection = *position;
-        wdata->addr3_end_selection = -1;
-        wdata->addr3_selection_source_id = g_idle_add(idle_select_region_shipaddr3,
+        wdata->addrX_selection_source_id = g_idle_add(idle_select_region_shipaddr3,
                                            user_data);
     }
 }
