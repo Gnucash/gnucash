@@ -569,7 +569,7 @@ function inst_gnome() {
         wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        echo 'gtk-theme-name = "MS-Windows"' > $GNOME_DIR/etc/gtk-2.0/gtkrc
+        echo 'gtk-theme-name = "MS-Windows"' > ${_GNOME_UDIR}/etc/gtk-2.0/gtkrc
         wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -936,9 +936,9 @@ function inst_libofx() {
                 --prefix=${_LIBOFX_UDIR} \
                 --with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
                 --with-opensp-libs=${_OPENSP_UDIR}/lib \
-                CPPFLAGS="-DOS_WIN32" \
+                CPPFLAGS="-DOS_WIN32 ${GNOME_CPPFLAGS}" \
                 --disable-static
-            make LDFLAGS="${LDFLAGS} -no-undefined"
+            make LDFLAGS="${LDFLAGS} -no-undefined ${GNOME_LDFLAGS} -liconv"
             make install
         qpopd
         quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
@@ -982,6 +982,7 @@ function inst_gwenhywfar() {
                 ./configure ${HOST_XCOMPILE} \
                     --with-libgcrypt-prefix=$_GNUTLS_UDIR \
                     --disable-binreloc \
+                    --disable-ssl \
                     --prefix=$_GWENHYWFAR_UDIR \
                     --with-guis=gtk2 \
                     CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS} `pkg-config --cflags gtk+-2.0`" \
@@ -997,6 +998,7 @@ function inst_gwenhywfar() {
                 ./configure ${HOST_XCOMPILE} \
                     --with-libgcrypt-prefix=$_GNUTLS_UDIR \
                     --disable-binreloc \
+                    --disable-ssl \
                     --prefix=$_GWENHYWFAR_UDIR \
                     CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}" \
                     LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
@@ -1211,6 +1213,14 @@ function inst_libdbi() {
             if [ -n "$LIBDBI_PATCH2" -a -f "$LIBDBI_PATCH2" ]; then
                 patch -p1 < $LIBDBI_PATCH2
 	    fi
+            if [ "$CROSS_COMPILE" = "yes" ]; then
+                rm ltmain.sh aclocal.m4
+                libtoolize --force
+                aclocal -I ${_AUTOTOOLS_UDIR}/share/aclocal
+                autoheader
+                automake --add-missing
+                autoconf
+            fi
             ./configure ${HOST_XCOMPILE} \
                 --disable-docs \
                 --prefix=${_LIBDBI_UDIR}
@@ -1331,7 +1341,7 @@ function inst_webkit() {
 
 function svn_up() {
     mkdir -p $_REPOS_UDIR
-    qpushd $REPOS_DIR
+    qpushd $_REPOS_UDIR
     if [ -x .svn ]; then
         setup "svn update in ${REPOS_DIR}"
         svn up -r ${SVN_REV}
