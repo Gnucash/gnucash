@@ -2875,15 +2875,9 @@ conn_test_dbi_library( dbi_conn conn )
     guint64 testulonglong = 9223372036854775807LLU, resultulonglong = 0;
     gdouble testdouble = 1.7976921348623157E+307, resultdouble = 0.0;
     dbi_result result;
-    gchar doublestr[G_ASCII_DTOSTR_BUF_SIZE];
+    gchar doublestr[G_ASCII_DTOSTR_BUF_SIZE], *querystr;
     gboolean retval = TRUE;
-
-#if G_OS_WIN32
-    /* Bug #641832: On win32 the queryf() calls below seem to
-     * crash. On the other hand, we know the used libdbi on windows is
-     * fine, so as a first workaround, we assume libdbi is safe. */
-    return TRUE;
-#endif
+    memset( doublestr, 0, sizeof(doublestr));
 
     result = dbi_conn_query( conn, "CREATE TEMPORARY TABLE numtest "
                              "( test_int BIGINT, test_unsigned BIGINT,"
@@ -2895,10 +2889,11 @@ conn_test_dbi_library( dbi_conn conn )
     }
     dbi_result_free( result );
     g_ascii_dtostr( doublestr, sizeof(doublestr), testdouble );
-    result = dbi_conn_queryf( conn,
-                              "INSERT INTO numtest VALUES (%" G_GINT64_FORMAT
-                              ", %" G_GUINT64_FORMAT ", %s)",
-                              testlonglong, testulonglong, doublestr );
+    querystr = g_strdup_printf( "INSERT INTO numtest VALUES (%" G_GINT64_FORMAT
+				", %" G_GUINT64_FORMAT ", %s)",
+				testlonglong, testulonglong, doublestr );
+    result = dbi_conn_query( conn, querystr );
+    g_free( querystr );
     if ( result == NULL )
     {
         PWARN("Test_DBI_Library: Failed to insert test row into table" );
