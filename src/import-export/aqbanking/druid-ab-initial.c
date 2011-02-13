@@ -241,8 +241,6 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
             AB_SetupDialog_new(banking);
         int rv;
 
-        PERR ("Unfortunately starting the setup wizard of aqbanking is not yet implemented in gnucash for aqbanking5. Please see http://lists.gnucash.org/pipermail/gnucash-devel/2010-August/029188.html and http://lists.gnucash.org/pipermail/gnucash-devel/2010-August/029189.html .");
-
         if (AB_Banking_OnlineInit(banking) != 0)
         {
             PERR("Got error on AB_Banking_OnlineInit!");
