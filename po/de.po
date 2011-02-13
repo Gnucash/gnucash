@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-12 17:08+0100\n"
-"PO-Revision-Date: 2011-02-12 17:29+0100\n"
+"POT-Creation-Date: 2011-02-13 21:14+0100\n"
+"PO-Revision-Date: 2011-02-13 21:16+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -1696,6 +1696,18 @@ msgstr "Eintrag _duplizieren"
 msgid "Make a copy of the current entry"
 msgstr "Kopie des aktuellen Postens erstellen"
 
+msgid "Move Entry _Up"
+msgstr "Eintrag _höher sortieren"
+
+msgid "Move the current entry one row upwards"
+msgstr "Aktuellen Eintrag eine Zeile höher einsortieren"
+
+msgid "Move Entry Do_wn"
+msgstr "Eintrag _tiefer sortieren"
+
+msgid "Move the current entry one row downwards"
+msgstr "Aktuellen Eintrag eine Zeile tiefer einsortieren"
+
 msgid "New _Invoice"
 msgstr "Neue _Rechnung..."
 
@@ -1762,6 +1774,12 @@ msgstr "Abbrechen"
 
 msgid "Delete"
 msgstr "Löschen"
+
+msgid "Up"
+msgstr "Höher"
+
+msgid "Down"
+msgstr "Tiefer"
 
 msgid "Blank"
 msgstr "Neu"
