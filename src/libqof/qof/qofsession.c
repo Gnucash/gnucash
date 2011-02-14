@@ -1114,7 +1114,8 @@ qof_session_begin (QofSession *session, const char * book_id,
     /* Check to see if this session is already open */
     if (session->book_id)
     {
-        qof_session_push_error (session, ERR_BACKEND_LOCKED, NULL);
+	if (ERR_BACKEND_NO_ERR != qof_session_get_error(session))
+	    qof_session_push_error (session, ERR_BACKEND_LOCKED, NULL);
         LEAVE("push error book is already open ");
         return;
     }
@@ -1122,7 +1123,8 @@ qof_session_begin (QofSession *session, const char * book_id,
     /* seriously invalid */
     if (!book_id)
     {
-        qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
+	if (ERR_BACKEND_NO_ERR != qof_session_get_error(session))
+	    qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
         LEAVE("push error missing book_id");
         return;
     }
@@ -1149,7 +1151,8 @@ qof_session_begin (QofSession *session, const char * book_id,
     {
         g_free(session->book_id);
         session->book_id = NULL;
-        qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
+        if (ERR_BACKEND_NO_ERR == qof_session_get_error(session))
+	    qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
         LEAVE (" BAD: no backend: sess=%p book-id=%s",
                session,  book_id ? book_id : "(null)");
         return;
@@ -1401,8 +1404,11 @@ qof_session_save (QofSession *session,
         }
         if (!session->backend)
         {
-            msg = g_strdup_printf("failed to load backend");
-            qof_session_push_error(session, ERR_BACKEND_NO_HANDLER, msg);
+	    if (ERR_BACKEND_NO_ERR != qof_session_get_error(session))
+	    {
+		msg = g_strdup_printf("failed to load backend");
+		qof_session_push_error(session, ERR_BACKEND_NO_HANDLER, msg);
+	    }
             goto leave;
         }
     }
@@ -1440,8 +1446,11 @@ qof_session_save (QofSession *session,
     }
     else
     {
-        msg = g_strdup_printf("failed to load backend");
-        qof_session_push_error(session, ERR_BACKEND_NO_HANDLER, msg);
+	if (ERR_BACKEND_NO_ERR != qof_session_get_error(session))
+	{
+	    msg = g_strdup_printf("failed to load backend");
+	    qof_session_push_error(session, ERR_BACKEND_NO_HANDLER, msg);
+	}
     }
     LEAVE("error -- No backend!");
 leave:
