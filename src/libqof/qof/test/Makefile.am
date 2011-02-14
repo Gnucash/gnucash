@@ -25,7 +25,7 @@ noinst_PROGRAMS = ${TEST_PROGS}
 
 #The tests might require more libraries, but try to keep them
 #as independent as possible.
-test_qof_LDADD = ${top_builddir}/${MODULEPATH}/libgnc-qof.la
+test_qof_LDADD = ${top_builddir}/${MODULEPATH}/libgnc-qof.la $(GLIB_LIBS)
 
 test_qof_CFLAGS = \
 	${DEFAULT_INCLUDES} \
