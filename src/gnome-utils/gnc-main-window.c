@@ -4304,5 +4304,11 @@ gnc_main_window_all_action_set_sensitive (const gchar *action_name,
     }
 }
 
+GtkUIManager *gnc_main_window_get_uimanager (GncMainWindow *window)
+{
+    g_assert(window);
+    return window->ui_merge;
+}
+
 /** @} */
 /** @} */

@@ -159,6 +159,11 @@ void gnc_main_window_foreach_page (GncMainWindowPageFunc fn,
 GncPluginPage *gnc_main_window_get_current_page (GncMainWindow *window);
 
 
+/** Returns the pointer to the GtkUIManager which is used for the menu
+ * item merging. */
+GtkUIManager *gnc_main_window_get_uimanager (GncMainWindow *window);
+
+
 /** Update the name of the page in the main window.
  *
  *  @param page The page to be updated.
