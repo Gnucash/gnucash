@@ -80,7 +80,7 @@ gnc_new_tip_number (GtkWidget *widget,
                     gint offset)
 {
     GtkWidget *textview;
-    gchar **tip_components, **tip_args;
+    gchar **tip_components;
     gchar *tip;
 
     ENTER("widget %p, offset %d", widget, offset);
@@ -92,10 +92,31 @@ gnc_new_tip_number (GtkWidget *widget,
         current_tip_number = 0;
     gnc_gconf_set_int(GCONF_SECTION, KEY_CURRENT_TIP, current_tip_number, NULL);
 
+    /* A tip consists of a translatable string, which might contain a %s
+     * placeholder, optionally followed by a | and a (non-translated)
+     * string to put in the placeholder. For example:
+     *
+     *  Welcome to GnuCash version %s|2.4
+     */
     tip_components = g_strsplit(tip_list[current_tip_number], "|", 0);
-    tip_args = &tip_components[1];
+    /* If the tip is empty, g_strisplit will return an empty list. This
+     * shouldn't normally happen, but make sure we don't crash just in
+     * case */
+    if (tip_components[0] == NULL)
+    {
+        tip = g_strdup("");
+    }
+    else 
+    {
+        /* Use printf to do the substitution. Note that if there is no |
+         * in the tip, tip_components[1] will be the terminating NULL,
+         * so this will never cause an out-of-bounds array access.
+         */
+        tip = g_strdup_printf( _(tip_components[0]), tip_components[1]);
+    }
+
+
     textview = gnc_glade_lookup_widget(widget, "tip_textview");
-    tip = g_strdup_printf( _(tip_components[0]), tip_components[1]);
     g_strfreev(tip_components);
     gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)),
                              tip, -1);
@@ -207,6 +228,17 @@ gnc_totd_initialize (void)
 
     g_free(contents);
     g_free(filename);
+
+    /* Don't continue when no tips were found, to prevent
+     * gnc_new_tip_number doesn't handle that case (it would try to
+     * display the terminating NULL). There's nothing to show
+     * anyway...*/
+    if (tip_count == 0)
+    {
+        PWARN("No tips found - Tips of the day window won't be displayed.");
+        return FALSE;
+    }
+
     return TRUE;
 }
 
