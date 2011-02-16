@@ -56,4 +56,11 @@
     </menu>
 
   </menubar>
+
+  <toolbar name="DefaultToolbar">
+    <placeholder name="DefaultToolbarPlaceholder">
+      <toolitem name="ToolbarInvoiceNew" action="ToolbarNewInvoiceAction"/>
+    </placeholder>
+  </toolbar>
+
 </ui>

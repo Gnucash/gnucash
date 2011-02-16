@@ -46,11 +46,23 @@
 #include "gnc-file.h"
 #include "guile-mappings.h"
 #include "gnc-session.h"
+#include "gnome-utils/gnc-icons.h" /* for GNC_STOCK_INVOICE_NEW */
+
+#include "core-utils/gnc-main.h" /* for GCONF_PATH */
+#include "core-utils/gnc-gconf-utils.h"
+#include "gnome-utils/gnc-main-window.h"
 
 /* g_object functions */
 static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
 static void gnc_plugin_business_init (GncPluginBusiness *plugin);
 static void gnc_plugin_business_finalize (GObject *object);
+static void gnc_plugin_business_gconf_changed (GConfClient *client,
+        guint cnxn_id,
+        GConfEntry *entry,
+        gpointer user_data);
+static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
+        GncMainWindow *window,
+        GQuark type);
 
 /* Command callbacks */
 static void gnc_plugin_business_cmd_customer_new_customer    (GtkAction *action,
@@ -282,6 +294,13 @@ static GtkActionEntry gnc_plugin_actions [] =
         N_("Initialize Test Data"),
         G_CALLBACK (gnc_plugin_business_cmd_test_init_data)
     },
+
+    /* Toolbar */
+    {
+        "ToolbarNewInvoiceAction", GNC_STOCK_INVOICE_NEW, N_("New _Invoice..."), NULL,
+        N_("Open the New Invoice dialog"),
+        G_CALLBACK (gnc_plugin_business_cmd_customer_new_invoice)
+    },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -358,11 +377,17 @@ gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
     /* plugin info */
     plugin_class->plugin_name  = GNC_PLUGIN_BUSINESS_NAME;
 
+    /* function overrides */
+    plugin_class->add_to_window = gnc_plugin_business_add_to_window;
+
     /* widget addition/removal */
     plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+
+    plugin_class->gconf_notifications = gnc_plugin_business_gconf_changed;
+    plugin_class->gconf_section = GCONF_SECTION_INVOICE;
 
     g_type_class_add_private(klass, sizeof(GncPluginBusinessPrivate));
 }
@@ -842,4 +867,76 @@ gnc_plugin_business_cmd_test_init_data (GtkAction *action,
 
     // Launch the invoice editor
     gnc_ui_invoice_edit(invoice);
+}
+
+/* This is the list of actions which are switched invisible or visible
+ * depending on the preference "extra_toolbuttons". */
+static const char* extra_toolbar_actions[] =
+{
+    "ToolbarNewInvoiceAction",
+    NULL
+};
+
+/* The code below will set the visibility of some extra toolbar
+ * buttons based on a gconf key setting. */
+static void set_toolbuttons_visibility(GncMainWindow *mainwindow,
+                                       gboolean visible)
+{
+    GtkActionGroup *action_group;
+    const char **iter;
+
+    /*g_warning("about to set button visibility %d", visible);*/
+
+    g_return_if_fail(mainwindow);
+
+    /* Get the action group */
+    action_group =
+        gnc_main_window_get_action_group(mainwindow, PLUGIN_ACTIONS_NAME);
+    g_assert(action_group);
+
+    for (iter = extra_toolbar_actions; *iter; ++iter)
+    {
+        /* Set the action's visibility */
+        GtkAction *action = gtk_action_group_get_action (action_group, *iter);
+        gtk_action_set_visible(action, visible);
+    }
+}
+
+static void update_extra_toolbuttons(GncMainWindow *mainwindow)
+{
+    gboolean value = gnc_gconf_get_bool(GCONF_SECTION_INVOICE,
+                                        "enable_toolbuttons", NULL);
+    set_toolbuttons_visibility(mainwindow, value);
+}
+
+/** This function is called whenever an entry in the business invoice
+ *  section of gconf is changed. If the modified gconf entry concerns
+ *  our toolbar buttons, we update their visibility status. */
+static void
+gnc_plugin_business_gconf_changed (GConfClient *client,
+                                   guint cnxn_id,
+                                   GConfEntry *entry,
+                                   gpointer user_data)
+{
+    GncMainWindow *mainwindow = user_data;
+    const char* full_gconf_path =
+        GCONF_PATH "/" GCONF_SECTION_INVOICE "/enable_toolbuttons";
+    const char* entry_key = gconf_entry_get_key(entry);
+
+    if (!entry_key)
+        return;
+
+    if (safe_strcmp(entry_key, full_gconf_path) == 0)
+    {
+        update_extra_toolbuttons(mainwindow);
+    }
+}
+
+/* Update the toolbar button visibility each time our plugin is added
+ * to a new GncMainWindow. */
+static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
+        GncMainWindow *mainwindow,
+        GQuark type)
+{
+    update_extra_toolbuttons(mainwindow);
 }

@@ -48,6 +48,21 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/dialogs/business/invoice/enable_toolbuttons</key>
+      <applyto>/apps/gnucash/dialogs/business/invoice/enable_toolbuttons</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Enable extra toolbar buttons for business</short>
+        <long>
+          If active, extra toolbar buttons for common business
+          functions are shown as well.  Otherwise they are not shown.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/dialogs/business/invoice/use_new_window</key>
       <applyto>/apps/gnucash/dialogs/business/invoice/use_new_window</applyto>
       <owner>gnucash</owner>
