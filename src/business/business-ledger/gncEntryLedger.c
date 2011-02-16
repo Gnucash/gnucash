@@ -941,6 +941,20 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
     if (!target || target == blank)
         return;
 
+    /* Also, only continue if both have the same date, because the
+     * "standard ordering" is tied to the date anyway. Note: This
+     * unfortunately prevents the user from changing the ordering if
+     * he has chosen a different sort order and the sort key happens
+     * to be equal among the two entries. But I don't know how to look
+     * up the current sort ordering from here, so I cowardly refuse to
+     * tweak the EntryDate in this case. */
+    {
+        Timespec t1 = gncEntryGetDate(current),
+                 t2 = gncEntryGetDate(target);
+        if (!timespec_equal(&t1, &t2))
+            return;
+    }
+
     /*g_warning("Ok, current desc='%s' target desc='%s'",
               gncEntryGetDescription(current),
               gncEntryGetDescription(target));*/
@@ -971,6 +985,11 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
         /* Write the new DateEntered. */
         gncEntrySetDateEntered(current, time_target);
         gncEntrySetDateEntered(target, time_current);
+
+        /* And finally let the GncInvoice sort its entries
+         * accordingly, so that the invoice reports will give the same
+         * ordering as the register window. */
+        gncInvoiceSortEntries(ledger->invoice);
     }
 
     gnc_resume_gui_refresh ();
