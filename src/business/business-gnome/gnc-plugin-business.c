@@ -888,6 +888,7 @@ static void set_toolbuttons_visibility(GncMainWindow *mainwindow,
     /*g_warning("about to set button visibility %d", visible);*/
 
     g_return_if_fail(mainwindow);
+    g_return_if_fail(GNC_IS_MAIN_WINDOW(mainwindow));
 
     /* Get the action group */
     action_group =
@@ -918,7 +919,7 @@ gnc_plugin_business_gconf_changed (GConfClient *client,
                                    GConfEntry *entry,
                                    gpointer user_data)
 {
-    GncMainWindow *mainwindow = user_data;
+    GncMainWindow *mainwindow = GNC_MAIN_WINDOW(user_data);
     const char* full_gconf_path =
         GCONF_PATH "/" GCONF_SECTION_INVOICE "/enable_toolbuttons";
     const char* entry_key = gconf_entry_get_key(entry);
