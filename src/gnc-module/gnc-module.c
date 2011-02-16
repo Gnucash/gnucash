@@ -422,7 +422,7 @@ gnc_module_check_loaded(const char * module_name, gint iface)
  *************************************************************/
 
 static GNCModule
-gnc_module_load_common(char * module_name, gint iface, gboolean optional)
+gnc_module_load_common(const char * module_name, gint iface, gboolean optional)
 {
 
     GNCLoadedModule * info;
@@ -532,13 +532,13 @@ gnc_module_load_common(char * module_name, gint iface, gboolean optional)
 
 
 GNCModule
-gnc_module_load(char * module_name, gint iface)
+gnc_module_load(const char * module_name, gint iface)
 {
     return gnc_module_load_common(module_name, iface, FALSE);
 }
 
 GNCModule
-gnc_module_load_optional(char * module_name, gint iface)
+gnc_module_load_optional(const char * module_name, gint iface)
 {
     return gnc_module_load_common(module_name, iface, TRUE);
 }
