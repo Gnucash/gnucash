@@ -1259,30 +1259,6 @@ fi
 AC_SUBST(LC_MESSAGES_ENUM)
 
 ###--------------------------------------------------------
-### Make gtkmm plugin optional
-###--------------------------------------------------------
-enable_gtkmm=false
-
-AC_ARG_ENABLE(gtkmm,
-  [AS_HELP_STRING([--enable-gtkmm],[enable gtkmm gui])],
-  [case "${enableval}" in
-     yes) enable_gtkmm=true ;;
-     no) enable_gtkmm=false ;;
-     *) enable_gtkmm=true ;;
-   esac]
-  )
-if test x${enable_gtkmm} = "xtrue"
-then
-  GTKMM_DIR=gtkmm
-  # We require gtkmm, of course
-  PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.16)
-  # and also the c++ compiler
-  AC_PROG_CXX
-  AC_PROG_CXXCPP
-fi
-AC_SUBST(GTKMM_DIR)
-
-###--------------------------------------------------------
 ### Make Python bindings optional
 ###--------------------------------------------------------
 enable_python=false
@@ -1496,7 +1472,6 @@ AC_CONFIG_FILES(
   src/libqof/qof/Makefile
   src/libqof/qof/test/Makefile
   src/optional/Makefile
-  src/optional/gtkmm/Makefile
   src/optional/python-bindings/Makefile
   src/optional/python-bindings/tests/Makefile
   src/pixmaps/Makefile

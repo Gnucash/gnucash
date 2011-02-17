@@ -576,8 +576,7 @@ load_gnucash_modules()
         { "gnucash/report/utility-reports", 0, FALSE },
         { "gnucash/report/locale-specific/us", 0, FALSE },
         { "gnucash/report/report-gnome", 0, FALSE },
-        { "gnucash/business-gnome", 0, TRUE },
-        { "gnucash/gtkmm", 0, TRUE },
+        { "gnucash/business-gnome", 0, TRUE }
     };
 
     /* module initializations go here */
