@@ -108,22 +108,24 @@ AM_GLIB_GNU_GETTEXT
 #AC_CONFIG_MACRO_DIR(macros)
 
 AC_PROG_INSTALL
+PKG_PROG_PKG_CONFIG
 
 
 ###--------------------------------------------------------
 ### Optionally enable gtkmm plugin (requires c++ compiler)
 ###--------------------------------------------------------
-enable_gtkmm=false
+enable_GTKMM=false
 
 AC_ARG_ENABLE(gtkmm,
-  [AS_HELP_STRING([--enable-gtkmm],[enable gtkmm gui])]
+  [AS_HELP_STRING([--enable-gtkmm],[enable gtkmm gui])],
   [case "${enableval}" in
-     yes) enable_gtkmm=true ;;
-     no) enable_gtkmm=false ;;
-     *) enable_gtkmm=true ;;
+     yes) enable_GTKMM=true ;;
+     no) enable_GTKMM=false ;;
+     *) enable_GTKMM=false ;;
    esac]
   )
-AS_IF([test x${enable_gtkmm} = "xyes"],
+
+AS_IF([test x${enable_GTKMM} = "xtrue"],
   [
     GTKMM_DIR=gtkmm
     # We require gtkmm, of course
@@ -1569,6 +1571,9 @@ if test x${AQBANKING_DIR} != x; then
 fi
 if test x${PYTHON_DIR} != x; then
   components="$components python-bindings"
+fi
+if test x${GTKMM_DIR} != x; then
+  components="${components} ${GTKMM_DIR}"
 fi
 
 AC_MSG_RESULT([
