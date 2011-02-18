@@ -34,58 +34,62 @@ extern "C" {
 #include "gnc-module/gnc-module.h"
 #include "gnc-module/gnc-module-api.h"
 
-GNC_MODULE_API_DECL(libgncmod_gtkmm)
+    GNC_MODULE_API_DECL(libgncmod_gtkmm)
 
-/* version of the gnc module system interface we require */
-gint libgncmod_gtkmm_gnc_module_system_interface = 0;
+    /* version of the gnc module system interface we require */
+    gint libgncmod_gtkmm_gnc_module_system_interface = 0;
 
-/* module versioning uses libtool semantics. */
-gint libgncmod_gtkmm_gnc_module_current  = 0;
-gint libgncmod_gtkmm_gnc_module_revision = 0;
-gint libgncmod_gtkmm_gnc_module_age      = 0;
+    /* module versioning uses libtool semantics. */
+    gint libgncmod_gtkmm_gnc_module_current  = 0;
+    gint libgncmod_gtkmm_gnc_module_revision = 0;
+    gint libgncmod_gtkmm_gnc_module_age      = 0;
 } // END extern "C"
 
+// c++ includes
 #include <gtkmm.h>
+
+// And our own plugin
+#include "gnc-plugin-gtkmm.hpp"
 
 extern "C" {
 
-gchar *
-libgncmod_gtkmm_gnc_module_path(void)
-{
-    return g_strdup("gnucash/gtkmm");
-}
-
-gchar *
-libgncmod_gtkmm_gnc_module_description(void)
-{
-    return g_strdup("Support for gtkmm gui");
-}
-
-gint
-libgncmod_gtkmm_gnc_module_init(gint refcount)
-{
-    /* Load modules we depend on */
-    if (!gnc_module_load("gnucash/engine", 0)
-            || !gnc_module_load("gnucash/app-utils", 0)
-            || !gnc_module_load("gnucash/gnome-utils", 0))
+    gchar *
+    libgncmod_gtkmm_gnc_module_path(void)
     {
-        return FALSE;
+        return g_strdup("gnucash/gtkmm");
     }
 
-    /* Initialize the gtkmm framework. Calling this static method is
-     * sufficient; we don't actually need a Gtk::Main object. */
-    Gtk::Main::init_gtkmm_internals();
+    gchar *
+    libgncmod_gtkmm_gnc_module_description(void)
+    {
+        return g_strdup("Support for gtkmm gui");
+    }
 
-    /* Add menu items with C callbacks */
-    /*gnc_plugin_gtkmm_create_plugin();*/
+    gint
+    libgncmod_gtkmm_gnc_module_init(gint refcount)
+    {
+        // Load modules we depend on
+        if (!gnc_module_load("gnucash/engine", 0)
+                || !gnc_module_load("gnucash/app-utils", 0)
+                || !gnc_module_load("gnucash/gnome-utils", 0))
+        {
+            return FALSE;
+        }
 
-    return 1;
-}
+        // Initialize the gtkmm framework. Calling this static method
+        // is sufficient; we don't actually need a Gtk::Main object.
+        Gtk::Main::init_gtkmm_internals();
 
-gint
-libgncmod_gtkmm_gnc_module_end(gint refcount)
-{
-    return 1;
-}
+        // Register our plugin, adding menu items with callbacks
+        gncmm::gnc_plugin_gtkmm_create_plugin();
+
+        return 1;
+    }
+
+    gint
+    libgncmod_gtkmm_gnc_module_end(gint refcount)
+    {
+        return 1;
+    }
 
 } // END extern "C"

@@ -3,9 +3,11 @@ SUBDIRS =
 pkglib_LTLIBRARIES = libgncmod-gtkmm.la
 
 libgncmod_gtkmm_la_SOURCES = \
+  gnc-plugin-gtkmm.cpp \
   gncmod-gtkmm.cpp
 
-noinst_HEADERS =
+noinst_HEADERS = \
+  gnc-plugin-gtkmm.hpp
 
 libgncmod_gtkmm_la_LDFLAGS = -avoid-version
 
@@ -24,17 +26,18 @@ libgncmod_gtkmm_la_LIBADD = \
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/libqof/qof \
   ${GTKMM_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS}
 
 uidir = $(GNC_UI_DIR)
-ui_DATA =
+ui_DATA = gnc-plugin-gtkmm-ui.xml
 
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA =
 
 EXTRA_DIST = ${ui_DATA} ${glade_DATA}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.gtkmm\"
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui.gtkmm\"

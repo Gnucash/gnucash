@@ -1,0 +1,11 @@
+<ui>
+  <menubar>
+    <menu name="File" action="FileAction">
+      <menu name="FileImport" action="FileImportAction">
+      	<placeholder name="FileImportPlaceholder">
+      	   <menuitem name="FileSomethingImport" action="GtkmmSomethingAction"/>
+      	</placeholder>
+      </menu>
+    </menu>
+  </menubar>
+</ui>
