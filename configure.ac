@@ -109,6 +109,35 @@ AM_GLIB_GNU_GETTEXT
 
 AC_PROG_INSTALL
 
+
+###--------------------------------------------------------
+### Optionally enable gtkmm plugin (requires c++ compiler)
+###--------------------------------------------------------
+enable_gtkmm=false
+
+AC_ARG_ENABLE(gtkmm,
+  [AS_HELP_STRING([--enable-gtkmm],[enable gtkmm gui])]
+  [case "${enableval}" in
+     yes) enable_gtkmm=true ;;
+     no) enable_gtkmm=false ;;
+     *) enable_gtkmm=true ;;
+   esac]
+  )
+AS_IF([test x${enable_gtkmm} = "xyes"],
+  [
+    GTKMM_DIR=gtkmm
+    # We require gtkmm, of course
+    PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.16)
+    # and also the c++ compiler
+    AC_PROG_CXXCPP
+    AC_PROG_CXX
+  ])
+AC_SUBST(GTKMM_DIR)
+# This section must come before AC_PROG_LIBTOOL because libtool
+# must know about the c++ compiler.
+###--------------------------------------------------------
+
+
 AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_WIN32_DLL
 AM_DISABLE_STATIC
@@ -1472,6 +1501,7 @@ AC_CONFIG_FILES(
   src/libqof/qof/Makefile
   src/libqof/qof/test/Makefile
   src/optional/Makefile
+  src/optional/gtkmm/Makefile
   src/optional/python-bindings/Makefile
   src/optional/python-bindings/tests/Makefile
   src/pixmaps/Makefile
