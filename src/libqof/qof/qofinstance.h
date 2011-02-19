@@ -149,6 +149,7 @@ KvpFrame* qof_instance_get_slots (const QofInstance *);
  */
 Timespec qof_instance_get_last_update (const QofInstance *inst);
 
+void qof_instance_set_editlevel(gpointer inst, gint level);
 gint qof_instance_get_editlevel (gconstpointer ptr);
 void qof_instance_increase_editlevel (gpointer ptr);
 void qof_instance_decrease_editlevel (gpointer ptr);
@@ -208,10 +209,6 @@ void qof_instance_set_dirty(QofInstance* inst);
 /* reset the dirty flag */
 void qof_instance_mark_clean (QofInstance *);
 
-gint qof_instance_get_editlevel(gconstpointer inst);
-void qof_instance_set_editlevel(gpointer inst, gint level);
-void qof_instance_increase_editlevel(gpointer inst);
-void qof_instance_decrease_editlevel(gpointer inst);
 gboolean qof_instance_check_edit(const QofInstance *inst);
 
 gboolean qof_instance_get_infant(const QofInstance *inst);
