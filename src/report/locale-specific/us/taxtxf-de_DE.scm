@@ -835,10 +835,10 @@
                    (gnc:html-markup
                     "blue"
                     (gnc:html-markup-p
-                     (_ "Blaue Posten können in eine XML-Datei und diese mit der Software \"Winston\" zu ELSTER exportiert werden.<br>
+                     "Blaue Posten können in eine XML-Datei und diese mit der Software \"Winston\" zu ELSTER exportiert werden.<br>
 Diese XML-Datei enthält dann die geschlüsselten USt-Kennzahlen und zu diesen die summierten Werte für den ELSTER-Export.<br>
 Bei Umsätzen werden nur voll Beträge ausgewiesen, bei Steuerkennzahlen auch die Dezimalstellen, aber ohne Komma.<br>
-Klicken Sie auf »Exportieren« , um den Export durchzuführen."))))))
+Klicken Sie auf »Exportieren« , um den Export durchzuführen.")))))
             
             (txf-print-dups doc)
             
@@ -853,8 +853,8 @@ Klicken Sie auf »Exportieren« , um den Export durchzuführen."))))))
                  doc
                  (gnc:make-html-text
                   (gnc:html-markup-p
-         (_ "Keine Steuer-relevanten Konten gefunden.<br>
-Gehen Sie zu Bearbeiten -> Optionen Steuerbericht, um Konten entsprechend einzurichten.")))))
+         "Keine Steuer-relevanten Konten gefunden.<br>
+Gehen Sie zu Bearbeiten -> Optionen Steuerbericht, um Konten entsprechend einzurichten."))))
 
 	    (gnc:report-finished)
             doc)))))

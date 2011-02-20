@@ -76,10 +76,10 @@
   (let ((pair (assv code txf-help-strings)))
     (if pair
         (cdr pair)
-        (_ "Keine Hilfe verfügbar, da nur Gruppenüberschrift.
+        "Keine Hilfe verfügbar, da nur Gruppenüberschrift.
 Diese Kategorie ohne Nummer ==>> N I C H T   V E R W E N D E N !
 USt-Kategorien 2011 für GnuCash Vers. 2.4.0 entwickelt und erstellt von: FJSW
-Fehlermeldungen + Dankschreiben an: stoll@bomhardt.de") )))
+Fehlermeldungen + Dankschreiben an: stoll@bomhardt.de")))
 
 (define (gnc:txf-get-codes categories tax-entity-type)
   (let* ((tax-entity-code-list-pair (assv (if (eqv? tax-entity-type "")
