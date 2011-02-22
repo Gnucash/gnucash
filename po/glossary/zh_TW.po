@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
 "POT-Creation-Date: 2010-11-24 02:25+0100\n"
-"PO-Revision-Date: 2007-09-07 02:45+0800\n"
+"PO-Revision-Date: 2011-02-19 18:55+0800\n"
 "Last-Translator: Kuang-che Wu <kcwu@csie.org>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgstr "動作：分佈"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr "動作：紅利"
+msgstr "動作：股利"
 
 #. "-"
 msgid "action: fee"
@@ -315,9 +315,8 @@ msgid "Description (column in register)"
 msgstr "敘述(登記簿中的欄位)"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "帳號"
+msgstr "折扣"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -337,7 +336,7 @@ msgstr "權益變動表"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr "附帶條件委付蓋印契約帳號"
+msgstr "代管帳號"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -413,7 +412,7 @@ msgstr "迷失帳號"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr ""
+msgstr "Lot"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"

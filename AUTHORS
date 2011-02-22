@@ -284,6 +284,7 @@ Darin Willits <darin@blueyonder.co.uk> initial budgeting prototype
 Andy Wingo <wingo@pobox.com> income per day-of-week report
 Tom Winterhalder <t.winterhalder@freesurf.ch> Swiss German account template
 David Woodhouse <dwmw2@infradead.org> messages  British translations
+Kuang-che Wu <kcwu@csie.org> Traditional Chinese translation
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 Shimpei Yamashita <shimpei@gol.com> messages Japanese translation
 Alex Zepeda <jazepeda@pacbell.net> postgres configure patch
