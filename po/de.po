@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-13 21:14+0100\n"
-"PO-Revision-Date: 2011-02-14 20:21+0100\n"
+"POT-Creation-Date: 2011-02-24 21:42+0100\n"
+"PO-Revision-Date: 2011-02-24 21:43+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -1029,9 +1029,17 @@ msgstr "<b>Allgemein</b>"
 msgid "<b>Invoices</b>"
 msgstr "<b>Rechnungsausgang</b>"
 
+msgid "Enable extra _buttons"
+msgstr "Zusätzliche _Werkzeugleisten-Knöpfe"
+
 msgid "How many days in the future to warn about Bills coming due."
 msgstr ""
 "Anzahl der Tage im Voraus, die an fällige Rechnungen erinnert werden soll."
+
+msgid ""
+"If active, extra toolbar buttons for common business functions are shown as "
+"well. Otherwise they are not shown."
+msgstr "Wenn aktiviert, werden zusätzliche Knöpfe in der Werkzeugleiste für häufig benutzte Geschäfts-Funktionen angezeigt. Andernfalls werden sie nicht angezeigt."
 
 msgid ""
 "If checked, each invoice will be opened in its own top level window.  If "
@@ -1793,6 +1801,9 @@ msgstr "Buchung löschen"
 msgid "Accumulate multiple splits into one"
 msgstr ""
 "Mehrfache Buchungsteile bei Ausstellung in eine einzige Buchung kumulieren"
+
+msgid "Enable extra toolbar buttons for business"
+msgstr "Zusätzliche Werkzeugleisten-Knöpfe aktivieren"
 
 msgid ""
 "If active, at startup GnuCash will check to see whether any bills will "
@@ -10624,9 +10635,9 @@ msgid "Enable skip transaction action"
 msgstr "»Überspringen«-Aktion aktivieren "
 
 msgid ""
-"Enable the SKIP action in the transaction matcher.  If enabled, a "
-"transaction whose best match's score is in the yellow zone (above the Auto-"
-"ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default."
+"Enable the SKIP action in the transaction matcher. If enabled, a transaction "
+"whose best match's score is in the yellow zone (above the Auto-ADD threshold "
+"but below the Auto-CLEAR threshold) will be skipped by default."
 msgstr ""
 "»Überspringen«-Aktion beim Buchungsimport aktivieren. Eine importierte "
 "Buchung, deren am besten bewertete existierende Buchung im gelben Bereich "
@@ -11520,16 +11531,6 @@ msgstr "»Überspringen«-Aktion aktivieren "
 
 msgid "Enable UPDATE match action"
 msgstr "»Übernehmen«-Aktion aktivieren"
-
-msgid ""
-"Enable the SKIP action in the transaction matcher. If enabled, a transaction "
-"whose best match's score is in the yellow zone (above the Auto-ADD threshold "
-"but below the Auto-CLEAR threshold) will be skipped by default."
-msgstr ""
-"»Überspringen«-Aktion beim Buchungsimport aktivieren. Eine importierte "
-"Buchung, deren am besten bewertete existierende Buchung im gelben Bereich "
-"liegt (größer als die Auto-Hinzufügen-Schwelle, aber kleiner als die Auto-"
-"Abgleichen-Schwelle), hat als Voreinstellung »Überspringen«."
 
 msgid ""
 "Enables bayesian matching when matching imported transaction against "
@@ -14246,23 +14247,6 @@ msgstr ""
 #, c-format
 msgid "Period from %s to %s"
 msgstr "Zeitraum von %s bis %s"
-
-#. src/report/locale-specific/us/taxtxf-de_DE.scm
-msgid ""
-"Blue items are exportable to a German Tax XML file. Press Export to actually "
-"export them."
-msgstr ""
-"Blaue Einträge können in eine deutsche Elster-XML-Datei exportiert werden. "
-"Klicken Sie »Export«, um den Export durchzuführen."
-
-#. src/report/locale-specific/us/taxtxf-de_DE.scm
-msgid ""
-"No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to "
-"set up tax-related accounts."
-msgstr ""
-"Keine Konten mit steuerrelevanten Informationen gefunden. Sie können "
-"steuerrelevante Informationen im Dialog Bearbeiten->Steuerrelevante "
-"Informationen angeben."
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 msgid "Tax Report & XML Export"
@@ -18272,13 +18256,12 @@ msgid "Tax Number"
 msgstr "Steuernummer"
 
 #. src/tax/us/txf-de_DE.scm
+msgid "The electronic tax number of your business"
+msgstr "Die Elster-Steuernummer Ihrer Unternehmung"
+
 #. src/tax/us/txf.scm
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
-
-#. src/tax/us/txf-de_DE.scm
-msgid "The electronic tax number of your business"
-msgstr "Die Elster-Steuernummer Ihrer Unternehmung"
 
 msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
