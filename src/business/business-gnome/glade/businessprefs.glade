@@ -214,7 +214,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip" translatable="yes">If active, extra toolbar buttons for common business functions are shown as well.  Otherwise they are not shown.</property>
+            <property name="tooltip" translatable="yes">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
             <property name="draw_indicator">True</property>
           </widget>
           <packing>

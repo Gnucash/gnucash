@@ -57,7 +57,7 @@
         <short>Enable extra toolbar buttons for business</short>
         <long>
           If active, extra toolbar buttons for common business
-          functions are shown as well.  Otherwise they are not shown.
+          functions are shown as well. Otherwise they are not shown.
         </long>
       </locale>
     </schema>
