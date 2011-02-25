@@ -106,7 +106,7 @@ static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen
 static void impl_webkit_reload( GncHtml* self );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
 static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
-static void impl_webkit_print( GncHtml* self );
+static void impl_webkit_print( GncHtml* self, const gchar* jobname );
 static void impl_webkit_cancel( GncHtml* self );
 static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
 
@@ -1060,7 +1060,7 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
  * @param self HTML renderer object
  */
 static void
-impl_webkit_print( GncHtml* self )
+impl_webkit_print( GncHtml* self, const gchar* jobname )
 {
 #if !HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
     extern void webkit_web_frame_print( WebKitWebFrame * frame );
@@ -1077,7 +1077,7 @@ impl_webkit_print( GncHtml* self )
     frame = webkit_web_view_get_main_frame( priv->web_view );
 
 #if HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
-    gnc_print_operation_init( op );
+    gnc_print_operation_init( op, jobname );
 #ifdef G_OS_WIN32
     gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
 #endif

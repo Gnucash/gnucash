@@ -50,8 +50,9 @@ void gnc_print_operation_save_print_settings(GtkPrintOperation *op);
  * GtkPrintOperation @a op.  Set the default page setup as well.
  *
  * @param op non-NULL print operation
+ * @param jobname non-NULL print job name
  */
-void gnc_print_operation_init(GtkPrintOperation *op);
+void gnc_print_operation_init(GtkPrintOperation *op, const gchar* jobname);
 
 /**
  * Run a page setup dialog and save the resulting GtkPageSetup in a static

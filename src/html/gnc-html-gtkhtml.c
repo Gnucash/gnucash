@@ -104,7 +104,7 @@ static void impl_gtkhtml_show_data( GncHtml* self, const gchar* data, int datale
 static void impl_gtkhtml_reload( GncHtml* self );
 static void impl_gtkhtml_copy_to_clipboard( GncHtml* self );
 static gboolean impl_gtkhtml_export_to_file( GncHtml* self, const gchar* filepath );
-static void impl_gtkhtml_print( GncHtml* self );
+static void impl_gtkhtml_print( GncHtml* self, const gchar* jobname );
 static void impl_gtkhtml_cancel( GncHtml* self );
 static void impl_gtkhtml_set_parent( GncHtml* self, GtkWindow* parent );
 
@@ -937,7 +937,7 @@ draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
 }
 
 static void
-impl_gtkhtml_print( GncHtml* self )
+impl_gtkhtml_print( GncHtml* self, const gchar* jobname )
 {
     GtkPrintOperation *print;
     GtkPrintOperationResult res;
@@ -946,7 +946,7 @@ impl_gtkhtml_print( GncHtml* self )
     priv = GNC_HTML_GTKHTML_GET_PRIVATE(self);
     print = gtk_print_operation_new();
 
-    gnc_print_operation_init(print);
+    gnc_print_operation_init(print, jobname);
     gtk_print_operation_set_use_full_page(print, FALSE);
     gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
     gtk_print_operation_set_n_pages(print, 1);

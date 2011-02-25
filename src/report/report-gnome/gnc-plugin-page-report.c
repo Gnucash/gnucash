@@ -1570,9 +1570,28 @@ static void
 gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report )
 {
     GncPluginPageReportPrivate *priv;
+    gchar *report_name = NULL;
+    gchar *job_name = NULL;
+    gchar *job_date = qof_print_date( time( NULL ) );
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-    gnc_html_print(priv->html);
+
+    if (priv->cur_report == SCM_BOOL_F)
+        report_name = g_strdup ( "GnuCash-Report");
+    else
+    {
+        report_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
+               "Report name", NULL);
+        if (!report_name)
+            report_name = g_strdup ( "GnuCash-Report");
+    }
+    job_name = g_strjoin ( "_", report_name, job_date, NULL );
+
+    gnc_html_print(priv->html, job_name);
+
+    g_free (report_name);
+    g_free (job_name);
+    g_free (job_date);
 }
 
 static void
