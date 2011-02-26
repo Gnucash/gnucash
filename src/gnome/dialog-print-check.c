@@ -2441,7 +2441,7 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
 
     print = gtk_print_operation_new();
 
-    gnc_print_operation_init(print);
+    gnc_print_operation_init(print, "GnuCash-Checks");
     gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
     gtk_print_operation_set_use_full_page(print, TRUE);
     g_signal_connect(print, "begin_print", G_CALLBACK(begin_print), pcd);

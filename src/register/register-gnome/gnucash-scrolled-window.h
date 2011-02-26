@@ -24,7 +24,7 @@
 #ifndef GNC_SCROLLED_WINDOW_H
 #define GNC_SCROLLED_WINDOW_H
 
-#include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

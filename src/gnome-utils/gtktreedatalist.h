@@ -25,7 +25,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include "gtk/gtktreesortable.h" //CAS: changed path
+#include <>gtk/gtk.h>
 
 typedef struct _GtkTreeDataList GtkTreeDataList;
 struct _GtkTreeDataList

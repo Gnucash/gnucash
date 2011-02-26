@@ -25,7 +25,7 @@
 
 #include "config.h"
 
-#include <gtk/gtkcellrenderertoggle.h>
+#include <gtk/gtk.h>
 
 #include "gnc-tree-model-selection.h"
 

@@ -37,8 +37,7 @@
 #ifndef __GNC_TREE_MODEL_SELECTION_H
 #define __GNC_TREE_MODEL_SELECTION_H
 
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreeviewcolumn.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

@@ -1921,7 +1921,7 @@ main_window_update_page_name (GncPluginPage *page,
     main_window_find_tab_event(window, page, &event_box);
 
     if (old_page_long_name && old_page_name
-        && g_strrstr(old_page_long_name, old_page_name) != NULL)
+            && g_strrstr(old_page_long_name, old_page_name) != NULL)
     {
         gchar *new_page_long_name;
         gint string_position;

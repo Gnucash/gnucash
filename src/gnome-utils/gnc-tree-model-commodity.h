@@ -36,8 +36,7 @@
 #ifndef __GNC_TREE_MODEL_COMMODITY_H
 #define __GNC_TREE_MODEL_COMMODITY_H
 
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreeselection.h>
+#include <gtk/gtk.h>
 #include "gnc-tree-model.h"
 
 #include "gnc-commodity.h"

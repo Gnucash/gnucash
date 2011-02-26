@@ -25,7 +25,7 @@
 #define WINDOW_RECONCILE_H
 
 #include "Account.h"
-#include <gtk/gtk.h> /* For GtkWidget */
+#include <gtk/gtk.h>
 
 
 /** STRUCTS *********************************************************/

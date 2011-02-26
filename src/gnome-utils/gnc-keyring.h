@@ -40,7 +40,7 @@
 #define KEYRING_H_
 
 #include <glib.h>
-#include <gtk/gtk.h> /* For GtkWidget */
+#include <gtk/gtk.h>
 
 
 /** Attempt to store a password in some trusted keystore. At this point

@@ -32,8 +32,7 @@
 #ifndef __GNC_TREE_VIEW_H
 #define __GNC_TREE_VIEW_H
 
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

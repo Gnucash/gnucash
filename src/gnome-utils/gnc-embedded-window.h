@@ -36,7 +36,7 @@
 #ifndef __GNC_EMBEDDED_WINDOW_H
 #define __GNC_EMBEDDED_WINDOW_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "gnc-plugin-page.h"
 

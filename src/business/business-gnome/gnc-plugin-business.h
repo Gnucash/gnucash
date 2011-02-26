@@ -25,7 +25,7 @@
 #ifndef __GNC_PLUGIN_BUSINESS_H
 #define __GNC_PLUGIN_BUSINESS_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "gnc-plugin.h"
 

@@ -135,7 +135,7 @@ struct _GncHtmlClass
     void (*reload)( GncHtml* html );
     void (*copy_to_clipboard)( GncHtml* html );
     gboolean (*export_to_file)( GncHtml* html, const gchar* file );
-    void (*print)( GncHtml* html );
+    void (*print)( GncHtml* html, const gchar* jobname );
     void (*cancel)( GncHtml* html );
     URLType (*parse_url)( GncHtml* html, const gchar* url,
                           gchar** url_location, gchar** url_label );
@@ -200,7 +200,7 @@ gboolean gnc_html_export_to_file( GncHtml* html, const gchar* filename );
  *
  * @param html GncHtml object
  */
-void gnc_html_print( GncHtml* html );
+void gnc_html_print( GncHtml* html, const gchar* jobname );
 
 /**
  * Cancels the current operation

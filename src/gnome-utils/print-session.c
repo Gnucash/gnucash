@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <gtk/gtkprintoperation.h>
+#include <gtk/gtk.h>
 
 #include "print-session.h"
 #include "gnc-gconf-utils.h" /* for gnc_gconf_set_string() */
@@ -57,7 +57,7 @@ gnc_print_operation_save_print_settings(GtkPrintOperation *op)
 }
 
 void
-gnc_print_operation_init(GtkPrintOperation *op)
+gnc_print_operation_init(GtkPrintOperation *op, const gchar* jobname)
 {
     g_return_if_fail(op);
 
@@ -72,6 +72,8 @@ gnc_print_operation_init(GtkPrintOperation *op)
     if (page_setup)
         gtk_print_operation_set_default_page_setup(op, page_setup);
     G_UNLOCK(page_setup);
+
+    gtk_print_operation_set_job_name ( op, jobname);
 }
 
 void
