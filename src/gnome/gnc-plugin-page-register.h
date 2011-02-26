@@ -35,7 +35,7 @@
 #ifndef __GNC_PLUGIN_PAGE_REGISTER_H
 #define __GNC_PLUGIN_PAGE_REGISTER_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "Account.h"
 #include "gnc-ledger-display.h"

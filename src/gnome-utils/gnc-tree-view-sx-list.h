@@ -28,8 +28,7 @@
 #ifndef __GNC_TREE_VIEW_SX_LIST_H
 #define __GNC_TREE_VIEW_SX_LIST_H
 
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 #include "gnc-tree-view.h"
 
 #include "SchedXaction.h"

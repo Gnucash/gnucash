@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <gtk/gtkprintoperation.h>
+#include <gtk/gtk.h>
 
 #include "print-session.h"
 #include "gnc-gconf-utils.h" /* for gnc_gconf_set_string() */

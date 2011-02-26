@@ -26,7 +26,7 @@
 #define ACCOUNT_MATCHER_H
 
 #include "Account.h"
-#include <gtk/gtk.h> /* For GtkWidget */
+#include <gtk/gtk.h>
 
 /**  Must be called with a string containing a unique identifier for the
   account.  If an account with a matching online_id kvp_frame is

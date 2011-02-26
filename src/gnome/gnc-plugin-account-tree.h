@@ -34,7 +34,7 @@
 #ifndef __GNC_PLUGIN_ACCOUNT_TREE_H
 #define __GNC_PLUGIN_ACCOUNT_TREE_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "gnc-plugin.h"
 

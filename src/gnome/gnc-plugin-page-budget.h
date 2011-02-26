@@ -30,7 +30,7 @@
 #ifndef __GNC_PLUGIN_PAGE_BUDGET_H
 #define __GNC_PLUGIN_PAGE_BUDGET_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "gnc-plugin-page.h"
 #include "gnc-budget.h"

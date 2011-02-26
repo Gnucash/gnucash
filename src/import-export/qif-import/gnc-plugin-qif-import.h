@@ -24,7 +24,7 @@
 #ifndef __GNC_PLUGIN_QIF_IMPORT_H
 #define __GNC_PLUGIN_QIF_IMPORT_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "gnc-plugin.h"
 

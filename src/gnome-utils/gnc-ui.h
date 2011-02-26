@@ -36,7 +36,7 @@
 #include "Account.h"
 #include "gnc-pricedb.h"
 #include "guile-mappings.h"
-#include <gtk/gtk.h> /* For GtkWidget */
+#include <gtk/gtk.h>
 
 
 /** Help Files ******************************************************/

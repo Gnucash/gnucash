@@ -31,8 +31,7 @@ s/gtk_tree_model_sort/gnc_tree_model_sort/g
 #ifndef __GNC_TREE_MODEL_SORT_H__
 #define __GNC_TREE_MODEL_SORT_H__
 
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreesortable.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

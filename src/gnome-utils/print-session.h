@@ -34,7 +34,7 @@
 /** @addtogroup Basic Session Functions
     @{ */
 
-#include <gtk/gtkprintoperation.h>
+#include <gtk/gtk.h>
 
 /**
  * Retrieve the print settings from the GtkPrintOperation @a op and save them in

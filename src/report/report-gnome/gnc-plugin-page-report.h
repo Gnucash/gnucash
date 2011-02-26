@@ -34,7 +34,7 @@
 #ifndef __GNC_PLUGIN_PAGE_REPORT_H
 #define __GNC_PLUGIN_PAGE_REPORT_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 #include "gnc-plugin.h"
 
 G_BEGIN_DECLS

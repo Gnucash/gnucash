@@ -34,8 +34,7 @@
 #ifndef __GNC_TREE_VIEW_PRICE_H
 #define __GNC_TREE_VIEW_PRICE_H
 
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 #include "gnc-tree-view.h"
 
 #include "gnc-pricedb.h"

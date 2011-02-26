@@ -35,7 +35,7 @@
 #ifndef __GNC_TREE_MODEL_H
 #define __GNC_TREE_MODEL_H
 
-#include <gtk/gtktreemodel.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

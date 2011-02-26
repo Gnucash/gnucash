@@ -25,7 +25,7 @@
 #define DIALOG_QIF_IMPORT_H
 
 #include <libguile.h>
-#include <gtk/gtk.h> /* For GtkWidget */
+#include <gtk/gtk.h>
 
 /* QIF Import Windows ***********************************************/
 

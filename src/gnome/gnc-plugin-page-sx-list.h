@@ -33,7 +33,7 @@
 
 #include "config.h"
 #include <glib/gi18n.h>
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 #include "SchedXaction.h"
 #include "gnc-plugin-page.h"
 

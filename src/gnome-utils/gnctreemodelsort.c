@@ -49,16 +49,11 @@ Plus some minor changes that have been annotated with 'CAS:'
 #include <config.h>
 #include <string.h>
 
-#include "gnctreemodelsort.h"    //CAS: header name changed
-#include "gtk/gtktreesortable.h" //CAS: path changed
-#include "gtk/gtktreestore.h"    //CAS: path changed
+#include "gnctreemodelsort.h"
+#include <gtk/gtk.h>
 #include "gtktreedatalist.h"
-//#include "gtk/gtkintl.h"       //CAS: header commented
-#include "gtk/gtkprivate.h"      //CAS: path changed
-#include "gtk/gtktreednd.h"      //CAS: path changed
-//#include "gtk/gtkalias.h"      //CAS: header commented
-#include <glib/gi18n.h> //CAS: header added
-#define P_(x) _(x)      //CAS: macro added
+#include <glib/gi18n.h>
+#define P_(x) _(x)
 
 typedef struct _SortElt SortElt;
 typedef struct _SortLevel SortLevel;
