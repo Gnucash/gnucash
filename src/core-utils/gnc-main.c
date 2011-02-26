@@ -92,8 +92,8 @@ gnc_get_svn_version (void)
 guint
 gnc_get_long_version()
 {
-return GNUCASH_MAJOR_VERSION * 1000000 +
-    GNUCASH_MINOR_VERSION * 10000 +
-    GNUCASH_MICRO_VERSION * 100 +
-    GNUCASH_NANO_VERSION;
+    return GNUCASH_MAJOR_VERSION * 1000000 +
+           GNUCASH_MINOR_VERSION * 10000 +
+           GNUCASH_MICRO_VERSION * 100 +
+           GNUCASH_NANO_VERSION;
 }

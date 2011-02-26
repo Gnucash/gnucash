@@ -106,7 +106,7 @@ gnc_new_tip_number (GtkWidget *widget,
     {
         tip = g_strdup("");
     }
-    else 
+    else
     {
         /* Use printf to do the substitution. Note that if there is no |
          * in the tip, tip_components[1] will be the terminating NULL,

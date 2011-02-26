@@ -295,7 +295,7 @@ gnc_GWEN_Gui_log_init(void)
     {
         log_gwen_gui =
 #ifdef USING_GWENHYWFAR_GTK2_GUI
-        Gtk2_Gui_new()
+            Gtk2_Gui_new()
 #else
         GWEN_Gui_new()
 #endif

@@ -2890,8 +2890,8 @@ conn_test_dbi_library( dbi_conn conn )
     dbi_result_free( result );
     g_ascii_dtostr( doublestr, sizeof(doublestr), testdouble );
     querystr = g_strdup_printf( "INSERT INTO numtest VALUES (%" G_GINT64_FORMAT
-				", %" G_GUINT64_FORMAT ", %s)",
-				testlonglong, testulonglong, doublestr );
+                                ", %" G_GUINT64_FORMAT ", %s)",
+                                testlonglong, testulonglong, doublestr );
     result = dbi_conn_query( conn, querystr );
     g_free( querystr );
     if ( result == NULL )
