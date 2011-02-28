@@ -801,7 +801,7 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
 
         gnc_budget_set_name(priv->budget, name);
         label = g_strdup_printf("%s: %s", _("Budget"), name);
-        g_object_set(G_OBJECT(page), "page-name", label, NULL);
+        main_window_update_page_name(GNC_PLUGIN_PAGE(page), label);
         g_free(label);
         DEBUG("%s", name);
         g_free(name);
