@@ -46,6 +46,7 @@
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-page-budget.h"
 #include "gnc-plugin-budget.h"
@@ -247,9 +248,24 @@ gnc_plugin_page_budget_new (GncBudget *budget)
     GncPluginPageBudget *plugin_page;
     GncPluginPageBudgetPrivate *priv;
     gchar* label;
+    const GList *item;
 
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
     ENTER(" ");
+
+    /* Is there an existing page? */
+    item = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_BUDGET_NAME);
+    for ( ; item; item = g_list_next(item))
+    {
+        plugin_page = (GncPluginPageBudget *)item->data;
+        priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
+        if (priv->budget == budget)
+        {
+            LEAVE("existing budget page %p", plugin_page);
+            return GNC_PLUGIN_PAGE(plugin_page);
+        }
+    }
+
     plugin_page = g_object_new(GNC_TYPE_PLUGIN_PAGE_BUDGET, NULL);
 
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
