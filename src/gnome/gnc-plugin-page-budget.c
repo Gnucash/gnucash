@@ -309,7 +309,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     ENTER("page %p", plugin_page);
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
 
-    /* Init parent declared variables */
+    /* Initialize parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Budget"),
@@ -330,7 +330,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
                                   plugin_page);
     gnc_plugin_init_short_names (action_group, toolbar_labels);
 
-    /* Visisble types */
+    /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
     priv->fd.show_hidden = FALSE;
     priv->fd.show_zero_total = TRUE;
@@ -398,7 +398,7 @@ gnc_plugin_page_budget_refresh_cb(GHashTable *changes, gpointer user_data)
 
 
 /*
- * GncPluginPage Fucntions
+ * GncPluginPage Functions
  */
 static GtkWidget *
 gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
@@ -622,7 +622,7 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
 
 /** This button press handler calls the common button press handler
  *  for all pages.  The GtkTreeView eats all button presses and
- *  doesn't pass them up the widget tree, even when doesn't do
+ *  doesn't pass them up the widget tree, even when it doesn't do
  *  anything with them.  The only way to get access to the button
  *  presses in an account tree page is here on the tree view widget.
  *  Button presses on all other pages are caught by the signal

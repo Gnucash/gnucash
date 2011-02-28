@@ -39,7 +39,7 @@ static void gnc_gobject_weak_cb (gpointer user_data, GObject *object);
 
 /** Get a pointer to the hash table used by the tracking database.  If
  *  the hash table doesn't exist, it will be created.  If gnucash was
- *  compiled with --enable-ref-count-dumps, this funtion is also the
+ *  compiled with --enable-ref-count-dumps, this function is also the
  *  point where the gnc_gobject_tracking_dump() function is registered
  *  to be called the GTK exits.
  *

@@ -120,67 +120,67 @@ struct _invoice_select_window
  */
 struct _invoice_window
 {
-    GladeXML *	xml;
+    GladeXML   * xml;
 
-    GtkWidget *	dialog;		/* Used by 'New Invoice Window' */
-    GncPluginPage *page;		/* Used by 'Edit Invoice' Page */
+    GtkWidget  * dialog;         /* Used by 'New Invoice Window' */
+    GncPluginPage *page;        /* Used by 'Edit Invoice' Page */
 
     /* Summary Bar Widgets */
-    GtkWidget *	total_label;
-    GtkWidget *	total_cash_label;
-    GtkWidget *	total_charge_label;
-    GtkWidget *	total_subtotal_label;
-    GtkWidget *	total_tax_label;
+    GtkWidget  * total_label;
+    GtkWidget  * total_cash_label;
+    GtkWidget  * total_charge_label;
+    GtkWidget  * total_subtotal_label;
+    GtkWidget  * total_tax_label;
 
     /* Data Widgets */
-    GtkWidget *	id_entry;
-    GtkWidget *	notes_text;
-    GtkWidget *	opened_date;
-    GtkWidget *	posted_date_hbox;
-    GtkWidget *	posted_date;
-    GtkWidget *	active_check;
+    GtkWidget  * id_entry;
+    GtkWidget  * notes_text;
+    GtkWidget  * opened_date;
+    GtkWidget  * posted_date_hbox;
+    GtkWidget  * posted_date;
+    GtkWidget  * active_check;
 
-    GtkWidget *	owner_box;
-    GtkWidget *	owner_label;
-    GtkWidget *	owner_choice;
-    GtkWidget *	job_label;
-    GtkWidget *	job_box;
-    GtkWidget *	job_choice;
-    GtkWidget *	billing_id_entry;
-    GtkWidget *	terms_menu;
+    GtkWidget  * owner_box;
+    GtkWidget  * owner_label;
+    GtkWidget  * owner_choice;
+    GtkWidget  * job_label;
+    GtkWidget  * job_box;
+    GtkWidget  * job_choice;
+    GtkWidget  * billing_id_entry;
+    GtkWidget  * terms_menu;
 
     /* Project Widgets (used for Bills only) */
-    GtkWidget *	proj_frame;
-    GtkWidget *	proj_cust_box;
-    GtkWidget *	proj_cust_choice;
-    GtkWidget *	proj_job_box;
-    GtkWidget *	proj_job_choice;
+    GtkWidget  * proj_frame;
+    GtkWidget  * proj_cust_box;
+    GtkWidget  * proj_cust_choice;
+    GtkWidget  * proj_job_box;
+    GtkWidget  * proj_job_choice;
 
-    /* Exp Voucher Widgets */
-    GtkWidget *	to_charge_frame;
-    GtkWidget *	to_charge_edit;
+    /* Expense Voucher Widgets */
+    GtkWidget  * to_charge_frame;
+    GtkWidget  * to_charge_edit;
 
-    gint		width;
+    gint         width;
 
-    GncBillTerm *	terms;
-    GnucashRegister *	reg;
-    GncEntryLedger *	ledger;
+    GncBillTerm     * terms;
+    GnucashRegister * reg;
+    GncEntryLedger  * ledger;
 
-    invoice_sort_type_t	last_sort;
+    invoice_sort_type_t last_sort;
 
-    InvoiceDialogType	dialog_type;
-    GncGUID		invoice_guid;
-    gint		component_id;
-    QofBook *	book;
-    GncInvoice *	created_invoice;
-    GncOwner	owner;
-    GncOwner	job;
+    InvoiceDialogType   dialog_type;
+    GncGUID      invoice_guid;
+    gint         component_id;
+    QofBook    * book;
+    GncInvoice * created_invoice;
+    GncOwner     owner;
+    GncOwner     job;
 
-    GncOwner	proj_cust;
-    GncOwner	proj_job;
+    GncOwner     proj_cust;
+    GncOwner     proj_job;
 
     /* for Unposting */
-    gboolean	reset_tax_tables;
+    gboolean     reset_tax_tables;
 };
 
 /* Forward definitions for CB functions */
@@ -401,7 +401,7 @@ gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data)
     /* Ok, we don't need this anymore */
     iw->invoice_guid = *guid_null ();
 
-    /* if this is a NEW_INVOICE, and created_invoice is NON-NULL, the
+    /* if this is a NEW_INVOICE, and created_invoice is NON-NULL, then
      * open up a new window with the invoice.  This used to be done
      * in gnc_ui_invoice_new() but cannot be done anymore
      */
@@ -1458,7 +1458,7 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
     GncInvoice *invoice = iw_get_invoice (iw);
     GncOwner *owner;
 
-    /* If there isn't a invoice behind us, close down */
+    /* If there isn't an invoice behind us, close down */
     if (!invoice)
     {
         gnc_close_gui_component (iw->component_id);
@@ -1492,7 +1492,7 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
     gnc_invoice_update_window (iw, NULL);
 }
 
-/** Update the various widgets in the window/page vased upon the data
+/** Update the various widgets in the window/page based upon the data
  *  in the InvoiceWindow data structure.
  *
  *  @param iw A pointer to the InvoiceWindow data structure.
@@ -1608,7 +1608,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         /*
          * Next, figure out if we've been posted, and if so set the
          * appropriate bits of information.. Then work on hiding or
-         * unhiding as necessary.
+         * showing as necessary.
          */
 
         acct = gncInvoiceGetPostedAcc (invoice);
@@ -1686,7 +1686,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     if (iw->page)
         gnc_plugin_page_invoice_update_menus(iw->page, is_posted, can_unpost);
 
-    /* Set the to-change widget */
+    /* Set the to_charge widget */
     gtk_widget_set_sensitive (iw->to_charge_edit, !is_posted);
 
     /* Hide the to_charge frame for all non-employee invoices,
@@ -2244,7 +2244,7 @@ gnc_invoice_window_new_invoice (QofBook *bookp, GncOwner *owner,
     iw->job_label = glade_xml_get_widget (xml, "job_label");
     iw->job_box = glade_xml_get_widget (xml, "job_hbox");
 
-    /* grab the project widgets */
+    /* Grab the project widgets */
     iw->proj_frame = glade_xml_get_widget (xml, "proj_frame");
     iw->proj_cust_box = glade_xml_get_widget (xml, "proj_cust_hbox");
     iw->proj_job_box = glade_xml_get_widget (xml, "proj_job_hbox");
@@ -2321,7 +2321,7 @@ set_gncEntry_date(gpointer data, gpointer user_data)
 
     gncEntrySetDate(entry, *new_date);
     /*gncEntrySetDateEntered(entry, *new_date); - don't modify this
-     * because apparently it implies the ordering of the entries,
+     * because apparently it defines the ordering of the entries,
      * which we don't want to change. */
 }
 
@@ -2707,7 +2707,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     }
 #endif
 
-    /* launch select dialog and return the result */
+    /* Launch select dialog and return the result */
     sw = g_new0 (struct _invoice_select_window, 1);
 
     if (owner)
@@ -2791,7 +2791,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
         { NULL },
     };
 
-    /* create the param list (in reverse order) */
+    /* Create the param list (in reverse order) */
     if (param_list == NULL)
     {
         param_list = gnc_search_param_prepend (param_list, _("Amount"), NULL, type,
@@ -2807,7 +2807,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     qof_query_search_for(q, GNC_INVOICE_MODULE_NAME);
     qof_query_set_book (q, book);
 
-    /* we want to find all invoices where:
+    /* We want to find all invoices where:
      *      invoice -> is_posted == TRUE
      * AND  invoice -> lot -> is_closed? == FALSE
      * AND  invoice -> type != _("Invoice") // note: currently the translated form

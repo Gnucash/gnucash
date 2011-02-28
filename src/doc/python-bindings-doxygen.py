@@ -9,7 +9,7 @@
 # @li maybe join python_bindings_page and group
 # @li work on the structure of the documentation to make it more clear
 # @li try to make SWIG include the documentation of the c-source
-# @li make funtion-links in SWIG-generated files work.
+# @li make function-links in SWIG-generated files work.
 # @li some words to the tests
 #
 # @author Christoph Holtermann
@@ -39,7 +39,7 @@
 #
 #   @section possibilities What are the Python bindings good for ?
 #
-#   The python bindings supply the ability to access a wide range of the core funtions of GnuCash. You
+#   The python bindings supply the ability to access a wide range of the core functions of GnuCash. You
 #   can read and write Transactions, Commodities, Lots, access the business stuff... You gain the ability
 #   to manipulate your financial data with a flexible scripting language.
 #

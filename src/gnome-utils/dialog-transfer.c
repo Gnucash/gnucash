@@ -125,7 +125,7 @@ struct _xferDialog
      */
     gnc_numeric * exch_rate;
 
-    /* Callback funtion to notify of the newly created Transaction */
+    /* Callback function to notify of the newly created Transaction */
     gnc_xfer_dialog_cb transaction_cb;
     /* , and its user_data */
     gpointer transaction_user_data;
@@ -192,7 +192,7 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
 
     /* when do we update, and when do we NOT update? */
 
-    /* XXX: I'm ALWAYS going to update whenver we get called */
+    /* XXX: I'm ALWAYS going to update whenever we get called */
 
     /* grab the price nearest to the DATE out of the pricedb */
     date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (xferData->date_entry));

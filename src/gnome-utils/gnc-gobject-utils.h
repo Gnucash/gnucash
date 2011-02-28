@@ -55,11 +55,11 @@
  *  search for a specific object wouldn't help because the information
  *  being inspected is private to the object.)
  *
- *  Any object added to this databasse during the execution of gnucash
+ *  Any object added to this database during the execution of gnucash
  *  should be deleted from it before completion of the program.  WHen
- *  the program shuts down, a list of all abjects still in the
+ *  the program shuts down, a list of all objects still in the
  *  database will be dumped out to the logfile.  This should help
- *  developers find memoty leaks in their code where an object is
+ *  developers find memory leaks in their code where an object is
  *  lost, or is not release because it gained an extra reference at
  *  some point during its lifetime.
  */

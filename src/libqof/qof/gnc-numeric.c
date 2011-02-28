@@ -309,7 +309,7 @@ gnc_numeric_equal(gnc_numeric a, gnc_numeric b)
     {
         /* BUG: One of the numbers has a reciprocal denom, and the other
            does not. I just don't know to handle this case in any
-           reasonably overflow-proof yet simple way.  So, this funtion
+           reasonably overflow-proof yet simple way.  So, this function
            will simply get it wrong whenever the three multiplies
            overflow 64-bits.  -CAS */
         if (a.denom < 0)

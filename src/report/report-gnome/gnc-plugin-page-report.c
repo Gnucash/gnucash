@@ -91,7 +91,7 @@ typedef struct GncPluginPageReportPrivate
     int reportId;
     gint component_manager_id;
 
-    /// The report which this Page is satisifying
+    /// The report which this Page is satisfying
     SCM cur_report;
     /// The Option DB for this report.
     GNCOptionDB *cur_odb;
@@ -557,7 +557,7 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
 }
 
 
-/** This function is called when one of the options for a register
+/** This function is called when one of the options for a report
  *  page has changed.  It is responsible for marking the report as
  *  dirty, and causing the report to reload using the new options.
  *
