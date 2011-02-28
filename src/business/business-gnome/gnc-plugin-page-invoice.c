@@ -949,7 +949,7 @@ gnc_plugin_page_invoice_update_title (GncPluginPage *plugin_page)
     page = GNC_PLUGIN_PAGE_INVOICE(plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
     title = gnc_invoice_get_title(priv->iw);
-    gnc_plugin_page_set_page_name(plugin_page, title);
+    main_window_update_page_name(plugin_page, title);
     g_free(title);
 }
 

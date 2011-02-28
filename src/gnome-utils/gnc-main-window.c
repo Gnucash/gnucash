@@ -1909,11 +1909,13 @@ main_window_update_page_name (GncPluginPage *page,
     old_page_long_name = g_strdup( gnc_plugin_page_get_page_long_name(page));
 
     /* Update the plugin */
-    window = GNC_MAIN_WINDOW(page->window);
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     gnc_plugin_page_set_page_name(page, name);
 
     /* Update the notebook tab */
+    window = GNC_MAIN_WINDOW(page->window);
+    if (!window)
+        return;
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     main_window_find_tab_items(window, page, &label, &entry);
     gtk_label_set_text(GTK_LABEL(label), name);
 
