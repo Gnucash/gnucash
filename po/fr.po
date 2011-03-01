@@ -19613,7 +19613,7 @@ msgstr "Paiement, merci"
 #: ../intl-scm/guile-strings.c:1570
 #, fuzzy
 msgid "Net Price"
-msgstr "Nouveau _prix :"
+msgstr "Sous-Total"
 
 # po/guile_strings.txt:186
 #. src/report/business-reports/easy-invoice.scm
@@ -19625,7 +19625,7 @@ msgstr "Nouveau _prix :"
 #: ../intl-scm/guile-strings.c:1576
 #, fuzzy
 msgid "Total Price"
-msgstr "Total (période)"
+msgstr "Total"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
 #. src/report/business-reports/easy-invoice.scm
@@ -27272,7 +27272,7 @@ msgstr ""
 # messages-i18n.c:267 po/guile_strings.txt:6
 #, fuzzy
 #~ msgid "Due date:"
-#~ msgstr "Date d'échéance"
+#~ msgstr "Échéance"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
