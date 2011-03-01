@@ -3780,7 +3780,7 @@ msgstr "表格"
 
 #: ../src/gnome/druid-acct-period.c:171
 msgid "The book was closed successfully."
-msgstr ""
+msgstr "帳本已成功關閉。"
 
 #: ../src/gnome/druid-acct-period.c:247
 #, c-format
@@ -4200,7 +4200,7 @@ msgstr "如果您想修改帳號名稱，點選該帳號再點帳號名就能修
 "\n"
 "如果你希望一個帳路有起始餘額，點選該帳號再點起始餘額那欄就能輸入一開始的餘額。\n"
 "\n"
-"注意: 除了股東權益(equity)跟 placeholder 之外，所有帳號都可以有起始餘額。\n"
+"注意: 除了淨值(equity)跟 placeholder 之外，所有帳號都可以有起始餘額。\n"
 
 
 #: ../src/gnome/glade/account.glade.h:35
@@ -4456,15 +4456,13 @@ msgid "_Use equity 'Opening Balances' account"
 msgstr "使用起始結餘淨值帳號"
 
 #: ../src/gnome/glade/acctperiod.glade.h:1
-#, fuzzy
 msgid "Book Closing Dates"
-msgstr "關閉日期"
+msgstr "帳本關閉日期"
 
 #: ../src/gnome/glade/acctperiod.glade.h:2
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:1
-#, fuzzy
 msgid "Close Book"
-msgstr "關閉"
+msgstr "關閉帳本"
 
 #: ../src/gnome/glade/acctperiod.glade.h:3
 #, fuzzy
@@ -4478,7 +4476,7 @@ msgstr "輸入項目描述"
 
 #: ../src/gnome/glade/acctperiod.glade.h:5
 msgid "Finish Closing Books"
-msgstr ""
+msgstr "結束關閉帳本"
 
 #: ../src/gnome/glade/acctperiod.glade.h:6
 #: ../src/gnome/glade/budget.glade.h:13
@@ -6135,7 +6133,7 @@ msgid ""
 "may also press `Back' to review your choices, or `Cancel' to quit without "
 "making any changes."
 msgstr ""
-"如果您已完成建立股票分割或合併，按“完成”。您也可以按“向後”來檢查您的選擇，"
+"如果您已完成建立股票分割或合併，按“套用”。您也可以按“向後”來檢查您的選擇，"
 "或“取消”不做任何變更而離開。"
 
 #: ../src/gnome/glade/stocks.glade.h:8
@@ -6195,7 +6193,7 @@ msgstr "<b>帳號稅務資訊</b>"
 
 #: ../src/gnome/glade/tax.glade.h:3
 msgid "<b>Copy Number</b>"
-msgstr "<b>複製數字</b>"
+msgstr "<b>複製次數</b>"
 
 #: ../src/gnome/glade/tax.glade.h:4
 #, fuzzy
@@ -6249,9 +6247,8 @@ msgid "_Income"
 msgstr "收入(_I)"
 
 #: ../src/gnome/glade/tax.glade.h:18
-#, fuzzy
 msgid "_Liability/Equity"
-msgstr "債務"
+msgstr "債務/淨值(_L)"
 
 #: ../src/gnome/glade/tax.glade.h:19
 msgid "_Parent Account"
@@ -6295,7 +6292,7 @@ msgstr "建立新檔案"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:104
 msgid "_Open..."
-msgstr "開啟舊檔...(_O)"
+msgstr "開啟舊檔(_O)..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:105
 msgid "Open an existing GnuCash file"
@@ -6380,7 +6377,7 @@ msgstr "預算(_U)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:164
 msgid "Close _Books"
-msgstr ""
+msgstr "關閉帳本(_B)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:165
 #, fuzzy
@@ -7708,9 +7705,8 @@ msgid "Automatically insert a decimal point"
 msgstr "自動小數點"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:6
-#, fuzzy
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr "自動將帳號列表或執行輸入動作者抬至上層。"
+msgstr "在輸入時自動跳出帳號列表或動作列表"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:7
 #, fuzzy
@@ -8869,14 +8865,12 @@ msgid ""
 msgstr "您必須為此商品輸入非空白的“全名”、“標記/縮寫”、“類型”。"
 
 #: ../src/gnome-utils/dialog-file-access.c:283
-#, fuzzy
 msgid "Open..."
-msgstr "開啟舊檔...(_O)"
+msgstr "開啟舊檔..."
 
 #: ../src/gnome-utils/dialog-file-access.c:290
-#, fuzzy
 msgid "Save As..."
-msgstr "另存新檔(_A)..."
+msgstr "另存新檔..."
 
 #: ../src/gnome-utils/dialog-file-access.c:297
 #: ../src/gnome-utils/gnc-file.c:118 ../src/gnome-utils/gnc-file.c:288
@@ -8977,7 +8971,7 @@ msgstr "選擇圖片檔案。"
 #: ../src/gnome-utils/dialog-preferences.c:144
 #, c-format
 msgid "Income%sSalary%sTaxable"
-msgstr "收入%s薪水%s納稅"
+msgstr "收入%s薪水%s應稅"
 
 #: ../src/gnome-utils/dialog-transfer.c:481
 msgid "Show the income and expense accounts"
@@ -9306,9 +9300,8 @@ msgid "F_raction traded:"
 msgstr "最小單位交易(_R)："
 
 #: ../src/gnome-utils/glade/commodity.glade.h:8
-#, fuzzy
 msgid "ISIN, CUSI_P or other code:"
-msgstr "CUSI_P 或其他代碼："
+msgstr "ISIN, CUSI_P 或其他代碼："
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid "Select security/currency "
@@ -9320,37 +9313,36 @@ msgstr "在此選擇使用者資訊..."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:11
 msgid "Si_ngle:"
-msgstr "單欄(_N):"
+msgstr "單一來源(_N):"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:12
 msgid ""
 "These are F::Q quote sources that retrieve information from a single site on "
 "the internet.  If that site is unavailable, you will not be able to retrieve "
 "quotes."
-msgstr ""
+msgstr "這是指 F::Q 報價只從一個網站截取。如果那個網站連不到，那就無法取得報價。"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:13
 msgid ""
 "These are F::Q quote sources that retrieve information from multiple sites "
 "on the internet.  If one of the sites is unavailable, F::Q will attempt to "
 "retrieve the information from another site."
-msgstr ""
+msgstr "這是指 F::Q 報價從多個網站截取。如果其中有網站連不到，F::Q 會試著從其他網站截取報價。"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:14
 msgid ""
 "These are quote sources that were recently added to F::Q.  GnuCash does not "
 "know if these sources retrieve information from a single site or from "
 "multiple sites on the internet."
-msgstr ""
+msgstr "這是新加入 F::Q 的報價源，GnuCash 不知道它們是從單一還是多個網站截取報價。"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:15
 msgid "Time_zone:"
 msgstr "時區(_Z):"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:16
-#, fuzzy
 msgid "Type of quote source:"
-msgstr "搜尋的類型"
+msgstr "報價來源類型:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:17
 msgid "Warning: Finance::Quote not installed properly."
@@ -9366,11 +9358,11 @@ msgstr "取得線上報價(_G)"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:20
 msgid "_Multiple:"
-msgstr "多行(M):"
+msgstr "多來源(_M):"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:21
 msgid "_Symbol/abbreviation:"
-msgstr "標記/縮寫(S)："
+msgstr "標記/縮寫(_S)："
 
 #: ../src/gnome-utils/glade/commodity.glade.h:23
 msgid "_Unknown:"
@@ -9382,14 +9374,12 @@ msgid "Description:"
 msgstr "敘述："
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:4
-#, fuzzy
 msgid "Expense Total:"
-msgstr "支出報告"
+msgstr "總支出:"
 
 #: ../src/gnome-utils/glade/dialog-book-close.glade.h:5
-#, fuzzy
 msgid "Income Total:"
-msgstr "收入帳號"
+msgstr "總收入:"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:1
 msgid "<b>Data Format:</b>"
@@ -9823,9 +9813,8 @@ msgid "<b>Checks</b>"
 msgstr "號碼"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:8
-#, fuzzy
 msgid "<b>Date Completion</b>"
-msgstr "動作(_A)"
+msgstr "<b>日期自動補完</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:9
 msgid "<b>Date Format</b>"
@@ -9985,7 +9974,7 @@ msgstr "自動為不足 1 的數值插入小數點。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:47
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "自動將帳號列表或執行輸入動作者抬至上層。"
+msgstr "在輸入時自動跳出帳號列表或動作列表。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:48
 msgid "B_ottom"
@@ -10121,9 +10110,8 @@ msgid "Draw hori_zontal lines between rows"
 msgstr "在每列之間畫橫線(_Z)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:81
-#, fuzzy
 msgid "Enter number of months."
-msgstr "輸入此客戶的名稱"
+msgstr "輸入幾個月。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "GnuCash Options"
@@ -10192,12 +10180,11 @@ msgstr ""
 msgid ""
 "In a sliding 12-month window starting this \n"
 "many months before the current month:"
-msgstr ""
+msgstr "用 12 個月的區間，自本月往前多久開始計算:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:98
-#, fuzzy
 msgid "In the current calendar year"
-msgstr "目前日曆年的終點"
+msgstr "用今年"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:99
 msgid "Include _grand total"
@@ -10459,7 +10446,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:163
 msgid "When a date is entered without year, it should be taken:"
-msgstr ""
+msgstr "當輸入日期只有日月，該如何決定年份:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:164
 msgid "Windows"
@@ -10470,9 +10457,8 @@ msgid "_Absolute:"
 msgstr "絕對的(_A):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:166
-#, fuzzy
 msgid "_Auto-raise lists"
-msgstr "自動抬升列表"
+msgstr "自動抬升列表(_A)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:167
 msgid "_Auto-split ledger"
@@ -10512,7 +10498,7 @@ msgstr "收入 & 支出(_I)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:176
 msgid "_Left"
-msgstr "左(L)"
+msgstr "左(_L)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:177
 msgid "_None"
@@ -11220,7 +11206,7 @@ msgstr "重設警告訊息(_W)..."
 
 #: ../src/gnome-utils/gnc-main-window.c:318
 msgid "Reset the state of all warning messages so they will be shown again."
-msgstr ""
+msgstr "重設所有警告訊息的狀態，使訊息能再次出現。"
 
 #: ../src/gnome-utils/gnc-main-window.c:322
 msgid "Re_name Page"
@@ -11362,9 +11348,8 @@ msgid "Close _Without Saving"
 msgstr "直接開閉不儲存(_W)"
 
 #: ../src/gnome-utils/gnc-main-window.c:1386
-#, fuzzy
 msgid "Unsaved Book"
-msgstr "關閉"
+msgstr "未儲存的帳本"
 
 #: ../src/gnome-utils/gnc-main-window.c:2354
 msgid "Unable to save to database."
@@ -11376,7 +11361,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:3969
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash 個人金融管理員。管理您金錢的 GNU 解決方案！"
+msgstr "GnuCash 個人財務管理員。管理您金錢的 GNU 解決方案！"
 
 #. Development version
 #: ../src/gnome-utils/gnc-main-window.c:3982
@@ -11390,9 +11375,11 @@ msgid "%s  This copy was built from r%s on %s."
 msgstr "%s  這是從 r%s 建立的版本, 日期 %s。"
 
 #: ../src/gnome-utils/gnc-main-window.c:3997
-#, fuzzy
 msgid "translator_credits"
-msgstr "有貸方"
+msgstr ""
+"Chao-Hsiung Liao <pesder.liao@msa.hinet.net>, 2003.\n"
+"Kuang-che Wu <kcwu@csie.org>, 2007, 2011.\n"
+"Barlos Lee <barlos.lee@gmail.com>, 2010."
 
 #. CY Strings
 #. src/app-utils/date-utilities.scm
@@ -12194,7 +12181,6 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:50
-#, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished.  You can now invoke Online Banking actions on those accounts.\n"
@@ -12204,14 +12190,14 @@ msgid ""
 "\n"
 "Press \"Apply\" now."
 msgstr ""
-"現在所有用來比對 GnuCash 帳號的 HBCI 帳號\n"
-"的設定已經完成。您現在可以在那些帳號上調用\n"
+"現在所有用來比對 GnuCash 帳號的 HBCI 帳號"
+"的設定已經完成。您現在可以在那些帳號上調用 "
 "HBCI 動作。\n"
 "\n"
-"如果您想要增加別的 HBCI 銀行、使用者或帳號，\n"
+"如果您想要增加別的 HBCI 銀行、使用者或帳號，"
 "您隨時可以再次啟動這個精靈。\n"
 "\n"
-"現在請按“完成”。"
+"現在請按“套用”。"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:55
 msgid ""
@@ -12669,7 +12655,7 @@ msgstr "網路銀行操作(_O)"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:94
 msgid "_Online Banking Setup..."
-msgstr "網路銀行設定...(_O)"
+msgstr "網路銀行設定(_O)..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:95
 msgid ""
@@ -12688,7 +12674,7 @@ msgstr "透過 HBCI 取得線上帳號結餘"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:104
 msgid "Get _Transactions..."
-msgstr "取得交易...(_T)"
+msgstr "取得交易(_T)..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:105
 #, fuzzy
@@ -12697,7 +12683,7 @@ msgstr "透過 HBCI 取得線上的交易"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:109
 msgid "_Issue Transaction..."
-msgstr "發布交易...(_I)"
+msgstr "發布交易(_I)..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:110
 #, fuzzy
@@ -12714,9 +12700,8 @@ msgid "Issue a new bank-internal transaction online through Online Banking"
 msgstr "透過 HBCI 在線上發布新的交易"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:119
-#, fuzzy
 msgid "_Direct Debit..."
-msgstr "直接債務"
+msgstr "直接借記(自動扣款)(_D)..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:120
 #, fuzzy
@@ -12750,7 +12735,7 @@ msgstr "匯入 _DTAUS 檔到 GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:149
 msgid "Import DTAUS and _send..."
-msgstr ""
+msgstr "匯入 DTAUS 檔並傳送(_S)..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:150
 msgid ""
@@ -12881,9 +12866,8 @@ msgstr "錯誤"
 
 #. Let the user select a file.
 #: ../src/import-export/csv/gnc-csv-import.c:1102
-#, fuzzy
 msgid "Select an CSV/Fixed-Width file to import"
-msgstr "選擇匯入檔案"
+msgstr "選擇 CSV/固定欄寬檔 匯入"
 
 #: ../src/import-export/csv/gnc-csv-model.c:33
 #: ../src/import-export/gnc-import-format-gnome.c:112
@@ -12950,9 +12934,8 @@ msgid "Comma (,)"
 msgstr "逗號 (,)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:4
-#, fuzzy
 msgid "Data type: "
-msgstr "日期："
+msgstr "資料類別："
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:5
 msgid "Date Format"
@@ -12981,7 +12964,7 @@ msgstr "設定預設 QIF 帳號名稱"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:11
 msgid "Semicolon (;)"
-msgstr ""
+msgstr "分號 (;)"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:12
 #, fuzzy
@@ -12989,24 +12972,20 @@ msgid "Separated"
 msgstr "開始日期"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:13
-#, fuzzy
 msgid "Separators"
-msgstr "字元"
+msgstr "分隔字元"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:14
-#, fuzzy
 msgid "Space"
-msgstr "儲存檔案"
+msgstr "空白"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:15
-#, fuzzy
 msgid "Tab"
 msgstr "Tab"
 
 #: ../src/import-export/csv/gnc-plugin-csv.c:47
-#, fuzzy
 msgid "Import _CSV/Fixed-Width..."
-msgstr "匯入 _CSV/固定寬度"
+msgstr "匯入 _CSV/固定欄寬檔..."
 
 #: ../src/import-export/csv/gnc-plugin-csv.c:48
 msgid " a CSV/Fixed-Width file"
@@ -13021,9 +13000,8 @@ msgid "\"R\""
 msgstr "\"R\""
 
 #: ../src/import-export/generic-import.glade.h:3
-#, fuzzy
 msgid "\"U+R\""
-msgstr "\"R\""
+msgstr "\"U+R\""
 
 #: ../src/import-export/generic-import.glade.h:4
 msgid "(none)"
@@ -13278,22 +13256,21 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/import-commodity-matcher.c:114
-#, fuzzy
 msgid ""
 "Please select a commodity to match the following exchange specific code. "
 "Please note that the exchange code of the commodity you select will be "
 "overwritten."
 msgstr ""
-"請選擇符合下列兌換代碼的商品。\n"
-"請注意您所選的商品的兌換代碼會被覆蓋。\n"
+"請選擇符合下列兌換代碼的商品。"
+"請注意您所選的商品的交換碼會被覆蓋。"
 
 #: ../src/import-export/import-format-dialog.c:60
 msgid "Period: 123,456.78"
-msgstr ""
+msgstr "句號為小數點: 123,456.78"
 
 #: ../src/import-export/import-format-dialog.c:69
 msgid "Comma: 123.456,78"
-msgstr ""
+msgstr "逗號為小數點: 123.456,78"
 
 #: ../src/import-export/import-format-dialog.c:78
 msgid "m/d/y"
@@ -13657,9 +13634,8 @@ msgid "_Name or description:"
 msgstr "名稱或描述(_N):"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2262
-#, fuzzy
 msgid "_Ticker symbol or other abbreviation:"
-msgstr "標記/縮寫(S)："
+msgstr "股票代碼或其他縮寫(_T)："
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2283
 #, fuzzy
@@ -13684,9 +13660,8 @@ msgid "A bug was detected while converting the QIF data."
 msgstr ""
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2741
-#, fuzzy
 msgid "Canceling"
-msgstr "取消"
+msgstr "正在取消"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2755
 #: ../src/import-export/qif-import/druid-qif-import.c:2759
@@ -13757,7 +13732,7 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"點選“結束”以自籌畫區匯入資料並更新"
+"點選“套用”以自籌畫區匯入資料並更新"
 "您的 GnuCash 帳號。您已經輸入的帳號與"
 "分類比對資訊會被儲存並做為您下次使用"
 "QIF 匯入功能的預設值。\n"
@@ -13788,12 +13763,10 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/qif-import/qif.glade.h:15
-#, fuzzy
 msgid "Enter the QIF file currency"
-msgstr "輸入折扣百分比"
+msgstr "輸入 QIF 檔用的貨幣"
 
 #: ../src/import-export/qif-import/qif.glade.h:16
-#, fuzzy
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
@@ -13805,15 +13778,15 @@ msgid ""
 "Click \"Forward\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
 msgstr ""
-"GnuCash 可以從 Quiken/QuickBooks、MS Money、\n"
-"Moneydance 與許多其他程式所產生的 QIF \n"
+"GnuCash 可以從 Quiken/QuickBooks、MS Money、"
+"Moneydance 與許多其他程式所產生的 QIF "
 "(Quicken 交換格式) 檔案匯入金融資料。\n"
 "\n"
-"匯入的程序有許多步驟。直到您在程序的最後\n"
-"點選“結束”之前，您的 GnuCash 帳號將不\n"
+"匯入的程序有許多步驟。直到您在程序的最後"
+"點選“套用”之前，您的 GnuCash 帳號將不"
 "會被變更。\n"
 "\n"
-"點選“向前”以開始載入您的 QIF 資料，\n"
+"點選“向前”以開始載入您的 QIF 資料，"
 "或“取消”以放棄程序。"
 
 #: ../src/import-export/qif-import/qif.glade.h:21
@@ -13940,7 +13913,7 @@ msgstr ""
 "稱與類型來建立新的帳號。如果您不喜歡建議的 GnuCash\n"
 "帳號，點選以改變它。\n"
 "\n"
-"注意 GnuCash 將會建立許多不存在於您其他個人金融程\n"
+"注意 GnuCash 將會建立許多不存在於您其他個人財務程\n"
 "式的帳號，包括您的每一個持股都有個別的帳號、佣金\n"
 "的個別帳號、做為您的起始結餘來源的“資產淨值”帳號\n"
 "(預設上是保留收入的子帳號)、其他。\n"
@@ -15060,7 +15033,7 @@ msgstr "<< 移除(_R)"
 
 #: ../src/report/report-gnome/report.glade.h:2
 msgid "<b>A_vailable reports</b>"
-msgstr "<b>可用的報告(V)</b>"
+msgstr "<b>可用的報告(_V)</b>"
 
 #: ../src/report/report-gnome/report.glade.h:3
 msgid "<b>Available style sheets</b>"
@@ -15163,7 +15136,7 @@ msgstr "編輯報告樣式表。"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:1
 msgid "GnuCash Finance Management"
-msgstr "GnuCash 金融管理"
+msgstr "GnuCash 財務管理"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:2
 msgid "Manage your finances, accounts, and investments"
@@ -15443,7 +15416,7 @@ msgstr "資金支出"
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:162
 msgid "Spend"
-msgstr "預算"
+msgstr "開銷"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:188
@@ -17621,11 +17594,10 @@ msgstr "從 %s 到 %s 期間"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1662
-#, fuzzy
 msgid ""
 "Blue items are exportable to a German Tax XML file. Press Export to actually "
 "export them."
-msgstr "藍色的項目是可匯出成 .TXF 檔案者。"
+msgstr "藍色的項目可匯出成德國報稅用 XML 檔案。按「匯出」以進行匯出。"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1664
@@ -17782,9 +17754,8 @@ msgstr ""
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1778
-#, fuzzy
 msgid "Tax Schedule Report & TXF Export"
-msgstr "稅務報告 & TXF 匯出"
+msgstr "稅務計畫報告 & TXF 匯出"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1780
@@ -19643,9 +19614,8 @@ msgstr ""
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2586 ../intl-scm/guile-strings.c:2810
-#, fuzzy
 msgid "Label the equity section"
-msgstr "取消目前的交易"
+msgstr "標示淨值部分"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -19720,9 +19690,8 @@ msgstr "全部資產淨值"
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2632 ../intl-scm/guile-strings.c:2882
-#, fuzzy
 msgid "Total Liabilities & Equity"
-msgstr "債務&資產淨值"
+msgstr "全部債務&資產淨值"
 
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2636
@@ -19736,15 +19705,13 @@ msgstr "負債帳號"
 
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2640
-#, fuzzy
 msgid "Equity Accounts"
-msgstr "編輯帳號"
+msgstr "淨值帳號"
 
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2648
-#, fuzzy
 msgid "Total Equity, Trading, and Liabilities"
-msgstr "債務"
+msgstr "全部的淨值、交易、負債"
 
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2650
@@ -19848,20 +19815,18 @@ msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2722
-#, fuzzy
 msgid "One"
-msgstr "一次"
+msgstr "一"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2724
 msgid "Display liabilities and equity below assets"
-msgstr ""
+msgstr "在資產下方顯示負債與淨值"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2726
-#, fuzzy
 msgid "Two"
-msgstr "到"
+msgstr "二"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2728
@@ -19941,15 +19906,13 @@ msgstr "現有資產"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2844
-#, fuzzy
 msgid "Allocated Assets"
-msgstr "總資產"
+msgstr "已配置總資產"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2846
-#, fuzzy
 msgid "Unallocated Assets"
-msgstr "未實現虧損"
+msgstr "未配置資產"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2852
@@ -19958,57 +19921,48 @@ msgstr "現有負債"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2854
-#, fuzzy
 msgid "New Liabilities"
-msgstr "債務"
+msgstr "新增債務"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2860
-#, fuzzy
 msgid "Existing Retained Earnings"
-msgstr "保留收入"
+msgstr "現有保留收入"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2862
-#, fuzzy
 msgid "Existing Retained Losses"
-msgstr "保留虧損"
+msgstr "現有保留虧損"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2864
-#, fuzzy
 msgid "New Retained Earnings"
-msgstr "保留收入"
+msgstr "新增保留收入"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2866
-#, fuzzy
 msgid "New Retained Losses"
-msgstr "保留虧損"
+msgstr "新增保留虧損"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2868
-#, fuzzy
 msgid "Total Retained Earnings"
-msgstr "保留收入"
+msgstr "全部保留收入"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2870
-#, fuzzy
 msgid "Total Retained Losses"
-msgstr "保留虧損"
+msgstr "全部保留虧損"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2876
-#, fuzzy
 msgid "Existing Equity"
-msgstr "已存在的帳號"
+msgstr "已存在的淨值"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2878
-#, fuzzy
 msgid "New Equity"
-msgstr "財產淨值"
+msgstr "新增財產淨值"
 
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:2884 ../intl-scm/guile-strings.c:2902
@@ -21184,9 +21138,8 @@ msgstr "客戶"
 
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:3970
-#, fuzzy
 msgid "Future Scheduled Transactions Summary"
-msgstr "已排程的交易"
+msgstr "未來排程交易摘要"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4076
@@ -22729,8 +22682,8 @@ msgid ""
 "follow the instructions provided."
 msgstr ""
 "您可以簡單地匯入您現有來自 Quicken、 MS Money、或其他匯出 QIF 檔案或 OFX 檔案"
-"的程式的金融資料。點選「檔案」選單的「匯入」功能，選擇 QIF 或 OFX 格式，接下"
-"來跟隨提供的指示即可。"
+"的程式的財務資料。點選「檔案」選單的「匯入」功能，選擇 QIF 或 OFX 格式，接下"
+"來依照指示進行即可。"
 
 #: ../doc/tip_of_the_day.list.in:9
 msgid ""
@@ -22739,7 +22692,7 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"如果您熟悉其他像 Quicken 這類金融程式，注意 GnuCash 使用帳號而非分類來追蹤收"
+"如果您熟悉其他像 Quicken 這類財務程式，注意 GnuCash 使用帳號而非分類來追蹤收"
 "入與支出。需要更多關於收入與支出帳號的資訊，請查閱 GnuCash 線上手冊。"
 
 #: ../doc/tip_of_the_day.list.in:14
@@ -22854,7 +22807,7 @@ msgid ""
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom -> \"Custom Multicolumn Report\" report."
 msgstr ""
-"您可以把多個報告集合到單一視窗中，讓您一眼看到所有您要的金融資訊。要這麼做，"
+"您可以把多個報告集合到單一視窗中，讓您一眼看到所有您要的財務資訊。要這麼做，"
 "使用 樣本 & 自訂 -> “自訂多欄報告”報告。"
 
 #: ../doc/tip_of_the_day.list.in:70
@@ -22994,19 +22947,6 @@ msgstr ""
 #~ msgid "Import a CSV file into GnuCash"
 #~ msgstr "選擇要載入的 CSV 檔案"
 
-#, fuzzy
-#~ msgid ""
-#~ "The PIN needs to be at least %d characters long. Do you want to try again?"
-#~ msgstr "PIN 至少要有 %d 個字元長。您是否要再試一次？"
-
-#, fuzzy
-#~ msgid ""
-#~ "You entered %ld characters, but the PIN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "PIN 必須是至少 %d 個字元的長度。\n"
-#~ "您是否要再試一次？"
-
 #~ msgid "Set configuration path"
 #~ msgstr "設定組態路徑"
 
@@ -23035,12 +22975,6 @@ msgstr ""
 
 #~ msgid "Creating transactions..."
 #~ msgstr "建立交易中..."
-
-#~ msgid "Press Apply to create these transactions."
-#~ msgstr "按下“完成”以建立這些交易。"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "範本交易(唯讀)"
 
 #~ msgid ""
 #~ "The following scheduled transactions have expired.  Select those you wish "
@@ -23157,7 +23091,7 @@ msgstr ""
 #~ "REMEMBER: There is no way to undo this final operation! Make sure you "
 #~ "have a backup before clicking 'Apply'."
 #~ msgstr ""
-#~ "按下“完成”以將您的 QSF 資料合併入當前的 GnuCash 檔案內。\n"
+#~ "按下“套用”以將您的 QSF 資料合併入當前的 GnuCash 檔案內。\n"
 #~ "\n"
 #~ "按下“向後”以檢查您的選擇。\n"
 #~ "\n"
@@ -23214,44 +23148,6 @@ msgstr ""
 #~ msgstr "設定所有收入與支出帳號的稅務資訊"
 
 #, fuzzy
-#~ msgid "Enter the transaction date"
-#~ msgstr "是否顯示交易日期？"
-
-#, fuzzy
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "轉帳帳號"
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "目前的交易尚未結算。"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr ""
-#~ "\n"
-#~ "商品: "
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "項目"
-
-#, fuzzy
-#~ msgid " (TXF Parameter: "
-#~ msgstr "%i: 參數名稱: %s "
-
-#, fuzzy
-#~ msgid "Balance on "
-#~ msgstr "結算"
-
-#, fuzzy
-#~ msgid ": Parameters"
-#~ msgstr "%i: 參數名稱: %s "
-
-#, fuzzy
-#~ msgid " Line "
-#~ msgstr "連線"
-
-#, fuzzy
 #~ msgid ": Payer Name Option "
 #~ msgstr "只是日期選項"
 
@@ -23265,14 +23161,6 @@ msgstr ""
 #~ "your selection or go to the Edit->Income Tax Options dialog to set up tax-"
 #~ "related accounts."
 #~ msgstr "找不到含稅的帳號。請至帳號->稅務選項對話盒設定含稅帳號。"
-
-#, fuzzy
-#~ msgid "Selected Report Options:<BR>"
-#~ msgstr "<b>已選的報告</b>"
-
-#, fuzzy
-#~ msgid "No accounts (none = all accounts)"
-#~ msgstr "選擇帳號 (無=全選)"
 
 #, fuzzy
 #~ msgid "Display transactions for selected accounts"
@@ -23291,34 +23179,8 @@ msgstr ""
 #~ msgstr "包括所有已選帳號的子帳號"
 
 #, fuzzy
-#~ msgid "Do not shade alternate transactions"
-#~ msgstr "交易以兩種模式的顏色交替表示(_M)"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to transaction date"
-#~ msgstr "是否顯示交易日期？"
-
-#, fuzzy
 #~ msgid "PriceDB lookups nearest to report end date"
 #~ msgstr "時間上最接近報告日期的記錄價格"
-
-#~ msgid "The following bills are due"
-#~ msgstr "下列的帳單已到期"
-
-#, fuzzy
-#~ msgid "Show Hidden"
-#~ msgstr "隱藏(_I)"
-
-#, fuzzy
-#~ msgid "Show hidden accounts."
-#~ msgstr "顯示完整帳號名稱"
-
-#, fuzzy
-#~ msgid "A bug was detected while reading the QIF file."
-#~ msgstr "載入此 QIF 檔案時發生錯誤。"
-
-#~ msgid "Int"
-#~ msgstr "Int"
 
 #, fuzzy
 #~ msgid "Compute unrealized gains and losses"
@@ -23420,9 +23282,6 @@ msgstr ""
 #~ "的縮寫符合此商品用於交易所或其列表類型的行\n"
 #~ "情指示器標記。"
 
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "藍色的項目是可匯出成 .TXF 檔案者。"
-
 #~ msgid "Importing transactions..."
 #~ msgstr "匯入交易中..."
 
@@ -23445,12 +23304,6 @@ msgstr ""
 #~ msgstr ""
 #~ "輸入商品類型。以股票為例，通常是股票買賣的交易所。您可以從列表中選擇既存的"
 #~ "類型或以鍵盤輸入新的類型。"
-
-#~ msgid "There was an error loading the specified URL."
-#~ msgstr "載入指定的 URL 時產生錯誤。"
-
-#~ msgid "Error message"
-#~ msgstr "錯誤訊息"
 
 #~ msgid "Field"
 #~ msgstr "欄位"
