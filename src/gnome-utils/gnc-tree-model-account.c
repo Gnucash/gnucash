@@ -411,6 +411,7 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD:
     case GNC_TREE_MODEL_ACCOUNT_COL_NOTES:
     case GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO:
+    case GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO_SUB_ACCT:
     case GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM:
 
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT:
@@ -799,6 +800,11 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO:
         g_value_init (value, G_TYPE_STRING);
         g_value_take_string (value, gnc_ui_account_get_tax_info_string (account));
+        break;
+
+    case GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO_SUB_ACCT:
+        g_value_init (value, G_TYPE_STRING);
+        g_value_take_string (value, gnc_ui_account_get_tax_info_sub_acct_string (account));
         break;
 
     case GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM:
