@@ -13,6 +13,7 @@ EXTRA_DIST = \
   opensp-1.5.2-patch.diff \
   pi.sh \
   ChineseSimp-12-5.1.11.isl \
+  ChineseTrad-2-5.1.11.isl \
   Greek-4-5.1.11.isl \
   Japanese-5-5.1.11.isl \
   Latvian-1-5.1.11.isl \
@@ -24,6 +25,7 @@ if OS_WIN32
   redirect_LDADD = $(GLIB_LIBS)
   AM_CPPFLAGS = $(GLIB_CFLAGS)
   pkgdata_DATA = ChineseSimp-12-5.1.11.isl
+  pkgdata_DATA += ChineseTrad-2-5.1.11.isl
   pkgdata_DATA += Greek-4-5.1.11.isl
   pkgdata_DATA += Japanese-5-5.1.11.isl
   pkgdata_DATA += Latvian-1-5.1.11.isl

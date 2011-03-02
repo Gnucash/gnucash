@@ -103,6 +103,7 @@ Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"; DestDir:
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-fr.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-it.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-zh_CN.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-zh_TW.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
