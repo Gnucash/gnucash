@@ -54,6 +54,9 @@
 #include "engine-helpers.h"
 #include "swig-runtime.h"
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = GNC_MOD_GUI;
+
 #ifdef HAVE_GETTEXT
 #  include <libintl.h>
 #  include <locale.h>
@@ -584,11 +587,13 @@ load_gnucash_modules()
     len = sizeof(modules) / sizeof(*modules);
     for (i = 0; i < len; i++)
     {
+        DEBUG("Loading module %s started", modules[i].name);
         gnc_update_splash_screen(modules[i].name, GNC_SPLASH_PERCENTAGE_UNKNOWN);
         if (modules[i].optional)
             gnc_module_load_optional(modules[i].name, modules[i].version);
         else
             gnc_module_load(modules[i].name, modules[i].version);
+        DEBUG("Loading module %s finished", modules[i].name);
     }
     if (!gnc_engine_is_initialized())
     {

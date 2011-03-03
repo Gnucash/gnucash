@@ -327,6 +327,8 @@ guid_init(void)
 {
     size_t bytes = 0;
 
+    ENTER("");
+
     /* Not needed; taken care of on first malloc.
      * guid_memchunk_init(); */
 
@@ -468,6 +470,7 @@ guid_init(void)
 #endif
 
     guid_initialized = TRUE;
+    LEAVE();
 }
 
 void

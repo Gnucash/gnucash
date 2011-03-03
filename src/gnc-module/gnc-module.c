@@ -15,6 +15,10 @@
 #endif
 
 #include "gnc-module.h"
+#include "qof.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = "gnc.gui";
 
 static GHashTable * loaded_modules = NULL;
 static GList      * module_info = NULL;
@@ -429,6 +433,8 @@ gnc_module_load_common(const char * module_name, gint iface, gboolean optional)
     GModule         * gmodule;
     GNCModuleInfo   * modinfo;
 
+    ENTER("module_name: %s",module_name);
+
     if (!loaded_modules)
     {
         gnc_module_system_init();
@@ -449,21 +455,25 @@ gnc_module_load_common(const char * module_name, gint iface, gboolean optional)
             if (info->init_func(info->load_count))
             {
                 info->load_count++;
+                LEAVE("module %s already loaded", module_name);
                 return info;
             }
             else
             {
                 g_warning ("module init failed: %s", module_name);
+                LEAVE("");
                 return NULL;
             }
         }
         else
         {
             g_warning ("module has no init func: %s", module_name);
+            LEAVE("");
             return NULL;
         }
         /* NOTREACHED */
         g_error("internal error");
+        LEAVE("");
         return NULL;
     }
 
@@ -480,6 +490,7 @@ gnc_module_load_common(const char * module_name, gint iface, gboolean optional)
             g_warning ("Could not locate module %s interface v.%d",
                        module_name, iface);
         }
+        LEAVE("");
         return NULL;
     }
 
@@ -511,9 +522,11 @@ gnc_module_load_common(const char * module_name, gint iface, gboolean optional)
                 g_free(info->filename);
                 g_free(info);
                 /* g_module_close(module); */
+                LEAVE("");
                 return NULL;
             }
 
+            LEAVE("");
             return info;
         }
         else
@@ -522,11 +535,13 @@ gnc_module_load_common(const char * module_name, gint iface, gboolean optional)
                        modinfo->module_filepath);
             //lt_dlclose(handle);
         }
+        LEAVE("");
         return info;
     }
 
     g_warning ("Failed to open module %s: %s\n", module_name, g_module_error());
 
+    LEAVE("");
     return NULL;
 }
 
