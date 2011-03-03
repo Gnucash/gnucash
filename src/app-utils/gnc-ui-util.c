@@ -666,6 +666,8 @@ gnc_ui_account_get_tax_info_sub_acct_string (const Account *account)
             if (xaccAccountGetTaxRelated (descendant->data))
                 sub_acct_tax_number++;
         }
+        g_list_free (account_descendants);
+        g_list_free (descendant);
         /* Translators: This and the following strings appear on
          * the account tab if the Tax Info column is displayed,
          * i.e. if the user wants to record the tax form number
