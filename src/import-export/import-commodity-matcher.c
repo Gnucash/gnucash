@@ -51,12 +51,12 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 
 
-gnc_commodity * gnc_import_select_commodity(char * cusip,
-        char auto_create,
-        char * default_fullname,
-        char * default_mnemonic)
+gnc_commodity * gnc_import_select_commodity(const char * cusip,
+                                            gboolean auto_create,
+        const char * default_fullname,
+        const char * default_mnemonic)
 {
-    gnc_commodity_table * commodity_table = gnc_get_current_commodities ();
+    const gnc_commodity_table * commodity_table = gnc_get_current_commodities ();
     gnc_commodity * retval = NULL;
     gnc_commodity * tmp_commodity = NULL;
     char * tmp_namespace = NULL;
@@ -67,8 +67,10 @@ gnc_commodity * gnc_import_select_commodity(char * cusip,
     DEBUG("Default mnemonic received: %s",
           default_mnemonic ? default_mnemonic : "(null)");
 
+    g_return_val_if_fail(cusip, NULL);
     DEBUG("Looking for commodity with exchange_code: %s", cusip);
 
+    g_assert(commodity_table);
     namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
 
 

@@ -75,21 +75,21 @@ double ofx_get_investment_amount(struct OfxTransactionData data);
 
 int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data)
 {
-    char * tmp_cusip = NULL;
-    char * tmp_default_fullname = NULL;
-    char * tmp_default_mnemonic = NULL;
+    const char* tmp_cusip = NULL;
+    const char* tmp_default_fullname = NULL;
+    const char* tmp_default_mnemonic = NULL;
 
     if (data.unique_id_valid == true)
     {
-        tmp_cusip = (char *)data.unique_id;
+        tmp_cusip = data.unique_id;
     }
     if (data.secname_valid == true)
     {
-        tmp_default_fullname = (char *)data.secname;
+        tmp_default_fullname = data.secname;
     }
     if (data.ticker_valid == true)
     {
-        tmp_default_mnemonic = (char *)data.ticker;
+        tmp_default_mnemonic = data.ticker;
     }
 
     gnc_import_select_commodity(tmp_cusip,
@@ -126,7 +126,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                                             ACCT_TYPE_NONE, NULL, NULL);
         if (account != NULL)
         {
-            /********** Validate the input strings to ensure utf8 ********************/
+            /***** Validate the input strings to ensure utf8 *****/
             if (data.name_valid)
                 gnc_utf8_strip_invalid(data.name);
             if (data.memo_valid)
@@ -136,7 +136,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
             if (data.reference_number_valid)
                 gnc_utf8_strip_invalid(data.reference_number);
 
-            /********** Create the transaction and setup transaction data ************/
+            /***** Create the transaction and setup transaction data *******/
             book = gnc_account_get_book(account);
             transaction = xaccMallocTransaction(book);
             xaccTransBeginEdit(transaction);
@@ -377,7 +377,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
             {
                 if (data.invtransactiontype_valid == false)
                 {
-                    /*************Process a normal transaction ***************************/
+                    /***** Process a normal transaction ******/
                     DEBUG("Adding split; Ordinary banking transaction, money flows from or into the source account");
                     split = xaccMallocSplit(book);
                     xaccTransAppendSplit(transaction, split);
@@ -388,7 +388,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                                                         GNC_HOW_RND_ROUND_HALF_UP);
                     xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
-                    /* Also put the ofx transaction's memo in the split's memo field */
+                    /* Also put the ofx transaction's memo in the
+                     * split's memo field */
                     if (data.memo_valid == true)
                     {
                         xaccSplitSetMemo(split, data.memo);
@@ -403,9 +404,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                          && data.security_data_ptr != NULL
                          && data.security_data_ptr->secname_valid == true)
                 {
-                    /************************ Process an investment transaction ******************************/
-                    /* Note that the ACCT_TYPE_STOCK account type should be replaced with something
-                       derived from data.invtranstype*/
+                    /********* Process an investment transaction **********/
+                    /* Note that the ACCT_TYPE_STOCK account type
+                       should be replaced with something derived from
+                       data.invtranstype*/
                     investment_commodity = gnc_import_select_commodity(data.unique_id,
                                            0,
                                            NULL,
@@ -526,7 +528,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                                                                 GNC_HOW_RND_ROUND_HALF_UP);
                             xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
-                            /* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */
+                            /* Also put the ofx transaction name in
+                             * the splits memo field, or ofx memo if
+                             * name is unavailable */
                             if (data.name_valid == true)
                             {
                                 xaccSplitSetMemo(split, data.name);
@@ -549,7 +553,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                                                                 GNC_HOW_RND_ROUND_HALF_UP);
                             xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
-                            /* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */
+                            /* Also put the ofx transaction name in
+                             * the splits memo field, or ofx memo if
+                             * name is unavailable */
                             if (data.name_valid == true)
                             {
                                 xaccSplitSetMemo(split, data.name);
@@ -573,7 +579,9 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                                                                 GNC_HOW_RND_ROUND_HALF_UP);
                             xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
-                            /* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */
+                            /* Also put the ofx transaction name in
+                             * the splits memo field, or ofx memo if
+                             * name is unavailable */
                             if (data.name_valid == true)
                             {
                                 xaccSplitSetMemo(split, data.name);

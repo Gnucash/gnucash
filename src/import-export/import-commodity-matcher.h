@@ -29,39 +29,39 @@
 
 /**
   Must be called with a string containing a unique identifier for the
-  commodity.  If an commodity with a matching cusip is
-  found, the function immediately returns with a pointer to that
-  commodity.  Otherwise, the user may be prompted to select a GnuCash
-  account or create a new one (in both cases, the cusip is
-  written to the commodity's cusip field, overwriting anything that
-  was there before.
+  commodity.  If an commodity with a matching cusip is found, the
+  function immediately returns with a pointer to that commodity.
+  Otherwise, the user may be prompted to select a GnuCash commodity or
+  create a new one (in both cases, the cusip is written to the
+  commodity's cusip field, overwriting anything that was there before.
 
-    @param cusip The string containing the code for which you
-    want a matching commodity.  A CUISP code or similar UNIQUE code.
-    The stock ticker is NOT appropriate, unless you have no other option.
+  @param cusip The string containing the code for which you want a
+  matching commodity.  A CUISP code or similar UNIQUE code.  The stock
+  ticker is NOT appropriate, unless you have no other option. Must be
+  non-NULL.
 
-    @param auto_create If 0, if the cusip value in unknown,
-    the function returns NULL, otherwise, the user will be asked to
-    create a new account.
+  @param auto_create If the cusip value is unknown and this parameter
+  is false (zero), the function returns NULL. Otherwise the user will
+  be asked to select an existing or create a new commodity.
 
-    @param default_fullname A human-readable description of the commodity, such
-    as the stock name.  Can be NULL. If it is not NULL, it will be shown
-    to the user when selecting a commodity.  It will also be used as
-    the default if a new commodity is created.
+  @param default_fullname A human-readable description of the
+  commodity, such as the stock name.  Can be NULL. If it is not NULL,
+  it will be shown to the user when selecting a commodity.  It will
+  also be used as the default if a new commodity is created.
 
-     @param default_mnemonic  Usually the stock ticker or similar. Can be NULL.
-     If it is not NULL, it will be shown
-    to the user when selecting a commodity.  It will also be used as
-    the default if a new commodity is created.
+  @param default_mnemonic Usually the stock ticker or similar. Can be
+  NULL.  If it is not NULL, it will be shown to the user when
+  selecting a commodity.  It will also be used as the default if a new
+  commodity is created.
 
   @return A pointer to the found or created commodity, or NULL if no
-  account was found or created.
+  commodity was found or created.
 
 */
-gnc_commodity * gnc_import_select_commodity(char * cusip,
-        char auto_create,
-        char * default_fullname,
-        char * default_mnemonic);
+gnc_commodity * gnc_import_select_commodity(const char * cusip,
+        gboolean auto_create,
+        const char * default_fullname,
+        const char * default_mnemonic);
 
 #endif
 /**@}*/
