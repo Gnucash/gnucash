@@ -15,7 +15,7 @@
 #endif
 
 #include "gnc-module.h"
-#include "qof.h"
+#include "libqof/qof/qof.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "gnc.gui";
