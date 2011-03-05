@@ -47,6 +47,7 @@
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 #include "gnc-glib-utils.h"
+#include "core-utils/gnc-gconf-utils.h"
 
 #define GCONF_SECTION "dialogs/import/ofx"
 
@@ -60,6 +61,9 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 /* CS: Store the reference to the created importer gui so that the
    ofx_proc_transaction_cb can use it. */
 GNCImportMainMatcher *gnc_ofx_importer_gui = NULL;
+static gboolean auto_create_commodity = FALSE;
+
+GList *ofx_created_commodites = NULL;
 
 /*
 int ofx_proc_status_cb(struct OfxStatusData data)
@@ -75,27 +79,74 @@ double ofx_get_investment_amount(struct OfxTransactionData data);
 
 int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data)
 {
-    const char* tmp_cusip = NULL;
-    const char* tmp_default_fullname = NULL;
-    const char* tmp_default_mnemonic = NULL;
+    const char* cusip = NULL;
+    const char* default_fullname = NULL;
+    const char* default_mnemonic = NULL;
 
     if (data.unique_id_valid == true)
     {
-        tmp_cusip = data.unique_id;
+        cusip = data.unique_id;
     }
     if (data.secname_valid == true)
     {
-        tmp_default_fullname = data.secname;
+        default_fullname = data.secname;
     }
     if (data.ticker_valid == true)
     {
-        tmp_default_mnemonic = data.ticker;
+        default_mnemonic = data.ticker;
     }
 
-    gnc_import_select_commodity(tmp_cusip,
-                                true,
-                                tmp_default_fullname,
-                                tmp_default_mnemonic);
+    if (auto_create_commodity)
+    {
+        gnc_commodity *commodity =
+            gnc_import_select_commodity(cusip,
+                                        FALSE,
+                                        default_fullname,
+                                        default_mnemonic);
+
+        if (!commodity)
+        {
+            QofBook *book = gnc_get_current_book();
+            gnc_quote_source *source;
+            gint source_selection = 0; // FIXME: This is just a wild guess
+            const char *commodity_namespace = NULL;
+            int fraction = 1;
+
+            if (data.unique_id_type_valid)
+            {
+                commodity_namespace = data.unique_id_type;
+            }
+
+            g_warning("Creating a new commodity, cusip=%s", cusip);
+            /* Create the new commodity */
+            commodity = gnc_commodity_new(book,
+                                          default_fullname,
+                                          commodity_namespace,
+                                          default_mnemonic,
+                                          cusip,
+                                          fraction);
+
+            /* Also set a single quote source */
+            gnc_commodity_begin_edit(commodity);
+            gnc_commodity_user_set_quote_flag (commodity, TRUE);
+            source = gnc_quote_source_lookup_by_ti (SOURCE_SINGLE, source_selection);
+            gnc_commodity_set_quote_source(commodity, source);
+            gnc_commodity_commit_edit(commodity);
+
+            /* Remember the commodity */
+            gnc_commodity_table_insert(gnc_get_current_commodities(), commodity);
+
+            /* Remember this new commodity for us as well */
+            ofx_created_commodites = g_list_prepend(ofx_created_commodites, commodity);
+        }
+    }
+    else
+    {
+        gnc_import_select_commodity(cusip,
+                                    TRUE,
+                                    default_fullname,
+                                    default_mnemonic);
+    }
     return 0;
 }
 
@@ -775,6 +826,10 @@ void gnc_file_ofx_import (void)
         /* Create the Generic transaction importer GUI. */
         gnc_ofx_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE, 42);
 
+        /* Look up the needed gconf options */
+        auto_create_commodity =
+            gnc_gconf_get_bool(GCONF_IMPORT_SECTION, "auto_create_commodity", NULL);
+
         /* Initialize libofx */
 
         /*ofx_set_statement_cb(libofx_context, ofx_proc_statement_cb, 0);*/
@@ -794,6 +849,18 @@ void gnc_file_ofx_import (void)
         g_free(selected_filename);
     }
 
+    if (ofx_created_commodites)
+    {
+        /* FIXME: Present some result window about the newly created
+         * commodities */
+        g_warning("Created %d new commodities during import", g_list_length(ofx_created_commodites));
+        g_list_free(ofx_created_commodites);
+        ofx_created_commodites = NULL;
+    }
+    else
+    {
+        //g_warning("No new commodities created");
+    }
 }
 
 

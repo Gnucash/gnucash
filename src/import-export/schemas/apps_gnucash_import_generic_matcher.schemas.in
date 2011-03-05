@@ -158,5 +158,20 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/auto_create_commodity</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/auto_create_commodity</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Automatically create new commodities</short>
+        <long>Enables the automatic creation of new commodities if any
+        unknown commodity is encountered during import. Otherwise
+        the user will be asked what to do with each unknown
+        commodity.</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

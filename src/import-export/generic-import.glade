@@ -730,7 +730,7 @@ click "OK".</property>
     <child>
       <widget class="GtkTable" id="matcher_prefs">
         <property name="visible">True</property>
-        <property name="n_rows">9</property>
+        <property name="n_rows">10</property>
         <property name="n_columns">4</property>
         <child>
           <widget class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/enable_skip">
@@ -933,6 +933,26 @@ click "OK".</property>
             <property name="bottom_attach">4</property>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
+            <property name="x_padding">12</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/auto_create_commodity">
+            <property name="label" translatable="yes">Automatically create new commodities</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip" translatable="yes">Enables the
+            automatic creation of new commodities if any
+        unknown commodity is encountered during import. Otherwise
+        the user will be asked what to do with each unknown
+        commodity.</property>
+            <property name="draw_indicator">True</property>
+          </widget>
+          <packing>
+            <property name="right_attach">4</property>
+            <property name="top_attach">8</property>
+            <property name="bottom_attach">9</property>
             <property name="x_padding">12</property>
           </packing>
         </child>
