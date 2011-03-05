@@ -40,7 +40,7 @@
   ticker is NOT appropriate, unless you have no other option. Must be
   non-NULL.
 
-  @param auto_create If the cusip value is unknown and this parameter
+  @param ask_on_unknown If the cusip value is unknown and this parameter
   is false (zero), the function returns NULL. Otherwise the user will
   be asked to select an existing or create a new commodity.
 
@@ -59,7 +59,7 @@
 
 */
 gnc_commodity * gnc_import_select_commodity(const char * cusip,
-        gboolean auto_create,
+        gboolean ask_on_unknown,
         const char * default_fullname,
         const char * default_mnemonic);
 

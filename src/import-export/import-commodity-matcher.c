@@ -52,7 +52,7 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 
 gnc_commodity * gnc_import_select_commodity(const char * cusip,
-                                            gboolean auto_create,
+        gboolean ask_on_unknown,
         const char * default_fullname,
         const char * default_mnemonic)
 {
@@ -110,7 +110,7 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
     g_list_free(commodity_list);
     g_list_free(namespace_list);
 
-    if (retval == NULL && auto_create != 0)
+    if (retval == NULL && ask_on_unknown != 0)
     {
         const gchar *message =
             _("Please select a commodity to match the following exchange "

@@ -36,7 +36,6 @@
  * If you modify the value of any of these, you must do the same in *
  * generic-import.scm                                               *
 \********************************************************************/
-#define GCONF_SECTION "dialogs/import/generic_matcher"
 
 static const int DEFAULT_ACTION_ADD_ENABLED = TRUE;
 static const int DEFAULT_ACTION_CLEAR_ENABLED = TRUE;
@@ -84,20 +83,20 @@ gnc_import_Settings_new (void)
 
 
     settings->action_skip_enabled =
-        gnc_gconf_get_bool(GCONF_SECTION, "enable_skip", NULL);
+        gnc_gconf_get_bool(GCONF_IMPORT_SECTION, "enable_skip", NULL);
     settings->action_update_enabled =
-        gnc_gconf_get_bool(GCONF_SECTION, "enable_update", NULL);
+        gnc_gconf_get_bool(GCONF_IMPORT_SECTION, "enable_update", NULL);
     settings->action_add_enabled = DEFAULT_ACTION_ADD_ENABLED;
     settings->action_clear_enabled = DEFAULT_ACTION_CLEAR_ENABLED;
     settings->clear_threshold =
-        gnc_gconf_get_float(GCONF_SECTION, "auto_clear_threshold", NULL);
+        gnc_gconf_get_float(GCONF_IMPORT_SECTION, "auto_clear_threshold", NULL);
     settings->add_threshold =
-        gnc_gconf_get_float(GCONF_SECTION, "auto_add_threshold", NULL);
+        gnc_gconf_get_float(GCONF_IMPORT_SECTION, "auto_add_threshold", NULL);
     settings->display_threshold =
-        gnc_gconf_get_float(GCONF_SECTION, "match_threshold", NULL);
+        gnc_gconf_get_float(GCONF_IMPORT_SECTION, "match_threshold", NULL);
 
     settings->fuzzy_amount =
-        gnc_gconf_get_float(GCONF_SECTION, "atm_fee_threshold", NULL);
+        gnc_gconf_get_float(GCONF_IMPORT_SECTION, "atm_fee_threshold", NULL);
 
     settings->match_date_hardlimit = 42; /* 6 weeks */
     return settings;
