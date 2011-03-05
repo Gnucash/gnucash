@@ -484,7 +484,7 @@ tax_info_data_func (GtkTreeViewColumn *col,
                     GtkTreeIter       *iter,
                     gpointer           view)
 {
-    const gchar *tax_info, *tax_info_sub_acct;
+    gchar *tax_info = NULL;
     GtkTreePath *path;
 
     gtk_tree_model_get(model,
@@ -493,35 +493,44 @@ tax_info_data_func (GtkTreeViewColumn *col,
                        &tax_info,
                        -1);
 
-    if (tax_info == NULL)
-        tax_info = "";
     path = gtk_tree_model_get_path(model, iter);
     if (gtk_tree_view_row_expanded(GTK_TREE_VIEW(view), path))
-        g_object_set(renderer, "text", tax_info, NULL);
+        g_object_set(renderer, "text",
+                     (tax_info == NULL ? "" : tax_info), NULL);
     else
     {
+        gchar *tax_info_sub_acct = NULL;
+
         gtk_tree_model_get(model,
                            iter,
                            GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO_SUB_ACCT,
                            &tax_info_sub_acct,
                            -1);
-        if (tax_info_sub_acct == NULL)
-            tax_info_sub_acct = "";
-        if (safe_strcmp (tax_info_sub_acct, "") == 0)
-            g_object_set(renderer, "text", tax_info, NULL);
+        if ((safe_strcmp (tax_info_sub_acct, "") == 0) ||
+                (tax_info_sub_acct == NULL))
+            g_object_set(renderer, "text",
+                         (tax_info == NULL ? "" : tax_info), NULL);
         else
         {
-            if (safe_strcmp (tax_info, "") == 0)
-                g_object_set(renderer, "text", tax_info_sub_acct, NULL);
+            if ((safe_strcmp (tax_info, "") == 0) ||
+                    (tax_info == NULL))
+                g_object_set(renderer, "text",
+                             (tax_info_sub_acct == NULL ? "" : tax_info_sub_acct),
+                             NULL);
             else
             {
-                const gchar *combined_tax_info;
-                combined_tax_info = g_strdup_printf ("%s; %s", tax_info,
-                                                     tax_info_sub_acct);
+                gchar *combined_tax_info;
+                combined_tax_info = g_strdup_printf ("%s; %s",
+                                                     (tax_info == NULL ? "" : tax_info),
+                                                     (tax_info_sub_acct == NULL ? "" :
+                                                      tax_info_sub_acct));
                 g_object_set(renderer, "text", combined_tax_info, NULL);
+                g_free(combined_tax_info);
             }
         }
+        g_free(tax_info_sub_acct);
     }
+    g_free(tax_info);
     gtk_tree_path_free(path);
 }
 

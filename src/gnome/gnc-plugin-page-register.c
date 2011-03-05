@@ -1359,10 +1359,15 @@ gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page)
     switch (ledger_type)
     {
     case LD_SINGLE:
-        return g_strdup(gnc_account_get_full_name (leader));
+        return gnc_account_get_full_name (leader);
 
     case LD_SUBACCOUNT:
-        return g_strdup_printf("%s+", gnc_account_get_full_name (leader));
+    {
+        gchar *account_full_name = gnc_account_get_full_name (leader);
+        gchar *return_string = g_strdup_printf("%s+", account_full_name);
+        g_free ((gpointer *) account_full_name);
+        return return_string;
+    }
 
     default:
         break;
