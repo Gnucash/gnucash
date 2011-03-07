@@ -370,10 +370,17 @@ guid_init(void)
 
     md5_init_ctx(&guid_context);
 
-    /* entropy pool */
+    /* entropy pool
+     * FIXME /dev/urandom doesn't exist on Windows. We should
+     *       use the Windows native CryptGenRandom or RtlGenRandom
+     *       functions. See
+     *       http://en.wikipedia.org/wiki/CryptGenRandom */
     bytes += init_from_file ("/dev/urandom", 512);
 
-    /* files */
+    /* files
+     * FIXME none of these directories make sense on
+     *       Windows. We should figure out some proper
+     *       alternatives there. */
     {
         const char * files[] =
         {
@@ -394,7 +401,13 @@ guid_init(void)
             bytes += init_from_file(files[i], BLOCKSIZE);
     }
 
-    /* directories */
+    /* directories
+     * Note: P_tmpdir is set to "\" by mingw (Windows) This seems to
+     * trigger unwanted network access attempts (see bug #521817).
+     * So on Windows we explicitly set the temporary directory.
+     * FIXME other than "c:/temp" none of these directories make sense on
+     *       Windows. We should figure out some proper
+     *       alternatives there. */
     {
         const char * dirname;
         const char * dirs[] =
