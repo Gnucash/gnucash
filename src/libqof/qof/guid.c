@@ -400,7 +400,11 @@ guid_init(void)
         const char * dirs[] =
         {
             "/proc",
+#ifndef G_OS_WIN32
             P_tmpdir,
+#else
+            "c:/temp",
+#endif
             "/var/lock",
             "/var/log",
             "/var/mail",
