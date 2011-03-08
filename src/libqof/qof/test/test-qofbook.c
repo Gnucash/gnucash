@@ -23,6 +23,7 @@
 #include <string.h>
 #include <glib.h>
 #include <qof.h>
+#include "qofbook-p.h"
 
 static const gchar *suitename = "/qof/qofbook";
 void test_suite_qofbook ( void );
@@ -52,9 +53,70 @@ test_book_readonly( Fixture *fixture, gconstpointer pData )
     qof_book_mark_readonly( fixture->book );
     g_assert( qof_book_is_readonly( fixture->book ) );
 }
+static void
+test_book_validate_counter( void )
+{
+    gchar *r;
+    g_test_bug("644036");
+
+    /* Test for detection of missing format conversion */
+    r = qof_book_validate_counter_format("This string is missing the conversion specifier");
+    g_assert(r);
+    if (r && g_test_verbose())
+    {
+        g_test_message("Counter format validation correctly failed: %s", r);
+    }
+    g_free(r);
+
+    /* Test the usual Linux/Unix G_GINT64_FORMAT */
+    r = qof_book_validate_counter_format_internal("Test - %li", "li");
+    if (r && g_test_verbose())
+    {
+        g_test_message("Counter format validation erroneously failed: %s", r);
+    }
+    g_assert(r == NULL);
+    g_free(r);
+
+    /* Test the Windows G_GINT64_FORMAT */
+    r = qof_book_validate_counter_format_internal("Test - %I64i", "I64i");
+    if (r && g_test_verbose())
+    {
+        g_test_message("Counter format validation erroneously failed: %s", r);
+    }
+    g_assert(r == NULL);
+    g_free(r);
+
+    /* Test the system's GINT64_FORMAT */
+    r = qof_book_validate_counter_format("Test - %" G_GINT64_FORMAT);
+    if (r && g_test_verbose())
+    {
+        g_test_message("Counter format validation erroneously failed: %s", r);
+    }
+    g_assert(r == NULL);
+    g_free(r);
+
+    /* Test an erroneous Windows G_GINT64_FORMAT */
+    r = qof_book_validate_counter_format_internal("Test - %li", "I64i");
+    if (r && g_test_verbose())
+    {
+        g_test_message("Counter format validation correctly failed: %s", r);
+    }
+    g_assert(r);
+    g_free(r);
+
+    /* Test an erroneous Linux G_GINT64_FORMAT */
+    r = qof_book_validate_counter_format_internal("Test - %I64i", "li");
+    if (r && g_test_verbose())
+    {
+        g_test_message("Counter format validation correctly failed: %s", r);
+    }
+    g_assert(r);
+    g_free(r);
+}
 
 void
 test_suite_qofbook ( void )
 {
     g_test_add( suitename, Fixture, NULL, setup, test_book_readonly, teardown );
+    g_test_add_func( suitename, test_book_validate_counter );
 }

@@ -563,7 +563,14 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
 gchar *
 qof_book_validate_counter_format(const gchar *p)
 {
-    const gchar *conv_start, *tmp;
+    return qof_book_validate_counter_format_internal(p, G_GINT64_FORMAT);
+}
+
+gchar *
+qof_book_validate_counter_format_internal(const gchar *p,
+        const gchar *gint64_format)
+{
+    const gchar *conv_start, *tmp = NULL;
 
     /* Validate a counter format. This is a very simple "parser" that
      * simply checks for a single gint64 conversion specification,
@@ -597,11 +604,23 @@ qof_book_validate_counter_format(const gchar *p)
     /* Skip the % */
     p++;
 
+    /* See whether we have already reached the correct format
+     * specification (e.g. "li" on Unix, "I64i" on Windows). */
+    tmp = strstr(p, gint64_format);
+
     /* Skip any number of flag characters */
-    while (*p && strchr("#0- +'I", *p)) p++;
+    while (*p && (tmp != p) && strchr("#0- +'I", *p))
+    {
+        p++;
+        tmp = strstr(p, gint64_format);
+    }
 
     /* Skip any number of field width digits */
-    while (*p && strchr("0123456789", *p)) p++;
+    while (*p && (tmp != p) && strchr("0123456789", *p))
+    {
+        p++;
+        tmp = strstr(p, gint64_format);
+    }
 
     /* A precision specifier always starts with a dot */
     if (*p && *p == '.')
@@ -617,10 +636,10 @@ qof_book_validate_counter_format(const gchar *p)
 
     /* See if the format string starts with the correct format
      * specification. */
-    tmp = strstr(p, G_GINT64_FORMAT);
+    tmp = strstr(p, gint64_format);
     if (tmp == NULL)
     {
-        return g_strdup_printf("Invalid length modifier and/or conversion specifier ('%.2s'), it should be: " G_GINT64_FORMAT, p);
+        return g_strdup_printf("Invalid length modifier and/or conversion specifier ('%.4s'), it should be: %s", p, gint64_format);
     }
     else if (tmp != p)
     {
@@ -628,7 +647,7 @@ qof_book_validate_counter_format(const gchar *p)
     }
 
     /* Skip length modifier / conversion specifier */
-    p += strlen(G_GINT64_FORMAT);
+    p += strlen(gint64_format);
 
     /* Skip a suffix of any character except % */
     while (*p)

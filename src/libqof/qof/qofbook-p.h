@@ -61,6 +61,14 @@ backends (when reading the GncGUID from the data source). */
 #define qof_book_set_guid(book,guid)    \
          qof_instance_set_guid(QOF_INSTANCE(book), guid)
 
+/** Validate a counter format string with the given
+ *    G_GINT64_FORMAT. Returns an error message if the format string
+ *    was invalid, or NULL if it is ok. The caller should free the
+ *    error message with g_free.
+ */
+gchar *qof_book_validate_counter_format_internal(const gchar *p,
+        const gchar* gint64_format);
+
 /* @} */
 /* @} */
 /* @} */
