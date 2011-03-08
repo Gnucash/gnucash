@@ -117,7 +117,7 @@ log4glib_handler(const gchar     *log_domain,
         time_t now;
         struct tm now_tm;
         const char *format_24hour =
-#ifdef _MSC_VER
+#ifdef G_OS_WIN32
             "%H:%M:%S"
 #else
             "%T"
