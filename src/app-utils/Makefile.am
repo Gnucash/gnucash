@@ -35,6 +35,7 @@ AM_CPPFLAGS = \
 
 libgncmod_app_utils_la_SOURCES = \
   swig-app-utils.c \
+  business-options.c \
   QuickFill.c \
   file-utils.c \
   gfec.c \
@@ -64,6 +65,7 @@ libgncmod_app_utils_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   QuickFill.h \
+  business-options.h \
   file-utils.h \
   gfec.h \
   gnc-basic-gobject.h \
