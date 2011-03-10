@@ -67,6 +67,7 @@
 #include "option-util.h"
 #include "window-report.h"
 #include "swig-runtime.h"
+#include "app-utils/business-options.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
@@ -1573,19 +1574,54 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
     gchar *report_name = NULL;
     gchar *job_name = NULL;
     gchar *job_date = qof_print_date( time( NULL ) );
+    const gchar *default_jobname = N_("GnuCash-Report");
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
     if (priv->cur_report == SCM_BOOL_F)
-        report_name = g_strdup ( "GnuCash-Report");
+        report_name = g_strdup (_(default_jobname));
     else
     {
+        /* Gather some information from the report to generate a
+         * decent print job name.
+         * FIXME: this is a bit of a hack. It would be better if each
+         *        report had a hidden job name option, because the
+         *        generic reporting code shouldn't know what makes
+         *        a decent job name for each report.
+         *
+         *        Also, the "Report name" for an invoice report is
+         *        "Printable Invoice", which is not what the user wants to see,
+         *        so I added yet another hack below for this. cstim.
+         */
+        GncInvoice *invoice;
         report_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
-               "Report name", NULL);
+                      "Report name", NULL);
         if (!report_name)
-            report_name = g_strdup ( "GnuCash-Report");
+            report_name = g_strdup (_(default_jobname));
+        if (safe_strcmp(report_name, _("Printable Invoice")) == 0)
+        {
+            /* Again HACK alert: We modify this single known string here into
+             * something more appropriate. */
+            g_free(report_name);
+            report_name = g_strdup(_("Invoice"));
+        }
+
+        invoice = gnc_option_db_lookup_invoice_option(priv->cur_odb, "General",
+                  "Invoice Number", NULL);
+        if (invoice)
+        {
+            const gchar *invoice_number = gncInvoiceGetID(invoice);
+            if (invoice_number)
+            {
+                /* Report is for an invoice. Add the invoice number to the job name. */
+                gchar *name_number = g_strjoin ( "_", report_name, invoice_number, NULL );
+                g_free (report_name);
+                report_name = name_number;
+            }
+        }
     }
     job_name = g_strjoin ( "_", report_name, job_date, NULL );
+    //g_warning("Setting job name=%s", job_name);
 
     gnc_html_print(priv->html, job_name);
 
