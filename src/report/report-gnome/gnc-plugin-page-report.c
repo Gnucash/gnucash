@@ -1621,24 +1621,26 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
         }
     }
 
+    job_name = g_strjoin ( "_", report_name, job_date, NULL );
+    g_free (report_name);
+	report_name = NULL;
+    g_free (job_date);
+
     {
         char forbidden_char = '/';
         // Now remove the characters that are not allowed in file
         // names. FIXME: Check for all disallowed characters here!
-        while (strchr(report_name, forbidden_char))
+        while (strchr(job_name, forbidden_char))
         {
-            *strchr(report_name, forbidden_char) = '_';
+            *strchr(job_name, forbidden_char) = '_';
         }
     }
 
-    job_name = g_strjoin ( "_", report_name, job_date, NULL );
     //g_warning("Setting job name=%s", job_name);
 
     gnc_html_print(priv->html, job_name);
 
-    g_free (report_name);
     g_free (job_name);
-    g_free (job_date);
 }
 
 static void
