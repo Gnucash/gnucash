@@ -1620,6 +1620,17 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
             }
         }
     }
+
+    {
+        char forbidden_char = '/';
+        // Now remove the characters that are not allowed in file
+        // names. FIXME: Check for all disallowed characters here!
+        while (strchr(report_name, forbidden_char))
+        {
+            *strchr(report_name, forbidden_char) = '_';
+        }
+    }
+
     job_name = g_strjoin ( "_", report_name, job_date, NULL );
     //g_warning("Setting job name=%s", job_name);
 
