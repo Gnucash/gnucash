@@ -1,14 +1,14 @@
 ﻿GnuCash 是一個自由、開放原始碼的帳務軟體，它使用 GNU 通用公共許可證(GPL)，支援 GNU/Linux, *BSD, Solaris, Mac OSX 及微軟 Windows。
 
-GnuCash 不僅設計成易於使用，而且功能強大又有彈性。它可以追踪銀行帳戶，股票，收入與支出，就像用帳簿一樣快捷、直覺。基於專業的會計原則確保帳目平衡並提供準確的報表。
+GnuCash 不僅設計成易於使用，而且功能強大又有彈性。它可以追蹤銀行帳戶、股票、收入與支出，就像用帳簿一樣快捷、直覺。基於專業的會計原則確保帳目平衡並提供準確的報表。
 
 -------------------
 
 可獲得支援的管道
 
 常見問題解答:   http://wiki.gnucash.org/wiki/FAQ
-Mailing Lists:  http://wiki.gnucash.org/wiki/Mailing_Lists
-IRC (Chat):     irc.gnome.org 伺服器的 #gnucash 頻道，見 http://wiki.gnucash.org/wiki/IRC
+通信論壇:       http://wiki.gnucash.org/wiki/Mailing_Lists
+IRC (聊天):     irc.gnome.org 伺服器的 #gnucash 頻道，見 http://wiki.gnucash.org/wiki/IRC
 
 如果您遇到了任何 bug 或問題，請不要遲疑，將問題報告到我們的 bug 追蹤系統 "Bugzilla": (請用英文)
 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash

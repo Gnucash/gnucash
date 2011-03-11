@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-2.4.2\n"
+"Project-Id-Version: gnucash-2.4.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-12 17:08+0100\n"
-"PO-Revision-Date: 2011-02-22 19:10+0800\n"
+"PO-Revision-Date: 2011-03-10 23:38+0800\n"
 "Last-Translator: Kuang-che Wu <kcwu@csie.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -118,7 +118,7 @@ msgstr ""
 #: ../src/app-utils/gnc-ui-util.c:679
 #, fuzzy, c-format
 msgid "(Tax-related subaccounts: %d)"
-msgstr "%s 和選定的子帳號"
+msgstr "%s 和選定的子科目"
 
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
@@ -456,7 +456,7 @@ msgstr "不正確的 URL %s"
 #: ../src/business/business-gnome/business-urls.c:301
 #, c-format
 msgid "No such Account entity: %s"
-msgstr "沒有這個帳號實體： %s"
+msgstr "沒有這個科目實體： %s"
 
 #: ../src/business/business-gnome/dialog-billterms.c:270
 msgid "Negative amounts are not allowed."
@@ -529,7 +529,7 @@ msgid ""
 "Identification - Company Name, and\n"
 "Payment Address - Name."
 msgstr ""
-"你必需輸入公司名稱。若客戶是個人而非公司，請在\"識別 - 公司名稱\"跟\"連絡地址 - 名稱\"填相"
+"你必須輸入公司名稱。若客戶是個人而非公司，請在\"識別 - 公司名稱\"跟\"連絡地址 - 名稱\"填相"
 "同的名字。"
 
 #: ../src/business/business-gnome/dialog-customer.c:335
@@ -636,12 +636,12 @@ msgstr "尋找客戶"
 
 #: ../src/business/business-gnome/dialog-date-close.c:76
 msgid "No Account selected.  Please try again."
-msgstr "沒有選定帳號。請再試一次。"
+msgstr "沒有選定科目。請再試一次。"
 
 #: ../src/business/business-gnome/dialog-date-close.c:83
 #, fuzzy
 msgid "Placeholder account selected.  Please try again."
-msgstr "沒有選定帳號。請再試一次。"
+msgstr "沒有選定科目。請再試一次。"
 
 #: ../src/business/business-gnome/dialog-employee.c:222
 msgid "You must enter a username."
@@ -772,7 +772,7 @@ msgstr "張貼日期"
 
 #: ../src/business/business-gnome/dialog-invoice.c:675
 msgid "Post to Account"
-msgstr "張貼到帳號"
+msgstr "張貼到科目"
 
 #: ../src/business/business-gnome/dialog-invoice.c:676
 #, fuzzy
@@ -797,7 +797,7 @@ msgstr "小計："
 
 #: ../src/business/business-gnome/dialog-invoice.c:1058
 msgid "Tax:"
-msgstr "稅"
+msgstr "稅:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1062
 msgid "Total Cash:"
@@ -1070,11 +1070,11 @@ msgstr "總額"
 #. Translators: %d is the number of bills due. This is a
 #. ngettext(3) message.
 #: ../src/business/business-gnome/dialog-invoice.c:2837
-#, fuzzy, c-format
+#, c-format
 msgid "The following %d bill is due:"
 msgid_plural "The following %d bills are due:"
-msgstr[0] "下列的帳單已到期"
-msgstr[1] "下列的帳單已到期"
+msgstr[0] "下列的 %d 份帳單已到期:"
+msgstr[1] "下列的 %d 份帳單已到期:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2843
 msgid "Due Bills Reminder"
@@ -1202,16 +1202,16 @@ msgstr "您必須選擇用於付款處理的公司。"
 
 #: ../src/business/business-gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
-msgstr "您必須自帳號樹選擇轉帳帳號。"
+msgstr "您必須自科目樹選擇轉帳科目。"
 
 #: ../src/business/business-gnome/dialog-payment.c:290
 msgid "You must enter an account name for posting."
-msgstr "您必須輸入用於張貼帳號名稱。"
+msgstr "您必須輸入張貼的科目名稱。"
 
 #: ../src/business/business-gnome/dialog-payment.c:300
 #, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr "您選擇的張貼帳號， %s ，並不存在。"
+msgstr "您選擇的張貼科目 %s 並不存在。"
 
 #: ../src/business/business-gnome/dialog-payment.c:325
 msgid ""
@@ -1234,7 +1234,7 @@ msgid ""
 "Identification - Company Name, and\n"
 "Payment Address - Name."
 msgstr ""
-"你必需輸入公司名稱。若廠商是個人而非公司，請在\"識別 - 公司名稱\"跟\"連絡地址 - 名稱\"填相"
+"你必須輸入公司名稱。若廠商是個人而非公司，請在\"識別 - 公司名稱\"跟\"連絡地址 - 名稱\"填相"
 "同的名字。"
 
 #: ../src/business/business-gnome/dialog-vendor.c:220
@@ -1692,7 +1692,7 @@ msgstr "問題"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:3
 msgid "acct"
-msgstr "帳號"
+msgstr "科目"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:4
 msgid "duedate"
@@ -1721,7 +1721,7 @@ msgstr "帳單"
 #: ../src/business/business-gnome/glade/employee.glade.h:6
 #: ../src/gnome-utils/dialog-transfer.c:1759
 msgid "Credit Account"
-msgstr "貸方帳號"
+msgstr "貸方科目"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:8
 msgid "Default Hours per Day: "
@@ -1814,7 +1814,7 @@ msgstr "保持現狀"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:21
 msgid "Posted Account"
-msgstr "張貼的帳號"
+msgstr "張貼的科目"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:22
 msgid "Reset Tax Tables to present Values?"
@@ -1824,7 +1824,7 @@ msgstr ""
 msgid ""
 "The invoice ID number.  If left blank a reasonable number will be chosen for "
 "you."
-msgstr "收據的 ID 編號。如果保持空白則會為您選擇一個合理的號碼"
+msgstr "收據的 ID 編號。如果保持空白則會為您選擇一個合理的號碼。"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:25
 msgid ""
@@ -2000,7 +2000,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/payment.glade.h:16
 msgid "Transfer Account"
-msgstr "轉帳帳號"
+msgstr "轉帳科目"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:15
 msgid "Tax Included:"
@@ -2265,11 +2265,11 @@ msgstr "排列順序(_O)"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:101
 #: ../src/gnome/gnc-plugin-page-account-tree.c:155
 msgid "New _Account..."
-msgstr "新增帳號(_A)..."
+msgstr "新增科目(_A)..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:102
 msgid "Create a new account"
-msgstr "建立新帳號"
+msgstr "建立新科目"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:106
 msgid "Print Invoice"
@@ -2379,7 +2379,7 @@ msgstr "新增收據(_I)"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:178
 #, fuzzy
 msgid "Create a new invoice for the same owner as the current one"
-msgstr "為每個報告或帳號樹建立新的頂端層級視窗"
+msgstr "為每個報告或科目樹建立新的頂端層級視窗"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:182
 #, fuzzy
@@ -2590,13 +2590,13 @@ msgstr "不是"
 #: ../src/register/ledger-core/split-register.c:1704
 #, c-format
 msgid "The account %s does not allow transactions."
-msgstr "此帳號 %s 不接受交易。"
+msgstr "此科目 %s 不接受交易。"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:83
 #: ../src/register/ledger-core/split-register.c:1705
 #, c-format
 msgid "The account %s does not exist. Would you like to create it?"
-msgstr "帳號 %s 不存在。您想要建立它嗎？"
+msgstr "科目 %s 不存在。您想要建立它嗎？"
 
 #. XXX: change this based on the ledger type
 #: ../src/business/business-ledger/gncEntryLedger.c:242
@@ -2707,7 +2707,7 @@ msgstr "sample(DH):+%"
 #: ../src/register/ledger-core/split-register-layout.c:594
 #: ../src/register/ledger-core/split-register-layout.c:602
 msgid "sample:Expenses:Automobile:Gasoline"
-msgstr "sample:花費:汽車:汽油"
+msgstr "sample:支出:汽車:汽油"
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:125
 msgid "sample:T?"
@@ -2780,11 +2780,11 @@ msgstr "索價"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:55
 msgid "Income Account"
-msgstr "收入帳號"
+msgstr "收入科目"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:60
 msgid "Expense Account"
-msgstr "支出帳號"
+msgstr "支出科目"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -2892,7 +2892,7 @@ msgstr "付款"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:544
 msgid ""
 "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr "輸入此項目的收入/支出帳號，或從清單中選擇一個"
+msgstr "輸入此項目的收入/支出科目，或從清單中選擇一個"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:557
 msgid "Enter the type of Entry"
@@ -3007,7 +3007,7 @@ msgstr "百分比必須介於 -100 和 100 之間。"
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:148
 msgid "You must choose a Tax Account."
-msgstr "您必須選擇稅金帳號。"
+msgstr "您必須選擇稅金科目。"
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:562
 #, c-format
@@ -3055,7 +3055,7 @@ msgstr ""
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:9
 msgid "_Account:"
-msgstr "帳號(_A):"
+msgstr "科目(_A):"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:10
 #: ../src/gnome/dialog-sx-editor.c:183 ../src/gnome/glade/price.glade.h:22
@@ -3375,7 +3375,7 @@ msgstr "交易已無效"
 msgid ""
 "That commodity is currently used by at least one of your accounts. You may "
 "not delete it."
-msgstr "此商品目前正被您其中一個以上的帳號使用。您不能將它刪除。"
+msgstr "此商品目前正被您其中一個以上的科目使用。您不能將它刪除。"
 
 #: ../src/gnome/dialog-commodities.c:169
 msgid ""
@@ -3417,7 +3417,7 @@ msgstr "付款的數量不能為負的。"
 
 #: ../src/gnome/dialog-find-transactions.c:101
 msgid "All Accounts"
-msgstr "所有帳號"
+msgstr "所有科目"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -3443,7 +3443,7 @@ msgstr "所有帳號"
 #: ../intl-scm/guile-strings.c:3834 ../intl-scm/guile-strings.c:3892
 #: ../intl-scm/guile-strings.c:4192
 msgid "Account"
-msgstr "帳號"
+msgstr "科目"
 
 #: ../src/gnome/dialog-find-transactions.c:108
 #: ../src/import-export/import-match-picker.c:349
@@ -3473,7 +3473,7 @@ msgstr "單位股份價格"
 #: ../intl-scm/guile-strings.c:3898 ../intl-scm/guile-strings.c:4132
 #: ../intl-scm/guile-strings.c:4196 ../intl-scm/guile-strings.c:4418
 msgid "Shares"
-msgstr "股份"
+msgstr "股數"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/portfolio.scm
@@ -3504,7 +3504,7 @@ msgstr "尋找交易"
 #, c-format
 msgid "Are you sure you want to delete the %d selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "您確定要刪除選擇的價格？"
+msgstr[0] "您確定要刪除這 %d 個選擇的價格？"
 msgstr[1] "您確定要刪除這 %d 個選擇的價格？"
 
 #: ../src/gnome/dialog-price-edit-db.c:185
@@ -3611,7 +3611,7 @@ msgstr ""
 msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
-msgstr "排程交易編輯器不能自動結算這個交易，是否仍然要將它輸入？"
+msgstr "排程交易編輯器不能自動平衡這個交易，是否仍然要將它輸入？"
 
 #: ../src/gnome/dialog-sx-editor.c:744
 msgid "Please name the Scheduled Transaction."
@@ -3764,9 +3764,8 @@ msgid "now"
 msgstr "現在"
 
 #: ../src/gnome/dialog-tax-info.c:1086
-#, fuzzy
 msgid "Income Tax Identity"
-msgstr "損益表"
+msgstr "所得稅籍"
 
 #: ../src/gnome/dialog-tax-info.c:1148
 msgid ""
@@ -3826,6 +3825,8 @@ msgid ""
 "%s\n"
 "Congratulations! You are done closing books!"
 msgstr ""
+"%s\n"
+"恭喜！您已成功關閉帳本！"
 
 #. Change the text so that its more mainingful for this druid
 #: ../src/gnome/druid-acct-period.c:560
@@ -3844,17 +3845,17 @@ msgstr "已選擇"
 #: ../src/gnome/druid-hierarchy.c:414
 #: ../src/gnome-utils/gnc-tree-view-account.c:1935
 msgid "Account Types"
-msgstr "帳號類型"
+msgstr "科目類型"
 
 #. Translators: '%s' is the name of the selected account hierarchy template.
 #: ../src/gnome/druid-hierarchy.c:493
 #, c-format
 msgid "Accounts in '%s'"
-msgstr "'%s' 所對應的帳號"
+msgstr "'%s' 所對應的科目"
 
 #: ../src/gnome/druid-hierarchy.c:514
 msgid "Accounts in Category"
-msgstr "帳號分類"
+msgstr "科目分類"
 
 #: ../src/gnome/druid-hierarchy.c:726
 msgid "zero"
@@ -3862,7 +3863,7 @@ msgstr "零"
 
 #: ../src/gnome/druid-hierarchy.c:739
 msgid "existing account"
-msgstr "已存在的帳號"
+msgstr "已存在的科目"
 
 #: ../src/gnome/druid-hierarchy.c:927
 #: ../src/gnome-utils/gnc-tree-view-account.c:652
@@ -3930,7 +3931,7 @@ msgstr "您確定要取消抵押/貸款設定精靈？"
 
 #: ../src/gnome/druid-loan.c:1197
 msgid "Please select a valid loan account."
-msgstr "請選擇有效的貸款帳號。"
+msgstr "請選擇有效的貸款科目。"
 
 #: ../src/gnome/druid-loan.c:1289
 msgid "Please select a valid Escrow Account."
@@ -3938,15 +3939,15 @@ msgstr "請選擇有效的代管帳號。"
 
 #: ../src/gnome/druid-loan.c:1360 ../src/gnome/druid-loan.c:1590
 msgid "Please select a valid \"from\" account."
-msgstr "請選擇有效的“來自”帳號。"
+msgstr "請選擇有效的“來自”科目。"
 
 #: ../src/gnome/druid-loan.c:1368 ../src/gnome/druid-loan.c:1600
 msgid "Please select a valid \"to\" account."
-msgstr "請選擇有效的“到”帳號。"
+msgstr "請選擇有效的“到”科目。"
 
 #: ../src/gnome/druid-loan.c:1376
 msgid "Please select a valid \"interest\" account."
-msgstr "請選擇有效的“利率”帳號。"
+msgstr "請選擇有效的“利息”科目。"
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
 #: ../src/gnome/druid-loan.c:1494
@@ -4006,18 +4007,17 @@ msgstr "現金分配必須為正數。"
 
 #: ../src/gnome/druid-stock-split.c:390
 msgid "You must select an income account for the cash distribution."
-msgstr "您必須選擇現金分配用的收入帳號。"
+msgstr "您必須選擇現金分配用的收入科目。"
 
 #: ../src/gnome/druid-stock-split.c:399
 msgid "You must select an asset account for the cash distribution."
-msgstr "您必須選擇現金分配用的資產帳號。"
+msgstr "您必須選擇現金分配用的資產科目。"
 
 #. Translators: This string has a disambiguation prefix
 #: ../src/gnome/druid-stock-split.c:461
 #: ../src/register/ledger-core/split-register.c:2328
-#, fuzzy
 msgid "Action Column|Split"
-msgstr "自動分割"
+msgstr "股票分割"
 
 #: ../src/gnome/druid-stock-split.c:492
 msgid "Error adding price."
@@ -4029,15 +4029,15 @@ msgstr "加入價格時發生錯誤。"
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:400
 #: ../intl-scm/guile-strings.c:2410 ../intl-scm/guile-strings.c:3726
 msgid "Symbol"
-msgstr "標記"
+msgstr "代號"
 
 #: ../src/gnome/druid-stock-split.c:795
 msgid "You don't have any stock accounts with balances!"
-msgstr "您沒有任何結算的股票帳號！"
+msgstr "您沒有任何結算的股票科目！"
 
 #: ../src/gnome/glade/account.glade.h:1
 msgid "<b>Acco_unt Type</b>"
-msgstr "<b>帳號類型(_U)</b>"
+msgstr "<b>科目類型(_U)</b>"
 
 #: ../src/gnome/glade/account.glade.h:2
 msgid "<b>Balance Information</b>"
@@ -4062,11 +4062,11 @@ msgstr "貨幣兌換"
 
 #: ../src/gnome/glade/account.glade.h:7
 msgid "<b>Sub-account Transactions</b>"
-msgstr "<b>子帳號交易</b>"
+msgstr "<b>子科目交易</b>"
 
 #: ../src/gnome/glade/account.glade.h:8
 msgid "<b>Sub-accounts</b>"
-msgstr "<b>子帳號</b>"
+msgstr "<b>子科目</b>"
 
 #: ../src/gnome/glade/account.glade.h:9
 #: ../src/gnome/glade/sched-xact.glade.h:50
@@ -4075,22 +4075,22 @@ msgstr "<b>交易</b>"
 
 #: ../src/gnome/glade/account.glade.h:10
 msgid "<b>_Parent Account</b>"
-msgstr "<b>母帳號</b>"
+msgstr "<b>母科目</b>"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../src/gnome/glade/account.glade.h:11 ../intl-scm/guile-strings.c:2282
 #: ../intl-scm/guile-strings.c:4024
 msgid "Account Type"
-msgstr "帳號類型"
+msgstr "科目類型"
 
 #: ../src/gnome/glade/account.glade.h:12
 msgid "Account _Color:"
-msgstr "帳號顏色 (_C)"
+msgstr "科目顏色(_C):"
 
 #: ../src/gnome/glade/account.glade.h:13
 msgid "Account _name:"
-msgstr "帳號名稱(_N)："
+msgstr "科目名稱(_N)："
 
 #: ../src/gnome/glade/account.glade.h:14
 msgid "C_lear All"
@@ -4102,7 +4102,7 @@ msgstr "選擇貨幣"
 
 #: ../src/gnome/glade/account.glade.h:16
 msgid "Choose accounts to create"
-msgstr "選擇要建立的帳號"
+msgstr "選擇要建立的科目"
 
 #. src/report/report-system/html-style-sheet.scm
 #. src/report/report-system/report.scm
@@ -4114,11 +4114,11 @@ msgstr "預設值"
 
 #: ../src/gnome/glade/account.glade.h:18
 msgid "Delete Account"
-msgstr "刪除帳號"
+msgstr "刪除科目"
 
 #: ../src/gnome/glade/account.glade.h:19
 msgid "Delete all _subaccounts"
-msgstr "刪除全部子帳號(_S)"
+msgstr "刪除全部子科目(_S)"
 
 #: ../src/gnome/glade/account.glade.h:20
 msgid "Delete all _transactions"
@@ -4135,7 +4135,7 @@ msgstr "過濾依..."
 
 #: ../src/gnome/glade/account.glade.h:23
 msgid "Finish Account Setup"
-msgstr "結束帳號設定"
+msgstr "結束科目設定"
 
 #. src/report/report-system/report.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -4176,7 +4176,7 @@ msgstr "隱藏(_I)"
 
 #: ../src/gnome/glade/account.glade.h:26
 msgid "Hide accounts which have a zero total value."
-msgstr "隱藏結算值為零的帳號。"
+msgstr "隱藏結算值為零的科目。"
 
 #: ../src/gnome/glade/account.glade.h:27
 msgid ""
@@ -4194,19 +4194,18 @@ msgid ""
 "\n"
 "Note: all accounts except Equity and placeholder accounts may have an "
 "opening balance.\n"
-msgstr "如果您想修改帳號名稱，點選該帳號再點帳號名就能修改。\n"
+msgstr "如果您想修改科目名稱，點選該科目再點科目名就能修改。\n"
 "\n"
-"有些帳號被標記為 \"Placeholder\". 這種帳號只是為了建立帳號階層用的，通常不會有交易或起始餘額。如果你想讓一個帳號如此，點選該帳號的複選框。\n"
+"有些科目被標記為 \"Placeholder\". 這種科目只是為了建立科目體系用的，通常不會有交易或起始餘額。如果你想讓一個科目如此，點選該科目的複選框。\n"
 "\n"
-"如果你希望一個帳路有起始餘額，點選該帳號再點起始餘額那欄就能輸入一開始的餘額。\n"
+"如果你希望一個帳路有起始餘額，點選該科目再點起始餘額那欄就能輸入一開始的餘額。\n"
 "\n"
-"注意: 除了淨值(equity)跟 placeholder 之外，所有帳號都可以有起始餘額。\n"
+"注意: 除了淨值(equity)跟 placeholder 之外，所有科目都可以有起始餘額。\n"
 
 
 #: ../src/gnome/glade/account.glade.h:35
-#, fuzzy
 msgid "Interval:"
-msgstr "介面"
+msgstr "區間:"
 
 #: ../src/gnome/glade/account.glade.h:36
 msgid "M_ove to:"
@@ -4215,15 +4214,15 @@ msgstr "移到(_O):"
 #: ../src/gnome/glade/account.glade.h:37
 #: ../src/gnome-utils/dialog-account.c:1468
 msgid "New Account"
-msgstr "新增帳號"
+msgstr "新增科目"
 
 #: ../src/gnome/glade/account.glade.h:38
 msgid "New Account (not implemented)"
-msgstr "新增帳號(尚未實作)"
+msgstr "新增科目(尚未實作)"
 
 #: ../src/gnome/glade/account.glade.h:39
 msgid "New Account Hierarchy Setup"
-msgstr "新帳號體系設定"
+msgstr "新科目體系設定"
 
 #: ../src/gnome/glade/account.glade.h:40
 msgid "No_tes:"
@@ -4233,17 +4232,15 @@ msgstr "筆記(_T):"
 msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
-msgstr "一或多個子帳號包含唯讀的交易。不能刪除。"
+msgstr "一或多個子科目包含唯讀的交易。不能刪除。"
 
 #: ../src/gnome/glade/account.glade.h:42
-#, fuzzy
 msgid ""
 "One or more sub-accounts contain transactions. What would you like to do "
 "with these transactions?"
 msgstr ""
-"這個帳號的一（或更多）個子帳號包含\n"
-"數筆交易。您確定要刪除 %s 帳號\n"
-"及其所有的子帳號？"
+"這個科目的一或數個子科目包含"
+"數筆交易。您決定如何處理這些交易?"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -4259,7 +4256,7 @@ msgstr "Placeholde_r"
 
 #: ../src/gnome/glade/account.glade.h:46
 msgid "Please choose the currency to use for new accounts."
-msgstr "請選擇用於新帳號的貨幣。"
+msgstr "請選擇用於新科目的貨幣。"
 
 #: ../src/gnome/glade/account.glade.h:47
 msgid "Prefix:"
@@ -4274,21 +4271,21 @@ msgid ""
 "\n"
 "Press `Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"按下“套用”以建立您的新帳號。你接下來便能將它們存到檔案或資料庫。\n"
+"按下“套用”以建立您的新科目。你接下來便能將它們存到檔案或資料庫。\n"
 "\n"
 "按下“向後”以檢查您的選擇。\n"
 "\n"
-"按下“取消”以結束此對話盒並且不建立任何新帳號。"
+"按下“取消”以結束此對話盒並且不建立任何新科目。"
 
 #: ../src/gnome/glade/account.glade.h:53
 msgid "Renumber sub-accounts"
-msgstr "將子帳號代碼重新編號"
+msgstr "將子科目代碼重新編號"
 
 #: ../src/gnome/glade/account.glade.h:54
 #: ../src/import-export/generic-import.glade.h:46
 #: ../src/import-export/qif-import/qif.glade.h:59
 msgid "Select Account"
-msgstr "選擇帳號"
+msgstr "選擇科目"
 
 #: ../src/gnome/glade/account.glade.h:55
 msgid ""
@@ -4298,26 +4295,26 @@ msgid ""
 "accounts by hand later."
 msgstr ""
 "選擇符合您使用 GnuCash 的方式的分類。"
-"您選擇的每個分類會建立一些帳號。"
+"您選擇的每個分類會建立一些科目。"
 "選擇適合您的分類。您隨時可以在稍後"
-"手動建立額外的帳號。"
+"手動建立額外的科目。"
 
 #: ../src/gnome/glade/account.glade.h:56
 msgid "Select or add a GnuCash account"
-msgstr "選擇或新增 GnuCash 帳號"
+msgstr "選擇或新增 GnuCash 科目"
 
 #: ../src/gnome/glade/account.glade.h:57
 #, fuzzy
 msgid "Setup selected accounts"
-msgstr "刪除選定的帳號"
+msgstr "刪除選定的科目"
 
 #: ../src/gnome/glade/account.glade.h:58
 msgid "Show _hidden accounts"
-msgstr "顯示被隱藏的帳號(_H)"
+msgstr "顯示被隱藏的科目(_H)"
 
 #: ../src/gnome/glade/account.glade.h:59
 msgid "Show _zero total accounts"
-msgstr "顯示結餘為零的帳號(_Z)"
+msgstr "顯示結餘為零的科目(_Z)"
 
 #: ../src/gnome/glade/account.glade.h:60
 msgid "Smallest _fraction:"
@@ -4344,22 +4341,20 @@ msgstr ""
 #: ../src/gnome/glade/account.glade.h:64
 #, fuzzy
 msgid "This account contains read-only transactions which may not be deleted."
-msgstr "這個帳號包含唯讀的交易。您不能刪除 %s。"
+msgstr "這個科目包含唯讀的交易。您不能刪除 %s。"
 
 #: ../src/gnome/glade/account.glade.h:65
-#, fuzzy
 msgid ""
 "This account contains sub-accounts.  What would you like to do with these "
 "sub-accounts?"
 msgstr ""
-"這個帳號包含數筆交易。您確定要\n"
-"刪除 %s 帳號？"
+"這個科目包含子科目。您決定如何處理這些子科目?"
 
 #: ../src/gnome/glade/account.glade.h:66
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
-msgstr "這個帳號包含數筆交易。您想對這些交易做什麼？"
+msgstr "這個科目包含數筆交易。您想對這些交易做什麼？"
 
 #: ../src/gnome/glade/account.glade.h:67
 msgid ""
@@ -4367,8 +4362,8 @@ msgid ""
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
 msgstr ""
-"這個帳號是用來在帳號體系中做為佔位符(placeholder)的。您不能將交易張貼到這個帳"
-"號，只能張貼到它的子張號。"
+"這個科目是用來在科目體系中做為佔位符(placeholder)的。您不能將交易張貼到這個"
+"科目，只能張貼到它的子科目。"
 
 #: ../src/gnome/glade/account.glade.h:68
 msgid ""
@@ -4379,12 +4374,12 @@ msgid ""
 "Click 'Cancel'  if you do not wish to create any new accounts now."
 msgstr ""
 "這個精靈會幫助您建立一組 GnuCash "
-"帳號，包括您的資產(像是投資、"
+"科目，包括您的資產(像是投資、"
 "支票或儲蓄帳號)、債務(像是貸款)"
 "與您可能會有的各種不同的收入和"
 "支出。\n"
 "\n"
-"如果您現在不希望建立任何新帳號"
+"如果您現在不希望建立任何新科目"
 "，點選“取消”。"
 
 #: ../src/gnome/glade/account.glade.h:71
@@ -4407,7 +4402,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:80
 msgid "_Account code:"
-msgstr "帳號代碼(_A)："
+msgstr "科目代碼(_A)："
 
 #: ../src/gnome/glade/account.glade.h:81
 msgid "_Balance:"
@@ -4448,12 +4443,12 @@ msgstr "選擇全部(_S)"
 
 #: ../src/gnome/glade/account.glade.h:89
 msgid "_Select transfer account"
-msgstr "選擇轉帳帳號(_S)"
+msgstr "選擇轉帳科目(_S)"
 
 #: ../src/gnome/glade/account.glade.h:90
 #, fuzzy
 msgid "_Use equity 'Opening Balances' account"
-msgstr "使用起始結餘淨值帳號"
+msgstr "使用起始結餘淨值科目"
 
 #: ../src/gnome/glade/acctperiod.glade.h:1
 msgid "Book Closing Dates"
@@ -4465,14 +4460,12 @@ msgid "Close Book"
 msgstr "關閉帳本"
 
 #: ../src/gnome/glade/acctperiod.glade.h:3
-#, fuzzy
 msgid "Enter a title for this book."
-msgstr "為此報告輸入敘述名稱"
+msgstr "輸入帳本標題。"
 
 #: ../src/gnome/glade/acctperiod.glade.h:4
-#, fuzzy
 msgid "Enter notes that describe this book."
-msgstr "輸入項目描述"
+msgstr "輸入帳本描述。"
 
 #: ../src/gnome/glade/acctperiod.glade.h:5
 msgid "Finish Closing Books"
@@ -4612,7 +4605,7 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:21
 msgid "beginning on: "
-msgstr "開始於:"
+msgstr "開始於: "
 
 #: ../src/gnome/glade/budget.glade.h:22
 msgid ""
@@ -4677,7 +4670,7 @@ msgstr "<b>週期：</b>"
 
 #: ../src/gnome/glade/fincalc.glade.h:5
 msgid "Account Information"
-msgstr "帳號資訊"
+msgstr "科目資訊"
 
 #: ../src/gnome/glade/fincalc.glade.h:6
 msgid ""
@@ -4803,7 +4796,7 @@ msgstr "總額"
 
 #: ../src/gnome/glade/lots.glade.h:1
 msgid "<b>_Lots in This Account</b>"
-msgstr "<b>這個帳號中的 _Lot</b>"
+msgstr "<b>這個科目中的 _Lot</b>"
 
 #: ../src/gnome/glade/lots.glade.h:2
 msgid "<b>_Mini-Viewer</b>"
@@ -4865,7 +4858,7 @@ msgstr ""
 #: ../src/gnome/glade/lots.glade.h:16
 #, fuzzy
 msgid "Scrub _Account"
-msgstr "股票帳號"
+msgstr "股票科目"
 
 #: ../src/gnome/glade/lots.glade.h:17
 msgid "Scrub the highlighted lot"
@@ -4891,7 +4884,7 @@ msgstr ""
 
 #: ../src/gnome/glade/newuser.glade.h:3
 msgid "C_reate a new set of accounts"
-msgstr "建立一組新帳號(_R)"
+msgstr "建立一組新科目(_R)"
 
 #: ../src/gnome/glade/newuser.glade.h:4
 msgid ""
@@ -4918,7 +4911,7 @@ msgstr "開啟新使用者教學(_O)"
 
 #: ../src/gnome/glade/price.glade.h:1
 msgid "Add a new price."
-msgstr "增加新價格"
+msgstr "增加新價格。"
 
 #: ../src/gnome/glade/price.glade.h:2
 msgid ""
@@ -4956,7 +4949,7 @@ msgstr "取得報價(_Q)"
 
 #: ../src/gnome/glade/price.glade.h:13
 msgid "Get new online quotes for stock accounts."
-msgstr "取得股票帳號新的線上報價。"
+msgstr "取得股票科目新的線上報價。"
 
 #: ../src/gnome/glade/price.glade.h:14
 msgid ""
@@ -5087,12 +5080,12 @@ msgstr "儲存自訂支票格式"
 #: ../src/gnome/glade/print.glade.h:24
 #, fuzzy
 msgid "Splits Account"
-msgstr "選擇帳號"
+msgstr "選擇科目"
 
 #: ../src/gnome/glade/print.glade.h:25
 #, fuzzy
 msgid "Splits Amount"
-msgstr "貸方帳號:"
+msgstr "貸方科目:"
 
 #: ../src/gnome/glade/print.glade.h:26
 #, fuzzy
@@ -5177,7 +5170,7 @@ msgstr "輸入利息付款(_I)..."
 
 #: ../src/gnome/glade/reconcile.glade.h:3
 msgid "Include _subaccounts"
-msgstr "包含子帳號(_S)"
+msgstr "包含子科目(_S)"
 
 #. starting balance title/value
 #: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1755
@@ -5263,7 +5256,7 @@ msgstr "結束:"
 
 #: ../src/gnome/glade/register.glade.h:26
 msgid "Erase all splits except the one for this account."
-msgstr "清除用於這個帳號以外的所有分割。"
+msgstr "清除用於這個科目以外的所有分割。"
 
 #: ../src/gnome/glade/register.glade.h:27
 msgid "Filter register by..."
@@ -5276,11 +5269,11 @@ msgstr "跳至"
 #: ../src/gnome/glade/register.glade.h:29
 #: ../src/gnome/gnc-plugin-page-register.c:315
 msgid "Jump to the corresponding transaction in the other account"
-msgstr "跳至其他帳號中對應的帳號"
+msgstr "跳至其他科目中對應的交易"
 
 #: ../src/gnome/glade/register.glade.h:30
 msgid "Keep normal account order"
-msgstr "保持正常帳號順序"
+msgstr "保持正常科目順序"
 
 #: ../src/gnome/glade/register.glade.h:31
 #: ../src/gnome/gnc-plugin-page-register.c:225
@@ -5307,7 +5300,7 @@ msgstr "從剪貼簿貼上交易"
 
 #: ../src/gnome/glade/register.glade.h:36
 msgid "Reason for voiding transaction:"
-msgstr "交易無效的理由"
+msgstr "交易無效的理由:"
 
 #: ../src/gnome/glade/register.glade.h:37
 #: ../src/gnome/gnc-plugin-page-register.c:240
@@ -5648,7 +5641,7 @@ msgstr "<b>接下來預定發生</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:52
 msgid "Account Deletion"
-msgstr "帳號刪除"
+msgstr "科目刪除"
 
 #: ../src/gnome/glade/sched-xact.glade.h:53
 msgid "Advanced..."
@@ -5799,7 +5792,7 @@ msgstr "長度:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:98
 msgid "Loan Account:"
-msgstr "貸款帳號:"
+msgstr "貸款科目:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:99
 msgid "Loan Information"
@@ -5978,7 +5971,7 @@ msgstr "自上次執行後..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:150
 msgid "Specify Source Account"
-msgstr "指定來源帳號"
+msgstr "指定來源科目"
 
 #: ../src/gnome/glade/sched-xact.glade.h:152
 msgid "Start Date: "
@@ -5997,7 +5990,7 @@ msgstr "交易範本"
 msgid ""
 "The following Scheduled Transactions reference the deleted account, and must "
 "now be corrected.  Press OK to edit them."
-msgstr "下列的排程交易用到了被刪除的帳號，必須修正。按確定之後進行編輯。"
+msgstr "下列的排程交易用到了被刪除的科目，必須修正。按確定之後進行編輯。"
 
 #: ../src/gnome/glade/sched-xact.glade.h:156
 #, fuzzy
@@ -6052,9 +6045,8 @@ msgid "_Review created transactions"
 msgstr "核對已建立的交易(_R)"
 
 #: ../src/gnome/glade/sched-xact.glade.h:169
-#, fuzzy
 msgid "_Run when data file opened"
-msgstr "不載入最後一次開啟的檔案"
+msgstr "當開啟資料檔時執行(_R)"
 
 #: ../src/gnome/glade/sched-xact.glade.h:170
 #: ../src/gnome-utils/glade/preferences.glade.h:188
@@ -6099,15 +6091,15 @@ msgstr "週。"
 
 #: ../src/gnome/glade/stocks.glade.h:1
 msgid "<b>A_sset Account</b>"
-msgstr "<b>資產帳號(_S)</b>"
+msgstr "<b>資產科目(_S)</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:2
 msgid "<b>_Income Account</b>"
-msgstr "<b>收入帳號(_I)</b>"
+msgstr "<b>收入科目(_I)</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:3
 msgid "Cash In Lieu"
-msgstr "兌現處"
+msgstr "現金發放"
 
 #: ../src/gnome/glade/stocks.glade.h:4
 msgid "Currenc_y:"
@@ -6124,8 +6116,8 @@ msgid ""
 "for the share distribution. You can also enter a description of the "
 "transaction, or accept the default one."
 msgstr ""
-"輸入日期與您因股票分割或合併所增加或失去的股份。以股票合併(分割的相反)來說在"
-"股份分配中使用負數。您也可以輸入交易的敘述，或接受預設值。"
+"輸入日期與您因股票分割或合併所獲得或失去的股數。像是減資換發新股造成股數變少就輸入負數。"
+"您也可以輸入交易的敘述，或接受預設值。"
 
 #: ../src/gnome/glade/stocks.glade.h:7
 msgid ""
@@ -6141,13 +6133,13 @@ msgid ""
 "If you received a cash disbursement as a result of the stock split, enter "
 "the details of that payment here. Otherwise, just click `Forward'."
 msgstr ""
-"如果您收到的股票分割結果是現金支出，在此輸入付款的詳情。否則請按“向前”。"
+"如果您股票分割結果有收到現金，在此輸入撥款的詳情。否則請按“向前”。"
 
 #: ../src/gnome/glade/stocks.glade.h:9
 msgid ""
 "If you want to record a stock price for the split, enter it below. You may "
 "safely leave it blank."
-msgstr "如果您要記錄分割的股票價格，可在下面輸入。您也可以保留空白。"
+msgstr "如果您要記錄分割後的股票價格，可在下面輸入。您也可以留空不填。"
 
 #: ../src/gnome/glade/stocks.glade.h:10
 msgid "New _Price:"
@@ -6156,11 +6148,11 @@ msgstr "新價格(_P)："
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid ""
 "Select the account for which you want to record a stock split or merger."
-msgstr "選擇您要記錄股票分割或合併的帳號。"
+msgstr "選擇您要記錄股票分割或合併的科目。"
 
 #: ../src/gnome/glade/stocks.glade.h:12
 msgid "Stock Account"
-msgstr "股票帳號"
+msgstr "股票科目"
 
 #: ../src/gnome/glade/stocks.glade.h:13
 msgid "Stock Split"
@@ -6172,7 +6164,7 @@ msgstr "股票分割詳情"
 
 #: ../src/gnome/glade/stocks.glade.h:15
 msgid "This assistant will help you record a stock split or stock merger."
-msgstr "這個精靈會幫助您記錄股票的分割或合併。"
+msgstr "這個精靈會幫助您記錄股票的分割或合併(像是除權、增減資等情況)。"
 
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
@@ -6181,7 +6173,7 @@ msgstr "總額(_A):"
 
 #: ../src/gnome/glade/stocks.glade.h:19
 msgid "_Shares:"
-msgstr "股份(_S):"
+msgstr "股數(_S):"
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
@@ -6189,7 +6181,7 @@ msgstr "0"
 
 #: ../src/gnome/glade/tax.glade.h:2
 msgid "<b>Account Tax Information</b>"
-msgstr "<b>帳號稅務資訊</b>"
+msgstr "<b>科目稅務資訊</b>"
 
 #: ../src/gnome/glade/tax.glade.h:3
 msgid "<b>Copy Number</b>"
@@ -6198,7 +6190,7 @@ msgstr "<b>複製次數</b>"
 #: ../src/gnome/glade/tax.glade.h:4
 #, fuzzy
 msgid "<b>Income Tax Identity</b>"
-msgstr "<b>收入帳號(_I)</b>"
+msgstr "<b>收入科目(_I)</b>"
 
 #: ../src/gnome/glade/tax.glade.h:5
 #, fuzzy
@@ -6207,7 +6199,7 @@ msgstr "付款人姓名"
 
 #: ../src/gnome/glade/tax.glade.h:6
 msgid "<b>_Accounts</b>"
-msgstr "<b>帳號(_A)</b>"
+msgstr "<b>科目(_A)</b>"
 
 #: ../src/gnome/glade/tax.glade.h:7
 msgid "<b>_TXF Categories</b>"
@@ -6215,11 +6207,11 @@ msgstr "<b>_TXF 分類</b>"
 
 #: ../src/gnome/glade/tax.glade.h:8
 msgid "Accounts Selected:"
-msgstr "選擇的帳號："
+msgstr "選擇的科目："
 
 #: ../src/gnome/glade/tax.glade.h:9
 msgid "C_urrent Account"
-msgstr "目前帳號(_U)"
+msgstr "目前科目(_U)"
 
 #: ../src/gnome/glade/tax.glade.h:10
 msgid "Click to change Tax Name and/or Tax Type"
@@ -6252,11 +6244,11 @@ msgstr "債務/淨值(_L)"
 
 #: ../src/gnome/glade/tax.glade.h:19
 msgid "_Parent Account"
-msgstr "母帳號(_P)"
+msgstr "母科目(_P)"
 
 #: ../src/gnome/glade/tax.glade.h:20
 msgid "_Select Subaccounts"
-msgstr "選擇子帳號(_S)"
+msgstr "選擇子科目(_S)"
 
 #: ../src/gnome/glade/userpass.glade.h:1
 msgid "Enter your username and password"
@@ -6276,11 +6268,11 @@ msgstr "使用者名稱(_U)："
 
 #: ../src/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
-msgstr "新增帳號頁"
+msgstr "新增科目頁"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
-msgstr "開啟新的帳號樹檢視頁"
+msgstr "開啟新的科目樹檢視頁"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:99
 msgid "New _File"
@@ -6312,11 +6304,11 @@ msgstr "另存新檔(_A)..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:120
 msgid "Export _Accounts"
-msgstr "匯出帳號(_A)"
+msgstr "匯出科目(_A)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:121
 msgid "Export the account hierarchy to a new GnuCash datafile"
-msgstr "匯出帳號體系至新的 GnuCash 資料檔"
+msgstr "匯出科目體系至新的 GnuCash 資料檔"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:128
 #: ../src/gnome/gnc-plugin-page-register.c:201
@@ -6405,9 +6397,8 @@ msgid "_Loan Repayment Calculator"
 msgstr "貸款償還計算機(_L)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:184
-#, fuzzy
 msgid "Use the loan/mortgage repayment calculator"
-msgstr "使用金融計算機"
+msgstr "使用貸款償還計算機"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:188
 msgid "_Close Book"
@@ -6459,11 +6450,11 @@ msgstr "選擇預算"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:156
 msgid "Create a new Account"
-msgstr "建立新帳號"
+msgstr "建立新科目"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:160
 msgid "New Account _Hierarchy..."
-msgstr "新增帳號體系(_H)..."
+msgstr "新增科目體系(_H)..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:161
 msgid "Extend the current book by merging with new account type categories"
@@ -6472,48 +6463,48 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-account-tree.c:165
 #: ../src/gnome/gnc-plugin-page-budget.c:128
 msgid "Open _Account"
-msgstr "開啟帳號(_A)"
+msgstr "開啟科目(_A)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:166
 #: ../src/gnome/gnc-plugin-page-budget.c:129
 msgid "Open the selected account"
-msgstr "開啟選定的帳號"
+msgstr "開啟選定的科目"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:170
 #: ../src/gnome/gnc-plugin-page-budget.c:134
 msgid "Open _Subaccounts"
-msgstr "開啟子帳號(_S)"
+msgstr "開啟子科目(_S)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:171
 #: ../src/gnome/gnc-plugin-page-budget.c:135
 msgid "Open the selected account and all its subaccounts"
-msgstr "開啟選定的帳號及其所有的子帳號"
+msgstr "開啟選定的科目及其所有的子科目"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:177
 #: ../src/gnome/gnc-plugin-page-register.c:196
 msgid "Edit _Account"
-msgstr "編輯帳號(_A)"
+msgstr "編輯科目(_A)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:178
 #: ../src/gnome/gnc-plugin-page-register.c:197
 msgid "Edit the selected account"
-msgstr "編輯選定的帳號"
+msgstr "編輯選定的科目"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 msgid "_Delete Account..."
-msgstr "刪除帳號(_D)..."
+msgstr "刪除科目(_D)..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:183
 msgid "Delete selected account"
-msgstr "刪除選定的帳號"
+msgstr "刪除選定的科目"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:187
 msgid "_Renumber Subaccounts..."
-msgstr "重新編號子帳號(_R)..."
+msgstr "重新編號子科目(_R)..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:188
 msgid "Renumber the children of the selected account"
-msgstr "將所選帳號的子帳號代碼重新編號"
+msgstr "將所選科目的子科目代碼重新編號"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
 #: ../src/gnome/gnc-plugin-page-budget.c:159
@@ -6530,7 +6521,7 @@ msgstr "一致化(_R)..."
 #: ../src/gnome/gnc-plugin-page-account-tree.c:201
 #: ../src/gnome/gnc-plugin-page-register.c:285
 msgid "Reconcile the selected account"
-msgstr "一致化選定的帳號"
+msgstr "一致化選定的科目"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:205
 #: ../src/gnome/gnc-plugin-page-register.c:289
@@ -6551,7 +6542,7 @@ msgstr "轉帳(_T)..."
 #: ../src/gnome/gnc-plugin-page-register.c:280
 #: ../src/gnome/window-reconcile.c:2149
 msgid "Transfer funds from one account to another"
-msgstr "從帳號匯兌資金至其他帳號"
+msgstr "從一個科目匯兌資金至另一個科目"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:215
 #: ../src/gnome/gnc-plugin-page-register.c:294
@@ -6575,24 +6566,24 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:225
 msgid "Check & Repair A_ccount"
-msgstr "檢查&修復帳號(_C)"
+msgstr "檢查&修復科目(_C)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:226
 #: ../src/gnome/window-reconcile.c:2154
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
-msgstr "檢查並修復在此帳號中未結算的交易與無主的分割"
+msgstr "檢查並修復在此科目中未結算的交易與無主的分割"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:230
 msgid "Check & Repair Su_baccounts"
-msgstr "檢查&修復子帳號(_B)"
+msgstr "檢查&修復子科目(_B)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:231
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
-msgstr "檢查並修復在此帳號及其子帳號中未結算的交易與無主的分割"
+msgstr "檢查並修復在此科目及其子科目中未結算的交易與無主的分割"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:236
 msgid "Check & Repair A_ll"
@@ -6602,7 +6593,7 @@ msgstr "檢查及修復全部(_L)"
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
-msgstr "檢查並修復所有帳號中未結算的交易與無主的分割"
+msgstr "檢查並修復所有科目中未結算的交易與無主的分割"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:263
 #: ../src/gnome/gnc-plugin-page-budget.c:178 ../src/gnome/lot-viewer.c:453
@@ -6652,7 +6643,7 @@ msgstr "新增"
 #: ../intl-scm/guile-strings.c:3718 ../intl-scm/guile-strings.c:3984
 #: ../intl-scm/guile-strings.c:4228 ../intl-scm/guile-strings.c:4524
 msgid "Accounts"
-msgstr "帳號"
+msgstr "科目"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:976
 msgid "(no name)"
@@ -6661,12 +6652,12 @@ msgstr "(未命名)"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:998
 #, c-format
 msgid "Deleting account %s"
-msgstr "刪除帳號 %s"
+msgstr "刪除科目 %s"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1105
 #, c-format
 msgid "The account %s will be deleted."
-msgstr "帳號 %s 將被刪除。"
+msgstr "科目 %s 將被刪除。"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1117
 #, c-format
@@ -6675,27 +6666,25 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1123
 msgid "All transactions in this account will be deleted."
-msgstr "在這個帳號中所有的交易將會被刪除。"
+msgstr "在這個科目中所有的交易將會被刪除。"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1132
-#, fuzzy, c-format
+#, c-format
 msgid "All of its sub-accounts will be moved to the account %s."
-msgstr "包括所有已選帳號的子帳號"
+msgstr "這個科目的所有子科目將會移到科目 %s。"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1138
-#, fuzzy
 msgid "All of its subaccounts will be deleted."
-msgstr "帳號清單將被更新"
+msgstr "這個科目的所有子科目將會被刪除。"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1143
-#, fuzzy, c-format
+#, c-format
 msgid "All sub-account transactions will be moved to the account %s."
-msgstr "增加一筆新的交易至帳號"
+msgstr "所有子科目的交易將會移到科目 %s。"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1149
-#, fuzzy
 msgid "All sub-account transactions will be deleted."
-msgstr "帳號清單將被更新"
+msgstr "所有子科目的交易將會被刪除。"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1154
 msgid "Are you sure you want to do this?"
@@ -6720,7 +6709,7 @@ msgstr "估計預算"
 #: ../src/gnome/gnc-plugin-page-budget.c:153
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr "根據選定帳號過去的交易紀錄估計預算值。"
+msgstr "根據選定科目過去的交易紀錄估計預算值。"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:181
 msgid "Estimate"
@@ -6753,7 +6742,7 @@ msgstr "刪除 %s?"
 #: ../src/gnome/gnc-plugin-page-budget.c:962
 #, fuzzy
 msgid "You must select at least one account to estimate."
-msgstr "您必須選擇帳號類型。"
+msgstr "您必須選擇科目類型。"
 
 #: ../src/gnome/gnc-plugin-page-register.c:174
 #, fuzzy
@@ -6890,21 +6879,19 @@ msgstr "這個交易(_T)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:335
 msgid "Account Report"
-msgstr "帳號報告"
+msgstr "科目報告"
 
 #: ../src/gnome/gnc-plugin-page-register.c:336
-#, fuzzy
 msgid "Open a register report for this Account"
-msgstr "開啟此交易的登記簿報告視窗"
+msgstr "開啟此交易的登記簿報告"
 
 #: ../src/gnome/gnc-plugin-page-register.c:340
 msgid "Account Transaction Report"
-msgstr "帳號交易明細報告"
+msgstr "科目交易明細報告"
 
 #: ../src/gnome/gnc-plugin-page-register.c:341
-#, fuzzy
 msgid "Open a register report for the selected Transaction"
-msgstr "開啟此交易的登記簿報告視窗"
+msgstr "開啟選定交易的登記簿報告"
 
 #: ../src/gnome/gnc-plugin-page-register.c:377
 #: ../src/gnome-utils/glade/preferences.glade.h:141
@@ -7003,11 +6990,11 @@ msgstr "登記簿報告"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1984
 msgid "and subaccounts"
-msgstr "及子帳號"
+msgstr "及子科目"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2123
 msgid "Print checks from multiple accounts?"
-msgstr "列印來自多個帳號的支票?"
+msgstr "列印來自多個科目的支票?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2125
 msgid ""
@@ -7026,7 +7013,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:2314
 msgid "You cannot void a transaction with reconciled or cleared splits."
-msgstr "不能將已清算或一致的分割標為無效"
+msgstr "不能將已清算或一致的分割標為無效。"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2384
 #: ../src/gnome/gnc-split-reg.c:877
@@ -7185,19 +7172,19 @@ msgstr "已一致："
 
 #: ../src/gnome/gnc-split-reg.c:1873
 msgid "Projected Minimum:"
-msgstr "規劃的最小值:"
+msgstr "預計最低:"
 
 #: ../src/gnome/gnc-split-reg.c:1877
 msgid "Shares:"
-msgstr "股份："
+msgstr "股數："
 
 #: ../src/gnome/gnc-split-reg.c:1878
 msgid "Current Value:"
-msgstr "目前值："
+msgstr "目前價值："
 
 #: ../src/gnome/gnc-split-reg.c:1952
 msgid "This account register is read-only."
-msgstr "這個帳號登記簿唯讀"
+msgstr "這個科目登記簿唯讀。"
 
 #: ../src/gnome/gnc-split-reg.c:1988
 msgid ""
@@ -7205,9 +7192,9 @@ msgid ""
 "register, please open the account options and turn off the placeholder "
 "checkbox."
 msgstr ""
-"這個帳號不能被編輯。如果您要"
+"這個科目不能被編輯。如果您要"
 "編輯這個登記簿的交易，請"
-"開啟帳號選項並且關閉 placeholder "
+"開啟科目選項並且關閉 placeholder "
 "核取方塊。"
 
 #: ../src/gnome/gnc-split-reg.c:1995
@@ -7217,12 +7204,12 @@ msgid ""
 "off the placeholder checkbox. You may also open an individual account "
 "instead of a set of accounts."
 msgstr ""
-"選擇的子帳號中有一個不能被編輯。"
+"選擇的子科目中有一個不能被編輯。"
 "如果您要編輯這個登記簿的交易，"
-"請開啟子帳號選項並且關閉 placeholder "
+"請開啟子科目選項並且關閉 placeholder "
 "核取方塊。"
-"您也可以開啟個別的帳號而不是一次"
-"一組帳號。"
+"您也可以開啟個別的科目而不是一次"
+"一組科目。"
 
 #. src/report/report-system/html-fonts.scm
 #. src/report/standard-reports/general-journal.scm
@@ -7239,7 +7226,7 @@ msgstr "獲利"
 #: ../src/gnome/lot-viewer.c:676
 #, fuzzy, c-format
 msgid "Lots in Account %s"
-msgstr "迷失帳號"
+msgstr "迷失科目"
 
 #: ../src/gnome/reconcile-list.c:213
 #: ../src/register/ledger-core/split-register-layout.c:570
@@ -7258,7 +7245,7 @@ msgstr "在這個對話盒中顯示貨幣"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:3
 msgid "Show the Full Name column"
-msgstr "顯示帳號全名欄位"
+msgstr "顯示科目全名欄位"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:4
 msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
@@ -7271,7 +7258,7 @@ msgstr ""
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:6
 #, fuzzy
 msgid "Show the Print Name column"
-msgstr "顯示收入與支出帳號"
+msgstr "顯示收入與支出科目"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:7
 msgid "Show the Quote Flag column"
@@ -7288,7 +7275,7 @@ msgstr "顯示報價時區欄位"
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:10
 #, fuzzy
 msgid "Show the Unique Name column"
-msgstr "顯示收入與支出帳號"
+msgstr "顯示收入與支出科目"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:11
 msgid "Show the fraction column"
@@ -7614,8 +7601,8 @@ msgid ""
 "only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and "
 "Liability accounts."
 msgstr ""
-"在一致化費用或支付利息的帳號之前，提示使用者輸入該利息費用或付款的交易。目前"
-"只能用在銀行、信用卡、共同基金、資產、應收、應付與債務帳號。"
+"在一致化費用或支付利息的科目之前，提示使用者輸入該利息費用或付款的交易。目前"
+"只能用在銀行、信用卡、共同基金、資產、應收、應付與債務科目。"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:7
 msgid "Prompt for credit card payment"
@@ -7690,7 +7677,7 @@ msgstr "按 \"Enter\" 鍵移至登記簿底端的空白交易處"
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:2
 #, fuzzy
 msgid "Accounts to reverse the balance"
-msgstr "要提出報告的股票帳號"
+msgstr "要提出報告的股票科目"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:3
 msgid "Allow file incompatibility with older versions."
@@ -7706,12 +7693,12 @@ msgstr "自動小數點"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:6
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr "在輸入時自動跳出帳號列表或動作列表"
+msgstr "在輸入時自動跳出科目列表或動作列表"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:7
 #, fuzzy
 msgid "Character to use as separator between account names"
-msgstr "用於分隔完全合格帳號名稱的字元"
+msgstr "用於分隔完全合格科目名稱的字元"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:8
 msgid "Closing a tab moves to the most recently visited tab."
@@ -7733,12 +7720,12 @@ msgstr "壓縮資料檔案"
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:12
 #, fuzzy
 msgid "Create a new window for each new register"
-msgstr "為每個報告或帳號樹建立新的頂端層級視窗"
+msgstr "為每個報告或科目樹建立新的頂端層級視窗"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:13
 #, fuzzy
 msgid "Create a new window for each new report"
-msgstr "為每個報告或帳號樹建立新的頂端層級視窗"
+msgstr "為每個報告或科目樹建立新的頂端層級視窗"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:14
 msgid "Date format choice"
@@ -7753,7 +7740,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:16
 msgid "Default currency for new accounts"
-msgstr "用於新帳號的預設貨幣"
+msgstr "用於新科目的預設貨幣"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:17
 msgid "Default currency for new reports"
@@ -7779,7 +7766,7 @@ msgstr "啟動歐元支援"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:22
 msgid "Enables additional support for the European Union EURO currency."
-msgstr "啟動對歐洲聯盟歐元貨幣的額外支援"
+msgstr "啟動對歐盟歐元貨幣的額外支援。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:23
 msgid "Enables file compression when writing the data file."
@@ -7892,9 +7879,8 @@ msgid ""
 msgstr "使用 24 小時制(代替 12 小時制)時間。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
-#, fuzzy
 msgid "Labels on toolbar buttons"
-msgstr "工具列按鈕"
+msgstr "工具列按鈕的文字標示"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
 #, fuzzy
@@ -7912,7 +7898,7 @@ msgstr "自動小數位數"
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:44
 #, fuzzy
 msgid "Only display leaf account names."
-msgstr "顯示帳號名稱？"
+msgstr "顯示科目名稱？"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:45
 #, fuzzy
@@ -7981,7 +7967,7 @@ msgstr "顯示細格的垂直邊線。"
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:58
 #, fuzzy
 msgid "Source of default account currency"
-msgstr "設定預設 QIF 帳號名稱"
+msgstr "設定預設 QIF 科目名稱"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:59
 #, fuzzy
@@ -8173,7 +8159,7 @@ msgstr "目前的交易尚未結算。"
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:11
 #, fuzzy
 msgid "Print checks from multiple accounts"
-msgstr "符合所有帳號"
+msgstr "符合所有科目"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:12
 #, fuzzy
@@ -8186,14 +8172,12 @@ msgid "Remove a reconciled split from a transaction"
 msgstr "顯示目前交易中的所有分割"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:14
-#, fuzzy
 msgid "Remove a split from a transaction"
-msgstr "顯示目前交易中的所有分割"
+msgstr "刪除交易中的一個分割"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:15
-#, fuzzy
 msgid "Remove all the splits from a transaction"
-msgstr "顯示目前交易中的所有分割"
+msgstr "刪除交易中的全部分割"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:16
 msgid ""
@@ -8320,11 +8304,10 @@ msgid "Profit/loss starting date type"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:6
-#, fuzzy
 msgid ""
 "Show a grand total of all accounts converted to the default report currency"
 msgstr ""
-"顯示多重貨幣的總和。如果沒有選擇此項，所有的總和都會轉換成報告使用的貨幣"
+"顯示所有科目的總和，都會換算成預設報告貨幣"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
 msgid "Show non currency commodities"
@@ -8406,9 +8389,8 @@ msgid "New Transaction"
 msgstr "新增交易"
 
 #: ../src/gnome-search/dialog-search.c:866
-#, fuzzy
 msgid "New item"
-msgstr "新增項目(_N)..."
+msgstr "新增項目"
 
 #: ../src/gnome-search/dialog-search.c:912
 msgid "all criteria are met"
@@ -8420,37 +8402,37 @@ msgstr "符合任何條件"
 
 #: ../src/gnome-search/search-account.c:175
 msgid "You have not selected any accounts"
-msgstr "您沒有選擇帳號"
+msgstr "您沒有選擇科目"
 
 #: ../src/gnome-search/search-account.c:196
 msgid "matches all accounts"
-msgstr "符合所有帳號"
+msgstr "符合所有科目"
 
 #: ../src/gnome-search/search-account.c:201
 msgid "matches any account"
-msgstr "符合任何帳號"
+msgstr "符合任何科目"
 
 #: ../src/gnome-search/search-account.c:202
 msgid "matches no accounts"
-msgstr "沒有符合帳號"
+msgstr "沒有符合科目"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../src/gnome-search/search-account.c:219 ../intl-scm/guile-strings.c:3136
 msgid "Selected Accounts"
-msgstr "選擇的帳號"
+msgstr "選擇的科目"
 
 #: ../src/gnome-search/search-account.c:220
 msgid "Choose Accounts"
-msgstr "選擇帳號"
+msgstr "選擇科目"
 
 #. Create the label
 #: ../src/gnome-search/search-account.c:254
 msgid "Select Accounts to Match"
-msgstr "選擇要比對的帳號"
+msgstr "選擇要比對的科目"
 
 #: ../src/gnome-search/search-account.c:258
 msgid "Select the Accounts to Compare"
-msgstr "選擇要比較的帳號"
+msgstr "選擇要比較的科目"
 
 #. Build and connect the toggle
 #: ../src/gnome-search/search-boolean.c:205
@@ -8665,12 +8647,12 @@ msgstr "大小寫視為相同？"
 #: ../src/gnome/top-level.c:96
 #, fuzzy, c-format
 msgid "Entity Not Found: %s"
-msgstr "此實體不是帳號實體： %s"
+msgstr "此實體不是科目實體： %s"
 
 #: ../src/gnome/top-level.c:157
 #, c-format
 msgid "Transaction with no Accounts: %s"
-msgstr "沒有帳號的交易： %s"
+msgstr "沒有科目的交易： %s"
 
 #: ../src/gnome/top-level.c:173
 #, c-format
@@ -8712,23 +8694,23 @@ msgstr ""
 #. children
 #: ../src/gnome-utils/dialog-account.c:681
 msgid "_Show children accounts"
-msgstr "顯示子帳號"
+msgstr "顯示子科目"
 
 #: ../src/gnome-utils/dialog-account.c:754
 msgid "The account must be given a name."
-msgstr "您必須給帳號一個名稱。"
+msgstr "您必須給科目一個名稱。"
 
 #: ../src/gnome-utils/dialog-account.c:780
 msgid "There is already an account with that name."
-msgstr "已經有使用這個名稱的帳號存在。"
+msgstr "已經有使用這個名稱的科目存在。"
 
 #: ../src/gnome-utils/dialog-account.c:789
 msgid "You must choose a valid parent account."
-msgstr "您必須選擇合法的母帳號。"
+msgstr "您必須選擇合法的母科目。"
 
 #: ../src/gnome-utils/dialog-account.c:798
 msgid "You must select an account type."
-msgstr "您必須選擇帳號類型。"
+msgstr "您必須選擇科目類型。"
 
 #: ../src/gnome-utils/dialog-account.c:807
 msgid ""
@@ -8748,16 +8730,16 @@ msgstr "您必須輸入合法的起始結餘或保持空白。"
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
-msgstr "您必須選擇轉帳的帳號或選定起始結餘資產淨值帳號。"
+msgstr "您必須選擇轉帳的科目或選定起始結餘資產淨值科目。"
 
 #: ../src/gnome-utils/dialog-account.c:1455
 msgid "Edit Account"
-msgstr "編輯帳號"
+msgstr "編輯科目"
 
 #: ../src/gnome-utils/dialog-account.c:1458
 #, c-format
 msgid "(%d) New Accounts"
-msgstr "(%d) 新帳號"
+msgstr "(%d) 新科目"
 
 #: ../src/gnome-utils/dialog-account.c:1985
 #, c-format
@@ -8885,7 +8867,7 @@ msgstr "選擇全部"
 
 #: ../src/gnome-utils/dialog-options.c:932
 msgid "Select all accounts."
-msgstr "選擇所有帳號。"
+msgstr "選擇所有科目。"
 
 #: ../src/gnome-utils/dialog-options.c:937
 #: ../src/gnome-utils/dialog-options.c:1080
@@ -8895,16 +8877,16 @@ msgstr "清除全部"
 #: ../src/gnome-utils/dialog-options.c:939
 #, fuzzy
 msgid "Clear the selection and unselect all accounts."
-msgstr "開啟選定的帳號及其所有的子帳號"
+msgstr "開啟選定的科目及其所有的子科目"
 
 #: ../src/gnome-utils/dialog-options.c:944
 msgid "Select Children"
-msgstr "選擇子帳號"
+msgstr "選擇子科目"
 
 #: ../src/gnome-utils/dialog-options.c:946
 #, fuzzy
 msgid "Select all descendents of selected account."
-msgstr "刪除選定的帳號"
+msgstr "刪除選定的科目"
 
 #: ../src/gnome-utils/dialog-options.c:952
 #: ../src/gnome-utils/dialog-options.c:1087
@@ -8914,20 +8896,19 @@ msgstr "選擇預設值"
 #: ../src/gnome-utils/dialog-options.c:954
 #, fuzzy
 msgid "Select the default account selection."
-msgstr "設定預設 QIF 帳號名稱"
+msgstr "設定預設 QIF 科目名稱"
 
 #: ../src/gnome-utils/dialog-options.c:968
 msgid "Show Hidden Accounts"
-msgstr "顯示隱藏的帳號"
+msgstr "顯示隱藏的科目"
 
 #: ../src/gnome-utils/dialog-options.c:970
 msgid "Show accounts that have been marked hidden."
-msgstr "顯示被標記為隱藏的帳號。"
+msgstr "顯示被標記為隱藏的科目。"
 
 #: ../src/gnome-utils/dialog-options.c:1075
-#, fuzzy
 msgid "Select all entries."
-msgstr "選擇帳號"
+msgstr "選擇所有的項目。"
 
 #: ../src/gnome-utils/dialog-options.c:1082
 msgid "Clear the selection and unselect all entries."
@@ -8944,7 +8925,7 @@ msgstr "全設回預設值"
 
 #: ../src/gnome-utils/dialog-options.c:1246
 msgid "Reset all values to their defaults."
-msgstr "所有值重設回預設狀態"
+msgstr "所有值重設回預設狀態。"
 
 #: ../src/gnome-utils/dialog-options.c:2117
 msgid "Clear"
@@ -8975,29 +8956,29 @@ msgstr "收入%s薪水%s應稅"
 
 #: ../src/gnome-utils/dialog-transfer.c:481
 msgid "Show the income and expense accounts"
-msgstr "顯示收入與支出帳號"
+msgstr "顯示收入與支出科目"
 
 #: ../src/gnome-utils/dialog-transfer.c:1307
 msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
-msgstr "您必須為此交易指定轉帳帳號的來源，目標，或兩者。否則不會被記錄。"
+msgstr "您必須為此交易指定轉帳科目的來源，目標，或兩者。否則不會被記錄。"
 
 #: ../src/gnome-utils/dialog-transfer.c:1317
 msgid "You can't transfer from and to the same account!"
-msgstr "轉帳的來源與目的不能為同一個帳號！"
+msgstr "轉帳的來源與目的不能為同一個科目！"
 
 #: ../src/gnome-utils/dialog-transfer.c:1343
 msgid ""
 "You can't transfer from a non-currency account.  Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
-"您不能從一個非貨幣帳號轉帳。試試看把“從”和“到”兩個帳號對調，並且把“總額”設為"
+"您不能從一個非貨幣科目轉帳。試試看把“從”和“到”兩個科目對調，並且把“總額”設為"
 "負數。"
 
 #: ../src/gnome-utils/dialog-transfer.c:1368
 msgid "You must enter an amount to transfer."
-msgstr "您必須輸入要轉帳過去的帳號。"
+msgstr "您必須輸入要轉帳過去的科目。"
 
 #: ../src/gnome-utils/dialog-transfer.c:1383
 msgid "You must enter a valid price."
@@ -9005,12 +8986,12 @@ msgstr "您必須輸入合法的價格。"
 
 #: ../src/gnome-utils/dialog-transfer.c:1395
 msgid "You must enter a valid `to' amount."
-msgstr "您必須輸入合法的“目的”帳號。"
+msgstr "您必須輸入合法的“目的”數量。"
 
 #: ../src/gnome-utils/dialog-transfer.c:1763
 #, fuzzy
 msgid "Debit Account"
-msgstr "編輯帳號"
+msgstr "編輯科目"
 
 #: ../src/gnome-utils/dialog-transfer.c:1781
 msgid "Transfer From"
@@ -9023,7 +9004,7 @@ msgstr "轉帳到"
 #: ../src/gnome-utils/dialog-transfer.c:1846
 #, fuzzy
 msgid "Debit Amount:"
-msgstr "貸方帳號:"
+msgstr "貸方科目:"
 
 #: ../src/gnome-utils/dialog-transfer.c:1851
 #: ../src/gnome-utils/glade/transfer.glade.h:13
@@ -9210,7 +9191,7 @@ msgstr "ISO-8859-1 KOI8-U"
 #: ../src/gnome-utils/druid-gnc-xml-import.c:750
 #: ../src/gnome-utils/druid-gnc-xml-import.c:770
 msgid "The file could not be reopened."
-msgstr "檔案無法重新開啟"
+msgstr "檔案無法重新開啟。"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:755
 msgid "Reading file..."
@@ -9611,7 +9592,7 @@ msgid ""
 "GnuCash Datafile import process."
 msgstr ""
 "如果您此時還有更多資料要匯入，點選“讀取其他檔案”。\n"
-"您可以在您的帳號儲存於不同 GnuCash 檔案時這麼做。\n"
+"您可以在您的科目儲存於不同 GnuCash 檔案時這麼做。\n"
 "\n"
 "點選“向前”以結束載入檔案並且移至 GnuCash 資料檔匯入程序\n"
 "的下一個步驟。"
@@ -9670,7 +9651,7 @@ msgid ""
 "Click \"Next\" to finish loading files and move to the next step. "
 msgstr ""
 "如果您此時還有更多資料要匯入，點選“讀取其他檔案”。\n"
-"您可以在您的帳號儲存於不同 QFX 檔案時這麼做。\n"
+"您可以在您的科目儲存於不同 QFX 檔案時這麼做。\n"
 "\n"
 "點選“向前”以結束載入檔案並且移至 OFX 匯入程序\n"
 "的下一個步驟。"
@@ -9871,7 +9852,7 @@ msgstr "<b>一致化</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:23
 msgid "<b>Reverse Balanced Accounts</b>"
-msgstr "<b>反向結算帳號類型</b>"
+msgstr "<b>反向結算科目類型</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:24
 msgid "<b>Search Dialog</b>"
@@ -9886,9 +9867,8 @@ msgid "<b>Start Date</b>"
 msgstr "<b>開始日期</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:27
-#, fuzzy
 msgid "<b>Summary Bar Position</b>"
-msgstr "<b>摘要列內容</b>"
+msgstr "<b>摘要列位置</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:28
 msgid "<b>Summarybar Content</b>"
@@ -9950,11 +9930,11 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:42
 msgid "Auto-save time _interval:"
-msgstr "自動存檔週期(_I):"
+msgstr "自動存檔時間間隔(_I):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:43
 msgid "Automatic _interest transfer"
-msgstr "自動利息轉換(_I)"
+msgstr "自動利息轉帳(_I)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:44
 msgid "Automatic credit card _payment"
@@ -9974,7 +9954,7 @@ msgstr "自動為不足 1 的數值插入小數點。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:47
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "在輸入時自動跳出帳號列表或動作列表。"
+msgstr "在輸入時自動跳出科目列表或動作列表。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:48
 msgid "B_ottom"
@@ -9982,7 +9962,7 @@ msgstr "下(_O)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:49
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr "在日期之下以 8 點字印出所用的日期格式"
+msgstr "在日期之下以 8 點字印出所用的日期格式。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:50
 msgid "Bottom"
@@ -9994,11 +9974,11 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:52
 msgid "C_redit accounts"
-msgstr "信用帳號(_R)"
+msgstr "信用科目(_R)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:53
 msgid "Ch_oose:"
-msgstr "自選(_O)"
+msgstr "自選(_O):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:54
 msgid "Character:"
@@ -10063,14 +10043,12 @@ msgid "Display the notebook tabs at the top of the window."
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:71
-#, fuzzy
 msgid "Display the summary bar at the bottom of the page."
-msgstr "移至此收據底端的空白項目處"
+msgstr "於頁籤最下方顯示摘要列。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:72
-#, fuzzy
 msgid "Display the summary bar at the top of the page."
-msgstr "移至此收據底端的空白項目處"
+msgstr "於頁籤最上方顯示摘要列。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:73
 msgid "Display toolbar items as icons only."
@@ -10093,9 +10071,8 @@ msgid ""
 msgstr "工具列顯示文字於圖示旁，只有最重要的項目才顯示文字。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:77
-#, fuzzy
 msgid "Don't sign reverse any accounts."
-msgstr "不反轉任何帳號"
+msgstr "不要改變任何科目的正負號。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid "Double _mode colors alternate with transactions"
@@ -10213,19 +10190,18 @@ msgstr "交易數量(_T):"
 #: ../src/gnome-utils/glade/preferences.glade.h:106
 #, fuzzy
 msgid "Perform account list _setup on new file"
-msgstr "新增檔案時不使用帳號列表設定"
+msgstr "新增檔案時不使用科目列表設定"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:107
-#, fuzzy
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
-msgstr "當一致化時自動核對已清算的交易"
+msgstr "當一致化時預先自動勾選已清算的交易。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:108
 #, fuzzy
 msgid ""
 "Present the new account list dialog when you choose \"New File\" from the "
 "\"File\" menu"
-msgstr "當您自“檔案”選單選擇“新增檔案”時不跳出新帳號列表對話盒"
+msgstr "當您自“檔案”選單選擇“新增檔案”時不跳出新科目列表對話盒"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:109
 msgid "Print '***' before and after each text field on the check."
@@ -10274,11 +10250,10 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:123
-#, fuzzy
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
 msgstr ""
-"顯示多重貨幣的總和。如果沒有選擇此項，所有的總和都會轉換成報告使用的貨幣"
+"顯示所有科目的總和，都會換算成預設報告貨幣。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:124
 msgid "Show all transactions on one line. (Two in double line mode.)"
@@ -10324,16 +10299,14 @@ msgid "Show vertical borders on the cells."
 msgstr "預設上，顯示細格的垂直邊線。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:133
-#, fuzzy
 msgid "Sign reverse balances on income and expense accounts."
-msgstr "反轉收入與支出帳號"
+msgstr "改變收入與支出科目結餘的正負號。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:134
-#, fuzzy
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
-msgstr "反轉信用卡、應付、債務、資產淨值與收入帳號"
+msgstr "改變以下科目結餘的正負號：信用卡、應付、債務、資產淨值與收入科目。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:135
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
@@ -10377,7 +10350,7 @@ msgstr "使用 24 小時制(代替 12 小時制)時間。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:147
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
-msgstr "只使用“借方”與”貸方”來代替口語的同義字"
+msgstr "只使用“借方”與“貸方”來代替口語的同義字"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:148
 msgid "Use s_ystem default"
@@ -10415,7 +10388,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:156
 msgid "Use the specified currency for all newly created accounts."
-msgstr "新開的帳號使用此貨幣。"
+msgstr "新開的科目使用此貨幣。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:157
 msgid "Use the specified currency for all newly created reports."
@@ -10434,7 +10407,7 @@ msgstr ""
 #: ../src/gnome-utils/glade/preferences.glade.h:160
 #, fuzzy
 msgid "Use the system locale currency for all newly created accounts."
-msgstr "請選擇用於新帳號的貨幣。"
+msgstr "請選擇用於新科目的貨幣。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:161
 msgid "Use the system locale currency for all newly created reports."
@@ -10458,7 +10431,7 @@ msgstr "絕對的(_A):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:166
 msgid "_Auto-raise lists"
-msgstr "自動抬升列表(_A)"
+msgstr "自動出現列表(_A)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:167
 msgid "_Auto-split ledger"
@@ -10474,7 +10447,7 @@ msgstr "基本分類帳(_B)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:170
 msgid "_Decimal places:"
-msgstr "自動小數位數"
+msgstr "自動小數位數:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:171
 msgid "_Double line mode"
@@ -10507,7 +10480,7 @@ msgstr "無(_N)"
 #: ../src/gnome-utils/glade/preferences.glade.h:178
 #, fuzzy
 msgid "_Only display leaf account names"
-msgstr "顯示帳號名稱？"
+msgstr "顯示科目名稱？"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:179
 msgid "_Relative:"
@@ -10765,7 +10738,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:222
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
-msgstr "這個版本的 GnuCash 不支援此 URL %s"
+msgstr "這個版本的 GnuCash 不支援此 URL %s。"
 
 #: ../src/gnome-utils/gnc-file.c:227
 #, c-format
@@ -10850,12 +10823,11 @@ msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr "檔案/URL %s 並未包含 GnuCash 資料或資料已損壞。"
 
 #: ../src/gnome-utils/gnc-file.c:325
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
 msgstr ""
-"在下列 URL 的伺服器\n"
-"    %s\n"
+"URL %s 的伺服器"
 "發生錯誤，或遇到不良、損壞的資料。"
 
 #: ../src/gnome-utils/gnc-file.c:331
@@ -10900,12 +10872,10 @@ msgstr ""
 "檔案 %s 的檔案類型未知。"
 
 #: ../src/gnome-utils/gnc-file.c:386
-#, fuzzy, c-format
+#, c-format
 msgid "Could not make a backup of the file %s"
 msgstr ""
-"無法開啟檔案\n"
-"     %s\n"
-"%s"
+"無法產生 %s 的備分檔案"
 
 #: ../src/gnome-utils/gnc-file.c:391
 #, c-format
@@ -10915,11 +10885,10 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:398
-#, fuzzy, c-format
+#, c-format
 msgid "No read permission to read from file %s."
 msgstr ""
-"您沒有存取下列項目的權限\n"
-"    %s\n"
+"您沒有權限讀取檔案 %s。"
 
 #. Translators: the first %s is a path in the filesystem,
 #. * the second %s is PACKAGE_NAME, which by default is "GnuCash"
@@ -10936,18 +10905,17 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:413
-#, fuzzy
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
-msgstr "這個資料庫來自較舊版本的 GnuCash。您是否要將資料庫升級至目前的版本？"
+msgstr "這個資料庫來自較舊版本的 GnuCash。按確定將資料庫升級至新的版本，按取消將資料庫標記為唯讀。"
 
 #: ../src/gnome-utils/gnc-file.c:422
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
 "File>Save As."
-msgstr ""
+msgstr "這個資料庫來自較新版本的 GnuCash。現在這個版本能夠讀取，但無法安全的寫入。資料庫將被標記為唯讀，直到您執行 檔案>另存新檔。"
 
 #: ../src/gnome-utils/gnc-file.c:430
 msgid ""
@@ -10996,23 +10964,16 @@ msgid ""
 "open the database. What would you like to do?"
 msgstr ""
 "可能有其他使用者在使用此資料庫，"
-"在此情形下您不應該開啟它。\n"
-"\n"
+"在此情形下您不應該開啟它。"
 "您想要怎麼做？"
 
 #: ../src/gnome-utils/gnc-file.c:695
-#, fuzzy
 msgid ""
 "That database may be on a read-only file system, or you may not have write "
 "permission for the directory. If you proceed you may not be able to save any "
 "changes. What would you like to do?"
 msgstr ""
-"GnuCash 無法鎖定下列項目\n"
-"   %s。\n"
-"可能有其他使用者在使用此資料庫，\n"
-"在此情形下您不應該開啟它。\n"
-"\n"
-"您想要怎麼做？"
+"這個資料庫可能放在唯讀的檔案系統，或是您沒有該目錄的寫入權限。您若繼續操作，可能會無法存下任何資料修改。您想要怎麼做？"
 
 #: ../src/gnome-utils/gnc-file.c:715
 msgid "_Open Anyway"
@@ -11033,12 +10994,10 @@ msgstr "重新儲存使用者資料..."
 
 #: ../src/gnome-utils/gnc-file.c:1086 ../src/gnome-utils/gnc-file.c:1314
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1448
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr ""
-"檔案\n"
-"    %s\n"
-"已存在。\n"
+"檔案 %s 已存在。"
 "您確定要覆蓋它？"
 
 #: ../src/gnome-utils/gnc-file.c:1115
@@ -11075,19 +11034,19 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-icons.c:18
 msgid "_Delete Account"
-msgstr "刪除帳號(_D)"
+msgstr "刪除科目(_D)"
 
 #: ../src/gnome-utils/gnc-icons.c:19 ../src/gnome/window-reconcile.c:2143
 msgid "_Edit Account"
-msgstr "編輯帳號(_E)"
+msgstr "編輯科目(_E)"
 
 #: ../src/gnome-utils/gnc-icons.c:20
 msgid "_New Account"
-msgstr "新增帳號(_N)"
+msgstr "新增科目(_N)"
 
 #: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/window-reconcile.c:2138
 msgid "_Open Account"
-msgstr "開啟帳號(_O)"
+msgstr "開啟科目(_O)"
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, http://www.somequotes.com/thequotes
@@ -11137,7 +11096,7 @@ msgstr "列印目前記事本頁面"
 
 #: ../src/gnome-utils/gnc-main-window.c:254
 msgid "Pa_ge Setup..."
-msgstr "設定列印格式(_G)"
+msgstr "設定列印格式(_G)..."
 
 #: ../src/gnome-utils/gnc-main-window.c:255
 msgid "Specify the page size and orientation for printing"
@@ -11180,9 +11139,8 @@ msgid "Select sorting criteria for this page view"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:305
-#, fuzzy
 msgid "Select the account types that should be displayed."
-msgstr "選擇要比較的帳號"
+msgstr "選擇要顯示的科目類型。"
 
 #: ../src/gnome-utils/gnc-main-window.c:308
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1028
@@ -11487,7 +11445,7 @@ msgstr "(永不)"
 
 #: ../src/gnome-utils/gnc-tree-model-account.c:621
 msgid "New top level account"
-msgstr "新增頂端層級帳號"
+msgstr "新增頂端層級科目"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -11498,7 +11456,7 @@ msgstr "新增頂端層級帳號"
 #: ../intl-scm/guile-strings.c:4124 ../intl-scm/guile-strings.c:4270
 #: ../intl-scm/guile-strings.c:4394 ../intl-scm/guile-strings.c:4630
 msgid "Account Name"
-msgstr "帳號名稱"
+msgstr "科目名稱"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:523
 msgid "Commodity"
@@ -11515,7 +11473,7 @@ msgstr "商品"
 #: ../intl-scm/guile-strings.c:4156 ../intl-scm/guile-strings.c:4274
 #: ../intl-scm/guile-strings.c:4402
 msgid "Account Code"
-msgstr "帳號代碼"
+msgstr "科目代碼"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:540
 #, fuzzy
@@ -11537,9 +11495,8 @@ msgid "Balance (Report)"
 msgstr "資產負債表"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:572
-#, fuzzy
 msgid "Balance (Period)"
-msgstr "資產負債表"
+msgstr "結算 (會計期間)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:585
 #, fuzzy
@@ -11552,9 +11509,8 @@ msgid "Reconciled (Report)"
 msgstr "已一致:R"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:604
-#, fuzzy
 msgid "Last Reconcile Date"
-msgstr "一致化日期"
+msgstr "上次一致化日期"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:609
 msgid "Future Minimum"
@@ -11594,13 +11550,12 @@ msgid "Total (Report)"
 msgstr "全部收益"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:635
-#, fuzzy
 msgid "Total (Period)"
-msgstr ". (句點)"
+msgstr "總計 (會計期間)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:647
 msgid "Tax Info"
-msgstr "稅務訊息"
+msgstr "稅務資訊"
 
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
@@ -11642,7 +11597,7 @@ msgstr "未來最小值 (%s)"
 #: ../src/gnome-utils/gnc-tree-view-account.c:1471
 #, c-format
 msgid "Total (%s)"
-msgstr "合計 (%s)"
+msgstr "總計 (%s)"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:395
 #, fuzzy
@@ -11759,19 +11714,19 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/window-main-summarybar.c:334
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Total:"
-msgstr "總額"
+msgstr "%s, 合計:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:337
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Non Currency Commodities Total:"
-msgstr "顯示外國貨幣"
+msgstr "%s, 非貨幣商品總合:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:340
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Grand Total:"
-msgstr "總合的顏色"
+msgstr "%s, 累計:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:344
 #, c-format
@@ -11779,13 +11734,12 @@ msgid "%s:"
 msgstr "%s:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:452
-#, fuzzy
 msgid "Net Assets:"
-msgstr "資產:"
+msgstr "淨資產:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:454
 msgid "Profits:"
-msgstr "利潤:"
+msgstr "盈餘:"
 
 #: ../src/gnome/window-reconcile.c:443
 msgid "Interest Payment"
@@ -11801,7 +11755,7 @@ msgstr "付款自"
 
 #: ../src/gnome/window-reconcile.c:470 ../src/gnome/window-reconcile.c:480
 msgid "Reconcile Account"
-msgstr "一致化帳號"
+msgstr "一致化科目"
 
 #: ../src/gnome/window-reconcile.c:485
 msgid "Payment To"
@@ -11809,11 +11763,11 @@ msgstr "付款到"
 
 #: ../src/gnome/window-reconcile.c:498
 msgid "No Auto Interest Payments for this Account"
-msgstr "沒有用於此帳號的自動利息付款"
+msgstr "沒有用於此科目的自動利息付款"
 
 #: ../src/gnome/window-reconcile.c:499
 msgid "No Auto Interest Charges for this Account"
-msgstr "沒有用於此帳號的自動利息收費"
+msgstr "沒有用於此科目的自動利息收費"
 
 #: ../src/gnome/window-reconcile.c:743
 msgid "Enter _Interest Charge..."
@@ -11854,17 +11808,16 @@ msgid "Difference:"
 msgstr "差額："
 
 #: ../src/gnome/window-reconcile.c:1898
-#, fuzzy
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr ""
-"您已經在此一致化視窗中做過變更。\n"
+"您已經在此一致化視窗中做過變更。"
 "您確定要取消？"
 
 #: ../src/gnome/window-reconcile.c:2013
 msgid "The account is not balanced. Are you sure you want to finish?"
-msgstr "此帳號尚未結算。您確定要結束？"
+msgstr "此科目尚未結算。您確定要結束？"
 
 #: ../src/gnome/window-reconcile.c:2070
 msgid "Do you want to postpone this reconciliation and finish it later?"
@@ -11877,7 +11830,7 @@ msgstr "一致化(_R)"
 
 #: ../src/gnome/window-reconcile.c:2107
 msgid "_Account"
-msgstr "帳號(_A)"
+msgstr "科目(_A)"
 
 #: ../src/gnome/window-reconcile.c:2114
 msgid "_Reconcile Information..."
@@ -11894,7 +11847,7 @@ msgstr "完成(_F)"
 
 #: ../src/gnome/window-reconcile.c:2121
 msgid "Finish the reconciliation of this account"
-msgstr "結束此帳號的一致化"
+msgstr "結束此科目的一致化"
 
 #: ../src/gnome/window-reconcile.c:2125
 msgid "_Postpone"
@@ -11902,33 +11855,32 @@ msgstr "延遲(_P)"
 
 #: ../src/gnome/window-reconcile.c:2126
 msgid "Postpone the reconciliation of this account"
-msgstr "延遲此帳號的一致化"
+msgstr "延遲此科目的一致化"
 
 #: ../src/gnome/window-reconcile.c:2131
 msgid "Cancel the reconciliation of this account"
-msgstr "取消此帳號的一致化"
+msgstr "取消此科目的一致化"
 
 #: ../src/gnome/window-reconcile.c:2139
 msgid "Open the account"
-msgstr "開啟帳號"
+msgstr "開啟科目"
 
 #: ../src/gnome/window-reconcile.c:2144
 msgid "Edit the main account for this register"
-msgstr "編輯此登記簿的主帳號"
+msgstr "編輯此登記簿的主科目"
 
 #: ../src/gnome/window-reconcile.c:2163
 msgid "Add a new transaction to the account"
-msgstr "增加一筆新的交易至帳號"
+msgstr "增加一筆新的交易至科目"
 
 #: ../src/gnome/window-reconcile.c:2167
-#, fuzzy
 msgid "_Balance"
-msgstr "結餘(_B)："
+msgstr "結餘(_B)"
 
 #: ../src/gnome/window-reconcile.c:2168
 #, fuzzy
 msgid "Add a new balancing entry to the account"
-msgstr "增加一筆新的交易至帳號"
+msgstr "增加一筆新的交易至科目"
 
 #: ../src/gnome/window-reconcile.c:2173
 msgid "Edit the current transaction"
@@ -11954,18 +11906,16 @@ msgstr "無法載入指定的 URL。"
 
 #: ../src/html/gnc-html-gtkhtml.c:414 ../src/html/gnc-html-gtkhtml.c:772
 #: ../src/html/gnc-html-webkit.c:482 ../src/html/gnc-html-webkit.c:880
-#, fuzzy
 msgid ""
 "Secure HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
 msgstr ""
-"安全性 HTTP 存取已關閉。\n"
-"您可以在偏好設定對話盒的\n"
+"安全的 HTTP 存取已關閉。"
+"您可以在偏好設定對話盒的"
 "網路部分啟動它。"
 
 #: ../src/html/gnc-html-gtkhtml.c:424 ../src/html/gnc-html-gtkhtml.c:784
 #: ../src/html/gnc-html-webkit.c:492 ../src/html/gnc-html-webkit.c:892
-#, fuzzy
 msgid ""
 "Network HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
@@ -12065,7 +12015,7 @@ msgstr "輸入線上交易"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:22
 msgid "Enter name for new template:"
-msgstr "輸入新範本的名稱"
+msgstr "輸入新範本的名稱:"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:23
 msgid "Enter your password"
@@ -12093,7 +12043,7 @@ msgstr "初始網路銀行設定"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:29
 msgid "Match Online Banking accounts with GnuCash accounts"
-msgstr "以 GnuCash 帳號比對網路銀行帳號"
+msgstr "以 GnuCash 科目比對網路銀行帳號"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:30
 #, fuzzy
@@ -12190,8 +12140,8 @@ msgid ""
 "\n"
 "Press \"Apply\" now."
 msgstr ""
-"現在所有用來比對 GnuCash 帳號的 HBCI 帳號"
-"的設定已經完成。您現在可以在那些帳號上調用 "
+"現在所有用來比對 GnuCash 科目的 HBCI 帳號"
+"的設定已經完成。您現在可以在那些科目上調用 "
 "HBCI 動作。\n"
 "\n"
 "如果您想要增加別的 HBCI 銀行、使用者或帳號，"
@@ -12430,7 +12380,7 @@ msgstr "其他帳號名稱"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:865
 msgid "GnuCash Account Name"
-msgstr "GnuCash 帳號名稱"
+msgstr "GnuCash 科目名稱"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:871
 #: ../src/import-export/generic-import.glade.h:36
@@ -12584,7 +12534,7 @@ msgstr ""
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:965
 #, fuzzy
 msgid "Reconcile account now?"
-msgstr "一致化帳號"
+msgstr "一致化科目"
 
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:93
 msgid "Select a file to import"
@@ -12601,9 +12551,8 @@ msgstr ""
 
 #. indicate that additional failures exist
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:283
-#, fuzzy
 msgid "...\n"
-msgstr "新增..."
+msgstr "...\n"
 
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:297
 #, c-format
@@ -12630,11 +12579,11 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../src/import-export/aqbanking/gnc-gwen-gui.c:1072
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
 "long. Do you want to try again?"
-msgstr "PIN 至少要有 %d 個字元長。您是否要再試一次？"
+msgstr "PIN 至少要有 %d 個字元長。\n您是否要再試一次？"
 
 #: ../src/import-export/aqbanking/gnc-gwen-gui.c:1567
 #, fuzzy
@@ -12692,7 +12641,7 @@ msgstr "透過 HBCI 在線上發布新的交易"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:114
 msgid "I_nternal Transaction..."
-msgstr "內部交易(_N)"
+msgstr "內部交易(_N)..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:115
 #, fuzzy
@@ -12701,7 +12650,7 @@ msgstr "透過 HBCI 在線上發布新的交易"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:119
 msgid "_Direct Debit..."
-msgstr "直接借記(自動扣款)(_D)..."
+msgstr "自動扣款(_D)..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:120
 #, fuzzy
@@ -12713,9 +12662,8 @@ msgid "Import _MT940"
 msgstr "匯入 _MT940"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:127
-#, fuzzy
 msgid "Import a MT940 file into GnuCash"
-msgstr "選擇要處理的 OFX/QFX 檔案"
+msgstr "匯入 MT940 檔案到 GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:131
 msgid "Import MT94_2"
@@ -12723,7 +12671,7 @@ msgstr "匯入 MT94_2"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:132
 msgid "Import a MT942 file into GnuCash"
-msgstr ""
+msgstr "匯入 MT942 檔案到 GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:136
 msgid "Import _DTAUS"
@@ -12958,9 +12906,8 @@ msgid "Import CSV/Fixed-Width File"
 msgstr "匯入 CSV/固定寬度的檔案"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:10
-#, fuzzy
 msgid "Select the type of each column below."
-msgstr "設定預設 QIF 帳號名稱"
+msgstr "選擇以下各欄的類別。"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:11
 msgid "Semicolon (;)"
@@ -13100,11 +13047,11 @@ msgid ""
 "duplicates are matched with the right existing transaction, \n"
 "click \"OK\"."
 msgstr ""
-"對新的交易而言，按下“其他帳號”可選擇這個交易的其他（目標）帳號。\n"
-"對和既存交易重複的交易來說，按下“其他帳號”或“描述”項目可以\n"
+"對新的交易而言，按下“其他科目”可選擇這個交易的其他（目標）科目。\n"
+"對和既存交易重複的交易來說，按下“其他科目”或“描述”項目可以\n"
 "檢查 GnuCash 是否選擇了正確的既存交易。\n"
 "要讓交易在兩種狀態間切換，按下“新增”欄位中的核取標記。\n"
-"當所有的新交易都有正確的目標帳號，而所有的重複也符合正確的既存交易後，\n"
+"當所有的新交易都有正確的目標科目，而所有的重複也符合正確的既存交易後，\n"
 "請按“確定”。"
 
 #: ../src/import-export/generic-import.glade.h:30
@@ -13150,11 +13097,11 @@ msgstr "線上帳號 ID 於此..."
 
 #: ../src/import-export/generic-import.glade.h:38
 msgid "Other Account"
-msgstr "其他帳號"
+msgstr "其他科目"
 
 #: ../src/import-export/generic-import.glade.h:39
 msgid "Please select or create an appropriate GnuCash account for:"
-msgstr "請選擇或建立適當的 GnuCash 帳號給："
+msgstr "請選擇或建立適當的 GnuCash 科目給："
 
 #: ../src/import-export/generic-import.glade.h:40
 msgid "Potential splits matching the selected transaction: "
@@ -13221,7 +13168,7 @@ msgstr "使用貝氏(_bayesian)比對"
 #: ../src/import-export/generic-import.glade.h:55
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
-msgstr "使用貝氏(bayesian)演算法進行新交易與現有帳號的比對。"
+msgstr "使用貝氏(bayesian)演算法進行新交易與現有科目的比對。"
 
 #: ../src/import-export/generic-import.glade.h:56
 msgid "Yellow"
@@ -13242,11 +13189,11 @@ msgstr "y-d-m"
 
 #: ../src/import-export/import-account-matcher.c:83
 msgid "Account ID"
-msgstr "帳號 ID"
+msgstr "科目 ID"
 
 #: ../src/import-export/import-account-matcher.c:213
 msgid "(Full account ID: "
-msgstr "(完整帳號 ID:"
+msgstr "(完整科目 ID: "
 
 #: ../src/import-export/import-account-matcher.c:245
 #, c-format
@@ -13290,7 +13237,7 @@ msgstr "y/d/m"
 
 #: ../src/import-export/import-main-matcher.c:257
 msgid "Destination account for the auto-balance split."
-msgstr "自動結餘分割的目標帳號。"
+msgstr "自動結餘分割的目標科目。"
 
 #: ../src/import-export/import-main-matcher.c:480
 msgid "A"
@@ -13453,7 +13400,7 @@ msgstr ""
 #: ../src/import-export/ofx/gnc-ofx-import.c:419
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "用於證券“%s”的股票帳號"
+msgstr "用於證券“%s”的股票科目"
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -13462,39 +13409,39 @@ msgstr "用於證券“%s”的股票帳號"
 #: ../src/import-export/ofx/gnc-ofx-import.c:489
 #, c-format
 msgid "Income account for security \"%s\""
-msgstr "用於證券“%s”的收入帳號"
+msgstr "用於證券“%s”的收入科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:628
 msgid "Unknown OFX account"
-msgstr "未知的 OFX 帳號"
+msgstr "未知的 OFX 科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:651
 msgid "Unknown OFX checking account"
-msgstr "未知的 OFX 支票帳號"
+msgstr "未知的 OFX 支票科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:655
 msgid "Unknown OFX savings account"
-msgstr "未知的 OFX 儲蓄帳號"
+msgstr "未知的 OFX 儲蓄科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:659
 msgid "Unknown OFX money market account"
-msgstr "未知的 OFX 金融市場帳號"
+msgstr "未知的 OFX 金融市場科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:663
 msgid "Unknown OFX credit line account"
-msgstr "未知的 OFX 信用額度帳號"
+msgstr "未知的 OFX 信用額度科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:667
 msgid "Unknown OFX CMA account"
-msgstr "未知的 OFX CMA 帳號"
+msgstr "未知的 OFX CMA 科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:671
 msgid "Unknown OFX credit card account"
-msgstr "未知的 OFX 信用卡帳號"
+msgstr "未知的 OFX 信用卡科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:675
 msgid "Unknown OFX investment account"
-msgstr "未知的 OFX 投資帳號"
+msgstr "未知的 OFX 投資科目"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:747
 msgid "Select an OFX/QFX file to process"
@@ -13510,7 +13457,7 @@ msgstr "處理 OFX/QFX 回應檔案"
 
 #: ../src/import-export/qif-import/dialog-account-picker.c:219
 msgid "Enter a name for the account"
-msgstr "輸入此帳號的名稱"
+msgstr "輸入此科目的名稱"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:644
 msgid "Select QIF File"
@@ -13594,16 +13541,16 @@ msgstr "恢復(_R)"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1434
 msgid "You must enter an account name."
-msgstr "您必須輸入帳號名稱。"
+msgstr "您必須輸入科目名稱。"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1514
 msgid "GnuCash account name"
-msgstr "GnuCash 帳號名稱"
+msgstr "GnuCash 科目名稱"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2117
 #: ../src/import-export/qif-import/druid-qif-import.c:2192
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
-msgstr "輸入此商品的名稱或簡述，例如“Red Hat 股”"
+msgstr "輸入此商品的名稱或簡述，例如“Red Hat 股票”。"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:2124
 #: ../src/import-export/qif-import/druid-qif-import.c:2194
@@ -13679,7 +13626,7 @@ msgstr ""
 #. Set up the QIF account to GnuCash account matcher.
 #: ../src/import-export/qif-import/druid-qif-import.c:3635
 msgid "QIF account name"
-msgstr "QIF 帳號名稱"
+msgstr "QIF 科目名稱"
 
 #. Set up the QIF category to GnuCash account matcher.
 #: ../src/import-export/qif-import/druid-qif-import.c:3641
@@ -13709,15 +13656,15 @@ msgstr "<b>QIF 匯入</b>"
 
 #: ../src/import-export/qif-import/qif.glade.h:2
 msgid "Account name:"
-msgstr "帳號名稱："
+msgstr "科目名稱："
 
 #: ../src/import-export/qif-import/qif.glade.h:3
 msgid "Accounts and stock holdings"
-msgstr "帳號與持有股份"
+msgstr "科目與持有股份"
 
 #: ../src/import-export/qif-import/qif.glade.h:4
 msgid "Change GnuCash _Account..."
-msgstr "改變 GnuCash 帳號(_A)..."
+msgstr "改變 GnuCash 科目(_A)..."
 
 #: ../src/import-export/qif-import/qif.glade.h:5
 msgid ""
@@ -13733,12 +13680,12 @@ msgid ""
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
 "點選“套用”以自籌畫區匯入資料並更新"
-"您的 GnuCash 帳號。您已經輸入的帳號與"
+"您的 GnuCash 科目。您已經輸入的科目與"
 "分類比對資訊會被儲存並做為您下次使用"
 "QIF 匯入功能的預設值。\n"
 "\n"
-"點選“向後”以檢查您的帳號與分類比對，"
-"您可以改變用於新帳號的貨幣與證券設定，"
+"點選“向後”以檢查您的科目與分類比對，"
+"您可以改變用於新科目的貨幣與證券設定，"
 "或新增更多檔案至籌畫區。\n"
 "\n"
 "點選“取消”以放棄 QIF 匯入程序。"
@@ -13752,7 +13699,7 @@ msgid ""
 "QIF import process. "
 msgstr ""
 "如果您此時還有更多資料要匯入，點選“載入其他檔案”。"
-"您可以在您的帳號儲存於不同 QIF 檔案時這麼做。\n"
+"您可以在您的科目儲存於不同 QIF 檔案時這麼做。\n"
 "\n"
 "點選“向前”以結束載入檔案並且移至 QIF 匯入程序"
 "的下一個步驟。"
@@ -13783,7 +13730,7 @@ msgstr ""
 "(Quicken 交換格式) 檔案匯入金融資料。\n"
 "\n"
 "匯入的程序有許多步驟。直到您在程序的最後"
-"點選“套用”之前，您的 GnuCash 帳號將不"
+"點選“套用”之前，您的 GnuCash 科目將不"
 "會被變更。\n"
 "\n"
 "點選“向前”以開始載入您的 QIF 資料，"
@@ -13803,13 +13750,13 @@ msgid ""
 "If you change your mind later, you can reorganize the account structure "
 "safely within GnuCash."
 msgstr ""
-"GnuCash 使用個別的收入與支出帳號而不是分類來歸類您的交易。您的 QIF 檔案中的每"
-"個分類將被轉換成 GnuCash 帳號。\n"
+"GnuCash 使用個別的收入與支出科目而不是分類來歸類您的交易。您的 QIF 檔案中的每"
+"個分類將被轉換成 GnuCash 科目。\n"
 "\n"
-"下一頁中，您將有機會查看 QIF 分類與 GnuCash 帳號之間的比對。您可以雙擊含有您"
+"下一頁中，您將有機會查看 QIF 分類與 GnuCash 科目之間的比對。您可以雙擊含有您"
 "不喜歡的分類名稱那一行來改變比對結果。\n"
 "\n"
-"假如您稍後改變心意，您也可以在 GnuCash 中安全地重新組織帳號結構。"
+"假如您稍後改變心意，您也可以在 GnuCash 中安全地重新組織科目結構。"
 
 #: ../src/import-export/qif-import/qif.glade.h:26
 msgid ""
@@ -13827,7 +13774,7 @@ msgid ""
 msgstr ""
 "如果您正匯入從銀行或其他金融機構下載的 QIF "
 "檔案，QIF 檔案中的一些資訊可能與已經在您的 "
-"GnuCash 帳號中的資訊相同。為了避免重複，GnuCash 會嘗試比"
+"GnuCash 科目中的資訊相同。為了避免重複，GnuCash 會嘗試比"
 "對既存的相同交易並需要您來幫忙確認。\n"
 "\n"
 "下一頁中，您將會看到一個匯入交易的列表。"
@@ -13868,11 +13815,11 @@ msgstr "載入 QIF 檔案"
 
 #: ../src/import-export/qif-import/qif.glade.h:39
 msgid "Match QIF accounts with GnuCash accounts"
-msgstr "以 GnuCash 帳號比對 QIF 帳號"
+msgstr "以 GnuCash 科目比對 QIF 科目"
 
 #: ../src/import-export/qif-import/qif.glade.h:40
 msgid "Match QIF categories with GnuCash accounts"
-msgstr "比對 QIF 分類與 GnuCash 帳號"
+msgstr "比對 QIF 分類與 GnuCash 科目"
 
 #: ../src/import-export/qif-import/qif.glade.h:41
 #, fuzzy
@@ -13881,15 +13828,14 @@ msgstr "選擇比對既存的交易"
 
 #: ../src/import-export/qif-import/qif.glade.h:42
 msgid "Match payees/memos to GnuCash accounts"
-msgstr "比對 收款人/備忘錄 至 GnuCash 帳號"
+msgstr "比對 收款人/備忘錄 至 GnuCash 科目"
 
 #: ../src/import-export/qif-import/qif.glade.h:43
 #, fuzzy
 msgid "Matchings selected:"
-msgstr "沒有選定帳號"
+msgstr "沒有選定科目"
 
 #: ../src/import-export/qif-import/qif.glade.h:44
-#, fuzzy
 msgid ""
 "On the next page, the accounts in your QIF files and any stocks or mutual "
 "funds you own will be matched with GnuCash accounts. If a GnuCash account "
@@ -13906,18 +13852,18 @@ msgid ""
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-"下一頁中，在您的 QIF 檔案中的帳號與任何您持有的股票\n"
-"或共同基金將會與 GnuCash 帳號比對。如果 GnuCash 帳\n"
-"號已經存有相同或近似名稱與適合的類型，那個帳號將會\n"
-"被視為相符；否則 GnuCash 會用在 QIF 帳號中相同的名\n"
-"稱與類型來建立新的帳號。如果您不喜歡建議的 GnuCash\n"
-"帳號，點選以改變它。\n"
+"下一頁中，在您的 QIF 檔案中的科目與任何您持有的股票"
+"或共同基金將會與 GnuCash 科目比對。如果 GnuCash 科目"
+"已經存有相同或近似名稱與適合的類型，那個科目將會"
+"被視為相符；否則 GnuCash 會用在 QIF 科目中相同的名"
+"稱與類型來建立新的科目。如果您不喜歡建議的 GnuCash"
+"科目，點選以改變它。\n"
 "\n"
-"注意 GnuCash 將會建立許多不存在於您其他個人財務程\n"
-"式的帳號，包括您的每一個持股都有個別的帳號、佣金\n"
-"的個別帳號、做為您的起始結餘來源的“資產淨值”帳號\n"
-"(預設上是保留收入的子帳號)、其他。\n"
-"這些帳號全部會出現在下一頁，因此如果有需要您可以\n"
+"注意 GnuCash 將會建立許多不存在於您其他個人財務程"
+"式的科目，包括您的每一個持股都有個別的科目、佣金"
+"的個別科目、做為您的起始結餘來源的“資產淨值”科目"
+"(預設上是保留收入的子科目)、其他。"
+"這些科目全部會出現在下一頁，因此如果有需要您可以"
 "改變他們，但是不管他們也是安全的。\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:48
@@ -13934,7 +13880,7 @@ msgid ""
 "worry if your data is in multiple files. \n"
 msgstr ""
 "請選擇要載入的檔案。當您點選“向前”時，檔案將會被載入並分析。您可能需要回答"
-"一些關於此檔案中的帳號的問題。\n"
+"一些關於此檔案中的科目的問題。\n"
 "您將有機會載入任何數量的檔案，因此即使您的資料位於不同的檔案中也不用擔心。\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:54
@@ -13953,13 +13899,13 @@ msgid ""
 "you select a different account, it will be remembered for future QIF files. "
 msgstr ""
 "自銀行或其他金融機構下載的 QIF 檔案可能沒有"
-"包含讓帳號與分類正確地分配到 GnuCash 帳號的"
+"包含讓科目與分類正確地分配到 GnuCash 科目的"
 "有關資訊。\n"
 "\n"
-"在下面一頁裡，您將會看到以非 QIF 帳號或分類的"
+"在下面一頁裡，您將會看到以非 QIF 科目或分類的"
 "型態出現在交易的收款人與備忘錄欄位的文字。預設"
-"上這些交易會被分派到 GnuCash 的“未指定”帳號。"
-"如果您選擇不同的帳號，它也會在未來的 QIF 檔案"
+"上這些交易會被分派到 GnuCash 的“未指定”科目。"
+"如果您選擇不同的科目，它也會在未來的 QIF 檔案"
 "中記住。"
 
 #: ../src/import-export/qif-import/qif.glade.h:58
@@ -13976,16 +13922,14 @@ msgstr "選擇可能的相同點"
 
 #: ../src/import-export/qif-import/qif.glade.h:63
 msgid "Set the default QIF account name"
-msgstr "設定預設 QIF 帳號名稱"
+msgstr "設定預設 QIF 科目名稱"
 
 #: ../src/import-export/qif-import/qif.glade.h:64
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:4
-#, fuzzy
 msgid "Show some documentation-only pages in QIF Import assistant."
-msgstr "在 QIF 匯入精靈中顯示一些全是文件的頁面"
+msgstr "在 QIF 匯入精靈中顯示一些只有說明的畫面。"
 
 #: ../src/import-export/qif-import/qif.glade.h:69
-#, fuzzy
 msgid ""
 "The QIF file that you just loaded appears to contain transactions for just "
 "one account, but the file does not specify a name for that account.  \n"
@@ -13994,24 +13938,21 @@ msgid ""
 "accounting program, you should use the same account name that was used  in "
 "that program.\n"
 msgstr ""
-"您正在載入的 QIF 檔案所包含的交易似乎僅用於\n"
-"一個帳號，但是檔案沒有指定這個帳號的名稱。\n"
+"您正在載入的 QIF 檔案所包含的交易似乎僅用於"
+"一個科目，但是檔案沒有指定這個科目的名稱。\n"
 "\n"
-"請輸入這個帳號的名稱。如果此檔案是從其他會\n"
-"計程式匯出的，您應該使用在原程式中所使用的\n"
-"同樣的帳號名稱。\n"
+"請輸入這個科目的名稱。如果此檔案是從其他會"
+"計程式匯出的，您應該使用在原程式中所使用的"
+"同樣的科目名稱。\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:73
-#, fuzzy
 msgid ""
 "The QIF importer cannot currently handle multi-currency QIF files. All the "
 "accounts you are importing must be denominated in the same currency.\n"
 msgstr ""
-"QIF 匯入程式目前無法處理多重貨幣的 QIF 檔案。\n"
-"在您匯入的 QIF 檔案中的所有帳號都會被當成同\n"
-"樣的貨幣。這個限制應該很快會移除。\n"
-"\n"
-"選擇從您的 QIF 檔案匯入的交易要使用的貨幣：\n"
+"QIF 匯入程式目前無法處理多重貨幣的 QIF 檔案。"
+"在您匯入的 QIF 檔案中的所有科目都會被當成同"
+"樣的貨幣。\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:75
 msgid "Tradable commodities"
@@ -14019,7 +13960,7 @@ msgstr "有價商品"
 
 #: ../src/import-export/qif-import/qif.glade.h:76
 msgid "Update your GnuCash accounts"
-msgstr "更新您的 GnuCash 帳號"
+msgstr "更新您的 GnuCash 科目"
 
 #: ../src/import-export/qif-import/qif.glade.h:77
 msgid ""
@@ -14059,7 +14000,7 @@ msgstr "與選定的新交易有可能相同者"
 
 #: ../src/import-export/qif-import/qif.glade.h:86
 msgid "_Select or add a GnuCash account:"
-msgstr "選擇或新增 GnuCash 帳號(_S):"
+msgstr "選擇或新增 GnuCash 科目(_S):"
 
 #: ../src/import-export/qif-import/qif.glade.h:87
 #, fuzzy
@@ -14069,7 +14010,7 @@ msgstr "刪除選定的交易"
 #: ../src/import-export/qif-import/qif.glade.h:88
 #, fuzzy
 msgid "_Select the matchings you want to change:"
-msgstr "選擇要比較的帳號"
+msgstr "選擇要比較的科目"
 
 #: ../src/import-export/qif-import/qif.glade.h:89
 msgid "_Select..."
@@ -14226,9 +14167,8 @@ msgid "ROW DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
 msgstr ""
 
 #: ../src/plugins/bi_import/bi_import.c:459
-#, fuzzy
 msgid "These rows were deleted:"
-msgstr "帳號 %s 將被刪除。"
+msgstr "這些列已被刪除:"
 
 #: ../src/plugins/bi_import/bi_import.c:606
 #, fuzzy
@@ -14260,11 +14200,8 @@ msgid "Comma separated with quotes"
 msgstr ""
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:8
-#, fuzzy
 msgid "Custom regular expression"
-msgstr ""
-"錯誤發生於正規表示式“%s”：\n"
-"%s"
+msgstr "自訂正規表示式"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:9
 msgid "Import bill CSV data"
@@ -14317,9 +14254,8 @@ msgid "These lines were ignored during import"
 msgstr ""
 
 #: ../src/plugins/bi_import/gui.c:218
-#, fuzzy
 msgid "The input file can not be opened."
-msgstr "檔案無法重新開啟"
+msgstr "輸入檔無法開啟。"
 
 #: ../src/plugins/bi_import/gui.c:329
 msgid "Adjust regular expression used for import"
@@ -14402,7 +14338,7 @@ msgstr "重新計算(_R)"
 #. must only contain the part after the | character.
 #: ../src/register/ledger-core/split-register.c:2228
 msgid "Action Column|Deposit"
-msgstr ""
+msgstr "存款"
 
 #: ../src/register/ledger-core/split-register.c:2229
 msgid "Withdraw"
@@ -14410,7 +14346,7 @@ msgstr "提款"
 
 #: ../src/register/ledger-core/split-register.c:2230
 msgid "Check"
-msgstr "檢查"
+msgstr "支票"
 
 #: ../src/register/ledger-core/split-register.c:2232
 #: ../src/register/ledger-core/split-register.c:2263
@@ -14456,7 +14392,7 @@ msgstr "減少"
 #. Action: Point Of Sale
 #: ../src/register/ledger-core/split-register.c:2241
 msgid "POS"
-msgstr "POS"
+msgstr "收銀機"
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../src/register/ledger-core/split-register.c:2242
@@ -14467,7 +14403,7 @@ msgstr "電話"
 #: ../src/register/ledger-core/split-register.c:2243
 #: ../src/register/ledger-core/split-register.c:2269
 msgid "Online"
-msgstr "連線"
+msgstr "線上交易"
 
 #. Action: Automatic Deposit ?!?
 #: ../src/register/ledger-core/split-register.c:2245
@@ -14480,7 +14416,7 @@ msgstr "電報"
 
 #: ../src/register/ledger-core/split-register.c:2248
 msgid "Direct Debit"
-msgstr "直接債務"
+msgstr "自動扣款"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2254
@@ -14528,7 +14464,6 @@ msgstr "薪水"
 
 #. Action: Dividend
 #: ../src/register/ledger-core/split-register.c:2318
-#, fuzzy
 msgid "Dividend"
 msgstr "股利"
 
@@ -14567,12 +14502,12 @@ msgstr "讓 GnuCash 新增調整分割"
 #: ../src/register/ledger-core/split-register-control.c:143
 #, fuzzy
 msgid "Adjust current account _split total"
-msgstr "調整目前帳號分割加總"
+msgstr "調整目前科目分割加總"
 
 #: ../src/register/ledger-core/split-register-control.c:149
 #, fuzzy
 msgid "Adjust _other account split total"
-msgstr "調整其他帳號分割加總"
+msgstr "調整其他科目分割加總"
 
 #: ../src/register/ledger-core/split-register-control.c:160
 #, fuzzy
@@ -14633,13 +14568,12 @@ msgid "Mark split as unreconciled?"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-control.c:1789
-#, fuzzy
 msgid ""
 "You are about to mark a reconciled split as unreconciled.  Doing so might "
 "make future reconciliation difficult!  Continue with this change?"
 msgstr ""
-"您確定要標記此交易為不一致化？\n"
-"這麼做可能使未來的一致化很困難！"
+"您確定要標記此交易為未一致化？"
+"這麼做可能使未來的一致化很困難！繼續這個修改？"
 
 #: ../src/register/ledger-core/split-register-control.c:1806
 msgid "_Unreconcile"
@@ -14782,7 +14716,7 @@ msgstr "輸入買或賣的股份數量"
 #: ../src/register/ledger-core/split-register-model.c:1324
 #: ../src/register/ledger-core/split-register-model.c:1390
 msgid "Enter the account to transfer from, or choose one from the list"
-msgstr "輸入轉帳來源帳號，或從列表中選擇一個"
+msgstr "輸入轉帳來源科目，或從列表中選擇一個"
 
 #: ../src/register/ledger-core/split-register-model.c:1400
 msgid ""
@@ -14809,13 +14743,12 @@ msgid "Change reconciled split?"
 msgstr "是否顯示一致化日期？"
 
 #: ../src/register/ledger-core/split-register-model.c:1944
-#, fuzzy
 msgid ""
 "You are about to change a reconciled split.  Doing so might make future "
 "reconciliation difficult!  Continue with this change?"
 msgstr ""
-"您確定要標記此交易為不一致化？\n"
-"這麼做可能使未來的一致化很困難！"
+"您確定要修改已一致化的交易？"
+"這麼做可能使未來的一致化很困難！繼續這個修改？"
 
 #: ../src/register/ledger-core/split-register-model.c:1957
 msgid "Chan_ge Split"
@@ -14835,19 +14768,16 @@ msgid "List"
 msgstr "List"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:1
-#, fuzzy
 msgid "Delete the currently selected report"
-msgstr "刪除選定的交易"
+msgstr "刪除目前選定的報告"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:2
-#, fuzzy
 msgid "Exit the custom report dialog"
-msgstr "開啟新增客戶對話盒"
+msgstr "離開自訂報告對話盒"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:3
-#, fuzzy
 msgid "Run the currently selected report"
-msgstr "列印目前的報告"
+msgstr "執行目前選擇的報告"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:4
 msgid "_Run"
@@ -14876,14 +14806,12 @@ msgid "Cols"
 msgstr "欄"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:304
-#, fuzzy
 msgid "You must select a report to delete."
-msgstr "您必須選擇一個商品。"
+msgstr "您必須選擇一份報告刪除。"
 
 #: ../src/report/report-gnome/dialog-custom-report.c:325
-#, fuzzy
 msgid "You must select a report to run."
-msgstr "您必須選擇貨幣。"
+msgstr "您必須選擇一份報告執行。"
 
 #: ../src/report/report-gnome/dialog-style-sheet.c:145
 #, c-format
@@ -15144,7 +15072,7 @@ msgstr ""
 
 #: ../src/libqof/qof/qofbookslots.h:66
 msgid "Use Trading Accounts"
-msgstr "使用交易帳號"
+msgstr "使用交易科目"
 
 #: ../src/libqof/qof/qofbookslots.h:68
 msgid "Budgeting"
@@ -15420,9 +15348,8 @@ msgstr "開銷"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:188
-#, fuzzy
 msgid "Counters"
-msgstr "內容"
+msgstr "計數器"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:190
@@ -15797,15 +15724,13 @@ msgstr "連線"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:350
-#, fuzzy
 msgid "Read aborted."
-msgstr "準備好建立"
+msgstr "讀取中斷。"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:352
-#, fuzzy
 msgid "Reading"
-msgstr "標題"
+msgstr "讀取中"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:354
@@ -15815,9 +15740,8 @@ msgstr "某些交易可能會被丟棄。"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:356 ../intl-scm/guile-strings.c:360
-#, fuzzy
 msgid "Converted to: "
-msgstr "壓縮資料檔案。"
+msgstr "轉換成: "
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:358
@@ -15831,15 +15755,13 @@ msgstr ""
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:364
-#, fuzzy
 msgid "Date required."
-msgstr "開收據的日期"
+msgstr "需要日期。"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:366
-#, fuzzy
 msgid "Discarding this transaction."
-msgstr "捨棄交易(_D)"
+msgstr "捨棄此交易。"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:368
@@ -15875,28 +15797,24 @@ msgstr "交易日記帳(_T)"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:380
-#, fuzzy
 msgid "Share price"
 msgstr "股份價格"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:382
-#, fuzzy
 msgid "Share quantity"
-msgstr "數量"
+msgstr "股數"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:384
-#, fuzzy
 msgid "Investment action"
-msgstr "投資組合"
+msgstr "投資動作"
 
 # src/gnome/glade-gnc-dialogs.c:1476
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:386
-#, fuzzy
 msgid "Reconciliation status"
-msgstr "一致化（自動）比對"
+msgstr "一致化狀態"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:388
@@ -15906,7 +15824,7 @@ msgstr "佣金"
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:390
 msgid "Account type"
-msgstr "帳號類型"
+msgstr "科目類型"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:392
@@ -15924,7 +15842,7 @@ msgstr "以總額排序"
 #: ../intl-scm/guile-strings.c:396
 #, fuzzy
 msgid "Account budget amount"
-msgstr "帳號刪除"
+msgstr "科目刪除"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:398
@@ -15941,7 +15859,7 @@ msgstr "解析檔案中..."
 #: ../intl-scm/guile-strings.c:402
 #, fuzzy
 msgid "Parsing accounts"
-msgstr "已存在的帳號"
+msgstr "已存在的科目"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:404
@@ -15998,7 +15916,7 @@ msgstr ""
 #. src/import-export/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:422
 msgid "QIF import: Name conflict with another account."
-msgstr "匯入 QIF ：名稱與其他帳號衝突。"
+msgstr "匯入 QIF ：名稱與其他科目衝突。"
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:424
@@ -16009,13 +15927,13 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:426
 #, fuzzy
 msgid "Creating accounts"
-msgstr "已存在的帳號"
+msgstr "已存在的科目"
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:428
 #, fuzzy
 msgid "Matching transfers between accounts"
-msgstr "沒有符合帳號"
+msgstr "沒有符合科目"
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:430
@@ -16025,15 +15943,13 @@ msgstr "排序"
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:432
-#, fuzzy
 msgid "Missing transaction date."
-msgstr "是否顯示交易日期？"
+msgstr "缺少交易日期。"
 
 #. src/import-export/qif-import/qif-to-gnc.scm
 #: ../intl-scm/guile-strings.c:434
-#, fuzzy
 msgid "Dates earlier than 1970 are not supported."
-msgstr "不支援未來的日期"
+msgstr "不支援早於 1970 年的日期。"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/customer-summary.scm
@@ -16306,7 +16222,7 @@ msgstr "從"
 #: ../intl-scm/guile-strings.c:538 ../intl-scm/guile-strings.c:540
 #: ../intl-scm/guile-strings.c:2150
 msgid "Income Accounts"
-msgstr "收入帳號"
+msgstr "收入科目"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:542
@@ -16318,7 +16234,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:544 ../intl-scm/guile-strings.c:546
 #: ../intl-scm/guile-strings.c:2152
 msgid "Expense Accounts"
-msgstr "支出帳號"
+msgstr "支出科目"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:548
@@ -16329,9 +16245,8 @@ msgstr ""
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:550
-#, fuzzy
 msgid "Show Expense Column"
-msgstr "顯示名稱欄位"
+msgstr "顯示支出欄位"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:552
@@ -16395,7 +16310,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:574
 #, fuzzy
 msgid "Sort Column"
-msgstr "選擇帳號"
+msgstr "選擇科目"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:576
@@ -16418,7 +16333,7 @@ msgstr "客戶編號: "
 #: ../intl-scm/guile-strings.c:594
 #, fuzzy
 msgid "Sort alphabetically by customer name"
-msgstr "以帳號名稱做字母排序"
+msgstr "以科目名稱做字母排序"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/average-balance.scm
@@ -16446,21 +16361,18 @@ msgstr ""
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:604 ../intl-scm/guile-strings.c:640
-#, fuzzy
 msgid "Sales"
-msgstr "股份"
+msgstr "銷售"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:606
-#, fuzzy
 msgid "Sort by sales amount"
-msgstr "以總額排序"
+msgstr "以銷售總額排序"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:610
-#, fuzzy
 msgid "Sort by expense amount"
-msgstr "以總額排序"
+msgstr "以支出總額排序"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -16566,9 +16478,8 @@ msgstr "稅率"
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:678 ../intl-scm/guile-strings.c:880
 #: ../intl-scm/guile-strings.c:1086
-#, fuzzy
 msgid "Custom Title"
-msgstr "客戶"
+msgstr "自訂標題"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16840,7 +16751,7 @@ msgstr "收據寬度"
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:806
 msgid "The minimum width of the invoice."
-msgstr "收據最小的寬度"
+msgstr "收據最小的寬度。"
 
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:808 ../intl-scm/guile-strings.c:816
@@ -17107,7 +17018,7 @@ msgstr "此報告的公司"
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1270 ../intl-scm/guile-strings.c:1396
 msgid "The account to search for transactions"
-msgstr "要搜尋交易的帳號"
+msgstr "要搜尋交易的科目"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -17195,12 +17106,12 @@ msgstr "員工報告"
 #. src/report/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:1450
 msgid "Payable Account"
-msgstr "應付帳號"
+msgstr "應付科目"
 
 #. src/report/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:1452
 msgid "The payable account you wish to examine"
-msgstr "您希望檢驗的應付帳號"
+msgstr "您希望檢驗的應付科目"
 
 #. src/report/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:1454
@@ -17210,12 +17121,12 @@ msgstr "應付衰減"
 #. src/report/business-reports/receivables.scm
 #: ../intl-scm/guile-strings.c:1456
 msgid "Receivables Account"
-msgstr "應收帳號"
+msgstr "應收科目"
 
 #. src/report/business-reports/receivables.scm
 #: ../intl-scm/guile-strings.c:1458
 msgid "The receivables account you wish to examine"
-msgstr "您希望檢驗的應收帳號"
+msgstr "您希望檢驗的應收科目"
 
 #. src/report/business-reports/receivables.scm
 #: ../intl-scm/guile-strings.c:1460
@@ -17265,7 +17176,7 @@ msgstr ""
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1494
 msgid "n/a"
-msgstr ""
+msgstr "n/a"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1496
@@ -17285,9 +17196,8 @@ msgstr "報告標題"
 #. src/report/business-reports/taxinvoice.scm
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:1508 ../intl-scm/guile-strings.c:2694
-#, fuzzy
 msgid "Template file"
-msgstr "模板(_T):"
+msgstr "模板檔案"
 
 #. src/report/business-reports/taxinvoice.scm
 #. src/report/standard-reports/balsheet-eg.scm
@@ -17550,13 +17460,13 @@ msgstr "去年九月 1 - 十二月 31"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1642 ../intl-scm/guile-strings.c:1730
 msgid "Select Accounts (none = all)"
-msgstr "選擇帳號 (無=全選)"
+msgstr "選擇科目 (無=全選)"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1644 ../intl-scm/guile-strings.c:1732
 msgid "Select accounts"
-msgstr "選擇帳號"
+msgstr "選擇科目"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/taxtxf.scm
@@ -17567,24 +17477,24 @@ msgstr "抑制 $0.00 值"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1648
 msgid "$0.00 valued Accounts won't be printed."
-msgstr "其值為 $0.00 的帳號不會列印出來。"
+msgstr "其值為 $0.00 的科目不會列印出來。"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1650
 msgid "Print Full account names"
-msgstr "列印帳號全名"
+msgstr "列印科目全名"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1652
 msgid "Print all Parent account names"
-msgstr "列印所有母帳號的名稱"
+msgstr "列印所有母科目的名稱"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1654
 msgid ""
 "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF "
 "codes with payer sources may be repeated."
-msgstr "警告：某些帳號分配到相同的 TXF 碼。只有具付款人來源的 TXF 碼會被重複。"
+msgstr "警告：某些科目分配到相同的 TXF 碼。只有具付款人來源的 TXF 碼會被重複。"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1660
@@ -17604,7 +17514,7 @@ msgstr "藍色的項目可匯出成德國報稅用 XML 檔案。按「匯出」�
 msgid ""
 "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to "
 "set up tax-related accounts."
-msgstr "找不到含稅的帳號。請至帳號->稅務選項對話盒設定含稅帳號。"
+msgstr "找不到含稅的科目。請至科目->稅務選項對話盒設定含稅科目。"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:1666
@@ -17649,18 +17559,18 @@ msgstr "其值為 $0.00 的稅不會列印出來。"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1738
 msgid "Do not print full account names"
-msgstr "不列印帳號全名"
+msgstr "不列印科目全名"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1740
 msgid "Do not print all Parent account names"
-msgstr "不列印所有母帳號的名稱"
+msgstr "不列印所有母科目的名稱"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1742
 #, fuzzy
 msgid "Print all Transfer To/From Accounts"
-msgstr "轉帳帳號"
+msgstr "轉帳科目"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1744
@@ -17686,7 +17596,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1752
 #, fuzzy
 msgid "Do not print Action:Memo data for transactions"
-msgstr "要搜尋交易的帳號"
+msgstr "要搜尋交易的科目"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1754
@@ -17799,17 +17709,17 @@ msgstr "顯示 %s 報告"
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:1796
 msgid "Custom Reports"
-msgstr "客戶報告"
+msgstr "自定義報告"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:1798
 msgid "Manage and run custom reports"
-msgstr ""
+msgstr "管理及執行自定義報告"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:1800
 msgid "Welcome Sample Report"
-msgstr "歡迎樣本報告"
+msgstr "歡迎來到樣本報告"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:1802
@@ -17863,13 +17773,13 @@ msgstr "匯出 HTML 格式的報告至檔案"
 #: ../intl-scm/guile-strings.c:1822
 #, fuzzy
 msgid "Account link"
-msgstr "帳號刪除"
+msgstr "科目刪除"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1824
 #, fuzzy
 msgid "Font info for account name"
-msgstr "列印帳號全名"
+msgstr "列印科目全名"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1828
@@ -17890,7 +17800,7 @@ msgstr "負數以紅色顯示"
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1836
 msgid "Display negative values in red."
-msgstr "負數以紅色顯示"
+msgstr "負數以紅色顯示。"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1840
@@ -17954,7 +17864,7 @@ msgstr "不能儲存樣式表"
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:1874
 msgid "Account name"
-msgstr "帳號名稱"
+msgstr "科目名稱"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:1878
@@ -17975,17 +17885,17 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1884
 #, fuzzy
 msgid "This report requires you to specify certain report options."
-msgstr "這個報告需要有選定的帳號。"
+msgstr "這個報告需要有選定的科目。"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:1888
 msgid "No accounts selected"
-msgstr "沒有選定帳號"
+msgstr "沒有選定科目"
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:1890
 msgid "This report requires accounts to be selected."
-msgstr "這個報告需要有選定的帳號。"
+msgstr "這個報告需要有選定的科目。"
 
 #. src/report/report-system/html-utilities.scm
 #. src/report/standard-reports/price-scatter.scm
@@ -17998,7 +17908,7 @@ msgstr "無資料"
 msgid ""
 "The selected accounts contain no data/transactions (or only zeroes) for the "
 "selected time period"
-msgstr "您選擇的帳號在此特定時間週期中沒有包含資料/交易(或其值為零)"
+msgstr "您選擇的科目在此特定時間週期中沒有包含資料/交易(或其值為零)"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1900
@@ -18068,7 +17978,7 @@ msgstr "全部"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1938
 msgid "All accounts"
-msgstr "所有帳號"
+msgstr "所有科目"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1940
@@ -18103,13 +18013,13 @@ msgstr "第六層級"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1952
 msgid "Show accounts to this depth, overriding any other option."
-msgstr "顯示帳號至此深度，無視其他任何選項。"
+msgstr "顯示科目至此深度，無視其他任何選項。"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1954
 msgid ""
 "Override account-selection and show sub-accounts of all selected accounts?"
-msgstr "無視帳號的選擇並顯示所有已選帳號的子帳號？"
+msgstr "無視科目的選擇並顯示所有已選科目的子科目？"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/account-summary.scm
@@ -18123,17 +18033,17 @@ msgstr "無視帳號的選擇並顯示所有已選帳號的子帳號？"
 #: ../intl-scm/guile-strings.c:2950 ../intl-scm/guile-strings.c:3504
 #: ../intl-scm/guile-strings.c:3986
 msgid "Report on these accounts, if display depth allows."
-msgstr "如果顯示深度允許，提出這些帳號的報告。"
+msgstr "如果顯示深度允許，提出這些科目的報告。"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1958
 msgid "Include sub-account balances in printed balance?"
-msgstr "在列印的結餘中包含子帳號結算？"
+msgstr "在列印的結餘中包含子科目結算？"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1960
 msgid "Group the accounts in main categories?"
-msgstr "把帳號歸類到主分類？"
+msgstr "把科目歸類到主分類？"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1962
@@ -18143,7 +18053,7 @@ msgstr "選擇用來顯示這份報告的數值的貨幣。"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1964
 msgid "Display the account's foreign currency amount?"
-msgstr "顯示帳號中外來貨幣的總額？"
+msgstr "顯示科目中外來貨幣的總額？"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -18202,12 +18112,12 @@ msgstr "時間上最接近報告日期的記錄價格"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1984
 msgid "Width of plot in pixels."
-msgstr "製圖寬度(像素)"
+msgstr "製圖寬度(像素)。"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1986
 msgid "Height of plot in pixels."
-msgstr "製圖高度(像素)"
+msgstr "製圖高度(像素)。"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1988
@@ -18257,12 +18167,12 @@ msgstr "以顏色填滿的方形"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2014
 msgid "Choose the method for sorting accounts."
-msgstr "請選擇排序帳號的方法。"
+msgstr "請選擇排序科目的方法。"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2018
 msgid "Alphabetical by account code"
-msgstr "以帳號代碼做字母排序"
+msgstr "以科目代碼做字母排序"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2020
@@ -18272,17 +18182,17 @@ msgstr "字母順序"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2022
 msgid "Alphabetical by account name"
-msgstr "以帳號名稱做字母排序"
+msgstr "以科目名稱做字母排序"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2026
 msgid "By amount, largest to smallest"
-msgstr "以帳號，從最大到最小"
+msgstr "以科目，從最大到最小"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2028
 msgid "How to show the balances of parent accounts"
-msgstr "如何顯示母帳號的結餘"
+msgstr "如何顯示母科目的結餘"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/account-summary.scm
@@ -18290,7 +18200,7 @@ msgstr "如何顯示母帳號的結餘"
 #: ../intl-scm/guile-strings.c:2030 ../intl-scm/guile-strings.c:2274
 #: ../intl-scm/guile-strings.c:4016
 msgid "Account Balance"
-msgstr "帳號結餘"
+msgstr "科目結餘"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2032
@@ -18312,12 +18222,12 @@ msgstr "不要顯示"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2040
 msgid "Do not show any balances of parent accounts"
-msgstr "不顯示母帳號的結餘"
+msgstr "不顯示母科目的結餘"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2042
 msgid "How to show account subtotals for parent accounts"
-msgstr "如何顯示母帳號的小計"
+msgstr "如何顯示母科目的小計"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2044
@@ -18328,12 +18238,12 @@ msgstr "顯示小計"
 #: ../intl-scm/guile-strings.c:2046
 #, fuzzy
 msgid "Show subtotals for selected parent accounts which have subaccounts"
-msgstr "顯示母帳號的小計"
+msgstr "顯示母科目的小計"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2050
 msgid "Do not show any subtotals for parent accounts"
-msgstr "不顯示母帳號的小計"
+msgstr "不顯示母科目的小計"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2052
@@ -18370,7 +18280,7 @@ msgstr "樣本 & 自訂(_S)"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2066
 msgid "_Custom"
-msgstr "客戶(_C)"
+msgstr "自訂(_C)"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2074
@@ -18412,7 +18322,7 @@ msgstr "選擇用於此報告的樣式表。"
 #: ../intl-scm/guile-strings.c:2092
 #, c-format
 msgid "Your report \"%s\" has been saved into the configuration file \"%s\"."
-msgstr ""
+msgstr "您的報告「%s」已經存到設定檔「%s」。"
 
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -18474,12 +18384,12 @@ msgstr "金融市場"
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:2122
 msgid "Accounts Receivable"
-msgstr "帳號應收"
+msgstr "科目應收"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:2124
 msgid "Accounts Payable"
-msgstr "帳號應付"
+msgstr "科目應付"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:2126
@@ -18490,7 +18400,7 @@ msgstr "信用額度"
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2128 ../intl-scm/guile-strings.c:2642
 msgid "Trading Accounts"
-msgstr "交易帳號"
+msgstr "交易科目"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:2130
@@ -18590,7 +18500,7 @@ msgstr "結束日期"
 #: ../intl-scm/guile-strings.c:2168 ../intl-scm/guile-strings.c:3184
 #: ../intl-scm/guile-strings.c:3276
 msgid "Show Accounts until level"
-msgstr "顯示此層級之前的帳號"
+msgstr "顯示此層級之前的科目"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -18598,7 +18508,7 @@ msgstr "顯示此層級之前的帳號"
 #: ../intl-scm/guile-strings.c:2170 ../intl-scm/guile-strings.c:3186
 #: ../intl-scm/guile-strings.c:3280
 msgid "Show long account names"
-msgstr "顯示完整帳號名稱"
+msgstr "顯示完整科目名稱"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -18701,7 +18611,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2204 ../intl-scm/guile-strings.c:3218
 #: ../intl-scm/guile-strings.c:3294 ../intl-scm/guile-strings.c:3648
 msgid "Report on these accounts, if chosen account level allows."
-msgstr "如果選擇的帳號層級允許，提出這些帳號的報告。"
+msgstr "如果選擇的科目層級允許，提出這些科目的報告。"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -18709,13 +18619,13 @@ msgstr "如果選擇的帳號層級允許，提出這些帳號的報告。"
 #: ../intl-scm/guile-strings.c:2206 ../intl-scm/guile-strings.c:3220
 #: ../intl-scm/guile-strings.c:3296
 msgid "Show accounts to this depth and not further"
-msgstr "顯示帳號到此深度，不再往下"
+msgstr "顯示科目到此深度，不再往下"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2208 ../intl-scm/guile-strings.c:3222
 msgid "Show the full account name in legend?"
-msgstr "在圖例中顯示帳號全名？"
+msgstr "在圖例中顯示科目全名？"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -18766,7 +18676,7 @@ msgstr "與"
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2230
 msgid "Account Summary"
-msgstr "帳號摘要"
+msgstr "科目摘要"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18845,7 +18755,7 @@ msgstr "公司/個人的名字"
 #: ../intl-scm/guile-strings.c:2952 ../intl-scm/guile-strings.c:3506
 #: ../intl-scm/guile-strings.c:3988 ../intl-scm/guile-strings.c:4528
 msgid "Levels of Subaccounts"
-msgstr "子帳號層數"
+msgstr "子科目層數"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18886,7 +18796,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3514 ../intl-scm/guile-strings.c:3996
 #, fuzzy
 msgid "Parent account balances"
-msgstr "母帳號"
+msgstr "母科目"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18898,7 +18808,7 @@ msgstr "母帳號"
 #: ../intl-scm/guile-strings.c:2776 ../intl-scm/guile-strings.c:2962
 #: ../intl-scm/guile-strings.c:3516 ../intl-scm/guile-strings.c:3998
 msgid "Parent account subtotals"
-msgstr "母帳號小計"
+msgstr "母科目小計"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18913,7 +18823,7 @@ msgstr "母帳號小計"
 #: ../intl-scm/guile-strings.c:4568
 #, fuzzy
 msgid "Include accounts with zero total balances"
-msgstr "包含有零股份結算的帳號。"
+msgstr "包含有零股份結算的科目。"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18928,7 +18838,7 @@ msgstr "包含有零股份結算的帳號。"
 #: ../intl-scm/guile-strings.c:4570
 #, fuzzy
 msgid "Include accounts with zero total (recursive) balances in this report"
-msgstr "包含有零股份結算的帳號。"
+msgstr "包含有零股份結算的科目。"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18967,7 +18877,7 @@ msgstr "若結餘為零則顯示空白"
 #: ../intl-scm/guile-strings.c:4008
 #, fuzzy
 msgid "Show accounting-style rules"
-msgstr "顯示此層級之前的帳號"
+msgstr "顯示此層級之前的科目"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18996,7 +18906,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2976 ../intl-scm/guile-strings.c:3530
 #: ../intl-scm/guile-strings.c:4012 ../intl-scm/guile-strings.c:4572
 msgid "Display accounts as hyperlinks"
-msgstr "以超連結顯示帳號"
+msgstr "以超連結顯示科目"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -19017,43 +18927,43 @@ msgstr ""
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2276 ../intl-scm/guile-strings.c:4018
 msgid "Show an account's balance"
-msgstr "顯示帳號結餘"
+msgstr "顯示科目結餘"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2280 ../intl-scm/guile-strings.c:4022
 msgid "Show an account's account code"
-msgstr "顯示帳號代碼"
+msgstr "顯示科目代碼"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2284 ../intl-scm/guile-strings.c:4026
 msgid "Show an account's account type"
-msgstr "顯示帳號類別"
+msgstr "顯示科目類別"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2286 ../intl-scm/guile-strings.c:4028
 msgid "Account Description"
-msgstr "帳號描述"
+msgstr "科目描述"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2288 ../intl-scm/guile-strings.c:4030
 msgid "Show an account's description"
-msgstr "顯示帳號描述"
+msgstr "顯示科目描述"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2290 ../intl-scm/guile-strings.c:4032
 msgid "Account Notes"
-msgstr "帳號備註"
+msgstr "科目備註"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2292 ../intl-scm/guile-strings.c:4034
 msgid "Show an account's notes"
-msgstr "顯示帳號備註"
+msgstr "顯示科目備註"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -19105,7 +19015,7 @@ msgstr "顯示外國貨幣"
 #: ../intl-scm/guile-strings.c:4584
 #, fuzzy
 msgid "Display any foreign currency amount in an account"
-msgstr "顯示帳號中外來貨幣的總額？"
+msgstr "顯示科目中外來貨幣的總額？"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -19162,21 +19072,21 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2312 ../intl-scm/guile-strings.c:4054
 #, fuzzy
 msgid "Raise Accounts"
-msgstr "過濾器帳號"
+msgstr "過濾器科目"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2314 ../intl-scm/guile-strings.c:4056
 #, fuzzy
 msgid "Shows accounts deeper than the depth limit at the depth limit"
-msgstr "顯示帳號至此深度，無視其他任何選項。"
+msgstr "顯示科目至此深度，無視其他任何選項。"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2316 ../intl-scm/guile-strings.c:4058
 #, fuzzy
 msgid "Omit Accounts"
-msgstr "編輯帳號"
+msgstr "編輯科目"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -19188,7 +19098,7 @@ msgstr ""
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2326 ../intl-scm/guile-strings.c:4070
 msgid "Account title"
-msgstr "帳號名稱"
+msgstr "科目名稱"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2332
@@ -19205,7 +19115,7 @@ msgstr "股份小數位數"
 #. src/report/standard-reports/portfolio.scm
 #: ../intl-scm/guile-strings.c:2338 ../intl-scm/guile-strings.c:3710
 msgid "Include accounts with no shares"
-msgstr "包含沒有股份的帳號"
+msgstr "包含沒有股份的科目"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2340
@@ -19240,7 +19150,7 @@ msgstr ""
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2352 ../intl-scm/guile-strings.c:2388
 msgid "Ignore brokerage fees when calculating returns"
-msgstr ""
+msgstr "計算報酬時不計手續費"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2368
@@ -19259,32 +19169,32 @@ msgstr "很接近的記錄價格"
 #: ../intl-scm/guile-strings.c:2374 ../intl-scm/guile-strings.c:2478
 #: ../intl-scm/guile-strings.c:2498
 msgid "Average"
-msgstr "平均數"
+msgstr "平均"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2376
 msgid "Use average cost of all shares for basis"
-msgstr ""
+msgstr "用平均股價當成本"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2378
 msgid "FIFO"
-msgstr ""
+msgstr "FIFO"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2380
 msgid "Use first-in first-out method for basis"
-msgstr ""
+msgstr "以先進先出方式計算成本"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2382
 msgid "FILO"
-msgstr ""
+msgstr "FILO"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2384
 msgid "Use first-in last-out method for basis"
-msgstr ""
+msgstr "以先進後出方式計算成本"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2386
@@ -19298,9 +19208,8 @@ msgstr "顯示股票代碼"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2392
-#, fuzzy
 msgid "Display exchange listings"
-msgstr "顯示 N 行"
+msgstr "顯示交易所"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2394
@@ -19322,13 +19231,13 @@ msgstr "顯示股份價格"
 #. src/report/standard-reports/portfolio.scm
 #: ../intl-scm/guile-strings.c:2402 ../intl-scm/guile-strings.c:3720
 msgid "Stock Accounts to report on"
-msgstr "要提出報告的股票帳號"
+msgstr "要提出報告的股票科目"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/portfolio.scm
 #: ../intl-scm/guile-strings.c:2404 ../intl-scm/guile-strings.c:3722
 msgid "Include accounts that have a zero share balances."
-msgstr "包含有零股份結算的帳號。"
+msgstr "包含有零股份結算的科目。"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/portfolio.scm
@@ -19376,7 +19285,7 @@ msgstr "總報酬"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2436
 msgid "Brokerage Fees"
-msgstr ""
+msgstr "手續費"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2438
@@ -19394,7 +19303,7 @@ msgstr ""
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2442 ../intl-scm/guile-strings.c:2480
 msgid "Average Balance"
-msgstr "平均結算"
+msgstr "平均餘額"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -19409,19 +19318,19 @@ msgstr "刻度大小"
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:2454 ../intl-scm/guile-strings.c:3278
 msgid "Include Sub-Accounts"
-msgstr "包括子帳號"
+msgstr "包括子科目"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2456
 #, fuzzy
 msgid "Exclude transactions between selected accounts"
-msgstr "不包括所有交易到/從過濾器帳號"
+msgstr "不包括所有交易到/從過濾器科目"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:2458 ../intl-scm/guile-strings.c:3292
 msgid "Include sub-accounts of all selected accounts"
-msgstr "包括所有已選帳號的子帳號"
+msgstr "包括所有已選科目的子科目"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2460
@@ -19433,7 +19342,7 @@ msgstr ""
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2464
 msgid "Do transaction report on this account"
-msgstr "進行此帳號的交易報告"
+msgstr "進行此科目的交易報告"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -19696,17 +19605,17 @@ msgstr "全部債務&資產淨值"
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2636
 msgid "Assets Accounts"
-msgstr "資産帳號"
+msgstr "資産科目"
 
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2638
 msgid "Liability Accounts"
-msgstr "負債帳號"
+msgstr "負債科目"
 
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2640
 msgid "Equity Accounts"
-msgstr "淨值帳號"
+msgstr "淨值科目"
 
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2648
@@ -19745,14 +19654,14 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2674
 #, fuzzy
 msgid "Exclude accounts with zero total balances"
-msgstr "包含有零股份結算的帳號。"
+msgstr "包含有零股份結算的科目。"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2676
 #, fuzzy
 msgid ""
 "Exclude non-top-level accounts with zero balance and no non-zero sub-accounts"
-msgstr "包含有零股份結算的帳號。"
+msgstr "包含有零股份結算的科目。"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2682
@@ -19987,7 +19896,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2896 ../intl-scm/guile-strings.c:2920
 #: ../intl-scm/guile-strings.c:4230 ../intl-scm/guile-strings.c:4526
 msgid "Report on these accounts"
-msgstr "提出這些帳號的報告"
+msgstr "提出這些科目的報告"
 
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:2900
@@ -20084,9 +19993,8 @@ msgstr ""
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:2992 ../intl-scm/guile-strings.c:3554
-#, fuzzy
 msgid "Include expense total"
-msgstr "收入 & 支出圖表"
+msgstr "包含總支出"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
@@ -20115,7 +20023,7 @@ msgstr "以雙欄方式顯示報告"
 #: ../intl-scm/guile-strings.c:3014 ../intl-scm/guile-strings.c:3588
 #, fuzzy
 msgid "Divides the report into an income column and an expense column"
-msgstr "設定所有收入與支出帳號的稅務資訊"
+msgstr "設定所有收入與支出科目的稅務資訊"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
@@ -20207,25 +20115,25 @@ msgstr "預算報告"
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3046 ../intl-scm/guile-strings.c:3112
 msgid "Account Display Depth"
-msgstr "帳號顯示深度"
+msgstr "科目顯示深度"
 
 #. src/report/standard-reports/budget.scm
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3048 ../intl-scm/guile-strings.c:3114
 msgid "Always show sub-accounts"
-msgstr "永遠顯示子帳號"
+msgstr "永遠顯示子科目"
 
 #. src/report/standard-reports/budget.scm
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3056 ../intl-scm/guile-strings.c:3124
 msgid "Show Full Account Names"
-msgstr "顯示完整的帳號名稱"
+msgstr "顯示完整的科目名稱"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3058
 #, fuzzy
 msgid "Select Columns"
-msgstr "選擇帳號"
+msgstr "選擇科目"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3060
@@ -20277,7 +20185,7 @@ msgstr "顯示項目的價值"
 #: ../intl-scm/guile-strings.c:3076
 #, fuzzy
 msgid "Roll up budget amounts to parent"
-msgstr "帳號刪除"
+msgstr "科目刪除"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3078
@@ -20290,7 +20198,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3080
 #, fuzzy
 msgid "Include accounts with zero total balances and budget values"
-msgstr "包含有零股份結算的帳號。"
+msgstr "包含有零股份結算的科目。"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3082
@@ -20298,7 +20206,7 @@ msgstr "包含有零股份結算的帳號。"
 msgid ""
 "Include accounts with zero total (recursive) balances and budget values in "
 "this report"
-msgstr "包含有零股份結算的帳號。"
+msgstr "包含有零股份結算的科目。"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3084
@@ -20317,7 +20225,7 @@ msgstr ""
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3096 ../intl-scm/guile-strings.c:3128
 msgid "Show full account names (including parent accounts)"
-msgstr "顯示完整的帳號名稱（包含母帳號）"
+msgstr "顯示完整的科目名稱（包含母科目）"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3098
@@ -20349,23 +20257,23 @@ msgstr "現金流量"
 #: ../intl-scm/guile-strings.c:3132
 #, c-format
 msgid "%s and subaccounts"
-msgstr "%s 和子帳號"
+msgstr "%s 和子科目"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3134
 #, c-format
 msgid "%s and selected subaccounts"
-msgstr "%s 和選定的子帳號"
+msgstr "%s 和選定的子科目"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3138
 msgid "Money into selected accounts comes from"
-msgstr "金錢流入自所選的帳號"
+msgstr "金錢流入自所選的科目"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3142
 msgid "Money out of selected accounts goes to"
-msgstr "金錢流出到所選的帳號"
+msgstr "金錢流出到所選的科目"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3146
@@ -20435,7 +20343,7 @@ msgstr "債務對時間變化圖"
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3188
 msgid "Use Stacked Bars"
-msgstr "使用金字塔長條圖"
+msgstr "使用堆疊長條圖"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3190
@@ -20449,9 +20357,8 @@ msgstr ""
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3224
-#, fuzzy
 msgid "Show barchart as stacked barchart?"
-msgstr "要用金字塔形式顯示長條圖？ (需要 Guppi>=0.35.4)"
+msgstr "要用堆疊形式顯示長條圖？"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3226
@@ -20506,7 +20413,7 @@ msgstr "權益變動表"
 #: ../intl-scm/guile-strings.c:3332
 #, fuzzy
 msgid "Report only on these accounts"
-msgstr "提出這些帳號的報告"
+msgstr "提出這些科目的報告"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
@@ -20648,14 +20555,14 @@ msgstr "一致化日期"
 #: ../intl-scm/guile-strings.c:4398
 #, fuzzy
 msgid "Use Full Account Name"
-msgstr "使用帳號全名？"
+msgstr "使用科目全名？"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3450 ../intl-scm/guile-strings.c:4128
 #: ../intl-scm/guile-strings.c:4294 ../intl-scm/guile-strings.c:4406
 msgid "Other Account Name"
-msgstr "其他帳號名稱"
+msgstr "其他科目名稱"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -20663,22 +20570,21 @@ msgstr "其他帳號名稱"
 #: ../intl-scm/guile-strings.c:4410
 #, fuzzy
 msgid "Use Full Other Account Name"
-msgstr "使用完整的其他帳號名稱？"
+msgstr "使用完整的其他科目名稱？"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3454 ../intl-scm/guile-strings.c:4160
 #: ../intl-scm/guile-strings.c:4298 ../intl-scm/guile-strings.c:4414
 msgid "Other Account Code"
-msgstr "其他帳號代碼"
+msgstr "其他科目代碼"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3466 ../intl-scm/guile-strings.c:4456
 #: ../intl-scm/guile-strings.c:4496
-#, fuzzy
 msgid "Sign Reverses"
-msgstr "符號反轉？"
+msgstr "改變正負號"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -20698,14 +20604,14 @@ msgstr "排序主鍵"
 #: ../intl-scm/guile-strings.c:3472 ../intl-scm/guile-strings.c:4172
 #: ../intl-scm/guile-strings.c:4348
 msgid "Show Full Account Name"
-msgstr "顯示完整的帳號名稱"
+msgstr "顯示完整的科目名稱"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3474 ../intl-scm/guile-strings.c:4168
 #: ../intl-scm/guile-strings.c:4352
 msgid "Show Account Code"
-msgstr "顯示帳號代碼"
+msgstr "顯示科目代碼"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -20884,9 +20790,8 @@ msgstr "商品價格"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:3752
-#, fuzzy
 msgid "Invert prices"
-msgstr "收據"
+msgstr "反向價格"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:3762
@@ -21035,7 +20940,7 @@ msgstr "顯示備忘錄？"
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3894
 msgid "Display the account?"
-msgstr "是否顯示帳號？"
+msgstr "是否顯示科目？"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
@@ -21205,12 +21110,12 @@ msgstr ""
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4234
 msgid "Filter on these accounts"
-msgstr "這些帳號的過濾器"
+msgstr "這些科目的過濾器"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4238
 msgid "Filter account"
-msgstr "過濾器帳號"
+msgstr "過濾器科目"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4242
@@ -21220,22 +21125,22 @@ msgstr "不使用任何過濾器"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4244
 msgid "Include Transactions to/from Filter Accounts"
-msgstr "包含過濾器所指定帳號的交易"
+msgstr "包含過濾器所指定科目的交易"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4246
 msgid "Include transactions to/from filter accounts only"
-msgstr "只包含 流進/流出 過濾器所指定帳號的交易"
+msgstr "只包含 流進/流出 過濾器所指定科目的交易"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4248
 msgid "Exclude Transactions to/from Filter Accounts"
-msgstr "不包含過濾器所指定帳號的交易"
+msgstr "不包含過濾器所指定科目的交易"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4250
 msgid "Exclude transactions to/from all filter accounts"
-msgstr "不包含所有 流進/流出 過濾器所指定帳號的交易"
+msgstr "不包含所有 流進/流出 過濾器所指定科目的交易"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4252
@@ -21280,12 +21185,12 @@ msgstr "不要排序"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4272
 msgid "Sort & subtotal by account name"
-msgstr "以帳號名稱排序與小計"
+msgstr "以科目名稱排序與小計"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4276
 msgid "Sort & subtotal by account code"
-msgstr "以帳號代碼排序與小計"
+msgstr "以科目代碼排序與小計"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4282
@@ -21315,12 +21220,12 @@ msgstr "以登記簿排序"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4296
 msgid "Sort by account transferred from/to's name"
-msgstr "以轉帳目標/來源帳號名稱排序"
+msgstr "以轉帳目標/來源科目名稱排序"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4300
 msgid "Sort by account transferred from/to's code"
-msgstr "以轉帳目標/來源帳號代碼排序"
+msgstr "以轉帳目標/來源科目代碼排序"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4312
@@ -21350,12 +21255,12 @@ msgstr "優先以此準則排序"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4350
 msgid "Show the full account name for subtotals and subtitles?"
-msgstr "顯示小計與小標題的帳號全名？"
+msgstr "顯示小計與小標題的科目全名？"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4354
 msgid "Show the account code for subtotals and subtitles?"
-msgstr "顯示小計與小標題的帳號代碼？"
+msgstr "顯示小計與小標題的科目代碼？"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4356
@@ -21401,29 +21306,29 @@ msgstr "是否顯示此收據的付款？"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4396
 msgid "Display the account name?"
-msgstr "顯示帳號名稱？"
+msgstr "顯示科目名稱？"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4400 ../intl-scm/guile-strings.c:4412
 msgid "Display the full account name"
-msgstr "顯示帳號全名"
+msgstr "顯示科目全名"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4404
 msgid "Display the account code"
-msgstr "顯示帳號代碼？"
+msgstr "顯示科目代碼？"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4408
 msgid ""
 "Display the other account name? (if this is a split transaction, this "
 "parameter is guessed)."
-msgstr "顯示其他帳號名稱？(如果這是分割交易，此參數會被預測)。"
+msgstr "顯示其他科目名稱？(如果這是分割交易，此參數會被預測)。"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4416
 msgid "Display the other account code"
-msgstr "顯示其他帳號代碼"
+msgstr "顯示其他科目代碼"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4446
@@ -21433,7 +21338,7 @@ msgstr "沒有總額顯示"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4458
 msgid "Reverse amount display for certain account types"
-msgstr "反轉某些帳號類型的總額顯示"
+msgstr "反轉某些科目類型的總額顯示"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4462
@@ -21453,14 +21358,14 @@ msgstr "反轉收入與支出的總額顯示"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4468
 msgid "Credit Accounts"
-msgstr "貸方帳號"
+msgstr "貸方科目"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4470
 msgid ""
 "Reverse amount display for Liability, Payable, Equity, Credit Card, and "
 "Income accounts"
-msgstr "反轉債務、應付、資產淨值、信用卡與收入帳號的總額顯示"
+msgstr "反轉債務、應付、資產淨值、信用卡與收入科目的總額顯示"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4472
@@ -21533,7 +21438,7 @@ msgstr "找不到相符的交易"
 msgid ""
 "No transactions were found that match the time interval and account "
 "selection specified in the Options panel."
-msgstr "找不到跟所給的時間間隔與所選帳號相符的交易"
+msgstr "找不到跟所給的時間間隔與所選科目相符的交易。"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:4506 ../intl-scm/guile-strings.c:4616
@@ -21571,7 +21476,7 @@ msgstr "遞減"
 #: ../intl-scm/guile-strings.c:4534
 #, fuzzy
 msgid "Gross adjustment accounts"
-msgstr "歸類此帳號"
+msgstr "歸類此科目"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:4536
@@ -21584,7 +21489,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4538
 #, fuzzy
 msgid "Income summary accounts"
-msgstr "收入帳號"
+msgstr "收入科目"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:4540
@@ -22006,7 +21911,7 @@ msgstr "小小計顏色"
 #: ../intl-scm/guile-strings.c:4956 ../intl-scm/guile-strings.c:5024
 #: ../intl-scm/guile-strings.c:5174 ../intl-scm/guile-strings.c:5246
 msgid "Grand Total Cell Color"
-msgstr "總合細格顏色"
+msgstr "「總和」細格顏色"
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -22014,7 +21919,7 @@ msgstr "總合細格顏色"
 #: ../intl-scm/guile-strings.c:4746 ../intl-scm/guile-strings.c:4958
 #: ../intl-scm/guile-strings.c:5176
 msgid "Color for grand totals"
-msgstr "總合的顏色"
+msgstr "「總和」的顏色"
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -22063,7 +21968,7 @@ msgstr "細格間距"
 #: ../intl-scm/guile-strings.c:5186 ../intl-scm/guile-strings.c:5270
 #: ../intl-scm/guile-strings.c:5318
 msgid "Table cell padding"
-msgstr "細格墊充"
+msgstr "表格框內距"
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -22071,9 +21976,8 @@ msgstr "細格墊充"
 #. src/report/stylesheets/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:4758 ../intl-scm/guile-strings.c:4970
 #: ../intl-scm/guile-strings.c:5188 ../intl-scm/guile-strings.c:5320
-#, fuzzy
 msgid "Space between table cell edge and content"
-msgstr "細格間距"
+msgstr "表格格線與內容之間的距離"
 
 #. src/report/stylesheets/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -22312,12 +22216,12 @@ msgstr "再次哈囉"
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5412
 msgid "An account list option"
-msgstr "帳號列表選項"
+msgstr "科目列表選項"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5414
 msgid "This is an account list option"
-msgstr "這是一個帳號列表選項"
+msgstr "這是一個科目列表選項"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5418
@@ -22497,7 +22401,7 @@ msgstr "(您沒有選擇列表中的項目。)"
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5480
 msgid "You have selected no accounts."
-msgstr "您沒有選擇帳號。"
+msgstr "您沒有選擇科目。"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:5482
@@ -22551,15 +22455,13 @@ msgstr "歡迎使用 GnuCash"
 
 #. src/report/utility-reports/welcome-to-gnucash.scm
 #: ../intl-scm/guile-strings.c:5514
-#, fuzzy
 msgid "Welcome to GnuCash 2.4!"
-msgstr "歡迎使用 GnuCash 2.0！"
+msgstr "歡迎使用 GnuCash 2.4！"
 
 #. src/report/utility-reports/welcome-to-gnucash.scm
 #: ../intl-scm/guile-strings.c:5516
-#, fuzzy
 msgid "GnuCash 2.4 has lots of nice features. Here are a few."
-msgstr "GnuCash 2.0 有許多優秀的功能。這裡只是其中一部分。"
+msgstr "GnuCash 2.4 有許多優秀的功能。這裡只是其中一部分。"
 
 #. src/scm/command-line.scm
 #: ../intl-scm/guile-strings.c:5520
@@ -22580,15 +22482,14 @@ msgstr "設定文件檔案的搜尋路徑"
 
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:5524
-#, fuzzy
 msgid "Book Options"
-msgstr "布林選項"
+msgstr "帳本選項"
 
 #. src/scm/price-quotes.scm
 #: ../intl-scm/guile-strings.c:5526 ../intl-scm/guile-strings.c:5528
 #, fuzzy
 msgid "No commodities marked for quote retrieval."
-msgstr "沒有帳號是標記為取回報價的。"
+msgstr "沒有科目是標記為取回報價的。"
 
 #. src/scm/price-quotes.scm
 #: ../intl-scm/guile-strings.c:5530 ../intl-scm/guile-strings.c:5532
@@ -22692,8 +22593,8 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"如果您熟悉其他像 Quicken 這類財務程式，注意 GnuCash 使用帳號而非分類來追蹤收"
-"入與支出。需要更多關於收入與支出帳號的資訊，請查閱 GnuCash 線上手冊。"
+"如果您熟悉其他像 Quicken 這類財務程式，注意 GnuCash 使用科目而非分類來追蹤收"
+"入與支出。需要更多關於收入與支出科目的資訊，請查閱 GnuCash 線上手冊。"
 
 #: ../doc/tip_of_the_day.list.in:14
 msgid ""
@@ -22702,8 +22603,8 @@ msgid ""
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
 msgstr ""
-"點選主視窗工具列的新增按鈕以建立新帳號。這樣會出現可以讓您輸入帳號詳細資料的"
-"對話盒。需要更多關於選擇帳號類型或建立會計科目表的資訊，請查閱 GnuCash 線上手"
+"點選主視窗工具列的新增按鈕以建立新科目。這樣會出現可以讓您輸入科目詳細資料的"
+"對話盒。需要更多關於選擇科目類型或建立會計科目表的資訊，請查閱 GnuCash 線上手"
 "冊。"
 
 #: ../doc/tip_of_the_day.list.in:20
@@ -22712,7 +22613,7 @@ msgid ""
 "options. Within each register, clicking the right mouse button brings up the "
 "transaction menu options."
 msgstr ""
-"在主視窗中點選滑鼠右鍵會出現帳號選單選項。在每個登記簿中點選滑鼠右鍵則會出現"
+"在主視窗中點選滑鼠右鍵會出現科目選單選項。在每個登記簿中點選滑鼠右鍵則會出現"
 "交易選單選項。"
 
 #: ../doc/tip_of_the_day.list.in:24
@@ -22754,8 +22655,8 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash.)"
 msgstr ""
-"在匯兌登記簿一欄中輸入現存帳號名稱的前幾個字時，GnuCash 會根據您的帳號列表完"
-"成帳號名稱。以子帳號為例，輸入母帳號的前幾個字，接著輸入 ':'，再輸入子帳號的"
+"在匯兌登記簿一欄中輸入現存科目名稱的前幾個字時，GnuCash 會根據您的科目列表完"
+"成科目名稱。以子科目為例，輸入母科目的前幾個字，接著輸入 ':'，再輸入子科目的"
 "前幾個字 (例 A:C 即 Assets:Cash。)"
 
 #: ../doc/tip_of_the_day.list.in:45
@@ -22764,8 +22665,8 @@ msgid ""
 "menu, highlight the parent account and select Accounts -> Open Subaccounts "
 "from the menu."
 msgstr ""
-"想在登記簿中看到您子帳號的所有交易？在主選單中反白母帳號並且從選單中選擇帳號 "
-"-> 開啟子帳號。"
+"想在登記簿中看到您子科目的所有交易？在主選單中反白母科目並且從選單中選擇科目 "
+"-> 開啟子科目。"
 
 #: ../doc/tip_of_the_day.list.in:49
 msgid ""
@@ -22798,7 +22699,7 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
-"要在使用不同貨幣的帳號間匯兌資金，按下登記簿工具列的轉帳按鈕，選擇帳號和貨幣"
+"要在使用不同貨幣的科目間匯兌資金，按下登記簿工具列的轉帳按鈕，選擇科目和貨幣"
 "匯兌選項，它可以讓您輸入匯率或其他貨幣金額。"
 
 #: ../doc/tip_of_the_day.list.in:65
@@ -22869,18 +22770,6 @@ msgstr ""
 #~ msgid "Invalid Entry:  You need to supply %s."
 #~ msgstr "無效的項目：您需要提供 %s 。"
 
-#~ msgid "an Account"
-#~ msgstr "一個帳號"
-
-#~ msgid "New %s"
-#~ msgstr "新增 %s"
-
-#~ msgid "item"
-#~ msgstr "項目"
-
-#~ msgid "_Open"
-#~ msgstr "開啟舊檔(_O)"
-
 #~ msgid ""
 #~ "The job was sent to the bank successfully, but the bank is refusing to "
 #~ "execute the job. Please check the log window for the exact error message "
@@ -22911,18 +22800,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose an Online Banking Version to use with the selected bank:"
 #~ msgstr "選擇要用在選定銀行的 HBCI 版本:"
-
-#~ msgid "Online Banking Version"
-#~ msgstr "線上銀行版本"
-
-#~ msgid "Version"
-#~ msgstr "版本"
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "輸入並確認您的新密碼"
-
-#~ msgid "Enter new Password"
-#~ msgstr "輸入新的密碼"
 
 #, fuzzy
 #~ msgid ""
@@ -22963,23 +22840,15 @@ msgstr ""
 #~ "accounts except Equity and placeholder accounts may have an opening "
 #~ "balance."
 #~ msgstr ""
-#~ "如果您想讓帳號有起始結餘，點選帳號並在\n"
+#~ "如果您想讓科目有起始結餘，點選科目並在\n"
 #~ "右邊的方塊中輸入起始結餘。除了資產淨值與佔位符\n"
-#~ "(placeholder)帳號之外的所有帳號都可以有起始結餘。"
+#~ "(placeholder)科目之外的所有科目都可以有起始結餘。"
 
 #~ msgid "Auto-Created Transactions Notification"
 #~ msgstr "自動建立的交易通知"
 
 #~ msgid "Created Transaction Review"
 #~ msgstr "檢閱已建立交易"
-
-#~ msgid "Creating transactions..."
-#~ msgstr "建立交易中..."
-
-#~ msgid ""
-#~ "The following scheduled transactions have expired.  Select those you wish "
-#~ "to delete."
-#~ msgstr "下列的排程交易已經過期了。請選擇您希望刪除的交易。"
 
 #~ msgid ""
 #~ "The listed Scheduled Transactions are to-be created soon.  Select any "
@@ -22993,24 +22862,6 @@ msgstr ""
 
 #~ msgid "Transaction Reminders"
 #~ msgstr "交易提醒"
-
-#~ msgid "Unselect All"
-#~ msgstr "取消選擇全部"
-
-#~ msgid "Value:"
-#~ msgstr "數值:"
-
-#~ msgid "Variable"
-#~ msgstr "變數"
-
-#~ msgid "Variables"
-#~ msgstr "變數"
-
-#~ msgid "What to do, what to do?"
-#~ msgstr "要做什麼，要做什麼？"
-
-#~ msgid "Defaults"
-#~ msgstr "預設值"
 
 #~ msgid "Start of this fiscal year"
 #~ msgstr "本會計年度的起點"
@@ -23055,13 +22906,10 @@ msgstr ""
 #~ msgstr "最新一季會計週期的終點"
 
 #~ msgid "Accounts to include"
-#~ msgstr "包含帳號"
+#~ msgstr "包含科目"
 
 #~ msgid "Show Full Account Name?"
-#~ msgstr "顯示完整的帳號名稱？"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "QSF 收據(_I)..."
+#~ msgstr "顯示完整的科目名稱？"
 
 #~ msgid "Click to choose the filename and location."
 #~ msgstr "點選以選擇檔名及位置。"
@@ -23078,56 +22926,13 @@ msgstr ""
 #~ msgid ""
 #~ "The Chart of Accounts includes the balance for each account, on the date "
 #~ "specified.  Note that future dates are not supported."
-#~ msgstr "會計科目表包含了每個帳號在指定日期的結餘。注意並不支援未來的日期。"
-
-#~ msgid ""
-#~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
-#~ "\n"
-#~ "Press `Back' to review your selections.\n"
-#~ "\n"
-#~ "Press `Cancel' to close this dialog without changing your current data "
-#~ "file.\n"
-#~ "\n"
-#~ "REMEMBER: There is no way to undo this final operation! Make sure you "
-#~ "have a backup before clicking 'Apply'."
-#~ msgstr ""
-#~ "按下“套用”以將您的 QSF 資料合併入當前的 GnuCash 檔案內。\n"
-#~ "\n"
-#~ "按下“向後”以檢查您的選擇。\n"
-#~ "\n"
-#~ "按下“取消”以結束此對話盒並且不改變您現在的資料。\n"
-#~ "\n"
-#~ "注意：這最後一個步驟是無法復原的！請確定您在按下“完成”前已備份。"
-
-#~ msgid "QSF Data Import Setup"
-#~ msgstr "QSF 資料匯入設定"
-
-#~ msgid "Export _Chart of Accounts to QSF"
-#~ msgstr "匯出會計科目表到 QSF(_C)"
-
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr "匯出某日期含結餘的會計科目表成 QSF"
-
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "選擇要載入 GnuCash 的 QSF 檔案"
+#~ msgstr "會計科目表包含了每個科目在指定日期的結餘。注意並不支援未來的日期。"
 
 #~ msgid "Delete old log/backup files after this many days (0 = never)."
 #~ msgstr "經過這個日數之後刪除舊的記錄/備份檔案（0 = 永不）。"
 
 #~ msgid "Report Currency"
 #~ msgstr "報告貨幣"
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "設定登入等級從 0 (最少) 至 6 (最多)"
-
-#~ msgid "LOGLEVEL"
-#~ msgstr "LOGLEVEL"
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "稅金表格編輯器(_T)"
-
-#~ msgid "Value '%s' cannot be interpreted as a float number."
-#~ msgstr "值 '%s' 無法轉為浮點數。"
 
 #, fuzzy
 #~ msgid ""
@@ -23139,64 +22944,24 @@ msgstr ""
 #~ "If you would like an account to be a placeholder account, just click the "
 #~ "checkbox for that account.\n"
 #~ msgstr ""
-#~ "如果您想讓帳號有起始結餘，點選帳號並在\n"
+#~ "如果您想讓科目有起始結餘，點選科目並在\n"
 #~ "右邊的方塊中輸入起始結餘。除了資產淨值與佔位符\n"
-#~ "(placeholder)帳號之外的所有帳號都可以有起始結餘。"
+#~ "(placeholder)科目之外的所有科目都可以有起始結餘。"
 
 #, fuzzy
 #~ msgid "Setup income tax information for relevant accounts"
-#~ msgstr "設定所有收入與支出帳號的稅務資訊"
-
-#, fuzzy
-#~ msgid ": Payer Name Option "
-#~ msgstr "只是日期選項"
-
-#, fuzzy
-#~ msgid "None specified"
-#~ msgstr "未指定的"
+#~ msgstr "設定所有收入與支出科目的稅務資訊"
 
 #, fuzzy
 #~ msgid ""
 #~ "No Tax Related accounts were found with your account selection. Change "
 #~ "your selection or go to the Edit->Income Tax Options dialog to set up tax-"
 #~ "related accounts."
-#~ msgstr "找不到含稅的帳號。請至帳號->稅務選項對話盒設定含稅帳號。"
-
-#, fuzzy
-#~ msgid "Display transactions for selected accounts"
-#~ msgstr "增加一筆新的交易至帳號"
-
-#, fuzzy
-#~ msgid "Do not display transactions for selected accounts"
-#~ msgstr "不顯示母帳號的小計"
-
-#, fuzzy
-#~ msgid "Do not include transactions outside of selected dates"
-#~ msgstr "兩者都顯示（並且在總計中包含空的交易）"
-
-#, fuzzy
-#~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "包括所有已選帳號的子帳號"
+#~ msgstr "找不到含稅的科目。請至科目->稅務選項對話盒設定含稅科目。"
 
 #, fuzzy
 #~ msgid "PriceDB lookups nearest to report end date"
 #~ msgstr "時間上最接近報告日期的記錄價格"
-
-#, fuzzy
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "包含沒有股份的帳號"
-
-#~ msgid "Future dates are not supported"
-#~ msgstr "不支援未來的日期"
-
-#~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-#~ msgstr "未知的資料庫存取模式“%s”。使用預設的模式：多使用者。"
-
-#~ msgid "From the Postgresql Server: %s"
-#~ msgstr "從 Postgresql 伺服器: %s"
-
-#~ msgid "Backend connection is not available"
-#~ msgstr "沒有可用的資料庫後端連線"
 
 #~ msgid "Query could not be executed"
 #~ msgstr "無法進行查詢"
@@ -23219,7 +22984,7 @@ msgstr ""
 #~ msgid ""
 #~ "An error occurred while importing QIF transactions into GnuCash. Your "
 #~ "accounts are unchanged."
-#~ msgstr "匯入 QIF 交易至 GnuCash 時發生錯誤。您的帳號並未變更。"
+#~ msgstr "匯入 QIF 交易至 GnuCash 時發生錯誤。您的科目並未變更。"
 
 #~ msgid "You must enter a Type for the commodity."
 #~ msgstr "您必須輸入此商品的類型。"
@@ -23247,7 +23012,7 @@ msgstr ""
 #~ msgstr "點選“向前”以輸入您的 QIF 檔案中所使用貨幣的相關資訊。"
 
 #~ msgid "Enter the currency used for new accounts"
-#~ msgstr "輸入使用於新帳號的貨幣"
+#~ msgstr "輸入使用於新科目的貨幣"
 
 #~ msgid "Imported transactions with duplicates"
 #~ msgstr "匯入交易中具相同點者"
@@ -23282,20 +23047,8 @@ msgstr ""
 #~ "的縮寫符合此商品用於交易所或其列表類型的行\n"
 #~ "情指示器標記。"
 
-#~ msgid "Importing transactions..."
-#~ msgstr "匯入交易中..."
-
-#~ msgid "The file contains an unknown Action '%s'."
-#~ msgstr "此檔案包含未知的動作“%s”。"
-
-#~ msgid "Choose the type of Billing Term"
-#~ msgstr "選擇記帳期限的類型"
-
 #~ msgid "Needs values for variables"
 #~ msgstr "需要用於變數的數值"
-
-#~ msgid "A Fixed-Rate loan"
-#~ msgstr "固定利率貸款"
 
 #~ msgid ""
 #~ "Enter the type of commodity. For stocks, this is often an exchange on "
@@ -23305,11 +23058,3 @@ msgstr ""
 #~ "輸入商品類型。以股票為例，通常是股票買賣的交易所。您可以從列表中選擇既存的"
 #~ "類型或以鍵盤輸入新的類型。"
 
-#~ msgid "Field"
-#~ msgstr "欄位"
-
-#~ msgid "Verify Changes"
-#~ msgstr "核對變更"
-
-#~ msgid "The following changes must be made. Continue?"
-#~ msgstr "必須進行下面的變更。是否繼續？"

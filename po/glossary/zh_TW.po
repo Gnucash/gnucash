@@ -1,13 +1,13 @@
 # traditional Chinese translation of gnucash-glossary
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Chao-Hsiung Liao <pesder@seed.net.tw>, 2002.
-# Kuang-che Wu <kcwu@csie.org>, 2007.
+# Kuang-che Wu <kcwu@csie.org>, 2007, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
 "POT-Creation-Date: 2010-11-24 02:25+0100\n"
-"PO-Revision-Date: 2011-02-19 18:55+0800\n"
+"PO-Revision-Date: 2011-03-10 22:11+0800\n"
 "Last-Translator: Kuang-che Wu <kcwu@csie.org>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -20,75 +20,75 @@ msgstr "期"
 
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr "帳號"
+msgstr "科目"
 
 #. "-"
 msgid "account code"
-msgstr "帳號代碼"
+msgstr "科目代碼"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr "帳號體系"
+msgstr "科目體系"
 
 #. "-"
 msgid "account name"
-msgstr "帳號名稱"
+msgstr "科目名稱"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
 msgid "account type: Asset"
-msgstr "帳號類型：資產"
+msgstr "科目類型：資產"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "帳號類型：支票"
+msgstr "科目類型：支票"
 
 #. "-"
 msgid "account type: currency"
-msgstr "帳號類型：貨幣"
+msgstr "科目類型：貨幣"
 
 #. "see: Equity"
 msgid "account type: Equity"
-msgstr "帳號類型：資產淨值"
+msgstr "科目類型：資產淨值"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "帳號類型：支出"
+msgstr "科目類型：支出"
 
 #. "-"
 msgid "account type: Income"
-msgstr "帳號類型：收入"
+msgstr "科目類型：收入"
 
 #. "A debt, a financial obligation"
 msgid "account type: Liability"
-msgstr "帳號類型：負債"
+msgstr "科目類型：負債"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "帳號類型：金融市場"
+msgstr "科目類型：金融市場"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "帳號類型：共同基金"
+msgstr "科目類型：共同基金"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "帳號類型：儲蓄"
+msgstr "科目類型：儲蓄"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "帳號類型：股票"
+msgstr "科目類型：股票"
 
 #. "-"
 msgid "account: parent account"
-msgstr "帳號：母帳號"
+msgstr "科目：母科目"
 
 #. "-"
 msgid "account: subaccount"
-msgstr "帳號：子帳號"
+msgstr "科目：子科目"
 
 #. "-"
 msgid "account: top level account"
-msgstr "帳號：頂端層級帳號"
+msgstr "科目：頂端層級科目"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -408,7 +408,7 @@ msgstr "虧損"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
-msgstr "迷失帳號"
+msgstr "迷失科目"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
@@ -680,7 +680,7 @@ msgstr "轉帳"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
-msgstr "轉帳帳號"
+msgstr "轉帳科目"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
