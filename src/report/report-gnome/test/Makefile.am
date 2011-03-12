@@ -20,9 +20,10 @@ TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 LDADD = \
+    $(top_builddir)/src/libqof/qof/libgnc-qof.la \
     ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
-        $(top_builddir)/src/app-utils/libgncmod-app-utils.la \
-	${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la
+    $(top_builddir)/src/app-utils/libgncmod-app-utils.la \
+    ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la
 
 check_PROGRAMS = test-link-module
 

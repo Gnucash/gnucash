@@ -12,7 +12,8 @@ check_PROGRAMS = \
   test-link-module
 
 test_link_module_SOURCES=test-link-module.c
-test_link_module_LDADD= \
+test_link_module_LDADD=\
+  $(top_builddir)/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \

@@ -11,11 +11,11 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS}
 
 LDADD = \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/test-core/libtest-core.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ../libgncmod-business-core.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS}
 
 TESTS = \

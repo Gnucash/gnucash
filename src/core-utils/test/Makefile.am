@@ -9,9 +9,9 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS}
 
 LDADD = \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ../libgnc-core-utils.la \
   ${top_builddir}/src/test-core/libtest-core.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS}
 
 # these tests are ordered kind more or less in the order

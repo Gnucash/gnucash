@@ -33,13 +33,13 @@ TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 LDADD = \
+   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/gnc-module/libgnc-module.la \
    ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
    ${top_builddir}/src/test-core/libtest-core.la \
    ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
    ${GUILE_LIBS} \
    ${GCONF_LIBS}
 

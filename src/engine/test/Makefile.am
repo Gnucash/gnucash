@@ -12,12 +12,12 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS}
 
 LDADD = \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/test-core/libtest-core.la \
   ../libgncmod-engine.la \
   ../test-core/libgncmod-test-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS}
 
 # these tests are ordered kind more or less in the order
@@ -84,8 +84,8 @@ check_PROGRAMS = \
 
 test_link_SOURCES = test-link.c
 test_link_LDADD = ../libgncmod-engine.la \
-  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la
 
 EXTRA_DIST = \
   test-create-account \
