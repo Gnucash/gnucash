@@ -643,8 +643,14 @@
 (define (gnc:accountlist-get-comm-balance-interval accountlist from to)
   (gnc:account-get-trans-type-balance-interval accountlist #f from to))
 
+(define (gnc:accountlist-get-comm-balance-interval-with-closing accountlist from to)
+  (gnc:account-get-trans-type-balance-interval-with-closing accountlist #f from to))
+
 (define (gnc:accountlist-get-comm-balance-at-date accountlist date)
   (gnc:account-get-trans-type-balance-interval accountlist #f #f date))
+
+(define (gnc:accountlist-get-comm-balance-at-date-with-closing accountlist date)
+  (gnc:account-get-trans-type-balance-interval-with-closing accountlist #f #f date))
 
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
@@ -708,7 +714,7 @@
 
 ;; Sums up any splits of a certain type affecting a set of accounts.
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
-;; If type is #f, sums all splits in the interval
+;; If type is #f, sums all non-closing splits in the interval
 (define (gnc:account-get-trans-type-balance-interval
 	 account-list type start-date-tp end-date-tp)
   (let* ((total (gnc:make-commodity-collector)))
@@ -716,9 +722,13 @@
            (let* ((shares (xaccSplitGetAmount split))
                   (acct-comm (xaccAccountGetCommodity
                               (xaccSplitGetAccount split)))
+                  (txn (xaccSplitGetParent split))
                   )
-             (gnc-commodity-collector-add total acct-comm shares)
-             )
+             (if type 
+                (gnc-commodity-collector-add total acct-comm shares)
+                (if (not (xaccTransGetIsClosingTxn txn))
+                    (gnc-commodity-collector-add total acct-comm shares)
+             )))
            )
 	 (gnc:account-get-trans-type-splits-interval
           account-list type start-date-tp end-date-tp)
@@ -727,6 +737,26 @@
     )
   )
 
+;; Sums up any splits of a certain type affecting a set of accounts.
+;; the type is an alist '((str "match me") (cased #f) (regexp #f))
+;; If type is #f, sums all splits in the interval (even closing splits)
+(define (gnc:account-get-trans-type-balance-interval-with-closing
+	 account-list type start-date-tp end-date-tp)
+  (let* ((total (gnc:make-commodity-collector)))
+    (map (lambda (split)
+           (let* ((shares (xaccSplitGetAmount split))
+                  (acct-comm (xaccAccountGetCommodity
+                              (xaccSplitGetAccount split)))
+                  )
+                (gnc-commodity-collector-add total acct-comm shares)
+             )
+           )
+	 (gnc:account-get-trans-type-splits-interval
+          account-list type start-date-tp end-date-tp)
+	 )
+    total
+    )
+  )
 ;; similar, but only counts transactions with non-negative shares and
 ;; *ignores* any closing entries
 (define (gnc:account-get-pos-trans-total-interval

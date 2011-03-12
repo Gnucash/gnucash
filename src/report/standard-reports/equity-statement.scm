@@ -444,10 +444,10 @@
 	  
 	  ;; start and end retained earnings (income - expenses)
 	  (set! neg-pre-start-retained-earnings
-		(gnc:accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-at-date-with-closing
 		 income-expense-accounts start-date-tp)) ; OK
 	  (set! neg-pre-end-retained-earnings
-		(gnc:accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-at-date-with-closing
 		 income-expense-accounts end-date-tp)) ; OK
 	  ;; neg-pre-end-retained-earnings is not used to calculate
 	  ;; profit but is used to calculate unrealized gains
@@ -455,13 +455,13 @@
 	  ;; calculate net income
 	  ;; first, ask out how much profit/loss was closed
 	  (set! income-expense-closing
-		(gnc:account-get-trans-type-balance-interval
+		(gnc:account-get-trans-type-balance-interval-with-closing
 		 income-expense-accounts closing-pattern
 		 start-date-tp end-date-tp)
 		)
 	  ;; find retained earnings for the period
 	  (set! neg-net-income
-		(gnc:accountlist-get-comm-balance-interval
+		(gnc:accountlist-get-comm-balance-interval-with-closing
 		 income-expense-accounts
 		 start-date-tp end-date-tp)) ; OK
 	  ;; revert the income/expense to its pre-closing balance
@@ -532,7 +532,7 @@
 	  ;; 
 	  
 	  (set! equity-closing 
-		(gnc:account-get-trans-type-balance-interval
+		(gnc:account-get-trans-type-balance-interval-with-closing
 		 equity-accounts closing-pattern
 		 start-date-tp end-date-tp)
 		)

@@ -516,29 +516,29 @@
 	  
 	  ;; sum revenues and expenses
 	  (set! revenue-closing
-		(gnc:account-get-trans-type-balance-interval
+		(gnc:account-get-trans-type-balance-interval-with-closing
 		 revenue-accounts closing-pattern
 		 start-date-tp end-date-tp)
 		) ;; this is norm positive (debit)
 	  (set! expense-closing
-		(gnc:account-get-trans-type-balance-interval
+		(gnc:account-get-trans-type-balance-interval-with-closing
 		 expense-accounts closing-pattern
 		 start-date-tp end-date-tp)
 		) ;; this is norm negative (credit)
 	  (set! expense-total
-		(gnc:accountlist-get-comm-balance-interval
+		(gnc:accountlist-get-comm-balance-interval-with-closing
 		 expense-accounts
 		 start-date-tp end-date-tp))
 	  (expense-total 'minusmerge expense-closing #f)
 	  (set! neg-revenue-total
-		(gnc:accountlist-get-comm-balance-interval
+		(gnc:accountlist-get-comm-balance-interval-with-closing
 		 revenue-accounts
 		 start-date-tp end-date-tp))
 	  (neg-revenue-total 'minusmerge revenue-closing #f)
 	  (set! revenue-total (gnc:make-commodity-collector))
 	  (revenue-total 'minusmerge neg-revenue-total #f)
           (set! trading-total 
-                (gnc:accountlist-get-comm-balance-interval
+                (gnc:accountlist-get-comm-balance-interval-with-closing
                  trading-accounts
                  start-date-tp end-date-tp))
 	  ;; calculate net income
