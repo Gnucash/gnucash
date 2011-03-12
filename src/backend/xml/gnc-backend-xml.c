@@ -684,6 +684,9 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
         rc = g_stat(datafile, &statbuf);
         if (rc == 0)
         {
+            /* We must never chmod the file /dev/null */
+            g_assert(safe_strcmp(tmp_name, "/dev/null") != 0);
+
             /* Use the permissions from the original data file */
             if (g_chmod(tmp_name, statbuf.st_mode) != 0)
             {

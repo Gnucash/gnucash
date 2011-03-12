@@ -139,6 +139,7 @@ log4glib_handler(const gchar     *log_domain,
 void
 qof_log_init_filename(const gchar* log_filename)
 {
+    gboolean warn_about_missing_permission = FALSE;
     if (log_table == NULL)
         log_table = g_hash_table_new_full(g_str_hash, g_str_equal,
                                           g_free, NULL);
@@ -160,14 +161,20 @@ qof_log_init_filename(const gchar* log_filename)
              * still isn't open. So we open normally with the file name and that's it. */
             fout = fopen(fname, "wb");
 #else
+            /* We must not overwrite /dev/null */
+            g_assert(safe_strcmp(log_filename, "/dev/null") != 0);
+
             /* Windows prevents renaming of open files, so the next command silently fails there
              * No problem, the filename on Winows will simply have the random characters */
             g_rename(fname, log_filename);
             fout = fdopen(fd, "w");
 #endif
+            if (!fout)
+                warn_about_missing_permission = TRUE;
         }
         else
         {
+            warn_about_missing_permission = TRUE;
             fout = stderr;
         }
         g_free(fname);
@@ -179,6 +186,11 @@ qof_log_init_filename(const gchar* log_filename)
     // @@fixme really, the userdata is a struct { log_table, fout, previous_handler }
     if (previous_handler == NULL)
         previous_handler = g_log_set_default_handler(log4glib_handler, log_table);
+
+    if (warn_about_missing_permission)
+    {
+        g_critical("Cannot open log output file \"%s\", using stderr.", log_filename);
+    }
 }
 
 void
@@ -257,10 +269,12 @@ qof_log_init_filename_special(const char *log_to_filename)
 {
     if (g_ascii_strcasecmp("stderr", log_to_filename) == 0)
     {
+        qof_log_init();
         qof_log_set_file(stderr);
     }
     else if (g_ascii_strcasecmp("stdout", log_to_filename) == 0)
     {
+        qof_log_init();
         qof_log_set_file(stdout);
     }
     else
