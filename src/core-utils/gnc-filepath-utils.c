@@ -310,6 +310,9 @@ gnc_dotgnucash_dir (void)
     tmp_dir = g_build_filename(dotgnucash, "checks", (gchar *)NULL);
     gnc_validate_directory(tmp_dir);
     g_free(tmp_dir);
+    tmp_dir = g_build_filename(dotgnucash, "translog", (gchar *)NULL);
+    gnc_validate_directory(tmp_dir);
+    g_free(tmp_dir);
 
     return dotgnucash;
 }
@@ -344,6 +347,27 @@ gnc_build_book_path (const gchar *filename)
 
     scrub_filename(filename_dup);
     result = g_build_filename(gnc_dotgnucash_dir(), "books",
+                              filename_dup, (gchar *)NULL);
+    g_free(filename_dup);
+    return result;
+}
+
+/** @fn gchar * gnc_build_translog_path (const gchar *filename)
+ *  @brief Make a path to filename in the translog subdirectory of the user's configuration directory.
+ *
+ * @param filename The name of the file
+ *
+ *  @return An absolute path.
+ */
+
+gchar *
+gnc_build_translog_path (const gchar *filename)
+{
+    gchar* filename_dup = g_strdup(filename);
+    gchar* result = NULL;
+
+    scrub_filename(filename_dup);
+    result = g_build_filename(gnc_dotgnucash_dir(), "translog",
                               filename_dup, (gchar *)NULL);
     g_free(filename_dup);
     return result;

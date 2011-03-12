@@ -44,6 +44,7 @@ gchar *gnc_resolve_file_path (const gchar *filefrag);
 const gchar *gnc_dotgnucash_dir (void);
 gchar *gnc_build_dotgnucash_path (const gchar *filename);
 gchar *gnc_build_book_path (const gchar *filename);
+gchar *gnc_build_translog_path (const gchar *filename);
 gchar *gnc_build_data_path (const gchar *filename);
 gchar *gnc_build_report_path (const gchar *filename);
 gchar *gnc_build_stdreports_path (const gchar *filename);
