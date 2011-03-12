@@ -79,6 +79,12 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 static GObjectClass *parent_class = NULL;
 
+// A static GHashTable to record the usage count for each printer
+// output name. FIXME: Currently this isn't cleaned up at program
+// shutdown because there isn't a place to easily insert a finalize()
+// function for this. Oh well.
+static GHashTable *static_report_printnames = NULL;
+
 // Property-id values.
 enum
 {
@@ -295,6 +301,11 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
     			G_TYPE_NONE, 1,
     			G_TYPE_POINTER);
     */
+
+    // Also initialize the report name usage count table
+    if (!static_report_printnames)
+        static_report_printnames = g_hash_table_new_full(g_str_hash,
+                                   g_str_equal, g_free, NULL);
 }
 
 static void
@@ -1613,7 +1624,8 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
             const gchar *invoice_number = gncInvoiceGetID(invoice);
             if (invoice_number)
             {
-                /* Report is for an invoice. Add the invoice number to the job name. */
+                /* Report is for an invoice. Add the invoice number to
+                 * the job name. */
                 gchar *name_number = g_strjoin ( "_", report_name, invoice_number, NULL );
                 g_free (report_name);
                 report_name = name_number;
@@ -1623,7 +1635,7 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 
     job_name = g_strjoin ( "_", report_name, job_date, NULL );
     g_free (report_name);
-	report_name = NULL;
+    report_name = NULL;
     g_free (job_date);
 
     {
@@ -1633,6 +1645,40 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
         while (strchr(job_name, forbidden_char))
         {
             *strchr(job_name, forbidden_char) = '_';
+        }
+    }
+
+    {
+        /* And one final checking issue: We want to avoid allocating
+         * the same name twice for a saved PDF.  Hence, we keep a
+         * GHashTable with the usage count of existing output
+         * names. (Because I'm lazy, I just use a static GHashTable
+         * for this.) */
+        gpointer value;
+        gboolean already_found;
+        g_assert(static_report_printnames);
+
+        // Lookup the existing usage count
+        value = g_hash_table_lookup(static_report_printnames, job_name);
+        already_found = (value != NULL);
+        if (!value)
+        {
+            value = GINT_TO_POINTER(0);
+        }
+
+        // Increment the stored usage count
+        value = GINT_TO_POINTER(1 + GPOINTER_TO_INT(value));
+        // and store it again
+        g_hash_table_insert(static_report_printnames, g_strdup(job_name), value);
+
+        // If the previous usage count was more than 0, append the current
+        // count (which is now 2 or higher) to the resulting name
+        if (already_found)
+        {
+            // The name was already in use, so modify the name again
+            gchar *tmp = g_strdup_printf("%s_%d", job_name, (int) GPOINTER_TO_INT(value));
+            g_free(job_name);
+            job_name = tmp;
         }
     }
 
