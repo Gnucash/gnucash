@@ -54,7 +54,7 @@ struct _accountpickerdialog
     GtkWidget       * account_tree_sw;
     const gchar * account_human_description;
     const gchar * account_online_id_value;
-    gnc_commodity * new_account_default_commodity;
+    const gnc_commodity * new_account_default_commodity;
     GNCAccountType new_account_default_type;
 };
 
@@ -146,7 +146,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
                                     const gchar * account_online_id_value,
                                     gboolean auto_create,
                                     const gchar * account_human_description,
-                                    gnc_commodity * new_account_default_commodity,
+                                    const gnc_commodity * new_account_default_commodity,
                                     GNCAccountType new_account_default_type,
                                     Account * default_selection,
                                     gboolean * ok_pressed)
@@ -257,6 +257,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
                 break;
             case GNC_RESPONSE_NEW:
                 gnc_import_add_account(picker);
+                ok_pressed_retval = TRUE;
                 break;
             default:
                 ok_pressed_retval = FALSE;

@@ -1539,10 +1539,10 @@ gnc_ui_new_account_window_internal (QofBook *book,
                                     Account *base_account,
                                     gchar **subaccount_names,
                                     GList *valid_types,
-                                    gnc_commodity * default_commodity,
+                                    const gnc_commodity * default_commodity,
                                     gboolean modal)
 {
-    gnc_commodity *commodity, *parent_commodity;
+    const gnc_commodity *commodity, *parent_commodity;
     AccountWindow *aw;
     Account *account;
     GList *list;
@@ -1607,7 +1607,7 @@ gnc_ui_new_account_window_internal (QofBook *book,
         commodity = NULL;
     }
     gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
-                                     commodity);
+                                     (gpointer) commodity);
     gnc_account_commodity_from_type (aw, FALSE);
 
     if (base_account == NULL)
@@ -1704,7 +1704,7 @@ gnc_ui_new_accounts_from_name_window_with_types (const char *name,
 Account *
 gnc_ui_new_accounts_from_name_with_defaults (const char *name,
         GList *valid_types,
-        gnc_commodity * default_commodity,
+        const gnc_commodity * default_commodity,
         Account * parent)
 {
     QofBook *book;

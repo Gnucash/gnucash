@@ -93,7 +93,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
                                     const gchar * account_online_id_value,
                                     gboolean auto_create,
                                     const gchar * account_human_description,
-                                    gnc_commodity * new_account_default_commodity,
+                                    const gnc_commodity * new_account_default_commodity,
                                     GNCAccountType new_account_default_type,
                                     Account * default_selection,
                                     gboolean * ok_pressed

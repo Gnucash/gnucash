@@ -131,7 +131,7 @@ Account * gnc_ui_new_accounts_from_name_window_with_types (const char *name,
  */
 Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
         GList *valid_types,
-        gnc_commodity * default_commodity,
+        const gnc_commodity * default_commodity,
         Account * parent);
 
 /*
