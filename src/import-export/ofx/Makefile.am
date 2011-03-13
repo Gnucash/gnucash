@@ -4,11 +4,13 @@ pkglib_LTLIBRARIES=libgncmod-ofx.la
 
 libgncmod_ofx_la_SOURCES = \
   gnc-ofx-import.c \
+  gnc-ofx-kvp.c \
   gncmod-ofx-import.c \
   gnc-plugin-ofx.c
 
 noinst_HEADERS = \
   gnc-ofx-import.h \
+  gnc-ofx-kvp.h \
   gnc-plugin-ofx.h
 
 libgncmod_ofx_la_LDFLAGS = -avoid-version

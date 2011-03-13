@@ -49,6 +49,8 @@
 #include "gnc-glib-utils.h"
 #include "core-utils/gnc-gconf-utils.h"
 
+#include "gnc-ofx-kvp.h"
+
 #define GCONF_SECTION "dialogs/import/ofx"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
@@ -276,9 +278,6 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     Account *account;
     Account *investment_account = NULL;
     Account *income_account = NULL;
-    kvp_frame * acc_frame;
-    kvp_value * kvp_val;
-    const GncGUID * income_acc_guid;
     gchar *investment_account_text;
     gnc_commodity *currency = NULL;
     gnc_commodity *investment_commodity = NULL;
@@ -540,13 +539,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                 {
                     DEBUG("Now let's find an account for the destination split");
 
-                    acc_frame = xaccAccountGetSlots(investment_account);
-                    kvp_val = kvp_frame_get_slot(acc_frame,
-                                                 "ofx/associated-income-account");
-                    if (kvp_val != NULL)
-                    {
-                        income_account = xaccAccountLookup(kvp_value_get_guid(kvp_val), book);
-                    }
+                    income_account = gnc_ofx_kvp_get_assoc_account(investment_account);
+
                     if (income_account == NULL)
                     {
                         DEBUG("Couldn't find an associated income account");
@@ -564,15 +558,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                                          ACCT_TYPE_INCOME,
                                          NULL,
                                          NULL);
-                        income_acc_guid = xaccAccountGetGUID(income_account);
-                        kvp_val = kvp_value_new_guid(income_acc_guid);
-                        if (acc_frame == NULL)
-                        {
-                            DEBUG("The kvp_frame was NULL, allocating new one");
-                            acc_frame = kvp_frame_new();
-                        }
-                        kvp_frame_set_slot_nc(acc_frame, "ofx/associated-income-account",
-                                              kvp_val);
+                        gnc_ofx_kvp_set_assoc_account(investment_account,
+                                                      income_account);
                         DEBUG("KVP written");
 
                     }
