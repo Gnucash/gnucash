@@ -201,7 +201,7 @@ set_default LIBXSLT_LIBXML2_URL "${XMLSOFT_URL}/libxml2-2.7.6.win32.zip"
 set_default LIBXSLT_ICONV_URL "${XMLSOFT_URL}/iconv-1.9.2.win32.zip"
 set_default LIBXSLT_ZLIB_URL "${XMLSOFT_URL}/zlib-1.2.3.win32.zip"
 set_default LIBXSLT_DIR $GLOBAL_DIR\\libxslt
-#set_default LIBXSLT_SRC_URL "http://xmlsoft.org/sources/libxslt-1.1.26.tar.gz" # unused
+set_default LIBXSLT_SRC_URL "http://xmlsoft.org/sources/libxslt-1.1.26.tar.gz" # needed for webkit build
 
 set_default LIBXML2_URL "$GNOME_WIN32_DEPS_URL/libxml2_2.7.4-1_win32.zip"
 set_default LIBXML2_DEV_URL "$GNOME_WIN32_DEPS_URL/libxml2-dev_2.7.4-1_win32.zip"
@@ -298,11 +298,12 @@ set_default INNO_DIR $GLOBAL_DIR\\inno
 set_default HH_URL "http://download.microsoft.com/download/0/a/9/0a939ef6-e31c-430f-a3df-dfae7960d564/htmlhelp.exe"
 set_default HH_DIR $GLOBAL_DIR\\hh
 
-set_default WEBKIT_URL "$SF_MIRROR/gnucash/webkit-1.1.90-win32.zip"
-set_default WEBKIT_DIR $GLOBAL_DIR\\webkit-1.1.90
-set_default WEBKIT_SRC_URL "http://www.webkitgtk.org/webkit-1.1.90.tar.gz"
-set_default WEBKIT_PATCH `pwd`/webkit-1.2.0-time.diff
-set_default WEBKIT_PATCH2 `pwd`/webkit-1.2.0-vsaprintf.diff
+set_default WEBKIT_VERSION "1.1.90"
+set_default WEBKIT_URL "$SF_MIRROR/gnucash/webkit-${WEBKIT_VERSION}-win32.zip"
+set_default WEBKIT_DIR $GLOBAL_DIR\\webkit-${WEBKIT_VERSION}
+set_default WEBKIT_SRC_URL "http://www.webkitgtk.org/webkit-1.2.7.tar.gz"
+set_default WEBKIT_PATCH `pwd`/webkit-1.2.7-time.patch
+set_default WEBKIT_PATCH2 `pwd`/webkit-1.2.7-vasprintf.patch
 set_default ENCHANT_URL "$GNOME_WIN32_URL/dependencies/enchant_1.5.0-2_win32.zip"
 set_default ENCHANT_DEV_URL "$GNOME_WIN32_URL/dependencies/enchant-dev_1.5.0-2_win32.zip"
 #set_default LIBSOUP_URL "$GNOME_WIN32_URL/libsoup/2.4/libsoup-2.4.0.zip"

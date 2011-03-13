@@ -82,11 +82,10 @@ function inst_crossmingw() {
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     mkdir -p `unix_path $MINGW_DIR\\\\mingw32`
     if [ -d $_MINGW_UDIR ] && 
-        quiet $_MINGW_UDIR/bin/mingw32-gcc -v &&
-        quiet mingw32-gcc -v 
+        quiet $CC -v 
     then
         echo "Cross mingw installed."
-       if [ ` mingw32-gcc -dumpversion | cut -d. -f1` -le 3 ] ;then
+       if [ ` $CC -dumpversion | cut -d. -f1` -le 3 ] ;then
            die "GCC 4.4 or higher needed"
        fi
     else
@@ -105,7 +104,7 @@ function inst_crossmingw() {
 
 function inst_crossbinutils() {
     _MINGW_UDIR=`unix_path $MINGW_DIR`
-    if quiet $_MINGW_UDIR/bin/mingw32-ld -v
+    if quiet $LD -v
     then 
         echo "Cross binutils already installed."
     else
@@ -131,7 +130,7 @@ function inst_crossbinutils() {
 
 function inst_crossgcc(){
     _MINGW_UDIR=`unix_path $MINGW_DIR`
-    if quiet $_MINGW_UDIR/bin/mingw32-gcc
+    if quiet $CC
     then 
         echo "Cross gcc alreadyinstalled."
     else
@@ -160,7 +159,7 @@ EOF
         qpopd
         qpushd $TMP_UDIR/build-gcc
             $TMP_UDIR/gcc-*/configure  \
-                --prefix=$_MINGW_UDIR --target=mingw32 \
+                --prefix=$_MINGW_UDIR --target=$TARGET \
                 --with-headers=$_MINGW_UDIR/mingw32/include \
                 --enable-languages=c,c++ \
                 --with-gcc --with-gnu-ld --with-gnu-as \
@@ -171,7 +170,7 @@ EOF
             make
             make install
         qpopd
-        if quiet $_MINGW_UDIR/bin/mingw32-gcc -v
+        if quiet $CC -v
         then 
             rm -rf $TMP_UDIR/build-gcc $TMP_UDIR/gcc-* $TMP_UDIR/mydir
             echo "Cross gcc installed successfully."
@@ -188,7 +187,7 @@ function inst_libxslt_gnome() {
     add_to_env -L$_GNOME_UDIR/lib GNOME_LDFLAGS
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     if [ "$CROSS_COMPILE" != "yes" ]; then
-        add_to_env $_GNOME_UDIR//pkg-config-msys.shPKG_CONFIG
+        add_to_env $_GNOME_UDIR//pkg-config-msys.sh PKG_CONFIG
     else
         add_to_env pkg-config PKG_CONFIG
     fi
@@ -214,12 +213,24 @@ EOF
          assert_one_dir $TMP_UDIR/libxslt-*
          qpushd $TMP_UDIR/libxslt-*
              ./configure ${HOST_XCOMPILE} \
+                 --with-libxml-prefix=$_GNOME_UDIR \
+                 --with-libxml-include-prefix=$_GNOME_UDIR/include/libxml2 \
+                 --with-libxml-libs-prefix=$_GNOME_UDIR/lib \
+                 PKG_CONFIG_PATH="$_GNOME_UDIR/lib/pkgconfig" \
                  --prefix=${_GNOME_UDIR} \
+                 --enable-static=no \
+                 --with-plugins=no \
+                 --with-python=no \
                  CPPFLAGS="$GNOME_CPPFLAGS $GNUTLS_CPPFLAGS" \
                  LDFLAGS="$GNOME_LDFLAGS $GNUTLS_LDFLAGS"
+            make .
+            cd libxslt
+            make EXTRA_LIBS="-L$_GNOME_UDIR/bin -lxml2-2"
+            cd ..
             make
             make install
          qpopd
+         rm -r $TMP_UDIR/libxslt-*
     fi
 }
 
@@ -318,6 +329,7 @@ function inst_libsoup () {
             make
             make install 
          qpopd
+         rm -r $TMP_UDIR/libsoup-*
     fi
 }
 
@@ -325,6 +337,7 @@ function inst_webkit() {
     setup WebKitGTK+
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     _GNOME_UDIR=`unix_path $GNOME_DIR`
+    _WEBKIT_DIR=`unix_path $WEBKIT_DIR`
     add_to_env -I$_GNOME_UDIR/include GNOME_CPPFLAGS
     add_to_env -L$_GNOME_UDIR/lib GNOME_LDFLAGS
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
@@ -355,18 +368,39 @@ function inst_webkit() {
         wget_unpacked $WEBKIT_SRC_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/webkit-*
         qpushd $TMP_UDIR/webkit-*
-            patch -p1 < $WEBKIT_PATCH
-            patch -p1 < $WEBKIT_PATCH2
-            perl -pi.bak -e"s!/usr/bin/gcc!$_MINGW_UDIR/bin/mingw32-gcc!" \
+            if [ -n "$WEBKIT_PATCH" -a -f "$WEBKIT_PATCH" ] ; then
+                patch -p1 < $WEBKIT_PATCH
+            fi
+            if [ -n "$WEBKIT_PATCH2" -a -f "$WEBKIT_PATCH2" ] ; then
+                patch -p1 < $WEBKIT_PATCH2
+            fi
+            perl -pi.bak -e"s!/usr/bin/gcc!$CC!" \
                 WebCore/dom/make_names.pl \
                 WebCore/css/make-css-file-arrays.pl \
                 WebCore/bindings/scripts/IDLParser.pm
             ./configure ${HOST_XCOMPILE} \
-               --prefix=${_GNOME_UDIR} \
-               --disable-silent-rules \
-               --disable-video \
-               --with-target=win32 \
                CPPFLAGS="$GNOME_CPPFLAGS" \
+                --prefix=${_WEBKIT_DIR} \
+                --enable-silent-rules \
+                --disable-datalist \
+                --disable-dom-storage \
+                --disable-eventsource \
+                --disable-filters \
+                --disable-gtk-doc-html \
+                --disable-offline-web-applications \
+                --disable-ruby \
+                --disable-shared-workers \
+                --disable-silent-rules \
+                --disable-svg-animation \
+                --disable-svg-as-image \
+                --disable-svg-fonts \
+                --disable-svg-foreign-object \
+                --disable-svg-use \
+                --disable-video \
+                --disable-workers \
+                --disable-xpath \
+                --with-target=win32 \
+                --with-unicode-backend=icu \
                CFLAGS="-g -O2 -std=gnu99" \
                CXXFLAGS="-g -O2 -std=gnu++98" \
                LDFLAGS="$GNOME_LDFLAGS"
@@ -445,12 +479,20 @@ function build_icu4c_native() {
 function inst_icu4c_mingw32() {
     setup icu4c-mingw32
     _ICU4C_UDIR=`unix_path $ICU4C_DIR`
+    rm -rf $TMP_UDIR/icu-cross
     mkdir -p $TMP_UDIR/icu-cross
+
+    # Note: If you have TARGET=i586-mingw32mingw, for this library you
+    # need to set a different --host argument here due to some known
+    # bug in the ICU source package
+    #HOST_XCOMPILE="--host=i586-mingw32"
+
     qpushd $TMP_UDIR/icu-cross
         $TMP_UDIR/icu/source/configure ${HOST_XCOMPILE} \
             --prefix=$_ICU4C_UDIR \
             --with-cross-build=$TMP_UDIR/icu-native \
-            --with-data-packaging=library
+            --with-data-packaging=library \
+            CC=$CC CPP="$CC -E" RANLIB=$RANLIB CXX=$TARGET-g++
         make  \
             CFLAGS="-g -O2 -std=gnu99" \
             CXXFLAGS="-g -O2 -std=gnu++98"
