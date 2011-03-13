@@ -542,81 +542,15 @@ AC_CHECK_LIB(z, gzopen, [:], [
 LIBS="$oLIBS"
 
 ### --------------------------------------------------------------------------
-### QOF, the Query Object Framework.  Check if there is a native version.
+### Internal code part which is called "qof"
 
-dnl XXX: FIXME: RELEASE HACK
-dnl This makes sure that we default to using internal QOF for SVN.
-dnl Make sure to enable this to be the default for stable releases!
+LIBQOF_LIBRARY_VERSION=1:4:0
+AC_SUBST(LIBQOF_LIBRARY_VERSION)
 
-AC_ARG_ENABLE(qof,
-  [AS_HELP_STRING([--enable-qof],[enable the search for an external QOF library (disabled)])],
-  [AC_MSG_ERROR([GnuCash has disabled use of external QOF.])
-   case "${enableval}" in
-     yes) gnc_enable_qof=true ;;
-     no)  gnc_enable_qof=false ;;
-     *) AC_MSG_ERROR(bad value ${enableval} for --enable-qof) ;;
-   esac],
-   [gnc_enable_qof=false])
-
-AC_ARG_WITH(qof, [AS_HELP_STRING([--with-qof=path],[prefix for Query Object Framework - QOF (auto)])],
-    [gnc_with_qof=$withval], [gnc_with_qof=yes])
-AC_ARG_WITH(qt3_wizard_package,
-                 [AS_HELP_STRING([--with-qt3-wizard-package=name],[name of package containing qt3-wizard (aqbanking)])],
-    [QT3_WIZARD_PACKAGE=$withval], [QT3_WIZARD_PACKAGE=aqbanking])
-AC_DEFINE_UNQUOTED([QT3_WIZARD_PACKAGE],["$QT3_WIZARD_PACKAGE"],[Name of package containing qt3-wizard.])
-
-# GnuCash builds without deprecated QOF code so needs latest version.
-QOF_REQUIRED=0.6.4
-# Can't use external qof until it supports "alternate dirty mode"
-QOF_REQUIRED=99.99.99
-if test "$gnc_enable_qof" = true ; then
-  AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
-  if test "$gnc_with_qof" != "yes"; then
-    QOF=`$PKG_CONFIG --silence-errors --exists '$gnc_with_qof/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
-    QOF_LIBS=`$PKG_CONFIG --silence-errors --libs $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-    QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-    QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-    QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-    QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-    QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir $gnc_with_qof/lib/pkgconfig/qof-1.pc`
-  else
-    QOF=`$PKG_CONFIG --silence-errors --exists 'qof-1 >= $QOF_REQUIRED'`
-    QOF_LIBS=`$PKG_CONFIG --silence-errors --libs qof-1`
-    QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags qof-1`
-    QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion qof-1`
-    QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix qof-1`
-    QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir qof-1`
-    QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir qof-1`
-  fi
-  if test x$QOF_XML_DIR = x; then
-    AC_MSG_RESULT([no, will use internal QOF code])
-  else
-    AC_MSG_RESULT([yes])
-  fi
-else
-  AC_MSG_NOTICE([External QOF Disabled.  Using Internal QOF Code.])
-fi
-if test x$QOF_XML_DIR = x; then
-  QOF_LIB_DIR='${pkglibdir}'
-  QOF_CFLAGS='-I${top_builddir}/src/libqof/qof -I${top_srcdir}/src/libqof/qof'
-  QOF_LIBS='${top_builddir}/src/libqof/qof/libgnc-qof.la'
-  QOF_VERSION="internal"
-  QOF_PREFIX="internal"
-  LIBQOF_LIBRARY_VERSION=1:4:0
-  AC_SUBST(LIBQOF_LIBRARY_VERSION)
-  AC_DEFINE(HAVE_LIBQOF,,[We will use the internal QOF code])
-  HAVE_LIBQOF="use_internal"
-fi
-AM_CONDITIONAL(USE_LIBQOF, [test x$HAVE_LIBQOF != x])
-AM_CONDITIONAL(USE_LIBQOF, [test "$HAVE_LIBQOF" = "use_internal"])
-AC_SUBST(USE_LIBQOF)
+QOF_CFLAGS='-I${top_builddir}/src/libqof/qof -I${top_srcdir}/src/libqof/qof'
+QOF_LIBS='${top_builddir}/src/libqof/qof/libgnc-qof.la'
 AC_SUBST(QOF_CFLAGS)
 AC_SUBST(QOF_LIBS)
-AS_SCRUB_INCLUDE(QOF_PREFIX)
-AC_SUBST(QOF_PREFIX)
-AC_SUBST(QOF_LIB_DIR)
-
-AC_DEFINE(QOF_DISABLE_DEPRECATED,1, [Don't use deprecated qof functions])
 
 ### ----------------------
 ### LIBDBI
@@ -716,66 +650,8 @@ case "${want_ofx}" in
   no)   AC_MSG_RESULT(no) ;;
   auto) AC_MSG_RESULT(yes -- automatic test) ;;
 esac
-if test x${want_ofx} != xno ;
-then
-  AC_ARG_WITH( ofx-prefix,
-    [AS_HELP_STRING([--with-ofx-prefix=DIR],[specify where to look for libOFX])],
-    OFXPREFIX="$with_ofx_prefix" )
-
-  if test x${OFXPREFIX} != x ; then
-    LIBOFX_LIBS="-L${OFXPREFIX}/lib"
-    LIBOFX_CFLAGS="-I${OFXPREFIX}/include"
-  fi
-
-  if test "x${want_ofx}" != xno ; then
-    # Version number verified. Now check header files.
-    AC_MSG_CHECKING(for libofx/libofx.h)
-    AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
-    save_CPPFLAGS="${CPPFLAGS}"
-    CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
-    AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes),
-                OFXfound=no )
-
-    if test x${OFXPREFIX} = x -a x${OFXfound} = no ; then
-      LIBOFX_LIBS="-L$/usr/local/lib"
-      LIBOFX_CFLAGS="-I$/usr/local/include"
-      AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
-      CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
-
-      AC_TRY_CPP( [#include <libofx/libofx.h>],
-        AC_MSG_RESULT([yes (in /usr/local)]),
-          [ if test "x${want_ofx}" = xyes ; then
-              AC_MSG_ERROR([cannot find libofx header, needed for OFX support.])
-            else
-              AC_MSG_RESULT([cannot find libofx header, needed for OFX support.])
-              want_ofx=no
-            fi
-          ] )
-    fi
-
-    if test "x${want_ofx}" != xno ; then
-      LIBOFX_LIBS="${LIBOFX_LIBS} -lofx"
-      AC_MSG_CHECKING(for libofx)
-      save_LIBS="${LIBS}"
-      LIBS="${LIBS} ${LIBOFX_LIBS}"
-      AC_TRY_LINK( [#include <libofx/libofx.h>],
-        [ LibofxContextPtr libofx_context = libofx_get_new_context();
-          libofx_free_context(libofx_context);
-        ], AC_MSG_RESULT(yes),
-        [ if test "x${want_ofx}" = xyes ; then
-            AC_MSG_ERROR([*** Cannot compile test program for libofx library. Please check config.log for the exact error.])
-          else
-            AC_MSG_RESULT([*** Cannot compile test program for libofx library. Please check config.log for the exact error.])
-            want_ofx=no
-          fi
-        ] )
-
-      LIBS="${save_LIBS}"
-      CPPFLAGS="${save_CPPFLAGS}"
-      AC_SUBST(LIBOFX_CFLAGS)
-      AC_SUBST(LIBOFX_LIBS)
-    fi
-  fi
+if test x${want_ofx} != xno ; then
+  PKG_CHECK_MODULES(LIBOFX, libofx, [want_ofx="yes"], [want_ofx="no"])
 fi
 if test "x${want_ofx}" != xno ; then
   OFX_DIR=ofx
@@ -826,6 +702,11 @@ then
   AC_SUBST(AQBANKING_CFLAGS)
 fi
 AC_SUBST(AQBANKING_DIR)
+
+AC_ARG_WITH(qt3_wizard_package,
+                 [AS_HELP_STRING([--with-qt3-wizard-package=name],[name of package containing qt3-wizard (aqbanking)])],
+    [QT3_WIZARD_PACKAGE=$withval], [QT3_WIZARD_PACKAGE=aqbanking])
+AC_DEFINE_UNQUOTED([QT3_WIZARD_PACKAGE],["$QT3_WIZARD_PACKAGE"],[Name of package containing qt3-wizard.])
 
 ### --------------------------------------------------------------------------
 ### i18n
