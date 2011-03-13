@@ -611,6 +611,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     GtkTreeSelection *selection;
     gchar *tmp, *imbalance, *text, *color;
     const gchar *ro_text;
+    Split *split;
     g_assert (gui);
     g_assert (model);
     g_assert (info);
@@ -620,8 +621,9 @@ refresh_model_row (GNCImportMainMatcher *gui,
     gtk_list_store_set(store, iter, DOWNLOADED_COL_DATA, info, -1);
 
     /*Account:*/
-    ro_text =
-        xaccAccountGetName(xaccSplitGetAccount(gnc_import_TransInfo_get_fsplit (info)));
+    split = gnc_import_TransInfo_get_fsplit (info);
+    g_assert(split); // Must not be NULL
+    ro_text = xaccAccountGetName(xaccSplitGetAccount(split));
     gtk_list_store_set(store, iter, DOWNLOADED_COL_ACCOUNT, ro_text, -1);
 
     /*Date*/
@@ -633,8 +635,8 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
     /*Amount*/
     ro_text = xaccPrintAmount
-              (xaccSplitGetAmount (gnc_import_TransInfo_get_fsplit(info) ),
-               gnc_split_amount_print_info(gnc_import_TransInfo_get_fsplit(info), TRUE)
+              (xaccSplitGetAmount (split),
+               gnc_split_amount_print_info(split, TRUE)
               );
     gtk_list_store_set(store, iter, DOWNLOADED_COL_AMOUNT, ro_text, -1);
 
@@ -643,7 +645,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     gtk_list_store_set(store, iter, DOWNLOADED_COL_DESCRIPTION, ro_text, -1);
 
     /*Memo*/
-    ro_text = xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit(info) );
+    ro_text = xaccSplitGetMemo(split);
     gtk_list_store_set(store, iter, DOWNLOADED_COL_MEMO, ro_text, -1);
 
     /*Actions*/
@@ -858,6 +860,12 @@ automatch_store_transactions (GNCImportMainMatcher *info,
     {
         refresh_model_row(info, model, iter, trans_info);
     }
+}
+
+GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info)
+{
+    g_assert(info);
+    return info->dialog;
 }
 
 /** @} */

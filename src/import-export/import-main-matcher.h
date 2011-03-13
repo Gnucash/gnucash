@@ -108,5 +108,9 @@ void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transac
  */
 gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info);
 
+/** Returns the widget of this dialog.
+ */
+GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info);
+
 #endif
 /**@}*/

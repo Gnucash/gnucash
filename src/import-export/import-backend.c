@@ -1124,6 +1124,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans)
 
     /* Look for an online_id in the first split */
     source_split = xaccTransGetSplit(trans, 0);
+    g_assert(source_split);
 
     /* DEBUG("%s%d%s","Checking split ",i," for duplicates"); */
     dest_acct = xaccSplitGetAccount(source_split);
@@ -1151,13 +1152,16 @@ GNCImportTransInfo *
 gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap)
 {
     GNCImportTransInfo *transaction_info;
+    Split *split;
     g_assert (trans);
 
     transaction_info = g_new0(GNCImportTransInfo, 1);
 
     transaction_info->trans = trans;
     /* Only use first split, the source split */
-    transaction_info->first_split = xaccTransGetSplit(trans, 0);
+    split = xaccTransGetSplit(trans, 0);
+    g_assert(split);
+    transaction_info->first_split = split;
 
     /* Try to find a previously selected destination account
        string match for the ADD action */

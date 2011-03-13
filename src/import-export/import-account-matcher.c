@@ -269,7 +269,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
     }
     else
     {
-        retval_name = xaccAccountGetName(retval);
+        retval_name = retval ? xaccAccountGetName(retval) : NULL;
         ok_pressed_retval = TRUE; /* There was no dialog involved, so the computer "pressed" ok */
     }
     /*FIXME: DEBUG("WRITEME: gnc_import_select_account() Here we should check if account type is compatible, currency matches, etc.\n"); */
