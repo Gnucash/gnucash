@@ -575,7 +575,14 @@ then
     LIBDBI_LIBS=-ldbi
     DBI_DIR=dbi
   else
-    AC_MSG_ERROR( Unable to find dbi/dbi.h )
+    AC_MSG_ERROR([
+
+ Unable to find <dbi/dbi.h>. Either install the libdbi development
+ package (such as libdbi0-dev), or switch off the database backend of
+ gnucash by --disable-dbi.
+ Note: If you install libdbi, you should also install its database
+ drivers (such as libdbd-sqlite3 libdbd-mysql libdbd-pgsql).
+])
   fi
 fi
 AC_SUBST(LIBDBI_LIBS)
