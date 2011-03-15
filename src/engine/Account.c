@@ -2148,7 +2148,7 @@ xaccAccountSetName (Account *acc, const char *str)
 
     /* optimizations */
     priv = GET_PRIVATE(acc);
-    if (str == priv->accountName)
+    if (safe_strcmp(str, priv->accountName) == 0)
         return;
 
     xaccAccountBeginEdit(acc);
@@ -2167,7 +2167,7 @@ xaccAccountSetCode (Account *acc, const char *str)
 
     /* optimizations */
     priv = GET_PRIVATE(acc);
-    if (str == priv->accountCode)
+    if (safe_strcmp(str, priv->accountCode) == 0)
         return;
 
     xaccAccountBeginEdit(acc);
@@ -2186,7 +2186,7 @@ xaccAccountSetDescription (Account *acc, const char *str)
 
     /* optimizations */
     priv = GET_PRIVATE(acc);
-    if (str == priv->description)
+    if (safe_strcmp(str, priv->description) == 0)
         return;
 
     xaccAccountBeginEdit(acc);

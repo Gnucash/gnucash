@@ -409,20 +409,23 @@ gnc_ui_to_account(AccountWindow *aw)
     gtk_text_buffer_get_end_iter (aw->notes_text_buffer, &end);
     string = gtk_text_buffer_get_text (aw->notes_text_buffer, &start, &end, FALSE);
     old_string = xaccAccountGetNotes (account);
-    if (safe_strcmp (string, old_string) != 0)
+    if (null_strcmp (string, old_string) != 0)
         xaccAccountSetNotes (account, string);
 
     flag =
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->tax_related_button));
-    xaccAccountSetTaxRelated (account, flag);
+    if (xaccAccountGetTaxRelated (account) != flag)
+	xaccAccountSetTaxRelated (account, flag);
 
     flag =
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->placeholder_button));
-    xaccAccountSetPlaceholder (account, flag);
+    if (xaccAccountGetPlaceholder (account) != flag)
+	xaccAccountSetPlaceholder (account, flag);
 
     flag =
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->hidden_button));
-    xaccAccountSetHidden (account, flag);
+    if (xaccAccountGetHidden (account) != flag)
+	xaccAccountSetHidden (account, flag);
 
     parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
 
