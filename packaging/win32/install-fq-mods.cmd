@@ -16,7 +16,7 @@ set _perlmajor=%errorlevel%
 perl -e "$ver=1000*sprintf(\"%%.3f\", $]); exit(int($ver)-5000);"
 set _perlminor=%errorlevel%
 if %_perlmajor% equ 5 (
-  if %_perlminor% equ 10 (
+  if %_perlminor% geq 10 (
     set _perlversion=5.10
     goto ccp
   )
@@ -31,7 +31,7 @@ if %_perlmajor% equ 5 (
 )
 echo.
 echo Did not find a usable perl.
-echo Please install ActivePerl 5.8 (http://www.activestate.com/store/activeperl)
+echo Please install ActivePerl 5.8, 5.10 or 5.12 (http://www.activestate.com/store/activeperl)
 echo and add the bin directory to your Path environment variable.
 goto error
 :ccp
@@ -49,12 +49,12 @@ echo * Install Crypt-SSLeay
 echo.
 set OLDPATH=%PATH%
 set PATH=%CD%;%PATH%
-if %_perlversion% == 5.10 (
-  perl -x -S ppm install Crypt-SSLeay
+if %_perlversion% == 5.6 (
+  perl -x -S ppm install http://theoryx5.uwinnipeg.ca/ppmpackages/Crypt-SSLeay.ppd
 ) else if %_perlversion% == 5.8 (
   echo anything | perl -x -S ppm install http://theoryx5.uwinnipeg.ca/ppms/Crypt-SSLeay.ppd
 ) else (
-  perl -x -S ppm install http://theoryx5.uwinnipeg.ca/ppmpackages/Crypt-SSLeay.ppd
+  perl -x -S ppm install Crypt-SSLeay
 )
 set errlvlbak=%errorlevel%
 set PATH=%OLDPATH%
@@ -85,7 +85,7 @@ goto end
 
 :error:
 echo.
-echo An error occured, see above.
+echo An error occurred, see above.
 echo.
 
 :end
