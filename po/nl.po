@@ -10,10 +10,10 @@
 # Mark Haanen <i18n@haanen.net>, 2009, 2010, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-2.4.3\n"
+"Project-Id-Version: gnucash-2.4.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-26 14:20-0500\n"
-"PO-Revision-Date: 2011-03-11 20:59+0100\n"
+"POT-Creation-Date: 2011-03-13 15:06-0400\n"
+"PO-Revision-Date: 2011-03-15 23:05+0100\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
@@ -67,7 +67,7 @@ msgstr "Numerieke fout"
 #. * account generally corresponds to a specific line number
 #. * on a paper form and each form has a unique
 #. * identification (e.g., Form 1040, Schedule A).
-#: ../src/app-utils/gnc-ui-util.c:497
+#: ../src/app-utils/gnc-ui-util.c:496
 msgid "Tax-related but has no tax code"
 msgstr "Fiscaal relevant maar zonder belastingcode"
 
@@ -75,52 +75,52 @@ msgstr "Fiscaal relevant maar zonder belastingcode"
 msgid "Tax entity type not specified"
 msgstr "Belastingsubjectsoort niet gespecificeerd"
 
-#: ../src/app-utils/gnc-ui-util.c:572
+#: ../src/app-utils/gnc-ui-util.c:583
 #, c-format
 msgid "Tax type %s: invalid code %s for account type"
 msgstr "Belastingsoort %s: ongeldige code %s voor grootboekrekeningtype"
 
-#: ../src/app-utils/gnc-ui-util.c:576
+#: ../src/app-utils/gnc-ui-util.c:587
 #, c-format
 msgid "Not tax-related; tax type %s: invalid code %s for account type"
 msgstr "Fiscaal niet relevant; belastingsoort %s: ongeldige code %s voor grootboekrekeningtype"
 
-#: ../src/app-utils/gnc-ui-util.c:586
+#: ../src/app-utils/gnc-ui-util.c:599
 #, c-format
 msgid "Invalid code %s for tax type %s"
 msgstr "Ongeldige code %s voor belastingsoort %s"
 
-#: ../src/app-utils/gnc-ui-util.c:590
+#: ../src/app-utils/gnc-ui-util.c:603
 #, c-format
 msgid "Not tax-related; invalid code %s for tax type %s"
 msgstr "Fiscaal niet relevant; ongeldige code %s voor belastingsoort %s"
 
-#: ../src/app-utils/gnc-ui-util.c:599
+#: ../src/app-utils/gnc-ui-util.c:615
 #, c-format
 msgid "No form: code %s, tax type %s"
 msgstr "Geen formulier: code %s, belastingsoort %s"
 
-#: ../src/app-utils/gnc-ui-util.c:602
+#: ../src/app-utils/gnc-ui-util.c:619
 #, c-format
 msgid "Not tax-related; no form: code %s, tax type %s"
 msgstr "Fiscaal niet relevant; geen formulier: code %s, belastingsoort %s"
 
-#: ../src/app-utils/gnc-ui-util.c:611 ../src/app-utils/gnc-ui-util.c:624
+#: ../src/app-utils/gnc-ui-util.c:630 ../src/app-utils/gnc-ui-util.c:646
 #, c-format
 msgid "No description: form %s, code %s, tax type %s"
 msgstr "Geen omschrijving: formulier %s, code %s, belastingsoort %s"
 
-#: ../src/app-utils/gnc-ui-util.c:615 ../src/app-utils/gnc-ui-util.c:628
+#: ../src/app-utils/gnc-ui-util.c:634 ../src/app-utils/gnc-ui-util.c:650
 #, c-format
 msgid "Not tax-related; no description: form %s, code %s, tax type %s"
 msgstr "Fiscaal niet relevant; geen omschrijving: formulier %s, code %s, belastingsoort %s"
 
-#: ../src/app-utils/gnc-ui-util.c:645
+#: ../src/app-utils/gnc-ui-util.c:675
 #, c-format
 msgid "Not tax-related; %s%s: %s (code %s, tax type %s)"
 msgstr "Fiscaal niet relevant; %s%s %s (code %s, belastingsoort %s)"
 
-#: ../src/app-utils/gnc-ui-util.c:679
+#: ../src/app-utils/gnc-ui-util.c:722
 #, c-format
 msgid "(Tax-related subaccounts: %d)"
 msgstr "(Fiscaal relevante subrekeningen: %d)"
@@ -129,35 +129,35 @@ msgstr "(Fiscaal relevante subrekeningen: %d)"
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
 #. colon. You should only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:716
+#: ../src/app-utils/gnc-ui-util.c:759
 msgid "not cleared:n"
 msgstr "o"
 
 # bevestigd
 #. Translators: Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:719
+#: ../src/app-utils/gnc-ui-util.c:762
 msgid "cleared:c"
 msgstr "b"
 
 # afgestemd
 #. Translators: Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:722
+#: ../src/app-utils/gnc-ui-util.c:765
 msgid "reconciled:y"
 msgstr "a"
 
 # vastgehouden
 #. Translators: Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:725
+#: ../src/app-utils/gnc-ui-util.c:768
 msgid "frozen:f"
 msgstr "v"
 
 # storno
 #. Translators: Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:728
+#: ../src/app-utils/gnc-ui-util.c:771
 msgid "void:v"
 msgstr "s"
 
-#: ../src/app-utils/gnc-ui-util.c:769
+#: ../src/app-utils/gnc-ui-util.c:812
 msgid "Opening Balances"
 msgstr "Beginsaldi"
 
@@ -168,7 +168,7 @@ msgstr "Beginsaldi"
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #. src/report/standard-reports/gnucash/report/balsheet-eg.eguile.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
-#: ../src/app-utils/gnc-ui-util.c:772 ../intl-scm/guile-strings.c:348
+#: ../src/app-utils/gnc-ui-util.c:815 ../intl-scm/guile-strings.c:348
 #: ../intl-scm/guile-strings.c:352 ../intl-scm/guile-strings.c:458
 #: ../intl-scm/guile-strings.c:462 ../intl-scm/guile-strings.c:598
 #: ../intl-scm/guile-strings.c:600 ../intl-scm/guile-strings.c:4110
@@ -183,7 +183,7 @@ msgstr "Ingehouden winst"
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
-#: ../src/app-utils/gnc-ui-util.c:844 ../src/engine/Account.c:3975
+#: ../src/app-utils/gnc-ui-util.c:887 ../src/engine/Account.c:3975
 #: ../src/register/ledger-core/split-register.c:2308
 #: ../intl-scm/guile-strings.c:346 ../intl-scm/guile-strings.c:350
 #: ../intl-scm/guile-strings.c:456 ../intl-scm/guile-strings.c:460
@@ -192,7 +192,7 @@ msgstr "Ingehouden winst"
 msgid "Equity"
 msgstr "Eigen vermogen"
 
-#: ../src/app-utils/gnc-ui-util.c:899 ../src/gnome/druid-hierarchy.c:944
+#: ../src/app-utils/gnc-ui-util.c:942 ../src/gnome/druid-hierarchy.c:944
 #: ../src/gnome/glade/account.glade.h:43
 #: ../src/gnome-utils/dialog-account.c:293
 msgid "Opening Balance"
@@ -244,110 +244,110 @@ msgstr ""
 "Er is een probleem met optie %s:%s.\n"
 "%s"
 
-#: ../src/bin/gnucash-bin.c:87
+#: ../src/bin/gnucash-bin.c:90
 msgid "This is a development version. It may or may not work.\n"
 msgstr "Dit is een ontwikkelversie. Er is geen garantie dat het programma werkt.\n"
 
-#: ../src/bin/gnucash-bin.c:88
+#: ../src/bin/gnucash-bin.c:91
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
 msgstr "Fouten en andere problemen kunt u aan gnucash-devel@gnucash.org rapporteren.\n"
 
-#: ../src/bin/gnucash-bin.c:89
+#: ../src/bin/gnucash-bin.c:92
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
 msgstr "U kunt geconstateerde fouten ook op http://bugzilla.gnome.org melden.\n"
 
 # Zo laten staan. We weten niet of na deze versie een nieuwe stabiele versie is uitgebracht.
-#: ../src/bin/gnucash-bin.c:90
+#: ../src/bin/gnucash-bin.c:93
 msgid "The last stable version was "
 msgstr "De laatste stabiele versie was "
 
-#: ../src/bin/gnucash-bin.c:91
+#: ../src/bin/gnucash-bin.c:94
 msgid "The next stable version will be "
 msgstr "De volgende stabiele versie is "
 
-#: ../src/bin/gnucash-bin.c:446
+#: ../src/bin/gnucash-bin.c:449
 msgid "Show GnuCash version"
 msgstr "GnuCash-versie weergeven"
 
-#: ../src/bin/gnucash-bin.c:451
+#: ../src/bin/gnucash-bin.c:454
 msgid "Enable debugging mode: increasing logging to provide deep detail."
 msgstr "Debug-modus inschakelen: meer uitvoer creëren voor gedetailleerdere informatie."
 
-#: ../src/bin/gnucash-bin.c:456
+#: ../src/bin/gnucash-bin.c:459
 msgid "Enable extra/development/debugging features."
 msgstr "Extra/ontwikkeling/debugging-functionaliteiten inschakelen"
 
-#: ../src/bin/gnucash-bin.c:461
+#: ../src/bin/gnucash-bin.c:464
 msgid "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""
 msgstr "Log-niveau instellen, in de vorm “com.po.nent={debug,info,warn,crit,error}”"
 
-#: ../src/bin/gnucash-bin.c:467
+#: ../src/bin/gnucash-bin.c:470
 msgid "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."
 msgstr "Bestand voor logmeldingen; standaard is “/tmp/gnucash.trace”; mag ook “stderr” of “stdout” zijn."
 
-#: ../src/bin/gnucash-bin.c:473
+#: ../src/bin/gnucash-bin.c:476
 msgid "Do not load the last file opened"
 msgstr "Het laatst geopende bestand niet laden"
 
-#: ../src/bin/gnucash-bin.c:477
+#: ../src/bin/gnucash-bin.c:480
 msgid "Set the prefix path for gconf queries"
 msgstr "Het voorkeurspad voor gconf-queries instellen"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
-#: ../src/bin/gnucash-bin.c:480
+#: ../src/bin/gnucash-bin.c:483
 msgid "GCONFPATH"
 msgstr "GCONFPAD"
 
-#: ../src/bin/gnucash-bin.c:484
+#: ../src/bin/gnucash-bin.c:487
 msgid "Add price quotes to given GnuCash datafile"
 msgstr "Koersnoteringen aan het opgegeven GnuCash-bestand toevoegen"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
-#: ../src/bin/gnucash-bin.c:487
+#: ../src/bin/gnucash-bin.c:490
 msgid "FILE"
 msgstr "BESTAND"
 
-#: ../src/bin/gnucash-bin.c:491
+#: ../src/bin/gnucash-bin.c:494
 msgid "Regular expression determining which namespace commodities will be retrieved"
 msgstr "Reguliere expressie die bepaalt uit welke naamruimte goederen zullen worden opgehaald"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
-#: ../src/bin/gnucash-bin.c:494
+#: ../src/bin/gnucash-bin.c:497
 msgid "REGEXP"
 msgstr "REGEXP"
 
 #. Translators: %s is the version number
-#: ../src/bin/gnucash-bin.c:519
+#: ../src/bin/gnucash-bin.c:522
 #, c-format
 msgid "GnuCash %s development version"
 msgstr "GnuCash %s ontwikkelversie"
 
 #. Translators: %s is the version number
-#: ../src/bin/gnucash-bin.c:524
+#: ../src/bin/gnucash-bin.c:527
 #, c-format
 msgid "GnuCash %s"
 msgstr "GnuCash %s"
 
 #. Translators: 1st %s is the build date; 2nd %s is the SVN
 #. revision number
-#: ../src/bin/gnucash-bin.c:529
+#: ../src/bin/gnucash-bin.c:532
 #, c-format
 msgid "Built %s from r%s"
 msgstr "Gecompileerd op %s uit r%s"
 
-#: ../src/bin/gnucash-bin.c:626
+#: ../src/bin/gnucash-bin.c:631
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
 msgstr "Geen koersen opgehaald. De module Finance::Quote is niet correct geïnstalleerd.\n"
 
 #. Install Price Quote Sources
-#: ../src/bin/gnucash-bin.c:707
+#: ../src/bin/gnucash-bin.c:712
 msgid "Checking Finance::Quote..."
 msgstr "Controleren van module Finance::Quote…"
 
-#: ../src/bin/gnucash-bin.c:715
+#: ../src/bin/gnucash-bin.c:720
 msgid "Loading data..."
 msgstr "Laden van gegevens…"
 
@@ -427,6 +427,7 @@ msgstr "Declaratie"
 #: ../src/engine/gncInvoice.c:919
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:12
 #: ../src/register/ledger-core/split-register.c:2281
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1617
 #: ../intl-scm/guile-strings.c:152 ../intl-scm/guile-strings.c:770
 #: ../intl-scm/guile-strings.c:984 ../intl-scm/guile-strings.c:1190
 #: ../intl-scm/guile-strings.c:1374 ../intl-scm/guile-strings.c:1588
@@ -1050,7 +1051,7 @@ msgstr "Declaratienummer"
 #. src/report/standard-reports/sx-summary.scm
 #: ../src/business/business-gnome/dialog-invoice.c:2624
 #: ../src/gnome/dialog-tax-info.c:1138
-#: ../src/gnome-utils/gnc-tree-view-account.c:519
+#: ../src/gnome-utils/gnc-tree-view-account.c:596
 #: ../src/gnome-utils/gnc-tree-view-price.c:460
 #: ../src/register/ledger-core/split-register-model.c:293
 #: ../intl-scm/guile-strings.c:714 ../intl-scm/guile-strings.c:1318
@@ -1539,7 +1540,7 @@ msgstr "Door activering van deze optie wordt iedere factuur in een nieuw venster
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:8
 #: ../src/gnome/glade/sched-xact.glade.h:132
-#: ../src/import-export/generic-import.glade.h:41
+#: ../src/import-export/generic-import.glade.h:47
 #: ../src/import-export/qif-import/qif.glade.h:53
 msgid "Preferences"
 msgstr "Voorkeuren"
@@ -1621,9 +1622,9 @@ msgstr "Eigenaar toewijzen"
 #: ../src/gnome/dialog-tax-info.c:1299 ../src/gnome/glade/lots.glade.h:10
 #: ../src/gnome/reconcile-list.c:222
 #: ../src/gnome-utils/gnc-tree-model-budget.c:102
-#: ../src/gnome-utils/gnc-tree-view-account.c:535
+#: ../src/gnome-utils/gnc-tree-view-account.c:612
 #: ../src/import-export/csv/gnc-csv-model.c:43
-#: ../src/import-export/generic-import.glade.h:16
+#: ../src/import-export/generic-import.glade.h:17
 #: ../src/import-export/import-main-matcher.c:478
 #: ../src/import-export/import-match-picker.c:347
 #: ../src/import-export/import-match-picker.c:387
@@ -1758,7 +1759,7 @@ msgstr "Naam: "
 #: ../src/business/business-gnome/glade/order.glade.h:9
 #: ../src/business/business-gnome/glade/vendor.glade.h:10
 #: ../src/gnome/dialog-find-transactions.c:122
-#: ../src/gnome-utils/gnc-tree-view-account.c:642
+#: ../src/gnome-utils/gnc-tree-view-account.c:719
 #: ../src/register/ledger-core/split-register-model.c:405
 #: ../intl-scm/guile-strings.c:2254 ../intl-scm/guile-strings.c:2784
 #: ../intl-scm/guile-strings.c:3822 ../intl-scm/guile-strings.c:4208
@@ -2074,7 +2075,7 @@ msgstr "Het identificatienummer van de order. Als dit wordt leeggelaten, zal aut
 #: ../src/gnome/glade/register.glade.h:14 ../src/gnome/reconcile-list.c:229
 #: ../src/gnome-utils/gnc-tree-view-price.c:448
 #: ../src/import-export/csv/gnc-csv-model.c:42
-#: ../src/import-export/generic-import.glade.h:15
+#: ../src/import-export/generic-import.glade.h:16
 #: ../src/import-export/import-main-matcher.c:474
 #: ../src/import-export/import-match-picker.c:345
 #: ../src/import-export/import-match-picker.c:385
@@ -2467,7 +2468,7 @@ msgstr "_Kopiëren"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:126
 #: ../src/gnome/gnc-plugin-page-register.c:191
 #: ../src/gnome-utils/gnc-main-window.c:287
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1023
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1035
 msgid "_Paste"
 msgstr "_Plakken"
 
@@ -2667,7 +2668,7 @@ msgstr "Annuleren"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:253
 #: ../src/gnome/glade/register.glade.h:16
 #: ../src/gnome/gnc-plugin-page-account-tree.c:266
-#: ../src/gnome/gnc-plugin-page-budget.c:179
+#: ../src/gnome/gnc-plugin-page-budget.c:181
 #: ../src/gnome/gnc-plugin-page-register.c:422
 msgid "Delete"
 msgstr "Verwijderen"
@@ -3468,7 +3469,7 @@ msgstr "Gerealiseerde winst/verlies"
 msgid "Realized Gains or Losses from Commodity or Trading Accounts that haven't been recorded elsewhere."
 msgstr "Gerealiseerde winsten of verliezen op goederen of portefeuilles die nergens anders worden verantwoord."
 
-#: ../src/engine/gnc-budget.c:93 ../src/gnome/gnc-plugin-page-budget.c:891
+#: ../src/engine/gnc-budget.c:93 ../src/gnome/gnc-plugin-page-budget.c:931
 msgid "Unnamed Budget"
 msgstr "Onbenoemd budget"
 
@@ -4084,7 +4085,7 @@ msgid "Selected"
 msgstr "Geselecteerd"
 
 #: ../src/gnome/druid-hierarchy.c:414
-#: ../src/gnome-utils/gnc-tree-view-account.c:1935
+#: ../src/gnome-utils/gnc-tree-view-account.c:2019
 msgid "Account Types"
 msgstr "Rekeningsoorten"
 
@@ -4107,7 +4108,7 @@ msgid "existing account"
 msgstr "bestaande rekening"
 
 #: ../src/gnome/druid-hierarchy.c:927
-#: ../src/gnome-utils/gnc-tree-view-account.c:652
+#: ../src/gnome-utils/gnc-tree-view-account.c:736
 msgid "Placeholder"
 msgstr "Aggregatie"
 
@@ -4549,7 +4550,7 @@ msgid "Renumber sub-accounts"
 msgstr "Subrekeningen _hernummeren"
 
 #: ../src/gnome/glade/account.glade.h:54
-#: ../src/import-export/generic-import.glade.h:46
+#: ../src/import-export/generic-import.glade.h:52
 #: ../src/import-export/qif-import/qif.glade.h:59
 msgid "Select Account"
 msgstr "Rekening selecteren"
@@ -4763,8 +4764,8 @@ msgid "Budget Name:"
 msgstr "Budgetnaam:"
 
 #: ../src/gnome/glade/budget.glade.h:4
-#: ../src/gnome/gnc-plugin-page-budget.c:146
-#: ../src/gnome/gnc-plugin-page-budget.c:870
+#: ../src/gnome/gnc-plugin-page-budget.c:148
+#: ../src/gnome/gnc-plugin-page-budget.c:910
 msgid "Budget Options"
 msgstr "Budgetopties"
 
@@ -4815,8 +4816,8 @@ msgstr "Het geselecteerde budget openen"
 
 #: ../src/gnome/glade/budget.glade.h:17 ../src/gnome/glade/print.glade.h:16
 #: ../src/gnome/glade/sched-xact.glade.h:123
-#: ../src/gnome/gnc-plugin-page-budget.c:180
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1079
+#: ../src/gnome/gnc-plugin-page-budget.c:182
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1091
 msgid "Options"
 msgstr "Opties"
 
@@ -5060,7 +5061,7 @@ msgstr "Een samenvatting van alle boekingen binnen de selectie."
 #. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/glade/lots.glade.h:7 ../src/gnome/lot-viewer.c:649
-#: ../src/gnome-utils/gnc-tree-view-account.c:558
+#: ../src/gnome-utils/gnc-tree-view-account.c:635
 #: ../src/import-export/csv/gnc-csv-model.c:44
 #: ../src/register/ledger-core/split-register-model.c:258
 #: ../src/register/ledger-core/split-register-model.c:398
@@ -5465,7 +5466,7 @@ msgid "Dup_licate Transaction..."
 msgstr "Boeking _dupliceren…"
 
 #: ../src/gnome/glade/register.glade.h:21
-#: ../src/import-export/generic-import.glade.h:18
+#: ../src/import-export/generic-import.glade.h:19
 msgid "Duplicate Transaction"
 msgstr "Boeking dupliceren"
 
@@ -6684,22 +6685,22 @@ msgid "Extend the current book by merging with new account type categories"
 msgstr "Het huidige grootboek uitbreiden door nieuwe rekeningcategorieën toe te voegen."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:165
-#: ../src/gnome/gnc-plugin-page-budget.c:128
+#: ../src/gnome/gnc-plugin-page-budget.c:130
 msgid "Open _Account"
 msgstr "_Rekening openen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:166
-#: ../src/gnome/gnc-plugin-page-budget.c:129
+#: ../src/gnome/gnc-plugin-page-budget.c:131
 msgid "Open the selected account"
 msgstr "De geselecteerde rekening openen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:170
-#: ../src/gnome/gnc-plugin-page-budget.c:134
+#: ../src/gnome/gnc-plugin-page-budget.c:136
 msgid "Open _Subaccounts"
 msgstr "_Subrekeningen openen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:171
-#: ../src/gnome/gnc-plugin-page-budget.c:135
+#: ../src/gnome/gnc-plugin-page-budget.c:137
 msgid "Open the selected account and all its subaccounts"
 msgstr "De geselecteerde rekening en zijn subrekeningen openen"
 
@@ -6730,7 +6731,7 @@ msgid "Renumber the children of the selected account"
 msgstr "Subrekeningen van geselecteerde rekening hernummeren"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:194
-#: ../src/gnome/gnc-plugin-page-budget.c:159
+#: ../src/gnome/gnc-plugin-page-budget.c:161
 #: ../src/gnome/gnc-plugin-page-register.c:272
 #: ../src/gnome-utils/gnc-main-window.c:304
 msgid "_Filter By..."
@@ -6813,7 +6814,7 @@ msgid "Check for and repair unbalanced transactions and orphan splits in all acc
 msgstr "Ongebalanceerde boekingen en verweesde boekregels op alle rekeningen zoeken en repareren"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:263
-#: ../src/gnome/gnc-plugin-page-budget.c:178 ../src/gnome/lot-viewer.c:453
+#: ../src/gnome/gnc-plugin-page-budget.c:180 ../src/gnome/lot-viewer.c:453
 #: ../src/gnome-utils/gnc-file.c:99 ../src/gnome-utils/gnc-file.c:932
 #: ../src/gnome/window-reconcile.c:1638
 msgid "Open"
@@ -6933,27 +6934,27 @@ msgstr "Alle transacties op subrekeningen zullen worden verwijderd."
 msgid "Are you sure you want to do this?"
 msgstr "Weet u zeker dat u dit wilt doen?"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:141
+#: ../src/gnome/gnc-plugin-page-budget.c:143
 msgid "_Delete Budget"
 msgstr "Budget _verwijderen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:142
+#: ../src/gnome/gnc-plugin-page-budget.c:144
 msgid "Delete this budget"
 msgstr "Het geselecteerde budget verwijderen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:147
+#: ../src/gnome/gnc-plugin-page-budget.c:149
 msgid "Edit this budget's options"
 msgstr "Budgetopties bewerken"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:151
+#: ../src/gnome/gnc-plugin-page-budget.c:153
 msgid "Estimate Budget"
 msgstr "Budget inschatten"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:153
+#: ../src/gnome/gnc-plugin-page-budget.c:155
 msgid "Estimate a budget value for the selected accounts from past transactions"
 msgstr "Een budgetwaarde voor de geselecteerde rekeningen inschatten op basis van boekingen in het verleden"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:181
+#: ../src/gnome/gnc-plugin-page-budget.c:183
 msgid "Estimate"
 msgstr "Inschatten"
 
@@ -6967,9 +6968,9 @@ msgstr "Inschatten"
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-flow.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget.scm
-#: ../src/gnome/gnc-plugin-page-budget.c:254
-#: ../src/gnome/gnc-plugin-page-budget.c:295
-#: ../src/gnome/gnc-plugin-page-budget.c:779 ../intl-scm/guile-strings.c:4328
+#: ../src/gnome/gnc-plugin-page-budget.c:274
+#: ../src/gnome/gnc-plugin-page-budget.c:315
+#: ../src/gnome/gnc-plugin-page-budget.c:819 ../intl-scm/guile-strings.c:4328
 #: ../intl-scm/guile-strings.c:4380 ../intl-scm/guile-strings.c:4384
 #: ../intl-scm/guile-strings.c:4390 ../intl-scm/guile-strings.c:4402
 #: ../intl-scm/guile-strings.c:4408 ../intl-scm/guile-strings.c:4424
@@ -6982,16 +6983,16 @@ msgstr "Inschatten"
 msgid "Budget"
 msgstr "Budget"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:812
+#: ../src/gnome/gnc-plugin-page-budget.c:852
 msgid "Set the budget options using this dialog."
 msgstr "In dit venster kunt u de budgetopties instellen."
 
-#: ../src/gnome/gnc-plugin-page-budget.c:894
+#: ../src/gnome/gnc-plugin-page-budget.c:934
 #, c-format
 msgid "Delete %s?"
 msgstr "%s verwijderen?"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:962
+#: ../src/gnome/gnc-plugin-page-budget.c:1002
 msgid "You must select at least one account to estimate."
 msgstr "U moet ten minste één in te schatten rekening selecteren."
 
@@ -7001,31 +7002,31 @@ msgstr "Cheques _afdrukken…"
 
 #: ../src/gnome/gnc-plugin-page-register.c:181
 #: ../src/gnome-utils/gnc-main-window.c:277
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1013
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1025
 msgid "Cu_t"
 msgstr "K_nippen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
 #: ../src/gnome-utils/gnc-main-window.c:278
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1014
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1026
 msgid "Cut the current selection and copy it to clipboard"
 msgstr "De huidige selectie naar het klembord verplaatsen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:186
 #: ../src/gnome-utils/gnc-main-window.c:282
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1018
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1030
 msgid "_Copy"
 msgstr "_Kopiëren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:187
 #: ../src/gnome-utils/gnc-main-window.c:283
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1019
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1031
 msgid "Copy the current selection to clipboard"
 msgstr "De huidige selectie naar het klembord kopiëren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:192
 #: ../src/gnome-utils/gnc-main-window.c:288
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1024
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1036
 msgid "Paste the clipboard content at the cursor position"
 msgstr "De inhoud van het klembord op de cursorpositie invoegen"
 
@@ -7163,7 +7164,7 @@ msgstr "Automatisch bevestigen"
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 #: ../src/gnome/gnc-plugin-page-register.c:658
 #: ../src/gnome/gnc-plugin-page-register.c:1292
-#: ../src/gnome/gnc-plugin-page-register.c:1948
+#: ../src/gnome/gnc-plugin-page-register.c:1953
 #: ../intl-scm/guile-strings.c:4918 ../intl-scm/guile-strings.c:6274
 msgid "General Ledger"
 msgstr "Grootboek"
@@ -7195,24 +7196,24 @@ msgid "unknown"
 msgstr "onbekend"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1294
-#: ../src/gnome/gnc-plugin-page-register.c:1954
+#: ../src/gnome/gnc-plugin-page-register.c:1959
 msgid "Portfolio"
 msgstr "Portefeuille"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1296
-#: ../src/gnome/gnc-plugin-page-register.c:1960
+#: ../src/gnome/gnc-plugin-page-register.c:1965
 msgid "Search Results"
 msgstr "Zoekresultaten"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1950
+#: ../src/gnome/gnc-plugin-page-register.c:1955
 msgid "General Ledger Report"
 msgstr "Grootboekrapport"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1956
+#: ../src/gnome/gnc-plugin-page-register.c:1961
 msgid "Portfolio Report"
 msgstr "Portefeuille-rapport"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1962
+#: ../src/gnome/gnc-plugin-page-register.c:1967
 msgid "Search Results Report"
 msgstr "Zoekresultaten-rapport"
 
@@ -7220,7 +7221,7 @@ msgstr "Zoekresultaten-rapport"
 #. src/report/standard-reports/gnucash/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:1966
+#: ../src/gnome/gnc-plugin-page-register.c:1971
 #: ../src/gnome-utils/glade/preferences.glade.h:116
 #: ../intl-scm/guile-strings.c:4892 ../intl-scm/guile-strings.c:6248
 #: ../intl-scm/guile-strings.c:6816 ../intl-scm/guile-strings.c:7966
@@ -7229,49 +7230,49 @@ msgstr "Grootboekkaart"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:1968
+#: ../src/gnome/gnc-plugin-page-register.c:1973
 #: ../intl-scm/guile-strings.c:6712 ../intl-scm/guile-strings.c:7862
 msgid "Register Report"
 msgstr "Grootboekkaart als rapport"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1984
+#: ../src/gnome/gnc-plugin-page-register.c:1989
 msgid "and subaccounts"
 msgstr "en subrekeningen"
 
-#: ../src/gnome/gnc-plugin-page-register.c:2123
+#: ../src/gnome/gnc-plugin-page-register.c:2128
 msgid "Print checks from multiple accounts?"
 msgstr "Cheques voor meerdere rekeningen afdrukken?"
 
-#: ../src/gnome/gnc-plugin-page-register.c:2125
+#: ../src/gnome/gnc-plugin-page-register.c:2130
 msgid "This search result contains splits from more than one account. Do you want to print the checks even though they are not all from the same account?"
 msgstr "Dit zoekresultaat bevat boekregels vanuit meerdere rekeningen. Wilt u de cheques afdrukken, ondanks dat deze niet allemaal op dezelfde rekening betrekking hebben?"
 
-#: ../src/gnome/gnc-plugin-page-register.c:2136
+#: ../src/gnome/gnc-plugin-page-register.c:2141
 msgid "_Print checks"
 msgstr "Cheques _afdrukken"
 
-#: ../src/gnome/gnc-plugin-page-register.c:2154
+#: ../src/gnome/gnc-plugin-page-register.c:2159
 msgid "You can only print checks from a bank account register or search results."
 msgstr "U kunt uitsluitend vanuit de grootboekkaart van een bankrekening of vanuit zoekresultaten cheques afdrukken."
 
-#: ../src/gnome/gnc-plugin-page-register.c:2314
+#: ../src/gnome/gnc-plugin-page-register.c:2319
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr "U kunt boekingen met afgestemde of bevestigde boekregels niet storneren."
 
-#: ../src/gnome/gnc-plugin-page-register.c:2384
+#: ../src/gnome/gnc-plugin-page-register.c:2389
 #: ../src/gnome/gnc-split-reg.c:877
 msgid "A reversing entry has already been created for this transaction."
 msgstr "Deze boeking is al tegengeboekt."
 
 #. Translations: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:2462
+#: ../src/gnome/gnc-plugin-page-register.c:2467
 #, c-format
 msgid "Sort %s by..."
 msgstr "%s sorteren op…"
 
 #. Translators: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:2515
-#: ../src/gnome-utils/gnc-tree-view-account.c:1897
+#: ../src/gnome/gnc-plugin-page-register.c:2520
+#: ../src/gnome-utils/gnc-tree-view-account.c:1981
 #, c-format
 msgid "Filter %s by..."
 msgstr "%s filteren op…"
@@ -7537,13 +7538,13 @@ msgstr "Kolom oplopend of aflopend sorteren"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:10
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:10
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:10
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:12
 msgid "The X,Y coordinates of the top left corner of the window when it was last closed."
 msgstr "De (X,Y)-coördinaten van de linkerbovenhoek van het venster toen dit voor het laatst werd afgesloten."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:11
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:11
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:13
 msgid "The width and size of the window when it was last closed."
 msgstr "De breedte en hoogte van het venster toen dit voor het laatst werd afgesloten."
 
@@ -7565,13 +7566,13 @@ msgstr "Deze instelling bepaalt de kolom waarop het rekeningschema wordt gesorte
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:16
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:17
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:17
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:19
 msgid "Window geometry"
 msgstr "Vensterafmetingen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:17
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:18
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:18
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:20
 msgid "Window position"
 msgstr "Vensterpositie"
 
@@ -8526,12 +8527,12 @@ msgid "Not Cleared"
 msgstr "Niet bevestigd"
 
 #: ../src/gnome-search/search-reconciled.c:229
-#: ../src/gnome-utils/gnc-tree-view-account.c:578
+#: ../src/gnome-utils/gnc-tree-view-account.c:655
 msgid "Cleared"
 msgstr "Bevestigd"
 
 #: ../src/gnome-search/search-reconciled.c:232
-#: ../src/gnome-utils/gnc-tree-view-account.c:591
+#: ../src/gnome-utils/gnc-tree-view-account.c:668
 msgid "Reconciled"
 msgstr "Afgestemd"
 
@@ -8775,7 +8776,7 @@ msgstr "Opslaan als…"
 
 #: ../src/gnome-utils/dialog-file-access.c:297
 #: ../src/gnome-utils/gnc-file.c:118 ../src/gnome-utils/gnc-file.c:288
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1078
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1090
 msgid "Export"
 msgstr "Exporteren"
 
@@ -9539,7 +9540,7 @@ msgid "December 31, 2000"
 msgstr "31 december 2000"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:6
-#: ../src/import-export/generic-import.glade.h:29
+#: ../src/import-export/generic-import.glade.h:35
 msgid "Format:"
 msgstr "Opmaak:"
 
@@ -10721,7 +10722,7 @@ msgid "Re-saving user data..."
 msgstr "Opnieuw opslaan van gebruikersgegevens…"
 
 #: ../src/gnome-utils/gnc-file.c:1086 ../src/gnome-utils/gnc-file.c:1314
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1448
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1460
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "Het bestand %s bestaat al. Weet u zeker dat u het wilt overschrijven?"
@@ -10866,12 +10867,12 @@ msgid "Select the account types that should be displayed."
 msgstr "De rekeningsoorten selecteren die moeten worden weergegeven."
 
 #: ../src/gnome-utils/gnc-main-window.c:308
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1028
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1040
 msgid "_Refresh"
 msgstr "Ve_rnieuwen"
 
 #: ../src/gnome-utils/gnc-main-window.c:309
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1029
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1041
 msgid "Refresh this window"
 msgstr "Dit venster vernieuwen"
 
@@ -11028,30 +11029,30 @@ msgstr "Afsluiten _zonder opslaan"
 msgid "Unsaved Book"
 msgstr "Niet opgeslagen boekhouding"
 
-#: ../src/gnome-utils/gnc-main-window.c:2355
+#: ../src/gnome-utils/gnc-main-window.c:2376
 msgid "Unable to save to database."
 msgstr "Niet in staat om databank op te slaan."
 
-#: ../src/gnome-utils/gnc-main-window.c:2357
+#: ../src/gnome-utils/gnc-main-window.c:2378
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "Niet in staat om databank op te slaan; boekhouding is gemarkeerd als alleen-lezen."
 
-#: ../src/gnome-utils/gnc-main-window.c:3970
+#: ../src/gnome-utils/gnc-main-window.c:4004
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr "GnuCash financieel beheer voor uw huishoudboekje. De vrije manier om uw geldzaken te managen!"
 
 #. Development version
-#: ../src/gnome-utils/gnc-main-window.c:3983
+#: ../src/gnome-utils/gnc-main-window.c:4017
 #, c-format
 msgid "%s  This copy was built from svn r%s on %s."
 msgstr "%s  Dit exemplaar is gecompileerd uit svn r%s op %s."
 
-#: ../src/gnome-utils/gnc-main-window.c:3986
+#: ../src/gnome-utils/gnc-main-window.c:4020
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
 msgstr "%s  Dit exemplaar is gecompileerd uit r%s op %s."
 
-#: ../src/gnome-utils/gnc-main-window.c:3998
+#: ../src/gnome-utils/gnc-main-window.c:4032
 msgid "translator_credits"
 msgstr ""
 "Huidige vertaling door\n"
@@ -11171,7 +11172,7 @@ msgstr "Aan het laden…"
 msgid "never"
 msgstr "nooit"
 
-#: ../src/gnome-utils/gnc-tree-model-account.c:621
+#: ../src/gnome-utils/gnc-tree-model-account.c:622
 msgid "New top level account"
 msgstr "Nieuwe rekening op hoofdniveau"
 
@@ -11183,7 +11184,7 @@ msgstr "Nieuwe rekening op hoofdniveau"
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/trial-balance.scm
-#: ../src/gnome-utils/gnc-tree-view-account.c:514
+#: ../src/gnome-utils/gnc-tree-view-account.c:591
 #: ../intl-scm/guile-strings.c:2940 ../intl-scm/guile-strings.c:3134
 #: ../intl-scm/guile-strings.c:4936 ../intl-scm/guile-strings.c:6292
 #: ../intl-scm/guile-strings.c:6972 ../intl-scm/guile-strings.c:7118
@@ -11193,7 +11194,7 @@ msgstr "Nieuwe rekening op hoofdniveau"
 msgid "Account Name"
 msgstr "Rekeningnaam"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:523
+#: ../src/gnome-utils/gnc-tree-view-account.c:600
 msgid "Commodity"
 msgstr "Goed (effect/valuta)"
 
@@ -11206,7 +11207,7 @@ msgstr "Goed (effect/valuta)"
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/gnome-utils/gnc-tree-view-account.c:529
+#: ../src/gnome-utils/gnc-tree-view-account.c:606
 #: ../intl-scm/guile-strings.c:3508 ../intl-scm/guile-strings.c:3770
 #: ../intl-scm/guile-strings.c:4940 ../intl-scm/guile-strings.c:5146
 #: ../intl-scm/guile-strings.c:6296 ../intl-scm/guile-strings.c:6868
@@ -11217,43 +11218,43 @@ msgstr "Goed (effect/valuta)"
 msgid "Account Code"
 msgstr "Rekeningnummer"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:540
+#: ../src/gnome-utils/gnc-tree-view-account.c:617
 msgid "Last Num"
 msgstr "Laatste nummer"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:545
+#: ../src/gnome-utils/gnc-tree-view-account.c:622
 msgid "Present"
 msgstr "Huidig"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:552
+#: ../src/gnome-utils/gnc-tree-view-account.c:629
 msgid "Present (Report)"
 msgstr "Huidig (rapport)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:565
+#: ../src/gnome-utils/gnc-tree-view-account.c:642
 msgid "Balance (Report)"
 msgstr "Balans (rapport)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:572
+#: ../src/gnome-utils/gnc-tree-view-account.c:649
 msgid "Balance (Period)"
 msgstr "Saldo (periode)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:585
+#: ../src/gnome-utils/gnc-tree-view-account.c:662
 msgid "Cleared (Report)"
 msgstr "Bevestigd (als rapport)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:598
+#: ../src/gnome-utils/gnc-tree-view-account.c:675
 msgid "Reconciled (Report)"
 msgstr "Afgestemd (rapport)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:604
+#: ../src/gnome-utils/gnc-tree-view-account.c:681
 msgid "Last Reconcile Date"
 msgstr "Laatste datum van afstemming"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:609
+#: ../src/gnome-utils/gnc-tree-view-account.c:686
 msgid "Future Minimum"
 msgstr "Toekomstig minimum"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:616
+#: ../src/gnome-utils/gnc-tree-view-account.c:693
 msgid "Future Minimum (Report)"
 msgstr "Toekomstig minimum (rapport)"
 
@@ -11277,7 +11278,7 @@ msgstr "Toekomstig minimum (rapport)"
 #. src/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/portfolio.scm
-#: ../src/gnome-utils/gnc-tree-view-account.c:622
+#: ../src/gnome-utils/gnc-tree-view-account.c:699
 #: ../intl-scm/guile-strings.c:676 ../intl-scm/guile-strings.c:678
 #: ../intl-scm/guile-strings.c:740 ../intl-scm/guile-strings.c:796
 #: ../intl-scm/guile-strings.c:822 ../intl-scm/guile-strings.c:882
@@ -11296,56 +11297,56 @@ msgstr "Toekomstig minimum (rapport)"
 msgid "Total"
 msgstr "Totaal"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:629
+#: ../src/gnome-utils/gnc-tree-view-account.c:706
 msgid "Total (Report)"
 msgstr "Totaal (rapport)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:635
+#: ../src/gnome-utils/gnc-tree-view-account.c:712
 msgid "Total (Period)"
 msgstr "Totaal (periode)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:647
+#: ../src/gnome-utils/gnc-tree-view-account.c:725
 msgid "Tax Info"
 msgstr "Fiscale informatie"
 
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
-#: ../src/gnome-utils/gnc-tree-view-account.c:655
+#: ../src/gnome-utils/gnc-tree-view-account.c:739
 msgid "Column letter for 'Placeholder'|P"
 msgstr "T"
 
 #. Translators: %s is a currency mnemonic.
-#: ../src/gnome-utils/gnc-tree-view-account.c:1456
+#: ../src/gnome-utils/gnc-tree-view-account.c:1540
 #, c-format
 msgid "Present (%s)"
 msgstr "Huidig (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: ../src/gnome-utils/gnc-tree-view-account.c:1459
+#: ../src/gnome-utils/gnc-tree-view-account.c:1543
 #, c-format
 msgid "Balance (%s)"
 msgstr "Saldo (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: ../src/gnome-utils/gnc-tree-view-account.c:1462
+#: ../src/gnome-utils/gnc-tree-view-account.c:1546
 #, c-format
 msgid "Cleared (%s)"
 msgstr "Bevestigd (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: ../src/gnome-utils/gnc-tree-view-account.c:1465
+#: ../src/gnome-utils/gnc-tree-view-account.c:1549
 #, c-format
 msgid "Reconciled (%s)"
 msgstr "Afgestemd (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: ../src/gnome-utils/gnc-tree-view-account.c:1468
+#: ../src/gnome-utils/gnc-tree-view-account.c:1552
 #, c-format
 msgid "Future Minimum (%s)"
 msgstr "Toekomstig minimum (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: ../src/gnome-utils/gnc-tree-view-account.c:1471
+#: ../src/gnome-utils/gnc-tree-view-account.c:1555
 #, c-format
 msgid "Total (%s)"
 msgstr "Totaal (%s)"
@@ -12087,7 +12088,7 @@ msgid "GnuCash Account Name"
 msgstr "GnuCash-rekeningnaam"
 
 #: ../src/import-export/aqbanking/druid-ab-initial.c:869
-#: ../src/import-export/generic-import.glade.h:36
+#: ../src/import-export/generic-import.glade.h:42
 #: ../src/import-export/qif-import/dialog-account-picker.c:367
 #: ../src/import-export/qif-import/druid-qif-import.c:1527
 msgid "New?"
@@ -12639,36 +12640,55 @@ msgid "Auto-c_lear threshold"
 msgstr "Drempelwaarde automatisch be_vestigen"
 
 #: ../src/import-export/generic-import.glade.h:13
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:2
+msgid "Automatically create new commodities"
+msgstr "Automatisch nieuwe goederen aanmaken"
+
+#: ../src/import-export/generic-import.glade.h:14
 msgid "Choose a format"
 msgstr "Een bestandsindeling selecteren"
 
-#: ../src/import-export/generic-import.glade.h:14
+#: ../src/import-export/generic-import.glade.h:15
 msgid "Commercial ATM _fees threshold"
 msgstr "Drempelwaarde _transactiekosten geldautomaten"
 
-#: ../src/import-export/generic-import.glade.h:17
+#: ../src/import-export/generic-import.glade.h:18
 msgid "Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
 msgstr "Dubbelklik op de boeking om deze met de bestaande boeking af te stemmen of, indien nodig, als nieuwe boeking op een nader te specificeren tegenrekening aan te merken."
 
-#: ../src/import-export/generic-import.glade.h:19
+#: ../src/import-export/generic-import.glade.h:20
 msgid "Enable skip transaction action"
 msgstr "Actie ‘boeking overslaan’ activeren"
 
-#: ../src/import-export/generic-import.glade.h:20
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
+#: ../src/import-export/generic-import.glade.h:21
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
 msgid "Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default."
 msgstr "De actie ‘boeking OVERSLAAN’ bij het herkennen van bestaande boekingen activeren. Een boeking met een mate van overeenkomst binnen de gele zone (boven de drempelwaarde voor TOEVOEGING maar kleiner dan of gelijk aan de drempelwaarde voor BEVESTIGING) wordt standaard (automatisch) overgeslagen."
 
-#: ../src/import-export/generic-import.glade.h:21
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
+#: ../src/import-export/generic-import.glade.h:22
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
 msgid "Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match's score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default."
 msgstr "De actie ‘boeking BIJWERKEN EN AFSTEMMEN’ bij het herkennen van bestaande boekingen activeren. Hierdoor wordt bij boekingen met een mate van overeenkomst boven de drempelwaarde voor BEVESTIGING een eventueel afwijkende afwijkende datum of bedrag standaard (automatisch) aangepast en afgestemd."
 
-#: ../src/import-export/generic-import.glade.h:22
+#: ../src/import-export/generic-import.glade.h:23
 msgid "Enable update match action"
 msgstr "Actie ‘overeenkomende boeking bijwerken’ activeren"
 
-#: ../src/import-export/generic-import.glade.h:23
+#: ../src/import-export/generic-import.glade.h:24
+msgid ""
+"Enables the\n"
+"            automatic creation of new commodities if any\n"
+"        unknown commodity is encountered during import. Otherwise\n"
+"        the user will be asked what to do with each unknown\n"
+"        commodity."
+msgstr ""
+"Activeert het \n"
+"                  automatisch aanmaken van nieuwe goederen als bij\n"
+"                  een import een onbekend goed (effect/valuta) wordt\n"
+"                  tegengekomen. Zonder deze optie wordt de gebruiker \n"
+"                  bij elk onbekend goed gevraagd hoe te handelen."
+
+#: ../src/import-export/generic-import.glade.h:29
 msgid ""
 "For a new transaction, click on the \"Other Account\" entry to choose the other (destination) account of this transaction.\n"
 "For a transaction that is a duplicate of an existing one, click on the \"Other Account\" or \"Description\" entry to \n"
@@ -12682,99 +12702,99 @@ msgstr ""
 "Om tussen beide mogelijkheden om te schakelen klikt u op het keuzevak in kolom ‘Nieuw’.\n"
 "Klik op [OK] wanneer alle boekingen de juiste bestemmingsrekening hebben en alle reeds bestaande boekingen op de juiste wijze zijn gekoppeld."
 
-#: ../src/import-export/generic-import.glade.h:30
+#: ../src/import-export/generic-import.glade.h:36
 msgid "Generic import transaction matcher"
 msgstr "Herkennen van bestaande boekingen"
 
-#: ../src/import-export/generic-import.glade.h:31
+#: ../src/import-export/generic-import.glade.h:37
 msgid "Green"
 msgstr "Groen"
 
-#: ../src/import-export/generic-import.glade.h:32
+#: ../src/import-export/generic-import.glade.h:38
 msgid "Imported transaction's first split:"
 msgstr "Eerste boekregel van geïmporteerde boeking:"
 
-#: ../src/import-export/generic-import.glade.h:33
+#: ../src/import-export/generic-import.glade.h:39
 msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores.  These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw $100, and you are charged $101,50 plus Interac fees.  If you manually entered that $100, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
 msgstr "Op sommige plaatsen staan commerciële ‘in-store’ geldautomaten die hun transactiekosten optellen op bij het opgenomen bedrag (in plaats van deze als losse transactie c.q. via de afrekening van uw bankkosten te verantwoorden). Een voorbeeld: wanneer u € 100 opneemt en de kosten zijn € 1,50, wordt een bedrag van € 101,50 van uw rekening afgeschreven. Als u vervolgens handmatig heeft ingevoerd dat u € 100 heeft opgenomen, komen de bedragen niet overeen. U moet deze waarde instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de overeenkomst herkend kan worden."
 
-#: ../src/import-export/generic-import.glade.h:34
+#: ../src/import-export/generic-import.glade.h:40
 msgid "List of downloaded transactions (source split shown):"
 msgstr "Overzicht van geïmporteerde boekingen (oorspronkelijke boeking weergegeven):"
 
-#: ../src/import-export/generic-import.glade.h:35
+#: ../src/import-export/generic-import.glade.h:41
 msgid "Match _display threshold"
 msgstr "Drempelwaarde _weergave overeenkomst"
 
-#: ../src/import-export/generic-import.glade.h:37
+#: ../src/import-export/generic-import.glade.h:43
 msgid "Online account ID here..."
 msgstr "Het online rekeningnummer…"
 
-#: ../src/import-export/generic-import.glade.h:38
+#: ../src/import-export/generic-import.glade.h:44
 msgid "Other Account"
 msgstr "Tegenrekening"
 
-#: ../src/import-export/generic-import.glade.h:39
+#: ../src/import-export/generic-import.glade.h:45
 msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "Een geschikte GnuCash-rekening selecteren of aanmaken voor:"
 
-#: ../src/import-export/generic-import.glade.h:40
+#: ../src/import-export/generic-import.glade.h:46
 msgid "Potential splits matching the selected transaction: "
 msgstr "Mogelijke boekingen die overeenkomen met de geselecteerde boeking: "
 
-#: ../src/import-export/generic-import.glade.h:42
+#: ../src/import-export/generic-import.glade.h:48
 msgid "Red"
 msgstr "Rood"
 
-#: ../src/import-export/generic-import.glade.h:43
+#: ../src/import-export/generic-import.glade.h:49
 msgid "Select \"A\" to add the transaction as new."
 msgstr "Kies ‘T’ om de boeking als nieuwe boeking toe te voegen."
 
-#: ../src/import-export/generic-import.glade.h:44
+#: ../src/import-export/generic-import.glade.h:50
 msgid "Select \"R\" to reconcile a matching transaction."
 msgstr "Kies ‘A’ om met een overeenkomende (bestaande) boeking af te stemmen."
 
-#: ../src/import-export/generic-import.glade.h:45
+#: ../src/import-export/generic-import.glade.h:51
 msgid "Select \"U+R\" to update and reconcile a matching transaction."
 msgstr "Kies ‘B+A’ om een overeenkomende (bestaande) boeking bij te werken en af te stemmen."
 
-#: ../src/import-export/generic-import.glade.h:47
+#: ../src/import-export/generic-import.glade.h:53
 msgid "Select matching existing transaction"
 msgstr "Overeenkomende bestaande boeking selecteren"
 
-#: ../src/import-export/generic-import.glade.h:48
+#: ../src/import-export/generic-import.glade.h:54
 msgid "Select neither to skip the transaction (it won't be imported at all)."
 msgstr "Als geen van beide wordt geselecteerd zal de boeking niet worden geïmporteerd."
 
-#: ../src/import-export/generic-import.glade.h:49
+#: ../src/import-export/generic-import.glade.h:55
 msgid "The minimum score a potential match must have to be displayed in the match list."
 msgstr "De minimale score die een potentiële match moet behalen om te worden weergegeven in de lijst met suggesties."
 
-#: ../src/import-export/generic-import.glade.h:50
+#: ../src/import-export/generic-import.glade.h:56
 msgid "This transaction probably requires your intervention or it will be imported unbalanced."
 msgstr "Deze boeking heeft uw aandacht nodig, anders wordt zij geïmporteerd terwijl zij niet in balans is."
 
-#: ../src/import-export/generic-import.glade.h:51
+#: ../src/import-export/generic-import.glade.h:57
 msgid "This transaction requires your intervention or it will NOT be imported."
 msgstr "Deze boeking vereist uw aandacht, anders zal deze niet worden geïmporteerd."
 
-#: ../src/import-export/generic-import.glade.h:52
+#: ../src/import-export/generic-import.glade.h:58
 msgid "This transaction will be imported balanced (you may still want to double check the match or destination account)."
 msgstr "Deze boeking wordt in balans geïmporteerd, maar het kan geen kwaad de bestemmingsrekening te beoordelen."
 
-#: ../src/import-export/generic-import.glade.h:53
+#: ../src/import-export/generic-import.glade.h:59
 msgid "Transaction List Help"
 msgstr "Hulp bij boekingsoverzicht"
 
-#: ../src/import-export/generic-import.glade.h:54
+#: ../src/import-export/generic-import.glade.h:60
 msgid "Use _bayesian matching"
 msgstr "_Bayesiaanse algoritmes gebruiken"
 
-#: ../src/import-export/generic-import.glade.h:55
+#: ../src/import-export/generic-import.glade.h:61
 msgid "Use bayesian algorithms to match new transactions with existing accounts."
 msgstr "Bayesiaanse algoritmes gebruiken om geïmporteerde boekingen aan bestaande boekingen te koppelen"
 
-#: ../src/import-export/generic-import.glade.h:56
+#: ../src/import-export/generic-import.glade.h:62
 msgid "Yellow"
 msgstr "Geel"
 
@@ -12804,7 +12824,7 @@ msgstr "(Volledig rekeningnummer: "
 msgid "The account %s is a placeholder account and does not allow transactions. Please choose a different account."
 msgstr "De rekening %s is een aggregatie en staat geen rechtstreekse boekingen toe. U dient een andere rekening te kiezen."
 
-#: ../src/import-export/import-commodity-matcher.c:114
+#: ../src/import-export/import-commodity-matcher.c:116
 msgid "Please select a commodity to match the following exchange specific code. Please note that the exchange code of the commodity you select will be overwritten."
 msgstr "Selecteer een goed (effect/valuta) dat overeenkomt met de volgende ISIN. Let erop dat de ISIN van het goed dat u selecteert zal worden overschreven."
 
@@ -12852,52 +12872,52 @@ msgstr "A"
 msgid "Info"
 msgstr "Informatie"
 
-#: ../src/import-export/import-main-matcher.c:658
+#: ../src/import-export/import-main-matcher.c:660
 msgid "New, already balanced"
 msgstr "Nieuw, reeds in balans"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: ../src/import-export/import-main-matcher.c:684
+#: ../src/import-export/import-main-matcher.c:686
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Nieuw, (handmatig) %s naar ‘%s’ overboeken"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: ../src/import-export/import-main-matcher.c:692
+#: ../src/import-export/import-main-matcher.c:694
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Nieuw, (automatisch) %s naar ‘%s’ overboeken"
 
 #. Translators: %s is the amount to be transferred.
-#: ../src/import-export/import-main-matcher.c:703
+#: ../src/import-export/import-main-matcher.c:705
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Nieuw, NIET IN BALANS (nog %s ongeboekt)"
 
-#: ../src/import-export/import-main-matcher.c:715
+#: ../src/import-export/import-main-matcher.c:717
 msgid "Reconcile (manual) match"
 msgstr "Afstemmen (handmatige) overeenkomst"
 
-#: ../src/import-export/import-main-matcher.c:719
+#: ../src/import-export/import-main-matcher.c:721
 msgid "Reconcile (auto) match"
 msgstr "Afstemmen (automatische) overeenkomst"
 
-#: ../src/import-export/import-main-matcher.c:725
-#: ../src/import-export/import-main-matcher.c:744
+#: ../src/import-export/import-main-matcher.c:727
+#: ../src/import-export/import-main-matcher.c:746
 msgid "Match missing!"
 msgstr "Geen overeenkomst!"
 
-#: ../src/import-export/import-main-matcher.c:734
+#: ../src/import-export/import-main-matcher.c:736
 msgid "Update and reconcile (manual) match"
 msgstr "Bijwerken en afstemmen (handmatige) overeenkomst"
 
-#: ../src/import-export/import-main-matcher.c:738
+#: ../src/import-export/import-main-matcher.c:740
 msgid "Update and reconcile (auto) match"
 msgstr "Bijwerken en afstemmen (automatische) overeenkomst"
 
-#: ../src/import-export/import-main-matcher.c:749
+#: ../src/import-export/import-main-matcher.c:751
 msgid "Do not import (no action selected)"
 msgstr "Niet importeren (geen actie geselecteerd)"
 
@@ -12969,11 +12989,12 @@ msgstr "GnuCash logbestand _opnieuw uitvoeren…"
 msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
 msgstr "De inhoud van een GnuCash logbestand na een crash opnieuw uitvoeren. Deze handeling kan niet ongedaan gemaakt worden."
 
+#. As we now have the commodity, select the account with that commodity.
 #. This string is a default account
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:419
+#: ../src/import-export/ofx/gnc-ofx-import.c:525
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "Effectenrekening voor fonds ‘%s’"
@@ -12982,44 +13003,44 @@ msgstr "Effectenrekening voor fonds ‘%s’"
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
 #. in any translations.
-#: ../src/import-export/ofx/gnc-ofx-import.c:489
+#: ../src/import-export/ofx/gnc-ofx-import.c:672
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "Opbrengstenrekening voor fonds ‘%s’"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:628
+#: ../src/import-export/ofx/gnc-ofx-import.c:779
 msgid "Unknown OFX account"
 msgstr "Onbekende OFX rekening"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:651
+#: ../src/import-export/ofx/gnc-ofx-import.c:802
 msgid "Unknown OFX checking account"
 msgstr "Onbekende OFX betaalrekening"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:655
+#: ../src/import-export/ofx/gnc-ofx-import.c:806
 msgid "Unknown OFX savings account"
 msgstr "Onbekende OFX spaarrekening"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:659
+#: ../src/import-export/ofx/gnc-ofx-import.c:810
 msgid "Unknown OFX money market account"
 msgstr "Onbekende OFX geldmarktrekening"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:663
+#: ../src/import-export/ofx/gnc-ofx-import.c:814
 msgid "Unknown OFX credit line account"
 msgstr "Onbekende OFX kredietrekening"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:667
+#: ../src/import-export/ofx/gnc-ofx-import.c:818
 msgid "Unknown OFX CMA account"
 msgstr "Onbekende OFX cash management-rekening"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:671
+#: ../src/import-export/ofx/gnc-ofx-import.c:822
 msgid "Unknown OFX credit card account"
 msgstr "Onbekende OFX creditcard-rekening"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:675
+#: ../src/import-export/ofx/gnc-ofx-import.c:826
 msgid "Unknown OFX investment account"
 msgstr "Onbekend OFX beleggingsrekening"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:747
+#: ../src/import-export/ofx/gnc-ofx-import.c:899
 msgid "Select an OFX/QFX file to process"
 msgstr "Een te verwerken OFX/QFX-bestand selecteren"
 
@@ -13492,47 +13513,51 @@ msgstr "Documentatie weergeven"
 msgid "Add matching transactions below this score"
 msgstr "Overeenkomende boekingen boven deze score toevoegen"
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:2
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:3
 msgid "Clear matching transactions above this score"
 msgstr "Overeenkomende boekingen boven deze score bevestigen"
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:3
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:4
 msgid "Enable SKIP transaction action"
 msgstr "Actie ‘boeking OVERSLAAN’ activeren"
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:4
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
 msgid "Enable UPDATE match action"
 msgstr "Actie ‘overeenkomende boeking BIJWERKEN’ activeren"
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
 msgid "Enables bayesian matching when matching imported transaction against existing transactions. Otherwise a less sophisticated rule-based matching mechanism will be used."
 msgstr "Activeert het gebruik van Bayesiaanse algoritmes om geïmporteerde boekingen aan bestaande boekingen te koppelen. Zonder deze optie wordt een minder intelligent algoritme op basis van regels gehanteerd."
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:9
+msgid "Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity."
+msgstr "Activeert het automatisch aanmaken van nieuwe goederen als bij een import een onbekend goed (effect/valuta) wordt tegengekomen. Zonder deze optie wordt de gebruiker bij elk onbekend goed gevraagd hoe te handelen."
+
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:10
 msgid "Maximum ATM fee amount in your area"
 msgstr "Maximumtarief voor GEA-opnames in uw regio"
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:9
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:11
 msgid "Minimum score to be displayed"
 msgstr "Weergavedrempel"
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:12
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
 msgid "This field specifies the extra fee that is taken into account when matching imported transactions. In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
 msgstr "De aanvullende transactiekosten waarmee bij het koppelen van geïmporteerde boekingen rekening wordt gehouden. Op sommige plaatsen staan commerciële ‘in-store’ geldautomaten die hun transactiekosten optellen op bij het opgenomen bedrag (in plaats van deze als losse transactie c.q. via de afrekening van uw bankkosten te verantwoorden). Een voorbeeld: wanneer u € 100 opneemt en de kosten zijn € 1,50, wordt een bedrag van € 101,50 van uw rekening afgeschreven. Als u vervolgens handmatig heeft ingevoerd dat u € 100 heeft opgenomen, komen de bedragen niet overeen. U moet deze waarde instellen op het maximum van dergelijke kosten in uw regio (in eenheden van uw lokale munteenheid), zodat de koppeling herkend kan worden."
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:13
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
 msgid "This field specifies the minimum matching score a potential matching transaction must have to be displayed in the match list."
 msgstr "De minimale score die een potentiële match moet behalen om te worden weergegeven in de lijst met suggesties."
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
 msgid "This field specifies the threshold above which a matching transaction will be cleared by default. A transaction whose best match's score is in the green zone (above or equal to this Clear threshold) will be cleared by default."
 msgstr "Dit veld bepaalt de drempel waarboven een gesuggereerde overeenkomende boeking automatisch wordt bevestigd. Een boeking met een mate van overeenkomst binnen de groene zone (boven of gelijk aan deze drempelwaarde voor bevestiging) wordt standaard (automatisch) bevestigd."
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:17
 msgid "This field specifies the threshold below which a matching transaction will be added automatically. A transaction whose best match's score is in the red zone (above the display minimum score but below or equal to the Add match score) will be added to the GnuCash file by default."
 msgstr "Dit veld bepaalt de drempel waarboven een gesuggereerde overeenkomende boeking boeking automatisch wordt toegevoegd. Een boeking met een mate van overeenkomst binnen de rode zone (boven de weergavedrempel maar kleiner dan of gelijk aan deze drempelwaarde voor toevoeging) wordt standaard (automatisch) toegevoegd."
 
-#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
+#: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:18
 msgid "Use bayesian matching"
 msgstr "Bayesiaanse algoritmes gebruiken"
 
@@ -14202,103 +14227,103 @@ msgstr "U moet aan dit nieuwe opmaaksjabloon een naam toekennen"
 msgid "Style Sheet Name"
 msgstr "Naam opmaaksjabloon"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:282
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:283
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:289
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:290
 msgid "The numeric ID of the report."
 msgstr "De identificatienummer van het rapport."
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1008
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1020
 msgid "_Print Report..."
 msgstr "Rapport _afdrukken…"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1009
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1021
 msgid "Print the current report"
 msgstr "Het huidige rapport afdrukken"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1033
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1045
 msgid "Add _Report"
 msgstr "_Rapport toevoegen"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1034
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1046
 msgid "Add the current report to the `Custom' menu for later use. The report will be saved in the file ~/.gnucash/saved-reports-2.4. It will be accessible as menu entry in the report menu at the next startup of GnuCash."
 msgstr "Het rapport aan het menu ‘Rapporten ‣ Aangepaste rapporten’ toevoegen voor later gebruik. Het rapport zal worden opgeslagen in het bestand ~/.gnucash/saved-reports-2.4. Het is als menukeuze beschikbaar zodra GnuCash de volgende keer wordt opgestart."
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1041
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1053
 msgid "Export _Report"
 msgstr "Rapport _exporteren"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1042
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1054
 msgid "Export HTML-formatted report to file"
 msgstr "HTML-geformatteerd rapport naar bestand exporteren"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1046
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1058
 msgid "_Report Options"
 msgstr "_Rapportopties"
 
 #. src/report/report-system/html-utilities.scm
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1047
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1059
 #: ../intl-scm/guile-strings.c:3378 ../intl-scm/guile-strings.c:3384
 #: ../intl-scm/guile-strings.c:3390
 msgid "Edit report options"
 msgstr "Rapportopties bewerken"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1052
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1064
 msgid "Back"
 msgstr "Terug"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1053
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1065
 msgid "Move back one step in the history"
 msgstr "Een stap terug"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1057
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1069
 msgid "Forward"
 msgstr "Vooruit"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1058
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1070
 msgid "Move forward one step in the history"
 msgstr "Een stap vooruit"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1062
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1074
 msgid "Reload"
 msgstr "Vernieuwen"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1063
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1075
 msgid "Reload the current page"
 msgstr "De huidige pagina opnieuw laden"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1067
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1079
 msgid "Stop"
 msgstr "Stoppen"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1068
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1080
 msgid "Cancel outstanding HTML requests"
 msgstr "Openstaande HTML-aanvragen annuleren"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1077
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1089
 msgid "Print"
 msgstr "Afdrukken"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1359
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1397
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1371
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1409
 msgid "HTML"
 msgstr "HTML"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1362
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1374
 msgid "Choose export format"
 msgstr "Exportopmaak selecteren"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1363
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1375
 msgid "Choose the export format for this report:"
 msgstr "Een exportopmaak voor dit rapport selecteren:"
 
 #. %s is the type of what is about to be saved, e.g. "HTML".
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1404
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1416
 #, c-format
 msgid "Save %s To File"
 msgstr "%s als bestand opslaan"
 
 #. %s is the strerror(3) string of the error that occurred.
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1429
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1441
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -14309,20 +14334,31 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1439
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1451
 msgid "You cannot save to that file."
 msgstr "U kunt niet als dat bestand opslaan."
 
 #. src/report/report-system/report.scm
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1529
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1541
 #: ../intl-scm/guile-strings.c:3582
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr "Kon het bestand ‘%s’ niet openen. De foutmelding luidt: %s"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1561
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1573
 msgid "There are no options for this report."
 msgstr "Er zijn geen opties voor dit rapport."
+
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1588
+msgid "GnuCash-Report"
+msgstr "GnuCash-rapport"
+
+#. src/report/business-reports/gnucash/report/invoice.scm
+#. src/report/business-reports/invoice.scm
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1612
+#: ../intl-scm/guile-strings.c:1986 ../intl-scm/guile-strings.c:2516
+msgid "Printable Invoice"
+msgstr "Afdrukbare factuur"
 
 #. * @}
 #. * @}
@@ -16821,12 +16857,6 @@ msgstr "Document in behandeling…"
 #: ../intl-scm/guile-strings.c:1210 ../intl-scm/guile-strings.c:1814
 msgid "Fancy Invoice"
 msgstr "Elegante factuur"
-
-#. src/report/business-reports/gnucash/report/invoice.scm
-#. src/report/business-reports/invoice.scm
-#: ../intl-scm/guile-strings.c:1986 ../intl-scm/guile-strings.c:2516
-msgid "Printable Invoice"
-msgstr "Afdrukbare factuur"
 
 #. src/report/business-reports/gnucash/report/job-report.scm
 #. src/report/business-reports/gnucash/report/owner-report.scm
