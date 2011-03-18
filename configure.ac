@@ -1005,7 +1005,7 @@ then
         *)
           # Unsure - check functions exist
           oLIBS="$LIBS"
-          LIBS="$LIBS -lwebkit-1.0"
+          LIBS="$LIBS ${WEBKIT_LIBS}"
           AC_CHECK_FUNCS(webkit_web_view_load_uri)
           LIBS="$oLIBS"
           AC_MSG_CHECKING(for webkit_web_frame_print_full)
