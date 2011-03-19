@@ -69,7 +69,7 @@
 ( "WIR Euro" "euro" "cent" "ISO4217" "CHE" "974" 100 100 "" ) ;; complementary currency by WIR Wirtschaftsring-Genossenschaft
 ( "Swiss Franc" "franc" "centime" "ISO4217" "CHF" "756" 100 100 "SFr." )
 ( "WIR Franc" "franc" "centime" "ISO4217" "CHW" "948" 100 100 "" ) ;; complementary currency by WIR Wirtschaftsring-Genossenschaft
-( "Unidades de fomento" "UF" "" "ISO4217" "CLF" "990" 1 1 "" ) ;; international secured loans
+( "Unidades de fomento" "UF" "" "ISO4217" "CLF" "990" 1000 1000 "" ) ;; international secured loans; decimals not defined but required for conversion as of 2011-03-18 1 CLF = 21,560.19 CLP
 ( "Chilean Peso" "peso" "centavo" "ISO4217" "CLP" "152" 100 1 "$" ) ;; "$" should have 2 strokes
 ( "Yuan Renminbi" "renminbi" "fen" "ISO4217" "CNY" "156" 100 100 "元" )
 ( "Colombian Peso" "peso" "centavo" "ISO4217" "COP" "170" 100 100 "$" )
