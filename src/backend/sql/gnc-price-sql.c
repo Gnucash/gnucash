@@ -19,8 +19,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @file gnc-price-sql.c
- *  @brief load and save data to SQL 
- *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
+ *  @brief load and save data to SQL
+ *  @author Copyright (c) 2006-2009 Phil Longstaff <plongstaff@rogers.com>
  *
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db
@@ -53,16 +53,16 @@
 
 static const GncSqlColumnTableEntry col_table[] =
 {
-	/*@ -full_init_block @*/
-    { "guid",           CT_GUID,           0,                    COL_NNUL|COL_PKEY, "guid" },
-    { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_COMMODITY },
-    { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_CURRENCY },
-    { "date",           CT_TIMESPEC,       0,                    COL_NNUL,          NULL, PRICE_DATE },
-    { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,                 NULL, PRICE_SOURCE },
-    { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 NULL, PRICE_TYPE },
-    { "value",          CT_NUMERIC,        0,                    COL_NNUL,          NULL, PRICE_VALUE },
+    /*@ -full_init_block @*/
+    { "guid",           CT_GUID,           0,                    COL_NNUL | COL_PKEY, "guid" },
+    { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          "commodity" },
+    { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          "currency" },
+    { "date",           CT_TIMESPEC,       0,                    COL_NNUL,          "date" },
+    { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,                 "source" },
+    { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 "type" },
+    { "value",          CT_NUMERIC,        0,                    COL_NNUL,          "value" },
     { NULL }
-	/*@ +full_init_block @*/
+    /*@ +full_init_block @*/
 };
 
 /* ================================================================= */
@@ -70,16 +70,16 @@ static const GncSqlColumnTableEntry col_table[] =
 static /*@ null @*//*@ dependent @*/ GNCPrice*
 load_single_price( GncSqlBackend* be, GncSqlRow* row )
 {
-	GNCPrice* pPrice;
+    GNCPrice* pPrice;
 
-	g_return_val_if_fail( be != NULL, NULL );
-	g_return_val_if_fail( row != NULL, NULL );
+    g_return_val_if_fail( be != NULL, NULL );
+    g_return_val_if_fail( row != NULL, NULL );
 
     pPrice = gnc_price_create( be->primary_book );
 
-	gnc_price_begin_edit( pPrice );
+    gnc_price_begin_edit( pPrice );
     gnc_sql_load_object( be, row, GNC_ID_PRICE, pPrice, col_table );
-	gnc_price_commit_edit( pPrice );
+    gnc_price_commit_edit( pPrice );
 
     return pPrice;
 }
@@ -92,35 +92,40 @@ load_all_prices( GncSqlBackend* be )
     QofBook* pBook;
     GNCPriceDB* pPriceDB;
 
-	g_return_if_fail( be != NULL );
+    g_return_if_fail( be != NULL );
 
     pBook = be->primary_book;
-    pPriceDB = gnc_book_get_pricedb( pBook );
+    pPriceDB = gnc_pricedb_get_db( pBook );
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
-	if( stmt != NULL ) {
-    	result = gnc_sql_execute_select_statement( be, stmt );
-		gnc_sql_statement_dispose( stmt );
-    	if( result != NULL ) {
-        	GNCPrice* pPrice;
-			GList* list = NULL;
-			GncSqlRow* row = gnc_sql_result_get_first_row( result );
+    if ( stmt != NULL )
+    {
+        result = gnc_sql_execute_select_statement( be, stmt );
+        gnc_sql_statement_dispose( stmt );
+        if ( result != NULL )
+        {
+            GNCPrice* pPrice;
+            GncSqlRow* row = gnc_sql_result_get_first_row( result );
+            gchar* sql;
 
-        	while( row != NULL ) {
-            	pPrice = load_single_price( be, row );
+            gnc_pricedb_set_bulk_update( pPriceDB, TRUE );
+            while ( row != NULL )
+            {
+                pPrice = load_single_price( be, row );
 
-            	if( pPrice != NULL ) {
-					list = g_list_append( list, pPrice );
-                	(void)gnc_pricedb_add_price( pPriceDB, pPrice );
-            	}
-				row = gnc_sql_result_get_next_row( result );
-        	}
-			gnc_sql_result_dispose( result );
+                if ( pPrice != NULL )
+                {
+                    (void)gnc_pricedb_add_price( pPriceDB, pPrice );
+                    gnc_price_unref( pPrice );
+                }
+                row = gnc_sql_result_get_next_row( result );
+            }
+            gnc_sql_result_dispose( result );
+            gnc_pricedb_set_bulk_update( pPriceDB, FALSE );
 
-			if( list != NULL ) {
-				gnc_sql_slots_load_for_list( be, list );
-				g_list_free( list );
-			}
-		}
+            sql = g_strdup_printf( "SELECT DISTINCT guid FROM %s", TABLE_NAME );
+            gnc_sql_slots_load_for_sql_subquery( be, sql, (BookLookupFn)gnc_price_lookup );
+            g_free( sql );
+        }
     }
 }
 
@@ -128,17 +133,22 @@ load_all_prices( GncSqlBackend* be )
 static void
 create_prices_tables( GncSqlBackend* be )
 {
-	gint version;
+    gint version;
 
-	g_return_if_fail( be != NULL );
+    g_return_if_fail( be != NULL );
 
-	version = gnc_sql_get_table_version( be, TABLE_NAME );
-    if( version == 0 ) {
+    version = gnc_sql_get_table_version( be, TABLE_NAME );
+    if ( version == 0 )
+    {
         (void)gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
-    } else if( version == 1 ) {
-		/* Upgrade 64 bit int handling */
-		gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
-		(void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+    }
+    else if ( version == 1 )
+    {
+        /* Upgrade 64 bit int handling */
+        gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+        (void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+
+        PINFO("Prices table upgraded from version 1 to version %d\n", TABLE_VERSION);
     }
 }
 
@@ -148,34 +158,41 @@ static gboolean
 save_price( GncSqlBackend* be, QofInstance* inst )
 {
     GNCPrice* pPrice = GNC_PRICE(inst);
-	gint op;
-	gboolean is_infant;
-	gboolean is_ok = TRUE;
+    gint op;
+    gboolean is_infant;
+    gboolean is_ok = TRUE;
 
-	g_return_val_if_fail( be != NULL, FALSE );
-	g_return_val_if_fail( inst != NULL, FALSE );
-	g_return_val_if_fail( GNC_IS_PRICE(inst), FALSE );
+    g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( inst != NULL, FALSE );
+    g_return_val_if_fail( GNC_IS_PRICE(inst), FALSE );
 
-	is_infant = qof_instance_get_infant( inst );
-	if( qof_instance_get_destroying( inst ) ) {
-		op = OP_DB_DELETE;
-	} else if( be->is_pristine_db || is_infant ) {
-		op = OP_DB_INSERT;
-	} else {
-		op = OP_DB_UPDATE;
-	}
+    is_infant = qof_instance_get_infant( inst );
+    if ( qof_instance_get_destroying( inst ) )
+    {
+        op = OP_DB_DELETE;
+    }
+    else if ( be->is_pristine_db || is_infant )
+    {
+        op = OP_DB_INSERT;
+    }
+    else
+    {
+        op = OP_DB_UPDATE;
+    }
 
-	if( op != OP_DB_DELETE ) {
-    	/* Ensure commodity and currency are in the db */
-		(void)gnc_sql_save_commodity( be, gnc_price_get_commodity( pPrice ) );
-    	is_ok = gnc_sql_save_commodity( be, gnc_price_get_currency( pPrice ) );
-	}
+    if ( op != OP_DB_DELETE )
+    {
+        /* Ensure commodity and currency are in the db */
+        (void)gnc_sql_save_commodity( be, gnc_price_get_commodity( pPrice ) );
+        is_ok = gnc_sql_save_commodity( be, gnc_price_get_currency( pPrice ) );
+    }
 
-	if( is_ok ) {
-    	is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_PRICE, pPrice, col_table );
-	}
+    if ( is_ok )
+    {
+        is_ok = gnc_sql_do_db_operation( be, op, TABLE_NAME, GNC_ID_PRICE, pPrice, col_table );
+    }
 
-	return is_ok;
+    return is_ok;
 }
 
 static gboolean
@@ -183,12 +200,13 @@ write_price( GNCPrice* p, gpointer data )
 {
     write_objects_t* s = (write_objects_t*)data;
 
-	g_return_val_if_fail( p != NULL, FALSE );
-	g_return_val_if_fail( data != NULL, FALSE );
+    g_return_val_if_fail( p != NULL, FALSE );
+    g_return_val_if_fail( data != NULL, FALSE );
 
-	if( s->is_ok ) {
-    	s->is_ok = save_price( s->be, QOF_INSTANCE(p) );
-	}
+    if ( s->is_ok )
+    {
+        s->is_ok = save_price( s->be, QOF_INSTANCE(p) );
+    }
 
     return s->is_ok;
 }
@@ -197,14 +215,14 @@ static gboolean
 write_prices( GncSqlBackend* be )
 {
     GNCPriceDB* priceDB;
-	write_objects_t data;
+    write_objects_t data;
 
-	g_return_val_if_fail( be != NULL, FALSE );
+    g_return_val_if_fail( be != NULL, FALSE );
 
-    priceDB = gnc_book_get_pricedb( be->primary_book );
+    priceDB = gnc_pricedb_get_db( be->primary_book );
 
-	data.be = be;
-	data.is_ok = TRUE;
+    data.be = be;
+    data.is_ok = TRUE;
     return gnc_pricedb_foreach_price( priceDB, write_price, &data, TRUE );
 }
 
@@ -219,8 +237,8 @@ gnc_sql_init_price_handler( void )
         save_price,         		/* commit */
         load_all_prices,            /* initial_load */
         create_prices_tables,    	/* create tables */
-		NULL, NULL, NULL,
-		write_prices				/* write */
+        NULL, NULL, NULL,
+        write_prices				/* write */
     };
 
     (void)qof_object_register_backend( GNC_ID_PRICE, GNC_SQL_BACKEND, &be_data );

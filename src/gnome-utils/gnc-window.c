@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-window.c -- structure which represents a GnuCash window.
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -36,28 +36,30 @@ static QofLogModule log_module = GNC_MOD_GUI;
 GType
 gnc_window_get_type (void)
 {
-  static GType gnc_window_type = 0;
+    static GType gnc_window_type = 0;
 
-  if (gnc_window_type == 0) {
-    static const GTypeInfo our_info = {
-      sizeof (GncWindowIface),
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-      0,
-      0,
-      NULL
-    };
+    if (gnc_window_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
+            sizeof (GncWindowIface),
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            0,
+            0,
+            NULL
+        };
 
-    gnc_window_type = g_type_register_static (G_TYPE_INTERFACE,
-					      "GncWindow",
-					      &our_info, 0);
-    g_type_interface_add_prerequisite (gnc_window_type, G_TYPE_OBJECT);
-  }
+        gnc_window_type = g_type_register_static (G_TYPE_INTERFACE,
+                          "GncWindow",
+                          &our_info, 0);
+        g_type_interface_add_prerequisite (gnc_window_type, G_TYPE_OBJECT);
+    }
 
-  return gnc_window_type;
+    return gnc_window_type;
 }
 
 /************************************************************
@@ -67,35 +69,35 @@ gnc_window_get_type (void)
 GtkWindow *
 gnc_window_get_gtk_window (GncWindow *window)
 {
-  g_return_val_if_fail(GNC_WINDOW (window), NULL);
+    g_return_val_if_fail(GNC_WINDOW (window), NULL);
 
-  /* mandatory */
-  g_return_val_if_fail(GNC_WINDOW_GET_IFACE (window)->get_gtk_window, NULL);
+    /* mandatory */
+    g_return_val_if_fail(GNC_WINDOW_GET_IFACE (window)->get_gtk_window, NULL);
 
-  return GNC_WINDOW_GET_IFACE (window)->get_gtk_window (window);
+    return GNC_WINDOW_GET_IFACE (window)->get_gtk_window (window);
 }
 
 static GtkWidget *
 gnc_window_get_statusbar (GncWindow *window)
 {
-  g_return_val_if_fail(GNC_WINDOW (window), NULL);
+    g_return_val_if_fail(GNC_WINDOW (window), NULL);
 
-  /* mandatory */
-  g_return_val_if_fail(GNC_WINDOW_GET_IFACE (window)->get_statusbar, NULL);
+    /* mandatory */
+    g_return_val_if_fail(GNC_WINDOW_GET_IFACE (window)->get_statusbar, NULL);
 
-  return GNC_WINDOW_GET_IFACE (window)->get_statusbar (window);
+    return GNC_WINDOW_GET_IFACE (window)->get_statusbar (window);
 }
 
 static GtkWidget *
 gnc_window_get_progressbar (GncWindow *window)
 {
-  g_return_val_if_fail(GNC_WINDOW (window), NULL);
+    g_return_val_if_fail(GNC_WINDOW (window), NULL);
 
-  /* optional */
-  if (GNC_WINDOW_GET_IFACE (window)->get_progressbar == NULL)
-    return NULL;
+    /* optional */
+    if (GNC_WINDOW_GET_IFACE (window)->get_progressbar == NULL)
+        return NULL;
 
-  return GNC_WINDOW_GET_IFACE (window)->get_progressbar (window);
+    return GNC_WINDOW_GET_IFACE (window)->get_progressbar (window);
 }
 
 /************************************************************
@@ -105,26 +107,26 @@ gnc_window_get_progressbar (GncWindow *window)
 void
 gnc_window_update_status (GncWindow *window, GncPluginPage *page)
 {
-  GtkWidget *statusbar;
-  const gchar *message;
+    GtkWidget *statusbar;
+    const gchar *message;
 
-  g_return_if_fail(GNC_WINDOW (window));
+    g_return_if_fail(GNC_WINDOW (window));
 
-  statusbar = gnc_window_get_statusbar (window);
-  message = gnc_plugin_page_get_statusbar_text(page);
-  gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0);
-  gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, message ? message : "");
+    statusbar = gnc_window_get_statusbar (window);
+    message = gnc_plugin_page_get_statusbar_text(page);
+    gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0);
+    gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, message ? message : "");
 }
 
 void
-gnc_window_set_status (GncWindow *window, GncPluginPage *page, 
+gnc_window_set_status (GncWindow *window, GncPluginPage *page,
                        const gchar *message)
 {
-  g_return_if_fail(GNC_WINDOW (window));
-  g_return_if_fail(GNC_PLUGIN_PAGE (page));
+    g_return_if_fail(GNC_WINDOW (window));
+    g_return_if_fail(GNC_PLUGIN_PAGE (page));
 
-  gnc_plugin_page_set_statusbar_text(page, message);
-  gnc_window_update_status (window, page);
+    gnc_plugin_page_set_statusbar_text(page, message);
+    gnc_window_update_status (window, page);
 }
 
 /************************************************************
@@ -144,59 +146,67 @@ static GncWindow *progress_bar_hack_window = NULL;
 void
 gnc_window_set_progressbar_window (GncWindow *window)
 {
-  if (window != NULL) {
-    g_return_if_fail(GNC_WINDOW (window));
-  }
+    if (window != NULL)
+    {
+        g_return_if_fail(GNC_WINDOW (window));
+    }
 
-  progress_bar_hack_window = window;
+    progress_bar_hack_window = window;
 }
 
 
 GncWindow *
 gnc_window_get_progressbar_window (void)
 {
-  return progress_bar_hack_window;
+    return progress_bar_hack_window;
 }
 
 
 void
 gnc_window_show_progress (const char *message, double percentage)
 {
-  GncWindow *window;
-  GtkWidget *progressbar;
+    GncWindow *window;
+    GtkWidget *progressbar;
 
-  window = progress_bar_hack_window;
-  if (window == NULL)
-    return;
+    window = progress_bar_hack_window;
+    if (window == NULL)
+        return;
 
-  progressbar = gnc_window_get_progressbar (window);
-  if (progressbar == NULL) {
-    DEBUG( "no progressbar in hack-window" );
-    return;
-  }
-
-  gnc_update_splash_screen(message, percentage);
-
-  if (percentage < 0) {
-    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), " ");
-    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), 0.0);
-    if (GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive != NULL)
-      GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive(window, TRUE);
-  } else {
-    if (message)
-      gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), message);
-    if ((percentage == 0) &&
-	(GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive != NULL))
-      GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive(window, FALSE);
-    if (percentage <= 100) {
-      gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), 
-                                    percentage/100);
-    } else {
-      gtk_progress_bar_pulse(GTK_PROGRESS_BAR(progressbar));
+    progressbar = gnc_window_get_progressbar (window);
+    if (progressbar == NULL)
+    {
+        DEBUG( "no progressbar in hack-window" );
+        return;
     }
-  }
 
-  /* make sure new text is up */
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+    gnc_update_splash_screen(message, percentage);
+
+    if (percentage < 0)
+    {
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), " ");
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), 0.0);
+        if (GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive != NULL)
+            GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive(window, TRUE);
+    }
+    else
+    {
+        if (message)
+            gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), message);
+        if ((percentage == 0) &&
+                (GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive != NULL))
+            GNC_WINDOW_GET_IFACE(window)->ui_set_sensitive(window, FALSE);
+        if (percentage <= 100)
+        {
+            gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar),
+                                          percentage / 100);
+        }
+        else
+        {
+            gtk_progress_bar_pulse(GTK_PROGRESS_BAR(progressbar));
+        }
+    }
+
+    /* make sure new text is up */
+    while (gtk_events_pending ())
+        gtk_main_iteration ();
 }

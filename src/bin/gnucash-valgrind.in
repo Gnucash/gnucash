@@ -1,42 +1,24 @@
 #!/bin/sh
 
-PATH="@-BIN_DIR-@:${PATH}"
-export PATH
+BIN_DIR=$(dirname $0)
+[ -e ${BIN_DIR}/gnucash-setup-env ] && \
+   . ${BIN_DIR}/gnucash-setup-env
 
-GUILE_WARN_DEPRECATED="no"
-export GUILE_WARN_DEPRECATED
-
-GNC_MODULE_PATH="@-GNC_PKGLIB_INSTALLDIR-@:${GNC_MODULE_PATH}"
-
-EXTRA_PATH="${EXTRA_PATH}:@-GNC_GUILE_MODULE_DIR-@"
-EXTRA_PATH="${EXTRA_PATH}:@-GNC_SCM_INSTALL_DIR-@"
-GUILE_LOAD_PATH="${EXTRA_PATH}:${GUILE_LOAD_PATH}"
-
-EXTRA_LIBS="${GNC_MODULE_PATH}"
-EXTRA_LIBS="${EXTRA_LIBS}:@-GNC_LIB_INSTALLDIR-@"
-EXTRA_LIBS="${EXTRA_LIBS}:@-GNC_PKGLIB_INSTALLDIR-@"
-
-LD_LIBRARY_PATH="${EXTRA_LIBS}:${LD_LIBRARY_PATH}"
 TOP_SRC_DIR="@-TOP_SRC_DIR-@"
-GNC_DBD_DIR="@-GNC_DBD_DIR-@"
-
-export GNC_MODULE_PATH
-export GUILE_LOAD_PATH
-export LD_LIBRARY_PATH
-export GNC_DBD_DIR
-
 #
 # Other potentially useful options, particularly for valgrind-2.x:
 # --tool=memcheck --trace-children=yes
 #
+export G_SLICE=always-malloc
+export G_DEBUG=gc-friendly
 exec valgrind -v \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-gnucash.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-glib.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-libfontconfig.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-libgda.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-libguile.supp \
-	--num-callers=25 \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-gnucash.supp \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-glib.supp \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-libfontconfig.supp \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-libgda.supp \
+    --suppressions=${TOP_SRC_DIR}/src/debug/valgrind/valgrind-libguile.supp \
+    --num-callers=25 \
     --error-limit=no \
     --tool=memcheck \
-	--leak-check=full \
-    gnucash-bin "$@"
+    --leak-check=full \
+    ${BIN_DIR}/@-GNUCASH_BIN_INSTALL_NAME-@ "$@"

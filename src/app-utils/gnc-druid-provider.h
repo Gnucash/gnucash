@@ -1,3 +1,20 @@
+/********************************************************************\
+ * gnc-druid-provider.h                                             *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
 
 #ifndef GNC_DRUID_PROVIDER_H
@@ -25,38 +42,38 @@ typedef struct _GNCDruidProviderClass GNCDruidProviderClass;
 
 struct _GNCDruidProvider
 {
-  GObject obj;
+    GObject obj;
 
-  GNCDruid *druid;		/* The druid this object belongs to,
+    GNCDruid *druid;		/* The druid this object belongs to,
 				 * inserted by this class. */
-  GNCDruidProviderDesc *desc;	/* The description for this provider.
+    GNCDruidProviderDesc *desc;	/* The description for this provider.
 				 * inserted by this class,
 				 * destroyed at finalize() */
-  GList *pages;			/* list of ALL druid pages created by the
+    GList *pages;			/* list of ALL druid pages created by the
 				 * subclass. destroyed at finalize() */
-  GNCDruidPage* page;		/* The current page, used for reference */
+    GNCDruidPage* page;		/* The current page, used for reference */
 };
 
 struct _GNCDruidProviderClass
 {
-  GObjectClass parent_class;
+    GObjectClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  GNCDruidPage* (*first_page)(GNCDruidProvider*);
-  GNCDruidPage* (*last_page)(GNCDruidProvider*);
-  GNCDruidPage* (*next_page)(GNCDruidProvider*);
-  GNCDruidPage* (*prev_page)(GNCDruidProvider*);
+    GNCDruidPage* (*first_page)(GNCDruidProvider*);
+    GNCDruidPage* (*last_page)(GNCDruidProvider*);
+    GNCDruidPage* (*next_page)(GNCDruidProvider*);
+    GNCDruidPage* (*prev_page)(GNCDruidProvider*);
 };
 
 GType	gnc_druid_provider_get_type(void);
 GNCDruidProvider* gnc_druid_provider_new(GNCDruid* druid,
-					 GNCDruidProviderDesc* desc);
+        GNCDruidProviderDesc* desc);
 
 
 typedef GNCDruidProvider* (*GNCDruidProviderNew)(GNCDruid*, GNCDruidProviderDesc*);
 void	gnc_druid_provider_register(const gchar* ui_type, const gchar* name,
-				    GNCDruidProviderNew new_provider);
+                                    GNCDruidProviderNew new_provider);
 
 /* methods */
 

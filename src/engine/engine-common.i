@@ -1,9 +1,9 @@
 %inline %{
-static const GUID * gncSplitGetGUID(Split *x)
+static const GncGUID * gncSplitGetGUID(Split *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
-static const GUID * gncTransGetGUID(Transaction *x)
+static const GncGUID * gncTransGetGUID(Transaction *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
-static const GUID * gncAccountGetGUID(Account *x)
+static const GncGUID * gncAccountGetGUID(Account *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
 %}
 

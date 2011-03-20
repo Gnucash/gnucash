@@ -36,12 +36,12 @@
                   (if ok?
                       (set! pass (+ 1 pass))
                       (begin 
-                        (simple-format #t "[fail] received ~S\n" result)
-                        (simple-format #t "       expected ~S\n" 
+                        (format #t "[fail] received ~S\n" result)
+                        (format #t "       expected ~S\n" 
                                        correct-result)
                         (set! fail (+ 1 fail))))
                   (loop (read)))))))
-      (simple-format #t "test ~A: pass=~S fail=~S\n" title pass fail)
+      (format #t "test ~A: pass=~S fail=~S\n" title pass fail)
       (= pass total)))
   
   (let ((all-pass #t))

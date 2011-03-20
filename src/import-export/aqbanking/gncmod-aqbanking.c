@@ -28,6 +28,7 @@
  */
 
 #include "config.h"
+#include <glib/gi18n.h>
 
 #include "gnc-ab-utils.h"
 #include "gnc-module.h"
@@ -52,7 +53,8 @@ libgncmod_aqbanking_gnc_module_path(void)
 }
 
 gchar *
-libgncmod_aqbanking_gnc_module_description(void) {
+libgncmod_aqbanking_gnc_module_description(void)
+{
     return g_strdup("Support for Online Banking protocols");
 }
 
@@ -60,10 +62,11 @@ gint
 libgncmod_aqbanking_gnc_module_init(gint refcount)
 {
     /* Load modules we depend on */
-    if(!gnc_module_load("gnucash/engine", 0)
-       || !gnc_module_load("gnucash/app-utils", 0)
-       || !gnc_module_load("gnucash/gnome-utils", 0)
-       || !gnc_module_load("gnucash/import-export", 0)) {
+    if (!gnc_module_load("gnucash/engine", 0)
+            || !gnc_module_load("gnucash/app-utils", 0)
+            || !gnc_module_load("gnucash/gnome-utils", 0)
+            || !gnc_module_load("gnucash/import-export", 0))
+    {
         return FALSE;
     }
 
@@ -71,7 +74,7 @@ libgncmod_aqbanking_gnc_module_init(gint refcount)
     gnc_plugin_aqbanking_create_plugin();
 
     gnc_preferences_add_to_page("aqbanking.glade", "aqbanking_prefs",
-                                "Online Banking");
+                                _("Online Banking"));
 
     /* Initialize gwen library */
     gnc_GWEN_Init();
@@ -80,7 +83,8 @@ libgncmod_aqbanking_gnc_module_init(gint refcount)
 }
 
 gint
-libgncmod_aqbanking_gnc_module_end(gint refcount) {
+libgncmod_aqbanking_gnc_module_end(gint refcount)
+{
     /* Delete the shared AB_BANKING object */
     gnc_AB_BANKING_delete(NULL);
 

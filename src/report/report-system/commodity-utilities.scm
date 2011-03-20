@@ -780,8 +780,8 @@
 (define (gnc:make-exchange-function exchange-alist)
   (let ((exchangelist exchange-alist))
     (lambda (foreign domestic)
-      (gnc:debug "foreign: " foreign)
-      (gnc:debug "domestic: " domestic)
+      (gnc:debug "foreign: " (gnc:monetary->string foreign))
+      (gnc:debug "domestic: " (gnc-commodity-get-printname domestic))
       (if foreign
           (or (gnc:exchange-by-euro foreign domestic #f)
               (gnc:exchange-if-same foreign domestic)
@@ -898,8 +898,8 @@
 (define (gnc:exchange-by-pricealist-nearest
 	 pricealist foreign domestic date)
   (begin 
-    (gnc:debug "foreign " foreign)
-    (gnc:debug "domestic " domestic)
+    (gnc:debug "foreign " (gnc:monetary->string foreign))
+    (gnc:debug "domestic " (gnc-commodity-get-printname domestic))
     (gnc:debug "pricealist " pricealist)
     
     (if (and (record? foreign) (gnc:gnc-monetary? foreign)

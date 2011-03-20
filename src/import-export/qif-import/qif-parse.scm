@@ -5,6 +5,8 @@
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash printf))
+
 (define qif-category-compiled-rexp
   (make-regexp "^ *(\\[)?([^]/|]*)(]?)(/?)([^|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
 
@@ -164,6 +166,8 @@
       (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE))
      ((string=? mangled-string "oth l")
       (list GNC-LIABILITY-TYPE GNC-CCARD-TYPE))
+     ((string=? mangled-string "oth s") ;; German asset account
+      (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE))
      ((string=? mangled-string "mutual")
       (list GNC-BANK-TYPE))
      (#t

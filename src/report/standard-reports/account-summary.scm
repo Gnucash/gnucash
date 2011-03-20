@@ -48,7 +48,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report account-summary))
+(define-module (gnucash report standard-reports account-summary))
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
@@ -71,7 +71,7 @@
 (define optname-date (N_ "Date"))
 ;; FIXME this needs an indent option
 
-(define optname-accounts (N_ "Accounts to include"))
+(define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
   (N_ "Report on these accounts, if display depth allows."))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
@@ -453,10 +453,11 @@
 		    account-cols
 		    )
 		)
-	  (if show-account-bals?
-	      (gnc:html-table-set-cell!
-	       build-table 0 (+ cur-col account-cols) (_ "Balance"))
-	      )
+          (if show-account-bals?
+              (gnc:html-table-set-cell/tag!
+               build-table 0 (+ cur-col account-cols) "number-header"
+	       (_ "Balance"))
+              )
 	  (let ((row 0))
 	    (while (< row table-rows)
 		   (gnc:html-table-set-row-markup! build-table (+ row 1)
@@ -476,8 +477,9 @@
 	  (set! cur-col (+ cur-col hold-table-width))
 	  (if show-account-notes?
 	      (begin
-		(gnc:html-table-set-cell!
-		 build-table 0 cur-col (_ "Notes"))
+		(gnc:html-table-set-cell/tag!
+		 build-table 0 cur-col "text-cell"
+		 (_ "Notes"))
 		(add-col 'account-notes)
 		)
 	      )

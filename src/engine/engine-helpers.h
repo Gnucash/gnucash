@@ -47,10 +47,11 @@ void gnc_transaction_set_date(Transaction *t, Timespec ts);
 
 SCM      gnc_timespec2timepair(Timespec t);
 Timespec gnc_timepair2timespec(SCM x);
+GDate    gnc_timepair_to_GDate(SCM x);
 int      gnc_timepair_p(SCM x);
 
-SCM  gnc_guid2scm(GUID guid);
-GUID gnc_scm2guid(SCM guid_scm);
+SCM  gnc_guid2scm(GncGUID guid);
+GncGUID gnc_scm2guid(SCM guid_scm);
 int  gnc_guid_p(SCM guid_scm);
 
 /* for a list of strings */
@@ -59,8 +60,8 @@ GSList * gnc_query_scm2path (SCM path_scm);
 /* These two functions convert a query object into a scheme
  * representation of the query and vice-versa. They do not
  * simply convert a query pointer to a guile query pointer! */
-SCM gnc_query2scm (Query * q);
-Query * gnc_scm2query (SCM query_scm);
+SCM gnc_query2scm (QofQuery * q);
+QofQuery * gnc_scm2query (SCM query_scm);
 
 SCM gnc_gint64_to_scm(const gint64 x);
 gint64 gnc_scm_to_gint64(SCM num);

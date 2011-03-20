@@ -33,93 +33,96 @@
 #define ACTION_SELL_STR _("Sell")
 struct sr_info
 {
-  /* The blank split at the bottom of the register */
-  GUID blank_split_guid;
+    /* The blank split at the bottom of the register */
+    GncGUID blank_split_guid;
 
-  /* The currently open transaction, if any */
-  GUID pending_trans_guid;
+    /* The currently open transaction, if any */
+    GncGUID pending_trans_guid;
 
-  /* A transaction used to remember where to put the cursor */
-  Transaction *cursor_hint_trans;
+    /* A transaction used to remember where to put the cursor */
+    Transaction *cursor_hint_trans;
 
-  /* A split used to remember where to put the cursor */
-  Split *cursor_hint_split;
+    /* A split used to remember where to put the cursor */
+    Split *cursor_hint_split;
 
-  /* A split used to remember where to put the cursor */
-  Split *cursor_hint_trans_split;
+    /* A split used to remember where to put the cursor */
+    Split *cursor_hint_trans_split;
 
-  /* Used to remember where to put the cursor */
-  CursorClass cursor_hint_cursor_class;
+    /* Used to remember where to put the cursor */
+    CursorClass cursor_hint_cursor_class;
 
-  /* If the hints were set by the traverse callback */
-  gboolean hint_set_by_traverse;
+    /* If the hints were set by the traverse callback */
+    gboolean hint_set_by_traverse;
 
-  /* If traverse is to the newly created split */
-  gboolean traverse_to_new;
+    /* If traverse is to the newly created split */
+    gboolean traverse_to_new;
 
-  /* A flag indicating if the last traversal was 'exact'.
-   * See table-allgui.[ch] for details. */
-  gboolean exact_traversal;
+    /* A flag indicating if the last traversal was 'exact'.
+     * See table-allgui.[ch] for details. */
+    gboolean exact_traversal;
 
-  /* Indicates that the current transaction is expanded
-   * in ledger mode. Meaningless in other modes. */
-  gboolean trans_expanded;
+    /* Indicates that the current transaction is expanded
+     * in ledger mode. Meaningless in other modes. */
+    gboolean trans_expanded;
 
-  /* set to TRUE after register is loaded */
-  gboolean reg_loaded;
+    /* set to TRUE after register is loaded */
+    gboolean reg_loaded;
 
-  /* flag indicating whether full refresh is ok */
-  gboolean full_refresh;
+    /* flag indicating whether full refresh is ok */
+    gboolean full_refresh;
 
-  /* The default account where new splits are added */
-  GUID default_account;
+    /* The default account where new splits are added */
+    GncGUID default_account;
 
-  /* The last date recorded in the blank split */
-  time_t last_date_entered;
+    /* The last date recorded in the blank split */
+    time_t last_date_entered;
 
-  /* true if the current blank split has been edited and commited */
-  gboolean blank_split_edited;
+    /* true if the current blank split has been edited and commited */
+    gboolean blank_split_edited;
 
-  /* true if the demarcation between 'past' and 'future' transactions
-   * should be visible */
-  gboolean show_present_divider;
+    /* true if the demarcation between 'past' and 'future' transactions
+     * should be visible */
+    gboolean show_present_divider;
 
-  /* true if we are loading the register for the first time */
-  gboolean first_pass;
+    /* true if we are loading the register for the first time */
+    gboolean first_pass;
 
-  /* true if the user has already confirmed changes of a reconciled
-   * split */
-  gboolean change_confirmed;
+    /* true if the user has already confirmed changes of a reconciled
+     * split */
+    gboolean change_confirmed;
 
-  /* true if the exchange rate has been reset on the current split */
-  gboolean rate_reset;
+    /* true if the exchange rate has been reset on the current split */
+    gboolean rate_reset;
 
-  /* User data for users of SplitRegisters */
-  gpointer user_data;
+    /* account on the current split when the exchange rate was last set */
+    Account *rate_account;
 
-  /* hook to get parent widget */
-  SRGetParentCallback get_parent;
+    /* User data for users of SplitRegisters */
+    gpointer user_data;
 
-  /* flag indicating a template register */
-  gboolean template;
+    /* hook to get parent widget */
+    SRGetParentCallback get_parent;
 
-  /* The template account which template transaction should belong to */
-  GUID template_account;
+    /* flag indicating a template register */
+    gboolean template;
 
-  /* configured strings for debit/credit headers */
-  char *debit_str;
-  char *credit_str;
-  char *tdebit_str;
-  char *tcredit_str;
+    /* The template account which template transaction should belong to */
+    GncGUID template_account;
 
-  /* true if the account separator has changed */
-  gboolean separator_changed;
+    /* configured strings for debit/credit headers */
+    char *debit_str;
+    char *credit_str;
+    char *tdebit_str;
+    char *tcredit_str;
+
+    /* true if the account separator has changed */
+    gboolean separator_changed;
 };
 
 
 SRInfo * gnc_split_register_get_info (SplitRegister *reg);
 
-gncUIWidget gnc_split_register_get_parent (SplitRegister *reg);
+GtkWidget *gnc_split_register_get_parent (SplitRegister *reg);
 
 Split * gnc_split_register_get_split (SplitRegister *reg,
                                       VirtualCellLocation vcell_loc);
@@ -127,7 +130,7 @@ Split * gnc_split_register_get_split (SplitRegister *reg,
 Account * gnc_split_register_get_default_account (SplitRegister *reg);
 
 Transaction * gnc_split_register_get_trans (SplitRegister *reg,
-                                            VirtualCellLocation vcell_loc);
+        VirtualCellLocation vcell_loc);
 
 Split *
 gnc_split_register_get_trans_split (SplitRegister *reg,
@@ -142,10 +145,19 @@ gboolean gnc_split_register_find_split (SplitRegister *reg,
 void gnc_split_register_show_trans (SplitRegister *reg,
                                     VirtualCellLocation start_loc);
 
+// Set the visibility of the split rows belonging to a transaction located at
+// vcell_loc.
+//
+// If only_blank_split is TRUE, only the row used for entering an
+// additional split is affected. Despite the name, this should not be confused
+// with the "blank split" row used for entering the first split of a brand-new
+// transaction. Instead, here it only refers to rows not tied to any split at
+// all, such as those created for entering new splits on old transactions or
+// the 2nd through nth split on brand-new transactions.
 void gnc_split_register_set_trans_visible (SplitRegister *reg,
-                                           VirtualCellLocation vcell_loc,
-                                           gboolean visible,
-                                           gboolean only_blank_split);
+        VirtualCellLocation vcell_loc,
+        gboolean visible,
+        gboolean only_blank_split);
 
 void gnc_split_register_set_cell_fractions (SplitRegister *reg, Split *split);
 
@@ -155,9 +167,9 @@ CellBlock * gnc_split_register_get_active_cursor (SplitRegister *reg);
 void gnc_split_register_set_last_num (SplitRegister *reg, const char *num);
 
 Account * gnc_split_register_get_account_by_name(
-    SplitRegister *reg, BasicCell * cell, const char *name, gboolean *new);
+    SplitRegister *reg, BasicCell * cell, const char *name);
 Account * gnc_split_register_get_account (SplitRegister *reg,
-                                          const char *cell_name);
+        const char *cell_name);
 
 gboolean gnc_split_register_recn_cell_confirm (char old_flag, gpointer data);
 

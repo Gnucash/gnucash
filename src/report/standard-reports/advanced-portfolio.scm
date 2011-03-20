@@ -25,14 +25,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report advanced-portfolio))
+(define-module (gnucash report standard-reports advanced-portfolio))
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
-(use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
-(require 'printf)
+(use-modules (gnucash printf))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -64,7 +63,7 @@
      (N_ "Date") "a")
 
     (gnc:options-add-currency! 
-     options gnc:pagename-general (N_ "Report Currency") "c")
+     options gnc:pagename-general (N_ "Report's currency") "c")
 
     (add-option
      (gnc:make-multichoice-option
@@ -375,7 +374,7 @@
 		 ;; with US dollars. In this case, commod-currency
 		 ;; would be US dollars. If there is no price, we
 		 ;; arbitrarily set the commod-currency to the same as
-		 ;; that of the report, currency
+		 ;; that of the report's currency
 		 (commod-currency (if price (gnc-price-get-currency price) currency))
 		 ;; the value of the commodity, expressed in terms of
 		 ;; the report's currency.
@@ -411,6 +410,7 @@
 			(lambda (s)
 			(if (and (not (or (split-account-type? s ACCT-TYPE-EXPENSE)
 					  (split-account-type? s ACCT-TYPE-INCOME)
+					  (split-account-type? s ACCT-TYPE-TRADING)
 					  (split-account-type? s ACCT-TYPE-ROOT)))
 				 (not (same-account? current (xaccSplitGetAccount s))))
 			    (begin
@@ -613,7 +613,7 @@
 	    ;; now we determine which price data to use, the pricelist or the txn
 	    ;; and if we have a choice, use whichever is newest.
 	    (set! use-txn (if (not price) #t 
-			      (if prefer-pricelist #f
+			      (if (or prefer-pricelist (not pricing-txn)) #f
 				  (if (not (gnc:timepair-le txn-date (gnc-price-get-time price)))
 				      #t #f))))
 	    (gnc:debug "use txn is " use-txn)
@@ -642,8 +642,8 @@
 	    ;; what this means is gain = moneyout - moneyin + basis-of-current-shares, and
 	    ;; adjust for brokers and dividends.
 	    (gaincoll 'add currency (sum-basis basis-list))
-	    (gnc:debug (list "basis we're using to build rows is " (sum-basis basis-list)))
-	    (gnc:debug (list "but the actual basis list is " basis-list))
+	    (gnc:debug "basis we're using to build rows is " (sum-basis basis-list))
+	    (gnc:debug "but the actual basis list is " basis-list)
 
 	    (gaincoll 'merge moneyoutcoll #f)
 	    (gaincoll 'minusmerge moneyincoll #f)
@@ -682,8 +682,8 @@
 	      (total-basis 'add currency (sum-basis basis-list))
 
 	      ;; build a list for the row  based on user selections
-	      (if show-symbol (append! activecols (list ticker-symbol)))
-	      (if show-listing (append! activecols (list listing)))
+	      (if show-symbol (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol))))
+	      (if show-listing (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" listing))))
 	      (if show-shares (append! activecols (list (gnc:make-html-table-header-cell/markup
  	        "number-cell" (xaccPrintAmount units share-print-info)))))
 	      (if show-price (append! activecols (list (gnc:make-html-table-header-cell/markup
@@ -752,7 +752,7 @@
   (let ((to-date     (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general "Date")))
         (accounts    (get-option gnc:pagename-accounts "Accounts"))
-        (currency    (get-option gnc:pagename-general "Report Currency"))
+        (currency    (get-option gnc:pagename-general "Report's currency"))
         (price-source (get-option gnc:pagename-general
                                   optname-price-source))
         (report-title (get-option gnc:pagename-general 

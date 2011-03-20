@@ -24,14 +24,14 @@
  * formulacell.h
  *
  * FUNCTION:
- * 
+ *
  * The FormulaCell is a register-table cell which can contain a formula
  * involving numbers, formula markup and strings denoting either functions or
  * variables.
  *
  * Copyright (c) 2002 Joshua Sled <jsled@asynchronous.org>
  **/
- 
+
 #ifndef FORMULA_CELL_H
 #define FORMULA_CELL_H
 
@@ -44,13 +44,13 @@
 
 typedef struct _FormulaCell
 {
-  BasicCell cell;
+    BasicCell cell;
 
-  /** The print-info for numeric values. **/
-  GNCPrintAmountInfo print_info;
+    /** The print-info for numeric values. **/
+    GNCPrintAmountInfo print_info;
 
-  /** The user-entered formula. **/
-  char *formula;
+    /** The user-entered formula. **/
+    char *formula;
 } FormulaCell;
 
 /* installs a callback to handle date recording */

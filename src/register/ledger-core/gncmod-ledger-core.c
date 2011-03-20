@@ -22,31 +22,34 @@ int libgncmod_ledger_core_gnc_module_age      = 0;
 
 
 char *
-libgncmod_ledger_core_gnc_module_path(void) {
-  return g_strdup("gnucash/register/ledger-core");
+libgncmod_ledger_core_gnc_module_path(void)
+{
+    return g_strdup("gnucash/register/ledger-core");
 }
 
 char *
-libgncmod_ledger_core_gnc_module_description(void) {
-  return g_strdup("Toolkit-independent GUI for financial ledgers");
+libgncmod_ledger_core_gnc_module_description(void)
+{
+    return g_strdup("Toolkit-independent GUI for financial ledgers");
 }
 
 int
-libgncmod_ledger_core_gnc_module_init(int refcount) {
-  if(!gnc_module_load("gnucash/engine", 0))
-  {
-    return FALSE;
-  }
+libgncmod_ledger_core_gnc_module_init(int refcount)
+{
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
 
-  if(!gnc_module_load("gnucash/register/register-core", 0))
-  {
-    return FALSE;
-  }
+    if (!gnc_module_load("gnucash/register/register-core", 0))
+    {
+        return FALSE;
+    }
 
-  if(!gnc_module_load("gnucash/app-utils", 0))
-  {
-    return FALSE;
-  }
+    if (!gnc_module_load("gnucash/app-utils", 0))
+    {
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }

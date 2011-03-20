@@ -134,8 +134,10 @@ gnc_ab_set_book_template_list(QofBook *b, GList *template_list)
 {
     kvp_frame *frame = gnc_ab_get_book_kvp(b, TRUE);
     kvp_value *value = kvp_value_new_glist_nc(template_list);
+    qof_book_begin_edit(b);
     kvp_frame_set_slot_nc(frame, AB_TEMPLATES, value);
-    qof_book_kvp_changed(b);
+    qof_book_mark_dirty(b);
+    qof_book_commit_edit(b);
 }
 
 static void
@@ -156,7 +158,8 @@ gnc_ab_get_account_kvp(const Account *a, gboolean create)
 {
     kvp_frame *toplevel = xaccAccountGetSlots(a);
     kvp_frame *result = kvp_frame_get_frame(toplevel, AB_KEY);
-    if (!result && create) {
+    if (!result && create)
+    {
         result = kvp_frame_new();
         kvp_frame_add_frame_nc(toplevel, AB_KEY, result);
     }
@@ -168,7 +171,8 @@ gnc_ab_get_book_kvp(QofBook *b, gboolean create)
 {
     kvp_frame *toplevel = qof_book_get_slots(b);
     kvp_frame *result = kvp_frame_get_frame(toplevel, AB_KEY);
-    if (!result && create) {
+    if (!result && create)
+    {
         result = kvp_frame_new();
         kvp_frame_add_frame_nc(toplevel, AB_KEY, result);
     }

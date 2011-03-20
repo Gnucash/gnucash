@@ -30,6 +30,8 @@
 ;;  doc as arg to get the string out. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash printf))
+
 (define <html-text> 
   (make-record-type "<html-text>"
                     '(body style)))
@@ -135,7 +137,7 @@
             (apply string-append
                    (gnc:html-document-tree-collapse rendered-elt)))
            (#t 
-            (simple-format "hold on there podner. form='~s'\n" rendered-elt)
+            (format "hold on there podner. form='~s'\n" rendered-elt)
             ""))))
       entities))))
 

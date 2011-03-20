@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-register.h -- 
+/*
+ * gnc-plugin-register.h --
  *
  * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -40,12 +40,14 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_REGISTER_NAME "gnc-plugin-register"
 
 /* typedefs & structures */
-typedef struct {
-	GncPlugin gnc_plugin;
+typedef struct
+{
+    GncPlugin gnc_plugin;
 } GncPluginRegister;
 
-typedef struct {
-	GncPluginClass gnc_plugin;
+typedef struct
+{
+    GncPluginClass gnc_plugin;
 } GncPluginRegisterClass;
 
 /* function prototypes */

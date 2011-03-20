@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
-#
+##@file
+# @brief
 # example script showing how to use the Quote perl module.
 # gets prices for some stocks, for some mutual funds
-
+#
 # Note that this example uses the meta-level "fetch" command.  We do
 # NOT used that in Gnucash because it's behavior is unpredictable If
 # the given method/exchange doesn't work, it'll fall back to other
@@ -11,6 +12,8 @@
 # directly, i.e. $quoter->fidelity_direct("IBM", "LNUX");, etc.  The
 # documentation page for each Finance::Quote sub-module describes how
 # to call it directly without fallbacks.
+#
+# @cond PERL
 
 use Finance::Quote;
 
@@ -84,3 +87,4 @@ foreach $f (@funds) {
 	      $quotes{$f,"date"}."\n";
 }
 print "\n\n";
+##@endcond Perl

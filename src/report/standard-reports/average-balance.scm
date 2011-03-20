@@ -7,23 +7,21 @@
 ;;  or indirect losses incurred as a result of using this software.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report average-balance))
+(define-module (gnucash report standard-reports average-balance))
 (use-modules (srfi srfi-1))
-(use-modules (ice-9 slib))
-
 (use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define reportname (N_ "Average Balance"))
 
-(define optname-from-date (N_ "From"))
-(define optname-to-date (N_ "To"))
+(define optname-from-date (N_ "Start Date"))
+(define optname-to-date (N_ "End Date"))
 (define optname-stepsize (N_ "Step Size"))
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-subacct (N_ "Include Sub-Accounts"))
-(define optname-internal (N_ "Exclude transactions between selected accounts?"))
+(define optname-internal (N_ "Exclude transactions between selected accounts"))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Options
@@ -43,7 +41,7 @@
     (gnc:options-add-interval-choice! 
      options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
-    ;; Report currency
+    ;; Report's currency
     (gnc:options-add-currency! 
      options gnc:pagename-general optname-report-currency "c")
     

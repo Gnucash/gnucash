@@ -247,6 +247,11 @@
 ;;          gnc:account-get-trans-type-balance-interval, matching
 ;;          closing transactions to be ignored when balance-mode is
 ;;          'pre-closing.
+;;
+;;     report-budget: budget
+;;
+;;	    (optional) a budget used to ignore accounts with zero 
+;;	    budget or balance (if zb-balance-mode is set to omit).
 ;; 
 ;;     account-type: unimplemented
 ;;     account-class: unimplemented
@@ -628,6 +633,7 @@
 				 (list 'regexp #f)
 				 )
 				))
+	 (report-budget (or (get-val env 'report-budget) #f))
 	 ;; local variables
 	 (toplvl-accts
 	  (gnc-account-get-children-sorted (gnc-get-current-root-account)))
@@ -673,26 +679,31 @@
                                         shares))))
            splits))
 
-        (merge-splits (gnc:account-get-trans-type-splits-interval
-                       accts #f start-date end-date)
-                      #f)
-        (cond
-         ((equal? balance-mode 'post-closing) #t)
-
-         ((equal? balance-mode 'pre-closing)
-          (merge-splits (gnc:account-get-trans-type-splits-interval
-                         accts closing-pattern start-date end-date)
-                        #t))
-
-         ((equal? balance-mode 'pre-adjusting)
-          (merge-splits (gnc:account-get-trans-type-splits-interval
-                         accts closing-pattern start-date end-date)
-                        #t)
-          (merge-splits (gnc:account-get-trans-type-splits-interval
-                         accts adjusting-pattern start-date end-date)
-                        #t))
-         (else (begin (display "you fail it")
-                      (newline))))
+        ;; If you pass a null account list to gnc:account-get-trans-type-splits-interval
+        ;; it returns splits from all accounts rather than from no accounts.  This is
+        ;; probably a bug but we'll work around it for now.
+        (if (not (null? accts))
+            (begin
+              (merge-splits (gnc:account-get-trans-type-splits-interval
+                             accts #f start-date end-date)
+                            #f)
+              (cond
+               ((equal? balance-mode 'post-closing) #t)
+      
+               ((equal? balance-mode 'pre-closing)
+                (merge-splits (gnc:account-get-trans-type-splits-interval
+                               accts closing-pattern start-date end-date)
+                              #t))
+      
+               ((equal? balance-mode 'pre-adjusting)
+                (merge-splits (gnc:account-get-trans-type-splits-interval
+                               accts closing-pattern start-date end-date)
+                              #t)
+                (merge-splits (gnc:account-get-trans-type-splits-interval
+                               accts adjusting-pattern start-date end-date)
+                              #t))
+               (else (begin (display "you fail it")
+                            (newline))))))
         hash-table
         )
 
@@ -828,10 +839,15 @@
 	     (set! acct-depth-reached (max acct-depth-reached acct-depth))
 	     (set! logi-depth-reached (max logi-depth-reached logi-depth))
 	     (set! disp-depth-reached (max disp-depth-reached disp-depth))
+
 	     (or (not (use-acct? acct))
 		 ;; ok, so we'll consider parent accounts with zero
 		 ;; recursive-bal to be zero balance leaf accounts
 		 (and (gnc-commodity-collector-allzero? recursive-bal)
+		      (or (not report-budget)
+             		  (gnc-numeric-zero-p
+				(gnc:budget-account-get-rolledup-net 
+					report-budget account #f #f)))
 		      (equal? zero-mode 'omit-leaf-acct))
 		 (begin
 		   (set! row-env
@@ -1291,7 +1307,7 @@
 	      label
               indented-depth
               account-colspan               ;; label-colspan
-              #f                            ;; label-markup
+              "anchor-cell"                 ;; label-markup
 	      amount
 	      (+ account-cols (- 0 1)
 		 (- logical-cols display-depth)

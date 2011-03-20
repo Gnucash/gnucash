@@ -640,6 +640,7 @@
   (let ((retval (make-simple-obj <qif-stock-symbol>)))
     (qif-stock-symbol:set-name! retval "")
     (qif-stock-symbol:set-symbol! retval "")
+    (qif-stock-symbol:set-type! retval "")
     retval))
 
 (define <qif-ticker-map>
@@ -670,7 +671,7 @@
        (if (string=? name (qif-stock-symbol:name symbol))
 	   (begin
 	     (set! retval (qif-stock-symbol:symbol symbol))
-	     (if (string=? retval "")
+	     (if (and (string? retval) (string=? retval ""))
 		 (set! retval #f)))))
      (qif-ticker-map:ticker-map ticker-map))
     retval))
@@ -682,7 +683,7 @@
        (if (string=? name (qif-stock-symbol:name symbol))
 	   (begin
 	     (set! retval (qif-stock-symbol:type symbol))
-	     (if (string=? retval "")
+	     (if (and (string? retval) (string=? retval ""))
 		 (set! retval #f)))))
      (qif-ticker-map:ticker-map ticker-map))
     retval))

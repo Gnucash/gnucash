@@ -26,12 +26,9 @@
  * restoring data to/from an SQL database
  */
 
-#ifndef GNC_LOT_SQL_H_
-#define GNC_LOT_SQL_H_
-
-#include "qof.h"
-#include <gmodule.h>
+#ifndef GNC_LOT_SQL_H
+#define GNC_LOT_SQL_H
 
 void gnc_sql_init_lot_handler( void );
 
-#endif /* GNC_LOT_SQL_H_ */
+#endif /* GNC_LOT_SQL_H */

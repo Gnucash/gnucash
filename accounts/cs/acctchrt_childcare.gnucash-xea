@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+	Výdaje na péči o dítě
+    </gnc-act:title>
+    <gnc-act:short-description>
+  	Účet na zaznamenávání výdajů na péči o dítě
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+	Zvolte si tuto sadu účtů, pokud máte výdaje na péči o dítě.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Hlavní Účet</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Výdaje</act:name>
+  <act:id type="new">ee8238ee2c2ce590160761df09b99b72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Výdaje</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Péče o dítě</act:name>
+  <act:id type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Péče o dítě</act:description>
+  <act:parent type="new">ee8238ee2c2ce590160761df09b99b72</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

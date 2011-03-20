@@ -9,6 +9,7 @@
 ;; from gnc-menu-extensions.scm
 (export gnc:extension-type)
 (export gnc:extension-name)
+(export gnc:extension-guid)
 (export gnc:extension-documentation)
 (export gnc:extension-path)
 (export gnc:extension-script)

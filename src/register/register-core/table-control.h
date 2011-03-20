@@ -27,11 +27,11 @@
 
 typedef enum
 {
-  GNC_TABLE_TRAVERSE_POINTER,
-  GNC_TABLE_TRAVERSE_LEFT,
-  GNC_TABLE_TRAVERSE_RIGHT,
-  GNC_TABLE_TRAVERSE_UP,
-  GNC_TABLE_TRAVERSE_DOWN
+    GNC_TABLE_TRAVERSE_POINTER,
+    GNC_TABLE_TRAVERSE_LEFT,
+    GNC_TABLE_TRAVERSE_RIGHT,
+    GNC_TABLE_TRAVERSE_UP,
+    GNC_TABLE_TRAVERSE_DOWN
 } gncTableTraversalDir;
 
 typedef void (*TableMoveFunc) (VirtualLocation *new_virt_loc,
@@ -43,15 +43,15 @@ typedef gboolean (*TableTraverseFunc) (VirtualLocation *new_virt_loc,
 
 typedef struct table_control
 {
-  /* called when the cursor is moved */
-  TableMoveFunc move_cursor;
+    /* called when the cursor is moved */
+    TableMoveFunc move_cursor;
 
-  gboolean allow_move;
+    gboolean allow_move;
 
-  /* called to determine traversal when user requests a move */
-  TableTraverseFunc traverse;
+    /* called to determine traversal when user requests a move */
+    TableTraverseFunc traverse;
 
-  gpointer user_data;
+    gpointer user_data;
 } TableControl;
 
 

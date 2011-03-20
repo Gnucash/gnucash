@@ -24,14 +24,14 @@ typedef struct _GNCImportFormatCBClass GNCImportFormatCBClass;
 
 struct _GNCImportFormatCB
 {
-  GNCDruidCB parent;
+    GNCDruidCB parent;
 
-  GncImportFormat	format;
+    GncImportFormat	format;
 };
 
 struct _GNCImportFormatCBClass
 {
-  GNCDruidCBClass parent_class;
+    GNCDruidCBClass parent_class;
 };
 
 GType	gnc_import_format_cb_get_type(void);

@@ -51,7 +51,8 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
     startToNext = g_date_get_julian(next) - g_date_get_julian(start);
 
     // Phase test
-    switch (pt) {
+    switch (pt)
+    {
     case PERIOD_YEAR:
         do_test((g_date_get_year(next) - g_date_get_year(start)) % mult == 0,
                 "year period phase wrong"); // redundant
@@ -63,21 +64,23 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
         // fall-through
     case PERIOD_LAST_WEEKDAY:
     case PERIOD_NTH_WEEKDAY:
-    case PERIOD_MONTH: {
+    case PERIOD_MONTH:
+    {
         gint monthdiff;
         GDateDay day_start, day_next;
 
         monthdiff = (g_date_get_month(next) - g_date_get_month(start)) +
-            12 * (g_date_get_year(next) - g_date_get_year(start));
+                    12 * (g_date_get_year(next) - g_date_get_year(start));
         do_test(monthdiff % mult == 0, "month or year phase wrong");
 
-        if (pt == PERIOD_NTH_WEEKDAY || pt == PERIOD_LAST_WEEKDAY) {
+        if (pt == PERIOD_NTH_WEEKDAY || pt == PERIOD_LAST_WEEKDAY)
+        {
             guint sweek, nweek;
 
             do_test(g_date_get_weekday(next) == g_date_get_weekday(start),
                     "weekday phase wrong");
-            sweek = (g_date_get_day(start)-1) / 7;
-            nweek = (g_date_get_day(next)-1) / 7;
+            sweek = (g_date_get_day(start) - 1) / 7;
+            nweek = (g_date_get_day(next) - 1) / 7;
 
             /* 3 cases: either the weeks agree, OR 'next' didn't have
                5 of the weekday that 'start' did, so it's only the
@@ -86,17 +89,20 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
                5th of that weekday */
             do_test(sweek == nweek ||
                     (sweek == 4 && nweek == 3 && (g_date_get_day(next) + 7) >
-                    g_date_get_days_in_month(
-                        g_date_get_month(next), g_date_get_year(next))) ||
+                     g_date_get_days_in_month(
+                         g_date_get_month(next), g_date_get_year(next))) ||
                     (sweek == 3 && nweek == 4 && (pt == PERIOD_LAST_WEEKDAY)),
                     "week of month phase wrong");
 
-        } else {
+        }
+        else
+        {
             day_start = g_date_get_day(start);
             day_next = g_date_get_day(next);
             if (day_start < 28)
                 do_test(day_start == day_next, "dom don't match");
-            else if (pt != PERIOD_END_OF_MONTH) {
+            else if (pt != PERIOD_END_OF_MONTH)
+            {
                 // the end of month case was already checked above.  near
                 // the end of the month, the days should still agree,
                 // unless they can't because of a short month.
@@ -105,7 +111,7 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
             }
         }
     }
-        break;
+    break;
     case PERIOD_WEEK:
         mult *= 7;
         // fall-through
@@ -140,15 +146,20 @@ static void test_all()
     gint32 j1, j2;
     gint i_ref;
 
-    for (pt = PERIOD_ONCE; pt < NUM_PERIOD_TYPES; pt++) {
-        for (wadj = WEEKEND_ADJ_NONE; wadj < NUM_WEEKEND_ADJS; wadj++) {
-            for (j1 = JULIAN_START; j1 < JULIAN_START + NUM_DATES_TO_TEST; j1++) {
+    for (pt = PERIOD_ONCE; pt < NUM_PERIOD_TYPES; pt++)
+    {
+        for (wadj = WEEKEND_ADJ_NONE; wadj < NUM_WEEKEND_ADJS; wadj++)
+        {
+            for (j1 = JULIAN_START; j1 < JULIAN_START + NUM_DATES_TO_TEST; j1++)
+            {
                 g_date_set_julian(&d_start, j1);
-                for (i_ref = 0; i_ref < NUM_DATES_TO_TEST_REF; i_ref++) {
+                for (i_ref = 0; i_ref < NUM_DATES_TO_TEST_REF; i_ref++)
+                {
                     j2 = (guint32) get_random_int_in_range(1, 1 << 19);
                     g_date_set_julian(&d_ref, j2);
 
-                    for (mult = 0; mult < NUM_MULT_TO_TEST; mult++) {
+                    for (mult = 0; mult < NUM_MULT_TO_TEST; mult++)
+                    {
                         recurrenceSet(&r, mult, pt, &d_start, wadj);
                         pt_reg = recurrenceGetPeriodType(&r);
                         d_start_reg = recurrenceGetDate(&r);
@@ -160,7 +171,7 @@ static void test_all()
                                     mult_reg, pt_reg, wadj_reg);
 
                     }
-               }
+                }
             }
         }
     }
@@ -168,7 +179,8 @@ static void test_all()
 
 static gboolean test_equal(GDate *d1, GDate *d2)
 {
-    if (!do_test(g_date_compare(d1, d2) == 0, "dates don't match")) {
+    if (!do_test(g_date_compare(d1, d2) == 0, "dates don't match"))
+    {
         gchar s1[21];
         gchar s2[21];
         g_date_strftime(s1, 20, "%x", d1);
@@ -199,7 +211,8 @@ static void test_specific(PeriodType pt, guint16 mult,
     recurrenceNextInstance(&r, &ref, &next);
 
     check_valid(&next, &ref, &start, mult, pt, WEEKEND_ADJ_NONE);
-    if (!test_equal(&next, &true_next)) {
+    if (!test_equal(&next, &true_next))
+    {
         gchar s1[21], s2[21], s3[21];
         g_date_strftime(s1, 20, "%x", &start);
         g_date_strftime(s2, 20, "%x", &ref);
@@ -226,89 +239,89 @@ static void test_nth(GDateMonth sm, GDateDay sd, GDateYear sy,
 
 static void test_nth_compare()
 {
-    test_nth(4,1,2005,   4,2,2005, -1, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   4,4,2005, -3, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   4,7,2005, -6, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   4,8,2005, -7, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   4,14,2005, -13, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   4,30,2005, -29, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   5,1,2005, 5, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   5,5,2005, 1, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   5,6,2005, 0, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   5,7,2005, -1, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   5,8,2005, -2, PERIOD_NTH_WEEKDAY);
-    test_nth(4,1,2005,   5,21,2005, -15, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   4, 2, 2005, -1, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   4, 4, 2005, -3, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   4, 7, 2005, -6, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   4, 8, 2005, -7, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   4, 14, 2005, -13, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   4, 30, 2005, -29, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   5, 1, 2005, 5, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   5, 5, 2005, 1, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   5, 6, 2005, 0, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   5, 7, 2005, -1, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   5, 8, 2005, -2, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 1, 2005,   5, 21, 2005, -15, PERIOD_NTH_WEEKDAY);
 
 
-    test_nth(4,6,2005,   4,1,2005, 5, PERIOD_NTH_WEEKDAY);
-    test_nth(4,6,2005,   4,4,2005, 2, PERIOD_NTH_WEEKDAY);
-    test_nth(4,6,2005,   4,6,2005, 0, PERIOD_NTH_WEEKDAY);
-    test_nth(4,6,2005,   4,9,2005, -3, PERIOD_NTH_WEEKDAY);
-    test_nth(4,6,2005,   4,11,2005, -5, PERIOD_NTH_WEEKDAY);
-    test_nth(4,6,2005,   4,13,2005, -7, PERIOD_NTH_WEEKDAY);
-    test_nth(4,6,2005,   4,14,2005, -8, PERIOD_NTH_WEEKDAY);
-    test_nth(4,6,2005,   4,29,2005, -23, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 6, 2005,   4, 1, 2005, 5, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 6, 2005,   4, 4, 2005, 2, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 6, 2005,   4, 6, 2005, 0, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 6, 2005,   4, 9, 2005, -3, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 6, 2005,   4, 11, 2005, -5, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 6, 2005,   4, 13, 2005, -7, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 6, 2005,   4, 14, 2005, -8, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 6, 2005,   4, 29, 2005, -23, PERIOD_NTH_WEEKDAY);
 
-    test_nth(4,12,2005,   4,1,2005, 11, PERIOD_NTH_WEEKDAY);
-    test_nth(4,12,2005,   4,4,2005, 8, PERIOD_NTH_WEEKDAY);
-    test_nth(4,12,2005,   4,11,2005, 1, PERIOD_NTH_WEEKDAY);
-    test_nth(4,12,2005,   4,12,2005, 0, PERIOD_NTH_WEEKDAY);
-    test_nth(4,12,2005,   4,13,2005, -1, PERIOD_NTH_WEEKDAY);
-    test_nth(4,12,2005,   4,17,2005, -5, PERIOD_NTH_WEEKDAY);
-    test_nth(4,12,2005,   4,19,2005, -7, PERIOD_NTH_WEEKDAY);
-    test_nth(4,12,2005,   4,28,2005, -16, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 12, 2005,   4, 1, 2005, 11, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 12, 2005,   4, 4, 2005, 8, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 12, 2005,   4, 11, 2005, 1, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 12, 2005,   4, 12, 2005, 0, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 12, 2005,   4, 13, 2005, -1, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 12, 2005,   4, 17, 2005, -5, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 12, 2005,   4, 19, 2005, -7, PERIOD_NTH_WEEKDAY);
+    test_nth(4, 12, 2005,   4, 28, 2005, -16, PERIOD_NTH_WEEKDAY);
 
-    test_nth(4,29,2005,   4,30,2005, -1, PERIOD_LAST_WEEKDAY);
-    test_nth(4,29,2005,   5,1,2005, 26, PERIOD_LAST_WEEKDAY);
-    test_nth(4,29,2005,   7,9,2005, 20, PERIOD_LAST_WEEKDAY);
-    test_nth(4,29,2005,   7,31,2005, -2, PERIOD_LAST_WEEKDAY);
+    test_nth(4, 29, 2005,   4, 30, 2005, -1, PERIOD_LAST_WEEKDAY);
+    test_nth(4, 29, 2005,   5, 1, 2005, 26, PERIOD_LAST_WEEKDAY);
+    test_nth(4, 29, 2005,   7, 9, 2005, 20, PERIOD_LAST_WEEKDAY);
+    test_nth(4, 29, 2005,   7, 31, 2005, -2, PERIOD_LAST_WEEKDAY);
 
-    test_nth(4,28,2005,   4,30,2005, -2, PERIOD_LAST_WEEKDAY);
-    test_nth(4,28,2005,   5,1,2005, 25, PERIOD_LAST_WEEKDAY);
-    test_nth(4,28,2005,   7,9,2005, 19, PERIOD_LAST_WEEKDAY);
-    test_nth(4,28,2005,   7,31,2005, -3, PERIOD_LAST_WEEKDAY);
-    test_nth(4,28,2005,   9,21,2005, 8, PERIOD_LAST_WEEKDAY);
+    test_nth(4, 28, 2005,   4, 30, 2005, -2, PERIOD_LAST_WEEKDAY);
+    test_nth(4, 28, 2005,   5, 1, 2005, 25, PERIOD_LAST_WEEKDAY);
+    test_nth(4, 28, 2005,   7, 9, 2005, 19, PERIOD_LAST_WEEKDAY);
+    test_nth(4, 28, 2005,   7, 31, 2005, -3, PERIOD_LAST_WEEKDAY);
+    test_nth(4, 28, 2005,   9, 21, 2005, 8, PERIOD_LAST_WEEKDAY);
 
 }
 #endif
 static void test_some()
 {
-    test_specific(PERIOD_NTH_WEEKDAY, 1, 4,1,2005,    4,2,2005,  5,6,2005);
-    test_specific(PERIOD_NTH_WEEKDAY, 1, 7,14,2005,   11,15,2005,  12,8,2005);
-    test_specific(PERIOD_NTH_WEEKDAY, 1, 7,14,2005,   11,5,2005,  11,10,2005);
-    test_specific(PERIOD_NTH_WEEKDAY, 1, 4,1,2005,    4,2,2005,  5,6,2005);
-    test_specific(PERIOD_NTH_WEEKDAY, 1, 4,1,2005,    4,2,2005,  5,6,2005);
+    test_specific(PERIOD_NTH_WEEKDAY, 1, 4, 1, 2005,    4, 2, 2005,  5, 6, 2005);
+    test_specific(PERIOD_NTH_WEEKDAY, 1, 7, 14, 2005,   11, 15, 2005,  12, 8, 2005);
+    test_specific(PERIOD_NTH_WEEKDAY, 1, 7, 14, 2005,   11, 5, 2005,  11, 10, 2005);
+    test_specific(PERIOD_NTH_WEEKDAY, 1, 4, 1, 2005,    4, 2, 2005,  5, 6, 2005);
+    test_specific(PERIOD_NTH_WEEKDAY, 1, 4, 1, 2005,    4, 2, 2005,  5, 6, 2005);
 
-    test_specific(PERIOD_LAST_WEEKDAY, 1, 4,29,2005,    4,30,2005,  5,27,2005);
-    test_specific(PERIOD_LAST_WEEKDAY, 1, 4,29,2005,    5,1,2005,  5,27,2005);
-    test_specific(PERIOD_LAST_WEEKDAY, 1, 4,29,2005,    7,9,2005,  7,29,2005);
-    test_specific(PERIOD_LAST_WEEKDAY, 1, 4,29,2005,    6,30,2005,  7,29,2005);
-    test_specific(PERIOD_LAST_WEEKDAY, 1, 4,29,2005,    7,31,2005,  8,26,2005);
+    test_specific(PERIOD_LAST_WEEKDAY, 1, 4, 29, 2005,    4, 30, 2005,  5, 27, 2005);
+    test_specific(PERIOD_LAST_WEEKDAY, 1, 4, 29, 2005,    5, 1, 2005,  5, 27, 2005);
+    test_specific(PERIOD_LAST_WEEKDAY, 1, 4, 29, 2005,    7, 9, 2005,  7, 29, 2005);
+    test_specific(PERIOD_LAST_WEEKDAY, 1, 4, 29, 2005,    6, 30, 2005,  7, 29, 2005);
+    test_specific(PERIOD_LAST_WEEKDAY, 1, 4, 29, 2005,    7, 31, 2005,  8, 26, 2005);
 
-    test_specific(PERIOD_NTH_WEEKDAY, 2, 4,27,2005,    4,27,2005,  6,22,2005);
+    test_specific(PERIOD_NTH_WEEKDAY, 2, 4, 27, 2005,    4, 27, 2005,  6, 22, 2005);
     //exit(1);
     //return;
-    test_specific(PERIOD_YEAR,          3,   9,8,838,    6,30,1094,  9,8,1096);
-    test_specific(PERIOD_YEAR,          2,   9,8,838,    6,30,1094,  9,8,1094);
-    test_specific(PERIOD_YEAR,          1,   1,10,1000,  1,5,1002,  1,10,1002);
+    test_specific(PERIOD_YEAR,          3,   9, 8, 838,    6, 30, 1094,  9, 8, 1096);
+    test_specific(PERIOD_YEAR,          2,   9, 8, 838,    6, 30, 1094,  9, 8, 1094);
+    test_specific(PERIOD_YEAR,          1,   1, 10, 1000,  1, 5, 1002,  1, 10, 1002);
     //return;
-    test_specific(PERIOD_MONTH, 1,     1,12,1,    2,6,1,    2,12,1);
+    test_specific(PERIOD_MONTH, 1,     1, 12, 1,    2, 6, 1,    2, 12, 1);
 
-    test_specific(PERIOD_MONTH, 1,     1,12,1,    2,12,1,   3,12,1);
-    test_specific(PERIOD_MONTH, 1,     1,12,1,    2,20,1,   3,12,1);
-    test_specific(PERIOD_MONTH, 1,     1,30,1,    2,28,1,   3,30,1);
-    test_specific(PERIOD_MONTH, 1,     1,30,1,    2,27,1,   2,28,1);
-    test_specific(PERIOD_MONTH, 1,     2,28,1,    3,30,1,   4,28,1);
+    test_specific(PERIOD_MONTH, 1,     1, 12, 1,    2, 12, 1,   3, 12, 1);
+    test_specific(PERIOD_MONTH, 1,     1, 12, 1,    2, 20, 1,   3, 12, 1);
+    test_specific(PERIOD_MONTH, 1,     1, 30, 1,    2, 28, 1,   3, 30, 1);
+    test_specific(PERIOD_MONTH, 1,     1, 30, 1,    2, 27, 1,   2, 28, 1);
+    test_specific(PERIOD_MONTH, 1,     2, 28, 1,    3, 30, 1,   4, 28, 1);
 
-    test_specific(PERIOD_END_OF_MONTH, 1,   2,28,1,    3,30,1,   3,31,1);
-    test_specific(PERIOD_END_OF_MONTH, 5,   4,30,1,    4,21,1,  4,30,1);
-    test_specific(PERIOD_END_OF_MONTH, 5,   2,28,1,    5,21,1,  7,31,1);
+    test_specific(PERIOD_END_OF_MONTH, 1,   2, 28, 1,    3, 30, 1,   3, 31, 1);
+    test_specific(PERIOD_END_OF_MONTH, 5,   4, 30, 1,    4, 21, 1,  4, 30, 1);
+    test_specific(PERIOD_END_OF_MONTH, 5,   2, 28, 1,    5, 21, 1,  7, 31, 1);
 
-    test_specific(PERIOD_YEAR,          7,   6,8,199,    9,10,1338,  6,8,1340);
-    test_specific(PERIOD_YEAR,          2,   9,8,838,    6,30,1094,  9,8,1094);
+    test_specific(PERIOD_YEAR,          7,   6, 8, 199,    9, 10, 1338,  6, 8, 1340);
+    test_specific(PERIOD_YEAR,          2,   9, 8, 838,    6, 30, 1094,  9, 8, 1094);
 
-    test_specific(PERIOD_YEAR,1,    5,2,13, 1,11,101,   5,2,101);
-    test_specific(PERIOD_DAY, 7,    4,1,2000,    4,8,2000,  4,15,2000);
+    test_specific(PERIOD_YEAR, 1,    5, 2, 13, 1, 11, 101,   5, 2, 101);
+    test_specific(PERIOD_DAY, 7,    4, 1, 2000,    4, 8, 2000,  4, 15, 2000);
 }
 
 static void test_use()

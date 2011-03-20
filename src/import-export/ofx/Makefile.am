@@ -4,11 +4,13 @@ pkglib_LTLIBRARIES=libgncmod-ofx.la
 
 libgncmod_ofx_la_SOURCES = \
   gnc-ofx-import.c \
+  gnc-ofx-kvp.c \
   gncmod-ofx-import.c \
   gnc-plugin-ofx.c
 
 noinst_HEADERS = \
   gnc-ofx-import.h \
+  gnc-ofx-kvp.h \
   gnc-plugin-ofx.h
 
 libgncmod_ofx_la_LDFLAGS = -avoid-version
@@ -20,7 +22,7 @@ libgncmod_ofx_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${QOF_LIBS} \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS} \
   ${LIBOFX_LIBS}
 
@@ -33,9 +35,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \

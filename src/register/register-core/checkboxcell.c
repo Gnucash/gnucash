@@ -23,7 +23,7 @@
 /*
  * FILE:
  * checkboxcell.c
- * 
+ *
  * FUNCTION:
  * Implements a mouse-click cell that toggles a yes/no value.
  *
@@ -48,71 +48,71 @@
 static void
 gnc_checkbox_cell_set_value (BasicCell *_cell, const char *value)
 {
-  CheckboxCell *cell = (CheckboxCell *) _cell;
-  gboolean flag = FALSE;
+    CheckboxCell *cell = (CheckboxCell *) _cell;
+    gboolean flag = FALSE;
 
-  if (value && *value == 'X')
-    flag = TRUE;
+    if (value && *value == 'X')
+        flag = TRUE;
 
-  gnc_checkbox_cell_set_flag (cell, flag);
+    gnc_checkbox_cell_set_flag (cell, flag);
 }
 
 static gboolean
 gnc_checkbox_cell_enter (BasicCell *_cell,
-                     int *cursor_position,
-                     int *start_selection,
-                     int *end_selection)
+                         int *cursor_position,
+                         int *start_selection,
+                         int *end_selection)
 {
-  CheckboxCell *cell = (CheckboxCell *) _cell;
-  gnc_checkbox_cell_set_flag (cell, !cell->flag);
-  return FALSE;
+    CheckboxCell *cell = (CheckboxCell *) _cell;
+    gnc_checkbox_cell_set_flag (cell, !cell->flag);
+    return FALSE;
 }
 
 static void
 gnc_checkbox_cell_init (CheckboxCell *cell)
 {
-  gnc_basic_cell_init (&cell->cell);
+    gnc_basic_cell_init (&cell->cell);
 
-  gnc_checkbox_cell_set_flag (cell, FALSE);
-  cell->cell.enter_cell = gnc_checkbox_cell_enter;
-  cell->cell.set_value = gnc_checkbox_cell_set_value;
+    gnc_checkbox_cell_set_flag (cell, FALSE);
+    cell->cell.enter_cell = gnc_checkbox_cell_enter;
+    cell->cell.set_value = gnc_checkbox_cell_set_value;
 }
 
 BasicCell *
 gnc_checkbox_cell_new (void)
 {
-  CheckboxCell * cell;
+    CheckboxCell * cell;
 
-  cell = g_new0 (CheckboxCell, 1);
+    cell = g_new0 (CheckboxCell, 1);
 
-  gnc_checkbox_cell_init (cell);
+    gnc_checkbox_cell_init (cell);
 
-  return &cell->cell;
+    return &cell->cell;
 }
 
 void
 gnc_checkbox_cell_set_flag (CheckboxCell *cell, gboolean flag)
 {
-  const char *string;
+    const char *string;
 
-  g_return_if_fail (cell != NULL);
+    g_return_if_fail (cell != NULL);
 
-  cell->flag = flag;
-  string = gnc_checkbox_cell_get_string (flag);
+    cell->flag = flag;
+    string = gnc_checkbox_cell_get_string (flag);
 
-  gnc_basic_cell_set_value_internal (&cell->cell, string);
+    gnc_basic_cell_set_value_internal (&cell->cell, string);
 }
 
 gboolean
 gnc_checkbox_cell_get_flag (CheckboxCell *cell)
 {
-  g_return_val_if_fail (cell != NULL, '\0');
+    g_return_val_if_fail (cell != NULL, '\0');
 
-  return cell->flag;
+    return cell->flag;
 }
 
 const char *
 gnc_checkbox_cell_get_string (gboolean flag)
 {
-  return (flag ? "X" : " ");
+    return (flag ? "X" : " ");
 }

@@ -27,7 +27,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gtypes.h>
-#include "glib-compat.h"
 #include <math.h>
 #include <time.h>
 
@@ -45,7 +44,8 @@
 
 /** Private Defs ********************/
 
-typedef enum {
+typedef enum
+{
     GNCFREQ_CHANGED,
     LAST_SIGNAL
 } GNCF_Signals;
@@ -88,7 +88,8 @@ static const struct pageDataTuple PAGES[] =
     { 0, 0, 0 }
 };
 
-static const char *CHECKBOX_NAMES[] = {
+static const char *CHECKBOX_NAMES[] =
+{
     "wd_check_sun",
     "wd_check_mon",
     "wd_check_tue",
@@ -105,8 +106,10 @@ GType
 gnc_frequency_get_type()
 {
     static GType gncfreq_type = 0;
-    if (gncfreq_type == 0) {
-        static GTypeInfo gncfreq_info = {
+    if (gncfreq_type == 0)
+    {
+        static GTypeInfo gncfreq_info =
+        {
             sizeof(GncFrequencyClass),
             NULL,
             NULL,
@@ -117,7 +120,7 @@ gnc_frequency_get_type()
             0,
             (GInstanceInitFunc)gnc_frequency_init
         };
-                
+
         gncfreq_type = g_type_register_static (GTK_TYPE_VBOX,
                                                "GncFrequency",
                                                &gncfreq_info, 0);
@@ -130,7 +133,7 @@ static void
 gnc_frequency_class_init( GncFrequencyClass *klass )
 {
     GObjectClass *object_class;
-        
+
     object_class = G_OBJECT_CLASS (klass);
 
     gnc_frequency_signals[GNCFREQ_CHANGED] =
@@ -153,10 +156,12 @@ gnc_frequency_init(GncFrequency *gf)
     GtkWidget* o;
     GtkAdjustment* adj;
 
-    static const struct comboBoxTuple {
+    static const struct comboBoxTuple
+    {
         char *name;
         void (*fn)();
-    } comboBoxes[] = {
+    } comboBoxes[] =
+    {
         { "freq_combobox",               freq_combo_changed },
         { "semimonthly_first",          semimonthly_sel_changed },
         { "semimonthly_first_weekend",  semimonthly_sel_changed },
@@ -167,10 +172,12 @@ gnc_frequency_init(GncFrequency *gf)
         { NULL,                         NULL }
     };
 
-    static const struct spinvalTuple {
+    static const struct spinvalTuple
+    {
         char *name;
         void (*fn)();
-    } spinVals[] = {
+    } spinVals[] =
+    {
         { "daily_spin",       spin_changed_helper },
         { "weekly_spin",      spin_changed_helper },
         { "semimonthly_spin", spin_changed_helper },
@@ -197,7 +204,7 @@ gnc_frequency_init(GncFrequency *gf)
     gtk_container_add(GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb));
 
     /* initialize the combo boxes */
-    for (i=0; comboBoxes[i].name != NULL; i++)
+    for (i = 0; comboBoxes[i].name != NULL; i++)
     {
         o = glade_xml_get_widget(gf->gxml, comboBoxes[i].name);
         gtk_combo_box_set_active(GTK_COMBO_BOX(o), 0);
@@ -208,9 +215,9 @@ gnc_frequency_init(GncFrequency *gf)
     }
 
     /* initialize the spin buttons */
-    for (i=0; spinVals[i].name != NULL; i++)
+    for (i = 0; spinVals[i].name != NULL; i++)
     {
-        if (spinVals[i].fn != NULL) 
+        if (spinVals[i].fn != NULL)
         {
             o = glade_xml_get_widget(gf->gxml, spinVals[i].name);
             adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(o));
@@ -219,11 +226,11 @@ gnc_frequency_init(GncFrequency *gf)
     }
 
     /* initialize the weekly::day-of-week checkbox-selection hooks */
-    for (i=0; i < 7; i++)
+    for (i = 0; i < 7; i++)
     {
         o = glade_xml_get_widget(gf->gxml, CHECKBOX_NAMES[i]);
         g_signal_connect(o, "clicked",
-                          G_CALLBACK(weekly_days_changed), gf);
+                         G_CALLBACK(weekly_days_changed), gf);
     }
 
     gtk_widget_show_all(GTK_WIDGET(&gf->widget));
@@ -235,59 +242,59 @@ gnc_frequency_init(GncFrequency *gf)
 static void
 spin_changed_helper( GtkAdjustment *adj, gpointer d )
 {
-        g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
+    g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
 
 static void
 weekly_days_changed( GtkButton *b, gpointer d )
 {
-        g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
+    g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
 
 static void
 monthly_sel_changed( GtkButton *b, gpointer d )
 {
-        g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
+    g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
 
 static void
 semimonthly_sel_changed( GtkButton *b, gpointer d )
 {
-        g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
+    g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
 
 static inline guint32 minn( guint32 a, guint32 b )
 {
-        return a > b ? b : a;
+    return a > b ? b : a;
 }
 
 static inline guint32 maxn( guint32 a, guint32 b )
 {
-        return a > b ? a : b;
+    return a > b ? a : b;
 }
 
 static void
 freq_combo_changed(GtkComboBox *b, gpointer d)
 {
-        GncFrequency *gf = GNC_FREQUENCY(d);
-        int option_index;
+    GncFrequency *gf = GNC_FREQUENCY(d);
+    int option_index;
 
-        /* Set the new page. */
-        option_index = gtk_combo_box_get_active(GTK_COMBO_BOX(gf->freqComboBox));
-        gtk_notebook_set_current_page(gf->nb, option_index);
-        g_signal_emit_by_name(gf, "changed");
+    /* Set the new page. */
+    option_index = gtk_combo_box_get_active(GTK_COMBO_BOX(gf->freqComboBox));
+    gtk_notebook_set_current_page(gf->nb, option_index);
+    g_signal_emit_by_name(gf, "changed");
 }
 
 static void
 start_date_changed( GNCDateEdit *gde, gpointer d )
 {
-        g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
+    g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
 
 /* ================================================================= */
 /* Relabel some of the labels */
 
-void 
+void
 gnc_frequency_set_frequency_label_text(GncFrequency *gf, const gchar *txt)
 {
     GtkLabel *lbl;
@@ -296,7 +303,7 @@ gnc_frequency_set_frequency_label_text(GncFrequency *gf, const gchar *txt)
     gtk_label_set_text (lbl, txt);
 }
 
-void 
+void
 gnc_frequency_set_date_label_text(GncFrequency *gf, const gchar *txt)
 {
     GtkLabel *lbl;
@@ -306,13 +313,13 @@ gnc_frequency_set_date_label_text(GncFrequency *gf, const gchar *txt)
 }
 
 GtkWidget*
-gnc_frequency_new_from_recurrence(GList *recurrences, GDate *start_date)
+gnc_frequency_new_from_recurrence(GList *recurrences, const GDate *start_date)
 {
     return gnc_frequency_new(recurrences, start_date);
 }
 
 GtkWidget*
-gnc_frequency_new(GList *recurrences, GDate *start_date)
+gnc_frequency_new(GList *recurrences, const GDate *start_date)
 {
     GncFrequency *toRet;
     toRet = g_object_new(gnc_frequency_get_type(), NULL);
@@ -354,148 +361,156 @@ _get_monthly_combobox_index(Recurrence *r)
     else if (recurrenceGetPeriodType(r) == PERIOD_LAST_WEEKDAY)
     {
         day_of_month_index
-            = LAST_DAY_OF_MONTH_OPTION_INDEX
-            + g_date_get_weekday(&recurrence_date);
+        = LAST_DAY_OF_MONTH_OPTION_INDEX
+          + g_date_get_weekday(&recurrence_date);
     }
     /* else { default value } */
     return day_of_month_index;
 }
 
 void
-gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *start_date)
+gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, const GDate *start_date)
 {
     gnc_frequency_setup(gf, recurrences, start_date);
 }
 
 void
-gnc_frequency_setup(GncFrequency *gf, GList *recurrences, GDate *start_date)
+gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_date)
 {
-     gboolean made_changes = FALSE;
+    gboolean made_changes = FALSE;
 
-     // setup start-date, if present
-     if (start_date != NULL
-         && g_date_valid(start_date))
-     {
-          gnc_date_edit_set_gdate(gf->startDate, start_date);
-          made_changes = TRUE;
-     }
+    // setup start-date, if present
+    if (start_date != NULL
+            && g_date_valid(start_date))
+    {
+        gnc_date_edit_set_gdate(gf->startDate, start_date);
+        made_changes = TRUE;
+    }
 
-     if (recurrences == NULL)
-     {
-          goto maybe_signal;
-          // return...
-     }
+    if (recurrences == NULL)
+    {
+        goto maybe_signal;
+        // return...
+    }
 
-     if (g_list_length(recurrences) > 1)
-     {
-         if (recurrenceListIsWeeklyMultiple(recurrences))
-         {
-             for (; recurrences != NULL; recurrences = recurrences->next)
-             {
-                 _setup_weekly_recurrence(gf, (Recurrence*)recurrences->data);
-             }
+    if (g_list_length(recurrences) > 1)
+    {
+        if (recurrenceListIsWeeklyMultiple(recurrences))
+        {
+            for (; recurrences != NULL; recurrences = recurrences->next)
+            {
+                _setup_weekly_recurrence(gf, (Recurrence*)recurrences->data);
+            }
 
-             gtk_notebook_set_current_page(gf->nb, PAGE_WEEKLY);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_WEEKLY);
-         }
-         else if (recurrenceListIsSemiMonthly(recurrences))
-         {
-             Recurrence *first, *second;
-             GtkWidget *multiplier_spin;
-             GtkWidget *dom_combobox;
+            gtk_notebook_set_current_page(gf->nb, PAGE_WEEKLY);
+            gtk_combo_box_set_active(gf->freqComboBox, PAGE_WEEKLY);
+        }
+        else if (recurrenceListIsSemiMonthly(recurrences))
+        {
+            Recurrence *first, *second;
+            GtkWidget *multiplier_spin;
+            GtkWidget *dom_combobox;
 
-             first = (Recurrence*)g_list_nth_data(recurrences, 0);
-             second = (Recurrence*)g_list_nth_data(recurrences, 1);
+            first = (Recurrence*)g_list_nth_data(recurrences, 0);
+            second = (Recurrence*)g_list_nth_data(recurrences, 1);
 
-             multiplier_spin = glade_xml_get_widget(gf->gxml, "semimonthly_spin");
-             gtk_spin_button_set_value(GTK_SPIN_BUTTON(multiplier_spin), recurrenceGetMultiplier(first));
+            multiplier_spin = glade_xml_get_widget(gf->gxml, "semimonthly_spin");
+            gtk_spin_button_set_value(GTK_SPIN_BUTTON(multiplier_spin), recurrenceGetMultiplier(first));
 
-             dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first");
-             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(first));
-             dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first_weekend");
-             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(first));
-             dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second");
-             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(second));
-             dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second_weekend");
-             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(second));
+            dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first");
+            gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(first));
+            dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first_weekend");
+            gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(first));
+            dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second");
+            gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(second));
+            dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second_weekend");
+            gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(second));
 
-             gtk_notebook_set_current_page(gf->nb, PAGE_SEMI_MONTHLY);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_SEMI_MONTHLY);
-         }
-         else
-         {
-             g_error("unknown composite recurrence with [%d] entries", g_list_length(recurrences));
-         }
-     }
-     else
-     {
-         Recurrence *r = (Recurrence*)recurrences->data;
-         g_debug("recurrence period [%d]", recurrenceGetPeriodType(r));
-         switch (recurrenceGetPeriodType(r))
-         {
-         case PERIOD_ONCE: {
-             GDate recurrence_date = recurrenceGetDate(r);
-             if (g_date_compare(start_date, &recurrence_date) != 0)
-             {
-                 char start_date_str[128], recur_date_str[128];
-                 g_date_strftime(start_date_str, 127, "%x", start_date);
-                 g_date_strftime(recur_date_str, 127, "%x", &recurrence_date);
-                 g_critical("start_date [%s] != recurrence_date [%s]", start_date_str, recur_date_str);
-             }
+            gtk_notebook_set_current_page(gf->nb, PAGE_SEMI_MONTHLY);
+            gtk_combo_box_set_active(gf->freqComboBox, PAGE_SEMI_MONTHLY);
+        }
+        else
+        {
+            g_error("unknown composite recurrence with [%d] entries", g_list_length(recurrences));
+        }
+    }
+    else
+    {
+        Recurrence *r = (Recurrence*)recurrences->data;
+        g_debug("recurrence period [%d]", recurrenceGetPeriodType(r));
+        switch (recurrenceGetPeriodType(r))
+        {
+        case PERIOD_ONCE:
+        {
+            GDate recurrence_date = recurrenceGetDate(r);
+            if (g_date_compare(start_date, &recurrence_date) != 0)
+            {
+                char start_date_str[128], recur_date_str[128];
+                g_date_strftime(start_date_str, 127, "%x", start_date);
+                g_date_strftime(recur_date_str, 127, "%x", &recurrence_date);
+                g_critical("start_date [%s] != recurrence_date [%s]", start_date_str, recur_date_str);
+            }
 
-             gtk_notebook_set_current_page(gf->nb, PAGE_ONCE);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_ONCE);
-         } break;
-         case PERIOD_DAY: {
-             guint multiplier;
-             GtkWidget *spin_button;
+            gtk_notebook_set_current_page(gf->nb, PAGE_ONCE);
+            gtk_combo_box_set_active(gf->freqComboBox, PAGE_ONCE);
+        }
+        break;
+        case PERIOD_DAY:
+        {
+            guint multiplier;
+            GtkWidget *spin_button;
 
-             multiplier = recurrenceGetMultiplier(r);
-             spin_button = glade_xml_get_widget(gf->gxml, "daily_spin");
-             gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_button), multiplier);
-             made_changes = TRUE;
+            multiplier = recurrenceGetMultiplier(r);
+            spin_button = glade_xml_get_widget(gf->gxml, "daily_spin");
+            gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_button), multiplier);
+            made_changes = TRUE;
 
-             gtk_notebook_set_current_page(gf->nb, PAGE_DAILY);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_DAILY);
-         } break;
-         case PERIOD_WEEK: {
-             _setup_weekly_recurrence(gf, r);
-             gtk_notebook_set_current_page(gf->nb, PAGE_WEEKLY);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_WEEKLY);
-         } break;
-         case PERIOD_END_OF_MONTH:
-         case PERIOD_MONTH:
-         case PERIOD_YEAR:
-         case PERIOD_LAST_WEEKDAY: {
-             guint multiplier;
-             GtkWidget *multipler_spin, *day_of_month, *weekend_mode;
-             
-             multipler_spin = glade_xml_get_widget(gf->gxml, "monthly_spin");
-             multiplier = recurrenceGetMultiplier(r);
-             if (recurrenceGetPeriodType(r) == PERIOD_YEAR)
-                 multiplier *= 12;
-             gtk_spin_button_set_value(GTK_SPIN_BUTTON(multipler_spin), multiplier);
+            gtk_notebook_set_current_page(gf->nb, PAGE_DAILY);
+            gtk_combo_box_set_active(gf->freqComboBox, PAGE_DAILY);
+        }
+        break;
+        case PERIOD_WEEK:
+        {
+            _setup_weekly_recurrence(gf, r);
+            gtk_notebook_set_current_page(gf->nb, PAGE_WEEKLY);
+            gtk_combo_box_set_active(gf->freqComboBox, PAGE_WEEKLY);
+        }
+        break;
+        case PERIOD_END_OF_MONTH:
+        case PERIOD_MONTH:
+        case PERIOD_YEAR:
+        case PERIOD_LAST_WEEKDAY:
+        {
+            guint multiplier;
+            GtkWidget *multipler_spin, *day_of_month, *weekend_mode;
 
-             day_of_month = glade_xml_get_widget(gf->gxml, "monthly_day");
-             gtk_combo_box_set_active(GTK_COMBO_BOX(day_of_month), _get_monthly_combobox_index(r));
-             weekend_mode = glade_xml_get_widget(gf->gxml, "monthly_weekend");
-             gtk_combo_box_set_active(GTK_COMBO_BOX(weekend_mode), recurrenceGetWeekendAdjust(r));
+            multipler_spin = glade_xml_get_widget(gf->gxml, "monthly_spin");
+            multiplier = recurrenceGetMultiplier(r);
+            if (recurrenceGetPeriodType(r) == PERIOD_YEAR)
+                multiplier *= 12;
+            gtk_spin_button_set_value(GTK_SPIN_BUTTON(multipler_spin), multiplier);
 
-             gtk_notebook_set_current_page(gf->nb, PAGE_MONTHLY);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_MONTHLY);
-         } break; 
-         case PERIOD_NTH_WEEKDAY:
-             g_critical("unhandled period type [%d]", recurrenceGetPeriodType(r));
-             break;
-         default:
-             g_error("unknown recurrence period type [%d]", recurrenceGetPeriodType(r));
-             break;
-         }
-     }
+            day_of_month = glade_xml_get_widget(gf->gxml, "monthly_day");
+            gtk_combo_box_set_active(GTK_COMBO_BOX(day_of_month), _get_monthly_combobox_index(r));
+            weekend_mode = glade_xml_get_widget(gf->gxml, "monthly_weekend");
+            gtk_combo_box_set_active(GTK_COMBO_BOX(weekend_mode), recurrenceGetWeekendAdjust(r));
+
+            gtk_notebook_set_current_page(gf->nb, PAGE_MONTHLY);
+            gtk_combo_box_set_active(gf->freqComboBox, PAGE_MONTHLY);
+        }
+        break;
+        case PERIOD_NTH_WEEKDAY:
+            g_critical("unhandled period type [%d]", recurrenceGetPeriodType(r));
+            break;
+        default:
+            g_error("unknown recurrence period type [%d]", recurrenceGetPeriodType(r));
+            break;
+        }
+    }
 
 maybe_signal:
-     if (made_changes)
-          g_signal_emit_by_name(gf, "changed");
+    if (made_changes)
+        g_signal_emit_by_name(gf, "changed");
 }
 
 static gint
@@ -515,7 +530,7 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
     int day_of_month_index = gtk_combo_box_get_active(GTK_COMBO_BOX(day_of_month_combo));
     GtkWidget *weekend_adjust_combo = glade_xml_get_widget(gf->gxml, combo_weekend_name);
     int weekend_adjust = gtk_combo_box_get_active(GTK_COMBO_BOX(weekend_adjust_combo));
-        
+
     r = g_new0(Recurrence, 1);
     if (day_of_month_index > LAST_DAY_OF_MONTH_OPTION_INDEX)
     {
@@ -538,7 +553,7 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
         GDate *day_of_month = g_date_new_julian(g_date_get_julian(start_date));
         allowable_date = MIN(day_of_month_index + 1,
                              g_date_get_days_in_month(g_date_get_month(day_of_month),
-                                                      g_date_get_year(day_of_month)));
+                                     g_date_get_year(day_of_month)));
         g_date_set_day(day_of_month, allowable_date);
         recurrenceSet(r, multiplier, PERIOD_MONTH, day_of_month, weekend_adjust);
     }
@@ -562,21 +577,27 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
 
     switch (page_index)
     {
-    case PAGE_NONE: {
+    case PAGE_NONE:
+    {
         // empty-recurrence list ~~ none.
     } break;
-    case PAGE_ONCE: {
+    case PAGE_ONCE:
+    {
         Recurrence *r = g_new0(Recurrence, 1);
         recurrenceSet(r, 1, PERIOD_ONCE, &start_date, WEEKEND_ADJ_NONE);
         *recurrences = g_list_append(*recurrences, r);
-    } break;
-    case PAGE_DAILY: {
+    }
+    break;
+    case PAGE_DAILY:
+    {
         gint multiplier = _get_multiplier_from_widget(gf, "daily_spin");
         Recurrence *r = g_new0(Recurrence, 1);
         recurrenceSet(r, multiplier, PERIOD_DAY, &start_date, WEEKEND_ADJ_NONE);
         *recurrences = g_list_append(*recurrences, r);
-    } break;
-    case PAGE_WEEKLY: {
+    }
+    break;
+    case PAGE_WEEKLY:
+    {
         int multiplier = _get_multiplier_from_widget(gf, "weekly_spin");
         int checkbox_idx;
         for (checkbox_idx = 0; CHECKBOX_NAMES[checkbox_idx] != NULL; checkbox_idx++)
@@ -596,20 +617,25 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
 
             r = g_new0(Recurrence, 1);
             recurrenceSet(r, multiplier, PERIOD_WEEK, day_of_week_aligned_date, WEEKEND_ADJ_NONE);
-            
+
             *recurrences = g_list_append(*recurrences, r);
         }
-    } break;
-    case PAGE_SEMI_MONTHLY: {
+    }
+    break;
+    case PAGE_SEMI_MONTHLY:
+    {
         int multiplier = _get_multiplier_from_widget(gf, "semimonthly_spin");
         *recurrences = g_list_append(*recurrences, _get_day_of_month_recurrence(gf, &start_date, multiplier, "semimonthly_first", "semimonthly_first_weekend"));
         *recurrences = g_list_append(*recurrences, _get_day_of_month_recurrence(gf, &start_date, multiplier, "semimonthly_second", "semimonthly_second_weekend"));
-    } break;
-    case PAGE_MONTHLY: {
+    }
+    break;
+    case PAGE_MONTHLY:
+    {
         int multiplier = _get_multiplier_from_widget(gf, "monthly_spin");
         Recurrence *r = _get_day_of_month_recurrence(gf, &start_date, multiplier, "monthly_day", "monthly_weekend");
         *recurrences = g_list_append(*recurrences, r);
-    } break;
+    }
+    break;
     default:
         g_error("unknown page index [%d]", page_index);
         break;

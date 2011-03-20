@@ -72,6 +72,33 @@ void gnc_GWEN_Gui_release(GncGWENGui *gui);
  */
 void gnc_GWEN_Gui_shutdown(void);
 
+/**
+ * Set "Close when finished" flag
+ *
+ * @param gboolean close_when_finished
+ */
+void gnc_GWEN_Gui_set_close_flag(gboolean close_when_finished);
+
+/**
+ * Get "Close when finished" flag
+ *
+ * @return gboolean close_when_finished
+ */
+gboolean gnc_GWEN_Gui_get_close_flag(void);
+
+/**
+ * Unhides Online Banking Connection Window (Make log visible)
+ *
+ * @return gboolean window is visible
+ */
+gboolean gnc_GWEN_Gui_show_dialog(void);
+
+/**
+ * Hides Online Banking Connection Window (Close log window)
+ *
+ */
+void gnc_GWEN_Gui_hide_dialog(void);
+
 G_END_DECLS
 
 /** @} */

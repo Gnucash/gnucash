@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-file-history.h -- 
+/*
+ * gnc-plugin-file-history.h --
  * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -56,14 +56,16 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 
 /** The instance data structure for a file history plugin. */
-typedef struct {
-	GncPlugin gnc_plugin;
+typedef struct
+{
+    GncPlugin gnc_plugin;
 } GncPluginFileHistory;
 
 
 /** The class data structure for a file history plugin. */
-typedef struct {
-	GncPluginClass gnc_plugin;
+typedef struct
+{
+    GncPluginClass gnc_plugin;
 } GncPluginFileHistoryClass;
 
 /* function prototypes */

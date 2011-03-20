@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-stylesheets.c -- 
+/*
+ * gnc-plugin-stylesheets.c --
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,24 +38,27 @@ static void gnc_plugin_stylesheets_finalize (GObject *object);
 
 /* Command callbacks */
 static void gnc_plugin_stylesheets_cmd_edit_style_sheet (GtkAction *action,
-							 GncMainWindowActionData *data);
+        GncMainWindowActionData *data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-stylesheets-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-stylesheets-ui.xml"
 
-static GtkActionEntry gnc_plugin_actions [] = {
-  /* Menu Items */
-  { "EditStyleSheetsAction", NULL, N_("St_yle Sheets"), NULL,
-    N_("Edit report style sheets."),
-    G_CALLBACK (gnc_plugin_stylesheets_cmd_edit_style_sheet) },
+static GtkActionEntry gnc_plugin_actions [] =
+{
+    /* Menu Items */
+    {
+        "EditStyleSheetsAction", NULL, N_("St_yle Sheets"), NULL,
+        N_("Edit report style sheets."),
+        G_CALLBACK (gnc_plugin_stylesheets_cmd_edit_style_sheet)
+    },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
 
 typedef struct GncPluginStylesheetsPrivate
 {
-  gpointer dummy;
+    gpointer dummy;
 } GncPluginStylesheetsPrivate;
 
 #define GNC_PLUGIN_STYLESHEETS_GET_PRIVATE(o)  \
@@ -70,55 +73,57 @@ static GObjectClass *parent_class = NULL;
 GType
 gnc_plugin_stylesheets_get_type (void)
 {
-  static GType gnc_plugin_stylesheets_type = 0;
+    static GType gnc_plugin_stylesheets_type = 0;
 
-  if (gnc_plugin_stylesheets_type == 0) {
-    static const GTypeInfo our_info = {
-      sizeof (GncPluginStylesheetsClass),
-		NULL,		/* base_init */
-		NULL,		/* base_finalize */
-		(GClassInitFunc) gnc_plugin_stylesheets_class_init,
-		NULL,		/* class_finalize */
-		NULL,		/* class_data */
-		sizeof (GncPluginStylesheets),
-		0,		/* n_preallocs */
-		(GInstanceInitFunc) gnc_plugin_stylesheets_init,
-    };
+    if (gnc_plugin_stylesheets_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
+            sizeof (GncPluginStylesheetsClass),
+            NULL,		/* base_init */
+            NULL,		/* base_finalize */
+            (GClassInitFunc) gnc_plugin_stylesheets_class_init,
+            NULL,		/* class_finalize */
+            NULL,		/* class_data */
+            sizeof (GncPluginStylesheets),
+            0,		/* n_preallocs */
+            (GInstanceInitFunc) gnc_plugin_stylesheets_init,
+        };
 
-    gnc_plugin_stylesheets_type = g_type_register_static (GNC_TYPE_PLUGIN,
-							  "GncPluginStylesheets",
-							  &our_info, 0);
-  }
+        gnc_plugin_stylesheets_type = g_type_register_static (GNC_TYPE_PLUGIN,
+                                      "GncPluginStylesheets",
+                                      &our_info, 0);
+    }
 
-  return gnc_plugin_stylesheets_type;
+    return gnc_plugin_stylesheets_type;
 }
 
 GncPlugin *
 gnc_plugin_stylesheets_new (void)
 {
-  return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_STYLESHEETS, NULL));
+    return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_STYLESHEETS, NULL));
 }
 
 static void
 gnc_plugin_stylesheets_class_init (GncPluginStylesheetsClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gnc_plugin_stylesheets_finalize;
+    object_class->finalize = gnc_plugin_stylesheets_finalize;
 
-  /* plugin info */
-  plugin_class->plugin_name  = GNC_PLUGIN_STYLESHEETS_NAME;
+    /* plugin info */
+    plugin_class->plugin_name  = GNC_PLUGIN_STYLESHEETS_NAME;
 
-  /* widget addition/removal */
-  plugin_class->actions_name  	   = PLUGIN_ACTIONS_NAME;
-  plugin_class->actions       	   = gnc_plugin_actions;
-  plugin_class->n_actions     	   = gnc_plugin_n_actions;
-  plugin_class->ui_filename   	   = PLUGIN_UI_FILENAME;
+    /* widget addition/removal */
+    plugin_class->actions_name  	   = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions       	   = gnc_plugin_actions;
+    plugin_class->n_actions     	   = gnc_plugin_n_actions;
+    plugin_class->ui_filename   	   = PLUGIN_UI_FILENAME;
 
-  g_type_class_add_private(klass, sizeof(GncPluginStylesheetsPrivate));
+    g_type_class_add_private(klass, sizeof(GncPluginStylesheetsPrivate));
 }
 
 static void
@@ -129,15 +134,15 @@ gnc_plugin_stylesheets_init (GncPluginStylesheets *plugin)
 static void
 gnc_plugin_stylesheets_finalize (GObject *object)
 {
-  GncPluginStylesheets *plugin;
-  GncPluginStylesheetsPrivate *priv;
+    GncPluginStylesheets *plugin;
+    GncPluginStylesheetsPrivate *priv;
 
-  g_return_if_fail (GNC_IS_PLUGIN_STYLESHEETS (object));
+    g_return_if_fail (GNC_IS_PLUGIN_STYLESHEETS (object));
 
-  plugin = GNC_PLUGIN_STYLESHEETS (object);
-  priv = GNC_PLUGIN_STYLESHEETS_GET_PRIVATE(plugin);
+    plugin = GNC_PLUGIN_STYLESHEETS (object);
+    priv = GNC_PLUGIN_STYLESHEETS_GET_PRIVATE(plugin);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /************************************************************
@@ -146,9 +151,9 @@ gnc_plugin_stylesheets_finalize (GObject *object)
 
 static void
 gnc_plugin_stylesheets_cmd_edit_style_sheet (GtkAction *action,
-					     GncMainWindowActionData *data)
+        GncMainWindowActionData *data)
 {
-  gnc_style_sheet_dialog_open();
+    gnc_style_sheet_dialog_open();
 }
 
 /************************************************************
@@ -158,7 +163,7 @@ gnc_plugin_stylesheets_cmd_edit_style_sheet (GtkAction *action,
 void
 gnc_plugin_stylesheets_create_plugin (void)
 {
-  GncPlugin *plugin = gnc_plugin_stylesheets_new ();
+    GncPlugin *plugin = gnc_plugin_stylesheets_new ();
 
-  gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
 }

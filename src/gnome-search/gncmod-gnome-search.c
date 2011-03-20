@@ -49,44 +49,48 @@ int libgncmod_gnome_search_gnc_module_age      = 0;
 char *
 libgncmod_gnome_search_gnc_module_path(void)
 {
-  return g_strdup("gnucash/gnome-search");
+    return g_strdup("gnucash/gnome-search");
 }
 
 char *
 libgncmod_gnome_search_gnc_module_description(void)
 {
-  return g_strdup("The GnuCash Gnome Search UI");
+    return g_strdup("The GnuCash Gnome Search UI");
 }
 
 int
 libgncmod_gnome_search_gnc_module_init(int refcount)
 {
-  /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
-    return FALSE;
-  }
+    /* load the engine (we depend on it) */
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
 
-  if (!gnc_module_load("gnucash/gnome-utils", 0)) {
-    return FALSE;
-  }
+    if (!gnc_module_load("gnucash/gnome-utils", 0))
+    {
+        return FALSE;
+    }
 
-  if(refcount == 0)
-  {
-    /* initialize known types */
-    gnc_search_core_initialize ();
-  }
+    if (refcount == 0)
+    {
+        /* initialize known types */
+        gnc_search_core_initialize ();
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 int
-libgncmod_gnome_search_gnc_module_end(int refcount) {
-  /* XXX Unload the other modules */
+libgncmod_gnome_search_gnc_module_end(int refcount)
+{
+    /* XXX Unload the other modules */
 
-  if (refcount == 0) {
-    /* Shutdown */
-    gnc_search_core_finalize ();
-  }
+    if (refcount == 0)
+    {
+        /* Shutdown */
+        gnc_search_core_finalize ();
+    }
 
-  return TRUE;
+    return TRUE;
 }

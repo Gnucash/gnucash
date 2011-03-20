@@ -112,7 +112,7 @@ var_store_ptr parser_get_vars (parser_env_ptr pe);
 unsigned delete_var (char *var_name, parser_env_ptr pe);
 
 char *parse_string (var_store_ptr value,
-		    const char *string, parser_env_ptr pe);
+                    const char *string, parser_env_ptr pe);
 
 
 /*==================================================*/

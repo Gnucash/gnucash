@@ -17,7 +17,8 @@
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
-(gnc:module-load "gnucash/gnome-utils" 0) ; for the html routines
+(gnc:module-load "gnucash/html" 0)
+(gnc:module-load "gnucash/gnome-utils" 0)
 
 ;; commodity-utilities.scm
 (export gnc:get-match-commodity-splits)
@@ -67,6 +68,11 @@
 (export gnc:options-add-sort-method!)
 (export gnc:options-add-subtotal-view!)
 
+;; html-fonts.scm
+
+(export register-font-options)
+(export add-css-information-to-doc)
+
 ;; html-utilities.scm 
 
 (export gnc:html-make-empty-cell)
@@ -92,6 +98,7 @@
 (export gnc:html-make-no-account-warning)
 (export gnc:html-make-generic-budget-warning)
 (export gnc:html-make-generic-options-warning)
+(export gnc:html-make-generic-simple-warning)
 (export gnc:html-make-empty-data-warning)
 
 ;; report.scm
@@ -227,6 +234,8 @@
 (export gnc:html-document-title)
 (export gnc:html-document-set-headline!)
 (export gnc:html-document-headline)
+(export gnc:html-document-set-style-text!)
+(export gnc:html-document-style-text)
 (export gnc:html-document-set-style-sheet!)
 (export gnc:html-document-style-sheet)
 (export gnc:html-document-set-style-stack!)
@@ -577,6 +586,7 @@
 (export gnc:html-table-prepend-row!)
 (export gnc:html-table-get-cell)
 (export gnc:html-table-set-cell!)
+(export gnc:html-table-set-cell/tag!)
 (export gnc:html-table-append-column!)
 (export gnc:html-table-prepend-column!)
 (export gnc:html-table-merge)
@@ -653,7 +663,9 @@
 (export gnc:account-get-balance-interval)
 (export gnc:account-get-comm-balance-interval)
 (export gnc:accountlist-get-comm-balance-interval)
+(export gnc:accountlist-get-comm-balance-interval-with-closing)
 (export gnc:accountlist-get-comm-balance-at-date)
+(export gnc:accountlist-get-comm-balance-at-date-with-closing)
 (export gnc:query-set-match-non-voids-only!)
 (export gnc:query-set-match-voids-only!)
 (export gnc:split-voided?)
@@ -664,17 +676,23 @@
 (export gnc:accounts-count-splits)
 (export gnc-commodity-collector-allzero?)
 (export gnc:account-get-trans-type-balance-interval)
+(export gnc:account-get-trans-type-balance-interval-with-closing)
 (export gnc:account-get-pos-trans-total-interval)
 (export gnc:account-get-trans-type-splits-interval)
 (export gnc:double-col)
 (export gnc:budget-get-start-date)
+(export gnc:budget-get-end-date)
 (export gnc:budget-account-get-net)
 (export gnc:budget-accountlist-get-net)
 (export gnc:budget-account-get-initial-balance)
 (export gnc:budget-accountlist-get-initial-balance)
+(export budget-account-sum budget)
+(export gnc:get-account-period-rolledup-budget-value)
+(export gnc:budget-account-get-rolledup-net)
 (export gnc:get-assoc-account-balances)
 (export gnc:select-assoc-account-balance)
 (export gnc:get-assoc-account-balances-total)
+(export make-file-url)
 
 (load-from-path "commodity-utilities.scm")
 (load-from-path "html-barchart.scm")
@@ -683,6 +701,7 @@
 (load-from-path "html-scatter.scm")
 (load-from-path "html-linechart.scm")
 (load-from-path "html-style-info.scm")
+(load-from-path "html-fonts.scm")
 
 (load-from-path "html-style-sheet.scm")
 (load-from-path "html-table.scm")

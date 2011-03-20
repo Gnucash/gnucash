@@ -1,12 +1,15 @@
 #! /usr/bin/env perl
 #
+## @file
+#
 # create-bogus-data.pl
 #
-# Create a lot of 'fake' transactions, handy for generating 
+# @brief Create a lot of 'fake' transactions, handy for generating 
 # large datasets for performance testing.
 # 
 # currently, very hacked up, uses hard-wired accounts
 # from the "txnreport.xac" test file
+#
 
 
 $ntrans = 3000;

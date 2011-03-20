@@ -24,10 +24,11 @@
 #ifndef QIF_FILE_H
 #define QIF_FILE_H
 
-struct _QifLine {
-  char		type;
-  gint		lineno;
-  char *	line;
+struct _QifLine
+{
+    char		type;
+    gint		lineno;
+    char *	line;
 };
 
 void qif_record_destroy(GList *record);

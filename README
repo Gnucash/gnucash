@@ -1,13 +1,7 @@
 ############################################################
-          GnuCash 2.1.x README file.
+          GnuCash 2.4.x README file.
 
-NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT 
-BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!   
-
-USE AT YOUR OWN RISK (AND KEEP *LOTS* OF BACKUPS) 
-
-If you want something a bit more tested, please use the 
-2.0 stable series. 
+The last known stable series is the 2.4.0 series.
 ------------------------------------------------------------
 
 ##################
@@ -15,7 +9,6 @@ Table of Contents:
 ------------------
 
   - Overview
-  - Upgrading from 2.0.x
   - Dependencies
   - Invocation/running
   - Internationalization
@@ -127,7 +120,7 @@ Features include:
     to conform more with the new GNOME Human Interface Guidelines.
 
 Home Page:
-http://gnucash.org/
+http://www.gnucash.org/
 
 Precompiled binaries:
 http://www.gnucash.org/pub/gnucash/
@@ -135,28 +128,6 @@ http://www.gnucash.org/pub/gnucash/
 Development versions:
 http://www.gnucash.org/en/hacking.phtml
 
-###############################
-Upgrading from earlier versions
--------------------------------
-
-There are many changes from the 2.0 series - have a look at the
-NEWS file if you want more details. In particular:
-
-- GnuCash now uses SWIG 1.3.28 instead of g-wrap for the
-inter-language bindings. g-wrap has been dropped completely in
-gnucash 2.2.0. See the "dependencies" section of this file for
-more detail.
-
-- The data files are not able to be accessed by 1.6 once the new
-features are used and saved, i.e. they are not backwards-compatible! 
-So backup your data!
-
-- The help documentation of gnucash has been moved to the separate
-package gnucash-docs. If you see error messages like "URL not found"
-when clicking on the "Help" menu item, you need to install the
-separate package gnucash-docs.
-
-We hope you enjoy all the new features!
 
 
 ############
@@ -184,11 +155,6 @@ the following;
     or newer. Sources can be found at
     http://sourceforge.net/projects/libofx/
   aqbanking: This library provide support for HBCI online actions.
-    GnuCash has mostly been tested against the 1.3.0 version, though
-    any newer version should also work. Sources can be found at
-    http://sourceforge.net/projects/aqbanking . Requires
-    gwenhywfar, http://sourceforge.net/projects/gwenhywfar . More
-    info in doc/README.HBCI.
 
 #######
 Running
@@ -199,10 +165,10 @@ You can also run gnucash --help for the command line options.
 
 You can start GnuCash at the command-line, with "gnucash" or "gnucash
 <filename>", where <filename> is a GnuCash account file.  Sample
-accounts can be found in "data" subdirectory.  *.xac files are GnuCash
-accounts that can opened with the "Open File" menu entry.  *.qif files
-are Quicken Import Format files that can be opened with the "Import
-QIF" menu entry.
+accounts can be found in the "doc/examples" subdirectory.  *.gnucash
+files are GnuCash accounts that can opened with the "Open File" menu entry.
+*.qif files are Quicken Import Format files that can be opened with the
+"Import QIF" menu entry.
 
 GnuCash responds to the following environment variables:
 
@@ -224,13 +190,13 @@ GnuCash responds to the following environment variables:
 ####################
 Internationalization
 --------------------
-Message catalogues exist for many different languages. These are
+Message catalogs exist for many different languages. These are
 enabled with environment variables. For example, 
 
-Francais, en bash:
+Francais, in bash:
     export LANG=fr_FR
 
-Francais, en tcsh:
+Francais, in tcsh:
     setenv LANG fr_FR
 
 German version:
@@ -423,9 +389,7 @@ Developing GnuCash
 ------------------
 Before you start developing GnuCash, you should do the following:
 
-1. Read the file src/doc/coding-style.txt to learn about the coding-styles
-   used in the GnuCash source code. Also read
-   http://wiki.gnucash.org/wiki/Development
+1. Read http://wiki.gnucash.org/wiki/Development
 
 2. Several of the directories under src contain files called design.txt
    which explain many aspects of GnuCash's design. Read those.
@@ -446,9 +410,10 @@ Submitting a Patch:
 
       svn diff > /tmp/mypatch
 
-  and send /tmp/mypatch to gnucash-devel@gnucash.org with `[PATCH]'
-  prefixed to the Subject: of the email.  Note that this
-  ONLY WORKS if you have NOT added any new files to the source tree.
+  and attach it to the appropriate bug or enhancement request in
+  Bugzilla (https://bugzilla.gnome.org). Create a new bug if you don't
+  find one that's applicable. Please don't submit patches to either of
+  the mailing lists, as they tend to be forgotten.
 
   If your patch adds new files, use the `-N' flag to diff between a
   clean directory and your development directory.  E.g.

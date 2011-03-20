@@ -27,7 +27,7 @@
 
 
 /* This is the API for GTables, a datatype for 2-dimensional tables
- * with automatic resizing and memory management. 
+ * with automatic resizing and memory management.
  *
  * HACK ALERT -- this thing should proably become a part of glib (??)
  */

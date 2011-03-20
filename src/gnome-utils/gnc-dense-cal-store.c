@@ -4,7 +4,7 @@
  * Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>
  *
  * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
+ * under the terms of version 2 and/or version 3 of the GNU General Public License as
  * published by the Free Software Foundation.
  *
  * As a special exception, permission is granted to link the binary module
@@ -33,7 +33,6 @@
 #include "config.h"
 #include <glib.h>
 #include <glib-object.h>
-#include "glib-compat.h"
 #include "gnc-dense-cal.h"
 #include "gnc-dense-cal-model.h"
 #include "gnc-dense-cal-store.h"
@@ -42,7 +41,7 @@
 struct _GncDenseCalStore
 {
     GObject parent;
-     
+
     GDate start_date;
     gdcs_end_type end_type;
     GDate end_date;
@@ -50,7 +49,7 @@ struct _GncDenseCalStore
     gchar *name;
     gchar *info;
     int num_marks;
-    int num_real_marks; 
+    int num_real_marks;
     GDate **cal_marks;
 };
 
@@ -76,7 +75,7 @@ gnc_dense_cal_store_class_init(GncDenseCalStoreClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
     parent_class = g_type_class_peek_parent(klass);
-     
+
     object_class->finalize = gnc_dense_cal_store_finalize;
 }
 
@@ -90,14 +89,15 @@ gnc_dense_cal_store_iface_init(gpointer g_iface, gpointer iface_data)
     iface->get_instance_count = gdcs_get_instance_count;
     iface->get_instance = gdcs_get_instance;
 }
- 
+
 GType
 gnc_dense_cal_store_get_type(void)
 {
     static GType type = 0;
     if (type == 0)
     {
-        static const GTypeInfo info = {
+        static const GTypeInfo info =
+        {
             sizeof (GncDenseCalStoreClass),
             NULL,   /* base_init */
             NULL,   /* base_finalize */
@@ -108,7 +108,8 @@ gnc_dense_cal_store_get_type(void)
             0,      /* n_preallocs */
             NULL    /* instance_init */
         };
-        static const GInterfaceInfo iDenseCalModelInfo = {
+        static const GInterfaceInfo iDenseCalModelInfo =
+        {
             (GInterfaceInitFunc)gnc_dense_cal_store_iface_init,
             NULL, /* interface finalize */
             NULL, /* interface data */
@@ -187,19 +188,24 @@ gdcs_generic_update_recurrences(GncDenseCalStore *trans, GDate *start, GList *re
 
     i = 0;
     while ((i < trans->num_marks)
-           && g_date_valid(&next)
-           /* Do checking against end restriction. */
-           && ((trans->end_type == NEVER_END)
-               || (trans->end_type == END_ON_DATE
-                   && g_date_compare(&next, &trans->end_date) <= 0)
-               || (trans->end_type == END_AFTER_N_OCCS
-                   && i < trans->n_occurrences)))
+            && g_date_valid(&next)
+            /* Do checking against end restriction. */
+            && ((trans->end_type == NEVER_END)
+                || (trans->end_type == END_ON_DATE
+                    && g_date_compare(&next, &trans->end_date) <= 0)
+                || (trans->end_type == END_AFTER_N_OCCS
+                    && i < trans->n_occurrences)))
     {
         *trans->cal_marks[i++] = next;
         date = next;
         recurrenceListNextInstance(recurrences, &date, &next);
     }
-    trans->num_real_marks = (i == 0 ? 0 : (i-1));
+    trans->num_real_marks = i;
+    /* cstim: Previously this was i-1 but that's just plain wrong for
+     * occurrences which are coming to an end, because then i contains
+     * the number of (rest) occurrences exactly! Subtracting one means
+     * we will miss the last one. */
+
     g_signal_emit_by_name(trans, "update", GUINT_TO_POINTER(1));
 }
 

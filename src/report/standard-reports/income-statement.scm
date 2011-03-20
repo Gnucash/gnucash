@@ -41,9 +41,9 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report income-statement))
+(define-module (gnucash report standard-reports income-statement))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
-(use-modules (ice-9 slib))
+(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -60,7 +60,7 @@
 (define optname-end-date (N_ "End Date"))
 ;; FIXME this could use an indent option
 
-(define optname-accounts (N_ "Accounts to include"))
+(define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
   (N_ "Report on these accounts, if display depth allows."))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
@@ -93,6 +93,12 @@
 (define optname-total-revenue (N_ "Include revenue total"))
 (define opthelp-total-revenue
   (N_ "Whether or not to include a line indicating total revenue"))
+(define optname-label-trading (N_ "Label the trading accounts section"))
+(define opthelp-label-trading
+  (N_ "Whether or not to include a label for the trading accounts section"))
+(define optname-total-trading (N_ "Include trading accounts total"))
+(define opthelp-total-trading
+  (N_ "Whether or not to include a line indicating total trading accounts balance"))
 (define optname-label-expense (N_ "Label the expense section"))
 (define opthelp-label-expense
   (N_ "Whether or not to include a label for the expense section"))
@@ -229,6 +235,15 @@
     
     (add-option 
      (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-label-trading
+      "h1" opthelp-label-trading #t))
+    (add-option 
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-total-trading
+      "h2" opthelp-total-trading #t))
+    
+    (add-option 
+     (gnc:make-simple-boolean-option
       gnc:pagename-display optname-label-expense
       "i" opthelp-label-expense #t))
     (add-option 
@@ -325,6 +340,10 @@
 				    optname-label-revenue))
          (total-revenue? (get-option gnc:pagename-display
 				    optname-total-revenue))
+         (label-trading? (get-option gnc:pagename-display
+				    optname-label-trading))
+         (total-trading? (get-option gnc:pagename-display
+				    optname-total-trading))
          (label-expense? (get-option gnc:pagename-display
 				    optname-label-expense))
          (total-expense? (get-option gnc:pagename-display
@@ -355,10 +374,8 @@
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
 	 (revenue-accounts (assoc-ref split-up-accounts ACCT-TYPE-INCOME))
+	 (trading-accounts (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
 	 (expense-accounts (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE))
-         (income-expense-accounts
-          (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
-                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
 	 
          (doc (gnc:make-html-document))
 	 ;; this can occasionally put extra (blank) columns in our
@@ -437,17 +454,20 @@
 	       (neg-revenue-total #f)
 	       (revenue-total #f)
 	       (expense-total #f)
+	       (trading-total #f)
 	       (net-income #f)
 	       
                ;; Create the account tables below where their
                ;; percentage time can be tracked.
 	       (inc-table (gnc:make-html-table)) ;; gnc:html-table
 	       (exp-table (gnc:make-html-table))
+	       (tra-table (gnc:make-html-table))
 
 	       (table-env #f)                      ;; parameters for :make-
 	       (params #f)                         ;; and -add-account-
                (revenue-table #f)                  ;; gnc:html-acct-table
                (expense-table #f)                  ;; gnc:html-acct-table
+               (trading-table #f)
 	       
 	       (terse-period? #t)
 	       (period-for (if terse-period?
@@ -496,30 +516,35 @@
 	  
 	  ;; sum revenues and expenses
 	  (set! revenue-closing
-		(gnc:account-get-trans-type-balance-interval
+		(gnc:account-get-trans-type-balance-interval-with-closing
 		 revenue-accounts closing-pattern
 		 start-date-tp end-date-tp)
 		) ;; this is norm positive (debit)
 	  (set! expense-closing
-		(gnc:account-get-trans-type-balance-interval
+		(gnc:account-get-trans-type-balance-interval-with-closing
 		 expense-accounts closing-pattern
 		 start-date-tp end-date-tp)
 		) ;; this is norm negative (credit)
 	  (set! expense-total
-		(gnc:accountlist-get-comm-balance-interval
+		(gnc:accountlist-get-comm-balance-interval-with-closing
 		 expense-accounts
 		 start-date-tp end-date-tp))
 	  (expense-total 'minusmerge expense-closing #f)
 	  (set! neg-revenue-total
-		(gnc:accountlist-get-comm-balance-interval
+		(gnc:accountlist-get-comm-balance-interval-with-closing
 		 revenue-accounts
 		 start-date-tp end-date-tp))
 	  (neg-revenue-total 'minusmerge revenue-closing #f)
 	  (set! revenue-total (gnc:make-commodity-collector))
 	  (revenue-total 'minusmerge neg-revenue-total #f)
+          (set! trading-total 
+                (gnc:accountlist-get-comm-balance-interval-with-closing
+                 trading-accounts
+                 start-date-tp end-date-tp))
 	  ;; calculate net income
 	  (set! net-income (gnc:make-commodity-collector))
 	  (net-income 'merge revenue-total #f)
+	  (net-income 'merge trading-total #f)
 	  (net-income 'minusmerge expense-total #f)
 	  
 	  (set! table-env
@@ -564,7 +589,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
 		 ))
 	    (gnc:html-table-append-row! inc-table space)
-	    (gnc:html-table-append-row! exp-table space))
+	    (gnc:html-table-append-row! exp-table space)
+	    (gnc:html-table-append-row! tra-table space))
 
 	       
 	  (gnc:report-percent-done 80)
@@ -591,6 +617,17 @@
 	  (if total-expense?
 	      (add-subtotal-line
 	       exp-table (_ "Total Expenses") #f expense-total))
+	       
+	  (if label-trading?
+              (add-subtotal-line tra-table (_ "Trading") #f #f))
+	  (set! trading-table
+	        (gnc:make-html-acct-table/env/accts
+	         table-env trading-accounts))
+	  (gnc:html-table-add-account-balances
+	   tra-table trading-table params)
+	  (if total-trading?
+              (add-subtotal-line
+	       tra-table (_ "Total Trading") #f trading-total))
 	  
 	  (report-line
 	   (if standard-order? 
@@ -611,11 +648,15 @@
 		  (if standard-order?
 		      (list
 		       (gnc:make-html-table-cell inc-table)
+		       (if (not (null? trading-accounts))
+		           (gnc:make-html-table-cell tra-table))
 		       (gnc:make-html-table-cell exp-table)
 		       )
 		      (list
 		       (gnc:make-html-table-cell exp-table)
 		       (gnc:make-html-table-cell inc-table)
+		       (if (not (null? trading-accounts))
+		           (gnc:make-html-table-cell tra-table))
 		       )
 		      )
 		  )
@@ -624,6 +665,10 @@
 		       (gnc:html-table-append-row!
 			build-table
 			(list (gnc:make-html-table-cell inc-table)))
+		       (if (not (null? trading-accounts))
+		           (gnc:html-table-append-row!
+			    build-table
+			    (list (gnc:make-html-table-cell tra-table))))
 		       (gnc:html-table-append-row!
 			build-table
 			(list (gnc:make-html-table-cell exp-table)))
@@ -635,6 +680,10 @@
 		       (gnc:html-table-append-row!
 			build-table
 			(list (gnc:make-html-table-cell inc-table)))
+		       (if (not (null? trading-accounts))
+		           (gnc:html-table-append-row!
+			    build-table
+			    (list (gnc:make-html-table-cell tra-table))))
 		       )
 		     )
 		 )
@@ -678,7 +727,7 @@
 (define (profit-and-loss-options-generator)
   (income-statement-options-generator-internal pnl-reportname))
 (define (profit-and-loss-renderer report-obj)
-  (income-statement-renderer-internal report-obj is-reportname))
+  (income-statement-renderer-internal report-obj pnl-reportname))
 
 
 (gnc:define-report 

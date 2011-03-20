@@ -432,9 +432,53 @@
      validator
      #f #f #f #f)))
 
+;; This defines an option to set a counter value. This is a slightly
+;; different kind of option: Unlike all other options, the values edited
+;; by this option are not saved in the "options"/<section> kvm slot, but
+;; in the "counters" slot. This is mostly due to backwards compatibility
+;; and partly because counters are a bit different from other options
+;; anyway.
+;;
+;; This is implemented by overriding the scm->kvp and kvp->scm methods
+;; to ignore the kvp path passed and replace it with a hardcoded
+;; "counters".
+(define (gnc:make-counter-option
+         section
+         name
+	 key
+         sort-tag
+         documentation-string
+         default-value)
+  (let ((option (gnc:make-number-range-option section name sort-tag documentation-string default-value 0 999999999 0 1)))
+     (gnc:set-option-scm->kvp option (lambda (f p) (kvp-frame-set-slot-path-gslist f (inexact->exact ((gnc:option-getter option))) (list "counters" key))))
+     (gnc:set-option-kvp->scm option (lambda (f p)
+                               (let ((v (kvp-frame-get-slot-path-gslist f (list "counters" key))))
+                                 (if (and v (integer? v))
+                                     ((gnc:option-setter option) v)))))
+     option))
+
+;; This defines an option to set a counter format, which has the same
+;; exception as gnc:make-counter-option above.
+(define (gnc:make-counter-format-option
+         section
+         name
+	 key
+         sort-tag
+         documentation-string
+         default-value)
+  (let ((option (gnc:make-string-option section name sort-tag documentation-string default-value)))
+     (gnc:set-option-scm->kvp option (lambda (f p) (kvp-frame-set-slot-path-gslist f ((gnc:option-getter option)) (list "counter_formats" key))))
+     (gnc:set-option-kvp->scm option (lambda (f p)
+                               (let ((v (kvp-frame-get-slot-path-gslist f (list "counter_formats" key))))
+                                 (if (and v (string? v))
+                                     ((gnc:option-setter option) v)))))
+     option))
+
 (export gnc:make-invoice-option)
 (export gnc:make-customer-option)
 (export gnc:make-vendor-option)
 (export gnc:make-employee-option)
 (export gnc:make-owner-option)
 (export gnc:make-taxtable-option)
+(export gnc:make-counter-option)
+(export gnc:make-counter-format-option)

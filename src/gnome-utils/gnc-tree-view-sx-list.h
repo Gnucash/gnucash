@@ -7,7 +7,7 @@
  **/
 /********************************************************************
  * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of version 2 of the GNU General Public *
+ * modify it under the terms of version 2 and/or version 3 of the GNU General Public *
  * License as published by the Free Software Foundation.            *
  *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
@@ -28,8 +28,7 @@
 #ifndef __GNC_TREE_VIEW_SX_LIST_H
 #define __GNC_TREE_VIEW_SX_LIST_H
 
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 #include "gnc-tree-view.h"
 
 #include "SchedXaction.h"

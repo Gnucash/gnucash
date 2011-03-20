@@ -29,10 +29,9 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report general-ledger))
+(define-module (gnucash report standard-reports general-ledger))
 (export gnc:make-general-ledger-report)
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
-(use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -64,7 +63,7 @@
     (set-option!
      gnc:pagename-accounts (N_ "Filter Type") 'none)
     (set-option!
-     gnc:pagename-accounts (N_ "Void Transactions?") 'non-void-only)
+     gnc:pagename-accounts (N_ "Void Transactions") 'non-void-only)
     
     ;; set options in the display tab...
     (for-each
@@ -78,10 +77,10 @@
       (list (N_ "Description") #t)
       (list (N_ "Memo") #f)
       (list (N_ "Account Name") #f)
-      (list (N_ "Use Full Account Name?") #f)
+      (list (N_ "Use Full Account Name") #f)
       (list (N_ "Account Code") #f)
       (list (N_ "Other Account Name") #f)
-      (list (N_ "Use Full Other Account Name?") #f)
+      (list (N_ "Use Full Other Account Name") #f)
       (list (N_ "Other Account Code") #f)
       (list (N_ "Shares") #f)
       (list (N_ "Price") #f)
@@ -89,7 +88,7 @@
       (list (N_ "Amount") 'double)
       (list (N_ "Running Balance") #t)
       (list (N_ "Totals") #f)
-      (list (N_ "Sign Reverses?") 'credit-accounts)
+      (list (N_ "Sign Reverses") 'credit-accounts)
       )
      )
     
@@ -107,8 +106,8 @@
      ;; One list per option here with: option-name, default-value
      (list
       (list (N_ "Primary Key") 'account-code)
-      (list (N_ "Show Full Account Name?") #f)
-      (list (N_ "Show Account Code?") #t)
+      (list (N_ "Show Full Account Name") #f)
+      (list (N_ "Show Account Code") #t)
       (list (N_ "Primary Subtotal") #t)
       (list (N_ "Primary Subtotal for Date Key") 'none)
       (list (N_ "Primary Sort Order") 'ascend)

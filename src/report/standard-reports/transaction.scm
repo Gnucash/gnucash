@@ -29,14 +29,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report transaction))
+(define-module (gnucash report standard-reports transaction))
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
-(use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
-(require 'printf)
+(use-modules (gnucash printf))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -53,10 +52,10 @@
 (define optname-sec-sortkey (N_ "Secondary Key"))
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
-(define optname-void-transactions (N_ "Void Transactions?"))
+(define optname-void-transactions (N_ "Void Transactions"))
 (define optname-table-export (N_ "Table for Exporting"))
 (define optname-common-currency (N_ "Common Currency"))
-(define optname-currency (N_ "Report Currency"))
+(define optname-currency (N_ "Report's currency"))
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")
@@ -139,7 +138,7 @@
 (define (account-namestring account show-account-code show-account-name show-account-full-name)
   ;;# on multi-line splits we can get an empty ('()) account
   (if (null? account)
-        (_ "Split")
+        (_ "Split Transaction")
         (string-append 
            ;; display account code?
            (if show-account-code
@@ -171,7 +170,9 @@
   (let ((account (xaccSplitGetAccount (xaccSplitGetOtherSplit split))))
     (add-subheading-row (gnc:make-html-text
                          (gnc:html-markup-anchor
+                          (if (not (null? account))
                            (gnc:account-anchor-text account)
+                           "")
                            (account-namestring account
                                                (used-sort-account-code      column-vector)
                                                #t
@@ -216,12 +217,12 @@
      table
      subtotal-style 
      (if export?
-      (append! (cons (gnc:make-html-table-cell subtotal-string)
+      (append! (cons (gnc:make-html-table-cell/markup "total-label-cell" subtotal-string)
                      (gnc:html-make-empty-cells (- width 2)))
                (list (gnc:make-html-table-cell/markup 
                       "total-number-cell"
                       (car currency-totals))))
-     (list (gnc:make-html-table-cell/size 1 (- width 1) 
+     (list (gnc:make-html-table-cell/size/markup 1 (- width 1) "total-label-cell"
                                           subtotal-string)
            (gnc:make-html-table-cell/markup 
             "total-number-cell"
@@ -385,7 +386,7 @@
                  (vector-set! column-list 10 #t))))
     (if (opt-val (N_ "Display") (N_ "Running Balance"))
         (vector-set! column-list 11 #t))
-    (if (opt-val (N_ "Display")  (N_ "Use Full Account Name?"))
+    (if (opt-val (N_ "Display")  (N_ "Use Full Account Name"))
         (vector-set! column-list 12 #t))
     (if (opt-val (N_ "Display") (N_ "Memo"))
         (vector-set! column-list 13 #t))
@@ -393,11 +394,11 @@
         (vector-set! column-list 14 #t))
     (if (opt-val (N_ "Display") (N_ "Other Account Code"))
         (vector-set! column-list 15 #t))
-    (if (opt-val (N_ "Display") (N_ "Use Full Other Account Name?"))
+    (if (opt-val (N_ "Display") (N_ "Use Full Other Account Name"))
         (vector-set! column-list 16 #t))
-    (if (opt-val (N_ "Sorting") (N_ "Show Account Code?"))
+    (if (opt-val (N_ "Sorting") (N_ "Show Account Code"))
         (vector-set! column-list 17 #t))
-    (if (opt-val (N_ "Sorting") (N_ "Show Full Account Name?"))
+    (if (opt-val (N_ "Sorting") (N_ "Show Full Account Name"))
         (vector-set! column-list 18 #t))
     (if (opt-val (N_ "Display") (N_ "Notes"))
         (vector-set! column-list 19 #t))
@@ -473,23 +474,27 @@
     (if (used-date column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc-print-date (gnc-transaction-get-date-posted parent))
+                    (gnc:make-html-table-cell/markup "text-cell"
+                        (gnc-print-date (gnc-transaction-get-date-posted parent)))
                     " ")))
     (if (used-reconciled-date column-vector)
         (addto! row-contents
-		(let ((date (gnc-split-get-date-reconciled split)))
-		  (if (equal? date (cons 0 0))
-		      " "
-		      (gnc-print-date date)))))
+                (gnc:make-html-table-cell/markup "text-cell"
+		    (let ((date (gnc-split-get-date-reconciled split)))
+		      (if (equal? date (cons 0 0))
+		          " "
+		          (gnc-print-date date))))))
     (if (used-num column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (xaccTransGetNum parent)
+                    (gnc:make-html-table-cell/markup "text-cell"
+                        (xaccTransGetNum parent))
                     " ")))
     (if (used-description column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (xaccTransGetDescription parent)
+                    (gnc:make-html-table-cell/markup "text-cell"
+                        (xaccTransGetDescription parent))
                     " ")))
     
     (if (used-memo column-vector)
@@ -559,7 +564,7 @@
   
   (gnc:options-add-date-interval!
    gnc:*transaction-report-options*
-   gnc:pagename-general (N_ "From") (N_ "To") "a")
+   gnc:pagename-general (N_ "Start Date") (N_ "End Date") "a")
   
   
   (gnc:register-trep-option
@@ -599,22 +604,20 @@
   ;; account to do report on
   (gnc:register-trep-option
    (gnc:make-account-list-option
-    gnc:pagename-accounts (N_ "Report Accounts")
+    gnc:pagename-accounts (N_ "Accounts")
     "a" (N_ "Report on these accounts")
-    ;; select, by default, all accounts...
+    ;; select, by default, no accounts! Selecting all accounts will
+    ;; always imply an insanely long waiting time upon opening, and it
+    ;; is almost never useful. So we instead display the normal error
+    ;; message saying "Click here", and the user knows how to
+    ;; continue.
     (lambda ()
-      (gnc:filter-accountlist-type 
-       (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
-             ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
-             ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
-             ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
-             ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
-       (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
+      '())
     #f #t))
 
   (gnc:register-trep-option
    (gnc:make-account-list-option
-    gnc:pagename-accounts (N_ "Filter Accounts")
+    gnc:pagename-accounts (N_ "Filter By...")
     "b" (N_ "Filter on these accounts")
     (lambda ()
       ;; FIXME : gnc:get-current-accounts disappeared.
@@ -755,14 +758,14 @@
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      pagename-sorting (N_ "Show Full Account Name?")
+      pagename-sorting (N_ "Show Full Account Name")
       "a1" 
       (N_ "Show the full account name for subtotals and subtitles?")
       #f))
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      pagename-sorting (N_ "Show Account Code?")
+      pagename-sorting (N_ "Show Account Code")
       "a2" 
       (N_ "Show the account code for subtotals and subtitles?")
       #f))
@@ -841,11 +844,11 @@
     (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
     (list (N_ "Notes")                        "d2" (N_ "Display the notes if the memo is unavailable?") #t)
     (list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
-    (list (N_ "Use Full Account Name?")       "f"  (N_ "Display the full account name") #t)
+    (list (N_ "Use Full Account Name")        "f"  (N_ "Display the full account name") #t)
     (list (N_ "Account Code")                 "g"  (N_ "Display the account code") #f)
     (list (N_ "Other Account Name")           "h"  (N_ "Display the other account name?\
  (if this is a split transaction, this parameter is guessed).") #f)
-    (list (N_ "Use Full Other Account Name?") "i"  (N_ "Display the full account name") #t)
+    (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name") #t)
     (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code") #f)
     (list (N_ "Shares")                       "k"  (N_ "Display the number of shares?") #f)
     (list (N_ "Price")                        "l"  (N_ "Display the shares price?") #f)
@@ -878,7 +881,7 @@
   
   (gnc:register-trep-option
    (gnc:make-multichoice-option
-    gnc:pagename-display (N_ "Sign Reverses?")
+    gnc:pagename-display (N_ "Sign Reverses")
     "p" (N_ "Reverse amount display for certain account types")
     'credit-accounts
     (list 
@@ -949,7 +952,7 @@ Credit Card, and Income accounts")))))
     (cdr (assq (gnc:option-value 
                 (gnc:lookup-option options
                                    (N_ "Display")
-                                   (N_ "Sign Reverses?")))
+                                   (N_ "Sign Reverses")))
                account-types-to-reverse-assoc-list)))
   
 
@@ -1301,15 +1304,15 @@ Credit Card, and Income accounts")))))
 
   (gnc:report-starting reportname)
   (let ((document (gnc:make-html-document))
-	(c_account_1 (opt-val gnc:pagename-accounts "Report Accounts"))
-	(c_account_2 (opt-val gnc:pagename-accounts "Filter Accounts"))
+	(c_account_1 (opt-val gnc:pagename-accounts "Accounts"))
+	(c_account_2 (opt-val gnc:pagename-accounts "Filter By..."))
 	(filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
         (begindate (gnc:timepair-start-day-time
                     (gnc:date-option-absolute-time
-                     (opt-val gnc:pagename-general "From"))))
+                     (opt-val gnc:pagename-general "Start Date"))))
         (enddate (gnc:timepair-end-day-time
                   (gnc:date-option-absolute-time
-                   (opt-val gnc:pagename-general "To"))))
+                   (opt-val gnc:pagename-general "End Date"))))
         (report-title (opt-val 
                        gnc:pagename-general
                        gnc:optname-reportname))

@@ -17,7 +17,8 @@ libgncmod_report_system_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${GTK_LIBS}
 
 if BUILDING_FROM_SVN
 swig-report-system.c: report-system.i ${top_srcdir}/src/base-typemaps.i
@@ -29,7 +30,9 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
-  ${GLIB_CFLAGS} ${GUILE_INCS}
+  ${GLIB_CFLAGS} \
+  ${GTK_CFLAGS} \
+  ${GUILE_INCS}
 
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
@@ -37,6 +40,7 @@ gncscm_DATA = \
      html-acct-table.scm \
      html-barchart.scm \
      html-document.scm \
+     html-fonts.scm \
      html-piechart.scm \
      html-scatter.scm \
      html-linechart.scm \
@@ -52,7 +56,11 @@ gncscm_DATA = \
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report-system
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
-gncscmmod_DATA = report-system.scm
+gncscmmod_DATA = \
+    report-system.scm \
+	eguile-gnc.scm \
+	eguile-utilities.scm \
+	eguile-html-utilities.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases

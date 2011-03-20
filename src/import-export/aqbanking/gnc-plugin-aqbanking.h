@@ -50,11 +50,13 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_AQBANKING_NAME "gnc-plugin-aqbanking"
 
 /* typedefs & structures */
-typedef struct {
+typedef struct
+{
     GncPlugin gnc_plugin;
 } GncPluginAqBanking;
 
-typedef struct {
+typedef struct
+{
     GncPluginClass gnc_plugin;
 } GncPluginAqBankingClass;
 
@@ -74,6 +76,11 @@ GncPlugin* gnc_plugin_aqbanking_new(void);
  * Create a new GncPluginAqBanking object and register it.
  */
 void gnc_plugin_aqbanking_create_plugin(void);
+
+/**
+ * Set MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW
+ */
+void gnc_plugin_aqbanking_set_logwindow_visible(gboolean logwindow_visible);
 
 G_END_DECLS
 

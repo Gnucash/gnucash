@@ -1,4 +1,4 @@
-TESTS = test-link-module test-load-module
+TESTS = test-link-module
 
 # Some of these dirs may not be needed anymore.
 GNC_TEST_DEPS = \
@@ -10,8 +10,6 @@ GNC_TEST_DEPS = \
 
 TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
-
-EXTRA_DIST = test-load-module
 
 check_PROGRAMS=test-link-module
 test_link_module_SOURCES=test-link-module.c

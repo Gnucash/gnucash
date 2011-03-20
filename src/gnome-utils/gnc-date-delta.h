@@ -29,20 +29,22 @@
  */
 
 #ifndef GNC_DATE_DELTA_H
-#define GNC_DATE_DELTA_H 
+#define GNC_DATE_DELTA_H
 
-typedef enum {
-  GNC_DATE_DELTA_DAYS,
-  GNC_DATE_DELTA_WEEKS,
-  GNC_DATE_DELTA_MONTHS,
-  GNC_DATE_DELTA_YEARS,
-  GNC_DATE_DELTA_NUM_UNITS
+typedef enum
+{
+    GNC_DATE_DELTA_DAYS,
+    GNC_DATE_DELTA_WEEKS,
+    GNC_DATE_DELTA_MONTHS,
+    GNC_DATE_DELTA_YEARS,
+    GNC_DATE_DELTA_NUM_UNITS
 } GNCDateDeltaUnits;
 
-typedef enum {
-  GNC_DATE_DELTA_PAST,
-  GNC_DATE_DELTA_FUTURE,
-  GNC_DATE_DELTA_NUM_POLARITY
+typedef enum
+{
+    GNC_DATE_DELTA_PAST,
+    GNC_DATE_DELTA_FUTURE,
+    GNC_DATE_DELTA_NUM_POLARITY
 } GNCDateDeltaPolarity;
 
 #define GNC_TYPE_DATE_DELTA           (gnc_date_delta_get_type())
@@ -50,25 +52,27 @@ typedef enum {
 #define GNC_DATE_DELTA_CLASS(klass)   G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_DATE_DELTA, GNCDateDeltaClass)
 #define GNC_IS_DATE_DELTA(obj)        G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_DATE_DELTA)
 
-typedef struct {
-  GtkHBox hbox;
+typedef struct
+{
+    GtkHBox hbox;
 
-  GtkWidget *value_spin;
-  GtkWidget *units_combo;
-  GtkWidget *polarity_combo;
+    GtkWidget *value_spin;
+    GtkWidget *units_combo;
+    GtkWidget *polarity_combo;
 
-  GNCDateDeltaUnits units;
-  GNCDateDeltaPolarity polarity;
+    GNCDateDeltaUnits units;
+    GNCDateDeltaPolarity polarity;
 
-  gboolean show_polarity;
+    gboolean show_polarity;
 } GNCDateDelta;
 
-typedef struct {
-  GtkHBoxClass parent_class;
-  void (*value_changed) (GNCDateDelta *gdd);
-  void (*units_changed) (GNCDateDelta *gdd);
-  void (*polarity_changed) (GNCDateDelta *gdd);
-  void (*delta_changed) (GNCDateDelta *gdd);
+typedef struct
+{
+    GtkHBoxClass parent_class;
+    void (*value_changed) (GNCDateDelta *gdd);
+    void (*units_changed) (GNCDateDelta *gdd);
+    void (*polarity_changed) (GNCDateDelta *gdd);
+    void (*delta_changed) (GNCDateDelta *gdd);
 } GNCDateDeltaClass;
 
 GType gnc_date_delta_get_type (void);

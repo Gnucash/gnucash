@@ -25,20 +25,20 @@ typedef struct _GNCImportProvFormatGnomeClass GNCImportProvFormatGnomeClass;
 
 struct _GNCImportProvFormatGnome
 {
-  GNCDruidProvider parent;
+    GNCDruidProvider parent;
 
-  GnomeDruidPage*	page;
-  GtkComboBox*		format_combo;
-  GtkLabel*		sample_label;
+    GnomeDruidPage*	page;
+    GtkComboBox*		format_combo;
+    GtkLabel*		sample_label;
 
-  GncImportFormat	choice;
+    GncImportFormat	choice;
 
-  GNCImportFormatCB* cb;
+    GNCImportFormatCB* cb;
 };
 
 struct _GNCImportProvFormatGnomeClass
 {
-  GNCDruidProviderClass parent_class;
+    GNCDruidProviderClass parent_class;
 };
 
 GType	gnc_import_format_gnome_get_type(void);

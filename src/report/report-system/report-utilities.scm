@@ -17,6 +17,9 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(use-modules (srfi srfi-13))
+(use-modules (gnucash printf))
+
 (define (list-ref-safe list elt)
   (if (> (length list) elt)
       (list-ref list elt)
@@ -94,7 +97,8 @@
                     ACCT-TYPE-CREDITLINE))
 	(cons ACCT-TYPE-EQUITY (list ACCT-TYPE-EQUITY))
 	(cons ACCT-TYPE-INCOME (list ACCT-TYPE-INCOME))
-	(cons ACCT-TYPE-EXPENSE (list ACCT-TYPE-EXPENSE)))))
+	(cons ACCT-TYPE-EXPENSE (list ACCT-TYPE-EXPENSE))
+	(cons ACCT-TYPE-TRADING (list ACCT-TYPE-TRADING)))))
 
 ;; Returns the name of the account type as a string, and in its plural
 ;; form (as opposed to xaccAccountGetTypeStr which gives the
@@ -118,7 +122,8 @@
     (cons ACCT-TYPE-MONEYMRKT (_ "Money Market"))
     (cons ACCT-TYPE-RECEIVABLE (_ "Accounts Receivable"))
     (cons ACCT-TYPE-PAYABLE (_ "Accounts Payable"))
-    (cons ACCT-TYPE-CREDITLINE (_ "Credit Lines")))
+    (cons ACCT-TYPE-CREDITLINE (_ "Credit Lines"))
+    (cons ACCT-TYPE-TRADING (_ "Trading Accounts")))
    type))
 
 ;; Get the list of all different commodities that are used within the
@@ -638,8 +643,14 @@
 (define (gnc:accountlist-get-comm-balance-interval accountlist from to)
   (gnc:account-get-trans-type-balance-interval accountlist #f from to))
 
+(define (gnc:accountlist-get-comm-balance-interval-with-closing accountlist from to)
+  (gnc:account-get-trans-type-balance-interval-with-closing accountlist #f from to))
+
 (define (gnc:accountlist-get-comm-balance-at-date accountlist date)
   (gnc:account-get-trans-type-balance-interval accountlist #f #f date))
+
+(define (gnc:accountlist-get-comm-balance-at-date-with-closing accountlist date)
+  (gnc:account-get-trans-type-balance-interval-with-closing accountlist #f #f date))
 
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
@@ -703,7 +714,7 @@
 
 ;; Sums up any splits of a certain type affecting a set of accounts.
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
-;; If type is #f, sums all splits in the interval
+;; If type is #f, sums all non-closing splits in the interval
 (define (gnc:account-get-trans-type-balance-interval
 	 account-list type start-date-tp end-date-tp)
   (let* ((total (gnc:make-commodity-collector)))
@@ -711,9 +722,13 @@
            (let* ((shares (xaccSplitGetAmount split))
                   (acct-comm (xaccAccountGetCommodity
                               (xaccSplitGetAccount split)))
+                  (txn (xaccSplitGetParent split))
                   )
-             (gnc-commodity-collector-add total acct-comm shares)
-             )
+             (if type 
+                (gnc-commodity-collector-add total acct-comm shares)
+                (if (not (xaccTransGetIsClosingTxn txn))
+                    (gnc-commodity-collector-add total acct-comm shares)
+             )))
            )
 	 (gnc:account-get-trans-type-splits-interval
           account-list type start-date-tp end-date-tp)
@@ -722,6 +737,26 @@
     )
   )
 
+;; Sums up any splits of a certain type affecting a set of accounts.
+;; the type is an alist '((str "match me") (cased #f) (regexp #f))
+;; If type is #f, sums all splits in the interval (even closing splits)
+(define (gnc:account-get-trans-type-balance-interval-with-closing
+	 account-list type start-date-tp end-date-tp)
+  (let* ((total (gnc:make-commodity-collector)))
+    (map (lambda (split)
+           (let* ((shares (xaccSplitGetAmount split))
+                  (acct-comm (xaccAccountGetCommodity
+                              (xaccSplitGetAccount split)))
+                  )
+                (gnc-commodity-collector-add total acct-comm shares)
+             )
+           )
+	 (gnc:account-get-trans-type-splits-interval
+          account-list type start-date-tp end-date-tp)
+	 )
+    total
+    )
+  )
 ;; similar, but only counts transactions with non-negative shares and
 ;; *ignores* any closing entries
 (define (gnc:account-get-pos-trans-total-interval
@@ -863,6 +898,11 @@
 (define (gnc:budget-get-start-date budget)
   (gnc-budget-get-period-start-date budget 0))
 
+;; Returns the end date of the last period of the budget.
+(define (gnc:budget-get-end-date budget)
+  (gnc-budget-get-period-end-date budget (- (gnc-budget-get-num-periods budget) 1)))
+
+
 (define (gnc:budget-accountlist-helper accountlist get-fn)
   (let
     (
@@ -930,6 +970,77 @@
   (gnc:budget-accountlist-helper accountlist (lambda (account)
     (gnc:budget-account-get-initial-balance budget account))))
 
+;; Calculate the sum of all budgets of all children of an account for a specific period
+;;
+;; Parameters:
+;;   budget - budget to use
+;;   children - list of children
+;;   period - budget period to use
+;;
+;; Return value:
+;;   budget value to use for account for specified period.
+(define (budget-account-sum budget children period)
+  (let* ((sum
+           (cond
+             ((null? children) (gnc-numeric-zero))
+             (else
+               (gnc-numeric-add
+                 (gnc:get-account-period-rolledup-budget-value budget (car children) period)
+                 (budget-account-sum budget (cdr children) period)
+                 GNC-DENOM-AUTO GNC-RND-ROUND))
+               )
+        ))
+  sum)
+)
+
+;; Calculate the value to use for the budget of an account for a specific period.
+;; - If the account has a budget value set for the period, use it
+;; - If the account has children, use the sum of budget values for the children
+;; - Otherwise, use 0.
+;;
+;; Parameters:
+;;   budget - budget to use
+;;   acct - account
+;;   period - budget period to use
+;;
+;; Return value:
+;;   sum of all budgets for list of children for specified period.
+(define (gnc:get-account-period-rolledup-budget-value budget acct period)
+  (let* ((bgt-set? (gnc-budget-is-account-period-value-set budget acct period))
+        (children (gnc-account-get-children acct))
+        (amount (cond
+                  (bgt-set? (gnc-budget-get-account-period-value budget acct period))
+          ((not (null? children)) (budget-account-sum budget children period))
+          (else (gnc-numeric-zero)))
+        ))
+  amount)
+)
+
+;; Sums rolled-up budget values for a single account from start-period (inclusive) to
+;; end-period (exclusive).
+;; - If the account has a budget value set for the period, use it
+;; - If the account has children, use the sum of budget values for the children
+;; - Otherwise, use 0.
+;;
+;; start-period may be #f to specify the start of the budget
+;; end-period may be #f to specify the end of the budget
+;;
+;; Returns a gnc-numeric value
+(define (gnc:budget-account-get-rolledup-net budget account start-period end-period)
+  (if (not start-period) (set! start-period 0))
+  (if (not end-period) (set! end-period (gnc-budget-get-num-periods budget)))
+  (let*
+    (
+      (period start-period)
+      (net (gnc-numeric-zero))
+      (acct-comm (xaccAccountGetCommodity account)))
+    (while (< period end-period)
+      (set! net (gnc-numeric-add net
+          (gnc:get-account-period-rolledup-budget-value budget account period)
+	  GNC-DENOM-AUTO GNC-RND-ROUND))
+      (set! period (+ period 1)))
+    net))
+
 (define (gnc:get-assoc-account-balances accounts get-balance-fn)
   (let*
     (
@@ -967,3 +1078,12 @@
         (total 'merge (car (cdr account-balance)) #f))
       account-balances)
     total))
+
+;; Adds "file:///" to the beginning of a URL if it doesn't already exist
+;;
+;; @param url URL
+;; @return URL with "file:///" as the URL type if it isn't already there
+(define (make-file-url url)
+  (if (string-prefix? "file:///" url)
+     url
+     (string-append "file:///" url)))

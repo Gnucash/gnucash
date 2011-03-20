@@ -1,9 +1,5 @@
-SUBDIRS = libc glib28 guile-www srfi stf
-DIST_SUBDIRS = libc glib28 guile-www srfi libqof stf
-
-if USE_LIBQOF
-SUBDIRS += libqof
-endif
+SUBDIRS = libc guile-www stf
+DIST_SUBDIRS = libc guile-www stf
 
 EXTRA_DIST = README
 

@@ -2,18 +2,16 @@ TESTS = \
   test-link-module \
   test-load-module
 
-GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
-  --gnc-module-dir ${top_builddir}/src/engine \
+GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/report/report-gnome \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/lib/libqof/qof \
+  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/xml \
-  --library-dir    ${top_builddir}/src/calculation \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/gnome-utils \
   --library-dir    ${top_builddir}/src/report/report-system
@@ -21,7 +19,11 @@ GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
 TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-LDADD = ../libgncmod-report-gnome.la
+LDADD = \
+    $(top_builddir)/src/libqof/qof/libgnc-qof.la \
+    ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+    $(top_builddir)/src/app-utils/libgncmod-app-utils.la \
+    ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la
 
 check_PROGRAMS = test-link-module
 

@@ -7,7 +7,6 @@ API: Backend
 This document is becoming obsolete. Please refer to the design
 documentation in src/doc/design for a complete description of the
 Engine architecture.
-http://code.neil.williamsleesmill.me.uk/texi/gnucash-design_4.html#SEC30
 
 The only remaining architecture flaw is related to the GnuCash XML v2
 backend modularisation. QofSession includes a dynamic method of loading

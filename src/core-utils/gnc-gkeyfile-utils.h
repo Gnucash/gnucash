@@ -38,23 +38,6 @@
 #define GNC_GKEYFILE_UTILS_H
 
 
-#ifndef HAVE_GLIB_2_12
-gdouble
-g_key_file_get_double (GKeyFile *key_file, const gchar *group_name,
-                       const gchar *key, GError **error);
-
-void
-g_key_file_set_double  (GKeyFile *key_file, const gchar *group_name,
-                        const gchar *key, gdouble value);
-gdouble*
-g_key_file_get_double_list (GKeyFile *key_file, const gchar *group_name,
-                            const gchar *key, gsize *length, GError **error);
-void
-g_key_file_set_double_list (GKeyFile *key_file, const gchar *group_name, 
-                            const gchar *key, gdouble list[], gsize length);
-#endif
-
-
 /** Open and read a key/value file from disk into memory.
  *
  *  @param file The name of the file to load.  This should be a fully
@@ -70,9 +53,9 @@ g_key_file_set_double_list (GKeyFile *key_file, const gchar *group_name,
  *  @return A pointer to a GKeyFile data structure, or NULL.
  */
 GKeyFile *gnc_key_file_load_from_file (const gchar *file,
-				       gboolean ignore_error,
-				       gboolean return_empty_struct,
-				       GError **caller_error);
+                                       gboolean ignore_error,
+                                       gboolean return_empty_struct,
+                                       GError **caller_error);
 
 
 /** Write a key/value file from memory to disk.  If there is no data
@@ -88,8 +71,8 @@ GKeyFile *gnc_key_file_load_from_file (const gchar *file,
  *  FALSE if there was an error.
  */
 gboolean gnc_key_file_save_to_file (const gchar *file,
-				    GKeyFile *key_file,
-				    GError **error);
+                                    GKeyFile *key_file,
+                                    GError **error);
 
 #endif /* GNC_GKEYFILE_UTILS_H */
 /** @} */

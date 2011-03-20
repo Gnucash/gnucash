@@ -23,6 +23,12 @@
  * @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
  */
 
+/** @file
+    @brief SWIG interface file for type translation of Timespec types
+    @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
+    @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
+    @ingroup python_bindings */
+
 // A typemap for converting python dates to Timespec in functions that
 // require Timespec as an argument
 %typemap(in) Timespec {
@@ -32,17 +38,17 @@
                           PyDateTime_GET_YEAR($input) );
 }
 
-// A typemap for converting python dates to Timespec *, for fuctions that
+// A typemap for converting python dates to Timespec *, for functions that
 // requires a Timespec * as an argument. BIG ASSUMPTION, the function
-// recieving this pointer is going to make a copy of the data. After the
+// receiving this pointer is going to make a copy of the data. After the
 // function call, the memory for the Timespec used to perform this conversion
-// is going to be lost, so make damn sure that the recipiant of this pointer
+// is going to be lost, so make damn sure that the recipient of this pointer
 // is NOT going dereference it sometime after this function call takes place.
 //
 // As far as I know, the xaccTransSetDate[Posted|Entered|Due]TS functions
 // from Transaction.h are the only functions with Timespec * that we re
-// actually using. I have personaly verifyed in the source that the pointer
-// being produced by this typemap is being deferenced, and the data copied
+// actually using. I have personally verified in the source that the pointer
+// being produced by this typemap is being dereferenced, and the data copied
 // in all three functions.
 // 
 // The memory for the Timespec used for this conversion is allocated on the

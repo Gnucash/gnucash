@@ -27,40 +27,40 @@
 
 typedef struct
 {
-        gint pixel_height;
-        gint pixel_width;
+    gint pixel_height;
+    gint pixel_width;
 
-        gint origin_x;
-        gint origin_y;
+    gint origin_x;
+    gint origin_y;
 
-        gboolean can_span_over;
+    gboolean can_span_over;
 } CellDimensions;
 
 typedef struct
 {
-        gint nrows;
-        gint ncols;
+    gint nrows;
+    gint ncols;
 
-        /* totals, in pixels */
-        gint height;
-        gint width;
+    /* totals, in pixels */
+    gint height;
+    gint width;
 
-        /* per cell parameters */
-        GTable *cell_dimensions;
+    /* per cell parameters */
+    GTable *cell_dimensions;
 
-        gint refcount;
+    gint refcount;
 } BlockDimensions;
 
 struct _SheetBlockStyle
 {
-        CellBlock * cursor;
+    CellBlock * cursor;
 
-        gint nrows;
-        gint ncols;
+    gint nrows;
+    gint ncols;
 
-        BlockDimensions *dimensions;
+    BlockDimensions *dimensions;
 
-        gint refcount;
+    gint refcount;
 };
 
 
@@ -71,7 +71,7 @@ void gnucash_sheet_style_init(void);
 gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col);
 
 CellDimensions * gnucash_style_get_cell_dimensions (SheetBlockStyle *style,
-                                                    int row, int col);
+        int row, int col);
 
 void gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width);
 
@@ -89,7 +89,7 @@ void gnucash_sheet_compile_styles (GnucashSheet *sheet);
 void gnucash_sheet_styles_recompile (GnucashSheet *sheet);
 
 SheetBlockStyle *gnucash_sheet_get_style (GnucashSheet *sheet,
-                                          VirtualCellLocation vcell_loc);
+        VirtualCellLocation vcell_loc);
 
 SheetBlockStyle *
 gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
@@ -100,10 +100,10 @@ gnucash_sheet_get_style_from_cursor (GnucashSheet *sheet,
                                      const char *cursor_name);
 
 void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
-                                                    gint cell_row,
-						    gint cell_col,
-                                                    gint *x, gint *y,
-						    gint *w, gint *h);
+        gint cell_row,
+        gint cell_col,
+        gint *x, gint *y,
+        gint *w, gint *h);
 
 void gnucash_style_ref   (SheetBlockStyle *style);
 void gnucash_style_unref (SheetBlockStyle *style);

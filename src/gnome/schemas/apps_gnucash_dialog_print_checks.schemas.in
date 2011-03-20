@@ -153,8 +153,8 @@
       <type>bool</type>
       <default>FALSE</default>
       <locale name="C">
-        <short>Print '***' before and after strings.</short>
-        <long>Print '***' before and after strings.</long>
+        <short>Print '***' before and after text.</short>
+        <long>Print '***' before and after text.</long>
       </locale>
     </schema>
 

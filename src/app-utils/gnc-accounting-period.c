@@ -1,5 +1,5 @@
 /*
- * gnc-accounting-period.c -- 
+ * gnc-accounting-period.c --
  *
  * Copyright (c) 2005 David Hampton <hampton@employees.org>
  * All rights reserved.
@@ -61,63 +61,69 @@
 
 static time_t
 lookup_start_date_option(const gchar *section,
-			 const gchar *key_choice,
-			 const gchar *key_absolute,
-			 const gchar *key_relative,
-			 GDate *fy_end)
+                         const gchar *key_choice,
+                         const gchar *key_absolute,
+                         const gchar *key_relative,
+                         GDate *fy_end)
 {
-  gchar *choice;
-  time_t time;
-  int which;
+    gchar *choice;
+    time_t time;
+    int which;
 
-  choice = gnc_gconf_get_string(section, key_choice, NULL);
-  if (choice && strcmp(choice, "absolute") == 0) {
-    time = gnc_gconf_get_int(section, key_absolute, NULL);
-  } else {
-    which = gnc_gconf_get_int(section, key_relative, NULL);
-    time = gnc_accounting_period_start_timet(which, fy_end, NULL);
-  }
-  g_free(choice);
-  /* we will need the balance of the last transaction before the start
-     date, so subtract 1 from start date */
-  /* CAS: we don't actually do what this comment says.  I think that's
-     because a bug in the engine has been fixed. */
-  return time;
+    choice = gnc_gconf_get_string(section, key_choice, NULL);
+    if (choice && strcmp(choice, "absolute") == 0)
+    {
+        time = gnc_gconf_get_int(section, key_absolute, NULL);
+    }
+    else
+    {
+        which = gnc_gconf_get_int(section, key_relative, NULL);
+        time = gnc_accounting_period_start_timet(which, fy_end, NULL);
+    }
+    g_free(choice);
+    /* we will need the balance of the last transaction before the start
+       date, so subtract 1 from start date */
+    /* CAS: we don't actually do what this comment says.  I think that's
+       because a bug in the engine has been fixed. */
+    return time;
 }
 
 
 static time_t
 lookup_end_date_option(const gchar *section,
-		       const gchar *key_choice,
-		       const gchar *key_absolute,
-		       const gchar *key_relative,
-		       GDate *fy_end)
+                       const gchar *key_choice,
+                       const gchar *key_absolute,
+                       const gchar *key_relative,
+                       GDate *fy_end)
 {
-  gchar *choice;
-  time_t time;
-  int which;
+    gchar *choice;
+    time_t time;
+    int which;
 
-  choice = gnc_gconf_get_string(section, key_choice, NULL);
-  if (choice && strcmp(choice, "absolute") == 0) {
-    time = gnc_gconf_get_int(section, key_absolute, NULL);
-    time = gnc_timet_get_day_end(time);
-  } else {
-    which = gnc_gconf_get_int(section, key_relative, NULL);
-    time = gnc_accounting_period_end_timet(which, fy_end, NULL);
-  }
-  g_free(choice);
-  if (time == 0)
-    time = -1;
-  return time;
+    choice = gnc_gconf_get_string(section, key_choice, NULL);
+    if (choice && strcmp(choice, "absolute") == 0)
+    {
+        time = gnc_gconf_get_int(section, key_absolute, NULL);
+        time = gnc_timet_get_day_end(time);
+    }
+    else
+    {
+        which = gnc_gconf_get_int(section, key_relative, NULL);
+        time = gnc_accounting_period_end_timet(which, fy_end, NULL);
+    }
+    g_free(choice);
+    if (time == 0)
+        time = -1;
+    return time;
 }
 
 static GDate *
-get_fy_end(void) 
+get_fy_end(void)
 {
     QofBook *book;
     KvpFrame *book_frame;
     gint64 month, day;
-    
+
     book = gnc_get_current_book();
     book_frame = qof_book_get_slots(book);
     month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
@@ -144,7 +150,7 @@ gnc_accounting_period_fiscal_end(void)
 {
     time_t t;
     GDate *fy_end = get_fy_end();
-    
+
     t = lookup_end_date_option(GCONF_SECTION, KEY_END_CHOICE,
                                KEY_END_DATE, KEY_END_PERIOD, fy_end);
     if (fy_end)
@@ -154,179 +160,191 @@ gnc_accounting_period_fiscal_end(void)
 
 GDate *
 gnc_accounting_period_start_gdate (GncAccountingPeriod which,
-				   const GDate *fy_end,
-				   const GDate *contains)
+                                   const GDate *fy_end,
+                                   const GDate *contains)
 {
-  GDate *date;
+    GDate *date;
 
-  if (contains) {
-    date = g_date_new_dmy(g_date_get_day(contains),
-			  g_date_get_month(contains),
-			  g_date_get_year(contains));
-  } else {
-    date = g_date_new();
-    g_date_set_time_t(date, time(NULL));
-  }
-
-  switch (which) {
-  default:
-    g_message("Undefined relative time constant %d", which);
-    g_date_free(date);
-    return NULL;
-
-  case GNC_ACCOUNTING_PERIOD_TODAY:
-    /* Already have today's date */
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_MONTH:
-    gnc_gdate_set_month_start(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_MONTH_PREV:
-    gnc_gdate_set_prev_month_start(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_QUARTER:
-    gnc_gdate_set_quarter_start(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_QUARTER_PREV:
-    gnc_gdate_set_prev_quarter_start(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_CYEAR:
-    gnc_gdate_set_year_start(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_CYEAR_PREV:
-    gnc_gdate_set_prev_year_start(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_FYEAR:
-    if (fy_end == NULL) {
-      g_message("Request for fisal year value but no fiscal year end value provided.");
-      g_date_free(date);
-      return NULL;
+    if (contains)
+    {
+        date = g_date_new_dmy(g_date_get_day(contains),
+                              g_date_get_month(contains),
+                              g_date_get_year(contains));
     }
-    gnc_gdate_set_fiscal_year_start(date, fy_end);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_FYEAR_PREV:
-    if (fy_end == NULL) {
-      g_message("Request for fisal year value but no fiscal year end value provided.");
-      g_date_free(date);
-      return NULL;
+    else
+    {
+        date = g_date_new();
+        g_date_set_time_t(date, time(NULL));
     }
-    gnc_gdate_set_prev_fiscal_year_start(date, fy_end);
-    break;
-  }
-  return date;
+
+    switch (which)
+    {
+    default:
+        g_message("Undefined relative time constant %d", which);
+        g_date_free(date);
+        return NULL;
+
+    case GNC_ACCOUNTING_PERIOD_TODAY:
+        /* Already have today's date */
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_MONTH:
+        gnc_gdate_set_month_start(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_MONTH_PREV:
+        gnc_gdate_set_prev_month_start(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_QUARTER:
+        gnc_gdate_set_quarter_start(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_QUARTER_PREV:
+        gnc_gdate_set_prev_quarter_start(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_CYEAR:
+        gnc_gdate_set_year_start(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_CYEAR_PREV:
+        gnc_gdate_set_prev_year_start(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_FYEAR:
+        if (fy_end == NULL)
+        {
+            g_message("Request for fisal year value but no fiscal year end value provided.");
+            g_date_free(date);
+            return NULL;
+        }
+        gnc_gdate_set_fiscal_year_start(date, fy_end);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_FYEAR_PREV:
+        if (fy_end == NULL)
+        {
+            g_message("Request for fisal year value but no fiscal year end value provided.");
+            g_date_free(date);
+            return NULL;
+        }
+        gnc_gdate_set_prev_fiscal_year_start(date, fy_end);
+        break;
+    }
+    return date;
 }
 
 time_t
 gnc_accounting_period_start_timet (GncAccountingPeriod which,
-				   const GDate *fy_end,
-				   const GDate *contains)
+                                   const GDate *fy_end,
+                                   const GDate *contains)
 {
-  GDate *date;
-  time_t secs;
+    GDate *date;
+    time_t secs;
 
-  date = gnc_accounting_period_start_gdate(which, fy_end, contains);
-  if (!date)
-    return 0;
+    date = gnc_accounting_period_start_gdate(which, fy_end, contains);
+    if (!date)
+        return 0;
 
-  secs = gnc_timet_get_day_start_gdate(date);
-  g_date_free(date);
-  return secs;
+    secs = gnc_timet_get_day_start_gdate(date);
+    g_date_free(date);
+    return secs;
 }
 
 GDate *
 gnc_accounting_period_end_gdate (GncAccountingPeriod which,
-				 const GDate *fy_end,
-				 const GDate *contains)
+                                 const GDate *fy_end,
+                                 const GDate *contains)
 {
-  GDate *date;
+    GDate *date;
 
-  if (contains) {
-    date = g_date_new_dmy(g_date_get_day(contains),
-			  g_date_get_month(contains),
-			  g_date_get_year(contains));
-  } else {
-    date = g_date_new();
-    g_date_set_time_t(date, time(NULL));
-  }
-
-  switch (which) {
-  default:
-    g_message("Undefined relative time constant %d", which);
-    g_date_free(date);
-    return 0;
-
-  case GNC_ACCOUNTING_PERIOD_TODAY:
-    /* Already have today's date */
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_MONTH:
-    gnc_gdate_set_month_end(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_MONTH_PREV:
-    gnc_gdate_set_prev_month_end(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_QUARTER:
-    gnc_gdate_set_quarter_end(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_QUARTER_PREV:
-    gnc_gdate_set_prev_quarter_end(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_CYEAR:
-    gnc_gdate_set_year_end(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_CYEAR_PREV:
-    gnc_gdate_set_prev_year_end(date);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_FYEAR:
-    if (fy_end == NULL) {
-      g_message("Request for fisal year value but no fiscal year end value provided.");
-      g_date_free(date);
-      return 0;
+    if (contains)
+    {
+        date = g_date_new_dmy(g_date_get_day(contains),
+                              g_date_get_month(contains),
+                              g_date_get_year(contains));
     }
-    gnc_gdate_set_fiscal_year_end(date, fy_end);
-    break;
-
-  case GNC_ACCOUNTING_PERIOD_FYEAR_PREV:
-    if (fy_end == NULL) {
-      g_message("Request for fisal year value but no fiscal year end value provided.");
-      g_date_free(date);
-      return 0;
+    else
+    {
+        date = g_date_new();
+        g_date_set_time_t(date, time(NULL));
     }
-    gnc_gdate_set_prev_fiscal_year_end(date, fy_end);
-    break;
-  }
 
-  return date;
+    switch (which)
+    {
+    default:
+        g_message("Undefined relative time constant %d", which);
+        g_date_free(date);
+        return 0;
+
+    case GNC_ACCOUNTING_PERIOD_TODAY:
+        /* Already have today's date */
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_MONTH:
+        gnc_gdate_set_month_end(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_MONTH_PREV:
+        gnc_gdate_set_prev_month_end(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_QUARTER:
+        gnc_gdate_set_quarter_end(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_QUARTER_PREV:
+        gnc_gdate_set_prev_quarter_end(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_CYEAR:
+        gnc_gdate_set_year_end(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_CYEAR_PREV:
+        gnc_gdate_set_prev_year_end(date);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_FYEAR:
+        if (fy_end == NULL)
+        {
+            g_message("Request for fisal year value but no fiscal year end value provided.");
+            g_date_free(date);
+            return 0;
+        }
+        gnc_gdate_set_fiscal_year_end(date, fy_end);
+        break;
+
+    case GNC_ACCOUNTING_PERIOD_FYEAR_PREV:
+        if (fy_end == NULL)
+        {
+            g_message("Request for fisal year value but no fiscal year end value provided.");
+            g_date_free(date);
+            return 0;
+        }
+        gnc_gdate_set_prev_fiscal_year_end(date, fy_end);
+        break;
+    }
+
+    return date;
 }
 
 time_t
 gnc_accounting_period_end_timet (GncAccountingPeriod which,
-				 const GDate *fy_end,
-				 const GDate *contains)
+                                 const GDate *fy_end,
+                                 const GDate *contains)
 {
-  GDate *date;
-  time_t secs;
+    GDate *date;
+    time_t secs;
 
-  date = gnc_accounting_period_end_gdate(which, fy_end, contains);
-  if (!date)
-    return 0;
+    date = gnc_accounting_period_end_gdate(which, fy_end, contains);
+    if (!date)
+        return 0;
 
-  secs = gnc_timet_get_day_end_gdate(date);
-  g_date_free(date);
-  return secs ;
+    secs = gnc_timet_get_day_end_gdate(date);
+    g_date_free(date);
+    return secs ;
 }
 
 

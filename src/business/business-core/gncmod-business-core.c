@@ -29,18 +29,7 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-
-#include "gncAddressP.h"
-#include "gncBillTermP.h"
-#include "gncCustomerP.h"
-#include "gncEmployeeP.h"
-#include "gncEntryP.h"
-#include "gncInvoiceP.h"
-#include "gncJobP.h"
-#include "gncOrderP.h"
-#include "gncOwnerP.h"
-#include "gncTaxTableP.h"
-#include "gncVendorP.h"
+#include "gncBusiness.h"
 
 GNC_MODULE_API_DECL(libgncmod_business_core)
 
@@ -58,47 +47,38 @@ int libgncmod_business_core_gnc_module_age      = 0;
 char *
 libgncmod_business_core_gnc_module_path(void)
 {
-  return g_strdup("gnucash/business-core");
+    return g_strdup("gnucash/business-core");
 }
 
 char *
 libgncmod_business_core_gnc_module_description(void)
 {
-  return g_strdup("The GnuCash business core");
+    return g_strdup("The GnuCash business core");
 }
 
 int
 libgncmod_business_core_gnc_module_init(int refcount)
 {
-  /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
-    return FALSE;
-  }
+    /* load the engine (we depend on it) */
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
 
-  if(refcount == 0)
-  {
-    /* initialize known types */
-    gncInvoiceRegister ();
-    gncJobRegister ();
-    gncBillTermRegister ();
-    gncCustomerRegister ();
-    gncAddressRegister ();
-    gncEmployeeRegister ();
-    gncEntryRegister ();
-    gncOrderRegister ();
-    gncOwnerRegister ();
-    gncTaxTableRegister ();
-    gncVendorRegister ();
-  }
+    if (refcount == 0)
+    {
+        /* Object initialization already finished in the engine. */
+    }
 
-  scm_init_sw_business_core_module();
-  scm_c_eval_string("(use-modules (sw_business_core))");
-  scm_c_eval_string("(use-modules (gnucash business-core))");
+    scm_init_sw_business_core_module();
+    scm_c_eval_string("(use-modules (sw_business_core))");
+    scm_c_eval_string("(use-modules (gnucash business-core))");
 
-  return TRUE;
+    return TRUE;
 }
 
 int
-libgncmod_business_core_gnc_module_end(int refcount) {
-  return TRUE;
+libgncmod_business_core_gnc_module_end(int refcount)
+{
+    return TRUE;
 }

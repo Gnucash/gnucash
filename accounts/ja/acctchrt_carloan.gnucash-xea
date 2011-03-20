@@ -7,7 +7,7 @@
       自動車ローンと関連利子用の勘定科目
     </gnc-act:short-description>
     <gnc-act:long-description>
-    自動車ローンを持っている場合はこの勘定科目セットを選ぶとよいでしょう。
+    自動車ローンがある場合はこの勘定科目集を選ぶとよいでしょう。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>

@@ -2,6 +2,9 @@
 ;;
 ;; This file was copied from the file txf.scm by  Richard -Gilligan- Uschold
 ;;
+;; In part English text with German text replaced and completed
+;; for GnuCash Vers. 2.4.0 in Dezember 2010 by FJSW - Franz Stoll
+;;
 ;; Originally, these were meant to print Tax related accounts and
 ;; exports TXF files for import to TaxCut, TurboTax, etc.  for the US
 ;; tax TXF format. I modified this heavily so that it might become
@@ -38,7 +41,7 @@
 ;;
 ;; NOTE: setting of specific dates is squirly! and seems to be
 ;; current-date dependant!  Actually, time of day dependant!  Just
-;; after midnight gives diffenent dates than just before!  Referencing
+;; after midnight gives different dates than just before!  Referencing
 ;; all times to noon seems to fix this.  Subtracting 1 year sometimes
 ;; subtracts 2!  see "(to-value"
 
@@ -47,8 +50,7 @@
 (define-module (gnucash report taxtxf-de_DE))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
-(use-modules (ice-9 slib))
-(require 'printf)
+(use-modules (gnucash printf))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/tax/de_DE" 0)
@@ -206,7 +208,7 @@
   (gnc:txf-get-format (if income?
                           txf-income-categories
                           txf-expense-categories)
-                      code))
+                      code ""))
 
 (define (gnc:account-get-txf-payer-source account)
   (let ((pns (xaccAccountGetTaxUSPayerNameSource account)))
@@ -233,11 +235,11 @@
                              (let* ((acc (cadr x))
                                     (txf (gnc:account-get-txf acc)))
                                (cons (string-append 
-                                      "Code \"" 
+                                      "Kennzahl \"" 
                                       (symbol->string
                                        (gnc:account-get-txf-code acc))
-                                      "\" has duplicates in "
-                                      (number->string cnt) " accounts:")
+                                      "\" hat Duplikate in "
+                                      (number->string cnt) " Konten:")
                                      (map gnc-account-get-full-name
                                           (cdr x))))
                              '())))
@@ -341,9 +343,9 @@
                            "Aufwendungen"))
                (category-key (if (eq? type ACCT-TYPE-INCOME)
                                  (gnc:txf-get-category-key 
-                                  txf-income-categories code)
+                                  txf-income-categories code "")
                                  (gnc:txf-get-category-key
-                                  txf-expense-categories code)))
+                                  txf-expense-categories code "")))
                (value-name (if (equal? "ReinvD" action)
                                (string-append 
                                 (substring value 1 (string-length value))
@@ -749,7 +751,7 @@
                                        (cons (current-time) 0))))))
 	  (tax-nr (or 
 		   (kvp-frame-get-slot-path-gslist
-		    (gnc-book-get-slots (gnc-get-current-book))
+		    (qof-book-get-slots (gnc-get-current-book))
 		    (append gnc:*kvp-option-path*
 			    (list gnc:*tax-label* gnc:*tax-nr-label*)))
 		   ""))
@@ -833,7 +835,10 @@
                    (gnc:html-markup
                     "blue"
                     (gnc:html-markup-p
-                     (_ "Blue items are exportable to a German Tax XML file. Press Export to actually export them."))))))
+                     "Blaue Posten können in eine XML-Datei und diese mit der Software \"Winston\" zu ELSTER exportiert werden.<br>
+Diese XML-Datei enthält dann die geschlüsselten USt-Kennzahlen und zu diesen die summierten Werte für den ELSTER-Export.<br>
+Bei Umsätzen werden nur voll Beträge ausgewiesen, bei Steuerkennzahlen auch die Dezimalstellen, aber ohne Komma.<br>
+Klicken Sie auf »Exportieren« , um den Export durchzuführen.")))))
             
             (txf-print-dups doc)
             
@@ -848,8 +853,8 @@
                  doc
                  (gnc:make-html-text
                   (gnc:html-markup-p
-                   (_ "No Tax Related accounts were found.  Go to the\
- Edit->Tax Options dialog to set up tax-related accounts.")))))
+         "Keine Steuer-relevanten Konten gefunden.<br>
+Gehen Sie zu Bearbeiten -> Optionen Steuerbericht, um Konten entsprechend einzurichten."))))
 
 	    (gnc:report-finished)
             doc)))))

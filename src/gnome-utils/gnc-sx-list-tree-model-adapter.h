@@ -1,10 +1,10 @@
-/* 
+/*
  * gnc-sx-list-tree-model-adapter.h
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
+ * modify it under the terms of version 2 and/or version 3 of the GNU General Public
  * License as published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
@@ -42,7 +42,8 @@ typedef struct _GncSxListTreeModelAdapter GncSxListTreeModelAdapter;
 typedef struct _GncSxListTreeModelAdapterClass GncSxListTreeModelAdapterClass;
 
 // model columns
-enum {
+enum
+{
     SXLTMA_COL_NAME = 0,
     SXLTMA_COL_ENABLED,
     SXLTMA_COL_FREQUENCY,

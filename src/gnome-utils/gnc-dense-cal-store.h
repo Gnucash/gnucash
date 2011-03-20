@@ -4,7 +4,7 @@
  * Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>
  *
  * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
+ * under the terms of version 2 and/or version 3 of the GNU General Public License as
  * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
@@ -37,7 +37,7 @@ G_BEGIN_DECLS
 #define GNC_IS_DENSE_CAL_STORE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_DENSE_CAL_STORE))
 #define GNC_IS_DENSE_CAL_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_DENSE_CAL_STORE))
 #define GNC_DENSE_CAL_STORE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_DENSE_CAL_STORE, GncDenseCalStore))
-  
+
 typedef enum { NEVER_END, END_ON_DATE, END_AFTER_N_OCCS, BAD_END } gdcs_end_type;
 
 typedef struct _GncDenseCalStore GncDenseCalStore;

@@ -1,11 +1,9 @@
 <ui>
   <menubar>
-    <menu name="File" action="FileAction">
-      <menu name="FileNewMenu" action="FileNewMenuAction">
-        <placeholder name="FileNewMiddlePlaceholder">
-          <menuitem name="FileNewAccountTree" action="FileNewAccountTreeAction"/>
-        </placeholder>
-      </menu>
+    <menu name="View" action="ViewAction">
+      <placeholder name="ViewMiddlePlaceholder">
+        <menuitem name="ViewAccountTree" action="ViewAccountTreeAction"/>
+      </placeholder>
     </menu>
   </menubar>
 </ui>

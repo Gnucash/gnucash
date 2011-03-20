@@ -2,12 +2,20 @@ noinst_LTLIBRARIES = libc-missing.la
 
 # All header files must be listed.
 noinst_HEADERS = \
-  localtime_r.h setenv.h strptime.h pow.h
+  gmtime_r.h \
+  localtime_r.h \
+  setenv.h \
+  strptime.h \
+  pow.h
 
 # No sources should be listed.
 libc_missing_la_SOURCES = libc-missing-noop.c
 
-EXTRA_libc_missing_la_SOURCES = localtime_r.c setenv.c strptime.c
+EXTRA_libc_missing_la_SOURCES = \
+  gmtime_r.c \
+  localtime_r.c \
+  setenv.c \
+  strptime.c
 
 # This will automatically be filled in with the necessary object file
 # names.  Configure does this based upon the AC_REPLACE_FUNCS macros.

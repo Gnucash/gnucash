@@ -3,7 +3,7 @@
  * Copyright (C) 2001,2006 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of version 2 of the GNU General Public *
+ * modify it under the terms of version 2 and/or version 3 of the GNU General Public *
  * License as published by the Free Software Foundation.            *
  *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
@@ -36,7 +36,7 @@
 typedef struct _GncSxEditorDialog GncSxEditorDialog;
 
 GncSxEditorDialog* gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
-                                                                 gboolean newSX);
+        gboolean newSX);
 
 void gnc_ui_scheduled_xaction_editor_dialog_destroy(GncSxEditorDialog *sxd);
 

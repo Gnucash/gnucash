@@ -23,12 +23,12 @@
                  (if (not eof?)
                      (qif-io:write-record (car record) outport))))
              (lambda (key new-state)
-               (simple-format outport "!~A\n" new-state)))
+               (format outport "!~A\n" new-state)))
       (if (not eof?)
           (loop)))
     (close-output-port outport)
     (close-input-port inport)
-    (system (simple-format #f "diff -b -I \"\\^*\" ~A /tmp/test-reader.tmp"
+    (system (format #f "diff -b -I \"\\^*\" ~A /tmp/test-reader.tmp"
                            qiffile))))
 
 
@@ -57,12 +57,12 @@
                   (if ok?
                       (set! pass (+ 1 pass))
                       (begin 
-                        (simple-format #t "[fail] received ~S\n" result)
-                        (simple-format #t "       expected ~S\n" 
+                        (format #t "[fail] received ~S\n" result)
+                        (format #t "       expected ~S\n" 
                                        correct-result)
                         (set! fail (+ 1 fail))))
                   (loop (read)))))))
-      (simple-format #t "test ~A: pass=~S fail=~S\n" title pass fail)
+      (format #t "test ~A: pass=~S fail=~S\n" title pass fail)
       (= pass total)))
   
   (let ((all-pass #t))

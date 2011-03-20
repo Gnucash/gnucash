@@ -13,7 +13,7 @@
           Recently Opened Files menu. This value may be set to zero to
           disable the file history.  This number has a maximum value
           of 10.
-	</long>
+        </long>
       </locale>
     </schema>
 
@@ -27,7 +27,7 @@
         <short>Most recently opened file</short>
         <long>
           This field contains the full path of the most recently opened file.
-	</long>
+        </long>
       </locale>
     </schema>
 
@@ -50,7 +50,7 @@
         <short>Next most recently opened file</short>
         <long>
           This field contains the full path of the next most recently opened file.
-	</long>
+        </long>
       </locale>
     </schema>
 

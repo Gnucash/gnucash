@@ -43,7 +43,7 @@ const char * gnc_commodity_edit_get_string (gpointer ptr);
  * enum. This tells the dialog how to limit the namespaces provided.
  */
 gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
-					GtkWidget *toplevel);
+                                        GtkWidget *toplevel);
 
 #endif
 

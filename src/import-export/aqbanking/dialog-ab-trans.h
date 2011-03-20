@@ -48,7 +48,8 @@ G_BEGIN_DECLS
 typedef struct _GncABTransDialog GncABTransDialog;
 
 typedef enum _GncABTransType GncABTransType;
-enum _GncABTransType {
+enum _GncABTransType
+{
     SINGLE_TRANSFER = 0,
     SINGLE_DEBITNOTE,
     SINGLE_INTERNAL_TRANSFER
@@ -67,9 +68,9 @@ enum _GncABTransType {
  * @return FIXME
  */
 GncABTransDialog *gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
-                                          gint commodity_scu,
-                                          GncABTransType trans_type,
-                                          GList *templates);
+        gint commodity_scu,
+        GncABTransType trans_type,
+        GList *templates);
 
 /**
  * FIXME

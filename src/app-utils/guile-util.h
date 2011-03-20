@@ -27,7 +27,6 @@
 #include <glib.h>
 #include <libguile.h>
 
-#include "gnc-book.h"
 #include "qof.h"
 #include "Account.h"
 
@@ -41,6 +40,11 @@ SCM    gnc_guile_call1_to_procedure(SCM func, SCM arg);
 SCM    gnc_guile_call1_to_list(SCM func, SCM arg);
 SCM    gnc_guile_list_ref(SCM list, int index);
 SCM    gnc_guile_call1_to_vector(SCM func, SCM arg);
+
+/** Wrapper around scm_to_locale_string() that returns a newly
+ * allocated string (even for guile-1.6 version). The caller must
+ * g_free() the returned string later. */
+gchar * gnc_scm_to_locale_string(SCM scm_string);
 
 /* Don't use this to get hold of symbols that are considered private
  * to a given module unless the C code you're writing is considered
@@ -72,11 +76,11 @@ SCM    gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics);
 void   gnc_copy_trans_scm_onto_trans(SCM trans_scm, Transaction *trans,
                                      gboolean do_commit, QofBook *book);
 void   gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
-                                                   Transaction *trans,
-                                                   const GUID *guid_1,
-                                                   const GUID *guid_2,
-                                                   gboolean do_commit,
-                                                   QofBook *book);
+        Transaction *trans,
+        const GncGUID *guid_1,
+        const GncGUID *guid_2,
+        gboolean do_commit,
+        QofBook *book);
 
 void   gnc_trans_scm_set_date(SCM trans_scm, Timespec *ts);
 void   gnc_trans_scm_set_num(SCM trans_scm, const char *num);

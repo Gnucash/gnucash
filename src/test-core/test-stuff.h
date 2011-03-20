@@ -57,16 +57,16 @@ Otherwise, only failures are printed out.
  * wish, but it's easier to use the do_test macro above.
  */
 gboolean do_test_call(
-		gboolean result,
-		const char* test_title,
-		const char* filename,
-		int line );
+    gboolean result,
+    const char* test_title,
+    const char* filename,
+    int line );
 gboolean do_test_args(
-		gboolean result,
-		const char* test_title,
-		const char* filename,
-		int line,
-		const char* format, ... );
+    gboolean result,
+    const char* test_title,
+    const char* filename,
+    int line,
+    const char* format, ... );
 
 
 /**
@@ -93,28 +93,28 @@ int get_rv(void);
  * a test into different forks of the code.
  */
 void success_call(
-		const char *test_title,
-		const char *file,
-		int line );
+    const char *test_title,
+    const char *file,
+    int line );
 
 void success_args(
-		const char *test_title,
-		const char *file,
-		int line,
-		const char *format,
-		... );
+    const char *test_title,
+    const char *file,
+    int line,
+    const char *format,
+    ... );
 
 void failure_call(
-		const char *test_title,
-		const char *file,
-		int line);
+    const char *test_title,
+    const char *file,
+    int line);
 
 void failure_args(
-		const char *test_title,
-		const char *file,
-		int line,
-		const char *format,
-		... );
+    const char *test_title,
+    const char *file,
+    int line,
+    const char *format,
+    ... );
 
 gboolean get_random_boolean(void);
 gint get_random_int_in_range(int start, int end);

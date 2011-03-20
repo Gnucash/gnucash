@@ -1,10 +1,10 @@
-/* 
+/*
  * gnc-sx-list-tree-model-adapter.c
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
+ * modify it under the terms of version 2 and/or version 3 of the GNU General Public
  * License as published by the Free Software Foundation.
  *
  * As a special exception, permission is granted to link the binary module
@@ -32,6 +32,7 @@
 
 #include "config.h"
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <glib-object.h>
 #include "gnc-sx-instance-model.h"
 #include "gnc-sx-list-tree-model-adapter.h"
@@ -68,8 +69,10 @@ GType
 gnc_sx_list_tree_model_adapter_get_type(void)
 {
     static GType type = 0;
-    if (type == 0) {
-        static const GTypeInfo info = {
+    if (type == 0)
+    {
+        static const GTypeInfo info =
+        {
             sizeof (GncSxListTreeModelAdapterClass),
             NULL,   /* base_init */
             NULL,   /* base_finalize */
@@ -80,12 +83,14 @@ gnc_sx_list_tree_model_adapter_get_type(void)
             0,      /* n_preallocs */
             (GInstanceInitFunc)gnc_sx_list_tree_model_adapter_init    /* instance_init */
         };
-        static const GInterfaceInfo itree_model_info = {
+        static const GInterfaceInfo itree_model_info =
+        {
             (GInterfaceInitFunc) gsltma_tree_model_interface_init,    /* interface_init */
             NULL,               /* interface_finalize */
             NULL                /* interface_data */
         };
-        static const GInterfaceInfo itree_sortable_info = {
+        static const GInterfaceInfo itree_sortable_info =
+        {
             (GInterfaceInitFunc) gsltma_tree_sortable_interface_init,    /* interface_init */
             NULL,               /* interface_finalize */
             NULL                /* interface_data */
@@ -244,8 +249,8 @@ gsltma_get_sort_column_id(GtkTreeSortable        *sortable,
                           GtkSortType            *order)
 {
     return gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real),
-                                                sort_column_id,
-                                                order);
+            sort_column_id,
+            order);
 }
 
 static void
@@ -265,7 +270,7 @@ gsltma_set_sort_func(GtkTreeSortable        *sortable,
                      gpointer                data,
                      GtkDestroyNotify        destroy)
 {
-    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real), 
+    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real),
                                     sort_column_id,
                                     func,
                                     data,
@@ -387,7 +392,7 @@ _freq_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer u
 
     a_inst = gsltma_get_sx_instances_from_orig_iter(adapter, a);
     b_inst = gsltma_get_sx_instances_from_orig_iter(adapter, b);
-     
+
     if (a_inst == NULL && b_inst == NULL) return 0;
     if (a_inst == NULL) return 1;
     if (b_inst == NULL) return -1;
@@ -396,7 +401,7 @@ _freq_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer u
 }
 
 static gint
-_safe_invalidable_date_compare(GDate *a, GDate *b)
+_safe_invalidable_date_compare(const GDate *a, const GDate *b)
 {
     if (!g_date_valid(a) && !g_date_valid(b))
     {
@@ -478,11 +483,11 @@ gnc_sx_list_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
 }
 
 static void
-_format_conditional_date(GDate *date, char *date_buf, int buf_max_length)
+_format_conditional_date(const GDate *date, char *date_buf, int buf_max_length)
 {
     if (date == NULL || !g_date_valid(date))
     {
-        g_stpcpy(date_buf, "never");
+        g_stpcpy(date_buf, _("never"));
     }
     else
     {
@@ -591,8 +596,8 @@ gnc_sx_list_tree_model_adapter_get_sx_instances(GncSxListTreeModelAdapter *model
 {
     GtkTreeIter translated_iter;
     gtk_tree_model_sort_convert_iter_to_child_iter(model->real,
-                                                   &translated_iter,
-                                                   sort_iter);
+            &translated_iter,
+            sort_iter);
     return gsltma_get_sx_instances_from_orig_iter(model, &translated_iter);
 }
 

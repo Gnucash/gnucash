@@ -7,7 +7,7 @@
       賃貸住宅にかかる費用
     </gnc-act:short-description>
     <gnc-act:long-description>
-    住居やアパートを賃貸している場合は（家賃、賃貸保険）この勘定科目集合を選ぶといいでしょう。
+    賃貸住居やアパートを利用している場合は（家賃、賃貸保険）この勘定科目集を選ぶといいでしょう。
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>

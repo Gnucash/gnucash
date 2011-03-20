@@ -33,7 +33,6 @@
 #define GNC_GENERAL_SEARCH_H
 
 #include "dialog-search.h"
-#include "gnc-book.h"
 
 #define GNC_TYPE_GENERAL_SEARCH \
 	(gnc_general_search_get_type ())
@@ -54,33 +53,37 @@
  */
 typedef GNCSearchWindow *(*GNCSearchCB) (gpointer start, gpointer user_data);
 
-typedef struct {
-  GtkHBox hbox;
+typedef struct
+{
+    GtkHBox hbox;
 
-  GtkWidget *	entry;  /* display of selection name */
-  GtkWidget *	button; /* button for popping up search window */
+    GtkWidget *	entry;  /* display of selection name */
+    GtkWidget *	button; /* button for popping up search window */
 
-  gpointer	selected_item;
+    gpointer	selected_item;
 
-  gboolean		allow_clear;
+    gboolean		allow_clear;
 } GNCGeneralSearch;
 
-typedef struct {
-  GtkHBoxClass parent_class;
+typedef struct
+{
+    GtkHBoxClass parent_class;
 
-  void 		(*changed) (GNCGeneralSearch *edit);
+    void 		(*changed) (GNCGeneralSearch *edit);
 } GNCGeneralSearchClass;
 
 
-GtkWidget *gnc_general_search_new            (GNCIdTypeConst type,
-					      const char *label,
-					      GNCSearchCB search_cb,
-					      gpointer user_data);
+GtkWidget *gnc_general_search_new            (QofIdTypeConst type,
+        const char *label,
+        gboolean text_editable,
+        GNCSearchCB search_cb,
+        gpointer user_data,
+        QofBook *book);
 
 void	   gnc_general_search_allow_clear    (GNCGeneralSearch *gsl,
-					      gboolean allow_clear);
+        gboolean allow_clear);
 void       gnc_general_search_set_selected   (GNCGeneralSearch *gsl,
-					      gpointer searched);
+        gpointer searched);
 gpointer   gnc_general_search_get_selected   (GNCGeneralSearch *gsl);
 
 GType      gnc_general_search_get_type       (void);

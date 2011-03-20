@@ -125,9 +125,9 @@ test_commodity(void)
         do_test(
             gnc_commodity_equiv(com, com2), "commodity equiv");
 
-	qof_book_destroy (book);
+        qof_book_destroy (book);
     }
-    
+
     {
         int i, j, num_total = 0;
         gnc_commodity_table *tbl;
@@ -140,13 +140,13 @@ test_commodity(void)
         do_test(gnc_commodity_table_get_size(tbl) == 0,
                 "test size for 0 table");
 
-        for(i = 0; i < 20; i++)
+        for (i = 0; i < 20; i++)
         {
             coms[i] = get_random_commodity(book);
 
             if (!gnc_commodity_table_lookup(
-                tbl, gnc_commodity_get_namespace(coms[i]),
-                gnc_commodity_get_mnemonic(coms[i])))
+                        tbl, gnc_commodity_get_namespace(coms[i]),
+                        gnc_commodity_get_mnemonic(coms[i])))
                 num_total++;
             do_test(
                 gnc_commodity_table_insert(tbl, coms[i]) != NULL,
@@ -158,14 +158,14 @@ test_commodity(void)
                 "should be %d and is %d", num_total,
                 gnc_commodity_table_get_size(tbl));
 
-            for(j = 0; j <= i; j++)
+            for (j = 0; j <= i; j++)
             {
                 gnc_commodity *testcom;
 
                 do_test(
                     (testcom = gnc_commodity_table_lookup(
-                        tbl, gnc_commodity_get_namespace(coms[j]),
-                        gnc_commodity_get_mnemonic(coms[j]))) != NULL,
+                                   tbl, gnc_commodity_get_namespace(coms[j]),
+                                   gnc_commodity_get_mnemonic(coms[j]))) != NULL,
                     "lookup commodity");
                 do_test(
                     gnc_commodity_equiv(testcom, coms[j]),
@@ -178,7 +178,7 @@ test_commodity(void)
                 "test have namespace");
         }
     }
-    
+
 }
 
 int

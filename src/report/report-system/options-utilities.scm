@@ -80,7 +80,7 @@
 	  (list->vector
 	   (list 4 "4" (N_ "Fourth-level")))
 	  (list->vector
-	   (list 5 "5" (N_ "Fourth-level")))
+	   (list 5 "5" (N_ "Fifth-level")))
 	  (list->vector
 	   (list 6 "6" (N_ "Sixth-level")))))))
 

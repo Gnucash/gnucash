@@ -43,17 +43,17 @@ typedef void (*GNCOptionCallback) (GtkWidget *, gint index,
 typedef struct _GNCOptionInfo GNCOptionInfo;
 struct _GNCOptionInfo
 {
-  char *name;
-  char *tip;
-  GNCOptionCallback callback;
-  gpointer user_data;
+    char *name;
+    char *tip;
+    GNCOptionCallback callback;
+    gpointer user_data;
 };
 
 
 /**** PROTOTYPES *************************************************/
 
 GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
-				   gint num_options);
+                                   gint num_options);
 
 
 GtkToolbarStyle gnc_get_toolbar_style (void);
@@ -86,8 +86,8 @@ void gnc_save_window_size (const char *section, GtkWindow *window);
 
 void gnc_option_menu_init (GtkWidget * option_menu);
 void gnc_option_menu_init_w_signal(GtkWidget * w,
-				   GCallback f,
-				   gpointer cb_data);
+                                   GCallback f,
+                                   gpointer cb_data);
 int  gnc_option_menu_get_active (GtkWidget * option_menu);
 
 /********************************************************************\
@@ -114,19 +114,19 @@ gboolean gnc_handle_date_accelerator (GdkEventKey *event,
  * after you have built the list. This only applies to unrealized
  * widgets. */
 #ifdef __GTK_CLIST_H__
-void gnc_clist_set_check (GtkCList *list, int row, int col, 
-			  gboolean checked);
+void gnc_clist_set_check (GtkCList *list, int row, int col,
+                          gboolean checked);
 #endif
 
 GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
 GtkWidget * gnc_glade_lookup_widget (GtkWidget *widget, const char *name);
 void gnc_glade_autoconnect_full_func(const gchar *handler_name,
-				     GObject *signal_object,
-				     const gchar *signal_name,
-				     const gchar *signal_data,
-				     GObject *connect_object,
-				     gboolean after,
-				     gpointer user_data);
+                                     GObject *signal_object,
+                                     const gchar *signal_name,
+                                     const gchar *signal_data,
+                                     GObject *connect_object,
+                                     gboolean after,
+                                     gpointer user_data);
 
 /** This function generates a button with icon and adds it to a
  *  GtkDialog.  This is similar to just adding a stock button to the
@@ -136,15 +136,15 @@ void gnc_glade_autoconnect_full_func(const gchar *handler_name,
  *  @param dialog The dialog where the button should be added.
  *
  *  @param label The text of the button.
- * 
+ *
  *  @param stock_id The name of the stock button to use.
  *
  *  @param response The response id to return if this button is
  *  clicked.*/
 void gnc_gtk_dialog_add_button (GtkWidget *dialog,
-				const gchar *label,
-				const gchar *stock_id,
-				guint response);
+                                const gchar *label,
+                                const gchar *stock_id,
+                                guint response);
 
 
 /** Note: This dialog is modal!  (It calls gtk_dialog_run() which is modal.)

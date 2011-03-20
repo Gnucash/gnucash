@@ -43,39 +43,42 @@ int libgncmod_business_utils_gnc_module_age      = 0;
 char *
 libgncmod_business_utils_gnc_module_path(void)
 {
-  return g_strdup("gnucash/business-utils");
+    return g_strdup("gnucash/business-utils");
 }
 
 char *
 libgncmod_business_utils_gnc_module_description(void)
 {
-  return g_strdup("The GnuCash business utilities module");
+    return g_strdup("The GnuCash business utilities module");
 }
 
 int
 libgncmod_business_utils_gnc_module_init(int refcount)
 {
-  /* load the business-core (we depend on it) */
-  if (!gnc_module_load("gnucash/business-core", 0)) {
-    return FALSE;
-  }
+    /* load the business-core (we depend on it) */
+    if (!gnc_module_load("gnucash/business-core", 0))
+    {
+        return FALSE;
+    }
 
-  /* Load the application utils.. */
-  if (!gnc_module_load("gnucash/app-utils", 0)) {
-    return FALSE;
-  }
+    /* Load the application utils.. */
+    if (!gnc_module_load("gnucash/app-utils", 0))
+    {
+        return FALSE;
+    }
 
-  if(refcount == 0)
-  {
-    /* initialize known types */
-  }
+    if (refcount == 0)
+    {
+        /* initialize known types */
+    }
 
-  scm_c_eval_string("(use-modules (gnucash business-utils))");
+    scm_c_eval_string("(use-modules (gnucash business-utils))");
 
-  return TRUE;
+    return TRUE;
 }
 
 int
-libgncmod_business_utils_gnc_module_end(int refcount) {
-  return TRUE;
+libgncmod_business_utils_gnc_module_end(int refcount)
+{
+    return TRUE;
 }

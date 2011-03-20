@@ -31,8 +31,6 @@
 #include "gnc-commodity.h"
 #include "qof.h"
 #include "GNCId.h"
-#include "gnc-ui-common.h"
-
 
 typedef struct gnc_option GNCOption;
 typedef struct gnc_option_section GNCOptionSection;
@@ -52,8 +50,15 @@ typedef void (*GNCOptionChangeCallback) (gpointer user_data);
 gboolean gnc_option_get_changed (GNCOption *option);
 void gnc_option_set_changed (GNCOption *option, gboolean changed);
 
-gncUIWidget gnc_option_get_widget (GNCOption *option);
-void gnc_option_set_widget (GNCOption *option, gncUIWidget widget);
+/** Returns an opaque pointer to the widget of this option. The actual
+ * GUI implementation in dialog-options.c will store a GtkWidget* in
+ * here. */
+gpointer gnc_option_get_widget (GNCOption *option);
+
+/** Store an opaque pointer to the widget of this option. The actual
+ * GUI implementation in dialog-options.c will store a GtkWidget* in
+ * here. */
+void gnc_option_set_widget (GNCOption *option, gpointer widget);
 
 SCM  gnc_option_get_ui_value(GNCOption *option);
 void gnc_option_set_ui_value(GNCOption *option, gboolean use_default);
@@ -79,13 +84,13 @@ void gnc_option_db_set_ui_callbacks (GNCOptionDB *odb,
                                      GNCOptionSetSelectable set_selectable);
 
 SCM gnc_option_db_register_change_callback(GNCOptionDB *odb,
-                                           GNCOptionChangeCallback callback,
-                                           gpointer data,
-                                           const char *section,
-                                           const char *name);
+        GNCOptionChangeCallback callback,
+        gpointer data,
+        const char *section,
+        const char *name);
 
 void gnc_option_db_unregister_change_callback_id(GNCOptionDB *odb,
-                                                 SCM callback_id);
+        SCM callback_id);
 
 char * gnc_option_section(GNCOption *option);
 char * gnc_option_name(GNCOption *option);
@@ -140,11 +145,11 @@ GNCOptionSection * gnc_option_db_get_section(GNCOptionDB *odb, gint i);
 GNCOption * gnc_get_option_section_option(GNCOptionSection *section, int i);
 
 GNCOption * gnc_option_db_get_option_by_name(GNCOptionDB *odb,
-                                             const char *section_name,
-                                             const char *name);
+        const char *section_name,
+        const char *name);
 
 GNCOption * gnc_option_db_get_option_by_SCM(GNCOptionDB *odb,
-                                            SCM guile_option);
+        SCM guile_option);
 
 gboolean gnc_option_db_dirty(GNCOptionDB *odb);
 void     gnc_option_db_clean(GNCOptionDB *odb);
@@ -160,14 +165,14 @@ SCM gnc_option_db_lookup_option(GNCOptionDB *odb,
                                 SCM default_value);
 
 gboolean gnc_option_db_lookup_boolean_option(GNCOptionDB *odb,
-                                             const char *section,
-                                             const char *name,
-                                             gboolean default_value);
+        const char *section,
+        const char *name,
+        gboolean default_value);
 
 char * gnc_option_db_lookup_string_option(GNCOptionDB *odb,
-                                          const char *section,
-                                          const char *name,
-                                          const char *default_value);
+        const char *section,
+        const char *name,
+        const char *default_value);
 
 char * gnc_option_db_lookup_font_option(GNCOptionDB *odb,
                                         const char *section,
@@ -175,40 +180,40 @@ char * gnc_option_db_lookup_font_option(GNCOptionDB *odb,
                                         const char *default_value);
 
 char * gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
-                                               const char *section,
-                                               const char *name,
-                                               const char *default_value);
+        const char *section,
+        const char *name,
+        const char *default_value);
 
 time_t gnc_option_db_lookup_date_option(GNCOptionDB *odb,
-					const char *section,
-					const char *name,
-					gboolean *is_relative,
-					Timespec *set_ab_value,
-					char **set_rel_value, 
-					Timespec *default_value);
+                                        const char *section,
+                                        const char *name,
+                                        gboolean *is_relative,
+                                        Timespec *set_ab_value,
+                                        char **set_rel_value,
+                                        Timespec *default_value);
 
 gdouble gnc_option_db_lookup_number_option(GNCOptionDB *odb,
-                                           const char *section,
-                                           const char *name,
-                                           gdouble default_value);
+        const char *section,
+        const char *name,
+        gdouble default_value);
 
 gboolean gnc_option_db_lookup_color_option(GNCOptionDB *odb,
-                                           const char *section,
-                                           const char *name,
-                                           gdouble *red,
-                                           gdouble *green,
-                                           gdouble *blue,
-                                           gdouble *alpha);
+        const char *section,
+        const char *name,
+        gdouble *red,
+        gdouble *green,
+        gdouble *blue,
+        gdouble *alpha);
 
 guint32 gnc_option_db_lookup_color_option_argb(GNCOptionDB *odb,
-                                               const char *section,
-                                               const char *name,
-                                               guint32 default_value);
+        const char *section,
+        const char *name,
+        guint32 default_value);
 
 GSList * gnc_option_db_lookup_list_option(GNCOptionDB *odb,
-                                          const char *section,
-                                          const char *name,
-                                          GSList *default_value);
+        const char *section,
+        const char *name,
+        GSList *default_value);
 
 void gnc_free_list_option_value(GSList *list);
 
@@ -228,19 +233,19 @@ gboolean gnc_option_db_set_option(GNCOptionDB *odb,
                                   SCM value);
 
 gboolean gnc_option_db_set_number_option(GNCOptionDB *odb,
-                                         const char *section,
-                                         const char *name,
-                                         gdouble value);
+        const char *section,
+        const char *name,
+        gdouble value);
 
 gboolean gnc_option_db_set_boolean_option(GNCOptionDB *odb,
-                                          const char *section,
-                                          const char *name,
-                                          gboolean value);
+        const char *section,
+        const char *name,
+        gboolean value);
 
 gboolean gnc_option_db_set_string_option(GNCOptionDB *odb,
-                                          const char *section,
-                                          const char *name,
-                                          const char *value);
+        const char *section,
+        const char *name,
+        const char *value);
 
 char * gnc_option_date_option_get_subtype(GNCOption *option);
 
@@ -249,15 +254,15 @@ Timespec gnc_date_option_value_get_absolute (SCM option_value);
 SCM gnc_date_option_value_get_relative (SCM option_value);
 
 void gnc_option_db_set_option_selectable_by_name(SCM guile_options,
-                                                 const char *section, 
-                                                 const char *name,
-                                                 gboolean selectable);
+        const char *section,
+        const char *name,
+        gboolean selectable);
 
 gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
-					   GNCDateMonthFormat *months,
-					   gboolean *years, char **custom);
+        GNCDateMonthFormat *months,
+        gboolean *years, char **custom);
 SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat months,
-				    gboolean years, const char *custom);
+                                    gboolean years, const char *custom);
 
 
 void gnc_option_db_register_option(GNCOptionDBHandle handle,

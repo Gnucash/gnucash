@@ -7,22 +7,22 @@ AM_CPPFLAGS = \
 LDADD = -L../.. -L../../.libs
 
 PWD := $(shell pwd)
-check_LTLIBRARIES=libfuturemodsys.la libincompatdep.la libagedver.la
+check_LTLIBRARIES=libgncmod_futuremodsys.la libgncmod_incompatdep.la libgncmod_agedver.la
 
-libfuturemodsys_la_SOURCES=futuremodsys.c
-libfuturemodsys_la_LDFLAGS=-rpath ${PWD} -avoid-version
-libfuturemodsys_la_LIBADD = \
+libgncmod_futuremodsys_la_SOURCES=futuremodsys.c
+libgncmod_futuremodsys_la_LDFLAGS=-rpath ${PWD} -avoid-version
+libgncmod_futuremodsys_la_LIBADD = \
   $(GLIB_LIBS)
 
-libincompatdep_la_SOURCES=incompatdep.c
-libincompatdep_la_LDFLAGS=--rpath ${PWD} -avoid-version
-libincompatdep_la_LIBADD = \
+libgncmod_incompatdep_la_SOURCES=incompatdep.c
+libgncmod_incompatdep_la_LDFLAGS=--rpath ${PWD} -avoid-version
+libgncmod_incompatdep_la_LIBADD = \
   ../../libgnc-module.la \
   $(GLIB_LIBS)
 
-libagedver_la_SOURCES=agedver.c
-libagedver_la_LDFLAGS=-rpath ${PWD} -avoid-version
-libagedver_la_LIBADD = \
+libgncmod_agedver_la_SOURCES=agedver.c
+libgncmod_agedver_la_LDFLAGS=-rpath ${PWD} -avoid-version
+libgncmod_agedver_la_LIBADD = \
   $(GLIB_LIBS)
 
 CLEANFILES = *.so* *.a

@@ -24,33 +24,33 @@
 #ifndef GNC_ENTRY_LEDGER_H
 #define GNC_ENTRY_LEDGER_H
 
-#include "QueryNew.h"
+#include "qof.h"
 #include "gncEntry.h"
 #include "gncOrder.h"
-#include "gnc-book.h"
 #include "table-allgui.h"
 
-typedef enum {
-  GNCENTRY_ORDER_ENTRY,
-  GNCENTRY_ORDER_VIEWER,
-  GNCENTRY_INVOICE_ENTRY,
-  GNCENTRY_INVOICE_VIEWER,
-  GNCENTRY_BILL_ENTRY,
-  GNCENTRY_BILL_VIEWER,
-  GNCENTRY_EXPVOUCHER_ENTRY,
-  GNCENTRY_EXPVOUCHER_VIEWER,
-  GNCENTRY_NUM_REGISTER_TYPES
+typedef enum
+{
+    GNCENTRY_ORDER_ENTRY,
+    GNCENTRY_ORDER_VIEWER,
+    GNCENTRY_INVOICE_ENTRY,
+    GNCENTRY_INVOICE_VIEWER,
+    GNCENTRY_BILL_ENTRY,
+    GNCENTRY_BILL_VIEWER,
+    GNCENTRY_EXPVOUCHER_ENTRY,
+    GNCENTRY_EXPVOUCHER_VIEWER,
+    GNCENTRY_NUM_REGISTER_TYPES
 } GncEntryLedgerType;
 
 typedef struct entry_ledger_colors
 {
-  guint32 header_bg_color;
+    guint32 header_bg_color;
 
-  guint32 primary_bg_color;
-  guint32 secondary_bg_color;
+    guint32 primary_bg_color;
+    guint32 secondary_bg_color;
 
-  guint32 primary_active_bg_color;
-  guint32 secondary_active_bg_color;
+    guint32 primary_active_bg_color;
+    guint32 secondary_active_bg_color;
 } GncEntryLedgerColors;
 
 #define ENTRY_IACCT_CELL	"inv-account"
@@ -79,15 +79,15 @@ typedef struct GncEntryLedger_s GncEntryLedger;
 /** Prototypes ***************************************************/
 
 /* Create and return a new GncEntry Ledger */
-GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type);
+GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type);
 
 /* Set the default order for this ledger */
 void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
-					 GncOrder *order);
+        GncOrder *order);
 
 /* Set the default invoice for this ledger */
 void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
-					   GncInvoice *invoice);
+        GncInvoice *invoice);
 
 /* Destroy the GncEntry Ledger */
 void gnc_entry_ledger_destroy (GncEntryLedger *ledger);
@@ -103,7 +103,7 @@ void gnc_entry_ledger_display_refresh (GncEntryLedger *ledger);
 /* Get the Table */
 Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger);
 
-void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent);
+void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, GtkWidget *parent);
 
 void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly);
 
@@ -119,16 +119,36 @@ gboolean gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger
 
 void gnc_entry_ledger_reset_query (GncEntryLedger *ledger);
 
+/** Returns the GncEntry at the given location, or NULL if the
+ * location is not valid. */
+GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,
+                                       VirtualCellLocation vcell_loc);
+
+/** Returns the GncEntry that represents the blank new line at the
+ * bottom of the ledger */
 GncEntry * gnc_entry_ledger_get_blank_entry (GncEntryLedger *ledger);
 
+/** Looks up the cell location of the given "entry" and writes the
+ * location into the variable pointed to by vcell_loc (which must be
+ * non-NULL). Returns TRUE if the entry was found, otherwise FALSE. */
 gboolean gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger,
-					      GncEntry *entry,
-					      VirtualCellLocation *vcell_loc);
+        const GncEntry *entry,
+        VirtualCellLocation *vcell_loc);
 
 void gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger);
 void gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger);
 
-QueryNew * gnc_entry_ledger_get_query (GncEntryLedger *ledger);
+/** This implements the command of moving the current entry (where the
+ * cursor is currently located) one row upwards or downwards,
+ * effectively swapping this row and the other row. If the other row
+ * is empty (or it is the blank entry), nothing will happen.
+ *
+ * \param move_up If TRUE, the current entry is moved upwards,
+ * otherwise downwards. */
+void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
+        gboolean move_up);
+
+QofQuery * gnc_entry_ledger_get_query (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string);
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.2\n"
-"POT-Creation-Date: 2008-04-18 00:32+0300\n"
+"POT-Creation-Date: 2010-11-24 02:25+0100\n"
 "PO-Revision-Date: 2008-04-23 00:04+0200\n"
 "Last-Translator: Ori Hoch <ori@uumpa.com>\n"
 "Language-Team: HE\n"
@@ -314,6 +314,11 @@ msgstr ""
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
 msgstr "תיאור"
+
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+#, fuzzy
+msgid "discount"
+msgstr "חשבון"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -757,4 +762,3 @@ msgstr ""
 #, fuzzy
 msgid "withdraw (in the reconcile dialog)"
 msgstr "חלק מההגדרות בתיבת הדו-שיח מתנגשים"
-

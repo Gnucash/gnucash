@@ -24,14 +24,14 @@ typedef struct _GNCDruidProviderEdgeGnomeClass GNCDruidProviderEdgeGnomeClass;
 
 struct _GNCDruidProviderEdgeGnome
 {
-  GNCDruidProvider parent;
+    GNCDruidProvider parent;
 
-  GnomeDruidPageEdge*	page;
+    GnomeDruidPageEdge*	page;
 };
 
 struct _GNCDruidProviderEdgeGnomeClass
 {
-  GNCDruidProviderClass parent_class;
+    GNCDruidProviderClass parent_class;
 };
 
 GType	gnc_druid_provider_edge_gnome_get_type(void);

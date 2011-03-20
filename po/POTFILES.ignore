@@ -1,6 +1,5 @@
 # Work around the intltool-0.35.5 / automake-1.10 failures
 # due to "missing" files.  These files may be distributed.
-lib/glib28/gfileutils-2.8.c
 src/gnome/gnucash.desktop.in.in
 src/gnome/gnucash.desktop.in
 src/engine/iso-4217-currencies.c

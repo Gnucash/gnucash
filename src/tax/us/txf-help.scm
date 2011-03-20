@@ -104,7 +104,7 @@
     (H320 . "Schedule D is used to report gains and losses from the sale of capital assets.")
     (N321 . "Short term gain or loss from the sale of a security.")
     (N323 . "Long term gain or loss from the sale of a security.")
-    (N810 . "Short term or long term gain or loss from the sale of capital assets other than securities.")
+    (N673 . "Short term or long term gain or loss from the sale of a security; for use when only the date sold and net sales amount are available and the date acquired and cost basis information is not available and will be separately added in the tax software.")
     (H325 . "Schedule E is used to report income or loss from rental real estate, royalties, and residual interest in REMIC's. Use a different copy for each rental or royalty. Use the Schedule K-1 categories for partnership rental income and loss amounts.")
     (N326 . "The amounts received as rental income from real estate (including personal property leased with real estate) but you were not in the real estate business. (If you are in the buisness of renting personal property, use Schedule C.)")
     (N327 . "Royalties recieved from oil, gas, or mineral properties (not including operating interests); copyrights; and patents.")

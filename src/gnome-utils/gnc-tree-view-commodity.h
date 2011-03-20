@@ -34,8 +34,7 @@
 #ifndef __GNC_TREE_VIEW_COMMODITY_H
 #define __GNC_TREE_VIEW_COMMODITY_H
 
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 #include "gnc-tree-view.h"
 
 #include "gnc-commodity.h"
@@ -52,13 +51,15 @@ G_BEGIN_DECLS
 #define GNC_TREE_VIEW_COMMODITY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_COMMODITY, GncTreeViewCommodityClass))
 
 /* typedefs & structures */
-typedef struct {
-	GncTreeView gnc_tree_view;
-	int stamp;
+typedef struct
+{
+    GncTreeView gnc_tree_view;
+    int stamp;
 } GncTreeViewCommodity;
 
-typedef struct {
-	GncTreeViewClass gnc_tree_view;
+typedef struct
+{
+    GncTreeViewClass gnc_tree_view;
 } GncTreeViewCommodityClass;
 
 
@@ -67,7 +68,7 @@ typedef struct {
 GType gnc_tree_view_commodity_get_type (void);
 
 
-/** @name Commodity Tree View Constructors 
+/** @name Commodity Tree View Constructors
  @{ */
 
 /** Create a new commodity tree view.  This view may or may not show a
@@ -85,12 +86,12 @@ GType gnc_tree_view_commodity_get_type (void);
  *  @return A pointer to a new commodity tree view.
  */
 GtkTreeView *gnc_tree_view_commodity_new (QofBook *book,
-					  const gchar *first_property_name,
-					  ...);
+        const gchar *first_property_name,
+        ...);
 /** @} */
 
 
-/** @name Commodity Tree View Configuration 
+/** @name Commodity Tree View Configuration
  @{ */
 
 /** Configure (by name) the set of visible columns in an commodity tree
@@ -103,7 +104,7 @@ GtkTreeView *gnc_tree_view_commodity_new (QofBook *book,
  *  @param column_names A list of column names to make visible.
  */
 void gnc_tree_view_commodity_configure_columns (GncTreeViewCommodity *view,
-						GSList *column_names);
+        GSList *column_names);
 
 #ifdef OLD
 /** Add a new column to the set of columns in an commodity tree view.
@@ -118,13 +119,13 @@ void gnc_tree_view_commodity_configure_columns (GncTreeViewCommodity *view,
  *  will be displayed in the column.
  */
 void gnc_tree_view_commodity_add_kvp_column (GncTreeViewCommodity *view,
-					     const gchar *column_title,
-					     const gchar *kvp_key);
+        const gchar *column_title,
+        const gchar *kvp_key);
 #endif
 /** @} */
 
 
-/** @name Commodity Tree View Filtering 
+/** @name Commodity Tree View Filtering
  @{ */
 
 typedef gboolean (*gnc_tree_view_commodity_ns_filter_func)(gnc_commodity_namespace*, gpointer data);
@@ -155,10 +156,10 @@ typedef gboolean (*gnc_tree_view_commodity_cm_filter_func)(gnc_commodity*, gpoin
  *  NULL.
  */
 void gnc_tree_view_commodity_set_filter (GncTreeViewCommodity *view,
-					 gnc_tree_view_commodity_ns_filter_func ns_func,
-					 gnc_tree_view_commodity_cm_filter_func cm_func,
-					 gpointer data,
-					 GtkDestroyNotify destroy);
+        gnc_tree_view_commodity_ns_filter_func ns_func,
+        gnc_tree_view_commodity_cm_filter_func cm_func,
+        gpointer data,
+        GtkDestroyNotify destroy);
 
 
 /** This function forces the commodity tree filter to be evaluated.  It
@@ -175,7 +176,7 @@ void gnc_tree_view_commodity_refilter (GncTreeViewCommodity *view);
 /** @} */
 
 
-/** @name Commodity Tree View Get/Set Functions 
+/** @name Commodity Tree View Get/Set Functions
  @{ */
 
 /** This function determines if an commodity in the commodity tree view
@@ -189,7 +190,7 @@ void gnc_tree_view_commodity_refilter (GncTreeViewCommodity *view);
  *  on error.
  */
 gint gnc_tree_view_commodity_count_children (GncTreeViewCommodity *view,
-					     gnc_commodity *commodity);
+        gnc_commodity *commodity);
 
 
 
@@ -206,8 +207,8 @@ gint gnc_tree_view_commodity_count_children (GncTreeViewCommodity *view,
  *  @return The commodity associated with the spcified row in the view.
  */
 gnc_commodity * gnc_tree_view_commodity_get_commodity_from_column (GtkTreeViewColumn *column,
-								   GtkTreeModel *f_model,
-								   GtkTreeIter  *f_iter);
+        GtkTreeModel *f_model,
+        GtkTreeIter  *f_iter);
 
 
 
@@ -222,7 +223,7 @@ gnc_commodity * gnc_tree_view_commodity_get_commodity_from_column (GtkTreeViewCo
  *  @return The commodity associated with this path.
  */
 gnc_commodity * gnc_tree_view_commodity_get_commodity_from_path (GncTreeViewCommodity *view,
-								 GtkTreePath *path);
+        GtkTreePath *path);
 
 
 /** This function returns the commodity in the commodity tree view at the
@@ -266,7 +267,7 @@ gnc_commodity * gnc_tree_view_commodity_get_selected_commodity  (GncTreeViewComm
  *  @param commodity A pointer to the commodity to select.
  */
 void gnc_tree_view_commodity_set_selected_commodity (GncTreeViewCommodity *view,
-						     gnc_commodity *commodity);
+        gnc_commodity *commodity);
 
 
 /** This function returns a list of the commodities associated with the
@@ -305,8 +306,8 @@ GList * gnc_tree_view_commodity_get_selected_commodities (GncTreeViewCommodity *
  *  selected.
  */
 void gnc_tree_view_commodity_set_selected_commodities (GncTreeViewCommodity *view,
-						       GList *commodity_list,
-						       gboolean show_last);
+        GList *commodity_list,
+        gboolean show_last);
 
 
 /** This function selects all sub-commodities of an commodity in the
@@ -322,7 +323,7 @@ void gnc_tree_view_commodity_set_selected_commodities (GncTreeViewCommodity *vie
  *  selected.
  */
 void gnc_tree_view_commodity_select_subcommodities (GncTreeViewCommodity *view,
-						    gnc_commodity *commodity);
+        gnc_commodity *commodity);
 
 /** @} */
 

@@ -1,5 +1,8 @@
 This directory contains spec files for building an RPM
 
+  REALLY WATCH OUT: The files in this directory are historical
+  examples.  They may be out of date and not maintained.  Please
+  contact your local distro supplier for updates.
 
   WATCH OUT: These spec file(s) might be heavily out of date and/or
   absolutely NOT SUITED to your distribution! They are particularly

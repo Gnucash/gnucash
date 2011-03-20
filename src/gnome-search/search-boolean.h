@@ -4,8 +4,9 @@
  *  Authors: Derek Atkins <warlord@MIT.EDU>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
- * License as published by the Free Software Foundation.
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +23,7 @@
 #define _GNCSEARCH_BOOLEAN_H
 
 #include "search-core-type.h"
-#include "QueryNew.h"
+#include "qof.h"
 
 #define GNC_TYPE_SEARCH_BOOLEAN		(gnc_search_boolean_get_type ())
 #define GNCSEARCH_BOOLEAN(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_BOOLEAN, GNCSearchBoolean)
@@ -32,19 +33,21 @@
 typedef struct _GNCSearchBoolean	GNCSearchBoolean;
 typedef struct _GNCSearchBooleanClass	GNCSearchBooleanClass;
 
-struct _GNCSearchBoolean {
-  GNCSearchCoreType parent;
+struct _GNCSearchBoolean
+{
+    GNCSearchCoreType parent;
 
-  query_compare_t	how;
-  gboolean		value;
+    QofQueryCompare	how;
+    gboolean		value;
 };
 
-struct _GNCSearchBooleanClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchBooleanClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_boolean_get_type	(void);
@@ -52,7 +55,7 @@ GNCSearchBoolean	*gnc_search_boolean_new	(void);
 
 /* methods */
 void	gnc_search_boolean_set_value (GNCSearchBoolean *fi, gboolean val);
-void	gnc_search_boolean_set_how (GNCSearchBoolean *fi, query_compare_t how);
+void	gnc_search_boolean_set_how (GNCSearchBoolean *fi, QofQueryCompare how);
 
 #endif /* ! _GNCSEARCH_BOOLEAN_H */
 

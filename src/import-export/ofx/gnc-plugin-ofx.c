@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-ofx.c -- 
+/*
+ * gnc-plugin-ofx.c --
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -40,16 +40,19 @@ static void gnc_plugin_ofx_cmd_import (GtkAction *action, GncMainWindowActionDat
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-ofx-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-ofx-ui.xml"
 
-static GtkActionEntry gnc_plugin_actions [] = {
-  { "OfxImportAction", GTK_STOCK_CONVERT, N_("Import _OFX/QFX..."), NULL,
-    N_("Process an OFX/QFX response file"),
-    G_CALLBACK (gnc_plugin_ofx_cmd_import) },
+static GtkActionEntry gnc_plugin_actions [] =
+{
+    {
+        "OfxImportAction", GTK_STOCK_CONVERT, N_("Import _OFX/QFX..."), NULL,
+        N_("Process an OFX/QFX response file"),
+        G_CALLBACK (gnc_plugin_ofx_cmd_import)
+    },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
 typedef struct GncPluginOfxPrivate
 {
-  gpointer dummy;
+    gpointer dummy;
 } GncPluginOfxPrivate;
 
 #define GNC_PLUGIN_OFX_GET_PRIVATE(o)  \
@@ -60,55 +63,57 @@ static GObjectClass *parent_class = NULL;
 GType
 gnc_plugin_ofx_get_type (void)
 {
-  static GType gnc_plugin_ofx_type = 0;
+    static GType gnc_plugin_ofx_type = 0;
 
-  if (gnc_plugin_ofx_type == 0) {
-    static const GTypeInfo our_info = {
-		sizeof (GncPluginOfxClass),
-		NULL,		/* base_init */
-		NULL,		/* base_finalize */
-		(GClassInitFunc) gnc_plugin_ofx_class_init,
-		NULL,		/* class_finalize */
-		NULL,		/* class_data */
-		sizeof (GncPluginOfx),
-		0,		/* n_preallocs */
-		(GInstanceInitFunc) gnc_plugin_ofx_init,
-    };
+    if (gnc_plugin_ofx_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
+            sizeof (GncPluginOfxClass),
+            NULL,		/* base_init */
+            NULL,		/* base_finalize */
+            (GClassInitFunc) gnc_plugin_ofx_class_init,
+            NULL,		/* class_finalize */
+            NULL,		/* class_data */
+            sizeof (GncPluginOfx),
+            0,		/* n_preallocs */
+            (GInstanceInitFunc) gnc_plugin_ofx_init,
+        };
 
-    gnc_plugin_ofx_type = g_type_register_static (GNC_TYPE_PLUGIN,
-						  "GncPluginOfx",
-						  &our_info, 0);
-  }
+        gnc_plugin_ofx_type = g_type_register_static (GNC_TYPE_PLUGIN,
+                              "GncPluginOfx",
+                              &our_info, 0);
+    }
 
-  return gnc_plugin_ofx_type;
+    return gnc_plugin_ofx_type;
 }
 
 GncPlugin *
 gnc_plugin_ofx_new (void)
 {
-  return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_OFX, NULL));
+    return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_OFX, NULL));
 }
 
 static void
 gnc_plugin_ofx_class_init (GncPluginOfxClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
+    parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gnc_plugin_ofx_finalize;
+    object_class->finalize = gnc_plugin_ofx_finalize;
 
-  /* plugin info */
-  plugin_class->plugin_name  = GNC_PLUGIN_OFX_NAME;
+    /* plugin info */
+    plugin_class->plugin_name  = GNC_PLUGIN_OFX_NAME;
 
-  /* widget addition/removal */
-  plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-  plugin_class->actions      = gnc_plugin_actions;
-  plugin_class->n_actions    = gnc_plugin_n_actions;
-  plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+    /* widget addition/removal */
+    plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
+    plugin_class->actions      = gnc_plugin_actions;
+    plugin_class->n_actions    = gnc_plugin_n_actions;
+    plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
 
-  g_type_class_add_private(klass, sizeof(GncPluginOfxPrivate));
+    g_type_class_add_private(klass, sizeof(GncPluginOfxPrivate));
 }
 
 static void
@@ -119,15 +124,15 @@ gnc_plugin_ofx_init (GncPluginOfx *plugin)
 static void
 gnc_plugin_ofx_finalize (GObject *object)
 {
-  GncPluginOfx *plugin;
-  GncPluginOfxPrivate *priv;
+    GncPluginOfx *plugin;
+    GncPluginOfxPrivate *priv;
 
-  g_return_if_fail (GNC_IS_PLUGIN_OFX (object));
+    g_return_if_fail (GNC_IS_PLUGIN_OFX (object));
 
-  plugin = GNC_PLUGIN_OFX (object);
-  priv = GNC_PLUGIN_OFX_GET_PRIVATE(plugin);
+    plugin = GNC_PLUGIN_OFX (object);
+    priv = GNC_PLUGIN_OFX_GET_PRIVATE(plugin);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /************************************************************
@@ -140,9 +145,9 @@ gnc_plugin_ofx_finalize (GObject *object)
 
 static void
 gnc_plugin_ofx_cmd_import (GtkAction *action,
-			   GncMainWindowActionData *data)
+                           GncMainWindowActionData *data)
 {
-  gnc_file_ofx_import ();
+    gnc_file_ofx_import ();
 }
 
 
@@ -153,7 +158,7 @@ gnc_plugin_ofx_cmd_import (GtkAction *action,
 void
 gnc_plugin_ofx_create_plugin (void)
 {
-  GncPlugin *plugin = gnc_plugin_ofx_new ();
+    GncPlugin *plugin = gnc_plugin_ofx_new ();
 
-  gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
 }

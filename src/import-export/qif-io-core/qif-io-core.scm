@@ -88,4 +88,4 @@
 (export qif-io:acct-table-make-gnc-acct-tree)
 
 ;; from main
-(export simple-format)
+(export format)

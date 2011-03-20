@@ -56,9 +56,9 @@
       (throw 'qif-io:arg-type 'output-port port))  
   (for-each 
    (lambda (kvp)
-     (simple-format port "~A~A\n" (car kvp) (cdr kvp)))
+     (format port "~A~A\n" (car kvp) (cdr kvp)))
    record-pairs)
-  (simple-format port "^\n"))
+  (format port "^\n"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -203,7 +203,7 @@
                           (#t 
                            (set! record-type 'unknown)))))
                  ((qif-io:record-error)
-                  (simple-format #t "record processing error ~S\n" args))
+                  (format #t "record processing error ~S\n" args))
                  (else 
                   (apply throw key args)))))
       
@@ -264,7 +264,7 @@
     ;; way)
     (if (not (null? classes))
         (begin
-          (simple-format port "!Type:Class\n")
+          (format port "!Type:Class\n")
           (for-each 
            (lambda (class)
              (qif-io:write-record (qif-io:class->record class) port))
@@ -274,7 +274,7 @@
     ;; accounts)
     (if (not (null? cats))
         (begin
-          (simple-format port "!Type:Cat\n")
+          (format port "!Type:Cat\n")
           (for-each 
            (lambda (cat)
              (qif-io:write-record (qif-io:category->record cat) port))
@@ -284,13 +284,13 @@
     ;; accounts)
     (if (not (null? accts))
         (begin
-          (simple-format port "!Option:Autoswitch\n")
-          (simple-format port "!Account\n")
+          (format port "!Option:Autoswitch\n")
+          (format port "!Account\n")
           (for-each 
            (lambda (acct)
              (qif-io:write-record (qif-io:account->record acct) port))
            accts)
-          (simple-format port "!Clear:Autoswitch\n")))
+          (format port "!Clear:Autoswitch\n")))
     
     ;; write out bank transactions.  Make sure to preface each
     ;; section with the source-account record.
@@ -307,7 +307,7 @@
            bank-xtns)
           (if (not (null? this-acct))
               (begin 
-                (simple-format port "!Type:Bank\n")
+                (format port "!Type:Bank\n")
                 (for-each 
                  (lambda (xtn)
                    (qif-io:write-record (qif-io:bank-xtn->record xtn) port))
@@ -330,9 +330,9 @@
               bank-xtns)
              (if (not (null? this-acct))
                  (begin 
-                   (simple-format port "!Account\n")
+                   (format port "!Account\n")
                    (qif-io:write-record (qif-io:account->record acct) port)
-                   (simple-format port "!Type:~A\n" 
+                   (format port "!Type:~A\n" 
                                   (qif-io:account-type acct))
                    (set! this-acct (reverse this-acct))
                    (for-each 
@@ -360,7 +360,7 @@
            invst-xtns)
           (if (not (null? this-acct))
               (begin 
-                (simple-format port "!Type:Invst\n")
+                (format port "!Type:Invst\n")
                 (for-each 
                  (lambda (xtn)
                    (qif-io:write-record (qif-io:invst-xtn->record xtn) port))
@@ -383,9 +383,9 @@
               invst-xtns)
              (if (not (null? this-acct))
                  (begin 
-                   (simple-format port "!Account\n")
+                   (format port "!Account\n")
                    (qif-io:write-record (qif-io:account->record acct) port)
-                   (simple-format port "!Type:~A\n" 
+                   (format port "!Type:~A\n" 
                                   (qif-io:account-type acct))
                    (set! this-acct (reverse this-acct))
                    (for-each 

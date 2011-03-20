@@ -25,8 +25,8 @@
  * is the same one as the item 'sold' in a different transaction.
  * Lots are used to make this association.  One Lot holds all of the
  * splits that involve the same item.   A lot is typically formed when
- * the item is bought, and is closed when the item is sold out. 
- * A lot need not be a single item, it can be a quantity of the same 
+ * the item is bought, and is closed when the item is sold out.
+ * A lot need not be a single item, it can be a quantity of the same
  * thing e.g. 500 gallons of paint (sold off a few gallons at a time).
  *
  * Lots are required to correctly implement invoices, inventory,
@@ -36,22 +36,22 @@
  * A lot is "closed" when the number of items in the lot has gone to zero.
  * It is very easy to compute the gains/losses for a closed lot: it is the
  * sum-total of the values of the items put into/taken out of the lot.
- * (Realized) Gains on still-open lots can be computed by pro-rating the 
- * purchase prices. 
- * 
+ * (Realized) Gains on still-open lots can be computed by pro-rating the
+ * purchase prices.
+ *
  * Lots are nothing more than a collection or grouping of splits in an
  * account. All of the splits in a lot must belong to the same account;
  * there's no mix-n-match.  Thus, in this sense, a lot belongs to an
- * accunt as well.
+ * account as well.
  *
  * Lots have an implicit "opening date": the date of the earliest split in
  * the lot. The "close date" is the date of the split that brought the lot
- * item balance down to zero. 
+ * item balance down to zero.
  *
  @{ */
 
 /** @file gnc-lot.h
- * 
+ *
  * @author Created by Linas Vepstas May 2002
  * @author Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
  */
@@ -59,10 +59,17 @@
 #ifndef GNC_LOT_H
 #define GNC_LOT_H
 
-typedef struct _GncLotClass GNCLotClass;
+//typedef struct _GncLotClass GNCLotClass;
 
 #include "qof.h"
-#include "gnc-lot-p.h"
+#include "gnc-engine.h"
+/*#include "gnc-lot-p.h"*/
+
+typedef struct
+{
+    QofInstanceClass parent_class;
+} GncLotClass;
+#define GNCLotClass GncLotClass
 
 /* --- type macros --- */
 #define GNC_TYPE_LOT            (gnc_lot_get_type ())
@@ -79,11 +86,13 @@ typedef struct _GncLotClass GNCLotClass;
 GType gnc_lot_get_type(void);
 
 
-/*@ dependent @*/ GNCLot * gnc_lot_new (QofBook *);
+/*@ dependent @*/
+GNCLot * gnc_lot_new (QofBook *);
 void gnc_lot_destroy (GNCLot *);
 
-/*@ dependent @*/ GNCLot * gnc_lot_lookup (const GUID *guid, QofBook *book);
-QofBook * gnc_lot_get_book (GNCLot *);		  
+/*@ dependent @*/
+GNCLot * gnc_lot_lookup (const GncGUID *guid, QofBook *book);
+QofBook * gnc_lot_get_book (GNCLot *);
 
 void gnc_lot_begin_edit (GNCLot *lot);
 void gnc_lot_commit_edit (GNCLot *lot);
@@ -92,7 +101,7 @@ void gnc_lot_commit_edit (GNCLot *lot);
  *    that *all* splits in a lot must also be in the same account.
  *    Note that this routine adds the split unconditionally, with
  *    no regard for the accounting policy.  To enforce a particular
- *    accounting policy, use the xaccSplitAssignToLot() routine 
+ *    accounting policy, use the xaccSplitAssignToLot() routine
  *    instead.
  */
 void gnc_lot_add_split (GNCLot *, Split *);
@@ -100,7 +109,7 @@ void gnc_lot_remove_split (GNCLot *, Split *);
 
 /** The gnc_lot_get_split_list() routine returns a GList of all the
  *    splits in this lot.  Do *not* not free this list when done;
- *    it is a pointer straight into the lots intenal list.  Do
+ *    it is a pointer straight into the lots internal list.  Do
  *    *not* add to or remove from this list directly.  Calling
  *    either gnc_lot_add_split() or gnc_lot_remove_split() will
  *    invalidate the returned pointer.
@@ -108,12 +117,14 @@ void gnc_lot_remove_split (GNCLot *, Split *);
 SplitList * gnc_lot_get_split_list (const GNCLot *);
 gint gnc_lot_count_splits (const GNCLot *);
 
-/** The gnc_lot_get_account() routine returns the account with which 
+/** The gnc_lot_get_account() routine returns the account with which
  *    this lot is associated. */
-/*@ dependent @*/ Account * gnc_lot_get_account (const GNCLot *);
+/*@ dependent @*/
+Account * gnc_lot_get_account (const GNCLot *);
+void gnc_lot_set_account(GNCLot*, Account*);
 
-/** The gnc_lot_get_balance() routine returns the balance of the lot. 
- *    The commodity in which this balance is expressed is the commodity 
+/** The gnc_lot_get_balance() routine returns the balance of the lot.
+ *    The commodity in which this balance is expressed is the commodity
  *    of the account. */
 gnc_numeric gnc_lot_get_balance (GNCLot *);
 
@@ -124,10 +135,10 @@ gnc_numeric gnc_lot_get_balance (GNCLot *);
 void gnc_lot_get_balance_before (const GNCLot *, const Split *,
                                  gnc_numeric *, gnc_numeric *);
 
-/** The gnc_lot_is_closed() routine returns a boolean flag: is this 
- *    lot closed?  A lot is closed if its balance is zero.  This 
+/** The gnc_lot_is_closed() routine returns a boolean flag: is this
+ *    lot closed?  A lot is closed if its balance is zero.  This
  *    routine is faster than using gnc_lot_get_balance() because
- *    once the balance goes to zero, this fact is cached.  
+ *    once the balance goes to zero, this fact is cached.
  */
 gboolean gnc_lot_is_closed (GNCLot *);
 
@@ -145,14 +156,19 @@ Split * gnc_lot_get_earliest_split (GNCLot *lot);
  */
 Split * gnc_lot_get_latest_split (GNCLot *lot);
 
-/** Get and set the account title, or the account notes. */
+/** Reset closed flag so that it will be recalculated. */
+void gnc_lot_set_closed_unknown(GNCLot*);
+
+/** Get and set the account title, or the account notes, or the marker. */
 const char * gnc_lot_get_title (const GNCLot *);
 const char * gnc_lot_get_notes (const GNCLot *);
 void gnc_lot_set_title (GNCLot *, const char *);
 void gnc_lot_set_notes (GNCLot *, const char *);
+unsigned char gnc_lot_get_marker(const GNCLot*);
+void gnc_lot_set_marker(GNCLot*, unsigned char);
 
 /** Every lot has a place to hang kvp data.  This routine returns that
- *     place. 
+ *     place.
  * */
 KvpFrame * gnc_lot_get_slots (const GNCLot *);
 
@@ -161,10 +177,10 @@ GNCLot * gnc_lot_make_default (Account * acc);
 
 #define gnc_lot_get_guid(X)  qof_entity_get_guid(QOF_INSTANCE(X))
 
-#define LOT_IS_CLOSED	"is-closed?"
-#define LOT_BALANCE	"balance"
-#define LOT_TITLE		"lot-title"
-#define LOT_NOTES		"notes"
+#define LOT_IS_CLOSED   "is-closed?"
+#define LOT_BALANCE     "balance"
+#define LOT_TITLE       "lot-title"
+#define LOT_NOTES       "notes"
 #endif /* GNC_LOT_H */
 /** @} */
 /** @} */

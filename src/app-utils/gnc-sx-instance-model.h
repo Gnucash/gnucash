@@ -1,10 +1,10 @@
-/* 
+/*
  * gnc-sx-instance-model.h
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
+ * modify it under the terms of version 2 and/or version 3 of the GNU General Public
  * License as published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
@@ -18,6 +18,9 @@
  * Free Software Foundation           Voice:  +1-617-542-5942
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
+ */
+
+/** \file
  */
 
 #ifndef _GNC_SX_INSTANCE_MODEL_H
@@ -40,45 +43,45 @@ G_BEGIN_DECLS
 
 typedef struct _GncSxInstanceModel
 {
-     GObject parent;
-     gboolean disposed;
+    GObject parent;
+    gboolean disposed;
 
-     /* private */
-     gint qof_event_handler_id;
+    /* private */
+    gint qof_event_handler_id;
 
-     /* signals */
-     /* void (*added)(SchedXaction *sx); // gpointer user_data */
-     /* void (*updated)(SchedXaction *sx); // gpointer user_data */
-     /* void (*removing)(SchedXaction *sx); // gpointer user_data */
+    /* signals */
+    /* void (*added)(SchedXaction *sx); // gpointer user_data */
+    /* void (*updated)(SchedXaction *sx); // gpointer user_data */
+    /* void (*removing)(SchedXaction *sx); // gpointer user_data */
 
-     /* public */
-     GDate range_end;
-     gboolean include_disabled;
-     GList *sx_instance_list; /* <GncSxInstances*> */
+    /* public */
+    GDate range_end;
+    gboolean include_disabled;
+    GList *sx_instance_list; /* <GncSxInstances*> */
 } GncSxInstanceModel;
 
 typedef struct _GncSxInstanceModelClass
 {
-     GObjectClass parent;
+    GObjectClass parent;
 
-     guint removing_signal_id;
-     guint updated_signal_id;
-     guint added_signal_id;
+    guint removing_signal_id;
+    guint updated_signal_id;
+    guint added_signal_id;
 } GncSxInstanceModelClass;
 
 typedef struct _GncSxInstances
 {
-     SchedXaction *sx;
-     GHashTable /** <name:char*,GncSxVariable*> **/ *variable_names;
-     gboolean variable_names_parsed;
-     
-     GDate next_instance_date;
-     
-     /** GList<GncSxInstance*> **/
+    SchedXaction *sx;
+    GHashTable /** <name:char*,GncSxVariable*> **/ *variable_names;
+    gboolean variable_names_parsed;
+
+    GDate next_instance_date;
+
+    /** GList<GncSxInstance*> **/
     GList *instance_list;
 } GncSxInstances;
 
-typedef enum 
+typedef enum
 {
     SX_INSTANCE_STATE_IGNORED,
     SX_INSTANCE_STATE_POSTPONED,
@@ -113,9 +116,16 @@ typedef struct _GncSxVariableNeeded
 
 GType gnc_sx_instance_model_get_type(void);
 
+/** Shorthand for get_instances(now, FALSE); */
 GncSxInstanceModel* gnc_sx_get_current_instances(void);
 
-GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end, gboolean include_disabled);
+/** Allocates a new SxInstanceModel and fills it with generated
+ * instances for all scheduled transactions up to the given range_end
+ * date.
+ *
+ * The caller must unref the returned object by
+ * g_object_unref(G_OBJECT(inst_model)); when no longer in use. */
+GncSxInstanceModel* gnc_sx_get_instances(const GDate *range_end, gboolean include_disabled);
 
 /**
  * Regenerates and updates the GncSxInstances* for the given SX.  Model
@@ -129,7 +139,7 @@ void gnc_sx_instance_model_remove_sx_instances(GncSxInstanceModel *model, SchedX
 /** @return GList<GncSxVariable*>. Caller owns the list, but not the items. **/
 GList *gnc_sx_instance_get_variables(GncSxInstance *inst);
 
-Account* gnc_sx_get_template_transaction_account(SchedXaction *sx);
+Account* gnc_sx_get_template_transaction_account(const SchedXaction *sx);
 
 /**
  * @return caller-owned data struct.
@@ -145,29 +155,29 @@ void gnc_sx_variable_free(GncSxVariable *var);
  * but upcoming reminders are not.  As such, a reminder can never be before any
  * other (modeled) instance type.  For instance, the following sequences are
  * disallowed:
- * 
+ *
  * [...]
  * remind    <- will be lost/skipped over; must be converted to `postponed`.
  * to-create <- this will be the last-recorded state.
  * [...]
- * 
+ *
  * [...]
  * remind    <- same as previous; will be lost/skipped; must be `postponed`.
  * postponed
  * [...]
- * 
+ *
  * remind    <- same...
  * ignore
  * [...]
- * 
- * 
+ *
+ *
  * As such, the SinceLastRun model will enforce that there are no previous
  * `remind` instances at every state change.  They will be silently converted to
  * `postponed`-state transactions.
  **/
 void gnc_sx_instance_model_change_instance_state(GncSxInstanceModel *model,
-                                                 GncSxInstance *instance,
-                                                 GncSxInstanceState new_state);
+        GncSxInstance *instance,
+        GncSxInstanceState new_state);
 
 void gnc_sx_instance_model_set_variable(GncSxInstanceModel *model,
                                         GncSxInstance *instance,
@@ -179,10 +189,13 @@ void gnc_sx_instance_model_set_variable(GncSxInstanceModel *model,
  * the caller owns the list and the items.
  **/
 GList* gnc_sx_instance_model_check_variables(GncSxInstanceModel *model);
+
+/** Really ("effectively") create the transactions from the SX
+ * instances in the given model. */
 void gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
-                                         gboolean auto_create_only,
-                                         GList **created_transaction_guids,
-                                         GList **creation_errors);
+        gboolean auto_create_only,
+        GList **created_transaction_guids,
+        GList **creation_errors);
 
 typedef struct _GncSxSummary
 {
@@ -200,11 +213,55 @@ typedef struct _GncSxSummary
  * that need either auto-creation or user-interaction.
  **/
 void gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary);
-void gnc_sx_summary_print(GncSxSummary *summary);
+
+/** Debug output to trace file */
+void gnc_sx_summary_print(const GncSxSummary *summary);
 
 void gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash);
 int gnc_sx_parse_vars_from_formula(const char *formula, GHashTable *var_hash, gnc_numeric *result);
 void gnc_sx_randomize_variables(GHashTable *vars);
+
+/** Returns a GHashTable<GUID*, gnc_numeric*> with no destructor for
+ * the key, but a destructor for the value set.
+ *
+ * The returned value must be free'd with g_hash_table_destroy or
+ * g_hash_table_unref. */
+GHashTable* gnc_g_hash_new_guid_numeric(void);
+
+/** Calculates the cash flow of one single instance of the given SX
+ * into the GHashTable<GUID*, gnc_numeric*> such that the cash flow on
+ * each account is added to the given hash under the GUID of that
+ * account.
+ *
+ * Exactly one instance of the SX is calculated, regardless of its
+ * start date, recurrence, or end date.
+ *
+ * The creation_errors list, if non-NULL, receive any errors that
+ * occurred during creation, similar as in
+ * gnc_sx_instance_model_effect_change(). */
+void gnc_sx_instantiate_cashflow(const SchedXaction* sx,
+                                 GHashTable* map, GList **creation_errors);
+
+/** Instantiates the cash flow of all given SXs (in the given
+ * GList<SchedXAction*>) into the GHashTable<GUID*, gnc_numeric*> for the
+ * given date range. Each SX is counted with multiplicity as it has
+ * occurrences in the given date range.
+ *
+ * The creation_errors list, if non-NULL, receive any errors that
+ * occurred during creation, similar as in
+ * gnc_sx_instance_model_effect_change(). */
+void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
+                                     const GDate *range_start, const GDate *range_end,
+                                     GHashTable* map, GList **creation_errors);
+
+/** Simplified wrapper around gnc_sx_all_instantiate_cashflow(): Run
+ * that function on all SX of the current book for the given date
+ * range. Ignore any potential error messages. Returns a newly
+ * allocated GHashTable with the result, which is a GHashTable<GUID*,
+ * gnc_numeric*>, identical to what gnc_g_hash_new_guid_numeric()
+ * would return. The returned value must be free'd with
+ * g_hash_table_destroy. */
+GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_end);
 
 G_END_DECLS
 

@@ -6,38 +6,41 @@ package CBBlib;
 use strict;
 use English;
 use IO;
-
+##  @file
+# @brief Belongs to package CBBlib
+#
 #### To do ######################
-
+#
 # Check remove transactions.
 # Move everything to Cbb package.
-
+#
 # put warnings into add_txns and remove_txns if attempted when inside
 # begin/end_txn_modifications
-
+#
 # Check to see that set_db is OK in the face of modifications...
-
+#
 # update_ledger has to return a sorted list of txn indices for modified txns
-
+#
 # ledger_add/modify/remove_txns?
-
+#
 # note_txn_modification
-
+#
 # Dirty should be set whenever a modification is made.
 # Dirty should be cleared whenever the client tells us we're clear...
-
+#
 # What about clones and begin/end_modify_txns and no db?
-
+#
 # check copy_obj, and automate?
-
+#
 # Need to clone account balances too?
-
+#
 # Should have list positions in txns?
-
+#
 # Need to create "Unitemized" category by default.
-
+#
 # Don't sort modifications by serial number.  Order is irrelevant.
 # Just use dates
+# @cond Perl
 
 STDOUT->autoflush(1);
 STDERR->autoflush(1);
@@ -1733,3 +1736,4 @@ sub load_file {
 
 1;
 __END__
+## @endcond Perl

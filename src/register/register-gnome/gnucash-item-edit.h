@@ -53,58 +53,60 @@ typedef int (*PopupGetWidth) (GnomeCanvasItem *item,
 typedef struct _PopupToggle PopupToggle;
 struct _PopupToggle
 {
-	GtkToggleButton *toggle_button;
-	GnomeCanvasItem *toggle_button_item;
+    GtkToggleButton *toggle_button;
+    GnomeCanvasItem *toggle_button_item;
 
-        gint toggle_offset;
+    gint toggle_offset;
 
-	GtkArrow *arrow;
+    GtkArrow *arrow;
 
-	gboolean signals_connected;
+    gboolean signals_connected;
 };
 
 
-typedef struct {
-        GnomeCanvasItem canvas_item;
+typedef struct
+{
+    GnomeCanvasItem canvas_item;
 
-	GnomeCanvasGroup *parent;
+    GnomeCanvasGroup *parent;
 
-        GnucashSheet *sheet;
+    GnucashSheet *sheet;
 
-        /* The editor whose status we reflect on the sheet */
-        GtkWidget *editor;
+    /* The editor whose status we reflect on the sheet */
+    GtkWidget *editor;
 
-        gchar *clipboard;
+    gchar *clipboard;
 
-        gboolean has_selection;
+    gboolean has_selection;
 
-	gboolean is_popup;
-	gboolean show_popup;
+    gboolean is_popup;
+    gboolean show_popup;
 
-	PopupToggle popup_toggle;
+    PopupToggle popup_toggle;
 
-        GnomeCanvasItem *popup_item;
-        GetPopupHeight   get_popup_height;
-        PopupAutosize    popup_autosize;
-        PopupSetFocus    popup_set_focus;
-        PopupPostShow    popup_post_show;
-        PopupGetWidth    popup_get_width;
-        gpointer         popup_user_data;
+    GnomeCanvasItem *popup_item;
+    GetPopupHeight   get_popup_height;
+    PopupAutosize    popup_autosize;
+    PopupSetFocus    popup_set_focus;
+    PopupPostShow    popup_post_show;
+    PopupGetWidth    popup_get_width;
+    gpointer         popup_user_data;
 
-        GdkGC *gc;
+    GdkGC *gc;
 
-        gboolean reset_pos;
-        gint x_offset;
-        gint anchor_pos;
+    gboolean reset_pos;
+    gint x_offset;
+    gint anchor_pos;
 
-        /* Where are we */
-        VirtualLocation virt_loc;
+    /* Where are we */
+    VirtualLocation virt_loc;
 
-        SheetBlockStyle *style;
+    SheetBlockStyle *style;
 } GncItemEdit;
 
-typedef struct {
-	GnomeCanvasItemClass parent_class;
+typedef struct
+{
+    GnomeCanvasItemClass parent_class;
 } GncItemEditClass;
 
 
@@ -113,23 +115,23 @@ GType gnc_item_edit_get_type (void);
 void gnc_item_edit_configure (GncItemEdit *item_edit);
 
 void gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
-				     int *x, int *y,
-				     int *w, int *h);
+                                     int *x, int *y,
+                                     int *w, int *h);
 
 GnomeCanvasItem *gnc_item_edit_new (GnomeCanvasGroup *parent,
-				    GnucashSheet *sheet, GtkWidget *entry);
+                                    GnucashSheet *sheet, GtkWidget *entry);
 
 GncItemList * gnc_item_edit_new_list (GncItemEdit *item_edit, GtkListStore *shared_store);
 GNCDatePicker * gnc_item_edit_new_date_picker (GncItemEdit *item_edit);
 
 void gnc_item_edit_set_popup (GncItemEdit     *item_edit,
-			      GnomeCanvasItem *popup_item,
-			      GetPopupHeight   get_popup_height,
-			      PopupAutosize    popup_autosize,
-			      PopupSetFocus    popup_set_focus,
-			      PopupPostShow    popup_post_show,
-			      PopupGetWidth    popup_get_width,
-			      gpointer         popup_user_data);
+                              GnomeCanvasItem *popup_item,
+                              GetPopupHeight   get_popup_height,
+                              PopupAutosize    popup_autosize,
+                              PopupSetFocus    popup_set_focus,
+                              PopupPostShow    popup_post_show,
+                              PopupGetWidth    popup_get_width,
+                              gpointer         popup_user_data);
 
 void gnc_item_edit_show_popup (GncItemEdit *item_edit);
 void gnc_item_edit_hide_popup (GncItemEdit *item_edit);
@@ -137,9 +139,9 @@ void gnc_item_edit_hide_popup (GncItemEdit *item_edit);
 int gnc_item_edit_get_toggle_offset (int row_height);
 
 gboolean gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
-                                   VirtualLocation virt_loc, int x,
-                                   gboolean changed_cells,
-                                   gboolean extend_selection);
+                                       VirtualLocation virt_loc, int x,
+                                       gboolean changed_cells,
+                                       gboolean extend_selection);
 
 void gnc_item_edit_redraw (GncItemEdit *item_edit);
 
@@ -152,16 +154,16 @@ void gnc_item_edit_set_has_selection (GncItemEdit *item_edit, gboolean has_selec
 gboolean gnc_item_edit_get_has_selection (GncItemEdit *item_edit);
 
 gboolean gnc_item_edit_selection_clear (GncItemEdit       *item_edit,
-					GdkEventSelection *event);
+                                        GdkEventSelection *event);
 
 void gnc_item_edit_selection_get (GncItemEdit         *item_edit,
-				  GtkSelectionData *selection_data,
-				  guint             info,
-				  guint             time);
+                                  GtkSelectionData *selection_data,
+                                  guint             info,
+                                  guint             time);
 
 void gnc_item_edit_selection_received (GncItemEdit       *item_edit,
-				       GtkSelectionData  *selection_data,
-				       guint              time);
+                                       GtkSelectionData  *selection_data,
+                                       guint              time);
 
 void gnc_item_edit_focus_in (GncItemEdit *item_edit);
 void gnc_item_edit_focus_out (GncItemEdit *item_edit);

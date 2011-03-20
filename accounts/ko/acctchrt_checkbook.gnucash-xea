@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      단순 수표책
+    </gnc-act:title>
+    <gnc-act:short-description>
+     GnuCash를 이용하기 위한 최소 계정.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+     수표책의 균형 수지를 원한다면 이것을 사용. 나중에 더 자세히 소득 및 지출을 추가할 수 있습니다.
+    </gnc-act:long-description>
+<gnc:account version="2.0.0">
+  <act:name>루트 계정</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>루트</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>자산</act:name>
+  <act:id type="new">bde24bbbe01829aff3dac8d038e174cc</act:id>
+  <act:type>자산</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>자산</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>자리표시자</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>현재 자산</act:name>
+  <act:id type="new">d90864ec1d660176244b05a0e43e621a</act:id>
+  <act:type>자산</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>현재 자산</act:description>
+  <act:parent type="new">bde24bbbe01829aff3dac8d038e174cc</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>자리표시자</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>자유 입출금식 계정</act:name>
+  <act:id type="new">ab2dc28552256b8d1ef4fdea4ba45717</act:id>
+  <act:type>은행</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>자유 입출금식 계정</act:description>
+  <act:parent type="new">d90864ec1d660176244b05a0e43e621a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>소득</act:name>
+  <act:id type="new">e96c0691c219f5f55590e20fb9a3309b</act:id>
+  <act:type>소득</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>소득</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>지출</act:name>
+  <act:id type="new">3b95fbbcc06ef20d61aa082b84938287</act:id>
+  <act:type>지출</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>지출</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>자기자본</act:name>
+  <act:id type="new">b8b72887da1adf889f171923d23efbdd</act:id>
+  <act:type>자기자본</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>자기자본</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>자리표시자</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>잔액</act:name>
+  <act:id type="new">bdb4dd9be2b98f03a0b400036452232c</act:id>
+  <act:type>자기자본</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>잔액</act:description>
+  <act:parent type="new">b8b72887da1adf889f171923d23efbdd</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

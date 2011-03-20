@@ -175,6 +175,20 @@ Use:  Holders for a bunch of counters for various types.  Used specifically
       that follows /counters/, e.g. "/counters/GncCustomer"
 \endverbatim      
 
+\verbatim
+Name: /counter_formats/...
+Type: string
+Entities: Book
+Use:  Holders for a bunch of counter formats for various types.  Used
+	  specifically in the business objects, to format a counter value
+	  into a (string) ID.  The counter name is the path that follows
+	  /counter_formats/, e.g. "/counter_formats/GncCustomer"
+
+	  These formats are printf-style format strings that contain exactly
+	  one format specifier for an int64 (optionally preceded or followed
+	  by arbitrary other strings).
+\endverbatim
+
 \subsection kvpD D
 
 \subsection kvpE E

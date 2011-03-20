@@ -18,11 +18,11 @@
 \********************************************************************/
 /** @addtogroup Import_Export
     @{ */
- /**@internal
- @file gncmod-log-replay.c
- @brief module definition/initialization for the log replay module
- @author Copyright (c) 2003 Benoit Grégoire bock@step.polymtl.ca
- */
+/**@internal
+@file gncmod-log-replay.c
+@brief module definition/initialization for the log replay module
+@author Copyright (c) 2003 Benoit Grégoire bock@step.polymtl.ca
+*/
 #include "config.h"
 
 #include <gmodule.h>
@@ -50,44 +50,44 @@ int libgncmod_log_replay_gnc_module_age      = 0;
 char *
 libgncmod_log_replay_gnc_module_path(void)
 {
-  return g_strdup("gnucash/import-export/log-replay");
+    return g_strdup("gnucash/import-export/log-replay");
 }
 
 char *
 libgncmod_log_replay_gnc_module_description(void)
 {
-  return g_strdup("C code for log file replay");
+    return g_strdup("C code for log file replay");
 }
 
 int
 libgncmod_log_replay_gnc_module_init(int refcount)
 {
-  if(!gnc_module_load("gnucash/engine", 0))
-  {
-    return FALSE;
-  }
-  if(!gnc_module_load("gnucash/app-utils", 0))
-  {
-    return FALSE;
-  }
-  if(!gnc_module_load("gnucash/gnome-utils", 0))
-  {
-    return FALSE;
-  }
-    if(!gnc_module_load("gnucash/import-export", 0))
-  {
-    return FALSE;
-  }
+    if (!gnc_module_load("gnucash/engine", 0))
+    {
+        return FALSE;
+    }
+    if (!gnc_module_load("gnucash/app-utils", 0))
+    {
+        return FALSE;
+    }
+    if (!gnc_module_load("gnucash/gnome-utils", 0))
+    {
+        return FALSE;
+    }
+    if (!gnc_module_load("gnucash/import-export", 0))
+    {
+        return FALSE;
+    }
 
-  /* Add menu items with C callbacks */
-  gnc_plugin_log_replay_create_plugin();
+    /* Add menu items with C callbacks */
+    gnc_plugin_log_replay_create_plugin();
 
-  return TRUE;
+    return TRUE;
 }
 
 int
 libgncmod_log_replay_gnc_module_end(int refcount)
 {
-  return TRUE;
+    return TRUE;
 }
 /** @}*/

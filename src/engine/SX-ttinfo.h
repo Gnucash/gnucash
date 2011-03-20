@@ -70,13 +70,13 @@ const char *gnc_ttsplitinfo_get_memo(TTSplitInfo *split_i);
 void gnc_ttsplitinfo_set_credit_formula(TTSplitInfo *split_i,
                                         const char *credit_formula);
 void gnc_ttsplitinfo_set_credit_formula_numeric(TTSplitInfo *split_i,
-                                                gnc_numeric credit_formula);
+        gnc_numeric credit_formula);
 const char *gnc_ttsplitinfo_get_credit_formula(TTSplitInfo *split_i);
 
 void gnc_ttsplitinfo_set_debit_formula(TTSplitInfo *split_i,
                                        const char *debit_formula);
 void gnc_ttsplitinfo_set_debit_formula_numeric(TTSplitInfo *split_i,
-                                               gnc_numeric debit_formula);
+        gnc_numeric debit_formula);
 const char *gnc_ttsplitinfo_get_debit_formula(TTSplitInfo *split_i);
 
 void gnc_ttsplitinfo_set_account(TTSplitInfo *split_i, Account *acc);

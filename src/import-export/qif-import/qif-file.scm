@@ -7,6 +7,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash core-utils))
+(use-modules (gnucash printf))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-13))
 
@@ -137,7 +138,7 @@
                         (case qstate-type
                           ;; Transaction list for a particular account
                           ((type:bank type:cash type:ccard type:invst type:port
-                                      #{type:oth\ a}#  #{type:oth\ l}#)
+                            #{type:oth a}#  #{type:oth l}# #{type:oth s}#)
                            (if ignore-accounts
                                (set! current-account-name
                                      last-seen-account-name))
@@ -198,7 +199,7 @@
                         ;;;;;;;;;;;;;;;;;;;;;;
 
                         ((type:bank type:cash type:ccard type:invst type:port
-                                    #{type:oth\ a}#  #{type:oth\ l}#)
+                          #{type:oth a}#  #{type:oth l}# #{type:oth s}#)
                          (case tag
                            ;; D : transaction date
                            ((#\D)

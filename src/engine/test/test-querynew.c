@@ -20,7 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
+
 #include "config.h"
 #include <glib.h>
 #include <stdio.h>
@@ -35,49 +35,50 @@
 
 static int test_sort (gpointer a, gpointer b)
 {
-  return 0;
+    return 0;
 }
 
 static int test_core_param (gpointer a)
 {
-  return 0;
+    return 0;
 }
 
 static void test_class (void)
 {
-  static QofParam params[] = {
-    { TEST_PARAM, TEST_CORE, (QofAccessFunc)test_core_param, NULL },
-    { NULL },
-  };
+    static QofParam params[] =
+    {
+        { TEST_PARAM, TEST_CORE, (QofAccessFunc)test_core_param, NULL },
+        { NULL },
+    };
 
-  fprintf (stderr, "\tTesting the qof_query_object interface. \n"
-	   "\tYou may see some \"** CRITICAL **\" messages, which you can safely ignore\n");
+    fprintf (stderr, "\tTesting the qof_query_object interface. \n"
+             "\tYou may see some \"** CRITICAL **\" messages, which you can safely ignore\n");
 
-  qof_class_register (TEST_MODULE_NAME, (QofSortFunc)test_sort, params);
+    qof_class_register (TEST_MODULE_NAME, (QofSortFunc)test_sort, params);
 
-  do_test (qof_class_get_parameter (TEST_MODULE_NAME, TEST_PARAM)
-	   == &params[0], "qof_class_get_parameter");
-  do_test (qof_class_get_parameter (NULL, NULL) == NULL,
-	   "qof_class_get_parameter (NULL, NULL)");
-  do_test (qof_class_get_parameter (TEST_MODULE_NAME, NULL) == NULL,
-	   "qof_class_get_parameter (TEST_MODULE_NAME, NULL)");
-  do_test (qof_class_get_parameter (TEST_MODULE_NAME, BAD_PARAM) == NULL,
-	   "qof_class_get_parameter (TEST_MODULE_NAME, BAD_PARAM)");
-  do_test (qof_class_get_parameter (NULL, TEST_PARAM) == NULL,
-	   "qof_class_get_parameter (NULL, TEST_PARAM)");
+    do_test (qof_class_get_parameter (TEST_MODULE_NAME, TEST_PARAM)
+             == &params[0], "qof_class_get_parameter");
+    do_test (qof_class_get_parameter (NULL, NULL) == NULL,
+             "qof_class_get_parameter (NULL, NULL)");
+    do_test (qof_class_get_parameter (TEST_MODULE_NAME, NULL) == NULL,
+             "qof_class_get_parameter (TEST_MODULE_NAME, NULL)");
+    do_test (qof_class_get_parameter (TEST_MODULE_NAME, BAD_PARAM) == NULL,
+             "qof_class_get_parameter (TEST_MODULE_NAME, BAD_PARAM)");
+    do_test (qof_class_get_parameter (NULL, TEST_PARAM) == NULL,
+             "qof_class_get_parameter (NULL, TEST_PARAM)");
 
-  do_test (qof_class_get_parameter_getter (TEST_MODULE_NAME, TEST_PARAM)
-	   == (QofAccessFunc)test_core_param,
-	   "qof_class_get_parameter_getter");
+    do_test (qof_class_get_parameter_getter (TEST_MODULE_NAME, TEST_PARAM)
+             == (QofAccessFunc)test_core_param,
+             "qof_class_get_parameter_getter");
 
-  do_test (safe_strcmp (qof_class_get_parameter_type (TEST_MODULE_NAME,
-						     TEST_PARAM),
-			TEST_CORE) == 0, "qof_class_get_parameter_type");
+    do_test (safe_strcmp (qof_class_get_parameter_type (TEST_MODULE_NAME,
+                          TEST_PARAM),
+                          TEST_CORE) == 0, "qof_class_get_parameter_type");
 
-/*  do_test (qof_class_get_default_sort (TEST_MODULE_NAME) == test_sort,
-	   "qof_class_get_default_sort");
-  do_test (qof_class_get_default_sort (NULL) == NULL,
-	   "qof_class_get_default_sort (NULL)");*/
+    /*  do_test (qof_class_get_default_sort (TEST_MODULE_NAME) == test_sort,
+    	   "qof_class_get_default_sort");
+      do_test (qof_class_get_default_sort (NULL) == NULL,
+    	   "qof_class_get_default_sort (NULL)");*/
 }
 
 static void test_query_core (void)
@@ -92,13 +93,14 @@ static void test_querynew (void)
 int
 main (int argc, char **argv)
 {
-     qof_init();
-     if(cashobjects_register()) {
-          test_query_core();
-          test_class();
-          test_querynew();
-     }
-     qof_close();
-     print_test_results();
-     return get_rv();
+    qof_init();
+    if (cashobjects_register())
+    {
+        test_query_core();
+        test_class();
+        test_querynew();
+    }
+    qof_close();
+    print_test_results();
+    return get_rv();
 }

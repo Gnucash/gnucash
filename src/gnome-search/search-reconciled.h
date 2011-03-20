@@ -4,8 +4,9 @@
  *  Authors: Derek Atkins <warlord@MIT.EDU>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
- * License as published by the Free Software Foundation.
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -32,19 +33,21 @@
 typedef struct _GNCSearchReconciled	GNCSearchReconciled;
 typedef struct _GNCSearchReconciledClass	GNCSearchReconciledClass;
 
-struct _GNCSearchReconciled {
-  GNCSearchCoreType parent;
+struct _GNCSearchReconciled
+{
+    GNCSearchCoreType parent;
 
-  char_match_t		how;
-  cleared_match_t	value;
+    QofCharMatch		how;
+    cleared_match_t	value;
 };
 
-struct _GNCSearchReconciledClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchReconciledClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_reconciled_get_type	(void);
@@ -52,6 +55,6 @@ GNCSearchReconciled	*gnc_search_reconciled_new	(void);
 
 /* methods */
 void	gnc_search_reconciled_set_value(GNCSearchReconciled *fi, cleared_match_t value);
-void	gnc_search_reconciled_set_how (GNCSearchReconciled *fi, char_match_t how);
+void	gnc_search_reconciled_set_how (GNCSearchReconciled *fi, QofCharMatch how);
 
 #endif /* ! _GNCSEARCH_RECONCILED_H */

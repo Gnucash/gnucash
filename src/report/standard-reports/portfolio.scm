@@ -21,14 +21,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report portfolio))
+(define-module (gnucash report standard-reports portfolio))
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
-(use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
-(require 'printf)
+(use-modules (gnucash printf))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -53,7 +52,7 @@
      (N_ "Date") "a")
 
     (gnc:options-add-currency! 
-     options gnc:pagename-general (N_ "Report Currency") "c")
+     options gnc:pagename-general (N_ "Report's currency") "c")
 
     (gnc:options-add-price-source! 
      options gnc:pagename-general
@@ -146,8 +145,8 @@
 			table
 			row-style
 			(list (gnc:html-account-anchor current)
-			      ticker-symbol
-			      listing
+			      (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol)
+			      (gnc:make-html-table-header-cell/markup "text-cell" listing)
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" 
 			       (xaccPrintAmount units share-print-info))
@@ -173,7 +172,7 @@
   (let ((to-date     (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general "Date")))
         (accounts    (get-option gnc:pagename-accounts "Accounts"))
-        (currency    (get-option gnc:pagename-general "Report Currency"))
+        (currency    (get-option gnc:pagename-general "Report's currency"))
         (report-title (get-option gnc:pagename-general 
                                   gnc:optname-reportname))
         (price-source (get-option gnc:pagename-general

@@ -75,6 +75,7 @@
         (cons ACCT-TYPE-EXPENSE    (N_ "Expense"))
         (cons ACCT-TYPE-PAYABLE    (N_ "Payment"))
         (cons ACCT-TYPE-RECEIVABLE (N_ "Invoice"))
+        (cons ACCT-TYPE-TRADING    (N_ "Decrease"))
         (cons ACCT-TYPE-EQUITY     (N_ "Decrease"))))
 
 (define gnc:*credit-strings*
@@ -91,6 +92,7 @@
         (cons ACCT-TYPE-EXPENSE    (N_ "Rebate"))
         (cons ACCT-TYPE-PAYABLE    (N_ "Bill"))
         (cons ACCT-TYPE-RECEIVABLE (N_ "Payment"))
+        (cons ACCT-TYPE-TRADING    (N_ "Increase"))
         (cons ACCT-TYPE-EQUITY     (N_ "Increase"))))
 
 (define (gnc:get-debit-string type)

@@ -42,15 +42,15 @@
 typedef struct gnc_ledger_display GNCLedgerDisplay;
 
 typedef void (*GNCLedgerDisplayDestroy) (GNCLedgerDisplay *ld);
-typedef gncUIWidget (*GNCLedgerDisplayGetParent) (GNCLedgerDisplay *ld);
+typedef GtkWidget *(*GNCLedgerDisplayGetParent) (GNCLedgerDisplay *ld);
 typedef void (*GNCLedgerDisplaySetHelp) (GNCLedgerDisplay *ld,
-                                         const char *help_str);
+        const char *help_str);
 
 typedef enum
 {
-  LD_SINGLE,
-  LD_SUBACCOUNT,
-  LD_GL,
+    LD_SINGLE,
+    LD_SUBACCOUNT,
+    LD_GL,
 } GNCLedgerDisplayType;
 
 
@@ -72,7 +72,7 @@ void gnc_ledger_display_set_handlers (GNCLedgerDisplay *ld,
                                       GNCLedgerDisplayGetParent get_parent);
 
 /** Returns the parent of a given ledger display */
-gncUIWidget gnc_ledger_display_get_parent( GNCLedgerDisplay *ld );
+GtkWidget *gnc_ledger_display_get_parent( GNCLedgerDisplay *ld );
 
 /* return the split register associated with a ledger display */
 SplitRegister * gnc_ledger_display_get_split_register (GNCLedgerDisplay *ld);
@@ -98,8 +98,8 @@ GNCLedgerDisplay * gnc_ledger_display_template_gl (char *id);
 
 /* display a general ledger for an arbitrary query */
 GNCLedgerDisplay * gnc_ledger_display_query (Query *query,
-                                             SplitRegisterType type,
-                                             SplitRegisterStyle style);
+        SplitRegisterType type,
+        SplitRegisterStyle style);
 
 /* Set the query used for a register. */
 void gnc_ledger_display_set_query (GNCLedgerDisplay *ledger_display,

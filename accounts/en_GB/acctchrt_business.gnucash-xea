@@ -347,7 +347,7 @@
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gas</act:name>
+  <act:name>Petrol</act:name>
   <act:id type="new">193f61c6db492e1ab56b2db714e2b574</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -355,7 +355,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Gas</act:description>
+  <act:description>Petrol</act:description>
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

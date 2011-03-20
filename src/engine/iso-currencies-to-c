@@ -2,44 +2,47 @@
 exec guile -s $0 "$@"
 !#
 
-(use-modules (srfi srfi-2))
-(use-modules (ice-9 slib))
-;; Test for simple-format
-(if (not (defined? 'simple-format))
+(if (< (length (command-line)) 2)
     (begin
-      (require 'format)
-      (export simple-format)
-      (define simple-format format)))
+      (display "Missing command line argument \"source directory\"")
+      (exit 1)))
 
-(define *currency-file* (string-append (getenv "srcdir") "/" "iso-4217-currencies.scm"))
+(define *srcdir* (list-ref (command-line) 1))
+(define *currency-file* (string-append *srcdir* "/" "iso-4217-currencies.scm"))
 (define *c-file-name* "iso-4217-currencies.c")
 
 (define (generate-currency-c-code form output-port)
-  (or (and-let* (((list? form))
-                 ((eq? 8 (length form)))
-                 (fullname (list-ref form 0))
-                 (unitname (list-ref form 1))
-                 (partname (list-ref form 2))
-                 (namespace (list-ref form 3))
-                 (mnemonic (list-ref form 4))
-                 (exchange-code (list-ref form 5))
-                 (parts-per-unit (list-ref form 6))
-                 (smallest-fraction (list-ref form 7))
-                 ((string? fullname))
-                 ((string? unitname))
-                 ((string? partname))
-                 ((string? namespace))
-                 ((string? mnemonic))
-                 ((string? exchange-code))
-                 ((number? parts-per-unit))
-                 ((number? smallest-fraction)))
-        
-        (format
-         output-port "
+  ;; Check for correct number of arguments
+  (if (and (list? form)
+	   (eq? 9 (length form)))
+      ;; Assign arguments
+      (let ((fullname (list-ref form 0))
+	    (unitname (list-ref form 1))
+	    (partname (list-ref form 2))
+	    (namespace (list-ref form 3))
+	    (mnemonic (list-ref form 4))
+	    (exchange-code (list-ref form 5))
+	    (parts-per-unit (list-ref form 6))
+	    (smallest-fraction (list-ref form 7))
+	    (local-symbol (list-ref form 8)))
+	;; Check for correct types of arguments
+	(if (and (string? fullname)
+		 (string? unitname)
+		 (string? partname)
+		 (string? namespace)
+		 (string? mnemonic)
+		 (string? exchange-code)
+		 (number? parts-per-unit)
+		 (number? smallest-fraction)
+		 (string? local-symbol))
+
+	    ;; And print the output line
+	    (format
+	     output-port "
   {
     const char *fullname = ~S;
     gnc_commodity *c = gnc_commodity_new(book,
-					 _(fullname),
+					 CUR_I18N(fullname),
                                          ~S,
                                          ~S,
                                          ~S,
@@ -52,14 +55,21 @@ exec guile -s $0 "$@"
       }
     }
   }\n"
-         fullname
-         namespace
-         mnemonic 
-         exchange-code
-         smallest-fraction))
+	     fullname
+	     namespace
+	     mnemonic
+	     exchange-code
+	     smallest-fraction)
+
+	    ;; Sorry, code doubling of the error message, but whatever.
+	    (begin
+	      (display "Bad currency data (wrong column data) at line: ")
+	      (display form)
+	      (newline)
+	      #f)))
 
       (begin
-        (display "Bad currency data at form: ")
+        (display "Bad currency data (wrong number of columns) at line: ")
         (display form)
         (newline)
         #f)))

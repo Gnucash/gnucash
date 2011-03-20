@@ -36,6 +36,7 @@
 
 void gnc_ui_file_access_for_open( void );
 void gnc_ui_file_access_for_save_as( void );
+void gnc_ui_file_access_for_export( void );
 
 /** @} */
 

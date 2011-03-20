@@ -36,22 +36,45 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <aqbanking/banking.h>
+#include <gwenhywfar/version.h>
 
 #include "Account.h"
 
 G_BEGIN_DECLS
 
-#if (AQBANKING_VERSION_MAJOR > 3) || \
-  ((AQBANKING_VERSION_MAJOR == 3) && \
-    (AQBANKING_VERSION_MINOR >= 99))
-/** Defined if libaqbanking4 as opposed to libaqbanking3 is being used */
+/** A define that combines the aqbanking version number into one single
+ * integer number. Assumption: Both MINOR and PATCHLEVEL numbers are
+ * in the interval [0..99]. */
+#define AQBANKING_VERSION_INT (10000 * AQBANKING_VERSION_MAJOR + 100 * AQBANKING_VERSION_MINOR + AQBANKING_VERSION_PATCHLEVEL)
+
+/** A define that combines the gwenhywfar version number into one single
+ * integer number. Assumption: Both MINOR and PATCHLEVEL numbers are
+ * in the interval [0..99]. */
+#define GWENHYWFAR_VERSION_INT (10000 * GWENHYWFAR_VERSION_MAJOR + 100 * GWENHYWFAR_VERSION_MINOR + GWENHYWFAR_VERSION_PATCHLEVEL)
+
+#if AQBANKING_VERSION_INT >= 39900
+/** Defined if libaqbanking4 as opposed to libaqbanking3 or earlier is
+ * being used */
 # define AQBANKING_VERSION_4_PLUS
+#endif
+
+#if AQBANKING_VERSION_INT >= 49900
+/** Defined if libaqbanking5 as opposed to libaqbanking4 or earlier is
+ * being used */
+# define AQBANKING_VERSION_5_PLUS
+#endif
+
+#if defined(AQBANKING_VERSION_4_PLUS) && !defined(AQBANKING_VERSION_5_PLUS)
+/** Defined if libaqbanking4 is used and neither a newer nor an older
+ * version of libaqbanking. */
+# define AQBANKING_VERSION_4_EXACTLY
 #endif
 
 #define GCONF_SECTION_AQBANKING "dialogs/import/hbci"
 #define KEY_FORMAT_SWIFT940 "format_swift_mt940"
 #define KEY_FORMAT_SWIFT942 "format_swift_mt942"
 #define KEY_FORMAT_DTAUS "format_dtaus"
+#define KEY_VERBOSE_DEBUG   "verbose_debug"
 
 typedef struct _GncABImExContextImport GncABImExContextImport;
 
@@ -121,6 +144,22 @@ AB_ACCOUNT *gnc_ab_get_ab_account(const AB_BANKING *api, Account *gnc_acc);
  * @return A newly allocated string
  */
 gchar *gnc_AB_VALUE_to_readable_string(const AB_VALUE *value);
+
+/**
+ * Return the job as string.
+ *
+ * @param value AB_JOB or NULL
+ * @return A newly allocated string
+ */
+gchar *gnc_AB_JOB_to_readable_string(const AB_JOB *job);
+
+/**
+ * Return the job_id as string.
+ *
+ * @param job_id
+ * @return A newly allocated string
+ */
+gchar *gnc_AB_JOB_ID_to_string(gulong job_id);
 
 /**
  * Retrieve the merged "remote name" fields from a transaction.  The returned
@@ -224,6 +263,14 @@ AB_JOB_LIST2 *gnc_ab_ieci_get_job_list(GncABImExContextImport *ieci);
  * @return The return value of gnc_gen_trans_list_run().
  */
 gboolean gnc_ab_ieci_run_matcher(GncABImExContextImport *ieci);
+
+
+/**
+ * get the GWEN_DB_NODE from AqBanking configuration files
+ *
+ * @return a GWEN_DB containing all permanently accepted SSL certificates (hashed).
+ */
+GWEN_DB_NODE *gnc_ab_get_permanent_certs(void);
 
 G_END_DECLS
 

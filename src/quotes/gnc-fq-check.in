@@ -22,8 +22,6 @@
 ### Boston, MA  02110-1301,  USA       gnu@gnu.org
 ######################################################################
 
-use lib '@-PERLINCL-@';
-
 use strict;
 use English;
 use FileHandle;

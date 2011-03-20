@@ -19,9 +19,12 @@
         <menu name="OnlineActions" action="OnlineActionsAction">
           <menuitem name="ABGetBalance"         action="ABGetBalanceAction"/>
           <menuitem name="ABGetTrans"           action="ABGetTransAction"/>
+          <separator name="OnlineActionsSep1"/>
           <menuitem name="ABIssueTrans"         action="ABIssueTransAction"/>
           <menuitem name="ABIssueIntTrans"      action="ABIssueIntTransAction"/>
           <menuitem name="ABIssueDirectDebit"   action="ABIssueDirectDebitAction"/>
+          <separator name="OnlineActionsSep2"/>
+          <menuitem name="ABViewLogwindow"   action="ABViewLogwindowAction"/>
         </menu>
       </placeholder>
     </menu>

@@ -12,9 +12,9 @@
       <locale name="C">
         <short>Window position</short>
         <long>
-	  The X,Y coordinates of the top left corner of the dialog
-	  when it was last closed.
-	</long>
+          The X,Y coordinates of the top left corner of the window
+          when it was last closed.
+        </long>
       </locale>
     </schema>
 
@@ -28,8 +28,8 @@
       <locale name="C">
         <short>Window geometry</short>
         <long>
-	  The width and size of the dialog when it was last closed.
-	</long>
+          The width and size of the window when it was last closed.
+        </long>
       </locale>
     </schema>
 
@@ -42,26 +42,29 @@
       <locale name="C">
         <short>Enable SKIP transaction action</short>
         <long>
-          Enable the SKIP action in the transaction matcher.  If
+          Enable the SKIP action in the transaction matcher. If
           enabled, a transaction whose best match's score is in the
           yellow zone (above the Auto-ADD threshold but below the
           Auto-CLEAR threshold) will be skipped by default.
-	</long>
+        </long>
       </locale>
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/enable_edit</key>
-      <applyto>/apps/gnucash/dialogs/import/generic_matcher/enable_edit</applyto>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/enable_update</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/enable_update</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
-      <default>FALSE</default>
+      <default>TRUE</default>
       <locale name="C">
-        <short>Enable EDIT transaction action</short>
+        <short>Enable UPDATE match action</short>
         <long>
-          Enable the EDIT action in the transaction matcher.  NOT YET
-          SUPPORTED.
-	</long>
+          Enable the UPDATE AND RECONCILE action in the transaction matcher.
+          If enabled, a transaction whose best match's score is above the
+          Auto-CLEAR threshold and has a different date or amount than the
+          matching existing transaction will cause the existing transaction
+          to be updated and cleared by default.
+        </long>
       </locale>
     </schema>
 
@@ -70,7 +73,7 @@
       <applyto>/apps/gnucash/dialogs/import/generic_matcher/use_bayes</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
-      <default>FALSE</default>
+      <default>TRUE</default>
       <locale name="C">
         <short>Use bayesian matching</short>
         <long>Enables bayesian matching when matching imported
@@ -152,6 +155,21 @@
           maximum such fee in your area (in units of your local
           currency), so the transaction will be recognised as a match.
         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/auto_create_commodity</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/auto_create_commodity</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Automatically create new commodities</short>
+        <long>Enables the automatic creation of new commodities if any
+        unknown commodity is encountered during import. Otherwise
+        the user will be asked what to do with each unknown
+        commodity.</long>
       </locale>
     </schema>
 

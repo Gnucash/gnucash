@@ -32,7 +32,7 @@
            (lambda () 
              (qif-io:setup-data-formats qiffile))
            (lambda (key field-type field-name possible-formats continue-proc)
-             (simple-format #t "field format: n='~S' t='~S' v='~S' u='~S'\n"
+             (format #t "field format: n='~S' t='~S' v='~S' u='~S'\n"
                             field-name field-type possible-formats 
                             (car possible-formats))
              (continue-proc (car possible-formats))))
@@ -60,8 +60,8 @@
       (let ((root (qif-io:acct-table-make-gnc-acct-tree 
 		   acct-table qiffile commodity)))
         ;; write the file
-        (let* ((name (simple-format #f "file:~A.gnc" filename)))
-          (simple-format #t "using book name='~A'\n" name)
+        (let* ((name (format #f "file:~A.gnc" filename)))
+          (format #t "using book name='~A'\n" name)
           (gnc-account-join-children (gnc-book-get-root book) root)
 	  (xaccAccountDestroy root)
           (gnc:session-begin session name #t #t)
@@ -96,13 +96,13 @@
                   (if ok?
                       (set! pass (+ 1 pass))
                       (begin 
-                        (simple-format #t "[fail] test ~S\n" (car this-line))
-                        (simple-format #t "       received ~S\n" result)
-                        (simple-format #t "       expected ~S\n" 
+                        (format #t "[fail] test ~S\n" (car this-line))
+                        (format #t "       received ~S\n" result)
+                        (format #t "       expected ~S\n" 
                                        correct-result)
                         (set! fail (+ 1 fail))))
                   (loop (read)))))))
-      (simple-format #t "test ~A: pass=~S fail=~S\n" title pass fail)
+      (format #t "test ~A: pass=~S fail=~S\n" title pass fail)
       (= pass total)))
   
   (let ((all-pass #t))

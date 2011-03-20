@@ -22,8 +22,10 @@ calculation                 Low-level expresion parsing & financial
 
 engine                      The engine module, without any backends
 
-backend/file                Binary and XML (v1 and v2) backends
-backend/postgres            Postgres backend
+backend/xml                 Binary and XML (v1 and v2) backends
+
+backend/dbi                 SQL based backends: postgres, mysql, sqlite3 (all
+                            via the dbi interface)
 
 register/ledger-core        The xacc SplitLedger and MultiLedger parts formerly
                             in src/

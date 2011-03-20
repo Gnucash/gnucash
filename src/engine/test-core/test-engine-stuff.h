@@ -29,7 +29,7 @@ bin_data* get_random_binary_data(void);
 
 kvp_frame* get_random_kvp_frame(void);
 gnc_numeric get_random_gnc_numeric(void);
-GUID* get_random_guid(void);
+GncGUID* get_random_guid(void);
 GList* get_random_glist(void);
 
 void random_glist_strings_only (gboolean strings_only);
@@ -47,25 +47,25 @@ Account* get_random_account(QofBook * book);
 Split* get_random_split(QofBook *book, Account *account, Transaction *trn);
 Transaction* get_random_transaction(QofBook *book);
 Transaction* get_random_transaction_with_currency(QofBook *book,
-                                                  gnc_commodity *currency,
-                                                  GList *account_list);
+        gnc_commodity *currency,
+        GList *account_list);
 gnc_commodity* get_random_commodity(QofBook *book);
 const char *get_random_commodity_namespace(void);
 
 typedef enum
 {
-  RANDOM_QT      = 0,
-  SIMPLE_QT      = 1 << 0,
-  ACCOUNT_QT     = 1 << 1,
-  SPLIT_KVP_QT   = 1 << 2,
-  TRANS_KVP_QT   = 1 << 3,
-  ACCOUNT_KVP_QT = 1 << 4,
-  GUID_QT        = 1 << 5,
-  ALL_QT         = (1 << 8) - 1
+    RANDOM_QT      = 0,
+    SIMPLE_QT      = 1 << 0,
+    ACCOUNT_QT     = 1 << 1,
+    SPLIT_KVP_QT   = 1 << 2,
+    TRANS_KVP_QT   = 1 << 3,
+    ACCOUNT_KVP_QT = 1 << 4,
+    GUID_QT        = 1 << 5,
+    ALL_QT         = (1 << 8) - 1
 } TestQueryTypes;
 
-Query * get_random_query(void);
-Query * make_trans_query (Transaction *trans, TestQueryTypes query_types);
+QofQuery * get_random_query(void);
+QofQuery * make_trans_query (Transaction *trans, TestQueryTypes query_types);
 TestQueryTypes get_random_query_type (void);
 void trans_query_include_price (gboolean include_amounts);
 
@@ -80,17 +80,17 @@ void make_random_changes_to_price (QofBook *book, GNCPrice *price);
 void make_random_changes_to_pricedb (QofBook *book, GNCPriceDB *pdb);
 void make_random_changes_to_split (Split *split);
 void make_random_changes_to_transaction (QofBook *book,
-                                         Transaction *trans);
+        Transaction *trans);
 void make_random_changes_to_transaction_and_splits (QofBook *book,
-                                                    Transaction *trans,
-                                                    GList *accounts);
+        Transaction *trans,
+        GList *accounts);
 void make_random_changes_to_account (QofBook *book, Account *account);
 void make_random_changes_to_level (QofBook *book, Account *parent);
 void make_random_changes_to_book (QofBook *book);
 void make_random_changes_to_session (QofSession *session);
 
-SchedXaction* add_daily_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur);
-SchedXaction* add_once_sx(gchar *name, GDate *when);
+SchedXaction* add_daily_sx(gchar *name, const GDate *start, const GDate *end, const GDate *last_occur);
+SchedXaction* add_once_sx(gchar *name, const GDate *when);
 void remove_sx(SchedXaction *sx);
 
 #endif

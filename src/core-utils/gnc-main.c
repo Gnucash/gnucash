@@ -21,15 +21,17 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+#include <stdlib.h>
 #include "config.h"
 #include "gnc-main.h"
+#include "core-utils/gnc-version.h"
 
 static gchar *namespace_regexp = NULL;
 static gboolean is_debugging = 0;
 static gboolean extras_enabled = 0;
 static const gchar *gconf_path;
 
-void 
+void
 gnc_main_set_namespace_regexp(const gchar *str)
 {
     if (namespace_regexp)
@@ -79,4 +81,19 @@ const gchar *
 gnc_get_gconf_path (void)
 {
     return gconf_path;
+}
+
+gint
+gnc_get_svn_version (void)
+{
+    return strtol(GNUCASH_SVN_REV, NULL, 10);
+}
+
+guint
+gnc_get_long_version()
+{
+    return GNUCASH_MAJOR_VERSION * 1000000 +
+           GNUCASH_MINOR_VERSION * 10000 +
+           GNUCASH_MICRO_VERSION * 100 +
+           GNUCASH_NANO_VERSION;
 }

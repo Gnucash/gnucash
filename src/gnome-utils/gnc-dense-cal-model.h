@@ -4,7 +4,7 @@
  * Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>
  *
  * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
+ * under the terms of version 2 and/or version 3 of the GNU General Public License as
  * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 #define GNC_DENSE_CAL_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_DENSE_CAL_MODEL, GncDenseCalModel))
 #define GNC_IS_DENSE_CAL_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_DENSE_CAL_MODEL))
 #define GNC_DENSE_CAL_MODEL_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GNC_TYPE_DENSE_CAL_MODEL, GncDenseCalModelIface))
-  
+
 typedef struct _GncDenseCalModel GncDenseCalModel; /* non existant */
 typedef struct _GncDenseCalModelIface
 {

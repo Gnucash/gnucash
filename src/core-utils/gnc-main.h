@@ -26,6 +26,8 @@
 
 #include <glib.h>
 
+#define GCONF_PATH "/apps/gnucash"
+
 void gnc_main_set_namespace_regexp(const gchar *str);
 const gchar *gnc_main_get_namespace_regexp(void);
 
@@ -37,5 +39,9 @@ void gnc_set_extra(gboolean enabled);
 
 void gnc_set_gconf_path(const gchar *prefix);
 const gchar *gnc_get_gconf_path(void);
+
+guint gnc_get_long_version( void );
+
+gint gnc_get_svn_version(void);
 
 #endif /* GNC_MAIN_H */

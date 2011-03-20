@@ -24,6 +24,24 @@
  * @author Jeff Green, ParIT Worker Co-operative <jeff@parit.ca>
  */
 
+/** @file
+    @brief SWIG interface file for the core parts of GnuCash
+
+        This file is processed by SWIG and the resulting files are gnucash_core.c and gnucash_core_c.py.
+        Have a look at the includes to see which parts of the GnuCash source SWIG takes as input.
+    @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
+    @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
+    @ingroup python_bindings 
+
+    @file gnucash_core.c
+    @brief SWIG output file.
+    @ingroup python_bindings
+    @file gnucash_core_c.py
+    @brief SWIG output file.
+    @ingroup python_bindings
+*/
+
+%feature("autodoc", "1");
 %module(package="gnucash") gnucash_core_c
 
 %{
@@ -32,8 +50,12 @@
 #include "qofsession.h"
 #include "qofbook.h"
 #include "qofbackend.h"
+#include "qoflog.h"
+#include "qofutil.h"
 #include "qofid.h"
 #include "guid.h"
+#include "gnc-module/gnc-module.h"
+#include "engine/gnc-engine.h"
 #include "Transaction.h"
 #include "Split.h"
 #include "Account.h"
@@ -45,7 +67,13 @@
 #include "gncVendor.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
-#include <guile/gh.h>
+#include "gncOwner.h"
+#include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncEntry.h"
+#include "gncTaxTable.h"
+#include "gncIDSearch.h"
+#include "engine/gnc-pricedb.h"
 %}
 
 %include <timespec.i>
@@ -57,7 +85,7 @@
 %include <qofbackend.h>
 
 // this function is defined in qofsession.h, but isnt found in the libraries,
-// ignoroed because SWIG attempts to link against (to create language bindings)
+// ignored because SWIG attempts to link against (to create language bindings)
 %ignore qof_session_not_saved;
 %include <qofsession.h>
 
@@ -79,7 +107,80 @@
 
 %include <gnc-commodity.h>
 
-/* %include <gnc-lot.h> */
+%include <gncOwner.h>
+
+%typemap(out) GncOwner * {
+    GncOwnerType owner_type = gncOwnerGetType($1);
+    PyObject * owner_tuple = PyTuple_New(2);
+    PyTuple_SetItem(owner_tuple, 0, PyInt_FromLong( (long) owner_type ) );
+    PyObject * swig_wrapper_object;
+    if (owner_type == GNC_OWNER_CUSTOMER ){
+        swig_wrapper_object = SWIG_NewPointerObj(
+	    gncOwnerGetCustomer($1), $descriptor(GncCustomer *), 0);
+    }
+    else if (owner_type == GNC_OWNER_JOB){
+        swig_wrapper_object = SWIG_NewPointerObj(
+	    gncOwnerGetJob($1), $descriptor(GncJob *), 0);
+    }
+    else if (owner_type == GNC_OWNER_VENDOR){
+        swig_wrapper_object = SWIG_NewPointerObj(
+	    gncOwnerGetVendor($1), $descriptor(GncVendor *), 0);
+    }
+    else if (owner_type == GNC_OWNER_EMPLOYEE){
+        swig_wrapper_object = SWIG_NewPointerObj(
+	    gncOwnerGetEmployee($1), $descriptor(GncEmployee *), 0);
+    }
+    else {
+        swig_wrapper_object = Py_None;
+	Py_INCREF(Py_None);
+    }
+    PyTuple_SetItem(owner_tuple, 1, swig_wrapper_object);
+    $result = owner_tuple;
+}
+
+
+%typemap(in) GncOwner * {
+    GncOwner * temp_owner = gncOwnerCreate();
+    void * pointer_to_real_thing;
+    if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncCustomer *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitCustomer(temp_owner, (GncCustomer *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncJob *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitJob(temp_owner, (GncJob *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncVendor *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitVendor(temp_owner, (GncVendor *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncEmployee *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitEmployee(temp_owner, (GncEmployee *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else {
+	PyErr_SetString(
+	    PyExc_ValueError,
+	    "Python object passed to function with GncOwner * argument "
+	    "couldn't be converted back to pointer of that type");
+        return NULL;
+    }
+}
+
+%typemap(freearg) GncOwner * {
+    gncOwnerDestroy($1);
+}
+
+
+%include <gnc-lot.h>
 
 //business-core includes
 %include <gncCustomer.h>
@@ -87,12 +188,21 @@
 %include <gncVendor.h>
 %include <gncAddress.h>
 %include <gncBillTerm.h>
+%include <gncInvoice.h>
+%include <gncJob.h>
+%include <gncEntry.h>
+%include <gncTaxTable.h>
+%include <gncIDSearch.h>
+
+// Commodity prices includes and stuff
+%include <gnc-pricedb.h>
+
 
 %init %{
-
-g_type_init();
-scm_init_guile();
-gnc_module_load("gnucash/engine", 0);
-gnc_module_load("gnucash/business-core-file", 0);
-
+qof_log_init();
+qof_init();
+gnc_module_system_init();
+char * no_args[1] = { NULL };
+gnc_engine_init(0, no_args);
 %}
+

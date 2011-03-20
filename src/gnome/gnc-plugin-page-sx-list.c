@@ -1,10 +1,10 @@
-/* 
+/*
  * gnc-plugin-page-sx-list.c
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
+ * modify it under the terms of version 2 and/or version 3 of the GNU General Public
  * License as published by the Free Software Foundation.
  *
  * As a special exception, permission is granted to link the binary module
@@ -43,14 +43,12 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include "glib-compat.h"
 #include <glade/glade-xml.h>
 #include "SX-book.h"
 #include "Split.h"
 #include "Transaction.h"
 #include "dialog-sx-editor.h"
 #include "dialog-utils.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-dense-cal.h"
@@ -115,14 +113,21 @@ static void gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxL
 static void gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page);
 
 /* Command callbacks */
-static GtkActionEntry gnc_plugin_page_sx_list_actions [] = {
+static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
+{
     { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL, NULL },
-    { "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
-      N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new) },
-    { "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
-      N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit) },
-    { "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
-      N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete) },
+    {
+        "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
+        N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new)
+    },
+    {
+        "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
+        N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit)
+    },
+    {
+        "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
+        N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete)
+    },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS (gnc_plugin_page_sx_list_actions);
@@ -132,8 +137,10 @@ gnc_plugin_page_sx_list_get_type (void)
 {
     static GType gnc_plugin_page_sx_list_type = 0;
 
-    if (gnc_plugin_page_sx_list_type == 0) {
-        static const GTypeInfo our_info = {
+    if (gnc_plugin_page_sx_list_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
             sizeof (GncPluginPageSxListClass),
             NULL,
             NULL,
@@ -144,10 +151,10 @@ gnc_plugin_page_sx_list_get_type (void)
             0,
             (GInstanceInitFunc) gnc_plugin_page_sx_list_init
         };
-		
+
         gnc_plugin_page_sx_list_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                                               GNC_PLUGIN_PAGE_SX_LIST_NAME,
-                                                               &our_info, 0);
+                                       GNC_PLUGIN_PAGE_SX_LIST_NAME,
+                                       &our_info, 0);
     }
 
     return gnc_plugin_page_sx_list_type;
@@ -223,12 +230,12 @@ gnc_plugin_page_sx_list_dispose(GObject *object)
 
     g_return_if_fail(!priv->disposed);
     priv->disposed = TRUE;
-     
+
     g_object_unref(G_OBJECT(priv->dense_cal_model));
     priv->dense_cal_model = NULL;
     gtk_widget_unref(GTK_WIDGET(priv->gdcal));
     priv->gdcal = NULL;
-    g_object_unref(G_OBJECT(priv->instances)); 
+    g_object_unref(G_OBJECT(priv->instances));
     priv->instances = NULL;
 
     G_OBJECT_CLASS (parent_class)->dispose(object);
@@ -287,9 +294,9 @@ gppsl_selection_changed_cb(GtkTreeSelection *selection, gpointer user_data)
     edit_action = gnc_plugin_page_get_action(page, "SxListEditAction");
     delete_action = gnc_plugin_page_get_action(page, "SxListDeleteAction");
     selection_state
-        = gtk_tree_selection_count_selected_rows(selection) == 0
-        ? FALSE
-        : TRUE;
+    = gtk_tree_selection_count_selected_rows(selection) == 0
+      ? FALSE
+      : TRUE;
     gtk_action_set_sensitive(edit_action, selection_state);
     gtk_action_set_sensitive(delete_action, selection_state);
 }
@@ -354,12 +361,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
         priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new(GNC_SX_INSTANCE_MODEL(priv->instances));
         priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
-#ifdef HAVE_GTK_2_10
         g_object_ref_sink(priv->gdcal);
-#else
-        g_object_ref(G_OBJECT(priv->gdcal));
-        gtk_object_sink(GTK_OBJECT(priv->gdcal));
-#endif
 
         gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
         gnc_dense_cal_set_num_months(priv->gdcal, 12);
@@ -370,10 +372,10 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     }
 
     priv->gnc_component_id = gnc_register_gui_component("plugin-page-sx-list",
-                                                        gnc_plugin_page_sx_list_refresh_cb,
-                                                        gnc_plugin_page_sx_list_close_cb,
-                                                        page);
-     
+                             gnc_plugin_page_sx_list_refresh_cb,
+                             gnc_plugin_page_sx_list_close_cb,
+                             page);
+
     return priv->widget;
 }
 
@@ -386,21 +388,22 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
     page = GNC_PLUGIN_PAGE_SX_LIST (plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
 
-    if (priv->widget) {
+    if (priv->widget)
+    {
         g_object_unref(G_OBJECT(priv->widget));
         priv->widget = NULL;
     }
 
-    if (priv->gnc_component_id) {
+    if (priv->gnc_component_id)
+    {
         gnc_unregister_gui_component(priv->gnc_component_id);
         priv->gnc_component_id = 0;
     }
 }
 
-/**
- * Save enough information about this page that it can be recreated next time
+/** Save enough information about this page that it can be recreated next time
  * the user starts gnucash.
- * @param page The page to save.
+ * @param plugin_page The page to save.
  * @param key_file A pointer to the GKeyFile data structure where the
  * page information should be written.
  * @param group_name The group name to use when saving data.
@@ -465,7 +468,7 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
     {
         GError *err = NULL;
         gint paned_position = g_key_file_get_integer(key_file, group_name,
-                                                     "paned_position", &err);
+                              "paned_position", &err);
         if (err == NULL)
             gtk_paned_set_position(GTK_PANED(priv->widget), paned_position);
         else
@@ -486,7 +489,7 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
         GDate now;
         Recurrence *r = g_new0(Recurrence, 1);
         GList *schedule;
-        
+
         g_date_clear(&now, 1);
         g_date_set_time_t(&now, time(NULL));
         recurrenceSet(r, 1, PERIOD_MONTH, &now, WEEKEND_ADJ_NONE);
@@ -553,11 +556,12 @@ _destroy_sx(gpointer data, gpointer user_data)
 {
     SchedXactions *sxes;
     SchedXaction *sx = (SchedXaction*)data;
-    GNCBook *book;
+    QofBook *book;
     book = gnc_get_current_book();
     sxes = gnc_book_get_schedxactions(book);
     gnc_sxes_del_sx(sxes, sx);
-    xaccSchedXactionFree(sx);
+    gnc_sx_begin_edit(sx);
+    xaccSchedXactionDestroy(sx);
 }
 
 static void
@@ -591,7 +595,7 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
        multiple SXs be deleted as well? Ideally, the number of
        to-be-deleted SXs should be mentioned here; see
        dialog-sx-since-last-run.c:807 */
-    if (gnc_verify_dialog(NULL, FALSE, _("Do you really want to delete this scheduled transaction?")))
+    if (gnc_verify_dialog(NULL, FALSE, "%s", _("Do you really want to delete this scheduled transaction?")))
     {
         g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
     }

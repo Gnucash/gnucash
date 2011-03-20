@@ -26,7 +26,7 @@
 /********************************************************************\
  * gnc_acct_period_dialog                                           *
  *   opens up a window to set up accounting period                  *
- *                                                                  * 
+ *                                                                  *
  * Args:   none                                                     *
  * Return: nothing                                                  *
 \********************************************************************/

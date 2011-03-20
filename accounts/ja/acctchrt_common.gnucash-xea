@@ -7,7 +7,7 @@
       最も共通に使われる科目の基本セット
     </gnc-act:short-description>
     <gnc-act:long-description>
-    ほとんどのユーザはこの勘定科目セットを選ぶとよいでしょう。最も共通に使われる科目 (預貯金、現金、クレジットカード、所得、一般的な支出) が含まれています。
+    ほとんどのユーザはこの勘定科目集を選ぶとよいでしょう。最も共通に使われる科目 (預貯金、現金、クレジットカード、所得、一般的な支出) が含まれています。
   </gnc-act:long-description>    
   <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
@@ -151,47 +151,47 @@
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>利息収入</act:name>
+  <act:name>利子収入</act:name>
   <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>利息収入</act:description>
+  <act:description>利子収入</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>当座預金利息</act:name>
+  <act:name>当座預金利子</act:name>
   <act:id type="new">73481e2da7461fc34e7003b7ec560bdf</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>当座預金利息</act:description>
+  <act:description>当座預金利子</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>その他の利息</act:name>
+  <act:name>その他の利子</act:name>
   <act:id type="new">be17363347a8578c48cecd06bc8b7aa8</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>その他の利息</act:description>
+  <act:description>その他の利子</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>普通預金利息</act:name>
+  <act:name>普通預金利子</act:name>
   <act:id type="new">2802ac0d1bff1c09a903f2ad6fde2725</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>普通預金利息</act:description>
+  <act:description>普通預金利子</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -333,14 +333,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>義援金</act:name>
+  <act:name>義捐金</act:name>
   <act:id type="new">ec8eec3d46c69aa861fda836e11346c0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>義援金</act:description>
+  <act:description>義捐金</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -355,14 +355,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>コンピュータ</act:name>
+  <act:name>コンピューター</act:name>
   <act:id type="new">fc4390b6214ad1576c5ffffc2b3c268c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>コンピュータ</act:description>
+  <act:description>コンピューター</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -553,14 +553,14 @@
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>電話料金</act:name>
+  <act:name>電話</act:name>
   <act:id type="new">1d9d7265e25c6c84dda514d2e8899e87</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>電話料金</act:description>
+  <act:description>電話</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

@@ -44,37 +44,41 @@ int libgncmod_dialog_tax_table_gnc_module_age      = 0;
 char *
 libgncmod_dialog_tax_table_gnc_module_path(void)
 {
-  return g_strdup("gnucash/dialog-tax-table");
+    return g_strdup("gnucash/dialog-tax-table");
 }
 
 char *
 libgncmod_dialog_tax_table_gnc_module_description(void)
 {
-  return g_strdup("The GnuCash tax-table GNOME UI module");
+    return g_strdup("The GnuCash tax-table GNOME UI module");
 }
 
 int
 libgncmod_dialog_tax_table_gnc_module_init(int refcount)
 {
-  /* load business-core: we depend on it -- and it depends on the engine */
-  if (!gnc_module_load ("gnucash/business-core", 0)) {
-    return FALSE;
-  }
-  /* We also depend on app-utils and gnome-utils modules */
-  if (!gnc_module_load ("gnucash/app-utils", 0)) {
-    return FALSE;
-  }
-  if (!gnc_module_load ("gnucash/gnome-utils", 0)) {
-    return FALSE;
-  }
+    /* load business-core: we depend on it -- and it depends on the engine */
+    if (!gnc_module_load ("gnucash/business-core", 0))
+    {
+        return FALSE;
+    }
+    /* We also depend on app-utils and gnome-utils modules */
+    if (!gnc_module_load ("gnucash/app-utils", 0))
+    {
+        return FALSE;
+    }
+    if (!gnc_module_load ("gnucash/gnome-utils", 0))
+    {
+        return FALSE;
+    }
 
-  scm_init_sw_dialog_tax_table_module();
-  scm_c_eval_string("(use-modules (sw_dialog_tax_table))");
+    scm_init_sw_dialog_tax_table_module();
+    scm_c_eval_string("(use-modules (sw_dialog_tax_table))");
 
-  return TRUE;
+    return TRUE;
 }
 
 int
-libgncmod_dialog_tax_table_gnc_module_end(int refcount) {
-  return TRUE;
+libgncmod_dialog_tax_table_gnc_module_end(int refcount)
+{
+    return TRUE;
 }

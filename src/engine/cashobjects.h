@@ -22,9 +22,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
  */
- 
- /* a convenience header for anyone working with the libcashobjects.la library. */
- 
+
+/* a convenience header for anyone working with the libcashobjects.la library. */
+
 #ifndef _CASHOBJECTS_H
 #define _CASHOBJECTS_H
 

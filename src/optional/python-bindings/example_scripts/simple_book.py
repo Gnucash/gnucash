@@ -1,13 +1,25 @@
 #!/usr/bin/env python
-from gnucash import Book
 
-book = Book()
+##  @file
+#   @brief Simple example for a book 
+#   @ingroup python_bindings_examples
+
+import sys
+from gnucash import Session
+
+# We need to tell GnuCash the data format to create the new file as (xml://)
+uri = "xml:///tmp/simple_book.gnucash"
+
+print "uri:", uri
+ses = Session(uri, is_new=True)
+book = ses.get_book()
 
 #Call some methods that produce output to show that Book works
-print "New book:"
-book.print_dirty()
-book.mark_saved()
-print "\nBook marked saved:"
-book.print_dirty()
+book.get_root_account().SetDescription("hello, book")
+print "Book is saved:", not book.not_saved()
 
-book.destroy()
+print "saving..."
+ses.save()
+
+print "Book is saved:", not book.not_saved()
+ses.end()

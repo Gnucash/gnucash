@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-main-window.h -- GtkWindow which represents the
  *	GnuCash main window.
  *
@@ -52,27 +52,30 @@
 /* typedefs & structures */
 
 /** The instance data structure for a main window object. */
-typedef struct GncMainWindow {
-	GtkWindow gtk_window;	/**< The parent object for a main window. */
-	GtkUIManager *ui_merge; /**< A pointer to the UI Manager data
+typedef struct GncMainWindow
+{
+    GtkWindow gtk_window;	/**< The parent object for a main window. */
+    GtkUIManager *ui_merge; /**< A pointer to the UI Manager data
 				   structure for the whole window. */
 } GncMainWindow;
 
 /** The class data structure for a main window object. */
-typedef struct {
-	GtkWindowClass gtk_window;	/**< The parent class for a
+typedef struct
+{
+    GtkWindowClass gtk_window;	/**< The parent class for a
 					   main window. */
 
-	/* callbacks */
-	void (*page_added)   (GncMainWindow *window,
-			      GncPluginPage *page);
-	void (*page_changed) (GncMainWindow *window,
-			      GncPluginPage *page);
+    /* callbacks */
+    void (*page_added)   (GncMainWindow *window,
+                          GncPluginPage *page);
+    void (*page_changed) (GncMainWindow *window,
+                          GncPluginPage *page);
 } GncMainWindowClass;
 
-typedef struct {
-	GncMainWindow *window;
-	gpointer data;
+typedef struct
+{
+    GncMainWindow *window;
+    gpointer data;
 } GncMainWindowActionData;
 
 typedef void (*GncMainWindowFunc) (GncMainWindow *window, GncPluginPage *page);
@@ -115,7 +118,7 @@ void gnc_main_window_display_page (GncPluginPage *page);
  *  page of data the should be brought to the top and displayed.
  */
 void gnc_main_window_open_page (GncMainWindow *window,
-				GncPluginPage *page);
+                                GncPluginPage *page);
 
 
 /** Remove a data plugin page from a window and display the previous
@@ -156,9 +159,30 @@ void gnc_main_window_foreach_page (GncMainWindowPageFunc fn,
 GncPluginPage *gnc_main_window_get_current_page (GncMainWindow *window);
 
 
+/** Returns the pointer to the GtkUIManager which is used for the menu
+ * item merging. */
+GtkUIManager *gnc_main_window_get_uimanager (GncMainWindow *window);
+
+
+/** Update the name of the page in the main window.
+ *
+ *  @param page The page to be updated.
+ *  @param name_in The new name for the page.
+*/
 void
 main_window_update_page_name (GncPluginPage *page,
-			      const gchar *name_in);
+                              const gchar *name_in);
+
+
+/** Update the color on the page tabs in the main window.
+ *
+ *  @param page The page to be updated.
+ *  @param color_in The new color string for the page tab.
+*/
+void
+main_window_update_page_color (GncPluginPage *page,
+                               const gchar *color_in);
+
 
 /** Manually add a set of actions to the specified window.  Plugins
  *  whose user interface is not hard coded (e.g. the menu-additions *
@@ -179,9 +203,9 @@ main_window_update_page_name (GncPluginPage *page,
  *  gtk_ui_manager_new_merge_id().
  */
 void gnc_main_window_manual_merge_actions (GncMainWindow *window,
-					   const gchar *group_name,
-					   GtkActionGroup *group,
-					   guint merge_id);
+        const gchar *group_name,
+        GtkActionGroup *group,
+        guint merge_id);
 
 
 /** Add a set of actions to the specified window.  This function
@@ -202,6 +226,11 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *
  *  @param n_entries The number of actions in the array.
  *
+ *  @param toggle_entries A pointer to an array of GtkToggleActionEntry.
+ *  These are the toggle actions that will be added to the user interface.
+ *
+ *  @param n_toggle_entries The number of toggle actions in the array.
+ *
  *  @param filename The filename containing the user interface
  *  definition that goes with this set of actions.
  *
@@ -209,11 +238,13 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *  functions.
  */
 void gnc_main_window_merge_actions (GncMainWindow *window,
-				    const gchar *group_name,
-				    GtkActionEntry *entries,
-				    guint n_entries,
-				    const gchar *filename,
-				    gpointer user_data);
+                                    const gchar *group_name,
+                                    GtkActionEntry *entries,
+                                    guint n_entries,
+                                    GtkToggleActionEntry *toggle_entries,
+                                    guint n_toggle_entries,
+                                    const gchar *filename,
+                                    gpointer user_data);
 
 
 /** Remove a set of actions from the specified window.  This function
@@ -228,7 +259,7 @@ void gnc_main_window_merge_actions (GncMainWindow *window,
  *  the same name provided when the actions were installed.
  */
 void gnc_main_window_unmerge_actions (GncMainWindow *window,
-				      const gchar *group_name);
+                                      const gchar *group_name);
 
 
 /** Force a full update of the user interface for the specified
@@ -258,7 +289,7 @@ void gnc_main_window_actions_updated (GncMainWindow *window);
  *  returned.
  */
 GtkActionGroup *gnc_main_window_get_action_group (GncMainWindow *window,
-						  const gchar *group_name);
+        const gchar *group_name);
 
 
 /** Set the window where all progressbar updates should occur.  This
@@ -288,32 +319,32 @@ void gnc_main_window_set_progressbar_window( GncMainWindow *window );
  *  handled the click.
  */
 gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
-					  GdkEventButton *event,
-					  GncPluginPage *page);
+        GdkEventButton *event,
+        GncPluginPage *page);
 
 /** Restore the persistent state of all windows.
  *
  *  @param keyfile The GKeyFile containing persistent window state.
- */ 
+ */
 void gnc_main_window_restore_all_windows(const GKeyFile *keyfile);
 
 /** Save the persistent state of all windows.
  *
  *  @param keyfile The GKeyFile to contain persistent window state.
- */ 
+ */
 void gnc_main_window_save_all_windows(GKeyFile *keyfile);
 
 /** Restore the persistent state of one window to a sane default.
- */ 
+ */
 void gnc_main_window_restore_default_state(void);
 
 /**
  * gnc_gtk_action_group_set_translation_domain:
  * @param action_group a #GtkActionGroup
  * @param domain the translation domain to use for dgettext() calls
- * 
- * Sets the translation domain and uses dgettext() for translating the 
- * @a label and @a tooltip of #GtkActionEntry<!-- -->s added by 
+ *
+ * Sets the translation domain and uses dgettext() for translating the
+ * @a label and @a tooltip of #GtkActionEntry<!-- -->s added by
  * gtk_action_group_add_actions().
  *
  * This is copied from gtk's gtk_action_group_set_translation_domain()
@@ -325,9 +356,9 @@ void gnc_main_window_restore_default_state(void);
  * gnc_gtk_action_group_set_translation_domain can be replaced by
  * gtk_action_group_set_translation_domain again.
  **/
-void 
+void
 gnc_gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
-					     const gchar    *domain);
+        const gchar    *domain);
 
 
 /** Tell a window to finish any outstanding activities.  This function
@@ -362,9 +393,21 @@ gboolean gnc_main_window_all_finish_pending (void);
  *  this action. */
 void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolean sensitive);
 
+/** Find action in main window.
+ *
+ *  @param window Whe window which should be checked for the action.
+ *
+ *  @param name The name of the command to be retrieved.
+ *
+ *  @return A pointer to a GtkAction that was added with the
+ *  specified name. If the name cannot be found, then NULL will be
+ *  returned.
+ */
+GtkAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
+
 /**
  * Shows all main windows.
- **/ 
+ **/
 void gnc_main_window_show_all_windows(void);
 
 #endif /* __GNC_MAIN_WINDOW_H */

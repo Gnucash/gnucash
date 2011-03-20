@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2006-04-29 15:14+0200\n"
-"PO-Revision-Date: 2007-09-14 22:46+0200\n"
+"POT-Creation-Date: 2010-11-24 02:25+0100\n"
+"PO-Revision-Date: 2010-10-05 21:53+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -59,7 +59,7 @@ msgstr "Ertrag"
 
 #. "A debt, a financial obligation"
 msgid "account type: Liability"
-msgstr "Passiva"
+msgstr "Fremdkapital (bis <=2.2.8: Passiva)"
 
 #. "-"
 msgid "account type: money-market"
@@ -79,7 +79,7 @@ msgstr "Aktienkonto (früher: Depot)"
 
 #. "-"
 msgid "account: parent account"
-msgstr "Hauptkonto"
+msgstr "Übergeordnetes Konto (bis <= 2.2.4: Hauptkonto)"
 
 #. "-"
 msgid "account: subaccount"
@@ -87,7 +87,7 @@ msgstr "Unterkonto"
 
 #. "-"
 msgid "account: top level account"
-msgstr "Top-Level-Konto (Oberkonto?)"
+msgstr "Konto der obersten Ebene (bis <=2.2.4: Top-Level-Konto?) (Oberkonto?)"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -191,7 +191,7 @@ msgstr "Bank"
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr "Rechnung (Rechnungseingang, Empfangene Rechnung)"
+msgstr "Lieferantenrechnung (Rechnung, Rechnungseingang, Empfangene Rechnung)"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -244,11 +244,11 @@ msgstr "Schliessen"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "Währung/Aktie"
+msgstr "Devise/Wertpapier (auch: Währung, Aktie)"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "Börsenplatzkürzel"
+msgstr "Handelsplatz (bis <=2.2.4: Börsenplatzkürzel)"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
@@ -315,6 +315,10 @@ msgstr "Abschreibung"
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
 msgstr "Beschreibung (Verwendungszweck, Buchungstext, Text?)"
+
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+msgid "discount"
+msgstr "Skonto (billingterms), Rabatt (invoice), Nachlass (als Oberbegriff sonst)"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -486,7 +490,9 @@ msgstr "Passwort (Mantra, Passphrase)"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr "Verbindlichkeiten/Forderungen (an Lieferungen und Leistungen)"
+msgstr ""
+"offene Verbindlichkeiten/Forderungen (an Lieferungen und Leistungen, bis "
+"<=2.2.8: ohne \"offene\")"
 
 #. "A person to whom sth is paid"
 msgid "payee"
@@ -518,11 +524,11 @@ msgstr "Preis"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr "Briefkurs"
+msgstr "Briefkurs, Ankauf"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr "Geldkurs"
+msgstr "Geldkurs, Verkauf"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
@@ -607,7 +613,7 @@ msgstr "überprüfen (bis 1.6: ausbuchen)"
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
-msgstr "Wertpapier"
+msgstr "Wertpapier (nicht nur Aktie, sondern auch Anteilsscheine etc.)"
 
 #. "-"
 msgid "Share Balance (register)"

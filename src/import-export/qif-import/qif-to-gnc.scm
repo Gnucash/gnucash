@@ -7,6 +7,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (srfi srfi-13))
+(use-modules (gnucash printf))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -133,6 +134,8 @@
                  new-acct (xaccAccountGetCommodity same-gnc-account))
                 (xaccAccountSetNotes
                  new-acct (xaccAccountGetNotes same-gnc-account))
+                (xaccAccountSetColor
+                 new-acct (xaccAccountGetColor same-gnc-account))
                 (xaccAccountSetCode
                  new-acct (xaccAccountGetCode same-gnc-account))))
 
@@ -212,7 +215,9 @@
 (define (qif-import:qif-to-gnc qif-files-list
                                qif-acct-map qif-cat-map
                                qif-memo-map stock-map
-                               default-currency-name progress-dialog)
+                               default-currency-name
+                               transaction-status-pref
+                               progress-dialog)
 
   ;; This procedure does all the work. We'll define it, then call it safely.
   (define (private-convert)
@@ -379,8 +384,9 @@
                                 (gnc-get-current-book))))
                   (xaccTransBeginEdit gnc-xtn)
 
-                  ;; FIXME. This is probably wrong
-                  (xaccTransSetCurrency gnc-xtn (gnc-default-currency))
+                  ;; All accounts & splits are required to be in the
+                  ;; user-specified currency. Use it for the txn too.
+                  (xaccTransSetCurrency gnc-xtn default-currency)
 
                   ;; Build the transaction.
                   (qif-import:qif-xtn-to-gnc-xtn xtn qif-file gnc-xtn
@@ -388,6 +394,7 @@
                                                  qif-acct-map
                                                  qif-cat-map
                                                  qif-memo-map
+                                                 transaction-status-pref
                                                  progress-dialog)
 
                   ;; rebalance and commit everything
@@ -419,6 +426,7 @@
 (define (qif-import:qif-xtn-to-gnc-xtn qif-xtn qif-file gnc-xtn
                                        gnc-acct-hash
                                        qif-acct-map qif-cat-map qif-memo-map
+                                       transaction-status-pref
                                        progress-dialog)
   (let ((splits (qif-xtn:splits qif-xtn))
         (gnc-near-split (xaccMallocSplit (gnc-get-current-book)))
@@ -486,10 +494,15 @@
 	      ;; the debit/credit lines. See bug 495219 for more information.
 	      (xaccTransSetNotes gnc-xtn qif-memo)))
 
+    ;; Look for the transaction status (QIF "C" line). When it exists, apply
+    ;; the cleared (c) or reconciled (y) status to the split. Otherwise, apply
+    ;; user preference.
     (if (eq? qif-cleared 'cleared)
-        (xaccSplitSetReconcile gnc-near-split #\c))
-    (if (eq? qif-cleared 'reconciled)
-        (xaccSplitSetReconcile gnc-near-split #\y))
+        (xaccSplitSetReconcile gnc-near-split #\c)
+        (if (eq? qif-cleared 'reconciled)
+            (xaccSplitSetReconcile gnc-near-split #\y)
+            ;; Apply user preference by default.
+            (xaccSplitSetReconcile gnc-near-split transaction-status-pref)))
 
     (if (not qif-security)
         (begin

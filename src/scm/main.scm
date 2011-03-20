@@ -15,13 +15,13 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(define-module (gnucash main))
+(define-module (gnucash main)
+  #:use-module (gnucash printf))
 
 ;; This is to silence warnings with guile-1.8:
 (if (and (>= (string->number (major-version)) 1) 
          (>= (string->number (minor-version)) 8))
     (default-duplicate-binding-handler 'last))
-(use-modules (ice-9 slib))
 
 (use-modules (gnucash core-utils))
 
@@ -31,9 +31,6 @@
 (use-modules (srfi srfi-8))
 
 (use-modules (gnucash gnc-module))
-
-(use-modules (ice-9 slib))
-(require 'printf)
 
 ;; files we can load from the top-level because they're "well behaved"
 ;; (these should probably be in modules eventually)
@@ -85,34 +82,29 @@
 
 ;; various utilities
 
-;; Test for simple-format
-(if (not (defined? 'simple-format))
-    (begin
-      (require 'format)
-      (export simple-format)
-      (define simple-format format)))
-
 (define (gnc:safe-strcmp a b)
-  (cond
-   (if (and a b)
-       (cond
-        ((string<? a b) -1)
-        ((string>? a b) 1)
-        (else 0))
-       (cond
-        (a 1)
-        (b -1)
-        (else 0)))))
+  (if (and a b)
+      (cond
+       ((string<? a b) -1)
+       ((string>? a b) 1)
+       (else 0))
+      (cond
+       (a 1)
+       (b -1)
+       (else 0))))
 
-(if (not (defined? 'hash-fold))
-    (define (hash-fold proc init table)
-      (for-each 
-       (lambda (bin)
-         (for-each 
-          (lambda (elt)
-            (set! init (proc (car elt) (cdr elt) init)))
-          bin))
-       (vector->list table))))
+(cond-expand
+ (guile-2)
+ (else
+  (if (not (defined? 'hash-fold))
+      (define (hash-fold proc init table)
+        (for-each 
+         (lambda (bin)
+           (for-each 
+            (lambda (elt)
+              (set! init (proc (car elt) (cdr elt) init)))
+            bin))
+         (vector->list table))))))
 
 (define (string-join lst joinstr)
   ;; This should avoid a bunch of unnecessary intermediate string-appends.
@@ -156,7 +148,7 @@
 ;;;; Status output functions.
 
 (define (strify items)
-  (string-join (map (lambda (x) (simple-format #f "~A" x)) items) ""))
+  (string-join (map (lambda (x) (format #f "~A" x)) items) ""))
 
 (define (gnc:warn . items)
   (gnc-scm-log-warn (strify items)))

@@ -32,9 +32,9 @@ void qif_parse_bangtype(QifContext ctx, const char *line);
 
 gboolean
 qif_parse_split_category(const char* str,
-			 char** cat, gboolean *cat_is_acct, char** cat_class,
-			 char** miscx_cat, gboolean *miscx_cat_is_acct,
-			 char **miscx_class);
+                         char** cat, gboolean *cat_is_acct, char** cat_class,
+                         char** miscx_cat, gboolean *miscx_cat_is_acct,
+                         char **miscx_class);
 
 gboolean qif_parse_numeric(QifLine line, gnc_numeric *num);
 QifRecnFlag qif_parse_cleared(QifLine line);

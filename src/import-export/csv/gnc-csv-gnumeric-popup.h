@@ -52,27 +52,28 @@
 
 #include <gtk/gtk.h>
 
-typedef struct {
-	char const *name;
-	char const *pixmap;
-	int display_filter;
-	int sensitive_filter;
+typedef struct
+{
+    char const *name;
+    char const *pixmap;
+    int display_filter;
+    int sensitive_filter;
 
-	int index;
+    int index;
 } GnumericPopupMenuElement;
 
 typedef gboolean (*GnumericPopupMenuHandler) (GnumericPopupMenuElement const *e,
-					      gpointer user_data);
+        gpointer user_data);
 
 /* Use this on menus that are popped up */
 void gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event);
 
 void gnumeric_create_popup_menu (GnumericPopupMenuElement const *elements,
-				 GnumericPopupMenuHandler handler,
-				 gpointer user_data,
-				 int display_filter,
-				 int sensitive_filter,
-				 GdkEventButton *event);
+                                 GnumericPopupMenuHandler handler,
+                                 gpointer user_data,
+                                 int display_filter,
+                                 int sensitive_filter,
+                                 GdkEventButton *event);
 
 
 #endif

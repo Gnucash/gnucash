@@ -54,6 +54,8 @@
      (else (string-append (build-string (cdr lst)) "\n" (car lst)))))
   (let ((lst '())
 	(addr (gnc:owner-get-address owner)))
+; Added gncAddressGetName  <mikee@saxicola.co.uk>
+    (set! lst (add-if-exists lst (gncAddressGetName  addr)))
     (set! lst (add-if-exists lst (gncAddressGetAddr1 addr)))
     (set! lst (add-if-exists lst (gncAddressGetAddr2 addr)))
     (set! lst (add-if-exists lst (gncAddressGetAddr3 addr)))

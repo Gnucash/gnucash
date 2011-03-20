@@ -24,7 +24,7 @@
    @addtogroup SchedXaction Scheduled/Periodic/Recurring Transactions
 
    Scheduled Transactions provide a framework for remembering
-   information about a transactions that are set to occur in the 
+   information about a transactions that are set to occur in the
    future, either once or periodically.
  @{ */
 /**
@@ -86,49 +86,50 @@ typedef struct _SchedXaction SchedXaction;
  **/
 struct _SchedXaction
 {
-  QofInstance     inst;
-  gchar           *name;
+    QofInstance     inst;
+    gchar           *name;
 
-  GList           *schedule;
-  
-  GDate           last_date;
-  
-  GDate           start_date;
-  /* if end_date is invalid, then no end. */
-  GDate           end_date;
+    GList           *schedule;
 
-  /* if num_occurances_total == 0, then no limit */
-  gint            num_occurances_total;
-  /* reminaing occurances are as-of the 'last_date'. */
-  gint            num_occurances_remain;
+    GDate           last_date;
 
-  /* the current instance-count of the SX. */
-  gint            instance_num;
-  
-  gboolean        enabled;
-  gboolean        autoCreateOption;
-  gboolean        autoCreateNotify;
-  gint            advanceCreateDays;
-  gint            advanceRemindDays;
- 
-  Account        *template_acct;
-  
-  /** The list of deferred SX instances.  This list is of temporalStateData
-   * instances.  */
-  GList /* <temporalStateData*> */ *deferredList;
+    GDate           start_date;
+    /* if end_date is invalid, then no end. */
+    GDate           end_date;
+
+    /* if num_occurances_total == 0, then no limit */
+    gint            num_occurances_total;
+    /* remaining occurrences are as-of the 'last_date'. */
+    gint            num_occurances_remain;
+
+    /* the current instance-count of the SX. */
+    gint            instance_num;
+
+    gboolean        enabled;
+    gboolean        autoCreateOption;
+    gboolean        autoCreateNotify;
+    gint            advanceCreateDays;
+    gint            advanceRemindDays;
+
+    Account        *template_acct;
+
+    /** The list of deferred SX instances.  This list is of SXTmpStateData
+     * instances.  */
+    GList /* <SXTmpStateData*> */ *deferredList;
 };
 
 struct _SchedXactionClass
 {
-  QofInstanceClass parent_class;
+    QofInstanceClass parent_class;
 };
 
 /** Just the variable temporal bits from the SX structure. */
-typedef struct _temporalStateData {
-  GDate last_date;
-  gint num_occur_rem;
-  gint num_inst;
-} temporalStateData;
+typedef struct _SXTmpStateData
+{
+    GDate last_date;
+    gint num_occur_rem;
+    gint num_inst;
+} SXTmpStateData;
 
 #define xaccSchedXactionSetGUID(X,G) qof_instance_set_guid(QOF_INSTANCE(X),(G))
 
@@ -140,15 +141,16 @@ SchedXaction *xaccSchedXactionMalloc(QofBook *book);
 void sx_set_template_account (SchedXaction *sx, Account *account);
 
 /**
- * Cleans up and frees a SchedXaction and it's associated data.
+ * Cleans up and frees a SchedXaction and its associated data.
 */
-void xaccSchedXactionFree( SchedXaction *sx );
+void xaccSchedXactionDestroy( SchedXaction *sx );
 
 void gnc_sx_begin_edit (SchedXaction *sx);
 void gnc_sx_commit_edit (SchedXaction *sx);
 
 /** @return GList<Recurrence*> **/
-/*@ dependent @*/ GList* gnc_sx_get_schedule(const SchedXaction *sx);
+/*@ dependent @*/
+GList* gnc_sx_get_schedule(const SchedXaction *sx);
 /** @param[in] schedule A GList<Recurrence*> **/
 void gnc_sx_set_schedule(SchedXaction *sx, /*@ null @*//*@ only @*/ GList *schedule);
 
@@ -158,36 +160,40 @@ gchar *xaccSchedXactionGetName( const SchedXaction *sx );
 */
 void xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName );
 
-GDate* xaccSchedXactionGetStartDate( SchedXaction *sx );
-void xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart );
+const GDate* xaccSchedXactionGetStartDate(const SchedXaction *sx );
+void xaccSchedXactionSetStartDate( SchedXaction *sx, const GDate* newStart );
 
 int xaccSchedXactionHasEndDate( const SchedXaction *sx );
 /**
  * Returns invalid date when there is no end-date specified.
 */
-GDate* xaccSchedXactionGetEndDate( SchedXaction *sx );
+const GDate* xaccSchedXactionGetEndDate(const SchedXaction *sx );
 /**
  * Set to an invalid GDate to turn off 'end-date' definition.
 */
-void xaccSchedXactionSetEndDate( SchedXaction *sx, GDate* newEnd );
+void xaccSchedXactionSetEndDate( SchedXaction *sx, const GDate* newEnd );
 
-GDate* xaccSchedXactionGetLastOccurDate( SchedXaction *sx );
-void xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur );
+const GDate* xaccSchedXactionGetLastOccurDate(const SchedXaction *sx );
+void xaccSchedXactionSetLastOccurDate( SchedXaction *sx, const GDate* newLastOccur );
 
 /**
  * Returns true if the scheduled transaction has a defined number of
- * occurances, false if not.
+ * occurrences, false if not.
 */
 gboolean xaccSchedXactionHasOccurDef( const SchedXaction *sx );
 gint xaccSchedXactionGetNumOccur( const SchedXaction *sx );
 /**
- * Set to '0' to turn off number-of-occurances definition.
+ * Set to '0' to turn off number-of-occurrences definition.
 */
 void xaccSchedXactionSetNumOccur( SchedXaction *sx, gint numNum );
 gint xaccSchedXactionGetRemOccur( const SchedXaction *sx );
 void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 
-/** \brief Set the instance count.
+/** Calculates and returns the number of occurrences of the given SX
+ * in the given date range (inclusive). */
+gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_date, const GDate* end_date);
+
+/** \brief Get the instance count.
  *
  *   This is incremented by one for every created
  * instance of the SX.  Returns the instance num of the SX unless stateData
@@ -196,7 +202,7 @@ void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
  * @param sx The instance whose state should be retrieved.
  * @param stateData may be NULL.
 */
-gint gnc_sx_get_instance_count( const SchedXaction *sx, /*@ null @*/ void *stateData );
+gint gnc_sx_get_instance_count( const SchedXaction *sx, /*@ null @*/ SXTmpStateData *stateData );
 /**
  * Sets the instance count to something other than the default.  As the
  * default is the incorrect value '0', callers should DTRT here.
@@ -231,22 +237,38 @@ void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
  * SX without having to rollback all the individual state changes.
 @{
 */
-void *gnc_sx_create_temporal_state( SchedXaction *sx );
-void gnc_sx_incr_temporal_state( SchedXaction *sx, void *stateData );
-void gnc_sx_revert_to_temporal_state( SchedXaction *sx,
-                                      void *stateData );
-void gnc_sx_destroy_temporal_state( void *stateData );
-/** \brief Allocates and returns a copy of the given temporal state.
+/** Allocates a new SXTmpStateData object and fills it with the
+ * current state of the given sx.
+ */
+SXTmpStateData *gnc_sx_create_temporal_state(const SchedXaction *sx );
 
- *   Destroy with gnc_sx_destroy_temporal_state(), as you'd expect.
+/** Calculates the next occurrence of the given SX and stores that
+ * occurence in the remporalStateDate. The SX is unchanged. */
+void gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *stateData );
+
+/** Sets the state of the given SX to the state of the given
+ * SXTmpStateData. In that sense, this function does not "revert"
+ * but instead it copies the state from the SXTmpStateData to the
+ * real SX.. */
+void gnc_sx_revert_to_temporal_state( SchedXaction *sx,
+                                      SXTmpStateData *stateData );
+
+/** Frees the given stateDate object. */
+void gnc_sx_destroy_temporal_state( SXTmpStateData *stateData );
+
+/** \brief Allocates and returns a one-by-one copy of the given
+ * temporal state.
+ *
+ * The caller must destroy the returned object with
+ * gnc_sx_destroy_temporal_state() after usage.
 */
-void *gnc_sx_clone_temporal_state( void *stateData );
+SXTmpStateData *gnc_sx_clone_temporal_state( SXTmpStateData *stateData );
 /** @} */
 
-/** \brief Returns the next occurance of a scheduled transaction.
+/** \brief Returns the next occurrence of a scheduled transaction.
  *
- *   If the transaction hasn't occured, then it's based off the start date.
- * Otherwise, it's based off the last-occurance date.
+ *   If the transaction hasn't occurred, then it's based off the start date.
+ * Otherwise, it's based off the last-occurrence date.
  *
  * If state data is NULL, the current value of the SX is used for
  * computation.  Otherwise, the values in the state data are used.  This
@@ -254,10 +276,10 @@ void *gnc_sx_clone_temporal_state( void *stateData );
  * for possible action without modifying the SX state until action is
  * actually taken.
 */
-GDate xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData );
-GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
-                                        GDate *date,
-                                        void *stateData );
+GDate xaccSchedXactionGetNextInstance(const SchedXaction *sx, SXTmpStateData *stateData );
+GDate xaccSchedXactionGetInstanceAfter(const SchedXaction *sx,
+                                       GDate *date,
+                                       SXTmpStateData *stateData );
 
 /** \brief Set the schedxaction's template transaction.
 
@@ -293,6 +315,8 @@ GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 #define GNC_SX_ACCOUNT               "account"
 #define GNC_SX_CREDIT_FORMULA        "credit-formula"
 #define GNC_SX_DEBIT_FORMULA         "debit-formula"
+#define GNC_SX_CREDIT_NUMERIC        "credit-numeric"
+#define GNC_SX_DEBIT_NUMERIC         "debit-numeric"
 #define GNC_SX_SHARES                "shares"
 #define GNC_SX_AMOUNT                "amnt"
 #define GNC_SX_FROM_SCHED_XACTION    "from-sched-xaction"
@@ -314,12 +338,12 @@ gboolean SXRegister (void);
 #define xaccSchedXactionGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
 
 /** \deprecated to be replaced with 'dirty' kvp's */
-KvpValue *xaccSchedXactionGetSlot( const SchedXaction *sx, 
-				    const char *slot );
+KvpValue *xaccSchedXactionGetSlot( const SchedXaction *sx,
+                                   const char *slot );
 /** \deprecated to be replaced with 'dirty' kvp's */
-void xaccSchedXactionSetSlot( SchedXaction *sx, 
-			      const char *slot,
-			      const KvpValue *value );
+void xaccSchedXactionSetSlot( SchedXaction *sx,
+                              const char *slot,
+                              const KvpValue *value );
 
 
 #endif /* XACC_SCHEDXACTION_H */

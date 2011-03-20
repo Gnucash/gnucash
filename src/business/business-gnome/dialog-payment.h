@@ -26,15 +26,14 @@
 
 typedef struct _payment_window PaymentWindow;
 
-#include "gnc-book.h"
 #include "gncOwner.h"
 #include "gncInvoice.h"
 
 /* Create a payment window */
-PaymentWindow * gnc_ui_payment_new (GncOwner *owner, GNCBook *book);
+PaymentWindow * gnc_ui_payment_new (GncOwner *owner, QofBook *book);
 PaymentWindow * gnc_ui_payment_new_with_invoice (GncOwner *owner,
-						 GNCBook *book,
-						 GncInvoice *invoice);
+        QofBook *book,
+        GncInvoice *invoice);
 
 /* Destroy a payment window */
 void gnc_ui_payment_window_destroy (PaymentWindow *pw);

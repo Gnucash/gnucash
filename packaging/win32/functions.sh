@@ -47,38 +47,66 @@ function wpwd() {
     qpopd
 }
 
-# usage:  smart_wget URL DESTDIR
+# usage:  smart_wget URL DESTDIR [DESTFILE]
 function smart_wget() {
     _FILE=`basename $1`
+    # Remove url garbage from filename that would not be removed by wget
+    _UFILE=${3:-${_FILE##*=}}
     _DLD=`unix_path $2`
 
     # If the file already exists in the download directory ($2)
     # then don't do anything.  But if it does NOT exist then
     # download the file to the tmpdir and then when that completes
     # move it to the dest dir.
-    if [ ! -f $_DLD/$_FILE ] ; then
+    if [ ! -f $_DLD/$_UFILE ] ; then
     # If WGET_RATE is set (in bytes/sec), limit download bandwith
     if [ ! -z "$WGET_RATE" ] ; then
             wget --passive-ftp -c $1 -P $TMP_UDIR --limit-rate=$WGET_RATE
         else
             wget --passive-ftp -c $1 -P $TMP_UDIR
         fi
-    mv $TMP_UDIR/$_FILE $_DLD
+    mv $TMP_UDIR/$_FILE $_DLD/$_UFILE
     fi
-    LAST_FILE=$_DLD/$_FILE
+    LAST_FILE=$_DLD/$_UFILE
 }
 
-# usage:  wget_unpacked URL DOWNLOAD_DIR UNPACK_DIR
+# usage:  wget_unpacked URL DOWNLOAD_DIR UNPACK_DIR [DESTFILE]
 function wget_unpacked() {
-    smart_wget $1 $2
-    _UPD=`unix_path $3`
-    echo -n "Extracting ${LAST_FILE##*/} ... "
+    smart_wget $1 $2 $4
+    _EXTRACT_UDIR=`unix_path $3`
+    _EXTRACT_SUBDIR=
+    echo -n "Extracting $_UFILE ... "
     case $LAST_FILE in
-        *.zip)     unzip -q -o $LAST_FILE -d $_UPD;;
-        *.tar.gz)  tar -xzpf $LAST_FILE -C $_UPD;;
-        *.tar.bz2) tar -xjpf $LAST_FILE -C $_UPD;;
-        *)         die "Cannot unpack file $LAST_FILE!";;
+        *.zip)
+            unzip -q -o $LAST_FILE -d $_EXTRACT_UDIR
+            _PACK_DIR=$(zipinfo -1 $LAST_FILE '*/*' 2>/dev/null | head -1)
+            ;;
+        *.tar.gz|*.tgz)
+            tar -xzpf $LAST_FILE -C $_EXTRACT_UDIR
+            _PACK_DIR=$(tar -ztf $LAST_FILE 2>/dev/null | head -1)
+            ;;
+        *.tar.bz2)
+            tar -xjpf $LAST_FILE -C $_EXTRACT_UDIR
+            _PACK_DIR=$(tar -jtf $LAST_FILE 2>/dev/null | head -1)
+            ;;
+        *.tar.lzma)
+            lzma -dc $LAST_FILE |tar xpf - -C $_EXTRACT_UDIR
+            _PACK_DIR=$(lzma -dc $LAST_FILE |tar -tf - 2>/dev/null | head -1)
+            ;;
+        *)
+            die "Cannot unpack file $LAST_FILE!"
+            ;;
     esac
+
+    # Get the path where the files were actually unpacked
+    # This can be a subdirectory of the requested directory, if the
+    # tarball or zipfile contained a relative path.
+    _PACK_DIR=$(echo "$_PACK_DIR" | sed 's,^\([^/]*\).*,\1,')
+    if (( ${#_PACK_DIR} > 3 ))    # Skip the bin and lib directories from the test
+    then
+        _EXTRACT_SUBDIR=$(echo $_UFILE | sed "s,^\($_PACK_DIR\).*,/\1,;t;d")
+    fi
+    _EXTRACT_UDIR="$_EXTRACT_UDIR$_EXTRACT_SUBDIR"
     echo "done"
 }
 
@@ -153,7 +181,24 @@ function set_env() {
 }
 
 function assert_one_dir() {
-    quiet [ -d "$@" ] || die "Detected multiple directories where only one was expected; please delete all but the latest one: $@"
+    counted=$(ls -d "$@" 2>/dev/null | wc -l)
+    if [[ $counted -eq 0 ]]; then
+        die "Exactly one directory is required, but detected $counted; please check why $@ wasn't created"
+    fi
+    if [[ $counted -gt 1 ]]; then
+        die "Exactly one directory is required, but detected $counted; please delete all but the latest one: $@"
+    fi
+}
+
+function fix_pkgconfigprefix() {
+        _PREFIX=$1
+        shift
+        perl -pi.bak -e"s!^prefix=.*\$!prefix=$_PREFIX!" $@
+   qpopd
+}
+
+function dos2unix() {
+       perl -pi.bak -e"s!\\r\\n\$!\\n!" $@
 }
 
 ### Local Variables: ***

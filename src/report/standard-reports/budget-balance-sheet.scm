@@ -28,9 +28,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report budget-balance-sheet))
+(define-module (gnucash report standard-reports budget-balance-sheet))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
-(use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -50,7 +49,7 @@
   (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section"))
 ;; FIXME this needs an indent option
 
-(define optname-accounts (N_ "Accounts to include"))
+(define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
   (N_ "Report on these accounts, if display depth allows."))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
@@ -908,15 +907,10 @@
 	  ;; however, this still doesn't seem to get around the
 	  ;; colspan bug... cf. gnc:colspans-are-working-right
 	  (if filename
-	      (let* ((port (open-output-file filename))
-		     (gnc:display-report-list-item
-		      (list doc) port " budget-balance-sheet.scm ")
-		     (close-output-port port)
-		     )
-		)
-	      )
-	  )
-	))) ;; end cond
+	      (let* ((port (open-output-file filename)))
+                (gnc:display-report-list-item
+                 (list doc) port " budget-balance-sheet.scm ")
+                (close-output-port port)))))))
     
     (gnc:report-finished)
     

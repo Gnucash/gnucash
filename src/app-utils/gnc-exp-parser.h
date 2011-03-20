@@ -27,10 +27,11 @@
 /**
  * The errors which can be determined at the gnc-exp-parser level.
  **/
-typedef enum {
-  NO_ERR,
-  VARIABLE_IN_EXP,
-  NUM_ERRORS
+typedef enum
+{
+    NO_ERR,
+    VARIABLE_IN_EXP,
+    NUM_ERRORS
 } GNCParseError;
 
 /* Initialize the expression parser. If this function is not
@@ -94,9 +95,9 @@ gboolean gnc_exp_parser_parse (const char * expression,
  * values of varHash when done.
  **/
 gboolean gnc_exp_parser_parse_separate_vars (const char * expression,
-                                             gnc_numeric *value_p,
-                                             char **error_loc_p,
-                                             GHashTable *varHash );
+        gnc_numeric *value_p,
+        char **error_loc_p,
+        GHashTable *varHash );
 
 /* If the last parse returned FALSE, return an error string describing
  * the problem. Otherwise, return NULL. */

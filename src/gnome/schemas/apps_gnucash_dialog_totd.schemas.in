@@ -11,10 +11,10 @@
       <locale name="C">
         <short>Show "Tip Of The Day" at GnuCash start</short>
         <long>
-	  Enables the "Tip Of The Day" when GnuCash starts up.  If
-	  active, the dialog will be shown. Otherwise it will not be
-	  shown.
-	</long>
+          Enables the "Tip Of The Day" when GnuCash starts up.  If
+          active, the dialog will be shown. Otherwise it will not be
+          shown.
+        </long>
       </locale>
     </schema>
 

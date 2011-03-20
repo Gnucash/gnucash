@@ -33,6 +33,8 @@
 ;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash printf))
+
 (define <html-table>
   (make-record-type "<html-table>"
                     '(col-headers
@@ -424,31 +426,69 @@
 ;; otherwise, append all remaining objects to the existing cell
 (define (gnc:html-table-set-cell! table row col . objects)
   (let ((rowdata #f)
-	(row-loc #f)
+        (row-loc #f)
         (l (length (gnc:html-table-data table)))
-	(objs (length objects))
-	)
+        (objs (length objects))
+        )
     ;; ensure the row-data is there 
     (if (>= row l)
-	(begin
+        (begin
           (let loop ((i l))
-	    (gnc:html-table-append-row! table (list))
+            (gnc:html-table-append-row! table (list))
             (if (< i row)
                 (loop (+ i 1))))
           (set! l (gnc:html-table-num-rows table))
-	  (set! row-loc (- (- l 1) row))
+          (set! row-loc (- (- l 1) row))
           (set! rowdata (list)))
-	(begin
-	  (set! row-loc (- (- l 1) row))
-	  (set! rowdata (list-ref (gnc:html-table-data table) row-loc))))
+        (begin
+          (set! row-loc (- (- l 1) row))
+          (set! rowdata (list-ref (gnc:html-table-data table) row-loc))))
     
     ;; make a table-cell and set the data 
     (let* ((tc (gnc:make-html-table-cell))
-	   (first (car objects)))
+           (first (car objects)))
       (if (and (equal? objs 1) (gnc:html-table-cell? first))
-	  (set! tc first)
-	  (apply gnc:html-table-cell-append-objects! tc objects)
-	  )
+          (set! tc first)
+          (apply gnc:html-table-cell-append-objects! tc objects)
+          )
+      (set! rowdata (list-set-safe! rowdata col tc))
+      
+      ;; add the row-data back to the table 
+      (gnc:html-table-set-data! 
+       table (list-set-safe! 
+              (gnc:html-table-data table) 
+              row-loc rowdata)))))
+
+;; if the 4th arg is a cell, overwrite the existing cell,
+;; otherwise, append all remaining objects to the existing cell
+(define (gnc:html-table-set-cell/tag! table row col tag . objects)
+  (let ((rowdata #f)
+        (row-loc #f)
+        (l (length (gnc:html-table-data table)))
+        (num-objs (length objects))
+        )
+    ;; ensure the row-data is there 
+    (if (>= row l)
+        (begin
+          (let loop ((i l))
+            (gnc:html-table-append-row! table (list))
+            (if (< i row)
+                (loop (+ i 1))))
+          (set! l (gnc:html-table-num-rows table))
+          (set! row-loc (- (- l 1) row))
+          (set! rowdata (list)))
+        (begin
+          (set! row-loc (- (- l 1) row))
+          (set! rowdata (list-ref (gnc:html-table-data table) row-loc))))
+    
+    ;; make a table-cell and set the data 
+    (let* ((tc (gnc:make-html-table-cell))
+           (first (car objects)))
+      (if (and (equal? num-objs 1) (gnc:html-table-cell? first))
+          (set! tc first)
+          (apply gnc:html-table-cell-append-objects! tc objects)
+          )
+      (gnc:html-table-cell-set-tag! tc tag)
       (set! rowdata (list-set-safe! rowdata col tc))
       
       ;; add the row-data back to the table 
@@ -529,7 +569,8 @@
   ;; returns a pair, the car of which is the prepending of newcol
   ;; and existing-data, and the cdr is the remaining elements of newcol
   (define (prepend-to-element newcol existing-data length-to-append)
-    (if (= length-to-append 0) ('() . newcol)
+    (if (= length-to-append 0)
+        (cons '() newcol)
         (let* 
             ((current-new (car newcol))
              (current-existing (car existing-data))

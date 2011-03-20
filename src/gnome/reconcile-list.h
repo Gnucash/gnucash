@@ -37,32 +37,35 @@ G_BEGIN_DECLS
 
 typedef struct GNCReconcileList GNCReconcileList;
 
-typedef enum {
-  RECLIST_DEBIT,
-  RECLIST_CREDIT
+typedef enum
+{
+    RECLIST_DEBIT,
+    RECLIST_CREDIT
 } GNCReconcileListType;
 
-struct GNCReconcileList {
-  GNCQueryList qlist;
+struct GNCReconcileList
+{
+    GNCQueryList qlist;
 
-  GHashTable *reconciled;
-  Account *account;
-  GList *column_list;
+    GHashTable *reconciled;
+    Account *account;
+    GList *column_list;
 
-  time_t statement_date;
+    time_t statement_date;
 
-  GNCReconcileList *sibling;
-  GNCReconcileListType list_type;
-  gboolean no_toggle;
+    GNCReconcileList *sibling;
+    GNCReconcileListType list_type;
+    gboolean no_toggle;
 };
 
-typedef struct {
-  GtkCListClass parent_class;
+typedef struct
+{
+    GtkCListClass parent_class;
 
-  void (*toggle_reconciled)  (GNCReconcileList *list,
-			      Split            *split);
-  void (*double_click_split) (GNCReconcileList *list,
-			      Split            *split);
+    void (*toggle_reconciled)  (GNCReconcileList *list,
+                                Split            *split);
+    void (*double_click_split) (GNCReconcileList *list,
+                                Split            *split);
 } GNCReconcileListClass;
 
 #define GCONF_RECONCILE_SECTION "dialogs/reconcile"
@@ -74,11 +77,11 @@ typedef struct {
 GType gnc_reconcile_list_get_type (void);
 
 GtkWidget * gnc_reconcile_list_new (Account * account,
-				    GNCReconcileListType type,
+                                    GNCReconcileListType type,
                                     time_t date);
 
 gint gnc_reconcile_list_get_needed_height(GNCReconcileList *list,
-                                          gint num_rows);
+        gint num_rows);
 
 gint gnc_reconcile_list_get_num_splits(GNCReconcileList *list);
 

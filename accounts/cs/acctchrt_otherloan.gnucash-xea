@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Ostatní půjčky       
+    </gnc-act:title>
+    <gnc-act:short-description>
+	Účty pro zaznamenávání ostatných půjček
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+	Zvolte si tuto sadu účtů, pokud máte i jinou než hypotéční půjčku.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Hlavní Účet</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pasiva</act:name>
+  <act:id type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Pasiva</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dluhy</act:name>
+  <act:id type="new">b5624a9d1a1b797b87b815774faccfe4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dluhy</act:description>
+  <act:parent type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Jiné půjčky</act:name>
+  <act:id type="new">eb79670a4c9b0faab87485b7b2a4abe4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Jiné půjčky</act:description>
+  <act:parent type="new">b5624a9d1a1b797b87b815774faccfe4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Výdaje</act:name>
+  <act:id type="new">565e52a122e8acc9a67a36e61357e2ae</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Výdaje</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Úrok</act:name>
+  <act:id type="new">4a02c14e992ea79076837c164aa6fc8d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Úrok</act:description>
+  <act:parent type="new">565e52a122e8acc9a67a36e61357e2ae</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ostatní úroky</act:name>
+  <act:id type="new">f01de45e290ecc29b64d9cb8a733af68</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Ostatní úroky</act:description>
+  <act:parent type="new">4a02c14e992ea79076837c164aa6fc8d</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -1,8 +1,6 @@
 /** \page pricedocs Price Overview
 
 The Prices and the Price DB overview is in src/doc/design/engine.texinfo
-(also available online as individual HTML:
-http://code.neil.williamsleesmill.me.uk/texi/gnucash-design_4.html#SEC66 )
 
 API: \ref Price
 

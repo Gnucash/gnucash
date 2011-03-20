@@ -20,6 +20,12 @@
 #
 # @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 
+##  @file
+#   @brief Library for making python classes from a set of functions.
+#   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
+#   @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
+#   @ingroup python_bindings
+
 INSTANCE_ARGUMENT = "instance"
 
 class ClassFromFunctions(object):
@@ -111,7 +117,7 @@ class ClassFromFunctions(object):
                      decorator( getattr(cls, function_name) ) )
 
 def method_function_returns_instance(method_function, cls):
-    """A function decorator that is used to decorates method functions that
+    """A function decorator that is used to decorate method functions that
     return instance data, to return instances instead.
 
     You can't use this decorator with @, because this function has a second
@@ -123,6 +129,18 @@ def method_function_returns_instance(method_function, cls):
         return cls( **kargs )
     
     return new_function
+
+def method_function_returns_instance_list(method_function, cls):
+    def new_function(*args):
+        return [ cls( **{INSTANCE_ARGUMENT: item} )
+                 for item in method_function(*args) ]
+    return new_function
+
+def methods_return_instance_lists(cls, function_dict):
+    for func_name, instance_name in function_dict.iteritems():
+        setattr(cls, func_name,
+                method_function_returns_instance_list(
+                getattr(cls, func_name), instance_name))
 
 def default_arguments_decorator(function, *args):
     """Decorates a function to give it default, positional arguments

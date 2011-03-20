@@ -21,12 +21,12 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  **/
-  
+
 /** @addtogroup GUI
     @{ */
 /** @addtogroup GuiReport Reports
     @{ */
-/** @file gnc-plugin-page-report.h 
+/** @file gnc-plugin-page-report.h
     @brief  Report page.
     @author Copyright (C) 2004 Joshua Sled <jsled@asynchronous.org>
 */
@@ -34,7 +34,7 @@
 #ifndef __GNC_PLUGIN_PAGE_REPORT_H
 #define __GNC_PLUGIN_PAGE_REPORT_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 #include "gnc-plugin.h"
 
 G_BEGIN_DECLS
@@ -50,14 +50,16 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_REPORT_NAME "GncPluginPageReport"
 
 /* typedefs & structures */
-typedef struct {
-	GncPluginPage gnc_plugin;
+typedef struct
+{
+    GncPluginPage gnc_plugin;
 } GncPluginPageReport;
 
-typedef struct {
-        GncPluginPageClass gnc_plugin;
+typedef struct
+{
+    GncPluginPageClass gnc_plugin;
 
-	/* callbacks */
+    /* callbacks */
 } GncPluginPageReportClass;
 
 /* function prototypes */

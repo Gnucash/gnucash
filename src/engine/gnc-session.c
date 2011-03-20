@@ -33,12 +33,13 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 QofSession *
 gnc_get_current_session (void)
 {
-    if (!current_session) {
+    if (!current_session)
+    {
         qof_event_suspend();
         current_session = qof_session_new ();
         qof_event_resume();
     }
-    
+
     return current_session;
 }
 
@@ -58,7 +59,8 @@ gnc_set_current_session (QofSession *session)
 
 void gnc_clear_current_session()
 {
-    if (current_session) {
+    if (current_session)
+    {
         xaccLogDisable();
         qof_session_destroy(current_session);
         xaccLogEnable();

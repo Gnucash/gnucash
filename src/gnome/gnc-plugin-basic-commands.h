@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-basic-commands.h -- 
+/*
+ * gnc-plugin-basic-commands.h --
  *
  * Copyright (C) 2005 David Hampton <hampton@employees.org>
  *
@@ -33,7 +33,7 @@
 #ifndef __GNC_PLUGIN_BASIC_COMMANDS_H
 #define __GNC_PLUGIN_BASIC_COMMANDS_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "gnc-plugin.h"
 
@@ -52,16 +52,18 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 
 /** The instance data structure for an basic commands menu plugin. */
-typedef struct {
-  /** The parent object for this widget */
-  GncPlugin gnc_plugin;
+typedef struct
+{
+    /** The parent object for this widget */
+    GncPlugin gnc_plugin;
 } GncPluginBasicCommands;
 
 
 /** The class data structure for a basic commands menu plugin. */
-typedef struct {
-  /** The parent class for this widget. */
-  GncPluginClass gnc_plugin;
+typedef struct
+{
+    /** The parent class for this widget. */
+    GncPluginClass gnc_plugin;
 } GncPluginBasicCommandsClass;
 
 

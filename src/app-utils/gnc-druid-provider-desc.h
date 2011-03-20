@@ -1,3 +1,20 @@
+/********************************************************************\
+ * gnc-druid-provider-desc.h                                        *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
 
 #ifndef GNC_DRUID_PROVIDER_DESC_H
@@ -27,22 +44,22 @@ typedef gboolean (*GNCDruidProviderCB)(GNCDruidCB*);
 
 struct _GNCDruidProviderDesc
 {
-  GObject obj;
-  const gchar *name;		/* the (system-provided)name of this provider */
-  gchar *title;			/* the (user-supplied) druid page title */
+    GObject obj;
+    const gchar *name;		/* the (system-provided)name of this provider */
+    gchar *title;			/* the (user-supplied) druid page title */
 
-  /* Some providers require these, but not all. */
-  GNCDruidProviderCB	next_cb;
-  GNCDruidProviderCB	prev_cb;
-  GNCDruidProviderCB	provider_needed;
+    /* Some providers require these, but not all. */
+    GNCDruidProviderCB	next_cb;
+    GNCDruidProviderCB	prev_cb;
+    GNCDruidProviderCB	provider_needed;
 
-  /* The following are set internally for use by the backend */
-  GNCDruidProvider *	provider; /* a pointer to the provider */
+    /* The following are set internally for use by the backend */
+    GNCDruidProvider *	provider; /* a pointer to the provider */
 };
 
 struct _GNCDruidProviderDescClass
 {
-  GObjectClass obj;
+    GObjectClass obj;
 };
 
 GType	gnc_druid_provider_desc_get_type(void);

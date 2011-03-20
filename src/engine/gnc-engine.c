@@ -32,7 +32,6 @@
 #include "gnc-budget.h"
 #include "TransactionP.h"
 #include "gnc-commodity.h"
-#include "gnc-lot-p.h"
 #include "gnc-pricedb-p.h"
 
 /** gnc file backend library name */
@@ -49,84 +48,89 @@ gpointer g_error_cb_data;
 
 // static QofLogModule log_module = GNC_MOD_ENGINE;
 
-/* GnuCash version functions */
-unsigned int
-gnucash_major_version (void)
-{
-  return GNUCASH_MAJOR_VERSION;
-}
-
-unsigned int
-gnucash_minor_version (void)
-{
-  return GNUCASH_MINOR_VERSION;
-}
-
-unsigned int
-gnucash_micro_version (void)
-{
-  return GNUCASH_MICRO_VERSION;
-}
-
 /********************************************************************
  * gnc_engine_init
- * initialize backend, load any necessary databases, etc. 
+ * initialize backend, load any necessary databases, etc.
  ********************************************************************/
 
-void 
+static void
+gnc_engine_init_part1()
+{
+    if (1 == engine_is_initialized) return;
+
+    /* initialize QOF */
+    qof_init();
+    qof_set_alt_dirty_mode(TRUE);
+
+    /* Now register our core types */
+    cashobjects_register();
+}
+
+static void
+gnc_engine_init_part2()
+{
+    gchar *pkglibdir = gnc_path_get_pkglibdir ();
+    static struct
+    {
+        const gchar* lib;
+        gboolean required;
+    } libs[] =
+    {
+#if defined( HAVE_DBI_DBI_H )
+        { "gncmod-backend-dbi", TRUE },
+#endif
+        { "gncmod-backend-xml", TRUE },
+        { NULL, FALSE }
+    }, *lib;
+
+    for (lib = libs; lib->lib ; lib++)
+    {
+        if (qof_load_backend_library(pkglibdir, lib->lib))
+        {
+            engine_is_initialized = 1;
+        }
+        else
+        {
+            g_warning("failed to load %s from %s\n", lib->lib, pkglibdir);
+            /* If this is a required library, stop now! */
+            if (lib->required)
+            {
+                g_critical("required library %s not found.\n", lib->lib);
+            }
+        }
+    }
+    g_free (pkglibdir);
+}
+
+static void
+gnc_engine_init_part3(int argc, char ** argv)
+{
+    GList * cur;
+    /* call any engine hooks */
+    for (cur = engine_init_hooks; cur; cur = cur->next)
+    {
+        gnc_engine_init_hook_t hook = (gnc_engine_init_hook_t)cur->data;
+
+        if (hook)
+            (*hook)(argc, argv);
+    }
+}
+
+void
 gnc_engine_init(int argc, char ** argv)
 {
-  static struct {
-    const gchar* lib;
-    gboolean required;
-  } libs[] = {
-#if defined( HAVE_DBI_DBI_H )
-    { "gncmod-backend-dbi", TRUE },
-#endif
-//    { "gncmod-backend-gda", TRUE },
-    { "gncmod-backend-xml", TRUE },
-    { NULL, FALSE } }, *lib;
-  gnc_engine_init_hook_t hook;
-  GList * cur;
-  gchar *pkglibdir;
-
-  if (1 == engine_is_initialized) return;
-
-  /* initialize QOF */
-  qof_init();
-  qof_set_alt_dirty_mode(TRUE);
-
-  /* Now register our core types */
-  cashobjects_register();
-
-  pkglibdir = gnc_path_get_pkglibdir ();
-  for (lib = libs; lib->lib ; lib++)
-  {
-      if (qof_load_backend_library(pkglibdir, lib->lib))
-      {
-          engine_is_initialized = 1;
-      }
-      else
-      {
-          g_warning("failed to load %s from %s\n", lib->lib, pkglibdir);
-          /* If this is a required library, stop now! */
-          if (lib->required)
-          {
-              g_critical("required library %s not found.\n", lib->lib);
-          }
-      }
-  }
-  g_free (pkglibdir);
-
-  /* call any engine hooks */
-  for (cur = engine_init_hooks; cur; cur = cur->next)
-  {
-    hook = (gnc_engine_init_hook_t)cur->data;
-
-    if (hook)
-      (*hook)(argc, argv);
-  }
+    gnc_engine_init_part1();
+    gnc_engine_init_part2();
+    gnc_engine_init_part3(argc, argv);
 }
+
+void
+gnc_engine_init_static(int argc, char ** argv)
+{
+    gnc_engine_init_part1();
+    gnc_engine_init_part3(argc, argv);
+}
+
 
 /********************************************************************
  * gnc_engine_shutdown
@@ -136,19 +140,20 @@ gnc_engine_init(int argc, char ** argv)
 void
 gnc_engine_shutdown (void)
 {
-  qof_log_shutdown();
-  qof_close();
-  engine_is_initialized = 0;
+    qof_log_shutdown();
+    qof_close();
+    engine_is_initialized = 0;
 }
 
 /********************************************************************
  * gnc_engine_add_init_hook
- * add a startup hook 
+ * add a startup hook
  ********************************************************************/
 
 void
-gnc_engine_add_init_hook(gnc_engine_init_hook_t h) {
-  engine_init_hooks = g_list_append(engine_init_hooks, (gpointer)h);
+gnc_engine_add_init_hook(gnc_engine_init_hook_t h)
+{
+    engine_init_hooks = g_list_append(engine_init_hooks, (gpointer)h);
 }
 
 gboolean
@@ -164,9 +169,9 @@ gnc_engine_is_initialized (void)
  * */
 void gnc_log_default(void)
 {
-	qof_log_set_default(QOF_LOG_WARNING);
+    qof_log_set_default(QOF_LOG_WARNING);
     qof_log_set_level(GNC_MOD_ROOT, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_DEBUG);
+    qof_log_set_level(GNC_MOD_TEST, QOF_LOG_DEBUG);
 }
 
 void
@@ -179,7 +184,8 @@ gnc_engine_add_commit_error_callback( EngineCommitErrorCallback cb, gpointer dat
 void
 gnc_engine_signal_commit_error( QofBackendError errcode )
 {
-    if( g_error_cb != NULL ) {
-	(*g_error_cb)( g_error_cb_data, errcode );
+    if ( g_error_cb != NULL )
+    {
+        (*g_error_cb)( g_error_cb_data, errcode );
     }
 }

@@ -4,8 +4,9 @@
  *  Authors: Derek Atkins <warlord@MIT.EDU>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
- * License as published by the Free Software Foundation.
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +24,7 @@
 
 #include "search-core-type.h"
 #include "qof.h"
-#include "QueryNew.h"
+#include "qof.h"
 
 #define GNC_TYPE_SEARCH_NUMERIC		(gnc_search_numeric_get_type ())
 #define GNCSEARCH_NUMERIC(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumeric)
@@ -33,21 +34,23 @@
 typedef struct _GNCSearchNumeric	GNCSearchNumeric;
 typedef struct _GNCSearchNumericClass	GNCSearchNumericClass;
 
-struct _GNCSearchNumeric {
-  GNCSearchCoreType parent;
-  struct _GNCSearchNumericPrivate *priv;
+struct _GNCSearchNumeric
+{
+    GNCSearchCoreType parent;
+    struct _GNCSearchNumericPrivate *priv;
 
-  query_compare_t	how;
-  gnc_numeric		value;
-  numeric_match_t	option;
+    QofQueryCompare	how;
+    gnc_numeric		value;
+    QofNumericMatch	option;
 };
 
-struct _GNCSearchNumericClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchNumericClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_numeric_get_type	(void);
@@ -56,8 +59,8 @@ GNCSearchNumeric	*gnc_search_numeric_debcred_new (void);
 
 /* methods */
 void	gnc_search_numeric_set_value (GNCSearchNumeric *fi, gnc_numeric val);
-void	gnc_search_numeric_set_how (GNCSearchNumeric *fi, query_compare_t how);
-void	gnc_search_numeric_set_option (GNCSearchNumeric *fi, numeric_match_t option);
+void	gnc_search_numeric_set_how (GNCSearchNumeric *fi, QofQueryCompare how);
+void	gnc_search_numeric_set_option (GNCSearchNumeric *fi, QofNumericMatch option);
 
 #endif /* ! _GNCSEARCH_NUMERIC_H */
 

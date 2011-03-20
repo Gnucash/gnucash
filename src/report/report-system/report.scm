@@ -21,6 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash main))
+(use-modules (gnucash printf))
 (use-modules (sw_report_system))
 
 ;; This hash should contain all the reports available and will be used
@@ -484,12 +485,12 @@
   ;; save them 
   (string-append 
    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-   (simple-format #f ";; options for report ~S\n" (gnc:report-name report))
-   (simple-format
+   (format #f ";; options for report ~S\n" (gnc:report-name report))
+   (format
     #f "(let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
     (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
    (gnc:generate-restore-forms (gnc:report-options report) "options")
-   (simple-format 
+   (format 
     #f "  (gnc:restore-report-by-guid ~S ~S ~S options))\n"
     (gnc:report-id report) (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))))
 
@@ -514,9 +515,9 @@
 (define (gnc:report-generate-saved-forms-string name type templ-name options embedded-options guid)
   (let ((result (string-append 
    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-   (simple-format #f ";; Options for saved report ~S, based on template ~S\n"
+   (format #f ";; Options for saved report ~S, based on template ~S\n"
 		  name type)
-   (simple-format
+   (format
     #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
     type templ-name)
    (gnc:generate-restore-forms options "options")
@@ -524,7 +525,7 @@
        embedded-options
        "")
    "  options))\n"
-   (simple-format 
+   (format 
     #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
     name
     (if guid
@@ -567,42 +568,57 @@
 (define gnc:current-saved-reports
   (gnc-build-dotgnucash-path "saved-reports-2.4"))
 
+(define (gnc:open-saved-reports mode)
+  (let ((conf-file-name gnc:current-saved-reports))
+    (catch #t
+           (lambda () (open-file conf-file-name mode))
+           (lambda (key . args)
+             (gnc-error-dialog
+              '()
+              (sprintf
+               #f (_ "Could not open the file %s. The error is: %s")
+               conf-file-name
+               (string-append (symbol->string key) " - " (car (caddr args)))))
+             #f))))
+
 (define (gnc:report-save-to-savefile report)
-  (let* ((conf-file-name gnc:current-saved-reports)
-         (saved-form (gnc:report-generate-saved-forms report))
+  (let* ((saved-form (gnc:report-generate-saved-forms report))
          ;; Immediate evaluate the saved form to both load it into the
          ;; runtime, but also so we can check if it's "allowed" to actually
          ;; be written to the saved reports file by inspecting the result.
          ;; #Bug#342206.
          (save-result (eval-string saved-form)))
     (if (record? save-result)
-        (begin
-          (display saved-form
-                   (open-file conf-file-name "a"))
-          (force-output)
-	      (let ((report-name (gnc:report-name report)))
-		(gnc-info-dialog
-		 '()
-		 (sprintf 
-		  #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".")
-		  (if (and report-name (not (string-null? report-name)))
-		      (gnc:gettext report-name)
-		      (gnc:gettext "Untitled"))
-		  conf-file-name)))
-	  ))))
+        (let ((report-port (gnc:open-saved-reports "a")))
+          (if report-port
+              (begin
+                (display saved-form report-port)
+                (close report-port)
+                (let ((report-name (gnc:report-name report)))
+                  (gnc-info-dialog
+                   '()
+                   (sprintf
+                    #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".")
+                    (if (and report-name (not (string-null? report-name)))
+                        (gnc:gettext report-name)
+                        (gnc:gettext "Untitled"))
+                    gnc:current-saved-reports)))
+                ))))))
 
 (define (gnc:report-template-save-to-savefile report-template)
-  (let ((conf-file-name gnc:current-saved-reports)
-	(saved-form (gnc:report-template-generate-saved-forms report-template)))
-    (display saved-form
-	     (open-file conf-file-name "a"))
-    (force-output)))
+  (let* ((report-port (gnc:open-saved-reports "a")))
+    (if report-port
+        (let ((saved-form (gnc:report-template-generate-saved-forms report-template)))
+          (display saved-form report-port)
+          (close report-port)))))
 
 ;; save all custom reports, moving the old version of the
 ;; saved-reports file aside as a backup
 (define (gnc:save-all-reports)
   (let ((temp-path (gnc-build-dotgnucash-path "saved-reports-2.4-backup")))
     (gnc:debug "saving all reports...")
+    ;; On windows, it seems to crash if we try to rename without deleting the old file first.
+    (delete-file temp-path)
     (rename-file gnc:current-saved-reports temp-path)
     (hash-for-each (lambda (k v)
 		     (if (gnc:report-template-parent-type v)
@@ -616,6 +632,8 @@
 ;; gets the stylesheet from the report;
 ;; renders the html doc and caches the resulting string;
 ;; returns the html string.
+;; Now accepts either an html-doc or finished HTML from the renderer -
+;; the former requires further processing, the latter is just returned.
 (define (gnc:report-render-html report headers?)
   (if (and (not (gnc:report-dirty? report))
            (gnc:report-ctext report))
@@ -633,8 +651,11 @@
                              (stylesheet (gnc:report-stylesheet report))
                              (doc (renderer report))
                              (html #f))
-                        (gnc:html-document-set-style-sheet! doc stylesheet)
-                        (set! html (gnc:html-document-render doc headers?))
+                        (if (string? doc)
+                          (set! html doc)
+                          (begin 
+                            (gnc:html-document-set-style-sheet! doc stylesheet)
+                            (set! html (gnc:html-document-render doc headers?))))
                         (gnc:report-set-ctext! report html) ;; cache the html
                         (gnc:report-set-dirty?! report #f)  ;; mark it clean
                         html)

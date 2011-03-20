@@ -5,13 +5,13 @@ This directory contains unit test cases for the core business objects.
 
 Notes on test of dirty/clean flag:
 ---------------------------------
-Test casees will fail the test of the 'dirty' flag if a backend
+Test cases will fail the test of the 'dirty' flag if a backend
 is not set up.  That's because the 'dirty' flag is supposed to be
 cleared by the backend only.
 An object cannot be marked 'clean' unless it has actually
 been saved to a file or sql db.  (Or, in the case of the file 
-backend, the 'dirtyness' of the data has been dully noted, and
-will be taken care of for teh next file save. 
+backend, the 'dirtiness' of the data has been duly noted, and
+will be taken care of for the next file save. 
 Until its saved, it lives in perpetual dirtiness.  Thus, the 
 test cases need to specify a backend, then do the commit, 
 then test the dirty flag.

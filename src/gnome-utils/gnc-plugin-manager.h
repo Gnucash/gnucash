@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-plugin-manager.h -- Manage gnucash plugins.
  *
  * Copyright (C) 2003 Jan Arne Petersen
@@ -26,7 +26,7 @@
     @{ */
 /** @addtogroup PluginManager Plugin Management Functions
     @{ */
-/** @file gnc-plugin-manager.h 
+/** @file gnc-plugin-manager.h
     @brief  Plugin management functions for the GnuCash UI
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
 
@@ -66,18 +66,20 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_MANAGER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_MANAGER, GncPluginManagerClass))
 
 /* typedefs & structures */
-typedef struct {
-	GObject gobject;
+typedef struct
+{
+    GObject gobject;
 } GncPluginManager;
 
-typedef struct {
-	GObjectClass gobject;
+typedef struct
+{
+    GObjectClass gobject;
 
-	/* Signals */
-	void (* plugin_added)
-         (GncPluginManager *plugin_manager, GncPlugin *plugin);
-	void (* plugin_removed)
-         (GncPluginManager *plugin_manager, GncPlugin *plugin);
+    /* Signals */
+    void (* plugin_added)
+    (GncPluginManager *plugin_manager, GncPlugin *plugin);
+    void (* plugin_removed)
+    (GncPluginManager *plugin_manager, GncPlugin *plugin);
 } GncPluginManagerClass;
 
 /** Retrieve the GType value for the gnucash plugin manager.
@@ -114,7 +116,7 @@ GncPluginManager *gnc_plugin_manager_get (void);
  *  the plugin after passing it off to the plugin manager.
  */
 void gnc_plugin_manager_add_plugin (GncPluginManager *manager,
-				    GncPlugin *plugin);
+                                    GncPlugin *plugin);
 
 
 /** Remove a plugin from the list maintained by the plugin manager.
@@ -125,7 +127,7 @@ void gnc_plugin_manager_add_plugin (GncPluginManager *manager,
  *  @param plugin A pointer to the plugin to add.
  */
 void gnc_plugin_manager_remove_plugin (GncPluginManager *manager,
-				       GncPlugin *plugin);
+                                       GncPlugin *plugin);
 
 
 /** Get a list of all plugins being held by the plugin manager.  This
@@ -153,7 +155,7 @@ GList *gnc_plugin_manager_get_plugins (GncPluginManager *manager);
  *  couldn't be found.
  */
 GncPlugin *gnc_plugin_manager_get_plugin (GncPluginManager *manager,
-					  const gchar *name);
+        const gchar *name);
 /** @} */
 
 

@@ -33,115 +33,122 @@
 
 void
 gnc_druid_set_watermark_images (GnomeDruid *druid,
-				const char *top_path,
-				const char *side_path)
+                                const char *top_path,
+                                const char *side_path)
 {
-  GdkPixbuf     *top_pixbuf, *side_pixbuf;
-  GList         *page_list, *item;
-  GtkWidget     *page;
+    GdkPixbuf     *top_pixbuf, *side_pixbuf;
+    GList         *page_list, *item;
+    GtkWidget     *page;
 
-  page_list = gtk_container_get_children(GTK_CONTAINER(druid));
-  top_pixbuf = gnc_gnome_get_gdkpixbuf(top_path);
-  side_pixbuf = gnc_gnome_get_gdkpixbuf(side_path);
+    page_list = gtk_container_get_children(GTK_CONTAINER(druid));
+    top_pixbuf = gnc_gnome_get_gdkpixbuf(top_path);
+    side_pixbuf = gnc_gnome_get_gdkpixbuf(side_path);
 
-  for (item = page_list; item; item = g_list_next(item)) {
-    page = item->data;
-    if (GNOME_IS_DRUID_PAGE_EDGE (page)) {
-      GnomeDruidPageEdge *page_edge;
+    for (item = page_list; item; item = g_list_next(item))
+    {
+        page = item->data;
+        if (GNOME_IS_DRUID_PAGE_EDGE (page))
+        {
+            GnomeDruidPageEdge *page_edge;
 
-      page_edge = GNOME_DRUID_PAGE_EDGE (page);
-      gnome_druid_page_edge_set_top_watermark (page_edge, top_pixbuf);
-      gnome_druid_page_edge_set_watermark (page_edge, side_pixbuf);
-    } else {
-      GnomeDruidPageStandard *page_standard;
+            page_edge = GNOME_DRUID_PAGE_EDGE (page);
+            gnome_druid_page_edge_set_top_watermark (page_edge, top_pixbuf);
+            gnome_druid_page_edge_set_watermark (page_edge, side_pixbuf);
+        }
+        else
+        {
+            GnomeDruidPageStandard *page_standard;
 
-      page_standard = GNOME_DRUID_PAGE_STANDARD (page);
-      gnome_druid_page_standard_set_top_watermark (page_standard, top_pixbuf);
+            page_standard = GNOME_DRUID_PAGE_STANDARD (page);
+            gnome_druid_page_standard_set_top_watermark (page_standard, top_pixbuf);
+        }
     }
-  }
 
-  g_object_unref (G_OBJECT(side_pixbuf));
-  g_object_unref (G_OBJECT(top_pixbuf));
-  g_list_free(page_list);
+    g_object_unref (G_OBJECT(side_pixbuf));
+    g_object_unref (G_OBJECT(top_pixbuf));
+    g_list_free(page_list);
 }
 
 void
 gnc_druid_set_logo_image (GnomeDruid *druid, char *image_path)
 {
-  GdkPixbuf     *logo_pixbuf;
-  GList         *page_list, *item;
-  GtkWidget     *page;
+    GdkPixbuf     *logo_pixbuf;
+    GList         *page_list, *item;
+    GtkWidget     *page;
 
-  page_list = gtk_container_get_children(GTK_CONTAINER(druid));
-  logo_pixbuf = gnc_gnome_get_gdkpixbuf(image_path); 
+    page_list = gtk_container_get_children(GTK_CONTAINER(druid));
+    logo_pixbuf = gnc_gnome_get_gdkpixbuf(image_path);
 
-  for (item = page_list; item; item = g_list_next(item)) {
-    page = item->data;
-    if (GNOME_IS_DRUID_PAGE_EDGE (page))
+    for (item = page_list; item; item = g_list_next(item))
     {
-      GnomeDruidPageEdge *page_edge;
+        page = item->data;
+        if (GNOME_IS_DRUID_PAGE_EDGE (page))
+        {
+            GnomeDruidPageEdge *page_edge;
 
-      page_edge = GNOME_DRUID_PAGE_EDGE (page);
-      gnome_druid_page_edge_set_logo (page_edge, logo_pixbuf);
-    } else {
-      GnomeDruidPageStandard *page_standard;
+            page_edge = GNOME_DRUID_PAGE_EDGE (page);
+            gnome_druid_page_edge_set_logo (page_edge, logo_pixbuf);
+        }
+        else
+        {
+            GnomeDruidPageStandard *page_standard;
 
-      page_standard = GNOME_DRUID_PAGE_STANDARD (page);
-      gnome_druid_page_standard_set_logo (page_standard, logo_pixbuf);
-    }    
-  }
+            page_standard = GNOME_DRUID_PAGE_STANDARD (page);
+            gnome_druid_page_standard_set_logo (page_standard, logo_pixbuf);
+        }
+    }
 
-  g_object_unref (G_OBJECT(logo_pixbuf));
-  g_list_free(page_list);
+    g_object_unref (G_OBJECT(logo_pixbuf));
+    g_list_free(page_list);
 }
 
 void
 gnc_druid_set_colors (GnomeDruid *druid)
 {
-  GList *pages = gtk_container_get_children (GTK_CONTAINER (druid));
-  GList *item = pages;
-  GdkColor bluish;
-  GdkColor white;
-  GdkColormap *cm;
+    GList *pages = gtk_container_get_children (GTK_CONTAINER (druid));
+    GList *item = pages;
+    GdkColor bluish;
+    GdkColor white;
+    GdkColormap *cm;
 
-  if (!druid) return;
-  if (!GNOME_IS_DRUID (druid)) return;
+    if (!druid) return;
+    if (!GNOME_IS_DRUID (druid)) return;
 
-  bluish.red =   (gushort) (.40 * 65535);
-  bluish.green = (gushort) (.40 * 65535);
-  bluish.blue =  (gushort) (.60 * 65535);
+    bluish.red =   (gushort) (.40 * 65535);
+    bluish.green = (gushort) (.40 * 65535);
+    bluish.blue =  (gushort) (.60 * 65535);
 
-  white.red =   65535;
-  white.green = 65535;
-  white.blue =  65535;
+    white.red =   65535;
+    white.green = 65535;
+    white.blue =  65535;
 
-  cm = gtk_widget_get_colormap (GTK_WIDGET (druid));
+    cm = gtk_widget_get_colormap (GTK_WIDGET (druid));
 
-  gdk_colormap_alloc_color(cm, &bluish, FALSE, TRUE);
-  gdk_colormap_alloc_color(cm, &white, FALSE, TRUE);
+    gdk_colormap_alloc_color(cm, &bluish, FALSE, TRUE);
+    gdk_colormap_alloc_color(cm, &white, FALSE, TRUE);
 
-  while (item != NULL)
-  {
-    GnomeDruidPage *page = GNOME_DRUID_PAGE (item->data);
-
-    if (GNOME_IS_DRUID_PAGE_EDGE (page))
+    while (item != NULL)
     {
-      GnomeDruidPageEdge *page_edge;
+        GnomeDruidPage *page = GNOME_DRUID_PAGE (item->data);
 
-      page_edge = GNOME_DRUID_PAGE_EDGE (page);
-      gnome_druid_page_edge_set_bg_color (page_edge, &bluish);
-      gnome_druid_page_edge_set_logo_bg_color (page_edge, &bluish);
+        if (GNOME_IS_DRUID_PAGE_EDGE (page))
+        {
+            GnomeDruidPageEdge *page_edge;
+
+            page_edge = GNOME_DRUID_PAGE_EDGE (page);
+            gnome_druid_page_edge_set_bg_color (page_edge, &bluish);
+            gnome_druid_page_edge_set_logo_bg_color (page_edge, &bluish);
+        }
+        else
+        {
+            GnomeDruidPageStandard *page_standard;
+
+            page_standard = GNOME_DRUID_PAGE_STANDARD (page);
+            gnome_druid_page_standard_set_background (page_standard, &bluish);
+            gnome_druid_page_standard_set_logo_background (page_standard, &bluish);
+            gnome_druid_page_standard_set_title_foreground (page_standard, &white);
+        }
+        item = item->next;
     }
-    else 
-    {
-      GnomeDruidPageStandard *page_standard;
-
-      page_standard = GNOME_DRUID_PAGE_STANDARD (page);
-      gnome_druid_page_standard_set_background (page_standard, &bluish);
-      gnome_druid_page_standard_set_logo_background (page_standard, &bluish);
-      gnome_druid_page_standard_set_title_foreground (page_standard, &white);
-    }    
-    item = item->next;
-  }
-  g_list_free(pages);
+    g_list_free(pages);
 }

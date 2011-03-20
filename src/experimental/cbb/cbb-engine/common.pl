@@ -22,6 +22,13 @@
 # $Id$
 # (Log is kept at end of this file)
 
+## @file
+# @brief common routines shared by many CBB files 
+# @author Curtis Olson
+# @date Started August 22, 1994
+# @cond PERL
+# ignore the following for doxygen
+
 use strict;
 
 sub destructive_merge_mangle {
@@ -334,7 +341,7 @@ sub mypwd {
 1;        # need to return a true value
 __END__
 
-
+## @endcond
 # ----------------------------------------------------------------------------
 # $Log$
 # Revision 1.1  2000/06/02 09:00:14  peticolas

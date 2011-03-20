@@ -4,6 +4,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <dialog-progress.h>
+#include "guile-mappings.h"
 
 SCM scm_init_sw_gnome_module (void);
 %}

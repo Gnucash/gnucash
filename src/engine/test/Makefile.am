@@ -6,18 +6,19 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src/core-utils \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
 LDADD = \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/test-core/libgncmod-test.la \
+  ${top_builddir}/src/test-core/libtest-core.la \
   ../libgncmod-engine.la \
   ../test-core/libgncmod-test-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${GLIB_LIBS} \
-  ${QOF_LIBS}
+  ${GLIB_LIBS}
 
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
@@ -38,7 +39,6 @@ TESTS = \
   test-querynew \
   test-query \
   test-recursive \
-  test-resolve-file-path \
   test-split-vs-account  \
   test-transaction-reversal \
   test-transaction-voiding \
@@ -50,7 +50,7 @@ GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/lib/libqof/qof \
+  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine
@@ -76,7 +76,6 @@ check_PROGRAMS = \
   test-query \
   test-querynew \
   test-recursive \
-  test-resolve-file-path \
   test-scm-query \
   test-split-vs-account \
   test-transaction-reversal \
@@ -84,7 +83,9 @@ check_PROGRAMS = \
 
 
 test_link_SOURCES = test-link.c
-test_link_LDADD = ../libgncmod-engine.la ${QOF_LIBS}
+test_link_LDADD = ../libgncmod-engine.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la
 
 EXTRA_DIST = \
   test-create-account \

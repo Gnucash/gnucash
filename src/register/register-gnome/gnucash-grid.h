@@ -33,31 +33,33 @@
 #define GNUCASH_IS_GRID(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNUCASH_TYPE_GRID))
 
 
-typedef struct {
-        GnomeCanvasItem canvas_item;
+typedef struct
+{
+    GnomeCanvasItem canvas_item;
 
-        GnucashSheet *sheet;
+    GnucashSheet *sheet;
 
-        /* The first and last displayed block */
-        int        top_block;
-        int        bottom_block;
+    /* The first and last displayed block */
+    int        top_block;
+    int        bottom_block;
 
-        /* Offset from spreadsheet origin in units */
-        long       top_offset;
-        long       left_offset;
+    /* Offset from spreadsheet origin in units */
+    long       top_offset;
+    long       left_offset;
 
-        GdkGC      *grid_gc;	/* Draw grid gc */
-        GdkGC      *fill_gc;	/* Default background fill gc */
-        GdkGC      *gc;		/* Color used for the cell */
+    GdkGC      *grid_gc;	/* Draw grid gc */
+    GdkGC      *fill_gc;	/* Default background fill gc */
+    GdkGC      *gc;		/* Color used for the cell */
 
-        GdkColor   background;
-        GdkColor   grid_color;
-        GdkColor   default_color;
+    GdkColor   background;
+    GdkColor   grid_color;
+    GdkColor   default_color;
 } GnucashGrid;
 
 
-typedef struct {
-        GnomeCanvasItemClass parent_class;
+typedef struct
+{
+    GnomeCanvasItemClass parent_class;
 } GnucashGridClass;
 
 
@@ -65,7 +67,7 @@ GType      gnucash_grid_get_type (void);
 GtkWidget *gnucash_grid_new 	 (GnucashSheet *sheet);
 
 gboolean   gnucash_grid_find_loc_by_pixel (GnucashGrid *grid, gint x, gint y,
-                                           VirtualLocation *vcell_loc);
+        VirtualLocation *vcell_loc);
 
 void       gnucash_draw_hatching (GdkDrawable *drawable, GdkGC *gc,
                                   int x, int y, int width, int height);

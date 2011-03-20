@@ -1,17 +1,9 @@
 <ui>
   <menubar>
-    <menu name="File" action="FileAction">
-      <menu name="FileNewMenu" action="FileNewMenuAction">
-        <placeholder name="FileNewTopPlaceholder">
-          <menuitem name="FileNewInvoice"         action="FileNewInvoiceAction"/>
-          <menuitem name="FileNewAccount"         action="FileNewAccountAction"/>
-        </placeholder>
-      </menu>
-    </menu>
-
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditInvoice"        action="EditEditInvoiceAction"/>
+        <menuitem name="EditDuplicateInvoice"   action="EditDuplicateInvoiceAction"/>
         <menuitem name="EditPostInvoice"        action="EditPostInvoiceAction"/>
         <menuitem name="EditUnpostInvoice"      action="EditUnpostInvoiceAction"/>
       </placeholder>
@@ -39,6 +31,8 @@
         <menuitem name="BlankEntry"        	action="BlankEntryAction"/>
         <separator name="ActionsSep4"/>
         <menuitem name="DuplicateEntry"    	action="DuplicateEntryAction"/>
+        <menuitem name="UpEntry"    	action="EntryUpAction"/>
+        <menuitem name="DownEntry"    	action="EntryDownAction"/>
       </placeholder>
     </menu>
 
@@ -58,17 +52,25 @@
   </menubar>
 
   <toolbar name="DefaultToolbar">
+    <placeholder name="ToolbarSavePlaceholder">
+      <toolitem name="ToolbarPrintInvoice" action="FilePrintAction"/>
+    </placeholder>
     <placeholder name="DefaultToolbarPlaceholder">
+      <toolitem name="ToolbarNewInvoice"       action="BusinessNewInvoiceAction"/>
       <toolitem name="ToolbarEditInvoice"       action="EditEditInvoiceAction"/>
+      <toolitem name="ToolbarDuplicateInvoice"  action="EditDuplicateInvoiceAction"/>
+      <separator name="ToolbarSep65"/>
       <toolitem name="ToolbarRecordEntry"    	action="RecordEntryAction"/>
       <toolitem name="ToolbarCancelEntry"    	action="CancelEntryAction"/>
       <toolitem name="ToolbarDeleteEntry"    	action="DeleteEntryAction"/>
-      <separator name="ToolbarSep66"/>
       <toolitem name="ToolbarDuplicateEntry" 	action="DuplicateEntryAction"/>
+        <toolitem name="ToolbarUpEntry"    	action="EntryUpAction"/>
+        <toolitem name="ToolbarDownEntry"    	action="EntryDownAction"/>
       <toolitem name="ToolbarBlankEntry"     	action="BlankEntryAction"/>
       <separator name="ToolbarSep68"/>
       <toolitem name="ToolbarPostInvoice"       action="EditPostInvoiceAction"/>
       <toolitem name="ToolbarUnPostInvoice"     action="EditUnpostInvoiceAction"/>
+      <toolitem name="ToolbarProcessPayment"     action="ToolsProcessPaymentAction"/>
     </placeholder>
   </toolbar>
 
@@ -79,6 +81,8 @@
       <menuitem name="DeleteEntry"       		action="DeleteEntryAction"/>
       <separator name="PopupSep1"/>
       <menuitem name="DuplicateEntry"    		action="DuplicateEntryAction"/>
+      <menuitem name="UpEntry"    	action="EntryUpAction"/>
+      <menuitem name="DownEntry"  	action="EntryDownAction"/>
       <menuitem name="BlankEntry"        		action="BlankEntryAction"/>
     </placeholder>
   </popup>

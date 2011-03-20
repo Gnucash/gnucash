@@ -13,7 +13,6 @@
 (use-modules (sw_gnome))
 
 (use-modules (gnucash gnc-module))
-(use-modules (ice-9 slib))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
 

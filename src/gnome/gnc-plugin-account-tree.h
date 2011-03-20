@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-account-tree.h -- 
+/*
+ * gnc-plugin-account-tree.h --
  *
  * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -34,7 +34,7 @@
 #ifndef __GNC_PLUGIN_ACCOUNT_TREE_H
 #define __GNC_PLUGIN_ACCOUNT_TREE_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "gnc-plugin.h"
 
@@ -53,15 +53,17 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 
 /** The instance data structure for an account tree menu plugin. */
-typedef struct {
-	/** The parent object for this widget */
-	GncPlugin gnc_plugin;
+typedef struct
+{
+    /** The parent object for this widget */
+    GncPlugin gnc_plugin;
 } GncPluginAccountTree;
 
 /** The class data structure for an account tree menu plugin. */
-typedef struct {
-	/** The parent class for this widget. */
-	GncPluginClass gnc_plugin;
+typedef struct
+{
+    /** The parent class for this widget. */
+    GncPluginClass gnc_plugin;
 } GncPluginAccountTreeClass;
 
 

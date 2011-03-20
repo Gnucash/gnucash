@@ -41,8 +41,8 @@
 /* Signal codes */
 enum
 {
-  SELECTION_CHANGED,
-  LAST_SIGNAL
+    SELECTION_CHANGED,
+    LAST_SIGNAL
 };
 
 
@@ -63,167 +63,169 @@ static guint general_select_signals[LAST_SIGNAL];
 GType
 gnc_general_select_get_type (void)
 {
-	static GType general_select_type = 0;
+    static GType general_select_type = 0;
 
-	if (general_select_type == 0) {
-		static const GTypeInfo general_select_info = {
-			sizeof (GNCGeneralSelectClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) gnc_general_select_class_init,
-			NULL,
-			NULL,
-			sizeof (GNCGeneralSelect),
-			0,
-			(GInstanceInitFunc) gnc_general_select_init,
-			NULL,
-		};
+    if (general_select_type == 0)
+    {
+        static const GTypeInfo general_select_info =
+        {
+            sizeof (GNCGeneralSelectClass),
+            NULL,
+            NULL,
+            (GClassInitFunc) gnc_general_select_class_init,
+            NULL,
+            NULL,
+            sizeof (GNCGeneralSelect),
+            0,
+            (GInstanceInitFunc) gnc_general_select_init,
+            NULL,
+        };
 
-		general_select_type = g_type_register_static(GTK_TYPE_HBOX,
-							"GNCGeneralSelect",
-							 &general_select_info, 0);
-	}
+        general_select_type = g_type_register_static(GTK_TYPE_HBOX,
+                              "GNCGeneralSelect",
+                              &general_select_info, 0);
+    }
 
-	return general_select_type;
+    return general_select_type;
 }
 
 static void
 gnc_general_select_forall (GtkContainer *container, gboolean include_internals,
                            GtkCallback callback, gpointer callback_data)
 {
-	g_return_if_fail (container != NULL);
-	g_return_if_fail (GNC_IS_GENERAL_SELECT (container));
-	g_return_if_fail (callback != NULL);
+    g_return_if_fail (container != NULL);
+    g_return_if_fail (GNC_IS_GENERAL_SELECT (container));
+    g_return_if_fail (callback != NULL);
 
-	/* Let GtkBox handle things only if the internal widgets need
-	 * to be poked. */
-        if (!include_internals)
-                return;
+    /* Let GtkBox handle things only if the internal widgets need
+     * to be poked. */
+    if (!include_internals)
+        return;
 
-        if (!GTK_CONTAINER_CLASS (parent_class)->forall)
-                return;
+    if (!GTK_CONTAINER_CLASS (parent_class)->forall)
+        return;
 
-        GTK_CONTAINER_CLASS (parent_class)->forall (container,
-                                                    include_internals,
-                                                    callback,
-                                                    callback_data);
+    GTK_CONTAINER_CLASS (parent_class)->forall (container,
+            include_internals,
+            callback,
+            callback_data);
 }
 
 static void
 gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 {
-	GObjectClass *object_class = (GObjectClass *) klass;
-	GtkContainerClass *container_class = (GtkContainerClass *) klass;
+    GObjectClass *object_class = (GObjectClass *) klass;
+    GtkContainerClass *container_class = (GtkContainerClass *) klass;
 
-	object_class = (GObjectClass*) klass;
+    object_class = (GObjectClass*) klass;
 
-	parent_class = g_type_class_ref(GTK_TYPE_HBOX);
+    parent_class = g_type_class_ref(GTK_TYPE_HBOX);
 
-        general_select_signals[SELECTION_CHANGED] =
-                g_signal_new("changed",
-                               G_TYPE_FROM_CLASS(object_class),
-                               G_SIGNAL_RUN_FIRST,
-                               G_STRUCT_OFFSET(GNCGeneralSelectClass,
-                                                changed),
-                               NULL, NULL,
-                               g_cclosure_marshal_VOID__VOID,
-                               G_TYPE_NONE, 0);
+    general_select_signals[SELECTION_CHANGED] =
+        g_signal_new("changed",
+                     G_TYPE_FROM_CLASS(object_class),
+                     G_SIGNAL_RUN_FIRST,
+                     G_STRUCT_OFFSET(GNCGeneralSelectClass,
+                                     changed),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
+                     G_TYPE_NONE, 0);
 
-	container_class->forall = gnc_general_select_forall;
+    container_class->forall = gnc_general_select_forall;
 
-	object_class->dispose = gnc_general_select_dispose;
-	object_class->finalize = gnc_general_select_finalize;
+    object_class->dispose = gnc_general_select_dispose;
+    object_class->finalize = gnc_general_select_finalize;
 
-        klass->changed = NULL;
+    klass->changed = NULL;
 }
 
 static void
 gnc_general_select_init (GNCGeneralSelect *gsl)
 {
-        gsl->disposed = FALSE;
-        gsl->selected_item = NULL;
+    gsl->disposed = FALSE;
+    gsl->selected_item = NULL;
 }
 
 static void
 gnc_general_select_finalize (GObject *object)
 {
-        GNCGeneralSelect *gsl;
+    GNCGeneralSelect *gsl;
 
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (GNC_IS_GENERAL_SELECT (object));
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_GENERAL_SELECT (object));
 
-        gsl = GNC_GENERAL_SELECT (object);
+    gsl = GNC_GENERAL_SELECT (object);
 
 
-	if (G_OBJECT_CLASS (parent_class)->finalize)
-		G_OBJECT_CLASS (parent_class)->finalize (object);
+    if (G_OBJECT_CLASS (parent_class)->finalize)
+        G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
 gnc_general_select_dispose (GObject *object)
 {
-        GNCGeneralSelect *gsl;
+    GNCGeneralSelect *gsl;
 
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (GNC_IS_GENERAL_SELECT (object));
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_GENERAL_SELECT (object));
 
-        gsl = GNC_GENERAL_SELECT (object);
+    gsl = GNC_GENERAL_SELECT (object);
 
-        if(gsl->disposed)
-                return;
+    if (gsl->disposed)
+        return;
 
-        gsl->disposed = TRUE;
-
-
-        gtk_widget_destroy(GTK_WIDGET(gsl->entry));
-        gsl->entry = NULL;
-
-        gtk_widget_destroy(GTK_WIDGET(gsl->button));
-        gsl->button = NULL;
+    gsl->disposed = TRUE;
 
 
-	if (G_OBJECT_CLASS (parent_class)->dispose)
-		G_OBJECT_CLASS (parent_class)->dispose (object);
+    gtk_widget_destroy(GTK_WIDGET(gsl->entry));
+    gsl->entry = NULL;
+
+    gtk_widget_destroy(GTK_WIDGET(gsl->button));
+    gsl->button = NULL;
+
+
+    if (G_OBJECT_CLASS (parent_class)->dispose)
+        G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
 select_cb(GtkButton * button, gpointer user_data)
 {
-        GNCGeneralSelect *gsl = user_data;
-	gpointer new_selection;
-        GtkWidget *toplevel;
+    GNCGeneralSelect *gsl = user_data;
+    gpointer new_selection;
+    GtkWidget *toplevel;
 
-        toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
+    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
 
-        new_selection = (gsl->new_select)(gsl->cb_arg, gsl->selected_item,
-					  toplevel);
+    new_selection = (gsl->new_select)(gsl->cb_arg, gsl->selected_item,
+                                      toplevel);
 
-        /* NULL return means cancel; no change */
-        if (new_selection == NULL)
-                return;
+    /* NULL return means cancel; no change */
+    if (new_selection == NULL)
+        return;
 
-        gnc_general_select_set_selected (gsl, new_selection);
+    gnc_general_select_set_selected (gsl, new_selection);
 }
 
 static void
 create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
 {
-        gsl->entry = gtk_entry_new ();
-        gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
-	gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
-        gtk_widget_show (gsl->entry);
+    gsl->entry = gtk_entry_new ();
+    gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
+    gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
+    gtk_widget_show (gsl->entry);
 
-	if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
-	  gsl->button = gtk_button_new_with_label (_("Select..."));
-	else if (type == GNC_GENERAL_SELECT_TYPE_EDIT)
-	  gsl->button = gtk_button_new_with_label (_("Edit..."));
-	else if (type == GNC_GENERAL_SELECT_TYPE_VIEW)
-	  gsl->button = gtk_button_new_with_label (_("View..."));
+    if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
+        gsl->button = gtk_button_new_with_label (_("Select..."));
+    else if (type == GNC_GENERAL_SELECT_TYPE_EDIT)
+        gsl->button = gtk_button_new_with_label (_("Edit..."));
+    else if (type == GNC_GENERAL_SELECT_TYPE_VIEW)
+        gsl->button = gtk_button_new_with_label (_("View..."));
 
-	gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
-	g_signal_connect (G_OBJECT (gsl->button), "clicked",
-			  G_CALLBACK (select_cb), gsl);
-        gtk_widget_show (gsl->button);
+    gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (gsl->button), "clicked",
+                      G_CALLBACK (select_cb), gsl);
+    gtk_widget_show (gsl->button);
 }
 
 /**
@@ -236,22 +238,22 @@ create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
  */
 GtkWidget *
 gnc_general_select_new (GNCGeneralSelectType type,
-			GNCGeneralSelectGetStringCB get_string,
-			GNCGeneralSelectNewSelectCB new_select,
-			gpointer cb_arg)
+                        GNCGeneralSelectGetStringCB get_string,
+                        GNCGeneralSelectNewSelectCB new_select,
+                        gpointer cb_arg)
 {
-	GNCGeneralSelect *gsl;
-	g_return_val_if_fail (get_string != NULL, NULL);
-	g_return_val_if_fail (new_select != NULL, NULL);
+    GNCGeneralSelect *gsl;
+    g_return_val_if_fail (get_string != NULL, NULL);
+    g_return_val_if_fail (new_select != NULL, NULL);
 
-	gsl = g_object_new(GNC_TYPE_GENERAL_SELECT, NULL, NULL);
+    gsl = g_object_new(GNC_TYPE_GENERAL_SELECT, NULL, NULL);
 
-	create_children (gsl, type);
-	gsl->get_string = get_string;
-	gsl->new_select = new_select;
-	gsl->cb_arg = cb_arg;
+    create_children (gsl, type);
+    gsl->get_string = get_string;
+    gsl->new_select = new_select;
+    gsl->cb_arg = cb_arg;
 
-	return GTK_WIDGET (gsl);
+    return GTK_WIDGET (gsl);
 }
 
 /*
@@ -264,10 +266,10 @@ gnc_general_select_new (GNCGeneralSelectType type,
 const char *
 gnc_general_select_get_printname (GNCGeneralSelect *gsl, gpointer selection)
 {
-  g_return_val_if_fail (gsl != NULL, NULL);
-  g_return_val_if_fail (selection != NULL, NULL);
+    g_return_val_if_fail (gsl != NULL, NULL);
+    g_return_val_if_fail (selection != NULL, NULL);
 
-  return (gsl->get_string)(selection);
+    return (gsl->get_string)(selection);
 }
 
 /**
@@ -282,21 +284,21 @@ gnc_general_select_get_printname (GNCGeneralSelect *gsl, gpointer selection)
 void
 gnc_general_select_set_selected (GNCGeneralSelect *gsl, gpointer selection)
 {
-        const char *text;
+    const char *text;
 
-        g_return_if_fail(gsl != NULL);
-        g_return_if_fail(GNC_IS_GENERAL_SELECT(gsl));
+    g_return_if_fail(gsl != NULL);
+    g_return_if_fail(GNC_IS_GENERAL_SELECT(gsl));
 
-        gsl->selected_item = selection;
+    gsl->selected_item = selection;
 
-        if (selection == NULL)
-                text = "";
-        else
-                text = gnc_general_select_get_printname(gsl, selection);
+    if (selection == NULL)
+        text = "";
+    else
+        text = gnc_general_select_get_printname(gsl, selection);
 
-        gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
+    gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
 
-        g_signal_emit(gsl, general_select_signals[SELECTION_CHANGED], 0);
+    g_signal_emit(gsl, general_select_signals[SELECTION_CHANGED], 0);
 }
 
 /**
@@ -308,10 +310,10 @@ gnc_general_select_set_selected (GNCGeneralSelect *gsl, gpointer selection)
 gpointer
 gnc_general_select_get_selected (GNCGeneralSelect *gsl)
 {
-        g_return_val_if_fail(gsl != NULL, NULL);
-        g_return_val_if_fail(GNC_IS_GENERAL_SELECT(gsl), NULL);
+    g_return_val_if_fail(gsl != NULL, NULL);
+    g_return_val_if_fail(GNC_IS_GENERAL_SELECT(gsl), NULL);
 
-        return gsl->selected_item;
+    return gsl->selected_item;
 }
 
 /** Sets the editable field from a general selection widget as the
@@ -325,11 +327,11 @@ gnc_general_select_get_selected (GNCGeneralSelect *gsl)
 void
 gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWidget *label)
 {
-        g_return_if_fail(gsl);
-        g_return_if_fail(GNC_IS_GENERAL_SELECT(gsl));
-        g_return_if_fail(label);
+    g_return_if_fail(gsl);
+    g_return_if_fail(GNC_IS_GENERAL_SELECT(gsl));
+    g_return_if_fail(label);
 
-	gtk_label_set_mnemonic_widget (GTK_LABEL(label), gsl->entry);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(label), gsl->entry);
 }
 
 /*

@@ -27,14 +27,14 @@
 
 typedef struct _ExtensionInfo
 {
-  SCM extension;
+    SCM extension;
 
-  GtkActionEntry ae;
-  gchar *path;
-  gchar *sort_key;
-  const gchar *typeStr;
-  GtkUIManagerItemType type;
-  gboolean accel_assigned;
+    GtkActionEntry ae;
+    gchar *path;
+    gchar *sort_key;
+    const gchar *typeStr;
+    GtkUIManagerItemType type;
+    gboolean accel_assigned;
 } ExtensionInfo;
 
 

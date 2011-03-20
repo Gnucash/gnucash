@@ -31,46 +31,46 @@
 
 typedef struct cell_record
 {
-  char *cell_type_name;
+    char *cell_type_name;
 
-  CellCreateFunc creator;
+    CellCreateFunc creator;
 } CellRecord;
 
 struct cell_factory
 {
-  GHashTable *cell_table;
+    GHashTable *cell_table;
 };
 
 
 CellFactory *
 gnc_cell_factory_new (void)
 {
-  CellFactory *cf;
+    CellFactory *cf;
 
-  cf = g_new0 (CellFactory, 1);
+    cf = g_new0 (CellFactory, 1);
 
-  cf->cell_table = g_hash_table_new (g_str_hash, g_str_equal);
+    cf->cell_table = g_hash_table_new (g_str_hash, g_str_equal);
 
-  return cf;
+    return cf;
 }
 
 static void
 cell_table_destroy_helper (gpointer key, gpointer value, gpointer user_data)
 {
-  CellRecord *cr = value;
+    CellRecord *cr = value;
 
-  g_free (cr->cell_type_name);
-  g_free (cr);
+    g_free (cr->cell_type_name);
+    g_free (cr);
 }
 
 void
 gnc_cell_factory_destroy (CellFactory *cf)
 {
-  if (!cf) return;
+    if (!cf) return;
 
-  g_hash_table_foreach (cf->cell_table, cell_table_destroy_helper, NULL);
+    g_hash_table_foreach (cf->cell_table, cell_table_destroy_helper, NULL);
 
-  g_free (cf);
+    g_free (cf);
 }
 
 void
@@ -78,37 +78,37 @@ gnc_cell_factory_add_cell_type (CellFactory *cf,
                                 const char *cell_type_name,
                                 CellCreateFunc cell_creator)
 {
-  CellRecord *cr;
+    CellRecord *cr;
 
-  g_return_if_fail (cell_type_name != NULL);
-  g_return_if_fail (cell_creator != NULL);
+    g_return_if_fail (cell_type_name != NULL);
+    g_return_if_fail (cell_creator != NULL);
 
-  cr = g_hash_table_lookup (cf->cell_table, cell_type_name);
+    cr = g_hash_table_lookup (cf->cell_table, cell_type_name);
 
-  if (cr)
-  {
-    g_hash_table_remove (cf->cell_table, cell_type_name);
-    g_free (cr->cell_type_name);
-  }
-  else
-    cr = g_new0 (CellRecord, 1);
+    if (cr)
+    {
+        g_hash_table_remove (cf->cell_table, cell_type_name);
+        g_free (cr->cell_type_name);
+    }
+    else
+        cr = g_new0 (CellRecord, 1);
 
-  cr->cell_type_name = g_strdup (cell_type_name);
-  cr->creator = cell_creator;
+    cr->cell_type_name = g_strdup (cell_type_name);
+    cr->creator = cell_creator;
 
-  g_hash_table_insert (cf->cell_table, cr->cell_type_name, cr);
+    g_hash_table_insert (cf->cell_table, cr->cell_type_name, cr);
 }
 
 BasicCell *
 gnc_cell_factory_make_cell (CellFactory *cf, const char *cell_type_name)
 {
-  CellRecord *cr;
+    CellRecord *cr;
 
-  g_return_val_if_fail (cf != NULL, NULL);
-  g_return_val_if_fail (cell_type_name != NULL, NULL);
+    g_return_val_if_fail (cf != NULL, NULL);
+    g_return_val_if_fail (cell_type_name != NULL, NULL);
 
-  cr = g_hash_table_lookup (cf->cell_table, cell_type_name);
-  g_return_val_if_fail (cr != NULL, NULL);
+    cr = g_hash_table_lookup (cf->cell_table, cell_type_name);
+    g_return_val_if_fail (cr != NULL, NULL);
 
-  return cr->creator ();
+    return cr->creator ();
 }

@@ -4,8 +4,9 @@
 # Check whether GnuCash should build optional modules.
 # To modify parameters, edit the .spec file, 0 is off, 1 is on
 %define _with_postgres 0
-%define _with_ofx 0
-%define _with_hbci 0
+%define _with_ofx 1
+%define _with_hbci 1
+%define _with_dbi 1
 
 # The --whatprovides redhat-release lets us work on RHEL as well as FC
 # Granted, it will look weird, but at least it wont fail outright.
@@ -46,12 +47,14 @@ Requires:	guile >= %{guile_version}
 Requires:	gtkhtml3 >= %{gtkhtml3_version}
 Requires:	slib >= 3a1
 
+BuildRequires:  gcc, intltool
 BuildRequires: 	libgnomeui-devel >= %{libgnomeui_version}
 BuildRequires: 	libgnomeprintui22-devel >= %{libgnomeprintui22_version}
 BuildRequires: 	gtkhtml3-devel >= %{gtkhtml3_version}
 BuildRequires: 	bzip2-devel, expat-devel, guile-devel
 BuildRequires: 	libglade2-devel, libgsf-devel
 BuildRequires: 	libjpeg-devel, openssl-devel
+BuildRequires:	goffice-devel
 
 %description
 GnuCash is a personal finance manager. A check-book like
@@ -78,7 +81,7 @@ Summary: Enables OFX importing in GnuCash
 Group: Applications/Finance
 Requires: gnucash = %{version}
 Requires: libofx >= %{libofx_version}
-BuildRequires: libofx
+BuildRequires: libofx-devel
 
 %description ofx
 This package adds OFX file import support to the base
@@ -116,6 +119,20 @@ want to keep your financial data in a database instead of a flat file
 (recommended for large volumes of data and commercial sites).
 %endif
 
+%if %{_with_dbi}
+%package backend-dbi
+Summary: DBI Backend for storing GnuCash data databases.
+Group: Applications/Finance
+Requires: gnucash = %{version}
+Requires: libdbi
+BuildRequires: libdbi-devel
+
+%description backend-dbi
+This package contains a backend for storing GnuCash accounts in databases
+using the libdbi package.  To enable this functionality, you must install
+one or more of the libdbi-dbd-* driver packages (e.g.  libdbi-dbd-mysql,
+libdbi-dbd-sqlite or libdbi-dbd-pgsql).
+%endif
 
 %prep
 %setup -q
@@ -126,17 +143,22 @@ want to keep your financial data in a database instead of a flat file
  --enable-ofx \
 %endif
 %if %{_with_hbci}
- --enable-hbci \
+ --enable-aqbanking \
 %endif
 %if %{_with_postgres}
  --enable-sql \
+%endif
+%if %{_with_dbi}
+ --enable-dbi \
 %endif
  --enable-gui
 
 
 make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
 
+%if %{_with_postgres}
 cp -p src/backend/postgres/README README.postgres
+%endif
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
@@ -188,18 +210,21 @@ fi
 %{_datadir}/gnucash
 %{_datadir}/applications/*
 %{_datadir}/xml/gnucash/xsl/*
-%{_datadir}/pixmaps/*
+%{_datadir}/icons/*
 %{_sysconfdir}/gconf/schemas/apps_gnucash*
 %if %{_with_ofx}
 %exclude %{_libdir}/gnucash/libgncmod-ofx*
 %endif
 %if %{_with_hbci}
-%exclude %{_libdir}/gnucash/libgncmod-hbci*
-%exclude %{_datadir}/gnucash/glade/hbci*
+%exclude %{_libdir}/gnucash/libgncmod-aqbanking*
+%exclude %{_datadir}/gnucash/glade/aqbanking*
 %exclude %{_sysconfdir}/gconf/schemas/apps_gnucash_dialog_hbci.schemas
 %endif
 %if %{_with_postgres}
 %exclude %{_libdir}/libgnc-backend-postgres*
+%endif
+%if %{_with_dbi}
+%exclude %{_libdir}/gnucash/libgncmod-backend-dbi*
 %endif
 %config %{_sysconfdir}/gnucash
 %doc AUTHORS COPYING ChangeLog* DOCUMENTERS HACKING LICENSE NEWS README
@@ -219,8 +244,8 @@ fi
 %if %{_with_hbci}
 %files hbci
 %defattr(444,root,root,755)
-%{_libdir}/gnucash/libgncmod-hbci*
-%{_datadir}/gnucash/glade/hbci*
+%{_libdir}/gnucash/libgncmod-aqbanking*
+%{_datadir}/gnucash/glade/aqbanking*
 %{_sysconfdir}/gconf/schemas/apps_gnucash_dialog_hbci.schemas
 %doc doc/README.HBCI
 %endif
@@ -230,4 +255,10 @@ fi
 %defattr(444,root,root,755)
 %{_libdir}/libgnc-backend-postgres*
 %doc README.postgres
+%endif
+
+%if %{_with_dbi}
+%files backend-dbi
+%defattr(444,root,root,755)
+%{_libdir}/gnucash/libgncmod-backend-dbi*
 %endif

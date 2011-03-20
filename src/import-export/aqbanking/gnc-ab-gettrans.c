@@ -39,6 +39,7 @@
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
 #include "gnc-gwen-gui.h"
+#include "gnc-ui.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -59,7 +60,8 @@ gettrans_dates(GtkWidget *parent, Account *gnc_acc,
 
     /* Get time of last retrieval */
     last_timespec = gnc_ab_get_account_trans_retrieval(gnc_acc);
-    if (last_timespec.tv_sec == 0) {
+    if (last_timespec.tv_sec == 0)
+    {
         use_last_date = FALSE;
         timespecFromTime_t(&last_timespec, now);
     }
@@ -73,9 +75,12 @@ gettrans_dates(GtkWidget *parent, Account *gnc_acc,
         return FALSE;
 
     /* Now calculate from date */
-    if (use_earliest_date) {
+    if (use_earliest_date)
+    {
         *from_date = NULL;
-    } else {
+    }
+    else
+    {
         if (use_last_date)
             last_timespec = gnc_ab_get_account_trans_retrieval(gnc_acc);
         *from_date = GWEN_Time_fromSeconds(timespecToTime_t(last_timespec));
@@ -102,20 +107,23 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     GncGWENGui *gui = NULL;
     AB_IMEXPORTER_CONTEXT *context = NULL;
     GncABImExContextImport *ieci = NULL;
+    AB_JOB_STATUS job_status;
 
     g_return_if_fail(parent && gnc_acc);
 
     /* Get the API */
     api = gnc_AB_BANKING_new();
-    if (!api) {
+    if (!api)
+    {
         g_warning("gnc_ab_gettrans: Couldn't get AqBanking API");
         return;
     }
     if (AB_Banking_OnlineInit(api
-#ifdef AQBANKING_VERSION_4_PLUS
-			      , 0
+#ifdef AQBANKING_VERSION_4_EXACTLY
+                              , 0
 #endif
-			      ) != 0) {
+                             ) != 0)
+    {
         g_warning("gnc_ab_gettrans: Couldn't initialize AqBanking API");
         goto cleanup;
     }
@@ -123,13 +131,16 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
 
     /* Get the AqBanking Account */
     ab_acc = gnc_ab_get_ab_account(api, gnc_acc);
-    if (!ab_acc) {
+    if (!ab_acc)
+    {
         g_warning("gnc_ab_gettrans: No AqBanking account found");
+        gnc_error_dialog(parent, _("No valid online banking account assigned."));
         goto cleanup;
     }
 
     /* Get the start and end dates for the GetTransactions job.  */
-    if (!gettrans_dates(parent, gnc_acc, &from_date, &to_date)) {
+    if (!gettrans_dates(parent, gnc_acc, &from_date, &to_date))
+    {
         g_debug("gnc_ab_gettrans: gettrans_dates aborted");
         goto cleanup;
     }
@@ -138,9 +149,15 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
 
     /* Get a GetTransactions job and enqueue it */
     job = AB_JobGetTransactions_new(ab_acc);
-    if (!job || AB_Job_CheckAvailability(job, 0)) {
+    if (!job || AB_Job_CheckAvailability(job
+#ifndef AQBANKING_VERSION_5_PLUS
+                                         , 0
+#endif
+                                        ))
+    {
         g_warning("gnc_ab_gettrans: JobGetTransactions not available for this "
                   "account");
+        gnc_error_dialog(parent, _("Online action \"Get Transactions\" not available for this account."));
         goto cleanup;
     }
     AB_JobGetTransactions_SetFromTime(job, from_date);
@@ -150,7 +167,8 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
 
     /* Get a GUI object */
     gui = gnc_GWEN_Gui_get(parent);
-    if (!gui) {
+    if (!gui)
+    {
         g_warning("gnc_ab_gettrans: Couldn't initialize Gwenhywfar GUI");
         goto cleanup;
     }
@@ -159,24 +177,41 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     context = AB_ImExporterContext_new();
 
     /* Execute the job */
-    if (AB_Banking_ExecuteJobs(api, job_list, context, 0)) {
+    AB_Banking_ExecuteJobs(api, job_list, context
+#ifndef AQBANKING_VERSION_5_PLUS
+                           , 0
+#endif
+                          );
+    /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
+     * status always describes better whether the job was actually
+     * transferred to and accepted by the bank.  See also
+     * http://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
+     */
+    job_status = AB_Job_GetStatus(job);
+    if (job_status != AB_Job_StatusFinished
+            && job_status != AB_Job_StatusPending)
+    {
         g_warning("gnc_ab_gettrans: Error on executing job");
+        gnc_error_dialog(parent, _("Error on executing job.\n\nStatus: %s - %s")
+                         , AB_Job_Status2Char(job_status)
+                         , AB_Job_GetResultText(job));
         goto cleanup;
     }
 
     /* Import the results */
     ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS, FALSE, NULL,
                                  parent);
-    if (!(gnc_ab_ieci_get_found(ieci) & FOUND_TRANSACTIONS)) {
+    if (!(gnc_ab_ieci_get_found(ieci) & FOUND_TRANSACTIONS))
+    {
         /* No transaction found */
         GtkWidget *dialog = gtk_message_dialog_new(
-            GTK_WINDOW(parent),
-            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-            GTK_MESSAGE_INFO,
-            GTK_BUTTONS_OK,
-            "%s",
-            _("The Online Banking import returned no transactions "
-              "for the selected time period."));
+                                GTK_WINDOW(parent),
+                                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                GTK_MESSAGE_INFO,
+                                GTK_BUTTONS_OK,
+                                "%s",
+                                _("The Online Banking import returned no transactions "
+                                  "for the selected time period."));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
     }
@@ -200,10 +235,10 @@ cleanup:
     if (from_date)
         GWEN_Time_free(from_date);
     if (online)
-#ifdef AQBANKING_VERSION_4_PLUS
-	AB_Banking_OnlineFini(api, 0);
+#ifdef AQBANKING_VERSION_4_EXACTLY
+        AB_Banking_OnlineFini(api, 0);
 #else
-	AB_Banking_OnlineFini(api);
+        AB_Banking_OnlineFini(api);
 #endif
     gnc_AB_BANKING_fini(api);
 }

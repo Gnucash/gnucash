@@ -1,3 +1,20 @@
+# This program is free software; you can redistribute it and/or    
+# modify it under the terms of the GNU General Public License as   
+# published by the Free Software Foundation; either version 2 of   
+# the License, or (at your option) any later version.              
+#                                                                  
+# This program is distributed in the hope that it will be useful,  
+# but WITHOUT ANY WARRANTY; without even the implied warranty of   
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+# GNU General Public License for more details.                     
+#                                                                  
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, contact:
+#
+# Free Software Foundation           Voice:  +1-617-542-5942
+# 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+# Boston, MA  02110-1301,  USA       gnu@gnu.org
+
 SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-app-utils.la
@@ -10,7 +27,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
@@ -18,10 +35,13 @@ AM_CPPFLAGS = \
 
 libgncmod_app_utils_la_SOURCES = \
   swig-app-utils.c \
+  business-options.c \
+  QuickFill.c \
   file-utils.c \
   gfec.c \
   gnc-account-merge.c \
   gnc-accounting-period.c \
+  gnc-addr-quickfill.c \
   gnc-component-manager.c \
   gnc-druid.c \
   gnc-druid-cb.c \
@@ -31,6 +51,7 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-druid-provider-desc-file.c \
   gnc-druid-provider-desc-multifile.c \
   gnc-druid-provider-file-cb.c \
+  gnc-entry-quickfill.c \
   gnc-euro.c \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
@@ -43,11 +64,14 @@ libgncmod_app_utils_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
+  QuickFill.h \
+  business-options.h \
   file-utils.h \
   gfec.h \
   gnc-basic-gobject.h \
   gnc-account-merge.h \
   gnc-accounting-period.h \
+  gnc-addr-quickfill.h \
   gnc-component-manager.h \
   gnc-druid.h \
   gnc-druid-cb.h \
@@ -57,13 +81,13 @@ gncinclude_HEADERS = \
   gnc-druid-provider-desc-file.h \
   gnc-druid-provider-desc-multifile.h \
   gnc-druid-provider-file-cb.h \
+  gnc-entry-quickfill.h \
   gnc-euro.h \
   gnc-exp-parser.h \
   gnc-gettext-util.h \
   gnc-help-utils.h \
   gnc-helpers.h \
   gnc-sx-instance-model.h \
-  gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
   option-util.h
@@ -75,10 +99,10 @@ libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GCONF_LIBS} \
   ${GTK_LIBS} \
   ${GUILE_LIBS} \
-  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SVN

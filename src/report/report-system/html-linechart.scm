@@ -54,7 +54,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-linechart> class
-;;  generate the <object> form for a guppi linechart. 
+;;  generate the <object> form for a linechart. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:make-html-linechart-internal
@@ -356,7 +356,7 @@
              (not (null? data))
 	     (gnc:not-all-zeros data))
         (begin 
-          (push "<object classid=\"gnc-guppi-line\" width=")
+          (push "<object classid=\"")(push GNC-CHART-LINE)(push "\" width=")
           (push (gnc:html-linechart-width linechart))
           (push " height=") 
           (push (gnc:html-linechart-height linechart))
@@ -531,7 +531,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-linechart> class
-;;  generate the <object> form for a guppi linechart.
+;;  generate the <object> form for a linechart.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:make-html-linechart-internal
@@ -833,7 +833,7 @@
              (not (null? data))
             (gnc:not-all-zeros data))
         (begin
-          (push "<object classid=\"gnc-guppi-line\" width=")
+          (push "<object classid=\"")(push GNC-CHART-LINE)(push "\" width=")
           (push (gnc:html-linechart-width linechart))
           (push " height=")
           (push (gnc:html-linechart-height linechart))

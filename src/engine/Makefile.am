@@ -8,7 +8,7 @@ AM_CPPFLAGS = \
 	-I${top_srcdir}/src \
 	-I${top_builddir}/src \
 	-I${top_srcdir}/src/gnc-module \
-	${QOF_CFLAGS} \
+	-I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
 	${GUILE_INCS}
 
@@ -26,17 +26,15 @@ libgncmod_engine_la_SOURCES = \
   Split.c \
   TransLog.c \
   Transaction.c \
-  binreloc.c \
   cap-gains.c \
   cashobjects.c \
   gnc-associate-account.c \
   gnc-budget.c \
   gnc-commodity.c \
   gnc-engine.c \
-  gnc-filepath-utils.c \
+  gnc-event.c \
   gnc-hooks.c \
   gnc-lot.c \
-  gnc-path.c \
   gnc-pricedb.c \
   gnc-session.c \
   gnc-session-scm.c \
@@ -45,7 +43,22 @@ libgncmod_engine_la_SOURCES = \
   kvp-scm.c \
   engine-helpers.c \
   glib-helpers.c  \
-  policy.c
+  policy.c \
+  swig-business-core.c \
+  gncBusGuile.c \
+  gncBusiness.c \
+  gncAddress.c \
+  gncBillTerm.c \
+  gncCustomer.c \
+  gncEmployee.c \
+  gncEntry.c \
+  gncInvoice.c \
+  gncJob.c \
+  gncOrder.c \
+  gncOwner.c \
+  gncTaxTable.c \
+  gncIDSearch.c \
+  gncVendor.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
@@ -60,39 +73,55 @@ gncinclude_HEADERS = \
   SX-book.h \
   SX-ttinfo.h \
   Query.h \
-  QueryNew.h \
-  QueryObject.h \
-  QueryCore.h \
   Scrub.h \
   Scrub2.h \
   Scrub3.h \
   Split.h \
   TransLog.h \
   Transaction.h \
-  binreloc.h \
   cap-gains.h \
   cashobjects.h \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
-  gnc-book.h \
   gnc-budget.h \
   gnc-commodity.h \
   gnc-engine.h \
   gnc-event.h \
-  gnc-filepath-utils.h \
   gnc-hooks.h \
-  gnc-path.h \
   gnc-pricedb.h \
   gnc-session.h \
   gnc-session-scm.h \
-  gncObject.h \
   kvp-scm.h \
-  policy.h
+  policy.h \
+  gncAddress.h \
+  gncAddressP.h \
+  gncBillTerm.h \
+  gncBillTermP.h \
+  gncBusiness.h \
+  gncBusGuile.h \
+  gncCustomer.h \
+  gncCustomerP.h \
+  gncEmployee.h \
+  gncEmployeeP.h \
+  gncEntry.h \
+  gncEntryP.h \
+  gncInvoice.h \
+  gncInvoiceP.h \
+  gncJob.h \
+  gncJobP.h \
+  gncOrder.h \
+  gncOrderP.h \
+  gncOwner.h \
+  gncOwnerP.h \
+  gncTaxTable.h \
+  gncTaxTableP.h \
+  gncIDSearch.h \
+  gncVendor.h \
+  gncVendorP.h
 
 noinst_HEADERS = \
   AccountP.h \
-  QueryP.h \
   ScrubP.h \
   SplitP.h \
   SX-book.h \
@@ -111,11 +140,10 @@ libgncmod_engine_la_LDFLAGS = -avoid-version
 libgncmod_engine_la_LIBADD = \
   ../gnc-module/libgnc-module.la \
   ../core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
-  ${QOF_LIBS} \
   ${REGEX_LIBS} \
   ${GLIB_LIBS} \
-  ${BINRELOC_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
@@ -134,10 +162,10 @@ EXTRA_DIST = \
   extensions.txt \
   iso-4217-currencies.scm \
   iso-currencies-to-c \
-  gncla-dir.h.in \
   kvp_doc.txt \
   SX-book-p.h \
   engine.i \
+  business-core.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
@@ -170,28 +198,21 @@ if BUILDING_FROM_SVN
 swig-engine.c: engine.i ${top_srcdir}/src/base-typemaps.i \
                ${gncinclude_HEADERS} ${noinst_HEADERS}
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/lib/libqof/qof -I${top_srcdir}/src -o $@ $<
+	-I${top_srcdir}/src/libqof/qof -I${top_srcdir}/src -o $@ $<
+swig-business-core.c: business-core.i ${noinst_HEADERS} \
+                      ${top_srcdir}/src/base-typemaps.i
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src -o $@ $<
 endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
-	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
+	${srcdir}/iso-currencies-to-c "${srcdir}"
 
-gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
-		-e 's#@-libdir-@#${libdir}#g' \
-		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
-		-e 's#@-datadir-@#${datadir}#g' \
-		-e 's#@-prefix-@#${prefix}#g'
-	mv $@.tmp $@
+BUILT_SOURCES = iso-4217-currencies.c
 
-BUILT_SOURCES = iso-4217-currencies.c \
-  gncla-dir.h
-
-CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links gncla-dir.h \
+CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links \
 	${SCM_FILE_LINKS}
-MAINTAINERCLEANFILES = swig-engine.c
+MAINTAINERCLEANFILES = swig-engine.c swig-business-core.c
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.engine\"

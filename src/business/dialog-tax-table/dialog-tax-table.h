@@ -26,14 +26,13 @@
 
 typedef struct _taxtable_window TaxTableWindow;
 
-#include "gnc-book.h"
 #include "gncTaxTable.h"
 
 /* Create a new tax-table by name */
-GncTaxTable * gnc_ui_tax_table_new_from_name (GNCBook *book, const char *name);
+GncTaxTable * gnc_ui_tax_table_new_from_name (QofBook *book, const char *name);
 
 /* Create a tax-table window */
-TaxTableWindow * gnc_ui_tax_table_window_new (GNCBook *book);
+TaxTableWindow * gnc_ui_tax_table_window_new (QofBook *book);
 
 /* Destroy a tax-table window */
 void gnc_ui_tax_table_window_destroy (TaxTableWindow *ttw);

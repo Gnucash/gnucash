@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-tree-model-account-types.h -- GtkTreeModel implementation
  *	to display account types in a GtkTreeView.
  *
@@ -28,7 +28,7 @@
 /** @addtogroup GuiTreeModel
  * @{ */
 /** @file gnc-tree-model-account-types.h
- *  @brief GtkTreeModel implementation to display account types in a 
+ *  @brief GtkTreeModel implementation to display account types in a
  *     GtkTreeView.
  *  @author Copyright (C) 2003 Jan Arne Petersen
  *  @author: Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -50,21 +50,24 @@ G_BEGIN_DECLS
 #define GNC_IS_TREE_MODEL_ACCOUNT_TYPES_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES))
 #define GNC_TREE_MODEL_ACCOUNT_TYPES_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, GncTreeModelAccountTypesClass))
 
-typedef enum {
-	GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE,
-	GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME,
-	GNC_TREE_MODEL_ACCOUNT_TYPES_COL_SELECTED,
-	GNC_TREE_MODEL_ACCOUNT_TYPES_NUM_COLUMNS
+typedef enum
+{
+    GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE,
+    GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME,
+    GNC_TREE_MODEL_ACCOUNT_TYPES_COL_SELECTED,
+    GNC_TREE_MODEL_ACCOUNT_TYPES_NUM_COLUMNS
 } GncTreeModelAccountTypesColumn;
 
 /* typedefs & structures */
-typedef struct {
-	GObject gobject;
-	int stamp;
+typedef struct
+{
+    GObject gobject;
+    int stamp;
 } GncTreeModelAccountTypes;
 
-typedef struct {
-	GObjectClass gobject;
+typedef struct
+{
+    GObjectClass gobject;
 } GncTreeModelAccountTypesClass;
 
 /* function prototypes */
@@ -102,12 +105,12 @@ GtkTreeModel * gnc_tree_model_account_types_valid (void);
 /* Returns a GtkTreeModelFilter that wraps the model. Only account
    types specified by the 'types' bitmask are visible.  To force the
    visibility of deprecated account types, pass
-   (xaccAccountTypesValid() | (1 << xaccAccountGetType(acct))). 
+   (xaccAccountTypesValid() | (1 << xaccAccountGetType(acct))).
 
    To get the GtkTreeModel that shows all account types, including
    deprecated account types, pass (-1).
 
-   To get the GtkTreeModel that only shows non-deprecated account types, 
+   To get the GtkTreeModel that only shows non-deprecated account types,
    use gnc_tree_model_account_types_valid().
 
    Caller is responsible for ref/unref. */
@@ -115,7 +118,7 @@ GtkTreeModel * gnc_tree_model_account_types_filter_using_mask (guint32 types);
 
 /* Update the set of the visibible account types in 'f_model' to 'types'. */
 void gnc_tree_model_account_types_set_mask (GtkTreeModel *f_model,
-                                            guint32 types);
+        guint32 types);
 
 /* Return the current set of the visibible account types. */
 guint32 gnc_tree_model_account_types_get_mask (GtkTreeModel *f_model);
@@ -137,7 +140,7 @@ gnc_tree_model_account_types_get_selection_single(GtkTreeSelection *sel);
    of account-type enums in 'selected'.  This will also scroll to a
    selected row in the TreeView.*/
 void gnc_tree_model_account_types_set_selection(GtkTreeSelection *sel,
-                                                guint32 selected);
+        guint32 selected);
 
 
 /**************** Method 2 functions **************/

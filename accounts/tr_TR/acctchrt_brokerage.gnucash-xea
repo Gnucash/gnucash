@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-9"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-     Menkul Kıymet Yatırımları
+     YatÄ±rÄ±m HesaplarÄ±
     </gnc-act:title>
     <gnc-act:short-description>
-      Aracı kurumlar nezdinde işlem gören menkul kıymet yatırımları
+      Ã‡eÅŸitli yatÄ±rÄ±m enstrÃ¼manlarÄ± iÃ§in yatÄ±rÄ±m hesaplarÄ± (hisse senedi, tahvil, bono, fonlar, faiz, kÃ¢r payÄ±)
     </gnc-act:short-description>
     <gnc-act:long-description>
-      Aracı kurumlar nezdinde işlem gören yatırımlarınızı (hisse senedi, tahvil/bono, A/B tipi yatırım fonları, katılma belgeleri, faiz, temettü) takip etmenizi sağlayan hesaplar
+    YatÄ±rÄ±mlarÄ±nÄ±z (hisse senedi, tahvil, bono, yatÄ±rÄ±m fonlarÄ±, faiz, kÃ¢r payÄ±) varsa bu hesap planÄ±nÄ± seÃ§in.
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -16,36 +16,48 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Varlıklar</act:name>
+  <act:name>VarlÄ±klar</act:name>
   <act:id type="new">52b5942b5beaec856eaca5a75ee71592</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Varlıklar</act:description>
+  <act:description>VarlÄ±klar</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Yatırımlar</act:name>
+  <act:name>YatÄ±rÄ±mlar</act:name>
   <act:id type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Yatırımlar</act:description>
+  <act:description>YatÄ±rÄ±mlar</act:description>
   <act:parent type="new">52b5942b5beaec856eaca5a75ee71592</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Aracı Kurum Hesabı</act:name>
+  <act:name>YatÄ±rÄ±m HesabÄ±</act:name>
   <act:id type="new">f15ec9568727f08a5ebd8f3e66483876</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Aracı Kurum Hesabı</act:description>
+  <act:description>YatÄ±rÄ±m HesabÄ±</act:description>
   <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -54,7 +66,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
   <act:description>Tahvil/Bono</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
@@ -65,87 +77,99 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
   <act:description>Hisse Senedi</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>A Tipi Fonlar</act:name>
+  <act:name>YatÄ±rÄ±m Fonu (A tipi)</act:name>
   <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Borsa Endeksi</act:description>
+  <act:description>YatÄ±rÄ±m Fonu (A tipi)</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B Tipi Fonlar</act:name>
+  <act:name>YatÄ±rÄ±m Fonu (B tipi)</act:name>
   <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Yatırım Fonu</act:description>
+  <act:description>YatÄ±rÄ±m Fonu (B tipi)</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gelirler</act:name>
+  <act:name>Gelir</act:name>
   <act:id type="new">9da3c880bd04b9db49eb7f5b06403bda</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Gelirler</act:description>
+  <act:description>Gelir</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Temettü Geliri</act:name>
+  <act:name>KÃ¢r payÄ±</act:name>
   <act:id type="new">1af1f4894aeab96d840e66254d023b88</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Temettü Geliri</act:description>
+  <act:description>KÃ¢r payÄ±</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Faiz Geliri</act:name>
+  <act:name>Faiz geliri</act:name>
   <act:id type="new">7943bc59ffbb9a7be4afcd2996147119</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Faiz Geliri</act:description>
+  <act:description>Faiz geliri</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Tahvil/Bono Faizi</act:name>
+  <act:name>Tahvil faizi</act:name>
   <act:id type="new">8ceb4752a11e2d342b9009b343fdba38</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Tahvil/Bono Faizi</act:description>
+  <act:description>Tahvil faizi</act:description>
   <act:parent type="new">7943bc59ffbb9a7be4afcd2996147119</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Giderler</act:name>
+  <act:name>Gider</act:name>
   <act:id type="new">6de23244232785031501171abcc1d4aa</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Giderler</act:description>
+  <act:description>Gider</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Komisyonlar</act:name>
@@ -153,7 +177,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
   <act:description>Komisyonlar</act:description>
   <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>

@@ -11,6 +11,7 @@ account_DATA = \
   acctchrt_common.gnucash-xea \
   acctchrt_eduloan.gnucash-xea \
   acctchrt_fixedassets.gnucash-xea \
+  acctchrt_full.gnucash-xea \
   acctchrt_homeloan.gnucash-xea \
   acctchrt_homeown.gnucash-xea \
   acctchrt_otherloan.gnucash-xea \

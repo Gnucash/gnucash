@@ -27,17 +27,17 @@
 
 struct GTable
 {
-  GArray *array;
+    GArray *array;
 
-  guint entry_size;
+    guint entry_size;
 
-  int rows;
-  int cols;
+    int rows;
+    int cols;
 
-  g_table_entry_constructor constructor;
-  g_table_entry_destroyer destroyer;
+    g_table_entry_constructor constructor;
+    g_table_entry_destroyer destroyer;
 
-  gpointer user_data;
+    gpointer user_data;
 };
 
 GTable *
@@ -46,125 +46,125 @@ g_table_new (guint entry_size,
              g_table_entry_destroyer destroyer,
              gpointer user_data)
 {
-  GTable *gtable;
+    GTable *gtable;
 
-  gtable = g_new(GTable, 1);
+    gtable = g_new(GTable, 1);
 
-  gtable->array = g_array_new(FALSE, FALSE, entry_size);
+    gtable->array = g_array_new(FALSE, FALSE, entry_size);
 
-  gtable->entry_size = entry_size;
+    gtable->entry_size = entry_size;
 
-  gtable->rows = 0;
-  gtable->cols = 0;
+    gtable->rows = 0;
+    gtable->cols = 0;
 
-  gtable->constructor = constructor;
-  gtable->destroyer = destroyer;
+    gtable->constructor = constructor;
+    gtable->destroyer = destroyer;
 
-  gtable->user_data = user_data;
+    gtable->user_data = user_data;
 
-  return gtable;
+    return gtable;
 }
 
 void
 g_table_destroy (GTable *gtable)
 {
-  if (gtable == NULL)
-    return;
+    if (gtable == NULL)
+        return;
 
-  g_table_resize (gtable, 0, 0);
+    g_table_resize (gtable, 0, 0);
 
-  g_array_free (gtable->array, TRUE);
+    g_array_free (gtable->array, TRUE);
 
-  gtable->array = NULL;
+    gtable->array = NULL;
 
-  g_free(gtable);
+    g_free(gtable);
 }
 
 gpointer
 g_table_index (GTable *gtable, int row, int col)
 {
-  guint index;
+    guint index;
 
-  if (gtable == NULL)
-    return NULL;
-  if ((row < 0) || (col < 0))
-    return NULL;
-  if (row >= gtable->rows)
-    return NULL;
-  if (col >= gtable->cols)
-    return NULL;
+    if (gtable == NULL)
+        return NULL;
+    if ((row < 0) || (col < 0))
+        return NULL;
+    if (row >= gtable->rows)
+        return NULL;
+    if (col >= gtable->cols)
+        return NULL;
 
-  index = ((row * gtable->cols) + col) * gtable->entry_size;
+    index = ((row * gtable->cols) + col) * gtable->entry_size;
 
-  return &gtable->array->data[index];
+    return &gtable->array->data[index];
 }
 
 void
 g_table_resize (GTable *gtable, int rows, int cols)
 {
-  guint old_len;
-  guint new_len;
+    guint old_len;
+    guint new_len;
 
-  if (gtable == NULL)
-    return;
-  if ((rows < 0) || (cols < 0))
-    return;
+    if (gtable == NULL)
+        return;
+    if ((rows < 0) || (cols < 0))
+        return;
 
-  old_len = gtable->array->len;
-  new_len = rows * cols;
+    old_len = gtable->array->len;
+    new_len = rows * cols;
 
-  if (new_len == old_len)
-    return;
+    if (new_len == old_len)
+        return;
 
-  /* If shrinking, destroy extra cells */
-  if ((new_len < old_len) && gtable->destroyer)
-  {
-    gchar *entry;
-    guint i;
-
-    entry = &gtable->array->data[new_len * gtable->entry_size];
-    for (i = new_len; i < old_len; i++)
+    /* If shrinking, destroy extra cells */
+    if ((new_len < old_len) && gtable->destroyer)
     {
-      gtable->destroyer(entry, gtable->user_data);
-      entry += gtable->entry_size;
+        gchar *entry;
+        guint i;
+
+        entry = &gtable->array->data[new_len * gtable->entry_size];
+        for (i = new_len; i < old_len; i++)
+        {
+            gtable->destroyer(entry, gtable->user_data);
+            entry += gtable->entry_size;
+        }
     }
-  }
 
-  /* Change the size */
-  g_array_set_size(gtable->array, new_len);
+    /* Change the size */
+    g_array_set_size(gtable->array, new_len);
 
-  /* If expanding, construct the new cells */
-  if ((new_len > old_len) && gtable->constructor)
-  {
-    gchar *entry;
-    guint i;
-
-    entry = &gtable->array->data[old_len * gtable->entry_size];
-    for (i = old_len; i < new_len; i++)
+    /* If expanding, construct the new cells */
+    if ((new_len > old_len) && gtable->constructor)
     {
-      gtable->constructor(entry, gtable->user_data);
-      entry += gtable->entry_size;
-    }
-  }
+        gchar *entry;
+        guint i;
 
-  gtable->rows = rows;
-  gtable->cols = cols;
+        entry = &gtable->array->data[old_len * gtable->entry_size];
+        for (i = old_len; i < new_len; i++)
+        {
+            gtable->constructor(entry, gtable->user_data);
+            entry += gtable->entry_size;
+        }
+    }
+
+    gtable->rows = rows;
+    gtable->cols = cols;
 }
 
 int
 g_table_rows (GTable *gtable)
 {
-  if (gtable == NULL)
-    return 0;
+    if (gtable == NULL)
+        return 0;
 
-  return gtable->rows;
+    return gtable->rows;
 }
 
 int
 g_table_cols (GTable *gtable)
 {
-  if (gtable == NULL)
-    return 0;
+    if (gtable == NULL)
+        return 0;
 
-  return gtable->cols;
+    return gtable->cols;
 }

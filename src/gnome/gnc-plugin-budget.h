@@ -27,7 +27,7 @@
 #ifndef __GNC_PLUGIN_BUDGET_H
 #define __GNC_PLUGIN_BUDGET_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 #include "gnc-plugin.h"
 #include "gnc-budget.h"
 
@@ -45,12 +45,14 @@ G_BEGIN_DECLS
 #define GNC_BUDGET_GUI_FILE    "budget.glade"
 
 /* typedefs & structures */
-typedef struct {
-  GncPlugin gnc_plugin;
+typedef struct
+{
+    GncPlugin gnc_plugin;
 } GncPluginBudget;
 
-typedef struct {
-  GncPluginClass gnc_plugin;
+typedef struct
+{
+    GncPluginClass gnc_plugin;
 } GncPluginBudgetClass;
 
 /* function prototypes */

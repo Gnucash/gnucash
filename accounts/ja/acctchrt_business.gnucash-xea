@@ -53,7 +53,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>当座預金口座</act:name>
+  <act:name>当座預金</act:name>
   <act:id type="new">8048bd85020e9ecf57b7cb300f4fa7e2</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
@@ -61,7 +61,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>当座預金口座</act:description>
+  <act:description>当座預金</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -75,7 +75,7 @@
   <act:parent type="new">f8532a8cdc024e0178fe20a1482e3192</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>普通預金口座</act:name>
+  <act:name>普通預金</act:name>
   <act:id type="new">f52774d7ec67a0c59c425a5c041dcc46</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
@@ -83,7 +83,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>普通預金口座</act:description>
+  <act:description>普通預金</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -225,7 +225,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>利息収入</act:name>
+  <act:name>利子収入</act:name>
   <act:id type="new">77e298a57faf85cacd4a881ade89808c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -233,7 +233,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>利息収入</act:description>
+  <act:description>利子収入</act:description>
   <act:parent type="new">f7a2e8717ea0a2e1801740d2a69b947e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -429,7 +429,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>義援金</act:name>
+  <act:name>義捐金</act:name>
   <act:id type="new">bf4c7466be71d858509cbb3d943dea8f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -437,7 +437,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>義援金</act:description>
+  <act:description>義捐金</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

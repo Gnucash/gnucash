@@ -41,9 +41,9 @@
 
 typedef struct
 {
-  BasicCell cell;
+    BasicCell cell;
 
-  gboolean flag;
+    gboolean flag;
 
 } CheckboxCell;
 

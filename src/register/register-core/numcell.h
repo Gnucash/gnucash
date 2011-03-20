@@ -31,7 +31,7 @@
  * HISTORY:
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
- 
+
 #ifndef NUM_CELL_H
 #define NUM_CELL_H
 
@@ -39,9 +39,9 @@
 
 typedef struct
 {
-  BasicCell cell;
-  long int next_num;
-  gboolean next_num_set;
+    BasicCell cell;
+    long int next_num;
+    gboolean next_num_set;
 } NumCell;
 
 BasicCell * gnc_num_cell_new (void);

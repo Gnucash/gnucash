@@ -1,5 +1,5 @@
-/* 
- * gnc-plugin-log-replay.h -- 
+/*
+ * gnc-plugin-log-replay.h --
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #ifndef __GNC_PLUGIN_LOG_REPLAY_H
 #define __GNC_PLUGIN_LOG_REPLAY_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 #include "gnc-plugin.h"
 
@@ -40,12 +40,14 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_LOG_REPLAY_NAME "gnc-plugin-log-replay"
 
 /* typedefs & structures */
-typedef struct {
-	GncPlugin gnc_plugin;
+typedef struct
+{
+    GncPlugin gnc_plugin;
 } GncPluginLogreplay;
 
-typedef struct {
-	GncPluginClass gnc_plugin;
+typedef struct
+{
+    GncPluginClass gnc_plugin;
 } GncPluginLogreplayClass;
 
 /* function prototypes */

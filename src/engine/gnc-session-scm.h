@@ -28,7 +28,7 @@
  * FUNCTION:
  * Encapsulates a connection to a GnuCash backend.  That is, it
  * manages the connection to a persistant data store; whereas
- * the backend is the thing that performs the actual datastore 
+ * the backend is the thing that performs the actual datastore
  * access.
  *
  * HISTORY:

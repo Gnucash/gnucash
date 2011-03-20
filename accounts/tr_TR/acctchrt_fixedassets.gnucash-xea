@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-9"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Maddi Duran Varlıklar
+      Duran VarlÄ±klar
     </gnc-act:title>
     <gnc-act:short-description>
-      Büyük sabit varlıklar 
+      BÃ¼yÃ¼k duran varlÄ±klarÄ±nÄ±zÄ± takip etmek iÃ§in hesaplar
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Maddi duran varlıklarınzı (ev, taşıt, yazlık, arsa, vs) takip etmenizi sağlayan hesaplar
+    BÃ¼yÃ¼k duran varlÄ±klarÄ±nÄ±zÄ±(konut, taÅŸÄ±t, yazlÄ±k, arsa, vb) takip etmek iÃ§in bu hesap planÄ±nÄ± seÃ§in.
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -16,26 +16,38 @@
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Varlıklar</act:name>
+  <act:name>VarlÄ±klar</act:name>
   <act:id type="new">64b6276c060185131cecbd1ac6218440</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Assets</act:description>
+  <act:description>VarlÄ±klar</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Maddi Duran Varlıklar</act:name>
+  <act:name>Duran VarlÄ±klar</act:name>
   <act:id type="new">9b171f77000bf68dd1ebbaf58336656d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Maddi Duran Varlıklar</act:description>
+  <act:description>Duran VarlÄ±klar</act:description>
   <act:parent type="new">64b6276c060185131cecbd1ac6218440</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ev</act:name>
@@ -43,31 +55,31 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
   <act:description>Ev</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Diğer Varlıklar</act:name>
+  <act:name>DiÄŸer VarlÄ±klar</act:name>
   <act:id type="new">ad3b239297277c9ef3840c0433cecb18</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Diğer Varlıklar</act:description>
+  <act:description>DiÄŸer VarlÄ±klar</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Taşıt</act:name>
+  <act:name>TaÅŸÄ±t</act:name>
   <act:id type="new">5913089ffc36df6f0a5d96a5d7a444c0</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>TRY</cmdty:id>
   </act:commodity>
-  <act:description>Taşıt</act:description>
+  <act:description>TaÅŸÄ±t</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
 </gnc-account-example>

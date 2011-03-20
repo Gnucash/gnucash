@@ -1,10 +1,10 @@
-/* 
+/*
  * gnc-plugin-page-sx-list.h
  *
  * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
+ * modify it under the terms of version 2 and/or version 3 of the GNU General Public
  * License as published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
@@ -33,7 +33,7 @@
 
 #include "config.h"
 #include <glib/gi18n.h>
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 #include "SchedXaction.h"
 #include "gnc-plugin-page.h"
 

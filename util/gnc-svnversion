@@ -17,6 +17,17 @@ my_die()
   exit 1
 }
 
+if [ "$BUILDING_FROM_SVN" = "0" -o \
+     "$BUILDING_FROM_SVN" = "no" -o \
+     "$BUILDING_FROM_SVN" = "false" ]; then
+  # Something outside of the Gnucash build system knows that we
+  # are NOT building from svn, svk or git checkout.
+  # We should believe it (needed by packagers that maintain the
+  # packaging code in svn, svk or git too)
+  echo "Environment variable BUILDING_FROM_SVN=$BUILDING_FROM_SVN" >&2
+  exit 1
+fi
+
 # Make sure we have a srcdir
 [ -n "$1" ] || my_die "Usage: $0 <srcdir>"
 [ -d "$1" ] || my_die "$0: $1: not a directory"
@@ -36,25 +47,53 @@ fi
 #   If this is an svn checkout we assume you have svnversion!
 if test -d "${real_srcdir}"/.svn
 then
-  svnversion "$real_srcdir"
+  # svnversion without options returns the most recent revision in the repo
+  # at the time of the last svn update/checkout even if that revision
+  # didn't hold any changes in the current path. Not very useful as a
+  # reference. Better is to ask for the last changed revision with -c.
+  # BUT: -c option for some reason always considers svn working copy
+  # as having mixed sources. We're only interested in the last part so
+  # we strip the beginning revision if it's there.
+  # As a result if your WC really has mixed sources, that will not be
+  # visible in the version number...
+  svn_mixed_version=$(svnversion -c "$real_srcdir")
+  echo ${svn_mixed_version#*:}
   exit $?
 fi
 
 # If we get here then this is NOT an svn checkout.
 
 # Maybe it's git?
-if test -d "${real_srcdir}"/.git
+real_gitdir="${real_srcdir}"/.git
+if test -d "${real_gitdir}"
 then
-  githead=`git --git-dir "${real_srcdir}"/.git rev-parse HEAD 2>/dev/null`
+  githead=`git --git-dir "${real_gitdir}" log -1 --pretty=format:"%h" HEAD 2>/dev/null`  # short hash only
   if test $? = 0 ; then
-    echo $githead
+    echo -n $githead
+    # Add a "+" to the hash if there deleted or modified files (not excluded by .gitignore and friends)
+    # "Ignores" untracked files
+    # [ $(git --git-dir "${real_gitdir}" ls-files -dkm 2>/dev/null | wc -l) -gt 0 ] && echo -n "+"
+    # Includes untracked files
+    [ $(git --git-dir "${real_gitdir}" ls-files -dkmo --exclude-standard 2>/dev/null | wc -l) -gt 0 ] && echo -n "+"
+    echo
     exit 0
   else
     exit 1
   fi
 fi
 
-if test $OSTYPE == "msys"
+if test -d "${real_srcdir}"/.bzr ;
+then
+    bzrhead=`(cd "${real_srcdir}"; bzr version-info --custom --template='{revno}\n')`
+    if test $? = 0 ; then
+	echo "$bzrhead";
+	exit 0
+    else
+	exit 1
+    fi
+fi
+
+if test $OSTYPE -a $OSTYPE = "msys";
 then
   svk_name="svk.bat"
   svk_cmd="cmd \/c svk"

@@ -1,7 +1,7 @@
 SUBDIRS = . schemas qif qif-import \
 	${OFX_DIR} ${AQBANKING_DIR} log-replay test csv
 DIST_SUBDIRS = schemas qif qif-import qif-io-core \
-	ofx aqbanking hbci log-replay test csv
+	ofx aqbanking log-replay test csv
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 
@@ -47,9 +47,9 @@ libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
-  ${QOF_LIBS} \
   ${REGEX_LIBS} \
   ${GLIB_LIBS}
 
@@ -66,10 +66,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
-  ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}

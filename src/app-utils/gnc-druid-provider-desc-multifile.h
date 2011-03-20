@@ -1,3 +1,20 @@
+/********************************************************************\
+ * gnc-druid-provider-desc-multifile.h                              *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
 
 #ifndef GNC_DRUID_PROVIDER_DESC_MULTIFILE_H
@@ -24,31 +41,31 @@ typedef struct _GNCDruidProviderDescMultifileClass GNCDruidProviderDescMultifile
 
 struct _GNCDruidProviderDescMultifile
 {
-  GNCDruidProviderDesc parent;
+    GNCDruidProviderDesc parent;
 
-  gchar* text;
-  GNCDruidProviderDescFile* file_provider;
-  GList* (*get_files)(gpointer be_ctx);
-  const gchar* (*get_filename)(gpointer be_ctx, gpointer file_ctx);
+    gchar* text;
+    GNCDruidProviderDescFile* file_provider;
+    GList* (*get_files)(gpointer be_ctx);
+    const gchar* (*get_filename)(gpointer be_ctx, gpointer file_ctx);
 };
 
 struct _GNCDruidProviderDescMultifileClass
 {
-  GNCDruidProviderDescClass parent;
+    GNCDruidProviderDescClass parent;
 };
 
 GType	gnc_druid_provider_desc_multifile_get_type(void);
 GNCDruidProviderDescMultifile* gnc_druid_provider_desc_multifile_new(void);
 GNCDruidProviderDescMultifile*
 gnc_druid_provider_desc_multifile_new_with_data(const gchar* title,
-						const gchar* text,
-						GNCDruidProviderDescFile *file_prov,
-						GNCDruidProviderCB next_cb,
-						GList* (*get_files)(gpointer),
-						const gchar* (*get_filename)(gpointer, gpointer));
+        const gchar* text,
+        GNCDruidProviderDescFile *file_prov,
+        GNCDruidProviderCB next_cb,
+        GList* (*get_files)(gpointer),
+        const gchar* (*get_filename)(gpointer, gpointer));
 
 void	gnc_druid_provider_desc_multifile_set_text(GNCDruidProviderDescMultifile*,
-						   const gchar* text);
+        const gchar* text);
 
 /* methods */
 

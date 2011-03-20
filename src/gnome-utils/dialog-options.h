@@ -24,8 +24,12 @@
 #define OPTIONS_DIALOG_H
 
 #include <libguile.h>
-
 #include "option-util.h"
+#include <gtk/gtk.h>
+
+/** A simple wrapper that casts the gpointer result of
+ * gnc_option_get_widget() already into a GtkWidget*. */
+GtkWidget *gnc_option_get_gtk_widget (GNCOption *option);
 
 typedef struct gnc_option_win GNCOptionWin;
 
@@ -52,9 +56,9 @@ void gnc_options_dialog_set_help_cb(GNCOptionWin * win,
 void gnc_options_dialog_set_close_cb(GNCOptionWin * win,
                                      GNCOptionWinCallback thunk,
                                      gpointer cb_data);
-                                     
+
 void gnc_options_dialog_set_global_help_cb(GNCOptionWinCallback thunk,
-                                           gpointer cb_data);
+        gpointer cb_data);
 
 void gnc_options_dialog_build_contents(GNCOptionWin *win,
                                        GNCOptionDB  *odb);
@@ -63,35 +67,36 @@ void gnc_options_dialog_build_contents(GNCOptionWin *win,
  * References to these functions will be held until the close_cb is called
  */
 void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
-					   SCM apply_cb,
-					   SCM close_cb);
+        SCM apply_cb,
+        SCM close_cb);
 
 /*****************************************************************/
 /* Option Registration                                           */
 
 /* Function to set the UI widget based upon the option */
 typedef GtkWidget *
-	(*GNCOptionUISetWidget)	(GNCOption *option, GtkBox *page_box,
-				 GtkTooltips *tooltips,
-				 char *name, char *documentation,
-				/* Return values */
-				 GtkWidget **enclosing, gboolean *packed);
+(*GNCOptionUISetWidget)	(GNCOption *option, GtkBox *page_box,
+                         GtkTooltips *tooltips,
+                         char *name, char *documentation,
+                         /* Return values */
+                         GtkWidget **enclosing, gboolean *packed);
 
 /* Function to set the UI Value for a particular option */
 typedef gboolean
-	(*GNCOptionUISetValue)	(GNCOption *option, gboolean use_default,
-				 GtkWidget *widget, SCM value);
+(*GNCOptionUISetValue)	(GNCOption *option, gboolean use_default,
+                         GtkWidget *widget, SCM value);
 
 /* Function to get the UI Value for a particular option */
 typedef SCM
-	(*GNCOptionUIGetValue)	(GNCOption *option, GtkWidget *widget);
+(*GNCOptionUIGetValue)	(GNCOption *option, GtkWidget *widget);
 
 
-typedef struct gnc_option_def {
-  const char *		option_name;
-  GNCOptionUISetWidget	set_widget;
-  GNCOptionUISetValue	set_value;
-  GNCOptionUIGetValue	get_value;
+typedef struct gnc_option_def
+{
+    const char *		option_name;
+    GNCOptionUISetWidget	set_widget;
+    GNCOptionUISetValue	set_value;
+    GNCOptionUIGetValue	get_value;
 } GNCOptionDef_t;
 
 

@@ -44,7 +44,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-piechart> class
-;;  generate the <object> form for a guppi piechart. 
+;;  generate the <object> form for a piechart. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:make-html-piechart-internal
@@ -197,7 +197,7 @@
     (if (and (list? data) 
              (not (null? data)))
         (begin 
-          (push "<object classid=\"gnc-guppi-pie\" width=")
+          (push "<object classid=\"")(push GNC-CHART-PIE)(push "\" width=")
           (push (gnc:html-piechart-width piechart))
           (push " height=") 
           (push (gnc:html-piechart-height piechart))

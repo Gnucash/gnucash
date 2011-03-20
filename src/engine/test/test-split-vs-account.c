@@ -65,7 +65,8 @@ int
 main (int argc, char **argv)
 {
     qof_init();
-    if(cashobjects_register()) {
+    if (cashobjects_register())
+    {
         xaccLogDisable ();
         run_test ();
         print_test_results();

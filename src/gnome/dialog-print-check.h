@@ -31,7 +31,6 @@
 typedef struct _print_check_dialog PrintCheckDialog;
 
 void gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
-                                      Split *split);
-void gnc_ui_print_check_dialog_destroy(PrintCheckDialog * pcd);
+                                      GList *splits);
 
 #endif

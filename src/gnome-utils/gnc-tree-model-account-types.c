@@ -1,4 +1,4 @@
-/* 
+/*
  * gnc-tree-model-account-types.c -- GtkTreeModel implementation
  *	to display account types in a GtkTreeView.
  *
@@ -66,8 +66,10 @@ gnc_tree_model_account_types_get_type (void)
 {
     static GType gnc_tree_model_account_types_type = 0;
 
-    if (gnc_tree_model_account_types_type == 0) {
-        static const GTypeInfo our_info = {
+    if (gnc_tree_model_account_types_type == 0)
+    {
+        static const GTypeInfo our_info =
+        {
             sizeof (GncTreeModelAccountTypesClass),
             NULL,
             NULL,
@@ -79,7 +81,8 @@ gnc_tree_model_account_types_get_type (void)
             (GInstanceInitFunc) gnc_tree_model_account_types_init
         };
 
-        static const GInterfaceInfo tree_model_info = {
+        static const GInterfaceInfo tree_model_info =
+        {
             (GInterfaceInitFunc) gnc_tree_model_account_types_tree_model_init,
             NULL,
             NULL
@@ -112,7 +115,8 @@ gnc_tree_model_account_types_class_init (GncTreeModelAccountTypesClass * klass)
 static void
 gnc_tree_model_account_types_init (GncTreeModelAccountTypes * model)
 {
-    while (model->stamp == 0) {
+    while (model->stamp == 0)
+    {
         model->stamp = g_random_int ();
     }
 }
@@ -161,7 +165,7 @@ gnc_tree_model_account_types_is_valid (GtkTreeModel *model,
     GNCAccountType type;
     GObject *f_model = G_OBJECT (data);
     guint32 valid_types = GPOINTER_TO_UINT (g_object_get_data (
-                                                f_model, TYPE_MASK));
+            f_model, TYPE_MASK));
 
     gtk_tree_model_get (model, iter,
                         GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE, &type, -1);
@@ -172,7 +176,7 @@ GtkTreeModel *
 gnc_tree_model_account_types_valid (void)
 {
     return gnc_tree_model_account_types_filter_using_mask(
-        xaccAccountTypesValid());
+               xaccAccountTypesValid());
 }
 
 GtkTreeModel *
@@ -181,7 +185,7 @@ gnc_tree_model_account_types_filter_using_mask (guint32 types)
     GtkTreeModel *f_model;
 
     f_model = gtk_tree_model_filter_new (gnc_tree_model_account_types_master (),
-                                        NULL);
+                                         NULL);
     g_object_set_data (G_OBJECT (f_model), TYPE_MASK, GUINT_TO_POINTER (types));
     gtk_tree_model_filter_set_visible_func (
         GTK_TREE_MODEL_FILTER (f_model), gnc_tree_model_account_types_is_valid,
@@ -211,24 +215,24 @@ gnc_tree_model_account_types_get_mask (GtkTreeModel *f_model)
 guint32
 gnc_tree_model_account_types_get_selected (GncTreeModelAccountTypes * model)
 {
-	GncTreeModelAccountTypesPrivate *priv;
+    GncTreeModelAccountTypesPrivate *priv;
 
-	g_return_val_if_fail (model != NULL, 0);
+    g_return_val_if_fail (model != NULL, 0);
 
-	priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
-	return priv->selected;
+    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
+    return priv->selected;
 }
 
 void
 gnc_tree_model_account_types_set_selected (GncTreeModelAccountTypes * model,
-                                           guint32 selected)
+        guint32 selected)
 {
-	GncTreeModelAccountTypesPrivate *priv;
+    GncTreeModelAccountTypesPrivate *priv;
 
-	g_return_if_fail (model != NULL);
+    g_return_if_fail (model != NULL);
 
-	priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
-	priv->selected = selected;
+    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
+    priv->selected = selected;
 }
 
 guint32
@@ -248,16 +252,19 @@ gnc_tree_model_account_types_get_selection (GtkTreeSelection *sel)
     f_model = NULL;
     list = gtk_tree_selection_get_selected_rows(sel, &f_model);
     if (!f_model)
-      f_model = gtk_tree_view_get_model(view);
+        f_model = gtk_tree_view_get_model(view);
 
     model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
     if (model != account_types_tree_model)
-       PERR("TreeSelection's TreeModel is not the account-types Model");
-    else {
-        for (node = list; node; node = node->next) {
+        PERR("TreeSelection's TreeModel is not the account-types Model");
+    else
+    {
+        for (node = list; node; node = node->next)
+        {
             path = gtk_tree_model_filter_convert_path_to_child_path(
-                GTK_TREE_MODEL_FILTER(f_model), (GtkTreePath*)node->data);
-            if (!path || gtk_tree_path_get_depth(path) != 1) {
+                       GTK_TREE_MODEL_FILTER(f_model), (GtkTreePath*)node->data);
+            if (!path || gtk_tree_path_get_depth(path) != 1)
+            {
                 PERR("Invalid Account-types TreePath.");
                 continue;
             }
@@ -276,7 +283,7 @@ gnc_tree_model_account_types_get_selection_single(GtkTreeSelection *sel)
 {
     gint i;
     guint32 selected = gnc_tree_model_account_types_get_selection(sel);
-    
+
     for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
         if (selected & (1 << i))
             return i;
@@ -285,7 +292,7 @@ gnc_tree_model_account_types_get_selection_single(GtkTreeSelection *sel)
 
 void
 gnc_tree_model_account_types_set_selection (GtkTreeSelection *sel,
-                                            guint32 selected)
+        guint32 selected)
 {
     GtkTreePath *path, *f_path;
     GtkTreeModelFilter *f_model;
@@ -296,15 +303,17 @@ gnc_tree_model_account_types_set_selection (GtkTreeSelection *sel,
     view = gtk_tree_selection_get_tree_view(sel);
     g_return_if_fail (view);
     f_model = GTK_TREE_MODEL_FILTER(gtk_tree_view_get_model(view));
-    g_return_if_fail(gtk_tree_model_filter_get_model(f_model) == 
+    g_return_if_fail(gtk_tree_model_filter_get_model(f_model) ==
                      account_types_tree_model);
     gtk_tree_selection_unselect_all(sel);
     path = gtk_tree_path_new_first();
 
-    for (i = 0; i < NUM_ACCOUNT_TYPES; i++) {
-        if (selected & (1 << i)) {
+    for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
+    {
+        if (selected & (1 << i))
+        {
             f_path = gtk_tree_model_filter_convert_child_path_to_path(
-                f_model, path);
+                         f_model, path);
             gtk_tree_selection_select_path(sel, f_path);
             gtk_tree_view_scroll_to_cell(view, f_path, NULL, FALSE, 0.0, 0.0);
         }
@@ -330,14 +339,15 @@ gnc_tree_model_account_types_get_n_columns (GtkTreeModel * tree_model)
 
 static GType
 gnc_tree_model_account_types_get_column_type (GtkTreeModel * tree_model,
-                                              int index)
+        int index)
 {
     g_return_val_if_fail(GNC_IS_TREE_MODEL_ACCOUNT_TYPES (tree_model),
                          G_TYPE_INVALID);
     g_return_val_if_fail((index < GNC_TREE_MODEL_ACCOUNT_TYPES_NUM_COLUMNS)
                          && (index >= 0), G_TYPE_INVALID);
 
-    switch (index) {
+    switch (index)
+    {
     case GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE:
         return G_TYPE_INT;
     case GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME:
@@ -362,7 +372,8 @@ gnc_tree_model_account_types_get_iter (GtkTreeModel * tree_model,
 
     i = gtk_tree_path_get_indices (path)[0];
 
-    if (i > ACCT_TYPE_NONE && i < NUM_ACCOUNT_TYPES) {
+    if (i > ACCT_TYPE_NONE && i < NUM_ACCOUNT_TYPES)
+    {
         iter->stamp = model->stamp;
         iter->user_data = GINT_TO_POINTER (i);
         return TRUE;
@@ -403,7 +414,8 @@ gnc_tree_model_account_types_get_value (GtkTreeModel * tree_model,
     g_return_if_fail (iter->stamp == model->stamp);
 
     priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
-    switch (column) {
+    switch (column)
+    {
     case GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE:
         g_value_init (value, G_TYPE_INT);
         g_value_set_int (value, GPOINTER_TO_INT (iter->user_data));
@@ -433,9 +445,10 @@ gnc_tree_model_account_types_iter_next (GtkTreeModel * tree_model,
     g_return_val_if_fail (iter != NULL, FALSE);
     g_return_val_if_fail (iter->stamp == model->stamp, FALSE);
 
-    if (GPOINTER_TO_INT (iter->user_data) < NUM_ACCOUNT_TYPES - 1) {
+    if (GPOINTER_TO_INT (iter->user_data) < NUM_ACCOUNT_TYPES - 1)
+    {
         iter->user_data = GINT_TO_POINTER(
-            GPOINTER_TO_INT(iter->user_data) + 1);
+                              GPOINTER_TO_INT(iter->user_data) + 1);
         return TRUE;
     }
 
@@ -445,8 +458,8 @@ gnc_tree_model_account_types_iter_next (GtkTreeModel * tree_model,
 
 static gboolean
 gnc_tree_model_account_types_iter_children (GtkTreeModel * tree_model,
-                                            GtkTreeIter * iter,
-                                            GtkTreeIter * parent)
+        GtkTreeIter * iter,
+        GtkTreeIter * parent)
 {
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT_TYPES(tree_model), FALSE);
@@ -462,14 +475,14 @@ gnc_tree_model_account_types_iter_children (GtkTreeModel * tree_model,
 
 static gboolean
 gnc_tree_model_account_types_iter_has_child (GtkTreeModel * tree_model,
-                                             GtkTreeIter * iter)
+        GtkTreeIter * iter)
 {
     return FALSE;
 }
 
 static int
 gnc_tree_model_account_types_iter_n_children (GtkTreeModel * tree_model,
-                                              GtkTreeIter * iter)
+        GtkTreeIter * iter)
 {
     g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT_TYPES (tree_model), -1);
 
@@ -484,8 +497,8 @@ gnc_tree_model_account_types_iter_n_children (GtkTreeModel * tree_model,
 
 static gboolean
 gnc_tree_model_account_types_iter_nth_child (GtkTreeModel * tree_model,
-                                             GtkTreeIter * iter,
-                                             GtkTreeIter * parent, int n)
+        GtkTreeIter * iter,
+        GtkTreeIter * parent, int n)
 {
     GncTreeModelAccountTypes *model;
 
@@ -496,10 +509,11 @@ gnc_tree_model_account_types_iter_nth_child (GtkTreeModel * tree_model,
 
     model = GNC_TREE_MODEL_ACCOUNT_TYPES (tree_model);
 
-    if (n > ACCT_TYPE_NONE && n < NUM_ACCOUNT_TYPES) {
-	iter->stamp = model->stamp;
-	iter->user_data = GINT_TO_POINTER (n);
-	return TRUE;
+    if (n > ACCT_TYPE_NONE && n < NUM_ACCOUNT_TYPES)
+    {
+        iter->stamp = model->stamp;
+        iter->user_data = GINT_TO_POINTER (n);
+        return TRUE;
     }
 
     iter->stamp = 0;
@@ -508,8 +522,8 @@ gnc_tree_model_account_types_iter_nth_child (GtkTreeModel * tree_model,
 
 static gboolean
 gnc_tree_model_account_types_iter_parent (GtkTreeModel * tree_model,
-                                          GtkTreeIter * iter,
-                                          GtkTreeIter * child)
+        GtkTreeIter * iter,
+        GtkTreeIter * child)
 {
     return FALSE;
 }

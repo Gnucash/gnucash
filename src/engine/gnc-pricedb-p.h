@@ -32,72 +32,73 @@
 
 struct gnc_price_s
 {
-  /* 'public' data fields */
-  QofInstance inst;              /* globally unique object identifier */
+    /* 'public' data fields */
+    QofInstance inst;              /* globally unique object identifier */
 
-  GNCPriceDB *db;
-  gnc_commodity *commodity;
-  gnc_commodity *currency;
-  Timespec tmspec;
-  char *source;
-  char *type;
-  gnc_numeric value;
+    GNCPriceDB *db;
+    gnc_commodity *commodity;
+    gnc_commodity *currency;
+    Timespec tmspec;
+    char *source;
+    char *type;
+    gnc_numeric value;
 
-  /* 'private' object management fields */
-  guint32  refcount;             /* garbage collection reference count */
+    /* 'private' object management fields */
+    guint32  refcount;             /* garbage collection reference count */
 };
 
 struct _GncPriceClass
 {
-  QofInstanceClass parent_class;
+    QofInstanceClass parent_class;
 };
 
 struct gnc_price_db_s
 {
-  QofInstance inst;              /* globally unique object identifier */
-  GHashTable *commodity_hash;
-  gboolean bulk_update;		 /* TRUE while reading XML file, etc. */
+    QofInstance inst;              /* globally unique object identifier */
+    GHashTable *commodity_hash;
+    gboolean bulk_update;		 /* TRUE while reading XML file, etc. */
 };
 
 struct _GncPriceDBClass
 {
-  QofInstanceClass parent_class;
+    QofInstanceClass parent_class;
 };
 
 /* These structs define the kind of price lookup being done
  * so that it can be passed to the backend.  This is a rather
  * cheesy, low-brow interface.  It could stand improvement.
  */
-typedef enum {
-  LOOKUP_LATEST = 1,
-  LOOKUP_ALL,
-  LOOKUP_AT_TIME,
-  LOOKUP_NEAREST_IN_TIME,
-  LOOKUP_LATEST_BEFORE,
-  LOOKUP_EARLIEST_AFTER
+typedef enum
+{
+    LOOKUP_LATEST = 1,
+    LOOKUP_ALL,
+    LOOKUP_AT_TIME,
+    LOOKUP_NEAREST_IN_TIME,
+    LOOKUP_LATEST_BEFORE,
+    LOOKUP_EARLIEST_AFTER
 } PriceLookupType;
 
 
 struct gnc_price_lookup_s
 {
-  PriceLookupType type;
-  GNCPriceDB     *prdb;
-  const gnc_commodity  *commodity;
-  const gnc_commodity  *currency;
-  Timespec        date;
+    PriceLookupType type;
+    GNCPriceDB     *prdb;
+    const gnc_commodity  *commodity;
+    const gnc_commodity  *currency;
+    Timespec        date;
 };
 
 
 typedef struct gnc_price_lookup_helper_s
 {
-  GList    **return_list;
-  Timespec time;
+    GList    **return_list;
+    Timespec time;
 } GNCPriceLookupHelper;
 
 #define  gnc_price_set_guid(P,G)  qof_instance_set_guid(QOF_INSTANCE(P),(G))
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
-                                          gnc_commodity *old_c,
-                                          gnc_commodity *new_c);
+        gnc_commodity *old_c,
+        gnc_commodity *new_c);
 
 /** register the pricedb object with the gncObject system */
 gboolean gnc_pricedb_register (void);

@@ -7,7 +7,9 @@
 
 (define-module (gnucash report standard-reports))
 (use-modules (ice-9 slib))
+(use-modules (srfi srfi-13))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash core-utils))
 
 (export gnc:register-report-create)
 (export gnc:register-report-hook)
@@ -65,29 +67,70 @@
 	    (begin (gnc:debug "get-non-split...") (get-non-split type-info)))
 	#f)))
 
-(use-modules (gnucash report account-piecharts))
-(use-modules (gnucash report account-summary))
-(use-modules (gnucash report advanced-portfolio))
-(use-modules (gnucash report average-balance))
-(use-modules (gnucash report balance-sheet))
-(use-modules (gnucash report equity-statement))
-(use-modules (gnucash report general-journal))
-(use-modules (gnucash report general-ledger))
-(use-modules (gnucash report cash-flow))
-(use-modules (gnucash report budget))
-(use-modules (gnucash report budget-balance-sheet))
-(use-modules (gnucash report budget-barchart))
-(use-modules (gnucash report budget-flow))
-(use-modules (gnucash report budget-income-statement))
-(use-modules (gnucash report category-barchart))
-(use-modules (gnucash report daily-reports))
-(use-modules (gnucash report net-barchart))
-(use-modules (gnucash report income-statement))
-(use-modules (gnucash report portfolio))
-(use-modules (gnucash report price-scatter))
-(use-modules (gnucash report register))
-(use-modules (gnucash report trial-balance))
-(use-modules (gnucash report transaction))
+
+;; Returns a list of files in a directory
+;;
+;; Param:
+;;   dir - directory name
+;;
+;; Return value:
+;;   list of files in the directory
+
+(define (directory-files dir)
+  (let ((fname-regexp (make-regexp "\\.scm$")) ;; Regexp that matches the desired filenames
+        (dir-stream (opendir dir)))
+    (let loop ((fname (readdir dir-stream))
+	               (acc '())
+				  )
+                  (if (eof-object? fname)
+                      (begin
+                          (closedir dir-stream)
+                          acc
+                      )
+                      (loop (readdir dir-stream)
+                            (if (regexp-exec fname-regexp fname)
+                                (cons fname acc)
+                                acc
+                            )
+                      )
+                  )
+    )
+  )
+)
+
+;; Process a list of files by removing the ".scm" suffix if it exists
+;;
+;; Param:
+;;   l - list of files
+;;
+;; Return value:
+;;   List of files with .scm suffix removed
+(define (process-file-list l)
+    (map (lambda (s) (if (string-suffix? ".scm" s) (string-drop-right s 4) s))
+         l
+    )
+)
+
+;; Return a list of symbols representing reports in the standard reports directory
+;;
+;; Return value:
+;;  List of symbols for reports
+(define (get-report-list)
+	(map (lambda (s) (string->symbol s))
+         (process-file-list (directory-files (gnc-path-get-stdreportsdir)))
+    )
+)
+
+(gnc:debug "dir-files=" (directory-files (gnc-path-get-stdreportsdir)))
+(gnc:debug "processed=" (process-file-list (directory-files (gnc-path-get-stdreportsdir))))
+(gnc:debug "report-list=" (get-report-list))
+
+(for-each
+    (lambda (x)
+	    (module-use!
+		    (current-module)
+			(resolve-interface (append '(gnucash report standard-reports) (list x)))))
+	(get-report-list))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)

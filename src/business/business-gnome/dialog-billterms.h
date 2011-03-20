@@ -26,10 +26,10 @@
 
 typedef struct _billterms_window BillTermsWindow;
 
-#include "gnc-book.h"
+#include "qof.h"
 
 /* Create a billterms window */
-BillTermsWindow * gnc_ui_billterms_window_new (GNCBook *book);
+BillTermsWindow * gnc_ui_billterms_window_new (QofBook *book);
 
 /* Destroy a billterms window */
 void gnc_ui_billterms_window_destroy (BillTermsWindow *ttw);

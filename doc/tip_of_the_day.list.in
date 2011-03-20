@@ -1,12 +1,5 @@
- N_( "Warning!! This is a DEVELOPMENT version of GnuCash. \
-It probably has lots of bugs and unstable features! \
-If you are looking for a stable personal finance application, \
-you should use the latest release of GnuCash 2.2.")
-
  N_( "The GnuCash online manual has lots of helpful information. \
-If you are upgrading from earlier versions of GnuCash, the section \
-\"What's new in GnuCash 2.0\" is particularly interesting. You can \
-access the manual under the Help menu.")
+You can access the manual under the Help menu.")
 
  N_( "You can easily import your existing financial data from Quicken, \
 MS Money or other programs that export QIF files or OFX files.  In the \
@@ -40,8 +33,8 @@ second value and press Enter to record the calculated amount.")
 
  N_( "Quick-fill makes it easy to enter common transactions.  When you \
 type the first letter(s) of a common transaction description, \
-GnuCash will automatically complete the remainder of the \
-transaction as it was last entered.")
+then press the Tab key, GnuCash will automatically complete \
+the remainder of the transaction as it was last entered.")
 
  N_( "Type the first letter(s) of an existing account name in the \
 Transfer register column, and GnuCash will complete the name from \
@@ -58,7 +51,7 @@ decrement the selected date. You can use '+' and '-' to increment and \
 decrement check numbers as well.")
 
  N_( "To switch between multiple tabs in the main window, press \
-Control+Alt+Page Up/Down.")
+Control+Page Up/Down.")
 
  N_( "In the reconcile window, you can press the spacebar to mark \
 transactions as reconciled.  You can also press Tab and Shift-Tab to \
@@ -80,6 +73,10 @@ the Edit -> Style Sheets menu to customize style sheets.")
 
  N_( "To raise the accounts menu in the transfer field of a register \
 page, press the Menu key or the Ctrl-Down key combination.")
+
+ N_( "If you work overnight, you should close and reopen your working \
+register after midnight, to get the new date as default for new \
+transactions. It is not necessary to restart GnuCash therefore.")
 
  N_( "The GnuCash developers are easy to contact.  As well \
 as several mailing lists, you can chat to them live on IRC! \

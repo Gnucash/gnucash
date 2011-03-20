@@ -30,24 +30,24 @@
 TableControl *
 gnc_table_control_new (void)
 {
-  TableControl *control;
+    TableControl *control;
 
-  control = g_new0 (TableControl, 1);
+    control = g_new0 (TableControl, 1);
 
-  return control;
+    return control;
 }
 
 void
 gnc_table_control_destroy (TableControl *control)
 {
-  if (!control) return;
-  g_free (control);
+    if (!control) return;
+    g_free (control);
 }
 
 void
 gnc_table_control_allow_move (TableControl *control,
                               gboolean allow_move)
 {
-  if (!control) return;
-  control->allow_move = allow_move;
+    if (!control) return;
+    control->allow_move = allow_move;
 }

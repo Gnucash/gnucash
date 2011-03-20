@@ -1,9 +1,11 @@
 NONGUI_SUBDIRS = \
+  libqof \
+  debug \
   doc \
   pixmaps \
+  test-core \
   core-utils \
   gnc-module \
-  test-core \
   engine \
   backend \
   scm \
@@ -14,6 +16,7 @@ GUI_SUBDIRS_1 = \
   tax \
   app-utils \
   gnome-utils \
+  html \
   gnome-search
 
 GUI_SUBDIRS_2 = \
@@ -22,20 +25,19 @@ GUI_SUBDIRS_2 = \
   import-export \
   business \
   optional \
+  plugins \
   bin
 
 DIST_SUBDIRS = $(NONGUI_SUBDIRS) $(GUI_SUBDIRS_1) report $(GUI_SUBDIRS_2)
 
 if GNUCASH_ENABLE_GUI
 SUBDIRS = . $(DIST_SUBDIRS)
-else 
+else
 SUBDIRS = . $(NONGUI_SUBDIRS) report
 endif
 
 noinst_HEADERS = \
-  RecnWindow.h \
-  swig-runtime.h \
-  gnc-ui.h
+  swig-runtime.h
 
 bin_SCRIPTS = gnc-test-env
 
@@ -49,6 +51,5 @@ EXTRA_DIST = \
   base-typemaps.i \
   README.modules \
   gnc-test-env \
-  valgrind-gnucash.supp \
   guile-mappings.h \
-  glib-compat.h
+  platform.h

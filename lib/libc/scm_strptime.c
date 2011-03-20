@@ -1,15 +1,15 @@
 /* Copyright (C) 1995,1996,1997,1998, 1999, 2000 Free Software Foundation, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this software; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -110,67 +110,67 @@ filltime (struct tm *bd_time, int zoff, char *zname);
 static SCM
 filltime (struct tm *bd_time, int zoff, char *zname)
 {
-  SCM result = scm_make_vector (SCM_MAKINUM(11), SCM_UNDEFINED);
+    SCM result = scm_make_vector (SCM_MAKINUM(11), SCM_UNDEFINED);
 
-  SCM_VELTS (result)[0] = SCM_MAKINUM (bd_time->tm_sec);
-  SCM_VELTS (result)[1] = SCM_MAKINUM (bd_time->tm_min);
-  SCM_VELTS (result)[2] = SCM_MAKINUM (bd_time->tm_hour);
-  SCM_VELTS (result)[3] = SCM_MAKINUM (bd_time->tm_mday);
-  SCM_VELTS (result)[4] = SCM_MAKINUM (bd_time->tm_mon);
-  SCM_VELTS (result)[5] = SCM_MAKINUM (bd_time->tm_year);
-  SCM_VELTS (result)[6] = SCM_MAKINUM (bd_time->tm_wday);
-  SCM_VELTS (result)[7] = SCM_MAKINUM (bd_time->tm_yday);
-  SCM_VELTS (result)[8] = SCM_MAKINUM (bd_time->tm_isdst);
-  SCM_VELTS (result)[9] = SCM_MAKINUM (zoff);
-  SCM_VELTS (result)[10] = zname ? scm_makfrom0str (zname) : SCM_BOOL_F;
-  return result;
+    SCM_VELTS (result)[0] = SCM_MAKINUM (bd_time->tm_sec);
+    SCM_VELTS (result)[1] = SCM_MAKINUM (bd_time->tm_min);
+    SCM_VELTS (result)[2] = SCM_MAKINUM (bd_time->tm_hour);
+    SCM_VELTS (result)[3] = SCM_MAKINUM (bd_time->tm_mday);
+    SCM_VELTS (result)[4] = SCM_MAKINUM (bd_time->tm_mon);
+    SCM_VELTS (result)[5] = SCM_MAKINUM (bd_time->tm_year);
+    SCM_VELTS (result)[6] = SCM_MAKINUM (bd_time->tm_wday);
+    SCM_VELTS (result)[7] = SCM_MAKINUM (bd_time->tm_yday);
+    SCM_VELTS (result)[8] = SCM_MAKINUM (bd_time->tm_isdst);
+    SCM_VELTS (result)[9] = SCM_MAKINUM (zoff);
+    SCM_VELTS (result)[10] = zname ? scm_makfrom0str (zname) : SCM_BOOL_F;
+    return result;
 }
 
 #ifndef HAVE_STRPTIME
 SCM_DEFINE (scm_strptime, "strptime", 2, 0, 0,
             (SCM format, SCM string),
-	    "Performs the reverse action to @code{strftime}, parsing @var{string}\n"
-	    "according to the specification supplied in @var{template}.  The\n"
-	    "interpretation of month and day names is dependent on the current\n"
-	    "locale.  The\n"
-	    "value returned is a pair.  The CAR has an object with time components \n"
-	    "in the form returned by @code{localtime} or @code{gmtime},\n"
-	    "but the time zone components\n"
-	    "are not usefully set.\n"
-	    "The CDR reports the number of characters from @var{string} which\n"
-	    "vwere used for the conversion.")
+            "Performs the reverse action to @code{strftime}, parsing @var{string}\n"
+            "according to the specification supplied in @var{template}.  The\n"
+            "interpretation of month and day names is dependent on the current\n"
+            "locale.  The\n"
+            "value returned is a pair.  The CAR has an object with time components \n"
+            "in the form returned by @code{localtime} or @code{gmtime},\n"
+            "but the time zone components\n"
+            "are not usefully set.\n"
+            "The CDR reports the number of characters from @var{string} which\n"
+            "vwere used for the conversion.")
 #define FUNC_NAME s_scm_strptime
 {
-  struct tm t;
-  char *fmt, *str, *rest;
+    struct tm t;
+    char *fmt, *str, *rest;
 
-  SCM_VALIDATE_ROSTRING (1,format);
-  SCM_VALIDATE_ROSTRING (2,string);
+    SCM_VALIDATE_ROSTRING (1, format);
+    SCM_VALIDATE_ROSTRING (2, string);
 
-  SCM_COERCE_SUBSTR (format);
-  SCM_COERCE_SUBSTR (string);
-  fmt = SCM_ROCHARS (format);
-  str = SCM_ROCHARS (string);
+    SCM_COERCE_SUBSTR (format);
+    SCM_COERCE_SUBSTR (string);
+    fmt = SCM_ROCHARS (format);
+    str = SCM_ROCHARS (string);
 
-  /* initialize the struct tm */
+    /* initialize the struct tm */
 #define tm_init(field) t.field = 0
-  tm_init (tm_sec);
-  tm_init (tm_min);
-  tm_init (tm_hour);
-  tm_init (tm_mday);
-  tm_init (tm_mon);
-  tm_init (tm_year);
-  tm_init (tm_wday);
-  tm_init (tm_yday);
+    tm_init (tm_sec);
+    tm_init (tm_min);
+    tm_init (tm_hour);
+    tm_init (tm_mday);
+    tm_init (tm_mon);
+    tm_init (tm_year);
+    tm_init (tm_wday);
+    tm_init (tm_yday);
 #undef tm_init
 
-  t.tm_isdst = -1;
-  SCM_DEFER_INTS;
-  if ((rest = strptime (str, fmt, &t)) == NULL)
-    SCM_SYSERROR;
+    t.tm_isdst = -1;
+    SCM_DEFER_INTS;
+    if ((rest = strptime (str, fmt, &t)) == NULL)
+        SCM_SYSERROR;
 
-  SCM_ALLOW_INTS;
-  return scm_cons (filltime (&t, 0, NULL),  SCM_MAKINUM (rest - str));
+    SCM_ALLOW_INTS;
+    return scm_cons (filltime (&t, 0, NULL),  SCM_MAKINUM (rest - str));
 }
 #undef FUNC_NAME
 #endif /* HAVE_STRPTIME */

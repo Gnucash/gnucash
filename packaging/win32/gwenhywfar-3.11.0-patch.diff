@@ -1,0 +1,27 @@
+From a31de9bb25ddb34cc5d53736d11b58e67a0e65f8 Mon Sep 17 00:00:00 2001
+From: christian <christian@70169cfe-8b10-0410-8925-dcb4b91034d8>
+Date: Tue, 22 Sep 2009 18:31:55 +0000
+Subject: [PATCH] Win32: Add configure check for RC executable.
+
+git-svn-id: https://devel.aqbanking.de/svn/gwenhywfar/trunk@1597 70169cfe-8b10-0410-8925-dcb4b91034d8
+---
+ configure.ac |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 38fb73f..7b00908 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -187,6 +187,9 @@ AC_PROG_INSTALL
+ 
+ AC_LIBTOOL_WIN32_DLL
+ AC_LIBTOOL_RC
++# Newer libtool doesn't have AC_LIBTOOL_RC anymore.  Need to check for
++# $(RC) by ourselves.
++AC_CHECK_TOOL([RC], [windres], [no])
+ AC_PROG_LIBTOOL
+ AC_PROG_AWK
+ AC_CHECK_PROG(USE_DOT,dot,YES,NO)
+-- 
+1.6.1.rc3.51.g5832d
+

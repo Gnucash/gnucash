@@ -210,5 +210,18 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnucash/general/warnings/print_multi_acct_checks</key>
+      <applyto>/apps/gnucash/general/warnings/permanent/print_multi_acct_checks</applyto>
+      <applyto>/apps/gnucash/general/warnings/temporary/print_multi_acct_checks</applyto>
+      <owner>gnucash</owner>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>Print checks from multiple accounts</short>
+        <long>This dialog is presented if you try to print checks from multiple accounts at the same time.</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

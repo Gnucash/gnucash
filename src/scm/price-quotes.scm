@@ -240,7 +240,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*finance-quote-check*
-  (g-find-program-in-path "gnc-fq-check"))
+  (string-append (gnc-path-get-bindir) "/gnc-fq-check"))
 
 (define (gnc:fq-check-sources)
   (let ((program '())
@@ -259,7 +259,7 @@
              #t
              (lambda ()
                (set! results (read from-child))
-               (gnc:debug (list 'results results))
+               (gnc:debug "results: " results)
                results)
              (lambda (key . args)
                key)))))
@@ -286,7 +286,7 @@
 ;; src/engine/gnc-pricedb.h
 
 (define gnc:*finance-quote-helper*
-  (g-find-program-in-path "gnc-fq-helper"))
+  (string-append (gnc-path-get-bindir) "/gnc-fq-helper"))
 
 (define (gnc:fq-get-quotes requests)
   ;; requests should be a list where each item is of the form
@@ -345,7 +345,7 @@
                (catch
                 #t
                 (lambda ()
-                  (gnc:debug (list 'handling-request request))
+                  (gnc:debug "handling-request: " request)
                   ;; we need to display the first element (the method, so it
                   ;; won't be quoted) and then write the rest
                   (display #\( to-child)
@@ -356,7 +356,7 @@
                   (newline to-child)
                   (force-output to-child)
                   (set! results (read from-child))
-                  (gnc:debug (list 'results results))
+                  (gnc:debug "results: " results)
                   results)
                 (lambda (key . args)
                   key)))
@@ -482,7 +482,7 @@
                     (and (pair? alist-item)
                          (not (eq? 'failed-conversion (cdr alist-item)))))
                   (cdr call-result)))
-            ;; OK, data is good (as far as we can tell.
+            ;; OK, data is good (as far as we can tell).
             (set! result-list
                   (cons (list (car call-data)
                               (caddr call-data)
@@ -746,7 +746,7 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
   (let ((sources (gnc:fq-check-sources)))
     (if (list? sources)
 	(begin
-      (simple-format #t "Found Finance::Quote version ~A" (car sources))
+      (format #t "Found Finance::Quote version ~A" (car sources))
       (newline)
 	  (gnc:msg "Found Finance::Quote version " (car sources))
 	  (gnc-quote-source-set-fq-installed (cdr sources))))))

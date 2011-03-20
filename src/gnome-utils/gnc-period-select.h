@@ -42,15 +42,17 @@ G_BEGIN_DECLS
 #define GNC_IS_PERIOD_SELECT(o)	    (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PERIOD_SELECT))
 
 /* typedefs & structures */
-typedef struct {
-  GtkHBox hbox;
+typedef struct
+{
+    GtkHBox hbox;
 } GncPeriodSelect;
 
-typedef struct {
-  GtkHBoxClass hbox;
+typedef struct
+{
+    GtkHBoxClass hbox;
 
-  /* Signals */
-  void (*changed) (GncPeriodSelect *period);
+    /* Signals */
+    void (*changed) (GncPeriodSelect *period);
 
 } GncPeriodSelectClass;
 
@@ -73,7 +75,7 @@ void gnc_period_select_changed (GncPeriodSelect *period);
 
 /** Create a new GncPeriodSelect widget which is used to select a
  *  accounting period like "previous month" or "this year".
- * 
+ *
  *  @param starting_labels If set to TRUE then all the labels will
  *  refer to the "Start of...".  If FALSE, labels will refer to "End
  *  of...".
@@ -91,8 +93,8 @@ GtkWidget *gnc_period_select_new (gboolean starting_labels);
  *  @return A newly created GncPeriodSelect widget.
  */
 GtkWidget * gnc_period_select_new_glade (gchar *widget_name,
-					gchar *string1, gchar *string2,
-					gint int1, gint int2);
+        gchar *string1, gchar *string2,
+        gint int1, gint int2);
 /** @} */
 
 
@@ -102,7 +104,7 @@ GtkWidget * gnc_period_select_new_glade (gchar *widget_name,
 /** Set the fiscal year end on a GncPeriodSelect widget.  If set to a
  *  value other than NULL then widget will include fiscal accounting
  *  period like "this fiscal year".
- * 
+ *
  *  @param period The GncPeriodSelect widget to update.
  *
  *  @param fy_end The new fiscal year end value, or NULL if no fiscal
@@ -115,7 +117,7 @@ void gnc_period_select_set_fy_end (GncPeriodSelect *period, const GDate *fy_end)
 /** Get the current value of the fiscal year end setting from a
  *  GncPeriodSelect widget.  If the result is NULL then fiscal years
  *  are not currently supported.
- * 
+ *
  *  @param period The GncPeriodSelect widget to query.
  *
  *  @return A pointer to a GDate containing the fiscal year end value,

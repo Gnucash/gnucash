@@ -4,6 +4,7 @@ AM_CPPFLAGS = \
    -I${top_srcdir}/lib/libc \
    -I${top_srcdir}/src \
    -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/libqof/qof \
    ${GLIB_CFLAGS} \
    ${GUILE_INCS}
 
@@ -14,8 +15,9 @@ libgnc_module_la_SOURCES = gnc-module.c swig-gnc-module.c
 libgnc_module_la_LIBADD = \
   ../core-utils/libgnc-core-utils.la \
   ${top_builddir}/lib/libc/libc-missing.la \
-  ${GUILE_LIBS} \
-  ${GLIB_LIBS}
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${GLIB_LIBS} \
+  ${GUILE_LIBS}
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnc-module.scm

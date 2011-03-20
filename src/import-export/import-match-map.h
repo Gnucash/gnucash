@@ -32,12 +32,11 @@
 typedef struct _GncImportMatchMap GncImportMatchMap;
 
 #include "Account.h"
-#include "gnc-book.h"
 
 /** @{
 Obtain an ImportMatchMap object from an Account or a Book */
 GncImportMatchMap * gnc_imap_create_from_account (Account *acc);
-GncImportMatchMap * gnc_imap_create_from_book (GNCBook *book);
+GncImportMatchMap * gnc_imap_create_from_book (QofBook *book);
 /*@}*/
 
 /** Destroy an import map. But all stored entries will still continue
@@ -49,13 +48,13 @@ void gnc_imap_clear (GncImportMatchMap *imap);
 
 /** Look up an Account in the map */
 Account* gnc_imap_find_account(GncImportMatchMap *imap, const char* category,
-			       const char *key);
+                               const char *key);
 
 /** Store an Account in the map. This mapping is immediatly stored in
   the underlying kvp frame, regardless of whether the MatchMap is
   destroyed later or not. */
 void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
-			   const char *key, Account *acc);
+                           const char *key, Account *acc);
 
 /** Look up an Account in the map from a GList* of pointers to strings(tokens)
   from the current transaction */
@@ -65,11 +64,11 @@ Account* gnc_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens);
   the underlying kvp frame, regardless of whether the MatchMap is
   destroyed later or not. */
 void gnc_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
-				 Account *acc);
+                                 Account *acc);
 
 
 /** @name Some well-known categories
- 
+
   NOTE: You DO NOT have to use these values in your importer -- these
   are just "well known" values, not "mandatory" values.  You are free
   to use these if they apply, map your own fields to these labels, or

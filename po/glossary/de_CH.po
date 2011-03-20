@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2006-04-29 15:14+0200\n"
-"PO-Revision-Date: 2008-02-24 17:00+0100\n"
+"POT-Creation-Date: 2010-11-24 02:25+0100\n"
+"PO-Revision-Date: 2008-03-03 00:47+0100\n"
 "Last-Translator: Raffael Luthiger <r.luthiger@huanga.com>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgstr "Kontobezeichnung"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
 msgid "account type: Asset"
-msgstr "Aktiva"
+msgstr "Aktiven"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -51,7 +51,7 @@ msgstr "Eigenkapital"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "Aufwand (pl. Aufwendungen)"
+msgstr "Aufwand (Für dieses Wort existiert kein Plural)"
 
 #. "-"
 msgid "account type: Income"
@@ -59,7 +59,7 @@ msgstr "Ertrag"
 
 #. "A debt, a financial obligation"
 msgid "account type: Liability"
-msgstr "Passiva"
+msgstr "Passiven"
 
 #. "-"
 msgid "account type: money-market"
@@ -79,7 +79,7 @@ msgstr "Aktienkonto (früher: Depot)"
 
 #. "-"
 msgid "account: parent account"
-msgstr "Hauptkonto"
+msgstr "Elternkonto"
 
 #. "-"
 msgid "account: subaccount"
@@ -87,7 +87,7 @@ msgstr "Unterkonto"
 
 #. "-"
 msgid "account: top level account"
-msgstr "Top-Level-Konto (Oberkonto?)"
+msgstr "Hauptkonto"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -139,7 +139,7 @@ msgstr "Zahlung"
 
 #. "-"
 msgid "action: POS"
-msgstr "Karten-Terminal"
+msgstr "Kassensystem"
 
 #. "-"
 msgid "action: rebate"
@@ -203,7 +203,8 @@ msgstr "Geschäftsbuch (Bücher, Buch, Handelsbuch)"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr "Buchabschluss (Jahresabschluss; die Bücher abschliessen; Jahresendabrechnung)"
+msgstr ""
+"Buchabschluss (Jahresabschluss; die Bücher abschliessen; Jahresendabrechnung)"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -259,7 +260,8 @@ msgstr "Symbol"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr "Haben (ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?)"
+msgstr ""
+"Haben (ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?)"
 
 #. "-"
 msgid "Credit Card"
@@ -279,7 +281,7 @@ msgstr "Benutzerdefiniert"
 
 #. "The backend where the data is stored."
 msgid "database"
-msgstr "Datei "
+msgstr "Datenbank"
 
 #. "A specific numbered day of the month"
 msgid "Date"
@@ -295,7 +297,8 @@ msgstr "Zeitraum"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
+msgstr ""
+"Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -312,6 +315,11 @@ msgstr "Abschreibung"
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
 msgstr "Beschreibung (Verwendungszweck, Buchungstext, Text?)"
+
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+#, fuzzy
+msgid "discount"
+msgstr "Konto"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -371,7 +379,7 @@ msgstr "Import"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
-msgstr "Einnahmeüberschussrechnung"
+msgstr "Mittelflussrechnung"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
@@ -391,7 +399,7 @@ msgstr "Hauptbuch"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr "Passiva"
+msgstr "Passiven"
 
 #. "A sum of money that is lent (by a bank)"
 msgid "loan"
@@ -531,7 +539,7 @@ msgstr "Ergebnis, Gewinn"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Gewinn- und Verlustrechnung (GuV)"
+msgstr "Erfolgsrechnung"
 
 #. "-"
 msgid "quick-fill"
@@ -551,7 +559,7 @@ msgstr "Buchführung"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "Kontobuch (1.8.2 und älter: Kassenbericht)"
+msgstr "Kontenblatt (oder Kontojournal)"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
@@ -563,7 +571,8 @@ msgstr "Aktienteilung"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "Buchungsansicht: Aktive vollständig (bis 1.8.7: Auto-Mehrteiliges Hauptbuch)"
+msgstr ""
+"Buchungsansicht: Aktive vollständig (bis 1.8.7: Auto-Mehrteiliges Hauptbuch)"
 
 #. "another form of register"
 msgid "register: basic ledger"
@@ -643,11 +652,11 @@ msgstr "-"
 
 #. "as abbreviation for Total"
 msgid "Tot"
-msgstr "Gesamt"
+msgstr "Tot"
 
 #. "The full number or amount: total of some balances, of any account's running balance etc."
 msgid "total"
-msgstr "Betrag"
+msgstr "Total"
 
 #. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
@@ -712,4 +721,3 @@ msgstr "Auslagenerstattung"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "Belastung"
-

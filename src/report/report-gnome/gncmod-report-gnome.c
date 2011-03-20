@@ -32,51 +32,54 @@ int libgncmod_report_gnome_gnc_module_age      = 0;
 char *
 libgncmod_report_gnome_gnc_module_path(void)
 {
-  return g_strdup("gnucash/report/report-gnome");
+    return g_strdup("gnucash/report/report-gnome");
 }
 
 char *
 libgncmod_report_gnome_gnc_module_description(void)
 {
-  return g_strdup("Gnome component of GnuCash report generation system");
+    return g_strdup("Gnome component of GnuCash report generation system");
 }
 
 static void
 lmod(char * mn)
 {
-  char * form = g_strdup_printf("(use-modules %s)\n", mn);
-  scm_c_eval_string(form);
-  g_free(form);
+    char * form = g_strdup_printf("(use-modules %s)\n", mn);
+    scm_c_eval_string(form);
+    g_free(form);
 }
 extern SCM scm_init_sw_report_gnome_module(void);
 
 int
 libgncmod_report_gnome_gnc_module_init(int refcount)
 {
-  if(!gnc_module_load("gnucash/app-utils", 0)) {
-    return FALSE;
-  }
+    if (!gnc_module_load("gnucash/app-utils", 0))
+    {
+        return FALSE;
+    }
 
-  if(!gnc_module_load("gnucash/gnome-utils", 0)) {
-    return FALSE;
-  }
+    if (!gnc_module_load("gnucash/gnome-utils", 0))
+    {
+        return FALSE;
+    }
 
-  if(!gnc_module_load("gnucash/report/report-system", 0)) {
-    return FALSE;
-  }
-  scm_init_sw_report_gnome_module();
+    if (!gnc_module_load("gnucash/report/report-system", 0))
+    {
+        return FALSE;
+    }
+    scm_init_sw_report_gnome_module();
 
-  lmod ("(sw_report_gnome)");
-  lmod ("(gnucash report report-gnome)");
+    lmod ("(sw_report_gnome)");
+    lmod ("(gnucash report report-gnome)");
 
-  if (refcount == 0)
-    gnc_report_init ();
+    if (refcount == 0)
+        gnc_report_init ();
 
-  return TRUE;
+    return TRUE;
 }
 
 int
 libgncmod_report_gnome_gnc_module_end(int refcount)
 {
-  return TRUE;
+    return TRUE;
 }

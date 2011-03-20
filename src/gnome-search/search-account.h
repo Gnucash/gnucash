@@ -4,8 +4,9 @@
  *  Authors: Derek Atkins <warlord@MIT.EDU>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
- * License as published by the Free Software Foundation.
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +23,7 @@
 #define _GNCSEARCH_ACCOUNT_H
 
 #include "search-core-type.h"
-#include "QueryNew.h"
+#include "qof.h"
 
 #define GNC_TYPE_SEARCH_ACCOUNT 	(gnc_search_account_get_type ())
 #define GNCSEARCH_ACCOUNT(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccount)
@@ -32,18 +33,20 @@
 typedef struct _GNCSearchAccount	GNCSearchAccount;
 typedef struct _GNCSearchAccountClass	GNCSearchAccountClass;
 
-struct _GNCSearchAccount {
-  GNCSearchCoreType parent;
+struct _GNCSearchAccount
+{
+    GNCSearchCoreType parent;
 
-  guid_match_t	how;
+    QofGuidMatch	how;
 };
 
-struct _GNCSearchAccountClass {
-  GNCSearchCoreTypeClass parent_class;
+struct _GNCSearchAccountClass
+{
+    GNCSearchCoreTypeClass parent_class;
 
-  /* virtual methods */
+    /* virtual methods */
 
-  /* signals */
+    /* signals */
 };
 
 GType		gnc_search_account_get_type	(void);

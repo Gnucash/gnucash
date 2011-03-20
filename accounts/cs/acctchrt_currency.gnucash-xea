@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+  	Účet na obchodování s měnou
+    </gnc-act:title>
+    <gnc-act:short-description>
+  	Účet na obchodování a konverze zahraničních měn
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+	Tento účet budete potrebovať, pokud budete konvertovať zahraniční měny.
+
+	Poznámka: účet je aktuální v DEM; pokud chcete, můžete to zmeniť.
+    </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Hlavní Účet</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktiva</act:name>
+  <act:id type="new">b3c65be1c5d163746ddc0c506f3f4619</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Aktiva</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Investice</act:name>
+  <act:id type="new">d9c796b35784533aee4309e28a3cbfc5</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Investice</act:description>
+  <act:parent type="new">b3c65be1c5d163746ddc0c506f3f4619</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Měnové obchody</act:name>
+  <act:id type="new">9206632307989cb5b244ad5da5d3131b</act:id>
+  <act:type>CURRENCY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DEM</cmdty:id>
+  </act:currency>
+  <act:description>Obchody s měnou</act:description>
+  <act:parent type="new">d9c796b35784533aee4309e28a3cbfc5</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

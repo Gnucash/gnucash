@@ -37,6 +37,11 @@ qof).
 strongly discouraged and actively removed whenever it's caught.
 
 
+Important notice
+----------------
+You can find the most recent version of the following part at 
+http://wiki.gnucash.org/wiki/Dependencies.
+
 GnuCash Library Dependency Policy
 ---------------------------------
 
@@ -55,7 +60,8 @@ release (or an official package-upgrade path)
 
 Libraries/Deps
 --------------
-aqbanking
+  required
+  --------
 gconf2
 glib2
 gtk+2
@@ -66,14 +72,25 @@ libgnomeprint2.2
 libgnomeui2
 [lib]goffice
 libgsf1
-[lib]gtkhtml3
-libofx
 libxml2
 pango
 swig
 
-(Note: gwrap has been replaced by swig and dropped completely in
-SVN-trunk on 2006-10-20 and for gnucash-2.2.0.)
+  alternatives
+  ------------
+[lib]gtkhtml3: old html renderer
+webkit: new html renderer
+
+  optional
+  --------
+aqbanking: online banking
+libdbi + desired database layer: SQL backend
+libofx
+python: python bindings
+
+  at runtime, suggested
+  ---------------------
+isocodes: translation of currency names 
 
 Interesting libraries
 ---------------------
@@ -88,27 +105,6 @@ gtkhtml
 
 libgoffice/libgsf details
 -------------------------
-
-- libgoffice-0.1.0
-  - glib-2.0 >= 2.6.3
-  - libgsf-1 >= 1.13.1
-    - libgsf-1.13.1
-      - glib-2.0 >= 2.6.0
-      - libxml-2.0 >= 2.4.16
-      - libbonobo-2.0 >= 2.0.0
-      - gnome-vfs-2.0 >= 2.2.0
-      - gnome-vfs-module-2.0 >= 2.2.0
-  - libxml-2.0 >= 2.4.12
-  - pango  >= 1.8.1
-  - pangoft2 >= 1.8.1
-  - cairo >= 0.5.0 [optional]
-  - gtk+-2.0 >= 2.6.0
-  - libglade-2.0 >= 2.3.6
-  - libgnomeprint-2.2 >= 2.8.2
-  - libart-2.0 >= 2.3.11
-  - gconf-2.0
-  - libgnomeui-2.0 >= 2.0.0
-  - libgsf-gnome-1 >= 1.12.2
 
 - libgoffice-0.4.0
   - glib-2.0		>= 2.6.4
@@ -145,7 +141,6 @@ Partial update, 2007-06-09; RHEL-only
     - glib2-2.4.7			glib2-2.12.3-2.fc6
     - gtk2-2.4.13			gtk2-2.10.4-16.el5
     - guile-1.6.4			guile-1.8.0--8.20060831cvs
-    - gwrap: not included		g-wrap-1.9.6    from Fedora Core 7
     - libart_lgpl-2.3.16		libart-lgpl-2.3.17-4
     - libglade2-2.4.0			libglade2-2.6.0-2
     - libgnomeprint22-2.8.0		libgnomeprint22-2.12.1-6

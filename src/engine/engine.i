@@ -5,6 +5,7 @@
 #include <glib.h>
 #include <qof.h>
 #include <Query.h>
+#include <guile-mappings.h>
 #include <gnc-budget.h>
 #include <gnc-commodity.h>
 #include <gnc-engine.h>
@@ -33,12 +34,18 @@ GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
 
 %typemap(newfree) gchar * "g_free($1);"
 
+/* These need to be here so that they are *before* the function
+declarations in the header files, some of which are included by
+engine-common.i */
+
+%newobject gnc_account_get_full_name;
+
 %include "engine-common.i"
 
 %inline %{
-static const GUID * gncPriceGetGUID(GNCPrice *x)
+static const GncGUID * gncPriceGetGUID(GNCPrice *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
-static const GUID * gncBudgetGetGUID(GncBudget *x)
+static const GncGUID * gncBudgetGetGUID(GncBudget *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
 %}
 
@@ -85,55 +92,32 @@ const char *qof_session_get_url (QofSession *session);
 extern const char *gnc_default_strftime_date_format;
 const char *gnc_print_date (Timespec ts);
 
-GUID guid_new_return(void);
+GncGUID guid_new_return(void);
 
 %inline {
 static QofQuery * qof_query_create_for_splits(void) {
   return qof_query_create_for(GNC_ID_SPLIT);
 }
 }
-%typemap(in) GSList * "$1 = gnc_query_scm2path($input);"
 
-void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
-                           const GUID *guid, QofQueryOp op);
-void qof_query_set_sort_order (QofQuery *q, GSList *params1,
-                           GSList *params2, GSList *params3);
-
-%clear GSList *;
 SplitList * qof_query_run (QofQuery *q);
+SplitList * qof_query_last_run (QofQuery *q);
+SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
+
+%typemap(in) QofQueryParamList * "$1 = gnc_query_scm2path($input);"
 
 %include <Query.h>
-%ignore qof_query_add_guid_match;
-%ignore qof_query_set_sort_order;
 %ignore qof_query_run;
+%ignore qof_query_last_run;
+%ignore qof_query_run_subquery;
 %include <qofquery.h>
 %include <qofquerycore.h>
+%include <qofbookslots.h>
+%include <qofbook.h>
 
-gnc_numeric gnc_numeric_create(gint64 num, gint64 denom);
-gnc_numeric gnc_numeric_zero(void);
-gint64 gnc_numeric_num(gnc_numeric a);
-gint64 gnc_numeric_denom(gnc_numeric a);
-gboolean gnc_numeric_zero_p(gnc_numeric a);
-int gnc_numeric_compare(gnc_numeric a, gnc_numeric b);
-gboolean gnc_numeric_negative_p(gnc_numeric a);
-gboolean gnc_numeric_positive_p(gnc_numeric a);
-gboolean gnc_numeric_equal(gnc_numeric a, gnc_numeric b);
-gnc_numeric
-gnc_numeric_add(gnc_numeric a, gnc_numeric b, gint64 denom, gint how);
-gnc_numeric
-gnc_numeric_sub(gnc_numeric a, gnc_numeric b, gint64 denom, gint how);
-gnc_numeric
-gnc_numeric_mul(gnc_numeric a, gnc_numeric b, gint64 denom, gint how);
-gnc_numeric
-gnc_numeric_div(gnc_numeric a, gnc_numeric b, gint64 denom, gint how);
-gnc_numeric gnc_numeric_neg(gnc_numeric a);
-gnc_numeric gnc_numeric_abs(gnc_numeric a);
-gnc_numeric gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b);
-gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b);
-gnc_numeric gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how);
-gnc_numeric double_to_gnc_numeric(double in, gint64 denom, gint how);
-double gnc_numeric_to_double(gnc_numeric in);
-gchar * gnc_numeric_to_string(gnc_numeric n);
+KvpFrame* qof_book_get_slots(QofBook* book);
+
+%include <gnc-numeric.h>
 
 Timespec timespecCanonicalDayTime(Timespec t);
 
@@ -146,17 +130,20 @@ gchar * gnc_build_book_path (const gchar *filename);
   SCM path_scm = $input;
   GList *path = NULL;
 
-  while (!SCM_NULLP (path_scm))
+  while (!scm_is_null (path_scm))
   {
     SCM key_scm = SCM_CAR (path_scm);
     char *key;
+    gchar* gkey;
 
-    if (!SCM_STRINGP (key_scm))
+    if (!scm_is_string (key_scm))
       break;
 
-    key = g_strdup (SCM_STRING_CHARS (key_scm));
+    key = scm_to_locale_string (key_scm);
+    gkey = g_strdup (key);
+    gnc_free_scm_locale_string(key);
 
-    path = g_list_prepend (path, key);
+    path = g_list_prepend (path, gkey);
 
     path_scm = SCM_CDR (path_scm);
   }
@@ -188,13 +175,7 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
 
 %clear GSList *key_path;
 
-%inline %{
-static KvpFrame * gnc_book_get_slots(QofBook *book) {
-   return qof_instance_get_slots(QOF_INSTANCE(book));
-}
-%}
-
-
+#if defined(SWIGGUILE)
 %init {
   {
     char tmp[100];
@@ -221,6 +202,8 @@ static KvpFrame * gnc_book_get_slots(QofBook *book) {
     SET_ENUM("ACCT-TYPE-EQUITY");
     SET_ENUM("ACCT-TYPE-RECEIVABLE");
     SET_ENUM("ACCT-TYPE-PAYABLE");
+    SET_ENUM("ACCT-TYPE-ROOT");
+    SET_ENUM("ACCT-TYPE-TRADING");
     SET_ENUM("NUM-ACCOUNT-TYPES");
     SET_ENUM("ACCT-TYPE-CHECKING");
     SET_ENUM("ACCT-TYPE-SAVINGS");
@@ -289,11 +272,27 @@ static KvpFrame * gnc_book_get_slots(QofBook *book) {
     SET_ENUM("TRANS-DATE-POSTED");
     SET_ENUM("TRANS-DESCRIPTION");
     SET_ENUM("TRANS-NUM");
+    
+    SET_ENUM("KVP-OPTION-PATH");
+
+    SET_ENUM("OPTION-SECTION-ACCOUNTS");
+    SET_ENUM("OPTION-NAME-TRADING-ACCOUNTS");
+
+    SET_ENUM("OPTION-SECTION-BUDGETING");
+    SET_ENUM("OPTION-NAME-DEFAULT-BUDGET");
 
     SET_ENUM("ACCOUNT-CODE-");  /* sic */
+
+    SET_ENUM("GNC-HOW-RND-CEIL");
+    SET_ENUM("GNC-HOW-RND-TRUNC");
+    SET_ENUM("GNC-HOW-RND-PROMOTE");
+    SET_ENUM("GNC-HOW-RND-ROUND-HALF-DOWN");
+    SET_ENUM("GNC-HOW-RND-ROUND-HALF-UP");
+    SET_ENUM("GNC-HOW-RND-ROUND");
+    SET_ENUM("GNC-HOW-RND-NEVER");
 
 #undefine SET_ENUM
   }
 
 }
-
+#endif

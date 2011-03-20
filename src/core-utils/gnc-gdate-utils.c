@@ -31,58 +31,58 @@
 gboolean
 gnc_gdate_equal(gconstpointer gda, gconstpointer gdb)
 {
-  return (g_date_compare( (GDate*)gda, (GDate*)gdb ) == 0 ? TRUE : FALSE);
+    return (g_date_compare( (GDate*)gda, (GDate*)gdb ) == 0 ? TRUE : FALSE);
 }
 
 guint
 gnc_gdate_hash( gconstpointer gd )
 {
-  gint val = (g_date_get_year( (GDate*)gd ) * 10000)
-    + (g_date_get_month( (GDate*)gd ) * 100)
-    + g_date_get_day( (GDate*)gd );
-  return g_int_hash( &val );
+    gint val = (g_date_get_year( (GDate*)gd ) * 10000)
+               + (g_date_get_month( (GDate*)gd ) * 100)
+               + g_date_get_day( (GDate*)gd );
+    return g_int_hash( &val );
 }
 
 
 time_t
 gnc_timet_get_day_start_gdate (GDate *date)
 {
-  struct tm stm;
-  time_t secs;
+    struct tm stm;
+    time_t secs;
 
-  /* First convert to a 'struct tm' */
-  g_date_to_struct_tm(date, &stm);
+    /* First convert to a 'struct tm' */
+    g_date_to_struct_tm(date, &stm);
 
-  /* Then convert to number of seconds */
-  secs = mktime (&stm);
-  return secs;
+    /* Then convert to number of seconds */
+    secs = mktime (&stm);
+    return secs;
 }
 
 time_t
 gnc_timet_get_day_end_gdate (GDate *date)
 {
-  struct tm stm;
-  time_t secs;
+    struct tm stm;
+    time_t secs;
 
-  /* First convert to a 'struct tm' */
-  g_date_to_struct_tm(date, &stm);
+    /* First convert to a 'struct tm' */
+    g_date_to_struct_tm(date, &stm);
 
-  /* Force to th last second of the day */
-  stm.tm_hour = 23;
-  stm.tm_min = 59;
-  stm.tm_sec = 59;
-  stm.tm_isdst = -1;
+    /* Force to th last second of the day */
+    stm.tm_hour = 23;
+    stm.tm_min = 59;
+    stm.tm_sec = 59;
+    stm.tm_isdst = -1;
 
-  /* Then convert to number of seconds */
-  secs = mktime (&stm);
-  return secs;
+    /* Then convert to number of seconds */
+    secs = mktime (&stm);
+    return secs;
 }
 
 
 void
 gnc_gdate_set_month_start (GDate *date)
 {
-  g_date_set_day(date, 1);
+    g_date_set_day(date, 1);
 }
 
 
@@ -90,18 +90,18 @@ gnc_gdate_set_month_start (GDate *date)
  *  knowledge of how many days are in a month, whether its a leap
  *  year, etc.  All that information is contained in the glib date
  *  functions.
- *  
+ *
  *  @param date The GDate to modify.
  */
 void
 gnc_gdate_set_month_end (GDate *date)
 {
-  /* First set the start of next month. */
-  g_date_set_day(date, 1);
-  g_date_add_months(date, 1);
+    /* First set the start of next month. */
+    g_date_set_day(date, 1);
+    g_date_add_months(date, 1);
 
-  /* Then back up one day */
-  g_date_subtract_days(date, 1);
+    /* Then back up one day */
+    g_date_subtract_days(date, 1);
 }
 
 
@@ -109,14 +109,14 @@ gnc_gdate_set_month_end (GDate *date)
  *  routine has no knowledge of how many days are in a month, whether
  *  its a leap year, etc.  All that information is contained in the
  *  glib date functions.
- *  
+ *
  *  @param date The GDate to modify.
  */
 void
 gnc_gdate_set_prev_month_start (GDate *date)
 {
-  g_date_set_day(date, 1);
-  g_date_subtract_months(date, 1);
+    g_date_set_day(date, 1);
+    g_date_subtract_months(date, 1);
 }
 
 
@@ -124,15 +124,15 @@ gnc_gdate_set_prev_month_start (GDate *date)
  *  routine has no knowledge of how many days are in a month, whether
  *  its a leap year, etc.  All that information is contained in the
  *  glib date functions.
- *  
+ *
  *  @param date The GDate to modify.
  */
 void
 gnc_gdate_set_prev_month_end (GDate *date)
 {
-  /* This will correctly handle the varying month lengths */
-  g_date_set_day(date, 1);
-  g_date_subtract_days(date, 1);
+    /* This will correctly handle the varying month lengths */
+    g_date_set_day(date, 1);
+    g_date_subtract_days(date, 1);
 }
 
 /* ========== */
@@ -140,47 +140,47 @@ gnc_gdate_set_prev_month_end (GDate *date)
 void
 gnc_gdate_set_quarter_start (GDate *date)
 {
-  gint months;
+    gint months;
 
-  /* Set the date to the first day of the specified month. */
-  g_date_set_day(date, 1);
+    /* Set the date to the first day of the specified month. */
+    g_date_set_day(date, 1);
 
-  /* Back up 0-2 months */ 
-  months = (g_date_get_month(date) - G_DATE_JANUARY) % 3;
-  g_date_subtract_months(date, months);
+    /* Back up 0-2 months */
+    months = (g_date_get_month(date) - G_DATE_JANUARY) % 3;
+    g_date_subtract_months(date, months);
 }
 
 
 void
 gnc_gdate_set_quarter_end (GDate *date)
 {
-  gint months;
+    gint months;
 
-  /* Set the date to the first day of the specified month. */
-  g_date_set_day(date, 1);
+    /* Set the date to the first day of the specified month. */
+    g_date_set_day(date, 1);
 
-  /* Add 1-3 months to get the first day of the next quarter.*/
-  months = (g_date_get_month(date) - G_DATE_JANUARY) % 3;
-  g_date_add_months(date, 3 - months);
+    /* Add 1-3 months to get the first day of the next quarter.*/
+    months = (g_date_get_month(date) - G_DATE_JANUARY) % 3;
+    g_date_add_months(date, 3 - months);
 
-  /* Now back up one day */
-  g_date_subtract_days(date, 1);
+    /* Now back up one day */
+    g_date_subtract_days(date, 1);
 }
 
 
 void
 gnc_gdate_set_prev_quarter_start (GDate *date)
 {
-  gnc_gdate_set_quarter_start(date);
-  g_date_subtract_months(date, 3);
+    gnc_gdate_set_quarter_start(date);
+    g_date_subtract_months(date, 3);
 }
 
 
 void
 gnc_gdate_set_prev_quarter_end (GDate *date)
 {
-  gnc_gdate_set_quarter_end(date);
-  g_date_subtract_months(date, 3);
+    gnc_gdate_set_quarter_end(date);
+    g_date_subtract_months(date, 3);
 }
 
 /* ========== */
@@ -188,101 +188,101 @@ gnc_gdate_set_prev_quarter_end (GDate *date)
 void
 gnc_gdate_set_year_start (GDate *date)
 {
-  g_date_set_month(date, G_DATE_JANUARY);
-  g_date_set_day(date, 1);
+    g_date_set_month(date, G_DATE_JANUARY);
+    g_date_set_day(date, 1);
 }
 
 
 void
 gnc_gdate_set_year_end (GDate *date)
 {
-  g_date_set_month(date, G_DATE_DECEMBER);
-  g_date_set_day(date, 31);
+    g_date_set_month(date, G_DATE_DECEMBER);
+    g_date_set_day(date, 31);
 }
 
 
 void
 gnc_gdate_set_prev_year_start (GDate *date)
 {
-  gnc_gdate_set_year_start(date);
-  g_date_subtract_years(date, 1);
+    gnc_gdate_set_year_start(date);
+    g_date_subtract_years(date, 1);
 }
 
 
 void
 gnc_gdate_set_prev_year_end (GDate *date)
 {
-  gnc_gdate_set_year_end(date);
-  g_date_subtract_years(date, 1);
+    gnc_gdate_set_year_end(date);
+    g_date_subtract_years(date, 1);
 }
 
 /* ========== */
 
 void
 gnc_gdate_set_fiscal_year_start (GDate *date,
-				const GDate *fy_end)
+                                 const GDate *fy_end)
 {
-  GDate temp;
-  gboolean new_fy;
+    GDate temp;
+    gboolean new_fy;
 
-  g_return_if_fail(date);
-  g_return_if_fail(fy_end);
+    g_return_if_fail(date);
+    g_return_if_fail(fy_end);
 
-  /* Compute the FY end that occurred this CY */
-  temp = *fy_end;
-  g_date_set_year(&temp, g_date_get_year(date));
+    /* Compute the FY end that occurred this CY */
+    temp = *fy_end;
+    g_date_set_year(&temp, g_date_get_year(date));
 
-  /* Has it already passed? */
-  new_fy = (g_date_compare(date, &temp) > 0);
+    /* Has it already passed? */
+    new_fy = (g_date_compare(date, &temp) > 0);
 
-  /* Set start date */
-  *date = temp;
-  g_date_add_days(date, 1);
-  if (!new_fy)
-    g_date_subtract_years(date, 1);
+    /* Set start date */
+    *date = temp;
+    g_date_add_days(date, 1);
+    if (!new_fy)
+        g_date_subtract_years(date, 1);
 }
 
 void
 gnc_gdate_set_fiscal_year_end (GDate *date,
-			      const GDate *fy_end)
+                               const GDate *fy_end)
 {
-  GDate temp;
-  gboolean new_fy;
+    GDate temp;
+    gboolean new_fy;
 
-  g_return_if_fail(date);
-  g_return_if_fail(fy_end);
+    g_return_if_fail(date);
+    g_return_if_fail(fy_end);
 
-  /* Compute the FY end that occurred this CY */
-  temp = *fy_end;
-  g_date_set_year(&temp, g_date_get_year(date));
+    /* Compute the FY end that occurred this CY */
+    temp = *fy_end;
+    g_date_set_year(&temp, g_date_get_year(date));
 
-  /* Has it already passed? */
-  new_fy = (g_date_compare(date, &temp) > 0);
+    /* Has it already passed? */
+    new_fy = (g_date_compare(date, &temp) > 0);
 
-  /* Set end date */
-  *date = temp;
-  if (new_fy)
-    g_date_add_years(date, 1);
+    /* Set end date */
+    *date = temp;
+    if (new_fy)
+        g_date_add_years(date, 1);
 }
 
 void
 gnc_gdate_set_prev_fiscal_year_start (GDate *date,
-				     const GDate *fy_end)
+                                      const GDate *fy_end)
 {
-  g_return_if_fail(date);
-  g_return_if_fail(fy_end);
+    g_return_if_fail(date);
+    g_return_if_fail(fy_end);
 
-  gnc_gdate_set_fiscal_year_start(date, fy_end);
-  g_date_subtract_years(date, 1);
+    gnc_gdate_set_fiscal_year_start(date, fy_end);
+    g_date_subtract_years(date, 1);
 }
 
 void
 gnc_gdate_set_prev_fiscal_year_end (GDate *date,
-				   const GDate *fy_end)
+                                    const GDate *fy_end)
 {
-  g_return_if_fail(date);
-  g_return_if_fail(fy_end);
+    g_return_if_fail(date);
+    g_return_if_fail(fy_end);
 
-  gnc_gdate_set_fiscal_year_end(date, fy_end);
-  g_date_subtract_years(date, 1);
+    gnc_gdate_set_fiscal_year_end(date, fy_end);
+    g_date_subtract_years(date, 1);
 }

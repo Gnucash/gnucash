@@ -1,4 +1,0 @@
-31c31
-< #include <libgnomevfs/gnome-vfs-mime.h>
----
-> #undef HAVE_GNOMEVFS

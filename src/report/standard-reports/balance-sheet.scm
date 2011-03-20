@@ -62,9 +62,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report balance-sheet))
+(define-module (gnucash report standard-reports balance-sheet))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
-(use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -85,7 +84,7 @@
   (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section"))
 ;; FIXME this needs an indent option
 
-(define optname-accounts (N_ "Accounts to include"))
+(define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
   (N_ "Report on these accounts, if display depth allows."))
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
@@ -139,9 +138,6 @@
   (N_ "Display any foreign currency amount in an account"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define opthelp-show-rates (N_ "Show the exchange rates used"))
-(define optname-unrealized-gains (N_ "Compute unrealized gains and losses"))
-(define opthelp-unrealized-gains
-  (N_ "Include unrealized gains and losses in the computation.  Will produce incorrect results if the current file uses commodity trading accounts"))
 
 
 ;; options generator
@@ -172,11 +168,6 @@
       gnc:pagename-general optname-report-form
       "d" opthelp-report-form #t))
 
-    (add-option
-     (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-unrealized-gains
-      "e" opthelp-unrealized-gains #t))
-    
     ;; accounts to work on
     (add-option
      (gnc:make-account-list-option
@@ -189,7 +180,8 @@
                ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
                ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
-               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE
+               ACCT-TYPE-TRADING)
 	 (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       #f #t))
     (gnc:options-add-account-levels!
@@ -299,10 +291,11 @@
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
                                    optname-date))))
+         (date-secs (gnc:timepair->secs date-tp))
          (report-form? (get-option gnc:pagename-general
                                optname-report-form))
-         (compute-unrealized-gains? (get-option gnc:pagename-general
-                                                optname-unrealized-gains))
+         (compute-unrealized-gains? (not (qof-book-use-trading-accounts 
+                                           (gnc-get-current-book))))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))	 
 	 (depth-limit (get-option gnc:pagename-accounts 
@@ -358,6 +351,8 @@
                   (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
          (equity-accounts
           (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
+         (trading-accounts
+          (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
 	 
          (doc (gnc:make-html-document))
 	 ;; this can occasionally put extra (blank) columns in our
@@ -415,6 +410,17 @@
        table
        (+ (* 2 tree-depth)
 	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
+    
+    ;; Return a commodity collector containing the sum of the balance of all of 
+    ;; the accounts on acct-list as of the time given in date-secs 
+    (define (account-list-balance acct-list date-secs)
+      (let ((balance-collector (gnc:make-commodity-collector)))
+        (for-each
+          (lambda (x)
+            (balance-collector 'add (xaccAccountGetCommodity x)
+                                    (xaccAccountGetBalanceAsOfDate x date-secs)))
+          acct-list)
+      balance-collector))
 
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
@@ -441,6 +447,8 @@
                (equity-balance #f)
 	       (neg-retained-earnings #f) ;; credit, income - expenses, < 0
 	       (retained-earnings #f)
+	       (neg-trading-balance #f)
+	       (trading-balance #f)
                (unrealized-gain-collector #f)
                (total-equity-balance #f)
                (liability-plus-equity #f)
@@ -470,14 +478,10 @@
 	  ;; to report earnings....  See discussion on bugzilla.
 	  (gnc:report-percent-done 4)
 	  ;; sum assets
-	  (set! asset-balance 
-                (gnc:accounts-get-comm-total-assets 
-                 asset-accounts get-total-balance-fn))
+	  (set! asset-balance (account-list-balance asset-accounts date-secs))
 	  (gnc:report-percent-done 6)
 	  ;; sum liabilities
-	  (set! neg-liability-balance
-                (gnc:accounts-get-comm-total-assets 
-                 liability-accounts get-total-balance-fn))
+	  (set! neg-liability-balance (account-list-balance liability-accounts date-secs))
 	  (set! liability-balance
                 (gnc:make-commodity-collector))
           (liability-balance 'minusmerge
@@ -485,22 +489,23 @@
 			     #f)
 	  (gnc:report-percent-done 8)
 	  ;; sum equities
-	  (set! neg-equity-balance
-                (gnc:accounts-get-comm-total-assets 
-                 equity-accounts get-total-balance-fn))
+	  (set! neg-equity-balance (account-list-balance equity-accounts date-secs))
 	  (set! equity-balance (gnc:make-commodity-collector))
 	  (equity-balance 'minusmerge
 			  neg-equity-balance
 			  #f)
 	  (gnc:report-percent-done 12)
 	  ;; sum any retained earnings
-	  (set! neg-retained-earnings
-		(gnc:accountlist-get-comm-balance-at-date
-		 income-expense-accounts date-tp))
+	  (set! neg-retained-earnings (account-list-balance income-expense-accounts date-secs))
 	  (set! retained-earnings (gnc:make-commodity-collector))
 	  (retained-earnings 'minusmerge
 			  neg-retained-earnings
 			  #f)
+	  (set! neg-trading-balance (account-list-balance trading-accounts date-secs))
+	  (set! trading-balance (gnc:make-commodity-collector))
+	  (trading-balance 'minusmerge
+	                   neg-trading-balance
+	                   #f)
 	  (gnc:report-percent-done 14)
 	  ;; sum any unrealized gains
 	  ;; 
@@ -537,6 +542,9 @@
 	  (total-equity-balance 'merge
 				unrealized-gain-collector
 				#f)
+	  (total-equity-balance 'merge
+	                        trading-balance
+	                        #f)
 	  (gnc:report-percent-done 18)
 	  (set! liability-plus-equity (gnc:make-commodity-collector))
 	  (liability-plus-equity 'merge
@@ -650,6 +658,12 @@
 				  (_ "Retained Losses")
 				  retained-earnings))
 	  (and (not (gnc-commodity-collector-allzero?
+	             trading-balance))
+	       (add-subtotal-line right-table
+	                          (_ "Trading Gains")
+	                          (_ "Trading Losses")
+	                          trading-balance))
+	  (and (not (gnc-commodity-collector-allzero?
 		     unrealized-gain-collector))
 	       (add-subtotal-line right-table
 				  (_ "Unrealized Gains")
@@ -700,15 +714,10 @@
 	  ;; however, this still doesn't seem to get around the
 	  ;; colspan bug... cf. gnc:colspans-are-working-right
 	  (if filename
-	      (let* ((port (open-output-file filename))
-		     (gnc:display-report-list-item
-		      (list doc) port " balance-sheet.scm ")
-		     (close-output-port port)
-		     )
-		)
-	      )
-	  )
-	)
+	      (let* ((port (open-output-file filename)))
+                (gnc:display-report-list-item
+                 (list doc) port " balance-sheet.scm ")
+                (close-output-port port)))))
     
     (gnc:report-finished)
     

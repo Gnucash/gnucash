@@ -11,9 +11,9 @@
 
 (define (read-file-thunk infile)
   (let ((qiffile (qif-io:make-file #f #f #f #f #f #f #f)))
-    (simple-format #t "======= ~A ======\n" infile)
+    (format #t "======= ~A ======\n" infile)
     (qif-io:read-file qiffile infile #f)    
-    (qif-io:write-file qiffile (simple-format #f "~A.out" infile))))
+    (qif-io:write-file qiffile (format #f "~A.out" infile))))
 
 (gnc:module-load "qifiocore")
 

@@ -6,30 +6,28 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/import-export/qif \
-  ${QOF_CFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
 LDADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/test-core/libgncmod-test.la \
+  ${top_builddir}/src/test-core/libtest-core.la \
   ../../libgncmod-generic-import.la \
   ../libgncmod-qif.la \
-  ${QOF_LIBS} \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS}
 
 TESTS = \
   test-link \
   test-qif
 
-GNC_TEST_DEPS = @GNC_TEST_SRFI_LOAD_CMD@ \
-  --gnc-module-dir ${top_builddir}/src/core-utils \
+GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/core-utils \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/import-export \
   --gnc-module-dir ${top_builddir}/src/import-export/qif \
-  --gnc-module-dir ${top_builddir}/src/calculation \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --gnc-module-dir ${top_srcdir}/src/gnc-module \
   --gnc-module-dir ${top_srcdir}/src/engine \
