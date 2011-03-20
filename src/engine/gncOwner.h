@@ -119,7 +119,10 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
 int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 
+const char * gncOwnerGetID (const GncOwner *owner);
 const char * gncOwnerGetName (const GncOwner *owner);
+GncAddress * gncOwnerGetAddr (const GncOwner *owner);
+gboolean gncOwnerGetActive (const GncOwner *owner);
 gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner);
 
 /** Get the GncGUID of the immediate owner */
