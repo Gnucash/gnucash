@@ -118,15 +118,15 @@ static inline GncVendor * gncVendorLookup (const QofBook *book, const GncGUID *g
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_VENDOR, GncVendor);
 }
 
-#define VENDOR_ID	"id"
-#define VENDOR_NAME	"name"
-#define VENDOR_ADDR	"addr"
-#define VENDOR_NOTES "vendor_notes"
-#define VENDOR_TERMS "vendor_terms"
-#define VENDOR_TAX_INC "vendor_tax_included"
-#define VENDOR_ACTIVE "vendor_is_active"
+#define VENDOR_ID           "id"
+#define VENDOR_NAME         "name"
+#define VENDOR_ADDR         "addr"
+#define VENDOR_NOTES        "vendor_notes"
+#define VENDOR_TERMS        "vendor_terms"
+#define VENDOR_TAX_INC      "vendor_tax_included"
+#define VENDOR_ACTIVE       "vendor_is_active"
 #define VENDOR_TAX_OVERRIDE "override_tax_table"
-#define VENDOR_TAX_TABLE "vendor_tax_table"
+#define VENDOR_TAX_TABLE    "vendor_tax_table"
 
 /** deprecated functions */
 #define gncVendorGetBook(X) qof_instance_get_book (QOF_INSTANCE(X))

@@ -89,7 +89,7 @@ static void gnc_tree_model_account_event_handler (QofInstance *entity,
         GncTreeModelAccount *model,
         GncEventData *ed);
 
-/** The instance private data for a account tree model. */
+/** The instance private data for an account tree model. */
 typedef struct GncTreeModelAccountPrivate
 {
     QofBook *book;
@@ -131,7 +131,7 @@ gnc_tree_model_account_update_color (GConfEntry *entry, gpointer user_data)
 /*               g_object required functions                */
 /************************************************************/
 
-/** A pointer to the parent class of a account tree model. */
+/** A pointer to the parent class of an account tree model. */
 static GtkObjectClass *parent_class = NULL;
 
 GType
@@ -144,13 +144,13 @@ gnc_tree_model_account_get_type (void)
         static const GTypeInfo our_info =
         {
             sizeof (GncTreeModelAccountClass), /* class_size */
-            NULL,   			   /* base_init */
-            NULL,				   /* base_finalize */
+            NULL,                              /* base_init */
+            NULL,                              /* base_finalize */
             (GClassInitFunc) gnc_tree_model_account_class_init,
-            NULL,				   /* class_finalize */
-            NULL,				   /* class_data */
-            sizeof (GncTreeModelAccount),	   /* */
-            0,				   /* n_preallocs */
+            NULL,                              /* class_finalize */
+            NULL,                              /* class_data */
+            sizeof (GncTreeModelAccount),      /* */
+            0,                                 /* n_preallocs */
             (GInstanceInitFunc) gnc_tree_model_account_init
         };
 
@@ -599,7 +599,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
     GncTreeModelAccountPrivate *priv;
     Account *account;
-    gboolean negative; /* used to set "deficit style" aka red numbers */
+    gboolean negative; /* used to set "deficit style" also known as red numbers */
     gchar *string;
     time_t last_date;
 

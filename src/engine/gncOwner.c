@@ -40,11 +40,11 @@
 #include "gncOwnerP.h"
 #include "gncVendorP.h"
 
-#define _GNC_MOD_NAME	GNC_ID_OWNER
+#define _GNC_MOD_NAME   GNC_ID_OWNER
 
-#define GNC_OWNER_ID	"gncOwner"
-#define GNC_OWNER_TYPE	"owner-type"
-#define GNC_OWNER_GUID	"owner-guid"
+#define GNC_OWNER_ID    "gncOwner"
+#define GNC_OWNER_TYPE  "owner-type"
+#define GNC_OWNER_GUID  "owner-guid"
 
 GncOwner * gncOwnerCreate (void)
 {
@@ -255,26 +255,6 @@ GncEmployee * gncOwnerGetEmployee (const GncOwner *owner)
     return owner->owner.employee;
 }
 
-gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner)
-{
-    if (!owner) return NULL;
-    switch (owner->type)
-    {
-    case GNC_OWNER_NONE:
-    case GNC_OWNER_UNDEFINED:
-    default:
-        return NULL;
-    case GNC_OWNER_CUSTOMER:
-        return gncCustomerGetCurrency (owner->owner.customer);
-    case GNC_OWNER_VENDOR:
-        return gncVendorGetCurrency (owner->owner.vendor);
-    case GNC_OWNER_EMPLOYEE:
-        return gncEmployeeGetCurrency (owner->owner.employee);
-    case GNC_OWNER_JOB:
-        return gncOwnerGetCurrency (gncJobGetOwner (owner->owner.job));
-    }
-}
-
 void gncOwnerCopy (const GncOwner *src, GncOwner *dest)
 {
     if (!src || !dest) return;
@@ -336,6 +316,26 @@ const char * gncOwnerGetName (const GncOwner *owner)
         return gncVendorGetName (owner->owner.vendor);
     case GNC_OWNER_EMPLOYEE:
         return gncAddressGetName(gncEmployeeGetAddr (owner->owner.employee));
+    }
+}
+
+gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner)
+{
+    if (!owner) return NULL;
+    switch (owner->type)
+    {
+    case GNC_OWNER_NONE:
+    case GNC_OWNER_UNDEFINED:
+    default:
+        return NULL;
+    case GNC_OWNER_CUSTOMER:
+        return gncCustomerGetCurrency (owner->owner.customer);
+    case GNC_OWNER_VENDOR:
+        return gncVendorGetCurrency (owner->owner.vendor);
+    case GNC_OWNER_EMPLOYEE:
+        return gncEmployeeGetCurrency (owner->owner.employee);
+    case GNC_OWNER_JOB:
+        return gncOwnerGetCurrency (gncJobGetOwner (owner->owner.job));
     }
 }
 

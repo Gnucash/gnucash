@@ -107,14 +107,14 @@ static inline GncEmployee * gncEmployeeLookup (const QofBook *book, const GncGUI
 gboolean gncEmployeeIsDirty (const GncEmployee *employee);
 gboolean gncEmployeeEqual(const GncEmployee* e1, const GncEmployee* e2);
 
-#define EMPLOYEE_ID			"id"
-#define EMPLOYEE_USERNAME	"username"
-#define EMPLOYEE_ADDR		"addr"
-#define EMPLOYEE_LANGUAGE 	"native language"
-#define EMPLOYEE_ACL		"acl"
-#define EMPLOYEE_WORKDAY	"workday"
-#define EMPLOYEE_RATE		"rate"
-#define EMPLOYEE_CC    "credit_card_account"
+#define EMPLOYEE_ID       "id"
+#define EMPLOYEE_USERNAME "username"
+#define EMPLOYEE_ADDR     "addr"
+#define EMPLOYEE_LANGUAGE "native language"
+#define EMPLOYEE_ACL      "acl"
+#define EMPLOYEE_WORKDAY  "workday"
+#define EMPLOYEE_RATE     "rate"
+#define EMPLOYEE_CC       "credit_card_account"
 
 /** deprecated routines */
 #define gncEmployeeGetGUID(E) qof_entity_get_guid(QOF_INSTANCE(E))

@@ -79,7 +79,7 @@ void gncJobCommitEdit (GncJob *job);
 const char * gncJobGetID (const GncJob *job);
 const char * gncJobGetName (const GncJob *job);
 const char * gncJobGetReference (const GncJob *job);
-GncOwner * gncJobGetOwner (GncJob *job);
+GncOwner   * gncJobGetOwner (GncJob *job);
 
 /** @} */
 gboolean gncJobGetActive (const GncJob *job);
@@ -100,12 +100,12 @@ static inline GncJob * gncJobLookup (const QofBook *book, const GncGUID *guid)
 int gncJobCompare (const GncJob *a, const GncJob *b);
 gboolean gncJobEqual(const GncJob *a, const GncJob *b);
 
-#define JOB_ID		"id"
-#define JOB_NAME	"name"
-#define JOB_REFERENCE	"reference"
-#define JOB_OWNER	"owner"
-#define Q_JOB_OWNER "owner_collection"
-#define JOB_ACTIVE	"active"
+#define JOB_ID          "id"
+#define JOB_NAME        "name"
+#define JOB_REFERENCE   "reference"
+#define JOB_OWNER       "owner"
+#define Q_JOB_OWNER     "owner_collection"
+#define JOB_ACTIVE      "active"
 
 /** deprecated functions */
 #define gncJobGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))

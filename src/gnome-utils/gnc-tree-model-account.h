@@ -101,9 +101,9 @@ typedef enum
 /** The instance data structure for an account tree model. */
 typedef struct
 {
-    GncTreeModel gnc_tree_model;	/**< The parent object data. */
-    int stamp;			/**< The state of the model. Any state
-					 *   change increments this number. */
+    GncTreeModel gnc_tree_model;    /**< The parent object data. */
+    int stamp;                      /**< The state of the model. Any state
+                                     *   change increments this number. */
 } GncTreeModelAccount;
 
 

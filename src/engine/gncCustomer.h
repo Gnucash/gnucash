@@ -142,14 +142,14 @@ gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b);
 gboolean gncCustomerEqual(const GncCustomer *a, const GncCustomer *b);
 
-#define CUSTOMER_ID			"id"
-#define CUSTOMER_NAME		"name"
-#define CUSTOMER_ADDR		"addr"
-#define CUSTOMER_SHIPADDR	"shipaddr"
-#define CUSTOMER_NOTES 		"notes"
-#define CUSTOMER_DISCOUNT 	"amount of discount"
-#define CUSTOMER_CREDIT 	"amount of credit"
-#define CUSTOMER_TT_OVER 	"tax table override"
+#define CUSTOMER_ID         "id"
+#define CUSTOMER_NAME       "name"
+#define CUSTOMER_ADDR       "addr"
+#define CUSTOMER_SHIPADDR   "shipaddr"
+#define CUSTOMER_NOTES      "notes"
+#define CUSTOMER_DISCOUNT   "amount of discount"
+#define CUSTOMER_CREDIT     "amount of credit"
+#define CUSTOMER_TT_OVER    "tax table override"
 #define CUSTOMER_TAX_INC    "customer_tax_included"
 #define CUSTOMER_TERMS      "customer_terms"
 #define CUSTOMER_ACTIVE     "customer_is_active"

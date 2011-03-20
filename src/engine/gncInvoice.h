@@ -208,26 +208,26 @@ gboolean gncInvoiceEqual(const GncInvoice *a, const GncInvoice *b);
 gboolean gncInvoiceIsPosted (const GncInvoice *invoice);
 gboolean gncInvoiceIsPaid (const GncInvoice *invoice);
 
-#define INVOICE_ID	"id"
-#define INVOICE_OWNER	"owner"
-#define INVOICE_OPENED	"date_opened"
-#define INVOICE_POSTED	"date_posted"
-#define INVOICE_DUE	"date_due"
-#define INVOICE_IS_POSTED	"is_posted?"
-#define INVOICE_IS_PAID	"is_paid?"
-#define INVOICE_TERMS	"terms"
-#define INVOICE_BILLINGID	"billing_id"
-#define INVOICE_NOTES	"notes"
-#define INVOICE_ACC	"account"
-#define INVOICE_POST_TXN	"posted_txn"
-#define INVOICE_POST_LOT	"posted_lot"
-#define INVOICE_TYPE	"type"
-#define INVOICE_BILLTO	"bill-to"
+#define INVOICE_ID          "id"
+#define INVOICE_OWNER       "owner"
+#define INVOICE_OPENED      "date_opened"
+#define INVOICE_POSTED      "date_posted"
+#define INVOICE_DUE         "date_due"
+#define INVOICE_IS_POSTED   "is_posted?"
+#define INVOICE_IS_PAID     "is_paid?"
+#define INVOICE_TERMS       "terms"
+#define INVOICE_BILLINGID   "billing_id"
+#define INVOICE_NOTES       "notes"
+#define INVOICE_ACC         "account"
+#define INVOICE_POST_TXN    "posted_txn"
+#define INVOICE_POST_LOT    "posted_lot"
+#define INVOICE_TYPE        "type"
+#define INVOICE_BILLTO      "bill-to"
 #define INVOICE_ENTRIES     "list_of_entries"
 #define INVOICE_JOB         "invoice_job"
 
-#define INVOICE_FROM_LOT	"invoice-from-lot"
-#define INVOICE_FROM_TXN	"invoice-from-txn"
+#define INVOICE_FROM_LOT    "invoice-from-lot"
+#define INVOICE_FROM_TXN    "invoice-from-txn"
 
 QofBook *gncInvoiceGetBook(GncInvoice *x);
 

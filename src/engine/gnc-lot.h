@@ -42,7 +42,7 @@
  * Lots are nothing more than a collection or grouping of splits in an
  * account. All of the splits in a lot must belong to the same account;
  * there's no mix-n-match.  Thus, in this sense, a lot belongs to an
- * accunt as well.
+ * account as well.
  *
  * Lots have an implicit "opening date": the date of the earliest split in
  * the lot. The "close date" is the date of the split that brought the lot
@@ -109,7 +109,7 @@ void gnc_lot_remove_split (GNCLot *, Split *);
 
 /** The gnc_lot_get_split_list() routine returns a GList of all the
  *    splits in this lot.  Do *not* not free this list when done;
- *    it is a pointer straight into the lots intenal list.  Do
+ *    it is a pointer straight into the lots internal list.  Do
  *    *not* add to or remove from this list directly.  Calling
  *    either gnc_lot_add_split() or gnc_lot_remove_split() will
  *    invalidate the returned pointer.
@@ -177,10 +177,10 @@ GNCLot * gnc_lot_make_default (Account * acc);
 
 #define gnc_lot_get_guid(X)  qof_entity_get_guid(QOF_INSTANCE(X))
 
-#define LOT_IS_CLOSED	"is-closed?"
-#define LOT_BALANCE	"balance"
-#define LOT_TITLE		"lot-title"
-#define LOT_NOTES		"notes"
+#define LOT_IS_CLOSED   "is-closed?"
+#define LOT_BALANCE     "balance"
+#define LOT_TITLE       "lot-title"
+#define LOT_NOTES       "notes"
 #endif /* GNC_LOT_H */
 /** @} */
 /** @} */
