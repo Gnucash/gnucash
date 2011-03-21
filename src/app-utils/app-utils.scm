@@ -20,6 +20,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (ice-9 syncase))
 
 (gnc:module-load "gnucash/engine" 0)
 
