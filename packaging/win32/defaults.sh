@@ -175,7 +175,7 @@ set_default ACTIVE_PERL_URL "http://downloads.activestate.com/ActivePerl/release
 set_default ACTIVE_PERL_DIR $GLOBAL_DIR\\active-perl
 
 set_default AUTOCONF_URL "http://ftp.gnu.org/gnu/autoconf/autoconf-2.63.tar.bz2"
-set_default AUTOMAKE_URL "http://ftp.gnu.org/gnu/automake/automake-1.10.2.tar.bz2"
+set_default AUTOMAKE_URL "http://ftp.gnu.org/gnu/automake/automake-1.11.1.tar.bz2"
 set_default LIBTOOL_URL "http://ftp.gnu.org/gnu/libtool/libtool-2.2.6a.tar.gz"
 set_default AUTOTOOLS_DIR $GLOBAL_DIR\\autotools
 
@@ -185,9 +185,9 @@ set_default GMP_DIR $GLOBAL_DIR\\gmp
 set_default GMP5_BIN_URL "$SF_MIRROR/mingw/libgmp-5.0.1-1-mingw32-dll-10.tar.lzma"
 set_default GMP5_DEV_URL "$SF_MIRROR/mingw/gmp-5.0.1-1-mingw32-dev.tar.lzma"
 
-set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
-set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
+set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.8.8.tar.gz"
 set_default GUILE_DIR $GLOBAL_DIR\\guile
+set_default GUILE_PATCH `pwd`/guile-1.8.8.patch
 
 set_default OPENSSL_URL "http://www.openssl.org/source/openssl-0.9.8j.tar.gz"
 set_default OPENSSL_DIR $GLOBAL_DIR\\openssl

@@ -72,13 +72,13 @@ if [ "$CROSS_COMPILE" != "yes" ]; then
 fi
 add_step inst_autotools
 add_step inst_gmp
+add_step inst_exetype
+add_step inst_gnome
 add_step inst_guile
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_svn
 fi
-add_step inst_exetype
 add_step inst_libxslt
-add_step inst_gnome
 add_step inst_gnutls
 add_step inst_isocodes
 add_step inst_swig

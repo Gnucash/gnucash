@@ -284,66 +284,34 @@ function inst_guile() {
     setup Guile
     _GUILE_WFSDIR=`win_fs_path $GUILE_DIR`
     _GUILE_UDIR=`unix_path $GUILE_DIR`
+    _WIN_UDIR=`unix_path $WINDIR`
     add_to_env -I$_GUILE_UDIR/include GUILE_CPPFLAGS
     add_to_env -L$_GUILE_UDIR/lib GUILE_LDFLAGS
     add_to_env $_GUILE_UDIR/bin PATH
-    if quiet guile -c '(use-modules (srfi srfi-39))' &&
-        quiet guile -c "(use-modules (ice-9 slib)) (require 'printf)"
+    if quiet guile -c '(use-modules (srfi srfi-39))'
     then
-        echo "guile and slib already installed.  skipping."
+        echo "guile already installed.  skipping."
     else
         smart_wget $GUILE_URL $DOWNLOAD_DIR
         _GUILE_BALL=$LAST_FILE
-        smart_wget $SLIB_URL $DOWNLOAD_DIR
-        _SLIB_BALL=$LAST_FILE
         tar -xzpf $_GUILE_BALL -C $TMP_UDIR
         assert_one_dir $TMP_UDIR/guile-*
         qpushd $TMP_UDIR/guile-*
-            qpushd ice-9
-                cp boot-9.scm boot-9.scm.bak
-                cat boot-9.scm.bak | sed '/SIGBUS/d' > boot-9.scm
-            qpopd
-            qpushd libguile
-                cp fports.c fports.c.bak
-                cat fports.c.bak | sed 's,#elif defined (FIONREAD),#elif 0,' > fports.c
-                cp load.c load.c.bak
-                cat load.c.bak | sed '/scan !=/s,:,;,' > load.c
-            qpopd
-            qpushd libguile-ltdl
-                cp raw-ltdl.c raw-ltdl.c.bak
-                cat raw-ltdl.c.bak | sed 's,\(SCMLTSTATIC\) LT_GLOBAL_DATA,\1,' > raw-ltdl.c
-                touch upstream/ltdl.c.diff
-            qpopd
+            patch -p1 < $GUILE_PATCH
+            ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS
             ./configure ${HOST_XCOMPILE} \
                 --disable-static \
                 --disable-elisp \
-                --disable-networking \
                 --disable-dependency-tracking \
-                --disable-libtool-lock \
-                --disable-linuxthreads \
                 -C --prefix=$_GUILE_WFSDIR \
                 ac_cv_func_regcomp_rx=yes \
-                CPPFLAGS="${READLINE_CPPFLAGS} ${REGEX_CPPFLAGS}" \
-                LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS}"
-            cp config.status config.status.bak
-            cat config.status.bak | sed 's# fileblocks[$.A-Za-z]*,#,#' > config.status
-            ./config.status
-            qpushd guile-config
-              cp Makefile Makefile.bak
-              cat Makefile.bak | sed '/-bindir-/s,:,^,g' > Makefile
-            qpopd
-            make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -no-undefined -avoid-version"
+                CFLAGS="-D__MINGW32__" \
+                CPPFLAGS="${READLINE_CPPFLAGS} ${REGEX_CPPFLAGS} ${AUTOTOOLS_CPPFLAGS} ${GMP_CPPFLAGS} -D__MINGW32__" \
+                LDFLAGS="${READLINE_LDFLAGS} ${REGEX_LDFLAGS} ${AUTOTOOLS_LDFLAGS} ${GMP_LDFLAGS} -Wl,--enable-auto-import"
+            make LDFLAGS="${READLINE_LDFLAGS} ${REGEX_LDFLAGS} ${AUTOTOOLS_LDFLAGS} ${GMP_LDFLAGS} -Wl,--enable-auto-import -no-undefined -avoid-version"
             make install
         qpopd
-        _SLIB_DIR=$_GUILE_UDIR/share/guile/1.*
-        unzip $_SLIB_BALL -d $_SLIB_DIR
-        qpushd $_SLIB_DIR/slib
-            cp guile.init guile.init.bak
-            sed '/lambda.*'"'"'unix/a\
-(define software-type (lambda () '"'"'ms-dos))' guile.init.bak > guile.init
-        qpopd
-        guile -c '(use-modules (srfi srfi-39))' &&
-        guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
+        guile -c '(use-modules (srfi srfi-39))' || die "guile not installed correctly"
 
         # If this libguile is used from MSVC compiler, we must
         # deactivate some macros of scmconfig.h again.
@@ -936,8 +904,14 @@ function inst_libofx() {
         wget_unpacked $LIBOFX_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libofx-*
         qpushd $TMP_UDIR/libofx-*
-            [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ] && \
+            if [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ]; then
                 patch -p1 < $LIBOFX_PATCH
+#                libtoolize --force
+#                aclocal ${ACLOCAL_FLAGS}
+#                automake
+#                autoconf
+#					ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS -B $_AUTOTOOLS_UDIR/share/autoconf/autoconf
+            fi
             ./configure ${HOST_XCOMPILE} \
                 --prefix=${_LIBOFX_UDIR} \
                 --with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
@@ -1397,8 +1371,8 @@ function inst_gnucash() {
             --enable-binreloc \
             --enable-locale-specific-tax \
             --with-html-engine=webkit \
-            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${LIBDBI_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
-            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
+            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GMP_CPPFLAGS} ${GUILE_CPPFLAGS} ${LIBDBI_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
+            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GMP_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
         make
