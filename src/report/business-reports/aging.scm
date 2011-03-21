@@ -31,8 +31,6 @@
 (use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 
-(require 'hash-table)
-
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/business-core" 0)
 
