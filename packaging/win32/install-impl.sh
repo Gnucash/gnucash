@@ -910,7 +910,7 @@ function inst_libofx() {
 #                aclocal ${ACLOCAL_FLAGS}
 #                automake
 #                autoconf
-#					ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS -B $_AUTOTOOLS_UDIR/share/autoconf/autoconf
+#                ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS -B $_AUTOTOOLS_UDIR/share/autoconf/autoconf
             fi
             ./configure ${HOST_XCOMPILE} \
                 --prefix=${_LIBOFX_UDIR} \
@@ -1412,6 +1412,13 @@ function make_install() {
     done
 
     make install
+
+    qpushd $_INSTALL_UDIR/bin
+        # Copy libstdc++-6.dll and its dependency to gnucash bin directory
+        # to prevent DLL loading errors
+        # (__gxx_personality_v0 not found in libstdc++-6.dll)
+        cp $MINGW_DIR/bin/{libstdc++-6.dll,libgcc_s_dw2-1.dll} .
+    qpopd
 
     qpushd $_INSTALL_UDIR/lib
         # Move modules that are compiled without -module to lib/gnucash and
