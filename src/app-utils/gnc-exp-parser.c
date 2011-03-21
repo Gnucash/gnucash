@@ -37,7 +37,7 @@
 #include "gnc-locale-utils.h"
 #include "guile-mappings.h"
 
-#define GROUP_NAME "Variables"
+#define GEP_GROUP_NAME "Variables"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -91,10 +91,10 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
         key_file = gnc_key_file_load_from_file(filename, TRUE, FALSE, NULL);
         if (key_file)
         {
-            keys = g_key_file_get_keys(key_file, GROUP_NAME, NULL, NULL);
+            keys = g_key_file_get_keys(key_file, GEP_GROUP_NAME, NULL, NULL);
             for (key = keys; key && *key; key++)
             {
-                str_value = g_key_file_get_string(key_file, GROUP_NAME, *key, NULL);
+                str_value = g_key_file_get_string(key_file, GEP_GROUP_NAME, *key, NULL);
                 if (str_value && string_to_gnc_numeric(str_value, &value))
                 {
                     gnc_exp_parser_set_value (*key, gnc_numeric_reduce (value));
@@ -124,7 +124,7 @@ set_one_key (gpointer key, gpointer value, gpointer data)
     char *num_str;
 
     num_str = gnc_numeric_to_string (gnc_numeric_reduce (pnum->value));
-    g_key_file_set_string ((GKeyFile *)data, GROUP_NAME, name, num_str);
+    g_key_file_set_string ((GKeyFile *)data, GEP_GROUP_NAME, name, num_str);
     g_free (num_str);
 }
 
@@ -140,7 +140,7 @@ gnc_exp_parser_shutdown (void)
     filename = gnc_exp_parser_filname();
     key_file = g_key_file_new();
     g_hash_table_foreach (variable_bindings, set_one_key, key_file);
-    g_key_file_set_comment(key_file, GROUP_NAME, NULL,
+    g_key_file_set_comment(key_file, GEP_GROUP_NAME, NULL,
                            " Variables are in the form 'name=value'",
                            NULL);
     gnc_key_file_save_to_file(filename, key_file, NULL);
