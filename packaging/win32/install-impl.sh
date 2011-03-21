@@ -120,7 +120,13 @@ function inst_mingw() {
         if [ "$CROSS_COMPILE" != "yes" ]; then
             wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_CORE_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_GPP_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_GMP_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_MPC_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_MPFR_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_PTHREADS_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
@@ -1471,6 +1477,7 @@ set PATH=$INSTALL_DIR\\bin;%PATH%
 set PATH=$INSTALL_DIR\\lib;%PATH%
 set PATH=$INSTALL_DIR\\lib\\gnucash;%PATH%
 set PATH=$GNUTLS_DIR\\bin;%PATH%
+set PATH=$MINGW_DIR\\bin;%PATH%
 set PATH=$GMP_DIR\\bin;%PATH%
 set PATH=$GOFFICE_DIR\\bin;%PATH%
 set PATH=$LIBGSF_DIR\\bin;%PATH%
