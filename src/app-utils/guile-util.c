@@ -1327,6 +1327,6 @@ gchar *gnc_scm_to_locale_string(SCM scm_string)
     /* scm_to_locale_string() returns a malloc'ed string in guile-1.8
        (but not in guile-1.6).  Copy to a g_malloc'ed one. */
     s = g_strdup(x);
-    gnc_free_scm_locale_string(x);
+    free(x);
     return s;
 }

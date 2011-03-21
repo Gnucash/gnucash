@@ -105,7 +105,7 @@ void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
       break;
     key = scm_to_locale_string (key_scm);
     gkey = g_strdup (key);
-    gnc_free_scm_locale_string(key);
+    free (key);
     path = g_list_prepend (path, gkey);
     path_scm = SCM_CDR (path_scm);
   }

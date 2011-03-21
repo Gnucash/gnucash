@@ -403,11 +403,11 @@ fi
 AS_SCRUB_INCLUDE(GUILE_INCS)
 AC_SUBST(GUILE_LIBS)
 
-AM_GUILE_VERSION_CHECK(1.6.7, , , [AC_MSG_ERROR([
+AM_GUILE_VERSION_CHECK(1.8.5, , , [AC_MSG_ERROR([
 
   guile does not appear to be installed correctly, or is not in the
   correct version range.  Perhaps you have not installed the guile
-  development packages?  Gnucash requires at least version 1.6.7 to build.
+  development packages?  Gnucash requires at least version 1.8.5 to build.
 ])])
 
 AC_SUBST(GUILE)
@@ -417,10 +417,6 @@ AC_DEFINE_UNQUOTED(GNC_GUILE_MINOR_VERSION, ${guile_minor_version},
     [Guile Minor version number])
 AC_DEFINE_UNQUOTED(GNC_GUILE_MICRO_VERSION, ${guile_micro_version},
     [Guile Micro version number])
-
-AM_GUILE_VERSION_CHECK(1.8.0, , [
-  AC_DEFINE(HAVE_GUILE18,1,[System has guile 1.8 or better])
-], )
 
 AS_SCRUB_INCLUDE(CFLAGS)
 

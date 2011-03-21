@@ -141,7 +141,7 @@ gchar * gnc_build_book_path (const gchar *filename);
 
     key = scm_to_locale_string (key_scm);
     gkey = g_strdup (key);
-    gnc_free_scm_locale_string(key);
+    free (key);
 
     path = g_list_prepend (path, gkey);
 

@@ -184,7 +184,7 @@ gnc_extension_path (SCM extension, char **fullpath)
             {
                 strings[i] = g_strdup(gettext(s));
             }
-            gnc_free_scm_locale_string(s);
+            free(s);
         }
         else
         {
