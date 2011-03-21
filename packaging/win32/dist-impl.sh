@@ -67,11 +67,10 @@ function dist_autotools() {
 function dist_guile() {
     setup Guile
     mkdir -p $DIST_UDIR/bin
-    cp -a $_GUILE_UDIR/bin/libguile{.,-ltdl.,-srfi}*dll $DIST_UDIR/bin
+    cp -a $_GUILE_UDIR/bin/libguile{.,-srfi}*dll $DIST_UDIR/bin
     cp -a $_GUILE_UDIR/bin/guile.exe $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
     cp -a $_GUILE_UDIR/share/guile $DIST_UDIR/share
-    [ -f $DIST_UDIR/share/guile/1.6/slibcat ] && rm $DIST_UDIR/share/guile/1.6/slibcat
 }
 
 function dist_openssl() {
