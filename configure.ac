@@ -424,20 +424,6 @@ AM_GUILE_VERSION_CHECK(1.8.0, , [
 
 AS_SCRUB_INCLUDE(CFLAGS)
 
-AC_MSG_CHECKING([for SLIB support])
-if ${GUILE} -c "(use-modules (ice-9 slib)) (require 'printf)" > /dev/null 2>&1
-then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_ERROR([
-
-Cannot find SLIB.  Are you sure you have it installed?
-See http://bugzilla.gnome.org/show_bug.cgi?id=347922
-and http://bugzilla.gnome.org/show_bug.cgi?id=483631
-
-])
-fi
-
 ### Check size of long_long - some guile's are broken.
 AC_MSG_CHECKING(if guile long_long is at least as big as gint64)
 GNC_OLDCFLAGS="$CFLAGS"
