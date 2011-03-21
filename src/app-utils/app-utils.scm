@@ -273,6 +273,22 @@
 (define gnc:*kvp-option-path* (list KVP-OPTION-PATH))
 (export gnc:*kvp-option-path*)
 
+;; gettext functions
+(define gnc:gettext gnc-gettext-helper)
+(define gnc:_ gnc:gettext)
+(define _ gnc:gettext)
+(define-syntax N_
+  (syntax-rules ()
+    ((_ x) x)))
+
+;; A lot of Gnucash's code uses procedural interfaces to load modules.
+;; This normally works, for procedures -- but for values that need to be
+;; known at expand time, like macros, it doesn't work (in Guile 2.0 at
+;; least). So instead of auditing all the code, since N_ is really the
+;; only Gnucash-defined macro in use, the surgical solution is just to
+;; make N_ available everywhere.
+(module-define! the-root-module 'N_ (module-ref (current-module) 'N_))
+
 (load-from-path "c-interface.scm")
 (load-from-path "config-var.scm")
 (load-from-path "options.scm")

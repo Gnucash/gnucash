@@ -37,15 +37,6 @@
    (call-with-output-string write-error)))
 
 
-;; gettext functions
-(define gnc:gettext gnc-gettext-helper)
-(define gnc:_ gnc:gettext)
-(define _ gnc:gettext)
-(define-syntax N_
-  (syntax-rules ()
-    ((_ x) x)))
-
-
 ;; This database can be used to store and retrieve translatable
 ;; strings. Strings that are returned by the lookup function are
 ;; translated with gettext.
