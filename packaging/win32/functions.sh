@@ -121,6 +121,7 @@ function die() {
     echo
     [ "$*" ] && echo "!!! $* !!!"
     echo "!!! ABORTING !!!"
+    restore_msys
     exit -1
 }
 
@@ -214,9 +215,11 @@ function configure_msys() {
 
 function restore_msys() {
     SUFFIX=$1
-    echo "resetting msys to use original mingw."
-    rm /etc/fstab
-    mv /etc/fstab.$SUFFIX /etc/fstab
+    if [ -f /ect/fstab.$SUFFIX ]; then
+      echo "resetting msys to use original mingw."
+      rm /etc/fstab
+      mv /etc/fstab.$SUFFIX /etc/fstab
+    fi
 }
 
 ### Local Variables: ***

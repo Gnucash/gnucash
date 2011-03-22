@@ -79,7 +79,7 @@ fi
 if [ `hostname` = "gnucash-win32" ]; then
   # Determine where to upload to
   if $(echo $REPOS_URL | grep -q tags); then
-    TARGET_DIR=tags
+    TARGET_DIR=releases
   else
     TARGET_DIR=${REPOS_URL##*/}
   fi
