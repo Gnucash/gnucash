@@ -45,6 +45,9 @@ function inst_prepare() {
         set_env "" PKG_CONFIG_PATH    # registered
         export PKG_CONFIG_LIBDIR=""   # not registered
     fi
+
+  # Save pid for use in temporary files
+  _PID=$$
 }
 
 function check_m4_version_ok() {
@@ -114,7 +117,7 @@ function inst_mingw() {
 
     if quiet test_for_mingw
     then
-        echo "mingw already installed.  skipping."
+        echo "mingw already installed."
     else
         mkdir -p $_MINGW_UDIR
         if [ "$CROSS_COMPILE" != "yes" ]; then
@@ -136,6 +139,8 @@ function inst_mingw() {
         fi
         quiet test_for_mingw || die "mingw not installed correctly"
     fi
+
+    configure_msys "$_PID" "$_MINGW_WFSDIR"
 }
 
 function inst_unzip() {
