@@ -17,7 +17,7 @@
 
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-app-utils.la
+pkglib_LTLIBRARIES = libgncmod-app-utils.la libgncmod-app-utils-python.la
 
 AM_CPPFLAGS = \
   -I$(top_srcdir)/lib/libc \
@@ -29,12 +29,20 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
+  ${PYTHON_CPPFLAGS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GTK_CFLAGS}
 
+libgncmod_app_utils_python_la_SOURCES = \
+  swig-app-utils-python.c
+
+libgncmod_app_utils_python_la_LIBADD = \
+  ${PYTHON_LIBS} \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la
+
 libgncmod_app_utils_la_SOURCES = \
-  swig-app-utils.c \
+  swig-app-utils-guile.c \
   business-options.c \
   QuickFill.c \
   file-utils.c \
@@ -106,8 +114,11 @@ libgncmod_app_utils_la_LIBADD = \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SVN
-swig-app-utils.c: app-utils.i ${top_srcdir}/src/base-typemaps.i
+swig-app-utils-guile.c: app-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src -o $@ $<
+swig-app-utils-python.c: app-utils.i ${top_srcdir}/src/base-typemaps.i
+	$(SWIG) -python -Wall -Werror $(SWIG_ARGS) \
 	-I${top_srcdir}/src -o $@ $<
 endif
 
@@ -160,6 +171,6 @@ if ! OS_WIN32
 endif
 
 CLEANFILES = ${SCM_FILE_LINKS} gnucash .scm-links
-MAINTAINERCLEANFILES = swig-app-utils.c
+MAINTAINERCLEANFILES = swig-app-utils-guile.c swig-app-utils-python.c
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.app-utils\"

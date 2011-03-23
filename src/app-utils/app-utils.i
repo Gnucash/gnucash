@@ -24,6 +24,18 @@ SCM scm_init_sw_app_utils_module (void);
 %}
 #endif
 
+#if defined(SWIGPYTHON)
+%{
+/* avoid no previous prototype warning/error */
+#if PY_VERSION_HEX >= 0x03000000
+PyObject*
+#else
+void
+#endif
+SWIG_init (void);
+%}
+#endif
+
 %import "base-typemaps.i"
 
 typedef void (*GNCOptionChangeCallback) (gpointer user_data);
