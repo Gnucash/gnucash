@@ -84,7 +84,9 @@ if [ `hostname` = "gnucash-win32" ]; then
     TARGET_DIR=${REPOS_URL##*/}
   fi
   # Small hack to create the target directory if it doesn't exist yet
-  scp -r $TARGET_DIR upload@code.gnucash.org:public_html/win32
+  mkdir "$TMP_DIR/$TARGET_DIR"
+  scp -r "$TMP_DIR/$TARGET_DIR" upload@code.gnucash.org:public_html/win32
+  rmdir "$TMP_DIR/$TARGET_DIR"
   # Copy the files to the chosen target directory
   scp -p ${LOGFILE} ${_OUTPUT_DIR}/${SETUP_FILENAME} upload@code.gnucash.org:public_html/win32/$TARGET_DIR
 fi
