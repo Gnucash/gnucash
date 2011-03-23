@@ -78,7 +78,8 @@ set_default GNOME_WIN32_DEPS_URL "$GNOME_WIN32_URL/dependencies"
 set_default DTK_URL "$SF_MIRROR/mingw/msysDTK-1.0.1.exe"
 set_default M4_URL "$SF_MIRROR/mingw/m4-1.4.7-MSYS.tar.bz2"
 
-set_default MINGW_RT_URL "$SF_MIRROR/mingw/mingwrt-3.18-mingw32-dll.tar.gz"
+set_default MINGW_RT_URL "$SF_MIRROR/mingw/mingwrt-3.18-mingw32-dev.tar.gz"
+set_default MINGW_RT_DLL_URL "$SF_MIRROR/mingw/mingwrt-3.18-mingw32-dll.tar.gz"
 set_default W32API_URL "$SF_MIRROR/mingw/w32api-3.15-1-mingw32-dev.tar.lzma"
 set_default MINGW_MAKE_URL "$SF_MIRROR/mingw/mingw32-make-3.81-20080326-3.tar.gz"
 set_default MINGW_DIR $GLOBAL_DIR\\mingw

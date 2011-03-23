@@ -131,6 +131,7 @@ function inst_mingw() {
             wget_unpacked $GCC_MPFR_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $GCC_PTHREADS_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $MINGW_RT_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
             (echo "y"; echo "y"; echo "$_MINGW_WFSDIR"; echo "y") | sh pi.sh
