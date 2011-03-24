@@ -1412,6 +1412,7 @@ AC_CONFIG_FILES(
   src/report/stylesheets/test/Makefile
   src/report/utility-reports/Makefile
   src/report/utility-reports/test/Makefile
+  src/report/jqplot/Makefile
   src/scm/Makefile
   src/scm/gnumeric/Makefile
   src/tax/Makefile
