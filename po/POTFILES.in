@@ -445,6 +445,7 @@ src/plugins/bi_import/gncmod-bi_import.c
 src/plugins/bi_import/gnc-plugin-bi_import.c
 src/plugins/bi_import/gui.c
 src/plugins/bi_import/helpers.c
+src/python/gncmod-python.c
 src/register/ledger-core/dialog-dup-trans.c
 src/register/ledger-core/gnc-ledger-display.c
 src/register/ledger-core/gncmod-ledger-core.c

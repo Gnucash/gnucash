@@ -1,3 +1,4 @@
+# These directories do not contain any gtk dependencies
 NONGUI_SUBDIRS = \
   libqof \
   debug \
@@ -9,17 +10,23 @@ NONGUI_SUBDIRS = \
   engine \
   backend \
   scm \
-  quotes
-
-GUI_SUBDIRS_1 = \
+  quotes \
   calculation \
-  tax \
+  tax
+
+# These directories should also not contain any gtk dependencies, but
+# currently there is only single very little dependency in
+# app-utils. It should go away in the long run, though.
+ALMOST_NONGUI_SUBDIRS = \
   app-utils \
+  ${PYTHON_DIR}
+
+# These directories contain the code with gtk dependency
+GUI_SUBDIRS = \
   gnome-utils \
   html \
-  gnome-search
-
-GUI_SUBDIRS_2 = \
+  gnome-search \
+  report \
   register \
   gnome \
   import-export \
@@ -28,13 +35,8 @@ GUI_SUBDIRS_2 = \
   plugins \
   bin
 
-DIST_SUBDIRS = $(NONGUI_SUBDIRS) $(GUI_SUBDIRS_1) report $(GUI_SUBDIRS_2)
-
-if GNUCASH_ENABLE_GUI
-SUBDIRS = . $(DIST_SUBDIRS)
-else
-SUBDIRS = . $(NONGUI_SUBDIRS) report
-endif
+SUBDIRS = $(NONGUI_SUBDIRS) $(ALMOST_NONGUI_SUBDIRS) $(GUI_SUBDIRS)
+DIST_SUBDIRS = $(SUBDIRS) python
 
 noinst_HEADERS = \
   swig-runtime.h

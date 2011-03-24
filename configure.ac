@@ -1160,12 +1160,12 @@ fi
 AC_SUBST(LC_MESSAGES_ENUM)
 
 ###--------------------------------------------------------
-### Make Python bindings optional
+### Make Python plugin and bindings optional
 ###--------------------------------------------------------
 enable_python=false
 
-AC_ARG_ENABLE(python-bindings,
-  [AS_HELP_STRING([--enable-python-bindings],[enable python bindings])],
+AC_ARG_ENABLE(python,
+  [AS_HELP_STRING([--enable-python],[enable python plugin and bindings])],
   [case "${enableval}" in
      yes) enable_python=true ;;
      no) enable_python=false ;;
@@ -1174,13 +1174,22 @@ AC_ARG_ENABLE(python-bindings,
   )
 if test x${enable_python} = "xtrue"
 then
-  PYTHON_DIR=python-bindings
+  PYTHON_DIR=python
+  PYTHON_BINDINGS_DIR=python-bindings
   AM_PATH_PYTHON(2.4)
   AC_PYTHON_DEVEL(>= '2.4')
   SWIG_PYTHON
 fi
 AC_SUBST(PYTHON_DIR)
+AC_SUBST(PYTHON_BINDINGS_DIR)
 AM_CONDITIONAL(WITH_PYTHON, [test x${enable_python} = xtrue])
+
+AC_ARG_ENABLE(python-bindings,
+  [AS_HELP_STRING([--enable-python-bindings],[obsolete: replaced by --enable-python])],
+  if test "x$enableval" != "xno" ; then
+    AC_MSG_ERROR([--enable-python-bindings is obsolete: The option has been renamed into --enable-python])
+  fi)
+
 
 ###-------------------------------------------------------------------------
 ### Additional compiler warnings (or not) if we're running GCC
@@ -1378,6 +1387,7 @@ AC_CONFIG_FILES(
   src/optional/python-bindings/Makefile
   src/optional/python-bindings/tests/Makefile
   src/pixmaps/Makefile
+  src/python/Makefile
   src/quotes/Makefile
   src/register/Makefile
   src/register/ledger-core/Makefile
@@ -1441,7 +1451,7 @@ if test x${AQBANKING_DIR} != x; then
   components="$components $AQBANKING_DIR"
 fi
 if test x${PYTHON_DIR} != x; then
-  components="$components python-bindings"
+  components="$components python"
 fi
 if test x${GTKMM_DIR} != x; then
   components="${components} ${GTKMM_DIR}"
