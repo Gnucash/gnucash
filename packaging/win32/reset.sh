@@ -63,6 +63,7 @@ function eval_all() {
     eval_path $AUTOTOOLS_DIR
     eval_path $GUILE_DIR
     eval_path $OPENSSL_DIR
+    eval_path $MINGW_DIR
     eval_path $MINGW_UTILS_DIR
     eval_path $EXETYPE_DIR
     eval_path $LIBXML2_DIR
