@@ -11,7 +11,7 @@
 set -e
 
 # Only run this script on Monday night (first day of the week)
-if [ `date +%u` != 2 ] ; then exit ; fi
+if [ `date +%u` != 1 ] ; then exit ; fi
 
 function qpushd() { pushd "$@" >/dev/null; }
 function qpopd() { popd >/dev/null; }
