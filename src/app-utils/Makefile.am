@@ -121,8 +121,12 @@ pkglib_LTLIBRARIES += libgncmod-app-utils-python.la
 libgncmod_app_utils_python_la_SOURCES = \
   swig-app-utils-python.c
 
+libgncmod_app_utils_python_la_LDFLAGS = \
+  ${PYTHON_LDFLAGS}
+
 libgncmod_app_utils_python_la_LIBADD = \
   ${PYTHON_LIBS} \
+  ${PYTHON_EXTRA_LIBS} \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la
 endif
 
