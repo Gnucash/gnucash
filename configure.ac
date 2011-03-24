@@ -1180,6 +1180,7 @@ then
   SWIG_PYTHON
 fi
 AC_SUBST(PYTHON_DIR)
+AM_CONDITIONAL(WITH_PYTHON, [test x${enable_python} = xtrue])
 
 ###-------------------------------------------------------------------------
 ### Additional compiler warnings (or not) if we're running GCC

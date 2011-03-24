@@ -17,7 +17,7 @@
 
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-app-utils.la libgncmod-app-utils-python.la
+pkglib_LTLIBRARIES = libgncmod-app-utils.la
 
 AM_CPPFLAGS = \
   -I$(top_srcdir)/lib/libc \
@@ -33,13 +33,6 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GTK_CFLAGS}
-
-libgncmod_app_utils_python_la_SOURCES = \
-  swig-app-utils-python.c
-
-libgncmod_app_utils_python_la_LIBADD = \
-  ${PYTHON_LIBS} \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la
 
 libgncmod_app_utils_la_SOURCES = \
   swig-app-utils-guile.c \
@@ -122,6 +115,17 @@ swig-app-utils-python.c: app-utils.i ${top_srcdir}/src/base-typemaps.i
 	-I${top_srcdir}/src -o $@ $<
 endif
 
+if WITH_PYTHON
+pkglib_LTLIBRARIES += libgncmod-app-utils-python.la
+
+libgncmod_app_utils_python_la_SOURCES = \
+  swig-app-utils-python.c
+
+libgncmod_app_utils_python_la_LIBADD = \
+  ${PYTHON_LIBS} \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la
+endif
+
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = app-utils.scm 
 
@@ -138,6 +142,7 @@ gncscm_DATA = \
 noinst_DATA = .scm-links
 
 EXTRA_DIST = \
+  swig-app-utils-python.c \
   app-utils.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
