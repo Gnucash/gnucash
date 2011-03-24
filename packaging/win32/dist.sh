@@ -43,6 +43,9 @@ for step in "${steps[@]}" ; do
     eval $step
 done
 
+setup Restore MSYS
+restore_msys "$PID"
+
 qpopd
 
 

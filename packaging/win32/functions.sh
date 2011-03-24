@@ -201,6 +201,24 @@ function dos2unix() {
        perl -pi.bak -e"s!\\r\\n\$!\\n!" $@
 }
 
+function configure_msys() {
+    # Make sure msys will be using this mingw
+    SUFFIX=$1
+    _MINGW_WFSDIR=$2
+    echo "configuring msys to use this mingw. suffix=$SUFFIX, _MINGW_WFSDIR=$_MINGW_WFSDIR"
+    cp /etc/fstab /etc/fstab.$SUFFIX
+    sed '\,/mingw$, d' /etc/fstab > tmp
+    echo "$_MINGW_WFSDIR /mingw" >> tmp
+    mv tmp /etc/fstab
+}
+
+function restore_msys() {
+    SUFFIX=$1
+    echo "resetting msys to use original mingw."
+    rm /etc/fstab
+    mv /etc/fstab.$SUFFIX /etc/fstab
+}
+
 ### Local Variables: ***
 ### mode: shell-script ***
 ### sh-basic-offset: 4 ***

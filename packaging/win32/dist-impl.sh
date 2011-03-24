@@ -46,10 +46,14 @@ Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
     _INNO_UDIR=`unix_path $INNO_DIR`
     _WEBKIT_UDIR=`unix_path $WEBKIT_DIR`
-	_ISOCODES_UDIR=`unix_path $ISOCODES_DIR`
+    _ISOCODES_UDIR=`unix_path $ISOCODES_DIR`
+    _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
     add_to_env $_UNZIP_UDIR/bin PATH # unzip
     add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
     add_to_env $_EXETYPE_UDIR/bin PATH # exetype
+
+    PID=$$
+    configure_msys "$PID" "$_MINGW_WFSDIR"
 }
 
 function dist_regex() {
