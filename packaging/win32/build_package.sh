@@ -77,5 +77,14 @@ fi
 # If we're running on the build server then upload the files
 # Note: change this target if you're building a different branch
 if [ `hostname` = "gnucash-win32" ]; then
-  scp -p ${LOGFILE} ${_OUTPUT_DIR}/${SETUP_FILENAME} upload@code.gnucash.org:public_html/win32/trunk
+  # Determine where to upload to
+  if $(echo $REPOS_URL | grep -q tags); then
+    TARGET_DIR=tags
+  else
+    TARGET_DIR=${REPOS_URL##*/}
+  fi
+  # Small hack to create the target directory if it doesn't exist yet
+  scp -r $TARGET_DIR upload@code.gnucash.org:public_html/win32
+  # Copy the files to the chosen target directory
+  scp -p ${LOGFILE} ${_OUTPUT_DIR}/${SETUP_FILENAME} upload@code.gnucash.org:public_html/win32/$TARGET_DIR
 fi
