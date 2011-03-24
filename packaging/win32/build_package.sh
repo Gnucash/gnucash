@@ -10,7 +10,7 @@ set -e
 
 function on_error() {
   if [ `hostname` = "gnucash-win32" ]; then
-    scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/trunk
+    scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/build-logs
   fi
   exit
 }
@@ -22,12 +22,28 @@ tag="$1"
 . functions.sh
 . defaults.sh
 
+# Determine where to upload to
+if $(echo $REPOS_URL | grep -q tags); then
+  TARGET_DIR=releases
+  LOG_TAG=$tag
+else
+  TARGET_DIR=${REPOS_URL##*/}
+  LOG_TAG=$TARGET_DIR
+fi
+
 set_default OUTPUT_DIR $GLOBAL_DIR\\output
-LOGFILENAME=build${tag:+-${tag}}-`date +'%Y-%m-%d'`.log
+LOGFILENAME=build-${LOG_TAG}-`date +'%Y-%m-%d'`.log
 
 _OUTPUT_DIR=`unix_path $OUTPUT_DIR`
 LOGFILE=${_OUTPUT_DIR}/${LOGFILENAME}
 mkdir -p ${_OUTPUT_DIR}
+
+if [ `hostname` = "gnucash-win32" ]; then
+  # Small hack to create the build-logs directory if it doesn't exist yet
+  mkdir "$TMP_DIR/build-logs"
+  scp -r "$TMP_DIR/build-logs" upload@code.gnucash.org:public_html/win32
+  rmdir "$TMP_DIR/build-logs"
+fi
 
 set +e
 trap on_error ERR
@@ -77,16 +93,11 @@ fi
 # If we're running on the build server then upload the files
 # Note: change this target if you're building a different branch
 if [ `hostname` = "gnucash-win32" ]; then
-  # Determine where to upload to
-  if $(echo $REPOS_URL | grep -q tags); then
-    TARGET_DIR=releases
-  else
-    TARGET_DIR=${REPOS_URL##*/}
-  fi
   # Small hack to create the target directory if it doesn't exist yet
   mkdir "$TMP_DIR/$TARGET_DIR"
   scp -r "$TMP_DIR/$TARGET_DIR" upload@code.gnucash.org:public_html/win32
   rmdir "$TMP_DIR/$TARGET_DIR"
   # Copy the files to the chosen target directory
-  scp -p ${LOGFILE} ${_OUTPUT_DIR}/${SETUP_FILENAME} upload@code.gnucash.org:public_html/win32/$TARGET_DIR
+  scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/build-logs
+  scp -p ${_OUTPUT_DIR}/${SETUP_FILENAME} upload@code.gnucash.org:public_html/win32/$TARGET_DIR
 fi
