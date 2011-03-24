@@ -49,6 +49,7 @@ gncscm_DATA = \
      html-table.scm \
      html-text.scm \
      html-utilities.scm \
+     html-jqplot.scm \
      options-utilities.scm \
      report-utilities.scm \
      report.scm 
