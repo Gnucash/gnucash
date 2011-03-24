@@ -1388,6 +1388,7 @@ AC_CONFIG_FILES(
   src/optional/python-bindings/tests/Makefile
   src/pixmaps/Makefile
   src/python/Makefile
+  src/python/pycons/Makefile
   src/quotes/Makefile
   src/register/Makefile
   src/register/ledger-core/Makefile

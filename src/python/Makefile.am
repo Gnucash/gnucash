@@ -1,4 +1,4 @@
-SUBDIRS = . 
+SUBDIRS = . pycons 
 #test
 
 pkglib_LTLIBRARIES = libgncmod-python.la
