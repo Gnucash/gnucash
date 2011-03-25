@@ -53,6 +53,8 @@
 (define reference-header (N_ "Reference"))
 (define type-header (N_ "Type"))
 (define desc-header (N_ "Description"))
+(define credit-header (N_ "Credits"))
+(define debit-header (N_ "Debits"))
 (define amount-header (N_ "Amount"))
 
 ;; Depending on the report type we want to set up some lists/cases 
@@ -105,10 +107,14 @@
   (vector-ref columns-used 3))
 (define (memo-col columns-used)
   (vector-ref columns-used 4))
-(define (value-col columns-used)
+(define (credit-col columns-used)
   (vector-ref columns-used 5))
+(define (debit-col columns-used)
+  (vector-ref columns-used 6))
+(define (value-col columns-used)
+  (vector-ref columns-used 7))
 
-(define columns-used-size 6)
+(define columns-used-size 8)
 
 (define (build-column-used options)   
   (define (opt-val section name)
@@ -130,7 +136,9 @@
     (set-col (opt-val "Display Columns" reference-header) 2)
     (set-col (opt-val "Display Columns" type-header) 3)
     (set-col (opt-val "Display Columns" desc-header) 4)
-    (set-col (opt-val "Display Columns" amount-header) 5)
+    (set-col (opt-val "Display Columns" credit-header) 5)
+    (set-col (opt-val "Display Columns" debit-header) 6)
+    (set-col (opt-val "Display Columns" amount-header) 7)
     col-vector))
 
 (define (make-heading-list column-vector)
@@ -145,6 +153,10 @@
 	(addto! heading-list (_ type-header)))
     (if (memo-col column-vector)
 	(addto! heading-list (_ desc-header)))
+    (if (credit-col column-vector)
+	(addto! heading-list (_ credit-header)))
+    (if (debit-col column-vector)
+	(addto! heading-list (_ debit-header)))
     (if (value-col column-vector)
 	(addto! heading-list (_ amount-header)))
     (reverse heading-list)))
@@ -224,7 +236,7 @@
 ;;
 ;; Make a row list based on the visible columns
 ;;
-(define (make-row column-vector date due-date num type-str memo monetary)
+(define (make-row column-vector date due-date num type-str memo monetary credit debit)
   (let ((row-contents '()))
     (if (date-col column-vector)
 	(addto! row-contents (gnc-print-date date)))
@@ -240,6 +252,12 @@
 	(addto! row-contents type-str))
     (if (memo-col column-vector)
 	(addto! row-contents memo))
+    (if (credit-col column-vector)
+	(addto! row-contents
+		(gnc:make-html-table-cell/markup "number-cell" credit)))
+    (if (debit-col column-vector)
+	(addto! row-contents
+		(gnc:make-html-table-cell/markup "number-cell" debit)))
     (if (value-col column-vector)
 	(addto! row-contents
 		(gnc:make-html-table-cell/markup "number-cell" monetary)))
@@ -255,9 +273,9 @@
   (if (not printed?)
       (begin
 	(set! printed? #t)
-	(if (not (gnc-numeric-zero-p total))
+	(if (and (value-col column-vector) (not (gnc-numeric-zero-p total)))
 	    (let ((row (make-row column-vector start-date #f "" (_ "Balance") ""
-				 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total)))
+				 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total) "" ""))
 		  (row-style (if odd-row? "normal-row" "alternate-row")))
 	      (gnc:html-table-append-row/markup! table row-style (reverse row))
 	      (set! odd-row? (not odd-row?))
@@ -308,7 +326,12 @@
 
 	  (let ((row (make-row column-vector date due-date (xaccTransGetNum txn)
 			       type-str (xaccSplitGetMemo split)
-			       (gnc:make-gnc-monetary currency value)))
+			       (gnc:make-gnc-monetary currency value)
+		   (if (not (gnc-numeric-negative-p value))
+		       (gnc:make-gnc-monetary currency value) "")
+		   (if (gnc-numeric-negative-p value)
+		       (gnc:make-gnc-monetary currency value) "")
+		))
 		(row-style (if odd-row? "normal-row" "alternate-row")))
 
 	    (gnc:html-table-append-row/markup! table row-style
@@ -325,6 +348,8 @@
   (let ((txns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY))
 	(used-columns (build-column-used options))
 	(total (gnc-numeric-zero))
+	(debit (gnc-numeric-zero))
+	(credit (gnc-numeric-zero))
 	(currency (gnc-default-currency)) ;XXX
 	(table (gnc:make-html-table))
 	(inv-str (gnc:option-value (gnc:lookup-option options "__reg"
@@ -351,6 +376,10 @@
 				       inv-str reverse? start-date total)))
 
 	      (set! printed? (car result))
+	      (if (and printed? total)
+		(if (gnc-numeric-negative-p (cadr result))
+		    (set! debit (gnc-numeric-add-fixed debit (cadr result)))
+		    (set! credit (gnc-numeric-add-fixed credit (cadr result)))))
 	      (set! total (gnc-numeric-add-fixed total (cadr result)))
 	      (set! odd-row? (caddr result))
 	      ))))
@@ -361,6 +390,33 @@
 	  (add-balance-row table used-columns (car txns) odd-row? printed? start-date total)
 		))
 
+    (if (or (credit-col used-columns) (debit-col used-columns))
+    (gnc:html-table-append-row/markup! 
+     table
+     "grand-total"
+     (append (cons (gnc:make-html-table-cell/markup
+		    "total-label-cell"
+		    (_ "Period Totals"))
+		   '())
+
+	; This is hard-coded to expect 'debits' to follow 'credits'
+	(let ((row-contents '())
+	    (credit-span (credit-col used-columns))
+	    (debit-span
+		(if (credit-col used-columns) 1 (debit-col used-columns))))
+
+	; HTML gets generated in reverse order
+	(if (debit-col used-columns) (addto! row-contents
+	    (gnc:make-html-table-cell/size/markup
+		1 debit-span "total-number-cell"
+		(gnc:make-gnc-monetary currency debit))))
+	(if (credit-col used-columns) (addto! row-contents
+	    (gnc:make-html-table-cell/size/markup
+		1 credit-span "total-number-cell"
+		(gnc:make-gnc-monetary currency credit))))
+	row-contents))))
+
+    (if (value-col used-columns)
     (gnc:html-table-append-row/markup! 
      table
      "grand-total"
@@ -373,14 +429,14 @@
 	     (list (gnc:make-html-table-cell/size/markup
 		    1 (value-col used-columns)
 		    "total-number-cell"
-		    (gnc:make-gnc-monetary currency total)))))
+		    (gnc:make-gnc-monetary currency total))))))
 
     (let* ((interval-vec (list->vector (make-interval-list end-date))))
       (gnc:html-table-append-row/markup!
        table
        "grand-total"
        (list (gnc:make-html-table-cell/size/markup
-	      1 (+ 1 (value-col used-columns))
+	      1 columns-used-size
 	      "centered-label-cell"
 	      (make-aging-table options query interval-vec reverse?)))))
 
@@ -445,6 +501,16 @@
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") desc-header
     "ha" (N_ "Display the transaction description?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") credit-header
+    "haa" (N_ "Display the period credits column?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") debit-header
+    "hab" (N_ "Display a period debits column?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
