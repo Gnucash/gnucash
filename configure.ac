@@ -1162,15 +1162,15 @@ AC_SUBST(LC_MESSAGES_ENUM)
 ###--------------------------------------------------------
 ### Make Python plugin and bindings optional
 ###--------------------------------------------------------
-enable_python=false
 
 AC_ARG_ENABLE(python,
   [AS_HELP_STRING([--enable-python],[enable python plugin and bindings])],
   [case "${enableval}" in
      yes) enable_python=true ;;
      no) enable_python=false ;;
-     *) enable_python=true ;;
-   esac]
+     *) enable_python=false    # default: false
+   esac],
+  [enable_python=false] # default: false
   )
 if test x${enable_python} = "xtrue"
 then
