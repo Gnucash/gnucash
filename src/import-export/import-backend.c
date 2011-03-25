@@ -721,13 +721,13 @@ static void split_find_match (GNCImportTransInfo * trans_info,
             const char *memo = xaccSplitGetMemo(new_trans_fsplit);
             if (memo && strlen(memo) != 0)
             {
-                if (safe_strcmp(memo, xaccSplitGetMemo(split)) == 0)
+                if (safe_strcasecmp(memo, xaccSplitGetMemo(split)) == 0)
                 {
                     /* An exact match of memo gives a +2 */
                     prob = prob + 2;
                     /* DEBUG("heuristics:  probability + 2 (memo)"); */
                 }
-                else if ((strncmp(memo, xaccSplitGetMemo(split),
+                else if ((strncasecmp(memo, xaccSplitGetMemo(split),
                                   strlen(xaccSplitGetMemo(split)) / 2)
                           == 0))
                 {
@@ -746,7 +746,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
             const char *descr = xaccTransGetDescription(new_trans);
             if (descr && strlen(descr) != 0)
             {
-                if (safe_strcmp(descr,
+                if (safe_strcasecmp(descr,
                                 xaccTransGetDescription(xaccSplitGetParent(split)))
                         == 0)
                 {
@@ -754,7 +754,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
                     prob = prob + 2;
                     /*DEBUG("heuristics:  probability + 2 (description)");*/
                 }
-                else if ((strncmp(descr,
+                else if ((strncasecmp(descr,
                                   xaccTransGetDescription (xaccSplitGetParent(split)),
                                   strlen(xaccTransGetDescription (new_trans)) / 2)
                           == 0))
