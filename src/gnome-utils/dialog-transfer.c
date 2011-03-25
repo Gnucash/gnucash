@@ -1176,6 +1176,12 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount)
 
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
 }
+void gnc_xfer_dialog_set_amount_sensitive(XferDialog *xferData,
+                                          gboolean is_sensitive)
+{
+    g_assert(xferData);
+    gtk_widget_set_sensitive(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT (xferData->amount_edit)), is_sensitive);
+}
 
 
 /********************************************************************\

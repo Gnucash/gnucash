@@ -99,6 +99,9 @@ void gnc_xfer_dialog_hide_to_account_tree(XferDialog *xferData );
  */
 void gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount);
 
+/** Set the "sensitive" state of the amount field to the given value */
+void gnc_xfer_dialog_set_amount_sensitive(XferDialog *xferData, gboolean is_sensitive);
+
 /**
  *   set the description in the given xfer dialog
  *
