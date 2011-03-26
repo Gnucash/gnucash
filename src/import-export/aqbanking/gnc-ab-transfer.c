@@ -226,6 +226,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                      xaccAccountGetCommoditySCU(gnc_acc),
                      GNC_HOW_RND_ROUND_HALF_UP);
         gnc_xfer_dialog_set_amount(xfer_dialog, amount);
+        gnc_xfer_dialog_set_amount_sensitive(xfer_dialog, FALSE);
 
         description = gnc_ab_description_to_gnc(ab_trans);
         gnc_xfer_dialog_set_description(xfer_dialog, description);
