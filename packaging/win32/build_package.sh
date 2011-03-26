@@ -7,10 +7,11 @@
 #
 
 set -e
+LOG_DIR=build-logs
 
 function on_error() {
   if [ `hostname` = "gnucash-win32" ]; then
-    scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/build-logs
+    scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/$LOG_DIR
   fi
   exit
 }
@@ -38,11 +39,11 @@ _OUTPUT_DIR=`unix_path $OUTPUT_DIR`
 LOGFILE=${_OUTPUT_DIR}/${LOGFILENAME}
 mkdir -p ${_OUTPUT_DIR}
 
+# Small hack to create $LOG_DIR on the webserver if it doesn't exist yet
 if [ `hostname` = "gnucash-win32" ]; then
-  # Small hack to create the build-logs directory if it doesn't exist yet
-  mkdir "$TMP_DIR/build-logs"
-  scp -r "$TMP_DIR/build-logs" upload@code.gnucash.org:public_html/win32
-  rmdir "$TMP_DIR/build-logs"
+  mkdir "$_OUTPUT_DIR/$LOG_DIR"
+  scp -r "$_OUTPUT_DIR/$LOG_DIR" upload@code.gnucash.org:public_html/win32
+  rmdir "$_OUTPUT_DIR/$LOG_DIR"
 fi
 
 set +e
@@ -91,13 +92,12 @@ if [ -n "${tag}" ] ; then
 fi
 
 # If we're running on the build server then upload the files
-# Note: change this target if you're building a different branch
 if [ `hostname` = "gnucash-win32" ]; then
-  # Small hack to create the target directory if it doesn't exist yet
-  mkdir "$TMP_DIR/$TARGET_DIR"
-  scp -r "$TMP_DIR/$TARGET_DIR" upload@code.gnucash.org:public_html/win32
-  rmdir "$TMP_DIR/$TARGET_DIR"
+  # Small hack to create the $TARGET_DIR on the webserver if it doesn't exist yet
+  mkdir "$_OUTPUT_DIR/$TARGET_DIR"
+  scp -r "$_OUTPUT_DIR/$TARGET_DIR" upload@code.gnucash.org:public_html/win32
+  rmdir "$_OUTPUT_DIR/$TARGET_DIR"
   # Copy the files to the chosen target directory
-  scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/build-logs
+  scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/$LOG_DIR
   scp -p ${_OUTPUT_DIR}/${SETUP_FILENAME} upload@code.gnucash.org:public_html/win32/$TARGET_DIR
 fi
