@@ -949,35 +949,22 @@ then
 
   AC_MSG_CHECKING([the html engine])
   AC_ARG_WITH(html_engine,
-              AS_HELP_STRING([--with-html-engine=@<:@webkit/gtkhtml@:>@],
-                             [Select HTML engine [default=gtkhtml]]),
-              [],[with_html_engine="gtkhtml"])
+              AS_HELP_STRING([--with-html-engine=@<:@webkit@:>@],
+                             [Obsolete: Only webkit is used as HTML engine now]),
+              [],[with_html_engine="webkit"])
 
   AC_MSG_RESULT([$with_html_engine])
 
   case "$with_html_engine" in
 
     gtkhtml)
-      # check for gtkhtml >= 3.14 with gtkprint support
-      gtkhtml=0
-      PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.14, [
-        # check for gtkhtml >= 3.16 (includes gtk_html_print_operation_run())
-        AC_MSG_CHECKING(for GtkHTML - version >= 3.16.0)
-        if $PKG_CONFIG 'libgtkhtml-3.14 >= 3.16.0'; then
-          AC_MSG_RESULT(yes)
-          AC_DEFINE(HAVE_GTKHTML_3_16,1,[System has gtkhtml 3.16.0 or better])
-          HAVE_GTKHTML_3_16=1
-        else
-          AC_MSG_RESULT(no)
-        fi
-      ], [
-        AC_MSG_ERROR([cannot find GtkHTML >= 3.14])
-      ])
+      # No more gtkhtml in gnucash-2.5.0
+      AC_MSG_ERROR([gtkhtml is no longer sufficient for gnucash, as we now require the CSS/javascript features using webkit. Please remove your --with-html-engine argument from configure.])
       ;;
 
     webkit)
       PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
-      AC_DEFINE(WANT_WEBKIT,1,[Use webkit instead of gtkhtml])
+      AC_DEFINE(WANT_WEBKIT,1,[Use webkit])
       case "$platform" in
         win32)
           # 1.1.90 has both functions
@@ -1008,25 +995,15 @@ then
         esac
         ;;
 
-    *) AC_MSG_ERROR([Invalid HTML engine: must be gtkhtml or webkit]) ;;
+    *) AC_MSG_ERROR([Invalid HTML engine: must be webkit]) ;;
   esac
 
   AM_CONDITIONAL(HTML_USING_WEBKIT, [test x${with_html_engine} = xwebkit])
   AC_SUBST(WEBKIT_CFLAGS)
   AC_SUBST(WEBKIT_LIBS)
-  AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
 
   dnl if Mac OSX, also scrub /sw/include
   dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
-
-  case $host_os in
-    darwin*)
-      GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include ;;" | ${SED} -e "s;-I/sw/include$;;"`
-      GTKHTML_CFLAGS=`echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include/gtkhtml ;;" | ${SED} -e "s;-I/sw/includ/gtkhtmle$;;"`
-      ;;
-  esac
-  AC_SUBST(GTKHTML_CFLAGS)
-  AC_SUBST(GTKHTML_LIBS)
 
   ###-----------------------------------------------------------------------
   ## Find a suitable password store
