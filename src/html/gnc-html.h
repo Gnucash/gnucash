@@ -26,7 +26,7 @@
 /**
  * A GncHtml object is an abstract base for an html engine used to display reports and
  * charts in gnucash.  It must be overridden to create specific objects using specific
- * html engines (e.g. gtkhtml, webkit).
+ * html engines (e.g. webkit).
  */
 
 #include <glib-object.h>

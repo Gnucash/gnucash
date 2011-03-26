@@ -964,7 +964,6 @@ then
 
     webkit)
       PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.0")
-      AC_DEFINE(WANT_WEBKIT,1,[Use webkit])
       case "$platform" in
         win32)
           # 1.1.90 has both functions
@@ -998,7 +997,6 @@ then
     *) AC_MSG_ERROR([Invalid HTML engine: must be webkit]) ;;
   esac
 
-  AM_CONDITIONAL(HTML_USING_WEBKIT, [test x${with_html_engine} = xwebkit])
   AC_SUBST(WEBKIT_CFLAGS)
   AC_SUBST(WEBKIT_LIBS)
 
@@ -1442,7 +1440,6 @@ AC_MSG_RESULT([
   gnucash version ...... : $VERSION
   Build for host ....... : $host
   Optional components... : $components
-  HTML engine .......... : $with_html_engine
   Extra Warnings ....... : $warnFLAGS
   CPPFLAGS ............. : $CPPFLAGS
   CFLAGS ............... : $CFLAGS

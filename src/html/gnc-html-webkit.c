@@ -396,7 +396,7 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
 
 /********************************************************************
  * load_to_stream : actually do the work of loading the HTML
- * or binary data referenced by a URL and feeding it into the GtkHTML
+ * or binary data referenced by a URL and feeding it into the webkit
  * widget.
  ********************************************************************/
 

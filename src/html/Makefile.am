@@ -18,6 +18,7 @@ AM_CPPFLAGS = \
   ${GTK_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
+  ${WEBKIT_CFLAGS} \
   ${GOFFICE_CFLAGS}
 
 libgncmod_html_la_SOURCES = \
@@ -26,6 +27,8 @@ libgncmod_html_la_SOURCES = \
   gnc-html-history.c \
   gnc-html-graph-gog.c \
   gnc-html-factory.c \
+  gnc-html-webkit.c \
+  gnc-html-graph-gog-webkit.c \
   swig-gnc-html.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -35,12 +38,9 @@ gncinclude_HEADERS = \
   gnc-html.h \
   gnc-html-p.h \
   gnc-html-factory.h \
-  gnc-html-gtkhtml.h \
   gnc-html-webkit.h \
   gnc-html-extras.h \
-  gnc-html-gtkhtml-p.h \
   gnc-html-webkit-p.h \
-  gnc-html-graph-gog-gtkhtml.h \
   gnc-html-graph-gog-webkit.h \
   gnc-html-graph-gog-extras.h
 
@@ -54,6 +54,7 @@ libgncmod_html_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
+  ${WEBKIT_LIBS} \
   ${GNOME_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLIB_LIBS} \
@@ -63,23 +64,6 @@ libgncmod_html_la_LIBADD = \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${REGEX_LIBS}
-
-if HTML_USING_WEBKIT
-AM_CPPFLAGS += ${WEBKIT_CFLAGS}
-libgncmod_html_la_SOURCES += \
-  gnc-html-webkit.c \
-  gnc-html-graph-gog-webkit.c
-libgncmod_html_la_LIBADD += \
-  ${WEBKIT_LIBS}
-else
-AM_CPPFLAGS += ${GTKHTML_CFLAGS}
-libgncmod_html_la_SOURCES += \
-  gnc-html-gtkhtml.c \
-  gnc-html-graph-gog-gtkhtml.c
-libgncmod_html_la_LIBADD += \
-  ${GTKHTML_LIBS}
-
-endif
 
 if BUILDING_FROM_SVN
 swig-gnc-html.c: gnc-html.i gnc-html.h \

@@ -355,9 +355,7 @@ src/gnome/window-reconcile.c
 src/html/gnc-html.c
 src/html/gnc-html-factory.c
 src/html/gnc-html-graph-gog.c
-src/html/gnc-html-graph-gog-gtkhtml.c
 src/html/gnc-html-graph-gog-webkit.c
-src/html/gnc-html-gtkhtml.c
 src/html/gnc-html-history.c
 src/html/gnc-html-webkit.c
 src/html/gncmod-html.c

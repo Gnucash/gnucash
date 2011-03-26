@@ -280,7 +280,7 @@ gnc_gnome_init (int argc, char **argv, const char * version)
     xmlCleanupInputCallbacks();
 #endif
 
-    /* initialization required for gtkhtml */
+    /* initialization required for gtkhtml (is it also needed for webkit?) */
     gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 
     /* use custom icon */
