@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-24 21:42+0100\n"
-"PO-Revision-Date: 2011-03-01 22:27+0100\n"
+"POT-Creation-Date: 2011-03-26 13:55+0100\n"
+"PO-Revision-Date: 2011-03-26 13:55+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "MIME-Version: 1.0\n"
@@ -1039,7 +1039,10 @@ msgstr ""
 msgid ""
 "If active, extra toolbar buttons for common business functions are shown as "
 "well. Otherwise they are not shown."
-msgstr "Wenn aktiviert, werden zusätzliche Knöpfe in der Werkzeugleiste für häufig benutzte Geschäfts-Funktionen angezeigt. Andernfalls werden sie nicht angezeigt."
+msgstr ""
+"Wenn aktiviert, werden zusätzliche Knöpfe in der Werkzeugleiste für häufig "
+"benutzte Geschäfts-Funktionen angezeigt. Andernfalls werden sie nicht "
+"angezeigt."
 
 msgid ""
 "If checked, each invoice will be opened in its own top level window.  If "
@@ -10616,6 +10619,9 @@ msgstr "Entscheidungsschwelle für automatisches Hinzufügen"
 msgid "Auto-c_lear threshold"
 msgstr "Entscheidungsschwelle für automatisches Abgleichen"
 
+msgid "Automatically create new commodities"
+msgstr "Automatisch neue Wertpapiere/Währungen erstellen"
+
 msgid "Choose a format"
 msgstr "Wählen Sie das Export-Format"
 
@@ -10659,6 +10665,16 @@ msgstr ""
 
 msgid "Enable update match action"
 msgstr "»Abgleichen und Datenübernahme«-Aktion aktivieren"
+
+msgid ""
+"Enables the automatic creation of new commodities if any unknown commodity "
+"is encountered during import. Otherwise the user will be asked what to do "
+"with each unknown commodity."
+msgstr ""
+"Aktiviert die automatische Erstellung von neuen Wertpapieren/Währungen, "
+"sobald unbekannte Wertpapiere/Währungen beim Importieren gefunden werden. "
+"Andernfalls wird eine Rückfrage für jedes unbekannte Wertpapier/Währung "
+"angezeigt."
 
 msgid ""
 "For a new transaction, click on the \"Other Account\" entry to choose the "
@@ -10958,6 +10974,7 @@ msgstr ""
 "Einträge aus Logdatei nach einem Programmabsturz abspielen. Dies kann nicht "
 "rückgängig gemacht werden."
 
+#. As we now have the commodity, select the account with that commodity.
 #. This string is a default account
 #. name. It MUST NOT contain the
 #. character ':' anywhere in it or
@@ -12218,6 +12235,13 @@ msgstr "Kann Datei %s nicht öffnen. Fehlermeldung: %s"
 
 msgid "There are no options for this report."
 msgstr "Es gibt für diesen Bericht keine Optionen."
+
+msgid "GnuCash-Report"
+msgstr "GnuCash-Bericht"
+
+#. src/report/business-reports/invoice.scm
+msgid "Printable Invoice"
+msgstr "Druckbare Rechnung"
 
 #. * @}
 #. * @}
@@ -13808,10 +13832,6 @@ msgstr "Rechnung in Bearbeitung..."
 #. src/report/business-reports/fancy-invoice.scm
 msgid "Fancy Invoice"
 msgstr "Elegante Rechnung"
-
-#. src/report/business-reports/invoice.scm
-msgid "Printable Invoice"
-msgstr "Druckbare Rechnung"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
