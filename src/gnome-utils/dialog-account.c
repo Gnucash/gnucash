@@ -366,12 +366,7 @@ gnc_ui_to_account(AccountWindow *aw)
         xaccAccountSetDescription (account, string);
 
     gtk_color_button_get_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color );
-#ifdef HAVE_GTK_2_12
     string = gdk_color_to_string(&color);
-#else
-    /* gdk_color_to_string requires gtk >= 2.12 */
-    string = g_strdup_printf("#%04X%04X%04X", color.red, color.green, color.blue);
-#endif
     if (safe_strcmp (string, DEFAULT_COLOR) == 0)
         string = "Not Set";
 

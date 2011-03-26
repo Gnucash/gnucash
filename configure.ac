@@ -227,33 +227,10 @@ if test "x$PKG_CONFIG" = x; then
 fi
 
 ### --------------------------------------------------------------------------
-### Glib checks..
+### Glib checks.
 
-AM_PATH_GLIB_2_0(2.12.0,,AC_MSG_ERROR([
-*** GLIB >= 2.12 is required to build Gnucash; please make sure you have the
-*** development headers installed. The latest version of GLIB is
-*** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
-    gthread gobject gmodule)
-
-AC_MSG_CHECKING([for untested GLIB versions (glib >= 2.13.0)])
-if $PKG_CONFIG 'glib-2.0 >= 2.13.0'
-then
-  AC_MSG_RESULT(yes)
-  HAVE_UNTESTED_GLIB=yes
-else
-  AC_MSG_RESULT(no)
-fi
-
-AC_MSG_CHECKING([for GLib testing (glib >= 2.16.0)])
-if $PKG_CONFIG 'glib-2.0 >= 2.16.0'
-then
-  AC_MSG_RESULT(yes)
-  _have_glib_testing=yes
-else
-  AC_MSG_RESULT(no)
-  _have_glib_testing=no
-fi
-AM_CONDITIONAL(HAVE_GLIB_TESTING, test "x$_have_glib_testing" = "xyes")
+# We require glib >= 2.20, released together with gtk-2.16
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.20 gthread-2.0 gobject-2.0 gmodule-2.0)
 
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
@@ -483,7 +460,7 @@ AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 ### --------------------------------------------------------------------------
 ### look for gconf
 
-PKG_CHECK_MODULES(GCONF, gconf-2.0 >= "2.0")
+PKG_CHECK_MODULES(GCONF, gconf-2.0 >= 2.22)
 # Look up gconftool-2
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AC_SUBST(GCONFTOOL)
@@ -890,46 +867,24 @@ then
   fi
   GNOME_COMPILE_WARNINGS
 
-  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.10)
+  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.16)
+  # Should be >= 2.18.1 once we got the win32 webkit build with newer
+  # gtk working.
   AS_SCRUB_INCLUDE(GTK_CFLAGS)
   AC_SUBST(GTK_CFLAGS)
   AC_SUBST(GTK_LIBS)
 
-  AC_MSG_CHECKING([for untested GTK versions (gtk > 2.11.0)])
-  if $PKG_CONFIG 'gtk+-2.0 > 2.11.0'
-  then
-    AC_MSG_RESULT(yes)
-    HAVE_UNTESTED_GTK=yes
-  fi
-
-  AC_MSG_CHECKING([for GTK >= 2.12.0])
-  if $PKG_CONFIG 'gtk+-2.0 >= 2.12.0'
-  then
-    AC_MSG_RESULT(yes)
-    AC_DEFINE(HAVE_GTK_2_12,1,[System has gtk 2.12.0 or better])
-    HAVE_GTK_2_12=yes
-  fi
-
-  PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.4)
+  PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.24)
   AS_SCRUB_INCLUDE(GNOME_CFLAGS)
   AC_SUBST(GNOME_CFLAGS)
   AC_SUBST(GNOME_LIBS)
-
-  AC_MSG_CHECKING([for untested GNOME versions (libgnome >= 2.19.0)])
-  if $PKG_CONFIG 'libgnome-2.0 >= 2.19.0'
-  then
-    AC_MSG_RESULT(yes)
-    HAVE_UNTESTED_GNOME=yes
-  else
-    AC_MSG_RESULT(no)
-  fi
 
   PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
   AS_SCRUB_INCLUDE(GDK_PIXBUF_CFLAGS)
   AC_SUBST(GDK_PIXBUF_CFLAGS)
   AC_SUBST(GDK_PIXBUF_LIBS)
 
-  PKG_CHECK_MODULES(GLADE, libglade-2.0 >= 2.4)
+  PKG_CHECK_MODULES(GLADE, libglade-2.0 >= 2.6)
   AS_SCRUB_INCLUDE(GLADE_CFLAGS)
   AC_SUBST(GLADE_CFLAGS)
   AC_SUBST(GLADE_LIBS)
@@ -1052,12 +1007,8 @@ fi
 ###-------------------------------------------------------------------------
 ### Selectively disable deprecated bits of glib/gdk/gtk/gnome
 ###-------------------------------------------------------------------------
-if test x${HAVE_UNTESTED_GLIB} = "xyes"
-then
-  allow_deprecated=true
-else
-  allow_deprecated=false
-fi
+
+allow_deprecated=true
 AC_ARG_ENABLE(deprecated-glib,
   [AS_HELP_STRING([--disable-deprecated-glib],[don't use deprecated glib functions])],
   [case "${enableval}" in
@@ -1067,16 +1018,13 @@ AC_ARG_ENABLE(deprecated-glib,
   )
 if test x${allow_deprecated} != "xtrue"
 then
+  # FIXME: This define is unused; this block can be removed
   AC_DEFINE(G_DISABLE_DEPRECATED,1, [Don't use deprecated glib functions])
 fi
 
 
-if test x${HAVE_UNTESTED_GTK} = "xyes"
-then
-  allow_deprecated=true
-else
-  allow_deprecated=false
-fi
+# default: Allow deprecated gtk functions
+allow_deprecated=true
 AC_ARG_ENABLE(deprecated-gtk,
   [AS_HELP_STRING([--disable-deprecated-gtk],[don't use deprecated gtk, gdk or gdk-pixbuf functions])],
   [case "${enableval}" in
@@ -1086,18 +1034,14 @@ AC_ARG_ENABLE(deprecated-gtk,
   )
 if test x${allow_deprecated} != "xtrue"
 then
+  # FIXME: This define is unused; this block can be removed
   AC_DEFINE(GTK_DISABLE_DEPRECATED,1, [Don't use deprecated gtk functions])
   AC_DEFINE(GDK_DISABLE_DEPRECATED,1, [Don't use deprecated gdk functions])
   AC_DEFINE(GDK_PIXBUF_DISABLE_DEPRECATED,1, [Don't use deprecated gdk-pixbuf functions])
 fi
 
 
-if test x${HAVE_UNTESTED_GNOME} = "xyes"
-then
-  allow_deprecated=true
-else
-  allow_deprecated=false
-fi
+allow_deprecated=true
 AC_ARG_ENABLE(deprecated-gnome,
   [AS_HELP_STRING([--disable-deprecated-gnome],[don't use deprecated gnome functions])],
   [case "${enableval}" in
@@ -1107,6 +1051,7 @@ AC_ARG_ENABLE(deprecated-gnome,
   )
 if test x${allow_deprecated} != "xtrue"
 then
+  # FIXME: This define is unused; this block can be removed
   AC_DEFINE(GNOME_DISABLE_DEPRECATED,1, [Don't use deprecated gnome functions])
 fi
 
