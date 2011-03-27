@@ -463,12 +463,13 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     static SCM get_desc = SCM_UNDEFINED;
 
     gboolean tax_related = FALSE;
-    const char *code = NULL;
-    const gchar *tax_type = NULL;
+    const char *code;
+    const gchar *tax_type;
     GNCAccountType atype;
     SCM category;
     SCM code_scm;
     SCM tax_entity_type;
+    const gchar *form, *desc, *copy_txt;
     gint64 copy_number;
     SCM scm;
 
@@ -499,12 +500,10 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     {
         const gchar *num_code = NULL;
         const gchar *prefix = "N";
-        char *return_string = NULL;
 
         tax_type = gnc_get_current_book_tax_type ();
         if (tax_type == NULL || (safe_strcmp (tax_type, "") == 0))
             return g_strdup (_("Tax entity type not specified"));
-
         atype = xaccAccountGetType (account);
         /*    tax_entity_type = scm_from_locale_string (tax_type); <- requires guile 1.8*/
         tax_entity_type = scm_makfrom0str (tax_type); /* <-guile 1.6  */
@@ -562,129 +561,89 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                                           (atype == ACCT_TYPE_PAYABLE)) ?
                                          "txf-liab-eq-categories" : ""))));
 
-        if (g_str_has_prefix (code, prefix))
-        {
-            const gchar *num_code_tmp;
-            num_code_tmp = g_strdup (code);
-            num_code_tmp++; /* to lose the leading N */
-            num_code = g_strdup (num_code_tmp);
-            num_code_tmp--;
-            g_free ((gpointer *) num_code_tmp);
-        }
-        else
-        {
-            num_code = g_strdup (code);
-        }
+        num_code = g_strdup (code);
+        if (g_str_has_prefix (num_code, prefix))
+            num_code++; /* to lose the leading N */
 
         if (category == SCM_UNDEFINED)
         {
             if (tax_related)
-                return_string = g_strdup_printf
-                                (_("Tax type %s: invalid code %s for account type"),
-                                 tax_type, num_code);
+                return g_strdup_printf
+                       (_("Tax type %s: invalid code %s for account type"),
+                        tax_type, num_code);
             else
-                return_string = g_strdup_printf
-                                (_("Not tax-related; tax type %s: invalid code %s for account type"),
-                                 tax_type, num_code);
+                return g_strdup_printf
+                       (_("Not tax-related; tax type %s: invalid code %s for account type"),
+                        tax_type, num_code);
+        }
+
+        code_scm = scm_str2symbol (code);
+        scm = scm_call_3 (get_form, category, code_scm, tax_entity_type);
+        if (!scm_is_string (scm))
+        {
+            if (tax_related)
+                return g_strdup_printf
+                       (_("Invalid code %s for tax type %s"),
+                        num_code, tax_type);
+            else
+                return g_strdup_printf
+                       (_("Not tax-related; invalid code %s for tax type %s"),
+                        num_code, tax_type);
+        }
+
+        form = scm_to_locale_string (scm);
+        if (!form)
+        {
+            if (tax_related)
+                return g_strdup_printf
+                       (_("No form: code %s, tax type %s"), num_code, tax_type);
+            else
+                return g_strdup_printf
+                       (_("Not tax-related; no form: code %s, tax type %s"),
+                        num_code, tax_type);
+        }
+
+        scm = scm_call_3 (get_desc, category, code_scm, tax_entity_type);
+        if (!scm_is_string (scm))
+        {
+            if (tax_related)
+                return g_strdup_printf
+                       (_("No description: form %s, code %s, tax type %s"),
+                        form, num_code, tax_type);
+            else
+                return g_strdup_printf
+                       (_("Not tax-related; no description: form %s, code %s, tax type %s"),
+                        form, num_code, tax_type);
+        }
+
+        desc = scm_to_locale_string (scm);
+        if (!desc)
+        {
+            if (tax_related)
+                return g_strdup_printf
+                       (_("No description: form %s, code %s, tax type %s"),
+                        form, num_code, tax_type);
+            else
+                return g_strdup_printf
+                       (_("Not tax-related; no description: form %s, code %s, tax type %s"),
+                        form, num_code, tax_type);
+        }
+
+        copy_number = xaccAccountGetTaxUSCopyNumber (account);
+        copy_txt = (copy_number == 1) ? "" : g_strdup_printf ("(%d)",
+                   (gint) copy_number);
+
+        if (tax_related)
+        {
+            if (safe_strcmp (form, "") == 0)
+                return g_strdup_printf ("%s", desc);
+            else
+                return g_strdup_printf ("%s%s: %s", form, copy_txt, desc);
         }
         else
-        {
-            code_scm = scm_str2symbol (code);
-            scm = scm_call_3 (get_form, category, code_scm,
-                              tax_entity_type);
-            if (!scm_is_string (scm))
-            {
-                if (tax_related)
-                    return_string = g_strdup_printf
-                                    (_("Invalid code %s for tax type %s"),
-                                     num_code, tax_type);
-                else
-                    return_string = g_strdup_printf
-                                    (_("Not tax-related; invalid code %s for tax type %s"),
-                                     num_code, tax_type);
-            }
-            else
-            {
-                const gchar *form = NULL;
-
-                form = scm_to_locale_string (scm);
-                if (!form)
-                {
-                    if (tax_related)
-                        return_string = g_strdup_printf
-                                        (_("No form: code %s, tax type %s"),
-                                         num_code, tax_type);
-                    else
-                        return_string = g_strdup_printf
-                                        (_("Not tax-related; no form: code %s, tax type %s"),
-                                         num_code, tax_type);
-                }
-                else
-                {
-                    scm = scm_call_3 (get_desc, category, code_scm,
-                                      tax_entity_type);
-                    if (!scm_is_string (scm))
-                    {
-                        if (tax_related)
-                            return_string = g_strdup_printf
-                                            (_("No description: form %s, code %s, tax type %s"),
-                                             form, num_code, tax_type);
-                        else
-                            return_string = g_strdup_printf
-                                            (_("Not tax-related; no description: form %s, code %s, tax type %s"),
-                                             form, num_code, tax_type);
-                    }
-                    else
-                    {
-                        const gchar *desc = NULL;
-
-                        desc = scm_to_locale_string (scm);
-                        if (!desc)
-                        {
-                            if (tax_related)
-                                return_string = g_strdup_printf
-                                                (_("No description: form %s, code %s, tax type %s"),
-                                                 form, num_code, tax_type);
-                            else
-                                return_string = g_strdup_printf
-                                                (_("Not tax-related; no description: form %s, code %s, tax type %s"),
-                                                 form, num_code, tax_type);
-                        }
-                        else
-                        {
-                            const gchar *copy_txt = NULL;
-
-                            copy_number
-                            = xaccAccountGetTaxUSCopyNumber  (account);
-                            copy_txt = (copy_number == 1) ?
-                                       g_strdup ("") :
-                                       g_strdup_printf ("(%d)",
-                                                        (gint) copy_number);
-                            if (tax_related)
-                            {
-                                if (safe_strcmp (form, "") == 0)
-                                    return_string
-                                    = g_strdup_printf ("%s", desc);
-                                else
-                                    return_string
-                                    = g_strdup_printf ("%s%s: %s",
-                                                       form, copy_txt, desc);
-                            }
-                            else
-                                return_string = g_strdup_printf
-                                                (_("Not tax-related; %s%s: %s (code %s, tax type %s)"),
-                                                 form, copy_txt, desc, num_code,
-                                                 tax_type);
-                            g_free ((gpointer *) copy_txt);
-                        }
-                        g_free ((gpointer *) desc);
-                    }
-                }
-                g_free ((gpointer *) form);
-            }
-        }
-        g_free ((gpointer *) num_code);
-        return return_string;
+            return g_strdup_printf
+                   (_("Not tax-related; %s%s: %s (code %s, tax type %s)"),
+                    form, copy_txt, desc, num_code, tax_type);
     }
 }
 
