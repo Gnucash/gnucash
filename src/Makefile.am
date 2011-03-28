@@ -35,7 +35,8 @@ GUI_SUBDIRS = \
   plugins \
   bin
 
-SUBDIRS = $(NONGUI_SUBDIRS) $(ALMOST_NONGUI_SUBDIRS) $(GUI_SUBDIRS)
+# Need to include '.' in order to build swig-runtime.h
+SUBDIRS = . $(NONGUI_SUBDIRS) $(ALMOST_NONGUI_SUBDIRS) $(GUI_SUBDIRS)
 DIST_SUBDIRS = $(SUBDIRS) python
 
 noinst_HEADERS = \
