@@ -66,7 +66,7 @@ function inst_wget() {
     add_to_env $_WGET_UDIR/bin PATH
     if quiet $_WGET_UDIR/wget --version || quiet wget --version
     then
-        echo "already installed.  skipping."
+        echo "already installed in $_WGET_UDIR/bin.  skipping."
     else
         mkdir -p $_WGET_UDIR/bin
         tar -xjpf $DOWNLOAD_UDIR/wget*.tar.bz2 -C $_WGET_UDIR
@@ -80,7 +80,7 @@ function inst_dtk() {
     _MSYS_UDIR=`unix_path $MSYS_DIR`
     if quiet ${_MSYS_UDIR}/bin/perl --help && [ check_m4_version_ok ]
     then
-    echo "msys dtk already installed.  skipping."
+    echo "msys dtk already installed in ${_MSYS_UDIR}.  skipping."
     else
         smart_wget $DTK_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$MSYS_DIR"
@@ -117,7 +117,7 @@ function inst_mingw() {
 
     if quiet test_for_mingw
     then
-        echo "mingw already installed."
+        echo "mingw already installed in $_MINGW_UDIR.  skipping."
     else
         mkdir -p $_MINGW_UDIR
         if [ "$CROSS_COMPILE" != "yes" ]; then
@@ -143,7 +143,7 @@ function inst_unzip() {
     add_to_env $_UNZIP_UDIR/bin PATH
     if quiet $_UNZIP_UDIR/bin/unzip --help || quiet unzip --help
     then
-        echo "unzip already installed.  skipping."
+        echo "unzip already installed in $_UNZIP_UDIR.  skipping."
     else
         smart_wget $UNZIP_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$UNZIP_DIR"
@@ -160,7 +160,7 @@ function inst_regex() {
     add_to_env $_REGEX_UDIR/bin PATH
     if quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile
     then
-        echo "regex already installed.  skipping."
+        echo "regex already installed in $_REGEX_UDIR.  skipping."
     else
         mkdir -p $_REGEX_UDIR
         wget_unpacked $REGEX_URL $DOWNLOAD_DIR $REGEX_DIR
@@ -177,7 +177,7 @@ function inst_readline() {
     add_to_env $_READLINE_UDIR/bin PATH
     if quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile
     then
-        echo "readline already installed.  skipping."
+        echo "readline already installed in $_READLINE_UDIR.  skipping."
     else
         mkdir -p $_READLINE_UDIR
         wget_unpacked $READLINE_BIN_URL $DOWNLOAD_DIR $READLINE_DIR
@@ -193,7 +193,7 @@ function inst_active_perl() {
     set_env_or_die $_ACTIVE_PERL_WFSDIR/ActivePerl/Perl/bin/perl INTLTOOL_PERL
     if quiet $INTLTOOL_PERL --help
     then
-        echo "ActivePerl already installed.  skipping."
+        echo "ActivePerl already installed IN $_ACTIVE_PERL_UDIR.  skipping."
     else
         wget_unpacked $ACTIVE_PERL_URL $DOWNLOAD_DIR $ACTIVE_PERL_DIR
         qpushd $_ACTIVE_PERL_UDIR
@@ -212,7 +212,7 @@ function inst_autotools() {
     add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
     if quiet autoconf --help && quiet automake --help
     then
-        echo "autoconf/automake already installed.  skipping."
+        echo "autoconf/automake already installed in $_AUTOTOOLS_UDIR.  skipping."
     else
         wget_unpacked $AUTOCONF_URL $DOWNLOAD_DIR $TMP_DIR
         wget_unpacked $AUTOMAKE_URL $DOWNLOAD_DIR $TMP_DIR
@@ -261,7 +261,7 @@ function inst_gmp() {
     add_to_env ${_GMP_UDIR}/bin PATH
     if quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile
     then
-        echo "Gmp already installed. skipping."
+        echo "Gmp already installed in ${_GMP_UDIR}. skipping."
     else
         wget_unpacked $GMP_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/gmp-*
@@ -289,7 +289,7 @@ function inst_guile() {
     if quiet guile -c '(use-modules (srfi srfi-39))' &&
         quiet guile -c "(use-modules (ice-9 slib)) (require 'printf)"
     then
-        echo "guile and slib already installed.  skipping."
+        echo "guile and slib already installed in $_GUILE_UDIR.  skipping."
     else
         smart_wget $GUILE_URL $DOWNLOAD_DIR
         _GUILE_BALL=$LAST_FILE
@@ -395,7 +395,7 @@ function inst_svn() {
     add_to_env $_SVN_UDIR/bin PATH
     if quiet $_SVN_UDIR/bin/svn --version
     then
-        echo "subversion already installed.  skipping."
+        echo "subversion already installed in $_SVN_UDIR.  skipping."
     else
 		wget_unpacked $SVN_URL $DOWNLOAD_DIR $TMP_DIR
 		assert_one_dir $TMP_UDIR/svn-win32-*
@@ -421,7 +421,7 @@ function inst_openssl() {
     fi
 
     if quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile ; then
-        echo "openssl already installed.  skipping."
+        echo "openssl already installed in $_OPENSSL_UDIR.  skipping."
     else
         smart_wget $OPENSSL_URL $DOWNLOAD_DIR
         echo -n "Extracting ${LAST_FILE##*/} ... "
@@ -465,7 +465,7 @@ function inst_mingwutils() {
     add_to_env $_MINGW_UTILS_UDIR/bin PATH
     if quiet which pexports && quiet which reimp
     then
-        echo "mingw-utils already installed.  skipping."
+        echo "mingw-utils already installed in $_MINGW_UTILS_UDIR.  skipping."
     else
         wget_unpacked $MINGW_UTILS_URL $DOWNLOAD_DIR $MINGW_UTILS_DIR
         (quiet which pexports && quiet which reimp) || die "mingw-utils not installed correctly"
@@ -478,7 +478,7 @@ function inst_exetype() {
     add_to_env $_EXETYPE_UDIR/bin PATH
     if quiet which exetype
     then
-        echo "exetype already installed.  skipping."
+        echo "exetype already installed in $_EXETYPE_UDIR.  skipping."
     else
         mkdir -p $_EXETYPE_UDIR/bin
         cp $EXETYPE_SCRIPT $_EXETYPE_UDIR/bin/exetype
@@ -493,7 +493,7 @@ function inst_libxslt() {
     add_to_env $_LIBXSLT_UDIR/bin PATH
     if quiet which xsltproc
     then
-        echo "libxslt already installed.  skipping."
+        echo "libxslt already installed in $_LIBXSLT_UDIR.  skipping."
     else
         [ "$CROSS_COMPILE" = "yes" ] && die "xsltproc unavailable"
         wget_unpacked $LIBXSLT_URL $DOWNLOAD_DIR $LIBXSLT_DIR
@@ -537,7 +537,7 @@ function inst_gnome() {
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
         quiet intltoolize --version
     then
-        echo "gnome packages installed.  skipping."
+        echo "gnome packages installed in $_GNOME_UDIR.  skipping."
     else
         mkdir -p $_GNOME_UDIR
         wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -666,7 +666,7 @@ function inst_isocodes() {
     add_to_env $_ISOCODES_UDIR/share/pkgconfig PKG_CONFIG_PATH
     if [ -f ${_ISOCODES_UDIR}/share/pkgconfig/iso-codes.pc ]
     then
-        echo "isocodes already installed. skipping."
+        echo "isocodes already installed in $_ISOCODES_UDIR. skipping."
     else
         wget_unpacked $ISOCODES_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/iso-codes-*
@@ -687,7 +687,7 @@ function inst_swig() {
     add_to_env $_SWIG_UDIR PATH
     if quiet swig -version
     then
-        echo "swig already installed.  skipping."
+        echo "swig already installed in $_SWIG_UDIR.  skipping."
     else
         wget_unpacked $SWIG_URL $DOWNLOAD_DIR $SWIG_DIR
         qpushd $SWIG_DIR
@@ -709,7 +709,7 @@ function inst_pcre() {
     add_to_env $_PCRE_UDIR/bin PATH
     if quiet ${LD} $PCRE_LDFLAGS -lpcre -o $TMP_UDIR/ofile
     then
-        echo "pcre already installed.  skipping."
+        echo "pcre already installed in $_PCRE_UDIR.  skipping."
     else
         mkdir -p $_PCRE_UDIR
         wget_unpacked $PCRE_BIN_URL $DOWNLOAD_DIR $PCRE_DIR
@@ -725,7 +725,7 @@ function inst_libbonoboui() {
     add_to_env $_LIBBONOBOUI_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ]
     then
-        echo "libbonoboui already installed.  skipping."
+        echo "libbonoboui already installed in $_LIBBONOBOUI_UDIR.  skipping."
     else
         wget_unpacked $LIBBONOBOUI_SRC_URL $DOWNLOAD_DIR $TMP_DIR
         mydir=`pwd`
@@ -763,7 +763,7 @@ function inst_libgsf() {
     if quiet ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 &&
         quiet ${PKG_CONFIG} --atleast-version=${LIBGSF_VERSION} libgsf-1
     then
-        echo "libgsf already installed.  skipping."
+        echo "libgsf already installed in $_LIBGSF_UDIR.  skipping."
     else
         rm -rf ${TMP_UDIR}/libgsf-*
         wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
@@ -790,7 +790,7 @@ function inst_goffice() {
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --atleast-version=${GOFFICE_VERSION} libgoffice-0.8
     then
-        echo "goffice already installed.  skipping."
+        echo "goffice already installed in $_GOFFICE_UDIR.  skipping."
     else
         wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
         mydir=`pwd`
@@ -824,7 +824,7 @@ function inst_glade() {
     add_to_env $_GLADE_UDIR/bin PATH
     if quiet glade-3 --version
     then
-        echo "glade already installed.  skipping."
+        echo "glade already installed in $_GLADE_UDIR.  skipping."
     else
         wget_unpacked $GLADE_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/glade3-*
@@ -844,7 +844,7 @@ function inst_inno() {
     add_to_env $_INNO_UDIR PATH
     if quiet which iscc
     then
-        echo "Inno Setup Compiler already installed.  skipping."
+        echo "Inno Setup Compiler already installed in $_INNO_UDIR.  skipping."
     else
         smart_wget $INNO_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$INNO_DIR"
@@ -874,7 +874,7 @@ function inst_hh() {
     add_to_env $_HH_UDIR PATH
     if quiet test_for_hh
     then
-        echo "html help workshop already installed.  skipping."
+        echo "html help workshop already installed in $_HH_UDIR.  skipping."
     else
         smart_wget $HH_URL $DOWNLOAD_DIR
         echo "!!! When asked for an installation path, specify $HH_DIR !!!"
@@ -898,7 +898,7 @@ function inst_opensp() {
     add_to_env ${_OPENSP_UDIR}/bin PATH
     if test -f ${_OPENSP_UDIR}/bin/libosp-5.dll
     then
-        echo "OpenSP already installed. skipping."
+        echo "OpenSP already installed in $_OPENSP_UDIR. skipping."
     else
         wget_unpacked $OPENSP_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/OpenSP-*
@@ -930,7 +930,7 @@ function inst_libofx() {
     add_to_env ${_LIBOFX_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --exists libofx
     then
-        echo "Libofx already installed. skipping."
+        echo "Libofx already installed in $_LIBOFX_UDIR. skipping."
     else
         wget_unpacked $LIBOFX_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libofx-*
@@ -960,7 +960,7 @@ function inst_gnutls() {
     add_to_env "-L${_GNUTLS_UDIR}/lib" GNUTLS_LDFLAGS
     if quiet ${PKG_CONFIG} --exact-version=${GNUTLS_VERSION} gnutls
     then
-        echo "GNUTLS already installed. skipping."
+        echo "GNUTLS already installed in $_GNUTLS_UDIR. skipping."
     else
         wget_unpacked $GNUTLS_URL $DOWNLOAD_DIR $GNUTLS_DIR
         rm -f $_GNUTLS_UDIR/lib/*.la
@@ -976,7 +976,7 @@ function inst_gwenhywfar() {
     add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --exact-version=${GWENHYWFAR_VERSION} gwenhywfar
     then
-        echo "Gwenhywfar already installed. skipping."
+        echo "Gwenhywfar already installed in $_GWENHYWFAR_UDIR. skipping."
     else
         wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/gwenhywfar-*
@@ -1027,7 +1027,7 @@ function inst_ktoblzcheck() {
     add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
     if quiet ${PKG_CONFIG} --exact-version=${KTOBLZCHECK_VERSION} ktoblzcheck
     then
-        echo "Ktoblzcheck already installed. skipping."
+        echo "Ktoblzcheck already installed in $_GWENHYWFAR_UDIR. skipping."
     else
         wget_unpacked $KTOBLZCHECK_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/ktoblzcheck-*
@@ -1081,7 +1081,7 @@ function inst_aqbanking() {
     add_to_env ${_AQBANKING_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --exact-version=${AQBANKING_VERSION} aqbanking
     then
-        echo "AqBanking already installed. skipping."
+        echo "AqBanking already installed in $_AQBANKING_UDIR. skipping."
     else
         wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/aqbanking-*
@@ -1165,7 +1165,7 @@ function inst_libdbi() {
     add_to_env -L$_LIBDBI_UDIR/lib LIBDBI_LDFLAGS
     if test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll
     then
-        echo "SQLite3 already installed.  skipping."
+        echo "SQLite3 already installed in $_SQLITE3_UDIR.  skipping."
     else
         wget_unpacked $SQLITE3_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/sqlite-*
@@ -1181,7 +1181,7 @@ function inst_libdbi() {
     if test -f ${_MYSQL_LIB_UDIR}/lib/libmysql.dll -a \
 	        -f ${_MYSQL_LIB_UDIR}/lib/libmysqlclient.a
     then
-        echo "MySQL library already installed.  skipping."
+        echo "MySQL library already installed in $_MYSQL_LIB_UDIR.  skipping."
     else
         wget_unpacked $MYSQL_LIB_URL $DOWNLOAD_DIR $TMP_DIR
         mkdir -p $_MYSQL_LIB_UDIR
@@ -1197,7 +1197,7 @@ function inst_libdbi() {
     fi
     if test -f ${_PGSQL_UDIR}/lib/libpq.dll
     then
-        echo "PGSQL library already installed.  skipping."
+        echo "PGSQL library already installed in $_PGSQL_UDIR.  skipping."
     else
         wget_unpacked $PGSQL_LIB_URL $DOWNLOAD_DIR $TMP_DIR
         cp -r $TMP_UDIR/pgsql* $_PGSQL_UDIR
@@ -1206,7 +1206,7 @@ function inst_libdbi() {
     fi
     if test -f ${_LIBDBI_UDIR}/bin/libdbi-0.dll
     then
-        echo "libdbi already installed.  skipping."
+        echo "libdbi already installed in $_LIBDBI_UDIR.  skipping."
     else
         wget_unpacked $LIBDBI_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libdbi-0*
@@ -1246,7 +1246,7 @@ function inst_libdbi() {
             -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdmysql.dll -a \
             -f ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/libdbdpgsql.dll
     then
-        echo "libdbi drivers already installed.  skipping."
+        echo "libdbi drivers already installed in $_LIBDBI_DRIVERS_UDIR.  skipping."
     else
         wget_unpacked $LIBDBI_DRIVERS_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libdbi-drivers-*
@@ -1286,7 +1286,7 @@ function inst_cmake() {
     add_to_env ${_CMAKE_UDIR}/bin PATH
     if [ -f ${_CMAKE_UDIR}/bin/cmake.exe ]
     then
-        echo "cmake already installed.  skipping."
+        echo "cmake already installed in $_CMAKE_UDIR.  skipping."
     else
         wget_unpacked $CMAKE_URL $DOWNLOAD_DIR $CMAKE_DIR
 
@@ -1337,7 +1337,7 @@ function inst_webkit() {
     add_to_env -I${_WEBKIT_UDIR}/include/webkit-1.0 WEBKIT_CFLAGS
     if quiet ${LD} ${WEBKIT_LIBS} -o $TMP_UDIR/ofile
     then
-        echo "webkit already installed.  skipping."
+        echo "webkit already installed in $_WEBKIT_UDIR.  skipping."
     else
         wget_unpacked $WEBKIT_URL $DOWNLOAD_DIR $WEBKIT_DIR
         quiet ${LD} ${WEBKIT_LIBS} -o $TMP_UDIR/ofile || die "webkit not installed correctly"
