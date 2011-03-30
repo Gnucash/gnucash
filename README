@@ -241,8 +241,8 @@ you'll need for the systems we know about:
   Debian/GNU/Linux: see README.dependencies and 
     current:
       libgnome-dev
-      libgtkhtml-dev
-      guile1.4
+      libwebkit-dev
+      guile1.8
       libguile9-dev
       libguile9-slib
 
@@ -289,7 +289,7 @@ DESTDIR can be helpful when trying to build install images and
 packages.
 
 NOTE: If you have installed different parts of Gnome in different
-places (for instance, if you've installed gtkhtml in /usr/local) you
+places (for instance, if you've installed webkit in /usr/local) you
 will need to set the environment variables GNOME_PATH and
 GNOME_LIBCONFIG_PATH.  See the manpage for gnome-config for more
 details.

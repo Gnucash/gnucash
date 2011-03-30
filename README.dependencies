@@ -47,12 +47,12 @@ GnuCash Library Dependency Policy
 
 GnuCash desires to only depend on library versions and packages that are
 practically available.  Specifically, we choose to depend only on versions
-that have been in the major distributions for 6 months. This is motivated in
+that have been in the major distributions for 6 months. (This is motivated in
 part by the 1.6 release, which required a large set of relatively-recent
 dependencies.  Specifically, as most user's (distributions) did not have the
 required versions packaged, it was exceedingly painful for end users to
 upgrade to the anticipated release, leading to a reputation that gnucash
-still has.
+still has.)
 
 This document serves to keep track of the major distributions, the date of
 their major release[s], and the relevant library versions as part of that
@@ -75,11 +75,7 @@ libgsf1
 libxml2
 pango
 swig
-
-  alternatives
-  ------------
-[lib]gtkhtml3: old html renderer
-webkit: new html renderer
+webkit
 
   optional
   --------
@@ -101,7 +97,20 @@ gtk
 cairo
 goffice, libgsf
 gtkprint
-gtkhtml
+webkit
+
+
+
+
+
+
+---------------------------
+
+The rest of the file collected version listings for rather old
+versions of major distributions, as defined by
+http://distrowatch.com/dwres.php?resource=major:
+
+
 
 libgoffice/libgsf details
 -------------------------
