@@ -555,7 +555,7 @@ gnc_account_class_init (AccountClass *klass)
                           "a short, 5 to 30 character long string "
                           "that is displayed by the GUI as the "
                           "account mnemonic.  Account names may be "
-                          "repeasted. but no two accounts that share "
+                          "repeated. but no two accounts that share "
                           "a parent may have the same name.",
                           NULL,
                           G_PARAM_READWRITE));
@@ -612,7 +612,7 @@ gnc_account_class_init (AccountClass *klass)
      g_param_spec_string ("notes",
                           "Account Notes",
                           "The account notes is an arbitrary provided "
-                          "for the user to attach any orther text that "
+                          "for the user to attach any other text that "
                           "they would like to associate with the account.",
                           NULL,
                           G_PARAM_READWRITE));
@@ -742,7 +742,7 @@ gnc_account_class_init (AccountClass *klass)
                         "list of splits for an account, but rather return "
                         "a partial list.  In such a case, the backend "
                         "will typically return all of the splits after "
-                        "some certain date, and the 'starting recontiled "
+                        "some certain date, and the 'starting reconciled "
                         "balance' will represent the summation of the "
                         "splits up to that date.",
                         GNC_TYPE_NUMERIC,
@@ -2077,7 +2077,7 @@ xaccAccountOrder (const Account *aa, const Account *ab)
     if (result)
         return result;
 
-    /* if acccount-type-order array not initialized, initialize it */
+    /* if account-type-order array not initialized, initialize it */
     /* this will happen at most once during program invocation */
     if (-1 == revorder[0])
     {
@@ -2442,7 +2442,7 @@ gnc_account_append_child (Account *new_parent, Account *child)
     qof_instance_set_dirty(&new_parent->inst);
     qof_instance_set_dirty(&child->inst);
 
-    /* Send events data. Warning: The call to commit_edit is also gpoing
+    /* Send events data. Warning: The call to commit_edit is also going
      * to send a MODIFY event. If the gtktreemodelfilter code gets the
      * MODIFY before it gets the ADD, it gets very confused and thinks
      * that two nodes have been added. */
@@ -4487,13 +4487,13 @@ xaccAccountFindTransByDesc(const Account *acc, const char *description)
 {
     Transaction *trans;
 
-    /* Get the transation matching the description. */
+    /* Get the translation matching the description. */
     finder_help_function(acc, description, NULL, &trans);
     return trans;
 }
 
 /* ================================================================ */
-/* Concatenation, Mergeing functions                                */
+/* Concatenation, Merging functions                                */
 
 void
 gnc_account_join_children (Account *to_parent, Account *from_parent)
