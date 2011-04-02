@@ -93,5 +93,6 @@
 #include "qofquerycore.h"
 #include "qofsession.h"
 #include "qofchoice.h"
+#include "qofreference.h"
 
 #endif /* QOF_H_ */

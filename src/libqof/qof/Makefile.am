@@ -62,6 +62,7 @@ qofinclude_HEADERS = \
    qoflog.h          \
    qofobject.h       \
    qofquerycore.h    \
+   qofreference.h    \
    qofsession.h      \
    qofutil.h         \
    qof-gobject.h
@@ -75,7 +76,6 @@ noinst_HEADERS = \
    qofevent-p.h \
    qofobject-p.h  \
    qofquerycore-p.h \
-   qofreference-p.h    \
    qofsession-p.h
 
 EXTRA_DIST = \
