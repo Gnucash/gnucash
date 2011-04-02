@@ -13,23 +13,23 @@ SET (libgnc_qof_SOURCES
    qof/gnc-date.c
    qof/gnc-numeric.c
    qof/guid.c
-   qof/kvp_frame.c
    qof/kvp-util.c
+   qof/kvp_frame.c
    qof/md5.c
    qof/qofbackend.c
-   qof/qofclass.c
+   qof/qofbook.c
    qof/qofchoice.c
+   qof/qofclass.c
+   qof/qofevent.c
    qof/qofid.c
    qof/qofinstance.c
-   qof/qofquery.c
-   qof/qofbook.c
-   qof/qofevent.c
    qof/qoflog.c
    qof/qofobject.c
+   qof/qofquery.c
    qof/qofquerycore.c
    qof/qofreference.c
-   qof/qofutil.c
    qof/qofsession.c
+   qof/qofutil.c
 )
 IF (WIN32)
   SET (libgnc_qof_SOURCES ${libgnc_qof_SOURCES}
@@ -44,28 +44,28 @@ ENDIF (WIN32)
 SET_SOURCE_FILES_PROPERTIES (${libgnc_qof_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 SET (libgnc_qof_HEADERS
-   qof/gnc-date.h
    qof/gnc-date-p.h
+   qof/gnc-date.h
    qof/gnc-numeric.h
    qof/guid.h
-   qof/kvp_frame.h
-   qof/kvp-util.h
    qof/kvp-util-p.h
+   qof/kvp-util.h
+   qof/kvp_frame.h
    qof/qof.h
-   qof/qofbackend.h
    qof/qofbackend-p.h
-   qof/qofclass.h
-   qof/qofchoice.h
-   qof/qofevent.h
-   qof/qofid.h
-   qof/qofid-p.h
-   qof/qofinstance-p.h
-   qof/qofinstance.h
-   qof/qofquery.h
+   qof/qofbackend.h
    qof/qofbook.h
    qof/qofbookslots.h
+   qof/qofchoice.h
+   qof/qofclass.h
+   qof/qofevent.h
+   qof/qofid-p.h
+   qof/qofid.h
+   qof/qofinstance-p.h
+   qof/qofinstance.h
    qof/qoflog.h
    qof/qofobject.h
+   qof/qofquery.h
    qof/qofquerycore.h
    qof/qofreference.h
    qof/qofsession.h

@@ -17,49 +17,49 @@ libgnc_qof_la_SOURCES =  \
    gnc-date.c        \
    gnc-numeric.c     \
    guid.c            \
-   kvp_frame.c       \
    kvp-util.c        \
+   kvp_frame.c       \
    md5.c             \
    qofbackend.c      \
-   qofclass.c        \
+   qofbook.c         \
    qofchoice.c       \
+   qofclass.c        \
+   qofevent.c        \
    qofid.c           \
    qofinstance.c     \
-   qofquery.c        \
-   qofbook.c         \
-   qofevent.c        \
    qoflog.c          \
    qofobject.c       \
+   qofquery.c        \
    qofquerycore.c    \
    qofreference.c    \
-   qofutil.c         \
-   qofsession.c
+   qofsession.c      \
+   qofutil.c
 
 qofincludedir = ${pkgincludedir}
 
 qofinclude_HEADERS = \
-   gnc-date.h        \
    gnc-date-p.h      \
+   gnc-date.h        \
    gnc-numeric.h     \
    guid.h            \
-   kvp_frame.h       \
-   kvp-util.h        \
    kvp-util-p.h      \
+   kvp-util.h        \
+   kvp_frame.h       \
    qof.h             \
-   qofbackend.h      \
    qofbackend-p.h    \
-   qofclass.h        \
-   qofchoice.h       \
-   qofevent.h        \
-   qofid.h           \
-   qofid-p.h         \
-   qofinstance-p.h   \
-   qofinstance.h     \
-   qofquery.h        \
+   qofbackend.h      \
    qofbook.h         \
    qofbookslots.h    \
+   qofchoice.h       \
+   qofclass.h        \
+   qofevent.h        \
+   qofid-p.h         \
+   qofid.h           \
+   qofinstance-p.h   \
+   qofinstance.h     \
    qoflog.h          \
    qofobject.h       \
+   qofquery.h        \
    qofquerycore.h    \
    qofreference.h    \
    qofsession.h      \
@@ -68,12 +68,12 @@ qofinclude_HEADERS = \
 
 noinst_HEADERS = \
    md5.h  \
-   qofclass-p.h  \
-   qofmath128-p.h  \
-   qofquery-p.h  \
    qofbook-p.h  \
+   qofclass-p.h  \
    qofevent-p.h \
+   qofmath128-p.h  \
    qofobject-p.h  \
+   qofquery-p.h  \
    qofquerycore-p.h \
    qofsession-p.h
 
