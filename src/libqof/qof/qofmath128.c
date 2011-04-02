@@ -22,7 +22,7 @@
  *******************************************************************/
 
 #include "config.h"
-#include "qofmath128.h"
+#include "qofmath128-p.h"
 
 #include <glib.h>
 

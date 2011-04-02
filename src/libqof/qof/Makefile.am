@@ -71,7 +71,7 @@ qofinclude_HEADERS = \
 noinst_HEADERS = \
    md5.h  \
    qofclass-p.h  \
-   qofmath128.h  \
+   qofmath128-p.h  \
    qofquery-p.h  \
    qofbook-p.h  \
    qofevent-p.h \
