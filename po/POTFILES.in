@@ -422,7 +422,6 @@ src/libqof/qof/kvp-util.c
 src/libqof/qof/md5.c
 src/libqof/qof/qofbackend.c
 src/libqof/qof/qofbook.c
-src/libqof/qof/qofbookmerge.c
 src/libqof/qof/qofchoice.c
 src/libqof/qof/qofclass.c
 src/libqof/qof/qofevent.c

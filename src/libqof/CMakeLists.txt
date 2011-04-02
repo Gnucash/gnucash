@@ -30,7 +30,6 @@ SET (libgnc_qof_SOURCES
    qof/qofreference.c
    qof/qofutil.c
    qof/qofsession.c
-   qof/qofbookmerge.c
 )
 IF (WIN32)
   SET (libgnc_qof_SOURCES ${libgnc_qof_SOURCES}
@@ -72,7 +71,6 @@ SET (libgnc_qof_HEADERS
    qof/qofreference-p.h
    qof/qofsession.h
    qof/qofutil.h
-   qof/qofbookmerge.h
    qof/qof-gobject.h
 )
 

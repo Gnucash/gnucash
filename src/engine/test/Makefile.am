@@ -43,8 +43,7 @@ TESTS = \
   test-transaction-reversal \
   test-transaction-voiding \
   test-recurrence \
-  test-scm-query \
-  test-book-merge
+  test-scm-query
 
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -71,7 +70,6 @@ check_PROGRAMS = \
   test-period \
   test-lots \
   test-numeric \
-  test-book-merge \
   test-object \
   test-query \
   test-querynew \
