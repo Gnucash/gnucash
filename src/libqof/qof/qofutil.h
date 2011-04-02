@@ -230,22 +230,6 @@ gboolean gnc_strisnum(const gchar *s);
 #define stpcpy g_stpcpy
 #endif
 
-/** Return NULL if the field is whitespace (blank, tab, formfeed etc.)
- *  Else return pointer to first non-whitespace character.
- */
-const gchar * qof_util_whitespace_filter (const gchar * val);
-
-/** Return integer 1 if the string starts with 't' or 'T' or
- *  contains the word 'true' or 'TRUE'; if string is a number,
- *  return that number. (Leading whitespace is ignored). */
-gint qof_util_bool_to_int (const gchar * val);
-
-/** \brief Converts a parameter to a printable string.
-
-The returned string must be freed by the caller.
-*/
-gchar* qof_util_param_as_string(QofInstance *ent, QofParam *param);
-
 /** The QOF String Cache:
  *
  * Many strings used throughout QOF and QOF applications are likely to

@@ -233,7 +233,7 @@ gnc_strisnum(const gchar *s)
  * Else return pointer to first non-whitespace character. */
 /* =================================================================== */
 
-const gchar *
+static const gchar *
 qof_util_whitespace_filter (const gchar * val)
 {
     size_t len;
@@ -242,27 +242,6 @@ qof_util_whitespace_filter (const gchar * val)
     len = strspn (val, "\a\b\t\n\v\f\r ");
     if (0 == val[len]) return NULL;
     return val + len;
-}
-
-/* =================================================================== */
-/* Return integer 1 if the string starts with 't' or 'T' or contains the
- * word 'true' or 'TRUE'; if string is a number, return that number. */
-/* =================================================================== */
-
-gint
-qof_util_bool_to_int (const gchar * val)
-{
-    const gchar * p = qof_util_whitespace_filter (val);
-    if (!p) return 0;
-    if ('t' == p[0]) return 1;
-    if ('T' == p[0]) return 1;
-    if ('y' == p[0]) return 1;
-    if ('Y' == p[0]) return 1;
-    if (strstr (p, "true")) return 1;
-    if (strstr (p, "TRUE")) return 1;
-    if (strstr (p, "yes")) return 1;
-    if (strstr (p, "YES")) return 1;
-    return atoi (val);
 }
 
 /* =================================================================== */
@@ -339,182 +318,6 @@ qof_util_string_cache_insert(gconstpointer key)
     if (key)
         return g_cache_insert(qof_util_get_string_cache(), (gpointer)key);
     return NULL;
-}
-
-gchar*
-qof_util_param_as_string(QofInstance *ent, QofParam *param)
-{
-    gchar       *param_string, param_date[MAX_DATE_LENGTH];
-    gchar       param_sa[GUID_ENCODING_LENGTH + 1];
-    gboolean    known_type;
-    QofType     paramType;
-    const GncGUID *param_guid;
-    time_t      param_t;
-    gnc_numeric param_numeric,  (*numeric_getter) (QofInstance*, QofParam*);
-    Timespec    param_ts,       (*date_getter)    (QofInstance*, QofParam*);
-    double      param_double,   (*double_getter)  (QofInstance*, QofParam*);
-    gboolean    param_boolean,  (*boolean_getter) (QofInstance*, QofParam*);
-    gint32      param_i32,      (*int32_getter)   (QofInstance*, QofParam*);
-    gint64      param_i64,      (*int64_getter)   (QofInstance*, QofParam*);
-    gchar       param_char,     (*char_getter)    (QofInstance*, QofParam*);
-
-    param_string = NULL;
-    known_type = FALSE;
-    paramType = param->param_type;
-    if (safe_strcmp(paramType, QOF_TYPE_STRING) == 0)
-    {
-        param_string = g_strdup(param->param_getfcn(ent, param));
-        if (param_string == NULL)
-        {
-            param_string = "";
-        }
-        known_type = TRUE;
-        return param_string;
-    }
-    if (safe_strcmp(paramType, QOF_TYPE_DATE) == 0)
-    {
-        date_getter = (Timespec (*)(QofInstance*, QofParam*))param->param_getfcn;
-        param_ts = date_getter(ent, param);
-        param_t = timespecToTime_t(param_ts);
-        qof_strftime(param_date, MAX_DATE_LENGTH,
-                     QOF_UTC_DATE_FORMAT, gmtime(&param_t));
-        param_string = g_strdup(param_date);
-        known_type = TRUE;
-        return param_string;
-    }
-    if ((safe_strcmp(paramType, QOF_TYPE_NUMERIC) == 0)  ||
-            (safe_strcmp(paramType, QOF_TYPE_DEBCRED) == 0))
-    {
-        numeric_getter = (gnc_numeric (*)(QofInstance*, QofParam*)) param->param_getfcn;
-        param_numeric = numeric_getter(ent, param);
-        param_string = g_strdup(gnc_numeric_to_string(param_numeric));
-        known_type = TRUE;
-        return param_string;
-    }
-    if (safe_strcmp(paramType, QOF_TYPE_GUID) == 0)
-    {
-        param_guid = param->param_getfcn(ent, param);
-        guid_to_string_buff(param_guid, param_sa);
-        param_string = g_strdup(param_sa);
-        known_type = TRUE;
-        return param_string;
-    }
-    if (safe_strcmp(paramType, QOF_TYPE_INT32) == 0)
-    {
-        int32_getter = (gint32 (*)(QofInstance*, QofParam*)) param->param_getfcn;
-        param_i32 = int32_getter(ent, param);
-        param_string = g_strdup_printf("%d", param_i32);
-        known_type = TRUE;
-        return param_string;
-    }
-    if (safe_strcmp(paramType, QOF_TYPE_INT64) == 0)
-    {
-        int64_getter = (gint64 (*)(QofInstance*, QofParam*)) param->param_getfcn;
-        param_i64 = int64_getter(ent, param);
-        param_string = g_strdup_printf("%"G_GINT64_FORMAT, param_i64);
-        known_type = TRUE;
-        return param_string;
-    }
-    if (safe_strcmp(paramType, QOF_TYPE_DOUBLE) == 0)
-    {
-        double_getter = (double (*)(QofInstance*, QofParam*)) param->param_getfcn;
-        param_double = double_getter(ent, param);
-        param_string = g_strdup_printf("%f", param_double);
-        known_type = TRUE;
-        return param_string;
-    }
-    if (safe_strcmp(paramType, QOF_TYPE_BOOLEAN) == 0)
-    {
-        boolean_getter = (gboolean (*)(QofInstance*, QofParam*)) param->param_getfcn;
-        param_boolean = boolean_getter(ent, param);
-        if (param_boolean == TRUE)
-        {
-            param_string = g_strdup("true");
-        }
-        else
-        {
-            param_string = g_strdup("false");
-        }
-        known_type = TRUE;
-        return param_string;
-    }
-    /* "kvp" contains repeating values, cannot be a single string for the frame. */
-    if (safe_strcmp(paramType, QOF_TYPE_KVP) == 0)
-    {
-        KvpFrame *frame = NULL;
-        frame = param->param_getfcn(ent, param);
-        known_type = TRUE;
-        if (!kvp_frame_is_empty(frame))
-        {
-            GHashTable *hash = kvp_frame_get_hash(frame);
-            param_string = g_strdup_printf("%s(%d)", QOF_TYPE_KVP,
-                                           g_hash_table_size(hash));
-        }
-        return param_string;
-    }
-    if (safe_strcmp(paramType, QOF_TYPE_CHAR) == 0)
-    {
-        char_getter = (gchar (*)(QofInstance*, QofParam*)) param->param_getfcn;
-        param_char = char_getter(ent, param);
-        known_type = TRUE;
-        return g_strdup_printf("%c", param_char);
-    }
-    /* "collect" contains repeating values, cannot be a single string. */
-    if (safe_strcmp(paramType, QOF_TYPE_COLLECT) == 0)
-    {
-        QofCollection *col = NULL;
-        col = param->param_getfcn(ent, param);
-        known_type = TRUE;
-        return g_strdup_printf("%s(%d)",
-                               qof_collection_get_type(col), qof_collection_count(col));
-    }
-    if (safe_strcmp(paramType, QOF_TYPE_CHOICE) == 0)
-    {
-        QofInstance *child = NULL;
-        child = param->param_getfcn(ent, param);
-        if (!child)
-        {
-            return param_string;
-        }
-        known_type = TRUE;
-        return g_strdup(qof_object_printable(child->e_type, child));
-    }
-    if (safe_strcmp(paramType, QOF_PARAM_BOOK) == 0)
-    {
-        QofBackend *be;
-        QofBook *book;
-        book = param->param_getfcn(ent, param);
-        PINFO (" book param %p", book);
-        be = qof_book_get_backend(book);
-        known_type = TRUE;
-        PINFO (" backend=%p", be);
-        if (!be)
-        {
-            return QOF_PARAM_BOOK;
-        }
-        param_string = g_strdup(be->fullpath);
-        PINFO (" fullpath=%s", param_string);
-        if (param_string)
-        {
-            return param_string;
-        }
-        param_guid = qof_book_get_guid(book);
-        guid_to_string_buff(param_guid, param_sa);
-        PINFO (" book GncGUID=%s", param_sa);
-        param_string = g_strdup(param_sa);
-        return param_string;
-    }
-    if (!known_type)
-    {
-        QofInstance *child = NULL;
-        child = param->param_getfcn(ent, param);
-        if (!child)
-        {
-            return param_string;
-        }
-        return g_strdup(qof_object_printable(child->e_type, child));
-    }
-    return g_strdup("");
 }
 
 void
