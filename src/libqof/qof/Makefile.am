@@ -65,7 +65,6 @@ qofinclude_HEADERS = \
    qofquerycore.h    \
    qofreference.h    \
    qofsession.h      \
-   qofsql.h          \
    qofutil.h         \
    qofbookmerge.h    \
    qof-gobject.h
@@ -75,8 +74,6 @@ noinst_HEADERS = \
    qofclass-p.h  \
    qofmath128.h  \
    qofquery-p.h  \
-   qofquery-deserial.h \
-   qofquery-serialize.h \
    qofbook-p.h  \
    qofevent-p.h \
    qofobject-p.h  \

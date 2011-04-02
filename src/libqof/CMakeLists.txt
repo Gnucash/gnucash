@@ -71,7 +71,6 @@ SET (libgnc_qof_HEADERS
    qof/qofquerycore.h
    qof/qofreference.h
    qof/qofsession.h
-   qof/qofsql.h
    qof/qofutil.h
    qof/qofbookmerge.h
    qof/qof-gobject.h

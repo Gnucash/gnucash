@@ -92,7 +92,6 @@
 #include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofsession.h"
-#include "qofsql.h"
 #include "qofchoice.h"
 #include "qofbookmerge.h"
 #include "qofreference.h"
