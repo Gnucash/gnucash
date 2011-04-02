@@ -236,58 +236,12 @@ KvpFrame *    kvp_frame_set_value_nc(KvpFrame * frame,
 KvpValue * kvp_frame_replace_value_nc (KvpFrame * frame, const gchar * slot,
                                        KvpValue * new_value);
 /** @} */
-/** @name KvpFrame URL handling
- @{
-*/
-/** The kvp_frame_add_url_encoding() routine will parse the
- *  value string, assuming it to be URL-encoded in the standard way,
- *  turning it into a set of key-value pairs, and adding those to the
- *  indicated frame.  URL-encoded strings are the things that are
- *  returned by web browsers when a form is filled out.  For example,
- *  'start-date=June&end-date=November' consists of two keys,
- *  'start-date' and 'end-date', which have the values 'June' and
- *  'November', respectively.  This routine also handles % encoding.
- *
- *  This routine treats all values as strings; it does *not* attempt
- *  to perform any type-conversion.
- * */
-void     kvp_frame_add_url_encoding (KvpFrame *frame, const gchar *enc);
-/** @} */
 
 /** @name KvpFrame Glist Bag Storing
  @{
 */
 
-/** The kvp_frame_add_gint64() routine will add the value of the
- *     gint64 to the glist bag of values at the indicated path.
- *     If not all frame components of the path exist, they are
- *     created.  If the value previously stored at this path was
- *     not a glist bag, then a bag will be formed there, the old
- *     value placed in the bag, and the new value added to the bag.
- *
- *     Similarly, the add_double, add_numeric, and add_timespec
- *     routines perform the same function, for each of the respective
- *     types.
- */
-void kvp_frame_add_gint64(KvpFrame * frame, const gchar * path, gint64 ival);
-void kvp_frame_add_double(KvpFrame * frame, const gchar * path, double dval);
-/** \deprecated
-
-Use kvp_frame_add_numeric instead of kvp_frame_add_gnc_numeric
-*/
-#define kvp_frame_add_gnc_numeric kvp_frame_add_numeric
-
-void kvp_frame_add_numeric(KvpFrame * frame, const gchar * path, gnc_numeric nval);
-void kvp_frame_add_timespec(KvpFrame * frame, const gchar * path, Timespec ts);
-void kvp_frame_add_gdate(KvpFrame * frame, const gchar * path, GDate date);
-
-/** \deprecated
-
-Use kvp_frame_add_string instead of kvp_frame_add_str
-*/
-#define kvp_frame_add_str kvp_frame_add_string
-
-/** \brief Copy of the string to the glist bag at the indicated path.
+/** \brief Store the given kvp_frame to the glist bag at the indicated path (non-copying)
 
  *    If not all frame components
  *    of the path exist, they are created.  If there was another
@@ -295,32 +249,9 @@ Use kvp_frame_add_string instead of kvp_frame_add_str
  *    to a bag, and the old value, along with the new value, is added
  *    to the bag.
  *
- *    Similarly, the add_guid and add_frame will make copies and
- *    add those.
- *
- * The kvp_frame_add_frame_nc() routine works as above, but does
- *    *NOT* copy the frame.
+ * This method does *NOT* copy the frame.
  */
-void kvp_frame_add_string(KvpFrame * frame, const gchar * path, const gchar* str);
-void kvp_frame_add_guid(KvpFrame * frame, const gchar * path, const GncGUID *guid);
-
-void kvp_frame_add_frame(KvpFrame *frame, const gchar *path, KvpFrame *chld);
 void kvp_frame_add_frame_nc(KvpFrame *frame, const gchar *path, KvpFrame *chld);
-
-/* The kvp_frame_add_value() routine will  add a copy of the value
- *    to the glist bag at the indicated path. If not all frame components
- *    of the path exist, they are created.  If there was another
- *    item previously stored at that path, then the path is converted
- *    to a bag, and the old value, along with the new value, is added
- *    to the bag.  This routine returns the pointer to the last frame
- *    (the actual frame to which the value was added), or NULL if there
- *    was an error of any sort (typically, a parse error in the path).
- *
- *    The *_nc() routine is analogous, except that it doesn't copy the
- *    value.
- */
-KvpFrame * kvp_frame_add_value(KvpFrame * frame, const gchar * path, KvpValue *value);
-KvpFrame * kvp_frame_add_value_nc(KvpFrame * frame, const gchar * path, KvpValue *value);
 
 
 /** @} */
@@ -443,8 +374,8 @@ You probably shouldn't be using these low-level routines
  *    Passing in a NULL new_value has the effect of deleting that
  *    slot.
  */
-KvpValue * kvp_frame_replace_slot_nc (KvpFrame * frame, const gchar * slot,
-                                      KvpValue * new_value);
+/* KvpValue * kvp_frame_replace_slot_nc (KvpFrame * frame, const gchar * slot, */
+/*                                       KvpValue * new_value); */
 
 
 /** The kvp_frame_set_slot() routine copies the value into the frame,

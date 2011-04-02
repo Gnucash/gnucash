@@ -168,7 +168,7 @@ kvp_frame_copy(const KvpFrame * frame)
  * Passing in a null value into this routine has the effect of
  * removing the key from the KVP tree.
  */
-KvpValue *
+static KvpValue *
 kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
                            KvpValue * new_value)
 {
@@ -524,7 +524,7 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
 
 /* ============================================================ */
 
-KvpFrame *
+static KvpFrame *
 kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value)
 {
     char *key = NULL;
@@ -566,88 +566,6 @@ kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value)
     frame = kvp_frame_set_value_nc (frame, path, value);
     LEAVE ("new frame=%s", kvp_frame_to_string(frame));
     return frame;
-}
-
-KvpFrame *
-kvp_frame_add_value(KvpFrame * frame, const char * path, KvpValue *value)
-{
-    value = kvp_value_copy (value);
-    frame = kvp_frame_add_value_nc (frame, path, value);
-    if (!frame) kvp_value_delete (value);
-    return frame;
-}
-
-void
-kvp_frame_add_gint64(KvpFrame * frame, const char * path, gint64 ival)
-{
-    KvpValue *value;
-    value = kvp_value_new_gint64 (ival);
-    frame = kvp_frame_add_value_nc (frame, path, value);
-    if (!frame) kvp_value_delete (value);
-}
-
-void
-kvp_frame_add_double(KvpFrame * frame, const char * path, double dval)
-{
-    KvpValue *value;
-    value = kvp_value_new_double (dval);
-    frame = kvp_frame_add_value_nc (frame, path, value);
-    if (!frame) kvp_value_delete (value);
-}
-
-void
-kvp_frame_add_numeric(KvpFrame * frame, const char * path, gnc_numeric nval)
-{
-    KvpValue *value;
-    value = kvp_value_new_gnc_numeric (nval);
-    frame = kvp_frame_add_value_nc (frame, path, value);
-    if (!frame) kvp_value_delete (value);
-}
-
-void
-kvp_frame_add_gdate(KvpFrame * frame, const char * path, GDate nval)
-{
-    KvpValue *value;
-    value = kvp_value_new_gdate (nval);
-    frame = kvp_frame_add_value_nc (frame, path, value);
-    if (!frame) kvp_value_delete (value);
-}
-
-
-void
-kvp_frame_add_string(KvpFrame * frame, const char * path, const char* str)
-{
-    KvpValue *value;
-    value = kvp_value_new_string (str);
-    frame = kvp_frame_add_value_nc (frame, path, value);
-    if (!frame) kvp_value_delete (value);
-}
-
-void
-kvp_frame_add_guid(KvpFrame * frame, const char * path, const GncGUID *guid)
-{
-    KvpValue *value;
-    value = kvp_value_new_guid (guid);
-    frame = kvp_frame_add_value_nc (frame, path, value);
-    if (!frame) kvp_value_delete (value);
-}
-
-void
-kvp_frame_add_timespec(KvpFrame * frame, const char * path, Timespec ts)
-{
-    KvpValue *value;
-    value = kvp_value_new_timespec (ts);
-    frame = kvp_frame_add_value_nc (frame, path, value);
-    if (!frame) kvp_value_delete (value);
-}
-
-void
-kvp_frame_add_frame(KvpFrame * frame, const char * path, KvpFrame *fr)
-{
-    KvpValue *value;
-    value = kvp_value_new_frame (fr);
-    frame = kvp_frame_add_value_nc (frame, path, value);
-    if (!frame) kvp_value_delete (value);
 }
 
 void
@@ -846,37 +764,6 @@ decode (char *enc)
         }
         while (*p);
     }
-}
-
-void
-kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc)
-{
-    char *buff, *p;
-    if (!frame || !enc) return;
-
-    /* Loop over all key-value pairs in the encoded string */
-    buff = g_strdup (enc);
-    p = buff;
-    while (*p)
-    {
-        char *n, *v;
-        n = strchr (p, '&');  /* n = next key-value */
-        if (n) *n = 0x0;
-
-        v = strchr (p, '=');  /* v =  pointer to value */
-        if (!v) break;
-        *v = 0x0;
-        v ++;
-
-        decode (p);
-        decode (v);
-        kvp_frame_set_slot_nc (frame, p, kvp_value_new_string(v));
-
-        if (!n) break; /* no next key, we are done */
-        p = ++n;
-    }
-
-    g_free(buff);
 }
 
 /* ============================================================ */
