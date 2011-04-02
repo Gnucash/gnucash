@@ -51,7 +51,6 @@ qofinclude_HEADERS = \
    qofclass.h        \
    qofchoice.h       \
    qofevent.h        \
-   qofgobj.h         \
    qofid.h           \
    qofid-p.h         \
    qofinstance-p.h   \

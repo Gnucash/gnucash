@@ -57,7 +57,6 @@ SET (libgnc_qof_HEADERS
    qof/qofclass.h
    qof/qofchoice.h
    qof/qofevent.h
-   qof/qofgobj.h
    qof/qofid.h
    qof/qofid-p.h
    qof/qofinstance-p.h
