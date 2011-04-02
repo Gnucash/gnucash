@@ -169,7 +169,8 @@ void qof_log_set_default(QofLogLevel log_level);
 #define PRETTY_FUNC_NAME qof_log_prettify(G_STRFUNC)
 
 #ifdef _MSC_VER
-/* Microsoft Visual Studio */
+/* Microsoft Visual Studio: MSVC compiler has a different syntax for
+ * macros with variadic argument list. */
 
 /** Log a fatal error */
 #define FATAL(format, ...) do { \
