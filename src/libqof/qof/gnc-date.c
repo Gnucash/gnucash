@@ -94,6 +94,8 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 /********************************************************************\
 \********************************************************************/
 
+static time_t xaccDMYToSec (gint day, gint month, gint year);
+
 const char*
 gnc_date_dateformat_to_string(QofDateFormat format)
 {
@@ -1009,7 +1011,7 @@ qof_formatted_time_to_utf8(const gchar *locale_string)
 }
 #endif /* G_OS_WIN32 */
 
-gchar *
+static gchar *
 qof_format_time(const gchar *format, const struct tm *tm)
 {
     gchar *locale_format, *tmpbuf, *retval;
@@ -1115,7 +1117,7 @@ param thyme The time in seconds to convert.
 return A pointer to the generated string.
 The caller owns this buffer and must free it when done.
 */
-char *
+static char *
 xaccDateUtilGetStamp (time_t thyme)
 {
     struct tm *stm;
@@ -1423,7 +1425,7 @@ gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
 /* hack alert -- this routine returns incorrect values for
  * dates before 1970 */
 
-time_t
+static time_t
 xaccDMYToSec (int day, int month, int year)
 {
     struct tm stm;

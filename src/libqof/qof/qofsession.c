@@ -341,7 +341,14 @@ qof_book_set_partial(QofBook *book)
     }
 }
 
-void
+/** \brief Adds a new reference to the partial book data hash.
+
+Retrieves any existing reference list and appends the new reference.
+
+If the book is not already marked as partial, it will be marked as
+partial.
+*/
+static void
 qof_session_update_reference_list(QofSession *session, QofInstanceReference *reference)
 {
     QofBook  *book;

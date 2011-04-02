@@ -273,7 +273,7 @@ gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
  * routine might return incorrect values for dates before 1970.  */
 void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
 
-/** \warning hack alert XXX FIXME -- these date routines return incorrect
+/* \warning hack alert XXX FIXME -- these date routines return incorrect
  * values for dates before 1970.  Most of them are good only up
  * till 2038.  This needs fixing ...
  *
@@ -281,7 +281,7 @@ void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
  * the user wanted the time at noon, localtime.  The returned
  * time_t should be seconds (at GMT) of the local noon-time.
 */
-time_t xaccDMYToSec (gint day, gint month, gint year);
+/* time_t xaccDMYToSec (gint day, gint month, gint year); */
 
 /** The gnc_timezone function returns the number of seconds *west*
  * of UTC represented by the tm argument, adjusted for daylight
@@ -366,7 +366,7 @@ gchar dateSeparator(void);
  * itself, instead of depending on the routines here.
  */
 
-/** qof_format_time takes a format specification in UTF-8 and a broken-down time,
+/* qof_format_time takes a format specification in UTF-8 and a broken-down time,
  *  tries to call strftime with a sufficiently large buffer and, if successful,
  *  return a newly allocated string in UTF-8 for the printing result.
  *
@@ -376,7 +376,7 @@ gchar dateSeparator(void);
  *
  *  @return A newly allocated string on success, or NULL otherwise.
  */
-gchar *qof_format_time(const gchar *format, const struct tm *tm);
+/* gchar *qof_format_time(const gchar *format, const struct tm *tm); */
 
 /** qof_strftime calls qof_format_time to print a given time and afterwards tries
  *  to put the result into a buffer of fixed size.
@@ -443,12 +443,12 @@ size_t qof_print_time_buff (char * buff, size_t len, time_t secs);
 size_t qof_print_date_time_buff (char * buff, size_t len, time_t secs);
 
 /* ------------------------------------------------------------------ */
-/** The xaccDateUtilGetStamp() routine will take the given time in
+/* The xaccDateUtilGetStamp() routine will take the given time in
  *  seconds and return a buffer containing a textual for the date.
  *  @param thyme The time in seconds to convert.
  *  @return A pointer to the generated string.
  *  @note The caller owns this buffer and must free it when done. */
-char * xaccDateUtilGetStamp (time_t thyme);
+/* char * xaccDateUtilGetStamp (time_t thyme); */
 
 /** qof_scan_date
  *    Convert a string into  day / month / year integers according to

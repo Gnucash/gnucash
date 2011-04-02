@@ -115,16 +115,6 @@ typedef struct qof_instance_reference
     const GncGUID      *ent_guid;   /**< The GncGUID of the original entity. */
 } QofInstanceReference;
 
-/** \brief Adds a new reference to the partial book data hash.
-
-Retrieves any existing reference list and appends the new reference.
-
-If the book is not already marked as partial, it will be marked as
-partial.
-*/
-void
-qof_session_update_reference_list(QofSession *session, QofInstanceReference *reference);
-
 /** Used as the key value for the QofBook data hash.
  *
  * Retrieved later by QSF (or any other suitable backend) to
