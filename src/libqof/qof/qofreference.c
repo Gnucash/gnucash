@@ -23,7 +23,7 @@
 
 #include "config.h"
 #include <glib.h>
-#include "qofreference.h"
+#include "qofreference-p.h"
 
 static void
 entity_set_reference_cb(QofInstance *ent, gpointer user_data)

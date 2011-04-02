@@ -69,7 +69,7 @@ SET (libgnc_qof_HEADERS
    qof/qoflog.h
    qof/qofobject.h
    qof/qofquerycore.h
-   qof/qofreference.h
+   qof/qofreference-p.h
    qof/qofsession.h
    qof/qofutil.h
    qof/qofbookmerge.h
