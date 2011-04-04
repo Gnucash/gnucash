@@ -267,12 +267,6 @@ void qof_book_mark_saved(QofBook *book);
  */
 void qof_book_mark_dirty(QofBook *book);
 
-/** This debugging function can be used to traverse the book structure
- *    and all subsidiary structures, printing out which structures
- *    have been marked dirty.
- */
-void qof_book_print_dirty (const QofBook *book);
-
 /** Retrieve the earliest modification time on the book. */
 time_t qof_book_get_dirty_time(const QofBook *book);
 

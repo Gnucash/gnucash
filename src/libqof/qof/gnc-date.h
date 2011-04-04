@@ -434,12 +434,10 @@ const char * gnc_print_date(Timespec ts);
 /* ------------------------------------------------------------------ */
 /* time printing utilities */
 
-/** The qof_print_time_buff() routine prints only the hour-part of the date.
- *    Thus, if secs is  ...
+/**
  *    Returns the number of bytes printed.
  */
 
-size_t qof_print_time_buff (char * buff, size_t len, time_t secs);
 size_t qof_print_date_time_buff (char * buff, size_t len, time_t secs);
 
 /* ------------------------------------------------------------------ */
@@ -515,16 +513,6 @@ void gnc_tm_set_day_end (struct tm *tm)
     tm->tm_sec = 59;
     tm->tm_isdst = -1;
 }
-
-/** The gnc_tm_get_day_start() routine will convert the given time in
- *  seconds to the struct tm format, and then adjust it to the
- *  first second of that day. */
-void   gnc_tm_get_day_start(struct tm *tm, time_t time_val);
-
-/** The gnc_tm_get_day_end() routine will convert the given time in
- *  seconds to the struct tm format, and then adjust it to the
- *  last second of that day. */
-void   gnc_tm_get_day_end(struct tm *tm, time_t time_val);
 
 /** The gnc_timet_get_day_start() routine will take the given time in
  *  seconds and adjust it to the last second of that day. */

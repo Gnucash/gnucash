@@ -75,7 +75,10 @@ qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle)
     return p != NULL;
 }
 
-gint
+/** Use g_utf8_casefold and g_utf8_collate to compare two utf8 strings,
+ * ignore case. Return < 0 if da compares before db, 0 if they compare
+ * equal, > 0 if da compares after db. */
+static gint
 qof_utf8_strcasecmp (const gchar *da, const gchar *db)
 {
     gchar *da_casefold, *db_casefold;

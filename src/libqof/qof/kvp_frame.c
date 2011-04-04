@@ -1584,7 +1584,7 @@ binary_to_string(const void *data, guint32 size)
     return output->str;
 }
 
-gchar*
+static gchar*
 kvp_value_glist_to_string(const GList *list)
 {
     gchar *tmp1;
@@ -1610,6 +1610,9 @@ kvp_value_glist_to_string(const GList *list)
     return tmp2;
 }
 
+static gchar*
+kvp_value_to_bare_string(const KvpValue *val);
+
 static void
 kvp_frame_to_bare_string_helper(gpointer key, gpointer value, gpointer data)
 {
@@ -1617,7 +1620,7 @@ kvp_frame_to_bare_string_helper(gpointer key, gpointer value, gpointer data)
     *str = g_strdup_printf("%s", kvp_value_to_bare_string((KvpValue *)value));
 }
 
-gchar*
+static gchar*
 kvp_value_to_bare_string(const KvpValue *val)
 {
     gchar *tmp1;

@@ -625,25 +625,6 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
     return flen;
 }
 
-size_t
-qof_print_time_buff (char * buff, size_t len, time_t secs)
-{
-    int flen;
-    struct tm ltm, gtm;
-
-    if (!buff) return 0;
-    if (dateFormat == QOF_DATE_FORMAT_UTC)
-    {
-        gtm = *gmtime (&secs);
-        flen = qof_strftime(buff, len, QOF_UTC_DATE_FORMAT, &gtm);
-        return flen;
-    }
-    ltm = *localtime (&secs);
-    flen = qof_strftime (buff, len, GNC_T_FMT, &ltm);
-
-    return flen;
-}
-
 /* ============================================================== */
 
 /* return the greatest integer <= a/b; works for b > 0 and positive or
@@ -1568,7 +1549,7 @@ Timespec gdate_to_timespec (GDate d)
                             g_date_get_year(&d));
 }
 
-void
+static void
 gnc_tm_get_day_start (struct tm *tm, time_t time_val)
 {
     /* Get the equivalent time structure */
@@ -1576,7 +1557,7 @@ gnc_tm_get_day_start (struct tm *tm, time_t time_val)
     gnc_tm_set_day_start(tm);
 }
 
-void
+static void
 gnc_tm_get_day_end (struct tm *tm, time_t time_val)
 {
     /* Get the equivalent time structure */

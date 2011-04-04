@@ -69,6 +69,12 @@ backends (when reading the GncGUID from the data source). */
 gchar *qof_book_validate_counter_format_internal(const gchar *p,
         const gchar* gint64_format);
 
+/** This debugging function can be used to traverse the book structure
+ *    and all subsidiary structures, printing out which structures
+ *    have been marked dirty.
+ */
+void qof_book_print_dirty (const QofBook *book);
+
 /* @} */
 /* @} */
 /* @} */

@@ -527,24 +527,6 @@ guid_init(void)
 }
 
 void
-guid_init_with_salt(const void *salt, size_t salt_len)
-{
-    guid_init();
-
-    md5_process_bytes(salt, salt_len, &guid_context);
-}
-
-void
-guid_init_only_salt(const void *salt, size_t salt_len)
-{
-    md5_init_ctx(&guid_context);
-
-    md5_process_bytes(salt, salt_len, &guid_context);
-
-    guid_initialized = TRUE;
-}
-
-void
 guid_shutdown (void)
 {
 }

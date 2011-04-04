@@ -221,19 +221,6 @@ qof_collection_add_entity (QofCollection *coll, QofInstance *ent);
 
 void qof_collection_remove_entity (QofInstance *ent);
 
-/** \brief Merge two QOF_TYPE_COLLECT of the same type.
-
-\note \b NOT the same as the main collections in the book.
-
-QOF_TYPE_COLLECT uses a secondary collection, independent of
-those in the book. Entities will not be removed from the
-original collection as when using ::qof_instance_insert_entity
-or ::qof_instance_remove_entity.
-
-*/
-gboolean
-qof_collection_merge (QofCollection *target, QofCollection *merge);
-
 /** \brief Compare two secondary collections.
 
 Performs a deep comparision of the collections. Each QofInstance in

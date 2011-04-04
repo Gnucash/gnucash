@@ -597,12 +597,6 @@ gint          kvp_value_compare(const KvpValue *va, const KvpValue *vb);
 
 /** @} */
 
-/** \brief General purpose function to convert any KvpValue to a string.
-
-Only the bare string is returned, there is no debugging information.
-*/
-gchar* kvp_value_to_bare_string(const KvpValue *val);
-
 /** \brief Debug version of kvp_value_to_string
 
 This version is used only by ::qof_query_printValueForParam,
@@ -633,7 +627,6 @@ void kvp_frame_for_each_slot(KvpFrame *f,
 /** Internal helper routines, you probably shouldn't be using these. */
 gchar* kvp_frame_to_string(const KvpFrame *frame);
 gchar* binary_to_string(const void *data, guint32 size);
-gchar* kvp_value_glist_to_string(const GList *list);
 GHashTable* kvp_frame_get_hash(const KvpFrame *frame);
 
 /** @} */

@@ -151,26 +151,6 @@ qof_collection_add_entity (QofCollection *coll, QofInstance *ent)
     return TRUE;
 }
 
-static void
-collection_merge_cb (QofInstance *ent, gpointer data)
-{
-    QofCollection *target;
-
-    target = (QofCollection*)data;
-    qof_collection_add_entity(target, ent);
-}
-
-gboolean
-qof_collection_merge (QofCollection *target, QofCollection *merge)
-{
-    if (!target || !merge)
-    {
-        return FALSE;
-    }
-    g_return_val_if_fail (target->e_type == merge->e_type, FALSE);
-    qof_collection_foreach(merge, collection_merge_cb, target);
-    return TRUE;
-}
 
 static void
 collection_compare_cb (QofInstance *ent, gpointer user_data)

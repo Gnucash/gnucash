@@ -177,11 +177,6 @@ void g_hash_table_foreach_sorted(GHashTable *hash_table, GHFunc func, gpointer u
  * otherwise. */
 gboolean qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle);
 
-/** Use g_utf8_casefold and g_utf8_collate to compare two utf8 strings,
- * ignore case. Return < 0 if da compares before db, 0 if they compare
- * equal, > 0 if da compares after db. */
-gint qof_utf8_strcasecmp (const gchar *da, const gchar *db);
-
 /** The safe_strcmp compares strings da and db the same way that strcmp()
  does, except that either may be null.  This routine assumes that
  a non-null string is always greater than a null string.
