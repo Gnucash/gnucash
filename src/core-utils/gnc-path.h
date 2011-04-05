@@ -68,6 +68,12 @@ gchar *gnc_path_get_pkglibdir(void);
  * @returns A newly allocated string. */
 gchar *gnc_path_get_gladedir(void);
 
+/** Returns the gtkbuilder file path, usually
+ * "$prefix/share/gnucash/gktbuilder".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_gtkbuilderdir(void);
+
 /** Returns the localedir path, usually
  * "$prefix/share/locale".
  *

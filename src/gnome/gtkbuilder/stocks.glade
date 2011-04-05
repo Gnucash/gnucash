@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkWindow" id="Stock Split Druid">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Stock Split</property>
+    <signal name="destroy" handler="gnc_stock_split_druid_window_destroy_cb"/>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+</interface>

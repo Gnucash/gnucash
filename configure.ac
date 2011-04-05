@@ -562,6 +562,7 @@ GNC_LIBEXECDIR='${libexecdir}/gnucash'
 GNC_ACCOUNTS_DIR='${GNC_SHAREDIR}/accounts'
 GNC_CHECKS_DIR='${GNC_SHAREDIR}/checks'
 GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
+GNC_GTKBUILDER_DIR='${GNC_SHAREDIR}/gtkbuilder'
 GNC_UI_DIR='${GNC_SHAREDIR}/ui'
 GNC_PIXMAP_DIR='${GNC_SHAREDIR}/pixmaps'
 
@@ -570,6 +571,7 @@ AC_SUBST(GNC_CHECKS_DIR)
 AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_GLADE_DIR)
+AC_SUBST(GNC_GTKBUILDER_DIR)
 AC_SUBST(GNC_UI_DIR)
 AC_SUBST(GNC_INCLUDE_DIR)
 AC_SUBST(GNC_PIXMAP_DIR)
@@ -1274,6 +1276,7 @@ AC_CONFIG_FILES(
   src/gnome/Makefile
   src/gnome/gnucash.desktop.in
   src/gnome/glade/Makefile
+  src/gnome/gtkbuilder/Makefile
   src/gnome/schemas/Makefile
   src/gnome/ui/Makefile
   src/gnome-utils/Makefile

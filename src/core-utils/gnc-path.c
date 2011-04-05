@@ -109,6 +109,19 @@ gchar *gnc_path_get_gladedir()
     return result;
 }
 
+/** Returns the gtkbuilder file path, usually
+ * "$prefix/share/gnucash/gtkbuilder".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_gtkbuilderdir()
+{
+    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+    gchar *result = g_build_filename (pkgdatadir, "gtkbuilder", (char*)NULL);
+    g_free (pkgdatadir);
+    //printf("Returning gtkbuilderdir %s\n", result);
+    return result;
+}
+
 /** Returns the localedir path, usually
  * "$prefix/share/locale".
  *

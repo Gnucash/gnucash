@@ -1,4 +1,4 @@
-SUBDIRS = glade schemas ui
+SUBDIRS = glade gtkbuilder schemas ui
 
 lib_LTLIBRARIES = libgnc-gnome.la
 

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkWindow" id="Acct Period Druid">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Setup Accounting Periods</property>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+</interface>
