@@ -1,7 +1,8 @@
 /********************************************************************\
- * druid-hierarchy.c -- account hierarchy creation functionality    *
+ * assistant-hierarchy.c -- account hierarchy creation functionality*
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2010 Geert Janssens                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -33,9 +34,8 @@
 #include "gnc-account-merge.h"
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
-#include "dialog-file-access.h"
-#include "druid-hierarchy.h"
-#include "druid-utils.h"
+#include "assistant-hierarchy.h"
+#include "assistant-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
 #include "gnc-exp-parser.h"
@@ -71,7 +71,7 @@ typedef enum
 typedef struct
 {
     GtkWidget *dialog;
-    GtkWidget *druid;
+    GtkWidget *assistant;
     gboolean next_ok;
 
     GtkWidget *currency_selector;
@@ -96,22 +96,20 @@ typedef struct
     gboolean account_list_added;
     gboolean use_defaults;
 
-    GncHierarchyDruidFinishedCallback when_completed;
+    GncHierarchyAssistantFinishedCallback when_completed;
 
 } hierarchy_data;
 
-void on_choose_account_categories_prepare (GnomeDruidPage  *gnomedruidpage,
-        gpointer         arg1,
+G_MODULE_EXPORT void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
         hierarchy_data  *data);
-void select_all_clicked (GtkButton       *button,
+void on_choose_account_categories_prepare (hierarchy_data  *data);
+G_MODULE_EXPORT void select_all_clicked (GtkButton       *button,
                          hierarchy_data  *data);
-void clear_all_clicked (GtkButton       *button,
+G_MODULE_EXPORT void clear_all_clicked (GtkButton       *button,
                         hierarchy_data  *data);
-void on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
-                               gpointer         arg1,
-                               hierarchy_data  *data);
-void on_cancel (GnomeDruid      *gnomedruid, hierarchy_data *data);
-void on_finish (GnomeDruidPage  *gnomedruidpage, gpointer arg1, hierarchy_data *data);
+void on_final_account_prepare (hierarchy_data  *data);
+G_MODULE_EXPORT void on_cancel (GtkAssistant      *gtkassistant, hierarchy_data *data);
+G_MODULE_EXPORT void on_finish (GtkAssistant  *gtkassistant, hierarchy_data *data);
 
 // ------------------------------------------------------------
 
@@ -228,28 +226,8 @@ gnc_get_ea_locale_dir(const char *top_dir)
  *                  Choose Categories Page                  *
  ************************************************************/
 
-/** This is a helper function to get around a gtk issue (probably and
- *  ordering issue) where you cannot set this button as sensitive
- *  during the initial creation of the druid page.  Using a delayed
- *  idle function works correctly for both the initial page creation
- *  and the subsequent changes when account sets are
- *  selected/deselected.
- *
- *  @param data A pointer to the data structure describing the
- *  hierarchy druid.
- *
- *  @return Always returns FALSE to remove this function from the idle
- *  loop. */
-static gboolean
-delayed_enable_next_button (hierarchy_data *data)
-{
-    gnome_druid_set_buttons_sensitive(GNOME_DRUID(data->druid),
-                                      TRUE, data->next_ok, TRUE, TRUE);
-    return FALSE;
-}
-
 /** This is a helper function called on each item in the GtkTreeStore
- *  by categories_page_enable_next.  The purpose is to determine is an
+ *  by categories_page_enable_next.  The purpose is to determine if an
  *  account set has been selected.
  *
  *  @param store The GtkListStore containing one line per account set.
@@ -290,15 +268,23 @@ account_set_checked_helper (GtkListStore *store,
  *  sensitive if one or more account sets has been selected.
  *
  *  @param data A pointer to the data structure describing the
- *  hierarchy druid. */
+ *  hierarchy assistant. */
 static void
 categories_page_enable_next (hierarchy_data *data)
 {
+    gint currentpagenum;
+    GtkWidget *currentpage;
+    GtkAssistant *assistant = GTK_ASSISTANT(data->dialog);
+
     data->next_ok = FALSE;
     gtk_tree_model_foreach (gtk_tree_view_get_model (data->categories_tree),
                             (GtkTreeModelForeachFunc)account_set_checked_helper,
                             &data->next_ok);
-    g_idle_add((GSourceFunc)delayed_enable_next_button, data);
+
+    currentpagenum = gtk_assistant_get_current_page(assistant);
+    currentpage = gtk_assistant_get_nth_page(assistant, currentpagenum);
+
+    gtk_assistant_set_page_complete(assistant, currentpage, data->next_ok);
 }
 
 
@@ -441,10 +427,27 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
     }
 }
 
+G_MODULE_EXPORT void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
+        hierarchy_data  *data)
+{
+    gint currentpage = gtk_assistant_get_current_page(assistant);
+
+    switch (gtk_assistant_get_current_page(assistant))
+    {
+        case 2:
+            /* Current page is account selection */
+            on_choose_account_categories_prepare(data);
+            break;
+        case 3:
+            /* Current page is final account page */
+            on_final_account_prepare (data);
+            break;
+    }
+
+}
+
 void
-on_choose_account_categories_prepare (GnomeDruidPage  *gnomedruidpage,
-                                      gpointer         arg1,
-                                      hierarchy_data  *data)
+on_choose_account_categories_prepare (hierarchy_data  *data)
 {
     GtkTextBuffer* buffer;
 
@@ -540,7 +543,7 @@ select_helper (GtkListStore *store,
     return FALSE;  /* Run entire tree */
 }
 
-void
+G_MODULE_EXPORT void
 select_all_clicked (GtkButton       *button,
                     hierarchy_data  *data)
 {
@@ -549,7 +552,7 @@ select_all_clicked (GtkButton       *button,
                             GINT_TO_POINTER(TRUE));
 }
 
-void
+G_MODULE_EXPORT void
 clear_all_clicked (GtkButton       *button,
                    hierarchy_data  *data)
 {
@@ -858,9 +861,7 @@ use_existing_account_data_func(GtkTreeViewColumn *tree_column,
 }
 
 void
-on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
-                          gpointer         arg1,
-                          hierarchy_data  *data)
+on_final_account_prepare (hierarchy_data  *data)
 {
     GSList *actlist;
     GtkTreeView *tree_view;
@@ -978,8 +979,8 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
     gnc_resume_gui_refresh ();
 }
 
-void
-on_cancel (GnomeDruid      *gnomedruid,
+G_MODULE_EXPORT void
+on_cancel (GtkAssistant      *gtkassistant,
            hierarchy_data  *data)
 {
     gnc_suspend_gui_refresh ();
@@ -1003,12 +1004,11 @@ starting_balance_helper (Account *account, hierarchy_data *data)
                                             gnc_get_current_book ());
 }
 
-void
-on_finish (GnomeDruidPage  *gnomedruidpage,
-           gpointer         arg1,
+G_MODULE_EXPORT void
+on_finish (GtkAssistant  *gtkassistant,
            hierarchy_data  *data)
 {
-    GncHierarchyDruidFinishedCallback when_completed;
+    GncHierarchyAssistantFinishedCallback when_completed;
     ENTER (" ");
 
     if (data->our_account_tree)
@@ -1042,50 +1042,63 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 }
 
 static GtkWidget *
-gnc_create_hierarchy_druid (gboolean use_defaults, GncHierarchyDruidFinishedCallback when_completed)
+gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFinishedCallback when_completed)
 {
     hierarchy_data *data;
     GtkWidget *dialog;
     GtkTreeView *tree_view;
     GtkWidget *box, *start_page;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GdkColor *color;
 
     data = g_new0 (hierarchy_data, 1);
-    xml = gnc_glade_xml_new ("account.glade", "Hierarchy Druid");
+    builder = gnc_builder_add_from_file ("account.glade", "Hierarchy Assistant");
 
-    dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Hierarchy Assistant"));
     data->dialog = dialog;
 
-    data->druid = glade_xml_get_widget (xml, "hierarchy_druid");
-    gnc_druid_set_colors (GNOME_DRUID (data->druid));
+    gnc_assistant_set_colors (GTK_ASSISTANT (data->dialog));
 
-    start_page = glade_xml_get_widget (xml, "start_page");
-    gtk_widget_show (start_page);
-    gtk_widget_show (glade_xml_get_widget (xml, "newUserDruidFinishPage"));
+    /* Enable buttons on first and last page. */
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "intro_page_label")),
+                                     TRUE);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "currency_page_vbox")),
+                                     TRUE);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "final_account_vbox")),
+                                     TRUE);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "finish_page_label")),
+                                     TRUE);
 
     /* Currency Page */
     data->currency_selector = gnc_currency_edit_new();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector), gnc_default_currency());
     gtk_widget_show (data->currency_selector);
-    box = glade_xml_get_widget (xml, "currency_chooser_vbox");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_chooser_vbox"));
     gtk_box_pack_start(GTK_BOX(box), data->currency_selector, FALSE, FALSE, 0);
 
     /* Categories Page */
-    tree_view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "account_categories_tree_view"));
+    tree_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_categories_tree_view"));
     g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (tree_view)), "changed",
                       G_CALLBACK (categories_tree_selection_changed), data);
     gtk_tree_selection_set_mode (gtk_tree_view_get_selection (tree_view), GTK_SELECTION_SINGLE);
     data->categories_tree = tree_view;
 
-    data->category_accounts_label = GTK_LABEL(glade_xml_get_widget (xml, "accounts_in_category_label"));
-    data->category_accounts_container = glade_xml_get_widget (xml, "accounts_in_category");
-    data->category_description = GTK_TEXT_VIEW(glade_xml_get_widget (xml, "account_types_description"));
+    data->category_accounts_label = GTK_LABEL(gtk_builder_get_object (builder, "accounts_in_category_label"));
+    data->category_accounts_container = GTK_WIDGET(gtk_builder_get_object (builder, "accounts_in_category"));
+    data->category_description = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "account_types_description"));
+    data->account_list_added = FALSE;
+
+/* FIXME -- what is this ?
     color = &GNOME_DRUID_PAGE_EDGE(start_page)->textbox_color;
     gtk_widget_modify_base(GTK_WIDGET(data->category_description), GTK_STATE_INSENSITIVE, color);
+    */
 
     /* Final Accounts Page */
-    data->final_account_tree_container = glade_xml_get_widget (xml, "final_account_tree_box");
+    data->final_account_tree_container = GTK_WIDGET(gtk_builder_get_object (builder, "final_account_tree_box"));
     data->final_account_tree = NULL;
 
     data->balance_hash = g_hash_table_new(NULL, NULL);
@@ -1093,7 +1106,7 @@ gnc_create_hierarchy_druid (gboolean use_defaults, GncHierarchyDruidFinishedCall
     g_signal_connect (G_OBJECT(dialog), "destroy",
                       G_CALLBACK (gnc_hierarchy_destroy_cb), data);
 
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, data);
+    gtk_builder_connect_signals(builder, data);
 
     data->when_completed = when_completed;
     data->use_defaults = use_defaults;
@@ -1101,16 +1114,16 @@ gnc_create_hierarchy_druid (gboolean use_defaults, GncHierarchyDruidFinishedCall
 }
 
 GtkWidget*
-gnc_ui_hierarchy_druid(gboolean use_defaults)
+gnc_ui_hierarchy_assistant(gboolean use_defaults)
 {
-    return gnc_create_hierarchy_druid(use_defaults, NULL);
+    return gnc_create_hierarchy_assistant(use_defaults, NULL);
 }
 
 GtkWidget*
-gnc_ui_hierarchy_druid_with_callback(gboolean use_defaults,
-                                     GncHierarchyDruidFinishedCallback when_finished)
+gnc_ui_hierarchy_assistant_with_callback(gboolean use_defaults,
+                                     GncHierarchyAssistantFinishedCallback when_finished)
 {
-    return gnc_create_hierarchy_druid(use_defaults, when_finished);
+    return gnc_create_hierarchy_assistant(use_defaults, when_finished);
 }
 
 static void
@@ -1119,21 +1132,20 @@ create_account_page(void)
     GncPluginPage *page;
     page = gnc_plugin_page_account_tree_new();
     gnc_main_window_open_page(NULL, page);
-    gnc_ui_file_access_for_save_as();
 }
 
 static void
-gnc_ui_hierarchy_druid_hook (void)
+gnc_ui_hierarchy_assistant_hook (void)
 {
     if (gnc_gconf_get_bool(GCONF_SECTION, "show_on_new_file", NULL))
     {
-        gnc_ui_hierarchy_druid_with_callback(TRUE, create_account_page);
+        gnc_ui_hierarchy_assistant_with_callback(TRUE, create_account_page);
     }
 }
 
 void
-gnc_ui_hierarchy_druid_initialize (void)
+gnc_ui_hierarchy_assistant_initialize (void)
 {
     gnc_hook_add_dangler(HOOK_NEW_BOOK,
-                         (GFunc)gnc_ui_hierarchy_druid_hook, NULL);
+                         (GFunc)gnc_ui_hierarchy_assistant_hook, NULL);
 }

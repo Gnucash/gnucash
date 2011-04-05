@@ -28,7 +28,7 @@
 
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
-#include "druid-hierarchy.h"
+#include "assistant-hierarchy.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"
@@ -62,7 +62,7 @@ gnc_set_first_startup (gboolean first_startup)
 }
 
 static void
-after_hierarchy_druid(void)
+after_hierarchy_assistant(void)
 {
     GncPluginPage *page;
 
@@ -107,7 +107,7 @@ gnc_ui_new_user_dialog (void)
     case GTK_RESPONSE_OK:
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button)))
         {
-            gnc_ui_hierarchy_druid_with_callback(TRUE, after_hierarchy_druid);
+            gnc_ui_hierarchy_assistant_with_callback(TRUE, after_hierarchy_assistant);
             break;
         }
         else if ((qifImportDruidFcn != NULL)

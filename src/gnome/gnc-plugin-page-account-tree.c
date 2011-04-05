@@ -45,7 +45,7 @@
 #include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "druid-hierarchy.h"
+#include "assistant-hierarchy.h"
 #include "gnc-account-sel.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
@@ -790,7 +790,7 @@ gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAc
 static void
 gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GtkAction *action, GncPluginPageAccountTree *page)
 {
-    gnc_ui_hierarchy_druid(FALSE);
+    gnc_ui_hierarchy_assistant(FALSE);
 }
 
 static void

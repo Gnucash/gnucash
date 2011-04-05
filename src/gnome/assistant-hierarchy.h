@@ -1,6 +1,7 @@
 /********************************************************************\
- * druid-hierarchy.h -- account hierarchy creation functionality    *
+ * assistant-hierarchy.h -- account hierarchy creation functionality*
  * Copyright (C) 2001 Gnumatic, Inc.                                *
+ * Copyright (C) 2010 Geert Janssens                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,20 +21,20 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef DRUID_HIERARCHY_H
-#define DRUID_HIERARCHY_H
+#ifndef ASSISTANT_HIERARCHY_H
+#define ASSISTANT_HIERARCHY_H
 
 /**
- * A callback (provided by the caller) to be invoked when the druid
- * completes successfully.  I.e., the new-user druid can finish the GnuCash
+ * A callback (provided by the caller) to be invoked when the assistant
+ * completes successfully.  I.e., the new-user assistant can finish the GnuCash
  * New-User Experience, create an account plugin-page, &c.
  **/
 
-typedef void (*GncHierarchyDruidFinishedCallback)(void);
+typedef void (*GncHierarchyAssistantFinishedCallback)(void);
 
-GtkWidget* gnc_ui_hierarchy_druid (gboolean use_defaults);
-GtkWidget* gnc_ui_hierarchy_druid_with_callback(gboolean use_defaults, GncHierarchyDruidFinishedCallback when_finished);
+GtkWidget* gnc_ui_hierarchy_assistant (gboolean use_defaults);
+GtkWidget* gnc_ui_hierarchy_assistant_with_callback(gboolean use_defaults, GncHierarchyAssistantFinishedCallback when_finished);
 
-void gnc_ui_hierarchy_druid_initialize (void);
+void gnc_ui_hierarchy_assistant_initialize (void);
 
 #endif

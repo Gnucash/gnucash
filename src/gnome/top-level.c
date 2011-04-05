@@ -36,7 +36,7 @@
 #include "dialog-sx-editor.h"
 #include "dialog-transfer.h"
 #include "dialog-totd.h"
-#include "druid-hierarchy.h"
+#include "assistant-hierarchy.h"
 #include "file-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
@@ -424,7 +424,7 @@ gnc_main_gui_init (void)
        Anyway... Oh, maybe... nah */
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (),
                                    gnc_plugin_budget_new ());
-    gnc_ui_hierarchy_druid_initialize();
+    gnc_ui_hierarchy_assistant_initialize();
 
     /* Run the ui startup hooks. */
     gnc_hook_run(HOOK_UI_STARTUP, NULL);
