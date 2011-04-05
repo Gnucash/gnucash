@@ -906,6 +906,96 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
     }
 }
 
+/*--------------------------------------------------------------------------
+ *   GtkBuilder support functions
+ *-------------------------------------------------------------------------*/
+
+/* gnc_builder_add_from_file:
+ *
+ *   a convenience wrapper for gtk_builder_add_objects_from_file.
+ *   It takes care of finding the directory for glade files and prints a
+ *   warning message in case of an error.
+ */
+GtkBuilder *
+gnc_builder_add_from_file (const char *filename, const char *root)
+{
+    GtkBuilder *gncbuilder = NULL;
+    GError* error = NULL;
+    char *fname;
+    gchar *gnc_builder_dir;
+
+    g_return_val_if_fail (filename != NULL, NULL);
+    g_return_val_if_fail (root != NULL, NULL);
+
+    gnc_builder_dir = gnc_path_get_gtkbuilderdir ();
+    fname = g_build_filename(gnc_builder_dir, filename, (char *)NULL);
+    g_free (gnc_builder_dir);
+
+    {
+        gchar *localroot = g_strdup(root);
+        gchar *objects[] = { localroot, NULL };
+        gncbuilder = gtk_builder_new ();
+        if (!gtk_builder_add_objects_from_file (gncbuilder, fname, objects, &error))
+        {
+            PWARN ("Couldn't load builder file: %s", error->message);
+            g_error_free (error);
+        }
+        g_free (localroot);
+    }
+
+    g_free (fname);
+
+    return gncbuilder;
+}
+
+/*
+ * The following function is built from a couple of glade functions.
+ */
+//GModule *allsymbols = NULL;
+
+void
+gnc_builder_connect_full_func(GtkBuilder *builder,
+                              GObject *signal_object,
+                              const gchar *signal_name,
+                              const gchar *handler_name,
+                              GObject *connect_object,
+                              GConnectFlags flags,
+                              gpointer user_data)
+{
+    GCallback func;
+    GCallback *p_func = &func;
+
+    if (allsymbols == NULL)
+    {
+        /* get a handle on the main executable -- use this to find symbols */
+        allsymbols = g_module_open(NULL, 0);
+    }
+
+    if (!g_module_symbol(allsymbols, handler_name, (gpointer *)p_func))
+    {
+#ifdef HAVE_DLSYM
+        /* Fallback to dlsym -- necessary for *BSD linkers */
+        func = dlsym(RTLD_DEFAULT, handler_name);
+#else
+        func = NULL;
+#endif
+        if (func == NULL)
+        {
+            PWARN("ggaff: could not find signal handler '%s'.", handler_name);
+            return;
+        }
+    }
+
+    if (connect_object)
+        g_signal_connect_object (signal_object, signal_name, func,
+                                 connect_object, flags);
+    else
+        g_signal_connect_data(signal_object, signal_name, func,
+                              user_data,NULL , flags);
+}
+
+/* End of GtkBuilder utilities */
+
 void
 gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *stock_id, guint response)
 {
