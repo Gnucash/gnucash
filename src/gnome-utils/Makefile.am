@@ -27,6 +27,7 @@ AM_CPPFLAGS = \
 
 libgncmod_gnome_utils_la_SOURCES = \
   account-quickfill.c \
+  assistant-utils.c \
   cursors.c \
   dialog-account.c \
   dialog-book-close.c \
@@ -105,6 +106,7 @@ libgncmod_gnome_utils_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   account-quickfill.h \
+  assistant-utils.h \
   dialog-account.h \
   dialog-book-close.h \
   dialog-commodity.h \
