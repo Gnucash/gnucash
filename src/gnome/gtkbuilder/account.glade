@@ -1693,9 +1693,6 @@
                 <property name="y_options"></property>
               </packing>
             </child>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="position">2</property>
@@ -1819,11 +1816,11 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox1">
+          <object class="GtkAlignment" id="currency_chooser_alignment">
             <property name="visible">True</property>
-            <child>
-              <placeholder/>
-            </child>
+            <property name="yalign">0</property>
+            <property name="xscale">0</property>
+            <property name="yscale">0</property>
             <child>
               <object class="GtkVBox" id="currency_chooser_vbox">
                 <property name="visible">True</property>
@@ -1832,18 +1829,9 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
                   <placeholder/>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="position">1</property>
           </packing>
         </child>
