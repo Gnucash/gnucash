@@ -23,7 +23,7 @@
 
 #include "config.h"
 #include <glib.h>
-#include <qof.h>
+#include "qof.h"
 
 extern void test_suite_qofbook();
 extern void test_suite_qofinstance();

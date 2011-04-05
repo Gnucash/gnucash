@@ -1,7 +1,7 @@
 #ifndef KVP_SCM_H
 #define KVP_SCM_H
 
-#include <qof.h>
+#include "qof.h"
 #include <libguile.h>
 
 int gnc_kvp_value_ptr_p(SCM arg);

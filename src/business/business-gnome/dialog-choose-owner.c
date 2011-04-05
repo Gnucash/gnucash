@@ -25,7 +25,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <qof.h>
+#include "qof.h"
 
 #include "Transaction.h"
 #include "dialog-utils.h"

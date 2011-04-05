@@ -31,7 +31,7 @@
 #define GNC_EVENT_H
 
 #include <glib.h>
-#include <qof.h>
+#include "qof.h"
 
 typedef struct
 {

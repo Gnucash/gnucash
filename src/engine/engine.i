@@ -1,22 +1,22 @@
 %module sw_engine
 %{
 /* Includes the header in the wrapper code */
-#include <config.h>
+#include "config.h"
 #include <glib.h>
-#include <qof.h>
-#include <Query.h>
-#include <guile-mappings.h>
-#include <gnc-budget.h>
-#include <gnc-commodity.h>
-#include <gnc-engine.h>
-#include <gnc-filepath-utils.h>
-#include <gnc-pricedb.h>
-#include <gnc-lot.h>
-#include <gnc-session-scm.h>
-#include <gnc-hooks-scm.h>
-#include <engine-helpers.h>
-#include <SX-book.h>
-#include <kvp-scm.h>
+#include "qof.h"
+#include "Query.h"
+#include "guile-mappings.h"
+#include "gnc-budget.h"
+#include "gnc-commodity.h"
+#include "gnc-engine.h"
+#include "gnc-filepath-utils.h"
+#include "gnc-pricedb.h"
+#include "gnc-lot.h"
+#include "gnc-session-scm.h"
+#include "gnc-hooks-scm.h"
+#include "engine-helpers.h"
+#include "SX-book.h"
+#include "kvp-scm.h"
 #include "glib-helpers.h"
 
 SCM scm_init_sw_engine_module (void);

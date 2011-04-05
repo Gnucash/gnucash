@@ -1,6 +1,6 @@
 /********************************************************************
- * test_qofsession.c: GLib g_test test suite for qofsession.	    *
- * Copyright 2011 John Ralls <jralls@ceridwen.us>		    *
+ * test_qofsession.c: GLib g_test test suite for qofsession.        *
+ * Copyright 2011 John Ralls <jralls@ceridwen.us>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,11 +20,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include <config.h>
+#include "config.h"
 #include <glib.h>
-#include <qof.h>
-#include <qofbackend-p.h>
-#include <qofsession-p.h>
+#include "qof.h"
+#include "qofbackend-p.h"
+#include "qofsession-p.h"
 
 static const gchar *suitename = "/qof/qofsession";
 void test_suite_qofsession ( void );
