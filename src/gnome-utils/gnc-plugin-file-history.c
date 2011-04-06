@@ -292,6 +292,7 @@ static gchar *
 gnc_history_generate_label (int index, const gchar *filename)
 {
     gchar *label, *result;
+    gchar **splitlabel;
 
     if ( gnc_uri_is_file_uri ( filename ) )
     {
@@ -305,6 +306,12 @@ gnc_history_generate_label (int index, const gchar *filename)
         /* for databases, display the full uri, except for the password */
         label = gnc_uri_normalize_uri ( filename, FALSE );
     }
+
+    /* Escape '_' characters */
+    splitlabel = g_strsplit ( label, "_", 0);
+    g_free (label);
+    label = g_strjoinv ( "__", splitlabel);
+    g_strfreev (splitlabel);
 
     result = g_strdup_printf ( "_%d %s", (index + 1) % 10, label);
     g_free ( label );
