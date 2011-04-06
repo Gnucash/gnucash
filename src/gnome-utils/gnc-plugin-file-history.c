@@ -725,8 +725,7 @@ gnc_plugin_file_history_cmd_open_file (GtkAction *action,
     filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
     /* also opens new account page */
-    if (!gnc_file_open_file (filename))
-        gnc_history_remove_file (filename);
+    gnc_file_open_file (filename);
     gnc_window_set_progressbar_window (NULL);
 }
 
