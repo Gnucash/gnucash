@@ -69,6 +69,11 @@ for tag_rev in $tags ; do
 
   # No need to update the sources we just checked out
   echo "UPDATE_SOURCES=no" >> ${w32pkg}/custom.sh
+  
+  # But set the repos url to the current tag anyway, it will be used
+  # to name the log file
+  echo -n "REPOS_URL=" >> ${w32pkg}/custom.sh
+  echo "${TAG_URL}/${tag}" >> ${w32pkg}/custom.sh
 
   # BUILD_FROM_TARBALL is special:
   # in install.sh place we check !=yes, in defaults.sh =yes, in dist.sh =no
