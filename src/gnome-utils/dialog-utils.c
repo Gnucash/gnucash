@@ -820,8 +820,21 @@ gnc_glade_xml_new (const char *filename, const char *root)
     }
 
     gnc_glade_dir = gnc_path_get_gladedir ();
+    if (!g_file_test(gnc_glade_dir, G_FILE_TEST_IS_DIR))
+    {
+        g_critical("Directory for glade UI files \"%s\" is not found. Your installation is incomplete and cannot be run.", gnc_glade_dir);
+        g_free (gnc_glade_dir);
+        return NULL;
+    }
+
     fname = g_build_filename(gnc_glade_dir, filename, (char *)NULL);
     g_free (gnc_glade_dir);
+
+    if (!g_file_test(fname, G_FILE_TEST_EXISTS))
+    {
+        g_critical("The glade UI file \"%s\" is not found. Your installation is incomplete and cannot be run.", fname);
+        return NULL;
+    }
 
     xml = glade_xml_new (fname, root, NULL);
 

@@ -676,7 +676,14 @@ druid_gconf_install_check_schemas (void)
 #endif /* G_OS_WIN32 */
 
     xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Query");
+    if (!xml)
+    {
+        gnc_error_dialog(NULL, "The glade UI files were not found. Your installation is incomplete and cannot be run.");
+        exit(-1); /* quit immediately */
+    }
+    g_assert(xml);
     dialog = glade_xml_get_widget (xml, "GConf Query");
+    g_assert(dialog);
     do
     {
         response = gtk_dialog_run(GTK_DIALOG(dialog));

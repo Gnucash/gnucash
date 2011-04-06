@@ -260,6 +260,25 @@ gnc_gnome_init (int argc, char **argv, const char * version)
     gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
     gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
     gchar *pkglibdir = gnc_path_get_pkglibdir ();
+    gboolean installation_ok = TRUE;
+
+    /* Verify all the various directory before proceeding */
+    if (!g_file_test(pkgdatadir, G_FILE_TEST_IS_DIR))
+    {
+        g_critical("The installation data directory \"%s\" was not found. Your installation is incomplete and cannot be run.", pkgdatadir);
+        installation_ok = FALSE;
+    }
+    if (!g_file_test(pkglibdir, G_FILE_TEST_IS_DIR))
+    {
+        g_critical("The installation lib directory \"%s\" was not found. Your installation is incomplete and cannot be run.", pkglibdir);
+        installation_ok = FALSE;
+    }
+
+    if (!g_file_test(pkgsysconfdir, G_FILE_TEST_IS_DIR))
+    {
+        g_critical("The installation sysconf directory \"%s\" was not found. Your installation is incomplete and cannot be run.", pkgsysconfdir);
+        installation_ok = FALSE;
+    }
 
     gnc_gtk_add_rc_file();
     gnucash_program = gnome_program_init(
@@ -270,10 +289,28 @@ gnc_gnome_init (int argc, char **argv, const char * version)
                           GNOME_PARAM_APP_DATADIR, pkgdatadir,
                           GNOME_PARAM_APP_LIBDIR, pkglibdir,
                           GNOME_PARAM_NONE);
+    if (!installation_ok)
+    {
+        /* The following string does not need translation because if
+         * it shows up, the program is unusable anyway. */
+        gnc_error_dialog(NULL, "The installation directories were not found.\n\ndatadir=%s\nlibdir=%s\nsysconfdir=%s\n\nYour installation is incomplete and cannot be run.",
+                         pkgdatadir, pkglibdir, pkgsysconfdir);
+        /* gnc_error_dialog must not be called before gnome_program_init. */
+    }
+
     g_free (prefix);
     g_free (pkgsysconfdir);
     g_free (pkgdatadir);
     g_free (pkglibdir);
+
+    /* Did the installation directory check fail? Terminate
+     * immediately because it will inevitably fail in the glade file
+     * lookup. */
+    if (!installation_ok)
+    {
+        /* No correct installation? Shut down immediately. */
+        exit(-1);
+    }
 
 #ifdef G_OS_WIN32
     /* workaround for bug #421792 */
