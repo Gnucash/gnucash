@@ -823,6 +823,10 @@
 ;; where type is defined as an alist '((str "match me") (cased #f) (regexp #f))
 (define (gnc:account-get-trans-type-splits-interval
          account-list type start-date-tp end-date-tp)
+  (if (null? account-list)
+      ;; No accounts given. Return empty list.
+      '()
+      ;; The normal case: There are accounts given.
   (let* ((query (qof-query-create-for-splits))
 	 (splits #f)
 	 (get-val (lambda (alist key)
@@ -846,6 +850,7 @@
     (qof-query-destroy query)
     splits
     )
+  )
   )
 
 ;; utility to assist with double-column balance tables
