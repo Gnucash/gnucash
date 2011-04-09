@@ -89,7 +89,7 @@ void
 gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
 {
     if (w != NULL)
-        gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY, update_now);
+        gnc_ui_set_cursor (gtk_widget_get_windor(w), GNC_CURSOR_BUSY, update_now);
     else
     {
         GList *containerstop, *node;
@@ -101,7 +101,7 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
             if (!w || !GTK_IS_WIDGET (w) || !w->window)
                 continue;
 
-            gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY, update_now);
+            gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_BUSY, update_now);
         }
         g_list_free (containerstop);
     }
@@ -120,7 +120,7 @@ void
 gnc_unset_busy_cursor (GtkWidget *w)
 {
     if (w != NULL)
-        gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL, FALSE);
+        gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_NORMAL, FALSE);
     else
     {
         GList *containerstop, *node;
@@ -132,7 +132,7 @@ gnc_unset_busy_cursor (GtkWidget *w)
             if (!w || !GTK_IS_WIDGET (w) || GTK_WIDGET_NO_WINDOW(w))
                 continue;
 
-            gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL, FALSE);
+            gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_NORMAL, FALSE);
         }
         g_list_free (containerstop);
     }
