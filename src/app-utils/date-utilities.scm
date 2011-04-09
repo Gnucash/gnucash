@@ -163,6 +163,16 @@
        (/ (- dayadj2 dayadj1) 
 	  366.0))))
 
+;; convert a date in seconds since 1970 into # of 1/2 years since 1970 as
+;; a fraction (doubling date-to-year-fraction)
+(define (gnc:date-to-halfyear-fraction caltime)
+  (* (gnc:date-to-year-fraction caltime) 2))
+
+;; convert a date in seconds since 1970 into # of quarters since 1970
+;; (assuming quarter = 3 months and using 1/3 of date-to-month-fraction)
+(define (gnc:date-to-quarter-fraction caltime)
+  (/ (gnc:date-to-month-fraction caltime) 3))
+
 ;; convert a date in seconds since 1970 into # of months since 1970
 (define (gnc:date-to-month-fraction caltime)
   (let ((lt (localtime caltime)))
@@ -171,6 +181,11 @@
        (/ (- (gnc:date-get-month-day lt) 1.0) (gnc:days-in-month 
 					       (gnc:date-get-month lt)
 					       (gnc:date-get-year lt))))))
+
+;; convert a date in seconds since 1970 into # of two-week periods since
+;; Jan 4, 1970 ignoring leap-seconds (just halfing date-to-week-fraction)
+(define (gnc:date-to-twoweek-fraction caltime)
+  (/ (gnc:date-to-week-fraction caltime) 2))
 
 ;; convert a date in seconds since 1970 into # of weeks since Jan 4, 1970
 ;; ignoring leap-seconds
@@ -191,7 +206,10 @@
 (define (gnc:date-get-fraction-func interval)
   (case interval
     ((YearDelta) gnc:date-to-year-fraction)
+    ((HalfYearDelta) gnc:date-to-halfyear-fraction)
+    ((QuarterDelta) gnc:date-to-quarter-fraction)
     ((MonthDelta) gnc:date-to-month-fraction)
+    ((TwoWeekDelta) gnc:date-to-twoweek-fraction)
     ((WeekDelta) gnc:date-to-week-fraction)
     ((DayDelta) gnc:date-to-day-fraction)
     (else #f)))
