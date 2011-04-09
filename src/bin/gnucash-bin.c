@@ -833,8 +833,6 @@ main(int argc, char ** argv)
 #ifdef HAVE_GETTEXT
     {
         gchar *localedir = gnc_path_get_localedir();
-        /* setlocale(LC_ALL, ""); is already called by gtk_set_locale()
-           via gtk_init() -- except that it hasn't been called yet. */
         bindtextdomain(GETTEXT_PACKAGE, localedir);
         textdomain(GETTEXT_PACKAGE);
         bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
@@ -845,6 +843,13 @@ main(int argc, char ** argv)
     qof_log_init();
     qof_log_set_default(QOF_LOG_INFO);
 
+    /* Note: setlocale will also be called later by gtk_init (which gets
+     * invoked by gnome_program_init), but that's too late. The locale
+     * must be properly set before parsing the command line arguments
+     * or filenames may be returned in a charset other than UTF-8 and
+     * not work with other glib calls.
+     */
+    setlocale(LC_ALL, "");
     gnucash_command_line(&argc, argv);
     gnc_print_unstable_message();
     gnc_log_init();
