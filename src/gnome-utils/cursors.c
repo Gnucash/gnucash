@@ -89,7 +89,7 @@ void
 gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
 {
     if (w != NULL)
-        gnc_ui_set_cursor (gtk_widget_get_windor(w), GNC_CURSOR_BUSY, update_now);
+        gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_BUSY, update_now);
     else
     {
         GList *containerstop, *node;
