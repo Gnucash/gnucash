@@ -354,13 +354,15 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
         GncEntry *to_entry = gncEntryCreate(book);
         gncEntryCopy(from_entry, to_entry);
 
-        if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR)
+        switch (gncInvoiceGetOwnerType (invoice))
         {
-            // this is a vendor bill
+        case GNC_OWNER_VENDOR:
+        case GNC_OWNER_EMPLOYEE:
+            // this is a vendor bill, or an expense voucher
             gncBillAddEntry(invoice, to_entry);
-        }
-        else
-        {
+            break;
+        case GNC_OWNER_CUSTOMER:
+        default:
             // this is an invoice
             gncInvoiceAddEntry(invoice, to_entry);
         }
