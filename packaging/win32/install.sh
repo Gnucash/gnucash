@@ -51,8 +51,8 @@ register_env_var READLINE_CPPFLAGS " "
 register_env_var READLINE_LDFLAGS " "
 register_env_var REGEX_CPPFLAGS " "
 register_env_var REGEX_LDFLAGS " "
-register_env_var WEBKIT_CFLAGS " "
-register_env_var WEBKIT_LIBS " "
+register_env_var SQLITE3_CFLAGS " "
+register_env_var SQLITE3_LIBS " "
 
 # steps
 # There is no reason to ever need to comment these out!
@@ -97,7 +97,12 @@ add_step inst_gwenhywfar
 add_step inst_ktoblzcheck
 add_step inst_aqbanking
 add_step inst_libdbi
+
+# libsoup and enchant needed by webkit
+add_step inst_libsoup
+add_step inst_enchant
 add_step inst_webkit
+
 ##
 if [ "$UPDATE_SOURCES" = "yes" ]; then
  add_step svn_up

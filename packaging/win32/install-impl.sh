@@ -75,6 +75,24 @@ function inst_wget() {
     fi
 }
 
+function inst_cmake() {
+    setup CMake
+    _CMAKE_UDIR=`unix_path ${CMAKE_DIR}`
+    add_to_env ${_CMAKE_UDIR}/bin PATH
+    if [ -f ${_CMAKE_UDIR}/bin/cmake.exe ]
+    then
+        echo "cmake already installed in $_CMAKE_UDIR.  skipping."
+    else
+        wget_unpacked $CMAKE_URL $DOWNLOAD_DIR $CMAKE_DIR
+
+        assert_one_dir ${_CMAKE_UDIR}/cmake-2*
+        mv ${_CMAKE_UDIR}/cmake-2*/* ${_CMAKE_UDIR}
+        rm -rf ${_CMAKE_UDIR}/cmake-2*
+
+        [ -f ${_CMAKE_UDIR}/bin/cmake.exe ] || die "cmake not installed correctly"
+    fi
+}
+
 function inst_dtk() {
     setup MSYS DTK
     _MSYS_UDIR=`unix_path $MSYS_DIR`
@@ -101,6 +119,21 @@ function inst_dtk() {
     fi
 }
 
+function inst_exetype() {
+    setup exetype
+    _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
+    add_to_env $_EXETYPE_UDIR/bin PATH
+    if quiet which exetype
+    then
+        echo "exetype already installed in $_EXETYPE_UDIR.  skipping."
+    else
+        mkdir -p $_EXETYPE_UDIR/bin
+        cp $EXETYPE_SCRIPT $_EXETYPE_UDIR/bin/exetype
+        chmod +x $_EXETYPE_UDIR/bin/exetype
+        quiet which exetype || die "exetype unavailable"
+    fi
+}
+
 function test_for_mingw() {
     if [ "$CROSS_COMPILE" == "yes" ]; then
         ${CC} --version && ${LD} --help
@@ -114,6 +147,7 @@ function inst_mingw() {
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
     [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/bin PATH
+    add_to_env $_MINGW_UDIR/bin PATH
 
     if quiet test_for_mingw
     then
@@ -140,228 +174,23 @@ function inst_mingw() {
         fi
         quiet test_for_mingw || die "mingw not installed correctly"
     fi
+    cp ${_MINGW_UDIR}/bin/libpthread-2.dll ${_MINGW_UDIR}/bin/pthreadGC2.dll
 
     configure_msys "$_PID" "$_MINGW_WFSDIR"
 }
 
-function inst_unzip() {
-    setup Unzip
-    _UNZIP_UDIR=`unix_path $UNZIP_DIR`
-    add_to_env $_UNZIP_UDIR/bin PATH
-    if quiet $_UNZIP_UDIR/bin/unzip --help || quiet unzip --help
+function inst_mingwutils() {
+    setup MinGW-Utils
+    _MINGW_UTILS_UDIR=`unix_path $MINGW_UTILS_DIR`
+    add_to_env $_MINGW_UTILS_UDIR/bin PATH
+    if quiet which pexports && quiet which reimp
     then
-        echo "unzip already installed in $_UNZIP_UDIR.  skipping."
+        echo "mingw-utils already installed in $_MINGW_UTILS_UDIR.  skipping."
     else
-        smart_wget $UNZIP_URL $DOWNLOAD_DIR
-        $LAST_FILE //SP- //SILENT //DIR="$UNZIP_DIR"
-        quiet unzip --help || die "unzip unavailable"
+        wget_unpacked $MINGW_UTILS_URL $DOWNLOAD_DIR $MINGW_UTILS_DIR
+        quiet which pexports || die "mingw-utils not installed correctly (pexports)"
+        quiet which reimp || die "mingw-utils not installed correctly (reimp)"
     fi
-}
-
-function inst_regex() {
-    setup RegEx
-    _REGEX_UDIR=`unix_path $REGEX_DIR`
-    add_to_env -lregex REGEX_LDFLAGS
-    add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
-    add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
-    add_to_env $_REGEX_UDIR/bin PATH
-    if quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile
-    then
-        echo "regex already installed in $_REGEX_UDIR.  skipping."
-    else
-        mkdir -p $_REGEX_UDIR
-        wget_unpacked $REGEX_URL $DOWNLOAD_DIR $REGEX_DIR
-        wget_unpacked $REGEX_DEV_URL $DOWNLOAD_DIR $REGEX_DIR
-        quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile || die "regex not installed correctly"
-    fi
-}
-
-function inst_readline() {
-    setup Readline
-    _READLINE_UDIR=`unix_path $READLINE_DIR`
-    add_to_env -I$_READLINE_UDIR/include READLINE_CPPFLAGS
-    add_to_env -L$_READLINE_UDIR/lib READLINE_LDFLAGS
-    add_to_env $_READLINE_UDIR/bin PATH
-    if quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile
-    then
-        echo "readline already installed in $_READLINE_UDIR.  skipping."
-    else
-        mkdir -p $_READLINE_UDIR
-        wget_unpacked $READLINE_BIN_URL $DOWNLOAD_DIR $READLINE_DIR
-        wget_unpacked $READLINE_LIB_URL $DOWNLOAD_DIR $READLINE_DIR
-        quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
-    fi
-}
-
-function inst_active_perl() {
-    setup ActivePerl \(intltool\)
-    _ACTIVE_PERL_UDIR=`unix_path $ACTIVE_PERL_DIR`
-    _ACTIVE_PERL_WFSDIR=`win_fs_path $ACTIVE_PERL_DIR`
-    set_env_or_die $_ACTIVE_PERL_WFSDIR/ActivePerl/Perl/bin/perl INTLTOOL_PERL
-    if quiet $INTLTOOL_PERL --help
-    then
-        echo "ActivePerl already installed IN $_ACTIVE_PERL_UDIR.  skipping."
-    else
-        wget_unpacked $ACTIVE_PERL_URL $DOWNLOAD_DIR $ACTIVE_PERL_DIR
-        qpushd $_ACTIVE_PERL_UDIR
-            assert_one_dir ActivePerl-*
-            mv ActivePerl-* ActivePerl
-        qpopd
-        quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
-    fi
-}
-
-function inst_autotools() {
-    setup Autotools
-    _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
-    add_to_env $_AUTOTOOLS_UDIR/bin PATH
-    add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
-    add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
-    if quiet autoconf --help && quiet automake --help
-    then
-        echo "autoconf/automake already installed in $_AUTOTOOLS_UDIR.  skipping."
-    else
-        wget_unpacked $AUTOCONF_URL $DOWNLOAD_DIR $TMP_DIR
-        wget_unpacked $AUTOMAKE_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/autoconf-*
-        qpushd $TMP_UDIR/autoconf-*
-            echo "building autoconf..."
-            ./configure --prefix=$_AUTOTOOLS_UDIR
-            make
-            make install
-        qpopd
-        assert_one_dir $TMP_UDIR/automake-*
-        qpushd $TMP_UDIR/automake-*
-            echo "building automake..."
-            ./configure --prefix=$_AUTOTOOLS_UDIR
-            make
-            make install
-        qpopd
-        quiet autoconf --help && quiet automake --help || die "autoconf/automake not installed correctly"
-        rm -rf ${TMP_UDIR}/autoconf-* ${TMP_UDIR}/automake-*
-    fi
-    if quiet libtoolize --help && \
-       quiet ${LD} $AUTOTOOLS_LDFLAGS -lltdl -o $TMP_UDIR/ofile
-    then
-        echo "libtool/libtoolize already installed.  skipping."
-    else
-        wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/libtool-*
-        qpushd $TMP_UDIR/libtool-*
-            echo "building libtool..."
-            ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR --disable-static
-            make
-            make install
-        qpopd
-        quiet libtoolize --help && \
-        quiet ${LD} $AUTOTOOLS_LDFLAGS -lltdl -o $TMP_UDIR/ofile || die "libtool/libtoolize not installed correctly"
-        rm -rf ${TMP_UDIR}/libtool-*
-    fi
-    [ ! -d $_AUTOTOOLS_UDIR/share/aclocal ] || add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
-}
-
-function inst_gmp() {
-    setup Gmp
-    _GMP_UDIR=`unix_path ${GMP_DIR}`
-    add_to_env -I$_GMP_UDIR/include GMP_CPPFLAGS
-    add_to_env -L$_GMP_UDIR/lib GMP_LDFLAGS
-    add_to_env ${_GMP_UDIR}/bin PATH
-    if quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile
-    then
-        echo "Gmp already installed in ${_GMP_UDIR}. skipping."
-    else
-        wget_unpacked $GMP_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/gmp-*
-        qpushd $TMP_UDIR/gmp-*
-            ./configure ${HOST_XCOMPILE} \
-                ABI=$GMP_ABI \
-                --prefix=${_GMP_UDIR} \
-                --disable-static --enable-shared 
-            make
-#            [ "$CROSS_COMPILE" != "yes" ] && make check
-            make install
-        qpopd
-        quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile || die "Gmp not installed correctly"
-        rm -rf ${TMP_UDIR}/gmp-*
-    fi
-}
-
-function inst_guile() {
-    setup Guile
-    _GUILE_WFSDIR=`win_fs_path $GUILE_DIR`
-    _GUILE_UDIR=`unix_path $GUILE_DIR`
-    _WIN_UDIR=`unix_path $WINDIR`
-    add_to_env -I$_GUILE_UDIR/include GUILE_CPPFLAGS
-    add_to_env -L$_GUILE_UDIR/lib GUILE_LDFLAGS
-    add_to_env $_GUILE_UDIR/bin PATH
-    if quiet guile -c '(use-modules (srfi srfi-39))'
-    then
-        echo "guile and slib already installed in $_GUILE_UDIR.  skipping."
-    else
-        smart_wget $GUILE_URL $DOWNLOAD_DIR
-        _GUILE_BALL=$LAST_FILE
-        tar -xzpf $_GUILE_BALL -C $TMP_UDIR
-        assert_one_dir $TMP_UDIR/guile-*
-        qpushd $TMP_UDIR/guile-*
-            patch -p1 < $GUILE_PATCH
-            ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS
-            ./configure ${HOST_XCOMPILE} \
-                --disable-static \
-                --disable-elisp \
-                --disable-dependency-tracking \
-                -C --prefix=$_GUILE_WFSDIR \
-                ac_cv_func_regcomp_rx=yes \
-                CFLAGS="-D__MINGW32__" \
-                CPPFLAGS="${READLINE_CPPFLAGS} ${REGEX_CPPFLAGS} ${AUTOTOOLS_CPPFLAGS} ${GMP_CPPFLAGS} -D__MINGW32__" \
-                LDFLAGS="${READLINE_LDFLAGS} ${REGEX_LDFLAGS} ${AUTOTOOLS_LDFLAGS} ${GMP_LDFLAGS} -Wl,--enable-auto-import"
-            make LDFLAGS="${READLINE_LDFLAGS} ${REGEX_LDFLAGS} ${AUTOTOOLS_LDFLAGS} ${GMP_LDFLAGS} -Wl,--enable-auto-import -no-undefined -avoid-version"
-            make install
-        qpopd
-        guile -c '(use-modules (srfi srfi-39))' || die "guile not installed correctly"
-
-        # If this libguile is used from MSVC compiler, we must
-        # deactivate some macros of scmconfig.h again.
-        SCMCONFIG_H=$_GUILE_UDIR/include/libguile/scmconfig.h
-        cat >> ${SCMCONFIG_H} <<EOF
-
-#ifdef _MSC_VER
-# undef HAVE_STDINT_H
-# undef HAVE_INTTYPES_H
-# undef HAVE_UNISTD_H
-#endif
-EOF
-        # Also, for MSVC compiler we need to create an import library
-        if [ x"$(which pexports.exe > /dev/null 2>&1)" != x ]
-        then
-            pexports $_GUILE_UDIR/bin/libguile.dll > $_GUILE_UDIR/lib/libguile.def
-            ${DLLTOOL} -d $_GUILE_UDIR/lib/libguile.def -D $_GUILE_UDIR/bin/libguile.dll -l $_GUILE_UDIR/lib/libguile.lib
-        fi
-        # Also, for MSVC compiler we need to slightly modify the gc.h header
-        GC_H=$_GUILE_UDIR/include/libguile/gc.h
-        grep -v 'extern .*_freelist2;' ${GC_H} > ${GC_H}.tmp
-        grep -v 'extern int scm_block_gc;' ${GC_H}.tmp > ${GC_H}
-        cat >> ${GC_H} <<EOF
-#ifdef _MSC_VER
-# define LIBGUILEDECL __declspec (dllimport)
-#else
-# define LIBGUILEDECL /* */
-#endif
-extern LIBGUILEDECL SCM scm_freelist2;
-extern LIBGUILEDECL struct scm_t_freelist scm_master_freelist2;
-extern LIBGUILEDECL int scm_block_gc;
-EOF
-        rm -rf ${TMP_UDIR}/guile-*
-    fi
-    if [ "$CROSS_COMPILE" = "yes" ]; then
-        mkdir -p $_GUILE_UDIR/bin
-        qpushd $_GUILE_UDIR/bin
-        # The cross-compiling guile expects these program names
-        # for the build-time guile
-        ln -sf /usr/bin/guile-config mingw32-guile-config
-        ln -sf /usr/bin/guile mingw32-build-guile
-        qpopd
-    fi
-    [ ! -d $_GUILE_UDIR/share/aclocal ] || add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
 function inst_svn() {
@@ -379,280 +208,6 @@ function inst_svn() {
 		cp -a $TMP_UDIR/svn-win32-*/* $SVN_DIR
 		rm -rf $TMP_UDIR/svn-win32-*
         quiet $_SVN_UDIR/bin/svn --version || die "svn not installed correctly"
-    fi
-}
-
-function inst_openssl() {
-    setup OpenSSL
-    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
-    add_to_env $_OPENSSL_UDIR/bin PATH
-    # Make sure the files of Win32OpenSSL-0_9_8d are really gone!
-    if test -f $_OPENSSL_UDIR/unins000.exe ; then
-        die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
-    fi
-    # Make sure the files of openssl-0.9.7c-{bin,lib}.zip are really gone!
-    if [ -f $_OPENSSL_UDIR/lib/libcrypto.dll.a ] ; then
-        die "Found old OpenSSL installation in $_OPENSSL_UDIR.  Please remove that first."
-    fi
-
-    if quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile ; then
-        echo "openssl already installed in $_OPENSSL_UDIR.  skipping."
-    else
-        smart_wget $OPENSSL_URL $DOWNLOAD_DIR
-        echo -n "Extracting ${LAST_FILE##*/} ... "
-        tar -xzpf $LAST_FILE -C $TMP_UDIR &>/dev/null | true
-        echo "done"
-        assert_one_dir $TMP_UDIR/openssl-*
-        qpushd $TMP_UDIR/openssl-*
-            for _dir in crypto ssl ; do
-                qpushd $_dir
-                    find . -name "*.h" -exec cp {} ../include/openssl/ \;
-                qpopd
-            done
-            cp *.h include/openssl
-            _COMSPEC_U=`unix_path $COMSPEC`
-            PATH=$_ACTIVE_PERL_UDIR/ActivePerl/Perl/bin:$_MINGW_UDIR/bin $_COMSPEC_U //c ms\\mingw32
-            mkdir -p $_OPENSSL_UDIR/bin
-            mkdir -p $_OPENSSL_UDIR/lib
-            mkdir -p $_OPENSSL_UDIR/include
-            cp -a libeay32.dll libssl32.dll $_OPENSSL_UDIR/bin
-            cp -a libssl32.dll $_OPENSSL_UDIR/bin/ssleay32.dll
-            for _implib in libeay32 libssl32 ; do
-                cp -a out/$_implib.a $_OPENSSL_UDIR/lib/$_implib.dll.a
-            done
-            cp -a include/openssl $_OPENSSL_UDIR/include
-        qpopd
-        quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile || die "openssl not installed correctly"
-        rm -rf ${TMP_UDIR}/openssl-*
-    fi
-    _eay32dll=$(echo $(which libeay32.dll))  # which sucks
-    if [ -z "$_eay32dll" ] ; then
-        die "Did not find libeay32.dll in your PATH, why that?"
-    fi
-    if [ "$_eay32dll" != "$_OPENSSL_UDIR/bin/libeay32.dll" ] ; then
-        die "Found $_eay32dll in PATH.  If you have added $_OPENSSL_UDIR/bin to your PATH before, make sure it is listed before paths from other packages shipping SSL libraries, like SVN.  In particular, check $_MINGW_UDIR/etc/profile.d/installer.sh."
-    fi
-}
-
-function inst_mingwutils() {
-    setup MinGW-Utils
-    _MINGW_UTILS_UDIR=`unix_path $MINGW_UTILS_DIR`
-    add_to_env $_MINGW_UTILS_UDIR/bin PATH
-    if quiet which pexports && quiet which reimp
-    then
-        echo "mingw-utils already installed in $_MINGW_UTILS_UDIR.  skipping."
-    else
-        wget_unpacked $MINGW_UTILS_URL $DOWNLOAD_DIR $MINGW_UTILS_DIR
-        (quiet which pexports && quiet which reimp) || die "mingw-utils not installed correctly"
-    fi
-}
-
-function inst_exetype() {
-    setup exetype
-    _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
-    add_to_env $_EXETYPE_UDIR/bin PATH
-    if quiet which exetype
-    then
-        echo "exetype already installed in $_EXETYPE_UDIR.  skipping."
-    else
-        mkdir -p $_EXETYPE_UDIR/bin
-        cp $EXETYPE_SCRIPT $_EXETYPE_UDIR/bin/exetype
-        chmod +x $_EXETYPE_UDIR/bin/exetype
-        quiet which exetype || die "exetype unavailable"
-    fi
-}
-
-function inst_libxslt() {
-    setup LibXSLT
-    _LIBXSLT_UDIR=`unix_path $LIBXSLT_DIR`
-    add_to_env $_LIBXSLT_UDIR/bin PATH
-    if quiet which xsltproc
-    then
-        echo "libxslt already installed in $_LIBXSLT_UDIR.  skipping."
-    else
-        [ "$CROSS_COMPILE" = "yes" ] && die "xsltproc unavailable"
-        wget_unpacked $LIBXSLT_URL $DOWNLOAD_DIR $LIBXSLT_DIR
-        wget_unpacked $LIBXSLT_LIBXML2_URL $DOWNLOAD_DIR $LIBXSLT_DIR
-        wget_unpacked ${LIBXSLT_ICONV_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
-        wget_unpacked ${LIBXSLT_ZLIB_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
-        qpushd $_LIBXSLT_UDIR
-            # The unpacked zips put their content into a directory one
-            # below of where we want them, so we move the content to
-            # the parent directory here.
-            for A in libxslt-* libxml2-* iconv-* zlib-* ; do
-                if [ -d $A ] ; then
-                    mv $A tmpdir
-                    cp -r tmpdir/* .
-                    rm -rf tmpdir
-                else
-                    echo "Oops, $A is not a directory - skipping here."
-                fi
-            done
-        qpopd
-        quiet which xsltproc || die "libxslt not installed correctly"
-    fi
-}
-
-function inst_gnome() {
-    setup Gnome platform
-    _GNOME_UDIR=`unix_path $GNOME_DIR`
-    add_to_env -I$_GNOME_UDIR/include GNOME_CPPFLAGS
-    add_to_env -L$_GNOME_UDIR/lib GNOME_LDFLAGS
-    add_to_env $_GNOME_UDIR/bin PATH
-    add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if [ "$CROSS_COMPILE" != "yes" ]; then
-        add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
-    else
-        add_to_env pkg-config PKG_CONFIG
-    fi
-    if quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
-        quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
-        quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
-        quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
-        quiet intltoolize --version
-    then
-        echo "gnome packages installed in $_GNOME_UDIR.  skipping."
-    else
-        mkdir -p $_GNOME_UDIR
-        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GETTEXT_RUNTIME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GETTEXT_TOOLS_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBJPEG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBPNG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBTIFF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ZLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PKG_CONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $EXPAT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $FONTCONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $FREETYPE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ATK_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ATK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PANGO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        echo 'gtk-theme-name = "MS-Windows"' > ${_GNOME_UDIR}/etc/gtk-2.0/gtkrc
-        wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GAIL_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GAIL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $POPT_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $POPT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GCONF_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GCONF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GNOME_VFS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/gtk2-themes-*
-        cp -a $TMP_UDIR/gtk2-themes-*/lib $_GNOME_UDIR/
-        cp -a $TMP_UDIR/gtk2-themes-*/share $_GNOME_UDIR/
-        rm -rf $TMP_UDIR/gtk2-themes-*
-
-        wget_unpacked $GTK_PREFS_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/gtk2_prefs-*
-        mv $TMP_UDIR/gtk2_prefs-*/gtk2_prefs.exe $_GNOME_UDIR/bin
-        rm -rf $TMP_UDIR/gtk2_prefs-*
-
-        wget_unpacked $GTK_DOC_URL $DOWNLOAD_DIR $TMP_DIR
-        qpushd $_GNOME_UDIR
-            assert_one_dir $TMP_UDIR/gtk-doc-*
-            mv $TMP_UDIR/gtk-doc-*/gtk-doc.m4 $_GNOME_UDIR/share/aclocal
-            if [ ! -f libexec/gconfd-2.console.exe ]; then
-                cp libexec/gconfd-2.exe libexec/gconfd-2.console.exe
-            fi
-            exetype libexec/gconfd-2.exe windows
-            for file in bin/intltool-*; do
-                sed '1s,!.*perl,!'"$INTLTOOL_PERL"',;s,/opt/gnu/bin/iconv,iconv,' $file > tmp
-                mv tmp $file
-            done
-            # work around a bug in msys bash, adding 0x01 smilies
-            cat > bin/pkg-config-msys.sh <<EOF
-#!/bin/sh
-PKG_CONFIG="\$(dirname \$0)/pkg-config"
-if \${PKG_CONFIG} "\$@" > /dev/null 2>&1 ; then
-    res=true
-else
-    res=false
-fi
-\${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
-EOF
-            chmod +x bin/pkg-config{.exe,-msys.sh}
-            rm -rf $TMP_UDIR/gtk-doc-*
-        qpopd
-
-        if [ "$CROSS_COMPILE" = "yes" ]; then
-            qpushd $_GNOME_UDIR/lib/pkgconfig
-                perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
-                #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
-            qpopd
-        fi
-        wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/pixman-*
-        qpushd $TMP_UDIR/pixman-*
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=$_GNOME_UDIR \
-                --disable-static
-            make
-            make install
-        qpopd
-        rm -rf $TMP_UDIR/pixman-*
-        ${PKG_CONFIG} --exists pixman-1 || die "pixman not installed correctly"
-        quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
-        quiet intltoolize --version || die "gnome not installed correctly"
-    fi
-    [ ! -d $_GNOME_UDIR/share/aclocal ] || add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
-}
-
-function inst_isocodes() {
-    setup isocodes
-    _ISOCODES_UDIR=`unix_path ${ISOCODES_DIR}`
-    add_to_env $_ISOCODES_UDIR/share/pkgconfig PKG_CONFIG_PATH
-    if [ -f ${_ISOCODES_UDIR}/share/pkgconfig/iso-codes.pc ]
-    then
-        echo "isocodes already installed in $_ISOCODES_UDIR. skipping."
-    else
-        wget_unpacked $ISOCODES_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/iso-codes-*
-        qpushd $TMP_UDIR/iso-codes-*
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=${_ISOCODES_UDIR}
-            make
-            make install
-        qpopd
-        quiet [ -f ${_ISOCODES_UDIR}/share/pkgconfig/iso-codes.pc ] || die "isocodes not installed correctly"
-        rm -rf ${TMP_UDIR}/iso-codes-*
     fi
 }
 
@@ -676,382 +231,40 @@ function inst_swig() {
     fi
 }
 
-function inst_pcre() {
-    setup pcre
-    _PCRE_UDIR=`unix_path $PCRE_DIR`
-    add_to_env -I$_PCRE_UDIR/include PCRE_CPPFLAGS
-    add_to_env -L$_PCRE_UDIR/lib PCRE_LDFLAGS
-    add_to_env $_PCRE_UDIR/bin PATH
-    if quiet ${LD} $PCRE_LDFLAGS -lpcre -o $TMP_UDIR/ofile
+function inst_unzip() {
+    setup Unzip
+    _UNZIP_UDIR=`unix_path $UNZIP_DIR`
+    add_to_env $_UNZIP_UDIR/bin PATH
+    if quiet $_UNZIP_UDIR/bin/unzip --help || quiet unzip --help
     then
-        echo "pcre already installed in $_PCRE_UDIR.  skipping."
+        echo "unzip already installed in $_UNZIP_UDIR.  skipping."
     else
-        mkdir -p $_PCRE_UDIR
-        wget_unpacked $PCRE_BIN_URL $DOWNLOAD_DIR $PCRE_DIR
-        wget_unpacked $PCRE_LIB_URL $DOWNLOAD_DIR $PCRE_DIR
+        smart_wget $UNZIP_URL $DOWNLOAD_DIR
+        $LAST_FILE //SP- //SILENT //DIR="$UNZIP_DIR"
+        quiet unzip --help || die "unzip unavailable"
     fi
-    quiet ${LD} $PCRE_LDFLAGS -lpcre -o $TMP_UDIR/ofile || die "pcre not installed correctly"
 }
 
-function inst_libbonoboui() {
-    setup libbonoboui
-    _LIBBONOBOUI_UDIR=`unix_path $LIBBONOBOUI_DIR`
-    add_to_env $_LIBBONOBOUI_UDIR/bin PATH
-    add_to_env $_LIBBONOBOUI_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ]
-    then
-        echo "libbonoboui already installed in $_LIBBONOBOUI_UDIR.  skipping."
-    else
-        wget_unpacked $LIBBONOBOUI_SRC_URL $DOWNLOAD_DIR $TMP_DIR
-        mydir=`pwd`
-        assert_one_dir $TMP_UDIR/libbonoboui-*
-        qpushd $TMP_UDIR/libbonoboui-*
-            [ -n "$LIBBONOBOUI_PATCH" -a -f "$LIBBONOBOUI_PATCH" ] && \
-                patch -p1 < $LIBBONOBOUI_PATCH
-            #libtoolize --force
-            #aclocal ${ACLOCAL_FLAGS} -I .
-            #automake
-            #autoconf
-            ./configure ${HOST_XCOMPILE} --prefix=$_LIBBONOBOUI_UDIR \
-                POPT_LIBS="-lpopt" \
-                CPPFLAGS="${GNOME_CPPFLAGS}" \
-                LDFLAGS="${GNOME_LDFLAGS}" \
-                --enable-static=no
-            make
-            make install
+# Functions before this point are basic build infrastructure functions or else they get pieces needed to build
+# gnucash but which are not part of the final product.  Functions after this point are for components of the
+# final build.  Please leave in alphabetical order so they are easier to find.
 
-            # We override the $GNOME_DIR libbonoboui files because
-            # those erroneously depend on the obsolete libxml2.dll
-            cp -a $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll $_GNOME_UDIR/bin
-            cp -a $_LIBBONOBOUI_UDIR/lib/libbonoboui* $_GNOME_UDIR/lib
+function inst_active_perl() {
+    setup ActivePerl \(intltool\)
+    _ACTIVE_PERL_UDIR=`unix_path $ACTIVE_PERL_DIR`
+    _ACTIVE_PERL_BASE_DIR=$_ACTIVE_PERL_UDIR/ActivePerl/Perl
+    _ACTIVE_PERL_WFSDIR=`win_fs_path $ACTIVE_PERL_DIR`
+    set_env_or_die $_ACTIVE_PERL_WFSDIR/ActivePerl/Perl/bin/perl INTLTOOL_PERL
+    if quiet $INTLTOOL_PERL --help
+    then
+        echo "ActivePerl already installed IN $_ACTIVE_PERL_UDIR.  skipping."
+    else
+        wget_unpacked $ACTIVE_PERL_URL $DOWNLOAD_DIR $ACTIVE_PERL_DIR
+        qpushd $_ACTIVE_PERL_UDIR
+            assert_one_dir ActivePerl-*
+            mv ActivePerl-* ActivePerl
         qpopd
-        ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ] || die "libbonoboui not installed correctly"
-        rm -rf ${TMP_UDIR}/libbonoboui-*
-    fi
-}
-
-function inst_libgsf() {
-    setup libGSF
-    _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
-    add_to_env $_LIBGSF_UDIR/bin PATH
-    add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 &&
-        quiet ${PKG_CONFIG} --atleast-version=${LIBGSF_VERSION} libgsf-1
-    then
-        echo "libgsf already installed in $_LIBGSF_UDIR.  skipping."
-    else
-        rm -rf ${TMP_UDIR}/libgsf-*
-        wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/libgsf-*
-        qpushd $TMP_UDIR/libgsf-*
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=$_LIBGSF_UDIR \
-                --disable-static \
-                --without-python \
-                CPPFLAGS="${GNOME_CPPFLAGS}" \
-                LDFLAGS="${GNOME_LDFLAGS}"
-            make
-            rm -rf ${_LIBGSF_UDIR}
-            make install
-        qpopd
-        ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
-    fi
-}
-
-function inst_goffice() {
-    setup GOffice
-    _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
-    add_to_env $_GOFFICE_UDIR/bin PATH
-    add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --atleast-version=${GOFFICE_VERSION} libgoffice-0.8
-    then
-        echo "goffice already installed in $_GOFFICE_UDIR.  skipping."
-    else
-        wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
-        mydir=`pwd`
-        assert_one_dir $TMP_UDIR/goffice-*
-        qpushd $TMP_UDIR/goffice-*
-            [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
-                patch -p1 < $GOFFICE_PATCH
-            libtoolize --force
-            aclocal ${ACLOCAL_FLAGS} -I .
-            automake
-            autoconf
-            ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
-                CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS} ${HH_CPPFLAGS}" \
-                LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS} ${HH_LDFLAGS}"
-            [ -d ../libgsf-* ] || die "We need the unpacked package $TMP_UDIR/libgsf-*; please unpack it in $TMP_UDIR"
-            [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
-            make
-            rm -rf ${_GOFFICE_UDIR}
-            make install
-        qpopd
-        ${PKG_CONFIG} --exists libgoffice-0.8 && [ -f $_GOFFICE_UDIR/bin/libgoffice*.dll ] || die "goffice not installed correctly"
-        rm -rf ${TMP_UDIR}/goffice-*
-        rm -rf ${TMP_UDIR}/libgsf-*
-    fi
-}
-
-function inst_glade() {
-    setup Glade
-    _GLADE_UDIR=`unix_path $GLADE_DIR`
-    _GLADE_WFSDIR=`win_fs_path $GLADE_DIR`
-    add_to_env $_GLADE_UDIR/bin PATH
-    if quiet glade-3 --version
-    then
-        echo "glade already installed in $_GLADE_UDIR.  skipping."
-    else
-        wget_unpacked $GLADE_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/glade3-*
-        qpushd $TMP_UDIR/glade3-*
-            ./configure ${HOST_XCOMPILE} --prefix=$_GLADE_WFSDIR
-            make
-            make install
-        qpopd
-        quiet glade-3 --version || die "glade not installed correctly"
-        rm -rf ${TMP_UDIR}/glade3-*
-    fi
-}
-
-function inst_inno() {
-    setup Inno Setup Compiler
-    _INNO_UDIR=`unix_path $INNO_DIR`
-    add_to_env $_INNO_UDIR PATH
-    if quiet which iscc
-    then
-        echo "Inno Setup Compiler already installed in $_INNO_UDIR.  skipping."
-    else
-        smart_wget $INNO_URL $DOWNLOAD_DIR
-        $LAST_FILE //SP- //SILENT //DIR="$INNO_DIR"
-        quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
-    fi
-}
-
-function test_for_hh() {
-    qpushd $TMP_UDIR
-        cat > ofile.c <<EOF
-#include <windows.h>
-#include <htmlhelp.h>
-int main(int argc, char **argv) {
-  HtmlHelpW(0, (wchar_t*)"", HH_HELP_CONTEXT, 0);
-  return 0;
-}
-EOF
-        gcc -shared -o ofile.dll ofile.c $HH_CPPFLAGS $HH_LDFLAGS -lhtmlhelp || return 1
-    qpopd
-}
-
-function inst_hh() {
-    setup HTML Help Workshop
-    _HH_UDIR=`unix_path $HH_DIR`
-    add_to_env -I$_HH_UDIR/include HH_CPPFLAGS
-    add_to_env -L$_HH_UDIR/lib HH_LDFLAGS
-    add_to_env $_HH_UDIR PATH
-    if quiet test_for_hh
-    then
-        echo "html help workshop already installed in $_HH_UDIR.  skipping."
-    else
-        smart_wget $HH_URL $DOWNLOAD_DIR
-        echo "!!! When asked for an installation path, specify $HH_DIR !!!"
-        $LAST_FILE
-        qpushd $HH_DIR
-           _HHCTRL_OCX=$(which hhctrl.ocx || true)
-           [ "$_HHCTRL_OCX" ] || die "Did not find hhctrl.ocx"
-           pexports -h include/htmlhelp.h $_HHCTRL_OCX > lib/htmlhelp.def
-           qpushd lib
-               ${DLLTOOL} -k -d htmlhelp.def -l libhtmlhelp.a
-               mv htmlhelp.lib htmlhelp.lib.bak
-           qpopd
-        qpopd
-        quiet test_for_hh || die "html help workshop not installed correctly"
-    fi
-}
-
-function inst_opensp() {
-    setup OpenSP
-    _OPENSP_UDIR=`unix_path ${OPENSP_DIR}`
-    add_to_env ${_OPENSP_UDIR}/bin PATH
-    if test -f ${_OPENSP_UDIR}/bin/libosp-5.dll
-    then
-        echo "OpenSP already installed in $_OPENSP_UDIR. skipping."
-    else
-        wget_unpacked $OPENSP_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/OpenSP-*
-        qpushd $TMP_UDIR/OpenSP-*
-            [ -n "$OPENSP_PATCH" -a -f "$OPENSP_PATCH" ] && \
-                patch -p0 < $OPENSP_PATCH
-            libtoolize --force
-            aclocal ${ACLOCAL_FLAGS} -I m4
-            automake
-            autoconf
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=${_OPENSP_UDIR} \
-                --disable-doc-build --disable-static
-            # On many windows machines, none of the programs will
-            # build, but we only need the library, so ignore the rest.
-            make all-am
-            make -C lib
-            make -i
-            make -i install
-        qpopd
-        test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "OpenSP not installed correctly"
-    fi
-}
-
-function inst_libofx() {
-    setup Libofx
-    _LIBOFX_UDIR=`unix_path ${LIBOFX_DIR}`
-    add_to_env ${_LIBOFX_UDIR}/bin PATH
-    add_to_env ${_LIBOFX_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libofx
-    then
-        echo "Libofx already installed in $_LIBOFX_UDIR. skipping."
-    else
-        wget_unpacked $LIBOFX_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/libofx-*
-        qpushd $TMP_UDIR/libofx-*
-            if [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ]; then
-                patch -p1 < $LIBOFX_PATCH
-#                libtoolize --force
-#                aclocal ${ACLOCAL_FLAGS}
-#                automake
-#                autoconf
-#                ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS -B $_AUTOTOOLS_UDIR/share/autoconf/autoconf
-            fi
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=${_LIBOFX_UDIR} \
-                --with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
-                --with-opensp-libs=${_OPENSP_UDIR}/lib \
-                CPPFLAGS="-DOS_WIN32 ${GNOME_CPPFLAGS}" \
-                --disable-static
-            make LDFLAGS="${LDFLAGS} -no-undefined ${GNOME_LDFLAGS} -liconv"
-            make install
-        qpopd
-        quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
-        rm -rf ${TMP_UDIR}/libofx-*
-    fi
-}
-
-function inst_gnutls() {
-    setup GNUTLS
-    _GNUTLS_UDIR=`unix_path ${GNUTLS_DIR}`
-    add_to_env ${_GNUTLS_UDIR}/bin PATH
-    add_to_env ${_GNUTLS_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_env "-I${_GNUTLS_UDIR}/include" GNUTLS_CPPFLAGS
-    add_to_env "-L${_GNUTLS_UDIR}/lib" GNUTLS_LDFLAGS
-    if quiet ${PKG_CONFIG} --exact-version=${GNUTLS_VERSION} gnutls
-    then
-        echo "GNUTLS already installed in $_GNUTLS_UDIR. skipping."
-    else
-        wget_unpacked $GNUTLS_URL $DOWNLOAD_DIR $GNUTLS_DIR
-        rm -f $_GNUTLS_UDIR/lib/*.la
-        quiet ${PKG_CONFIG} --exists gnutls || die "GNUTLS not installed correctly"
-    fi
-    [ ! -d $_GNUTLS_UDIR/share/aclocal ] || add_to_env "-I $_GNUTLS_UDIR/share/aclocal" ACLOCAL_FLAGS
-}
-
-function inst_gwenhywfar() {
-    setup Gwenhywfar
-    _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
-    add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
-    add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exact-version=${GWENHYWFAR_VERSION} gwenhywfar
-    then
-        echo "Gwenhywfar already installed in $_GWENHYWFAR_UDIR. skipping."
-    else
-        wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/gwenhywfar-*
-        qpushd $TMP_UDIR/gwenhywfar-*
-            # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
-            if [ "$AQBANKING5" = "yes" ]; then
-                # Note: gwenhywfar-3.x and higher don't use openssl anymore.
-                ./configure ${HOST_XCOMPILE} \
-                    --with-libgcrypt-prefix=$_GNUTLS_UDIR \
-                    --disable-binreloc \
-                    --disable-ssl \
-                    --prefix=$_GWENHYWFAR_UDIR \
-                    --with-guis=gtk2 \
-                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS} `pkg-config --cflags gtk+-2.0`" \
-                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
-            else
-                if [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] ; then
-                    patch -p1 < $GWENHYWFAR_PATCH
-                    #aclocal -I m4 ${ACLOCAL_FLAGS}
-                    #automake
-                    #autoconf
-                fi
-                # Note: gwenhywfar-3.x and higher don't use openssl anymore.
-                ./configure ${HOST_XCOMPILE} \
-                    --with-libgcrypt-prefix=$_GNUTLS_UDIR \
-                    --disable-binreloc \
-                    --disable-ssl \
-                    --prefix=$_GWENHYWFAR_UDIR \
-                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}" \
-                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
-            fi
-            make
-#            [ "$CROSS_COMPILE" != "yes" ] && make check
-            rm -rf ${_GWENHYWFAR_UDIR}
-            make install
-        qpopd
-        ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
-        rm -rf ${TMP_UDIR}/gwenhywfar-*
-    fi
-    [ ! -d $_GWENHYWFAR_UDIR/share/aclocal ] || add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
-}
-
-function inst_ktoblzcheck() {
-    setup Ktoblzcheck
-    # Out of convenience ktoblzcheck is being installed into
-    # GWENHYWFAR_DIR
-    add_to_env "-I${_GWENHYWFAR_UDIR}/include" KTOBLZCHECK_CPPFLAGS
-    add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
-    if quiet ${PKG_CONFIG} --exact-version=${KTOBLZCHECK_VERSION} ktoblzcheck
-    then
-        echo "Ktoblzcheck already installed in $_GWENHYWFAR_UDIR. skipping."
-    else
-        wget_unpacked $KTOBLZCHECK_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/ktoblzcheck-*
-        qpushd $TMP_UDIR/ktoblzcheck-*
-            # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=${_GWENHYWFAR_UDIR} \
-                --disable-binreloc \
-                --disable-python
-            make
-#            [ "$CROSS_COMPILE" != "yes" ] && make check
-            make install
-        qpopd
-        ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
-        rm -rf ${TMP_UDIR}/ktoblzcheck-*
-    fi
-}
-
-function inst_qt4() {
-    # This section is not a full install, but the .la creation is
-    # already useful in itself and that's why it has already been
-    # added.
-
-    [ "$QTDIR" ] || die "QTDIR is not set.  Please install Qt and set that variable in custom.sh, or deactivate AQBANKING_WITH_QT"
-    export QTDIR=`unix_path ${QTDIR}`  # help configure of aqbanking
-    _QTDIR=$QTDIR
-    # This section creates .la files for the Qt-4 DLLs so that
-    # libtool correctly links to the DLLs.
-    if test ! -f ${_QTDIR}/lib/libQtCore4.la ; then
-        qpushd ${_QTDIR}/lib
-            for A in lib*.a; do
-                LIBBASENAME=`basename ${A} .a`
-                OUTFILE="${LIBBASENAME}.la"
-                BASENAME=`echo ${LIBBASENAME} | sed -e"s/lib//" `
-                DLLNAME="${BASENAME}.dll"
-
-                # Create la file
-                echo "# Generated by foo bar libtool" > $OUTFILE
-                echo "dlname='../bin/${DLLNAME}'" >> $OUTFILE
-                echo "library_names='${DLLNAME}'" >> $OUTFILE
-                echo "libdir='${_QTDIR}/bin'" >> $OUTFILE
-            done
-        qpopd
+        quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
     fi
 }
 
@@ -1135,6 +348,543 @@ function inst_aqbanking() {
     [ ! -d $_AQBANKING_UDIR/share/aclocal ] || add_to_env "-I $_AQBANKING_UDIR/share/aclocal" ACLOCAL_FLAGS
 }
 
+function inst_autotools() {
+    setup Autotools
+    _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
+    add_to_env $_AUTOTOOLS_UDIR/bin PATH
+    add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
+    add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
+    if quiet autoconf --help && quiet automake --help
+    then
+        echo "autoconf/automake already installed in $_AUTOTOOLS_UDIR.  skipping."
+    else
+        wget_unpacked $AUTOCONF_URL $DOWNLOAD_DIR $TMP_DIR
+        wget_unpacked $AUTOMAKE_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/autoconf-*
+        qpushd $TMP_UDIR/autoconf-*
+            echo "building autoconf..."
+            ./configure --prefix=$_AUTOTOOLS_UDIR
+            make
+            make install
+        qpopd
+        assert_one_dir $TMP_UDIR/automake-*
+        qpushd $TMP_UDIR/automake-*
+            echo "building automake..."
+            ./configure --prefix=$_AUTOTOOLS_UDIR
+            make
+            make install
+        qpopd
+        quiet autoconf --help || die "autoconf not installed correctly"
+        quiet automake --help || die "automake not installed correctly"
+        rm -rf ${TMP_UDIR}/autoconf-* ${TMP_UDIR}/automake-*
+    fi
+    if quiet libtoolize --help && \
+       quiet ${LD} $AUTOTOOLS_LDFLAGS -lltdl -o $TMP_UDIR/ofile
+    then
+        echo "libtool/libtoolize already installed.  skipping."
+    else
+        wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libtool-*
+        qpushd $TMP_UDIR/libtool-*
+            echo "building libtool..."
+            ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR --disable-static
+            make
+            make install
+        qpopd
+        quiet libtoolize --help && \
+        quiet ${LD} $AUTOTOOLS_LDFLAGS -lltdl -o $TMP_UDIR/ofile || die "libtool/libtoolize not installed correctly"
+        rm -rf ${TMP_UDIR}/libtool-*
+    fi
+    [ ! -d $_AUTOTOOLS_UDIR/share/aclocal ] || add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
+}
+
+function inst_enchant() {
+    setup enchant
+    _ENCHANT_UDIR=`unix_path $ENCHANT_DIR`
+    add_to_env ${_ENCHANT_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists enchant
+    then
+        echo "enchant already installed in $_ENCHANT_UDIR.  skipping."
+    else
+        wget_unpacked $ENCHANT_URL $DOWNLOAD_DIR $ENCHANT_DIR
+        wget_unpacked $ENCHANT_DEV_URL $DOWNLOAD_DIR $ENCHANT_DIR
+        quiet ${PKG_CONFIG} --exists enchant || die "enchant not installed correctly"
+    fi
+}
+
+function inst_glade() {
+    setup Glade
+    _GLADE_UDIR=`unix_path $GLADE_DIR`
+    _GLADE_WFSDIR=`win_fs_path $GLADE_DIR`
+    add_to_env $_GLADE_UDIR/bin PATH
+    if quiet glade-3 --version
+    then
+        echo "glade already installed in $_GLADE_UDIR.  skipping."
+    else
+        wget_unpacked $GLADE_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/glade3-*
+        qpushd $TMP_UDIR/glade3-*
+            ./configure ${HOST_XCOMPILE} --prefix=$_GLADE_WFSDIR
+            make
+            make install
+        qpopd
+        quiet glade-3 --version || die "glade not installed correctly"
+        rm -rf ${TMP_UDIR}/glade3-*
+    fi
+}
+
+function inst_gmp() {
+    setup Gmp
+    _GMP_UDIR=`unix_path ${GMP_DIR}`
+    add_to_env -I$_GMP_UDIR/include GMP_CPPFLAGS
+    add_to_env -L$_GMP_UDIR/lib GMP_LDFLAGS
+    add_to_env ${_GMP_UDIR}/bin PATH
+    if quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile
+    then
+        echo "Gmp already installed in ${_GMP_UDIR}. skipping."
+    else
+        wget_unpacked $GMP_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/gmp-*
+        qpushd $TMP_UDIR/gmp-*
+            ./configure ${HOST_XCOMPILE} \
+                ABI=$GMP_ABI \
+                --prefix=${_GMP_UDIR} \
+                --disable-static --enable-shared 
+            make
+#            [ "$CROSS_COMPILE" != "yes" ] && make check
+            make install
+        qpopd
+        quiet ${LD} $GMP_LDFLAGS -lgmp -o $TMP_UDIR/ofile || die "Gmp not installed correctly"
+        rm -rf ${TMP_UDIR}/gmp-*
+    fi
+}
+
+function inst_gnome() {
+    setup Gnome platform
+    _GNOME_UDIR=`unix_path $GNOME_DIR`
+    add_to_env -I$_GNOME_UDIR/include GNOME_CPPFLAGS
+    add_to_env -L$_GNOME_UDIR/lib GNOME_LDFLAGS
+    add_to_env $_GNOME_UDIR/bin PATH
+    add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    if [ "$CROSS_COMPILE" != "yes" ]; then
+        add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
+    else
+        add_to_env pkg-config PKG_CONFIG
+    fi
+    if quiet gconftool-2 --version &&
+        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
+        quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
+        quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
+        quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
+        quiet intltoolize --version
+    then
+        echo "gnome packages installed in $_GNOME_UDIR.  skipping."
+    else
+        mkdir -p $_GNOME_UDIR
+        wget_unpacked $ATK_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ATK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $EXPAT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $FONTCONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $FREETYPE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GAIL_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GAIL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GCONF_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GCONF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GDK_PIXBUF_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GDK_PIXBUF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_RUNTIME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_TOOLS_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GNOME_VFS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBJPEG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBPNG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBTIFF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+#        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
+#        wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PANGO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PKG_CONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $POPT_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $POPT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ZLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        echo 'gtk-theme-name = "MS-Windows"' > ${_GNOME_UDIR}/etc/gtk-2.0/gtkrc
+
+        wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/gtk2-themes-*
+        cp -a $TMP_UDIR/gtk2-themes-*/lib $_GNOME_UDIR/
+        cp -a $TMP_UDIR/gtk2-themes-*/share $_GNOME_UDIR/
+        rm -rf $TMP_UDIR/gtk2-themes-*
+
+        wget_unpacked $GTK_PREFS_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/gtk2_prefs-*
+        mv $TMP_UDIR/gtk2_prefs-*/gtk2_prefs.exe $_GNOME_UDIR/bin
+        rm -rf $TMP_UDIR/gtk2_prefs-*
+
+        wget_unpacked $GTK_DOC_URL $DOWNLOAD_DIR $TMP_DIR
+        qpushd $_GNOME_UDIR
+            assert_one_dir $TMP_UDIR/gtk-doc-*
+            mv $TMP_UDIR/gtk-doc-*/gtk-doc.m4 $_GNOME_UDIR/share/aclocal
+            if [ ! -f libexec/gconfd-2.console.exe ]; then
+                cp libexec/gconfd-2.exe libexec/gconfd-2.console.exe
+            fi
+            exetype libexec/gconfd-2.exe windows
+            for file in bin/intltool-*; do
+                sed '1s,!.*perl,!'"$INTLTOOL_PERL"',;s,/opt/gnu/bin/iconv,iconv,' $file > tmp
+                mv tmp $file
+            done
+            # work around a bug in msys bash, adding 0x01 smilies
+            cat > bin/pkg-config-msys.sh <<EOF
+#!/bin/sh
+PKG_CONFIG="\$(dirname \$0)/pkg-config"
+if \${PKG_CONFIG} "\$@" > /dev/null 2>&1 ; then
+    res=true
+else
+    res=false
+fi
+\${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
+EOF
+            chmod +x bin/pkg-config{.exe,-msys.sh}
+            rm -rf $TMP_UDIR/gtk-doc-*
+        qpopd
+
+        if [ "$CROSS_COMPILE" = "yes" ]; then
+            qpushd $_GNOME_UDIR/lib/pkgconfig
+                perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
+                #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
+            qpopd
+        fi
+
+        wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/pixman-*
+        qpushd $TMP_UDIR/pixman-*
+	    GLIB_CPPFLAGS=`${PKG_CONFIG} --cflags glib-2.0`
+	    GTK_CPPFLAGS="-I${_GNOME_UDIR}/include/gtk-2.0"
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=$_GNOME_UDIR \
+                --disable-static \
+		CPPFLAGS="${GLIB_CPPFLAGS} ${GTK_CPPFLAGS}"
+            make
+            make install
+        qpopd
+        ${PKG_CONFIG} --exists pixman-1 || die "pixman not installed correctly"
+        rm -rf $TMP_UDIR/pixman-*
+
+        wget_unpacked $LIBXML2_SRC_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libxml2-*
+        qpushd $TMP_UDIR/libxml2-*
+            ./configure \
+                --prefix=${_GNOME_UDIR} \
+                --without-threads
+            make
+            make install
+        qpopd
+
+        rm -rf ${TMP_UDIR}/libxml2-*
+        quiet gconftool-2 --version &&
+        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
+        quiet intltoolize --version || die "gnome not installed correctly"
+    fi
+    [ ! -d $_GNOME_UDIR/share/aclocal ] || add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
+}
+
+function inst_gnutls() {
+    setup GNUTLS
+    _GNUTLS_UDIR=`unix_path ${GNUTLS_DIR}`
+    add_to_env ${_GNUTLS_UDIR}/bin PATH
+    add_to_env ${_GNUTLS_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_env "-I${_GNUTLS_UDIR}/include" GNUTLS_CPPFLAGS
+    add_to_env "-L${_GNUTLS_UDIR}/lib" GNUTLS_LDFLAGS
+    if quiet ${PKG_CONFIG} --exact-version=${GNUTLS_VERSION} gnutls
+    then
+        echo "GNUTLS already installed in $_GNUTLS_UDIR. skipping."
+    else
+        wget_unpacked $GNUTLS_URL $DOWNLOAD_DIR $GNUTLS_DIR
+        rm -f $_GNUTLS_UDIR/lib/*.la
+        quiet ${PKG_CONFIG} --exists gnutls || die "GNUTLS not installed correctly"
+    fi
+    [ ! -d $_GNUTLS_UDIR/share/aclocal ] || add_to_env "-I $_GNUTLS_UDIR/share/aclocal" ACLOCAL_FLAGS
+}
+
+function inst_goffice() {
+    setup GOffice
+    _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
+    add_to_env $_GOFFICE_UDIR/bin PATH
+    add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --atleast-version=${GOFFICE_VERSION} libgoffice-0.8
+    then
+        echo "goffice already installed in $_GOFFICE_UDIR.  skipping."
+    else
+        wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
+        mydir=`pwd`
+        assert_one_dir $TMP_UDIR/goffice-*
+        qpushd $TMP_UDIR/goffice-*
+            [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
+                patch -p1 < $GOFFICE_PATCH
+            libtoolize --force
+            aclocal ${ACLOCAL_FLAGS} -I .
+            automake
+            autoconf
+            ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
+                CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS} ${HH_CPPFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS} ${HH_LDFLAGS}"
+            [ -d ../libgsf-* ] || die "We need the unpacked package $TMP_UDIR/libgsf-*; please unpack it in $TMP_UDIR"
+            [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
+            make
+            rm -rf ${_GOFFICE_UDIR}
+            make install
+        qpopd
+        ${PKG_CONFIG} --exists libgoffice-0.8 && [ -f $_GOFFICE_UDIR/bin/libgoffice*.dll ] || die "goffice not installed correctly"
+        rm -rf ${TMP_UDIR}/goffice-*
+        rm -rf ${TMP_UDIR}/libgsf-*
+    fi
+}
+
+function inst_guile() {
+    setup Guile
+    _GUILE_WFSDIR=`win_fs_path $GUILE_DIR`
+    _GUILE_UDIR=`unix_path $GUILE_DIR`
+    _WIN_UDIR=`unix_path $WINDIR`
+    add_to_env -I$_GUILE_UDIR/include GUILE_CPPFLAGS
+    add_to_env -L$_GUILE_UDIR/lib GUILE_LDFLAGS
+    add_to_env $_GUILE_UDIR/bin PATH
+    if quiet guile -c '(use-modules (srfi srfi-39))'
+    then
+        echo "guile and slib already installed in $_GUILE_UDIR.  skipping."
+    else
+        smart_wget $GUILE_URL $DOWNLOAD_DIR
+        _GUILE_BALL=$LAST_FILE
+        tar -xzpf $_GUILE_BALL -C $TMP_UDIR
+        assert_one_dir $TMP_UDIR/guile-*
+        qpushd $TMP_UDIR/guile-*
+            patch -p1 < $GUILE_PATCH
+            ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS
+            ./configure ${HOST_XCOMPILE} \
+                --disable-static \
+                --disable-elisp \
+                --disable-dependency-tracking \
+                -C --prefix=$_GUILE_WFSDIR \
+                ac_cv_func_regcomp_rx=yes \
+                CFLAGS="-D__MINGW32__" \
+                CPPFLAGS="${READLINE_CPPFLAGS} ${REGEX_CPPFLAGS} ${AUTOTOOLS_CPPFLAGS} ${GMP_CPPFLAGS} -D__MINGW32__" \
+                LDFLAGS="${READLINE_LDFLAGS} ${REGEX_LDFLAGS} ${AUTOTOOLS_LDFLAGS} ${GMP_LDFLAGS} -Wl,--enable-auto-import"
+            make LDFLAGS="${READLINE_LDFLAGS} ${REGEX_LDFLAGS} ${AUTOTOOLS_LDFLAGS} ${GMP_LDFLAGS} -Wl,--enable-auto-import -no-undefined -avoid-version"
+            make install
+        qpopd
+        guile -c '(use-modules (srfi srfi-39))' || die "guile not installed correctly"
+
+        # If this libguile is used from MSVC compiler, we must
+        # deactivate some macros of scmconfig.h again.
+        SCMCONFIG_H=$_GUILE_UDIR/include/libguile/scmconfig.h
+        cat >> ${SCMCONFIG_H} <<EOF
+
+#ifdef _MSC_VER
+# undef HAVE_STDINT_H
+# undef HAVE_INTTYPES_H
+# undef HAVE_UNISTD_H
+#endif
+EOF
+        # Also, for MSVC compiler we need to create an import library
+        if [ x"$(which pexports.exe > /dev/null 2>&1)" != x ]
+        then
+            pexports $_GUILE_UDIR/bin/libguile.dll > $_GUILE_UDIR/lib/libguile.def
+            ${DLLTOOL} -d $_GUILE_UDIR/lib/libguile.def -D $_GUILE_UDIR/bin/libguile.dll -l $_GUILE_UDIR/lib/libguile.lib
+        fi
+        # Also, for MSVC compiler we need to slightly modify the gc.h header
+        GC_H=$_GUILE_UDIR/include/libguile/gc.h
+        grep -v 'extern .*_freelist2;' ${GC_H} > ${GC_H}.tmp
+        grep -v 'extern int scm_block_gc;' ${GC_H}.tmp > ${GC_H}
+        cat >> ${GC_H} <<EOF
+#ifdef _MSC_VER
+# define LIBGUILEDECL __declspec (dllimport)
+#else
+# define LIBGUILEDECL /* */
+#endif
+extern LIBGUILEDECL SCM scm_freelist2;
+extern LIBGUILEDECL struct scm_t_freelist scm_master_freelist2;
+extern LIBGUILEDECL int scm_block_gc;
+EOF
+        rm -rf ${TMP_UDIR}/guile-*
+    fi
+    if [ "$CROSS_COMPILE" = "yes" ]; then
+        mkdir -p $_GUILE_UDIR/bin
+        qpushd $_GUILE_UDIR/bin
+        # The cross-compiling guile expects these program names
+        # for the build-time guile
+        ln -sf /usr/bin/guile-config mingw32-guile-config
+        ln -sf /usr/bin/guile mingw32-build-guile
+        qpopd
+    fi
+    [ ! -d $_GUILE_UDIR/share/aclocal ] || add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
+}
+
+function inst_gwenhywfar() {
+    setup Gwenhywfar
+    _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
+    add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
+    add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exact-version=${GWENHYWFAR_VERSION} gwenhywfar
+    then
+        echo "Gwenhywfar already installed in $_GWENHYWFAR_UDIR. skipping."
+    else
+        wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/gwenhywfar-*
+        qpushd $TMP_UDIR/gwenhywfar-*
+            # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
+            if [ "$AQBANKING5" = "yes" ]; then
+                # Note: gwenhywfar-3.x and higher don't use openssl anymore.
+                ./configure ${HOST_XCOMPILE} \
+                    --with-libgcrypt-prefix=$_GNUTLS_UDIR \
+                    --disable-binreloc \
+                    --disable-ssl \
+                    --prefix=$_GWENHYWFAR_UDIR \
+                    --with-guis=gtk2 \
+                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS} `pkg-config --cflags gtk+-2.0`" \
+                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
+            else
+                if [ -n "$GWENHYWFAR_PATCH" -a -f "$GWENHYWFAR_PATCH" ] ; then
+                    patch -p1 < $GWENHYWFAR_PATCH
+                    #aclocal -I m4 ${ACLOCAL_FLAGS}
+                    #automake
+                    #autoconf
+                fi
+                # Note: gwenhywfar-3.x and higher don't use openssl anymore.
+                ./configure ${HOST_XCOMPILE} \
+                    --with-libgcrypt-prefix=$_GNUTLS_UDIR \
+                    --disable-binreloc \
+                    --disable-ssl \
+                    --prefix=$_GWENHYWFAR_UDIR \
+                    CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}" \
+                    LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS} -lintl"
+            fi
+            make
+#            [ "$CROSS_COMPILE" != "yes" ] && make check
+            rm -rf ${_GWENHYWFAR_UDIR}
+            make install
+        qpopd
+        ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
+        rm -rf ${TMP_UDIR}/gwenhywfar-*
+    fi
+    [ ! -d $_GWENHYWFAR_UDIR/share/aclocal ] || add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
+}
+
+function inst_isocodes() {
+    setup isocodes
+    _ISOCODES_UDIR=`unix_path ${ISOCODES_DIR}`
+    add_to_env $_ISOCODES_UDIR/share/pkgconfig PKG_CONFIG_PATH
+    if [ -f ${_ISOCODES_UDIR}/share/pkgconfig/iso-codes.pc ]
+    then
+        echo "isocodes already installed in $_ISOCODES_UDIR. skipping."
+    else
+        wget_unpacked $ISOCODES_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/iso-codes-*
+        qpushd $TMP_UDIR/iso-codes-*
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_ISOCODES_UDIR}
+            make
+            make install
+        qpopd
+        quiet [ -f ${_ISOCODES_UDIR}/share/pkgconfig/iso-codes.pc ] || die "isocodes not installed correctly"
+        rm -rf ${TMP_UDIR}/iso-codes-*
+    fi
+}
+
+function inst_ktoblzcheck() {
+    setup Ktoblzcheck
+    # Out of convenience ktoblzcheck is being installed into
+    # GWENHYWFAR_DIR
+    add_to_env "-I${_GWENHYWFAR_UDIR}/include" KTOBLZCHECK_CPPFLAGS
+    add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
+    if quiet ${PKG_CONFIG} --exact-version=${KTOBLZCHECK_VERSION} ktoblzcheck
+    then
+        echo "Ktoblzcheck already installed in $_GWENHYWFAR_UDIR. skipping."
+    else
+        wget_unpacked $KTOBLZCHECK_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/ktoblzcheck-*
+        qpushd $TMP_UDIR/ktoblzcheck-*
+            # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_GWENHYWFAR_UDIR} \
+                --disable-binreloc \
+                --disable-python
+            make
+#            [ "$CROSS_COMPILE" != "yes" ] && make check
+            make install
+        qpopd
+        ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
+        rm -rf ${TMP_UDIR}/ktoblzcheck-*
+    fi
+}
+
+function inst_libbonoboui() {
+    setup libbonoboui
+    _LIBBONOBOUI_UDIR=`unix_path $LIBBONOBOUI_DIR`
+    add_to_env $_LIBBONOBOUI_UDIR/bin PATH
+    add_to_env $_LIBBONOBOUI_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ]
+    then
+        echo "libbonoboui already installed in $_LIBBONOBOUI_UDIR.  skipping."
+    else
+        wget_unpacked $LIBBONOBOUI_SRC_URL $DOWNLOAD_DIR $TMP_DIR
+        mydir=`pwd`
+        assert_one_dir $TMP_UDIR/libbonoboui-*
+        qpushd $TMP_UDIR/libbonoboui-*
+            [ -n "$LIBBONOBOUI_PATCH" -a -f "$LIBBONOBOUI_PATCH" ] && \
+                patch -p1 < $LIBBONOBOUI_PATCH
+            #libtoolize --force
+            #aclocal ${ACLOCAL_FLAGS} -I .
+            #automake
+            #autoconf
+            ./configure ${HOST_XCOMPILE} --prefix=$_LIBBONOBOUI_UDIR \
+                POPT_LIBS="-lpopt" \
+                CPPFLAGS="${GNOME_CPPFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS}" \
+                --enable-static=no
+            make
+            make install
+
+            # We override the $GNOME_DIR libbonoboui files because
+            # those erroneously depend on the obsolete libxml2.dll
+            cp -a $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll $_GNOME_UDIR/bin
+            cp -a $_LIBBONOBOUI_UDIR/lib/libbonoboui* $_GNOME_UDIR/lib
+        qpopd
+        ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ] || die "libbonoboui not installed correctly"
+        rm -rf ${TMP_UDIR}/libbonoboui-*
+    fi
+}
+
 function inst_libdbi() {
     setup LibDBI
     _SQLITE3_UDIR=`unix_path ${SQLITE3_DIR}`
@@ -1144,6 +894,9 @@ function inst_libdbi() {
     _LIBDBI_DRIVERS_UDIR=`unix_path ${LIBDBI_DRIVERS_DIR}`
     add_to_env -I$_LIBDBI_UDIR/include LIBDBI_CPPFLAGS
     add_to_env -L$_LIBDBI_UDIR/lib LIBDBI_LDFLAGS
+    add_to_env -I${_SQLITE3_UDIR}/include SQLITE3_CFLAGS
+    add_to_env -lsqlite3 SQLITE3_LIBS
+    add_to_env -L${_SQLITE3_UDIR}/lib SQLITE3_LIBS
     if test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll
     then
         echo "SQLite3 already installed in $_SQLITE3_UDIR.  skipping."
@@ -1261,22 +1014,401 @@ function inst_libdbi() {
     fi
 }
 
-function inst_cmake() {
-    setup CMake
-    _CMAKE_UDIR=`unix_path ${CMAKE_DIR}`
-    add_to_env ${_CMAKE_UDIR}/bin PATH
-    if [ -f ${_CMAKE_UDIR}/bin/cmake.exe ]
+function inst_libgsf() {
+    setup libGSF
+    _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
+    add_to_env $_LIBGSF_UDIR/bin PATH
+    add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 &&
+        quiet ${PKG_CONFIG} --atleast-version=${LIBGSF_VERSION} libgsf-1
     then
-        echo "cmake already installed in $_CMAKE_UDIR.  skipping."
+        echo "libgsf already installed in $_LIBGSF_UDIR.  skipping."
     else
-        wget_unpacked $CMAKE_URL $DOWNLOAD_DIR $CMAKE_DIR
-
-        assert_one_dir ${_CMAKE_UDIR}/cmake-2*
-        mv ${_CMAKE_UDIR}/cmake-2*/* ${_CMAKE_UDIR}
-        rm -rf ${_CMAKE_UDIR}/cmake-2*
-
-        [ -f ${_CMAKE_UDIR}/bin/cmake.exe ] || die "cmake not installed correctly"
+        rm -rf ${TMP_UDIR}/libgsf-*
+        wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libgsf-*
+        qpushd $TMP_UDIR/libgsf-*
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=$_LIBGSF_UDIR \
+                --disable-static \
+                --without-python \
+                CPPFLAGS="${GNOME_CPPFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS}"
+            make
+            rm -rf ${_LIBGSF_UDIR}
+            make install
+        qpopd
+        ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
     fi
+}
+
+function inst_libofx() {
+    setup Libofx
+    _LIBOFX_UDIR=`unix_path ${LIBOFX_DIR}`
+    add_to_env ${_LIBOFX_UDIR}/bin PATH
+    add_to_env ${_LIBOFX_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists libofx
+    then
+        echo "Libofx already installed in $_LIBOFX_UDIR. skipping."
+    else
+        wget_unpacked $LIBOFX_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libofx-*
+        qpushd $TMP_UDIR/libofx-*
+            if [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ]; then
+                patch -p1 < $LIBOFX_PATCH
+#                libtoolize --force
+#                aclocal ${ACLOCAL_FLAGS}
+#                automake
+#                autoconf
+#                ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS -B $_AUTOTOOLS_UDIR/share/autoconf/autoconf
+            fi
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_LIBOFX_UDIR} \
+                --with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
+                --with-opensp-libs=${_OPENSP_UDIR}/lib \
+                CPPFLAGS="-DOS_WIN32 ${GNOME_CPPFLAGS}" \
+                --disable-static \
+		--with-iconv=${_GNOME_UDIR}
+            make LDFLAGS="${LDFLAGS} -no-undefined ${GNOME_LDFLAGS} -liconv"
+            make install
+        qpopd
+        quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
+        rm -rf ${TMP_UDIR}/libofx-*
+    fi
+}
+
+function inst_libsoup() {
+    setup libsoup
+    _LIBSOUP_UDIR=`unix_path $LIBSOUP_DIR`
+    add_to_env $_LIBSOUP_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists libsoup-2.4
+    then
+        echo "libsoup already installed in $_LIBSOUP_UDIR.  skipping."
+    else
+        wget_unpacked $LIBSOUP_SRC_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libsoup-*
+        qpushd $TMP_UDIR/libsoup-*
+            ./configure \
+                --prefix=${_LIBSOUP_UDIR} \
+		--disable-gtk-doc \
+		--without-gnome \
+		--disable-ssl \
+		CPPFLAGS=-I${_GNOME_UDIR}/include \
+		LDFLAGS="-L${_GNOME_UDIR}/lib -Wl,-s -lz"
+            make
+            make install
+        qpopd
+        quiet ${PKG_CONFIG} --exists libsoup-2.4 || die "libsoup not installed correctly"
+        rm -rf ${TMP_UDIR}/libsoup-*
+    fi
+    LIBSOUP_CPPFLAGS=`${PKG_CONFIG} --cflags libsoup-2.4`
+}
+
+function inst_libxslt() {
+    setup LibXSLT
+    _LIBXSLT_UDIR=`unix_path $LIBXSLT_DIR`
+    add_to_env $_LIBXSLT_UDIR/bin PATH
+    add_to_env $_LIBXSLT_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet which xsltproc
+    then
+        echo "libxslt already installed in $_LIBXSLT_UDIR.  skipping."
+    else
+        [ "$CROSS_COMPILE" = "yes" ] && die "xsltproc unavailable"
+        #wget_unpacked ${LIBXSLT_ICONV_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
+        #wget_unpacked ${LIBXSLT_ZLIB_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
+
+        wget_unpacked $LIBXSLT_SRC_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libxslt-*
+        qpushd $TMP_UDIR/libxslt-*
+	    patch -p0 -u -i ${LIBXSLT_MAKEFILE_PATCH}
+            ./configure \
+                --prefix=${_LIBXSLT_UDIR} \
+                --with-libxml-prefix=${_GNOME_UDIR}
+            make
+            make install
+        qpopd
+        rm -rf ${TMP_UDIR}/libxslt-*
+
+        quiet which xsltproc || die "libxslt not installed correctly"
+    fi
+}
+
+function inst_opensp() {
+    setup OpenSP
+    _OPENSP_UDIR=`unix_path ${OPENSP_DIR}`
+    add_to_env ${_OPENSP_UDIR}/bin PATH
+    if test -f ${_OPENSP_UDIR}/bin/libosp-5.dll
+    then
+        echo "OpenSP already installed in $_OPENSP_UDIR. skipping."
+    else
+        wget_unpacked $OPENSP_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/OpenSP-*
+        qpushd $TMP_UDIR/OpenSP-*
+            [ -n "$OPENSP_PATCH" -a -f "$OPENSP_PATCH" ] && \
+                patch -p0 < $OPENSP_PATCH
+            libtoolize --force
+            aclocal ${ACLOCAL_FLAGS} -I m4
+            automake
+            autoconf
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_OPENSP_UDIR} \
+                --disable-doc-build --disable-static
+            # On many windows machines, none of the programs will
+            # build, but we only need the library, so ignore the rest.
+            make all-am
+            make -C lib
+            make -i
+            make -i install
+        qpopd
+        test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "OpenSP not installed correctly"
+	rm -rf $TMP_UDIR/OpenSP-*
+    fi
+}
+
+function inst_openssl() {
+    setup OpenSSL
+    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
+    add_to_env $_OPENSSL_UDIR/bin PATH
+    # Make sure the files of Win32OpenSSL-0_9_8d are really gone!
+    if test -f $_OPENSSL_UDIR/unins000.exe ; then
+        die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
+    fi
+    # Make sure the files of openssl-0.9.7c-{bin,lib}.zip are really gone!
+    if [ -f $_OPENSSL_UDIR/lib/libcrypto.dll.a ] ; then
+        die "Found old OpenSSL installation in $_OPENSSL_UDIR.  Please remove that first."
+    fi
+
+    if quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile ; then
+        echo "openssl already installed in $_OPENSSL_UDIR.  skipping."
+    else
+        smart_wget $OPENSSL_URL $DOWNLOAD_DIR
+        echo -n "Extracting ${LAST_FILE##*/} ... "
+        tar -xzpf $LAST_FILE -C $TMP_UDIR &>/dev/null | true
+        echo "done"
+        assert_one_dir $TMP_UDIR/openssl-*
+        qpushd $TMP_UDIR/openssl-*
+            for _dir in crypto ssl ; do
+                qpushd $_dir
+                    find . -name "*.h" -exec cp {} ../include/openssl/ \;
+                qpopd
+            done
+            cp *.h include/openssl
+            _COMSPEC_U=`unix_path $COMSPEC`
+            PATH=$_ACTIVE_PERL_UDIR/ActivePerl/Perl/bin:$_MINGW_UDIR/bin $_COMSPEC_U //c ms\\mingw32
+            mkdir -p $_OPENSSL_UDIR/bin
+            mkdir -p $_OPENSSL_UDIR/lib
+            mkdir -p $_OPENSSL_UDIR/include
+            cp -a libeay32.dll libssl32.dll $_OPENSSL_UDIR/bin
+            cp -a libssl32.dll $_OPENSSL_UDIR/bin/ssleay32.dll
+            for _implib in libeay32 libssl32 ; do
+                cp -a out/$_implib.a $_OPENSSL_UDIR/lib/$_implib.dll.a
+            done
+            cp -a include/openssl $_OPENSSL_UDIR/include
+        qpopd
+        quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile || die "openssl not installed correctly"
+        rm -rf ${TMP_UDIR}/openssl-*
+    fi
+    _eay32dll=$(echo $(which libeay32.dll))  # which sucks
+    if [ -z "$_eay32dll" ] ; then
+        die "Did not find libeay32.dll in your PATH, why that?"
+    fi
+    if [ "$_eay32dll" != "$_OPENSSL_UDIR/bin/libeay32.dll" ] ; then
+        die "Found $_eay32dll in PATH.  If you have added $_OPENSSL_UDIR/bin to your PATH before, make sure it is listed before paths from other packages shipping SSL libraries, like SVN.  In particular, check $_MINGW_UDIR/etc/profile.d/installer.sh."
+    fi
+}
+
+function inst_pcre() {
+    setup pcre
+    _PCRE_UDIR=`unix_path $PCRE_DIR`
+    add_to_env -I$_PCRE_UDIR/include PCRE_CPPFLAGS
+    add_to_env -L$_PCRE_UDIR/lib PCRE_LDFLAGS
+    add_to_env $_PCRE_UDIR/bin PATH
+    if quiet ${LD} $PCRE_LDFLAGS -lpcre -o $TMP_UDIR/ofile
+    then
+        echo "pcre already installed in $_PCRE_UDIR.  skipping."
+    else
+        mkdir -p $_PCRE_UDIR
+        wget_unpacked $PCRE_BIN_URL $DOWNLOAD_DIR $PCRE_DIR
+        wget_unpacked $PCRE_LIB_URL $DOWNLOAD_DIR $PCRE_DIR
+    fi
+    quiet ${LD} $PCRE_LDFLAGS -lpcre -o $TMP_UDIR/ofile || die "pcre not installed correctly"
+}
+
+function inst_qt4() {
+    # This section is not a full install, but the .la creation is
+    # already useful in itself and that's why it has already been
+    # added.
+
+    [ "$QTDIR" ] || die "QTDIR is not set.  Please install Qt and set that variable in custom.sh, or deactivate AQBANKING_WITH_QT"
+    export QTDIR=`unix_path ${QTDIR}`  # help configure of aqbanking
+    _QTDIR=$QTDIR
+    # This section creates .la files for the Qt-4 DLLs so that
+    # libtool correctly links to the DLLs.
+    if test ! -f ${_QTDIR}/lib/libQtCore4.la ; then
+        qpushd ${_QTDIR}/lib
+            for A in lib*.a; do
+                LIBBASENAME=`basename ${A} .a`
+                OUTFILE="${LIBBASENAME}.la"
+                BASENAME=`echo ${LIBBASENAME} | sed -e"s/lib//" `
+                DLLNAME="${BASENAME}.dll"
+
+                # Create la file
+                echo "# Generated by foo bar libtool" > $OUTFILE
+                echo "dlname='../bin/${DLLNAME}'" >> $OUTFILE
+                echo "library_names='${DLLNAME}'" >> $OUTFILE
+                echo "libdir='${_QTDIR}/bin'" >> $OUTFILE
+            done
+        qpopd
+    fi
+}
+
+function inst_readline() {
+    setup Readline
+    _READLINE_UDIR=`unix_path $READLINE_DIR`
+    add_to_env -I$_READLINE_UDIR/include READLINE_CPPFLAGS
+    add_to_env -L$_READLINE_UDIR/lib READLINE_LDFLAGS
+    add_to_env $_READLINE_UDIR/bin PATH
+    if quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile
+    then
+        echo "readline already installed in $_READLINE_UDIR.  skipping."
+    else
+        mkdir -p $_READLINE_UDIR
+        wget_unpacked $READLINE_BIN_URL $DOWNLOAD_DIR $READLINE_DIR
+        wget_unpacked $READLINE_LIB_URL $DOWNLOAD_DIR $READLINE_DIR
+        quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
+    fi
+}
+
+function inst_regex() {
+    setup RegEx
+    _REGEX_UDIR=`unix_path $REGEX_DIR`
+    add_to_env -lregex REGEX_LDFLAGS
+    add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
+    add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
+    add_to_env $_REGEX_UDIR/bin PATH
+    if quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile
+    then
+        echo "regex already installed in $_REGEX_UDIR.  skipping."
+    else
+        mkdir -p $_REGEX_UDIR
+        wget_unpacked $REGEX_URL $DOWNLOAD_DIR $REGEX_DIR
+        wget_unpacked $REGEX_DEV_URL $DOWNLOAD_DIR $REGEX_DIR
+        quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile || die "regex not installed correctly"
+    fi
+}
+
+function inst_webkit() {
+    setup WebKit
+    _WEBKIT_UDIR=`unix_path ${WEBKIT_DIR}`
+    add_to_env ${_WEBKIT_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists webkit-1.0
+    then
+        echo "webkit already installed in $_WEBKIT_UDIR.  skipping."
+    else
+        if [ "$BUILD_WEBKIT_FROM_SOURCE" = "yes" ]; then
+            wget_unpacked $WEBKIT_SRC_URL $DOWNLOAD_DIR $TMP_DIR
+            assert_one_dir ${TMP_UDIR}/webkit-*
+            qpushd $TMP_UDIR/webkit-*
+	        add_to_env /c/Programs/GnuWin32/bin PATH
+	        SAVED_PATH=$PATH
+	        add_to_env ${_ACTIVE_PERL_BASE_DIR}/bin PATH
+	        export PERL5LIB=${_ACTIVE_PERL_BASE_DIR}/lib
+    
+	        patch -p0 -u < $WEBKIT_CONFIGURE_PATCH
+	        CPPFLAGS="${GNOME_CPPFLAGS} ${SQLITE3_CFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS} ${SQLITE3_LIBS}" \
+	        PERL="${_ACTIVE_PERL_BASE_DIR}/bin/perl" \
+	        ./configure \
+	            --prefix=${_WEBKIT_UDIR} \
+		    --with-target=win32 \
+		    --with-unicode-backend=glib \
+		    --enable-web-sockets \
+		    --enable-3D-transforms \
+		    --disable-video
+                patch -p0 -u < $WEBKIT_DATADIR_PATCH
+                patch -p0 -u < $WEBKIT_GCCPATH_PATCH
+                patch -p0 -u < $WEBKIT_MAKEFILE_PATCH
+                patch -p0 -u < $WEBKIT_MINGW32_PATCH
+                patch -p0 -u < $WEBKIT_NOSVG_PATCH
+	        cp $WEBKIT_WEBKITENUMTYPES_CPP DerivedSources
+	        cp $WEBKIT_WEBKITENUMTYPES_H Webkit/gtk/webkit
+	        make
+	        make install
+	        PATH=$SAVED_PATH
+	    qpopd
+	else
+            wget_unpacked $WEBKIT_URL $DOWNLOAD_DIR $WEBKIT_DIR
+	fi
+        quiet ${PKG_CONFIG} --exists webkit-1.0 || die "webkit not installed correctly"
+	rm -rf ${TMP_UDIR}/webkit-*
+    fi
+}
+
+function inst_inno() {
+    setup Inno Setup Compiler
+    _INNO_UDIR=`unix_path $INNO_DIR`
+    add_to_env $_INNO_UDIR PATH
+    if quiet which iscc
+    then
+        echo "Inno Setup Compiler already installed in $_INNO_UDIR.  skipping."
+    else
+        smart_wget $INNO_URL $DOWNLOAD_DIR
+        $LAST_FILE //SP- //SILENT //DIR="$INNO_DIR"
+        quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
+    fi
+}
+
+function test_for_hh() {
+    qpushd $TMP_UDIR
+        cat > ofile.c <<EOF
+#include <windows.h>
+#include <htmlhelp.h>
+int main(int argc, char **argv) {
+  HtmlHelpW(0, (wchar_t*)"", HH_HELP_CONTEXT, 0);
+  return 0;
+}
+EOF
+        gcc -shared -o ofile.dll ofile.c $HH_CPPFLAGS $HH_LDFLAGS -lhtmlhelp || return 1
+    qpopd
+}
+
+function inst_hh() {
+    setup HTML Help Workshop
+    _HH_UDIR=`unix_path $HH_DIR`
+    add_to_env -I$_HH_UDIR/include HH_CPPFLAGS
+    add_to_env -L$_HH_UDIR/lib HH_LDFLAGS
+    add_to_env $_HH_UDIR PATH
+    if quiet test_for_hh
+    then
+        echo "html help workshop already installed in $_HH_UDIR.  skipping."
+    else
+        smart_wget $HH_URL $DOWNLOAD_DIR
+        echo "!!! When asked for an installation path, specify $HH_DIR !!!"
+        $LAST_FILE
+        qpushd $HH_DIR
+           _HHCTRL_OCX=$(which hhctrl.ocx || true)
+           [ "$_HHCTRL_OCX" ] || die "Did not find hhctrl.ocx"
+           pexports -h include/htmlhelp.h $_HHCTRL_OCX > lib/htmlhelp.def
+           qpushd lib
+               ${DLLTOOL} -k -d htmlhelp.def -l libhtmlhelp.a
+               mv htmlhelp.lib htmlhelp.lib.bak
+           qpopd
+        qpopd
+        quiet test_for_hh || die "html help workshop not installed correctly"
+    fi
+}
+
+function svn_up() {
+    mkdir -p $_REPOS_UDIR
+    qpushd $_REPOS_UDIR
+    if [ -x .svn ]; then
+        setup "svn update in ${REPOS_DIR}"
+        svn up -r ${SVN_REV}
+    else
+        setup svn co
+        svn co -r ${SVN_REV} $REPOS_URL .
+    fi
+    qpopd
 }
 
 function inst_cutecash() {
@@ -1309,35 +1441,6 @@ function inst_cutecash() {
     qpopd
 }
 
-function inst_webkit() {
-    setup WebKit
-    _WEBKIT_UDIR=`unix_path ${WEBKIT_DIR}`
-    add_to_env ${_WEBKIT_UDIR}/bin PATH
-    add_to_env -lwebkit-1.0-2 WEBKIT_LIBS
-    add_to_env -L${_WEBKIT_UDIR}/bin WEBKIT_LIBS
-    add_to_env -I${_WEBKIT_UDIR}/include/webkit-1.0 WEBKIT_CFLAGS
-    if quiet ${LD} ${WEBKIT_LIBS} -o $TMP_UDIR/ofile
-    then
-        echo "webkit already installed in $_WEBKIT_UDIR.  skipping."
-    else
-        wget_unpacked $WEBKIT_URL $DOWNLOAD_DIR $WEBKIT_DIR
-        quiet ${LD} ${WEBKIT_LIBS} -o $TMP_UDIR/ofile || die "webkit not installed correctly"
-    fi
-}
-
-function svn_up() {
-    mkdir -p $_REPOS_UDIR
-    qpushd $_REPOS_UDIR
-    if [ -x .svn ]; then
-        setup "svn update in ${REPOS_DIR}"
-        svn up -r ${SVN_REV}
-    else
-        setup svn co
-        svn co -r ${SVN_REV} $REPOS_URL .
-    fi
-    qpopd
-}
-
 function inst_gnucash() {
     setup GnuCash
     _INSTALL_WFSDIR=`win_fs_path $INSTALL_DIR`
@@ -1359,11 +1462,11 @@ function inst_gnucash() {
         export name_build_guile=/usr/bin/guile-config
     fi
 
-    qpushd $REPOS_DIR
-        if [ "$BUILD_FROM_TARBALL" != "yes" ]; then
+    if [ "$BUILD_FROM_TARBALL" != "yes" ]; then
+        qpushd $REPOS_DIR
             ./autogen.sh
-        fi
-    qpopd
+        qpopd
+    fi
 
     qpushd $_BUILD_UDIR
         $_REL_REPOS_UDIR/configure ${HOST_XCOMPILE} \
@@ -1377,7 +1480,7 @@ function inst_gnucash() {
             --enable-binreloc \
             --enable-locale-specific-tax \
             --with-html-engine=webkit \
-            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GMP_CPPFLAGS} ${GUILE_CPPFLAGS} ${LIBDBI_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
+            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GMP_CPPFLAGS} ${GUILE_CPPFLAGS} ${LIBDBI_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} ${LIBSOUP_CPPFLAGS} -D_WIN32 ${EXTRA_CFLAGS}" \
             LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GMP_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 

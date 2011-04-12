@@ -26,10 +26,13 @@ Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     _PCRE_UDIR=`unix_path $PCRE_DIR`
     _LIBBONOBOUI_UDIR=`unix_path $LIBBONOBOUI_DIR`
+    _LIBSOUP_UDIR=`unix_path $LIBSOUP_DIR`
+    _ENCHANT_UDIR=`unix_path $ENCHANT_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     _OPENSP_UDIR=`unix_path $OPENSP_DIR`
     _LIBOFX_UDIR=`unix_path $LIBOFX_DIR`
+    _LIBXSLT_UDIR=`unix_path $LIBXSLT_DIR`
     _GMP_UDIR=`unix_path $GMP_DIR`
     _GNUTLS_UDIR=`unix_path $GNUTLS_DIR`
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
@@ -43,6 +46,7 @@ Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     _REPOS_UDIR=`unix_path $REPOS_DIR`
     _BUILD_UDIR=`unix_path $BUILD_DIR`
+    _MINGW_UDIR=`unix_path $MINGW_DIR`
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
     _INNO_UDIR=`unix_path $INNO_DIR`
     _WEBKIT_UDIR=`unix_path $WEBKIT_DIR`
@@ -56,10 +60,13 @@ Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
     configure_msys "$PID" "$_MINGW_WFSDIR"
 }
 
-function dist_regex() {
-    setup RegEx
-    smart_wget $REGEX_URL $DOWNLOAD_DIR
-    unzip -q $LAST_FILE bin/libgnurx-0.dll -d $DIST_DIR
+function dist_aqbanking() {
+    setup aqbanking
+    cp -a ${_AQBANKING_UDIR}/bin/*.exe ${DIST_UDIR}/bin
+    cp -a ${_AQBANKING_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_AQBANKING_UDIR}/lib/aqbanking ${DIST_UDIR}/lib
+    cp -a ${_AQBANKING_UDIR}/share/aqbanking ${DIST_UDIR}/share
+    cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/share
 }
 
 function dist_autotools() {
@@ -68,56 +75,45 @@ function dist_autotools() {
     cp -a $_AUTOTOOLS_UDIR/bin/*.dll $DIST_UDIR/bin
 }
 
-function dist_guile() {
-    setup Guile
-    mkdir -p $DIST_UDIR/bin
-    cp -a $_GUILE_UDIR/bin/libguile{.,-srfi}*dll $DIST_UDIR/bin
-    cp -a $_GUILE_UDIR/bin/guile.exe $DIST_UDIR/bin
-    mkdir -p $DIST_UDIR/share
-    cp -a $_GUILE_UDIR/share/guile $DIST_UDIR/share
-}
-
-function dist_openssl() {
-    setup OpenSSL
-    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
-    mkdir -p $DIST_UDIR/bin
-    cp -a $_OPENSSL_UDIR/bin/*.dll $DIST_UDIR/bin
+function dist_gmp() {
+    setup gmp
+    cp -a ${_GMP_UDIR}/bin/*.dll ${DIST_UDIR}/bin
 }
 
 function dist_gnome() {
     setup Gnome platform
-    wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $DIST_DIR
-    smart_wget $LIBICONV_URL $DOWNLOAD_DIR
-    unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
-    wget_unpacked $GLIB_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $ATK_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $ATK_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $GTK_URL $DOWNLOAD_DIR $DIST_DIR
-    echo 'gtk-theme-name = "MS-Windows"' > $DIST_DIR/etc/gtk-2.0/gtkrc
-    wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GAIL_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $POPT_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GCONF_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $GDK_PIXBUF_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $GLIB_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $GTK_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
-	wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $DIST_DIR
-	wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
+    smart_wget $LIBICONV_URL $DOWNLOAD_DIR
+    unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
+    wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $DIST_DIR
+    #wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $POPT_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $DIST_DIR
+    echo 'gtk-theme-name = "MS-Windows"' > $DIST_DIR/etc/gtk-2.0/gtkrc
 
+    wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
     assert_one_dir $TMP_UDIR/gtk2-themes-*
     cp -a $TMP_UDIR/gtk2-themes-*/lib $DIST_DIR/
     cp -a $TMP_UDIR/gtk2-themes-*/share $DIST_DIR/
@@ -128,6 +124,10 @@ function dist_gnome() {
     mv $TMP_UDIR/gtk2_prefs-*/gtk2_prefs.exe $DIST_DIR/bin
     rm -rf $TMP_UDIR/gtk2_prefs-*
 
+    wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $DIST_DIR
+
+    cp -a $_GNOME_UDIR/bin/libxml*.dll $DIST_DIR/bin
+
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
     if [ -d $DIST_UDIR/lib/locale ] ; then
         # Huh, is this removed in newer gtk?
@@ -136,30 +136,10 @@ function dist_gnome() {
     fi
 }
 
-function dist_isocodes() {
-    setup isocodes
-    mkdir -p $DIST_UDIR/share
-    cp -a $_ISOCODES_UDIR/share/{locale,xml} $DIST_UDIR/share
-}
-
-function dist_pcre() {
-    setup pcre
-    mkdir -p $DIST_UDIR/bin
-    cp -a $_PCRE_UDIR/bin/pcre3.dll $DIST_UDIR/bin
-}
-
-function dist_libbonoboui() {
-    setup libbonoboui
-    mkdir -p $DIST_UDIR/bin
-    cp -a $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll $DIST_UDIR/bin
-}
-
-function dist_libgsf() {
-    setup libGSF
-    mkdir -p $DIST_UDIR/bin
-    cp -a $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
-    mkdir -p $DIST_UDIR/share
-    cp -a $_LIBGSF_UDIR/share/locale $DIST_UDIR/share
+function dist_gnutls() {
+    setup gnutls
+    cp -a ${_GNUTLS_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_GNUTLS_UDIR}/bin/*.exe ${DIST_UDIR}/bin
 }
 
 function dist_goffice() {
@@ -172,24 +152,13 @@ function dist_goffice() {
     cp -a $_GOFFICE_UDIR/share/{goffice,locale,pixmaps} $DIST_UDIR/share
 }
 
-function dist_libofx() {
-    setup OpenSP and LibOFX
-    cp -a ${_OPENSP_UDIR}/bin/*.dll ${DIST_UDIR}/bin
-    cp -a ${_OPENSP_UDIR}/share/OpenSP ${DIST_UDIR}/share
-    cp -a ${_LIBOFX_UDIR}/bin/*.dll ${DIST_UDIR}/bin
-    cp -a ${_LIBOFX_UDIR}/bin/*.exe ${DIST_UDIR}/bin
-    cp -a ${_LIBOFX_UDIR}/share/libofx ${DIST_UDIR}/share
-}
-
-function dist_gnutls() {
-    setup gnutls
-    cp -a ${_GNUTLS_UDIR}/bin/*.dll ${DIST_UDIR}/bin
-    cp -a ${_GNUTLS_UDIR}/bin/*.exe ${DIST_UDIR}/bin
-}
-
-function dist_gmp() {
-    setup gmp
-    cp -a ${_GMP_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+function dist_guile() {
+    setup Guile
+    mkdir -p $DIST_UDIR/bin
+    cp -a $_GUILE_UDIR/bin/libguile{.,-srfi}*dll $DIST_UDIR/bin
+    cp -a $_GUILE_UDIR/bin/guile.exe $DIST_UDIR/bin
+    mkdir -p $DIST_UDIR/share
+    cp -a $_GUILE_UDIR/share/guile $DIST_UDIR/share
 }
 
 function dist_gwenhywfar() {
@@ -201,19 +170,22 @@ function dist_gwenhywfar() {
     cp -a ${_GWENHYWFAR_UDIR}/share/gwenhywfar/ca-bundle.crt ${DIST_UDIR}/share/gwenhywfar
 }
 
+function dist_isocodes() {
+    setup isocodes
+    mkdir -p $DIST_UDIR/share
+    cp -a $_ISOCODES_UDIR/share/{locale,xml} $DIST_UDIR/share
+}
+
 function dist_ktoblzcheck() {
     setup ktoblzcheck
     # dll is already copied in dist_gwenhywfar
     cp -a ${_GWENHYWFAR_UDIR}/share/ktoblzcheck ${DIST_UDIR}/share
 }
 
-function dist_aqbanking() {
-    setup aqbanking
-    cp -a ${_AQBANKING_UDIR}/bin/*.exe ${DIST_UDIR}/bin
-    cp -a ${_AQBANKING_UDIR}/bin/*.dll ${DIST_UDIR}/bin
-    cp -a ${_AQBANKING_UDIR}/lib/aqbanking ${DIST_UDIR}/lib
-    cp -a ${_AQBANKING_UDIR}/share/aqbanking ${DIST_UDIR}/share
-    cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/share
+function dist_libbonoboui() {
+    setup libbonoboui
+    mkdir -p $DIST_UDIR/bin
+    cp -a $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll $DIST_UDIR/bin
 }
 
 function dist_libdbi() {
@@ -228,14 +200,54 @@ function dist_libdbi() {
     cp -a ${_LIBDBI_DRIVERS_UDIR}/lib/dbd/*.dll ${DIST_UDIR}/lib/dbd
 }
 
+function dist_libgsf() {
+    setup libGSF
+    mkdir -p $DIST_UDIR/bin
+    cp -a $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
+    mkdir -p $DIST_UDIR/share
+    cp -a $_LIBGSF_UDIR/share/locale $DIST_UDIR/share
+}
+
+function dist_libofx() {
+    setup OpenSP and LibOFX
+    cp -a ${_OPENSP_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_OPENSP_UDIR}/share/OpenSP ${DIST_UDIR}/share
+    cp -a ${_LIBOFX_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_LIBOFX_UDIR}/bin/*.exe ${DIST_UDIR}/bin
+    cp -a ${_LIBOFX_UDIR}/share/libofx ${DIST_UDIR}/share
+}
+
+function dist_openssl() {
+    setup OpenSSL
+    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
+    mkdir -p $DIST_UDIR/bin
+    cp -a $_OPENSSL_UDIR/bin/*.dll $DIST_UDIR/bin
+}
+
+function dist_pcre() {
+    setup pcre
+    mkdir -p $DIST_UDIR/bin
+    cp -a $_PCRE_UDIR/bin/pcre3.dll $DIST_UDIR/bin
+}
+
+function dist_regex() {
+    setup RegEx
+    smart_wget $REGEX_URL $DOWNLOAD_DIR
+    unzip -q $LAST_FILE bin/libgnurx-0.dll -d $DIST_DIR
+}
+
 function dist_webkit() {
     setup WebKit
+    cp -a ${_LIBSOUP_UDIR}/bin/* ${DIST_UDIR}/bin
+    cp -a ${_LIBXSLT_UDIR}/bin/* ${DIST_UDIR}/bin
+    cp -a ${_ENCHANT_UDIR}/bin/* ${DIST_UDIR}/bin
     cp -a ${_WEBKIT_UDIR}/bin/* ${DIST_UDIR}/bin
 }
 
 function dist_gnucash() {
     setup GnuCash
     mkdir -p $DIST_UDIR/bin
+    cp $_MINGW_UDIR/bin/pthreadGC2.dll $DIST_UDIR/bin
     cp -a $_INSTALL_UDIR/bin/* $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/etc/gconf/schemas
     cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
