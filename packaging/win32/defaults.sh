@@ -318,7 +318,7 @@ set_default HH_DIR $GLOBAL_DIR\\hh
 set_default BUILD_WEBKIT_FROM_SOURCE no
 set_default WEBKIT_VERSION "1.2.7"
 set_default WEBKIT_URL "$SF_MIRROR/gnucash/webkit-${WEBKIT_VERSION}-win32.zip"
-set_default WEBKIT_DIR $GLOBAL_DIR\\webkit-${WEBKIT_VERSION}
+set_default WEBKIT_DIR $GLOBAL_DIR\\webkit
 set_default WEBKIT_SRC_URL "http://www.webkitgtk.org/webkit-1.2.7.tar.gz"
 set_default WEBKIT_PATCH `pwd`/webkit-1.2.7-time.patch
 set_default WEBKIT_PATCH2 `pwd`/webkit-1.2.7-vasprintf.patch
@@ -333,11 +333,11 @@ set_default WEBKIT_WEBKITENUMTYPES_H `pwd`/webkitenumtypes.h
 set_default ENCHANT_VERSION "1.5.0"
 set_default ENCHANT_URL "$GNOME_WIN32_URL/dependencies/enchant_${ENCHANT_VERSION}-2_win32.zip"
 set_default ENCHANT_DEV_URL "$GNOME_WIN32_URL/dependencies/enchant-dev_${ENCHANT_VERSION}-2_win32.zip"
-set_default ENCHANT_DIR $GLOBAL_DIR\\enchant-${ENCHANT_VERSION}
+set_default ENCHANT_DIR $GLOBAL_DIR\\enchant
 set_default LIBSOUP_VERSION "2.28.2"
 set_default LIBSOUP_URL "$GNOME_WIN32_URL/libsoup/2.26/libsoup-${LIBSOUP_VERSION}-1_win32.zip"
 set_default LIBSOUP_DEV_URL "$GNOME_WIN32_URL/libsoup/2.26/libsoup-dev-${LIBSOUP_VERSION}-1_win32.zip"
-set_default LIBSOUP_DIR $GLOBAL_DIR\\libsoup-${LIBSOUP_VERSION}
+set_default LIBSOUP_DIR $GLOBAL_DIR\\libsoup
 set_default LIBSOUP_SRC_URL "$GNOME_MIRROR/sources/libsoup/2.28/libsoup-${LIBSOUP_VERSION}.tar.bz2"
 set_default ICU4C_URL "http://download.icu-project.org/files/icu4c/4.4.1/icu4c-4_4_1-Win32-msvc9.zip"
 set_default ICU4C_SRC_URL "http://download.icu-project.org/files/icu4c/4.4.1/icu4c-4_4_1-src.tgz"
