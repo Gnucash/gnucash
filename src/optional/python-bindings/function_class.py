@@ -52,7 +52,7 @@ class ClassFromFunctions(object):
         # use new to avoid creating new instances when existing instances
         # already exist with the same __instance value, or equivlent __instance
         # values, where this is desirable...
-        return super(ClassFromFunctions, cls).__new__(cls, *args, **kargs)
+        return super(ClassFromFunctions, cls).__new__(cls)
     
     def __init__(self, *args, **kargs):
         """Construct a new instance, using either the function
