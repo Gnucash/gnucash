@@ -1047,7 +1047,7 @@ function inst_libofx() {
     _LIBOFX_UDIR=`unix_path ${LIBOFX_DIR}`
     add_to_env ${_LIBOFX_UDIR}/bin PATH
     add_to_env ${_LIBOFX_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libofx
+    if quiet ${PKG_CONFIG} --exists libofx && quiet ${PKG_CONFIG} --atleast-version=${LIBOFX_VERSION} libofx
     then
         echo "Libofx already installed in $_LIBOFX_UDIR. skipping."
     else
@@ -1068,7 +1068,7 @@ function inst_libofx() {
                 --with-opensp-libs=${_OPENSP_UDIR}/lib \
                 CPPFLAGS="-DOS_WIN32 ${GNOME_CPPFLAGS}" \
                 --disable-static \
-		--with-iconv=${_GNOME_UDIR}
+                --with-iconv=${_GNOME_UDIR}
             make LDFLAGS="${LDFLAGS} -no-undefined ${GNOME_LDFLAGS} -liconv"
             make install
         qpopd
