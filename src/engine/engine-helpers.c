@@ -142,7 +142,8 @@ gnc_scm2guid(SCM guid_scm)
     GncGUID guid;
     const gchar * str;
 
-    if (GUID_ENCODING_LENGTH != scm_c_string_length (guid_scm))
+    if (!scm_is_string(guid_scm)
+        || (GUID_ENCODING_LENGTH != scm_c_string_length (guid_scm)))
     {
         return *guid_null();
     }
