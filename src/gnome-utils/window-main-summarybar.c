@@ -385,8 +385,14 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     GList *current;
     GNCSummarybarOptions options;
 
-    options.default_currency = gnc_default_report_currency ();
 
+    root = gnc_get_current_root_account ();
+    options.default_currency = xaccAccountGetCommodity(root);
+    if(options.default_currency == NULL)
+    {	
+      options.default_currency = gnc_default_currency ();
+    }
+  
     options.euro = gnc_gconf_get_bool(GCONF_GENERAL, KEY_ENABLE_EURO, NULL);
     options.grand_total =
         gnc_gconf_get_bool(GCONF_SECTION, KEY_GRAND_TOTAL, NULL);
@@ -407,7 +413,6 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     gnc_ui_get_currency_accumulator (&currency_list, options.default_currency,
                                      TOTAL_SINGLE);
 
-    root = gnc_get_current_root_account ();
     gnc_ui_accounts_recurse(root, &currency_list, options);
 
     {

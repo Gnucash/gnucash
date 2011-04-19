@@ -1009,13 +1009,18 @@ on_finish (GtkAssistant  *gtkassistant,
            hierarchy_data  *data)
 {
     GncHierarchyAssistantFinishedCallback when_completed;
+    gnc_commodity *com;
+    Account * root;
     ENTER (" ");
-
+    com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(data->currency_selector));
+    
     if (data->our_account_tree)
     {
         gnc_account_foreach_descendant (data->our_account_tree,
                                         (AccountCb)starting_balance_helper,
                                         data);
+    
+      
     }
 
     // delete before we suspend GUI events, and then muck with the model,
@@ -1027,12 +1032,17 @@ on_finish (GtkAssistant  *gtkassistant,
     gnc_suspend_gui_refresh ();
 
     account_trees_merge(gnc_get_current_root_account(), data->our_account_tree);
-
+    
     delete_our_account_tree (data);
 
     when_completed = data->when_completed;
     g_free(data);
+    
+    root = gnc_get_current_root_account();
+    xaccAccountSetCommodity(root, com);
+    
     gnc_resume_gui_refresh ();
+    
     if (when_completed)
     {
         (*when_completed)();
