@@ -76,7 +76,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     GWEN_DB_NODE *db_profiles = NULL;
     GWEN_DB_NODE *db_profile;
     AB_IMEXPORTER_CONTEXT *context = NULL;
-    GWEN_IO_LAYER *io;
+    GWEN_IO_LAYER *io = NULL;
     GncABImExContextImport *ieci = NULL;
     AB_JOB_LIST2 *job_list = NULL;
     AB_JOB_LIST2_ITERATOR *jit;
@@ -177,8 +177,22 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
 #ifdef AQBANKING_VERSION_5_PLUS
     close(dtaus_fd);
     io = GWEN_SyncIo_File_new(selected_filename, GWEN_SyncIo_File_CreationMode_OpenExisting);
+    g_assert(io);
+    GWEN_SyncIo_AddFlags(io, GWEN_SYNCIO_FILE_FLAGS_READ);
+    {
+	/* We must explicitly call "Connect" on the GWEN_SYNCIO
+	 * object. */
+	int rv = GWEN_SyncIo_Connect(io);
+	if (rv < 0)
+	{
+	    g_warning("gnc_file_aqbanking_import: Failed to open file %s: %d", selected_filename, rv);
+	    goto cleanup;
+	}
+	g_assert(GWEN_SyncIo_GetStatus == GWEN_SyncIo_Status_Connected);
+    }
 #else
     io = GWEN_Io_LayerFile_new(dtaus_fd, -1);
+    g_assert(io);
     if (GWEN_Io_Manager_RegisterLayer(io))
     {
         g_warning("gnc_file_aqbanking_import: Failed to wrap file");
@@ -204,6 +218,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
 #else
     GWEN_Io_Layer_free(io);
 #endif
+    io = NULL;
 
     /* Import the results */
     ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS,
@@ -322,6 +337,15 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     }
 
 cleanup:
+    if (io)
+    {
+#ifdef AQBANKING_VERSION_5_PLUS
+	GWEN_SyncIo_free(io);
+#else
+	GWEN_Io_Layer_free(io);
+#endif
+    }
+
     if (job_list)
         AB_Job_List2_FreeAll(job_list);
     if (ieci)
