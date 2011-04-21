@@ -1301,7 +1301,8 @@ function inst_webkit() {
     setup WebKit
     _WEBKIT_UDIR=`unix_path ${WEBKIT_DIR}`
     add_to_env ${_WEBKIT_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists webkit-1.0
+    if quiet ${PKG_CONFIG} --exists webkit-1.0 &&
+        quiet ${PKG_CONFIG} --atleast-version=${WEBKIT_VERSION} webkit-1.0
     then
         echo "webkit already installed in $_WEBKIT_UDIR.  skipping."
     else
