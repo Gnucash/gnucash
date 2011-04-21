@@ -131,7 +131,7 @@ gnc_xml_be_get_file_lock (FileBackend *be)
         return FALSE;
     }
 
-    be->lockfd = g_open (be->lockfile, O_RDWR | O_CREAT | O_EXCL , 0);
+    be->lockfd = g_open (be->lockfile, O_RDWR | O_CREAT | O_EXCL , S_IRUSR | S_IWUSR);
     if (be->lockfd < 0)
     {
         /* oops .. we can't create the lockfile .. */
