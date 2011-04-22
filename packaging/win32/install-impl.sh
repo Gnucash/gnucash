@@ -402,7 +402,7 @@ function inst_enchant() {
     setup enchant
     _ENCHANT_UDIR=`unix_path $ENCHANT_DIR`
     add_to_env ${_ENCHANT_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_end "-L${_ENCHANT_UDIR}/lib" ENCHANT_LDFLAGS
+    add_to_env "-L${_ENCHANT_UDIR}/lib" ENCHANT_LDFLAGS
     if quiet ${PKG_CONFIG} --exists enchant
     then
         echo "enchant already installed in $_ENCHANT_UDIR.  skipping."
