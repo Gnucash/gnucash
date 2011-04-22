@@ -174,9 +174,13 @@ function inst_mingw() {
         fi
         quiet test_for_mingw || die "mingw not installed correctly"
     fi
-    cp ${_MINGW_UDIR}/bin/libpthread-2.dll ${_MINGW_UDIR}/bin/pthreadGC2.dll
 
-    configure_msys "$_PID" "$_MINGW_WFSDIR"
+    if [ "$CROSS_COMPILE" != "yes" ]; then
+        # Some preparation steps, only for native (non-cross-compile)
+        cp ${_MINGW_UDIR}/bin/libpthread-2.dll ${_MINGW_UDIR}/bin/pthreadGC2.dll
+
+        configure_msys "$_PID" "$_MINGW_WFSDIR"
+    fi
 }
 
 function inst_mingwutils() {
