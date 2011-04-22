@@ -1113,6 +1113,7 @@ function inst_libxslt() {
     _LIBXSLT_UDIR=`unix_path $LIBXSLT_DIR`
     add_to_env $_LIBXSLT_UDIR/bin PATH
     add_to_env $_LIBXSLT_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_env -L${_LIBXSLT_UDIR}/lib LIBXSLT_LDFLAGS
     if quiet which xsltproc
     then
         echo "libxslt already installed in $_LIBXSLT_UDIR.  skipping."
@@ -1485,7 +1486,7 @@ function inst_gnucash() {
             --enable-binreloc \
             --enable-locale-specific-tax \
             CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GMP_CPPFLAGS} ${GUILE_CPPFLAGS} ${LIBDBI_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} ${LIBSOUP_CPPFLAGS} -D_WIN32 ${EXTRA_CFLAGS}" \
-            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GMP_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS} -L${_SQLITE3_UDIR}/lib -L${_ENCHANT_UDIR}/lib" \
+            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GMP_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS} -L${_SQLITE3_UDIR}/lib -L${_ENCHANT_UDIR}/lib -L${_LIBXSLT_UDIR}/lib -L${_MINGW_UDIR}/lib" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
         make
