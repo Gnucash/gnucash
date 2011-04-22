@@ -81,14 +81,14 @@ Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdir
 ;;; Not needed with AQBANKING5!
 ;; Additionally, we ship the Qt DLLs because the Online-Banking-Wizard
 ;; lib/aqbanking/plugins/@-aqbanking_so_effective-@/wizards/qt3-wizard.exe needs them.
-Source: "@-qtbindir-@\QtCore4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "@-qtbindir-@\QtGui4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "@-qtbindir-@\mingwm10.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-;; The following are all needed by Qt3Support
-Source: "@-qtbindir-@\Qt3Support4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "@-qtbindir-@\QtXml4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "@-qtbindir-@\QtSql4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "@-qtbindir-@\QtNetwork4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+;Source: "@-qtbindir-@\QtCore4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+;Source: "@-qtbindir-@\QtGui4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+;Source: "@-qtbindir-@\mingwm10.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+;;; The following are all needed by Qt3Support
+;Source: "@-qtbindir-@\Qt3Support4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+;Source: "@-qtbindir-@\QtXml4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+;Source: "@-qtbindir-@\QtSql4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+;Source: "@-qtbindir-@\QtNetwork4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 
 ;; The translations
 ;Source: "@prefix@\..\dist\share\locale\*"; DestDir: "{app}\share\locale"; Flags: recursesubdirs; Components: translations
