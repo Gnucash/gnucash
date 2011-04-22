@@ -58,7 +58,7 @@
 #endif
 
 #ifdef G_OS_WIN32
-#include <Winsock2.h>
+#include <winsock2.h>
 #define GETPID() GetCurrentProcessId()
 #else
 #include <limits.h>
