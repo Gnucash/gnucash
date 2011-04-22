@@ -1461,14 +1461,6 @@ function inst_gnucash() {
     AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
     LIBOFX_OPTIONS="--enable-ofx --with-ofx-prefix=${_LIBOFX_UDIR}"
 
-    if [ "$CROSS_COMPILE" = "yes" ]; then
-        # Set these variables manually because of cross-compiling
-        export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
-        export GUILE_INCS="${GUILE_CPPFLAGS}"
-        export BUILD_GUILE=yes
-        export name_build_guile=/usr/bin/guile-config
-    fi
-
     if [ "$BUILD_FROM_TARBALL" != "yes" ]; then
         qpushd $REPOS_DIR
             ./autogen.sh
