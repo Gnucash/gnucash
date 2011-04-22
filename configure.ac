@@ -368,8 +368,18 @@ if test "x$GUILE_INCS" != x; then
   saved_GUILE_INCS="$GUILE_INCS"
 fi
 GUILE_LIBS=""
-GNOME_CHECK_GUILE
 
+# Look up GUILE_CFLAGS and GUILE_LIBS, and version check
+PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5], , [AC_MSG_ERROR([
+
+  guile does not appear to be installed correctly, or is not in the
+  correct version range.  Perhaps you have not installed the guile
+  development packages?  Gnucash requires at least version 1.8.5 to build.
+])])
+# Look up GUILE executable
+AC_PATH_PROG(GUILE, guile)
+
+GUILE_INCS="${GUILE_CFLAGS}"
 if test "x$saved_GUILE_LIBS" != x; then
   GUILE_LIBS="$saved_GUILE_LIBS"
 fi
@@ -379,26 +389,12 @@ fi
 
 AS_SCRUB_INCLUDE(GUILE_INCS)
 AC_SUBST(GUILE_LIBS)
-
-AM_GUILE_VERSION_CHECK(1.8.5, , , [AC_MSG_ERROR([
-
-  guile does not appear to be installed correctly, or is not in the
-  correct version range.  Perhaps you have not installed the guile
-  development packages?  Gnucash requires at least version 1.8.5 to build.
-])])
-
 AC_SUBST(GUILE)
-AC_DEFINE_UNQUOTED(GNC_GUILE_MAJOR_VERSION, ${guile_major_version},
-    [Guile Major version number])
-AC_DEFINE_UNQUOTED(GNC_GUILE_MINOR_VERSION, ${guile_minor_version},
-    [Guile Minor version number])
-AC_DEFINE_UNQUOTED(GNC_GUILE_MICRO_VERSION, ${guile_micro_version},
-    [Guile Micro version number])
 
-AS_SCRUB_INCLUDE(CFLAGS)
 
 ### Check size of long_long - some guile's are broken.
 AC_MSG_CHECKING(if guile long_long is at least as big as gint64)
+AS_SCRUB_INCLUDE(CFLAGS)
 GNC_OLDCFLAGS="$CFLAGS"
 GNC_OLDLDFLAGS="$LDFLAGS"
 CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
