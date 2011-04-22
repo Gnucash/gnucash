@@ -402,7 +402,7 @@ function inst_enchant() {
     setup enchant
     _ENCHANT_UDIR=`unix_path $ENCHANT_DIR`
     add_to_env ${_ENCHANT_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_env "-L${_ENCHANT_UDIR}/lib" ENCHANT_LDFLAGS
+    add_to_env -L${_ENCHANT_UDIR}/lib ENCHANT_LDFLAGS
     if quiet ${PKG_CONFIG} --exists enchant
     then
         echo "enchant already installed in $_ENCHANT_UDIR.  skipping."
@@ -896,7 +896,7 @@ function inst_libdbi() {
     add_to_env -I$_LIBDBI_UDIR/include LIBDBI_CPPFLAGS
     add_to_env -L$_LIBDBI_UDIR/lib LIBDBI_LDFLAGS
     add_to_env -I${_SQLITE3_UDIR}/include SQLITE3_CFLAGS
-    add_to_env "-L${_SQLITE3_UDIR}/lib" SQLITE3_LDFLAGS
+    add_to_env -L${_SQLITE3_UDIR}/lib SQLITE3_LDFLAGS
     if test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll
     then
         echo "SQLite3 already installed in $_SQLITE3_UDIR.  skipping."
