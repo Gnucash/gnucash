@@ -402,6 +402,7 @@ function inst_enchant() {
     setup enchant
     _ENCHANT_UDIR=`unix_path $ENCHANT_DIR`
     add_to_env ${_ENCHANT_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_end "-L${_ENCHANT_UDIR}/lib" ENCHANT_LDFLAGS
     if quiet ${PKG_CONFIG} --exists enchant
     then
         echo "enchant already installed in $_ENCHANT_UDIR.  skipping."
@@ -895,8 +896,7 @@ function inst_libdbi() {
     add_to_env -I$_LIBDBI_UDIR/include LIBDBI_CPPFLAGS
     add_to_env -L$_LIBDBI_UDIR/lib LIBDBI_LDFLAGS
     add_to_env -I${_SQLITE3_UDIR}/include SQLITE3_CFLAGS
-    add_to_env -lsqlite3 SQLITE3_LIBS
-    add_to_env -L${_SQLITE3_UDIR}/lib SQLITE3_LIBS
+    add_to_env "-L${_SQLITE3_UDIR}/lib" SQLITE3_LDFLAGS
     if test -f ${_SQLITE3_UDIR}/bin/libsqlite3-0.dll
     then
         echo "SQLite3 already installed in $_SQLITE3_UDIR.  skipping."
@@ -1317,7 +1317,7 @@ function inst_webkit() {
     
 	        patch -p0 -u < $WEBKIT_CONFIGURE_PATCH
 	        CPPFLAGS="${GNOME_CPPFLAGS} ${SQLITE3_CFLAGS}" \
-                LDFLAGS="${GNOME_LDFLAGS} ${SQLITE3_LIBS}" \
+                LDFLAGS="${GNOME_LDFLAGS} ${SQLITE3_LDFLAGS} -lsqlite3" \
 	        PERL="${_ACTIVE_PERL_BASE_DIR}/bin/perl" \
 	        ./configure \
 	            --prefix=${_WEBKIT_UDIR} \
@@ -1480,9 +1480,8 @@ function inst_gnucash() {
             ${AQBANKING_OPTIONS} \
             --enable-binreloc \
             --enable-locale-specific-tax \
-            --with-html-engine=webkit \
             CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GMP_CPPFLAGS} ${GUILE_CPPFLAGS} ${LIBDBI_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} ${LIBSOUP_CPPFLAGS} -D_WIN32 ${EXTRA_CFLAGS}" \
-            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GMP_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
+            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GMP_LDFLAGS} ${GUILE_LDFLAGS} ${LIBDBI_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS} ${SQLITE3_LDFLAGS} ${ENCHANT_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
         make
