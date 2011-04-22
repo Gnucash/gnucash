@@ -685,6 +685,7 @@ function inst_guile() {
     add_to_env -I$_GUILE_UDIR/include GUILE_CPPFLAGS
     add_to_env -L$_GUILE_UDIR/lib GUILE_LDFLAGS
     add_to_env $_GUILE_UDIR/bin PATH
+    add_to_env ${_GUILE_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
     if quiet guile -c '(use-modules (srfi srfi-39))'
     then
         echo "guile and slib already installed in $_GUILE_UDIR.  skipping."
