@@ -259,8 +259,18 @@ function dist_gnucash() {
     cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.cmd $DIST_UDIR/bin
 
     _QTDIR_WIN=$(unix_path $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' )
-    _AQBANKING_SO_EFFECTIVE=$(awk '/AQBANKING_SO_EFFECTIVE / { print $3 }' ${_AQBANKING_UDIR}/include/aqbanking/version.h )
-    _GWENHYWFAR_SO_EFFECTIVE=$(awk '/GWENHYWFAR_SO_EFFECTIVE / { print $3 }' ${_GWENHYWFAR_UDIR}/include/gwenhywfar3/gwenhywfar/version.h )
+    if [ "$AQBANKING5" != "yes" ] ; then
+        # aqbanking < 5
+        AQBANKING_VERSION_H=${_AQBANKING_UDIR}/include/aqbanking/version.h
+        GWENHYWFAR_VERSION_H=${_GWENHYWFAR_UDIR}/include/gwenhywfar3/gwenhywfar/version.h
+    else
+        # aqbanking >= 5.0.0
+        AQBANKING_VERSION_H=${_AQBANKING_UDIR}/include/aqbanking5/aqbanking/version.h
+        GWENHYWFAR_VERSION_H=${_GWENHYWFAR_UDIR}/include/gwenhywfar4/gwenhywfar/version.h
+    fi
+
+    _AQBANKING_SO_EFFECTIVE=$(awk '/AQBANKING_SO_EFFECTIVE / { print $3 }' ${AQBANKING_VERSION_H} )
+    _GWENHYWFAR_SO_EFFECTIVE=$(awk '/GWENHYWFAR_SO_EFFECTIVE / { print $3 }' ${GWENHYWFAR_VERSION_H} )
     sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
         > $_GNUCASH_UDIR/gnucash.iss \
         -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g" \
