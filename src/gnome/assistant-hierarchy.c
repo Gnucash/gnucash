@@ -57,6 +57,16 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 #define GCONF_SECTION "dialogs/new_hierarchy"
 
+#ifdef G_MODULE_EXPORT
+/* No separate marking of functions as "DLL export", please: The rest
+ * of gnucash relies on *everything* being exported.  As soon as at
+ * least one function is manually marked as export, nothing except
+ * those marked functions are exported, which will break the build on
+ * Windows. */
+# undef G_MODULE_EXPORT
+# define G_MODULE_EXPORT
+#endif
+
 typedef enum
 {
     COL_CHECKED,
