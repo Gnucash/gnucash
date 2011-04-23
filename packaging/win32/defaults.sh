@@ -186,7 +186,8 @@ set_default GMP_DIR $GLOBAL_DIR\\gmp
 set_default GMP5_BIN_URL "$SF_MIRROR/mingw/libgmp-5.0.1-1-mingw32-dll-10.tar.lzma"
 set_default GMP5_DEV_URL "$SF_MIRROR/mingw/gmp-5.0.1-1-mingw32-dev.tar.lzma"
 
-set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.8.8.tar.gz"
+GUILE_VERSION="1.8.8"
+set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-${GUILE_VERSION}.tar.gz"
 set_default GUILE_DIR $GLOBAL_DIR\\guile
 set_default GUILE_PATCH `pwd`/guile-1.8.8.patch
 
@@ -231,7 +232,7 @@ set_default GAIL_DEV_URL            "$GNOME_WIN32_URL/gail/1.22/gail-dev-1.22.0.
 GCONF_VERSION="2.22.0"
 set_default GCONF_URL               "$GNOME_WIN32_URL/GConf/2.22/GConf_${GCONF_VERSION}-3_win32.zip"
 set_default GCONF_DEV_URL           "$GNOME_WIN32_URL/GConf/2.22/GConf-dev_${GCONF_VERSION}-3_win32.zip"
-GDK_PIXBUF_VERSION=2.22.1
+#GDK_PIXBUF_VERSION=2.22.1
 set_default GDK_PIXBUF_URL          "$GNOME_WIN32_URL/gdk-pixbuf/2.22/gdk-pixbuf_${GCONF_VERSION}-1_win32.zip"
 set_default GDK_PIXBUF_DEV_URL      "$GNOME_WIN32_URL/gdk-pixbuf/2.22/gdk-pixbuf-dev_${GCONF_VERSION}-1_win32.zip"
 set_default GETTEXT_RUNTIME_URL     "$GNOME_WIN32_DEPS_URL/gettext-runtime_0.18.1.1-2_win32.zip"

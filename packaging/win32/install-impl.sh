@@ -610,14 +610,14 @@ EOF
         wget_unpacked $LIBXML2_SRC_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libxml2-*
         qpushd $TMP_UDIR/libxml2-*
-            ./configure \
+            ./configure ${HOST_XCOMPILE} \
                 --prefix=${_GNOME_UDIR} \
                 --without-threads
             make
             make install
         qpopd
-
         rm -rf ${TMP_UDIR}/libxml2-*
+
         quiet gconftool-2 --version &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
         quiet intltoolize --version || die "gnome not installed correctly"
@@ -686,7 +686,8 @@ function inst_guile() {
     add_to_env -L$_GUILE_UDIR/lib GUILE_LDFLAGS
     add_to_env $_GUILE_UDIR/bin PATH
     add_to_env ${_GUILE_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet guile -c '(use-modules (srfi srfi-39))'
+    if quiet guile -c '(use-modules (srfi srfi-39))' &&
+        quiet ${PKG_CONFIG} --atleast-version=${GUILE_VERSION} guile-1.8
     then
         echo "guile and slib already installed in $_GUILE_UDIR.  skipping."
     else
@@ -1093,7 +1094,7 @@ function inst_libsoup() {
         wget_unpacked $LIBSOUP_SRC_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libsoup-*
         qpushd $TMP_UDIR/libsoup-*
-            ./configure \
+            ./configure ${HOST_XCOMPILE} \
                 --prefix=${_LIBSOUP_UDIR} \
 		--disable-gtk-doc \
 		--without-gnome \
@@ -1115,7 +1116,8 @@ function inst_libxslt() {
     add_to_env $_LIBXSLT_UDIR/bin PATH
     add_to_env $_LIBXSLT_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     add_to_env -L${_LIBXSLT_UDIR}/lib LIBXSLT_LDFLAGS
-    if quiet which xsltproc
+    if quiet which xsltproc &&
+        quiet ${PKG_CONFIG} --atleast-version=${LIBXSLT_VERSION} libxslt
     then
         echo "libxslt already installed in $_LIBXSLT_UDIR.  skipping."
     else
@@ -1127,7 +1129,7 @@ function inst_libxslt() {
         assert_one_dir $TMP_UDIR/libxslt-*
         qpushd $TMP_UDIR/libxslt-*
 	    patch -p0 -u -i ${LIBXSLT_MAKEFILE_PATCH}
-            ./configure \
+            ./configure ${HOST_XCOMPILE} \
                 --prefix=${_LIBXSLT_UDIR} \
                 --with-libxml-prefix=${_GNOME_UDIR}
             make
@@ -1525,10 +1527,12 @@ function make_install() {
     make install
 
     qpushd $_INSTALL_UDIR/bin
+        [ "$CROSS_COMPILE" = "yes" ] && die "Cross-compile mingw is missing some parts for installation.  Install step unavailable in cross-compile."
+
         # Copy libstdc++-6.dll and its dependency to gnucash bin directory
         # to prevent DLL loading errors
         # (__gxx_personality_v0 not found in libstdc++-6.dll)
-        cp $MINGW_DIR/bin/{libstdc++-6.dll,libgcc_s_dw2-1.dll} .
+        cp $_MINGW_UDIR/bin/{libstdc++-6.dll,libgcc_s_dw2-1.dll} .
     qpopd
 
     qpushd $_INSTALL_UDIR/lib
