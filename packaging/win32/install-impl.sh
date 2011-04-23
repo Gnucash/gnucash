@@ -1348,6 +1348,10 @@ function inst_webkit() {
 	fi
         quiet ${PKG_CONFIG} --exists webkit-1.0 || die "webkit not installed correctly"
 	rm -rf ${TMP_UDIR}/webkit-*
+
+        qpushd $_WEBKIT_UDIR/lib/pkgconfig
+            perl -pi.bak -e"s!^prefix=.*\$!prefix=$_WEBKIT_UDIR!" *.pc
+        qpopd
     fi
 }
 
