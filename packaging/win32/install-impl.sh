@@ -154,19 +154,22 @@ function inst_mingw() {
         echo "mingw already installed in $_MINGW_UDIR.  skipping."
     else
         mkdir -p $_MINGW_UDIR
+
+        # Download the precompiled packages in any case to get their DLLs
+        wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_CORE_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_GPP_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_GMP_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_MPC_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_MPFR_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_PTHREADS_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $MINGW_RT_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
+
         if [ "$CROSS_COMPILE" != "yes" ]; then
-            wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_CORE_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_GPP_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_GMP_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_MPC_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_MPFR_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_PTHREADS_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $MINGW_RT_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
             (echo "y"; echo "y"; echo "$_MINGW_WFSDIR"; echo "y") | sh pi.sh
         else
@@ -1527,7 +1530,7 @@ function make_install() {
     make install
 
     qpushd $_INSTALL_UDIR/bin
-        [ "$CROSS_COMPILE" = "yes" ] && die "Cross-compile mingw is missing some parts for installation.  Install step unavailable in cross-compile."
+        if [ ! -f $_MINGW_UDIR/bin/libstdc++-6.dll ] ; then die "File $_MINGW_UDIR/bin/libstdc++-6.dll is missing.  Install step unavailable in cross-compile." ; fi
 
         # Copy libstdc++-6.dll and its dependency to gnucash bin directory
         # to prevent DLL loading errors
@@ -1649,7 +1652,7 @@ function inst_docs() {
     fi
 
     mkdir -p $_DOCS_UDIR/repos
-    qpushd $DOCS_DIR/repos
+    qpushd $_DOCS_UDIR/repos
         if [ "$UPDATE_DOCS" = "yes" ]; then
             if [ -x .svn ]; then
                 setup "SVN update of docs"
