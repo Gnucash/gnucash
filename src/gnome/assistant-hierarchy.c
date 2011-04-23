@@ -1062,7 +1062,8 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     GdkColor *color;
 
     data = g_new0 (hierarchy_data, 1);
-    builder = gnc_builder_add_from_file ("account.glade", "Hierarchy Assistant");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "account.glade", "Hierarchy Assistant");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Hierarchy Assistant"));
     data->dialog = dialog;
@@ -1117,6 +1118,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
                       G_CALLBACK (gnc_hierarchy_destroy_cb), data);
 
     gtk_builder_connect_signals(builder, data);
+    g_object_unref(G_OBJECT(builder));
 
     data->when_completed = when_completed;
     data->use_defaults = use_defaults;

@@ -128,14 +128,14 @@ void gnc_glade_autoconnect_full_func(const gchar *handler_name,
                                      gboolean after,
                                      gpointer user_data);
 
-GtkBuilder * gnc_builder_add_from_file (const char *filename, const char *root);
-void gnc_builder_connect_full_func(GtkBuilder *builder,
-                                   GObject *signal_object,
-                                   const gchar *signal_name,
-                                   const gchar *handler_name,
-                                   GObject *connect_object,
-                                   GConnectFlags flags,
-                                   gpointer user_data);
+gboolean gnc_builder_add_from_file (GtkBuilder *builder, const char *filename, const char *root);
+void gnc_builder_connect_full_func (GtkBuilder *builder,
+                                    GObject *signal_object,
+                                    const gchar *signal_name,
+                                    const gchar *handler_name,
+                                    GObject *connect_object,
+                                    GConnectFlags flags,
+                                    gpointer user_data);
 
 
 /** This function generates a button with icon and adds it to a

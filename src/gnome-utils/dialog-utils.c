@@ -929,16 +929,17 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
  *   It takes care of finding the directory for glade files and prints a
  *   warning message in case of an error.
  */
-GtkBuilder *
-gnc_builder_add_from_file (const char *filename, const char *root)
+gboolean
+gnc_builder_add_from_file (GtkBuilder *builder, const char *filename, const char *root)
 {
-    GtkBuilder *gncbuilder = NULL;
     GError* error = NULL;
     char *fname;
     gchar *gnc_builder_dir;
+    gboolean result;
 
-    g_return_val_if_fail (filename != NULL, NULL);
-    g_return_val_if_fail (root != NULL, NULL);
+    g_return_val_if_fail (builder != NULL, FALSE);
+    g_return_val_if_fail (filename != NULL, FALSE);
+    g_return_val_if_fail (root != NULL, FALSE);
 
     gnc_builder_dir = gnc_path_get_gtkbuilderdir ();
     fname = g_build_filename(gnc_builder_dir, filename, (char *)NULL);
@@ -947,8 +948,8 @@ gnc_builder_add_from_file (const char *filename, const char *root)
     {
         gchar *localroot = g_strdup(root);
         gchar *objects[] = { localroot, NULL };
-        gncbuilder = gtk_builder_new ();
-        if (!gtk_builder_add_objects_from_file (gncbuilder, fname, objects, &error))
+        result = gtk_builder_add_objects_from_file (builder, fname, objects, &error);
+        if (!result)
         {
             PWARN ("Couldn't load builder file: %s", error->message);
             g_error_free (error);
@@ -958,7 +959,7 @@ gnc_builder_add_from_file (const char *filename, const char *root)
 
     g_free (fname);
 
-    return gncbuilder;
+    return result;
 }
 
 /*
