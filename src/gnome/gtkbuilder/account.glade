@@ -2,9 +2,9 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkListStore" id="liststore1">
+  <object class="GtkListStore" id="fraction_liststore">
     <columns>
-      <!-- column-name item -->
+      <!-- column-name Fractions -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -39,6 +39,7 @@
     <property name="title" translatable="yes">New Account</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
+    <signal name="destroy" handler="gnc_account_window_destroy_cb"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox12">
         <property name="visible">True</property>
@@ -218,6 +219,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <signal name="clicked" handler="gnc_account_color_default_cb"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -310,6 +312,8 @@
                             <property name="can_focus">True</property>
                             <property name="has_focus">True</property>
                             <property name="activates_default">True</property>
+                            <signal name="changed" handler="gnc_account_name_changed_cb"/>
+                            <signal name="insert_text" handler="gnc_account_name_insert_text_cb"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -376,9 +380,9 @@
                             <child>
                               <object class="GtkComboBox" id="account_scu">
                                 <property name="visible">True</property>
-                                <property name="model">liststore1</property>
+                                <property name="model">fraction_liststore</property>
                                 <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                  <object class="GtkCellRendererText" id="acct_scu_renderer"/>
                                   <attributes>
                                     <attribute name="text">0</attribute>
                                   </attributes>
@@ -712,6 +716,7 @@
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="opening_equity_cb"/>
                           </object>
                         </child>
                       </object>
@@ -1692,6 +1697,9 @@
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
           <packing>
