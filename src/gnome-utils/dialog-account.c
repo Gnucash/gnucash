@@ -56,16 +56,6 @@
 #define GCONF_SECTION "dialogs/account"
 #define DEFAULT_COLOR "#ededececebeb"
 
-#ifdef G_MODULE_EXPORT
-/* No separate marking of functions as "DLL export", please: The rest
- * of gnucash relies on *everything* being exported.  As soon as at
- * least one function is manually marked as export, nothing except
- * those marked functions are exported, which will break the build on
- * Windows. */
-# undef G_MODULE_EXPORT
-# define G_MODULE_EXPORT
-#endif
-
 enum account_cols
 {
     ACCOUNT_COL_FULLNAME = 0,
@@ -156,11 +146,11 @@ void gnc_account_renumber_prefix_changed_cb (GtkEditable *editable, RenumberDial
 void gnc_account_renumber_interval_changed_cb (GtkSpinButton *spinbutton, RenumberDialog *data);
 void gnc_account_renumber_response_cb (GtkDialog *dialog, gint response, RenumberDialog *data);
 
-G_MODULE_EXPORT void gnc_account_window_destroy_cb (GtkObject *object, gpointer data);
-G_MODULE_EXPORT void opening_equity_cb (GtkWidget *w, gpointer data);
-G_MODULE_EXPORT void gnc_account_name_changed_cb(GtkWidget *widget, gpointer data);
-G_MODULE_EXPORT void gnc_account_color_default_cb(GtkWidget *widget, gpointer data);
-G_MODULE_EXPORT void gnc_account_name_insert_text_cb (GtkWidget   *entry,
+void gnc_account_window_destroy_cb (GtkObject *object, gpointer data);
+void opening_equity_cb (GtkWidget *w, gpointer data);
+void gnc_account_name_changed_cb(GtkWidget *widget, gpointer data);
+void gnc_account_color_default_cb(GtkWidget *widget, gpointer data);
+void gnc_account_name_insert_text_cb (GtkWidget   *entry,
                                                       const gchar *text,
                                                       gint         length,
                                                       gint        *position,
@@ -728,7 +718,7 @@ verify_children_compatible (AccountWindow *aw)
 }
 
 
-G_MODULE_EXPORT static gboolean
+static gboolean
 gnc_filter_parent_accounts (Account *account, gpointer data)
 {
     AccountWindow *aw = data;
@@ -928,7 +918,7 @@ gnc_new_account_ok (AccountWindow *aw)
     LEAVE(" ");
 }
 
-G_MODULE_EXPORT static void
+static void
 gnc_account_window_response_cb (GtkDialog *dialog,
                                 gint response,
                                 gpointer data)
@@ -979,7 +969,7 @@ gnc_account_window_response_cb (GtkDialog *dialog,
     LEAVE(" ");
 }
 
-G_MODULE_EXPORT void
+void
 gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 {
     AccountWindow *aw = data;
@@ -1028,7 +1018,7 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
     LEAVE(" ");
 }
 
-G_MODULE_EXPORT static void
+static void
 gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
 {
     AccountWindow *aw = data;
@@ -1090,7 +1080,7 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
     gnc_account_window_set_name(aw);
 }
 
-G_MODULE_EXPORT static void
+static void
 gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
 {
     AccountWindow *aw = data;
@@ -1188,7 +1178,7 @@ gnc_account_type_view_create (AccountWindow *aw)
     gnc_tree_model_account_types_set_selection(selection, 1 << aw->type);
 }
 
-G_MODULE_EXPORT void
+void
 gnc_account_name_insert_text_cb (GtkWidget   *entry,
                                  const gchar *text,
                                  gint         length,
@@ -1218,7 +1208,7 @@ gnc_account_name_insert_text_cb (GtkWidget   *entry,
     g_strfreev ( strsplit );
 }
 
-G_MODULE_EXPORT void
+void
 gnc_account_name_changed_cb(GtkWidget *widget, gpointer data)
 {
     AccountWindow *aw = data;
@@ -1226,7 +1216,7 @@ gnc_account_name_changed_cb(GtkWidget *widget, gpointer data)
     gnc_account_window_set_name (aw);
 }
 
-G_MODULE_EXPORT void
+void
 gnc_account_color_default_cb(GtkWidget *widget, gpointer data)
 {
     GdkColor color;
@@ -1237,7 +1227,7 @@ gnc_account_color_default_cb(GtkWidget *widget, gpointer data)
 
 }
 
-G_MODULE_EXPORT static void
+static void
 commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 {
     AccountWindow *aw = data;
@@ -1290,7 +1280,7 @@ account_commodity_filter (GtkTreeSelection *selection,
     return gnc_commodity_equiv (xaccAccountGetCommodity (account), commodity);
 }
 
-G_MODULE_EXPORT void
+void
 opening_equity_cb (GtkWidget *w, gpointer data)
 {
     AccountWindow *aw = data;

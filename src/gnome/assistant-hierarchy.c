@@ -57,16 +57,6 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 #define GCONF_SECTION "dialogs/new_hierarchy"
 
-#ifdef G_MODULE_EXPORT
-/* No separate marking of functions as "DLL export", please: The rest
- * of gnucash relies on *everything* being exported.  As soon as at
- * least one function is manually marked as export, nothing except
- * those marked functions are exported, which will break the build on
- * Windows. */
-# undef G_MODULE_EXPORT
-# define G_MODULE_EXPORT
-#endif
-
 typedef enum
 {
     COL_CHECKED,
@@ -110,16 +100,16 @@ typedef struct
 
 } hierarchy_data;
 
-G_MODULE_EXPORT void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
+void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
         hierarchy_data  *data);
 void on_choose_account_categories_prepare (hierarchy_data  *data);
-G_MODULE_EXPORT void select_all_clicked (GtkButton       *button,
+void select_all_clicked (GtkButton       *button,
                          hierarchy_data  *data);
-G_MODULE_EXPORT void clear_all_clicked (GtkButton       *button,
+void clear_all_clicked (GtkButton       *button,
                         hierarchy_data  *data);
 void on_final_account_prepare (hierarchy_data  *data);
-G_MODULE_EXPORT void on_cancel (GtkAssistant      *gtkassistant, hierarchy_data *data);
-G_MODULE_EXPORT void on_finish (GtkAssistant  *gtkassistant, hierarchy_data *data);
+void on_cancel (GtkAssistant      *gtkassistant, hierarchy_data *data);
+void on_finish (GtkAssistant  *gtkassistant, hierarchy_data *data);
 
 // ------------------------------------------------------------
 
@@ -437,7 +427,7 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
     }
 }
 
-G_MODULE_EXPORT void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
+void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
         hierarchy_data  *data)
 {
     gint currentpage = gtk_assistant_get_current_page(assistant);
@@ -553,7 +543,7 @@ select_helper (GtkListStore *store,
     return FALSE;  /* Run entire tree */
 }
 
-G_MODULE_EXPORT void
+void
 select_all_clicked (GtkButton       *button,
                     hierarchy_data  *data)
 {
@@ -562,7 +552,7 @@ select_all_clicked (GtkButton       *button,
                             GINT_TO_POINTER(TRUE));
 }
 
-G_MODULE_EXPORT void
+void
 clear_all_clicked (GtkButton       *button,
                    hierarchy_data  *data)
 {
@@ -989,7 +979,7 @@ on_final_account_prepare (hierarchy_data  *data)
     gnc_resume_gui_refresh ();
 }
 
-G_MODULE_EXPORT void
+void
 on_cancel (GtkAssistant      *gtkassistant,
            hierarchy_data  *data)
 {
@@ -1014,7 +1004,7 @@ starting_balance_helper (Account *account, hierarchy_data *data)
                                             gnc_get_current_book ());
 }
 
-G_MODULE_EXPORT void
+void
 on_finish (GtkAssistant  *gtkassistant,
            hierarchy_data  *data)
 {
