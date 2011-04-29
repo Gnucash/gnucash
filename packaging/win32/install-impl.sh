@@ -1134,7 +1134,7 @@ function inst_libxslt() {
 	    patch -p0 -u -i ${LIBXSLT_MAKEFILE_PATCH}
             ./configure ${HOST_XCOMPILE} \
                 --prefix=${_LIBXSLT_UDIR} \
-                --with-libxml-prefix=${_GNOME_UDIR}
+                --with-libxml-prefix=${_GNOME_UDIR} CPPFLAGS="${GNUTLS_CPPFLAGS}" LDFLAGS="${GNUTLS_LDFLAGS}"
             make
             make install
         qpopd

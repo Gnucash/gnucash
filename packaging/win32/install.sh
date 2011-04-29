@@ -78,8 +78,8 @@ add_step inst_guile
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_svn
 fi
-add_step inst_libxslt
 add_step inst_gnutls
+add_step inst_libxslt
 add_step inst_isocodes
 add_step inst_swig
 add_step inst_pcre
