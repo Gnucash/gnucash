@@ -34,6 +34,7 @@
 #include "gnc-account-merge.h"
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
+#include "dialog-file-access.h"
 #include "assistant-hierarchy.h"
 #include "assistant-utils.h"
 #include "gnc-amount-edit.h"
@@ -1144,6 +1145,7 @@ create_account_page(void)
     GncPluginPage *page;
     page = gnc_plugin_page_account_tree_new();
     gnc_main_window_open_page(NULL, page);
+    gnc_ui_file_access_for_save_as();
 }
 
 static void
