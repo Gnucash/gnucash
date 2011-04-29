@@ -646,7 +646,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     }
     if (page_count == 0)
     {
-        /* Should never happen, but has during alpha testing. Having this
+        /* Shound never happen, but has during alpha testing. Having this
          * check doesn't hurt anything. */
         goto cleanup;
     }
@@ -2293,6 +2293,8 @@ gnc_main_window_destroy (GtkObject *object)
 
     window = GNC_MAIN_WINDOW (object);
 
+    active_windows = g_list_remove (active_windows, window);
+
     /* Do these things once */
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     if (priv->merged_actions_table)
@@ -2325,7 +2327,6 @@ gnc_main_window_destroy (GtkObject *object)
         g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
         g_list_free (plugins);
     }
-    active_windows = g_list_remove (active_windows, window);
     GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
@@ -2729,21 +2730,13 @@ gnc_main_window_close_page (GncPluginPage *page)
     gnc_plugin_page_destroy_widget (page);
     g_object_unref(page);
 
-    /* If this is the last page on this window and this isn't the last window,
-     * go ahead and destroy the window.
-     * If it is the last window and the user just closed the last page,
-     * automatically reopen an account page. Leaving an empty window
-     * is pretty confusing. */
+    /* If this isn't the last window, go ahead and destroy the window. */
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     if (priv->installed_pages == NULL)
     {
         if (g_list_length(active_windows) > 1)
         {
             gtk_widget_destroy(GTK_WIDGET(window));
-        }
-        else
-        {
-            gnc_main_window_restore_default_state();
         }
     }
 }
