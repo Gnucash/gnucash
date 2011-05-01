@@ -77,21 +77,14 @@ FIND_PACKAGE (SWIG REQUIRED)
 INCLUDE (${SWIG_USE_FILE})
 
 # guile library and include dir
-FIND_PACKAGE (Guile REQUIRED)
+PKG_CHECK_MODULES (GUILE guile-1.8>=1.8.0)
+ADD_DEFINITIONS (-DHAVE_GUILE18)
 # We also need to look up the executable
 FIND_PROGRAM (GUILE_EXECUTABLE guile)
 
-# Check for guile version > 1.7, i.e. guile-1.8.x?
-IF (GUILE_INCLUDE_DIR)
-  IF (${GUILE_VERSION_MAJOR} EQUAL 1
-      AND ${GUILE_VERSION_MINOR} GREATER 7)
-    # Yes, define this macro
-    ADD_DEFINITIONS (-DHAVE_GUILE18)
-  ENDIF (${GUILE_VERSION_MAJOR} EQUAL 1
-         AND ${GUILE_VERSION_MINOR} GREATER 7)
-ELSE (GUILE_INCLUDE_DIR)
-  MESSAGE (SEND_ERROR "Guile was not found, but is required. Please set GUILE_LIBRARY and GUILE_INCLUDE_DIR.")
-ENDIF (GUILE_INCLUDE_DIR)
+IF (NOT GUILE_INCLUDE_DIRS)
+  MESSAGE (SEND_ERROR "Guile was not found, but is required. Please set PKG_CONFIG_PATH so that guile-1.8.pc is found.")
+ENDIF (NOT GUILE_INCLUDE_DIRS)
 IF (NOT GUILE_EXECUTABLE)
   MESSAGe (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
 ENDIF (NOT GUILE_EXECUTABLE)
