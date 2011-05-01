@@ -287,7 +287,7 @@ function inst_aqbanking() {
         wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/aqbanking-*
         qpushd $TMP_UDIR/aqbanking-*
-            _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}"
+            _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS} ${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS} -I${_GWENHYWFAR_UDIR}/include/gwenhywfar4"
             _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS} ${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS}"
             if test x$CROSS_COMPILE = xyes; then
                 XMLMERGE="xmlmerge"
