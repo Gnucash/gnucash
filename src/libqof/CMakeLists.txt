@@ -32,6 +32,7 @@ SET (libgnc_qof_SOURCES
    qof/qofutil.c
 )
 IF (WIN32)
+  ADD_DEFINITIONS (-DOS_WIN32)
   SET (libgnc_qof_SOURCES ${libgnc_qof_SOURCES}
     qof/qof-win32.c
 	../../lib/libc/strptime.c
