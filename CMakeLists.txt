@@ -82,9 +82,9 @@ ADD_DEFINITIONS (-DHAVE_GUILE18)
 # We also need to look up the executable
 FIND_PROGRAM (GUILE_EXECUTABLE guile)
 
-IF (NOT GUILE_INCLUDE_DIRS)
+IF (NOT GUILE_FOUND)
   MESSAGE (SEND_ERROR "Guile was not found, but is required. Please set PKG_CONFIG_PATH so that guile-1.8.pc is found.")
-ENDIF (NOT GUILE_INCLUDE_DIRS)
+ENDIF (NOT GUILE_FOUND)
 IF (NOT GUILE_EXECUTABLE)
   MESSAGe (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
 ENDIF (NOT GUILE_EXECUTABLE)
