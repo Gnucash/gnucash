@@ -26,6 +26,7 @@ INCLUDE (CheckIncludeFiles)
 # ############################################################
 
 OPTION (WITH_SQL "Build this project with SQL (libdbi) support" OFF)
+OPTION (WITH_AQBANKING "Build this project with aqbanking (online banking) support" OFF)
 
 # ############################################################
 
@@ -108,6 +109,12 @@ ENDIF (WITH_SQL)
 # Qt
 SET (QT_MIN_VERSION "4.5.0")
 FIND_PACKAGE (Qt4 REQUIRED) # find and setup Qt4 for this project
+
+# ############################################################
+IF (WITH_AQBANKING)
+  PKG_CHECK_MODULES (GWENHYWFAR REQUIRED gwenhywfar)
+  PKG_CHECK_MODULES (AQBANKING REQUIRED aqbanking)
+ENDIF (WITH_AQBANKING)
 
 # ############################################################
 
