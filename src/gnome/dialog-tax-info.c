@@ -227,6 +227,8 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
     SCM tax_entity_type;
     SCM category;
     SCM codes;
+    SCM tax_types;
+    gboolean tax_type_valid = FALSE;
 
     if (ti_dialog->tax_type == NULL ||
             (safe_strcmp (ti_dialog->tax_type, "") == 0))
@@ -236,8 +238,32 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
     }
     else
     {
-        /*     tax_entity_type = scm_from_locale_string (ti_dialog->tax_type); <- Req's guile 1.8 */
-        tax_entity_type = scm_makfrom0str (ti_dialog->tax_type); /* <-guile 1.6  */
+        tax_entity_type = scm_from_locale_string (ti_dialog->tax_type);
+    }
+
+    /* validate that tax_type in book is valid (can be untrue if locales
+       are changed) */
+    tax_types = scm_call_0 (getters.tax_entity_types);
+    if (!scm_is_list (tax_types))
+    {
+        destroy_txf_infos (infos);
+        return NULL;
+    }
+    while (!scm_is_null (tax_types))
+    {
+        SCM type_scm;
+        gchar *str;
+
+        type_scm  = SCM_CAR (tax_types);
+        tax_types = SCM_CDR (tax_types);
+        str = scm_is_symbol(type_scm) ? SCM_SYMBOL_CHARS(type_scm) : "";
+        if (safe_strcmp (ti_dialog->tax_type, str) == 0)
+                tax_type_valid = TRUE;
+    }
+    if (!tax_type_valid)
+    {
+        destroy_txf_infos (infos);
+        return NULL;
     }
 
     switch (acct_category)

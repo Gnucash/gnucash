@@ -459,6 +459,7 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
 char *
 gnc_ui_account_get_tax_info_string (const Account *account)
 {
+    static SCM get_tax_entity_types = SCM_UNDEFINED;
     static SCM get_form = SCM_UNDEFINED;
     static SCM get_desc = SCM_UNDEFINED;
 
@@ -498,15 +499,17 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     }
     else  /* with tax code */
     {
+        SCM tax_types;
+        gboolean tax_type_valid = FALSE;
         const gchar *num_code = NULL;
         const gchar *prefix = "N";
 
         tax_type = gnc_get_current_book_tax_type ();
         if (tax_type == NULL || (safe_strcmp (tax_type, "") == 0))
             return g_strdup (_("Tax entity type not specified"));
+
         atype = xaccAccountGetType (account);
-        /*    tax_entity_type = scm_from_locale_string (tax_type); <- requires guile 1.8*/
-        tax_entity_type = scm_makfrom0str (tax_type); /* <-guile 1.6  */
+        tax_entity_type = scm_from_locale_string (tax_type);
 
         if (get_form == SCM_UNDEFINED)
         {
@@ -536,13 +539,37 @@ gnc_ui_account_get_tax_info_string (const Account *account)
 
             g_return_val_if_fail (module, NULL);
 
-            get_form = scm_c_eval_string ("(false-if-exception gnc:txf-get-form)");
+            get_tax_entity_types = scm_c_eval_string
+                ("(false-if-exception gnc:txf-get-tax-entity-type-codes)");
+            get_form = scm_c_eval_string
+                ("(false-if-exception gnc:txf-get-form)");
             get_desc = scm_c_eval_string
-                       ("(false-if-exception gnc:txf-get-description)");
+                ("(false-if-exception gnc:txf-get-description)");
         }
 
+        g_return_val_if_fail (scm_is_procedure (get_tax_entity_types),
+            NULL);
         g_return_val_if_fail (scm_is_procedure (get_form), NULL);
         g_return_val_if_fail (scm_is_procedure (get_desc), NULL);
+
+        tax_types = scm_call_0 (get_tax_entity_types);
+        if (!scm_is_list (tax_types))
+            return g_strdup (_("Tax entity types not available"));
+        while (!scm_is_null (tax_types))
+        {
+            SCM type_scm;
+            gchar *str;
+
+            type_scm  = SCM_CAR (tax_types);
+            tax_types = SCM_CDR (tax_types);
+            str = scm_is_symbol(type_scm) ? SCM_SYMBOL_CHARS(type_scm) : "";
+            if (safe_strcmp (tax_type, str) == 0)
+                tax_type_valid = TRUE;
+            /* g_free (str); */
+        }
+        if (!tax_type_valid)
+            return g_strdup_printf (_("Tax entity type not valid: %s"),
+                        tax_type);
 
         category = scm_c_eval_string (atype == ACCT_TYPE_INCOME ?
                                       "txf-income-categories" :
