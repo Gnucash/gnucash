@@ -1713,7 +1713,7 @@
   ;; and have an invalid tax code are put on an error list. Codes N438 and N440
   ;; have special processing: if an asset account is assigned to either of these
   ;; two codes, an additional 'form-line-acct' entry is created for the other
-  ;; code so that either both accounts are represented or neither.
+  ;; code so that either both codes are represented or neither.
   (define (make-form-line-acct-list accounts tax-year)
      (map (lambda (account)
             (let* ((account-name (gnc-account-get-full-name account))

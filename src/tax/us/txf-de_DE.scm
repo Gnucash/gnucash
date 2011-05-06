@@ -32,9 +32,11 @@
    (cons 'Other #("None" "Keine Steuerberichtsoptionen vorhanden"))))
 
 (define (gnc:tax-type-txf-get-code-info tax-entity-types type-code index)
-  (let ((tax-entity-type (assv type-code tax-entity-types)))
-    (and tax-entity-type
-         (vector-ref (cdr tax-entity-type) index))))
+  (if (assv type-code tax-entity-types)
+      (let ((tax-entity-type (assv type-code tax-entity-types)))
+           (and tax-entity-type
+                (vector-ref (cdr tax-entity-type) index)))
+      #f))
 
 (define (gnc:txf-get-tax-entity-type type-code)
   (gnc:tax-type-txf-get-code-info txf-tax-entity-types type-code 0))
@@ -58,19 +60,27 @@
 (define (gnc:txf-get-category-key categories code tax-entity-type)
   (gnc:txf-get-code-info categories code 5 tax-entity-type))
 (define (gnc:txf-get-line-data categories code tax-entity-type)
-  (let* ((tax-entity-codes (cdr (assv (string->symbol tax-entity-type)
-                                                                  categories)))
-         (category (assv code tax-entity-codes)))
-    (if (or (not category) (< (vector-length (cdr category)) 7))
-        #f
-        (gnc:txf-get-code-info categories code 6 tax-entity-type))))
+  (if (assv (string->symbol tax-entity-type) categories)
+      (let* ((tax-entity-codes (cdr (assv (string->symbol tax-entity-type)
+                                          categories)))
+             (category (if (assv code tax-entity-codes)
+                           (assv code tax-entity-codes)
+                           #f)))
+            (if (or (not category) (< (vector-length (cdr category)) 7))
+                #f
+                (gnc:txf-get-code-info categories code 6 tax-entity-type)))
+      #f))
 (define (gnc:txf-get-last-year categories code tax-entity-type)
-  (let* ((tax-entity-codes (cdr (assv (string->symbol tax-entity-type)
-                                                                  categories)))
-         (category (assv code tax-entity-codes)))
-    (if (or (not category) (< (vector-length (cdr category)) 8))
-        #f
-        (gnc:txf-get-code-info categories code 7 tax-entity-type))))
+  (if (assv (string->symbol tax-entity-type) categories)
+      (let* ((tax-entity-codes (cdr (assv (string->symbol tax-entity-type)
+                                          categories)))
+             (category (if (assv code tax-entity-codes)
+                           (assv code tax-entity-codes)
+                           #f)))
+            (if (or (not category) (< (vector-length (cdr category)) 8))
+                #f
+                (gnc:txf-get-code-info categories code 7 tax-entity-type)))
+      #f))
 
 (define (gnc:txf-get-help categories code)
   (let ((pair (assv code txf-help-strings)))
@@ -82,14 +92,16 @@ USt-Kategorien 2011 für GnuCash Vers. 2.4.0 entwickelt und erstellt von: FJSW
 Fehlermeldungen + Dankschreiben an: stoll@bomhardt.de")))
 
 (define (gnc:txf-get-codes categories tax-entity-type)
-  (let* ((tax-entity-code-list-pair (assv (if (eqv? tax-entity-type "")
-                                              'Ind
-                                              (string->symbol tax-entity-type))
-                                          categories))
-         (tax-entity-codes (if tax-entity-code-list-pair
-                               (cdr tax-entity-code-list-pair)
-                               '())))
-    (map car tax-entity-codes)))
+  (if (assv (string->symbol tax-entity-type) categories)
+      (let* ((tax-entity-code-list-pair (assv (if (eqv? tax-entity-type "")
+                                               'Ind
+                                               (string->symbol tax-entity-type))
+                                              categories))
+             (tax-entity-codes (if tax-entity-code-list-pair
+                                   (cdr tax-entity-code-list-pair)
+                                   '())))
+            (map car tax-entity-codes))
+      #f))
 
 ;;;; Private
 
@@ -102,8 +114,10 @@ Fehlermeldungen + Dankschreiben an: stoll@bomhardt.de")))
                                (cdr tax-entity-code-list-pair)
                                '()))
          (category (assv code tax-entity-codes)))
-    (and category
-         (vector-ref (cdr category) index))))
+        (if category
+            (and category
+                 (vector-ref (cdr category) index))
+            #f)))
 
 (define txf-help-categories
   (list

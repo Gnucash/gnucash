@@ -227,8 +227,6 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
     SCM tax_entity_type;
     SCM category;
     SCM codes;
-    SCM tax_types;
-    gboolean tax_type_valid = FALSE;
 
     if (ti_dialog->tax_type == NULL ||
             (safe_strcmp (ti_dialog->tax_type, "") == 0))
@@ -239,31 +237,6 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
     else
     {
         tax_entity_type = scm_from_locale_string (ti_dialog->tax_type);
-    }
-
-    /* validate that tax_type in book is valid (can be untrue if locales
-       are changed) */
-    tax_types = scm_call_0 (getters.tax_entity_types);
-    if (!scm_is_list (tax_types))
-    {
-        destroy_txf_infos (infos);
-        return NULL;
-    }
-    while (!scm_is_null (tax_types))
-    {
-        SCM type_scm;
-        gchar *str;
-
-        type_scm  = SCM_CAR (tax_types);
-        tax_types = SCM_CDR (tax_types);
-        str = scm_is_symbol(type_scm) ? SCM_SYMBOL_CHARS(type_scm) : "";
-        if (safe_strcmp (ti_dialog->tax_type, str) == 0)
-                tax_type_valid = TRUE;
-    }
-    if (!tax_type_valid)
-    {
-        destroy_txf_infos (infos);
-        return NULL;
     }
 
     switch (acct_category)
@@ -319,7 +292,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
 
         scm = scm_call_3 (getters.payer_name_source, category, code_scm,
                           tax_entity_type);
-        str = SCM_SYMBOL_CHARS (scm);
+        str = scm_is_symbol(scm) ? SCM_SYMBOL_CHARS (scm) : "";
         if (safe_strcmp (str, "not-impl") == 0)
         {
             continue;
@@ -349,8 +322,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
         scm = scm_call_2 (getters.help, category, code_scm);
         str = scm_is_string(scm) ? scm_to_locale_string(scm) : "";
         scm = scm_call_3 (getters.last_year, category, code_scm, tax_entity_type);
-        /*    year = scm_is_bool (scm) ? 0 : scm_to_int(scm); <- Req's guile 1.8 */
-        year = scm_is_bool (scm) ? 0 : SCM_INUM(scm); /* <-guile 1.6  */
+        year = scm_is_bool (scm) ? 0 : scm_to_int(scm);
         scm = scm_call_3 (getters.line_data, category, code_scm, tax_entity_type);
         if (scm_is_list (scm))
         {
@@ -367,10 +339,8 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
                 year_scm  = SCM_CAR (scm);
                 scm       = SCM_CDR (scm);
 
-                /*        line_year = scm_is_bool (SCM_CAR (year_scm)) ? 0 :
-                                          scm_to_int (SCM_CAR (year_scm)); <- Req's guile 1.8 */
                 line_year = scm_is_bool (SCM_CAR (year_scm)) ? 0 :
-                            SCM_INUM (SCM_CAR (year_scm)); /* <-guile 1.6  */
+                                          scm_to_int (SCM_CAR (year_scm));
                 line = scm_is_string((SCM_CAR (SCM_CDR (year_scm))))
                        ? scm_to_locale_string((SCM_CAR (SCM_CDR (year_scm)))) : "";
                 temp = g_strconcat (form_line_data, "\n",
@@ -409,8 +379,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
             g_free(form_line_data);
 
         scm = scm_call_3 (getters.copy, category, code_scm, tax_entity_type);
-        /*    cpy = scm_is_bool (scm) ? (scm_is_false (scm) ? FALSE : TRUE): FALSE; <- Req's guile 1.8 */
-        cpy = scm_is_bool (scm) ? (scm_is_false (scm) ? FALSE : TRUE) : FALSE; /* <-guile 1.6  */
+        cpy = scm_is_bool (scm) ? (scm_is_false (scm) ? FALSE : TRUE): FALSE;
         txf_info->copy = cpy;
 
         infos = g_list_prepend (infos, txf_info);
