@@ -211,11 +211,12 @@ set_default EXETYPE_DIR $TOOLS_DIR
 XMLSOFT_URL="http://xmlsoft.org/sources/win32"
 XSLT_BASE_URL="http://ftp.acc.umu.se/pub/GNOME/sources/libxslt/1.1"
 XML2_BASE_URL="http://ftp.acc.umu.se/pub/GNOME/sources/libxml2/2.6"
-LIBXSLT_VERSION=1.1.22
+LIBXSLT_VERSION="1.1.22"
 #LIBXSLT_VERSION=1.1.26
 set_default LIBXSLT_SRC_URL "${XSLT_BASE_URL}/libxslt-${LIBXSLT_VERSION}.tar.bz2"
 set_default LIBXSLT_MAKEFILE_PATCH "`pwd`/libxslt-1.1.22.Makefile.in.patch"
-set_default LIBXML2_SRC_URL "${XML2_BASE_URL}/libxml2-2.6.27.tar.bz2"
+LIBXML2_VERSION="2.6.30"
+set_default LIBXML2_SRC_URL "${XML2_BASE_URL}/libxml2-${LIBXML2_VERSION}.tar.bz2"
 set_default LIBXSLT_ICONV_URL "${XMLSOFT_URL}/iconv-1.9.2.win32.zip"
 set_default LIBXSLT_ZLIB_URL "${XMLSOFT_URL}/zlib-1.2.3.win32.zip"
 set_default LIBXSLT_DIR $GLOBAL_DIR\\libxslt
