@@ -484,6 +484,7 @@ function inst_gnome() {
         quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
+        quiet ${PKG_CONFIG} --atleast-version=${PIXMAN_VERSION} pixman-1 &&
         quiet intltoolize --version
     then
         echo "gnome packages installed in $_GNOME_UDIR.  skipping."
@@ -595,20 +596,25 @@ EOF
             qpopd
         fi
 
-        wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/pixman-*
-        qpushd $TMP_UDIR/pixman-*
-	    GLIB_CPPFLAGS=`${PKG_CONFIG} --cflags glib-2.0`
-	    GTK_CPPFLAGS="-I${_GNOME_UDIR}/include/gtk-2.0"
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=$_GNOME_UDIR \
-                --disable-static \
-		CPPFLAGS="${GLIB_CPPFLAGS} ${GTK_CPPFLAGS}"
-            make
-            make install
-        qpopd
-        ${PKG_CONFIG} --exists pixman-1 || die "pixman not installed correctly"
-        rm -rf $TMP_UDIR/pixman-*
+
+        if quiet ${PKG_CONFIG} --exact-version=${PIXMAN_VERSION} pixman-1 ; then
+            echo "Pixman already compiled+installed"
+        else
+            wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
+            assert_one_dir $TMP_UDIR/pixman-*
+            qpushd $TMP_UDIR/pixman-*
+	        GLIB_CPPFLAGS=`${PKG_CONFIG} --cflags glib-2.0`
+                GTK_CPPFLAGS="-I${_GNOME_UDIR}/include/gtk-2.0"
+                ./configure ${HOST_XCOMPILE} \
+                    --prefix=$_GNOME_UDIR \
+                    --disable-static \
+                    CPPFLAGS="${GLIB_CPPFLAGS} ${GTK_CPPFLAGS}"
+                make
+                make install
+            qpopd
+            rm -rf $TMP_UDIR/pixman-*
+        fi
+        quiet ${PKG_CONFIG} --exact-version=${PIXMAN_VERSION} pixman-1 || die "pixman not installed correctly"
 
         wget_unpacked $LIBXML2_SRC_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libxml2-*

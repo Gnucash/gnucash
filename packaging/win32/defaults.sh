@@ -278,7 +278,6 @@ set_default ORBIT2_URL              "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2_2.14.16
 set_default ORBIT2_DEV_URL          "$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-dev_2.14.16-1_win32.zip"
 set_default PANGO_URL               "$GNOME_WIN32_URL/pango/1.28/pango_1.28.3-1_win32.zip"
 set_default PANGO_DEV_URL           "$GNOME_WIN32_URL/pango/1.28/pango-dev_1.28.3-1_win32.zip"
-set_default PIXMAN_DEV_URL          "$GNOME_WIN32_DEPS_URL/pixman-dev_0.20.0-1_win32.zip"
 set_default PKG_CONFIG_URL          "$GNOME_WIN32_DEPS_URL/pkg-config_0.25-1_win32.zip"
 set_default PKG_CONFIG_DEV_URL      "$GNOME_WIN32_DEPS_URL/pkg-config-dev_0.25-1_win32.zip"
 set_default POPT_URL                "$GNOME_WIN32_DEPS_URL/popt-1.10.2-tml-20050828.zip"
@@ -287,7 +286,8 @@ set_default ZLIB_URL                "$GNOME_WIN32_DEPS_URL/zlib_1.2.5-2_win32.zi
 set_default ZLIB_DEV_URL            "$GNOME_WIN32_DEPS_URL/zlib-dev_1.2.5-2_win32.zip"
 set_default GNOME_DIR $GLOBAL_DIR\\gnome
 
-set_default PIXMAN_URL              "http://cairographics.org/releases/pixman-0.17.6.tar.gz"
+PIXMAN_VERSION="0.22.0"
+set_default PIXMAN_URL              "http://www.cairographics.org/releases/pixman-${PIXMAN_VERSION}.tar.gz"
 
 set_default LIBBONOBOUI_URL "$GNOME_WIN32_URL/libbonoboui/2.24/libbonoboui_2.24.0-1_win32.zip"
 set_default LIBBONOBOUI_DEV_URL "$GNOME_WIN32_URL/libbonoboui/2.24/libbonoboui-dev_2.24.0-1_win32.zip"
