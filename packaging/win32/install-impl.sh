@@ -485,7 +485,7 @@ function inst_gnome() {
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
         quiet ${PKG_CONFIG} --atleast-version=${PIXMAN_VERSION} pixman-1 &&
-        quiet ${PKG_CONFIG} --atleast-version=${LIBXML2_VERSION} libxml-2.0 &&
+        quiet ${PKG_CONFIG} --exact-version=${LIBXML2_VERSION} libxml-2.0 &&
         quiet intltoolize --version
     then
         echo "gnome packages installed in $_GNOME_UDIR.  skipping."
@@ -590,14 +590,6 @@ EOF
             rm -rf $TMP_UDIR/gtk-doc-*
         qpopd
 
-        if [ "$CROSS_COMPILE" = "yes" ]; then
-            qpushd $_GNOME_UDIR/lib/pkgconfig
-                perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
-                #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
-            qpopd
-        fi
-
-
         if quiet ${PKG_CONFIG} --exact-version=${PIXMAN_VERSION} pixman-1 ; then
             echo "Pixman already compiled+installed"
         else
@@ -634,13 +626,18 @@ EOF
             rm -rf ${TMP_UDIR}/libxml2-*
         fi
 
+        qpushd $_GNOME_UDIR/lib/pkgconfig
+            perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
+            #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
+        qpopd
+
         quiet gconftool-2 --version &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
         quiet ${PKG_CONFIG} --atleast-version=${PIXMAN_VERSION} pixman-1 &&
-        quiet ${PKG_CONFIG} --atleast-version=${LIBXML2_VERSION} libxml-2.0 &&
+        quiet ${PKG_CONFIG} --exact-version=${LIBXML2_VERSION} libxml-2.0 &&
         quiet intltoolize --version || die "gnome not installed correctly"
     fi
     [ ! -d $_GNOME_UDIR/share/aclocal ] || add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
