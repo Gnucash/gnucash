@@ -101,6 +101,8 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
     gnc_suspend_gui_refresh ();
     gncJobBeginEdit (job);
 
+    qof_event_gen(QOF_INSTANCE(job), QOF_EVENT_ADD, NULL);
+
     gncJobSetID (job, gtk_editable_get_chars (GTK_EDITABLE (jw->id_entry),
                  0, -1));
     gncJobSetName (job, gtk_editable_get_chars (GTK_EDITABLE (jw->name_entry),
