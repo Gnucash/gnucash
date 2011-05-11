@@ -125,6 +125,7 @@ gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner);
 /** \name Set routines.
 @{
 */
+void gncOwnerSetName (const GncOwner *owner, const gchar *new_name);
 void gncOwnerSetActive (const GncOwner *owner, gboolean active);
 /** @} */
 

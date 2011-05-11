@@ -420,6 +420,31 @@ const GncGUID * gncOwnerGetGUID (const GncOwner *owner)
 }
 
 void
+gncOwnerSetName (const GncOwner *owner, const gchar *name)
+{
+    if (!owner) return;
+    switch (owner->type)
+    {
+    case GNC_OWNER_CUSTOMER:
+        gncCustomerSetName (owner->owner.customer, name);
+        break;
+    case GNC_OWNER_VENDOR:
+        gncVendorSetName (owner->owner.vendor, name);
+        break;
+    case GNC_OWNER_EMPLOYEE:
+        gncAddressSetName (gncEmployeeGetAddr (owner->owner.employee), name);
+        break;
+    case GNC_OWNER_JOB:
+        gncJobSetName (owner->owner.job, name);
+        break;
+    case GNC_OWNER_NONE:
+    case GNC_OWNER_UNDEFINED:
+    default:
+        break;
+    }
+}
+
+void
 gncOwnerSetActive (const GncOwner *owner, gboolean active)
 {
     if (!owner) return;
