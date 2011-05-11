@@ -1058,33 +1058,38 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
           entity, event_type, model, ed);
     priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
+    qofOwnerSetEntity (&owner, entity);
+    if (gncOwnerGetType(&owner) != priv->owner_type)
+    {
+        LEAVE("model type and owner type differ");
+        return;
+    }
+
     if (qof_instance_get_book (entity) != priv->book)
     {
         LEAVE("not in this book");
         return;
     }
-    qofOwnerSetEntity (&owner, entity);
-    if (!gnc_tree_model_owner_get_iter_from_owner (model, &owner, &iter))
-    {
-        LEAVE("not in this model");
-        return;
-    }
+
     /* What to do, that to do. */
     switch (event_type)
     {
     case QOF_EVENT_ADD:
         /* Tell the filters/views where the new owner was added. */
         DEBUG("add owner %p (%s)", &owner, gncOwnerGetName(&owner));
+        /* First update our copy of the owner list. This isn't done automatically */
+        priv->owner_list = gncBusinessGetOwnerList (priv->book,
+                           gncOwnerTypeToQofIdType(priv->owner_type), TRUE);
+        increment_stamp(model);
+        if (!gnc_tree_model_owner_get_iter_from_owner (model, &owner, &iter))
+        {
+            LEAVE("can't generate iter");
+            break;
+        }
         path = gnc_tree_model_owner_get_path(GTK_TREE_MODEL(model), &iter);
         if (!path)
         {
             DEBUG("can't generate path");
-            break;
-        }
-        increment_stamp(model);
-        if (!gnc_tree_model_owner_get_iter(GTK_TREE_MODEL(model), &iter, path))
-        {
-            DEBUG("can't generate iter");
             break;
         }
         gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
@@ -1108,15 +1113,15 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
 
     case QOF_EVENT_MODIFY:
         DEBUG("modify  owner %p (%s)", &owner, gncOwnerGetName(&owner));
+        if (!gnc_tree_model_owner_get_iter_from_owner (model, &owner, &iter))
+        {
+            LEAVE("can't generate iter");
+            return;
+        }
         path = gnc_tree_model_owner_get_path(GTK_TREE_MODEL(model), &iter);
         if (!path)
         {
             DEBUG("can't generate path");
-            break;
-        }
-        if (!gnc_tree_model_owner_get_iter(GTK_TREE_MODEL(model), &iter, path))
-        {
-            DEBUG("can't generate iter");
             break;
         }
         gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
