@@ -134,12 +134,16 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
 /** \name Comparison routines.
  @{
  */
-gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b); /** Check if both objects refer to the same owner type
-                                                                   if and the owner reference points to the same
-                                                                   {vendor/customer/employee} in memory */
-int gncOwnerGCompareFunc (const GncOwner *a, const GncOwner *b); /** Same as gncOwnerEqual, but returns 0 if
-                                                                     equal to be used as a GList custom compare function */
-int gncOwnerCompare (const GncOwner *a, const GncOwner *b); /** Sort on name */
+/** Assess equality by checking
+ *  - if both owner objects refer to the same owner type
+ *  - and if the owner reference points to the same
+ *    {vendor/customer/employee} in memory */
+gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
+/** Same as gncOwnerEqual, but returns 0 if
+    equal to be used as a GList custom compare function */
+int gncOwnerGCompareFunc (const GncOwner *a, const GncOwner *b);
+/** Sort on name */
+int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 /** @} */
 
 /** Get the GncGUID of the immediate owner */
