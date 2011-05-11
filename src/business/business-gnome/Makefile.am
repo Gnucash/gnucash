@@ -42,6 +42,7 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-vendor.c \
   gnc-plugin-business.c \
   gnc-plugin-page-invoice.c \
+  gnc-plugin-page-owner-tree.c \
   gncmod-business-gnome.c \
   search-owner.c
 
@@ -61,6 +62,7 @@ noinst_HEADERS = \
   dialog-vendor.h \
   gnc-plugin-business.h \
   gnc-plugin-page-invoice.h \
+  gnc-plugin-page-owner-tree.h \
   search-owner.h
 
 libgncmod_business_gnome_la_LDFLAGS = -avoid-version

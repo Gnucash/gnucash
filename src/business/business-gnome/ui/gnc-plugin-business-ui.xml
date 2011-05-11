@@ -3,6 +3,7 @@
     <placeholder name="AdditionalMenusPlaceholder">
       <menu name="Business" action="BusinessAction">
 	<menu name="CustomerMenu" action="CustomerMenuAction">
+	  <menuitem name="CustomerOverviewPage"     action="CustomerOverviewPageAction"/>
 	  <menuitem name="CustomerNewCustomerOpen"  action="CustomerNewCustomerOpenAction"/>
 	  <menuitem name="CustomerFindCustomerOpen" action="CustomerFindCustomerOpenAction"/>
 	  <menuitem name="CustomerNewInvoiceOpen"   action="CustomerNewInvoiceOpenAction"/>
@@ -13,6 +14,7 @@
 	</menu>
 
 	<menu name="VendorMenu" action="VendorMenuAction">
+	  <menuitem name="VendorOverviewPage"   action="VendorOverviewPageAction"/>
 	  <menuitem name="VendorNewVendorOpen"  action="VendorNewVendorOpenAction"/>
 	  <menuitem name="VendorFindVendorOpen" action="VendorFindVendorOpenAction"/>
 	  <menuitem name="VendorNewBillOpen"    action="VendorNewBillOpenAction"/>
@@ -23,6 +25,7 @@
 	</menu>
 
 	<menu name="EmployeeMenu" action="EmployeeMenuAction">
+	  <menuitem name="EmployeeOverviewPage"     action="EmployeeOverviewPageAction"/>
 	  <menuitem name="EmployeeNewEmployeeOpen"  action="EmployeeNewEmployeeOpenAction"/>
 	  <menuitem name="EmployeeFindEmployeeOpen" action="EmployeeFindEmployeeOpenAction"/>
 	  <menuitem name="EmployeeNewExpenseOpen"   action="EmployeeNewExpenseVoucherOpenAction"/>

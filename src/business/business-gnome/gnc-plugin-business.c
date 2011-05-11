@@ -40,6 +40,7 @@
 #include "dialog-vendor.h"
 #include "gnc-plugin-business.h"
 #include "gnc-plugin-page-invoice.h"
+#include "gnc-plugin-page-owner-tree.h"
 #include "gncOwner.h"
 #include "gnc-ui-util.h"
 #include "gnc-date.h"
@@ -65,6 +66,8 @@ static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
         GQuark type);
 
 /* Command callbacks */
+static void gnc_plugin_business_cmd_customer_page            (GtkAction *action,
+        GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_customer_new_customer    (GtkAction *action,
         GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_customer_find_customer   (GtkAction *action,
@@ -80,6 +83,8 @@ static void gnc_plugin_business_cmd_customer_find_job        (GtkAction *action,
 static void gnc_plugin_business_cmd_customer_process_payment (GtkAction *action,
         GncMainWindowActionData *data);
 
+static void gnc_plugin_business_cmd_vendor_page            (GtkAction *action,
+        GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_vendor_new_vendor      (GtkAction *action,
         GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_vendor_find_vendor     (GtkAction *action,
@@ -95,6 +100,8 @@ static void gnc_plugin_business_cmd_vendor_find_job        (GtkAction *action,
 static void gnc_plugin_business_cmd_vendor_process_payment (GtkAction *action,
         GncMainWindowActionData *data);
 
+static void gnc_plugin_business_cmd_employee_page                 (GtkAction *action,
+        GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_employee_new_employee         (GtkAction *action,
         GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_employee_find_employee        (GtkAction *action,
@@ -148,6 +155,11 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* Customer submenu */
     { "CustomerMenuAction", NULL, N_("_Customer"), NULL, NULL, NULL },
     {
+        "CustomerOverviewPageAction", NULL, N_("Customers Overview"), NULL,
+        N_("Open a Customer overview page"),
+        G_CALLBACK (gnc_plugin_business_cmd_customer_page)
+    },
+    {
         "CustomerNewCustomerOpenAction", NULL, N_("_New Customer..."), NULL,
         N_("Open the New Customer dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_new_customer)
@@ -184,6 +196,11 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
 
     /* Vendor submenu */
+    {
+        "VendorOverviewPageAction", NULL, N_("Vendors Overview"), NULL,
+        N_("Open a Vendor overview page"),
+        G_CALLBACK (gnc_plugin_business_cmd_vendor_page)
+    },
     { "VendorMenuAction", NULL, N_("_Vendor"), NULL, NULL, NULL },
     {
         "VendorNewVendorOpenAction", NULL, N_("_New Vendor..."), NULL,
@@ -222,6 +239,11 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
 
     /* Employee submenu */
+    {
+        "EmployeeOverviewPageAction", NULL, N_("Employees Overview"), NULL,
+        N_("Open a Employee overview page"),
+        G_CALLBACK (gnc_plugin_business_cmd_employee_page)
+    },
     { "EmployeeMenuAction", NULL, N_("_Employee"), NULL, NULL, NULL },
     {
         "EmployeeNewEmployeeOpenAction", NULL, N_("_New Employee..."), NULL,
@@ -357,6 +379,7 @@ gnc_plugin_business_new (void)
     /* Reference the invoice page plugin to ensure it exists in
      * the gtk type system. */
     GNC_TYPE_PLUGIN_PAGE_INVOICE;
+    GNC_TYPE_PLUGIN_PAGE_OWNER_TREE;
 
     plugin = g_object_new (GNC_TYPE_PLUGIN_BUSINESS,
                            (char *)NULL);
@@ -435,6 +458,19 @@ gnc_plugin_business_get_window()
 /************************************************************
  *                    Command Callbacks                     *
  ************************************************************/
+
+static void
+gnc_plugin_business_cmd_customer_page (GtkAction *action,
+        GncMainWindowActionData *mw)
+{
+    GncPluginPage *page;
+
+    g_return_if_fail (mw != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
+
+    page = gnc_plugin_page_owner_tree_new (GNC_OWNER_CUSTOMER);
+    gnc_main_window_open_page (mw->window, page);
+}
 
 static void
 gnc_plugin_business_cmd_customer_new_customer (GtkAction *action,
@@ -541,6 +577,19 @@ gnc_plugin_business_cmd_customer_process_payment (GtkAction *action,
 }
 
 static void
+gnc_plugin_business_cmd_vendor_page (GtkAction *action,
+        GncMainWindowActionData *mw)
+{
+    GncPluginPage *page;
+
+    g_return_if_fail (mw != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
+
+    page = gnc_plugin_page_owner_tree_new (GNC_OWNER_VENDOR);
+    gnc_main_window_open_page (mw->window, page);
+}
+
+static void
 gnc_plugin_business_cmd_vendor_new_vendor (GtkAction *action,
         GncMainWindowActionData *mw)
 {
@@ -642,6 +691,19 @@ gnc_plugin_business_cmd_vendor_process_payment (GtkAction *action,
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     gnc_ui_payment_new (priv->last_vendor, gnc_get_current_book());
+}
+
+static void
+gnc_plugin_business_cmd_employee_page (GtkAction *action,
+        GncMainWindowActionData *mw)
+{
+    GncPluginPage *page;
+
+    g_return_if_fail (mw != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
+
+    page = gnc_plugin_page_owner_tree_new (GNC_OWNER_EMPLOYEE);
+    gnc_main_window_open_page (mw->window, page);
 }
 
 static void
