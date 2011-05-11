@@ -941,13 +941,13 @@ gnc_tree_model_owner_get_iter_from_owner (GncTreeModelOwner *model,
     gnc_leave_return_val_if_fail ((owner != NULL), FALSE);
     gnc_leave_return_val_if_fail ((iter != NULL), FALSE);
 
-    iter->user_data = owner;
-    iter->stamp = model->stamp;
 
     priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
-    owner_in_list = g_list_find (priv->owner_list, (gconstpointer)owner);
+    owner_in_list = g_list_find_custom (priv->owner_list, (gconstpointer)owner, (GCompareFunc)gncOwnerGCompareFunc);
     if (owner_in_list)
     {
+        iter->stamp = model->stamp;
+        iter->user_data = owner_in_list->data;
         iter->user_data2 = GINT_TO_POINTER (g_list_position (priv->owner_list, owner_in_list));
         iter->user_data3 = NULL;
         LEAVE("iter %s", iter_to_string (iter));
@@ -955,6 +955,8 @@ gnc_tree_model_owner_get_iter_from_owner (GncTreeModelOwner *model,
     }
     else
     {
+        iter->stamp = 0;
+        iter->user_data = NULL;
         LEAVE("Owner not found in list");
         return FALSE;
     }
@@ -1056,13 +1058,13 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
           entity, event_type, model, ed);
     priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
-    qofOwnerSetEntity (&owner, entity);
-    if (qof_instance_get_book (QOF_INSTANCE(&owner)) != priv->book)
+    if (qof_instance_get_book (entity) != priv->book)
     {
         LEAVE("not in this book");
         return;
     }
-    if (!g_list_find (priv->owner_list, (gconstpointer)&owner))
+    qofOwnerSetEntity (&owner, entity);
+    if (!gnc_tree_model_owner_get_iter_from_owner (model, &owner, &iter))
     {
         LEAVE("not in this model");
         return;
@@ -1073,7 +1075,7 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
     case QOF_EVENT_ADD:
         /* Tell the filters/views where the new owner was added. */
         DEBUG("add owner %p (%s)", &owner, gncOwnerGetName(&owner));
-        path = gnc_tree_model_owner_get_path_from_owner(model, &owner);
+        path = gnc_tree_model_owner_get_path(GTK_TREE_MODEL(model), &iter);
         if (!path)
         {
             DEBUG("can't generate path");
@@ -1106,7 +1108,7 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
 
     case QOF_EVENT_MODIFY:
         DEBUG("modify  owner %p (%s)", &owner, gncOwnerGetName(&owner));
-        path = gnc_tree_model_owner_get_path_from_owner(model, &owner);
+        path = gnc_tree_model_owner_get_path(GTK_TREE_MODEL(model), &iter);
         if (!path)
         {
             DEBUG("can't generate path");

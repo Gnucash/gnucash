@@ -130,8 +130,17 @@ void gncOwnerSetActive (const GncOwner *owner, gboolean active);
 /** @} */
 
 void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
-gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
-int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
+
+/** \name Comparison routines.
+ @{
+ */
+gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b); /** Check if both objects refer to the same owner type
+                                                                   if and the owner reference points to the same
+                                                                   {vendor/customer/employee} in memory */
+int gncOwnerGCompareFunc (const GncOwner *a, const GncOwner *b); /** Same as gncOwnerEqual, but returns 0 if
+                                                                     equal to be used as a GList custom compare function */
+int gncOwnerCompare (const GncOwner *a, const GncOwner *b); /** Sort on name */
+/** @} */
 
 /** Get the GncGUID of the immediate owner */
 const GncGUID * gncOwnerGetGUID (const GncOwner *owner);

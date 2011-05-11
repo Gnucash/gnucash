@@ -394,6 +394,14 @@ gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b)
     return (a->owner.undefined == b->owner.undefined);
 }
 
+int gncOwnerGCompareFunc (const GncOwner *a, const GncOwner *b)
+{
+    if (gncOwnerEqual (a, b))
+        return 0;
+    else
+        return 1;
+}
+
 const char * gncOwnerGetID (const GncOwner *owner)
 {
     if (!owner) return NULL;
