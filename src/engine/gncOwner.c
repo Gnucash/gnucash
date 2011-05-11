@@ -298,20 +298,25 @@ qofOwnerSetEntity (GncOwner *owner, QofInstance *ent)
         owner->type = GNC_OWNER_CUSTOMER;
         gncOwnerInitCustomer(owner, (GncCustomer*)ent);
     }
-    if (0 == safe_strcmp(ent->e_type, GNC_ID_JOB))
+    else if (0 == safe_strcmp(ent->e_type, GNC_ID_JOB))
     {
         owner->type = GNC_OWNER_JOB;
         gncOwnerInitJob(owner, (GncJob*)ent);
     }
-    if (0 == safe_strcmp(ent->e_type, GNC_ID_VENDOR))
+    else if (0 == safe_strcmp(ent->e_type, GNC_ID_VENDOR))
     {
         owner->type = GNC_OWNER_VENDOR;
         gncOwnerInitVendor(owner, (GncVendor*)ent);
     }
-    if (0 == safe_strcmp(ent->e_type, GNC_ID_EMPLOYEE))
+    else if (0 == safe_strcmp(ent->e_type, GNC_ID_EMPLOYEE))
     {
         owner->type = GNC_OWNER_EMPLOYEE;
         gncOwnerInitEmployee(owner, (GncEmployee*)ent);
+    }
+    else
+    {
+        owner->type = GNC_OWNER_NONE;
+        owner->owner.undefined=NULL;
     }
 }
 
