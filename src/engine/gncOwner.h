@@ -114,16 +114,23 @@ GncCustomer * gncOwnerGetCustomer (const GncOwner *owner);
 GncJob * gncOwnerGetJob (const GncOwner *owner);
 GncVendor * gncOwnerGetVendor (const GncOwner *owner);
 GncEmployee * gncOwnerGetEmployee (const GncOwner *owner);
-/** @} */
-void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
-gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
-int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 
 const char * gncOwnerGetID (const GncOwner *owner);
 const char * gncOwnerGetName (const GncOwner *owner);
 GncAddress * gncOwnerGetAddr (const GncOwner *owner);
 gboolean gncOwnerGetActive (const GncOwner *owner);
 gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner);
+/** @} */
+
+/** \name Set routines.
+@{
+*/
+void gncOwnerSetActive (const GncOwner *owner, gboolean active);
+/** @} */
+
+void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
+gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
+int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 
 /** Get the GncGUID of the immediate owner */
 const GncGUID * gncOwnerGetGUID (const GncOwner *owner);

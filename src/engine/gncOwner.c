@@ -419,6 +419,31 @@ const GncGUID * gncOwnerGetGUID (const GncOwner *owner)
     }
 }
 
+void
+gncOwnerSetActive (const GncOwner *owner, gboolean active)
+{
+    if (!owner) return;
+    switch (owner->type)
+    {
+    case GNC_OWNER_CUSTOMER:
+        gncCustomerSetActive (owner->owner.customer, active);
+        break;
+    case GNC_OWNER_VENDOR:
+        gncVendorSetActive (owner->owner.vendor, active);
+        break;
+    case GNC_OWNER_EMPLOYEE:
+        gncEmployeeSetActive (owner->owner.employee, active);
+        break;
+    case GNC_OWNER_JOB:
+        gncJobSetActive (owner->owner.job, active);
+        break;
+    case GNC_OWNER_NONE:
+    case GNC_OWNER_UNDEFINED:
+    default:
+        break;
+    }
+}
+
 GncGUID gncOwnerRetGUID (GncOwner *owner)
 {
     const GncGUID *guid = gncOwnerGetGUID (owner);
