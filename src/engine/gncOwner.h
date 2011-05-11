@@ -179,6 +179,16 @@ KvpFrame* gncOwnerGetSlots(GncOwner* owner);
 GncOwner * gncOwnerNew (void);
 void gncOwnerFree (GncOwner *owner);
 
+
+/**
+ * These are convenience wrappers around gnc{Vender,Customer,Job,Employee}*
+ * functions. This allows you to begin edit, destroy commit edit an owner
+ * without knowing its type.
+ */
+void gncOwnerBeginEdit (GncOwner *owner);
+void gncOwnerCommitEdit (GncOwner *owner);
+void gncOwnerDestroy (GncOwner *owner);
+
 #endif /* GNC_OWNER_H_ */
 /** @} */
 /** @} */

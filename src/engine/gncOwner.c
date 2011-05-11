@@ -61,6 +61,101 @@ void gncOwnerFree (GncOwner *owner)
     g_free (owner);
 }
 
+void gncOwnerBeginEdit (GncOwner *owner)
+{
+    if (!owner) return;
+    switch (owner->type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        break;
+    case GNC_OWNER_CUSTOMER :
+    {
+        gncCustomerBeginEdit(owner->owner.customer);
+        break;
+    }
+    case GNC_OWNER_JOB :
+    {
+        gncJobBeginEdit(owner->owner.job);
+        break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+        gncVendorBeginEdit(owner->owner.vendor);
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gncEmployeeBeginEdit(owner->owner.employee);
+        break;
+    }
+    }
+}
+
+
+void gncOwnerCommitEdit (GncOwner *owner)
+{
+    if (!owner) return;
+    switch (owner->type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        break;
+    case GNC_OWNER_CUSTOMER :
+    {
+        gncCustomerCommitEdit(owner->owner.customer);
+        break;
+    }
+    case GNC_OWNER_JOB :
+    {
+        gncJobCommitEdit(owner->owner.job);
+        break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+        gncVendorCommitEdit(owner->owner.vendor);
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gncEmployeeCommitEdit(owner->owner.employee);
+        break;
+    }
+    }
+}
+
+
+void gncOwnerDestroy (GncOwner *owner)
+{
+    if (!owner) return;
+    switch (owner->type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        break;
+    case GNC_OWNER_CUSTOMER :
+    {
+        gncCustomerDestroy(owner->owner.customer);
+        break;
+    }
+    case GNC_OWNER_JOB :
+    {
+        gncJobDestroy(owner->owner.job);
+        break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+        gncVendorDestroy(owner->owner.vendor);
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gncEmployeeDestroy(owner->owner.employee);
+        break;
+    }
+    }
+}
+
 void gncOwnerInitUndefined (GncOwner *owner, gpointer obj)
 {
     if (!owner) return;
