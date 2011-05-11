@@ -140,7 +140,7 @@
 
 
 %typemap(in) GncOwner * {
-    GncOwner * temp_owner = gncOwnerCreate();
+    GncOwner * temp_owner = gncOwnerNew();
     void * pointer_to_real_thing;
     if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
                          $descriptor(GncCustomer *),
@@ -176,7 +176,7 @@
 }
 
 %typemap(freearg) GncOwner * {
-    gncOwnerDestroy($1);
+    gncOwnerFree($1);
 }
 
 

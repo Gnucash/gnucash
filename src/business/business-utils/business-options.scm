@@ -279,7 +279,7 @@
 	 value-validator
 	 owner-type)
 
-  (let ((option-value (gncOwnerCreate)))
+  (let ((option-value (gncOwnerNew)))
 
     (define (convert-to-pair item)
       (if (pair? item)

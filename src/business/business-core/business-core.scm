@@ -92,7 +92,7 @@
 (define (gnc:owner-from-split split result-owner)
   (let* ((trans (xaccSplitGetParent split))
 	 (invoice (gncInvoiceGetInvoiceFromTxn trans))
-	 (temp-owner (gncOwnerCreate))
+	 (temp-owner (gncOwnerNew))
 	 (owner '()))
 
     (if (not (null? invoice))
@@ -117,10 +117,10 @@
     (if (not (null? owner))
 	(begin
 	  (gncOwnerCopy (gncOwnerGetEndOwner owner) result-owner)
-	  (gncOwnerDestroy temp-owner)
+	  (gncOwnerFree temp-owner)
 	  result-owner)
 	(begin
-	  (gncOwnerDestroy temp-owner)
+	  (gncOwnerFree temp-owner)
 	  '()))))
 
 

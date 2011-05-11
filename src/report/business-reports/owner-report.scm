@@ -834,14 +834,14 @@
 	 account split query journal? double? title
 	 debit-string credit-string)
 
-  (let* ((temp-owner (gncOwnerCreate))
+  (let* ((temp-owner (gncOwnerNew))
 	 (owner (gnc:owner-from-split split temp-owner))
 	 (res -1)) ;; XXX -- in this case we should create an error report
 
     (if (not (null? owner))
 	(set! res (gnc:owner-report-create owner account)))
 
-    (gncOwnerDestroy temp-owner)
+    (gncOwnerFree temp-owner)
     res))
 
 (gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t

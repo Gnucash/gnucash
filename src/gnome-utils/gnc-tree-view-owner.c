@@ -1561,7 +1561,7 @@ tree_restore_selected_row (GncTreeViewOwner *view,
                            GncOwnerType owner_type,
                            const gchar *owner_guid_str)
 {
-    GncOwner *owner=gncOwnerCreate();
+    GncOwner *owner=gncOwnerNew();
     QofBook *book;
     GncGUID owner_guid;
 

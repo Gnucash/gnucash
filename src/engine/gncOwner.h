@@ -176,8 +176,8 @@ KvpFrame* gncOwnerGetSlots(GncOwner* owner);
  * Normal C code has no need to ever use these two functions, and rather
  * can just use a GncOwner directly and just pass around a pointer to it.
  */
-GncOwner * gncOwnerCreate (void);
-void gncOwnerDestroy (GncOwner *owner);
+GncOwner * gncOwnerNew (void);
+void gncOwnerFree (GncOwner *owner);
 
 #endif /* GNC_OWNER_H_ */
 /** @} */

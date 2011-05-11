@@ -552,7 +552,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             // new invoice
             invoice = gncInvoiceCreate (book);
             gncInvoiceSetID (invoice, id);
-            owner = gncOwnerCreate ();
+            owner = gncOwnerNew ();
             if (g_ascii_strcasecmp (type, "BILL") == 0)
                 gncOwnerInitVendor (owner,
                                     gnc_search_vendor_on_id (book, owner_id));

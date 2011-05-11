@@ -46,7 +46,7 @@
 #define GNC_OWNER_TYPE  "owner-type"
 #define GNC_OWNER_GUID  "owner-guid"
 
-GncOwner * gncOwnerCreate (void)
+GncOwner * gncOwnerNew (void)
 {
     GncOwner *o;
 
@@ -55,7 +55,7 @@ GncOwner * gncOwnerCreate (void)
     return o;
 }
 
-void gncOwnerDestroy (GncOwner *owner)
+void gncOwnerFree (GncOwner *owner)
 {
     if (!owner) return;
     g_free (owner);

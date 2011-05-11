@@ -181,7 +181,7 @@
 
   (define (do-update value)
     (let* ((transaction (xaccSplitGetParent split))
-	   (temp-owner (gncOwnerCreate))
+	   (temp-owner (gncOwnerNew))
 	   (owner (gnc:owner-from-split split temp-owner)))
 
       (if (not (null? owner))
@@ -218,7 +218,7 @@ more than one currency.  This report is not designed to cope with this possibili
 			 (process-payment company-info value))
 		     (hash-set! hash guid company-info)
 		     (cons #t guid)))
-	       (gncOwnerDestroy temp-owner))
+	       (gncOwnerFree temp-owner))
 		 
 	     ;; if it's a new company
 	     (begin
@@ -230,7 +230,7 @@ more than one currency.  This report is not designed to cope with this possibili
 		 (hash-set! hash guid new-company))
 	       (cons #t guid))))
        ; else (no owner)
-       (gncOwnerDestroy temp-owner))))
+       (gncOwnerFree temp-owner))))
   
   ;; figure out if this split is part of a closed lot
   ;; also save the split value...
@@ -655,7 +655,7 @@ totals to report currency")
 				    (gnc:owner-anchor-text owner)
 				    company-name))
 				  monetary-list))
-			  (gncOwnerDestroy owner)))
+			  (gncOwnerFree owner)))
 		      company-list)
 
 	    ;; add the totals

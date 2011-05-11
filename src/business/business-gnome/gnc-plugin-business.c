@@ -398,13 +398,13 @@ gnc_plugin_business_init (GncPluginBusiness *plugin)
     GncPluginBusinessPrivate *priv;
 
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    priv->last_customer = gncOwnerCreate ();
+    priv->last_customer = gncOwnerNew ();
     gncOwnerInitCustomer (priv->last_customer, NULL);
 
-    priv->last_vendor = gncOwnerCreate ();
+    priv->last_vendor = gncOwnerNew ();
     gncOwnerInitVendor (priv->last_vendor, NULL);
 
-    priv->last_employee = gncOwnerCreate ();
+    priv->last_employee = gncOwnerNew ();
     gncOwnerInitEmployee (priv->last_employee, NULL);
 }
 
@@ -804,7 +804,7 @@ gnc_plugin_business_cmd_test_init_data (GtkAction *action,
     GncCustomer *customer	= gncCustomerCreate(book);
     GncAddress *address	= gncCustomerGetAddr(customer);
     GncInvoice *invoice	= gncInvoiceCreate(book);
-    GncOwner *owner		= gncOwnerCreate();
+    GncOwner *owner		= gncOwnerNew();
     GncJob *job		= gncJobCreate(book);
     Account *root		= gnc_book_get_root_account(book);
     Account *inc_acct	= xaccMallocAccount(book);
