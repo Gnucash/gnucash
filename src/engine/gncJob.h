@@ -80,9 +80,9 @@ const char * gncJobGetID (const GncJob *job);
 const char * gncJobGetName (const GncJob *job);
 const char * gncJobGetReference (const GncJob *job);
 GncOwner   * gncJobGetOwner (GncJob *job);
+gboolean     gncJobGetActive (const GncJob *job);
 
 /** @} */
-gboolean gncJobGetActive (const GncJob *job);
 
 /** Return a pointer to the instance gncJob that is identified
  *  by the guid, and is residing in the book. Returns NULL if the

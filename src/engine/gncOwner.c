@@ -393,9 +393,8 @@ gboolean gncOwnerGetActive (const GncOwner *owner)
         return gncVendorGetActive (owner->owner.vendor);
     case GNC_OWNER_EMPLOYEE:
         return gncEmployeeGetActive (owner->owner.employee);
-    /* Jobs don't really have an active status, so we consider them always active */
     case GNC_OWNER_JOB:
-        return TRUE;
+        return gncJobGetActive (owner->owner.job);
     }
 }
 
