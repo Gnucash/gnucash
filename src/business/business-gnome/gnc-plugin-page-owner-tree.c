@@ -751,8 +751,7 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwn
 
     /* If the owner has objects referring to it, show the list - the owner can't be deleted until these
        references are dealt with. */
-    /* XXX is this actually ok ? Can a generic owner type be cast to a qof instance ? */
-    list = qof_instance_get_referring_object_list(QOF_INSTANCE(owner));
+    list = qof_instance_get_referring_object_list(QOF_INSTANCE(gncOwnerGetUndefined(owner)));
     if (list != NULL)
     {
 #define EXPLANATION "The list below shows objects which make use of the owner which you want to delete.\nBefore you can delete it, you must either delete those objects or else modify them so they make use\nof another owner"
