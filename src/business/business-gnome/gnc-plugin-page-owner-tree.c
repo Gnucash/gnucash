@@ -141,11 +141,11 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         N_("Edit the selected owner"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
-    {
+/* FIXME disabled due to crash    {
         "EditDeleteOwnerAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Owner..."), "Delete",
         N_("Delete selected owner"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_delete_owner)
-    },
+    }, */
 
     /* View menu */
     {
@@ -162,7 +162,7 @@ static guint gnc_plugin_page_owner_tree_n_actions = G_N_ELEMENTS (gnc_plugin_pag
 static const gchar *actions_requiring_owner[] =
 {
     "EditEditOwnerAction",
-    "EditDeleteOwnerAction",
+/* FIXME disabled due to crash    "EditDeleteOwnerAction", */
     NULL
 };
 
@@ -172,7 +172,7 @@ static action_toolbar_labels toolbar_labels[] =
 {
     { "EditEditOwnerAction",     N_("Edit") },
     { "BusinessNewOwnerAction",  N_("New") },
-    { "EditDeleteOwnerAction",   N_("Delete") },
+/* FIXME disable due to crash   { "EditDeleteOwnerAction",   N_("Delete") },*/
     { NULL, NULL },
 };
 
@@ -791,6 +791,8 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwn
 
         if (GTK_RESPONSE_ACCEPT == response)
         {
+            /* FIXME The code below results in a crash.
+             *       The corresponding menu item/toolbar button is disabled until this is fixed. */
             gnc_set_busy_cursor(NULL, TRUE);
             gnc_suspend_gui_refresh ();
             gncOwnerBeginEdit (owner);
