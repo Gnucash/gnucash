@@ -196,10 +196,10 @@ noinst_DATA = .scm-links
 
 if BUILDING_FROM_SVN
 swig-engine.c: engine.i ${top_srcdir}/src/base-typemaps.i \
-               ${gncinclude_HEADERS} ${noinst_HEADERS}
+               ${gncinclude_HEADERS} ${noinst_HEADERS} $(gncinclude_HEADERS)
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src/libqof/qof -I${top_srcdir}/src -o $@ $<
-swig-business-core.c: business-core.i ${noinst_HEADERS} \
+swig-business-core.c: business-core.i ${noinst_HEADERS} $(gncinclude_HEADERS) \
                       ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
