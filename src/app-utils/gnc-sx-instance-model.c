@@ -1673,13 +1673,6 @@ instantiate_cashflow_internal(const SchedXaction* sx,
         return;
     }
 
-    if (!xaccSchedXactionGetEnabled(sx))
-    {
-        g_debug("Skipping non-enabled SX [%s]",
-                xaccSchedXactionGetName(sx));
-        return;
-    }
-
     create_cashflow_data.hash = map;
     create_cashflow_data.creation_errors = creation_errors;
     create_cashflow_data.sx = sx;
