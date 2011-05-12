@@ -1451,7 +1451,7 @@ owner_filter_dialog_create(OwnerFilterDialog *fd, GncPluginPage *page)
 
     /* Create the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "owner.ui", "Filter By");
+    gnc_builder_add_from_file (builder, "owner.glade", "Filter By");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Filter By"));
     fd->dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
