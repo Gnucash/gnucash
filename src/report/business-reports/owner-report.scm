@@ -40,6 +40,7 @@
 ;; Option names
 (define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
+(define optname-date-driver (N_ "Due or Post Date"))
 
 ;; let's define a name for the report-guid's, much prettier
 (define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44")
@@ -162,7 +163,7 @@
     (reverse heading-list)))
 
 
-(define num-buckets 4)
+(define num-buckets 5)
 (define (new-bucket-vector)
   (make-vector num-buckets (gnc-numeric-zero)))
 
@@ -173,8 +174,13 @@
     (set! begindate (decdate begindate ThirtyDayDelta))
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
+;; Have make-list create a stepped list, then add a date in the future for the "current" bucket 
+(define (make-extended-interval-list to-date) 
+    (define dayforcurrent (incdate to-date YearDelta)) ;; MAGIC CONSTANT 
+    (define oldintervalreversed (reverse (make-interval-list to-date)))          
+  (reverse (cons dayforcurrent oldintervalreversed))) 
 
-(define (make-aging-table options query bucket-intervals reverse?)
+(define (make-aging-table options query bucket-intervals reverse? date-type)
   (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
 	(buckets (new-bucket-vector))
 	(payments (gnc-numeric-zero))
@@ -206,21 +212,25 @@
      (lambda (lot)
        (let* ((bal (gnc-lot-get-balance lot))
 	      (invoice (gncInvoiceGetInvoiceFromLot lot))
-	      (post-date (gncInvoiceGetDatePosted invoice)))
-
+              (date (if (eq? date-type 'postdate)
+               (gncInvoiceGetDatePosted invoice) 
+               (gncInvoiceGetDateDue invoice)))
+              )
+         
 	 (if (not (gnc-numeric-zero-p bal))
 	     (begin
 	       (if reverse?
 		   (set! bal (gnc-numeric-neg bal)))
 	       (if (not (null? invoice))
 		   (begin
-		     (apply-invoice post-date bal))
+		     (apply-invoice date bal))
 		   (apply-payment bal))))))
      lots)
 
     (gnc:html-table-set-col-headers!
      table
-     (list (_ "0-30 days")
+     (list (_ "Current")
+           (_ "0-30 days")
 	   (_ "31-60 days")
 	   (_ "61-90 days")
 	   (_ "91+ days")))
@@ -344,7 +354,7 @@
     ))
 
 
-(define (make-txn-table options query acc start-date end-date)
+(define (make-txn-table options query acc start-date end-date date-type)
   (let ((txns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY))
 	(used-columns (build-column-used options))
 	(total (gnc-numeric-zero))
@@ -431,14 +441,14 @@
 		    "total-number-cell"
 		    (gnc:make-gnc-monetary currency total))))))
 
-    (let* ((interval-vec (list->vector (make-interval-list end-date))))
+    (let* ((interval-vec (list->vector (make-extended-interval-list end-date))))
       (gnc:html-table-append-row/markup!
        table
        "grand-total"
        (list (gnc:make-html-table-cell/size/markup
 	      1 columns-used-size
 	      "centered-label-cell"
-	      (make-aging-table options query interval-vec reverse?)))))
+	      (make-aging-table options query interval-vec reverse? date-type)))))
 
     table))
 
@@ -522,6 +532,17 @@
     gnc:pagename-general (N_ "Today Date Format")
     "p" (N_ "The format for the date->string conversion for today's date.")
     (gnc-default-strftime-date-format)))
+  
+  (gnc:register-inv-option 
+   (gnc:make-multichoice-option 
+    gnc:pagename-general 
+    optname-date-driver 
+    "k" 
+    (N_ "Leading date") 
+    'duedate 
+    (list 
+     (vector 'duedate (N_ "Due date") (N_ "Due date is leading")) ;; Should be using standard label for due date? 
+     (vector 'postdate (N_ "Post date") (N_ "Post date is leading"))))) ;; Should be using standard label for post date? 
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -670,6 +691,7 @@
 	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
          (type (opt-val "__reg" "owner-type"))
          (owner-descr (owner-string type))
+         (date-type (opt-val gnc:pagename-general optname-date-driver)) 
 	 (owner (opt-val owner-page owner-descr)))
 
     (gnc:html-document-set-title!
@@ -695,7 +717,7 @@
 	  (if (not (null? account))
 	      (begin
 		(set! table (make-txn-table (gnc:report-options report-obj)
-					    query account start-date end-date))
+					    query account start-date end-date date-type))
 		(gnc:html-table-set-style!
 		 table "table"
 		 'attribute (list "border" 1)
