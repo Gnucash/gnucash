@@ -299,8 +299,7 @@
       (gnc:html-document-add-object!
        ssdoc
        (gnc:make-html-text
-        (gnc:html-markup-p
-         (gnc:html-markup-h3 headline))))))
+         (gnc:html-markup-h3 headline)))))
 
     (gnc:html-document-append-objects! ssdoc
                        (gnc:html-document-objects doc))
