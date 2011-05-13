@@ -153,6 +153,11 @@
               (gnc:report-render-starting (gnc:html-document-title doc)))
           (if (not (null? headers?))
               (begin 
+                ;;This is the only place where <html> appears
+                ;;with the exception of 2 reports: 
+                ;;./share/gnucash/guile-modules/gnucash/report/taxinvoice.eguile.scm:<html>
+                ;;./share/gnucash/guile-modules/gnucash/report/balsheet-eg.eguile.scm:<html>
+                (push "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \n\"http://www.w3.org/TR/html4/loose.dtd\">") ;;trying 4.01 Trans
                 (push "<html>\n")
                 (push "<head>\n")
                 (push "<meta http-equiv=\"content-type\" content=\"text-html; charset=utf-8\">\n")
