@@ -142,7 +142,7 @@ error_handler(const char *str)
 gboolean
 gnc_run_report (gint report_id, char ** data)
 {
-    const gchar *free_data;
+    gchar *free_data;
     SCM scm_text;
     gchar *str;
 
@@ -156,8 +156,11 @@ gnc_run_report (gint report_id, char ** data)
     if (scm_text == SCM_UNDEFINED || !scm_is_string (scm_text))
         return FALSE;
 
+    scm_dynwind_begin (0); 
     free_data = scm_to_locale_string (scm_text);
     *data = g_strdup (free_data);
+    scm_dynwind_free (free_data); 
+    scm_dynwind_end (); 
 
     return TRUE;
 }
@@ -185,6 +188,8 @@ gnc_report_name( SCM report )
 {
     SCM    get_name = scm_c_eval_string("gnc:report-name");
     SCM    value;
+    gchar *str = NULL;
+    gchar *report_name = NULL;
 
     if (report == SCM_BOOL_F)
         return NULL;
@@ -193,7 +198,13 @@ gnc_report_name( SCM report )
     if (!scm_is_string(value))
         return NULL;
 
-    return g_strdup(scm_to_locale_string(value));
+    scm_dynwind_begin (0); 
+    str = scm_to_locale_string (value);
+    report_name = g_strdup (str);
+    scm_dynwind_free (str); 
+    scm_dynwind_end (); 
+
+    return report_name;
 }
 
 gchar*
