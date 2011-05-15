@@ -241,7 +241,7 @@ gncs_validate (GNCSearchCoreType *fe)
 static void
 toggle_changed (GtkToggleButton *button, GNCSearchString *fe)
 {
-    fe->ign_case = gtk_toggle_button_get_active (button);
+    fe->ign_case = !gtk_toggle_button_get_active (button);
 }
 
 static void
@@ -325,9 +325,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
     gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
     priv->entry = entry;
 
-    /* Build and connect the toggle button */
-    toggle = gtk_toggle_button_new_with_label (_("Case Insensitive?"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), fi->ign_case);
+    /* Build and connect the case-sensitive check button; defaults to off */
+    toggle = gtk_check_button_new_with_label (_("Match case"));
     g_signal_connect (G_OBJECT(toggle), "toggled", G_CALLBACK (toggle_changed), fe);
     gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
 
