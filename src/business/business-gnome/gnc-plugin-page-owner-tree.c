@@ -211,7 +211,7 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
     GncPluginPageOwnerTree *plugin_page;
 
     GncPluginPageOwnerTreePrivate *priv;
-    gchar* label;
+    gchar* label = "";
     const GList *item;
 
     g_return_val_if_fail( (owner_type != GNC_OWNER_UNDEFINED)
