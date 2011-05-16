@@ -19,7 +19,7 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
-/** @addtogroup Transaction Financial Transactions
+/** @addtogroup Transaction Transaction, Split
     A good overview of transactions, splits and accounts can be
     found in the texinfo documentation, together with an overview of
     how to use this API.
