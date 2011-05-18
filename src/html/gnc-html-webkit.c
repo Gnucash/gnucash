@@ -218,6 +218,12 @@ gnc_html_webkit_dispose( GObject* obj )
         priv->web_view = NULL;
     }
 
+    if ( priv->html_string != NULL )
+    {
+        g_free( priv->html_string );
+        priv->html_string = NULL;
+    }
+
     G_OBJECT_CLASS(gnc_html_webkit_parent_class)->dispose( obj );
 }
 
