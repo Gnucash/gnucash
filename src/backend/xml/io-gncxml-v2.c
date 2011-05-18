@@ -1628,7 +1628,7 @@ gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding)
 
     if (is_gzipped_file(name))
     {
-        gzFile *file;
+        gzFile *file = NULL;
         char first_chunk[256];
         int num_read;
 

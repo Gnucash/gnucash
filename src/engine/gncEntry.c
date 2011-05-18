@@ -625,7 +625,7 @@ void qofEntrySetInvDiscType (GncEntry *entry, const char *type_string)
 
 void qofEntrySetInvDiscHow  (GncEntry *entry, const char *type)
 {
-    GncDiscountHow how;
+    GncDiscountHow how = GNC_DISC_PRETAX;
 
     if (!entry) return;
     gncEntryBeginEdit (entry);
