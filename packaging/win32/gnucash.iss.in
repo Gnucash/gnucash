@@ -53,7 +53,7 @@ Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.exe"; WorkingDir: 
 
 [Run]
 Filename: "{app}\bin\gnucash.exe"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent
-Filename: "{app}\bin\guile.cmd"; Parameters: "-c ""(use-modules (ice-9 slib)) (require 'printf)"""; Flags: runhidden
+Filename: "{app}\bin\guile.cmd"; Flags: runhidden
 ;; The Windows firewall exceptions, see http://www.vincenzo.net/isxkb/index.php?title=Adding_a_rule_to_the_Windows_firewall
 Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gnucash.exe"" ""GnuCash Free Finance Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
 Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gconfd-2.exe"" ""GConf Settings Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
@@ -164,7 +164,6 @@ Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "c
 [UninstallDelete]
 Type: files; Name: "{app}\bin\guile.cmd"
 Type: files; Name: "{app}\etc\gnucash\environment"
-Type: files; Name: "{app}\share\guile\1.6\slibcat"
 Type: filesandordirs; Name: "{app}\share\guile"
 Type: filesandordirs; Name: "{app}\etc\gconf"
 Type: dirifempty; Name: "{app}\etc\gnucash"
@@ -364,7 +363,7 @@ begin
       { Adapt GUILE_LOAD_PATH parameter and prevent cygwin interference in SCHEME_LIBRARY_PATH }
       if (Pos('GUILE_LOAD_PATH', EnvStrList[iLineCounter]) = 1) then
       begin
-        StringChangeEx(EnvStrList[iLineCounter], '{GUILE_LOAD_PATH}', '{GNC_HOME}/share/guile/1.6;{GUILE_LOAD_PATH}', True);
+        StringChangeEx(EnvStrList[iLineCounter], '{GUILE_LOAD_PATH}', '{GNC_HOME}/share/guile/1.8;{GUILE_LOAD_PATH}', True);
 
         EnvStrList[iLineCounter] := EnvStrList[iLineCounter] + #13#10 + '# Clear SCHEME_LIBRARY_PATH to prevent interference from other guile installations (like cygwin)' + #13#10;
         EnvStrList[iLineCounter] := EnvStrList[iLineCounter] + 'SCHEME_LIBRARY_PATH=' + #13#10;
