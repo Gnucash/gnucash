@@ -207,7 +207,8 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 
     gncCustomerBeginEdit (cust);
 
-    qof_event_gen(QOF_INSTANCE(cust), QOF_EVENT_ADD, NULL);
+    if (cw->dialog_type == NEW_CUSTOMER)
+        qof_event_gen(QOF_INSTANCE(cust), QOF_EVENT_ADD, NULL);
 
     gncCustomerSetID (cust, gtk_editable_get_chars
                       (GTK_EDITABLE (cw->id_entry), 0, -1));

@@ -140,7 +140,8 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
     gnc_suspend_gui_refresh ();
     gncVendorBeginEdit (vendor);
 
-    qof_event_gen(QOF_INSTANCE(vendor), QOF_EVENT_ADD, NULL);
+    if (vw->dialog_type == NEW_VENDOR)
+        qof_event_gen(QOF_INSTANCE(vendor), QOF_EVENT_ADD, NULL);
 
     gncVendorSetID (vendor, gtk_editable_get_chars
                     (GTK_EDITABLE (vw->id_entry), 0, -1));

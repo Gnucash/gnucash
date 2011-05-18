@@ -125,7 +125,8 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 
     gncEmployeeBeginEdit (employee);
 
-    qof_event_gen(QOF_INSTANCE(employee), QOF_EVENT_ADD, NULL);
+    if (ew->dialog_type == NEW_EMPLOYEE)
+        qof_event_gen(QOF_INSTANCE(employee), QOF_EVENT_ADD, NULL);
 
     gncEmployeeSetID (employee, gtk_editable_get_chars
                       (GTK_EDITABLE (ew->id_entry), 0, -1));
