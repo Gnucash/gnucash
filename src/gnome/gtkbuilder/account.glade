@@ -901,7 +901,7 @@
                         <property name="n_columns">2</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkRadioButton" id="tmrb">
+                          <object class="GtkRadioButton" id="trans_mrb">
                             <property name="label" translatable="yes">M_ove to:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -918,15 +918,15 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="tdrb">
+                          <object class="GtkRadioButton" id="trans_drb">
                             <property name="label" translatable="yes">Delete all _transactions</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">tmrb</property>
-                            <signal name="toggled" handler="gppat_set_insensitive_iff_rb_active" object="tmas"/>
+                            <property name="group">trans_mrb</property>
+                            <signal name="toggled" handler="gppat_set_insensitive_iff_rb_active" object="trans_mas_hbox"/>
                           </object>
                           <packing>
                             <property name="right_attach">2</property>
@@ -965,7 +965,18 @@
                           </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkHBox" id="trans_mas_hbox">
+                            <property name="visible">True</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
@@ -1022,7 +1033,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="damrb">
+                          <object class="GtkRadioButton" id="sa_mrb">
                             <property name="label" translatable="yes">_Move to:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -1031,7 +1042,7 @@
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="gppat_set_insensitive_iff_rb_active" object="subaccount_trans"/>
-                            <signal name="toggled" handler="gppat_populate_tmas_list" object="tmas"/>
+                            <signal name="toggled" handler="gppat_populate_trans_mas_list"/>
                           </object>
                           <packing>
                             <property name="top_attach">2</property>
@@ -1041,15 +1052,15 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="dadrb">
+                          <object class="GtkRadioButton" id="sa_drb">
                             <property name="label" translatable="yes">Delete all _subaccounts</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">damrb</property>
-                            <signal name="toggled" handler="gppat_set_insensitive_iff_rb_active" object="damas"/>
+                            <property name="group">sa_mrb</property>
+                            <signal name="toggled" handler="gppat_set_insensitive_iff_rb_active" object="sa_mas_hbox"/>
                           </object>
                           <packing>
                             <property name="right_attach">2</property>
@@ -1060,7 +1071,18 @@
                           </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkHBox" id="sa_mas_hbox">
+                            <property name="visible">True</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
@@ -1107,7 +1129,7 @@
                         <property name="n_columns">2</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkRadioButton" id="dtmrb">
+                          <object class="GtkRadioButton" id="sa_trans_mrb">
                             <property name="label" translatable="yes">M_ove to:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -1124,15 +1146,15 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="dtdrb">
+                          <object class="GtkRadioButton" id="sa_trans_drb">
                             <property name="label" translatable="yes">Delete all _transactions</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">dtmrb</property>
-                            <signal name="toggled" handler="gppat_set_insensitive_iff_rb_active" object="dtmas"/>
+                            <property name="group">sa_trans_mrb</property>
+                            <signal name="toggled" handler="gppat_set_insensitive_iff_rb_active" object="sa_trans_mas_hbox"/>
                           </object>
                           <packing>
                             <property name="right_attach">2</property>
@@ -1171,7 +1193,18 @@
                           </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkHBox" id="sa_trans_mas_hbox">
+                            <property name="visible">True</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
