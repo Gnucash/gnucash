@@ -50,7 +50,7 @@
 #include "dialog-print-check.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "druid-stock-split.h"
+#include "assistant-stock-split.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"

@@ -1,8 +1,9 @@
 /********************************************************************\
- * druid-stock-split.h -- stock split druid for GnuCash             *
+ * assistant-stock-split.h -- stock split assistant for GnuCash     *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Copyright (C) 2001 Dave Peticolas <dave@krondo.com>              *
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2011 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,8 +23,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_DRUID_STOCK_SPLIT_H
-#define GNC_DRUID_STOCK_SPLIT_H
+#ifndef GNC_ASSISTANT_STOCK_SPLIT_H
+#define GNC_ASSISTANT_STOCK_SPLIT_H
 
 #include "Account.h"
 

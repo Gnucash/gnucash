@@ -1,8 +1,9 @@
 /********************************************************************\
- * druid-stock-split.c -- stock split druid for GnuCash             *
+ * assistant-stock-split.c -- stock split assistant for GnuCash     *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Copyright (c) 2001 Dave Peticolas <dave@krondo.com>              *
  * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2011 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,13 +25,13 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "Transaction.h"
 #include "dialog-utils.h"
-#include "druid-stock-split.h"
-#include "druid-utils.h"
+#include "assistant-stock-split.h"
+#include "assistant-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
@@ -43,7 +44,7 @@
 #include "gnc-ui-util.h"
 
 
-#define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"
+#define ASSISTANT_STOCK_SPLIT_CM_CLASS "assistant-stock-split"
 
 enum split_cols
 {
@@ -58,7 +59,7 @@ enum split_cols
 typedef struct
 {
     GtkWidget * window;
-    GtkWidget * druid;
+    GtkWidget * assistant;
 
     /* account page data */
     GtkWidget * account_view;
@@ -80,38 +81,34 @@ typedef struct
 
 
 /** declarations *******************************************************/
-void     gnc_stock_split_druid_window_destroy_cb (GtkObject *object, gpointer data);
-gboolean gnc_stock_split_druid_account_next      (GnomeDruidPage *druidpage,
-        gpointer arg1,
+void     gnc_stock_split_assistant_window_destroy_cb (GtkObject *object, gpointer user_data);
+void     gnc_stock_split_assistant_prepare           (GtkAssistant  *assistant,
+        GtkWidget *page,
         gpointer user_data);
-void     gnc_stock_split_druid_details_prepare   (GnomeDruidPage *druidpage,
-        gpointer arg1,
+void     gnc_stock_split_assistant_details_prepare   (GtkAssistant *assistant,
         gpointer user_data);
-gboolean gnc_stock_split_druid_details_next      (GnomeDruidPage *druidpage,
-        gpointer arg1,
+void     gnc_stock_split_assistant_cash_prepare      (GtkAssistant *assistant,
         gpointer user_data);
-void     gnc_stock_split_druid_cash_prepare      (GnomeDruidPage *druidpage,
-        gpointer arg1,
+gboolean gnc_stock_split_assistant_details_test      (GtkAssistant *assistant,
         gpointer user_data);
-gboolean gnc_stock_split_druid_cash_next         (GnomeDruidPage *druidpage,
-        gpointer arg1,
+gboolean gnc_stock_split_assistant_cash_test         (GtkAssistant *assistant,
         gpointer user_data);
-void     gnc_stock_split_druid_finish            (GnomeDruidPage *druidpage,
-        gpointer arg1,
+void     gnc_stock_split_assistant_finish            (GtkAssistant *assistant,
         gpointer user_data);
-void     gnc_stock_split_druid_cancel_druid      (GnomeDruid *druid,
+void     gnc_stock_split_assistant_cancel            (GtkAssistant *gtkassistant,
         gpointer user_data);
 
 /******* implementations ***********************************************/
 void
-gnc_stock_split_druid_window_destroy_cb (GtkObject *object, gpointer data)
+gnc_stock_split_assistant_window_destroy_cb (GtkObject *object, gpointer user_data)
 {
-    StockSplitInfo *info = data;
+    StockSplitInfo *info = user_data;
 
-    gnc_unregister_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
+    gnc_unregister_gui_component_by_data (ASSISTANT_STOCK_SPLIT_CM_CLASS, info);
 
     g_free (info);
 }
+
 
 static int
 fill_account_list (StockSplitInfo *info, Account *selected_account)
@@ -191,8 +188,9 @@ fill_account_list (StockSplitInfo *info, Account *selected_account)
     return rows;
 }
 
+
 static void
-selection_changed (GtkTreeSelection *selection,
+selection_changed_cb (GtkTreeSelection *selection,
                    gpointer user_data)
 {
     StockSplitInfo *info = user_data;
@@ -205,6 +203,7 @@ selection_changed (GtkTreeSelection *selection,
                        SPLIT_COL_ACCOUNT, &info->acct,
                        -1);
 }
+
 
 static void
 refresh_details_page (StockSplitInfo *info)
@@ -249,19 +248,6 @@ refresh_details_page (StockSplitInfo *info)
      currency);
 }
 
-gboolean
-gnc_stock_split_druid_account_next (GnomeDruidPage *druidpage,
-                                    gpointer arg1,
-                                    gpointer user_data)
-{
-    StockSplitInfo *info = user_data;
-
-    g_return_val_if_fail (info->acct != NULL, TRUE);
-
-    refresh_details_page (info);
-
-    return FALSE;
-}
 
 static void
 gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
@@ -281,64 +267,46 @@ gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
                       parse_error_string);
 }
 
+
+void gnc_stock_split_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
+        gpointer user_data)
+{
+    StockSplitInfo *info = user_data;
+    gint currentpage = gtk_assistant_get_current_page(assistant);
+
+    switch (currentpage)
+    {
+        case 2:
+            /* Current page is details page */
+	     gtk_assistant_set_page_complete (assistant, page, FALSE);
+             gnc_stock_split_assistant_details_prepare(assistant, user_data);
+            break;
+        case 3:
+            /* Current page is Cash in Lieu page */
+             gtk_assistant_set_page_complete (assistant, page, FALSE);
+             gnc_stock_split_assistant_cash_prepare (assistant, user_data);
+            break;
+    }
+}
+
+
 void
-gnc_stock_split_druid_details_prepare (GnomeDruidPage *druidpage,
-                                       gpointer arg1,
+gnc_stock_split_assistant_details_prepare (GtkAssistant *assistant,
                                        gpointer user_data)
 {
     StockSplitInfo *info = user_data;
 
-    gtk_widget_grab_focus(info->distribution_edit);
+    refresh_details_page(info);
+
+    gtk_widget_set_can_focus(GTK_WIDGET (info->distribution_edit), TRUE);
+    gtk_widget_grab_focus(GTK_WIDGET (info->distribution_edit));
+
+    /** FIXME The focus does not seem to work ? **/
 }
 
-gboolean
-gnc_stock_split_druid_details_next (GnomeDruidPage *druidpage,
-                                    gpointer arg1,
-                                    gpointer user_data)
-{
-    StockSplitInfo *info = user_data;
-    gnc_numeric amount;
-
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->distribution_edit)))
-    {
-        gnc_parse_error_dialog (info,
-                                _("You must enter a valid distribution amount."));
-        return TRUE;
-    }
-
-    amount = gnc_amount_edit_get_amount
-             (GNC_AMOUNT_EDIT (info->distribution_edit));
-
-    if (gnc_numeric_zero_p (amount))
-    {
-        const char *message = _("You must enter a distribution amount.");
-        gnc_error_dialog (info->window, "%s", message);
-        return TRUE;
-    }
-
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->price_edit)))
-    {
-        gnc_parse_error_dialog (info,
-                                _("You must either enter a valid price "
-                                  "or leave it blank."));
-        return TRUE;
-    }
-
-    amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->price_edit));
-
-    if (gnc_numeric_negative_p (amount))
-    {
-        const char *message = _("The price must be positive.");
-        gnc_error_dialog (info->window, "%s", message);
-        return TRUE;
-    }
-
-    return FALSE;
-}
 
 void
-gnc_stock_split_druid_cash_prepare (GnomeDruidPage *druidpage,
-                                    gpointer arg1,
+gnc_stock_split_assistant_cash_prepare (GtkAssistant *assistant,
                                     gpointer user_data)
 {
     StockSplitInfo *info = user_data;
@@ -353,11 +321,59 @@ gnc_stock_split_druid_cash_prepare (GnomeDruidPage *druidpage,
     gtk_tree_selection_unselect_all (selection);
 
     gtk_widget_grab_focus(info->cash_edit);
+
+    /** FIXME The focus does not seem to work ? **/
+
 }
 
+
 gboolean
-gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
-                                 gpointer arg1,
+gnc_stock_split_assistant_details_test (GtkAssistant *assistant,
+                                    gpointer user_data)
+{
+    StockSplitInfo *info = user_data;
+    gnc_numeric amount;
+
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->distribution_edit)))
+    {
+        gnc_parse_error_dialog (info,
+                                _("You must enter a valid distribution amount."));
+        return FALSE;
+    }
+
+    amount = gnc_amount_edit_get_amount
+             (GNC_AMOUNT_EDIT (info->distribution_edit));
+
+    if (gnc_numeric_zero_p (amount))
+    {
+        const char *message = _("You must enter a distribution amount.");
+        gnc_error_dialog (info->window, "%s", message);
+        return FALSE;
+    }
+
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->price_edit)))
+    {
+        gnc_parse_error_dialog (info,
+                                _("You must either enter a valid price "
+                                  "or leave it blank."));
+        return FALSE;
+    }
+
+    amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->price_edit));
+
+    if (gnc_numeric_negative_p (amount))
+    {
+        const char *message = _("The price must be positive.");
+        gnc_error_dialog (info->window, "%s", message);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+
+gboolean
+gnc_stock_split_assistant_cash_test (GtkAssistant *assistant,
                                  gpointer user_data)
 {
     StockSplitInfo *info = user_data;
@@ -368,7 +384,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
         gnc_parse_error_dialog (info,
                                 _("You must either enter a valid cash amount "
                                   "or leave it blank."));
-        return TRUE;
+        return FALSE;
     }
 
     amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->cash_edit));
@@ -377,7 +393,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
     {
         const char *message = _("The cash distribution must be positive.");
         gnc_error_dialog (info->window, "%s", message);
-        return TRUE;
+        return FALSE;
     }
 
     if (gnc_numeric_positive_p (amount))
@@ -390,7 +406,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
             const char *message = _("You must select an income account "
                                     "for the cash distribution.");
             gnc_error_dialog (info->window, "%s", message);
-            return TRUE;
+            return FALSE;
         }
 
         account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
@@ -399,16 +415,16 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
             const char *message = _("You must select an asset account "
                                     "for the cash distribution.");
             gnc_error_dialog (info->window, "%s", message);
-            return TRUE;
+            return FALSE;
         }
     }
 
-    return FALSE;
+    return TRUE;
 }
 
+
 void
-gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
-                              gpointer arg1,
+gnc_stock_split_assistant_finish (GtkAssistant *assistant,
                               gpointer user_data)
 {
     StockSplitInfo *info = user_data;
@@ -545,19 +561,20 @@ gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
 
     gnc_resume_gui_refresh ();
 
-    gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
+    gnc_close_gui_component_by_data (ASSISTANT_STOCK_SPLIT_CM_CLASS, info);
 }
+
 
 void
-gnc_stock_split_druid_cancel_druid (GnomeDruid *druid, gpointer user_data)
+gnc_stock_split_assistant_cancel (GtkAssistant *assistant, gpointer user_data)
 {
     StockSplitInfo *info = user_data;
-
-    gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
+    gnc_close_gui_component_by_data (ASSISTANT_STOCK_SPLIT_CM_CLASS, info);
 }
 
+
 static gboolean
-gnc_stock_split_druid_view_filter_income (Account  *account,
+gnc_stock_split_assistant_view_filter_income (Account  *account,
         gpointer  data)
 {
     GNCAccountType type;
@@ -566,8 +583,9 @@ gnc_stock_split_druid_view_filter_income (Account  *account,
     return (type == ACCT_TYPE_INCOME);
 }
 
+
 static gboolean
-gnc_stock_split_druid_view_filter_asset (Account  *account,
+gnc_stock_split_assistant_view_filter_asset (Account  *account,
         gpointer  data)
 {
     GNCAccountType type;
@@ -577,25 +595,73 @@ gnc_stock_split_druid_view_filter_asset (Account  *account,
             (type == ACCT_TYPE_ASSET));
 }
 
+
 static void
-gnc_stock_split_druid_create (StockSplitInfo *info)
+gnc_stock_split_details_valid_button_cb (GtkButton *button, gpointer user_data)
 {
-    GladeXML *xml;
+   StockSplitInfo *info = user_data;
+   GtkAssistant *assistant = GTK_ASSISTANT(info->window);
+   gint num = gtk_assistant_get_current_page (assistant);
+   GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    xml = gnc_glade_xml_new ("stocks.glade", "Stock Split Druid");
-    info->window = glade_xml_get_widget (xml, "Stock Split Druid");
-    info->druid = glade_xml_get_widget (xml, "stock_split_druid");
-
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, info);
-
-    /* libglade2 is broken. It should read these from the glade file. */
-    gnc_druid_set_colors (GNOME_DRUID(info->druid));
-    gnc_druid_set_watermark_images (GNOME_DRUID(info->druid),
-                                    "stock_split_title.png",
-                                    "stock_split_watermark.png");
+   if(gnc_stock_split_assistant_details_test (assistant,user_data) == TRUE)
+   {
+       gtk_assistant_set_page_complete (assistant, page, TRUE);
+       gtk_assistant_set_current_page (assistant, num + 1);
+   }
+}
 
 
-    /* account list */
+static void
+gnc_stock_split_cash_valid_button_cb (GtkButton *button, gpointer user_data)
+{
+   StockSplitInfo *info = user_data;
+   GtkAssistant *assistant = GTK_ASSISTANT(info->window);
+   gint num = gtk_assistant_get_current_page (assistant);
+   GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+
+   if(gnc_stock_split_assistant_cash_test (assistant,user_data) == TRUE)
+   {
+       gtk_assistant_set_page_complete (assistant, page, TRUE);
+       gtk_assistant_set_current_page (assistant, num + 1);
+   }
+}
+
+
+static GtkWidget *
+gnc_stock_split_assistant_create (StockSplitInfo *info)
+{
+    GtkBuilder *builder;
+    GtkWidget *window;
+
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file  (builder ,"stocks.glade", "Stock Split Assistant");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "Stock Split Assistant"));
+    info->window = window;
+
+    /* Set the assistant colors */
+    gnc_assistant_set_colors (GTK_ASSISTANT (info->window));
+
+    /* Enable buttons on first, second and last page. */
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "intro_page_label")),
+                                     TRUE);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "stock_account_page")),
+                                     TRUE);
+/**
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "stock_details_page")),
+                                     TRUE);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "stock_cash_page")),
+                                     TRUE);
+**/
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "finish_page_label")),
+                                     TRUE);
+
+    /* Account page Widgets */
     {
         GtkTreeView *view;
         GtkListStore *store;
@@ -603,7 +669,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
         GtkCellRenderer *renderer;
         GtkTreeViewColumn *column;
 
-        info->account_view = glade_xml_get_widget (xml, "account_view");
+        info->account_view = GTK_WIDGET(gtk_builder_get_object(builder, "account_view"));
 
         view = GTK_TREE_VIEW(info->account_view);
 
@@ -633,101 +699,120 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
         selection = gtk_tree_view_get_selection(view);
         gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
         g_signal_connect (selection, "changed",
-                          G_CALLBACK (selection_changed), info);
+                          G_CALLBACK (selection_changed_cb), info);
+
     }
 
-    /* info widgets */
+    /* Details Page Widgets */
     {
         GtkWidget *box;
         GtkWidget *amount;
         GtkWidget *date;
         GtkWidget *ce;
         GtkWidget *label;
+	GtkWidget *button;
 
-        info->description_entry = glade_xml_get_widget (xml, "description_entry");
+        info->description_entry = GTK_WIDGET(gtk_builder_get_object(builder, "description_entry"));
 
-        box = glade_xml_get_widget (xml, "date_box");
+        box = GTK_WIDGET(gtk_builder_get_object(builder, "date_box"));
         date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
         gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
         info->date_edit = date;
-        label = glade_xml_get_widget (xml, "date_label");
+        label = GTK_WIDGET(gtk_builder_get_object(builder, "date_label"));
         gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date), label);
 
-        box = glade_xml_get_widget (xml, "distribution_box");
+        box = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_box"));
         amount = gnc_amount_edit_new ();
         gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
         info->distribution_edit = amount;
-        label = glade_xml_get_widget (xml, "distribution_label");
+        label = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
-        box = glade_xml_get_widget (xml, "price_box");
+        box = GTK_WIDGET(gtk_builder_get_object(builder, "price_box"));
         amount = gnc_amount_edit_new ();
         gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
                                         gnc_default_price_print_info ());
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
         info->price_edit = amount;
-        label = glade_xml_get_widget (xml, "price_label");
+        label = GTK_WIDGET(gtk_builder_get_object(builder, "price_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
-        box = glade_xml_get_widget (xml, "price_currency_box");
-        ce = gnc_currency_edit_new ();
-        gtk_box_pack_start (GTK_BOX (box), ce, TRUE, TRUE, 0);
-        info->price_currency_edit = ce;
-        label = glade_xml_get_widget (xml, "currency_label");
-        gtk_label_set_mnemonic_widget(GTK_LABEL(label), ce);
+        info->price_currency_edit = gnc_currency_edit_new();
+        gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(info->price_currency_edit), gnc_default_currency());
+        gtk_widget_show (info->price_currency_edit);
+        box = GTK_WIDGET(gtk_builder_get_object (builder, "price_currency_box"));
+        gtk_box_pack_start(GTK_BOX(box), info->price_currency_edit, TRUE, TRUE, 0);
+
+        button = GTK_WIDGET(gtk_builder_get_object(builder, "stock_details_valid_button"));
+        g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (gnc_stock_split_details_valid_button_cb), info);
+
     }
 
-    /* Cash in Lieu page */
+    /* Cash page Widgets */
     {
         GtkWidget *box;
         GtkWidget *tree;
         GtkWidget *amount;
         GtkWidget *label;
         GtkWidget *scroll;
+	GtkWidget *button;
 
-        box = glade_xml_get_widget (xml, "cash_box");
+        box = GTK_WIDGET(gtk_builder_get_object(builder, "cash_box"));
         amount = gnc_amount_edit_new ();
         gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
         info->cash_edit = amount;
-        label = glade_xml_get_widget (xml, "cash_label");
+        label = GTK_WIDGET(gtk_builder_get_object(builder, "cash_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
-        info->memo_entry = glade_xml_get_widget (xml, "memo_entry");
+        info->memo_entry = GTK_WIDGET(gtk_builder_get_object(builder, "memo_entry"));
 
         /* income tree */
         tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
         info->income_tree = tree;
         gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
-                                          gnc_stock_split_druid_view_filter_income,
+                                          gnc_stock_split_assistant_view_filter_income,
                                           NULL, /* user data */
                                           NULL  /* destroy callback */);
 
         gtk_widget_show (tree);
 
-        label = glade_xml_get_widget (xml, "income_label");
+        label = GTK_WIDGET(gtk_builder_get_object(builder, "income_label"));
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
 
-        scroll = glade_xml_get_widget (xml, "income_scroll");
+        scroll = GTK_WIDGET(gtk_builder_get_object(builder, "income_scroll"));
         gtk_container_add (GTK_CONTAINER (scroll), tree);
-
 
         /* asset tree */
         tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
         info->asset_tree = tree;
         gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
-                                          gnc_stock_split_druid_view_filter_asset,
+                                          gnc_stock_split_assistant_view_filter_asset,
                                           NULL /* user data */,
                                           NULL /* destroy callback */);
 
         gtk_widget_show (tree);
 
-        label = glade_xml_get_widget (xml, "asset_label");
+        label = GTK_WIDGET(gtk_builder_get_object(builder, "asset_label"));
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
 
-        scroll = glade_xml_get_widget (xml, "asset_scroll");
+        scroll = GTK_WIDGET(gtk_builder_get_object(builder, "asset_scroll"));
         gtk_container_add (GTK_CONTAINER (scroll), tree);
+
+	button = GTK_WIDGET(gtk_builder_get_object(builder, "stock_cash_valid_button"));
+	g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (gnc_stock_split_cash_valid_button_cb), info);
+
     }
+
+    g_signal_connect (G_OBJECT(window), "destroy",
+                      G_CALLBACK (gnc_stock_split_assistant_window_destroy_cb), info);
+
+    gtk_builder_connect_signals(builder, info);
+    g_object_unref(G_OBJECT(builder));
+    return window;
+
 }
 
 static void
@@ -736,22 +821,17 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     StockSplitInfo *info = user_data;
     Account *old_account;
     GtkWidget *page;
-    GladeXML *xml;
+    GtkBuilder *builder;
 
     old_account = info->acct;
 
     if (fill_account_list (info, info->acct) == 0)
     {
-        gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
+        gnc_close_gui_component_by_data (ASSISTANT_STOCK_SPLIT_CM_CLASS, info);
         return;
     }
 
     if (NULL == info->acct || old_account == info->acct) return;
-
-    xml = glade_get_widget_tree (info->window);
-    page = glade_xml_get_widget (xml, "account_page");
-
-    gnome_druid_set_page (GNOME_DRUID (info->druid), GNOME_DRUID_PAGE (page));
 }
 
 static void
@@ -780,9 +860,9 @@ gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
 
     info->acct = NULL;
 
-    gnc_stock_split_druid_create (info);
+    gnc_stock_split_assistant_create (info);
 
-    component_id = gnc_register_gui_component (DRUID_STOCK_SPLIT_CM_CLASS,
+    component_id = gnc_register_gui_component (ASSISTANT_STOCK_SPLIT_CM_CLASS,
                    refresh_handler, close_handler,
                    info);
 
@@ -793,7 +873,7 @@ gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
     if (fill_account_list (info, initial) == 0)
     {
         gnc_warning_dialog (parent, "%s", _("You don't have any stock accounts with balances!"));
-        gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
+        gnc_close_gui_component_by_data (ASSISTANT_STOCK_SPLIT_CM_CLASS, info);
         return;
     }
 

@@ -13,7 +13,6 @@ glade_DATA = \
 	progress.glade \
 	reconcile.glade \
 	register.glade \
-	stocks.glade \
 	tax.glade \
 	userpass.glade \
 	sched-xact.glade

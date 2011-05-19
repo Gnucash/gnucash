@@ -25,6 +25,7 @@ libgnc_gnome_la_LIBADD = \
 libgnc_gnome_la_SOURCES = \
   swig-gnome.c \
   assistant-hierarchy.c \
+  assistant-stock-split.c \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
@@ -39,7 +40,6 @@ libgnc_gnome_la_SOURCES = \
   dialog-tax-info.c \
   druid-acct-period.c \
   druid-loan.c \
-  druid-stock-split.c \
   gnc-plugin-account-tree.c \
   gnc-plugin-basic-commands.c \
   gnc-plugin-budget.c \
@@ -65,6 +65,7 @@ appicondir = $(datadir)/pixmaps
 
 noinst_HEADERS = \
   assistant-hierarchy.h \
+  assistant-stock-split.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-new-user.h \
@@ -75,7 +76,6 @@ noinst_HEADERS = \
   dialog-sx-since-last-run.h \
   druid-acct-period.h \
   druid-loan.h \
-  druid-stock-split.h \
   gnc-plugin-account-tree.h \
   gnc-plugin-basic-commands.h \
   gnc-plugin-budget.h \
