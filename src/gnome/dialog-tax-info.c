@@ -1496,6 +1496,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
         gint position = gnc_gconf_get_int(GCONF_SECTION, PANED_POSITION, NULL);
         gtk_paned_set_position(GTK_PANED(paned), position);
     }
+    g_object_unref (xml);
 }
 
 static void
