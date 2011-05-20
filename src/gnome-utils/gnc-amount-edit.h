@@ -75,6 +75,8 @@ void      gnc_amount_edit_set_damount     (GNCAmountEdit *gae,
 gnc_numeric gnc_amount_edit_get_amount    (GNCAmountEdit *gae);
 double      gnc_amount_edit_get_damount   (GNCAmountEdit *gae);
 
+gint      gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
+                                         gboolean empty_ok);
 gboolean  gnc_amount_edit_evaluate        (GNCAmountEdit *gae);
 
 void      gnc_amount_edit_set_print_info  (GNCAmountEdit *gae,

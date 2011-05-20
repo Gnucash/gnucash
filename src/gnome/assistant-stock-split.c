@@ -89,9 +89,9 @@ void     gnc_stock_split_assistant_details_prepare   (GtkAssistant *assistant,
         gpointer user_data);
 void     gnc_stock_split_assistant_cash_prepare      (GtkAssistant *assistant,
         gpointer user_data);
-gboolean gnc_stock_split_assistant_details_test      (GtkAssistant *assistant,
+gboolean gnc_stock_split_assistant_details_complete  (GtkAssistant *assistant,
         gpointer user_data);
-gboolean gnc_stock_split_assistant_cash_test         (GtkAssistant *assistant,
+gboolean gnc_stock_split_assistant_cash_complete     (GtkAssistant *assistant,
         gpointer user_data);
 void     gnc_stock_split_assistant_finish            (GtkAssistant *assistant,
         gpointer user_data);
@@ -249,25 +249,6 @@ refresh_details_page (StockSplitInfo *info)
 }
 
 
-static void
-gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
-{
-    const char * parse_error_string;
-
-    parse_error_string = gnc_exp_parser_error_string ();
-    if (parse_error_string == NULL)
-        parse_error_string = "";
-
-    if (error_string == NULL)
-        error_string = "";
-
-    gnc_error_dialog (info->window,
-                      "%s.\n\n%s: %s.",
-                      error_string, _("Error"),
-                      parse_error_string);
-}
-
-
 void gnc_stock_split_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
         gpointer user_data)
 {
@@ -278,12 +259,10 @@ void gnc_stock_split_assistant_prepare (GtkAssistant  *assistant, GtkWidget *pag
     {
         case 2:
             /* Current page is details page */
-	     gtk_assistant_set_page_complete (assistant, page, FALSE);
              gnc_stock_split_assistant_details_prepare(assistant, user_data);
             break;
         case 3:
             /* Current page is Cash in Lieu page */
-             gtk_assistant_set_page_complete (assistant, page, FALSE);
              gnc_stock_split_assistant_cash_prepare (assistant, user_data);
             break;
     }
@@ -312,14 +291,6 @@ gnc_stock_split_assistant_cash_prepare (GtkAssistant *assistant,
     StockSplitInfo *info = user_data;
     GtkTreeSelection *selection;
 
-    gtk_tree_view_expand_all (GTK_TREE_VIEW(info->income_tree));
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(info->income_tree));
-    gtk_tree_selection_unselect_all (selection);
-
-    gtk_tree_view_expand_all (GTK_TREE_VIEW(info->asset_tree));
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(info->asset_tree));
-    gtk_tree_selection_unselect_all (selection);
-
     gtk_widget_grab_focus(info->cash_edit);
 
     /** FIXME The focus does not seem to work ? **/
@@ -328,96 +299,57 @@ gnc_stock_split_assistant_cash_prepare (GtkAssistant *assistant,
 
 
 gboolean
-gnc_stock_split_assistant_details_test (GtkAssistant *assistant,
-                                    gpointer user_data)
+gnc_stock_split_assistant_details_complete (GtkAssistant *assistant,
+                                            gpointer user_data)
 {
     StockSplitInfo *info = user_data;
     gnc_numeric amount;
+    gint result;
 
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->distribution_edit)))
-    {
-        gnc_parse_error_dialog (info,
-                                _("You must enter a valid distribution amount."));
-        return FALSE;
-    }
-
-    amount = gnc_amount_edit_get_amount
-             (GNC_AMOUNT_EDIT (info->distribution_edit));
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->distribution_edit), &amount, TRUE);
+    if ( result != 0)
+        return FALSE; /* Parsing error or field is empty */
 
     if (gnc_numeric_zero_p (amount))
-    {
-        const char *message = _("You must enter a distribution amount.");
-        gnc_error_dialog (info->window, "%s", message);
-        return FALSE;
-    }
+        return FALSE; /* field value is 0 */
 
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->price_edit)))
-    {
-        gnc_parse_error_dialog (info,
-                                _("You must either enter a valid price "
-                                  "or leave it blank."));
-        return FALSE;
-    }
-
-    amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->price_edit));
-
-    if (gnc_numeric_negative_p (amount))
-    {
-        const char *message = _("The price must be positive.");
-        gnc_error_dialog (info->window, "%s", message);
-        return FALSE;
-    }
-
-    return TRUE;
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->price_edit), &amount, TRUE);
+    if (result == -1)
+        return TRUE; /* Optional field is empty */
+    else if ( result > 0)
+        return FALSE; /* Parsing error */
+    else if (gnc_numeric_negative_p (amount))
+        return FALSE; /* Negative price is not allowed */
+    else
+        return TRUE; /* Valid positive price */
 }
 
 
 gboolean
-gnc_stock_split_assistant_cash_test (GtkAssistant *assistant,
-                                 gpointer user_data)
+gnc_stock_split_assistant_cash_complete (GtkAssistant *assistant,
+                                         gpointer user_data)
 {
     StockSplitInfo *info = user_data;
     gnc_numeric amount;
+    gint result;
+    Account *account;
 
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->cash_edit)))
-    {
-        gnc_parse_error_dialog (info,
-                                _("You must either enter a valid cash amount "
-                                  "or leave it blank."));
+    result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT (info->cash_edit), &amount, TRUE);
+    if (result == -1)
+        return TRUE; /* Optional field is empty */
+    else if ( result > 0)
+        return FALSE; /* Parsing error */
+    else if (gnc_numeric_negative_p (amount))
+        return FALSE; /* Negative cash amount is not allowed */
+
+    /* We have a positive cash amount */
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree));
+    if (!account)
         return FALSE;
-    }
 
-    amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->cash_edit));
-
-    if (gnc_numeric_negative_p (amount))
-    {
-        const char *message = _("The cash distribution must be positive.");
-        gnc_error_dialog (info->window, "%s", message);
+    account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
+    if (!account)
         return FALSE;
-    }
-
-    if (gnc_numeric_positive_p (amount))
-    {
-        Account *account;
-
-        account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree));
-        if (!account)
-        {
-            const char *message = _("You must select an income account "
-                                    "for the cash distribution.");
-            gnc_error_dialog (info->window, "%s", message);
-            return FALSE;
-        }
-
-        account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
-        if (!account)
-        {
-            const char *message = _("You must select an asset account "
-                                    "for the cash distribution.");
-            gnc_error_dialog (info->window, "%s", message);
-            return FALSE;
-        }
-    }
 
     return TRUE;
 }
@@ -597,34 +529,28 @@ gnc_stock_split_assistant_view_filter_asset (Account  *account,
 
 
 static void
-gnc_stock_split_details_valid_button_cb (GtkButton *button, gpointer user_data)
+gnc_stock_split_details_valid_cb (GtkWidget *widget, gpointer user_data)
 {
    StockSplitInfo *info = user_data;
    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
    gint num = gtk_assistant_get_current_page (assistant);
    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-   if(gnc_stock_split_assistant_details_test (assistant,user_data) == TRUE)
-   {
-       gtk_assistant_set_page_complete (assistant, page, TRUE);
-       gtk_assistant_set_current_page (assistant, num + 1);
-   }
+   gtk_assistant_set_page_complete (assistant, page,
+       gnc_stock_split_assistant_details_complete (assistant, user_data));
 }
 
 
 static void
-gnc_stock_split_cash_valid_button_cb (GtkButton *button, gpointer user_data)
+gnc_stock_split_cash_valid_cb (GtkWidget *widget, gpointer user_data)
 {
    StockSplitInfo *info = user_data;
    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
    gint num = gtk_assistant_get_current_page (assistant);
    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-   if(gnc_stock_split_assistant_cash_test (assistant,user_data) == TRUE)
-   {
-       gtk_assistant_set_page_complete (assistant, page, TRUE);
-       gtk_assistant_set_current_page (assistant, num + 1);
-   }
+   gtk_assistant_set_page_complete (assistant, page,
+       gnc_stock_split_assistant_cash_complete (assistant, user_data));
 }
 
 
@@ -642,21 +568,16 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     /* Set the assistant colors */
     gnc_assistant_set_colors (GTK_ASSISTANT (info->window));
 
-    /* Enable buttons on first, second and last page. */
+    /* Enable buttons on first, second, fourth and last page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
                                      GTK_WIDGET(gtk_builder_get_object(builder, "intro_page_label")),
                                      TRUE);
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
                                      GTK_WIDGET(gtk_builder_get_object(builder, "stock_account_page")),
                                      TRUE);
-/**
-    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "stock_details_page")),
-                                     TRUE);
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
                                      GTK_WIDGET(gtk_builder_get_object(builder, "stock_cash_page")),
                                      TRUE);
-**/
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
                                      GTK_WIDGET(gtk_builder_get_object(builder, "finish_page_label")),
                                      TRUE);
@@ -710,7 +631,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         GtkWidget *date;
         GtkWidget *ce;
         GtkWidget *label;
-	GtkWidget *button;
+        GtkWidget *button;
 
         info->description_entry = GTK_WIDGET(gtk_builder_get_object(builder, "description_entry"));
 
@@ -723,8 +644,12 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
         box = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_box"));
         amount = gnc_amount_edit_new ();
+        g_signal_connect (amount, "changed",
+                          G_CALLBACK (gnc_stock_split_details_valid_cb), info);
+        gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
         info->distribution_edit = amount;
+
         label = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
@@ -732,22 +657,21 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         amount = gnc_amount_edit_new ();
         gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
                                         gnc_default_price_print_info ());
+        g_signal_connect (amount, "changed",
+                          G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
         info->price_edit = amount;
+
         label = GTK_WIDGET(gtk_builder_get_object(builder, "price_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
         info->price_currency_edit = gnc_currency_edit_new();
         gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(info->price_currency_edit), gnc_default_currency());
         gtk_widget_show (info->price_currency_edit);
+
         box = GTK_WIDGET(gtk_builder_get_object (builder, "price_currency_box"));
         gtk_box_pack_start(GTK_BOX(box), info->price_currency_edit, TRUE, TRUE, 0);
-
-        button = GTK_WIDGET(gtk_builder_get_object(builder, "stock_details_valid_button"));
-        g_signal_connect (G_OBJECT (button), "clicked",
-                    G_CALLBACK (gnc_stock_split_details_valid_button_cb), info);
-
     }
 
     /* Cash page Widgets */
@@ -757,12 +681,17 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         GtkWidget *amount;
         GtkWidget *label;
         GtkWidget *scroll;
-	GtkWidget *button;
+        GtkWidget *button;
+        GtkTreeSelection *selection;
 
         box = GTK_WIDGET(gtk_builder_get_object(builder, "cash_box"));
         amount = gnc_amount_edit_new ();
+        g_signal_connect (amount, "changed",
+                          G_CALLBACK (gnc_stock_split_cash_valid_cb), info);
+        gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
         info->cash_edit = amount;
+
         label = GTK_WIDGET(gtk_builder_get_object(builder, "cash_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
@@ -777,6 +706,12 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                                           NULL  /* destroy callback */);
 
         gtk_widget_show (tree);
+
+        gtk_tree_view_expand_all (GTK_TREE_VIEW(tree));
+        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
+        gtk_tree_selection_unselect_all (selection);
+        g_signal_connect (selection, "changed",
+                          G_CALLBACK (gnc_stock_split_cash_valid_cb), info);
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "income_label"));
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
@@ -800,10 +735,11 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         scroll = GTK_WIDGET(gtk_builder_get_object(builder, "asset_scroll"));
         gtk_container_add (GTK_CONTAINER (scroll), tree);
 
-	button = GTK_WIDGET(gtk_builder_get_object(builder, "stock_cash_valid_button"));
-	g_signal_connect (G_OBJECT (button), "clicked",
-                    G_CALLBACK (gnc_stock_split_cash_valid_button_cb), info);
-
+        gtk_tree_view_expand_all (GTK_TREE_VIEW(tree));
+        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
+        gtk_tree_selection_unselect_all (selection);
+        g_signal_connect (selection, "changed",
+                          G_CALLBACK (gnc_stock_split_cash_valid_cb), info);
     }
 
     g_signal_connect (G_OBJECT(window), "destroy",
