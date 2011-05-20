@@ -384,7 +384,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
                                  plugin_page);
     gnc_plugin_init_short_names (action_group, toolbar_labels);
 
-    /* Visisble types */
+    /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
     priv->fd.show_hidden = FALSE;
     priv->fd.show_zero_total = TRUE;

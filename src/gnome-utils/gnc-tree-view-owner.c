@@ -297,7 +297,7 @@ sort_by_boolean (GtkTreeModel *f_model,
 
     model = sort_cb_setup_w_iters(f_model, f_iter1, f_iter2, &iter1, &iter2, &owner1, &owner2);
 
-    /* Get the strings. */
+    /* Get the booleans. */
     gtk_tree_model_get(GTK_TREE_MODEL(model), &iter1,  column, &bool1, -1);
     gtk_tree_model_get(GTK_TREE_MODEL(model), &iter2,  column, &bool2, -1);
 

@@ -388,7 +388,7 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
         currency = gnc_default_currency ();
 
     /*
-     * No existing employee window found.  Build a new one.
+     * No existing vendor window found.  Build a new one.
      */
     vw = g_new0 (VendorWindow, 1);
 

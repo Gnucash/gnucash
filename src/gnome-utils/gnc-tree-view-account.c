@@ -743,7 +743,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                     sort_by_placeholder,
                                     gnc_tree_view_account_placeholder_toggled);
 
-    /* Update column titles to use the curreny name. */
+    /* Update column titles to use the currency name. */
     gtva_update_column_names(view);
 
     /* By default only the first column is visible. */

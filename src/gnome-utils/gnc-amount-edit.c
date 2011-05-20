@@ -311,7 +311,7 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
  * @gae: The GNCAmountEdit widget
  *
  * Returns the amount entered in the GNCAmountEdit widget,
- * parsing the epxression if necessary. The result of parsing
+ * parsing the expression if necessary. The result of parsing
  * replaces the expression.
  */
 gnc_numeric
@@ -331,7 +331,7 @@ gnc_amount_edit_get_amount (GNCAmountEdit *gae)
  * @gae: The GNCAmountEdit widget
  *
  * Returns the amount entered in the GNCAmountEdit widget,
- * parsing the epxression if necessary. The result of parsing
+ * parsing the expression if necessary. The result of parsing
  * replaces the expression.
  */
 double
