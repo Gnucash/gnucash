@@ -25,7 +25,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
 #include "assistant-utils.h"
