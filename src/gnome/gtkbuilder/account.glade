@@ -1598,7 +1598,7 @@
               <object class="GtkSpinButton" id="interval_spin">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="adjustment">adjustment1</property>
+                <property name="adjustment">interval_adjustment</property>
                 <property name="climb_rate">1</property>
                 <signal name="value_changed" handler="gnc_account_renumber_interval_changed_cb"/>
               </object>
@@ -2084,7 +2084,7 @@ Press `Cancel' to close this dialog without creating any new accounts.</property
       </packing>
     </child>
   </object>
-  <object class="GtkAdjustment" id="adjustment1">
+  <object class="GtkAdjustment" id="interval_adjustment">
     <property name="value">10</property>
     <property name="lower">1</property>
     <property name="upper">10000</property>

@@ -1971,7 +1971,7 @@ void
 gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
 {
     RenumberDialog *data;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *widget;
     gchar *string;
 
@@ -1979,12 +1979,14 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     data->parent = account;
     data->num_children = gnc_account_n_children(account);
 
-    xml = gnc_glade_xml_new ("account.glade", "Renumber Accounts");
-    data->dialog = glade_xml_get_widget (xml, "Renumber Accounts");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "account.glade", "interval_adjustment");
+    gnc_builder_add_from_file (builder, "account.glade", "Renumber Accounts");
+    data->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Renumber Accounts"));
     gtk_window_set_transient_for(GTK_WINDOW(data->dialog), GTK_WINDOW(window));
-    g_object_set_data_full(G_OBJECT(data->dialog), "xml", xml, g_object_unref);
+    g_object_set_data_full(G_OBJECT(data->dialog), "builder", builder, g_object_unref);
 
-    widget = glade_xml_get_widget (xml, "header_label");
+    widget = GTK_WIDGET(gtk_builder_get_object (builder, "header_label"));
     string = g_strdup_printf(_( "Renumber the immediate sub-accounts of %s?  "
                                 "This will replace the account code field of "
                                 "each child account with a newly generated code."),
@@ -1992,16 +1994,15 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     gtk_label_set_text(GTK_LABEL(widget), string);
     g_free(string);
 
-    data->prefix = glade_xml_get_widget (xml, "prefix_entry");
-    data->interval = glade_xml_get_widget (xml, "interval_spin");
-    data->example1 = glade_xml_get_widget (xml, "example1_label");
-    data->example2 = glade_xml_get_widget (xml, "example2_label");
+    data->prefix = GTK_WIDGET(gtk_builder_get_object (builder, "prefix_entry"));
+    data->interval = GTK_WIDGET(gtk_builder_get_object (builder, "interval_spin"));
+    data->example1 = GTK_WIDGET(gtk_builder_get_object (builder, "example1_label"));
+    data->example2 = GTK_WIDGET(gtk_builder_get_object (builder, "example2_label"));
 
     gtk_entry_set_text(GTK_ENTRY(data->prefix), xaccAccountGetCode(account));
     gnc_account_renumber_update_examples(data);
 
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-                                      data);
+    gtk_builder_connect_signals(builder, data);
 
     gtk_widget_show_all(data->dialog);
 }
