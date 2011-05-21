@@ -1311,6 +1311,7 @@
                 <child>
                   <object class="GtkVButtonBox" id="vbuttonbox1">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="layout_style">spread</property>
                     <child>
                       <object class="GtkButton" id="select_all">

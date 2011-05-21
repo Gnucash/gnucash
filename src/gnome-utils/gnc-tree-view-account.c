@@ -1960,6 +1960,7 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     GtkTreeView *view;
     GtkCellRenderer *renderer;
     GladeXML *xml;
+    GtkBuilder *builder;
     gchar *title;
 
     ENTER("(fd %p, page %p)", fd, page);
@@ -1972,8 +1973,9 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     }
 
     /* Create the dialog */
-    xml = gnc_glade_xml_new ("account.glade", "Filter By");
-    dialog = glade_xml_get_widget (xml, "Filter By");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "account.glade", "Filter By");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Filter By"));
     fd->dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                  GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
@@ -1989,15 +1991,15 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     fd->original_show_zero_total = fd->show_zero_total;
 
     /* Update the dialog widgets for the current state */
-    button = glade_xml_get_widget (xml, "show_hidden");
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_hidden"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
                                  fd->show_hidden);
-    button = glade_xml_get_widget (xml, "show_zero");
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_zero"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
                                  fd->show_zero_total);
 
     /* Set up the tree view and model */
-    view = GTK_TREE_VIEW(glade_xml_get_widget (xml, FILTER_TREE_VIEW));
+    view = GTK_TREE_VIEW(gtk_builder_get_object (builder, FILTER_TREE_VIEW));
 
     fd->model = gnc_tree_model_account_types_filter_using_mask
                 (~(1 << ACCT_TYPE_ROOT));
@@ -2020,8 +2022,8 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
      "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
 
     /* Wire up the rest of the callbacks */
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-                                      fd);
+    gtk_builder_connect_signals(builder, fd);
+    g_object_unref(G_OBJECT(builder));
 
     /* Show it */
     gtk_widget_show_all(dialog);
