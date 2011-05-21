@@ -1959,7 +1959,6 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     GtkWidget *dialog, *button;
     GtkTreeView *view;
     GtkCellRenderer *renderer;
-    GladeXML *xml;
     GtkBuilder *builder;
     gchar *title;
 
