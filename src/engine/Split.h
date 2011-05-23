@@ -38,8 +38,8 @@ typedef struct _SplitClass SplitClass;
 
 #include <time.h>
 
-#include "gnc-engine.h"
 #include "gnc-commodity.h"
+#include "gnc-engine.h"
 
 /* --- type macros --- */
 #define GNC_TYPE_SPLIT            (gnc_split_get_type ())

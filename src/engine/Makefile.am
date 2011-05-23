@@ -1,9 +1,5 @@
 SUBDIRS = . test-core test 
 
-INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --add-include-path=$(top_builddir)/src/libqof/qof
-INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
-
 pkglib_LTLIBRARIES = libgncmod-engine.la
 
 AM_CPPFLAGS = \
@@ -220,24 +216,3 @@ CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links \
 MAINTAINERCLEANFILES = swig-engine.c swig-business-core.c
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.engine\"
-if HAVE_INTROSPECTION
-include ${INTROSPECTION_MAKEFILE}
-introspection_sources = $(gncinclude_HEADERS)
-
-INTROSPECTION_GIRS += Gncengine.gir
-Gncengine_gir_INCLUDES = GObject-2.0 GLib-2.0 Qof-1
-Gncengine_gir_NAMESPACE = Gnc
-Gncengine_gir_CFLAGS = ${AM_CPPFLAGS} -I$(top_builddir)
-Gncengine_gir_LIBS = libgncmod-engine.la
-Gncengine_gir_FILES = $(introspection_sources)
-
-
-girdir = $(datadir)/gir-1.0
-gir_DATA = $(INTROSPECTION_GIRS)
-
-typelibdir = $(libdir)/girepository-1.0
-typelib_DATA = GncEngine.typelib
-
-CLEANFILES += $(gir_DATA) $(typelib_DATA)
-endif
-

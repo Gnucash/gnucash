@@ -288,7 +288,7 @@ mark_account (Account *acc)
 \********************************************************************/
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncAccount, gnc_account, QOF_TYPE_INSTANCE)
+G_DEFINE_TYPE(Account, gnc_account, QOF_TYPE_INSTANCE)
 
 static void
 gnc_account_init(Account* acc)
@@ -534,7 +534,7 @@ gnc_account_set_property (GObject         *object,
 }
 
 static void
-gnc_account_class_init (GncAccountClass *klass)
+gnc_account_class_init (AccountClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 

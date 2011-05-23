@@ -1,10 +1,5 @@
 SUBDIRS = . test
 
-INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir)
-INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
-
-
 lib_LTLIBRARIES = libgnc-qof.la
 
 libgnc_qof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
@@ -84,28 +79,6 @@ noinst_HEADERS = \
 
 EXTRA_DIST = \
   qofmath128.c
-
-if HAVE_INTROSPECTION
-include ${INTROSPECTION_MAKEFILE}
-introspection_sources = $(qofinclude_HEADERS)
-
-INTROSPECTION_GIRS += Qof-1.gir
-Qof_1_gir_INCLUDES = GObject-2.0 GLib-2.0
-Qof_1_gir_NAMESPACE = Qof
-Qof_1_gir_VERSION = 1
-Qof_1_gir_CFLAGS = ${AM_CPPFLAGS} -I$(top_builddir)
-Qof_1_gir_LIBS = libgnc-qof.la
-Qof_1_gir_FILES = $(introspection_sources)
-
-
-girdir = $(datadir)/gir-1.0
-gir_DATA = $(INTROSPECTION_GIRS)
-
-typelibdir = $(libdir)/girepository-1.0
-typelib_DATA = Qof-1.typelib
-
-CLEANFILES = $(gir_DATA) $(typelib_DATA)
-endif
 
 if OS_WIN32
 libgnc_qof_la_SOURCES += qof-win32.c

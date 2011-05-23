@@ -32,7 +32,6 @@
 #ifndef QOF_UTIL_H
 #define QOF_UTIL_H
 
-#include <config.h>
 #include <stddef.h>
 #include "qof.h"
 #include "qoflog.h"
