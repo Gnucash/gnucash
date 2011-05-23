@@ -389,9 +389,8 @@
       (gnc:html-table-append-row/markup!
        table
        "grand-total"
-       (list (gnc:make-html-table-cell/size/markup
+       (list (gnc:make-html-table-cell/size
 	      1 (+ 1 (value-col used-columns))
-	      "centered-label-cell"
 	      (make-aging-table options query interval-vec reverse? date-type)))))
 
     table))
