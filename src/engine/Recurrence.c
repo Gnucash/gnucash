@@ -140,14 +140,16 @@ static gint
 nth_weekday_compare(const GDate *start, const GDate *next, PeriodType pt)
 {
     GDateDay sd, nd;
-    gint matchday, dim;
+    gint matchday, dim, week;
 
     nd = g_date_get_day(next);
     sd = g_date_get_day(start);
-
+    week = sd / 7 > 3 ? 3 : sd / 7;
+    if (week > 0 && sd % 7 == 0 && sd != 28)
+        --week;
     /* matchday has a week part, capped at 3 weeks, and a day part,
        capped at 7 days, so max(matchday) == 3*7 + 7 == 28. */
-    matchday = 7 * ((sd - 1) / 7 == 4 ? 3 : (sd - 1) / 7) +
+    matchday = 7 * week + //((sd - 1) / 7 == 4 ? 3 : (sd - 1) / 7) +
                (nd - g_date_get_weekday(next) + g_date_get_weekday(start) + 7) % 7;
     /* That " + 7" is to avoid negative modulo in case nd < 6. */
 
@@ -155,6 +157,8 @@ nth_weekday_compare(const GDate *start, const GDate *next, PeriodType pt)
               g_date_get_month(next), g_date_get_year(next));
     if ((dim - matchday) >= 7 && pt == PERIOD_LAST_WEEKDAY)
         matchday += 7;     /* Go to the fifth week, if needed */
+    if (pt == PERIOD_NTH_WEEKDAY && (matchday % 7 == 0))
+        matchday += 7;
 
     return matchday - nd;  /* Offset from 'next' to matchday */
 }
@@ -269,8 +273,7 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
         else if ( g_date_is_last_of_month(next) ||
                   ((pt == PERIOD_MONTH || pt == PERIOD_YEAR) &&
                    g_date_get_day(next) >= g_date_get_day(start)) ||
-                  ((pt == PERIOD_NTH_WEEKDAY || pt == PERIOD_LAST_WEEKDAY) &&
-                   nth_weekday_compare(start, next, pt) <= 0) )
+                  ((pt == PERIOD_NTH_WEEKDAY || pt == PERIOD_LAST_WEEKDAY)) )
             g_date_add_months(next, mult);
         else
             /* one fewer month fwd because of the occurrence in this month */
@@ -308,8 +311,17 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
            the day in one of the three possible ways. */
         dim = g_date_get_days_in_month(g_date_get_month(next),
                                        g_date_get_year(next));
-        if (pt == PERIOD_NTH_WEEKDAY || pt == PERIOD_LAST_WEEKDAY)
-            g_date_add_days(next, nth_weekday_compare(start, next, pt));
+        if (pt == PERIOD_LAST_WEEKDAY || pt == PERIOD_NTH_WEEKDAY)
+        {
+            gint wdresult = nth_weekday_compare(start, next, pt);
+            if (wdresult < 0)
+            {
+                wdresult = -wdresult;
+                g_date_subtract_days(next, wdresult);
+            }
+            else
+                g_date_add_days(next, wdresult);
+        }
         else if (pt == PERIOD_END_OF_MONTH || g_date_get_day(start) >= dim)
             g_date_set_day(next, dim);  /* last day in the month */
         else
@@ -618,6 +630,22 @@ _monthly_append_when(Recurrence *r, GString *buf)
         /* translators: %s is an already-localized form of the day of the week. */
         g_string_append_printf(buf, _("last %s"), day_name_buf);
     }
+    else if (recurrenceGetPeriodType(r) == PERIOD_NTH_WEEKDAY)
+    {
+        int week = 0;
+        int day_of_month_index = 0;
+        const char *numerals[] = {N_("1st"), N_("2nd"), N_("3rd"), N_("4th")};
+        gchar day_name_buf[abbrev_day_name_bufsize];
+
+        gnc_dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
+        day_of_month_index = g_date_get_day(&date) - 1;
+        week = day_of_month_index / 7 > 3 ? 3 : day_of_month_index / 7;
+        if (week > 0 && day_of_month_index % 7 == 0)
+            --week;
+        /* translators: %s is the string 1st, 2nd, 3rd and so on, and
+         * %s is an already-localized form of the day of the week. */
+        g_string_append_printf(buf, _("%s %s"), _(numerals[week]), day_name_buf);
+    }
     else
     {
         /* translators: %u is the day of month */
@@ -657,7 +685,7 @@ recurrenceListToCompactString(GList *rs)
             g_string_append_printf(buf, " ");
             if (recurrenceGetMultiplier(first) > 1)
             {
-                /* translators: %u is the recurrence multiplier */
+                /* translators: %u is the recurrence multiplier number */
                 g_string_append_printf(buf, _(" (x%u)"), recurrenceGetMultiplier(first));
             }
             g_string_append_printf(buf, ": ");
@@ -714,8 +742,16 @@ recurrenceListToCompactString(GList *rs)
         break;
         case PERIOD_NTH_WEEKDAY:
         {
-            g_warning("nth weekday not handled");
-            g_string_printf(buf, "@fixme: nth weekday not handled");
+            //g_warning("nth weekday not handled");
+            //g_string_printf(buf, "@fixme: nth weekday not handled");
+            g_string_printf(buf, "%s", _("Monthly"));
+            if (multiplier > 1)
+            {
+                /* translators: %u is the recurrence multiplier. */
+                g_string_append_printf(buf, _(" (x%u)"), multiplier);
+            }
+            g_string_append_printf(buf, ": ");
+            _monthly_append_when(r, buf);
         }
         break;
         case PERIOD_YEAR:

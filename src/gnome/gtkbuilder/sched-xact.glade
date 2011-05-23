@@ -2344,6 +2344,90 @@
       <row>
         <col id="0" translatable="yes">Last Sunday</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">1st Mon</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1st Tue</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1st Wed</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1st Thu</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1st Fri</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1st Sat</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1st Sun</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2nd Mon</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2nd Tue</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2nd Wed</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2nd Thu</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2nd Fri</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2nd Sat</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2nd Sun</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3rd Mon</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3rd Tue</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3rd Wed</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3rd Thu</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3rd Fri</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3rd Sat</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3rd Sun</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4th Mon</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4th Tue</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4th Wed</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4th Thu</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4th Fri</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4th Sat</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4th Sun</col>
+      </row>
     </data>
   </object>
   <object class="GtkListStore" id="liststore7">

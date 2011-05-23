@@ -353,6 +353,7 @@ static int
 _get_monthly_combobox_index(Recurrence *r)
 {
     GDate recurrence_date = recurrenceGetDate(r);
+    int week = 0;
     int day_of_month_index = g_date_get_day(&recurrence_date) - 1;
     if (recurrenceGetPeriodType(r) == PERIOD_END_OF_MONTH)
     {
@@ -363,6 +364,16 @@ _get_monthly_combobox_index(Recurrence *r)
         day_of_month_index
         = LAST_DAY_OF_MONTH_OPTION_INDEX
           + g_date_get_weekday(&recurrence_date);
+    }
+    else if (recurrenceGetPeriodType(r) == PERIOD_NTH_WEEKDAY)
+    {
+        week = day_of_month_index / 7 > 3 ? 3 : day_of_month_index / 7;
+        if (week > 0 && day_of_month_index % 7 == 0)
+            --week;
+        day_of_month_index = LAST_DAY_OF_MONTH_OPTION_INDEX + 7 +
+                             g_date_get_weekday(&recurrence_date) + 7 * week;
+
+
     }
     /* else { default value } */
     return day_of_month_index;
@@ -480,6 +491,7 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_dat
         case PERIOD_MONTH:
         case PERIOD_YEAR:
         case PERIOD_LAST_WEEKDAY:
+        case PERIOD_NTH_WEEKDAY:
         {
             guint multiplier;
             GtkWidget *multipler_spin, *day_of_month, *weekend_mode;
@@ -499,9 +511,6 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_dat
             gtk_combo_box_set_active(gf->freqComboBox, PAGE_MONTHLY);
         }
         break;
-        case PERIOD_NTH_WEEKDAY:
-            g_critical("unhandled period type [%d]", recurrenceGetPeriodType(r));
-            break;
         default:
             g_error("unknown recurrence period type [%d]", recurrenceGetPeriodType(r));
             break;
@@ -524,18 +533,31 @@ _get_multiplier_from_widget(GncFrequency *gf, char *widget_name)
 static Recurrence*
 _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier, char *combo_name, char *combo_weekend_name)
 {
-    int last_day_of_month_option_index = 31;
     Recurrence *r;
     GtkWidget *day_of_month_combo = glade_xml_get_widget(gf->gxml, combo_name);
     int day_of_month_index = gtk_combo_box_get_active(GTK_COMBO_BOX(day_of_month_combo));
     GtkWidget *weekend_adjust_combo = glade_xml_get_widget(gf->gxml, combo_weekend_name);
     int weekend_adjust = gtk_combo_box_get_active(GTK_COMBO_BOX(weekend_adjust_combo));
-
+    GDateWeekday selected_day_of_week;
+    GDate *day_of_week_date;
+    int selected_index, selected_week;
     r = g_new0(Recurrence, 1);
-    if (day_of_month_index > LAST_DAY_OF_MONTH_OPTION_INDEX)
+    if (day_of_month_index > LAST_DAY_OF_MONTH_OPTION_INDEX + 7)
     {
-        GDate *day_of_week_date = g_date_new_julian(g_date_get_julian(start_date));
-        GDateWeekday selected_day_of_week = day_of_month_index - LAST_DAY_OF_MONTH_OPTION_INDEX;
+        selected_index = day_of_month_index - LAST_DAY_OF_MONTH_OPTION_INDEX - 7;
+        day_of_week_date = g_date_new_julian(g_date_get_julian(start_date));
+        selected_week = (selected_index - 1) / 7 == 4 ? 3 : (selected_index - 1) / 7;
+        selected_day_of_week = selected_index - 7 * selected_week;
+        g_date_set_day(day_of_week_date, 1);
+        while (g_date_get_weekday(day_of_week_date) != selected_day_of_week)
+            g_date_add_days(day_of_week_date, 1);
+        g_date_add_days(day_of_week_date, 7 * selected_week);
+        recurrenceSet(r, multiplier, PERIOD_NTH_WEEKDAY, day_of_week_date, WEEKEND_ADJ_NONE);
+    }
+    else if (day_of_month_index > LAST_DAY_OF_MONTH_OPTION_INDEX)
+    {
+        day_of_week_date = g_date_new_julian(g_date_get_julian(start_date));
+        selected_day_of_week = day_of_month_index - LAST_DAY_OF_MONTH_OPTION_INDEX;
         // increment until we align on the DOW, but stay inside the month
         g_date_set_day(day_of_week_date, 1);
         while (g_date_get_weekday(day_of_week_date) != selected_day_of_week)

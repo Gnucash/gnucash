@@ -1484,7 +1484,35 @@ Last Wednesday
 Last Thursday
 Last Friday
 Last Saturday
-Last Sunday</property>
+Last Sunday
+1st Mon
+1st Tue
+1st Wed
+1st Thu
+1st Fri
+1st Sat
+1st Sun
+2nd Mon
+2nd Tue
+2nd Wed
+2nd Thu
+2nd Fri
+2nd Sat
+2nd Sun
+3rd Mon
+3rd Tue
+3rd Wed
+3rd Thu
+3rd Fri
+3rd Sat
+3rd Sun
+4th Mon
+4th Tue
+4th Wed
+4th Thu
+4th Fri
+4th Sat
+4th Sun</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -1908,6 +1936,20 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                     <property name="column_spacing">5</property>
                     <property name="row_spacing">5</property>
                     <child>
+                      <widget class="GtkLabel" id="label847897">
+                        <property name="visible">True</property>
+                        <property name="xalign">1</property>
+                        <property name="label" translatable="yes">Interest Rate:</property>
+                        <property name="justify">center</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
                       <widget class="GtkLabel" id="label847899">
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
@@ -2157,23 +2199,25 @@ years</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkComboBox" id="irate_type_combobox">
-                        <property name="visible">True</property>
-                        <property name="active">1</property>
-                        <property name="items" translatable="yes">Interest Rate
-APR (Compounded Daily)
-APR (Compounded Weekly)
-APR (Compounded Monthly)
-APR (Compounded Quarterly)
-APR (Compounded Annually)
-</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
-                      </packing>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </widget>
                   <packing>
