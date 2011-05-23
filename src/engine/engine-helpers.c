@@ -502,12 +502,17 @@ gnc_query_scm2path (SCM path_scm)
     while (!scm_is_null (path_scm))
     {
         SCM key_scm = SCM_CAR (path_scm);
+        char *str;
         char *key;
 
         if (!scm_is_string (key_scm))
             break;
 
-        key = g_strdup (scm_to_locale_string (key_scm));
+        scm_dynwind_begin (0); 
+        str = scm_to_locale_string(key_scm); 
+        key = g_strdup (str);
+        scm_dynwind_free (str); 
+        scm_dynwind_end (); 
 
         path = g_slist_prepend (path, key);
 
