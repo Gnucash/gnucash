@@ -275,22 +275,22 @@
 
           (gnc:html-document-set-style!
              ssdoc "total-number-cell"
-             'tag '("td" "b")
+             'tag '("td")
              'attribute (list "class" "total-number-cell"))
 
           (gnc:html-document-set-style!
              ssdoc "total-number-cell-neg"
-             'tag '("td" "b")
+             'tag '("td")
              'attribute (list "class" "total-number-cell neg"))
 
           (gnc:html-document-set-style!
              ssdoc "total-label-cell"
-             'tag '("td" "b")
+             'tag '("td")
              'attribute (list "class" "total-label-cell"))
 
           (gnc:html-document-set-style!
              ssdoc "centered-label-cell"
-             'tag '("td" "b")
+             'tag '("td")
              'attribute (list "class" "centered-label-cell"))
         )
         (begin ;; this is for gtkhtml
@@ -344,22 +344,22 @@
 
           (gnc:html-document-set-style!
              ssdoc "total-number-cell"
-             'tag '("td" "b")
+             'tag '("td")
              'attribute (list "align" "right"))
 
           (gnc:html-document-set-style!
              ssdoc "total-number-cell-neg"
-             'tag '("td" "b")
+             'tag '("td")
              'attribute (list "align" "right"))
 
           (gnc:html-document-set-style!
              ssdoc "total-label-cell"
-             'tag '("td" "b")
+             'tag '("td")
              'attribute (list "align" "left"))
 
           (gnc:html-document-set-style!
              ssdoc "centered-label-cell"
-             'tag '("td" "b")
+             'tag '("td")
              'attribute (list "align" "center"))
         )
     )
@@ -471,6 +471,7 @@
        t 2 headcolumn
        (gnc:html-document-objects doc))
       (gnc:html-document-add-object! ssdoc t))
+    (gnc:html-document-add-object! ssdoc (gnc:make-html-text "</center>")) ;;TODO: make this a div instead of <center> (deprecated)
     ssdoc))
 
 (gnc:define-html-style-sheet 
