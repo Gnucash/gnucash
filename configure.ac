@@ -23,6 +23,7 @@ AC_PREREQ(2.59)
 AC_INIT([GnuCash], [2.4.99], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
+AC_CONFIG_MACRO_DIR(macros)
 
 #Change this in development versions when changing anything that
 #affects stored data structures. Reset to zero when bumping version.
@@ -100,12 +101,6 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
     [GetText version number])
 
 AM_GLIB_GNU_GETTEXT
-
-
-# Enable only when we have autoconf --version >= 2.59
-# on all platforms. Note that AC_PREREQ(2.59) may be
-# insufficient to actually use v2.59 on OSX
-#AC_CONFIG_MACRO_DIR(macros)
 
 AC_PROG_INSTALL
 PKG_PROG_PKG_CONFIG
@@ -231,6 +226,8 @@ fi
 
 # We require glib >= 2.20, released together with gtk-2.16
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.20 gthread-2.0 gobject-2.0 gmodule-2.0)
+
+GOBJECT_INTROSPECTION_CHECK([0.6.7])
 
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 

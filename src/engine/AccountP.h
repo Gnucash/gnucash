@@ -49,7 +49,7 @@
  * No one outside of the engine should ever include this file.
 */
 
-/** \struct Account */
+/** \struct GncAccount */
 struct account_s
 {
     QofInstance inst;
