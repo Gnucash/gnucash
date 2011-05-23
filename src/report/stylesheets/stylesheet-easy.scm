@@ -427,7 +427,7 @@
          (if show-preparer? 
              ;; title plus preparer info 
              (gnc:make-html-text
-              (gnc:html-markup-b headline)
+              (gnc:html-markup-h3 headline)
               (gnc:html-markup-br)
               (_ "Prepared by: ")
               (gnc:html-markup-b preparer)
@@ -441,7 +441,7 @@
 
              ;; title only 
              (gnc:make-html-text
-              (gnc:html-markup-b headline))))
+              (gnc:html-markup-h3 headline))))
         )
       
       ; only setup an image if we specified one
