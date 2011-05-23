@@ -422,8 +422,7 @@
          (if show-preparer? 
              ;; title plus preparer info 
              (gnc:make-html-text
-              (gnc:html-markup-b 
-               (gnc:html-document-title doc))  
+              (gnc:html-markup-h3 headline)  
               (gnc:html-markup-br)
               (_ "Prepared by: ")
               (gnc:html-markup-b preparer)
@@ -437,8 +436,7 @@
 
              ;; title only 
              (gnc:make-html-text
-              (gnc:html-markup-b 
-               (gnc:html-document-title doc)))))
+              (gnc:html-markup-h3 headline))))
         )
       
       (if (and logopixmap
