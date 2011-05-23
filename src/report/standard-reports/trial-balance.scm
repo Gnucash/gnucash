@@ -661,7 +661,7 @@
 		   "th" (_ "Credit")))
 		 (row (append
 		       (list (gnc:make-html-table-cell/markup
-			      "total-label-cell" (_ "Account Name")))
+			      "th" (_ "Account Name")))
 		       (gnc:html-make-empty-cells (- account-cols 1))
 		       (list debit-cell)
 		       (list credit-cell))
