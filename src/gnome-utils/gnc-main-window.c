@@ -151,9 +151,9 @@ static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
 static gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget, GncPluginPage *page);
 
 #ifdef MAC_INTEGRATION
-static void gnc_quartz_shutdown(GtkOSXApplication *theApp, gpointer data);
-static gboolean gnc_quartz_should_quit(GtkOSXApplication *theApp, GncMainWindow *window);
-static void gnc_quartz_set_menu(GncMainWindow* window);
+static void gtk_quartz_shutdown(GtkOSXApplication *theApp, gpointer data);
+static gboolean gtk_quartz_should_quit(GtkOSXApplication *theApp, GncMainWindow *window);
+static void gtk_quartz_set_menu(GncMainWindow* window);
 #endif
 
 /** The instance private data structure for an embedded window
@@ -2308,8 +2308,9 @@ gnc_main_window_destroy (GtkObject *object)
             gnc_window_set_progressbar_window(NULL);
 
         /* Update the "Windows" menu in all other windows */
+#ifndef MAC_INTEGRATION
         gnc_main_window_update_all_menu_items();
-
+#endif
         gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
                                       GNC_MAIN_WINDOW_NAME);
         gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL,
@@ -2356,8 +2357,9 @@ gnc_main_window_new (void)
     }
     active_windows = g_list_append (active_windows, window);
     gnc_main_window_update_title(window);
-    gnc_main_window_update_all_menu_items();
-
+#ifndef MAC_INTEGRATION
+    gnc_main_window_update_allmenu_items();
+#endif
     gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
 
     return window;
@@ -3373,13 +3375,13 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 #ifdef MAC_INTEGRATION
 static void
-gnc_quartz_shutdown (GtkOSXApplication *theApp, gpointer data)
+gtk_quartz_shutdown (GtkOSXApplication *theApp, gpointer data)
 {
     gnc_shutdown(0);
 }
 
 static gboolean
-gnc_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
+gtk_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 {
     QofSession *session;
     gboolean needs_save, do_shutdown;
@@ -3397,7 +3399,7 @@ gnc_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 }
 
 static void
-gnc_quartz_set_menu(GncMainWindow* window)
+gtk_quartz_set_menu(GncMainWindow* window)
 {
     GtkOSXApplicationMenuGroup *group;
     GtkOSXApplication *theApp = g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
@@ -3440,7 +3442,7 @@ gnc_quartz_set_menu(GncMainWindow* window)
                                       "/menubar/Windows");
     gtk_osxapplication_set_window_menu(theApp, GTK_MENU_ITEM(item));
     g_signal_connect(theApp, "NSApplicationBlockTermination",
-                     G_CALLBACK(gnc_quartz_should_quit), window);
+                     G_CALLBACK(gtk_quartz_should_quit), window);
 
 }
 #endif //MAC_INTEGRATION
@@ -3561,8 +3563,9 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
                               g_list_length(priv->installed_pages) > 1);
 
     gnc_main_window_update_title(window);
+#ifndef MAC_INTEGRATION
     gnc_main_window_update_menu_item(window);
-
+#endif
     g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, page);
     LEAVE(" ");
 }
@@ -3923,7 +3926,9 @@ gnc_main_window_cmd_window_raise (GtkAction *action,
 
     /* revert the change in the radio group
      * impossible while handling "changed" (G_SIGNAL_NO_RECURSE) */
+#ifndef MAC_INTEGRATION
     g_idle_add((GSourceFunc)gnc_main_window_update_radio_button, old_window);
+#endif
     LEAVE(" ");
 }
 
@@ -4057,12 +4062,12 @@ gnc_main_window_show_all_windows(void)
     {
         gtk_widget_show(GTK_WIDGET(window_iter->data));
 #ifdef MAC_INTEGRATION
-        gnc_quartz_set_menu(window_iter->data);
+        gtk_quartz_set_menu(window_iter->data);
 #endif
     }
 #ifdef MAC_INTEGRATION
     g_signal_connect(theApp, "NSApplicationWillTerminate",
-                     G_CALLBACK(gnc_quartz_shutdown), NULL);
+                     G_CALLBACK(gtk_quartz_shutdown), NULL);
     gtk_osxapplication_ready(theApp);
 #endif
 }
