@@ -74,10 +74,10 @@ SET (libgncmod_engine_HEADERS
 
 # Command to generate the swig-engine.c wrapper file
 SET (SWIG_ENGINE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-engine.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i)
+GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${libgncmod_engine_HEADERS})
 
 SET (SWIG_BUSINESS_CORE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-business-core.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_BUSINESS_CORE_C} ${CMAKE_CURRENT_SOURCE_DIR}/business-core.i)
+GNC_ADD_SWIG_COMMAND (${SWIG_BUSINESS_CORE_C} ${CMAKE_CURRENT_SOURCE_DIR}/business-core.i ${libgncmod_engine_HEADERS})
 
 # Command to generate the iso-4217-currencies.c file
 SET (ISO_4217_C ${CMAKE_CURRENT_BINARY_DIR}/iso-4217-currencies.c)
