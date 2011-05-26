@@ -2306,10 +2306,10 @@ gnc_main_window_destroy (GtkObject *object)
 
         if (gnc_window_get_progressbar_window() == GNC_WINDOW(window))
             gnc_window_set_progressbar_window(NULL);
-
+#ifndef MAC_INTEGRATION
         /* Update the "Windows" menu in all other windows */
         gnc_main_window_update_all_menu_items();
-
+#endif
         gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
                                       GNC_MAIN_WINDOW_NAME);
         gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL,
@@ -2356,8 +2356,9 @@ gnc_main_window_new (void)
     }
     active_windows = g_list_append (active_windows, window);
     gnc_main_window_update_title(window);
+#ifndef MAC_INTEGRATION
     gnc_main_window_update_all_menu_items();
-
+#endif
     gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
 
     return window;
@@ -3587,8 +3588,9 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
                               g_list_length(priv->installed_pages) > 1);
 
     gnc_main_window_update_title(window);
+#ifndef MAC_INTEGRATION
     gnc_main_window_update_menu_item(window);
-
+#endif
     g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, page);
     LEAVE(" ");
 }
@@ -3946,10 +3948,11 @@ gnc_main_window_cmd_window_raise (GtkAction *action,
     value = gtk_radio_action_get_current_value(current);
     new_window = g_list_nth_data(active_windows, value);
     gtk_window_present(GTK_WINDOW(new_window));
-
+#ifndef MAC_INTEGRATION
     /* revert the change in the radio group
      * impossible while handling "changed" (G_SIGNAL_NO_RECURSE) */
     g_idle_add((GSourceFunc)gnc_main_window_update_radio_button, old_window);
+#endif
     LEAVE(" ");
 }
 
