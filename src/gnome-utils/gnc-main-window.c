@@ -3401,12 +3401,25 @@ gnc_main_window_setup_window (GncMainWindow *window)
 }
 
 #ifdef MAC_INTEGRATION
+/* Event handlers for the shutdown process.  Gnc_quartz_shutdown is
+ * connected to NSApplicationWillTerminate, the last chance to do
+ * anything before quitting. The problem is that it's launched from a
+ * CFRunLoop, not a g_main_loop, and if we call anything that would
+ * affect the main_loop we get an assert that we're in a subidiary
+ * loop.
+ */
 static void
 gtk_quartz_shutdown (GtkOSXApplication *theApp, gpointer data)
 {
-    gnc_shutdown(0);
+/* Do Nothing. It's too late. */
 }
-
+/* Should quit responds to NSApplicationBlockTermination; returning
+ * TRUE means "don't terminate", FALSE means "do terminate". If we
+ * decide that it's OK to terminate, then we queue a gnc_shutdown for
+ * the next idle time (because we're not running in the main loop) and
+ * then tell the OS not to terminate. That gives the gnc_shutdown an
+ * opportunity to shut down.
+ */
 static gboolean
 gtk_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 {
@@ -3421,8 +3434,9 @@ gtk_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
                  !gnc_file_save_in_progress();
     if (needs_save && gnc_main_window_prompt_for_save(GTK_WIDGET(window)))
         return TRUE;
-    gnc_shutdown(0);
-    return FALSE;
+
+    g_idle_add((GSourceFunc)gnc_shutdown, 0);
+    return TRUE;
 }
 
 static void
