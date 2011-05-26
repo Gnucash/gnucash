@@ -3221,6 +3221,32 @@ connect_proxy (GtkUIManager *merge,
 /* CS: end copied code from gtk+/test/testmerge.c */
 
 static void
+gnc_main_window_window_menu (GncMainWindow *window)
+{
+    GncMainWindowPrivate *priv;
+    guint merge_id;
+#ifdef MAC_INTEGRATION
+    gchar *filename = gnc_gnome_locate_ui_file("gnc-window-menu-ui-quartz.xml");
+#else
+    gchar *filename = gnc_gnome_locate_ui_file("gnc-window-menu-ui.xml");
+#endif
+    GError *error = NULL;
+    g_assert(filename);
+    merge_id = gtk_ui_manager_add_ui_from_file(window->ui_merge, filename,
+					       &error);
+    g_free(filename);
+    g_assert(merge_id);
+#ifndef MAC_INTEGRATION
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    gtk_action_group_add_radio_actions (priv->action_group,
+                                        radio_entries, n_radio_entries,
+                                        0,
+                                        G_CALLBACK(gnc_main_window_cmd_window_raise),
+                                        window);
+#endif
+};
+
+static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
     GncMainWindowPrivate *priv;
@@ -3334,7 +3360,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
         g_assert(merge_id != 0);
     }
     g_free(filename);
-
+    gnc_main_window_window_menu(window);
     gnc_gconf_add_notification(G_OBJECT(window), GCONF_GENERAL,
                                gnc_main_window_gconf_changed,
                                GNC_MAIN_WINDOW_NAME);

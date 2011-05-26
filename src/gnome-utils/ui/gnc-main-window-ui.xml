@@ -107,21 +107,8 @@
       <placeholder name="ExtensionsPlaceholder"/>
     </menu>
 
-    <menu name="Windows" action="WindowsAction">
-      <menuitem name="WindowNew"      action="WindowNewAction"/>
-      <menuitem name="WindowMovePage" action="WindowMovePageAction"/>
-      <separator name="ViewSep4"/>
-      <menuitem name="Window0"        action="Window0Action"/>
-      <menuitem name="Window1"        action="Window1Action"/>
-      <menuitem name="Window2"        action="Window2Action"/>
-      <menuitem name="Window3"        action="Window3Action"/>
-      <menuitem name="Window4"        action="Window4Action"/>
-      <menuitem name="Window5"        action="Window5Action"/>
-      <menuitem name="Window6"        action="Window6Action"/>
-      <menuitem name="Window7"        action="Window7Action"/>
-      <menuitem name="Window8"        action="Window8Action"/>
-      <menuitem name="Window9"        action="Window9Action"/>
-      <placeholder name="WindowsPlaceholder"/>
+    <menu name="Windows" action="WindowsAction" >
+      <placeholder name= "WindowPlaceholder"/>
     </menu>
 
     <menu name="Help" action="HelpAction">
