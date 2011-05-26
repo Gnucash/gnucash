@@ -2356,7 +2356,9 @@ gnc_main_window_new (void)
     }
     active_windows = g_list_append (active_windows, window);
     gnc_main_window_update_title(window);
-#ifndef MAC_INTEGRATION
+#ifdef MAC_INTEGRATION
+    gnc_quartz_set_menu(window);
+#else
     gnc_main_window_update_all_menu_items();
 #endif
     gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
