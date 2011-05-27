@@ -384,8 +384,8 @@ set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-${KTOBLZCHECK_VE
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
 if [ "$AQBANKING5" = "yes" ]; then
-    AQBANKING_VERSION="5.0.6"
-    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=79&file=01&dummy=aqbanking-${AQBANKING_VERSION}.tar.gz"
+    AQBANKING_VERSION="5.0.7"
+    set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=80&file=01&dummy=aqbanking-${AQBANKING_VERSION}.tar.gz"
     set_default AQBANKING_WITH_QT no
 else
     AQBANKING_VERSION="4.2.4"
