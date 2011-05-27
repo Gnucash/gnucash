@@ -3229,9 +3229,9 @@ gnc_main_window_window_menu (GncMainWindow *window)
     GncMainWindowPrivate *priv;
     guint merge_id;
 #ifdef MAC_INTEGRATION
-    gchar *filename = gnc_gnome_locate_ui_file("gnc-window-menu-ui-quartz.xml");
+    gchar *filename = gnc_gnome_locate_ui_file("gnc-windows-menu-ui-quartz.xml");
 #else
-    gchar *filename = gnc_gnome_locate_ui_file("gnc-window-menu-ui.xml");
+    gchar *filename = gnc_gnome_locate_ui_file("gnc-windows-menu-ui.xml");
 #endif
     GError *error = NULL;
     g_assert(filename);
