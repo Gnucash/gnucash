@@ -844,22 +844,6 @@ typedef struct
 
 } select_info;
 
-/*
- * This function is needed because gtk_entry_insert_text() sets the
- * cursor position after emitting the "insert+text" signal.  This
- * means that the gtk_editable_select_region() call cannot be in the
- * insert_cb function because it will just be cancelled out after
- * the function finishes running.
- */
-static gboolean
-gnucash_sheet_select_data_cb (select_info *info)
-{
-    gtk_editable_select_region (info->editable,
-                                info->start_sel, info->end_sel);
-    g_free(info);
-    return FALSE; /* This is a one shot function */
-}
-
 static void
 gnucash_sheet_insert_cb (GtkWidget *widget,
                          const gchar *insert_text,
@@ -999,17 +983,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         *position = g_utf8_strlen(retval, -1);
 
     if (start_sel != end_sel)
-    {
-        select_info *info;
-
-        info = g_malloc(sizeof(*info));
-        info->editable = editable;
-        info->start_sel = start_sel;
-        info->end_sel = end_sel;
-        g_timeout_add(/*ASAP*/ 1,
-                               (GSourceFunc)gnucash_sheet_select_data_cb,
-                               info);
-    }
+	gtk_editable_select_region(editable, start_sel, end_sel);
 
     g_string_free (new_text_gs, TRUE);
     g_string_free (change_text_gs, TRUE);
@@ -2030,7 +2004,14 @@ gnucash_sheet_commit_cb (GtkIMContext *context, const gchar *str,
               gtk_editable_get_position (editable)
               : sheet->preedit_start_position;
     gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
+
+    /* insert_cb may have changed the selection, but gtk_editable_set_position
+       (erroneously?) clears it.  If a selection is set, preserve it. */
+    gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
     gtk_editable_set_position (editable, tmp_pos);
+    if (sel_start != sel_end)
+	gtk_editable_select_region (editable, sel_start, sel_end);
+
     gnucash_sheet_im_context_reset_flags(sheet);
 }
 
