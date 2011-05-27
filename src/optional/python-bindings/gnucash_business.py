@@ -31,7 +31,7 @@ import gnucash_core_c
 from function_class import \
      ClassFromFunctions, extract_attributes_with_prefix, \
      default_arguments_decorator, method_function_returns_instance, \
-     methods_return_instance
+     methods_return_instance, methods_return_instance_lists
 
 from gnucash_core import \
      GnuCashCoreClass, GncNumeric, GncCommodity, Transaction, \
@@ -309,6 +309,8 @@ taxtableentry_dict = {
 
 # Invoice
 Invoice.add_constructor_and_methods_with_prefix('gncInvoice', 'Create')
+methods_return_instance_lists(
+    Invoice, { 'GetEntries': Entry })
 
 # Bill
 Bill.add_methods_with_prefix('gncBill')

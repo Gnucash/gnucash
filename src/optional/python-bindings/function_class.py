@@ -30,7 +30,7 @@ INSTANCE_ARGUMENT = "instance"
 
 class ClassFromFunctions(object):
     """Inherit this class to give yourself a python class that wraps a set of
-    functions that together consitute the methods of the class.
+    functions that together constitute the methods of the class.
 
     The method functions must all have as a first argument an object
     holding the instance data. There must also be a function that
@@ -50,7 +50,7 @@ class ClassFromFunctions(object):
     def __new__(cls, *args, **kargs):
         # why reimpliment __new__? Because later on we're going to
         # use new to avoid creating new instances when existing instances
-        # already exist with the same __instance value, or equivlent __instance
+        # already exist with the same __instance value, or equivalent __instance
         # values, where this is desirable...
         return super(ClassFromFunctions, cls).__new__(cls)
     
@@ -93,7 +93,37 @@ class ClassFromFunctions(object):
         setattr(cls, method_name, method_function)
         setattr(method_function, "__name__", method_name)
         return method_function
-    
+
+    @classmethod
+    def ya_add_classmethod(cls, function_name, method_name):
+        """Add the function, method_name to this class as a classmethod named name
+        
+        Taken from function_class and slightly modified.
+        """
+        def method_function(self, *meth_func_args):
+            return getattr(self._module, function_name)(
+                self,
+                *process_list_convert_to_instance(meth_func_args) )
+        
+        setattr(cls, method_name, classmethod(method_function))
+        setattr(method_function, "__name__", method_name)
+        return method_function    
+
+    @classmethod
+    def ya_add_method(cls, function_name, method_name):
+        """Add the function, method_name to this class as a method named name
+        
+        Taken from function_class and slightly modified.
+        """
+        def method_function(self, *meth_func_args):
+            return getattr(self._module, function_name)(
+                self,
+                *process_list_convert_to_instance(meth_func_args) )
+        
+        setattr(cls, method_name, method_function)
+        setattr(method_function, "__name__", method_name)
+        return method_function
+
     @classmethod
     def add_methods_with_prefix(cls, prefix):
         """Add a group of functions with the same prefix 
