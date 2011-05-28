@@ -3452,6 +3452,8 @@ gnc_quartz_set_menu(GncMainWindow* window)
         menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menu));
     gtk_widget_hide(menu);
     gtk_osxapplication_set_menu_bar (theApp, GTK_MENU_SHELL (menu));
+    if (gtk_osxapplication_use_quartz_accelerators(theApp))
+	gtk_osxapplication_set_use_quartz_accelerators(theApp, FALSE);
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/File/FileQuit");
@@ -3483,7 +3485,7 @@ gnc_quartz_set_menu(GncMainWindow* window)
                                       "/menubar/Windows");
     gtk_osxapplication_set_window_menu(theApp, GTK_MENU_ITEM(item));
     g_signal_connect(theApp, "NSApplicationBlockTermination",
-                     G_CALLBACK(gtk_quartz_should_quit), window);
+                     G_CALLBACK(gnc_quartz_should_quit), window);
 
 }
 #endif //MAC_INTEGRATION
