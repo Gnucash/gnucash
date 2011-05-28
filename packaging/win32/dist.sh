@@ -2,6 +2,12 @@
 
 set -e
 
+function on_error() {
+  setup "An error occurred, exiting."
+  restore_msys "$_PID"
+}
+trap on_error ERR
+
 function qpushd() { pushd "$@" >/dev/null; }
 function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
@@ -44,7 +50,7 @@ for step in "${steps[@]}" ; do
 done
 
 setup Restore MSYS
-restore_msys "$PID"
+restore_msys "$_PID"
 
 qpopd
 
