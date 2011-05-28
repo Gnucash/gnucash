@@ -10,6 +10,12 @@
 
 set -e
 
+function on_error() {
+  setup "An error occurred, exiting."
+  restore_msys "$_PID"
+}
+trap on_error ERR
+
 echo -n "Build Starting at "
 date
 

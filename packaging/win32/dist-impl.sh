@@ -56,8 +56,8 @@ Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
     add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
     add_to_env $_EXETYPE_UDIR/bin PATH # exetype
 
-    PID=$$
-    configure_msys "$PID" "$_MINGW_WFSDIR"
+    _PID=$$
+    configure_msys "$_PID" "$_MINGW_WFSDIR"
 }
 
 function dist_aqbanking() {
