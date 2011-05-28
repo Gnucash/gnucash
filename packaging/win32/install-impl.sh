@@ -146,6 +146,8 @@ function inst_mingw() {
     setup MinGW
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
+    # Configure msys to use mingw on the above path before running any tests !
+    configure_msys "$_PID" "$_MINGW_WFSDIR"
     [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/bin PATH
     add_to_env $_MINGW_UDIR/bin PATH
 
@@ -181,8 +183,6 @@ function inst_mingw() {
     if [ "$CROSS_COMPILE" != "yes" ]; then
         # Some preparation steps, only for native (non-cross-compile)
         cp ${_MINGW_UDIR}/bin/libpthread-2.dll ${_MINGW_UDIR}/bin/pthreadGC2.dll
-
-        configure_msys "$_PID" "$_MINGW_WFSDIR"
     fi
 }
 
