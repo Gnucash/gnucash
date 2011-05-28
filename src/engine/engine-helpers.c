@@ -140,15 +140,18 @@ GncGUID
 gnc_scm2guid(SCM guid_scm)
 {
     GncGUID guid;
-    const gchar * str;
+    gchar * str;
 
     if (!scm_is_string(guid_scm)
         || (GUID_ENCODING_LENGTH != scm_c_string_length (guid_scm)))
     {
         return *guid_null();
     }
+    scm_dynwind_begin (0); 
     str = scm_to_locale_string (guid_scm);
     string_to_guid(str, &guid);
+    scm_dynwind_free (str); 
+    scm_dynwind_end (); 
     return guid;
 }
 
