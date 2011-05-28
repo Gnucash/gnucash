@@ -21,25 +21,7 @@ from gnucash import Session, Account, Split
 import gnucash
 import datetime
 from fractions import Fraction
-
-# Function definition from Christoph Holtermann
-def findAccount(account,name,account_list=None):
-  """Searches full names of account and descendents
-
-  returns a list of accounts which contain name."""
-
-  if not account_list:
-    account_list=[]
-
-  for child in account.get_children():
-     child=Account(instance=child)
-     account_list=findAccount(child,name,account_list)
-  
-  Account_name=account.GetName()
-  if name in Account_name:
-    account_list.append(account)
-  
-  return account_list
+from gnc_convenience import find_account
 
 FILE = "./test.gnucash"
 url = "xml://"+FILE
@@ -72,7 +54,7 @@ book = session.book
 account = book.get_root_account()
 pdb = book.get_price_db()
 comm_table = book.get_table()
-ac = findAccount(account,'Intel')[0] 
+ac = find_account(account,'Intel')[0] 
 
 stock = ac.GetCommodity()
 # Add the prices

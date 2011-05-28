@@ -553,7 +553,6 @@ Transaction.add_method('gncTransGetGUID', 'GetGUID');
 trans_dict =    {
                     'GetSplit': Split,
                     'FindSplitByAccount': Split,
-                    'GetNthSplit': Split,
                     'Clone': Transaction,
                     'Reverse': Transaction,
                     'GetReversedBy': Transaction,
