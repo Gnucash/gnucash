@@ -151,9 +151,9 @@ static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
 static gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget, GncPluginPage *page);
 
 #ifdef MAC_INTEGRATION
-static void gtk_quartz_shutdown(GtkOSXApplication *theApp, gpointer data);
-static gboolean gtk_quartz_should_quit(GtkOSXApplication *theApp, GncMainWindow *window);
-static void gtk_quartz_set_menu(GncMainWindow* window);
+static void gnc_quartz_shutdown(GtkOSXApplication *theApp, gpointer data);
+static gboolean gnc_quartz_should_quit(GtkOSXApplication *theApp, GncMainWindow *window);
+static void gnc_quartz_set_menu(GncMainWindow* window);
 #endif
 
 /** The instance private data structure for an embedded window
@@ -3409,7 +3409,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
  * loop.
  */
 static void
-gtk_quartz_shutdown (GtkOSXApplication *theApp, gpointer data)
+gnc_quartz_shutdown (GtkOSXApplication *theApp, gpointer data)
 {
 /* Do Nothing. It's too late. */
 }
@@ -3421,7 +3421,7 @@ gtk_quartz_shutdown (GtkOSXApplication *theApp, gpointer data)
  * opportunity to shut down.
  */
 static gboolean
-gtk_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
+gnc_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 {
     QofSession *session;
     gboolean needs_save, do_shutdown;
@@ -3440,7 +3440,7 @@ gtk_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 }
 
 static void
-gtk_quartz_set_menu(GncMainWindow* window)
+gnc_quartz_set_menu(GncMainWindow* window)
 {
     GtkOSXApplicationMenuGroup *group;
     GtkOSXApplication *theApp = g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
@@ -4102,12 +4102,12 @@ gnc_main_window_show_all_windows(void)
     {
         gtk_widget_show(GTK_WIDGET(window_iter->data));
 #ifdef MAC_INTEGRATION
-        gtk_quartz_set_menu(window_iter->data);
+        gnc_quartz_set_menu(window_iter->data);
 #endif
     }
 #ifdef MAC_INTEGRATION
     g_signal_connect(theApp, "NSApplicationWillTerminate",
-                     G_CALLBACK(gtk_quartz_shutdown), NULL);
+                     G_CALLBACK(gnc_quartz_shutdown), NULL);
     gtk_osxapplication_ready(theApp);
 #endif
 }
