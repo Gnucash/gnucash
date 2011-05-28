@@ -113,6 +113,8 @@ function inst_mingw() {
     setup MinGW
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
+    # Configure msys to use mingw on the above path before running any tests !
+    configure_msys "$_PID" "$_MINGW_WFSDIR"
     [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/bin PATH
 
     if quiet test_for_mingw
@@ -133,8 +135,6 @@ function inst_mingw() {
         fi
         quiet test_for_mingw || die "mingw not installed correctly"
     fi
-
-    configure_msys "$_PID" "$_MINGW_WFSDIR"
 }
 
 function inst_unzip() {
