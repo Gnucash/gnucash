@@ -1426,7 +1426,6 @@ AC_CONFIG_FILES(
   checks/Makefile
   doc/Makefile
   doc/examples/Makefile
-  intl-scm/Makefile
   lib/Makefile
   lib/libc/Makefile
   lib/stf/Makefile

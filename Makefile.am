@@ -1,5 +1,5 @@
 
-SUBDIRS = . doc lib src intl-scm packaging po accounts checks
+SUBDIRS = . doc lib src packaging po accounts checks
 
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
@@ -190,10 +190,8 @@ $(srcdir)/po/POTFILES.in: make-gnucash-potfiles .potfiles
 
 # Creation rules so that po/gnucash.pot can always be created for
 # make dist.
-po/gnucash.pot: po/POTFILES.in intl-scm/guile-strings.c
+po/gnucash.pot: po/POTFILES.in
 	${MAKE} -C po gnucash.pot
-intl-scm/guile-strings.c:
-	${MAKE} -C intl-scm guile-strings.c
 
 .potfiles:
 

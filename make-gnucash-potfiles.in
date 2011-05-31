@@ -20,7 +20,7 @@ my @ignored_files = `grep -v \# @-SRCDIR-@/po/POTFILES.ignore`;
 
 my @possible_files = `cd @-SRCDIR-@ && find src -name '*.c' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
-                      -o -name '*.gschema.xml.in.in' |sort`;
+                      -o -name '*.gschema.xml.in.in' -o -name '*.scm' | sort`;
 ## For perl files add the following:
 # -o -name '*.pl'
 
@@ -60,5 +60,4 @@ print "src/gnome/gnucash.appdata.xml.in\n";
 print "src/gnome/gnucash.desktop.in.in\n";
 print "src/libqof/qof/gnc-date.c\n";
 print "src/libqof/qof/qofbookslots.h\n";
-print "intl-scm/guile-strings.c\n";
 print "doc/tip_of_the_day.list.in\n";
