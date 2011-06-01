@@ -3,7 +3,7 @@
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditOwner"     action="EditEditOwnerAction"/>
-        <menuitem name="EditDeleteOwner"   action="EditDeleteOwnerAction"/>
+<!--        <menuitem name="EditDeleteOwner"   action="EditDeleteOwnerAction"/> -->
         <menuitem name="EditNewOwner"      action="BusinessNewOwnerAction"/>
       </placeholder>
     </menu>
@@ -13,14 +13,14 @@
     <placeholder name="DefaultToolbarPlaceholder">
       <toolitem name="ToolbarNewOwner"     action="BusinessNewOwnerAction"/>
       <toolitem name="ToolbarEditOwner"    action="EditEditOwnerAction"/>
-      <toolitem name="ToolbarDeleteOwner"  action="EditDeleteOwnerAction"/>
+<!--      <toolitem name="ToolbarDeleteOwner"  action="EditDeleteOwnerAction"/> -->
     </placeholder>
   </toolbar>
 
   <popup name="MainPopup"              action="FakeToplevel">
     <placeholder name="PopupPlaceholder2">
         <menuitem name="EditOwner"     action="EditEditOwnerAction"/>
-        <menuitem name="DeleteOwner"   action="EditDeleteOwnerAction"/>
+<!--        <menuitem name="DeleteOwner"   action="EditDeleteOwnerAction"/> -->
     </placeholder>
   </popup>
 </ui>
