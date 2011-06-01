@@ -41,6 +41,7 @@
 #include "dialog-vendor.h"
 #include "dialog-customer.h"
 #include "dialog-employee.h"
+#include "dialog-invoice.h"
 #include "dialog-job.h"
 
 #include "gncOwner.h"
@@ -118,6 +119,7 @@ static void gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPlug
 static void gnc_plugin_page_owner_tree_cmd_edit_owner (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageOwnerTree *page);
+static void gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action, GncPluginPageOwnerTree *page);
 
 
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
@@ -152,6 +154,23 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_view_filter_by)
     },
+
+    /* Business menu */
+    {
+        "BusinessNewBillAction", GNC_STOCK_INVOICE_NEW, N_("New _Bill..."), NULL,
+        N_("Create a new bill"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
+    },
+    {
+        "BusinessNewInvoiceAction", GNC_STOCK_INVOICE_NEW, N_("New _Invoice..."), NULL,
+        N_("Create a new invoice"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
+    },
+    {
+        "BusinessNewVoucherAction", GNC_STOCK_INVOICE_NEW, N_("New _Voucher..."), NULL,
+        N_("Create a new voucher"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
+    },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_owner_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_owner_tree_actions);
@@ -172,10 +191,31 @@ static action_toolbar_labels toolbar_labels[] =
 {
     { "EditEditOwnerAction",     N_("Edit") },
     { "BusinessNewOwnerAction",  N_("New") },
+    { "BusinessNewBillAction",  N_("New Bill") },
+    { "BusinessNewInvoiceAction",  N_("New Invoice") },
+    { "BusinessNewVoucherAction",  N_("New Voucher") },
 /* FIXME disable due to crash   { "EditDeleteOwnerAction",   N_("Delete") },*/
     { NULL, NULL },
 };
 
+/** Map actions to owners. Will be used to hide actions that are
+ *  not relevant on the active owner overview page
+ */
+typedef struct
+{
+    /** The name of the action. */
+    const char *action_name;
+    /** The owner type to show this action for */
+    GncOwnerType owner_type;
+} action_owners_struct;
+
+static action_owners_struct action_owners[] =
+{
+        { "BusinessNewBillAction",    GNC_OWNER_VENDOR },
+        { "BusinessNewInvoiceAction", GNC_OWNER_CUSTOMER },
+        { "BusinessNewVoucherAction", GNC_OWNER_EMPLOYEE },
+        { NULL, GNC_OWNER_NONE },
+};
 
 GType
 gnc_plugin_page_owner_tree_get_type (void)
@@ -213,6 +253,11 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
     GncPluginPageOwnerTreePrivate *priv;
     gchar* label = "";
     const GList *item;
+
+    GtkActionGroup *action_group;
+    GtkAction    *action;
+    GValue        gvalue = { 0 };
+    gint          i;
 
     g_return_val_if_fail( (owner_type != GNC_OWNER_UNDEFINED)
                            && (owner_type != GNC_OWNER_NONE), NULL);
@@ -266,6 +311,17 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
         break;
     }
     }
+
+    /* Hide menu and toolbar items that are not relevant for the active owner list */
+    action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(plugin_page));
+    g_value_init (&gvalue, G_TYPE_BOOLEAN);
+    for (i = 0; action_owners[i].action_name; i++)
+    {
+        action = gtk_action_group_get_action (action_group, action_owners[i].action_name);
+        g_value_set_boolean (&gvalue, (priv->owner_type == action_owners[i].owner_type) );
+        g_object_set_property (G_OBJECT(action), "visible", &gvalue);
+    }
+
 
     g_object_set(G_OBJECT(plugin_page), "page-name", label, NULL);
 
@@ -333,6 +389,7 @@ gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page)
                                  gnc_plugin_page_owner_tree_n_actions,
                                  plugin_page);
     gnc_plugin_init_short_names (action_group, toolbar_labels);
+
 
     /* Init filter */
     priv->fd.show_inactive = TRUE;
@@ -819,6 +876,55 @@ gnc_plugin_page_owner_tree_cmd_view_filter_by (GtkAction *action,
 
     priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(page);
     owner_filter_dialog_create(&priv->fd, GNC_PLUGIN_PAGE(page));
+    LEAVE(" ");
+}
+
+
+static void
+gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action,
+        GncPluginPageOwnerTree *page)
+{
+    GncPluginPageOwnerTreePrivate *priv;
+    GncOwner current_owner;
+
+    ENTER("action %p, page %p", action, page);
+
+    priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(page);
+    switch (priv->owner_type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        gncOwnerInitUndefined(&current_owner, NULL);
+        break;
+    case GNC_OWNER_CUSTOMER :
+    {
+        gncOwnerInitCustomer(&current_owner,
+                gncOwnerGetCustomer(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+        break;
+    }
+    case GNC_OWNER_JOB :
+    {
+        gncOwnerInitJob(&current_owner,
+                gncOwnerGetJob(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+        break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+        gncOwnerInitVendor(&current_owner,
+                gncOwnerGetVendor(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gncOwnerInitEmployee(&current_owner,
+                gncOwnerGetEmployee(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+        break;
+    }
+    }
+
+    if (gncOwnerGetType(&current_owner) != GNC_OWNER_UNDEFINED)
+        gnc_ui_invoice_new (&current_owner, gnc_get_current_book());
+
     LEAVE(" ");
 }
 /** @} */
