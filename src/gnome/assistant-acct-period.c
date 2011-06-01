@@ -1,8 +1,9 @@
 /********************************************************************\
- * druid-acct-period.c -- accouting period druid for GnuCash        *
+ * assistant-acct-period.c - accouting period assistant for GnuCash *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Copyright (C) 2001 Dave Peticolas <dave@krondo.com>              *
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2011 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,10 +22,19 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
+/*************************************************************************\
+ * This is still a work in progress so may damage your data, to enable   *
+ * for testing do the following :-                                       *
+ * Add a define entry to gnc-plugin-basic-commands.c as below            *
+ *     #define CLOSE_BOOKS_ACTUALLY_WORKS                                *
+ *                                                                       *
+ * Add the following to gnc-plugin-basic-commands-ui.xml on line 43      *
+ * <menuitem name="ActionsCloseBooks" action="ActionsCloseBooksAction"/> *
+\*************************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "Recurrence.h"
@@ -34,8 +44,8 @@
 #include "Scrub3.h"
 #include "Transaction.h"
 #include "dialog-utils.h"
-#include "druid-acct-period.h"
-#include "druid-utils.h"
+#include "assistant-acct-period.h"
+#include "assistant-utils.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-file.h"
@@ -46,25 +56,24 @@
 #include "misc-gnome-utils.h"
 #include "gnc-session.h"
 
-#define DRUID_ACCT_PERIOD_CM_CLASS "druid-acct-period"
+#define ASSISTANT_ACCT_PERIOD_CM_CLASS "assistant-acct-period"
+/*#define REALLY_DO_CLOSE_BOOKS */
 
-static QofLogModule log_module = GNC_MOD_DRUID;
+static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
 /** structures *********************************************************/
 typedef struct
 {
     GtkWidget * window;
-    GnomeDruid * druid;
-    GnomeDruidPage *start_page;
-    GnomeDruidPage *menu_page;
-    GnomeDruidPage *book_page;
-    GnomeDruidPage *finish_page;
+    GtkWidget * assistant;
     GncFrequency *period_menu;
-    GtkLabel  * period_remarks;
-    GtkLabel  * close_results;
-    GtkLabel  * book_details;
-    GtkEntry  * book_title;
-    GtkTextView * book_notes;
+    GtkWidget  * period_remarks;
+    GtkWidget  * close_results;
+    GtkWidget  * book_details;
+    GtkWidget  * book_title;
+    GtkTextView  * book_notes;
+    GtkWidget  * apply_label;
+    GtkWidget  * summary;
 
     time_t earliest;
     char * earliest_str;
@@ -75,6 +84,21 @@ typedef struct
 
 } AcctPeriodInfo;
 
+/* =============================================================== */
+
+void     ap_assistant_window_destroy_cb (GtkObject *object, gpointer user_data);
+void     ap_assistant_prepare           (GtkAssistant  *assistant, GtkWidget *page,
+        				gpointer user_data);
+void     ap_assistant_menu_prepare      (GtkAssistant *assistant, gpointer user_data);
+void	 ap_assistant_book_prepare 	(GtkAssistant *assistant, gpointer user_data);
+void	 ap_assistant_apply_prepare 	(GtkAssistant *assistant, gpointer user_data);
+void	 ap_assistant_summary_prepare   (GtkAssistant *assistant, gpointer user_data);
+
+gboolean ap_validate_menu 		(GtkAssistant *assistant, gpointer user_data);
+
+void     ap_assistant_finish            (GtkAssistant *gtkassistant, gpointer user_data);
+void     ap_assistant_cancel            (GtkAssistant *gtkassistant, gpointer user_data);
+void     ap_assistant_close             (GtkAssistant *gtkassistant, gpointer user_data);
 
 /* =============================================================== */
 /* Find the earliest date occuring in the book.  Do this by making
@@ -179,11 +203,11 @@ get_close_status_str (AcctPeriodInfo *info)
 /* =============================================================== */
 
 static void
-ap_window_destroy_cb (GtkObject *object, gpointer data)
+ap_assistant_destroy_cb (GtkObject *object, gpointer data)
 {
     AcctPeriodInfo *info = data;
 
-    gnc_unregister_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
+    gnc_unregister_gui_component_by_data (ASSISTANT_ACCT_PERIOD_CM_CLASS, info);
 
     // do we need gnc_frequency_destroy or is this automatic ??
     recurrenceListFree(&info->period);
@@ -191,31 +215,66 @@ ap_window_destroy_cb (GtkObject *object, gpointer data)
     g_free (info);
 }
 
-static void
-ap_finish (GnomeDruidPageEdge *druidpage,
-           GtkWidget *druid,
-           gpointer user_data)
-{
-    AcctPeriodInfo *info = user_data;
-    gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
-}
+/* =============================================================== */
 
-static void
-ap_druid_cancel (GnomeDruid *druid, gpointer user_data)
+void
+ap_assistant_cancel (GtkAssistant *assistant, gpointer user_data)
 {
     AcctPeriodInfo *info = user_data;
-    gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
+    gnc_close_gui_component_by_data (ASSISTANT_ACCT_PERIOD_CM_CLASS, info);
 }
 
 /* =============================================================== */
 
-static void
-prepare_remarks (AcctPeriodInfo *info)
+void
+ap_assistant_close (GtkAssistant *assistant, gpointer user_data)
+{
+    AcctPeriodInfo *info = user_data;
+    gnc_close_gui_component_by_data (ASSISTANT_ACCT_PERIOD_CM_CLASS, info);
+}
+
+/* =============================================================== */
+
+void 
+ap_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
+        gpointer user_data)
+{
+    AcctPeriodInfo *info = user_data;
+    gint currentpage = gtk_assistant_get_current_page(assistant);
+
+    switch (currentpage)
+    {
+        case 1:
+            /* Current page is Menu page */
+             ap_assistant_menu_prepare(assistant, user_data);
+            break;
+        case 2:
+            /* Current page is Book page */
+             ap_assistant_book_prepare (assistant, user_data);
+            break;
+        case 3:
+            /* Current page is Apply page */
+             ap_assistant_apply_prepare (assistant, user_data);
+            break;
+        case 4:
+            /* Current page is Summary page */
+             ap_assistant_summary_prepare (assistant, user_data);
+            break;
+    }
+}
+
+/* =============================================================== */
+
+void
+ap_assistant_menu_prepare (GtkAssistant *assistant, gpointer user_data)
 {
     int nperiods;
     GDate period_begin, period_end, date_now;
     const char *remarks_text;
     char * str;
+
+    AcctPeriodInfo *info = user_data;
+
     ENTER ("info=%p", info);
 
     /* Pull info from widget, push into freq spec */
@@ -234,29 +293,39 @@ prepare_remarks (AcctPeriodInfo *info)
     while (0 > g_date_compare(&period_end, &date_now ))
     {
         nperiods ++;
-        PINFO ("period=%d end date=%d/%d/%d", nperiods,
+        PINFO ("Period = %d and End date is %d/%d/%d", nperiods,
                g_date_get_month(&period_end),
                g_date_get_day(&period_end),
                g_date_get_year(&period_end));
         period_begin = period_end;
         recurrenceListNextInstance(info->period, &period_begin, &period_end);
+
+    /* FIXME Check for valid period_end, not sure why it wont be!!! */
+    if (g_date_valid (&period_end) != TRUE)
+       break;
     }
+
+    /* Find the date of the earliest transaction in the current book.
+     * Note that this could have changed since last time, since
+     * we may have closed books since last time. */
+    info->earliest = get_earliest_in_book (gnc_get_current_book());
+    info->earliest_str = qof_print_date(info->earliest);
+    PINFO ("Date of earliest transaction is %ld %s", info->earliest, ctime (&info->earliest));
 
     /* Display the results */
     remarks_text =
         _("The earliest transaction date found in this book is %s. "
           "Based on the selection made above, this book will be split "
-          "into %d books.  Click on 'Forward' to start closing the "
-          "earliest book.");
+          "into %d books.");
     str = g_strdup_printf (remarks_text, info->earliest_str, nperiods);
-    gtk_label_set_text (info->period_remarks, str);
+    gtk_label_set_text (GTK_LABEL(info->period_remarks), str);
     g_free (str);
 }
 
 /* =============================================================== */
 
-static void
-show_book_details (AcctPeriodInfo *info)
+void
+ap_assistant_book_prepare (GtkAssistant *assistant, gpointer user_data)
 {
     QofBook *currbook;
     char close_date_str[MAX_DATE_LENGTH];
@@ -265,12 +334,15 @@ show_book_details (AcctPeriodInfo *info)
     char *str;
     const char *cstr;
     int ntrans, nacc;
+    GtkTextBuffer *buffer;
+
+    AcctPeriodInfo *info = user_data;
 
     ENTER ("info=%p", info);
 
     /* Tell user about how the previous book closing went. */
     cstr = get_close_status_str (info);
-    gtk_label_set_text (info->close_results, cstr);
+    gtk_label_set_text (GTK_LABEL(info->close_results), cstr);
     info->close_status = -1;
 
     /* Pull info from widget, push into freq spec */
@@ -293,14 +365,13 @@ show_book_details (AcctPeriodInfo *info)
     period_text =
         _("You have asked for a book to be created.  This book "
           "will contain all transactions up to midnight %s "
-          "(for a total of %d transactions spread over %d accounts). "
-          "Click on 'Forward' to create this book. "
-          "Click on 'Back' to adjust the dates.");
+          "(for a total of %d transactions spread over %d accounts).\n\n "
+          "Amend the Title and Notes or Click on 'Forward' to procede.\n "
+          "Click on 'Back' to adjust the dates or 'Cancel'.");
     str = g_strdup_printf (period_text, close_date_str, ntrans, nacc);
-    gtk_label_set_text (info->book_details, str);
+    gtk_label_set_text (GTK_LABEL(info->book_details), str);
     g_free (str);
 
-    /* Weird bug fix ! */
     gtk_widget_show (GTK_WIDGET (info->book_details));
 
     /* Create default settings for the title, notes fields */
@@ -310,46 +381,52 @@ show_book_details (AcctPeriodInfo *info)
                              g_date_get_year(&info->prev_closing_date));
 
     str = g_strdup_printf (_("Period %s - %s"), prev_close_date_str, close_date_str);
-    gtk_entry_set_text (info->book_title, str);
-    xxxgtk_textview_set_text (info->book_notes, str);
-    g_free (str);
+    gtk_entry_set_text (GTK_ENTRY(info->book_title), str);
 
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(info->book_notes));
+    gtk_text_buffer_set_text(buffer, str, -1);
+
+    g_free (str);
+}
+
+/* =============================================================== */
+
+void
+ap_assistant_apply_prepare (GtkAssistant *assistant, gpointer user_data)
+{
+    AcctPeriodInfo *info = user_data;
+    const char *apply_text;
+    const char *btitle;
+    char *str;
+    apply_text =
+        _("The book will be created with the title %s when you\n\n"
+          "Click on 'Apply', Click on 'Back' to adjust or 'Cancel'.");
+
+    btitle = gtk_entry_get_text (GTK_ENTRY(info->book_title));
+    str = g_strdup_printf (apply_text, btitle);
+    gtk_label_set_text (GTK_LABEL(info->apply_label), str);
+    g_free (str);
 }
 
 /* =============================================================== */
 
 static void
-ap_changed (GtkWidget *widget, gpointer user_data)
+ap_assistant_menu_changed_cb (GtkWidget *widget, gpointer user_data)
 {
     AcctPeriodInfo *info = user_data;
+    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     ENTER ("info=%p", info);
-    prepare_remarks (info);
+    ap_assistant_menu_prepare (assistant, info);
+    gtk_assistant_set_page_complete (assistant, page, ap_validate_menu (assistant, user_data));
 }
 
+/* =============================================================== */
 
-static void
-ap_show_menu (GnomeDruidPage *druidpage,
-              GtkWidget *druid,
-              gpointer user_data)
-{
-    AcctPeriodInfo *info = user_data;
-    ENTER("info=%p", info);
-
-    /* Find the date of the earliest transaction in the current book.
-     * Note that this could have changed since last time, since
-     * we may have closed books since last time. */
-    info->earliest = get_earliest_in_book (gnc_get_current_book());
-    info->earliest_str = qof_print_date(info->earliest);
-    PINFO ("date of earliest is %ld %s", info->earliest, ctime (&info->earliest));
-
-    prepare_remarks (info);
-}
-
-static gboolean
-ap_validate_menu (GnomeDruidPage *druidpage,
-                  GtkWidget *druid,
-                  gpointer user_data)
+gboolean 
+ap_validate_menu (GtkAssistant *assistant, gpointer user_data)
 {
     GDate date_now;
     AcctPeriodInfo *info = user_data;
@@ -362,36 +439,18 @@ ap_validate_menu (GnomeDruidPage *druidpage,
 
     if (0 <= g_date_compare(&info->prev_closing_date, &info->closing_date))
     {
-        const char *msg = _("You must select closing date that "
-                            "is greater than the closing date "
-                            "of the previous book.");
-        gnc_error_dialog (info->window, "%s", msg);
-        return TRUE;
+	/* Closing date must be greater than closing date of previous book */
+        return FALSE;
     }
 
     g_date_clear (&date_now, 1);
     g_date_set_time_t (&date_now, time(NULL));
     if (0 < g_date_compare(&info->closing_date, &date_now))
     {
-        const char *msg = _("You must select closing date "
-                            "that is not in the future.");
-        gnc_error_dialog (info->window, "%s", msg);
-        return TRUE;
+	/* Closing date must be in the future */
+        return FALSE;
     }
-    return FALSE;
-}
-
-/* =============================================================== */
-
-static void
-ap_show_book (GnomeDruidPage *druidpage,
-              GtkWidget *druid,
-              gpointer user_data)
-{
-    AcctPeriodInfo *info = user_data;
-
-    ENTER ("info=%p", info);
-    show_book_details (info);
+    return TRUE;
 }
 
 /* =============================================================== */
@@ -408,12 +467,13 @@ scrub_all(void)
 
 /* =============================================================== */
 
-static gboolean
-ap_close_period (GnomeDruidPage *druidpage,
-                 GtkWidget *druid,
-                 gpointer user_data)
+void
+ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 {
     AcctPeriodInfo *info = user_data;
+    GtkTextBuffer * buffer;
+    GtkTextIter startiter,enditer;
+    gint len;
     QofBook *closed_book = NULL, *current_book;
     const char *btitle;
     char *bnotes;
@@ -425,14 +485,18 @@ ap_close_period (GnomeDruidPage *druidpage,
 
     current_book = gnc_get_current_book ();
 
-    btitle = gtk_entry_get_text (info->book_title);
-    bnotes = xxxgtk_textview_get_text (info->book_notes);
-    PINFO("book title=%s\n", btitle);
+    btitle = gtk_entry_get_text (GTK_ENTRY(info->book_title));
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(info->book_notes));
+    len = gtk_text_buffer_get_char_count (buffer);
+    gtk_text_buffer_get_iter_at_offset(buffer, &startiter, 0);
+    gtk_text_buffer_get_iter_at_offset(buffer, &enditer, len);
+
+    bnotes = gtk_text_buffer_get_text(buffer,&startiter,&enditer ,0);
+    PINFO("Book title is - %s\n", btitle);
 
     timespecFromTime_t (&closing_date,
                         gnc_timet_get_day_end_gdate (&info->closing_date));
 
-#define REALLY_DO_CLOSE_BOOKS
 #ifdef REALLY_DO_CLOSE_BOOKS
     really_do_close_books = TRUE;
 #endif /* REALLY_DO_CLOSE_BOOKS */
@@ -470,25 +534,25 @@ ap_close_period (GnomeDruidPage *druidpage,
     info->prev_closing_date = info->closing_date;
     recurrenceListNextInstance(info->period, &info->prev_closing_date, &info->closing_date);
 
-    /* If the next closing date is in the future, then we are done. */
-    if (time(NULL) < gnc_timet_get_day_end_gdate (&info->closing_date))
+
+    /* FIXME Test for valid closing date, not sure why it wont be!!! */
+    if(g_date_valid(&info->closing_date) == TRUE)
     {
-        return FALSE;
+        /* If the next closing date is in the future, then we are done. */
+        if (time(NULL) > gnc_timet_get_day_end_gdate (&info->closing_date))
+        {
+            /* Load up the GUI for the next closing period. */
+            gnc_frequency_setup_recurrence(info->period_menu, NULL, &info->closing_date);
+            /* Jump back to the Close Book page. */
+            gtk_assistant_set_current_page (GTK_ASSISTANT(info->window),1);
+        }
     }
-
-    /* Load up the GUI for the next closing period. */
-    gnc_frequency_setup_recurrence(info->period_menu, NULL, &info->closing_date);
-
-    show_book_details (info);
-    return TRUE;
 }
 
 /* =============================================================== */
 
-static void
-ap_show_done (GnomeDruidPageEdge *druidpage,
-              GtkWidget *druid,
-              gpointer user_data)
+void
+ap_assistant_summary_prepare (GtkAssistant *assistant, gpointer user_data)
 {
     const char *msg;
     char *str;
@@ -499,36 +563,44 @@ ap_show_done (GnomeDruidPageEdge *druidpage,
        replaced by one single message? Either this closing went
        successfully ("success", "congratulations") or something else
        should be displayed anyway. */
-    msg = _("%s\nCongratulations! You are done closing books!");
+    msg = _("%s\nCongratulations! You are done closing books!\n");
 
     str = g_strdup_printf (msg, get_close_status_str (info));
-    gnome_druid_page_edge_set_text (druidpage, str);
+    gtk_label_set_text (GTK_LABEL(info->summary), str);
     g_free (str);
+
 }
 
 /* =============================================================== */
 
-static void
-ap_druid_create (AcctPeriodInfo *info)
+static GtkWidget *
+ap_assistant_create (AcctPeriodInfo *info)
 {
-    GladeXML *xml;
-    GtkWidget *w;
+    GtkBuilder *builder;
+    GtkWidget *window;
+    GtkWidget *box;
 
-    xml = gnc_glade_xml_new ("acctperiod.glade", "Acct Period Druid");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file  (builder ,"acctperiod.glade", "Account Period Assistant");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "Account Period Assistant"));
+    info->window = window;
 
-    info->window = glade_xml_get_widget (xml, "Acct Period Druid");
+    /* Set the assistant colors */
+    gnc_assistant_set_colors (GTK_ASSISTANT (info->window));
 
-    info->druid = GNOME_DRUID (glade_xml_get_widget (xml, "acct_period_druid"));
-    gnc_druid_set_colors (info->druid);
-
-    info->start_page =
-        GNOME_DRUID_PAGE(glade_xml_get_widget (xml, "start page"));
-    info->menu_page =
-        GNOME_DRUID_PAGE(glade_xml_get_widget (xml, "menu page"));
-    info->book_page =
-        GNOME_DRUID_PAGE(glade_xml_get_widget (xml, "book page"));
-    info->finish_page =
-        GNOME_DRUID_PAGE(glade_xml_get_widget (xml, "finish page"));
+    /* Enable all pages except menu page. */
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "start_page")),
+                                     TRUE);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "book_page")),
+                                     TRUE);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "finish_page")),
+                                     TRUE);
+    gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "summary_page")),
+                                     TRUE);
 
     info->close_status = -1;
 
@@ -556,61 +628,41 @@ ap_druid_create (AcctPeriodInfo *info)
     info->period_menu = GNC_FREQUENCY(
                             gnc_frequency_new_from_recurrence(info->period, &info->closing_date));
 
-    /* Change the text so that its more mainingful for this druid */
+    /* Change the text so that its more mainingful for this assistant */
     gnc_frequency_set_frequency_label_text(info->period_menu, _("Period:"));
     gnc_frequency_set_date_label_text(info->period_menu, _("Closing Date:"));
 
     /* Reparent to the correct location */
-    w = glade_xml_get_widget (xml, "period box");
-    gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (info->period_menu),
-                        TRUE, TRUE, 0);
+
+    box = GTK_WIDGET(gtk_builder_get_object(builder, "period_hbox"));
+    gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (info->period_menu), TRUE, TRUE, 0);
+    g_signal_connect (info->period_menu, "changed",
+                      G_CALLBACK (ap_assistant_menu_changed_cb), info);
 
     /* Get handles to all of the other widgets we'll need */
-    info->period_remarks =
-        GTK_LABEL (glade_xml_get_widget (xml, "remarks label"));
+    info->period_remarks = GTK_WIDGET(gtk_builder_get_object(builder, "remarks_label"));
 
-    info->close_results =
-        GTK_LABEL (glade_xml_get_widget (xml, "results label"));
+    info->close_results = GTK_WIDGET(gtk_builder_get_object(builder, "results_label"));
 
-    info->book_details =
-        GTK_LABEL (glade_xml_get_widget (xml, "book label"));
+    info->book_details = GTK_WIDGET(gtk_builder_get_object(builder, "book_label"));
 
-    info->book_title =
-        GTK_ENTRY (glade_xml_get_widget (xml, "book title entry"));
+    info->book_title = GTK_WIDGET(gtk_builder_get_object(builder, "book_title_entry"));
 
-    info->book_notes =
-        GTK_TEXT_VIEW (glade_xml_get_widget (xml, "book notes text"));
+    info->book_notes = GTK_TEXT_VIEW(gtk_builder_get_object(builder, "book_notes_view"));
 
-    /* generic finished/close/abort signals */
-    g_signal_connect (info->window, "destroy",
-                      G_CALLBACK (ap_window_destroy_cb), info);
+    info->apply_label = GTK_WIDGET(gtk_builder_get_object(builder, "finish_page"));
 
-    g_signal_connect (info->druid, "cancel",
-                      G_CALLBACK (ap_druid_cancel), info);
+    info->summary = GTK_WIDGET(gtk_builder_get_object(builder, "summary_label"));
 
-    g_signal_connect (info->menu_page, "prepare",
-                      G_CALLBACK (ap_show_menu), info);
+    g_signal_connect (G_OBJECT(window), "destroy",
+                      G_CALLBACK (ap_assistant_destroy_cb), info);
 
-    g_signal_connect (info->menu_page, "next",
-                      G_CALLBACK (ap_validate_menu), info);
-
-    g_signal_connect (info->book_page, "prepare",
-                      G_CALLBACK (ap_show_book), info);
-
-    g_signal_connect (info->book_page, "next",
-                      G_CALLBACK (ap_close_period), info);
-
-    g_signal_connect (info->finish_page, "prepare",
-                      G_CALLBACK (ap_show_done), info);
-
-    g_signal_connect (info->finish_page, "finish",
-                      G_CALLBACK (ap_finish), info);
-
-    /* User changes the accouting period or date signals */
-    g_signal_connect (info->period_menu, "changed",
-                      G_CALLBACK (ap_changed), info);
+    gtk_builder_connect_signals(builder, info);
+    g_object_unref(G_OBJECT(builder));
+    return window;
 }
 
+/* =============================================================== */
 
 static void
 ap_close_handler (gpointer user_data)
@@ -622,7 +674,7 @@ ap_close_handler (gpointer user_data)
 
 /********************************************************************\
  * gnc_acct_period_dialog                                           *
- *   opens up a druid to configure accounting periods               *
+ *   opens up a assistant to configure accounting periods           *
  *                                                                  *
  * Args:   none                                                     *
  * Return: nothing                                                  *
@@ -636,9 +688,9 @@ gnc_acct_period_dialog (void)
 
     info = g_new0 (AcctPeriodInfo, 1);
 
-    ap_druid_create (info);
+    ap_assistant_create (info);
 
-    component_id = gnc_register_gui_component (DRUID_ACCT_PERIOD_CM_CLASS,
+    component_id = gnc_register_gui_component (ASSISTANT_ACCT_PERIOD_CM_CLASS,
                    NULL, ap_close_handler,
                    info);
 

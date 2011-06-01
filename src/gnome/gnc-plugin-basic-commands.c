@@ -45,7 +45,7 @@
 #include "dialog-find-transactions.h"
 #include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"
-#include "druid-acct-period.h"
+#include "assistant-acct-period.h"
 #include "druid-loan.h"
 #include "gnc-engine.h"
 #include "gnc-file.h"

@@ -63,6 +63,7 @@
 #define GNC_MOD_PREFS     "gnc.pref"
 #define GNC_MOD_IMPORT    "gnc.import"
 #define GNC_MOD_DRUID     "gnc.druids"
+#define GNC_MOD_ASSISTANT "gnc.assistant"
 #define GNC_MOD_TEST      "gnc.tests"
 #define GNC_MOD_BUDGET    "gnc.budget"
 //@}

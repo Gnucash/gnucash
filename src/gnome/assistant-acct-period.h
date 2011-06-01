@@ -1,6 +1,7 @@
 /********************************************************************\
- * druid-acct-period.h -- accounting period druid for GnuCash       *
+ * assistant-acct-period.h - accounting period assistant for GnuCash*
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2011 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,8 +21,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_DRUID_ACCT_PERIOD_H
-#define GNC_DRUID_ACCT_PERIOD_H
+#ifndef GNC_ASSISTANT_ACCT_PERIOD_H
+#define GNC_ASSISTANT_ACCT_PERIOD_H
 
 /********************************************************************\
  * gnc_acct_period_dialog                                           *
