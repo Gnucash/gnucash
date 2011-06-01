@@ -114,10 +114,10 @@ static void gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *s
         GncPluginPageOwnerTree *page);
 
 /* Command callbacks */
-static void gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerTree *plugin_page);
+static void gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_edit_owner (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwnerTree *page);
-static void gnc_plugin_page_owner_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageOwnerTree *plugin_page);
+static void gnc_plugin_page_owner_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageOwnerTree *page);
 
 
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
@@ -658,7 +658,10 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
 }
 
 
-/* Command callbacks */
+/************************************************************/
+/*                     Command callbacks                    */
+/************************************************************/
+
 static void
 gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerTree *page)
 {
@@ -701,10 +704,9 @@ static void
 gnc_plugin_page_owner_tree_cmd_edit_owner (GtkAction *action, GncPluginPageOwnerTree *page)
 {
     GncOwner *owner = gnc_plugin_page_owner_tree_get_current_owner (page);
+    if (NULL == owner) return;
 
     ENTER("action %p, page %p", action, page);
-
-    if (NULL == owner) return;
 
     switch (owner->type)
     {
