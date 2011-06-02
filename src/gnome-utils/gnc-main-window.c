@@ -3314,13 +3314,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gtk_action_group_add_toggle_actions (priv->action_group,
                                          toggle_actions, n_toggle_actions,
                                          window);
-#ifndef MAC_INTEGRATION
-    gtk_action_group_add_radio_actions (priv->action_group,
-                                        radio_entries, n_radio_entries,
-                                        0,
-                                        G_CALLBACK(gnc_main_window_cmd_window_raise),
-                                        window);
-#endif
     gnc_plugin_update_actions(priv->action_group,
                               initially_insensitive_actions,
                               "sensitive", FALSE);
