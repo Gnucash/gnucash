@@ -734,6 +734,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
     SCM get_embedded_list, embedded, item, tmp_report;
     gint count, id;
     gchar *text, *key_name;
+    char * str;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REPORT(plugin_page));
     g_return_if_fail (key_file != NULL);
@@ -772,9 +773,13 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         }
 
         key_name = g_strdup_printf(SCHEME_OPTIONS_N, id);
-        text = gnc_guile_strip_comments(scm_to_locale_string(scm_text));
+        scm_dynwind_begin (0); 
+        str = scm_to_locale_string (scm_text);
+        text = gnc_guile_strip_comments(str);
         g_key_file_set_string(key_file, group_name, key_name, text);
         g_free(text);
+        scm_dynwind_free (str); 
+        scm_dynwind_end (); 
         g_free(key_name);
     }
 
@@ -785,9 +790,13 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         return;
     }
 
-    text = gnc_guile_strip_comments(scm_to_locale_string(scm_text));
+    scm_dynwind_begin (0); 
+    str = scm_to_locale_string (scm_text);
+    text = gnc_guile_strip_comments(str);
     g_key_file_set_string(key_file, group_name, SCHEME_OPTIONS, text);
     g_free(text);
+    scm_dynwind_free (str); 
+    scm_dynwind_end (); 
     LEAVE(" ");
 }
 
@@ -1342,7 +1351,7 @@ gnc_get_export_type_choice (SCM export_types)
     for (tail = export_types; !scm_is_null (tail); tail = SCM_CDR (tail))
     {
         SCM pair = SCM_CAR (tail);
-        const gchar * name;
+        char * name;
         SCM scm;
 
         if (!scm_is_pair (pair))
@@ -1360,8 +1369,11 @@ gnc_get_export_type_choice (SCM export_types)
             break;
         }
 
+        scm_dynwind_begin (0); 
         name = scm_to_locale_string (scm);
         choices = g_list_prepend (choices, g_strdup (name));
+        scm_dynwind_free (name); 
+        scm_dynwind_end (); 
     }
 
     if (!bad)
@@ -1401,15 +1413,21 @@ gnc_get_export_filename (SCM choice)
     char * filepath;
     struct stat statbuf;
     char * title;
-    const gchar * type;
+    const gchar * html_type = _("HTML");
+    char * type;
     int rc;
     char * default_dir;
 
     if (choice == SCM_BOOL_T)
-        type = _("HTML");
+        type = g_strdup (html_type);
     else
     {
-        type = scm_to_locale_string(SCM_CAR (choice));
+        char * str;
+        scm_dynwind_begin (0); 
+        str = scm_to_locale_string(SCM_CAR (choice));
+        type = g_strdup (str);
+        scm_dynwind_free (str); 
+        scm_dynwind_end (); 
     }
 
     /* %s is the type of what is about to be saved, e.g. "HTML". */
@@ -1422,6 +1440,7 @@ gnc_get_export_filename (SCM choice)
     if (g_strrstr(filepath, ".") == NULL)
         filepath = g_strconcat(filepath, ".", g_ascii_strdown(type, strlen(type)), NULL);
 
+    g_free (type);
     g_free (title);
     g_free (default_dir);
 
