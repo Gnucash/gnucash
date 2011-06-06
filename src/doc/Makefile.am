@@ -32,8 +32,6 @@ EXTRA_DIST = \
   python-bindings-doxygen.py
 
 
-docdir = ${GNC_DOC_INSTALL_DIR}
-
 all:
 
 doc: doxygen.cfg

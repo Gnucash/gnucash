@@ -19,7 +19,7 @@ dnl Process this file with autoconf to produce a configure script.
 #   Footer    - Autoconf footer stuff
 
 # Autoconf initialization
-AC_PREREQ(2.59)
+AC_PREREQ(2.60)
 AC_INIT([GnuCash], [2.4.99], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
@@ -549,7 +549,7 @@ AM_CONDITIONAL(CUSTOM_GNC_DBD_DIR, [test x"$GNC_DBD_DIR" != "x"])
 ### Variables
 ### Set up all the initial variable values...
 GNC_CONFIGDIR='${sysconfdir}/gnucash'
-GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
+GNC_DOC_INSTALL_DIR='${docdir}'
 GNC_INCLUDE_DIR='${includedir}/gnucash'
 GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
 GNC_SHAREDIR='${pkgdatadir}'

@@ -1,8 +1,6 @@
 
 SUBDIRS = . doc lib src intl-scm packaging po accounts checks
 
-docdir = ${GNC_DOC_INSTALL_DIR}
-
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 

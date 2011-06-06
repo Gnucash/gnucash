@@ -1,6 +1,5 @@
 SUBDIRS = examples
 
-docdir = ${GNC_DOC_INSTALL_DIR}
 doc_DATA = \
   README.francais \
   README.german \

@@ -1,6 +1,4 @@
 
-docdir = ${GNC_DOC_INSTALL_DIR}/examples
-
 doc_DATA = \
   Money95bank_fr.qif  \
   Money95invst_fr.qif \
