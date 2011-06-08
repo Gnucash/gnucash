@@ -159,12 +159,22 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
             {
                 ptr = scm_call_1(get_template_name, ptr);
                 if (scm_is_string(ptr))
-                    title = scm_to_locale_string(ptr);
+                {
+                    char * str;
+
+                    scm_dynwind_begin (0); 
+                    str = scm_to_locale_string (ptr);
+                    title = g_strdup (str);
+                    scm_dynwind_free (str); 
+                    scm_dynwind_end (); 
+                }
             }
         }
 
         /* Don't forget to translate the window title */
         prm->win  = gnc_options_dialog_new((gchar*) (title && *title ? _(title) : ""));
+
+        g_free ((gpointer *) title);
 
         scm_gc_protect_object(prm->scm_options);
         scm_gc_protect_object(prm->cur_report);
