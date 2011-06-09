@@ -1322,11 +1322,14 @@ gnc_parse_time_to_timet(const gchar *s, const gchar *format)
 gchar *gnc_scm_to_locale_string(SCM scm_string)
 {
     gchar* s;
-    char* x = scm_to_locale_string(scm_string);
+    char * str;
 
-    /* scm_to_locale_string() returns a malloc'ed string in guile-1.8
-       (but not in guile-1.6).  Copy to a g_malloc'ed one. */
-    s = g_strdup(x);
-    free(x);
+    scm_dynwind_begin (0); 
+    str = scm_to_locale_string(scm_string);
+
+    /* prevent memory leaks in scm_to_locale_string() per guile manual; see 'http://www.gnu.org/software/guile/manual/html_node/Dynamic-Wind.html#Dynamic-Wind' */
+    s = g_strdup(str);
+    scm_dynwind_free (str); 
+    scm_dynwind_end (); 
     return s;
 }
