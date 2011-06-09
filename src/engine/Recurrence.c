@@ -273,7 +273,8 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
         else if ( g_date_is_last_of_month(next) ||
                   ((pt == PERIOD_MONTH || pt == PERIOD_YEAR) &&
                    g_date_get_day(next) >= g_date_get_day(start)) ||
-                  ((pt == PERIOD_NTH_WEEKDAY || pt == PERIOD_LAST_WEEKDAY)) )
+                  ((pt == PERIOD_NTH_WEEKDAY || pt == PERIOD_LAST_WEEKDAY) &&
+                    nth_weekday_compare(start, next, pt) <= 0) )
             g_date_add_months(next, mult);
         else
             /* one fewer month fwd because of the occurrence in this month */
