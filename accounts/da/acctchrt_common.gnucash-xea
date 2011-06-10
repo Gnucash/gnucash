@@ -20,10 +20,10 @@
   <act:name>Aktiver</act:name>
   <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Aktiver</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -31,10 +31,10 @@
   <act:name>Aktuelle aktiver</act:name>
   <act:id type="new">a1dd5f225156f110689c204fefded0ab</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Aktuelle aktiver</act:description>
   <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
 </gnc:account>
@@ -42,10 +42,10 @@
   <act:name>Checkkonto</act:name>
   <act:id type="new">b477aa9e0d4eb67c34e1e35903fb3f99</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Checkkonto</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
@@ -53,10 +53,10 @@
   <act:name>Lønkonto</act:name>
   <act:id type="new">eeae5a1892e88adbc3b369c76ee4e889</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Lønkonto</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
@@ -64,10 +64,10 @@
   <act:name>Kontanter på lommen</act:name>
   <act:id type="new">07b454b9dd6f68c4b613c5f1ef76f884</act:id>
   <act:type>CASH</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Kontanter på lommen</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
@@ -75,10 +75,10 @@
   <act:name>Passiver</act:name>
   <act:id type="new">19a911feed9b41b8b01be036a2aed9fe</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Passiver</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -86,10 +86,10 @@
   <act:name>Forventede udgifter</act:name>
   <act:id type="new">a8186db64d71dc2ca5fdccb3234b531b</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Forventede udgifter</act:description>
   <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
 </gnc:account>
@@ -97,10 +97,10 @@
   <act:name>Kreditkort</act:name>
   <act:id type="new">efc3caac2619666c53e6e27f02d5e716</act:id>
   <act:type>CREDIT</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Kreditkort</act:description>
   <act:parent type="new">a8186db64d71dc2ca5fdccb3234b531b</act:parent>
 </gnc:account>
@@ -108,10 +108,10 @@
   <act:name>Indtægter</act:name>
   <act:id type="new">a7ab23dd2d41616042034d5a012a0850</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Indtægter</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -119,10 +119,10 @@
   <act:name>Bonus</act:name>
   <act:id type="new">59b72cd943a2ca6f077748bba9a942cd</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Bonus</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
@@ -130,10 +130,10 @@
   <act:name>Modtagne gaver</act:name>
   <act:id type="new">1adcf2c65d7a66f32144ccd9ce4f438f</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Modtagne gaver</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
@@ -141,10 +141,10 @@
   <act:name>Renteindtægter</act:name>
   <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Renteindtægter</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
@@ -152,10 +152,10 @@
   <act:name>Checkrenter</act:name>
   <act:id type="new">73481e2da7461fc34e7003b7ec560bdf</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Checkrenter</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
@@ -163,10 +163,10 @@
   <act:name>Andre renter</act:name>
   <act:id type="new">be17363347a8578c48cecd06bc8b7aa8</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Andre renter</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
@@ -174,10 +174,10 @@
   <act:name>Lønkontorenter</act:name>
   <act:id type="new">2802ac0d1bff1c09a903f2ad6fde2725</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Lønkontorenter</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
@@ -185,10 +185,10 @@
   <act:name>Andre indtægter</act:name>
   <act:id type="new">49525ad0fb4ced06b9874d365d53f505</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Andre indtægter</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
@@ -196,10 +196,10 @@
   <act:name>Løn</act:name>
   <act:id type="new">a750b99cb8487a5e47daedcd3a69fe85</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Løn</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
@@ -207,10 +207,10 @@
   <act:name>Udgifter</act:name>
   <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Udgifter</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -218,10 +218,10 @@
   <act:name>Justering</act:name>
   <act:id type="new">72f85277a7a7f8b4de175405e20d83bd</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Justering</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -229,10 +229,10 @@
   <act:name>Bankgebyrer</act:name>
   <act:id type="new">fb6c8e25a50737e70fffde432a2355ee</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Bankgebyrer</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -240,10 +240,10 @@
   <act:name>Bøger</act:name>
   <act:id type="new">36479bbc17680f4b9663a9842736153f</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Bøger</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -251,10 +251,10 @@
   <act:name>Antenne</act:name>
   <act:id type="new">a1393344fb199f08f751ac3154694e87</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Antenne</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -262,10 +262,10 @@
   <act:name>Velgørenhed</act:name>
   <act:id type="new">ec8eec3d46c69aa861fda836e11346c0</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Velgørenhed</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -273,10 +273,10 @@
   <act:name>Tøj</act:name>
   <act:id type="new">c27a040a73eac2688d85d29b5b5309c8</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Tøj</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -284,10 +284,10 @@
   <act:name>Computer</act:name>
   <act:id type="new">fc4390b6214ad1576c5ffffc2b3c268c</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Computer</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -295,10 +295,10 @@
   <act:name>Restaurant</act:name>
   <act:id type="new">0a59a3347e4ff02b862de41ef59d7351</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Restaurant</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -306,10 +306,10 @@
   <act:name>Uddannelse</act:name>
   <act:id type="new">5b5ac050529b0f553752babe4a6a35d2</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Uddannelse</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -317,10 +317,10 @@
   <act:name>Underholdning</act:name>
   <act:id type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Underholdning</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -328,10 +328,10 @@
   <act:name>Musik/film</act:name>
   <act:id type="new">4570ea8f4ac5cbd7d8927c905f0978ae</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Musik og film</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
@@ -339,10 +339,10 @@
   <act:name>Fritid</act:name>
   <act:id type="new">7db9b0aa3bc348da9900f95fc67541a1</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Fritid</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
@@ -350,10 +350,10 @@
   <act:name>Rejser</act:name>
   <act:id type="new">def0eac939dbd668f503d84860de8d6e</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Rejser</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
@@ -361,10 +361,10 @@
   <act:name>Gaver</act:name>
   <act:id type="new">f86b1cebc619455ada23952a0e810909</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Gaver</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -372,10 +372,10 @@
   <act:name>Husholdning</act:name>
   <act:id type="new">83bc2bd915ab6b74c7107b55f8783523</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Husholdning</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -383,10 +383,10 @@
   <act:name>Hobby</act:name>
   <act:id type="new">89f6400a94cd87fea0b056faf6ab7744</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Hobby</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -394,10 +394,10 @@
   <act:name>Forsikring</act:name>
   <act:id type="new">5bda5ff833bc395dc1b00f95c66ce555</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Forsikring</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -405,10 +405,10 @@
   <act:name>Sygesikring</act:name>
   <act:id type="new">d80613194a52340c9e5eb62e853c72cf</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Sygesikring</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
@@ -416,10 +416,10 @@
   <act:name>Indboforsikring</act:name>
   <act:id type="new">d80613194a52340c9e5eb62e853c728f</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Indboforsikring</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
@@ -427,10 +427,10 @@
   <act:name>Livsforsikring</act:name>
   <act:id type="new">70a327f54be53ef187a52b1d8df70fdd</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Livsforsikring</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
@@ -438,10 +438,10 @@
   <act:name>Tøjvask/rensning</act:name>
   <act:id type="new">1006551b2458631dfc8507b7451c9631</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Tøjvask og -rensning</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -449,10 +449,10 @@
   <act:name>Medicin</act:name>
   <act:id type="new">62752930dd1b2b4c90c6d198bd2ff33f</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Medicin</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -460,10 +460,10 @@
   <act:name>Diverse</act:name>
   <act:id type="new">759deef82e73587bf48a7dd76aa6abe8</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Diverse</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -471,10 +471,10 @@
   <act:name>Internet</act:name>
   <act:id type="new">2170a1a631cc3b6fc32813fa49a12f77</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Internet</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -482,10 +482,10 @@
   <act:name>Telefon</act:name>
   <act:id type="new">1d9d7265e25c6c84dda514d2e8899e87</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Telefon</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -493,10 +493,10 @@
   <act:name>Offentlig transport</act:name>
   <act:id type="new">64aa760163c7768518e49a104d1c171f</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Offentlig transport</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -504,10 +504,10 @@
   <act:name>Cykel</act:name>
   <act:id type="new">64aa760163c7768518e49a104d1c172f</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Cykel</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -515,10 +515,10 @@
   <act:name>Abonnementer</act:name>
   <act:id type="new">0336712690d36bcb02e0ce59b5d7653b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Abonnementer</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -526,10 +526,10 @@
   <act:name>Skatter/afgifter</act:name>
   <act:id type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Skatter og afgifter</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -537,10 +537,10 @@
   <act:name>Stat</act:name>
   <act:id type="new">090a786357463ec7fbee8066cb999097</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Stat</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
@@ -548,10 +548,10 @@
   <act:name>Amt</act:name>
   <act:id type="new">0785932c5de43e814659420762c9b577</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Amt</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
@@ -559,10 +559,10 @@
   <act:name>Kommune</act:name>
   <act:id type="new">cd1f1b512ed51a069fd83a5ffcaf6e11</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Kommune</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
@@ -570,10 +570,10 @@
   <act:name>Andre skatter</act:name>
   <act:id type="new">51875f8aaa0e4f2295a2ae13cf780b2e</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Andre skatter</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
@@ -581,10 +581,10 @@
   <act:name>Forsyning</act:name>
   <act:id type="new">57635fa5f71dee8ffc207c277250e773</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Forsyning</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
@@ -592,10 +592,10 @@
   <act:name>El</act:name>
   <act:id type="new">2fe462e202e2daffd845359b08a7eefe</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>El</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
@@ -603,10 +603,10 @@
   <act:name>Affald</act:name>
   <act:id type="new">2d0315d7b2f8f11a8a8b32d805bca6eb</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Affaldsordning</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
@@ -614,10 +614,10 @@
   <act:name>Gas</act:name>
   <act:id type="new">dcc33ce7edf402e327318aa1890d35ea</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Gas</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
@@ -625,10 +625,10 @@
   <act:name>Vand</act:name>
   <act:id type="new">8cdc91b733444f9f0dfae9773b8f408c</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Vand</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
@@ -636,10 +636,10 @@
   <act:name>Afstemning</act:name>
   <act:id type="new">3ab6a6d97b216c11333e48aa2b749a91</act:id>
   <act:type>EQUITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Afstemning</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -647,10 +647,10 @@
   <act:name>Åbningssaldi</act:name>
   <act:id type="new">a0a622a30410f75eba35d2875a843da8</act:id>
   <act:type>EQUITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Åbningssaldi</act:description>
   <act:parent type="new">3ab6a6d97b216c11333e48aa2b749a91</act:parent>
 </gnc:account>

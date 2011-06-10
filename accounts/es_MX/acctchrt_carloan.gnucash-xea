@@ -21,10 +21,10 @@
   <act:name>Pasivo</act:name>
   <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Pasivo</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -32,10 +32,10 @@
   <act:name>Préstamos</act:name>
   <act:id type="new">023e2343114b3d695feaeb96904e0da6</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Préstamos</act:description>
   <act:parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
 </gnc:account>
@@ -43,10 +43,10 @@
   <act:name>Vehículo a plazos</act:name>
   <act:id type="new">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Vehículo a plazos</act:description>
   <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
 </gnc:account>
@@ -54,10 +54,10 @@
   <act:name>Gastos</act:name>
   <act:id type="new">acacdcb998e45fb741766622e8542f0b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Gastos</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -65,10 +65,10 @@
   <act:name>Intereses</act:name>
   <act:id type="new">9e8495e80ebfb762089be917dff7ab72</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Intereses</act:description>
   <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
 </gnc:account>
@@ -76,10 +76,10 @@
   <act:name>Intereses pago plazos vehículo</act:name>
   <act:id type="new">e9bd8477e27361238d2f53c4fe7594ab</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Intereses pago plazos vehículo</act:description>
   <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
 </gnc:account>

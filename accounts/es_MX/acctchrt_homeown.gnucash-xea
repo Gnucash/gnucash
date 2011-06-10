@@ -21,10 +21,10 @@
   <act:name>Gastos</act:name>
   <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Gastos</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -32,10 +32,10 @@
   <act:name>Reparaciones domésticas</act:name>
   <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Reparaciones domésticas</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -43,10 +43,10 @@
   <act:name>Seguros</act:name>
   <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Seguros</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -54,10 +54,10 @@
   <act:name>Seguro contra siniestros</act:name>
   <act:id type="new">3b5909f31bda0e0f76149fd600e0cb1d</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Seguro contra siniestros (incendios, entre otros)</act:description>
   <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
 </gnc:account>
@@ -65,10 +65,10 @@
   <act:name>Impuestos</act:name>
   <act:id type="new">a931b8ffe2917ff9a069333623da96ca</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Impuestos</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -76,10 +76,10 @@
   <act:name>Predial</act:name>
   <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Impuesto predial</act:description>
   <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
 </gnc:account>
