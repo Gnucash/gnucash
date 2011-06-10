@@ -20,10 +20,10 @@
   <act:name>Actif</act:name>
   <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Avoir</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -31,10 +31,10 @@
   <act:name>Investissements</act:name>
   <act:id type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Investissements</act:description>
   <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
 </gnc:account>
@@ -42,10 +42,10 @@
   <act:name>Compte de bourse/titre</act:name>
   <act:id type="new">f15ec9568727f08a5ebd8f3e66483876</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Compte de bourse/titres</act:description>
   <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
 </gnc:account>
@@ -53,10 +53,10 @@
   <act:name>Obligation</act:name>
   <act:id type="new">8196bf0015c25f501338f07a87c512d8</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Obligation</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
@@ -64,10 +64,10 @@
   <act:name>Action</act:name>
   <act:id type="new">7d7db9bed07f21fc0b1f50674702aff0</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Action</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
@@ -75,10 +75,10 @@
   <act:name>Marché d'indice</act:name>
   <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
   <act:type>MUTUAL</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Marché d'indice</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
@@ -86,10 +86,10 @@
   <act:name>Fond commun</act:name>
   <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
   <act:type>MUTUAL</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Fond commun</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
@@ -97,10 +97,10 @@
   <act:name>Revenus</act:name>
   <act:id type="new">9da3c880bd04b9db49eb7f5b06403bda</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Revenus</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -108,10 +108,10 @@
   <act:name>Revenu de dividende</act:name>
   <act:id type="new">1af1f4894aeab96d840e66254d023b88</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Revenu de dividende</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
@@ -119,10 +119,10 @@
   <act:name>Revenu d'intérêts</act:name>
   <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Revenu d'intérets</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
@@ -130,10 +130,10 @@
   <act:name>Intérêts d'obligation</act:name>
   <act:id type="new">8ceb4752a11e2d342b9009b343fdba38</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Intérêts d'obligation</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
@@ -141,10 +141,10 @@
   <act:name>Dépenses</act:name>
   <act:id type="new">6de23244232785031501171abcc1d4aa</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Dépenses</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -152,10 +152,10 @@
   <act:name>Commissions</act:name>
   <act:id type="new">77fdffddc79c662c93c482cefa5a4744</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Commissions</act:description>
   <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>
 </gnc:account>

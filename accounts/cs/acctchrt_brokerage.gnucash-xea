@@ -19,10 +19,10 @@
   <act:name>Aktiva</act:name>
   <act:id type="new">52b5942b5beaec856eaca5a75ee71592</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Aktiva</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -30,10 +30,10 @@
   <act:name>Investice</act:name>
   <act:id type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Investice</act:description>
   <act:parent type="new">52b5942b5beaec856eaca5a75ee71592</act:parent>
 </gnc:account>
@@ -41,10 +41,10 @@
     <act:name>Makléřský účet</act:name>
   <act:id type="new">f15ec9568727f08a5ebd8f3e66483876</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Investice na účtu u brokera</act:description>
   <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
 </gnc:account>
@@ -52,10 +52,10 @@
   <act:name>Dluhopis</act:name>
   <act:id type="new">8196bf0015c25f501338f07a87c512d8</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Dluhopis</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
@@ -63,10 +63,10 @@
   <act:name>Akcie</act:name>
   <act:id type="new">7d7db9bed07f21fc0b1f50674702aff0</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Akcie</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
@@ -74,10 +74,10 @@
   <act:name>Index Trhu</act:name>
   <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
   <act:type>MUTUAL</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Index Trhu</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
@@ -85,10 +85,10 @@
   <act:name>Podílový fond</act:name>
   <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
   <act:type>MUTUAL</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Podílový fond</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
@@ -96,10 +96,10 @@
   <act:name>Příjem</act:name>
   <act:id type="new">9da3c880bd04b9db49eb7f5b06403bda</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Příjem</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -107,10 +107,10 @@
   <act:name>Dividendový příjem</act:name>
   <act:id type="new">1af1f4894aeab96d840e66254d023b88</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Dividendový příjem</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
@@ -118,10 +118,10 @@
   <act:name>Úrokový příjem</act:name>
   <act:id type="new">7943bc59ffbb9a7be4afcd2996147119</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Úrokový příjem</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
@@ -129,10 +129,10 @@
   <act:name>Úrok dluhopisu</act:name>
   <act:id type="new">8ceb4752a11e2d342b9009b343fdba38</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Úrok dluhopisu</act:description>
   <act:parent type="new">7943bc59ffbb9a7be4afcd2996147119</act:parent>
 </gnc:account>
@@ -140,10 +140,10 @@
   <act:name>Výdaje</act:name>
   <act:id type="new">6de23244232785031501171abcc1d4aa</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Výdaje</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -151,10 +151,10 @@
   <act:name>Poplatky</act:name>
   <act:id type="new">77fdffddc79c662c93c482cefa5a4744</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Poplatky</act:description>
   <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>
 </gnc:account>

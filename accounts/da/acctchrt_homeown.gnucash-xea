@@ -19,10 +19,10 @@
   <act:name>Udgifter</act:name>
   <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Udgifter</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -30,10 +30,10 @@
   <act:name>Vedligehold af bolig</act:name>
   <act:id type="new">fa27de57090e107fa99fe1db53790f23</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Vedligehold af bolig</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -41,10 +41,10 @@
   <act:name>Fællesudgifter</act:name>
   <act:id type="new">fa27de57090e107fa99fe1db537a0f23</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Fællesudgifter til ejerforening</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -52,10 +52,10 @@
   <act:name>Forsikring</act:name>
   <act:id type="new">4677fe36914ebcf23758f3bf20686b4a</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Forsikring</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -63,10 +63,10 @@
   <act:name>Husforsikring</act:name>
   <act:id type="new">3b5909f31bda0e0f76149fd600e0cb1d</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Husforsikring</act:description>
   <act:parent type="new">4677fe36914ebcf23758f3bf20686b4a</act:parent>
 </gnc:account>
@@ -74,10 +74,10 @@
   <act:name>Skatter/afgifter</act:name>
   <act:id type="new">a931b8ffe2917ff9a069333623da96ca</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Skatter/afgifter</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
@@ -85,10 +85,10 @@
   <act:name>Ejendomsskat</act:name>
   <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Ejendomsskat</act:description>
   <act:parent type="new">a931b8ffe2917ff9a069333623da96ca</act:parent>
 </gnc:account>

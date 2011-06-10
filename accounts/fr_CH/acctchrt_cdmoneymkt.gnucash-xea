@@ -19,10 +19,10 @@
   <act:name>Actif</act:name>
   <act:id type="new">7b1a39efc6234d1db148baa722c9471e</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Actif</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -30,10 +30,10 @@
   <act:name>Actifs actuels</act:name>
   <act:id type="new">1880e89ec9fe82622b8648df481dd2b7</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Actifs actuels</act:description>
   <act:parent type="new">7b1a39efc6234d1db148baa722c9471e</act:parent>
 </gnc:account>
@@ -41,10 +41,10 @@
   <act:name>CD bancaire</act:name>
   <act:id type="new">c1620f9c3082e33d8fd559e17f90a122</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>CD bancaire</act:description>
   <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
 </gnc:account>
@@ -52,10 +52,10 @@
   <act:name>Marché monétaire</act:name>
   <act:id type="new">3a01e5b0132ba26803b49732a3242654</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Marché monétaire</act:description>
   <act:parent type="new">1880e89ec9fe82622b8648df481dd2b7</act:parent>
 </gnc:account>
@@ -63,10 +63,10 @@
   <act:name>Revenus</act:name>
   <act:id type="new">9da3c880bd04b9db49eb7f5b06403bda</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Revenus</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -74,10 +74,10 @@
   <act:name>Revenu d'intérêts</act:name>
   <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Revenu d'intérêt</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
@@ -85,10 +85,10 @@
   <act:name>Intérêt CD</act:name>
   <act:id type="new">28d311f0f38da5e35628e76ad8bcc853</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Intérêt CD</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
@@ -96,10 +96,10 @@
   <act:name>Intérêt du marché monétaire</act:name>
   <act:id type="new">dc537946f39e84ccef7ce38f016249af</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Intérêt du marché monétaire</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>

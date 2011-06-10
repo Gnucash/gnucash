@@ -21,10 +21,10 @@
   <act:name>Ativos</act:name>
   <act:id type="new">b3c65be1c5d163746ddc0c506f3f4619</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Ativos</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
@@ -32,10 +32,10 @@
   <act:name>Investimentos</act:name>
   <act:id type="new">d9c796b35784533aee4309e28a3cbfc5</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Investimentos</act:description>
   <act:parent type="new">b3c65be1c5d163746ddc0c506f3f4619</act:parent>
 </gnc:account>
@@ -43,10 +43,10 @@
   <act:name>Conversão de Moeda</act:name>
   <act:id type="new">9206632307989cb5b244ad5da5d3131b</act:id>
   <act:type>CURRENCY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
-  </act:currency>
+  </act:commodity>
   <act:description>Conversão de Moeda</act:description>
   <act:parent type="new">d9c796b35784533aee4309e28a3cbfc5</act:parent>
 </gnc:account>
