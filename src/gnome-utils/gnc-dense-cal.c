@@ -1724,6 +1724,7 @@ gdc_add_tag_markings(GncDenseCal *cal, guint tag)
     gchar *name, *info;
     gint num_marks, idx;
     GDate **dates;
+    GDate *calDate;
 
     // copy the values into the old marking function.
     name = gnc_dense_cal_model_get_name(cal->model, tag);
@@ -1734,14 +1735,19 @@ gdc_add_tag_markings(GncDenseCal *cal, guint tag)
         goto cleanup;
 
     dates = g_new0(GDate*, num_marks);
+    calDate = g_date_new_dmy(1, cal->month, cal->year);
+    
     for (idx = 0; idx < num_marks; idx++)
     {
         dates[idx] = g_date_new();
         gnc_dense_cal_model_get_instance(cal->model, tag, idx, dates[idx]);
     }
 
-    _gnc_dense_cal_set_month(cal, g_date_get_month(dates[0]), FALSE);
-    _gnc_dense_cal_set_year(cal, g_date_get_year(dates[0]), FALSE);
+    if(g_date_get_julian(dates[0]) < g_date_get_julian(calDate))
+    {
+        _gnc_dense_cal_set_month(cal, g_date_get_month(dates[0]), FALSE);
+        _gnc_dense_cal_set_year(cal, g_date_get_year(dates[0]), FALSE);
+    }
 
     gdc_mark_add(cal, tag, name, info, num_marks, dates);
 
@@ -1750,7 +1756,8 @@ gdc_add_tag_markings(GncDenseCal *cal, guint tag)
         g_date_free(dates[idx]);
     }
     g_free(dates);
-
+    g_date_free(calDate);
+    
 cleanup:
     g_free(info);
 }
