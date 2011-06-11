@@ -574,7 +574,7 @@ function inst_gnome() {
         wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        echo 'gtk-theme-name = "MS-Windows"' > ${_GNOME_UDIR}/etc/gtk-2.0/gtkrc
+        echo 'gtk-theme-name = "Nimbus"' > ${_GNOME_UDIR}/etc/gtk-2.0/gtkrc
         wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
