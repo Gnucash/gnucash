@@ -73,6 +73,10 @@ typedef struct _gnc_numeric gnc_numeric;
     allows the results of financial and other rational computations to be
     properly rounded to the appropriate units.
 
+    Watch out: You \e must specifiy a rounding policy such as
+    GNC_HOW_RND_NEVER, otherwise the fractional part of the input
+    value might silently get discarded!
+
     Valid values for denom are:
     GNC_DENOM_AUTO  -- compute denominator exactly
     integer n       -- Force the denominator of the result to be this integer
@@ -126,6 +130,10 @@ typedef struct _gnc_numeric gnc_numeric;
  *  denominator affect the result. For example, if a computed result is
  *  "3/4" but the specified denominator for the return value is 2, should
  *  the return value be "1/2" or "2/2"?
+ *
+ * Watch out: You \e must specifiy a rounding policy such as
+ * GNC_HOW_RND_NEVER, otherwise the fractional part of the input value
+ * might silently get discarded!
  *
  * Possible rounding instructions are:
  */
@@ -241,7 +249,8 @@ typedef enum
 /** @name Constructors
 @{
 */
-/** Make a gnc_numeric from numerator and denominator */
+/** Returns a newly created gnc_numeric with the given numerator and
+ * denominator, that is "num/denom". */
 static inline
 gnc_numeric gnc_numeric_create(gint64 num, gint64 denom)
 {
@@ -251,7 +260,7 @@ gnc_numeric gnc_numeric_create(gint64 num, gint64 denom)
     return out;
 }
 
-/** create a zero-value gnc_numeric */
+/** Returns a newly created gnc_numeric of value zero, that is "0/1". */
 static inline
 gnc_numeric gnc_numeric_zero(void)
 {
@@ -259,9 +268,28 @@ gnc_numeric gnc_numeric_zero(void)
 }
 
 /** Convert a floating-point number to a gnc_numeric.
- *  Both 'denom' and 'how' are used as in arithmetic,
- *  but GNC_DENOM_AUTO is not recognized; a denominator
- *  must be specified either explicitctly or through sigfigs.
+ *
+ * Both 'denom' and 'how' are used as in arithmetic, but
+ * GNC_DENOM_AUTO is not recognized; a denominator must be specified
+ * either explicitly or through sigfigs.
+ *
+ * \sa \ref Arguments
+ *
+ * \param n The double value that is converted into a gnc_numeric
+ *
+ * \param denom The denominator of the gnc_numeric return value. If
+ * the 'how' argument contains the GNC_HOW_DENOM_SIGFIG flag, this
+ * value will be ignored.
+ *
+ * \param how Describes the rounding policy and output
+ * denominator. Watch out: You \e must specifiy a rounding policy such
+ * as GNC_HOW_RND_NEVER, otherwise the fractional part of the input
+ * value is silently discarded! Common values for 'how' are
+ * (GNC_HOW_DENOM_REDUCE|GNC_HOW_RND_NEVER) or
+ * (GNC_HOW_DENOM_FIXED|GNC_HOW_RND_NEVER). As mentioned above,
+ * GNC_DENOM_AUTO is not allowed here.
+ *
+ * \return The newly created gnc_numeric rational value.
  */
 gnc_numeric double_to_gnc_numeric(double n, gint64 denom,
                                   gint how);
@@ -284,13 +312,13 @@ const char* gnc_numeric_errorCode_to_string(GNCNumericErrorCode error_code);
 /** @name Value Accessors
  @{
 */
-/** Return numerator */
+/** Returns the numerator of the given gnc_numeric value. */
 static inline
 gint64 gnc_numeric_num(gnc_numeric a)
 {
     return a.num;
 }
-/** Return denominator */
+/** Returns the denominator of the given gnc_numeric value. */
 static inline
 gint64 gnc_numeric_denom(gnc_numeric a)
 {
@@ -385,10 +413,14 @@ gnc_numeric gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
  */
 gnc_numeric gnc_numeric_div(gnc_numeric x, gnc_numeric y,
                             gint64 denom, gint how);
-/** Negate the argument  */
+/** Returns a newly created gnc_numeric that is the negative of the
+ * given gnc_numeric value. For a given gnc_numeric "a/b" the returned
+ * value is "-a/b".  */
 gnc_numeric gnc_numeric_neg(gnc_numeric a);
 
-/** Return the absolute value of the argument */
+/** Returns a newly created gnc_numeric that is the absolute value of
+ * the given gnc_numeric value. For a given gnc_numeric "a/b" the
+ * returned value is "|a/b|". */
 gnc_numeric gnc_numeric_abs(gnc_numeric a);
 
 /**
