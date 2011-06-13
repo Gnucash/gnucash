@@ -36,7 +36,15 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
     {
         result = scm_call_2(func, tag, throw_args);
         if (scm_is_string(result))
-            msg = scm_to_locale_string(result);
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (result);
+            msg = g_strdup (str);
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
     }
 
     if (msg == NULL)
