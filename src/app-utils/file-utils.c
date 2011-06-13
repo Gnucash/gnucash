@@ -54,7 +54,8 @@ static QofLogModule log_module = GNC_MOD_GUILE;
 char *
 gncFindFile (const char * filename)
 {
-    const gchar *full_filename = NULL;
+    char *full_filename = NULL;
+    char * return_string = NULL;
     SCM find_doc_file;
     SCM scm_filename;
     SCM scm_result;
@@ -67,9 +68,17 @@ gncFindFile (const char * filename)
     scm_result = scm_call_1(find_doc_file, scm_filename);
 
     if (scm_is_string(scm_result))
-        full_filename = scm_to_locale_string(scm_result);
+    {
+        char * str;
 
-    return g_strdup (full_filename);
+        scm_dynwind_begin (0); 
+        full_filename = scm_to_locale_string(scm_result);
+        return_string = g_strdup (full_filename);
+        scm_dynwind_free (full_filename); 
+        scm_dynwind_end (); 
+    }
+
+    return return_string;
 }
 
 /********************************************************************\
