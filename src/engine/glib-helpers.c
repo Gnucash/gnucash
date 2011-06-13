@@ -121,9 +121,17 @@ gnc_scm_to_glist_string(SCM list)
 
     while (!scm_is_null (list))
     {
-        const gchar * str = scm_to_locale_string (SCM_CAR(list));
-        if (str)
-            glist = g_list_prepend (glist, g_strdup (str));
+        if (scm_is_string(SCM_CAR(list)))
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (SCM_CAR(list));
+            if (str)
+                glist = g_list_prepend (glist, g_strdup (str));
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
         list = SCM_CDR (list);
     }
 
@@ -137,9 +145,17 @@ gnc_scm_to_gslist_string(SCM list)
 
     while (!scm_is_null (list))
     {
-        const gchar * str = scm_to_locale_string (SCM_CAR(list));
-        if (str)
-            gslist = g_slist_prepend (gslist, g_strdup (str));
+        if (scm_is_string(SCM_CAR(list)))
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (SCM_CAR(list));
+            if (str)
+                gslist = g_slist_prepend (gslist, g_strdup (str));
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
         list = SCM_CDR (list);
     }
 
