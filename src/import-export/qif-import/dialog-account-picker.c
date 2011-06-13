@@ -74,7 +74,7 @@ acct_tree_add_accts(SCM accts,
                     GtkTreeRowReference **reference)
 {
     GtkTreeIter  iter;
-    const char   * compname;
+    char         * compname;
     char         * acctname;
     gboolean     leafnode;
     SCM          current;
@@ -92,9 +92,17 @@ acct_tree_add_accts(SCM accts,
         }
 
         if (scm_is_string(SCM_CAR(current)))
-            compname = scm_to_locale_string(SCM_CAR(current));
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (SCM_CAR(current));
+            compname = g_strdup(str);
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
         else
-            compname = "";
+            compname = g_strdup("");
 
         if (!scm_is_null(SCM_CADDR(current)))
         {
@@ -140,6 +148,7 @@ acct_tree_add_accts(SCM accts,
         }
 
         g_free(acctname);
+        g_free(compname);
 
         accts = SCM_CDR(accts);
     }
@@ -327,8 +336,16 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
     scm_gc_protect_object(wind->map_entry);
 
     /* Set the initial account to be selected. */
-    wind->selected_name = g_strdup(scm_to_locale_string(orig_acct));
+    if (scm_is_string(orig_acct))
+    {
+        char * str;
 
+        scm_dynwind_begin (0); 
+        str = scm_to_locale_string (orig_acct);
+        wind->selected_name = g_strdup(str);
+        scm_dynwind_free (str); 
+        scm_dynwind_end (); 
+    }
 
     xml = gnc_glade_xml_new("qif.glade", "QIF Import Account Picker");
 
