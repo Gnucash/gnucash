@@ -160,6 +160,8 @@ static void gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
         XferDirection direction);
 void gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data);
 void gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data);
+static gboolean gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
+        gpointer data);
 
 /** Implementations **********************************************/
 
@@ -229,7 +231,15 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
 static void
 gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
 {
-    gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (data));
+    AccountTreeFilterInfo info;
+
+    info.show_inc_exp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
+    info.show_hidden = FALSE;
+
+    gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (data),
+                                      gnc_xfer_dialog_show_inc_exp_visible_cb,
+                                      &info,  /* user data */
+                                      NULL    /* destroy callback */);
 }
 
 static gboolean
