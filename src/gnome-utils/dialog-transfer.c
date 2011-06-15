@@ -158,10 +158,22 @@ static Account *gnc_transfer_dialog_get_selected_account (XferDialog *dialog,
 static void gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
         Account *account,
         XferDirection direction);
+
+void gnc_xfer_description_insert_cb(GtkEditable *editable,
+                                    const gchar *insert_text,
+                                    const gint insert_text_len,
+                                    gint *start_pos,
+                                    XferDialog *xferData);
+gboolean gnc_xfer_description_key_press_cb( GtkEntry *entry,
+                                            GdkEventKey *event,
+                                            XferDialog *xferData );
+void gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData);
+gboolean gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
+                                                  gpointer data);
+void price_amount_radio_toggled_cb(GtkToggleButton *togglebutton, gpointer data);
+
 void gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data);
 void gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data);
-static gboolean gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
-        gpointer data);
 
 /** Implementations **********************************************/
 
@@ -351,7 +363,7 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
 }
 
 
-static void
+void
 price_amount_radio_toggled_cb(GtkToggleButton *togglebutton, gpointer data)
 {
     XferDialog *xferData = data;
@@ -460,7 +472,7 @@ gnc_xfer_dialog_to_tree_selection_changed_cb (GtkTreeSelection *selection, gpoin
         gnc_xfer_dialog_reload_quickfill(xferData);
 }
 
-static gboolean
+gboolean
 gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
         gpointer data)
 {
@@ -494,6 +506,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
     GtkTreeSelection *selection;
     gboolean  use_accounting_labels;
     AccountTreeFilterInfo info;
+    GtkBuilder *builder = g_object_get_data (G_OBJECT (xferData->dialog), "builder");
 
     use_accounting_labels = gnc_gconf_get_bool(GCONF_GENERAL,
                             KEY_ACCOUNTING_LABELS, NULL);
@@ -511,21 +524,21 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
      */
     if (use_accounting_labels)
     {
-        button = gnc_glade_lookup_widget (xferData->dialog,
+        button = GTK_WIDGET(gtk_builder_get_object (builder,
                                           (direction == XFER_DIALOG_TO) ?
-                                          "left_show_button" : "right_show_button");
-        scroll_win = gnc_glade_lookup_widget (xferData->dialog,
+                                          "left_show_button" : "right_show_button"));
+        scroll_win = GTK_WIDGET(gtk_builder_get_object (builder,
                                               (direction == XFER_DIALOG_TO) ?
-                                              "left_trans_window" : "right_trans_window");
+                                              "left_trans_window" : "right_trans_window"));
     }
     else
     {
-        button = gnc_glade_lookup_widget (xferData->dialog,
+        button = GTK_WIDGET(gtk_builder_get_object (builder,
                                           (direction == XFER_DIALOG_TO) ?
-                                          "right_show_button" : "left_show_button");
-        scroll_win = gnc_glade_lookup_widget (xferData->dialog,
+                                          "right_show_button" : "left_show_button"));
+        scroll_win = GTK_WIDGET(gtk_builder_get_object (builder,
                                               (direction == XFER_DIALOG_TO) ?
-                                              "right_trans_window" : "left_trans_window");
+                                              "right_trans_window" : "left_trans_window"));
     }
 
     tree_view = GTK_TREE_VIEW(gnc_tree_view_account_new(FALSE));
@@ -719,7 +732,7 @@ idle_select_region(gpointer data)
  * cursor position accordingly.  It will not set the selection but will register
  * idle_select_region to do that once the program returns to its main loop.
  */
-static void
+void
 gnc_xfer_description_insert_cb(GtkEditable *editable,
                                const gchar *insert_text,
                                const gint insert_text_len,
@@ -781,7 +794,7 @@ gnc_xfer_description_insert_cb(GtkEditable *editable,
     g_free(new_text);
 }
 
-static gboolean
+gboolean
 gnc_xfer_description_key_press_cb( GtkEntry *entry,
                                    GdkEventKey *event,
                                    XferDialog *xferData )
@@ -1618,7 +1631,7 @@ gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data)
 }
 
 
-static void
+void
 gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 {
     gnc_numeric rate;
@@ -1674,25 +1687,23 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 static void
 gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 {
-    GtkWidget *dialog;
-    GladeXML  *xml;
+    GtkWidget  *dialog;
+    GtkBuilder *builder;
     gboolean  use_accounting_labels;
 
     use_accounting_labels = gnc_gconf_get_bool(GCONF_GENERAL,
                             KEY_ACCOUNTING_LABELS, NULL);
 
     ENTER(" ");
-    xml = gnc_glade_xml_new ("transfer.glade", "Transfer Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "transfer.glade", "Transfer Dialog");
 
-    dialog = glade_xml_get_widget (xml, "Transfer Dialog");
-    xferData->dialog = dialog;
-    g_object_set_data_full (G_OBJECT (dialog), "xml", xml, g_object_unref);
+    xferData->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Transfer Dialog"));
+    g_object_set_data_full (G_OBJECT (xferData->dialog), "builder", builder, g_object_unref);
 
     /* parent */
     if (parent != NULL)
-        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
-
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, xferData);
+        gtk_window_set_transient_for (GTK_WINDOW (xferData->dialog), GTK_WINDOW (parent));
 
     xferData->tips = gtk_tooltips_new();
 
@@ -1701,11 +1712,9 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     /* default to quickfilling off of the "From" account. */
     xferData->quickfill = XFER_DIALOG_FROM;
 
-    xferData->transferinfo_label = glade_xml_get_widget (xml, "transferinfo-label");
+    xferData->transferinfo_label = GTK_WIDGET(gtk_builder_get_object (builder, "transferinfo-label"));
 
-    xferData->fetch_button = glade_xml_get_widget (xml, "fetch");
-    glade_xml_signal_connect_data (xml, "gnc_xfer_dialog_fetch",
-                                   G_CALLBACK (gnc_xfer_dialog_fetch), xferData);
+    xferData->fetch_button = GTK_WIDGET(gtk_builder_get_object (builder, "fetch"));
 
     /* amount & date widgets */
     {
@@ -1715,7 +1724,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         GtkWidget *hbox;
 
         amount = gnc_amount_edit_new();
-        hbox = glade_xml_get_widget (xml, "amount_hbox");
+        hbox = GTK_WIDGET(gtk_builder_get_object (builder, "amount_hbox"));
         gtk_box_pack_end(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         xferData->amount_edit = amount;
@@ -1727,7 +1736,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
         date = gnc_date_edit_new(time (NULL), FALSE, FALSE);
         gnc_date_activates_default (GNC_DATE_EDIT(date), TRUE);
-        hbox = glade_xml_get_widget (xml, "date_hbox");
+        hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
 
         gtk_box_pack_end(GTK_BOX(hbox), date, TRUE, TRUE, 0);
         xferData->date_entry = date;
@@ -1738,19 +1747,13 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     {
         GtkWidget *entry;
 
-        entry = glade_xml_get_widget (xml, "num_entry");
+        entry = GTK_WIDGET(gtk_builder_get_object (builder, "num_entry"));
         xferData->num_entry = entry;
 
-        entry = glade_xml_get_widget (xml, "description_entry");
+        entry = GTK_WIDGET(gtk_builder_get_object (builder, "description_entry"));
         xferData->description_entry = entry;
 
-        /* Get signals from the Description for quickfill. */
-        g_signal_connect (G_OBJECT (entry), "insert_text",
-                          G_CALLBACK (gnc_xfer_description_insert_cb), xferData);
-        g_signal_connect (G_OBJECT (entry), "key_press_event",
-                          G_CALLBACK (gnc_xfer_description_key_press_cb), xferData);
-
-        entry = glade_xml_get_widget (xml, "memo_entry");
+        entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
         xferData->memo_entry = entry;
     }
 
@@ -1766,10 +1769,10 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
            see comment in function gnc_xfer_dialog_fill_tree_table */
         if (use_accounting_labels)
         {
-            label = glade_xml_get_widget (xml, "right_trans_label");
+            label = GTK_WIDGET(gtk_builder_get_object (builder, "right_trans_label"));
             xferData->from_transfer_label = label;
 
-            label = glade_xml_get_widget (xml, "left_trans_label");
+            label = GTK_WIDGET(gtk_builder_get_object (builder, "left_trans_label"));
             xferData->to_transfer_label = label;
 
             text = g_strconcat ("<b>", _("Credit Account"), "</b>", NULL);
@@ -1780,18 +1783,18 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
             gtk_label_set_markup (GTK_LABEL (xferData->to_transfer_label), text);
             g_free (text);
 
-            label = glade_xml_get_widget (xml, "right_currency_label");
+            label = GTK_WIDGET(gtk_builder_get_object (builder, "right_currency_label"));
             xferData->from_currency_label = label;
 
-            label = glade_xml_get_widget (xml, "left_currency_label");
+            label = GTK_WIDGET(gtk_builder_get_object (builder, "left_currency_label"));
             xferData->to_currency_label = label;
         }
         else
         {
-            label = glade_xml_get_widget (xml, "left_trans_label");
+            label = GTK_WIDGET(gtk_builder_get_object (builder, "left_trans_label"));
             xferData->from_transfer_label = label;
 
-            label = glade_xml_get_widget (xml, "right_trans_label");
+            label = GTK_WIDGET(gtk_builder_get_object (builder, "right_trans_label"));
             xferData->to_transfer_label = label;
 
             text = g_strconcat ("<b>", _("Transfer From"), "</b>", NULL);
@@ -1801,17 +1804,17 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
             text = g_strconcat ("<b>", _("Transfer To"), "</b>", NULL);
             gtk_label_set_markup (GTK_LABEL (xferData->to_transfer_label), text);
 
-            label = glade_xml_get_widget (xml, "left_currency_label");
+            label = GTK_WIDGET(gtk_builder_get_object (builder, "left_currency_label"));
             xferData->from_currency_label = label;
 
-            label = glade_xml_get_widget (xml, "right_currency_label");
+            label = GTK_WIDGET(gtk_builder_get_object (builder, "right_currency_label"));
             xferData->to_currency_label = label;
         }
 
-        label = glade_xml_get_widget (xml, "conv_forward");
+        label = GTK_WIDGET(gtk_builder_get_object (builder, "conv_forward"));
         xferData->conv_forward = label;
 
-        label = glade_xml_get_widget (xml, "conv_reverse");
+        label = GTK_WIDGET(gtk_builder_get_object (builder, "conv_reverse"));
         xferData->conv_reverse = label;
     }
 
@@ -1823,13 +1826,13 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         GtkWidget *hbox;
         GtkWidget *button;
 
-        table = glade_xml_get_widget (xml, "curr_transfer_table");
+        table = GTK_WIDGET(gtk_builder_get_object (builder, "curr_transfer_table"));
         xferData->curr_xfer_table = table;
 
         edit = gnc_amount_edit_new();
         gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
                                        gnc_default_print_info (FALSE));
-        hbox = glade_xml_get_widget (xml, "price_hbox");
+        hbox = GTK_WIDGET(gtk_builder_get_object (builder, "price_hbox"));
         gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
         xferData->price_edit = edit;
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
@@ -1838,7 +1841,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         gtk_entry_set_activates_default(GTK_ENTRY (entry), TRUE);
 
         edit = gnc_amount_edit_new();
-        hbox = glade_xml_get_widget (xml, "right_amount_hbox");
+        hbox = GTK_WIDGET(gtk_builder_get_object (builder, "right_amount_hbox"));
         gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
         xferData->to_amount_edit = edit;
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
@@ -1846,16 +1849,12 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
                           G_CALLBACK (gnc_xfer_to_amount_update_cb), xferData);
         gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 
-        button = glade_xml_get_widget (xml, "price_radio");
+        button = GTK_WIDGET(gtk_builder_get_object (builder, "price_radio"));
         xferData->price_radio = button;
-        g_signal_connect (G_OBJECT (xferData->price_radio), "toggled",
-                          G_CALLBACK (price_amount_radio_toggled_cb), xferData);
 
-        button = glade_xml_get_widget (xml, "amount_radio");
+        button = GTK_WIDGET(gtk_builder_get_object (builder, "amount_radio"));
         xferData->amount_radio = button;
-        g_signal_connect(G_OBJECT(xferData->amount_radio), "toggled",
-                         G_CALLBACK(price_amount_radio_toggled_cb),
-                         xferData);
+
         if (use_accounting_labels)
         {
             gtk_label_set_text(GTK_LABEL(GTK_BIN(xferData->amount_radio)->child),
@@ -1867,7 +1866,9 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
                                _("To Amount:"));
         }
     }
-    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW (dialog));
+
+    gtk_builder_connect_signals(builder, xferData);
+    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW (xferData->dialog));
     LEAVE(" ");
 }
 
@@ -2038,9 +2039,10 @@ void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
 {
     if ( xferData && label && callback )
     {
-        GtkWidget *button = gtk_button_new_with_label( label );
-        GtkWidget *box    = gnc_glade_lookup_widget (xferData->dialog,
-                            "transfermain-vbox" );
+        GtkBuilder *builder = g_object_get_data (G_OBJECT (xferData->dialog), "builder");
+        GtkWidget *button   = gtk_button_new_with_label( label );
+        GtkWidget *box      = GTK_WIDGET(gtk_builder_get_object (builder,
+                                         "transfermain-vbox" ));
         gtk_box_pack_end( GTK_BOX(box), button, FALSE, FALSE, 0 );
         g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (callback), user_data);
         gtk_widget_show( button );

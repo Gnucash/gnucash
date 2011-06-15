@@ -13,7 +13,6 @@ glade_DATA = \
   gnc-date-format.glade \
   gnc-gui-query.glade \
   preferences.glade \
-  totd.glade \
-  transfer.glade
+  totd.glade
 
 EXTRA_DIST = $(glade_DATA)

@@ -1,4 +1,4 @@
-SUBDIRS = glade schemas . test ui
+SUBDIRS = glade gtkbuilder schemas . test ui
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 

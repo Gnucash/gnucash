@@ -1277,6 +1277,7 @@ AC_CONFIG_FILES(
   src/gnome/ui/Makefile
   src/gnome-utils/Makefile
   src/gnome-utils/glade/Makefile
+  src/gnome-utils/gtkbuilder/Makefile
   src/gnome-utils/schemas/Makefile
   src/gnome-utils/test/Makefile
   src/gnome-utils/ui/Makefile
