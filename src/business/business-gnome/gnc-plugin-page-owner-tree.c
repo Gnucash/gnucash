@@ -503,9 +503,6 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
                  "show-column-menu", TRUE,
                  NULL);
 
-    gnc_tree_view_owner_set_name_edited(GNC_TREE_VIEW_OWNER(tree_view),
-                                          gnc_tree_view_owner_name_edited_cb);
-
     priv->tree_view = tree_view;
     selection = gtk_tree_view_get_selection(tree_view);
     g_signal_connect (G_OBJECT (selection), "changed",
@@ -639,6 +636,39 @@ gnc_plugin_page_owner_tree_recreate_page (GtkWidget *window,
     return page;
 }
 
+/* Wrapper function to open the proper edit dialog, depending on the owner type */
+static void gnc_ui_owner_edit (GncOwner *owner)
+{
+    if (NULL == owner) return;
+
+    switch (owner->type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        break;
+    case GNC_OWNER_CUSTOMER :
+    {
+        gnc_ui_customer_edit (owner->owner.customer);
+        break;
+    }
+    case GNC_OWNER_JOB :
+    {
+        gnc_ui_job_edit (owner->owner.job);
+        break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+        gnc_ui_vendor_edit (owner->owner.vendor);
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gnc_ui_employee_edit (owner->owner.employee);
+        break;
+    }
+    }
+}
+
 
 /* Callbacks */
 
@@ -679,9 +709,7 @@ gnc_plugin_page_owner_tree_double_click_cb (GtkTreeView        *treeview,
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_OWNER_TREE (page));
     owner = gnc_tree_view_owner_get_owner_from_path (GNC_TREE_VIEW_OWNER(treeview), path);
-    /* FIXME does nothing for now. What should be the default action if a user
-     *       double-clicks an owner entry ?
-     */
+    gnc_ui_owner_edit (owner);
 }
 
 static void
@@ -765,32 +793,7 @@ gnc_plugin_page_owner_tree_cmd_edit_owner (GtkAction *action, GncPluginPageOwner
 
     ENTER("action %p, page %p", action, page);
 
-    switch (owner->type)
-    {
-    case GNC_OWNER_NONE :
-    case GNC_OWNER_UNDEFINED :
-        break;
-    case GNC_OWNER_CUSTOMER :
-    {
-        gnc_ui_customer_edit (owner->owner.customer);
-        break;
-    }
-    case GNC_OWNER_JOB :
-    {
-        gnc_ui_job_edit (owner->owner.job);
-        break;
-    }
-    case GNC_OWNER_VENDOR :
-    {
-        gnc_ui_vendor_edit (owner->owner.vendor);
-        break;
-    }
-    case GNC_OWNER_EMPLOYEE :
-    {
-        gnc_ui_employee_edit (owner->owner.employee);
-        break;
-    }
-    }
+    gnc_ui_owner_edit (owner);
 
     LEAVE(" ");
 }
