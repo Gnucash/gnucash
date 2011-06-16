@@ -216,7 +216,8 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
     SCM  get_gnc_name = scm_c_eval_string("qif-map-entry:gnc-name");
     SCM  get_new      = scm_c_eval_string("qif-map-entry:new-acct?");
     SCM  accts_left;
-    const gchar *qif_name, *gnc_name;
+    const gchar *qif_name = NULL;
+    const gchar *gnc_name = NULL;
     gboolean checked;
     gint row = 0;
     gint prev_row;
@@ -242,8 +243,26 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 
     while (!scm_is_null(accts_left))
     {
-        qif_name = scm_to_locale_string(scm_call_1(get_qif_name, SCM_CAR(accts_left)));
-        gnc_name = scm_to_locale_string(scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
+        if (scm_is_string(scm_call_1(get_qif_name, SCM_CAR(accts_left))))
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (scm_call_1(get_qif_name, SCM_CAR(accts_left)));
+            qif_name = g_strdup (str);
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
+        if (scm_is_string(scm_call_1(get_gnc_name, SCM_CAR(accts_left))))
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
+            gnc_name = g_strdup (str);
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
         checked  = (scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
 
         gtk_list_store_append(store, &iter);
@@ -883,7 +902,18 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
     }
     else if (!scm_is_null(load_return))
     {
-        const gchar *str = scm_to_locale_string(SCM_CADR(load_return));
+        /* since the result of scm_to_locale_string doesn't appear to be used */
+        /* can we just delete the whole if statement? */
+        if (scm_is_string(SCM_CADR(load_return)))
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (SCM_CADR(load_return));
+            /* str doesn't seem to be used anywhere, so go ahead and free it */
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
 
         if (SCM_CAR(load_return) == SCM_BOOL_F)
         {
@@ -1092,11 +1122,19 @@ gnc_ui_qif_import_load_progress_next_cb(GnomeDruidPage * page,
     else if (scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T)
     {
         SCM default_acct = scm_c_eval_string("qif-file:path-to-accountname");
-        const gchar * default_acctname;
+        const gchar * default_acctname = NULL;
 
         /* Go to the "ask account name" page. */
-        default_acctname = scm_to_locale_string(scm_call_1(default_acct,
-                                                wind->selected_file));
+        if (scm_is_string(scm_call_1(default_acct, wind->selected_file)))
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (scm_call_1(default_acct, wind->selected_file));
+            default_acctname = g_strdup (str);
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
         gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
 
         gnome_druid_set_page(GNOME_DRUID(wind->druid),
@@ -1194,10 +1232,19 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
     {
         /* There is an account name missing. Ask the user to provide one. */
         SCM default_acct = scm_c_eval_string("qif-file:path-to-accountname");
-        const gchar * default_acctname;
+        const gchar * default_acctname = NULL;
 
-        default_acctname = scm_to_locale_string(scm_call_1(default_acct,
+        if (scm_is_string(scm_call_1(default_acct, wind->selected_file)))
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (scm_call_1(default_acct,
                                                 wind->selected_file));
+            default_acctname = g_strdup (str);
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
         gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
 
         return FALSE;
@@ -1227,7 +1274,7 @@ update_file_page(QIFImportWindow * wind)
     SCM       scm_qiffile = SCM_BOOL_F;
     SCM       qif_file_path;
     int       row = 0;
-    const char  * row_text;
+    const char  * row_text = NULL;
     GtkTreeView *view;
     GtkListStore *store;
     GtkTreeIter iter;
@@ -1243,7 +1290,16 @@ update_file_page(QIFImportWindow * wind)
     while (!scm_is_null(loaded_file_list))
     {
         scm_qiffile = SCM_CAR(loaded_file_list);
-        row_text    = scm_to_locale_string(scm_call_1(qif_file_path, scm_qiffile));
+        if (scm_is_string(scm_call_1(qif_file_path, scm_qiffile)))
+        {
+            char * str;
+
+            scm_dynwind_begin (0); 
+            str = scm_to_locale_string (scm_call_1(qif_file_path, scm_qiffile));
+            row_text = g_strdup (str);
+            scm_dynwind_free (str); 
+            scm_dynwind_end (); 
+        }
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
