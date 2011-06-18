@@ -30,5 +30,6 @@ test_qof_LDADD = ${top_builddir}/${MODULEPATH}/libgnc-qof.la $(GLIB_LIBS)
 test_qof_CFLAGS = \
 	${DEFAULT_INCLUDES} \
 	-I$(top_srcdir)/${MODULEPATH}/ \
+	-I$(top_srcdir)/src/test-core \
 	-DTESTPROG=test_qof \
 	${GLIB_CFLAGS}
