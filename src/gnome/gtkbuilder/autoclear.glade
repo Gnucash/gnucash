@@ -98,6 +98,7 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
+                <signal name="clicked" handler="gnc_autoclear_window_cancel_cb"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -114,6 +115,7 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <signal name="clicked" handler="gnc_autoclear_window_ok_cb"/>
               </object>
               <packing>
                 <property name="expand">False</property>

@@ -1,6 +1,5 @@
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
-	autoclear.glade \
 	budget.glade \
 	commodities.glade \
 	fincalc.glade \
