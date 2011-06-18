@@ -83,6 +83,25 @@ typedef struct
     gboolean     original_show_zero_total;
 } OwnerFilterDialog;
 
+#define GNC_OWNER_TREE_NAME_COL                 "name"
+#define GNC_OWNER_TREE_TYPE_COL                 "type"
+#define GNC_OWNER_TREE_ID_COL                   "owner-id"
+#define GNC_OWNER_TREE_CURRENCY_COL             "currency"
+#define GNC_OWNER_TREE_ADDRESS_NAME_COL         "address-name"
+#define GNC_OWNER_TREE_ADDRESS_1_COL            "address-1"
+#define GNC_OWNER_TREE_ADDRESS_2_COL            "address-2"
+#define GNC_OWNER_TREE_ADDRESS_3_COL            "address-3"
+#define GNC_OWNER_TREE_ADDRESS_4_COL            "address-4"
+#define GNC_OWNER_TREE_PHONE_COL                "phone"
+#define GNC_OWNER_TREE_FAX_COL                  "fax"
+#define GNC_OWNER_TREE_EMAIL_COL                "email"
+#define GNC_OWNER_TREE_BALANCE_COL              "balance"
+#define GNC_OWNER_TREE_BALANCE_REPORT_COL       "balance-report"
+#define GNC_OWNER_TREE_BALANCE_PERIOD_COL       "balance-period"
+#define GNC_OWNER_TREE_NOTES_COL                "notes"
+#define GNC_OWNER_TREE_ACTIVE_COL               "active"
+
+
 void owner_filter_dialog_create(OwnerFilterDialog *fd,
                                   GncPluginPage *page);
 
