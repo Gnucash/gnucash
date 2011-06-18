@@ -45,6 +45,8 @@
 (define optname-show-zeros (N_ "Show zero balance items"))
 (define optname-date-driver (N_ "Due or Post Date"))
 
+(export optname-show-zeros)
+
 ;; The idea is:  have a hash with the key being the contact name
 ;; (In future this might be GUID'ed, but for now it's a string
 ;; from the description or the split memo.

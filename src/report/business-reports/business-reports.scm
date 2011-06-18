@@ -111,7 +111,14 @@
 
 (define gnc:invoice-report-create gnc:invoice-report-create-internal)
 
+(define (gnc:payables-report-create account title show-zeros?)
+  (payables-report-create-internal account title show-zeros?))
+
+(define (gnc:receivables-report-create account title show-zeros?)
+  (receivables-report-create-internal account title show-zeros?))
+
 (export gnc:invoice-report-create
 	gnc:customer-anchor-text gnc:job-anchor-text gnc:vendor-anchor-text
-	gnc:invoice-anchor-text gnc:owner-anchor-text gnc:owner-report-text)
+	gnc:invoice-anchor-text gnc:owner-anchor-text gnc:owner-report-text
+	gnc:payables-report-create gnc:receivables-report-create)
 (re-export gnc:owner-report-create)

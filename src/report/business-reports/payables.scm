@@ -73,17 +73,23 @@
  'renderer payables-renderer
  'in-menu? #t)
 
-(define (payables-report-create-internal acct)
+(define (payables-report-create-internal acct title show-zeros?)
   (let* ((options (gnc:make-report-options payables-aging-guid))
-	 (acct-op (gnc:lookup-option options acc-page this-acc)))
+	 (acct-op (gnc:lookup-option options acc-page this-acc))
+	 (zero-op (gnc:lookup-option options acc-page optname-show-zeros))
+	 (title-op (gnc:lookup-option options acc-page gnc:optname-reportname)))
 
     (gnc:option-set-value acct-op acct)
+    (gnc:option-set-value title-op title)
+    (gnc:option-set-value zero-op show-zeros?)
     (gnc:make-report payables-aging-guid options)))
 
 (define (gnc:payables-report-create-internal
 	 account split query journal? double? title
 	 debit-string credit-string)
-  (payables-report-create-internal account))
+  (payables-report-create-internal account #f #f))
 
 (gnc:register-report-hook ACCT-TYPE-PAYABLE #f
 			  gnc:payables-report-create-internal)
+
+(export payables-report-create-internal)

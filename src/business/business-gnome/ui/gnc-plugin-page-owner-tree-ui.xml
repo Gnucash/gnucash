@@ -2,33 +2,42 @@
   <menubar>
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
-        <menuitem name="EditEditOwner"     action="EditEditOwnerAction"/>
+        <menuitem name="EditEditOwner"         action="EditEditOwnerAction"/>
 <!--        <menuitem name="EditDeleteOwner"   action="EditDeleteOwnerAction"/> -->
-        <menuitem name="EditNewOwner"      action="BusinessNewOwnerAction"/>
+        <menuitem name="EditNewOwner"          action="BusinessNewOwnerAction"/>
+      </placeholder>
+    </menu>
+    
+    <menu name="Reports" action="ReportsAction">
+      <placeholder name="OtherReports">
+        <menuitem name="VendorListingReport"   action="VendorListingReportAction"/>
+        <menuitem name="CustomerListingReport" action="CustomerListingReportAction"/>
       </placeholder>
     </menu>
   </menubar>
 
   <toolbar name="DefaultToolbar">
     <placeholder name="DefaultToolbarPlaceholder">
-      <toolitem name="ToolbarNewOwner"     action="BusinessNewOwnerAction"/>
-      <toolitem name="ToolbarEditOwner"    action="EditEditOwnerAction"/>
+      <toolitem name="ToolbarNewOwner"         action="BusinessNewOwnerAction"/>
+      <toolitem name="ToolbarEditOwner"        action="EditEditOwnerAction"/>
 <!--      <toolitem name="ToolbarDeleteOwner"  action="EditDeleteOwnerAction"/> -->
       <separator name="ToolbarSep168"/>
-      <toolitem name="ToolbarNewBill"      action="BusinessNewBillAction"/>
-      <toolitem name="ToolbarNewInvoice"   action="BusinessNewInvoiceAction"/>
-      <toolitem name="ToolbarNewVoucher"   action="BusinessNewVoucherAction"/>
+      <toolitem name="ToolbarNewBill"          action="BusinessNewBillAction"/>
+      <toolitem name="ToolbarNewInvoice"       action="BusinessNewInvoiceAction"/>
+      <toolitem name="ToolbarNewVoucher"       action="BusinessNewVoucherAction"/>
+      <toolitem name="ToolbarVendorListing"    action="VendorListingReportAction"/>
+      <toolitem name="ToolbarCustomerListing"  action="CustomerListingReportAction"/>
     </placeholder>
   </toolbar>
 
-  <popup name="MainPopup"              action="FakeToplevel">
+  <popup name="MainPopup"                      action="FakeToplevel">
     <placeholder name="PopupPlaceholder2">
-        <menuitem name="EditOwner"     action="EditEditOwnerAction"/>
-<!--        <menuitem name="DeleteOwner"   action="EditDeleteOwnerAction"/> -->
+        <menuitem name="EditOwner"             action="EditEditOwnerAction"/>
+<!--        <menuitem name="DeleteOwner"           action="EditDeleteOwnerAction"/> -->
         <separator name="ToolbarSep169"/>
-        <menuitem name="NewBill"       action="BusinessNewBillAction"/>
-        <menuitem name="NewInvoice"    action="BusinessNewInvoiceAction"/>
-        <menuitem name="NewVoucher"    action="BusinessNewVoucherAction"/>
+        <menuitem name="NewBill"               action="BusinessNewBillAction"/>
+        <menuitem name="NewInvoice"            action="BusinessNewInvoiceAction"/>
+        <menuitem name="NewVoucher"            action="BusinessNewVoucherAction"/>
     </placeholder>
   </popup>
 </ui>

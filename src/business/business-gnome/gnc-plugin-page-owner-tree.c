@@ -35,8 +35,11 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include "swig-runtime.h"
+
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-owner-tree.h"
+#include "gnc-plugin-page-report.h"
 
 #include "dialog-vendor.h"
 #include "dialog-customer.h"
@@ -120,6 +123,7 @@ static void gnc_plugin_page_owner_tree_cmd_edit_owner (GtkAction *action, GncPlu
 static void gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action, GncPluginPageOwnerTree *page);
+static void gnc_plugin_page_owner_tree_cmd_listing_report (GtkAction *action, GncPluginPageOwnerTree *plugin_page);
 
 
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
@@ -171,6 +175,16 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         N_("Create a new voucher"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
+    {
+        "VendorListingReportAction", GTK_STOCK_PRINT_PREVIEW, N_("Vendor Listing"), NULL,
+        N_("Show vendor aging overview"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_listing_report)
+    },
+    {
+        "CustomerListingReportAction", GTK_STOCK_PRINT_PREVIEW, N_("Customer Listing"), NULL,
+        N_("Show customer aging overview"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_listing_report)
+    },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_owner_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_owner_tree_actions);
@@ -189,11 +203,13 @@ static const gchar *actions_requiring_owner[] =
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "EditEditOwnerAction",     N_("Edit") },
-    { "BusinessNewOwnerAction",  N_("New") },
-    { "BusinessNewBillAction",  N_("New Bill") },
-    { "BusinessNewInvoiceAction",  N_("New Invoice") },
-    { "BusinessNewVoucherAction",  N_("New Voucher") },
+    { "EditEditOwnerAction",          N_("Edit") },
+    { "BusinessNewOwnerAction",       N_("New") },
+    { "BusinessNewBillAction",        N_("New Bill") },
+    { "BusinessNewInvoiceAction",     N_("New Invoice") },
+    { "BusinessNewVoucherAction",     N_("New Voucher") },
+    { "VendorListingReportAction",    N_("Vendor Listing") },
+    { "CustomerListingReportAction",  N_("Customer Listing") },
 /* FIXME disable due to crash   { "EditDeleteOwnerAction",   N_("Delete") },*/
     { NULL, NULL },
 };
@@ -211,9 +227,11 @@ typedef struct
 
 static action_owners_struct action_owners[] =
 {
-        { "BusinessNewBillAction",    GNC_OWNER_VENDOR },
-        { "BusinessNewInvoiceAction", GNC_OWNER_CUSTOMER },
-        { "BusinessNewVoucherAction", GNC_OWNER_EMPLOYEE },
+        { "BusinessNewBillAction",       GNC_OWNER_VENDOR },
+        { "BusinessNewInvoiceAction",    GNC_OWNER_CUSTOMER },
+        { "BusinessNewVoucherAction",    GNC_OWNER_EMPLOYEE },
+        { "VendorListingReportAction",   GNC_OWNER_VENDOR },
+        { "CustomerListingReportAction", GNC_OWNER_CUSTOMER },
         { NULL, GNC_OWNER_NONE },
 };
 
@@ -754,6 +772,74 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
     g_signal_emit (page, plugin_page_signals[OWNER_SELECTED], 0, owner);
 }
 
+/******************************************************************/
+/*                     Report helper functions                    */
+/******************************************************************/
+
+static int
+build_aging_report (GncOwnerType owner_type)
+{
+    Account *account;
+    gchar *report_name = NULL;
+    gchar *report_title = NULL;
+    swig_type_info * qtype;
+    SCM args;
+    SCM func;
+    SCM arg;
+
+    args = SCM_EOL;
+
+    switch(owner_type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+    case GNC_OWNER_EMPLOYEE :
+    case GNC_OWNER_JOB :
+    {
+        return -1;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+        report_name  = "gnc:payables-report-create";
+        report_title = _("Vendor Listing");
+        break;
+    }
+    case GNC_OWNER_CUSTOMER :
+    {
+        report_name = "gnc:receivables-report-create";
+        report_title = _("Customer Listing");
+        break;
+    }
+    }
+
+    /* Find report generator function in guile */
+    func = scm_c_eval_string (report_name);
+    g_return_val_if_fail (scm_is_procedure (func), -1);
+
+    /* Option Show zero's ? - Yes for the listing report */
+    arg = SCM_BOOL_T;
+    args = scm_cons (arg, args);
+    g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
+
+    /* Option Report title */
+    arg = scm_makfrom0str (report_title);
+    args = scm_cons (arg, args);
+
+    /* Option Account - Using False to select default account
+     *
+     * XXX I'm not sure if it would make sense to use another
+     *     account than default */
+    arg = SCM_BOOL_F;
+    args = scm_cons (arg, args);
+    g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
+
+
+    /* Apply the function to the args */
+    arg = scm_apply (func, args, SCM_EOL);
+    g_return_val_if_fail (scm_is_exact (arg), -1);
+
+    return scm_num2int (arg, SCM_ARG1, G_STRFUNC);
+}
 
 /************************************************************/
 /*                     Command callbacks                    */
@@ -942,5 +1028,26 @@ gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action,
 
     LEAVE(" ");
 }
+
+static void
+gnc_plugin_page_owner_tree_cmd_listing_report (GtkAction *action,
+        GncPluginPageOwnerTree *plugin_page)
+{
+    GncPluginPageOwnerTreePrivate *priv;
+    GncMainWindow *window;
+    int id;
+
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_OWNER_TREE(plugin_page));
+
+    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
+    priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(plugin_page);
+    id = build_aging_report (priv->owner_type);
+    if (id >= 0)
+        gnc_main_window_open_report(id, window);
+    LEAVE(" ");
+}
+
 /** @} */
 /** @} */
