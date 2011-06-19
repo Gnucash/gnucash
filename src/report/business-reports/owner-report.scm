@@ -75,11 +75,35 @@
         (else (N_ "Company")))) 
 
 ;; Error strings in case there is no (valid) selection (translated)
-(define (invalid-selection-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "No valid customer selected. Click on the Options button to select a customer."))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "No valid employee selected. Click on the Options button to select an employee."))
+(define (invalid-selection-title-string owner-type)
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "No valid customer selected."))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "No valid employee selected."))
         ;; FALLTHROUGH
-        (else (_ "No valid company selected. Click on the Options button to select a company."))))
+        (else (_ "No valid company selected."))))
+
+(define (invalid-selection-string owner-type)
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "This report requires a customer to be selected."))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "This report requires a employee to be selected."))
+        ;; FALLTHROUGH
+        (else (_ "This report requires a company to be selected."))))
+
+;; Html formatted error message documents
+(define (gnc:html-make-no-owner-warning
+         report-title-string report-id)
+  (gnc:html-make-generic-warning
+    report-title-string
+    report-id
+    invalid-selection-title-string
+    invalid-selection-string))
+
+(define (gnc:html-make-no-valid-account-warning
+         report-title-string report-id)
+  (gnc:html-make-generic-warning
+    report-title-string
+    report-id
+    (_ "No valid account selected")
+    (_ "This report requires a valid account to be selected.")))
+
 
 ;; Document names, used in report names (translated)
 (define (doctype-str owner-type)
@@ -677,88 +701,85 @@
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
   (let* ((document (gnc:make-html-document))
-	 (table '())
-	 (orders '())
-	 (query (qof-query-create-for-splits))
-	 (account (opt-val owner-page acct-string))
-         (start-date (gnc:timepair-start-day-time 
-		       (gnc:date-option-absolute-time
-			(opt-val gnc:pagename-general optname-from-date))))
-	 (end-date (gnc:timepair-end-day-time 
-		       (gnc:date-option-absolute-time
-			(opt-val gnc:pagename-general optname-to-date))))
-	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
-         (type (opt-val "__reg" "owner-type"))
-         (owner-descr (owner-string type))
-         (date-type (opt-val gnc:pagename-general optname-date-driver)) 
-	 (owner (opt-val owner-page owner-descr)))
+     (table '())
+     (orders '())
+     (query (qof-query-create-for-splits))
+     (account (opt-val owner-page acct-string))
+     (start-date (gnc:timepair-start-day-time 
+      (gnc:date-option-absolute-time
+       (opt-val gnc:pagename-general optname-from-date))))
+     (end-date (gnc:timepair-end-day-time 
+               (gnc:date-option-absolute-time
+               (opt-val gnc:pagename-general optname-to-date))))
+     (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
+     (type (opt-val "__reg" "owner-type"))
+     (owner-descr (owner-string type))
+     (date-type (opt-val gnc:pagename-general optname-date-driver)) 
+     (owner (opt-val owner-page owner-descr))
+     (report-title (string-append (doctype-str type) " " (_ "Report"))))
 
-    (gnc:html-document-set-title!
-     document (string-append (doctype-str type) " " (_ "Report")))
+    (if (not (gncOwnerIsValid owner))
+     (gnc:html-document-add-object!
+      document
+      (gnc:html-make-no-owner-warning
+       report-title (gnc:report-id report-obj)))
 
-    (if (gncOwnerIsValid owner)
-	(begin
-	  (setup-query query owner account end-date)
+    ;; else....
+     (begin
+      (set! report-title (string-append report-title ": " (gncOwnerGetName owner)))
+      (if (null? account)
+       (gnc:html-document-add-object!
+        document
+        (gnc:html-make-no-valid-account-warning
+         report-title (gnc:report-id report-obj)))
 
-	  (gnc:html-document-set-title!
-	   document
-           (string-append (doctype-str type) " " (_ "Report:") " " (gncOwnerGetName owner)))
+      ;; else....
+       (begin
+        (setup-query query owner account end-date)
+        (gnc:html-document-set-title! document report-title)
 
-           (gnc:html-document-set-headline!
-            document (gnc:html-markup
-                      "!" 
-                      (doctype-str type)
-                      " " (_ "Report:") " "
-                      (gnc:html-markup-anchor
-                       (gnc:owner-anchor-text owner)
-                       (gncOwnerGetName owner))))
-	  
-	  (if (not (null? account))
-	      (begin
-		(set! table (make-txn-table (gnc:report-options report-obj)
-					    query account start-date end-date date-type))
-		(gnc:html-table-set-style!
-		 table "table"
-		 'attribute (list "border" 1)
-		 'attribute (list "cellspacing" 0)
-		 'attribute (list "cellpadding" 4)))
+        (gnc:html-document-set-headline!
+         document (gnc:html-markup
+                   "!" 
+                   (doctype-str type)
+                   " " (_ "Report:") " "
+                   (gnc:html-markup-anchor
+                    (gnc:owner-anchor-text owner)
+                    (gncOwnerGetName owner))))
+      
+        (set! table (make-txn-table (gnc:report-options report-obj)
+                        query account start-date end-date date-type))
+        (gnc:html-table-set-style!
+         table "table"
+         'attribute (list "border" 1)
+         'attribute (list "cellspacing" 0)
+         'attribute (list "cellpadding" 4))
 
-	      (set!
-	       table
-	       (gnc:make-html-text
-		(_ "No valid account selected.  Click on the Options button and select the account to use."))))
+        (gnc:html-document-add-object!
+         document
+         (make-myname-table book (opt-val gnc:pagename-general (N_ "Today Date Format"))))
 
-	  (gnc:html-document-add-object!
-	   document
-	   (make-myname-table book (opt-val gnc:pagename-general (N_ "Today Date Format"))))
+        (gnc:html-document-add-object!
+         document
+         (make-owner-table owner))
 
-	  (gnc:html-document-add-object!
-	   document
-	   (make-owner-table owner))
+        (make-break! document)
 
-	  (make-break! document)
+        (gnc:html-document-add-object!
+         document
+         (gnc:make-html-text
+          (string-append
+           (_ "Date Range")
+           ": "
+           (gnc-print-date start-date)
+           " - "
+           (gnc-print-date end-date))))
 
-	  (gnc:html-document-add-object!
-	   document
-	   (gnc:make-html-text
-	    (string-append
-	     (_ "Date Range")
-	     ": "
-	     (gnc-print-date start-date)
-	     " - "
-	     (gnc-print-date end-date))))
+        (make-break! document)
 
-	  (make-break! document)
-
-	  (gnc:html-document-add-object! document table))
-
-	;; else....
-	(gnc:html-document-add-object!
-	 document
-	 (gnc:make-html-text
-	  (invalid-selection-string type)))) 
-    (qof-query-destroy query)
-    document))
+        (gnc:html-document-add-object! document table)
+        (qof-query-destroy query)))))
+   document))
 
 (define (find-first-account type)
   (define (find-first account num index)
