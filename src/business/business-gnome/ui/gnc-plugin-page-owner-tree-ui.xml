@@ -10,8 +10,11 @@
     
     <menu name="Reports" action="ReportsAction">
       <placeholder name="OtherReports">
-        <menuitem name="VendorListingReport"   action="VendorListingReportAction"/>
-        <menuitem name="CustomerListingReport" action="CustomerListingReportAction"/>
+        <menuitem name="ReportVendorListingReport"   action="VendorListingReportAction"/>
+        <menuitem name="ReportCustomerListingReport" action="CustomerListingReportAction"/>
+        <menuitem name="ReportOTVendorReport"        action="OTVendorReportAction"/>
+        <menuitem name="ReportOTCustomerReport"      action="OTCustomerReportAction"/>
+        <menuitem name="ReportOTEmployeeReport"      action="OTEmployeeReportAction"/>
       </placeholder>
     </menu>
   </menubar>
@@ -38,6 +41,9 @@
         <menuitem name="NewBill"               action="BusinessNewBillAction"/>
         <menuitem name="NewInvoice"            action="BusinessNewInvoiceAction"/>
         <menuitem name="NewVoucher"            action="BusinessNewVoucherAction"/>
+        <menuitem name="OTVendorReport"        action="OTVendorReportAction"/>
+        <menuitem name="OTCustomerReport"      action="OTCustomerReportAction"/>
+        <menuitem name="OTEmployeeReport"      action="OTEmployeeReportAction"/>
     </placeholder>
   </popup>
 </ui>
