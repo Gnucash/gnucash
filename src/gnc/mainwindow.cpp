@@ -86,6 +86,11 @@ MainWindow::MainWindow()
     createToolBars();
     createStatusBar();
 
+    /* Properties used by QSettings */
+    QCoreApplication::setOrganizationName("Gnucash");
+    QCoreApplication::setOrganizationDomain("gnucash.org");
+    QCoreApplication::setApplicationName("Cutecash");
+
     readSettings();
 
     connect(m_undoStack, SIGNAL(cleanChanged(bool)),
@@ -250,7 +255,7 @@ void MainWindow::createStatusBar()
 
 void MainWindow::readSettings()
 {
-    QSettings settings("gnucash.org", "Cutecash");
+    QSettings settings;
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(400, 400)).toSize();
     resize(size);
@@ -260,7 +265,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("gnucash.org", "Cutecash");
+    QSettings settings;
     settings.setValue("pos", pos());
     settings.setValue("size", size());
     m_menuRecentFiles->writeSettings(&settings, "RecentFiles");
