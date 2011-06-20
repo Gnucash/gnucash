@@ -2017,7 +2017,6 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
         <property name="title" translatable="yes">Choose accounts to create</property>
       </packing>
     </child>
