@@ -62,7 +62,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox85">
+                              <object class="GtkHBox" id="payment_periods_hbox">
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
                                 <child>
@@ -76,11 +76,12 @@
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Clear the entry</property>
                                     <property name="use_stock">True</property>
-                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb" object="payment_periods_edit"/>
+                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="pack_type">end</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
@@ -112,7 +113,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox86">
+                              <object class="GtkHBox" id="interest_rate_hbox">
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
                                 <child>
@@ -126,11 +127,12 @@
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Clear the entry</property>
                                     <property name="use_stock">True</property>
-                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb" object="interest_rate_edit"/>
+                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="pack_type">end</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
@@ -162,7 +164,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox87">
+                              <object class="GtkHBox" id="present_value_hbox">
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
                                 <child>
@@ -176,11 +178,12 @@
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Clear the entry</property>
                                     <property name="use_stock">True</property>
-                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb" object="present_value_edit"/>
+                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="pack_type">end</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
@@ -212,7 +215,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox88">
+                              <object class="GtkHBox" id="periodic_payment_hbox">
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
                                 <child>
@@ -226,11 +229,12 @@
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Clear the entry</property>
                                     <property name="use_stock">True</property>
-                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb" object="period_payment_edit"/>
+                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="pack_type">end</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
@@ -262,7 +266,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox89">
+                              <object class="GtkHBox" id="future_value_hbox">
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
                                 <child>
@@ -276,11 +280,12 @@
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Clear the entry</property>
                                     <property name="use_stock">True</property>
-                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb" object="future_value_edit"/>
+                                    <signal name="clicked" handler="fincalc_amount_clear_clicked_cb"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="pack_type">end</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
@@ -1021,7 +1026,7 @@
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -1062,7 +1067,7 @@
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
