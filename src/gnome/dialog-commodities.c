@@ -308,34 +308,33 @@ gnc_commodities_dialog_filter_cm_func (gnc_commodity *commodity,
 static void
 gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
 {
-    GtkWidget *dialog;
     GtkWidget *button;
     GtkWidget *scrolled_window;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkTreeView *view;
     GtkTreeSelection *selection;
 
-    xml = gnc_glade_xml_new ("commodities.glade", "Securities Dialog");
-    dialog = glade_xml_get_widget (xml, "Securities Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "commodities.glade", "Securities Dialog");
 
-    cd->dialog = dialog;
+    cd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Securities Dialog"));
     cd->session = gnc_get_current_session();
     cd->book = qof_session_get_book(cd->session);
     cd->show_currencies = gnc_gconf_get_bool(GCONF_SECTION, "include_iso", NULL);
 
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, cd);
+    gtk_builder_connect_signals(builder, cd);
 
     /* parent */
     if (parent != NULL)
-        gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+        gtk_window_set_transient_for (GTK_WINDOW (cd->dialog), GTK_WINDOW (parent));
 
     /* buttons */
-    cd->remove_button = glade_xml_get_widget (xml, "remove_button");
-    cd->edit_button = glade_xml_get_widget (xml, "edit_button");
+    cd->remove_button = GTK_WIDGET(gtk_builder_get_object (builder, "remove_button"));
+    cd->edit_button = GTK_WIDGET(gtk_builder_get_object (builder, "edit_button"));
 
     /* commodity tree */
 
-    scrolled_window = glade_xml_get_widget (xml, "commodity_list_window");
+    scrolled_window = GTK_WIDGET(gtk_builder_get_object (builder, "commodity_list_window"));
     view = gnc_tree_view_commodity_new(cd->book,
                                        "gconf-section", GCONF_SECTION,
                                        "show-column-menu", TRUE,
@@ -355,9 +354,10 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
                       G_CALLBACK (row_activated_cb), cd);
 
     /* Show currency button */
-    button = glade_xml_get_widget (xml, "show_currencies_button");
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_currencies_button"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), cd->show_currencies);
 
+    g_object_unref(G_OBJECT(builder));
     gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(cd->dialog));
 }
 
