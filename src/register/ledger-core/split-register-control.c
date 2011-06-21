@@ -1462,7 +1462,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     xfer = gnc_split_register_xfer_dialog(reg, txn, split);
     gnc_xfer_dialog_is_exchange_dialog(xfer, &exch_rate);
     if (gnc_xfer_dialog_run_exchange_dialog(
-                xfer, &exch_rate, amount, reg_acc, txn, xfer_com))
+                xfer, &exch_rate, amount, reg_acc, txn, xfer_com, expanded))
     {
         /* FIXME: How should the dialog be destroyed? */
         LEAVE("leaving rate unchanged");

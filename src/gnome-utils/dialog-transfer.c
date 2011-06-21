@@ -2222,7 +2222,8 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
 
 gboolean gnc_xfer_dialog_run_exchange_dialog(
     XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount,
-    Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com)
+    Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com,
+    gboolean expanded)
 {
     gboolean swap_amounts = FALSE;
     gnc_commodity *txn_cur = xaccTransGetCurrency(txn);
@@ -2243,7 +2244,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
             *exch_rate = gnc_numeric_create(1, 1);
             return FALSE;
         }
-        swap_amounts = TRUE;
+        swap_amounts = expanded;
 
         /* We know that "amount" is always in the reg_com currency.
          * Unfortunately it is possible that neither xfer_com or txn_cur are
@@ -2296,6 +2297,9 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     {
         gnc_xfer_dialog_select_to_currency(xfer, xfer_com);
         gnc_xfer_dialog_select_from_currency(xfer, txn_cur);
+
+        if (xaccTransUseTradingAccounts ( txn ))
+            amount = gnc_numeric_neg(amount);
     }
     gnc_xfer_dialog_hide_to_account_tree(xfer);
     gnc_xfer_dialog_hide_from_account_tree(xfer);
