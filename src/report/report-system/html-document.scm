@@ -157,10 +157,12 @@
                 ;;with the exception of 2 reports: 
                 ;;./share/gnucash/guile-modules/gnucash/report/taxinvoice.eguile.scm:<html>
                 ;;./share/gnucash/guile-modules/gnucash/report/balsheet-eg.eguile.scm:<html>
-                (push "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \n\"http://www.w3.org/TR/html4/loose.dtd\">") ;;trying 4.01 Trans
-                (push "<html>\n")
+
+                ;; Validate against XHTML 1.0 Transitional
+                (push "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">")
+                (push "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n")
                 (push "<head>\n")
-                (push "<meta http-equiv=\"content-type\" content=\"text-html; charset=utf-8\">\n")
+                (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")
 				(if css? 
 				  (if style-text
 				    (push (list "</style>" style-text "<style type=\"text/css\">\n"))))
@@ -171,7 +173,7 @@
                 
                 ;; this lovely little number just makes sure that <body>
                 ;; attributes like bgcolor get included 
-                (push ((gnc:html-markup/no-end "body") doc))))
+                (push ((gnc:html-markup/open-tag-only "body") doc))))
           
           ;; now render the children
           (for-each 
@@ -252,7 +254,7 @@
 ;;                                 '("attr1" "value1") '("attr2" "value2"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:html-document-markup-start doc markup . rest)
+(define (gnc:html-document-markup-start doc markup end-tag? . rest)
   (let ((childinfo (gnc:html-document-fetch-markup-style doc markup))
         (extra-attrib
          (if (not (null? rest))
@@ -289,6 +291,8 @@
                 (push "\n<") (push tag)
                 (if attr (hash-fold add-attribute #f attr))
                 (if extra-attrib (for-each addextraatt extra-attrib))
+                (if (not end-tag?)
+                    (push " /")) ;;add closing "/" for no-end elements...
                 (push ">"))))
         (if tag
             (if (list? tag)
@@ -296,6 +300,10 @@
                   (build-first-tag (car tag))
                   (for-each add-internal-tag (cdr tag)))
                 (build-first-tag tag)))
+        ;; XXX Font styling should be done through CSS, NOT html code
+        ;; XXX Also, why is this even here?  'Font' is an html tag just like anything else,
+        ;;       so why does it have it's own custom pseudo code here?  It should be built
+        ;;       as a call to this function just like any other tag, passing face/size/color as attributes.
         (if (or face size color)
             (begin
               (push "<font ")

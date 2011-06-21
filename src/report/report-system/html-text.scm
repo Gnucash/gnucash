@@ -94,6 +94,16 @@
            #t
            entities)))
 
+;; This creates an open html tag which must be explicitly closed later.
+(define (gnc:html-markup/open-tag-only tag . entities)
+  (lambda (doc)
+    (apply gnc:html-text-render-markup-noclose
+           doc
+           tag
+           #f
+           #t
+           entities)))
+
 (define (gnc:html-markup/no-end tag . entities)
   (lambda (doc)
     (apply gnc:html-text-render-markup
@@ -217,10 +227,25 @@
     (gnc:html-style-table-uncompile (gnc:html-text-style p))
     retval))
 
+;; XXX It would be better to merge this with the original html-text-render-markup below it,
+;; but that would require a fair amount of work to refactor so that it works correctly.
+(define (gnc:html-text-render-markup-noclose doc markup attrib end-tag? . entities)
+  (let* ((retval '())
+         (push (lambda (l) (set! retval (cons l retval)))))
+    (push (gnc:html-document-markup-start doc markup end-tag? attrib))
+    (for-each 
+     (lambda (elt)
+       (cond ((procedure? elt)
+              (push (elt doc)))
+             (#t 
+              (push (gnc:html-document-render-data doc elt)))))
+     entities)
+    retval))
+
 (define (gnc:html-text-render-markup doc markup attrib end-tag? . entities)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval)))))
-    (push (gnc:html-document-markup-start doc markup attrib))
+    (push (gnc:html-document-markup-start doc markup end-tag? attrib))
     (for-each 
      (lambda (elt)
        (cond ((procedure? elt)

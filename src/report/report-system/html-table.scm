@@ -146,9 +146,9 @@
 ;	    (or (gnc:html-table-cell-colspan cell) 1)))
     (gnc:html-document-push-style doc style)
     (push (gnc:html-document-markup-start 
-           doc (gnc:html-table-cell-tag cell)
-           (sprintf #f "rowspan=%a" (gnc:html-table-cell-rowspan cell))
-           (sprintf #f "colspan=%a" (gnc:html-table-cell-colspan cell))))
+           doc (gnc:html-table-cell-tag cell)  #t
+           (sprintf #f "rowspan=\"%a\"" (gnc:html-table-cell-rowspan cell))
+           (sprintf #f "colspan=\"%a\"" (gnc:html-table-cell-colspan cell))))
     (for-each 
      (lambda (child) 
        (push (gnc:html-object-render child doc)))
@@ -636,13 +636,13 @@
      (gnc:html-table-style table) (gnc:html-document-style-stack doc))
     
     (gnc:html-document-push-style doc (gnc:html-table-style table))
-    (push (gnc:html-document-markup-start doc "table"))
+    (push (gnc:html-document-markup-start doc "table" #t))
     
     ;; render the caption 
     (let ((c (gnc:html-table-caption table)))
       (if c
           (begin 
-            (push (gnc:html-document-markup-start doc "caption"))
+            (push (gnc:html-document-markup-start doc "caption" #t))
             (push (gnc:html-object-render c doc))
             (push (gnc:html-document-markup-end doc "caption")))))
     
@@ -656,7 +656,6 @@
           (begin 
             (gnc:html-document-push-style 
              doc (gnc:html-table-col-headers-style table))
-            (push (gnc:html-document-markup-start doc "tr"))
             
             ;; compile the column styles just in case there's
             ;; something interesting in the table header cells.
@@ -669,12 +668,13 @@
              #f (gnc:html-table-col-styles table))
             
             ;; render the headers 
+            (push (gnc:html-document-markup-start doc "tr" #t))
             (for-each 
              (lambda (hdr) 
                (gnc:html-document-push-style 
                 doc (gnc:html-table-col-style table colnum))
                (if (not (gnc:html-table-cell? hdr))
-                   (push (gnc:html-document-markup-start doc "th")))
+                   (push (gnc:html-document-markup-start doc "th" #t)))
                (push (gnc:html-object-render hdr doc))
                (if (not (gnc:html-table-cell? hdr))
                    (push (gnc:html-document-markup-end doc "th")))
@@ -684,6 +684,8 @@
                    (set! colnum (+ (gnc:html-table-cell-colspan hdr)
                                    colnum))))
              ch)
+            (push (gnc:html-document-markup-end doc "tr"))
+
             ;; pop the col header style 
             (gnc:html-document-pop-style doc))))
     
@@ -713,7 +715,7 @@
            ;; push the style for this row and write the start tag, then 
            ;; pop it again.
            (if rowstyle (gnc:html-document-push-style doc rowstyle))
-           (push (gnc:html-document-markup-start doc rowmarkup))
+           (push (gnc:html-document-markup-start doc rowmarkup #t))
            (if rowstyle (gnc:html-document-pop-style doc))
            
            ;; write the column data, pushing the right column style 
@@ -728,7 +730,7 @@
                 
                 ;; render the cell contents 
                 (if (not (gnc:html-table-cell? datum))
-                    (push (gnc:html-document-markup-start doc "td")))
+                    (push (gnc:html-document-markup-start doc "td" #t)))
                 (push (gnc:html-object-render datum doc))
                 (if (not (gnc:html-table-cell? datum))
                     (push (gnc:html-document-markup-end doc "td")))
