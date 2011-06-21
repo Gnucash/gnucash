@@ -545,7 +545,7 @@
 
 				     (if (gnc-numeric-zero-p dividend-rein)
 					 ;; no reinvested dividend, return just the income split
-					 (xaccSplitGetValue s)
+					 dividend-income
 					 ;; dividend reinvested so
 					 ;; apply the ratio to the
 					 ;; dividend and return it for
