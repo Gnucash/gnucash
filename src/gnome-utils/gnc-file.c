@@ -1452,8 +1452,6 @@ gnc_file_quit (void)
     gnc_close_gui_component_by_session (session);
     gnc_clear_current_session();
 
-    gnc_get_current_session ();
-
     qof_event_resume ();
     gnc_unset_busy_cursor (NULL);
 }
