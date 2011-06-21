@@ -428,7 +428,7 @@
 		     ;; oli-custom modified to colspan the subtotal labels
 		     ;; instead of the data fields
 		     (append (cons (gnc:make-html-table-cell/size/markup
-				    0 (colspan currency used-columns)
+				    1 (colspan currency used-columns)
 				    "total-label-cell" subtotal-label)
 				   '())
 			     (list (gnc:make-html-table-cell/markup
