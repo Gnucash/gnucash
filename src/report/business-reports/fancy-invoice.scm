@@ -415,6 +415,15 @@
 		    (gnc:monetary-neg monetary)
 		    monetary)
 		monetary))))
+    
+    (define (get-empty-row colcount)
+      (define row-contents '())
+      (do ((i 1 (+ i 1)))
+        ((> i colcount))
+        (addto! row-contents (gnc:make-html-table-cell))    ;;do stuff here
+        )
+      row-contents
+      )
 
     (define (add-subtotal-row table used-columns
 			      subtotal-collector subtotal-style subtotal-label)
@@ -496,14 +505,13 @@
 	    ;; oli-custom - modified to have a minimum of entries per table,
 	    ;; currently defaults to 24
 	    ;; also, doesn't count payment rows and stuff
-	    (do ((entries-added entries-added (+ entries-added 1))
-		 (odd-row? odd-row? (not odd-row?)))
-		((> entries-added (opt-val "Display" "Minimum # of entries" )))
-		(gnc:html-table-append-row/markup!
-		 table (if odd-row? "normal-row" "alternate-row")
-		 (string->list (make-string (num-columns-required used-columns)
-					    #\space)))
-		)
+            (do ((entries-added entries-added (+ entries-added 1))
+                 (odd-row? odd-row? (not odd-row?)))
+              ((> entries-added (opt-val "Display" "Minimum # of entries" )))
+              (gnc:html-table-append-row/markup!
+               table (if odd-row? "normal-row" "alternate-row")
+               (get-empty-row (num-columns-required used-columns)))
+              )
 	    (add-subtotal-row table used-columns value-collector
 			      "grand-total" (_ "Net Price"))
 
@@ -645,7 +653,7 @@
     (gnc:html-table-cell-set-style!
      name-cell "td"
      'font-size "+2")
-    (gnc:html-table-append-row! table (list name-cell #\newline "<br>"))
+    (gnc:html-table-append-row! table (list name-cell "" "")) ;;Bert: had a newline and a "<br>"
     (gnc:html-table-append-row!
      table
      (list
@@ -741,7 +749,7 @@
     (gnc:html-table-cell-set-style!
 	name-cell "td"
 	'font-size "+2")
-    (gnc:html-table-append-row! table (list name-cell "" invoice-cell))
+    (gnc:html-table-append-row! table (list name-cell (gnc:make-html-table-cell) invoice-cell)) ;;(gnc:make-html-table-cell) was ""
     (gnc:html-table-set-col-style!
 	table 1 "td"
 	'attribute (list "align" "center")
