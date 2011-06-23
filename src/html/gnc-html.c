@@ -360,17 +360,22 @@ gnc_html_show_url( GncHtml* self, URLType type,
                    const gchar* location, const gchar* label,
                    gboolean new_window_hint )
 {
+    URLType lc_type = NULL;
+
     g_return_if_fail( self != NULL );
     g_return_if_fail( GNC_IS_HTML(self) );
 
+    lc_type = g_ascii_strdown (type, -1);
     if ( GNC_HTML_GET_CLASS(self)->show_url != NULL )
     {
-        GNC_HTML_GET_CLASS(self)->show_url( self, type, location, label, new_window_hint );
+        GNC_HTML_GET_CLASS(self)->show_url( self, lc_type, location, label, new_window_hint );
     }
     else
     {
         DEBUG( "'show_url' not implemented" );
     }
+
+    g_free (lc_type);
 }
 
 
@@ -581,18 +586,27 @@ gnc_html_set_parent( GncHtml* self, GtkWindow* parent )
 gboolean
 gnc_html_register_urltype( URLType type, const char *protocol )
 {
+    URLType  lc_type  = NULL;
+    char    *lc_proto = NULL;
+
     if (!gnc_html_type_to_proto_hash)
     {
         gnc_html_type_to_proto_hash = g_hash_table_new (g_str_hash, g_str_equal);
         gnc_html_proto_to_type_hash = g_hash_table_new (g_str_hash, g_str_equal);
     }
     if (!protocol) return FALSE;
-    if (g_hash_table_lookup (gnc_html_type_to_proto_hash, type))
-        return FALSE;
 
-    g_hash_table_insert (gnc_html_type_to_proto_hash, type, (gpointer)protocol);
-    if (*protocol)
-        g_hash_table_insert (gnc_html_proto_to_type_hash, (gpointer)protocol, type);
+    lc_type = g_ascii_strdown (type, -1);
+    if (g_hash_table_lookup (gnc_html_type_to_proto_hash, lc_type))
+    {
+        g_free (lc_type);
+        return FALSE;
+    }
+
+    lc_proto = g_ascii_strdown (protocol, -1);
+    g_hash_table_insert (gnc_html_type_to_proto_hash, lc_type, (gpointer)lc_proto);
+    if (*lc_proto)
+        g_hash_table_insert (gnc_html_proto_to_type_hash, (gpointer)lc_proto, lc_type);
 
     return TRUE;
 }
@@ -640,10 +654,13 @@ gnc_html_initialize( void )
 gchar*
 gnc_build_url( URLType type, const gchar* location, const gchar* label )
 {
+    URLType  lc_type  = NULL;
     char * type_name;
 
     DEBUG(" ");
-    type_name = g_hash_table_lookup (gnc_html_type_to_proto_hash, type);
+    lc_type = g_ascii_strdown (type, -1);
+    type_name = g_hash_table_lookup (gnc_html_type_to_proto_hash, lc_type);
+    g_free (lc_type);
     if (!type_name)
         type_name = "";
 
@@ -833,7 +850,8 @@ gnc_html_register_object_handler( const char * classid,
     gnc_html_unregister_object_handler( classid );
     if ( hand != NULL )
     {
-        g_hash_table_insert( gnc_html_object_handlers, g_strdup( classid ), hand );
+        gchar *lc_id  = g_ascii_strdown (classid, -1);
+        g_hash_table_insert( gnc_html_object_handlers, lc_id, hand );
     }
 }
 
@@ -844,15 +862,17 @@ gnc_html_unregister_object_handler( const gchar* classid )
     gchar* valptr = NULL;
     gchar** p_keyptr = &keyptr;
     gchar** p_valptr = &valptr;
+    gchar* lc_id = g_ascii_strdown (classid, -1);
 
     if ( g_hash_table_lookup_extended( gnc_html_object_handlers,
-                                       classid,
+                                       lc_id,
                                        (gpointer *)p_keyptr,
                                        (gpointer *)p_valptr) )
     {
-        g_hash_table_remove( gnc_html_object_handlers, classid );
+        g_hash_table_remove( gnc_html_object_handlers, lc_id );
         g_free( keyptr );
     }
+    g_free( lc_id );
 }
 
 void
@@ -868,14 +888,17 @@ gnc_html_register_stream_handler( URLType url_type, GncHTMLStreamCB hand )
     gnc_html_unregister_stream_handler( url_type );
     if ( hand != NULL )
     {
-        g_hash_table_insert( gnc_html_stream_handlers, url_type, hand );
+        URLType  lc_type  = g_ascii_strdown (url_type, -1);
+        g_hash_table_insert( gnc_html_stream_handlers, lc_type, hand );
     }
 }
 
 void
 gnc_html_unregister_stream_handler( URLType url_type )
 {
-    g_hash_table_remove( gnc_html_stream_handlers, url_type );
+    URLType  lc_type = g_ascii_strdown (url_type, -1);
+    g_hash_table_remove( gnc_html_stream_handlers, lc_type );
+    g_free(lc_type);
 }
 
 void
@@ -891,12 +914,15 @@ gnc_html_register_url_handler( URLType url_type, GncHTMLUrlCB hand )
     gnc_html_unregister_url_handler( url_type );
     if ( hand != NULL )
     {
-        g_hash_table_insert( gnc_html_url_handlers, url_type, hand );
+        URLType lc_type = g_ascii_strdown (url_type, -1);
+        g_hash_table_insert( gnc_html_url_handlers, lc_type, hand );
     }
 }
 
 void
 gnc_html_unregister_url_handler( URLType url_type )
 {
-    g_hash_table_remove( gnc_html_url_handlers, url_type );
+    URLType lc_type = g_ascii_strdown (url_type, -1);
+    g_hash_table_remove( gnc_html_url_handlers, lc_type );
+    g_free(lc_type);
 }
