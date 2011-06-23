@@ -286,7 +286,7 @@ gnc_html_history_node_new(URLType type, const gchar * location,
 {
     gnc_html_history_node * rv = g_new0(gnc_html_history_node, 1);
 
-    rv->type      = type;
+    rv->type      = g_strdup(type);
     rv->location  = g_strdup(location);
     rv->label     = g_strdup(label);
     return rv;
@@ -302,6 +302,7 @@ gnc_html_history_node_destroy(gnc_html_history_node * node)
 {
 
     /* free the url resources and cached text */
+    g_free(node->type);
     g_free(node->location);
     g_free(node->label);
 
