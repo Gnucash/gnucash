@@ -523,7 +523,17 @@ void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
 {
     if (!ledger) return;
     ledger->invoice = invoice;
-    ledger->last_date_entered = gncInvoiceGetDateOpened (invoice);
+
+    /* For bills only, set the default date for new entries
+     * to the bill's opened date. This saves a lot of typing when
+     * adding bills on a day different from the bill's own date.
+     * Note this is for bills only, because for (customer's) invoices
+     * it makes more sense to use the current date.
+     * Consult https://bugzilla.gnome.org/show_bug.cgi?id=646541
+     * to understand why.
+     */
+    if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR)
+        ledger->last_date_entered = gncInvoiceGetDateOpened (invoice);
 
     if (!ledger->query && invoice)
         create_invoice_query (ledger);
