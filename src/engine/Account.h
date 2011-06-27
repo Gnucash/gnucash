@@ -678,17 +678,25 @@ Account * gnc_account_get_root (Account *account);
  *  @return TRUE if this account is of type ROOT.  FALSE otherwise. */
 gboolean gnc_account_is_root (const Account *account);
 
-/** This routine returns a GList of all children of the specified
+/** This routine returns a GList of all children accounts of the specified
  *  account.  This function only returns the immediate children of the
  *  specified account.  For a list of all descendant accounts, use the
  *  gnc_account_get_descendants() function.
  *
+ *  If you are looking for the splits of this account, use
+ *  xaccAccountGetSplitList() instead. This function here deals with
+ *  children accounts inside the account tree.
+ *
  *  @param account The account whose children should be returned.
  *
  *  @return A GList of account pointers, or NULL if there are no
- *  children. It is the callers responsibility to free any returned
+ *  children accounts. It is the callers responsibility to free any returned
  *  list with the g_list_free() function. */
 GList *gnc_account_get_children (const Account *account);
+
+/** This routine returns a GList of all children accounts of the specified
+ *  account, ordered by xaccAccountOrder().  \sa gnc_account_get_children()
+ */
 GList *gnc_account_get_children_sorted (const Account *account);
 
 /** Return the number of children of the specified account.  The
