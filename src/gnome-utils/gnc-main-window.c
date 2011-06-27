@@ -3417,18 +3417,20 @@ static gboolean
 gnc_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 {
     QofSession *session;
-    gboolean needs_save, do_shutdown;
+    gboolean needs_save;
 
-    gboolean finished = gnc_main_window_all_finish_pending();
-    if (!finished)
+    if (!gnc_main_window_all_finish_pending() ||
+	gnc_file_save_in_progress())
+    {
         return TRUE;
+    }
     session = gnc_get_current_session();
     needs_save = qof_book_not_saved(qof_session_get_book(session)) &&
                  !gnc_file_save_in_progress();
     if (needs_save && gnc_main_window_prompt_for_save(GTK_WIDGET(window)))
         return TRUE;
 
-    g_idle_add((GSourceFunc)gnc_shutdown, 0);
+    g_timeout_add(250, gnc_main_window_timed_quit, NULL);
     return TRUE;
 }
 
@@ -3445,8 +3447,6 @@ gnc_quartz_set_menu(GncMainWindow* window)
         menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menu));
     gtk_widget_hide(menu);
     gtk_osxapplication_set_menu_bar (theApp, GTK_MENU_SHELL (menu));
-    if (gtk_osxapplication_use_quartz_accelerators(theApp))
-	gtk_osxapplication_set_use_quartz_accelerators(theApp, FALSE);
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/File/FileQuit");
