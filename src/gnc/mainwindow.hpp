@@ -59,6 +59,9 @@ public:
     MainWindow();
     ~MainWindow();
 
+    const QString& getCurrentFilename() const { return m_currentFilename; }
+    bool hasOpenedFile() const { return !m_currentFilename.isEmpty(); }
+
 public slots:
     void accountItemActivated(const QModelIndex & index);
     void loadFileMaybe(const QString &fileName);
