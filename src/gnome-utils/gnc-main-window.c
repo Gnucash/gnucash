@@ -3399,18 +3399,20 @@ static gboolean
 gtk_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 {
     QofSession *session;
-    gboolean needs_save, do_shutdown;
+    gboolean needs_save;
 
-    gboolean finished = gnc_main_window_all_finish_pending();
-    if (!finished)
+    if (!gnc_main_window_all_finish_pending() ||
+	gnc_file_save_in_progress())
+    {
         return TRUE;
+    }
     session = gnc_get_current_session();
     needs_save = qof_book_not_saved(qof_session_get_book(session)) &&
                  !gnc_file_save_in_progress();
     if (needs_save && gnc_main_window_prompt_for_save(GTK_WIDGET(window)))
         return TRUE;
 
-    g_idle_add((GSourceFunc)gnc_shutdown, 0);
+    g_timeout_add(250, gnc_main_window_timed_quit, NULL);
     return TRUE;
 }
 
