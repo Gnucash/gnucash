@@ -672,10 +672,6 @@ test_book_new_destroy( void )
     qof_book_destroy( book );
     g_assert( qof_book_shutting_down( book ) );
     g_assert( test_struct.called );
-    g_assert( book->hash_of_collections );
-    g_assert_cmpint( g_hash_table_size( book->hash_of_collections ), ==, 0 );
-    g_assert( !book->data_tables );
-    g_assert( !book->data_table_finalizers );    
 }
 
 void
