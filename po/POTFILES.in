@@ -172,7 +172,6 @@ src/engine/gncmod-engine.c
 src/engine/gncOrder.c
 src/engine/gncOwner.c
 src/engine/gnc-pricedb.c
-src/engine/gnc-pricedb-static.c
 src/engine/gnc-session.c
 src/engine/gnc-session-scm.c
 src/engine/gncTaxTable.c
