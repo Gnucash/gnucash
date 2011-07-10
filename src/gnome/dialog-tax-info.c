@@ -95,6 +95,8 @@ typedef struct
 {
     GtkWidget * dialog;
 
+    GladeXML * xml;
+
     GtkWidget * entity_name_display;
     GtkWidget * entity_name_entry;
     GtkWidget * entity_type_display;
@@ -783,6 +785,8 @@ window_destroy_cb (GtkObject *object, gpointer data)
 
     gnc_unregister_gui_component_by_data (DIALOG_TAX_INFO_CM_CLASS, ti_dialog);
 
+    g_object_unref (ti_dialog->xml);
+
     destroy_tax_type_infos (ti_dialog->entity_type_infos);
     ti_dialog->entity_type_infos = NULL;
 
@@ -1308,6 +1312,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     GtkWidget *label;
 
     xml = gnc_glade_xml_new ("tax.glade", "Tax Information Dialog");
+    ti_dialog->xml = xml;
 
     dialog = glade_xml_get_widget (xml, "Tax Information Dialog");
     ti_dialog->dialog = dialog;
