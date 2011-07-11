@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.4.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-10 16:01-0400\n"
-"PO-Revision-Date: 2011-05-21 23:25+0900\n"
+"PO-Revision-Date: 2011-07-10 16:28+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "Language: ja\n"
@@ -1393,7 +1393,7 @@ msgstr "この支払条件を確定する"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:7
 msgid "Create a new Billing Term"
-msgstr "支払条件を新規作成する"
+msgstr "支払条件を新規作成します"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:8
 msgid "Cutoff Day: "
@@ -5395,7 +5395,7 @@ msgstr "<b>照合情報</b>"
 
 #: ../src/gnome/glade/reconcile.glade.h:2 ../src/gnome/window-reconcile.c:741
 msgid "Enter _Interest Payment..."
-msgstr "金利の支払いの入力(_I)..."
+msgstr "利払いの入力(_I)..."
 
 #: ../src/gnome/glade/reconcile.glade.h:3
 msgid "Include _subaccounts"
@@ -7139,7 +7139,7 @@ msgstr "この勘定科目の記録簿帳票を開く"
 
 #: ../src/gnome/gnc-plugin-page-register.c:340
 msgid "Account Transaction Report"
-msgstr "勘定科目取引帳票"
+msgstr "勘定科目取引出納帳"
 
 #: ../src/gnome/gnc-plugin-page-register.c:341
 msgid "Open a register report for the selected Transaction"
@@ -7397,7 +7397,7 @@ msgstr "将来:"
 
 #: ../src/gnome/gnc-split-reg.c:1871
 msgid "Cleared:"
-msgstr "精算済:"
+msgstr "清算済:"
 
 #: ../src/gnome/gnc-split-reg.c:1872
 msgid "Reconciled:"
@@ -9767,7 +9767,7 @@ msgstr "自動保存間隔(_I):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:43
 msgid "Automatic _interest transfer"
-msgstr "自動利息移動(_I)"
+msgstr "自動利子入力(_I)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:44
 msgid "Automatic credit card _payment"
@@ -10836,7 +10836,7 @@ msgstr "プロパティ(_T)"
 
 #: ../src/gnome-utils/gnc-main-window.c:260
 msgid "Edit the properties of the current file"
-msgstr "現在のファイルのプロパティを編集する"
+msgstr "現在のファイルのプロパティを編集します"
 
 #: ../src/gnome-utils/gnc-main-window.c:264
 msgid "_Close"
@@ -10844,7 +10844,7 @@ msgstr "閉じる"
 
 #: ../src/gnome-utils/gnc-main-window.c:265
 msgid "Close the currently active page"
-msgstr "現在アクティブなページを閉じる"
+msgstr "現在アクティブなページを閉じます"
 
 #: ../src/gnome-utils/gnc-main-window.c:269
 msgid "_Quit"
@@ -10852,7 +10852,7 @@ msgstr "終了(_Q)"
 
 #: ../src/gnome-utils/gnc-main-window.c:270
 msgid "Quit this application"
-msgstr "このアプリケーションを終了する"
+msgstr "このアプリケーションを終了します"
 
 #: ../src/gnome-utils/gnc-main-window.c:292
 msgid "Pr_eferences"
@@ -10878,7 +10878,7 @@ msgstr "再表示(_R)"
 #: ../src/gnome-utils/gnc-main-window.c:309
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1041
 msgid "Refresh this window"
-msgstr "このウィンドウを再表示する"
+msgstr "このウィンドウを再表示します"
 
 #. Actions menu
 #: ../src/gnome-utils/gnc-main-window.c:315
@@ -10920,7 +10920,7 @@ msgstr "現在のページを新しい最上位GnuCashウィンドウに移す"
 
 #: ../src/gnome-utils/gnc-main-window.c:343
 msgid "Tutorial and Concepts _Guide"
-msgstr "チュートリアルとコンセプトガイド(_G)"
+msgstr "チュートリアル・コンセプトガイド(_G)"
 
 #: ../src/gnome-utils/gnc-main-window.c:344
 msgid "Open the GnuCash Tutorial"
@@ -11486,9 +11486,8 @@ msgid "%s:"
 msgstr "%s:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:452
-#, fuzzy
 msgid "Net Assets:"
-msgstr "資産:"
+msgstr "純資産:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:454
 msgid "Profits:"
@@ -11516,7 +11515,7 @@ msgstr "利子・手数料を支払う勘定科目"
 
 #: ../src/gnome/window-reconcile.c:498
 msgid "No Auto Interest Payments for this Account"
-msgstr "この勘定科目では自動利払いを行わない"
+msgstr "この勘定科目では自動利払い入力を行わない"
 
 #: ../src/gnome/window-reconcile.c:499
 msgid "No Auto Interest Charges for this Account"
@@ -19907,7 +19906,7 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:3956 ../intl-scm/guile-strings.c:5332
 msgid "Do transaction report on this account"
-msgstr "この勘定科目について取引帳票を実行する"
+msgstr "この勘定科目について取引出納帳を実行する"
 
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -22072,14 +22071,13 @@ msgstr "変更済"
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:6806 ../intl-scm/guile-strings.c:7956
 msgid "Client"
-msgstr ""
+msgstr "クライアント"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:6818 ../intl-scm/guile-strings.c:7968
-#, fuzzy
 msgid "Future Scheduled Transactions Summary"
-msgstr "予定取引"
+msgstr "今後の予定取引の要約"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -23952,16 +23950,14 @@ msgstr "GnuCashへようこそ"
 #. src/report/utility-reports/gnucash/report/welcome-to-gnucash.scm
 #. src/report/utility-reports/welcome-to-gnucash.scm
 #: ../intl-scm/guile-strings.c:10204 ../intl-scm/guile-strings.c:10392
-#, fuzzy
 msgid "Welcome to GnuCash 2.4!"
-msgstr "GnuCash 2.0にようこそ!"
+msgstr "GnuCash 2.4にようこそ!"
 
 #. src/report/utility-reports/gnucash/report/welcome-to-gnucash.scm
 #. src/report/utility-reports/welcome-to-gnucash.scm
 #: ../intl-scm/guile-strings.c:10206 ../intl-scm/guile-strings.c:10394
-#, fuzzy
 msgid "GnuCash 2.4 has lots of nice features. Here are a few."
-msgstr "GnuCash 2.0にはたくさんの素晴らしい機能があります。ここで少し紹介します。"
+msgstr "GnuCash 2.4にはたくさんの素晴らしい機能があります。ここで少し紹介します。"
 
 #. src/scm/command-line.scm
 #: ../intl-scm/guile-strings.c:10398
@@ -24075,9 +24071,8 @@ msgid "No help available."
 msgstr "ヘルプが利用できません。"
 
 #: ../doc/tip_of_the_day.list.in:1
-#, fuzzy
 msgid "The GnuCash online manual has lots of helpful information. You can access the manual under the Help menu."
-msgstr "GnuCash オンラインマニュアルには有益な情報がたくさんあります。以前のバージョンのGnuCashからアップグレードした場合は、\"GnuCash 2.0の新機能\" のセクションが特に興味のあるところでしょう。マニュアルにはヘルプメニューからアクセスすることができます。"
+msgstr "GnuCash オンラインマニュアルには有益な情報がたくさんあります。マニュアルにはヘルプメニューからアクセスすることができます。"
 
 #: ../doc/tip_of_the_day.list.in:4
 msgid "You can easily import your existing financial data from Quicken, MS Money or other programs that export QIF files or OFX files.  In the File menu, click on the sub-menu Import and click on QIF or OFX file, respectively. Then, follow the instructions provided."
@@ -24120,9 +24115,8 @@ msgid "When entering dates, you can type '+' or '-' to increment or decrement th
 msgstr "日付を入力する際、'+', '-' を使って選択した日付を増減させることができます。小切手番号の増減にも同様に利用できます。"
 
 #: ../doc/tip_of_the_day.list.in:53
-#, fuzzy
 msgid "To switch between multiple tabs in the main window, press Control+Page Up/Down."
-msgstr "メインウィンドウのタブ間を移動するには、Control+Alt+Page Up/Downを押します。"
+msgstr "メインウィンドウのタブ間を移動するには、Control+Page Up/Downを押します。"
 
 #: ../doc/tip_of_the_day.list.in:56
 msgid "In the reconcile window, you can press the spacebar to mark transactions as reconciled.  You can also press Tab and Shift-Tab to move between deposits and withdrawals."
@@ -24146,7 +24140,7 @@ msgstr "記録簿ページの資金移動欄で勘定科目メニューを開く
 
 #: ../doc/tip_of_the_day.list.in:77
 msgid "If you work overnight, you should close and reopen your working register after midnight, to get the new date as default for new transactions. It is not necessary to restart GnuCash therefore."
-msgstr ""
+msgstr "夜通し仕事をする場合、日付が変わった後に作業をしている記録簿を閉じて、再度開けば、新しい取引のデフォルトとして新しい日付が設定されます。よって GnuCash 自体を再起動する必要はありません。"
 
 #: ../doc/tip_of_the_day.list.in:81
 msgid "The GnuCash developers are easy to contact.  As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
