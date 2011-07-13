@@ -10171,7 +10171,7 @@ msgstr "ne correspond pas à l'expression régulière"
 #. Build and connect the toggle button
 #: ../src/gnome-search/search-string.c:329
 msgid "Case Insensitive?"
-msgstr "Respecter la casse ?"
+msgstr "Ignorer la casse?"
 
 #: ../src/gnome/top-level.c:96
 #, c-format
