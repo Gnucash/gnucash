@@ -77,6 +77,69 @@ Otherwise, only failures are printed out.
     g_free( testpath );\
 }
 
+/**
+ * Test Support
+ *
+ * Struct and functions for unit test support:
+ * Intercept and report GLib error messages to test functions.
+ * Ensure that mock functions are called, and with the right data pointer
+ *
+ */
+
+typedef struct
+{
+    GLogLevelFlags log_level;
+    gchar *log_domain;
+    gchar *msg;
+} TestErrorStruct;
+
+ /**
+  * Pass this to g_test_log_set_fatal_handler(), setting user_data to
+  * a pointer to TestErrorStruct to intercept and handle expected
+  * error and warning messages. It will g_assert if an error is
+  * received which doesn't match the log_level, log_domain, and
+  * message in the struct (if they're set), or return FALSE to prevent
+  * the message from aborting. Be sure to g_free() the
+  * TestErrorData:msg after you're done testing it.
+  */
+gboolean test_handle_faults( const char *log_domain, GLogLevelFlags log_level,
+			     const gchar *msg, gpointer user_data);
+/**
+ * When you know you're going to get a useless log message, pass this
+ * to g_log_set_default_handler to shut it up.
+ */
+void test_silent_logger(  const char *log_domain, GLogLevelFlags log_level,
+			  const gchar *msg, gpointer user_data );
+/**
+ * Call this from a mock object to indicate that the mock has in fact
+ * been called
+ */
+void test_set_called( const gboolean val );
+
+/**
+ * Destructively tests (meaning that it resets called to FALSE) and
+ * returns the value of called.
+ */
+const test_reset_called( void );
+
+/**
+ * Set the test data pointer with the what you expect your mock to be
+ * called with.
+ */
+void test_set_data( gpointer data );
+
+/**
+ * Destructively retrieves the test data pointer. Call from your mock
+ * to ensure that it received the expected data.
+ */
+const gpointer test_reset_data( void );
+
+/**
+ * A handy function to use to free memory from lists of simple
+ * pointers. Call g_list_free_full(list, (GDestroyNotify)*test_free).
+ */
+void test_free( gpointer data );
+
 /* Privately used to indicate a test result. You may use these if you
  * wish, but it's easier to use the do_test macro above.
  */

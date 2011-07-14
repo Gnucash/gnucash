@@ -20,6 +20,15 @@
 #include <glib.h>
 #include "test-stuff.h"
 
+typedef struct
+{
+    gpointer data;
+    gboolean called;
+    gchar *msg;
+}TestStruct;
+
+static TestStruct tdata;
+
 void vsuccess_args(
     const char *test_title,
     const char *file,
@@ -346,4 +355,63 @@ get_random_string_in_array(const char* str_list[])
 
     num = get_random_int_in_range(0, num - 1);
     return str_list[num];
+}
+
+void
+test_silent_logger(  const char *log_domain, GLogLevelFlags log_level,
+		    const gchar *msg, gpointer user_data )
+{
+    //Silent, remember?
+    return;
+}
+
+gboolean
+test_handle_faults( const char *log_domain, GLogLevelFlags log_level,
+		    const gchar *msg, gpointer user_data )
+{
+    TestErrorStruct *tdata = (TestErrorStruct*)user_data;
+    if (tdata == NULL) {
+	g_printf("Recieved Error Message %s\n", msg);
+	return FALSE;
+    }
+    if (tdata->log_domain != NULL)
+	g_assert(g_strcmp0(tdata->log_domain, log_domain) == 0);
+    if (tdata->log_level)
+	g_assert(log_level == tdata->log_level);
+    tdata->msg = g_strdup(msg);
+    return FALSE;
+}
+
+void
+test_set_called( const gboolean val )
+{
+    tdata.called = val;
+}
+
+const gboolean
+test_reset_called( void )
+{
+    const gboolean called  = tdata.called;
+    tdata.called = FALSE;
+    return called;
+}
+
+void
+test_set_data( const gpointer val )
+{
+    tdata.data = val;
+}
+
+const gpointer
+test_reset_data( void )
+{
+    const gpointer data  = tdata.data;
+    tdata.data = NULL;
+    return data;
+}
+
+void
+test_free( gpointer data ) {
+    if (!data) return;
+    g_free(data);
 }
