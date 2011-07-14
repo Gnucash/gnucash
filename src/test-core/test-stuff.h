@@ -61,7 +61,7 @@ Otherwise, only failures are printed out.
 #define GNC_TEST_ADD( suite, path, fixture, data, setup, test, teardown )\
 {\
     gchar *testpath = g_strdup_printf( "%s/%s", suite, path );\
-    g_test_add( testpath, fixture, NULL, setup, test, teardown );\
+    g_test_add( testpath, fixture, data, setup, test, teardown );\
     g_free( testpath );\
 }
 
