@@ -120,7 +120,7 @@ void test_set_called( const gboolean val );
  * Destructively tests (meaning that it resets called to FALSE) and
  * returns the value of called.
  */
-const test_reset_called( void );
+const gboolean test_reset_called( void );
 
 /**
  * Set the test data pointer with the what you expect your mock to be
