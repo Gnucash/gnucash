@@ -12,12 +12,14 @@ test_qof_SOURCES = \
 	test-qof.c \
 	test-qofbook.c \
 	test-qofinstance.c \
+	test-kvp_frame.c \
 	test-qofsession.c
 
 test_qof_HEADERSS = \
 	$(top_srcdir)/${MODULEPATH}/qofbook.h \
 	$(top_srcdir)/${MODULEPATH}/qofinstance.h \
-	$(top_srcdir)/${MODULEPATH/}qofsession.h
+	$(top_srcdir)/${MODULEPATH}/kvp_frame.h \
+	$(top_srcdir)/${MODULEPATH}/qofsession.h
 
 TEST_PROGS += test-qof
 

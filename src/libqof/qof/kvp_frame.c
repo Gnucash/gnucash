@@ -1610,6 +1610,27 @@ kvp_value_glist_to_string(const GList *list)
     return tmp2;
 }
 
+/* struct for kvp frame static funtion testing*/
+void init_static_test_pointers( void );
+
+KvpFrame* ( *p_get_trailer_make )( KvpFrame *frame, const char *key_path, char **end_key );
+gchar* ( *p_kvp_value_glist_to_string )( const GList *list );
+KvpFrame* ( *p_get_or_make )( KvpFrame *fr, const char * key );
+const KvpFrame* ( *p_kvp_frame_get_frame_or_null_slash_trash )( const KvpFrame *frame, char *key_path );
+const KvpFrame* ( *p_get_trailer_or_null )( const KvpFrame * frame, const char * key_path, char **end_key );
+
+void
+init_static_test_pointers( void )
+{
+    p_get_trailer_make = get_trailer_make;
+    p_kvp_value_glist_to_string = kvp_value_glist_to_string;
+    p_get_or_make = get_or_make;
+    p_kvp_frame_get_frame_or_null_slash_trash = kvp_frame_get_frame_or_null_slash_trash;
+    p_get_trailer_or_null = get_trailer_or_null;
+}
+
+/* ----- */
+
 static gchar*
 kvp_value_to_bare_string(const KvpValue *val);
 
