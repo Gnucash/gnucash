@@ -836,14 +836,14 @@ gnc_account_class_init (AccountClass *klass)
     g_object_class_install_property
     (gobject_class,
      PROP_TAX_COPY_NUMBER,
-     g_param_spec_int ("tax-copy-number",
-                       "Tax Copy Number",
-                       "This specifies the copy number of the tax "
-                       "form/schedule.",
-                       1,
-                       G_MAXINT16,
-                       1,
-                       G_PARAM_READWRITE));
+     g_param_spec_int64 ("tax-copy-number",
+                         "Tax Copy Number",
+                         "This specifies the copy number of the tax "
+                         "form/schedule.",
+                         (gint64)1,
+                         G_MAXINT64,
+                         (gint64)1,
+                         G_PARAM_READWRITE));
 
     g_object_class_install_property
     (gobject_class,
