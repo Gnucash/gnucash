@@ -215,8 +215,8 @@ void
 xaccTransWriteLog (Transaction *trans, char flag)
 {
     GList *node;
-    char trans_guid_str[GUID_ENCODING_LENGTH+1];
-    char split_guid_str[GUID_ENCODING_LENGTH+1];
+    char trans_guid_str[GUID_ENCODING_LENGTH + 1];
+    char split_guid_str[GUID_ENCODING_LENGTH + 1];
     const char *trans_notes;
     char dnow[100], dent[100], dpost[100], drecn[100];
     Timespec ts;
@@ -241,7 +241,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
     {
         Split *split = node->data;
         const char * accname = "";
-        char acc_guid_str[GUID_ENCODING_LENGTH+1];
+        char acc_guid_str[GUID_ENCODING_LENGTH + 1];
         gnc_numeric amt, val;
 
         if (xaccSplitGetAccount(split))

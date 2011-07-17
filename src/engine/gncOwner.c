@@ -316,7 +316,7 @@ qofOwnerSetEntity (GncOwner *owner, QofInstance *ent)
     else
     {
         owner->type = GNC_OWNER_NONE;
-        owner->owner.undefined=NULL;
+        owner->owner.undefined = NULL;
     }
 }
 

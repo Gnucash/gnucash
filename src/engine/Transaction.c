@@ -799,8 +799,8 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
                 if (!xaccSplitEqual (split_a, split_b, check_guids, check_balances,
                                      FALSE))
                 {
-                    char str_a[GUID_ENCODING_LENGTH+1];
-                    char str_b[GUID_ENCODING_LENGTH+1];
+                    char str_a[GUID_ENCODING_LENGTH + 1];
+                    char str_b[GUID_ENCODING_LENGTH + 1];
 
                     guid_to_string_buff (xaccSplitGetGUID (split_a), str_a);
                     guid_to_string_buff (xaccSplitGetGUID (split_b), str_b);
@@ -909,12 +909,12 @@ xaccTransGetImbalance (const Transaction * trans)
                 imbal_value);
             }
             imbal_list = gnc_monetary_list_add_value(imbal_list, commodity,
-            xaccSplitGetAmount(s));
+                         xaccSplitGetAmount(s));
         }
 
         /* Add it to the value accumulator in case we need it. */
         imbal_value = gnc_numeric_add(imbal_value, xaccSplitGetValue(s),
-        GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
     } );
 
 
@@ -2077,7 +2077,7 @@ xaccTransVoid(Transaction *trans, const char *reason)
     KvpFrame *frame;
     KvpValue *val;
     Timespec now;
-    char iso8601_str[ISO_DATELENGTH+1] = "";
+    char iso8601_str[ISO_DATELENGTH + 1] = "";
 
     g_return_if_fail(trans && reason);
 

@@ -143,15 +143,15 @@ gnc_scm2guid(SCM guid_scm)
     gchar * str;
 
     if (!scm_is_string(guid_scm)
-        || (GUID_ENCODING_LENGTH != scm_c_string_length (guid_scm)))
+            || (GUID_ENCODING_LENGTH != scm_c_string_length (guid_scm)))
     {
         return *guid_null();
     }
-    scm_dynwind_begin (0); 
+    scm_dynwind_begin (0);
     str = scm_to_locale_string (guid_scm);
     string_to_guid(str, &guid);
-    scm_dynwind_free (str); 
-    scm_dynwind_end (); 
+    scm_dynwind_free (str);
+    scm_dynwind_end ();
     return guid;
 }
 
@@ -169,11 +169,11 @@ gnc_guid_p(SCM guid_scm)
     {
         return FALSE;
     }
-    scm_dynwind_begin (0); 
+    scm_dynwind_begin (0);
     str = scm_to_locale_string (guid_scm);
     return_int = string_to_guid(str, &guid);
-    scm_dynwind_free (str); 
-    scm_dynwind_end (); 
+    scm_dynwind_free (str);
+    scm_dynwind_end ();
     return return_int;
 }
 
@@ -515,11 +515,11 @@ gnc_query_scm2path (SCM path_scm)
         if (!scm_is_string (key_scm))
             break;
 
-        scm_dynwind_begin (0); 
-        str = scm_to_locale_string(key_scm); 
+        scm_dynwind_begin (0);
+        str = scm_to_locale_string(key_scm);
         key = g_strdup (str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
 
         path = g_slist_prepend (path, key);
 
@@ -688,11 +688,11 @@ gnc_scm2KvpValue (SCM value_scm)
     case KVP_TYPE_STRING:
     {
         gchar * str;
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         str = scm_to_locale_string (val_scm);
         value = kvp_value_new_string (str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
         break;
     }
 
@@ -804,24 +804,24 @@ gnc_scm2KvpFrame (SCM frame_scm)
         if (!scm_is_string (key_scm))
             continue;
 
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         key = scm_to_locale_string (key_scm);
         if (!key)
         {
-            scm_dynwind_free (key); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (key);
+            scm_dynwind_end ();
             continue;
         }
         value = gnc_scm2KvpValue (val_scm);
         if (!value)
         {
-            scm_dynwind_free (key); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (key);
+            scm_dynwind_end ();
             continue;
         }
         kvp_frame_set_slot_nc (frame, key, value);
-        scm_dynwind_free (key); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (key);
+        scm_dynwind_end ();
     }
 
     return frame;
@@ -986,13 +986,13 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
             qt_scm = SCM_CDR (qt_scm);
             if (!scm_is_string (scm)) break;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             matchstring = scm_to_locale_string (scm);
 
             pd = qof_query_string_predicate (compare_how, matchstring,
                                              options, is_regex);
-            scm_dynwind_free (matchstring); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (matchstring);
+            scm_dynwind_end ();
         }
         else if (!safe_strcmp (type, QOF_TYPE_DATE))
         {
@@ -1110,12 +1110,12 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
             qt_scm = SCM_CDR (qt_scm);
             if (!scm_is_string (scm))
                 break;
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             char_list = scm_to_locale_string (scm);
 
             pd = qof_query_char_predicate (options, char_list);
-            scm_dynwind_free (char_list); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (char_list);
+            scm_dynwind_end ();
         }
         else if (!safe_strcmp (type, QOF_TYPE_KVP))
         {
@@ -1381,7 +1381,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
             scm = SCM_CAR (query_term_scm);
             query_term_scm = SCM_CDR (query_term_scm);
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             matchstring = scm_to_locale_string (scm);
 
             if (!safe_strcmp (pr_type, "pr-action"))
@@ -1416,8 +1416,8 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
             {
                 PINFO ("Unknown string predicate: %s", pr_type);
             }
-            scm_dynwind_free (matchstring); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (matchstring);
+            scm_dynwind_end ();
 
         }
         else if (!safe_strcmp (pd_type, "pd-cleared"))
@@ -1470,11 +1470,11 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
             /* id type */
             scm = SCM_CAR (query_term_scm);
             query_term_scm = SCM_CDR (query_term_scm);
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             str = scm_to_locale_string (scm);
             id_type = g_strdup (str);
-            scm_dynwind_free (str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (str);
+            scm_dynwind_end ();
 
             xaccQueryAddGUIDMatch (q, &guid, id_type, QOF_QUERY_OR);
             g_free ((void *) id_type);
