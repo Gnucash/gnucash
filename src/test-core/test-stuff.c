@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
+#include <glib/gprintf.h>
 #include "test-stuff.h"
 
 typedef struct
