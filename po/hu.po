@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-07-07 01:30+0200\n"
-"PO-Revision-Date: 2011-07-15 20:48+0100\n"
+"PO-Revision-Date: 2011-07-30 16:57+0100\n"
 "Last-Translator: Takó Kornél <takokornel@gmail.com>\n"
 "Language-Team: Hungarian\n"
 "Language: \n"
@@ -201,7 +201,7 @@ msgstr "Nyitóegyenleg"
 #: ../intl-scm/guile-strings.c:4212
 #: ../intl-scm/guile-strings.c:4636
 msgid "Debit"
-msgstr "Terhelés"
+msgstr "Jóváírás"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
@@ -217,7 +217,7 @@ msgstr "Terhelés"
 #: ../intl-scm/guile-strings.c:4214
 #: ../intl-scm/guile-strings.c:4638
 msgid "Credit"
-msgstr "Jóváírás"
+msgstr "Terhelés"
 
 #: ../src/app-utils/option-util.c:1715
 #, c-format
@@ -562,7 +562,7 @@ msgstr "Engedmény százaléka lehet 0-100 közötti érték, vagy üresen kell 
 
 #: ../src/business/business-gnome/dialog-customer.c:350
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr "A jóváírás pozitív összeg lehet, vagy üresen kell hagyni."
+msgstr "A terhelés pozitív összeg lehet, vagy üresen kell hagyni."
 
 #: ../src/business/business-gnome/dialog-customer.c:426
 #: ../src/business/business-gnome/dialog-employee.c:310
@@ -829,7 +829,7 @@ msgstr "Készpénz összesen:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1080
 msgid "Total Charge:"
-msgstr " Összes terhelés:"
+msgstr " Összes Költség:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1736
 #: ../src/business/business-gnome/glade/invoice.glade.h:18
@@ -1114,7 +1114,7 @@ msgstr "Összeg"
 #: ../src/business/business-gnome/dialog-invoice.c:2854
 #, c-format
 msgid "The following %d bill is due:"
-msgstr "\"A következő számla esedékes\""
+msgstr "\"Az alábbi %d számla esedékes\""
 
 #: ../src/business/business-gnome/dialog-invoice.c:2860
 msgid "Due Bills Reminder"
@@ -3711,12 +3711,12 @@ msgstr "Ez az ütemezett tranzakció megváltozott. Biztosan elveti?"
 #: ../src/gnome/dialog-sx-editor.c:661
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
-msgstr "Nem sikerült feldolgozni a jóváírás kiszámítási-képletét a \"%s\" részkönyvelésben."
+msgstr "Nem sikerült feldolgozni a terhelés kiszámítási-képletét a \"%s\" részkönyvelésben."
 
 #: ../src/gnome/dialog-sx-editor.c:689
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
-msgstr "Nem sikerült feldolgozni a terhelés kiszámítási-képletét a \"%s\" részkönyvelésben."
+msgstr "Nem sikerült feldolgozni a jóváírás kiszámítási-képletét a \"%s\" részkönyvelésben."
 
 #: ../src/gnome/dialog-sx-editor.c:723
 #: ../src/gnome/dialog-sx-from-trans.c:276
@@ -8264,11 +8264,11 @@ msgstr "tartalmaz terhelést vagy jóváírást"
 
 #: ../src/gnome-search/search-numeric.c:254
 msgid "has debits"
-msgstr "tartalmaz terhelést"
+msgstr "tartalmaz jóváírást"
 
 #: ../src/gnome-search/search-numeric.c:255
 msgid "has credits"
-msgstr "tartalmaz jóváírást"
+msgstr "tartalmaz terhelést"
 
 #. Build and connect the toggles
 #: ../src/gnome-search/search-reconciled.c:226
@@ -11241,13 +11241,13 @@ msgstr "Enter _Interest Charge..."
 
 #: ../src/gnome/window-reconcile.c:1004
 msgid "Debits"
-msgstr "Terhelések"
+msgstr "Jóváírások"
 
 #. src/report/report-system/report-utilities.scm
 #: ../src/gnome/window-reconcile.c:1014
 #: ../intl-scm/guile-strings.c:2108
 msgid "Credits"
-msgstr "Jóváírások"
+msgstr "Terhelések"
 
 #: ../src/gnome/window-reconcile.c:1182
 msgid "Are you sure you want to delete the selected transaction?"
@@ -11681,7 +11681,7 @@ msgstr "(ismeretlen)"
 #. * subdirectory.
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:307
 msgid "Enter an Online Direct Debit Note"
-msgstr "Online terhelés bevitele"
+msgstr "Online jóváírás-megjegyzés bevitele"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:310
 msgid "Debited Account Owner"
@@ -12031,11 +12031,11 @@ msgstr "Új belső tranzakció intézése Online Banking-gel"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:119
 msgid "_Direct Debit..."
-msgstr "_Direkt terhelés..."
+msgstr "_Direkt jóváírás..."
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:120
 msgid "Issue a new direct debit note online through Online Banking"
-msgstr "Új online direkt terhelés intézése Online Banking-gel"
+msgstr "Új online direkt jóváírás intézése Online Banking-gel"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:126
 msgid "Import _MT940"
@@ -20336,22 +20336,22 @@ msgstr "Futó egyenleg megjelenítése"
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3956
 msgid "Total Debits"
-msgstr "Terhelés összesen"
+msgstr "Jóváírás összesen"
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3958
 msgid "Total Credits"
-msgstr "Jóváírás összesen"
+msgstr "Terhelés összesen"
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3960
 msgid "Total Value Debits"
-msgstr "Total Value Debits"
+msgstr "Jóváírások értéke összesen"
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3962
 msgid "Total Value Credits"
-msgstr "Total Value Credits"
+msgstr "Terhelések értéke összesen"
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3964
@@ -22101,26 +22101,33 @@ msgstr ""
 #~ "engedélyezve,akkor azon tranzakció, melynek legjobb egyezési pontszáma a "
 #~ "sárga sávba esik (az auto-bővítés küszöb felett, de az auto-törlés küszöb "
 #~ "alatt),alapértelmezésként kihagyva."
+
 #~ msgid ""
 #~ "Blue items are exportable to a German Tax XML file. Press Export to "
 #~ "actually export them."
 #~ msgstr ""
 #~ "A kék tételek exportálhatók egy német adó XML fájlba. Nyomjon Exportot a "
 #~ "tényleges exportáláshoz."
+
 #~ msgid ""
 #~ "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog "
 #~ "to set up tax-related accounts."
 #~ msgstr ""
 #~ "Nincs adóvonatkozású számla. Nyissa meg a Számlák->Adóinformáció "
 #~ "dialógust, és készítsen adóvonatkozású számlákat."
+
 #~ msgid "Default number of register rows to display in Invoices."
 #~ msgstr "A számlákban megjelenítendő cellák száma."
+
 #~ msgid "Number of _rows:"
 #~ msgstr "Cellák _száma:"
+
 #~ msgid "Create a new invoice"
 #~ msgstr "Új számla létrehozása"
+
 #~ msgid "The number of rows in an invoice"
 #~ msgstr "A sorok száma egy számlán"
+
 #~ msgid ""
 #~ "This field sets the number of rows to show in an invoice. It does not "
 #~ "actually affect the display of the contents of the window. It is only "
@@ -22129,16 +22136,22 @@ msgstr ""
 #~ "E mező állítja be a számlán megjelenített sorok számát. Nem befolyásolja "
 #~ "az ablakban megjelenített tartalmat. Csak az ablak első megnyitásakor az "
 #~ "ablakméret beállítására használják."
+
 #~ msgid "Invalid Entry:  You need to supply %s."
 #~ msgstr "Érvénytelen tétel: Meg kell adni: %s."
+
 #~ msgid "an Account"
 #~ msgstr "egy folyószámla"
+
 #~ msgid "This SX has changed; are you sure you want to cancel?"
 #~ msgstr "Ez az ütemezés megváltozott. Biztosan elveti?"
+
 #~ msgid "Crea_te in advance, days:"
 #~ msgstr "Korábbi _létrehozás,napok:"
+
 #~ msgid "R_emind in advance, days:"
 #~ msgstr "Megelőző _emlékeztetés, nap:"
+
 #~ msgid ""
 #~ "This field sets the number of rows to show in a register. It does not "
 #~ "actually affect the display of the contents of the window. It is only "
@@ -22147,17 +22160,23 @@ msgstr ""
 #~ "E mező határozza meg a regiszterben megjelenítendő sorok számát. "
 #~ "Ténylegesen nem befolyásolja az ablak tartalmának megjelenítését. Csak az "
 #~ "első megnyitáskoriméret meghatározásához használják."
+
 #~ msgid "New %s"
 #~ msgstr "Új %s"
+
 #~ msgid "item"
 #~ msgstr "tétel"
+
 #~ msgid "Display this many rows when a register is created."
 #~ msgstr "Ennyi sor megjelenítése regiszter teremtésekor."
+
 #~ msgid "_Open"
 #~ msgstr "Megnyitás"
+
 #~ msgid ""
 #~ "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
 #~ msgstr "SZERKESZTÉS engedélyezése a tranzakció-illesztő. MÉG NEM TÁMOGATOTT"
+
 #~ msgid ""
 #~ "The job was sent to the bank successfully, but the bank is refusing to "
 #~ "execute the job. Please check the log window for the exact error message "
@@ -22171,36 +22190,49 @@ msgstr ""
 #~ "A hibaüzenet sora 9000-nél nagyobb kódszámot tartalmaz.\n"
 #~ "\n"
 #~ "Akarja újból bevinni a feladatot?"
+
 #~ msgid "The two passwords didn't match. Please try again."
 #~ msgstr "A két jelszó nem egyezik. Próbálja újra."
+
 #~ msgid "Choose AqBanking Backend"
 #~ msgstr "Válasszon AqBanking Modul-t"
+
 #~ msgid "Please choose an AqBanking backend to be configured"
 #~ msgstr "Válasszon AqBanking Modult a beállításhoz"
+
 #~ msgid "Co_nfigure"
 #~ msgstr "Beállítás"
+
 #~ msgid "The file %s does not exist. Would you like to create it now?"
 #~ msgstr "A %s fájl nem létezik. Akarja létrehozni?"
+
 #~ msgid ""
 #~ "The directory for file %s does not exist. Please choose another place for "
 #~ "this file."
 #~ msgstr "%s fájl mappája nem létezik. Válasszon egy másik helyet a fájlnak."
+
 #~ msgid "Choose an Online Banking Version to use with the selected bank:"
 #~ msgstr "Válassza ki a banknál használni kívánt Online Banking változatot:"
+
 #~ msgid "Version"
 #~ msgstr "Verzió"
+
 #~ msgid "Enter and confirm your new password"
 #~ msgstr "Adja meg és erősítse meg az új jelszavát"
+
 #~ msgid "Enter new Password"
 #~ msgstr "Új jelszó bevitele"
+
 #~ msgid "Activate verbose debug messages for Online Banking."
 #~ msgstr "Bőbeszédű hibaüzenetek aktiválása az Online Banking-hez."
+
 #~ msgid ""
 #~ "The PIN you entered was wrong.\n"
 #~ "Do you want to try again?"
 #~ msgstr ""
 #~ "Rossz a megadott PIN-kód.\n"
 #~ "Kívánja újrapróbálni?"
+
 #~ msgid ""
 #~ "The PIN you entered was wrong.\n"
 #~ "ATTENTION: You have zero further wrong retries left!\n"
@@ -22209,22 +22241,26 @@ msgstr ""
 #~ "Rossz a megadott PIN-kód.\n"
 #~ "FIGYELEM: nulla újrapróbálás maradt!\n"
 #~ " Akarja újrapróbálni?"
+
 #~ msgid ""
 #~ "Unfortunately you entered a wrong PIN for too many times. Your chip card "
 #~ "is therefore destroyed. Aborting."
 #~ msgstr ""
 #~ "Sajnos túl sokszor adott meg rossz PIN-kódot. Ezért a chipkártya "
 #~ "használhatatlanná vált. Kilépés."
+
 #~ msgid ""
 #~ "No chip card has been found in the chip card reader. Do you want to try "
 #~ "again?"
 #~ msgstr "Nincs chipkártya a chipkártya-olvasóban. Akarja újrapróbálni?"
+
 #~ msgid ""
 #~ "The server of your bank refused the Online Banking connection. Please try "
 #~ "again later. Aborting."
 #~ msgstr ""
 #~ "A bank kiszolgálója elutasította az Online Banking kapcsolatot. Próbálja "
 #~ "újra később. Kilépés."
+
 #~ msgid ""
 #~ "One of the jobs was sent to the bank successfully, but the bank is "
 #~ "refusing to execute the job. Please check the log window for the exact "
@@ -22238,52 +22274,67 @@ msgstr ""
 #~ "A hibaüzenet sora 9000-nél nagyobb kódszámot tartalmaz.\n"
 #~ "\n"
 #~ "A feladat el lett távolítva a kérésből."
+
 #~ msgid ""
 #~ "The PIN needs to be at least %d characters long. Do you want to try again?"
 #~ msgstr "A PIN-kód legalább %d karakter kell legyen. Akarja újrapróbálni?"
+
 #~ msgid ""
 #~ "You entered %ld characters, but the PIN must be no longer than %d "
 #~ "characters. Do you want to try again?"
 #~ msgstr ""
 #~ "%ld betűt adtak meg, de a PIN legfeljebb %d betű lehet. Akarja "
 #~ "újrapróbálni?"
+
 #~ msgid ""
 #~ "This TAN needs to be at least %d characters long. Do you want to try "
 #~ "again?"
 #~ msgstr "A TAN legalább %d karakter kell legyen. Akarja újrapróbálni?"
+
 #~ msgid ""
 #~ "You entered %ld characters, but the TAN must be no longer than %d "
 #~ "characters. Do you want to try again?"
 #~ msgstr ""
 #~ "%ld betűt adtak meg, de a TAN legfeljebb %d betű lehet. Akarja "
 #~ "újrapróbálni?"
+
 #~ msgid "Enable EDIT transaction action"
 #~ msgstr "Tranzakció szerkesztésének engedélyezése"
+
 #~ msgid ""
 #~ "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
 #~ msgstr ""
 #~ "Tranzakció szerkesztésének engedélyezése a tranzakció-illesztőben. MÉG "
 #~ "NEM TÁMOGATOTT."
+
 #~ msgid "Set configuration path"
 #~ msgstr "Adja meg a beállítás elérési útját"
+
 #~ msgid "CONFIGPATH"
 #~ msgstr "CONFIGPATH"
+
 #~ msgid "Set shared data file search path"
 #~ msgstr "Adja meg a megosztott adatok keresési útját"
+
 #~ msgid "SHAREPATH"
 #~ msgstr "SHAREPATH"
+
 #~ msgid "Transaction _journal"
 #~ msgstr "Tranzakció napló"
 
 #, fuzzy
 #~ msgid "Payment rec'd..."
 #~ msgstr "Törlesztés gyakorisága"
+
 #~ msgid "<b>Contained Accounts</b>"
 #~ msgstr "<b>Tartalmazott számlák</b>"
+
 #~ msgid "<b>Description</b>"
 #~ msgstr "<b>Magyarázat</b>"
+
 #~ msgid "<b>New Account Currency</b>"
 #~ msgstr "<b>Új számlák pénzneme</b>"
+
 #~ msgid ""
 #~ "If you would like an account to have an opening balance, click on the "
 #~ "account and enter the starting balance in the box on the right. All "
@@ -22293,40 +22344,58 @@ msgstr ""
 #~ "Ha kívánja, hogy a számlának legyen nyitóegyenlege, akkor kattintson a "
 #~ "számlára, és adja meg a kezdő egyenleget a jobboldali mezőben. A saját "
 #~ "tőke és a töltelék kivételével bármely számlának lehet nyitóegyenlege."
+
 #~ msgid "This is Sample2."
 #~ msgstr "Ez a 2. példa."
+
 #~ msgid "Auto-Created Transactions Notification"
 #~ msgstr "Értesítés,automatikusan létrehozott tranzakciókról"
+
 #~ msgid "Create"
 #~ msgstr "Létrehozás"
+
 #~ msgid "Create as scheduled"
 #~ msgstr "Létrehozás Ütemezettként"
+
 #~ msgid "Created Transaction Review"
 #~ msgstr "Létrehozott tranzakció-áttekintés"
+
 #~ msgid "Creating transactions..."
 #~ msgstr "Tranzakciók létrehozása..."
+
 #~ msgid "Days Away"
 #~ msgstr "nap múlva"
+
 #~ msgid "Disposition?"
 #~ msgstr "Rendelkezés?"
+
 #~ msgid "Ended On"
 #~ msgstr "Vége"
+
 #~ msgid "Ignore"
 #~ msgstr "Kihagy"
+
 #~ msgid "Obsolete Scheduled Transactions"
 #~ msgstr "Elavult időzített tranzakciók"
+
 #~ msgid "Postpone"
 #~ msgstr "Halaszt"
+
 #~ msgid "Press Apply to create these transactions."
 #~ msgstr "Nyomjon Alkalmazást a tranzakció létrehozáshoz."
+
 #~ msgid "Scheduled Transaction"
 #~ msgstr "Időzített tranzakciók"
+
 #~ msgid "Since Last Run"
 #~ msgstr "Utolsó futás óta"
+
 #~ msgid "State"
 #~ msgstr "Állapot"
+
 #~ msgid "Template Transaction (Read-Only)"
 #~ msgstr "Tranzakciósablon (csak olvasható)"
+
 #~ msgid ""
 #~ "The following scheduled transactions have expired.  Select those you wish "
 #~ "to delete."
@@ -22338,113 +22407,164 @@ msgstr ""
 #~ "This assistant will walk you through any scheduled transactions that "
 #~ "should be created."
 #~ msgstr "A tündér fogja önt segíteni az időzített átutalások létrehozásában."
+
 #~ msgid "To-Create Transaction Preparation"
 #~ msgstr "Tranzakció-készítés létrehozása"
+
 #~ msgid "Transaction Reminders"
 #~ msgstr "Tranzakció-emlékeztető"
+
 #~ msgid "Unselect All"
 #~ msgstr "A kijelölések megszüntetése"
+
 #~ msgid "Value:"
 #~ msgstr "Érték:"
+
 #~ msgid "Variable"
 #~ msgstr "Változó"
+
 #~ msgid "Variables"
 #~ msgstr "Változók"
+
 #~ msgid "What to do, what to do?"
 #~ msgstr "Mit tegyek, mit tegyek?"
+
 #~ msgid "Defaults"
 #~ msgstr "Alapértelmezések"
+
 #~ msgid "Start of this fiscal year"
 #~ msgstr "Jelen pénzügyi év kezdete"
+
 #~ msgid "Start of previous fiscal year"
 #~ msgstr "Előző pénzügyi év kezdete"
+
 #~ msgid "End of this fiscal year"
 #~ msgstr "Jelen pénzügyi év vége"
+
 #~ msgid "End of previous fiscal year"
 #~ msgstr "Előző pénzügyi év vége"
+
 #~ msgid "Current Year Start"
 #~ msgstr "Idei év kezdete"
+
 #~ msgid "Current Year End"
 #~ msgstr "Idei év vége"
+
 #~ msgid "Previous Year Start"
 #~ msgstr "Tavalyi év kezdete"
+
 #~ msgid "Previous Year End"
 #~ msgstr "Tavalyi év vége"
+
 #~ msgid "End of the Previous Year"
 #~ msgstr "Tavalyi naptári év vége"
+
 #~ msgid "Start of Financial Period"
 #~ msgstr "Pénzügyi időszak kezdete"
+
 #~ msgid "End of Financial Period"
 #~ msgstr "Pénzügyi időszak vége"
+
 #~ msgid "End of the accounting period, as set in the global preferences"
 #~ msgstr "Számviteli időszak vége a globális beállításoknak megfelelően"
+
 #~ msgid "End of the current month"
 #~ msgstr "A jelen hónap vége"
+
 #~ msgid "The beginning of the previous month"
 #~ msgstr "Az előző hónap kezdete"
+
 #~ msgid "The end of the latest quarterly accounting period"
 #~ msgstr "Az utolsó negyedéves könyvelési időszak vége"
+
 #~ msgid "Accounts to include"
 #~ msgstr "Felhasználandó számlák"
+
 #~ msgid "Show Full Account Name?"
 #~ msgstr "Teljes számlanév megjelenítése?"
+
 #~ msgid "Report Accounts"
 #~ msgstr "Jelentésszámlák"
+
 #~ msgid "Filter Accounts"
 #~ msgstr "Számlák szűrése"
 
 #, fuzzy
 #~ msgid "Flatten list to depth limit?"
 #~ msgstr "Lista lapítása mélységi korlát szerint"
+
 #~ msgid "DOCPATH"
 #~ msgstr "DOCPATH"
+
 #~ msgid "QSF _Invoice..."
 #~ msgstr "QSF _számla..."
+
 #~ msgid "Export one or more invoices to QSF"
 #~ msgstr "Exportáljon egy vagy több számlát QSF-be"
+
 #~ msgid "QSF _Customer..."
 #~ msgstr "QSF _ügyfél..."
+
 #~ msgid "Export one or more customers to QSF"
 #~ msgstr "Exportáljon egy vagy több ügyfelet QSF-be"
+
 #~ msgid "QSF _Vendor..."
 #~ msgstr "QSF _beszállító..."
+
 #~ msgid "Export one or more vendors to QSF"
 #~ msgstr "Exportáljon egy vagy több beszállítót QSF-be"
+
 #~ msgid "QSF _Employee..."
 #~ msgstr "QSF _munkatárs..."
+
 #~ msgid "Export one or more employees to QSF"
 #~ msgstr "Exportáljon egy vagy több alkalmazottat QSF-be"
+
 #~ msgid "Export Invoices to XML"
 #~ msgstr "Számlák exportálása XML-be"
+
 #~ msgid "Export Customers to XML"
 #~ msgstr "Exportáljon ügyfeleket XML-be"
+
 #~ msgid "Export Vendors to XML"
 #~ msgstr "Exportáljon beszállítókat XML-be"
+
 #~ msgid "Export Employees to XML"
 #~ msgstr "Exportáljon alkalmazottakat XML-be"
+
 #~ msgid "Export Chart of Accounts to QSF XML"
 #~ msgstr "Folyószámlakészlet exportálása QSF XML-be"
+
 #~ msgid ""
 #~ "Error: Please resolve all %d conflicts before trying to commit the data."
 #~ msgstr "Hiba: Oldja fel mind a %d ütközést, mielőtt jóváhagyja az adatokat."
+
 #~ msgid "Error: the Commit operation failed, error code %d."
 #~ msgstr "Hiba: a jóváhagyási művelet sikertelen. Hibakód %d."
+
 #~ msgid "%i conflict needs to be resolved."
+
 #~ msgid_plural "%i conflicts need to be resolved."
 #~ msgstr[0] "%i ütközést kell feloldani."
+
 #~ msgid "%i parameter value for this \"%s\" object."
+
 #~ msgid_plural "%i parameter values for this \"%s\" object."
 #~ msgstr[0] "%i paraméterérték ?%s? objektumhoz."
 
 #, fuzzy
 #~ msgid "%i: Parameter name: %s "
 #~ msgstr "%i: Paraméternév: %s "
+
 #~ msgid "Import data : %s "
 #~ msgstr "Importadatok : %s "
+
 #~ msgid "Original data : %s\n"
 #~ msgstr "Eredeti adatok : %s\n"
+
 #~ msgid "Click to choose the filename and location."
 #~ msgstr "Kattintson a fájlnév és hely kiválasztásához."
+
 #~ msgid "Export Chart of Accounts"
 #~ msgstr "Számlakészlet exportálása"
 
@@ -22455,45 +22575,61 @@ msgstr ""
 #~ msgstr ""
 #~ "Válasszon dátumot és kattintson az Exportra, hogy fájlnevet és helyet "
 #~ "válasszon."
+
 #~ msgid ""
 #~ "The Chart of Accounts includes the balance for each account, on the date "
 #~ "specified.  Note that future dates are not supported."
 #~ msgstr ""
 #~ "A számlakészlet tartalmazza minden számla egyenlegét, a megadott napon. "
 #~ "Jövőbeni dátumokat nem támogatottak."
+
 #~ msgid ""
 #~ "You can export the Chart of Accounts to a QSF XML file that can be "
 #~ "imported into another GnuCash file or used in other programs."
 #~ msgstr ""
 #~ "Exportálhatja a számlakészletet QSF XML fájlba, ami importálható más "
 #~ "GnuCash fájlba, vagy más programok használhatják."
+
 #~ msgid "Annual"
 #~ msgstr "Éves"
+
 #~ msgid "Bi-monthly"
 #~ msgstr "Kéthavi"
+
 #~ msgid "Bi-weekly"
 #~ msgstr "Kétheti"
+
 #~ msgid "Daily (360)"
 #~ msgstr "Napi (360)"
+
 #~ msgid "Daily (365)"
 #~ msgstr "Napi (365)"
+
 #~ msgid "Semi-annual"
 #~ msgstr "Félévi"
+
 #~ msgid "Tri-annual"
 #~ msgstr "Háromévi"
+
 #~ msgid "1. Update your existing book with the import data"
 #~ msgstr "1. A meglévő könyv frissítése az importált adatokkal"
+
 #~ msgid "2. Ignore the import data, leave original unchanged"
 #~ msgstr ""
 #~ "2. Mellőzze az importált adatokat, hagyja az eredetieket változatlanul"
+
 #~ msgid "3. Import the data as a NEW object"
 #~ msgstr "3. Importálja az adatokat ÚJ objektumként"
+
 #~ msgid "Add the import as a new object, leave original in place"
 #~ msgstr "Vegye fel az importot új objektumként, hagyja az eredetit a helyén"
+
 #~ msgid "Commit QSF Import Data to data file"
 #~ msgstr "A hozzácsatolt QSF fájlok importálása a fájlba"
+
 #~ msgid "Please resolve any conflicts in the merge"
 #~ msgstr "Oldja fel az ütközéseket az összefésülésben"
+
 #~ msgid ""
 #~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
 #~ "\n"
@@ -22513,8 +22649,10 @@ msgstr ""
 #~ " \n"
 #~ " Figyelem:Alkalmazás után már nem lehet visszacsinálni!Készítsen "
 #~ "biztonsági mentést."
+
 #~ msgid "QSF Data Import Setup"
 #~ msgstr "QSF adatimportálás beállítása"
+
 #~ msgid "Shows how your QSF data conflicts with existing data in your file."
 #~ msgstr "Mutatja a QSF adatütközéseket a jelenlegi fájllal."
 
@@ -22557,6 +22695,7 @@ msgstr ""
 #~ "A QSF adatok készen állnak a behozatalra\n"
 #~ "\n"
 #~ " Kattintson a 'Megszakítás' -ra ha nem akarja összefésülni a fájlokat."
+
 #~ msgid ""
 #~ "You have three choices for each collision: \n"
 #~ "1. The import object can be allowed to overwrite the target - use this to "
@@ -22572,22 +22711,31 @@ msgstr ""
 #~ "objektum,másolata a meglévő fájlnak. \n"
 #~ "3. Az importálandó objektum létrehozható új objektumként a meglévő "
 #~ "fájlban."
+
 #~ msgid "ignore the import, leave the original untouched"
 #~ msgstr "Az importálás mellőzése, az eredeti érintetlenül hagyása"
+
 #~ msgid "overwrite the original with the import data"
 #~ msgstr "az eredeti felülírása a importtáltal"
+
 #~ msgid "_QSF Import"
 #~ msgstr "_QSF-importálás"
+
 #~ msgid "Import a QSF object file"
 #~ msgstr "QSF-fájl importálása"
+
 #~ msgid "Export _Chart of Accounts to QSF"
 #~ msgstr "Számlakészlet exportálása QSF-be"
+
 #~ msgid "Export the chart of accounts for a date with balances as QSF"
 #~ msgstr "Számlakészlet exportálása QSF-be"
+
 #~ msgid "Select the QSF file to import into GnuCash"
 #~ msgstr "Betöltendő QSF-fájl kiválasztása"
+
 #~ msgid "Delete old log/backup files after this many days (0 = never)."
 #~ msgstr "Régi napló/mentés fájlok törlése ennyi nap után (0 = soha)."
+
 #~ msgid ""
 #~ "Invalid QSF Object file! The QSF object file %s failed to validate "
 #~ "against the QSF object schema. The XML structure of the file is either "
@@ -22596,6 +22744,7 @@ msgstr ""
 #~ "Érvénytelen QSF-tárgyfájl! %s QSF-tárgyfájl érvényesítése sikertelen a "
 #~ "QSF-tárgyséma szerint. A fájl XML-struktúrája vagy nem jól formált, vagy "
 #~ "érvénytelen adatokat tartalmaz."
+
 #~ msgid ""
 #~ "Invalid QSF Map file! The QSF map file %s failed to validate against the "
 #~ "QSF map schema. The XML structure of the file is either not well-formed "
@@ -22604,12 +22753,14 @@ msgstr ""
 #~ "Érvénytelen QSF-térképfájl! A %s QSF-térképfájl érvényesítése sikertelen "
 #~ "a QSF-térképséma szerint. A fájl XML-struktúrája vagy nem jól formált, "
 #~ "vagy érvénytelen adatokat tartalmaz."
+
 #~ msgid ""
 #~ "The QSF Map file %s was written for a different version of QOF.  It may "
 #~ "need to be modified to work with your current QOF installation."
 #~ msgstr ""
 #~ "%s QSF-térképfájlt a QOF egy másik változatához készítették. Talán "
 #~ "módosítani kellene, hogy működjön a jelenleg telepített QOF-fel."
+
 #~ msgid ""
 #~ "The selected QSF map %s contains unusable data. This is usually because "
 #~ "not all the required parameters for the defined objects have calculations "
@@ -22618,6 +22769,7 @@ msgstr ""
 #~ "%s, a kiválasztott QSF-térképfájl instabil adatokat tartalmaz. Ez "
 #~ "rendszerint azért van, mert nem minden, a meghatározott tárgyakhoz "
 #~ "szükséges, paramétert írtak le a térképen."
+
 #~ msgid ""
 #~ "The selected QSF object file %s contains one or more invalid GUIDs. The "
 #~ "file cannot be processed - please check the source of the file and try "
@@ -22626,11 +22778,13 @@ msgstr ""
 #~ "%s, a kiválasztott QSF-tárgyfájl egy vagy több érvénytelen GUID-t "
 #~ "tartalmaz. A fájlt nem lehet feldolgozni. Kérem ellenőrizze a forrásfájlt "
 #~ "és próbálja újra."
+
 #~ msgid ""
 #~ "The selected QSF Object file %s requires a map but it was not provided."
 #~ msgstr ""
 #~ "%s, a kiválasztott QSF-tárgyfájlhoz szükséges egy térképfájl, de nincs "
 #~ "megadva."
+
 #~ msgid ""
 #~ "Wrong QSF map selected. The selected map %s validates but was written for "
 #~ "different QOF objects.  The list of objects defined in this map does not "
@@ -22639,10 +22793,12 @@ msgstr ""
 #~ "Rossz a kiválasztott QSF-térképfájl. %s, a kiválasztott térkép érvényes, "
 #~ "de más QOF-tárgyakhoz írták. E térképen megadott tárgyak listája nem "
 #~ "tartalmazza a jelenlegi QSF-tárgyfájlban leírt összes tárgyat."
+
 #~ msgid ""
 #~ "The selected file %s is a QSF map and cannot be opened as a QSF object."
 #~ msgstr ""
 #~ "%s, a kiválasztott fájl QSF-térkép, és nem nyitható meg QSF-tárgyként."
+
 #~ msgid ""
 #~ "When converting XML strings into numbers, an overflow has been detected. "
 #~ "The QSF object file %s contains invalid data in a field that is meant to "
@@ -22651,6 +22807,7 @@ msgstr ""
 #~ "XML szövegek számmá való átalakításakor túlcsordulás történt. %s, a QSF-"
 #~ "tárgyfájl érvénytelen adatokat tartalmaz egy olyan mezőben, aminek számot "
 #~ "kellene tartalmazina."
+
 #~ msgid ""
 #~ "The QSF object file %s is valid and contains GnuCash objects. However, "
 #~ "GnuCash cannot open the file directly because the data needs to be merged "
@@ -22663,22 +22820,27 @@ msgstr ""
 #~ "GnuCash adatkönyvbe kell belefésülni. Kérem nyisson meg egy GnuCash-"
 #~ "fájlt, vagy teremtsen egyet, azután importálja e QSF tárgyfájlt, így az "
 #~ "adatokat belefésüli a fő adatkönyvbe."
+
 #~ msgid "Level of compression to use: 0 for none, 9 for highest."
 #~ msgstr "Használt tömörítési foka: 0 nincs, 9 legnagyobb."
+
 #~ msgid ""
 #~ "QOF can compress QSF XML files using gzip. Note that compression is not "
 #~ "used when outputting to STDOUT."
 #~ msgstr ""
 #~ "QOF tömöríthet QSF XML fájlokat gzip használatával. STDOUT kimenetnél "
 #~ "nincs tömörítés."
+
 #~ msgid "List of QSF map files to use for this session."
 #~ msgstr "E munkamenetben használt QSF térképfájlok listája."
+
 #~ msgid ""
 #~ "QOF can convert objects within QSF XML files using a map of the changes "
 #~ "required."
 #~ msgstr ""
 #~ "QOF átalakíthat objektumokat QSF XML fájlokban a szükséges változástérkép "
 #~ "szerint."
+
 #~ msgid "String encoding to use when writing the XML file."
 #~ msgstr "Szövegkódolás használata XML fájl írásakor."
 
@@ -22689,6 +22851,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Could not open the file: "
 #~ msgstr "%s fájlt nem lehet megnyitni. A hiba: %s"
+
 #~ msgid "Report Currency"
 #~ msgstr "Jelentés pénzneme"
 
@@ -22703,22 +22866,27 @@ msgstr ""
 #, fuzzy
 #~ msgid "<h2>Tax Invoice</h2>"
 #~ msgstr "<b>Kimenő számlák</b>"
+
 #~ msgid "Set the logging level from 0 (least) to 6 (most)"
 #~ msgstr "Adja meg a naplózás szintjét 0 (legkevesebb) és 6 (legtöbb) között"
+
 #~ msgid "LOGLEVEL"
 #~ msgstr "LOGLEVEL"
+
 #~ msgid "_Tax Table Editor"
 #~ msgstr "Adó_táblázat szerkesztő"
 
 #, fuzzy
 #~ msgid "Value '%s' cannot be interpreted as a float number."
 #~ msgstr "A(z) '%s' érték nem értelmezhető lebegő számként."
+
 #~ msgid ""
 #~ "Key file contains key '%s' in group '%s' which has a value that cannot be "
 #~ "interpreted."
 #~ msgstr ""
 #~ "Kulcs fájl '%s' kulcsot tartalmaz a(z) '%s' csoportban, melynek értéke "
 #~ "nem értelmezhető."
+
 #~ msgid ""
 #~ "If you would like an account to have an opening balance, click on the row "
 #~ "containing the account, click again in the opening balances column, and "
@@ -22735,6 +22903,7 @@ msgstr ""
 #~ "\n"
 #~ "Ha akarja, hogy egy számla töltelék legyen, kattintson csak az ellenőrző "
 #~ "dobozra, ami ahhoz a számlához tartozik!\n"
+
 #~ msgid "Setup new accounts"
 #~ msgstr "Új számlák beállítása"
 
@@ -22745,6 +22914,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Setup income tax information for relevant accounts"
 #~ msgstr "Az összes bevétel- és költségszámla adóinformációinak beállítása"
+
 #~ msgid "Print GnuCash Document"
 #~ msgstr "GnuCash-dokumentum kinyomtatása"
 
@@ -22896,8 +23066,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "PriceDB lookups nearest to report end date"
 #~ msgstr "A jelentés dátumához időben legközelebb eső rögzített ár"
+
 #~ msgid "The following bills are due"
 #~ msgstr "A következő számlák esedékesek"
+
 #~ msgid "Escrow "
 #~ msgstr "Letét"
 
@@ -22908,40 +23080,53 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show hidden accounts."
 #~ msgstr "Rej_tett számlák megjelenítése"
+
 #~ msgid "<no file>"
 #~ msgstr "<nincs fájl>"
 
 #, fuzzy
 #~ msgid "A bug was detected while reading the QIF file."
 #~ msgstr "A QIF fájl betöltésekor hiba történt."
+
 #~ msgid "Int"
 #~ msgstr "Belső"
+
 #~ msgid "Div"
 #~ msgstr "Div"
+
 #~ msgid "Compute unrealized gains and losses"
 #~ msgstr "Nem realizált nyereségek és veszteségek feltüntetése"
+
 #~ msgid "ATM"
 #~ msgstr "ATM"
+
 #~ msgid "Future dates are not supported"
 #~ msgstr "Jövőbeli dátumokat nem támogatottak"
+
 #~ msgid "<br>Invoice&nbsp;in&nbsp;progress...."
 #~ msgstr "<br>Számla&nbsp;folyamatban...."
 
 #, fuzzy
 #~ msgid " Date"
 #~ msgstr "Dátum"
+
 #~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
 #~ msgstr ""
 #~ "Ismeretlen adatbázis elérési mód ?%s?. Alapértelmezett (többfelhasználós) "
 #~ "lesz használva."
+
 #~ msgid "From the Postgresql Server: %s"
 #~ msgstr "A PostgreSQL kiszolgálótól: %s"
+
 #~ msgid "Backend connection is not available"
 #~ msgstr "Nincs kapcsolat a kiszolgálóval"
+
 #~ msgid "Query could not be executed"
 #~ msgstr "A lekérdezést nem lehetett végrehajtani"
+
 #~ msgid "Save transaction before closing?"
 #~ msgstr "Tranzakció mentése zárás előtt?"
+
 #~ msgid ""
 #~ "The current transaction has been changed.  Would you like to record the "
 #~ "changes before closing this page, close the page without recording the "
@@ -22950,28 +23135,38 @@ msgstr ""
 #~ "A jelenlegi tranzakció megváltozott. Kívánja menteni a változásokat a lap "
 #~ "bezárása előtt, bezárni a lapot a változások mentése nélkül, vagy nyitva "
 #~ "hagyni?"
+
 #~ msgid "CUSIP code"
 #~ msgstr "CUSIP kód"
+
 #~ msgid "do not translate"
 #~ msgstr "fordítás nélkül"
+
 #~ msgid "gnc-new-account"
 #~ msgstr "gnc-new-account"
+
 #~ msgid "QIF file load warning: %s"
 #~ msgstr "Figyelmeztetés a QIF-fájl betöltésekor: %s"
+
 #~ msgid "QIF file load failed: %s"
 #~ msgstr "A QIF fájl betöltése sikertelen: %s"
+
 #~ msgid ""
 #~ "An error occurred while importing QIF transactions into GnuCash. Your "
 #~ "accounts are unchanged."
 #~ msgstr ""
 #~ "A QIF-tranzakciók GnuCash-be való importálása során hiba történt. A "
 #~ "számlái nem változtak."
+
 #~ msgid "You must enter a Type for the commodity."
 #~ msgstr "Meg kell adni az áru típusát."
+
 #~ msgid "You must enter a name for the commodity."
 #~ msgstr "Meg kell adni az áru nevét."
+
 #~ msgid "You must enter an abbreviation for the commodity."
 #~ msgstr "Meg kell adni az áru rövidítését."
+
 #~ msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
 #~ msgstr ""
 #~ "Válassza ki az áru tőzsdéjét vagy besorolását (BUX, NASDAQ, NYSE stb.)."
@@ -22979,8 +23174,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Click \"Forward\" to accept the information and move on."
 #~ msgstr "Kattintson a fájlnév és hely kiválasztásához."
+
 #~ msgid "Dup?"
 #~ msgstr "Dup?"
+
 #~ msgid "Enter the currency used for new accounts"
 #~ msgstr "Új folyószámlák pénznemének megadása"
 
@@ -23020,8 +23217,10 @@ msgstr ""
 #~ "Import\"részében.\n"
 #~ "\n"
 #~ "Kattintson az \"Előre\" gombra a folytatáshoz. "
+
 #~ msgid "Imported transactions with duplicates"
 #~ msgstr "Importált duplikált tranzakciók"
+
 #~ msgid ""
 #~ "In the next pages, you will be asked to provide information about stocks, "
 #~ "mutual funds, and other tradable commodities that appear in the QIF file"
@@ -23050,109 +23249,160 @@ msgstr ""
 #~ "Vizsgálja meg, hogy van-e megfelelő típus. Ha nincs, újat is megadhat az "
 #~ "input mezőben. Nézze meg, hogy a megadott rövidítés megegyezik-e a jószág "
 #~ "típusánál a tőzsdén vagy listán használt jelöléssel."
+
 #~ msgid "Match duplicate transactions"
 #~ msgstr "Duplikált tranzakciók összevetése"
+
 #~ msgid "Blue items are exportable to a .TXF file."
 #~ msgstr "A kék tételek exportálhatók egy .TXF-fájlba."
+
 #~ msgid "TXF"
 #~ msgstr "TXF"
+
 #~ msgid "Importing transactions..."
 #~ msgstr "Tranzakció Importálása"
+
 #~ msgid "The file contains an unknown Action '%s'."
 #~ msgstr "A fájl '%s' ismeretlen műveletet tartalmazza."
+
 #~ msgid "INVOICE"
 #~ msgstr "SZÁMLA"
+
 #~ msgid "Invoice&nbsp;#&nbsp;%d"
 #~ msgstr "Számla&nbsp;#&nbsp;%d"
+
 #~ msgid "Invoice&nbsp;Date"
 #~ msgstr "Számladátum"
+
 #~ msgid "Invoice #%d"
 #~ msgstr "Számla #%d"
+
 #~ msgid "%s - %s to %s for"
 #~ msgstr "%s - %s és %s között"
+
 #~ msgid "last day"
 #~ msgstr "utolsó nap"
+
 #~ msgid "Once: %s"
 #~ msgstr "Egyszer: %s"
+
 #~ msgid "Daily (x%u)"
 #~ msgstr "Naponta (x%u)"
+
 #~ msgid "Weekdays: (x%u)"
 #~ msgstr "Hét napjai: (x%u)"
+
 #~ msgid "Weekdays"
 #~ msgstr "Hét napjai"
+
 #~ msgid "Weekly (x%d): %s"
 #~ msgstr "Hetente (x%d): %s"
+
 #~ msgid "Weekly: %s"
 #~ msgstr "Hetente: %s"
+
 #~ msgid "Bi-Weekly, %ss"
 #~ msgstr "Két hetente, %ss"
+
 #~ msgid "Semi-monthly (x%u): %s, %s"
 #~ msgstr "Félhavonta (x%u): %s, %s"
+
 #~ msgid "Semi-monthly: %s, %s"
 #~ msgstr "Félhavonta: %s, %s"
+
 #~ msgid "Monthly (x%u): %u"
 #~ msgstr "Havonta (x%u): %u"
+
 #~ msgid "Monthly: %u"
 #~ msgstr "Havonta: %u"
+
 #~ msgid "Quarterly (x%u): %u"
 #~ msgstr "Negyedévente (x%u): %u"
+
 #~ msgid "Quarterly: %u"
 #~ msgstr "Negyedévente: %u"
+
 #~ msgid "Tri-Yearly (x%u): %u"
 #~ msgstr "Négyhavonta (x%u): %u"
+
 #~ msgid "Tri-Yearly: %u"
 #~ msgstr "Négyhavonta: %u"
+
 #~ msgid "Semi-Yearly (x%u): %u"
 #~ msgstr "Félévente (x%u): %u"
+
 #~ msgid "Semi-Yearly: %u"
 #~ msgstr "Félévente: %u"
+
 #~ msgid "Yearly (x%u): %s/%u"
 #~ msgstr "Évente (x%u): %s/%u"
+
 #~ msgid "Yearly: %s/%u"
 #~ msgstr "Évente: %s/%u"
+
 #~ msgid "button1"
 #~ msgstr "button1"
+
 #~ msgid "checkbutton1"
 #~ msgstr "checkbutton1"
+
 #~ msgid "radiobutton1"
 #~ msgstr "radiobutton1"
+
 #~ msgid "togglebutton1"
 #~ msgstr "togglebutton1"
+
 #~ msgid "type:bank"
 #~ msgstr "type:bank"
+
 #~ msgid "type:cash"
 #~ msgstr "type:cash"
+
 #~ msgid "type:ccard"
 #~ msgstr "type:ccard"
+
 #~ msgid "type:invst"
 #~ msgstr "type:invst"
+
 #~ msgid "type:port"
 #~ msgstr "type:port"
+
 #~ msgid "type:oth a"
 #~ msgstr "type:oth a"
+
 #~ msgid "type:oth l"
 #~ msgstr "type:oth l"
+
 #~ msgid "type:class"
 #~ msgstr "type:class"
+
 #~ msgid "type:cat"
 #~ msgstr "type:cat"
+
 #~ msgid "type:security"
 #~ msgstr "type:security"
+
 #~ msgid "account"
 #~ msgstr "folyószámla "
+
 #~ msgid "option:autoswitch"
 #~ msgstr "option:autoswitch"
+
 #~ msgid "clear:autoswitch"
 #~ msgstr "clear:autoswitch"
+
 #~ msgid "The Date format is ambiguous.  Please choose the correct format."
 #~ msgstr "A dátumformátum bizonytalan. Válassza ki a jó formátumot."
+
 #~ msgid " Stylesheet"
 #~ msgstr " Stíluslap"
+
 #~ msgid "Include gains and losses"
 #~ msgstr "Nyereségek és veszteségek feltüntetése"
+
 #~ msgid "Include splits with no shares for calculating money-in and money-out"
 #~ msgstr ""
 #~ "Részek nélküli osztások feltüntetése pénz-be és pénz-ki számításához"
+
 #~ msgid "Sub-"
 #~ msgstr "Al-"
-
