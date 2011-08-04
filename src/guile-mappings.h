@@ -17,7 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#include <libguile/version.h> /* for SCM_MAJOR_VERSION etc */
+#include <libguile.h> /* for SCM_MAJOR_VERSION etc */
 
 /* Give Guile 1.8 a 2.0-like interface */
 #if (SCM_MAJOR_VERSION == 1) && (SCM_MINOR_VERSION <= 8)

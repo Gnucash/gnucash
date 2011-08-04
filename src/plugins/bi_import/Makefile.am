@@ -29,7 +29,8 @@ libgncmod_bi_import_la_LIBADD = \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${GUILE_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -52,6 +53,7 @@ AM_CFLAGS = \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${QOF_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${GUILE_INCS}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.plugin.bi_import\"
