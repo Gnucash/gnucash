@@ -38,6 +38,30 @@ static GList *object_modules = NULL;
 static GList *book_list = NULL;
 static GHashTable *backend_data = NULL;
 
+/*
+ * These getters are used in tests to reach static vars from outside
+ * They should be removed when no longer needed
+ */
+
+gboolean get_object_is_initialized( void );
+GList* get_object_modules( void );
+GList* get_book_list( void );
+GHashTable* get_backend_data( void );
+
+gboolean
+get_object_is_initialized( void ) { return object_is_initialized; }
+
+GList*
+get_object_modules( void ) { return object_modules; }
+
+GList*
+get_book_list( void ) { return book_list; }
+
+GHashTable*
+get_backend_data( void ) { return backend_data; }
+
+/*********/
+
 gpointer
 qof_object_new_instance (QofIdTypeConst type_name, QofBook *book)
 {
