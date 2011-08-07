@@ -561,7 +561,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     GtkWidget *window;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder ,"stocks.glade", "Stock Split Assistant");
+    gnc_builder_add_from_file  (builder ,"assistant-stock-split.glade", "Stock Split Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "Stock Split Assistant"));
     info->window = window;
 

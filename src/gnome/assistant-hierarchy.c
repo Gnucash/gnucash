@@ -1064,7 +1064,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
 
     data = g_new0 (hierarchy_data, 1);
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "account.glade", "Hierarchy Assistant");
+    gnc_builder_add_from_file (builder, "assistant-hierarchy.glade", "Hierarchy Assistant");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Hierarchy Assistant"));
     data->dialog = dialog;
