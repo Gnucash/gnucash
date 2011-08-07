@@ -1,6 +1,5 @@
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
-  commodity.glade \
   dialog-book-close.glade \
   dialog-file-access.glade \
   dialog-object-references.glade \

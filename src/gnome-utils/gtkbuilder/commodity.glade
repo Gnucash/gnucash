@@ -1,130 +1,34 @@
 <?xml version="1.0"?>
-<glade-interface>
-  <!-- interface-requires gtk+ 2.10 -->
-  <!-- interface-naming-policy toplevel-contextual -->
-  <widget class="GtkDialog" id="Security Selector Dialog">
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkDialog" id="Security Dialog">
+    <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select security/currency </property>
-    <property name="resizable">False</property>
+    <property name="title">New Security</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <property name="has_separator">False</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox12">
+      <object class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="spacing">12</property>
-        <child>
-          <widget class="GtkTable" id="select_table">
-            <property name="visible">True</property>
-            <property name="n_rows">3</property>
-            <property name="n_columns">3</property>
-            <property name="column_spacing">12</property>
-            <property name="row_spacing">6</property>
-            <child>
-              <widget class="GtkLabel" id="select_user_prompt">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Select user information here...</property>
-                <property name="justify">center</property>
-              </widget>
-              <packing>
-                <property name="right_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkAlignment" id="alignment1">
-                <property name="visible">True</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <widget class="GtkLabel" id="label807">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Type:</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">center</property>
-                    <property name="mnemonic_widget">namespace_cbe</property>
-                  </widget>
-                </child>
-              </widget>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkAlignment" id="alignment2">
-                <property name="visible">True</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <widget class="GtkLabel" id="item_label">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label">_Security/currency:</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">center</property>
-                    <property name="mnemonic_widget">commodity_cbe</property>
-                  </widget>
-                </child>
-              </widget>
-              <packing>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkComboBoxEntry" id="namespace_cbe">
-                <property name="visible">True</property>
-                <property name="items">Dummy namespace entry</property>
-                <signal name="changed" handler="gnc_ui_select_commodity_namespace_changed_cb"/>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">3</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkComboBoxEntry" id="commodity_cbe">
-                <property name="visible">True</property>
-                <property name="items">Dummy security entry should be much longer</property>
-                <signal name="changed" handler="gnc_ui_select_commodity_changed_cb"/>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">3</property>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area12">
+          <object class="GtkHButtonBox" id="dialog-action_area6">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="new_button">
-                <property name="label">gtk-new</property>
-                <property name="response_id">1</property>
+              <object class="GtkButton" id="cancel_button">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -132,16 +36,16 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="button69">
-                <property name="label">gtk-cancel</property>
-                <property name="response_id">-6</property>
+              <object class="GtkButton" id="ok_button">
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -149,53 +53,43 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="ok_button">
-                <property name="label">gtk-ok</property>
-                <property name="response_id">-5</property>
+              <object class="GtkButton" id="help_button">
+                <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
-      </widget>
-    </child>
-  </widget>
-  <widget class="GtkDialog" id="Security Dialog">
-    <property name="border_width">6</property>
-    <property name="title">New Security</property>
-    <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
-    <property name="has_separator">False</property>
-    <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox13">
-        <property name="visible">True</property>
-        <property name="spacing">12</property>
         <child>
-          <widget class="GtkTable" id="edit_table">
+          <object class="GtkTable" id="edit_table">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="n_rows">15</property>
             <property name="n_columns">3</property>
             <property name="column_spacing">12</property>
             <property name="row_spacing">6</property>
             <child>
-              <widget class="GtkLabel" id="label828">
+              <object class="GtkLabel" id="label828">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">6</property>
                 <property name="bottom_attach">7</property>
@@ -204,14 +98,21 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="fullname_entry">
+              <object class="GtkEntry" id="fullname_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
-                <property name="tooltip" translatable="yes">Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple Computer, Inc.</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple Computer, Inc.</property>
+                <property name="tooltip_text" translatable="yes">Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple Computer, Inc.</property>
+                <property name="invisible_char">&#x25CF;</property>
                 <property name="activates_default">True</property>
-                <signal name="changed" handler="gnc_ui_commodity_changed_cb"/>
-              </widget>
+                <property name="invisible_char_set">True</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="secondary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">True</property>
+                <property name="secondary_icon_sensitive">True</property>
+                <signal name="changed" handler="gnc_ui_commodity_changed_cb" swapped="no"/>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
@@ -221,13 +122,21 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="mnemonic_entry">
+              <object class="GtkEntry" id="mnemonic_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip" translatable="yes">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
+                <property name="tooltip_text" translatable="yes">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
+                <property name="invisible_char">&#x25CF;</property>
                 <property name="activates_default">True</property>
-                <signal name="changed" handler="gnc_ui_commodity_changed_cb"/>
-              </widget>
+                <property name="invisible_char_set">True</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="secondary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">True</property>
+                <property name="secondary_icon_sensitive">True</property>
+                <signal name="changed" handler="gnc_ui_commodity_changed_cb" swapped="no"/>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
@@ -237,12 +146,20 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="code_entry">
+              <object class="GtkEntry" id="code_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip" translatable="yes">Enter a unique code used to identify the commodity. Or, you may safely leave this field blank.</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">Enter a unique code used to identify the commodity. Or, you may safely leave this field blank.</property>
+                <property name="tooltip_text" translatable="yes">Enter a unique code used to identify the commodity. Or, you may safely leave this field blank.</property>
+                <property name="invisible_char">&#x25CF;</property>
                 <property name="activates_default">True</property>
-              </widget>
+                <property name="invisible_char_set">True</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="secondary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">True</property>
+                <property name="secondary_icon_sensitive">True</property>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
@@ -252,14 +169,16 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox64">
+              <object class="GtkHBox" id="hbox64">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
-                  <widget class="GtkLabel" id="label814">
+                  <object class="GtkLabel" id="label814">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes">1 /</property>
                     <property name="justify">center</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -268,18 +187,28 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkSpinButton" id="fraction_spinbutton">
+                  <object class="GtkSpinButton" id="fraction_spinbutton">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip" translatable="yes">Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1.</property>
-                    <property name="adjustment">10000 1 100000000 1 100 0</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1.</property>
+                    <property name="tooltip_text" translatable="yes">Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1.</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="invisible_char_set">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
+                    <property name="adjustment">adjustment1</property>
                     <property name="climb_rate">1</property>
-                  </widget>
+                  </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
@@ -290,12 +219,13 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="quote_label">
+              <object class="GtkLabel" id="quote_label">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">&lt;b&gt;Quote Source Information&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="right_attach">2</property>
                 <property name="top_attach">7</property>
@@ -305,12 +235,13 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="security_label">
+              <object class="GtkLabel" id="security_label">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label">&lt;b&gt;Security Information&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="right_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
@@ -318,12 +249,13 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="single_source_box">
+              <object class="GtkHBox" id="single_source_box">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
@@ -334,12 +266,13 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="multi_source_box">
+              <object class="GtkHBox" id="multi_source_box">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
@@ -350,12 +283,13 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="unknown_source_box">
+              <object class="GtkHBox" id="unknown_source_box">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
@@ -366,12 +300,13 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="quote_tz_box">
+              <object class="GtkHBox" id="quote_tz_box">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
@@ -382,18 +317,20 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment10">
+              <object class="GtkAlignment" id="alignment10">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkLabel" id="source_label">
+                  <object class="GtkLabel" id="source_label">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Type of quote source:</property>
                     <property name="justify">right</property>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="right_attach">2</property>
                 <property name="top_attach">10</property>
@@ -403,20 +340,22 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment3">
+              <object class="GtkAlignment" id="alignment3">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkLabel" id="label809">
+                  <object class="GtkLabel" id="label809">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Full name:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">fullname_entry</property>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
@@ -425,20 +364,22 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment4">
+              <object class="GtkAlignment" id="alignment4">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkLabel" id="label810">
+                  <object class="GtkLabel" id="label810">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Symbol/abbreviation:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">mnemonic_entry</property>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
@@ -447,20 +388,22 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment5">
+              <object class="GtkAlignment" id="alignment5">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkLabel" id="label812">
+                  <object class="GtkLabel" id="label812">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Type:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">namespace_cbe</property>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">3</property>
                 <property name="bottom_attach">4</property>
@@ -469,20 +412,22 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment6">
+              <object class="GtkAlignment" id="alignment6">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkLabel" id="label811">
+                  <object class="GtkLabel" id="label811">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">ISIN, CUSI_P or other code:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">code_entry</property>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">4</property>
                 <property name="bottom_attach">5</property>
@@ -491,19 +436,21 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment7">
+              <object class="GtkAlignment" id="alignment7">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkLabel" id="label813">
+                  <object class="GtkLabel" id="label813">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">F_raction traded:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">5</property>
                 <property name="bottom_attach">6</property>
@@ -512,27 +459,32 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="fq_warning_alignment">
+              <object class="GtkAlignment" id="fq_warning_alignment">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkHBox" id="finance_quote_warning">
+                  <object class="GtkHBox" id="finance_quote_warning">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
-                      <widget class="GtkArrow" id="arrow1">
+                      <object class="GtkArrow" id="arrow1">
                         <property name="visible">True</property>
-                      </widget>
+                        <property name="can_focus">False</property>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label824">
+                      <object class="GtkLabel" id="label824">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Warning: Finance::Quote not installed properly.</property>
                         <property name="justify">center</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -540,18 +492,20 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkArrow" id="arrow2">
+                      <object class="GtkArrow" id="arrow2">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="arrow_type">left</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="right_attach">2</property>
                 <property name="top_attach">8</property>
@@ -561,21 +515,23 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment9">
+              <object class="GtkAlignment" id="alignment9">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkCheckButton" id="get_quote_check">
+                  <object class="GtkCheckButton" id="get_quote_check">
                     <property name="label" translatable="yes">_Get Online Quotes</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb"/>
-                  </widget>
+                    <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb" swapped="no"/>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="right_attach">2</property>
                 <property name="top_attach">9</property>
@@ -585,23 +541,27 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment11">
+              <object class="GtkAlignment" id="alignment11">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">24</property>
                 <child>
-                  <widget class="GtkRadioButton" id="single_source_button">
+                  <object class="GtkRadioButton" id="single_source_button">
                     <property name="label" translatable="yes">Si_ngle:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip" translatable="yes">These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes.</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes.</property>
+                    <property name="tooltip_text" translatable="yes">These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes.</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb"/>
-                  </widget>
+                    <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb" swapped="no"/>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">11</property>
                 <property name="bottom_attach">12</property>
@@ -610,23 +570,27 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment12">
+              <object class="GtkAlignment" id="alignment12">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">24</property>
                 <child>
-                  <widget class="GtkRadioButton" id="multi_source_button">
+                  <object class="GtkRadioButton" id="multi_source_button">
                     <property name="label" translatable="yes">_Multiple:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip" translatable="yes">These are F::Q quote sources that retrieve information from multiple sites on the internet.  If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">These are F::Q quote sources that retrieve information from multiple sites on the internet.  If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
+                    <property name="tooltip_text" translatable="yes">These are F::Q quote sources that retrieve information from multiple sites on the internet.  If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">single_source_button</property>
-                    <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb"/>
-                  </widget>
+                    <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb" swapped="no"/>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">12</property>
                 <property name="bottom_attach">13</property>
@@ -635,23 +599,27 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="unknown_source_alignment">
+              <object class="GtkAlignment" id="unknown_source_alignment">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">24</property>
                 <child>
-                  <widget class="GtkRadioButton" id="unknown_source_button">
+                  <object class="GtkRadioButton" id="unknown_source_button">
                     <property name="label" translatable="yes">_Unknown:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip" translatable="yes">These are quote sources that were recently added to F::Q.  GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">These are quote sources that were recently added to F::Q.  GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
+                    <property name="tooltip_text" translatable="yes">These are quote sources that were recently added to F::Q.  GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">single_source_button</property>
-                    <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb"/>
-                  </widget>
+                    <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb" swapped="no"/>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">13</property>
                 <property name="bottom_attach">14</property>
@@ -660,19 +628,21 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="quote_tz_alignment">
+              <object class="GtkAlignment" id="quote_tz_alignment">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkLabel" id="quote_tz_label">
+                  <object class="GtkLabel" id="quote_tz_label">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Time_zone:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">14</property>
                 <property name="bottom_attach">15</property>
@@ -681,11 +651,11 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkComboBoxEntry" id="namespace_cbe">
+              <object class="GtkComboBoxEntry" id="namespace_cbe">
                 <property name="visible">True</property>
-                <property name="items">Dummy namespace</property>
-                <signal name="changed" handler="gnc_ui_commodity_changed_cb"/>
-              </widget>
+                <property name="can_focus">False</property>
+                <signal name="changed" handler="gnc_ui_commodity_changed_cb" swapped="no"/>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
@@ -743,26 +713,47 @@
             <child>
               <placeholder/>
             </child>
-          </widget>
+          </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancel_button</action-widget>
+      <action-widget response="-5">ok_button</action-widget>
+      <action-widget response="-11">help_button</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="Security Selector Dialog">
+    <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="title" translatable="yes">Select security/currency </property>
+    <property name="resizable">False</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area13">
+          <object class="GtkHButtonBox" id="dialog-action_area4">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="cancel_button">
-                <property name="label">gtk-cancel</property>
-                <property name="response_id">-6</property>
+              <object class="GtkButton" id="ss_new_button">
+                <property name="label">gtk-new</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -770,16 +761,16 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="ok_button1">
-                <property name="label">gtk-ok</property>
-                <property name="response_id">-5</property>
+              <object class="GtkButton" id="ss_cancel_button">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -787,29 +778,149 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="help_button">
-                <property name="label">gtk-help</property>
-                <property name="response_id">-11</property>
+              <object class="GtkButton" id="ss_ok_button">
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
-      </widget>
+        <child>
+          <object class="GtkTable" id="select_table">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="n_rows">3</property>
+            <property name="n_columns">3</property>
+            <property name="column_spacing">12</property>
+            <property name="row_spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="select_user_prompt">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Select user information here...</property>
+                <property name="justify">center</property>
+              </object>
+              <packing>
+                <property name="right_attach">3</property>
+                <property name="x_options">GTK_FILL</property>
+                <property name="y_options"></property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkLabel" id="label807">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Type:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">ss_namespace_cbe</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+                <property name="x_options">GTK_FILL</property>
+                <property name="y_options">GTK_FILL</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkLabel" id="item_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label">_Security/currency:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">ss_commodity_cbe</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="top_attach">2</property>
+                <property name="bottom_attach">3</property>
+                <property name="x_options">GTK_FILL</property>
+                <property name="y_options">GTK_FILL</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxEntry" id="ss_namespace_cbe">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <signal name="changed" handler="gnc_ui_select_commodity_namespace_changed_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">3</property>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+                <property name="x_options">GTK_FILL</property>
+                <property name="y_options">GTK_FILL</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxEntry" id="ss_commodity_cbe">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <signal name="changed" handler="gnc_ui_select_commodity_changed_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">3</property>
+                <property name="top_attach">2</property>
+                <property name="bottom_attach">3</property>
+                <property name="x_options">GTK_FILL</property>
+                <property name="y_options">GTK_FILL</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+    <action-widgets>
+      <action-widget response="1">ss_new_button</action-widget>
+      <action-widget response="-6">ss_cancel_button</action-widget>
+      <action-widget response="-5">ss_ok_button</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="upper">100000000</property>
+    <property name="value">10000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+</interface>

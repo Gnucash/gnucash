@@ -4,6 +4,7 @@
  * Author: Dave Peticolas <dave@krondo.com>                         *
  * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  * Copyright (c) 2009 Herbert Thoma <herbie@hthoma.de>              *
+ * Copyright (c) 2011 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -51,8 +52,10 @@
 #define GCONF_SECTION "dialogs/price_editor"
 #define DIALOG_PRICE_EDIT_SOURCE "user:price-editor"
 
+
 /* This static indicates the debugging module that this .o belongs to.  */
-/* static short module = MOD_GUI; */
+static QofLogModule log_module = GNC_MOD_GUI;
+
 
 typedef struct
 {
@@ -80,6 +83,7 @@ typedef struct
 
 } PriceEditDialog;
 
+
 void pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data);
 void pedit_data_changed_cb (GtkWidget *w, gpointer data);
 void pedit_commodity_ns_changed_cb (GtkComboBoxEntry *cbe, gpointer data);
@@ -93,6 +97,7 @@ gnc_prices_set_changed (PriceEditDialog *pedit_dialog, gboolean changed)
 
     gtk_widget_set_sensitive (pedit_dialog->apply_button, changed);
 }
+
 
 static int
 type_string_to_index (const char *type)
@@ -112,6 +117,7 @@ type_string_to_index (const char *type)
     return 4;
 }
 
+
 static const char *
 type_index_to_string (int index)
 {
@@ -129,6 +135,7 @@ type_index_to_string (int index)
         return "unknown";
     }
 }
+
 
 static void
 price_to_gui (PriceEditDialog *pedit_dialog)
@@ -188,6 +195,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pedit_dialog->price_edit), value);
 }
 
+
 static const char *
 gui_to_price (PriceEditDialog *pedit_dialog)
 {
@@ -203,12 +211,12 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     fullname = gtk_combo_box_get_active_text(GTK_COMBO_BOX(pedit_dialog->commodity_cbe));
     commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), namespace, fullname);
     if (!commodity)
-        return _("You must select a commodity.");
+        return _("You must select a Security.");
 
     currency = gnc_currency_edit_get_currency
                (GNC_CURRENCY_EDIT (pedit_dialog->currency_edit));
     if (!currency)
-        return _("You must select a currency.");
+        return _("You must select a Currency.");
 
     date.tv_sec = gnc_date_edit_get_date (GNC_DATE_EDIT (pedit_dialog->date_edit));
     date.tv_nsec = 0;
@@ -241,6 +249,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     return NULL;
 }
 
+
 static void
 pedit_dialog_destroy_cb (GtkWidget *widget, gpointer data)
 {
@@ -258,6 +267,7 @@ pedit_dialog_destroy_cb (GtkWidget *widget, gpointer data)
 
     g_free (pedit_dialog);
 }
+
 
 void
 pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
@@ -300,6 +310,7 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     }
 }
 
+
 void
 pedit_commodity_ns_changed_cb (GtkComboBoxEntry *cbe, gpointer data)
 {
@@ -313,6 +324,7 @@ pedit_commodity_ns_changed_cb (GtkComboBoxEntry *cbe, gpointer data)
 
     g_free(namespace);
 }
+
 
 void
 pedit_commodity_changed_cb (GtkComboBoxEntry *cbe, gpointer data)
@@ -354,6 +366,7 @@ pedit_commodity_changed_cb (GtkComboBoxEntry *cbe, gpointer data)
     g_free(fullname);
 }
 
+
 void
 pedit_data_changed_cb (GtkWidget *w, gpointer data)
 {
@@ -362,12 +375,13 @@ pedit_data_changed_cb (GtkWidget *w, gpointer data)
     gnc_prices_set_changed (pedit_dialog, TRUE);
 }
 
+
 static void
 gnc_price_pedit_dialog_create (GtkWidget *parent,
                                PriceEditDialog *pedit_dialog,
                                QofSession *session)
 {
-    GladeXML *xml;
+    GtkBuilder *builder;
     GNCPrintAmountInfo print_info;
     GtkWidget *dialog;
     GtkWidget *entry;
@@ -376,34 +390,74 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     GtkWidget *label;
     gchar *namespace;
 
-    xml = gnc_glade_xml_new ("price.glade", "Price Dialog");
+
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "price.glade", "liststore1");
+    gnc_builder_add_from_file (builder, "price.glade", "Price Dialog");
 
     pedit_dialog->session = session;
     pedit_dialog->book = qof_session_get_book(pedit_dialog->session);
     pedit_dialog->price_db = gnc_pricedb_get_db(pedit_dialog->book);
 
-    dialog = glade_xml_get_widget (xml, "Price Dialog");
+    dialog =  GTK_WIDGET(gtk_builder_get_object (builder, "Price Dialog"));
     pedit_dialog->dialog = dialog;
 
     /* parent */
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-    w = glade_xml_get_widget (xml, "namespace_cbe");
+    w = GTK_WIDGET(gtk_builder_get_object (builder, "namespace_cbe"));
     pedit_dialog->namespace_cbe = w;
-    gtk_combo_box_remove_text(GTK_COMBO_BOX(pedit_dialog->namespace_cbe), 0);
-    gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(pedit_dialog->namespace_cbe));
-    gnc_ui_update_namespace_picker(w, NULL, DIAG_COMM_ALL);
 
-    w = glade_xml_get_widget (xml, "commodity_cbe");
+    /* namespace List Store - create here as we get an error if created in builder */
+    {
+    GtkListStore  *store;
+    GtkTreeIter    iter;
+    gchar          string[] = "Dummy namespace Line";
+
+    store = gtk_list_store_new( 1, G_TYPE_STRING );
+
+    gtk_list_store_append( store, &iter );
+    gtk_list_store_set( store, &iter, 0, string, -1 );
+
+    gtk_combo_box_set_model( GTK_COMBO_BOX( pedit_dialog->namespace_cbe ),
+                         GTK_TREE_MODEL( store ) );
+    g_object_unref( G_OBJECT( store ) );
+    gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( pedit_dialog->namespace_cbe ), 0 );
+    }
+
+    gtk_combo_box_remove_text(GTK_COMBO_BOX(pedit_dialog->namespace_cbe), 0);
+    gnc_ui_update_namespace_picker(w, NULL, DIAG_COMM_ALL);
+    gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(pedit_dialog->namespace_cbe));
+    gtk_combo_box_set_active(GTK_COMBO_BOX(pedit_dialog->namespace_cbe), 1);
+
+    w = GTK_WIDGET(gtk_builder_get_object (builder, "commodity_cbe"));
     pedit_dialog->commodity_cbe = w;
+
+    /* commodity List Store - create here as we get an error if created in builder */
+    {
+    GtkListStore  *store;
+    GtkTreeIter    iter;
+    gchar          string[] = "Dummy commodity Line";
+
+    store = gtk_list_store_new( 1, G_TYPE_STRING );
+
+    gtk_list_store_append( store, &iter );
+    gtk_list_store_set( store, &iter, 0, string, -1 );
+
+    gtk_combo_box_set_model( GTK_COMBO_BOX( pedit_dialog->commodity_cbe ),
+                         GTK_TREE_MODEL( store ) );
+    g_object_unref( G_OBJECT( store ) );
+    gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( pedit_dialog->commodity_cbe ), 0 );
+    }
+
     gtk_combo_box_remove_text(GTK_COMBO_BOX(pedit_dialog->commodity_cbe), 0);
     gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(pedit_dialog->commodity_cbe));
     namespace = gnc_ui_namespace_picker_ns(pedit_dialog->namespace_cbe);
     gnc_ui_update_commodity_picker(pedit_dialog->commodity_cbe, namespace, NULL);
     g_free(namespace);
 
-    box = glade_xml_get_widget (xml, "currency_box");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_box"));
     w = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT (w),
                                     gnc_default_currency ());
@@ -412,10 +466,10 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     gtk_widget_show (w);
     g_signal_connect (G_OBJECT (GTK_COMBO_BOX(w)), "changed",
                       G_CALLBACK (pedit_data_changed_cb), pedit_dialog);
-    label = glade_xml_get_widget (xml, "currency_label");
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "currency_label"));
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), w);
 
-    box = glade_xml_get_widget (xml, "date_box");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "date_box"));
     w = gnc_date_edit_new (time (NULL), FALSE, FALSE);
     pedit_dialog->date_edit = w;
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
@@ -425,17 +479,17 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     g_signal_connect (G_OBJECT (GNC_DATE_EDIT (w)->date_entry), "changed",
                       G_CALLBACK (pedit_data_changed_cb), pedit_dialog);
     gtk_entry_set_activates_default(GTK_ENTRY(GNC_DATE_EDIT(w)->date_entry), TRUE);
-    label = glade_xml_get_widget (xml, "date_label");
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
     gnc_date_make_mnemonic_target (GNC_DATE_EDIT(w), label);
 
 
-    w = glade_xml_get_widget (xml, "source_entry");
+    w = GTK_WIDGET(gtk_builder_get_object (builder, "source_entry"));
     pedit_dialog->source_entry = w;
 
-    w = glade_xml_get_widget (xml, "type_combobox");
+    w = GTK_WIDGET(gtk_builder_get_object (builder, "type_combobox"));
     pedit_dialog->type_combobox = w;
 
-    box = glade_xml_get_widget (xml, "price_box");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "price_box"));
     w = gnc_amount_edit_new ();
     pedit_dialog->price_edit = w;
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
@@ -444,28 +498,28 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (w), print_info);
     gtk_entry_set_activates_default(GTK_ENTRY(w), TRUE);
     gtk_widget_show (w);
-    label = glade_xml_get_widget (xml, "price_label");
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "price_label"));
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), w);
 
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (w));
     g_signal_connect (G_OBJECT (entry), "changed",
                       G_CALLBACK (pedit_data_changed_cb), pedit_dialog);
 
-    w = glade_xml_get_widget (xml, "cancel_button");
+    w = GTK_WIDGET(gtk_builder_get_object (builder, "pd_cancel_button"));
     pedit_dialog->cancel_button = w;
 
-    w = glade_xml_get_widget (xml, "apply_button");
+    w = GTK_WIDGET(gtk_builder_get_object (builder, "pd_apply_button"));
     pedit_dialog->apply_button = w;
     gnc_prices_set_changed (pedit_dialog, FALSE);
 
-    w = glade_xml_get_widget (xml, "ok_button");
+    w = GTK_WIDGET(gtk_builder_get_object (builder, "pd_ok_button"));
     pedit_dialog->ok_button = w;
 
-    glade_xml_signal_autoconnect_full( xml,
-                                       gnc_glade_autoconnect_full_func,
-                                       pedit_dialog );
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pedit_dialog);
 
+    g_object_unref(G_OBJECT(builder));
 }
+
 
 static void
 close_handler (gpointer user_data)
@@ -475,6 +529,7 @@ close_handler (gpointer user_data)
     gtk_dialog_response(GTK_DIALOG(pedit_dialog->dialog), GTK_RESPONSE_CANCEL);
 }
 
+
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
@@ -482,6 +537,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
     //  gnc_prices_load_prices (pedit_dialog);
 }
+
 
 static gboolean
 show_handler (const char *class, gint component_id,
@@ -496,6 +552,7 @@ show_handler (const char *class, gint component_id,
     gtk_window_present (GTK_WINDOW(pedit_dialog->dialog));
     return(TRUE);
 }
+
 
 /********************************************************************\
  * gnc_price_edit_dialog                                            *
@@ -553,6 +610,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
     gtk_widget_grab_focus (pedit_dialog->commodity_cbe);
     gtk_widget_show (pedit_dialog->dialog);
 }
+
 
 /********************************************************************\
  * gnc_price_edit_by_guid                                           *

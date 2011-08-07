@@ -3,7 +3,6 @@ glade_DATA = \
 	budget.glade \
 	lots.glade \
 	newuser.glade \
-	price.glade \
 	print.glade \
 	progress.glade \
 	reconcile.glade \
