@@ -59,6 +59,7 @@
 #include "gnc-tree-view-owner.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "guile-mappings.h"
 #include "lot-viewer.h"
 #include "dialog-object-references.h"
 
