@@ -46,7 +46,7 @@
 #include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"
 #include "assistant-acct-period.h"
-#include "druid-loan.h"
+#include "assistant-loan.h"
 #include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
@@ -501,7 +501,7 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
 static void
 gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data)
 {
-    gnc_ui_sx_loan_druid_create ();
+    gnc_ui_sx_loan_assistant_create ();
 }
 
 static void

@@ -1764,13 +1764,6 @@
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkWindow" id="loan_druid_win">
-    <property name="visible">True</property>
-    <property name="title" translatable="yes">Mortgage/Loan Assistant</property>
-    <child>
-      <placeholder/>
-    </child>
-  </object>
   <object class="GtkMenu" id="Since Last Run popup">
     <property name="visible">True</property>
     <child>

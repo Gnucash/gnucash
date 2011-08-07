@@ -2,6 +2,7 @@ gtkbuilderdir = $(GNC_GTKBUILDER_DIR)
 gtkbuilder_DATA = \
 	account.glade \
 	acctperiod.glade \
+	assistant-loan.glade \
 	autoclear.glade \
 	budget.glade \
 	commodities.glade \

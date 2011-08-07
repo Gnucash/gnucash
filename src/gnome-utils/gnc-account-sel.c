@@ -200,6 +200,8 @@ gas_populate_list( GNCAccountSel *gas )
     currentSel = gtk_editable_get_chars(
                      GTK_EDITABLE(entry), 0, -1 );
 
+    g_signal_handlers_block_by_func( gas->combo, combo_changed_cb , gas );
+
     root = gnc_book_get_root_account( gnc_get_current_book() );
     accts = gnc_account_get_descendants_sorted( root );
 
@@ -231,6 +233,8 @@ gas_populate_list( GNCAccountSel *gas )
      * reset to it. */
     if (active != -1)
         gtk_combo_box_set_active(GTK_COMBO_BOX(gas->combo), active);
+
+    g_signal_handlers_unblock_by_func( gas->combo, combo_changed_cb , gas );
 
     g_list_free( filteredAccts );
     if ( currentSel )
@@ -313,6 +317,7 @@ gnc_account_sel_find_account (GtkTreeModel *model,
 void
 gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct, gboolean set_default_acct )
 {
+    GtkEntry *entry;
     gas_find_data data;
 
     if (set_default_acct)
@@ -324,8 +329,11 @@ gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct, gboolean set_def
         gtk_combo_box_set_active( GTK_COMBO_BOX(gas->combo), -1 );
     }
     if ( acct == NULL )
+    {
+        entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(gas->combo)));
+        gtk_editable_delete_text(GTK_EDITABLE(entry),0,-1);
         return;
-
+    }
     data.gas = gas;
     data.acct = acct;
     gtk_tree_model_foreach(GTK_TREE_MODEL(gas->store),

@@ -26,6 +26,7 @@ libgnc_gnome_la_SOURCES = \
   swig-gnome.c \
   assistant-acct-period.c \
   assistant-hierarchy.c \
+  assistant-loan.c \
   assistant-stock-split.c \
   dialog-commodities.c \
   dialog-fincalc.c \
@@ -39,7 +40,6 @@ libgnc_gnome_la_SOURCES = \
   dialog-sx-from-trans.c \
   dialog-sx-since-last-run.c \
   dialog-tax-info.c \
-  druid-loan.c \
   gnc-plugin-account-tree.c \
   gnc-plugin-basic-commands.c \
   gnc-plugin-budget.c \
@@ -66,6 +66,7 @@ appicondir = $(datadir)/pixmaps
 noinst_HEADERS = \
   assistant-acct-period.h \
   assistant-hierarchy.h \
+  assistant-loan.h \
   assistant-stock-split.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
@@ -75,7 +76,6 @@ noinst_HEADERS = \
   dialog-sx-editor.h \
   dialog-sx-from-trans.h \
   dialog-sx-since-last-run.h \
-  druid-loan.h \
   gnc-plugin-account-tree.h \
   gnc-plugin-basic-commands.h \
   gnc-plugin-budget.h \

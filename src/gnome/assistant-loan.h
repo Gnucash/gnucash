@@ -1,7 +1,8 @@
 /********************************************************************\
- * druid-loan.h : A Gnome Druid for setting up loan-repayment       *
+ * assistant-loan.h : An Assistant for setting up loan-repayment    *
  *     scheduled transactions.                                      *
  * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2011 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,4 +22,4 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-struct LoanDruidData_* gnc_ui_sx_loan_druid_create(void);
+void gnc_ui_sx_loan_assistant_create(void);
