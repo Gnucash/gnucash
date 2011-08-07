@@ -15,6 +15,7 @@ AM_CPPFLAGS = \
 
 libgnc_qof_la_SOURCES =  \
    gnc-date.c        \
+   qofmath128.c      \
    gnc-numeric.c     \
    guid.c            \
    kvp-util.c        \
@@ -77,13 +78,10 @@ noinst_HEADERS = \
    qofquerycore-p.h \
    qofsession-p.h
 
-EXTRA_DIST = \
-  qofmath128.c
-
 if OS_WIN32
 libgnc_qof_la_SOURCES += qof-win32.c
 else
-EXTRA_DIST += qof-win32.c
+EXTRA_DIST = qof-win32.c
 endif
 
 ## For testing the qofmath128 routines
