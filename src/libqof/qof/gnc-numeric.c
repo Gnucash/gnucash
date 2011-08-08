@@ -34,7 +34,7 @@
 #include <string.h>
 
 #include "gnc-numeric.h"
-#include "qofmath128-p.h"
+#include "qofmath128.c" /* FIXME: Why is this C file included here?!? */
 
 /* static short module = MOD_ENGINE; */
 
