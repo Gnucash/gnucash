@@ -77,6 +77,10 @@ typedef struct
      (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ACCOUNT))
 #define GNC_ACCOUNT_GET_CLASS(o)    \
      (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ACCOUNT, AccountClass))
+/** Returns the GType type system description of the Account class.
+ *
+ * This must not be confused with the \ref GNCAccountType as returned
+ * by xaccAccountGetType(). */
 GType gnc_account_get_type(void);
 
 /** The account types are used to determine how the transaction data
@@ -299,9 +303,13 @@ void xaccAccountSetNotes (Account *account, const char *notes);
 void xaccAccountSetLastNum (Account *account, const char *num);
 /** Set the account's lot order policy */
 void gnc_account_set_policy (Account *account, GNCPolicy *policy);
-/** Get the account's type */
+/** Returns the account's account type. 
+ *
+ * This must not be confused with the \ref GType as returned by
+ * gnc_account_get_type(), which is related to glib's type system. */
 GNCAccountType xaccAccountGetType (const Account *account);
-/** Is the account a stock, mutual fund or currency? */
+/** Returns true if the account is a stock, mutual fund or currency,
+ * otherwise false. */
 gboolean xaccAccountIsPriced(const Account *acc);
 
 /** This function will set the starting commodity balance for this
