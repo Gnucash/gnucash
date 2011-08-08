@@ -34,7 +34,12 @@
 #include <string.h>
 
 #include "gnc-numeric.h"
-#include "qofmath128.c" /* FIXME: Why is this C file included here?!? */
+
+/* Note: The qofmath128 functions are used mostly here and almost
+         nowhere else. Hence, we inline the C code directly into here so
+         that the compiler can potentially inline the code as-is and speed
+         up the gnc-numeric.c functions. */
+#include "qofmath128.c"
 
 /* static short module = MOD_ENGINE; */
 
