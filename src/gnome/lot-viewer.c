@@ -24,8 +24,6 @@
 /* XXX todo: The button "view lot in register" is not implemented.
  *   it needs to open register window showing only the splits in the
  *     given lot ...
- *
- * XXX clist should be probably be removed and replaced by the gnc_query_list
  */
 
 #include "config.h"
@@ -61,6 +59,19 @@ enum lot_cols
     NUM_LOT_COLS
 };
 
+enum split_cols
+{
+    SPLIT_COL_DATE = 0,
+    SPLIT_COL_NUM,
+    SPLIT_COL_DESCRIPTION,
+    SPLIT_COL_AMOUNT,
+    SPLIT_COL_VALUE,
+    SPLIT_COL_GAIN_LOSS,
+    SPLIT_COL_BALANCE,
+    SPLIT_COL_PNTR,
+    NUM_SPLIT_COLS
+};
+
 #define RESPONSE_VIEW          1
 #define RESPONSE_DELETE        2
 #define RESPONSE_SCRUB_LOT     3
@@ -86,7 +97,8 @@ struct _GNCLotViewer
     GtkListStore  * lot_store;
     GtkTextView   * lot_notes;
     GtkEntry      * title_entry;
-    GtkCList      * mini_clist;
+    GtkTreeView   * split_view;
+    GtkListStore  * split_store;
 
     Account       * account;
     GNCLot        * selected_lot;
@@ -105,16 +117,7 @@ void lv_paned_notify_cb (GObject *gobject,
                          gpointer user_data);
 
 /* ======================================================================== */
-/* Put the splits into the split clist */
-
-#define MINI_DATE_COL 0
-#define MINI_NUM_COL  1
-#define MINI_DESC_COL 2
-#define MINI_AMNT_COL 3
-#define MINI_VALU_COL 4
-#define MINI_GAIN_COL 5
-#define MINI_BALN_COL 6
-#define MINI_NUM_COLS 7
+/* Put the splits into the split list */
 
 static void
 lv_show_splits (GNCLotViewer *lv)
@@ -122,12 +125,14 @@ lv_show_splits (GNCLotViewer *lv)
     GNCLot *lot = lv->selected_lot;
     SplitList *split_list, *node;
     gnc_numeric baln = gnc_numeric_zero();
+    GtkListStore *store;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GtkTreeSelection *selection;
 
     if (NULL == lot) return;
 
-    /* qof_event_suspend();  XXX remove when xaccSplitGetCapGains() fixed */
-    gtk_clist_freeze (lv->mini_clist);
-    gtk_clist_clear (lv->mini_clist);
+    gtk_list_store_clear (lv->split_store);
     split_list = gnc_lot_get_split_list (lot);
     for (node = split_list; node; node = node->next)
     {
@@ -141,24 +146,29 @@ lv_show_splits (GNCLotViewer *lv)
         Transaction *trans = xaccSplitGetParent (split);
         time_t date = xaccTransGetDate (trans);
         gnc_numeric amnt, valu, gains;
-        const char *row_vals[MINI_NUM_COLS];
         int row;
 
         /* Do not show gains splits */
         if (gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
 
-        /* Opening date */
-        qof_print_date_buff (dbuff, MAX_DATE_LENGTH, date);
-        row_vals[MINI_DATE_COL] = dbuff;
+        store = lv->split_store;
+        gtk_list_store_append(store, &iter);
 
-        row_vals[MINI_NUM_COL]  = xaccTransGetNum (trans);
-        row_vals[MINI_DESC_COL] = xaccTransGetDescription (trans);
+        /* Date */
+        qof_print_date_buff (dbuff, MAX_DATE_LENGTH, date);
+        gtk_list_store_set (store, &iter, SPLIT_COL_DATE, dbuff, -1);
+
+        /* Num */
+        gtk_list_store_set (store, &iter, SPLIT_COL_NUM, xaccTransGetNum (trans), -1);
+
+        /* Description */
+        gtk_list_store_set (store, &iter, SPLIT_COL_DESCRIPTION, xaccTransGetDescription (trans), -1);
 
         /* Amount */
         amnt = xaccSplitGetAmount (split);
         xaccSPrintAmount (amtbuff, amnt,
                           gnc_account_print_info (lv->account, TRUE));
-        row_vals[MINI_AMNT_COL] = amtbuff;
+        gtk_list_store_set (store, &iter, SPLIT_COL_AMOUNT, amtbuff, -1);
 
         /* Value. Invert the sign on the first, opening entry. */
         currency = xaccTransGetCurrency (trans);
@@ -169,7 +179,7 @@ lv_show_splits (GNCLotViewer *lv)
         }
         xaccSPrintAmount (valbuff, valu,
                           gnc_commodity_print_info (currency, TRUE));
-        row_vals[MINI_VALU_COL] = valbuff;
+        gtk_list_store_set (store, &iter, SPLIT_COL_VALUE, valbuff, -1);
 
         /* Gains. Blank if none. */
         gains = xaccSplitGetCapGains (split);
@@ -182,7 +192,7 @@ lv_show_splits (GNCLotViewer *lv)
             xaccSPrintAmount (gainbuff, gains,
                               gnc_commodity_print_info (currency, TRUE));
         }
-        row_vals[MINI_GAIN_COL] = gainbuff;
+        gtk_list_store_set (store, &iter, SPLIT_COL_GAIN_LOSS, gainbuff, -1);
 
         /* Balance of Gains */
         baln = gnc_numeric_add_fixed (baln, amnt);
@@ -195,24 +205,24 @@ lv_show_splits (GNCLotViewer *lv)
             xaccSPrintAmount (balnbuff, baln,
                               gnc_account_print_info (lv->account, TRUE));
         }
-        row_vals[MINI_BALN_COL] = balnbuff;
+        gtk_list_store_set (store, &iter, SPLIT_COL_BALANCE, balnbuff, -1);
 
         /* Self-reference */
-        row = gtk_clist_append (lv->mini_clist, (char **)row_vals);
-        gtk_clist_set_selectable (lv->mini_clist, row, FALSE);
+        gtk_list_store_set(store, &iter, SPLIT_COL_PNTR, split, -1);
     }
-    gtk_clist_thaw (lv->mini_clist);
-    /* qof_event_resume();  XXX remove when xaccSplitGetCapGains() fixed */
 }
 
 /* ======================================================================== */
+/* Remove all splits from the split list */
 
 static void
 lv_clear_splits (GNCLotViewer *lv)
 {
-    gtk_clist_clear (lv->mini_clist);
+    gtk_list_store_clear (lv->split_store);
 }
 
+/* ======================================================================== */
+/* Save potential changes to the currently selected lot */
 static void
 lv_save_current_row (GNCLotViewer *lv)
 {
@@ -238,7 +248,7 @@ lv_save_current_row (GNCLotViewer *lv)
 }
 
 /* ======================================================================== */
-/* Callback for selecting a row the the list-of-list clist */
+/* Select a row in the lot list */
 
 static void
 lv_select_row (GNCLotViewer *lv,
@@ -297,15 +307,17 @@ lv_unset_lot (GNCLotViewer *lv)
 }
 
 /* ======================================================================== */
-/* Callback for un-selecting a row the the list-of-list clist */
+/* De-select a row the the lot list */
 
 static void
 lv_unselect_row (GNCLotViewer *lv)
 {
     lv_save_current_row (lv);
-
     lv_unset_lot (lv);
 }
+
+/* ======================================================================== */
+/* Callback triggered when the user changes the selected line in the lot list */
 
 static void
 lv_selection_changed_cb (GtkTreeSelection *selection,
@@ -328,7 +340,7 @@ lv_selection_changed_cb (GtkTreeSelection *selection,
 
 
 /* ======================================================================== */
-/* Callback when user types a new lot title into the entry widget */
+/* Callback triggered when user types a new lot title into the entry widget */
 
 void
 lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
@@ -348,7 +360,7 @@ lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
 }
 
 /* ======================================================================== */
-/* Get the realized gains for this lot.  This routine or a varient of it
+/* Get the realized gains for this lot.  This routine or a variant of it
  * should probably be moved to gnc-lot.c.
  * The conceptual difficulty here is that this works only if all of the
  * realized gains in the lot are of the
@@ -572,7 +584,7 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
     case RESPONSE_VIEW:
         if (NULL == lot)
             return;
-        printf ("duude UNIMPLEMENTED: need to disply register showing only this one lot \n");
+        printf ("UNIMPLEMENTED: need to display register showing only this one lot \n");
         break;
 
     case RESPONSE_DELETE:
@@ -606,6 +618,65 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
         xaccAccountInsertLot (lv->account, lot);
         break;
     }
+}
+
+/* ======================================================================== */
+
+static void
+lv_init_split_view (GNCLotViewer *lv)
+{
+    GtkTreeView *view;
+    GtkListStore *store;
+    GtkTreeViewColumn *column;
+    GtkTreeSelection *selection;
+    GtkCellRenderer *renderer;
+
+    g_return_if_fail(GTK_IS_TREE_VIEW(lv->split_view));
+
+    view = lv->split_view;
+    store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
+                               G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                               G_TYPE_STRING, G_TYPE_STRING,
+                               G_TYPE_POINTER);
+    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+    g_object_unref(store);
+    lv->split_store = store;
+
+    /* Set up the columns */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
+             "text", SPLIT_COL_DATE, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Num"), renderer,
+             "text", SPLIT_COL_NUM, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Description"), renderer,
+             "text", SPLIT_COL_DESCRIPTION, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Amount"), renderer,
+             "text", SPLIT_COL_AMOUNT, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Value"), renderer,
+             "text", SPLIT_COL_VALUE, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Gain/Loss"), renderer,
+             "text", SPLIT_COL_GAIN_LOSS, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
+             "text", SPLIT_COL_BALANCE, NULL);
+    gtk_tree_view_append_column(view, column);
 }
 
 /* ======================================================================== */
@@ -689,6 +760,9 @@ lv_create (GNCLotViewer *lv)
     lv->lot_notes = GTK_TEXT_VIEW(glade_xml_get_widget (xml, "lot notes text"));
     lv->title_entry = GTK_ENTRY (glade_xml_get_widget (xml, "lot title entry"));
 
+    lv->split_view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "split view"));
+    lv_init_split_view(lv);
+
     lv->lot_vpaned = GTK_PANED (glade_xml_get_widget (xml, "lot vpaned"));
     position = gnc_gconf_get_int(GCONF_SECTION, GCONF_KEY_VPOSITION, NULL);
     if (position)
@@ -698,8 +772,6 @@ lv_create (GNCLotViewer *lv)
     position = gnc_gconf_get_int(GCONF_SECTION, GCONF_KEY_HPOSITION, NULL);
     if (position)
         gtk_paned_set_position (lv->lot_hpaned, position);
-
-    lv->mini_clist = GTK_CLIST(glade_xml_get_widget (xml, "mini clist"));
 
     lv->selected_lot = NULL;
 
