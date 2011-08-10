@@ -1361,7 +1361,7 @@ Review the details below and if correct press Apply to create the schedule.</pro
         <col id="0" translatable="yes">Whole Loan</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Custome</col>
+        <col id="0" translatable="yes">Custom</col>
       </row>
     </data>
   </object>
