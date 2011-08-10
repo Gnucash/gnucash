@@ -60,7 +60,7 @@
 #include "gnc-tree-model-account-types.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "lot-viewer.h"
+#include "dialog-lot-viewer.h"
 #include "window-reconcile.h"
 #include "window-autoclear.h"
 #include "window-main-summarybar.h"

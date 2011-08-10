@@ -8,8 +8,8 @@ gtkbuilder_DATA = \
 	autoclear.glade \
 	budget.glade \
 	commodities.glade \
+	dialog-lot-viewer.glade \
 	fincalc.glade \
-	lots.glade \
 	newuser.glade \
 	owner.glade \
 	price.glade \

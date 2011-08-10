@@ -26,13 +26,13 @@
  * FUNCTION:
  * Lots implement the fundamental conceptual idea behind invoices,
  * inventory lots, and stock market investment lots.  See the file
- * src/doc/lots.txt for implmentation overview.
+ * src/doc/lots.txt for implementation overview.
  *
  * XXX Lots are not currently treated in a correct transactional
  * manner.  There's now a per-Lot dirty flag in the QofInstance, but
  * this code still needs to emit the correct signals when a lot has
  * changed.  This is true both in the Scrub2.c and in
- * src/gnome/lot-viewer.c
+ * src/gnome/dialog-lot-viewer.c
  *
  * HISTORY:
  * Created by Linas Vepstas May 2002

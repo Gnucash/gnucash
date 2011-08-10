@@ -198,6 +198,7 @@ src/gnome/assistant-stock-split.c
 src/gnome/dialog-commodities.c
 src/gnome/dialog-fincalc.c
 src/gnome/dialog-find-transactions.c
+src/gnome/dialog-lot-viewer.c
 src/gnome/dialog-new-user.c
 src/gnome/dialog-price-edit-db.c
 src/gnome/dialog-price-editor.c
@@ -233,8 +234,8 @@ src/gnome/gtkbuilder/assistant-stock-split.glade
 src/gnome/gtkbuilder/autoclear.glade
 src/gnome/gtkbuilder/budget.glade
 src/gnome/gtkbuilder/commodities.glade
+src/gnome/gtkbuilder/dialog-lot-viewer.glade
 src/gnome/gtkbuilder/fincalc.glade
-src/gnome/gtkbuilder/lots.glade
 src/gnome/gtkbuilder/newuser.glade
 src/gnome/gtkbuilder/owner.glade
 src/gnome/gtkbuilder/price.glade
@@ -245,7 +246,6 @@ src/gnome/gtkbuilder/register.glade
 src/gnome/gtkbuilder/sched-xact.glade
 src/gnome/gtkbuilder/tax.glade
 src/gnome/gtkbuilder/userpass.glade
-src/gnome/lot-viewer.c
 src/gnome/reconcile-list.c
 src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in
 src/gnome/schemas/apps_gnucash_dialog_common.schemas.in

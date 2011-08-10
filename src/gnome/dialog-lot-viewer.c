@@ -1,6 +1,7 @@
 /*******************************************************************\
- * lot-viewer.c -- a basic lot viewer for GnuCash                   *
+ * dialog-lot-viewer.c -- a basic lot viewer for GnuCash            *
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2011 Geert Janssens <geert@kobaltwit.be>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -40,13 +41,13 @@
 #include "Transaction.h"
 
 #include "dialog-utils.h"
-#include "lot-viewer.h"
+#include "dialog-lot-viewer.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
 #include "misc-gnome-utils.h"
 
-#define LOT_VIEWER_CM_CLASS "lot-viewer"
+#define LOT_VIEWER_CM_CLASS "dialog-lot-viewer"
 
 enum lot_cols
 {
@@ -743,7 +744,7 @@ lv_create (GNCLotViewer *lv)
 
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "lots.glade", "Lot Viewer Window");
+    gnc_builder_add_from_file (builder, "dialog-lot-viewer.glade", "Lot Viewer Window");
 
     lv->window = GTK_WIDGET(gtk_builder_get_object (builder, "Lot Viewer Window"));
 

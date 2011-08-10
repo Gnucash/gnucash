@@ -31,6 +31,7 @@ libgnc_gnome_la_SOURCES = \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
+  dialog-lot-viewer.c \
   dialog-new-user.c \
   dialog-price-editor.c \
   dialog-price-edit-db.c \
@@ -49,7 +50,6 @@ libgnc_gnome_la_SOURCES = \
   gnc-plugin-page-sx-list.c \
   gnc-plugin-page-register.c \
   gnc-split-reg.c \
-  lot-viewer.c \
   reconcile-list.c \
   top-level.c \
   window-reconcile.c \
@@ -70,6 +70,7 @@ noinst_HEADERS = \
   assistant-stock-split.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
+  dialog-lot-viewer.h \
   dialog-new-user.h \
   dialog-print-check.h \
   dialog-progress.h \
@@ -85,7 +86,6 @@ noinst_HEADERS = \
   gnc-plugin-page-sx-list.h \
   gnc-plugin-page-register.h \
   gnc-split-reg.h \
-  lot-viewer.h \
   reconcile-list.h \
   top-level.h \
   window-reconcile.h \

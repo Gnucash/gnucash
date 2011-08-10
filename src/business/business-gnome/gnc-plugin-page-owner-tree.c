@@ -60,7 +60,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "guile-mappings.h"
-#include "lot-viewer.h"
+#include "dialog-lot-viewer.h"
 #include "dialog-object-references.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */

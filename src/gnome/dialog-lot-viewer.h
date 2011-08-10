@@ -1,6 +1,7 @@
 /*******************************************************************\
- * lot-viewer.h -- a basic lot viewer for GnuCash                   *
+ * dialog-lot-viewer.h -- a basic lot viewer for GnuCash            *
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2011 Geert Janssens <geert@kobaltwit.be>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

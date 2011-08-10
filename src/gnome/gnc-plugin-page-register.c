@@ -68,7 +68,7 @@
 #include "gnc-main-window.h"
 #include "gnc-session.h"
 #include "gnucash-sheet.h"
-#include "lot-viewer.h"
+#include "dialog-lot-viewer.h"
 #include "Scrub.h"
 #include "qof.h"
 #include "window-reconcile.h"
