@@ -737,38 +737,42 @@ lv_init_lot_view (GNCLotViewer *lv)
 static void
 lv_create (GNCLotViewer *lv)
 {
-    GladeXML *xml;
-    char win_title[251];
+    gchar *win_title;
     gint position;
+    GtkBuilder *builder;
 
-    xml = gnc_glade_xml_new ("lots.glade", "Lot Viewer Window");
-    lv->window = glade_xml_get_widget (xml, "Lot Viewer Window");
 
-    snprintf (win_title, 250, _("Lots in Account %s"),
-              xaccAccountGetName(lv->account));
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "lots.glade", "Lot Viewer Window");
+
+    lv->window = GTK_WIDGET(gtk_builder_get_object (builder, "Lot Viewer Window"));
+
+    win_title=g_strdup_printf (_("Lots in Account %s"),
+                               xaccAccountGetName(lv->account));
     gtk_window_set_title (GTK_WINDOW (lv->window), win_title);
+    g_free (win_title);
 
 #ifdef LOTS_READY_FOR_SHOWTIME
-    lv->regview_button = GTK_BUTTON(glade_xml_get_widget (xml, "regview button"));
+    lv->regview_button = GTK_BUTTON(glade_xml_get_widget (builder, "regview button"));
 #endif
-    lv->delete_button = GTK_BUTTON(glade_xml_get_widget (xml, "delete button"));
-    lv->scrub_lot_button = GTK_BUTTON(glade_xml_get_widget (xml, "scrub lot button"));
-    lv->new_lot_button = GTK_BUTTON(glade_xml_get_widget (xml, "new lot button"));
+    lv->delete_button = GTK_BUTTON(gtk_builder_get_object (builder, "delete button"));
+    lv->scrub_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "scrub lot button"));
+    lv->new_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "new lot button"));
 
-    lv->lot_view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "lot view"));
+    lv->lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "lot view"));
     lv_init_lot_view(lv);
-    lv->lot_notes = GTK_TEXT_VIEW(glade_xml_get_widget (xml, "lot notes text"));
-    lv->title_entry = GTK_ENTRY (glade_xml_get_widget (xml, "lot title entry"));
+    lv->lot_notes = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "lot notes text"));
+    lv->title_entry = GTK_ENTRY (gtk_builder_get_object (builder, "lot title entry"));
 
-    lv->split_view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "split view"));
+    lv->split_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split view"));
     lv_init_split_view(lv);
 
-    lv->lot_vpaned = GTK_PANED (glade_xml_get_widget (xml, "lot vpaned"));
+    lv->lot_vpaned = GTK_PANED (gtk_builder_get_object (builder, "lot vpaned"));
     position = gnc_gconf_get_int(GCONF_SECTION, GCONF_KEY_VPOSITION, NULL);
     if (position)
         gtk_paned_set_position (lv->lot_vpaned, position);
 
-    lv->lot_hpaned = GTK_PANED (glade_xml_get_widget (xml, "lot hpaned"));
+    lv->lot_hpaned = GTK_PANED (gtk_builder_get_object (builder, "lot hpaned"));
     position = gnc_gconf_get_int(GCONF_SECTION, GCONF_KEY_HPOSITION, NULL);
     if (position)
         gtk_paned_set_position (lv->lot_hpaned, position);
@@ -776,9 +780,8 @@ lv_create (GNCLotViewer *lv)
     lv->selected_lot = NULL;
 
     /* Setup signals */
-    glade_xml_signal_autoconnect_full( xml,
-                                       gnc_glade_autoconnect_full_func,
-                                       lv);
+    gtk_builder_connect_signals(builder, lv);
+    g_object_unref(G_OBJECT(builder));
 
     gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(lv->window));
 }

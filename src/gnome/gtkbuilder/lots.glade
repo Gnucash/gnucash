@@ -190,7 +190,12 @@
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <placeholder/>
+                      <object class="GtkTreeView" id="split view">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="rules_hint">True</property>
+                        <property name="enable_search">False</property>
+                      </object>
                     </child>
                   </object>
                   <packing>

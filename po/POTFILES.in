@@ -208,7 +208,6 @@ src/gnome/dialog-sx-from-trans.c
 src/gnome/dialog-sx-since-last-run.c
 src/gnome/dialog-tax-info.c
 src/gnome/glade/budget.glade
-src/gnome/glade/lots.glade
 src/gnome/glade/newuser.glade
 src/gnome/glade/print.glade
 src/gnome/glade/progress.glade
