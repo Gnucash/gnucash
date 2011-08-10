@@ -366,7 +366,7 @@ ap_assistant_book_prepare (GtkAssistant *assistant, gpointer user_data)
         _("You have asked for a book to be created.  This book "
           "will contain all transactions up to midnight %s "
           "(for a total of %d transactions spread over %d accounts).\n\n "
-          "Amend the Title and Notes or Click on 'Forward' to procede.\n "
+          "Amend the Title and Notes or Click on 'Forward' to proceed.\n "
           "Click on 'Back' to adjust the dates or 'Cancel'.");
     str = g_strdup_printf (period_text, close_date_str, ntrans, nacc);
     gtk_label_set_text (GTK_LABEL(info->book_details), str);
