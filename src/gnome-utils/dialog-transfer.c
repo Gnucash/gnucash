@@ -1696,7 +1696,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "transfer.glade", "Transfer Dialog");
+    gnc_builder_add_from_file (builder, "dialog-transfer.glade", "Transfer Dialog");
 
     xferData->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Transfer Dialog"));
     g_object_set_data_full (G_OBJECT (xferData->dialog), "builder", builder, g_object_unref);

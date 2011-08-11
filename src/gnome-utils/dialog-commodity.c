@@ -249,7 +249,7 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     GtkWidget *button, *label;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"commodity.glade", "Security Selector Dialog");
+    gnc_builder_add_from_file (builder,"dialog-commodity.glade", "Security Selector Dialog");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
@@ -967,8 +967,8 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
 		 parent, selected_namespace, fullname, mnemonic);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"commodity.glade", "adjustment1");
-    gnc_builder_add_from_file (builder,"commodity.glade", "Security Dialog");
+    gnc_builder_add_from_file (builder,"dialog-commodity.glade", "adjustment1");
+    gnc_builder_add_from_file (builder,"dialog-commodity.glade", "Security Dialog");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
