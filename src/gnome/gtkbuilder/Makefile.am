@@ -5,20 +5,20 @@ gtkbuilder_DATA = \
 	assistant-hierarchy.glade \
 	assistant-loan.glade \
 	assistant-stock-split.glade \
-	autoclear.glade \
 	budget.glade \
-	commodities.glade \
+	dialog-commodities.glade \
 	dialog-lot-viewer.glade \
-	fincalc.glade \
+	dialog-fincalc.glade \
+	dialog-price.glade \
+	dialog-print-check.glade \
 	newuser.glade \
 	owner.glade \
-	price.glade \
-	dialog-print-check.glade \
 	progress.glade \
 	reconcile.glade \
 	register.glade \
 	sched-xact.glade \
 	tax.glade \
-	userpass.glade
+	userpass.glade \
+	window-autoclear.glade
 
 EXTRA_DIST = $(gtkbuilder_DATA)

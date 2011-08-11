@@ -392,8 +392,8 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
 
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "price.glade", "liststore1");
-    gnc_builder_add_from_file (builder, "price.glade", "Price Dialog");
+    gnc_builder_add_from_file (builder, "dialog-price.glade", "liststore1");
+    gnc_builder_add_from_file (builder, "dialog-price.glade", "Price Dialog");
 
     pedit_dialog->session = session;
     pedit_dialog->book = qof_session_get_book(pedit_dialog->session);

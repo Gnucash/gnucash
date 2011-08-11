@@ -566,9 +566,9 @@ gnc_ui_fincalc_dialog_create(void)
     fcd = g_new0(FinCalcDialog, 1);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "fincalc.glade", "liststore1");
-    gnc_builder_add_from_file (builder, "fincalc.glade", "liststore2");
-    gnc_builder_add_from_file (builder, "fincalc.glade", "Financial Calculator Dialog");
+    gnc_builder_add_from_file (builder, "dialog-fincalc.glade", "liststore1");
+    gnc_builder_add_from_file (builder, "dialog-fincalc.glade", "liststore2");
+    gnc_builder_add_from_file (builder, "dialog-fincalc.glade", "Financial Calculator Dialog");
 
     fcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Financial Calculator Dialog"));
 

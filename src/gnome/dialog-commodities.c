@@ -315,7 +315,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     GtkTreeSelection *selection;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "commodities.glade", "Securities Dialog");
+    gnc_builder_add_from_file (builder, "dialog-commodities.glade", "Securities Dialog");
 
     cd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Securities Dialog"));
     cd->session = gnc_get_current_session();

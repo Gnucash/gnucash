@@ -225,7 +225,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "price.glade", "Deletion Date");
+    gnc_builder_add_from_file (builder, "dialog-price.glade", "Deletion Date");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Deletion Date"));
 
@@ -423,7 +423,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "price.glade", "Prices Dialog");
+    gnc_builder_add_from_file (builder, "dialog-price.glade", "Prices Dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Prices Dialog"));
     pdb_dialog->dialog = dialog;
