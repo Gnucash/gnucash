@@ -118,7 +118,56 @@ void lv_paned_notify_cb (GObject *gobject,
                          gpointer user_data);
 
 /* ======================================================================== */
-/* Put the splits into the split list */
+/* Get the realized gains for this lot.  This routine or a variant of it
+ * should probably be moved to gnc-lot.c.
+ * The conceptual difficulty here is that this works only if all of the
+ * realized gains in the lot are of the
+ */
+
+static gnc_commodity *
+find_first_currency (GNCLot *lot)
+{
+    SplitList *split_list, *node;
+
+    split_list = gnc_lot_get_split_list(lot);
+    for (node = split_list; node; node = node->next)
+    {
+        Split *s = node->data;
+        Transaction *trans;
+        if (FALSE == gnc_numeric_zero_p(xaccSplitGetAmount(s))) continue;
+        trans = xaccSplitGetParent (s);
+        return xaccTransGetCurrency (trans);
+    }
+    return NULL;
+}
+
+static gnc_numeric
+get_realized_gains (GNCLot *lot, gnc_commodity *currency)
+{
+    gnc_numeric zero = gnc_numeric_zero();
+    gnc_numeric gains = zero;
+    SplitList *split_list, *node;
+
+    if (!currency) return zero;
+
+    split_list = gnc_lot_get_split_list(lot);
+    for (node = split_list; node; node = node->next)
+    {
+        Split *s = node->data;
+        Transaction *trans;
+
+        if (FALSE == gnc_numeric_zero_p(xaccSplitGetAmount(s))) continue;
+        trans = xaccSplitGetParent (s);
+        if (FALSE == gnc_commodity_equal (xaccTransGetCurrency(trans), currency)) continue;
+
+        gains = gnc_numeric_add (gains, xaccSplitGetValue (s), GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+    }
+    return gains;
+}
+
+
+/* ======================================================================== */
+/* Populate the split list view based on the currently selected lot */
 
 static void
 lv_show_splits (GNCLotViewer *lv)
@@ -214,7 +263,7 @@ lv_show_splits (GNCLotViewer *lv)
 }
 
 /* ======================================================================== */
-/* Remove all splits from the split list */
+/* Remove all splits from the split list view */
 
 static void
 lv_clear_splits (GNCLotViewer *lv)
@@ -224,8 +273,9 @@ lv_clear_splits (GNCLotViewer *lv)
 
 /* ======================================================================== */
 /* Save potential changes to the currently selected lot */
+
 static void
-lv_save_current_row (GNCLotViewer *lv)
+lv_save_current_lot (GNCLotViewer *lv)
 {
     GNCLot *lot = lv->selected_lot;
     const char * str;
@@ -249,39 +299,7 @@ lv_save_current_row (GNCLotViewer *lv)
 }
 
 /* ======================================================================== */
-/* Select a row in the lot list */
-
-static void
-lv_select_row (GNCLotViewer *lv,
-               GNCLot       *lot)
-{
-    const char * str;
-
-    lv_save_current_row (lv);
-
-    str = gnc_lot_get_title (lot);
-    if (!str) str = "";
-    gtk_entry_set_text (lv->title_entry, str);
-    gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), TRUE);
-
-    /* Set the notes field */
-    str = gnc_lot_get_notes (lot);
-    if (!str) str = "";
-    xxxgtk_textview_set_text (lv->lot_notes, str);
-    gtk_text_view_set_editable (lv->lot_notes, TRUE);
-
-    /* Don't set until end, to avoid recursion in gtkentry "changed" cb. */
-    lv->selected_lot = lot;
-    lv_show_splits (lv);
-
-#ifdef LOTS_READY_FOR_SHOWTIME
-    gtk_widget_set_sensitive(GTK_WIDGET(lv->regview_button), TRUE);
-#endif
-    gtk_widget_set_sensitive(GTK_WIDGET(lv->delete_button), TRUE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lv->scrub_lot_button), TRUE);
-}
-
-/* ======================================================================== */
+/* Clear all information related to the currently selected lot */
 
 static void
 lv_unset_lot (GNCLotViewer *lv)
@@ -308,107 +326,50 @@ lv_unset_lot (GNCLotViewer *lv)
 }
 
 /* ======================================================================== */
-/* De-select a row the the lot list */
+/* Select a row in the lot list */
+
+static void
+lv_select_row (GNCLotViewer *lv,
+               GNCLot       *lot)
+{
+    const char * str;
+
+    lv_save_current_lot (lv);
+
+    str = gnc_lot_get_title (lot);
+    if (!str) str = "";
+    gtk_entry_set_text (lv->title_entry, str);
+    gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), TRUE);
+
+    /* Set the notes field */
+    str = gnc_lot_get_notes (lot);
+    if (!str) str = "";
+    xxxgtk_textview_set_text (lv->lot_notes, str);
+    gtk_text_view_set_editable (lv->lot_notes, TRUE);
+
+    /* Don't set until end, to avoid recursion in gtkentry "changed" cb. */
+    lv->selected_lot = lot;
+    lv_show_splits (lv);
+
+#ifdef LOTS_READY_FOR_SHOWTIME
+    gtk_widget_set_sensitive(GTK_WIDGET(lv->regview_button), TRUE);
+#endif
+    gtk_widget_set_sensitive(GTK_WIDGET(lv->delete_button), TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lv->scrub_lot_button), TRUE);
+}
+
+/* ======================================================================== */
+/* Un-select a row the the lot list */
 
 static void
 lv_unselect_row (GNCLotViewer *lv)
 {
-    lv_save_current_row (lv);
+    lv_save_current_lot (lv);
     lv_unset_lot (lv);
 }
 
 /* ======================================================================== */
-/* Callback triggered when the user changes the selected line in the lot list */
-
-static void
-lv_selection_changed_cb (GtkTreeSelection *selection,
-                         GNCLotViewer *lv)
-{
-    GNCLot *lot;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-
-    if (gtk_tree_selection_get_selected (selection, &model, &iter))
-    {
-        gtk_tree_model_get(model, &iter, LOT_COL_PNTR, &lot, -1);
-        lv_select_row(lv, lot);
-    }
-    else
-    {
-        lv_unselect_row(lv);
-    }
-}
-
-
-/* ======================================================================== */
-/* Callback triggered when user types a new lot title into the entry widget */
-
-void
-lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
-{
-    GNCLotViewer *lv = user_data;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GtkTreeSelection *selection;
-    const char * title;
-    title = gtk_entry_get_text (lv->title_entry);
-
-    selection = gtk_tree_view_get_selection(lv->lot_view);
-    if (gtk_tree_selection_get_selected (selection, &model, &iter))
-    {
-        gtk_list_store_set(GTK_LIST_STORE(model), &iter, LOT_COL_TITLE, title, -1);
-    }
-}
-
-/* ======================================================================== */
-/* Get the realized gains for this lot.  This routine or a variant of it
- * should probably be moved to gnc-lot.c.
- * The conceptual difficulty here is that this works only if all of the
- * realized gains in the lot are of the
- */
-
-static gnc_commodity *
-find_first_currency (GNCLot *lot)
-{
-    SplitList *split_list, *node;
-
-    split_list = gnc_lot_get_split_list(lot);
-    for (node = split_list; node; node = node->next)
-    {
-        Split *s = node->data;
-        Transaction *trans;
-        if (FALSE == gnc_numeric_zero_p(xaccSplitGetAmount(s))) continue;
-        trans = xaccSplitGetParent (s);
-        return xaccTransGetCurrency (trans);
-    }
-    return NULL;
-}
-
-static gnc_numeric
-get_realized_gains (GNCLot *lot, gnc_commodity *currency)
-{
-    gnc_numeric zero = gnc_numeric_zero();
-    gnc_numeric gains = zero;
-    SplitList *split_list, *node;
-
-    if (!currency) return zero;
-
-    split_list = gnc_lot_get_split_list(lot);
-    for (node = split_list; node; node = node->next)
-    {
-        Split *s = node->data;
-        Transaction *trans;
-
-        if (FALSE == gnc_numeric_zero_p(xaccSplitGetAmount(s))) continue;
-        trans = xaccSplitGetParent (s);
-        if (FALSE == gnc_commodity_equal (xaccTransGetCurrency(trans), currency)) continue;
-
-        gains = gnc_numeric_add (gains, xaccSplitGetValue (s), GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
-    }
-    return gains;
-}
-
-/* ======================================================================== */
+/* Populate the lot list view */
 
 static void
 gnc_lot_viewer_fill (GNCLotViewer *lv)
@@ -525,11 +486,57 @@ lv_close_handler (gpointer user_data)
     GNCLotViewer *lv = user_data;
     GNCLot *lot = lv->selected_lot;
 
-    lv_save_current_row (lv);
+    lv_save_current_lot (lv);
 
     gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(lv->window));
     gtk_widget_destroy (lv->window);
 }
+
+/* ===========================    Callbacks    ============================ */
+/* ======================================================================== */
+/* The lot title in the entry widget changed */
+
+void
+lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
+{
+    GNCLotViewer *lv = user_data;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GtkTreeSelection *selection;
+    const char * title;
+    title = gtk_entry_get_text (lv->title_entry);
+
+    selection = gtk_tree_view_get_selection(lv->lot_view);
+    if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
+        gtk_list_store_set(GTK_LIST_STORE(model), &iter, LOT_COL_TITLE, title, -1);
+    }
+}
+
+/* ======================================================================== */
+/* Selection in the lot list view changed */
+
+static void
+lv_selection_changed_cb (GtkTreeSelection *selection,
+                         GNCLotViewer *lv)
+{
+    GNCLot *lot;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+
+    if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
+        gtk_tree_model_get(model, &iter, LOT_COL_PNTR, &lot, -1);
+        lv_select_row(lv, lot);
+    }
+    else
+    {
+        lv_unselect_row(lv);
+    }
+}
+
+/* ======================================================================== */
+/* Lot viewer window closed */
 
 void
 lv_window_destroy_cb (GtkObject *object, gpointer user_data)
@@ -614,11 +621,64 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
         break;
 
     case RESPONSE_NEW_LOT:
-        lv_save_current_row (lv);
+        lv_save_current_lot (lv);
         lot = gnc_lot_make_default (lv->account);
         xaccAccountInsertLot (lv->account, lot);
         break;
     }
+}
+
+/* ======================================================================== */
+
+static void
+lv_init_lot_view (GNCLotViewer *lv)
+{
+    GtkTreeView *view;
+    GtkListStore *store;
+    GtkTreeViewColumn *column;
+    GtkTreeSelection *selection;
+    GtkCellRenderer *renderer;
+
+    g_return_if_fail(GTK_IS_TREE_VIEW(lv->lot_view));
+
+    view = lv->lot_view;
+    store = gtk_list_store_new(NUM_LOT_COLS, G_TYPE_STRING, G_TYPE_STRING,
+                               G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                               G_TYPE_POINTER);
+    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+    g_object_unref(store);
+    lv->lot_store = store;
+
+    /* Set up the columns */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Opened"), renderer,
+             "text", LOT_COL_OPEN, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Closed"), renderer,
+             "text", LOT_COL_CLOSE, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Title"), renderer,
+             "text", LOT_COL_TITLE, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
+             "text", LOT_COL_BALN, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Gains"), renderer,
+             "text", LOT_COL_GAINS, NULL);
+    gtk_tree_view_append_column(view, column);
+
+    /* Set up the selection callbacks */
+    selection =  gtk_tree_view_get_selection(view);
+    g_signal_connect(selection, "changed",
+                     G_CALLBACK(lv_selection_changed_cb), lv);
 }
 
 /* ======================================================================== */
@@ -678,59 +738,6 @@ lv_init_split_view (GNCLotViewer *lv)
     column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
              "text", SPLIT_COL_BALANCE, NULL);
     gtk_tree_view_append_column(view, column);
-}
-
-/* ======================================================================== */
-
-static void
-lv_init_lot_view (GNCLotViewer *lv)
-{
-    GtkTreeView *view;
-    GtkListStore *store;
-    GtkTreeViewColumn *column;
-    GtkTreeSelection *selection;
-    GtkCellRenderer *renderer;
-
-    g_return_if_fail(GTK_IS_TREE_VIEW(lv->lot_view));
-
-    view = lv->lot_view;
-    store = gtk_list_store_new(NUM_LOT_COLS, G_TYPE_STRING, G_TYPE_STRING,
-                               G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                               G_TYPE_POINTER);
-    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
-    g_object_unref(store);
-    lv->lot_store = store;
-
-    /* Set up the columns */
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Opened"), renderer,
-             "text", LOT_COL_OPEN, NULL);
-    gtk_tree_view_append_column(view, column);
-
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Closed"), renderer,
-             "text", LOT_COL_CLOSE, NULL);
-    gtk_tree_view_append_column(view, column);
-
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Title"), renderer,
-             "text", LOT_COL_TITLE, NULL);
-    gtk_tree_view_append_column(view, column);
-
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
-             "text", LOT_COL_BALN, NULL);
-    gtk_tree_view_append_column(view, column);
-
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Gains"), renderer,
-             "text", LOT_COL_GAINS, NULL);
-    gtk_tree_view_append_column(view, column);
-
-    /* Set up the selection callbacks */
-    selection =  gtk_tree_view_get_selection(view);
-    g_signal_connect(selection, "changed",
-                     G_CALLBACK(lv_selection_changed_cb), lv);
 }
 
 /* ======================================================================== */
