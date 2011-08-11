@@ -546,6 +546,18 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 
     /* Fill in the post_combo and account_tree widgets */
     gnc_fill_account_select_combo (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
+
+    if (invoice)
+    {
+        Account *postacct = gncInvoiceGetPostedAcc (invoice);
+        if (postacct)
+        {
+            gchar *acct_string = gnc_account_get_full_name (postacct);
+            gnc_cbe_set_by_string(GTK_COMBO_BOX_ENTRY(pw->post_combo), acct_string);
+            g_free(acct_string);
+        }
+    }
+
     /* Show it all */
     gtk_widget_show_all (pw->dialog);
 
