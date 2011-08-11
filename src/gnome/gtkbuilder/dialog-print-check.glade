@@ -2,16 +2,173 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkDialog" id="Format Title Dialog">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Save Custom Check Format</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox7">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area7">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="cancel_button">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok_button">
+                <property name="label">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847683">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="label" translatable="yes">Enter a title for this custom format.  This title will appear in the "Check format" selector of the Print Check dialog.  Using the title of an existing custom format will cause that format to be overwritten.</property>
+            <property name="wrap">True</property>
+            <property name="selectable">True</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="format_title">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="invisible_char">•</property>
+            <property name="activates_default">True</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
+            <signal name="changed" handler="gnc_check_format_title_changed" object="ok_button" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancel_button</action-widget>
+      <action-widget response="-5">ok_button</action-widget>
+    </action-widgets>
+  </object>
   <object class="GtkDialog" id="Print Check Dialog">
+    <property name="can_focus">False</property>
     <property name="title" translatable="yes">Print Check</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
-    <signal name="response" handler="gnc_ui_print_check_response_cb"/>
+    <signal name="response" handler="gnc_ui_print_check_response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
+        <property name="can_focus">False</property>
         <property name="spacing">8</property>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area6">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="helpbutton">
+                <property name="label">gtk-help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancelbutton">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton">
+                <property name="label">gtk-print</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkNotebook" id="notebook4">
             <property name="visible">True</property>
@@ -19,6 +176,7 @@
             <child>
               <object class="GtkTable" id="options_table">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="border_width">5</property>
                 <property name="n_rows">14</property>
                 <property name="n_columns">3</property>
@@ -27,6 +185,7 @@
                 <child>
                   <object class="GtkLabel" id="label847677">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Check _format:</property>
                     <property name="use_underline">True</property>
@@ -41,6 +200,7 @@
                 <child>
                   <object class="GtkLabel" id="label847678">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Check po_sition:</property>
                     <property name="use_underline">True</property>
@@ -57,14 +217,16 @@
                 <child>
                   <object class="GtkLabel" id="label847679">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
+                    <property name="yalign">0.20000000298023224</property>
                     <property name="label" translatable="yes">_Date format:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
@@ -72,8 +234,9 @@
                 <child>
                   <object class="GtkComboBox" id="check_format_combobox">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="model">liststore3</property>
-                    <signal name="changed" handler="gnc_print_check_format_changed"/>
+                    <signal name="changed" handler="gnc_print_check_format_changed" swapped="no"/>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext3"/>
                       <attributes>
@@ -90,8 +253,9 @@
                 <child>
                   <object class="GtkComboBox" id="check_position_combobox">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="model">liststore2</property>
-                    <signal name="changed" handler="gnc_print_check_position_changed"/>
+                    <signal name="changed" handler="gnc_print_check_position_changed" swapped="no"/>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
                       <attributes>
@@ -113,6 +277,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="caps_lock_warning">False</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -127,6 +295,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="caps_lock_warning">False</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -141,6 +313,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="caps_lock_warning">False</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -155,6 +331,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="caps_lock_warning">False</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -169,6 +349,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="caps_lock_warning">False</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -181,6 +365,7 @@
                 <child>
                   <object class="GtkLabel" id="check_print_address_label">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Check format must have an
 ADDRESS item defined in order
 to print an address on the check.</property>
@@ -198,9 +383,9 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkHSeparator" id="hseparator1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">8</property>
                     <property name="bottom_attach">9</property>
@@ -210,6 +395,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label8">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                   </object>
                   <packing>
                     <property name="top_attach">10</property>
@@ -220,6 +406,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label9">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                   </object>
                   <packing>
                     <property name="top_attach">11</property>
@@ -230,6 +417,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label10">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                   </object>
                   <packing>
                     <property name="top_attach">12</property>
@@ -240,6 +428,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label11">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                   </object>
                   <packing>
                     <property name="top_attach">13</property>
@@ -250,6 +439,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="first_page_label">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Checks on first _page:</property>
                     <property name="use_underline">True</property>
@@ -266,10 +456,14 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="first_page_count_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x2022;</property>
+                    <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">3</property>
                     <property name="xalign">1</property>
                     <property name="caps_lock_warning">False</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment24</property>
                     <property name="snap_to_ticks">True</property>
                     <property name="numeric">True</property>
@@ -285,16 +479,15 @@ to print an address on the check.</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
+                  <object class="GtkHSeparator" id="hseparator3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
@@ -337,6 +530,7 @@ to print an address on the check.</property>
             <child type="tab">
               <object class="GtkLabel" id="label847675">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xpad">5</property>
                 <property name="label" translatable="yes">Options</property>
                 <property name="justify">center</property>
@@ -348,12 +542,14 @@ to print an address on the check.</property>
             <child>
               <object class="GtkTable" id="custom_table">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="border_width">5</property>
                 <property name="n_rows">19</property>
                 <property name="n_columns">3</property>
                 <child>
                   <object class="GtkLabel" id="label703">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes">x</property>
                     <property name="justify">center</property>
                   </object>
@@ -367,6 +563,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label744">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes">y</property>
                     <property name="justify">center</property>
                   </object>
@@ -380,6 +577,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label701">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Pa_yee:</property>
                     <property name="use_underline">True</property>
@@ -396,6 +594,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label705">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Date:</property>
                     <property name="use_underline">True</property>
@@ -412,6 +611,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label706">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Amount (_words):</property>
                     <property name="use_underline">True</property>
@@ -428,6 +628,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label707">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Amount (_numbers):</property>
                     <property name="use_underline">True</property>
@@ -444,6 +645,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label708">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Notes:</property>
                     <property name="use_underline">True</property>
@@ -461,6 +663,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="payee_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment23</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -479,6 +685,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="date_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment22</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -497,6 +707,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="amount_words_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment21</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -515,6 +729,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="amount_numbers_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment20</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -533,6 +751,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="notes_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment19</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -551,6 +773,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="payee_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment18</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -569,6 +795,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="date_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment17</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -587,6 +817,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="amount_words_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment16</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -605,6 +839,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="amount_numbers_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment15</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -623,6 +861,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="notes_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment14</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -640,6 +882,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkComboBox" id="units_combobox">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="model">liststore1</property>
                     <property name="button_sensitivity">on</property>
                     <child>
@@ -661,6 +904,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label709">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Units:</property>
                     <property name="use_underline">True</property>
@@ -678,6 +922,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="translation_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment13</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -694,6 +942,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="translation_label">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Translation:</property>
                     <property name="use_underline">True</property>
@@ -710,6 +959,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label847680">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Rotation</property>
                     <property name="use_underline">True</property>
@@ -726,6 +976,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="check_rotation_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment12</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -744,6 +998,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="translation_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment11</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -760,6 +1018,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="upper_left">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">The origin point is the upper left-hand corner of the page.</property>
                   </object>
@@ -775,6 +1034,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="lower_left">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">The origin point is the lower left-hand corner of the page.</property>
                   </object>
@@ -790,6 +1050,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="rotation_units">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Degrees</property>
                   </object>
@@ -806,6 +1067,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label847681">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label"> </property>
                   </object>
@@ -821,19 +1083,23 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <signal name="clicked" handler="gnc_print_check_save_button_clicked"/>
+                    <property name="use_action_appearance">False</property>
+                    <signal name="clicked" handler="gnc_print_check_save_button_clicked" swapped="no"/>
                     <child>
                       <object class="GtkAlignment" id="alignment1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xscale">0</property>
                         <property name="yscale">0</property>
                         <child>
                           <object class="GtkHBox" id="hbox1">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="spacing">2</property>
                             <child>
                               <object class="GtkImage" id="image1">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="stock">gtk-save-as</property>
                               </object>
                               <packing>
@@ -845,6 +1111,7 @@ to print an address on the check.</property>
                             <child>
                               <object class="GtkLabel" id="label847682">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">_Save format</property>
                                 <property name="use_underline">True</property>
                               </object>
@@ -871,6 +1138,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Address:</property>
                     <property name="use_underline">True</property>
@@ -886,6 +1154,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="address_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment10</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -904,6 +1176,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="address_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment9</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -921,6 +1197,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Memo:</property>
                     <property name="use_underline">True</property>
@@ -938,6 +1215,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="memo_y_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment8</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -956,6 +1237,10 @@ to print an address on the check.</property>
                   <object class="GtkSpinButton" id="memo_x_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment7</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -973,6 +1258,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Splits Memo</property>
                     <property name="use_underline">True</property>
@@ -989,6 +1275,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Splits Amount</property>
                     <property name="use_underline">True</property>
@@ -1005,6 +1292,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Splits Account</property>
                     <property name="use_underline">True</property>
@@ -1023,6 +1311,10 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment6</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -1042,6 +1334,10 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment5</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -1061,6 +1357,10 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment4</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -1080,6 +1380,10 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -1099,6 +1403,10 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -1118,6 +1426,10 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="primary_icon_sensitive">True</property>
+                    <property name="secondary_icon_sensitive">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">3</property>
@@ -1135,6 +1447,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkHSeparator" id="hseparator2">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                   </object>
                   <packing>
                     <property name="right_attach">3</property>
@@ -1146,6 +1459,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1158,6 +1472,7 @@ to print an address on the check.</property>
                 <child>
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                   </object>
                   <packing>
                     <property name="y_options"></property>
@@ -1183,6 +1498,7 @@ to print an address on the check.</property>
             <child type="tab">
               <object class="GtkLabel" id="label847676">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xpad">5</property>
                 <property name="label" translatable="yes">Custom format</property>
                 <property name="justify">center</property>
@@ -1194,63 +1510,9 @@ to print an address on the check.</property>
             </child>
           </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">2</property>
-          </packing>
-        </child>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area6">
-            <property name="visible">True</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="helpbutton">
-                <property name="label">gtk-help</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="cancelbutton">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="okbutton">
-                <property name="label">gtk-print</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
           </packing>
         </child>
       </object>
@@ -1261,130 +1523,7 @@ to print an address on the check.</property>
       <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkDialog" id="Format Title Dialog">
-    <property name="visible">True</property>
-    <property name="title" translatable="yes">Save Custom Check Format</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox7">
-        <property name="visible">True</property>
-        <child>
-          <object class="GtkLabel" id="label847683">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="label" translatable="yes">Enter a title for this custom format.  This title will appear in the "Check format" selector of the Print Check dialog.  Using the title of an existing custom format will cause that format to be overwritten.</property>
-            <property name="wrap">True</property>
-            <property name="selectable">True</property>
-          </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="format_title">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">&#x2022;</property>
-            <property name="activates_default">True</property>
-            <signal name="changed" handler="gnc_check_format_title_changed" object="okbutton"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area7">
-            <property name="visible">True</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="cancelbutton">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="okbutton">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-6">cancelbutton</action-widget>
-      <action-widget response="-5">okbutton</action-widget>
-    </action-widgets>
-  </object>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">100000</property>
-    <property name="step_increment">0.10000000149</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment2">
-    <property name="upper">100000</property>
-    <property name="step_increment">0.10000000149</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment3">
-    <property name="upper">100000</property>
-    <property name="step_increment">0.10000000149</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment4">
-    <property name="upper">100000</property>
-    <property name="step_increment">0.10000000149</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment5">
-    <property name="upper">100000</property>
-    <property name="step_increment">0.10000000149</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment6">
-    <property name="upper">100000</property>
-    <property name="step_increment">0.10000000149</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment7">
-    <property name="upper">100000</property>
-    <property name="step_increment">0.10000000149</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment8">
-    <property name="upper">100000</property>
-    <property name="step_increment">0.10000000149</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment9">
     <property name="upper">100000</property>
     <property name="step_increment">0.10000000149</property>
     <property name="page_increment">10</property>
@@ -1440,6 +1579,11 @@ to print an address on the check.</property>
     <property name="step_increment">0.10000000149</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">100000</property>
+    <property name="step_increment">0.10000000149</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjustment20">
     <property name="upper">100000</property>
     <property name="step_increment">0.10000000149</property>
@@ -1465,9 +1609,44 @@ to print an address on the check.</property>
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">100000</property>
+    <property name="step_increment">0.10000000149</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">100000</property>
+    <property name="step_increment">0.10000000149</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="upper">100000</property>
+    <property name="step_increment">0.10000000149</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="upper">100000</property>
+    <property name="step_increment">0.10000000149</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment7">
+    <property name="upper">100000</property>
+    <property name="step_increment">0.10000000149</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment8">
+    <property name="upper">100000</property>
+    <property name="step_increment">0.10000000149</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment9">
+    <property name="upper">100000</property>
+    <property name="step_increment">0.10000000149</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -1487,7 +1666,7 @@ to print an address on the check.</property>
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -1507,7 +1686,7 @@ to print an address on the check.</property>
   </object>
   <object class="GtkListStore" id="liststore3">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>

@@ -13,7 +13,7 @@ gtkbuilder_DATA = \
 	newuser.glade \
 	owner.glade \
 	price.glade \
-	print.glade \
+	dialog-print-check.glade \
 	progress.glade \
 	reconcile.glade \
 	register.glade \
