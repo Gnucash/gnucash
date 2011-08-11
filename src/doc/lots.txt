@@ -99,7 +99,7 @@ how many widgets there are in the warehouse.  Lots offer an additional
 level of detail that can be useful when, for example, the widgets have
 an expiration date (e.g. milk) or vary slightly from batch to batch 
 (e.g paint), and creating a new account to track these differences
-would be too heavyweight.
+would be too heavy-weight.
 
 In order to track widgets as single units (and prohibit fractional
 widgets), set the currency denominator to 1.  This will prevent
@@ -185,11 +185,11 @@ closed lots are not propagated forward into the currently open book.
 
 Actually, its slightly more subtle than that. Not only must open
 lots stay with the open book, but so must all transactions that
-have splits that participate in teh open lot, and, by extension,
-all closed lots that participate in these 'open transations', 
+have splits that participate in the open lot, and, by extension,
+all closed lots that participate in these 'open transactions', 
 ad infinitum.
 
-\section lotsdouble The "Double Balance" Requirment
+\section lotsdouble The "Double Balance" Requirement
 
 The following is a proposal for how to handle both realized
 and unrealized gains/losses by means of "adjusting transactions."
@@ -236,7 +236,7 @@ requirement for stock accounts.
 
 Note that because the 'adjusting transaction' has one split
 in dollars, and another split in RHAT shares (albeit for zero 
-RHAT shares), it evades the old double-entry requriement,
+RHAT shares), it evades the old double-entry requirement,
 and will not be flagged as 'out of balance'.  Note also 
 that because the 'adjusting transaction' contains a split
 holding S (albeit zero S), it *must* be a part of a Lot.
@@ -256,17 +256,17 @@ A similar problem occurs for more complex stock transactions:
 If I buy 100 shares of RHAT with Schwab, and transfer them
 to another account with Etrade, then I have the same lot
 closing problem.   There's an even worse scenario, where
-I move to brazil, and take my RHAT stock (purchased in dollars)
-to my brazilian broker (who will sell them for cruzeiros).
+I move to Brazil, and take my RHAT stock (purchased in dollars)
+to my Brazilian broker (who will sell them for cruzeiros).
 
 Is the correct answer to just 'punt' in these cases? 
 How is the closing of books to be handled in such a case?
 
 GUI Elements:
 - The user should be able to specify a default 'realized-gain'
-   account that is associated witha a stock account.
+   account that is associated with a stock account.
 - The user should be able to specify a default 'unrealized-gain'
-   account that is associated witha a stock account.
+   account that is associated with a stock account.
 	
 \section lotsfifo FIFO's
 
@@ -277,7 +277,7 @@ to the difference in price between when it was bought and sold.
 FIFO's are also used in depreciation schedules, and in other places.
 
 Currently the only policy that is implemented in the cap-gains 
-code is the FIFO policy.  I beleive that it's been abstracted 
+code is the FIFO policy.  I believe that it's been abstracted 
 properly, so that it should be easy to add other policies, 
 e.g. LIFO.  See policy.c for what would need to be implemented.
 
@@ -291,13 +291,13 @@ as due dates for invoices, etc.  A lot has a GUID.
 
 From the memory-management and data-base management point of view, lots
 belong to accounts.  The GnuCash account structure maintains a list of
-lots so that all lots belonging to an account can be quickly retreived.
+lots so that all lots belonging to an account can be quickly retrieved.
 (In principle, the lots can be found by scanning every split in the
 account, but this is a painful process.)
 
 \section lotscapgains Implementing Cap Gains (Is a Pain in the Neck)
 
-Although Lots provide a good conceptual framework for determing
+Although Lots provide a good conceptual framework for determining
 gains or losses when a lot is closed, cap-gains on half-open
 lots present additional complexities.   Consider the following
 stock purchase and subsequent sale of half the stock:
@@ -318,7 +318,7 @@ Date     Action  Amt    Prc  Value    Amt      Amt
 The gain, shown in the third line, is computed as a straight
 sum of purchase price to sale price. 
 
-Should the above be reprsented as two transactions, or as three?
+Should the above be represented as two transactions, or as three?
 One could, in principle, combine the second and third lines into
 one transaction.  However, this has some drawbacks:  computing
 the overall balance of such a transaction is tricky, because 
@@ -431,11 +431,11 @@ for each account {
 }
 \endverbatim
 
-See the file Scrub2.h for details of teh low-level API, and Scrub3.h 
+See the file Scrub2.h for details of the low-level API, and Scrub3.h 
 for the high-level API.
 
-There is a bit of a problem with this conversion proceedure: If the
-user had prviously recorded cap gains using a 'handmade' version of
+There is a bit of a problem with this conversion procedure: If the
+user had previously recorded cap gains using a 'handmade' version of
 lots, those cap gains will be ignored and will throw off balances.
 User will need to hand-edit to recover.
 
@@ -474,7 +474,7 @@ implemented in the 'Scrub' routines).
       list to another, but some UI designers argue against this.
       Is there a better way to move splits into/out-of a lot?
 
-- button, labelled 'close lot', which, when pressed, will
+- button, labeled 'close lot', which, when pressed, will
       set lot balance to zero. (by using fifo on the unassigned 
       splits, if possible).
 

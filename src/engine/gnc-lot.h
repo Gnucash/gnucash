@@ -108,7 +108,7 @@ void gnc_lot_add_split (GNCLot *, Split *);
 void gnc_lot_remove_split (GNCLot *, Split *);
 
 /** The gnc_lot_get_split_list() routine returns a GList of all the
- *    splits in this lot.  Do *not* not free this list when done;
+ *    splits in this lot.  Do *not* free this list when done;
  *    it is a pointer straight into the lots internal list.  Do
  *    *not* add to or remove from this list directly.  Calling
  *    either gnc_lot_add_split() or gnc_lot_remove_split() will
@@ -128,7 +128,7 @@ void gnc_lot_set_account(GNCLot*, Account*);
  *    of the account. */
 gnc_numeric gnc_lot_get_balance (GNCLot *);
 
-/** The gnc_lot_get_balance_before routines computes both the balance and
+/** The gnc_lot_get_balance_before routine computes both the balance and
  *  value in the lot considering only splits in transactions prior to the
  *  one containing the given split or other splits in the same transaction.
  *  The first return value is the amount and the second is the value. */

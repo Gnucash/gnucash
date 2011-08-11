@@ -595,6 +595,7 @@ gnc_lot_get_earliest_split (GNCLot *lot)
     return priv->splits->data;
 }
 
+/* Utility function, get latest split in lot */
 Split *
 gnc_lot_get_latest_split (GNCLot *lot)
 {
