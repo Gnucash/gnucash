@@ -377,33 +377,6 @@ gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
         g_free (text);
 }
 
-GList *
-gnc_business_account_types (GncOwner *owner)
-{
-    g_return_val_if_fail (owner, NULL);
-
-    switch (gncOwnerGetType (owner))
-    {
-    case GNC_OWNER_CUSTOMER:
-        return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_RECEIVABLE));
-    case GNC_OWNER_VENDOR:
-    case GNC_OWNER_EMPLOYEE:
-        return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_PAYABLE));
-        break;
-    default:
-        return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_NONE));
-    }
-}
-
-GList *
-gnc_business_commodities (GncOwner *owner)
-{
-    g_return_val_if_fail (owner, NULL);
-    g_return_val_if_fail (gncOwnerGetCurrency(owner), NULL);
-
-    return (g_list_prepend (NULL, gncOwnerGetCurrency(owner)));
-}
-
 /*********************************************************************/
 /* Option Menu creation                                              */
 

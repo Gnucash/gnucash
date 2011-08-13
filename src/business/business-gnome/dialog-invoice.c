@@ -45,6 +45,7 @@
 #include "dialog-search.h"
 #include "search-param.h"
 #include "gnc-session.h"
+#include "gncOwner.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
 
@@ -693,10 +694,10 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
     question_label = _("Accumulate Splits?");
 
     /* Determine the type of account to post to */
-    acct_types = gnc_business_account_types (&(iw->owner));
+    acct_types = gncOwnerGetAccountTypesList (&(iw->owner));
 
     /* Determine which commodity we're working with */
-    acct_commodities = gnc_business_commodities(&(iw->owner));
+    acct_commodities = gncOwnerGetCommoditiesList(&(iw->owner));
 
     /* Get the due date and posted account */
     postdate = gncInvoiceGetDateOpened (invoice);

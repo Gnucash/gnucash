@@ -39,6 +39,7 @@
 #include "gnc-tree-view-account.h"
 #include "Transaction.h"
 #include "Account.h"
+#include "gncOwner.h"
 
 #include "gncInvoice.h"
 
@@ -160,8 +161,8 @@ gnc_payment_dialog_owner_changed(PaymentWindow *pw)
         pw->acct_commodities = NULL;
     }
 
-    pw->acct_types = gnc_business_account_types(&pw->owner);
-    pw->acct_commodities = gnc_business_commodities (&pw->owner);
+    pw->acct_types = gncOwnerGetAccountTypesList(&pw->owner);
+    pw->acct_commodities = gncOwnerGetCommoditiesList (&pw->owner);
     gnc_fill_account_select_combo (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
 
     if (guid)
@@ -471,9 +472,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     gncOwnerCopy (owner, &(pw->owner));
 
     /* Compute the post-to account types */
-    pw->acct_types = gnc_business_account_types (owner);
+    pw->acct_types = gncOwnerGetAccountTypesList (owner);
 
-    pw->acct_commodities = gnc_business_commodities (owner);
+    pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
 
     /* Open and read the XML */
     xml = gnc_glade_xml_new ("payment.glade", "Payment Dialog");

@@ -58,12 +58,6 @@ GncInvoice * gnc_invoice_get_invoice (GtkWidget *widget);
 void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice);
 void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner);
 
-/* Return a list of account-types based on the owner type */
-GList * gnc_business_account_types (GncOwner *owner);
-
-/* Return a list of currencies associated with the owner */
-GList * gnc_business_commodities (GncOwner *owner);
-
 /* Fill in a combo box with the appropriate list of accounts */
 void gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
                                     GList *acct_types,

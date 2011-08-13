@@ -168,21 +168,6 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 gboolean
 gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables);
 
-/**
- * Apply a payment of "amount" for the owner, between the xfer_account
- * (bank or other asset) and the posted_account (A/R or A/P).  If the
- * caller supplies an (optional) invoice argument, then apply the
- * payment to that invoice first before any other invoice.
- *
- * XXX: yes, this should be in gncOwner, but all the other logic is
- * in gncInvoice...
- */
-Transaction *
-gncOwnerApplyPayment (GncOwner *owner, GncInvoice *invoice,
-                      Account *posted_acc, Account *xfer_acc,
-                      gnc_numeric amount, gnc_numeric exch, Timespec date,
-                      const char *memo, const char *num);
-
 
 /** Given a transaction, find and return the Invoice */
 GncInvoice * gncInvoiceGetInvoiceFromTxn (const Transaction *txn);

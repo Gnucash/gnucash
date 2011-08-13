@@ -37,13 +37,6 @@ typedef struct _gncOwner GncOwner;
 
 #define GNC_ID_OWNER   "gncOwner"
 
-#include "qof.h"
-#include "gncCustomer.h"
-#include "gncJob.h"
-#include "gncVendor.h"
-#include "gncEmployee.h"
-#include "gnc-lot.h"
-
 typedef enum
 {
     GNC_OWNER_NONE ,
@@ -53,6 +46,15 @@ typedef enum
     GNC_OWNER_VENDOR ,
     GNC_OWNER_EMPLOYEE ,
 } GncOwnerType;
+
+#include "qof.h"
+#include "gncCustomer.h"
+#include "gncJob.h"
+#include "gncVendor.h"
+#include "gncEmployee.h"
+#include "gncInvoice.h"
+#include "Account.h"
+#include "gnc-lot.h"
 
 /** \name QOF handling
 
@@ -171,6 +173,24 @@ gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType
 
 /** Get the kvp-frame from the underlying owner object */
 KvpFrame* gncOwnerGetSlots(GncOwner* owner);
+
+/**
+ * Apply a payment of "amount" for the owner, between the xfer_account
+ * (bank or other asset) and the posted_account (A/R or A/P).  If the
+ * caller supplies an (optional) invoice argument, then apply the
+ * payment to that invoice first before any other invoice.
+ */
+Transaction *
+gncOwnerApplyPayment (GncOwner *owner, GncInvoice *invoice,
+                      Account *posted_acc, Account *xfer_acc,
+                      gnc_numeric amount, gnc_numeric exch, Timespec date,
+                      const char *memo, const char *num);
+
+/** Returns a GList of account-types based on the owner type */
+GList * gncOwnerGetAccountTypesList (const GncOwner *owner);
+
+/** Returns a GList of currencies associated with the owner */
+GList * gncOwnerGetCommoditiesList (const GncOwner *owner);
 
 #define OWNER_TYPE        "type"
 #define OWNER_TYPE_STRING "type-string"  /**< Allows the type to be handled externally. */
