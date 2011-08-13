@@ -36,6 +36,7 @@
 #include <locale.h>
 
 #include "Account.h"
+#include "gncOwner.h"
 #include "qof.h"
 
 
@@ -174,6 +175,33 @@ gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
         const Account *account,
         gboolean recurse,
         gboolean *negative);
+
+/** Get the balance for the underlying owner object.
+ *  The returned value is always positive,
+ *  intended to be displayed to a user. However the real sign
+ *  of the balance is indicated via the "negative" parameter.
+ */
+gnc_numeric gnc_ui_owner_get_balance_full (GncOwner *owner,
+                                           gboolean *negative,
+                                           const gnc_commodity *commodity);
+
+/** Get the balance for the underlying owner object in string format
+ *  and the owner's native currency.
+ *  The returned value is always positive,
+ *  intended to be displayed to a user. However the real sign
+ *  of the balance is indicated via the "negative" parameter.
+ */
+gchar * gnc_ui_owner_get_print_balance (GncOwner *owner,
+                                        gboolean *negative);
+
+/** Get the balance for the underlying owner object in string format
+ *  and in the default report currency.
+ *  The returned value is always positive,
+ *  intended to be displayed to a user. However the real sign
+ *  of the balance is indicated via the "negative" parameter.
+ */
+gchar * gnc_ui_owner_get_print_report_balance (GncOwner *owner,
+                                               gboolean *negative);
 
 char *gnc_ui_account_get_tax_info_string (const Account *account);
 

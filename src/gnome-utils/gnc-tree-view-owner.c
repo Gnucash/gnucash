@@ -315,30 +315,20 @@ sort_by_boolean (GtkTreeModel *f_model,
 }
 
 static gint
-sort_by_xxx_value (xaccGetBalanceInCurrencyFn fn,
-                   gboolean recurse,
-                   GtkTreeModel *f_model,
+sort_by_xxx_value (GtkTreeModel *f_model,
                    GtkTreeIter *f_iter_a,
                    GtkTreeIter *f_iter_b,
                    gpointer user_data)
 {
-    const GncOwner *owner_a, *owner_b;
+    GncOwner *owner_a, *owner_b;
     gnc_numeric balance_a, balance_b;
     gint result;
 
     /* Find the owners */
-    sort_cb_setup (f_model, f_iter_a, f_iter_b, &owner_a, &owner_b);
+    sort_cb_setup (f_model, f_iter_a, f_iter_b, (const GncOwner**)&owner_a, (const GncOwner**)&owner_b);
 
-    /* Get balances */
-    /* FIXME I'm not aware of any functions to get an owner's "balance" yet.
-     *       This should be implemented before this function does anything useful.
-     *       The code below is copied from the tree-view-account source to serve
-     *       as an example.
-    balance_a = gnc_ui_owner_get_balance_full(fn, owner_a, recurse, NULL, NULL);
-    balance_b = gnc_ui_owner_get_balance_full(fn, owner_b, recurse, NULL, NULL);
-    */
-    balance_a = gnc_numeric_zero();
-    balance_b = gnc_numeric_zero();
+    balance_a = gnc_ui_owner_get_balance_full(owner_a, NULL, NULL);
+    balance_b = gnc_ui_owner_get_balance_full(owner_b, NULL, NULL);
 
     result = gnc_numeric_compare(balance_a, balance_b);
     if (result != 0)
@@ -352,57 +342,9 @@ sort_by_balance_value (GtkTreeModel *f_model,
                        GtkTreeIter *f_iter_b,
                        gpointer user_data)
 {
-    /* FIXME I'm not aware of any functions to get an owner's "balance" yet.
-     *       This should be implemented before this function does anything useful.
-     *       The code below is copied from the tree-view-account source to serve
-     *       as an example.
-    return sort_by_xxx_value (gncOwnerGetBalanceInCurrency, TRUE,
-                              f_model, f_iter_a, f_iter_b, user_data);
-     */
-     return sort_by_xxx_value (NULL, TRUE,
-             f_model, f_iter_a, f_iter_b, user_data);
-}
-static gint
-sort_by_xxx_period_value (GtkTreeModel *f_model,
-                          GtkTreeIter *f_iter_a,
-                          GtkTreeIter *f_iter_b,
-                          gboolean recurse)
-{
-    GncOwner *owner1, *owner2;
-    time_t t1, t2;
-    gnc_numeric b1, b2;
-    gint result;
-
-    sort_cb_setup (f_model, f_iter_a, f_iter_b,
-                   (const GncOwner **)&owner1, (const GncOwner **)&owner2);
-
-    t1 = gnc_accounting_period_fiscal_start();
-    t2 = gnc_accounting_period_fiscal_end();
-
-    /* FIXME I'm not aware of any functions to get an owner's "balance" yet.
-     *       This should be implemented before this function does anything useful.
-     *       The code below is copied from the tree-view-account source to serve
-     *       as an example.
-    b1 = gncOwnerGetBalanceChangeForPeriod(owner1, t1, t2, recurse);
-    b2 = gncOwnerGetBalanceChangeForPeriod(owner2, t1, t2, recurse);
-    */
-    b1 = gnc_numeric_zero();
-    b2 = gnc_numeric_zero();
-
-    result = gnc_numeric_compare(b1, b2);
-    if (result != 0)
-        return result;
-    return gncOwnerCompare(owner1, owner2);
+    return sort_by_xxx_value (f_model, f_iter_a, f_iter_b, user_data);
 }
 
-static gint
-sort_by_balance_period_value (GtkTreeModel *f_model,
-                              GtkTreeIter *f_iter_a,
-                              GtkTreeIter *f_iter_b,
-                              gpointer user_data)
-{
-    return sort_by_xxx_period_value (f_model, f_iter_a, f_iter_b, FALSE);
-}
 
 /************************************************************/
 /*                    New View Creation                     */
@@ -520,20 +462,15 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                      GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE,
                                      GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                      sort_by_balance_value);
+
     priv->balance_report_column
-    = gnc_tree_view_add_numeric_column(view, _("Balance (Report)"), GNC_OWNER_TREE_BALANCE_REPORT_COL,
+    = gnc_tree_view_add_numeric_column(view, _("Balance"), GNC_OWNER_TREE_BALANCE_REPORT_COL,
                                        SAMPLE_OWNER_VALUE,
                                        GNC_TREE_MODEL_OWNER_COL_BALANCE_REPORT,
                                        GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE,
                                        GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                        sort_by_balance_value);
 
-    gnc_tree_view_add_numeric_column(view, _("Balance (Period)"), GNC_OWNER_TREE_BALANCE_PERIOD_COL,
-                                     SAMPLE_OWNER_VALUE,
-                                     GNC_TREE_MODEL_OWNER_COL_BALANCE_PERIOD,
-                                     GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE_PERIOD,
-                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                     sort_by_balance_period_value);
     priv->notes_column
     = gnc_tree_view_add_text_column(view, _("Notes"), GNC_OWNER_TREE_NOTES_COL, NULL,
                                     "Sample owner notes.",

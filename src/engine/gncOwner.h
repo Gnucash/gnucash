@@ -192,6 +192,14 @@ GList * gncOwnerGetAccountTypesList (const GncOwner *owner);
 /** Returns a GList of currencies associated with the owner */
 GList * gncOwnerGetCommoditiesList (const GncOwner *owner);
 
+
+/** Given an owner, extract the open balance from the owner and then
+ *  convert it to the desired currency.
+ */
+gnc_numeric
+gncOwnerGetBalanceInCurrency (GncOwner *owner,
+                              const gnc_commodity *report_currency);
+
 #define OWNER_TYPE        "type"
 #define OWNER_TYPE_STRING "type-string"  /**< Allows the type to be handled externally. */
 #define OWNER_CUSTOMER    "customer"

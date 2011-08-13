@@ -405,11 +405,9 @@ gnc_tree_model_owner_get_column_type (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_OWNER_COL_EMAIL:
     case GNC_TREE_MODEL_OWNER_COL_BALANCE:
     case GNC_TREE_MODEL_OWNER_COL_BALANCE_REPORT:
-    case GNC_TREE_MODEL_OWNER_COL_BALANCE_PERIOD:
     case GNC_TREE_MODEL_OWNER_COL_NOTES:
 
     case GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE:
-    case GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE_PERIOD:
         return G_TYPE_STRING;
 
     case GNC_TREE_MODEL_OWNER_COL_ACTIVE:
@@ -526,43 +524,6 @@ gnc_tree_model_owner_set_color(GncTreeModelOwner *model,
         g_value_set_static_string (value, "black");
 }
 
-static gchar *
-gnc_tree_model_owner_compute_period_balance(GncTreeModelOwner *model,
-        GncOwner *acct,
-        gboolean recurse,
-        gboolean *negative)
-{
-    GncTreeModelOwnerPrivate *priv;
-    time_t t1, t2;
-    gnc_numeric b3;
-
-    if ( negative )
-        *negative = FALSE;
-
-    /* FIXME Figure out how to calculate the payment balance for an owner.
-     *       The code below is from the account tree model and should be
-     *       adapted for owners.
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
-    if (acct == priv->root)
-        return g_strdup("");
-
-    t1 = gnc_ownering_period_fiscal_start();
-    t2 = gnc_ownering_period_fiscal_end();
-
-    if (t1 > t2)
-        return g_strdup("");
-
-    b3 = xaccOwnerGetBalanceChangeForPeriod(acct, t1, t2, recurse);
-    if (gnc_reverse_balance (acct))
-        b3 = gnc_numeric_neg (b3);
-
-    if (negative)
-        *negative = gnc_numeric_negative_p(b3);
-
-    return g_strdup(xaccPrintAmount(b3, gnc_owner_print_info(acct, TRUE))); */
-    return g_strdup("0");
-}
-
 static void
 gnc_tree_model_owner_get_value (GtkTreeModel *tree_model,
                                 GtkTreeIter *iter,
@@ -674,39 +635,20 @@ gnc_tree_model_owner_get_value (GtkTreeModel *tree_model,
 
     case GNC_TREE_MODEL_OWNER_COL_BALANCE:
         g_value_init (value, G_TYPE_STRING);
-        /* FIXME how to calculate an Owner's balance ?
-        string = gnc_ui_owner_get_print_balance(xaccOwnerGetBalanceInCurrency,
-                 owner, TRUE, &negative);
-        g_value_take_string (value, string); */
-        g_value_set_static_string (value, "0");
+        string = gnc_ui_owner_get_print_balance(owner, &negative);
+        g_value_take_string (value, string);
         break;
+
     case GNC_TREE_MODEL_OWNER_COL_BALANCE_REPORT:
         g_value_init (value, G_TYPE_STRING);
-        /* FIXME how to calculate an Owner's balance ?
-        string = gnc_ui_owner_get_print_report_balance(xaccOwnerGetBalanceInCurrency,
-                 owner, TRUE, &negative);
-        g_value_take_string (value, string); */
-        g_value_set_static_string (value, "0");
+        string = gnc_ui_owner_get_print_report_balance(owner, &negative);
+        g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE:
         g_value_init (value, G_TYPE_STRING);
-        /* FIXME how to calculate an Owner's balance ?
-        string = gnc_ui_owner_get_print_balance(xaccOwnerGetBalanceInCurrency,
-                 owner, TRUE, &negative);*/
-        negative = FALSE;
+        string = gnc_ui_owner_get_print_balance(owner, &negative);
         gnc_tree_model_owner_set_color(model, negative, value);
-        /* g_free(string);*/
-        break;
-    case GNC_TREE_MODEL_OWNER_COL_BALANCE_PERIOD:
-        g_value_init (value, G_TYPE_STRING);
-        string = gnc_tree_model_owner_compute_period_balance(model, owner, FALSE, &negative);
-        g_value_take_string (value, string);
-        break;
-    case GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE_PERIOD:
-        g_value_init (value, G_TYPE_STRING);
-        string = gnc_tree_model_owner_compute_period_balance(model, owner, FALSE, &negative);
-        gnc_tree_model_owner_set_color(model, negative, value);
-        g_free (string);
+        g_free(string);
         break;
 
     case GNC_TREE_MODEL_OWNER_COL_NOTES:

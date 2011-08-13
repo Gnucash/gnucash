@@ -455,6 +455,94 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
     return balance;
 }
 
+/*
+ * This is a wrapper routine around an gncOwnerGetBalanceInCurrency
+ * function that handles additional needs of the gui.
+ *
+ * @param owner     The owner to retrieve data about.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ * @param commodity The commodity in which the account balance should
+ *                  be returned. If NULL, the value will be returned in
+ *                  the commodity of the owner. This is normally used
+ *                  to specify a currency, which forces the conversion
+ *                  of things like stock account values from share
+ *                  values to an amount the requested currency.
+ */
+gnc_numeric
+gnc_ui_owner_get_balance_full (GncOwner *owner,
+                               gboolean *negative,
+                               const gnc_commodity *commodity)
+{
+    gnc_numeric balance;
+
+    if (!owner)
+        return gnc_numeric_zero ();
+
+    balance = gncOwnerGetBalanceInCurrency (owner, commodity);
+
+    /* reverse sign if needed */
+    if ((gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER))
+        balance = gnc_numeric_neg (balance);
+
+    /* Record whether the balance is negative. */
+    if (negative)
+        *negative = gnc_numeric_negative_p (balance);
+
+    return balance;
+}
+
+
+/**
+ * Wrapper around gnc_ui_owner_get_balance_full that converts
+ * the resulting number to a character string.  The number is
+ * formatted according to the specification of the owner currency.
+ * The caller is responsible for g_free'ing the returned memory.
+ *
+ * @param owner   The owner to retrieve data about.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ */
+gchar *
+gnc_ui_owner_get_print_balance (GncOwner *owner,
+                                gboolean *negative)
+{
+    gnc_numeric balance;
+    GNCPrintAmountInfo print_info;
+
+    balance = gnc_ui_owner_get_balance_full (owner, negative, NULL);
+    print_info = gnc_commodity_print_info (gncOwnerGetCurrency (owner), TRUE);
+    return g_strdup (xaccPrintAmount (balance, print_info));
+}
+
+/**
+ * Wrapper around gnc_ui_owner_get_balance_full that converts
+ * the resulting number to a character string.  The number is
+ * formatted according to the specification of the default reporting
+ * currency.
+ *
+ * @param account   The owner to retrieve data about.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ */
+gchar *
+gnc_ui_owner_get_print_report_balance (GncOwner *owner,
+                                       gboolean *negative)
+{
+    GNCPrintAmountInfo print_info;
+    gnc_numeric balance;
+    gnc_commodity *report_commodity;
+
+    report_commodity = gnc_default_report_currency ();
+    balance = gnc_ui_owner_get_balance_full (owner, negative,
+                                               report_commodity);
+    print_info = gnc_commodity_print_info (report_commodity, TRUE);
+    return g_strdup (xaccPrintAmount (balance, print_info));
+}
+
 /* Caller is responsible for g_free'ing returned memory */
 char *
 gnc_ui_account_get_tax_info_string (const Account *account)
