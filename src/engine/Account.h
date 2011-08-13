@@ -28,7 +28,7 @@
     list of Splits, the Account structure also gives the Account a name, a
     code number, description and notes fields, a key-value frame, a pointer
     to the commodity that is used for all splits in this account. The
-    commodity can be the name of anything traded and tradable: a stock
+    commodity can be the name of anything traded and tradeable: a stock
     (e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or
     anything added to the commodity table.
 
@@ -617,10 +617,10 @@ gnc_numeric xaccAccountGetBalanceChangeForPeriod (
  * any account, both its parent and its children can be easily found.
  * To make the management of sets of accounts easier, an account does not
  * directly point at its children, but rather at an 'Account Group' that
- * stores the children.  At the top of the tree heirarchy lies a single
+ * stores the children.  At the top of the tree hierarchy lies a single
  * root node, the root account group.
  *
- * The account tree heirarchy is unique, in that a given account can
+ * The account tree hierarchy is unique, in that a given account can
  * have only one parent account.
  @{
 */
@@ -644,7 +644,7 @@ gnc_numeric xaccAccountGetBalanceChangeForPeriod (
  */
 void gnc_account_append_child (Account *new_parent, Account *child);
 
-/** This function will remove the speified child account from the
+/** This function will remove the specified child account from the
  *  specified parent account. It will NOT free the associated memory
  *  or otherwise alter the account: the account can now be reparented
  *  to a new location.  Note, however, that it will mark the old
@@ -678,7 +678,7 @@ Account * gnc_account_get_parent (const Account *account);
  *  belongs.  NULL if the account is not part of any account tree. */
 Account * gnc_account_get_root (Account *account);
 
-/** This routine indicates whether the spcified account is the root
+/** This routine indicates whether the specified account is the root
  *  node of an account tree.
  *
  *  @param account A pointer to any account.
@@ -824,7 +824,7 @@ void gnc_account_foreach_child (const Account *account,
 /** This method will traverse the immediate children of this accounts,
  *  calling 'func' on each account.  Traversal will stop when func
  *  returns a non-null value, and the routine will return with that
- *  value.  Therefore, this function will return null iff func returns
+ *  value.  Therefore, this function will return null if func returns
  *  null for every account.  For a simpler function that always
  *  traverses all children nodes, use the gnc_account_foreach_child()
  *  function.
@@ -859,7 +859,7 @@ void gnc_account_foreach_descendant (const Account *account,
 /** This method will traverse all children of this accounts and their
  *  descendants, calling 'func' on each account.  Traversal will stop
  *  when func returns a non-null value, and the routine will return
- *  with that value.  Therefore, this function will return null iff
+ *  with that value.  Therefore, this function will return null if
  *  func returns null for every account.  For a simpler function that
  *  always traverses all children nodes, use the
  *  gnc_account_foreach_descendant() function.
@@ -883,7 +883,7 @@ gpointer gnc_account_foreach_descendant_until (const Account *account,
 
 /** The gnc_account_join_children() subroutine will move (reparent)
  *  all child accounts from the from_parent account to the to_parent
- *  account, preserving the account heirarchy.  It will also take care
+ *  account, preserving the account hierarchy.  It will also take care
  *  that the moved accounts will have the to_parent's book parent
  *  as well.
  */
@@ -891,7 +891,7 @@ void gnc_account_join_children (Account *to_parent, Account *from_parent);
 
 /** The gnc_account_copy_children() subroutine will copy all child
  *  accounts from the "src" account to the "dest" account, preserving
- *  the account heirarchy.  It will also take care that the moved
+ *  the account hierarchy.  It will also take care that the moved
  *  accounts will have the "dest" account's book parent as well.  This
  *  routine will *NOT* copy any splits/transactions.  It will copy the
  *  KVP trees in each account.
@@ -960,21 +960,21 @@ Account *gnc_account_lookup_by_code (const Account *parent,
 */
 /**
  * Conversion routines for the account types to/from strings
- * that are used in persistant storage, communications.  These
+ * that are used in persistent storage, communications.  These
  * strings should *not* be translated to the local language.
- * Typical converstion is ACCT_TYPE_INCOME -> "INCOME". */
+ * Typical conversion is ACCT_TYPE_INCOME -> "INCOME". */
 const char * xaccAccountTypeEnumAsString (GNCAccountType type);
 /**
  * Conversion routines for the account types to/from strings
- * that are used in persistant storage, communications.  These
+ * that are used in persistent storage, communications.  These
  * strings should *not* be translated to the local language.
- * Typical converstion is "INCOME" -> ACCT_TYPE_INCOME. */
+ * Typical conversion is "INCOME" -> ACCT_TYPE_INCOME. */
 gboolean xaccAccountStringToType (const char* str, GNCAccountType *type);
 /**
  * Conversion routines for the account types to/from strings
- * that are used in persistant storage, communications.  These
+ * that are used in persistent storage, communications.  These
  * strings should *not* be translated to the local language.
- * Typical converstion is "INCOME" -> ACCT_TYPE_INCOME. */
+ * Typical conversion is "INCOME" -> ACCT_TYPE_INCOME. */
 GNCAccountType xaccAccountStringToEnum (const char* str);
 
 /** The xaccAccountGetTypeStr() routine returns a string suitable for
@@ -1097,7 +1097,7 @@ LotList* xaccAccountGetLotList (const Account *account);
 /** The xaccAccountForEachLot() method will apply the function 'proc'
  *    to each lot in the account.  If 'proc' returns a non-NULL value,
  *    further application will be stopped, and the resulting value
- *    will be returned.  There is no guarenteed order over which
+ *    will be returned.  There is no guaranteed order over which
  *    the Lots will be traversed.
  */
 gpointer xaccAccountForEachLot(
@@ -1375,7 +1375,7 @@ int gnc_account_tree_staged_transaction_traversal(const Account *account,
         void *data);
 
 /** Traverse all of the transactions in the given account group.
- * Continue processing IFF @a proc returns 0. This function
+ * Continue processing IF @a proc returns 0. This function
  * will descend recursively to traverse transactions in the
  * children of the accounts in the group.
  *
@@ -1383,7 +1383,7 @@ int gnc_account_tree_staged_transaction_traversal(const Account *account,
  * pointed to by at least one split in any account in the hierarchy
  * topped by the root Account @a acc.
  *
- * The result of this function will be 0 IFF every relevant
+ * The result of this function will be 0 IF every relevant
  * transaction was traversed exactly once; otherwise, the return
  * value is the last non-zero value returned by the callback.
  *

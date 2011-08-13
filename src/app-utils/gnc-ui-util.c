@@ -312,7 +312,7 @@ gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
 }
 
 /*
- * This routine retrives the total balance in an account, possibly
+ * This routine retrieves the total balance in an account, possibly
  * including all sub-accounts under the specified account.
  */
 gnc_numeric
@@ -323,7 +323,7 @@ gnc_ui_account_get_balance (const Account *account, gboolean recurse)
 }
 
 /*
- * This routine retrives the total balance in an account converted to
+ * This routine retrieves the total balance in an account converted to
  * a given currency, possibly including all sub-accounts under the
  * specified account.
  */
@@ -337,7 +337,7 @@ gnc_ui_account_get_balance_in_currency (const Account *account,
 }
 
 /*
- * This routine retrives the reconciled balance in an account,
+ * This routine retrieves the reconciled balance in an account,
  * possibly including all sub-accounts under the specified account.
  */
 gnc_numeric
@@ -741,7 +741,7 @@ string_after_colon (const char *msgstr)
  * gnc_get_reconcile_str                                            *
  *   return the i18n'd string for the given reconciled flag         *
  *                                                                  *
- * Args: reconciled_flag - the flag to stringize                    *
+ * Args: reconciled_flag - the flag to convert into a string        *
  * Returns: the i18n'd reconciled string                            *
 \********************************************************************/
 const char *
@@ -789,7 +789,7 @@ gnc_get_reconcile_valid_flags (void)
  * gnc_get_reconcile_flag_order                                     *
  *   return a string containing the reconciled-flag change order    *
  *                                                                  *
- * Args: reconciled_flag - the flag to stringize                    *
+ * Args: reconciled_flag - the flag to convert into a string        *
  * Returns: the i18n'd reconciled string                            *
 \********************************************************************/
 const char *
@@ -1343,7 +1343,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
         return 0;
     }
 
-    /* Print the absolute value, but remember negativity */
+    /* Print the absolute value, but remember sign */
     value_is_negative = gnc_numeric_negative_p (val);
     val = gnc_numeric_abs (val);
 
@@ -1747,10 +1747,10 @@ static gchar *big_numbers[] =
        thousands. */
     "Million",
     /* Translators: This is the word for the number 10^9, one thousand
-       millions. WATCH OUT: In British english and many other languages
+       millions. WATCH OUT: In British English and many other languages
        this word is used for 10^12 which is one million millions! In
        contrast to this, here in GnuCash this is used in the American
-       english meaning of 10^9.  */
+       English meaning of 10^9.  */
     "Billion",
     /* Translators: This is the word for the number 10^12, one million
        millions. */
