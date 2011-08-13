@@ -135,6 +135,7 @@ struct _crit_data
 static void search_clear_criteria (GNCSearchWindow *sw);
 static void gnc_search_dialog_display_results (GNCSearchWindow *sw);
 
+
 static void
 gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
                                     GNCSearchWindow *sw)
@@ -142,6 +143,7 @@ gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
     if (cb->cb_fcn)
         (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
 }
+
 
 static void
 gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
@@ -151,6 +153,7 @@ gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
     cb = g_object_get_data (G_OBJECT (button), "data");
     gnc_search_callback_button_execute (cb, sw);
 }
+
 
 static void
 gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
@@ -201,6 +204,7 @@ gnc_search_dialog_double_click_entry (GNCQueryList *list, gpointer item,
 }
 #endif
 
+
 static void
 gnc_search_dialog_select_row_cb (GtkCList *clist, gint row, gint column,
                                  GdkEventButton *event, gpointer user_data)
@@ -224,6 +228,7 @@ gnc_search_dialog_select_row_cb (GtkCList *clist, gint row, gint column,
     }
 }
 
+
 static void
 gnc_search_dialog_unselect_row_cb (GtkCList *clist, gint row, gint column,
                                    GdkEventButton *event, gpointer user_data)
@@ -234,6 +239,7 @@ gnc_search_dialog_unselect_row_cb (GtkCList *clist, gint row, gint column,
     if (sw->selected_item == item)
         sw->selected_item = NULL;
 }
+
 
 static void
 gnc_search_dialog_init_result_list (GNCSearchWindow *sw)
@@ -246,6 +252,7 @@ gnc_search_dialog_init_result_list (GNCSearchWindow *sw)
     g_signal_connect (G_OBJECT (sw->result_list), "unselect-row",
                       G_CALLBACK (gnc_search_dialog_unselect_row_cb), sw);
 }
+
 
 static void
 gnc_search_dialog_display_results (GNCSearchWindow *sw)
@@ -316,11 +323,13 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->new_rb), TRUE);
 }
 
+
 static void
 match_combo_changed (GtkComboBox *combo_box, GNCSearchWindow *sw)
 {
     sw->grouping = gtk_combo_box_get_active(combo_box);
 }
+
 
 static void
 search_type_cb (GtkToggleButton *button, GNCSearchWindow *sw)
@@ -334,6 +343,7 @@ search_type_cb (GtkToggleButton *button, GNCSearchWindow *sw)
     }
 }
 
+
 static void
 search_active_only_cb (GtkToggleButton *button, GNCSearchWindow *sw)
 {
@@ -341,6 +351,7 @@ search_active_only_cb (GtkToggleButton *button, GNCSearchWindow *sw)
     gnc_gconf_set_bool(sw->gconf_section, KEY_ACTIVE_ONLY,
                        gtk_toggle_button_get_active (button), NULL);
 }
+
 
 static void
 search_update_query (GNCSearchWindow *sw)
@@ -430,6 +441,7 @@ search_update_query (GNCSearchWindow *sw)
     sw->q = new_q;
 }
 
+
 static void
 gnc_search_dialog_show_close_cancel (GNCSearchWindow *sw)
 {
@@ -444,6 +456,7 @@ gnc_search_dialog_show_close_cancel (GNCSearchWindow *sw)
         gtk_widget_show (sw->close_button);
     }
 }
+
 
 static void
 gnc_search_dialog_reset_widgets (GNCSearchWindow *sw)
@@ -472,6 +485,7 @@ gnc_search_dialog_reset_widgets (GNCSearchWindow *sw)
     }
 }
 
+
 static gboolean
 gnc_search_dialog_crit_ok (GNCSearchWindow *sw)
 {
@@ -492,6 +506,7 @@ gnc_search_dialog_crit_ok (GNCSearchWindow *sw)
     return ret;
 }
 
+
 static void
 search_find_cb (GtkButton *button, GNCSearchWindow *sw)
 {
@@ -507,6 +522,7 @@ search_find_cb (GtkButton *button, GNCSearchWindow *sw)
     else
         gnc_search_dialog_display_results (sw);
 }
+
 
 static void
 search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
@@ -541,6 +557,7 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
     }
 }
 
+
 static void
 search_cancel_cb (GtkButton *button, GNCSearchWindow *sw)
 {
@@ -549,11 +566,13 @@ search_cancel_cb (GtkButton *button, GNCSearchWindow *sw)
     gnc_search_dialog_destroy (sw);
 }
 
+
 static void
 search_help_cb (GtkButton *button, GNCSearchWindow *sw)
 {
     gnc_gnome_help (HF_HELP, HL_FIND_TRANSACTIONS);
 }
+
 
 static void
 remove_element (GtkWidget *button, GNCSearchWindow *sw)
@@ -582,6 +601,7 @@ remove_element (GtkWidget *button, GNCSearchWindow *sw)
     }
 }
 
+
 static void
 attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
 {
@@ -602,6 +622,7 @@ attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
     gtk_widget_show (remove);
     data->button = remove;	/* Save the button for later */
 }
+
 
 static void
 combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
@@ -653,6 +674,7 @@ combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
     gnc_search_core_type_editable_enters (newelem);
 }
 
+
 static void
 search_clear_criteria (GNCSearchWindow *sw)
 {
@@ -667,6 +689,7 @@ search_clear_criteria (GNCSearchWindow *sw)
         node = tmp;
     }
 }
+
 
 static GtkWidget *
 get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
@@ -729,6 +752,7 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     return hbox;
 }
 
+
 static void
 gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
 {
@@ -773,11 +797,13 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
     }
 }
 
+
 static void
 add_criterion (GtkWidget *button, GNCSearchWindow *sw)
 {
     gnc_search_dialog_add_criterion (sw);
 }
+
 
 static int
 gnc_search_dialog_close_cb (GtkDialog *dialog, GNCSearchWindow *sw)
@@ -802,6 +828,7 @@ gnc_search_dialog_close_cb (GtkDialog *dialog, GNCSearchWindow *sw)
     return FALSE;
 }
 
+
 static void
 refresh_handler (GHashTable *changes, gpointer data)
 {
@@ -810,6 +837,7 @@ refresh_handler (GHashTable *changes, gpointer data)
     g_return_if_fail (sw);
     gnc_search_dialog_display_results (sw);
 }
+
 
 static void
 close_handler (gpointer data)
@@ -820,6 +848,7 @@ close_handler (gpointer data)
     gtk_widget_destroy (sw->dialog);
     /* DRH: should sw be freed here? */
 }
+
 
 static const gchar *
 type_label_to_new_button(const gchar* type_label)
@@ -856,6 +885,10 @@ type_label_to_new_button(const gchar* type_label)
     {
         return _("New Transaction");
     }
+    else if (g_strcmp0(type_label, "Split") == 0)
+    {
+        return _("New Split");
+    }
     else if (g_strcmp0(type_label, "Vendor") == 0)
     {
         return _("New Vendor");
@@ -867,31 +900,34 @@ type_label_to_new_button(const gchar* type_label)
     }
 }
 
+
 static void
 gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 {
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *label, *add, *box;
     GtkComboBox *combo_box;
+    GtkWidget *widget;
     GtkWidget *new_item_button;
     const char * type_label;
     gboolean active;
 
-    xml = gnc_glade_xml_new ("search.glade", "Search Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-search.glade", "Search Dialog");
 
     /* Grab the dialog, save the dialog info */
-    sw->dialog = glade_xml_get_widget (xml, "Search Dialog");
+    sw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Search Dialog"));
     gtk_window_set_title(GTK_WINDOW(sw->dialog), title);
     g_object_set_data (G_OBJECT (sw->dialog), "dialog-info", sw);
 
-    /* grab the result hbox */
-    sw->result_hbox = glade_xml_get_widget (xml, "result_hbox");
+    /* Grab the result hbox */
+    sw->result_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "result_hbox"));
 
     /* Grab the search-table widget */
-    sw->criteria_table = glade_xml_get_widget (xml, "criteria_table");
+    sw->criteria_table = GTK_WIDGET(gtk_builder_get_object (builder, "criteria_table"));
 
     /* Set the type label */
-    label = glade_xml_get_widget (xml, "type_label");
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "type_label"));
     if (sw->type_label)
         type_label = sw->type_label;
     else
@@ -902,7 +938,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     add = gtk_button_new_from_stock (GTK_STOCK_ADD);
 
     g_signal_connect (G_OBJECT (add), "clicked", G_CALLBACK (add_criterion), sw);
-    box = glade_xml_get_widget (xml, "add_button_box");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "add_button_box"));
     gtk_box_pack_start (GTK_BOX (box), add, FALSE, FALSE, 3);
     gtk_widget_show (add);
 
@@ -914,24 +950,33 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gtk_combo_box_set_active(combo_box, sw->grouping);
     g_signal_connect(combo_box, "changed", G_CALLBACK (match_combo_changed), sw);
 
-    box = glade_xml_get_widget (xml, "type_menu_box");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "type_menu_box"));
     gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET(combo_box), FALSE, FALSE, 3);
     gtk_widget_show(GTK_WIDGET(combo_box));
 
     /* Grab the 'all items match' label */
-    sw->match_all_label = glade_xml_get_widget (xml, "match_all_label");
+    sw->match_all_label = GTK_WIDGET(gtk_builder_get_object (builder, "match_all_label"));
 
-    /* if there's no original query, make the narrow, add, delete
-     * buttons inaccessible */
-    sw->new_rb = glade_xml_get_widget (xml, "new_search_radiobutton");
-    sw->narrow_rb = glade_xml_get_widget (xml, "narrow_search_radiobutton");
-    sw->add_rb = glade_xml_get_widget (xml, "add_search_radiobutton");
-    sw->del_rb = glade_xml_get_widget (xml, "delete_search_radiobutton");
+    /* if there's no original query, make the narrow, add, delete buttons inaccessible */
+    sw->new_rb = GTK_WIDGET(gtk_builder_get_object (builder, "new_search_radiobutton"));
+    g_signal_connect (sw->new_rb,"toggled",
+                                   G_CALLBACK (search_type_cb), sw);
+    sw->narrow_rb = GTK_WIDGET(gtk_builder_get_object (builder, "narrow_search_radiobutton"));
+    g_signal_connect (sw->narrow_rb,"toggled",
+                                   G_CALLBACK (search_type_cb), sw);
+    sw->add_rb = GTK_WIDGET(gtk_builder_get_object (builder, "add_search_radiobutton"));
+    g_signal_connect (sw->add_rb,"toggled",
+                                   G_CALLBACK (search_type_cb), sw);
+    sw->del_rb = GTK_WIDGET(gtk_builder_get_object (builder, "delete_search_radiobutton"));
+    g_signal_connect (sw->del_rb,"toggled",
+                                   G_CALLBACK (search_type_cb), sw);
 
     active = gnc_gconf_get_bool(sw->gconf_section, KEY_ACTIVE_ONLY, NULL);
-    sw->active_only_check = glade_xml_get_widget (xml, "active_only_check");
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sw->active_only_check),
-                                  active);
+    sw->active_only_check = GTK_WIDGET(gtk_builder_get_object (builder, "active_only_check"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sw->active_only_check), active);
+    g_signal_connect (sw->active_only_check,"toggled",
+                                   G_CALLBACK (search_active_only_cb), sw);
+
 
     /* Figure out if we this object-type has an "active" parameter, and
      * if not, then set the active-check button insensitive
@@ -939,14 +984,32 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     if (qof_class_get_parameter (sw->search_for, QOF_PARAM_ACTIVE) == NULL)
         gtk_widget_set_sensitive (sw->active_only_check, FALSE);
 
+    /* Deal with the find button */
+    widget = GTK_WIDGET(gtk_builder_get_object (builder, "find_button"));
+    g_signal_connect (widget,"clicked",
+                                   G_CALLBACK (search_find_cb), sw);
+
     /* Deal with the cancel button */
-    sw->cancel_button = glade_xml_get_widget (xml, "cancel_button");
-    sw->close_button = glade_xml_get_widget (xml, "close_button");
+    sw->cancel_button = GTK_WIDGET(gtk_builder_get_object (builder, "cancel_button"));
+    g_signal_connect (sw->cancel_button,"clicked",
+                                   G_CALLBACK (search_cancel_cb), sw);
+
+    /* Deal with the close button */
+    sw->close_button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
+    g_signal_connect (sw->close_button,"clicked",
+                                   G_CALLBACK (search_cancel_cb), sw);
 
     /* Deal with the new_item button */
-    new_item_button = glade_xml_get_widget (xml, "new_item_button");
+    new_item_button = GTK_WIDGET(gtk_builder_get_object (builder, "new_item_button"));
     gtk_button_set_label (GTK_BUTTON(new_item_button),
                           type_label_to_new_button(type_label));
+    g_signal_connect (new_item_button,"clicked",
+                                   G_CALLBACK (search_new_item_cb), sw);
+
+    /* Deal with the help button */
+    widget = GTK_WIDGET(gtk_builder_get_object (builder, "help_button"));
+    g_signal_connect (widget,"clicked",
+                                   G_CALLBACK (search_help_cb), sw);
 
     /* add the first criterion */
     gnc_search_dialog_add_criterion (sw);
@@ -955,28 +1018,8 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     if (!sw->new_item_cb)
         gtk_widget_hide (new_item_button);
 
-    /* Connect XML signals */
-
-    glade_xml_signal_connect_data (xml, "gnc_ui_search_type_cb",
-                                   G_CALLBACK (search_type_cb), sw);
-
-    glade_xml_signal_connect_data (xml, "gnc_ui_search_active_cb",
-                                   G_CALLBACK (search_active_only_cb), sw);
-
-    glade_xml_signal_connect_data (xml, "gnc_ui_search_new_cb",
-                                   G_CALLBACK (search_new_item_cb), sw);
-
-    glade_xml_signal_connect_data (xml, "gnc_ui_search_find_cb",
-                                   G_CALLBACK (search_find_cb), sw);
-
-    glade_xml_signal_connect_data (xml, "gnc_ui_search_cancel_cb",
-                                   G_CALLBACK (search_cancel_cb), sw);
-
-    glade_xml_signal_connect_data (xml, "gnc_ui_search_close_cb",
-                                   G_CALLBACK (search_cancel_cb), sw);
-
-    glade_xml_signal_connect_data (xml, "gnc_ui_search_help_cb",
-                                   G_CALLBACK (search_help_cb), sw);
+    /* Connect all the signals */
+    gtk_builder_connect_signals (builder, sw);
 
     /* Register ourselves */
     sw->component_id = gnc_register_gui_component (DIALOG_SEARCH_CM_CLASS,
@@ -989,7 +1032,10 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     gnc_search_dialog_reset_widgets (sw);
     gnc_search_dialog_show_close_cancel (sw);
+
+    g_object_unref(G_OBJECT(builder));
 }
+
 
 void
 gnc_search_dialog_destroy (GNCSearchWindow *sw)
@@ -1000,12 +1046,14 @@ gnc_search_dialog_destroy (GNCSearchWindow *sw)
     gnc_close_gui_component (sw->component_id);
 }
 
+
 void
 gnc_search_dialog_raise (GNCSearchWindow *sw)
 {
     if (!sw) return;
     gtk_window_present (GTK_WINDOW(sw->dialog));
 }
+
 
 GNCSearchWindow *
 gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
@@ -1064,6 +1112,7 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
     return sw;
 }
 
+
 /* Register an on-close signal with the Search Dialog */
 guint gnc_search_dialog_connect_on_close (GNCSearchWindow *sw,
         GCallback func,
@@ -1078,6 +1127,7 @@ guint gnc_search_dialog_connect_on_close (GNCSearchWindow *sw,
 
 }
 
+
 /* Un-register the signal handlers with the Search Dialog */
 void gnc_search_dialog_disconnect (GNCSearchWindow *sw, gpointer user_data)
 {
@@ -1087,6 +1137,7 @@ void gnc_search_dialog_disconnect (GNCSearchWindow *sw, gpointer user_data)
     g_signal_handlers_disconnect_matched (sw->dialog, G_SIGNAL_MATCH_DATA,
                                           0, 0, NULL, NULL, user_data);
 }
+
 
 /* Clear all callbacks with this Search Window */
 void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
@@ -1112,6 +1163,7 @@ void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
     /* Show the proper close/cancel button */
     gnc_search_dialog_show_close_cancel (sw);
 }
+
 
 /* TEST CODE BELOW HERE */
 
@@ -1145,6 +1197,7 @@ get_params_list (QofIdTypeConst type)
     return list;
 }
 
+
 static GList *
 get_display_list (QofIdTypeConst type)
 {
@@ -1159,11 +1212,13 @@ get_display_list (QofIdTypeConst type)
     return list;
 }
 
+
 static void
 do_nothing (gpointer *a, gpointer b)
 {
     return;
 }
+
 
 void
 gnc_search_dialog_test (void)

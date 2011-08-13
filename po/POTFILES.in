@@ -258,6 +258,7 @@ src/gnome/schemas/apps_gnucash_warnings.schemas.in
 src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in
 src/gnome/schemas/apps_gnucash_window_pages_register.schemas.in
 src/gnome-search/dialog-search.c
+src/gnome-search/dialog-search.glade
 src/gnome-search/gnc-general-search.c
 src/gnome-search/gncmod-gnome-search.c
 src/gnome-search/search-account.c
@@ -266,7 +267,6 @@ src/gnome-search/search-core-type.c
 src/gnome-search/search-core-utils.c
 src/gnome-search/search-date.c
 src/gnome-search/search-double.c
-src/gnome-search/search.glade
 src/gnome-search/search-int64.c
 src/gnome-search/search-numeric.c
 src/gnome-search/search-reconciled.c

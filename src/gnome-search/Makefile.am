@@ -59,11 +59,11 @@ libgncmod_gnome_search_la_LIBADD = \
   ${GLIB_LIBS} \
   ${REGEX_LIBS}
 
-gladedir = $(GNC_GLADE_DIR)
-glade_DATA = \
-  search.glade
+gtkbuilderdir = $(GNC_GTKBUILDER_DIR)
+gtkbuilder_DATA = \
+  dialog-search.glade
 
 EXTRA_DIST = \
-  ${glade_DATA}
+  ${gtkbuilder_DATA}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui.search\"
