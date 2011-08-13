@@ -1322,14 +1322,15 @@ gnc_plugin_page_register_get_tab_color (GncPluginPage *plugin_page)
     reg = gnc_ledger_display_get_split_register (ld);
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
-    color = xaccAccountGetColor (leader);
 
     switch (ledger_type)
     {
     case LD_SINGLE:
+        color = xaccAccountGetColor (leader);
         return g_strdup(color ? color : "");
 
     case LD_SUBACCOUNT:
+        color = xaccAccountGetColor (leader);
         return g_strdup_printf("%s+", color ? color : "");
 
     default:
