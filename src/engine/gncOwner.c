@@ -326,6 +326,16 @@ qofOwnerSetEntity (GncOwner *owner, QofInstance *ent)
     }
 }
 
+gboolean GNC_IS_OWNER (QofInstance *ent)
+{
+    if (!ent)
+        return FALSE;
+
+    return (GNC_IS_VENDOR(ent) ||
+            GNC_IS_CUSTOMER(ent) ||
+            GNC_IS_EMPLOYEE(ent) ||
+            GNC_IS_JOB(ent));
+}
 gpointer gncOwnerGetUndefined (const GncOwner *owner)
 {
     if (!owner) return NULL;
@@ -944,7 +954,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
         /* Now send an event for the invoice so it gets updated as paid */
         this_invoice = gncInvoiceGetInvoiceFromLot(lot);
         if (this_invoice)
-            qof_event_gen (QOF_INSTANCE(&this_invoice), QOF_EVENT_MODIFY, NULL);
+            qof_event_gen (QOF_INSTANCE(this_invoice), QOF_EVENT_MODIFY, NULL);
 
         if (gnc_numeric_zero_p (payment_value))
             break;

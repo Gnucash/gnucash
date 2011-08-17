@@ -69,6 +69,10 @@ QofIdTypeConst qofOwnerGetType(const GncOwner *owner);
 QofInstance* qofOwnerGetOwner (const GncOwner *owner);
 /** set the owner from the entity. */
 void qofOwnerSetEntity (GncOwner *owner, QofInstance *ent);
+/** Check if entity is an owner kind. This function conveniently
+ *  imitates the various GNC_IS_ checks on the other gnucash
+ *  objects even though an owner is not really a true object. */
+gboolean GNC_IS_OWNER (QofInstance *ent);
 
 /** Returns the QofIdType of the given GncOwnerType, or NULL if no
  * suitable one exists. */
