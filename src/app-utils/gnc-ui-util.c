@@ -483,7 +483,7 @@ gnc_ui_owner_get_balance_full (GncOwner *owner,
     balance = gncOwnerGetBalanceInCurrency (owner, commodity);
 
     /* reverse sign if needed */
-    if ((gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER))
+    if ((gncOwnerGetType (owner) != GNC_OWNER_CUSTOMER))
         balance = gnc_numeric_neg (balance);
 
     /* Record whether the balance is negative. */
