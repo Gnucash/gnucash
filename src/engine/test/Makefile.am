@@ -38,7 +38,6 @@ TESTS = \
   test-period \
   test-querynew \
   test-query \
-  test-recursive \
   test-split-vs-account  \
   test-transaction-reversal \
   test-transaction-voiding \
@@ -73,7 +72,6 @@ check_PROGRAMS = \
   test-object \
   test-query \
   test-querynew \
-  test-recursive \
   test-scm-query \
   test-split-vs-account \
   test-transaction-reversal \
