@@ -166,12 +166,6 @@ void kvp_frame_set_numeric(KvpFrame * frame, const gchar * path, gnc_numeric nva
  *     the path exist, they are created.
  */
 void kvp_frame_set_timespec(KvpFrame * frame, const gchar * path, Timespec ts);
-/**    store the value of the
- *     GDate at the indicated path.
- *     If not all frame components of
- *     the path exist, they are created.
- */
-void kvp_frame_set_gdate(KvpFrame * frame, const gchar * path, GDate date);
 
 /** \deprecated
 
@@ -290,8 +284,6 @@ double      kvp_frame_get_double(const KvpFrame *frame, const gchar *path);
 gnc_numeric kvp_frame_get_numeric(const KvpFrame *frame, const gchar *path);
 const gchar * kvp_frame_get_string(const KvpFrame *frame, const gchar *path);
 GncGUID      * kvp_frame_get_guid(const KvpFrame *frame, const gchar *path);
-void      * kvp_frame_get_binary(const KvpFrame *frame, const gchar *path,
-                                 guint64 * size_return);
 Timespec    kvp_frame_get_timespec(const KvpFrame *frame, const gchar *path);
 KvpValue  * kvp_frame_get_value(const KvpFrame *frame, const gchar *path);
 
@@ -316,39 +308,6 @@ KvpValue  * kvp_frame_get_value(const KvpFrame *frame, const gchar *path);
 /*@ dependent @*/
 KvpFrame  * kvp_frame_get_frame(const KvpFrame *frame, const gchar *path);
 
-/** This routine returns the last frame of the path.
- *  If the frame path doesn't exist, it is created.
- *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
- *
- *  @note The semantics of this function implemented the gnucash-1.8
- *  behaviour of kvp_frame_get_frame: In gnucash-1.8, if the KvpFrame
- *  did not exist, kvp_frame_get_frame automatically created one and
- *  returned it. However, now that one will return NULL in this case
- *  and the caller has to create a KvpFrame on his own. The old
- *  functionality is implemented by this
- *  kvp_frame_get_frame_path(). This happened on 2003-09-14, revision
- *  1.31.
- */
-KvpFrame    * kvp_frame_get_frame_path (KvpFrame *frame, const gchar *, ...);
-
-/** This routine returns the last frame of the path.
- *  If the frame path doesn't exist, it is created.
- *  Note that this is *VERY DIFFERENT FROM* kvp_frame_get_frame()
- */
-KvpFrame    * kvp_frame_get_frame_gslist (KvpFrame *frame,
-        const GSList *key_path);
-
-/** This routine returns the last frame of the path.
- *  If the frame path doesn't exist, it is created.
- *  Note that this is *VERY DIFFERENT FROM* kvp_frame_get_frame()
- *
- * The kvp_frame_get_frame_slash() routine takes a single string
- *    where the keys are separated by slashes; thus, for example:
- *    /this/is/a/valid/path  and///so//is////this/
- *    Multiple slashes are compresed.  Leading slash is optional.
- *    The pointers . and .. are *not* currently followed/obeyed.
- *    (This is a bug that needs fixing).
- */
 KvpFrame    * kvp_frame_get_frame_slash (KvpFrame *frame,
         const gchar *path);
 
