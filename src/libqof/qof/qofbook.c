@@ -151,18 +151,6 @@ qof_book_destroy (QofBook *book)
 
     LEAVE ("book=%p", book);
 }
-
-/* ====================================================================== */
-/* XXX this should probably be calling is_equal callbacks on gncObject */
-
-gboolean
-qof_book_equal (const QofBook *book_1, const QofBook *book_2)
-{
-    if (book_1 == book_2) return TRUE;
-    if (!book_1 || !book_2) return FALSE;
-    return FALSE;
-}
-
 /* ====================================================================== */
 
 gboolean
@@ -205,15 +193,6 @@ void qof_book_mark_dirty (QofBook *book)
         if (book->dirty_cb)
             book->dirty_cb(book, TRUE, book->dirty_data);
     }
-}
-
-void
-qof_book_print_dirty (const QofBook *book)
-{
-    if (qof_instance_get_dirty_flag(book))
-        printf("book is dirty.\n");
-    qof_book_foreach_collection
-    (book, (QofCollectionForeachCB)qof_collection_print_dirty, NULL);
 }
 
 time_t
@@ -375,33 +354,6 @@ void qof_book_mark_closed (QofBook *book)
         return;
     }
     book->book_open = 'n';
-}
-
-gchar qof_book_get_open_marker(const QofBook *book)
-{
-    if (!book)
-    {
-        return 'n';
-    }
-    return book->book_open;
-}
-
-gint32 qof_book_get_version (const QofBook *book)
-{
-    if (!book)
-    {
-        return -1;
-    }
-    return book->version;
-}
-
-void qof_book_set_version (QofBook *book, gint32 version)
-{
-    if (!book && version < 0)
-    {
-        return;
-    }
-    book->version = version;
 }
 
 gint64
@@ -720,15 +672,6 @@ static void commit_err (QofInstance *inst, QofBackendError errcode)
     PERR ("Failed to commit: %d", errcode);
 //  gnc_engine_signal_commit_error( errcode );
 }
-
-#if 0
-static void lot_free(QofInstance* inst)
-{
-    GNCLot* lot = GNC_LOT(inst);
-
-    gnc_lot_free(lot);
-}
-#endif
 
 static void noop (QofInstance *inst) {}
 

@@ -279,11 +279,6 @@ void qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
  * is marked 'dirty'. */
 void qof_book_kvp_changed (QofBook *book);
 
-/** The qof_book_equal() method returns TRUE if books are equal.
- * XXX this routine is broken, and does not currently compare data.
- */
-gboolean qof_book_equal (const QofBook *book_1, const QofBook *book_2);
-
 /** This will get the named counter for this book. The return value is
  *    -1 on error or the current value of the counter.
  */
