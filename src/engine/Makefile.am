@@ -15,7 +15,6 @@ AM_CPPFLAGS = \
 libgncmod_engine_la_SOURCES = \
   Account.c \
   Recurrence.c \
-  Period.c \
   Query.c \
   SchedXaction.c \
   SX-book.c \
@@ -68,7 +67,6 @@ gncinclude_HEADERS = \
   FreqSpec.h \
   Recurrence.h \
   GNCId.h \
-  Period.h \
   SchedXaction.h \
   SX-book.h \
   SX-ttinfo.h \

@@ -177,7 +177,6 @@ src/engine/gnc-session-scm.c
 src/engine/gncTaxTable.c
 src/engine/gncVendor.c
 src/engine/kvp-scm.c
-src/engine/Period.c
 src/engine/policy.c
 src/engine/Query.c
 src/engine/Recurrence.c

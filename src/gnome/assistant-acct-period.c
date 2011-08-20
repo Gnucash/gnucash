@@ -38,7 +38,6 @@
 #include <glib/gi18n.h>
 
 #include "Recurrence.h"
-#include "Period.h"
 #include "Query.h"
 #include "Scrub.h"
 #include "Scrub3.h"
@@ -57,7 +56,6 @@
 #include "gnc-session.h"
 
 #define ASSISTANT_ACCT_PERIOD_CM_CLASS "assistant-acct-period"
-/*#define REALLY_DO_CLOSE_BOOKS */
 
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
@@ -479,7 +477,6 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     char *bnotes;
     Timespec closing_date;
     KvpFrame *book_frame;
-    gboolean really_do_close_books = FALSE;
 
     ENTER("info=%p", info);
 
@@ -496,35 +493,6 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 
     timespecFromTime_t (&closing_date,
                         gnc_timet_get_day_end_gdate (&info->closing_date));
-
-#ifdef REALLY_DO_CLOSE_BOOKS
-    really_do_close_books = TRUE;
-#endif /* REALLY_DO_CLOSE_BOOKS */
-
-    if (really_do_close_books)
-    {
-        /* Close the books ! */
-        qof_event_suspend ();
-        gnc_suspend_gui_refresh ();
-
-        scrub_all();
-        closed_book = gnc_book_close_period (current_book, closing_date, NULL, btitle);
-
-        book_frame = qof_book_get_slots(closed_book);
-        kvp_frame_set_str (book_frame, "/book/title", btitle);
-        kvp_frame_set_str (book_frame, "/book/notes", bnotes);
-
-        qof_session_add_book (gnc_get_current_session(), closed_book);
-
-        /* We must save now; if we don't, and the user bails without saving,
-         * then opening account balances will be incorrect, and this can only
-         * lead to unhappiness.
-         */
-        gnc_file_save ();
-        gnc_resume_gui_refresh ();
-        qof_event_resume ();
-        gnc_gui_refresh_all ();  /* resume above should have been enough ??? */
-    }
     g_free(bnotes);
 
     /* Report the status back to the user. */

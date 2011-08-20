@@ -35,7 +35,6 @@ TESTS = \
   test-account-object \
   test-group-vs-book \
   test-lots \
-  test-period \
   test-querynew \
   test-query \
   test-split-vs-account  \
@@ -66,7 +65,6 @@ check_PROGRAMS = \
   test-account-object \
   test-group-vs-book \
   test-load-engine \
-  test-period \
   test-lots \
   test-numeric \
   test-object \
