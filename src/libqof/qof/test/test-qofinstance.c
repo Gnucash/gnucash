@@ -115,8 +115,8 @@ test_instance_new_destroy( void )
     QofInstance *inst;
     QofInstanceClass *klass;
     /* test var */
-    Timespec timespec_priv;
-  
+    Timespec *timespec_priv;
+
     g_test_message( "Testing qofinstance object initialization" );
     inst = g_object_new(QOF_TYPE_INSTANCE, NULL);
     g_assert( QOF_IS_INSTANCE( inst ) );
@@ -131,9 +131,9 @@ test_instance_new_destroy( void )
     g_assert( !qof_instance_get_collection( inst ) );
     g_assert( qof_instance_get_book( inst ) == NULL );
     g_assert( inst->kvp_data );
-    timespec_priv = qof_instance_get_last_update( inst );
-    g_assert_cmpint( timespec_priv.tv_sec, ==, 0 );
-    g_assert_cmpint( timespec_priv.tv_nsec, ==, -1 );
+    g_object_get( inst, "last-update", &timespec_priv, NULL);
+    g_assert_cmpint( timespec_priv->tv_sec, ==, 0 );
+    g_assert_cmpint( timespec_priv->tv_nsec, ==, -1 );
     g_assert_cmpint( qof_instance_get_editlevel( inst ), ==, 0 );
     g_assert( !qof_instance_get_destroying( inst ) );
     g_assert( !qof_instance_get_dirty_flag( inst ) );

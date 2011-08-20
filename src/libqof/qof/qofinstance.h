@@ -140,15 +140,6 @@ gint qof_instance_guid_compare(const gconstpointer ptr1, const gconstpointer ptr
 /** Return the pointer to the kvp_data */
 /*@ dependent @*/
 KvpFrame* qof_instance_get_slots (const QofInstance *);
-
-/** Return the last time this instance was modified.  If QofInstances
- *  are used with the QofObject storage backends, then the instance
- *  update times are reserved for use by the backend, for managing
- *  multi-user updates.  Non-backend code should not set the update
- *  times.
- */
-Timespec qof_instance_get_last_update (const QofInstance *inst);
-
 void qof_instance_set_editlevel(gpointer inst, gint level);
 gint qof_instance_get_editlevel (gconstpointer ptr);
 void qof_instance_increase_editlevel (gpointer ptr);
@@ -209,23 +200,19 @@ void qof_instance_set_dirty(QofInstance* inst);
 /* reset the dirty flag */
 void qof_instance_mark_clean (QofInstance *);
 
-gboolean qof_instance_check_edit(const QofInstance *inst);
-
 gboolean qof_instance_get_infant(const QofInstance *inst);
 
 /** Get the version number on this instance.  The version number is
  *  used to manage multi-user updates. */
 gint32 qof_instance_get_version (gconstpointer inst);
-/** Compare the version numbers of two instances. */
-gint qof_instance_compare_version (gconstpointer inst1, gconstpointer inst2);
+
 /** Set the version number on this instance.  The version number is
  *  used to manage multi-user updates. */
 void qof_instance_set_version (gpointer inst, gint32 value);
 /** Copy the version number on this instance.  The version number is
  *  used to manage multi-user updates. */
 void qof_instance_copy_version (gpointer to, gconstpointer from);
-/** Increment the instance version number */
-void qof_instance_increment_version (gpointer inst, guint32 new_check);
+
 /** Get the instance version_check number */
 guint32 qof_instance_get_version_check (gconstpointer inst);
 /** Set the instance version_check number */

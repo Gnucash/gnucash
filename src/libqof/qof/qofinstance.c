@@ -602,17 +602,6 @@ qof_instance_set_slots (QofInstance *inst, KvpFrame *frm)
     inst->kvp_data = frm;
 }
 
-Timespec
-qof_instance_get_last_update (const QofInstance *inst)
-{
-    if (!inst)
-    {
-        Timespec ts = {0, -1};
-        return ts;
-    }
-    return GET_PRIVATE(inst)->last_update;
-}
-
 void
 qof_instance_set_last_update (QofInstance *inst, Timespec ts)
 {
@@ -643,13 +632,6 @@ void qof_instance_reset_editlevel (gpointer ptr)
 {
     g_return_if_fail(QOF_IS_INSTANCE(ptr));
     GET_PRIVATE(ptr)->editlevel = 0;
-}
-
-gboolean
-qof_instance_check_edit(const QofInstance *inst)
-{
-    g_return_val_if_fail(QOF_IS_INSTANCE(inst), FALSE);
-    return (GET_PRIVATE(inst)->editlevel > 0);
 }
 
 int
@@ -770,14 +752,6 @@ qof_instance_get_version (gconstpointer inst)
     return GET_PRIVATE(inst)->version;
 }
 
-gint
-qof_instance_compare_version (gconstpointer inst1, gconstpointer inst2)
-{
-    g_return_val_if_fail(QOF_IS_INSTANCE(inst1), 1);
-    g_return_val_if_fail(QOF_IS_INSTANCE(inst2), -1);
-    return GET_PRIVATE(inst2)->version - GET_PRIVATE(inst1)->version;
-}
-
 void
 qof_instance_set_version (gpointer inst, gint32 vers)
 {
@@ -791,18 +765,6 @@ qof_instance_copy_version (gpointer to, gconstpointer from)
     g_return_if_fail(QOF_IS_INSTANCE(to));
     g_return_if_fail(QOF_IS_INSTANCE(from));
     GET_PRIVATE(to)->version = GET_PRIVATE(from)->version;
-}
-
-void
-qof_instance_increment_version (gpointer inst, guint32 new_check)
-{
-    QofInstancePrivate *priv;
-
-    g_return_if_fail(QOF_IS_INSTANCE(inst));
-
-    priv = GET_PRIVATE(inst);
-    priv->version++;
-    priv->version_check = new_check;
 }
 
 guint32
