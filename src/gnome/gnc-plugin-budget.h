@@ -42,7 +42,6 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_BUDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_BUDGET, GncPluginBudgetClass))
 
 #define GNC_PLUGIN_BUDGET_NAME "gnc-plugin-budget"
-#define GNC_BUDGET_GUI_FILE    "budget.glade"
 
 /* typedefs & structures */
 typedef struct

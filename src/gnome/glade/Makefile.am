@@ -1,6 +1,5 @@
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
-	budget.glade \
 	newuser.glade \
 	progress.glade \
 	reconcile.glade \

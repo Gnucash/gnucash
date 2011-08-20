@@ -5,12 +5,12 @@ gtkbuilder_DATA = \
 	assistant-hierarchy.glade \
 	assistant-loan.glade \
 	assistant-stock-split.glade \
-	budget.glade \
 	dialog-commodities.glade \
 	dialog-lot-viewer.glade \
 	dialog-fincalc.glade \
 	dialog-price.glade \
 	dialog-print-check.glade \
+	gnc-plugin-page-budget.glade \
 	newuser.glade \
 	owner.glade \
 	progress.glade \

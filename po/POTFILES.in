@@ -207,7 +207,6 @@ src/gnome/dialog-sx-editor.c
 src/gnome/dialog-sx-from-trans.c
 src/gnome/dialog-sx-since-last-run.c
 src/gnome/dialog-tax-info.c
-src/gnome/glade/budget.glade
 src/gnome/glade/newuser.glade
 src/gnome/glade/progress.glade
 src/gnome/glade/reconcile.glade
@@ -229,12 +228,12 @@ src/gnome/gtkbuilder/assistant-acct-period.glade
 src/gnome/gtkbuilder/assistant-hierarchy.glade
 src/gnome/gtkbuilder/assistant-loan.glade
 src/gnome/gtkbuilder/assistant-stock-split.glade
-src/gnome/gtkbuilder/budget.glade
 src/gnome/gtkbuilder/dialog-commodities.glade
 src/gnome/gtkbuilder/dialog-fincalc.glade
 src/gnome/gtkbuilder/dialog-lot-viewer.glade
 src/gnome/gtkbuilder/dialog-price.glade
 src/gnome/gtkbuilder/dialog-print-check.glade
+src/gnome/gtkbuilder/gnc-plugin-page-budget.glade
 src/gnome/gtkbuilder/newuser.glade
 src/gnome/gtkbuilder/owner.glade
 src/gnome/gtkbuilder/progress.glade
@@ -359,6 +358,7 @@ src/gnome-utils/gnc-window.c
 src/gnome-utils/gtkbuilder/dialog-commodity.glade
 src/gnome-utils/gtkbuilder/dialog-transfer.glade
 src/gnome-utils/gtkbuilder/gnc-date-format.glade
+src/gnome-utils/gtkbuilder/gnc-recurrence.glade
 src/gnome-utils/misc-gnome-utils.c
 src/gnome-utils/print-session.c
 src/gnome-utils/schemas/apps_gnucash_history.schemas.in
