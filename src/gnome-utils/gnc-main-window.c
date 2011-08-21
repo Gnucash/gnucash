@@ -1927,6 +1927,8 @@ main_window_update_page_name (GncPluginPage *page,
     window = GNC_MAIN_WINDOW(page->window);
     if (!window)
     {
+        g_free(old_page_name);
+        g_free(old_page_long_name);
         LEAVE("no window widget available");
         return;
     }
