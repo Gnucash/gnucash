@@ -1436,7 +1436,6 @@ get_random_transaction_with_currency(QofBook *book,
     gint num;
     gchar *numstr;
 
-    numstr = g_new0(gchar, 10);
     if (!account_list)
     {
         account_list = gnc_account_get_descendants (gnc_book_get_root_account (book));
@@ -1449,6 +1448,8 @@ get_random_transaction_with_currency(QofBook *book,
                      "get_random_transaction_with_currency: account_list too short");
         return NULL;
     }
+
+    numstr = g_new0(gchar, 10);
 
     trans = xaccMallocTransaction(book);
 
