@@ -29,7 +29,7 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
 {
     SCM func;
     SCM result;
-    const char *msg = NULL;
+    char *msg = NULL;
 
     func = scm_c_eval_string("gnc:error->string");
     if (scm_is_procedure(func))
@@ -49,10 +49,13 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
 
     if (msg == NULL)
     {
-        msg = "Error running guile function.";
+        *(char**)data = strdup("Error running guile function.");
     }
-
-    *(char**)data = strdup(msg);
+    else
+    {
+        *(char**)data = strdup(msg);
+        g_free(msg);
+    }
 
     return SCM_UNDEFINED;
 }
