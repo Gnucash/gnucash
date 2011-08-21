@@ -2230,8 +2230,7 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
                         *set_rel_value = g_strdup(SCM_SYMBOL_CHARS (relative));
                 }
 
-                if (symbol)
-                    free (symbol);
+                g_free (symbol);
             }
         }
     }
