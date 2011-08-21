@@ -334,6 +334,7 @@ gnc_read_example_account(const gchar *filename)
                 GNC_ACCOUNT_STRING, main_parser,
                 NULL, NULL))
     {
+        gnc_destroy_example_account(gea);
         return FALSE;
     }
 
@@ -347,6 +348,7 @@ gnc_read_example_account(const gchar *filename)
                 "gnc:account", gnc_account_sixtp_parser_create(),
                 NULL, NULL))
     {
+        gnc_destroy_example_account(gea);
         return FALSE;
     }
 
@@ -355,6 +357,7 @@ gnc_read_example_account(const gchar *filename)
     {
         sixtp_destroy(top_parser);
         xaccLogEnable ();
+        gnc_destroy_example_account(gea);
         return FALSE;
     }
 
