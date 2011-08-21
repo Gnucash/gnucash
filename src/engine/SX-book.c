@@ -302,7 +302,7 @@ book_sxlist_notsaved(const QofCollection *col)
 
     sxl = gnc_collection_get_schedxactions(col);
     if (!sxl) return FALSE;
-    if ((sxl && sxl->sx_notsaved)) return TRUE;
+    if (sxl->sx_notsaved) return TRUE;
 
     for (sxlist = sxl->sx_list;
             sxlist != NULL;
