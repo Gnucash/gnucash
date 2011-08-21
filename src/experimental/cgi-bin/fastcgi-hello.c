@@ -46,6 +46,7 @@ int main (int argc, char *argv[])
             fread (bufp, ilen, 1, stdin);
 
             printf ("The POST data is<P>%s\n", bufp);
+            free (bufp);
         }
 
     }
