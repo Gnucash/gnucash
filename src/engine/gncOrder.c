@@ -236,57 +236,6 @@ static void gncOrderFree (GncOrder *order)
     g_object_unref (order);
 }
 
-GncOrder *
-gncCloneOrder (GncOrder *from, QofBook *book)
-{
-    GList *node;
-    GncOrder *order;
-
-    if (!book) return NULL;
-
-    order = g_object_new (GNC_TYPE_ORDER, NULL);
-    qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
-    qof_instance_gemini (&order->inst, &from->inst);
-
-    order->id = CACHE_INSERT (from->id);
-    order->notes = CACHE_INSERT (from->notes);
-    order->reference = CACHE_INSERT (from->reference);
-
-    order->active = from->active;
-    order->printname = NULL; /* yes, null, that's right */
-    order->opened = from->opened;
-    order->closed = from->closed;
-
-    order->owner = gncCloneOwner (&from->owner, book);
-
-    order->entries = NULL;
-    for (node = g_list_last(from->entries); node; node = node->prev)
-    {
-        GncEntry *entry = node->data;
-        entry = gncEntryObtainTwin (entry, book);
-        order->entries = g_list_prepend (order->entries, entry);
-    }
-
-    qof_event_gen (&order->inst, QOF_EVENT_CREATE, NULL);
-
-    return order;
-}
-
-GncOrder *
-gncOrderObtainTwin (GncOrder *from, QofBook *book)
-{
-    GncOrder *order;
-    if (!book) return NULL;
-
-    order = (GncOrder *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
-    if (!order)
-    {
-        order = gncCloneOrder (from, book);
-    }
-
-    return order;
-}
-
 /* =============================================================== */
 /* Set Functions */
 

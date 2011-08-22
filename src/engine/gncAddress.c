@@ -357,31 +357,6 @@ qofAddressGetOwner(const GncAddress *addr)
     return addr->parent;
 }
 
-GncAddress *
-gncCloneAddress (const GncAddress *from, QofInstance *new_parent, QofBook *book)
-{
-    GncAddress *addr;
-
-    if (!book) return NULL;
-
-    addr = g_object_new (GNC_TYPE_ADDRESS, NULL);
-    qof_instance_init_data(&addr->inst, GNC_ID_ADDRESS, book);
-    addr->book = book;
-    addr->dirty = TRUE;
-    addr->parent = new_parent;
-
-    addr->name = CACHE_INSERT (from->name);
-    addr->addr1 = CACHE_INSERT (from->addr1);
-    addr->addr2 = CACHE_INSERT (from->addr2);
-    addr->addr3 = CACHE_INSERT (from->addr3);
-    addr->addr4 = CACHE_INSERT (from->addr4);
-    addr->phone = CACHE_INSERT (from->phone);
-    addr->fax = CACHE_INSERT (from->fax);
-    addr->email = CACHE_INSERT (from->email);
-
-    return addr;
-}
-
 void
 gncAddressDestroy (GncAddress *addr)
 {

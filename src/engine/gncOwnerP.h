@@ -32,9 +32,5 @@
 
 gboolean gncOwnerRegister (void);
 
-/** The gncCloneOwner() routine makes a copy of the indicated
- *  owner union structure.
- */
-GncOwner gncCloneOwner (const GncOwner *from, QofBook *);
 
 #endif /* GNC_OWNERP_H_ */

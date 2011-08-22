@@ -815,64 +815,6 @@ void qof_instance_set_idata(gpointer inst, guint32 idata)
 
 /* ========================================================== */
 
-void
-qof_instance_gemini (QofInstance *to, const QofInstance *from)
-{
-    QofInstancePrivate *from_priv, *to_priv, *fb_priv, *tb_priv;
-    time_t now;
-
-    g_return_if_fail(QOF_IS_INSTANCE(to));
-    g_return_if_fail(QOF_IS_INSTANCE(from));
-
-    from_priv = GET_PRIVATE(from);
-    to_priv = GET_PRIVATE(to);
-    fb_priv = GET_PRIVATE(from_priv->book);
-    tb_priv = GET_PRIVATE(to_priv->book);
-
-    /* Books must differ for a gemini to be meaningful */
-    if (from_priv->book == to_priv->book)
-        return;
-
-    now = time(0);
-
-    /* Make a note of where the copy came from */
-    gnc_kvp_bag_add (to->kvp_data, "gemini", now,
-                     "inst_guid", &from_priv->guid,
-                     "book_guid", &fb_priv->guid,
-                     NULL);
-    gnc_kvp_bag_add (from->kvp_data, "gemini", now,
-                     "inst_guid", &to_priv->guid,
-                     "book_guid", &tb_priv->guid,
-                     NULL);
-
-    to_priv->dirty = TRUE;
-}
-
-QofInstance *
-qof_instance_lookup_twin (const QofInstance *src, QofBook *target_book)
-{
-    QofCollection *col;
-    KvpFrame *fr;
-    GncGUID * twin_guid;
-    QofInstance * twin;
-    QofInstancePrivate *bpriv;
-
-    if (!src || !target_book) return NULL;
-    ENTER (" ");
-
-    bpriv = GET_PRIVATE(QOF_INSTANCE(target_book));
-    fr = gnc_kvp_bag_find_by_guid (src->kvp_data, "gemini",
-                                   "book_guid", &bpriv->guid);
-
-    twin_guid = kvp_frame_get_guid (fr, "inst_guid");
-
-    col = qof_book_get_collection (target_book, src->e_type);
-    twin = (QofInstance *) qof_collection_lookup_entity (col, twin_guid);
-
-    LEAVE (" found twin=%p", twin);
-    return twin;
-}
-
 /* Returns a displayable name to represent this object */
 gchar* qof_instance_get_display_name(const QofInstance* inst)
 {

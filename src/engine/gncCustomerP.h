@@ -34,25 +34,6 @@
 gboolean gncCustomerRegister (void);
 gchar *gncCustomerNextID (QofBook *book);
 
-/** The gncCloneCustomer() routine makes a copy of the indicated
- *  customer, placing it in the indicated book.  It copies
- *  the addresses, credits, currency, billing terms and jobs.
- *  It then adds a pair of 'gemini' kvp pointers so that each copy
- *  can be found from the other.
- */
-GncCustomer * gncCloneCustomer (GncCustomer *from,  QofBook *book);
-
-/** The gncCustomerObtainTwin() will find the 'twin' of the
- *  indicated customer in the indicated book.  If the twin doesn't
- *  yet exist in the book, it will be created (by calling
- *  gncCloneCustomer()) and placed into the book.
- *
- * We called this routine 'Obtain' instead of "Get" to distinguish
- * it from the other Get routines, which work in fundamentally
- * different ways.
- */
-GncCustomer * gncCustomerObtainTwin (GncCustomer *from, QofBook *book);
-
 #define gncCustomerSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
 #endif /* GNC_CUSTOMERP_H_ */

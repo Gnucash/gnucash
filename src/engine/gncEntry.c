@@ -418,29 +418,6 @@ static void gncEntryFree (GncEntry *entry)
     g_object_unref (entry);
 }
 
-GncEntry *
-gncCloneEntry (GncEntry *from, QofBook *book)
-{
-    /* XXX unfinished */
-    return NULL;
-}
-
-GncEntry *
-gncEntryObtainTwin (GncEntry *from, QofBook *book)
-{
-    GncEntry *entry;
-    if (!book) return NULL;
-
-    entry = (GncEntry *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
-    if (!entry)
-    {
-        entry = gncCloneEntry (from, book);
-    }
-
-    return entry;
-}
-
-
 /* ================================================================ */
 /* Set Functions */
 

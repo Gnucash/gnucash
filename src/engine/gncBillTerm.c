@@ -302,68 +302,6 @@ static void gncBillTermFree (GncBillTerm *term)
     g_object_unref (term);
 }
 
-GncBillTerm *
-gncCloneBillTerm (GncBillTerm *from, QofBook *book)
-{
-    GList *node;
-    GncBillTerm *term;
-
-    if (!book || !from) return NULL;
-
-    term = g_object_new (GNC_TYPE_BILLTERM, NULL);
-    qof_instance_init_data(&term->inst, _GNC_MOD_NAME, book);
-    qof_instance_gemini (&term->inst, &from->inst);
-
-    term->name = CACHE_INSERT (from->name);
-    term->desc = CACHE_INSERT (from->desc);
-    term->type = from->type;
-    term->due_days = from->due_days;
-    term->disc_days = from->disc_days;
-    term->discount = from->discount;
-    term->cutoff = from->cutoff;
-    term->invisible = from->invisible;
-
-    term->refcount = 0;
-
-    /* Make copies of parents and children. Note that this can be
-     * a recursive copy ... treat as doubly-linked list. */
-    if (from->child)
-    {
-        term->child = gncBillTermObtainTwin (from->child, book);
-        term->child->parent = term;
-    }
-    if (from->parent)
-    {
-        term->parent = gncBillTermObtainTwin (from->parent, book);
-        term->parent->child = term;
-    }
-    for (node = g_list_last(from->children); node; node = node->next)
-    {
-        GncBillTerm *btrm = node->data;
-        btrm = gncBillTermObtainTwin (btrm, book);
-        btrm->parent = term;
-        term->children = g_list_prepend(term->children, btrm);
-    }
-
-    addObj (term);
-    qof_event_gen (&term->inst, QOF_EVENT_CREATE, NULL);
-    return term;
-}
-
-GncBillTerm *
-gncBillTermObtainTwin (GncBillTerm *from, QofBook *book)
-{
-    GncBillTerm *term;
-    if (!from) return NULL;
-
-    term = (GncBillTerm *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
-    if (!term)
-    {
-        term = gncCloneBillTerm (from, book);
-    }
-    return term;
-}
-
 /* ============================================================== */
 /* Set Functions */
 

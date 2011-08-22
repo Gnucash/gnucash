@@ -34,25 +34,6 @@
 gboolean gncJobRegister (void);
 gchar *gncJobNextID (QofBook *book);
 
-/** The gncCloneTaxTable() routine makes a copy of the indicated
- *  tax table, placing it in the indicated book.  It copies
- *  the id, name description and owner.
- *  It then adds a pair of 'gemini' kvp pointers so that each copy
- *  can be found from the other.
- */
-GncJob * gncCloneJob (GncJob *from, QofBook *book);
-
-/** The gncJobObtainTwin() will find the 'twin' of the
- *  indicated job in the indicated book.  If the twin doesn't
- *  yet exist in the book, it will be created (by calling
- *  gncCloneJob()) and placed into the book.
- *
- * We called this routine 'Obtain' instead of "Get" to distinguish
- * it from the other Get routines, which work in fundamentally
- * different ways.
- */
-GncJob * gncJobObtainTwin (GncJob *from, QofBook *book);
-
 #define gncJobSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
 #endif /* GNC_JOBP_H_ */

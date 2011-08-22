@@ -279,48 +279,6 @@ static void gncEmployeeFree (GncEmployee *employee)
     g_object_unref (employee);
 }
 
-GncEmployee *
-gncCloneEmployee (GncEmployee *from, QofBook *book)
-{
-    GncEmployee *employee;
-    if (!book || !from) return NULL;
-
-    employee = g_object_new (GNC_TYPE_EMPLOYEE, NULL);
-    qof_instance_init_data(&employee->inst, _GNC_MOD_NAME, book);
-    qof_instance_gemini (&employee->inst, &from->inst);
-
-    employee->id = CACHE_INSERT (from->id);
-    employee->username = CACHE_INSERT (from->username);
-    employee->language = CACHE_INSERT (from->language);
-    employee->acl = CACHE_INSERT (from->acl);
-    employee->addr = gncCloneAddress (from->addr, &employee->inst, book);
-    employee->workday = from->workday;
-    employee->rate = from->rate;
-    employee->active = from->active;
-    employee->currency = gnc_commodity_obtain_twin(from->currency, book);
-    employee->ccard_acc =
-        GNC_ACCOUNT(qof_instance_lookup_twin(QOF_INSTANCE(from->ccard_acc), book));
-
-    qof_event_gen (&employee->inst, QOF_EVENT_CREATE, NULL);
-
-    return employee;
-}
-
-GncEmployee *
-gncEmployeeObtainTwin (GncEmployee *from, QofBook *book)
-{
-    GncEmployee *employee;
-    if (!book) return NULL;
-
-    employee = (GncEmployee *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
-    if (!employee)
-    {
-        employee = gncCloneEmployee (from, book);
-    }
-
-    return employee;
-}
-
 /* ============================================================== */
 /* Set Functions */
 

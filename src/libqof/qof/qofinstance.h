@@ -225,33 +225,6 @@ void qof_instance_copy_version_check (gpointer to, gconstpointer from);
 guint32 qof_instance_get_idata (gconstpointer inst);
 void qof_instance_set_idata(gpointer inst, guint32 idata);
 
-/** Pair things up.  This routine inserts a kvp value into each instance
- *  containing the guid of the other.  In this way, if one has one of the
- *  pair, one can always find the other by looking up it's guid.  Typically,
- *  you will want to use qof_instance_lookup_twin() to find the twin.
- *  (The current implementation assumes the two instances belong to different
- *  books, and will not add gemini kvp's unless the books differ.  Note that
- *  the gemini kvp includes the book guid as well, so that the right book can
- *  be found.
- */
-void qof_instance_gemini (QofInstance *to, const QofInstance *from);
-
-/** The qof_instance_lookup_twin() routine will find the "twin" of this
- *    instance 'src' in the given other 'book' (if the twin exists).
- *
- *    When instances are gemini'ed or cloned, both of the pair are marked
- *    with the guid of their copy, thus allowing the sibling-copy of
- *    an instance to be found.  Since the sibling may end up in a
- *    different book, we need a way of finding it, given only that we
- *    know the book, and that we know its twin.
- *
- *    That's what this routine does.  Given some book 'book', and an
- *    instance 'src', it will find the sibling instance of 'src' that is
- *    in 'book', and return it.  If not found, it returns NULL.  This
- *    routine uses the 'gemini' kvp values to do its work.
- */
-QofInstance * qof_instance_lookup_twin (const QofInstance *src, QofBook *book);
-
 /**
  * Returns a displayable name for this object.  The returned string must be freed by the caller.
  */

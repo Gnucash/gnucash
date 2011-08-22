@@ -33,25 +33,6 @@
 gboolean gncVendorRegister (void);
 gchar *gncVendorNextID (QofBook *book);
 
-/** The gncCloneVendor() routine makes a copy of the indicated
- *  vendor, placing it in the indicated book.  It copies
- *  the name, notes, address, etc.
- *  It then adds a pair of 'gemini' kvp pointers so that each copy
- *  can be found from the other.
- */
-
-GncVendor * gncCloneVendor (GncVendor *from, QofBook *);
-
-/** The gncVendorObtainTwin() will find the 'twin' of the
- *  indicated vendor in the indicated book.  If the twin doesn't
- *  yet exist in the book, it will be created (by calling
- *  gncCloneVendor()) and placed into the book.
- *
- * We called this routine 'Obtain' instead of "Get" to distinguish
- * it from the other Get routines, which work in fundamentally
- * different ways.
- */
-GncVendor * gncVendorObtainTwin (GncVendor *from, QofBook *book);
 #define gncVendorSetGUID(V,G) qof_instance_set_guid(QOF_INSTANCE(V),(G))
 
 

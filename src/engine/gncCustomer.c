@@ -276,50 +276,6 @@ GncCustomer *gncCustomerCreate (QofBook *book)
     return cust;
 }
 
-/** Create a copy of a customer, placing the copy into a new book. */
-GncCustomer *
-gncCloneCustomer (GncCustomer *from, QofBook *book)
-{
-    GList *node;
-    GncCustomer *cust;
-
-    cust = g_object_new (GNC_TYPE_CUSTOMER, NULL);
-
-    qof_instance_init_data (&cust->inst, _GNC_MOD_NAME, book);
-    qof_instance_gemini (&cust->inst, &from->inst);
-
-    cust->id = CACHE_INSERT (from->id);
-    cust->name = CACHE_INSERT (from->name);
-    cust->notes = CACHE_INSERT (from->notes);
-    cust->discount = from->discount;
-    cust->credit = from->credit;
-    cust->taxincluded = from->taxincluded;
-    cust->active = from->active;
-    cust->taxtable_override = from->taxtable_override;
-
-    cust->addr = gncCloneAddress (from->addr, &cust->inst, book);
-    cust->shipaddr = gncCloneAddress (from->shipaddr, &cust->inst, book);
-
-    /* Find the matching currency in the new book, assumes
-     * currency has already been copied into new book. */
-    cust->currency = gnc_commodity_obtain_twin (from->currency, book);
-
-    /* Find the matching bill term, tax table in the new book */
-    cust->terms = gncBillTermObtainTwin(from->terms, book);
-    cust->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
-
-    for (node = g_list_last(cust->jobs); node; node = node->next)
-    {
-        GncJob *job = node->data;
-        job = gncJobObtainTwin (job, book);
-        cust->jobs = g_list_prepend(cust->jobs, job);
-    }
-
-    qof_event_gen (&cust->inst, QOF_EVENT_CREATE, NULL);
-
-    return cust;
-}
-
 void gncCustomerDestroy (GncCustomer *cust)
 {
     if (!cust) return;
@@ -352,20 +308,6 @@ static void gncCustomerFree (GncCustomer *cust)
 
     /* qof_instance_release (&cust->inst); */
     g_object_unref (cust);
-}
-
-GncCustomer *
-gncCustomerObtainTwin (GncCustomer *from, QofBook *book)
-{
-    GncCustomer *cust;
-    if (!from) return NULL;
-
-    cust = (GncCustomer *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
-    if (!cust)
-    {
-        cust = gncCloneCustomer (from, book);
-    }
-    return cust;
 }
 
 /* ============================================================== */

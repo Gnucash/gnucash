@@ -357,44 +357,6 @@ test_instance_get_set_dirty( Fixture *fixture, gconstpointer pData )
     qof_collection_destroy( col );
 }
 
-static void
-test_instance_gemini_and_lookup( void )
-{
-    QofBook *to_book, *from_book;
-    KvpFrame *to_book_frame, *from_book_frame;
-    
-    /* setup books */
-    to_book = qof_book_new();
-    from_book = qof_book_new();
-    g_assert( QOF_IS_BOOK( to_book ) );
-    g_assert( QOF_IS_BOOK( from_book ) );
-    g_assert( to_book != from_book );
-    g_assert( to_book == qof_instance_get_book( QOF_INSTANCE( to_book ) ) );
-    g_assert( from_book == qof_instance_get_book( QOF_INSTANCE( from_book ) ) );
-    
-    g_test_message( "Test instances lookup has instance and book null protection" );
-    g_assert( qof_instance_lookup_twin( NULL, from_book ) == NULL );
-    g_assert( qof_instance_lookup_twin( QOF_INSTANCE( from_book ), NULL ) == NULL );
-    
-    g_test_message( "Test instances lookup which are not geminis should return null" );
-    g_assert( qof_instance_lookup_twin( QOF_INSTANCE( to_book ), from_book ) == NULL );
-    g_assert( qof_instance_lookup_twin( QOF_INSTANCE( from_book ), to_book ) == NULL );
-    
-    g_test_message( "Test instances with the same book are not paired" );
-    qof_instance_gemini (&to_book->inst, (QofInstance *) &to_book->inst);
-    g_assert( qof_instance_lookup_twin( QOF_INSTANCE( to_book ), to_book ) == NULL );
-    g_assert( qof_instance_lookup_twin( QOF_INSTANCE( from_book ), from_book ) == NULL );
-    
-    g_test_message( "Test instances with different books are paired" );
-    qof_instance_gemini (&to_book->inst, (QofInstance *) &from_book->inst);
-    g_assert( qof_instance_lookup_twin( QOF_INSTANCE( to_book ), from_book ) == &from_book->inst );
-    g_assert( qof_instance_lookup_twin( QOF_INSTANCE( from_book ), to_book ) == &to_book->inst );
-      
-    /* destroy books */
-    qof_book_destroy( to_book );
-    qof_book_destroy( from_book );
-}
-
 /* mock display name function */
 static gchar*
 mock_get_display_name(const QofInstance* inst)
@@ -1068,7 +1030,6 @@ test_suite_qofinstance ( void )
     GNC_TEST_ADD( suitename, "get set slots", Fixture, NULL, setup, test_instance_get_set_slots, teardown );
     GNC_TEST_ADD_FUNC( suitename, "version compare", test_instance_version_cmp );
     GNC_TEST_ADD( suitename, "get set dirty", Fixture, NULL, setup, test_instance_get_set_dirty, teardown );
-    GNC_TEST_ADD_FUNC( suitename, "gemini creation and lookup", test_instance_gemini_and_lookup );
     GNC_TEST_ADD( suitename, "display name", Fixture, NULL, setup, test_instance_display_name, teardown );
     GNC_TEST_ADD( suitename, "begin edit", Fixture, NULL, setup, test_instance_begin_edit, teardown );
     GNC_TEST_ADD( suitename, "commit edit", Fixture, NULL, setup, test_instance_commit_edit, teardown );

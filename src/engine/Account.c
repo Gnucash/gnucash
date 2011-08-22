@@ -1029,16 +1029,6 @@ xaccCloneAccountCommon(const Account *from, QofBook *book)
 }
 
 Account *
-xaccCloneAccount (const Account *from, QofBook *book)
-{
-    Account *ret = xaccCloneAccountCommon(from, book);
-    qof_instance_gemini (&ret->inst, (QofInstance *) &from->inst);
-    g_assert (ret ==
-              (Account*) qof_instance_lookup_twin (QOF_INSTANCE(from), book));
-    return ret;
-}
-
-Account *
 xaccCloneAccountSimple (const Account *from, QofBook *book)
 {
     Account *ret = xaccCloneAccountCommon(from, book);
@@ -4517,58 +4507,6 @@ gnc_account_join_children (Account *to_parent, Account *from_parent)
     g_list_free(children);
     LEAVE (" ");
 }
-
-void
-gnc_account_copy_children (Account *to, Account *from)
-{
-    AccountPrivate *to_priv, *from_priv;
-    GList *node;
-    QofBook *to_book;
-
-    /* errors */
-    g_return_if_fail(GNC_IS_ACCOUNT(to));
-    g_return_if_fail(GNC_IS_ACCOUNT(from));
-
-    /* optimizations */
-    to_priv = GET_PRIVATE(to);
-    from_priv = GET_PRIVATE(from);
-    if (!from_priv->children)
-        return;
-
-    to_book = gnc_account_get_book(to);
-    if (!to_book) return;
-
-    ENTER (" ");
-    xaccAccountBeginEdit(to);
-    xaccAccountBeginEdit(from);
-    for (node = from_priv->children; node; node = node->next)
-    {
-        Account *to_acc, *from_acc = node->data;
-
-        /* This will copy the basic data and the KVP.  It will
-         * not copy any splits/transactions. It will gemini. */
-        to_acc = xaccCloneAccount (from_acc, to_book);
-
-        xaccAccountBeginEdit (to_acc);
-        to_priv->children = g_list_append(to_priv->children, to_acc);
-
-        GET_PRIVATE(to_acc)->parent = to;
-        qof_instance_set_dirty(&to_acc->inst);
-
-        /* Copy child accounts too. */
-        if (GET_PRIVATE(from_acc)->children)
-        {
-            gnc_account_copy_children(to_acc, from_acc);
-        }
-        xaccAccountCommitEdit (to_acc);
-        qof_event_gen (&to_acc->inst, QOF_EVENT_CREATE, NULL);
-        /* DRH - Should this send ADD/REMOVE events */
-    }
-    xaccAccountCommitEdit(from);
-    xaccAccountCommitEdit(to);
-    LEAVE (" ");
-}
-
 /********************************************************************\
 \********************************************************************/
 

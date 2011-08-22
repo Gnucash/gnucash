@@ -288,63 +288,6 @@ static void gncVendorFree (GncVendor *vendor)
     g_object_unref (vendor);
 }
 
-/** Create a copy of a vendor, placing the copy into a new book. */
-GncVendor *
-gncCloneVendor (GncVendor *from, QofBook *book)
-{
-    GList *node;
-    GncVendor *vendor;
-
-    if (!book) return NULL;
-
-    vendor = g_object_new (GNC_TYPE_VENDOR, NULL);
-    qof_instance_init_data (&vendor->inst, _GNC_MOD_NAME, book);
-    qof_instance_gemini (&vendor->inst, &from->inst);
-
-    vendor->id = CACHE_INSERT (from->id);
-    vendor->name = CACHE_INSERT (from->name);
-    vendor->notes = CACHE_INSERT (from->notes);
-    vendor->addr = gncCloneAddress (from->addr, &vendor->inst, book);
-    vendor->taxincluded = from->taxincluded;
-    vendor->taxtable_override = from->taxtable_override;
-    vendor->active = from->active;
-
-    vendor->terms = gncBillTermObtainTwin (from->terms, book);
-    gncBillTermIncRef (vendor->terms);
-
-    vendor->currency = gnc_commodity_obtain_twin (from->currency, book);
-
-    vendor->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
-    gncTaxTableIncRef (vendor->taxtable);
-
-    vendor->jobs = NULL;
-    for (node = g_list_last(from->jobs); node; node = node->prev)
-    {
-        GncJob *job = node->data;
-        job = gncJobObtainTwin (job, book);
-        vendor->jobs = g_list_prepend(vendor->jobs, job);
-    }
-
-    qof_event_gen (&vendor->inst, QOF_EVENT_CREATE, NULL);
-
-    return vendor;
-}
-
-GncVendor *
-gncVendorObtainTwin (GncVendor *from, QofBook *book)
-{
-    GncVendor *vendor;
-    if (!book) return NULL;
-
-    vendor = (GncVendor *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
-    if (!vendor)
-    {
-        vendor = gncCloneVendor (from, book);
-    }
-
-    return vendor;
-}
-
 /* ============================================================== */
 /* Set Functions */
 

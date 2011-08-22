@@ -199,29 +199,6 @@ GncJob *gncJobCreate (QofBook *book)
     return job;
 }
 
-GncJob *
-gncCloneJob (GncJob *from, QofBook *book)
-{
-    GncJob *job;
-
-    if (!book) return NULL;
-
-    job = g_object_new (GNC_TYPE_JOB, NULL);
-    qof_instance_init_data (&job->inst, _GNC_MOD_NAME, book);
-    qof_instance_gemini (&job->inst, &from->inst);
-
-    job->id = CACHE_INSERT (from->id);
-    job->name = CACHE_INSERT (from->name);
-    job->desc = CACHE_INSERT (from->desc);
-    job->active = from->active;
-
-    job->owner = gncCloneOwner(&from->owner, book);
-
-    qof_event_gen (&job->inst, QOF_EVENT_CREATE, NULL);
-
-    return job;
-}
-
 void gncJobDestroy (GncJob *job)
 {
     if (!job) return;
@@ -255,19 +232,6 @@ static void gncJobFree (GncJob *job)
     g_object_unref (job);
 }
 
-GncJob *
-gncJobObtainTwin (GncJob *from, QofBook *book)
-{
-    GncJob *job;
-    if (!from) return NULL;
-
-    job = (GncJob *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
-    if (!job)
-    {
-        job = gncCloneJob (from, book);
-    }
-    return job;
-}
 
 /* ================================================================== */
 /* Set Functions */

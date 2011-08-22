@@ -177,14 +177,6 @@ Account * xaccMallocAccount (QofBook *book);
 /** Create a new root level account.  */
 Account * gnc_account_create_root (QofBook *book);
 
-/** The xaccCloneAccount() does the same as xaccCloneAccountSimple(),
- *    except that it also also places a pair of GncGUID-pointers
- *    of each account to the other, in the other's kvp slot.
- *    The guid pointers are stored under the under the kvp
- *    path "gemini".
- */
-Account * xaccCloneAccount (const Account *source, QofBook *book);
-
 /** The xaccCloneAccountSimple() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies
  *  the account type, name, description, and the kvp values;
@@ -192,8 +184,6 @@ Account * xaccCloneAccount (const Account *source, QofBook *book);
  *  a commodity table in it that has commodities with the same
  *  unique name as the ones being copied in the account (the
  *  commodities in the clone will be those from the book).
- *  Note that this routines does *NOT* use the 'gemini' kvp value
- *  to indicate where it was copied from.
  */
 Account * xaccCloneAccountSimple (const Account *source, QofBook *book);
 
@@ -888,15 +878,6 @@ gpointer gnc_account_foreach_descendant_until (const Account *account,
  *  as well.
  */
 void gnc_account_join_children (Account *to_parent, Account *from_parent);
-
-/** The gnc_account_copy_children() subroutine will copy all child
- *  accounts from the "src" account to the "dest" account, preserving
- *  the account hierarchy.  It will also take care that the moved
- *  accounts will have the "dest" account's book parent as well.  This
- *  routine will *NOT* copy any splits/transactions.  It will copy the
- *  KVP trees in each account.
- */
-void gnc_account_copy_children (Account *dest, Account *src);
 
 /** The gnc_account_merge_children() subroutine will go through an
  *  account, merging all child accounts that have the same name and

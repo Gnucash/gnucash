@@ -378,36 +378,6 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest)
     memcpy (dest, src, sizeof (*dest));
 }
 
-GncOwner
-gncCloneOwner (const GncOwner *from, QofBook *book)
-{
-    GncOwner owner = { GNC_OWNER_NONE };
-    if (!from) return owner;
-    owner.type = from->type;
-    switch (from->type)
-    {
-    case GNC_OWNER_NONE:
-        return owner;
-    case GNC_OWNER_UNDEFINED:
-        owner.owner.undefined = from->owner.undefined;  /* XXX probably wrong ! */
-        return owner;
-    case GNC_OWNER_CUSTOMER:
-        owner.owner.customer = gncCustomerObtainTwin (from->owner.customer, book);
-        return owner;
-    case GNC_OWNER_JOB:
-        owner.owner.job = gncJobObtainTwin (from->owner.job, book);
-        return owner;
-    case GNC_OWNER_VENDOR:
-        owner.owner.vendor = gncVendorObtainTwin (from->owner.vendor, book);
-        return owner;
-    case GNC_OWNER_EMPLOYEE:
-        owner.owner.employee = gncEmployeeObtainTwin (from->owner.employee, book);
-        return owner;
-    default:
-        return owner;
-    }
-}
-
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b)
 {
     if (!a || !b) return FALSE;
