@@ -20,7 +20,6 @@ SET (libgncmod_engine_HEADERS
   FreqSpec.h
   Recurrence.h
   GNCId.h
-  Period.h
   SchedXaction.h
   SX-book.h
   SX-ttinfo.h
@@ -103,7 +102,6 @@ SET_SOURCE_FILES_PROPERTIES (gnc-hooks.c engine-helpers.c kvp-scm.c glib-helpers
 SET (libgncmod_engine_SOURCES
   Account.c
   Recurrence.c
-  Period.c
   Query.c
   SchedXaction.c
   SX-book.c
