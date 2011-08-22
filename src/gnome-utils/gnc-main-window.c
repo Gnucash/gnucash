@@ -1929,7 +1929,7 @@ main_window_update_page_name (GncPluginPage *page,
     {
         g_free(old_page_name);
         g_free(old_page_long_name);
-        g_free(name);
+	g_free(name);
         LEAVE("no window widget available");
         return;
     }
