@@ -987,8 +987,8 @@ gnc_account_create_root (QofBook *book)
     return root;
 }
 
-static Account *
-xaccCloneAccountCommon(const Account *from, QofBook *book)
+Account *
+xaccCloneAccount(const Account *from, QofBook *book)
 {
     Account *ret;
     AccountPrivate *from_priv, *priv;
@@ -1024,15 +1024,8 @@ xaccCloneAccountCommon(const Account *from, QofBook *book)
     priv->commodity_scu = from_priv->commodity_scu;
     priv->non_standard_scu = from_priv->non_standard_scu;
 
-    LEAVE (" ");
-    return ret;
-}
-
-Account *
-xaccCloneAccountSimple (const Account *from, QofBook *book)
-{
-    Account *ret = xaccCloneAccountCommon(from, book);
     qof_instance_set_dirty(&ret->inst);
+    LEAVE (" ");
     return ret;
 }
 

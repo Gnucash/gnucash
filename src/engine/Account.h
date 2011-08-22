@@ -177,7 +177,7 @@ Account * xaccMallocAccount (QofBook *book);
 /** Create a new root level account.  */
 Account * gnc_account_create_root (QofBook *book);
 
-/** The xaccCloneAccountSimple() routine makes a simple copy of the
+/** The xaccCloneAccount() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies
  *  the account type, name, description, and the kvp values;
  *  it does not copy splits/transactions.  The book should have
@@ -185,7 +185,7 @@ Account * gnc_account_create_root (QofBook *book);
  *  unique name as the ones being copied in the account (the
  *  commodities in the clone will be those from the book).
  */
-Account * xaccCloneAccountSimple (const Account *source, QofBook *book);
+Account * xaccCloneAccount (const Account *source, QofBook *book);
 
 /** The xaccAccountBeginEdit() subroutine is the first phase of
  *    a two-phase-commit wrapper for account updates. */

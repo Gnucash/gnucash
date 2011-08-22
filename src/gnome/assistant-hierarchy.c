@@ -582,7 +582,7 @@ clone_account (const Account* from, gnc_commodity *com)
 {
     Account *ret;
 
-    ret = xaccCloneAccountSimple (from, gnc_get_current_book ());
+    ret = xaccCloneAccount (from, gnc_get_current_book ());
 
     xaccAccountSetCommodity (ret, com);
 
