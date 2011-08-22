@@ -191,9 +191,9 @@ gnc_recurrence_init( GncRecurrence *gr )
 
     /* Open up the builder file */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"gnc-recurrence.glade", "GCB_PeriodType_liststore");
-    gnc_builder_add_from_file (builder,"gnc-recurrence.glade", "GSB_Mult_Adj");
-    gnc_builder_add_from_file (builder,"gnc-recurrence.glade", "RecurrenceEntryVBox");
+    gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "GCB_PeriodType_liststore");
+    gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "GSB_Mult_Adj");
+    gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "RecurrenceEntryVBox");
 
     vb = GTK_VBOX(gtk_builder_get_object (builder, "RecurrenceEntryVBox"));
     hb = GTK_HBOX(gtk_builder_get_object (builder, "Startdate_hbox"));

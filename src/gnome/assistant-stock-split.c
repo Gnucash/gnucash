@@ -191,7 +191,7 @@ fill_account_list (StockSplitInfo *info, Account *selected_account)
 
 static void
 selection_changed_cb (GtkTreeSelection *selection,
-                   gpointer user_data)
+                      gpointer user_data)
 {
     StockSplitInfo *info = user_data;
     GtkTreeModel *list;
@@ -250,28 +250,28 @@ refresh_details_page (StockSplitInfo *info)
 
 
 void gnc_stock_split_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
-        gpointer user_data)
+                                        gpointer user_data)
 {
     StockSplitInfo *info = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
     switch (currentpage)
     {
-        case 2:
-            /* Current page is details page */
-             gnc_stock_split_assistant_details_prepare(assistant, user_data);
-            break;
-        case 3:
-            /* Current page is Cash in Lieu page */
-             gnc_stock_split_assistant_cash_prepare (assistant, user_data);
-            break;
+    case 2:
+        /* Current page is details page */
+        gnc_stock_split_assistant_details_prepare(assistant, user_data);
+        break;
+    case 3:
+        /* Current page is Cash in Lieu page */
+        gnc_stock_split_assistant_cash_prepare (assistant, user_data);
+        break;
     }
 }
 
 
 void
 gnc_stock_split_assistant_details_prepare (GtkAssistant *assistant,
-                                       gpointer user_data)
+        gpointer user_data)
 {
     StockSplitInfo *info = user_data;
 
@@ -286,7 +286,7 @@ gnc_stock_split_assistant_details_prepare (GtkAssistant *assistant,
 
 void
 gnc_stock_split_assistant_cash_prepare (GtkAssistant *assistant,
-                                    gpointer user_data)
+                                        gpointer user_data)
 {
     StockSplitInfo *info = user_data;
     GtkTreeSelection *selection;
@@ -300,7 +300,7 @@ gnc_stock_split_assistant_cash_prepare (GtkAssistant *assistant,
 
 gboolean
 gnc_stock_split_assistant_details_complete (GtkAssistant *assistant,
-                                            gpointer user_data)
+        gpointer user_data)
 {
     StockSplitInfo *info = user_data;
     gnc_numeric amount;
@@ -327,7 +327,7 @@ gnc_stock_split_assistant_details_complete (GtkAssistant *assistant,
 
 gboolean
 gnc_stock_split_assistant_cash_complete (GtkAssistant *assistant,
-                                         gpointer user_data)
+        gpointer user_data)
 {
     StockSplitInfo *info = user_data;
     gnc_numeric amount;
@@ -357,7 +357,7 @@ gnc_stock_split_assistant_cash_complete (GtkAssistant *assistant,
 
 void
 gnc_stock_split_assistant_finish (GtkAssistant *assistant,
-                              gpointer user_data)
+                                  gpointer user_data)
 {
     StockSplitInfo *info = user_data;
     GList *account_commits;
@@ -531,26 +531,26 @@ gnc_stock_split_assistant_view_filter_asset (Account  *account,
 static void
 gnc_stock_split_details_valid_cb (GtkWidget *widget, gpointer user_data)
 {
-   StockSplitInfo *info = user_data;
-   GtkAssistant *assistant = GTK_ASSISTANT(info->window);
-   gint num = gtk_assistant_get_current_page (assistant);
-   GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+    StockSplitInfo *info = user_data;
+    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-   gtk_assistant_set_page_complete (assistant, page,
-       gnc_stock_split_assistant_details_complete (assistant, user_data));
+    gtk_assistant_set_page_complete (assistant, page,
+                                     gnc_stock_split_assistant_details_complete (assistant, user_data));
 }
 
 
 static void
 gnc_stock_split_cash_valid_cb (GtkWidget *widget, gpointer user_data)
 {
-   StockSplitInfo *info = user_data;
-   GtkAssistant *assistant = GTK_ASSISTANT(info->window);
-   gint num = gtk_assistant_get_current_page (assistant);
-   GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+    StockSplitInfo *info = user_data;
+    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-   gtk_assistant_set_page_complete (assistant, page,
-       gnc_stock_split_assistant_cash_complete (assistant, user_data));
+    gtk_assistant_set_page_complete (assistant, page,
+                                     gnc_stock_split_assistant_cash_complete (assistant, user_data));
 }
 
 
@@ -561,7 +561,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     GtkWidget *window;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder ,"assistant-stock-split.glade", "Stock Split Assistant");
+    gnc_builder_add_from_file  (builder , "assistant-stock-split.glade", "Stock Split Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "Stock Split Assistant"));
     info->window = window;
 

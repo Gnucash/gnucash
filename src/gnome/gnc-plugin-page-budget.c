@@ -738,7 +738,7 @@ gppb_selection_changed_cb(GtkTreeSelection *selection,
 }
 
 
-/********************* 
+/*********************
  * Command callbacks *
  ********************/
 static void
@@ -834,68 +834,68 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
 
     if (!priv->dialog)
     {
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "NumPeriods_Adj");
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "OptionsContainer");
+        builder = gtk_builder_new();
+        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "NumPeriods_Adj");
+        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "OptionsContainer");
 
-    priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "OptionsContainer"));
+        priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "OptionsContainer"));
 
-    gtk_window_set_transient_for(
-        GTK_WINDOW(priv->dialog),
-        GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
+        gtk_window_set_transient_for(
+            GTK_WINDOW(priv->dialog),
+            GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
 
-    gbname = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetName"));
-    gtk_entry_set_text(GTK_ENTRY(gbname), gnc_budget_get_name(priv->budget));
+        gbname = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetName"));
+        gtk_entry_set_text(GTK_ENTRY(gbname), gnc_budget_get_name(priv->budget));
 
-    gbtreeview = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetDescription"));
-    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gbtreeview));
-    gtk_text_buffer_set_text (buffer, gnc_budget_get_description(priv->budget), -1);
+        gbtreeview = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetDescription"));
+        buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gbtreeview));
+        gtk_text_buffer_set_text (buffer, gnc_budget_get_description(priv->budget), -1);
 
-    gbhb = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetPeriod"));
-    gr = GNC_RECURRENCE(gnc_recurrence_new());
-    gnc_recurrence_set(gr, gnc_budget_get_recurrence(priv->budget));
-    gtk_box_pack_start (GTK_BOX (gbhb), GTK_WIDGET(gr), TRUE, TRUE, 0);
-    gtk_widget_show (GTK_WIDGET(gr));
+        gbhb = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetPeriod"));
+        gr = GNC_RECURRENCE(gnc_recurrence_new());
+        gnc_recurrence_set(gr, gnc_budget_get_recurrence(priv->budget));
+        gtk_box_pack_start (GTK_BOX (gbhb), GTK_WIDGET(gr), TRUE, TRUE, 0);
+        gtk_widget_show (GTK_WIDGET(gr));
 
-    gbnumperiods = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetNumPeriods"));
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(gbnumperiods), gnc_budget_get_num_periods(priv->budget));
+        gbnumperiods = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetNumPeriods"));
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(gbnumperiods), gnc_budget_get_num_periods(priv->budget));
 
-    gtk_widget_show_all (priv->dialog);
-    result = gtk_dialog_run(GTK_DIALOG(priv->dialog));
+        gtk_widget_show_all (priv->dialog);
+        result = gtk_dialog_run(GTK_DIALOG(priv->dialog));
 
-    switch (result)
-    {
-    case GTK_RESPONSE_OK:
-	name = (gchar *) gtk_entry_get_text(GTK_ENTRY(gbname));
-   	DEBUG("%s", name);
-    	if (name)
-    	{
-            gchar* label;
-            gnc_budget_set_name(priv->budget, name); 
-            label = g_strdup_printf("%s: %s", _("Budget"), name);
-            main_window_update_page_name(GNC_PLUGIN_PAGE(page), label);
-            g_free(label);
+        switch (result)
+        {
+        case GTK_RESPONSE_OK:
+            name = (gchar *) gtk_entry_get_text(GTK_ENTRY(gbname));
+            DEBUG("%s", name);
+            if (name)
+            {
+                gchar* label;
+                gnc_budget_set_name(priv->budget, name);
+                label = g_strdup_printf("%s: %s", _("Budget"), name);
+                main_window_update_page_name(GNC_PLUGIN_PAGE(page), label);
+                g_free(label);
+            }
+
+            gtk_text_buffer_get_bounds (gtk_text_view_get_buffer(GTK_TEXT_VIEW (gbtreeview)), &start, &end);
+            desc = gtk_text_buffer_get_text (gtk_text_view_get_buffer(GTK_TEXT_VIEW (gbtreeview)), &start, &end, TRUE);
+
+            gnc_budget_set_description(priv->budget, desc);
+            g_free(desc);
+
+            num_periods = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(gbnumperiods));
+            gnc_budget_set_num_periods(priv->budget, num_periods);
+
+            r = gnc_recurrence_get(gr);
+            gnc_budget_set_recurrence(priv->budget, r);
+            break;
+        case GTK_RESPONSE_CANCEL:
+            break;
+        default:
+            break;
         }
-
-        gtk_text_buffer_get_bounds (gtk_text_view_get_buffer(GTK_TEXT_VIEW (gbtreeview)), &start, &end);
-        desc = gtk_text_buffer_get_text (gtk_text_view_get_buffer(GTK_TEXT_VIEW (gbtreeview)), &start, &end, TRUE);
-
-        gnc_budget_set_description(priv->budget, desc);
-        g_free(desc);
-
-        num_periods = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(gbnumperiods));
-        gnc_budget_set_num_periods(priv->budget, num_periods);
-
-        r = gnc_recurrence_get(gr);
-        gnc_budget_set_recurrence(priv->budget, r);
-        break;
-    case GTK_RESPONSE_CANCEL:
-	break;
-    default:
-        break;
-    }
-    g_object_unref(G_OBJECT(builder));
-    gtk_widget_destroy(priv->dialog);
+        g_object_unref(G_OBJECT(builder));
+        gtk_widget_destroy(priv->dialog);
     }
     priv->dialog = NULL;
 }

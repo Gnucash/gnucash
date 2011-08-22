@@ -1929,7 +1929,7 @@ main_window_update_page_name (GncPluginPage *page,
     {
         g_free(old_page_name);
         g_free(old_page_long_name);
-	g_free(name);
+        g_free(name);
         LEAVE("no window widget available");
         return;
     }
@@ -3239,7 +3239,7 @@ gnc_main_window_window_menu (GncMainWindow *window)
     GError *error = NULL;
     g_assert(filename);
     merge_id = gtk_ui_manager_add_ui_from_file(window->ui_merge, filename,
-					       &error);
+               &error);
     g_free(filename);
     g_assert(merge_id);
 #ifndef MAC_INTEGRATION
@@ -3407,7 +3407,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 static void
 gnc_quartz_shutdown (GtkOSXApplication *theApp, gpointer data)
 {
-/* Do Nothing. It's too late. */
+    /* Do Nothing. It's too late. */
 }
 /* Should quit responds to NSApplicationBlockTermination; returning
  * TRUE means "don't terminate", FALSE means "do terminate". If we
@@ -3423,7 +3423,7 @@ gnc_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
     gboolean needs_save;
 
     if (!gnc_main_window_all_finish_pending() ||
-	gnc_file_save_in_progress())
+            gnc_file_save_in_progress())
     {
         return TRUE;
     }

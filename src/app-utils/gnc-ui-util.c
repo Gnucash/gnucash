@@ -538,7 +538,7 @@ gnc_ui_owner_get_print_report_balance (GncOwner *owner,
 
     report_commodity = gnc_default_report_currency ();
     balance = gnc_ui_owner_get_balance_full (owner, negative,
-                                               report_commodity);
+              report_commodity);
     print_info = gnc_commodity_print_info (report_commodity, TRUE);
     return g_strdup (xaccPrintAmount (balance, print_info));
 }
@@ -622,9 +622,9 @@ gnc_ui_account_get_tax_info_string (const Account *account)
             g_return_val_if_fail (module, NULL);
 
             get_form = scm_c_eval_string
-                ("(false-if-exception gnc:txf-get-form)");
+                       ("(false-if-exception gnc:txf-get-form)");
             get_desc = scm_c_eval_string
-                ("(false-if-exception gnc:txf-get-description)");
+                       ("(false-if-exception gnc:txf-get-description)");
         }
 
         g_return_val_if_fail (scm_is_procedure (get_form), NULL);
@@ -665,12 +665,12 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         {
             if (tax_related)
                 return_string = g_strdup_printf
-                           (_("Tax type %s: invalid code %s for account type"),
-                            tax_type, num_code);
+                                (_("Tax type %s: invalid code %s for account type"),
+                                 tax_type, num_code);
             else
                 return_string = g_strdup_printf
-                           (_("Not tax-related; tax type %s: invalid code %s for account type"),
-                            tax_type, num_code);
+                                (_("Not tax-related; tax type %s: invalid code %s for account type"),
+                                 tax_type, num_code);
         }
         else
         {
@@ -682,12 +682,12 @@ gnc_ui_account_get_tax_info_string (const Account *account)
             {
                 if (tax_related)
                     return_string =  g_strdup_printf
-                           (_("Invalid code %s for tax type %s"),
-                            num_code, tax_type);
+                                     (_("Invalid code %s for tax type %s"),
+                                      num_code, tax_type);
                 else
                     return_string =  g_strdup_printf
-                           (_("Not tax-related; invalid code %s for tax type %s"),
-                            num_code, tax_type);
+                                     (_("Not tax-related; invalid code %s for tax type %s"),
+                                      num_code, tax_type);
             }
             else
             {
@@ -698,28 +698,28 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                 {
                     if (tax_related)
                         return_string = g_strdup_printf
-                               (_("No form: code %s, tax type %s"), num_code,
-                                tax_type);
+                                        (_("No form: code %s, tax type %s"), num_code,
+                                         tax_type);
                     else
                         return_string = g_strdup_printf
-                               (_("Not tax-related; no form: code %s, tax type %s"),
-                                num_code, tax_type);
+                                        (_("Not tax-related; no form: code %s, tax type %s"),
+                                         num_code, tax_type);
                 }
                 else
                 {
                     SCM desc_scm;
                     desc_scm = scm_call_3 (get_desc, category, code_scm,
-                                            tax_entity_type);
+                                           tax_entity_type);
                     if (!scm_is_string (desc_scm))
                     {
                         if (tax_related)
                             return_string = g_strdup_printf
-                               (_("No description: form %s, code %s, tax type %s"),
-                                form, num_code, tax_type);
+                                            (_("No description: form %s, code %s, tax type %s"),
+                                             form, num_code, tax_type);
                         else
                             return_string = g_strdup_printf
-                               (_("Not tax-related; no description: form %s, code %s, tax type %s"),
-                                form, num_code, tax_type);
+                                            (_("Not tax-related; no description: form %s, code %s, tax type %s"),
+                                             form, num_code, tax_type);
                     }
                     else
                     {
@@ -729,12 +729,12 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                         {
                             if (tax_related)
                                 return_string = g_strdup_printf
-                                  (_("No description: form %s, code %s, tax type %s"),
-                                  form, num_code, tax_type);
+                                                (_("No description: form %s, code %s, tax type %s"),
+                                                 form, num_code, tax_type);
                             else
                                 return_string = g_strdup_printf
-                                 (_("Not tax-related; no description: form %s, code %s, tax type %s"),
-                                    form, num_code, tax_type);
+                                                (_("Not tax-related; no description: form %s, code %s, tax type %s"),
+                                                 form, num_code, tax_type);
                         }
                         else
                         {
@@ -742,22 +742,22 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                             gchar *copy_txt = NULL;
                             copy_number = xaccAccountGetTaxUSCopyNumber (account);
                             copy_txt = (copy_number == 1) ?
-                                        g_strdup ("") :
-                                        g_strdup_printf ("(%d)",
-                                                       (gint) copy_number);
+                                       g_strdup ("") :
+                                       g_strdup_printf ("(%d)",
+                                                        (gint) copy_number);
                             if (tax_related)
                             {
                                 if (safe_strcmp (form, "") == 0)
                                     return_string = g_strdup_printf ("%s", desc);
                                 else
                                     return_string = g_strdup_printf ("%s%s: %s",
-                                                        form, copy_txt, desc);
+                                                                     form, copy_txt, desc);
                             }
                             else
                             {
                                 return_string = g_strdup_printf
-                                    (_("Not tax-related; %s%s: %s (code %s, tax type %s)"),
-                                     form, copy_txt, desc, num_code, tax_type);
+                                                (_("Not tax-related; %s%s: %s (code %s, tax type %s)"),
+                                                 form, copy_txt, desc, num_code, tax_type);
                             }
                             g_free (copy_txt);
                         }

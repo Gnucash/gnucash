@@ -121,11 +121,11 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
         {
             char * str;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             str = scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(names), SCM_BOOL_F));
             name = g_strdup (str);
-            scm_dynwind_free (str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (str);
+            scm_dynwind_end ();
 
             gtk_list_store_append(store, &iter);
             gtk_list_store_set(store, &iter,
@@ -311,11 +311,11 @@ on_delete_custom_report_clicked(GtkWidget *button,
     {
         char * str;
 
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         str = scm_to_locale_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
         report_name = g_strdup (str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
 
         /* we must confirm the user wants to delete their precious custom report! */
         if (gnc_verify_dialog(crd->dialog, FALSE, "Are you sure you want to delete %s?", report_name))

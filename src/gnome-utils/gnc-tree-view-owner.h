@@ -103,7 +103,7 @@ typedef struct
 
 
 void owner_filter_dialog_create(OwnerFilterDialog *fd,
-                                  GncPluginPage *page);
+                                GncPluginPage *page);
 
 gboolean gnc_plugin_page_owner_tree_filter_owners (GncOwner *owner,
         gpointer user_data);
@@ -118,13 +118,13 @@ void gppot_filter_response_cb (GtkWidget *dialog, gint response,
 
 /* Saving/Restoring */
 void gnc_tree_view_owner_save(GncTreeViewOwner *tree_view,
-                                OwnerFilterDialog *fd,
-                                GKeyFile *key_file, const gchar *group_name);
+                              OwnerFilterDialog *fd,
+                              GKeyFile *key_file, const gchar *group_name);
 void gnc_tree_view_owner_restore(GncTreeViewOwner *view,
-                                   OwnerFilterDialog *fd,
-                                   GKeyFile *key_file,
-                                   const gchar *group_name,
-                                   GncOwnerType owner_type);
+                                 OwnerFilterDialog *fd,
+                                 GKeyFile *key_file,
+                                 const gchar *group_name,
+                                 GncOwnerType owner_type);
 
 
 /* Get the GType for an GncTreeViewOwner object. */
@@ -196,8 +196,8 @@ void gnc_tree_view_owner_name_edited_cb(GncOwner *owner, GtkTreeViewColumn *col,
  */
 GtkTreeViewColumn *
 gnc_tree_view_owner_add_kvp_column (GncTreeViewOwner *view,
-                                      const gchar *column_title,
-                                      const gchar *kvp_key);
+                                    const gchar *column_title,
+                                    const gchar *kvp_key);
 
 /** @} */
 
@@ -216,7 +216,7 @@ gnc_tree_view_owner_add_kvp_column (GncTreeViewOwner *view,
  *  @param avi A pointer to an old style filter block to fill in.
  */
 void gnc_tree_view_owner_get_view_info (GncTreeViewOwner *owner_view,
-        OwnerViewInfo *avi);
+                                        OwnerViewInfo *avi);
 
 /** Given pointers to an owner tree and old style filter block, this
  *  function will applies the settings specified to the current
@@ -230,7 +230,7 @@ void gnc_tree_view_owner_get_view_info (GncTreeViewOwner *owner_view,
  *  view.
  */
 void gnc_tree_view_owner_set_view_info (GncTreeViewOwner *owner_view,
-        OwnerViewInfo *avi);
+                                        OwnerViewInfo *avi);
 
 
 /** This is the description of a filter function used by the owner tree.
@@ -264,9 +264,9 @@ typedef gboolean (*gnc_tree_view_owner_filter_func)(GncOwner *owner, gpointer da
  *  NULL.
  */
 void gnc_tree_view_owner_set_filter (GncTreeViewOwner *owner_view,
-                                       gnc_tree_view_owner_filter_func func,
-                                       gpointer data,
-                                       GtkFunction destroy);
+                                     gnc_tree_view_owner_filter_func func,
+                                     gpointer data,
+                                     GtkFunction destroy);
 
 
 /** This function forces the owner tree filter to be evaluated.  It

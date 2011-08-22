@@ -164,8 +164,8 @@ gnc_date_format_init (GNCDateFormat *gdf)
 
     /* Open up the Glade and set the signals */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"gnc-date-format.glade", "format-liststore");
-    gnc_builder_add_from_file (builder,"gnc-date-format.glade", "GNC Date Format");
+    gnc_builder_add_from_file (builder, "gnc-date-format.glade", "format-liststore");
+    gnc_builder_add_from_file (builder, "gnc-date-format.glade", "GNC Date Format");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gdf);
 

@@ -161,8 +161,8 @@ gnc_tree_model_owner_get_type (void)
         };
 
         gnc_tree_model_owner_type = g_type_register_static (GNC_TYPE_TREE_MODEL,
-                                      GNC_TREE_MODEL_OWNER_NAME,
-                                      &our_info, 0);
+                                    GNC_TREE_MODEL_OWNER_NAME,
+                                    &our_info, 0);
 
         g_type_add_interface_static (gnc_tree_model_owner_type,
                                      GTK_TYPE_TREE_MODEL,
@@ -384,7 +384,7 @@ gnc_tree_model_owner_get_n_columns (GtkTreeModel *tree_model)
 
 static GType
 gnc_tree_model_owner_get_column_type (GtkTreeModel *tree_model,
-                                        int index)
+                                      int index)
 {
     g_return_val_if_fail (GNC_IS_TREE_MODEL_OWNER (tree_model), G_TYPE_INVALID);
     g_return_val_if_fail ((index < GNC_TREE_MODEL_OWNER_NUM_COLUMNS) && (index >= 0), G_TYPE_INVALID);
@@ -684,7 +684,7 @@ gnc_tree_model_owner_get_value (GtkTreeModel *tree_model,
 
 static gboolean
 gnc_tree_model_owner_iter_next (GtkTreeModel *tree_model,
-                                  GtkTreeIter *iter)
+                                GtkTreeIter *iter)
 {
     GncTreeModelOwner *model = GNC_TREE_MODEL_OWNER (tree_model);
     GncTreeModelOwnerPrivate *priv;
@@ -720,8 +720,8 @@ gnc_tree_model_owner_iter_next (GtkTreeModel *tree_model,
 
 static gboolean
 gnc_tree_model_owner_iter_children (GtkTreeModel *tree_model,
-                                      GtkTreeIter *iter,
-                                      GtkTreeIter *parent_iter)
+                                    GtkTreeIter *iter,
+                                    GtkTreeIter *parent_iter)
 {
     GncTreeModelOwnerPrivate *priv;
     GncTreeModelOwner *model;
@@ -755,7 +755,7 @@ gnc_tree_model_owner_iter_children (GtkTreeModel *tree_model,
 
 static gboolean
 gnc_tree_model_owner_iter_has_child (GtkTreeModel *tree_model,
-                                       GtkTreeIter *iter)
+                                     GtkTreeIter *iter)
 {
     /* Owner lists don't have children, so always return false */
     return FALSE;
@@ -763,7 +763,7 @@ gnc_tree_model_owner_iter_has_child (GtkTreeModel *tree_model,
 
 static int
 gnc_tree_model_owner_iter_n_children (GtkTreeModel *tree_model,
-                                        GtkTreeIter *iter)
+                                      GtkTreeIter *iter)
 {
     GncTreeModelOwner *model;
     GncTreeModelOwnerPrivate *priv;
@@ -788,9 +788,9 @@ gnc_tree_model_owner_iter_n_children (GtkTreeModel *tree_model,
 
 static gboolean
 gnc_tree_model_owner_iter_nth_child (GtkTreeModel *tree_model,
-                                       GtkTreeIter *iter,
-                                       GtkTreeIter *parent_iter,
-                                       int n)
+                                     GtkTreeIter *iter,
+                                     GtkTreeIter *parent_iter,
+                                     int n)
 {
     GncTreeModelOwner *model;
     GncTreeModelOwnerPrivate *priv;
@@ -836,8 +836,8 @@ gnc_tree_model_owner_iter_nth_child (GtkTreeModel *tree_model,
 
 static gboolean
 gnc_tree_model_owner_iter_parent (GtkTreeModel *tree_model,
-                                    GtkTreeIter *iter,
-                                    GtkTreeIter *child)
+                                  GtkTreeIter *iter,
+                                  GtkTreeIter *child)
 {
     /* Owner lists don't have children, so always return false */
     iter->stamp = 0;
@@ -855,7 +855,7 @@ gnc_tree_model_owner_iter_parent (GtkTreeModel *tree_model,
  */
 GncOwner *
 gnc_tree_model_owner_get_owner (GncTreeModelOwner *model,
-                                    GtkTreeIter *iter)
+                                GtkTreeIter *iter)
 {
     g_return_val_if_fail (GNC_IS_TREE_MODEL_OWNER (model), NULL);
     g_return_val_if_fail (iter != NULL, NULL);
@@ -982,9 +982,9 @@ increment_stamp(GncTreeModelOwner *model)
  */
 static void
 gnc_tree_model_owner_event_handler (QofInstance *entity,
-                                      QofEventId event_type,
-                                      GncTreeModelOwner *model,
-                                      GncEventData *ed)
+                                    QofEventId event_type,
+                                    GncTreeModelOwner *model,
+                                    GncEventData *ed)
 {
     GncTreeModelOwnerPrivate *priv;
     GtkTreePath *path = NULL;
@@ -1041,7 +1041,7 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
         if (!ed) /* Required for a remove. */
             break;
         DEBUG("remove owner %d (%s) from owner_list %p", ed->idx,
-                        gncOwnerGetName(&owner), priv->owner_list);
+              gncOwnerGetName(&owner), priv->owner_list);
         path = gtk_tree_path_new();
         if (!path)
         {

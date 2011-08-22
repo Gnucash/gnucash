@@ -433,7 +433,7 @@ gnc_module_load_common(const char * module_name, gint iface, gboolean optional)
     GModule         * gmodule;
     GNCModuleInfo   * modinfo;
 
-    ENTER("module_name: %s",module_name);
+    ENTER("module_name: %s", module_name);
 
     if (!loaded_modules)
     {

@@ -247,21 +247,21 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
         {
             char * str;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             str = scm_to_locale_string (scm_call_1(get_qif_name, SCM_CAR(accts_left)));
             qif_name = g_strdup (str);
-            scm_dynwind_free (str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (str);
+            scm_dynwind_end ();
         }
         if (scm_is_string(scm_call_1(get_gnc_name, SCM_CAR(accts_left))))
         {
             char * str;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             str = scm_to_locale_string (scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
             gnc_name = g_strdup (str);
-            scm_dynwind_free (str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (str);
+            scm_dynwind_end ();
         }
         checked  = (scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
 
@@ -908,11 +908,11 @@ gnc_ui_qif_import_load_progress_show_cb(GtkWidget *widget,
         {
             char * str;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             str = scm_to_locale_string (SCM_CADR(load_return));
             /* str doesn't seem to be used anywhere, so go ahead and free it */
-            scm_dynwind_free (str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (str);
+            scm_dynwind_end ();
         }
 
         if (SCM_CAR(load_return) == SCM_BOOL_F)
@@ -1129,11 +1129,11 @@ gnc_ui_qif_import_load_progress_next_cb(GnomeDruidPage * page,
         {
             char * str;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             str = scm_to_locale_string (scm_call_1(default_acct, wind->selected_file));
             default_acctname = g_strdup (str);
-            scm_dynwind_free (str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (str);
+            scm_dynwind_end ();
         }
         gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
 
@@ -1238,12 +1238,12 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
         {
             char * str;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             str = scm_to_locale_string (scm_call_1(default_acct,
-                                                wind->selected_file));
+                                                   wind->selected_file));
             default_acctname = g_strdup (str);
-            scm_dynwind_free (str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (str);
+            scm_dynwind_end ();
         }
         gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
 
@@ -1294,11 +1294,11 @@ update_file_page(QIFImportWindow * wind)
         {
             char * str;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             str = scm_to_locale_string (scm_call_1(qif_file_path, scm_qiffile));
             row_text = g_strdup (str);
-            scm_dynwind_free (str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (str);
+            scm_dynwind_end ();
         }
 
         gtk_list_store_append(store, &iter);

@@ -28,8 +28,8 @@
 #include <gtk/gtk.h>
 
 void gnc_assistant_set_watermark_images (GtkAssistant *assistant,
-                                     const char *top_path,
-                                     const char *side_path);
+        const char *top_path,
+        const char *side_path);
 void gnc_assistant_set_colors (GtkAssistant *assistant);
 
 #endif

@@ -1324,12 +1324,12 @@ gchar *gnc_scm_to_locale_string(SCM scm_string)
     gchar* s;
     char * str;
 
-    scm_dynwind_begin (0); 
+    scm_dynwind_begin (0);
     str = scm_to_locale_string(scm_string);
 
     /* prevent memory leaks in scm_to_locale_string() per guile manual; see 'http://www.gnu.org/software/guile/manual/html_node/Dynamic-Wind.html#Dynamic-Wind' */
     s = g_strdup(str);
-    scm_dynwind_free (str); 
-    scm_dynwind_end (); 
+    scm_dynwind_free (str);
+    scm_dynwind_end ();
     return s;
 }

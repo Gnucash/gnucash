@@ -203,11 +203,11 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
         const char* orig_name;
 
         SCM t = SCM_CAR(templates);
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         str = scm_to_locale_string (scm_call_1(t_name, t));
         orig_name = g_strdup (str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
 
         /* Store the untranslated names for lookup later */
         template_names = g_list_prepend (template_names, (gpointer)orig_name);
@@ -264,11 +264,11 @@ gnc_style_sheet_select_dialog_add_one(StyleSheetDialog * ss,
 
     get_name = scm_c_eval_string("gnc:html-style-sheet-name");
     scm_name = scm_call_1(get_name, sheet_info);
-    scm_dynwind_begin (0); 
+    scm_dynwind_begin (0);
     str = scm_to_locale_string (scm_name);
     c_name = g_strdup (str);
-    scm_dynwind_free (str); 
-    scm_dynwind_end (); 
+    scm_dynwind_free (str);
+    scm_dynwind_end ();
     if (!c_name)
         return;
 

@@ -34,8 +34,8 @@
 
 void
 gnc_assistant_set_watermark_images (GtkAssistant *assistant,
-                                const char *top_path,
-                                const char *side_path)
+                                    const char *top_path,
+                                    const char *side_path)
 {
     GdkPixbuf     *top_pixbuf, *side_pixbuf;
     GList         *page_list, *item;
@@ -53,8 +53,8 @@ gnc_assistant_set_watermark_images (GtkAssistant *assistant,
 
         gtk_assistant_set_page_header_image (assistant, page, top_pixbuf);
         if ( (page_type == GTK_ASSISTANT_PAGE_INTRO) ||
-             (page_type == GTK_ASSISTANT_PAGE_SUMMARY) ||
-             (page_type == GTK_ASSISTANT_PAGE_CONFIRM) )
+                (page_type == GTK_ASSISTANT_PAGE_SUMMARY) ||
+                (page_type == GTK_ASSISTANT_PAGE_CONFIRM) )
             gtk_assistant_set_page_side_image (assistant, page, side_pixbuf);
     }
 

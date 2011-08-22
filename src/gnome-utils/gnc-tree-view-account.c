@@ -2294,7 +2294,7 @@ void
 gnc_tree_view_account_code_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_code)
 {
     if (safe_strcmp(xaccAccountGetCode(account), new_code) == 0)
-	return;
+        return;
     xaccAccountSetCode(account, new_code);
 }
 
@@ -2302,7 +2302,7 @@ void
 gnc_tree_view_account_description_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_desc)
 {
     if (safe_strcmp(xaccAccountGetDescription(account), new_desc) == 0)
-	return;
+        return;
     xaccAccountSetDescription(account, new_desc);
 }
 
@@ -2310,7 +2310,7 @@ void
 gnc_tree_view_account_notes_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_notes)
 {
     if (safe_strcmp(xaccAccountGetNotes(account), new_notes) == 0)
-	return;
+        return;
     xaccAccountSetNotes(account, new_notes);
 }
 

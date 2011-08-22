@@ -628,7 +628,8 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
         result = NULL;
     }
     return FALSE;
-}static void
+}
+static void
 gnc_dbi_unlock( QofBackend *qbe )
 {
     GncDbiBackend *qe = (GncDbiBackend*)qbe;

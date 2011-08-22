@@ -2253,11 +2253,11 @@ gnc_option_set_ui_value_string (GNCOption *option, gboolean use_default,
         const gchar *string;
         char * str;
 
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         str = scm_to_locale_string (value);
         string = g_strdup (str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
 
         gtk_entry_set_text(GTK_ENTRY(widget), string);
         g_free ((gpointer *) string);
@@ -2283,11 +2283,11 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
         const gchar *string;
         char * str;
 
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         str = scm_to_locale_string (value);
         string = g_strdup (str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
 
         gtk_text_buffer_set_text (buffer, string, scm_c_string_length(value));
         g_free ((gpointer *) string);
@@ -2581,11 +2581,11 @@ gnc_option_set_ui_value_font (GNCOption *option, gboolean use_default,
         const gchar *string;
         char * str;
 
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         str = scm_to_locale_string (value);
         string = g_strdup (str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
 
         if ((string != NULL) && (*string != '\0'))
         {
@@ -2609,11 +2609,11 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
         const gchar *string;
         char * str;
 
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         str = scm_to_locale_string (value);
         string = g_strdup (str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
 
         if (string && *string)
         {

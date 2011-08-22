@@ -116,8 +116,8 @@ gnc_tree_view_owner_get_type (void)
         };
 
         gnc_tree_view_owner_type = g_type_register_static (
-                                         GNC_TYPE_TREE_VIEW, GNC_TREE_VIEW_OWNER_NAME,
-                                         &our_info, 0);
+                                       GNC_TYPE_TREE_VIEW, GNC_TREE_VIEW_OWNER_NAME,
+                                       &our_info, 0);
     }
 
     return gnc_tree_view_owner_type;
@@ -193,8 +193,8 @@ gnc_tree_view_owner_finalize (GObject *object)
  ************************************************************/
 static void
 gnc_tree_view_owner_active_toggled (GtkCellRendererToggle *cell,
-        const gchar *s_path_str,
-        gpointer user_data)
+                                    const gchar *s_path_str,
+                                    gpointer user_data)
 {
     GncTreeViewOwner *tree_view;
     GtkTreePath *s_path;
@@ -285,9 +285,9 @@ sort_by_string (GtkTreeModel *f_model,
 
 static gint
 sort_by_boolean (GtkTreeModel *f_model,
-                GtkTreeIter *f_iter1,
-                GtkTreeIter *f_iter2,
-                gpointer user_data)
+                 GtkTreeIter *f_iter1,
+                 GtkTreeIter *f_iter2,
+                 gpointer user_data)
 {
     GtkTreeModel *model;
     GtkTreeIter iter1, iter2;
@@ -442,7 +442,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
     gnc_tree_view_add_text_column(view, _("Phone"), GNC_OWNER_TREE_PHONE_COL,
-                                   NULL, "+1-617-542-5942",
+                                  NULL, "+1-617-542-5942",
                                   GNC_TREE_MODEL_OWNER_COL_PHONE,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
@@ -519,7 +519,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
 
 static GtkTreePath *
 gnc_tree_view_owner_get_path_from_owner (GncTreeViewOwner *view,
-                                         GncOwner *owner)
+        GncOwner *owner)
 {
     GtkTreeModel *model, *f_model, *s_model;
     GtkTreePath *path, *f_path, *s_path;
@@ -561,8 +561,8 @@ gnc_tree_view_owner_get_path_from_owner (GncTreeViewOwner *view,
 
 static gboolean
 gnc_tree_view_owner_get_iter_from_owner (GncTreeViewOwner *view,
-                                         GncOwner *owner,
-                                         GtkTreeIter *s_iter)
+        GncOwner *owner,
+        GtkTreeIter *s_iter)
 {
     GtkTreeModel *model, *f_model, *s_model;
     GtkTreeIter iter, f_iter;
@@ -660,7 +660,7 @@ gnc_tree_view_owner_filter_helper (GtkTreeModel *model,
     g_return_val_if_fail (iter != NULL, FALSE);
 
     owner = gnc_tree_model_owner_get_owner (
-                  GNC_TREE_MODEL_OWNER(model), iter);
+                GNC_TREE_MODEL_OWNER(model), iter);
 
     priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(view);
     if (priv->filter_fn)
@@ -791,7 +791,7 @@ gnc_tree_view_owner_get_owner_from_iter (GtkTreeModel *s_model,
         GTK_TREE_MODEL_FILTER(f_model), &iter, &f_iter);
     model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
     owner = gnc_tree_model_owner_get_owner (
-                  GNC_TREE_MODEL_OWNER(model), &iter);
+                GNC_TREE_MODEL_OWNER(model), &iter);
     LEAVE("owner %p (%s)", owner, gncOwnerGetName (owner));
     return owner;
 }
@@ -843,7 +843,7 @@ gnc_tree_view_owner_get_selected_owner (GncTreeViewOwner *view)
  */
 void
 gnc_tree_view_owner_set_selected_owner (GncTreeViewOwner *view,
-        GncOwner *owner)
+                                        GncOwner *owner)
 {
     GtkTreeModel *model, *f_model, *s_model;
     GtkTreePath *path, *f_path, *s_path, *parent_path;
@@ -917,9 +917,9 @@ typedef struct
  */
 static void
 get_selected_owners_helper (GtkTreeModel *s_model,
-                              GtkTreePath *s_path,
-                              GtkTreeIter *s_iter,
-                              gpointer data)
+                            GtkTreePath *s_path,
+                            GtkTreeIter *s_iter,
+                            gpointer data)
 {
     GncTreeViewSelectionInfo *gtvsi = data;
     GtkTreeModel *f_model;
@@ -1103,10 +1103,10 @@ gtvo_currency_changed_cb (void)
  * and the cell renderer's 'text' property. */
 static void
 owner_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
-                            GtkCellRenderer *cell,
-                            GtkTreeModel *s_model,
-                            GtkTreeIter *s_iter,
-                            gpointer key)
+                          GtkCellRenderer *cell,
+                          GtkTreeModel *s_model,
+                          GtkTreeIter *s_iter,
+                          gpointer key)
 {
     GncOwner *owner;
     kvp_frame * frame;
@@ -1125,8 +1125,8 @@ owner_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
 
 GtkTreeViewColumn *
 gnc_tree_view_owner_add_kvp_column (GncTreeViewOwner *view,
-                                      const gchar *column_title,
-                                      const gchar *kvp_key)
+                                    const gchar *column_title,
+                                    const gchar *kvp_key)
 {
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
@@ -1266,7 +1266,7 @@ gnc_tree_view_owner_add_custom_column(GncTreeViewOwner *owner_view,
  *  owner should be hidden. */
 gboolean
 gnc_plugin_page_owner_tree_filter_owners (GncOwner *owner,
-                                          gpointer user_data)
+        gpointer user_data)
 {
     OwnerFilterDialog *fd = user_data;
     gnc_numeric total;
@@ -1408,10 +1408,10 @@ owner_filter_dialog_create(OwnerFilterDialog *fd, GncPluginPage *page)
     /* Update the dialog widgets for the current state */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "show_inactive"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button),
-                                 fd->show_inactive);
+                                  fd->show_inactive);
     button = GTK_WIDGET(gtk_builder_get_object (builder, "show_zero"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button),
-                                 fd->show_zero_total);
+                                  fd->show_zero_total);
 
     /* Wire up the rest of the callbacks */
     gtk_builder_connect_signals (builder, fd);
@@ -1465,8 +1465,8 @@ tree_save_selected_row (GncTreeViewOwner *view,
 
 void
 gnc_tree_view_owner_save(GncTreeViewOwner *view,
-                           OwnerFilterDialog *fd,
-                           GKeyFile *key_file, const gchar *group_name)
+                         OwnerFilterDialog *fd,
+                         GKeyFile *key_file, const gchar *group_name)
 {
     bar_t bar;
 
@@ -1500,7 +1500,7 @@ tree_restore_selected_row (GncTreeViewOwner *view,
                            GncOwnerType owner_type,
                            const gchar *owner_guid_str)
 {
-    GncOwner *owner=gncOwnerNew();
+    GncOwner *owner = gncOwnerNew();
     QofBook *book;
     GncGUID owner_guid;
 
@@ -1512,9 +1512,9 @@ tree_restore_selected_row (GncTreeViewOwner *view,
 
 void
 gnc_tree_view_owner_restore(GncTreeViewOwner *view,
-                              OwnerFilterDialog *fd,
-                              GKeyFile *key_file, const gchar *group_name,
-                              GncOwnerType owner_type)
+                            OwnerFilterDialog *fd,
+                            GKeyFile *key_file, const gchar *group_name,
+                            GncOwnerType owner_type)
 {
     GError *error = NULL;
     gchar *key, *value;
@@ -1585,7 +1585,7 @@ gtvo_set_column_editor(GncTreeViewOwner *view,
 
 void
 gnc_tree_view_owner_set_name_edited(GncTreeViewOwner *view,
-                                      GncTreeViewOwnerColumnTextEdited edited_cb)
+                                    GncTreeViewOwnerColumnTextEdited edited_cb)
 {
     GncTreeViewOwnerPrivate *priv;
     priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(view);

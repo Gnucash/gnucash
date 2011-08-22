@@ -728,7 +728,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
                     /* DEBUG("heuristics:  probability + 2 (memo)"); */
                 }
                 else if ((strncasecmp(memo, xaccSplitGetMemo(split),
-                                  strlen(xaccSplitGetMemo(split)) / 2)
+                                      strlen(xaccSplitGetMemo(split)) / 2)
                           == 0))
                 {
                     /* Very primitive fuzzy match worth +1.  This matches the
@@ -747,7 +747,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
             if (descr && strlen(descr) != 0)
             {
                 if (safe_strcasecmp(descr,
-                                xaccTransGetDescription(xaccSplitGetParent(split)))
+                                    xaccTransGetDescription(xaccSplitGetParent(split)))
                         == 0)
                 {
                     /*An exact match of Description gives a +2 */
@@ -755,8 +755,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
                     /*DEBUG("heuristics:  probability + 2 (description)");*/
                 }
                 else if ((strncasecmp(descr,
-                                  xaccTransGetDescription (xaccSplitGetParent(split)),
-                                  strlen(xaccTransGetDescription (new_trans)) / 2)
+                                      xaccTransGetDescription (xaccSplitGetParent(split)),
+                                      strlen(xaccTransGetDescription (new_trans)) / 2)
                           == 0))
                 {
                     /* Very primitive fuzzy match worth +1.  This matches the

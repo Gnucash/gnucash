@@ -461,7 +461,7 @@ gnc_plugin_business_get_window()
 
 static void
 gnc_plugin_business_cmd_customer_page (GtkAction *action,
-        GncMainWindowActionData *mw)
+                                       GncMainWindowActionData *mw)
 {
     GncPluginPage *page;
 
@@ -578,7 +578,7 @@ gnc_plugin_business_cmd_customer_process_payment (GtkAction *action,
 
 static void
 gnc_plugin_business_cmd_vendor_page (GtkAction *action,
-        GncMainWindowActionData *mw)
+                                     GncMainWindowActionData *mw)
 {
     GncPluginPage *page;
 
@@ -695,7 +695,7 @@ gnc_plugin_business_cmd_vendor_process_payment (GtkAction *action,
 
 static void
 gnc_plugin_business_cmd_employee_page (GtkAction *action,
-        GncMainWindowActionData *mw)
+                                       GncMainWindowActionData *mw)
 {
     GncPluginPage *page;
 

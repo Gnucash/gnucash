@@ -71,11 +71,11 @@ gncFindFile (const char * filename)
     {
         char * str;
 
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         full_filename = scm_to_locale_string(scm_result);
         return_string = g_strdup (full_filename);
-        scm_dynwind_free (full_filename); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (full_filename);
+        scm_dynwind_end ();
     }
 
     return return_string;

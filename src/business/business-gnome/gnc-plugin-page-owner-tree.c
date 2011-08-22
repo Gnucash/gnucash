@@ -272,21 +272,21 @@ typedef struct
 
 static action_owners_struct action_owners[] =
 {
-        { "OTEditVendorAction",            GNC_OWNER_VENDOR },
-        { "OTEditCustomerAction",          GNC_OWNER_CUSTOMER },
-        { "OTEditEmployeeAction",          GNC_OWNER_EMPLOYEE },
-        { "OTNewVendorAction",             GNC_OWNER_VENDOR },
-        { "OTNewCustomerAction",           GNC_OWNER_CUSTOMER },
-        { "OTNewEmployeeAction",           GNC_OWNER_EMPLOYEE },
-        { "OTNewBillAction",               GNC_OWNER_VENDOR },
-        { "OTNewInvoiceAction",            GNC_OWNER_CUSTOMER },
-        { "OTNewVoucherAction",            GNC_OWNER_EMPLOYEE },
-        { "OTVendorListingReportAction",   GNC_OWNER_VENDOR },
-        { "OTCustomerListingReportAction", GNC_OWNER_CUSTOMER },
-        { "OTVendorReportAction",          GNC_OWNER_VENDOR },
-        { "OTCustomerReportAction",        GNC_OWNER_CUSTOMER },
-        { "OTEmployeeReportAction",        GNC_OWNER_EMPLOYEE },
-        { NULL, GNC_OWNER_NONE },
+    { "OTEditVendorAction",            GNC_OWNER_VENDOR },
+    { "OTEditCustomerAction",          GNC_OWNER_CUSTOMER },
+    { "OTEditEmployeeAction",          GNC_OWNER_EMPLOYEE },
+    { "OTNewVendorAction",             GNC_OWNER_VENDOR },
+    { "OTNewCustomerAction",           GNC_OWNER_CUSTOMER },
+    { "OTNewEmployeeAction",           GNC_OWNER_EMPLOYEE },
+    { "OTNewBillAction",               GNC_OWNER_VENDOR },
+    { "OTNewInvoiceAction",            GNC_OWNER_CUSTOMER },
+    { "OTNewVoucherAction",            GNC_OWNER_EMPLOYEE },
+    { "OTVendorListingReportAction",   GNC_OWNER_VENDOR },
+    { "OTCustomerListingReportAction", GNC_OWNER_CUSTOMER },
+    { "OTVendorReportAction",          GNC_OWNER_VENDOR },
+    { "OTCustomerReportAction",        GNC_OWNER_CUSTOMER },
+    { "OTEmployeeReportAction",        GNC_OWNER_EMPLOYEE },
+    { NULL, GNC_OWNER_NONE },
 };
 
 GType
@@ -310,8 +310,8 @@ gnc_plugin_page_owner_tree_get_type (void)
         };
 
         gnc_plugin_page_owner_tree_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                            GNC_PLUGIN_PAGE_OWNER_TREE_NAME,
-                                            &our_info, 0);
+                                          GNC_PLUGIN_PAGE_OWNER_TREE_NAME,
+                                          &our_info, 0);
     }
 
     return gnc_plugin_page_owner_tree_type;
@@ -332,7 +332,7 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
     gint          i;
 
     g_return_val_if_fail( (owner_type != GNC_OWNER_UNDEFINED)
-                           && (owner_type != GNC_OWNER_NONE), NULL);
+                          && (owner_type != GNC_OWNER_NONE), NULL);
     ENTER(" ");
 
     /* Is there an existing page? */
@@ -656,8 +656,8 @@ gnc_plugin_page_owner_tree_destroy_widget (GncPluginPage *plugin_page)
  *  @param group_name The group name to use when saving data. */
 static void
 gnc_plugin_page_owner_tree_save_page (GncPluginPage *plugin_page,
-                                        GKeyFile *key_file,
-                                        const gchar *group_name)
+                                      GKeyFile *key_file,
+                                      const gchar *group_name)
 {
     GncPluginPageOwnerTree *owner_page;
     GncPluginPageOwnerTreePrivate *priv;
@@ -676,7 +676,7 @@ gnc_plugin_page_owner_tree_save_page (GncPluginPage *plugin_page,
                            priv->owner_type);
 
     gnc_tree_view_owner_save(GNC_TREE_VIEW_OWNER(priv->tree_view),
-                               &priv->fd, key_file, group_name);
+                             &priv->fd, key_file, group_name);
     LEAVE(" ");
 }
 
@@ -715,7 +715,7 @@ gnc_plugin_page_owner_tree_recreate_page (GtkWidget *window,
     gnc_main_window_open_page(GNC_MAIN_WINDOW(window), page);
 
     gnc_tree_view_owner_restore(GNC_TREE_VIEW_OWNER(priv->tree_view),
-                                  &priv->fd, key_file, group_name, owner_type);
+                                &priv->fd, key_file, group_name, owner_type);
     LEAVE(" ");
     return page;
 }
@@ -843,7 +843,7 @@ build_aging_report (GncOwnerType owner_type)
 
     args = SCM_EOL;
 
-    switch(owner_type)
+    switch (owner_type)
     {
     case GNC_OWNER_NONE :
     case GNC_OWNER_UNDEFINED :
@@ -1093,25 +1093,25 @@ gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action,
     case GNC_OWNER_CUSTOMER :
     {
         gncOwnerInitCustomer(&current_owner,
-                gncOwnerGetCustomer(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+                             gncOwnerGetCustomer(gnc_plugin_page_owner_tree_get_current_owner (page)) );
         break;
     }
     case GNC_OWNER_JOB :
     {
         gncOwnerInitJob(&current_owner,
-                gncOwnerGetJob(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+                        gncOwnerGetJob(gnc_plugin_page_owner_tree_get_current_owner (page)) );
         break;
     }
     case GNC_OWNER_VENDOR :
     {
         gncOwnerInitVendor(&current_owner,
-                gncOwnerGetVendor(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+                           gncOwnerGetVendor(gnc_plugin_page_owner_tree_get_current_owner (page)) );
         break;
     }
     case GNC_OWNER_EMPLOYEE :
     {
         gncOwnerInitEmployee(&current_owner,
-                gncOwnerGetEmployee(gnc_plugin_page_owner_tree_get_current_owner (page)) );
+                             gncOwnerGetEmployee(gnc_plugin_page_owner_tree_get_current_owner (page)) );
         break;
     }
     }

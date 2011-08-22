@@ -173,7 +173,7 @@ gnc_extension_path (SCM extension, char **fullpath)
         {
             char* s;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             s = scm_to_locale_string(item);
 
             if (i == 1)
@@ -185,8 +185,8 @@ gnc_extension_path (SCM extension, char **fullpath)
             {
                 strings[i] = g_strdup(gettext(s));
             }
-            scm_dynwind_free (s); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (s);
+            scm_dynwind_end ();
         }
         else
         {

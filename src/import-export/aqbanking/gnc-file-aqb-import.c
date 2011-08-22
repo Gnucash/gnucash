@@ -180,15 +180,15 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     g_assert(io);
     GWEN_SyncIo_AddFlags(io, GWEN_SYNCIO_FILE_FLAGS_READ);
     {
-	/* We must explicitly call "Connect" on the GWEN_SYNCIO
-	 * object. */
-	int rv = GWEN_SyncIo_Connect(io);
-	if (rv < 0)
-	{
-	    g_warning("gnc_file_aqbanking_import: Failed to open file %s: %d", selected_filename, rv);
-	    goto cleanup;
-	}
-	g_assert(GWEN_SyncIo_GetStatus(io) == GWEN_SyncIo_Status_Connected);
+        /* We must explicitly call "Connect" on the GWEN_SYNCIO
+         * object. */
+        int rv = GWEN_SyncIo_Connect(io);
+        if (rv < 0)
+        {
+            g_warning("gnc_file_aqbanking_import: Failed to open file %s: %d", selected_filename, rv);
+            goto cleanup;
+        }
+        g_assert(GWEN_SyncIo_GetStatus(io) == GWEN_SyncIo_Status_Connected);
     }
 #else
     io = GWEN_Io_LayerFile_new(dtaus_fd, -1);
@@ -340,9 +340,9 @@ cleanup:
     if (io)
     {
 #ifdef AQBANKING_VERSION_5_PLUS
-	GWEN_SyncIo_free(io);
+        GWEN_SyncIo_free(io);
 #else
-	GWEN_Io_Layer_free(io);
+        GWEN_Io_Layer_free(io);
 #endif
     }
 

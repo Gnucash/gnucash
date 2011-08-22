@@ -165,11 +165,11 @@ void gnc_xfer_description_insert_cb(GtkEditable *editable,
                                     gint *start_pos,
                                     XferDialog *xferData);
 gboolean gnc_xfer_description_key_press_cb( GtkEntry *entry,
-                                            GdkEventKey *event,
-                                            XferDialog *xferData );
+        GdkEventKey *event,
+        XferDialog *xferData );
 void gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData);
 gboolean gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
-                                                  gpointer data);
+        gpointer data);
 void price_amount_radio_toggled_cb(GtkToggleButton *togglebutton, gpointer data);
 
 void gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data);
@@ -525,20 +525,20 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
     if (use_accounting_labels)
     {
         button = GTK_WIDGET(gtk_builder_get_object (builder,
-                                          (direction == XFER_DIALOG_TO) ?
-                                          "left_show_button" : "right_show_button"));
+                            (direction == XFER_DIALOG_TO) ?
+                            "left_show_button" : "right_show_button"));
         scroll_win = GTK_WIDGET(gtk_builder_get_object (builder,
-                                              (direction == XFER_DIALOG_TO) ?
-                                              "left_trans_window" : "right_trans_window"));
+                                (direction == XFER_DIALOG_TO) ?
+                                "left_trans_window" : "right_trans_window"));
     }
     else
     {
         button = GTK_WIDGET(gtk_builder_get_object (builder,
-                                          (direction == XFER_DIALOG_TO) ?
-                                          "right_show_button" : "left_show_button"));
+                            (direction == XFER_DIALOG_TO) ?
+                            "right_show_button" : "left_show_button"));
         scroll_win = GTK_WIDGET(gtk_builder_get_object (builder,
-                                              (direction == XFER_DIALOG_TO) ?
-                                              "right_trans_window" : "left_trans_window"));
+                                (direction == XFER_DIALOG_TO) ?
+                                "right_trans_window" : "left_trans_window"));
     }
 
     tree_view = GTK_TREE_VIEW(gnc_tree_view_account_new(FALSE));
@@ -1200,7 +1200,7 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount)
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
 }
 void gnc_xfer_dialog_set_amount_sensitive(XferDialog *xferData,
-                                          gboolean is_sensitive)
+        gboolean is_sensitive)
 {
     g_assert(xferData);
     gtk_widget_set_sensitive(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT (xferData->amount_edit)), is_sensitive);

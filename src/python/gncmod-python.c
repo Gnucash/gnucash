@@ -74,12 +74,15 @@ libgncmod_python_gnc_module_init(int refcount)
     init_filename = g_build_filename(pkgdatadir, "python/init.py", (char*)NULL);
     g_debug("Looking for python init script at %s", (init_filename ? init_filename : "<null>"));
     fp = fopen(init_filename, "r+");
-    if (fp) {
+    if (fp)
+    {
         PyRun_SimpleFile(fp, init_filename);
         fclose(fp);
 
         /* PyRun_InteractiveLoop(stdin, "foo"); */
-    } else {
+    }
+    else
+    {
         g_warning("Unable to initialize Python module (unable to open %s)", init_filename);
     }
     g_free(init_filename);

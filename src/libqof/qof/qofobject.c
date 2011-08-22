@@ -49,16 +49,28 @@ GList* get_book_list( void );
 GHashTable* get_backend_data( void );
 
 gboolean
-get_object_is_initialized( void ) { return object_is_initialized; }
+get_object_is_initialized( void )
+{
+    return object_is_initialized;
+}
 
 GList*
-get_object_modules( void ) { return object_modules; }
+get_object_modules( void )
+{
+    return object_modules;
+}
 
 GList*
-get_book_list( void ) { return book_list; }
+get_book_list( void )
+{
+    return book_list;
+}
 
 GHashTable*
-get_backend_data( void ) { return backend_data; }
+get_backend_data( void )
+{
+    return backend_data;
+}
 
 /*********/
 

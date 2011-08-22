@@ -923,11 +923,11 @@ gnc_option_permissible_value_name(GNCOption *option, int index)
     if (!scm_is_string(name))
         return NULL;
 
-    scm_dynwind_begin (0); 
+    scm_dynwind_begin (0);
     str = scm_to_locale_string (name);
     string = g_strdup (str);
-    scm_dynwind_free (str); 
-    scm_dynwind_end (); 
+    scm_dynwind_free (str);
+    scm_dynwind_end ();
 
     return string;
 }
@@ -962,11 +962,11 @@ gnc_option_permissible_value_description(GNCOption *option, int index)
     if (!scm_is_string(help))
         return NULL;
 
-    scm_dynwind_begin (0); 
+    scm_dynwind_begin (0);
     str = scm_to_locale_string (help);
     string = g_strdup (str);
-    scm_dynwind_free (str); 
-    scm_dynwind_end (); 
+    scm_dynwind_free (str);
+    scm_dynwind_end ();
 
     return string;
 }
@@ -1739,11 +1739,11 @@ gnc_commit_option(GNCOption *option)
             return;
         }
 
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         str = scm_to_locale_string (oops);
         message = g_strdup (str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
         name = gnc_option_name(option);
         section = gnc_option_section(option);
 
@@ -1948,11 +1948,11 @@ gnc_option_db_get_default_section(GNCOptionDB *odb)
     if (!scm_is_string(value))
         return NULL;
 
-    scm_dynwind_begin (0); 
+    scm_dynwind_begin (0);
     str = scm_to_locale_string (value);
     string = g_strdup (str);
-    scm_dynwind_free (str); 
-    scm_dynwind_end (); 
+    scm_dynwind_free (str);
+    scm_dynwind_end ();
     return string;
 }
 
@@ -2062,11 +2062,11 @@ gnc_option_db_lookup_string_option(GNCOptionDB *odb,
             {
                 char * str;
                 char * string;
-                scm_dynwind_begin (0); 
+                scm_dynwind_begin (0);
                 str = scm_to_locale_string (value);
                 string = g_strdup (str);
-                scm_dynwind_free (str); 
-                scm_dynwind_end (); 
+                scm_dynwind_free (str);
+                scm_dynwind_end ();
                 return string;
             }
         }
@@ -2811,11 +2811,11 @@ gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
         {
             char * tmp_str;
             char * string;
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             tmp_str = scm_to_locale_string (val);
             string = g_strdup (tmp_str);
-            scm_dynwind_free (tmp_str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (tmp_str);
+            scm_dynwind_end ();
             *custom = string;
         }
 

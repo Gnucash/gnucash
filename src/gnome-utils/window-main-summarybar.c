@@ -388,11 +388,11 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 
     root = gnc_get_current_root_account ();
     options.default_currency = xaccAccountGetCommodity(root);
-    if(options.default_currency == NULL)
-    {	
-      options.default_currency = gnc_default_currency ();
+    if (options.default_currency == NULL)
+    {
+        options.default_currency = gnc_default_currency ();
     }
-  
+
     options.euro = gnc_gconf_get_bool(GCONF_GENERAL, KEY_ENABLE_EURO, NULL);
     options.grand_total =
         gnc_gconf_get_bool(GCONF_SECTION, KEY_GRAND_TOTAL, NULL);

@@ -26,7 +26,7 @@ typedef struct
     gpointer data;
     gboolean called;
     gchar *msg;
-}TestStruct;
+} TestStruct;
 
 static TestStruct tdata;
 
@@ -360,7 +360,7 @@ get_random_string_in_array(const char* str_list[])
 
 void
 test_silent_logger(  const char *log_domain, GLogLevelFlags log_level,
-		    const gchar *msg, gpointer user_data )
+                     const gchar *msg, gpointer user_data )
 {
     //Silent, remember?
     return;
@@ -368,17 +368,18 @@ test_silent_logger(  const char *log_domain, GLogLevelFlags log_level,
 
 gboolean
 test_handle_faults( const char *log_domain, GLogLevelFlags log_level,
-		    const gchar *msg, gpointer user_data )
+                    const gchar *msg, gpointer user_data )
 {
     TestErrorStruct *tdata = (TestErrorStruct*)user_data;
-    if (tdata == NULL) {
-	g_printf("Recieved Error Message %s\n", msg);
-	return FALSE;
+    if (tdata == NULL)
+    {
+        g_printf("Recieved Error Message %s\n", msg);
+        return FALSE;
     }
     if (tdata->log_domain != NULL)
-	g_assert(g_strcmp0(tdata->log_domain, log_domain) == 0);
+        g_assert(g_strcmp0(tdata->log_domain, log_domain) == 0);
     if (tdata->log_level)
-	g_assert(log_level == tdata->log_level);
+        g_assert(log_level == tdata->log_level);
     tdata->msg = g_strdup(msg);
     return FALSE;
 }
@@ -412,7 +413,8 @@ test_reset_data( void )
 }
 
 void
-test_free( gpointer data ) {
+test_free( gpointer data )
+{
     if (!data) return;
     g_free(data);
 }

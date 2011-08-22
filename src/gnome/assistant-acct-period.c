@@ -86,7 +86,7 @@ typedef struct
 
 void     ap_assistant_window_destroy_cb (GtkObject *object, gpointer user_data);
 void     ap_assistant_prepare           (GtkAssistant  *assistant, GtkWidget *page,
-        				gpointer user_data);
+        gpointer user_data);
 void     ap_assistant_menu_prepare      (GtkAssistant *assistant, gpointer user_data);
 void	 ap_assistant_book_prepare 	(GtkAssistant *assistant, gpointer user_data);
 void	 ap_assistant_apply_prepare 	(GtkAssistant *assistant, gpointer user_data);
@@ -233,31 +233,31 @@ ap_assistant_close (GtkAssistant *assistant, gpointer user_data)
 
 /* =============================================================== */
 
-void 
+void
 ap_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
-        gpointer user_data)
+                      gpointer user_data)
 {
     AcctPeriodInfo *info = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
     switch (currentpage)
     {
-        case 1:
-            /* Current page is Menu page */
-             ap_assistant_menu_prepare(assistant, user_data);
-            break;
-        case 2:
-            /* Current page is Book page */
-             ap_assistant_book_prepare (assistant, user_data);
-            break;
-        case 3:
-            /* Current page is Apply page */
-             ap_assistant_apply_prepare (assistant, user_data);
-            break;
-        case 4:
-            /* Current page is Summary page */
-             ap_assistant_summary_prepare (assistant, user_data);
-            break;
+    case 1:
+        /* Current page is Menu page */
+        ap_assistant_menu_prepare(assistant, user_data);
+        break;
+    case 2:
+        /* Current page is Book page */
+        ap_assistant_book_prepare (assistant, user_data);
+        break;
+    case 3:
+        /* Current page is Apply page */
+        ap_assistant_apply_prepare (assistant, user_data);
+        break;
+    case 4:
+        /* Current page is Summary page */
+        ap_assistant_summary_prepare (assistant, user_data);
+        break;
     }
 }
 
@@ -298,9 +298,9 @@ ap_assistant_menu_prepare (GtkAssistant *assistant, gpointer user_data)
         period_begin = period_end;
         recurrenceListNextInstance(info->period, &period_begin, &period_end);
 
-    /* FIXME Check for valid period_end, not sure why it wont be!!! */
-    if (g_date_valid (&period_end) != TRUE)
-       break;
+        /* FIXME Check for valid period_end, not sure why it wont be!!! */
+        if (g_date_valid (&period_end) != TRUE)
+            break;
     }
 
     /* Find the date of the earliest transaction in the current book.
@@ -423,7 +423,7 @@ ap_assistant_menu_changed_cb (GtkWidget *widget, gpointer user_data)
 
 /* =============================================================== */
 
-gboolean 
+gboolean
 ap_validate_menu (GtkAssistant *assistant, gpointer user_data)
 {
     GDate date_now;
@@ -437,7 +437,7 @@ ap_validate_menu (GtkAssistant *assistant, gpointer user_data)
 
     if (0 <= g_date_compare(&info->prev_closing_date, &info->closing_date))
     {
-	/* Closing date must be greater than closing date of previous book */
+        /* Closing date must be greater than closing date of previous book */
         return FALSE;
     }
 
@@ -445,7 +445,7 @@ ap_validate_menu (GtkAssistant *assistant, gpointer user_data)
     g_date_set_time_t (&date_now, time(NULL));
     if (0 < g_date_compare(&info->closing_date, &date_now))
     {
-	/* Closing date must be in the future */
+        /* Closing date must be in the future */
         return FALSE;
     }
     return TRUE;
@@ -470,7 +470,7 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 {
     AcctPeriodInfo *info = user_data;
     GtkTextBuffer * buffer;
-    GtkTextIter startiter,enditer;
+    GtkTextIter startiter, enditer;
     gint len;
     QofBook *closed_book = NULL, *current_book;
     const char *btitle;
@@ -488,7 +488,7 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     gtk_text_buffer_get_iter_at_offset(buffer, &startiter, 0);
     gtk_text_buffer_get_iter_at_offset(buffer, &enditer, len);
 
-    bnotes = gtk_text_buffer_get_text(buffer,&startiter,&enditer ,0);
+    bnotes = gtk_text_buffer_get_text(buffer, &startiter, &enditer , 0);
     PINFO("Book title is - %s\n", btitle);
 
     timespecFromTime_t (&closing_date,
@@ -504,7 +504,7 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 
 
     /* FIXME Test for valid closing date, not sure why it wont be!!! */
-    if(g_date_valid(&info->closing_date) == TRUE)
+    if (g_date_valid(&info->closing_date) == TRUE)
     {
         /* If the next closing date is in the future, then we are done. */
         if (time(NULL) > gnc_timet_get_day_end_gdate (&info->closing_date))
@@ -512,7 +512,7 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
             /* Load up the GUI for the next closing period. */
             gnc_frequency_setup_recurrence(info->period_menu, NULL, &info->closing_date);
             /* Jump back to the Close Book page. */
-            gtk_assistant_set_current_page (GTK_ASSISTANT(info->window),1);
+            gtk_assistant_set_current_page (GTK_ASSISTANT(info->window), 1);
         }
     }
 }
@@ -549,7 +549,7 @@ ap_assistant_create (AcctPeriodInfo *info)
     GtkWidget *box;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder ,"assistant-acct-period.glade", "Account Period Assistant");
+    gnc_builder_add_from_file  (builder , "assistant-acct-period.glade", "Account Period Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "Account Period Assistant"));
     info->window = window;
 

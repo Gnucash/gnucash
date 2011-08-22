@@ -102,7 +102,7 @@ typedef struct
 } hierarchy_data;
 
 void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
-        hierarchy_data  *data);
+                 hierarchy_data  *data);
 void on_choose_account_categories_prepare (hierarchy_data  *data);
 void select_all_clicked (GtkButton       *button,
                          hierarchy_data  *data);
@@ -429,20 +429,20 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 }
 
 void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
-        hierarchy_data  *data)
+                 hierarchy_data  *data)
 {
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
     switch (gtk_assistant_get_current_page(assistant))
     {
-        case 2:
-            /* Current page is account selection */
-            on_choose_account_categories_prepare(data);
-            break;
-        case 3:
-            /* Current page is final account page */
-            on_final_account_prepare (data);
-            break;
+    case 2:
+        /* Current page is account selection */
+        on_choose_account_categories_prepare(data);
+        break;
+    case 3:
+        /* Current page is final account page */
+        on_final_account_prepare (data);
+        break;
     }
 
 }
@@ -1014,14 +1014,14 @@ on_finish (GtkAssistant  *gtkassistant,
     Account * root;
     ENTER (" ");
     com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(data->currency_selector));
-    
+
     if (data->our_account_tree)
     {
         gnc_account_foreach_descendant (data->our_account_tree,
                                         (AccountCb)starting_balance_helper,
                                         data);
-    
-      
+
+
     }
 
     // delete before we suspend GUI events, and then muck with the model,
@@ -1033,17 +1033,17 @@ on_finish (GtkAssistant  *gtkassistant,
     gnc_suspend_gui_refresh ();
 
     account_trees_merge(gnc_get_current_root_account(), data->our_account_tree);
-    
+
     delete_our_account_tree (data);
 
     when_completed = data->when_completed;
     g_free(data);
-    
+
     root = gnc_get_current_root_account();
     xaccAccountSetCommodity(root, com);
-    
+
     gnc_resume_gui_refresh ();
-    
+
     if (when_completed)
     {
         (*when_completed)();
@@ -1104,10 +1104,10 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     data->category_description = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "account_types_description"));
     data->account_list_added = FALSE;
 
-/* FIXME -- what is this ?
-    color = &GNOME_DRUID_PAGE_EDGE(start_page)->textbox_color;
-    gtk_widget_modify_base(GTK_WIDGET(data->category_description), GTK_STATE_INSENSITIVE, color);
-    */
+    /* FIXME -- what is this ?
+        color = &GNOME_DRUID_PAGE_EDGE(start_page)->textbox_color;
+        gtk_widget_modify_base(GTK_WIDGET(data->category_description), GTK_STATE_INSENSITIVE, color);
+        */
 
     /* Final Accounts Page */
     data->final_account_tree_container = GTK_WIDGET(gtk_builder_get_object (builder, "final_account_tree_box"));
@@ -1134,7 +1134,7 @@ gnc_ui_hierarchy_assistant(gboolean use_defaults)
 
 GtkWidget*
 gnc_ui_hierarchy_assistant_with_callback(gboolean use_defaults,
-                                     GncHierarchyAssistantFinishedCallback when_finished)
+        GncHierarchyAssistantFinishedCallback when_finished)
 {
     return gnc_create_hierarchy_assistant(use_defaults, when_finished);
 }

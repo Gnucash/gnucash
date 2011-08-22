@@ -151,10 +151,10 @@ void opening_equity_cb (GtkWidget *w, gpointer data);
 void gnc_account_name_changed_cb(GtkWidget *widget, gpointer data);
 void gnc_account_color_default_cb(GtkWidget *widget, gpointer data);
 void gnc_account_name_insert_text_cb (GtkWidget   *entry,
-                                                      const gchar *text,
-                                                      gint         length,
-                                                      gint        *position,
-                                                      gpointer     data);
+                                      const gchar *text,
+                                      gint         length,
+                                      gint        *position,
+                                      gpointer     data);
 
 /** Implementation *******************************************************/
 
@@ -421,17 +421,17 @@ gnc_ui_to_account(AccountWindow *aw)
     flag =
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->tax_related_button));
     if (xaccAccountGetTaxRelated (account) != flag)
-	xaccAccountSetTaxRelated (account, flag);
+        xaccAccountSetTaxRelated (account, flag);
 
     flag =
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->placeholder_button));
     if (xaccAccountGetPlaceholder (account) != flag)
-	xaccAccountSetPlaceholder (account, flag);
+        xaccAccountSetPlaceholder (account, flag);
 
     flag =
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->hidden_button));
     if (xaccAccountGetHidden (account) != flag)
-	xaccAccountSetHidden (account, flag);
+        xaccAccountSetHidden (account, flag);
 
     parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
 
@@ -1382,7 +1382,7 @@ gnc_account_window_create(AccountWindow *aw)
         gtk_notebook_get_nth_page (GTK_NOTEBOOK (aw->notebook), 1);
 
     aw->opening_equity_radio = GTK_WIDGET(gtk_builder_get_object (builder,
-                               "opening_equity_radio"));
+                                          "opening_equity_radio"));
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "transfer_account_scroll"));
     aw->transfer_account_scroll = box;

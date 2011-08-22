@@ -2114,7 +2114,7 @@ draw_date_format(GncPrintContext *context, const gchar *date_format,
 
 
 /* Print each of the items that in the description of a single check.  This
- * function uses helper functions to print text based and picture based items. 
+ * function uses helper functions to print text based and picture based items.
  */
 static void
 draw_page_items(GncPrintContext *context,
@@ -2237,7 +2237,7 @@ draw_page_items(GncPrintContext *context,
 }
 
 
-/* Print each of the items that in the description of a single check.  This 
+/* Print each of the items that in the description of a single check.  This
  * function uses helper functions to print text based and picture based items.
  */
 static void
@@ -2262,7 +2262,7 @@ draw_page_boxes(GncPrintContext *context,
 }
 
 
-/* Print an entire page based upon the layout in a check description file. This 
+/* Print an entire page based upon the layout in a check description file. This
  * function takes care of translating/rotating the page, calling the function to
  * print the grid pattern (if requested), and calls a helper function to print
  * all check items.

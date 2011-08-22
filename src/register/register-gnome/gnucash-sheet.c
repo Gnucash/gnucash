@@ -983,7 +983,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         *position = g_utf8_strlen(retval, -1);
 
     if (start_sel != end_sel)
-	gtk_editable_select_region(editable, start_sel, end_sel);
+        gtk_editable_select_region(editable, start_sel, end_sel);
 
     g_string_free (new_text_gs, TRUE);
     g_string_free (change_text_gs, TRUE);
@@ -2010,7 +2010,7 @@ gnucash_sheet_commit_cb (GtkIMContext *context, const gchar *str,
     gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
     gtk_editable_set_position (editable, tmp_pos);
     if (sel_start != sel_end)
-	gtk_editable_select_region (editable, sel_start, sel_end);
+        gtk_editable_select_region (editable, sel_start, sel_end);
 
     gnucash_sheet_im_context_reset_flags(sheet);
 }

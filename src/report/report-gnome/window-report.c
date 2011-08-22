@@ -162,11 +162,11 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
                 {
                     char * str;
 
-                    scm_dynwind_begin (0); 
+                    scm_dynwind_begin (0);
                     str = scm_to_locale_string (ptr);
                     title = g_strdup (str);
-                    scm_dynwind_free (str); 
-                    scm_dynwind_end (); 
+                    scm_dynwind_free (str);
+                    scm_dynwind_end ();
                 }
             }
         }

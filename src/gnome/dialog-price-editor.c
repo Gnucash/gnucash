@@ -411,19 +411,19 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
 
     /* namespace List Store - create here as we get an error if created in builder */
     {
-    GtkListStore  *store;
-    GtkTreeIter    iter;
-    gchar          string[] = "Dummy namespace Line";
+        GtkListStore  *store;
+        GtkTreeIter    iter;
+        gchar          string[] = "Dummy namespace Line";
 
-    store = gtk_list_store_new( 1, G_TYPE_STRING );
+        store = gtk_list_store_new( 1, G_TYPE_STRING );
 
-    gtk_list_store_append( store, &iter );
-    gtk_list_store_set( store, &iter, 0, string, -1 );
+        gtk_list_store_append( store, &iter );
+        gtk_list_store_set( store, &iter, 0, string, -1 );
 
-    gtk_combo_box_set_model( GTK_COMBO_BOX( pedit_dialog->namespace_cbe ),
-                         GTK_TREE_MODEL( store ) );
-    g_object_unref( G_OBJECT( store ) );
-    gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( pedit_dialog->namespace_cbe ), 0 );
+        gtk_combo_box_set_model( GTK_COMBO_BOX( pedit_dialog->namespace_cbe ),
+                                 GTK_TREE_MODEL( store ) );
+        g_object_unref( G_OBJECT( store ) );
+        gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( pedit_dialog->namespace_cbe ), 0 );
     }
 
     gtk_combo_box_remove_text(GTK_COMBO_BOX(pedit_dialog->namespace_cbe), 0);
@@ -436,19 +436,19 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
 
     /* commodity List Store - create here as we get an error if created in builder */
     {
-    GtkListStore  *store;
-    GtkTreeIter    iter;
-    gchar          string[] = "Dummy commodity Line";
+        GtkListStore  *store;
+        GtkTreeIter    iter;
+        gchar          string[] = "Dummy commodity Line";
 
-    store = gtk_list_store_new( 1, G_TYPE_STRING );
+        store = gtk_list_store_new( 1, G_TYPE_STRING );
 
-    gtk_list_store_append( store, &iter );
-    gtk_list_store_set( store, &iter, 0, string, -1 );
+        gtk_list_store_append( store, &iter );
+        gtk_list_store_set( store, &iter, 0, string, -1 );
 
-    gtk_combo_box_set_model( GTK_COMBO_BOX( pedit_dialog->commodity_cbe ),
-                         GTK_TREE_MODEL( store ) );
-    g_object_unref( G_OBJECT( store ) );
-    gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( pedit_dialog->commodity_cbe ), 0 );
+        gtk_combo_box_set_model( GTK_COMBO_BOX( pedit_dialog->commodity_cbe ),
+                                 GTK_TREE_MODEL( store ) );
+        g_object_unref( G_OBJECT( store ) );
+        gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( pedit_dialog->commodity_cbe ), 0 );
     }
 
     gtk_combo_box_remove_text(GTK_COMBO_BOX(pedit_dialog->commodity_cbe), 0);

@@ -293,7 +293,7 @@ void xaccAccountSetNotes (Account *account, const char *notes);
 void xaccAccountSetLastNum (Account *account, const char *num);
 /** Set the account's lot order policy */
 void gnc_account_set_policy (Account *account, GNCPolicy *policy);
-/** Returns the account's account type. 
+/** Returns the account's account type.
  *
  * This must not be confused with the \ref GType as returned by
  * gnc_account_get_type(), which is related to glib's type system. */
@@ -508,7 +508,8 @@ void xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 
 /** Get the account's commodity  */
-/*@ dependent @*/ gnc_commodity * xaccAccountGetCommodity (const Account *account);
+/*@ dependent @*/
+gnc_commodity * xaccAccountGetCommodity (const Account *account);
 
 /** Return the SCU for the account.  If a non-standard SCU has been
  *   set for the account, that is returned; else the default SCU for

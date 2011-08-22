@@ -959,23 +959,23 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     /* if there's no original query, make the narrow, add, delete buttons inaccessible */
     sw->new_rb = GTK_WIDGET(gtk_builder_get_object (builder, "new_search_radiobutton"));
-    g_signal_connect (sw->new_rb,"toggled",
-                                   G_CALLBACK (search_type_cb), sw);
+    g_signal_connect (sw->new_rb, "toggled",
+                      G_CALLBACK (search_type_cb), sw);
     sw->narrow_rb = GTK_WIDGET(gtk_builder_get_object (builder, "narrow_search_radiobutton"));
-    g_signal_connect (sw->narrow_rb,"toggled",
-                                   G_CALLBACK (search_type_cb), sw);
+    g_signal_connect (sw->narrow_rb, "toggled",
+                      G_CALLBACK (search_type_cb), sw);
     sw->add_rb = GTK_WIDGET(gtk_builder_get_object (builder, "add_search_radiobutton"));
-    g_signal_connect (sw->add_rb,"toggled",
-                                   G_CALLBACK (search_type_cb), sw);
+    g_signal_connect (sw->add_rb, "toggled",
+                      G_CALLBACK (search_type_cb), sw);
     sw->del_rb = GTK_WIDGET(gtk_builder_get_object (builder, "delete_search_radiobutton"));
-    g_signal_connect (sw->del_rb,"toggled",
-                                   G_CALLBACK (search_type_cb), sw);
+    g_signal_connect (sw->del_rb, "toggled",
+                      G_CALLBACK (search_type_cb), sw);
 
     active = gnc_gconf_get_bool(sw->gconf_section, KEY_ACTIVE_ONLY, NULL);
     sw->active_only_check = GTK_WIDGET(gtk_builder_get_object (builder, "active_only_check"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sw->active_only_check), active);
-    g_signal_connect (sw->active_only_check,"toggled",
-                                   G_CALLBACK (search_active_only_cb), sw);
+    g_signal_connect (sw->active_only_check, "toggled",
+                      G_CALLBACK (search_active_only_cb), sw);
 
 
     /* Figure out if we this object-type has an "active" parameter, and
@@ -986,30 +986,30 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     /* Deal with the find button */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "find_button"));
-    g_signal_connect (widget,"clicked",
-                                   G_CALLBACK (search_find_cb), sw);
+    g_signal_connect (widget, "clicked",
+                      G_CALLBACK (search_find_cb), sw);
 
     /* Deal with the cancel button */
     sw->cancel_button = GTK_WIDGET(gtk_builder_get_object (builder, "cancel_button"));
-    g_signal_connect (sw->cancel_button,"clicked",
-                                   G_CALLBACK (search_cancel_cb), sw);
+    g_signal_connect (sw->cancel_button, "clicked",
+                      G_CALLBACK (search_cancel_cb), sw);
 
     /* Deal with the close button */
     sw->close_button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
-    g_signal_connect (sw->close_button,"clicked",
-                                   G_CALLBACK (search_cancel_cb), sw);
+    g_signal_connect (sw->close_button, "clicked",
+                      G_CALLBACK (search_cancel_cb), sw);
 
     /* Deal with the new_item button */
     new_item_button = GTK_WIDGET(gtk_builder_get_object (builder, "new_item_button"));
     gtk_button_set_label (GTK_BUTTON(new_item_button),
                           type_label_to_new_button(type_label));
-    g_signal_connect (new_item_button,"clicked",
-                                   G_CALLBACK (search_new_item_cb), sw);
+    g_signal_connect (new_item_button, "clicked",
+                      G_CALLBACK (search_new_item_cb), sw);
 
     /* Deal with the help button */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "help_button"));
-    g_signal_connect (widget,"clicked",
-                                   G_CALLBACK (search_help_cb), sw);
+    g_signal_connect (widget, "clicked",
+                      G_CALLBACK (search_help_cb), sw);
 
     /* add the first criterion */
     gnc_search_dialog_add_criterion (sw);

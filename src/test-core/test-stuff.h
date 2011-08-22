@@ -53,9 +53,9 @@ Otherwise, only failures are printed out.
 #define do_test_args( result, title, format ) do_test_call( result, title, __FILE__, __LINE__, format, ... );
 */
 
-/** 
+/**
  * Use this macro to format informative test path output when using g_test_add.
- * Suite stands for tests' pack, while path for individual test name. 
+ * Suite stands for tests' pack, while path for individual test name.
 */
 
 #define GNC_TEST_ADD( suite, path, fixture, data, setup, test, teardown )\
@@ -65,9 +65,9 @@ Otherwise, only failures are printed out.
     g_free( testpath );\
 }
 
-/** 
+/**
  * Use this macro to format informative test path output when using g_test_add_func.
- * Suite stands for tests' pack, while path for individual test name. 
+ * Suite stands for tests' pack, while path for individual test name.
 */
 
 #define GNC_TEST_ADD_FUNC( suite, path, test )\
@@ -93,23 +93,23 @@ typedef struct
     gchar *msg;
 } TestErrorStruct;
 
- /**
-  * Pass this to g_test_log_set_fatal_handler(), setting user_data to
-  * a pointer to TestErrorStruct to intercept and handle expected
-  * error and warning messages. It will g_assert if an error is
-  * received which doesn't match the log_level, log_domain, and
-  * message in the struct (if they're set), or return FALSE to prevent
-  * the message from aborting. Be sure to g_free() the
-  * TestErrorData:msg after you're done testing it.
-  */
+/**
+ * Pass this to g_test_log_set_fatal_handler(), setting user_data to
+ * a pointer to TestErrorStruct to intercept and handle expected
+ * error and warning messages. It will g_assert if an error is
+ * received which doesn't match the log_level, log_domain, and
+ * message in the struct (if they're set), or return FALSE to prevent
+ * the message from aborting. Be sure to g_free() the
+ * TestErrorData:msg after you're done testing it.
+ */
 gboolean test_handle_faults( const char *log_domain, GLogLevelFlags log_level,
-			     const gchar *msg, gpointer user_data);
+                             const gchar *msg, gpointer user_data);
 /**
  * When you know you're going to get a useless log message, pass this
  * to g_log_set_default_handler to shut it up.
  */
 void test_silent_logger(  const char *log_domain, GLogLevelFlags log_level,
-			  const gchar *msg, gpointer user_data );
+                          const gchar *msg, gpointer user_data );
 /**
  * Call this from a mock object to indicate that the mock has in fact
  * been called

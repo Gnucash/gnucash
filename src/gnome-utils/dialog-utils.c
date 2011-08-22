@@ -1005,7 +1005,7 @@ gnc_builder_connect_full_func(GtkBuilder *builder,
                                  connect_object, flags);
     else
         g_signal_connect_data(signal_object, signal_name, func,
-                              user_data,NULL , flags);
+                              user_data, NULL , flags);
 }
 
 /* End of GtkBuilder utilities */

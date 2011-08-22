@@ -95,11 +95,11 @@ acct_tree_add_accts(SCM accts,
         {
             char * str;
 
-            scm_dynwind_begin (0); 
+            scm_dynwind_begin (0);
             str = scm_to_locale_string (SCM_CAR(current));
             compname = g_strdup(str);
-            scm_dynwind_free (str); 
-            scm_dynwind_end (); 
+            scm_dynwind_free (str);
+            scm_dynwind_end ();
         }
         else
             compname = g_strdup("");
@@ -340,11 +340,11 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
     {
         char * str;
 
-        scm_dynwind_begin (0); 
+        scm_dynwind_begin (0);
         str = scm_to_locale_string (orig_acct);
         wind->selected_name = g_strdup(str);
-        scm_dynwind_free (str); 
-        scm_dynwind_end (); 
+        scm_dynwind_free (str);
+        scm_dynwind_end ();
     }
 
     xml = gnc_glade_xml_new("qif.glade", "QIF Import Account Picker");

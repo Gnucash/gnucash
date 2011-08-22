@@ -232,8 +232,8 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
                 toclear_value = gnc_numeric_sub_fixed(toclear_value,
                                                       xaccSplitGetAmount(split));
                 PINFO("    Cleared: %s -> %s\n",
-                       gnc_numeric_to_string(xaccSplitGetAmount(split)),
-                       gnc_numeric_to_string(toclear_value));
+                      gnc_numeric_to_string(xaccSplitGetAmount(split)),
+                      gnc_numeric_to_string(toclear_value));
             }
             else
             {
