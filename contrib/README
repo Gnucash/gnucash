@@ -36,3 +36,10 @@ found on http://www.alice-dsl.net/gnuc2ooo/index.html .
 
 The file gnuc2ooo.py is installed by the extension manager in
 OpenOffice.org (Extras -> Extension Manager).
+
+
+The "xslt" directory
+--------------------
+
+The files in the "xslt" subdirectory are explained in their own README
+file, xslt/README.

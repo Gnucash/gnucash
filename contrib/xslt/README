@@ -1,0 +1,71 @@
+This directory contains XSLT stylesheets which may be useful for
+developers and contributors.
+
+Processing data with these stylesheets requires an XSLT transformer,
+such as xsltproc.
+
+gnc2xea.xsl
+-----------
+
+Converts a regular GnuCash file into an account hierarchy, which other
+files may then use as a template. Requires an uncompressed GnuCash
+file as input; if your file is compressed then simply pipe it through
+"gunzip" before passing it to your XSLT transformer.
+
+This stylesheet takes three parameters:
+
+* "title" - a short and descriptive title for your account hierarchy
+  that shows up in the Categories list in the New Account Hierarchy
+  Setup assistant.
+
+* "short-description" - a brief description for your account
+  hierarchy. Usually five words or less.
+
+* "long-description" - a long description potentially containing
+  background information on how the account hierarchy should be used,
+  who would most likely use it, etc.
+
+Failure to set either of these will result in the respective field
+being empty in the account hierarchy. The stylesheet generates a
+warning message if that is the case, and you can subsequently edit the
+title and descriptions in the resulting XML file.
+
+Invocation example (assuming you are using xsltproc on a compressed
+GnuCash file):
+
+gunzip -c <your gnucash file> | \
+       xsltproc --stringparam title "Spacecraft project" \
+                --stringparam short-description "Accounts useful for space exploration" \
+                --stringparam long-description "A set of accounts useful for space exploration. Implements NASA Standards FOO-1234-BAR and FOO-3456-BAZ for Earth Orbit Satellites, Earth Orbit Space Stations, Solar System Manned and Unmanned Spaceflight, and Interstellar Exploration." \
+                gnc2xea.xsl -
+
+
+acctlist.xsl
+------------
+
+A simple stylesheet that converts a GnuCash file or account hierarchy
+template into a comma-separated list of the following format:
+
+"Number","Name","Type"
+
+Where Number is the account number (empty if unset), Name is the
+account name, and Type is the account type (ASSET, LIABILITY, INCOME,
+EXPENSE etc.).
+
+This stylesheet takes two parameters:
+
+* "separator" - the separator character to use, by default a simple
+  comma (,).
+
+* "quote" - the quote character to use, by default double quotes (").
+
+This may be helpful if you are developing a new account hierarchy, are
+unsure of certain account types, and want to solicit someone's
+feedback without making them actually fire up GnuCash or load an
+account hierarchy.
+
+Invocation example (assuming you are using xsltproc on a compressed
+GnuCash file):
+
+gunzip -c <your gnucash file> | \
+       xsltproc -o /tmp/acctlist.csv acctlist.xsl -
