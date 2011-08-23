@@ -54,6 +54,8 @@
 #include "qofutil.h"
 #include "qofid.h"
 #include "guid.h"
+#include "qofquery.h"
+#include "qofquerycore.h"
 #include "gnc-module/gnc-module.h"
 #include "engine/gnc-engine.h"
 #include "Transaction.h"
@@ -92,6 +94,10 @@
 %include <qofbook.h>
 
 %include <qofid.h>
+
+%include <qofquery.h>
+
+%include <qofquerycore.h>
 
 /* SWIG doesn't like this macro, so redefine it to simply mean const */
 #define G_CONST_RETURN const
@@ -201,6 +207,7 @@
 %init %{
 qof_log_init();
 qof_init();
+qof_query_init();
 gnc_module_system_init();
 char * no_args[1] = { NULL };
 gnc_engine_init(0, no_args);

@@ -136,6 +136,28 @@ typedef char gchar;
     }
 }
 
+%typemap(in) GSList *, QofQueryParamList * {
+    $1 = NULL;
+    /* Check if is a list */
+    if (PyList_Check($input)) {
+        int i;
+        int size = PyList_Size($input);
+        for (i = size-1; i >= 0; i--) {
+            PyObject *o = PyList_GetItem($input, i);
+            if (PyString_Check(o)) {
+                $1 = g_slist_prepend($1,PyString_AsString(PyList_GetItem($input, i)));
+            } else {
+                PyErr_SetString(PyExc_TypeError, "list must contain strings");
+                g_slist_free($1);
+                return NULL;
+            }
+        }
+    } else {
+        PyErr_SetString(PyExc_TypeError, "not a list");
+        return NULL;
+    }
+}
+
 %typemap(out) GList *, CommodityList *, SplitList *, AccountList *, LotList *,
     MonetaryList *, PriceList *, EntryList * {
     guint i;
@@ -158,6 +180,8 @@ typedef char gchar;
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCLot, 0));
         else if (GNC_IS_PRICE(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCPrice, 0));
+        else if (GNC_IS_INVOICE(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncInvoice, 0));
         else if (GNC_IS_ENTRY(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEntry, 0));
         else if ($1_descriptor == $descriptor(MonetaryList *))

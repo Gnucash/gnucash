@@ -35,7 +35,8 @@ gnucash-env: gnucash-env.in ${top_builddir}/config.status Makefile
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
             -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
             -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
-            -e 's#@-GNC_SCRIPT_OVERRIDE_DIR-@#${gncoverridedir}#g'
+            -e 's#@-GNC_SCRIPT_OVERRIDE_DIR-@#${gncoverridedir}#g' \
+            -e 's#@-GNC_PYTHON_DIR-@#${pythondir}#g'
 	mv $@.tmp $@
 	chmod u+x $@
 CLEANFILES += gnucash-env

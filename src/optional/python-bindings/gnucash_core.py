@@ -655,3 +655,15 @@ guid_dict = {
             }
 methods_return_instance(GUID, guid_dict)
 
+#Query
+from gnucash_core_c import \
+    QOF_QUERY_AND, \
+    QOF_QUERY_OR, \
+    QOF_QUERY_NAND, \
+    QOF_QUERY_NOR, \
+    QOF_QUERY_XOR
+
+class Query(GnuCashCoreClass):
+    pass
+
+Query.add_constructor_and_methods_with_prefix('qof_query_', 'create')
