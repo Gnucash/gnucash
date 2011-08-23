@@ -39,6 +39,7 @@
 #include "gnc-lot.h"
 #include "Scrub3.h"
 #include "Transaction.h"
+#include "gncInvoice.h"
 
 #include "dialog-utils.h"
 #include "dialog-lot-viewer.h"
@@ -51,7 +52,8 @@
 
 enum lot_cols
 {
-    LOT_COL_OPEN = 0,
+    LOT_COL_TYPE = 0,
+    LOT_COL_OPEN,
     LOT_COL_CLOSE,
     LOT_COL_TITLE,
     LOT_COL_BALN,
@@ -98,14 +100,20 @@ struct _GNCLotViewer
     GtkListStore  * lot_store;
     GtkTextView   * lot_notes;
     GtkEntry      * title_entry;
-    GtkTreeView   * split_view;
-    GtkListStore  * split_store;
+    GtkTreeView   * split_in_lot_view;
+    GtkListStore  * split_in_lot_store;
+    GtkTreeView   * split_free_view;
+    GtkListStore  * split_free_store;
+    GtkButton     * add_split_to_lot_button;
+    GtkButton     * remove_split_from_lot_button;
+    GtkToggleButton * only_show_open_lots_checkbutton;
 
     Account       * account;
     GNCLot        * selected_lot;
 };
 
 static void gnc_lot_viewer_fill (GNCLotViewer *lv);
+static void gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_list);
 
 /* ======================================================================== */
 /* Callback prototypes */
@@ -167,108 +175,55 @@ get_realized_gains (GNCLot *lot, gnc_commodity *currency)
 
 
 /* ======================================================================== */
-/* Populate the split list view based on the currently selected lot */
+/* Populate the lot split list view based on the currently selected lot */
 
 static void
-lv_show_splits (GNCLotViewer *lv)
+lv_show_splits_in_lot (GNCLotViewer *lv)
 {
     GNCLot *lot = lv->selected_lot;
-    SplitList *split_list, *node;
-    gnc_numeric baln = gnc_numeric_zero();
-    GtkListStore *store;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GtkTreeSelection *selection;
+    SplitList *split_list;
 
     if (NULL == lot) return;
 
-    gtk_list_store_clear (lv->split_store);
     split_list = gnc_lot_get_split_list (lot);
-    for (node = split_list; node; node = node->next)
-    {
-        Split *split = node->data;
-        char dbuff[MAX_DATE_LENGTH];
-        char amtbuff[200];
-        char valbuff[200];
-        char gainbuff[200];
-        char balnbuff[200];
-        gnc_commodity *currency;
-        Transaction *trans = xaccSplitGetParent (split);
-        time_t date = xaccTransGetDate (trans);
-        gnc_numeric amnt, valu, gains;
-        int row;
-
-        /* Do not show gains splits */
-        if (gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
-
-        store = lv->split_store;
-        gtk_list_store_append(store, &iter);
-
-        /* Date */
-        qof_print_date_buff (dbuff, MAX_DATE_LENGTH, date);
-        gtk_list_store_set (store, &iter, SPLIT_COL_DATE, dbuff, -1);
-
-        /* Num */
-        gtk_list_store_set (store, &iter, SPLIT_COL_NUM, xaccTransGetNum (trans), -1);
-
-        /* Description */
-        gtk_list_store_set (store, &iter, SPLIT_COL_DESCRIPTION, xaccTransGetDescription (trans), -1);
-
-        /* Amount */
-        amnt = xaccSplitGetAmount (split);
-        xaccSPrintAmount (amtbuff, amnt,
-                          gnc_account_print_info (lv->account, TRUE));
-        gtk_list_store_set (store, &iter, SPLIT_COL_AMOUNT, amtbuff, -1);
-
-        /* Value. Invert the sign on the first, opening entry. */
-        currency = xaccTransGetCurrency (trans);
-        valu = xaccSplitGetValue (split);
-        if (node != split_list)
-        {
-            valu = gnc_numeric_neg (valu);
-        }
-        xaccSPrintAmount (valbuff, valu,
-                          gnc_commodity_print_info (currency, TRUE));
-        gtk_list_store_set (store, &iter, SPLIT_COL_VALUE, valbuff, -1);
-
-        /* Gains. Blank if none. */
-        gains = xaccSplitGetCapGains (split);
-        if (gnc_numeric_zero_p(gains))
-        {
-            gainbuff[0] = 0;
-        }
-        else
-        {
-            xaccSPrintAmount (gainbuff, gains,
-                              gnc_commodity_print_info (currency, TRUE));
-        }
-        gtk_list_store_set (store, &iter, SPLIT_COL_GAIN_LOSS, gainbuff, -1);
-
-        /* Balance of Gains */
-        baln = gnc_numeric_add_fixed (baln, amnt);
-        if (gnc_numeric_zero_p(baln))
-        {
-            balnbuff[0] = 0;
-        }
-        else
-        {
-            xaccSPrintAmount (balnbuff, baln,
-                              gnc_account_print_info (lv->account, TRUE));
-        }
-        gtk_list_store_set (store, &iter, SPLIT_COL_BALANCE, balnbuff, -1);
-
-        /* Self-reference */
-        gtk_list_store_set(store, &iter, SPLIT_COL_PNTR, split, -1);
-    }
+    gnc_split_viewer_fill(lv,lv->split_in_lot_store,split_list);
 }
 
 /* ======================================================================== */
 /* Remove all splits from the split list view */
 
 static void
-lv_clear_splits (GNCLotViewer *lv)
+lv_clear_splits_in_lot (GNCLotViewer *lv)
 {
-    gtk_list_store_clear (lv->split_store);
+    gtk_list_store_clear (lv->split_in_lot_store);
+}
+
+/* ======================================================================== */
+/* Populate the free split list view */
+
+static void
+lv_show_splits_free (GNCLotViewer *lv)
+{
+    SplitList *split_list, *node;
+    SplitList *filtered_list = NULL;
+
+    /* cleanup */
+    gtk_list_store_clear (lv->split_free_store);
+
+    /* get splits */
+    split_list = xaccAccountGetSplitList(lv->account);
+
+    /* filter splits */
+    for (node = split_list; node; node = node->next)
+    {
+        Split *split = node->data;
+        if (NULL == xaccSplitGetLot(split)) {
+          filtered_list = g_list_append(filtered_list,split);
+        }
+    }
+
+    /* display list */
+    gnc_split_viewer_fill(lv,lv->split_free_store,filtered_list);
 }
 
 /* ======================================================================== */
@@ -316,7 +271,7 @@ lv_unset_lot (GNCLotViewer *lv)
     gtk_text_view_set_editable (lv->lot_notes, FALSE);
 
     /* Erase the mini-view area */
-    lv_clear_splits (lv);
+    lv_clear_splits_in_lot (lv);
 
 #ifdef LOTS_READY_FOR_SHOWTIME
     gtk_widget_set_sensitive(GTK_WIDGET(lv->regview_button), FALSE);
@@ -349,7 +304,7 @@ lv_select_row (GNCLotViewer *lv,
 
     /* Don't set until end, to avoid recursion in gtkentry "changed" cb. */
     lv->selected_lot = lot;
-    lv_show_splits (lv);
+    lv_show_splits_in_lot (lv);
 
 #ifdef LOTS_READY_FOR_SHOWTIME
     gtk_widget_set_sensitive(GTK_WIDGET(lv->regview_button), TRUE);
@@ -393,6 +348,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
 
     for (node = lot_list; node; node = node->next)
     {
+        char type_buff[200];
         char obuff[MAX_DATE_LENGTH];
         char cbuff[MAX_DATE_LENGTH];
         char baln_buff[200];
@@ -405,8 +361,22 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
         gnc_commodity *currency = find_first_currency (lot);
         gnc_numeric gains_baln = get_realized_gains (lot, currency);
 
+        /* Skip closed lots when only open should be shown */
+        if (TRUE == gtk_toggle_button_get_active(lv->only_show_open_lots_checkbutton) && gnc_lot_is_closed (lot))
+        {
+            continue;
+        }
+
         store = lv->lot_store;
         gtk_list_store_append(store, &iter);
+
+        /* Part of invoice */
+        type_buff[0] = '\0';
+        if ( NULL != gncInvoiceGetInvoiceFromLot(lot) )
+        {
+                snprintf(type_buff,200,"I");
+        }
+        gtk_list_store_set(store, &iter, LOT_COL_TYPE, type_buff, -1);
 
         /* Opening date */
         qof_print_date_buff (obuff, MAX_DATE_LENGTH, open_date);
@@ -471,13 +441,164 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
 }
 
 /* ======================================================================== */
+/* Get selected split in a split list view */
+
+static Split *
+lv_get_selected_split (GNCLotViewer *lv, GtkTreeView *view)
+{
+    Split *split = NULL;
+    GtkTreeModel *model;
+    GtkTreeSelection *selection;
+    GtkTreeIter iter;
+
+    selection = gtk_tree_view_get_selection(view);
+    if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
+        gtk_tree_model_get(model, &iter, SPLIT_COL_PNTR, &split, -1);
+    }
+
+    return split;
+}
+
+/* ======================================================================== */
+/* Check if split is main invoice split in lot */
+
+static gboolean
+lv_can_remove_split_from_lot(Split * split, GNCLot * lot)
+{
+    GncInvoice *lot_invoice, *txn_invoice;
+    Transaction *txn;
+
+    lot_invoice = gncInvoiceGetInvoiceFromLot(lot);
+    txn = xaccSplitGetParent(split);
+    txn_invoice = gncInvoiceGetInvoiceFromTxn(txn);
+    if ( lot_invoice != NULL && lot_invoice == txn_invoice )
+        return FALSE;
+
+    return TRUE;
+}
+
+/* ======================================================================== */
+/* Populate a split list view */
+
+static void
+gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_list)
+{
+    SplitList *node;
+    GtkTreeIter iter;
+
+    gnc_numeric baln = gnc_numeric_zero();
+    gtk_list_store_clear (lv->split_in_lot_store);
+    for (node = split_list; node; node = node->next)
+    {
+        Split *split = node->data;
+        char dbuff[MAX_DATE_LENGTH];
+        char amtbuff[200];
+        char valbuff[200];
+        char gainbuff[200];
+        char balnbuff[200];
+        gnc_commodity *currency;
+        Transaction *trans = xaccSplitGetParent (split);
+        time_t date = xaccTransGetDate (trans);
+        gnc_numeric amnt, valu, gains;
+        int row;
+
+        /* Do not show gains splits */
+        if (gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
+
+        gtk_list_store_append(store, &iter);
+
+        /* Date */
+        qof_print_date_buff (dbuff, MAX_DATE_LENGTH, date);
+        gtk_list_store_set (store, &iter, SPLIT_COL_DATE, dbuff, -1);
+
+        /* Num */
+        gtk_list_store_set (store, &iter, SPLIT_COL_NUM, xaccTransGetNum (trans), -1);
+
+        /* Description */
+        gtk_list_store_set (store, &iter, SPLIT_COL_DESCRIPTION, xaccTransGetDescription (trans), -1);
+
+        /* Amount */
+        amnt = xaccSplitGetAmount (split);
+        xaccSPrintAmount (amtbuff, amnt,
+                          gnc_account_print_info (lv->account, TRUE));
+        gtk_list_store_set (store, &iter, SPLIT_COL_AMOUNT, amtbuff, -1);
+
+        /* Value. Invert the sign on the first, opening entry. */
+        currency = xaccTransGetCurrency (trans);
+        valu = xaccSplitGetValue (split);
+        if (node != split_list)
+        {
+            valu = gnc_numeric_neg (valu);
+        }
+        xaccSPrintAmount (valbuff, valu,
+                          gnc_commodity_print_info (currency, TRUE));
+        gtk_list_store_set (store, &iter, SPLIT_COL_VALUE, valbuff, -1);
+
+        /* Gains. Blank if none. */
+        gains = xaccSplitGetCapGains (split);
+        if (gnc_numeric_zero_p(gains))
+        {
+            gainbuff[0] = 0;
+        }
+        else
+        {
+            xaccSPrintAmount (gainbuff, gains,
+                              gnc_commodity_print_info (currency, TRUE));
+        }
+        gtk_list_store_set (store, &iter, SPLIT_COL_GAIN_LOSS, gainbuff, -1);
+
+        /* Balance of Gains */
+        baln = gnc_numeric_add_fixed (baln, amnt);
+        if (gnc_numeric_zero_p(baln))
+        {
+            balnbuff[0] = 0;
+        }
+        else
+        {
+            xaccSPrintAmount (balnbuff, baln,
+                              gnc_account_print_info (lv->account, TRUE));
+        }
+        gtk_list_store_set (store, &iter, SPLIT_COL_BALANCE, balnbuff, -1);
+
+        /* Self-reference */
+        gtk_list_store_set(store, &iter, SPLIT_COL_PNTR, split, -1);
+    }
+}
+
+/* ======================================================================== */
+
+static void
+lv_update_split_buttons(GNCLotViewer *lv)
+{
+    Split * split;
+    gtk_widget_set_sensitive(GTK_WIDGET(lv->add_split_to_lot_button),FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lv->remove_split_from_lot_button),FALSE);
+    if (NULL != lv->selected_lot) {
+        if (NULL != lv_get_selected_split(lv,lv->split_free_view) ) {
+            gtk_widget_set_sensitive(GTK_WIDGET(lv->add_split_to_lot_button),TRUE);
+        }
+        split = lv_get_selected_split(lv,lv->split_in_lot_view);
+        if (NULL != split && TRUE == lv_can_remove_split_from_lot(split,lv->selected_lot)) {
+            gtk_widget_set_sensitive(GTK_WIDGET(lv->remove_split_from_lot_button),TRUE);
+        }
+    }
+}
+
+static void lv_refresh(GNCLotViewer * lv)
+{
+    gnc_lot_viewer_fill (lv);
+    lv_show_splits_free (lv);
+    lv_show_splits_in_lot (lv);
+}
+
+/* ======================================================================== */
 
 static void
 lv_refresh_handler (GHashTable *changes, gpointer user_data)
 {
     GNCLotViewer *lv = user_data;
-    gnc_lot_viewer_fill (lv);
-    lv_show_splits (lv);
+    lv_refresh (lv);
 }
 
 static void
@@ -533,6 +654,7 @@ lv_selection_changed_cb (GtkTreeSelection *selection,
     {
         lv_unselect_row(lv);
     }
+    lv_update_split_buttons(lv);
 }
 
 /* ======================================================================== */
@@ -547,6 +669,55 @@ lv_window_destroy_cb (GtkObject *object, gpointer user_data)
     g_free (lv);
 }
 
+static void
+lv_split_selection_changed_cb (GtkTreeSelection *selection,
+                               GNCLotViewer *lv)
+{
+    lv_update_split_buttons(lv);
+}
+
+static void
+lv_add_split_to_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
+{
+    Split *split;
+
+    if ( NULL == lv->selected_lot ) return;
+    split = lv_get_selected_split(lv,lv->split_free_view);
+    if ( NULL == split ) return;
+
+    xaccAccountBeginEdit(lv->account);
+    gnc_lot_add_split(lv->selected_lot, split);
+    xaccAccountCommitEdit(lv->account);
+
+    lv_refresh(lv);
+}
+
+static void
+lv_remove_split_from_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
+{
+    GncInvoice *lot_invoice, *txn_invoice;
+    Transaction *txn;
+    Split *split;
+
+    if ( NULL == lv->selected_lot ) return;
+    split = lv_get_selected_split(lv,lv->split_in_lot_view);
+    if ( NULL == split ) return;
+
+    if ( FALSE == lv_can_remove_split_from_lot(split,lv->selected_lot) )
+        return;
+
+    xaccAccountBeginEdit(lv->account);
+    gnc_lot_remove_split(lv->selected_lot, split);
+    xaccAccountCommitEdit(lv->account);
+
+    lv_refresh(lv);
+}
+
+static void
+lv_only_show_open_lots_changed_cb (GtkWidget *widget, GNCLotViewer * lv)
+{
+    lv_refresh(lv);
+}
 
 /* ======================================================================== */
 /* Divider moved */
@@ -598,6 +769,9 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
     case RESPONSE_DELETE:
         if (NULL == lot)
             return;
+        /* Prevent broken invoices */
+        if (NULL != gncInvoiceGetInvoiceFromLot(lot))
+            return;
         xaccAccountRemoveLot (gnc_lot_get_account(lot), lot);
         gnc_lot_destroy (lot);
         lv_unset_lot (lv);
@@ -609,7 +783,7 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
             return;
         xaccScrubLot (lot);
         gnc_lot_viewer_fill (lv);
-        lv_show_splits (lv);
+        lv_show_splits_in_lot (lv);
         break;
 
     case RESPONSE_SCRUB_ACCOUNT:
@@ -617,7 +791,8 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
         xaccAccountScrubLots (lv->account);
         gnc_resume_gui_refresh ();
         gnc_lot_viewer_fill (lv);
-        lv_show_splits (lv);
+        lv_show_splits_free (lv);
+        lv_show_splits_in_lot (lv);
         break;
 
     case RESPONSE_NEW_LOT:
@@ -644,100 +819,142 @@ lv_init_lot_view (GNCLotViewer *lv)
     view = lv->lot_view;
     store = gtk_list_store_new(NUM_LOT_COLS, G_TYPE_STRING, G_TYPE_STRING,
                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                               G_TYPE_POINTER);
+                               G_TYPE_STRING, G_TYPE_POINTER);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
     lv->lot_store = store;
 
     /* Set up the columns */
     renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Type"), renderer,
+            "text", LOT_COL_TYPE, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_TYPE);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Opened"), renderer,
              "text", LOT_COL_OPEN, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_OPEN);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Closed"), renderer,
              "text", LOT_COL_CLOSE, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_CLOSE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Title"), renderer,
              "text", LOT_COL_TITLE, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_TITLE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
              "text", LOT_COL_BALN, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_BALN);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Gains"), renderer,
              "text", LOT_COL_GAINS, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_GAINS);
     gtk_tree_view_append_column(view, column);
 
-    /* Set up the selection callbacks */
+    /* Set up signals */
     selection =  gtk_tree_view_get_selection(view);
     g_signal_connect(selection, "changed",
                      G_CALLBACK(lv_selection_changed_cb), lv);
+    g_signal_connect(lv->only_show_open_lots_checkbutton, "toggled",
+                     G_CALLBACK(lv_only_show_open_lots_changed_cb), lv);
+
 }
 
 /* ======================================================================== */
 
-static void
-lv_init_split_view (GNCLotViewer *lv)
+static GtkListStore *
+lv_init_split_view (GNCLotViewer *lv, GtkTreeView *view)
 {
-    GtkTreeView *view;
     GtkListStore *store;
     GtkTreeViewColumn *column;
     GtkTreeSelection *selection;
     GtkCellRenderer *renderer;
 
-    g_return_if_fail(GTK_IS_TREE_VIEW(lv->split_view));
+    g_return_val_if_fail(GTK_IS_TREE_VIEW(view),NULL);
 
-    view = lv->split_view;
     store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
                                G_TYPE_STRING, G_TYPE_STRING,
                                G_TYPE_POINTER);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
-    lv->split_store = store;
 
     /* Set up the columns */
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
              "text", SPLIT_COL_DATE, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_DATE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Num"), renderer,
              "text", SPLIT_COL_NUM, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_NUM);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Description"), renderer,
              "text", SPLIT_COL_DESCRIPTION, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_DESCRIPTION);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Amount"), renderer,
              "text", SPLIT_COL_AMOUNT, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_AMOUNT);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Value"), renderer,
              "text", SPLIT_COL_VALUE, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_VALUE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Gain/Loss"), renderer,
              "text", SPLIT_COL_GAIN_LOSS, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_GAIN_LOSS);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
              "text", SPLIT_COL_BALANCE, NULL);
+    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_BALANCE);
     gtk_tree_view_append_column(view, column);
+
+    /* Set up the selection callbacks */
+    selection =  gtk_tree_view_get_selection(view);
+    g_signal_connect(selection, "changed",
+            G_CALLBACK(lv_split_selection_changed_cb), lv);
+
+    return store;
+}
+
+static void
+lv_init_split_views (GNCLotViewer *lv)
+{
+    lv->split_free_store = lv_init_split_view (lv,lv->split_free_view);
+    lv->split_in_lot_store = lv_init_split_view (lv,lv->split_in_lot_view);
+}
+
+static void
+lv_init_split_buttons (GNCLotViewer *lv)
+{
+    /* Set up the add/remove callbacks */
+    g_signal_connect(G_OBJECT(lv->add_split_to_lot_button), "clicked",
+                     G_CALLBACK(lv_add_split_to_lot_cb), lv);
+    g_signal_connect(G_OBJECT(lv->remove_split_from_lot_button), "clicked",
+                     G_CALLBACK(lv_remove_split_from_lot_cb), lv);
 }
 
 /* ======================================================================== */
@@ -748,7 +965,6 @@ lv_create (GNCLotViewer *lv)
     gchar *win_title;
     gint position;
     GtkBuilder *builder;
-
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-lot-viewer.glade", "Lot Viewer Window");
@@ -768,12 +984,18 @@ lv_create (GNCLotViewer *lv)
     lv->new_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "new lot button"));
 
     lv->lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "lot view"));
+    lv->only_show_open_lots_checkbutton = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "only show open lots checkbutton"));
     lv_init_lot_view(lv);
     lv->lot_notes = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "lot notes text"));
     lv->title_entry = GTK_ENTRY (gtk_builder_get_object (builder, "lot title entry"));
 
-    lv->split_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split view"));
-    lv_init_split_view(lv);
+    lv->split_in_lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split in lot view"));
+    lv->split_free_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split free view"));
+    lv_init_split_views(lv);
+
+    lv->add_split_to_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "add split to lot button"));
+    lv->remove_split_from_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "remove split from lot button"));
+    lv_init_split_buttons(lv);
 
     lv->lot_vpaned = GTK_PANED (gtk_builder_get_object (builder, "lot vpaned"));
     position = gnc_gconf_get_int(GCONF_SECTION, GCONF_KEY_VPOSITION, NULL);
@@ -790,6 +1012,8 @@ lv_create (GNCLotViewer *lv)
     /* Setup signals */
     gtk_builder_connect_signals(builder, lv);
     g_object_unref(G_OBJECT(builder));
+
+    lv_update_split_buttons(lv);
 
     gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(lv->window));
 }
@@ -808,6 +1032,7 @@ gnc_lot_viewer_dialog (Account *account)
     lv->account = account;
     lv_create (lv);
     gnc_lot_viewer_fill (lv);
+    lv_show_splits_free (lv);
 
     component_id = gnc_register_gui_component (LOT_VIEWER_CM_CLASS,
                    lv_refresh_handler,

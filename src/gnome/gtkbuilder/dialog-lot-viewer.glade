@@ -13,12 +13,10 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <object class="GtkVPaned" id="lot vpaned">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="orientation">vertical</property>
             <property name="position">200</property>
             <signal name="notify" handler="lv_paned_notify_cb"/>
             <child>
@@ -119,7 +117,7 @@
                 <child>
                   <object class="GtkTable" id="table2">
                     <property name="visible">True</property>
-                    <property name="n_rows">2</property>
+                    <property name="n_rows">3</property>
                     <child>
                       <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
@@ -153,6 +151,20 @@
                         <property name="x_padding">12</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkCheckButton" id="only show open lots checkbutton">
+                        <property name="label" translatable="yes">Show only open lots</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="resize">True</property>
@@ -166,44 +178,165 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTable" id="table3">
+              <object class="GtkHPaned" id="split hpaned">
                 <property name="visible">True</property>
-                <property name="n_rows">2</property>
+                <property name="can_focus">True</property>
                 <child>
-                  <object class="GtkLabel" id="label10">
+                  <object class="GtkTable" id="table3">
                     <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;_Mini-Viewer&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow4">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hscrollbar_policy">automatic</property>
-                    <property name="vscrollbar_policy">automatic</property>
-                    <property name="shadow_type">in</property>
+                    <property name="n_rows">2</property>
                     <child>
-                      <object class="GtkTreeView" id="split view">
+                      <object class="GtkLabel" id="label10">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Splits _free&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow4">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="rules_hint">True</property>
-                        <property name="enable_search">False</property>
+                        <property name="hscrollbar_policy">automatic</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="split free view">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="rules_hint">True</property>
+                            <property name="enable_search">False</property>
+                          </object>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                        <property name="y_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                        <property name="x_padding">12</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                    <property name="y_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                    <property name="x_padding">12</property>
+                    <property name="resize">True</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="hbox1">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkVBox" id="vbox1">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment4">
+                            <property name="visible">True</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="add split to lot button">
+                            <property name="label" translatable="yes">&gt;&gt;</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="padding">5</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="remove split from lot button">
+                            <property name="label" translatable="yes">&lt;&lt;</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="alignment5">
+                            <property name="visible">True</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="padding">5</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkTable" id="table4">
+                        <property name="visible">True</property>
+                        <property name="n_rows">2</property>
+                        <child>
+                          <object class="GtkLabel" id="label1">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Splits _in lot&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkScrolledWindow" id="scrolledwindow1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="vscrollbar_policy">automatic</property>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="split in lot view">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="rules_hint">True</property>
+                                <property name="enable_search">False</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="resize">True</property>
+                    <property name="shrink">True</property>
                   </packing>
                 </child>
               </object>
