@@ -23,6 +23,7 @@ src/app-utils/gnc-helpers.c
 src/app-utils/gnc-help-utils.c
 src/app-utils/gncmod-app-utils.c
 src/app-utils/gnc-sx-instance-model.c
+src/app-utils/gnc-ui-balances.c
 src/app-utils/gnc-ui-util.c
 src/app-utils/guile-util.c
 src/app-utils/option-util.c

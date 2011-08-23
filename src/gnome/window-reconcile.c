@@ -47,6 +47,7 @@
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-ui.h"
+#include "gnc-ui-balances.h"
 #include "guile-util.h"
 #include "reconcile-list.h"
 #include "window-reconcile.h"

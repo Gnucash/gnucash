@@ -36,6 +36,7 @@
 #include "gnc-engine.h"
 #include "gnc-event.h"
 #include "gnc-gobject-utils.h"
+#include "gnc-ui-balances.h"
 #include "gnc-ui-util.h"
 
 #define TREE_MODEL_OWNER_CM_CLASS "tree-model-owner"
