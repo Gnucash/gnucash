@@ -317,22 +317,23 @@ gnc_account_sel_find_account (GtkTreeModel *model,
 void
 gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct, gboolean set_default_acct )
 {
-    GtkEntry *entry;
     gas_find_data data;
 
     if (set_default_acct)
     {
         gtk_combo_box_set_active(GTK_COMBO_BOX(gas->combo), 0);
+        if ( !acct )
+            return;
     }
     else
     {
         gtk_combo_box_set_active( GTK_COMBO_BOX(gas->combo), -1 );
-    }
-    if ( acct == NULL )
-    {
-        entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(gas->combo)));
-        gtk_editable_delete_text(GTK_EDITABLE(entry), 0, -1);
-        return;
+        if ( !acct )
+        {
+            GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(gas->combo)));
+            gtk_editable_delete_text(GTK_EDITABLE(entry),0,-1);
+            return;
+        }
     }
     data.gas = gas;
     data.acct = acct;
