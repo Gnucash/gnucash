@@ -291,8 +291,3 @@ gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
 /** @} */
 /** @} */
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

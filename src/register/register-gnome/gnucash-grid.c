@@ -784,8 +784,3 @@ gnucash_grid_get_type (void)
 }
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

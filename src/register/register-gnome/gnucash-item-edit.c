@@ -1614,8 +1614,3 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
 }
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

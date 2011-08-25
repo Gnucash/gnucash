@@ -56,9 +56,3 @@ gpointer gnc_commodity_edit_new_select (gpointer arg, gpointer ptr,
     mode = mode_ptr ? *mode_ptr : DIAG_COMM_ALL;
     return gnc_ui_select_commodity_modal(comm, toplevel, mode);
 }
-
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

@@ -334,8 +334,3 @@ gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWidget *label
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), gsl->entry);
 }
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

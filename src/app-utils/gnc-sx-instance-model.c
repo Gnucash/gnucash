@@ -1749,10 +1749,3 @@ GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_e
     return result_map;
 }
 
-
-// Local Variables:
-// mode: c
-// indent-tabs-mode: nil
-// c-block-comment-prefix: "* "
-// eval: (c-add-style "gnc" '("k&r" (c-basic-offset . 4) (c-offsets-alist (case-label . +))) t)
-// End:

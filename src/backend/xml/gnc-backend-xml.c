@@ -1324,10 +1324,3 @@ gnc_module_init_backend_xml(void)
 }
 
 /* ========================== END OF FILE ===================== */
-
-/* For emacs we set some variables concerning indentation:
- * Local Variables: *
- * indent-tabs-mode:nil *
- * c-basic-offset:4 *
- * tab-width:8 *
- * End: */

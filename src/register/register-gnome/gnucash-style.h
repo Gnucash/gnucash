@@ -129,8 +129,3 @@ void gnucash_sheet_set_header_widths (GnucashSheet *sheet,
 #endif
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

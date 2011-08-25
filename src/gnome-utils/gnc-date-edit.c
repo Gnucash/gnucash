@@ -1258,8 +1258,3 @@ gnc_date_make_mnemonic_target (GNCDateEdit *gde, GtkWidget *label)
 }
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

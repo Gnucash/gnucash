@@ -614,8 +614,3 @@ gnucash_cursor_new (GnomeCanvasGroup *parent)
 }
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

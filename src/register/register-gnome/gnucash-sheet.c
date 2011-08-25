@@ -3091,9 +3091,3 @@ void gnucash_register_set_moved_cb (GnucashRegister *reg,
     sheet->moved_cb_data = cb_data;
 }
 
-
-/*
-  Local Variables:
-  c-basic-offset: 4
-  End:
-*/

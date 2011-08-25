@@ -82,8 +82,3 @@ int gnc_item_list_autosize (GncItemList *item_list);
 #endif /* GNUCASH_ITEM_LIST_H */
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

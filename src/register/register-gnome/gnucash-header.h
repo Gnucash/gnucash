@@ -72,8 +72,3 @@ void gnc_header_set_header_rows (GncHeader *header,
 
 #endif /* GNUCASH_HEADER_H */
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

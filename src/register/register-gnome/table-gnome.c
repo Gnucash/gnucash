@@ -295,8 +295,3 @@ gnc_table_gnome_init (void)
     gnc_table_set_default_gui_handlers (&gui_handlers);
 }
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

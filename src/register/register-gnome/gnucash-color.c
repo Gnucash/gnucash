@@ -169,8 +169,3 @@ gnucash_color_init (void)
 }
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

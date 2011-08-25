@@ -772,8 +772,3 @@ gnc_header_new (GnucashSheet *sheet)
 }
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

@@ -254,9 +254,3 @@ GdkColor *get_gtkrc_color (GnucashSheet *sheet, RegisterColor field_type);
 
 #endif
 
-
-/*
-  Local Variables:
-  c-basic-offset: 4
-  End:
-*/

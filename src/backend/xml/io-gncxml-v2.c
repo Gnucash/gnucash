@@ -2103,9 +2103,3 @@ gnc_xml2_parse_with_subst (FileBackend *fbe, QofBook *book, GHashTable *subst)
     return success;
 }
 
-/* For emacs we set some variables concerning indentation:
- * Local Variables: *
- * indent-tabs-mode:nil *
- * c-basic-offset:4 *
- * tab-width:8 *
- * End: */

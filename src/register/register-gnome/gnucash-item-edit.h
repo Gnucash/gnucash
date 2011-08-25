@@ -173,8 +173,3 @@ void gnc_item_edit_reset_offset (GncItemEdit *item_edit);
 #endif /* GNUCASH_ITEM_EDIT_H */
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

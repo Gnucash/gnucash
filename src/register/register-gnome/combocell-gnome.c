@@ -961,8 +961,3 @@ gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize)
     box->autosize = autosize;
 }
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

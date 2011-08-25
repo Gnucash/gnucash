@@ -75,8 +75,3 @@ void       gnucash_draw_hatching (GdkDrawable *drawable, GdkGC *gc,
 #endif /* GNUCASH_GRID_H */
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

@@ -110,8 +110,3 @@ gnc_quickfill_cell_gnome_new (void)
     return cell;
 }
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

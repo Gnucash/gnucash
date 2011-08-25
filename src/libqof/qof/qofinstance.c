@@ -1064,9 +1064,3 @@ qof_commit_edit_part2(QofInstance *inst,
 
 /* ========================== END OF FILE ======================= */
 
-// Local Variables:
-// mode: c
-// indent-tabs-mode: nil
-// c-block-comment-prefix: "* "
-// eval: (c-add-style "gnc" '("k&r" (c-basic-offset . 4) (c-offsets-alist (case-label . +))) t)
-// End:

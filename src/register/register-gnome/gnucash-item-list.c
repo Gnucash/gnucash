@@ -519,8 +519,3 @@ gnc_item_list_new(GnomeCanvasGroup *parent, GtkListStore *list_store)
 }
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

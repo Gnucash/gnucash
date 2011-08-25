@@ -1664,9 +1664,3 @@ timespec_get_type( void )
     return type;
 }
 
-/* For emacs we set some variables concerning indentation:
- * Local Variables: *
- * indent-tabs-mode:nil *
- * c-basic-offset:4 *
- * tab-width:8 *
- * End: */

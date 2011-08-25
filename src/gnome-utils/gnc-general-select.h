@@ -85,8 +85,3 @@ void       gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWi
 
 #endif
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

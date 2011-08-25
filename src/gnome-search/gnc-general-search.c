@@ -567,8 +567,3 @@ gnc_general_search_allow_clear (GNCGeneralSearch *gsl, gboolean allow_clear)
     gsl->allow_clear = allow_clear;
 }
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/

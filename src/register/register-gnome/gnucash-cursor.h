@@ -108,8 +108,3 @@ void gnucash_cursor_configure (GnucashCursor *cursor);
 #endif /* GNUCASH_CURSOR_H */
 
 
-/*
-  Local Variables:
-  c-basic-offset: 8
-  End:
-*/
