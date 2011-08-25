@@ -30,6 +30,7 @@ extern "C"
 #include "qof.h"
 #include "gnc-date.h"
 #include "app-utils/gnc-ui-util.h"
+#include "app-utils/gnc-ui-balances.h"
 }
 
 #include <QtCore/QDateTime>

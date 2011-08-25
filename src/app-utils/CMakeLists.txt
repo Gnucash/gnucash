@@ -44,6 +44,7 @@ SET (app_utils_HEADERS
   gnc-helpers.h
   gnc-sx-instance-model.h
   gnc-ui-util.h
+  gnc-ui-balances.h
   guile-util.h
   option-util.h
 )
@@ -75,6 +76,7 @@ SET (app_utils_SOURCES
   gnc-helpers.c
   gnc-sx-instance-model.c
   gnc-ui-util.c
+  gnc-ui-balances.c
   gncmod-app-utils.c
   guile-util.c
   option-util.c
