@@ -283,6 +283,7 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
                cannot find this filename */
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
             qof_backend_set_message (be_start, "Couldn't find directory for %s", be->fullpath);
+            PWARN ("Couldn't find directory for %s", be->fullpath);
             g_free (be->fullpath);
             be->fullpath = NULL;
             g_free (be->dirname);
@@ -298,6 +299,7 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
             /* Error on stat means the file doesn't exist */
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
             qof_backend_set_message (be_start, "Couldn't find %s", be->fullpath);
+            PWARN ("Couldn't find %s", be->fullpath);
             g_free (be->fullpath);
             be->fullpath = NULL;
             g_free (be->dirname);
@@ -316,6 +318,7 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
             qof_backend_set_error (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
             qof_backend_set_message(be_start, "Path %s is a directory",
                                     be->fullpath);
+            PWARN("Path %s is a directory", be->fullpath);
             g_free (be->fullpath);
             be->fullpath = NULL;
             g_free (be->dirname);

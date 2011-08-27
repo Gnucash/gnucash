@@ -257,6 +257,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     {
         qof_backend_set_error( qbe, ERR_FILEIO_FILE_NOT_FOUND );
         qof_backend_set_message(qbe, "Sqlite3 file %s not found", filepath);
+        PWARN ("Sqlite3 file %s not found", filepath);
         goto exit;
     }
 
@@ -264,6 +265,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     {
         qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
         msg = "Might clobber, no force";
+        PWARN ("%s", msg);
         goto exit;
     }
 
