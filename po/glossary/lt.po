@@ -1,0 +1,746 @@
+# Translation of gnucash glossary to Lithuanian.
+# Copyright (C) 2011 Free Software Foundation, Inc.
+# Aurimas Fišeras <aurimas@members.fsf.org>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: lt\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-25 18:37+0300\n"
+"PO-Revision-Date: 2011-08-26 18:53+0300\n"
+"Last-Translator: Aurimas Fišeras <aurimas@members.fsf.org>\n"
+"Language-Team: komp_lt@konf.lt\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: UTF-8\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Virtaal 0.7.0\n"
+
+#. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
+msgid "Term (Dear translator: This file will never be visible to the user!)"
+msgstr "Terminas (Mielas vertėjau: šis failas niekada nebus matomas naudotojo!)"
+
+#. "A detailed record of money spent and received"
+msgid "account"
+msgstr "sąskaita"
+
+#. "-"
+msgid "account code"
+msgstr "sąskaitos kodas"
+
+#. "the tree view of all accounts"
+msgid "account hierarchy"
+msgstr "sąskaitų hierarchija"
+
+#. "-"
+msgid "account name"
+msgstr "sąskaitos pavadinimas"
+
+#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
+msgid "account type: Asset"
+msgstr "sąskaitos tipas: Turtas"
+
+#. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
+msgid "account type: checking"
+msgstr "sąskaitos tipas: einamoji"
+
+#. "-"
+msgid "account type: currency"
+msgstr "sąskaitos tipas: valiuta"
+
+#. "see: Equity"
+msgid "account type: Equity"
+msgstr "sąskaitos tipas: Nuosavybė"
+
+#. "-"
+msgid "account type: Expense"
+msgstr "sąskaitos tipas: Sąnaudos"
+
+#. "-"
+msgid "account type: Income"
+msgstr "sąskaitos tipas: Pajamos"
+
+#. "A debt, a financial obligation"
+msgid "account type: Liability"
+msgstr "sąskaitos tipas: Įsipareigojimas"
+
+#. "-"
+msgid "account type: money-market"
+msgstr "sąskaitos tipas: pinigų rinka"
+
+#. "-"
+msgid "account type: Mutual fund"
+msgstr "sąskaitos tipas: Investicinis fondas"
+
+#. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
+msgid "account type: saving"
+msgstr "sąskaitos tipas: taupomoji"
+
+#. "-"
+msgid "account type: Stock"
+msgstr "sąskaitos tipas: Akcijos"
+
+#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+msgid "account type: trading"
+msgstr "sąskaitos tipas: prekyba"
+
+#. "-"
+msgid "account: parent account"
+msgstr "sąskaita: pirminė sąskaita"
+
+#. "-"
+msgid "account: subaccount"
+msgstr "sąskaita: antrinė sąskaita"
+
+#. "-"
+msgid "account: top level account"
+msgstr "sąskaita: aukščiausiojo lygio sąskaita"
+
+#. "The process of doing something that caused a transaction to happen"
+msgid "Action (register)"
+msgstr "Veiksmas (registre)"
+
+#. "Automated teller machine"
+msgid "action: ATM"
+msgstr "veiksmas: bankomatas"
+
+#. "Transaction was an auto deposit"
+msgid "action: autoDep"
+msgstr "veiksmas: aut. indėlis"
+
+#. "-"
+msgid "action: buy"
+msgstr "veiksmas: pirkti"
+
+#. "-"
+msgid "action: deposit"
+msgstr "veiksmas: indėlis"
+
+#. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
+msgid "action: direct debit"
+msgstr "veiksmas: tiesioginis debetas"
+
+#. "transaction is a distribution (???)"
+msgid "action: dist"
+msgstr "veiksmas: paskirstymas"
+
+#. "transaction is a dividend"
+msgid "action: div"
+msgstr "veiksmas: dividendai"
+
+#. "-"
+msgid "action: fee"
+msgstr "veiksmas: rinkliava"
+
+#. "transaction comes from interest"
+msgid "action: int"
+msgstr "veiksmas: palūkanos"
+
+#. "-"
+msgid "action: loan"
+msgstr "veiksmas: paskola"
+
+#. "see: payment 1."
+msgid "action: payment"
+msgstr "veiksmas: mokėjimas"
+
+#. "-"
+msgid "action: POS"
+msgstr "veiksmas: EKA"
+
+#. "-"
+msgid "action: rebate"
+msgstr "veiksmas: grąžinimas"
+
+#. "-"
+msgid "action: sell"
+msgstr "veiksmas: parduoti"
+
+#. "-"
+msgid "action: Teller"
+msgstr "veiksmas: Kasininkas"
+
+#. "see: transfer 2. (=credit transfer)"
+msgid "action: transfer"
+msgstr "veiksmas: pervedimas"
+
+#. "-"
+msgid "action: wire"
+msgstr "veiksmas: elektroninis"
+
+#. "-"
+msgid "action: withdraw"
+msgstr "veiksmas: išimti"
+
+#. "A sum of money"
+msgid "amount"
+msgstr "suma"
+
+#. "The result of adding several amounts together and then dividing this total by the number of amounts"
+msgid "average"
+msgstr "vidurkis"
+
+#. "The amount of money that is in one's account"
+msgid "balance (noun)"
+msgstr "balansas (daiktavardis)"
+
+#. "A written record of money received and paid out, showing the difference between the two total amounts"
+msgid "balance sheet"
+msgstr "balansas"
+
+#. "To arrange for income and spending to be equal"
+msgid "balance, to"
+msgstr "balansuoti"
+
+#. "-"
+msgid "bank"
+msgstr "bankas"
+
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
+msgid "bill"
+msgstr "gauta sąskaita"
+
+#. "see invoice owner"
+msgid "bill owner"
+msgstr "sąskaitą išrašė"
+
+#. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
+msgid "billing terms"
+msgstr "apmokėjimo sąlygos"
+
+#. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
+msgid "Book"
+msgstr "Knyga"
+
+#. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
+msgid "book closing"
+msgstr "knygos uždarymas"
+
+#. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
+msgid "Budget"
+msgstr "Biudžetas"
+
+#. "-"
+msgid "business (adjective)"
+msgstr "verslo (būdvardis)"
+
+#. "as Menu Item: Headline for features that are related to small business accounting"
+msgid "business (noun)"
+msgstr "verslas (daiktavardis)"
+
+#. "Profits made from the sale of investments or property"
+msgid "capital gains"
+msgstr "kapitalo prieaugis"
+
+#. "Distinguishing the uppercase and lowercase letters"
+msgid "case sensitive"
+msgstr "skirti raidžių dydį"
+
+#. "Money in coins or notes"
+msgid "cash"
+msgstr "grynieji"
+
+#. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
+msgid "check"
+msgstr "čekis"
+
+#. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
+msgid "check and repair, to"
+msgstr "tikrinti ir taisyti"
+
+#. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
+msgid "close, to"
+msgstr "užverti"
+
+#. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
+msgid "commodity"
+msgstr "prekė"
+
+#. "e.g. NASDAQ"
+msgid "commodity listing"
+msgstr "prekių sąrašas"
+
+#. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
+msgid "commodity option: fraction"
+msgstr "prekės parinktis: dalis"
+
+#. "e.g. USD, DEM"
+msgid "commodity option: Symbol"
+msgstr "prekės parinktis: Simbolis"
+
+#. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
+msgid "Credit (column in register)"
+msgstr "Kreditas (stulpelis registre)"
+
+#. "-"
+msgid "Credit Card"
+msgstr "Kreditinė kortelė"
+
+#. "A transfer of money direct from one bank account to another, without using a cheque"
+msgid "credit transfer"
+msgstr "kredito pervedimas"
+
+#. "The system of money used in a country"
+msgid "currency"
+msgstr "valiuta"
+
+#. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
+msgid "Custom"
+msgstr "Tinkintas"
+
+#. "The backend where the data is stored."
+msgid "database"
+msgstr "duomenų bazė"
+
+#. "A specific numbered day of the month"
+msgid "Date"
+msgstr "Data"
+
+#. "DD/MM/YY or MM/DD/YY or something else"
+msgid "date format"
+msgstr "datos formatas"
+
+#. "A range in time that is delimited by two distinct dates."
+msgid "date range"
+msgstr "laikotarpis"
+
+#. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
+msgid "Debit (column in register)"
+msgstr "Debetas (stulpelis registre)"
+
+#. "Each option has a default setting that it is shipped with, until the user changes the setting."
+msgid "default"
+msgstr "numatytoji"
+
+#. "see credit"
+msgid "deposit (in the reconcile dialog)"
+msgstr "įdėjimas (suderinimo lange)"
+
+#. "The process of something becoming less valuable"
+msgid "depreciation"
+msgstr "nusidėvėjimas"
+
+#. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
+msgid "Description (column in register)"
+msgstr "Aprašas (stulpelis registre)"
+
+#. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
+msgid "discount"
+msgstr "nuolaida"
+
+#. "Important Buzzword :)"
+msgid "double entry"
+msgstr "dvejybinis į́rašas"
+
+#. "a person who works for somebody or a company in return for wages"
+msgid "employee"
+msgstr "darbuotojas"
+
+#. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
+msgid "equity"
+msgstr "nuosavybė"
+
+#. "Report that ... FIXME: Add description."
+msgid "equity statement"
+msgstr "nuosavybės ataskaita"
+
+#. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
+msgid "escrow (account)"
+msgstr "sąlyginio įsipareigojimo (sąskaita)"
+
+#. "The relation in value between the money used in different countries"
+msgid "exchange rate"
+msgstr "valiutos kursas"
+
+#. "in the account creation dialog??"
+msgid "field"
+msgstr "laukas"
+
+#. "Any piece of information (text, graphics, executable) put together and given a name. All the information you have on the hard drive is arranged as a collection of  files."
+msgid "file"
+msgstr "failas"
+
+#. "-"
+msgid "file type"
+msgstr "failo tipas"
+
+#. "-"
+msgid "financial calculator: interest rate"
+msgstr "finansinis skaičiuotuvas: palūkanų norma"
+
+#. "see: payment"
+msgid "financial calculator: payments"
+msgstr "finansinis skaičiuotuvas: mokėjimas"
+
+#. "An increase in wealth; profit; advantage (See also: capital gains)"
+msgid "gain"
+msgstr "pelnas"
+
+#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+msgid "imbalance"
+msgstr "disbalansas"
+
+#. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
+msgid "import"
+msgstr "importas"
+
+#. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
+msgid "income statement"
+msgstr "pajamų deklaracija"
+
+#. "Money charged for borrowing money, or paid to somebody who invests money"
+msgid "interest"
+msgstr "palūkanos"
+
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
+msgid "invoice"
+msgstr "faktūra"
+
+#. "The customer (or vendor) to which this invoice is sent to."
+msgid "invoice owner"
+msgstr "faktūros gavėjas"
+
+#. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
+msgid "job"
+msgstr "darbas"
+
+#. "A book in which a bank, business firm, etc. records its financial accounts"
+msgid "ledger"
+msgstr "didžioji knyga"
+
+#. "The heading for the right side of the balance sheet. See also: Equity."
+msgid "liabilities/equity"
+msgstr "įsipareigojimai/nuosavybė"
+
+#. "A sum of money that is lent (by a bank)"
+msgid "loan"
+msgstr "paskola"
+
+#. "The money lost in business activity"
+msgid "loss"
+msgstr "nuostolis"
+
+#. "name of an automatically created account"
+msgid "Lost Accounts"
+msgstr "Prarastosios sąskaitos"
+
+#. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
+msgid "Lot"
+msgstr "Partija"
+
+#. "Combine two books into one (see book)."
+msgid "merge, to"
+msgstr "jungti"
+
+#. "The thing that the scatter plot uses to mark each data point"
+msgid "marker"
+msgstr "žymeklis"
+
+#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+msgid "markup"
+msgstr "antkainis"
+
+#. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
+msgid "MDI modus"
+msgstr "MDI"
+
+#. "One textfield per split that should help you remember what this split was about."
+msgid "Memo"
+msgstr "Pastaba"
+
+#. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
+msgid "Mortgage"
+msgstr "Hipoteka"
+
+#. "e.g. USD, DEM, see Currency."
+msgid "national currency"
+msgstr "nacionalinė valiuta"
+
+#. "(of money) remaining when nothing more is to be taken away"
+msgid "net"
+msgstr "grynasis"
+
+#. "net total of all assets"
+msgid "net assets"
+msgstr "grynasis turtas"
+
+#. "The total income minus the total expenses of a given time period."
+msgid "net profit"
+msgstr "grynasis pelnas"
+
+#. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
+msgid "net worth"
+msgstr "grynoji vertė"
+
+#. "One textfield per transaction that can hold explanatory text about the transaction."
+msgid "notes (register)"
+msgstr "pastabos (registre)"
+
+#. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
+msgid "Num (column in register)"
+msgstr "Numeris (stulpelis registre)"
+
+#. "to make accessible"
+msgid "open, to"
+msgstr "atverti"
+
+#. "If an account starts with a non-zero balance, then this amount is called the opening balance."
+msgid "opening balance"
+msgstr "pradžios likutis"
+
+#. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
+msgid "options"
+msgstr "parinktys"
+
+#. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
+msgid "order"
+msgstr "užsakymas"
+
+#. "Name of an automatically created account that holds splits that have no account."
+msgid "orphan"
+msgstr "pamesta"
+
+#. "A secret phrase that one needs to know in order to get access to a user account "
+msgid "passphrase"
+msgstr "slaptafrazė"
+
+#. "An amount that must be paid / An amount for which money has not yet been received"
+msgid "Payables/Receivables"
+msgstr "Mokėtina/Gautina"
+
+#. "A person to whom sth is paid"
+msgid "payee"
+msgstr "gavėjas"
+
+#. "A person who pays or who has to pay for sth"
+msgid "payer"
+msgstr "mokėtojas"
+
+#. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
+msgid "payment"
+msgstr "mokėjimas"
+
+#. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
+msgid "placeholder"
+msgstr "rezervuota vieta"
+
+#. "A set of investments owned by a person"
+msgid "portfolio"
+msgstr "portfelis"
+
+#. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
+msgid "preferences"
+msgstr "nuostatos"
+
+#. "An amount of money for which sth may be bought or sold"
+msgid "price (in a split)"
+msgstr "kaina (skaidyme)"
+
+#. "An ask is an offer to sell, and the price you want to sell at."
+msgid "price type: ask"
+msgstr "kainos tipas: pirkimo"
+
+#. "A bid is an offer to buy, and the price you want to buy at."
+msgid "price type: bid"
+msgstr "kainos tipas: pardavimo"
+
+#. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
+msgid "price: quotes"
+msgstr "kaina: pasiūlymai"
+
+#. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
+msgid "profit"
+msgstr "pelnas"
+
+#. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
+msgid "Profit & Loss"
+msgstr "Pelnas ir nuostolis"
+
+#. "-"
+msgid "quick-fill"
+msgstr "greitas užpildymas"
+
+#. "-"
+msgid "rebalance, to (a transaction)"
+msgstr "perbalansuoti (operaciją)"
+
+#. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
+msgid "reconcile, to"
+msgstr "suderinti"
+
+#. "-"
+msgid "record keeping"
+msgstr "registravimas"
+
+#. "A list of items; a book containing such a list"
+msgid "register"
+msgstr "registras"
+
+#. "A transaction that is divided into two or more parts"
+msgid "register entry: split transaction"
+msgstr "registro įrašas: skaidyta operacija"
+
+#. "-"
+msgid "register entry: stock split"
+msgstr "registro įrašas: akcijų skaidymas"
+
+#. "one form of register"
+msgid "register: auto-split ledger"
+msgstr "registras: automatiškai skaidoma didžioji knyga"
+
+#. "another form of register"
+msgid "register: basic ledger"
+msgstr "registras: pagrindinė didžioji knyga"
+
+#. "another form of register"
+msgid "register: general ledger"
+msgstr "registras: didžioji knyga"
+
+#. "another form of register"
+msgid "register: transaction journal"
+msgstr "registras: operacijų žurnalas"
+
+#. "reload the current document"
+msgid "reload, to"
+msgstr "įkelti iš naujo"
+
+#. "name of an equity account (?); to be distinguished from the opening balance."
+msgid "Retained Earnings"
+msgstr "Nepaskirstytosios pajamos"
+
+#. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
+msgid "reverse transaction, to (Action in the register)"
+msgstr "atlikti atvirkštinę operaciją (veiksmas registre)"
+
+#. "(In the customer summary report) The total amount of money received because something was sold."
+msgid "sales"
+msgstr "pardavimai"
+
+#. "To write data (typically a file) to a storage medium, such as a disk or tape."
+msgid "save, to (to a file)"
+msgstr "išsaugoti (į failą)"
+
+#. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
+msgid "Scheduled Transaction"
+msgstr "Planinė operacija"
+
+#. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
+msgid "scrub, to"
+msgstr "valyti"
+
+#. "A document or certificate showing who owns shares"
+msgid "security"
+msgstr "saugumas"
+
+#. "-"
+msgid "Share Balance (register)"
+msgstr "Akcijų balansas (registras)"
+
+#. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
+msgid "shares"
+msgstr "akcijos"
+
+#. "(of a price) A place wfrom which sth comes or is obtained"
+msgid "source"
+msgstr "šaltinis"
+
+#. "One of the two or several parts a transaction is divided into"
+msgid "split"
+msgstr "skaidymas"
+
+#. "This sets the particular design or shape of a report."
+msgid "style sheet"
+msgstr "stiliaus aprašas"
+
+#. "The total of a set of figures that are part of a larger group of figures"
+msgid "subtotal"
+msgstr "tarpinė suma"
+
+#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+msgid "tax code"
+msgstr "mokesčio kodas"
+
+#. "field of an account"
+msgid "tax info"
+msgstr "mokesčio informacija"
+
+#. "if you create a new e.g. style sheet, you can start from a template"
+msgid "template"
+msgstr "šablonas"
+
+#. "see: date range"
+msgid "time period"
+msgstr "laikotarpis"
+
+#. "as abbreviation for Total"
+msgid "Tot"
+msgstr "Iš viso"
+
+#. "The full number or amount: total of some balances, of any account's running balance etc."
+msgid "total"
+msgstr "iš viso"
+
+#. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
+msgid "transaction"
+msgstr "operacija"
+
+#. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
+msgid "transaction state: cleared"
+msgstr "operacijos būsena: apmokėta"
+
+#. "-"
+msgid "transaction state: frozen"
+msgstr "operacijos būsena: sustabdyta"
+
+#. "A transaction that was reconciled with the bank's statement."
+msgid "transaction state: reconciled"
+msgstr "operacijos būsena: suderinta"
+
+#. "A transaction that is void i.e. not valid (anymore)."
+msgid "transaction state: voided"
+msgstr "operacijos būsena: anuliuota"
+
+#. "1. The action of transferring sth. 2. see: credit transfer"
+msgid "transfer (noun)"
+msgstr "pervedimas (daiktavardis)"
+
+#. "The account where an amount is transferred to"
+msgid "transfer account"
+msgstr "pervedimo sąskaita"
+
+#. "To move money from one account to another. Will create a transaction."
+msgid "transfer, to (register toolbar)"
+msgstr "pervesti (registro įrankių juosta)"
+
+#. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
+msgid "trial balance (report)"
+msgstr "bandomasis balansas (ataskaita)"
+
+#. "A class or things that have characteristics in common; type of an account, of a commodity etc."
+msgid "type"
+msgstr "tipas"
+
+#. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
+msgid "units"
+msgstr "vienetai"
+
+#. "-"
+msgid "URL"
+msgstr "URL"
+
+#. "The worth of sth in terms of money or other commodities for which it can be exchanged"
+msgid "value (in a split)"
+msgstr "vertė (skaidyme)"
+
+#. "In small business accounting: A person or company that sells items and is supplying goods"
+msgid "vendor"
+msgstr "pardavėjas"
+
+#. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
+msgid "voucher"
+msgstr "kvitas"
+
+#. "see debit"
+msgid "withdraw (in the reconcile dialog)"
+msgstr "išėmimas (suderinimo lange)"
