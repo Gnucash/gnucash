@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.4.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-07-02 15:04-0700\n"
-"PO-Revision-Date: 2011-08-06 15:57+0900\n"
+"PO-Revision-Date: 2011-08-30 21:36+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "Language: ja\n"
@@ -2399,17 +2399,17 @@ msgstr "日付(_D)"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:212
 #: ../src/gnome/glade/register.glade.h:59 ../intl-scm/guile-strings.c:4308
 msgid "Sort by date"
-msgstr "日付順にソート"
+msgstr "日付順にソートします"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:213
 #: ../src/gnome/glade/register.glade.h:15
 msgid "Date of _Entry"
-msgstr "入力の日付(_E)"
+msgstr "入力日(_E)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:213
 #: ../src/gnome/glade/register.glade.h:64
 msgid "Sort by the date of entry"
-msgstr "入力日付順にソート"
+msgstr "入力日付順にソートします"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:214
 msgid "_Quantity"
@@ -2438,7 +2438,7 @@ msgstr "説明(_P)"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:216
 #: ../src/gnome/glade/register.glade.h:60 ../intl-scm/guile-strings.c:4336
 msgid "Sort by description"
-msgstr "説明順にソート"
+msgstr "説明順にソートします"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:251
 #: ../src/gnome/glade/register.glade.h:25
@@ -3731,7 +3731,7 @@ msgstr ""
 #: ../src/gnome/druid-acct-period.c:312
 #, c-format
 msgid "Period %s - %s"
-msgstr "期間 %s 〜 %s"
+msgstr "期間 %s ～ %s"
 
 #: ../src/gnome/druid-acct-period.c:365
 msgid "You must select closing date that is greater than the closing date of the previous book."
@@ -5054,7 +5054,7 @@ msgstr "清算済(_L)"
 #: ../src/gnome/glade/register.glade.h:7
 #: ../src/gnome/gnc-plugin-page-register.c:245
 msgid "Cancel the current transaction"
-msgstr "現在の取引をキャンセルする"
+msgstr "現在の取引をキャンセルします"
 
 #: ../src/gnome/glade/register.glade.h:8
 msgid "Choo_se Date:"
@@ -5071,7 +5071,7 @@ msgstr "選択された取引をコピーする"
 #: ../src/gnome/glade/register.glade.h:11
 #: ../src/gnome/gnc-plugin-page-register.c:320
 msgid "Create a Scheduled Transaction with the current transaction as a template"
-msgstr "現在の取引をテンプレートとして予定取引を作成する"
+msgstr "現在の取引をテンプレートとして予定取引を作成します"
 
 #: ../src/gnome/glade/register.glade.h:12
 msgid "Cut Transaction"
@@ -5084,7 +5084,7 @@ msgstr "選択されている取引を切り取る"
 #: ../src/gnome/glade/register.glade.h:17
 #: ../src/gnome/gnc-plugin-page-register.c:230
 msgid "Delete the current transaction"
-msgstr "現在の取引を削除する"
+msgstr "現在の取引を削除します"
 
 #: ../src/gnome/glade/register.glade.h:19
 msgid "Dup_licate Transaction..."
@@ -5126,12 +5126,12 @@ msgstr "相手勘定科目内の該当取引に移動する"
 
 #: ../src/gnome/glade/register.glade.h:30
 msgid "Keep normal account order"
-msgstr "普通の勘定科目の順番を維持する"
+msgstr "標準の勘定科目順を維持します"
 
 #: ../src/gnome/glade/register.glade.h:31
 #: ../src/gnome/gnc-plugin-page-register.c:225
 msgid "Make a copy of the current transaction"
-msgstr "現在の取引の複製を作成する"
+msgstr "現在の取引の複製を作成します"
 
 #: ../src/gnome/glade/register.glade.h:32
 #: ../src/gnome/gnc-plugin-page-register.c:305
@@ -5149,7 +5149,7 @@ msgstr "取引を貼り付け"
 #: ../src/gnome/glade/register.glade.h:35
 #: ../src/gnome/gnc-plugin-page-register.c:220
 msgid "Paste the transaction from the clipboard"
-msgstr "クリップボードから取引を貼り付ける"
+msgstr "クリップボードにある取引を貼り付けます"
 
 #: ../src/gnome/glade/register.glade.h:36
 msgid "Reason for voiding transaction:"
@@ -5226,7 +5226,7 @@ msgstr "日付順にソート"
 
 #: ../src/gnome/glade/register.glade.h:54
 msgid "Sort by Description"
-msgstr "説明順にソート"
+msgstr "説明順にソートします"
 
 #: ../src/gnome/glade/register.glade.h:55
 msgid "Sort by Memo"
@@ -5234,42 +5234,39 @@ msgstr "摘要順にソート"
 
 #: ../src/gnome/glade/register.glade.h:56
 msgid "Sort by Number"
-msgstr "番号順にソート"
+msgstr "番号順にソートします"
 
 #: ../src/gnome/glade/register.glade.h:57
 msgid "Sort by action field"
-msgstr "アクションフィールド順にソート"
+msgstr "アクション欄順にソートします"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/glade/register.glade.h:58 ../intl-scm/guile-strings.c:4332
 msgid "Sort by amount"
-msgstr "金額順にソート"
+msgstr "金額順にソートします"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/glade/register.glade.h:61 ../intl-scm/guile-strings.c:4344
 msgid "Sort by memo"
-msgstr "摘要順にソート"
+msgstr "摘要順にソートします"
 
 #: ../src/gnome/glade/register.glade.h:62
 msgid "Sort by notes field"
-msgstr "備考フィールド順にソート"
+msgstr "備考欄順にソートします"
 
 #: ../src/gnome/glade/register.glade.h:63
 msgid "Sort by number"
-msgstr "番号順にソート"
+msgstr "番号順にソートします"
 
 #: ../src/gnome/glade/register.glade.h:65
 msgid "Sort by the statement date (unreconciled items last)"
-msgstr "計算書発行日順にソート（未照合項目は最後）"
+msgstr "計算書発行日順にソートします（未照合項目は最後になります）"
 
 #: ../src/gnome/glade/register.glade.h:66
 msgid "Sort register by..."
 msgstr "記録簿をソート..."
 
-# Japanese Translation Notice:
-# 取引の場合は「スプリット」で良いですが、株式分割の場合は「株式分割」
-# と訳すべきところです。スプリット内のアクション欄に「スプリット」と表
-# 示されて混乱を招いてしまう可能性がありますが、翻訳の都合上回避できません。
+# 取引のスプリットです
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:424
 msgid "Split"
@@ -6105,7 +6102,7 @@ msgstr "勘定科目ページを新規作成(_P)"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
-msgstr "勘定科目ツリーの新規作成ページを開く"
+msgstr "勘定科目ツリーの新規作成ページを開きます"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:99
 msgid "New _File"
@@ -6113,7 +6110,7 @@ msgstr "ファイルを新規作成(_F)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:100
 msgid "Create a new file"
-msgstr "ファイルを新規作成する"
+msgstr "ファイルを新規作成します"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:104
 msgid "_Open..."
@@ -6121,7 +6118,7 @@ msgstr "開く(_O)..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:105
 msgid "Open an existing GnuCash file"
-msgstr "既存のGnuCashファイルを開く"
+msgstr "既存のGnuCashファイルを開きます"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:109
 msgid "_Save"
@@ -6141,7 +6138,7 @@ msgstr "勘定科目をエクスポート"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:121
 msgid "Export the account hierarchy to a new GnuCash datafile"
-msgstr "勘定科目の階層を新しいGnuCashデータファイルにエクスポートする"
+msgstr "勘定科目の階層を新しいGnuCashデータファイルにエクスポートします"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:128
 #: ../src/gnome/gnc-plugin-page-register.c:201
@@ -6151,7 +6148,7 @@ msgstr "検索(_F)..."
 #: ../src/gnome/gnc-plugin-basic-commands.c:129
 #: ../src/gnome/gnc-plugin-page-register.c:202
 msgid "Find transactions with a search"
-msgstr "検索により取引を見つける"
+msgstr "検索により取引を見つけます"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:134
 msgid "Ta_x Report Options"
@@ -6163,7 +6160,7 @@ msgstr "税金帳票オプション(_X)"
 #. * So adjust this string
 #: ../src/gnome/gnc-plugin-basic-commands.c:139
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr ""
+msgstr "税金帳票に関連付ける勘定科目を設定します。例: 所得税"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:145
@@ -6582,7 +6579,7 @@ msgstr "切り取り(_T)"
 #: ../src/gnome-utils/gnc-main-window.c:278
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1026
 msgid "Cut the current selection and copy it to clipboard"
-msgstr "現在の選択を切り取りクリップボードにコピーする"
+msgstr "現在の選択を切り取りクリップボードにコピーします"
 
 #: ../src/gnome/gnc-plugin-page-register.c:186
 #: ../src/gnome-utils/gnc-main-window.c:282
@@ -6594,13 +6591,13 @@ msgstr "コピー(_C)"
 #: ../src/gnome-utils/gnc-main-window.c:283
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1031
 msgid "Copy the current selection to clipboard"
-msgstr "現在の選択をクリップボードにコピーする"
+msgstr "現在の選択をクリップボードにコピーします"
 
 #: ../src/gnome/gnc-plugin-page-register.c:192
 #: ../src/gnome-utils/gnc-main-window.c:288
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1036
 msgid "Paste the clipboard content at the cursor position"
-msgstr "カーソル位置にクリップボードの内容を貼り付ける"
+msgstr "カーソル位置にクリップボードの内容を貼り付けます"
 
 #: ../src/gnome/gnc-plugin-page-register.c:209
 msgid "Cu_t Transaction"
@@ -6608,7 +6605,7 @@ msgstr "取引を切り取り(_T)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:210
 msgid "Cut the selected transaction into clipboard"
-msgstr "選択されている取引をクリップボードに切り取る"
+msgstr "選択されている取引をクリップボードに切り取ります"
 
 #: ../src/gnome/gnc-plugin-page-register.c:214
 msgid "_Copy Transaction"
@@ -6616,7 +6613,7 @@ msgstr "取引をコピー(_C)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:215
 msgid "Copy the selected transaction into clipboard"
-msgstr "選択された取引をクリップボードにコピーする"
+msgstr "選択された取引をクリップボードにコピーします"
 
 #: ../src/gnome/gnc-plugin-page-register.c:219
 msgid "_Paste Transaction"
@@ -6637,11 +6634,11 @@ msgstr "取引のスプリットを除去(_V)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:235
 msgid "Remove all splits in the current transaction"
-msgstr "現在の取引のスプリットをすべて除去する"
+msgstr "現在の取引のスプリットをすべて除去します"
 
 #: ../src/gnome/gnc-plugin-page-register.c:239
 msgid "_Enter Transaction"
-msgstr "取引を入力(_E)"
+msgstr "取引を記帳(_E)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:244
 msgid "Ca_ncel Transaction"
@@ -6660,9 +6657,8 @@ msgid "Add _Reversing Transaction"
 msgstr "逆方向の取引を追加(_R)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:261
-#, fuzzy
 msgid "_Shift Transaction Forward"
-msgstr "取引仕訳帳(_T)"
+msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:268
 #: ../src/gnome-utils/gnc-main-window.c:300
@@ -10371,7 +10367,7 @@ msgstr "ページの設定(_G)"
 
 #: ../src/gnome-utils/gnc-main-window.c:255
 msgid "Specify the page size and orientation for printing"
-msgstr "印刷する用紙のサイズと向きを指定する"
+msgstr "印刷する用紙のサイズと向きを指定します"
 
 #: ../src/gnome-utils/gnc-main-window.c:259
 msgid "Proper_ties"
@@ -10491,7 +10487,7 @@ msgstr "ツールバー(_T)"
 
 #: ../src/gnome-utils/gnc-main-window.c:367
 msgid "Show/hide the toolbar on this window"
-msgstr "このウィンドウのツールバーを表示する/隠す"
+msgstr "このウィンドウのツールバーの表示/非表示を切り替えます"
 
 #: ../src/gnome-utils/gnc-main-window.c:371
 msgid "Su_mmary Bar"
@@ -10499,7 +10495,7 @@ msgstr "サマリーバー(_M)"
 
 #: ../src/gnome-utils/gnc-main-window.c:372
 msgid "Show/hide the summary bar on this window"
-msgstr "このウィンドウのサマリーバーを表示する/隠す"
+msgstr "このウィンドウのサマリーバーの表示/非表示を切り替えます"
 
 #: ../src/gnome-utils/gnc-main-window.c:376
 msgid "Stat_us Bar"
@@ -10507,7 +10503,7 @@ msgstr "ステータスバー(_U)"
 
 #: ../src/gnome-utils/gnc-main-window.c:377
 msgid "Show/hide the status bar on this window"
-msgstr "このウィンドウのステータスバーを表示する/隠す"
+msgstr "このウィンドウのステータスバーの表示/非表示を切り替えます"
 
 #: ../src/gnome-utils/gnc-main-window.c:388
 msgid "Window _1"
@@ -12502,7 +12498,7 @@ msgstr "_OFX/QFXをインポート..."
 
 #: ../src/import-export/ofx/gnc-plugin-ofx.c:47
 msgid "Process an OFX/QFX response file"
-msgstr "OFX/QFXレスポンスファイルを処理する"
+msgstr "OFX/QFXレスポンスファイルを処理します"
 
 #: ../src/import-export/qif-import/dialog-account-picker.c:219
 msgid "Enter a name for the account"
@@ -12684,7 +12680,7 @@ msgstr "_QIFをインポート..."
 
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:51
 msgid "Import a Quicken QIF file"
-msgstr "Quicken QIFファイルをインポートする"
+msgstr "Quicken QIFファイルをインポートします"
 
 #: ../src/import-export/qif-import/qif.glade.h:1
 msgid "<b>QIF Import</b>"
@@ -13934,7 +13930,7 @@ msgstr "スタイルシート(_Y)"
 
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:52
 msgid "Edit report style sheets."
-msgstr "帳票のスタイルシートを編集する"
+msgstr "帳票のスタイルシートを編集します"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:1
 msgid "GnuCash Finance Management"
@@ -14227,59 +14223,53 @@ msgstr "消費"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:188
-#, fuzzy
 msgid "Counters"
-msgstr "中央"
+msgstr "カウンター"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:190
-#, fuzzy
 msgid "Customer number format"
-msgstr "得意先番号: "
+msgstr "得意先番号書式"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:192
-#, fuzzy
 msgid "Customer number"
-msgstr "得意先番号: "
+msgstr "得意先番号"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:194
 msgid "The format string to use for generating customer numbers. This is a printf-style format string."
-msgstr ""
+msgstr "得意先番号を生成するために使用される書式文字列です。printf形式の書式文字列です。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:196
 msgid "The previous customer number generated. This number will be incremented to generate the next customer number."
-msgstr ""
+msgstr "前に生成した得意先番号です。次の得意先番号を生成した時に値が1増加します。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:198
-#, fuzzy
 msgid "Employee number format"
-msgstr "従業員番号: "
+msgstr "従業員番号書式"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:200
-#, fuzzy
 msgid "Employee number"
-msgstr "従業員番号: "
+msgstr "従業員番号"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:202
 msgid "The format string to use for generating employee numbers. This is a printf-style format string."
-msgstr ""
+msgstr "従業員番号を生成するために使用される書式文字列です。printf形式の書式文字列です。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:204
 msgid "The previous employee number generated. This number will be incremented to generate the next employee number."
-msgstr ""
+msgstr "前に生成した従業員番号です。次の従業員番号を生成した時に値が1増加します。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:206
-#, fuzzy
 msgid "Invoice number format"
-msgstr "得意先請求書番号"
+msgstr "得意先請求書番号書式"
 
 #. src/business/business-utils/business-prefs.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -14290,162 +14280,152 @@ msgstr "得意先請求書番号"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:210
 msgid "The format string to use for generating invoice numbers. This is a printf-style format string."
-msgstr ""
+msgstr "得意先請求書番号を生成するために使用される書式文字列です。printf形式の書式文字列です。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:212
 msgid "The previous invoice number generated. This number will be incremented to generate the next invoice number."
-msgstr ""
+msgstr "前に生成した得意先請求書番号です。次の得意先請求書番号を生成した時に値が1増加します。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:214
-#, fuzzy
 msgid "Bill number format"
-msgstr "請求情報"
+msgstr "仕入先請求書番号書式"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:216
-#, fuzzy
 msgid "Bill number"
-msgstr "仕入先請求書所有者"
+msgstr "仕入先請求書番号"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:218
 msgid "The format string to use for generating bill numbers. This is a printf-style format string."
-msgstr ""
+msgstr "仕入先請求書番号を生成するために使用される書式文字列です。printf形式の書式文字列です。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:220
 msgid "The previous bill number generated. This number will be incremented to generate the next bill number."
-msgstr ""
+msgstr "前に生成した仕入先請求書番号です。次の仕入先請求書番号を生成した時に値が1増加します。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:222
-#, fuzzy
 msgid "Expense voucher number format"
-msgstr "立替払請求書"
+msgstr "立替払請求書番号書式"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:224
-#, fuzzy
 msgid "Expense voucher number"
-msgstr "立替払請求書"
+msgstr "立替払請求書番号"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:226
 msgid "The format string to use for generating expense voucher numbers. This is a printf-style format string."
-msgstr ""
+msgstr "立替払請求書番号を生成するために使用される書式文字列です。printf形式の書式文字列です。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:228
 msgid "The previous expense voucher number generated. This number will be incremented to generate the next voucher number."
-msgstr ""
+msgstr "前に生成した立替払請求書番号です。次の立替払請求書番号を生成した時に値が1増加します。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:230
-#, fuzzy
 msgid "Job number format"
-msgstr "請求のまとめ情報"
+msgstr "請求のまとめ番号書式"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:232
-#, fuzzy
 msgid "Job number"
 msgstr "請求のまとめ番号"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:234
 msgid "The format string to use for generating job numbers. This is a printf-style format string."
-msgstr ""
+msgstr "請求のまとめ番号を生成するために使用される書式文字列です。printf形式の書式文字列です。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:236
 msgid "The previous job number generated. This number will be incremented to generate the next job number."
-msgstr ""
+msgstr "前に生成した請求のまとめ番号です。次の請求のまとめ番号を生成した時に値が1増加します。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:238
-#, fuzzy
 msgid "Order number format"
-msgstr "注文情報"
+msgstr "注文番号書式"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:240
-#, fuzzy
 msgid "Order number"
-msgstr "注文項目"
+msgstr "注文番号"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:242
 msgid "The format string to use for generating order numbers. This is a printf-style format string."
-msgstr ""
+msgstr "注文番号を生成するために使用される書式文字列です。printf形式の書式文字列です。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:244
 msgid "The previous order number generated. This number will be incremented to generate the next order number."
-msgstr ""
+msgstr "前に生成した注文番号です。次の注文番号を生成した時に値が1増加します。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:246
-#, fuzzy
 msgid "Vendor number format"
-msgstr "仕入先番号: "
+msgstr "仕入先番号書式"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:248
-#, fuzzy
 msgid "Vendor number"
-msgstr "仕入先番号: "
+msgstr "仕入先番号"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:250
 msgid "The format string to use for generating vendor numbers. This is a printf-style format string."
-msgstr ""
+msgstr "仕入先番号を生成するために使用される書式文字列です。printf形式の書式文字列です。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:252
 msgid "The previous vendor number generated. This number will be incremented to generate the next vendor number."
-msgstr ""
+msgstr "前に生成した仕入先番号です。次の仕入先番号を生成した時に値が1増加します。"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:254
 msgid "The name of your business"
-msgstr "あなたのビジネスの名前"
+msgstr "あなたの会社のの名前です"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:256
 msgid "The address of your business"
-msgstr "あなたのビジネスの住所"
+msgstr "あなたの会社の住所です"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:258
 msgid "The contact person to print on invoices"
-msgstr "得意先請求書に印刷する連絡先"
+msgstr "得意先請求書に印刷する連絡先です"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:260
 msgid "The phone number of your business"
-msgstr "あなたのビジネスの電話番号"
+msgstr "あなたの会社の電話番号です"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:262
 msgid "The fax number of your business"
-msgstr "あなたのビジネスのFAX番号"
+msgstr "あなたの会社のFAX番号です"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:264
 msgid "The email address of your business"
-msgstr "あなたのビジネスのメールアドレス"
+msgstr "あなたの会社のールアドレスです"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:266
 msgid "The URL address of your website"
-msgstr "あなたのWEBサイトのURLアドレス"
+msgstr "あなたの会社のWEBサイトのURLです"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:268
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)"
-msgstr "会社のID（例: '納税ID: 00-00000）"
+msgstr "会社のIDです（例: '納税番号: 00-00000）"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:270
@@ -14455,7 +14435,7 @@ msgstr "デフォルトの得意先税額表"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:272
 msgid "The default tax table to apply to customers."
-msgstr "得意先に適用するデフォルト税額表"
+msgstr "得意先に適用するデフォルト税額表です"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:274
@@ -14465,7 +14445,7 @@ msgstr "デフォルトの仕入先税額表"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:276
 msgid "The default tax table to apply to vendors."
-msgstr "仕入先に適用するデフォルト税額表"
+msgstr "仕入先に適用するデフォルト税額表です"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:278
@@ -14475,7 +14455,7 @@ msgstr "日付の書式"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:280
 msgid "The default date format used for fancy printed dates"
-msgstr "装飾的な日付印刷に用いるデフォルトの日付の書式"
+msgstr "装飾的な日付印刷に用いるデフォルトの日付の書式です"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:282
@@ -14485,7 +14465,7 @@ msgstr "2種類以上の通貨・商品を含む取引のためには投機勘�
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:284
 msgid "Budget to be used when none has been otherwise specified"
-msgstr "何も指定しないときに使用される予算"
+msgstr "何も指定しないときに使用される予算です"
 
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:290
@@ -19164,7 +19144,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4090 ../intl-scm/guile-strings.c:4642
 #, c-format
 msgid "For Period Covering %s to %s"
-msgstr "期間 %s 〜 %s"
+msgstr "期間 %s ～ %s"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
