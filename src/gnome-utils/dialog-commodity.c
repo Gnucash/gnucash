@@ -730,7 +730,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbe,
 gchar *
 gnc_ui_namespace_picker_ns (GtkWidget *cbe)
 {
-    char *namespace;
+    gchar *namespace;
 
     g_return_val_if_fail(GTK_IS_COMBO_BOX_ENTRY (cbe), NULL);
 
@@ -740,7 +740,7 @@ gnc_ui_namespace_picker_ns (GtkWidget *cbe)
     {
         /* In case the user types in ISO4217, map it to CURRENCY. */
         g_free(namespace);
-        return strdup(GNC_COMMODITY_NS_CURRENCY);
+        return g_strdup(GNC_COMMODITY_NS_CURRENCY);
     }
     else
         return namespace;
