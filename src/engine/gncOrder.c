@@ -430,8 +430,8 @@ int gncOrderCompare (const GncOrder *a, const GncOrder *b)
     int compare;
 
     if (a == b) return 0;
-    if (!a && b) return -1;
-    if (a && !b) return 1;
+    if (!a) return -1;
+    if (!b) return 1;
 
     compare = safe_strcmp (a->id, b->id);
     if (compare) return compare;

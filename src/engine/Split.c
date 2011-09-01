@@ -1374,8 +1374,8 @@ xaccSplitOrder (const Split *sa, const Split *sb)
 
     if (sa == sb) return 0;
     /* nothing is always less than something */
-    if (!sa && sb) return -1;
-    if (sa && !sb) return +1;
+    if (!sa) return -1;
+    if (!sb) return +1;
 
     retval = xaccTransOrder (sa->parent, sb->parent);
     if (retval) return retval;
@@ -1424,14 +1424,14 @@ xaccSplitOrderDateOnly (const Split *sa, const Split *sb)
 
     if (sa == sb) return 0;
     /* nothing is always less than something */
-    if (!sa && sb) return -1;
-    if (sa && !sb) return +1;
+    if (!sa) return -1;
+    if (!sb) return +1;
 
     ta = sa->parent;
     tb = sb->parent;
-    if ( ta && !tb ) return -1;
-    if ( !ta && tb ) return +1;
     if ( !ta && !tb ) return 0;
+    if ( !tb ) return -1;
+    if ( !ta ) return +1;
 
     /* if dates differ, return */
     DATE_CMP(ta, tb, date_posted);
