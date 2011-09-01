@@ -2821,13 +2821,13 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     g_return_if_fail (n_actions > 0);
     g_return_if_fail (filename != NULL);
 
-    data = g_new0 (GncMainWindowActionData, 1);
-    data->window = window;
-    data->data = user_data;
-
     pathname = gnc_gnome_locate_ui_file (filename);
     if (pathname == NULL)
         return;
+
+    data = g_new0 (GncMainWindowActionData, 1);
+    data->window = window;
+    data->data = user_data;
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     entry = g_new0 (MergedActionEntry, 1);
