@@ -377,6 +377,7 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
     if ( end_object_tag == NULL )
     {
         //  Hmmm... no object end tag
+        g_free (object_classid);
         return html_str;
     }
     end_object_tag += strlen( "</object>" );

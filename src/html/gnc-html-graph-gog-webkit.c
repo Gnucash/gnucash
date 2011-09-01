@@ -249,6 +249,7 @@ handle_piechart( GncHtml* html, gpointer eb, gpointer d )
     if ( temp_str != NULL )
     {
         pieChartInfo.data = read_doubles( temp_str, pieChartInfo.datasize );
+        g_free( temp_str );
     }
     temp_str = get_string_param( &object_info, "colors" );
     if ( temp_str != NULL )
@@ -314,6 +315,7 @@ handle_barchart( GncHtml* html, gpointer eb, gpointer d )
     if ( temp_str != NULL )
     {
         barChartInfo.data = read_doubles( temp_str, barChartInfo.data_rows * barChartInfo.data_cols );
+        g_free( temp_str );
     }
     barChartInfo.x_axis_label = get_string_param( &object_info, "x_axis_label" );
     barChartInfo.y_axis_label = get_string_param( &object_info, "y_axis_label" );
@@ -394,6 +396,7 @@ handle_linechart( GncHtml* html, gpointer eb, gpointer d )
     if ( temp_str != NULL )
     {
         lineChartInfo.data = read_doubles( temp_str, lineChartInfo.data_rows * lineChartInfo.data_cols );
+        g_free( temp_str );
     }
     lineChartInfo.x_axis_label = get_string_param( &object_info, "x_axis_label" );
     lineChartInfo.y_axis_label = get_string_param( &object_info, "y_axis_label" );
@@ -465,11 +468,13 @@ handle_scatter( GncHtml* html, gpointer eb, gpointer d )
     if ( temp_str != NULL )
     {
         scatterPlotInfo.xData = read_doubles( temp_str, scatterPlotInfo.datasize );
+        g_free( temp_str );
     }
     temp_str = get_string_param( &object_info, "y_data" );
     if ( temp_str != NULL )
     {
         scatterPlotInfo.yData = read_doubles( temp_str, scatterPlotInfo.datasize );
+        g_free( temp_str );
     }
 
     pixbuf = gnc_html_graph_gog_create_scatterplot( &scatterPlotInfo );
