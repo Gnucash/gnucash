@@ -799,7 +799,7 @@ gnc_tree_model_owner_iter_nth_child (GtkTreeModel *tree_model,
     if (parent_iter)
     {
         gchar *parent_string;
-        parent_string = strdup(iter_to_string(parent_iter));
+        parent_string = g_strdup(iter_to_string(parent_iter));
         ENTER("model %p, iter %s, parent_iter %s, n %d",
               tree_model, iter_to_string(iter),
               parent_string, n);

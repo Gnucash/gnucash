@@ -998,7 +998,7 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
     if (parent_iter)
     {
         gchar *parent_string;
-        parent_string = strdup(iter_to_string(parent_iter));
+        parent_string = g_strdup(iter_to_string(parent_iter));
         ENTER("model %p, iter %s, parent_iter %s, n %d",
               tree_model, iter_to_string(iter),
               parent_string, n);
@@ -1065,7 +1065,7 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
     {
         gchar *child_string;
 
-        child_string = strdup(iter_to_string(child));
+        child_string = g_strdup(iter_to_string(child));
         ENTER("model %p, iter %s, child %s",
               tree_model, iter_to_string(iter),
               child_string);

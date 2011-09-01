@@ -1102,7 +1102,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
         /* Make a copy of the local part of the key so it can be split
          * into column name and key type */
         known = FALSE;
-        column_name = strdup(local);
+        column_name = g_strdup(local);
         type_name = strrchr(column_name, '_');
         *type_name++ = '\0';
 
