@@ -1246,7 +1246,7 @@ make_random_changes_to_account (QofBook *book, Account *account)
 
     set_account_random_string (account, xaccAccountSetName);
 
-    tmp_int = get_random_int_in_range (ACCT_TYPE_BANK, ACCT_TYPE_CREDITLINE);
+    tmp_int = get_random_int_in_range (ACCT_TYPE_BANK, NUM_ACCOUNT_TYPES - 1);
     xaccAccountSetType (account, tmp_int);
 
     set_account_random_string (account, xaccAccountSetCode);
