@@ -28,6 +28,7 @@
 #include <QSharedPointer>
 #include "gnc/Session.hpp"
 #include "gnc/AccountItemModel.hpp"
+#include "gnc/dashboard.hpp"
 
 class QAction;
 class QMenu;
@@ -35,6 +36,7 @@ class QPlainTextEdit;
 class QTextEdit;
 class QTabWidget;
 class QUndoStack;
+class QToolButton;
 
 namespace Ui
 {
@@ -45,6 +47,7 @@ namespace gnc
 {
 
 class RecentFileMenu;
+class Dashboard;
 
 /** The main window of Cutecash.
  *
@@ -61,6 +64,7 @@ public:
 
     const QString& getCurrentFilename() const { return m_currentFilename; }
     bool hasOpenedFile() const { return !m_currentFilename.isEmpty(); }
+    void dockWidgetsVisibilityChanged(int wdg, bool visible);
 
 public slots:
     void accountItemActivated(const QModelIndex & index);
@@ -69,6 +73,9 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *event);
+
+signals:
+    void dashboardVisible(bool visible);
 
 private slots:
     void newFile();
@@ -84,6 +91,7 @@ private slots:
     void on_actionViewAccountTree_triggered(bool checked);
     void on_actionViewAccountList_triggered(bool checked);
     void on_actionViewWelcomepage_triggered(bool checked);
+    void on_actionViewDashboard_triggered(bool checked);
     void documentWasModified();
     void selectionChanged(const QItemSelection & selected, const QItemSelection & deselected );
 
@@ -92,7 +100,8 @@ private:
     void createToolBars();
     void createStatusBar();
     void setIcons();
-    void readSettings();
+    void readSettings();    
+    void autoLoadRecentFile();
     void writeSettings();
     bool maybeSave();
     void setCurrentFile(const QString &fileName);
@@ -123,10 +132,14 @@ private:
 
     QToolBar *m_fileToolBar;
     QToolBar *m_editToolBar;
+    QToolBar *m_dashboardToolBar;
     QAction *m_actionUndo;
     QAction *m_actionRedo;
+    QToolButton *m_btnTransferFundsWidget;
     QSharedPointer<RecentFileMenu> m_menuRecentFiles;
     QUndoStack *m_undoStack;
+
+    Dashboard *dboard;
 
     Session m_session;
     AccountListModel *m_accountListModel;

@@ -50,6 +50,8 @@ public:
      */
     void readSettings(QSettings *settings, const QString &groupName);
 
+    QString getRecentFileName(QSettings *settings, const QString &groupName);
+
     /**
      * Write the internal list to a QSettings array.
      * @param settings QSettings to write to

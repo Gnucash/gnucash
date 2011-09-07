@@ -32,7 +32,6 @@
 #include "config.h"
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
-#include "dashboard.hpp"
 
 // gnucash includes
 #include <glib/gi18n.h>
@@ -88,8 +87,10 @@ MainWindow::MainWindow()
     createStatusBar();
     setIcons();
 
-    Dashboard *dboard = new Dashboard(this);
-    ui->tabWidget->addTab(dboard, tr("Dashboard"));
+    dboard = new Dashboard(this);
+    dboard->setWindowTitle("Dashboard");
+    //dboard->show();
+    ui->tabWidget->addTab(dboard, "Dashboard");
 
     /* Properties used by QSettings */
     QCoreApplication::setOrganizationName("Gnucash");
@@ -100,15 +101,23 @@ MainWindow::MainWindow()
 
     connect(m_undoStack, SIGNAL(cleanChanged(bool)),
             this, SLOT(documentCleanStateChanged(bool)));
+    connect(m_btnTransferFundsWidget, SIGNAL(toggled(bool)),
+            dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
+    connect(this, SIGNAL(dashboardVisible(bool)),
+            dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
 
     setWindowIcon(QIcon(":/pixmaps/gnucash-icon-64x64.png"));
 
+    /* Check if the system supports freedesktop standards for icons,
+     * if not, then use the bundled icon set. */
     if (!QIcon::hasThemeIcon("document-open")) {
         QIcon::setThemeName("oxygen");
     }
 
     newFile();
     setUnifiedTitleAndToolBarOnMac(true);
+
+    autoLoadRecentFile();
 }
 
 MainWindow::~MainWindow()
@@ -253,6 +262,14 @@ void MainWindow::createToolBars()
     m_editToolBar->addAction(ui->actionCut);
     m_editToolBar->addAction(ui->actionCopy);
     m_editToolBar->addAction(ui->actionPaste);
+
+    m_dashboardToolBar = addToolBar(tr("Dashboard"));
+    m_dashboardToolBar->setObjectName("m_dashboardToolBar");
+    m_btnTransferFundsWidget = new QToolButton;
+    m_btnTransferFundsWidget->setCheckable(true);
+    QSettings settings;
+    m_btnTransferFundsWidget->setChecked(settings.value("basic-txn-dockwidget-visible").toBool());
+    m_dashboardToolBar->addWidget(m_btnTransferFundsWidget);
 }
 
 void MainWindow::createStatusBar()
@@ -275,6 +292,7 @@ void MainWindow::setIcons()
     ui->actionSave_as->setIcon(QIcon::fromTheme("document-save-as"));
     ui->actionExit->setIcon(QIcon::fromTheme("window-close"));
     ui->actionAbout->setIcon(QIcon::fromTheme("help-about"));
+    m_btnTransferFundsWidget->setIcon(QIcon::fromTheme("help-about"));
 }
 
 void MainWindow::readSettings()
@@ -282,16 +300,32 @@ void MainWindow::readSettings()
     QSettings settings;
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(400, 400)).toSize();
-    resize(size);
-    move(pos);
+    //resize(size);
+    //move(pos);
+    restoreState(settings.value("state").toByteArray());
+    restoreGeometry(settings.value("geometry").toByteArray());
     m_menuRecentFiles->readSettings(&settings, "RecentFiles");
+}
+
+void MainWindow::autoLoadRecentFile()
+{
+    QSettings settings;
+    QString lastOpenedFile = "";
+    lastOpenedFile = m_menuRecentFiles->getRecentFileName(&settings,
+                                                          "RecentFiles");
+    if(maybeSave())
+    {
+        loadFile(lastOpenedFile);
+    }
 }
 
 void MainWindow::writeSettings()
 {
     QSettings settings;
-    settings.setValue("pos", pos());
-    settings.setValue("size", size());
+    //settings.setValue("pos", pos());
+    //settings.setValue("size", size());
+    settings.setValue("state", saveState());
+    settings.setValue("geometry", saveGeometry());
     m_menuRecentFiles->writeSettings(&settings, "RecentFiles");
 }
 
@@ -365,6 +399,13 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         ui->actionViewAccountList->setChecked(false);
         reallyRemoveTab(index);
     }
+    else if (widget == dboard)
+    {
+        ui->actionViewDashboard->setChecked(false);
+        m_dashboardToolBar->setEnabled(false);
+        m_dashboardToolBar->setHidden(true);
+        reallyRemoveTab(index);
+    }
     else
     {
         QVariant prevPos = widget->property(PROPERTY_TAB_PREVIOUSPOS);
@@ -393,6 +434,11 @@ void MainWindow::on_actionViewWelcomepage_triggered(bool checked)
     viewOrHideTab(checked, ui->textBrowserTab);
 }
 
+void MainWindow::on_actionViewDashboard_triggered(bool checked)
+{
+    viewOrHideTab(checked, dboard);
+}
+
 void MainWindow::viewOrHideTab(bool checked, QWidget *widget)
 {
     if (checked)
@@ -411,6 +457,13 @@ void MainWindow::viewOrHideTab(bool checked, QWidget *widget)
         ui->tabWidget->insertTab(tabPosition.toInt(), widget, tabLabel.toString());
         if (tabIsCurrent)
             ui->tabWidget->setCurrentWidget(widget);
+
+        if(widget == dboard)
+        {
+            m_dashboardToolBar->setEnabled(true);
+            m_dashboardToolBar->setHidden(false);
+            emit dashboardVisible(true);
+        }
     }
     else
     {
@@ -436,6 +489,18 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     QWidget *widget = ui->tabWidget->widget(index);
     bool tabWithAccounts = (widget != ui->textBrowserTab);
     ui->menuAccount->setEnabled(tabWithAccounts);
+
+    if(ui->tabWidget->currentWidget() == dboard)
+    {
+        m_dashboardToolBar->setEnabled(true);
+        m_dashboardToolBar->setHidden(false);
+        dboard->showDashboardWidgets();
+    }
+    else
+    {
+        m_dashboardToolBar->setEnabled(false);
+        m_dashboardToolBar->setHidden(true);
+    }
 }
 
 void MainWindow::accountItemActivated(const QModelIndex & index)
@@ -503,6 +568,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (maybeSave())
     {
+        dboard->mainWindowCloseEvent();
         writeSettings();
         event->accept();
 
@@ -554,5 +620,15 @@ void MainWindow::newFile()
         setCurrentFile("");
     }
 }
+
+void MainWindow::dockWidgetsVisibilityChanged(int wdg, bool visible)
+{
+    if(wdg == 0)
+    {
+        /** todo: handle tabs */
+        m_btnTransferFundsWidget->setChecked(visible);
+    }
+}
+
 
 } // END namespace gnc

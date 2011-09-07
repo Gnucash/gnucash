@@ -1,0 +1,48 @@
+#dateWidget {
+background-color: #FAA0A0;
+color:black;
+border-style: outset;
+border-width: 1px;
+border-radius: 5px;
+border-color: beige;
+
+border-bottom-width: 2px;
+border-bottom-color: darkgray;
+border-bottom-style: solid;
+
+min-width: 12em;
+padding: 2px;
+}
+
+#accountWidget {
+background-color: #A0A1FA;
+border-style: outset;
+border-width: 1px;
+border-radius: 5px;
+border-color: beige;
+padding: 2px;
+
+/* Test with colours */
+/*
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0.5, y2: 0.5,
+                                 stop: 0 #FF92BB, stop: 1 white);
+*/
+}
+
+#descWidget {
+background-color: #A9FAA0;
+border-style: outset;
+border-width: 1px;
+border-radius: 5px;
+border-color: beige;
+padding: 2px;
+}
+
+#amountWidget {
+background-color: #F0F7F0;
+border-style: outset;
+border-width: 1px;
+border-radius: 5px;
+border-color: beige;
+padding: 2px;
+}

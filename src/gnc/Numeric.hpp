@@ -101,6 +101,8 @@ public:
             : base_class(gnc_default_print_info(use_symbol))
     {}
 
+    /* If the boolean set to true, then prefix 3 letter ISO 4217
+       currency code to the amount. */
     PrintAmountInfo(const Account& account, bool use_symbol);
     PrintAmountInfo(const Split& split, bool use_symbol);
 

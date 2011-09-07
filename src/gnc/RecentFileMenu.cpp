@@ -110,6 +110,15 @@ void RecentFileMenu::readSettings(QSettings *settings, const QString &groupName)
     updateMenu();
 }
 
+QString RecentFileMenu::getRecentFileName(QSettings *settings,
+                                          const QString &groupName)
+{
+    settings->beginReadArray(groupName);
+    settings->setArrayIndex(0);
+    QString qs = settings->value("filename").toString();
+    settings->endArray();
+    return qs;
+}
 
 void RecentFileMenu::writeSettings(QSettings *settings, const QString &groupName)
 {

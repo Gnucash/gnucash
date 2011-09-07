@@ -29,6 +29,9 @@ SET (gnc_SOURCES
   mainwindow.cpp
   mainwindow-file.cpp
   dashboard.cpp
+  fpo/FPO.cpp
+  fpo/ViewletModel.cpp
+  fpo/ViewletView.cpp
 )
 
 SET (gnc_QOBJECT_HEADERS
@@ -39,6 +42,9 @@ SET (gnc_QOBJECT_HEADERS
   SplitListView.hpp
   mainwindow.hpp
   dashboard.hpp
+  fpo/FPO.hpp
+  fpo/ViewletModel.hpp
+  fpo/ViewletView.hpp
 )
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
   Account.hpp
@@ -63,6 +69,7 @@ SET (gnc_RESOURCES
   gnucash.qrc
   gtk-icons.qrc
   fallback-icons.qrc
+  stylesheets.qrc
 )
 
 IF (WITH_SQL)

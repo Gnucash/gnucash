@@ -187,6 +187,12 @@ main(int argc, char ** argv)
         gnc::MainWindow mainWin;
         mainWin.show();
 
+        /* set stylesheet */
+        QFile styleSheetFile(":/qss-default");
+        styleSheetFile.open(QFile::ReadOnly);
+        QString styleSheetName = QLatin1String(styleSheetFile.readAll());
+        app.setStyleSheet(styleSheetName);
+
         // Go into the main qt event loop
         r = app.exec();
 
