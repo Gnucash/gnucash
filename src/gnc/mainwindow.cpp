@@ -32,6 +32,7 @@
 #include "config.h"
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
+#include "dashboard.hpp"
 
 // gnucash includes
 #include <glib/gi18n.h>
@@ -85,6 +86,10 @@ MainWindow::MainWindow()
     createActions();
     createToolBars();
     createStatusBar();
+    setIcons();
+
+    Dashboard *dboard = new Dashboard(this);
+    ui->tabWidget->addTab(dboard, tr("Dashboard"));
 
     /* Properties used by QSettings */
     QCoreApplication::setOrganizationName("Gnucash");
@@ -97,6 +102,10 @@ MainWindow::MainWindow()
             this, SLOT(documentCleanStateChanged(bool)));
 
     setWindowIcon(QIcon(":/pixmaps/gnucash-icon-64x64.png"));
+
+    if (!QIcon::hasThemeIcon("document-open")) {
+        QIcon::setThemeName("oxygen");
+    }
 
     newFile();
     setUnifiedTitleAndToolBarOnMac(true);
@@ -193,10 +202,8 @@ void MainWindow::createActions()
     ui->actionSave_as->setShortcuts(QKeySequence::SaveAs);
 
     m_actionRedo = m_undoStack->createRedoAction(ui->menuEdit, tr("&Redo"));
-    m_actionRedo->setIcon(QIcon(":/gtk-icons/gtk-redo.png"));
     m_actionRedo->setShortcuts(QKeySequence::Redo);
     m_actionUndo = m_undoStack->createUndoAction(ui->menuEdit, tr("&Undo"));
-    m_actionUndo->setIcon(QIcon(":/gtk-icons/gtk-undo.png"));
     m_actionUndo->setShortcuts(QKeySequence::Undo);
     ui->menuEdit->insertAction(ui->actionCut, m_actionUndo);
     ui->menuEdit->insertAction(ui->actionCut, m_actionRedo);
@@ -251,6 +258,23 @@ void MainWindow::createToolBars()
 void MainWindow::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
+}
+
+void MainWindow::setIcons()
+{
+    m_actionRedo->setIcon(QIcon::fromTheme("edit-redo"));
+    m_actionUndo->setIcon(QIcon::fromTheme("edit-undo"));
+    ui->actionCut->setIcon(QIcon::fromTheme("edit-cut"));
+    ui->actionCopy->setIcon(QIcon::fromTheme("edit-copy"));
+    ui->actionPaste->setIcon(QIcon::fromTheme("edit-paste"));
+    ui->actionCloseTab->setIcon(QIcon::fromTheme("tab-close-other"));
+    ui->actionNew->setIcon(QIcon::fromTheme("document-new"));
+    ui->actionOpen->setIcon(QIcon::fromTheme("document-open"));
+    ui->actionSave->setIcon(QIcon::fromTheme("document-save"));
+    ui->actionCloseTab->setIcon(QIcon::fromTheme("tab-close-other"));
+    ui->actionSave_as->setIcon(QIcon::fromTheme("document-save-as"));
+    ui->actionExit->setIcon(QIcon::fromTheme("window-close"));
+    ui->actionAbout->setIcon(QIcon::fromTheme("help-about"));
 }
 
 void MainWindow::readSettings()
