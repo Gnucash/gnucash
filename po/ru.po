@@ -11112,7 +11112,7 @@ msgstr "<b>Совет дня:</b>"
 
 #: ../src/gnome-utils/glade/totd.glade.h:2
 msgid "GnuCash Tip Of The Day"
-msgstr "<b>Советы дня GnuCash</b>"
+msgstr "Советы дня GnuCash"
 
 #: ../src/gnome-utils/glade/totd.glade.h:3
 msgid "_Show tips at startup"
