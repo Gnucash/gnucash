@@ -1,34 +1,37 @@
-/*
- * gnc-plugin-page-sx-list.c
- *
- * Copyright (C) 2006 Josh Sled <jsled@asynchronous.org>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 and/or version 3 of the GNU General Public
- * License as published by the Free Software Foundation.
- *
- * As a special exception, permission is granted to link the binary module
- * resultant from this code with the OpenSSL project's "OpenSSL" library (or
- * modified versions of it that use the same license as the "OpenSSL"
- * library), and distribute the linked executable.  You must obey the GNU
- * General Public License in all respects for all of the code used other than
- * "OpenSSL". If you modify this file, you may extend this exception to your
- * version of the file, but you are not obligated to do so. If you do not
- * wish to do so, delete this exception statement from your version of this
- * file.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, contact:
- *
- * Free Software Foundation           Voice:  +1-617-542-5942
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
- * Boston, MA  02110-1301,  USA       gnu@gnu.org
- */
+/********************************************************************\
+ * gnc-plugin-page-sx-list.c : scheduled transaction plugin         *
+ *                                                                  *
+ * Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2011 Robert Fewell                                 *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of version 2 and/or version 3 of the   *
+ * GNU General Public License as published by the Free Software     *
+ * Foundation.                                                      *
+ *                                                                  *
+ * As a special exception, permission is granted to link the binary *
+ * module resultant from this code with the OpenSSL project's       *
+ * "OpenSSL" library (or modified versions of it that use the same  *
+ * license as the "OpenSSL" library), and distribute the linked     *
+ * executable.  You must obey the GNU General Public License in all *
+ * respects for all of the code used other than "OpenSSL". If you   *
+ * modify this file, you may extend this exception to your version  *
+ * of the file, but you are not obligated to do so. If you do not   *
+ * wish to do so, delete this exception statement from your version *
+ * of this file.                                                    *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+\********************************************************************/
 
 /** @addtogroup ContentPlugins
     @{ */
@@ -43,7 +46,6 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <glade/glade-xml.h>
 #include "SX-book.h"
 #include "Split.h"
 #include "Transaction.h"
@@ -69,6 +71,8 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.plugin-page.sx-list"
 
+static QofLogModule log_module = GNC_MOD_GUI_SX;
+
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
 #define GCONF_SECTION "window/pages/sx_list"
 
@@ -79,12 +83,12 @@ typedef struct GncPluginPageSxListPrivate
     GtkWidget* widget;
     gint gnc_component_id;
 
-    GladeXML* gxml;
     GncSxInstanceDenseCalAdapter *dense_cal_model;
     GncDenseCal* gdcal;
 
     GncSxInstanceModel* instances;
     GtkTreeView* tree_view;
+
 } GncPluginPageSxListPrivate;
 
 #define GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(o)  \
@@ -132,6 +136,7 @@ static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS (gnc_plugin_page_sx_list_actions);
 
+
 GType
 gnc_plugin_page_sx_list_get_type (void)
 {
@@ -160,6 +165,7 @@ gnc_plugin_page_sx_list_get_type (void)
     return gnc_plugin_page_sx_list_type;
 }
 
+
 GncPluginPage *
 gnc_plugin_page_sx_list_new (void)
 {
@@ -167,6 +173,7 @@ gnc_plugin_page_sx_list_new (void)
     plugin_page = g_object_new(GNC_TYPE_PLUGIN_PAGE_SX_LIST, NULL);
     return GNC_PLUGIN_PAGE(plugin_page);
 }
+
 
 static void
 gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
@@ -188,6 +195,7 @@ gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
 
     g_type_class_add_private(klass, sizeof(GncPluginPageSxListPrivate));
 }
+
 
 static void
 gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
@@ -217,6 +225,7 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
     /* gnc_plugin_init_short_names (action_group, toolbar_labels); */
 }
 
+
 static void
 gnc_plugin_page_sx_list_dispose(GObject *object)
 {
@@ -241,6 +250,7 @@ gnc_plugin_page_sx_list_dispose(GObject *object)
     G_OBJECT_CLASS (parent_class)->dispose(object);
 }
 
+
 static void
 gnc_plugin_page_sx_list_finalize (GObject *object)
 {
@@ -254,6 +264,7 @@ gnc_plugin_page_sx_list_finalize (GObject *object)
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
+
 
 /* Virtual Functions */
 static void
@@ -272,6 +283,7 @@ gnc_plugin_page_sx_list_refresh_cb (GHashTable *changes, gpointer user_data)
     gtk_widget_queue_draw(priv->widget);
 }
 
+
 static void
 gnc_plugin_page_sx_list_close_cb (gpointer user_data)
 {
@@ -282,6 +294,7 @@ gnc_plugin_page_sx_list_close_cb (gpointer user_data)
     page = GNC_PLUGIN_PAGE_SX_LIST (plugin_page);
     gnc_main_window_close_page(plugin_page);
 }
+
 
 static void
 gppsl_selection_changed_cb(GtkTreeSelection *selection, gpointer user_data)
@@ -301,19 +314,51 @@ gppsl_selection_changed_cb(GtkTreeSelection *selection, gpointer user_data)
     gtk_action_set_sensitive(delete_action, selection_state);
 }
 
+
 static GtkWidget *
 gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageSxList *page;
     GncPluginPageSxListPrivate *priv;
+    GtkWidget *widget;
+    GtkWidget *vbox;
+    GtkWidget *label;
+    GtkWidget *swin;
+    char *markup;
+    char *text;
 
     page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
     if (priv->widget != NULL)
         return priv->widget;
 
-    priv->gxml = gnc_glade_xml_new("sched-xact.glade", "sx-list-vbox");
-    priv->widget = glade_xml_get_widget(priv->gxml, "sx-list-vbox");
+    /* Create Vpaned widget for top level */
+    widget = gtk_vpaned_new();
+    priv->widget = widget;
+    gtk_widget_show (priv->widget);
+
+    /* Add vbox and label */
+    vbox = gtk_vbox_new(FALSE,0);
+    gtk_paned_pack1( GTK_PANED(widget), vbox, TRUE, FALSE);
+
+    label = gtk_label_new(NULL);
+    text = g_strdup_printf(_("Transactions"));
+    markup = g_markup_printf_escaped ("<b> %s</b>", text);
+    gtk_label_set_markup (GTK_LABEL (label), markup);
+    g_free (markup);
+    g_free (text);
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0);
+    gtk_widget_show (label);
+    gtk_box_pack_start ( GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    gtk_widget_show (vbox);
+
+    /* Create scrolled window for top area */
+    swin = gtk_scrolled_window_new(NULL,NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC);
+    gtk_box_pack_start ( GTK_BOX(vbox), swin, TRUE, TRUE, 5);
+    gtk_widget_show (swin);
 
     {
         // gint half_way;
@@ -339,16 +384,14 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     }
 
     {
-        GtkContainer *tree_view_container;
         GtkTreeSelection *selection;
 
-        tree_view_container = GTK_CONTAINER(glade_xml_get_widget(priv->gxml, "sx-list-tree-view-container"));
         priv->tree_view = GTK_TREE_VIEW(gnc_tree_view_sx_list_new(priv->instances));
         g_object_set(G_OBJECT(priv->tree_view),
                      "gconf-section", GCONF_SECTION,
                      "show-column-menu", TRUE,
                      NULL);
-        gtk_container_add(tree_view_container, GTK_WIDGET(priv->tree_view));
+        gtk_container_add(GTK_CONTAINER( swin ), GTK_WIDGET(priv->tree_view));
 
         selection = gtk_tree_view_get_selection(priv->tree_view);
         gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
@@ -356,9 +399,31 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         g_signal_connect(G_OBJECT(priv->tree_view), "row-activated", (GCallback)gppsl_row_activated_cb, (gpointer)page);
     }
 
-    {
-        GtkWidget *w;
+    /* Add vbox and label */
+    vbox = gtk_vbox_new(FALSE,0);
+    gtk_paned_pack2( GTK_PANED(widget), vbox, TRUE, FALSE);
 
+    label = gtk_label_new(NULL);
+    text = g_strdup_printf(_("Upcoming Transactions"));
+    markup = g_markup_printf_escaped ("<b> %s</b>", text);
+    gtk_label_set_markup (GTK_LABEL (label), markup);
+    g_free (markup);
+    g_free (text);
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0);
+    gtk_widget_show (label);
+
+    gtk_box_pack_start ( GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    gtk_widget_show (vbox);
+
+    /* Create scrolled window for bottom area */
+    swin = gtk_scrolled_window_new(NULL,NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
+                                    GTK_POLICY_AUTOMATIC,
+                                    GTK_POLICY_AUTOMATIC);
+    gtk_box_pack_start ( GTK_BOX(vbox), swin, TRUE, TRUE, 5);
+    gtk_widget_show (swin);
+
+    {
         priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new(GNC_SX_INSTANCE_MODEL(priv->instances));
         priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
         g_object_ref_sink(priv->gdcal);
@@ -366,9 +431,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
         gnc_dense_cal_set_num_months(priv->gdcal, 12);
 
-        w = glade_xml_get_widget(priv->gxml, "upcoming_cal_hbox");
-        gtk_container_add(GTK_CONTAINER(w), GTK_WIDGET(priv->gdcal));
-        gtk_widget_show_all(w);
+        gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(priv->gdcal));
     }
 
     priv->gnc_component_id = gnc_register_gui_component("plugin-page-sx-list",
@@ -378,6 +441,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
     return priv->widget;
 }
+
 
 static void
 gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
@@ -400,6 +464,7 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
         priv->gnc_component_id = 0;
     }
 }
+
 
 /** Save enough information about this page that it can be recreated next time
  * the user starts gnucash.
@@ -429,6 +494,7 @@ gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page,
     g_key_file_set_integer(key_file, group_name, "paned_position",
                            gtk_paned_get_position(GTK_PANED(priv->widget)));
 }
+
 
 /**
  * Create a new sx list page based on the information saved during a previous
@@ -478,6 +544,7 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
     return GNC_PLUGIN_PAGE(page);
 }
 
+
 static void
 gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
 {
@@ -500,17 +567,20 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
     gnc_ui_scheduled_xaction_editor_dialog_create(new_sx, new_sx_flag);
 }
 
+
 static void
 _edit_sx(gpointer data, gpointer user_data)
 {
     gnc_ui_scheduled_xaction_editor_dialog_create((SchedXaction*)data, FALSE);
 }
 
+
 static SchedXaction*
 _argument_reorder_fn(GtkTreePath* list_path_data, GncTreeViewSxList* user_tree_view)
 {
     return gnc_tree_view_sx_list_get_sx_from_path(user_tree_view, list_path_data);
 }
+
 
 static void
 gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
@@ -536,6 +606,7 @@ gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
     g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free(selected_paths);
 }
+
 
 static void
 gppsl_row_activated_cb(GtkTreeView *tree_view,
@@ -563,6 +634,7 @@ _destroy_sx(gpointer data, gpointer user_data)
     gnc_sx_begin_edit(sx);
     xaccSchedXactionDestroy(sx);
 }
+
 
 static void
 gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)

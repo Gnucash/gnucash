@@ -42,12 +42,12 @@
  **/
 typedef struct _GncFrequency
 {
-    GtkVBox	        widget;
+    GtkVBox	     widget;
     GtkVBox         *vb;
     GtkNotebook     *nb;
     GtkComboBox     *freqComboBox;
     GNCDateEdit     *startDate;
-    GladeXML        *gxml;
+    GtkBuilder      *builder;
 } GncFrequency;
 
 typedef struct _GncFrequencyClass

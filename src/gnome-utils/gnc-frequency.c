@@ -3,6 +3,7 @@
  * Copyright (C) 2001,2002,2007 Joshua Sled <jsled@asynchronous.org>*
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
  * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2011 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -39,6 +40,8 @@
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.frequency"
+
+static QofLogModule log_module = GNC_MOD_GUI;
 
 #define LAST_DAY_OF_MONTH_OPTION_INDEX 31
 
@@ -129,6 +132,7 @@ gnc_frequency_get_type()
     return gncfreq_type;
 }
 
+
 static void
 gnc_frequency_class_init( GncFrequencyClass *klass )
 {
@@ -148,6 +152,7 @@ gnc_frequency_class_init( GncFrequencyClass *klass )
                       0);
 }
 
+
 void
 gnc_frequency_init(GncFrequency *gf)
 {
@@ -155,6 +160,7 @@ gnc_frequency_init(GncFrequency *gf)
     GtkVBox* vb;
     GtkWidget* o;
     GtkAdjustment* adj;
+    GtkBuilder *builder;
 
     static const struct comboBoxTuple
     {
@@ -162,7 +168,7 @@ gnc_frequency_init(GncFrequency *gf)
         void (*fn)();
     } comboBoxes[] =
     {
-        { "freq_combobox",               freq_combo_changed },
+        { "freq_combobox",              freq_combo_changed },
         { "semimonthly_first",          semimonthly_sel_changed },
         { "semimonthly_first_weekend",  semimonthly_sel_changed },
         { "semimonthly_second",         semimonthly_sel_changed },
@@ -185,28 +191,42 @@ gnc_frequency_init(GncFrequency *gf)
         { NULL,               NULL }
     };
 
-    gf->gxml = gnc_glade_xml_new("sched-xact.glade", "gncfreq_vbox");
-    o = glade_xml_get_widget(gf->gxml, "gncfreq_nb");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "adjustment1");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "adjustment2");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "adjustment3");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "adjustment4");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore1");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore2");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore3");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore4");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore5");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore6");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore7");
+    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "gncfreq_vbox");
+
+    gf->builder = builder;
+    o = GTK_WIDGET(gtk_builder_get_object (builder, "gncfreq_nb"));
     gf->nb = GTK_NOTEBOOK(o);
-    o = glade_xml_get_widget(gf->gxml, "freq_combobox");
+    o = GTK_WIDGET(gtk_builder_get_object (builder, "freq_combobox"));
     gf->freqComboBox = GTK_COMBO_BOX(o);
     gf->startDate = GNC_DATE_EDIT(gnc_date_edit_new(time(NULL), FALSE, FALSE));
     /* Add the new widget to the table. */
     {
         gint dont_expand_or_fill = 0;
-        GtkWidget *table = glade_xml_get_widget(gf->gxml, "gncfreq_table");
+        GtkWidget *table = GTK_WIDGET(gtk_builder_get_object (builder, "gncfreq_table"));
         gtk_table_attach(GTK_TABLE(table), GTK_WIDGET(gf->startDate),
-                         1, 2, 1, 2, dont_expand_or_fill, 0,
+                         4, 5, 0, 1, dont_expand_or_fill, 0,
                          0, 0);
     }
-    vb = GTK_VBOX(glade_xml_get_widget(gf->gxml, "gncfreq_vbox"));
+    vb = GTK_VBOX(gtk_builder_get_object (builder, "gncfreq_vbox"));
     gf->vb = vb;
     gtk_container_add(GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb));
 
     /* initialize the combo boxes */
     for (i = 0; comboBoxes[i].name != NULL; i++)
     {
-        o = glade_xml_get_widget(gf->gxml, comboBoxes[i].name);
+        o = GTK_WIDGET(gtk_builder_get_object (builder, comboBoxes[i].name));
         gtk_combo_box_set_active(GTK_COMBO_BOX(o), 0);
         if (comboBoxes[i].fn != NULL)
         {
@@ -219,7 +239,7 @@ gnc_frequency_init(GncFrequency *gf)
     {
         if (spinVals[i].fn != NULL)
         {
-            o = glade_xml_get_widget(gf->gxml, spinVals[i].name);
+            o = GTK_WIDGET(gtk_builder_get_object (builder, spinVals[i].name));
             adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(o));
             g_signal_connect(adj, "value_changed", G_CALLBACK(spinVals[i].fn), gf);
         }
@@ -228,7 +248,7 @@ gnc_frequency_init(GncFrequency *gf)
     /* initialize the weekly::day-of-week checkbox-selection hooks */
     for (i = 0; i < 7; i++)
     {
-        o = glade_xml_get_widget(gf->gxml, CHECKBOX_NAMES[i]);
+        o = GTK_WIDGET(gtk_builder_get_object (builder, CHECKBOX_NAMES[i]));
         g_signal_connect(o, "clicked",
                          G_CALLBACK(weekly_days_changed), gf);
     }
@@ -237,7 +257,13 @@ gnc_frequency_init(GncFrequency *gf)
 
     /* respond to start date changes */
     g_signal_connect(gf->startDate, "date_changed", G_CALLBACK(start_date_changed), gf);
+
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gf);
+
+    /* We can not use this as builder file is accessed when widgets change */
+    /* g_object_unref(G_OBJECT(builder)); */
 }
+
 
 static void
 spin_changed_helper( GtkAdjustment *adj, gpointer d )
@@ -245,11 +271,13 @@ spin_changed_helper( GtkAdjustment *adj, gpointer d )
     g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
 
+
 static void
 weekly_days_changed( GtkButton *b, gpointer d )
 {
     g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
+
 
 static void
 monthly_sel_changed( GtkButton *b, gpointer d )
@@ -257,21 +285,25 @@ monthly_sel_changed( GtkButton *b, gpointer d )
     g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
 
+
 static void
 semimonthly_sel_changed( GtkButton *b, gpointer d )
 {
     g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
 
+
 static inline guint32 minn( guint32 a, guint32 b )
 {
     return a > b ? b : a;
 }
 
+
 static inline guint32 maxn( guint32 a, guint32 b )
 {
     return a > b ? a : b;
 }
+
 
 static void
 freq_combo_changed(GtkComboBox *b, gpointer d)
@@ -285,38 +317,43 @@ freq_combo_changed(GtkComboBox *b, gpointer d)
     g_signal_emit_by_name(gf, "changed");
 }
 
+
 static void
 start_date_changed( GNCDateEdit *gde, gpointer d )
 {
     g_signal_emit_by_name(GNC_FREQUENCY(d), "changed");
 }
 
-/* ================================================================= */
-/* Relabel some of the labels */
 
+/**************************************
+ * Relabel some of the labels         *
+ *************************************/
 void
 gnc_frequency_set_frequency_label_text(GncFrequency *gf, const gchar *txt)
 {
     GtkLabel *lbl;
     if (!gf || !txt) return;
-    lbl = GTK_LABEL (glade_xml_get_widget (gf->gxml, "freq label"));
+    lbl = GTK_LABEL (gtk_builder_get_object (gf->builder, "freq_label"));
     gtk_label_set_text (lbl, txt);
 }
+
 
 void
 gnc_frequency_set_date_label_text(GncFrequency *gf, const gchar *txt)
 {
     GtkLabel *lbl;
     if (!gf || !txt) return;
-    lbl = GTK_LABEL (glade_xml_get_widget (gf->gxml, "startdate label"));
+    lbl = GTK_LABEL (gtk_builder_get_object (gf->builder, "startdate_label"));
     gtk_label_set_text (lbl, txt);
 }
+
 
 GtkWidget*
 gnc_frequency_new_from_recurrence(GList *recurrences, const GDate *start_date)
 {
     return gnc_frequency_new(recurrences, start_date);
 }
+
 
 GtkWidget*
 gnc_frequency_new(GList *recurrences, const GDate *start_date)
@@ -327,6 +364,7 @@ gnc_frequency_new(GList *recurrences, const GDate *start_date)
     return GTK_WIDGET(toRet);
 }
 
+
 static void
 _setup_weekly_recurrence(GncFrequency *gf, Recurrence *r)
 {
@@ -336,7 +374,7 @@ _setup_weekly_recurrence(GncFrequency *gf, Recurrence *r)
     const char *checkbox_widget_name;
     GtkWidget *weekday_checkbox;
 
-    GtkWidget *multipler_spin = glade_xml_get_widget(gf->gxml, "weekly_spin");
+    GtkWidget *multipler_spin = GTK_WIDGET(gtk_builder_get_object (gf->builder, "weekly_spin"));
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(multipler_spin), multiplier);
 
     recurrence_date = recurrenceGetDate(r);
@@ -345,9 +383,10 @@ _setup_weekly_recurrence(GncFrequency *gf, Recurrence *r)
     // this `mod 7' is explicit knowledge of the values of (monday=1)-based
     // GDateWeekday, vs. our (sunday=0)-based checkbox names array.
     checkbox_widget_name = CHECKBOX_NAMES[day_of_week % 7];
-    weekday_checkbox = glade_xml_get_widget(gf->gxml, checkbox_widget_name);
+    weekday_checkbox = GTK_WIDGET(gtk_builder_get_object (gf->builder, checkbox_widget_name));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(weekday_checkbox), TRUE);
 }
+
 
 static int
 _get_monthly_combobox_index(Recurrence *r)
@@ -379,11 +418,13 @@ _get_monthly_combobox_index(Recurrence *r)
     return day_of_month_index;
 }
 
+
 void
 gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, const GDate *start_date)
 {
     gnc_frequency_setup(gf, recurrences, start_date);
 }
+
 
 void
 gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_date)
@@ -425,16 +466,15 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_dat
             first = (Recurrence*)g_list_nth_data(recurrences, 0);
             second = (Recurrence*)g_list_nth_data(recurrences, 1);
 
-            multiplier_spin = glade_xml_get_widget(gf->gxml, "semimonthly_spin");
+            multiplier_spin = GTK_WIDGET(gtk_builder_get_object (gf->builder, "semimonthly_spin"));
             gtk_spin_button_set_value(GTK_SPIN_BUTTON(multiplier_spin), recurrenceGetMultiplier(first));
-
-            dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first");
+            dom_combobox = GTK_WIDGET(gtk_builder_get_object (gf->builder, "semimonthly_first"));
             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(first));
-            dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_first_weekend");
+            dom_combobox = GTK_WIDGET(gtk_builder_get_object (gf->builder, "semimonthly_first_weekend"));
             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(first));
-            dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second");
+            dom_combobox = GTK_WIDGET(gtk_builder_get_object (gf->builder, "semimonthly_second"));
             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(second));
-            dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second_weekend");
+            dom_combobox = GTK_WIDGET(gtk_builder_get_object (gf->builder, "semimonthly_second_weekend"));
             gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), recurrenceGetWeekendAdjust(second));
 
             gtk_notebook_set_current_page(gf->nb, PAGE_SEMI_MONTHLY);
@@ -472,7 +512,7 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_dat
             GtkWidget *spin_button;
 
             multiplier = recurrenceGetMultiplier(r);
-            spin_button = glade_xml_get_widget(gf->gxml, "daily_spin");
+            spin_button = GTK_WIDGET(gtk_builder_get_object (gf->builder, "daily_spin"));
             gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_button), multiplier);
             made_changes = TRUE;
 
@@ -496,15 +536,15 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_dat
             guint multiplier;
             GtkWidget *multipler_spin, *day_of_month, *weekend_mode;
 
-            multipler_spin = glade_xml_get_widget(gf->gxml, "monthly_spin");
+            multipler_spin = GTK_WIDGET(gtk_builder_get_object (gf->builder, "monthly_spin"));
             multiplier = recurrenceGetMultiplier(r);
             if (recurrenceGetPeriodType(r) == PERIOD_YEAR)
                 multiplier *= 12;
             gtk_spin_button_set_value(GTK_SPIN_BUTTON(multipler_spin), multiplier);
 
-            day_of_month = glade_xml_get_widget(gf->gxml, "monthly_day");
+            day_of_month = GTK_WIDGET(gtk_builder_get_object (gf->builder, "monthly_day"));
             gtk_combo_box_set_active(GTK_COMBO_BOX(day_of_month), _get_monthly_combobox_index(r));
-            weekend_mode = glade_xml_get_widget(gf->gxml, "monthly_weekend");
+            weekend_mode = GTK_WIDGET(gtk_builder_get_object (gf->builder, "monthly_weekend"));
             gtk_combo_box_set_active(GTK_COMBO_BOX(weekend_mode), recurrenceGetWeekendAdjust(r));
 
             gtk_notebook_set_current_page(gf->nb, PAGE_MONTHLY);
@@ -522,21 +562,23 @@ maybe_signal:
         g_signal_emit_by_name(gf, "changed");
 }
 
+
 static gint
 _get_multiplier_from_widget(GncFrequency *gf, char *widget_name)
 {
     GtkWidget *multiplier_spin;
-    multiplier_spin = glade_xml_get_widget(gf->gxml, widget_name);
+    multiplier_spin = GTK_WIDGET(gtk_builder_get_object (gf->builder, widget_name));
     return gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(multiplier_spin));
 }
+
 
 static Recurrence*
 _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier, char *combo_name, char *combo_weekend_name)
 {
     Recurrence *r;
-    GtkWidget *day_of_month_combo = glade_xml_get_widget(gf->gxml, combo_name);
+    GtkWidget *day_of_month_combo = GTK_WIDGET(gtk_builder_get_object (gf->builder, combo_name));
     int day_of_month_index = gtk_combo_box_get_active(GTK_COMBO_BOX(day_of_month_combo));
-    GtkWidget *weekend_adjust_combo = glade_xml_get_widget(gf->gxml, combo_weekend_name);
+    GtkWidget *weekend_adjust_combo = GTK_WIDGET(gtk_builder_get_object (gf->builder, combo_weekend_name));
     int weekend_adjust = gtk_combo_box_get_active(GTK_COMBO_BOX(weekend_adjust_combo));
     GDateWeekday selected_day_of_week;
     GDate *day_of_week_date;
@@ -581,6 +623,7 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
     }
     return r;
 }
+
 
 void
 gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *out_start_date)
@@ -627,7 +670,7 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
             GDate *day_of_week_aligned_date;
             Recurrence *r;
             const char *day_widget_name = CHECKBOX_NAMES[checkbox_idx];
-            GtkWidget *weekday_checkbox = glade_xml_get_widget(gf->gxml, day_widget_name);
+            GtkWidget *weekday_checkbox = GTK_WIDGET(gtk_builder_get_object (gf->builder, day_widget_name));
 
             if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(weekday_checkbox)))
                 continue;

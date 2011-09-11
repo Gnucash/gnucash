@@ -10,13 +10,13 @@ gtkbuilder_DATA = \
 	dialog-fincalc.glade \
 	dialog-price.glade \
 	dialog-print-check.glade \
+        dialog-sx.glade \
 	gnc-plugin-page-budget.glade \
 	newuser.glade \
 	owner.glade \
 	progress.glade \
 	reconcile.glade \
 	register.glade \
-	sched-xact.glade \
 	tax.glade \
 	userpass.glade \
 	window-autoclear.glade

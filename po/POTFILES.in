@@ -234,13 +234,13 @@ src/gnome/gtkbuilder/dialog-fincalc.glade
 src/gnome/gtkbuilder/dialog-lot-viewer.glade
 src/gnome/gtkbuilder/dialog-price.glade
 src/gnome/gtkbuilder/dialog-print-check.glade
+src/gnome/gtkbuilder/dialog-sx.glade
 src/gnome/gtkbuilder/gnc-plugin-page-budget.glade
 src/gnome/gtkbuilder/newuser.glade
 src/gnome/gtkbuilder/owner.glade
 src/gnome/gtkbuilder/progress.glade
 src/gnome/gtkbuilder/reconcile.glade
 src/gnome/gtkbuilder/register.glade
-src/gnome/gtkbuilder/sched-xact.glade
 src/gnome/gtkbuilder/tax.glade
 src/gnome/gtkbuilder/userpass.glade
 src/gnome/gtkbuilder/window-autoclear.glade
@@ -359,6 +359,7 @@ src/gnome-utils/gnc-window.c
 src/gnome-utils/gtkbuilder/dialog-commodity.glade
 src/gnome-utils/gtkbuilder/dialog-transfer.glade
 src/gnome-utils/gtkbuilder/gnc-date-format.glade
+src/gnome-utils/gtkbuilder/gnc-frequency.glade
 src/gnome-utils/gtkbuilder/gnc-recurrence.glade
 src/gnome-utils/misc-gnome-utils.c
 src/gnome-utils/print-session.c

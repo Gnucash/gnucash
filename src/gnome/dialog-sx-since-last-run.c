@@ -4,19 +4,20 @@
  * Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of version 2 and/or version 3 of the GNU General Public *
- * License as published by the Free Software Foundation.            *
- *
- * As a special exception, permission is granted to link the binary
- * module resultant from this code with the OpenSSL project's
- * "OpenSSL" library (or modified versions of it that use the same
- * license as the "OpenSSL" library), and distribute the linked
- * executable.  You must obey the GNU General Public License in all
- * respects for all of the code used other than "OpenSSL". If you
- * modify this file, you may extend this exception to your version
- * of the file, but you are not obligated to do so. If you do not
- * wish to do so, delete this exception statement from your version
- * of this file.
+ * modify it under the terms of version 2 and/or version 3 of the   *
+ * GNU General Public License as published by the Free Software     *
+ * Foundation.                                                      *
+ *                                                                  *
+ * As a special exception, permission is granted to link the binary *
+ * module resultant from this code with the OpenSSL project's       *
+ * "OpenSSL" library (or modified versions of it that use the same  *
+ * license as the "OpenSSL" library), and distribute the linked     *
+ * executable.  You must obey the GNU General Public License in all *
+ * respects for all of the code used other than "OpenSSL". If you   *
+ * modify this file, you may extend this exception to your version  *
+ * of the file, but you are not obligated to do so. If you do not   *
+ * wish to do so, delete this exception statement from your version *
+ * of this file.                                                    *
  *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
@@ -34,7 +35,6 @@
 #include "config.h"
 #include <glib.h>
 #include <gtk/gtk.h>
-#include <glade/glade-xml.h>
 
 #include "dialog-utils.h"
 #include "gnc-exp-parser.h"
@@ -54,6 +54,8 @@
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.sx.slr"
+
+static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define DIALOG_SX_SINCE_LAST_RUN_CM_CLASS "dialog-sx-since-last-run"
 #define GCONF_SECTION "dialogs/scheduled_trans/since_last_run"
@@ -914,14 +916,17 @@ GncSxSinceLastRunDialog*
 gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
 {
     GncSxSinceLastRunDialog *dialog;
-    GladeXML *glade;
+    GtkBuilder *builder;
 
     dialog = g_new0(GncSxSinceLastRunDialog, 1);
-    glade = gnc_glade_xml_new("sched-xact.glade", "since-last-run-dialog");
-    dialog->dialog = glade_xml_get_widget(glade, "since-last-run-dialog");
+
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-sx.glade", "since-last-run-dialog");
+
+    dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since-last-run-dialog"));
 
     dialog->editing_model = gnc_sx_slr_tree_model_adapter_new(sx_instances);
-    dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(glade_xml_get_widget(glade, "review_txn_toggle"));
+    dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "review_txn_toggle"));
 
     dialog->created_txns = auto_created_txn_guids;
 
@@ -929,7 +934,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
         GtkCellRenderer *renderer;
         GtkTreeViewColumn *col;
 
-        dialog->instance_view = GTK_TREE_VIEW(glade_xml_get_widget(glade, "instance_view"));
+        dialog->instance_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "instance_view"));
         gtk_tree_view_set_model(dialog->instance_view, GTK_TREE_MODEL(dialog->editing_model));
 
         renderer = gtk_cell_renderer_text_new();
@@ -988,6 +993,10 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
                                   gnc_get_current_session());
 
     gtk_widget_show_all(dialog->dialog);
+
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+
+    g_object_unref(G_OBJECT(builder));
 
     return dialog;
 }
