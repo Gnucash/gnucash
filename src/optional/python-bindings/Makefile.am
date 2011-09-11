@@ -86,6 +86,8 @@ endif
 
 EXTRA_DIST = \
   $(SWIG_FILES) \
+  example_scripts/Invoice.tex \
+  example_scripts/latex_invoices.py \
   example_scripts/simple_book.py \
   example_scripts/simple_session.py \
   example_scripts/simple_test.py \
