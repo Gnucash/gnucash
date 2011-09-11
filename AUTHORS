@@ -288,5 +288,6 @@ Kuang-che Wu <kcwu@csie.org> Traditional Chinese translation
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 Shimpei Yamashita <shimpei@gol.com> messages Japanese translation
 Alex Zepeda <jazepeda@pacbell.net> postgres configure patch
+Rafał Krzewski <rafal.krzewski@caltha.pl> bi module fixes
 
 ... and I am sure that I have missed many others ...
