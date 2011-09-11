@@ -172,7 +172,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
             FILL_IN_HELPER ("id", ID); /* FIXME: Should "id" be translated? I don't think so. */
             FILL_IN_HELPER ("date_opened", DATE_OPENED);
             FILL_IN_HELPER ("owner_id", OWNER_ID);
-            FILL_IN_HELPER ("biing_id", BILLING_ID);
+            FILL_IN_HELPER ("billing_id", BILLING_ID);
             FILL_IN_HELPER ("notes", NOTES);
 
             FILL_IN_HELPER ("date", DATE);
@@ -476,7 +476,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 {
     gboolean valid;
     GtkTreeIter iter;
-    gchar *id, *date_opened, *owner_id, *biing_id, *notes;
+    gchar *id, *date_opened, *owner_id, *billing_id, *notes;
     gchar *date, *desc, *action, *account, *quantity, *price, *disc_type,
           *disc_how, *discount, *taxable, *taxincluded, *tax_table;
     gchar *date_posted, *due_date, *account_posted, *memo_posted,
@@ -520,7 +520,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                             MEMO_POSTED, &memo_posted,	// if autoposting requested
                             ACCU_SPLITS, &accumulatesplits,	// if autoposting requested
                             OWNER_ID, &owner_id,
-                            BILLING_ID, &biing_id,
+                            BILLING_ID, &billing_id,
                             NOTES, &notes,
                             DATE, &date,
                             DESC, &desc,
@@ -574,7 +574,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 timespecFromTime_t (&now_timespec, now);
                 gncInvoiceSetDateOpened (invoice, now_timespec);
             }
-            gncInvoiceSetBillingID (invoice, biing_id);
+            gncInvoiceSetBillingID (invoice, billing_id);
             gncInvoiceSetNotes (invoice, notes);
             gncInvoiceSetActive (invoice, TRUE);
             //if (g_ascii_strcasecmp(type,"INVOICE"))gncInvoiceSetBillTo( invoice, billto );
@@ -612,7 +612,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                     g_free (id);
                     g_free (date_opened);
                     g_free (owner_id);
-                    g_free (biing_id);
+                    g_free (billing_id);
                     g_free (notes);
                     g_free (date);
                     g_free (desc);
@@ -716,7 +716,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         g_free (id);
         g_free (date_opened);
         g_free (owner_id);
-        g_free (biing_id);
+        g_free (billing_id);
         g_free (notes);
         g_free (date);
         g_free (desc);
