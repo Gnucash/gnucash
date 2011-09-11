@@ -578,7 +578,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                                       gnc_search_customer_on_id (book, owner_id));
             gncInvoiceSetOwner (invoice, owner);
             gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (owner));	// Set the invoice currency based on the owner
-            if (!(g_ascii_strcasecmp (type, "")))	// If a date is specified in CSV
+            if (strlen (date_opened) != 0)	// If a date is specified in CSV
             {
                 qof_scan_date (date_opened, &day, &month, &year);
                 gncInvoiceSetDateOpened (invoice,
