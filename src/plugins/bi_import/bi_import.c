@@ -559,9 +559,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         // no predefined invoice number is a new invoice that's in need of a new number.
         // This was  not designed to satisfy the need for repeat invoices however, so maybe we need a another method for this, after all
         // It should be easier to copy an invoice with a new ID than to go through all this malarky.
-        if (g_ascii_strcasecmp (type, "BILL"))
+        if (g_ascii_strcasecmp (type, "BILL") == 0)
             invoice = gnc_search_bill_on_id (book, id);
-        else if (g_ascii_strcasecmp (type, "INVOICE"))
+        else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
             invoice = gnc_search_invoice_on_id (book, id);
 
         if (!invoice)
