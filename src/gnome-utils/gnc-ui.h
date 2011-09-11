@@ -35,7 +35,6 @@
 
 #include "Account.h"
 #include "gnc-pricedb.h"
-#include "guile-mappings.h"
 #include <gtk/gtk.h>
 
 
