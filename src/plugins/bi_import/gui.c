@@ -309,7 +309,7 @@ void gnc_bi_import_gui_option3_cb (GtkWidget *widget, gpointer data)
     BillImportGui *gui = data;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    g_string_assign (gui->regexp, "^(?<id>[^!#+^;]*);(?<date_opened>[^;]*);(?<owner_id>[^;]*);(?<billing_id>[^;]*);?(?<notes>[^;]*);?(?<date>[^;]*);?(?<desc>[^;]*);?(?<action>[^;]*);?(?<account>[^;]*);?(?<quantity>[^;]*);?(?<price>[^;]*);?(?<disc_type>[^;]*);?(?<disc_how>[^;]*);?(?<discount>[^;]*);?(?<taxable>[^;]*);?(?<taxincluded>[^;]*);?(?<tax_table>[^;]*);(?<date_posted>[^;]*);(?<due_date>[^;]*);(?<account_posted>[^;]*);(?<memo_posted>[^;]*);(?<accu_splits>[^;]*)");
+    g_string_assign (gui->regexp, "^\"(?<id>[^!#+^\"]*)\";\"(?<date_opened>[^\"]*)\";\"(?<owner_id>[^\"]*)\";\"(?<billing_id>[^\"]*)\";\"?(?<notes>[^\"]*)\";\"?(?<date>[^\"]*)\";\"?(?<desc>[^\"]*)\";\"?(?<action>[^\"]*)\";\"?(?<account>[^\"]*)\";\"?(?<quantity>[^\"]*)\";\"?(?<price>[^\"]*)\";\"?(?<disc_type>[^\"]*)\";\"?(?<disc_how>[^\"]*)\";\"?(?<discount>[^\"]*)\";\"?(?<taxable>[^\"]*)\";\"?(?<taxincluded>[^\"]*)\";\"?(?<tax_table>[^\"]*)\";\"(?<date_posted>[^\"]*)\";\"(?<due_date>[^\"]*)\";\"(?<account_posted>[^\"]*)\";\"(?<memo_posted>[^\"]*)\";\"(?<accu_splits>[^\"]*)\"");
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 void gnc_bi_import_gui_option4_cb (GtkWidget *widget, gpointer data)
@@ -317,7 +317,7 @@ void gnc_bi_import_gui_option4_cb (GtkWidget *widget, gpointer data)
     BillImportGui *gui = data;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    g_string_assign (gui->regexp, "^(?<id>[^!#+^;]*);(?<date_opened>[^;]*);(?<owner_id>[^;]*);(?<billing_id>[^;]*);?(?<notes>[^;]*);?(?<date>[^;]*);?(?<desc>[^;]*);?(?<action>[^;]*);?(?<account>[^;]*);?(?<quantity>[^;]*);?(?<price>[^;]*);?(?<disc_type>[^;]*);?(?<disc_how>[^;]*);?(?<discount>[^;]*);?(?<taxable>[^;]*);?(?<taxincluded>[^;]*);?(?<tax_table>[^;]*);(?<date_posted>[^;]*);(?<due_date>[^;]*);(?<account_posted>[^;]*);(?<memo_posted>[^;]*);(?<accu_splits>[^;]*)");
+    g_string_assign (gui->regexp, "^\"(?<id>[^!#+^\"]*)\",\"(?<date_opened>[^\"]*)\",\"(?<owner_id>[^\"]*)\",\"(?<billing_id>[^\"]*)\",\"?(?<notes>[^\"]*)\",\"?(?<date>[^\"]*)\",\"?(?<desc>[^\"]*)\",\"?(?<action>[^\"]*)\",\"?(?<account>[^\"]*)\",\"?(?<quantity>[^\"]*)\",\"?(?<price>[^\"]*)\",\"?(?<disc_type>[^\"]*)\",\"?(?<disc_how>[^\"]*)\",\"?(?<discount>[^\"]*)\",\"?(?<taxable>[^\"]*)\",\"?(?<taxincluded>[^\"]*)\",\"?(?<tax_table>[^\"]*)\",\"(?<date_posted>[^\"]*)\",\"(?<due_date>[^\"]*)\",\"(?<account_posted>[^\"]*)\",\"(?<memo_posted>[^\"]*)\",\"(?<accu_splits>[^\"]*)\"");
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 void gnc_bi_import_gui_option5_cb (GtkWidget *widget, gpointer data)
