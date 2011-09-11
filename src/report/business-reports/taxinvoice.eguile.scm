@@ -112,7 +112,7 @@
 <title><?scm:d (_ "Invoice") ?> <?scm:d invoiceid ?></title>
 
 <?scm (if css? (begin ?>
-<link rel="stylesheet" href="<?scm:d opt-css-file ?>" type="text/css">
+<link rel="stylesheet" href="<?scm:d (make-file-url opt-css-file) ?>" type="text/css">
 <!-- Note that the external stylesheet file is overridden by this following: -->
 <style type="text/css">
   body { 
@@ -139,7 +139,7 @@
 <tr valign="top" style="vertical-align: top">
   <?scm (if (access? opt-logofile R_OK) (begin ?>
     <td align="left">
-      <img align="left" src="<?scm:d opt-logofile ?>" alt="logo" class="logo"
+      <img align="left" src="<?scm:d (make-file-url opt-logofile) ?>" alt="logo" class="logo"
         <?scm (if opt-logo-width (begin ?>
           style="width: <?scm:d opt-logo-width ?>"
         <?scm )) ?>
