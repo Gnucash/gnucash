@@ -200,7 +200,7 @@ gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     res = gnc_bi_import_read_file (filename, gui->regexp->str, gui->store, 0, &stats);
     if (res == RESULT_OK)
     {
-        gnc_bi_import_fix_bis (gui->store, &n_fixed, &n_deleted, info);
+        gnc_bi_import_fix_bis (gui->store, &n_fixed, &n_deleted, info, gui->type);
         if (info->len > 0)
             gnc_info_dialog (gui->dialog, "%s", info->str);
         g_string_free( info, TRUE );

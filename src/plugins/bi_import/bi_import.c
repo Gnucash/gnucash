@@ -230,7 +230,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 //! * if price is unset, delete row
 void
 gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
-                       GString * info)
+                       GString * info, gchar *type)
 {
     GtkTreeIter iter;
     gboolean valid, row_deleted, row_fixed;
@@ -394,7 +394,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                     gtk_list_store_remove (store, &iter);
                     row_deleted = TRUE;
                     g_string_append_printf (info,
-                                            _("ROW DELETED, VENDOR_NOT_SET: id=%s\n"),
+                                            _("ROW DELETED, OWNER_NOT_SET: id=%s\n"),
                                             id);
                 }
                 else
@@ -409,16 +409,33 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                 // remember owner_id
                 g_string_assign (prev_owner_id, owner_id);
             }
-            // now check, if customer exists
-            if (!gnc_search_vendor_on_id
-                    (gnc_get_current_book (), prev_owner_id->str))
+            if (g_ascii_strcasecmp (type, "BILL") == 0)
             {
-                // customer not found => delete row
-                gtk_list_store_remove (store, &iter);
-                row_deleted = TRUE;
-                g_string_append_printf (info,
-                                        _("ROW DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"),
-                                        id);
+                // BILL: check, if vendor exists
+                if (!gnc_search_vendor_on_id
+                        (gnc_get_current_book (), prev_owner_id->str))
+                {
+                    // vendor not found => delete row
+                    gtk_list_store_remove (store, &iter);
+                    row_deleted = TRUE;
+                    g_string_append_printf (info,
+                                           _("ROW DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"),
+                                           id);
+                }
+            }
+            else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
+            {
+                // INVOICE: check, if customer exists
+                if (!gnc_search_customer_on_id
+                        (gnc_get_current_book (), prev_owner_id->str))
+                {
+                    // customer not found => delete row
+                    gtk_list_store_remove (store, &iter);
+                    row_deleted = TRUE;
+                    g_string_append_printf (info,
+                                           _("ROW DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"),
+                                           id);
+                }
             }
 
             // owner_id is valid
