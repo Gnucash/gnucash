@@ -419,8 +419,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                     gtk_list_store_remove (store, &iter);
                     row_deleted = TRUE;
                     g_string_append_printf (info,
-                                           _("ROW DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"),
-                                           id);
+                                            _("ROW DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"),
+                                            id);
                 }
             }
             else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
@@ -433,8 +433,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                     gtk_list_store_remove (store, &iter);
                     row_deleted = TRUE;
                     g_string_append_printf (info,
-                                           _("ROW DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"),
-                                           id);
+                                            _("ROW DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"),
+                                            id);
                 }
             }
 
