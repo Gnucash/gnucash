@@ -82,7 +82,7 @@
                   <widget class="GtkAlignment" id="alignment5">
                     <property name="visible">True</property>
                     <child>
-                      <widget class="GtkHBox" id="hbox2">
+                      <widget class="GtkVBox" id="vbox2">
                         <property name="visible">True</property>
                         <child>
                           <widget class="GtkRadioButton" id="radiobuttonBill">
@@ -143,6 +143,7 @@
           </widget>
           <packing>
             <property name="position">1</property>
+            <property name="expand">False</property>
           </packing>
         </child>
         <child>
