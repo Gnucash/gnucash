@@ -114,7 +114,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
     // compile the regular expression and check for errors
     err = NULL;
     regexpat =
-        g_regex_new (parser_regexp, G_REGEX_EXTENDED | G_REGEX_OPTIMIZE, 0, &err);
+        g_regex_new (parser_regexp, G_REGEX_EXTENDED | G_REGEX_OPTIMIZE | G_REGEX_DUPNAMES, 0, &err);
     if (err != NULL)
     {
         GtkWidget *dialog;
