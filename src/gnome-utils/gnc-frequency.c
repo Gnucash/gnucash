@@ -58,6 +58,7 @@ static guint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 /** Private Prototypes ********************/
 
 static void gnc_frequency_class_init( GncFrequencyClass *klass );
+static void gnc_frequency_class_destroy( GtkObject *object );
 
 static void freq_combo_changed( GtkComboBox *b, gpointer d );
 static void start_date_changed( GNCDateEdit *gde, gpointer d );
@@ -69,6 +70,8 @@ static void monthly_sel_changed( GtkButton *b, gpointer d );
 static void semimonthly_sel_changed( GtkButton *b, gpointer d );
 
 /** Static Inits ********************/
+
+static GObjectClass *parent_class = NULL;
 
 enum
 {
@@ -137,8 +140,12 @@ static void
 gnc_frequency_class_init( GncFrequencyClass *klass )
 {
     GObjectClass *object_class;
+    GtkObjectClass *gtkobject_class;
+
+    parent_class = g_type_class_peek_parent (klass);
 
     object_class = G_OBJECT_CLASS (klass);
+    gtkobject_class = GTK_OBJECT_CLASS (klass);
 
     gnc_frequency_signals[GNCFREQ_CHANGED] =
         g_signal_new ("changed",
@@ -150,6 +157,9 @@ gnc_frequency_class_init( GncFrequencyClass *klass )
                       g_cclosure_marshal_VOID__VOID,
                       G_TYPE_NONE,
                       0);
+
+    /* GtkObject signals */
+    gtkobject_class->destroy = gnc_frequency_class_destroy;
 }
 
 
@@ -260,8 +270,37 @@ gnc_frequency_init(GncFrequency *gf)
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gf);
 
-    /* We can not use this as builder file is accessed when widgets change */
-    /* g_object_unref(G_OBJECT(builder)); */
+}
+
+
+/** Destroy the GncFrequency object.  This function is called (possibly
+ *  multiple times) from the Gtk_Object level to destroy the object.
+ *
+ *  @param object The object being destroyed.
+ *
+ *  @internal
+ */
+static void
+gnc_frequency_class_destroy (GtkObject *object)
+{
+    GncFrequency *gf;
+
+    ENTER("frequency %p", object);
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_FREQUENCY (object));
+
+    gf = GNC_FREQUENCY (object);
+
+    if (gf->builder)
+    {
+        DEBUG("removing builder");
+        g_object_unref(G_OBJECT(gf->builder));
+        gf->builder = NULL;
+    }
+
+    if (GTK_OBJECT_CLASS (parent_class)->destroy)
+        GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    LEAVE(" ");
 }
 
 
