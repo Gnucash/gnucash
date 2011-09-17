@@ -52,7 +52,8 @@ struct _bi_import_gui
     gint          component_id;
     GString      *regexp;
     QofBook      *book;
-    gchar	*type;
+    gchar        *type;
+    gchar        *open_mode;
 };
 
 
@@ -72,6 +73,7 @@ void gnc_bi_import_gui_option2_cb (GtkWidget *widget, gpointer data);
 void gnc_bi_import_gui_option3_cb (GtkWidget *widget, gpointer data);
 void gnc_bi_import_gui_option4_cb (GtkWidget *widget, gpointer data);
 void gnc_bi_import_gui_option5_cb (GtkWidget *widget, gpointer data);
+void gnc_bi_import_gui_open_mode (GtkWidget *widget, gpointer data);
 void gnc_import_gui_type(GtkWidget *widget, gpointer data);
 
 // utils
@@ -105,6 +107,7 @@ gnc_plugin_bi_import_showGUI(void)
     // create new window
     gui = g_new0 (BillImportGui, 1);
     gui->type = "BILL"; // Set default type to match gui.  really shouldn't be here TODO change me
+    gui->open_mode = "ALL";
     xml = gnc_glade_xml_new ("bi_import.glade", "bi_import Dialog");
     gui->dialog = glade_xml_get_widget (xml, "bi_import Dialog");
     gui->tree_view = glade_xml_get_widget (xml, "treeview1");
@@ -204,7 +207,7 @@ gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
         if (info->len > 0)
             gnc_info_dialog (gui->dialog, "%s", info->str);
         g_string_free( info, TRUE );
-        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated, gui->type);
+        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated, gui->type, gui->open_mode);
         gnc_info_dialog (gui->dialog, _("Import results:\n%i lines were ignored\n%i lines imported:\n   %u fixes\n   %u ignored (not fixable)\n\n   %u created\n   %u updated (based on id)"), stats.n_ignored, stats.n_imported, n_fixed, n_deleted, n_invoices_created, n_invoices_updated);
 
         if (stats.n_ignored > 0)
@@ -334,6 +337,16 @@ void gnc_bi_import_gui_option5_cb (GtkWidget *widget, gpointer data)
         gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
     }
 }
+void gnc_bi_import_gui_open_mode (GtkWidget *widget, gpointer data)
+{
+    BillImportGui *gui = data;
+    if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
+        return;
+    if  (g_ascii_strcasecmp(widget->name, "radiobuttonOpenAll") == 0)gui->open_mode = "ALL";
+    else if (g_ascii_strcasecmp(widget->name, "radiobuttonOpenNotPosted") == 0)gui->open_mode = "NOT_POSTED";
+    else if (g_ascii_strcasecmp(widget->name, "radiobuttonOpenNone") == 0)gui->open_mode = "NONE";
+}
+
 /*****************************************************************
  * Set whether we are importing a bi, invoice, Customer or Vendor
  * ****************************************************************/

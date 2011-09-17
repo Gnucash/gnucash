@@ -489,7 +489,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 void
 gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           guint * n_invoices_created,
-                          guint * n_invoices_updated, gchar * type)
+                          guint * n_invoices_updated,
+                          gchar * type, gchar * open_mode )
 {
     gboolean valid;
     GtkTreeIter iter;
@@ -597,8 +598,11 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             //if (g_ascii_strcasecmp(type,"INVOICE"))gncInvoiceSetBillTo( invoice, billto );
             (*n_invoices_created)++;
             update = YES;
-            // If the invoice has not been posted yet, open it in a tab.
-            if (strlen(date_posted) == 0)
+
+            // open new bill / invoice in a tab, if requested
+            if (g_ascii_strcasecmp(open_mode, "ALL") == 0
+					|| (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
+							&& strlen(date_posted) == 0))
             {
                 iw =  gnc_ui_invoice_edit (invoice);
                 new_page = gnc_plugin_page_invoice_new (iw);
