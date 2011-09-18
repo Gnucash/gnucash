@@ -43,6 +43,19 @@ typedef enum
     drop_backup
 } TableOpType;
 
+/**
+ * Return values from conn_test_dbi_library
+ * @var GNC_DBI_PASS Did not find the large numbers bug
+ * @var GNC_DBI_FAIL_SETUP Could not completed the test
+ * @var GNC_DBI_FAIL_TEST Found the large numbers bug
+ */
+typedef enum
+{
+    GNC_DBI_PASS = 0,
+    GNC_DBI_FAIL_SETUP,
+    GNC_DBI_FAIL_TEST
+} GncDbiTestResult;
+
 typedef gchar* (*CREATE_TABLE_DDL_FN)( GncSqlConnection* conn,
                                        const gchar* table_name,
                                        const GList* col_info_list );

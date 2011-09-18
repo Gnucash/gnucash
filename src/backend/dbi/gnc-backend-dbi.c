@@ -137,7 +137,7 @@ static /*@ null @*/ gchar* add_columns_ddl( GncSqlConnection* conn,
         const gchar* table_name,
         GList* col_info_list );
 static GncSqlConnection* create_dbi_connection( /*@ observer @*/ provider_functions_t* provider, /*@ observer @*/ QofBackend* qbe, /*@ observer @*/ dbi_conn conn );
-static gboolean conn_test_dbi_library( dbi_conn conn );
+static GncDbiTestResult conn_test_dbi_library( dbi_conn conn );
 #define GNC_DBI_PROVIDER_SQLITE (&provider_sqlite3)
 #define GNC_DBI_PROVIDER_MYSQL (&provider_mysql)
 #define GNC_DBI_PROVIDER_PGSQL (&provider_pgsql)
@@ -242,6 +242,7 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     gchar *filepath = NULL;
     gchar *msg = " ";
     gboolean file_exists;
+    GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
 
     g_return_if_fail( qbe != NULL );
     g_return_if_fail( session != NULL );
@@ -314,10 +315,26 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
         goto exit;
     }
 
-    if ( !conn_test_dbi_library( be->conn ) )
+    dbi_test_result = conn_test_dbi_library( be->conn );
+    switch( dbi_test_result )
     {
-        qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-        qof_backend_set_message( qbe, "DBI library fails large number test" );
+        case GNC_DBI_PASS:
+            break;
+
+        case GNC_DBI_FAIL_SETUP:
+            qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+            qof_backend_set_message( qbe,
+                    "SQLite3: Failed to setup for large number test" );
+            break;
+
+        case GNC_DBI_FAIL_TEST:
+            qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+            qof_backend_set_message( qbe,
+                    "SQLite3 DBI library fails large number test" );
+            break;
+    }
+    if ( dbi_test_result != GNC_DBI_PASS )
+    {
         if ( create && !file_exists ) /* File didn't exist before, but it */
         {
             /* does now, and we don't want to */
@@ -733,6 +750,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     gint portnum = 0;
     gint result;
     gboolean success = FALSE;
+    GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
 
     g_return_if_fail( qbe != NULL );
     g_return_if_fail( session != NULL );
@@ -769,11 +787,26 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
-        if ( !conn_test_dbi_library( be->conn ) )
+        dbi_test_result = conn_test_dbi_library( be->conn );
+        switch( dbi_test_result )
         {
-            qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-            qof_backend_set_message( qbe,
-                                     "DBI library fails large number test" );
+            case GNC_DBI_PASS:
+                break;
+
+            case GNC_DBI_FAIL_SETUP:
+                qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+                qof_backend_set_message( qbe,
+                        "DBI library large number test incomplete" );
+                break;
+
+            case GNC_DBI_FAIL_TEST:
+                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+                qof_backend_set_message( qbe,
+                        "DBI library fails large number test" );
+                break;
+        }
+        if ( GNC_DBI_PASS != dbi_test_result )
+        {
             goto exit;
         }
         if (create && !force && save_may_clobber_data( qbe ) )
@@ -842,11 +875,26 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
-            if ( !conn_test_dbi_library( be->conn ) )
+            dbi_test_result = conn_test_dbi_library( be->conn );
+            switch( dbi_test_result )
             {
-                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-                qof_backend_set_message( qbe,
-                                         "DBI library fails large number test" );
+                case GNC_DBI_PASS:
+                    break;
+
+                case GNC_DBI_FAIL_SETUP:
+                    qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+                    qof_backend_set_message( qbe,
+                            "MySql: Failed to setup for large number test" );
+                    break;
+
+                case GNC_DBI_FAIL_TEST:
+                    qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+                    qof_backend_set_message( qbe,
+                            "MySql DBI library fails large number test" );
+                    break;
+            }
+            if ( dbi_test_result != GNC_DBI_PASS )
+            {
                 dbi_conn_queryf( be->conn, "DROP DATABASE %s", dbname );
                 goto exit;
             }
@@ -1005,6 +1053,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     gchar* translog_path = NULL;
     gboolean success = FALSE;
     gint portnum = 0;
+    GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
 
     g_return_if_fail( qbe != NULL );
     g_return_if_fail( session != NULL );
@@ -1048,11 +1097,26 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
-        if ( !conn_test_dbi_library( be->conn ) )
+        dbi_test_result = conn_test_dbi_library( be->conn );
+        switch ( dbi_test_result )
         {
-            qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-            qof_backend_set_message( qbe,
-                                     "DBI library fails large number test" );
+            case GNC_DBI_PASS:
+                break;
+
+            case GNC_DBI_FAIL_SETUP:
+                qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+                qof_backend_set_message( qbe,
+                        "Postgresql: Failed to setup for large number test" );
+                break;
+
+            case GNC_DBI_FAIL_TEST:
+                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+                qof_backend_set_message( qbe,
+                        "Postgresql DBI library fails large number test" );
+                break;
+        }
+        if ( dbi_test_result != GNC_DBI_PASS )
+        {
             goto exit;
         }
         if (create && !force && save_may_clobber_data( qbe ) )
@@ -1122,11 +1186,26 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
-            if ( !conn_test_dbi_library( be->conn ) )
+            dbi_test_result = conn_test_dbi_library( be->conn );
+            switch( dbi_test_result )
             {
-                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-                qof_backend_set_message( qbe,
-                                         "DBI library fails large number test" );
+                case GNC_DBI_PASS:
+                    break;
+
+                case GNC_DBI_FAIL_SETUP:
+                    qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+                    qof_backend_set_message( qbe,
+                            "DBI library large number test incomplete" );
+                    break;
+
+                case GNC_DBI_FAIL_TEST:
+                    qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+                    qof_backend_set_message( qbe,
+                            "DBI library fails large number test" );
+                    break;
+            }
+            if ( GNC_DBI_PASS != dbi_test_result )
+            {
                 dbi_conn_select_db( be->conn, "template1" );
                 dbi_conn_queryf( be->conn, "DROP DATABASE %s", dbnamelc );
                 goto exit;
@@ -2898,9 +2977,11 @@ conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname )
  * compiler option it fails to correctly handle saving of 64-bit
  * values. This function tests for the problem.
  * @param: conn: The just-opened dbi_conn
- * @returns: TRUE if the dbi library is safe to use, FALSE otherwise.
+ * @returns: GNC_DBI_PASS if the dbi library is safe to use,
+ * GNC_DBI_FAIL_SETUP if the test could not be completed, or
+ * GNC_DBI_FAIL_TEST if the bug was found.
  */
-static gboolean
+static GncDbiTestResult
 conn_test_dbi_library( dbi_conn conn )
 {
     gint64 testlonglong = -9223372036854775807LL, resultlonglong = 0;
@@ -2908,7 +2989,7 @@ conn_test_dbi_library( dbi_conn conn )
     gdouble testdouble = 1.7976921348623157E+307, resultdouble = 0.0;
     dbi_result result;
     gchar doublestr[G_ASCII_DTOSTR_BUF_SIZE], *querystr;
-    gboolean retval = TRUE;
+    GncDbiTestResult retval = GNC_DBI_PASS;
     memset( doublestr, 0, sizeof(doublestr));
 
     result = dbi_conn_query( conn, "CREATE TEMPORARY TABLE numtest "
@@ -2917,7 +2998,7 @@ conn_test_dbi_library( dbi_conn conn )
     if ( result == NULL )
     {
         PWARN("Test_DBI_Library: Create table failed");
-        return FALSE;
+        return GNC_DBI_FAIL_SETUP;
     }
     dbi_result_free( result );
     g_ascii_dtostr( doublestr, sizeof(doublestr), testdouble );
@@ -2929,7 +3010,7 @@ conn_test_dbi_library( dbi_conn conn )
     if ( result == NULL )
     {
         PWARN("Test_DBI_Library: Failed to insert test row into table" );
-        return FALSE;
+        return GNC_DBI_FAIL_SETUP;
     }
     dbi_result_free( result );
     gnc_push_locale( LC_NUMERIC, "C");
@@ -2941,7 +3022,7 @@ conn_test_dbi_library( dbi_conn conn )
         PWARN("Test_DBI_Library: Failed to retrieve test row into table: %s",
               errmsg );
         result = dbi_conn_query( conn, "DROP TABLE numtest" );
-        return FALSE;
+        return GNC_DBI_FAIL_SETUP;
     }
     while ( dbi_result_next_row( result ))
     {
@@ -2954,13 +3035,13 @@ conn_test_dbi_library( dbi_conn conn )
     {
         PWARN( "Test_DBI_Library: LongLong Failed %" G_GINT64_FORMAT " != % " G_GINT64_FORMAT,
                testlonglong, resultlonglong );
-        retval = FALSE;
+        retval = GNC_DBI_FAIL_TEST;
     }
     if ( testulonglong != resultulonglong )
     {
         PWARN( "Test_DBI_Library: Unsigned longlong Failed %" G_GUINT64_FORMAT " != %" G_GUINT64_FORMAT,
                testulonglong, resultulonglong );
-        retval = FALSE;
+        retval = GNC_DBI_FAIL_TEST;
     }
     /* A bug in libdbi stores only 7 digits of precision */
     if ( testdouble >= resultdouble + 0.000001e307 ||
@@ -2968,7 +3049,7 @@ conn_test_dbi_library( dbi_conn conn )
     {
         PWARN( "Test_DBI_Library: Double Failed %17e != %17e",
                testdouble, resultdouble );
-        retval = FALSE;
+        retval = GNC_DBI_FAIL_TEST;
     }
     return retval;
 }

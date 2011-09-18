@@ -447,6 +447,17 @@ show_session_error (QofBackendError io_error,
         gnc_error_dialog (parent, "%s", fmt);
         break;
 
+    case ERR_SQL_DBI_UNTESTABLE:
+
+        fmt = _("GnuCash could not complete a critical test for the presence of "
+                "a bug in the \"libdbi\" library. This may be caused by a "
+                "permissions misconfiguration of your SQL database. Please see "
+                "https://bugzilla.gnome.org/show_bug.cgi?id=645216 for more "
+                "information.");
+
+        gnc_error_dialog (parent, "%s", fmt);
+        break;
+
     default:
         PERR("FIXME: Unhandled error %d", io_error);
         fmt = _("An unknown I/O error (%d) occurred.");
