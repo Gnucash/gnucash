@@ -141,6 +141,9 @@ typedef struct
     gboolean show_hidden;
 } AccountTreeFilterInfo;
 
+static AccountTreeFilterInfo *from_info = NULL;
+static AccountTreeFilterInfo *to_info   = NULL;
+
 struct _acct_list_item
 {
     char *acct_full_name;
@@ -168,7 +171,7 @@ gboolean gnc_xfer_description_key_press_cb( GtkEntry *entry,
         GdkEventKey *event,
         XferDialog *xferData );
 void gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData);
-gboolean gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
+gboolean gnc_xfer_dialog_inc_exp_filter_func (Account *account,
         gpointer data);
 void price_amount_radio_toggled_cb(GtkToggleButton *togglebutton, gpointer data);
 
@@ -243,15 +246,17 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
 static void
 gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
 {
-    AccountTreeFilterInfo info;
+    AccountTreeFilterInfo* info;
+    GncTreeViewAccount* treeview = GNC_TREE_VIEW_ACCOUNT (data);
 
-    info.show_inc_exp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-    info.show_hidden = FALSE;
+    info = g_object_get_data (G_OBJECT(treeview), "filter-info");
+    if (info)
+    {
+        info->show_inc_exp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
+        info->show_hidden = FALSE;
 
-    gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (data),
-                                      gnc_xfer_dialog_show_inc_exp_visible_cb,
-                                      &info,  /* user data */
-                                      NULL    /* destroy callback */);
+        gnc_tree_view_account_refilter (treeview);
+    }
 }
 
 static gboolean
@@ -473,7 +478,7 @@ gnc_xfer_dialog_to_tree_selection_changed_cb (GtkTreeSelection *selection, gpoin
 }
 
 gboolean
-gnc_xfer_dialog_show_inc_exp_visible_cb (Account *account,
+gnc_xfer_dialog_inc_exp_filter_func (Account *account,
         gpointer data)
 {
     AccountTreeFilterInfo* info;
@@ -505,7 +510,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
     GtkWidget *button;
     GtkTreeSelection *selection;
     gboolean  use_accounting_labels;
-    AccountTreeFilterInfo info;
+    AccountTreeFilterInfo *info;
     GtkBuilder *builder = g_object_get_data (G_OBJECT (xferData->dialog), "builder");
 
     use_accounting_labels = gnc_gconf_get_bool(GCONF_GENERAL,
@@ -541,17 +546,22 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
                                 "right_trans_window" : "left_trans_window"));
     }
 
+
+    if (direction == XFER_DIALOG_TO)
+        info = to_info;
+    else
+        info = from_info;
+
     tree_view = GTK_TREE_VIEW(gnc_tree_view_account_new(FALSE));
     gtk_container_add(GTK_CONTAINER(scroll_win), GTK_WIDGET(tree_view));
-    info.show_inc_exp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-    info.show_hidden = FALSE;
+    info->show_inc_exp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
+    info->show_hidden = FALSE;
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree_view),
-                                      gnc_xfer_dialog_show_inc_exp_visible_cb,
-                                      &info,  /* user data */
+                                      gnc_xfer_dialog_inc_exp_filter_func,
+                                      info,  /* user data */
                                       NULL    /* destroy callback */);
+    g_object_set_data (G_OBJECT(tree_view), "filter-info", info);
 
-    /* Have to force the filter once. Alt is to show income/expense by default. */
-    gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (tree_view));
     gtk_widget_show(GTK_WIDGET(tree_view));
     g_signal_connect (G_OBJECT (tree_view), "key-press-event",
                       G_CALLBACK (gnc_xfer_dialog_key_press_cb), NULL);
@@ -1762,6 +1772,9 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         GtkWidget *label;
         gchar *text;
 
+        to_info   = g_new0(AccountTreeFilterInfo, 1);
+        from_info = g_new0(AccountTreeFilterInfo, 1);
+
         gnc_xfer_dialog_fill_tree_view (xferData, XFER_DIALOG_TO);
         gnc_xfer_dialog_fill_tree_view (xferData, XFER_DIALOG_FROM);
 
@@ -1885,6 +1898,8 @@ close_handler (gpointer user_data)
     gtk_widget_hide (dialog);
     gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
     gtk_widget_destroy (dialog);
+    g_free (to_info);
+    g_free (from_info);
     LEAVE(" ");
 }
 
