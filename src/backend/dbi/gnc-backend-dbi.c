@@ -3022,6 +3022,7 @@ conn_test_dbi_library( dbi_conn conn )
         PWARN("Test_DBI_Library: Failed to retrieve test row into table: %s",
               errmsg );
         result = dbi_conn_query( conn, "DROP TABLE numtest" );
+	gnc_pop_locale( LC_NUMERIC );
         return GNC_DBI_FAIL_SETUP;
     }
     while ( dbi_result_next_row( result ))
