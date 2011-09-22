@@ -3,10 +3,23 @@ SUBDIRS =
 pkglib_LTLIBRARIES = libgncmod-gtkmm.la
 
 libgncmod_gtkmm_la_SOURCES = \
+  gncmm/Account.cpp \
+  gncmm/Book.cpp \
+  gncmm/Commodity.cpp \
+  gncmm/Numeric.cpp \
+  gncmm/wrap_init.cpp \
   gnc-plugin-gtkmm.cpp \
   gncmod-gtkmm.cpp
 
 noinst_HEADERS = \
+  gncmm/Account.hpp \
+  gncmm/Book.hpp \
+  gncmm/Commodity.hpp \
+  gncmm/private/Account_p.hpp \
+  gncmm/private/Book_p.hpp \
+  gncmm/private/Commodity_p.hpp \
+  gncmm/Numeric.hpp \
+  gncmm/wrap_init.hpp \
   gnc-plugin-gtkmm.hpp
 
 libgncmod_gtkmm_la_LDFLAGS = -avoid-version
@@ -27,6 +40,9 @@ libgncmod_gtkmm_la_LIBADD = \
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/engine \
   ${GTKMM_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
