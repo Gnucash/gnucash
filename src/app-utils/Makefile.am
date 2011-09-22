@@ -129,7 +129,7 @@ libgncmod_app_utils_python_la_LDFLAGS = \
 libgncmod_app_utils_python_la_LIBADD = \
   ${PYTHON_LIBS} \
   ${PYTHON_EXTRA_LIBS} \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la
+  libgncmod-app-utils.la
 endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
