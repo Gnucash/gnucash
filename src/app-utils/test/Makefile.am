@@ -7,11 +7,9 @@ TESTS = \
   test-sx
 
 test_exp_parser_SOURCES = \
-  ${top_builddir}/src/core-utils/gnc-gconf-utils.c \
   test-exp-parser.c
 
 test_print_parse_amount_SOURCES = \
-  ${top_builddir}/src/core-utils/gnc-gconf-utils.c \
   test-print-parse-amount.c
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
