@@ -30,6 +30,14 @@ extern "C"
 #include "qof.h"
 }
 
+#include <glibmm/object.h>
+
+namespace gnc
+{
+class Book;
+class GncInstance;
+} // END namespace gnc
+
 #include "Book.hpp"
 
 namespace gnc
@@ -51,37 +59,37 @@ public:
 
     Glib::RefPtr<Book> getBook() const
     {
-        return Glib::wrap(qof_instance_get_book (QOF_INSTANCE(get_gobj())));
+        return Glib::wrap(qof_instance_get_book (get_instance()));
     }
     const ::GncGUID* getGUID() const
     {
-        return qof_entity_get_guid(QOF_INSTANCE(get_gobj()));
+        return qof_entity_get_guid(get_instance());
     }
 
     bool is_dirty() const
     {
-        return qof_instance_get_dirty(QOF_INSTANCE(get_gobj()));
+        return qof_instance_get_dirty(get_instance());
     }
     void set_dirty()
     {
-        return qof_instance_set_dirty(QOF_INSTANCE(get_gobj()));
+        return qof_instance_set_dirty(get_instance());
     }
     void mark_clean()
     {
-        return qof_instance_mark_clean(QOF_INSTANCE(get_gobj()));
+        return qof_instance_mark_clean(get_instance());
     }
 
     //bool check_type(const char* type_id) { return (0 == g_strcmp0(type_id, QOF_INSTANCE(base_class::get())->e_type)); }
     //Slots getSlots() const { return qof_instance_get_slots(QOF_INSTANCE(get())); }
 
 private:
-    GObject* get_gobj()
+    ::QofInstance* get_instance()
     {
-        return dynamic_cast<Glib::Object&>(*this).gobj();
+        return QOF_INSTANCE(dynamic_cast<Glib::Object&>(*this).gobj());
     }
-    const GObject* get_gobj() const
+    /*const*/ ::QofInstance* get_instance() const
     {
-        return dynamic_cast<const Glib::Object&>(*this).gobj();
+        return QOF_INSTANCE(dynamic_cast<const Glib::Object&>(*this).gobj());
     }
 };
 

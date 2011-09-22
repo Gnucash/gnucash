@@ -65,7 +65,7 @@ inline Glib::ustring gchar_to_ustring(gchar* tmp_string)
 
 #if GLIB_HAVE_DATETIME
 // Glib::DateTime is new in glibmm-2.29 but very useful
-inline Glib::DateTime toQDateTime(const ::Timespec& timespec)
+inline Glib::DateTime toGDateTime(const ::Timespec& timespec)
 {
     Glib::DateTime result = Glib::DateTime::create_now_utc(timespec.tv_sec);
     result.add_seconds(timespec.tv_nsec * 1e-9);

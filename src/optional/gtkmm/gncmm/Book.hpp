@@ -32,10 +32,13 @@ extern "C"
 }
 
 #include <glibmm/object.h>
+//#include "GncInstance.hpp"
 
 namespace gnc
 {
 class Book_Class;
+class Book;
+class GncInstance;
 } // END namespace gnc
 
 namespace gnc
@@ -45,7 +48,7 @@ class Account;
 /** Wrapper around a gnucash ::QofBook pointer with C++ methods for
  * easier setter and getter access.
  */
-class Book : public Glib::Object
+class Book : public Glib::Object //, public GncInstance
 {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     typedef Book CppObjectType;

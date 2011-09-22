@@ -7,6 +7,8 @@ libgncmod_gtkmm_la_SOURCES = \
   gncmm/Book.cpp \
   gncmm/Commodity.cpp \
   gncmm/Numeric.cpp \
+  gncmm/Split.cpp \
+  gncmm/Transaction.cpp \
   gncmm/wrap_init.cpp \
   gnc-plugin-gtkmm.cpp \
   gncmod-gtkmm.cpp
@@ -16,10 +18,14 @@ noinst_HEADERS = \
   gncmm/Book.hpp \
   gncmm/Commodity.hpp \
   gncmm/GncInstance.hpp \
+  gncmm/Numeric.hpp \
+  gncmm/Split.hpp \
+  gncmm/Transaction.hpp \
   gncmm/private/Account_p.hpp \
   gncmm/private/Book_p.hpp \
   gncmm/private/Commodity_p.hpp \
-  gncmm/Numeric.hpp \
+  gncmm/private/Split_p.hpp \
+  gncmm/private/Transaction_p.hpp \
   gncmm/wrap_init.hpp \
   gnc-plugin-gtkmm.hpp
 

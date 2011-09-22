@@ -33,6 +33,7 @@ extern "C"
 
 #include <glibmm/object.h>
 #include <glibmm/ustring.h>
+#include "GncInstance.hpp"
 
 namespace gnc
 {
@@ -43,7 +44,7 @@ namespace gnc
 {
 
 /** Wrapper around a gnucash \ref gnc_commodity object */
-class Commodity : public Glib::Object
+class Commodity : public Glib::Object, public GncInstance
 {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     typedef Commodity CppObjectType;
