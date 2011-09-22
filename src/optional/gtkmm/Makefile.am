@@ -15,6 +15,7 @@ noinst_HEADERS = \
   gncmm/Account.hpp \
   gncmm/Book.hpp \
   gncmm/Commodity.hpp \
+  gncmm/GncInstance.hpp \
   gncmm/private/Account_p.hpp \
   gncmm/private/Book_p.hpp \
   gncmm/private/Commodity_p.hpp \
