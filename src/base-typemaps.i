@@ -184,6 +184,10 @@ typedef char gchar;
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncInvoice, 0));
         else if (GNC_IS_ENTRY(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEntry, 0));
+        else if (GNC_IS_CUSTOMER(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncCustomer, 0));
+        else if (GNC_IS_VENDOR(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncVendor, 0));
         else if ($1_descriptor == $descriptor(MonetaryList *))
             PyList_Append(list, SWIG_NewPointerObj(data, $descriptor(gnc_monetary *), 0));
         else
