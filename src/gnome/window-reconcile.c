@@ -59,36 +59,37 @@
 struct _RecnWindow
 {
     GncGUID account;             /* The account that we are reconciling  */
-    gnc_numeric new_ending;   /* The new ending balance               */
-    time_t statement_date;    /* The statement date                   */
+    gnc_numeric new_ending;      /* The new ending balance               */
+    time_t statement_date;       /* The statement date                   */
 
-    gint component_id;        /* id of component                      */
+    gint component_id;           /* id of component                      */
 
-    GtkWidget *window;        /* The reconcile window                 */
+    GtkWidget *window;           /* The reconcile window                 */
 
     GtkUIManager *ui_merge;
     GtkActionGroup *action_group;
-    GtkWidget *toolbar;       /* Toolbar widget                       */
-    gint toolbar_change_cb_id;  /* id for toolbar preference change cb  */
-    gint toolbar_change_cb_id2; /* id for toolbar preference change cb  */
+    GtkWidget *toolbar;          /* Toolbar widget                       */
+    gint toolbar_change_cb_id;   /* id for toolbar preference change cb  */
+    gint toolbar_change_cb_id2;  /* id for toolbar preference change cb  */
 
-    GtkWidget *starting;      /* The starting balance                 */
-    GtkWidget *ending;        /* The ending balance                   */
-    GtkWidget *recn_date;     /* The statement date                   */
-    GtkWidget *reconciled;    /* The reconciled balance               */
-    GtkWidget *difference;    /* Text field, amount left to reconcile */
+    GtkWidget *starting;         /* The starting balance                 */
+    GtkWidget *ending;           /* The ending balance                   */
+    GtkWidget *recn_date;        /* The statement date                   */
+    GtkWidget *reconciled;       /* The reconciled balance               */
+    GtkWidget *difference;       /* Text field, amount left to reconcile */
 
-    GtkWidget *total_debit;   /* Text field, total debit reconciled   */
-    GtkWidget *total_credit;  /* Text field, total credit reconciled  */
+    GtkWidget *total_debit;      /* Text field, total debit reconciled   */
+    GtkWidget *total_credit;     /* Text field, total credit reconciled  */
 
-    GtkWidget *debit;         /* Debit matrix show unreconciled debit */
-    GtkWidget *credit;        /* Credit matrix, shows credits...      */
+    GtkWidget *debit;            /* Debit matrix show unreconciled debit */
+    GtkWidget *credit;           /* Credit matrix, shows credits...      */
 
-    GtkWidget *debit_frame;   /* Frame around debit matrix            */
-    GtkWidget *credit_frame;  /* Frame around credit matrix           */
+    GtkWidget *debit_frame;      /* Frame around debit matrix            */
+    GtkWidget *credit_frame;     /* Frame around credit matrix           */
 
-    gboolean delete_refresh;  /* do a refresh upon a window deletion  */
+    gboolean delete_refresh;     /* do a refresh upon a window deletion  */
 };
+
 
 /* This structure doesn't contain everything involved in the
  * startRecnWindow, just pointers that have to be passed in to
@@ -151,9 +152,9 @@ static void   gnc_recn_set_window_name(RecnWindow *recnData);
 static gboolean find_by_account (gpointer find_data, gpointer user_data);
 
 
-/** GLOBALS *********************************************************/
+/** GLOBALS ************************************************************/
 /* This static indicates the debugging module that this .o belongs to. */
-/* static short module = MOD_GUI; */
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static time_t gnc_reconcile_last_statement_date = 0;
 
@@ -202,6 +203,7 @@ recn_get_account (RecnWindow *recnData)
 
     return xaccAccountLookup (&recnData->account, gnc_get_current_book ());
 }
+
 
 /********************************************************************\
  * recnRecalculateBalance                                           *
@@ -310,6 +312,7 @@ recnRecalculateBalance (RecnWindow *recnData)
     return diff;
 }
 
+
 static gboolean
 gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
                          startRecnWindowData *data)
@@ -322,6 +325,7 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
     data->user_set_value = !gnc_numeric_equal(value, data->original_value);
     return FALSE;
 }
+
 
 /* If the user changed the date edit widget, update the
  * ending balance to reflect the ending balance of the account
@@ -336,17 +340,15 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
 
     if (data->user_set_value)
         return;
-
     new_date = gnc_date_edit_get_date_end (gde);
-
     /* get the balance for the account as of the new date */
     new_balance = gnc_ui_account_get_balance_as_of_date (data->account, new_date,
                   data->include_children);
-
     /* update the amount edit with the amount */
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value),
                                 new_balance);
 }
+
 
 void
 gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data)
@@ -357,6 +359,7 @@ gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data)
     /* Force an update of the ending balance */
     gnc_start_recn_date_changed (data->date_value, data);
 }
+
 
 /* For a given account, determine if an auto interest xfer dialog should be
  * shown, based on both the per-account flag as well as the global reconcile
@@ -372,6 +375,7 @@ gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( Account *account )
                                    "auto_interest_transfer", NULL);
     return xaccAccountGetAutoInterestXfer( account, auto_xfer );
 }
+
 
 /********************************************************************\
  * recnInterestXferWindow                                           *
@@ -405,6 +409,7 @@ gnc_recn_make_interest_window_name(Account *account, char *text)
     return title;
 }
 
+
 /* user clicked button in the interest xfer dialog entitled
  * "No Auto Interest Payments for this Account".
  */
@@ -424,6 +429,7 @@ gnc_recn_interest_xfer_no_auto_clicked_cb(GtkButton *button,
     if ( data->xfer_button )
         gtk_widget_set_sensitive(GTK_WIDGET(data->xfer_button), TRUE);
 }
+
 
 static void
 recnInterestXferWindow( startRecnWindowData *data)
@@ -522,6 +528,7 @@ recnInterestXferWindow( startRecnWindowData *data)
     data->xferData = NULL;
 }
 
+
 /* Set up for the interest xfer window, run the window, and update
  * the startRecnWindow if the interest xfer changed anything that matters.
  */
@@ -553,6 +560,7 @@ gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
     }
 }
 
+
 void
 gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data)
 {
@@ -567,6 +575,7 @@ gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data)
     /* run the account window */
     gnc_reconcile_interest_xfer_run( data );
 }
+
 
 static void
 gnc_save_reconcile_interval(Account *account, time_t statement_date)
@@ -617,6 +626,7 @@ gnc_save_reconcile_interval(Account *account, time_t statement_date)
     xaccAccountSetReconcileLastInterval(account, months, days);
 }
 
+
 /********************************************************************\
  * startRecnWindow                                                  *
  *   opens up the window to prompt the user to enter the ending     *
@@ -637,7 +647,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
                 gboolean enable_subaccount)
 {
     GtkWidget *dialog, *end_value, *date_value, *include_children_button;
-    GladeXML *xml;
+    GtkBuilder *builder;
     startRecnWindowData data = { NULL };
     gboolean auto_interest_xfer_option;
     GNCPrintAmountInfo print_info;
@@ -673,9 +683,11 @@ startRecnWindow(GtkWidget *parent, Account *account,
      */
 
     /* Create the dialog box */
-    xml = gnc_glade_xml_new ("reconcile.glade", "Reconcile Start Dialog");
-    dialog = glade_xml_get_widget (xml, "Reconcile Start Dialog");
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, &data);
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "window-reconcile.glade", "Reconcile Start Dialog");
+
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Reconcile Start Dialog"));
+
     title = gnc_recn_make_window_name (account);
     gtk_window_set_title(GTK_WINDOW(dialog), title);
     g_free (title);
@@ -690,35 +702,37 @@ startRecnWindow(GtkWidget *parent, Account *account,
         GtkWidget *entry, *label;
         GtkWidget *interest = NULL;
 
-        start_value = glade_xml_get_widget(xml, "start_value");
+        start_value = GTK_WIDGET(gtk_builder_get_object (builder, "start_value"));
         gtk_label_set_text(GTK_LABEL(start_value), xaccPrintAmount (ending, print_info));
 
-        include_children_button = glade_xml_get_widget(xml, "subaccount_check");
+        include_children_button = GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_check"));
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(include_children_button),
                                      data.include_children);
         gtk_widget_set_sensitive(include_children_button, enable_subaccount);
 
         date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
         data.date_value = date_value;
-        box = glade_xml_get_widget(xml, "date_value_box");
+        box = GTK_WIDGET(gtk_builder_get_object (builder, "date_value_box"));
         gtk_box_pack_start(GTK_BOX(box), date_value, TRUE, TRUE, 0);
-        label = glade_xml_get_widget(xml, "date_label");
+        label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
         gnc_date_make_mnemonic_target(GNC_DATE_EDIT(date_value), label);
 
         end_value = gnc_amount_edit_new ();
         data.end_value = GNC_AMOUNT_EDIT(end_value);
         data.original_value = *new_ending;
         data.user_set_value = FALSE;
-        box = glade_xml_get_widget(xml, "ending_value_box");
+        box = GTK_WIDGET(gtk_builder_get_object (builder, "ending_value_box"));
         gtk_box_pack_start(GTK_BOX(box), end_value, TRUE, TRUE, 0);
-        label = glade_xml_get_widget(xml, "end_label");
+        label = GTK_WIDGET(gtk_builder_get_object (builder, "end_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), end_value);
 
+        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, &data);
+
+        gnc_date_activates_default(GNC_DATE_EDIT(date_value), TRUE);
 
         /* need to get a callback on date changes to update the recn balance */
         g_signal_connect ( G_OBJECT (date_value), "date_changed",
                            G_CALLBACK (gnc_start_recn_date_changed), (gpointer) &data );
-        gnc_date_activates_default(GNC_DATE_EDIT(date_value), TRUE);
 
         print_info.use_symbol = 0;
         gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (end_value), print_info);
@@ -737,7 +751,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
          * account, add a button so that the user can pop up the appropriate
          * dialog if it isn't automatically popping up.
          */
-        interest = glade_xml_get_widget(xml, "interest_button");
+        interest = GTK_WIDGET(gtk_builder_get_object (builder, "interest_button"));
         if ( account_type_has_auto_interest_payment( data.account_type ) )
             gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Payment...") );
         else if ( account_type_has_auto_interest_charge( data.account_type ) )
@@ -783,6 +797,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
         gnc_save_reconcile_interval(account, *statement_date);
     }
     gtk_widget_destroy (dialog);
+    g_object_unref(G_OBJECT(builder));
 
     return (result == GTK_RESPONSE_OK);
 }
@@ -811,6 +826,7 @@ gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
     gtk_action_set_sensitive(action, sensitive);
 }
 
+
 static void
 gnc_reconcile_window_list_cb(GNCReconcileList *list, Split *split,
                              gpointer data)
@@ -820,6 +836,7 @@ gnc_reconcile_window_list_cb(GNCReconcileList *list, Split *split,
     gnc_reconcile_window_set_sensitivity(recnData);
     recnRecalculateBalance(recnData);
 }
+
 
 /** Popup a contextual menu.  This function ends up being called when
  *  the user right-clicks in the context of a window, or uses the
@@ -906,6 +923,7 @@ gnc_reconcile_window_button_press_cb (GtkWidget *widget,
     return FALSE;
 }
 
+
 static GNCSplitReg *
 gnc_reconcile_window_open_register(RecnWindow *recnData)
 {
@@ -925,6 +943,7 @@ gnc_reconcile_window_open_register(RecnWindow *recnData)
     return gsr;
 }
 
+
 static void
 gnc_reconcile_window_double_click_cb(GNCReconcileList *list, Split *split,
                                      gpointer data)
@@ -941,6 +960,7 @@ gnc_reconcile_window_double_click_cb(GNCReconcileList *list, Split *split,
         return;
     gnc_split_reg_jump_to_split( gsr, split );
 }
+
 
 static void
 gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
@@ -960,6 +980,7 @@ gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
     /* clear the *other* list so we always have no more than one selection */
     gnc_reconcile_list_unselect_all(other_list);
 }
+
 
 static gboolean
 gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
@@ -993,6 +1014,7 @@ gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
     return TRUE;
 }
 
+
 static void
 gnc_reconcile_window_set_titles(RecnWindow *recnData)
 {
@@ -1021,6 +1043,7 @@ gnc_reconcile_window_set_titles(RecnWindow *recnData)
     if (!formal)
         g_free(title);
 }
+
 
 static GtkWidget *
 gnc_reconcile_window_create_list_box(Account *account,
@@ -1101,11 +1124,13 @@ gnc_reconcile_window_get_current_split(RecnWindow *recnData)
     return split;
 }
 
+
 static void
 gnc_ui_reconcile_window_help_cb(GtkWidget *widget, gpointer data)
 {
     gnc_gnome_help(HF_HELP, HL_RECNWIN);
 }
+
 
 static void
 gnc_ui_reconcile_window_change_cb(GtkAction *action, gpointer data)
@@ -1126,6 +1151,7 @@ gnc_ui_reconcile_window_change_cb(GtkAction *action, gpointer data)
     }
 }
 
+
 static void
 gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
 {
@@ -1137,6 +1163,7 @@ gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
         return;
     gnc_split_reg_jump_to_blank( gsr );
 }
+
 
 static void
 gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
@@ -1166,6 +1193,7 @@ gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
 
     gnc_split_reg_balancing_entry(gsr, account, statement_date, balancing_amount);
 }
+
 
 static void
 gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
@@ -1197,6 +1225,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 
     gnc_resume_gui_refresh ();
 }
+
 
 static void
 gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
@@ -1231,6 +1260,7 @@ gnc_recn_make_window_name(Account *account)
     return title;
 }
 
+
 static void
 gnc_recn_set_window_name(RecnWindow *recnData)
 {
@@ -1242,6 +1272,7 @@ gnc_recn_set_window_name(RecnWindow *recnData)
 
     g_free (title);
 }
+
 
 static void
 gnc_recn_edit_account_cb(GtkAction *action, gpointer data)
@@ -1255,6 +1286,7 @@ gnc_recn_edit_account_cb(GtkAction *action, gpointer data)
     gnc_ui_edit_account_window (account);
 }
 
+
 static void
 gnc_recn_xfer_cb(GtkAction *action, gpointer data)
 {
@@ -1266,6 +1298,7 @@ gnc_recn_xfer_cb(GtkAction *action, gpointer data)
 
     gnc_xfer_dialog (recnData->window, account);
 }
+
 
 static void
 gnc_recn_scrub_cb(GtkAction *action, gpointer data)
@@ -1288,6 +1321,7 @@ gnc_recn_scrub_cb(GtkAction *action, gpointer data)
     gnc_resume_gui_refresh ();
 }
 
+
 static void
 gnc_recn_open_cb(GtkAction *action, gpointer data)
 {
@@ -1295,6 +1329,7 @@ gnc_recn_open_cb(GtkAction *action, gpointer data)
 
     gnc_reconcile_window_open_register(recnData);
 }
+
 
 static void
 gnc_recn_refresh_toolbar(RecnWindow *recnData)
@@ -1310,6 +1345,7 @@ gnc_recn_refresh_toolbar(RecnWindow *recnData)
     g_slist_foreach(list, (GFunc)gtk_toolbar_set_style, GINT_TO_POINTER(style));
     g_slist_free(list);
 }
+
 
 static void
 gnc_toolbar_change_cb (GConfClient *client,
@@ -1334,6 +1370,7 @@ gnc_toolbar_change_cb (GConfClient *client,
         gnc_recn_refresh_toolbar(recnData);
     }
 }
+
 
 static void
 gnc_get_reconcile_info (Account *account,
@@ -1405,6 +1442,7 @@ gnc_get_reconcile_info (Account *account,
     }
 }
 
+
 static gboolean
 find_by_account (gpointer find_data, gpointer user_data)
 {
@@ -1416,6 +1454,7 @@ find_by_account (gpointer find_data, gpointer user_data)
 
     return guid_equal (&recnData->account, xaccAccountGetGUID (account));
 }
+
 
 static void
 recn_set_watches_one_account (gpointer data, gpointer user_data)
@@ -1450,6 +1489,7 @@ recn_set_watches_one_account (gpointer data, gpointer user_data)
     }
 }
 
+
 static void
 recn_set_watches (RecnWindow *recnData)
 {
@@ -1476,6 +1516,7 @@ recn_set_watches (RecnWindow *recnData)
 
     g_list_free (accounts);
 }
+
 
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
@@ -1507,6 +1548,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     recnRefresh (recnData);
 }
 
+
 static void
 close_handler (gpointer user_data)
 {
@@ -1514,6 +1556,7 @@ close_handler (gpointer user_data)
 
     gtk_widget_destroy (recnData->window);
 }
+
 
 /********************************************************************\
  * recnWindow                                                       *
@@ -1552,6 +1595,7 @@ recnWindow (GtkWidget *parent, Account *account)
     return recnWindowWithBalance (parent, account, new_ending, statement_date);
 }
 
+
 static void
 recnWindow_add_widget (GtkUIManager *merge,
                        GtkWidget *widget,
@@ -1560,6 +1604,7 @@ recnWindow_add_widget (GtkUIManager *merge,
     gtk_box_pack_start (GTK_BOX (dock), widget, FALSE, FALSE, 0);
     gtk_widget_show (widget);
 }
+
 
 /********************************************************************\
  * recnWindowWithBalance
@@ -1884,6 +1929,7 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
     g_free (recnData);
 }
 
+
 static void
 recn_cancel(RecnWindow *recnData)
 {
@@ -1905,6 +1951,7 @@ recn_cancel(RecnWindow *recnData)
     gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 }
 
+
 static gboolean
 recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
@@ -1913,6 +1960,7 @@ recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
     recn_cancel(recnData);
     return TRUE;
 }
+
 
 static gboolean
 recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -1929,6 +1977,7 @@ recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
         return FALSE;
     }
 }
+
 
 /********************************************************************\
  * find_payment_account                                             *
@@ -2053,6 +2102,7 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
     gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 }
 
+
 /********************************************************************\
  * recnPostponeCB                                                   *
  *   saves reconcile information for later use                      *
@@ -2089,12 +2139,14 @@ recnPostponeCB (GtkAction *action, gpointer data)
     gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 }
 
+
 static void
 recnCancelCB (GtkAction *action, gpointer data)
 {
     RecnWindow *recnData = data;
     recn_cancel(recnData);
 }
+
 
 /** An array of all of the actions provided by the main window code.
  *  This includes some placeholder actions for the menus that are

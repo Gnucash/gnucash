@@ -33,9 +33,8 @@
 #include "qof.h"
 #include "gnc-ui.h"
 
-
 /* This static indicates the debugging module that this .o belongs to.  */
-/* static short module = MOD_GUI; */
+static QofLogModule log_module = GNC_MOD_GUI;
 
 typedef struct
 {
@@ -46,7 +45,6 @@ typedef struct
     GtkWidget * date_edit;
     GtkWidget * num_edit;
 } DupTransDialog;
-
 
 /* Parses the string value and returns true if it is a
  * number. In that case, *num is set to the value parsed.
@@ -92,11 +90,13 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
                              time_t date, const char *num_str)
 {
     GtkWidget *dialog;
-    GladeXML  *xml;
+    GtkBuilder  *builder;
 
-    xml = gnc_glade_xml_new ("register.glade", "Duplicate Transaction Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "adjustment1");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "Duplicate Transaction Dialog");
 
-    dialog = glade_xml_get_widget (xml, "Duplicate Transaction Dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Duplicate Transaction Dialog"));
     dt_dialog->dialog = dialog;
 
     /* parent */
@@ -111,10 +111,10 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
 
         date_edit = gnc_date_edit_new (date, FALSE, FALSE);
         gnc_date_activates_default(GNC_DATE_EDIT(date_edit), TRUE);
-        hbox = glade_xml_get_widget (xml, "date_hbox");
+        hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
         gtk_widget_show (date_edit);
 
-        label = glade_xml_get_widget (xml, "date_label");
+        label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
         gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), label);
 
         gtk_box_pack_end (GTK_BOX (hbox), date_edit, TRUE, TRUE, 0);
@@ -125,7 +125,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         GtkWidget *num_spin;
         long int num;
 
-        num_spin = glade_xml_get_widget (xml, "num_spin");
+        num_spin = GTK_WIDGET(gtk_builder_get_object (builder, "num_spin"));
         dt_dialog->num_edit = num_spin;
 
         gtk_entry_set_activates_default(GTK_ENTRY(num_spin), TRUE);
@@ -137,6 +137,10 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         else
             gtk_entry_set_text (GTK_ENTRY (num_spin), "");
     }
+
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dt_dialog);
+
+    g_object_unref(G_OBJECT(builder));
 }
 
 /********************************************************************\

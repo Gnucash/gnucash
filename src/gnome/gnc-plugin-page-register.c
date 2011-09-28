@@ -1,26 +1,27 @@
-/*
- * gnc-plugin-page-register.c --
- *
- * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, contact:
- *
- * Free Software Foundation           Voice:  +1-617-542-5942
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
- * Boston, MA  02110-1301,  USA       gnu@gnu.org
- */
+/**********************************************************************
+ * gnc-plugin-page-register.c -- register page functions              *
+ *                                                                    *
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>       *
+ * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org> *
+ * Copyright (C) 2011, Robert Fewell                                  *
+ *                                                                    *
+ * This program is free software; you can redistribute it and/or      *
+ * modify it under the terms of the GNU General Public License as     *
+ * published by the Free Software Foundation; either version 2 of     *
+ * the License, or (at your option) any later version.                *
+ *                                                                    *
+ * This program is distributed in the hope that it will be useful,    *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of     *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      *
+ * GNU General Public License for more details.                       *
+ *                                                                    *
+ * You should have received a copy of the GNU General Public License  *
+ * along with this program; if not, contact:                          *
+ *                                                                    *
+ * Free Software Foundation           Voice:  +1-617-542-5942         *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652         *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                     *
+ **********************************************************************/
 
 /** @addtogroup ContentPlugins
     @{ */
@@ -342,6 +343,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report)
     },
 };
+
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (gnc_plugin_page_register_actions);
 
 static GtkToggleActionEntry toggle_entries[] =
@@ -358,6 +360,7 @@ static GtkToggleActionEntry toggle_entries[] =
         G_CALLBACK (gnc_plugin_page_register_cmd_expand_transaction), FALSE
     },
 };
+
 static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
 static GtkRadioActionEntry radio_entries_2 [] =
@@ -378,8 +381,8 @@ static GtkRadioActionEntry radio_entries_2 [] =
         N_("Show expanded transactions with all splits"), REG_STYLE_JOURNAL
     }
 };
-static guint n_radio_entries_2 = G_N_ELEMENTS (radio_entries_2);
 
+static guint n_radio_entries_2 = G_N_ELEMENTS (radio_entries_2);
 
 /** These are the "important" actions provided by the register page.
  *  Their labels will appear when the toolbar is set to "Icons and
@@ -389,7 +392,6 @@ static const gchar *important_actions[] =
     "SplitTransactionAction",
     NULL,
 };
-
 
 /** Actions that require an account to be selected before they are
  *  enabled. */
@@ -402,7 +404,6 @@ static const gchar *actions_requiring_account[] =
     NULL
 };
 
-
 /** View Style actions */
 static const gchar *view_style_actions[] =
 {
@@ -411,7 +412,6 @@ static const gchar *view_style_actions[] =
     "ViewStyleJournalAction",
     NULL
 };
-
 
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
@@ -429,20 +429,21 @@ static action_toolbar_labels toolbar_labels[] =
     { NULL, NULL },
 };
 
-
 struct status_action
 {
     const char *action_name;
     int value;
+    GtkWidget *widget;
 };
+
 static struct status_action status_actions[] =
 {
-    { "filter_status_reconciled",   CLEARED_RECONCILED },
-    { "filter_status_cleared",      CLEARED_CLEARED },
-    { "filter_status_voided",       CLEARED_VOIDED },
-    { "filter_status_frozen",       CLEARED_FROZEN },
-    { "filter_status_unreconciled", CLEARED_NO },
-    { NULL, 0 },
+    { "filter_status_reconciled",   CLEARED_RECONCILED, NULL },
+    { "filter_status_cleared",      CLEARED_CLEARED, NULL },
+    { "filter_status_voided",       CLEARED_VOIDED, NULL },
+    { "filter_status_frozen",       CLEARED_FROZEN, NULL },
+    { "filter_status_unreconciled", CLEARED_NO, NULL },
+    { NULL, 0, NULL },
 };
 #define CLEARED_VALUE "cleared_value"
 
@@ -474,6 +475,13 @@ typedef struct GncPluginPageRegisterPrivate
     struct
     {
         GtkWidget *dialog;
+        GtkWidget *table;
+        GtkWidget *start_date_choose;
+        GtkWidget *start_date_today;
+        GtkWidget *start_date;
+        GtkWidget *end_date_choose;
+        GtkWidget *end_date_today;
+        GtkWidget *end_date;
         cleared_match_t original_cleared_match;
         cleared_match_t cleared_match;
         time_t original_start_time;
@@ -700,7 +708,6 @@ gnc_plugin_page_register_finalize (GObject *object)
     LEAVE(" ");
 }
 
-
 Account *
 gnc_plugin_page_register_get_account (GncPluginPageRegister *page)
 {
@@ -716,7 +723,6 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page)
         return leader;
     return NULL;
 }
-
 
 static void
 gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page)
@@ -1465,7 +1471,7 @@ gnc_plugin_page_register_sort_button_cb (GtkToggleButton *button,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-    name = gtk_widget_get_name(GTK_WIDGET(button));
+    name = gtk_buildable_get_name(GTK_BUILDABLE(button));
     ENTER("button %s(%p), page %p", name, button, page);
     type = SortTypefromString(name);
     gnc_split_reg_set_sort_type(priv->gsr, type);
@@ -1598,7 +1604,7 @@ gnc_plugin_page_register_filter_status_one_cb (GtkToggleButton *button,
     g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
-    name = gtk_widget_get_name(GTK_WIDGET(button));
+    name = gtk_buildable_get_name(GTK_BUILDABLE(button));
     ENTER("toggle button %s (%p), plugin_page %p", name, button, page);
 
     /* Determine what status bit to change */
@@ -1648,8 +1654,7 @@ gnc_plugin_page_register_filter_status_all_cb (GtkButton *button,
     /* Turn on all the check menu items */
     for (i = 0; status_actions[i].action_name; i++)
     {
-        widget = gnc_glade_lookup_widget(GTK_WIDGET(button),
-                                         status_actions[i].action_name);
+        widget = status_actions[i].widget;
         g_signal_handlers_block_by_func(widget, gnc_plugin_page_register_filter_status_one_cb, page);
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), TRUE);
         g_signal_handlers_unblock_by_func(widget, gnc_plugin_page_register_filter_status_one_cb, page);
@@ -1682,18 +1687,15 @@ get_filter_times(GncPluginPageRegister *page)
     time_t time_val;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-    button = gnc_glade_lookup_widget(priv->fd.dialog, "start_date_choose");
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)))
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.start_date_choose)))
     {
-        gde = gnc_glade_lookup_widget(button, "start_date");
-        time_val = gnc_date_edit_get_date(GNC_DATE_EDIT(gde));
+        time_val = gnc_date_edit_get_date(GNC_DATE_EDIT(priv->fd.start_date));
         time_val = gnc_timet_get_day_start(time_val);
         priv->fd.start_time = time_val;
     }
     else
     {
-        today = gnc_glade_lookup_widget(priv->fd.dialog, "start_date_today");
-        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(today)))
+        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.start_date_today)))
         {
             priv->fd.start_time = gnc_timet_get_today_start();
         }
@@ -1703,18 +1705,15 @@ get_filter_times(GncPluginPageRegister *page)
         }
     }
 
-    button = gnc_glade_lookup_widget(priv->fd.dialog, "end_date_choose");
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)))
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.end_date_choose)))
     {
-        gde = gnc_glade_lookup_widget(button, "end_date");
-        time_val = gnc_date_edit_get_date(GNC_DATE_EDIT(gde));
+        time_val = gnc_date_edit_get_date(GNC_DATE_EDIT(priv->fd.end_date));
         time_val = gnc_timet_get_day_end(time_val);
         priv->fd.end_time = time_val;
     }
     else
     {
-        today = gnc_glade_lookup_widget(priv->fd.dialog, "end_date_today");
-        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(today)))
+        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.start_date_today)))
         {
             priv->fd.end_time = gnc_timet_get_today_end();
         }
@@ -1746,7 +1745,6 @@ gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton *button,
         GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
-    GtkWidget *table;
     gboolean active;
 
     g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
@@ -1754,9 +1752,8 @@ gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton *button,
 
     ENTER("(button %p, page %p)", button, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-    table = gnc_glade_lookup_widget(GTK_WIDGET(button), "select_range_table");
     active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-    gtk_widget_set_sensitive(table, active);
+    gtk_widget_set_sensitive(priv->fd.table, active);
     if (active)
     {
         get_filter_times(page);
@@ -1787,7 +1784,7 @@ gnc_plugin_page_register_filter_gde_changed_cb (GtkWidget *unused,
 {
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
-    ENTER("(widget %s(%p), page %p)", gtk_widget_get_name(unused), unused, page);
+    ENTER("(widget %s(%p), page %p)", gtk_buildable_get_name(GTK_BUILDABLE(unused)), unused, page);
     get_filter_times(page);
     gnc_ppr_update_date_query(page);
     LEAVE(" ");
@@ -1817,24 +1814,24 @@ void
 gnc_plugin_page_register_filter_start_cb (GtkWidget *radio,
         GncPluginPageRegister *page)
 {
-    GtkWidget *widget, *gde;
+    GncPluginPageRegisterPrivate *priv;
+    const gchar *name;
     gboolean active;
 
     g_return_if_fail(GTK_IS_RADIO_BUTTON(radio));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
-    ENTER("(radio %s(%p), page %p)", gtk_widget_get_name(radio), radio, page);
+    ENTER("(radio %s(%p), page %p)", gtk_buildable_get_name(GTK_BUILDABLE(radio)), radio, page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
     if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio)))
     {
         LEAVE("1st callback of pair. Defer to 2nd callback.");
         return;
     }
 
-    widget = gnc_glade_lookup_widget(radio, "start_date_choose");
-    active = (widget == radio);
-    gde = gnc_glade_lookup_widget(radio, "start_date");
-    gtk_widget_set_sensitive(gde, active);
-
+    name = gtk_buildable_get_name(GTK_BUILDABLE(radio));
+    active = ( strcmp(name, g_strdup("start_date_choose")) == 0 ? 1 : 0 );
+    gtk_widget_set_sensitive(priv->fd.start_date, active);
     get_filter_times(page);
     gnc_ppr_update_date_query(page);
     LEAVE(" ");
@@ -1864,24 +1861,24 @@ void
 gnc_plugin_page_register_filter_end_cb (GtkWidget *radio,
                                         GncPluginPageRegister *page)
 {
-    GtkWidget *widget, *gde;
+    GncPluginPageRegisterPrivate *priv;
+    const gchar *name;
     gboolean active;
 
     g_return_if_fail(GTK_IS_RADIO_BUTTON(radio));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
-    ENTER("(radio %s(%p), page %p)", gtk_widget_get_name(radio), radio, page);
+    ENTER("(radio %s(%p), page %p)", gtk_buildable_get_name(GTK_BUILDABLE(radio)), radio, page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
     if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio)))
     {
         LEAVE("1st callback of pair. Defer to 2nd callback.");
         return;
     }
 
-    widget = gnc_glade_lookup_widget(radio, "end_date_choose");
-    active = (widget == radio);
-    gde = gnc_glade_lookup_widget(radio, "end_date");
-    gtk_widget_set_sensitive(gde, active);
-
+    name = gtk_buildable_get_name(GTK_BUILDABLE(radio));
+    active = ( strcmp(name, g_strdup("end_date_choose")) == 0 ? 1 : 0 );
+    gtk_widget_set_sensitive(priv->fd.end_date, active);
     get_filter_times(page);
     gnc_ppr_update_date_query(page);
     LEAVE(" ");
@@ -2300,7 +2297,7 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
     GtkWidget *dialog, *entry;
     SplitRegister *reg;
     Transaction *trans;
-    GladeXML *xml;
+    GtkBuilder *builder;
     const char *reason;
     gint result;
 
@@ -2324,9 +2321,10 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
     if (!gnc_plugin_page_register_finish_pending(GNC_PLUGIN_PAGE(page)))
         return;
 
-    xml = gnc_glade_xml_new("register.glade", "Void Transaction");
-    dialog = glade_xml_get_widget(xml, "Void Transaction");
-    entry = glade_xml_get_widget(xml, "reason");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file  (builder ,"gnc-plugin-page-register.glade", "Void Transaction");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Void Transaction"));
+    entry = GTK_WIDGET(gtk_builder_get_object (builder, "reason"));
 
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     if (result == GTK_RESPONSE_OK)
@@ -2339,7 +2337,7 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
 
     /* All done. Get rid of it. */
     gtk_widget_destroy(dialog);
-    g_object_unref(xml);
+    g_object_unref(G_OBJECT(builder));
 }
 
 
@@ -2442,7 +2440,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
 {
     GncPluginPageRegisterPrivate *priv;
     GtkWidget *dialog, *button;
-    GladeXML *xml;
+    GtkBuilder *builder;
     SortType sort;
     const gchar *name;
     gchar *title;
@@ -2459,8 +2457,10 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     }
 
     /* Create the dialog */
-    xml = gnc_glade_xml_new ("register.glade", "Sort By");
-    dialog = glade_xml_get_widget (xml, "Sort By");
+
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file  (builder, "gnc-plugin-page-register.glade", "Sort By");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Sort By"));
     priv->sd.dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                  gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
@@ -2473,17 +2473,17 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     /* Set the button for the current sort order */
     sort = gnc_split_reg_get_sort_type(priv->gsr);
     name = SortTypeasString(sort);
-    button = glade_xml_get_widget (xml, name);
+    button = GTK_WIDGET(gtk_builder_get_object (builder, name));
     DEBUG("current sort %d, button %s(%p)", sort, name, button);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
     priv->sd.original_sort_type = sort;
 
     /* Wire it up */
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-                                      page);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, page);
 
     /* Show it */
     gtk_widget_show(dialog);
+    g_object_unref(G_OBJECT(builder));
     LEAVE(" ");
 }
 
@@ -2492,9 +2492,9 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
         GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
-    GtkWidget *dialog, *toggle, *button, *start_date, *end_date, *table;
+    GtkWidget *dialog, *toggle, *button, *start_date, *end_date, *table, *hbox;
     time_t start_time, end_time, time_val;
-    GladeXML *xml;
+    GtkBuilder *builder;
     gboolean sensitive, value;
     Query *query;
     gchar *title;
@@ -2512,11 +2512,13 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     }
 
     /* Create the dialog */
-    xml = gnc_glade_xml_new ("register.glade", "Filter By");
-    dialog = glade_xml_get_widget (xml, "Filter By");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "Filter By");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Filter By"));
     priv->fd.dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                  gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
+
     /* Translators: The %s is the name of the plugin page */
     title = g_strdup_printf(_("Filter %s by..."),
                             gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
@@ -2526,14 +2528,15 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     /* Set the check buttons for the current status */
     for (i = 0; status_actions[i].action_name; i++)
     {
-        toggle = glade_xml_get_widget (xml, status_actions[i].action_name);
+        toggle = GTK_WIDGET(gtk_builder_get_object (builder, status_actions[i].action_name));
         value = priv->fd.cleared_match & status_actions[i].value;
+	status_actions[i].widget = toggle;
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), value);
     }
     priv->fd.original_cleared_match = priv->fd.cleared_match;
 
     /* Set the date info */
-    button = glade_xml_get_widget(xml, "filter_show_range");
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "filter_show_range"));
     query = gnc_ledger_display_get_query (priv->ledger);
     xaccQueryGetDateMatchTT(query, &start_time, &end_time);
     priv->fd.original_start_time = start_time;
@@ -2541,16 +2544,21 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     priv->fd.original_end_time = end_time;
     priv->fd.end_time = end_time;
 
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
-                                 start_time || end_time);
-    table = glade_xml_get_widget(xml, "select_range_table");
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), start_time || end_time);
+    table = GTK_WIDGET(gtk_builder_get_object (builder, "select_range_table"));
+    priv->fd.table = table;
     gtk_widget_set_sensitive(GTK_WIDGET(table), start_time || end_time);
+
+    priv->fd.start_date_choose = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_choose"));
+    priv->fd.start_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_today"));
+    priv->fd.end_date_choose = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_choose"));
+    priv->fd.end_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_today"));
 
     {
         /* Start date info */
         if (start_time == 0)
         {
-            button = glade_xml_get_widget(xml, "start_date_earliest");
+            button = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_earliest"));
             time_val = xaccQueryGetEarliestDateFound (query);
             sensitive = FALSE;
         }
@@ -2560,20 +2568,23 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
             if ((start_time >= gnc_timet_get_today_start()) &&
                     (start_time <= gnc_timet_get_today_end()))
             {
-                button = glade_xml_get_widget(xml, "start_date_today");
+                button = priv->fd.start_date_today;
                 sensitive = FALSE;
             }
             else
             {
-                button = glade_xml_get_widget(xml, "start_date_choose");
+                button = priv->fd.start_date_choose;
                 sensitive = TRUE;
             }
         }
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-        start_date = glade_xml_get_widget(xml, "start_date");
-        gtk_widget_set_sensitive(GTK_WIDGET(start_date), sensitive);
-        gnc_date_edit_set_time(GNC_DATE_EDIT(start_date), time_val);
-        g_signal_connect (G_OBJECT (start_date), "date-changed",
+        priv->fd.start_date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+        hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
+        gtk_box_pack_start (GTK_BOX (hbox), priv->fd.start_date, TRUE, TRUE, 0);
+        gtk_widget_show (priv->fd.start_date);
+        gtk_widget_set_sensitive(GTK_WIDGET(priv->fd.start_date), sensitive);
+        gnc_date_edit_set_time(GNC_DATE_EDIT(priv->fd.start_date), time_val);
+        g_signal_connect (G_OBJECT (priv->fd.start_date), "date-changed",
                           G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
                           page);
     }
@@ -2582,7 +2593,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
         /* End date info */
         if (end_time == 0)
         {
-            button = glade_xml_get_widget(xml, "end_date_latest");
+            button = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_latest"));
             time_val = xaccQueryGetLatestDateFound (query);
             sensitive = FALSE;
         }
@@ -2592,29 +2603,33 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
             if ((end_time >= gnc_timet_get_today_start()) &&
                     (end_time <= gnc_timet_get_today_end()))
             {
-                button = glade_xml_get_widget(xml, "end_date_today");
+                button = priv->fd.end_date_today;
                 sensitive = FALSE;
             }
             else
             {
-                button = glade_xml_get_widget(xml, "end_date_choose");
+                button = priv->fd.end_date_choose;
                 sensitive = TRUE;
             }
         }
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-        end_date = glade_xml_get_widget(xml, "end_date");
-        gtk_widget_set_sensitive(GTK_WIDGET(end_date), sensitive);
-        gnc_date_edit_set_time(GNC_DATE_EDIT(end_date), time_val);
-        g_signal_connect (G_OBJECT (end_date), "date-changed",
+        priv->fd.end_date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+        hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
+        gtk_box_pack_start (GTK_BOX (hbox), priv->fd.end_date, TRUE, TRUE, 0);
+        gtk_widget_show (priv->fd.end_date);
+        gtk_widget_set_sensitive(GTK_WIDGET(priv->fd.end_date), sensitive);
+        gnc_date_edit_set_time(GNC_DATE_EDIT(priv->fd.end_date), time_val);
+        g_signal_connect (G_OBJECT (priv->fd.end_date), "date-changed",
                           G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
                           page);
     }
 
     /* Wire it up */
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, page);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, page);
 
     /* Show it */
     gtk_widget_show_all(dialog);
+    g_object_unref(G_OBJECT(builder));
     LEAVE(" ");
 }
 

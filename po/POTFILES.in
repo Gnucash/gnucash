@@ -210,8 +210,6 @@ src/gnome/dialog-sx-since-last-run.c
 src/gnome/dialog-tax-info.c
 src/gnome/glade/newuser.glade
 src/gnome/glade/progress.glade
-src/gnome/glade/reconcile.glade
-src/gnome/glade/register.glade
 src/gnome/glade/sched-xact.glade
 src/gnome/glade/tax.glade
 src/gnome/glade/userpass.glade
@@ -236,14 +234,15 @@ src/gnome/gtkbuilder/dialog-price.glade
 src/gnome/gtkbuilder/dialog-print-check.glade
 src/gnome/gtkbuilder/dialog-sx.glade
 src/gnome/gtkbuilder/gnc-plugin-page-budget.glade
+src/gnome/gtkbuilder/gnc-plugin-page-register.glade
 src/gnome/gtkbuilder/newuser.glade
 src/gnome/gtkbuilder/owner.glade
 src/gnome/gtkbuilder/progress.glade
-src/gnome/gtkbuilder/reconcile.glade
-src/gnome/gtkbuilder/register.glade
+src/gnome/gtkbuilder/sched-xact.glade
 src/gnome/gtkbuilder/tax.glade
 src/gnome/gtkbuilder/userpass.glade
 src/gnome/gtkbuilder/window-autoclear.glade
+src/gnome/gtkbuilder/window-reconcile.glade
 src/gnome/reconcile-list.c
 src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in
 src/gnome/schemas/apps_gnucash_dialog_common.schemas.in

@@ -10,15 +10,15 @@ gtkbuilder_DATA = \
 	dialog-fincalc.glade \
 	dialog-price.glade \
 	dialog-print-check.glade \
-        dialog-sx.glade \
+	dialog-sx.glade \
 	gnc-plugin-page-budget.glade \
+	gnc-plugin-page-register.glade \
 	newuser.glade \
 	owner.glade \
 	progress.glade \
-	reconcile.glade \
-	register.glade \
 	tax.glade \
 	userpass.glade \
-	window-autoclear.glade
+	window-autoclear.glade \
+	window-reconcile.glade
 
 EXTRA_DIST = $(gtkbuilder_DATA)
