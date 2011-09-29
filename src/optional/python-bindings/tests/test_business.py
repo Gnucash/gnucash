@@ -49,6 +49,12 @@ class TestBusiness( BusinessSession ):
         self.assertTrue( self.customer.Equal( self.job.GetOwner() ) )
         self.assertTrue( self.customer.Equal( self.invoice.GetOwner() ) )
 
+    def test_employee_name(self):
+        NAME = 'John Doe'
+        self.assertEqual( '', self.employee.GetName() )
+        self.employee.SetName(NAME)
+        self.assertEqual( NAME, self.employee.GetName() )
+
     def test_post(self):
         self.assertTrue( self.invoice.IsPosted() )
 
