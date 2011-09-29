@@ -188,6 +188,12 @@ typedef char gchar;
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncCustomer, 0));
         else if (GNC_IS_VENDOR(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncVendor, 0));
+        else if (GNC_IS_EMPLOYEE(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEmployee, 0));
+        else if (GNC_IS_JOB(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncJob, 0));
+        else if (GNC_IS_OWNER(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncOwner, 0));
         else if ($1_descriptor == $descriptor(MonetaryList *))
             PyList_Append(list, SWIG_NewPointerObj(data, $descriptor(gnc_monetary *), 0));
         else

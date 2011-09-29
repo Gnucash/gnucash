@@ -75,19 +75,15 @@ class GnuCashBusinessEntity(GnuCashCoreClass):
             trans = Transaction(instance=trans)
         return trans
             
+class Owner(GnuCashBusinessEntity): pass
 
-class Customer(GnuCashBusinessEntity): pass
+class Customer(Owner): pass
                          
-class Employee(GnuCashBusinessEntity):
-    def SetName(self, name):
-        self.GetAddr().SetName(name)
-    
-    def GetName(self):
-        return self.GetAddr().GetName()
+class Employee(Owner): pass
 
-class Vendor(GnuCashBusinessEntity): pass
+class Vendor(Owner): pass
 
-class Job(GnuCashBusinessEntity):
+class Job(Owner):
     # override the superclass contructor, as Job doesn't require
     # a currency but it does require an owner
     def __init__(self, book=None, id=None, owner=None, name=None,
@@ -232,6 +228,21 @@ class Entry(GnuCashCoreClass):
                 invoice.AddEntry(self)
         else:
             GnuCashCoreClass.__init__(self, instance=instance)    
+
+# Owner
+Owner.add_constructor_and_methods_with_prefix('gncOwner', 'New')
+
+owner_dict = {
+                    'GetCustomer' : Customer,
+                    'GetVendor' : Vendor,
+                    'GetEmployee' : Employee,
+                    'GetJob' : Job,
+                    'GetAddr' : Address,
+                    'GetCurrency' : GncCommodity,
+                    'GetEndOwner': Owner,
+                    'GetBalanceInCurrency': GncNumeric,
+              }
+methods_return_instance(Owner, owner_dict)
 
 # Customer
 Customer.add_constructor_and_methods_with_prefix('gncCustomer', 'Create')
