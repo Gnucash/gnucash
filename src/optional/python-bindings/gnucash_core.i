@@ -113,8 +113,6 @@
 
 %include <gnc-commodity.h>
 
-%include <gncOwner.h>
-
 %typemap(out) GncOwner * {
     GncOwnerType owner_type = gncOwnerGetType($1);
     PyObject * owner_tuple = PyTuple_New(2);
@@ -189,6 +187,7 @@
 %include <gnc-lot.h>
 
 //business-core includes
+%include <gncOwner.h>
 %include <gncCustomer.h>
 %include <gncEmployee.h>
 %include <gncVendor.h>

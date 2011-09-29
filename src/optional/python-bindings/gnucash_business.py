@@ -63,27 +63,13 @@ class GnuCashBusinessEntity(GnuCashCoreClass):
         else:
             GnuCashCoreClass.__init__(self, instance=instance)
 
-    def ApplyPayment(self, invoice, posted_acc, xfer_acc, amount,
-                     exch, date, memo, num):
-        if invoice != None:
-            invoice = invoice.get_instance()
-        trans = gncOwnerApplyPayment(
-            self.get_instance(), invoice, posted_acc.get_instance(),
-            xfer_acc.get_instance(), amount.get_instance(),
-            exch.get_instance(), date, memo, num)
-        if trans != None:
-            trans = Transaction(instance=trans)
-        return trans
-            
-class Owner(GnuCashBusinessEntity): pass
-
-class Customer(Owner): pass
+class Customer(GnuCashBusinessEntity): pass
                          
-class Employee(Owner): pass
+class Employee(GnuCashBusinessEntity): pass
 
-class Vendor(Owner): pass
+class Vendor(GnuCashBusinessEntity): pass
 
-class Job(Owner):
+class Job(GnuCashBusinessEntity):
     # override the superclass contructor, as Job doesn't require
     # a currency but it does require an owner
     def __init__(self, book=None, id=None, owner=None, name=None,
@@ -230,7 +216,7 @@ class Entry(GnuCashCoreClass):
             GnuCashCoreClass.__init__(self, instance=instance)    
 
 # Owner
-Owner.add_constructor_and_methods_with_prefix('gncOwner', 'New')
+GnuCashBusinessEntity.add_methods_with_prefix('gncOwner')
 
 owner_dict = {
                     'GetCustomer' : Customer,
@@ -239,10 +225,15 @@ owner_dict = {
                     'GetJob' : Job,
                     'GetAddr' : Address,
                     'GetCurrency' : GncCommodity,
-                    'GetEndOwner': Owner,
+                    'GetEndOwner': GnuCashBusinessEntity,
                     'GetBalanceInCurrency': GncNumeric,
               }
-methods_return_instance(Owner, owner_dict)
+methods_return_instance(GnuCashBusinessEntity, owner_dict)
+
+methods_return_instance_lists(
+    GnuCashBusinessEntity, {
+        'GetCommoditiesList': GncCommodity
+    })
 
 # Customer
 Customer.add_constructor_and_methods_with_prefix('gncCustomer', 'Create')

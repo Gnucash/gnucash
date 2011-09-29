@@ -18,12 +18,14 @@ class TestSplit( SplitSession ):
 
     def test_account(self):
         ACCT = Account(self.book)
+        ACCT.SetCommodity(self.currency)
         self.split.SetAccount(ACCT)
         self.assertTrue( ACCT.Equal(self.split.GetAccount(), True) )
 
     def test_transaction(self):
         TRANS = Transaction(self.book)
         self.split.SetParent(TRANS)
+        TRANS.SetCurrency(self.currency)
         TRANS.SetDescription("Foo")
         self.assertEquals( TRANS.GetDescription(), self.split.GetParent().GetDescription() )
 

@@ -9,4 +9,5 @@ EXTRA_DIST = \
   test_account.py \
   test_book.py \
   test_split.py \
-  test_transaction.py
+  test_transaction.py \
+  test_business.py

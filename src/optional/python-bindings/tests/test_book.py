@@ -6,6 +6,8 @@ class BookSession( TestCase ):
     def setUp(self):
         self.ses = Session()
         self.book = self.ses.get_book()
+        table = self.book.get_table()
+        self.currency = table.lookup('CURRENCY', 'EUR')
 
 class TestBook( BookSession ):
     def test_markclosed(self):

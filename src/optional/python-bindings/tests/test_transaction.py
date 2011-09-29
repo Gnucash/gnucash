@@ -13,6 +13,7 @@ class TransactionSession( BookSession ):
         self.split = Split(self.book)
         self.split.SetParent(self.trans)
         ############
+        self.trans.SetCurrency(self.currency)
 
 class TestTransaction( TransactionSession ):
     def test_equal(self):
@@ -25,6 +26,9 @@ class TestTransaction( TransactionSession ):
         self.assertFalse( TRANS.Equal(self.trans, True, False, False, False) )
         #Clone and original should have the same balance
         self.assertTrue( TRANS.Equal(self.trans, False, False, True, False) )
+
+    def test_setcurrency(self):
+        self.assertTrue( self.currency.equal( self.trans.GetCurrency() ) )
 
     def test_edit(self):
         self.assertFalse( self.trans.IsOpen() )
@@ -44,6 +48,7 @@ class TestTransaction( TransactionSession ):
 
     def test_findsplit(self):
         ACCT = Account(self.book)
+        ACCT.SetCommodity(self.currency)
         self.split.SetAccount( ACCT )
         SPLIT = self.trans.FindSplitByAccount( ACCT )
         self.assertTrue( SPLIT.Equal(self.split, True, False, False) )
