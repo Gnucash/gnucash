@@ -751,80 +751,62 @@ gnc_lot_sort_func (GNCLot *a, GNCLot *b)
     return timespec_cmp (&da, &db);
 }
 
-/*
- * Apply a payment of "amount" for the owner, between the xfer_account
- * (bank or other asset) and the posted_account (A/R or A/P).
- */
-Transaction *
-gncOwnerApplyPayment (const GncOwner *owner, GncInvoice* invoice,
-                      Account *posted_acc, Account *xfer_acc,
-                      gnc_numeric amount, gnc_numeric exch, Timespec date,
-                      const char *memo, const char *num)
+static gboolean use_reversed_payment_amounts(const GncOwner *owner)
 {
-    QofBook *book;
+    g_assert(owner);
+    return (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);
+}
+
+gint
+gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
+                         Account *posted_account, GncInvoice* invoice)
+{
     Account *inv_posted_acc;
-    Transaction *txn;
-    Split *split;
-    GList *lot_list, *fifo = NULL;
-    GNCLot *lot, *inv_posted_lot = NULL, *prepay_lot = NULL;
-    GncInvoice *this_invoice;
-    const char *name;
-    gnc_commodity *commodity;
+    GList *lot_list, *fifo;
+    GNCLot *inv_posted_lot = NULL, *prepay_lot = NULL;
     gnc_numeric split_amt;
-    gboolean reverse, inv_passed = TRUE;
-    gnc_numeric payment_value = amount;
+    gboolean inv_passed = TRUE;
+    Split *split;
+    QofBook *book = gnc_account_get_book(posted_account);
+    gnc_commodity *txn_commodity = xaccTransGetCurrency(txn);
+    gint result = 0;
+    gnc_numeric payment_value;
+    const char *memo;
+    gboolean reverse = use_reversed_payment_amounts(owner);
 
-    /* Verify our arguments */
-    if (!owner || !posted_acc || !xfer_acc) return NULL;
-    g_return_val_if_fail (owner->owner.undefined != NULL, NULL);
+    g_assert(owner);
+    g_assert(txn);
+    g_assert(xaccTransIsOpen(txn));
+    g_assert(posted_account);
 
-    /* Compute the ancillary data */
-    book = gnc_account_get_book (posted_acc);
-    name = gncOwnerGetName (gncOwnerGetEndOwner ((GncOwner*)owner));
-    commodity = gncOwnerGetCurrency (owner);
-    reverse = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);
-
-    txn = xaccMallocTransaction (book);
-    xaccTransBeginEdit (txn);
-
-    /* Set up the transaction */
-    xaccTransSetDescription (txn, name ? name : "");
-    xaccTransSetNum (txn, num);
-    xaccTransSetCurrency (txn, commodity);
-    xaccTransSetDateEnteredSecs (txn, time(NULL));
-    xaccTransSetDatePostedTS (txn, &date);
-    xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
-
-
-    /* The split for the transfer account */
-    split = xaccMallocSplit (book);
-    xaccSplitSetMemo (split, memo);
-    xaccSplitSetAction (split, _("Payment"));
-    xaccAccountBeginEdit (xfer_acc);
-    xaccAccountInsertSplit (xfer_acc, split);
-    xaccAccountCommitEdit (xfer_acc);
-    xaccTransAppendSplit (txn, split);
-
-    if (gnc_commodity_equal(xaccAccountGetCommodity(xfer_acc), commodity))
+    if (txn_commodity != gncOwnerGetCurrency (owner))
     {
-        xaccSplitSetBaseValue (split, reverse ? amount :
-                               gnc_numeric_neg (amount), commodity);
+        // Uh oh
+        return result;
     }
-    else
+    // We require exactly one split in the transaction
+    if (xaccTransCountSplits(txn) != 1)
     {
-        /* Need to value the payment in terms of the owner commodity */
-        xaccSplitSetAmount(split, reverse ? amount : gnc_numeric_neg (amount));
-        payment_value = gnc_numeric_mul(amount, exch, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
-        xaccSplitSetValue(split, reverse ? payment_value : gnc_numeric_neg(payment_value));
+        // Uh oh
+        return result;
     }
 
+    {
+        // Retrieve the payment value from the existing first split.
+        Split *asset_split = xaccTransGetSplit(txn, 0);
+        g_assert(asset_split);
+        payment_value = xaccSplitGetValue(asset_split);
+        if (!reverse)
+            payment_value = gnc_numeric_neg(payment_value);
+        memo = xaccSplitGetMemo(asset_split);
+    }
 
     /* Now, find all "open" lots in the posting account for this
      * company and apply the payment on a FIFO basis.  Create
      * a new split for each open lot until the payment is gone.
      */
 
-    fifo = xaccAccountFindOpenLots (posted_acc, gnc_lot_match_invoice_owner,
+    fifo = xaccAccountFindOpenLots (posted_account, gnc_lot_match_invoice_owner,
                                     (gpointer)owner,
                                     (GCompareFunc)gnc_lot_sort_func);
 
@@ -838,7 +820,7 @@ gncOwnerApplyPayment (const GncOwner *owner, GncInvoice* invoice,
         inv_posted_lot = gncInvoiceGetPostedLot(invoice);
         if (inv_posted_acc && inv_posted_lot &&
                 guid_equal(xaccAccountGetGUID(inv_posted_acc),
-                           xaccAccountGetGUID(posted_acc)) &&
+                           xaccAccountGetGUID(posted_account)) &&
                 !gnc_lot_is_closed(inv_posted_lot))
         {
             /* Put this invoice at the beginning of the FIFO */
@@ -847,7 +829,7 @@ gncOwnerApplyPayment (const GncOwner *owner, GncInvoice* invoice,
         }
     }
 
-    xaccAccountBeginEdit (posted_acc);
+    xaccAccountBeginEdit (posted_account);
 
     /* Now iterate over the fifo until the payment is fully applied
      * (or all the lots are paid)
@@ -856,7 +838,7 @@ gncOwnerApplyPayment (const GncOwner *owner, GncInvoice* invoice,
     {
         gnc_numeric balance;
 
-        lot = lot_list->data;
+        GNCLot *lot = lot_list->data;
 
         /* Skip this lot if it matches the invoice that was passed in and
          * we've seen it already.  This way we post to it the first time
@@ -914,19 +896,22 @@ gncOwnerApplyPayment (const GncOwner *owner, GncInvoice* invoice,
         payment_value = gnc_numeric_sub (payment_value, split_amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
 
         /* Create the split for this lot in the post account */
+        ++result;
         split = xaccMallocSplit (book);
         xaccSplitSetMemo (split, memo);
         xaccSplitSetAction (split, _("Payment"));
-        xaccAccountInsertSplit (posted_acc, split);
+        xaccAccountInsertSplit (posted_account, split);
         xaccTransAppendSplit (txn, split);
         xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (split_amt) :
-                               split_amt, commodity);
+                               split_amt, txn_commodity);
         gnc_lot_add_split (lot, split);
 
         /* Now send an event for the invoice so it gets updated as paid */
-        this_invoice = gncInvoiceGetInvoiceFromLot(lot);
-        if (this_invoice)
-            qof_event_gen (QOF_INSTANCE(this_invoice), QOF_EVENT_MODIFY, NULL);
+        {
+            GncInvoice *this_invoice = gncInvoiceGetInvoiceFromLot(lot);
+            if (this_invoice)
+                qof_event_gen (QOF_INSTANCE(this_invoice), QOF_EVENT_MODIFY, NULL);
+        }
 
         if (gnc_numeric_zero_p (payment_value))
             break;
@@ -946,14 +931,82 @@ gncOwnerApplyPayment (const GncOwner *owner, GncInvoice* invoice,
         split = xaccMallocSplit (book);
         xaccSplitSetMemo (split, memo);
         xaccSplitSetAction (split, _("Pre-Payment"));
-        xaccAccountInsertSplit (posted_acc, split);
+        xaccAccountInsertSplit (posted_account, split);
         xaccTransAppendSplit (txn, split);
         xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (payment_value) :
-                               payment_value, commodity);
+                               payment_value, txn_commodity);
         gnc_lot_add_split (prepay_lot, split);
     }
 
-    xaccAccountCommitEdit (posted_acc);
+    xaccAccountCommitEdit (posted_account);
+
+    return result;
+}
+
+
+/*
+ * Apply a payment of "amount" for the owner, between the xfer_account
+ * (bank or other asset) and the posted_account (A/R or A/P).
+ */
+Transaction *
+gncOwnerApplyPayment (const GncOwner *owner, GncInvoice* invoice,
+                      Account *posted_acc, Account *xfer_acc,
+                      gnc_numeric amount, gnc_numeric exch, Timespec date,
+                      const char *memo, const char *num)
+{
+    QofBook *book;
+    Transaction *txn;
+    Split *split;
+    const char *name;
+    gnc_commodity *commodity;
+    gboolean reverse;
+    gnc_numeric payment_value = amount;
+
+    /* Verify our arguments */
+    if (!owner || !posted_acc || !xfer_acc) return NULL;
+    g_return_val_if_fail (owner->owner.undefined != NULL, NULL);
+
+    /* Compute the ancillary data */
+    book = gnc_account_get_book (posted_acc);
+    name = gncOwnerGetName (gncOwnerGetEndOwner ((GncOwner*)owner));
+    commodity = gncOwnerGetCurrency (owner);
+    reverse = use_reversed_payment_amounts(owner);
+
+    txn = xaccMallocTransaction (book);
+    xaccTransBeginEdit (txn);
+
+    /* Set up the transaction */
+    xaccTransSetDescription (txn, name ? name : "");
+    xaccTransSetNum (txn, num);
+    xaccTransSetCurrency (txn, commodity);
+    xaccTransSetDateEnteredSecs (txn, time(NULL));
+    xaccTransSetDatePostedTS (txn, &date);
+    xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
+
+
+    /* The split for the transfer account */
+    split = xaccMallocSplit (book);
+    xaccSplitSetMemo (split, memo);
+    xaccSplitSetAction (split, _("Payment"));
+    xaccAccountBeginEdit (xfer_acc);
+    xaccAccountInsertSplit (xfer_acc, split);
+    xaccAccountCommitEdit (xfer_acc);
+    xaccTransAppendSplit (txn, split);
+
+    if (gnc_commodity_equal(xaccAccountGetCommodity(xfer_acc), commodity))
+    {
+        xaccSplitSetBaseValue (split, reverse ? amount :
+                               gnc_numeric_neg (amount), commodity);
+    }
+    else
+    {
+        /* Need to value the payment in terms of the owner commodity */
+        xaccSplitSetAmount(split, reverse ? amount : gnc_numeric_neg (amount));
+        payment_value = gnc_numeric_mul(amount, exch, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+        xaccSplitSetValue(split, reverse ? payment_value : gnc_numeric_neg(payment_value));
+    }
+
+    gncOwnerAssignPaymentTxn(owner, txn, posted_acc, invoice);
 
     /* Commit this new transaction */
     xaccTransCommitEdit (txn);
