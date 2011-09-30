@@ -969,26 +969,26 @@ gnc_invoice_window_sort (InvoiceWindow *iw, invoice_sort_type_t sort_code)
 
     switch (sort_code)
     {
-    case BY_STANDARD:
+    case INVSORT_BY_STANDARD:
         p1 = standard;
         break;
-    case BY_DATE:
+    case INVSORT_BY_DATE:
         p1 = g_slist_prepend (p1, ENTRY_DATE);
         p2 = standard;
         break;
-    case BY_DATE_ENTERED:
+    case INVSORT_BY_DATE_ENTERED:
         p1 = g_slist_prepend (p1, ENTRY_DATE_ENTERED);
         p2 = standard;
         break;
-    case BY_DESC:
+    case INVSORT_BY_DESC:
         p1 = g_slist_prepend (p1, ENTRY_DESC);
         p2 = standard;
         break;
-    case BY_QTY:
+    case INVSORT_BY_QTY:
         p1 = g_slist_prepend (p1, ENTRY_QTY);
         p2 = standard;
         break;
-    case BY_PRICE:
+    case INVSORT_BY_PRICE:
         p1 = g_slist_prepend (p1, ((iw->owner.type == GNC_OWNER_CUSTOMER) ?
                                    ENTRY_IPRICE : ENTRY_BPRICE));
         p2 = standard;

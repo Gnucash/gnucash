@@ -37,12 +37,12 @@ typedef struct _invoice_window InvoiceWindow;
 
 typedef enum
 {
-    BY_STANDARD = 0,
-    BY_DATE,
-    BY_DATE_ENTERED,
-    BY_DESC,
-    BY_QTY,
-    BY_PRICE
+    INVSORT_BY_STANDARD = 0,
+    INVSORT_BY_DATE,
+    INVSORT_BY_DATE_ENTERED,
+    INVSORT_BY_DESC,
+    INVSORT_BY_QTY,
+    INVSORT_BY_PRICE
 } invoice_sort_type_t;
 
 
