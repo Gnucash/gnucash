@@ -714,7 +714,9 @@ KvpFrame* gncOwnerGetSlots(GncOwner* owner)
 static gboolean
 gnc_lot_match_invoice_owner (GNCLot *lot, gpointer user_data)
 {
-    GncOwner owner_def, *owner, *this_owner = user_data;
+    GncOwner owner_def;
+    const GncOwner *owner;
+    const GncOwner *this_owner = user_data;
     GncInvoice *invoice;
 
     /* If this lot is not for this owner, then ignore it */
@@ -722,7 +724,7 @@ gnc_lot_match_invoice_owner (GNCLot *lot, gpointer user_data)
     if (invoice)
     {
         owner = gncInvoiceGetOwner (invoice);
-        owner = gncOwnerGetEndOwner (owner);
+        owner = gncOwnerGetEndOwner ((GncOwner*)owner);
     }
     else
     {
@@ -754,7 +756,7 @@ gnc_lot_sort_func (GNCLot *a, GNCLot *b)
  * (bank or other asset) and the posted_account (A/R or A/P).
  */
 Transaction *
-gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
+gncOwnerApplyPayment (const GncOwner *owner, GncInvoice* invoice,
                       Account *posted_acc, Account *xfer_acc,
                       gnc_numeric amount, gnc_numeric exch, Timespec date,
                       const char *memo, const char *num)
@@ -778,7 +780,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
 
     /* Compute the ancillary data */
     book = gnc_account_get_book (posted_acc);
-    name = gncOwnerGetName (gncOwnerGetEndOwner (owner));
+    name = gncOwnerGetName (gncOwnerGetEndOwner ((GncOwner*)owner));
     commodity = gncOwnerGetCurrency (owner);
     reverse = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);
 
@@ -823,7 +825,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
      */
 
     fifo = xaccAccountFindOpenLots (posted_acc, gnc_lot_match_invoice_owner,
-                                    owner,
+                                    (gpointer)owner,
                                     (GCompareFunc)gnc_lot_sort_func);
 
     /* Check if an invoice was passed in, and if so, does it match the
@@ -994,7 +996,7 @@ gncOwnerGetCommoditiesList (const GncOwner *owner)
  * convert it to the desired currency.
  */
 gnc_numeric
-gncOwnerGetBalanceInCurrency (GncOwner *owner,
+gncOwnerGetBalanceInCurrency (const GncOwner *owner,
                               const gnc_commodity *report_currency)
 {
     gnc_numeric balance = gnc_numeric_zero ();
@@ -1027,7 +1029,7 @@ gncOwnerGetBalanceInCurrency (GncOwner *owner,
 
         /* Get a list of open lots for this owner and account */
         lot_list = xaccAccountFindOpenLots (account, gnc_lot_match_invoice_owner,
-                                            owner,
+                                            (gpointer)owner,
                                             (GCompareFunc)gnc_lot_sort_func);
         /* For each lot */
         for (lot_node = lot_list; lot_node; lot_node = lot_node->next)

@@ -185,7 +185,7 @@ KvpFrame* gncOwnerGetSlots(GncOwner* owner);
  * payment to that invoice first before any other invoice.
  */
 Transaction *
-gncOwnerApplyPayment (GncOwner *owner, GncInvoice *invoice,
+gncOwnerApplyPayment (const GncOwner *owner, GncInvoice *invoice,
                       Account *posted_acc, Account *xfer_acc,
                       gnc_numeric amount, gnc_numeric exch, Timespec date,
                       const char *memo, const char *num);
@@ -201,7 +201,7 @@ GList * gncOwnerGetCommoditiesList (const GncOwner *owner);
  *  convert it to the desired currency.
  */
 gnc_numeric
-gncOwnerGetBalanceInCurrency (GncOwner *owner,
+gncOwnerGetBalanceInCurrency (const GncOwner *owner,
                               const gnc_commodity *report_currency);
 
 #define OWNER_TYPE        "type"
