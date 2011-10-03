@@ -619,7 +619,8 @@ EOF
                     --prefix=${_GNOME_UDIR} \
                     --disable-static \
                     --with-python=no \
-                    --without-threads
+                    --without-threads \
+                    CPPFLAGS="${GNOME_CPPFLAGS}" LDFLAGS="${GNOME_LDFLAGS}"
                 make
                 make install
             qpopd
