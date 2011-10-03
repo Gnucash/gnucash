@@ -502,13 +502,13 @@ src/register/register-gnome/pricecell-gnome.c
 src/register/register-gnome/quickfillcell-gnome.c
 src/register/register-gnome/table-gnome.c
 src/report/locale-specific/us/gncmod-locale-reports-us.c
-src/report/report-gnome/custom-report-dialog.glade
-src/report/report-gnome/dialog-column-view.c
 src/report/report-gnome/dialog-custom-report.c
-src/report/report-gnome/dialog-style-sheet.c
+src/report/report-gnome/dialog-custom-report.glade
+src/report/report-gnome/dialog-report-column-view.c
+src/report/report-gnome/dialog-report.glade
+src/report/report-gnome/dialog-report-style-sheet.c
 src/report/report-gnome/gncmod-report-gnome.c
 src/report/report-gnome/gnc-plugin-page-report.c
-src/report/report-gnome/report.glade
 src/report/report-gnome/window-report.c
 src/report/report-system/gncmod-report-system.c
 src/report/report-system/gnc-report.c

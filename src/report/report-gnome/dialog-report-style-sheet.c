@@ -1,5 +1,5 @@
 /********************************************************************
- * dialog-style-sheet.c -- window for configuring HTML style        *
+ * dialog-report-style-sheet.c -- window for configuring HTML style *
  *                         sheets in GnuCash                        *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
@@ -27,7 +27,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "dialog-style-sheet.h"
+#include "dialog-report-style-sheet.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-gtk-utils.h"
@@ -184,11 +184,16 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     GList *template_names = NULL;
 
     /* get the new name for the style sheet */
-    GladeXML *xml = gnc_glade_xml_new ("report.glade",
-                                       "New Style Sheet Dialog");
-    GtkWidget * dlg = glade_xml_get_widget (xml, "New Style Sheet Dialog");
-    template_combo = glade_xml_get_widget (xml, "template_combobox");
-    name_entry     = glade_xml_get_widget (xml, "name_entry");
+    GtkBuilder *builder;
+    GtkWidget *dlg;
+
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder,"dialog-report.glade", "template_liststore");
+    gnc_builder_add_from_file (builder,"dialog-report.glade", "New Style Sheet Dialog");
+
+    dlg = GTK_WIDGET(gtk_builder_get_object (builder, "New Style Sheet Dialog"));
+    template_combo = GTK_WIDGET(gtk_builder_get_object (builder, "template_combobox"));
+    name_entry     = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
 
     g_assert(ssd);
 
@@ -243,6 +248,9 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     }
 
     g_list_free (template_names);
+
+    g_object_unref(G_OBJECT(builder));
+
     gtk_widget_destroy(dlg);
     return(new_ss);
 }
@@ -399,15 +407,16 @@ static StyleSheetDialog *
 gnc_style_sheet_select_dialog_create(void)
 {
     StyleSheetDialog  * ss = g_new0(StyleSheetDialog, 1);
-    GladeXML          * xml;
+    GtkBuilder        * builder;
     GtkCellRenderer   * renderer;
     GtkTreeSelection  * selection;
 
-    xml = gnc_glade_xml_new ("report.glade", "Select Style Sheet Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder,"dialog-report.glade", "Select Style Sheet Dialog");
 
-    ss->toplevel   = glade_xml_get_widget (xml, "Select Style Sheet Dialog");
+    ss->toplevel   = GTK_WIDGET(gtk_builder_get_object (builder, "Select Style Sheet Dialog"));
 
-    ss->list_view  = GTK_TREE_VIEW(glade_xml_get_widget (xml, "style_sheet_list_view"));
+    ss->list_view  = GTK_TREE_VIEW(gtk_builder_get_object (builder, "style_sheet_list_view"));
     ss->list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
     gtk_tree_view_set_model(ss->list_view, GTK_TREE_MODEL(ss->list_store));
     g_object_unref(ss->list_store);
@@ -428,6 +437,8 @@ gnc_style_sheet_select_dialog_create(void)
     gnc_style_sheet_select_dialog_fill(ss);
 
     gtk_widget_show_all(ss->toplevel);
+
+    g_object_unref(G_OBJECT(builder));
 
     return ss;
 }

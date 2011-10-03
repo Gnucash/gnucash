@@ -1,5 +1,5 @@
 /********************************************************************
- * dialog-column-view.c -- editor for simple column view of reports *
+ * dialog-report-column-view.c -- editor for column view of reports *
  * Copyright (C) 2001 Bill Gribble <grib@billgribble.com>           *
  * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
@@ -24,10 +24,11 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <libguile.h>
 #include "swig-runtime.h"
 
-#include "dialog-column-view.h"
+#include "dialog-report-column-view.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "option-util.h"
@@ -68,17 +69,11 @@ struct gncp_column_view_edit
     int       contents_selected;
 };
 
-static void gnc_column_view_edit_add_cb(GtkButton * button,
-                                        gpointer user_data);
-static void gnc_column_view_edit_remove_cb(GtkButton * button,
-        gpointer user_data);
-static void gnc_edit_column_view_move_up_cb(GtkButton * button,
-        gpointer user_data);
-static void gnc_edit_column_view_move_down_cb(GtkButton * button,
-        gpointer user_data);
-static void gnc_column_view_edit_size_cb(GtkButton * button,
-        gpointer user_data);
-
+void gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data);
+void gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data);
+void gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data);
+void gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data);
+void gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data);
 
 static void
 gnc_column_view_set_option(GNCOptionDB * odb, char * section, char * name,
@@ -307,7 +302,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
     else
     {
         gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
-        GladeXML *xml;
+        GtkBuilder *builder;
 
         r->optwin = gnc_options_dialog_new(NULL);
 
@@ -320,31 +315,12 @@ gnc_column_view_edit_options(SCM options, SCM view)
             gtk_widget_hide(page_list);
         }
 
-        xml = gnc_glade_xml_new ("report.glade", "view_contents_table");
+        builder = gtk_builder_new();
+        gnc_builder_add_from_file (builder, "dialog-report.glade", "view_contents_table");
 
-        glade_xml_signal_connect_data
-        (xml, "gnc_column_view_edit_add_cb",
-         G_CALLBACK (gnc_column_view_edit_add_cb), r);
-
-        glade_xml_signal_connect_data
-        (xml, "gnc_column_view_edit_remove_cb",
-         G_CALLBACK (gnc_column_view_edit_remove_cb), r);
-
-        glade_xml_signal_connect_data
-        (xml, "gnc_edit_column_view_move_up_cb",
-         G_CALLBACK (gnc_edit_column_view_move_up_cb), r);
-
-        glade_xml_signal_connect_data
-        (xml, "gnc_edit_column_view_move_down_cb",
-         G_CALLBACK (gnc_edit_column_view_move_down_cb), r);
-
-        glade_xml_signal_connect_data
-        (xml, "gnc_column_view_edit_size_cb",
-         G_CALLBACK (gnc_column_view_edit_size_cb), r);
-
-        editor       = glade_xml_get_widget (xml, "view_contents_table");
-        r->available = GTK_TREE_VIEW (glade_xml_get_widget (xml, "available_view"));
-        r->contents  = GTK_TREE_VIEW (glade_xml_get_widget (xml, "contents_view"));
+        editor       = GTK_WIDGET(gtk_builder_get_object (builder, "view_contents_table"));
+        r->available = GTK_TREE_VIEW (gtk_builder_get_object (builder, "available_view"));
+        r->contents  = GTK_TREE_VIEW (gtk_builder_get_object (builder, "contents_view"));
         r->options   = options;
         r->view      = view;
         r->available_selected = 0;
@@ -417,11 +393,16 @@ gnc_column_view_edit_options(SCM options, SCM view)
                                         gnc_column_view_edit_close_cb, r);
 
         gtk_widget_show(gnc_options_dialog_widget(r->optwin));
+
+        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, r);
+
+        g_object_unref(G_OBJECT(builder));
+
         return gnc_options_dialog_widget(r->optwin);
     }
 }
 
-static void
+void
 gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
 {
     gnc_column_view_edit * r = user_data;
@@ -484,7 +465,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
     update_display_lists(r);
 }
 
-static void
+void
 gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
 {
     gnc_column_view_edit * r = user_data;
@@ -527,7 +508,7 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
     update_display_lists(r);
 }
 
-static void
+void
 gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data)
 {
     gnc_column_view_edit * r = user_data;
@@ -565,7 +546,7 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data)
     }
 }
 
-static void
+void
 gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
 {
     gnc_column_view_edit * r = user_data;
@@ -603,24 +584,27 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
     }
 }
 
-static void
+void
 gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
 {
     gnc_column_view_edit * r = user_data;
     GtkWidget * rowspin;
     GtkWidget * colspin;
     GtkWidget * dlg;
-    GladeXML *xml;
+    GtkBuilder *builder;
     SCM current;
     int length;
     int dlg_ret;
 
-    xml = gnc_glade_xml_new ("report.glade", "Edit Report Size");
-    dlg = glade_xml_get_widget (xml, "Edit Report Size");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-report.glade", "col_adjustment");
+    gnc_builder_add_from_file (builder, "dialog-report.glade", "row_adjustment");
+    gnc_builder_add_from_file (builder, "dialog-report.glade", "Edit Report Size");
+    dlg = GTK_WIDGET(gtk_builder_get_object (builder, "Edit Report Size"));
 
     /* get the spinner widgets */
-    rowspin = glade_xml_get_widget (xml, "row_spin");
-    colspin = glade_xml_get_widget (xml, "col_spin");
+    rowspin = GTK_WIDGET(gtk_builder_get_object (builder, "row_spin"));
+    colspin = GTK_WIDGET(gtk_builder_get_object (builder, "col_spin"));
 
     length = scm_ilength(r->contents_list);
     if (length > r->contents_selected)
@@ -653,6 +637,9 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
             gnc_options_dialog_changed (r->optwin);
             update_display_lists(r);
         }
+
+        g_object_unref(G_OBJECT(builder));
+
         gtk_widget_destroy(dlg);
     }
 }

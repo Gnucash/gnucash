@@ -1,6 +1,7 @@
 /********************************************************************
- * dialog-column-view.h -- editor for simple column view            *
- * Copyright (C) 2001 Bill Gribble <grib@billgribble.com>           *
+ * dialog-report-style-sheet.h -- window for configuring HTML style *
+ *                       sheets in GnuCash                          *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,14 +21,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef GNC_DIALOG_COLUMN_VIEW_H
-#define GNC_DIALOG_COLUMN_VIEW_H
+#ifndef GNC_DIALOG_STYLE_SHEET_H
+#define GNC_DIALOG_STYLE_SHEET_H
 
-#include <libguile.h>
-#include <gtk/gtk.h>
+typedef struct _stylesheetdialog StyleSheetDialog;
 
-typedef struct gncp_column_view_edit gnc_column_view_edit;
-
-GtkWidget * gnc_column_view_edit_options(SCM options, SCM view);
+void gnc_style_sheet_dialog_open(void);
 
 #endif

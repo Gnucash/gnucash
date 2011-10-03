@@ -3,7 +3,7 @@
 /* Includes the header in the wrapper code */
 #include <config.h>
 #include <gtk/gtk.h>
-#include <dialog-column-view.h>
+#include <dialog-report-column-view.h>
 #include <gnc-plugin-page-report.h>
 #include <window-report.h>
 #include <dialog-custom-report.h>

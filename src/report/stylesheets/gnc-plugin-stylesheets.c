@@ -25,7 +25,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "dialog-style-sheet.h"
+#include "dialog-report-style-sheet.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-plugin-stylesheets.h"
 #include "gnc-plugin-manager.h"
