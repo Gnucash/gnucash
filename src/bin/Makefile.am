@@ -177,6 +177,7 @@ EXTRA_DIST = \
 	gnucash-launcher.in \
 	gnucash-valgrind.in \
 	gnucash-gdb.in \
-	environment.in
+	environment.in \
+	gnucash-setup-env-osx.in
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.bin\"
