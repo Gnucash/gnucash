@@ -1246,7 +1246,7 @@ gnc_invoice_update_proj_job (InvoiceWindow *iw)
     case VIEW_INVOICE:
     case EDIT_INVOICE:
         iw->proj_job_choice =
-            gnc_owner_edit_create (NULL, iw->proj_job_box, iw->book, &(iw->job));
+            gnc_owner_edit_create (NULL, iw->proj_job_box, iw->book, &(iw->proj_job));
         break;
     case NEW_INVOICE:
     case MOD_INVOICE:
