@@ -1391,7 +1391,7 @@ gnc_invoice_reset_total_label (GtkLabel *label, gnc_numeric amt, gnc_commodity *
     char string[256];
 
     amt = gnc_numeric_convert (amt, gnc_commodity_get_fraction(com), GNC_HOW_RND_ROUND_HALF_UP);
-    xaccSPrintAmount (string, amt, gnc_default_print_info (TRUE));
+    xaccSPrintAmount (string, amt, gnc_commodity_print_info (com, TRUE));
     gtk_label_set_text (label, string);
 }
 
