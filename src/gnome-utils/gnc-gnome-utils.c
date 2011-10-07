@@ -719,6 +719,8 @@ gnc_gui_init(void)
     gchar *map;
     gchar *data_dir;
 
+    ENTER ("");
+
     if (gnome_is_initialized)
     {
         return main_window;
@@ -766,6 +768,7 @@ gnc_gui_init(void)
     gnc_load_stock_icons();
     gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
 
+    LEAVE ("");
     return main_window;
 }
 

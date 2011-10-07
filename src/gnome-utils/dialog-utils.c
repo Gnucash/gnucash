@@ -239,6 +239,8 @@ gnc_restore_window_size(const char *section, GtkWindow *window)
     GSList *coord_list;
     gint coords[2];
 
+    ENTER("");
+
     g_return_if_fail(section != NULL);
     g_return_if_fail(window != NULL);
 
@@ -251,6 +253,7 @@ gnc_restore_window_size(const char *section, GtkWindow *window)
     {
         coords[0] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 0));
         coords[1] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 1));
+        DEBUG("coords[0]: %d, coords[1]: %d", coords[0], coords[1]);
         gtk_window_move(window, coords[0], coords[1]);
         g_slist_free(coord_list);
     }
@@ -261,10 +264,13 @@ gnc_restore_window_size(const char *section, GtkWindow *window)
     {
         coords[0] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 0));
         coords[1] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 1));
+        DEBUG("coords[0]: %d, coords[1]: %d", coords[0], coords[1]);
         if ((coords[0] != 0) && (coords[1] != 0))
             gtk_window_resize(window, coords[0], coords[1]);
         g_slist_free(coord_list);
     }
+
+    LEAVE("");
 }
 
 
