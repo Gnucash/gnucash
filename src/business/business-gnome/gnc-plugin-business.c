@@ -53,6 +53,11 @@
 #include "core-utils/gnc-gconf-utils.h"
 #include "gnome-utils/gnc-main-window.h"
 
+#include "gnc-plugin-page-register.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = G_LOG_DOMAIN;
+
 /* g_object functions */
 static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
 static void gnc_plugin_business_init (GncPluginBusiness *plugin);
@@ -135,6 +140,8 @@ static void gnc_plugin_business_cmd_test_reload_receivable_report (GtkAction *ac
 static void gnc_plugin_business_cmd_test_init_data (GtkAction *action,
         GncMainWindowActionData *data);
 
+static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
+        GncMainWindowActionData *data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-business-ui.xml"
@@ -322,6 +329,13 @@ static GtkActionEntry gnc_plugin_actions [] =
         "ToolbarNewInvoiceAction", GNC_STOCK_INVOICE_NEW, N_("New _Invoice..."), NULL,
         N_("Open the New Invoice dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_new_invoice)
+    },
+
+    /* Register popup menu */
+    {
+        "RegisterAssignPayment", NULL, N_("Assign as payment..."), NULL,
+        N_("Assign the selected transaction as payment"),
+        G_CALLBACK (gnc_plugin_business_cmd_assign_payment)
     },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -858,6 +872,101 @@ gnc_plugin_business_cmd_test_reload_receivable_report (GtkAction *action,
     gnc_plugin_business_reload_module("gnucash/report/receivable-report.scm");
 }
 
+static void gnc_business_assign_payment (GtkWidget *parent,
+        Transaction *trans,
+        GncOwner *owner)
+{
+    g_return_if_fail(trans);
+
+    // Do nothing if we don't have more than one split (e.g. in the empty line at the end of the register)
+    if (xaccTransCountSplits(trans) <= 1)
+        return;
+
+    //g_message("Creating payment dialog with trans %p", trans);
+    gnc_ui_payment_new_with_txn(owner, trans);
+}
+
+static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
+        GncMainWindowActionData *mw)
+{
+    GncPluginBusiness *plugin_business;
+    GncPluginBusinessPrivate *plugin_business_priv;
+    GncPluginPage *plugin_page;
+    GNCSplitReg *gsr;
+    SplitRegister *reg;
+    Split *split;
+    Transaction *trans;
+
+    g_return_if_fail (mw != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
+
+    plugin_page = gnc_main_window_get_current_page(mw->window);
+
+    // We continue only if the current page is a plugin page and more
+    // specifically a register plugin page
+    if (!GNC_IS_PLUGIN_PAGE(plugin_page)
+            || !GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page))
+        return;
+
+    gsr = gnc_plugin_page_register_get_gsr(plugin_page);
+    g_return_if_fail(gsr);
+
+    reg = gnc_ledger_display_get_split_register( gsr->ledger );
+    g_return_if_fail(reg);
+
+    split = gnc_split_register_get_current_split(reg);
+    g_return_if_fail(split);
+
+    trans = xaccSplitGetParent(split);
+    g_return_if_fail(trans);
+
+    plugin_business = GNC_PLUGIN_BUSINESS (mw->data);
+    plugin_business_priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin_business);
+
+    gnc_business_assign_payment (gnc_plugin_page_get_window(plugin_page),
+                                 trans,
+                                 plugin_business_priv->last_customer);
+}
+
+static const gchar *register_txn_actions[] =
+{
+    "RegisterAssignPayment",
+    NULL
+};
+
+static void
+gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
+{
+    GncMainWindow  *window;
+    GtkActionGroup *action_group;
+    gboolean is_txn_register;
+
+    // We continue only if the current page is a plugin page
+    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+        return;
+
+    is_txn_register = GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page);
+    window = GNC_MAIN_WINDOW(plugin_page->window);
+    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+
+    // Change visibility and also sensitivity according to whether we are in a txn register
+    gnc_plugin_update_actions (action_group, register_txn_actions,
+                               "sensitive", is_txn_register);
+    gnc_plugin_update_actions (action_group, register_txn_actions,
+                               "visible", is_txn_register);
+}
+
+
+static void gnc_plugin_business_main_window_page_changed(GncMainWindow *window,
+        GncPluginPage *page,
+        gpointer user_data)
+{
+//    g_message("gnc_plugin_business_main_window_page_changed, page=%p", page);
+    gnc_plugin_business_update_menus(page);
+}
+
 static void
 gnc_plugin_business_cmd_test_init_data (GtkAction *action,
                                         GncMainWindowActionData *data)
@@ -995,11 +1104,20 @@ gnc_plugin_business_gconf_changed (GConfClient *client,
     }
 }
 
-/* Update the toolbar button visibility each time our plugin is added
+/**
+ * Called when this plugin is added to a main window.  Connect a few callbacks
+ * here to track page changes.
+ *
+ * Update the toolbar button visibility each time our plugin is added
  * to a new GncMainWindow. */
 static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
         GncMainWindow *mainwindow,
         GQuark type)
 {
+//     g_message("gnc_plugin_business_add_to_window");
     update_extra_toolbuttons(mainwindow);
+
+    g_signal_connect(mainwindow, "page_changed",
+                     G_CALLBACK(gnc_plugin_business_main_window_page_changed),
+                     plugin);
 }

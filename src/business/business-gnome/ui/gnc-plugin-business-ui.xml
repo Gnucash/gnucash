@@ -1,5 +1,11 @@
 <ui>
   <menubar>
+    <menu name="Edit" action="EditAction">
+      <placeholder name="EditSelectedPlaceholder">
+        <menuitem name="RegisterAssignPayment"       action="RegisterAssignPayment"/>
+      </placeholder>
+    </menu>
+
     <placeholder name="AdditionalMenusPlaceholder">
       <menu name="Business" action="BusinessAction">
 	<menu name="CustomerMenu" action="CustomerMenuAction">
@@ -66,4 +72,10 @@
     </placeholder>
   </toolbar>
 
+  <popup name="MainPopup" action="FakeToplevel">
+    <!--separator name="PopupSep3"/-->
+    <placeholder name="PopupPlaceholder3">
+      <menuitem name="RegisterAssignPayment"       action="RegisterAssignPayment"/>
+    </placeholder>
+  </popup>
 </ui>
