@@ -70,8 +70,53 @@ struct _payment_window
     GncInvoice *	invoice;
     GList *	acct_types;
     GList *       acct_commodities;
+
+    Transaction *pre_existing_txn;
 };
 
+void gnc_ui_payment_window_set_num (PaymentWindow *pw, const char* num)
+{
+    g_assert(pw);
+    gtk_entry_set_text(GTK_ENTRY (pw->num_entry), num);
+}
+void gnc_ui_payment_window_set_memo (PaymentWindow *pw, const char* memo)
+{
+    g_assert(pw);
+    gtk_entry_set_text(GTK_ENTRY (pw->memo_entry), memo);
+}
+void gnc_ui_payment_window_set_date (PaymentWindow *pw, const GDate *date)
+{
+    g_assert(pw);
+    g_assert(date);
+    gnc_date_edit_set_gdate (GNC_DATE_EDIT (pw->date_edit), date);
+}
+void gnc_ui_payment_window_set_amount (PaymentWindow *pw, gnc_numeric amount)
+{
+    g_assert(pw);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(pw->amount_edit), amount);
+}
+void gnc_ui_payment_window_set_postaccount (PaymentWindow *pw, const Account* account)
+{
+    g_assert(pw);
+    g_assert(account);
+    {
+        gchar *acct_string = gnc_account_get_full_name (account);
+        gnc_cbe_set_by_string(GTK_COMBO_BOX_ENTRY(pw->post_combo), acct_string);
+        g_free(acct_string);
+    }
+}
+void gnc_ui_payment_window_set_xferaccount (PaymentWindow *pw, const Account* account)
+{
+    g_assert(pw);
+    g_assert(account);
+    gnc_tree_view_account_set_selected_account(GNC_TREE_VIEW_ACCOUNT(pw->acct_tree),
+            (Account*)account);
+}
+
+static gboolean has_pre_existing_txn(const PaymentWindow* pw)
+{
+    return pw->pre_existing_txn != NULL;
+}
 
 void gnc_payment_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_cancel_cb (GtkWidget *widget, gpointer data);
@@ -103,6 +148,11 @@ gnc_payment_dialog_invoice_changed(PaymentWindow *pw)
     GNCLot *lot;
     gnc_numeric val;
 
+    // Ignore the amount of the invoice in case this payment is from a
+    // pre-existing txn
+    if (has_pre_existing_txn(pw))
+        return;
+
     /* Set the payment amount in the dialog */
     if (pw->invoice)
     {
@@ -114,7 +164,7 @@ gnc_payment_dialog_invoice_changed(PaymentWindow *pw)
         val = gnc_numeric_zero();
     }
 
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(pw->amount_edit), val);
+    gnc_ui_payment_window_set_amount(pw, val);
 }
 
 static void
@@ -170,8 +220,9 @@ gnc_payment_dialog_owner_changed(PaymentWindow *pw)
         last_acct = xaccAccountLookup(guid, pw->book);
     }
 
-    /* Set the last-used transfer account */
-    if (last_acct)
+    /* Set the last-used transfer account, but only if we didn't
+     * create this dialog from a pre-existing transaction. */
+    if (last_acct && !has_pre_existing_txn(pw))
     {
         gnc_tree_view_account_set_selected_account(GNC_TREE_VIEW_ACCOUNT(pw->acct_tree),
                 last_acct);
@@ -341,9 +392,63 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
             gnc_xfer_dialog_run_until_done(xfer);
         }
 
-        /* Now apply the payment */
-        gncOwnerApplyPayment (&pw->owner, pw->invoice,
-                              post, acc, amount, exch, date, memo, num);
+        if (!has_pre_existing_txn(pw))
+        {
+            /* Now apply the payment */
+            gncOwnerApplyPayment (&pw->owner, pw->invoice,
+                                  post, acc, amount, exch, date, memo, num);
+        }
+        else
+        {
+            // New implementation: Allow the user to have a
+            // pre-selected transaction
+            Transaction *txn = pw->pre_existing_txn;
+            GncOwner *owner = &pw->owner;
+
+            Split *xfer_split = xaccTransFindSplitByAccount(txn, acc);
+
+            if (xaccTransGetCurrency(txn) != gncOwnerGetCurrency (owner))
+            {
+                g_message("Uh oh, mismatching currency/commodity between selected transaction and owner. We fall back to manual creation of a new transaction.");
+                xfer_split = NULL;
+            }
+
+            if (!xfer_split)
+            {
+                g_message("Huh? Asset account not found anymore. Fully deleting old txn and now creating a new one.");
+
+                xaccTransBeginEdit (txn);
+                xaccTransDestroy (txn);
+                xaccTransCommitEdit (txn);
+
+                pw->pre_existing_txn = NULL;
+                gncOwnerApplyPayment (owner, pw->invoice,
+                                      post, acc, amount, exch, date, memo, num);
+            }
+            else
+            {
+                int i = 0;
+                xaccTransBeginEdit (txn);
+                while (i < xaccTransCountSplits(txn))
+                {
+                    Split *split = xaccTransGetSplit (txn, i);
+                    if (split == xfer_split)
+                    {
+                        ++i;
+                    }
+                    else
+                    {
+                        xaccSplitDestroy(split);
+                    }
+                }
+
+                // We have opened the txn for editing, and we have deleted all the other splits.
+                gncOwnerAssignPaymentTxn (owner, txn,
+                                          post, pw->invoice);
+
+                xaccTransCommitEdit (txn);
+            }
+        }
 
     }
     gnc_resume_gui_refresh ();
@@ -460,6 +565,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     {
         if (owner->owner.undefined)
             gnc_payment_set_owner (pw, owner);
+
+        // Reset the setting about the pre-existing TXN
+        pw->pre_existing_txn = NULL;
 
         gtk_window_present (GTK_WINDOW(pw->dialog));
         return(pw);
@@ -621,3 +729,138 @@ gnc_ui_payment_new (GncOwner *owner, QofBook *book)
     return gnc_ui_payment_new_with_invoice (owner, book, NULL);
 }
 
+// ////////////////////////////////////////////////////////////
+
+static gboolean isAssetLiabType(GNCAccountType t)
+{
+    switch (t)
+    {
+    case ACCT_TYPE_RECEIVABLE:
+    case ACCT_TYPE_PAYABLE:
+        return FALSE;
+    default:
+        return (xaccAccountTypesCompatible(ACCT_TYPE_ASSET, t)
+                || xaccAccountTypesCompatible(ACCT_TYPE_LIABILITY, t));
+    }
+}
+static gboolean isAPARType(GNCAccountType t)
+{
+    switch (t)
+    {
+    case ACCT_TYPE_RECEIVABLE:
+    case ACCT_TYPE_PAYABLE:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+static void increment_if_asset_account (gpointer data,
+                                        gpointer user_data)
+{
+    int *r = user_data;
+    const Split *split = data;
+    const Account *account = xaccSplitGetAccount(split);
+    if (isAssetLiabType(xaccAccountGetType(account)))
+        ++(*r);
+}
+static int countAssetAccounts(SplitList* slist)
+{
+    int result = 0;
+    g_list_foreach(slist, &increment_if_asset_account, &result);
+    return result;
+}
+
+static gint predicate_is_asset_account(gconstpointer a,
+                                       gconstpointer user_data)
+{
+    const Split *split = a;
+    const Account *account = xaccSplitGetAccount(split);
+    if (isAssetLiabType(xaccAccountGetType(account)))
+        return 0;
+    else
+        return -1;
+}
+static gint predicate_is_apar_account(gconstpointer a,
+                                      gconstpointer user_data)
+{
+    const Split *split = a;
+    const Account *account = xaccSplitGetAccount(split);
+    if (isAPARType(xaccAccountGetType(account)))
+        return 0;
+    else
+        return -1;
+}
+static Split *getFirstAssetAccountSplit(SplitList* slist)
+{
+    GList *r = g_list_find_custom(slist, NULL, &predicate_is_asset_account);
+    if (r)
+        return r->data;
+    else
+        return NULL;
+}
+static Split *getFirstAPARAccountSplit(SplitList* slist)
+{
+    GList *r = g_list_find_custom(slist, NULL, &predicate_is_apar_account);
+    if (r)
+        return r->data;
+    else
+        return NULL;
+}
+
+static gint predicate_not_equal(gconstpointer a,
+                                gconstpointer user_data)
+{
+    return (a != user_data);
+}
+static Split *getFirstOtherSplit(SplitList* slist, const Split *postaccount_split)
+{
+    GList *r = g_list_find_custom(slist, postaccount_split, &predicate_not_equal);
+    if (r)
+        return r->data;
+    else
+        return NULL;
+}
+
+// ///////////////
+
+PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
+{
+    SplitList *slist;
+
+    if (!txn)
+        return NULL;
+
+    // We require the txn to have one split in an A/R or A/P account.
+
+    slist = xaccTransGetSplitList(txn);
+    if (!slist)
+        return NULL;
+    if (countAssetAccounts(slist) == 0)
+    {
+        g_message("No asset splits in txn");
+        return NULL;
+    }
+
+    {
+        Split *xferaccount_split = getFirstAssetAccountSplit(slist);
+        Split *postaccount_split = getFirstAPARAccountSplit(slist);
+        gnc_numeric amount = xaccSplitGetValue(xferaccount_split);
+
+        PaymentWindow *pw = gnc_ui_payment_new(owner,
+                                               qof_instance_get_book(QOF_INSTANCE(txn)));
+
+        // Fill in the values from the given txn
+        pw->pre_existing_txn = txn;
+        gnc_ui_payment_window_set_num(pw, xaccTransGetNum(txn));
+        gnc_ui_payment_window_set_memo(pw, xaccTransGetDescription(txn));
+        {
+            GDate txn_date = xaccTransGetDatePostedGDate (txn);
+            gnc_ui_payment_window_set_date(pw, &txn_date);
+        }
+        gnc_ui_payment_window_set_amount(pw, gnc_numeric_abs(amount));
+        gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(xferaccount_split));
+        gnc_ui_payment_window_set_postaccount(pw, xaccSplitGetAccount(postaccount_split));
+
+        return pw;
+    }
+}
