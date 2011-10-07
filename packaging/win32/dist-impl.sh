@@ -166,8 +166,8 @@ function dist_gwenhywfar() {
     cp -a ${_GWENHYWFAR_UDIR}/bin/*.dll ${DIST_UDIR}/bin
     mkdir -p ${DIST_UDIR}/etc
     cp -a ${_GWENHYWFAR_UDIR}/lib/gwenhywfar ${DIST_UDIR}/lib
-    mkdir -p ${DIST_UDIR}/share/gwenhywfar
-    cp -a ${_GWENHYWFAR_UDIR}/share/gwenhywfar/ca-bundle.crt ${DIST_UDIR}/share/gwenhywfar
+    mkdir -p ${DIST_UDIR}/share
+    cp -a ${_GWENHYWFAR_UDIR}/share/gwenhywfar ${DIST_UDIR}/share
 }
 
 function dist_isocodes() {
