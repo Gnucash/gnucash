@@ -41,6 +41,7 @@
 #include "gnc-csv-gnumeric-popup.h"
 
 #define GCONF_SECTION "dialogs/import/csv"
+#define MIN_COL_WIDTH 70
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -308,11 +309,15 @@ static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCs
     for (i = 0; i < ncols - 1; i++)
     {
         gint col_width; /* The width of the column in preview->treeview. */
+        GtkTreeViewColumn* pcol;
         GtkTreeViewColumn* ccol; /* The corresponding column in preview->ctreeview. */
 
         /* Get the width. */
         col_width = gtk_tree_view_column_get_width(gtk_tree_view_get_column(preview->treeview, i));
-
+        /* Set the minumum width for a column so that drop down selector can be seen. */
+        if (col_width < MIN_COL_WIDTH){col_width = MIN_COL_WIDTH;}
+        pcol = gtk_tree_view_get_column(preview->treeview, i);
+        gtk_tree_view_column_set_min_width(pcol, col_width);
         /* Set ccol's width the same. */
         ccol = gtk_tree_view_get_column(preview->ctreeview, i);
         gtk_tree_view_column_set_min_width(ccol, col_width);
