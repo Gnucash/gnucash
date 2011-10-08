@@ -123,7 +123,7 @@ AM_CPPFLAGS = \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   $(GLIB_CFLAGS) \
-  ${IGE_MAC_CFLAGS}
+  ${GTK_MAC_CFLAGS}
 
 # We build this in an earlier directory.
 
