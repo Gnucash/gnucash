@@ -837,17 +837,19 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
         return NULL;
     if (countAssetAccounts(slist) == 0)
     {
-        g_message("No asset splits in txn");
+        g_message("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
+                  xaccTransGetDescription(txn));
         return NULL;
     }
 
     {
-        Split *xferaccount_split = getFirstAssetAccountSplit(slist);
-        Split *postaccount_split = getFirstAPARAccountSplit(slist);
-        gnc_numeric amount = xaccSplitGetValue(xferaccount_split);
+        Split *assetaccount_split = getFirstAssetAccountSplit(slist);
+        Split *postaccount_split = getFirstAPARAccountSplit(slist); // watch out: Might be NULL
+        gnc_numeric amount = xaccSplitGetValue(assetaccount_split);
 
         PaymentWindow *pw = gnc_ui_payment_new(owner,
                                                qof_instance_get_book(QOF_INSTANCE(txn)));
+        g_assert(assetaccount_split); // we can rely on this because of the countAssetAccounts() check above
 
         // Fill in the values from the given txn
         pw->pre_existing_txn = txn;
@@ -858,8 +860,9 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
             gnc_ui_payment_window_set_date(pw, &txn_date);
         }
         gnc_ui_payment_window_set_amount(pw, gnc_numeric_abs(amount));
-        gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(xferaccount_split));
-        gnc_ui_payment_window_set_postaccount(pw, xaccSplitGetAccount(postaccount_split));
+        gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(assetaccount_split));
+        if (postaccount_split)
+            gnc_ui_payment_window_set_postaccount(pw, xaccSplitGetAccount(postaccount_split));
 
         return pw;
     }
