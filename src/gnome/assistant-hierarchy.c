@@ -1069,6 +1069,10 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Hierarchy Assistant"));
     data->dialog = dialog;
 
+    /* If we have a callback, make this window stay on top */
+    if (when_completed != NULL)
+        gtk_window_set_keep_above (GTK_WINDOW(data->dialog), TRUE);
+
     gnc_assistant_set_colors (GTK_ASSISTANT (data->dialog));
 
     /* Enable buttons on first and last page. */
@@ -1089,8 +1093,8 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     data->currency_selector = gnc_currency_edit_new();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector), gnc_default_currency());
     gtk_widget_show (data->currency_selector);
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_chooser_vbox"));
-    gtk_box_pack_start(GTK_BOX(box), data->currency_selector, FALSE, FALSE, 0);
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_chooser_hbox"));
+    gtk_box_pack_start(GTK_BOX(box), data->currency_selector, TRUE, TRUE, 0);
 
     /* Categories Page */
     tree_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_categories_tree_view"));
