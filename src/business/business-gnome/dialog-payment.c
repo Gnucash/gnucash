@@ -174,6 +174,7 @@ gnc_payment_dialog_owner_changed(PaymentWindow *pw)
     GncGUID *guid = NULL;
     KvpValue* value;
     KvpFrame* slots;
+    GncOwner *owner = &pw->owner;
 
     /* If the owner changed, the invoice selection is invalid */
     pw->invoice = NULL;
@@ -188,7 +189,7 @@ gnc_payment_dialog_owner_changed(PaymentWindow *pw)
      */
 
     /* Now handle the account tree */
-    slots = gncOwnerGetSlots(&pw->owner);
+    slots = gncOwnerGetSlots(owner);
     if (slots)
     {
         value = kvp_frame_get_slot_path(slots, "payment", "last_acct", NULL);
@@ -211,8 +212,9 @@ gnc_payment_dialog_owner_changed(PaymentWindow *pw)
         pw->acct_commodities = NULL;
     }
 
-    pw->acct_types = gncOwnerGetAccountTypesList(&pw->owner);
-    pw->acct_commodities = gncOwnerGetCommoditiesList (&pw->owner);
+    pw->acct_types = gncOwnerGetAccountTypesList(owner);
+    if (gncOwnerIsValid(owner))
+        pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
     gnc_fill_account_select_combo (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
 
     if (guid)
@@ -319,7 +321,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 
     /* Verify the user has selected an owner */
     gnc_owner_get_owner (pw->owner_choice, &(pw->owner));
-    if (pw->owner.owner.undefined == NULL)
+    if (!gncOwnerIsValid(&pw->owner))
     {
         text = _("You must select a company for payment processing.");
         gnc_error_dialog (pw->dialog, "%s", text);
@@ -563,7 +565,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     pw = gnc_find_first_gui_component (cm_class, find_handler, NULL);
     if (pw)
     {
-        if (owner->owner.undefined)
+        if (owner->owner.undefined) // FIXME: Does that mean gncOwnerIsValid(owner->owner)???
             gnc_payment_set_owner (pw, owner);
 
         // Reset the setting about the pre-existing TXN
@@ -582,7 +584,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     /* Compute the post-to account types */
     pw->acct_types = gncOwnerGetAccountTypesList (owner);
 
-    pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
+    if (gncOwnerIsValid(owner))
+        pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
 
     /* Open and read the XML */
     xml = gnc_glade_xml_new ("payment.glade", "Payment Dialog");
