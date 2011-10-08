@@ -80,17 +80,18 @@ gnc_ui_new_user_dialog (void)
     GtkWidget *new_accounts_button;
     GtkWidget *import_qif_button;
     GtkWidget *tutorial_button;
-    GladeXML  *xml;
+    GtkBuilder  *builder;
     gint result;
 
     ENTER(" ");
-    xml = gnc_glade_xml_new ("newuser.glade", "New User Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-new-user.glade", "New User Dialog");
 
-    dialog = glade_xml_get_widget (xml, "New User Dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "New User Dialog"));
 
-    new_accounts_button = glade_xml_get_widget (xml, "new_accounts_button");
-    import_qif_button = glade_xml_get_widget (xml, "import_qif_button");
-    tutorial_button = glade_xml_get_widget (xml, "tutorial_button");
+    new_accounts_button = GTK_WIDGET(gtk_builder_get_object (builder, "new_accounts_button"));
+    import_qif_button = GTK_WIDGET(gtk_builder_get_object (builder, "import_qif_button"));
+    tutorial_button = GTK_WIDGET(gtk_builder_get_object (builder, "tutorial_button"));
 
     /* Set the sensitivity of the qif-import button based on the availability
      * of the qif-import druid.
@@ -128,6 +129,7 @@ gnc_ui_new_user_dialog (void)
         g_assert_not_reached ();
     }
 
+    g_object_unref(G_OBJECT(builder));
     gtk_widget_destroy (dialog);
     LEAVE(" ");
 }
@@ -136,13 +138,14 @@ static void
 gnc_ui_new_user_cancel_dialog (void)
 {
     GtkWidget *dialog;
-    GladeXML  *xml;
+    GtkBuilder  *builder;
     gint result;
     gboolean keepshowing;
 
-    xml = gnc_glade_xml_new ("newuser.glade", "New User Cancel Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-new-user.glade", "New User Cancel Dialog");
 
-    dialog = glade_xml_get_widget (xml, "New User Cancel Dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "New User Cancel Dialog"));
 
     result = gtk_dialog_run (GTK_DIALOG (dialog));
     keepshowing = (result == GTK_RESPONSE_YES);
@@ -150,6 +153,7 @@ gnc_ui_new_user_cancel_dialog (void)
     gnc_set_first_startup (keepshowing);
     gncp_new_user_finish ();
 
+    g_object_unref(G_OBJECT(builder));
     gtk_widget_destroy(dialog);
 }
 

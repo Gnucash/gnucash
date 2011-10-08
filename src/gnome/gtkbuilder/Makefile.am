@@ -8,16 +8,15 @@ gtkbuilder_DATA = \
 	dialog-commodities.glade \
 	dialog-lot-viewer.glade \
 	dialog-fincalc.glade \
+	dialog-new-user.glade \
 	dialog-price.glade \
 	dialog-print-check.glade \
+	dialog-progress.glade \
 	dialog-sx.glade \
 	gnc-plugin-page-budget.glade \
 	gnc-plugin-page-register.glade \
-	newuser.glade \
 	owner.glade \
-	progress.glade \
 	tax.glade \
-	userpass.glade \
 	window-autoclear.glade \
 	window-reconcile.glade
 

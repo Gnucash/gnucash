@@ -1,28 +1,30 @@
-<?xml version="1.0"?>
-<glade-interface>
-  <!-- interface-requires gtk+ 2.10 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
-  <widget class="GtkWindow" id="Progress Dialog">
+  <object class="GtkWindow" id="Progress Dialog">
     <property name="visible">True</property>
+    <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Working...</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child>
-      <widget class="GtkVBox" id="vbox85">
+      <object class="GtkVBox" id="vbox85">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="border_width">5</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <widget class="GtkLabel" id="primary_label">
+          <object class="GtkLabel" id="primary_label">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label">&lt;span weight="bold" size="larger"&gt;Primary text&lt;/span&gt;</property>
             <property name="use_markup">True</property>
             <property name="wrap">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -30,12 +32,13 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="secondary_label">
+          <object class="GtkLabel" id="secondary_label">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label">Secondary text.</property>
             <property name="wrap">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -43,14 +46,15 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkVBox" id="progress_vbox1">
+          <object class="GtkVBox" id="progress_vbox1">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
+            <property name="can_focus">False</property>
             <child>
-              <widget class="GtkProgressBar" id="progress_bar">
+              <object class="GtkProgressBar" id="progress_bar">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="pulse_step">0.10000000149</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -58,20 +62,21 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="sub_label">
+              <object class="GtkLabel" id="sub_label">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label">&lt;span style="italic"&gt;Sub-operation text&lt;/span&gt;</property>
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -80,41 +85,45 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkScrolledWindow" id="progress_log_window">
+          <object class="GtkScrolledWindow" id="progress_log_window">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hscrollbar_policy">automatic</property>
             <property name="vscrollbar_policy">automatic</property>
             <property name="shadow_type">in</property>
             <child>
-              <widget class="GtkTextView" id="progress_log">
+              <object class="GtkTextView" id="progress_log">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="editable">False</property>
                 <property name="wrap_mode">word</property>
                 <property name="cursor_visible">False</property>
+                <property name="buffer">textbuffer1</property>
                 <property name="accepts_tab">False</property>
-                <property name="text">1234567890123456789012345678901234567890</property>
-              </widget>
+              </object>
             </child>
-          </widget>
+          </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkHButtonBox" id="hbuttonbox3">
+          <object class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="cancel_button">
+              <object class="GtkButton" id="cancel_button">
                 <property name="label">gtk-cancel</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -122,29 +131,34 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="ok_button">
+              <object class="GtkButton" id="ok_button">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">4</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text" translatable="yes">1234567890123456789012345678901234567890</property>
+  </object>
+</interface>

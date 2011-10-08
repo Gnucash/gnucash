@@ -197,13 +197,15 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
 {
     GtkWidget *dialog;
     GtkObject *tdo;
-    GladeXML  *xml;
+    GtkBuilder *builder;
 
     g_return_if_fail(progress);
 
-    xml = gnc_glade_xml_new("progress.glade", "Progress Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-progress.glade", "Progress Dialog");
 
-    dialog = glade_xml_get_widget(xml, "Progress Dialog");
+
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Progress Dialog"));
     progress->dialog = dialog;
     tdo = GTK_OBJECT(dialog);
 
@@ -215,24 +217,24 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
 
     g_signal_connect(tdo, "destroy", G_CALLBACK(destroy_cb), progress);
 
-    progress->primary_label = glade_xml_get_widget(xml, "primary_label");
+    progress->primary_label = GTK_WIDGET(gtk_builder_get_object (builder, "primary_label"));
     gtk_widget_hide(progress->primary_label);
 
-    progress->secondary_label = glade_xml_get_widget(xml, "secondary_label");
+    progress->secondary_label = GTK_WIDGET(gtk_builder_get_object (builder, "secondary_label"));
     gtk_widget_hide(progress->secondary_label);
 
-    progress->progress_bar = glade_xml_get_widget(xml, "progress_bar");
+    progress->progress_bar = GTK_WIDGET(gtk_builder_get_object (builder, "progress_bar"));
     progress->total_offset = 0;
     progress->total_weight = 1;
     progress->bar_value = 0;
 
-    progress->sub_label = glade_xml_get_widget(xml, "sub_label");
+    progress->sub_label = GTK_WIDGET(gtk_builder_get_object (builder, "sub_label"));
     gtk_widget_hide(progress->sub_label);
 
-    progress->log = glade_xml_get_widget(xml, "progress_log");
-    gtk_widget_hide(glade_xml_get_widget(xml, "progress_log_window"));
+    progress->log = GTK_WIDGET(gtk_builder_get_object (builder, "progress_log"));
+    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "progress_log_window")));
 
-    progress->ok_button = glade_xml_get_widget(xml, "ok_button");
+    progress->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
 
     g_signal_connect(progress->ok_button, "clicked",
                      G_CALLBACK(ok_cb), progress);
@@ -240,7 +242,7 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
     if (!progress->use_ok_button)
         gtk_widget_hide(progress->ok_button);
 
-    progress->cancel_button = glade_xml_get_widget(xml, "cancel_button");
+    progress->cancel_button = GTK_WIDGET(gtk_builder_get_object (builder, "cancel_button"));
 
     g_signal_connect(progress->cancel_button, "clicked",
                      G_CALLBACK(cancel_cb), progress);
@@ -254,6 +256,9 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
     progress->finished = FALSE;
     progress->destroyed = FALSE;
     progress->title_set = FALSE;
+
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, progress);
+    g_object_unref(G_OBJECT(builder));
 }
 
 
