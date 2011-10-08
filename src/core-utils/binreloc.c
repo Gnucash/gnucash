@@ -19,7 +19,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #ifdef MAC_INTEGRATION
-#include <igemacintegration/gtkosxapplication.h>
+#include <gtkmacintegration/gtkosxapplication.h>
 #endif
 #endif /* ENABLE_BINRELOC */
 #include <stdio.h>
@@ -63,10 +63,9 @@ _br_find_exe (Gnc_GbrInitError *error)
     g_free (prefix);
     return result;
 #elif defined MAC_INTEGRATION
-    GtkOSXApplication *theApp;
-    g_type_init();
-    theApp  = g_object_new (GTK_TYPE_OSX_APPLICATION, NULL);
-    return gtk_osxapplication_get_executable_path(theApp);
+    gchar *path = quartz_application_get_executable_path();
+    g_print ("Application Path %s\n", path);
+    return path;
 #else
     char *path, *path2, *line, *result;
     size_t buf_size;

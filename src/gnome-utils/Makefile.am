@@ -23,7 +23,7 @@ AM_CPPFLAGS = \
   ${QOF_CFLAGS} \
   ${GOFFICE_CFLAGS} \
   ${LIBGDA_CFLAGS} \
-  ${IGE_MAC_CFLAGS}
+  ${GTK_MAC_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   account-quickfill.c \
@@ -198,7 +198,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${DB_LIBS} \
   ${REGEX_LIBS} \
   ${LIBXML2_LIBS} \
-  ${IGE_MAC_LIBS}
+  ${GTK_MAC_LIBS}
 
 if HAVE_X11_XLIB_H
   libgncmod_gnome_utils_la_LIBADD += -lX11

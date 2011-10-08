@@ -299,15 +299,15 @@ update to latest  darwin])
       platform=darwin/quartz
       AC_MSG_RESULT(yes)
       AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
-      PKG_CHECK_MODULES([IGE_MAC], ige-mac-integration,
-                        [_ige_mac=yes], [_ige_mac=no])
-      if test "x$_ige_mac" = xyes; then
-        IGE_MAC_LIBS="${IGE_MAC_LIBS} -lobjc"
-        IGE_MAC_CFLAGS="${IGE_MAC_CFLAGS} -xobjective-c"
+      PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration,
+                        [_gtk_mac=yes], [_gtk_mac=no])
+      if test "x$_gtk_mac" = xyes; then
+        GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc"
+        GTK_MAC_CFLAGS="${GTK_MAC_CFLAGS} -xobjective-c"
       fi
-      AC_MSG_RESULT(${_ige_mac})
-      AC_SUBST(IGE_MAC_LIBS)
-      AC_SUBST(IGE_MAC_CFLAGS)
+      AC_MSG_RESULT(${_gtk_mac})
+      AC_SUBST(GTK_MAC_LIBS)
+      AC_SUBST(GTK_MAC_CFLAGS)
     else
       AC_MSG_RESULT(no)
     fi

@@ -19,7 +19,7 @@ AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
-  ${IGE_MAC_CFLAGS}
+  ${GTK_MAC_CFLAGS}
 
 SUFFIXES = .rc .res
 
