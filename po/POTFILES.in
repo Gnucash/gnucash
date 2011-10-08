@@ -353,6 +353,7 @@ src/gnome-utils/gnc-tree-view-sx-list.c
 src/gnome-utils/gnc-window.c
 src/gnome-utils/gtkbuilder/dialog-commodity.glade
 src/gnome-utils/gtkbuilder/dialog-transfer.glade
+src/gnome-utils/gtkbuilder/dialog-userpass.glade
 src/gnome-utils/gtkbuilder/gnc-date-format.glade
 src/gnome-utils/gtkbuilder/gnc-frequency.glade
 src/gnome-utils/gtkbuilder/gnc-recurrence.glade
