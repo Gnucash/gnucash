@@ -44,30 +44,31 @@
 
 struct _gncInvoice
 {
-    QofInstance inst;
+    QofInstance   inst;
 
-    char        *id;
-    char        *notes;
-    gboolean    active;
+    char          *id;
+    char          *notes;
+    gboolean      active;
+    gboolean      credit_note;
 
-    char        *billing_id;
-    char        *printname;
-    GncBillTerm *terms;
-    GList       *entries;
-    GList       *prices;
-    GncOwner    owner;
-    GncOwner    billto;
-    GncJob      *job;
-    Timespec    date_opened;
-    Timespec    date_posted;
+    char          *billing_id;
+    char          *printname;
+    GncBillTerm   *terms;
+    GList         *entries;
+    GList         *prices;
+    GncOwner      owner;
+    GncOwner      billto;
+    GncJob        *job;
+    Timespec      date_opened;
+    Timespec      date_posted;
 
-    gnc_numeric	to_charge_amount;
+    gnc_numeric   to_charge_amount;
 
-    gnc_commodity * currency;
+    gnc_commodity *currency;
 
-    Account     *posted_acc;
-    Transaction *posted_txn;
-    GNCLot      *posted_lot;
+    Account       *posted_acc;
+    Transaction   *posted_txn;
+    GNCLot        *posted_lot;
 };
 
 struct _gncInvoiceClass
@@ -306,6 +307,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 
     invoice->billto.type = GNC_OWNER_CUSTOMER;
     invoice->active = TRUE;
+    invoice->credit_note = FALSE;
 
     invoice->to_charge_amount = gnc_numeric_zero();
 
@@ -333,6 +335,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     invoice->notes = CACHE_INSERT (from->notes);
     invoice->billing_id = CACHE_INSERT (from->billing_id);
     invoice->active = from->active;
+    invoice->credit_note = from->credit_note;
 
     invoice->terms = from->terms;
     gncBillTermIncRef (invoice->terms);
@@ -509,6 +512,16 @@ void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
     if (invoice->active == active) return;
     gncInvoiceBeginEdit (invoice);
     invoice->active = active;
+    mark_invoice (invoice);
+    gncInvoiceCommitEdit (invoice);
+}
+
+void gncInvoiceSetIsCreditNote (GncInvoice *invoice, gboolean credit_note)
+{
+    if (!invoice) return;
+    if (invoice->credit_note == credit_note) return;
+    gncInvoiceBeginEdit (invoice);
+    invoice->credit_note = credit_note;
     mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);
 }
@@ -861,20 +874,11 @@ GncInvoiceType gncInvoiceGetType (GncInvoice *invoice)
     switch (gncInvoiceGetOwnerType (invoice))
     {
     case GNC_OWNER_CUSTOMER:
-        if (/* Amount is positive*/ 1 >= 0)
-            return GNC_INVOICE_CUST_INVOICE;
-        else
-            return GNC_INVOICE_CUST_CREDIT_NOTE;
+        return (invoice->credit_note ? GNC_INVOICE_CUST_CREDIT_NOTE : GNC_INVOICE_CUST_INVOICE);
     case GNC_OWNER_VENDOR:
-        if (/* Amount is positive*/ 1 >= 0)
-            return GNC_INVOICE_VEND_INVOICE;
-        else
-            return GNC_INVOICE_VEND_CREDIT_NOTE;
+        return (invoice->credit_note ? GNC_INVOICE_VEND_CREDIT_NOTE : GNC_INVOICE_VEND_INVOICE);
     case GNC_OWNER_EMPLOYEE:
-        if (/* Amount is positive*/ 1 >= 0)
-            return GNC_INVOICE_EMPL_INVOICE;
-        else
-            return GNC_INVOICE_EMPL_CREDIT_NOTE;
+        return (invoice->credit_note ? GNC_INVOICE_EMPL_CREDIT_NOTE : GNC_INVOICE_EMPL_INVOICE);
     default:
         return GNC_INVOICE_UNDEFINED;
     }
@@ -936,6 +940,12 @@ gboolean gncInvoiceGetActive (const GncInvoice *invoice)
 {
     if (!invoice) return FALSE;
     return invoice->active;
+}
+
+gboolean gncInvoiceGetIsCreditNote (const GncInvoice *invoice)
+{
+    if (!invoice) return FALSE;
+    return invoice->credit_note;
 }
 
 
@@ -1884,6 +1894,7 @@ gboolean gncInvoiceRegister (void)
         { INVOICE_ENTRIES,   QOF_TYPE_COLLECT, (QofAccessFunc)qofInvoiceGetEntries, (QofSetterFunc)qofInvoiceSetEntries },
         { INVOICE_JOB,       GNC_ID_JOB,       (QofAccessFunc)qofInvoiceGetJob,     (QofSetterFunc)qofInvoiceSetJob },
         { QOF_PARAM_ACTIVE,  QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, (QofSetterFunc)gncInvoiceSetActive },
+        { INVOICE_IS_CN,     QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetIsCreditNote, (QofSetterFunc)gncInvoiceSetIsCreditNote },
         { QOF_PARAM_BOOK,    QOF_ID_BOOK,      (QofAccessFunc)qof_instance_get_book, NULL },
         { QOF_PARAM_GUID,    QOF_TYPE_GUID,    (QofAccessFunc)qof_instance_get_guid, NULL },
         { NULL },

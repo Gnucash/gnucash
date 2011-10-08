@@ -105,6 +105,7 @@ void gncInvoiceSetBillingID (GncInvoice *invoice, const char *billing_id);
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
 void gncInvoiceSetCurrency (GncInvoice *invoice, gnc_commodity *currency);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
+void gncInvoiceSetIsCreditNote (GncInvoice *invoice, gboolean credit_note);
 void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto);
 void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount);
 /** @} */
@@ -143,6 +144,7 @@ gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice);
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetToChargeAmount (const GncInvoice *invoice);
 gboolean gncInvoiceGetActive (const GncInvoice *invoice);
+gboolean gncInvoiceGetIsCreditNote (const GncInvoice *invoice);
 
 GNCLot * gncInvoiceGetPostedLot (const GncInvoice *invoice);
 Transaction * gncInvoiceGetPostedTxn (const GncInvoice *invoice);
@@ -221,6 +223,7 @@ gboolean gncInvoiceIsPaid (const GncInvoice *invoice);
 #define INVOICE_ACC         "account"
 #define INVOICE_POST_TXN    "posted_txn"
 #define INVOICE_POST_LOT    "posted_lot"
+#define INVOICE_IS_CN       "credit_note"
 #define INVOICE_TYPE        "type"
 #define INVOICE_TYPE_STRING "type_string"
 #define INVOICE_BILLTO      "bill-to"
