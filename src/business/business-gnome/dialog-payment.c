@@ -826,6 +826,37 @@ static Split *getFirstOtherSplit(SplitList* slist, const Split *postaccount_spli
 
 // ///////////////
 
+gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
+{
+    SplitList *slist;
+    gboolean result = TRUE;
+
+    if (!txn)
+        return result;
+
+    // We require the txn to have one split in an A/R or A/P account.
+
+    slist = xaccTransGetSplitList(txn);
+    if (!slist)
+        return result;
+    if (countAssetAccounts(slist) == 0)
+    {
+        g_message("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
+                  xaccTransGetDescription(txn));
+        return result;
+    }
+
+    {
+        Split *assetaccount_split = getFirstAssetAccountSplit(slist);
+        gnc_numeric amount = xaccSplitGetValue(assetaccount_split);
+        gboolean result = gnc_numeric_positive_p(amount); // positive amounts == customer
+        //g_message("Amount=%s", gnc_numeric_to_string(amount));
+        return result;
+    }
+}
+
+// ///////////////
+
 PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
 {
     SplitList *slist;
@@ -853,6 +884,7 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
         PaymentWindow *pw = gnc_ui_payment_new(owner,
                                                qof_instance_get_book(QOF_INSTANCE(txn)));
         g_assert(assetaccount_split); // we can rely on this because of the countAssetAccounts() check above
+        //g_message("Amount=%s", gnc_numeric_to_string(amount));
 
         // Fill in the values from the given txn
         pw->pre_existing_txn = txn;

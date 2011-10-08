@@ -36,6 +36,10 @@ PaymentWindow * gnc_ui_payment_new_with_invoice (GncOwner *owner,
         GncInvoice *invoice);
 PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn);
 
+/** Returns TRUE if the given transaction (to be used with gnc_ui_payment_new_with_txn() )
+ * is for a customer, or FALSE if it's from a vendor or employee voucher. */
+gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn);
+
 /* Destroy a payment window */
 void gnc_ui_payment_window_destroy (PaymentWindow *pw);
 
