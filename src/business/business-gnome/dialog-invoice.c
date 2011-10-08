@@ -2646,7 +2646,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         columns = gnc_search_param_prepend (columns, _("Billing ID"), NULL, type,
                                             INVOICE_BILLINGID, NULL);
         columns = gnc_search_param_prepend (columns, _("Type"), NULL, type,
-                                            INVOICE_TYPE, NULL);
+                                            INVOICE_TYPE_STRING, NULL);
         columns = gnc_search_param_prepend_with_justify (columns, _("Paid"),
                   GTK_JUSTIFY_CENTER, NULL, type,
                   INVOICE_IS_PAID, NULL);
@@ -2712,9 +2712,8 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         {
             QofQueryPredData *inv_type_pred;
             GSList *param_list = NULL;
-            inv_type_pred = qof_query_string_predicate(QOF_COMPARE_EQUAL,
-                            gncInvoiceGetTypeFromOwnerType(owner_type),
-                            QOF_STRING_MATCH_NORMAL, FALSE);
+            inv_type_pred = qof_query_int32_predicate(QOF_COMPARE_EQUAL,
+                            gncInvoiceGetTypeListForOwnerType(owner_type));
             param_list = g_slist_prepend (param_list, INVOICE_TYPE);
             qof_query_add_term (q, param_list, inv_type_pred, QOF_QUERY_AND);
         }
@@ -2844,14 +2843,14 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     qof_query_add_boolean_match (q, g_slist_prepend(g_slist_prepend(NULL, LOT_IS_CLOSED),
                                  INVOICE_POST_LOT), FALSE, QOF_QUERY_AND);
 
-    /* Bug#602091, #639365: The INVOICE_TYPE string unfortunately is
-     * stored in translated form due to the usage of gncInvoiceGetType
+    /* Bug#602091, #639365: The INVOICE_TYPE_STRING string unfortunately is
+     * stored in translated form due to the usage of gncInvoiceGetTypeString
      * for user-visible strings as well. Hence, as an exception we
      * must also search for the translated here even though it's an
      * internal flag. */
     pred_data = qof_query_string_predicate (QOF_COMPARE_NEQ, _("Invoice"),
                                             QOF_STRING_MATCH_NORMAL, FALSE);
-    qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
+    qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE_STRING), pred_data, QOF_QUERY_AND);
 
     end_date = time(NULL);
     if (days_in_advance < 0)

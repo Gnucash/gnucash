@@ -51,6 +51,20 @@ typedef GList GncInvoiceList;
 
 #define GNC_ID_INVOICE    "gncInvoice"
 
+typedef enum
+{
+    GNC_INVOICE_UNDEFINED ,
+    GNC_INVOICE_CUST_INVOICE ,       /* Invoice */
+    GNC_INVOICE_VEND_INVOICE ,       /* Bill */
+    GNC_INVOICE_EMPL_INVOICE ,       /* Voucher */
+    GNC_INVOICE_CUST_CREDIT_NOTE ,   /* Credit Note for a customer */
+    GNC_INVOICE_VEND_CREDIT_NOTE ,   /* Credit Note from a vendor */
+    GNC_INVOICE_EMPL_CREDIT_NOTE ,   /* Credit Note from an employee,
+                                        not sure this makes sense,
+                                        but all code is symmetrical
+                                        so I've added it to prevent unexpected errors */
+} GncInvoiceType;
+
 /* --- type macros --- */
 #define GNC_TYPE_INVOICE            (gnc_invoice_get_type ())
 #define GNC_INVOICE(o)              \
@@ -122,8 +136,9 @@ GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice);
 const char * gncInvoiceGetBillingID (const GncInvoice *invoice);
 const char * gncInvoiceGetNotes (const GncInvoice *invoice);
 GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice);
-const char * gncInvoiceGetTypeFromOwnerType (GncOwnerType type);
-const char * gncInvoiceGetType (GncInvoice *invoice);
+GncInvoiceType gncInvoiceGetTypeListForOwnerType (GncOwnerType type);
+GncInvoiceType gncInvoiceGetType (GncInvoice *invoice);
+const char * gncInvoiceGetTypeString (GncInvoice *invoice);
 gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice);
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetToChargeAmount (const GncInvoice *invoice);
@@ -207,6 +222,7 @@ gboolean gncInvoiceIsPaid (const GncInvoice *invoice);
 #define INVOICE_POST_TXN    "posted_txn"
 #define INVOICE_POST_LOT    "posted_lot"
 #define INVOICE_TYPE        "type"
+#define INVOICE_TYPE_STRING "type_string"
 #define INVOICE_BILLTO      "bill-to"
 #define INVOICE_ENTRIES     "list_of_entries"
 #define INVOICE_JOB         "invoice_job"
