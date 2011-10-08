@@ -114,11 +114,26 @@ void gncOwnerInitEmployee (GncOwner *owner, GncEmployee *employee);
 /** \name Get routines.
 @{
 */
+/** Returns the GncOwnerType of this owner. (Not to be confused with qofOwnerGetType().) */
 GncOwnerType gncOwnerGetType (const GncOwner *owner);
+/** Returns TRUE if the given owner is one of the valid objects.
+ * Returns FALSE if the owner is (still) undefined, or if it is NULL. */
+gboolean gncOwnerIsValid (const GncOwner *owner);
+
+/** If the given owner is of type GNC_OWNER_UNDEFINED, returns the undefined
+ * pointer, which is usually NULL. Otherwise returns NULL. */
 gpointer gncOwnerGetUndefined (const GncOwner *owner);
+/** If the given owner is of type GNC_OWNER_CUSTOMER, returns the pointer
+ * to the customer object. Otherwise returns NULL. */
 GncCustomer * gncOwnerGetCustomer (const GncOwner *owner);
+/** If the given owner is of type GNC_OWNER_JOB, returns the pointer
+ * to the job object. Otherwise returns NULL. */
 GncJob * gncOwnerGetJob (const GncOwner *owner);
+/** If the given owner is of type GNC_OWNER_VENDOR, returns the pointer
+ * to the vendor object. Otherwise returns NULL. */
 GncVendor * gncOwnerGetVendor (const GncOwner *owner);
+/** If the given owner is of type GNC_OWNER_EMPLOYEE, returns the pointer
+ * to the employee object. Otherwise returns NULL. */
 GncEmployee * gncOwnerGetEmployee (const GncOwner *owner);
 
 const char * gncOwnerGetID (const GncOwner *owner);
@@ -155,8 +170,6 @@ int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 /** Get the GncGUID of the immediate owner */
 const GncGUID * gncOwnerGetGUID (const GncOwner *owner);
 GncGUID gncOwnerRetGUID (GncOwner *owner);
-
-gboolean gncOwnerIsValid (const GncOwner *owner);
 
 /**
  * Get the "parent" Owner or GncGUID thereof.  The "parent" owner
