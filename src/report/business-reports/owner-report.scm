@@ -341,7 +341,10 @@
           (gnc:invoice-anchor-text invoice)
           inv-str))
         inv-str))
-       ((equal? type TXN-TYPE-PAYMENT) (_ "Payment, thank you"))
+       ((equal? type TXN-TYPE-PAYMENT)
+        (gnc:make-html-text
+	 (gnc:html-markup-anchor
+	  (gnc:split-anchor-text split) (_ "Payment, thank you"))))
        (else (_ "Unknown"))))
      )
 
