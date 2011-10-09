@@ -1,0 +1,42 @@
+[Top]
+Guid = 2cbc5758-40e6-4813-af5d-c2d592f26f82
+Title = Quicken Check-21
+Rotation = 0.0
+Translation = 0.0;4.0
+Show_Grid = false
+Show_Boxes = false
+
+[Check Positions]
+Height = 204.5
+Names = Top;Middle;Bottom
+
+[Check Items]
+Type_1 = PAYEE
+Coords_1 = 231.0;73.0
+
+Type_2 = AMOUNT_WORDS
+Coords_2 = 200.0;93.0
+
+Type_3 = AMOUNT_NUMBER
+Blocking_Chars_3 = true
+Coords_3 = 518.0;73.0
+
+Type_4 = DATE
+Coords_4 = 530.0;50.0
+
+Type_5 = NOTES
+Coords_5 = 220.0;155.0
+
+# stub
+
+Type_6 = DATE
+Coords_6 = 36.0;53.0
+
+Type_7 = PAYEE
+Coords_7 = 26.0;78.0;150.0;12.0
+
+Type_8 = AMOUNT_NUMBER
+Coords_8 = 50.0;114.0
+
+Type_9 = NOTES
+Coords_9 = 28.0;139.0;150.0;12.0
