@@ -137,7 +137,7 @@ GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice);
 const char * gncInvoiceGetBillingID (const GncInvoice *invoice);
 const char * gncInvoiceGetNotes (const GncInvoice *invoice);
 GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice);
-GList * gncInvoiceGetTypeListForOwnerType (GncOwnerType type);
+GList * gncInvoiceGetTypeListForOwnerType (const GncOwnerType type);
 GncInvoiceType gncInvoiceGetType (GncInvoice *invoice);
 const char * gncInvoiceGetTypeString (GncInvoice *invoice);
 gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice);
@@ -161,6 +161,16 @@ typedef GList EntryList;
 EntryList * gncInvoiceGetEntries (GncInvoice *invoice);
 GList * gncInvoiceGetPrices(GncInvoice *invoice);
 GNCPrice * gncInvoiceGetPrice(GncInvoice *invoice, gnc_commodity* commodity);
+
+/** Depending on the invoice type, invoices have a different effect
+ *  on the balance. Customer invoices increase the balance, while
+ *  vendor bills decrease the balance. Credit notes have the opposite
+ *  effect.
+ *
+ *  Returns TRUE if the invoice will increase the balance or FALSE
+ *  otherwise.
+ */
+gboolean gncInvoiceAmountPositive (GncInvoice *invoice);
 
 /** Post this invoice to an account.  Returns the new Transaction
  * that is tied to this invoice.   The transaction is set with

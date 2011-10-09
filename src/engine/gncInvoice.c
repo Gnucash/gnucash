@@ -778,7 +778,7 @@ const char * gncInvoiceGetNotes (const GncInvoice *invoice)
 
 GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice)
 {
-    GncOwner *owner;
+    const GncOwner *owner;
     g_return_val_if_fail (invoice, GNC_OWNER_NONE);
 
     owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
@@ -1154,10 +1154,28 @@ gncInvoiceGetInvoiceFromTxn (const Transaction *txn)
     return gncInvoiceLookup(book, guid);
 }
 
+gboolean gncInvoiceAmountPositive (GncInvoice *invoice)
+{
+    switch (gncInvoiceGetType (invoice))
+    {
+        case GNC_INVOICE_CUST_INVOICE:
+        case GNC_INVOICE_VEND_CREDIT_NOTE:
+        case GNC_INVOICE_EMPL_CREDIT_NOTE:
+            return TRUE;
+        case GNC_INVOICE_CUST_CREDIT_NOTE:
+        case GNC_INVOICE_VEND_INVOICE:
+        case GNC_INVOICE_EMPL_INVOICE:
+        case GNC_INVOICE_UNDEFINED:
+            return FALSE;
+        default:
+            return FALSE;
+    }
+}
+
 struct lotmatch
 {
     GncOwner *owner;
-    gboolean reverse;
+    gboolean positive_balance;
 };
 
 static gboolean
@@ -1168,7 +1186,7 @@ gnc_lot_match_owner_payment (GNCLot *lot, gpointer user_data)
     gnc_numeric balance = gnc_lot_get_balance (lot);
 
     /* Is this a payment lot */
-    if (gnc_numeric_positive_p (lm->reverse ? balance :
+    if (gnc_numeric_positive_p (lm->positive_balance ? balance :
                                 gnc_numeric_neg (balance)))
         return FALSE;
 
@@ -1194,7 +1212,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     GList *iter;
     GList *splitinfo = NULL;
     gnc_numeric total;
-    gboolean reverse;
+    gboolean positive_balance;
+    gboolean is_cust_doc;
     const char *name, *type;
     char *lot_title;
     Account *ccard_acct = NULL;
@@ -1210,8 +1229,13 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         gncInvoiceSetTerms (invoice,
                             gncBillTermReturnChild (invoice->terms, TRUE));
 
-    /* Figure out if we need to "reverse" the numbers. */
-    reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+    /* Does the invoice/credit note have a positive effect on the balance ? Note that
+     * payments for such invoices by definition then have a negative effect on the balance.
+     * This is used to determine which open lots can be considered when posting the invoice. */
+    positive_balance = gncInvoiceAmountPositive (invoice);
+
+    /* GncEntry functions need to know if the invoice/credit note is for a customer or a vendor/employee. */
+    is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
     /* Figure out if we need to separate out "credit-card" items */
     owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
@@ -1223,7 +1247,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         LotList *lot_list;
         struct lotmatch lm;
 
-        lm.reverse = reverse;
+        lm.positive_balance = positive_balance;
         lm.owner = owner;
 
         lot_list = xaccAccountFindOpenLots (acc, gnc_lot_match_owner_payment,
@@ -1281,7 +1305,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
         /* Stabilize the TaxTable in this entry */
         gncEntryBeginEdit (entry);
-        if (reverse)
+        if (is_cust_doc)
             gncEntrySetInvTaxTable
             (entry, gncTaxTableReturnChild (gncEntryGetInvTaxTable (entry), TRUE));
         else
@@ -1296,10 +1320,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         gncEntryCommitEdit (entry);
 
         /* Obtain the Entry's Value and TaxValues */
-        gncEntryGetValue (entry, reverse, &value, NULL, &tax, &taxes);
+        gncEntryGetValue (entry, is_cust_doc, &value, NULL, &tax, &taxes);
 
         /* add the value for the account split */
-        this_acc = (reverse ? gncEntryGetInvAccount (entry) :
+        this_acc = (is_cust_doc ? gncEntryGetInvAccount (entry) :
                     gncEntryGetBillAccount (entry));
         if (this_acc)
         {
@@ -1328,9 +1352,19 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                     xaccAccountCommitEdit (this_acc);
                     xaccTransAppendSplit (txn, split);
 
+                    /* General note on the split creations below:
+                     * Invoice and bill amounts are always stored as positive values in entries
+                     * So to convert them to proper splits, the amounts may have to be reverted
+                     * to have the proper effect on the account balance.
+                     * Credit notes have the opposite effect of invoices/bills, but their amounts
+                     * are stored as negative values as well. So to convert them into splits
+                     * they can be treated exactly the same as their invoice/bill counter parts.
+                     * The net effect is that the owner type is sufficient to determine whether a
+                     * value has to be reverted when converting an invoice/bill/cn amount to a split.
+                     */
                     if (gnc_commodity_equal(xaccAccountGetCommodity(this_acc), invoice->currency))
                     {
-                        xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (value)
+                        xaccSplitSetBaseValue (split, (is_cust_doc ? gnc_numeric_neg (value)
                                                        : value),
                                                invoice->currency);
                     }
@@ -1350,10 +1384,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                         else
                         {
                             gnc_numeric converted_amount;
-                            xaccSplitSetValue(split, (reverse ? gnc_numeric_neg(value) : value));
+                            xaccSplitSetValue(split, (is_cust_doc ? gnc_numeric_neg(value) : value));
                             converted_amount = gnc_numeric_div(value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
                             printf("converting from %f to %f\n", gnc_numeric_to_double(value), gnc_numeric_to_double(converted_amount));
-                            xaccSplitSetAmount(split, reverse ? gnc_numeric_neg(converted_amount) : converted_amount);
+                            xaccSplitSetAmount(split, is_cust_doc ? gnc_numeric_neg(converted_amount) : converted_amount);
                         }
                     }
                 }
@@ -1379,7 +1413,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                     xaccAccountInsertSplit (ccard_acct, split);
                     xaccAccountCommitEdit (ccard_acct);
                     xaccTransAppendSplit (txn, split);
-                    xaccSplitSetBaseValue (split, (reverse ? value : gnc_numeric_neg (value)),
+                    xaccSplitSetBaseValue (split, (is_cust_doc ? value : gnc_numeric_neg (value)),
                                            invoice->currency);
 
                 }
@@ -1421,7 +1455,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
         if (gnc_commodity_equal(xaccAccountGetCommodity(acc_val->account), invoice->currency))
         {
-            xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->value)
+            xaccSplitSetBaseValue (split, (is_cust_doc ? gnc_numeric_neg (acc_val->value)
                                            : acc_val->value),
                                    invoice->currency);
         }
@@ -1441,11 +1475,11 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
             else
             {
                 gnc_numeric converted_amount;
-                xaccSplitSetValue(split, (reverse ? gnc_numeric_neg(acc_val->value) : acc_val->value));
+                xaccSplitSetValue(split, (is_cust_doc ? gnc_numeric_neg(acc_val->value) : acc_val->value));
                 converted_amount = gnc_numeric_div(acc_val->value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
                 printf("converting from %f to %f\n", gnc_numeric_to_double(acc_val->value), gnc_numeric_to_double(converted_amount));
 
-                xaccSplitSetAmount(split, reverse ? gnc_numeric_neg(converted_amount) : converted_amount);
+                xaccSplitSetAmount(split, is_cust_doc ? gnc_numeric_neg(converted_amount) : converted_amount);
             }
         }
     }
@@ -1465,7 +1499,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         xaccAccountInsertSplit (ccard_acct, split);
         xaccAccountCommitEdit (ccard_acct);
         xaccTransAppendSplit (txn, split);
-        xaccSplitSetBaseValue (split, (reverse ? invoice->to_charge_amount :
+        xaccSplitSetBaseValue (split, (is_cust_doc ? invoice->to_charge_amount :
                                        gnc_numeric_neg(invoice->to_charge_amount)),
                                invoice->currency);
 
@@ -1473,7 +1507,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
     }
 
-    /* Now create the Posted split (which is negative -- it's a credit) */
+    /* Now create the Posted split (which is the opposite sign of the above splits) */
     {
         Split *split = xaccMallocSplit (book);
 
@@ -1485,7 +1519,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         xaccAccountInsertSplit (acc, split);
         xaccAccountCommitEdit (acc);
         xaccTransAppendSplit (txn, split);
-        xaccSplitSetBaseValue (split, (reverse ? total : gnc_numeric_neg (total)),
+        xaccSplitSetBaseValue (split, (is_cust_doc ? total : gnc_numeric_neg (total)),
                                invoice->currency);
 
         /* add this split to the lot */
@@ -1513,8 +1547,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
      */
     total = gnc_lot_get_balance (lot);
 
-    if ( (gnc_numeric_negative_p (total) && reverse) ||
-            (gnc_numeric_positive_p (total) && !reverse) )
+    if ( (gnc_numeric_negative_p (total) && positive_balance) ||
+            (gnc_numeric_positive_p (total) && !positive_balance) )
     {
         Transaction *t2;
         GNCLot *lot2;
@@ -1613,7 +1647,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
     /* if we've been asked to reset the tax tables, then do so */
     if (reset_tax_tables)
     {
-        gboolean reverse = (gncInvoiceGetOwnerType(invoice) == GNC_OWNER_CUSTOMER);
+        gboolean is_cust_doc = (gncInvoiceGetOwnerType(invoice) == GNC_OWNER_CUSTOMER);
         GList *iter;
 
         for (iter = gncInvoiceGetEntries(invoice); iter; iter = iter->next)
@@ -1621,7 +1655,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
             GncEntry *entry = iter->data;
 
             gncEntryBeginEdit(entry);
-            if (reverse)
+            if (is_cust_doc)
                 gncEntrySetInvTaxTable(entry,
                                        gncTaxTableGetParent(gncEntryGetInvTaxTable(entry)));
             else
