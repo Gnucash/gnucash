@@ -6,11 +6,13 @@ checks_DATA = \
 	liberty.chk \
 	quicken.chk \
 	quicken_wallet.chk \
-	voucher.chk
+	voucher.chk \
+	quicken_check_21.chk
 
 EXTRA_DIST = \
 	deluxe.chk \
 	liberty.chk \
 	quicken.chk \
 	quicken_wallet.chk \
-	voucher.chk
+	voucher.chk \
+	quicken_check_21.chk
