@@ -792,11 +792,14 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
 {
     GList *node;
     gnc_numeric total = gnc_numeric_zero();
-    gboolean reverse;
+    gboolean is_cust_doc;
 
     g_return_val_if_fail (invoice, total);
 
-    reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+    /* Is the current document an invoice/credit note related to a customer or a vendor/employee ?
+     * The GncEntry code needs to know to return the proper entry amounts
+     */
+    is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
     for (node = gncInvoiceGetEntries(invoice); node; node = node->next)
     {
@@ -806,7 +809,7 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
         if (use_payment_type && gncEntryGetBillPayment (entry) != type)
             continue;
 
-        gncEntryGetValue (entry, reverse, &value, NULL, &tax, NULL);
+        gncEntryGetValue (entry, is_cust_doc, &value, NULL, &tax, NULL);
 
         if (gnc_numeric_check (value) == GNC_ERROR_OK)
         {
