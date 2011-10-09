@@ -851,19 +851,25 @@ gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
     return gncInvoiceGetTotalInternal(invoice, TRUE, TRUE, TRUE, type);
 }
 
-// FIXME this should return a list of valid invoice types for a given owner type
-GncInvoiceType gncInvoiceGetTypeListForOwnerType (GncOwnerType type)
+GList * gncInvoiceGetTypeListForOwnerType (GncOwnerType type)
 {
+    GList *type_list = NULL;
     switch (type)
     {
     case GNC_OWNER_CUSTOMER:
-        return GNC_INVOICE_CUST_INVOICE;
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_CUST_INVOICE));
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_CUST_CREDIT_NOTE));
+        return type_list;
     case GNC_OWNER_VENDOR:
-        return GNC_INVOICE_VEND_INVOICE;
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_VEND_INVOICE));
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_VEND_CREDIT_NOTE));
+        return type_list;
     case GNC_OWNER_EMPLOYEE:
-        return GNC_INVOICE_EMPL_INVOICE;
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_EMPL_INVOICE));
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_EMPL_CREDIT_NOTE));
+        return type_list;
     default:
-        return GNC_INVOICE_UNDEFINED;
+        return NULL;
     }
 
 }

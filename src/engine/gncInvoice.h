@@ -137,7 +137,7 @@ GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice);
 const char * gncInvoiceGetBillingID (const GncInvoice *invoice);
 const char * gncInvoiceGetNotes (const GncInvoice *invoice);
 GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice);
-GncInvoiceType gncInvoiceGetTypeListForOwnerType (GncOwnerType type);
+GList * gncInvoiceGetTypeListForOwnerType (GncOwnerType type);
 GncInvoiceType gncInvoiceGetType (GncInvoice *invoice);
 const char * gncInvoiceGetTypeString (GncInvoice *invoice);
 gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice);

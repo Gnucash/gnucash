@@ -2703,32 +2703,35 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
                                       (g_slist_prepend (NULL, OWNER_PARENTG),
                                        INVOICE_OWNER),
                                       gncOwnerGetGUID (owner), QOF_QUERY_OR);
-
             qof_query_merge_in_place (q, q2, QOF_QUERY_AND);
             qof_query_destroy (q2);
+
+            /* Use this base query as pre-fill query.
+             * This will pre-fill the search dialog with the query results
+             */
             q2 = qof_query_copy (q);
+
         }
         else
         {
-            QofQueryPredData *inv_type_pred;
-            GSList *param_list = NULL;
-            inv_type_pred = qof_query_int32_predicate(QOF_COMPARE_EQUAL,
-                            gncInvoiceGetTypeListForOwnerType(owner_type));
-            param_list = g_slist_prepend (param_list, INVOICE_TYPE);
-            qof_query_add_term (q, param_list, inv_type_pred, QOF_QUERY_AND);
+            QofQuery *q3 = qof_query_create ();
+            QofQueryPredData *inv_type_pred = NULL;
+            GList *type_list = NULL, *node = NULL;
+
+            type_list = gncInvoiceGetTypeListForOwnerType(owner_type);
+            for (node = type_list; node; node=node->next)
+            {
+                inv_type_pred = qof_query_int32_predicate(QOF_COMPARE_EQUAL,
+                                GPOINTER_TO_INT(node->data));
+                qof_query_add_term (q3, g_slist_prepend (NULL, INVOICE_TYPE), inv_type_pred, QOF_QUERY_OR);
+            }
+            qof_query_merge_in_place (q, q3, QOF_QUERY_AND);
+            qof_query_destroy (q3);
+
+            /* Don't set a pre-fill query in this case, the result set would be too long */
+            q2 = NULL;
         }
     }
-
-#if 0
-    if (start)
-    {
-        if (q2 == NULL)
-            q2 = qof_query_copy (q);
-
-        qof_query_add_guid_match (q2, g_slist_prepend (NULL, QOF_PARAM_GUID),
-                                  gncInvoiceGetGUID (start), QOF_QUERY_AND);
-    }
-#endif
 
     /* Launch select dialog and return the result */
     sw = g_new0 (struct _invoice_select_window, 1);
