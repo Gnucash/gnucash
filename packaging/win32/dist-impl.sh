@@ -111,7 +111,7 @@ function dist_gnome() {
     wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $POPT_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $DIST_DIR
-    echo 'gtk-theme-name = "MS-Windows"' > $DIST_DIR/etc/gtk-2.0/gtkrc
+    echo 'gtk-theme-name = "Nimbus"' > $DIST_DIR/etc/gtk-2.0/gtkrc
 
     wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
     assert_one_dir $TMP_UDIR/gtk2-themes-*
