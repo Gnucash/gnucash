@@ -129,17 +129,17 @@ void gncInvoiceSortEntries (GncInvoice *invoice);
 /** @name Get Functions
  @{ */
 const char * gncInvoiceGetID (const GncInvoice *invoice);
-GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
+const GncOwner * gncInvoiceGetOwner (const GncInvoice *invoice);
 Timespec gncInvoiceGetDateOpened (const GncInvoice *invoice);
 Timespec gncInvoiceGetDatePosted (const GncInvoice *invoice);
 Timespec gncInvoiceGetDateDue (const GncInvoice *invoice);
 GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice);
 const char * gncInvoiceGetBillingID (const GncInvoice *invoice);
 const char * gncInvoiceGetNotes (const GncInvoice *invoice);
-GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice);
+GncOwnerType gncInvoiceGetOwnerType (const GncInvoice *invoice);
 GList * gncInvoiceGetTypeListForOwnerType (const GncOwnerType type);
-GncInvoiceType gncInvoiceGetType (GncInvoice *invoice);
-const char * gncInvoiceGetTypeString (GncInvoice *invoice);
+GncInvoiceType gncInvoiceGetType (const GncInvoice *invoice);
+const char * gncInvoiceGetTypeString (const GncInvoice *invoice);
 gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice);
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetToChargeAmount (const GncInvoice *invoice);
@@ -170,7 +170,7 @@ GNCPrice * gncInvoiceGetPrice(GncInvoice *invoice, gnc_commodity* commodity);
  *  Returns TRUE if the invoice will increase the balance or FALSE
  *  otherwise.
  */
-gboolean gncInvoiceAmountPositive (GncInvoice *invoice);
+gboolean gncInvoiceAmountPositive (const GncInvoice *invoice);
 
 /** Post this invoice to an account.  Returns the new Transaction
  * that is tied to this invoice.   The transaction is set with

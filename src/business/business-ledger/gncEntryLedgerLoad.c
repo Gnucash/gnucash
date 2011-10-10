@@ -108,7 +108,7 @@ static void load_discount_how_cells (GncEntryLedger *ledger)
 static void load_payment_type_cells (GncEntryLedger *ledger)
 {
     ComboCell *cell;
-    GncOwner *owner;
+    const GncOwner *owner;
     GncEmployee *employee;
 
     cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
@@ -356,7 +356,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
             /* The rest of this does not apply to expense vouchers */
             if (ledger->type != GNCENTRY_EXPVOUCHER_ENTRY)
             {
-                GncOwner *owner = gncInvoiceGetOwner (ledger->invoice);
+                const GncOwner *owner = gncInvoiceGetOwner (ledger->invoice);
                 GncTaxTable *table = NULL;
                 GncTaxIncluded taxincluded_p = GNC_TAXINCLUDED_USEGLOBAL;
                 gboolean taxincluded = FALSE;
@@ -364,8 +364,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
                 GNCOptionDB *odb;
 
                 /* Determine the TaxIncluded and Discount values */
-                owner = gncOwnerGetEndOwner (owner);
-                switch (gncOwnerGetType (owner))
+                switch (gncOwnerGetType (gncOwnerGetEndOwner (owner)))
                 {
                 case GNC_OWNER_CUSTOMER:
                     taxincluded_p = gncCustomerGetTaxIncluded (owner->owner.customer);

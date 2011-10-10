@@ -571,7 +571,7 @@ GncGUID gncOwnerRetGUID (GncOwner *owner)
     return *guid_null ();
 }
 
-GncOwner * gncOwnerGetEndOwner (GncOwner *owner)
+const GncOwner * gncOwnerGetEndOwner (const GncOwner *owner)
 {
     if (!owner) return NULL;
     switch (owner->type)
@@ -615,11 +615,10 @@ int gncOwnerCompare (const GncOwner *a, const GncOwner *b)
     }
 }
 
-const GncGUID * gncOwnerGetEndGUID (GncOwner *owner)
+const GncGUID * gncOwnerGetEndGUID (const GncOwner *owner)
 {
     if (!owner) return NULL;
-    owner = gncOwnerGetEndOwner (owner);
-    return gncOwnerGetGUID (owner);
+    return gncOwnerGetGUID (gncOwnerGetEndOwner (owner));
 }
 
 void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)

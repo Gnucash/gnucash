@@ -706,7 +706,7 @@ gnc_ui_payment_window_destroy (PaymentWindow *pw)
 }
 
 PaymentWindow *
-gnc_ui_payment_new_with_invoice (GncOwner *owner, QofBook *book,
+gnc_ui_payment_new_with_invoice (const GncOwner *owner, QofBook *book,
                                  GncInvoice *invoice)
 {
     GncOwner owner_def;
@@ -715,15 +715,14 @@ gnc_ui_payment_new_with_invoice (GncOwner *owner, QofBook *book,
     if (owner)
     {
         /* Figure out the company */
-        owner = gncOwnerGetEndOwner (owner);
+        gncOwnerCopy (gncOwnerGetEndOwner (owner), &owner_def);
     }
     else
     {
         gncOwnerInitCustomer (&owner_def, NULL);
-        owner = &owner_def;
     }
 
-    return new_payment_window (owner, book, invoice);
+    return new_payment_window (&owner_def, book, invoice);
 }
 
 PaymentWindow *

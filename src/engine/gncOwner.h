@@ -175,8 +175,8 @@ GncGUID gncOwnerRetGUID (GncOwner *owner);
  * Get the "parent" Owner or GncGUID thereof.  The "parent" owner
  * is the Customer or Vendor, or the Owner of a Job
  */
-GncOwner * gncOwnerGetEndOwner (GncOwner *owner);
-const GncGUID * gncOwnerGetEndGUID (GncOwner *owner);
+const GncOwner * gncOwnerGetEndOwner (const GncOwner *owner);
+const GncGUID * gncOwnerGetEndGUID (const GncOwner *owner);
 
 /** attach an owner to a lot */
 void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot);

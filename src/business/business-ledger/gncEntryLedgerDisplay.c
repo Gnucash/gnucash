@@ -141,7 +141,7 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
     /* For expense vouchers, watch the employee and refresh if it's changed */
     if (ledger->type == GNCENTRY_EXPVOUCHER_ENTRY)
     {
-        GncOwner *owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (ledger->invoice));
+        const GncOwner *owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (ledger->invoice));
         GncEmployee *employee = gncOwnerGetEmployee (owner);
 
         if (employee)

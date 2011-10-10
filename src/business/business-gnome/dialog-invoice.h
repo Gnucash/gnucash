@@ -59,15 +59,6 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *invoice);
 /* Search for invoices */
 GNCSearchWindow * gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book);
 
-/*
- * These callbacks are for use with the gnc_general_search widget
- *
- * select() provides a Select Dialog and returns it.
- * edit() opens the existing invoice for editing and returns NULL.
- */
-GNCSearchWindow * gnc_invoice_search_select (gpointer start, gpointer book);
-GNCSearchWindow * gnc_invoice_search_edit (gpointer start, gpointer book);
-
 void gnc_business_call_owner_report (GncOwner *owner, Account *acc);
 
 void gnc_invoice_window_sort (InvoiceWindow *iw, invoice_sort_type_t sort_code);

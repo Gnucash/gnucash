@@ -696,7 +696,7 @@ const char * gncInvoiceGetID (const GncInvoice *invoice)
     return invoice->id;
 }
 
-GncOwner * gncInvoiceGetOwner (GncInvoice *invoice)
+const GncOwner * gncInvoiceGetOwner (const GncInvoice *invoice)
 {
     if (!invoice) return NULL;
     return &invoice->owner;
@@ -776,7 +776,7 @@ const char * gncInvoiceGetNotes (const GncInvoice *invoice)
     return invoice->notes;
 }
 
-GncOwnerType gncInvoiceGetOwnerType (GncInvoice *invoice)
+GncOwnerType gncInvoiceGetOwnerType (const GncInvoice *invoice)
 {
     const GncOwner *owner;
     g_return_val_if_fail (invoice, GNC_OWNER_NONE);
@@ -877,7 +877,7 @@ GList * gncInvoiceGetTypeListForOwnerType (GncOwnerType type)
 
 }
 
-GncInvoiceType gncInvoiceGetType (GncInvoice *invoice)
+GncInvoiceType gncInvoiceGetType (const GncInvoice *invoice)
 {
     if (!invoice) return GNC_INVOICE_UNDEFINED;
     switch (gncInvoiceGetOwnerType (invoice))
@@ -893,7 +893,7 @@ GncInvoiceType gncInvoiceGetType (GncInvoice *invoice)
     }
 }
 
-const char * gncInvoiceGetTypeString (GncInvoice *invoice)
+const char * gncInvoiceGetTypeString (const GncInvoice *invoice)
 {
     GncInvoiceType type = gncInvoiceGetType(invoice);
     switch (type)
@@ -1154,7 +1154,7 @@ gncInvoiceGetInvoiceFromTxn (const Transaction *txn)
     return gncInvoiceLookup(book, guid);
 }
 
-gboolean gncInvoiceAmountPositive (GncInvoice *invoice)
+gboolean gncInvoiceAmountPositive (const GncInvoice *invoice)
 {
     switch (gncInvoiceGetType (invoice))
     {
@@ -1174,7 +1174,7 @@ gboolean gncInvoiceAmountPositive (GncInvoice *invoice)
 
 struct lotmatch
 {
-    GncOwner *owner;
+    const GncOwner *owner;
     gboolean positive_balance;
 };
 
@@ -1182,7 +1182,8 @@ static gboolean
 gnc_lot_match_owner_payment (GNCLot *lot, gpointer user_data)
 {
     struct lotmatch *lm = user_data;
-    GncOwner owner_def, *owner;
+    GncOwner owner_def;
+    const GncOwner *owner;
     gnc_numeric balance = gnc_lot_get_balance (lot);
 
     /* Is this a payment lot */
@@ -1217,7 +1218,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     const char *name, *type;
     char *lot_title;
     Account *ccard_acct = NULL;
-    GncOwner *owner;
+    const GncOwner *owner;
 
     if (!invoice || !acc) return NULL;
 
@@ -1964,7 +1965,7 @@ gboolean gncInvoiceRegister (void)
     return qof_object_register (&gncInvoiceDesc);
 }
 
-gchar *gncInvoiceNextID (QofBook *book, GncOwner *owner)
+gchar *gncInvoiceNextID (QofBook *book, const GncOwner *owner)
 {
     gchar *nextID;
     switch (gncOwnerGetType(gncOwnerGetEndOwner(owner)))

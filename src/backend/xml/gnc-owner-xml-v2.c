@@ -56,7 +56,7 @@ const gchar *owner_version_string = "2.0.0";
 #define owner_id_string		"owner:id"
 
 xmlNodePtr
-gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
+gnc_owner_to_dom_tree (const char *tag, const GncOwner *owner)
 {
     xmlNodePtr ret;
     const char *type_str;

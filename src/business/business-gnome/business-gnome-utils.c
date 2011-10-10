@@ -204,19 +204,12 @@ static void
 gnc_invoice_select_search_set_label(GncISI* isi)
 {
     GncOwnerType owner_type;
-    GncOwner *tmp;
     char *label;
 
     g_assert(isi);
     if (!isi->label) return;
 
-    tmp = &isi->owner;
-    owner_type = gncOwnerGetType(tmp);
-    while (owner_type == GNC_OWNER_JOB)
-    {
-        tmp = gncOwnerGetEndOwner(tmp);
-        owner_type = gncOwnerGetType(tmp);
-    }
+    owner_type = gncOwnerGetType(gncOwnerGetEndOwner(&isi->owner));
 
     /* Translators:  See comments in dialog-invoice.c:gnc_invoice_search() */
     switch (owner_type)

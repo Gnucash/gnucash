@@ -31,7 +31,7 @@ typedef struct _payment_window PaymentWindow;
 
 /* Create a payment window */
 PaymentWindow * gnc_ui_payment_new (GncOwner *owner, QofBook *book);
-PaymentWindow * gnc_ui_payment_new_with_invoice (GncOwner *owner,
+PaymentWindow * gnc_ui_payment_new_with_invoice (const GncOwner *owner,
         QofBook *book,
         GncInvoice *invoice);
 PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn);

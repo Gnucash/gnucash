@@ -35,7 +35,7 @@
 #include "gncOwner.h"
 
 gboolean gncInvoiceRegister (void);
-gchar *gncInvoiceNextID (QofBook *book, GncOwner *owner);
+gchar *gncInvoiceNextID (QofBook *book, const GncOwner *owner);
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc);
 void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn);
 void gncInvoiceSetPostedLot (GncInvoice *invoice, GNCLot *lot);

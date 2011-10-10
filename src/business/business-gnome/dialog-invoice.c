@@ -1480,7 +1480,7 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
     InvoiceWindow *iw = user_data;
     const EventInfo *info;
     GncInvoice *invoice = iw_get_invoice (iw);
-    GncOwner *owner;
+    const GncOwner *owner;
 
     /* If there isn't an invoice behind us, close down */
     if (!invoice)
@@ -1840,7 +1840,7 @@ find_handler (gpointer find_data, gpointer user_data)
 
 static InvoiceWindow *
 gnc_invoice_new_page (QofBook *bookp, InvoiceDialogType type,
-                      GncInvoice *invoice, GncOwner *owner,
+                      GncInvoice *invoice, const GncOwner *owner,
                       GncMainWindow *window)
 {
     InvoiceWindow *iw;
@@ -2198,13 +2198,14 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 }
 
 static InvoiceWindow *
-gnc_invoice_window_new_invoice (QofBook *bookp, GncOwner *owner,
+gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
                                 GncInvoice *invoice)
 {
     InvoiceWindow *iw;
     GladeXML *xml;
     GtkWidget *hbox;
     GncOwner *billto;
+    const GncOwner *start_owner;
 
     if (invoice)
     {
@@ -2236,17 +2237,18 @@ gnc_invoice_window_new_invoice (QofBook *bookp, GncOwner *owner,
         invoice = gncInvoiceCreate (bookp);
         gncInvoiceSetCurrency (invoice, gnc_default_currency ());
         iw->book = bookp;
+        start_owner = owner;
     }
     else
     {
         iw->dialog_type = MOD_INVOICE;
-        owner = gncInvoiceGetOwner (invoice);
+        start_owner = gncInvoiceGetOwner (invoice);
         iw->book = gncInvoiceGetBook (invoice);
     }
 
     /* Save this for later */
-    gncOwnerCopy (gncOwnerGetEndOwner(owner), &(iw->owner));
-    gncOwnerInitJob (&(iw->job), gncOwnerGetJob (owner));
+    gncOwnerCopy (gncOwnerGetEndOwner(start_owner), &(iw->owner));
+    gncOwnerInitJob (&(iw->job), gncOwnerGetJob (start_owner));
 
     billto = gncInvoiceGetBillTo (invoice);
     gncOwnerCopy (gncOwnerGetEndOwner (billto), &(iw->proj_cust));
@@ -2677,15 +2679,8 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
      */
     if (owner)
     {
-        GncOwner *tmp = owner;
-
         /* First, figure out the type of owner here.. */
-        owner_type = gncOwnerGetType(owner);
-        while (owner_type == GNC_OWNER_JOB)
-        {
-            tmp = gncOwnerGetEndOwner(tmp);
-            owner_type = gncOwnerGetType(tmp);
-        }
+        owner_type = gncOwnerGetType (gncOwnerGetEndOwner (owner));
 
         /* Then if there's an actual owner add it to the query
          * and limit the search to this owner
@@ -2769,34 +2764,6 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
                                      buttons, NULL, new_invoice_cb,
                                      sw, free_invoice_cb, GCONF_SECTION_SEARCH,
                                      label);
-}
-
-GNCSearchWindow *
-gnc_invoice_search_select (gpointer start, gpointer book)
-{
-    GncInvoice *i = start;
-    GncOwner owner, *ownerp;
-
-    if (!book) return NULL;
-
-    if (i)
-    {
-        ownerp = gncInvoiceGetOwner (i);
-        gncOwnerCopy (ownerp, &owner);
-    }
-    else
-        gncOwnerInitCustomer (&owner, NULL); /* XXX */
-
-    return gnc_invoice_search (start, NULL, book);
-}
-
-GNCSearchWindow *
-gnc_invoice_search_edit (gpointer start, gpointer book)
-{
-    if (start)
-        gnc_ui_invoice_edit (start);
-
-    return NULL;
 }
 
 DialogQueryList *
