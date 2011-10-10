@@ -35,6 +35,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-query-list.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-session.h"
 #include "qof.h"
 
 #include "Transaction.h"	/* for the SPLIT_* and TRANS_* */
@@ -1025,6 +1026,8 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     sw->component_id = gnc_register_gui_component (DIALOG_SEARCH_CM_CLASS,
                        refresh_handler,
                        close_handler, sw);
+    gnc_gui_component_set_session (sw->component_id,
+                                   gnc_get_current_session());
 
     /* And setup the close callback */
     g_signal_connect (G_OBJECT (sw->dialog), "destroy",
