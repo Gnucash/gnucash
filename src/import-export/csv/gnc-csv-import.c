@@ -982,6 +982,8 @@ static void gnc_csv_preview_update(GncCsvPreview* preview)
         /* Add a single column for the treeview. */
         col = gtk_tree_view_column_new_with_attributes("", renderer, "text", i, NULL);
         gtk_tree_view_insert_column(preview->treeview, col, -1);
+        /* Enable resizing of the columns. */
+        gtk_tree_view_column_set_resizable(col,TRUE);
         /* Use the alternating model and text entries from ctstore in
          * preview->ctreeview. */
         gtk_tree_view_insert_column_with_attributes(preview->ctreeview,
