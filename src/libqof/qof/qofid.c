@@ -325,7 +325,8 @@ struct _iterate
     gpointer                data;
 };
 
-static void foreach_cb (gpointer key, gpointer item, gpointer arg)
+static void
+foreach_cb (gpointer item, gpointer arg)
 {
     struct _iterate *iter = arg;
     QofInstance *ent = item;
@@ -338,6 +339,7 @@ qof_collection_foreach (const QofCollection *col, QofInstanceForeachCB cb_func,
                         gpointer user_data)
 {
     struct _iterate iter;
+    GList *entries;
 
     g_return_if_fail (col);
     g_return_if_fail (cb_func);
@@ -345,7 +347,12 @@ qof_collection_foreach (const QofCollection *col, QofInstanceForeachCB cb_func,
     iter.fcn = cb_func;
     iter.data = user_data;
 
-    g_hash_table_foreach (col->hash_of_entities, foreach_cb, &iter);
-}
+    PINFO("Hash Table size of %s before is %d", col->e_type, g_hash_table_size(col->hash_of_entities));
 
+    entries = g_hash_table_get_values (col->hash_of_entities);
+    g_list_foreach (entries, foreach_cb, &iter);
+    g_list_free (entries);
+
+    PINFO("Hash Table size of %s after is %d", col->e_type, g_hash_table_size(col->hash_of_entities));
+}
 /* =============================================================== */
