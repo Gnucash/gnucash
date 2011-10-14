@@ -356,7 +356,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
             /* The rest of this does not apply to expense vouchers */
             if (ledger->type != GNCENTRY_EXPVOUCHER_ENTRY)
             {
-                const GncOwner *owner = gncInvoiceGetOwner (ledger->invoice);
+                const GncOwner *owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (ledger->invoice));
                 GncTaxTable *table = NULL;
                 GncTaxIncluded taxincluded_p = GNC_TAXINCLUDED_USEGLOBAL;
                 gboolean taxincluded = FALSE;
@@ -364,7 +364,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
                 GNCOptionDB *odb;
 
                 /* Determine the TaxIncluded and Discount values */
-                switch (gncOwnerGetType (gncOwnerGetEndOwner (owner)))
+                switch (gncOwnerGetType (owner))
                 {
                 case GNC_OWNER_CUSTOMER:
                     taxincluded_p = gncCustomerGetTaxIncluded (owner->owner.customer);
