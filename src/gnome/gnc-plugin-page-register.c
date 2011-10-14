@@ -112,6 +112,11 @@ void gnc_plugin_page_register_filter_end_cb(GtkWidget *radio, GncPluginPageRegis
 void gnc_plugin_page_register_filter_response_cb(GtkDialog *dialog, gint response, GncPluginPageRegister *plugin_page);
 void gnc_plugin_page_register_filter_status_all_cb(GtkButton *button, GncPluginPageRegister *plugin_page);
 void gnc_plugin_page_register_filter_status_one_cb(GtkToggleButton *button, GncPluginPageRegister *page);
+void gnc_plugin_page_register_filter_save_cb(GtkToggleButton *button, GncPluginPageRegister *page);
+
+static gchar *gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page);
+void gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *filter );
+static void gnc_ppr_update_status_query (GncPluginPageRegister *page);
 
 /* Command callbacks */
 static void gnc_plugin_page_register_cmd_print_check (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -446,7 +451,7 @@ static struct status_action status_actions[] =
     { NULL, 0, NULL },
 };
 #define CLEARED_VALUE "cleared_value"
-
+#define DEFAULT_FILTER "0x001f"
 
 /************************************************************/
 /*                      Data Structures                     */
@@ -488,6 +493,7 @@ typedef struct GncPluginPageRegisterPrivate
         time_t original_end_time;
         time_t start_time;
         time_t end_time;
+        gboolean save_it;
     } fd;
 } GncPluginPageRegisterPrivate;
 
@@ -540,6 +546,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
     GList *book_list;
     gchar *label;
     gchar *label_color;
+    gchar *filter;
     QofQuery *q;
 
     /* Is there an existing page? */
@@ -574,6 +581,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
     gnc_plugin_page_set_page_long_name(plugin_page, label);
     g_free(label);
 
+    filter = gnc_plugin_page_register_get_filter(plugin_page);
+    priv->fd.cleared_match = (gint)g_ascii_strtoll( filter, NULL, 16 );
+    g_free(filter);
+
     q = gnc_ledger_display_get_query (ledger);
     book_list = qof_query_get_books (q);
     for (item = book_list; item; item = g_list_next(item))
@@ -581,6 +592,8 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
     // Do not free the list. It is owned by the query.
 
     reg = gnc_ledger_display_get_split_register(priv->ledger);
+
+    gnc_ppr_update_status_query (register_page);
 
     priv->component_manager_id = 0;
     return plugin_page;
@@ -805,7 +818,6 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister *page)
     gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), reg->use_double_line);
     g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
 }
-
 
 /* Virtual Functions */
 
@@ -1328,22 +1340,57 @@ gnc_plugin_page_register_get_tab_color (GncPluginPage *plugin_page)
     reg = gnc_ledger_display_get_split_register (ld);
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
+    color = NULL;
 
-    switch (ledger_type)
-    {
-    case LD_SINGLE:
+    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
         color = xaccAccountGetColor (leader);
-        return g_strdup(color ? color : "");
 
-    case LD_SUBACCOUNT:
-        color = xaccAccountGetColor (leader);
-        return g_strdup_printf("%s+", color ? color : "");
+    return g_strdup(color ? color : "Not Set");
+}
 
-    default:
-        break;
-    }
+static gchar *
+gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page)
+{
+    GncPluginPageRegisterPrivate *priv;
+    GNCLedgerDisplayType ledger_type;
+    GNCLedgerDisplay *ld;
+    SplitRegister *reg;
+    Account *leader;
+    const char* filter;
 
-    return g_strdup("Not Set");
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+    ld = priv->ledger;
+    reg = gnc_ledger_display_get_split_register (ld);
+    ledger_type = gnc_ledger_display_type (ld);
+    leader = gnc_ledger_display_leader (ld);
+    filter = NULL;
+
+    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+        filter = xaccAccountGetFilter (leader);
+
+    return g_strdup(filter ? filter : DEFAULT_FILTER);
+}
+
+void
+gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *filter )
+{
+    GncPluginPageRegisterPrivate *priv;
+    GNCLedgerDisplayType ledger_type;
+    GNCLedgerDisplay *ld;
+    SplitRegister *reg;
+    Account *leader;
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+    ld = priv->ledger;
+    reg = gnc_ledger_display_get_split_register (ld);
+    ledger_type = gnc_ledger_display_type (ld);
+    leader = gnc_ledger_display_leader (ld);
+
+    xaccAccountSetFilter (leader, filter);
+
+    return;
 }
 
 static gchar *
@@ -1885,6 +1932,37 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget *radio,
 }
 
 
+/** This function is called whenever the save status is checked
+ *  or unchecked. It will allow saving of the filter if required.
+ *
+ *  @param button The toggle button that was changed.
+ *
+ *  @param page A pointer to the GncPluginPageRegister that is
+ *  associated with this filter dialog.
+ */
+void
+gnc_plugin_page_register_filter_save_cb (GtkToggleButton *button,
+        GncPluginPageRegister *page)
+{
+    GncPluginPageRegisterPrivate *priv;
+    const gchar *name;
+    gint i, value;
+
+    g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+    ENTER("Save toggle button (%p), plugin_page %p", button, page);
+
+    /* Compute the new save filter status */
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    if (gtk_toggle_button_get_active(button))
+        priv->fd.save_it = TRUE;
+    else
+        priv->fd.save_it = FALSE;
+    LEAVE(" ");
+}
+
+
 /** This function is called when the "Filter By..." dialog is closed.
  *  If the dialog was closed by any method other than clicking the OK
  *  button, the original sorting order will be restored.
@@ -1902,12 +1980,16 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
         GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
+    GncPluginPage *plugin_page;
+    const char* filter; 
 
     g_return_if_fail(GTK_IS_DIALOG(dialog));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
     ENTER(" ");
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    plugin_page = GNC_PLUGIN_PAGE(page);
+
     if (response != GTK_RESPONSE_OK)
     {
         /* Remove the old status match */
@@ -1916,6 +1998,14 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
         priv->fd.start_time = priv->fd.original_start_time;
         priv->fd.end_time = priv->fd.original_end_time;
         gnc_ppr_update_date_query(page);
+    }
+    else
+    {
+        if(priv->fd.save_it)
+	{
+        filter = g_strdup_printf("0x%04x", priv->fd.cleared_match);
+        gnc_plugin_page_register_set_filter (plugin_page, filter);
+	}
     }
     priv->fd.dialog = NULL;
     gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -2534,6 +2624,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), value);
     }
     priv->fd.original_cleared_match = priv->fd.cleared_match;
+    priv->fd.save_it = FALSE;
 
     /* Set the date info */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "filter_show_range"));

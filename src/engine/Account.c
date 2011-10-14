@@ -84,6 +84,7 @@ enum
 
     PROP_HIDDEN,
     PROP_PLACEHOLDER,
+    PROP_FILTER,
 };
 
 typedef struct AccountPrivate
@@ -435,6 +436,9 @@ gnc_account_get_property (GObject         *object,
     case PROP_PLACEHOLDER:
         g_value_set_boolean(value, xaccAccountGetPlaceholder(account));
         break;
+    case PROP_FILTER:
+        g_value_set_string(value, xaccAccountGetFilter(account));
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -526,6 +530,9 @@ gnc_account_set_property (GObject         *object,
         break;
     case PROP_PLACEHOLDER:
         xaccAccountSetPlaceholder(account, g_value_get_boolean(value));
+        break;
+    case PROP_FILTER:
+        xaccAccountSetFilter(account, g_value_get_string(value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -864,6 +871,16 @@ gnc_account_class_init (AccountClass *klass)
                            "allow transactions to be created, edited or deleted.",
                            FALSE,
                            G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_FILTER,
+     g_param_spec_string ("filter",
+                          "Account Filter",
+                          "The account filter is a value saved to allow "
+                          "filters to be recalled.",
+                          NULL,
+                          G_PARAM_READWRITE));
 }
 
 static void
@@ -2199,6 +2216,28 @@ xaccAccountSetColor (Account *acc, const char *str)
     xaccAccountCommitEdit(acc);
 }
 
+void
+xaccAccountSetFilter (Account *acc, const char *str)
+{
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    xaccAccountBeginEdit(acc);
+    if (str)
+    {
+        gchar *tmp = g_strstrip(g_strdup(str));
+        kvp_frame_set_slot_nc(acc->inst.kvp_data, "filter",
+                              strlen(tmp) ? kvp_value_new_string(tmp) : NULL);
+        g_free(tmp);
+    }
+    else
+    {
+        kvp_frame_set_slot_nc(acc->inst.kvp_data, "filter", NULL);
+    }
+    mark_account (acc);
+    xaccAccountCommitEdit(acc);
+}
+
+
 static void
 qofAccountSetParent (Account *acc, QofInstance *parent)
 {
@@ -2978,6 +3017,14 @@ xaccAccountGetColor (const Account *acc)
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
     return acc ? kvp_frame_get_string(acc->inst.kvp_data, "color") : NULL;
 }
+
+const char *
+xaccAccountGetFilter (const Account *acc)
+{
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
+    return acc ? kvp_frame_get_string(acc->inst.kvp_data, "filter") : NULL;
+}
+
 
 const char *
 xaccAccountGetNotes (const Account *acc)
@@ -4809,6 +4856,11 @@ gboolean xaccAccountRegister (void)
             ACCOUNT_COLOR_, QOF_TYPE_STRING,
             (QofAccessFunc) xaccAccountGetColor,
             (QofSetterFunc) xaccAccountSetColor
+        },
+        {
+            ACCOUNT_FILTER_, QOF_TYPE_STRING,
+            (QofAccessFunc) xaccAccountGetFilter,
+            (QofSetterFunc) xaccAccountSetFilter
         },
         {
             ACCOUNT_NOTES_, QOF_TYPE_STRING,

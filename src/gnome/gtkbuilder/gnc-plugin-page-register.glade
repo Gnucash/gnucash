@@ -178,7 +178,7 @@
     <property name="resizable">False</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <signal name="response" handler="gnc_plugin_page_register_filter_response_cb"/>
+    <signal name="response" handler="gnc_plugin_page_register_filter_response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox19">
         <property name="visible">True</property>
@@ -277,7 +277,7 @@
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">filter_show_all</property>
-                    <signal name="toggled" handler="gnc_plugin_page_register_filter_select_range_cb"/>
+                    <signal name="toggled" handler="gnc_plugin_page_register_filter_select_range_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -314,7 +314,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb"/>
+                        <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -332,7 +332,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb"/>
+                        <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -353,7 +353,7 @@
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">end_date_choose</property>
-                        <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb"/>
+                        <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -374,7 +374,7 @@
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">end_date_choose</property>
-                        <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb"/>
+                        <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -423,7 +423,7 @@
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">start_date_earliest</property>
-                        <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb"/>
+                        <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -444,7 +444,7 @@
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">start_date_earliest</property>
-                        <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb"/>
+                        <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -536,158 +536,183 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTable" id="table1">
+              <object class="GtkVBox" id="vbox104">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">12</property>
-                <property name="n_rows">7</property>
-                <property name="n_columns">3</property>
                 <child>
-                  <object class="GtkLabel" id="label847688">
+                  <object class="GtkTable" id="table1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="border_width">12</property>
+                    <property name="n_rows">7</property>
+                    <property name="n_columns">3</property>
+                    <child>
+                      <object class="GtkCheckButton" id="filter_status_unreconciled">
+                        <property name="label" translatable="yes">_Unreconciled</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="right_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="filter_status_reconciled">
+                        <property name="label" translatable="yes">_Reconciled</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="filter_status_cleared">
+                        <property name="label" translatable="yes">C_leared</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="filter_status_voided">
+                        <property name="label" translatable="yes">_Voided</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="filter_status_frozen">
+                        <property name="label" translatable="yes">_Frozen</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">4</property>
+                        <property name="bottom_attach">5</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button84">
+                        <property name="label" translatable="yes">Select _All</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="gnc_plugin_page_register_filter_status_all_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">6</property>
+                        <property name="bottom_attach">7</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkHSeparator" id="hseparator1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">5</property>
+                        <property name="bottom_attach">6</property>
+                        <property name="y_options">GTK_EXPAND</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
-                    <property name="y_options"></property>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label847686">
+                  <object class="GtkHBox" id="hbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <child>
+                      <object class="GtkCheckButton" id="filter_save">
+                        <property name="label" translatable="yes">_Save Filter Status</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">1</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="gnc_plugin_page_register_filter_save_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="padding">6</property>
+                        <property name="pack_type">end</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
-                    <property name="y_options">GTK_EXPAND</property>
+                    <property name="expand">True</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
                   </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="filter_status_unreconciled">
-                    <property name="label" translatable="yes">_Unreconciled</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb"/>
-                  </object>
-                  <packing>
-                    <property name="right_attach">3</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="filter_status_reconciled">
-                    <property name="label" translatable="yes">_Reconciled</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb"/>
-                  </object>
-                  <packing>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="filter_status_cleared">
-                    <property name="label" translatable="yes">C_leared</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb"/>
-                  </object>
-                  <packing>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="filter_status_voided">
-                    <property name="label" translatable="yes">_Voided</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb"/>
-                  </object>
-                  <packing>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="filter_status_frozen">
-                    <property name="label" translatable="yes">_Frozen</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb"/>
-                  </object>
-                  <packing>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button84">
-                    <property name="label" translatable="yes">Select _All</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="gnc_plugin_page_register_filter_status_all_cb"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -728,7 +753,7 @@
     <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
-    <signal name="response" handler="gnc_plugin_page_register_sort_response_cb"/>
+    <signal name="response" handler="gnc_plugin_page_register_sort_response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox17">
         <property name="visible">True</property>
@@ -795,7 +820,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -825,7 +850,7 @@
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -844,7 +869,7 @@
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -863,7 +888,7 @@
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -882,7 +907,7 @@
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -901,7 +926,7 @@
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -920,7 +945,7 @@
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -939,7 +964,7 @@
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -958,7 +983,7 @@
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -977,7 +1002,7 @@
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">BY_STANDARD</property>
-                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb"/>
+                <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

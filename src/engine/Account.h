@@ -287,6 +287,8 @@ void xaccAccountSetCode (Account *account, const char *code);
 void xaccAccountSetDescription (Account *account, const char *desc);
 /** Set the account's Color */
 void xaccAccountSetColor (Account *account, const char *color);
+/** Set the account's Filter */
+void xaccAccountSetFilter (Account *account, const char *filter);
 /** Set the account's notes */
 void xaccAccountSetNotes (Account *account, const char *notes);
 /** Set the last num field of an Account */
@@ -384,6 +386,8 @@ const char * xaccAccountGetCode (const Account *account);
 const char * xaccAccountGetDescription (const Account *account);
 /** Get the account's color */
 const char * xaccAccountGetColor (const Account *account);
+/** Get the account's filter */
+const char * xaccAccountGetFilter (const Account *account);
 /** Get the account's notes */
 const char * xaccAccountGetNotes (const Account *account);
 /** Get the last num field of an Account */
@@ -1435,6 +1439,7 @@ const char * dxaccAccountGetQuoteTZ (const Account *account);
 #define ACCOUNT_CODE_		"code"
 #define ACCOUNT_DESCRIPTION_	"desc"
 #define ACCOUNT_COLOR_		"color"
+#define ACCOUNT_FILTER_		"filter"
 #define ACCOUNT_NOTES_		"notes"
 #define ACCOUNT_BALANCE_	"balance"
 #define ACCOUNT_CLEARED_	"cleared"
