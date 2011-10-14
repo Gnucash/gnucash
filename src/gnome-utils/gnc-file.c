@@ -698,6 +698,8 @@ gnc_post_file_open (const char * filename)
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
         GtkWidget *dialog;
+        gchar *displayname = NULL;
+
         char *fmt1 = _("GnuCash could not obtain the lock for %s.");
         char *fmt2 = ((ERR_BACKEND_LOCKED == io_err) ?
                       _("That database may be in use by another user, "
@@ -710,6 +712,11 @@ gnc_post_file_open (const char * filename)
                      );
         int rc;
 
+        if (! gnc_uri_is_file_uri (newfile)) /* Hide the db password in error messages */
+            displayname = gnc_uri_normalize_uri ( newfile, FALSE);
+        else
+            displayname = g_strdup (newfile);
+
         // Bug#467521: on Mac (and maybe Win?), the dialog will appear below the
         // splash, but is modal, so we can't get rid of the splash...  So, get
         // rid of it now.
@@ -719,7 +726,7 @@ gnc_post_file_open (const char * filename)
                                         0,
                                         GTK_MESSAGE_WARNING,
                                         GTK_BUTTONS_NONE,
-                                        fmt1, newfile);
+                                        fmt1, displayname);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", fmt2);
 
@@ -732,6 +739,7 @@ gnc_post_file_open (const char * filename)
                                   GTK_STOCK_QUIT, RESPONSE_QUIT);
         rc = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
+        g_free (displayname);
 
         if (rc == GTK_RESPONSE_DELETE_EVENT)
         {
