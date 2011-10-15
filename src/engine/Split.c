@@ -729,6 +729,10 @@ xaccSplitCommitEdit(Split *s)
 
     orig_acc = s->orig_acc;
     acc = s->acc;
+
+    if (!GNC_IS_ACCOUNT(acc))
+        return;
+
     /* Remove from lot (but only if it hasn't been moved to
        new lot already) */
     if (s->lot && (gnc_lot_get_account(s->lot) != acc || qof_instance_get_destroying(s)))
