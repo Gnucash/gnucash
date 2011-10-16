@@ -721,14 +721,18 @@ static void commit_err (QofInstance *inst, QofBackendError errcode)
 void
 xaccSplitCommitEdit(Split *s)
 {
-    Account *acc, *orig_acc;
+    Account *acc = NULL;
+    Account *orig_acc = NULL;
 
     g_return_if_fail(s);
     if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
         return;
 
     orig_acc = s->orig_acc;
-    acc = s->acc;
+
+    if (GNC_IS_ACCOUNT(s->acc))
+        acc=s->acc;
+
     /* Remove from lot (but only if it hasn't been moved to
        new lot already) */
     if (s->lot && (gnc_lot_get_account(s->lot) != acc || qof_instance_get_destroying(s)))
