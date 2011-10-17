@@ -315,7 +315,10 @@ static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCs
         /* Get the width. */
         col_width = gtk_tree_view_column_get_width(gtk_tree_view_get_column(preview->treeview, i));
         /* Set the minumum width for a column so that drop down selector can be seen. */
-        if (col_width < MIN_COL_WIDTH){col_width = MIN_COL_WIDTH;}
+        if (col_width < MIN_COL_WIDTH)
+        {
+            col_width = MIN_COL_WIDTH;
+        }
         pcol = gtk_tree_view_get_column(preview->treeview, i);
         gtk_tree_view_column_set_min_width(pcol, col_width);
         /* Set ccol's width the same. */
@@ -983,7 +986,7 @@ static void gnc_csv_preview_update(GncCsvPreview* preview)
         col = gtk_tree_view_column_new_with_attributes("", renderer, "text", i, NULL);
         gtk_tree_view_insert_column(preview->treeview, col, -1);
         /* Enable resizing of the columns. */
-        gtk_tree_view_column_set_resizable(col,TRUE);
+        gtk_tree_view_column_set_resizable(col, TRUE);
         /* Use the alternating model and text entries from ctstore in
          * preview->ctreeview. */
         gtk_tree_view_insert_column_with_attributes(preview->ctreeview,

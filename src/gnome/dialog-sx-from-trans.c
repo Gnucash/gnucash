@@ -356,10 +356,10 @@ sxftd_init( SXFromTransInfo *sxfti )
 
     /* Setup Widgets */
     {
-       sxfti->ne_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "never_end_button"));
-       sxfti->ed_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "end_on_date_button"));
-       sxfti->oc_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "n_occurrences_button"));
-       sxfti->n_occurences = GTK_ENTRY(gtk_builder_get_object(sxfti->builder, "n_occurrences_entry"));
+        sxfti->ne_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "never_end_button"));
+        sxfti->ed_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "end_on_date_button"));
+        sxfti->oc_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "n_occurrences_button"));
+        sxfti->n_occurences = GTK_ENTRY(gtk_builder_get_object(sxfti->builder, "n_occurrences_entry"));
     }
 
     /* Get the name from the transaction, try that as the initial SX name. */
@@ -781,9 +781,9 @@ gnc_sx_create_from_trans( Transaction *trans )
 
     builder = gtk_builder_new();
 
-    gnc_builder_add_from_file  (builder ,"dialog-sx.glade", "freq_liststore");
+    gnc_builder_add_from_file  (builder , "dialog-sx.glade", "freq_liststore");
 
-    gnc_builder_add_from_file  (builder ,"dialog-sx.glade", "sx_from_real_trans");
+    gnc_builder_add_from_file  (builder , "dialog-sx.glade", "sx_from_real_trans");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sx_from_real_trans"));
 
     sxfti->builder = builder;

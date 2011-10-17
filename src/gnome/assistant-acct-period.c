@@ -311,18 +311,18 @@ ap_assistant_menu_prepare (GtkAssistant *assistant, gpointer user_data)
 
     /* Display the results */
     str = g_strdup_printf (
-        /* Translators: %s is a date string. %d is the number of books
-         * that will be created. This is a ngettext(3) message (but
-         * only for the %d part). */
-        ngettext("The earliest transaction date found in this book is %s. "
-                 "Based on the selection made above, this book will be split "
-                 "into %d book.",
-                 "The earliest transaction date found in this book is %s. "
-                 "Based on the selection made above, this book will be split "
-                 "into %d books.",
-                 nperiods),
-        info->earliest_str,
-        nperiods);
+              /* Translators: %s is a date string. %d is the number of books
+               * that will be created. This is a ngettext(3) message (but
+               * only for the %d part). */
+              ngettext("The earliest transaction date found in this book is %s. "
+                       "Based on the selection made above, this book will be split "
+                       "into %d book.",
+                       "The earliest transaction date found in this book is %s. "
+                       "Based on the selection made above, this book will be split "
+                       "into %d books.",
+                       nperiods),
+              info->earliest_str,
+              nperiods);
     gtk_label_set_text (GTK_LABEL(info->period_remarks), str);
     g_free (str);
 }

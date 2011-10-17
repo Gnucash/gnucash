@@ -30,16 +30,16 @@ main (int   argc,
       char *argv[])
 {
     gtk_test_init (&argc, &argv); // initialize test program
-/* Add test functions and suites. See
- * http://library.gnome.org/devel/glib/stable/glib-Testing.html for
- * details. Unfortunately, GLib-Testing doesn't provide the automatic
- * registration features of more sophisitcated frameworks. */
+    /* Add test functions and suites. See
+     * http://library.gnome.org/devel/glib/stable/glib-Testing.html for
+     * details. Unfortunately, GLib-Testing doesn't provide the automatic
+     * registration features of more sophisitcated frameworks. */
     g_test_add_func ("/TESTPROG/Test Case Name", test_case_test_func);
-	    ScannerFixture,            // fixture structure type
-	    NULL,                      // unused data argument
-	    scanner_fixture_setup,     // fixture setup
-	    test_scanner_symbols,      // test function
-	    scanner_fixture_teardown); // fixture teardown
+    ScannerFixture,            // fixture structure type
+    NULL,                      // unused data argument
+    scanner_fixture_setup,     // fixture setup
+    test_scanner_symbols,      // test function
+    scanner_fixture_teardown); // fixture teardown
     return g_test_run();
 }
 

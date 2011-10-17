@@ -318,22 +318,22 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
     }
 
     dbi_test_result = conn_test_dbi_library( be->conn );
-    switch( dbi_test_result )
+    switch ( dbi_test_result )
     {
-        case GNC_DBI_PASS:
-            break;
+    case GNC_DBI_PASS:
+        break;
 
-        case GNC_DBI_FAIL_SETUP:
-            qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
-            qof_backend_set_message( qbe,
-                    "SQLite3: Failed to setup for large number test" );
-            break;
+    case GNC_DBI_FAIL_SETUP:
+        qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+        qof_backend_set_message( qbe,
+                                 "SQLite3: Failed to setup for large number test" );
+        break;
 
-        case GNC_DBI_FAIL_TEST:
-            qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-            qof_backend_set_message( qbe,
-                    "SQLite3 DBI library fails large number test" );
-            break;
+    case GNC_DBI_FAIL_TEST:
+        qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+        qof_backend_set_message( qbe,
+                                 "SQLite3 DBI library fails large number test" );
+        break;
     }
     if ( dbi_test_result != GNC_DBI_PASS )
     {
@@ -791,22 +791,22 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     if ( result == 0 )
     {
         dbi_test_result = conn_test_dbi_library( be->conn );
-        switch( dbi_test_result )
+        switch ( dbi_test_result )
         {
-            case GNC_DBI_PASS:
-                break;
+        case GNC_DBI_PASS:
+            break;
 
-            case GNC_DBI_FAIL_SETUP:
-                qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
-                qof_backend_set_message( qbe,
-                        "DBI library large number test incomplete" );
-                break;
+        case GNC_DBI_FAIL_SETUP:
+            qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+            qof_backend_set_message( qbe,
+                                     "DBI library large number test incomplete" );
+            break;
 
-            case GNC_DBI_FAIL_TEST:
-                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-                qof_backend_set_message( qbe,
-                        "DBI library fails large number test" );
-                break;
+        case GNC_DBI_FAIL_TEST:
+            qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+            qof_backend_set_message( qbe,
+                                     "DBI library fails large number test" );
+            break;
         }
         if ( GNC_DBI_PASS != dbi_test_result )
         {
@@ -879,22 +879,22 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
                 goto exit;
             }
             dbi_test_result = conn_test_dbi_library( be->conn );
-            switch( dbi_test_result )
+            switch ( dbi_test_result )
             {
-                case GNC_DBI_PASS:
-                    break;
+            case GNC_DBI_PASS:
+                break;
 
-                case GNC_DBI_FAIL_SETUP:
-                    qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
-                    qof_backend_set_message( qbe,
-                            "MySql: Failed to setup for large number test" );
-                    break;
+            case GNC_DBI_FAIL_SETUP:
+                qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+                qof_backend_set_message( qbe,
+                                         "MySql: Failed to setup for large number test" );
+                break;
 
-                case GNC_DBI_FAIL_TEST:
-                    qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-                    qof_backend_set_message( qbe,
-                            "MySql DBI library fails large number test" );
-                    break;
+            case GNC_DBI_FAIL_TEST:
+                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+                qof_backend_set_message( qbe,
+                                         "MySql DBI library fails large number test" );
+                break;
             }
             if ( dbi_test_result != GNC_DBI_PASS )
             {
@@ -1103,20 +1103,20 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
         dbi_test_result = conn_test_dbi_library( be->conn );
         switch ( dbi_test_result )
         {
-            case GNC_DBI_PASS:
-                break;
+        case GNC_DBI_PASS:
+            break;
 
-            case GNC_DBI_FAIL_SETUP:
-                qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
-                qof_backend_set_message( qbe,
-                        "Postgresql: Failed to setup for large number test" );
-                break;
+        case GNC_DBI_FAIL_SETUP:
+            qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+            qof_backend_set_message( qbe,
+                                     "Postgresql: Failed to setup for large number test" );
+            break;
 
-            case GNC_DBI_FAIL_TEST:
-                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-                qof_backend_set_message( qbe,
-                        "Postgresql DBI library fails large number test" );
-                break;
+        case GNC_DBI_FAIL_TEST:
+            qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+            qof_backend_set_message( qbe,
+                                     "Postgresql DBI library fails large number test" );
+            break;
         }
         if ( dbi_test_result != GNC_DBI_PASS )
         {
@@ -1190,22 +1190,22 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
                 goto exit;
             }
             dbi_test_result = conn_test_dbi_library( be->conn );
-            switch( dbi_test_result )
+            switch ( dbi_test_result )
             {
-                case GNC_DBI_PASS:
-                    break;
+            case GNC_DBI_PASS:
+                break;
 
-                case GNC_DBI_FAIL_SETUP:
-                    qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
-                    qof_backend_set_message( qbe,
-                            "DBI library large number test incomplete" );
-                    break;
+            case GNC_DBI_FAIL_SETUP:
+                qof_backend_set_error( qbe, ERR_SQL_DBI_UNTESTABLE );
+                qof_backend_set_message( qbe,
+                                         "DBI library large number test incomplete" );
+                break;
 
-                case GNC_DBI_FAIL_TEST:
-                    qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
-                    qof_backend_set_message( qbe,
-                            "DBI library fails large number test" );
-                    break;
+            case GNC_DBI_FAIL_TEST:
+                qof_backend_set_error( qbe, ERR_SQL_BAD_DBI );
+                qof_backend_set_message( qbe,
+                                         "DBI library fails large number test" );
+                break;
             }
             if ( GNC_DBI_PASS != dbi_test_result )
             {
@@ -3025,7 +3025,7 @@ conn_test_dbi_library( dbi_conn conn )
         PWARN("Test_DBI_Library: Failed to retrieve test row into table: %s",
               errmsg );
         result = dbi_conn_query( conn, "DROP TABLE numtest" );
-	gnc_pop_locale( LC_NUMERIC );
+        gnc_pop_locale( LC_NUMERIC );
         return GNC_DBI_FAIL_SETUP;
     }
     while ( dbi_result_next_row( result ))

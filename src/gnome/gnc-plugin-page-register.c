@@ -1981,7 +1981,7 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
 {
     GncPluginPageRegisterPrivate *priv;
     GncPluginPage *plugin_page;
-    const char* filter; 
+    const char* filter;
 
     g_return_if_fail(GTK_IS_DIALOG(dialog));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
@@ -2001,11 +2001,11 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
     }
     else
     {
-        if(priv->fd.save_it)
-	{
-        filter = g_strdup_printf("0x%04x", priv->fd.cleared_match);
-        gnc_plugin_page_register_set_filter (plugin_page, filter);
-	}
+        if (priv->fd.save_it)
+        {
+            filter = g_strdup_printf("0x%04x", priv->fd.cleared_match);
+            gnc_plugin_page_register_set_filter (plugin_page, filter);
+        }
     }
     priv->fd.dialog = NULL;
     gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -2412,7 +2412,7 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
         return;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder ,"gnc-plugin-page-register.glade", "Void Transaction");
+    gnc_builder_add_from_file  (builder , "gnc-plugin-page-register.glade", "Void Transaction");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Void Transaction"));
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "reason"));
 
@@ -2620,7 +2620,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     {
         toggle = GTK_WIDGET(gtk_builder_get_object (builder, status_actions[i].action_name));
         value = priv->fd.cleared_match & status_actions[i].value;
-	status_actions[i].widget = toggle;
+        status_actions[i].widget = toggle;
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), value);
     }
     priv->fd.original_cleared_match = priv->fd.cleared_match;

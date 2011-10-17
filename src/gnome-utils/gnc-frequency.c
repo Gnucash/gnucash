@@ -202,18 +202,18 @@ gnc_frequency_init(GncFrequency *gf)
     };
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "adjustment1");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "adjustment2");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "adjustment3");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "adjustment4");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore1");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore2");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore3");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore4");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore5");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore6");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "liststore7");
-    gnc_builder_add_from_file  (builder ,"gnc-frequency.glade", "gncfreq_vbox");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment1");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment2");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment3");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment4");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore1");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore2");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore3");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore4");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore5");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore6");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "liststore7");
+    gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "gncfreq_vbox");
 
     gf->builder = builder;
     o = GTK_WIDGET(gtk_builder_get_object (builder, "gncfreq_nb"));

@@ -3456,7 +3456,7 @@ gnc_quartz_set_menu(GncMainWindow* window)
     if (GTK_IS_MENU_ITEM (item))
         gtk_widget_hide (GTK_WIDGET (item));
 
-   item = gtk_ui_manager_get_widget (window->ui_merge,
+    item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Edit/EditPreferences");
     if (GTK_IS_MENU_ITEM (item))
         gtk_osxapplication_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
@@ -3466,8 +3466,8 @@ gnc_quartz_set_menu(GncMainWindow* window)
     if (GTK_IS_MENU_ITEM (item))
     {
         gtk_osxapplication_insert_app_menu_item (theApp,
-						 gtk_separator_menu_item_new (),
-						 0);
+                gtk_separator_menu_item_new (),
+                0);
         gtk_osxapplication_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
     }
 

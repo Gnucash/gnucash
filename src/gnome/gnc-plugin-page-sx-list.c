@@ -338,7 +338,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_widget_show (priv->widget);
 
     /* Add vbox and label */
-    vbox = gtk_vbox_new(FALSE,0);
+    vbox = gtk_vbox_new(FALSE, 0);
     gtk_paned_pack1( GTK_PANED(widget), vbox, TRUE, FALSE);
 
     label = gtk_label_new(NULL);
@@ -353,7 +353,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_widget_show (vbox);
 
     /* Create scrolled window for top area */
-    swin = gtk_scrolled_window_new(NULL,NULL);
+    swin = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
@@ -400,7 +400,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     }
 
     /* Add vbox and label */
-    vbox = gtk_vbox_new(FALSE,0);
+    vbox = gtk_vbox_new(FALSE, 0);
     gtk_paned_pack2( GTK_PANED(widget), vbox, TRUE, FALSE);
 
     label = gtk_label_new(NULL);
@@ -416,7 +416,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_widget_show (vbox);
 
     /* Create scrolled window for bottom area */
-    swin = gtk_scrolled_window_new(NULL,NULL);
+    swin = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);

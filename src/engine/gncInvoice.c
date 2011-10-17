@@ -1158,20 +1158,20 @@ gboolean gncInvoiceAmountPositive (const GncInvoice *invoice)
 {
     switch (gncInvoiceGetType (invoice))
     {
-        case GNC_INVOICE_CUST_INVOICE:
-        case GNC_INVOICE_VEND_CREDIT_NOTE:
-        case GNC_INVOICE_EMPL_CREDIT_NOTE:
-            return TRUE;
-        case GNC_INVOICE_CUST_CREDIT_NOTE:
-        case GNC_INVOICE_VEND_INVOICE:
-        case GNC_INVOICE_EMPL_INVOICE:
-            return FALSE;
-        case GNC_INVOICE_UNDEFINED:
-        default:
-            /* Should never be reached.
-             * If it is, perhaps a new value is added to GncInvoiceType ? */
-            g_assert_not_reached();
-            return FALSE;
+    case GNC_INVOICE_CUST_INVOICE:
+    case GNC_INVOICE_VEND_CREDIT_NOTE:
+    case GNC_INVOICE_EMPL_CREDIT_NOTE:
+        return TRUE;
+    case GNC_INVOICE_CUST_CREDIT_NOTE:
+    case GNC_INVOICE_VEND_INVOICE:
+    case GNC_INVOICE_EMPL_INVOICE:
+        return FALSE;
+    case GNC_INVOICE_UNDEFINED:
+    default:
+        /* Should never be reached.
+         * If it is, perhaps a new value is added to GncInvoiceType ? */
+        g_assert_not_reached();
+        return FALSE;
     }
 }
 

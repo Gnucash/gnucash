@@ -186,7 +186,7 @@ lv_show_splits_in_lot (GNCLotViewer *lv)
     if (NULL == lot) return;
 
     split_list = gnc_lot_get_split_list (lot);
-    gnc_split_viewer_fill(lv,lv->split_in_lot_store,split_list);
+    gnc_split_viewer_fill(lv, lv->split_in_lot_store, split_list);
 }
 
 /* ======================================================================== */
@@ -217,13 +217,14 @@ lv_show_splits_free (GNCLotViewer *lv)
     for (node = split_list; node; node = node->next)
     {
         Split *split = node->data;
-        if (NULL == xaccSplitGetLot(split)) {
-          filtered_list = g_list_append(filtered_list,split);
+        if (NULL == xaccSplitGetLot(split))
+        {
+            filtered_list = g_list_append(filtered_list, split);
         }
     }
 
     /* display list */
-    gnc_split_viewer_fill(lv,lv->split_free_store,filtered_list);
+    gnc_split_viewer_fill(lv, lv->split_free_store, filtered_list);
 }
 
 /* ======================================================================== */
@@ -374,7 +375,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
         type_buff[0] = '\0';
         if ( NULL != gncInvoiceGetInvoiceFromLot(lot) )
         {
-                snprintf(type_buff,200,"I");
+            snprintf(type_buff, 200, "I");
         }
         gtk_list_store_set(store, &iter, LOT_COL_TYPE, type_buff, -1);
 
@@ -572,15 +573,18 @@ static void
 lv_update_split_buttons(GNCLotViewer *lv)
 {
     Split * split;
-    gtk_widget_set_sensitive(GTK_WIDGET(lv->add_split_to_lot_button),FALSE);
-    gtk_widget_set_sensitive(GTK_WIDGET(lv->remove_split_from_lot_button),FALSE);
-    if (NULL != lv->selected_lot) {
-        if (NULL != lv_get_selected_split(lv,lv->split_free_view) ) {
-            gtk_widget_set_sensitive(GTK_WIDGET(lv->add_split_to_lot_button),TRUE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lv->add_split_to_lot_button), FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(lv->remove_split_from_lot_button), FALSE);
+    if (NULL != lv->selected_lot)
+    {
+        if (NULL != lv_get_selected_split(lv, lv->split_free_view) )
+        {
+            gtk_widget_set_sensitive(GTK_WIDGET(lv->add_split_to_lot_button), TRUE);
         }
-        split = lv_get_selected_split(lv,lv->split_in_lot_view);
-        if (NULL != split && TRUE == lv_can_remove_split_from_lot(split,lv->selected_lot)) {
-            gtk_widget_set_sensitive(GTK_WIDGET(lv->remove_split_from_lot_button),TRUE);
+        split = lv_get_selected_split(lv, lv->split_in_lot_view);
+        if (NULL != split && TRUE == lv_can_remove_split_from_lot(split, lv->selected_lot))
+        {
+            gtk_widget_set_sensitive(GTK_WIDGET(lv->remove_split_from_lot_button), TRUE);
         }
     }
 }
@@ -682,7 +686,7 @@ lv_add_split_to_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
     Split *split;
 
     if ( NULL == lv->selected_lot ) return;
-    split = lv_get_selected_split(lv,lv->split_free_view);
+    split = lv_get_selected_split(lv, lv->split_free_view);
     if ( NULL == split ) return;
 
     xaccAccountBeginEdit(lv->account);
@@ -700,10 +704,10 @@ lv_remove_split_from_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
     Split *split;
 
     if ( NULL == lv->selected_lot ) return;
-    split = lv_get_selected_split(lv,lv->split_in_lot_view);
+    split = lv_get_selected_split(lv, lv->split_in_lot_view);
     if ( NULL == split ) return;
 
-    if ( FALSE == lv_can_remove_split_from_lot(split,lv->selected_lot) )
+    if ( FALSE == lv_can_remove_split_from_lot(split, lv->selected_lot) )
         return;
 
     xaccAccountBeginEdit(lv->account);
@@ -827,38 +831,38 @@ lv_init_lot_view (GNCLotViewer *lv)
     /* Set up the columns */
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Type"), renderer,
-            "text", LOT_COL_TYPE, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_TYPE);
+             "text", LOT_COL_TYPE, NULL);
+    gtk_tree_view_column_set_sort_column_id(column, LOT_COL_TYPE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Opened"), renderer,
              "text", LOT_COL_OPEN, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_OPEN);
+    gtk_tree_view_column_set_sort_column_id(column, LOT_COL_OPEN);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Closed"), renderer,
              "text", LOT_COL_CLOSE, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_CLOSE);
+    gtk_tree_view_column_set_sort_column_id(column, LOT_COL_CLOSE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Title"), renderer,
              "text", LOT_COL_TITLE, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_TITLE);
+    gtk_tree_view_column_set_sort_column_id(column, LOT_COL_TITLE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
              "text", LOT_COL_BALN, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_BALN);
+    gtk_tree_view_column_set_sort_column_id(column, LOT_COL_BALN);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Gains"), renderer,
              "text", LOT_COL_GAINS, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,LOT_COL_GAINS);
+    gtk_tree_view_column_set_sort_column_id(column, LOT_COL_GAINS);
     gtk_tree_view_append_column(view, column);
 
     /* Set up signals */
@@ -880,7 +884,7 @@ lv_init_split_view (GNCLotViewer *lv, GtkTreeView *view)
     GtkTreeSelection *selection;
     GtkCellRenderer *renderer;
 
-    g_return_val_if_fail(GTK_IS_TREE_VIEW(view),NULL);
+    g_return_val_if_fail(GTK_IS_TREE_VIEW(view), NULL);
 
     store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_STRING, G_TYPE_STRING,
                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
@@ -893,49 +897,49 @@ lv_init_split_view (GNCLotViewer *lv, GtkTreeView *view)
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
              "text", SPLIT_COL_DATE, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_DATE);
+    gtk_tree_view_column_set_sort_column_id(column, SPLIT_COL_DATE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Num"), renderer,
              "text", SPLIT_COL_NUM, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_NUM);
+    gtk_tree_view_column_set_sort_column_id(column, SPLIT_COL_NUM);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Description"), renderer,
              "text", SPLIT_COL_DESCRIPTION, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_DESCRIPTION);
+    gtk_tree_view_column_set_sort_column_id(column, SPLIT_COL_DESCRIPTION);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Amount"), renderer,
              "text", SPLIT_COL_AMOUNT, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_AMOUNT);
+    gtk_tree_view_column_set_sort_column_id(column, SPLIT_COL_AMOUNT);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Value"), renderer,
              "text", SPLIT_COL_VALUE, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_VALUE);
+    gtk_tree_view_column_set_sort_column_id(column, SPLIT_COL_VALUE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Gain/Loss"), renderer,
              "text", SPLIT_COL_GAIN_LOSS, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_GAIN_LOSS);
+    gtk_tree_view_column_set_sort_column_id(column, SPLIT_COL_GAIN_LOSS);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
              "text", SPLIT_COL_BALANCE, NULL);
-    gtk_tree_view_column_set_sort_column_id(column,SPLIT_COL_BALANCE);
+    gtk_tree_view_column_set_sort_column_id(column, SPLIT_COL_BALANCE);
     gtk_tree_view_append_column(view, column);
 
     /* Set up the selection callbacks */
     selection =  gtk_tree_view_get_selection(view);
     g_signal_connect(selection, "changed",
-            G_CALLBACK(lv_split_selection_changed_cb), lv);
+                     G_CALLBACK(lv_split_selection_changed_cb), lv);
 
     return store;
 }
@@ -943,8 +947,8 @@ lv_init_split_view (GNCLotViewer *lv, GtkTreeView *view)
 static void
 lv_init_split_views (GNCLotViewer *lv)
 {
-    lv->split_free_store = lv_init_split_view (lv,lv->split_free_view);
-    lv->split_in_lot_store = lv_init_split_view (lv,lv->split_in_lot_view);
+    lv->split_free_store = lv_init_split_view (lv, lv->split_free_view);
+    lv->split_in_lot_store = lv_init_split_view (lv, lv->split_in_lot_view);
 }
 
 static void

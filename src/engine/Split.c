@@ -731,7 +731,7 @@ xaccSplitCommitEdit(Split *s)
     orig_acc = s->orig_acc;
 
     if (GNC_IS_ACCOUNT(s->acc))
-        acc=s->acc;
+        acc = s->acc;
 
     /* Remove from lot (but only if it hasn't been moved to
        new lot already) */

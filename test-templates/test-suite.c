@@ -41,39 +41,39 @@ typedef struct
 static void
 setup_module_test(Fixture *fixture, gconstpointer pData)
 {
-/* Do something useful */
+    /* Do something useful */
 }
 
 static void
 teardown_module_test(Fixture *fixture, gconstpointer pData)
 {
-/* Clean up after ourselves */
+    /* Clean up after ourselves */
 }
 
 static void
 test_function( void )
 {
-/* A simple test function */
+    /* A simple test function */
 }
 
 static void
 test_function_with_data( gconstpointer data )
 {
-/* a more complicated function that needs arguments at invocation */
+    /* a more complicated function that needs arguments at invocation */
 }
 
 static void
 test_function_with_fixture( Fixture *fixture, gconstpointer pData )
 {
-/* A really complicated function that needs an external test fixture */
+    /* A really complicated function that needs an external test fixture */
 }
 
 static void
 test_performance_function( void )
 {
-/* A slow function that measures performance of some critical
- * routine. Note g_test_timer functions for simple perfomance
- * measurements. */
+    /* A slow function that measures performance of some critical
+     * routine. Note g_test_timer functions for simple perfomance
+     * measurements. */
 }
 
 /* Assert macros that you can use in your test functions. "cmp" is a
@@ -98,16 +98,16 @@ test_suite_module1 ( void )
     Datatype data = something();
     g_test_add_func( suitename, test_function );
     g_test_add_data_func( suitename, (gconstpointer)(&data),
-			  test_function_with_data );
+                          test_function_with_data );
     g_test_add( suitename, Fixture,
-		data,
-		setup_module_test,
-		test_function_with_fixture,
-		teardown_module_test);
-/* Other conditionals are g_test_quick(), g_test_slow(), and
- * g_test_thorough() */
+                data,
+                setup_module_test,
+                test_function_with_fixture,
+                teardown_module_test);
+    /* Other conditionals are g_test_quick(), g_test_slow(), and
+     * g_test_thorough() */
     if ( g_test_perf() )
     {
-	g_test_add_func( suitename, test_performance_func );
+        g_test_add_func( suitename, test_performance_func );
     }
 }

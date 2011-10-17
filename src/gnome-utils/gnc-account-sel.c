@@ -331,7 +331,7 @@ gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct, gboolean set_def
         if ( !acct )
         {
             GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(gas->combo)));
-            gtk_editable_delete_text(GTK_EDITABLE(entry),0,-1);
+            gtk_editable_delete_text(GTK_EDITABLE(entry), 0, -1);
             return;
         }
     }

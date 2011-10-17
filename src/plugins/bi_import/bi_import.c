@@ -601,8 +601,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 
             // open new bill / invoice in a tab, if requested
             if (g_ascii_strcasecmp(open_mode, "ALL") == 0
-					|| (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
-							&& strlen(date_posted) == 0))
+                    || (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
+                        && strlen(date_posted) == 0))
             {
                 iw =  gnc_ui_invoice_edit (invoice);
                 new_page = gnc_plugin_page_invoice_new (iw);

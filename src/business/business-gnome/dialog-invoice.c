@@ -2714,7 +2714,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
             GList *type_list = NULL, *node = NULL;
 
             type_list = gncInvoiceGetTypeListForOwnerType(owner_type);
-            for (node = type_list; node; node=node->next)
+            for (node = type_list; node; node = node->next)
             {
                 inv_type_pred = qof_query_int32_predicate(QOF_COMPARE_EQUAL,
                                 GPOINTER_TO_INT(node->data));
