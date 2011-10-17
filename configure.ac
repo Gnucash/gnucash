@@ -1304,6 +1304,7 @@ AC_CONFIG_FILES(
   src/libqof/qof/test/Makefile
   src/optional/Makefile
   src/optional/gtkmm/Makefile
+  src/optional/gtkmm/test/Makefile
   src/optional/python-bindings/Makefile
   src/optional/python-bindings/tests/Makefile
   src/pixmaps/Makefile
