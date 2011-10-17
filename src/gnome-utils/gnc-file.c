@@ -557,8 +557,6 @@ gnc_file_query_save (gboolean can_cancel)
         gint response;
         const char *title = _("Save changes to the file?");
         /* This should be the same message as in gnc-main-window.c */
-        const gchar *message =
-            _("If you don't save, changes from the past %d minutes will be discarded.");
         time_t oldest_change;
         gint minutes;
 
@@ -570,7 +568,9 @@ gnc_file_query_save (gboolean can_cancel)
         oldest_change = qof_book_get_dirty_time(current_book);
         minutes = (time(NULL) - oldest_change) / 60 + 1;
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                message, minutes);
+                ngettext("If you don't save, changes from the past %d minute will be discarded.",
+                         "If you don't save, changes from the past %d minutes will be discarded.",
+                         minutes), minutes);
         gtk_dialog_add_button(GTK_DIALOG(dialog),
                               _("Continue _Without Saving"), GTK_RESPONSE_OK);
 

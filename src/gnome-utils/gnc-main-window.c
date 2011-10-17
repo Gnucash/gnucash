@@ -1124,8 +1124,6 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
     const gchar *filename, *tmp;
     const gchar *title = _("Save changes to file %s before closing?");
     /* This should be the same message as in gnc-file.c */
-    const gchar *message_mins =
-        _("If you don't save, changes from the past %d minutes will be discarded.");
     const gchar *message_hours =
         _("If you don't save, changes from the past %d hours and %d minutes will be discarded.");
     const gchar *message_days =
@@ -1169,7 +1167,9 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
     else
     {
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                message_mins, minutes);
+                ngettext("If you don't save, changes from the past %d minute will be discarded.",
+                         "If you don't save, changes from the past %d minutes will be discarded.",
+                         minutes), minutes);
     }
     gtk_dialog_add_buttons(GTK_DIALOG(dialog),
                            _("Close _Without Saving"), GTK_RESPONSE_CLOSE,
