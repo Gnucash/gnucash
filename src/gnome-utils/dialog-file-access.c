@@ -26,7 +26,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <glade/glade.h>
 
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -54,6 +53,7 @@ typedef struct FileAccessWindow
     GtkWidget* frame_file;
     GtkWidget* frame_database;
     GtkFileChooser* fileChooser;
+    gchar *starting_dir;
     GtkComboBox* cb_uri_type;
     GtkEntry* tf_host;
     GtkEntry* tf_database;
@@ -167,6 +167,7 @@ set_widget_sensitivity( FileAccessWindow* faw, gboolean is_file_based_uri )
     {
         gtk_widget_show(faw->frame_file);
         gtk_widget_hide(faw->frame_database);
+        gtk_file_chooser_set_current_folder(faw->fileChooser, faw->starting_dir);
     }
     else
     {
@@ -231,11 +232,11 @@ static void
 gnc_ui_file_access( int type )
 {
     FileAccessWindow *faw;
-    GladeXML* xml;
+    GtkBuilder* builder;
     GtkWidget* box;
     GList* ds_node;
     GtkButton* op;
-    GtkWidget* align;
+    GtkWidget* file_chooser;
     GtkFileChooserWidget* fileChooser;
     GtkFileChooserAction fileChooserAction = GTK_FILE_CHOOSER_ACTION_OPEN;
     GList* list;
@@ -252,7 +253,6 @@ gnc_ui_file_access( int type )
     const gchar *button_label = NULL;
     const gchar *gconf_section = NULL;
     gchar *last;
-    gchar *starting_dir = NULL;
 
     g_return_if_fail( type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS || type == FILE_ACCESS_EXPORT );
 
@@ -260,22 +260,24 @@ gnc_ui_file_access( int type )
     g_return_if_fail( faw != NULL );
 
     faw->type = type;
+    faw->starting_dir = NULL;
 
     /* Open the dialog */
-    xml = gnc_glade_xml_new( "dialog-file-access.glade", "File Access" );
-    faw->dialog = glade_xml_get_widget( xml, "File Access" );
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-file-access.glade", "File Access" );
+    faw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "File Access" ));
     g_object_set_data_full( G_OBJECT(faw->dialog), "FileAccessWindow", faw,
                             g_free );
 
-    faw->frame_file = glade_xml_get_widget( xml, "frame_file" );
-    faw->frame_database = glade_xml_get_widget( xml, "frame_database" );
-    faw->tf_host = GTK_ENTRY(glade_xml_get_widget( xml, "tf_host" ));
+    faw->frame_file = GTK_WIDGET(gtk_builder_get_object (builder, "frame_file" ));
+    faw->frame_database = GTK_WIDGET(gtk_builder_get_object (builder, "frame_database" ));
+    faw->tf_host = GTK_ENTRY(gtk_builder_get_object (builder, "tf_host" ));
     gtk_entry_set_text( faw->tf_host, DEFAULT_HOST );
-    faw->tf_database = GTK_ENTRY(glade_xml_get_widget( xml, "tf_database" ));
+    faw->tf_database = GTK_ENTRY(gtk_builder_get_object (builder, "tf_database" ));
     default_db = get_default_database();
     gtk_entry_set_text( faw->tf_database, default_db );
-    faw->tf_username = GTK_ENTRY(glade_xml_get_widget( xml, "tf_username" ));
-    faw->tf_password = GTK_ENTRY(glade_xml_get_widget( xml, "tf_password" ));
+    faw->tf_username = GTK_ENTRY(gtk_builder_get_object (builder, "tf_username" ));
+    faw->tf_password = GTK_ENTRY(gtk_builder_get_object (builder, "tf_password" ));
 
     switch ( type )
     {
@@ -301,17 +303,17 @@ gnc_ui_file_access( int type )
         break;
     }
 
-    op = GTK_BUTTON(glade_xml_get_widget( xml, "pb_op" ));
+    op = GTK_BUTTON(gtk_builder_get_object (builder, "pb_op" ));
     if ( op != NULL )
     {
         gtk_button_set_label( op, button_label );
         gtk_button_set_use_stock( op, TRUE );
     }
 
-    align = glade_xml_get_widget( xml, "alignment_file_chooser" );
+    file_chooser = GTK_WIDGET(gtk_builder_get_object (builder, "file_chooser" ));
     fileChooser = GTK_FILE_CHOOSER_WIDGET(gtk_file_chooser_widget_new( fileChooserAction ));
     faw->fileChooser = GTK_FILE_CHOOSER(fileChooser);
-    gtk_container_add( GTK_CONTAINER(align), GTK_WIDGET(fileChooser) );
+    gtk_box_pack_start( GTK_BOX(file_chooser), GTK_WIDGET(fileChooser),TRUE, TRUE, 6 );
 
     /* Set the default directory */
     if (type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS)
@@ -320,18 +322,18 @@ gnc_ui_file_access( int type )
         if ( last && gnc_uri_is_file_uri ( last ) )
         {
             gchar *filepath = gnc_uri_get_path ( last );
-            starting_dir = g_path_get_dirname( filepath );
+            faw->starting_dir = g_path_get_dirname( filepath );
             g_free ( filepath );
         }
     }
-    if (!starting_dir)
-        starting_dir = gnc_get_default_directory(gconf_section);
-    gtk_file_chooser_set_current_folder(faw->fileChooser, starting_dir);
+    if (!faw->starting_dir)
+        faw->starting_dir = gnc_get_default_directory(gconf_section);
+    gtk_file_chooser_set_current_folder(faw->fileChooser, faw->starting_dir);
 
     g_object_connect( G_OBJECT(faw->fileChooser), "signal::file-activated",
                       gnc_ui_file_access_file_activated_cb, faw, NULL );
 
-    uri_type_container = glade_xml_get_widget( xml, "vb_uri_type_container" );
+    uri_type_container = GTK_WIDGET(gtk_builder_get_object (builder, "vb_uri_type_container" ));
     faw->cb_uri_type = GTK_COMBO_BOX(gtk_combo_box_new_text());
     gtk_container_add( GTK_CONTAINER(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
     gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type),
@@ -341,8 +343,7 @@ gnc_ui_file_access( int type )
                       NULL );
 
     /* Autoconnect signals */
-    glade_xml_signal_autoconnect_full( xml, gnc_glade_autoconnect_full_func,
-                                       faw->dialog );
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, faw);
 
     /* See what qof backends are available and add appropriate ones to the combo box */
     list = qof_backend_get_registered_access_method_list();
@@ -420,9 +421,7 @@ gnc_ui_file_access( int type )
     }
     g_assert( active_access_method_index >= 0 );
 
-    /* Clean up the xml data structure when the dialog is destroyed */
-    g_object_set_data_full( G_OBJECT(faw->dialog), "dialog-file-access.glade",
-                            xml, g_object_unref );
+    g_object_unref(G_OBJECT(builder));
 
     /* Run the dialog */
     gtk_widget_show_all( faw->dialog );

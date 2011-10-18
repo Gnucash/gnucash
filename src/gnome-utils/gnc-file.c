@@ -579,6 +579,9 @@ gnc_file_query_save (gboolean can_cancel)
                                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
         gtk_dialog_add_button(GTK_DIALOG(dialog),
                               GTK_STOCK_SAVE, GTK_RESPONSE_YES);
+
+        gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+
         response = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
 

@@ -233,6 +233,7 @@ src/gnome/gtkbuilder/dialog-progress.glade
 src/gnome/gtkbuilder/dialog-sx.glade
 src/gnome/gtkbuilder/gnc-plugin-page-budget.glade
 src/gnome/gtkbuilder/gnc-plugin-page-register.glade
+src/gnome/gtkbuilder/sched-xact.glade
 src/gnome/gtkbuilder/tax.glade
 src/gnome/gtkbuilder/window-autoclear.glade
 src/gnome/gtkbuilder/window-reconcile.glade
@@ -283,7 +284,6 @@ src/gnome-utils/druid-gconf-setup.c
 src/gnome-utils/druid-gnc-xml-import.c
 src/gnome-utils/druid-utils.c
 src/gnome-utils/glade/dialog-book-close.glade
-src/gnome-utils/glade/dialog-file-access.glade
 src/gnome-utils/glade/dialog-object-references.glade
 src/gnome-utils/glade/dialog-query-list.glade
 src/gnome-utils/glade/dialog-reset-warnings.glade
@@ -293,7 +293,6 @@ src/gnome-utils/glade/druid-provider-multifile.glade
 src/gnome-utils/glade/exchange-dialog.glade
 src/gnome-utils/glade/gnc-gui-query.glade
 src/gnome-utils/glade/preferences.glade
-src/gnome-utils/glade/totd.glade
 src/gnome-utils/gnc-account-sel.c
 src/gnome-utils/gnc-amount-edit.c
 src/gnome-utils/gnc-autosave.c
@@ -350,6 +349,8 @@ src/gnome-utils/gnc-tree-view-sx-list.c
 src/gnome-utils/gnc-window.c
 src/gnome-utils/gtkbuilder/dialog-account.glade
 src/gnome-utils/gtkbuilder/dialog-commodity.glade
+src/gnome-utils/gtkbuilder/dialog-file-access.glade
+src/gnome-utils/gtkbuilder/dialog-totd.glade
 src/gnome-utils/gtkbuilder/dialog-transfer.glade
 src/gnome-utils/gtkbuilder/dialog-userpass.glade
 src/gnome-utils/gtkbuilder/gnc-date-format.glade
