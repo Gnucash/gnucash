@@ -1,6 +1,5 @@
 gtkbuilderdir = $(GNC_GTKBUILDER_DIR)
 gtkbuilder_DATA = \
-	account.glade \
 	assistant-acct-period.glade \
 	assistant-hierarchy.glade \
 	assistant-loan.glade \
@@ -15,7 +14,6 @@ gtkbuilder_DATA = \
 	dialog-sx.glade \
 	gnc-plugin-page-budget.glade \
 	gnc-plugin-page-register.glade \
-	owner.glade \
 	tax.glade \
 	window-autoclear.glade \
 	window-reconcile.glade

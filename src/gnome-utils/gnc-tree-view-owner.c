@@ -1348,13 +1348,11 @@ gppot_filter_response_cb (GtkWidget *dialog,
                           gint       response,
                           OwnerFilterDialog *fd)
 {
-    GtkWidget *view;
     gpointer gptemp;
 
     g_return_if_fail(GTK_IS_DIALOG(dialog));
 
     ENTER("dialog %p, response %d", dialog, response);
-    view = gnc_glade_lookup_widget(dialog, FILTER_TREE_VIEW);
 
     if (response != GTK_RESPONSE_OK)
     {
@@ -1390,7 +1388,7 @@ owner_filter_dialog_create(OwnerFilterDialog *fd, GncPluginPage *page)
 
     /* Create the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "owner.glade", "Filter By");
+    gnc_builder_add_from_file (builder, "gnc-tree-view-owner.glade", "Filter By");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Filter By"));
     fd->dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),

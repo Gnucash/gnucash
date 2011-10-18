@@ -1928,13 +1928,11 @@ gppat_filter_response_cb (GtkWidget *dialog,
                           gint       response,
                           AccountFilterDialog *fd)
 {
-    GtkWidget *view;
     gpointer gptemp;
 
     g_return_if_fail(GTK_IS_DIALOG(dialog));
 
     ENTER("dialog %p, response %d", dialog, response);
-    view = gnc_glade_lookup_widget(dialog, FILTER_TREE_VIEW);
 
     if (response != GTK_RESPONSE_OK)
     {
@@ -1973,7 +1971,7 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
 
     /* Create the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "account.glade", "Filter By");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "Filter By");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Filter By"));
     fd->dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),

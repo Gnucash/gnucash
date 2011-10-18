@@ -1311,8 +1311,8 @@ gnc_account_window_create(AccountWindow *aw)
 
     ENTER("aw %p, modal %d", aw, aw->modal);
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "account.glade", "fraction_liststore");
-    gnc_builder_add_from_file (builder, "account.glade", "Account Dialog");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "fraction_liststore");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "Account Dialog");
 
     aw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Account Dialog"));
     awo = G_OBJECT (aw->dialog);
@@ -1980,8 +1980,8 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     data->num_children = gnc_account_n_children(account);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "account.glade", "interval_adjustment");
-    gnc_builder_add_from_file (builder, "account.glade", "Renumber Accounts");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "interval_adjustment");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "Renumber Accounts");
     data->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Renumber Accounts"));
     gtk_window_set_transient_for(GTK_WINDOW(data->dialog), GTK_WINDOW(window));
     g_object_set_data_full(G_OBJECT(data->dialog), "builder", builder, g_object_unref);
