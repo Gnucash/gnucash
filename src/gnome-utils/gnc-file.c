@@ -628,7 +628,7 @@ gnc_post_file_open (const char * filename)
 
 
     ENTER(" ");
-
+RESTART:
     if (!filename) return FALSE;
 
     /* Convert user input into a normalized uri
@@ -694,8 +694,26 @@ gnc_post_file_open (const char * filename)
 
     qof_session_begin (new_session, newfile, FALSE, FALSE, FALSE);
     io_err = qof_session_get_error (new_session);
+
+    if (ERR_BACKEND_BAD_URL == io_err)
+    {
+	gchar *directory;
+	show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
+	io_err = ERR_BACKEND_NO_ERR;
+	if (g_file_test (filename, G_FILE_TEST_IS_DIR))
+	    directory = g_strdup (filename);
+	else
+	    directory = gnc_get_default_directory (GCONF_DIR_OPEN_SAVE);
+
+	filename = gnc_file_dialog (NULL, NULL, directory,
+				    GNC_FILE_DIALOG_OPEN);
+	qof_session_destroy (new_session);
+	new_session = NULL;
+	g_free (directory);
+	goto RESTART;
+    }
     /* if file appears to be locked, ask the user ... */
-    if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
+    else if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
         GtkWidget *dialog;
         gchar *displayname = NULL;

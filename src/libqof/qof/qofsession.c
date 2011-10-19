@@ -1100,7 +1100,7 @@ void
 qof_session_begin (QofSession *session, const char * book_id,
                    gboolean ignore_lock, gboolean create, gboolean force)
 {
-    gchar **splituri;
+    gchar *scheme = NULL, *filename = NULL;
 
     if (!session) return;
 
@@ -1128,6 +1128,22 @@ qof_session_begin (QofSession *session, const char * book_id,
         LEAVE("push error missing book_id");
         return;
     }
+    scheme = g_uri_parse_scheme (book_id);
+    if (g_strcmp0 (scheme, "file") == 0)
+	filename = g_filename_from_uri (book_id, NULL, NULL);
+    else if (!scheme)
+	filename = g_strdup (book_id);
+
+    if (filename && g_file_test (filename, G_FILE_TEST_IS_DIR))
+    {
+        if (ERR_BACKEND_NO_ERR == qof_session_get_error(session))
+            qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
+	g_free (filename);
+	g_free (scheme);
+        LEAVE("Can't open a directory");
+        return;
+    }
+
 
     /* destroy the old backend */
     qof_session_destroy_backend(session);
@@ -1135,16 +1151,12 @@ qof_session_begin (QofSession *session, const char * book_id,
     /* Store the session URL  */
     session->book_id = g_strdup (book_id);
 
-    /* Look for something of the form of "file://", "http://" or
-     * "postgres://". Everything before the colon is the access
-     * method.  Load the first backend found for that access method.
-     */
-    splituri = g_strsplit ( book_id, "://", 2 );
-    if ( splituri[1] == NULL ) /* no access method in the uri, use generic "file" backend */
+    if (filename)
         qof_session_load_backend(session, "file");
     else                       /* access method found, load appropriate backend */
-        qof_session_load_backend(session, splituri[0]);
-    g_strfreev ( splituri );
+        qof_session_load_backend(session, scheme);
+    g_free (filename);
+    g_free (scheme);
 
     /* No backend was found. That's bad. */
     if (NULL == session->backend)
