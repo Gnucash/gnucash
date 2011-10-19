@@ -131,6 +131,13 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
         {
             return;
         }
+
+	if ( g_file_test( g_filename_from_uri( url, NULL, NULL ),
+			  G_FILE_TEST_IS_DIR ))
+	{
+	    gtk_file_chooser_set_current_folder_uri( faw->fileChooser, url );
+	    return;
+	}
         if ( faw->type == FILE_ACCESS_OPEN )
         {
             gnc_file_open_file( url );
