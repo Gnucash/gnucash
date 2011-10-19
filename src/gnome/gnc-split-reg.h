@@ -29,8 +29,6 @@
 #ifndef GNC_SPLIT_REG_H
 #define GNC_SPLIT_REG_H
 
-#include <libguile.h>
-
 #include "gnc-ledger-display.h"
 #include "gnucash-sheet.h"
 
