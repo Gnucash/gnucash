@@ -31,7 +31,6 @@
 #include <gmodule.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <libguile.h>
 
 #include "gnc-hooks.h"
 #include "gnc-module.h"
