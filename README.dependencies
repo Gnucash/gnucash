@@ -85,6 +85,9 @@ webkit: new html renderer
   --------
 aqbanking: online banking
 libdbi + desired database layer: SQL backend
+
+NOTE: If you configure --enable-dbi (which is a default) you should ensure that libsqlite3.so and libdbdsqlite3.so are installed and available. They are needed both for make check to succeed and to ensure that the (rather convoluted) initialization code is able to correctly detect normal XML files.
+
 libofx
 python: python bindings
 
