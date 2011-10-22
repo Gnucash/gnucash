@@ -65,7 +65,7 @@ void SplitListModel::recreateCache()
     m_hash.clear();
     for (int k = 0; k < m_list.size(); ++k)
     {
-        m_hash.insert(Split(m_list[k]).getParent().gobj(), k);
+        m_hash.insert(Split(m_list[k]).getParent().get(), k);
     }
 
     if (doReset)
@@ -83,10 +83,10 @@ void SplitListModel::recreateTmpTrans()
     m_tmpTransaction.setDatePosted(QDate::currentDate());
     TmpSplit& oursplit = m_tmpTransaction.getSplits().front();
     TmpSplit& othersplit = m_tmpTransaction.getSplits().back();
-    oursplit.setAccount(m_account.gobj());
+    oursplit.setAccount(m_account.get());
 
     Q_ASSERT(m_tmpTransaction.countSplits() == 2);
-    Q_ASSERT(oursplit.getAccount() == m_account.gobj());
+    Q_ASSERT(oursplit.getAccount() == m_account.get());
     Q_ASSERT(othersplit.getAccount() == NULL);
 }
 
@@ -105,10 +105,10 @@ QModelIndex SplitListModel::index(int row, int column,
         return createIndex(row, column, (void*)NULL);
 
     Split childItem = m_list.at(row);
-    if (childItem.gobj())
+    if (childItem.get())
     {
         //qDebug() << "returning" << childItem.getName();
-        return createIndex(row, column, childItem.gobj());
+        return createIndex(row, column, childItem.get());
     }
     else
         return QModelIndex();
@@ -272,7 +272,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
 
         Split split(static_cast< ::Split*>(index.internalPointer()));
         Transaction trans(split.getParent());
-        Numeric amount = split.getValue(); // Alternatively: xaccSplitConvertAmount(split.gobj(), split.getAccount().gobj());
+        Numeric amount = split.getValue(); // Alternatively: xaccSplitConvertAmount(split.get(), split.getAccount().get());
         PrintAmountInfo printInfo(split, false);
 
         switch (index.column())
@@ -413,7 +413,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
 
         TmpTransaction& trans = m_tmpTransaction;
         TmpSplit& split = trans.getSplits().front();
-        Q_ASSERT(split.getAccount() == m_account.gobj());
+        Q_ASSERT(split.getAccount() == m_account.get());
         Q_ASSERT(trans.countSplits() == 2);
         TmpSplit& other = trans.getSplits().back();
 
@@ -679,7 +679,7 @@ void SplitListModel::transactionEvent( ::Transaction* trans, QofEventId event_ty
 
 void SplitListModel::accountEvent( ::Account* acc, QofEventId event_type)
 {
-    if (acc != m_account.gobj())
+    if (acc != m_account.get())
         return;
     //qDebug() << "SplitListModel::accountEvent, id=" << qofEventToString(event_type);
 

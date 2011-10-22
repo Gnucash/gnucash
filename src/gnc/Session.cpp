@@ -33,7 +33,7 @@ namespace gnc
 
 Book Session::get_book () const
 {
-    return Book(qof_session_get_book(gobj()));
+    return Book(qof_session_get_book(get()));
 }
 
 

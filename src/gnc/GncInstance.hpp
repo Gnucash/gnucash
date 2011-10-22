@@ -54,15 +54,15 @@ public:
             : base_class(ptr)
     { }
 
-    GncInstance< ::QofBook > getBook() const { return qof_instance_get_book (QOF_INSTANCE(base_class::gobj())); }
-    ::GncGUID getGUID() const { return qof_entity_get_guid(QOF_INSTANCE(base_class::gobj())); }
+    GncInstance< ::QofBook > getBook() const { return qof_instance_get_book (QOF_INSTANCE(base_class::get())); }
+    ::GncGUID getGUID() const { return qof_entity_get_guid(QOF_INSTANCE(base_class::get())); }
 
-    bool is_dirty() const { return qof_instance_get_dirty(QOF_INSTANCE(base_class::gobj())); }
-    void set_dirty() { return qof_instance_set_dirty(QOF_INSTANCE(base_class::gobj())); }
-    void mark_clean() { return qof_instance_mark_clean(QOF_INSTANCE(base_class::gobj())); }
+    bool is_dirty() const { return qof_instance_get_dirty(QOF_INSTANCE(base_class::get())); }
+    void set_dirty() { return qof_instance_set_dirty(QOF_INSTANCE(base_class::get())); }
+    void mark_clean() { return qof_instance_mark_clean(QOF_INSTANCE(base_class::get())); }
 
-    //bool check_type(const char* type_id) { return (0 == g_strcmp0(type_id, QOF_INSTANCE(base_class::gobj())->e_type)); }
-    //Slots getSlots() const { return qof_instance_get_slots(QOF_INSTANCE(gobj())); }
+    //bool check_type(const char* type_id) { return (0 == g_strcmp0(type_id, QOF_INSTANCE(base_class::get())->e_type)); }
+    //Slots getSlots() const { return qof_instance_get_slots(QOF_INSTANCE(get())); }
 };
 
 } // END namespace gnc

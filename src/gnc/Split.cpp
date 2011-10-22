@@ -29,17 +29,17 @@
 namespace gnc
 {
 
-Account Split::getAccount() const { return xaccSplitGetAccount(gobj()); }
-void Split::setAccount(Account acc) { xaccSplitSetAccount(gobj(), acc.gobj()); }
-void Split::setAccount(::Account* acc) { xaccSplitSetAccount(gobj(), acc); }
+Account Split::getAccount() const { return xaccSplitGetAccount(get()); }
+void Split::setAccount(Account acc) { xaccSplitSetAccount(get(), acc.get()); }
+void Split::setAccount(::Account* acc) { xaccSplitSetAccount(get(), acc); }
 
 
-Transaction Split::getParent() const { return xaccSplitGetParent(gobj()); }
-void Split::setParent(Transaction& trans) { xaccSplitSetParent(gobj(), trans.gobj()); }
+Transaction Split::getParent() const { return xaccSplitGetParent(get()); }
+void Split::setParent(Transaction& trans) { xaccSplitSetParent(get(), trans.get()); }
 
 
 TmpSplit::TmpSplit(const Split& s, const TmpTransaction* parent_trans)
-        : m_account(s.getAccount().gobj())
+        : m_account(s.getAccount().get())
         , m_parent(parent_trans)
         , m_memo(s.getMemo())
         , m_action(s.getAction())
@@ -80,7 +80,7 @@ void TmpSplit::clear(::Account* account)
 
 void TmpSplit::copyInto(Transaction& t) const
 {
-    Split s(xaccMallocSplit(t.getBook().gobj()));
+    Split s(xaccMallocSplit(t.getBook().get()));
     s.setAccount(m_account);
     s.setParent(t);
     s.setMemo(m_memo);

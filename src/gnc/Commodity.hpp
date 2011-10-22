@@ -46,17 +46,17 @@ public:
     Commodity(element_type *ptr = 0)
             : base_class(ptr)
     {}
-    QString get_mnemonic() const { return gnc_commodity_get_mnemonic(gobj()); }
-    QString get_namespace() const { return gnc_commodity_get_namespace(gobj()); }
-    QString get_fullname() const { return gnc_commodity_get_fullname(gobj()); }
-    QString get_printname() const { return gnc_commodity_get_printname(gobj()); }
+    QString get_mnemonic() const { return gnc_commodity_get_mnemonic(get()); }
+    QString get_namespace() const { return gnc_commodity_get_namespace(get()); }
+    QString get_fullname() const { return gnc_commodity_get_fullname(get()); }
+    QString get_printname() const { return gnc_commodity_get_printname(get()); }
 
-    int get_fraction() const { return gnc_commodity_get_fraction(gobj()); }
-    bool get_quote_flag() const { return gnc_commodity_get_quote_flag(gobj()); }
+    int get_fraction() const { return gnc_commodity_get_fraction(get()); }
+    bool get_quote_flag() const { return gnc_commodity_get_quote_flag(get()); }
 
-    bool is_currency() const { return gnc_commodity_is_currency(gobj()); }
+    bool is_currency() const { return gnc_commodity_is_currency(get()); }
 
-    bool equal(const Commodity& other) const { return gnc_commodity_equal(gobj(), other.gobj()); }
+    bool equal(const Commodity& other) const { return gnc_commodity_equal(get(), other.get()); }
 };
 
 inline bool operator==(const Commodity& a, const Commodity& b)

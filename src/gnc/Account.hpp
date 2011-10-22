@@ -59,25 +59,25 @@ public:
     Account(element_type* ptr = 0)
             : base_class(ptr)
     { }
-    QString getName() const { return QString::fromUtf8(xaccAccountGetName(gobj())); }
-    QString getFullName() const { return gchar_to_QString(gnc_account_get_full_name (gobj())); }
-    QString getCode() const { return QString::fromUtf8(xaccAccountGetCode(gobj())); }
-    QString getDescription() const { return QString::fromUtf8(xaccAccountGetDescription(gobj())); }
-    Commodity getCommodity() const { return xaccAccountGetCommodity(gobj()); }
-    int getCommoditySCU() const { return xaccAccountGetCommoditySCU(gobj()); }
+    QString getName() const { return QString::fromUtf8(xaccAccountGetName(get())); }
+    QString getFullName() const { return gchar_to_QString(gnc_account_get_full_name (get())); }
+    QString getCode() const { return QString::fromUtf8(xaccAccountGetCode(get())); }
+    QString getDescription() const { return QString::fromUtf8(xaccAccountGetDescription(get())); }
+    Commodity getCommodity() const { return xaccAccountGetCommodity(get()); }
+    int getCommoditySCU() const { return xaccAccountGetCommoditySCU(get()); }
 
-    ::SplitList* getSplitList() const { return xaccAccountGetSplitList(gobj()); }
+    ::SplitList* getSplitList() const { return xaccAccountGetSplitList(get()); }
 
     /** @name Account tree traversal */
     //@{
 
-    Account get_parent() const { return gnc_account_get_parent(gobj()); }
-    Account get_root() { return gnc_account_get_root(gobj()); }
-    bool is_root() const { return gnc_account_is_root(gobj()); }
-    gint n_children() const { return gnc_account_n_children(gobj()); }
-    GList *get_children() const { return gnc_account_get_children(gobj()); }
-    GList *get_descendants () const { return gnc_account_get_descendants (gobj()); }
-    Account nth_child (gint num) const { return gnc_account_nth_child(gobj(), num); }
+    Account get_parent() const { return gnc_account_get_parent(get()); }
+    Account get_root() { return gnc_account_get_root(get()); }
+    bool is_root() const { return gnc_account_is_root(get()); }
+    gint n_children() const { return gnc_account_n_children(get()); }
+    GList *get_children() const { return gnc_account_get_children(get()); }
+    GList *get_descendants () const { return gnc_account_get_descendants (get()); }
+    Account nth_child (gint num) const { return gnc_account_nth_child(get(), num); }
 
 
     /** Return the index of this account in the children's list of its
@@ -86,14 +86,14 @@ public:
     gint child_index () const
     {
         Account parent(get_parent());
-        if (parent.gobj())
-            return gnc_account_child_index(parent.gobj(), gobj());
+        if (parent.get())
+            return gnc_account_child_index(parent.get(), get());
         else
             return 0;
     }
 
-    gint get_current_depth () const { return gnc_account_get_current_depth(gobj()); }
-    gint get_tree_depth () const { return gnc_account_get_tree_depth(gobj()); }
+    gint get_current_depth () const { return gnc_account_get_current_depth(get()); }
+    gint get_tree_depth () const { return gnc_account_get_tree_depth(get()); }
     //@}
 
 

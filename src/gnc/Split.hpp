@@ -70,32 +70,32 @@ public:
     Transaction getParent() const;
     void setParent(Transaction& trans);
 
-    QString getMemo() const { return QString::fromUtf8(xaccSplitGetMemo(gobj())); }
-    void setMemo(const QString& v) { xaccSplitSetMemo(gobj(), v.toUtf8()); }
+    QString getMemo() const { return QString::fromUtf8(xaccSplitGetMemo(get())); }
+    void setMemo(const QString& v) { xaccSplitSetMemo(get(), v.toUtf8()); }
 
-    QString getAction() const { return QString::fromUtf8(xaccSplitGetAction(gobj())); }
-    void setAction(const QString& v) { xaccSplitSetAction(gobj(), v.toUtf8()); }
+    QString getAction() const { return QString::fromUtf8(xaccSplitGetAction(get())); }
+    void setAction(const QString& v) { xaccSplitSetAction(get(), v.toUtf8()); }
 
-    char getReconcile() const { return xaccSplitGetReconcile(gobj()); }
-    void setReconcile(char v) { xaccSplitSetReconcile(gobj(), v); }
+    char getReconcile() const { return xaccSplitGetReconcile(get()); }
+    void setReconcile(char v) { xaccSplitSetReconcile(get(), v); }
 
-    Split getOtherSplit() const { return xaccSplitGetOtherSplit(gobj()); }
+    Split getOtherSplit() const { return xaccSplitGetOtherSplit(get()); }
 
     QString getCorrAccountFullName() const
     {
-        return gchar_to_QString(xaccSplitGetCorrAccountFullName(gobj()));
+        return gchar_to_QString(xaccSplitGetCorrAccountFullName(get()));
     }
-    QString getCorrAccountName() const { return QString::fromUtf8(xaccSplitGetCorrAccountName(gobj())); }
-    QString getCorrAccountCode() const { return QString::fromUtf8(xaccSplitGetCorrAccountCode(gobj())); }
+    QString getCorrAccountName() const { return QString::fromUtf8(xaccSplitGetCorrAccountName(get())); }
+    QString getCorrAccountCode() const { return QString::fromUtf8(xaccSplitGetCorrAccountCode(get())); }
 
-    void setAmount(const Numeric& amount) { xaccSplitSetAmount(gobj(), amount); }
-    Numeric getAmount() const { return xaccSplitGetAmount(gobj()); }
-    void setValue(const Numeric& value) { xaccSplitSetValue(gobj(), value); }
-    Numeric getValue() const { return xaccSplitGetValue(gobj()); }
-    Numeric getSharePrice() const { return xaccSplitGetSharePrice(gobj()); }
-    Numeric getBalance() const { return xaccSplitGetBalance(gobj()); }
-    Numeric getClearedBalance() const { return xaccSplitGetClearedBalance(gobj()); }
-    Numeric getReconciledBalance() const { return xaccSplitGetReconciledBalance(gobj()); }
+    void setAmount(const Numeric& amount) { xaccSplitSetAmount(get(), amount); }
+    Numeric getAmount() const { return xaccSplitGetAmount(get()); }
+    void setValue(const Numeric& value) { xaccSplitSetValue(get(), value); }
+    Numeric getValue() const { return xaccSplitGetValue(get()); }
+    Numeric getSharePrice() const { return xaccSplitGetSharePrice(get()); }
+    Numeric getBalance() const { return xaccSplitGetBalance(get()); }
+    Numeric getClearedBalance() const { return xaccSplitGetClearedBalance(get()); }
+    Numeric getReconciledBalance() const { return xaccSplitGetReconciledBalance(get()); }
 
 
 

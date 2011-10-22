@@ -50,10 +50,10 @@ QModelIndex AccountTreeModel::index(int row, int column,
         parentItem.reset(static_cast< ::Account*>(parent.internalPointer()));
 
     Account childItem = parentItem.nth_child(row);
-    if (childItem.gobj())
+    if (childItem.get())
     {
         //qDebug() << "returning" << childItem.getName();
-        return createIndex(row, column, childItem.gobj());
+        return createIndex(row, column, childItem.get());
     }
     else
         return QModelIndex();
@@ -68,10 +68,10 @@ QModelIndex AccountTreeModel::parent(const QModelIndex &index) const
     Account childItem(static_cast< ::Account*>(index.internalPointer()));
     Account parentItem(childItem.get_parent());
 
-    if (parentItem.gobj() == m_root.gobj())
+    if (parentItem.get() == m_root.get())
         return QModelIndex();
 
-    return createIndex(parentItem.child_index(), 0, parentItem.gobj());
+    return createIndex(parentItem.child_index(), 0, parentItem.get());
 }
 
 int AccountTreeModel::rowCount(const QModelIndex& parent) const
@@ -120,8 +120,8 @@ QVariant AccountTreeModel::data(const QModelIndex& index, int role) const
             return account.getDescription();
         case 3:
         {
-            Numeric balance = gnc_ui_account_get_balance(account.gobj(), false);
-            PrintAmountInfo printInfo(account.gobj(), true);
+            Numeric balance = gnc_ui_account_get_balance(account.get(), false);
+            PrintAmountInfo printInfo(account.get(), true);
             return balance.printAmount(printInfo);
         }
         default:
@@ -207,10 +207,10 @@ QModelIndex AccountListModel::index(int row, int column,
         return QModelIndex();
 
     Account childItem = m_list.at(row);
-    if (childItem.gobj())
+    if (childItem.get())
     {
         //qDebug() << "returning" << childItem.getName();
-        return createIndex(row, column, childItem.gobj());
+        return createIndex(row, column, childItem.get());
     }
     else
         return QModelIndex();

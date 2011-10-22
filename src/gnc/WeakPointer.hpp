@@ -70,7 +70,7 @@ public:
         return m_ptr;
     }
 
-    T * gobj() const // never throws
+    T * get() const // never throws
     {
         return m_ptr;
     }

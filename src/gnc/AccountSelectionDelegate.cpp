@@ -88,7 +88,7 @@ void AccountSelectionDelegate::setEditorData(QWidget *editor, const QModelIndex 
         {
             const AccountListModel* amodel = dynamic_cast<const AccountListModel*>(comboBox->model());
             Q_ASSERT(amodel);
-            comboBox->setCurrentIndex(amodel->indexOf(acc.gobj()));
+            comboBox->setCurrentIndex(amodel->indexOf(acc.get()));
         }
     }
     else

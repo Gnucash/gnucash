@@ -309,7 +309,7 @@ bool MainWindow::show_session_error (QWidget *parent,
 static void
 gnc_book_opened (Session& sess)
 {
-    gnc_hook_run(HOOK_BOOK_OPENED, sess.gobj());
+    gnc_hook_run(HOOK_BOOK_OPENED, sess.get());
 }
 
 
@@ -373,8 +373,8 @@ void MainWindow::loadFile(const QString &fileName)
     /* -------------- BEGIN CORE SESSION CODE ------------- */
     /* -- this code is almost identical in FileOpen and FileSaveAs -- */
     m_session.call_close_hooks();
-    gnc_hook_run(HOOK_BOOK_CLOSED, m_session.gobj());
-    qof_session_destroy(m_session.gobj());
+    gnc_hook_run(HOOK_BOOK_CLOSED, m_session.get());
+    qof_session_destroy(m_session.get());
     m_session.reset();
 
     /* load the accounts from the users datafile */
@@ -412,7 +412,7 @@ void MainWindow::loadFile(const QString &fileName)
         else if (msgBox.clickedButton() == createNewFile)
         {
             /* Can't use the given file, so just create a new
-             * database so that the user will gobj a window that
+             * database so that the user will get a window that
              * they can click "Exit" on.
              */
             newFile();
@@ -584,7 +584,7 @@ bool MainWindow::saveFileAs(const QString &fileName)
     }
     QByteArray newfile = newfile_qstring.toUtf8();
 
-    QofSession *session = m_session.gobj();
+    QofSession *session = m_session.get();
     if (m_session.get_url() == fileName)
     {
         return saveFile();
@@ -670,7 +670,7 @@ bool MainWindow::saveFileAs(const QString &fileName)
     /* if we got to here, then we've successfully gotten a new session */
     /* close up the old file session (if any) */
     qof_session_swap_data (session, new_session);
-    qof_session_destroy(m_session.gobj());
+    qof_session_destroy(m_session.get());
     m_session.reset();
     session = NULL;
 
@@ -695,9 +695,9 @@ static bool been_here_before = false;
 
 bool MainWindow::saveFile()
 {
-    /* hack alert -- Somehow make sure all in-progress edits gobj committed! */
+    /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
-    /* If we don't have a filename/path to save to gobj one. */
+    /* If we don't have a filename/path to save to get one. */
     if (m_session.get_url().isEmpty())
         return on_actionSave_as_triggered();
 
@@ -718,7 +718,7 @@ bool MainWindow::saveFile()
         progress_functor functor(&progressBar);
 
         // The actual saving
-        qof_session_save (m_session.gobj(), &progress_functor::static_func);
+        qof_session_save (m_session.get(), &progress_functor::static_func);
 
         // Remove the progress bar again from the status bar.
         statusBar()->removeWidget(&progressBar);
@@ -746,7 +746,7 @@ bool MainWindow::saveFile()
     }
 
     xaccReopenLog();
-    gnc_hook_run(HOOK_BOOK_SAVED, m_session.gobj());
+    gnc_hook_run(HOOK_BOOK_SAVED, m_session.get());
 
     documentCleanStateChanged(true);
     statusBar()->showMessage(tr("File saved"), 5000);

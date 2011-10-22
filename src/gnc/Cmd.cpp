@@ -105,7 +105,7 @@ public:
                            const value_type& newValue,
                            QUndoCommand *parent = 0)
             : base_class(text, parent)
-            , m_target(targetPtr.gobj())
+            , m_target(targetPtr.get())
             , m_previousValue(previousValue)
             , m_newValue(newValue)
     {
@@ -201,7 +201,7 @@ public:
                           WeakPointer<target_type::element_type>& targetPtr,
                           QUndoCommand *parent = 0)
             : base_class(text, parent)
-            , m_target(targetPtr.gobj())
+            , m_target(targetPtr.get())
             , m_previousValue(m_target)
             , m_book(m_target.getBook())
     {
@@ -210,7 +210,7 @@ public:
 
     virtual void redo()
     {
-        xaccTransDestroy(m_target.gobj());
+        xaccTransDestroy(m_target.get());
         m_target.reset();
     }
 
@@ -313,7 +313,7 @@ QUndoCommand* setSplitAccount(TmpSplit& t, Account newValue)
 {
     return new CmdRef<TmpSplit, ::Account*, void(TmpSplit::*)(::Account*)>(QObject::tr("Edit Split Account"),
             t, &TmpSplit::setAccount,
-            t.getAccount(), newValue.gobj());
+            t.getAccount(), newValue.get());
 }
 QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue)
 {
@@ -437,7 +437,7 @@ public:
 
     virtual void undo()
     {
-        xaccTransDestroy(m_created.gobj());
+        xaccTransDestroy(m_created.get());
         m_created.reset();
     }
 
