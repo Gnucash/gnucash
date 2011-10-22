@@ -28,7 +28,7 @@ namespace gnc
 {
 Account Book::get_root_account()
 {
-    return Account(gnc_book_get_root_account (get()));
+    return Account(gnc_book_get_root_account (gobj()));
 }
 
 } // END namespace gnc

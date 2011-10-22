@@ -60,49 +60,49 @@ public:
 
     void begin(const QString& book_id, bool ignore_lock, bool create_if_nonexistent, bool force)
     {
-        qof_session_begin(get(), book_id.toUtf8(), ignore_lock, create_if_nonexistent, force);
+        qof_session_begin(gobj(), book_id.toUtf8(), ignore_lock, create_if_nonexistent, force);
     }
     void load (QofPercentageFunc percentage_func)
     {
-        qof_session_load(get(), percentage_func);
+        qof_session_load(gobj(), percentage_func);
     }
     QofBackendError get_error ()
     {
-        return qof_session_get_error(get());
+        return qof_session_get_error(gobj());
     }
     QofBackendError pop_error ()
     {
-        return qof_session_pop_error(get());
+        return qof_session_pop_error(gobj());
     }
     QString get_error_message() const
     {
-        return QString::fromUtf8(qof_session_get_error_message(get()));
+        return QString::fromUtf8(qof_session_get_error_message(gobj()));
     }
     Book get_book () const;
 
     QString get_file_path () const
     {
-        return QString::fromUtf8(qof_session_get_file_path(get()));
+        return QString::fromUtf8(qof_session_get_file_path(gobj()));
     }
 
     QString get_url() const
     {
-        return QString::fromUtf8(qof_session_get_url(get()));
+        return QString::fromUtf8(qof_session_get_url(gobj()));
     }
 
     bool save_in_progress() const
     {
-        return qof_session_save_in_progress(get());
+        return qof_session_save_in_progress(gobj());
     }
     void save (QofPercentageFunc percentage_func)
     {
-        qof_session_save(get(), percentage_func);
+        qof_session_save(gobj(), percentage_func);
     }
 
 
     void call_close_hooks ()
     {
-        qof_session_call_close_hooks (get());
+        qof_session_call_close_hooks (gobj());
     }
 
 

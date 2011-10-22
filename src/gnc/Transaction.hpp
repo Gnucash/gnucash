@@ -62,39 +62,39 @@ public:
             : base_class(ptr)
     { }
 
-    void beginEdit() { xaccTransBeginEdit(get()); }
-    void commitEdit() { xaccTransCommitEdit(get()); }
-    void rollbackEdit() { xaccTransRollbackEdit(get()); }
-    bool isOpen() const { return xaccTransIsOpen(get()); }
+    void beginEdit() { xaccTransBeginEdit(gobj()); }
+    void commitEdit() { xaccTransCommitEdit(gobj()); }
+    void rollbackEdit() { xaccTransRollbackEdit(gobj()); }
+    bool isOpen() const { return xaccTransIsOpen(gobj()); }
 
 
-    QString getNum() const { return QString::fromUtf8(xaccTransGetNum(get())); }
-    void setNum(const QString& v) { xaccTransSetNum(get(), v.toUtf8()); }
+    QString getNum() const { return QString::fromUtf8(xaccTransGetNum(gobj())); }
+    void setNum(const QString& v) { xaccTransSetNum(gobj(), v.toUtf8()); }
 
-    QString getDescription() const { return QString::fromUtf8(xaccTransGetDescription(get())); }
-    void setDescription(const QString& v) { xaccTransSetDescription(get(), v.toUtf8()); }
+    QString getDescription() const { return QString::fromUtf8(xaccTransGetDescription(gobj())); }
+    void setDescription(const QString& v) { xaccTransSetDescription(gobj(), v.toUtf8()); }
 
-    QString getNotes() const { return QString::fromUtf8(xaccTransGetNotes(get())); }
-    void setNotes(const QString& v) { xaccTransSetNotes(get(), v.toUtf8()); }
+    QString getNotes() const { return QString::fromUtf8(xaccTransGetNotes(gobj())); }
+    void setNotes(const QString& v) { xaccTransSetNotes(gobj(), v.toUtf8()); }
 
-    int countSplits() const { return xaccTransCountSplits(get()); }
+    int countSplits() const { return xaccTransCountSplits(gobj()); }
     Split findSplitByAccount(const Account& acc) const;
     void appendSplit(Split& split);
     Split getSplit(int i) const;
     int getSplitIndex(const Split& split) const;
-    ::SplitList* getSplitList() const { return xaccTransGetSplitList(get()); }
+    ::SplitList* getSplitList() const { return xaccTransGetSplitList(gobj()); }
 
-    Commodity getCurrency() const { return xaccTransGetCurrency(get()); }
-    void setCurrency(const Commodity& c) { xaccTransSetCurrency(get(), c.get()); }
+    Commodity getCurrency() const { return xaccTransGetCurrency(gobj()); }
+    void setCurrency(const Commodity& c) { xaccTransSetCurrency(gobj(), c.gobj()); }
 
-    Numeric getImbalanceValue() const { return xaccTransGetImbalanceValue(get()); }
-    bool isBalanced() const { return xaccTransIsBalanced(get()); }
-    Numeric getAccountConvRate(const Account& acc) const { return xaccTransGetAccountConvRate(get(), acc.get()); }
+    Numeric getImbalanceValue() const { return xaccTransGetImbalanceValue(gobj()); }
+    bool isBalanced() const { return xaccTransIsBalanced(gobj()); }
+    Numeric getAccountConvRate(const Account& acc) const { return xaccTransGetAccountConvRate(gobj(), acc.gobj()); }
 
-    void setDatePosted(const QDate& d) { xaccTransSetDate(get(), d.day(), d.month(), d.year()); }
-    void setDateEntered(const QDateTime& t) { xaccTransSetDateEnteredSecs(get(), t.toTime_t()); }
-    QDate getDatePosted() const { return toQDate(xaccTransGetDatePostedGDate(get())); }
-    QDateTime getDateEntered() const { return toQDateTime(xaccTransRetDateEnteredTS(get())); }
+    void setDatePosted(const QDate& d) { xaccTransSetDate(gobj(), d.day(), d.month(), d.year()); }
+    void setDateEntered(const QDateTime& t) { xaccTransSetDateEnteredSecs(gobj(), t.toTime_t()); }
+    QDate getDatePosted() const { return toQDate(xaccTransGetDatePostedGDate(gobj())); }
+    QDateTime getDateEntered() const { return toQDateTime(xaccTransRetDateEnteredTS(gobj())); }
 
     static element_type* newInstance(const Book& b);
 };

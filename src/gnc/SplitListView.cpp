@@ -86,7 +86,7 @@ void SplitListView::closeEditor(QWidget* editor, QAbstractItemDelegate::EndEditH
 
 void SplitListView::accountEvent( ::Account* v, QofEventId event_type)
 {
-    if (v != m_account.get())
+    if (v != m_account.gobj())
         return;
     //qDebug() << "SplitListView::accountEvent, id=" << qofEventToString(event_type);
     switch (event_type)

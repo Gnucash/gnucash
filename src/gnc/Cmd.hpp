@@ -88,7 +88,7 @@ public:
         const value_type& newValue,
         QUndoCommand *parent = 0)
             : base_class(text, parent)
-            , m_target(targetPtr.get())
+            , m_target(targetPtr.gobj())
             , m_setter(setter)
             , m_previousValue((m_target.*getter)())
             , m_newValue(newValue)
@@ -114,7 +114,7 @@ public:
         const value_type& newValue,
         QUndoCommand *parent = 0)
             : base_class(text, parent)
-            , m_target(targetPtr.get())
+            , m_target(targetPtr.gobj())
             , m_setter(setter)
             , m_previousValue(previousValue)
             , m_newValue(newValue)
