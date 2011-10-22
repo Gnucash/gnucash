@@ -761,7 +761,7 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
                          Account *posted_account, GncInvoice* invoice)
 {
     Account *inv_posted_acc;
-    GList *lot_list, *fifo;
+    GList *lot_iter, *open_lot_fifo;
     GNCLot *inv_posted_lot = NULL, *prepay_lot = NULL;
     gnc_numeric split_amt;
     gboolean inv_passed = TRUE;
@@ -771,7 +771,6 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
     gint result = 0;
     gnc_numeric payment_value;
     const char *memo;
-    gboolean reverse = use_reversed_payment_amounts(owner);
 
     g_assert(owner);
     g_assert(txn);
@@ -794,9 +793,10 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
         // Retrieve the payment value from the existing first split.
         Split *asset_split = xaccTransGetSplit(txn, 0);
         g_assert(asset_split);
-        payment_value = xaccSplitGetValue(asset_split);
-        if (!reverse)
-            payment_value = gnc_numeric_neg(payment_value);
+
+        /* Note: to balance the transaction the payment to assign
+         * must have the opposite sign of the existing first split */
+        payment_value = gnc_numeric_neg(xaccSplitGetValue(asset_split));
         memo = xaccSplitGetMemo(asset_split);
     }
 
@@ -805,16 +805,17 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
      * a new split for each open lot until the payment is gone.
      */
 
-    fifo = xaccAccountFindOpenLots (posted_account, gnc_lot_match_invoice_owner,
-                                    (gpointer)owner,
-                                    (GCompareFunc)gnc_lot_sort_func);
+    open_lot_fifo = xaccAccountFindOpenLots (posted_account, gnc_lot_match_invoice_owner,
+                                             (gpointer)owner,
+                                             (GCompareFunc)gnc_lot_sort_func);
 
-    /* Check if an invoice was passed in, and if so, does it match the
-     * account, and is it an open lot?  If so, put it at the beginning
-     * of the lot list fifo so we post to this invoice's lot first.
-     */
+    /* Check if an invoice was passed in. */
     if (invoice)
     {
+        /* If so, does it match the account, and is it an open lot?
+         * If so, put it at the beginning of the lot list fifo so we
+         * post to this invoice's lot first.
+         */
         inv_posted_acc = gncInvoiceGetPostedAcc(invoice);
         inv_posted_lot = gncInvoiceGetPostedLot(invoice);
         if (inv_posted_acc && inv_posted_lot &&
@@ -823,7 +824,7 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
                 !gnc_lot_is_closed(inv_posted_lot))
         {
             /* Put this invoice at the beginning of the FIFO */
-            fifo = g_list_prepend (fifo, inv_posted_lot);
+            open_lot_fifo = g_list_prepend (open_lot_fifo, inv_posted_lot);
             inv_passed = FALSE;
         }
     }
@@ -833,11 +834,11 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
     /* Now iterate over the fifo until the payment is fully applied
      * (or all the lots are paid)
      */
-    for (lot_list = fifo; lot_list; lot_list = lot_list->next)
+    for (lot_iter = open_lot_fifo; lot_iter; lot_iter = lot_iter->next)
     {
         gnc_numeric balance;
 
-        GNCLot *lot = lot_list->data;
+        GNCLot *lot = lot_iter->data;
 
         /* Skip this lot if it matches the invoice that was passed in and
          * we've seen it already.  This way we post to it the first time
@@ -856,13 +857,12 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
 
         balance = gnc_lot_get_balance (lot);
 
-        if (!reverse)
-            balance = gnc_numeric_neg (balance);
-
-        /* If the balance is "negative" then skip this lot.
-         * (just save the pre-payment lot for later)
+        /* The balance can be positive or negative. But in order to assign a payment to it,
+         * it has to have the opposite sign of the payment_value we have left.
+         * If they are of the same sign, we may reserve it as the pre-payment lot for later
          */
-        if (gnc_numeric_negative_p (balance))
+        if ( (gnc_numeric_negative_p (balance) && gnc_numeric_negative_p (payment_value)) ||
+             (gnc_numeric_positive_p (balance) && gnc_numeric_positive_p (payment_value)) )
         {
             if (prepay_lot)
             {
@@ -870,25 +870,32 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
             }
             else
             {
-                prepay_lot = lot;
+                /* A lot can only be used as a pre-payment lot if it has no document (invoice/credit note) attached */
+                if (!gncInvoiceGetInvoiceFromLot(lot))
+                    prepay_lot = lot;
             }
             continue;
         }
 
         /*
-         * If the payment_value <= the balance; we're done -- apply the payment_value.
+         * If there is less to pay than there's open in the lot; we're done -- apply the payment_value.
+         * Note that payment_value and balance are opposite in sign, so we have to compare absolute values here
+         *
          * Otherwise, apply the balance, subtract that from the payment_value,
          * and move on to the next one.
          */
-        if (gnc_numeric_compare (payment_value, balance) <= 0)
+        if (gnc_numeric_compare (gnc_numeric_abs (payment_value), gnc_numeric_abs (balance)) <= 0)
         {
-            /* payment_value <= balance */
+            /* abs(payment_value) <= abs(balance) */
             split_amt = payment_value;
         }
         else
         {
-            /* payment_value > balance */
-            split_amt = balance;
+            /* abs(payment_value) > abs(balance)
+             * Remember payment_value and balance are opposite in sign,
+             * and we want a payment to neutralize the current balance
+             * so we need to negate here */
+            split_amt = gnc_numeric_neg (balance);
         }
 
         /* reduce the payment_value by split_amt */
@@ -901,11 +908,11 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
         xaccSplitSetAction (split, _("Payment"));
         xaccAccountInsertSplit (posted_account, split);
         xaccTransAppendSplit (txn, split);
-        xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (split_amt) :
-                               split_amt, txn_commodity);
+        xaccSplitSetBaseValue (split, split_amt, txn_commodity);
         gnc_lot_add_split (lot, split);
 
-        /* Now send an event for the invoice so it gets updated as paid */
+        /* If the lot was linked to a document (invoice/credit note),
+         * send an event for it so it gets updated as paid */
         {
             GncInvoice *this_invoice = gncInvoiceGetInvoiceFromLot(lot);
             if (this_invoice)
@@ -916,10 +923,10 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
             break;
     }
 
-    g_list_free (fifo);
+    g_list_free (open_lot_fifo);
 
     /* If there is still money left here, then create a pre-payment lot */
-    if (gnc_numeric_positive_p (payment_value))
+    if (!gnc_numeric_zero_p (payment_value))
     {
         if (prepay_lot == NULL)
         {
@@ -932,8 +939,7 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
         xaccSplitSetAction (split, _("Pre-Payment"));
         xaccAccountInsertSplit (posted_account, split);
         xaccTransAppendSplit (txn, split);
-        xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (payment_value) :
-                               payment_value, txn_commodity);
+        xaccSplitSetBaseValue (split, payment_value, txn_commodity);
         gnc_lot_add_split (prepay_lot, split);
     }
 
