@@ -28,23 +28,23 @@ namespace gnc
 
 Split Transaction::findSplitByAccount(const Account& acc) const
 {
-    return xaccTransFindSplitByAccount(get(), acc.get());
+    return xaccTransFindSplitByAccount(gobj(), acc.gobj());
 }
 Split Transaction::getSplit(int i) const
 {
-    return xaccTransGetSplit(get(), i);
+    return xaccTransGetSplit(gobj(), i);
 }
 void Transaction::appendSplit(Split& split)
 {
-    xaccSplitSetParent(split.get(), get());
+    xaccSplitSetParent(split.gobj(), gobj());
 }
 int Transaction::getSplitIndex(const Split& split) const
 {
-    return xaccTransGetSplitIndex(get(), split.get());
+    return xaccTransGetSplitIndex(gobj(), split.gobj());
 }
 Transaction::element_type* Transaction::newInstance(const Book& b)
 {
-    return xaccMallocTransaction (b.get());
+    return xaccMallocTransaction (b.gobj());
 }
 
 // ////////////////////////////////////////////////////////////

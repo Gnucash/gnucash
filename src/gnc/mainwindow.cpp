@@ -122,9 +122,9 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-    if (m_session.get())
+    if (m_session.gobj())
     {
-        qof_session_destroy(m_session.get());
+        qof_session_destroy(m_session.gobj());
         m_session.reset();
     }
 }
@@ -576,10 +576,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
          * transactions during shutdown would cause massive redraws */
         qof_event_suspend ();
 
-        qof_session_call_close_hooks(m_session.get());
-        gnc_hook_run(HOOK_BOOK_CLOSED, m_session.get());
+        qof_session_call_close_hooks(m_session.gobj());
+        gnc_hook_run(HOOK_BOOK_CLOSED, m_session.gobj());
 
-        qof_session_destroy(m_session.get());
+        qof_session_destroy(m_session.gobj());
         m_session.reset();
 
         qof_event_resume ();
@@ -598,13 +598,13 @@ void MainWindow::newFile()
         if (m_session)
         {
             /* close any ongoing file sessions, and free the accounts.
-             * disable events so we don't get spammed by redraws. */
+             * disable events so we don't gobj spammed by redraws. */
             qof_event_suspend ();
 
             m_session.call_close_hooks();
-            gnc_hook_run(HOOK_BOOK_CLOSED, m_session.get());
+            gnc_hook_run(HOOK_BOOK_CLOSED, m_session.gobj());
 
-            qof_session_destroy(m_session.get());
+            qof_session_destroy(m_session.gobj());
             m_session.reset();
             qof_event_resume ();
         }
@@ -615,7 +615,7 @@ void MainWindow::newFile()
         gnc_hook_run(HOOK_NEW_BOOK, NULL);
 
         /* Call this after re-enabling events. */
-        gnc_hook_run(HOOK_BOOK_OPENED, m_session.get());
+        gnc_hook_run(HOOK_BOOK_OPENED, m_session.gobj());
 
         setCurrentFile("");
     }
