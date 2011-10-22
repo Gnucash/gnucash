@@ -98,6 +98,10 @@ public:
 
 
     Glib::RefPtr<Account> get_root_account();
+    bool is_readonly() const { return qof_book_is_readonly(gobj()); }
+    void mark_readonly() { qof_book_mark_readonly(gobj()); }
+    void set_string_option (const Glib::ustring& opt_name, const Glib::ustring& opt_val);
+    Glib::ustring get_string_option (const Glib::ustring& opt_name) const;
 };
 
 } // END namespace gnc

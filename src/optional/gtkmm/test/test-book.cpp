@@ -61,15 +61,11 @@ static void
 setup( Fixture *fixture, gconstpointer pData )
 {
     fixture->book = qof_book_new();
-    g_test_message("Book ref counter: is floating=%d",
-                   g_object_is_floating(G_OBJECT(fixture->book)));
 }
 
 static void
 teardown( Fixture *fixture, gconstpointer pData )
 {
-    g_test_message("Book ref counter: is floating=%d",
-                   g_object_is_floating(G_OBJECT(fixture->book)));
     qof_book_destroy( fixture->book );
 }
 
@@ -132,25 +128,47 @@ test_book_wrap( Fixture *fixture, gconstpointer pData )
 {
     g_assert( fixture->book != NULL );
     {
-        Glib::RefPtr<gnc::Book> book = Glib::wrap(fixture->book);
+        // WATCH OUT: The second "true" argument is very important, as it says
+        // the Glib::RefPtr must not take ownership of the original object.
+        Glib::RefPtr<gnc::Book> book = Glib::wrap(fixture->book, true);
         g_assert( book->gobj() == fixture->book );
         g_assert(G_IS_OBJECT(fixture->book));
     }
-    g_assert(G_IS_OBJECT(fixture->book)); // uh oh.
-    // Due to the missing ref counting in setup() and teardown(), the
-    // Glib::wrap pointer is the first reference. Once it gets out of
-    // scope, the underlying object will be deleted as nobody owns a
-    // ref() anymore. Oops.
+    g_assert(G_IS_OBJECT(fixture->book)); // All is fine due to the "true" above.
+    // The setup() and teardown() indeed uses the GObject ref counting correctly.
 
-//     g_test_message("Book ref counter: is floating=%d",
-//                    g_object_is_floating(G_OBJECT(fixture->book)));
-
-    qof_book_mark_readonly( fixture->book ); // this will crash due to the deleted book
+    qof_book_mark_readonly( fixture->book );
     g_assert( qof_book_is_readonly( fixture->book ) );
+}
+static void
+test_book_wrap_readonly( Fixture *fixture, gconstpointer pData )
+{
+    Glib::RefPtr<gnc::Book> book = Glib::wrap(fixture->book, true); // "true" is important!
+    g_assert( book );
+    g_assert( book->gobj() == fixture-> book); // indeed the identical object
+    g_assert( !book->is_readonly() );
+    g_assert( !qof_book_is_readonly( fixture->book ) );
+    book->mark_readonly();
+    g_assert( book->is_readonly() );
+    g_assert( qof_book_is_readonly( fixture->book ) ); // indeed the identical object
+}
+static void
+test_book_get_string_option( Fixture *fixture, gconstpointer pData )
+{
+    Glib::ustring opt_name("Option Name");
+    Glib::ustring opt_value("Option Value");
+    Glib::ustring opt_name_notset("Not Set");
+    Glib::RefPtr<gnc::Book> book = Glib::wrap(fixture->book, true); // "true" is important!
+    g_assert( book );
+    book->set_string_option( opt_name, opt_value);
+    g_assert_cmpstr( book->get_string_option( opt_name ).c_str(), == , opt_value.c_str());
+    g_assert( book->get_string_option( opt_name_notset ).empty());
 }
 
 void test_suite_gtkmm_book()
 {
     GNC_TEST_ADD( suitename, "readonly", Fixture, NULL, setup, test_book_readonly, teardown );
     GNC_TEST_ADD( suitename, "wrap", Fixture, NULL, setup, test_book_wrap, teardown );
+    GNC_TEST_ADD( suitename, "wrapped-readonly", Fixture, NULL, setup, test_book_wrap_readonly, teardown );
+    GNC_TEST_ADD( suitename, "wrapped-get_string_option", Fixture, NULL, setup, test_book_get_string_option, teardown );
 }

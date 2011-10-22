@@ -1,4 +1,4 @@
-SUBDIRS = test
+SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-gtkmm.la
 

@@ -28,7 +28,7 @@
 extern "C" {
 #include "qof.h"
 
-    gint libgncmod_gtkmm_gnc_module_init(gint refcount);
+//    gint libgncmod_gtkmm_gnc_module_init(gint refcount);
 }
 // c++ includes
 #include <gtkmm.h>

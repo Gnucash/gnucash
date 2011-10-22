@@ -115,6 +115,19 @@ GType Book::get_base_type()
 }
 
 
+void Book::set_string_option (const Glib::ustring& opt_name, const Glib::ustring& opt_val)
+{
+    qof_book_set_string_option(gobj(), opt_name.c_str(), opt_val.c_str());
+}
+
+Glib::ustring Book::get_string_option (const Glib::ustring& opt_name) const
+{
+    const char* r = qof_book_get_string_option(gobj(), opt_name.c_str());
+    if (r)
+        return r;
+    else
+        return "";
+}
 
 // Account Book::get_root_account()
 // {
