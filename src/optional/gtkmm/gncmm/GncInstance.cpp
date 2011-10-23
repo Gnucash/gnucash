@@ -1,5 +1,5 @@
 /*
- * Book.cpp
+ * GncInstance.cpp
  * Copyright (C) 2011 Christian Stimming
  *
  * This program is free software; you can redistribute it and/or
@@ -20,17 +20,17 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#include "config.h"
+#include "GncInstance.hpp"
+#include "private/GncInstance_p.hpp"
 #include "Book.hpp"
-#include "private/Book_p.hpp"
-//#include "Account.hpp"
+
 
 namespace Glib
 {
 
-Glib::RefPtr<gnc::Book> wrap(QofBook* object, bool take_copy)
+Glib::RefPtr<gnc::GncInstance> wrap(::QofInstance* object, bool take_copy)
 {
-    return Glib::RefPtr<gnc::Book>( dynamic_cast<gnc::Book*> (Glib::wrap_auto ((GObject*)(object), take_copy)) );
+    return Glib::RefPtr<gnc::GncInstance>( dynamic_cast<gnc::GncInstance*> (Glib::wrap_auto ((GObject*)(object), take_copy)) );
     //We use dynamic_cast<> in case of multiple inheritance.
 }
 
@@ -43,19 +43,19 @@ namespace gnc
 
 /* The *_Class implementation: */
 
-const Glib::Class& Book_Class::init()
+const Glib::Class& GncInstance_Class::init()
 {
     if (!gtype_) // create the GType if necessary
     {
         // Glib::Class has to know the class init function to clone custom types.
-        class_init_func_ = &Book_Class::class_init_function;
+        class_init_func_ = &GncInstance_Class::class_init_function;
 
         // This is actually just optimized away, apparently with no harm.
         // Make sure that the parent type has been created.
         //CppClassParent::CppObjectType::get_type();
 
         // Create the wrapper type, with the same class/instance size as the base type.
-        register_derived_type(qof_book_get_type());
+        register_derived_type(qof_instance_get_type());
 
         // Add derived versions of interfaces, if the C type implements any interfaces:
 
@@ -65,73 +65,67 @@ const Glib::Class& Book_Class::init()
 }
 
 
-void Book_Class::class_init_function(void* g_class, void* class_data)
+void GncInstance_Class::class_init_function(void* g_class, void* class_data)
 {
     BaseClassType *const klass = static_cast<BaseClassType*>(g_class);
     CppClassParent::class_init_function(klass, class_data);
 }
 
 
-Glib::ObjectBase* Book_Class::wrap_new(GObject* object)
+Glib::ObjectBase* GncInstance_Class::wrap_new(GObject* object)
 {
-    return new Book((QofBook*)object);
+    return new GncInstance((::QofInstance*)object);
 }
 
 
 /* The implementation: */
 
-QofBook* Book::gobj_copy()
+::QofInstance* GncInstance::gobj_copy()
 {
     reference();
     return gobj();
 }
 
-Book::Book(const Glib::ConstructParams& construct_params)
-    : GncInstance(construct_params)
+GncInstance::GncInstance(const Glib::ConstructParams& construct_params)
+    : Glib::Object(construct_params)
 {
 
 }
 
-Book::Book(QofBook* castitem)
-    : GncInstance((::QofInstance*)(castitem))
+GncInstance::GncInstance(::QofInstance* castitem)
+    : Glib::Object((GObject*)(castitem))
 {}
 
 
-Book::~Book()
+GncInstance::~GncInstance()
 {}
 
 
-Book::CppClassType Book::book_class_; // initialize static member
+GncInstance::CppClassType GncInstance::gncInstance_class_; // initialize static member
 
-GType Book::get_type()
+GType GncInstance::get_type()
 {
-    return book_class_.init().get_type();
+    return gncInstance_class_.init().get_type();
 }
 
 
-GType Book::get_base_type()
+GType GncInstance::get_base_type()
 {
-    return qof_book_get_type();
+    return qof_instance_get_type();
+}
+
+// ////////////////////////////////////////
+
+Glib::RefPtr<Book> GncInstance::getBook() const
+{
+    return Glib::wrap(qof_instance_get_book (gobj()));
+}
+void GncInstance::set_book(Glib::RefPtr<Book> book)
+{
+    g_assert (book);
+    qof_instance_set_book(gobj(), book->gobj());
 }
 
 
-void Book::set_string_option (const Glib::ustring& opt_name, const Glib::ustring& opt_val)
-{
-    qof_book_set_string_option(gobj(), opt_name.c_str(), opt_val.c_str());
-}
-
-Glib::ustring Book::get_string_option (const Glib::ustring& opt_name) const
-{
-    const char* r = qof_book_get_string_option(gobj(), opt_name.c_str());
-    if (r)
-        return r;
-    else
-        return "";
-}
-
-// Account Book::get_root_account()
-// {
-//     return Account(gnc_book_get_root_account (get()));
-// }
 
 } // END namespace gnc

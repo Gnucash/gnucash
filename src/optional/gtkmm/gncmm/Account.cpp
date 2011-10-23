@@ -87,13 +87,13 @@ Glib::ObjectBase* Account_Class::wrap_new(GObject* object)
 }
 
 Account::Account(const Glib::ConstructParams& construct_params)
-    : Glib::Object(construct_params)
+    : GncInstance(construct_params)
 {
 
 }
 
 Account::Account(::Account* castitem)
-    : Glib::Object((GObject*)(castitem))
+    : GncInstance((::QofInstance*)(castitem))
 {}
 
 

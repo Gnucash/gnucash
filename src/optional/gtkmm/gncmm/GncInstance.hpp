@@ -36,60 +36,95 @@ namespace gnc
 {
 class Book;
 class GncInstance;
+class GncInstance_Class;
 } // END namespace gnc
-
-#include "Book.hpp"
 
 namespace gnc
 {
 
-/** Wrapper that should be used as an additional base class for those
- * Glib::Object objects that are also derived from QofInstance. This
+/** Wrapper for ::QofInstance
+ * This
  * base class offers some common methods.
  *
  * We cannot name it QofInstance because those stupid C macros (like
  * QOF_CHECK_TYPE) would always confuse our namespaced declaration
  * with the C declaration. I hate macros!
  */
-class GncInstance
+class GncInstance : public Glib::Object
 {
-public:
-    GncInstance() {}
-    virtual ~GncInstance() {}
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    typedef GncInstance CppObjectType;
+    typedef GncInstance_Class CppClassType;
+    typedef ::QofInstance BaseObjectType;
+    typedef ::QofInstanceClass BaseClassType;
 
-    Glib::RefPtr<Book> getBook() const
+private:
+    friend class GncInstance_Class;
+    static CppClassType gncInstance_class_;
+
+private:
+    // noncopyable
+    GncInstance(const GncInstance&);
+    GncInstance& operator=(const GncInstance&);
+
+protected:
+    explicit GncInstance(const Glib::ConstructParams& construct_params);
+    explicit GncInstance(::QofInstance* castitem);
+
+#endif /* DOXYGEN_SHOULD_SKIP_THIS */
+
+public:
+    virtual ~GncInstance();
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    static GType get_type()      G_GNUC_CONST;
+    static GType get_base_type() G_GNUC_CONST;
+#endif
+
+    ///Provides access to the underlying C GObject.
+    ::QofInstance*       gobj()
     {
-        return Glib::wrap(qof_instance_get_book (get_instance()));
+        return reinterpret_cast< ::QofInstance*>(gobject_);
     }
+
+    ///Provides access to the underlying C GObject.
+    const ::QofInstance* gobj() const
+    {
+        return reinterpret_cast< ::QofInstance*>(gobject_);
+    }
+
+    ///Provides access to the underlying C instance. The caller is responsible for unrefing it. Use when directly setting fields in structs.
+    ::QofInstance* gobj_copy();
+
+public:
+
+    Glib::RefPtr<Book> getBook() const;
+    void set_book(Glib::RefPtr<Book> book);
     const ::GncGUID* getGUID() const
     {
-        return qof_entity_get_guid(get_instance());
+        return qof_entity_get_guid(gobj_const());
     }
 
     bool is_dirty() const
     {
-        return qof_instance_get_dirty(get_instance());
+        return qof_instance_get_dirty(gobj_const());
     }
     void set_dirty()
     {
-        return qof_instance_set_dirty(get_instance());
+        return qof_instance_set_dirty(gobj());
     }
     void mark_clean()
     {
-        return qof_instance_mark_clean(get_instance());
+        return qof_instance_mark_clean(gobj());
     }
 
     //bool check_type(const char* type_id) { return (0 == g_strcmp0(type_id, QOF_INSTANCE(base_class::get())->e_type)); }
     //Slots getSlots() const { return qof_instance_get_slots(QOF_INSTANCE(get())); }
 
 private:
-    ::QofInstance* get_instance()
+    /*const*/
+    ::QofInstance* gobj_const() const
     {
-        return QOF_INSTANCE(dynamic_cast<Glib::Object&>(*this).gobj());
-    }
-    /*const*/ ::QofInstance* get_instance() const
-    {
-        return QOF_INSTANCE(dynamic_cast<const Glib::Object&>(*this).gobj());
+        return const_cast< ::QofInstance*>(gobj());
     }
 };
 

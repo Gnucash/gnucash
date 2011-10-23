@@ -32,7 +32,7 @@ extern "C"
 }
 
 #include <glibmm/object.h>
-//#include "GncInstance.hpp"
+#include "GncInstance.hpp"
 
 namespace gnc
 {
@@ -48,7 +48,7 @@ class Account;
 /** Wrapper around a gnucash ::QofBook pointer with C++ methods for
  * easier setter and getter access.
  */
-class Book : public Glib::Object //, public GncInstance
+class Book : public GncInstance
 {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     typedef Book CppObjectType;
@@ -98,8 +98,14 @@ public:
 
 
     Glib::RefPtr<Account> get_root_account();
-    bool is_readonly() const { return qof_book_is_readonly(gobj()); }
-    void mark_readonly() { qof_book_mark_readonly(gobj()); }
+    bool is_readonly() const
+    {
+        return qof_book_is_readonly(gobj());
+    }
+    void mark_readonly()
+    {
+        qof_book_mark_readonly(gobj());
+    }
     void set_string_option (const Glib::ustring& opt_name, const Glib::ustring& opt_val);
     Glib::ustring get_string_option (const Glib::ustring& opt_name) const;
 };

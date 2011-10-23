@@ -89,13 +89,13 @@ Glib::ObjectBase* Transaction_Class::wrap_new(GObject* object)
 }
 
 Transaction::Transaction(const Glib::ConstructParams& construct_params)
-    : Glib::Object(construct_params)
+    : GncInstance(construct_params)
 {
 
 }
 
 Transaction::Transaction(::Transaction* castitem)
-    : Glib::Object((GObject*)(castitem))
+    : GncInstance((::QofInstance*)(castitem))
 {}
 
 
@@ -202,7 +202,7 @@ void TmpTransaction::copyTo(Glib::RefPtr<Transaction> t) const
         //m_splits[i].copyInto(t);
     }
 }
-
+#if 0
 Glib::RefPtr<Transaction> TmpTransaction::createAsReal() const
 {
     assert (!m_splits.empty());
@@ -216,7 +216,7 @@ Glib::RefPtr<Transaction> TmpTransaction::createAsReal() const
     trans->commitEdit();
     return trans;
 }
-
+#endif
 void TmpTransaction::push_back(const TmpSplit& s)
 {
     m_splits.push_back(s);

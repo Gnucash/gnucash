@@ -49,7 +49,7 @@ class Commodity;
 /** Wrapper around a gnucash ::Account pointer with C++ methods for
  * easier setter and getter access.
  */
-class Account : public Glib::Object, public GncInstance
+class Account : public GncInstance
 {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     typedef Account CppObjectType;

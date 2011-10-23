@@ -57,7 +57,7 @@ class TmpSplit;
 /** Wrapper around a gnucash ::Transaction pointer with C++ methods for
  * easier setter and getter access.
  */
-class Transaction : public Glib::Object, public GncInstance
+class Transaction : public GncInstance
 {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     typedef Transaction CppObjectType;

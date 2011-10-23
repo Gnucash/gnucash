@@ -56,7 +56,7 @@ typedef std::vector< ::Split*> SplitQList;
 /** Wrapper around a gnucash ::Split pointer with C++ methods for
  * easier setter and getter access.
  */
-class Split : public Glib::Object, public GncInstance
+class Split : public GncInstance
 {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     typedef Split CppObjectType;

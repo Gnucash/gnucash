@@ -86,13 +86,13 @@ gnc_commodity* Commodity::gobj_copy()
 }
 
 Commodity::Commodity(const Glib::ConstructParams& construct_params)
-    : Glib::Object(construct_params)
+    : GncInstance(construct_params)
 {
 
 }
 
 Commodity::Commodity(gnc_commodity* castitem)
-    : Glib::Object((GObject*)(castitem))
+    : GncInstance((::QofInstance*)(castitem))
 {}
 
 

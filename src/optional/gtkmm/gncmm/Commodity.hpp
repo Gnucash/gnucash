@@ -44,7 +44,7 @@ namespace gnc
 {
 
 /** Wrapper around a gnucash \ref gnc_commodity object */
-class Commodity : public Glib::Object, public GncInstance
+class Commodity : public GncInstance
 {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     typedef Commodity CppObjectType;
