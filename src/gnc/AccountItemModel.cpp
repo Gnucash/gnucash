@@ -180,7 +180,7 @@ AccountListModel::AccountListModel(Account rootaccount, QObject *parent)
 
 void AccountListModel::recreateCache()
 {
-    m_list = Account::fromGList(m_root.get_descendants());
+    m_list = accountFromGList(m_root.get_descendants());
     reset();
 }
 

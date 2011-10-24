@@ -189,19 +189,10 @@ public:
     }
 
 
-#if 0
     static SplitQList fromGList(GList* glist)
     {
-        SplitQList result;
-        GList* list = glist;
-        while (list)
-        {
-            result.append(reinterpret_cast< ::Split*>(list->data));
-            list = g_list_next(list);
-        }
-        return result;
+        return gnc::fromGList<SplitQList>(glist);
     }
-#endif
 };
 
 
@@ -232,7 +223,7 @@ public:
     /** Copies the content of this tmp split into the given real
      * transaction by allocating a new real gnc::Split and adding it
      * to the given real gnc::Transaction. */
-    void copyInto(Transaction& t) const;
+    void copyInto(Glib::RefPtr<Transaction> t) const;
 
     ::Account* getAccount() const
     {

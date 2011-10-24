@@ -63,7 +63,11 @@ protected:
     Account m_root;
 };
 
-
+typedef QList< ::Account*> AccountQList;
+inline AccountQList accountFromGList(GList *glist)
+{
+    return fromGList<AccountQList>(glist);
+}
 
 /** Specialization of the account tree model for when all accounts
  * should be viewed as a flat list instead of a tree. Only the index()

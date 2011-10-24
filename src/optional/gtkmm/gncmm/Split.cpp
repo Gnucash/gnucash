@@ -189,16 +189,17 @@ void TmpSplit::clear(::Account* account)
     m_value = Numeric::zero();
 }
 
-void TmpSplit::copyInto(Transaction& t) const
+void TmpSplit::copyInto(Glib::RefPtr<Transaction> t) const
 {
-//     Glib::RefPtr<Split> s(Glib::wrap(xaccMallocSplit(t.getBook()->gobj())));
-//     s->setAccount(m_account);
-//     s->setParent(t);
-//     s->setMemo(m_memo);
-//     s->setAction(m_action);
-//     s->setReconcile(m_reconcile);
-//     s->setAmount(m_amount);
-//     s->setValue(m_value);
+    g_assert(t);
+    Glib::RefPtr<Split> s(Glib::wrap(xaccMallocSplit(t->getBook()->gobj())));
+    s->setAccount(m_account);
+    s->setParent(t);
+    s->setMemo(m_memo);
+    s->setAction(m_action);
+    s->setReconcile(m_reconcile);
+    s->setAmount(m_amount);
+    s->setValue(m_value);
 }
 
 } // END namespace gnc

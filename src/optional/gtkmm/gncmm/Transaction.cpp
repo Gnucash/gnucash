@@ -126,17 +126,21 @@ Glib::RefPtr<Split> Transaction::getSplit(int i) const
 {
     return Glib::wrap(xaccTransGetSplit(gobj(), i));
 }
-void Transaction::appendSplit(Split& split)
+void Transaction::appendSplit(Glib::RefPtr<Split> split)
 {
-    xaccSplitSetParent(split.gobj(), gobj());
+    g_assert(split);
+    xaccSplitSetParent(split->gobj(), gobj());
 }
 int Transaction::getSplitIndex(const Split& split) const
 {
     return xaccTransGetSplitIndex(gobj(), split.gobj());
 }
-::Transaction* Transaction::newInstance(const ::QofBook* b)
+::Transaction* Transaction::newInstance(const Glib::RefPtr<Book> b)
 {
-    return xaccMallocTransaction (const_cast< ::QofBook*>(b));
+    if (b)
+        return xaccMallocTransaction (const_cast< ::QofBook*>(b->gobj()));
+    else
+        return NULL;
 }
 
 // ////////////////////////////////////////////////////////////
@@ -151,14 +155,9 @@ TmpTransaction::TmpTransaction(const Transaction& t)
     , m_notes(t.getNotes())
     , m_commodity(t.getCurrency())
     , m_datePosted(t.getDatePosted())
-    //, m_dateTimeEntered(t.getDateEntered())
+    , m_dateTimeEntered(t.getDateEnteredTT())
 {
-    SplitQList slist
-#if HAVE_GLIBMM_VECTORUTILS_H
-    = Glib::ListHandlier<Glib::RefPtr<Split> >::list_to_vector(t.getSplitList());
-#else
-    ;
-#endif
+    SplitQList slist = Split::fromGList(t.getSplitList());
     for (SplitQList::const_iterator iter = slist.begin(); iter != slist.end(); ++iter)
     {
         m_splits.push_back(TmpSplit(Glib::wrap(*iter), this));
@@ -178,7 +177,7 @@ void TmpTransaction::resetContent()
     m_notes.clear();
     m_commodity.reset();
     m_datePosted = Glib::Date();
-    //m_dateTimeEntered = QDateTime();
+    m_dateTimeEntered = 0;
     for (int i = 0; i < m_splits.size(); ++i)
     {
         TmpSplit& split = m_splits[i];
@@ -196,13 +195,13 @@ void TmpTransaction::copyTo(Glib::RefPtr<Transaction> t) const
         t->setNotes(m_notes);
     t->setCurrency(m_commodity);
     t->setDatePosted(m_datePosted);
-    //t->setDateEntered(m_dateTimeEntered);
+    t->setDateEntered(m_dateTimeEntered);
     for (int i = 0; i < m_splits.size(); ++i)
     {
-        //m_splits[i].copyInto(t);
+        m_splits[i].copyInto(t);
     }
 }
-#if 0
+
 Glib::RefPtr<Transaction> TmpTransaction::createAsReal() const
 {
     assert (!m_splits.empty());
@@ -210,13 +209,13 @@ Glib::RefPtr<Transaction> TmpTransaction::createAsReal() const
     assert (acc);
     Glib::RefPtr<Book> book(acc->getBook());
     assert (book);
-    Glib::RefPtr<Transaction> trans(Glib::wrap(Transaction::newInstance(book->gobj())));
+    Glib::RefPtr<Transaction> trans(Glib::wrap(Transaction::newInstance(book)));
     trans->beginEdit();
     copyTo(trans);
     trans->commitEdit();
     return trans;
 }
-#endif
+
 void TmpTransaction::push_back(const TmpSplit& s)
 {
     m_splits.push_back(s);

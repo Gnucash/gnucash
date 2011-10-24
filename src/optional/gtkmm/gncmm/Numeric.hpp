@@ -80,6 +80,20 @@ inline ::Timespec toTimespec(const Glib::DateTime& gdt)
 }
 #endif
 
+/** Copies the pointer values from the given GList into the specified output
+ * list type, such as std::vector<FooBar*>. */
+template<class ResultListType>
+ResultListType fromGList(GList* glist)
+{
+    ResultListType result;
+    GList* list = glist;
+    while (list)
+    {
+        result.push_back(reinterpret_cast< typename ResultListType::value_type >(list->data));
+        list = g_list_next(list);
+    }
+    return result;
+}
 
 /** Wrapper around a gnucash ::GNCPrintAmountInfo structure with C++
  * methods for easier setter and getter access.

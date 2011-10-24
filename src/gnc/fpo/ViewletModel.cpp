@@ -25,7 +25,7 @@ ViewletModel::leftVGenerate(::Account *selectedAccount)
     ::Account *rootAccount = gnc_book_get_root_account(book);
 
     GList *accountsGList = gnc_account_get_descendants(rootAccount);
-    AccountQList accountsList = Account::fromGList(accountsGList);
+    AccountQList accountsList = accountFromGList(accountsGList);
 
     int numOfAccounts = accountsList.count();
     qDebug()<<"Total num of accounts: "<<numOfAccounts;
@@ -50,7 +50,7 @@ ViewletModel::rightVGenerate(::Account *selectedAccount)
     ::Account *rootAccount = gnc_book_get_root_account(book);
 
     GList *accountsGList = gnc_account_get_descendants(rootAccount);
-    AccountQList accountsList = Account::fromGList(accountsGList);
+    AccountQList accountsList = accountFromGList(accountsGList);
 
     int numOfAccounts = accountsList.count();
     qDebug()<<"Total num of accounts: "<<numOfAccounts;
@@ -136,10 +136,10 @@ ViewletModel::buildSplitListDateSort(AccountQList accountsList)
 
         SplitQList tempList = Split::fromGList(::xaccAccountGetSplitList(C_acct));
 
-        int numOfSplits = tempList.count();
+        int numOfSplits = tempList.size();
         for(int i=0; i<numOfSplits; i++)
         {
-            allSplitsList.append(tempList.at(i));
+            allSplitsList.push_back(tempList.at(i));
         }
     }
 
@@ -158,7 +158,7 @@ ViewletModel::lessThanByDate(::Split* a, ::Split* b)
 void
 ViewletModel::buildMiniJournalStruct(SplitQList splitList)
 {
-    int numOfSplits = splitList.count();
+    int numOfSplits = splitList.size();
     Split split;
     int i;
     QDate tempDate;

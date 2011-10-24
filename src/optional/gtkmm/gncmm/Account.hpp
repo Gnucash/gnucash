@@ -173,21 +173,6 @@ public:
     }
     //@}
 
-
-#if 0
-    static AccountQList fromGList(GList* glist)
-    {
-        AccountQList result;
-        GList* list = glist;
-        while (list)
-        {
-            result.append(reinterpret_cast< ::Account*>(list->data));
-            list = g_list_next(list);
-        }
-        return result;
-    }
-#endif
-
 };
 
 } // END namespace gnc

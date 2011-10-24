@@ -37,6 +37,7 @@ extern "C"
 
 #include "gnc/GncInstance.hpp"
 #include "gnc/Numeric.hpp"
+#include <vector>
 
 namespace gnc
 {
@@ -45,7 +46,7 @@ class Account;
 class Transaction;
 class TmpTransaction;
 
-typedef QList< ::Split*> SplitQList;
+typedef std::vector< ::Split*> SplitQList;
 
 
 /** Wrapper around a gnucash ::Split pointer with C++ methods for
@@ -98,17 +99,9 @@ public:
     Numeric getReconciledBalance() const { return xaccSplitGetReconciledBalance(gobj()); }
 
 
-
     static SplitQList fromGList(GList* glist)
     {
-        SplitQList result;
-        GList* list = glist;
-        while (list)
-        {
-            result.append(reinterpret_cast< ::Split*>(list->data));
-            list = g_list_next(list);
-        }
-        return result;
+        return gnc::fromGList<SplitQList>(glist);
     }
 };
 

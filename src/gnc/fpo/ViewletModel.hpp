@@ -16,6 +16,7 @@ extern "C"
 
 #include "gnc/Split.hpp"
 #include "gnc/SplitListModel.hpp"
+#include "gnc/AccountItemModel.hpp"
 
 namespace gnc
 {

@@ -42,8 +42,6 @@ extern "C"
 namespace gnc
 {
 
-typedef QList< ::Account*> AccountQList;
-
 
 /** Wrapper around a gnucash ::Account pointer with C++ methods for
  * easier setter and getter access.
@@ -96,18 +94,6 @@ public:
     gint get_tree_depth () const { return gnc_account_get_tree_depth(gobj()); }
     //@}
 
-
-    static AccountQList fromGList(GList* glist)
-    {
-        AccountQList result;
-        GList* list = glist;
-        while (list)
-        {
-            result.append(reinterpret_cast< ::Account*>(list->data));
-            list = g_list_next(list);
-        }
-        return result;
-    }
 };
 
 } // END namespace gnc

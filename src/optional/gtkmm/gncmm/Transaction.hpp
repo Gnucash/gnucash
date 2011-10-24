@@ -155,7 +155,7 @@ public:
         return xaccTransCountSplits(gobj());
     }
     Glib::RefPtr<Split> findSplitByAccount(const Account& acc) const;
-    void appendSplit(Split& split);
+    void appendSplit(Glib::RefPtr<Split> split);
     Glib::RefPtr<Split> getSplit(int i) const;
     int getSplitIndex(const Split& split) const;
     ::SplitList* getSplitList() const
@@ -189,14 +189,22 @@ public:
     {
         xaccTransSetDatePostedGDate(gobj(), *d.gobj());
     }
-//    void setDateEntered(const Glib::DateTime& t) { xaccTransSetDateEnteredSecs(gobj(), t.toTime_t()); }
     Glib::Date getDatePosted() const
     {
         return Glib::Date(xaccTransGetDatePostedGDate(gobj()));
     }
+    void setDateEntered(time_t t)
+    {
+        xaccTransSetDateEnteredSecs(gobj(), t);
+    }
+//    void setDateEntered(const Glib::DateTime& t) { xaccTransSetDateEnteredSecs(gobj(), t.toTime_t()); }
+    time_t getDateEnteredTT() const
+    {
+        return timespecToTime_t(xaccTransRetDateEnteredTS(gobj()));
+    }
     //Glib::DateTime getDateEntered() const { return toGDateTime(xaccTransRetDateEnteredTS(gobj())); }
 
-    static ::Transaction* newInstance(const ::QofBook* b);
+    static ::Transaction* newInstance(const Glib::RefPtr<Book> b);
 };
 
 
@@ -287,6 +295,14 @@ public:
         m_datePosted = v;
     }
 
+    time_t getDateEnteredTT() const
+    {
+        return m_dateTimeEntered;
+    }
+    void setDateEntered(time_t v)
+    {
+        m_dateTimeEntered = v;
+    }
     //Glib::DateTime getDateEntered() const { return m_dateTimeEntered; }
     //void setDateEntered(const Glib::DateTime& v) { m_dateTimeEntered = v; }
 
@@ -297,6 +313,7 @@ private:
     TmpSplitList m_splits;
     Glib::RefPtr<Commodity> m_commodity;
     Glib::Date m_datePosted;
+    time_t m_dateTimeEntered;
     //Glib::DateTime m_dateTimeEntered;
 };
 
