@@ -160,9 +160,11 @@ test_book_get_string_option( Fixture *fixture, gconstpointer pData )
     Glib::ustring opt_name_notset("Not Set");
     Glib::RefPtr<gnc::Book> book = Glib::wrap(fixture->book, true); // "true" is important!
     g_assert( book );
-    book->set_string_option( opt_name, opt_value);
-    g_assert_cmpstr( book->get_string_option( opt_name ).c_str(), == , opt_value.c_str());
-    g_assert( book->get_string_option( opt_name_notset ).empty());
+    book->string_option_set( opt_name, opt_value);
+    g_assert_cmpstr( book->string_option_get( opt_name ).c_str(), == , opt_value.c_str());
+    g_assert( book->string_option_exists(opt_name) == true);
+    g_assert( book->string_option_get( opt_name_notset ).empty());
+    g_assert( book->string_option_exists( opt_name_notset ) == false);
 }
 
 void test_suite_gtkmm_book()

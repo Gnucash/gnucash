@@ -106,8 +106,9 @@ public:
     {
         qof_book_mark_readonly(gobj());
     }
-    void set_string_option (const Glib::ustring& opt_name, const Glib::ustring& opt_val);
-    Glib::ustring get_string_option (const Glib::ustring& opt_name) const;
+    void string_option_set (const Glib::ustring& opt_name, const Glib::ustring& opt_val);
+    Glib::ustring string_option_get (const Glib::ustring& opt_name) const;
+    bool string_option_exists (const Glib::ustring& opt_name) const;
 };
 
 } // END namespace gnc
