@@ -31,7 +31,7 @@ extern "C" {
 //    gint libgncmod_gtkmm_gnc_module_init(gint refcount);
 }
 // c++ includes
-#include <gtkmm.h>
+//#include <gtkmm.h>
 // And our own plugin
 #include "gncmm/wrap_init.hpp"
 
@@ -47,8 +47,13 @@ main (int   argc,
     qof_log_init_filename_special("stderr"); /* Init the log system */
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
 
-    Gtk::Main::init_gtkmm_internals();
+    // Initialize glibmm
+    Glib::init();
     gnc::wrap_init();
+
+    // The below only needed if we use gtkmm stuff
+    //Gtk::Main::init_gtkmm_internals();
+
     //libgncmod_gtkmm_gnc_module_init(1);
 
     test_suite_gtkmm_book();

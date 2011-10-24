@@ -129,7 +129,7 @@ AS_IF([test x${enable_GTKMM} = "xtrue"],
   [
     GTKMM_DIR=gtkmm
     # We require gtkmm, of course
-    PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.16)
+    PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.20)
     # and also the c++ compiler
     AC_PROG_CXXCPP
     AC_PROG_CXX

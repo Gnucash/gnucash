@@ -77,12 +77,15 @@ extern "C" {
             return FALSE;
         }
 
-        // Initialize the gtkmm framework. Calling this static method
-        // is sufficient; we don't actually need a Gtk::Main object.
-        Gtk::Main::init_gtkmm_internals();
+        // Initialize glibmm
+        Glib::init();
 
         // Register our own gncmm wrapper classes at glib type system
         gnc::wrap_init();
+
+        // Initialize the gtkmm framework. Calling this static method
+        // is sufficient; we don't actually need a Gtk::Main object.
+        Gtk::Main::init_gtkmm_internals();
 
         // Register our plugin, adding menu items with callbacks
         gncmm::gnc_plugin_gtkmm_create_plugin();

@@ -6,7 +6,7 @@
 #undef  G_GNUC_CONST
 #define G_GNUC_CONST /* empty */
 
-#include <giomm/wrap_init.h>
+//#include <giomm/wrap_init.h>
 #include <glibmm/error.h>
 #include <glibmm/object.h>
 
