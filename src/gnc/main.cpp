@@ -58,6 +58,11 @@ extern "C"
 #  include <locale.h>
 #endif
 
+// Glibmm includes
+#include <glibmm.h>
+#include "gncmm/wrap_init.hpp"
+
+// Qt includes
 #include <QApplication>
 #include "mainwindow.hpp"
 
@@ -171,6 +176,10 @@ main(int argc, char ** argv)
     qof_init();
     gnc_module_system_init();
     gnc_engine_init_static(argc, argv);
+
+    // Initialize glibmm
+    Glib::init();
+    //gnc::wrap_init(); // requires replacing the qt-based engine wrappers
 
     // Call the statically-linked versions of the backend init
     // functions

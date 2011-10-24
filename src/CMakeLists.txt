@@ -95,6 +95,7 @@ IF (WITH_SQL)
   ADD_SUBDIRECTORY (backend/dbi)
   ADD_SUBDIRECTORY (backend/sql)
 ENDIF (WITH_SQL)
+ADD_SUBDIRECTORY (optional/gtkmm)
 
 ADD_SUBDIRECTORY (gnc)
 
