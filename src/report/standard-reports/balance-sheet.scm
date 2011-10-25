@@ -117,6 +117,9 @@
 (define optname-total-assets (N_ "Include assets total"))
 (define opthelp-total-assets
   (N_ "Whether or not to include a line indicating total assets"))
+(define optname-standard-order (N_ "Use standard US layout"))
+(define opthelp-standard-order
+  (N_ "Report section order is assets/liabilities/equity (rather than assets/equity/liabilities)"))
 (define optname-label-liabilities (N_ "Label the liabilities section"))
 (define opthelp-label-liabilities
   (N_ "Whether or not to include a label for the liabilities section"))
@@ -167,6 +170,11 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-report-form
       "d" opthelp-report-form #t))
+
+    (add-option
+      (gnc:make-simple-boolean-option
+       gnc:pagename-general optname-standard-order
+       "dd" opthelp-standard-order #t))
 
     ;; accounts to work on
     (add-option
@@ -294,6 +302,8 @@
          (date-secs (gnc:timepair->secs date-tp))
          (report-form? (get-option gnc:pagename-general
                                optname-report-form))
+         (standard-order? (get-option gnc:pagename-general 
+                                      optname-standard-order))
          (compute-unrealized-gains? (not (qof-book-use-trading-accounts 
                                            (gnc-get-current-book))))
          (accounts (get-option gnc:pagename-accounts
@@ -422,6 +432,24 @@
           acct-list)
       balance-collector))
 
+    ;; Format the liabilities section of the report
+    (define (liability-block label-liabilities? parent-table table-env liability-accounts params
+                                       total-liabilities? liability-balance)
+      (let* ((liability-table #f))               ;; gnc:html-acct-table
+	      (if label-liabilities?
+		  (add-subtotal-line 
+		      parent-table (_ "Liabilities") #f #f))
+	      (set! liability-table
+		  (gnc:make-html-acct-table/env/accts
+		      table-env liability-accounts))
+	      (gnc:html-table-add-account-balances
+		  parent-table liability-table params)
+	      (if total-liabilities?
+		  (add-subtotal-line
+		      parent-table (_ "Total Liabilities") #f liability-balance))
+
+	      (add-rule parent-table)))
+	      
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
@@ -461,7 +489,6 @@
 	       (table-env #f)                      ;; parameters for :make-
 	       (params #f)                         ;; and -add-account-
                (asset-table #f)                    ;; gnc:html-acct-table
-               (liability-table #f)                ;; gnc:html-acct-table
                (equity-table #f)                   ;; gnc:html-acct-table
 	       (get-total-balance-fn
 		(lambda (account)
@@ -625,20 +652,11 @@
 	      (add-rule left-table))
 	  
 	  (gnc:report-percent-done 85)
-	  (if label-liabilities?
-	      (add-subtotal-line 
-	       right-table (_ "Liabilities") #f #f))
-	  (set! liability-table
-		(gnc:make-html-acct-table/env/accts
-		 table-env liability-accounts))
-	  (gnc:html-table-add-account-balances
-	   right-table liability-table params)
-	  (if total-liabilities?
-	      (add-subtotal-line
-	       right-table (_ "Total Liabilities") #f liability-balance))
-	  
-	  (add-rule right-table)
-	  
+          (if standard-order?
+	    (liability-block label-liabilities? right-table table-env
+	                          liability-accounts params
+                                  total-liabilities? liability-balance))
+  
 	  (gnc:report-percent-done 88)
 	  (if label-equity?
 	      (add-subtotal-line
@@ -672,9 +690,14 @@
 	  (if total-equity?
 	      (add-subtotal-line
 	       right-table (_ "Total Equity") #f total-equity-balance))
-	  
+  
 	  (add-rule right-table)
 	  
+	  (if (not standard-order?)
+	    (liability-block label-liabilities? right-table table-env
+	                          liability-accounts params
+                                  total-liabilities? liability-balance))
+
           (add-subtotal-line
            right-table (_ "Total Liabilities & Equity")
 	   #f liability-plus-equity)
