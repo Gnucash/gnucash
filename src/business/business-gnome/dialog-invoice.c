@@ -25,7 +25,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <libguile.h>
 #include "swig-runtime.h"
@@ -91,6 +91,7 @@ void gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_terms_changed_cb (GtkWidget *widget, gpointer data);
 
 #define ENUM_INVOICE_TYPE(_) \
   _(NEW_INVOICE, )  \
@@ -121,7 +122,7 @@ struct _invoice_select_window
  */
 struct _invoice_window
 {
-    GladeXML   * xml;
+    GtkBuilder   * builder;
 
     GtkWidget  * dialog;         /* Used by 'New Invoice Window' */
     GncPluginPage *page;        /* Used by 'Edit Invoice' Page */
@@ -221,38 +222,32 @@ gnc_invoice_get_register(InvoiceWindow *iw)
 static gboolean
 iw_ask_unpost (InvoiceWindow *iw)
 {
-    GtkWidget *dialog, *toggle, *pixmap;
-    GladeXML *xml;
+    GtkWidget *dialog;
+    GtkToggleButton *toggle;
+    GtkBuilder *builder;
     gint response;
     char *s;
 
-    xml = gnc_glade_xml_new ("invoice.glade", "Unpost Message Dialog");
-    dialog = glade_xml_get_widget (xml, "Unpost Message Dialog");
-    toggle = glade_xml_get_widget (xml, "yes_tt_reset");
-    pixmap = glade_xml_get_widget (xml, "q_pixmap");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder,"dialog-invoice.glade", "Unpost Message Dialog");
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Unpost Message Dialog"));
+    toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "yes_tt_reset"));
 
     gtk_window_set_transient_for (GTK_WINDOW(dialog),
                                   GTK_WINDOW(iw_get_window(iw)));
 
     iw->reset_tax_tables = FALSE;
 
-    s = gnome_program_locate_file (NULL,
-                                   GNOME_FILE_DOMAIN_PIXMAP,
-                                   "gnome-question.png", TRUE, NULL);
-    if (s)
-    {
-        pixmap = gtk_image_new_from_file(s);
-        g_free(s);
-    }
-
     gtk_widget_show_all(dialog);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     if (response == GTK_RESPONSE_OK)
         iw->reset_tax_tables =
-            gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle));
+            gtk_toggle_button_get_active(toggle);
 
     gtk_widget_destroy(dialog);
+    g_object_unref(G_OBJECT(builder));
+
     return (response == GTK_RESPONSE_OK);
 }
 
@@ -1326,7 +1321,7 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
 
     /* XXX: I'm not sure -- should we change the terms if this happens? */
     iw->terms = term;
-    gnc_ui_optionmenu_set_value (iw->terms_menu, iw->terms);
+    gnc_simple_combo_set_value (GTK_COMBO_BOX(iw->terms_menu), iw->terms);
 
     gnc_invoice_update_job_choice (iw);
 
@@ -1591,10 +1586,9 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         gtk_widget_hide_all (iw->job_box);
     }
 
-    acct_entry = glade_xml_get_widget (iw->xml, "acct_entry");
+    acct_entry = GTK_WIDGET (gtk_builder_get_object (iw->builder, "acct_entry"));
 
     /* We know that "invoice" (and "owner") exist now */
-    do
     {
         GtkTextBuffer* text_buffer;
         const char *string;
@@ -1627,7 +1621,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
 
         /* fill in the terms menu */
         iw->terms = gncInvoiceGetTerms (invoice);
-        gnc_ui_optionmenu_set_value (iw->terms_menu, iw->terms);
+        gnc_simple_combo_set_value (GTK_COMBO_BOX(iw->terms_menu), iw->terms);
 
         /*
          * Next, figure out if we've been posted, and if so set the
@@ -1636,27 +1630,25 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
          */
 
         acct = gncInvoiceGetPostedAcc (invoice);
-        if (!acct)
-            break;
+        if (acct)
+        {
+            /* Ok, it's definitely posted. Setup the 'posted-invoice' fields now */
+            is_posted = TRUE;
 
-        /* Ok, it's definitely posted. Setup the 'posted-invoice' fields now */
-        is_posted = TRUE;
+            /* Can we unpost this invoice?
+             * XXX: right now we always can, but there
+             * may be times in the future when we cannot.
+             */
+            can_unpost = TRUE;
 
-        /* Can we unpost this invoice?
-         * XXX: right now we always can, but there
-         * may be times in the future when we cannot.
-         */
-        can_unpost = TRUE;
+            ts = gncInvoiceGetDatePosted (invoice);
+            gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->posted_date), ts);
 
-        ts = gncInvoiceGetDatePosted (invoice);
-        gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->posted_date), ts);
-
-        tmp_string = gnc_account_get_full_name (acct);
-        gtk_entry_set_text (GTK_ENTRY (acct_entry), tmp_string);
-        g_free(tmp_string);
-
+            tmp_string = gnc_account_get_full_name (acct);
+            gtk_entry_set_text (GTK_ENTRY (acct_entry), tmp_string);
+            g_free(tmp_string);
+        }
     }
-    while (FALSE);
 
     gnc_invoice_id_changed_cb(NULL, iw);
     if (iw->dialog_type == NEW_INVOICE || iw->dialog_type == MOD_INVOICE)
@@ -1683,25 +1675,25 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
 
         if (is_posted == TRUE)
         {
-            hide = glade_xml_get_widget (iw->xml, "hide3");
+            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide3"));
             gtk_widget_hide_all (hide);
-            hide = glade_xml_get_widget (iw->xml, "hide4");
+            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide4"));
             gtk_widget_hide_all (hide);
 
         }
-        else  			/* ! posted */
+        else           /* ! posted */
         {
-            hide = glade_xml_get_widget (iw->xml, "posted_label");
+            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "posted_label"));
             gtk_widget_hide_all (hide);
             gtk_widget_hide_all (iw->posted_date_hbox);
 
-            hide = glade_xml_get_widget (iw->xml, "acct_label");
+            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "acct_label"));
             gtk_widget_hide_all (hide);
             gtk_widget_hide_all (acct_entry);
 
-            hide = glade_xml_get_widget (iw->xml, "hide1");
+            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide1"));
             gtk_widget_hide_all (hide);
-            hide = glade_xml_get_widget (iw->xml, "hide2");
+            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide2"));
             gtk_widget_hide_all (hide);
         }
     }
@@ -1826,6 +1818,19 @@ gnc_invoice_id_changed_cb (GtkWidget *unused, gpointer data)
         gtk_window_set_title (GTK_WINDOW (iw->dialog), title);
         g_free (title);
     }
+}
+
+void
+gnc_invoice_terms_changed_cb (GtkWidget *widget, gpointer data)
+{
+    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
+    InvoiceWindow *iw = data;
+    gchar *title;
+
+    if (!iw) return;
+    if (!cbox) return;
+
+    iw->terms = gnc_simple_combo_get_value (cbox);
 }
 
 
@@ -2021,7 +2026,7 @@ GtkWidget *
 gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 {
     GncInvoice *invoice;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *dialog, *hbox;
     GncEntryLedger *entry_ledger = NULL;
     GncOwnerType owner_type;
@@ -2033,27 +2038,29 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     iw->page = page;
 
     /* Find the dialog */
-    iw->xml = xml = gnc_glade_xml_new ("invoice.glade", "invoice_entry_vbox");
-    dialog = glade_xml_get_widget (xml, "invoice_entry_vbox");
+    iw->builder = builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "terms_store");
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "invoice_entry_vbox");
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoice_entry_vbox"));
 
     /* Autoconnect all the signals */
-    glade_xml_signal_autoconnect_full (xml, gnc_glade_autoconnect_full_func, iw);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, iw);
 
     /* Grab the widgets */
-    iw->id_entry = glade_xml_get_widget (xml, "id_entry");
-    iw->billing_id_entry = glade_xml_get_widget (xml, "billing_id_entry");
-    iw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
-    iw->notes_text = glade_xml_get_widget (xml, "notes_text");
-    iw->active_check = glade_xml_get_widget (xml, "active_check");
-    iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
-    iw->owner_label = glade_xml_get_widget (xml, "owner_label");
-    iw->job_label = glade_xml_get_widget (xml, "job_label");
-    iw->job_box = glade_xml_get_widget (xml, "job_hbox");
+    iw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "page_id_entry"));
+    iw->billing_id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "page_billing_id_entry"));
+    iw->terms_menu = GTK_WIDGET (gtk_builder_get_object (builder, "page_terms_menu"));
+    iw->notes_text = GTK_WIDGET (gtk_builder_get_object (builder, "page_notes_text"));
+    iw->active_check = GTK_WIDGET (gtk_builder_get_object (builder, "active_check"));
+    iw->owner_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_owner_hbox"));
+    iw->owner_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_owner_label"));
+    iw->job_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_label"));
+    iw->job_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_hbox"));
 
     /* grab the project widgets */
-    iw->proj_frame = glade_xml_get_widget (xml, "proj_frame");
-    iw->proj_cust_box = glade_xml_get_widget (xml, "proj_cust_hbox");
-    iw->proj_job_box = glade_xml_get_widget (xml, "proj_job_hbox");
+    iw->proj_frame = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_frame"));
+    iw->proj_cust_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_cust_hbox"));
+    iw->proj_job_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_job_hbox"));
 
     /* grab the to_charge widgets */
     {
@@ -2062,7 +2069,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         gnc_commodity *currency = gncInvoiceGetCurrency (invoice);
         GNCPrintAmountInfo print_info;
 
-        iw->to_charge_frame = glade_xml_get_widget (xml, "to_charge_frame");
+        iw->to_charge_frame = GTK_WIDGET (gtk_builder_get_object (builder, "to_charge_frame"));
         edit = gnc_amount_edit_new();
         print_info = gnc_commodity_print_info (currency, FALSE);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
@@ -2071,7 +2078,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
                                       gnc_commodity_get_fraction (currency));
         iw->to_charge_edit = edit;
         gtk_widget_show (edit);
-        hbox = glade_xml_get_widget (xml, "to_charge_box");
+        hbox = GTK_WIDGET (gtk_builder_get_object (builder, "to_charge_box"));
         gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
         g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(edit))),
@@ -2081,12 +2088,12 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
                          G_CALLBACK(gnc_invoice_window_changed_to_charge_cb), iw);
     }
 
-    hbox = glade_xml_get_widget (xml, "date_opened_hbox");
+    hbox = GTK_WIDGET (gtk_builder_get_object (builder, "page_date_opened_hbox"));
     iw->opened_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
     gtk_widget_show(iw->opened_date);
     gtk_box_pack_start (GTK_BOX(hbox), iw->opened_date, TRUE, TRUE, 0);
 
-    iw->posted_date_hbox = glade_xml_get_widget (xml, "date_posted_hbox");
+    iw->posted_date_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "date_posted_hbox"));
     iw->posted_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
     gtk_widget_show(iw->posted_date);
     gtk_box_pack_start (GTK_BOX(iw->posted_date_hbox), iw->posted_date,
@@ -2170,7 +2177,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         gtk_widget_show(regWidget);
         gnc_table_init_gui( regWidget, entry_ledger );
 
-        frame = glade_xml_get_widget (xml, "ledger_frame");
+        frame = GTK_WIDGET (gtk_builder_get_object (builder, "ledger_frame"));
         gtk_container_add (GTK_CONTAINER (frame), regWidget);
 
         iw->reg = GNUCASH_REGISTER (regWidget);
@@ -2186,7 +2193,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
 
     /* Now fill in a lot of the pieces and display properly */
-    gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
+    gnc_billterms_combo (GTK_COMBO_BOX(iw->terms_menu), iw->book, TRUE, iw->terms);
     gnc_invoice_update_window (iw, dialog);
 
     gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
@@ -2202,7 +2209,7 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
                                 GncInvoice *invoice)
 {
     InvoiceWindow *iw;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *hbox;
     GncOwner *billto;
     const GncOwner *start_owner;
@@ -2255,27 +2262,29 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
     gncOwnerInitJob (&iw->proj_job, gncOwnerGetJob (billto));
 
     /* Find the glade page layout */
-    iw->xml = xml = gnc_glade_xml_new ("invoice.glade", "New Invoice Dialog");
-    iw->dialog = glade_xml_get_widget (xml, "New Invoice Dialog");
+    iw->builder = builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "terms_store");
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "New Invoice Dialog");
+    iw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "New Invoice Dialog"));
 
     g_object_set_data (G_OBJECT (iw->dialog), "dialog_info", iw);
 
     /* Grab the widgets */
-    iw->id_entry = glade_xml_get_widget (xml, "id_entry");
-    iw->billing_id_entry = glade_xml_get_widget (xml, "billing_id_entry");
-    iw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
-    iw->notes_text = glade_xml_get_widget (xml, "notes_text");
-    iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
-    iw->owner_label = glade_xml_get_widget (xml, "owner_label");
-    iw->job_label = glade_xml_get_widget (xml, "job_label");
-    iw->job_box = glade_xml_get_widget (xml, "job_hbox");
+    iw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_id_entry"));
+    iw->billing_id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_billing_id_entry"));
+    iw->terms_menu = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_terms_menu"));
+    iw->notes_text = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_notes_text"));
+    iw->owner_box = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_owner_hbox"));
+    iw->owner_label = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_owner_label"));
+    iw->job_label = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_job_label"));
+    iw->job_box = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_job_hbox"));
 
     /* Grab the project widgets */
-    iw->proj_frame = glade_xml_get_widget (xml, "proj_frame");
-    iw->proj_cust_box = glade_xml_get_widget (xml, "proj_cust_hbox");
-    iw->proj_job_box = glade_xml_get_widget (xml, "proj_job_hbox");
+    iw->proj_frame = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_proj_frame"));
+    iw->proj_cust_box = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_proj_cust_hbox"));
+    iw->proj_job_box = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_proj_job_hbox"));
 
-    hbox = glade_xml_get_widget (xml, "date_opened_hbox");
+    hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_date_opened_hbox"));
     iw->opened_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
     gtk_widget_show(iw->opened_date);
     gtk_box_pack_start (GTK_BOX(hbox), iw->opened_date, TRUE, TRUE, 0);
@@ -2284,8 +2293,8 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
     gtk_widget_set_sensitive (iw->notes_text, (iw->dialog_type == NEW_INVOICE));
 
     /* Setup signals */
-    glade_xml_signal_autoconnect_full( xml,
-                                       gnc_glade_autoconnect_full_func,
+    gtk_builder_connect_signals_full( builder,
+                                       gnc_builder_connect_full_func,
                                        iw);
     /* Setup initial values */
     iw->invoice_guid = *gncInvoiceGetGUID (invoice);
@@ -2301,7 +2310,7 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     /* Now fill in a lot of the pieces and display properly */
-    gnc_ui_billterms_optionmenu (iw->terms_menu, iw->book, TRUE, &iw->terms);
+    gnc_billterms_combo (GTK_COMBO_BOX(iw->terms_menu), iw->book, TRUE, iw->terms);
     gnc_invoice_update_window (iw, iw->dialog);
     gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 

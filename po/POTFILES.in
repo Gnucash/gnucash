@@ -106,7 +106,6 @@ src/business/business-gnome/glade/choose-owner.glade
 src/business/business-gnome/glade/customer.glade
 src/business/business-gnome/glade/date-close.glade
 src/business/business-gnome/glade/employee.glade
-src/business/business-gnome/glade/invoice.glade
 src/business/business-gnome/glade/job.glade
 src/business/business-gnome/glade/order.glade
 src/business/business-gnome/glade/payment.glade
@@ -115,6 +114,7 @@ src/business/business-gnome/gncmod-business-gnome.c
 src/business/business-gnome/gnc-plugin-business.c
 src/business/business-gnome/gnc-plugin-page-invoice.c
 src/business/business-gnome/gnc-plugin-page-owner-tree.c
+src/business/business-gnome/gtkbuilder/invoice.glade
 src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in
 src/business/business-gnome/search-owner.c
 src/business/business-ledger/gncEntryLedger.c
