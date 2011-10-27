@@ -110,12 +110,12 @@ void gnc_billterms_combo (GtkComboBox *cbox, QofBook *book,
                           gboolean none_ok, GncBillTerm *initial_choice);
 
 /* Same thing except for the tax tables */
-//void
-//gnc_ui_taxtables_optionmenu (GtkComboBox *cbox, QofBook *book,
-//                             gboolean none_ok, GncTaxTable **choice);
+void
+gnc_taxtables_combo (GtkComboBox *cbox, QofBook *book,
+                     gboolean none_ok, GncTaxTable *initial_choice);
 
 /* Build an option menu for choosing a GncTaxIncluded */
-//void gnc_ui_taxincluded_optionmenu (GtkComboBox *cbox, GncTaxIncluded *choice);
+void gnc_taxincluded_combo (GtkComboBox *cbox, GncTaxIncluded initial_choice);
 
 
 /* Here are some "simple combo box" utilities that can be used with

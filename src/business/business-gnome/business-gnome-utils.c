@@ -720,7 +720,7 @@ gnc_simple_combo_destroy_cb (GtkWidget *widget, gpointer data)
     g_free (lsd);
 }
 
-static ListStoreData *
+static void
 gnc_simple_combo_make (GtkComboBox *cbox, QofBook *book,
                        gboolean none_ok, QofIdType type_name,
                        GList * (*get_list)(QofBook*),
@@ -763,8 +763,6 @@ gnc_simple_combo_make (GtkComboBox *cbox, QofBook *book,
 
     gnc_simple_combo_generate_liststore (lsd);
     gnc_simple_combo_set_value (cbox, initial_choice);
-
-    return lsd;
 }
 
 /***********************************************************
@@ -787,6 +785,40 @@ gnc_billterms_combo (GtkComboBox *cbox, QofBook *book,
                            gncBillTermGetTerms,
                            (GenericLookup_t)gncBillTermGetName,
                            (gpointer)initial_choice);
+}
+
+void
+gnc_taxtables_combo (GtkComboBox *cbox, QofBook *book,
+                     gboolean none_ok, GncTaxTable *initial_choice)
+{
+    if (!cbox || !book) return;
+
+    gnc_simple_combo_make (cbox, book, none_ok, GNC_TAXTABLE_MODULE_NAME,
+                           gncTaxTableGetTables,
+                           (GenericLookup_t)gncTaxTableGetName,
+                           (gpointer)initial_choice);
+}
+
+void
+gnc_taxincluded_combo (GtkComboBox *cbox, GncTaxIncluded initial_choice)
+{
+    GtkWidget *menu;
+    GtkListStore *liststore;
+
+    if (!cbox) return;
+
+    gnc_simple_combo_make (cbox, NULL, FALSE, NULL, NULL, NULL,
+                           GINT_TO_POINTER(initial_choice));
+    liststore = GTK_LIST_STORE (gtk_combo_box_get_model (cbox));
+
+    gnc_simple_combo_add_item (liststore, _("Yes"),
+                               GINT_TO_POINTER (GNC_TAXINCLUDED_YES));
+    gnc_simple_combo_add_item (liststore, _("No"),
+                               GINT_TO_POINTER (GNC_TAXINCLUDED_NO));
+    gnc_simple_combo_add_item (liststore, _("Use Global"),
+                               GINT_TO_POINTER (GNC_TAXINCLUDED_USEGLOBAL));
+
+    gnc_simple_combo_set_value (cbox, GINT_TO_POINTER(initial_choice));
 }
 
 /* Convenience functions for the above simple combo box types.  */
