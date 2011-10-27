@@ -3,7 +3,6 @@ glade_DATA = \
   billterms.glade \
   businessprefs.glade \
   choose-owner.glade \
-  customer.glade \
   date-close.glade \
   employee.glade \
   job.glade \
