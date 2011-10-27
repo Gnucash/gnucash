@@ -377,25 +377,25 @@ typedef const char * (*GenericLookup_t)(gpointer);
 
 typedef struct
 {
-    gint		component_id;
-    GtkWidget *	omenu;
-    QofBook *	book;
-    gboolean	none_ok;
-    const char *	(*get_name)(gpointer);
-    GList *	(*get_list)(QofBook*);
+    gint         component_id;
+    GtkWidget    *omenu;
+    QofBook      *book;
+    gboolean     none_ok;
+    const char * (*get_name)(gpointer);
+    GList *      (*get_list)(QofBook*);
 
-    gboolean	building_menu;
-    gpointer	result;
-    gpointer *	result_p;
+    gboolean     building_menu;
+    gpointer     result;
+    gpointer     *result_p;
 
-    void		(*changed_cb)(GtkWidget*, gpointer);
-    gpointer	cb_arg;
+    void         (*changed_cb)(GtkWidget*, gpointer);
+    gpointer     cb_arg;
 } OpMenuData;
 
 #define DO_ADD_ITEM(s,o) { \
-	add_menu_item (menu, (s), omd, (o)); \
-	if (omd->result == (o)) current = index; \
-	index++; \
+    add_menu_item (menu, (s), omd, (o)); \
+    if (omd->result == (o)) current = index; \
+    index++; \
 }
 
 static void
@@ -653,4 +653,186 @@ gnc_ui_taxincluded_optionmenu (GtkWidget *omenu, GncTaxIncluded *choice)
     gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
     gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), current);
     gtk_widget_show (menu);
+}
+
+/***********************************************************************
+ * gnc_simple_combo implementation functions
+ */
+
+typedef struct
+{
+    gint         component_id;
+    GtkComboBox  *cbox;
+    QofBook      *book;
+    gboolean     none_ok;
+    const char * (*get_name)(gpointer);
+    GList *      (*get_list)(QofBook*);
+
+} ListStoreData;
+
+static void
+gnc_simple_combo_add_item (GtkListStore *liststore, const char *label, gpointer this_item)
+{
+    GtkTreeIter iter;
+
+    gtk_list_store_append (liststore, &iter);
+    gtk_list_store_set (liststore, &iter, 0, label, 1, this_item, -1);
+}
+
+static void
+gnc_simple_combo_generate_liststore (ListStoreData *lsd)
+{
+    GList *items;
+    GtkListStore *liststore;
+
+    if (!(lsd->get_list))
+        return;
+    if (!(lsd->get_name))
+        return;
+
+    /* Get the list of items */
+    items = (lsd->get_list)(lsd->book);
+
+    /* Reset the combobox' liststore */
+    liststore = GTK_LIST_STORE (gtk_combo_box_get_model (lsd->cbox));
+    gtk_list_store_clear (liststore);
+
+    if (lsd->none_ok || !items)
+        gnc_simple_combo_add_item (liststore, _("None"), NULL);
+
+    for ( ; items; items = items->next)
+        gnc_simple_combo_add_item (liststore, (lsd->get_name)(items->data), items->data);
+}
+
+static void
+gnc_simple_combo_refresh_handler (GHashTable *changes, gpointer user_data)
+{
+    ListStoreData *lsd = user_data;
+    gnc_simple_combo_generate_liststore (lsd);
+}
+
+static void
+gnc_simple_combo_destroy_cb (GtkWidget *widget, gpointer data)
+{
+    ListStoreData *lsd = data;
+
+    gnc_unregister_gui_component (lsd->component_id);
+    g_free (lsd);
+}
+
+static ListStoreData *
+gnc_simple_combo_make (GtkComboBox *cbox, QofBook *book,
+                       gboolean none_ok, QofIdType type_name,
+                       GList * (*get_list)(QofBook*),
+                       GenericLookup_t get_name,
+                       gpointer initial_choice)
+{
+    ListStoreData *lsd;
+
+    lsd = g_object_get_data (G_OBJECT (cbox), "liststore-data");
+
+    /* If this is the first time we've been called, then build the
+     * Option Menu Data object, register with the component manager, and
+     * watch for changed items.  Then register for deletion, so we can
+     * unregister and free the data when this menu is destroyed.
+     */
+    if (!lsd)
+    {
+
+        lsd = g_new0 (ListStoreData, 1);
+        lsd->cbox = cbox;
+        lsd->book = book;
+        lsd->none_ok = none_ok;
+        lsd->get_name = get_name;
+        lsd->get_list = get_list;
+        g_object_set_data (G_OBJECT (cbox), "liststore-data", lsd);
+
+        lsd->component_id =
+            gnc_register_gui_component ("gnc-simple-combo-refresh-hook",
+                                        gnc_simple_combo_refresh_handler,
+                                        NULL, lsd);
+
+        if (type_name)
+            gnc_gui_component_watch_entity_type (lsd->component_id,
+                                                 type_name,
+                                                 QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+
+        g_signal_connect (G_OBJECT (cbox), "destroy",
+                          G_CALLBACK (gnc_simple_combo_destroy_cb), lsd);
+    }
+
+    gnc_simple_combo_generate_liststore (lsd);
+    gnc_simple_combo_set_value (cbox, initial_choice);
+
+    return lsd;
+}
+
+/***********************************************************
+ * Specific invocations of the gnc_simple_combo widget
+ */
+
+/* Use a list available billing terms to fill the model of
+ * the combobox passed in.  If none_ok is true, then add "none" as a
+ * choice (with data set to NULL)..  If inital_choice is non-NULL,
+ * then that will be the default option setting when the menu is
+ * created.
+ */
+void
+gnc_billterms_combo (GtkComboBox *cbox, QofBook *book,
+                     gboolean none_ok, GncBillTerm *initial_choice)
+{
+    if (!cbox || !book) return;
+
+    gnc_simple_combo_make (cbox, book, none_ok, GNC_BILLTERM_MODULE_NAME,
+                           gncBillTermGetTerms,
+                           (GenericLookup_t)gncBillTermGetName,
+                           (gpointer)initial_choice);
+}
+
+/* Convenience functions for the above simple combo box types.  */
+
+/** Get the value of the item that is currently selected in the combo box */
+gpointer
+gnc_simple_combo_get_value (GtkComboBox *cbox)
+{
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+    GValue value = { 0 };
+
+    if (!cbox) return NULL;
+
+    model = gtk_combo_box_get_model (cbox);
+    if (!gtk_combo_box_get_active_iter (cbox, &iter))
+        return NULL;
+    gtk_tree_model_get_value (model, &iter, 1, &value);
+    return g_value_get_pointer (&value);
+}
+
+/** Find the item in the combo box whose value is "data"
+ *  and make it the active item. */
+void
+gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data)
+{
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+    gboolean valid_iter;
+
+    if (!cbox) return;
+
+    model = gtk_combo_box_get_model (cbox);
+    valid_iter = gtk_tree_model_get_iter_first (model, &iter);
+
+    while (valid_iter)
+    {
+        GValue value = { 0 };
+
+        gtk_tree_model_get_value (model, &iter, 1, &value);
+        if (g_value_get_pointer(&value) == data)
+        {
+            gtk_combo_box_set_active_iter (cbox, &iter);
+            return;
+        }
+
+        valid_iter = gtk_tree_model_iter_next (model, &iter);
+    }
 }

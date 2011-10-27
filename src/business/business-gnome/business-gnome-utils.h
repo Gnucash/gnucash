@@ -95,5 +95,41 @@ void gnc_ui_optionmenu_set_changed_callback (GtkWidget *omenu,
 gpointer gnc_ui_optionmenu_get_value (GtkWidget *omenu);
 void gnc_ui_optionmenu_set_value (GtkWidget *omenu, gpointer data);
 
+/* Create a combo box of available billing terms based on
+ * the combo box If none_ok is true, then add "none" as a
+ * choice (with data set to NULL).  If inital_choice is non-NULL,
+ * then that will be the default option setting when the menu is
+ * created.
+ *
+ * Note: if you are interested in the currently active combo box
+ * item, you can use the function gnc_simple_combo_get_value below.
+ * This can be used for example in a callback function that triggers
+ * on the combo box' "changed" signal"
+ */
+void gnc_billterms_combo (GtkComboBox *cbox, QofBook *book,
+                          gboolean none_ok, GncBillTerm *initial_choice);
+
+/* Same thing except for the tax tables */
+//void
+//gnc_ui_taxtables_optionmenu (GtkComboBox *cbox, QofBook *book,
+//                             gboolean none_ok, GncTaxTable **choice);
+
+/* Build an option menu for choosing a GncTaxIncluded */
+//void gnc_ui_taxincluded_optionmenu (GtkComboBox *cbox, GncTaxIncluded *choice);
+
+
+/* Here are some "simple combo box" utilities that can be used with
+ * ANY of the above combo box types.  In particular the following
+ * functions are useful for hooking the above combo boxes into the
+ * GNC Option infrastructure.
+ */
+
+/** Get the value of the item that is currently selected in the combo box */
+gpointer gnc_simple_combo_get_value (GtkComboBox *cbox);
+
+/** Find the item in the combo box whose value is "data"
+ *  and make it the active item. */
+void gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data);
+
 
 #endif /* GNC_BUSINESS_GNOME_UTILS_H_ */
