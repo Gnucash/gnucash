@@ -179,7 +179,7 @@ main(int argc, char ** argv)
 
     // Initialize glibmm
     Glib::init();
-    //gnc::wrap_init(); // requires replacing the qt-based engine wrappers
+    gnc::wrap_init();
 
     // Call the statically-linked versions of the backend init
     // functions

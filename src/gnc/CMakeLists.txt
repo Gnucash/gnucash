@@ -16,16 +16,12 @@ LINK_DIRECTORIES (${GLIB2_LIBRARY_DIRS}
 SET (gnc_SOURCES
   AccountItemModel.cpp
   AccountSelectionDelegate.cpp
-  Book.cpp
   Cmd.cpp
-  Numeric.cpp
   QofEventWrapper.cpp
   RecentFileMenu.cpp
   Session.cpp
-  Split.cpp
   SplitListModel.cpp
   SplitListView.cpp
-  Transaction.cpp
   main.cpp
   mainwindow.cpp
   mainwindow-file.cpp
@@ -48,16 +44,9 @@ SET (gnc_QOBJECT_HEADERS
   fpo/ViewletView.hpp
 )
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
-  Account.hpp
-  Book.hpp
   Cmd.hpp
-  Commodity.hpp
-  GncInstance.hpp
-  Numeric.hpp
   QofEventWrapper.hpp
   Session.hpp
-  Split.hpp
-  Transaction.hpp
   WeakPointer.hpp
 )
 
@@ -123,7 +112,7 @@ IF (WITH_AQBANKING)
   TARGET_LINK_LIBRARIES (cutecash gnc-aqbanking)
 #  TARGET_LINK_LIBRARIES (cutecash ${AQBANKING_LIBRARIES} ${GWENHYWFAR_LIBRARIES})
 ENDIF (WITH_AQBANKING)
-#TARGET_LINK_LIBRARIES (cutecash libgncmod-gtkmm) # requires replacing the qt-based engine wrappers
+TARGET_LINK_LIBRARIES (cutecash libgncmod-gtkmm)
 TARGET_LINK_LIBRARIES (cutecash engine gnc-module core-utils qof)
 
 TARGET_LINK_LIBRARIES (cutecash ${GLIBMM_LIBRARIES})
