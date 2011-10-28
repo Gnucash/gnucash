@@ -23,13 +23,13 @@
 #include "AccountItemModel.hpp"
 
 #include "engine/gnc-event.h" // for GNC_EVENT_ITEM_ADDED
-#include "gnc/Numeric.hpp"
+#include "gncmm/Numeric.hpp"
 #include <QDebug>
 
 namespace gnc
 {
 
-AccountTreeModel::AccountTreeModel(Account rootaccount, QObject *parent)
+AccountTreeModel::AccountTreeModel(Glib::RefPtr<Account> rootaccount, QObject *parent)
         : QAbstractItemModel(parent)
         , m_root(rootaccount)
 {
@@ -42,18 +42,18 @@ QModelIndex AccountTreeModel::index(int row, int column,
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    Account parentItem;
+    Glib::RefPtr<Account> parentItem;
 
     if (!parent.isValid())
         parentItem = m_root;
     else
-        parentItem.reset(static_cast< ::Account*>(parent.internalPointer()));
+        parentItem = Glib::wrap(static_cast< ::Account*>(parent.internalPointer()));
 
-    Account childItem = parentItem.nth_child(row);
-    if (childItem.gobj())
+    Glib::RefPtr<Account> childItem = parentItem->nth_child(row);
+    if (childItem)
     {
         //qDebug() << "returning" << childItem.getName();
-        return createIndex(row, column, childItem.gobj());
+        return createIndex(row, column, childItem->gobj());
     }
     else
         return QModelIndex();
@@ -65,13 +65,13 @@ QModelIndex AccountTreeModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    Account childItem(static_cast< ::Account*>(index.internalPointer()));
-    Account parentItem(childItem.get_parent());
+    Glib::RefPtr<Account> childItem = Glib::wrap(static_cast< ::Account*>(index.internalPointer()));
+    Glib::RefPtr<Account> parentItem(childItem->get_parent());
 
-    if (parentItem.gobj() == m_root.gobj())
+    if (parentItem->gobj() == m_root->gobj())
         return QModelIndex();
 
-    return createIndex(parentItem.child_index(), 0, parentItem.gobj());
+    return createIndex(parentItem->child_index(), 0, parentItem->gobj());
 }
 
 int AccountTreeModel::rowCount(const QModelIndex& parent) const
@@ -82,14 +82,14 @@ int AccountTreeModel::rowCount(const QModelIndex& parent) const
     // FIXME: Doesn't this just mean the nonzero columns don't have a
     // tree? In that case it would be correct.
 
-    Account parentItem;
+    Glib::RefPtr<Account> parentItem;
     if (!parent.isValid())
         parentItem = m_root;
     else
-        parentItem.reset(static_cast< ::Account*>(parent.internalPointer()));
+        parentItem = Glib::wrap(static_cast< ::Account*>(parent.internalPointer()));
 
     //qDebug() << "Returning " << parentItem.n_children();
-    return parentItem.n_children();
+    return parentItem->n_children();
 }
 
 int AccountTreeModel::columnCount(const QModelIndex& parent) const
@@ -107,22 +107,22 @@ QVariant AccountTreeModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    Account account(static_cast< ::Account*>(index.internalPointer()));
+    Glib::RefPtr<Account> account = Glib::wrap(static_cast< ::Account*>(index.internalPointer()));
     if (role == Qt::DisplayRole)
     {
         switch (index.column())
         {
         case 0:
-            return account.getName();
+            return g2q(account->getName());
         case 1:
-            return account.getCode();
+            return g2q(account->getCode());
         case 2:
-            return account.getDescription();
+            return g2q(account->getDescription());
         case 3:
         {
-            Numeric balance = gnc_ui_account_get_balance(account.gobj(), false);
-            PrintAmountInfo printInfo(account.gobj(), true);
-            return balance.printAmount(printInfo);
+            Numeric balance = gnc_ui_account_get_balance(account->gobj(), false);
+            PrintAmountInfo printInfo(account, true);
+            return g2q(balance.printAmount(printInfo));
         }
         default:
             return QVariant();
@@ -170,7 +170,7 @@ QVariant AccountTreeModel::headerData(int section, Qt::Orientation orientation, 
 // ////////////////////////////////////////////////////////////
 
 
-AccountListModel::AccountListModel(Account rootaccount, QObject *parent)
+AccountListModel::AccountListModel(Glib::RefPtr<Account> rootaccount, QObject *parent)
         : base_class(rootaccount, parent)
         , m_list()
         , m_eventWrapperAccount(*this, &AccountListModel::accountEvent)
@@ -180,7 +180,7 @@ AccountListModel::AccountListModel(Account rootaccount, QObject *parent)
 
 void AccountListModel::recreateCache()
 {
-    m_list = accountFromGList(m_root.get_descendants());
+    m_list = accountFromGList(m_root->get_descendants());
     reset();
 }
 
@@ -206,11 +206,11 @@ QModelIndex AccountListModel::index(int row, int column,
     if (!hasIndex(row, column, parent) || row >= m_list.size())
         return QModelIndex();
 
-    Account childItem = m_list.at(row);
-    if (childItem.gobj())
+    Glib::RefPtr<Account> childItem = Glib::wrap(m_list.at(row));
+    if (childItem)
     {
         //qDebug() << "returning" << childItem.getName();
-        return createIndex(row, column, childItem.gobj());
+        return createIndex(row, column, childItem->gobj());
     }
     else
         return QModelIndex();
@@ -229,14 +229,14 @@ QVariant AccountListNamesModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    Account account(static_cast< ::Account*>(index.internalPointer()));
+    Glib::RefPtr<Account> account = Glib::wrap(static_cast< ::Account*>(index.internalPointer()));
     switch (index.column())
     {
     case 0:
         switch (role)
         {
         case Qt::DisplayRole:
-            return account.getFullName();
+            return g2q(account->getFullName());
         default:
             return QVariant();
         }

@@ -23,7 +23,8 @@
 #ifndef GNC_SPLITLISTVIEW_HPP
 #define GNC_SPLITLISTVIEW_HPP
 
-#include "gnc/Account.hpp"
+#include "config.h"
+#include "gncmm/Account.hpp"
 #include "gnc/SplitListModel.hpp"
 #include "gnc/QofEventWrapper.hpp"
 
@@ -40,18 +41,18 @@ class SplitListView : public QTableView
     Q_OBJECT
 public:
     typedef QTableView base_class;
-    SplitListView(Account account, QUndoStack* undoStack, QWidget* parent = 0);
+    SplitListView(Glib::RefPtr<Account> account, QUndoStack* undoStack, QWidget* parent = 0);
 
-signals:
+Q_SIGNALS:
     void editorClosed(const QModelIndex& index, QAbstractItemDelegate::EndEditHint hint);
 
-public slots:
+public Q_SLOTS:
     void closeEditor(QWidget* editor, QAbstractItemDelegate::EndEditHint hint);
     void accountEvent( ::Account* v, QofEventId event_type);
     void bookEvent( ::QofBook* v, QofEventId event_type);
 
 private:
-    Account m_account;
+    Glib::RefPtr<Account> m_account;
     QofEventWrapper<SplitListView, ::Account*> m_eventWrapperAccount;
     QofEventWrapper<SplitListView, ::QofBook*> m_eventWrapperBook;
 };

@@ -24,7 +24,7 @@
 #include "engine/gnc-event.h"
 
 #include "gnc/SplitListModel.hpp"
-#include "gnc/Transaction.hpp"
+#include "gncmm/Transaction.hpp"
 
 namespace gnc
 {

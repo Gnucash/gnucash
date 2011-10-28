@@ -33,6 +33,7 @@ extern "C"
 }
 
 #include "gnc/WeakPointer.hpp"
+#include <glibmm/refptr.h>
 #include <QString>
 
 namespace gnc
@@ -78,7 +79,7 @@ public:
     {
         return QString::fromUtf8(qof_session_get_error_message(gobj()));
     }
-    Book get_book () const;
+    Glib::RefPtr<Book> get_book () const;
 
     QString get_file_path () const
     {

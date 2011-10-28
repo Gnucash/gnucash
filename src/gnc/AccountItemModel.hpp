@@ -23,8 +23,11 @@
 #ifndef GNC_ACCOUNTITEMMODEL_HPP
 #define GNC_ACCOUNTITEMMODEL_HPP
 
-#include "gnc/Account.hpp"
+#include "config.h"
+#include "gncmm/Account.hpp"
 #include "gnc/QofEventWrapper.hpp"
+#include "gnc/conv.hpp"
+#include "gnc/metatype.hpp"
 
 #include <QAbstractItemModel>
 
@@ -47,7 +50,7 @@ class AccountTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    AccountTreeModel(Account rootaccount, QObject *parent = 0);
+    AccountTreeModel(Glib::RefPtr<Account> rootaccount, QObject *parent = 0);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -60,7 +63,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 protected:
-    Account m_root;
+    Glib::RefPtr<Account> m_root;
 };
 
 typedef QList< ::Account*> AccountQList;
@@ -77,7 +80,7 @@ class AccountListModel : public AccountTreeModel
     Q_OBJECT
 public:
     typedef AccountTreeModel base_class;
-    AccountListModel(Account rootaccount, QObject *parent = 0);
+    AccountListModel(Glib::RefPtr<Account> rootaccount, QObject *parent = 0);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const { return m_list.size(); }
 
@@ -89,7 +92,7 @@ public:
     int indexOf(AccountQList::value_type value) const { return m_list.indexOf(value); }
     const AccountQList::value_type at(int i) const { return m_list.at(i); }
 
-public slots:
+public Q_SLOTS:
     void accountEvent( ::Account* v, QofEventId event_type);
 
 private:
@@ -107,14 +110,12 @@ class AccountListNamesModel : public AccountListModel
     Q_OBJECT
 public:
     typedef AccountListModel base_class;
-    AccountListNamesModel(Account rootaccount, QObject *parent = 0)
+    AccountListNamesModel(Glib::RefPtr<Account> rootaccount, QObject *parent = 0)
             : base_class(rootaccount, parent)
     {}
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role) const;
 };
-
-
 
 } // END namespace gnc
 

@@ -23,10 +23,10 @@ public:
 
     Session m_session;
 
-signals:
+Q_SIGNALS:
     void sessionLoaded();
 
-public slots:
+public Q_SLOTS:
 
 };
 

@@ -322,7 +322,7 @@ Dashboard::on_dockwBasicTxn_visibilityChanged(bool visible)
 void
 Dashboard::transferFundsWidgetButtonToggled(bool checked)
 {
-    if(checked)
+    if (checked)
     {
         ui->dockwBasicTxn->show();
     }

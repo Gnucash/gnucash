@@ -44,11 +44,11 @@ extern "C"
 #include "engine/TransLog.h"
 }
 
-#include "gnc/Account.hpp"
+#include "gncmm/Account.hpp"
 #include "gnc/AccountItemModel.hpp"
-#include "gnc/Book.hpp"
-#include "gnc/Numeric.hpp"
-#include "gnc/Split.hpp"
+#include "gncmm/Book.hpp"
+#include "gncmm/Numeric.hpp"
+#include "gncmm/Split.hpp"
 #include "gnc/SplitListModel.hpp"
 #include "gnc/RecentFileMenu.hpp"
 #include "gnc/SplitListView.hpp"
@@ -87,10 +87,10 @@ MainWindow::MainWindow()
     createStatusBar();
     setIcons();
 
-    dboard = new Dashboard(this);
-    dboard->setWindowTitle("Dashboard");
-    //dboard->show();
-    ui->tabWidget->addTab(dboard, "Dashboard");
+    m_dboard = new Dashboard(this);
+    m_dboard->setWindowTitle("Dashboard");
+    //m_dboard->show();
+    ui->tabWidget->addTab(m_dboard, "Dashboard");
 
     /* Properties used by QSettings */
     QCoreApplication::setOrganizationName("Gnucash");
@@ -102,15 +102,16 @@ MainWindow::MainWindow()
     connect(m_undoStack, SIGNAL(cleanChanged(bool)),
             this, SLOT(documentCleanStateChanged(bool)));
     connect(m_btnTransferFundsWidget, SIGNAL(toggled(bool)),
-            dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
+            m_dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
     connect(this, SIGNAL(dashboardVisible(bool)),
-            dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
+            m_dboard, SLOT(transferFundsWidgetButtonToggled(bool)));
 
     setWindowIcon(QIcon(":/pixmaps/gnucash-icon-64x64.png"));
 
     /* Check if the system supports freedesktop standards for icons,
      * if not, then use the bundled icon set. */
-    if (!QIcon::hasThemeIcon("document-open")) {
+    if (!QIcon::hasThemeIcon("document-open"))
+    {
         QIcon::setThemeName("oxygen");
     }
 
@@ -312,8 +313,8 @@ void MainWindow::autoLoadRecentFile()
     QSettings settings;
     QString lastOpenedFile = "";
     lastOpenedFile = m_menuRecentFiles->getRecentFileName(&settings,
-                                                          "RecentFiles");
-    if(maybeSave())
+                     "RecentFiles");
+    if (maybeSave())
     {
         loadFile(lastOpenedFile);
     }
@@ -399,7 +400,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         ui->actionViewAccountList->setChecked(false);
         reallyRemoveTab(index);
     }
-    else if (widget == dboard)
+    else if (widget == m_dboard)
     {
         ui->actionViewDashboard->setChecked(false);
         m_dashboardToolBar->setEnabled(false);
@@ -436,7 +437,7 @@ void MainWindow::on_actionViewWelcomepage_triggered(bool checked)
 
 void MainWindow::on_actionViewDashboard_triggered(bool checked)
 {
-    viewOrHideTab(checked, dboard);
+    viewOrHideTab(checked, m_dboard);
 }
 
 void MainWindow::viewOrHideTab(bool checked, QWidget *widget)
@@ -458,11 +459,11 @@ void MainWindow::viewOrHideTab(bool checked, QWidget *widget)
         if (tabIsCurrent)
             ui->tabWidget->setCurrentWidget(widget);
 
-        if(widget == dboard)
+        if(widget == m_dboard)
         {
             m_dashboardToolBar->setEnabled(true);
             m_dashboardToolBar->setHidden(false);
-            emit dashboardVisible(true);
+            Q_EMIT dashboardVisible(true);
         }
     }
     else
@@ -490,11 +491,11 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     bool tabWithAccounts = (widget != ui->textBrowserTab);
     ui->menuAccount->setEnabled(tabWithAccounts);
 
-    if(ui->tabWidget->currentWidget() == dboard)
+    if(ui->tabWidget->currentWidget() == m_dboard)
     {
         m_dashboardToolBar->setEnabled(true);
         m_dashboardToolBar->setHidden(false);
-        dboard->showDashboardWidgets();
+        m_dboard->showDashboardWidgets();
     }
     else
     {
@@ -511,7 +512,7 @@ void MainWindow::accountItemActivated(const QModelIndex & index)
         qDebug() << "Wrong model; row=" << (index.isValid()? index.row() : -1);
         return;
     }
-    Account account(static_cast< ::Account*>(index.internalPointer()));
+    Glib::RefPtr<Account> account = Glib::wrap(static_cast< ::Account*>(index.internalPointer()));
     if (!account)
     {
         qDebug() << "Account is null; why?";
@@ -526,7 +527,7 @@ void MainWindow::accountItemActivated(const QModelIndex & index)
 
     // Insert this as a new tab
     tableView->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());
-    ui->tabWidget->addTab(tableView, account.getName());
+    ui->tabWidget->addTab(tableView, g2q(account->getName()));
     ui->tabWidget->setCurrentWidget(tableView);
 
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -568,7 +569,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (maybeSave())
     {
-        dboard->mainWindowCloseEvent();
+        m_dboard->mainWindowCloseEvent();
         writeSettings();
         event->accept();
 
@@ -623,7 +624,7 @@ void MainWindow::newFile()
 
 void MainWindow::dockWidgetsVisibilityChanged(int wdg, bool visible)
 {
-    if(wdg == 0)
+    if (wdg == 0)
     {
         /** todo: handle tabs */
         m_btnTransferFundsWidget->setChecked(visible);

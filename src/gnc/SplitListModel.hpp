@@ -23,10 +23,12 @@
 #ifndef GNC_SPLITLISTMODEL_HPP
 #define GNC_SPLITLISTMODEL_HPP
 
-#include "gnc/Account.hpp"
-#include "gnc/Split.hpp"
+#include "config.h"
+#include "gncmm/Account.hpp"
+#include "gncmm/Split.hpp"
 #include "gnc/QofEventWrapper.hpp"
-#include "gnc/Transaction.hpp"
+#include "gncmm/Transaction.hpp"
+#include "gnc/conv.hpp"
 
 extern "C"
 {
@@ -61,10 +63,10 @@ public:
         , COLUMN_LAST
     };
 
-    SplitListModel(const Account& acc, QUndoStack* undoStack, QObject *parent = 0);
+    SplitListModel(const Glib::RefPtr<Account> acc, QUndoStack* undoStack, QObject *parent = 0);
     ~SplitListModel();
 
-    Account getAccount() const { return m_account; }
+    Glib::RefPtr<Account> getAccount() const { return m_account; }
 
     QModelIndex parent(const QModelIndex &index) const { return QModelIndex(); }
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -79,7 +81,7 @@ public:
 
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
 
-public slots:
+public Q_SLOTS:
     void transactionEvent( ::Transaction* trans, QofEventId event_type);
     void accountEvent( ::Account* trans, QofEventId event_type);
     void editorClosed(const QModelIndex& index, QAbstractItemDelegate::EndEditHint hint);
@@ -89,7 +91,7 @@ private:
     void recreateTmpTrans();
 
 protected:
-    Account m_account;
+    Glib::RefPtr<Account> m_account;
     SplitQList m_list;
     QUndoStack* m_undoStack;
     typedef QHash< ::Transaction*, int> TransactionRowHash;

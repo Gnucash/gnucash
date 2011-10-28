@@ -14,7 +14,7 @@ extern "C"
 #include "engine/Split.h"
 }
 
-#include "gnc/Split.hpp"
+#include "gncmm/Split.hpp"
 #include "gnc/SplitListModel.hpp"
 #include "gnc/AccountItemModel.hpp"
 

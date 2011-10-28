@@ -21,9 +21,10 @@
  */
 
 #include "Cmd.hpp"
-#include "gnc/Split.hpp"
-#include "gnc/Account.hpp"
-#include "gnc/Transaction.hpp"
+#include "gncmm/Split.hpp"
+#include "gncmm/Account.hpp"
+#include "gncmm/Transaction.hpp"
+#include "gnc/conv.hpp"
 #include <QObject>
 
 namespace gnc
@@ -37,54 +38,54 @@ namespace cmd
 
 // ////////////////////////////////////////////////////////////
 
-QUndoCommand* setSplitMemo(Split& t, const QString& newValue)
+QUndoCommand* setSplitMemo(Glib::RefPtr<Split> t, const QString& newValue)
 {
-    return new Cmd<Split, QString>(QObject::tr("Edit Split Memo"),
-                                   t, &Split::setMemo,
-                                   t.getMemo(), newValue);
+    return new Cmd<Split, Glib::ustring>(QObject::tr("Edit Split Memo"),
+                                         t, &Split::setMemo,
+                                         t->getMemo(), q2g(newValue));
 }
 
-QUndoCommand* setSplitAction(Split& t, const QString& newValue)
+QUndoCommand* setSplitAction(Glib::RefPtr<Split> t, const QString& newValue)
 {
-    return new Cmd<Split, QString>(QObject::tr("Edit Split Action"),
-                                   t, &Split::setAction,
-                                   t.getAction(), newValue);
+    return new Cmd<Split, Glib::ustring>(QObject::tr("Edit Split Action"),
+                                         t, &Split::setAction,
+                                         t->getAction(), q2g(newValue));
 }
 
-QUndoCommand* setSplitReconcile(Split& t, char newValue)
+QUndoCommand* setSplitReconcile(Glib::RefPtr<Split> t, char newValue)
 {
-    if (newValue == t.getReconcile())
+    if (newValue == t->getReconcile())
         return NULL;
     // Special third argument: The setter function takes a value
     // directly, instead of a const-reference, so the template type
     // must be given explicitly.
     return new Cmd<Split, char, void (Split::*)(char)>(QObject::tr("Edit Split Reconcile"),
             t, &Split::setReconcile,
-            t.getReconcile(), newValue);
+            t->getReconcile(), newValue);
 }
 
-QUndoCommand* setSplitAccount(Split& t, Account newValue)
+QUndoCommand* setSplitAccount(Glib::RefPtr<Split> t, Glib::RefPtr<Account> newValue)
 {
     // Temporary function pointer "tmp" to resolve the ambiguous
     // overload "setAccount()".
-    void (Split::*tmp)(Account) = &Split::setAccount;
-    return new Cmd<Split, Account, void (Split::*)(Account)>(QObject::tr("Edit Split Account"),
+    void (Split::*tmp)(Glib::RefPtr<Account>) = &Split::setAccount;
+    return new Cmd<Split, Glib::RefPtr<Account>, void (Split::*)(Glib::RefPtr<Account>)>(QObject::tr("Edit Split Account"),
             t, tmp,
-            t.getAccount(), newValue);
+            t->getAccount(), newValue);
 }
 
-QUndoCommand* setSplitAmount(Split& t, const Numeric& newValue)
+QUndoCommand* setSplitAmount(Glib::RefPtr<Split> t, const Numeric& newValue)
 {
     return new Cmd<Split, Numeric>(QObject::tr("Edit Split Amount"),
                                    t, &Split::setAmount,
-                                   t.getAmount(), newValue);
+                                   t->getAmount(), newValue);
 }
 
-QUndoCommand* setSplitValue(Split& t, const Numeric& newValue)
+QUndoCommand* setSplitValue(Glib::RefPtr<Split> t, const Numeric& newValue)
 {
     return new Cmd<Split, Numeric>(QObject::tr("Edit Split Value"),
                                    t, &Split::setValue,
-                                   t.getValue(), newValue);
+                                   t->getValue(), newValue);
 }
 
 // ////////////////////////////////////////////////////////////
@@ -100,91 +101,97 @@ public:
      * value given directly.
      */
     SplitValueAndAmountCmd(const QString& text,
-                           WeakPointer<target_type::element_type>& targetPtr,
+                           Glib::RefPtr<Split> targetPtr,
                            const value_type& previousValue,
                            const value_type& newValue,
                            QUndoCommand *parent = 0)
-            : base_class(text, parent)
-            , m_target(targetPtr.gobj())
-            , m_previousValue(previousValue)
-            , m_newValue(newValue)
+        : base_class(text, parent)
+        , m_target(targetPtr)
+        , m_previousValue(previousValue)
+        , m_newValue(newValue)
     {
         Q_ASSERT(m_target);
     }
 
-    virtual void redo() { set(m_newValue); }
-    virtual void undo() { set(m_previousValue); }
+    virtual void redo()
+    {
+        set(m_newValue);
+    }
+    virtual void undo()
+    {
+        set(m_previousValue);
+    }
 private:
     void set(const value_type& value)
     {
-        Transaction trans = m_target.getParent();
-        if (trans.countSplits() != 2)
+        Glib::RefPtr<Transaction> trans = m_target->getParent();
+        if (!trans || trans->countSplits() != 2)
             return;
-        Split other = m_target.getOtherSplit();
+        Glib::RefPtr<Split> other = m_target->getOtherSplit();
         Q_ASSERT(other);
-        Commodity originCommodity = m_target.getAccount().getCommodity();
-        Commodity transCommodity = trans.getCurrency();
-        Commodity otherCommodity = other.getAccount().getCommodity();
+        Glib::RefPtr<Commodity> originCommodity = m_target->getAccount()->getCommodity();
+        Glib::RefPtr<Commodity> transCommodity = trans->getCurrency();
+        Glib::RefPtr<Commodity> otherCommodity = other->getAccount()->getCommodity();
         if (originCommodity != transCommodity
                 || transCommodity != otherCommodity)
             return;
 
-        trans.beginEdit();
-        m_target.setValue(value);
-        m_target.setAmount(value);
+        trans->beginEdit();
+        m_target->setValue(value);
+        m_target->setAmount(value);
         Numeric valueNeg = value.neg();
-        other.setAmount(valueNeg);
-        other.setValue(valueNeg);
-        trans.commitEdit();
+        other->setAmount(valueNeg);
+        other->setValue(valueNeg);
+        trans->commitEdit();
     }
 
 protected:
-    target_type m_target;
+    Glib::RefPtr<target_type> m_target;
     value_type m_previousValue;
     value_type m_newValue;
 
 };
 
-QUndoCommand* setSplitValueAndAmount(Split& t, const Numeric& newValue)
+QUndoCommand* setSplitValueAndAmount(Glib::RefPtr<Split> t, const Numeric& newValue)
 {
     return new SplitValueAndAmountCmd(QObject::tr("Edit Transaction Value"),
-                                      t, t.getValue(), newValue);
+                                      t, t->getValue(), newValue);
 }
 
 // ////////////////////////////////////////////////////////////
 
-QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue)
+QUndoCommand* setTransactionNum(Glib::RefPtr<Transaction> t, const QString& newValue)
 {
-    if (newValue == t.getNum())
+    if (newValue == g2q(t->getNum()))
         return NULL;
-    return new Cmd<Transaction, QString>(QObject::tr("Edit Transaction Number"),
-                                         t, &Transaction::setNum,
-                                         t.getNum(), newValue);
+    return new Cmd<Transaction, Glib::ustring>(QObject::tr("Edit Transaction Number"),
+            t, &Transaction::setNum,
+            t->getNum(), q2g(newValue));
 }
 
-QUndoCommand* setTransactionDescription(Transaction& t, const QString& newValue)
+QUndoCommand* setTransactionDescription(Glib::RefPtr<Transaction> t, const QString& newValue)
 {
-    if (newValue == t.getDescription())
+    if (newValue == g2q(t->getDescription()))
         return NULL;
-    return new Cmd<Transaction, QString>(QObject::tr("Edit Transaction Description"),
-                                         t, &Transaction::setDescription,
-                                         t.getDescription(), newValue);
+    return new Cmd<Transaction, Glib::ustring>(QObject::tr("Edit Transaction Description"),
+            t, &Transaction::setDescription,
+            t->getDescription(), q2g(newValue));
 }
 
-QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue)
+QUndoCommand* setTransactionNotes(Glib::RefPtr<Transaction> t, const QString& newValue)
 {
-    return new Cmd<Transaction, QString>(QObject::tr("Edit Transaction Notes"),
-                                         t, &Transaction::setNotes,
-                                         t.getNotes(), newValue);
+    return new Cmd<Transaction, Glib::ustring>(QObject::tr("Edit Transaction Notes"),
+            t, &Transaction::setNotes,
+            t->getNotes(), q2g(newValue));
 }
 
-QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue)
+QUndoCommand* setTransactionDate(Glib::RefPtr<Transaction> t, const QDate& newValue)
 {
-    if (newValue == t.getDatePosted())
+    if (newValue == g2q(t->getDatePosted()))
         return NULL;
-    return new Cmd<Transaction, QDate>(QObject::tr("Edit Transaction Date"),
-                                       t, &Transaction::setDatePosted,
-                                       t.getDatePosted(), newValue);
+    return new Cmd<Transaction, Glib::Date>(QObject::tr("Edit Transaction Date"),
+                                            t, &Transaction::setDatePosted,
+                                            t->getDatePosted(), q2g(newValue));
 }
 
 // ////////////////////////////////////////////////////////////
@@ -198,38 +205,38 @@ public:
     /** Constructor
      */
     TransactionDestroyCmd(const QString& text,
-                          WeakPointer<target_type::element_type>& targetPtr,
+                          Glib::RefPtr<target_type>& targetPtr,
                           QUndoCommand *parent = 0)
-            : base_class(text, parent)
-            , m_target(targetPtr.gobj())
-            , m_previousValue(m_target)
-            , m_book(m_target.getBook())
+        : base_class(text, parent)
+        , m_target(targetPtr)
+        , m_previousValue(*targetPtr.operator->())
+        , m_book(m_target->getBook())
     {
         Q_ASSERT(m_target);
     }
 
     virtual void redo()
     {
-        xaccTransDestroy(m_target.gobj());
+        xaccTransDestroy(m_target->gobj());
         m_target.reset();
     }
 
     virtual void undo()
     {
-        m_target.reset(Transaction::newInstance(m_book));
-        m_target.beginEdit();
+        m_target = Glib::wrap(Transaction::newInstance(m_book));
+        m_target->beginEdit();
         m_previousValue.copyTo(m_target);
-        m_target.commitEdit();
+        m_target->commitEdit();
         // Could also use m_previousValue.createAsReal()
     }
 
 protected:
-    target_type m_target;
+    Glib::RefPtr<Transaction> m_target;
     TmpTransaction m_previousValue;
-    Book m_book;
+    Glib::RefPtr<Book> m_book;
 };
 
-QUndoCommand* destroyTransaction(Transaction& t)
+QUndoCommand* destroyTransaction(Glib::RefPtr<Transaction> t)
 {
     return new TransactionDestroyCmd(QObject::tr("Delete Transaction"),
                                      t);
@@ -251,7 +258,7 @@ QUndoCommand* destroyTransaction(Transaction& t)
  * definition keeps a C pointer to the original object, and we hope
  * that one lives longer than we do.
  */
-template<class TargetT, class ValueT, typename SetterFunc = void (TargetT::*)(const ValueT&)>
+template < class TargetT, class ValueT, typename SetterFunc = void (TargetT::*)(const ValueT&) >
 class CmdRef : public QUndoCommand
 {
 public:
@@ -282,17 +289,23 @@ public:
            const value_type& previousValue,
            const value_type& newValue,
            QUndoCommand *parent = 0)
-            : base_class(text, parent)
-            , m_target(targetRef)
-            , m_setter(setter)
-            , m_previousValue(previousValue)
-            , m_newValue(newValue)
+        : base_class(text, parent)
+        , m_target(targetRef)
+        , m_setter(setter)
+        , m_previousValue(previousValue)
+        , m_newValue(newValue)
     {
         Q_ASSERT(m_setter);
     }
 
-    virtual void redo() { set(m_newValue); }
-    virtual void undo() { set(m_previousValue); }
+    virtual void redo()
+    {
+        set(m_newValue);
+    }
+    virtual void undo()
+    {
+        set(m_previousValue);
+    }
 
 private:
     void set(const value_type& value)
@@ -309,11 +322,11 @@ protected:
 };
 
 
-QUndoCommand* setSplitAccount(TmpSplit& t, Account newValue)
+QUndoCommand* setSplitAccount(TmpSplit& t, Glib::RefPtr<Account> newValue)
 {
     return new CmdRef<TmpSplit, ::Account*, void(TmpSplit::*)(::Account*)>(QObject::tr("Edit Split Account"),
             t, &TmpSplit::setAccount,
-            t.getAccount(), newValue.gobj());
+            t.getAccount(), newValue->gobj());
 }
 QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue)
 {
@@ -326,21 +339,21 @@ QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue)
 }
 QUndoCommand* setTransactionNum(TmpTransaction& t, const QString& newValue)
 {
-    return new CmdRef<TmpTransaction, QString>(QObject::tr("Edit Transaction Number"),
+    return new CmdRef<TmpTransaction, Glib::ustring>(QObject::tr("Edit Transaction Number"),
             t, &TmpTransaction::setNum,
-            t.getNum(), newValue);
+            t.getNum(), q2g(newValue));
 }
 QUndoCommand* setTransactionDescription(TmpTransaction& t, const QString& newValue)
 {
-    return new CmdRef<TmpTransaction, QString>(QObject::tr("Edit Transaction Description"),
+    return new CmdRef<TmpTransaction, Glib::ustring>(QObject::tr("Edit Transaction Description"),
             t, &TmpTransaction::setDescription,
-            t.getDescription(), newValue);
+            t.getDescription(), q2g(newValue));
 }
 QUndoCommand* setTransactionDate(TmpTransaction& t, const QDate& newValue)
 {
-    return new CmdRef<TmpTransaction, QDate>(QObject::tr("Edit Transaction Date"),
+    return new CmdRef<TmpTransaction, Glib::Date>(QObject::tr("Edit Transaction Date"),
             t, &TmpTransaction::setDatePosted,
-            t.getDatePosted(), newValue);
+            t.getDatePosted(), q2g(newValue));
 }
 
 // ////////////////////////////////////////////////////////////
@@ -360,18 +373,24 @@ public:
                               const value_type& previousValue,
                               const value_type& newValue,
                               QUndoCommand *parent = 0)
-            : base_class(text, parent)
-            , m_target(targetRef)
-            , m_previousValue(previousValue)
-            , m_newValue(newValue)
+        : base_class(text, parent)
+        , m_target(targetRef)
+        , m_previousValue(previousValue)
+        , m_newValue(newValue)
     {
         Q_ASSERT(m_target.getParent());
         Q_ASSERT(m_target.getOtherSplit());
         Q_ASSERT(m_target.getAccount());
     }
 
-    virtual void redo() { set(m_newValue); }
-    virtual void undo() { set(m_previousValue); }
+    virtual void redo()
+    {
+        set(m_newValue);
+    }
+    virtual void undo()
+    {
+        set(m_previousValue);
+    }
 private:
     void set(const value_type& value)
     {
@@ -382,10 +401,10 @@ private:
         TmpSplit* p_other = m_target.getOtherSplit();
         Q_ASSERT(p_other);
         TmpSplit& other = *p_other;
-        Commodity originCommodity = Account(m_target.getAccount()).getCommodity();
-        Commodity transCommodity = trans.getCommodity();
+        Glib::RefPtr<Commodity> originCommodity = Glib::wrap(m_target.getAccount())->getCommodity();
+        Glib::RefPtr<Commodity> transCommodity = trans.getCommodity();
         Q_ASSERT(other.getAccount());
-        Commodity otherCommodity = Account(other.getAccount()).getCommodity();
+        Glib::RefPtr<Commodity> otherCommodity = Glib::wrap(other.getAccount())->getCommodity();
         if (originCommodity != transCommodity
                 || transCommodity != otherCommodity)
             return;
@@ -425,9 +444,9 @@ public:
     TransactionCreateCmd(const QString& text,
                          const TmpTransaction& target,
                          QUndoCommand *parent = 0)
-            : base_class(text, parent)
-            , m_template(target)
-            , m_created(NULL)
+        : base_class(text, parent)
+        , m_template(target)
+        , m_created(NULL)
     {}
 
     virtual void redo()
@@ -437,13 +456,13 @@ public:
 
     virtual void undo()
     {
-        xaccTransDestroy(m_created.gobj());
+        xaccTransDestroy(m_created->gobj());
         m_created.reset();
     }
 
 protected:
     TmpTransaction m_template;
-    Transaction m_created;
+    Glib::RefPtr<Transaction> m_created;
 };
 
 QUndoCommand* commitNewTransaction(const TmpTransaction& t)

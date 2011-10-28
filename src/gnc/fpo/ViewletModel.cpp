@@ -1,8 +1,8 @@
 #include "ViewletModel.hpp"
-#include "gnc/Transaction.hpp"
-#include "gnc/Account.hpp"
+#include "gncmm/Transaction.hpp"
+#include "gncmm/Account.hpp"
 
-#include "gnc/Numeric.hpp"
+#include "gncmm/Numeric.hpp"
 
 namespace gnc
 {
@@ -159,57 +159,53 @@ void
 ViewletModel::buildMiniJournalStruct(SplitQList splitList)
 {
     int numOfSplits = splitList.size();
-    Split split;
-    int i;
-    QDate tempDate;
-    QString tempAccount;
+    Glib::Date tempDate;
+    Glib::ustring tempAccount;
 
-    for (i = 0; i < numOfSplits; i++)
+    for (int i = 0; i < numOfSplits; i++)
     {
-        split = splitList.at(i);
-        Transaction txn = split.getParent();
+        Glib::RefPtr<Split> split = Glib::wrap(splitList.at(i));
+        Glib::RefPtr<Transaction> txn = split->getParent();
 
         structViewletEntries entry;
 
         if(i == 0)
         {
-            tempDate = txn.getDatePosted();
+            tempDate = txn->getDatePosted();
             entry.isDateEqual = false;
-            tempAccount = split.getCorrAccountName();
+            tempAccount = split->getCorrAccountName();
             entry.isSplitAccountEqual = false;
         }
         else
         {
-            if(txn.getDatePosted() == tempDate)
+            if(txn->getDatePosted() == tempDate)
             {
                 entry.isDateEqual = true;
-                tempDate = txn.getDatePosted();
             }
             else
             {
                 entry.isDateEqual = false;
-                tempDate = txn.getDatePosted();
+                tempDate = txn->getDatePosted();
             }
 
-            if(split.getCorrAccountName() == tempAccount)
+            if(split->getCorrAccountName() == tempAccount)
             {
                 entry.isSplitAccountEqual = true;
             }
             else
             {
                 entry.isSplitAccountEqual = false;
-                tempAccount = split.getCorrAccountName();
+                tempAccount = split->getCorrAccountName();
             }
         }
 
-        entry.txnDate = txn.getDatePosted().toString();
-        entry.splitAccount = split.getCorrAccountName();
-        entry.txnDescription = txn.getDescription();
+        entry.txnDate = g2q(txn->getDatePosted()).toString();
+        entry.splitAccount = g2q(split->getCorrAccountName());
+        entry.txnDescription = g2q(txn->getDescription());
 
-        Numeric splitAmount;
-        splitAmount = split.getAmount();
+        Numeric splitAmount = split->getAmount();
         PrintAmountInfo printInfo(split, true);
-        entry.splitAmount = splitAmount.printAmount(printInfo);
+        entry.splitAmount = g2q(splitAmount.printAmount(printInfo));
 
         //qDebug()<<entry.isDateEqual;
         //qDebug()<<entry.isSplitAccountEqual;

@@ -288,7 +288,7 @@ ViewletView::loadAccountsTreeComboBox(AccountListModel * const m_accountsListMod
 {
     accountsList = m_accountsListModel;
     comboAccountsList->setModel(accountsList);
-    emit fileLoaded();
+    Q_EMIT fileLoaded();
 }
 
 /***** Slots *****/

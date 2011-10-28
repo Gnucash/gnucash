@@ -148,7 +148,7 @@ void RecentFileMenu::on_actionRecentFile()
     {
         QString str = action->data().toString();
         if (!str.isEmpty())
-            emit fileSelected(str);
+            Q_EMIT fileSelected(str);
     }
 }
 

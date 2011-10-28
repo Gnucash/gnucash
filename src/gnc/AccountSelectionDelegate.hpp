@@ -23,7 +23,8 @@
 #ifndef GNC_ACCOUNTSELECTIONDELEGATE_HPP
 #define GNC_ACCOUNTSELECTIONDELEGATE_HPP
 
-#include "gnc/Account.hpp"
+#include "config.h"
+#include "gncmm/Account.hpp"
 
 #include <QtGui/QStyledItemDelegate>
 #include <QDebug>

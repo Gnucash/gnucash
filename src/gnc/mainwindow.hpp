@@ -66,7 +66,7 @@ public:
     bool hasOpenedFile() const { return !m_currentFilename.isEmpty(); }
     void dockWidgetsVisibilityChanged(int wdg, bool visible);
 
-public slots:
+public Q_SLOTS:
     void accountItemActivated(const QModelIndex & index);
     void loadFileMaybe(const QString &fileName);
     void documentCleanStateChanged(bool clean);
@@ -74,10 +74,10 @@ public slots:
 protected:
     void closeEvent(QCloseEvent *event);
 
-signals:
+Q_SIGNALS:
     void dashboardVisible(bool visible);
 
-private slots:
+private Q_SLOTS:
     void newFile();
     void on_actionOpen_triggered();
     bool on_actionSave_triggered();
@@ -100,7 +100,7 @@ private:
     void createToolBars();
     void createStatusBar();
     void setIcons();
-    void readSettings();    
+    void readSettings();
     void autoLoadRecentFile();
     void writeSettings();
     bool maybeSave();
@@ -139,7 +139,7 @@ private:
     QSharedPointer<RecentFileMenu> m_menuRecentFiles;
     QUndoStack *m_undoStack;
 
-    Dashboard *dboard;
+    Dashboard *m_dboard;
 
     Session m_session;
     AccountListModel *m_accountListModel;

@@ -24,8 +24,9 @@
 #define GNC_CMD_HPP
 
 #include <QUndoCommand>
+#include <QDate>
 #include <gnc/WeakPointer.hpp>
-#include <gnc/Numeric.hpp>
+#include <gncmm/Numeric.hpp>
 
 namespace gnc
 {
@@ -73,32 +74,8 @@ public:
     /// Type of the getter function to retrieve the current value from the target object
     typedef value_type (target_type::*getter_func)() const;
 
-    /** Constructor.
-     * @param text The QUndoCommand's text which will be displayed in the Undo action.
-     * @param targetPtr Reference to the target object on which this command is applied.
-     * @param setter Pointer to function which sets the value in the target object
-     * @param getter Pointer to function which returns the current value from the target object
-     * @param newValue The new value to be set
-     * @param parent The parent QUndoCommand instance, or NULL.
-     */
-    Cmd(const QString& text,
-        WeakPointer<typename target_type::element_type>& targetPtr,
-        setter_func setter,
-        getter_func getter,
-        const value_type& newValue,
-        QUndoCommand *parent = 0)
-            : base_class(text, parent)
-            , m_target(targetPtr.gobj())
-            , m_setter(setter)
-            , m_previousValue((m_target.*getter)())
-            , m_newValue(newValue)
-    {
-        Q_ASSERT(m_target);
-        Q_ASSERT(m_setter);
-    }
-
-    /** Overloaded constructor without a getter-function but instead
-     * the previous value given directly.
+    /** Constructor with the to-be-manipulated object "targetPtr", the setter
+     * function, the previous value, and the new value.
      *
      * @param text The QUndoCommand's text which will be displayed in the Undo action.
      * @param targetPtr Reference to the target object on which this command is applied.
@@ -108,13 +85,13 @@ public:
      * @param parent The parent QUndoCommand instance, or NULL.
      */
     Cmd(const QString& text,
-        WeakPointer<typename target_type::element_type>& targetPtr,
+        Glib::RefPtr<target_type> targetPtr,
         setter_func setter,
         const value_type& previousValue,
         const value_type& newValue,
         QUndoCommand *parent = 0)
             : base_class(text, parent)
-            , m_target(targetPtr.gobj())
+            , m_target(targetPtr)
             , m_setter(setter)
             , m_previousValue(previousValue)
             , m_newValue(newValue)
@@ -139,11 +116,11 @@ private:
     {
         // Uh oh.  The calling syntax for pointer-to-member
         // variables (here: m_setter) looks rather weird:
-        (m_target.*m_setter)(value);
+        (m_target.operator->()->*m_setter)(value);
     }
 
 protected:
-    target_type m_target;
+    Glib::RefPtr<target_type> m_target;
     setter_func m_setter;
     value_type m_previousValue;
     value_type m_newValue;
@@ -160,22 +137,22 @@ namespace cmd
 // forth. Spooky, IMHO.
 // QUndoCommand* setSplitMemo(Split& split, const QString& newValue);
 // QUndoCommand* setSplitAction(Split& t, const QString& newValue);
-QUndoCommand* setSplitAccount(Split& t, Account newValue);
-QUndoCommand* setSplitAccount(TmpSplit& t, Account newValue);
-QUndoCommand* setSplitReconcile(Split& t, char newValue);
+QUndoCommand* setSplitAccount(Glib::RefPtr<Split> t, Glib::RefPtr<Account> newValue);
+QUndoCommand* setSplitAccount(TmpSplit& t, Glib::RefPtr<Account> newValue);
+QUndoCommand* setSplitReconcile(Glib::RefPtr<Split> t, char newValue);
 QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue);
-// QUndoCommand* setSplitAmount(Split& t, const Numeric& newValue);
-// QUndoCommand* setSplitValue(Split& t, const Numeric& newValue);
-QUndoCommand* setTransactionNum(Transaction& t, const QString& newValue);
+// QUndoCommand* setSplitAmount(Glib::RefPtr<Split> t, const Numeric& newValue);
+// QUndoCommand* setSplitValue(Glib::RefPtr<Split> t, const Numeric& newValue);
+QUndoCommand* setTransactionNum(Glib::RefPtr<Transaction> t, const QString& newValue);
 QUndoCommand* setTransactionNum(TmpTransaction& t, const QString& newValue);
-QUndoCommand* setTransactionDescription(Transaction& t, const QString& newValue);
+QUndoCommand* setTransactionDescription(Glib::RefPtr<Transaction> t, const QString& newValue);
 QUndoCommand* setTransactionDescription(TmpTransaction& t, const QString& newValue);
-// QUndoCommand* setTransactionNotes(Transaction& t, const QString& newValue);
-QUndoCommand* setTransactionDate(Transaction& t, const QDate& newValue);
+// QUndoCommand* setTransactionNotes(Glib::RefPtr<Transaction> t, const QString& newValue);
+QUndoCommand* setTransactionDate(Glib::RefPtr<Transaction> t, const QDate& newValue);
 QUndoCommand* setTransactionDate(TmpTransaction& t, const QDate& newValue);
-QUndoCommand* setSplitValueAndAmount(Split& t, const Numeric& newValue);
+QUndoCommand* setSplitValueAndAmount(Glib::RefPtr<Split> t, const Numeric& newValue);
 QUndoCommand* setSplitValueAndAmount(TmpSplit& t, const Numeric& newValue);
-QUndoCommand* destroyTransaction(Transaction& t);
+QUndoCommand* destroyTransaction(Glib::RefPtr<Transaction> t);
 QUndoCommand* commitNewTransaction(const TmpTransaction& t);
 
 } // END namespace cmd

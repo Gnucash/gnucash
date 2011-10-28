@@ -23,8 +23,8 @@
 #include "AccountSelectionDelegate.hpp"
 
 #include "gnc/AccountItemModel.hpp"
-#include "gnc/Book.hpp"
-#include "gnc/Split.hpp"
+#include "gncmm/Book.hpp"
+#include "gncmm/Split.hpp"
 #include "gnc/SplitListModel.hpp"
 
 #include <QDebug>
@@ -39,10 +39,13 @@ AccountSelectionDelegate::AccountSelectionDelegate(QObject* parent)
 
 QString AccountSelectionDelegate::displayText(const QVariant& value, const QLocale& locale) const
 {
-    if (value.canConvert<Account>())
+    if (value.canConvert< ::Account*>())
     {
-        Account acc = value.value<Account>();
-        return acc.getFullName();
+        Glib::RefPtr<Account> acc = Glib::wrap(value.value< ::Account*>());
+        if (acc)
+            return g2q(acc->getFullName());
+        else
+            return QString();
     }
     else
     {
@@ -60,11 +63,11 @@ QWidget *AccountSelectionDelegate::createEditor(QWidget *parent,
     const SplitListModel* smodel = dynamic_cast<const SplitListModel*>(index.model());
     if (smodel)
     {
-        Account modelAccount = smodel->getAccount();
+        Glib::RefPtr<Account> modelAccount = smodel->getAccount();
         Q_ASSERT(modelAccount);
-        Book book = modelAccount.getBook();
+        Glib::RefPtr<Book> book = modelAccount->getBook();
         Q_ASSERT(book);
-        Account rootaccount = book.get_root_account();
+        Glib::RefPtr<Account> rootaccount = book->get_root_account();
         Q_ASSERT(rootaccount);
         AccountListModel* model = new AccountListNamesModel(rootaccount, comboBox);
         comboBox->setModel(model);
@@ -81,14 +84,14 @@ void AccountSelectionDelegate::setEditorData(QWidget *editor, const QModelIndex 
     Q_ASSERT(index.isValid());
 
     QVariant value = index.model()->data(index, Qt::EditRole);
-    if (value.canConvert<Account>())
+    if (value.canConvert< ::Account*>())
     {
-        Account acc = value.value<Account>();
+        Glib::RefPtr<Account> acc = Glib::wrap(value.value< ::Account*>());
         if (acc)
         {
             const AccountListModel* amodel = dynamic_cast<const AccountListModel*>(comboBox->model());
             Q_ASSERT(amodel);
-            comboBox->setCurrentIndex(amodel->indexOf(acc.gobj()));
+            comboBox->setCurrentIndex(amodel->indexOf(acc->gobj()));
         }
     }
     else
@@ -108,7 +111,7 @@ void AccountSelectionDelegate::setModelData(QWidget *editor, QAbstractItemModel 
         return;
     const AccountListModel* amodel = dynamic_cast<const AccountListModel*>(comboBox->model());
     Q_ASSERT(amodel);
-    Account acc(amodel->at(currentIndex));
+    ::Account* acc(amodel->at(currentIndex));
     if (acc)
     {
         model->setData(index, QVariant::fromValue(acc), Qt::EditRole);

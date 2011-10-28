@@ -59,7 +59,7 @@ public:
      */
     void writeSettings(QSettings *settings, const QString &groupName);
 
-public slots:
+public Q_SLOTS:
     /**
      * Record the given string as a filename that was (or is)
      * being used in the application.  As a result the given
@@ -67,14 +67,14 @@ public slots:
      */
     void usingFile(const QString &fileName);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted whenever the user selects a file from the internally managed
      * menu (i.e. the user wants to open the given file).
      */
     void fileSelected(const QString &fileName);
 
-private slots:
+private Q_SLOTS:
     void on_actionRecentFile();
 
 private:

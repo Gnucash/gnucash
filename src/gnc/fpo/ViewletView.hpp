@@ -40,10 +40,10 @@ public:
     void leftVUpdate();
     void rightVUpdate();
 
-signals:
+Q_SIGNALS:
     void fileLoaded();
 
-public slots:
+public Q_SLOTS:
     void defaultVUpdate();
 
 private:
@@ -91,7 +91,7 @@ private:
     void accountCheckOutput();
     void descriptionAmountOutput();
 
-private slots:
+private Q_SLOTS:
     void leftVLoad();
     void rightVLoad();
 };

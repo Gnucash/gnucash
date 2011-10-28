@@ -44,6 +44,8 @@ SET (gnc_QOBJECT_HEADERS
   fpo/ViewletView.hpp
 )
 SET (gnc_HEADERS ${gnc_QOBJECT_HEADERS}
+  conv.hpp
+  metatype.hpp
   Cmd.hpp
   QofEventWrapper.hpp
   Session.hpp
@@ -92,6 +94,7 @@ INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/src/engine) # for swig-runtime.h
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR}) # for ui_mainwindow.h
 
 INCLUDE_DIRECTORIES (${QT_INCLUDES})
+ADD_DEFINITIONS(-DQT_NO_KEYWORDS)
 
 ADD_EXECUTABLE (cutecash
   ${gnc_FORMS_HEADERS}

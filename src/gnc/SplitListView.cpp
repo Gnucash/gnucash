@@ -23,7 +23,7 @@
 #include "SplitListView.hpp"
 
 #include "engine/gnc-event.h" // for GNC_EVENT_ITEM_ADDED
-#include "gnc/Account.hpp"
+#include "gncmm/Account.hpp"
 #include "gnc/SplitListModel.hpp"
 #include "gnc/AccountSelectionDelegate.hpp"
 
@@ -34,7 +34,7 @@
 namespace gnc
 {
 
-SplitListView::SplitListView(Account account, QUndoStack* undoStack, QWidget* parent)
+SplitListView::SplitListView(Glib::RefPtr<Account> account, QUndoStack* undoStack, QWidget* parent)
         : base_class(parent)
         , m_account(account)
         , m_eventWrapperAccount(*this, &SplitListView::accountEvent)
@@ -65,7 +65,7 @@ void SplitListView::closeEditor(QWidget* editor, QAbstractItemDelegate::EndEditH
     //qDebug() << "closeEditor, row=" << currentIndex().row() << "hint=" << hint;
     QModelIndex index = currentIndex();
     if (hint != QAbstractItemDelegate::NoHint)
-        emit editorClosed(index, hint);
+        Q_EMIT editorClosed(index, hint);
     if (index.isValid()
             && hint == QAbstractItemDelegate::SubmitModelCache
             && index.row() < model()->rowCount() - 1)
@@ -86,7 +86,7 @@ void SplitListView::closeEditor(QWidget* editor, QAbstractItemDelegate::EndEditH
 
 void SplitListView::accountEvent( ::Account* v, QofEventId event_type)
 {
-    if (v != m_account.gobj())
+    if (v != m_account->gobj())
         return;
     //qDebug() << "SplitListView::accountEvent, id=" << qofEventToString(event_type);
     switch (event_type)

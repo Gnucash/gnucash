@@ -22,9 +22,10 @@
 
 #include "SplitListModel.hpp"
 #include "engine/gnc-event.h" // for GNC_EVENT_ITEM_ADDED
-#include "gnc/Transaction.hpp"
+#include "gncmm/Transaction.hpp"
 #include "gnc/Cmd.hpp"
 #include "gnc/Session.hpp"
+#include "gnc/metatype.hpp"
 #include <QDebug>
 #include <QUndoStack>
 #include <QBrush>
@@ -38,7 +39,7 @@ namespace gnc
 
 
 
-SplitListModel::SplitListModel(const Account& acc, QUndoStack* undoStack, QObject *parent)
+SplitListModel::SplitListModel(const Glib::RefPtr<Account> acc, QUndoStack* undoStack, QObject *parent)
         : QAbstractItemModel(parent)
         , m_account(acc)
         , m_list()
@@ -56,7 +57,7 @@ SplitListModel::SplitListModel(const Account& acc, QUndoStack* undoStack, QObjec
 
 void SplitListModel::recreateCache()
 {
-    SplitQList newSplits = Split::fromGList(m_account.getSplitList());
+    SplitQList newSplits = Split::fromGList(m_account->getSplitList());
     bool doReset = (newSplits.size() != m_list.size());
 
     m_list = newSplits;
@@ -65,7 +66,7 @@ void SplitListModel::recreateCache()
     m_hash.clear();
     for (int k = 0; k < m_list.size(); ++k)
     {
-        m_hash.insert(Split(m_list[k]).getParent().gobj(), k);
+        m_hash.insert(Glib::wrap(m_list[k])->getParent()->gobj(), k);
     }
 
     if (doReset)
@@ -79,14 +80,14 @@ void SplitListModel::recreateTmpTrans()
         m_tmpTransaction.getSplits().pop_back();
     Q_ASSERT(m_tmpTransaction.countSplits() == 2);
 
-    m_tmpTransaction.setCommodity(m_account.getCommodity());
-    m_tmpTransaction.setDatePosted(QDate::currentDate());
+    m_tmpTransaction.setCommodity(m_account->getCommodity());
+    m_tmpTransaction.setDatePosted(q2g(QDate::currentDate()));
     TmpSplit& oursplit = m_tmpTransaction.getSplits().front();
     TmpSplit& othersplit = m_tmpTransaction.getSplits().back();
-    oursplit.setAccount(m_account.gobj());
+    oursplit.setAccount(m_account->gobj());
 
     Q_ASSERT(m_tmpTransaction.countSplits() == 2);
-    Q_ASSERT(oursplit.getAccount() == m_account.gobj());
+    Q_ASSERT(oursplit.getAccount() == m_account->gobj());
     Q_ASSERT(othersplit.getAccount() == NULL);
 }
 
@@ -104,11 +105,11 @@ QModelIndex SplitListModel::index(int row, int column,
     if (m_enableNewTransaction && row == m_list.size())
         return createIndex(row, column, (void*)NULL);
 
-    Split childItem = m_list.at(row);
-    if (childItem.gobj())
+    Glib::RefPtr<Split> childItem = Glib::wrap(m_list.at(row));
+    if (childItem)
     {
         //qDebug() << "returning" << childItem.getName();
-        return createIndex(row, column, childItem.gobj());
+        return createIndex(row, column, childItem->gobj());
     }
     else
         return QModelIndex();
@@ -118,9 +119,9 @@ bool SplitListModel::removeRows(int position, int rows, const QModelIndex &index
 {
     for (int row = position; row < position + rows; ++row)
     {
-        Split s(m_list.at(row));
+        Glib::RefPtr<Split> s = Glib::wrap(m_list.at(row));
         Q_ASSERT(s);
-        Transaction t = s.getParent();
+        Glib::RefPtr<Transaction> t = s->getParent();
         Q_ASSERT(t);
         QUndoCommand* cmd = cmd::destroyTransaction(t);
         m_undoStack->push(cmd);
@@ -191,7 +192,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                return trans.getDatePosted();
+                return g2q(trans.getDatePosted());
             default:
                 return QVariant();
             }
@@ -200,7 +201,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                return trans.getNum();
+                return g2q(trans.getNum());
             default:
                 return QVariant();
             }
@@ -209,7 +210,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                return trans.getDescription();
+                return g2q(trans.getDescription());
             default:
                 return QVariant();
             }
@@ -219,7 +220,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             case Qt::DisplayRole:
             case Qt::EditRole:
                 if (trans.countSplits() == 2)
-                    return QVariant::fromValue(Account(trans.getSplits().back().getAccount()));
+                    return QVariant::fromValue(trans.getSplits().back().getAccount());
                 else
                     return QVariant(); // FIXME: Multi-split txn here
             default:
@@ -240,7 +241,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             case Qt::DisplayRole:
             case Qt::EditRole:
                 if (!amount.zero_p() && amount.positive_p())
-                    return amount.printAmount(printInfo);
+                    return g2q(amount.printAmount(printInfo));
                 else
                     return QString();
             default:
@@ -254,7 +255,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
                 if (amount.zero_p() || amount.positive_p())
                     return QString();
                 else
-                    return amount.neg().printAmount(printInfo);
+                    return g2q(amount.neg().printAmount(printInfo));
             default:
                 return QVariant();
             }
@@ -270,9 +271,9 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
         // Normal case: We are in a row that displays a normal
         // transaction and split
 
-        Split split(static_cast< ::Split*>(index.internalPointer()));
-        Transaction trans(split.getParent());
-        Numeric amount = split.getValue(); // Alternatively: xaccSplitConvertAmount(split.gobj(), split.getAccount().gobj());
+        Glib::RefPtr<Split> split = Glib::wrap(static_cast< ::Split*>(index.internalPointer()));
+        Glib::RefPtr<Transaction> trans(split->getParent());
+        Numeric amount = split->getValue(); // Alternatively: xaccSplitConvertAmount(split.gobj(), split.getAccount().gobj());
         PrintAmountInfo printInfo(split, false);
 
         switch (index.column())
@@ -282,7 +283,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                return trans.getDatePosted();
+                return g2q(trans->getDatePosted());
             default:
                 return QVariant();
             }
@@ -291,7 +292,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                return trans.getNum();
+                return g2q(trans->getNum());
             default:
                 return QVariant();
             }
@@ -300,7 +301,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                return trans.getDescription();
+                return g2q(trans->getDescription());
             default:
                 return QVariant();
             }
@@ -309,10 +310,10 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                if (trans.countSplits() == 2)
-                    return QVariant::fromValue(split.getOtherSplit().getAccount());
+                if (trans->countSplits() == 2)
+                    return QVariant::fromValue(split->getOtherSplit()->getAccount()->gobj());
                 else
-                    return split.getCorrAccountFullName();
+                    return g2q(split->getCorrAccountFullName());
             default:
                 return QVariant();
             }
@@ -321,7 +322,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             {
             case Qt::DisplayRole:
             case Qt::EditRole:
-                return QString::fromUtf8(gnc_get_reconcile_str(split.getReconcile()));
+                return QString::fromUtf8(gnc_get_reconcile_str(split->getReconcile()));
             default:
                 return QVariant();
             }
@@ -331,7 +332,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             case Qt::DisplayRole:
             case Qt::EditRole:
                 if (amount.positive_p())
-                    return amount.printAmount(printInfo);
+                    return g2q(amount.printAmount(printInfo));
                 else
                     return QString();
             default:
@@ -345,7 +346,7 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
                 if (amount.positive_p())
                     return QString();
                 else
-                    return amount.neg().printAmount(printInfo);
+                    return g2q(amount.neg().printAmount(printInfo));
             default:
                 return QVariant();
             }
@@ -353,9 +354,9 @@ QVariant SplitListModel::data(const QModelIndex& index, int role) const
             switch (role)
             {
             case Qt::DisplayRole:
-                return split.getBalance().printAmount(printInfo);
+                return g2q(split->getBalance().printAmount(printInfo));
             case Qt::ForegroundRole:
-                return split.getBalance().negative_p()
+                return split->getBalance().negative_p()
                        ? QBrush(Qt::red)
                        : QBrush();
             default:
@@ -413,7 +414,7 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
 
         TmpTransaction& trans = m_tmpTransaction;
         TmpSplit& split = trans.getSplits().front();
-        Q_ASSERT(split.getAccount() == m_account.gobj());
+        Q_ASSERT(split.getAccount() == m_account->gobj());
         Q_ASSERT(trans.countSplits() == 2);
         TmpSplit& other = trans.getSplits().back();
 
@@ -439,11 +440,11 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             cmd = cmd::setTransactionDescription(trans, value.toString());
             break;
         case COLUMN_ACCOUNT:
-            if (value.canConvert<Account>())
+            if (value.canConvert< ::Account*>())
             {
                 if (trans.countSplits() == 2)
                 {
-                    cmd = cmd::setSplitAccount(other, value.value<Account>());
+                    cmd = cmd::setSplitAccount(other, Glib::wrap(value.value< ::Account*>()));
                 }
                 else
                     QMessageBox::warning(NULL, tr("Unimplemented"),
@@ -478,10 +479,10 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             if (str.isEmpty())
                 break;
             Numeric n;
-            QString errmsg = n.parse(str);
+            QString errmsg = g2q(n.parse(q2g(str)));
             if (errmsg.isEmpty())
             {
-                qDebug() << "Successfully parsed string to numeric=" << n.to_string();
+                qDebug() << "Successfully parsed string to numeric=" << g2q(n.to_string());
                 if (index.column() == COLUMN_DECREASE)
                     n = n.neg();
                 // Check whether we have the simple case here
@@ -492,12 +493,12 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
                 }
                 else
                 {
-                    Commodity originCommodity = m_account.getCommodity();
-                    Commodity transCommodity = trans.getCommodity();
+                    Glib::RefPtr<Commodity> originCommodity = m_account->getCommodity();
+                    Glib::RefPtr<Commodity> transCommodity = trans.getCommodity();
                     bool sameCommodities = (originCommodity == transCommodity);
                     if (other.getAccount())
                     {
-                        Commodity otherCommodity = Account(other.getAccount()).getCommodity();
+                        Glib::RefPtr<Commodity> otherCommodity = Glib::wrap(other.getAccount())->getCommodity();
                         sameCommodities = sameCommodities && (transCommodity == otherCommodity);
                     }
                     if (!sameCommodities)
@@ -528,8 +529,8 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
         // Normal case: We are in a row that displays a normal
         // transaction and split
 
-        Split split(static_cast< ::Split*>(index.internalPointer()));
-        Transaction trans(split.getParent());
+        Glib::RefPtr<Split> split = Glib::wrap(static_cast< ::Split*>(index.internalPointer()));
+        Glib::RefPtr<Transaction> trans(split->getParent());
         QVariant y(trans);
 
         // "Editing" is done by creating a Cmd-object and adding it to
@@ -554,16 +555,17 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             cmd = cmd::setTransactionDescription(trans, value.toString());
             break;
         case COLUMN_ACCOUNT:
-            if (value.canConvert<Account>())
+            if (value.canConvert< ::Account*>())
             {
-                if (trans.countSplits() == 2)
+                if (trans->countSplits() == 2)
                 {
-                    Split other = split.getOtherSplit();
-                    cmd = cmd::setSplitAccount(other, value.value<Account>());
+                    Glib::RefPtr<Split> other = split->getOtherSplit();
+                    cmd = cmd::setSplitAccount(other, Glib::wrap(value.value< ::Account*>()));
                 }
                 else
                     QMessageBox::warning(NULL, tr("Unimplemented"),
-                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(trans.countSplits()));
+                                         tr("Sorry, but editing a transaction with more than two splits "
+                                            "(here: %1) is not yet implemented.").arg(trans->countSplits()));
             }
             break;
         case COLUMN_RECONCILE:
@@ -594,26 +596,27 @@ bool SplitListModel::setData(const QModelIndex &index, const QVariant &value, in
             if (str.isEmpty())
                 break;
             Numeric n;
-            QString errmsg = n.parse(str);
+            QString errmsg = g2q(n.parse(q2g(str)));
             if (errmsg.isEmpty())
             {
-                qDebug() << "Successfully parsed string to numeric=" << n.to_string();
+                qDebug() << "Successfully parsed string to numeric=" << g2q(n.to_string());
                 if (index.column() == COLUMN_DECREASE)
                     n = n.neg();
                 // Check whether we have the simple case here
-                if (split.getParent().countSplits() != 2)
+                if (split->getParent()->countSplits() != 2)
                 {
                     QMessageBox::warning(NULL, tr("Unimplemented"),
-                                         tr("Sorry, but editing a transaction with more than two splits (here: %1) is not yet implemented.").arg(split.getParent().countSplits()));
+                                         tr("Sorry, but editing a transaction with more than two splits "
+                                            "(here: %1) is not yet implemented.").arg(split->getParent()->countSplits()));
                 }
                 else
                 {
-                    Transaction trans = split.getParent();
-                    Split other = split.getOtherSplit();
+                    Glib::RefPtr<Transaction> trans = split->getParent();
+                    Glib::RefPtr<Split> other = split->getOtherSplit();
                     Q_ASSERT(other);
-                    Commodity originCommodity = split.getAccount().getCommodity();
-                    Commodity transCommodity = trans.getCurrency();
-                    Commodity otherCommodity = other.getAccount().getCommodity();
+                    Glib::RefPtr<Commodity> originCommodity = split->getAccount()->getCommodity();
+                    Glib::RefPtr<Commodity> transCommodity = trans->getCurrency();
+                    Glib::RefPtr<Commodity> otherCommodity = other->getAccount()->getCommodity();
                     if (originCommodity != transCommodity
                             || transCommodity != otherCommodity)
                     {
@@ -657,7 +660,7 @@ void SplitListModel::transactionEvent( ::Transaction* trans, QofEventId event_ty
         if (m_hash.contains(trans))
         {
             int row = m_hash.value(trans);
-            emit dataChanged(index(row, 0), index(row, columnCount() - 1));
+            Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
         }
         break;
     case GNC_EVENT_ITEM_REMOVED:
@@ -679,7 +682,7 @@ void SplitListModel::transactionEvent( ::Transaction* trans, QofEventId event_ty
 
 void SplitListModel::accountEvent( ::Account* acc, QofEventId event_type)
 {
-    if (acc != m_account.gobj())
+    if (acc != m_account->gobj())
         return;
     //qDebug() << "SplitListModel::accountEvent, id=" << qofEventToString(event_type);
 
@@ -728,7 +731,7 @@ void SplitListModel::editorClosed(const QModelIndex& index,
             {
                 // Commit the new transaction
                 //qDebug() << "Commit the new transaction as a real one";
-                m_tmpTransaction.setDateEntered(QDateTime::currentDateTime());
+                m_tmpTransaction.setDateEntered(QDateTime::currentDateTime().toTime_t());
                 QUndoCommand* cmd = cmd::commitNewTransaction(m_tmpTransaction);
                 recreateTmpTrans();
                 m_undoStack->push(cmd);

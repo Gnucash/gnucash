@@ -45,11 +45,11 @@ extern "C"
 #include "engine/TransLog.h"
 }
 
-#include "gnc/Account.hpp"
+#include "gncmm/Account.hpp"
 #include "gnc/AccountItemModel.hpp"
-#include "gnc/Book.hpp"
-#include "gnc/Numeric.hpp"
-#include "gnc/Split.hpp"
+#include "gncmm/Book.hpp"
+#include "gncmm/Numeric.hpp"
+#include "gncmm/Split.hpp"
 #include "gnc/SplitListModel.hpp"
 #include "gnc/RecentFileMenu.hpp"
 
@@ -356,7 +356,7 @@ void MainWindow::loadFile(const QString &fileName)
     // copied from gnc_post_file_open, gnome-utils/gnc-file.c
 
     QString newfile_qstring =
-        gchar_to_QString(gnc_uri_normalize_uri(fileName.toUtf8(), TRUE));
+        g2q(gchar_to_ustring(gnc_uri_normalize_uri(fileName.toUtf8(), TRUE)));
     if (newfile_qstring.isEmpty())
     {
         show_session_error (this, ERR_FILEIO_FILE_NOT_FOUND, fileName,
@@ -532,7 +532,7 @@ void MainWindow::loadFile(const QString &fileName)
     // ////////////////////////////////////////////////////////////
     // Some display about this file
 
-    Account root (m_session.get_book().get_root_account());
+    Glib::RefPtr<Account> root (m_session.get_book()->get_root_account());
     if (root)
     {
         m_accountListModel = new AccountListModel(root, this);
@@ -541,13 +541,13 @@ void MainWindow::loadFile(const QString &fileName)
         m_accountTreeModel = new AccountTreeModel(root, this);
         ui->treeView->setModel(m_accountTreeModel);
         /* Load the tree in combo boxes of dashboard */
-        dboard->loadAccountsTreeComboBox(m_accountListModel);
-        dboard->fpoWidget->defaultViewlet->loadAccountsTreeComboBox(m_accountListModel);
-        dboard->fpoWidget->leftViewlet->loadAccountsTreeComboBox(m_accountListModel);
-        dboard->fpoWidget->rightViewlet->loadAccountsTreeComboBox(m_accountListModel);
+        m_dboard->loadAccountsTreeComboBox(m_accountListModel);
+        m_dboard->fpoWidget->defaultViewlet->loadAccountsTreeComboBox(m_accountListModel);
+        m_dboard->fpoWidget->leftViewlet->loadAccountsTreeComboBox(m_accountListModel);
+        m_dboard->fpoWidget->rightViewlet->loadAccountsTreeComboBox(m_accountListModel);
 
         ui->treeViewTab->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());
-        ui->tabWidget->setCurrentWidget(dboard);
+        ui->tabWidget->setCurrentWidget(m_dboard);
     }
     else
     {
@@ -567,7 +567,7 @@ bool MainWindow::saveFileAs(const QString &fileName)
 {
     if (gnc_uri_is_file_uri(fileName.toUtf8()))
     {
-        QFile file(gchar_to_QString(gnc_uri_get_path(fileName.toUtf8())));
+        QFile file(g2q(gchar_to_ustring(gnc_uri_get_path(fileName.toUtf8()))));
         if (!file.open(QFile::WriteOnly))
         {
             QMessageBox::warning(this, tr("Application"),
@@ -583,7 +583,7 @@ bool MainWindow::saveFileAs(const QString &fileName)
      * file. If so, then just do a simple save, instead of a full save as */
     /* FIXME Check if it is ok to have a password in the uri here */
     QString newfile_qstring =
-        gchar_to_QString(gnc_uri_normalize_uri ( fileName.toUtf8(), TRUE ));
+        g2q(gchar_to_ustring(gnc_uri_normalize_uri ( fileName.toUtf8(), TRUE )));
     if (newfile_qstring.isEmpty())
     {
         show_session_error (this, ERR_FILEIO_FILE_NOT_FOUND, fileName,

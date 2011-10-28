@@ -62,7 +62,7 @@ public:
     void showDashboardWidgets();
     void mainWindowCloseEvent();
 
-public slots:
+public Q_SLOTS:
     void transferFundsWidgetButtonToggled(bool checked);
     void transactionEvent( ::Transaction* trans, QofEventId event_type);
     void accountEvent( ::Account* acc, QofEventId event_type);
@@ -113,7 +113,7 @@ private:
     QofEventWrapper<Dashboard, ::Transaction*> m_eventWrapper;
     QofEventWrapper<Dashboard, ::Account*> m_eventWrapperAccount;
 
-private slots:
+private Q_SLOTS:
     void on_btnCreateBasicTxn_clicked();
     void on_dockwBasicTxn_visibilityChanged(bool visible);
 };

@@ -22,7 +22,7 @@
 
 #include "config.h"
 #include "gnc/Session.hpp"
-#include "gnc/Book.hpp"
+#include "gncmm/Book.hpp"
 
 // Explicit instantiation to check for compiler errors in the template
 template class gnc::WeakPointer< QofSession >;
@@ -31,9 +31,9 @@ template class gnc::WeakPointer< QofSession >;
 namespace gnc
 {
 
-Book Session::get_book () const
+Glib::RefPtr<Book> Session::get_book () const
 {
-    return Book(qof_session_get_book(gobj()));
+    return Glib::wrap(qof_session_get_book(gobj()));
 }
 
 
