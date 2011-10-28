@@ -754,13 +754,13 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">taxtable_store</property>
-                                <signal name="changed" handler="gnc_customer_taxtable_changed_cb" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText" id="taxtable_cell_renderer_text"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
+                                    <signal name="changed" handler="gnc_customer_taxtable_changed_cb" swapped="no"/>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="taxtable_cell_renderer_text"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
