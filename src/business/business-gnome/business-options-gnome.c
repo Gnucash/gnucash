@@ -30,6 +30,7 @@
 #include <libguile.h>
 
 #include "gnc-ui-util.h"
+#include "dialog-utils.h"
 #include "qof.h"
 #include "option-util.h"
 #include "gnc-general-search.h"
@@ -425,18 +426,22 @@ static GtkWidget *
 create_taxtable_widget (GNCOption *option, GtkWidget *hbox)
 {
     GtkWidget *widget;
+    GtkBuilder *builder;
 
-    widget = gtk_option_menu_new ();
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "business-options-gnome.glade", "taxtable_store");
+    gnc_builder_add_from_file (builder, "business-options-gnome.glade", "taxtable_menu");
 
-    gnc_ui_taxtables_optionmenu (widget, gnc_get_current_book (), TRUE, NULL);
-
+    widget = GTK_WIDGET (gtk_builder_get_object (builder, "taxtable_menu"));
+    gnc_taxtables_combo (GTK_COMBO_BOX(widget), gnc_get_current_book (), TRUE, NULL);
     gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+
     gnc_option_set_widget (option, widget);
 
-    gnc_ui_optionmenu_set_changed_callback (widget,
-                                            (void(*)(GtkWidget*, gpointer))gnc_option_changed_option_cb,
-                                            option);
+    g_signal_connect (widget, "changed",
+                      G_CALLBACK (gnc_option_changed_option_cb), option);
 
+    g_object_unref(G_OBJECT(builder));
     return widget;
 }
 
@@ -477,7 +482,7 @@ taxtable_set_value (GNCOption *option, gboolean use_default,
     taxtable = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncTaxTable"), 1, 0);
 
     widget = gnc_option_get_gtk_widget (option);
-    gnc_ui_optionmenu_set_value (widget, taxtable);
+    gnc_simple_combo_set_value (GTK_COMBO_BOX(widget), taxtable);
     return FALSE;
 }
 
@@ -487,7 +492,7 @@ taxtable_get_value (GNCOption *option, GtkWidget *widget)
 {
     GncTaxTable *taxtable;
 
-    taxtable = gnc_ui_optionmenu_get_value (widget);
+    taxtable = gnc_simple_combo_get_value (GTK_COMBO_BOX(widget));
     return SWIG_NewPointerObj(taxtable, SWIG_TypeQuery("_p__gncTaxTable"), 0);
 }
 

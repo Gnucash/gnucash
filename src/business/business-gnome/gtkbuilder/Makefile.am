@@ -1,5 +1,6 @@
 gtkbuilderdir = $(GNC_GTKBUILDER_DIR)
 gtkbuilder_DATA = \
+  business-options-gnome.glade \
   dialog-customer.glade \
   dialog-invoice.glade \
   dialog-vendor.glade
