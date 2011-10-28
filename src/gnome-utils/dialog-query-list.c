@@ -37,14 +37,14 @@
 
 struct _DialogQueryList
 {
-    GtkWidget 			* dialog;
-    GtkWidget 			* label;
-    GtkWidget 			* qlist;
-    GtkWidget 			* button_box;
-    GNCDisplayListButton 	* buttons;
-    gpointer			user_data;
-    GList 			* books;
-    gint			component_id;
+    GtkWidget            * dialog;
+    GtkWidget            * label;
+    GtkWidget            * qlist;
+    GtkWidget            * button_box;
+    GNCDisplayListButton * buttons;
+    gpointer             user_data;
+    GList                * books;
+    gint                 component_id;
 };
 
 static void

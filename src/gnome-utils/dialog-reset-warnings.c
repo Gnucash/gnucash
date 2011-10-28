@@ -36,14 +36,14 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PREFS;
 
-#define GCONF_SECTION			"dialogs/reset_warnings"
-#define DIALOG_RESET_WARNINGS_CM_CLASS	"reset-warnings"
-#define GCONF_ENTRY_LIST		"gconf_entries"
+#define GCONF_SECTION                   "dialogs/reset_warnings"
+#define DIALOG_RESET_WARNINGS_CM_CLASS  "reset-warnings"
+#define GCONF_ENTRY_LIST                "gconf_entries"
 #define TIPS_STRING                     "tips"
 
 typedef struct
 {
-    GtkWidget	*dialog;
+    GtkWidget   *dialog;
     GtkWidget   *perm_vbox_label;
     GtkWidget   *perm_vbox;
     GtkWidget   *temp_vbox_label;
@@ -57,11 +57,11 @@ void gnc_reset_warnings_select_all_cb (GtkButton *button, gpointer user_data);
 void gnc_reset_warnings_unselect_all_cb (GtkButton *button, gpointer user_data);
 void gnc_reset_warnings_response_cb (GtkDialog *dialog, gint response, gpointer user_data);
 static GSList *gnc_reset_warnings_add_section (RWDialog *rw_dialog, 
-					const gchar *section, GtkWidget *box);
+                                               const gchar *section, GtkWidget *box);
 static void gnc_reset_warnings_release_entries (GSList *entries);
 static void gnc_reset_warnings_update_widgets (RWDialog *rw_dialog);
 static void gnc_reset_warnings_gconf_changed (GConfClient *client, guint cnxn_id,
-                                  GConfEntry *entry, gpointer user_data);
+                                              GConfEntry *entry, gpointer user_data);
 
 
 /****************************************************
@@ -269,8 +269,8 @@ gnc_reset_warnings_unselect_all_cb (GtkButton *button,
 }
 
 
-/**************************************************************************
- *  This is the call back function adds an entry to the correct dialog box.
+/***********************************************************************
+ *  This call back function adds an entry to the correct dialog box.
  *
  *  @internal
  *  @param rw_dialog, the data structure
@@ -325,7 +325,7 @@ gnc_reset_warnings_add_one (RWDialog *rw_dialog, GConfEntry *entry, GtkWidget *b
 
 
 /********************************************************************
- *  This is the call back function adds the gconf section 
+ *  This call back function adds the gconf section
  *  to the dialog box.
  *
  *  @internal
@@ -389,8 +389,9 @@ gnc_reset_warnings_find_remove (GtkWidget *widget,
 }
 
 
-/*************************************************************************
- *  This is the call back function when warning gconf entries are changed.
+/***********************************************************************
+ *  This call back function is triggered when warning gconf entries
+ *  are changed.
  *
  *  @internal
  *  @param The gconf client unused.
@@ -404,7 +405,6 @@ gnc_reset_warnings_gconf_changed (GConfClient *client,
                                   GConfEntry *entry,
                                   gpointer user_data)
 {
-
     RWDialog *rw_dialog = g_object_get_data(G_OBJECT(user_data),"dialog-structure");
 
     GtkWidget *box;
@@ -502,7 +502,6 @@ close_handler (gpointer user_data)
 void
 gnc_reset_warnings_dialog (GtkWindow *parent)
 {
-
     RWDialog   *rw_dialog;
     GtkWidget  *dialog;
     GtkBuilder *builder;
