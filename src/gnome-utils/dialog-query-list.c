@@ -37,17 +37,14 @@
 
 struct _DialogQueryList
 {
-    GtkWidget *	dialog;
-    GtkWidget *	label;
-    GtkWidget *	qlist;
-    GtkWidget *	button_box;
-
-    GNCDisplayListButton *	buttons;
-    gpointer		user_data;
-
-    GList *	books;
-
-    gint		component_id;
+    GtkWidget 			* dialog;
+    GtkWidget 			* label;
+    GtkWidget 			* qlist;
+    GtkWidget 			* button_box;
+    GNCDisplayListButton 	* buttons;
+    gpointer			user_data;
+    GList 			* books;
+    gint			component_id;
 };
 
 static void
@@ -183,23 +180,24 @@ gnc_dialog_query_list_close (GtkButton *button, DialogQueryList *dql)
 DialogQueryList *
 gnc_dialog_query_list_new (GList *param_list, Query *q)
 {
-    GladeXML *xml;
+    GtkBuilder  *builder;
     DialogQueryList *dql;
     GtkWidget *scroller, *close;
     GList *node;
 
     dql = g_new0 (DialogQueryList, 1);
-    xml = gnc_glade_xml_new ("dialog-query-list.glade", "Query List Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-query-list.glade", "Query List Dialog");
 
     /* Grab the dialog, save the dialog info */
-    dql->dialog = glade_xml_get_widget (xml, "Query List Dialog");
+    dql->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Query List Dialog"));
     g_object_set_data (G_OBJECT (dql->dialog), "dialog-info", dql);
 
     /* grab the widgets */
-    dql->label = glade_xml_get_widget (xml, "dialog_label");
-    dql->button_box = glade_xml_get_widget (xml, "button_vbox");
-    scroller = glade_xml_get_widget (xml, "result_scroller");
-    close = glade_xml_get_widget (xml, "close_button");
+    dql->label = GTK_WIDGET(gtk_builder_get_object (builder, "dialog_label"));
+    dql->button_box = GTK_WIDGET(gtk_builder_get_object (builder, "button_vbox"));
+    scroller = GTK_WIDGET(gtk_builder_get_object (builder, "result_scroller"));
+    close = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
 
     /* build the query list */
     dql->qlist = gnc_query_list_new (param_list, q);
@@ -209,7 +207,6 @@ gnc_dialog_query_list_new (GList *param_list, Query *q)
     g_signal_connect (G_OBJECT (dql->qlist), "double_click_entry",
                       G_CALLBACK(gnc_dialog_query_list_double_click_entry), dql);
 
-
     /* connect to the close button */
     g_signal_connect (G_OBJECT (close), "clicked",
                       G_CALLBACK (gnc_dialog_query_list_close), dql);
@@ -218,10 +215,8 @@ gnc_dialog_query_list_new (GList *param_list, Query *q)
     g_signal_connect (G_OBJECT (dql->dialog), "delete_event",
                       G_CALLBACK (gnc_dialog_query_list_delete_cb), dql);
 
-
     /* register ourselves */
-    dql->component_id =
-        gnc_register_gui_component ("GNC Dialog Query List",
+    dql->component_id = gnc_register_gui_component ("GNC Dialog Query List",
                                     gnc_dialog_query_list_refresh_handler,
                                     close_handler, dql);
 
@@ -232,6 +227,8 @@ gnc_dialog_query_list_new (GList *param_list, Query *q)
     for (node = dql->books; node; node = node->next)
         gnc_gui_component_watch_entity (dql->component_id, (GncGUID*)node->data,
                                         QOF_EVENT_DESTROY);
+
+    g_object_unref(G_OBJECT(builder));
 
     return dql;
 }

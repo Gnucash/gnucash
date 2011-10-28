@@ -28,7 +28,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <glade/glade.h>
 
 #include "dialog-utils.h"
 #include "gnc-engine.h"
@@ -46,6 +45,9 @@
 #define DIALOG_BOOK_CLOSE_CM_CLASS "dialog-book-close"
 
 void gnc_book_close_response_cb(GtkDialog *, gint, GtkDialog *);
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = GNC_MOD_GUI;
 
 struct CloseBookWindow
 {
@@ -266,6 +268,8 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
     Account* income_acct;
     Account* expense_acct;
 
+    ENTER("dialog %p, response %d, unused %p", dialog, response, unused);
+
     g_return_if_fail(dialog);
 
     cbw = g_object_get_data(G_OBJECT(dialog), "CloseBookWindow");
@@ -308,12 +312,13 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         gtk_widget_destroy(GTK_WIDGET(dialog));
         break;
     }
+    LEAVE("");
 }
 
 void gnc_ui_close_book (QofBook* book)
 {
     struct CloseBookWindow *cbw;
-    GladeXML* xml;
+    GtkBuilder* builder;
     GtkWidget* box;
     GList* equity_list = NULL;
 
@@ -324,17 +329,20 @@ void gnc_ui_close_book (QofBook* book)
     cbw->book = book;
 
     /* Open the dialog */
-    xml = gnc_glade_xml_new("dialog-book-close.glade", "Close Book");
-    cbw->dialog = glade_xml_get_widget(xml, "Close Book");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-book-close.glade", "Close Book");
+    cbw->dialog = GTK_WIDGET(gtk_builder_get_object (builder,  "Close Book"));
+
+    PINFO("Closed Book Window is %p, Dialog is %p", cbw, cbw->dialog);
 
     /* close date */
-    box = glade_xml_get_widget(xml, "date_box");
+    box = GTK_WIDGET(gtk_builder_get_object (builder,  "date_box"));
     cbw->close_date_widget = gnc_date_edit_new(time(NULL), FALSE, FALSE);
     gtk_box_pack_start(GTK_BOX(box), cbw->close_date_widget, TRUE, TRUE, 0);
 
     /* income acct */
     equity_list = g_list_prepend(equity_list, GINT_TO_POINTER(ACCT_TYPE_EQUITY));
-    box = glade_xml_get_widget(xml, "income_acct_box");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "income_acct_box"));
     cbw->income_acct_widget = gnc_account_sel_new();
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->income_acct_widget),
                                      equity_list, NULL);
@@ -342,7 +350,7 @@ void gnc_ui_close_book (QofBook* book)
     gtk_box_pack_start(GTK_BOX(box), cbw->income_acct_widget, TRUE, TRUE, 0);
 
     /* expense acct */
-    box = glade_xml_get_widget(xml, "expense_acct_box");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "expense_acct_box"));
     cbw->expense_acct_widget = gnc_account_sel_new();
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->expense_acct_widget),
                                      equity_list, NULL);
@@ -350,11 +358,10 @@ void gnc_ui_close_book (QofBook* book)
     gtk_box_pack_start(GTK_BOX(box), cbw->expense_acct_widget, TRUE, TRUE, 0);
 
     /* desc */
-    cbw->desc_widget = glade_xml_get_widget(xml, "desc_entry");
+    cbw->desc_widget = GTK_WIDGET(gtk_builder_get_object (builder, "desc_entry"));
 
     /* Autoconnect signals */
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-                                      cbw->dialog);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, cbw->dialog);
 
     /* Register dialog with component manager */
     cbw->component_manager_id =
@@ -364,11 +371,10 @@ void gnc_ui_close_book (QofBook* book)
                                   gnc_get_current_session());
     g_signal_connect(cbw->dialog, "destroy", G_CALLBACK(destroy_cb), NULL);
 
-    /* Clean up the xml data structure when the dialog is destroyed */
-    g_object_set_data_full(G_OBJECT(cbw->dialog), "dialog-book-close.glade",
-                           xml, g_object_unref);
-    g_object_set_data_full(G_OBJECT(cbw->dialog), "CloseBookWindow", cbw,
-                           g_free);
+    /* Clean up the data structure when the dialog is destroyed */
+    g_object_set_data_full(G_OBJECT(cbw->dialog), "CloseBookWindow", cbw, g_free);
+
+    g_object_unref(G_OBJECT(builder));
 
     /* Run the dialog */
     gtk_widget_show_all(cbw->dialog);

@@ -1,8 +1,12 @@
 gtkbuilderdir = $(GNC_GTKBUILDER_DIR)
 gtkbuilder_DATA = \
   dialog-account.glade \
+  dialog-book-close.glade \
   dialog-commodity.glade \
   dialog-file-access.glade \
+  dialog-object-references.glade \
+  dialog-query-list.glade \
+  dialog-reset-warnings.glade \
   dialog-totd.glade \
   dialog-transfer.glade \
   dialog-userpass.glade \

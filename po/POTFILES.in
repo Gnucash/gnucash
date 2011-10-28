@@ -284,10 +284,6 @@ src/gnome-utils/dialog-utils.c
 src/gnome-utils/druid-gconf-setup.c
 src/gnome-utils/druid-gnc-xml-import.c
 src/gnome-utils/druid-utils.c
-src/gnome-utils/glade/dialog-book-close.glade
-src/gnome-utils/glade/dialog-object-references.glade
-src/gnome-utils/glade/dialog-query-list.glade
-src/gnome-utils/glade/dialog-reset-warnings.glade
 src/gnome-utils/glade/druid-gconf-setup.glade
 src/gnome-utils/glade/druid-gnc-xml-import.glade
 src/gnome-utils/glade/druid-provider-multifile.glade
@@ -349,8 +345,12 @@ src/gnome-utils/gnc-tree-view-price.c
 src/gnome-utils/gnc-tree-view-sx-list.c
 src/gnome-utils/gnc-window.c
 src/gnome-utils/gtkbuilder/dialog-account.glade
+src/gnome-utils/gtkbuilder/dialog-book-close.glade
 src/gnome-utils/gtkbuilder/dialog-commodity.glade
 src/gnome-utils/gtkbuilder/dialog-file-access.glade
+src/gnome-utils/gtkbuilder/dialog-object-references.glade
+src/gnome-utils/gtkbuilder/dialog-query-list.glade
+src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade
 src/gnome-utils/gtkbuilder/dialog-totd.glade
 src/gnome-utils/gtkbuilder/dialog-transfer.glade
 src/gnome-utils/gtkbuilder/dialog-userpass.glade

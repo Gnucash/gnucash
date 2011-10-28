@@ -3792,7 +3792,7 @@ gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window)
 {
-    gnc_reset_warnings_dialog(GTK_WIDGET(window));
+    gnc_reset_warnings_dialog(GTK_WINDOW(window));
 }
 
 static void
