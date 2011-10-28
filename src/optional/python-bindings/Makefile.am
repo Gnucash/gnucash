@@ -54,7 +54,6 @@ _gnucash_core_c_includes= \
 	${top_srcdir}/src/gnc-module/gnc-module.h \
 	${top_srcdir}/src/engine/gnc-engine.h \
 	${top_srcdir}/src/engine/Transaction.h \
-	${top_srcdir}/src/gnc/Transaction.hpp \
 	${top_srcdir}/src/engine/Split.h \
 	${top_srcdir}/src/engine/Account.h \
 	${top_srcdir}/src/engine/gnc-commodity.h \
