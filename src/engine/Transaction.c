@@ -1173,8 +1173,10 @@ do_destroy (Transaction *trans)
     gboolean shutting_down = qof_book_shutting_down(qof_instance_get_book(trans));
 
     /* If there are capital-gains transactions associated with this,
-     * they need to be destroyed too.  */
-    destroy_gains (trans);
+     * they need to be destroyed too unless we're shutting down in
+     * which case all transactions will be destroyed. */
+    if (!shutting_down)
+    	destroy_gains (trans);
 
     /* Make a log in the journal before destruction.  */
     if (!shutting_down)
