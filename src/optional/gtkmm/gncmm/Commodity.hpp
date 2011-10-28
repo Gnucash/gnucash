@@ -151,7 +151,7 @@ namespace Glib
  *
  * @relates Gio::FileInfo
  */
-Glib::RefPtr<gnc::Commodity> wrap(gnc_commodity* object, bool take_copy = false);
+Glib::RefPtr<gnc::Commodity> wrap(gnc_commodity* object, bool refuse_ownership = true);
 }
 
 

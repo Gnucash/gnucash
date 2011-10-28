@@ -21,6 +21,8 @@
  */
 
 #include "Numeric.hpp"
+#include "Account.hpp"
+#include "Split.hpp"
 
 extern "C"
 {
@@ -33,12 +35,12 @@ namespace gnc
 // These are in the cpp file to avoid circular dependency between the
 // headers
 
-// PrintAmountInfo::PrintAmountInfo(const Account& account, bool use_symbol)
-//         : base_class(gnc_account_print_info(account.get(), use_symbol))
-// {}
-// PrintAmountInfo::PrintAmountInfo(const Split& split, bool use_symbol)
-//         : base_class(gnc_split_amount_print_info(split.get(), use_symbol))
-// {}
+PrintAmountInfo::PrintAmountInfo(const Glib::RefPtr<Account> account, bool use_symbol)
+    : base_class(gnc_account_print_info(account->gobj(), use_symbol))
+{}
+PrintAmountInfo::PrintAmountInfo(const Glib::RefPtr<Split> split, bool use_symbol)
+    : base_class(gnc_split_amount_print_info(split->gobj(), use_symbol))
+{}
 
 Glib::ustring Numeric::printAmount(const PrintAmountInfo& info) const
 {

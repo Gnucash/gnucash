@@ -123,7 +123,7 @@ namespace Glib
  *
  * @relates Gio::FileInfo
  */
-Glib::RefPtr<gnc::Book> wrap(::QofBook* object, bool take_copy = false);
+Glib::RefPtr<gnc::Book> wrap(::QofBook* object, bool refuse_ownership = true);
 }
 
 #endif

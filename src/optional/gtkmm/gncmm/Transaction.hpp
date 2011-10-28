@@ -329,7 +329,7 @@ namespace Glib
  *
  * @relates Gio::FileInfo
  */
-Glib::RefPtr<gnc::Transaction> wrap(::Transaction* object, bool take_copy = false);
+Glib::RefPtr<gnc::Transaction> wrap(::Transaction* object, bool refuse_ownership = true);
 }
 
 #endif

@@ -34,6 +34,7 @@ extern "C"
 }
 
 #include <glibmm/ustring.h>
+#include <glibmm/refptr.h>
 
 #if GLIB_HAVE_DATETIME
 // Glib::DateTime is new in glibmm-2.29 but very useful
@@ -116,8 +117,8 @@ public:
 
     /* If the boolean set to true, then prefix 3 letter ISO 4217
        currency code to the amount. */
-    PrintAmountInfo(const Account& account, bool use_symbol);
-    PrintAmountInfo(const Split& split, bool use_symbol);
+    PrintAmountInfo(const Glib::RefPtr<Account> account, bool use_symbol);
+    PrintAmountInfo(const Glib::RefPtr<Split> split, bool use_symbol);
 
     static PrintAmountInfo share_places(int decplaces)
     {

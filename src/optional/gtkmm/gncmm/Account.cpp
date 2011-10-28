@@ -28,9 +28,9 @@
 namespace Glib
 {
 
-Glib::RefPtr<gnc::Account> wrap(::Account* object, bool take_copy)
+Glib::RefPtr<gnc::Account> wrap(::Account* object, bool refuse_ownership)
 {
-    return Glib::RefPtr<gnc::Account>( dynamic_cast<gnc::Account*> (Glib::wrap_auto ((GObject*)(object), take_copy)) );
+    return Glib::RefPtr<gnc::Account>( dynamic_cast<gnc::Account*> (Glib::wrap_auto ((GObject*)(object), refuse_ownership)) );
     //We use dynamic_cast<> in case of multiple inheritance.
 }
 

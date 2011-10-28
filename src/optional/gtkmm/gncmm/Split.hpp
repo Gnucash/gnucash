@@ -314,7 +314,7 @@ namespace Glib
  *
  * @relates Gio::FileInfo
  */
-Glib::RefPtr<gnc::Split> wrap(::Split* object, bool take_copy = false);
+Glib::RefPtr<gnc::Split> wrap(::Split* object, bool refuse_ownership = true);
 }
 
 

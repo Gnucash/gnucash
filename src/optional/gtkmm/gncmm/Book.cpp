@@ -23,7 +23,7 @@
 #include "config.h"
 #include "Book.hpp"
 #include "private/Book_p.hpp"
-//#include "Account.hpp"
+#include "Account.hpp"
 
 namespace Glib
 {
@@ -137,9 +137,9 @@ bool Book::string_option_exists (const Glib::ustring& opt_name) const
         return false;
 }
 
-// Account Book::get_root_account()
-// {
-//     return Account(gnc_book_get_root_account (get()));
-// }
+Glib::RefPtr<Account> Book::get_root_account()
+{
+    return Glib::wrap(gnc_book_get_root_account (gobj()));
+}
 
 } // END namespace gnc

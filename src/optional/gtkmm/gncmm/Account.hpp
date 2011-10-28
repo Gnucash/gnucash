@@ -187,7 +187,7 @@ namespace Glib
  *
  * @relates Gio::FileInfo
  */
-Glib::RefPtr<gnc::Account> wrap(::Account* object, bool take_copy = false);
+Glib::RefPtr<gnc::Account> wrap(::Account* object, bool refuse_ownership = true);
 }
 
 #endif
