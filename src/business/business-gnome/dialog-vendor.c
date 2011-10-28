@@ -58,6 +58,9 @@ void gnc_vendor_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_vendor_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_vendor_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_vendor_terms_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_vendor_taxincluded_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_vendor_taxtable_changed_cb (GtkWidget *widget, gpointer data);
 
 typedef enum
 {
@@ -312,6 +315,45 @@ gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data)
     g_free (title);
 }
 
+void
+gnc_vendor_terms_changed_cb (GtkWidget *widget, gpointer data)
+{
+    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
+    VendorWindow *vw = data;
+    gchar *title;
+
+    if (!vw) return;
+    if (!cbox) return;
+
+    vw->terms = gnc_simple_combo_get_value (cbox);
+}
+
+void
+gnc_vendor_taxincluded_changed_cb (GtkWidget *widget, gpointer data)
+{
+    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
+    VendorWindow *vw = data;
+    gchar *title;
+
+    if (!vw) return;
+    if (!cbox) return;
+
+    vw->taxincluded = GPOINTER_TO_INT (gnc_simple_combo_get_value (cbox));
+}
+
+void
+gnc_vendor_taxtable_changed_cb (GtkWidget *widget, gpointer data)
+{
+    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
+    VendorWindow *vw = data;
+    gchar *title;
+
+    if (!vw) return;
+    if (!cbox) return;
+
+    vw->taxtable = gnc_simple_combo_get_value (cbox);
+}
+
 static void
 gnc_vendor_window_close_handler (gpointer user_data)
 {
@@ -359,7 +401,7 @@ static VendorWindow *
 gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
 {
     VendorWindow *vw;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *edit, *hbox;
     gnc_commodity *currency;
 
@@ -395,41 +437,45 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
     vw->book = bookp;
 
     /* Find the dialog */
-    xml = gnc_glade_xml_new ("vendor.glade", "Vendor Dialog");
-    vw->dialog = glade_xml_get_widget (xml, "Vendor Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-vendor.glade", "terms_store");
+    gnc_builder_add_from_file (builder, "dialog-vendor.glade", "tax_included_store");
+    gnc_builder_add_from_file (builder, "dialog-vendor.glade", "taxtable_store");
+    gnc_builder_add_from_file (builder, "dialog-vendor.glade", "Vendor Dialog");
+    vw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Vendor Dialog"));
 
     /* Get entry points */
-    vw->id_entry = glade_xml_get_widget (xml, "id_entry");
-    vw->company_entry = glade_xml_get_widget (xml, "company_entry");
+    vw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "id_entry"));
+    vw->company_entry = GTK_WIDGET (gtk_builder_get_object (builder, "company_entry"));
 
-    vw->name_entry = glade_xml_get_widget (xml, "name_entry");
-    vw->addr1_entry = glade_xml_get_widget (xml, "addr1_entry");
-    vw->addr2_entry = glade_xml_get_widget (xml, "addr2_entry");
-    vw->addr3_entry = glade_xml_get_widget (xml, "addr3_entry");
-    vw->addr4_entry = glade_xml_get_widget (xml, "addr4_entry");
-    vw->phone_entry = glade_xml_get_widget (xml, "phone_entry");
-    vw->fax_entry = glade_xml_get_widget (xml, "fax_entry");
-    vw->email_entry = glade_xml_get_widget (xml, "email_entry");
+    vw->name_entry = GTK_WIDGET (gtk_builder_get_object (builder, "name_entry"));
+    vw->addr1_entry = GTK_WIDGET (gtk_builder_get_object (builder, "addr1_entry"));
+    vw->addr2_entry = GTK_WIDGET (gtk_builder_get_object (builder, "addr2_entry"));
+    vw->addr3_entry = GTK_WIDGET (gtk_builder_get_object (builder, "addr3_entry"));
+    vw->addr4_entry = GTK_WIDGET (gtk_builder_get_object (builder, "addr4_entry"));
+    vw->phone_entry = GTK_WIDGET (gtk_builder_get_object (builder, "phone_entry"));
+    vw->fax_entry = GTK_WIDGET (gtk_builder_get_object (builder, "fax_entry"));
+    vw->email_entry = GTK_WIDGET (gtk_builder_get_object (builder, "email_entry"));
 
-    vw->active_check = glade_xml_get_widget (xml, "active_check");
-    vw->taxincluded_menu = glade_xml_get_widget (xml, "tax_included_menu");
-    vw->notes_text = glade_xml_get_widget (xml, "notes_text");
-    vw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
+    vw->active_check = GTK_WIDGET (gtk_builder_get_object (builder, "active_check"));
+    vw->taxincluded_menu = GTK_WIDGET (gtk_builder_get_object (builder, "tax_included_menu"));
+    vw->notes_text = GTK_WIDGET (gtk_builder_get_object (builder, "notes_text"));
+    vw->terms_menu = GTK_WIDGET (gtk_builder_get_object (builder, "terms_menu"));
 
-    vw->taxtable_check = glade_xml_get_widget (xml, "taxtable_button");
-    vw->taxtable_menu = glade_xml_get_widget (xml, "taxtable_menu");
+    vw->taxtable_check = GTK_WIDGET (gtk_builder_get_object (builder, "taxtable_button"));
+    vw->taxtable_menu = GTK_WIDGET (gtk_builder_get_object (builder, "taxtable_menu"));
 
     /* Currency */
     edit = gnc_currency_edit_new();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(edit), currency);
     vw->currency_edit = edit;
 
-    hbox = glade_xml_get_widget (xml, "currency_box");
+    hbox = GTK_WIDGET (gtk_builder_get_object (builder, "currency_box"));
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
     /* Setup signals */
-    glade_xml_signal_autoconnect_full( xml,
-                                       gnc_glade_autoconnect_full_func,
+    gtk_builder_connect_signals_full( builder,
+                                       gnc_builder_connect_full_func,
                                        vw);
 
     /* Setup initial values */
@@ -493,11 +539,11 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
     /* I know that vendor exists here -- either passed in or just created */
 
     vw->taxincluded = gncVendorGetTaxIncluded (vendor);
-    gnc_ui_taxincluded_optionmenu (vw->taxincluded_menu, &vw->taxincluded);
-    gnc_ui_billterms_optionmenu (vw->terms_menu, bookp, TRUE, &vw->terms);
+    gnc_taxincluded_combo (GTK_COMBO_BOX(vw->taxincluded_menu), vw->taxincluded);
+    gnc_billterms_combo (GTK_COMBO_BOX(vw->terms_menu), bookp, TRUE, vw->terms);
 
     vw->taxtable = gncVendorGetTaxTable (vendor);
-    gnc_ui_taxtables_optionmenu (vw->taxtable_menu, bookp, TRUE, &vw->taxtable);
+    gnc_taxtables_combo (GTK_COMBO_BOX(vw->taxtable_menu), bookp, TRUE, vw->taxtable);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (vw->taxtable_check),
                                   gncVendorGetTaxTableOverride (vendor));
     gnc_vendor_taxtable_check_cb (GTK_TOGGLE_BUTTON (vw->taxtable_check), vw);
@@ -507,6 +553,7 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     gtk_widget_show_all (vw->dialog);
+    g_object_unref(G_OBJECT(builder));
 
     return vw;
 }
