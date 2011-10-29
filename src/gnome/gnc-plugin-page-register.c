@@ -886,7 +886,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 
     gnc_split_reg_set_sort_type(priv->gsr, SortTypefromString(order));
 
-    if(strcmp(order, DEFAULT_SORT_ORDER) != 0)
+    if (order && (strcmp (order, DEFAULT_SORT_ORDER) != 0))
         priv->sd.save_order = TRUE;
 
     priv->sd.original_save_order = priv->sd.save_order;
@@ -901,25 +901,25 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 
     priv->fd.cleared_match = (gint)g_ascii_strtoll( filter[0], NULL, 16 );
 
-    if(strcmp(filter[0], DEFAULT_FILTER) != 0)
-	filter_changed = filter_changed + 1;
+    if (filter[0] && (strcmp (filter[0], DEFAULT_FILTER) != 0))
+        filter_changed = filter_changed + 1;
 
-    if (strcmp(filter[1],"0") != 0 )
+    if (filter[1] && (strcmp (filter[1],"0") != 0 ))
     {
         PINFO("Loaded Filter Start Date is %s", filter[1]);
 
         priv->fd.start_time = gnc_plugin_page_register_filter_dmy2time( filter[1] );
         priv->fd.start_time = gnc_timet_get_day_start(priv->fd.start_time);
-	filter_changed = filter_changed + 1;
-    }
+        filter_changed = filter_changed + 1;
 
-    if (strcmp(filter[2],"0") != 0 )
-    {
-        PINFO("Loaded Filter End Date is %s", filter[2]);
+        if (filter[2] && (strcmp (filter[2],"0") != 0 ))
+        {
+            PINFO("Loaded Filter End Date is %s", filter[2]);
 
-        priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time( filter[2] );
-        priv->fd.end_time = gnc_timet_get_day_end(priv->fd.end_time);
-	filter_changed = filter_changed + 1;
+            priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time( filter[2] );
+            priv->fd.end_time = gnc_timet_get_day_end(priv->fd.end_time);
+            filter_changed = filter_changed + 1;
+        }
     }
 
     if(filter_changed != 0)
@@ -1459,7 +1459,7 @@ gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *fi
 
     default_filter = g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
 
-    if(strcmp(filter, default_filter) == 0)
+    if (!filter || (strcmp (filter, default_filter) == 0))
         xaccAccountSetFilter (leader, NULL);
     else
         xaccAccountSetFilter (leader, filter);
@@ -1507,7 +1507,7 @@ gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
 
-    if(strcmp(sort_order, DEFAULT_SORT_ORDER) == 0)
+    if (!sort_order || (strcmp (sort_order, DEFAULT_SORT_ORDER) == 0))
         xaccAccountSetSortOrder (leader, NULL);
     else
         xaccAccountSetSortOrder (leader, sort_order);
