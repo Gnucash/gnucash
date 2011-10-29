@@ -66,13 +66,13 @@ inline Glib::ustring gchar_to_ustring(gchar* tmp_string)
 
 #if GLIB_HAVE_DATETIME
 // Glib::DateTime is new in glibmm-2.29 but very useful
-inline Glib::DateTime toGDateTime(const ::Timespec& timespec)
+inline Glib::DateTime to_gdatetime(const ::Timespec& timespec)
 {
     Glib::DateTime result = Glib::DateTime::create_now_utc(timespec.tv_sec);
     result.add_seconds(timespec.tv_nsec * 1e-9);
     return result;
 }
-inline ::Timespec toTimespec(const Glib::DateTime& gdt)
+inline ::Timespec to_timespec(const Glib::DateTime& gdt)
 {
     ::Timespec result;
     result.tv_sec = qdt.to_unix;
@@ -84,7 +84,7 @@ inline ::Timespec toTimespec(const Glib::DateTime& gdt)
 /** Copies the pointer values from the given GList into the specified output
  * list type, such as std::vector<FooBar*>. */
 template<class ResultListType>
-ResultListType fromGList(GList* glist)
+ResultListType from_glist(GList* glist)
 {
     ResultListType result;
     GList* list = glist;

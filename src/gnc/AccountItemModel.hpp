@@ -69,7 +69,7 @@ protected:
 typedef QList< ::Account*> AccountQList;
 inline AccountQList accountFromGList(GList *glist)
 {
-    return fromGList<AccountQList>(glist);
+    return from_glist<AccountQList>(glist);
 }
 
 /** Specialization of the account tree model for when all accounts

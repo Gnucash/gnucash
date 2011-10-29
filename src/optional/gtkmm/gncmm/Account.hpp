@@ -100,29 +100,29 @@ public:
 
     // actual implementation follows here
 
-    Glib::ustring getName() const
+    Glib::ustring get_name() const
     {
         return (xaccAccountGetName(gobj()));
     }
-    Glib::ustring getFullName() const
+    Glib::ustring get_full_name() const
     {
         return gchar_to_ustring(gnc_account_get_full_name (gobj()));
     }
-    Glib::ustring getCode() const
+    Glib::ustring get_code() const
     {
         return (xaccAccountGetCode(gobj()));
     }
-    Glib::ustring getDescription() const
+    Glib::ustring get_description() const
     {
         return (xaccAccountGetDescription(gobj()));
     }
-    Glib::RefPtr<Commodity> getCommodity() const;
-    int getCommoditySCU() const
+    Glib::RefPtr<Commodity> get_commodity() const;
+    int get_commodity_scu() const
     {
         return xaccAccountGetCommoditySCU(gobj());
     }
 
-    ::SplitList* getSplitList() const
+    ::SplitList* get_split_list() const
     {
         return xaccAccountGetSplitList(gobj());
     }
@@ -136,7 +136,7 @@ public:
     {
         return gnc_account_is_root(gobj());
     }
-    gint n_children() const
+    gint get_num_children() const
     {
         return gnc_account_n_children(gobj());
     }
@@ -148,7 +148,7 @@ public:
     {
         return gnc_account_get_descendants (gobj());
     }
-    Glib::RefPtr<Account> nth_child (gint num) const;
+    Glib::RefPtr<Account> get_nth_child (gint num) const;
 
 
     /** Return the index of this account in the children's list of its

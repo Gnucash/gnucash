@@ -49,7 +49,7 @@ QModelIndex AccountTreeModel::index(int row, int column,
     else
         parentItem = Glib::wrap(static_cast< ::Account*>(parent.internalPointer()));
 
-    Glib::RefPtr<Account> childItem = parentItem->nth_child(row);
+    Glib::RefPtr<Account> childItem = parentItem->get_nth_child(row);
     if (childItem)
     {
         //qDebug() << "returning" << childItem.getName();
@@ -89,7 +89,7 @@ int AccountTreeModel::rowCount(const QModelIndex& parent) const
         parentItem = Glib::wrap(static_cast< ::Account*>(parent.internalPointer()));
 
     //qDebug() << "Returning " << parentItem.n_children();
-    return parentItem->n_children();
+    return parentItem->get_num_children();
 }
 
 int AccountTreeModel::columnCount(const QModelIndex& parent) const
@@ -113,11 +113,11 @@ QVariant AccountTreeModel::data(const QModelIndex& index, int role) const
         switch (index.column())
         {
         case 0:
-            return g2q(account->getName());
+            return g2q(account->get_name());
         case 1:
-            return g2q(account->getCode());
+            return g2q(account->get_code());
         case 2:
-            return g2q(account->getDescription());
+            return g2q(account->get_description());
         case 3:
         {
             Numeric balance = gnc_ui_account_get_balance(account->gobj(), false);
@@ -236,7 +236,7 @@ QVariant AccountListNamesModel::data(const QModelIndex& index, int role) const
         switch (role)
         {
         case Qt::DisplayRole:
-            return g2q(account->getFullName());
+            return g2q(account->get_full_name());
         default:
             return QVariant();
         }

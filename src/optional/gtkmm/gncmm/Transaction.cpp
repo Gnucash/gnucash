@@ -118,24 +118,24 @@ GType Transaction::get_base_type()
 
 
 
-Glib::RefPtr<Split> Transaction::findSplitByAccount(const Account& acc) const
+Glib::RefPtr<Split> Transaction::find_split_by_account(const Account& acc) const
 {
     return Glib::wrap(xaccTransFindSplitByAccount(gobj(), acc.gobj()));
 }
-Glib::RefPtr<Split> Transaction::getSplit(int i) const
+Glib::RefPtr<Split> Transaction::get_split(int i) const
 {
     return Glib::wrap(xaccTransGetSplit(gobj(), i));
 }
-void Transaction::appendSplit(Glib::RefPtr<Split> split)
+void Transaction::append_split(Glib::RefPtr<Split> split)
 {
     g_assert(split);
     xaccSplitSetParent(split->gobj(), gobj());
 }
-int Transaction::getSplitIndex(const Split& split) const
+int Transaction::get_split_index(const Split& split) const
 {
     return xaccTransGetSplitIndex(gobj(), split.gobj());
 }
-::Transaction* Transaction::newInstance(const Glib::RefPtr<Book> b)
+::Transaction* Transaction::new_instance(const Glib::RefPtr<Book> b)
 {
     if (b)
         return xaccMallocTransaction (const_cast< ::QofBook*>(b->gobj()));
@@ -150,14 +150,14 @@ TmpTransaction::TmpTransaction()
     clear();
 }
 TmpTransaction::TmpTransaction(const Transaction& t)
-    : m_num(t.getNum())
-    , m_description(t.getDescription())
-    , m_notes(t.getNotes())
-    , m_commodity(t.getCurrency())
-    , m_datePosted(t.getDatePosted())
-    , m_dateTimeEntered(t.getDateEnteredTT())
+    : m_num(t.get_num())
+    , m_description(t.get_description())
+    , m_notes(t.get_notes())
+    , m_commodity(t.get_currency())
+    , m_datePosted(t.get_date_posted())
+    , m_dateTimeEntered(t.get_date_entered_tt())
 {
-    SplitQList slist = Split::fromGList(t.getSplitList());
+    SplitQList slist = Split::from_glist(t.get_split_list());
     for (SplitQList::const_iterator iter = slist.begin(); iter != slist.end(); ++iter)
     {
         m_splits.push_back(TmpSplit(Glib::wrap(*iter), this));
@@ -167,10 +167,10 @@ TmpTransaction::TmpTransaction(const Transaction& t)
 void TmpTransaction::clear()
 {
     m_splits.clear();
-    resetContent();
+    reset_content();
 }
 
-void TmpTransaction::resetContent()
+void TmpTransaction::reset_content()
 {
     m_num.clear();
     m_description.clear();
@@ -182,44 +182,44 @@ void TmpTransaction::resetContent()
     {
         TmpSplit& split = m_splits[i];
         split.clear();
-        split.setParent(this);
+        split.set_parent(this);
     }
 }
 
-void TmpTransaction::copyTo(Glib::RefPtr<Transaction> t) const
+void TmpTransaction::copy_to(Glib::RefPtr<Transaction> t) const
 {
     assert(t);
-    t->setNum(m_num);
-    t->setDescription(m_description);
+    t->set_num(m_num);
+    t->set_description(m_description);
     if (!m_notes.empty())
-        t->setNotes(m_notes);
-    t->setCurrency(m_commodity);
-    t->setDatePosted(m_datePosted);
-    t->setDateEntered(m_dateTimeEntered);
+        t->set_notes(m_notes);
+    t->set_currency(m_commodity);
+    t->set_date_posted(m_datePosted);
+    t->set_date_entered(m_dateTimeEntered);
     for (int i = 0; i < m_splits.size(); ++i)
     {
-        m_splits[i].copyInto(t);
+        m_splits[i].copy_into(t);
     }
 }
 
-Glib::RefPtr<Transaction> TmpTransaction::createAsReal() const
+Glib::RefPtr<Transaction> TmpTransaction::create_as_real() const
 {
     assert (!m_splits.empty());
-    Glib::RefPtr<Account> acc(Glib::wrap(m_splits.front().getAccount()));
+    Glib::RefPtr<Account> acc(Glib::wrap(m_splits.front().get_account()));
     assert (acc);
-    Glib::RefPtr<Book> book(acc->getBook());
+    Glib::RefPtr<Book> book(acc->get_book());
     assert (book);
-    Glib::RefPtr<Transaction> trans(Glib::wrap(Transaction::newInstance(book)));
-    trans->beginEdit();
-    copyTo(trans);
-    trans->commitEdit();
+    Glib::RefPtr<Transaction> trans(Glib::wrap(Transaction::new_instance(book)));
+    trans->begin_edit();
+    copy_to(trans);
+    trans->commit_edit();
     return trans;
 }
 
 void TmpTransaction::push_back(const TmpSplit& s)
 {
     m_splits.push_back(s);
-    m_splits.back().setParent(this);
+    m_splits.back().set_parent(this);
 }
 
 } // END namespace gnc

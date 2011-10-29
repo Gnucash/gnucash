@@ -105,106 +105,106 @@ public:
 private:
 public:
 
-    void beginEdit()
+    void begin_edit()
     {
         xaccTransBeginEdit(gobj());
     }
-    void commitEdit()
+    void commit_edit()
     {
         xaccTransCommitEdit(gobj());
     }
-    void rollbackEdit()
+    void rollback_edit()
     {
         xaccTransRollbackEdit(gobj());
     }
-    bool isOpen() const
+    bool is_open() const
     {
         return xaccTransIsOpen(gobj());
     }
 
 
-    Glib::ustring getNum() const
+    Glib::ustring get_num() const
     {
         return xaccTransGetNum(gobj());
     }
-    void setNum(const Glib::ustring& v)
+    void set_num(const Glib::ustring& v)
     {
         xaccTransSetNum(gobj(), v.c_str());
     }
 
-    Glib::ustring getDescription() const
+    Glib::ustring get_description() const
     {
         return xaccTransGetDescription(gobj());
     }
-    void setDescription(const Glib::ustring& v)
+    void set_description(const Glib::ustring& v)
     {
         xaccTransSetDescription(gobj(), v.c_str());
     }
 
-    Glib::ustring getNotes() const
+    Glib::ustring get_notes() const
     {
         return xaccTransGetNotes(gobj());
     }
-    void setNotes(const Glib::ustring& v)
+    void set_notes(const Glib::ustring& v)
     {
         xaccTransSetNotes(gobj(), v.c_str());
     }
 
-    int countSplits() const
+    int get_num_splits() const
     {
         return xaccTransCountSplits(gobj());
     }
-    Glib::RefPtr<Split> findSplitByAccount(const Account& acc) const;
-    void appendSplit(Glib::RefPtr<Split> split);
-    Glib::RefPtr<Split> getSplit(int i) const;
-    int getSplitIndex(const Split& split) const;
-    ::SplitList* getSplitList() const
+    Glib::RefPtr<Split> find_split_by_account(const Account& acc) const;
+    void append_split(Glib::RefPtr<Split> split);
+    Glib::RefPtr<Split> get_split(int i) const;
+    int get_split_index(const Split& split) const;
+    ::SplitList* get_split_list() const
     {
         return xaccTransGetSplitList(gobj());
     }
 
-    Glib::RefPtr<Commodity> getCurrency() const
+    Glib::RefPtr<Commodity> get_currency() const
     {
         return Glib::wrap(xaccTransGetCurrency(gobj()));
     }
-    void setCurrency(const Glib::RefPtr<Commodity>& c)
+    void set_currency(const Glib::RefPtr<Commodity>& c)
     {
         if (c) xaccTransSetCurrency(gobj(), c->gobj());
     }
 
-    Numeric getImbalanceValue() const
+    Numeric get_imbalance_value() const
     {
         return xaccTransGetImbalanceValue(gobj());
     }
-    bool isBalanced() const
+    bool is_balanced() const
     {
         return xaccTransIsBalanced(gobj());
     }
-    Numeric getAccountConvRate(const Account& acc) const
+    Numeric get_account_conv_rate(const Account& acc) const
     {
         return xaccTransGetAccountConvRate(gobj(), acc.gobj());
     }
 
-    void setDatePosted(const Glib::Date& d)
+    void set_date_posted(const Glib::Date& d)
     {
         xaccTransSetDatePostedGDate(gobj(), *d.gobj());
     }
-    Glib::Date getDatePosted() const
+    Glib::Date get_date_posted() const
     {
         return Glib::Date(xaccTransGetDatePostedGDate(gobj()));
     }
-    void setDateEntered(time_t t)
+    void set_date_entered(time_t t)
     {
         xaccTransSetDateEnteredSecs(gobj(), t);
     }
-//    void setDateEntered(const Glib::DateTime& t) { xaccTransSetDateEnteredSecs(gobj(), t.toTime_t()); }
-    time_t getDateEnteredTT() const
+//    void set_date_entered(const Glib::DateTime& t) { xaccTransSetDateEnteredSecs(gobj(), t.toTime_t()); }
+    time_t get_date_entered_tt() const
     {
         return timespecToTime_t(xaccTransRetDateEnteredTS(gobj()));
     }
-    //Glib::DateTime getDateEntered() const { return toGDateTime(xaccTransRetDateEnteredTS(gobj())); }
+    //Glib::DateTime get_date_entered() const { return toGDateTime(xaccTransRetDateEnteredTS(gobj())); }
 
-    static ::Transaction* newInstance(const Glib::RefPtr<Book> b);
+    static ::Transaction* new_instance(const Glib::RefPtr<Book> b);
 };
 
 
@@ -233,78 +233,78 @@ public:
 
     /** Clears all data fields, but does not delete the splits and
      * instead only resets the data fields of all splits */
-    void resetContent();
+    void reset_content();
 
     /** Copies the content of this tmp transaction into the given real
      * transaction. */
-    void copyTo(Glib::RefPtr<Transaction> t) const;
+    void copy_to(Glib::RefPtr<Transaction> t) const;
 
     /** Allocates a new real transaction in the Book and Account as
      * stored in the tmp transaction, copies the content of this tmp
      * transaction into the newly allocated one, and returns the
      * pointer to the newly created real transaction. */
-    Glib::RefPtr<Transaction> createAsReal() const;
+    Glib::RefPtr<Transaction> create_as_real() const;
 
-    Glib::ustring getNum() const
+    Glib::ustring get_num() const
     {
         return m_num;
     }
-    void setNum(const Glib::ustring& v)
+    void set_num(const Glib::ustring& v)
     {
         m_num = v;
     }
 
-    Glib::ustring getDescription() const
+    Glib::ustring get_description() const
     {
         return m_description;
     }
-    void setDescription(const Glib::ustring& v)
+    void set_description(const Glib::ustring& v)
     {
         m_description = v;
     }
 
     void push_back(const TmpSplit& s);
-    const TmpSplitList& getSplits() const
+    const TmpSplitList& get_splits() const
     {
         return m_splits;
     }
-    TmpSplitList& getSplits()
+    TmpSplitList& get_splits()
     {
         return m_splits;
     }
-    int countSplits() const
+    int get_num_splits() const
     {
         return m_splits.size();
     }
 
-    Glib::RefPtr<Commodity> getCommodity() const
+    Glib::RefPtr<Commodity> get_commodity() const
     {
         return m_commodity;
     }
-    void setCommodity(const Glib::RefPtr<Commodity>& v)
+    void set_commodity(const Glib::RefPtr<Commodity>& v)
     {
         m_commodity = v;
     }
 
-    Glib::Date getDatePosted() const
+    Glib::Date get_date_posted() const
     {
         return m_datePosted;
     }
-    void setDatePosted(const Glib::Date& v)
+    void set_date_posted(const Glib::Date& v)
     {
         m_datePosted = v;
     }
 
-    time_t getDateEnteredTT() const
+    time_t get_date_entered_tt() const
     {
         return m_dateTimeEntered;
     }
-    void setDateEntered(time_t v)
+    void set_date_entered(time_t v)
     {
         m_dateTimeEntered = v;
     }
-    //Glib::DateTime getDateEntered() const { return m_dateTimeEntered; }
-    //void setDateEntered(const Glib::DateTime& v) { m_dateTimeEntered = v; }
+    //Glib::DateTime get_date_entered() const { return m_dateTimeEntered; }
+    //void set_date_entered(const Glib::DateTime& v) { m_dateTimeEntered = v; }
 
 private:
     Glib::ustring m_num;

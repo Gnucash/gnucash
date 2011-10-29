@@ -43,7 +43,7 @@ QString AccountSelectionDelegate::displayText(const QVariant& value, const QLoca
     {
         Glib::RefPtr<Account> acc = Glib::wrap(value.value< ::Account*>());
         if (acc)
-            return g2q(acc->getFullName());
+            return g2q(acc->get_full_name());
         else
             return QString();
     }
@@ -65,7 +65,7 @@ QWidget *AccountSelectionDelegate::createEditor(QWidget *parent,
     {
         Glib::RefPtr<Account> modelAccount = smodel->getAccount();
         Q_ASSERT(modelAccount);
-        Glib::RefPtr<Book> book = modelAccount->getBook();
+        Glib::RefPtr<Book> book = modelAccount->get_book();
         Q_ASSERT(book);
         Glib::RefPtr<Account> rootaccount = book->get_root_account();
         Q_ASSERT(rootaccount);

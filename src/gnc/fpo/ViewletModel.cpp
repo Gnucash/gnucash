@@ -113,7 +113,7 @@ SplitQList
 ViewletModel::buildSplitListDateSort(::Account *selectedAccount)
 {
     ::SplitList * splitL = ::xaccAccountGetSplitList(selectedAccount);
-    return Split::fromGList(splitL);
+    return Split::from_glist(splitL);
 }
 
 static bool greaterThanByDate(const ::Split* a, const ::Split* b)
@@ -134,7 +134,7 @@ ViewletModel::buildSplitListDateSort(AccountQList accountsList)
     {
         ::Account *C_acct = static_cast< ::Account *>(accountsList.at(i));
 
-        SplitQList tempList = Split::fromGList(::xaccAccountGetSplitList(C_acct));
+        SplitQList tempList = Split::from_glist(::xaccAccountGetSplitList(C_acct));
 
         int numOfSplits = tempList.size();
         for(int i=0; i<numOfSplits; i++)
@@ -165,45 +165,45 @@ ViewletModel::buildMiniJournalStruct(SplitQList splitList)
     for (int i = 0; i < numOfSplits; i++)
     {
         Glib::RefPtr<Split> split = Glib::wrap(splitList.at(i));
-        Glib::RefPtr<Transaction> txn = split->getParent();
+        Glib::RefPtr<Transaction> txn = split->get_parent();
 
         structViewletEntries entry;
 
         if(i == 0)
         {
-            tempDate = txn->getDatePosted();
+            tempDate = txn->get_date_posted();
             entry.isDateEqual = false;
-            tempAccount = split->getCorrAccountName();
+            tempAccount = split->get_corr_account_name();
             entry.isSplitAccountEqual = false;
         }
         else
         {
-            if(txn->getDatePosted() == tempDate)
+            if(txn->get_date_posted() == tempDate)
             {
                 entry.isDateEqual = true;
             }
             else
             {
                 entry.isDateEqual = false;
-                tempDate = txn->getDatePosted();
+                tempDate = txn->get_date_posted();
             }
 
-            if(split->getCorrAccountName() == tempAccount)
+            if(split->get_corr_account_name() == tempAccount)
             {
                 entry.isSplitAccountEqual = true;
             }
             else
             {
                 entry.isSplitAccountEqual = false;
-                tempAccount = split->getCorrAccountName();
+                tempAccount = split->get_corr_account_name();
             }
         }
 
-        entry.txnDate = g2q(txn->getDatePosted()).toString();
-        entry.splitAccount = g2q(split->getCorrAccountName());
-        entry.txnDescription = g2q(txn->getDescription());
+        entry.txnDate = g2q(txn->get_date_posted()).toString();
+        entry.splitAccount = g2q(split->get_corr_account_name());
+        entry.txnDescription = g2q(txn->get_description());
 
-        Numeric splitAmount = split->getAmount();
+        Numeric splitAmount = split->get_amount();
         PrintAmountInfo printInfo(split, true);
         entry.splitAmount = g2q(splitAmount.printAmount(printInfo));
 

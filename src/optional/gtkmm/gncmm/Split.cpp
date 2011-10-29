@@ -116,47 +116,47 @@ GType Split::get_base_type()
 
 
 
-Glib::RefPtr<Account> Split::getAccount() const
+Glib::RefPtr<Account> Split::get_account() const
 {
     return Glib::wrap(xaccSplitGetAccount(gobj()));
 }
-void Split::setAccount(Glib::RefPtr<Account> acc)
+void Split::set_account(Glib::RefPtr<Account> acc)
 {
     if (acc) xaccSplitSetAccount(gobj(), acc->gobj());
 }
-void Split::setAccount(::Account* acc)
+void Split::set_account(::Account* acc)
 {
     xaccSplitSetAccount(gobj(), acc);
 }
 
 
-Glib::RefPtr<Transaction> Split::getParent() const
+Glib::RefPtr<Transaction> Split::get_parent() const
 {
     return Glib::wrap(xaccSplitGetParent(gobj()));
 }
-void Split::setParent(Glib::RefPtr<Transaction> trans)
+void Split::set_parent(Glib::RefPtr<Transaction> trans)
 {
     if (trans) xaccSplitSetParent(gobj(), trans->gobj());
 }
-void Split::setParent(Transaction& trans)
+void Split::set_parent(Transaction& trans)
 {
     xaccSplitSetParent(gobj(), trans.gobj());
 }
 
-Glib::RefPtr<Split> Split::getOtherSplit() const
+Glib::RefPtr<Split> Split::get_other_split() const
 {
     return Glib::wrap(xaccSplitGetOtherSplit(gobj()));
 }
 
 
 TmpSplit::TmpSplit(const Glib::RefPtr<Split>& s, const TmpTransaction* parent_trans)
-    : m_account(s->getAccount()->gobj())
+    : m_account(s->get_account()->gobj())
     , m_parent(parent_trans)
-    , m_memo(s->getMemo())
-    , m_action(s->getAction())
-    , m_reconcile(s->getReconcile())
-    , m_amount(s->getAmount())
-    , m_value(s->getValue())
+    , m_memo(s->get_memo())
+    , m_action(s->get_action())
+    , m_reconcile(s->get_reconcile())
+    , m_amount(s->get_amount())
+    , m_value(s->get_value())
 {}
 
 TmpSplit::TmpSplit(::Account* account)
@@ -164,15 +164,15 @@ TmpSplit::TmpSplit(::Account* account)
     clear(account);
 }
 
-TmpSplit* TmpSplit::getOtherSplit() const
+TmpSplit* TmpSplit::get_other_split() const
 {
     if (!m_parent)
         return NULL;
     const TmpTransaction& p = *m_parent;
-    if (p.countSplits() != 2)
+    if (p.get_num_splits() != 2)
         return NULL;
-    TmpTransaction::TmpSplitList& splits = const_cast<TmpTransaction&>(p).getSplits();
-    if (splits.front().getAccount() != m_account)
+    TmpTransaction::TmpSplitList& splits = const_cast<TmpTransaction&>(p).get_splits();
+    if (splits.front().get_account() != m_account)
         return &splits.front();
     else
         return &splits.back();
@@ -189,17 +189,17 @@ void TmpSplit::clear(::Account* account)
     m_value = Numeric::zero();
 }
 
-void TmpSplit::copyInto(Glib::RefPtr<Transaction> t) const
+void TmpSplit::copy_into(Glib::RefPtr<Transaction> t) const
 {
     g_assert(t);
-    Glib::RefPtr<Split> s(Glib::wrap(xaccMallocSplit(t->getBook()->gobj())));
-    s->setAccount(m_account);
-    s->setParent(t);
-    s->setMemo(m_memo);
-    s->setAction(m_action);
-    s->setReconcile(m_reconcile);
-    s->setAmount(m_amount);
-    s->setValue(m_value);
+    Glib::RefPtr<Split> s(Glib::wrap(xaccMallocSplit(t->get_book()->gobj())));
+    s->set_account(m_account);
+    s->set_parent(t);
+    s->set_memo(m_memo);
+    s->set_action(m_action);
+    s->set_reconcile(m_reconcile);
+    s->set_amount(m_amount);
+    s->set_value(m_value);
 }
 
 } // END namespace gnc

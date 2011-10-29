@@ -116,7 +116,7 @@ GType Account::get_base_type()
 
 
 
-Glib::RefPtr<Commodity> Account::getCommodity() const
+Glib::RefPtr<Commodity> Account::get_commodity() const
 {
     return Glib::wrap(xaccAccountGetCommodity(gobj()));
 }
@@ -128,7 +128,7 @@ Glib::RefPtr<Account> Account::get_root()
 {
     return Glib::wrap(gnc_account_get_root(gobj()));
 }
-Glib::RefPtr<Account> Account::nth_child (gint num) const
+Glib::RefPtr<Account> Account::get_nth_child (gint num) const
 {
     return Glib::wrap(gnc_account_nth_child(gobj(), num));
 }

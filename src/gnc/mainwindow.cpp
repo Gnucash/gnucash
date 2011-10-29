@@ -527,7 +527,7 @@ void MainWindow::accountItemActivated(const QModelIndex & index)
 
     // Insert this as a new tab
     tableView->setProperty(PROPERTY_TAB_PREVIOUSPOS, ui->tabWidget->currentIndex());
-    ui->tabWidget->addTab(tableView, g2q(account->getName()));
+    ui->tabWidget->addTab(tableView, g2q(account->get_name()));
     ui->tabWidget->setCurrentWidget(tableView);
 
     connect(tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),

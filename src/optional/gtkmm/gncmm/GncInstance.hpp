@@ -97,9 +97,9 @@ public:
 
 public:
 
-    Glib::RefPtr<Book> getBook() const;
+    Glib::RefPtr<Book> get_book() const;
     void set_book(Glib::RefPtr<Book> book);
-    const ::GncGUID* getGUID() const
+    const ::GncGUID* get_guid() const
     {
         return qof_entity_get_guid(gobj_const());
     }

@@ -116,7 +116,7 @@ GType GncInstance::get_base_type()
 
 // ////////////////////////////////////////
 
-Glib::RefPtr<Book> GncInstance::getBook() const
+Glib::RefPtr<Book> GncInstance::get_book() const
 {
     return Glib::wrap(qof_instance_get_book (gobj()));
 }

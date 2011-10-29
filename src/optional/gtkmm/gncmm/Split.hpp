@@ -105,93 +105,93 @@ private:
 public:
 
 
-    Glib::RefPtr<Account> getAccount() const;
-    void setAccount(Glib::RefPtr<Account> acc);
-    void setAccount(::Account* acc);
+    Glib::RefPtr<Account> get_account() const;
+    void set_account(Glib::RefPtr<Account> acc);
+    void set_account(::Account* acc);
 
-    Glib::RefPtr<Transaction> getParent() const;
-    void setParent(Glib::RefPtr<Transaction> trans);
-    void setParent(Transaction& trans);
+    Glib::RefPtr<Transaction> get_parent() const;
+    void set_parent(Glib::RefPtr<Transaction> trans);
+    void set_parent(Transaction& trans);
 
-    Glib::ustring getMemo() const
+    Glib::ustring get_memo() const
     {
         return xaccSplitGetMemo(gobj());
     }
-    void setMemo(const Glib::ustring& v)
+    void set_memo(const Glib::ustring& v)
     {
         xaccSplitSetMemo(gobj(), v.c_str());
     }
 
-    Glib::ustring getAction() const
+    Glib::ustring get_action() const
     {
         return xaccSplitGetAction(gobj());
     }
-    void setAction(const Glib::ustring& v)
+    void set_action(const Glib::ustring& v)
     {
         xaccSplitSetAction(gobj(), v.c_str());
     }
 
-    char getReconcile() const
+    char get_reconcile() const
     {
         return xaccSplitGetReconcile(gobj());
     }
-    void setReconcile(char v)
+    void set_reconcile(char v)
     {
         xaccSplitSetReconcile(gobj(), v);
     }
 
-    Glib::RefPtr<Split> getOtherSplit() const;
+    Glib::RefPtr<Split> get_other_split() const;
 
-    Glib::ustring getCorrAccountFullName() const
+    Glib::ustring get_corr_account_full_name() const
     {
         return gchar_to_ustring(xaccSplitGetCorrAccountFullName(gobj()));
     }
-    Glib::ustring getCorrAccountName() const
+    Glib::ustring get_corr_account_name() const
     {
         return xaccSplitGetCorrAccountName(gobj());
     }
-    Glib::ustring getCorrAccountCode() const
+    Glib::ustring get_corr_account_code() const
     {
         return xaccSplitGetCorrAccountCode(gobj());
     }
 
-    void setAmount(const Numeric& amount)
+    void set_amount(const Numeric& amount)
     {
         xaccSplitSetAmount(gobj(), amount);
     }
-    Numeric getAmount() const
+    Numeric get_amount() const
     {
         return xaccSplitGetAmount(gobj());
     }
-    void setValue(const Numeric& value)
+    void set_value(const Numeric& value)
     {
         xaccSplitSetValue(gobj(), value);
     }
-    Numeric getValue() const
+    Numeric get_value() const
     {
         return xaccSplitGetValue(gobj());
     }
-    Numeric getSharePrice() const
+    Numeric get_share_price() const
     {
         return xaccSplitGetSharePrice(gobj());
     }
-    Numeric getBalance() const
+    Numeric get_balance() const
     {
         return xaccSplitGetBalance(gobj());
     }
-    Numeric getClearedBalance() const
+    Numeric get_cleared_balance() const
     {
         return xaccSplitGetClearedBalance(gobj());
     }
-    Numeric getReconciledBalance() const
+    Numeric get_reconciled_balance() const
     {
         return xaccSplitGetReconciledBalance(gobj());
     }
 
 
-    static SplitQList fromGList(GList* glist)
+    static SplitQList from_glist(GList* glist)
     {
-        return gnc::fromGList<SplitQList>(glist);
+        return gnc::from_glist<SplitQList>(glist);
     }
 };
 
@@ -223,71 +223,71 @@ public:
     /** Copies the content of this tmp split into the given real
      * transaction by allocating a new real gnc::Split and adding it
      * to the given real gnc::Transaction. */
-    void copyInto(Glib::RefPtr<Transaction> t) const;
+    void copy_into(Glib::RefPtr<Transaction> t) const;
 
-    ::Account* getAccount() const
+    ::Account* get_account() const
     {
         return m_account;
     }
-    void setAccount(::Account* v)
+    void set_account(::Account* v)
     {
         m_account = v;
     }
 
-    const TmpTransaction* getParent() const
+    const TmpTransaction* get_parent() const
     {
         return m_parent;
     }
-    void setParent(const TmpTransaction* v)
+    void set_parent(const TmpTransaction* v)
     {
         m_parent = v;
     }
 
     /** Returns a pointer to the "Other" split if it exists, or NULL
      * if none or multiple of them exist. */
-    TmpSplit* getOtherSplit() const;
+    TmpSplit* get_other_split() const;
 
-    Glib::ustring getMemo() const
+    Glib::ustring get_memo() const
     {
         return m_memo;
     }
-    void setMemo(const Glib::ustring& v)
+    void set_memo(const Glib::ustring& v)
     {
         m_memo = v;
     }
 
-    Glib::ustring getAction() const
+    Glib::ustring get_action() const
     {
         return m_action;
     }
-    void setAction(const Glib::ustring& v)
+    void set_action(const Glib::ustring& v)
     {
         m_action = v;
     }
 
-    char getReconcile() const
+    char get_reconcile() const
     {
         return m_reconcile;
     }
-    void setReconcile(char v)
+    void set_reconcile(char v)
     {
         m_reconcile = v;
     }
 
-    Numeric getAmount() const
+    Numeric get_amount() const
     {
         return m_amount;
     }
-    void setAmount(const Numeric& v)
+    void set_amount(const Numeric& v)
     {
         m_amount = v;
     }
 
-    Numeric getValue() const
+    Numeric get_value() const
     {
         return m_value;
     }
-    void setValue(const Numeric& v)
+    void set_value(const Numeric& v)
     {
         m_value = v;
     }

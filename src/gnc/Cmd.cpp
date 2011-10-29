@@ -41,51 +41,51 @@ namespace cmd
 QUndoCommand* setSplitMemo(Glib::RefPtr<Split> t, const QString& newValue)
 {
     return new Cmd<Split, Glib::ustring>(QObject::tr("Edit Split Memo"),
-                                         t, &Split::setMemo,
-                                         t->getMemo(), q2g(newValue));
+                                         t, &Split::set_memo,
+                                         t->get_memo(), q2g(newValue));
 }
 
 QUndoCommand* setSplitAction(Glib::RefPtr<Split> t, const QString& newValue)
 {
     return new Cmd<Split, Glib::ustring>(QObject::tr("Edit Split Action"),
-                                         t, &Split::setAction,
-                                         t->getAction(), q2g(newValue));
+                                         t, &Split::set_action,
+                                         t->get_action(), q2g(newValue));
 }
 
 QUndoCommand* setSplitReconcile(Glib::RefPtr<Split> t, char newValue)
 {
-    if (newValue == t->getReconcile())
+    if (newValue == t->get_reconcile())
         return NULL;
     // Special third argument: The setter function takes a value
     // directly, instead of a const-reference, so the template type
     // must be given explicitly.
     return new Cmd<Split, char, void (Split::*)(char)>(QObject::tr("Edit Split Reconcile"),
-            t, &Split::setReconcile,
-            t->getReconcile(), newValue);
+            t, &Split::set_reconcile,
+            t->get_reconcile(), newValue);
 }
 
 QUndoCommand* setSplitAccount(Glib::RefPtr<Split> t, Glib::RefPtr<Account> newValue)
 {
     // Temporary function pointer "tmp" to resolve the ambiguous
     // overload "setAccount()".
-    void (Split::*tmp)(Glib::RefPtr<Account>) = &Split::setAccount;
+    void (Split::*tmp)(Glib::RefPtr<Account>) = &Split::set_account;
     return new Cmd<Split, Glib::RefPtr<Account>, void (Split::*)(Glib::RefPtr<Account>)>(QObject::tr("Edit Split Account"),
             t, tmp,
-            t->getAccount(), newValue);
+            t->get_account(), newValue);
 }
 
 QUndoCommand* setSplitAmount(Glib::RefPtr<Split> t, const Numeric& newValue)
 {
     return new Cmd<Split, Numeric>(QObject::tr("Edit Split Amount"),
-                                   t, &Split::setAmount,
-                                   t->getAmount(), newValue);
+                                   t, &Split::set_amount,
+                                   t->get_amount(), newValue);
 }
 
 QUndoCommand* setSplitValue(Glib::RefPtr<Split> t, const Numeric& newValue)
 {
     return new Cmd<Split, Numeric>(QObject::tr("Edit Split Value"),
-                                   t, &Split::setValue,
-                                   t->getValue(), newValue);
+                                   t, &Split::set_value,
+                                   t->get_value(), newValue);
 }
 
 // ////////////////////////////////////////////////////////////
@@ -124,25 +124,25 @@ public:
 private:
     void set(const value_type& value)
     {
-        Glib::RefPtr<Transaction> trans = m_target->getParent();
-        if (!trans || trans->countSplits() != 2)
+        Glib::RefPtr<Transaction> trans = m_target->get_parent();
+        if (!trans || trans->get_num_splits() != 2)
             return;
-        Glib::RefPtr<Split> other = m_target->getOtherSplit();
+        Glib::RefPtr<Split> other = m_target->get_other_split();
         Q_ASSERT(other);
-        Glib::RefPtr<Commodity> originCommodity = m_target->getAccount()->getCommodity();
-        Glib::RefPtr<Commodity> transCommodity = trans->getCurrency();
-        Glib::RefPtr<Commodity> otherCommodity = other->getAccount()->getCommodity();
+        Glib::RefPtr<Commodity> originCommodity = m_target->get_account()->get_commodity();
+        Glib::RefPtr<Commodity> transCommodity = trans->get_currency();
+        Glib::RefPtr<Commodity> otherCommodity = other->get_account()->get_commodity();
         if (originCommodity != transCommodity
                 || transCommodity != otherCommodity)
             return;
 
-        trans->beginEdit();
-        m_target->setValue(value);
-        m_target->setAmount(value);
+        trans->begin_edit();
+        m_target->set_value(value);
+        m_target->set_amount(value);
         Numeric valueNeg = value.neg();
-        other->setAmount(valueNeg);
-        other->setValue(valueNeg);
-        trans->commitEdit();
+        other->set_amount(valueNeg);
+        other->set_value(valueNeg);
+        trans->commit_edit();
     }
 
 protected:
@@ -155,43 +155,43 @@ protected:
 QUndoCommand* setSplitValueAndAmount(Glib::RefPtr<Split> t, const Numeric& newValue)
 {
     return new SplitValueAndAmountCmd(QObject::tr("Edit Transaction Value"),
-                                      t, t->getValue(), newValue);
+                                      t, t->get_value(), newValue);
 }
 
 // ////////////////////////////////////////////////////////////
 
 QUndoCommand* setTransactionNum(Glib::RefPtr<Transaction> t, const QString& newValue)
 {
-    if (newValue == g2q(t->getNum()))
+    if (newValue == g2q(t->get_num()))
         return NULL;
     return new Cmd<Transaction, Glib::ustring>(QObject::tr("Edit Transaction Number"),
-            t, &Transaction::setNum,
-            t->getNum(), q2g(newValue));
+            t, &Transaction::set_num,
+            t->get_num(), q2g(newValue));
 }
 
 QUndoCommand* setTransactionDescription(Glib::RefPtr<Transaction> t, const QString& newValue)
 {
-    if (newValue == g2q(t->getDescription()))
+    if (newValue == g2q(t->get_description()))
         return NULL;
     return new Cmd<Transaction, Glib::ustring>(QObject::tr("Edit Transaction Description"),
-            t, &Transaction::setDescription,
-            t->getDescription(), q2g(newValue));
+            t, &Transaction::set_description,
+            t->get_description(), q2g(newValue));
 }
 
 QUndoCommand* setTransactionNotes(Glib::RefPtr<Transaction> t, const QString& newValue)
 {
     return new Cmd<Transaction, Glib::ustring>(QObject::tr("Edit Transaction Notes"),
-            t, &Transaction::setNotes,
-            t->getNotes(), q2g(newValue));
+            t, &Transaction::set_notes,
+            t->get_notes(), q2g(newValue));
 }
 
 QUndoCommand* setTransactionDate(Glib::RefPtr<Transaction> t, const QDate& newValue)
 {
-    if (newValue == g2q(t->getDatePosted()))
+    if (newValue == g2q(t->get_date_posted()))
         return NULL;
     return new Cmd<Transaction, Glib::Date>(QObject::tr("Edit Transaction Date"),
-                                            t, &Transaction::setDatePosted,
-                                            t->getDatePosted(), q2g(newValue));
+                                            t, &Transaction::set_date_posted,
+                                            t->get_date_posted(), q2g(newValue));
 }
 
 // ////////////////////////////////////////////////////////////
@@ -210,7 +210,7 @@ public:
         : base_class(text, parent)
         , m_target(targetPtr)
         , m_previousValue(*targetPtr.operator->())
-        , m_book(m_target->getBook())
+        , m_book(m_target->get_book())
     {
         Q_ASSERT(m_target);
     }
@@ -223,10 +223,10 @@ public:
 
     virtual void undo()
     {
-        m_target = Glib::wrap(Transaction::newInstance(m_book));
-        m_target->beginEdit();
-        m_previousValue.copyTo(m_target);
-        m_target->commitEdit();
+        m_target = Glib::wrap(Transaction::new_instance(m_book));
+        m_target->begin_edit();
+        m_previousValue.copy_to(m_target);
+        m_target->commit_edit();
         // Could also use m_previousValue.createAsReal()
     }
 
@@ -325,8 +325,8 @@ protected:
 QUndoCommand* setSplitAccount(TmpSplit& t, Glib::RefPtr<Account> newValue)
 {
     return new CmdRef<TmpSplit, ::Account*, void(TmpSplit::*)(::Account*)>(QObject::tr("Edit Split Account"),
-            t, &TmpSplit::setAccount,
-            t.getAccount(), newValue->gobj());
+            t, &TmpSplit::set_account,
+            t.get_account(), newValue->gobj());
 }
 QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue)
 {
@@ -334,26 +334,26 @@ QUndoCommand* setSplitReconcile(TmpSplit& t, char newValue)
     // directly, instead of a const-reference, so the template type
     // must be given explicitly.
     return new CmdRef<TmpSplit, char, void (TmpSplit::*)(char)>(QObject::tr("Edit Split Reconcile"),
-            t, &TmpSplit::setReconcile,
-            t.getReconcile(), newValue);
+            t, &TmpSplit::set_reconcile,
+            t.get_reconcile(), newValue);
 }
 QUndoCommand* setTransactionNum(TmpTransaction& t, const QString& newValue)
 {
     return new CmdRef<TmpTransaction, Glib::ustring>(QObject::tr("Edit Transaction Number"),
-            t, &TmpTransaction::setNum,
-            t.getNum(), q2g(newValue));
+            t, &TmpTransaction::set_num,
+            t.get_num(), q2g(newValue));
 }
 QUndoCommand* setTransactionDescription(TmpTransaction& t, const QString& newValue)
 {
     return new CmdRef<TmpTransaction, Glib::ustring>(QObject::tr("Edit Transaction Description"),
-            t, &TmpTransaction::setDescription,
-            t.getDescription(), q2g(newValue));
+            t, &TmpTransaction::set_description,
+            t.get_description(), q2g(newValue));
 }
 QUndoCommand* setTransactionDate(TmpTransaction& t, const QDate& newValue)
 {
     return new CmdRef<TmpTransaction, Glib::Date>(QObject::tr("Edit Transaction Date"),
-            t, &TmpTransaction::setDatePosted,
-            t.getDatePosted(), q2g(newValue));
+            t, &TmpTransaction::set_date_posted,
+            t.get_date_posted(), q2g(newValue));
 }
 
 // ////////////////////////////////////////////////////////////
@@ -378,9 +378,9 @@ public:
         , m_previousValue(previousValue)
         , m_newValue(newValue)
     {
-        Q_ASSERT(m_target.getParent());
-        Q_ASSERT(m_target.getOtherSplit());
-        Q_ASSERT(m_target.getAccount());
+        Q_ASSERT(m_target.get_parent());
+        Q_ASSERT(m_target.get_other_split());
+        Q_ASSERT(m_target.get_account());
     }
 
     virtual void redo()
@@ -394,26 +394,26 @@ public:
 private:
     void set(const value_type& value)
     {
-        Q_ASSERT(m_target.getParent());
-        const TmpTransaction& trans = *m_target.getParent();
-        if (trans.countSplits() != 2)
+        Q_ASSERT(m_target.get_parent());
+        const TmpTransaction& trans = *m_target.get_parent();
+        if (trans.get_num_splits() != 2)
             return;
-        TmpSplit* p_other = m_target.getOtherSplit();
+        TmpSplit* p_other = m_target.get_other_split();
         Q_ASSERT(p_other);
         TmpSplit& other = *p_other;
-        Glib::RefPtr<Commodity> originCommodity = Glib::wrap(m_target.getAccount())->getCommodity();
-        Glib::RefPtr<Commodity> transCommodity = trans.getCommodity();
-        Q_ASSERT(other.getAccount());
-        Glib::RefPtr<Commodity> otherCommodity = Glib::wrap(other.getAccount())->getCommodity();
+        Glib::RefPtr<Commodity> originCommodity = Glib::wrap(m_target.get_account())->get_commodity();
+        Glib::RefPtr<Commodity> transCommodity = trans.get_commodity();
+        Q_ASSERT(other.get_account());
+        Glib::RefPtr<Commodity> otherCommodity = Glib::wrap(other.get_account())->get_commodity();
         if (originCommodity != transCommodity
                 || transCommodity != otherCommodity)
             return;
 
-        m_target.setValue(value);
-        m_target.setAmount(value);
+        m_target.set_value(value);
+        m_target.set_amount(value);
         Numeric valueNeg = value.neg();
-        other.setAmount(valueNeg);
-        other.setValue(valueNeg);
+        other.set_amount(valueNeg);
+        other.set_value(valueNeg);
     }
 
 protected:
@@ -427,7 +427,7 @@ protected:
 QUndoCommand* setSplitValueAndAmount(TmpSplit& t, const Numeric& newValue)
 {
     return new TmpSplitValueAndAmountCmd(QObject::tr("Edit Transaction Value"),
-                                         t, t.getValue(), newValue);
+                                         t, t.get_value(), newValue);
 }
 
 // ////////////////////////////////////////////////////////////
@@ -451,7 +451,7 @@ public:
 
     virtual void redo()
     {
-        m_created = m_template.createAsReal();
+        m_created = m_template.create_as_real();
     }
 
     virtual void undo()
