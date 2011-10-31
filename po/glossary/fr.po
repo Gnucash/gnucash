@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "POT-Creation-Date: 2010-11-24 02:25+0100\n"
-"PO-Revision-Date: 2011-10-30 13:26+0100\n"
+"PO-Revision-Date: 2011-10-31 14:59+0100\n"
 "Last-Translator: Jérôme Rapinat <romjerome@yahoo.fr>\n"
 "Language-Team: FR\n"
 "MIME-Version: 1.0\n"
@@ -39,7 +39,7 @@ msgstr "type de compte : actif"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "type de compte : chèque"
+msgstr "type de compte : compte courant"
 
 #. "-"
 msgid "account type: currency"
@@ -71,11 +71,11 @@ msgstr "type de compte : fond mutuel"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "type de compte : sauvegarde"
+msgstr "type de compte : épargne"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "type de compte : stock"
+msgstr "type de compte : action"
 
 #. "-"
 msgid "account: parent account"
@@ -95,7 +95,7 @@ msgstr "Action (enregistrement)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "action : ATM"
+msgstr "action : guichet automatique (ATM)"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
@@ -153,9 +153,8 @@ msgid "action: sell"
 msgstr "action : accord"
 
 #. "-"
-#, fuzzy
 msgid "action: Teller"
-msgstr "action : Teller"
+msgstr "action : Guichet automatique"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
@@ -167,11 +166,11 @@ msgstr "action : transfert électronique (TIP)"
 
 #. "-"
 msgid "action: withdraw"
-msgstr "action : retirer"
+msgstr "action : retrait"
 
 #. "A sum of money"
 msgid "amount"
-msgstr "somme"
+msgstr "montant brut"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -231,11 +230,11 @@ msgstr "sensible à la casse"
 
 #. "Money in coins or notes"
 msgid "cash"
-msgstr "cash"
+msgstr "liquide"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
-msgstr "cheque"
+msgstr "chèque"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
@@ -247,19 +246,19 @@ msgstr "fermer, pour"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "produit"
+msgstr "produit, bien"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "Liste de produit"
+msgstr "Liste de produit, bien"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "option du produit : fraction"
+msgstr "option du produit, bien : fraction"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "option du produit : symbole"
+msgstr "option du produit, bien : symbole"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -331,7 +330,7 @@ msgstr "employé(e)"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
-msgstr "passif"
+msgstr "capitaux propres"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
@@ -399,7 +398,7 @@ msgstr "livre"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr "dettes/capitaux propres"
+msgstr "dettes, passifs/capitaux propres"
 
 #. "A sum of money that is lent (by a bank)"
 msgid "loan"
@@ -567,7 +566,7 @@ msgstr "entrée du registre : transaction divisée"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "registre : division du stock"
+msgstr "registre : division d'action"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
@@ -715,7 +714,7 @@ msgstr "fournisseur"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr "bon"
+msgstr "bon (commande)"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
