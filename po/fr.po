@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-12 17:08+0100\n"
-"PO-Revision-Date: 2011-10-31 16:19+0100\n"
+"PO-Revision-Date: 2011-11-01 12:18+0100\n"
 "Last-Translator: Jérôme Rapinat <romjerome@yahoo.fr>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -5803,6 +5803,9 @@ msgid ""
 "ADDRESS item defined in order\n"
 "to print an address on the check."
 msgstr ""
+"Le format de chèque doit avoir\n"
+"une ADRESSE définie pour pouvoir\n"
+"imprimer une adresse sur le chèque."
 
 # src/gnome/glade-gnc-dialogs.c:1186 src/gnome/glade-gnc-dialogs.c:1356
 #: ../src/gnome/glade/print.glade.h:7
@@ -6756,6 +6759,9 @@ msgid ""
 "Use previous weekday\n"
 "Use next weekday"
 msgstr ""
+"Aucun changement\n"
+"Utiliser le jour précédent\n"
+"Utiliser le jour suivant"
 
 #: ../src/gnome/glade/sched-xact.glade.h:112
 msgid ""
@@ -7131,7 +7137,7 @@ msgstr "Division d'actions"
 
 #: ../src/gnome/glade/stocks.glade.h:14
 msgid "Stock Split Details"
-msgstr "Détail de la division d'action"
+msgstr "Détails de la division d'action"
 
 #: ../src/gnome/glade/stocks.glade.h:15
 msgid "This assistant will help you record a stock split or stock merger."
@@ -7199,7 +7205,7 @@ msgstr "Cliquez pour changer le nom de la taxe et/ou le type de taxe"
 # messages-i18n.c:231
 #: ../src/gnome/glade/tax.glade.h:11
 msgid "Income Tax Information"
-msgstr "Détails sur la taxation des revenus"
+msgstr "Détails de la taxation des revenus"
 
 # messages-i18n.c:211
 #: ../src/gnome/glade/tax.glade.h:13
@@ -7561,6 +7567,8 @@ msgstr "_Auto pointage..."
 #: ../src/gnome/gnc-plugin-page-account-tree.c:206
 msgid "Automatically clear individual transactions, given a cleared amount"
 msgstr ""
+"Pointer automatiquement les transactions individuelles, fournissant un "
+"compte pointé"
 
 # messages-i18n.c:163
 #: ../src/gnome/gnc-plugin-page-account-tree.c:210
@@ -7933,6 +7941,8 @@ msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
 msgstr ""
+"Pointer automatiquement les transactions individuelles, pour avoir un compte "
+"pointé"
 
 # messages-i18n.c:162
 #: ../src/gnome/gnc-plugin-page-register.c:304
@@ -8121,7 +8131,7 @@ msgstr ""
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "Vous ne pouvez pas invalider une transaction ayant des répartitions "
-"réconciliées ou pointées."
+"rapprochées ou pointées."
 
 # messages-i18n.c:176
 #: ../src/gnome/gnc-plugin-page-register.c:2384
@@ -8214,8 +8224,8 @@ msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
 msgstr ""
-"Vous effaceriez une transaction avec des répartitions déjà réconciliées.\n"
-"Ce n'est pas une bonne idée, car votre solde réconcilié sera incorrecte."
+"Vous effaceriez une transaction avec des répartitions déjà rapprochées.\n"
+"Ce n'est pas une bonne idée, car votre solde rapproché sera incorrecte."
 
 # messages-i18n.c:57
 #: ../src/gnome/gnc-split-reg.c:967
@@ -8233,8 +8243,8 @@ msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
 msgstr ""
-"Vous effaceriez une répartition déjà réconciliée ! Ce n'est pas une bonne "
-"idée car votre solde réconcilié sera incorrect."
+"Vous effaceriez une répartition déjà rapprochée ! Ce n'est pas une bonne "
+"idée car votre solde rapproché sera incorrect."
 
 #: ../src/gnome/gnc-split-reg.c:1046
 msgid "You cannot delete this split."
@@ -8279,8 +8289,8 @@ msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Vous effaceriez une transaction avec des répartitions déjà réconciliées. Ce "
-"n'est pas une bonne idée, car votre balance réconciliée sera incorrecte."
+"Vous effaceriez une transaction avec des répartitions déjà rapprochées. Ce "
+"n'est pas une bonne idée, car votre balance rapprochée sera incorrecte."
 
 #: ../src/gnome/gnc-split-reg.c:1430
 msgid "Balancing entry from reconcilation"
@@ -8771,7 +8781,7 @@ msgstr "Position du chèque à imprimer"
 # po/guile_strings.txt:219
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:1
 msgid "Always reconcile to today"
-msgstr "Toujours réconcilier vers aujourd'hui"
+msgstr "Toujours rapprocher vers aujourd'hui"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
 msgid ""
@@ -9511,7 +9521,7 @@ msgstr "Dupliquer une transaction modifiée"
 # messages-i18n.c:82
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:10
 msgid "Mark transaction split as unreconciled"
-msgstr "Marquer une transaction répartie comme non réconciliée"
+msgstr "Marquer une transaction répartie comme non rapprochée"
 
 # messages-i18n.c:186
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:11
@@ -11700,7 +11710,7 @@ msgstr "Date/heure"
 #: ../src/gnome-utils/glade/preferences.glade.h:60
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
-msgstr ""
+msgstr "Les dates seront complétées en conformité avec le calendrier actuel."
 
 # po/guile_strings.txt:258
 #: ../src/gnome-utils/glade/preferences.glade.h:61
@@ -11719,7 +11729,7 @@ msgstr "Afficher la boîte de dialogue \"_Astuce du jour\""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:64
 msgid "Display hints for using GnuCash at startup"
-msgstr "Affiche des astuces au démarrage sur l'utilisation de GnuCash"
+msgstr "Afficher des astuces au démarrage sur l'utilisation de GnuCash"
 
 # messages-i18n.c:96
 #: ../src/gnome-utils/glade/preferences.glade.h:65
@@ -11729,19 +11739,19 @@ msgstr "Afficher les montants bruts _négatifs en rouge"
 # messages-i18n.c:71
 #: ../src/gnome-utils/glade/preferences.glade.h:67
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "Affiche les onglets en bas de la fenêtre."
+msgstr "Afficher les onglets en bas de la fenêtre."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:68
 msgid "Display the notebook tabs at the left of the window."
-msgstr "Affiche les onglets à gauche de la fenêtre."
+msgstr "Afficher les onglets à gauche de la fenêtre."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:69
 msgid "Display the notebook tabs at the right of the window."
-msgstr "Affiche les onglets à droite de la fenêtre."
+msgstr "Afficher les onglets à droite de la fenêtre."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:70
 msgid "Display the notebook tabs at the top of the window."
-msgstr "Affiche les onglets en haut de la fenêtre."
+msgstr "Afficher les onglets en haut de la fenêtre."
 
 # messages-i18n.c:71
 #: ../src/gnome-utils/glade/preferences.glade.h:71
@@ -11754,12 +11764,12 @@ msgstr "Afficher une barre de résumé au début de la page."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:73
 msgid "Display toolbar items as icons only."
-msgstr "Affiche uniquement les icônes des éléments de la barre d'outils."
+msgstr "Afficher uniquement les icônes des éléments de la barre d'outils."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid "Display toolbar items as text only."
 msgstr ""
-"Affiche uniquement le nom de la commande pour les éléments de la barre "
+"Afficher uniquement le nom de la commande pour les éléments de la barre "
 "d'outils."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:75
@@ -11767,15 +11777,15 @@ msgid ""
 "Display toolbar items with the text label below the icon.  Labels are show "
 "for all items."
 msgstr ""
-"Affiche les éléments de la barre d'outils avec l'étiquette sous l'icône. Les "
-"étiquettes sont affichés pour tous les éléments."
+"Afficher les éléments de la barre d'outils avec l'étiquette sous l'icône. "
+"Les étiquettes sont affichés pour tous les éléments."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:76
 msgid ""
 "Display toolbar items with the text label beside the icon.  Labels are only "
 "shown for the most important items."
 msgstr ""
-"Affiche les éléments de la barre d'outils avec l'étiquette à côté de "
+"Afficher les éléments de la barre d'outils avec l'étiquette à côté de "
 "l'icône. Les étiquettes sont uniquement affichés sur les éléments les plus "
 "importants."
 
@@ -12025,7 +12035,7 @@ msgstr "Afficher la fenêtre de démarrage"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:129
 msgid "Show splash screen at startup."
-msgstr "Affiche la fenêtre de démarrage au lancement."
+msgstr "Afficher la fenêtre de démarrage au lancement."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:130
 msgid ""
@@ -12327,7 +12337,7 @@ msgstr "_Afficher une astuce au démarrage"
 # messages-i18n.c:231
 #: ../src/gnome-utils/glade/transfer.glade.h:1
 msgid "<b>Basic Information</b>"
-msgstr "<b>Informantion basique</b>"
+msgstr "<b>Information basique</b>"
 
 # messages-i18n.c:266 po/guile_strings.txt:112
 # src/gnome/glade-gnc-dialogs.c:641
@@ -12785,6 +12795,10 @@ msgid ""
 "but cannot safely save to it. It will be marked read-only until you do "
 "File>Save As."
 msgstr ""
+"Cette base de données est issue d'une nouvelle version de GnuCash. Cette "
+"version peut la lire, mais ne peut pas l'enregistrer en toute sécurité. Elle "
+"sera marquée en lecture seule tant que vous n'utiliserez pas Fichier -> "
+"Enregistrer sous..."
 
 #: ../src/gnome-utils/gnc-file.c:430
 msgid ""
@@ -13137,7 +13151,7 @@ msgstr "_Outils"
 
 #: ../src/gnome-utils/gnc-main-window.c:367
 msgid "Show/hide the toolbar on this window"
-msgstr "Affiche/masque la barre d'outils pour cette fenêtre"
+msgstr "Afficher/masquer la barre d'outils pour cette fenêtre"
 
 #: ../src/gnome-utils/gnc-main-window.c:371
 msgid "Su_mmary Bar"
@@ -13145,7 +13159,7 @@ msgstr "Barre de _synthèse"
 
 #: ../src/gnome-utils/gnc-main-window.c:372
 msgid "Show/hide the summary bar on this window"
-msgstr "Affiche/masque la barre de synthèse de cette fenêtre"
+msgstr "Afficher/masquer la barre de synthèse de cette fenêtre"
 
 #: ../src/gnome-utils/gnc-main-window.c:376
 msgid "Stat_us Bar"
@@ -13153,7 +13167,7 @@ msgstr "_Barre d'état"
 
 #: ../src/gnome-utils/gnc-main-window.c:377
 msgid "Show/hide the status bar on this window"
-msgstr "Affiche/masque la barre d'état"
+msgstr "Afficher/masquer la barre d'état"
 
 # po/guile_strings.txt:31
 #: ../src/gnome-utils/gnc-main-window.c:388
@@ -13737,7 +13751,7 @@ msgstr "Paiement à partir de"
 # src/gnome/glade-gnc-dialogs.c:506
 #: ../src/gnome/window-reconcile.c:470 ../src/gnome/window-reconcile.c:480
 msgid "Reconcile Account"
-msgstr "Compte pour la réconciliation"
+msgstr "Compte pour la rapprochement"
 
 # messages-i18n.c:312
 #: ../src/gnome/window-reconcile.c:485
@@ -14988,6 +15002,8 @@ msgid ""
 "The rows displayed below had errors. You can attempt to correct these errors "
 "by changing the configuration."
 msgstr ""
+"Les lignes affichées ont des erreurs. Vous pouvez essayer de corriger ces "
+"erreurs en modifiant la configuration."
 
 #: ../src/import-export/csv/gnc-csv-import.c:1081
 msgid "Errors"
@@ -15173,9 +15189,9 @@ msgid ""
 "threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
 "default."
 msgstr ""
-"Une transaction pour laquelle le score de la meilleure réconciliation "
-"potentielle est dans la zone ROUGE (au-dessus du seuil d'affichage, mais en "
-"dessous ou égal au seuil d'AJOUT automatique) sera AJOUTÉE par défaut."
+"Une transaction pour laquelle le score du meilleur rapprochement potentiel "
+"est dans la zone ROUGE (au-dessus du seuil d'affichage, mais en dessous ou "
+"égal au seuil d'AJOUT automatique) sera AJOUTÉE par défaut."
 
 #: ../src/import-export/generic-import.glade.h:11
 msgid "Auto-_add threshold"
@@ -16402,7 +16418,7 @@ msgid ""
 "This field specifies the minimum matching score a potential matching "
 "transaction must have to be displayed in the match list."
 msgstr ""
-"Le score minimal que doit avoir une réconciliation potentielle pour être "
+"Le score minimal que doit avoir un rapprochement potentiel pour être "
 "affichée dans la liste des homologues."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
@@ -16990,6 +17006,8 @@ msgid ""
 "Could not determine the account currency.  Using the default currency "
 "provided by your system."
 msgstr ""
+"Impossible de déterminer le compte de devise. La devise par défaut fournie "
+"par votre système sera utilisée."
 
 #: ../src/register/ledger-core/split-register-model.c:214
 msgid "Ref"
@@ -18643,7 +18661,7 @@ msgid ""
 "Show multi-currency totals.  If not selected, convert all totals to report "
 "currency"
 msgstr ""
-"Affiche les totaux multidevises. Sinon, convertit tous les totaux à la "
+"Afficher les totaux multidevises. Sinon, convertit tous les totaux à la "
 "devise du rapport"
 
 #. src/report/business-reports/aging.scm
@@ -19942,7 +19960,7 @@ msgstr "Note ajoutée à la fin de la facture -- peut contenir une balise HTML"
 #: ../intl-scm/guile-strings.c:1590
 msgid "Display a customer invoice with tax columns (using eguile template)"
 msgstr ""
-"Affiche une facture personnalisée avec les colonnes taxes (utilisant le "
+"Afficher une facture personnalisée avec les colonnes taxes (utilisant le "
 "modèle eguile)"
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20229,6 +20247,8 @@ msgstr "Imprimer les paramètres d'exportation TXF"
 #: ../intl-scm/guile-strings.c:1748
 msgid "Show TXF export parameters for each TXF code/account on report"
 msgstr ""
+"Afficher les paramètres d'exportation TXF pour chaque numéro/compte TXF dans "
+"le rapport"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1750
@@ -20357,7 +20377,7 @@ msgstr "Ce rapport n'a aucune option."
 #: ../intl-scm/guile-strings.c:1794
 #, c-format
 msgid "Display the %s report"
-msgstr "Affiche le rapport %s"
+msgstr "Afficher le rapport %s"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #. src/report/report-gnome/report-gnome.scm
@@ -20442,12 +20462,12 @@ msgstr "La police pour le nom du compte"
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1828
 msgid "Number cell"
-msgstr "Numéro de cellules"
+msgstr "Cellule nombre"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1830
 msgid "Font info for regular number cells"
-msgstr "Détail de la police pour les cellules normales"
+msgstr "Détails de la police pour les cellules nombre"
 
 # messages-i18n.c:96
 #. src/report/report-system/html-fonts.scm
@@ -20465,12 +20485,12 @@ msgstr "Afficher les montants négatifs en rouge"
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1840
 msgid "Number header"
-msgstr "Numéro d'en-têtes"
+msgstr "En-tête du nombre"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1842
 msgid "Font info for number headers"
-msgstr "Détails de la police pour les en-têtes"
+msgstr "Détails de la police pour les en-têtes nombre"
 
 # po/guile_strings.txt:134
 #. src/report/report-system/html-fonts.scm
@@ -20481,18 +20501,18 @@ msgstr "Texte de la cellule"
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1848
 msgid "Font info for regular text cells"
-msgstr "Détail de la police pour les cellules avec le texte de base"
+msgstr "Détails de la police pour les cellules avec le texte de base"
 
 # messages-i18n.c:344
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1852
 msgid "Total number cell"
-msgstr "Total des numéros"
+msgstr "Total du nombre"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1854
 msgid "Font info for number cells containing a total"
-msgstr "Détail de la police pour les cellules avec un total"
+msgstr "Détails de la police pour les cellules avec un total"
 
 # messages-i18n.c:298 po/guile_strings.txt:165
 # src/gnome/glade-gnc-dialogs.c:632
@@ -20504,7 +20524,7 @@ msgstr "Total des étiquettes"
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1860
 msgid "Font info for cells containing total labels"
-msgstr "Détail de la police pour les cellules avec des étiquettes"
+msgstr "Détails de la police pour les cellules avec des étiquettes"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1864
@@ -20514,7 +20534,7 @@ msgstr "Étiquette de la cellule centrale"
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1866
 msgid "Font info for centered label cells"
-msgstr "Détail de la police pour les cellules avec une étiquette centrée"
+msgstr "Détails de la police pour les cellules avec une étiquette centrée"
 
 # po/guile_strings.txt:127
 #. src/report/report-system/html-style-sheet.scm
@@ -22600,7 +22620,7 @@ msgstr "Un"
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2724
 msgid "Display liabilities and equity below assets"
-msgstr "Affiche les passifs et capitaux propres à côté des actifs"
+msgstr "Afficher les passifs et capitaux propres à côté des actifs"
 
 # messages-i18n.c:342 po/guile_strings.txt:252
 #. src/report/standard-reports/balsheet-eg.scm
@@ -22612,7 +22632,7 @@ msgstr "Deux"
 #: ../intl-scm/guile-strings.c:2728
 msgid "Display assets on the left, liabilities and equity on the right"
 msgstr ""
-"Affiche les actifs à gauche, les passifs et les capitaux propres à droite"
+"Afficher les actifs à gauche, les passifs et les capitaux propres à droite"
 
 # messages-i18n.c:169 po/guile_strings.txt:62
 #. src/report/standard-reports/balsheet-eg.scm
@@ -22656,7 +22676,7 @@ msgstr "Graphique du bilan utilisant eguile-gnc"
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2746
 msgid "Display a balance sheet (using eguile template)"
-msgstr "Affiche un bilan graphique (utilisant le modèle eguile)"
+msgstr "Afficher un bilan graphique (utilisant le modèle eguile)"
 
 # po/guile_strings.txt:197
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -22909,7 +22929,7 @@ msgstr "Saisies"
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:3012 ../intl-scm/guile-strings.c:3586
 msgid "Display as a two column report"
-msgstr "Affiche en tant que rapport sur deux colonnes"
+msgstr "Afficher en tant que rapport sur deux colonnes"
 
 # messages-i18n.c:53
 #. src/report/standard-reports/budget-income-statement.scm
@@ -23494,7 +23514,7 @@ msgstr "Annuler les transactions"
 #: ../intl-scm/guile-strings.c:4180 ../intl-scm/guile-strings.c:4286
 #: ../intl-scm/guile-strings.c:4378
 msgid "Reconciled Date"
-msgstr "Date de réconciliation"
+msgstr "Date de rapprochement"
 
 # messages-i18n.c:199
 #. src/report/standard-reports/general-ledger.scm
@@ -23951,7 +23971,7 @@ msgstr "Afficher le nombre de titres ?"
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3906
 msgid "Display the name of lot the shares are in?"
-msgstr "Afficher le nom des nombreux titres présents ?"
+msgstr "Afficher le nom du lot de titres présents ?"
 
 # po/guile_strings.txt:219
 #. src/report/standard-reports/register.scm
@@ -24005,7 +24025,7 @@ msgstr "Afficher la référence de transaction ?"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3938 ../intl-scm/guile-strings.c:4428
 msgid "Display a running balance"
-msgstr "Affiche la balance finale"
+msgstr "Afficher la balance finale"
 
 # messages-i18n.c:268 po/guile_strings.txt:32
 #. src/report/standard-reports/register.scm
@@ -24108,12 +24128,12 @@ msgstr "Ligne multiple"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4218
 msgid "Display N lines"
-msgstr "Affiche N lignes"
+msgstr "Afficher N lignes"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4222
 msgid "Display 1 line"
-msgstr "Affiche une ligne"
+msgstr "Afficher une ligne"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4224
@@ -24242,7 +24262,7 @@ msgstr "Trier par heure exacte"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4288
 msgid "Sort by the Reconciled Date"
-msgstr "Trier par la date de réconciliation"
+msgstr "Trier par la date de rapprochement"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #. src/report/standard-reports/transaction.scm
@@ -24345,7 +24365,7 @@ msgstr "L'ordre du tri secondaire"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4380
 msgid "Display the reconciled date?"
-msgstr "Afficher la date de réconciliation ?"
+msgstr "Afficher la date de rapprochement ?"
 
 # po/guile_strings.txt:219
 #. src/report/standard-reports/transaction.scm
