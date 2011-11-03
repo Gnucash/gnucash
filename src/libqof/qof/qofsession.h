@@ -219,6 +219,12 @@ const char * qof_session_get_file_path (const QofSession *session);
 
 const char * qof_session_get_url (const QofSession *session);
 
+/** Returns TRUE if this session is marked as read-only, otherwise FALSE. */
+gboolean qof_session_is_readonly(const QofSession * session);
+
+/** Sets the is_readonly value to the given value. */
+void qof_session_set_readonly(QofSession* session, gboolean is_readonly);
+
 /**
  * The qof_session_not_saved() subroutine will return TRUE
  *    if any data in the session hasn't been saved to long-term storage.

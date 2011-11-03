@@ -64,6 +64,7 @@ struct _QofSession
      * between the persistant store and the local engine.  */
     QofBackend *backend;
     gint lock;
+    gboolean is_readonly;
 };
 
 
