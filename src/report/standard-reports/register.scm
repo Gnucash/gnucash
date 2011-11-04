@@ -562,7 +562,13 @@
                (rest (cdr splits))
                (next (if (null? rest) #f
                          (car rest)))
-               (split-value (add-split-row table 
+               ;; The general ledger has a split that doesn't have an account
+               ;; set yet (the new entry transaction).
+               ;; This split should be skipped or the report errors out.
+               ;; See bug #639082
+               (valid-split? (not (null? (xaccSplitGetAccount current))))
+               (split-value (if valid-split?
+                            (add-split-row table 
                                            current 
                                            used-columns 
                                            current-row-style
@@ -570,13 +576,13 @@
                                            (not multi-rows?)
                                            double?
                                            (opt-val "Display" "Memo")
-                                           (opt-val "Display" "Description"))))
+                                           (opt-val "Display" "Description")))))
 
-          (if multi-rows?
+          (if (and multi-rows? valid-split?)
               (add-other-split-rows 
                current table used-columns "alternate-row"))
 
-          (if multi-rows?
+          (if (and multi-rows? valid-split?)
               (for-each (lambda (split)
                           (if (string=? (gncAccountGetGUID
                                          (xaccSplitGetAccount current))
