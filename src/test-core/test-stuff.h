@@ -36,6 +36,7 @@ Otherwise, only failures are printed out.
 
 #include <glib.h>
 #include <stdlib.h>
+#include <qof.h>
 
 /**
  * Use this to indicate the result of a test.
@@ -120,7 +121,7 @@ void test_set_called( const gboolean val );
  * Destructively tests (meaning that it resets called to FALSE) and
  * returns the value of called.
  */
-const gboolean test_reset_called( void );
+gboolean test_reset_called( void );
 
 /**
  * Set the test data pointer with the what you expect your mock to be
@@ -132,7 +133,7 @@ void test_set_data( gpointer data );
  * Destructively retrieves the test data pointer. Call from your mock
  * to ensure that it received the expected data.
  */
-const gpointer test_reset_data( void );
+gpointer test_reset_data( void );
 
 /**
  * A handy function to use to free memory from lists of simple
@@ -213,5 +214,27 @@ gchar* get_random_string_without(const char *exclude_chars);
 gint64 get_random_gint64(void);
 double get_random_double(void);
 const char* get_random_string_in_array(const char* str_list[]);
+
+/* TestSignal is an opaque struct used to mock handling signals
+ * emitted by functions-under-test. It registers a handler and counts
+ * how many times it is called with the right instance and type.  The
+ * struct is allocated using g_slice_new, and it registers a
+ * qof_event_handler; test_signal_free cleans up at the end of the
+ * test function (or sooner, if you want to reuse a TestSignal).  If
+ * event_data isn't NULL, the mock signal handler will test that it
+ * matches the event_data passed with the signal and assert if it
+ * isn't the same object (pointer comparison). If the actual event
+ * data is a local variable, it won't be accessible, so the event_data
+ * passed to test_signal_new should be NULL to avoid the test.
+ */
+typedef gpointer TestSignal;
+TestSignal test_signal_new (QofInstance *entity, QofEventId eventType,
+			     gpointer event_data);
+/* test_signal_assert_hits calls g_assert_cmpuint with an ==
+ * operator. Use it in a test program to see if a TestSignal has been
+ * emitted the number of times you expect.
+ */
+void test_signal_assert_hits (TestSignal sig, guint hits);
+void test_signal_free (TestSignal sig);
 
 #endif /* TEST_STUFF_H */

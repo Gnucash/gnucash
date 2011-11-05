@@ -373,14 +373,21 @@ test_handle_faults( const char *log_domain, GLogLevelFlags log_level,
     TestErrorStruct *tdata = (TestErrorStruct*)user_data;
     if (tdata == NULL)
     {
-        g_printf("Recieved Error Message %s\n", msg);
+        g_printf("Received Log Message %s\n", msg);
         return FALSE;
     }
+/* If it's a lower loglevel than we expected, report it and move on */
+    if (tdata->log_level && log_level < tdata->log_level)
+    {
+	g_printf ("Received Log Message %s\n", msg);
+	return FALSE;
+    }
     if (tdata->log_domain != NULL)
-        g_assert(g_strcmp0(tdata->log_domain, log_domain) == 0);
+        g_assert_cmpstr (tdata->log_domain, ==, log_domain);
     if (tdata->log_level)
-        g_assert(log_level == tdata->log_level);
-    tdata->msg = g_strdup(msg);
+        g_assert_cmpuint (tdata->log_level, ==, log_level);
+    if (tdata->log_level)
+        g_assert_cmpstr (tdata->msg, ==, msg);
     return FALSE;
 }
 
@@ -390,7 +397,7 @@ test_set_called( const gboolean val )
     tdata.called = val;
 }
 
-const gboolean
+gboolean
 test_reset_called( void )
 {
     const gboolean called  = tdata.called;
@@ -404,7 +411,7 @@ test_set_data( const gpointer val )
     tdata.data = val;
 }
 
-const gpointer
+gpointer
 test_reset_data( void )
 {
     const gpointer data  = tdata.data;
@@ -417,4 +424,56 @@ test_free( gpointer data )
 {
     if (!data) return;
     g_free(data);
+}
+
+
+typedef struct
+{
+    QofInstance *entity;
+    QofEventId event_type;
+    gpointer event_data;
+    gint hdlr;
+    guint hits;
+} _TestSignal;
+
+static void
+mock_signal_handler (QofInstance *entity, QofEventId event_type,
+		     gpointer handler_data, gpointer event_data)
+{
+    _TestSignal *signal = (_TestSignal*)handler_data;
+    if ((signal->entity == entity || signal->entity == NULL)
+	&& signal->event_type == event_type)
+    {
+	if (signal->event_data)
+	    g_assert (signal->event_data == event_data);
+	signal->hits += 1;
+    }
+}
+
+TestSignal
+test_signal_new (QofInstance *entity, QofEventId event_type,
+		 gpointer event_data)
+{
+    _TestSignal *sig = g_slice_new (_TestSignal);
+    sig->entity = entity;
+    sig->event_type = event_type;
+    sig->event_data = event_data;
+    sig->hits = 0;
+    sig->hdlr = qof_event_register_handler (mock_signal_handler, (gpointer)sig);
+    return (TestSignal)sig;
+}
+
+void
+test_signal_free (TestSignal sigp)
+{
+    _TestSignal *sig = (_TestSignal *)sigp;
+    qof_event_unregister_handler (sig->hdlr);
+    g_slice_free (_TestSignal, sig);
+}
+
+void
+test_signal_assert_hits (TestSignal sigp, guint hits)
+{
+    _TestSignal *sig = (_TestSignal *)sigp;
+    g_assert_cmpint (sig->hits, ==, hits);
 }
