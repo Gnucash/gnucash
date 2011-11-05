@@ -39,13 +39,11 @@
 #include "gnc-lot.h"
 #include "gnc-pricedb.h"
 
-#define GNC_ID_ROOT_ACCOUNT        "RootAccount"
-
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
 /* The Canonical Account Separator.  Pre-Initialized. */
 static gchar account_separator[8] = ".";
-gunichar account_uc_separator = ':';
+static gunichar account_uc_separator = ':';
 
 enum
 {
@@ -87,76 +85,6 @@ enum
     PROP_FILTER,
     PROP_SORT_ORDER,
 };
-
-typedef struct AccountPrivate
-{
-    /* The accountName is an arbitrary string assigned by the user.
-     * It is intended to a short, 5 to 30 character long string that
-     * is displayed by the GUI as the account mnemonic.
-     */
-    char *accountName;
-
-    /* The accountCode is an arbitrary string assigned by the user.
-     * It is intended to be reporting code that is a synonym for the
-     * accountName. Typically, it will be a numeric value that follows
-     * the numbering assignments commonly used by accountants, such
-     * as 100, 200 or 600 for top-level accounts, and 101, 102..  etc.
-     * for detail accounts.
-     */
-    char *accountCode;
-
-    /* The description is an arbitrary string assigned by the user.
-     * It is intended to be a longer, 1-5 sentence description of what
-     * this account is all about.
-     */
-    char *description;
-
-    /* The type field is the account type, picked from the enumerated
-     * list that includes ACCT_TYPE_BANK, ACCT_TYPE_STOCK,
-     * ACCT_TYPE_CREDIT, ACCT_TYPE_INCOME, etc.  Its intended use is to
-     * be a hint to the GUI as to how to display and format the
-     * transaction data.
-     */
-    GNCAccountType type;
-
-    /*
-     * The commodity field denotes the kind of 'stuff' stored
-     * in this account.  The 'amount' field of a split indicates
-     * how much of the 'stuff' there is.
-     */
-    gnc_commodity * commodity;
-    int commodity_scu;
-    gboolean non_standard_scu;
-
-    /* The parent and children pointers are used to implement an account
-     * hierarchy, of accounts that have sub-accounts ("detail accounts").
-     */
-    Account *parent;    /* back-pointer to parent */
-    GList *children;    /* list of sub-accounts */
-
-    /* protected data - should only be set by backends */
-    gnc_numeric starting_balance;
-    gnc_numeric starting_cleared_balance;
-    gnc_numeric starting_reconciled_balance;
-
-    /* cached parameters */
-    gnc_numeric balance;
-    gnc_numeric cleared_balance;
-    gnc_numeric reconciled_balance;
-
-    gboolean balance_dirty;     /* balances in splits incorrect */
-
-    GList *splits;              /* list of split pointers */
-    gboolean sort_dirty;        /* sort order of splits is bad */
-
-    LotList   *lots;		/* list of lot pointers */
-    GNCPolicy *policy;		/* Cached pointer to policy method */
-
-    /* The "mark" flag can be used by the user to mark this account
-     * in any way desired.  Handy for specialty traversals of the
-     * account tree. */
-    short mark;
-} AccountPrivate;
 
 #define GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_ACCOUNT, AccountPrivate))
@@ -921,7 +849,7 @@ gnc_account_get_book(const Account *account)
 /********************************************************************\
 \********************************************************************/
 
-static Account *
+Account *
 gnc_coll_get_root_account (QofCollection *col)
 {
     if (!col) return NULL;
@@ -1153,7 +1081,9 @@ xaccFreeAccount (Account *acc)
             xaccSplitDestroy (s);
         }
         g_list_free(slist);
+/* Nothing here (or in xaccAccountCommitEdit) NULLs priv->splits, so this asserts every time.
         g_assert(priv->splits == NULL);
+*/
     }
 
     CACHE_REPLACE(priv->accountName, NULL);
@@ -4980,4 +4910,28 @@ gboolean xaccAccountRegister (void)
     return qof_object_register (&account_object_def);
 }
 
+/* ======================= UNIT TESTING ACCESS =======================
+ * The following functions are for unit testing use only.
+ */
+static AccountPrivate*
+utest_account_get_private (Account *acc)
+{
+    return GET_PRIVATE (acc);
+}
+
+AccountTestFunctions*
+_utest_account_fill_functions(void)
+{
+    AccountTestFunctions* func = g_new(AccountTestFunctions, 1);
+
+    func->get_private = utest_account_get_private;
+    func->coll_get_root_account = gnc_coll_get_root_account;
+    func->xaccFreeAccountChildren = xaccFreeAccountChildren;
+    func->xaccFreeAccount = xaccFreeAccount;
+    func->qofAccountSetParent = qofAccountSetParent;
+    func->gnc_account_lookup_by_full_name_helper =
+	gnc_account_lookup_by_full_name_helper;
+
+    return func;
+}
 /* ======================= END OF FILE =========================== */

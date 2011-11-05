@@ -1,3 +1,6 @@
+include $(top_srcdir)/test-templates/Makefile.decl
+
+MODULEPATH = src/engine
 
 AM_CPPFLAGS = \
   -I${top_srcdir} \
@@ -81,11 +84,35 @@ test_link_LDADD = ../libgncmod-engine.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la
 
-EXTRA_DIST = \
+EXTRA_DIST += \
   test-create-account \
   test-create-account.scm \
   test-scm-query-import \
   test-scm-query-import.scm
+
+TEST_PROGS += test-engine
+
+noinst_PROGRAMS = ${TEST_PROGS}
+
+test_engine_SOURCES = \
+	test-engine.c \
+	utest-Account.c
+
+test_engine_HEADERS = \
+	${top_srcdir}/${MODULEPATH}/gnc-engine.h
+
+test_enginedir = ${top_builddir}/${MODULEPATH}/test
+
+test_engine_LDADD = \
+	${top_builddir}/${MODULEPATH}/libgncmod-engine.la \
+	${top_builddir}/src/test-core/libtest-core.la
+
+
+test_engine_CFLAGS = \
+	${DEFAULT_INCLUDES} \
+	-I${top_srcdir}/${MODULEPATH}/ \
+	-DTESTPROG=test_engine \
+	${GLIB_CFLAGS}
 
 clean-local:
 	rm -f translog.*

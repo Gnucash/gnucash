@@ -16,7 +16,7 @@ test_qof_SOURCES = \
 	test-qofobject.c \
 	test-qofsession.c
 
-test_qof_HEADERSS = \
+test_qof_HEADERS = \
 	$(top_srcdir)/${MODULEPATH}/qofbook.h \
 	$(top_srcdir)/${MODULEPATH}/qofinstance.h \
 	$(top_srcdir)/${MODULEPATH}/kvp_frame.h \
@@ -26,6 +26,7 @@ test_qof_HEADERSS = \
 TEST_PROGS += test-qof
 
 noinst_PROGRAMS = ${TEST_PROGS}
+test_qofdir = ${top_builddir}/${MODULEPATH}/test
 
 #The tests might require more libraries, but try to keep them
 #as independent as possible.

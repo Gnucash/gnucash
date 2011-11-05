@@ -164,6 +164,7 @@ typedef enum
 			     *   for now, see NUM_ACCOUNT_TYPES  */
     ACCT_TYPE_CREDITLINE = 18, /**< line of credit -- don't use this for
 			      *   now, see NUM_ACCOUNT_TYPES  */
+    ACCT_TYPE_LAST
 } GNCAccountType;
 
 
@@ -204,13 +205,14 @@ void xaccAccountDestroy (Account *account);
 gboolean xaccAccountEqual(const Account *a, const Account* b,
                           gboolean check_guids);
 
-/** The xaccAccountOrder() subroutine defines a sorting order
- *    on accounts.  It takes pointers to two accounts, and
- *    returns -1 if the first account is "less than" the second,
- *    returns +1 if the first is "greater than" the second, and
- *    0 if they are equal.  To determine the sort order, first
- *    the account codes are compared, and if these are equal, then
- *    account types, and, if these are equal, the account names.
+/** The xaccAccountOrder() subroutine defines a sorting order on
+ *    accounts.  It takes pointers to two accounts, and returns an int < 0 if
+ *    the first account is "less than" the second, returns an int > 0 if the
+ *    first is "greater than" the second, and 0 if they are equal.  To
+ *    determine the sort order, first the account codes are compared,
+ *    and if these are equal, then account types, then account
+ *    names. If still equal, it compares GUID to ensure that there
+ *    aren't any ties.
  */
 int xaccAccountOrder (const Account *account_1, const Account *account_2);
 
