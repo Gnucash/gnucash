@@ -1,3 +1,4 @@
+# -*- makefile-automake-mode -*-
 # GLIB - Library of useful C routines
 
 GTESTER = gtester 					# for non-GLIB packages
