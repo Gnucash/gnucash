@@ -5,19 +5,21 @@
 # Nigel Titley <nigel@titley.com>, 2002, 2003, 2004, 2006, 2007.
 # Neil Williams <linux@codehelp.co.uk>, 2006.
 # Mike Evans <mikee@saxicola.idps.co.uk>, 2010.
+# Mike Evans <mikee@saxicola.co.uk>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: en_GB\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-12 17:08+0100\n"
-"PO-Revision-Date: 2010-09-12 11:26+0100\n"
-"Last-Translator: Mike Evans <mikee@saxicola.idps.co.uk>\n"
+"PO-Revision-Date: 2011-11-05 14:12+0000\n"
+"Last-Translator: Mike Evans <mikee@saxicola.co.uk>\n"
 "Language-Team: British English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.2\n"
+"Language: en_GB\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:656
 msgid "Illegal variable in expression."
@@ -14885,7 +14887,7 @@ msgstr "_Recalculate"
 #. must only contain the part after the | character.
 #: ../src/register/ledger-core/split-register.c:2228
 msgid "Action Column|Deposit"
-msgstr ""
+msgstr "Deposit"
 
 #: ../src/register/ledger-core/split-register.c:2229
 msgid "Withdraw"
