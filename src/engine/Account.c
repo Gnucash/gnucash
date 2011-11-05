@@ -2722,7 +2722,7 @@ gnc_account_get_descendants_sorted (const Account *account)
     {
         descendants = g_list_append(descendants, child->data);
         descendants = g_list_concat(descendants,
-                                    gnc_account_get_descendants(child->data));
+                                    gnc_account_get_descendants_sorted(child->data));
     }
     g_list_free(children);
     return descendants;
