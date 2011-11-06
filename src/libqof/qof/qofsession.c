@@ -245,40 +245,6 @@ qof_session_get_book (const QofSession *session)
     return NULL;
 }
 
-void
-qof_session_add_book (QofSession *session, QofBook *addbook)
-{
-    GList *node;
-    if (!session) return;
-
-    ENTER (" sess=%p book=%p", session, addbook);
-
-    /* See if this book is already there ... */
-    for (node = session->books; node; node = node->next)
-    {
-        QofBook *book = node->data;
-        if (addbook == book) return;
-    }
-
-    if ('y' == addbook->book_open)
-    {
-        /* hack alert -- someone should free all the books in the list,
-         * but it should probably not be us ... since the books backends
-         * should be shutdown first, etc */
-        /* XXX this should probably be an error XXX */
-        g_list_free (session->books);
-        session->books = g_list_append (NULL, addbook);
-    }
-    else
-    {
-        /* XXX Need to tell the backend to add a book as well */
-        session->books = g_list_append (session->books, addbook);
-    }
-
-    qof_book_set_backend (addbook, session->backend);
-    LEAVE (" ");
-}
-
 QofBackend *
 qof_session_get_backend (const QofSession *session)
 {
