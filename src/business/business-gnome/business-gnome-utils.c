@@ -375,6 +375,7 @@ gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
  */
 
 typedef const char * (*GenericLookup_t)(gpointer);
+typedef gboolean (*GenericEqual_t)(gpointer, gpointer);
 
 typedef struct
 {
@@ -384,6 +385,7 @@ typedef struct
     gboolean     none_ok;
     const char * (*get_name)(gpointer);
     GList *      (*get_list)(QofBook*);
+    gboolean     (*is_equal)(gpointer, gpointer);
 
 } ListStoreData;
 
@@ -442,6 +444,7 @@ gnc_simple_combo_make (GtkComboBox *cbox, QofBook *book,
                        gboolean none_ok, QofIdType type_name,
                        GList * (*get_list)(QofBook*),
                        GenericLookup_t get_name,
+                       GenericEqual_t is_equal,
                        gpointer initial_choice)
 {
     ListStoreData *lsd;
@@ -462,6 +465,7 @@ gnc_simple_combo_make (GtkComboBox *cbox, QofBook *book,
         lsd->none_ok = none_ok;
         lsd->get_name = get_name;
         lsd->get_list = get_list;
+        lsd->is_equal = is_equal;
         g_object_set_data (G_OBJECT (cbox), "liststore-data", lsd);
 
         lsd->component_id =
@@ -501,6 +505,7 @@ gnc_billterms_combo (GtkComboBox *cbox, QofBook *book,
     gnc_simple_combo_make (cbox, book, none_ok, GNC_BILLTERM_MODULE_NAME,
                            gncBillTermGetTerms,
                            (GenericLookup_t)gncBillTermGetName,
+                           (GenericEqual_t)gncBillTermIsFamily,
                            (gpointer)initial_choice);
 }
 
@@ -513,6 +518,7 @@ gnc_taxtables_combo (GtkComboBox *cbox, QofBook *book,
     gnc_simple_combo_make (cbox, book, none_ok, GNC_TAXTABLE_MODULE_NAME,
                            gncTaxTableGetTables,
                            (GenericLookup_t)gncTaxTableGetName,
+                           NULL,
                            (gpointer)initial_choice);
 }
 
@@ -524,7 +530,7 @@ gnc_taxincluded_combo (GtkComboBox *cbox, GncTaxIncluded initial_choice)
 
     if (!cbox) return;
 
-    gnc_simple_combo_make (cbox, NULL, FALSE, NULL, NULL, NULL,
+    gnc_simple_combo_make (cbox, NULL, FALSE, NULL, NULL, NULL, NULL,
                            GINT_TO_POINTER(initial_choice));
     liststore = GTK_LIST_STORE (gtk_combo_box_get_model (cbox));
 
@@ -565,6 +571,7 @@ gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data)
     GtkTreeIter iter;
     GtkTreeModel *model;
     gboolean valid_iter;
+    ListStoreData *lsd = g_object_get_data (G_OBJECT (cbox), "liststore-data");
 
     if (!cbox) return;
 
@@ -576,12 +583,22 @@ gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data)
         GValue value = { 0 };
 
         gtk_tree_model_get_value (model, &iter, 1, &value);
-        if (g_value_get_pointer(&value) == data)
+        if (lsd && lsd->is_equal)    // A specific comparator function was set
         {
-            gtk_combo_box_set_active_iter (cbox, &iter);
-            return;
+            if ((lsd->is_equal)(g_value_get_pointer(&value), data))
+            {
+                gtk_combo_box_set_active_iter (cbox, &iter);
+                return;
+            }
         }
-
+        else    // No specific comparator function set, use generic pointer comparison instead
+        {
+            if (g_value_get_pointer(&value) == data)
+            {
+                gtk_combo_box_set_active_iter (cbox, &iter);
+                return;
+            }
+        }
         valid_iter = gtk_tree_model_iter_next (model, &iter);
     }
 }

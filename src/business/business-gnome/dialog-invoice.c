@@ -2240,11 +2240,25 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
 
     if (invoice == NULL)
     {
+        GncBillTerm *owner_terms = NULL;
         iw->dialog_type = NEW_INVOICE;
         invoice = gncInvoiceCreate (bookp);
         gncInvoiceSetCurrency (invoice, gnc_default_currency ());
         iw->book = bookp;
         start_owner = owner;
+        switch (gncOwnerGetType (gncOwnerGetEndOwner (owner)))
+        {
+            case GNC_OWNER_CUSTOMER:
+                owner_terms = gncCustomerGetTerms (gncOwnerGetCustomer (gncOwnerGetEndOwner (owner)));
+                break;
+            case GNC_OWNER_VENDOR:
+                owner_terms = gncVendorGetTerms (gncOwnerGetVendor (gncOwnerGetEndOwner (owner)));
+                break;
+            default:
+                break;
+        }
+        if (owner_terms)
+            gncInvoiceSetTerms (invoice, owner_terms);
     }
     else
     {

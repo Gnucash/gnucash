@@ -695,6 +695,14 @@ gboolean gncBillTermEqual(const GncBillTerm *a, const GncBillTerm *b)
     return TRUE;
 }
 
+gboolean gncBillTermIsFamily (const GncBillTerm *a, const GncBillTerm *b)
+{
+    if (!gncBillTermCompare (a, b))
+        return TRUE;
+    else
+        return FALSE;
+}
+
 gboolean gncBillTermIsDirty (const GncBillTerm *term)
 {
     if (!term) return FALSE;

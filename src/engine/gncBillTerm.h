@@ -143,8 +143,22 @@ GncBillTerm *gncBillTermReturnChild (GncBillTerm *term, gboolean make_new);
 gint64 gncBillTermGetRefcount (const GncBillTerm *term);
 /** @} */
 
+/** @name Comparison Functions
+ @{ */
+/** Compare BillTerms on their name for sorting. */
 int gncBillTermCompare (const GncBillTerm *a, const GncBillTerm *b);
+/** Check if all internal fields of a and b match. */
 gboolean gncBillTermEqual(const GncBillTerm *a, const GncBillTerm *b);
+/** Check only if the bill terms are "family". This is the case if
+ *  - a and b are the same bill term
+ *  - a is b's parent or vice versa
+ *  - a and be are children of the same parent
+ *
+ *  In practice, this check if performed by comparing the bill term's names.
+ *  This is required to be unique per parent/children group.
+ */
+gboolean gncBillTermIsFamily (const GncBillTerm *a, const GncBillTerm *b);
+/** @} */
 
 /********************************************************/
 /* functions to compute dates from Bill Terms           */
