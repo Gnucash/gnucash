@@ -436,9 +436,9 @@ GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)/
 static void
 test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
 {
-    gchar *msg;
+    gchar *msg = "No particular message";
     TestErrorStruct quiet = { 0, NULL, msg };
-    GList *results;
+    GList *results, *res_iter;
     gchar *sep = ":";
     QofBook *book = gnc_account_get_book (fixture->acct);
     /* Because of GLib bug 653052, we have to set the logging user_data to
@@ -452,7 +452,9 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
     g_log_set_default_handler (oldlogger, NULL);
     results = gnc_account_list_name_violations (book, sep);
     g_assert_cmpuint (g_list_length (results), ==, 2);
-    g_list_free_full (results, test_free);
+    for (res_iter = results; res_iter; res_iter = g_list_next (res_iter))
+	test_free (res_iter->data);
+    g_list_free (results);
 }
 /* mark_account
 void

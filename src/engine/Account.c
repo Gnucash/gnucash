@@ -849,7 +849,7 @@ gnc_account_get_book(const Account *account)
 /********************************************************************\
 \********************************************************************/
 
-Account *
+static Account *
 gnc_coll_get_root_account (QofCollection *col)
 {
     if (!col) return NULL;
