@@ -1763,8 +1763,8 @@ static void
 test_xaccAccountGetProjectedMinimumBalance (Fixture *fixture, gconstpointer pData)
 {
     gnc_numeric val, bal = gnc_numeric_zero ();
-    gdouble dval;
-    gdouble dbal = 0.0;
+    gfloat dval;
+    gfloat dbal = 0.0;
     SetupData *sdata = (SetupData*)pData;
     TxnParms* t_arr;
     int ind;
@@ -1792,8 +1792,8 @@ static void
 test_xaccAccountGetBalanceAsOfDate (Fixture *fixture, gconstpointer pData)
 {
     gnc_numeric val, bal = gnc_numeric_zero ();
-    gdouble dval;
-    gdouble dbal = 0.0;
+    gfloat dval;
+    gfloat dbal = 0.0;
     SetupData *sdata = (SetupData*)pData;
     TxnParms* t_arr;
     int ind;
@@ -1819,8 +1819,8 @@ static void
 test_xaccAccountGetPresentBalance (Fixture *fixture, gconstpointer pData)
 {
     gnc_numeric val, bal = gnc_numeric_zero ();
-    gdouble dval;
-    gdouble dbal = 0.0;
+    gfloat dval;
+    gfloat dbal = 0.0;
     SetupData *sdata = (SetupData*)pData;
     TxnParms* t_arr;
     int ind;
@@ -2237,10 +2237,10 @@ test_gnc_account_merge_children (Fixture *fixture, gconstpointer pData)
     gint stocks_desc = gnc_account_n_descendants (stocks);
     gint taxable_desc = gnc_account_n_descendants (taxable);
     gint expense_desc = gnc_account_n_descendants (expense);
-    gdouble stocks_balance = gnc_numeric_to_double (
+    gfloat stocks_balance = gnc_numeric_to_double (
 	xaccAccountGetBalance (stocks));
-    gdouble baz_balance = gnc_numeric_to_double (xaccAccountGetBalance (baz));
-    gdouble baz2_balance = gnc_numeric_to_double (xaccAccountGetBalance (baz2));
+    gfloat baz_balance = gnc_numeric_to_double (xaccAccountGetBalance (baz));
+    gfloat baz2_balance = gnc_numeric_to_double (xaccAccountGetBalance (baz2));
     TestSignal sig1, sig2, sig3, sig4, sig5;
     /* This segment doesn't test because of problems with resetting
      * the accounts on the splits. It will have to be rewritten with a
