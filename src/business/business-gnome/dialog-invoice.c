@@ -759,7 +759,8 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
         this_acc = (reverse ? gncEntryGetInvAccount (entry) :
                     gncEntryGetBillAccount (entry));
 
-        if (!gnc_commodity_equal(gncInvoiceGetCurrency (invoice), xaccAccountGetCommodity(this_acc)))
+        if (this_acc &&
+            !gnc_commodity_equal (gncInvoiceGetCurrency (invoice), xaccAccountGetCommodity (this_acc)))
         {
             GNCPrice *convprice;
 
