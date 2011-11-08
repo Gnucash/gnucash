@@ -74,7 +74,9 @@
 (debug-enable 'backtrace)
 (read-enable 'positions)
 
-(debug-set! maxdepth 100000)
+;; maxdepth doesn't exist in guile 2 and onwards:
+(if (< (string->number (major-version)) 2)
+    (debug-set! maxdepth 100000))
 (debug-set! stack    200000)
 
 ;;(use-modules (ice-9 statprof))
