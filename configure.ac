@@ -370,12 +370,13 @@ fi
 GUILE_LIBS=""
 
 # Look up GUILE_CFLAGS and GUILE_LIBS, and version check
-PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5], , [AC_MSG_ERROR([
-
-  guile does not appear to be installed correctly, or is not in the
-  correct version range.  Perhaps you have not installed the guile
-  development packages?  Gnucash requires at least version 1.8.5 to build.
-])])
+PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5], , [
+  PKG_CHECK_MODULES(GUILE, [guile-2.0 >= 2.0.0], , [AC_MSG_ERROR([
+    guile does not appear to be installed correctly, or is not in the
+    correct version range.  Perhaps you have not installed the guile
+    development packages?  Gnucash requires at least version 1.8.5 to build.
+  ])])
+])
 # Look up GUILE executable
 AC_PATH_PROG(GUILE, guile)
 
