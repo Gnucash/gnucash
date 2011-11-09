@@ -5,8 +5,8 @@ gtkbuilder_DATA = \
 	assistant-loan.glade \
 	assistant-stock-split.glade \
 	dialog-commodities.glade \
-	dialog-lot-viewer.glade \
 	dialog-fincalc.glade \
+	dialog-lot-viewer.glade \
 	dialog-new-user.glade \
 	dialog-price.glade \
 	dialog-print-check.glade \

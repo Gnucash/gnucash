@@ -348,7 +348,7 @@
 	       ;; date->string of srfi-19, similar to get_wday_name()
 	       ;; in src/engine/FreqSpeq.c. For now, we simply use
 	       ;; the normal translations, which show up in the glade
-	       ;; file src/gnome/glade/sched-xact.glade anyway.
+	       ;; file src/gnome-utils/gtkbuilder/gnc-frequency.glade anyway.
                (days-of-week (list (_"Sunday") (_"Monday") 
 				   (_"Tuesday") (_"Wednesday") 
 				   (_"Thursday") (_"Friday") (_"Saturday"))))
