@@ -214,7 +214,7 @@ qof_session_init (QofSession *session)
     if (!session) return;
 
     session->entity.e_type = QOF_ID_SESSION;
-    session->books = g_list_append (NULL, qof_book_new ());
+    session->book = qof_book_new ();
     session->book_id = NULL;
     session->backend = NULL;
     session->lock = 1;
@@ -235,13 +235,16 @@ qof_session_get_book (const QofSession *session)
 {
     GList *node;
     if (!session) return NULL;
+    if (!session->book) return NULL;
 
-    for (node = session->books; node; node = node->next)
+    if ('y' == session->book->book_open)
     {
-        QofBook *book = node->data;
-        if ('y' == book->book_open) return book;
+        return session->book;
     }
-    return NULL;
+    else
+    {
+        return NULL;
+    }
 }
 
 QofBackend *
@@ -295,14 +298,10 @@ static void
 qof_session_load_backend(QofSession * session, const char * access_method)
 {
     GSList *p;
-    GList *node;
     QofBackendProvider *prov;
-    QofBook *book;
     char *msg;
-    gint num;
     gboolean prov_type;
     gboolean (*type_check) (const char*);
-    gchar *libdir_from_env = NULL;
 
     ENTER (" list=%d, initted=%s", g_slist_length(provider_list),
            qof_providers_initialized ? "true" : "false");
@@ -340,12 +339,8 @@ qof_session_load_backend(QofSession * session, const char * access_method)
             /* Use the providers creation callback */
             session->backend = (*(prov->backend_new))();
             session->backend->provider = prov;
-            /* Tell the books about the backend that they'll be using. */
-            for (node = session->books; node; node = node->next)
-            {
-                book = node->data;
-                qof_book_set_backend (book, session->backend);
-            }
+            /* Tell the book about the backend that they'll be using. */
+            qof_book_set_backend (session->book, session->backend);
             LEAVE (" ");
             return;
         }
@@ -494,8 +489,7 @@ void
 qof_session_load (QofSession *session,
                   QofPercentageFunc percentage_func)
 {
-    QofBook *newbook, *ob;
-    QofBookList *oldbooks, *node;
+    QofBook *newbook, *oldbook;
     QofBackend *be;
     QofBackendError err;
 
@@ -508,14 +502,14 @@ qof_session_load (QofSession *session,
     /* At this point, we should are supposed to have a valid book
     * id and a lock on the file. */
 
-    oldbooks = session->books;
+    oldbook = session->book;
 
     /* XXX why are we creating a book here? I think the books
     * need to be handled by the backend ... especially since
     * the backend may need to load multiple books ... XXX. FIXME.
     */
     newbook = qof_book_new();
-    session->books = g_list_append (NULL, newbook);
+    session->book = newbook;
     PINFO ("new book=%p", newbook);
 
     qof_session_clear_error (session);
@@ -560,18 +554,12 @@ qof_session_load (QofSession *session,
         /* Something broke, put back the old stuff */
         qof_book_set_backend (newbook, NULL);
         qof_book_destroy (newbook);
-        g_list_free (session->books);
-        session->books = oldbooks;
+        session->book = oldbook;
         LEAVE("error from backend %d", qof_session_get_error(session));
         return;
     }
-    for (node = oldbooks; node; node = node->next)
-    {
-        ob = node->data;
-        qof_book_set_backend (ob, NULL);
-        qof_book_destroy (ob);
-    }
-    g_list_free (oldbooks);
+    qof_book_set_backend (oldbook, NULL);
+    qof_book_destroy (oldbook);
 
     LEAVE ("sess = %p, book_id=%s", session, session->book_id
            ? session->book_id : "(null)");
@@ -597,12 +585,11 @@ void
 qof_session_save (QofSession *session,
                   QofPercentageFunc percentage_func)
 {
-    GList *node;
     QofBackend *be;
     gboolean partial, change_backend;
     QofBackendProvider *prov;
     GSList *p;
-    QofBook *book, *abook;
+    QofBook *book;
     int err;
     gint num;
     char *msg = NULL;
@@ -688,12 +675,8 @@ qof_session_save (QofSession *session,
                         msg = NULL;
                     }
                 }
-                /* Tell the books about the backend that they'll be using. */
-                for (node = session->books; node; node = node->next)
-                {
-                    book = node->data;
-                    qof_book_set_backend (book, session->backend);
-                }
+                /* Tell the book about the backend that they'll be using. */
+                qof_book_set_backend (session->book, session->backend);
                 p = NULL;
             }
             if (p)
@@ -723,19 +706,16 @@ qof_session_save (QofSession *session,
     be = session->backend;
     if (be)
     {
-        for (node = session->books; node; node = node->next)
+        /* if invoked as SaveAs(), then backend not yet set */
+        qof_book_set_backend (session->book, be);
+        be->percentage = percentage_func;
+        if (be->sync)
         {
-            abook = node->data;
-            /* if invoked as SaveAs(), then backend not yet set */
-            qof_book_set_backend (abook, be);
-            be->percentage = percentage_func;
-            if (be->sync)
-            {
-                (be->sync)(be, abook);
-                if (save_error_handler(be, session))
-                    goto leave;
-            }
+            (be->sync)(be, session->book);
+            if (save_error_handler(be, session))
+                goto leave;
         }
+
         /* If we got to here, then the backend saved everything
         * just fine, and we are done. So return. */
         /* Return the book_id to previous value. */
@@ -812,7 +792,6 @@ qof_session_end (QofSession *session)
 void
 qof_session_destroy (QofSession *session)
 {
-    GList *node;
     if (!session) return;
 
     ENTER ("sess=%p book_id=%s", session, session->book_id
@@ -823,14 +802,9 @@ qof_session_destroy (QofSession *session)
     /* destroy the backend */
     qof_session_destroy_backend(session);
 
-    for (node = session->books; node; node = node->next)
-    {
-        QofBook *book = node->data;
-        qof_book_set_backend (book, NULL);
-        qof_book_destroy (book);
-    }
-
-    session->books  = NULL;
+    qof_book_set_backend (session->book, NULL);
+    qof_book_destroy (session->book);
+    session->book  = NULL;
 
     g_free (session);
 
@@ -843,29 +817,21 @@ qof_session_destroy (QofSession *session)
 void
 qof_session_swap_data (QofSession *session_1, QofSession *session_2)
 {
-    GList *books_1, *books_2, *node;
+    QofBook *book_1, *book_2;
 
     if (session_1 == session_2) return;
     if (!session_1 || !session_2) return;
 
     ENTER ("sess1=%p sess2=%p", session_1, session_2);
 
-    books_1 = session_1->books;
-    books_2 = session_2->books;
+    book_1 = session_1->book;
+    book_2 = session_2->book;
 
-    session_1->books = books_2;
-    session_2->books = books_1;
+    session_1->book = book_2;
+    session_2->book = book_1;
 
-    for (node = books_1; node; node = node->next)
-    {
-        QofBook *book_1 = node->data;
-        qof_book_set_backend (book_1, session_2->backend);
-    }
-    for (node = books_2; node; node = node->next)
-    {
-        QofBook *book_2 = node->data;
-        qof_book_set_backend (book_2, session_1->backend);
-    }
+    qof_book_set_backend (book_1, session_2->backend);
+    qof_book_set_backend (book_2, session_1->backend);
 
     LEAVE (" ");
 }
