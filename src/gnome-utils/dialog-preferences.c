@@ -1,24 +1,26 @@
-/*
- * dialog-preferences.c -- preferences dialog
- * Copyright (C) 2005 David Hampton
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, contact:
- *
- * Free Software Foundation           Voice:  +1-617-542-5942
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
- * Boston, MA  02110-1301,  USA       gnu@gnu.org
- */
+/********************************************************************\
+ * dialog-preferences.c -- preferences dialog                       *
+ *                                                                  *
+ * Copyright (C) 2005 David Hampton                                 *
+ * Copyright (C) 2011 Robert Fewell                                 *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+\********************************************************************/
 
 /** @addtogroup Dialogs
     @{ */
@@ -33,21 +35,20 @@
     code ends up being nothing more than a pretty interface to set
     key/value pairs in that database.  Any module may add a page (or
     partial page) of preferences to the dialog.  These additions are
-    done by providing the name of a glade file, and a widget in that
-    file.  If a partial page is added, the widget name provided must
-    be that of a GtkTable containing four columns. If a full page is
-    added, the widget name provided to this code can be any kind of
+    done by providing the name of a glade file and the content to
+    load from that file along with a widget in that file.  If a
+    partial page is added, the widget name provided must be that of
+    a GtkTable containing four columns. If a full page is added, 
+    the widget name provided to this code can be any kind of
     widget, but for consistence it should probably be the same.
 
-    If a widget names is in the form gconf/xxx/yyy... and it is a type
+    If a widget name is in the form gconf/xxx/yyy... and it is a type
     of widget this code knows how to handle, then the callback signals
-    will be automatically wired up for the widget.  The only fields
-    that is required to be set in the glade file is the widget name.
-    This code currently knows about radio buttons, check buttons, spin
-    boxes, combo boxes, gnucash currency select widgets, gnucash
-    accounting period widgets, and a gnucash date edit widget.  (Combo
-    boxes should not be used for less than six choices.  Use a radio
-    button group instead.)
+    will be automatically wired up for the widget. This code currently
+    knows about radio buttons, check buttons, spin boxes, combo boxes,
+    gnucash currency select widgets, gnucash accounting period widgets,
+    and a gnucash date edit widget. (Combo boxes should not be used for
+    less than six choices. Use a radio button group instead.)
 
     The argument *is* a glade file, so if your code has special
     requirements (e.g. make one widget insensitive until another is
@@ -60,7 +61,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <glade/glade.h>
 
 #include "dialog-utils.h"
 #include "gnc-currency-edit.h"
@@ -134,7 +134,8 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
     GList *invalid_account_names;
     QofBook *book;
 
-    label = gnc_glade_lookup_widget(dialog, "sample_account");
+    label = g_object_get_data(G_OBJECT(dialog), "sample_account");
+    DEBUG("Sample Account pointer is %p", label );
     /* Translators: Both %s will be the account separator character; the
        resulting string is a demonstration how the account separator
        character will look like. You can replace these three account
@@ -144,28 +145,27 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
     sample = g_strdup_printf(_("Income%sSalary%sTaxable"),
                              gnc_get_account_separator_string(),
                              gnc_get_account_separator_string());
-    DEBUG(" Label set to '%s'", sample);
+    PINFO(" Label set to '%s'", sample);
     gtk_label_set_text(GTK_LABEL(label), sample);
     g_free(sample);
 
     /* Check if the new separator clashes with existing account names */
-    image = gnc_glade_lookup_widget(dialog, "separator_error");
+    image = g_object_get_data(G_OBJECT(dialog), "separator_error");
+    DEBUG("Separator Error Image pointer is %p", image );
     book = gnc_get_current_book();
     invalid_account_names = gnc_account_list_name_violations ( book,
                             gnc_get_account_separator_string() );
     if ( invalid_account_names )
     {
-        GtkTooltipsData *tipsdata = gtk_tooltips_data_get (image);
         gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
                          invalid_account_names );
         gnc_warning_dialog(dialog, "%s", message);
-
-        gtk_tooltips_set_tip ( tipsdata->tooltips, image, message, NULL);
-        gtk_widget_show (image);
+        gtk_widget_set_tooltip_text(GTK_WIDGET(image), message);
+        gtk_widget_show (GTK_WIDGET(image));
         g_free ( message );
     }
     else
-        gtk_widget_hide (image);
+        gtk_widget_hide (GTK_WIDGET(image));
 
     g_list_free ( invalid_account_names );
 }
@@ -201,7 +201,8 @@ gnc_prefs_compare_addins (addition *a,
  *
  *  @param filename The name of a glade file.
  *
- *  @param widgetname The name of the widget to extract from the glade file.
+ *  @param widgetname A string of content to load, the last one being
+ *         the name of the widget to add to the preferences dialog.
  *
  *  @param tabname The name this page of preferences should have in
  *  the dialog notebook.
@@ -286,7 +287,7 @@ gnc_preferences_add_page_internal (const gchar *filename,
 
 
 /*  This function adds a full page of preferences to the preferences
- *  dialog.  When the dialog is created, the specified widget will be
+ *  dialog.  When the dialog is created, the specified content will be
  *  pulled from the specified glade file and added to the preferences
  *  dialog with the specified tab name.  The tab name may not be
  *  duplicated.  For example, the Business code might have a full page
@@ -302,8 +303,8 @@ gnc_preferences_add_page (const gchar *filename,
 
 /*  This function adds a partial page of preferences to the
  *  preferences dialog.  When the dialog is created, the specified
- *  widget will be pulled from the specified glade file and added to
- *  the preferences dialog with the specified tab name.  The tab name
+ *  content will be pulled from the glade file and added to the
+ *  preferences dialog with the specified tab name.  The tab name
  *  may be duplicated.  For example, the HBCI preferences may share a
  *  "Data Import" page with QIF and other methods. */
 void
@@ -314,48 +315,57 @@ gnc_preferences_add_to_page (const gchar *filename,
     gnc_preferences_add_page_internal(filename, widgetname, tabname, FALSE);
 }
 
-/****************************************/
+
+/*******************************************************************/
 
 /** This function builds a hash table of "interesting" widgets,
  *  i.e. widgets whose name starts with "gconf/".  This table is
  *  needed to perform name->widget lookups in the gconf callback
- *  functions.  Normally glade could be used for this function, but
- *  since the widgets come from multiple glade files that won;t work
- *  in this dialog.
+ *  functions as they are comming from multiple glade files.
  *
  *  @internal
  *
- *  @param xml A pointer to glade xml file currently being added to
- *  the dialog.
+ *  @param builder A pointer to builder glade file currently being
+ *  added to the dialog.
  *
- *  @param dialog A pointer to the dialog.  The hash table is stored
+ *  @param dialog A pointer to the dialog. The hash table is stored
  *  as a pointer off the dialog so that it can be found in the
  *  callback from gconf. */
 static void
-gnc_prefs_build_widget_table (GladeXML *xml,
+gnc_prefs_build_widget_table (GtkBuilder *builder,
                               GtkWidget *dialog)
 {
     GHashTable *table;
-    GList *interesting, *runner;
+    GSList *interesting, *runner; 
     const gchar *name;
+    const gchar *wname;
     GtkWidget *widget;
 
     table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
-    interesting = glade_xml_get_widget_prefix(xml, "gconf");
-    for (runner = interesting; runner; runner = g_list_next(runner))
+
+    interesting = gtk_builder_get_objects(builder);
+		
+    for (runner = interesting; runner; runner = g_slist_next(runner))
     {
         widget = runner->data;
-        name = gtk_widget_get_name(widget);
-        g_hash_table_insert(table, (gchar *)name, widget);
+        if (GTK_IS_WIDGET(widget))
+        {
+            wname = gtk_widget_get_name(widget);
+            name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+            DEBUG("Widget type is %s and buildable get name is %s", wname, name);
+            if(g_str_has_prefix (name,"gconf"))
+                g_hash_table_insert(table, (gchar *)name, widget);
+        }
     }
-    g_list_free(interesting);
+    g_slist_free(interesting);
 }
 
+
 /** This data structure is used while building the preferences dialog
- *  to copy a table from a glade file to the dialog under
- *  construction.  It maintains state information between invocations
- *  of the function gnc_prefs_move_table_entry which is called via a
- *  foreach loop over each item in the table. */
+ *  to copy a table from a glade file to the dialog under construction.
+ *  It maintains state information between invocations of the function
+ *  gnc_prefs_move_table_entry which is called via a foreach loop over
+ *  each item in the table. */
 struct copy_data
 {
     /** The table being copied from. */
@@ -459,36 +469,44 @@ static void
 gnc_preferences_build_page (gpointer data,
                             gpointer user_data)
 {
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *dialog, *existing_content, *new_content, *label;
     GtkNotebook *notebook;
     addition *add_in;
     struct copy_data copydata;
     gint rows, cols;
+    gchar **widgetname;
+    gint i;
 
     ENTER("add_in %p, dialog %p", data, user_data);
     add_in = (addition *)data;
     dialog = user_data;
 
-    DEBUG("Opening %s to get %s:", add_in->filename, add_in->widgetname);
-    xml = gnc_glade_xml_new(add_in->filename, add_in->widgetname);
-    new_content = glade_xml_get_widget(xml, add_in->widgetname);
+    DEBUG("Opening %s to get %s", add_in->filename, add_in->widgetname);
+    builder = gtk_builder_new();
+
+    /* Adjustments etc... must come before dialog information */
+    widgetname = g_strsplit(add_in->widgetname,",",-1);
+
+    for(i=0; widgetname[i]; i++)
+    {
+       DEBUG("Opening %s to get content %s", add_in->filename, widgetname[i]);
+       gnc_builder_add_from_file (builder, add_in->filename, widgetname[i]);
+    }
+
+    DEBUG("Widget Content is %s", widgetname[i - 1]);
+    new_content = GTK_WIDGET(gtk_builder_get_object (builder, widgetname[i - 1]));
+
+    g_strfreev(widgetname);
     DEBUG("done");
 
     /* Add to the list of interesting widgets */
-    gnc_prefs_build_widget_table(xml, dialog);
-
-    /* Clean up the xml data structure when the dialog is destroyed */
-    g_object_set_data_full(G_OBJECT(dialog), add_in->filename,
-                           xml, g_object_unref);
+    gnc_prefs_build_widget_table(builder, dialog);
 
     /* Connect the signals in this glade file. The dialog is passed in
      * so the the callback can find "interesting" widgets from other
-     * glade files if necessary (via the WIDGET_HASH hash
-     * table). Widgets from the same glade file can be found with the
-     * usual gnc_glade_lookup_widget() function. */
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-                                      dialog);
+     * glade files if necessary (via the WIDGET_HASH hash table). */
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     /* Prepare for recursion */
     notebook = g_object_get_data(G_OBJECT(dialog), NOTEBOOK);
@@ -498,6 +516,7 @@ gnc_preferences_build_page (gpointer data,
         label = gtk_label_new(add_in->tabname);
         gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
         gtk_notebook_append_page(notebook, new_content, label);
+        g_object_unref(G_OBJECT(builder));
         LEAVE("appended page");
         return;
     }
@@ -508,6 +527,7 @@ gnc_preferences_build_page (gpointer data,
         g_critical("The object name %s in file %s is not a GtkTable.  It cannot "
                    "be added to the preferences dialog.",
                    add_in->widgetname, add_in->filename);
+        g_object_unref(G_OBJECT(builder));
         LEAVE("");
         return;
     }
@@ -517,6 +537,7 @@ gnc_preferences_build_page (gpointer data,
         g_critical("The table %s in file %s does not have four columns.  It cannot "
                    "be added to the preferences dialog.",
                    add_in->widgetname, add_in->filename);
+        g_object_unref(G_OBJECT(builder));
         LEAVE("");
         return;
     }
@@ -561,8 +582,11 @@ gnc_preferences_build_page (gpointer data,
                           &copydata);
 
     g_object_ref_sink(new_content);
+    g_object_unref(G_OBJECT(builder));
+
     LEAVE("added content to page");
 }
+
 
 static gint
 tab_cmp (GtkWidget *page_a, GtkWidget *page_b, GtkNotebook *notebook)
@@ -570,6 +594,7 @@ tab_cmp (GtkWidget *page_a, GtkWidget *page_b, GtkNotebook *notebook)
     return g_utf8_collate (gtk_notebook_get_tab_label_text (notebook, page_a),
                            gtk_notebook_get_tab_label_text (notebook, page_b));
 }
+
 
 static void
 gnc_prefs_sort_pages (GtkNotebook *notebook)
@@ -599,7 +624,6 @@ gnc_prefs_sort_pages (GtkNotebook *notebook)
 /* Dynamically added Callbacks */
 /*******************************/
 
-
 /** The user changed a GtkFontButton.  Update gconf.  Font selection
  *  choices are stored as a string.
  *
@@ -616,7 +640,7 @@ gnc_prefs_font_button_user_cb (GtkFontButton *fb,
     const gchar *key, *font;
 
     g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
-    key = gtk_widget_get_name(GTK_WIDGET(fb)) + PREFIX_LEN;
+    key = gtk_buildable_get_name(GTK_BUILDABLE(fb)) + PREFIX_LEN;
     font = gtk_font_button_get_font_name(fb);
 
     DEBUG("font_button %s set", key);
@@ -645,8 +669,7 @@ gnc_prefs_font_button_gconf_cb (GtkFontButton *fb,
     font = gconf_value_get_string(entry->value);
 
     g_signal_handlers_block_by_func(G_OBJECT(fb),
-                                    G_CALLBACK(gnc_prefs_font_button_user_cb),
-                                    NULL);
+                                    G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
     gtk_font_button_set_font_name(fb, font);
     g_signal_handlers_unblock_by_func(G_OBJECT(fb),
                                       G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
@@ -670,7 +693,7 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
     g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
 
     /* Lookup font name based upon gconf setting */
-    name = gtk_widget_get_name(GTK_WIDGET(fb)) + PREFIX_LEN;
+    name = gtk_buildable_get_name(GTK_BUILDABLE(fb)) + PREFIX_LEN;
     font = gnc_gconf_get_string(name, NULL, NULL);
 
     gtk_font_button_set_font_name(fb, font);
@@ -683,9 +706,7 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
     gtk_widget_show_all(GTK_WIDGET(fb));
 }
 
-
-/**********/
-
+/****************************************************************************/
 
 /** The user clicked on a radio button.  Update gconf.  Radio button
  *  group choices are stored as a string.  The last component of the
@@ -711,7 +732,7 @@ gnc_prefs_radio_button_user_cb (GtkRadioButton *button,
         return;
 
     /* Copy the widget name and split into gconf key and button value parts */
-    key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
+    key = g_strdup(gtk_buildable_get_name(GTK_BUILDABLE(button)) + PREFIX_LEN);
     button_name = strrchr(key, '/');
     *button_name++ = '\0';
 
@@ -735,8 +756,7 @@ gnc_prefs_radio_button_gconf_cb (GtkRadioButton *button)
     g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
     ENTER("button %p", button);
     g_signal_handlers_block_by_func(G_OBJECT(button),
-                                    G_CALLBACK(gnc_prefs_radio_button_user_cb),
-                                    NULL);
+                                    G_CALLBACK(gnc_prefs_radio_button_user_cb), NULL);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
     g_signal_handlers_unblock_by_func(G_OBJECT(button),
                                       G_CALLBACK(gnc_prefs_radio_button_user_cb), NULL);
@@ -763,7 +783,7 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
     g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
 
     /* Copy the widget name and split into gconf key and button name parts */
-    key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
+    key = g_strdup(gtk_buildable_get_name(GTK_BUILDABLE(button)) + PREFIX_LEN);
     button_name = strrchr(key, '/');
     *button_name++ = '\0';
 
@@ -780,8 +800,7 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
         group =  gtk_radio_button_get_group(button);
         active = (button != g_slist_nth_data(group, g_slist_length(group)));
     }
-    DEBUG(" Radio set %s, button %s initially set to %d",
-          key, button_name, active);
+    DEBUG(" Radio set %s, button %s initially set to %d", key, button_name, active);
 
     /* Wire up the button */
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
@@ -791,8 +810,7 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
     g_free(key);
 }
 
-/**********/
-
+/****************************************************************************/
 
 /** The user clicked on a check button.  Update gconf.  Check button
  *  choices are stored as a boolean
@@ -811,7 +829,7 @@ gnc_prefs_check_button_user_cb (GtkCheckButton *button,
     gboolean active;
 
     g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
-    name = gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN;
+    name = gtk_buildable_get_name(GTK_BUILDABLE(button)) + PREFIX_LEN;
     active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
     DEBUG("Checkbox %s now %sactive", name, active ? "" : "in");
     gnc_gconf_set_bool(name, NULL, active, NULL);
@@ -834,8 +852,7 @@ gnc_prefs_check_button_gconf_cb (GtkCheckButton *button,
     g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
     ENTER("button %p, active %d", button, active);
     g_signal_handlers_block_by_func(G_OBJECT(button),
-                                    G_CALLBACK(gnc_prefs_check_button_user_cb),
-                                    NULL);
+                                    G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
     g_signal_handlers_unblock_by_func(G_OBJECT(button),
                                       G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
@@ -857,7 +874,7 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
     const gchar *name;
     gboolean active;
 
-    name = gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN;
+    name = gtk_buildable_get_name(GTK_BUILDABLE(button)) + PREFIX_LEN;
     active = gnc_gconf_get_bool(name, NULL, NULL);
     DEBUG(" Checkbox %s initially %sactive", name, active ? "" : "in");
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
@@ -865,8 +882,7 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
                      G_CALLBACK(gnc_prefs_check_button_user_cb), NULL);
 }
 
-/**********/
-
+/****************************************************************************/
 
 /** The user updated a spin button.  Update gconf.  Spin button
  *  choices are stored as a float.
@@ -885,9 +901,9 @@ gnc_prefs_spin_button_user_cb (GtkSpinButton *spin,
     gdouble value;
 
     g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
-    name = gtk_widget_get_name(GTK_WIDGET(spin)) + PREFIX_LEN;
+    name = gtk_buildable_get_name(GTK_BUILDABLE(spin)) + PREFIX_LEN;
     value = gtk_spin_button_get_value(spin);
-    DEBUG(" Spin button %s has value %f", name, value);
+    DEBUG("Spin button %s has value %f", name, value);
     gnc_gconf_set_float(name, NULL, value, NULL);
 }
 
@@ -908,8 +924,7 @@ gnc_prefs_spin_button_gconf_cb (GtkSpinButton *spin,
     g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
     ENTER("button %p, value %f", spin, value);
     g_signal_handlers_block_by_func(G_OBJECT(spin),
-                                    G_CALLBACK(gnc_prefs_spin_button_user_cb),
-                                    NULL);
+                                    G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
     gtk_spin_button_set_value(spin, value);
     g_signal_handlers_unblock_by_func(G_OBJECT(spin),
                                       G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
@@ -932,7 +947,7 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
     gdouble value;
 
     g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
-    name = gtk_widget_get_name(GTK_WIDGET(spin)) + PREFIX_LEN;
+    name = gtk_buildable_get_name(GTK_BUILDABLE(spin)) + PREFIX_LEN;
     value = gnc_gconf_get_float(name, NULL, NULL);
     gtk_spin_button_set_value(spin, value);
     DEBUG(" Spin button %s has initial value %f", name, value);
@@ -940,9 +955,7 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
                      G_CALLBACK(gnc_prefs_spin_button_user_cb), NULL);
 }
 
-
-/**********/
-
+/****************************************************************************/
 
 /** The user changed a combo box.  Update gconf.  Combo box
  *  choices are stored as an int.
@@ -961,7 +974,7 @@ gnc_prefs_combo_box_user_cb (GtkComboBox *box,
     gint active;
 
     g_return_if_fail(GTK_IS_COMBO_BOX(box));
-    name = gtk_widget_get_name(GTK_WIDGET(box)) + PREFIX_LEN;
+    name = gtk_buildable_get_name(GTK_BUILDABLE(box)) + PREFIX_LEN;
     active = gtk_combo_box_get_active(box);
     DEBUG("Combo box %s set to item %d", name, active);
     gnc_gconf_set_int(name, NULL, active, NULL);
@@ -984,8 +997,7 @@ gnc_prefs_combo_box_gconf_cb (GtkComboBox *box,
     g_return_if_fail(GTK_IS_COMBO_BOX(box));
     ENTER("box %p, value %d", box, value);
     g_signal_handlers_block_by_func(G_OBJECT(box),
-                                    G_CALLBACK(gnc_prefs_combo_box_user_cb),
-                                    NULL);
+                                    G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
     gtk_combo_box_set_active(box, value);
     g_signal_handlers_unblock_by_func(G_OBJECT(box),
                                       G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
@@ -1007,7 +1019,7 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
     gint active;
 
     g_return_if_fail(GTK_IS_COMBO_BOX(box));
-    name = gtk_widget_get_name(GTK_WIDGET(box)) + PREFIX_LEN;
+    name = gtk_buildable_get_name(GTK_BUILDABLE(box)) + PREFIX_LEN;
     active = gnc_gconf_get_int(name, NULL, NULL);
     gtk_combo_box_set_active(GTK_COMBO_BOX(box), active);
     DEBUG(" Combo box %s set to item %d", name, active);
@@ -1015,9 +1027,7 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
                      G_CALLBACK(gnc_prefs_combo_box_user_cb), NULL);
 }
 
-
-/**********/
-
+/****************************************************************************/
 
 /** The user changed a currency_edit.  Update gconf.  Currency_edit
  *  choices are stored as an int.
@@ -1036,11 +1046,11 @@ gnc_prefs_currency_edit_user_cb (GNCCurrencyEdit *gce,
     gnc_commodity *currency;
 
     g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
-    name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
+    name  = g_object_get_data(G_OBJECT(gce), "name");
     currency = gnc_currency_edit_get_currency(gce);
     mnemonic = gnc_commodity_get_mnemonic(currency);
 
-    DEBUG("currency_edit %s set to %s", name, mnemonic);
+    DEBUG("Currency edit %s set to %s", name, mnemonic);
     gnc_gconf_set_string(name, NULL, mnemonic, NULL);
 }
 
@@ -1078,8 +1088,7 @@ gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
     }
 
     g_signal_handlers_block_by_func(G_OBJECT(gce),
-                                    G_CALLBACK(gnc_prefs_currency_edit_user_cb),
-                                    NULL);
+                                    G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
     gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
     g_signal_handlers_unblock_by_func(G_OBJECT(gce),
                                       G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
@@ -1095,7 +1104,7 @@ gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
  *  @param gce A pointer to the currency_edit that should be connected.
  */
 static void
-gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
+gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
 {
     gnc_commodity *currency;
     const gchar *name;
@@ -1104,7 +1113,10 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
     g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
 
     /* Lookup commodity based upon gconf setting */
-    name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
+    name = boxname + PREFIX_LEN;
+
+    g_object_set_data(G_OBJECT(gce), "name", g_strdup(name) );
+
     mnemonic = gnc_gconf_get_string(name, NULL, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
                                           GNC_COMMODITY_NS_CURRENCY, mnemonic);
@@ -1116,7 +1128,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
         currency = gnc_locale_default_currency();
 
     gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
-    DEBUG(" currency_edit %s set to %s", name,
+    DEBUG(" Currency edit %s set to %s", name,
           gnc_commodity_get_mnemonic(currency));
 
     g_signal_connect(G_OBJECT(gce), "changed",
@@ -1125,9 +1137,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
     gtk_widget_show_all(GTK_WIDGET(gce));
 }
 
-
-/**********/
-
+/****************************************************************************/
 
 /** The user changed a gtk entry.  Update gconf.
  *
@@ -1144,9 +1154,9 @@ gnc_prefs_entry_user_cb (GtkEntry *entry,
     const gchar *name, *text;
 
     g_return_if_fail(GTK_IS_ENTRY(entry));
-    name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
+    name = gtk_buildable_get_name(GTK_BUILDABLE(entry)) + PREFIX_LEN;
     text = gtk_entry_get_text(entry);
-    DEBUG("Entry %s set to '%s'", name, text);
+    DEBUG("entry %s set to '%s'", name, text);
     gnc_gconf_set_string(name, NULL, text, NULL);
 }
 
@@ -1166,8 +1176,7 @@ gnc_prefs_entry_gconf_cb (GtkEntry *entry,
     g_return_if_fail(GTK_IS_ENTRY(entry));
     ENTER("entry %p, value '%s'", entry, value);
     g_signal_handlers_block_by_func(G_OBJECT(entry),
-                                    G_CALLBACK(gnc_prefs_entry_user_cb),
-                                    NULL);
+                                    G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
     gtk_entry_set_text(entry, value);
     g_signal_handlers_unblock_by_func(G_OBJECT(entry),
                                       G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
@@ -1189,7 +1198,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
     gchar *text;
 
     g_return_if_fail(GTK_IS_ENTRY(entry));
-    name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
+    name = gtk_buildable_get_name(GTK_BUILDABLE(entry)) + PREFIX_LEN;
     text = gnc_gconf_get_string(name, NULL, NULL);
     gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
     DEBUG(" Entry %s set to '%s'", name ? name : "(null)", text ? text : "(null)");
@@ -1198,9 +1207,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
                      G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
 }
 
-
-/**********/
-
+/****************************************************************************/
 
 /** The user changed a GncPeriodSelect widget.  Update gconf.
  *  GncPeriodSelect choices are stored as an int.
@@ -1219,9 +1226,9 @@ gnc_prefs_period_select_user_cb (GncPeriodSelect *period,
     gint active;
 
     g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
-    name = gtk_widget_get_name(GTK_WIDGET(period)) + PREFIX_LEN;
+    name  = g_object_get_data(G_OBJECT(period), "name");
     active = gnc_period_select_get_active(period);
-    DEBUG("Period select %s set to item %d", name, active);
+    DEBUG("period select %s set to item %d", name, active);
     gnc_gconf_set_int(name, NULL, active, NULL);
 }
 
@@ -1242,8 +1249,7 @@ gnc_prefs_period_select_gconf_cb (GncPeriodSelect *period,
     g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
     ENTER("period %p, value %d", period, value);
     g_signal_handlers_block_by_func(G_OBJECT(period),
-                                    G_CALLBACK(gnc_prefs_period_select_user_cb),
-                                    NULL);
+                                    G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
     gnc_period_select_set_active(period, value);
     g_signal_handlers_unblock_by_func(G_OBJECT(period),
                                       G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
@@ -1259,7 +1265,7 @@ gnc_prefs_period_select_gconf_cb (GncPeriodSelect *period,
  *  @param period A pointer to the GncPeriodSelect that should be connected.
  */
 static void
-gnc_prefs_connect_period_select (GncPeriodSelect *period)
+gnc_prefs_connect_period_select (GncPeriodSelect *period, const gchar *boxname )
 {
     const gchar *name;
     gint active;
@@ -1280,7 +1286,10 @@ gnc_prefs_connect_period_select (GncPeriodSelect *period)
         gnc_period_select_set_fy_end(period, &fy_end);
     }
 
-    name = gtk_widget_get_name(GTK_WIDGET(period)) + PREFIX_LEN;
+    name = boxname + PREFIX_LEN;
+
+    g_object_set_data(G_OBJECT(period), "name", g_strdup(name) );
+
     active = gnc_gconf_get_int(name, NULL, NULL);
     gnc_period_select_set_active(period, active);
     DEBUG(" Period select %s set to item %d", name, active);
@@ -1288,9 +1297,7 @@ gnc_prefs_connect_period_select (GncPeriodSelect *period)
                      G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
 }
 
-
-/**********/
-
+/****************************************************************************/
 
 /** The user changed a date_edit.  Update gconf.  Date_edit
  *  choices are stored as an int.
@@ -1309,7 +1316,7 @@ gnc_prefs_date_edit_user_cb (GNCDateEdit *gde,
     time_t time;
 
     g_return_if_fail(GNC_IS_DATE_EDIT(gde));
-    name = gtk_widget_get_name(GTK_WIDGET(gde)) + PREFIX_LEN;
+    name  = g_object_get_data(G_OBJECT(gde), "name");
     time = gnc_date_edit_get_date(gde);
 
     DEBUG("date_edit %s set", name);
@@ -1333,13 +1340,12 @@ gnc_prefs_date_edit_gconf_cb (GNCDateEdit *gde,
     time_t time;
 
     g_return_if_fail(GNC_IS_DATE_EDIT(gde));
-    ENTER("gde %p, entry %p", gde, entry);
+    ENTER("date_edit %p, entry %p", gde, entry);
 
     time = gconf_value_get_int(entry->value);
 
     g_signal_handlers_block_by_func(G_OBJECT(gde),
-                                    G_CALLBACK(gnc_prefs_date_edit_user_cb),
-                                    NULL);
+                                    G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
     gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
     g_signal_handlers_unblock_by_func(G_OBJECT(gde),
                                       G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
@@ -1355,15 +1361,18 @@ gnc_prefs_date_edit_gconf_cb (GNCDateEdit *gde,
  *  @param gde A pointer to the date_edit that should be connected.
  */
 static void
-gnc_prefs_connect_date_edit (GNCDateEdit *gde)
+gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
 {
     const gchar *name;
     time_t time;
 
     g_return_if_fail(GNC_IS_DATE_EDIT(gde));
 
-    /* Lookup commodity based upon gconf setting */
-    name = gtk_widget_get_name(GTK_WIDGET(gde)) + PREFIX_LEN;
+    /* Lookup the date based upon gconf setting */
+    name = boxname + PREFIX_LEN;
+
+    g_object_set_data(G_OBJECT(gde), "name", g_strdup(name) );
+
     time = gnc_gconf_get_int(name, NULL, NULL);
 
     gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
@@ -1375,6 +1384,8 @@ gnc_prefs_connect_date_edit (GNCDateEdit *gde)
     gtk_widget_show_all(GTK_WIDGET(gde));
 }
 
+
+/****************************************************************************/
 
 /********************/
 /*    Callbacks     */
@@ -1417,10 +1428,10 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
     }
 }
 
+
 /********************/
 /*    Creation      */
 /********************/
-
 
 /** Connect one dialog widget to the appropriate callback function for
  *  its type.
@@ -1439,23 +1450,9 @@ gnc_prefs_connect_one (const gchar *name,
                        gpointer user_data)
 {
     /* These tests must be ordered from more specific widget to less
-     * specific widget.  Test custom widgets first */
-    if (GNC_IS_CURRENCY_EDIT(widget))   /* must be tested before combo_box */
-    {
-        DEBUG("  %s - currency_edit", name);
-        gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget));
-    }
-    else if (GNC_IS_PERIOD_SELECT(widget))
-    {
-        DEBUG("  %s - period_Select", name);
-        gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget));
-    }
-    else if (GNC_IS_DATE_EDIT(widget))
-    {
-        DEBUG("  %s - date_edit", name);
-        gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget));
-    }
-    else if (GTK_IS_FONT_BUTTON(widget))
+     * specific widget. */
+
+    if (GTK_IS_FONT_BUTTON(widget))
     {
         DEBUG("  %s - entry", name);
         gnc_prefs_connect_font_button(GTK_FONT_BUTTON(widget));
@@ -1485,6 +1482,32 @@ gnc_prefs_connect_one (const gchar *name,
         DEBUG("  %s - entry", name);
         gnc_prefs_connect_entry(GTK_ENTRY(widget));
     }
+    else if (GTK_IS_HBOX(widget))
+    {
+        /* Test custom widgets are all children of a hbox */
+        GtkWidget *widget_child;
+        GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
+        widget_child = child->data;
+        g_list_free(child);
+        DEBUG("  %s - hbox", name);
+        DEBUG("Hbox widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
+
+        if (GNC_IS_CURRENCY_EDIT(widget_child))
+        {
+            DEBUG("  %s - currency_edit", name);
+            gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget_child), name );
+        }
+        else if (GNC_IS_PERIOD_SELECT(widget_child))
+        {
+            DEBUG("  %s - period_Select", name);
+            gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget_child), name );
+        }
+        else if (GNC_IS_DATE_EDIT(widget_child))
+        {
+            DEBUG("  %s - date_edit", name);
+            gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget_child), name );
+        }
+    }
     else
     {
         DEBUG("  %s - unsupported %s", name,
@@ -1494,11 +1517,11 @@ gnc_prefs_connect_one (const gchar *name,
 
 
 /** Create the preferences dialog.  This function first reads the
- *  preferences.glade file to get obtain the dialog and set of common
- *  preferences.  It then runs the list of add-ins, calling a helper
- *  function to add each full/partial page to this dialog, Finally it
- *  runs the list of "interesting: widgets that it has built,
- *  connecting this widgets up to callback functions.
+ *  dialog-preferences.glade file to obtain the content and then 
+ *  the dialog and set of common preferences.  It then runs the list 
+ *  of add-ins, calling a helper function to add each full/partial
+ *  page to this dialog, Finally it builds the "interesting widgets"
+ *  table that is used for connecting the widgets up to callback functions.
  *
  *  @internal
  *
@@ -1507,8 +1530,9 @@ gnc_prefs_connect_one (const gchar *name,
 static GtkWidget *
 gnc_preferences_dialog_create(void)
 {
-    GladeXML *xml;
-    GtkWidget *dialog, *notebook, *label;
+    GtkBuilder *builder;
+    GtkWidget *dialog, *notebook, *label, *image;
+    GtkWidget *box, *date, *period, *currency;
     GHashTable *table;
     GDate* gdate;
     gchar buf[128];
@@ -1516,26 +1540,65 @@ gnc_preferences_dialog_create(void)
     const gchar *currency_name;
 
     ENTER("");
-    DEBUG("Opening preferences.glade:");
-    xml = gnc_glade_xml_new(GLADE_FILENAME, "GnuCash Preferences");
-    dialog = glade_xml_get_widget(xml, "GnuCash Preferences");
-    DEBUG("autoconnect");
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-                                      dialog);
+    DEBUG("Opening dialog-preferences.glade:");
+    builder = gtk_builder_new();
 
-    /* Clean up the xml data structure when the dialog is destroyed */
-    g_object_set_data_full(G_OBJECT(dialog), GLADE_FILENAME,
-                           xml, g_object_unref);
+    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "auto_decimal_places_adj");
+    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "autosave_interval_minutes_adj");
+    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "date_backmonth_adj");
+    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "max_transactions_adj");
+    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "new_search_limit_adj");
+    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "retain_days_adj");
+    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "tab_width_adj");
+    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "GnuCash Preferences");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GnuCash Preferences"));
+
+    DEBUG("autoconnect");
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+
     DEBUG("done");
 
-    notebook = glade_xml_get_widget(xml, "notebook1");
+    notebook = GTK_WIDGET(gtk_builder_get_object (builder, "notebook1"));
     table = g_hash_table_new(g_str_hash, g_str_equal);
     g_object_set_data(G_OBJECT(dialog), NOTEBOOK, notebook);
     g_object_set_data_full(G_OBJECT(dialog), WIDGET_HASH,
                            table, (GDestroyNotify)g_hash_table_destroy);
 
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/start_period"));
+    period = gnc_period_select_new(TRUE);
+    gtk_widget_show (period);
+    gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
+
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/start_date"));
+    date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+    gtk_widget_show (date);
+    gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
+
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/end_period"));
+    period = gnc_period_select_new(FALSE);
+    gtk_widget_show (period);
+    gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
+
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/end_date"));
+    date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+    gtk_widget_show (date);
+    gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
+
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/general/currency_other"));
+    currency = gnc_currency_edit_new();
+    gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
+    gtk_widget_show (currency);
+    gtk_box_pack_start(GTK_BOX (box), currency, TRUE, TRUE, 0);
+
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/general/report/currency_other"));
+    currency = gnc_currency_edit_new();
+    gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
+    gtk_widget_show (currency);
+    gtk_box_pack_start(GTK_BOX (box), currency, TRUE, TRUE, 0);
+
+
     /* Add to the list of interesting widgets */
-    gnc_prefs_build_widget_table(xml, dialog);
+    gnc_prefs_build_widget_table(builder, dialog);
 
     g_slist_foreach(add_ins, gnc_preferences_build_page, dialog);
 
@@ -1550,18 +1613,26 @@ gnc_preferences_dialog_create(void)
     /* Other stuff */
     gdate = g_date_new_dmy(31, G_DATE_JULY, 2005);
     g_date_strftime(buf, sizeof(buf), "%x", gdate);
-    label = glade_xml_get_widget(xml, "locale_date_sample");
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_date_sample"));
     gtk_label_set_text(GTK_LABEL(label), buf);
     g_date_free(gdate);
 
     locale_currency = gnc_locale_default_currency ();
     currency_name = gnc_commodity_get_printname(locale_currency);
-    label = glade_xml_get_widget(xml, "locale_currency");
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_currency"));
     gtk_label_set_label(GTK_LABEL(label), currency_name);
-    label = glade_xml_get_widget(xml, "locale_currency2");
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_currency2"));
     gtk_label_set_label(GTK_LABEL(label), currency_name);
 
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "sample_account"));
+    g_object_set_data(G_OBJECT(dialog), "sample_account", label);
+
+    image = GTK_WIDGET(gtk_builder_get_object (builder, "separator_error"));
+    g_object_set_data(G_OBJECT(dialog), "separator_error", image);
+
     gnc_account_separator_prefs_cb(NULL, dialog);
+
+    g_object_unref(G_OBJECT(builder));
 
     LEAVE("dialog %p", dialog);
     return dialog;
@@ -1571,7 +1642,6 @@ gnc_preferences_dialog_create(void)
 /*************************************/
 /*    GConf common callback code     */
 /*************************************/
-
 
 /** Find a partial match from gconf key to widget name.  This function
  *  is needed if the user manually updates the value of a radio button
@@ -1605,12 +1675,12 @@ gnc_prefs_nearest_match (gpointer key,
 }
 
 
-/** Create the preferences dialog.  This function first reads the
- *  preferences.glade file to get obtain the dialog and set of common
+/** Create the preferences dialog. This function first reads the
+ *  preferences.glade file to obtain the dialog and set of common
  *  preferences.  It then runs the list of add-ins, calling a helper
  *  function to add each full/partial page to this dialog, Finally it
- *  runs the list of "interesting: widgets that it has built,
- *  connecting this widgets up to callback functions.
+ *  runs the list of "interesting widgets" that it has built,
+ *  connecting these widgets up to callback functions.
  *
  *  @internal
  *
@@ -1678,24 +1748,9 @@ gnc_preferences_gconf_changed (GConfClient *client,
     if (widget != NULL)
     {
         /* These tests must be ordered from more specific widget to less
-         * specific widget.  Test custom widgets first */
-        if (GNC_IS_CURRENCY_EDIT(widget))   /* must come before combo box */
-        {
-            DEBUG("widget %p - currency_edit", widget);
-            gnc_prefs_currency_edit_gconf_cb(GNC_CURRENCY_EDIT(widget), entry);
-        }
-        else if (GNC_IS_PERIOD_SELECT(widget))
-        {
-            DEBUG("widget %p - period_select", widget);
-            gnc_prefs_period_select_gconf_cb(GNC_PERIOD_SELECT(widget),
-                                             gconf_value_get_int(entry->value));
-        }
-        else if (GNC_IS_DATE_EDIT(widget))
-        {
-            DEBUG("widget %p - date_edit", widget);
-            gnc_prefs_date_edit_gconf_cb(GNC_DATE_EDIT(widget), entry);
-        }
-        else if (GTK_IS_FONT_BUTTON(widget))
+         * specific widget. */
+
+        if (GTK_IS_FONT_BUTTON(widget))
         {
             DEBUG("widget %p - font button", widget);
             gnc_prefs_font_button_gconf_cb(GTK_FONT_BUTTON(widget), entry);
@@ -1729,13 +1784,40 @@ gnc_preferences_gconf_changed (GConfClient *client,
             gnc_prefs_entry_gconf_cb(GTK_ENTRY(widget),
                                      gconf_value_get_string(entry->value));
         }
+        else if (GTK_IS_HBOX(widget))
+        {
+            /* Test custom widgets are all children of a hbox */
+            GtkWidget *widget_child;
+            GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
+            widget_child = child->data;
+            g_list_free(child);
+
+            DEBUG("  %s - hbox", name);
+            DEBUG("Hbox gconf name is %s and widget get name is %s", name, gtk_widget_get_name(GTK_WIDGET(widget_child)));
+
+            if (GNC_IS_CURRENCY_EDIT(widget_child))
+            {
+                DEBUG("widget %p - currency_edit", widget_child);
+                gnc_prefs_currency_edit_gconf_cb(GNC_CURRENCY_EDIT(widget_child), entry);
+            }
+            else if (GNC_IS_PERIOD_SELECT(widget_child))
+            {
+                DEBUG("widget %p - period_select", widget_child);
+                gnc_prefs_period_select_gconf_cb(GNC_PERIOD_SELECT(widget_child),
+                                             gconf_value_get_int(entry->value));
+            }
+            else if (GNC_IS_DATE_EDIT(widget_child))
+            {
+                DEBUG("widget %p - date_edit", widget_child);
+                gnc_prefs_date_edit_gconf_cb(GNC_DATE_EDIT(widget_child), entry);
+            }
+        }
         else
         {
             DEBUG("widget %p - unsupported %s", widget,
                   G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
         }
     }
-
     g_free(name);
     LEAVE(" ");
 }

@@ -58,6 +58,9 @@ glade_DATA = \
   generic-import.glade \
   import-provider-format.glade
 
+gtkbuilderdir = ${GNC_GTKBUILDER_DIR}
+gtkbuilder_DATA = dialog-import.glade
+
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -74,6 +77,7 @@ AM_CPPFLAGS = \
 
 EXTRA_DIST = \
   $(glade_DATA) \
+  $(gtkbuilder_DATA) \
   generic-import-design.txt
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.i-e\"

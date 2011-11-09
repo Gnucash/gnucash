@@ -1,22 +1,25 @@
 <?xml version="1.0"?>
-<glade-interface>
-  <!-- interface-requires gtk+ 2.10 -->
-  <!-- interface-naming-policy toplevel-contextual -->
-  <widget class="GtkWindow" id="Preferences">
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="Preferences">
     <property name="visible">True</property>
+    <property name="can_focus">False</property>
     <property name="title" translatable="yes">Preferences</property>
     <child>
-      <widget class="GtkTable" id="business_prefs">
+      <object class="GtkTable" id="business_prefs">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="border_width">6</property>
         <property name="n_rows">9</property>
         <property name="n_columns">4</property>
         <property name="column_spacing">12</property>
         <child>
-          <widget class="GtkLabel" id="label53">
+          <object class="GtkLabel" id="label53">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="xalign">0</property>
-          </widget>
+          </object>
           <packing>
             <property name="top_attach">2</property>
             <property name="bottom_attach">3</property>
@@ -25,12 +28,13 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label54">
+          <object class="GtkLabel" id="label54">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">&lt;b&gt;Invoices&lt;/b&gt;</property>
             <property name="use_markup">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="right_attach">2</property>
             <property name="top_attach">4</property>
@@ -40,15 +44,18 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="gconf/dialogs/business/bill/tax_included">
+          <object class="GtkCheckButton" id="gconf/dialogs/business/bill/tax_included">
             <property name="label" translatable="yes">Ta_x included</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip" translatable="yes">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
+            <property name="tooltip_text" translatable="yes">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
+            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="top_attach">8</property>
             <property name="bottom_attach">9</property>
@@ -58,14 +65,22 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkSpinButton" id="gconf/dialogs/business/bill/days_in_advance">
+          <object class="GtkSpinButton" id="gconf/dialogs/business/bill/days_in_advance">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tooltip" translatable="yes">How many days in the future to warn about Bills coming due.</property>
-            <property name="adjustment">7 1 180 1 10 0</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">How many days in the future to warn about Bills coming due.</property>
+            <property name="tooltip_text" translatable="yes">How many days in the future to warn about Bills coming due.</property>
+            <property name="invisible_char">&#x25CF;</property>
+            <property name="invisible_char_set">True</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
+            <property name="adjustment">days_in_adj</property>
             <property name="climb_rate">1</property>
             <property name="numeric">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="left_attach">3</property>
             <property name="right_attach">4</property>
@@ -76,13 +91,14 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label15">
+          <object class="GtkLabel" id="label15">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">_Days in advance:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">gconf/dialogs/business/bill/days_in_advance</property>
-          </widget>
+          </object>
           <packing>
             <property name="left_attach">2</property>
             <property name="right_attach">3</property>
@@ -93,15 +109,18 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="gconf/dialogs/business/bill/notify_when_due">
+          <object class="GtkCheckButton" id="gconf/dialogs/business/bill/notify_when_due">
             <property name="label" translatable="yes">_Notify when due</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip" translatable="yes">Whether to display the list of Bills Due at startup.</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Whether to display the list of Bills Due at startup.</property>
+            <property name="tooltip_text" translatable="yes">Whether to display the list of Bills Due at startup.</property>
+            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="right_attach">2</property>
             <property name="top_attach">7</property>
@@ -112,12 +131,13 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label51">
+          <object class="GtkLabel" id="label51">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">&lt;b&gt;Bills&lt;/b&gt;</property>
             <property name="use_markup">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="right_attach">2</property>
             <property name="top_attach">6</property>
@@ -127,10 +147,11 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label50">
+          <object class="GtkLabel" id="label50">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="xalign">0</property>
-          </widget>
+          </object>
           <packing>
             <property name="top_attach">5</property>
             <property name="bottom_attach">6</property>
@@ -139,15 +160,18 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="gconf/dialogs/business/invoice/tax_included">
+          <object class="GtkCheckButton" id="gconf/dialogs/business/invoice/tax_included">
             <property name="label" translatable="yes">_Tax included</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip" translatable="yes">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
+            <property name="tooltip_text" translatable="yes">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
+            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="right_attach">2</property>
             <property name="top_attach">5</property>
@@ -158,15 +182,18 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="gconf/dialogs/business/invoice/accumulate_splits">
+          <object class="GtkCheckButton" id="gconf/dialogs/business/invoice/accumulate_splits">
             <property name="label" translatable="yes">_Accumulate splits on post</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip" translatable="yes">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
+            <property name="tooltip_text" translatable="yes">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
+            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="right_attach">2</property>
             <property name="top_attach">3</property>
@@ -177,15 +204,18 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="gconf/dialogs/business/invoice/use_new_window">
+          <object class="GtkCheckButton" id="gconf/dialogs/business/invoice/use_new_window">
             <property name="label" translatable="yes">_Open in new window</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip" translatable="yes">If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window.</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window.</property>
+            <property name="tooltip_text" translatable="yes">If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window.</property>
+            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="right_attach">2</property>
             <property name="top_attach">2</property>
@@ -196,28 +226,32 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label1">
+          <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="yalign">0.47999998927116394</property>
             <property name="label" translatable="yes">&lt;b&gt;General&lt;/b&gt;</property>
             <property name="use_markup">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"></property>
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="gconf/dialogs/business/invoice/enable_toolbuttons">
+          <object class="GtkCheckButton" id="gconf/dialogs/business/invoice/enable_toolbuttons">
             <property name="label" translatable="yes">Enable extra _buttons</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip" translatable="yes">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
+            <property name="tooltip_text" translatable="yes">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
+            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="right_attach">2</property>
             <property name="top_attach">1</property>
@@ -281,7 +315,14 @@
         <child>
           <placeholder/>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+  <object class="GtkAdjustment" id="days_in_adj">
+    <property name="lower">1</property>
+    <property name="upper">180</property>
+    <property name="value">7</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+</interface>

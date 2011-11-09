@@ -51,6 +51,9 @@ gncscm_DATA = \
 gladedir = ${GNC_GLADE_DIR}
 glade_DATA = qif.glade
 
+gtkbuilderdir = ${GNC_GTKBUILDER_DIR}
+gtkbuilder_DATA = dialog-account-picker.glade
+
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
@@ -74,6 +77,7 @@ ui_DATA = \
 EXTRA_DIST = \
   ${gncscm_DATA} \
   ${glade_DATA} \
+  ${gtkbuilder_DATA} \
   file-format.txt \
   $(ui_DATA)
 

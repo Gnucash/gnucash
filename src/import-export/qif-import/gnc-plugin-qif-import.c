@@ -174,8 +174,10 @@ void
 gnc_plugin_qif_import_create_plugin (void)
 {
     GncPlugin *plugin = gnc_plugin_qif_import_new ();
-
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
-    gnc_preferences_add_to_page ("qif.glade", "prefs_table",
+
+    /* Add to preferences under Online Banking */
+    /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */
+    gnc_preferences_add_to_page ("dialog-account-picker.glade", "prefs_table",
                                  _("Online Banking"));
 }

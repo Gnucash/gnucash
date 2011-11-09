@@ -101,7 +101,6 @@ src/business/business-gnome/dialog-order.c
 src/business/business-gnome/dialog-payment.c
 src/business/business-gnome/dialog-vendor.c
 src/business/business-gnome/glade/billterms.glade
-src/business/business-gnome/glade/businessprefs.glade
 src/business/business-gnome/glade/choose-owner.glade
 src/business/business-gnome/glade/date-close.glade
 src/business/business-gnome/glade/employee.glade
@@ -113,6 +112,7 @@ src/business/business-gnome/gnc-plugin-business.c
 src/business/business-gnome/gnc-plugin-page-invoice.c
 src/business/business-gnome/gnc-plugin-page-owner-tree.c
 src/business/business-gnome/gtkbuilder/business-options-gnome.glade
+src/business/business-gnome/gtkbuilder/business-prefs.glade
 src/business/business-gnome/gtkbuilder/dialog-customer.glade
 src/business/business-gnome/gtkbuilder/dialog-invoice.glade
 src/business/business-gnome/gtkbuilder/dialog-vendor.glade
@@ -286,7 +286,6 @@ src/gnome-utils/druid-gnc-xml-import.c
 src/gnome-utils/druid-utils.c
 src/gnome-utils/glade/druid-gnc-xml-import.glade
 src/gnome-utils/glade/druid-provider-multifile.glade
-src/gnome-utils/glade/preferences.glade
 src/gnome-utils/gnc-account-sel.c
 src/gnome-utils/gnc-amount-edit.c
 src/gnome-utils/gnc-autosave.c
@@ -347,6 +346,7 @@ src/gnome-utils/gtkbuilder/dialog-book-close.glade
 src/gnome-utils/gtkbuilder/dialog-commodity.glade
 src/gnome-utils/gtkbuilder/dialog-file-access.glade
 src/gnome-utils/gtkbuilder/dialog-object-references.glade
+src/gnome-utils/gtkbuilder/dialog-preferences.glade
 src/gnome-utils/gtkbuilder/dialog-query-list.glade
 src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade
 src/gnome-utils/gtkbuilder/dialog-totd.glade
@@ -391,6 +391,7 @@ src/import-export/csv/gnc-csv-model.c
 src/import-export/csv/gnc-csv-preview-dialog.glade
 src/import-export/csv/gncmod-csv-import.c
 src/import-export/csv/gnc-plugin-csv.c
+src/import-export/dialog-import.glade
 src/import-export/generic-import.glade
 src/import-export/gnc-import-desc-format.c
 src/import-export/gnc-import-format-cb.c
@@ -415,6 +416,7 @@ src/import-export/ofx/gnc-ofx-import.c
 src/import-export/ofx/gnc-ofx-kvp.c
 src/import-export/ofx/gnc-plugin-ofx.c
 src/import-export/qif-import/dialog-account-picker.c
+src/import-export/qif-import/dialog-account-picker.glade
 src/import-export/qif-import/druid-qif-import.c
 src/import-export/qif-import/gncmod-qif-import.c
 src/import-export/qif-import/gnc-plugin-qif-import.c

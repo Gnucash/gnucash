@@ -58,9 +58,11 @@ libgncmod_generic_import_gnc_module_init(int refcount)
     if (!refcount)
     {
         gnc_import_format_gnome_register();
-        gnc_preferences_add_to_page("generic-import.glade", "matcher_prefs",
-                                    _("Online Banking"));
 
+        /* Add to preferences under Online Banking */
+        /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */
+        gnc_preferences_add_to_page("dialog-import.glade", "atm_fee_adj,auto_add_adj,auto_clear_adj,match_adj,matcher_prefs",
+                                    _("Online Banking"));
     }
 
     return TRUE;

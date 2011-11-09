@@ -137,7 +137,9 @@ libgncmod_business_gnome_gnc_module_init(int refcount)
         gnc_hook_add_dangler(HOOK_BOOK_OPENED,
                              (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
 
-        gnc_preferences_add_page("businessprefs.glade", "business_prefs",
+        /* Add to preferences under Business */
+        /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */
+        gnc_preferences_add_page("business-prefs.glade", "days_in_adj,business_prefs",
                                  _("Business"));
     }
 

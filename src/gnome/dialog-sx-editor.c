@@ -156,7 +156,7 @@ static void gnc_sxed_save_sx( GncSxEditorDialog *sxed );
 static void gnc_sxed_freq_changed( GncFrequency *gf, gpointer ud );
 static void sxed_excal_update_adapt_cb( GtkObject *o, gpointer ud );
 static void gnc_sxed_update_cal(GncSxEditorDialog *sxed);
-static void on_sx_check_toggled (GtkWidget *togglebutton, gpointer user_data);
+void on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data);
 static void gnc_sxed_reg_check_close(GncSxEditorDialog *sxed);
 static gboolean sxed_delete_event( GtkWidget *widget, GdkEvent *event, gpointer ud );
 static gboolean sxed_confirmed_cancel( GncSxEditorDialog *sxed );
@@ -1676,21 +1676,27 @@ sxed_excal_update_adapt_cb(GtkObject *o, gpointer ud)
 }
 
 
-static void
-on_sx_check_toggled (GtkWidget *togglebutton,
+void
+on_sx_check_toggled_cb (GtkWidget *togglebutton,
                      gpointer user_data)
 {
-    GtkWidget *widget;
-    gboolean create; // , notify;
+    GtkWidget *widget_create, *widget_notify;
+    gboolean active; // , notify;
+    GHashTable *table;
 
-    /* The gnc_glade_lookup_widget() function works because all of these
-     * widgets come from the same glade file. */
-    widget = gnc_glade_lookup_widget(togglebutton,
-                                     "gconf/dialogs/scheduled_trans/transaction_editor/create_auto");
-    create = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-    widget = gnc_glade_lookup_widget(togglebutton,
-                                     "gconf/dialogs/scheduled_trans/transaction_editor/notify");
-    gtk_widget_set_sensitive(widget, create);
+    PINFO("Togglebutton is %p and user_data is %p", togglebutton, user_data);
+    PINFO("Togglebutton builder name is %s", gtk_buildable_get_name(GTK_BUILDABLE(togglebutton)));
+
+    /* We need to use the hash table to find the required widget to activate. */
+    table = g_object_get_data(G_OBJECT(user_data), "widget_hash");
+    widget_create = g_hash_table_lookup(table, "gconf/dialogs/scheduled_trans/transaction_editor/create_auto");
+    widget_notify = g_hash_table_lookup(table, "gconf/dialogs/scheduled_trans/transaction_editor/notify");
+
+    active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget_create));
+    if(active)
+        gtk_widget_set_sensitive(widget_notify, TRUE);
+    else
+        gtk_widget_set_sensitive(widget_notify, FALSE);
 }
 
 
@@ -1801,7 +1807,8 @@ gnc_ui_sx_initialize (void)
                          (GFunc)gnc_sx_sxsincelast_book_opened, NULL);
 
     /* Add page to preferences page for Sheduled Transactions */
-    gnc_preferences_add_page ("sched-xact.glade",
-                              "sx_prefs",
+    /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */
+    gnc_preferences_add_page ("dialog-sx.glade",
+                              "create_days_adj,remind_days_adj,sx_prefs",
                               _("Scheduled Transactions"));
 }
