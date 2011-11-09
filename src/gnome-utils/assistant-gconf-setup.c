@@ -675,7 +675,7 @@ assistant_gconf_install_check_schemas (void)
         {
         case GTK_RESPONSE_CANCEL:
         default:
-            gnc_shutdown(42);
+            exit(42);
             /* never returns */
 
         case GTK_RESPONSE_NO:
