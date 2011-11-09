@@ -218,7 +218,6 @@ qof_session_init (QofSession *session)
     session->book_id = NULL;
     session->backend = NULL;
     session->lock = 1;
-    session->is_readonly = FALSE;
 
     qof_session_clear_error (session);
 }
@@ -250,18 +249,6 @@ qof_session_get_backend (const QofSession *session)
 {
     if (!session) return NULL;
     return session->backend;
-}
-
-gboolean qof_session_is_readonly(const QofSession * session)
-{
-    g_assert(session);
-    return session->is_readonly;
-}
-
-void qof_session_set_readonly(QofSession* session, gboolean is_readonly)
-{
-    g_assert(session);
-    session->is_readonly = is_readonly;
 }
 
 const char *
@@ -628,15 +615,6 @@ qof_session_save (QofSession *session,
            session, session->book_id ? session->book_id : "(null)");
     /* Partial book handling. */
     book = qof_session_get_book(session);
-
-    if (qof_session_is_readonly(session) || qof_book_is_readonly(book))
-    {
-        // Well, we are read-only, so saving is not allowed.
-        msg = g_strdup_printf("session is marked as read-only");
-        qof_session_push_error(session, ERR_BACKEND_READONLY, msg);
-        goto leave;
-    }
-
     partial = (gboolean)GPOINTER_TO_INT(qof_book_get_data(book, PARTIAL_QOFBOOK));
     change_backend = FALSE;
     msg = g_strdup_printf(" ");
@@ -788,13 +766,6 @@ qof_session_safe_save(QofSession *session, QofPercentageFunc percentage_func)
     char *msg = NULL;
     g_return_if_fail( be != NULL );
     g_return_if_fail( be->safe_sync != NULL );
-    if (qof_session_is_readonly(session))
-    {
-        // Well, we are read-only, so saving is not allowed.
-        qof_session_push_error(session, ERR_BACKEND_READONLY, "session is marked as read-only");
-        return;
-    }
-
     be->percentage = percentage_func;
     (be->safe_sync)( be, qof_session_get_book( session ));
     err = qof_backend_get_error(session->backend);
