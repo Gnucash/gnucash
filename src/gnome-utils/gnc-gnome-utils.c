@@ -34,7 +34,7 @@
 
 //#include "gnc-html-graph-gog.h"
 
-#include "druid-gconf-setup.h"
+#include "assistant-gconf-setup.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 //#include "gnc-html.h"
@@ -358,7 +358,7 @@ gnc_gnome_init (int argc, char **argv, const char * version)
         g_list_free(icons);
     }
 
-    druid_gconf_install_check_schemas();
+    assistant_gconf_install_check_schemas();
 
     return;
 }

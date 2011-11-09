@@ -1,7 +1,8 @@
 /*
- * druid-gconf-setup.h  -- install gconf keys where they can be found.
+ * assistant-gconf-setup.h  -- install gconf keys where they can be found.
  *
  * Copyright (c) 2005 David Hampton <hampton@employees.org>
+ * Copyright (c) 2011 Robert Fewell
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,17 +22,17 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-/** @addtogroup Druids
+/** @addtogroup Assistants
     @{ */
-/** @addtogroup GConfDruid Setup Druid for GConf
+/** @addtogroup GConfAssistant Setup Assistant for GConf
     @{ */
-/** @file druid-gconf-setup.h
+/** @file assistant-gconf-setup.h
     @brief Check for gconf.  Help user set up if needed.
     @author Copyright (C) 2005 David Hampton <hampton@employees.org>
 */
 
-#ifndef GNC_DRUID_GCONF_SETUP_H
-#define GNC_DRUID_GCONF_SETUP_H
+#ifndef GNC_ASSISTANT_GCONF_SETUP_H
+#define GNC_ASSISTANT_GCONF_SETUP_H
 
 /** This routine checks to see if GnuCash's gconf schemas are visible
  *  to the user.  The schemas typically should be visible, as rpm and
@@ -39,10 +40,10 @@
  *  For things like network installs or developers, this function will
  *  present a warning dialog that asks the user whether to setup
  *  gconf, continue without the schemas, or quit.  If the user chooses
- *  to set up the schemas, this function will invoke a druid to walk
+ *  to set up the schemas, this function will invoke a assistant to walk
  *  the user through making the schemas visible.
  */
-void druid_gconf_install_check_schemas(void);
+void assistant_gconf_install_check_schemas(void);
 
 #endif
 

@@ -43,7 +43,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-userpass.c \
   dialog-utils.c \
   druid-utils.c \
-  druid-gconf-setup.c \
+  assistant-gconf-setup.c \
   druid-gnc-xml-import.c \
   gnc-account-sel.c \
   gnc-amount-edit.c \
@@ -122,7 +122,7 @@ gncinclude_HEADERS = \
   dialog-transfer.h \
   dialog-utils.h \
   druid-utils.h \
-  druid-gconf-setup.h \
+  assistant-gconf-setup.h \
   druid-gnc-xml-import.h \
   gnc-account-sel.h \
   gnc-amount-edit.h \
