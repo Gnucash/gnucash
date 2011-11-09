@@ -89,11 +89,11 @@ gnc_import_Settings_new (void)
     settings->action_add_enabled = DEFAULT_ACTION_ADD_ENABLED;
     settings->action_clear_enabled = DEFAULT_ACTION_CLEAR_ENABLED;
     settings->clear_threshold =
-        gnc_gconf_get_float(GCONF_IMPORT_SECTION, "auto_clear_threshold", NULL);
+        (int)gnc_gconf_get_float(GCONF_IMPORT_SECTION, "auto_clear_threshold", NULL);
     settings->add_threshold =
-        gnc_gconf_get_float(GCONF_IMPORT_SECTION, "auto_add_threshold", NULL);
+        (int)gnc_gconf_get_float(GCONF_IMPORT_SECTION, "auto_add_threshold", NULL);
     settings->display_threshold =
-        gnc_gconf_get_float(GCONF_IMPORT_SECTION, "match_threshold", NULL);
+        (int)gnc_gconf_get_float(GCONF_IMPORT_SECTION, "match_threshold", NULL);
 
     settings->fuzzy_amount =
         gnc_gconf_get_float(GCONF_IMPORT_SECTION, "atm_fee_threshold", NULL);

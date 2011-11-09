@@ -336,7 +336,7 @@ gboolean gnc_gconf_get_bool_no_error (const gchar *section,
  *  display an error message via stdout.  If present, this function
  *  will pass any error back to the calling function for it to handle.
  *
- *  @return This function returns the float value stored at the
+ *  @return This function returns the integer value stored at the
  *  requested key in the gconf database.  If the key has never been
  *  set, this function passes on the default value returned by GConf
  *  as specified in the schema for this key.  If there is an error in
@@ -372,7 +372,7 @@ gint gnc_gconf_get_int (const gchar *section,
  *  display an error message via stdout.  If present, this function
  *  will pass any error back to the calling function for it to handle.
  *
- *  @return This function returns the integer value stored at the
+ *  @return This function returns the float value stored at the
  *  requested key in the gconf database.  If the key has never been
  *  set, this function passes on the default value returned by GConf
  *  as specified in the schema for this key.  If there is an error in

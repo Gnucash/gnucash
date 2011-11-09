@@ -2233,7 +2233,7 @@ gnc_auto_decimal_init (void)
     auto_decimal_enabled =
         gnc_gconf_get_bool(GCONF_GENERAL, "auto_decimal_point", NULL);
     auto_decimal_places =
-        gnc_gconf_get_float(GCONF_GENERAL, "auto_decimal_places", NULL);
+        (int)gnc_gconf_get_float(GCONF_GENERAL, "auto_decimal_places", NULL);
 }
 
 void

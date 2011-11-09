@@ -528,7 +528,7 @@ gnc_gconf_get_float (const gchar *section,
                      GError **caller_error)
 {
     GError *error = NULL;
-    gint value;
+    gdouble value;
     gchar *key;
 
     if (our_client == NULL)
