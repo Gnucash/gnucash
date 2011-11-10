@@ -63,6 +63,7 @@ typedef enum
                                         not sure this makes sense,
                                         but all code is symmetrical
                                         so I've added it to prevent unexpected errors */
+    GNC_INVOICE_NUM_TYPES
 } GncInvoiceType;
 
 /* --- type macros --- */

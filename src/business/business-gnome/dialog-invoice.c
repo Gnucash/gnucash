@@ -90,6 +90,7 @@
 void gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_type_toggled_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_terms_changed_cb (GtkWidget *widget, gpointer data);
 
@@ -135,6 +136,9 @@ struct _invoice_window
     GtkWidget  * total_tax_label;
 
     /* Data Widgets */
+    GtkWidget  * type_label;
+    GtkWidget  * type_hbox;
+    GtkWidget  * type_choice;
     GtkWidget  * id_entry;
     GtkWidget  * notes_text;
     GtkWidget  * opened_date;
@@ -172,6 +176,7 @@ struct _invoice_window
 
     InvoiceDialogType   dialog_type;
     GncGUID      invoice_guid;
+    gboolean     is_credit_note;
     gint         component_id;
     QofBook    * book;
     GncInvoice * created_invoice;
@@ -322,6 +327,10 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
         else
             gncInvoiceSetBillTo (invoice, &iw->proj_cust);
     }
+
+    /* Document type can only be modified for a new invoice/credit note */
+    if (iw->dialog_type == NEW_INVOICE)
+        gncInvoiceSetIsCreditNote (invoice, iw->is_credit_note);
 
     gncInvoiceCommitEdit (invoice);
     gnc_resume_gui_refresh ();
@@ -1077,7 +1086,7 @@ gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
 {
     GtkWidget *summarybar;
 
-    iw->total_label	    = NULL;
+    iw->total_label           = NULL;
     iw->total_cash_label      = NULL;
     iw->total_charge_label    = NULL;
     iw->total_subtotal_label  = NULL;
@@ -1085,7 +1094,7 @@ gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
 
     summarybar = gtk_hbox_new (FALSE, 4);
 
-    iw->total_label	    = add_summary_label (summarybar, _("Total:"));
+    iw->total_label           = add_summary_label (summarybar, _("Total:"));
 
     switch (gncOwnerGetType (&iw->owner))
     {
@@ -1112,7 +1121,6 @@ static int
 gnc_invoice_job_changed_cb (GtkWidget *widget, gpointer data)
 {
     InvoiceWindow *iw = data;
-    GncInvoice *invoice;
     char const *msg = "";
 
     if (!iw)
@@ -1122,7 +1130,6 @@ gnc_invoice_job_changed_cb (GtkWidget *widget, gpointer data)
         return FALSE;
 
     gnc_owner_get_owner (iw->job_choice, &(iw->job));
-    invoice = iw_get_invoice (iw);
 
     if (iw->dialog_type == EDIT_INVOICE)
         return FALSE;
@@ -1164,7 +1171,6 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
     if (iw->owner.owner.undefined == NULL)
     {
         iw->job_choice = NULL;
-
     }
     else
         switch (iw->dialog_type)
@@ -1568,6 +1574,9 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         break;
     }
 
+    /* Set the type label */
+    gtk_label_set_text (GTK_LABEL(iw->type_label), iw->is_credit_note ? _("Credit note") : _("Invoice"));
+
     if (iw->owner_choice)
         gtk_widget_show_all (iw->owner_choice);
     if (iw->proj_cust_choice)
@@ -1803,6 +1812,15 @@ gnc_invoice_get_title (InvoiceWindow *iw)
 }
 
 void
+gnc_invoice_type_toggled_cb (GtkWidget *widget, gpointer data)
+{
+    InvoiceWindow *iw = data;
+
+    if (!iw) return;
+    iw->is_credit_note = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+}
+
+void
 gnc_invoice_id_changed_cb (GtkWidget *unused, gpointer data)
 {
     InvoiceWindow *iw = data;
@@ -1881,6 +1899,7 @@ gnc_invoice_new_page (QofBook *bookp, InvoiceDialogType type,
     iw->book = bookp;
     iw->dialog_type = type;
     iw->invoice_guid = *gncInvoiceGetGUID (invoice);
+    iw->is_credit_note = gncInvoiceGetIsCreditNote (invoice);
     iw->width = -1;
 
     /* Save this for later */
@@ -2048,6 +2067,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, iw);
 
     /* Grab the widgets */
+    iw->type_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_type_label"));
     iw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "page_id_entry"));
     iw->billing_id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "page_billing_id_entry"));
     iw->terms_menu = GTK_WIDGET (gtk_builder_get_object (builder, "page_terms_menu"));
@@ -2285,6 +2305,22 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
     g_object_set_data (G_OBJECT (iw->dialog), "dialog_info", iw);
 
     /* Grab the widgets */
+    iw->type_label = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_label"));
+    iw->type_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_choice_hbox"));
+    iw->type_choice = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_invoice"));
+    /* configure the type related widgets based on dialog type and invoice type */
+    if (iw->dialog_type == NEW_INVOICE)
+    {
+        gtk_widget_show_all (iw->type_hbox);
+        gtk_widget_hide (iw->type_label);
+    }
+    else
+    {
+        gtk_widget_hide_all (iw->type_hbox);
+        gtk_widget_show (iw->type_label);
+
+    }
+
     iw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_id_entry"));
     iw->billing_id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_billing_id_entry"));
     iw->terms_menu = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_terms_menu"));
@@ -2311,8 +2347,10 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
     gtk_builder_connect_signals_full( builder,
                                        gnc_builder_connect_full_func,
                                        iw);
+
     /* Setup initial values */
     iw->invoice_guid = *gncInvoiceGetGUID (invoice);
+    iw->is_credit_note = gncInvoiceGetIsCreditNote (invoice);
 
     iw->component_id =
         gnc_register_gui_component (DIALOG_NEW_INVOICE_CM_CLASS,
@@ -2423,7 +2461,7 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice)
     // And also open the "properties" pop-up... however, changing the
     // invoice ID won't be copied over to the tab title even though
     // it's correctly copied into the invoice.
-    iw = gnc_invoice_window_new_invoice (NULL, NULL, new_invoice);
+    iw = gnc_ui_invoice_modify (new_invoice);
 
     return iw;
 }

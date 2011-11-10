@@ -897,6 +897,8 @@ GncInvoiceType gncInvoiceGetType (const GncInvoice *invoice)
                       GNC_INVOICE_EMPL_CREDIT_NOTE :
                       GNC_INVOICE_EMPL_INVOICE);
     default:
+        PWARN ("No invoice types defined for owner %d",
+                gncInvoiceGetOwnerType (invoice));
         return GNC_INVOICE_UNDEFINED;
     }
 }
@@ -919,6 +921,7 @@ const char * gncInvoiceGetTypeString (const GncInvoice *invoice)
     case GNC_INVOICE_EMPL_CREDIT_NOTE:
         return _("Employee Credit Note");
     default:
+        PWARN("Unknown invoice type");
         return NULL;
     }
 }
