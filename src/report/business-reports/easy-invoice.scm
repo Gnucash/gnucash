@@ -132,16 +132,25 @@
 
 (define (make-account-hash) (make-hash-table 23))
 
-(define (update-account-hash hash values)
+;; Internally invoice values are positive and credit-note values are negative
+;; However on the invoice/cn document they are always displayed as positive
+;; So depending on the document type the internal values have to be reversed
+;; before they are printed on the document. This function handles that.
+;; It should be called for each internal value that is to be displayed on the document.
+(define (inv-or-cn-value value credit-note?)
+  (if (not credit-note?)
+	value
+	(gnc-numeric-neg value)))
+
+(define (update-account-hash hash values credit-note?)
   (for-each
    (lambda (item)
      (let* ((acct (car item))
-	    (val (cdr item))
+	    (val (inv-or-cn-value(cdr item) credit-note?))
 	    (ref (hash-ref hash acct)))
 
        (hash-set! hash acct (if ref (gnc-numeric-add-fixed ref val) val))))
    values))
-
 
 (define (monetary-or-percent numeric currency entry-type)
   (if (gnc:entry-type-percent-p entry-type)
@@ -160,14 +169,14 @@
 	table)
       (gnc:make-gnc-monetary currency numeric)))
 
-(define (add-entry-row table currency entry column-vector row-style invoice?)
+(define (add-entry-row table currency entry column-vector row-style cust-doc? credit-note?)
   (let* ((row-contents '())
 	 (entry-value (gnc:make-gnc-monetary
 		       currency
-		       (gncEntryReturnValue entry invoice?)))
+		       (inv-or-cn-value (gncEntryReturnValue entry cust-doc?) credit-note?)))
 	 (entry-tax-value (gnc:make-gnc-monetary
 			   currency
-			   (gncEntryReturnTaxValue entry invoice?))))
+			   (inv-or-cn-value (gncEntryReturnTaxValue entry cust-doc?) credit-note?))))
 
     (if (date-col column-vector)
         (addto! row-contents
@@ -185,19 +194,19 @@
 	(addto! row-contents
 		(gnc:make-html-table-cell/markup
 		 "number-cell"
-		 (gncEntryGetQuantity entry))))
+		 (inv-or-cn-value (gncEntryGetQuantity entry) credit-note?))))
 
     (if (price-col column-vector)
 	(addto! row-contents
 		(gnc:make-html-table-cell/markup
 		 "number-cell"
 		 (gnc:make-gnc-monetary
-		  currency (if invoice? (gncEntryGetInvPrice entry)
-			       (gncEntryGetBillPrice entry))))))
+		  currency (if cust-doc? (gncEntryGetInvPrice entry)
+					 (gncEntryGetBillPrice entry))))))
 
     (if (discount-col column-vector)
 	(addto! row-contents
-		(if invoice?
+		(if cust-doc?
 		    (gnc:make-html-table-cell/markup
 		     "number-cell"
 		     (monetary-or-percent (gncEntryGetInvDiscount entry)
@@ -207,7 +216,7 @@
 
     (if (tax-col column-vector)
 	(addto! row-contents
-		(if (if invoice?
+		(if (if cust-doc?
 			(and (gncEntryGetInvTaxable entry)
 			     (gncEntryGetInvTaxTable entry))
 			(and (gncEntryGetBillTaxable entry)
@@ -372,7 +381,7 @@
   gnc:*report-options*)
 
 
-(define (make-entry-table invoice options add-order invoice?)
+(define (make-entry-table invoice options add-order cust-doc? credit-note?)
   (define (opt-val section name)
     (gnc:option-value
      (gnc:lookup-option options section name)))
@@ -381,7 +390,8 @@
 	(display-all-taxes (opt-val "Display" "Individual Taxes"))
 	(lot (gncInvoiceGetPostedLot invoice))
 	(txn (gncInvoiceGetPostedTxn invoice))
-	(currency (gncInvoiceGetCurrency invoice)))
+	(currency (gncInvoiceGetCurrency invoice))
+	(reverse-payments? (not (gncInvoiceAmountPositive invoice))))
 
     (define (colspan monetary used-columns)
       (cond
@@ -417,34 +427,22 @@
 				    (display-subtotal currency used-columns))))))
 		  currency-totals)))
 
-    (define (add-payment-row table used-columns split total-collector)
+    (define (add-payment-row table used-columns split total-collector reverse-payments?)
       (let* ((t (xaccSplitGetParent split))
 	     (currency (xaccTransGetCurrency t))
 	     (invoice (opt-val invoice-page invoice-name))
 	     (owner '())
-	     ;; XXX Need to know when to reverse the value
-	     (amt (gnc:make-gnc-monetary currency (xaccSplitGetValue split)))
+	     ;; Depending on the document type, the payments may need to be sign-reversed
+	     (amt (gnc:make-gnc-monetary currency
+		    (if reverse-payments?
+			(gnc-numeric-neg(xaccSplitGetValue split))
+			(xaccSplitGetValue split))))
 	     (payment-style "grand-total")
 	     (row '()))
 
-	; Update to fix bug 564380, payment on bill doubles bill. Mike Evans <mikee@saxicola.co.uk>
-	;; Reverse the value when needed
-	(if (not (null? invoice))
-	(begin
-	  (set! owner (gncInvoiceGetOwner invoice))
-	  (let ((type (gncOwnerGetType
-                       (gncOwnerGetEndOwner owner))))
-	    (cond
-	      ((eqv? type GNC-OWNER-CUSTOMER)
-	       (total-collector 'add
-			  (gnc:gnc-monetary-commodity amt)
-			 (gnc:gnc-monetary-amount amt)))
-	      ((eqv? type GNC-OWNER-VENDOR)
-	       (total-collector 'add
-			  (gnc:gnc-monetary-commodity amt)
-			 (gnc:gnc-monetary-amount (gnc:monetary-neg amt))))
-	      ))))
-
+	(total-collector 'add
+	    (gnc:gnc-monetary-commodity amt)
+	    (gnc:gnc-monetary-amount amt))
 
 	(if (date-col used-columns)
 	    (addto! row
@@ -507,7 +505,7 @@
 		   (lambda (split)
 		     (if (not (equal? (xaccSplitGetParent split) txn))
 			 (add-payment-row table used-columns
-					  split total-collector)))
+					  split total-collector reverse-payments?)))
 		   splits)))
 
 	    (add-subtotal-row table used-columns total-collector
@@ -526,11 +524,11 @@
 					      current
 					      used-columns
 					      current-row-style
-					      invoice?)))
+					      cust-doc? credit-note?)))
 
 	    (if display-all-taxes
-		(let ((tax-list (gncEntryReturnTaxValues current invoice?)))
-		  (update-account-hash acct-hash tax-list))
+		(let ((tax-list (gncEntryReturnTaxValues current cust-doc?)))
+		  (update-account-hash acct-hash tax-list credit-note?))
 		(tax-collector 'add
 			       (gnc:gnc-monetary-commodity (cdr entry-values))
 			       (gnc:gnc-monetary-amount (cdr entry-values))))
@@ -708,7 +706,8 @@
 	 (default-title (_ "Invoice"))
 	 (custom-title (opt-val invoice-page "Custom Title"))
 	 (title "")
-	 (invoice? #f))
+	 (cust-doc? #f)
+	 (credit-note? #f))
 
     (define (add-order o)
       (if (and references? (not (member o orders)))
@@ -716,16 +715,27 @@
 
     (if (not (null? invoice))
 	(begin
-	  (set! owner (gncInvoiceGetOwner invoice))
-	  (let ((type (gncOwnerGetType
-			(gncOwnerGetEndOwner owner))))
+	  (let ((type (gncInvoiceGetType invoice)))
 	    (cond
-	      ((eqv? type GNC-OWNER-CUSTOMER)
-	       (set! invoice? #t))
-	      ((eqv? type GNC-OWNER-VENDOR)
+	      ((eqv? type GNC-INVOICE-CUST-INVOICE)
+	       (set! cust-doc? #t))
+	      ((eqv? type GNC-INVOICE-VEND-INVOICE)
 	       (set! default-title (_ "Bill")))
-	      ((eqv? type GNC-OWNER-EMPLOYEE)
-	       (set! default-title (_ "Expense Voucher")))))
+	      ((eqv? type GNC-INVOICE-EMPL-INVOICE)
+	       (set! default-title (_ "Expense Voucher")))
+	      ((eqv? type GNC-INVOICE-CUST-CREDIT-NOTE)
+	       (begin
+	        (set! cust-doc? #t)
+	        (set! credit-note? #t)
+	        (set! default-title (_ "Credit Note"))))
+	      ((eqv? type GNC-INVOICE-VEND-CREDIT-NOTE)
+	       (begin
+	        (set! credit-note? #t)
+	        (set! default-title (_ "Credit Note"))))
+	      ((eqv? type GNC-INVOICE-EMPL-CREDIT-NOTE)
+	       (begin
+	        (set! credit-note? #t)
+	        (set! default-title (_ "Credit Note"))))))
 	  (set! title (sprintf #f (_"%s #%d") (title-string default-title custom-title)
 			       (gncInvoiceGetID invoice)))))
 
@@ -772,7 +782,7 @@
 	(let ((book (gncInvoiceGetBook invoice)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
-					add-order invoice?))
+					add-order cust-doc? credit-note?))
 
           (add-html! document "<table width='100%'><tr>")
           (add-html! document "<td align='left' valign='top'>")
