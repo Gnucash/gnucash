@@ -672,21 +672,21 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
 
     reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
-    /* Make sure that the invoice has a positive balance */
-    if (gnc_numeric_negative_p(gncInvoiceGetTotal(invoice)))
-    {
-        gnc_error_dialog(iw_get_window(iw), "%s",
-                         _("You may not post an invoice with a negative total value."));
-        return;
-    }
+//    /* Make sure that the invoice/credit note has a positive balance */
+//    if (gnc_numeric_negative_p(gncInvoiceGetTotal(invoice)))
+//    {
+//        gnc_error_dialog(iw_get_window(iw), "%s",
+//                         _("You may not post an invoice with a negative total value."));
+//        return;
+//    }
 
-    if (iw->total_cash_label &&
-            gnc_numeric_negative_p(gncInvoiceGetTotalOf(invoice, GNC_PAYMENT_CASH)))
-    {
-        gnc_error_dialog(iw_get_window(iw), "%s",
-                         _("You may not post an expense voucher with a negative total cash value."));
-        return;
-    }
+//    if (iw->total_cash_label &&
+//            gnc_numeric_negative_p(gncInvoiceGetTotalOf(invoice, GNC_PAYMENT_CASH)))
+//    {
+//        gnc_error_dialog(iw_get_window(iw), "%s",
+//                         _("You may not post an expense voucher with a negative total cash value."));
+//        return;
+//    }
 
     /* Ok, we can post this invoice.  Ask for verification, set the due date,
      * post date, and posted account
@@ -1421,18 +1421,33 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     if (iw->total_label)
     {
         amount = gncInvoiceGetTotal (invoice);
+        /* Credit notes have their value signs reversed internally.
+         * So reverse here as well before displaying
+         */
+        if (iw->is_credit_note)
+            amount = gnc_numeric_neg (amount);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_label), amount, currency);
     }
 
     if (iw->total_subtotal_label)
     {
         amount = gncInvoiceGetTotalSubtotal (invoice);
+        /* Credit notes have their value signs reversed internally.
+         * So reverse here as well before displaying
+         */
+        if (iw->is_credit_note)
+            amount = gnc_numeric_neg (amount);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_subtotal_label), amount, currency);
     }
 
     if (iw->total_tax_label)
     {
         amount = gncInvoiceGetTotalTax (invoice);
+        /* Credit notes have their value signs reversed internally.
+         * So reverse here as well before displaying
+         */
+        if (iw->is_credit_note)
+            amount = gnc_numeric_neg (amount);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_tax_label), amount, currency);
     }
 
@@ -1442,11 +1457,21 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     {
         gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (iw->to_charge_edit));
         to_charge_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(iw->to_charge_edit));
+        /* Credit notes have their value signs reversed internally.
+         * So reverse here as well before displaying
+         */
+        if (iw->is_credit_note)
+            to_charge_amt = gnc_numeric_neg (to_charge_amt);
     }
 
     if (iw->total_cash_label)
     {
         amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CASH);
+        /* Credit notes have their value signs reversed internally.
+         * So reverse here as well before displaying
+         */
+        if (iw->is_credit_note)
+            amount = gnc_numeric_neg (amount);
         amount = gnc_numeric_sub (amount, to_charge_amt,
                                   gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND_HALF_UP);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_cash_label), amount, currency);
@@ -1455,6 +1480,11 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     if (iw->total_charge_label)
     {
         amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CARD);
+        /* Credit notes have their value signs reversed internally.
+         * So reverse here as well before displaying
+         */
+        if (iw->is_credit_note)
+            amount = gnc_numeric_neg (amount);
         amount = gnc_numeric_add (amount, to_charge_amt,
                                   gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND_HALF_UP);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_charge_label), amount, currency);
@@ -1759,14 +1789,17 @@ gnc_invoice_get_title (InvoiceWindow *iw)
         switch (iw->dialog_type)
         {
         case NEW_INVOICE:
-            wintitle = _("New Invoice");
+            wintitle = iw->is_credit_note ? _("New Credit Note")
+                                          : _("New Invoice");
             break;
         case MOD_INVOICE:
         case EDIT_INVOICE:
-            wintitle = _("Edit Invoice");
+            wintitle = iw->is_credit_note ? _("Edit Credit Note")
+                                          : _("Edit Invoice");
             break;
         case VIEW_INVOICE:
-            wintitle = _("View Invoice");
+            wintitle = iw->is_credit_note ? _("View Credit Note")
+                                          : _("View Invoice");
             break;
         }
         break;
@@ -1774,14 +1807,17 @@ gnc_invoice_get_title (InvoiceWindow *iw)
         switch (iw->dialog_type)
         {
         case NEW_INVOICE:
-            wintitle = _("New Bill");
+            wintitle = iw->is_credit_note ? _("New Credit Note")
+                                          : _("New Bill");
             break;
         case MOD_INVOICE:
         case EDIT_INVOICE:
-            wintitle = _("Edit Bill");
+            wintitle = iw->is_credit_note ? _("Edit Credit Note")
+                                          : _("Edit Bill");
             break;
         case VIEW_INVOICE:
-            wintitle = _("View Bill");
+            wintitle = iw->is_credit_note ? _("View Credit Note")
+                                          : _("View Bill");
             break;
         }
         break;
@@ -1789,14 +1825,17 @@ gnc_invoice_get_title (InvoiceWindow *iw)
         switch (iw->dialog_type)
         {
         case NEW_INVOICE:
-            wintitle = _("New Expense Voucher");
+            wintitle = iw->is_credit_note ? _("New Credit Note")
+                                          : _("New Expense Voucher");
             break;
         case MOD_INVOICE:
         case EDIT_INVOICE:
-            wintitle = _("Edit Expense Voucher");
+            wintitle = iw->is_credit_note ? _("Edit Credit Note")
+                                          : _("Edit Expense Voucher");
             break;
         case VIEW_INVOICE:
-            wintitle = _("View Expense Voucher");
+            wintitle = iw->is_credit_note ? _("View Credit Note")
+                                          : _("View Expense Voucher");
             break;
         }
         break;
@@ -2052,8 +2091,10 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     GncOwnerType owner_type;
     GncEntryLedgerType ledger_type;
     const gchar *gconf_section = NULL;
+    gboolean is_credit_note = FALSE;
 
-    invoice = gncInvoiceLookup(iw->book, &iw->invoice_guid);
+    invoice = gncInvoiceLookup (iw->book, &iw->invoice_guid);
+    is_credit_note = gncInvoiceGetIsCreditNote (invoice);
 
     iw->page = page;
 
@@ -2133,13 +2174,16 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         switch (owner_type)
         {
         case GNC_OWNER_CUSTOMER:
-            ledger_type = GNCENTRY_INVOICE_ENTRY;
+            ledger_type = is_credit_note ? GNCENTRY_CUST_CREDIT_NOTE_ENTRY
+                                         : GNCENTRY_INVOICE_ENTRY;
             break;
         case GNC_OWNER_VENDOR:
-            ledger_type = GNCENTRY_BILL_ENTRY;
+            ledger_type = is_credit_note ? GNCENTRY_VEND_CREDIT_NOTE_ENTRY
+                                         : GNCENTRY_BILL_ENTRY;
             break;
         case GNC_OWNER_EMPLOYEE:
-            ledger_type = GNCENTRY_EXPVOUCHER_ENTRY;
+            ledger_type = is_credit_note ? GNCENTRY_EMPL_CREDIT_NOTE_ENTRY
+                                         : GNCENTRY_EXPVOUCHER_ENTRY;
             break;
         default:
             g_warning ("Invalid owner type");
@@ -2150,15 +2194,18 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         switch (owner_type)
         {
         case GNC_OWNER_CUSTOMER:
-            ledger_type = GNCENTRY_INVOICE_VIEWER;
+            ledger_type = is_credit_note ? GNCENTRY_CUST_CREDIT_NOTE_VIEWER
+                                         : GNCENTRY_INVOICE_VIEWER;
             gconf_section = GCONF_SECTION_INVOICE;
             break;
         case GNC_OWNER_VENDOR:
-            ledger_type = GNCENTRY_BILL_VIEWER;
+            ledger_type = is_credit_note ? GNCENTRY_VEND_CREDIT_NOTE_VIEWER
+                                         : GNCENTRY_BILL_VIEWER;
             gconf_section = GCONF_SECTION_BILL;
             break;
         case GNC_OWNER_EMPLOYEE:
-            ledger_type = GNCENTRY_EXPVOUCHER_VIEWER;
+            ledger_type = is_credit_note ? GNCENTRY_EMPL_CREDIT_NOTE_VIEWER
+                                         : GNCENTRY_EXPVOUCHER_VIEWER;
             gconf_section = GCONF_SECTION_BILL;
             break;
         default:

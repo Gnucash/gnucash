@@ -105,16 +105,22 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
         break;
 
     case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
         /* Watch the invoice owner to see when items get added via orders */
         gnc_gui_component_watch_entity (ledger->component_id,
                                         gncOwnerGetGUID
                                         (gncInvoiceGetOwner (ledger->invoice)),
                                         QOF_EVENT_MODIFY);
     case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_BILL_VIEWER:
     case GNCENTRY_EXPVOUCHER_ENTRY:
     case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
         type = GNC_INVOICE_MODULE_NAME;
         break;
 

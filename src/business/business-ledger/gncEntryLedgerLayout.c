@@ -170,14 +170,20 @@ static void gnc_entry_ledger_layout_add_cursors (GncEntryLedger *ledger,
     case GNCENTRY_ORDER_VIEWER:
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
         num_cols = 15;
         break;
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
         num_cols = 12;
         break;
     case GNCENTRY_EXPVOUCHER_ENTRY:
     case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
         num_cols = 10;
         break;
     default:
@@ -204,6 +210,8 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
     case GNCENTRY_ORDER_VIEWER:
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
 
         curs = gnc_table_layout_get_cursor (layout, "cursor");
         gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 0);
@@ -226,6 +234,8 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
 
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
 
         curs = gnc_table_layout_get_cursor (layout, "cursor");
         gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 0);
@@ -245,6 +255,8 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
 
     case GNCENTRY_EXPVOUCHER_ENTRY:
     case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
 
         curs = gnc_table_layout_get_cursor (layout, "cursor");
         gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 0);

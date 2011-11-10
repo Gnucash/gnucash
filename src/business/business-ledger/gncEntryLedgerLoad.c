@@ -207,6 +207,8 @@ load_xfer_type_cells (GncEntryLedger *ledger)
     case GNCENTRY_ORDER_VIEWER:
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
         qf = gnc_get_shared_account_name_quickfill (root, IKEY,
                 skip_expense_acct_cb, NULL);
         store = gnc_get_shared_account_name_list_store (root, IKEY,
@@ -217,6 +219,10 @@ load_xfer_type_cells (GncEntryLedger *ledger)
     case GNCENTRY_BILL_VIEWER:
     case GNCENTRY_EXPVOUCHER_ENTRY:
     case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
     case GNCENTRY_NUM_REGISTER_TYPES:
         qf = gnc_get_shared_account_name_quickfill (root, EKEY,
                 skip_income_acct_cb, NULL);
@@ -284,6 +290,8 @@ load_description_cell (GncEntryLedger *ledger)
     {
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
         shared_quickfill = gnc_get_shared_entry_desc_quickfill(ledger->book, DESC_QF_KEY_INVOICES, TRUE);
         break;
     default:
@@ -306,7 +314,7 @@ void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
 /* XXX (FIXME): This should be in a config file! */
 /* Copy GncEntry information from the list to the rows of the Ledger. */
 /* XXX This code is a cut-n-paste job from the SplitRegister code;
- * the split-regsiter should be generalized to the point where a cut-n-paste
+ * the split-register should be generalized to the point where a cut-n-paste
  * like this isn't required, and this should be trashed.
  */
 void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
@@ -344,6 +352,9 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
         case GNCENTRY_INVOICE_ENTRY:
         case GNCENTRY_BILL_ENTRY:
         case GNCENTRY_EXPVOUCHER_ENTRY:
+        case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
 
             gnc_suspend_gui_refresh ();
 
@@ -430,7 +441,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
                 gnc_option_db_destroy (odb);
 
-                if (ledger->is_invoice)
+                if (ledger->is_cust_doc)
                 {
                     gncEntrySetInvTaxTable (blank_entry, table);
                     gncEntrySetInvTaxIncluded (blank_entry, taxincluded);
