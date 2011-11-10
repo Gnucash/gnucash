@@ -49,7 +49,6 @@ struct _gncInvoice
     char          *id;
     char          *notes;
     gboolean      active;
-    gboolean      credit_note;
 
     char          *billing_id;
     char          *printname;
@@ -78,10 +77,11 @@ struct _gncInvoiceClass
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_ID_INVOICE
+#define _GNC_MOD_NAME     GNC_ID_INVOICE
 
-#define GNC_INVOICE_ID		"gncInvoice"
-#define GNC_INVOICE_GUID	"invoice-guid"
+#define GNC_INVOICE_ID    "gncInvoice"
+#define GNC_INVOICE_GUID  "invoice-guid"
+#define GNC_INVOICE_IS_CN "credit-note"
 
 #define SET_STR(obj, member, str) { \
 	char * tmp; \
@@ -307,7 +307,6 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 
     invoice->billto.type = GNC_OWNER_CUSTOMER;
     invoice->active = TRUE;
-    invoice->credit_note = FALSE;
 
     invoice->to_charge_amount = gnc_numeric_zero();
 
@@ -321,6 +320,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     GncInvoice *invoice;
     QofBook* book;
     GList *node;
+    gint64 is_cn;
 
     g_assert(from);
     book = qof_instance_get_book(from);
@@ -335,7 +335,9 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     invoice->notes = CACHE_INSERT (from->notes);
     invoice->billing_id = CACHE_INSERT (from->billing_id);
     invoice->active = from->active;
-    invoice->credit_note = from->credit_note;
+
+    is_cn = kvp_frame_get_gint64(from->inst.kvp_data, GNC_INVOICE_IS_CN);
+    kvp_frame_set_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN, is_cn);
 
     invoice->terms = from->terms;
     gncBillTermIncRef (invoice->terms);
@@ -519,9 +521,9 @@ void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
 void gncInvoiceSetIsCreditNote (GncInvoice *invoice, gboolean credit_note)
 {
     if (!invoice) return;
-    if (invoice->credit_note == credit_note) return;
     gncInvoiceBeginEdit (invoice);
-    invoice->credit_note = credit_note;
+    kvp_frame_set_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN,
+                         credit_note ? 1 : 0);
     mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);
 }
@@ -883,11 +885,17 @@ GncInvoiceType gncInvoiceGetType (const GncInvoice *invoice)
     switch (gncInvoiceGetOwnerType (invoice))
     {
     case GNC_OWNER_CUSTOMER:
-        return (invoice->credit_note ? GNC_INVOICE_CUST_CREDIT_NOTE : GNC_INVOICE_CUST_INVOICE);
+        return (gncInvoiceGetIsCreditNote(invoice) ?
+                      GNC_INVOICE_CUST_CREDIT_NOTE :
+                      GNC_INVOICE_CUST_INVOICE);
     case GNC_OWNER_VENDOR:
-        return (invoice->credit_note ? GNC_INVOICE_VEND_CREDIT_NOTE : GNC_INVOICE_VEND_INVOICE);
+        return (gncInvoiceGetIsCreditNote(invoice) ?
+                      GNC_INVOICE_VEND_CREDIT_NOTE :
+                      GNC_INVOICE_VEND_INVOICE);
     case GNC_OWNER_EMPLOYEE:
-        return (invoice->credit_note ? GNC_INVOICE_EMPL_CREDIT_NOTE : GNC_INVOICE_EMPL_INVOICE);
+        return (gncInvoiceGetIsCreditNote(invoice) ?
+                      GNC_INVOICE_EMPL_CREDIT_NOTE :
+                      GNC_INVOICE_EMPL_INVOICE);
     default:
         return GNC_INVOICE_UNDEFINED;
     }
@@ -953,8 +961,12 @@ gboolean gncInvoiceGetActive (const GncInvoice *invoice)
 
 gboolean gncInvoiceGetIsCreditNote (const GncInvoice *invoice)
 {
+    gint64 is_cn;
     if (!invoice) return FALSE;
-    return invoice->credit_note;
+    if (kvp_frame_get_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN))
+        return TRUE;
+    else
+        return FALSE;
 }
 
 
