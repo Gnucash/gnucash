@@ -42,7 +42,7 @@ DIST_SUBDIRS = $(SUBDIRS) python
 noinst_HEADERS = \
   swig-runtime.h
 
-bin_SCRIPTS = gnc-test-env
+noinst_DATA = gnc-test-env
 
 if BUILDING_FROM_SVN
 swig-runtime.h:
