@@ -1022,15 +1022,15 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
                                            ENTRY_DATE_CELL, TRUE))
     {
         BasicCell *cell;
-        Timespec ts;
+        GDate date;
 
         cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DATE_CELL);
 
         /* commit any pending changes */
         gnc_date_cell_commit ((DateCell *) cell);
 
-        gnc_date_cell_get_date ((DateCell *) cell, &ts);
-        gncEntrySetDate (entry, ts);
+        gnc_date_cell_get_date_gdate ((DateCell *) cell, &date);
+        gncEntrySetDateGDate (entry, &date);
     }
 
     if (gnc_table_layout_get_cell_changed (ledger->table->layout,

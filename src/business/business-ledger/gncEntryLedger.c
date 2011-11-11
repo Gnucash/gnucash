@@ -327,9 +327,9 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
     ledger->blank_entry_edited = FALSE;
 
     {
-        Timespec ts = { 0, 0 };
-        ts.tv_sec = time (NULL);
-        ledger->last_date_entered = timespecCanonicalDayTime (ts);
+        GDate *today = gnc_g_date_new_today();
+        ledger->last_date_entered = *today;
+        g_date_free(today);
     }
 
     {
@@ -554,7 +554,7 @@ void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
      * to understand why.
      */
     if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR)
-        ledger->last_date_entered = gncInvoiceGetDateOpened (invoice);
+        ledger->last_date_entered = timespec_to_gdate(gncInvoiceGetDateOpened (invoice));
 
     if (!ledger->query && invoice)
         create_invoice_query (ledger);
@@ -927,7 +927,7 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
 
         new_entry = gncEntryCreate (ledger->book);
         gncEntryCopy (entry, new_entry);
-        gncEntrySetDate (new_entry, ledger->last_date_entered);
+        gncEntrySetDateGDate (new_entry, &ledger->last_date_entered);
 
         /* We also must set a new DateEntered on the new entry
          * because otherwise the ordering is not deterministic */

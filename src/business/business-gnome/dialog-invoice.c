@@ -2451,10 +2451,10 @@ static void
 set_gncEntry_date(gpointer data, gpointer user_data)
 {
     GncEntry *entry = data;
-    const Timespec* new_date = user_data;
+    const GDate* new_date = user_data;
     //g_warning("Modifying date for entry with desc=\"%s\"", gncEntryGetDescription(entry));
 
-    gncEntrySetDate(entry, *new_date);
+    gncEntrySetDateGDate(entry, new_date);
     /*gncEntrySetDateEntered(entry, *new_date); - don't modify this
      * because apparently it defines the ordering of the entries,
      * which we don't want to change. */
@@ -2468,6 +2468,7 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice)
     Timespec new_date;
     gchar *new_id;
     GList *node;
+    GDate new_date_gdate;
 
     g_assert(old_invoice);
 
@@ -2495,12 +2496,13 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice)
 
     // Modify the date to today
     timespecFromTime_t(&new_date, gnc_timet_get_today_start());
+    new_date_gdate = timespec_to_gdate(new_date);
     gncInvoiceSetDateOpened(new_invoice, new_date);
 
     // Also modify the date of all entries to today
     //g_warning("We have %d entries", g_list_length(gncInvoiceGetEntries(new_invoice)));
     g_list_foreach(gncInvoiceGetEntries(new_invoice),
-                   &set_gncEntry_date, &new_date);
+                   &set_gncEntry_date, &new_date_gdate);
 
     // Now open that newly created invoice in the "edit" window
     iw = gnc_ui_invoice_edit (new_invoice);

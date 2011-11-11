@@ -665,7 +665,11 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         // add entry to invoice/bill
         entry = gncEntryCreate (book);
         qof_scan_date (date, &day, &month, &year);
-        gncEntrySetDate (entry, gnc_dmy2timespec (day, month, year));
+        {
+            GDate *date = g_date_new_dmy(day, month, year);
+            gncEntrySetDateGDate (entry, date);
+            g_date_free (date);
+        }
         timespecFromTime_t (&today, time (NULL));	// set today to the current date
         gncEntrySetDateEntered (entry, today);
         gncEntrySetDescription (entry, desc);

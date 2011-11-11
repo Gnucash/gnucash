@@ -38,7 +38,7 @@ struct GncEntryLedger_s
     gboolean      full_refresh;  /* Is a full refresh ok? */
     gint          component_id;  /* To register for events */
 
-    Timespec      last_date_entered;
+    GDate       last_date_entered;
 
     GncEntry    * hint_entry;    /* A Hint for where to display */
 
