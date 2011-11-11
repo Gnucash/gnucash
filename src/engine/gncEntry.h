@@ -96,6 +96,11 @@ void gncEntryDestroy (GncEntry *entry);
 
 /** @name Generic (shared) data
  @{ */
+/** Set the date of this entry */
+void gncEntrySetDateGDate (GncEntry *entry, const GDate* date);
+/** DEPRECATED - use gncEntrySetDateGDate() instead! (Because the time-of-day
+is a misleading extra information. We are only dealing with the day
+information! */
 void gncEntrySetDate (GncEntry *entry, Timespec date);
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date);
 void gncEntrySetDescription (GncEntry *entry, const char *desc);
@@ -137,6 +142,11 @@ void gncEntrySetBillPayment (GncEntry *entry, GncEntryPaymentType type);
 /* GET FUNCTIONS */
 /** @name Generic (shared) data
  @{ */
+/** Returns the day of this entry */
+GDate gncEntryGetDateGDate (const GncEntry *entry);
+/** DEPRECATED - use gncEntryGetDateGDate() instead! (Because the time-of-day
+is a misleading extra information. We are only dealing with the day
+information! */
 Timespec gncEntryGetDate (const GncEntry *entry);
 Timespec gncEntryGetDateEntered (const GncEntry *entry);
 const char * gncEntryGetDescription (const GncEntry *entry);

@@ -445,6 +445,19 @@ void gncEntrySetDate (GncEntry *entry, Timespec date)
     }
 }
 
+void gncEntrySetDateGDate (GncEntry *entry, const GDate* date)
+{
+    if (!entry || !date || !g_date_valid(date))
+        return;
+
+    /* Watch out: Here we are deviating from the initial convention that a
+    GDate always converts to the start time of the day. Instead, the GDate is
+    converted to "noon" on the respective date. This is not nice, but this
+    convention was used for the Timespec of GncEntry all the time, so we better
+    stick to it.*/
+    gncEntrySetDate(entry, timespecCanonicalDayTime(gdate_to_timespec(*date)));
+}
+
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date)
 {
     if (!entry) return;
@@ -802,6 +815,11 @@ Timespec gncEntryGetDate (const GncEntry *entry)
     ts.tv_nsec = 0;
     if (!entry) return ts;
     return entry->date;
+}
+
+GDate gncEntryGetDateGDate(const GncEntry *entry)
+{
+    return timespec_to_gdate(gncEntryGetDate(entry));
 }
 
 Timespec gncEntryGetDateEntered (const GncEntry *entry)
