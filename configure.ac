@@ -867,9 +867,7 @@ then
   fi
   GNOME_COMPILE_WARNINGS
 
-  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.16)
-  # Should be >= 2.18.1 once we got the win32 webkit build with newer
-  # gtk working.
+  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.18.1)
   AS_SCRUB_INCLUDE(GTK_CFLAGS)
   AC_SUBST(GTK_CFLAGS)
   AC_SUBST(GTK_LIBS)
