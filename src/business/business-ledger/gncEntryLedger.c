@@ -1004,10 +1004,26 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
      * up the current sort ordering from here, so I cowardly refuse to
      * tweak the EntryDate in this case. */
     {
-        Timespec t1 = gncEntryGetDate(current),
-                 t2 = gncEntryGetDate(target);
-        if (!timespec_equal(&t1, &t2))
+        Timespec t1, t2;
+        GDate d1 = gncEntryGetDateGDate(current),
+              d2 = gncEntryGetDateGDate(target);
+        if (g_date_compare(&d1, &d2) != 0)
             return;
+
+        /* Special treatment if the equality doesn't hold if we access the
+        dates as timespec. See the comment in gncEntrySetDateGDate() for the
+        reason: Some code used the timespec at noon for the EntryDate, other
+        code used the timespec at the start of day. */
+        t1 = gncEntryGetDate(current);
+        t2 = gncEntryGetDate(target);
+        if (!timespec_equal(&t1, &t2))
+        {
+            /* Timespecs are not equal, even though the GDates were equal? Then
+            we set the GDates again. This will force the timespecs to be equal
+            as well. */
+            gncEntrySetDateGDate(current, &d1);
+            gncEntrySetDateGDate(target, &d2);
+        }
     }
 
     /*g_warning("Ok, current desc='%s' target desc='%s'",
