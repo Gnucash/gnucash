@@ -1476,6 +1476,15 @@ gnc_dmy2timespec (int day, int month, int year)
     return gnc_dmy2timespec_internal (day, month, year, TRUE);
 }
 
+GDate gnc_dmy2gdate (gint day, gint month, gint year)
+{
+    GDate result;
+    g_date_set_day (&result, day);
+    g_date_set_month (&result, month);
+    g_date_set_year (&result, year);
+    return result;
+}
+
 Timespec
 gnc_dmy2timespec_end (int day, int month, int year)
 {
@@ -1539,6 +1548,13 @@ GDate timespec_to_gdate (Timespec ts)
     g_date_clear(&result, 1);
     g_date_set_time_t(&result, timespecToTime_t(ts));
     g_assert(g_date_valid(&result));
+    return result;
+}
+
+GDate* gnc_g_date_new_today ()
+{
+    GDate *result = g_date_new();
+    g_date_set_time_t(result, time(NULL));
     return result;
 }
 

@@ -221,11 +221,19 @@ void timespecFromTime_t( Timespec *ts, time_t t );
 /** Turns a Timespec into a time_t */
 time_t timespecToTime_t (Timespec ts);
 
+/** Returns a newly allocated date of the current clock time, taken from
+ * time(2). The caller must g_date_free() the object afterwards. */
+GDate* gnc_g_date_new_today (void);
+
 /** Turns a Timespec into a GDate */
 GDate timespec_to_gdate (Timespec ts);
 
 /** Turns a GDate into a Timespec  */
 Timespec gdate_to_timespec (GDate d);
+
+/** Convert a day, month, and year to a GDate. Similar to g_date_new_dmy() but
+ * returns by-value and not by pointer. */
+GDate gnc_dmy2gdate (gint day, gint month, gint year);
 
 /** Convert a day, month, and year to a Timespec */
 Timespec gnc_dmy2timespec (gint day, gint month, gint year);
