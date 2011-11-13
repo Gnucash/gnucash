@@ -9,6 +9,7 @@ include $(top_srcdir)/test-templates/Makefile.decl
 MODULEPATH = src/libqof/qof
 
 test_qof_SOURCES = \
+	test-gnc-date.c \
 	test-qof.c \
 	test-qofbook.c \
 	test-qofinstance.c \
