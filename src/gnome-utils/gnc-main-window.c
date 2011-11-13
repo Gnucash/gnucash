@@ -1359,6 +1359,8 @@ gnc_main_window_generate_title (GncMainWindow *window)
     gchar *filename = NULL;
     const gchar *book_id = NULL;
     const gchar *dirty = "";
+    const gchar *readonly_text = NULL;
+    gchar *readonly;
     gchar *title;
     GtkAction* action;
 
@@ -1380,7 +1382,16 @@ gnc_main_window_generate_title (GncMainWindow *window)
                 gtk_action_set_sensitive(action, TRUE);
             }
         }
+        if (qof_book_is_readonly(book))
+        {
+            /* Translators: This string is shown in the window title if this
+            document is, well, read-only. */
+            readonly_text = _("(read-only)");
+        }
     }
+    readonly = (readonly_text != NULL)
+               ? g_strdup_printf(" %s", readonly_text)
+               : g_strdup("");
 
     if (!book_id)
         filename = g_strdup(_("Unsaved Book"));
@@ -1408,14 +1419,15 @@ gnc_main_window_generate_title (GncMainWindow *window)
     {
         /* The Gnome HIG 2.0 recommends the application name not be used. (p16)
          * but several developers prefer to use it anyway. */
-        title = g_strdup_printf("%s%s - %s - GnuCash", dirty, filename,
+        title = g_strdup_printf("%s%s%s - %s - GnuCash", dirty, filename, readonly,
                                 gnc_plugin_page_get_page_name(page));
     }
     else
     {
-        title = g_strdup_printf("%s%s - GnuCash", dirty, filename);
+        title = g_strdup_printf("%s%s%s - GnuCash", dirty, filename, readonly);
     }
     g_free( filename );
+    g_free(readonly);
 
     return title;
 }

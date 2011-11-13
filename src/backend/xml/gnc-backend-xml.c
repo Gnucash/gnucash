@@ -340,8 +340,28 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
 
     if (!ignore_lock && !gnc_xml_be_get_file_lock (be))
     {
+        // We should not ignore the lock, but couldn't get it. The
+        // be_get_file_lock() already set the appropriate backend_error in this
+        // case, so we just return here.
         g_free (be->lockfile);
         be->lockfile = NULL;
+
+        if (force)
+        {
+            QofBackendError berror = qof_backend_get_error(be_start);
+            if (berror == ERR_BACKEND_LOCKED || berror == ERR_BACKEND_READONLY)
+            {
+                // Even though we couldn't get the lock, we were told to force
+                // the opening. This is ok because the FORCE argument is
+                // changed only if the caller wants a read-only book.
+            }
+            else
+            {
+                // Unknown error. Push it again on the error stack.
+                qof_backend_set_error(be_start, berror);
+            }
+        }
+
         LEAVE("");
         return;
     }
@@ -357,6 +377,12 @@ xml_session_end(QofBackend *be_start)
 {
     FileBackend *be = (FileBackend*)be_start;
     ENTER (" ");
+
+    if ( be->primary_book && qof_book_is_readonly( be->primary_book ) )
+    {
+        qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_READONLY );
+        return;
+    }
 
     if (be->linkfile)
         g_unlink (be->linkfile);
@@ -656,6 +682,14 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
 
     ENTER (" book=%p file=%s", book, datafile);
 
+    if (book && qof_book_is_readonly(book))
+    {
+        /* Are we read-only? Don't continue in this case. */
+        qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_READONLY );
+        LEAVE("");
+        return FALSE;
+    }
+
     /* If the book is 'clean', recently saved, then don't save again. */
     /* XXX this is currently broken due to faulty 'Save As' logic. */
     /* if (FALSE == qof_book_not_saved (book)) return FALSE; */
@@ -937,6 +971,13 @@ xml_sync_all(QofBackend* be, QofBook *book)
      */
     if (NULL == fbe->primary_book) fbe->primary_book = book;
     if (book != fbe->primary_book) return;
+
+    if (qof_book_is_readonly( fbe->primary_book ) )
+    {
+        /* Are we read-only? Don't continue in this case. */
+        qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_READONLY );
+        return;
+    }
 
     gnc_xml_be_write_to_file (fbe, book, fbe->fullpath, TRUE);
     gnc_xml_be_remove_old_files (fbe);
