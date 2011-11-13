@@ -239,25 +239,33 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     {
         GWEN_DIALOG *dlg =
             AB_SetupDialog_new(banking);
-        int rv;
 
         if (AB_Banking_OnlineInit(banking) != 0)
         {
             PERR("Got error on AB_Banking_OnlineInit!");
         }
 
-        rv = GWEN_Gui_ExecDialog(dlg, 0);
-        if (rv <= 0)
+        if (!dlg)
         {
-            /* Dialog was aborted/rejected */
-            druid_disable_next_button(info);
+            PERR("Could not lookup Setup Dialog of aqbanking!");
+            /* Dialog failed, but maybe the user wants to continue anyway */
+            druid_enable_next_button(info);
         }
         else
         {
-            /* Dialog accepted, all fine */
-            druid_enable_next_button(info);
+            int rv = GWEN_Gui_ExecDialog(dlg, 0);
+            if (rv <= 0)
+            {
+                /* Dialog was aborted/rejected */
+                druid_disable_next_button(info);
+            }
+            else
+            {
+                /* Dialog accepted, all fine */
+                druid_enable_next_button(info);
+            }
+            GWEN_Dialog_free(dlg);
         }
-        GWEN_Dialog_free(dlg);
 
         if (AB_Banking_OnlineFini(banking) != 0)
         {
