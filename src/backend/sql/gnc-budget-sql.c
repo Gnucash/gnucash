@@ -275,7 +275,7 @@ save_budget_amounts( GncSqlBackend* be, GncBudget* budget )
 
     info.budget = budget;
     num_periods = gnc_budget_get_num_periods( budget );
-    descendants = gnc_account_get_descendants( gnc_book_get_root_account( be->primary_book ) );
+    descendants = gnc_account_get_descendants( gnc_book_get_root_account( be->book ) );
     for ( node = descendants; node != NULL && is_ok; node = g_list_next(node) )
     {
         guint i;
@@ -309,11 +309,11 @@ load_single_budget( GncSqlBackend* be, GncSqlRow* row )
     guid = gnc_sql_load_guid( be, row );
     if ( guid != NULL )
     {
-        pBudget = gnc_budget_lookup( guid, be->primary_book );
+        pBudget = gnc_budget_lookup( guid, be->book );
     }
     if ( pBudget == NULL )
     {
-        pBudget = gnc_budget_new( be->primary_book );
+        pBudget = gnc_budget_new( be->book );
     }
 
     gnc_budget_begin_edit( pBudget );
@@ -472,7 +472,7 @@ write_budgets( GncSqlBackend* be )
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_collection_foreach( qof_book_get_collection( be->primary_book, GNC_ID_BUDGET ),
+    qof_collection_foreach( qof_book_get_collection( be->book, GNC_ID_BUDGET ),
                             (QofInstanceForeachCB)do_save_budget, &data );
 
     return data.is_ok;
@@ -497,7 +497,7 @@ load_budget_guid( const GncSqlBackend* be, GncSqlRow* row,
     if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
     {
         (void)string_to_guid( g_value_get_string( val ), &guid );
-        budget = gnc_budget_lookup( &guid, be->primary_book );
+        budget = gnc_budget_lookup( &guid, be->book );
         if ( budget != NULL )
         {
             if ( table_row->gobj_param_name != NULL )

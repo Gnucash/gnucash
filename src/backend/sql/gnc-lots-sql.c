@@ -104,7 +104,7 @@ load_single_lot( GncSqlBackend* be, GncSqlRow* row )
     g_return_val_if_fail( be != NULL, NULL );
     g_return_val_if_fail( row != NULL, NULL );
 
-    lot = gnc_lot_new( be->primary_book );
+    lot = gnc_lot_new( be->book );
 
     gnc_lot_begin_edit( lot );
     gnc_sql_load_object( be, row, GNC_ID_LOT, lot, col_table );
@@ -207,7 +207,7 @@ write_lots( GncSqlBackend* be )
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_collection_foreach( qof_book_get_collection( be->primary_book, GNC_ID_LOT ),
+    qof_collection_foreach( qof_book_get_collection( be->book, GNC_ID_LOT ),
                             (QofInstanceForeachCB)do_save_lot, &data );
     return data.is_ok;
 }
@@ -231,7 +231,7 @@ load_lot_guid( const GncSqlBackend* be, GncSqlRow* row,
     if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
     {
         (void)string_to_guid( g_value_get_string( val ), &guid );
-        lot = gnc_lot_lookup( &guid, be->primary_book );
+        lot = gnc_lot_lookup( &guid, be->book );
         if ( lot != NULL )
         {
             if ( table_row->gobj_param_name != NULL )

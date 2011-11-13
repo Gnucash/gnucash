@@ -53,7 +53,7 @@ struct FileBackend_struct
     char *linkfile;
     int lockfd;
 
-    QofBook *primary_book;  /* The primary, main open book */
+    QofBook *book;  /* The primary, main open book */
 
     XMLFileRetentionType file_retention_type;
     int file_retention_days;

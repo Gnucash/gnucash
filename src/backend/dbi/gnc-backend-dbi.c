@@ -1693,7 +1693,7 @@ init_sql_backend( GncDbiBackend* dbi_be )
     gnc_sql_init( &dbi_be->sql_be );
 
     dbi_be->sql_be.conn = NULL;
-    dbi_be->sql_be.primary_book = NULL;
+    dbi_be->sql_be.book = NULL;
 }
 
 static QofBackend*

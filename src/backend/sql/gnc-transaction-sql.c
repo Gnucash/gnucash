@@ -210,10 +210,10 @@ load_single_split( GncSqlBackend* be, GncSqlRow* row )
     if ( guid == NULL ) return NULL;
     split_guid = *guid;
 
-    pSplit = xaccSplitLookup( &split_guid, be->primary_book );
+    pSplit = xaccSplitLookup( &split_guid, be->book );
     if ( pSplit == NULL )
     {
-        pSplit = xaccMallocSplit( be->primary_book );
+        pSplit = xaccMallocSplit( be->book );
     }
 
     /* If the split is dirty, don't overwrite it */
@@ -222,7 +222,7 @@ load_single_split( GncSqlBackend* be, GncSqlRow* row )
         gnc_sql_load_object( be, row, GNC_ID_SPLIT, pSplit, split_col_table );
     }
 
-    /*# -ifempty */g_assert( pSplit == xaccSplitLookup( &split_guid, be->primary_book ) );
+    /*# -ifempty */g_assert( pSplit == xaccSplitLookup( &split_guid, be->book ) );
 
     return pSplit;
 }
@@ -287,17 +287,17 @@ load_single_tx( GncSqlBackend* be, GncSqlRow* row )
     tx_guid = *guid;
 
     // Don't overwrite the transaction if it's already been loaded (and possibly modified).
-    pTx = xaccTransLookup( &tx_guid, be->primary_book );
+    pTx = xaccTransLookup( &tx_guid, be->book );
     if ( pTx != NULL )
     {
         return NULL;
     }
 
-    pTx = xaccMallocTransaction( be->primary_book );
+    pTx = xaccMallocTransaction( be->book );
     xaccTransBeginEdit( pTx );
     gnc_sql_load_object( be, row, GNC_ID_TRANS, pTx, tx_col_table );
 
-    g_assert( pTx == xaccTransLookup( &tx_guid, be->primary_book ) );
+    g_assert( pTx == xaccTransLookup( &tx_guid, be->book ) );
 
     return pTx;
 }
@@ -389,7 +389,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
         Transaction* tx;
         GSList* bal_list = NULL;
         GSList* nextbal;
-        Account* root = gnc_book_get_root_account( be->primary_book );
+        Account* root = gnc_book_get_root_account( be->book );
 
 #if LOAD_TRANSACTIONS_AS_NEEDED
         qof_event_suspend();
@@ -1335,7 +1335,7 @@ set_acct_bal_account_from_guid( gpointer pObject, gpointer pValue )
     g_return_if_fail( pObject != NULL );
     g_return_if_fail( pValue != NULL );
 
-    bal->acct = xaccAccountLookup( guid, bal->be->primary_book );
+    bal->acct = xaccAccountLookup( guid, bal->be->book );
 }
 
 static void
@@ -1498,7 +1498,7 @@ load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
     if ( guid_str != NULL )
     {
         (void)string_to_guid( guid_str, &guid );
-        tx = xaccTransLookup( &guid, be->primary_book );
+        tx = xaccTransLookup( &guid, be->book );
 
         // If the transaction is not found, try loading it
         if ( tx == NULL )
@@ -1511,7 +1511,7 @@ load_tx_guid( const GncSqlBackend* be, GncSqlRow* row,
             stmt = gnc_sql_create_statement_from_sql( (GncSqlBackend*)be, buf );
             g_free( buf );
             query_transactions( (GncSqlBackend*)be, stmt );
-            tx = xaccTransLookup( &guid, be->primary_book );
+            tx = xaccTransLookup( &guid, be->book );
         }
 
         if ( tx != NULL )

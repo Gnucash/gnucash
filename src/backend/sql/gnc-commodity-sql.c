@@ -115,7 +115,7 @@ set_quote_source_name( gpointer pObject, gpointer pValue )
 static /*@ dependent @*/ gnc_commodity*
 load_single_commodity( GncSqlBackend* be, GncSqlRow* row )
 {
-    QofBook* pBook = be->primary_book;
+    QofBook* pBook = be->book;
     gnc_commodity* pCommodity;
 
     pCommodity = gnc_commodity_new( pBook, NULL, NULL, NULL, NULL, 100 );
@@ -133,7 +133,7 @@ load_all_commodities( GncSqlBackend* be )
     GncSqlResult* result;
     gnc_commodity_table* pTable;
 
-    pTable = gnc_commodity_table_get_table( be->primary_book );
+    pTable = gnc_commodity_table_get_table( be->book );
     stmt = gnc_sql_create_select_statement( be, COMMODITIES_TABLE );
     if ( stmt == NULL ) return;
     result = gnc_sql_execute_select_statement( be, stmt );
@@ -278,7 +278,7 @@ load_commodity_guid( const GncSqlBackend* be, GncSqlRow* row,
     if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
     {
         (void)string_to_guid( g_value_get_string( val ), &guid );
-        commodity = gnc_commodity_find_commodity_by_guid( &guid, be->primary_book );
+        commodity = gnc_commodity_find_commodity_by_guid( &guid, be->book );
         if ( commodity != NULL )
         {
             if ( table_row->gobj_param_name != NULL )

@@ -102,10 +102,10 @@ load_single_invoice( GncSqlBackend* be, GncSqlRow* row )
     g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    pInvoice = gncInvoiceLookup( be->primary_book, guid );
+    pInvoice = gncInvoiceLookup( be->book, guid );
     if ( pInvoice == NULL )
     {
-        pInvoice = gncInvoiceCreate( be->primary_book );
+        pInvoice = gncInvoiceCreate( be->book );
     }
     gnc_sql_load_object( be, row, GNC_ID_INVOICE, pInvoice, col_table );
     qof_instance_mark_clean( QOF_INSTANCE(pInvoice) );
@@ -122,7 +122,7 @@ load_all_invoices( GncSqlBackend* be )
 
     g_return_if_fail( be != NULL );
 
-    pBook = be->primary_book;
+    pBook = be->book;
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );
@@ -277,7 +277,7 @@ write_invoices( GncSqlBackend* be )
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_object_foreach( GNC_ID_INVOICE, be->primary_book, write_single_invoice, &data );
+    qof_object_foreach( GNC_ID_INVOICE, be->book, write_single_invoice, &data );
 
     return data.is_ok;
 }
@@ -301,7 +301,7 @@ load_invoice_guid( const GncSqlBackend* be, GncSqlRow* row,
     if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
     {
         string_to_guid( g_value_get_string( val ), &guid );
-        invoice = gncInvoiceLookup( be->primary_book, &guid );
+        invoice = gncInvoiceLookup( be->book, &guid );
         if ( invoice != NULL )
         {
             if ( table_row->gobj_param_name != NULL )

@@ -169,11 +169,11 @@ load_single_account( GncSqlBackend* be, GncSqlRow* row,
     guid = gnc_sql_load_guid( be, row );
     if ( guid != NULL )
     {
-        pAccount = xaccAccountLookup( guid, be->primary_book );
+        pAccount = xaccAccountLookup( guid, be->book );
     }
     if ( pAccount == NULL )
     {
-        pAccount = xaccMallocAccount( be->primary_book );
+        pAccount = xaccMallocAccount( be->book );
     }
     xaccAccountBeginEdit( pAccount );
     gnc_sql_load_object( be, row, GNC_ID_ACCOUNT, pAccount, col_table );
@@ -182,7 +182,7 @@ load_single_account( GncSqlBackend* be, GncSqlRow* row,
     /* If we don't have a parent and this isn't the root account, it might be because the parent
        account hasn't been loaded yet.  Remember the account and its parent guid for later. */
     if ( gnc_account_get_parent( pAccount ) == NULL
-            && pAccount != gnc_book_get_root_account( be->primary_book ) )
+            && pAccount != gnc_book_get_root_account( be->book ) )
     {
         account_parent_guid_struct* s = g_malloc( (gsize)sizeof(account_parent_guid_struct) );
         g_assert( s != NULL );
@@ -210,7 +210,7 @@ load_all_accounts( GncSqlBackend* be )
 
     ENTER( "" );
 
-    pBook = be->primary_book;
+    pBook = be->book;
     pTable = gnc_commodity_table_get_table( pBook );
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
@@ -256,7 +256,7 @@ load_all_accounts( GncSqlBackend* be )
                 for ( elem = l_accounts_needing_parents; elem != NULL; )
                 {
                     account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
-                    pParent = xaccAccountLookup( &s->guid, be->primary_book );
+                    pParent = xaccAccountLookup( &s->guid, be->book );
                     if ( pParent != NULL )
                     {
                         GList* next_elem;
@@ -416,7 +416,7 @@ load_account_guid( const GncSqlBackend* be, GncSqlRow* row,
     if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
     {
         (void)string_to_guid( g_value_get_string( val ), &guid );
-        account = xaccAccountLookup( &guid, be->primary_book );
+        account = xaccAccountLookup( &guid, be->book );
         if ( account != NULL )
         {
             if ( table_row->gobj_param_name != NULL )

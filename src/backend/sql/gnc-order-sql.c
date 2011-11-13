@@ -76,10 +76,10 @@ load_single_order( GncSqlBackend* be, GncSqlRow* row )
     g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    pOrder = gncOrderLookup( be->primary_book, guid );
+    pOrder = gncOrderLookup( be->book, guid );
     if ( pOrder == NULL )
     {
-        pOrder = gncOrderCreate( be->primary_book );
+        pOrder = gncOrderCreate( be->book );
     }
     gnc_sql_load_object( be, row, GNC_ID_ORDER, pOrder, col_table );
     qof_instance_mark_clean( QOF_INSTANCE(pOrder) );
@@ -96,7 +96,7 @@ load_all_orders( GncSqlBackend* be )
 
     g_return_if_fail( be != NULL );
 
-    pBook = be->primary_book;
+    pBook = be->book;
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );
@@ -194,7 +194,7 @@ write_orders( GncSqlBackend* be )
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_object_foreach( GNC_ID_ORDER, be->primary_book, write_single_order, &data );
+    qof_object_foreach( GNC_ID_ORDER, be->book, write_single_order, &data );
 
     return data.is_ok;
 }
@@ -218,7 +218,7 @@ load_order_guid( const GncSqlBackend* be, GncSqlRow* row,
     if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
     {
         string_to_guid( g_value_get_string( val ), &guid );
-        order = gncOrderLookup( be->primary_book, &guid );
+        order = gncOrderLookup( be->book, &guid );
         if ( order != NULL )
         {
             if ( table_row->gobj_param_name != NULL )

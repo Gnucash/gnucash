@@ -292,10 +292,10 @@ load_single_taxtable( GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail( row != NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    tt = gncTaxTableLookup( be->primary_book, guid );
+    tt = gncTaxTableLookup( be->book, guid );
     if ( tt == NULL )
     {
-        tt = gncTaxTableCreate( be->primary_book );
+        tt = gncTaxTableCreate( be->book );
     }
     gnc_sql_load_object( be, row, GNC_ID_TAXTABLE, tt, tt_col_table );
     gnc_sql_slots_load( be, QOF_INSTANCE(tt) );
@@ -528,7 +528,7 @@ write_taxtables( GncSqlBackend* be )
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_object_foreach( GNC_ID_TAXTABLE, be->primary_book, save_next_taxtable, &data );
+    qof_object_foreach( GNC_ID_TAXTABLE, be->book, save_next_taxtable, &data );
 
     return data.is_ok;
 }
@@ -552,7 +552,7 @@ load_taxtable_guid( const GncSqlBackend* be, GncSqlRow* row,
     if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
     {
         string_to_guid( g_value_get_string( val ), &guid );
-        taxtable = gncTaxTableLookup( be->primary_book, &guid );
+        taxtable = gncTaxTableLookup( be->book, &guid );
         if ( taxtable != NULL )
         {
             if ( table_row->gobj_param_name != NULL )

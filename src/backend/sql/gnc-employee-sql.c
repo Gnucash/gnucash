@@ -85,10 +85,10 @@ load_single_employee( GncSqlBackend* be, GncSqlRow* row )
     g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    pEmployee = gncEmployeeLookup( be->primary_book, guid );
+    pEmployee = gncEmployeeLookup( be->book, guid );
     if ( pEmployee == NULL )
     {
-        pEmployee = gncEmployeeCreate( be->primary_book );
+        pEmployee = gncEmployeeCreate( be->book );
     }
     gnc_sql_load_object( be, row, GNC_ID_EMPLOYEE, pEmployee, col_table );
     qof_instance_mark_clean( QOF_INSTANCE(pEmployee) );
@@ -106,7 +106,7 @@ load_all_employees( GncSqlBackend* be )
 
     g_return_if_fail( be != NULL );
 
-    pBook = be->primary_book;
+    pBook = be->book;
     pTable = gnc_commodity_table_get_table( pBook );
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
@@ -259,7 +259,7 @@ write_employees( GncSqlBackend* be )
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_object_foreach( GNC_ID_EMPLOYEE, be->primary_book, write_single_employee, &data );
+    qof_object_foreach( GNC_ID_EMPLOYEE, be->book, write_single_employee, &data );
 
     return data.is_ok;
 }

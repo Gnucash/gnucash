@@ -378,7 +378,7 @@ xml_session_end(QofBackend *be_start)
     FileBackend *be = (FileBackend*)be_start;
     ENTER (" ");
 
-    if ( be->primary_book && qof_book_is_readonly( be->primary_book ) )
+    if ( be->book && qof_book_is_readonly( be->book ) )
     {
         qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_READONLY );
         return;
@@ -959,20 +959,18 @@ static void
 xml_sync_all(QofBackend* be, QofBook *book)
 {
     FileBackend *fbe = (FileBackend *) be;
-    ENTER ("book=%p, primary=%p", book, fbe->primary_book);
+    ENTER ("book=%p, fbe->book=%p", book, fbe->book);
 
     /* We make an important assumption here, that we might want to change
      * in the future: when the user says 'save', we really save the one,
-     * the only, the current open book, and nothing else.  We do this
-     * because we assume that any other books that we are dealing with
-     * are 'read-only', non-editable, because they are closed books.
-     * If we ever want to have more than one book open read-write,
-     * this will have to change.
+     * the only, the current open book, and nothing else. In any case the plans
+     * for multiple books have been removed in the meantime and there is just one
+     * book, no more.
      */
-    if (NULL == fbe->primary_book) fbe->primary_book = book;
-    if (book != fbe->primary_book) return;
+    if (NULL == fbe->book) fbe->book = book;
+    if (book != fbe->book) return;
 
-    if (qof_book_is_readonly( fbe->primary_book ) )
+    if (qof_book_is_readonly( fbe->book ) )
     {
         /* Are we read-only? Don't continue in this case. */
         qof_backend_set_error( (QofBackend*)be, ERR_BACKEND_READONLY );
@@ -1102,7 +1100,7 @@ gnc_xml_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType l
     if (loadType != LOAD_TYPE_INITIAL_LOAD) return;
 
     error = ERR_BACKEND_NO_ERR;
-    be->primary_book = book;
+    be->book = book;
 
     switch (gnc_xml_be_determine_file_type(be->fullpath))
     {
@@ -1282,7 +1280,7 @@ gnc_backend_new(void)
     gnc_be->linkfile = NULL;
     gnc_be->lockfd = -1;
 
-    gnc_be->primary_book = NULL;
+    gnc_be->book = NULL;
 
     gnc_be->file_retention_days = (int)gnc_gconf_get_float(GCONF_GENERAL, KEY_RETAIN_DAYS, NULL);
     gnc_be->file_compression = gnc_gconf_get_bool(GCONF_GENERAL, KEY_FILE_COMPRESSION, NULL);

@@ -55,7 +55,7 @@ struct GncSqlBackend
     QofBackend be;				/**< QOF backend */
     GncSqlConnection* conn;		/**< SQL connection */
     /*@ dependent @*/
-    QofBook *primary_book;	/**< The primary, main open book */
+    QofBook *book;	/**< The primary, main open book */
     gboolean loading;				/**< We are performing an initial load */
     gboolean in_query;			/**< We are processing a query */
     gboolean is_pristine_db;		/**< Are we saving to a new pristine db? */

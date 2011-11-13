@@ -148,7 +148,7 @@ load_single_book( GncSqlBackend* be, GncSqlRow* row )
 
     guid = gnc_sql_load_guid( be, row );
 
-    pBook = be->primary_book;
+    pBook = be->book;
     if ( pBook == NULL )
     {
         pBook = qof_book_new();
@@ -182,7 +182,7 @@ load_all_books( GncSqlBackend* be )
             // If there are no rows, try committing the book
             if ( row == NULL )
             {
-                (void)gnc_sql_save_book( be, QOF_INSTANCE(be->primary_book) );
+                (void)gnc_sql_save_book( be, QOF_INSTANCE(be->book) );
             }
             else
             {

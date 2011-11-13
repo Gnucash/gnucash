@@ -187,10 +187,10 @@ load_single_billterm( GncSqlBackend* be, GncSqlRow* row,
     g_return_val_if_fail( row != NULL, NULL );
 
     guid = gnc_sql_load_guid( be, row );
-    pBillTerm = gncBillTermLookup( be->primary_book, guid );
+    pBillTerm = gncBillTermLookup( be->book, guid );
     if ( pBillTerm == NULL )
     {
-        pBillTerm = gncBillTermCreate( be->primary_book );
+        pBillTerm = gncBillTermCreate( be->book );
     }
     gnc_sql_load_object( be, row, GNC_ID_BILLTERM, pBillTerm, col_table );
 
@@ -229,7 +229,7 @@ load_all_billterms( GncSqlBackend* be )
 
     g_return_if_fail( be != NULL );
 
-    pBook = be->primary_book;
+    pBook = be->book;
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );
@@ -312,7 +312,7 @@ write_billterms( GncSqlBackend* be )
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_object_foreach( GNC_ID_BILLTERM, be->primary_book, do_save_billterm, &data );
+    qof_object_foreach( GNC_ID_BILLTERM, be->book, do_save_billterm, &data );
     return data.is_ok;
 }
 
@@ -369,7 +369,7 @@ load_billterm_guid( const GncSqlBackend* be, GncSqlRow* row,
     if ( val != NULL && G_VALUE_HOLDS_STRING( val ) && g_value_get_string( val ) != NULL )
     {
         string_to_guid( g_value_get_string( val ), &guid );
-        term = gncBillTermLookup( be->primary_book, &guid );
+        term = gncBillTermLookup( be->book, &guid );
         if ( term != NULL )
         {
             if ( table_row->gobj_param_name != NULL )
