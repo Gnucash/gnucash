@@ -1975,6 +1975,13 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
     dialog_args *args = g_malloc(sizeof(dialog_args));
     SplitRegister *reg;
 
+    if (qof_book_is_readonly(gnc_get_current_book()))
+    {
+        /* Is the book read-only? Then for sure also make this register
+        read-only. */
+        gsr->read_only = TRUE;
+    }
+
     if ( !gsr->read_only )
     {
 

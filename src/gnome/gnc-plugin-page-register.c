@@ -745,6 +745,31 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page)
     return NULL;
 }
 
+/* This is the list of actions which are switched inactive in a read-only book. */
+static const char* readonly_inactive_actions[] =
+{
+    "EditCutAction",
+    "EditPasteAction",
+    "CutTransactionAction",
+    "PasteTransactionAction",
+    "DuplicateTransactionAction",
+    "DeleteTransactionAction",
+    "RemoveTransactionSplitsAction",
+    "RecordTransactionAction",
+    "CancelTransactionAction",
+    "UnvoidTransactionAction",
+    "VoidTransactionAction",
+    "ReverseTransactionAction",
+    "ShiftTransactionForwardAction",
+    "ActionsTransferAction",
+    "ActionsReconcileAction",
+    "ActionsStockSplitAction",
+    "ScheduleTransactionAction",
+    "ScrubAllAction",
+    "ScrubCurrentAction",
+    NULL
+};
+
 static void
 gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page)
 {
@@ -777,6 +802,19 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "UnvoidTransactionAction");
     gtk_action_set_sensitive (GTK_ACTION(action), voided);
+
+    /* If we are in a readonly book, make any modifying action inactive */
+    if (qof_book_is_readonly(gnc_get_current_book()))
+    {
+        const char **iter;
+        for (iter = readonly_inactive_actions; *iter; ++iter)
+        {
+            /* Set the action's sensitivity */
+            GtkAction *action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), *iter);
+            gtk_action_set_sensitive(action, FALSE);
+        }
+
+    }
 }
 
 static void

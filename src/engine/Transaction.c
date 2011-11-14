@@ -1121,8 +1121,11 @@ xaccTransBeginEdit (Transaction *trans)
 
     if (qof_book_shutting_down(qof_instance_get_book(trans))) return;
 
-    xaccOpenLog ();
-    xaccTransWriteLog (trans, 'B');
+    if (!qof_book_is_readonly(qof_instance_get_book(trans)))
+    {
+        xaccOpenLog ();
+        xaccTransWriteLog (trans, 'B');
+    }
 
     /* Make a clone of the transaction; we will use this
      * in case we need to roll-back the edit. */
@@ -1179,7 +1182,7 @@ do_destroy (Transaction *trans)
     	destroy_gains (trans);
 
     /* Make a log in the journal before destruction.  */
-    if (!shutting_down)
+    if (!shutting_down && !qof_book_is_readonly(qof_instance_get_book(trans)))
         xaccTransWriteLog (trans, 'D');
 
     qof_event_gen (&trans->inst, QOF_EVENT_DESTROY, NULL);
@@ -1288,7 +1291,8 @@ static void trans_cleanup_commit(Transaction *trans)
     }
     g_list_free(slist);
 
-    xaccTransWriteLog (trans, 'C');
+    if (!qof_book_is_readonly(qof_instance_get_book(trans)))
+        xaccTransWriteLog (trans, 'C');
 
     /* Get rid of the copy we made. We won't be rolling back,
      * so we don't need it any more.  */
@@ -1512,7 +1516,8 @@ xaccTransRollbackEdit (Transaction *trans)
         }
     }
 
-    xaccTransWriteLog (trans, 'R');
+    if (!qof_book_is_readonly(qof_instance_get_book(trans)))
+        xaccTransWriteLog (trans, 'R');
 
     xaccFreeTransaction (trans->orig);
 
