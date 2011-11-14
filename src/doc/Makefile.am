@@ -5,29 +5,25 @@ SUBDIRS = \
 
 EXTRA_DIST = \
   README \
+  TODO-schedxactions \
+  TODO-sixtp \
   backup.txt \
+  books.txt \
   budget.txt \
   callgrind.txt \
   constderv.html \
+  currencies.txt \
+  doxygen.cfg.in \
+  doxygen_main_page.c \
   finderv.html \
   finutil.html \
-  plugin.txt \
-  tax.txt \
-  doxygen_main_page.c \
-  doxygen.cfg.in \
-  TODO-schedxactions \
-  TODO-sixtp \
-  backend-api.txt \
-  backend-errors.txt \
-  books.txt \
-  currencies.txt \
+  generic-druid-framework.txt \
+  guid.txt \
   loans.txt \
   lots.txt \
   multicurrency-discussion.txt \
-  netlogin.txt \
-  guid.txt \
   qif.txt \
-  generic-druid-framework.txt \
+  tax.txt \
   user-prefs-howto.txt \
   python-bindings-doxygen.py
 

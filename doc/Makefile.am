@@ -22,7 +22,6 @@ tips_DATA = tip_of_the_day.list
 
 EXTRA_DIST = \
   ${doc_DATA} \
-  misc-notes.txt \
   README.build-system \
   README.HBCI \
   README.OFX \
@@ -30,10 +29,9 @@ EXTRA_DIST = \
   TRANSLATION_HOWTO \
   build-aix.txt \
   build-solaris.txt \
-  generic_objects.txt \
-  gnome-hackers.txt \
   gnucash.1.in \
   gtkrc-2.0.gnucash \
+  misc-notes.txt \
   tip_of_the_day.list.in
 
 ## We borrow guile's convention and use @-...-@ as the substitution

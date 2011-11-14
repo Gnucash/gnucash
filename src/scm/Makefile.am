@@ -52,7 +52,6 @@ SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 EXTRA_DIST = \
   build-config.scm.in \
   config \
-  startup-design.txt \
   ${SCM_FILES}
 
 ## We borrow guile's convention and use @-...-@ as the substitution
