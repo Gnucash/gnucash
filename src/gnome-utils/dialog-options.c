@@ -2,6 +2,7 @@
  * dialog-options.c -- GNOME option handling                        *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
  * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
+ * Copyright (c) 2011 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -79,6 +80,7 @@ struct gnc_option_win
 {
     GtkWidget  * dialog;
     GtkWidget  * notebook;
+    GtkWidget  * page_list_view;
     GtkWidget  * page_list;
 
     gboolean toplevel;
@@ -106,6 +108,12 @@ typedef enum
     GNC_RD_WID_REL_WIDGET_POS
 } GNCRdPositions;
 
+enum page_tree
+{
+  PAGE_INDEX = 0,
+  PAGE_NAME,
+  NUM_COLUMNS
+};
 
 static GNCOptionWinCallback global_help_cb = NULL;
 gpointer global_help_cb_data = NULL;
@@ -113,9 +121,8 @@ gpointer global_help_cb_data = NULL;
 void gnc_options_dialog_response_cb(GtkDialog *dialog, gint response,
                                     GNCOptionWin *window);
 static void gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data);
-void gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
-                                       gpointer data);
-
+void gnc_options_dialog_list_select_cb (GtkTreeSelection *selection,
+                      gpointer data);
 
 GtkWidget *
 gnc_option_get_gtk_widget (GNCOption *option)
@@ -289,7 +296,6 @@ gnc_image_option_selection_changed_cb (GtkFileChooser *chooser,
  *                     use the current value                        *
  * Return: nothing                                                  *
 \********************************************************************/
-
 static void
 gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
 {
@@ -330,7 +336,6 @@ gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
     free(type);
 }
 
-
 /********************************************************************\
  * gnc_option_get_ui_value_internal                                 *
  *   returns the SCM representation of the GUI option value         *
@@ -366,7 +371,6 @@ gnc_option_get_ui_value_internal (GNCOption *option)
 
     return result;
 }
-
 
 /********************************************************************\
  * gnc_option_set_selectable_internal                               *
@@ -796,7 +800,6 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
     return frame;
 }
 
-
 static void
 gnc_option_account_cb(GtkTreeSelection *selection, gpointer data)
 {
@@ -1199,6 +1202,9 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     GtkWidget *reset_button;
     GtkWidget *listitem = NULL;
     GtkWidget *buttonbox;
+    GtkTreeView *view;
+    GtkListStore *list;
+    GtkTreeIter iter;
     gint num_options;
     const char *name;
     gint i, page_count, name_offset;
@@ -1213,6 +1219,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     advanced = (strncmp(name, "_+", 2) == 0);
     name_offset = (advanced) ? 2 : 0;
     page_label = gtk_label_new(_(name + name_offset));
+    PINFO("Page_label is %s", _(name + name_offset));
     gtk_widget_show(page_label);
 
     /* Build this options page */
@@ -1257,12 +1264,18 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     page_count = gtk_notebook_page_num(GTK_NOTEBOOK(propertybox->notebook),
                                        page_content_box);
 
-    if (propertybox->page_list)
+    if (propertybox->page_list_view)
     {
         /* Build the matching list item for selecting from large page sets */
-        listitem = gtk_list_item_new_with_label(_(name + name_offset));
-        gtk_widget_show(listitem);
-        gtk_container_add(GTK_CONTAINER(propertybox->page_list), listitem);
+        view = GTK_TREE_VIEW(propertybox->page_list_view);
+        list = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+
+        PINFO("Page name is %s and page_count is %d", name, page_count);
+        gtk_list_store_append(list, &iter);
+        gtk_list_store_set(list, &iter,
+                           PAGE_NAME, _(name),
+                           PAGE_INDEX, page_count,
+                           -1);
 
         if (page_count > MAX_TAB_COUNT - 1)   /* Convert 1-based -> 0-based */
         {
@@ -1270,12 +1283,13 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
             gtk_notebook_set_show_tabs(GTK_NOTEBOOK(propertybox->notebook), FALSE);
             gtk_notebook_set_show_border(GTK_NOTEBOOK(propertybox->notebook), FALSE);
         }
+        else
+	    gtk_widget_hide(propertybox->page_list);
 
         /* Tweak "advanced" pages for later handling. */
         if (advanced)
         {
-            notebook_page =
-                gtk_notebook_get_nth_page(GTK_NOTEBOOK(propertybox->notebook),
+            notebook_page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(propertybox->notebook),
                                           page_count);
 
             g_object_set_data(G_OBJECT(notebook_page), "listitem", listitem);
@@ -1283,10 +1297,8 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
                               GINT_TO_POINTER(advanced));
         }
     }
-
     return(page_count);
 }
-
 
 /********************************************************************\
  * gnc_options_dialog_build_contents                                *
@@ -1325,6 +1337,8 @@ gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
     num_sections = gnc_option_db_num_sections(odb);
     default_section_name = gnc_option_db_get_default_section(odb);
 
+    PINFO("Default Section name is %s", default_section_name);
+
     for (i = 0; i < num_sections; i++)
     {
         const char *section_name;
@@ -1357,23 +1371,30 @@ gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
     gtk_notebook_popup_enable(GTK_NOTEBOOK(propertybox->notebook));
     if (default_page >= 0)
     {
+        /* Find the page list and set the selection to the default page */
+        GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(propertybox->page_list_view));
+        GtkTreeIter iter;
+        GtkTreeModel *model;
+ 
+        model = gtk_tree_view_get_model(GTK_TREE_VIEW(propertybox->page_list_view));
+        gtk_tree_model_iter_nth_child(model, &iter, NULL, default_page);
+        gtk_tree_selection_select_iter (selection, &iter);
         gtk_notebook_set_current_page(GTK_NOTEBOOK(propertybox->notebook), default_page);
-        gtk_list_select_item(GTK_LIST(propertybox->page_list), default_page);
-    }
-    else
-    {
-        /* GTKList doesn't default to selecting the first item. */
-        gtk_list_select_item(GTK_LIST(propertybox->page_list), 0);
     }
     gnc_options_dialog_changed_internal(propertybox->dialog, FALSE);
     gtk_widget_show(propertybox->dialog);
 }
 
-
 GtkWidget *
 gnc_options_dialog_widget(GNCOptionWin * win)
 {
     return win->dialog;
+}
+
+GtkWidget *
+gnc_options_page_list(GNCOptionWin * win)
+{
+    return win->page_list;
 }
 
 GtkWidget *
@@ -1435,16 +1456,20 @@ gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data)
 }
 
 void
-gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
-                                  gpointer data)
+gnc_options_dialog_list_select_cb (GtkTreeSelection *selection,
+                      gpointer data)
 {
     GNCOptionWin * win = data;
-    gint index;
+    GtkTreeModel *list;
+    GtkTreeIter iter;
+    gint index = 0;
 
-    g_return_if_fail (list);
-    g_return_if_fail (win);
-
-    index = gtk_list_child_position(GTK_LIST(list), item);
+    if (!gtk_tree_selection_get_selected(selection, &list, &iter))
+        return;
+    gtk_tree_model_get(list, &iter,
+                       PAGE_INDEX, &index,
+                       -1);
+    PINFO("Index is %d", index);
     gtk_notebook_set_current_page(GTK_NOTEBOOK(win->notebook), index);
 }
 
@@ -1481,8 +1506,8 @@ component_close_handler (gpointer data)
 
 /* gnc_options_dialog_new:
  *
- *   - Opens the preferences glade file
- *   - Connects signals specified in the glade file
+ *   - Opens the dialog-options glade file
+ *   - Connects signals specified in the builder file
  *   - Sets the window's title
  *   - Initializes a new GtkNotebook, and adds it to the window
  *
@@ -1490,25 +1515,54 @@ component_close_handler (gpointer data)
 GNCOptionWin *
 gnc_options_dialog_new(gchar *title)
 {
-    GNCOptionWin * retval;
-    GladeXML *xml;
-    GtkWidget * hbox;
+    GNCOptionWin *retval;
+    GtkBuilder   *builder;
+    GtkWidget    *hbox;
     gint component_id;
 
     retval = g_new0(GNCOptionWin, 1);
-    xml = gnc_glade_xml_new ("preferences.glade", "GnuCash Options");
-    retval->dialog = glade_xml_get_widget (xml, "GnuCash Options");
-    retval->page_list = glade_xml_get_widget (xml, "page_list");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-options.glade", "GnuCash Options");
+    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GnuCash Options"));
+    retval->page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
 
-    glade_xml_signal_autoconnect_full( xml,
-                                       gnc_glade_autoconnect_full_func,
-                                       retval );
+    /* Page List */
+    {
+        GtkTreeView *view;
+        GtkListStore *store;
+        GtkTreeSelection *selection;
+        GtkCellRenderer *renderer;
+        GtkTreeViewColumn *column;
+
+        retval->page_list_view = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_treeview"));
+
+        view = GTK_TREE_VIEW(retval->page_list_view);
+
+        store = gtk_list_store_new(NUM_COLUMNS, G_TYPE_INT, G_TYPE_STRING);
+        gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+        g_object_unref(store);
+
+        renderer = gtk_cell_renderer_text_new();
+        column = gtk_tree_view_column_new_with_attributes(_("Page"), renderer,
+                 "text", PAGE_NAME, NULL);
+        gtk_tree_view_append_column(view, column);
+
+        gtk_tree_view_column_set_alignment(column,0.5);
+
+        selection = gtk_tree_view_get_selection(view);
+        gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
+        g_signal_connect (selection, "changed",
+                          G_CALLBACK (gnc_options_dialog_list_select_cb), retval);
+
+    }
+
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
     if (title)
         gtk_window_set_title(GTK_WINDOW(retval->dialog), title);
 
     /* glade doesn't suport a notebook with zero pages */
-    hbox = glade_xml_get_widget (xml, "notebook placeholder");
+    hbox = GTK_WIDGET(gtk_builder_get_object (builder, "notebook placeholder"));
     retval->notebook = gtk_notebook_new();
     gtk_widget_show(retval->notebook);
     gtk_box_pack_start(GTK_BOX(hbox), retval->notebook, TRUE, TRUE, 5);
@@ -1517,6 +1571,8 @@ gnc_options_dialog_new(gchar *title)
                    NULL, component_close_handler,
                    retval);
     gnc_gui_component_set_session (component_id, gnc_get_current_session());
+
+    g_object_unref(G_OBJECT(builder));
 
     return retval;
 }
@@ -1588,7 +1644,6 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
 
     g_free(win);
 }
-
 
 /*****************************************************************/
 /* Option Registration                                           */
@@ -2229,7 +2284,6 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkBox *page_box,
  *
  *
  */
-
 static gboolean
 gnc_option_set_ui_value_boolean (GNCOption *option, gboolean use_default,
                                  GtkWidget *widget, SCM value)
@@ -2737,7 +2791,6 @@ gnc_option_set_ui_value_dateformat (GNCOption *option, gboolean use_default,
  * gui widget.
  *
  */
-
 static SCM
 gnc_option_get_ui_value_boolean (GNCOption *option, GtkWidget *widget)
 {
@@ -3045,8 +3098,9 @@ gnc_option_get_ui_value_dateformat (GNCOption *option, GtkWidget *widget)
     return (gnc_dateformat_option_set_value(format, months, years, custom));
 }
 
-/* INITIALIZATION */
-
+/************************************/
+/*          INITIALIZATION          */
+/************************************/
 static void gnc_options_initialize_options (void)
 {
     static GNCOptionDef_t options[] =

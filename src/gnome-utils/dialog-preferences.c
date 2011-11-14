@@ -75,7 +75,6 @@
 #include "gnc-component-manager.h"
 #include "dialog-preferences.h"
 
-#define GLADE_FILENAME			"preferences.glade"
 #define DIALOG_PREFERENCES_CM_CLASS	"dialog-newpreferences"
 #define GCONF_SECTION			"dialogs/preferences"
 #define PREFIX_LEN			sizeof("gconf/") - 1
@@ -1518,8 +1517,8 @@ gnc_prefs_connect_one (const gchar *name,
 
 /** Create the preferences dialog.  This function first reads the
  *  dialog-preferences.glade file to obtain the content and then 
- *  the dialog and set of common preferences.  It then runs the list 
- *  of add-ins, calling a helper function to add each full/partial
+ *  the dialog is created with a set of common preferences.  It then
+ *  runs the list of add-ins, calling a helper function to add each full/partial
  *  page to this dialog, Finally it builds the "interesting widgets"
  *  table that is used for connecting the widgets up to callback functions.
  *
@@ -1676,11 +1675,11 @@ gnc_prefs_nearest_match (gpointer key,
 
 
 /** Create the preferences dialog. This function first reads the
- *  preferences.glade file to obtain the dialog and set of common
+ *  dialog-preferences.glade file to obtain the dialog and a set of common
  *  preferences.  It then runs the list of add-ins, calling a helper
  *  function to add each full/partial page to this dialog, Finally it
- *  runs the list of "interesting widgets" that it has built,
- *  connecting these widgets up to callback functions.
+ *  runs the list of "interesting widgets" that it has built and
+ *  connects these widgets up to the callback functions.
  *
  *  @internal
  *

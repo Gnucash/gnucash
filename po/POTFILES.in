@@ -344,6 +344,7 @@ src/gnome-utils/gtkbuilder/dialog-book-close.glade
 src/gnome-utils/gtkbuilder/dialog-commodity.glade
 src/gnome-utils/gtkbuilder/dialog-file-access.glade
 src/gnome-utils/gtkbuilder/dialog-object-references.glade
+src/gnome-utils/gtkbuilder/dialog-options.glade
 src/gnome-utils/gtkbuilder/dialog-preferences.glade
 src/gnome-utils/gtkbuilder/dialog-query-list.glade
 src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade

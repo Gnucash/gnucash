@@ -41,6 +41,7 @@ void gnc_options_dialog_destroy(GNCOptionWin * win);
 void gnc_options_register_stocks (void);
 
 GtkWidget * gnc_options_dialog_widget(GNCOptionWin * win);
+GtkWidget * gnc_options_page_list(GNCOptionWin * win);
 GtkWidget * gnc_options_dialog_notebook(GNCOptionWin * win);
 
 void gnc_options_dialog_changed (GNCOptionWin *win);

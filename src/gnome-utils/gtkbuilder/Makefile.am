@@ -6,6 +6,7 @@ gtkbuilder_DATA = \
   dialog-commodity.glade \
   dialog-file-access.glade \
   dialog-object-references.glade \
+  dialog-options.glade \
   dialog-preferences.glade \
   dialog-query-list.glade \
   dialog-reset-warnings.glade \

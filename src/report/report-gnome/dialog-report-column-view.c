@@ -307,13 +307,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
         r->optwin = gnc_options_dialog_new(NULL);
 
         /* Hide the generic dialog page list. */
-        {
-            GtkWidget *dialog, *page_list;
-
-            dialog = gnc_options_dialog_widget(r->optwin);
-            page_list = gnc_glade_lookup_widget (dialog, "page_list");
-            gtk_widget_hide(page_list);
-        }
+        gtk_widget_hide(gnc_options_page_list(r->optwin));
 
         builder = gtk_builder_new();
         gnc_builder_add_from_file (builder, "dialog-report.glade", "view_contents_table");
