@@ -211,8 +211,11 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 
 BUILT_SOURCES = iso-4217-currencies.c
 
-CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links \
+CLEANFILES = $(BUILT_SOURCES) .scm-links \
 	${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-engine.c swig-business-core.c
+
+clean-local:
+	rm -rf gnucash
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.engine\"

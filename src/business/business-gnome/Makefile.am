@@ -118,6 +118,9 @@ if ! OS_WIN32
 endif
 
 noinst_DATA = .scm-links
-CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
+clean-local:
+	rm -rf gnucash
+
+CLEANFILES = $(BUILT_SOURCES) .scm-links ${SCM_FILE_LINKS}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.gnome\"

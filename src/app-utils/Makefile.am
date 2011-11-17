@@ -159,7 +159,10 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-CLEANFILES = ${SCM_FILE_LINKS} gnucash .scm-links
+clean-local:
+	rm -rf gnucash
+
+CLEANFILES = ${SCM_FILE_LINKS}  .scm-links
 MAINTAINERCLEANFILES = swig-app-utils.c
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.app-utils\"

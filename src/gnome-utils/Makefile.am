@@ -245,7 +245,10 @@ if ! OS_WIN32
 endif
 
 noinst_DATA = .scm-links
-CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
+clean-local:
+	rm -rf gnucash
+
+CLEANFILES = $(BUILT_SOURCES) .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-gnome-utils.c
 
 # FIXME: Symlinking directories only works on non-win32.

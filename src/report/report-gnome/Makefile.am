@@ -100,7 +100,10 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-CLEANFILES = gnucash report .scm-links ${SCM_FILE_LINKS}
+clean-local:
+	rm -rf gnucash
+
+CLEANFILES = report .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-report-gnome.c
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.gui\"

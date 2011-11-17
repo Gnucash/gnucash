@@ -53,6 +53,9 @@ if ! OS_WIN32
 endif
 
 noinst_DATA = .scm-links
+clean-local:
+	rm -rf gnucash
+
 CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES =
 
