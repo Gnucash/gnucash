@@ -79,7 +79,10 @@ endif
 noinst_DATA = .scm-links
 BUILT_SOURCES = gncla-dir.h gnc-version.h
 EXTRA_DIST = $(gncmod_DATA) core-utils.i gncla-dir.h.in gnc-svninfo.h
-CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links
+clean-local:
+	rm -rf gnucash
+
+CLEANFILES = $(BUILT_SOURCES) .scm-links
 MAINTAINERCLEANFILES = swig-core-utils.c
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.core-utils\"

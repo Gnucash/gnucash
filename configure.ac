@@ -127,14 +127,14 @@ AC_ARG_ENABLE(gtkmm,
 
 AS_IF([test x${enable_GTKMM} = "xtrue"],
   [
-    GTKMM_DIR=gtkmm
     # We require gtkmm, of course
     PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.20)
     # and also the c++ compiler
     AC_PROG_CXXCPP
     AC_PROG_CXX
+    _COMPONENTS="$_COMPONENTS gtkmm"
   ])
-AC_SUBST(GTKMM_DIR)
+AM_CONDITIONAL([WITH_GTKMM], [test x${enable_GTKMM} = "xtrue"])
 # This section must come before AC_PROG_LIBTOOL because libtool
 # must know about the c++ compiler.
 ###--------------------------------------------------------
@@ -530,7 +530,7 @@ then
       GNC_DBD_DIR="")
 
     LIBDBI_LIBS=-ldbi
-    DBI_DIR=dbi
+    _COMPONENTS="$_COMPONENTS dbi"
   else
     AC_MSG_ERROR([
 
@@ -543,9 +543,9 @@ then
   fi
 fi
 AC_SUBST(LIBDBI_LIBS)
-AC_SUBST(DBI_DIR)
 AC_SUBST(GNC_DBD_DIR)
 AM_CONDITIONAL(CUSTOM_GNC_DBD_DIR, [test x"$GNC_DBD_DIR" != "x"])
+AM_CONDITIONAL(WITH_DBI, [test "x$ac_cv_header_dbi_dbi_h" != xno])
 
 ### --------------------------------------------------------------------------
 ### Variables
@@ -618,12 +618,9 @@ case "${want_ofx}" in
 esac
 if test x${want_ofx} != xno ; then
   PKG_CHECK_MODULES(LIBOFX, libofx, [want_ofx="yes"], [want_ofx="no"])
+  _COMPONENTS="$_COMPONENTS ofx"
 fi
-if test "x${want_ofx}" != xno ; then
-  OFX_DIR=ofx
-fi
-AC_SUBST(OFX_DIR)
-
+AM_CONDITIONAL([WITH_OFX], [test "x${want_ofx}" != xno])
 ### --------------------------------------------------------------------------
 ### MT940
 AC_ARG_ENABLE( mt940,
@@ -651,8 +648,8 @@ then
   # We require aqbanking-4.0.0 because our implementation doesn't run
   # with earlier version anymore. (libaqbanking ships with a pkgconfig
   # file since its version 1.6.1.)
-  PKG_CHECK_MODULES(AQBANKING, aqbanking >= 4.0.0 gwenhywfar, [AQBANKING_DIR=aqbanking], [
-    AC_MSG_ERROR([Could not find aqbanking >= 4.0.0. If you use --enable-aqbanking, you *have* to have aqbanking installed!])
+  PKG_CHECK_MODULES(AQBANKING, aqbanking >= 4.0.0 gwenhywfar, , [
+    AC_MSG_ERROR([Could not find aqbanking >= 4.0.0. If you use --enable-aqbanking, you MUST have aqbanking installed!])
   ])
   # For libgwenhywfar > 3.99.20, look for its library gwengui-gtk2.
   PKG_CHECK_MODULES([GWENGUI_GTK2], [gwengui-gtk2 gwenhywfar], [has_gwengui_gtk2=1], [has_gwengui_gtk2=0])
@@ -666,8 +663,9 @@ then
   AS_SCRUB_INCLUDE(AQBANKING_CFLAGS)
   AC_SUBST(AQBANKING_LIBS)
   AC_SUBST(AQBANKING_CFLAGS)
+  _COMPONENTS="$_COMPONENTS aqbanking"
 fi
-AC_SUBST(AQBANKING_DIR)
+AM_CONDITIONAL([WITH_AQBANKING], [test x${want_aqbanking} = xyes])
 
 AC_ARG_WITH(qt3_wizard_package,
                  [AS_HELP_STRING([--with-qt3-wizard-package=name],[name of package containing qt3-wizard (aqbanking)])],
@@ -1092,14 +1090,11 @@ AC_ARG_ENABLE(python,
   )
 if test x${enable_python} = "xtrue"
 then
-  PYTHON_DIR=python
-  PYTHON_BINDINGS_DIR=python-bindings
   AM_PATH_PYTHON(2.4)
   AC_PYTHON_DEVEL(>= '2.4')
   SWIG_PYTHON
+  _COMPONENTS="$_COMPONENTS python"
 fi
-AC_SUBST(PYTHON_DIR)
-AC_SUBST(PYTHON_BINDINGS_DIR)
 AM_CONDITIONAL(WITH_PYTHON, [test x${enable_python} = xtrue])
 
 AC_ARG_ENABLE(python-bindings,
@@ -1365,28 +1360,13 @@ AC_CONFIG_FILES(
 )
 AC_OUTPUT
 
-if test x${DBI_DIR} != x; then
-  components="$components dbi"
-fi
-if test x${OFX_DIR} != x; then
-  components="$components ofx"
-fi
-if test x${AQBANKING_DIR} != x; then
-  components="$components $AQBANKING_DIR"
-fi
-if test x${PYTHON_DIR} != x; then
-  components="$components python"
-fi
-if test x${GTKMM_DIR} != x; then
-  components="${components} ${GTKMM_DIR}"
-fi
 
 AC_MSG_RESULT([
   Options detected/selected
   -------------------------
   gnucash version ...... : $VERSION
   Build for host ....... : $host
-  Optional components... : $components
+  Optional components... : $_COMPONENTS
   Extra Warnings ....... : $warnFLAGS
   CPPFLAGS ............. : $CPPFLAGS
   CFLAGS ............... : $CFLAGS

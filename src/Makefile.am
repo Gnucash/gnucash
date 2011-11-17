@@ -1,4 +1,8 @@
 # These directories do not contain any gtk dependencies
+if WITH_PYTHON
+   PYTHON_DIR = python
+endif
+
 NONGUI_SUBDIRS = \
   libqof \
   debug \
@@ -37,7 +41,6 @@ GUI_SUBDIRS = \
 
 # Need to include '.' in order to build swig-runtime.h
 SUBDIRS = . $(NONGUI_SUBDIRS) $(ALMOST_NONGUI_SUBDIRS) $(GUI_SUBDIRS)
-DIST_SUBDIRS = $(SUBDIRS) python
 
 noinst_HEADERS = \
   swig-runtime.h
