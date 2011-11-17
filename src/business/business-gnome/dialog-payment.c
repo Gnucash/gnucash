@@ -551,6 +551,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 {
     PaymentWindow *pw;
     GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *box, *label;
     char * cm_class = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER ?
                        DIALOG_PAYMENT_CUSTOMER_CM_CLASS :
@@ -588,35 +589,38 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
         pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
 
     /* Open and read the XML */
-    xml = gnc_glade_xml_new ("payment.glade", "Payment Dialog");
-    pw->dialog = glade_xml_get_widget (xml, "Payment Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-payment.glade", "post_combo_model");
+    gnc_builder_add_from_file (builder, "dialog-payment.glade", "Payment Dialog");
+    pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Payment Dialog"));
 
     /* Grab the widgets and build the dialog */
-    pw->num_entry = glade_xml_get_widget (xml, "num_entry");
-    pw->memo_entry = glade_xml_get_widget (xml, "memo_entry");
-    pw->post_combo = glade_xml_get_widget (xml, "post_combo");
+    pw->num_entry = GTK_WIDGET (gtk_builder_get_object (builder, "num_entry"));
+    pw->memo_entry = GTK_WIDGET (gtk_builder_get_object (builder, "memo_entry"));
+    pw->post_combo = GTK_WIDGET (gtk_builder_get_object (builder, "post_combo"));
+    gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( pw->post_combo ), 0 );
     gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(pw->post_combo));
 
-    label = glade_xml_get_widget (xml, "owner_label");
-    box = glade_xml_get_widget (xml, "owner_box");
+    label = GTK_WIDGET (gtk_builder_get_object (builder, "owner_label"));
+    box = GTK_WIDGET (gtk_builder_get_object (builder, "owner_box"));
     pw->owner_choice = gnc_owner_select_create (label, box, book, owner);
 
-    label = glade_xml_get_widget (xml, "invoice_label");
-    box = glade_xml_get_widget (xml, "invoice_box");
+    label = GTK_WIDGET (gtk_builder_get_object (builder, "invoice_label"));
+    box = GTK_WIDGET (gtk_builder_get_object (builder, "invoice_box"));
     pw->invoice_choice = gnc_invoice_select_create (box, book, owner, invoice, label);
 
-    box = glade_xml_get_widget (xml, "amount_box");
+    box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_box"));
     pw->amount_edit = gnc_amount_edit_new ();
     gtk_box_pack_start (GTK_BOX (box), pw->amount_edit, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_edit),
                                            TRUE);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_edit), gnc_numeric_zero());
 
-    box = glade_xml_get_widget (xml, "date_box");
+    box = GTK_WIDGET (gtk_builder_get_object (builder, "date_box"));
     pw->date_edit = gnc_date_edit_new (time(NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX (box), pw->date_edit, TRUE, TRUE, 0);
 
-    box = glade_xml_get_widget (xml, "acct_window");
+    box = GTK_WIDGET (gtk_builder_get_object (builder, "acct_window"));
     pw->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
     gtk_container_add (GTK_CONTAINER (box), pw->acct_tree);
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(pw->acct_tree), FALSE);
@@ -630,8 +634,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     gnc_payment_dialog_invoice_changed(pw);
 
     /* Setup signals */
-    glade_xml_signal_autoconnect_full( xml,
-                                       gnc_glade_autoconnect_full_func,
+    gtk_builder_connect_signals_full( builder,
+                                       gnc_builder_connect_full_func,
                                        pw);
 
     g_signal_connect (G_OBJECT (pw->owner_choice), "changed",
@@ -672,6 +676,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 
     /* Show it all */
     gtk_widget_show_all (pw->dialog);
+    g_object_unref(G_OBJECT(builder));
 
     /* Warn the user if they have no valid post-to accounts */
     {

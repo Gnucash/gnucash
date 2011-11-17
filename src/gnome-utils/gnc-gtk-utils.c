@@ -213,7 +213,7 @@ gnc_cbe_require_list_item (GtkComboBoxEntry *cbe)
     g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
 
     /* Now the signals to make sure the user can't leave the
-       widget without a valid currency. */
+       widget without a valid match. */
     id = g_signal_connect(cbe, "changed",
                           G_CALLBACK(gnc_cbe_changed_cb), cbe);
     g_signal_connect(completion, "match_selected",

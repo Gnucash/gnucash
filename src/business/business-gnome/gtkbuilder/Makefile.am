@@ -4,14 +4,14 @@ gtkbuilder_DATA = \
   business-prefs.glade \
   dialog-customer.glade \
   dialog-invoice.glade \
+  dialog-payment.glade \
   dialog-vendor.glade
 #  billterms.glade \
 #  choose-owner.glade \
 #  date-close.glade \
 #  employee.glade \
 #  job.glade \
-#  order.glade \
-#  payment.glade
+#  order.glade
 
 EXTRA_DIST = \
   ${gtkbuilder_DATA}

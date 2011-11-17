@@ -5,8 +5,7 @@ glade_DATA = \
   date-close.glade \
   employee.glade \
   job.glade \
-  order.glade \
-  payment.glade
+  order.glade
 
 EXTRA_DIST = \
   ${glade_DATA}

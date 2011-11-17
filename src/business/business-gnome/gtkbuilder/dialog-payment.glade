@@ -1,45 +1,97 @@
-<?xml version="1.0"?>
-<glade-interface>
-  <!-- interface-requires gtk+ 2.10 -->
-  <!-- interface-naming-policy toplevel-contextual -->
-  <widget class="GtkDialog" id="Payment Dialog">
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="2.18"/>
+  <object class="GtkDialog" id="Payment Dialog">
     <property name="visible">True</property>
+    <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="gnc_payment_window_destroy_cb"/>
+    <signal name="destroy" handler="gnc_payment_window_destroy_cb" swapped="no"/>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox1">
+      <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
-        <child>
-          <widget class="GtkHBox" id="hlayoutbox">
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="cancelbutton">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="gnc_payment_cancel_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton">
+                <property name="label">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="gnc_payment_ok_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hlayoutbox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="spacing">3</property>
             <child>
-              <widget class="GtkVBox" id="vbox1">
+              <object class="GtkVBox" id="vbox1">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
+                <property name="can_focus">False</property>
                 <child>
-                  <widget class="GtkFrame" id="frame1">
+                  <object class="GtkFrame" id="frame1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label_xalign">0</property>
                     <child>
-                      <widget class="GtkHBox" id="hbox1">
+                      <object class="GtkHBox" id="hbox1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
-                          <widget class="GtkVBox" id="vbox2">
+                          <object class="GtkVBox" id="vbox2">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="border_width">3</property>
-                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
                             <child>
-                              <widget class="GtkLabel" id="owner_label">
+                              <object class="GtkLabel" id="owner_label">
                                 <property name="visible">True</property>
-                                <property name="tooltip" translatable="yes">The company associated with this payment.</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">The company associated with this payment.</property>
                                 <property name="xalign">1</property>
                                 <property name="label">(owner)</property>
                                 <property name="justify">right</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
@@ -47,15 +99,16 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="invoice_label">
+                              <object class="GtkLabel" id="invoice_label">
                                 <property name="visible">True</property>
-                                <property name="tooltip" translatable="yes">The invoice being paid.
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">The invoice being paid.
 
 Note that is field is optional. If you leave it blank, GnuCash will automatically assign the payment to the first unpaid invoice for this company.</property>
                                 <property name="xalign">1</property>
                                 <property name="label">(invoice)</property>
                                 <property name="justify">right</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
@@ -63,12 +116,13 @@ Note that is field is optional. If you leave it blank, GnuCash will automaticall
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="date_label">
+                              <object class="GtkLabel" id="date_label">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="xalign">1</property>
                                 <property name="label" translatable="yes">Date</property>
                                 <property name="justify">right</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
@@ -76,9 +130,10 @@ Note that is field is optional. If you leave it blank, GnuCash will automaticall
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="amount_label">
+                              <object class="GtkLabel" id="amount_label">
                                 <property name="visible">True</property>
-                                <property name="tooltip" translatable="yes">The amount to pay for this invoice.
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
@@ -86,7 +141,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                                 <property name="xalign">1</property>
                                 <property name="label" translatable="yes">Amount</property>
                                 <property name="justify">right</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
@@ -94,12 +149,13 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="num_label">
+                              <object class="GtkLabel" id="num_label">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="xalign">1</property>
                                 <property name="label" translatable="yes">Num</property>
                                 <property name="justify">right</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
@@ -107,63 +163,72 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="memo_label">
+                              <object class="GtkLabel" id="memo_label">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="xalign">1</property>
                                 <property name="label" translatable="yes">Memo</property>
                                 <property name="justify">right</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
                                 <property name="position">5</property>
                               </packing>
                             </child>
-                          </widget>
+                          </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkVBox" id="vbox3">
+                          <object class="GtkVBox" id="vbox3">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="border_width">3</property>
-                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
                             <child>
-                              <widget class="GtkHBox" id="owner_box">
+                              <object class="GtkHBox" id="owner_box">
                                 <property name="visible">True</property>
-                                <property name="tooltip" translatable="yes">The company associated with this payment.</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">The company associated with this payment.</property>
                                 <child>
                                   <placeholder/>
                                 </child>
-                              </widget>
+                              </object>
                               <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="invoice_box">
+                              <object class="GtkHBox" id="invoice_box">
                                 <property name="visible">True</property>
-                                <property name="tooltip" translatable="yes">The invoice being paid.
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">The invoice being paid.
 
 Note that is field is optional. If you leave it blank, GnuCash will automatically assign the payment to the first unpaid invoice for this company.</property>
                                 <child>
                                   <placeholder/>
                                 </child>
-                              </widget>
+                              </object>
                               <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="date_box">
+                              <object class="GtkHBox" id="date_box">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <child>
                                   <placeholder/>
                                 </child>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
@@ -171,9 +236,10 @@ Note that is field is optional. If you leave it blank, GnuCash will automaticall
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="amount_box">
+                              <object class="GtkHBox" id="amount_box">
                                 <property name="visible">True</property>
-                                <property name="tooltip" translatable="yes">The amount to pay for this invoice.
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">The amount to pay for this invoice.
 
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
@@ -181,16 +247,18 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                                 <child>
                                   <placeholder/>
                                 </child>
-                              </widget>
+                              </object>
                               <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
                                 <property name="position">3</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="num_entry">
+                              <object class="GtkEntry" id="num_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
@@ -198,33 +266,33 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="memo_entry">
+                              <object class="GtkEntry" id="memo_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
                                 <property name="position">5</property>
                               </packing>
                             </child>
-                          </widget>
+                          </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
-                      </widget>
+                      </object>
                     </child>
-                    <child>
-                      <widget class="GtkLabel" id="label1">
+                    <child type="label">
+                      <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Payment Information</property>
-                      </widget>
-                      <packing>
-                        <property name="type">label_item</property>
-                      </packing>
+                      </object>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -232,118 +300,93 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkFrame" id="frame2">
+                  <object class="GtkFrame" id="frame4">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label_xalign">0</property>
+                    <property name="shadow_type">none</property>
                     <child>
-                      <widget class="GtkComboBoxEntry" id="post_combo">
+                      <object class="GtkComboBoxEntry" id="post_combo">
                         <property name="visible">True</property>
-                        <property name="items">Dummy Entry</property>
-                      </widget>
+                        <property name="can_focus">False</property>
+                        <property name="model">post_combo_model</property>
+                      </object>
                     </child>
-                    <child>
-                      <widget class="GtkLabel" id="label6">
+                    <child type="label">
+                      <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Post To</property>
-                      </widget>
-                      <packing>
-                        <property name="type">label_item</property>
-                      </packing>
+                        <property name="use_markup">True</property>
+                      </object>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkFrame" id="frame3">
+              <object class="GtkFrame" id="frame3">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
                 <child>
-                  <widget class="GtkScrolledWindow" id="acct_window">
+                  <object class="GtkScrolledWindow" id="acct_window">
                     <property name="width_request">250</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="border_width">3</property>
-                    <property name="hscrollbar_policy">automatic</property>
-                    <property name="vscrollbar_policy">automatic</property>
                     <child>
                       <placeholder/>
                     </child>
-                  </widget>
+                  </object>
                 </child>
-                <child>
-                  <widget class="GtkLabel" id="label7">
+                <child type="label">
+                  <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Transfer Account</property>
-                  </widget>
-                  <packing>
-                    <property name="type">label_item</property>
-                  </packing>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
-        <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="layout_style">end</property>
-            <child>
-              <widget class="GtkButton" id="cancelbutton">
-                <property name="label">gtk-cancel</property>
-                <property name="response_id">-6</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="gnc_payment_cancel_cb"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkButton" id="okbutton">
-                <property name="label">gtk-ok</property>
-                <property name="response_id">-5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="gnc_payment_ok_cb"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+    <action-widgets>
+      <action-widget response="-6">cancelbutton</action-widget>
+      <action-widget response="-5">okbutton</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkListStore" id="post_combo_model">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">Dummy Entry</col>
+      </row>
+    </data>
+  </object>
+</interface>
