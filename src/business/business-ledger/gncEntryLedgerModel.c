@@ -1274,6 +1274,9 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
     case GNCENTRY_INVOICE_VIEWER:
     case GNCENTRY_BILL_VIEWER:
     case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
         /* make this table read-only */
         gnc_table_model_set_read_only (model, TRUE);
         break;
