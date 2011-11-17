@@ -28,7 +28,6 @@
 #include "qof.h"
 
 gboolean    gnc_is_euro_currency (const gnc_commodity * currency);
-gboolean    gnc_is_euro_currency_code (const char *code);
 gnc_numeric gnc_convert_to_euro (const gnc_commodity * currency,
                                  gnc_numeric value);
 gnc_numeric gnc_convert_from_euro (const gnc_commodity * currency,

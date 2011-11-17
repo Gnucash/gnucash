@@ -30,7 +30,6 @@
 
 SCM  gnc_printinfo2scm(GNCPrintAmountInfo info);
 GNCPrintAmountInfo gnc_scm2printinfo(SCM info_scm);
-int  gnc_printinfo_p(SCM info_scm);
 
 /** Given a pointer to a gnc-commodity data structure, build a Scheme
  *  list containing the data needed by the code in price-quotes.scm.
@@ -43,6 +42,5 @@ int  gnc_printinfo_p(SCM info_scm);
  */
 SCM  gnc_quoteinfo2scm(gnc_commodity *com);
 
-SCM gnc_parse_amount_helper (const char * string, gboolean monetary);
 
 #endif

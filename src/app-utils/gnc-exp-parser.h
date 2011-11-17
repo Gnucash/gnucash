@@ -52,22 +52,8 @@ void gnc_exp_parser_real_init( gboolean addPredefined );
 /* Shutdown the expression parser and free any associated memory in the ParserState. */
 void gnc_exp_parser_shutdown (void);
 
-/* Return a list of variable names which are currently defined
- * in the parser. The names should not be modified or freed. */
-GList * gnc_exp_parser_get_variable_names (void);
-
 /* Undefine the variable name if it is already defined. */
 void gnc_exp_parser_remove_variable (const char *variable_name);
-
-/* Undefine every variable name appearing in the list. Variables in
- * the list which are not defined are ignored. */
-void gnc_exp_parser_remove_variable_names (GList * variable_names);
-
-/* Return TRUE if the variable is defined, FALSE otherwise. If defined
- * and value_p != NULL, return the value in *value_p, otherwise, *value_p
- * is unchanged. */
-gboolean gnc_exp_parser_get_value (const char * variable_name,
-                                   gnc_numeric *value_p);
 
 /* Set the value of the variable to the given value. If the variable is
  * not already defined, it will be after the call. */

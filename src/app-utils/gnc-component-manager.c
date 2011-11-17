@@ -467,14 +467,6 @@ gnc_gui_component_watch_entity (gint component_id,
 }
 
 void
-gnc_gui_component_watch_entity_direct (gint component_id,
-                                       GncGUID entity,
-                                       QofEventId event_mask)
-{
-    gnc_gui_component_watch_entity (component_id, &entity, event_mask);
-}
-
-void
 gnc_gui_component_watch_entity_type (gint component_id,
                                      QofIdTypeConst entity_type,
                                      QofEventId event_mask)

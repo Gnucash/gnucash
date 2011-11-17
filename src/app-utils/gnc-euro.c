@@ -101,22 +101,6 @@ gnc_euro_rate_compare_code (const void * key, const void * value)
 /* ------------------------------------------------------ */
 
 gboolean
-gnc_is_euro_currency_code (const char *code)
-{
-    gnc_euro_rate_struct *result;
-
-    if (!code) return FALSE;
-
-    result = bsearch (code,
-                      gnc_euro_rates,
-                      sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
-                      sizeof(gnc_euro_rate_struct),
-                      gnc_euro_rate_compare_code);
-
-    return result != NULL;
-}
-
-gboolean
 gnc_is_euro_currency(const gnc_commodity * currency)
 {
     gnc_euro_rate_struct *result;

@@ -165,19 +165,6 @@ prepend_name (gpointer key, gpointer value, gpointer data)
     *list = g_list_prepend (*list, key);
 }
 
-GList *
-gnc_exp_parser_get_variable_names (void)
-{
-    GList *names = NULL;
-
-    if (!parser_inited)
-        return NULL;
-
-    g_hash_table_foreach (variable_bindings, prepend_name, &names);
-
-    return names;
-}
-
 void
 gnc_exp_parser_remove_variable (const char *variable_name)
 {
@@ -197,40 +184,6 @@ gnc_exp_parser_remove_variable (const char *variable_name)
         g_free(key);
         g_free(value);
     }
-}
-
-void
-gnc_exp_parser_remove_variable_names (GList * variable_names)
-{
-    if (!parser_inited)
-        return;
-
-    while (variable_names != NULL)
-    {
-        gnc_exp_parser_remove_variable (variable_names->data);
-        variable_names = variable_names->next;
-    }
-}
-
-gboolean
-gnc_exp_parser_get_value (const char * variable_name, gnc_numeric *value_p)
-{
-    ParserNum *pnum;
-
-    if (!parser_inited)
-        return FALSE;
-
-    if (variable_name == NULL)
-        return FALSE;
-
-    pnum = g_hash_table_lookup (variable_bindings, variable_name);
-    if (pnum == NULL)
-        return FALSE;
-
-    if (value_p != NULL)
-        *value_p = pnum->value;
-
-    return TRUE;
 }
 
 void

@@ -44,7 +44,6 @@ typedef QofSession * (*QofSessionCB) (void);
 
 
 gboolean gnc_reverse_balance(const Account *account);
-gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 /* Default directory sections ***************************************/
 #define GCONF_DIR_OPEN_SAVE "dialogs/open_save"
@@ -253,13 +252,6 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 /* Initialization ***************************************************/
 
 void gnc_ui_util_init (void);
-
-/* Missing functions ************************************************/
-
-#ifndef HAVE_TOWUPPER
-gint32 towupper (gint32 wc);
-int iswlower (gint32 wc);
-#endif
 
 #endif
 /** @} */

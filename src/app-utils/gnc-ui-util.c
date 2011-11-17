@@ -147,18 +147,6 @@ gnc_reverse_balance_init (void)
 }
 
 gboolean
-gnc_reverse_balance_type (GNCAccountType type)
-{
-    if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
-        return FALSE;
-
-    if (!reverse_balance_inited)
-        gnc_reverse_balance_init ();
-
-    return reverse_type[type];
-}
-
-gboolean
 gnc_reverse_balance (const Account *account)
 {
     int type;
@@ -2260,24 +2248,3 @@ gnc_ui_util_init (void)
                                   NULL);
 
 }
-
-/* These implementations are rather lame. */
-#ifndef HAVE_TOWUPPER
-gint32
-towupper (gint32 wc)
-{
-    if (wc > 127)
-        return wc;
-
-    return toupper ((int) wc);
-}
-
-int
-iswlower (gint32 wc)
-{
-    if (wc > 127)
-        return 1;
-
-    return islower ((int) wc);
-}
-#endif

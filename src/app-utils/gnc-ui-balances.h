@@ -55,9 +55,9 @@ gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
 gnc_numeric gnc_ui_account_get_balance (const Account *account,
                                         gboolean include_children);
 
-gnc_numeric gnc_ui_account_get_balance_in_currency (const Account *account,
-        const gnc_commodity *currency,
-        gboolean recurse);
+// gnc_numeric gnc_ui_account_get_balance_in_currency (const Account *account,
+//         const gnc_commodity *currency,
+//         gboolean recurse);
 /**
  * This routine retrieves the reconciled balance in an account,
  * possibly including all sub-accounts under the specified account.

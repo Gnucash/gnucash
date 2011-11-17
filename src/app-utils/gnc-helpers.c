@@ -95,25 +95,6 @@ gnc_scm2printinfo(SCM info_scm)
     return info;
 }
 
-int
-gnc_printinfo_p(SCM info_scm)
-{
-    const gchar *symbol;
-
-    if (!scm_is_list(info_scm) || scm_is_null(info_scm))
-        return 0;
-
-    info_scm = SCM_CAR (info_scm);
-    if (!scm_is_symbol (info_scm))
-        return 0;
-
-    symbol = SCM_SYMBOL_CHARS (info_scm);
-    if (symbol == NULL)
-        return 0;
-
-    return (strcmp (symbol, "print-info") == 0);
-}
-
 /* This is a scaled down version of the routine that would be needed
  * to fully convert a gnc-commodity to a scheme data structure.  In an
  * attempt to optimize the speed of price quote retrieval, this
@@ -153,19 +134,4 @@ gnc_quoteinfo2scm(gnc_commodity *comm)
     info_scm = scm_cons (comm_scm, info_scm);
     info_scm = scm_cons (scm_makfrom0str (name), info_scm);
     return info_scm;
-}
-
-SCM
-gnc_parse_amount_helper (const char * string, gboolean monetary)
-{
-    gnc_numeric result;
-    gboolean ok;
-
-    g_return_val_if_fail (string, SCM_BOOL_F);
-
-    ok = xaccParseAmount (string, monetary, &result, NULL);
-    if (!ok)
-        return SCM_BOOL_F;
-
-    return gnc_numeric_to_scm (result);
 }

@@ -125,14 +125,6 @@ static int last_db_handle = 0;
 
 
 /*******************************************************************/
-
-gboolean
-gnc_option_get_changed (GNCOption *option)
-{
-    if (!option) return FALSE;
-    return option->changed;
-}
-
 void
 gnc_option_set_changed (GNCOption *option, gboolean changed)
 {
@@ -313,42 +305,6 @@ gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
 
     scm_call_3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
 }
-
-void
-gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots)
-{
-    static SCM scm_to_kvp = SCM_UNDEFINED;
-    static SCM kvp_option_path = SCM_UNDEFINED;
-    SCM scm_slots;
-
-    if (!odb || !slots) return;
-
-    if (scm_to_kvp == SCM_UNDEFINED)
-    {
-        scm_to_kvp = scm_c_eval_string("gnc:options-scm->kvp");
-        if (!scm_is_procedure (scm_to_kvp))
-        {
-            PERR ("not a procedure\n");
-            scm_to_kvp = SCM_UNDEFINED;
-            return;
-        }
-    }
-
-    if (kvp_option_path == SCM_UNDEFINED)
-    {
-        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
-        if (kvp_option_path == SCM_UNDEFINED)
-        {
-            PERR ("can't find the option path");
-            return;
-        }
-    }
-
-    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("p_KvpFrame"), 0);
-
-    scm_call_3 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path);
-}
-
 /********************************************************************\
  * gnc_option_db_destroy                                            *
  *   unregister the scheme options and free all the memory          *
@@ -1385,29 +1341,6 @@ compare_option_tags(gconstpointer a, gconstpointer b)
 
     return result;
 }
-
-#if 0
-static gint
-compare_option_names(gconstpointer a, gconstpointer b)
-{
-    GNCOption *oa = (GNCOption *) a;
-    GNCOption *ob = (GNCOption *) b;
-    char *name_a = gnc_option_name(oa);
-    char *name_b = gnc_option_name(ob);
-    gint result;
-
-    result = safe_strcmp(name_a, name_b);
-
-    if (name_a != NULL)
-        free(name_a);
-
-    if (name_b != NULL)
-        free(name_b);
-
-    return result;
-}
-#endif
-
 
 /********************************************************************\
  * gnc_option_db_dirty                                              *

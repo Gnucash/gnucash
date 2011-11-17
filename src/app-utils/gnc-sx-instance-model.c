@@ -1685,14 +1685,6 @@ instantiate_cashflow_internal(const SchedXaction* sx,
                                   &create_cashflow_data);
 }
 
-void gnc_sx_instantiate_cashflow(const SchedXaction* sx,
-                                 GHashTable* map, GList **creation_errors)
-{
-    /* Calculate ("Instantiate") the cash flow for exactly one
-     * occurrence */
-    instantiate_cashflow_internal(sx, map, creation_errors, 1);
-}
-
 typedef struct
 {
     GHashTable *hash;
@@ -1738,6 +1730,7 @@ void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
     /* The work is done in the callback for each SX */
     g_list_foreach(all_sxes, instantiate_cashflow_cb, &userdata);
 }
+
 
 GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_end)
 {
