@@ -124,6 +124,14 @@ gnc_engine_init(int argc, char ** argv)
     gnc_engine_init_part3(argc, argv);
 }
 
+void
+gnc_engine_init_static(int argc, char ** argv)
+{
+    gnc_engine_init_part1();
+    gnc_engine_init_part3(argc, argv);
+}
+
+
 /********************************************************************
  * gnc_engine_shutdown
  * shutdown backend, destroy any global data, etc.

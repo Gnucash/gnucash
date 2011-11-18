@@ -1415,6 +1415,22 @@ get_corr_account_split(const Split *sa, const Split **retval)
 }
 
 /* TODO: these static consts can be shared. */
+const char *
+xaccSplitGetCorrAccountName(const Split *sa)
+{
+    static const char *split_const = NULL;
+    const Split *other_split;
+
+    if (!get_corr_account_split(sa, &other_split))
+    {
+        if (!split_const)
+            split_const = _("-- Split Transaction --");
+
+        return split_const;
+    }
+
+    return xaccAccountGetName(other_split->acc);
+}
 
 char *
 xaccSplitGetCorrAccountFullName(const Split *sa)

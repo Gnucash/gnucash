@@ -417,6 +417,8 @@ int xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb);
 
 char * xaccSplitGetCorrAccountFullName(const Split *sa);
 /** document me */
+const char * xaccSplitGetCorrAccountName(const Split *sa);
+/** document me */
 const char * xaccSplitGetCorrAccountCode(const Split *sa);
 
 #ifdef DUMP_FUNCTIONS
