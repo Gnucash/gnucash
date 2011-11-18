@@ -534,9 +534,9 @@ gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
     static GList *columns = NULL;
     static GNCSearchCallbackButton buttons[] =
     {
-        { N_("View/Edit Job"), edit_job_cb},
-        { N_("View Invoices"), invoice_job_cb},
-        { N_("Process Payment"), payment_job_cb},
+        { N_("View/Edit Job"), edit_job_cb, NULL},
+        { N_("View Invoices"), invoice_job_cb, NULL},
+        { N_("Process Payment"), payment_job_cb, NULL},
         { NULL },
     };
 

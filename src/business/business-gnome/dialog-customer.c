@@ -903,11 +903,11 @@ gnc_customer_search (GncCustomer *start, QofBook *book)
     static GList *columns = NULL;
     static GNCSearchCallbackButton buttons[] =
     {
-        { N_("View/Edit Customer"), edit_customer_cb},
-        { N_("Customer's Jobs"), jobs_customer_cb},
-        //    { N_("Customer's Orders"), order_customer_cb},
-        { N_("Customer's Invoices"), invoice_customer_cb},
-        { N_("Process Payment"), payment_customer_cb},
+        { N_("View/Edit Customer"), edit_customer_cb, NULL},
+        { N_("Customer's Jobs"), jobs_customer_cb, NULL},
+        //    { N_("Customer's Orders"), order_customer_cb, NULL},
+        { N_("Customer's Invoices"), invoice_customer_cb, NULL},
+        { N_("Process Payment"), payment_customer_cb, NULL},
         { NULL },
     };
     (void)order_customer_cb;

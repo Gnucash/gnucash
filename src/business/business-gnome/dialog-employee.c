@@ -706,9 +706,9 @@ gnc_employee_search (GncEmployee *start, QofBook *book)
     static GList *columns = NULL;
     static GNCSearchCallbackButton buttons[] =
     {
-        { N_("View/Edit Employee"), edit_employee_cb},
-        { N_("Expense Vouchers"), invoice_employee_cb},
-        { N_("Process Payment"), payment_employee_cb},
+        { N_("View/Edit Employee"), edit_employee_cb, NULL},
+        { N_("Expense Vouchers"), invoice_employee_cb, NULL},
+        { N_("Process Payment"), payment_employee_cb, NULL},
         { NULL },
     };
 

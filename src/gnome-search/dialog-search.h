@@ -56,17 +56,25 @@ typedef gpointer (*GNCSearchNewItemCB) (gpointer user_data);
 /* Free the general user_data object */
 typedef void (*GNCSearchFree) (gpointer user_data);
 
-/* This callback is called when (if) the user clicks the 'select'
+/** This callback is called when (if) the user clicks the 'select'
  * button.  The search dialog will close when this callback function
  * returns.
  */
 typedef void (*GNCSearchSelectedCB) (gpointer selected_object,
                                      gpointer user_data);
 
+/** This callback is called when (if) the user clicks the 'select'
+ * button.  The search dialog will close when this callback function
+ * returns.
+ */
+typedef void (*GNCSearchMultiSelectedCB) (GList *list_of_selected_objects,
+                                          gpointer user_data);
+
 typedef struct
 {
     const char *		label;
     GNCSearchCallback	cb_fcn;
+    GNCSearchMultiSelectedCB cb_multiselect_fn;
 } GNCSearchCallbackButton;
 
 /* Caller MUST supply _EITHER_ a result_callback or a list of callback
