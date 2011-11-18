@@ -153,6 +153,7 @@ gnc_vendor_set_property (GObject         *object,
 }
 
 /** Return displayable name */
+/*
 static gchar*
 impl_get_display_name(const QofInstance* inst)
 {
@@ -164,7 +165,7 @@ impl_get_display_name(const QofInstance* inst)
     v = GNC_VENDOR(inst);
     return g_strdup_printf("Vendor %s", v->name);
 }
-
+*/
 /** Does this object refer to a specific object */
 static gboolean
 impl_refers_to_object(const QofInstance* inst, const QofInstance* ref)
@@ -654,28 +655,8 @@ gboolean gncVendorEqual(const GncVendor *a, const GncVendor *b)
     return TRUE;
 }
 
-GList * gncVendorGetJoblist (const GncVendor *vendor, gboolean show_all)
-{
-    if (!vendor) return NULL;
-
-    if (show_all)
-    {
-        return (g_list_copy (vendor->jobs));
-    }
-    else
-    {
-        GList *list = NULL, *iterator;
-        for (iterator = vendor->jobs; iterator; iterator = iterator->next)
-        {
-            GncJob *j = iterator->data;
-            if (gncJobGetActive (j))
-                list = g_list_append (list, j);
-        }
-        return list;
-    }
-}
-
-gboolean gncVendorIsDirty (const GncVendor *vendor)
+gboolean
+gncVendorIsDirty (const GncVendor *vendor)
 {
     if (!vendor) return FALSE;
     return (qof_instance_get_dirty_flag(vendor)

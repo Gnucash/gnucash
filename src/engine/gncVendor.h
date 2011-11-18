@@ -102,10 +102,8 @@ GncTaxTable* gncVendorGetTaxTable (const GncVendor *vendor);
 /** XXX should be renamed to RetJobList to be consistent with
  * other usage, since caller must free the copied list
  */
-GList * gncVendorGetJoblist (const GncVendor *vendor, gboolean show_all);
-gboolean gncVendorIsDirty (const GncVendor *vendor);
+
 int gncVendorCompare (const GncVendor *a, const GncVendor *b);
-gboolean gncVendorEqual(const GncVendor *a, const GncVendor *b);
 
 /** Return a pointer to the instance gncVendor that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
@@ -133,7 +131,9 @@ static inline GncVendor * gncVendorLookup (const QofBook *book, const GncGUID *g
 #define gncVendorGetGUID(X) qof_instance_get_guid (QOF_INSTANCE(X))
 #define gncVendorRetGUID(X) (X ? *(qof_instance_get_guid (QOF_INSTANCE(X))) : *(guid_null()))
 #define gncVendorLookupDirect(G,B) gncVendorLookup((B),&(G))
-
+/** Test support function, used by test-dbi-business-stuff.c */
+gboolean gncVendorEqual(const GncVendor *a, const GncVendor *b);
+gboolean gncVendorIsDirty (const GncVendor *vendor);
 #endif /* GNC_VENDOR_H_ */
 /** @} */
 /** @} */

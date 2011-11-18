@@ -346,13 +346,6 @@ PriceList * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                                        const gnc_commodity *currency,
                                        Timespec t);
 
-/** gnc_pricedb_lookup_at_time_any_currency - return all prices that match the
-     given commodity and timespec in any available currency.  Prices will be
-     returned as a GNCPrice list (see above). */
-PriceList * gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
-        const gnc_commodity *c,
-        Timespec t);
-
 /** gnc_pricedb_lookup_day - return all prices that match the given
      commodity, currency, and timespec.  Prices will be returned as a
      GNCPrice list (see above). */
@@ -361,12 +354,6 @@ PriceList * gnc_pricedb_lookup_day(GNCPriceDB *db,
                                    const gnc_commodity *currency,
                                    Timespec t);
 
-/** gnc_pricedb_lookup_day_any_currency - return all prices that match the
-     given commodity and timespec in any available currency.  Prices will be
-     returned as a GNCPrice list (see above). */
-PriceList * gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
-        const gnc_commodity *c,
-        Timespec t);
 
 /** gnc_pricedb_lookup_nearest_in_time - return the price for the given
      commodity in the given currency nearest to the given time t. */
@@ -413,16 +400,6 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
         const gnc_commodity *new_currency,
         Timespec t);
 
-/** gnc_pricedb_convert_balance_latest_before - Convert a balance from one currency
-    to another using the lastest price prior to Timespec t. */
-gnc_numeric
-gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
-        gnc_numeric balance,
-        gnc_commodity *balance_currency,
-        gnc_commodity *new_currency,
-        Timespec t);
-
-
 /** gnc_pricedb_foreach_price - call f once for each price in db, until
      and unless f returns FALSE.  If stable_order is not FALSE, make
      sure the ordering of the traversal is stable (i.e. the same order
@@ -434,10 +411,11 @@ gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
                                        gpointer user_data,
                                        gboolean stable_order);
 
+/* The following two convenience functions are used to test the xml backend */
 /** gnc_pricedb_get_num_prices - return the number of prices
    in the database. */
 guint gnc_pricedb_get_num_prices(GNCPriceDB *db);
-
+/** gnc_pricedb_equal - test equality of two pricedbs */
 gboolean gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2);
 
 /** @name Internal/Debugging

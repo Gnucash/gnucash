@@ -480,19 +480,6 @@ gnc_quote_source_get_user_name (const gnc_quote_source *source)
 }
 
 const char *
-gnc_quote_source_get_old_internal_name (const gnc_quote_source *source)
-{
-    ENTER("%p", source);
-    if (!source)
-    {
-        LEAVE("bad source");
-        return NULL;
-    }
-    LEAVE("old internal name %s", source->old_internal_name);
-    return source->old_internal_name;
-}
-
-const char *
 gnc_quote_source_get_internal_name (const gnc_quote_source *source)
 {
     ENTER("%p", source);
@@ -1625,14 +1612,6 @@ gnc_commodity_obtain_twin (const gnc_commodity *from, QofBook *book)
  * get the size of the commodity table
  ********************************************************************/
 
-guint
-gnc_commodity_table_get_number_of_namespaces(const gnc_commodity_table* tbl)
-{
-    g_return_val_if_fail(tbl, 0);
-    g_return_val_if_fail(tbl->ns_table, 0);
-    return g_hash_table_size(tbl->ns_table);
-}
-
 static void
 count_coms(gpointer key, gpointer value, gpointer user_data)
 {
@@ -2157,17 +2136,6 @@ gnc_commodity_find_commodity_by_guid(const GncGUID *guid, QofBook *book)
     return (gnc_commodity *) qof_collection_lookup_entity (col, guid);
 }
 
-gnc_commodity_namespace *
-gnc_commodity_find_namespace_by_guid(const GncGUID *guid, QofBook *book)
-{
-    QofCollection *col;
-    if (!guid || !book) return NULL;
-    col = qof_book_get_collection (book, GNC_ID_COMMODITY_NAMESPACE);
-    return (gnc_commodity_namespace *) qof_collection_lookup_entity (col, guid);
-}
-
-
-
 /********************************************************************
  * gnc_commodity_table_delete_namespace
  * delete a namespace
@@ -2290,68 +2258,6 @@ gnc_commodity_table_destroy(gnc_commodity_table * t)
 }
 
 /* =========================================================== */
-
-static gboolean
-table_equal_helper (gnc_commodity *cm_1, gpointer user_data)
-{
-    gnc_commodity_table *t_2 = user_data;
-    gnc_commodity *cm_2;
-
-    cm_2 = gnc_commodity_table_lookup (t_2,
-                                       gnc_commodity_get_namespace (cm_1),
-                                       gnc_commodity_get_mnemonic (cm_1));
-
-    if (!cm_2)
-    {
-        PWARN ("one has commodity %s, the other does not",
-               gnc_commodity_get_unique_name (cm_1));
-        return FALSE;
-    }
-
-    return gnc_commodity_equal (cm_1, cm_2);
-}
-
-gboolean
-gnc_commodity_table_equal(gnc_commodity_table *t_1,
-                          gnc_commodity_table *t_2)
-{
-    gboolean ok;
-
-    if (t_1 == t_2) return TRUE;
-    if (!t_1 || !t_2) return FALSE;
-
-    ok = gnc_commodity_table_foreach_commodity (t_1, table_equal_helper, t_2);
-    if (!ok)
-        return FALSE;
-
-    return gnc_commodity_table_foreach_commodity (t_2, table_equal_helper, t_1);
-}
-
-/* =========================================================== */
-
-typedef struct
-{
-    gnc_commodity_table *dest;
-    QofBook *dest_book;
-} table_copy_helper_data;
-
-static gboolean
-table_copy_helper (gnc_commodity *src_cm, gpointer user_data)
-{
-    table_copy_helper_data *data = user_data;
-    gnc_commodity_table_insert (data->dest,
-                                gnc_commodity_clone (src_cm, data->dest_book));
-    return TRUE;
-}
-
-void
-gnc_commodity_table_copy(gnc_commodity_table *dest,
-                         gnc_commodity_table *src,
-                         QofBook *dest_book)
-{
-    table_copy_helper_data data = {dest, dest_book};
-    gnc_commodity_table_foreach_commodity (src, table_copy_helper, &data);
-}
 
 /********************************************************************
  * gnc_commodity_table_add_default_data

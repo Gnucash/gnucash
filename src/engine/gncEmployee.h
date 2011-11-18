@@ -104,8 +104,6 @@ static inline GncEmployee * gncEmployeeLookup (const QofBook *book, const GncGUI
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_EMPLOYEE, GncEmployee);
 }
 
-gboolean gncEmployeeIsDirty (const GncEmployee *employee);
-gboolean gncEmployeeEqual(const GncEmployee* e1, const GncEmployee* e2);
 
 #define EMPLOYEE_ID       "id"
 #define EMPLOYEE_USERNAME "username"
@@ -121,6 +119,10 @@ gboolean gncEmployeeEqual(const GncEmployee* e1, const GncEmployee* e2);
 #define gncEmployeeGetBook(E) qof_instance_get_book(QOF_INSTANCE(E))
 #define gncEmployeeRetGUID(E) (E ? *(qof_entity_get_guid(QOF_INSTANCE(E))) : *(guid_null()))
 #define gncEmployeeLookupDirect(G,B) gncEmployeeLookup((B),&(G))
+
+/** Test support function, used by test-dbi-business-stuff.c */
+gboolean gncEmployeeEqual(const GncEmployee* e1, const GncEmployee* e2);
+gboolean gncEmployeeIsDirty (const GncEmployee *employee);
 
 #endif /* GNC_EMPLOYEE_H_ */
 /** @} */

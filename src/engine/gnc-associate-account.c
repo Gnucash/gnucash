@@ -243,31 +243,6 @@ gnc_tracking_associate_income_accounts(Account *stock_account,
  *                                                                   *
  * Returns : void                                                    *
 \*********************************************************************/
-void
-gnc_tracking_asssociate_expense_account(Account *stock_account,
-                                        GNCTrackingExpenseCategory category,
-                                        GList *account_list)
-{
-    KvpFrame *account_frame, *expense_acc_frame;
-    KvpValue *kvpd_on_account_list;
-
-    g_return_if_fail(stock_account);
-    g_return_if_fail(xaccAccountIsPriced(stock_account));
-    account_frame = xaccAccountGetSlots(stock_account);
-    g_return_if_fail(account_frame);
-    g_return_if_fail(category >= 0);
-    g_return_if_fail(category < GNC_TR_EXP_N_CATEGORIES);
-
-    expense_acc_frame = get_assoc_acc_frame(account_frame);
-    kvpd_on_account_list = make_kvpd_on_list(account_list);
-
-    back_associate_expense_accounts(stock_account, account_list, category);
-
-    kvp_frame_set_slot_nc(expense_acc_frame,
-                          expense_to_key[category],
-                          kvpd_on_account_list);
-}
-
 /*********************************************************************\
  * gnc_tracking_find_expense_accounts                                *
  *   find out which accounts are associated with a particular        *

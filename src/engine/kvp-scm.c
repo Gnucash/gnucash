@@ -8,18 +8,13 @@
 #include "guile-mappings.h"
 #include "swig-runtime.h"
 
-int
-gnc_kvp_value_ptr_p(SCM arg)
-{
-    return TRUE;
-}
-
 /* NOTE: There are some problems with this approach. Currently,
  *       guids are stored simply as strings in scheme, so some
  *       strings could be mistaken for guids, although that is
  *       unlikely. The general problem is distinguishing kvp
  *       types based only on the scheme type.
  */
+
 KvpValue *
 gnc_scm_to_kvp_value_ptr(SCM val)
 {

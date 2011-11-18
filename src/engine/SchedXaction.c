@@ -768,28 +768,6 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
     return result;
 }
 
-
-KvpValue *
-xaccSchedXactionGetSlot( const SchedXaction *sx, const char *slot )
-{
-    if (!sx) return NULL;
-
-    return kvp_frame_get_slot(sx->inst.kvp_data, slot);
-}
-
-void
-xaccSchedXactionSetSlot( SchedXaction *sx,
-                         const char *slot,
-                         const KvpValue *value )
-{
-    if (!sx) return;
-
-    gnc_sx_begin_edit(sx);
-    kvp_frame_set_slot( sx->inst.kvp_data, slot, value );
-    qof_instance_set_dirty(&sx->inst);
-    gnc_sx_commit_edit(sx);
-}
-
 gboolean
 xaccSchedXactionGetEnabled( const SchedXaction *sx )
 {
@@ -1165,18 +1143,6 @@ gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *stateData )
         tsd->num_occur_rem -= 1;
     }
     tsd->num_inst += 1;
-}
-
-void
-gnc_sx_revert_to_temporal_state( SchedXaction *sx, SXTmpStateData *stateData )
-{
-    SXTmpStateData *tsd = (SXTmpStateData*)stateData;
-    gnc_sx_begin_edit(sx);
-    sx->last_date        = tsd->last_date;
-    sx->num_occurances_remain = tsd->num_occur_rem;
-    sx->instance_num     = tsd->num_inst;
-    qof_instance_set_dirty(&sx->inst);
-    gnc_sx_commit_edit(sx);
 }
 
 void

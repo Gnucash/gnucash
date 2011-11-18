@@ -629,14 +629,6 @@ void gncInvoiceAddPrice (GncInvoice *invoice, GNCPrice *price)
     mark_invoice (invoice);
 }
 
-void gncInvoiceRemovePrice (GncInvoice *invoice, GNCPrice *price)
-{
-    if (!invoice || !price) return;
-
-    invoice->prices = g_list_remove (invoice->prices, price);
-    mark_invoice (invoice);
-}
-
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry)
 {
     GncInvoice *old;
@@ -663,23 +655,6 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry)
     bill->entries = g_list_remove (bill->entries, entry);
     mark_invoice (bill);
 }
-
-void gncBillAddPrice (GncInvoice *bill, GNCPrice *price)
-{
-    if (!bill || !price) return;
-
-    bill->prices = g_list_prepend(bill->prices, price);
-    mark_invoice (bill);
-}
-
-void gncBillRemovePrice (GncInvoice *bill, GNCPrice *price)
-{
-    if (!bill || !price) return;
-
-    bill->prices = g_list_remove (bill->prices, price);
-    mark_invoice (bill);
-}
-
 
 void gncInvoiceSortEntries (GncInvoice *invoice)
 {
@@ -983,12 +958,6 @@ EntryList * gncInvoiceGetEntries (GncInvoice *invoice)
 {
     if (!invoice) return NULL;
     return invoice->entries;
-}
-
-GList * gncInvoiceGetPrices(GncInvoice *invoice)
-{
-    if (!invoice) return NULL;
-    return invoice->prices;
 }
 
 GNCPrice * gncInvoiceGetPrice(GncInvoice *invoice, gnc_commodity *commodity)

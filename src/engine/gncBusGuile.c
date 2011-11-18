@@ -40,15 +40,6 @@ get_acct_type ()
     return account_type;
 }
 
-int gnc_account_value_pointer_p (SCM arg)
-{
-    swig_type_info * account_type = get_acct_type();
-
-    return (scm_is_pair (arg) &&
-            SWIG_IsPointerOfType(SCM_CAR (arg), account_type) &&
-            gnc_numeric_p (SCM_CDR (arg)));
-}
-
 GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
 {
     GncAccountValue *res;

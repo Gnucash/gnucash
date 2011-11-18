@@ -164,8 +164,6 @@ const char * gnc_lot_get_title (const GNCLot *);
 const char * gnc_lot_get_notes (const GNCLot *);
 void gnc_lot_set_title (GNCLot *, const char *);
 void gnc_lot_set_notes (GNCLot *, const char *);
-unsigned char gnc_lot_get_marker(const GNCLot*);
-void gnc_lot_set_marker(GNCLot*, unsigned char);
 
 /** Every lot has a place to hang kvp data.  This routine returns that
  *     place.

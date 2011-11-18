@@ -114,13 +114,10 @@ void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount);
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry);
 void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
 void gncInvoiceAddPrice (GncInvoice *invoice, GNCPrice *price);
-void gncInvoiceRemovePrice (GncInvoice *invoice, GNCPrice *price);
 
 /** Call this function when adding an entry to a bill instead of an invoice */
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry);
 void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
-void gncBillAddPrice (GncInvoice *bill, GNCPrice *price);
-void gncBillRemovePrice (GncInvoice *bill, GNCPrice *price);
 
 /** Call this function when an Entry is changed and you want to
     re-sort the list of entries
@@ -160,7 +157,6 @@ gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice);
 
 typedef GList EntryList;
 EntryList * gncInvoiceGetEntries (GncInvoice *invoice);
-GList * gncInvoiceGetPrices(GncInvoice *invoice);
 GNCPrice * gncInvoiceGetPrice(GncInvoice *invoice, gnc_commodity* commodity);
 
 /** Depending on the invoice type, invoices have a different effect
@@ -217,7 +213,6 @@ static inline GncInvoice * gncInvoiceLookup (const QofBook *book, const GncGUID 
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
 int gncInvoiceCompare (const GncInvoice *a, const GncInvoice *b);
-gboolean gncInvoiceEqual(const GncInvoice *a, const GncInvoice *b);
 gboolean gncInvoiceIsPosted (const GncInvoice *invoice);
 gboolean gncInvoiceIsPaid (const GncInvoice *invoice);
 
@@ -250,6 +245,9 @@ QofBook *gncInvoiceGetBook(GncInvoice *x);
 #define gncInvoiceGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncInvoiceRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncInvoiceLookupDirect(G,B) gncInvoiceLookup((B),&(G))
+
+/** Test support function used by test-dbi-business-stuff.c */
+gboolean gncInvoiceEqual(const GncInvoice *a, const GncInvoice *b);
 
 #endif /* GNC_INVOICE_H_ */
 /** @} */

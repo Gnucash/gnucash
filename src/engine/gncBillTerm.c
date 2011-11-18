@@ -815,16 +815,6 @@ gncBillTermComputeDueDate (const GncBillTerm *term, Timespec post_date)
 
     return compute_time (term, post_date, term->due_days);
 }
-
-Timespec
-gncBillTermComputeDiscountDate (const GncBillTerm *term, Timespec post_date)
-{
-    Timespec res = post_date;
-    if (!term) return res;
-
-    return compute_time (term, post_date, term->disc_days);
-}
-
 /* Package-Private functions */
 
 static void _gncBillTermCreate (QofBook *book)

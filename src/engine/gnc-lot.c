@@ -322,26 +322,6 @@ gnc_lot_set_account(GNCLot* lot, Account* account)
     }
 }
 
-unsigned char
-gnc_lot_get_marker(const GNCLot* lot)
-{
-    LotPrivate* priv;
-    if (lot == NULL) return 0;
-    priv = GET_PRIVATE(lot);
-    return priv->marker;
-}
-
-void
-gnc_lot_set_marker(GNCLot* lot, unsigned char m)
-{
-    LotPrivate* priv;
-    if (lot != NULL)
-    {
-        priv = GET_PRIVATE(lot);
-        priv->marker = m;
-    }
-}
-
 void
 gnc_lot_set_closed_unknown(GNCLot* lot)
 {

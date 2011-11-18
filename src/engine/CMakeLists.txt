@@ -41,7 +41,6 @@ SET (libgncmod_engine_HEADERS
   gnc-event.h
   gnc-hooks.h
   gnc-pricedb.h
-  gnc-session-scm.h
   gnc-session.h
   kvp-scm.h
   policy.h
@@ -122,7 +121,6 @@ SET (libgncmod_engine_SOURCES
   gnc-hooks.c
   gnc-lot.c
   gnc-pricedb.c
-  gnc-session-scm.c
   gnc-session.c
   gncmod-engine.c
   kvp-scm.c

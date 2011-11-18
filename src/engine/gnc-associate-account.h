@@ -58,11 +58,6 @@ void gnc_tracking_associate_income_accounts(Account *stock_account,
         GNCTrackingIncomeCategory category,
         AccountList *account_list);
 
-
-void gnc_tracking_asssociate_expense_account(Account *stock_account,
-        GNCTrackingExpenseCategory category,
-        AccountList *account_list);
-
 /*
  * returns a list of account *'s,
  * returns null if no association specified

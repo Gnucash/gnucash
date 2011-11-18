@@ -1504,14 +1504,14 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
 
 /********************************************************************\
 \********************************************************************/
-
+/*
 gboolean
 gnc_account_get_sort_dirty (Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     return GET_PRIVATE(acc)->sort_dirty;
 }
-
+*/
 void
 gnc_account_set_sort_dirty (Account *acc)
 {
@@ -1525,14 +1525,14 @@ gnc_account_set_sort_dirty (Account *acc)
     priv = GET_PRIVATE(acc);
     priv->sort_dirty = TRUE;
 }
-
+/*
 gboolean
 gnc_account_get_balance_dirty (Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     return GET_PRIVATE(acc)->balance_dirty;
 }
-
+*/
 void
 gnc_account_set_balance_dirty (Account *acc)
 {
@@ -1549,7 +1549,7 @@ gnc_account_set_balance_dirty (Account *acc)
 
 /********************************************************************\
 \********************************************************************/
-
+/*
 gboolean
 gnc_account_find_split (Account *acc, Split *s)
 {
@@ -1563,7 +1563,7 @@ gnc_account_find_split (Account *acc, Split *s)
     node = g_list_find(priv->splits, s);
     return node ? TRUE : FALSE;
 }
-
+*/
 gboolean
 gnc_account_insert_split (Account *acc, Split *s)
 {
@@ -1682,7 +1682,7 @@ xaccAccountLookup (const GncGUID *guid, QofBook *book)
 
 /********************************************************************\
 \********************************************************************/
-
+/*
 short
 xaccAccountGetMark (const Account *acc)
 {
@@ -1690,7 +1690,7 @@ xaccAccountGetMark (const Account *acc)
 
     return GET_PRIVATE(acc)->mark;
 }
-
+*/
 void
 xaccAccountSetMark (Account *acc, short m)
 {
@@ -2812,7 +2812,7 @@ gnc_account_foreach_child (const Account *acc,
         thunk (node->data, user_data);
     }
 }
-
+/*
 gpointer
 gnc_account_foreach_child_until (const Account *acc,
                                  AccountCb2 thunk,
@@ -2835,7 +2835,7 @@ gnc_account_foreach_child_until (const Account *acc,
 
     return NULL;
 }
-
+*/
 void
 gnc_account_foreach_descendant (const Account *acc,
                                 AccountCb thunk,
@@ -3036,7 +3036,7 @@ xaccAccountGetCommodity (const Account *acc)
 
 /********************************************************************\
 \********************************************************************/
-
+/*
 gnc_numeric
 gnc_account_get_start_balance (Account *acc)
 {
@@ -3044,7 +3044,7 @@ gnc_account_get_start_balance (Account *acc)
 
     return GET_PRIVATE(acc)->starting_balance;
 }
-
+*/
 void
 gnc_account_set_start_balance (Account *acc, const gnc_numeric start_baln)
 {
@@ -3056,7 +3056,7 @@ gnc_account_set_start_balance (Account *acc, const gnc_numeric start_baln)
     priv->starting_balance = start_baln;
     priv->balance_dirty = TRUE;
 }
-
+/*
 gnc_numeric
 gnc_account_get_start_cleared_balance (Account *acc)
 {
@@ -3064,7 +3064,7 @@ gnc_account_get_start_cleared_balance (Account *acc)
 
     return GET_PRIVATE(acc)->starting_cleared_balance;
 }
-
+*/
 void
 gnc_account_set_start_cleared_balance (Account *acc,
                                        const gnc_numeric start_baln)
@@ -3077,7 +3077,7 @@ gnc_account_set_start_cleared_balance (Account *acc,
     priv->starting_cleared_balance = start_baln;
     priv->balance_dirty = TRUE;
 }
-
+/*
 gnc_numeric
 gnc_account_get_start_reconciled_balance (Account *acc)
 {
@@ -3085,7 +3085,7 @@ gnc_account_get_start_reconciled_balance (Account *acc)
 
     return GET_PRIVATE(acc)->starting_reconciled_balance;
 }
-
+*/
 void
 gnc_account_set_start_reconciled_balance (Account *acc,
         const gnc_numeric start_baln)
@@ -3519,7 +3519,6 @@ xaccAccountGetClearedBalanceInCurrency (const Account *acc,
                acc, xaccAccountGetClearedBalance, report_commodity,
                include_children);
 }
-
 
 gnc_numeric
 xaccAccountGetReconciledBalanceInCurrency (const Account *acc,
@@ -3994,7 +3993,7 @@ xaccAccountGetTypeStr(GNCAccountType type)
     if (type < 0 || NUM_ACCOUNT_TYPES <= type ) return "";
     return _(account_type_name [type]);
 }
-
+/*
 GNCAccountType
 xaccAccountGetTypeFromStr (const gchar *str)
 {
@@ -4011,7 +4010,7 @@ xaccAccountGetTypeFromStr (const gchar *str)
 
     return ACCT_TYPE_INVALID;
 }
-
+*/
 
 /********************************************************************\
 \********************************************************************/
@@ -4634,7 +4633,7 @@ xaccTransactionTraverse (Transaction *trans, int stage)
 
     return FALSE;
 }
-
+/*
 gboolean
 xaccSplitTransactionTraverse (Split *split, int stage)
 {
@@ -4642,7 +4641,7 @@ xaccSplitTransactionTraverse (Split *split, int stage)
 
     return xaccTransactionTraverse (split->parent, stage);
 }
-
+*/
 static void do_one_split (Split *s, gpointer data)
 {
     Transaction *trans = s->parent;

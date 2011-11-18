@@ -526,34 +526,6 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
 
 /* We don't need these here, but maybe they're useful somewhere else?
    Maybe this should move to Account.h */
-#if 0
-static gpointer
-is_same_commodity(Account *a, gpointer data)
-{
-    gnc_commodity *acct_comm;
-    gnc_commodity *comm;
-
-    g_return_val_if_fail(data, NULL);
-    // What? No type-checking macro?
-    comm = (gnc_commodity *) data;
-    acct_comm = xaccAccountGetCommodity(a);
-
-    return gnc_commodity_equal(comm, acct_comm) ? NULL : data;
-}
-
-static gboolean
-xaccAccountChildrenHaveSameCommodity(Account *account)
-{
-    gpointer different;
-    gnc_commodity *comm;
-
-    comm = xaccAccountGetCommodity(account);
-    different =
-        gnc_account_foreach_descendant_until(account, is_same_commodity, comm);
-    return (different == NULL);
-}
-#endif
-
 
 gboolean
 gnc_budget_is_account_period_value_set(const GncBudget *budget, const Account *account,
@@ -621,13 +593,6 @@ gnc_budget_get_account_period_actual_value(
     g_return_val_if_fail(GNC_IS_BUDGET(budget) && acc, gnc_numeric_zero());
     return recurrenceGetAccountPeriodValue(&GET_PRIVATE(budget)->recurrence,
                                            acc, period_num);
-}
-
-QofBook*
-gnc_budget_get_book(const GncBudget* budget)
-{
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
-    return qof_instance_get_book(&budget->inst);
 }
 
 GncBudget*

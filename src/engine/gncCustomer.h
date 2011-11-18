@@ -135,12 +135,9 @@ gnc_commodity * gncCustomerGetCurrency (const GncCustomer *customer);
 gboolean gncCustomerGetTaxTableOverride (const GncCustomer *customer);
 GncTaxTable* gncCustomerGetTaxTable (const GncCustomer *customer);
 
-GList * gncCustomerGetJoblist (const GncCustomer *customer, gboolean show_all);
 /** @} */
 
-gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b);
-gboolean gncCustomerEqual(const GncCustomer *a, const GncCustomer *b);
 
 #define CUSTOMER_ID         "id"
 #define CUSTOMER_NAME       "name"
@@ -160,6 +157,12 @@ gboolean gncCustomerEqual(const GncCustomer *a, const GncCustomer *b);
 #define gncCustomerRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncCustomerGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 #define gncCustomerLookupDirect(g,b) gncCustomerLookup((b), &(g))
+
+/** Test support function, used in gets-dbi-business-stuff.c */
+gboolean gncCustomerEqual(const GncCustomer *a, const GncCustomer *b);
+
+GList * gncCustomerGetJoblist (const GncCustomer *customer, gboolean show_all);
+gboolean gncCustomerIsDirty (GncCustomer *customer);
 
 #endif /* GNC_CUSTOMER_H_ */
 /** @} */

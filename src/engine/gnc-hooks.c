@@ -106,23 +106,6 @@ gnc_hook_lookup (const gchar *name)
     return(hook);
 }
 
-gchar *
-gnc_hook_get_description(const gchar *name)
-{
-    GncHook *hook;
-    ENTER("name %s", name);
-
-    hook = gnc_hook_lookup(name);
-    if (!hook)
-    {
-        LEAVE("No hook found");
-        return "";
-    }
-
-    LEAVE("desc: %s", hook->desc);
-    return (gchar*) hook->desc;
-}
-
 void
 gnc_hook_add_dangler (const gchar *name, GFunc callback, gpointer cb_arg)
 {
@@ -235,34 +218,6 @@ hook_remove_scm_runner (GHook *hook, gpointer data)
 
     res = scm_equal_p(scm1->proc, scm2->proc);
     return(scm_is_true(res));
-}
-
-void
-gnc_hook_del_scm_dangler (const gchar *name, SCM proc)
-{
-    GncHook *gnc_hook;
-    GHook *hook;
-    GncScmDangler scm;
-
-    ENTER("name %s, proc ???", name);
-
-    scm.proc = proc;
-    gnc_hook = gnc_hook_lookup(name);
-    if (gnc_hook == NULL)
-    {
-        LEAVE("Unknown hook list %s", name);
-        return;
-    }
-
-    hook = g_hook_find(gnc_hook->scm_danglers, TRUE, hook_remove_scm_runner, &scm);
-    if (hook == NULL)
-    {
-        LEAVE("Hook dangler not found");
-        return;
-    }
-
-    g_hook_destroy_link(gnc_hook->scm_danglers, hook);
-    LEAVE("Removed dangler from %s", name);
 }
 
 static void

@@ -665,23 +665,6 @@ add_keys_to_list(gpointer key, gpointer val, gpointer list)
     *(GList **)list = g_list_prepend(*(GList **)list, key);
 }
 
-GList *
-xaccSplitListGetUniqueTransactions(const GList *splits)
-{
-    const GList *node;
-    GList *transList = NULL;
-    GHashTable *transHash = g_hash_table_new(g_direct_hash, g_direct_equal);
-
-    for (node = splits; node; node = node->next)
-    {
-        Transaction *trans = xaccSplitGetParent((Split *)(node->data));
-        g_hash_table_insert(transHash, trans, trans);
-    }
-    g_hash_table_foreach(transHash, add_keys_to_list, &transList);
-    g_hash_table_destroy(transHash);
-    return transList;
-}
-
 /********************************************************************
  * Account funcs
  ********************************************************************/
@@ -920,7 +903,7 @@ xaccSplitGetSlots (const Split * s)
 {
     return qof_instance_get_slots(QOF_INSTANCE(s));
 }
-
+/* Used for testing only: _get_random_split in test-engine-stuff.c */
 void
 xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
 {
@@ -933,25 +916,6 @@ xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
 
 /********************************************************************\
 \********************************************************************/
-
-void
-DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
-{
-    if (!s) return;
-    ENTER (" ");
-    xaccTransBeginEdit (s->parent);
-
-    s->amount = double_to_gnc_numeric(amt, get_commodity_denom(s),
-                                      GNC_HOW_RND_ROUND_HALF_UP);
-    s->value  = double_to_gnc_numeric(price * amt, get_currency_denom(s),
-                                      GNC_HOW_RND_ROUND_HALF_UP);
-
-    SET_GAINS_A_VDIRTY(s);
-    mark_split (s);
-    qof_instance_set_dirty(QOF_INSTANCE(s));
-    xaccTransCommitEdit(s->parent);
-    LEAVE("");
-}
 
 void
 xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price, gnc_numeric amt)
@@ -993,41 +957,6 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
                                GNC_HOW_RND_ROUND_HALF_UP);
 
     SET_GAINS_VDIRTY(s);
-    mark_split (s);
-    qof_instance_set_dirty(QOF_INSTANCE(s));
-    xaccTransCommitEdit(s->parent);
-    LEAVE ("");
-}
-
-void
-DxaccSplitSetShareAmount (Split *s, double damt)
-{
-    gnc_numeric old_price, old_amt;
-    int commodity_denom = get_commodity_denom(s);
-    gnc_numeric amt = double_to_gnc_numeric(damt, commodity_denom,
-                                            GNC_HOW_RND_ROUND_HALF_UP);
-    if (!s) return;
-    ENTER (" ");
-    xaccTransBeginEdit (s->parent);
-
-    old_amt = xaccSplitGetAmount (s);
-    if (!gnc_numeric_zero_p(old_amt))
-    {
-        old_price = gnc_numeric_div(xaccSplitGetValue (s),
-                                    old_amt, GNC_DENOM_AUTO,
-                                    GNC_HOW_DENOM_REDUCE);
-    }
-    else
-    {
-        old_price = gnc_numeric_create(1, 1);
-    }
-
-    s->amount = gnc_numeric_convert(amt, commodity_denom,
-                                    GNC_HOW_RND_NEVER);
-    s->value  = gnc_numeric_mul(s->amount, old_price,
-                                get_currency_denom(s), GNC_HOW_RND_ROUND_HALF_UP);
-
-    SET_GAINS_A_VDIRTY(s);
     mark_split (s);
     qof_instance_set_dirty(QOF_INSTANCE(s));
     xaccTransCommitEdit(s->parent);
@@ -1206,68 +1135,68 @@ xaccSplitGetBaseValue (const Split *s, const gnc_commodity * base_currency)
 /********************************************************************\
 \********************************************************************/
 
-gnc_numeric
-xaccSplitsComputeValue (GList *splits, const Split * skip_me,
-                        const gnc_commodity * base_currency)
-{
-    GList *node;
-    gnc_numeric value = gnc_numeric_zero();
+/* gnc_numeric */
+/* xaccSplitsComputeValue (GList *splits, const Split * skip_me, */
+/*                         const gnc_commodity * base_currency) */
+/* { */
+/*     GList *node; */
+/*     gnc_numeric value = gnc_numeric_zero(); */
 
-    g_return_val_if_fail (base_currency, value);
+/*     g_return_val_if_fail (base_currency, value); */
 
-    ENTER (" currency=%s", gnc_commodity_get_mnemonic (base_currency));
+/*     ENTER (" currency=%s", gnc_commodity_get_mnemonic (base_currency)); */
 
-    for (node = splits; node; node = node->next)
-    {
-        const Split *s = node->data;
-        const gnc_commodity *currency;
-        const gnc_commodity *commodity;
+/*     for (node = splits; node; node = node->next) */
+/*     { */
+/*         const Split *s = node->data; */
+/*         const gnc_commodity *currency; */
+/*         const gnc_commodity *commodity; */
 
-        if (s == skip_me) continue;
+/*         if (s == skip_me) continue; */
 
-        /* value = gnc_numeric_add(value, xaccSplitGetBaseValue(s, base_currency),
-           GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); */
+/*         /\* value = gnc_numeric_add(value, xaccSplitGetBaseValue(s, base_currency), */
+/*            GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); *\/ */
 
-        /* The split-editor often sends us 'temp' splits whose account
-         * hasn't yet been set.  Be lenient, and assume an implied base
-         * currency. If there's a problem later, the scrub routines will
-         * pick it up.
-         */
-        commodity = s->acc ? xaccAccountGetCommodity (s->acc) : base_currency;
-        currency = xaccTransGetCurrency (s->parent);
+/*         /\* The split-editor often sends us 'temp' splits whose account */
+/*          * hasn't yet been set.  Be lenient, and assume an implied base */
+/*          * currency. If there's a problem later, the scrub routines will */
+/*          * pick it up. */
+/*          *\/ */
+/*         commodity = s->acc ? xaccAccountGetCommodity (s->acc) : base_currency; */
+/*         currency = xaccTransGetCurrency (s->parent); */
 
 
-        if (gnc_commodity_equiv(currency, base_currency))
-        {
-            value = gnc_numeric_add(value, xaccSplitGetValue(s),
-                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        }
-        else if (gnc_commodity_equiv(commodity, base_currency))
-        {
-            value = gnc_numeric_add(value, xaccSplitGetAmount(s),
-                                    GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        }
-        else
-        {
-            PERR ("inconsistent currencies\n"
-                  "\tbase = '%s', curr='%s', sec='%s'\n",
-                  gnc_commodity_get_printname(base_currency),
-                  gnc_commodity_get_printname(currency),
-                  gnc_commodity_get_printname(commodity));
-            g_return_val_if_fail (FALSE, value);
-        }
-    }
+/*         if (gnc_commodity_equiv(currency, base_currency)) */
+/*         { */
+/*             value = gnc_numeric_add(value, xaccSplitGetValue(s), */
+/*                                     GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); */
+/*         } */
+/*         else if (gnc_commodity_equiv(commodity, base_currency)) */
+/*         { */
+/*             value = gnc_numeric_add(value, xaccSplitGetAmount(s), */
+/*                                     GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); */
+/*         } */
+/*         else */
+/*         { */
+/*             PERR ("inconsistent currencies\n" */
+/*                   "\tbase = '%s', curr='%s', sec='%s'\n", */
+/*                   gnc_commodity_get_printname(base_currency), */
+/*                   gnc_commodity_get_printname(currency), */
+/*                   gnc_commodity_get_printname(commodity)); */
+/*             g_return_val_if_fail (FALSE, value); */
+/*         } */
+/*     } */
 
-    /* Note that just because the currencies are equivalent
-     * doesn't mean the denominators are the same! */
-    value = gnc_numeric_convert(value,
-                                gnc_commodity_get_fraction (base_currency),
-                                GNC_HOW_RND_ROUND_HALF_UP);
+/*     /\* Note that just because the currencies are equivalent */
+/*      * doesn't mean the denominators are the same! *\/ */
+/*     value = gnc_numeric_convert(value, */
+/*                                 gnc_commodity_get_fraction (base_currency), */
+/*                                 GNC_HOW_RND_ROUND_HALF_UP); */
 
-    LEAVE (" total=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
-           value.num, value.denom);
-    return value;
-}
+/*     LEAVE (" total=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, */
+/*            value.num, value.denom); */
+/*     return value; */
+/* } */
 
 gnc_numeric
 xaccSplitConvertAmount (const Split *split, const Account * account)
@@ -1444,7 +1373,6 @@ xaccSplitOrderDateOnly (const Split *sa, const Split *sb)
     return -1;
 }
 
-
 static gboolean
 get_corr_account_split(const Split *sa, const Split **retval)
 {
@@ -1487,22 +1415,6 @@ get_corr_account_split(const Split *sa, const Split **retval)
 }
 
 /* TODO: these static consts can be shared. */
-const char *
-xaccSplitGetCorrAccountName(const Split *sa)
-{
-    static const char *split_const = NULL;
-    const Split *other_split;
-
-    if (!get_corr_account_split(sa, &other_split))
-    {
-        if (!split_const)
-            split_const = _("-- Split Transaction --");
-
-        return split_const;
-    }
-
-    return xaccAccountGetName(other_split->acc);
-}
 
 char *
 xaccSplitGetCorrAccountFullName(const Split *sa)
@@ -1973,12 +1885,6 @@ xaccSplitGetOtherSplit (const Split *split)
 
 /********************************************************************\
 \********************************************************************/
-
-gboolean
-xaccIsPeerSplit (const Split *sa, const Split *sb)
-{
-    return (sa && sb && (sa->parent == sb->parent));
-}
 
 gnc_numeric
 xaccSplitVoidFormerAmount(const Split *split)

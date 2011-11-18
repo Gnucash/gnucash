@@ -33,12 +33,6 @@
 gchar * gnc_hook_create(const gchar *name, gint num_args, const gchar *desc);
 
 /**
- * lookup the description of a hook.  returned description belongs to
- * the hook and not the caller
- */
-gchar * gnc_hook_get_description(const gchar *name);
-
-/**
  * add and remove C-style dangers from a hook.  The callback is called
  *   function(hook_run_data, cb_data)
  */

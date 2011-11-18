@@ -241,7 +241,6 @@ gboolean gncEntryIsOpen (const GncEntry *entry);
 void gncEntryBeginEdit (GncEntry *entry);
 void gncEntryCommitEdit (GncEntry *entry);
 int gncEntryCompare (const GncEntry *a, const GncEntry *b);
-gboolean gncEntryEqual(const GncEntry *a, const GncEntry *b);
 
 #define ENTRY_DATE			"date"
 #define ENTRY_DATE_ENTERED 	"date-entered"

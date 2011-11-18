@@ -491,7 +491,7 @@ gnc_account_init (Account* acc)// 1
  * gnc_account_set_start_cleared_balance ()
  * gnc_account_set_start_reconciled_balance ()
  * gnc_account_set_policy ()
- * xaccAccountSetMark ()
+ * xaccAccountSetMark () *** Not Used ***
  * xaccAccountSetTaxRelated ()
  * xaccAccountSetTaxUSCode ()
  * xaccAccountSetTaxUSPayerNameSource ()
@@ -968,16 +968,12 @@ test_xaccAccountEqual (Fixture *fixture, gconstpointer pData)
 }*/
 /*
   The following are getters and setters, unworthy of testing:
-  gnc_account_get_sort_dirty
+  gnc_account_get_sort_dirty *** Test Only ***
   gnc_account_set_sort_dirty
-  gnc_account_get_balance_dirty
+  gnc_account_get_balance_dirty *** Test Only ***
   gnc_account_set_balance_dirty
 */
-/* gnc_account_find_split
-gboolean
-gnc_account_find_split (Account *acc, Split *s)// C: 4 in 2
-Simple pass-through, no test
-*/
+/* gnc_account_find_split *** Test Only ***
 /* gnc_account_insert_split
 gboolean
 gnc_account_insert_split (Account *acc, Split *s)// C: 5 in 3
@@ -1091,9 +1087,9 @@ xaccAccountLookup (const GncGUID *guid, QofBook *book)// C: 37 in 28 SCM: 2 in 1
 Passthrough, no test.
 */
 /* More getters/setters:
-	xaccAccountGetMark
-	xaccAccountSetMark
-	xaccClearMark
+	xaccAccountGetMark *** Test Only ***
+	xaccAccountSetMark *** Not Used ***
+	xaccClearMark *** Not Used ***
 	xaccClearMarkDown
 	gnc_account_get_policy
 	gnc_account_set_policy
@@ -1657,10 +1653,10 @@ test_gnc_account_foreach_child (Fixture *fixture, gconstpointer pData)
     gnc_account_foreach_child (begin, thunk, &counter);
     g_assert_cmpint (counter, ==, 2);
 }
-/* gnc_account_foreach_child_until
+/* gnc_account_foreach_child_until  *** Not Used ***
 gpointer
 gnc_account_foreach_child_until (const Account *acc,// C: 4 in 2 */
-static void
+/*static void
 test_gnc_account_foreach_child_until (Fixture *fixture, gconstpointer pData)
 {
     Account *root = gnc_account_get_root (fixture->acct);
@@ -1676,7 +1672,7 @@ test_gnc_account_foreach_child_until (Fixture *fixture, gconstpointer pData)
     result = gnc_account_foreach_child_until (second, thunk2, &counter);
     g_assert (result == expected);
     g_assert_cmpint (counter, ==, 3);
-}
+    }*/
 /* gnc_account_foreach_descendant
 void
 gnc_account_foreach_descendant (const Account *acc,// C: 23 in 14 */
@@ -1719,14 +1715,14 @@ test_gnc_account_foreach_descendant_until (Fixture *fixture, gconstpointer pData
  * xaccAccountGetColor
  * xaccAccountGetNotes
  * xaccAccountGetCommodity
- * gnc_account_get_start_balance
+ * gnc_account_get_start_balance *** Test Only ***
  * gnc_account_set_start_balance
- * gnc_account_get_start_cleared_balance
+ * gnc_account_get_start_cleared_balance *** Test Only ***
  * gnc_account_set_start_cleared_balance
- * gnc_account_get_start_reconciled_balance
+ * gnc_account_get_start_reconciled_balance *** Test Only ***
  * gnc_account_set_start_reconciled_balance
  * xaccAccountGetBalance
- * xaccAccountGetClearedBalanc
+ * xaccAccountGetClearedBalance C: 1
  * xaccAccountGetReconciledBalance
  */
 /* gnc_account_get_full_name
@@ -1981,8 +1977,8 @@ test_xaccAccountHasAncestor (Fixture *fixture, gconstpointer pData)
 /* xaccAccountTypeEnumAsString
  * xaccAccountStringToType
  * xaccAccountStringToEnum
- * xaccAccountGetTypeStr
- * xaccAccountGetTypeFromStr
+ * xaccAccountGetTypeStr *** Not Used ***
+ * xaccAccountGetTypeFromStr *** Test Only ***
  * xaccAccountIsPriced
 const char *
 xaccAccountTypeEnumAsString (GNCAccountType type)// C: 5 in 3 */
@@ -2034,7 +2030,7 @@ test_xaccAccountType_Stuff (void)
 	}
 	else
 	    g_assert_cmpstr (typestr_uc, ==, typename);
-	g_assert_cmpint (xaccAccountGetTypeFromStr (typestr), ==, type);
+//	g_assert_cmpint (xaccAccountGetTypeFromStr (typestr), ==, type);
 	g_free (typestr_uc);
 
 	g_object_set (acc, "type", type, NULL);
@@ -2167,7 +2163,7 @@ test_xaccAccountType_Compatibility (void)
  */
 /* finder_help_function
 static void
-finder_help_function (const Account *acc, const char *description,// 3
+finder_help_function (const Account *acc, const char *descrption,// 3
 Helper function, fully exercised by the following two public functions
 */
 /* xaccAccountFindSplitByDesc
@@ -2408,7 +2404,7 @@ test_suite_account (void)
     GNC_TEST_ADD (suitename, "gnc account lookup by full name helper", Fixture, &complex, setup, test_gnc_account_lookup_by_full_name_helper,  teardown );
     GNC_TEST_ADD (suitename, "gnc account lookup by full name", Fixture, &complex, setup, test_gnc_account_lookup_by_full_name,  teardown );
     GNC_TEST_ADD (suitename, "gnc account foreach child", Fixture, &complex, setup, test_gnc_account_foreach_child,  teardown );
-    GNC_TEST_ADD (suitename, "gnc account foreach child until", Fixture, &complex, setup, test_gnc_account_foreach_child_until,  teardown );
+//    GNC_TEST_ADD (suitename, "gnc account foreach child until", Fixture, &complex, setup, test_gnc_account_foreach_child_until,  teardown );
     GNC_TEST_ADD (suitename, "gnc account foreach descendant", Fixture, &complex, setup, test_gnc_account_foreach_descendant,  teardown );
     GNC_TEST_ADD (suitename, "gnc account foreach descendant until", Fixture, &complex, setup, test_gnc_account_foreach_descendant_until,  teardown );
     GNC_TEST_ADD (suitename, "gnc account get full name", Fixture, &good_data, setup, test_gnc_account_get_full_name,  teardown );

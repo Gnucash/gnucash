@@ -736,6 +736,8 @@ gnc_numeric gncTaxTableEntryGetAmount (const GncTaxTableEntry *entry)
     return entry->amount;
 }
 
+/* This is a semi-private function (meaning that it's not declared in
+ * the header) used for SQL Backend testing. */
 GncTaxTable* gncTaxTableEntryGetTable( const GncTaxTableEntry* entry )
 {
     if (!entry) return NULL;

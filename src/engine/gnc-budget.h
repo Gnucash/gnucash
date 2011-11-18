@@ -150,9 +150,6 @@ gnc_numeric gnc_budget_get_account_period_value(
 gnc_numeric gnc_budget_get_account_period_actual_value(
     const GncBudget *budget, Account *account, guint period_num);
 
-/** Get the book that this budget is associated with. */
-QofBook* gnc_budget_get_book(const GncBudget* budget);
-
 /* Returns some budget in the book, or NULL. */
 GncBudget* gnc_budget_get_default(QofBook *book);
 

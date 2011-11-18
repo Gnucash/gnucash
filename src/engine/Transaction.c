@@ -449,38 +449,6 @@ xaccMallocTransaction (QofBook *book)
     return trans;
 }
 
-#ifdef DUMP_FUNCTIONS
-void
-xaccTransDump (const Transaction *trans, const char *tag)
-{
-    GList *node;
-
-    printf("%s Trans %p", tag, trans);
-    printf("    Entered:     %s\n", gnc_print_date(trans->date_entered));
-    printf("    Posted:      %s\n", gnc_print_date(trans->date_posted));
-    printf("    Num:         %s\n", trans->num ? trans->num : "(null)");
-    printf("    Description: %s\n",
-           trans->description ? trans->description : "(null)");
-    printf("    Currency:    %s\n",
-           gnc_commodity_get_printname(trans->common_currency));
-    printf("    version:     %x\n", qof_instance_get_version(trans));
-    printf("    version_chk: %x\n", qof_instance_get_version_check(trans));
-    printf("    editlevel:   %x\n", qof_instance_get_editlevel(trans));
-    printf("    orig:        %p\n", trans->orig);
-    printf("    idata:       %x\n", qof_instance_get_idata(trans));
-    printf("    splits:      ");
-    for (node = trans->splits; node; node = node->next)
-    {
-        printf("%p ", node->data);
-    }
-    printf("\n");
-    for (node = trans->splits; node; node = node->next)
-    {
-        xaccSplitDump(node->data, tag);
-    }
-    printf("\n");
-}
-#endif
 
 void
 xaccTransSortSplits (Transaction *trans)

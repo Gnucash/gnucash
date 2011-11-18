@@ -233,26 +233,4 @@ LIFOPolicyIsOpeningSplit (GNCPolicy *pcy, GNCLot *lot, Split *split)
     return (split == opening_split);
 }
 
-/* ============================================================== */
-
-/* Define a single, static policy, since we have no per-object data.
- * I suppose this could change, but we don't need any better at the
- * moment ... */
-
-GNCPolicy *
-xaccGetLIFOPolicy (void)
-{
-    static GNCPolicy *pcy = NULL;
-
-    if (!pcy)
-    {
-        pcy = g_new (GNCPolicy, 1);
-        pcy->PolicyGetLot = LIFOPolicyGetLot;
-        pcy->PolicyGetSplit = LIFOPolicyGetSplit;
-        pcy->PolicyGetLotOpening = LIFOPolicyGetLotOpening;
-        pcy->PolicyIsOpeningSplit = LIFOPolicyIsOpeningSplit;
-    }
-    return pcy;
-}
-
 /* =========================== END OF FILE ======================= */

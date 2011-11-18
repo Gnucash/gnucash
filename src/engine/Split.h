@@ -143,9 +143,9 @@ void xaccSplitSetLot(Split* split, GNCLot* lot);
 KvpFrame *xaccSplitGetSlots(const Split *split);
 
 /** Set the KvpFrame slots of this split to the given frm by directly
- * using the frm pointer (i.e. non-copying). */
+ * using the frm pointer (i.e. non-copying).
 void xaccSplitSetSlots_nc(Split *s, KvpFrame *frm);
-
+*/
 
 /** The memo is an arbitrary string associated with a split.  It is
  * intended to hold a short (zero to forty character) string that is
@@ -314,9 +314,6 @@ gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 @{
 */
 
-/* Get a GList of unique transactions containing the given list of Splits. */
-GList *xaccSplitListGetUniqueTransactions(const GList *splits);
-
 /** Equality.
  *
  * @param sa First split to compare
@@ -356,9 +353,9 @@ Split * xaccSplitGetOtherSplit (const Split *split);
 /** The xaccIsPeerSplit() is a convenience routine that returns TRUE
  * (a non-zero value) if the two splits share a common parent
  * transaction, else it returns FALSE (zero).
- */
+ *
 gboolean xaccIsPeerSplit (const Split *split_1, const Split *split_2);
-
+*/
 /** Returns the split type, which is either the string "normal", or
  * "stock-split" for a split from a stock split (pun intended? :-).  */
 const char *xaccSplitGetType(const Split *s);
@@ -419,8 +416,6 @@ int xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb);
  */
 
 char * xaccSplitGetCorrAccountFullName(const Split *sa);
-/** document me */
-const char * xaccSplitGetCorrAccountName(const Split *sa);
 /** document me */
 const char * xaccSplitGetCorrAccountCode(const Split *sa);
 

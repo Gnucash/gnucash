@@ -83,12 +83,6 @@ gnc_get_gconf_path (void)
     return gconf_path;
 }
 
-gint
-gnc_get_svn_version (void)
-{
-    return strtol(GNUCASH_SVN_REV, NULL, 10);
-}
-
 guint
 gnc_get_long_version()
 {

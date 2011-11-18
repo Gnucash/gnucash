@@ -71,18 +71,6 @@ gnc_split_get_date_reconciled(const Split *s)
 }
 
 void
-gnc_transaction_set_date_posted(Transaction *t, const Timespec d)
-{
-    xaccTransSetDatePostedTS(t, &d);
-}
-
-void
-gnc_transaction_set_date_entered(Transaction *t, const Timespec d)
-{
-    xaccTransSetDateEnteredTS(t, &d);
-}
-
-void
 gnc_transaction_set_date(Transaction *t, Timespec ts)
 {
     xaccTransSetDatePostedTS(t, &ts);
@@ -2432,10 +2420,4 @@ SCM
 gnc_book_to_scm (const QofBook *book)
 {
     return gnc_generic_to_scm(book, "_p_QofBook");
-}
-
-SCM
-qof_session_to_scm (const QofSession *session)
-{
-    return gnc_generic_to_scm(session, "_p_QofSession");
 }

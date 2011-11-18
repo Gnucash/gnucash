@@ -246,13 +246,6 @@ SXTmpStateData *gnc_sx_create_temporal_state(const SchedXaction *sx );
  * occurence in the remporalStateDate. The SX is unchanged. */
 void gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *stateData );
 
-/** Sets the state of the given SX to the state of the given
- * SXTmpStateData. In that sense, this function does not "revert"
- * but instead it copies the state from the SXTmpStateData to the
- * real SX.. */
-void gnc_sx_revert_to_temporal_state( SchedXaction *sx,
-                                      SXTmpStateData *stateData );
-
 /** Frees the given stateDate object. */
 void gnc_sx_destroy_temporal_state( SXTmpStateData *stateData );
 
@@ -336,15 +329,6 @@ gboolean SXRegister (void);
 #define xaccSchedXactionGetGUID(X) qof_entity_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccSchedXactionGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
-
-/** \deprecated to be replaced with 'dirty' kvp's */
-KvpValue *xaccSchedXactionGetSlot( const SchedXaction *sx,
-                                   const char *slot );
-/** \deprecated to be replaced with 'dirty' kvp's */
-void xaccSchedXactionSetSlot( SchedXaction *sx,
-                              const char *slot,
-                              const KvpValue *value );
-
 
 #endif /* XACC_SCHEDXACTION_H */
 

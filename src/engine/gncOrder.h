@@ -92,7 +92,6 @@ GList * gncOrderGetEntries (GncOrder *order);
 void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
 int gncOrderCompare (const GncOrder *a, const GncOrder *b);
-gboolean gncOrderEqual(const GncOrder *a, const GncOrder *b);
 
 gboolean gncOrderIsClosed (const GncOrder *order);
 

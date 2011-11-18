@@ -36,7 +36,6 @@ libgncmod_engine_la_SOURCES = \
   gnc-lot.c \
   gnc-pricedb.c \
   gnc-session.c \
-  gnc-session-scm.c \
   gncmod-engine.c \
   swig-engine.c \
   kvp-scm.c \
@@ -89,7 +88,6 @@ gncinclude_HEADERS = \
   gnc-hooks.h \
   gnc-pricedb.h \
   gnc-session.h \
-  gnc-session-scm.h \
   kvp-scm.h \
   policy.h \
   gncAddress.h \

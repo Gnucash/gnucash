@@ -12,7 +12,6 @@
 #include "gnc-filepath-utils.h"
 #include "gnc-pricedb.h"
 #include "gnc-lot.h"
-#include "gnc-session-scm.h"
 #include "gnc-hooks-scm.h"
 #include "engine-helpers.h"
 #include "SX-book.h"
@@ -156,7 +155,6 @@ void gnc_quote_source_set_fq_installed (GList *sources_list);
 %ignore gnc_quote_source_set_fq_installed;
 %include <gnc-commodity.h>
 
-%include <gnc-session-scm.h>
 void gnc_hook_add_scm_dangler (const gchar *name, SCM proc);
 void gnc_hook_run (const gchar *name, gpointer data);
 %include <gnc-hooks.h>

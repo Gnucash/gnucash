@@ -146,7 +146,6 @@ gnc_commodity * gncOwnerGetCurrency (const GncOwner *owner);
 /** \name Set routines.
 @{
 */
-void gncOwnerSetName (const GncOwner *owner, const gchar *new_name);
 void gncOwnerSetActive (const GncOwner *owner, gboolean active);
 /** @} */
 
@@ -270,7 +269,6 @@ void gncOwnerFree (GncOwner *owner);
  * without knowing its type.
  */
 void gncOwnerBeginEdit (GncOwner *owner);
-void gncOwnerCommitEdit (GncOwner *owner);
 void gncOwnerDestroy (GncOwner *owner);
 
 #endif /* GNC_OWNER_H_ */

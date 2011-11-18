@@ -51,15 +51,6 @@ typedef struct gncpolicy_s GNCPolicy;
  */
 GNCPolicy *xaccGetFIFOPolicy (void);
 
-/** Last-in, First-out Policy
- *  This policy will create LIFO Lots.  LIFO Lots have the following
- *  properties:
- *  -- XXX  I think the implementation is broken right now.
- *  -- All splits in the lot share the same transaction currency as
- *     the split that opened the lot.
- */
-GNCPolicy *xaccGetLIFOPolicy (void);
-
 #endif /* XACC_POLICY_H */
 /** @} */
 /** @} */

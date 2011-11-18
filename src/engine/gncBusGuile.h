@@ -27,7 +27,6 @@
 #include <gncTaxTable.h>	/* for GncAccountValue */
 #include <libguile.h>
 
-int gnc_account_value_pointer_p (SCM arg);
 GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg);
 SCM gnc_account_value_ptr_to_scm (GncAccountValue *);
 

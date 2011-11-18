@@ -165,7 +165,6 @@ gboolean gncBillTermIsFamily (const GncBillTerm *a, const GncBillTerm *b);
 
 /* Compute the due date and discount dates from the post date */
 Timespec gncBillTermComputeDueDate (const GncBillTerm *term, Timespec post_date);
-Timespec gncBillTermComputeDiscountDate (const GncBillTerm *term, Timespec post_date);
 
 /* deprecated */
 #define gncBillTermGetGUID(x) qof_instance_get_guid (QOF_INSTANCE(x))
