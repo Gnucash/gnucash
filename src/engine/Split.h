@@ -143,9 +143,9 @@ void xaccSplitSetLot(Split* split, GNCLot* lot);
 KvpFrame *xaccSplitGetSlots(const Split *split);
 
 /** Set the KvpFrame slots of this split to the given frm by directly
- * using the frm pointer (i.e. non-copying).
+ * using the frm pointer (i.e. non-copying). */
 void xaccSplitSetSlots_nc(Split *s, KvpFrame *frm);
-*/
+
 
 /** The memo is an arbitrary string associated with a split.  It is
  * intended to hold a short (zero to forty character) string that is
