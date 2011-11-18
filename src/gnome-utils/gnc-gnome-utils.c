@@ -190,19 +190,6 @@ gnc_gnome_locate_pixmap (const char *name)
 }
 
 char *
-gnc_gnome_locate_file (GnomeFileDomain domain, const char *name)
-{
-    char *fullname;
-
-    g_return_val_if_fail(name, NULL);
-    fullname = gnome_program_locate_file(gnucash_program,
-                                         domain, name, TRUE, NULL);
-    if (!fullname)
-        PERR ("Could not locate file %s", name);
-    return fullname;
-}
-
-char *
 gnc_gnome_locate_data_file (const char *name)
 {
     char *fullname;

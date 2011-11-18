@@ -179,53 +179,6 @@ void gnc_tree_view_commodity_refilter (GncTreeViewCommodity *view);
 /** @name Commodity Tree View Get/Set Functions
  @{ */
 
-/** This function determines if an commodity in the commodity tree view
- *  has any visible children.
- *
- *  @param view A pointer to an commodity tree view.
- *
- *  @param commodity A pointer to the commodity to check.
- *
- *  @return The number of children of the specified commodity. Returns 0
- *  on error.
- */
-gint gnc_tree_view_commodity_count_children (GncTreeViewCommodity *view,
-        gnc_commodity *commodity);
-
-
-
-/** This function retrieves a pointer to a commodity based upon the
- *  model and iter passed into it.  It should only be used by callback
- *  functions that have had the model/iter passed to them.
- *
- *  @param column A pointer to a tree view column from a commodity view.
- *
- *  @param f_model A pointer to the filter model for the view.
- *
- *  @param f_iter A pointer to the iter for a particular row in the view.
- *
- *  @return The commodity associated with the spcified row in the view.
- */
-gnc_commodity * gnc_tree_view_commodity_get_commodity_from_column (GtkTreeViewColumn *column,
-        GtkTreeModel *f_model,
-        GtkTreeIter  *f_iter);
-
-
-
-/** This function returns the commodity associated with the specified
- *  path.  This function is useful in selection callbacks on an
- *  commodity tree widget.
- *
- *  @param view A pointer to an commodity tree view.
- *
- *  @param path A path specifying a node in the commodity tree.
- *
- *  @return The commodity associated with this path.
- */
-gnc_commodity * gnc_tree_view_commodity_get_commodity_from_path (GncTreeViewCommodity *view,
-        GtkTreePath *path);
-
-
 /** This function returns the commodity in the commodity tree view at the
  *  current location of the cursor. (The outline frame. Usually is
  *  selected and therefore filled in, but not always.)
@@ -248,67 +201,7 @@ gnc_commodity * gnc_tree_view_commodity_get_cursor_commodity (GncTreeViewCommodi
  *
  *  @return The selected commodity, or NULL if no commodity was selected.
  */
-gnc_commodity * gnc_tree_view_commodity_get_selected_commodity  (GncTreeViewCommodity *view);
-
-
-/** This function selects an commodity in the commodity tree view.  All
- *  other commodities will be unselected.  In addition, this function
- *  collapses the entitre tree and then expands only the path to the
- *  selected commodity, making the item easy to find.  In general, this
- *  routine only need be called when initially putting up a window
- *  containing an commodity tree view widget.
- *
- *  @note It only makes sense to call this function when the commodity
- *  tree is set to select a single item.  There is a different
- *  function to use when the tree supports multiple selections.
- *
- *  @param view A pointer to an commodity tree view.
- *
- *  @param commodity A pointer to the commodity to select.
- */
-void gnc_tree_view_commodity_set_selected_commodity (GncTreeViewCommodity *view,
-        gnc_commodity *commodity);
-
-
-/** This function returns a list of the commodities associated with the
- *  selected items in the commodity tree view.
- *
- *  @note It only makes sense to call this function when the commodity
- *  tree is set to select multiple items.  There is a different
- *  function to use when the tree supports single selection.
- *
- *  @param view A pointer to an commodity tree view.
- *
- *  @return A list of commodities, or NULL if no commodity was selected.
- */
-GList * gnc_tree_view_commodity_get_selected_commodities (GncTreeViewCommodity *view);
-
-
-/** This function selects a set of commodities in the commodity tree view.
- *  All other commodities will be unselected.  In addition, this function
- *  collapses the entitre tree and then expands only the path to the
- *  selected commodities, making them easy to find.  In general, this
- *  routine only need be called when initially putting up a window
- *  containing an commodity tree view widget.
- *
- *  @note It only makes sense to call this function when the commodity
- *  tree is set to select a single item.  There is a different
- *  function to use when the tree supports multiple selections.
- *
- *  @note It is the responsibility of the caller to free the returned
- *  list.
- *
- *  @param view A pointer to an commodity tree view.
- *
- *  @param commodity_list A list of commodities to select.
- *
- *  @param show_last Force the window to scroll to the last commodity
- *  selected.
- */
-void gnc_tree_view_commodity_set_selected_commodities (GncTreeViewCommodity *view,
-        GList *commodity_list,
-        gboolean show_last);
-
+ gnc_commodity * gnc_tree_view_commodity_get_selected_commodity  (GncTreeViewCommodity *view);
 
 /** This function selects all sub-commodities of an commodity in the
  *  commodity tree view.  All other commodities will be unselected.

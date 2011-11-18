@@ -94,18 +94,6 @@ GtkTreeView *gnc_tree_view_price_new (QofBook *book,
 /** @name Price Tree View Configuration
  @{ */
 
-/** Configure (by name) the set of visible columns in an price tree
- *  view.  By default, only the price name column is show.  The
- *  avalible list of columns can be found in the file
- *  gnc-tree-view-price.c
- *
- *  @param price_view A pointer to an price tree view.
- *
- *  @param column_names A list of column names to make visible.
- */
-void gnc_tree_view_price_configure_columns (GncTreeViewPrice *price_view,
-        GSList *column_names);
-
 #ifdef OLD
 /** Add a new column to the set of columns in an price tree view.
  *  This column will display the contents of a specified KVP slot.
@@ -156,58 +144,11 @@ void gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
                                      gnc_tree_view_price_pc_filter_func pc_func,
                                      gpointer data,
                                      GtkDestroyNotify destroy);
-
-/** This function forces the price tree filter to be evaluated.  It
- *  may be necessary to call this function if the initial state of the
- *  view is incorrect.  This appears to only be necessary if the
- *  filter affects one of the top level prices in gnucash.
- *
- *  @note This calls a function in gtk that is annotated in the
- *  sources as being slow.  You have been warned.
- *
- *  @param view A pointer to an price tree view.
- */
-void gnc_tree_view_price_refilter (GncTreeViewPrice *view);
 /** @} */
 
 
 /** @name Price Tree View Get/Set Functions
  @{ */
-
-/** This function determines if an price in the price tree view
- *  has any visible children.
- *
- *  @param view A pointer to an price tree view.
- *
- *  @param price A pointer to the price to check.
- *
- *  @return The number of children of the specified price. Returns 0
- *  on error.
- */
-gint gnc_tree_view_price_count_children (GncTreeViewPrice *view,
-        GNCPrice *price);
-
-
-
-GNCPrice * gnc_tree_view_price_get_price_from_column (GtkTreeViewColumn *column,
-        GtkTreeModel *f_model,
-        GtkTreeIter  *f_iter);
-
-
-
-/** This function returns the price associated with the specified
- *  path.  This function is useful in selection callbacks on an
- *  price tree widget.
- *
- *  @param view A pointer to an price tree view.
- *
- *  @param path A path specifying a node in the price tree.
- *
- *  @return The price associated with this path.
- */
-GNCPrice * gnc_tree_view_price_get_price_from_path (GncTreeViewPrice *view,
-        GtkTreePath *path);
-
 
 /** This function returns the price in the price tree view at the
  *  current location of the cursor. (The outline frame. Usually is
@@ -267,30 +208,6 @@ void gnc_tree_view_price_set_selected_price (GncTreeViewPrice *view,
 GList * gnc_tree_view_price_get_selected_prices (GncTreeViewPrice *view);
 
 
-/** This function selects a set of prices in the price tree view.
- *  All other prices will be unselected.  In addition, this function
- *  collapses the entitre tree and then expands only the path to the
- *  selected prices, making them easy to find.  In general, this
- *  routine only need be called when initially putting up a window
- *  containing an price tree view widget.
- *
- *  @note It only makes sense to call this function when the price
- *  tree is set to select a single item.  There is a different
- *  function to use when the tree supports multiple selections.
- *
- *  @note It is the responsibility of the caller to free the returned
- *  list.
- *
- *  @param view A pointer to an price tree view.
- *
- *  @param price_list A pointer to the list of prices to select.
- *
- *  @param show_last Force the window to scroll to the last price
- *  selected.
- */
-void gnc_tree_view_price_set_selected_prices (GncTreeViewPrice *view,
-        GList *price_list,
-        gboolean show_last);
 /** @} */
 
 G_END_DECLS

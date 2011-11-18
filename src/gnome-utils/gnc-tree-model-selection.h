@@ -66,7 +66,6 @@ GType              gnc_tree_model_selection_get_type                   (void);
 
 GtkTreeModel      *gnc_tree_model_selection_new                        (GtkTreeModel *child_model);
 
-GtkTreeModel      *gnc_tree_model_selection_get_model                  (GncTreeModelSelection *model);
 void               gnc_tree_model_selection_convert_child_iter_to_iter (GncTreeModelSelection *model,
         GtkTreeIter *selection_iter,
         GtkTreeIter *child_iter);
@@ -74,12 +73,6 @@ void               gnc_tree_model_selection_convert_iter_to_child_iter (GncTreeM
         GtkTreeIter *child_iter,
         GtkTreeIter *selection_iter);
 
-gint               gnc_tree_model_selection_get_selection_column       (GncTreeModelSelection *model);
-GtkTreeViewColumn *gnc_tree_model_selection_create_tree_view_column    (GncTreeModelSelection *model,
-        const gchar *title);
-
-gboolean           gnc_tree_model_selection_is_selected                (GncTreeModelSelection *model,
-        GtkTreeIter *iter);
 void               gnc_tree_model_selection_set_selected               (GncTreeModelSelection *model,
         GtkTreeIter *iter,
         gboolean selected);

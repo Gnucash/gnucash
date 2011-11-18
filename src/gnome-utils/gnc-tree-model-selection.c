@@ -209,17 +209,6 @@ gnc_tree_model_selection_new (GtkTreeModel *child_model)
     return GTK_TREE_MODEL (model);
 }
 
-GtkTreeModel *
-gnc_tree_model_selection_get_model (GncTreeModelSelection *model)
-{
-    GncTreeModelSelectionPrivate *priv;
-
-    g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (model), NULL);
-
-    priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
-    return priv->child_model;
-}
-
 void
 gnc_tree_model_selection_convert_child_iter_to_iter (GncTreeModelSelection *model,
         GtkTreeIter *selection_iter,
@@ -251,53 +240,6 @@ gnc_tree_model_selection_convert_iter_to_child_iter (GncTreeModelSelection *mode
     child_iter->user_data3 = ((GtkTreeIter *) selection_iter->user_data)->user_data3;
 }
 
-gint
-gnc_tree_model_selection_get_selection_column (GncTreeModelSelection *model)
-{
-    GncTreeModelSelectionPrivate *priv;
-
-    g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (model), 0);
-
-    priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
-    return gtk_tree_model_get_n_columns (priv->child_model);
-}
-
-GtkTreeViewColumn *
-gnc_tree_model_selection_create_tree_view_column (GncTreeModelSelection *model,
-        const gchar *title)
-{
-    GtkCellRenderer *renderer;
-    GtkTreeViewColumn *column;
-
-    renderer = gtk_cell_renderer_toggle_new ();
-    g_object_set (G_OBJECT (renderer), "activatable", TRUE, NULL);
-    g_signal_connect (G_OBJECT (renderer), "toggled",
-                      G_CALLBACK (gnc_tree_model_selection_toggled), model);
-
-    column = gtk_tree_view_column_new_with_attributes (title,
-             renderer,
-             "active",
-             gnc_tree_model_selection_get_selection_row (model),
-             NULL);
-
-    return column;
-}
-
-gboolean
-gnc_tree_model_selection_is_selected  (GncTreeModelSelection *model,
-                                       GtkTreeIter *iter)
-{
-    GncTreeModelSelectionPrivate *priv;
-    gchar *path;
-    gboolean selected;
-
-    priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
-    path = gtk_tree_model_get_string_from_iter (GTK_TREE_MODEL (model), iter);
-    selected = g_hash_table_lookup (priv->selections, path) != NULL;
-    g_free (path);
-
-    return selected;
-}
 
 void
 gnc_tree_model_selection_set_selected (GncTreeModelSelection *model,

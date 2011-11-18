@@ -82,21 +82,6 @@ char *gnc_gnome_locate_data_file (const char *name);
  */
 char *gnc_gnome_locate_ui_file (const char *name);
 
-/** Given a file name, find the file in the directories associated
- *  with the given file domain.  This routine will display an error
- *  message if it can't find the file.
- *
- *  @param domain The GnomeFileDomain, e.g. GNOME_FILE_DOMAIN_APP_HELP
- *
- *  @param name The name of the file to be found.
- *
- *  @return the full path name of the file, or NULL of the file can't
- *  be found.
- *
- *  @note It is the caller's responsibility to free the returned string.
- */
-char *gnc_gnome_locate_file (GnomeFileDomain domain, const char *name);
-
 /** Launch the default gnome help browser and open to a given link
  *  within a given file.  This routine will display an error message
  *  if it can't find the help file or can't open the help browser.

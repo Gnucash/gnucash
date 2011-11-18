@@ -1027,20 +1027,6 @@ gnc_tree_view_account_refilter (GncTreeViewAccount *view)
 }
 
 gboolean
-gnc_tree_view_account_filter_by_type_selection(Account* acct, gpointer data)
-{
-    GNCAccountType acct_type;
-    guint sel_bits = GPOINTER_TO_UINT(data);
-
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acct), FALSE);
-    acct_type = xaccAccountGetType(acct);
-
-    /* Because of some silly '== TRUE' comparisons in treemodelfilter,
-       we have to return exactly TRUE */
-    return (sel_bits & (1 << acct_type)) ? TRUE : FALSE;
-}
-
-gboolean
 gnc_tree_view_account_filter_by_view_info(Account* acct, gpointer data)
 {
     GNCAccountType acct_type;
@@ -1772,7 +1758,8 @@ gnc_plugin_page_account_tree_filter_accounts (Account *account,
  *
  *  @param button The GtkCheckButton that was toggled.
  *
- *  @param fd A pointer to the account filter dialog struct. */
+ *  @param fd A pointer to the account filter dialog struct.
+ */
 void
 gppat_filter_show_hidden_toggled_cb (GtkToggleButton *button,
                                      AccountFilterDialog *fd)
@@ -1790,7 +1777,8 @@ gppat_filter_show_hidden_toggled_cb (GtkToggleButton *button,
  *
  *  @param button The GtkCheckButton that was toggled.
  *
- *  @param fd A pointer to the account filter dialog struct. */
+ *  @param fd A pointer to the account filter dialog struct.
+ */
 void
 gppat_filter_show_zero_toggled_cb (GtkToggleButton *button,
                                    AccountFilterDialog *fd)
@@ -1809,7 +1797,8 @@ gppat_filter_show_zero_toggled_cb (GtkToggleButton *button,
  *
  *  @param button The button that was clicked.
  *
- *  @param fd A pointer to the account filter dialog struct. */
+ *  @param fd A pointer to the account filter dialog struct.
+ */
 void
 gppat_filter_clear_all_cb (GtkWidget *button,
                            AccountFilterDialog *fd)
@@ -1848,7 +1837,8 @@ gppat_filter_select_all_cb (GtkWidget *button,
  *
  *  @param button The button that was clicked.
  *
- *  @param fd A pointer to the account filter dialog struct. */
+ *  @param fd A pointer to the account filter dialog struct.
+ *
 void
 gppat_filter_select_default_cb (GtkWidget *button,
                                 AccountFilterDialog *fd)
@@ -1857,7 +1847,7 @@ gppat_filter_select_default_cb (GtkWidget *button,
     gppat_filter_select_all_cb(button, fd);
     LEAVE(" ");
 }
-
+*/
 /** Set the renderer's properties.
  *
  *  @param column A GtkTreeColumn
@@ -1922,7 +1912,8 @@ gppat_filter_visible_toggled_cb (GtkCellRendererToggle *renderer,
  *
  *  @param response The response code from closing the dialog.
  *
- *  @param fd A pointer to the account filter dialog struct. */
+ *  @param fd A pointer to the account filter dialog struct.
+ */
 void
 gppat_filter_response_cb (GtkWidget *dialog,
                           gint       response,

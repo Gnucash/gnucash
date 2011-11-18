@@ -33,37 +33,6 @@
 #include "gnc-gnome-utils.h"
 
 void
-gnc_assistant_set_watermark_images (GtkAssistant *assistant,
-                                    const char *top_path,
-                                    const char *side_path)
-{
-    GdkPixbuf     *top_pixbuf, *side_pixbuf;
-    GList         *page_list, *item;
-    GtkWidget     *page;
-    GtkAssistantPageType page_type;
-
-    page_list = gtk_container_get_children(GTK_CONTAINER(assistant));
-    top_pixbuf = gnc_gnome_get_gdkpixbuf(top_path);
-    side_pixbuf = gnc_gnome_get_gdkpixbuf(side_path);
-
-    for (item = page_list; item; item = g_list_next(item))
-    {
-        page = item->data;
-        page_type = gtk_assistant_get_page_type(assistant, page);
-
-        gtk_assistant_set_page_header_image (assistant, page, top_pixbuf);
-        if ( (page_type == GTK_ASSISTANT_PAGE_INTRO) ||
-                (page_type == GTK_ASSISTANT_PAGE_SUMMARY) ||
-                (page_type == GTK_ASSISTANT_PAGE_CONFIRM) )
-            gtk_assistant_set_page_side_image (assistant, page, side_pixbuf);
-    }
-
-    g_object_unref (G_OBJECT(side_pixbuf));
-    g_object_unref (G_OBJECT(top_pixbuf));
-    g_list_free(page_list);
-}
-
-void
 gnc_assistant_set_colors (GtkAssistant *assistant)
 {
     GdkColor bluish;

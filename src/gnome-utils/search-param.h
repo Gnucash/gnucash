@@ -57,7 +57,6 @@ GType			gnc_search_param_get_type (void);
 
 /* Create a new search param */
 GNCSearchParam *	gnc_search_param_new (void);
-GNCSearchParam *	gnc_search_param_clone (GNCSearchParam *param);
 
 /* use the param_path for this parameter.  This will automatically
  * compute the parameter type and the converter functions.

@@ -597,56 +597,6 @@ gnc_tree_view_owner_get_iter_from_owner (GncTreeViewOwner *view,
 /*            Owner Tree View Filter Functions            */
 /************************************************************/
 
-/*
- * Get a copy of the owner view info structure in use by the
- * specified tree.
- */
-void
-gnc_tree_view_owner_get_view_info (GncTreeViewOwner *owner_view,
-                                   OwnerViewInfo *ovi)
-{
-    GncTreeViewOwnerPrivate *priv;
-
-    g_return_if_fail(GNC_IS_TREE_VIEW_OWNER(owner_view));
-    g_return_if_fail(ovi != NULL);
-
-    priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(owner_view);
-
-    *ovi = priv->ovi;
-}
-
-/*
- * Set the owner view info data in use by the specified tree to
- * match the callers request.
- *
- * DRH - COMPATIBILITY WARNING
- *
- * This function does not do anything with the 'include_type' field.
- * Should there be a automatic filter for backward compatibility
- * that uses these flags, or should all uses of this be converted to
- * a GtkTreeModelFilter?
- *
- * CAS - For now, I'll try the automatic filter approach by making
- * this function use GtkTreeModelFilter.
- */
-void
-gnc_tree_view_owner_set_view_info (GncTreeViewOwner *owner_view,
-                                   OwnerViewInfo *ovi)
-{
-    GncTreeViewOwnerPrivate *priv;
-    gint i;
-    guint sel_bits = 0;
-
-    ENTER("%p", owner_view);
-    g_return_if_fail(GNC_IS_TREE_VIEW_OWNER(owner_view));
-    g_return_if_fail(ovi != NULL);
-
-    priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(owner_view);
-    priv->ovi = *ovi;
-
-    LEAVE(" ");
-}
-
 static gboolean
 gnc_tree_view_owner_filter_helper (GtkTreeModel *model,
                                    GtkTreeIter *iter,
@@ -941,117 +891,6 @@ get_selected_owners_helper (GtkTreeModel *s_model,
     }
 }
 
-/*
- * Given an owner tree view, return a list of the selected owners. The
- * owner tree must be in multiple selection mode.
- *
- * Note: It is the responsibility of the caller to free the returned
- * list.
- */
-GList *
-gnc_tree_view_owner_get_selected_owners (GncTreeViewOwner *view)
-{
-    GtkTreeSelection *selection;
-    GncTreeViewSelectionInfo info;
-
-    g_return_val_if_fail (GNC_IS_TREE_VIEW_OWNER (view), NULL);
-
-    info.return_list = NULL;
-    info.priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(view);
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
-    gtk_tree_selection_selected_foreach(selection, get_selected_owners_helper, &info);
-    return info.return_list;
-}
-
-/*
- * Given an owner tree view and a list of owners, select those
- * owners in the tree view.
- */
-void
-gnc_tree_view_owner_set_selected_owners (GncTreeViewOwner *view,
-        GList *owner_list,
-        gboolean show_last)
-{
-    GtkTreeModel *model, *f_model, *s_model;
-    GtkTreePath *path, *f_path, *s_path, *parent_path;
-    GtkTreeSelection *selection;
-    GList *element;
-    GncOwner *owner;
-
-    g_return_if_fail (GNC_IS_TREE_VIEW_OWNER (view));
-
-    s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
-    f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-    model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
-
-    /* Clear any existing selection. */
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
-    gtk_tree_selection_unselect_all (selection);
-
-    /* Now go select what the user requested. */
-    for (element = owner_list; element; )
-    {
-        owner = element->data;
-        element = g_list_next(element);
-
-        path = gnc_tree_model_owner_get_path_from_owner (GNC_TREE_MODEL_OWNER(model), owner);
-        if (path == NULL)
-        {
-            /*
-             * Oops.  Someone must have deleted this owner and not cleaned
-             * up all references to it.
-             */
-            continue;
-        }
-
-        f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model),
-                 path);
-        gtk_tree_path_free(path);
-        if (f_path == NULL)
-            continue;
-
-        s_path = gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model),
-                 f_path);
-        gtk_tree_path_free(f_path);
-        if (s_path == NULL)
-            continue;
-
-        gtk_tree_selection_select_path (selection, s_path);
-        if (show_last && (element == NULL))
-            gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), s_path, NULL, FALSE, 0.0, 0.0);
-        gtk_tree_path_free(s_path);
-    }
-}
-
-
-/*
- * Retrieve the owner currently under the cursor.
- */
-GncOwner *
-gnc_tree_view_owner_get_cursor_owner (GncTreeViewOwner *view)
-{
-    GtkTreeModel *s_model;
-    GtkTreePath *s_path;
-    GncOwner *owner;
-
-    ENTER("view %p", view);
-    g_return_val_if_fail (GNC_IS_TREE_VIEW_OWNER (view), NULL);
-
-    s_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
-    gtk_tree_view_get_cursor (GTK_TREE_VIEW(view), &s_path, NULL);
-    if (!s_path)
-    {
-        LEAVE("no owner");
-        return NULL;
-    }
-
-    owner = gnc_tree_view_owner_get_owner_from_path (view, s_path);
-    gtk_tree_path_free(s_path);
-    LEAVE("owner %p (%s)", owner, gncOwnerGetName (owner));
-    return owner;
-}
-
-
 /************************************************************/
 /*         Owner Tree View Add Column Functions           */
 /************************************************************/
@@ -1120,33 +959,6 @@ owner_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
                   "xalign", 0.0,
                   NULL);
 
-}
-
-
-GtkTreeViewColumn *
-gnc_tree_view_owner_add_kvp_column (GncTreeViewOwner *view,
-                                    const gchar *column_title,
-                                    const gchar *kvp_key)
-{
-    GtkCellRenderer *renderer;
-    GtkTreeViewColumn *column;
-
-    g_return_val_if_fail (GNC_IS_TREE_VIEW_OWNER (view), NULL);
-    g_return_val_if_fail (kvp_key != NULL, NULL);
-
-    column = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), column_title,
-                                           kvp_key, NULL, "Sample text",
-                                           -1, -1, NULL);
-
-    /* This new kvp column has only had one renderer added to it so
-     * far.  Find that renderer. */
-    renderer = gnc_tree_view_column_get_renderer(column);
-    g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
-
-    gtk_tree_view_column_set_cell_data_func (column, renderer,
-            owner_cell_kvp_data_func,
-            g_strdup(kvp_key), g_free);
-    return column;
 }
 
 static void col_edited_helper(GtkCellRendererText *cell, gchar *path_string,
@@ -1218,37 +1030,6 @@ gtvo_setup_column_renderer_edited_cb(GncTreeViewOwner *owner_view,
         g_object_set_data(G_OBJECT(renderer), "column_view", column);
     }
 }
-
-GtkTreeViewColumn *
-gnc_tree_view_owner_add_custom_column(GncTreeViewOwner *owner_view,
-                                      const gchar *column_title,
-                                      GncTreeViewOwnerColumnSource
-                                      col_source_cb,
-                                      GncTreeViewOwnerColumnTextEdited
-                                      col_edited_cb)
-{
-    GtkCellRenderer *renderer;
-    GtkTreeViewColumn *column;
-
-    g_return_val_if_fail (GNC_IS_TREE_VIEW_OWNER (owner_view), NULL);
-
-    renderer = gtk_cell_renderer_text_new ();
-    g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
-
-    column = gtk_tree_view_column_new_with_attributes (column_title,
-             renderer, NULL);
-    if (col_edited_cb)
-    {
-        gtvo_setup_column_renderer_edited_cb(owner_view, column,
-                                             renderer, col_edited_cb);
-    }
-    gtk_tree_view_column_set_cell_data_func (column, renderer,
-            col_source_helper,
-            col_source_cb, NULL);
-    gnc_tree_view_append_column (GNC_TREE_VIEW(owner_view), column);
-    return column;
-}
-
 
 /* BEGIN FILTER FUNCTIONS */
 #define FILTER_TREE_VIEW "types_tree_view"
@@ -1554,14 +1335,6 @@ gnc_tree_view_owner_restore(GncTreeViewOwner *view,
     gnc_tree_view_owner_refilter(view);
 }
 
-void
-gnc_tree_view_owner_name_edited_cb(GncOwner *owner, GtkTreeViewColumn *col, const gchar *new_name)
-{
-    if (safe_strcmp(gncOwnerGetName(owner), new_name) == 0)
-        return;
-    gncOwnerSetName(owner, new_name);
-}
-
 static void
 gtvo_set_column_editor(GncTreeViewOwner *view,
                        GtkTreeViewColumn *column,
@@ -1579,13 +1352,4 @@ gtvo_set_column_editor(GncTreeViewOwner *view,
     g_list_free(renderers_orig);
     g_return_if_fail(renderer != NULL);
     gtvo_setup_column_renderer_edited_cb(GNC_TREE_VIEW_OWNER(view), column, renderer, edited_cb);
-}
-
-void
-gnc_tree_view_owner_set_name_edited(GncTreeViewOwner *view,
-                                    GncTreeViewOwnerColumnTextEdited edited_cb)
-{
-    GncTreeViewOwnerPrivate *priv;
-    priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(view);
-    gtvo_set_column_editor(view, priv->name_column, edited_cb);
 }

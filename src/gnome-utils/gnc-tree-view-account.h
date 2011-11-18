@@ -292,26 +292,6 @@ void gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view,
  *  gnc-tree-model-account-types.h.  If you have some view that is
  *  backed by the "account types" tree model, you can get a guint32
  *  from that view's tree selection.  Then, you can use that account
- *  type selection as a filter for the account tree view.  For
- *  example:
- *
- *  guint sel_mask;
- *
- *  sel_mask = gnc_tree_model_account_types_get_selection(view);
- *
- *  gnc_tree_view_account_set_filter(account_view,
- *    gnc_tree_view_account_filter_by_type_selection,
- *    GUINT_TO_POINTER(sel_mask), NULL);
- *
- */
-gboolean gnc_tree_view_account_filter_by_type_selection(
-    Account* acct, gpointer data);
-
-/*  This is a convenient filter function for use with
- *  gnc_tree_view_account_set_filter() and the functions in
- *  gnc-tree-model-account-types.h.  If you have some view that is
- *  backed by the "account types" tree model, you can get a guint32
- *  from that view's tree selection.  Then, you can use that account
  *  type selection as a filter for the account tree view.  This also
  *  can filter by whether an account is hidden or not.
  */

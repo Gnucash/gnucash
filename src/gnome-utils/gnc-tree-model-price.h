@@ -251,32 +251,6 @@ gboolean gnc_tree_model_price_get_iter_from_price (GncTreeModelPrice *model,
         GNCPrice *price,
         GtkTreeIter *iter);
 
-/** Convert a commodity namespace pointer into a GtkTreePath.
- *
- *  @param model A pointer to the price tree model.
- *
- *  @param namespace A pointer to the gnucash commodity namespace.
- *
- *  @return A pointer to a GtkTreePath describing the location of this
- *  namespace.  This pointer must be freed by the caller when no
- *  longer needed.  This routine will return NULL if the namespace
- *  does not exist in the tree. */
-GtkTreePath *gnc_tree_model_price_get_path_from_namespace (GncTreeModelPrice *model,
-        gnc_commodity_namespace *namespace);
-
-/** Convert a commodity pointer into a GtkTreePath.
- *
- *  @param model A pointer to the price tree model.
- *
- *  @param commodity A pointer to the gnucash commodity.
- *
- *  @return A pointer to a GtkTreePath describing the location of this
- *  commodity.  This pointer must be freed by the caller when no
- *  longer needed.  This routine will return NULL if the commodity
- *  does not exist in the tree. */
-GtkTreePath *gnc_tree_model_price_get_path_from_commodity (GncTreeModelPrice *model,
-        gnc_commodity *commodity);
-
 /** Convert a price pointer into a GtkTreePath.
  *
  *  @param model A pointer to the price tree model.

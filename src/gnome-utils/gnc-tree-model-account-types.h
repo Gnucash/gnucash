@@ -97,11 +97,6 @@ GType gnc_tree_model_account_types_get_type (void);
 
 /*************** Method 1 functions ***************/
 
-/* Returns a GtkTreeModelFilter that wraps the model. Deprecated and root
-   account types will be filtered. Caller is responsible for
-   ref/unref. */
-GtkTreeModel * gnc_tree_model_account_types_valid (void);
-
 /* Returns a GtkTreeModelFilter that wraps the model. Only account
    types specified by the 'types' bitmask are visible.  To force the
    visibility of deprecated account types, pass
@@ -146,12 +141,6 @@ void gnc_tree_model_account_types_set_selection(GtkTreeSelection *sel,
 /**************** Method 2 functions **************/
 
 GtkTreeModel *gnc_tree_model_account_types_new(guint32 selected);
-
-guint32 gnc_tree_model_account_types_get_selected(
-    GncTreeModelAccountTypes * model);
-
-void gnc_tree_model_account_types_set_selected(
-    GncTreeModelAccountTypes * model, guint32 selected);
 
 
 G_END_DECLS

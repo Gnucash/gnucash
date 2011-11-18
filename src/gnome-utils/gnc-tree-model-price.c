@@ -1297,42 +1297,6 @@ gnc_tree_model_price_get_iter_from_commodity (GncTreeModelPrice *model,
 }
 
 /*
- * Convert a model/commodity pair into a gtk_tree_model_path.  This
- * routine should only be called from the file
- * gnc-tree-view-price.c.
- */
-GtkTreePath *
-gnc_tree_model_price_get_path_from_commodity (GncTreeModelPrice *model,
-        gnc_commodity *commodity)
-{
-    GtkTreeIter tree_iter;
-    GtkTreePath *tree_path;
-
-    ENTER("model %p, commodity %p", model, commodity);
-    g_return_val_if_fail (GNC_IS_TREE_MODEL_PRICE (model), NULL);
-    g_return_val_if_fail (commodity != NULL, NULL);
-
-    if (!gnc_tree_model_price_get_iter_from_commodity (model, commodity, &tree_iter))
-    {
-        LEAVE("no iter");
-        return NULL;
-    }
-
-    tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &tree_iter);
-    if (tree_path)
-    {
-        gchar *path_string = gtk_tree_path_to_string(tree_path);
-        LEAVE("path (2) %s", path_string);
-        g_free(path_string);
-    }
-    else
-    {
-        LEAVE("no path");
-    }
-    return tree_path;
-}
-
-/*
  * Convert a model/namespace pair into a gtk_tree_model_iter.  This
  * routine should only be called from the file
  * gnc-tree-view-price.c.
@@ -1368,42 +1332,6 @@ gnc_tree_model_price_get_iter_from_namespace (GncTreeModelPrice *model,
     iter->user_data3 = GINT_TO_POINTER(n);
     LEAVE("iter %s", iter_to_string(model, iter));
     return TRUE;
-}
-
-/*
- * Convert a model/namespace pair into a gtk_tree_model_path.  This
- * routine should only be called from the file
- * gnc-tree-view-price.c.
- */
-GtkTreePath *
-gnc_tree_model_price_get_path_from_namespace (GncTreeModelPrice *model,
-        gnc_commodity_namespace *namespace)
-{
-    GtkTreeIter tree_iter;
-    GtkTreePath *tree_path;
-
-    ENTER("model %p, namespace %p", model, namespace);
-    g_return_val_if_fail (GNC_IS_TREE_MODEL_PRICE (model), NULL);
-    g_return_val_if_fail (namespace != NULL, NULL);
-
-    if (!gnc_tree_model_price_get_iter_from_namespace (model, namespace, &tree_iter))
-    {
-        LEAVE("no iter");
-        return NULL;
-    }
-
-    tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &tree_iter);
-    if (tree_path)
-    {
-        gchar *path_string = gtk_tree_path_to_string(tree_path);
-        LEAVE("path (2) %s", path_string);
-        g_free(path_string);
-    }
-    else
-    {
-        LEAVE("no path");
-    }
-    return tree_path;
 }
 
 /************************************************************/

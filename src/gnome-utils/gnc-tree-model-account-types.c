@@ -173,13 +173,6 @@ gnc_tree_model_account_types_is_valid (GtkTreeModel *model,
 }
 
 GtkTreeModel *
-gnc_tree_model_account_types_valid (void)
-{
-    return gnc_tree_model_account_types_filter_using_mask(
-               xaccAccountTypesValid());
-}
-
-GtkTreeModel *
 gnc_tree_model_account_types_filter_using_mask (guint32 types)
 {
     GtkTreeModel *f_model;
@@ -210,29 +203,6 @@ gnc_tree_model_account_types_get_mask (GtkTreeModel *f_model)
     g_return_val_if_fail (f_model, 0);
 
     return GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (f_model), TYPE_MASK));
-}
-
-guint32
-gnc_tree_model_account_types_get_selected (GncTreeModelAccountTypes * model)
-{
-    GncTreeModelAccountTypesPrivate *priv;
-
-    g_return_val_if_fail (model != NULL, 0);
-
-    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
-    return priv->selected;
-}
-
-void
-gnc_tree_model_account_types_set_selected (GncTreeModelAccountTypes * model,
-        guint32 selected)
-{
-    GncTreeModelAccountTypesPrivate *priv;
-
-    g_return_if_fail (model != NULL);
-
-    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
-    priv->selected = selected;
 }
 
 guint32
