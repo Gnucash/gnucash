@@ -974,7 +974,7 @@ test_xaccAccountEqual (Fixture *fixture, gconstpointer pData)
   gnc_account_set_balance_dirty
 */
 /* gnc_account_find_split *** Test Only ***
-/* gnc_account_insert_split
+/ * gnc_account_insert_split
 gboolean
 gnc_account_insert_split (Account *acc, Split *s)// C: 5 in 3
 
