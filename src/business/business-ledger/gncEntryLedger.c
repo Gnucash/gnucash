@@ -378,6 +378,10 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
 
     /* Initialize Display */
     gnc_entry_ledger_display_init (ledger);
+    if (qof_book_is_readonly(ledger->book))
+    {
+        gnc_entry_ledger_set_readonly(ledger, TRUE);
+    }
     return ledger;
 }
 
@@ -603,6 +607,7 @@ gboolean gnc_entry_ledger_find_entry (GncEntryLedger *ledger, GncEntry *entry,
 void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly)
 {
     if (!ledger) return;
+    if (!readonly && qof_book_is_readonly(ledger->book)) return;
 
     /* reset the ledger type appropriately */
     if (readonly)

@@ -423,6 +423,13 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(page));
 
+    if (qof_book_is_readonly(gnc_get_current_book()))
+    {
+        // Are we readonly? Then don't allow any actions.
+        is_posted = TRUE;
+        can_unpost = FALSE;
+    }
+
     action_group = gnc_plugin_page_get_action_group(page);
     gnc_plugin_update_actions (action_group, posted_actions,
                                "sensitive", is_posted);

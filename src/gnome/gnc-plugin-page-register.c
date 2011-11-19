@@ -827,12 +827,13 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister *page)
     SplitRegister *reg;
     GNCLedgerDisplayType ledger_type;
     int i;
+    gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
     account = gnc_plugin_page_register_get_account (page);
     action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(page));
     gnc_plugin_update_actions(action_group, actions_requiring_account,
-                              "sensitive", account != NULL);
+                              "sensitive", is_readwrite && account != NULL);
 
     /* Set "style" radio button */
     ledger_type = gnc_ledger_display_type(priv->ledger);
@@ -1300,14 +1301,15 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboolean hide)
     GtkAction *action;
     gboolean can_copy = FALSE, can_cut = FALSE, can_paste = FALSE;
     gboolean has_selection;
+    gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
 
     reg_page = GNC_PLUGIN_PAGE_REGISTER(page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(reg_page);
     has_selection = gnucash_register_has_selection (priv->gsr->reg);
 
     can_copy = has_selection;
-    can_cut = has_selection;
-    can_paste = TRUE;
+    can_cut = is_readwrite && has_selection;
+    can_paste = is_readwrite;
 
     action = gnc_plugin_page_get_action (page, "EditCopyAction");
     gtk_action_set_sensitive (action, can_copy);
