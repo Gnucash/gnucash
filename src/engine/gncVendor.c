@@ -152,20 +152,6 @@ gnc_vendor_set_property (GObject         *object,
     }
 }
 
-/** Return displayable name */
-/*
-static gchar*
-impl_get_display_name(const QofInstance* inst)
-{
-    GncVendor* v;
-
-    g_return_val_if_fail(inst != NULL, FALSE);
-    g_return_val_if_fail(GNC_IS_VENDOR(inst), FALSE);
-
-    v = GNC_VENDOR(inst);
-    return g_strdup_printf("Vendor %s", v->name);
-}
-*/
 /** Does this object refer to a specific object */
 static gboolean
 impl_refers_to_object(const QofInstance* inst, const QofInstance* ref)

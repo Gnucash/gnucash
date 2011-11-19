@@ -1135,69 +1135,6 @@ xaccSplitGetBaseValue (const Split *s, const gnc_commodity * base_currency)
 /********************************************************************\
 \********************************************************************/
 
-/* gnc_numeric */
-/* xaccSplitsComputeValue (GList *splits, const Split * skip_me, */
-/*                         const gnc_commodity * base_currency) */
-/* { */
-/*     GList *node; */
-/*     gnc_numeric value = gnc_numeric_zero(); */
-
-/*     g_return_val_if_fail (base_currency, value); */
-
-/*     ENTER (" currency=%s", gnc_commodity_get_mnemonic (base_currency)); */
-
-/*     for (node = splits; node; node = node->next) */
-/*     { */
-/*         const Split *s = node->data; */
-/*         const gnc_commodity *currency; */
-/*         const gnc_commodity *commodity; */
-
-/*         if (s == skip_me) continue; */
-
-/*         /\* value = gnc_numeric_add(value, xaccSplitGetBaseValue(s, base_currency), */
-/*            GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); *\/ */
-
-/*         /\* The split-editor often sends us 'temp' splits whose account */
-/*          * hasn't yet been set.  Be lenient, and assume an implied base */
-/*          * currency. If there's a problem later, the scrub routines will */
-/*          * pick it up. */
-/*          *\/ */
-/*         commodity = s->acc ? xaccAccountGetCommodity (s->acc) : base_currency; */
-/*         currency = xaccTransGetCurrency (s->parent); */
-
-
-/*         if (gnc_commodity_equiv(currency, base_currency)) */
-/*         { */
-/*             value = gnc_numeric_add(value, xaccSplitGetValue(s), */
-/*                                     GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); */
-/*         } */
-/*         else if (gnc_commodity_equiv(commodity, base_currency)) */
-/*         { */
-/*             value = gnc_numeric_add(value, xaccSplitGetAmount(s), */
-/*                                     GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); */
-/*         } */
-/*         else */
-/*         { */
-/*             PERR ("inconsistent currencies\n" */
-/*                   "\tbase = '%s', curr='%s', sec='%s'\n", */
-/*                   gnc_commodity_get_printname(base_currency), */
-/*                   gnc_commodity_get_printname(currency), */
-/*                   gnc_commodity_get_printname(commodity)); */
-/*             g_return_val_if_fail (FALSE, value); */
-/*         } */
-/*     } */
-
-/*     /\* Note that just because the currencies are equivalent */
-/*      * doesn't mean the denominators are the same! *\/ */
-/*     value = gnc_numeric_convert(value, */
-/*                                 gnc_commodity_get_fraction (base_currency), */
-/*                                 GNC_HOW_RND_ROUND_HALF_UP); */
-
-/*     LEAVE (" total=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, */
-/*            value.num, value.denom); */
-/*     return value; */
-/* } */
-
 gnc_numeric
 xaccSplitConvertAmount (const Split *split, const Account * account)
 {

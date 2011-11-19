@@ -974,7 +974,8 @@ test_xaccAccountEqual (Fixture *fixture, gconstpointer pData)
   gnc_account_set_balance_dirty
 */
 /* gnc_account_find_split *** Test Only ***
-/ * gnc_account_insert_split
+ */
+/* gnc_account_insert_split
 gboolean
 gnc_account_insert_split (Account *acc, Split *s)// C: 5 in 3
 
@@ -1715,11 +1716,8 @@ test_gnc_account_foreach_descendant_until (Fixture *fixture, gconstpointer pData
  * xaccAccountGetColor
  * xaccAccountGetNotes
  * xaccAccountGetCommodity
- * gnc_account_get_start_balance *** Test Only ***
  * gnc_account_set_start_balance
- * gnc_account_get_start_cleared_balance *** Test Only ***
  * gnc_account_set_start_cleared_balance
- * gnc_account_get_start_reconciled_balance *** Test Only ***
  * gnc_account_set_start_reconciled_balance
  * xaccAccountGetBalance
  * xaccAccountGetClearedBalance C: 1
@@ -1977,8 +1975,7 @@ test_xaccAccountHasAncestor (Fixture *fixture, gconstpointer pData)
 /* xaccAccountTypeEnumAsString
  * xaccAccountStringToType
  * xaccAccountStringToEnum
- * xaccAccountGetTypeStr *** Not Used ***
- * xaccAccountGetTypeFromStr *** Test Only ***
+ * xaccAccountGetTypeStr
  * xaccAccountIsPriced
 const char *
 xaccAccountTypeEnumAsString (GNCAccountType type)// C: 5 in 3 */
@@ -2030,7 +2027,6 @@ test_xaccAccountType_Stuff (void)
 	}
 	else
 	    g_assert_cmpstr (typestr_uc, ==, typename);
-//	g_assert_cmpint (xaccAccountGetTypeFromStr (typestr), ==, type);
 	g_free (typestr_uc);
 
 	g_object_set (acc, "type", type, NULL);
@@ -2163,7 +2159,7 @@ test_xaccAccountType_Compatibility (void)
  */
 /* finder_help_function
 static void
-finder_help_function (const Account *acc, const char *descrption,// 3
+finder_help_function (const Account *acc, const char *description,// 3
 Helper function, fully exercised by the following two public functions
 */
 /* xaccAccountFindSplitByDesc
@@ -2404,7 +2400,6 @@ test_suite_account (void)
     GNC_TEST_ADD (suitename, "gnc account lookup by full name helper", Fixture, &complex, setup, test_gnc_account_lookup_by_full_name_helper,  teardown );
     GNC_TEST_ADD (suitename, "gnc account lookup by full name", Fixture, &complex, setup, test_gnc_account_lookup_by_full_name,  teardown );
     GNC_TEST_ADD (suitename, "gnc account foreach child", Fixture, &complex, setup, test_gnc_account_foreach_child,  teardown );
-//    GNC_TEST_ADD (suitename, "gnc account foreach child until", Fixture, &complex, setup, test_gnc_account_foreach_child_until,  teardown );
     GNC_TEST_ADD (suitename, "gnc account foreach descendant", Fixture, &complex, setup, test_gnc_account_foreach_descendant,  teardown );
     GNC_TEST_ADD (suitename, "gnc account foreach descendant until", Fixture, &complex, setup, test_gnc_account_foreach_descendant_until,  teardown );
     GNC_TEST_ADD (suitename, "gnc account get full name", Fixture, &good_data, setup, test_gnc_account_get_full_name,  teardown );

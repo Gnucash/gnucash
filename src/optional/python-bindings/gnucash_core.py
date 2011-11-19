@@ -315,7 +315,6 @@ PriceDB_dict =  {
                 'lookup_latest_before' : GncPrice,
                 'convert_balance_latest_price' : GncNumeric,
                 'convert_balance_nearest_price' : GncNumeric,
-                'convert_balance_latest_before' : GncNumeric,
                 }
 methods_return_instance(GncPriceDB,PriceDB_dict)
 GncPriceDB.get_prices = method_function_returns_instance_list(
@@ -615,8 +614,6 @@ account_dict =  {
                     'lookup_by_full_name' : Account,
                     'FindTransByDesc' : Transaction,
                     'FindSplitByDesc' : Split,
-                    'get_start_balance' : GncNumeric,
-                    'get_start_cleared_balance' : GncNumeric,
                     'GetBalance' : GncNumeric,
                     'GetClearedBalance' : GncNumeric,
                     'GetReconciledBalance' : GncNumeric,

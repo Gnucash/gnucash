@@ -350,16 +350,6 @@ void gnc_account_set_balance_dirty (Account *acc);
  *  @param acc Set the flag on this account. */
 void gnc_account_set_sort_dirty (Account *acc);
 
-/** Find the given split in an account.
- *
- *  @param acc The account whose splits are to be searched.
- *
- *  @param s The split to be found.
- *
- *  @result TRUE is the split is found in the accounts list of splits.
- *  FALSE otherwise.
-gboolean gnc_account_find_split (Account *acc, Split *s);
-*/
 /** Insert the given split from an account.
  *
  *  @param acc The account to which the split should be added.
@@ -400,35 +390,7 @@ const char * xaccAccountGetNotes (const Account *account);
 const char * xaccAccountGetLastNum (const Account *account);
 /** Get the account's lot order policy */
 GNCPolicy *gnc_account_get_policy (Account *account);
-/** Retrieve the starting commodity balance for this account.
-gnc_numeric gnc_account_get_start_balance (Account *acc);
-*/
-/** Retrieve the starting cleared commodity balance for this
- *  account.
-gnc_numeric gnc_account_get_start_cleared_balance (Account *acc);
-*/
-/** Retrieve the starting reconciled commodity balance for this
- *  account.
-gnc_numeric gnc_account_get_start_reconciled_balance (Account *acc);
-*/
-/** Get an indication of whether the account believes that the running
- *  balances may be incorrect and need to be recomputed.
- *
- *  @param acc Retrieve the flag on this account.
- *
- *  @return TRUE if the running account balances need to be recomputed.
- *  FALSE if they are correct.
-gboolean gnc_account_get_balance_dirty (Account *acc);
-*/
-/** Get an indication of whether the account believes that the splits
- *  may be incorrectly sorted and need to be resorted.
- *
- *  @param acc Retrieve the flag on this account.
- *
- *  @return TRUE if the splits in the account need to be resorted.
- *  FALSE if the sort order is correct.
-gboolean gnc_account_get_sort_dirty (Account *acc);
-*/
+
 /** The following recompute the partial balances (stored with the
  *  transaction) and the total balance, for this account
  */
@@ -822,25 +784,6 @@ gint gnc_account_get_tree_depth (const Account *account);
 void gnc_account_foreach_child (const Account *account,
                                 AccountCb func, /*@ null @*/ gpointer user_data);
 
-/** This method will traverse the immediate children of this accounts,
- *  calling 'func' on each account.  Traversal will stop when func
- *  returns a non-null value, and the routine will return with that
- *  value.  Therefore, this function will return null if func returns
- *  null for every account.  For a simpler function that always
- *  traverses all children nodes, use the gnc_account_foreach_child()
- *  function.
- *
- *  @param account A pointer to the account on whose children the
- *  function should be called.
- *
- *  @param func A function taking two arguments, an Account and a
- *  gpointer.
- *
- *  @param user_data This data will be passed to each call of func.
-gpointer gnc_account_foreach_child_until (const Account *account,
-        AccountCb2 func, gpointer user_data);
-*/
-
 /** This method will traverse all children of this accounts and their
  *  descendants, calling 'func' on each account.  This function
  *  traverses all descendant nodes.  To traverse only a subset of the
@@ -973,11 +916,7 @@ GNCAccountType xaccAccountStringToEnum (const char* str);
  *  use in the GUI/Interface.  These strings should be translated
  *  to the local language. */
 const char * xaccAccountGetTypeStr (GNCAccountType type);
-/** The xaccAccountGetTypeStr() routine returns a string suitable for
- *  use in the GUI/Interface.  These strings should be translated
- *  to the local language.
-GNCAccountType xaccAccountGetTypeFromStr (const gchar *str);
-*/
+
 /** Return the bitmask of parent account types compatible with a given type. */
 guint32 xaccParentAccountTypesCompatibleWith (GNCAccountType type);
 
@@ -1325,11 +1264,6 @@ void xaccAccountBeginStagedTransactionTraversals(const Account *account);
  */
 gboolean xaccTransactionTraverse(Transaction *trans, int stage);
 
-/** xaccSplitTransactionTraverse() behaves as above using the parent of
- *    the given split.
- *
-gboolean xaccSplitTransactionTraverse(Split *split, int stage);
-*/
 /** xaccAccountStagedTransactionTraversal() calls @a thunk on each
  *    transaction in account @a a whose current marker is less than the
  *    given @a stage and updates each transaction's marker to be @a stage.

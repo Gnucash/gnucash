@@ -146,20 +146,6 @@ gnc_employee_set_property (GObject         *object,
     }
 }
 
-/** Get displayable name */
-/*
-static gchar*
-impl_get_display_name(const QofInstance* inst)
-{
-    GncEmployee* emp;
-
-    g_return_val_if_fail(inst != NULL, FALSE);
-    g_return_val_if_fail(GNC_IS_EMPLOYEE(inst), FALSE);
-
-    emp = GNC_EMPLOYEE(inst);
-    return g_strdup_printf("Employee %s", emp->username);
-}
-*/
 /** Does this object refer to a specific object */
 static gboolean
 impl_refers_to_object(const QofInstance* inst, const QofInstance* ref)

@@ -483,20 +483,6 @@ destroy_job_on_book_close(QofInstance *ent, gpointer data)
     gncJobFree(job);
 }
 
-/** Handles book end - frees all jobs from the book
- *
- * @param book Book being closed
- */
-/*
-static void
-gnc_job_book_end(QofBook* book)
-{
-    QofCollection *col;
-
-    col = qof_book_get_collection(book, GNC_ID_JOB);
-    qof_collection_foreach(col, destroy_job_on_book_close, NULL);
-}
-*/
 static QofObject gncJobDesc =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,
