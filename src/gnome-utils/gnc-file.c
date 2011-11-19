@@ -611,6 +611,7 @@ gnc_file_query_save (gboolean can_cancel)
 #define RESPONSE_NEW  1
 #define RESPONSE_OPEN 2
 #define RESPONSE_QUIT 3
+#define RESPONSE_READONLY 4
 
 static gboolean
 gnc_post_file_open (const char * filename)
@@ -628,6 +629,7 @@ gnc_post_file_open (const char * filename)
     gchar *password = NULL;
     gchar *path = NULL;
     gint32 port = 0;
+    gboolean is_readonly = FALSE;
 
 
     ENTER(" ");
@@ -751,10 +753,12 @@ RESTART:
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", fmt2);
 
-        gnc_gtk_dialog_add_button(dialog, _("_Open Anyway"),
-                                  GTK_STOCK_OPEN, RESPONSE_OPEN);
+        gnc_gtk_dialog_add_button(dialog, _("_Open Read-Only"),
+                                  GTK_STOCK_REVERT_TO_SAVED, RESPONSE_READONLY);
         gnc_gtk_dialog_add_button(dialog, _("_Create New File"),
                                   GTK_STOCK_NEW, RESPONSE_NEW);
+        gnc_gtk_dialog_add_button(dialog, _("Open _Anyway"),
+                                  GTK_STOCK_OPEN, RESPONSE_OPEN);
         if (shutdown_cb)
             gtk_dialog_add_button(GTK_DIALOG(dialog),
                                   GTK_STOCK_QUIT, RESPONSE_QUIT);
@@ -766,22 +770,29 @@ RESTART:
         {
             rc = shutdown_cb ? RESPONSE_QUIT : RESPONSE_NEW;
         }
-        if (rc == RESPONSE_QUIT)
+        switch (rc)
         {
+        case RESPONSE_QUIT:
             if (shutdown_cb)
                 shutdown_cb(0);
             g_assert(1);
-        }
-        else if (rc == RESPONSE_OPEN)
-        {
+            break;
+        case RESPONSE_READONLY:
+            is_readonly = TRUE;
+            // re-enable the splash screen, file loading and display of
+            // reports may take some time
+            gnc_show_splash_screen();
+            /* user told us to open readonly. We do not ignore locks, but force the opening. */
+            qof_session_begin (new_session, newfile, FALSE, FALSE, TRUE);
+            break;
+        case RESPONSE_OPEN:
             // re-enable the splash screen, file loading and display of
             // reports may take some time
             gnc_show_splash_screen();
             /* user told us to ignore locks. So ignore them. */
             qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
-        }
-        else
-        {
+            break;
+        default:
             /* Can't use the given file, so just create a new
              * database so that the user will get a window that
              * they can click "Exit" on.
@@ -833,6 +844,13 @@ RESTART:
         qof_session_load (new_session, gnc_window_show_progress);
         gnc_window_show_progress(NULL, -1.0);
         xaccLogEnable();
+
+        if (is_readonly)
+        {
+            // If the user chose "open read-only" above, make sure to have this
+            // read-only here.
+            qof_book_mark_readonly(qof_session_get_book(new_session));
+        }
 
         /* check for i/o error, put up appropriate error dialog */
         io_err = qof_session_pop_error (new_session);
@@ -1190,6 +1208,19 @@ gnc_file_save (void)
     if (!qof_session_get_url(session))
     {
         gnc_file_save_as ();
+        return;
+    }
+
+    if (qof_book_is_readonly(qof_session_get_book(session)))
+    {
+        gint response = gnc_ok_cancel_dialog(gnc_ui_get_toplevel(),
+                                       GTK_RESPONSE_CANCEL,
+                                       _("The database was opened read-only. "
+                                         "Do you want to save it to a different place?"));
+        if (response == GTK_RESPONSE_OK)
+        {
+            gnc_file_save_as ();
+        }
         return;
     }
 
