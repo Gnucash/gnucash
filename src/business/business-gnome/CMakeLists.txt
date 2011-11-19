@@ -50,7 +50,7 @@ ADD_LIBRARY(gncmod-business-gnome
   ${business_gnome_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gncmod-business-gnome gnc-business-ledger gncmod-gnome-search 
+TARGET_LINK_LIBRARIES(gncmod-business-gnome gncmod-ledger-core gncmod-gnome-search 
    gncmod-report-gnome gncmod-gnome-utils gnc-gnome gncmod-engine gnc-qof ${GTK3_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-business-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.business.gnome\")

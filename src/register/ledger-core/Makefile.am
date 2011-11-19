@@ -12,7 +12,13 @@ libgncmod_ledger_core_la_SOURCES = \
   split-register-load.c \
   split-register-model.c \
   split-register-model-save.c \
-  split-register-util.c
+  split-register-util.c \
+  gncEntryLedger.c \
+  gncEntryLedgerControl.c \
+  gncEntryLedgerDisplay.c \
+  gncEntryLedgerLayout.c \
+  gncEntryLedgerLoad.c \
+  gncEntryLedgerModel.c
 
 noinst_HEADERS = \
   gnc-ledger-display.h \
@@ -22,7 +28,12 @@ noinst_HEADERS = \
   split-register-layout.h \
   split-register-model.h \
   split-register-model-save.h \
-  split-register-p.h
+  split-register-p.h \
+  gncEntryLedger.h \
+  gncEntryLedgerP.h \
+  gncEntryLedgerControl.h \
+  gncEntryLedgerLayout.h \
+  gncEntryLedgerModel.h
 
 libgncmod_ledger_core_la_LDFLAGS = -avoid-version
 
