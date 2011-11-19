@@ -106,7 +106,7 @@ src/business/business-gnome/glade/date-close.glade
 src/business/business-gnome/glade/employee.glade
 src/business/business-gnome/glade/job.glade
 src/business/business-gnome/glade/order.glade
-src/business/business-gnome/glade/payment.glade
+src/business/business-gnome/gtkbuilder/dialog-payment.glade
 src/business/business-gnome/gncmod-business-gnome.c
 src/business/business-gnome/gnc-plugin-business.c
 src/business/business-gnome/gnc-plugin-page-invoice.c
