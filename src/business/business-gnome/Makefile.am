@@ -14,7 +14,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnome-search \
   -I${top_srcdir}/src/html \
   -I${top_srcdir}/src/report/report-gnome \
-  -I${top_srcdir}/src/business/business-ledger \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/register/ledger-core \
@@ -66,9 +65,9 @@ libgncmod_business_gnome_la_LDFLAGS = -avoid-version
 
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome/libgnc-gnome.la \
-  ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
   ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
+  ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \

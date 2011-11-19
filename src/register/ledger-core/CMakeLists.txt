@@ -12,7 +12,14 @@ SET (ledger_core_SOURCES
   split-register-model.c
   split-register-model-save.c
   split-register-util.c
+  gncEntryLedger.c
+  gncEntryLedgerControl.c
+  gncEntryLedgerDisplay.c
+  gncEntryLedgerLayout.c
+  gncEntryLedgerLoad.c
+  gncEntryLedgerModel.c
 )
+
 
 SET (ledger_core_HEADERS
   gnc-ledger-display.h
@@ -23,6 +30,11 @@ SET (ledger_core_HEADERS
   split-register-model.h
   split-register-model-save.h
   split-register-p.h
+  gncEntryLedger.h
+  gncEntryLedgerP.h
+  gncEntryLedgerControl.h
+  gncEntryLedgerLayout.h
+  gncEntryLedgerModel.h
 )
 
 # Add dependency on config.h
@@ -31,7 +43,7 @@ SET_SOURCE_FILES_PROPERTIES (${ledger_core_SOURCES} PROPERTIES OBJECT_DEPENDS ${
 ADD_LIBRARY (gncmod-ledger-core ${ledger_core_SOURCES} ${ledger_core_HEADERS})
 
 TARGET_LINK_LIBRARIES(gncmod-ledger-core gncmod-register-gnome gncmod-register-core gncmod-gnome-utils
-        gncmod-engine ${GTK3_LDFLAGS})
+        gncmod-engine gnc-core-utils ${GTK3_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gncmod-ledger-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.ledger\")
 
@@ -43,5 +55,7 @@ INSTALL(TARGETS gncmod-ledger-core
   RUNTIME DESTINATION bin)
 # No headers to install
 
+
 SET_LOCAL_DIST(ledger_core_DIST_local CMakeLists.txt Makefile.am ${ledger_core_SOURCES} ${ledger_core_HEADERS})
 SET(ledger_core_DIST ${ledger_core_DIST_local} ${test_ledger_core_DIST} PARENT_SCOPE)
+

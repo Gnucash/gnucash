@@ -142,12 +142,6 @@ src/business/business-gnome/gtkbuilder/dialog-order.glade
 src/business/business-gnome/gtkbuilder/dialog-payment.glade
 src/business/business-gnome/gtkbuilder/dialog-vendor.glade
 src/business/business-gnome/search-owner.c
-src/business/business-ledger/gncEntryLedger.c
-src/business/business-ledger/gncEntryLedgerControl.c
-src/business/business-ledger/gncEntryLedgerDisplay.c
-src/business/business-ledger/gncEntryLedgerLayout.c
-src/business/business-ledger/gncEntryLedgerLoad.c
-src/business/business-ledger/gncEntryLedgerModel.c
 src/core-utils/binreloc.c
 src/core-utils/core-utils.scm
 src/core-utils/gnc-environment.c
@@ -524,6 +518,12 @@ src/plugins/customer_import/libgncmod-customer_import.c
 src/plugins/example/gncmod-example.c
 src/plugins/example/gnc-plugin.example.c
 src/python/gncmod-python.c
+src/register/ledger-core/gncEntryLedger.c
+src/register/ledger-core/gncEntryLedgerControl.c
+src/register/ledger-core/gncEntryLedgerDisplay.c
+src/register/ledger-core/gncEntryLedgerLayout.c
+src/register/ledger-core/gncEntryLedgerLoad.c
+src/register/ledger-core/gncEntryLedgerModel.c
 src/register/ledger-core/gnc-ledger-display2.c
 src/register/ledger-core/gnc-ledger-display.c
 src/register/ledger-core/gncmod-ledger-core.c

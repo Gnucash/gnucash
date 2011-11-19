@@ -35,7 +35,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/src/gnome-search/ \
   -I${top_srcdir}/src/register/ledger-core \
-  -I${top_srcdir}/src/business/business-ledger/ \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/business/dialog-tax-table \

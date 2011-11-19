@@ -57,7 +57,6 @@ eval `${top_srcdir}/src/gnc-test-env.pl \
   --gnc-module-dir ${top_builddir}/src/business/business-core/file \
   --gnc-module-dir ${top_builddir}/src/business/business-utils \
   --gnc-module-dir ${top_builddir}/src/business/dialog-tax-table \
-  --gnc-module-dir ${top_builddir}/src/business/business-ledger \
   --gnc-module-dir ${top_builddir}/src/business/business-gnome \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/gnc-module \
@@ -92,7 +91,6 @@ eval `${top_srcdir}/src/gnc-test-env.pl \
   --library-dir    ${top_builddir}/src/register/register-gnome \
   --library-dir    ${top_builddir}/src/register/register-core \
   --library-dir    ${top_builddir}/src/register/ledger-core \
-  --library-dir    ${top_builddir}/src/business/business-ledger \
   --library-dir    ${top_builddir}/src/report/report-system \
   --library-dir    ${top_builddir}/src/report/report-gnome
   `

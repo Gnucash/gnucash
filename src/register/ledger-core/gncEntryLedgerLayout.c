@@ -289,5 +289,3 @@ TableLayout * gnc_entry_ledger_layout_new (GncEntryLedger *ledger)
 
     return layout;
 }
-
-

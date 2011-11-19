@@ -1786,7 +1786,6 @@ AC_CONFIG_FILES(
   src/business/business-gnome/gtkbuilder/Makefile
   src/business/business-gnome/gschemas/Makefile
   src/business/business-gnome/ui/Makefile
-  src/business/business-ledger/Makefile
   dnl # Stuff for bill/invoice import plugin
   src/plugins/Makefile
   src/plugins/bi_import/Makefile
