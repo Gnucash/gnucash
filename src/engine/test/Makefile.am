@@ -105,6 +105,7 @@ test_enginedir = ${top_builddir}/${MODULEPATH}/test
 
 test_engine_LDADD = \
 	${top_builddir}/${MODULEPATH}/libgncmod-engine.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
 	${top_builddir}/src/test-core/libtest-core.la
 
 
