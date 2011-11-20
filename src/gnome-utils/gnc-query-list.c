@@ -47,6 +47,18 @@ struct _GNCQueryListPriv
     gint	          component_id;
 };
 
+struct _OriginalGtkCListPointers
+{
+    void   (*original_select_row)          (GtkCList       *clist,
+                                   gint            row,
+                                   gint            column,
+                                   GdkEvent       *event);
+    void   (*original_unselect_row)        (GtkCList       *clist,
+                                   gint            row,
+                                   gint            column,
+                                   GdkEvent       *event);
+};
+
 #define GNC_QUERY_LIST_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_QUERY_LIST, GNCQueryListPriv))
 
@@ -57,6 +69,7 @@ struct _GNCQueryListPriv
 
 /** Static Globals ****************************************************/
 static GtkCListClass *parent_class = NULL;
+static struct _OriginalGtkCListPointers original_parent_class_functions;
 static guint query_list_signals[LAST_SIGNAL] = {0};
 
 
@@ -370,7 +383,16 @@ gnc_query_list_class_init (GNCQueryListClass *klass)
 
     object_class->destroy = gnc_query_list_destroy;
 
+    // Watch out: This code messes with the callback function pointers directly
+    // in the GtkCList structure, which unexpectedly also modifies the behaviour
+    // of any other GtkCList inside our process. We add the workaround to store
+    // the original pointers, and because we happen to know the other GtkCList
+    // in our process has a different selection_mode, we switch to the original
+    // functions based on that criterion. Yes, that's a hack. But the actual
+    // solution is rather fixing *this* code not to mess up the parent's class structure!
+    original_parent_class_functions.original_select_row = clist_class->select_row;
     clist_class->select_row = gnc_query_list_select_row;
+    original_parent_class_functions.original_unselect_row = clist_class->unselect_row;
     clist_class->unselect_row = gnc_query_list_unselect_row;
 
     klass->line_toggled = NULL;
@@ -403,6 +425,13 @@ gnc_query_list_select_row (GtkCList *clist, gint row, gint column,
 {
     GNCQueryList *list = GNC_QUERY_LIST(clist);
 
+    if (clist->selection_mode == GTK_SELECTION_MULTIPLE)
+    {
+        // This is the GtkCTree instance of dialog-search.c. Don't mess with it.
+        original_parent_class_functions.original_select_row(clist, row, column, event);
+        return;
+    }
+
     list->current_row = row;
 
     gnc_query_list_toggle (list);
@@ -430,6 +459,13 @@ gnc_query_list_unselect_row (GtkCList *clist, gint row, gint column,
                              GdkEvent *event)
 {
     GNCQueryList *list = GNC_QUERY_LIST(clist);
+
+    if (clist->selection_mode == GTK_SELECTION_MULTIPLE)
+    {
+        // This is the GtkCTree instance of dialog-search.c. Don't mess with it.
+        original_parent_class_functions.original_unselect_row(clist, row, column, event);
+        return;
+    }
 
     if (row == list->current_row)
     {
