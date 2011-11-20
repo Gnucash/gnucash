@@ -61,11 +61,11 @@ class Session(GnuCashCoreClass):
     """A GnuCash book editing session
 
     To commit changes to the session you may need to call save,
-    (this is allways the case with the file backend).
+    (this is always the case with the file backend).
 
     When you're down with a session you may need to call end()
 
-    Every Session has a Book in the book attribute, which you'll definetely
+    Every Session has a Book in the book attribute, which you'll definitely
     be interested in, as every GnuCash entity (Transaction, Split, Vendor,
     Invoice..) is associated with a particular book where it is stored.
     """
@@ -157,7 +157,7 @@ class Book(GnuCashCoreClass):
     the book via the book property, 'my_session.book'
 
     If you would like to create a Book without any backing storage, call the
-    Book constructor wihout any parameters, 'Book()'. You can later merge
+    Book constructor without any parameters, 'Book()'. You can later merge
     such a book into a book with actual store by using merge_init.
 
     Methods of interest
@@ -324,11 +324,11 @@ GncPriceDB.get_prices = method_function_returns_instance_list(
 class GncCommodity(GnuCashCoreClass): pass
 
 class GncCommodityTable(GnuCashCoreClass):
-    """A CommodityTable provides a way to store and lookup commoditys.
-    Commoditys are primarily currencies, but other tradable things such as
-    stocks, mutual funds, and material substances are posible.
+    """A CommodityTable provides a way to store and lookup commodities.
+    Commodities are primarily currencies, but other tradable things such as
+    stocks, mutual funds, and material substances are possible.
 
-    Users of this library should not create thier own CommodityTable, instead
+    Users of this library should not create their own CommodityTable, instead
     the get_table method from the Book class should be used.
 
     This table is automatically populated with the GnuCash default commodity's

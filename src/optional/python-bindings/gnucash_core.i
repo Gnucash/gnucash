@@ -186,7 +186,7 @@
 
 %include <gnc-lot.h>
 
-//business-core includes
+//core business includes
 %include <gncOwner.h>
 %include <gncCustomer.h>
 %include <gncEmployee.h>
