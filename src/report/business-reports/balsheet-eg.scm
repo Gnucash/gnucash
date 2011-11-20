@@ -31,7 +31,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report standard-reports balsheet-eg))
+(define-module (gnucash report balsheet-eg))
 (use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash business-utils))

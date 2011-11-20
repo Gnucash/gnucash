@@ -12,7 +12,10 @@ gncscmmod_DATA = \
    job-report.scm \
    owner-report.scm \
    payables.scm \
-   receivables.scm
+   receivables.scm \
+   balsheet-eg.css \
+   balsheet-eg.eguile.scm \
+   balsheet-eg.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 SCM_FILE_LINKS = ${gncscmmod_DATA}

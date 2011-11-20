@@ -108,6 +108,7 @@
 (use-modules (gnucash report payables))
 (use-modules (gnucash report receivables))
 (use-modules (gnucash report customer-summary))
+(use-modules (gnucash report balsheet-eg))
 
 (define gnc:invoice-report-create gnc:invoice-report-create-internal)
 
