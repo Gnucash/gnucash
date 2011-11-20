@@ -39,8 +39,10 @@ libgncmod_python_gnc_module_description(void)
 
 #if PY_VERSION_HEX >= 0x03000000
 extern PyObject* PyInit__sw_app_utils(void);
+extern PyObject* PyInit__sw_core_utils(void);
 #else
 extern void init_sw_app_utils(void);
+extern void init_sw_core_utils(void);
 #endif
 
 int
@@ -53,8 +55,10 @@ libgncmod_python_gnc_module_init(int refcount)
     Py_Initialize();
 #if PY_VERSION_HEX >= 0x03000000
     PyInit__sw_app_utils();
+    PyInit__sw_core_utils();
 #else
     init_sw_app_utils();
+    init_sw_core_utils();
 #endif
 
     /*

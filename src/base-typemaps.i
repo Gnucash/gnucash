@@ -93,7 +93,7 @@ typedef char gchar;
 }
 
 %typemap(in) gchar * {
-    $1 = ($1_type)PyString_AsString($input);
+    $1 = ($1_ltype)PyString_AsString($input);
 }
 
 %typemap(out) gchar * {

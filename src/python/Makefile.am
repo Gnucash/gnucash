@@ -11,7 +11,7 @@ libgncmod_python_la_LDFLAGS = -avoid-version \
 
 libgncmod_python_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils-python.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils-python.la \
   ${PYTHON_LIBS} \
   ${PYTHON_EXTRA_LIBS} \

@@ -14,7 +14,7 @@ libgnc_core_utils_la_SOURCES = \
   gnc-main.c \
   gnc-path.c \
   gnc-uri-utils.c \
-  swig-core-utils.c
+  swig-core-utils-guile.c
 
 libgnc_core_utils_la_LIBADD = \
   ${GUILE_LIBS} \
@@ -23,6 +23,7 @@ libgnc_core_utils_la_LIBADD = \
   ${GTK_MAC_LIBS} \
   ${GCONF_LIBS} \
   ${QOF_LIBS}
+
 
 noinst_HEADERS = \
   binreloc.h \
@@ -38,9 +39,14 @@ noinst_HEADERS = \
   gnc-uri-utils.h
 
 if BUILDING_FROM_SVN
-swig-core-utils.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
+swig-core-utils-guile.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
+if WITH_PYTHON
+swig-core-utils-python.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
+	$(SWIG) -python -Wall -Werror $(SWIG_ARGS) \
+	-I${top_srcdir}/src -o $@ $<
+endif
 endif
 
 AM_CPPFLAGS = \
@@ -60,6 +66,29 @@ if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
 #for running
 SCM_FILE_LINKS = ${gncmod_DATA}
+endif
+
+if WITH_PYTHON
+
+lib_LTLIBRARIES += libgnc-core-utils-python.la
+
+libgnc_core_utils_python_la_SOURCES = \
+	swig-core-utils-python.c
+
+libgnc_core_utils_python_la_LIBADD = \
+	${PYTHON_LIBS} \
+	${top_builddir}/src/core-utils/libgnc-core-utils.la
+
+libgnc_core_utils_python_la_CPPFLAGS = \
+  ${GLIB_CFLAGS} \
+  ${GCONF_CFLAGS} \
+  ${GTK_MAC_CFLAGS} \
+  ${QOF_CFLAGS} \
+  ${PYTHON_CPPFLAGS} \
+  -I${top_srcdir}/src/libqof/qof \
+  -I${top_builddir}/src \
+  -I${top_srcdir}/src
+
 endif
 
 .scm-links: 
