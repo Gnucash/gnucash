@@ -1,32 +1,34 @@
 import sys
 import _sw_app_utils
 from gnucash import *
-
+from _sw_core_utils import gnc_is_extra_enabled
 import gtk
 import os
 sys.path.append(os.path.dirname(__file__))
-print "woop", os.path.dirname(__file__)
+noisy = gnc_is_extra_enabled()
+if noisy:
+    print "woop", os.path.dirname(__file__)
 import pycons.console as cons
 
-print "Hello from python!"
-
-print "test", sys.modules.keys()
-print "test2", dir(_sw_app_utils)
+if noisy:
+    print "Hello from python!"
+    print "test", sys.modules.keys()
+    print "test2", dir(_sw_app_utils)
 
 root = _sw_app_utils.gnc_get_current_root_account()
 
-print "test", dir(root), root.__class__
-print "test2", dir(gnucash_core_c)
+if noisy:
+    print "test", dir(root), root.__class__
+    print "test2", dir(gnucash_core_c)
 
 acct = Account(instance = root)
 
-print "test3", dir(acct)
-#print acct.GetName()
-#print acct.GetBalance()
-#print acct.GetSplitList()
-
-
-#print "test2", dir(gnucash.gnucash_core_c)
+if noisy:
+    print "test3", dir(acct)
+   #print acct.GetName()
+   #print acct.GetBalance()
+   #print acct.GetSplitList()
+   #print "test2", dir(gnucash.gnucash_core_c)
 
 class Console (cons.Console):
     """ GTK python console """

@@ -51,6 +51,8 @@ gchar * gnc_locale_from_utf8(const gchar *);
 %newobject gnc_locale_to_utf8;
 gchar * gnc_locale_to_utf8(const gchar *);
 
+gboolean gnc_is_extra_enabled();
+
 const char * gnc_locale_default_iso_currency_code (void);
 
 #if defined(SWIGGUILE)
