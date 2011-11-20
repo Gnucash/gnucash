@@ -1,4 +1,4 @@
-TESTS_ENVIRONMENT = PYTHONPATH=$(PYTHONPATH):$(pythondir) $(top_builddir)/src/bin/gnucash-setup-env $(PYTHON)
+TESTS_ENVIRONMENT = PYTHONPATH=$(PYTHONPATH):$(pythondir) $(top_builddir)/src/bin/overrides/gnucash-build-env $(PYTHON)
 TESTS = runTests.py
 
 clean-local:
