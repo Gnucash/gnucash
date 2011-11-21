@@ -77,7 +77,7 @@ libgnc_core_utils_python_la_SOURCES = \
 
 libgnc_core_utils_python_la_LIBADD = \
 	${PYTHON_LIBS} \
-	${top_builddir}/src/core-utils/libgnc-core-utils.la
+	libgnc-core-utils.la
 
 libgnc_core_utils_python_la_CPPFLAGS = \
   ${GLIB_CFLAGS} \
