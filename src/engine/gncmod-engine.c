@@ -49,6 +49,7 @@ libgncmod_engine_gnc_module_init(int refcount)
     scm_init_sw_engine_module();
     scm_c_eval_string("(use-modules (sw_engine))");
     scm_c_eval_string("(use-modules (gnucash engine))");
+    scm_c_eval_string("(use-modules (gnucash business-core))");
 
     return TRUE;
 }

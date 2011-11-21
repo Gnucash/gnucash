@@ -18,6 +18,19 @@
 #include "kvp-scm.h"
 #include "glib-helpers.h"
 
+#include "gncAddress.h"
+#include "gncBillTerm.h"
+#include "gncCustomer.h"
+#include "gncEmployee.h"
+#include "gncEntry.h"
+#include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncOrder.h"
+#include "gncOwner.h"
+#include "gncTaxTable.h"
+#include "gncVendor.h"
+#include "gncBusGuile.h"
+
 SCM scm_init_sw_engine_module (void);
 %}
 
@@ -294,3 +307,5 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
 
 }
 #endif
+
+%include business-core.i

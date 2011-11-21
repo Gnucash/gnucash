@@ -2,7 +2,6 @@
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/app-utils" 0)
-(gnc:module-load "gnucash/business-core" 0)
 
 (define gnc:*business-label* (N_ "Business"))
 (define gnc:*company-name* (N_ "Company Name"))

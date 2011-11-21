@@ -7,7 +7,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
@@ -25,7 +24,6 @@ noinst_HEADERS = \
 libgncmod_dialog_tax_table_la_LDFLAGS = -avoid-version
 
 libgncmod_dialog_tax_table_la_LIBADD = \
-  ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \

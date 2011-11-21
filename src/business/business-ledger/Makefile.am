@@ -18,7 +18,6 @@ noinst_HEADERS = \
   gncEntryLedgerModel.h
 
 libgnc_business_ledger_la_LIBADD = \
-  ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-utils/libgncmod-business-utils.la \
   ${top_builddir}/src/business/dialog-tax-table/libgncmod-dialog-tax-table.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
@@ -33,7 +32,6 @@ libgnc_business_ledger_la_LIBADD = \
   ${GLIB_LIBS}
 
 AM_CPPFLAGS = \
-  -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/business/business-utils \
   -I${top_srcdir}/src/business/dialog-tax-table \
   -I${top_srcdir}/src \

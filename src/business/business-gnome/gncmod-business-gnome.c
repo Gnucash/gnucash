@@ -75,16 +75,12 @@ libgncmod_business_gnome_gnc_module_description(void)
 int
 libgncmod_business_gnome_gnc_module_init(int refcount)
 {
-    /* load business-core: we depend on it -- and it depends on the engine */
-    if (!gnc_module_load ("gnucash/business-core", 0))
-    {
-        return FALSE;
-    }
-    /* We also depend on app-utils, gnome-utils, and gnome-search modules */
+    /* load app-utils: we depend on it -- and it depends on the engine */
     if (!gnc_module_load ("gnucash/app-utils", 0))
     {
         return FALSE;
     }
+    /* We also depend on gnome-utils and gnome-search modules */
     if (!gnc_module_load ("gnucash/gnome-utils", 0))
     {
         return FALSE;
@@ -97,31 +93,9 @@ libgncmod_business_gnome_gnc_module_init(int refcount)
     {
         return FALSE;
     }
-    //  if (!libgncmod_business_gnome_gnc_module_load ("gnucash/report/standard-reports", 0)) {
-    //    return FALSE;
-    //  }
 
     scm_c_eval_string("(use-modules (gnucash business-gnome))");
     scm_c_eval_string("(use-modules (gnucash report business-reports))");
-
-    // temp code until gnc:url-type is wrapped
-    /*
-    {
-        SCM wct_gnc_url_type = scm_c_eval_string("<gnc:url-type>");
-        SCM tmp;
-
-        tmp = gw_wcp_assimilate_ptr(GNC_CUSTOMER_MODULE_NAME, wct_gnc_url_type);
-        scm_c_define("gnc:url-type-customer", tmp);
-        tmp = gw_wcp_assimilate_ptr(GNC_VENDOR_MODULE_NAME, wct_gnc_url_type);
-        scm_c_define("gnc:url-type-vendor", tmp);
-        tmp = gw_wcp_assimilate_ptr(GNC_EMPLOYEE_MODULE_NAME, wct_gnc_url_type);
-        scm_c_define("gnc:url-type-employee", tmp);
-        tmp = gw_wcp_assimilate_ptr(GNC_INVOICE_MODULE_NAME, wct_gnc_url_type);
-        scm_c_define("gnc:url-type-invoice", tmp);
-        tmp = gw_wcp_assimilate_ptr(URL_TYPE_OWNERREPORT, wct_gnc_url_type);
-        scm_c_define("gnc:url-type-ownerreport", tmp);
-    }
-    */
 
     if (refcount == 0)
     {

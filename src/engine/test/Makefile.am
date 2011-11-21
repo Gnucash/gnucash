@@ -44,7 +44,13 @@ TESTS = \
   test-transaction-reversal \
   test-transaction-voiding \
   test-recurrence \
-  test-scm-query
+  test-scm-query \
+  test-business \
+  test-address \
+  test-customer \
+  test-employee \
+  test-job \
+  test-vendor
 
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -76,7 +82,13 @@ check_PROGRAMS = \
   test-scm-query \
   test-split-vs-account \
   test-transaction-reversal \
-  test-transaction-voiding
+  test-transaction-voiding \
+  test-business \
+  test-address \
+  test-customer \
+  test-employee \
+  test-job \
+  test-vendor
 
 
 test_link_SOURCES = test-link.c

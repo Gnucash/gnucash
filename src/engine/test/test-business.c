@@ -123,7 +123,7 @@ test_printable (const char *name, gpointer obj)
 static void
 main_helper (void *closure, int argc, char **argv)
 {
-    gnc_module_load("gnucash/business-core", 0);
+    gnc_module_load("gnucash/engine", 0);
     test_business();
     print_test_results();
     exit(get_rv());

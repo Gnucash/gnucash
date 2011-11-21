@@ -73,10 +73,6 @@ libgncmod_bi_import_gnc_module_init (int refcount)
     {
         return FALSE;
     }
-    if (!gnc_module_load ("gnucash/business-core", 0))
-    {
-        return FALSE;
-    }
     if (!gnc_module_load ("gnucash/engine", 0))
     {
         return FALSE;

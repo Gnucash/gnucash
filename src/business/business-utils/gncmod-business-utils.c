@@ -55,12 +55,6 @@ libgncmod_business_utils_gnc_module_description(void)
 int
 libgncmod_business_utils_gnc_module_init(int refcount)
 {
-    /* load the business-core (we depend on it) */
-    if (!gnc_module_load("gnucash/business-core", 0))
-    {
-        return FALSE;
-    }
-
     /* Load the application utils.. */
     if (!gnc_module_load("gnucash/app-utils", 0))
     {

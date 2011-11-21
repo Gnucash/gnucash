@@ -42,7 +42,6 @@ libgncmod_engine_la_SOURCES = \
   engine-helpers.c \
   glib-helpers.c  \
   policy.c \
-  swig-business-core.c \
   gncBusGuile.c \
   gncBusiness.c \
   gncAddress.c \
@@ -143,7 +142,8 @@ libgncmod_engine_la_LIBADD = \
   ${top_builddir}/lib/libc/libc-missing.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = engine.scm 
+gncmod_DATA = engine.scm \
+  business-core.scm
 
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
@@ -195,10 +195,6 @@ swig-engine.c: engine.i $(top_srcdir)/src/base-typemaps.i \
                $(gncinclude_HEADERS) $(noinst_HEADERS)
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src/libqof/qof -I${top_srcdir}/src -o $@ $<
-swig-business-core.c: business-core.i $(top_srcdir)/src/base-typemaps.i \
-                      $(gncinclude_HEADERS) $(noinst_HEADERS)
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/src -o $@ $<
 endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
@@ -209,7 +205,7 @@ BUILT_SOURCES = iso-4217-currencies.c
 
 CLEANFILES = $(BUILT_SOURCES) .scm-links \
 	${SCM_FILE_LINKS}
-MAINTAINERCLEANFILES = swig-engine.c swig-business-core.c
+MAINTAINERCLEANFILES = swig-engine.c
 
 clean-local:
 	rm -rf gnucash

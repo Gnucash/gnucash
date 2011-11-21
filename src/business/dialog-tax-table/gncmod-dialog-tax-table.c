@@ -56,16 +56,12 @@ libgncmod_dialog_tax_table_gnc_module_description(void)
 int
 libgncmod_dialog_tax_table_gnc_module_init(int refcount)
 {
-    /* load business-core: we depend on it -- and it depends on the engine */
-    if (!gnc_module_load ("gnucash/business-core", 0))
-    {
-        return FALSE;
-    }
-    /* We also depend on app-utils and gnome-utils modules */
+    /* load app-utils: we depend on it -- and it depends on the engine */
     if (!gnc_module_load ("gnucash/app-utils", 0))
     {
         return FALSE;
     }
+    /* We also depend on the gnome-utils module */
     if (!gnc_module_load ("gnucash/gnome-utils", 0))
     {
         return FALSE;

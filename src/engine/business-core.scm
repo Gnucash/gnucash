@@ -1,5 +1,4 @@
 (define-module (gnucash business-core))
-(use-modules (sw_business_core))
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
 
