@@ -118,13 +118,13 @@ typedef char gchar;
 %typemap(out) gboolean {
     if ($1 == TRUE)
     {
-        Py_INCREF(Py_True);
         $result = Py_True;
+        Py_INCREF($result);
     }
     else if ($1 == FALSE)
     {
-        Py_INCREF(Py_False);
         $result = Py_False;
+        Py_INCREF($result);
     }
     else
     {
