@@ -19,14 +19,13 @@
 ; put the (define-module... back when installing as a 'proper' report
 ; as opposed to referring to it from .gnucash/config.user
 ; (see http://wiki.gnucash.org/wiki/Custom_Reports )
-(define-module (gnucash report taxinvoice))        
+(define-module (gnucash report taxinvoice))
 
 (use-modules (gnucash main))
-(use-modules (gnucash gnc-module))        
+(use-modules (gnucash gnc-module))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash business-utils))
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/business-utils" 0)
+(gnc:module-load "gnucash/app-utils" 0)
 (gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/engine" 0)
 

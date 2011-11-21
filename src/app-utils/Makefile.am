@@ -137,6 +137,8 @@ gncmod_DATA = app-utils.scm
 
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
+  business-options.scm \
+  business-prefs.scm \
   c-interface.scm \
   config-var.scm \
   date-utilities.scm \

@@ -24,14 +24,13 @@
 
 (define-module (gnucash report eguile-html-utilities))
 
-; using all of these seems like overkill -- 
+; using all of these seems like overkill --
 ; not sure which are really required
 (use-modules (gnucash main))
-(use-modules (gnucash gnc-module))        
+(use-modules (gnucash gnc-module))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash business-utils))
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/business-utils" 0)
+(gnc:module-load "gnucash/app-utils" 0)
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
 

@@ -1336,7 +1336,6 @@ AC_CONFIG_FILES(
   src/tax/us/test/Makefile
   src/test-core/Makefile
   src/business/Makefile
-  src/business/business-utils/Makefile
   src/business/business-gnome/Makefile
   src/business/business-gnome/glade/Makefile
   src/business/business-gnome/gtkbuilder/Makefile

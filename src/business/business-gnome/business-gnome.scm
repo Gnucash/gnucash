@@ -2,7 +2,7 @@
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
-(gnc:module-load "gnucash/business-utils" 0)
+(gnc:module-load "gnucash/app-utils" 0)
 (gnc:module-load "gnucash/gnome-search" 0)
 
 (gnc:module-load "gnucash/report/report-gnome" 0)
