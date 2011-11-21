@@ -263,6 +263,6 @@ main (int argc, char **argv)
     test_job();
     print_test_results();
     qof_close();
-    return 0;
+    return get_rv();
 }
 
