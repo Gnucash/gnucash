@@ -30,8 +30,6 @@
 
 ;; to define gnc-build-url
 (gnc:module-load "gnucash/html" 0)
-;; this defines URL-TYPE-OWNERREPORT
-(gnc:module-load "gnucash/business-gnome" 0)
 
 (define gnc:menuname-business-reports (N_ "_Business"))
 
