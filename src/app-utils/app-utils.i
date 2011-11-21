@@ -54,13 +54,6 @@ void gnc_option_db_set_option_selectable_by_name(SCM guile_option,
   $result = scm_reverse(list);
 }
 
-%inline %{
-typedef GList GncCommodityList;
-
-GncCommodityList *
-gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table);
-%}
-
 gnc_commodity * gnc_default_currency (void);
 gnc_commodity * gnc_default_report_currency (void);
 
