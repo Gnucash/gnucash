@@ -74,9 +74,6 @@ SET (libgncmod_engine_HEADERS
 SET (SWIG_ENGINE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-engine.c)
 GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${libgncmod_engine_HEADERS})
 
-SET (SWIG_BUSINESS_CORE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-business-core.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_BUSINESS_CORE_C} ${CMAKE_CURRENT_SOURCE_DIR}/business-core.i ${libgncmod_engine_HEADERS})
-
 # Command to generate the iso-4217-currencies.c file
 SET (ISO_4217_C ${CMAKE_CURRENT_BINARY_DIR}/iso-4217-currencies.c)
 ADD_CUSTOM_COMMAND (
@@ -140,7 +137,6 @@ SET (libgncmod_engine_SOURCES
   gncOwner.c
   gncTaxTable.c
   gncVendor.c
-  ${SWIG_BUSINESS_CORE_C}
 )
 
 # Add dependency on config.h
