@@ -38,6 +38,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-preferences.c \
   dialog-query-list.c \
   dialog-reset-warnings.c \
+  dialog-tax-table.c \
   dialog-totd.c \
   dialog-transfer.c \
   dialog-userpass.c \
@@ -177,6 +178,7 @@ gncinclude_HEADERS = \
   window-main-summarybar.h
 
 noinst_HEADERS = \
+  dialog-tax-table.h \
   gnc-autosave.h \
   gnc-druid-gnome.h \
   gnc-druid-provider-edge-gnome.h \
