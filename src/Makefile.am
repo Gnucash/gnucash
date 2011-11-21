@@ -1,8 +1,4 @@
 # These directories do not contain any gtk dependencies
-if WITH_PYTHON
-   PYTHON_DIR = python
-endif
-
 NONGUI_SUBDIRS = \
   libqof \
   debug \
@@ -21,6 +17,10 @@ NONGUI_SUBDIRS = \
 # These directories should also not contain any gtk dependencies, but
 # currently there is only single very little dependency in
 # app-utils. It should go away in the long run, though.
+if WITH_PYTHON
+   PYTHON_DIR = python
+endif
+
 ALMOST_NONGUI_SUBDIRS = \
   app-utils \
   ${PYTHON_DIR}
