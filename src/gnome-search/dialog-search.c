@@ -75,7 +75,6 @@ struct _GNCSearchWindow
     GtkWidget *	result_list;
     gpointer	selected_item;
     GList *selected_item_list;
-    GTree *selected_row_btree;
 
     /* The search_type radio-buttons */
     GtkWidget *	new_rb;
@@ -140,27 +139,43 @@ static void gnc_search_dialog_display_results (GNCSearchWindow *sw);
 
 /** The callback for converting the row numbers from a GTree to actual item
 pointers in a GList */
-static gboolean cb_tree_to_itemlist (gpointer key,
-                                     gpointer value,
-                                     gpointer user_data)
+static void cb_tree_to_itemlist (gpointer element,
+                                 gpointer user_data)
 {
     GNCSearchWindow *sw = user_data;
-    gpointer item = gtk_clist_get_row_data (GTK_CLIST(sw->result_list), GPOINTER_TO_INT(key));
+    gint row_number = GPOINTER_TO_INT(element);
+    gpointer item = gtk_clist_get_row_data (GTK_CLIST(sw->result_list), row_number);
     sw->selected_item_list = g_list_prepend(sw->selected_item_list, item);
-    return FALSE;
 }
 
 static void
 gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
                                     GNCSearchWindow *sw)
 {
+    GNCQueryList* gql = GNC_QUERY_LIST(sw->result_list);
+    GtkCList* clist;
+
+    // Sanity check
+    g_assert(gql);
+    clist = &gql->clist;
+    g_assert(clist->selection_mode == GTK_SELECTION_MULTIPLE);
+
     // Do we have a callback for multi-selections, and also more than one selected item?
-    if (cb->cb_multiselect_fn && (g_tree_nnodes(sw->selected_row_btree) > 1))
+    if (cb->cb_multiselect_fn && g_list_length(clist->selection) > 1)
     {
+        GList *selected_rows_list = clist->selection;
         // Yes, use the multi-selection callback
+
+        // Obtain the GncInvoice pointer for each selected row
         sw->selected_item_list = NULL;
-        g_tree_foreach(sw->selected_row_btree, cb_tree_to_itemlist, sw);
+        g_list_foreach(selected_rows_list, cb_tree_to_itemlist, sw);
+        // We use g_list_prepend (for performance reasons), so we have to reverse once here
+        sw->selected_item_list = g_list_reverse(sw->selected_item_list);
+
+        // Call the callback
         (cb->cb_multiselect_fn)(sw->selected_item_list, sw->user_data);
+
+        // And clean up again
         g_list_free(sw->selected_item_list);
         sw->selected_item_list = NULL;
     }
@@ -241,9 +256,6 @@ gnc_search_dialog_select_row_cb (GtkCList *clist, gint row, gint column,
     sw->selected_item = gtk_clist_get_row_data (clist, row);
     //g_message("select-row, row=%d", row);
 
-    // Keep note of the selection of this row
-    g_tree_insert(sw->selected_row_btree, GINT_TO_POINTER(row), NULL);
-
     /* If we double-click an item, then either "select" it, or run it
      * through the first button (which should be view/edit
      */
@@ -269,9 +281,6 @@ gnc_search_dialog_unselect_row_cb (GtkCList *clist, gint row, gint column,
     gpointer item = gtk_clist_get_row_data (clist, row);
     //g_message("unselect-row, row=%d", row);
 
-    // Remove this row from the noted selection
-    g_tree_remove(sw->selected_row_btree, GINT_TO_POINTER(row));
-
     if (sw->selected_item == item)
         sw->selected_item = NULL;
 }
@@ -281,10 +290,9 @@ static void
 gnc_search_dialog_init_result_list (GNCSearchWindow *sw)
 {
     sw->result_list = gnc_query_list_new(sw->display_list, sw->q);
-//#if GTK_CHECK_VERSION(2, 24, 0)
-//    // Apparently the multi-selection mode of GtkCList is broken in gtk-2.20
-//    gtk_clist_set_selection_mode(GTK_CLIST(sw->result_list), GTK_SELECTION_MULTIPLE);
-//#endif
+
+    // We want the multi-selection mode of GtkCList.
+    gtk_clist_set_selection_mode(&GNC_QUERY_LIST(sw->result_list)->clist, GTK_SELECTION_MULTIPLE);
 
     /* Setup the list callbacks */
     g_signal_connect (G_OBJECT (sw->result_list), "select-row",
@@ -1085,7 +1093,6 @@ gnc_search_dialog_destroy (GNCSearchWindow *sw)
     if (!sw) return;
     if (sw->gconf_section)
         gnc_save_window_size(sw->gconf_section, GTK_WINDOW(sw->dialog));
-    g_tree_destroy(sw->selected_row_btree);
     gnc_close_gui_component (sw->component_id);
 }
 
@@ -1095,12 +1102,6 @@ gnc_search_dialog_raise (GNCSearchWindow *sw)
 {
     if (!sw) return;
     gtk_window_present (GTK_WINDOW(sw->dialog));
-}
-
-static gint
-my_comparefunc_gint(gconstpointer a, gconstpointer b)
-{
-    return GPOINTER_TO_INT(a) < GPOINTER_TO_INT(b);
 }
 
 GNCSearchWindow *
@@ -1138,8 +1139,6 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
     sw->free_cb = free_cb;
     sw->gconf_section = gconf_section;
     sw->type_label = type_label;
-
-    sw->selected_row_btree = g_tree_new(my_comparefunc_gint);
 
     /* Grab the get_guid function */
     sw->get_guid = qof_class_get_parameter (sw->search_for, QOF_PARAM_GUID);

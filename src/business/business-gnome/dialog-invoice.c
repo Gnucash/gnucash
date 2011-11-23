@@ -2586,7 +2586,7 @@ duplicate_invoice_direct (gpointer invoice, gpointer user_data)
 static void
 duplicate_invoice_cb (gpointer *invoice_p, gpointer user_data)
 {
-    g_return_if_fail (invoice_p && user_data);
+    g_return_if_fail (invoice_p); // && user_data);
     if (! *invoice_p)
         return;
     duplicate_invoice_direct (*invoice_p, user_data);
@@ -2594,16 +2594,30 @@ duplicate_invoice_cb (gpointer *invoice_p, gpointer user_data)
 
 static void multi_duplicate_invoice_one(gpointer data, gpointer user_data)
 {
-    GncInvoice *invoice = data;
-    if (invoice)
-        gnc_ui_invoice_duplicate(invoice, FALSE);
+    GncInvoice *old_invoice = data;
+    if (old_invoice)
+    {
+        GncInvoice *new_invoice;
+        // In this simplest form, we just use the existing duplication
+        // algorithm, only without opening the "edit invoice" window for editing
+        // the number etc. for each of the invoices.
+        InvoiceWindow *iw = gnc_ui_invoice_duplicate(old_invoice, FALSE);
+        // FIXME: Now we could use this invoice and manipulate further data.
+        g_assert(iw);
+        new_invoice = iw->created_invoice;
+        //g_assert(new_invoice); // FIXME: This is NULL?!?
+    }
 }
 
 static void
 multi_duplicate_invoice_cb (GList *invoice_list, gpointer user_data)
 {
-    g_return_if_fail (invoice_list && user_data);
-    g_list_foreach(invoice_list, multi_duplicate_invoice_one, NULL);
+    g_return_if_fail (invoice_list);
+
+    // Note: If we want to have a more sophisticated duplication, we might want
+    // to ask for particular data right here, then insert this data upon
+    // duplication.
+    g_list_foreach(invoice_list, multi_duplicate_invoice_one, user_data);
 }
 
 static gpointer
