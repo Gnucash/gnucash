@@ -751,7 +751,7 @@ gnc_numeric amount)
     xaccSplitSetParent(split, trans);
     xaccSplitSetAmount(split, amount);
     xaccSplitSetValue(split, amount);
-    xaccSplitSetAction(split, "Deposit");
+    //xaccSplitSetAction(split, "Deposit");
 }
 
 /** Tests a TransPropertyList for having enough essential properties.
