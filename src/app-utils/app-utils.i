@@ -24,6 +24,18 @@ SCM scm_init_sw_app_utils_module (void);
 %}
 #endif
 
+#if defined(SWIGPYTHON)
+%{
+/* avoid no previous prototype warning/error */
+#if PY_VERSION_HEX >= 0x03000000
+PyObject*
+#else
+void
+#endif
+SWIG_init (void);
+%}
+#endif
+
 %import "base-typemaps.i"
 
 typedef void (*GNCOptionChangeCallback) (gpointer user_data);
@@ -53,6 +65,13 @@ void gnc_option_db_set_option_selectable_by_name(SCM guile_option,
 
   $result = scm_reverse(list);
 }
+
+%inline %{
+typedef GList GncCommodityList;
+
+GncCommodityList *
+gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table);
+%}
 
 gnc_commodity * gnc_default_currency (void);
 gnc_commodity * gnc_default_report_currency (void);
@@ -98,7 +117,7 @@ void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
       break;
     key = scm_to_locale_string (key_scm);
     gkey = g_strdup (key);
-    gnc_free_scm_locale_string(key);
+    free (key);
     path = g_list_prepend (path, gkey);
     path_scm = SCM_CDR (path_scm);
   }
