@@ -606,11 +606,9 @@ gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data)
     }
 }
 
-void
-gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
+static void
+gnc_invoice_window_print_invoice(GncInvoice *invoice)
 {
-    InvoiceWindow *iw = data;
-    GncInvoice *invoice = iw_get_invoice (iw);
     SCM func, arg;
     SCM args = SCM_EOL;
     int report_id;
@@ -633,9 +631,15 @@ gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
     if (report_id >= 0)
         reportWindow (report_id);
 }
+void
+gnc_invoice_window_printCB (GtkWidget *unused_widget, gpointer data)
+{
+    InvoiceWindow *iw = data;
+    gnc_invoice_window_print_invoice(iw_get_invoice (iw));
+}
 
 void
-gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
+gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
 {
     InvoiceWindow *iw = data;
     GncInvoice *invoice;
@@ -2506,6 +2510,7 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice, gboolean open
 
     // Now open that newly created invoice in the "edit" window
     iw = gnc_ui_invoice_edit (new_invoice);
+    iw->created_invoice = new_invoice;
 
     if (open_properties)
     {
@@ -2513,6 +2518,7 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice, gboolean open
         // invoice ID won't be copied over to the tab title even though
         // it's correctly copied into the invoice.
         iw = gnc_ui_invoice_modify (new_invoice);
+        iw->created_invoice = new_invoice;
     }
 
     return iw;
@@ -2576,22 +2582,6 @@ pay_invoice_cb (gpointer *invoice_p, gpointer user_data)
     pay_invoice_direct (*invoice_p, user_data);
 }
 
-static void
-duplicate_invoice_direct (gpointer invoice, gpointer user_data)
-{
-    g_return_if_fail (invoice);
-    gnc_ui_invoice_duplicate (invoice, TRUE);
-}
-
-static void
-duplicate_invoice_cb (gpointer *invoice_p, gpointer user_data)
-{
-    g_return_if_fail (invoice_p); // && user_data);
-    if (! *invoice_p)
-        return;
-    duplicate_invoice_direct (*invoice_p, user_data);
-}
-
 static void multi_duplicate_invoice_one(gpointer data, gpointer user_data)
 {
     GncInvoice *old_invoice = data;
@@ -2613,11 +2603,58 @@ static void
 multi_duplicate_invoice_cb (GList *invoice_list, gpointer user_data)
 {
     g_return_if_fail (invoice_list);
+    switch (g_list_length(invoice_list))
+    {
+    case 0:
+        return;
+    case 1:
+    {
+        // Duplicate exactly one invoice
+        GncInvoice *old_invoice = invoice_list->data;
+        gnc_ui_invoice_duplicate(old_invoice, TRUE);
+        return;
+    }
+    default:
+    {
+        // Note: If we want to have a more sophisticated duplication, we might want
+        // to ask for particular data right here, then insert this data upon
+        // duplication.
+        g_list_foreach(invoice_list, multi_duplicate_invoice_one, user_data);
+        return;
+    }
+    }
+}
 
-    // Note: If we want to have a more sophisticated duplication, we might want
-    // to ask for particular data right here, then insert this data upon
-    // duplication.
-    g_list_foreach(invoice_list, multi_duplicate_invoice_one, user_data);
+static void post_one_invoice_cb(gpointer data, gpointer user_data)
+{
+    GncInvoice *invoice = data;
+    InvoiceWindow *iw = gnc_ui_invoice_edit(invoice);
+    gnc_invoice_window_ok_save (iw);
+    gnc_invoice_window_postCB(NULL, iw);
+}
+
+static void
+multi_post_invoice_cb (GList *invoice_list, gpointer user_data)
+{
+    if (g_list_length(invoice_list) == 0)
+        return;
+
+    g_list_foreach(invoice_list, post_one_invoice_cb, user_data);
+}
+
+static void print_one_invoice_cb(gpointer data, gpointer user_data)
+{
+    GncInvoice *invoice = data;
+    gnc_invoice_window_print_invoice(invoice); // that's all!
+}
+
+static void
+multi_print_invoice_cb (GList *invoice_list, gpointer user_data)
+{
+    if (g_list_length(invoice_list) == 0)
+        return;
+
+    g_list_foreach(invoice_list, print_one_invoice_cb, user_data);
 }
 
 static gpointer
@@ -2658,14 +2695,18 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     {
         { N_("View/Edit Invoice"), edit_invoice_cb, NULL},
         { N_("Process Payment"), pay_invoice_cb, NULL},
-        { N_("Duplicate"), duplicate_invoice_cb, multi_duplicate_invoice_cb},
+        { N_("Duplicate"), NULL, multi_duplicate_invoice_cb},
+        { N_("Post"), NULL, multi_post_invoice_cb},
+        { N_("Print"), NULL, multi_print_invoice_cb},
         { NULL },
     };
     static GNCSearchCallbackButton bill_buttons[] =
     {
         { N_("View/Edit Bill"), edit_invoice_cb, NULL},
         { N_("Process Payment"), pay_invoice_cb, NULL},
-        { N_("Duplicate"), duplicate_invoice_cb, multi_duplicate_invoice_cb},
+        { N_("Duplicate"), NULL, multi_duplicate_invoice_cb},
+        { N_("Post"), NULL, multi_post_invoice_cb},
+        { N_("Print"), NULL, multi_print_invoice_cb},
         { NULL },
     };
     static GNCSearchCallbackButton emp_buttons[] =
@@ -2674,7 +2715,9 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
            interchangeably in gnucash and mean the same thing. */
         { N_("View/Edit Voucher"), edit_invoice_cb, NULL},
         { N_("Process Payment"), pay_invoice_cb, NULL},
-        { N_("Duplicate"), duplicate_invoice_cb, multi_duplicate_invoice_cb},
+        { N_("Duplicate"), NULL, multi_duplicate_invoice_cb},
+        { N_("Post"), NULL, multi_post_invoice_cb},
+        { N_("Print"), NULL, multi_print_invoice_cb},
         { NULL },
     };
 

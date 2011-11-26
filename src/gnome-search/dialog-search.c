@@ -161,7 +161,7 @@ gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
     g_assert(clist->selection_mode == GTK_SELECTION_MULTIPLE);
 
     // Do we have a callback for multi-selections, and also more than one selected item?
-    if (cb->cb_multiselect_fn && g_list_length(clist->selection) > 1)
+    if (cb->cb_multiselect_fn && (!cb->cb_fcn || g_list_length(clist->selection) > 1))
     {
         GList *selected_rows_list = clist->selection;
         // Yes, use the multi-selection callback
