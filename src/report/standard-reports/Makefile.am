@@ -47,7 +47,8 @@ gncscmreportmod_DATA = \
    general-journal.scm \
    general-ledger.scm \
    transaction.scm \
-   sx-summary.scm
+   sx-summary.scm \
+   net-linechart.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
