@@ -353,7 +353,16 @@ gnc_plugin_update_actions (GtkActionGroup *action_group,
     for (i = 0; action_names[i]; i++)
     {
         action = gtk_action_group_get_action (action_group, action_names[i]);
-        g_object_set_property (G_OBJECT(action), property_name, &gvalue);
+        if (action)
+        {
+            g_object_set_property (G_OBJECT(action), property_name, &gvalue);
+        }
+        else
+        {
+            g_warning("No such action with name '%s' in action group %s (size %d)",
+                      action_names[i], gtk_action_group_get_name(action_group),
+                      g_list_length(gtk_action_group_list_actions(action_group)));
+        }
     }
 }
 

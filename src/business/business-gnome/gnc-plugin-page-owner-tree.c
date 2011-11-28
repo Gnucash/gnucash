@@ -100,6 +100,7 @@ static GObjectClass *parent_class = NULL;
 static void gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass);
 static void gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page);
 static void gnc_plugin_page_owner_tree_finalize (GObject *object);
+static void gnc_plugin_page_owner_tree_selected (GObject *object, gpointer user_data);
 
 static GtkWidget *gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_owner_tree_destroy_widget (GncPluginPage *plugin_page);
@@ -227,16 +228,35 @@ static guint gnc_plugin_page_owner_tree_n_actions = G_N_ELEMENTS (gnc_plugin_pag
 
 
 /** Actions that require an owner to be selected before they are
- *  enabled. */
-static const gchar *actions_requiring_owner[] =
+ *  enabled. These ones are only sensitive in a read-write book. */
+static const gchar *actions_requiring_owner_rw[] =
 {
     "OTEditVendorAction",
     "OTEditCustomerAction",
     "OTEditEmployeeAction",
+/* FIXME disabled due to crash    "EditDeleteOwnerAction", */
+    NULL
+};
+
+/** Actions that require an owner to be selected before they are
+ *  enabled. These are sensitive always. */
+static const gchar *actions_requiring_owner_always[] =
+{
     "OTVendorReportAction",
     "OTCustomerReportAction",
     "OTEmployeeReportAction",
-/* FIXME disabled due to crash    "EditDeleteOwnerAction", */
+    NULL
+};
+
+/* This is the list of actions which are switched inactive in a read-only book. */
+static const gchar* readonly_inactive_actions[] =
+{
+    "OTNewVendorAction",
+    "OTNewCustomerAction",
+    "OTNewEmployeeAction",
+    "OTNewBillAction",
+    "OTNewInvoiceAction",
+    "OTNewVoucherAction",
     NULL
 };
 
@@ -448,6 +468,8 @@ gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page)
                  "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-owner-tree-ui.xml",
                  NULL);
+    g_signal_connect (G_OBJECT (plugin_page), "selected",
+                      G_CALLBACK (gnc_plugin_page_owner_tree_selected), plugin_page);
 
     /* change me when the system supports multiple books */
     gnc_plugin_page_add_book(parent, gnc_get_current_book());
@@ -486,6 +508,33 @@ gnc_plugin_page_owner_tree_finalize (GObject *object)
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
 }
+
+static void update_inactive_actions(GncPluginPage *plugin_page)
+{
+    GtkActionGroup *action_group;
+    gboolean is_sensitive = !qof_book_is_readonly(gnc_get_current_book());
+
+    // We are readonly - so we have to switch particular actions to inactive.
+    g_return_if_fail(plugin_page);
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE(plugin_page));
+
+    /* Get the action group */
+    action_group = gnc_plugin_page_get_action_group(plugin_page);
+    g_return_if_fail(GTK_IS_ACTION_GROUP (action_group));
+
+    /* Set the action's sensitivity */
+    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
+                               "sensitive", is_sensitive);
+}
+
+static void
+gnc_plugin_page_owner_tree_selected (GObject *object, gpointer user_data)
+{
+    GncPluginPage *page = GNC_PLUGIN_PAGE (object);
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    update_inactive_actions(page);
+}
+
 
 GncOwner *
 gnc_plugin_page_owner_tree_get_current_owner (GncPluginPageOwnerTree *page)
@@ -805,6 +854,7 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
     GtkTreeView *view;
     GncOwner *owner = NULL;
     gboolean sensitive;
+    gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_OWNER_TREE(page));
 
@@ -821,8 +871,10 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
     }
 
     action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(page));
-    gnc_plugin_update_actions (action_group, actions_requiring_owner,
+    gnc_plugin_update_actions (action_group, actions_requiring_owner_always,
                                "sensitive", sensitive);
+    gnc_plugin_update_actions (action_group, actions_requiring_owner_rw,
+                               "sensitive", sensitive && is_readwrite);
     g_signal_emit (page, plugin_page_signals[OWNER_SELECTED], 0, owner);
 }
 
