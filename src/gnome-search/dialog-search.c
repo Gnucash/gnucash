@@ -342,8 +342,13 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 
             for (i = 0; sw->buttons[i].label; i++)
             {
-                button = gtk_button_new_with_label (_(sw->buttons[i].label));
-                g_object_set_data (G_OBJECT (button), "data", &(sw->buttons[i]));
+                GNCSearchCallbackButton* button_spec = sw->buttons + i;
+                button = gtk_button_new_with_label (_(button_spec->label));
+                g_object_set_data (G_OBJECT (button), "data", button_spec);
+                if (qof_book_is_readonly (gnc_get_current_book ()))
+                {
+                    gtk_widget_set_sensitive (GTK_WIDGET(button), button_spec->sensitive_if_readonly);
+                }
                 g_signal_connect (G_OBJECT (button), "clicked",
                                   G_CALLBACK (gnc_search_dialog_result_clicked), sw);
                 gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 3);
@@ -1278,11 +1283,11 @@ gnc_search_dialog_test (void)
     static GNCSearchCallbackButton buttons[] =
     {
         /* Don't mark these as translatable since these are only test strings! */
-        { ("View Split"), do_nothing, NULL },
-        { ("New Split"), do_nothing, NULL },
-        { ("Do Something"), do_nothing, NULL },
-        { ("Do Nothing"), do_nothing, NULL },
-        { ("Who Cares?"), do_nothing, NULL },
+        { ("View Split"), do_nothing, NULL, TRUE },
+        { ("New Split"), do_nothing, NULL, TRUE },
+        { ("Do Something"), do_nothing, NULL, TRUE },
+        { ("Do Nothing"), do_nothing, NULL, TRUE },
+        { ("Who Cares?"), do_nothing, NULL, FALSE },
         { NULL }
     };
 

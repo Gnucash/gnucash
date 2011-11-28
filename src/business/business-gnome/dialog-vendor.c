@@ -708,11 +708,11 @@ gnc_vendor_search (GncVendor *start, QofBook *book)
     static GList *columns = NULL;
     static GNCSearchCallbackButton buttons[] =
     {
-        { N_("View/Edit Vendor"), edit_vendor_cb, NULL},
-        { N_("Vendor's Jobs"), jobs_vendor_cb, NULL},
-        //    { N_("Vendor Orders"), order_vendor_cb, NULL},
-        { N_("Vendor's Bills"), invoice_vendor_cb, NULL},
-        { N_("Pay Bill"), payment_vendor_cb, NULL},
+        { N_("View/Edit Vendor"), edit_vendor_cb, NULL, TRUE},
+        { N_("Vendor's Jobs"), jobs_vendor_cb, NULL, TRUE},
+        //    { N_("Vendor Orders"), order_vendor_cb, NULL, TRUE},
+        { N_("Vendor's Bills"), invoice_vendor_cb, NULL, TRUE},
+        { N_("Pay Bill"), payment_vendor_cb, NULL, FALSE},
         { NULL },
     };
     (void)order_vendor_cb;

@@ -827,7 +827,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
     static GList *columns = NULL;
     static GNCSearchCallbackButton buttons[] =
     {
-        { N_("View/Edit Order"), edit_order_cb, NULL},
+        { N_("View/Edit Order"), edit_order_cb, NULL, TRUE},
         { NULL },
     };
 

@@ -75,6 +75,11 @@ typedef struct
     const char *		label;
     GNCSearchCallback	cb_fcn;
     GNCSearchMultiSelectedCB cb_multiselect_fn;
+
+    /** TRUE if this action should be sensitive even in a read-only book. If
+    FALSE, this action is sensitive in read-write book but not in a read-only
+    book. */
+    gboolean sensitive_if_readonly;
 } GNCSearchCallbackButton;
 
 /* Caller MUST supply _EITHER_ a result_callback or a list of callback

@@ -2693,31 +2693,31 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     static GNCSearchCallbackButton *buttons;
     static GNCSearchCallbackButton inv_buttons[] =
     {
-        { N_("View/Edit Invoice"), edit_invoice_cb, NULL},
-        { N_("Process Payment"), pay_invoice_cb, NULL},
-        { N_("Duplicate"), NULL, multi_duplicate_invoice_cb},
-        { N_("Post"), NULL, multi_post_invoice_cb},
-        { N_("Print"), NULL, multi_print_invoice_cb},
+        { N_("View/Edit Invoice"), edit_invoice_cb, NULL, TRUE},
+        { N_("Process Payment"), pay_invoice_cb, NULL, FALSE},
+        { N_("Duplicate"), NULL, multi_duplicate_invoice_cb, FALSE},
+        { N_("Post"), NULL, multi_post_invoice_cb, FALSE},
+        { N_("Print"), NULL, multi_print_invoice_cb, TRUE},
         { NULL },
     };
     static GNCSearchCallbackButton bill_buttons[] =
     {
-        { N_("View/Edit Bill"), edit_invoice_cb, NULL},
-        { N_("Process Payment"), pay_invoice_cb, NULL},
-        { N_("Duplicate"), NULL, multi_duplicate_invoice_cb},
-        { N_("Post"), NULL, multi_post_invoice_cb},
-        { N_("Print"), NULL, multi_print_invoice_cb},
+        { N_("View/Edit Bill"), edit_invoice_cb, NULL, TRUE},
+        { N_("Process Payment"), pay_invoice_cb, NULL, FALSE},
+        { N_("Duplicate"), NULL, multi_duplicate_invoice_cb, FALSE},
+        { N_("Post"), NULL, multi_post_invoice_cb, FALSE},
+        { N_("Print"), NULL, multi_print_invoice_cb, TRUE},
         { NULL },
     };
     static GNCSearchCallbackButton emp_buttons[] =
     {
         /* Translators: The terms 'Voucher' and 'Expense Voucher' are used
            interchangeably in gnucash and mean the same thing. */
-        { N_("View/Edit Voucher"), edit_invoice_cb, NULL},
-        { N_("Process Payment"), pay_invoice_cb, NULL},
-        { N_("Duplicate"), NULL, multi_duplicate_invoice_cb},
-        { N_("Post"), NULL, multi_post_invoice_cb},
-        { N_("Print"), NULL, multi_print_invoice_cb},
+        { N_("View/Edit Voucher"), edit_invoice_cb, NULL, TRUE},
+        { N_("Process Payment"), pay_invoice_cb, NULL, FALSE},
+        { N_("Duplicate"), NULL, multi_duplicate_invoice_cb, FALSE},
+        { N_("Post"), NULL, multi_post_invoice_cb, FALSE},
+        { N_("Print"), NULL, multi_print_invoice_cb, TRUE},
         { NULL },
     };
 
