@@ -178,7 +178,8 @@ static gboolean autosave_timeout_cb(gpointer user_data)
     /* Is there already a save in progress? If yes, return FALSE so that
        the timeout is automatically destroyed and the function will not
        be called again. */
-    if (gnc_file_save_in_progress() || !gnc_current_session_exist())
+    if (gnc_file_save_in_progress() || !gnc_current_session_exist()
+            || qof_book_is_readonly(book))
         return FALSE;
 
     /* Store the current toplevel window for later use. */
@@ -287,6 +288,12 @@ void gnc_autosave_dirty_handler (QofBook *book, gboolean dirty)
             (dirty ? "TRUE" : "FALSE"));
     if (dirty)
     {
+        if (qof_book_is_readonly(book))
+        {
+            //g_debug("Book is read-only, ignoring dirty flag");
+            return;
+        }
+
         /* Book state changed from non-dirty to dirty. */
         if (!qof_book_shutting_down(book))
         {

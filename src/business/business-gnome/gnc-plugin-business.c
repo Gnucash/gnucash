@@ -142,6 +142,7 @@ static void gnc_plugin_business_cmd_test_init_data (GtkAction *action,
 
 static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
         GncMainWindowActionData *data);
+static void update_inactive_actions(GncPluginPage *page);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-business-ui.xml"
@@ -969,6 +970,7 @@ static void gnc_plugin_business_main_window_page_changed(GncMainWindow *window,
 {
 //    g_message("gnc_plugin_business_main_window_page_changed, page=%p", page);
     gnc_plugin_business_update_menus(page);
+    update_inactive_actions(page);
 }
 
 static void
@@ -1042,6 +1044,48 @@ gnc_plugin_business_cmd_test_init_data (GtkAction *action,
 
     // Launch the invoice editor
     gnc_ui_invoice_edit(invoice);
+}
+
+/* This is the list of actions which are switched inactive in a read-only book. */
+static const gchar* readonly_inactive_actions[] =
+{
+    "CustomerNewCustomerOpenAction",
+    "CustomerNewInvoiceOpenAction",
+    "CustomerNewInvoiceOpenAction",
+    "CustomerNewJobOpenAction",
+    "CustomerProcessPaymentAction",
+    "VendorNewVendorOpenAction",
+    "VendorNewBillOpenAction",
+    "VendorNewJobOpenAction",
+    "VendorProcessPaymentAction",
+    "EmployeeNewEmployeeOpenAction",
+    "EmployeeNewExpenseVoucherOpenAction",
+    "EmployeeProcessPaymentAction",
+    "ToolbarNewInvoiceAction",
+    "RegisterAssignPayment",
+    NULL
+};
+
+static void update_inactive_actions(GncPluginPage *plugin_page)
+{
+    GncMainWindow  *window;
+    GtkActionGroup *action_group;
+
+    // We are readonly - so we have to switch particular actions to inactive.
+    gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
+
+    // We continue only if the current page is a plugin page
+    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+        return;
+
+    window = GNC_MAIN_WINDOW(plugin_page->window);
+    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+
+    /* Set the action's sensitivity */
+    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
+                               "sensitive", is_readwrite);
 }
 
 /* This is the list of actions which are switched invisible or visible

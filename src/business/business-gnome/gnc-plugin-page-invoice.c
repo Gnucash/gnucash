@@ -217,6 +217,16 @@ static GtkRadioActionEntry radio_entries [] =
 };
 static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
 
+static const gchar *invoice_book_readwrite_actions[] =
+{
+    // Only insert actions here which are not yet in posted_actions and unposted_actions!
+    "FileNewAccountAction",
+    "EditDuplicateInvoiceAction",
+    "BusinessNewInvoiceAction",
+    "ToolsProcessPaymentAction",
+    NULL
+};
+
 static const gchar *posted_actions[] =
 {
     NULL
@@ -420,10 +430,11 @@ void
 gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, gboolean can_unpost)
 {
     GtkActionGroup *action_group;
+    gboolean is_readonly = qof_book_is_readonly(gnc_get_current_book());
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(page));
 
-    if (qof_book_is_readonly(gnc_get_current_book()))
+    if (is_readonly)
     {
         // Are we readonly? Then don't allow any actions.
         is_posted = TRUE;
@@ -437,6 +448,8 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
                                "sensitive", !is_posted);
     gnc_plugin_update_actions (action_group, can_unpost_actions,
                                "sensitive", can_unpost);
+    gnc_plugin_update_actions (action_group, invoice_book_readwrite_actions,
+                               "sensitive", !is_readonly);
 }
 
 
