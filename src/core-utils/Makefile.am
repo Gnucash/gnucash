@@ -42,11 +42,9 @@ if BUILDING_FROM_SVN
 swig-core-utils-guile.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
-if WITH_PYTHON
 swig-core-utils-python.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -python -Wall -Werror $(SWIG_ARGS) \
 	-I${top_srcdir}/src -o $@ $<
-endif
 endif
 
 AM_CPPFLAGS = \

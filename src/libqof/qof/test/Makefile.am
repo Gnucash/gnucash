@@ -27,7 +27,7 @@ test_qof_HEADERS = \
 TEST_PROGS += test-qof
 
 noinst_PROGRAMS = ${TEST_PROGS}
-test_qofdir = ${top_builddir}/${MODULEPATH}/test
+test_qofdir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
 
 #The tests might require more libraries, but try to keep them
 #as independent as possible.

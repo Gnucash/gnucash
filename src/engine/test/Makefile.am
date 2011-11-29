@@ -104,7 +104,7 @@ EXTRA_DIST += \
 
 TEST_PROGS += test-engine
 
-noinst_PROGRAMS = ${TEST_PROGS}
+noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
 
 test_engine_SOURCES = \
 	test-engine.c \
@@ -113,7 +113,7 @@ test_engine_SOURCES = \
 test_engine_HEADERS = \
 	${top_srcdir}/${MODULEPATH}/gnc-engine.h
 
-test_enginedir = ${top_builddir}/${MODULEPATH}/test
+test_enginedir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
 
 test_engine_LDADD = \
 	${top_builddir}/${MODULEPATH}/libgncmod-engine.la \
