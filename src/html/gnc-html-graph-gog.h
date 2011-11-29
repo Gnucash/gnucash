@@ -74,6 +74,7 @@ typedef struct
     gboolean minor_grid;
     const gchar* x_axis_label;
     const gchar* y_axis_label;
+    gint line_width;
 } GncHtmlLineChartInfo;
 
 typedef struct
