@@ -413,8 +413,9 @@ gnc_html_graph_gog_create_linechart( GncHtmlLineChartInfo* info )
             style->fill.type = GO_STYLE_FILL_PATTERN;
             if ( gdk_color_parse( info->col_colors[i], &color ) )
             {
-                style->fill.auto_back = FALSE;
-                go_pattern_set_solid( &style->fill.pattern, GO_COLOR_FROM_GDK(color) );
+		style->line.width = 1;
+		style->line.auto_color = FALSE;
+		style->line.color = GO_COLOR_FROM_GDK(color);
             }
             else
             {
