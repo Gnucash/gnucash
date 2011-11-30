@@ -33,6 +33,7 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-ui.h"
+#include "gnc-file.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-session.h"
@@ -71,6 +72,7 @@ after_hierarchy_assistant(void)
 
     page = gnc_plugin_page_account_tree_new();
     gnc_main_window_open_page(NULL, page);
+    gnc_file_save_as ();
 }
 
 void
