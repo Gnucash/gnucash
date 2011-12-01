@@ -72,7 +72,6 @@ after_hierarchy_assistant(void)
 
     page = gnc_plugin_page_account_tree_new();
     gnc_main_window_open_page(NULL, page);
-    gnc_file_save_as ();
 }
 
 void
