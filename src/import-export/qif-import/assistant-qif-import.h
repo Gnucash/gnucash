@@ -1,7 +1,8 @@
 /********************************************************************\
- * dialog-qif-import.h -- window for controlling import of QIF data *
+ * assistant-qif-import.h -- window for import of QIF data          *
  *                       (GnuCash)                                  *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (c) 2011 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,8 +22,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef DIALOG_QIF_IMPORT_H
-#define DIALOG_QIF_IMPORT_H
+#ifndef ASSISTANT_QIF_IMPORT_H
+#define ASSISTANT_QIF_IMPORT_H
 
 #include <libguile.h>
 #include <gtk/gtk.h>
@@ -31,13 +32,11 @@
 
 typedef struct _qifimportwindow QIFImportWindow;
 
-QIFImportWindow * gnc_ui_qif_import_druid_make(void);
-void              gnc_ui_qif_import_druid_destroy (QIFImportWindow * window);
-SCM               gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w);
+SCM               gnc_ui_qif_import_assistant_get_mappings(QIFImportWindow * w);
 
 /* The gnc_file_qif_import() routine will pop up a standard file
  *     selection dialogue asking the user to pick a QIF file. If one
- *     is selected the the QIF file is opened and read. It's contents
+ *     is selected then the QIF file is opened and read. It's contents
  *     are merged into the existing session (if any). The current
  *     session continues to remain open for editing. */
 void              gnc_file_qif_import (void);

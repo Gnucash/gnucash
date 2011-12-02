@@ -11,7 +11,7 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-#include "druid-qif-import.h"
+#include "assistant-qif-import.h"
 #include "dialog-new-user.h"
 
 #include "gnc-plugin-qif-import.h"
@@ -57,13 +57,13 @@ libgncmod_qif_import_gnc_module_init(int refcount)
         return FALSE;
     }
 
-    /* If the recount == 0 then register the qif-import-druid for the new-user
+    /* If the recount == 0 then register the qif-import-assistant for the new-user
      * dialog.
      */
     if (refcount == 0)
     {
-        gnc_new_user_dialog_register_qif_druid
-        ((void (*)())gnc_ui_qif_import_druid_make);
+        gnc_new_user_dialog_register_qif_assistant
+        ((void (*)())gnc_file_qif_import);
     }
 
     scm_c_eval_string("(use-modules (gnucash import-export qif-import))");

@@ -27,7 +27,7 @@
 #include <glib/gi18n.h>
 
 #include "dialog-preferences.h"
-#include "druid-qif-import.h"
+#include "assistant-qif-import.h"
 #include "gnc-druid-test.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-qif-import.h"
@@ -155,7 +155,7 @@ static void
 gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action,
         GncMainWindowActionData *data)
 {
-    gnc_ui_qif_import_druid_make ();
+      gnc_file_qif_import();
 }
 
 /*

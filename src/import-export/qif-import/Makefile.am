@@ -4,14 +4,14 @@ pkglib_LTLIBRARIES=libgncmod-qif-import.la
 
 libgncmod_qif_import_la_SOURCES = \
   dialog-account-picker.c \
-  druid-qif-import.c \
+  assistant-qif-import.c \
   gnc-plugin-qif-import.c \
   gnc-druid-test.c \
   gncmod-qif-import.c
 
 noinst_HEADERS = \
   dialog-account-picker.h \
-  druid-qif-import.h \
+  assistant-qif-import.h \
   gnc-druid-test.h \
   gnc-plugin-qif-import.h
 
@@ -48,11 +48,10 @@ gncscm_DATA = \
   qif-to-gnc.scm \
   qif-utils.scm
 
-gladedir = ${GNC_GLADE_DIR}
-glade_DATA = qif.glade
-
 gtkbuilderdir = ${GNC_GTKBUILDER_DIR}
-gtkbuilder_DATA = dialog-account-picker.glade
+gtkbuilder_DATA = \
+   dialog-account-picker.glade \
+   assistant-qif-import.glade
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
@@ -76,7 +75,6 @@ ui_DATA = \
 
 EXTRA_DIST = \
   ${gncscm_DATA} \
-  ${glade_DATA} \
   ${gtkbuilder_DATA} \
   file-format.txt \
   $(ui_DATA)

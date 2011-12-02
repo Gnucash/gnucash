@@ -44,16 +44,16 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-/* function to open a qif import druid */
-static void (*qifImportDruidFcn)(void) = NULL;
+/* function to open a qif import assistant */
+static void (*qifImportAssistantFcn)(void) = NULL;
 
 static void gnc_ui_new_user_cancel_dialog (void);
 
 void
-gnc_new_user_dialog_register_qif_druid (void (*cb_fcn)(void))
+gnc_new_user_dialog_register_qif_assistant (void (*cb_fcn)(void))
 {
-    g_return_if_fail (qifImportDruidFcn == NULL);
-    qifImportDruidFcn = cb_fcn;
+    g_return_if_fail (qifImportAssistantFcn == NULL);
+    qifImportAssistantFcn = cb_fcn;
 }
 
 void
@@ -95,9 +95,9 @@ gnc_ui_new_user_dialog (void)
     tutorial_button = GTK_WIDGET(gtk_builder_get_object (builder, "tutorial_button"));
 
     /* Set the sensitivity of the qif-import button based on the availability
-     * of the qif-import druid.
+     * of the qif-import assistant.
      */
-    gtk_widget_set_sensitive (import_qif_button, (qifImportDruidFcn != NULL));
+    gtk_widget_set_sensitive (import_qif_button, (qifImportAssistantFcn != NULL));
 
     result = gtk_dialog_run (GTK_DIALOG (dialog));
     switch (result)
@@ -112,10 +112,10 @@ gnc_ui_new_user_dialog (void)
             gnc_ui_hierarchy_assistant_with_callback(TRUE, after_hierarchy_assistant);
             break;
         }
-        else if ((qifImportDruidFcn != NULL)
+        else if ((qifImportAssistantFcn != NULL)
                  && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button)))
         {
-            qifImportDruidFcn();
+            qifImportAssistantFcn();
             gncp_new_user_finish ();
             break;
         }

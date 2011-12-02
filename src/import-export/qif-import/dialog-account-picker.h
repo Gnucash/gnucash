@@ -26,7 +26,7 @@
 
 #include <libguile.h>
 
-#include "druid-qif-import.h"
+#include "assistant-qif-import.h"
 
 gboolean qif_account_picker_dialog(QIFImportWindow * wind, SCM initial_sel);
 
