@@ -1,25 +1,25 @@
-/*
- * gnc-plugin-qif-import.c --
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, contact:
- *
- * Free Software Foundation           Voice:  +1-617-542-5942
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
- * Boston, MA  02110-1301,  USA       gnu@gnu.org
- */
+/********************************************************************\
+ * gnc-plugin-qif-import.c -- window for importing QIF files        *
+ *                        (GnuCash)                                 *
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>     *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+\********************************************************************/
 
 #include "config.h"
 
@@ -28,7 +28,6 @@
 
 #include "dialog-preferences.h"
 #include "assistant-qif-import.h"
-#include "gnc-druid-test.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-qif-import.h"
 
@@ -38,8 +37,6 @@ static void gnc_plugin_qif_import_finalize (GObject *object);
 
 /* Command callbacks */
 static void gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action, GncMainWindowActionData *data);
-/* static void gnc_plugin_qif_test_druid (GtkAction *action, GncMainWindowActionData *data); */
-
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-qif-import-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-qif-import-ui.xml"
@@ -51,10 +48,6 @@ static GtkActionEntry gnc_plugin_actions [] =
         N_("Import a Quicken QIF file"),
         G_CALLBACK (gnc_plugin_qif_import_cmd_new_qif_import)
     },
-    /*
-    	{ "QIFTestDruid", GTK_STOCK_CONVERT, "_Test Druid...", NULL,
-    	  "Test the new Druid", G_CALLBACK(gnc_plugin_qif_test_druid) },
-    */
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -158,13 +151,6 @@ gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action,
       gnc_file_qif_import();
 }
 
-/*
-static void
-gnc_plugin_qif_test_druid (GtkAction *action, GncMainWindowActionData *data)
-{
-	gnc_druid_gnome_test();
-}
-*/
 
 /************************************************************
  *                    Plugin Bootstrapping                   *

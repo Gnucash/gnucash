@@ -6,13 +6,11 @@ libgncmod_qif_import_la_SOURCES = \
   dialog-account-picker.c \
   assistant-qif-import.c \
   gnc-plugin-qif-import.c \
-  gnc-druid-test.c \
   gncmod-qif-import.c
 
 noinst_HEADERS = \
   dialog-account-picker.h \
   assistant-qif-import.h \
-  gnc-druid-test.h \
   gnc-plugin-qif-import.h
 
 libgncmod_qif_import_la_LDFLAGS = -avoid-version
