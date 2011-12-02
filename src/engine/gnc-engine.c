@@ -70,7 +70,7 @@ static void
 gnc_engine_init_part2()
 {
     gchar *pkglibdir;
-    static gchar *builddir = g_getenv ("GNC_BUILDDIR");
+    const gchar *builddir = g_getenv ("GNC_BUILDDIR");
     gboolean uninstalled = (g_getenv ("GNC_UNINSTALLED") != NULL
 			    && builddir != NULL);
 
