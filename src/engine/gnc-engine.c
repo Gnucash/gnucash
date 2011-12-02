@@ -69,35 +69,54 @@ gnc_engine_init_part1()
 static void
 gnc_engine_init_part2()
 {
-    gchar *pkglibdir = gnc_path_get_pkglibdir ();
+    gchar *pkglibdir;
+    static gchar *builddir = g_getenv ("GNC_BUILDDIR");
+    gboolean uninstalled = (g_getenv ("GNC_UNINSTALLED") != NULL
+			    && builddir != NULL);
+
     static struct
     {
+	const gchar* subdir;
         const gchar* lib;
         gboolean required;
     } libs[] =
     {
 #if defined( HAVE_DBI_DBI_H )
-        { "gncmod-backend-dbi", TRUE },
+        { "dbi", "gncmod-backend-dbi", TRUE },
 #endif
-        { "gncmod-backend-xml", TRUE },
+        { "xml", "gncmod-backend-xml", TRUE },
         { NULL, FALSE }
     }, *lib;
 
+    if (uninstalled)
+	pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir,
+				  "src", "backend", NULL);
+    else
+	pkglibdir = gnc_path_get_pkglibdir ();
+
     for (lib = libs; lib->lib ; lib++)
     {
-        if (qof_load_backend_library(pkglibdir, lib->lib))
+	gchar *libdir;
+	if (uninstalled)
+	    libdir = g_build_path (G_DIR_SEPARATOR_S, pkglibdir,
+				   lib->subdir, ".libs", NULL);
+	else
+	    libdir = pkglibdir;
+        if (qof_load_backend_library(libdir, lib->lib))
         {
             engine_is_initialized = 1;
         }
         else
         {
-            g_warning("failed to load %s from %s\n", lib->lib, pkglibdir);
+            g_warning("failed to load %s from %s\n", lib->lib, libdir);
             /* If this is a required library, stop now! */
             if (lib->required)
             {
                 g_critical("required library %s not found.\n", lib->lib);
             }
         }
+	if (uninstalled)
+	    g_free (libdir);
     }
     g_free (pkglibdir);
 }
