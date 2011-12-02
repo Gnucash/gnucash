@@ -9,6 +9,7 @@ exec guile -s "$0"
 (debug-set! maxdepth 10000)
 
 (display "  testing report module load ... ")
+(setenv "GNC_UNINSTALLED" "1")
 (use-modules (ice-9 syncase))
 (use-modules (gnucash gnc-module))
 

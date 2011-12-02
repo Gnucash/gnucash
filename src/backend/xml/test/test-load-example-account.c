@@ -117,6 +117,7 @@ guile_main (void *closure, int argc, char **argv)
 int
 main (int argc, char ** argv)
 {
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     scm_boot_guile (argc, argv, guile_main, NULL);
     exit(get_rv());
 }
