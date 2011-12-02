@@ -315,7 +315,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_lots)
     },
     {
-        "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), NULL,
+        "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), "<control>Page_Down",
         N_("Move to the blank transaction at the bottom of the register"),
         G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction)
     },
@@ -2232,7 +2232,7 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
 {
     GncPluginPageRegisterPrivate *priv;
     GncPluginPage *plugin_page;
-    const char* filter; 
+    const char* filter;
 
     g_return_if_fail(GTK_IS_DIALOG(dialog));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
