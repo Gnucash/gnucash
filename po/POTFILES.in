@@ -86,7 +86,6 @@ src/backend/xml/sixtp-stack.c
 src/backend/xml/sixtp-to-dom-parser.c
 src/backend/xml/sixtp-utils.c
 src/bin/gnucash-bin.c
-src/business/business-core/gncmod-business-core.c
 src/business/business-gnome/business-gnome-utils.c
 src/business/business-gnome/business-options-gnome.c
 src/business/business-gnome/business-urls.c
@@ -124,10 +123,6 @@ src/business/business-ledger/gncEntryLedgerDisplay.c
 src/business/business-ledger/gncEntryLedgerLayout.c
 src/business/business-ledger/gncEntryLedgerLoad.c
 src/business/business-ledger/gncEntryLedgerModel.c
-src/business/business-utils/gncmod-business-utils.c
-src/business/dialog-tax-table/dialog-tax-table.c
-src/business/dialog-tax-table/gncmod-dialog-tax-table.c
-src/business/dialog-tax-table/tax-tables.glade
 src/calculation/amort_opt.c
 src/calculation/amort_prt.c
 src/calculation/expression_parser.c
@@ -275,6 +270,7 @@ src/gnome-utils/dialog-options.c
 src/gnome-utils/dialog-preferences.c
 src/gnome-utils/dialog-query-list.c
 src/gnome-utils/dialog-reset-warnings.c
+src/gnome-utils/dialog-tax-table.c
 src/gnome-utils/dialog-totd.c
 src/gnome-utils/dialog-transfer.c
 src/gnome-utils/dialog-userpass.c
@@ -283,6 +279,7 @@ src/gnome-utils/druid-gnc-xml-import.c
 src/gnome-utils/druid-utils.c
 src/gnome-utils/glade/druid-gnc-xml-import.glade
 src/gnome-utils/glade/druid-provider-multifile.glade
+src/gnome-utils/glade/tax-tables.glade
 src/gnome-utils/gnc-account-sel.c
 src/gnome-utils/gnc-amount-edit.c
 src/gnome-utils/gnc-autosave.c
@@ -420,7 +417,6 @@ src/import-export/qif-import/gncmod-qif-import.c
 src/import-export/qif-import/gnc-plugin-qif-import.c
 src/import-export/qif-import/assistant-qif-import.glade
 src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in
-src/import-export/qif-io-core/gncmod-qifiocore.c
 src/import-export/qif/qif-context.c
 src/import-export/qif/qif-file.c
 src/import-export/qif/qif-objects.c
