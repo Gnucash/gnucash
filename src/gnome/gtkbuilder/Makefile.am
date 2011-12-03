@@ -12,9 +12,9 @@ gtkbuilder_DATA = \
 	dialog-print-check.glade \
 	dialog-progress.glade \
 	dialog-sx.glade \
+	dialog-tax-info.glade \
 	gnc-plugin-page-budget.glade \
 	gnc-plugin-page-register.glade \
-	tax.glade \
 	window-autoclear.glade \
 	window-reconcile.glade
 

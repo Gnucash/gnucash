@@ -1266,7 +1266,6 @@ AC_CONFIG_FILES(
   src/gnc-module/test/misc-mods/Makefile
   src/gnome/Makefile
   src/gnome/gnucash.desktop.in
-  src/gnome/glade/Makefile
   src/gnome/gtkbuilder/Makefile
   src/gnome/schemas/Makefile
   src/gnome/ui/Makefile
