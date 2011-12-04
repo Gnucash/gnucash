@@ -446,7 +446,7 @@
                  (lambda (col)
                    (gnc:html-table-set-col-style!
                     table col "td"
-                    'attribute (list "align" "right")))
+                    'attribute (list "class" "number-cell")))
                  '(1 2 3))
 
               (gnc:html-document-add-object! document table))
