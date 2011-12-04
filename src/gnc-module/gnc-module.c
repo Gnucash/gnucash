@@ -279,7 +279,7 @@ gnc_module_get_info(const char * fullpath)
     gchar * (* f_descrip)(void);
 
     /*   g_debug("(init) dlopening '%s'\n", fullpath); */
-    gmodule = g_module_open(fullpath, G_MODULE_BIND_MASK);
+    gmodule = g_module_open(fullpath, G_MODULE_BIND_LAZY);
     if (gmodule == NULL)
     {
         g_warning("Failed to dlopen() '%s': %s\n", fullpath, g_module_error());
@@ -323,7 +323,7 @@ gnc_module_get_info(const char * fullpath)
     info->module_age         = *(int *)age;
     info->module_revision    = *(int *)revision;
 
-
+    g_module_make_resident(gmodule);
 get_info_close:
     /*   g_debug("(init) closing '%s'\n", fullpath); */
     g_module_close(gmodule);
