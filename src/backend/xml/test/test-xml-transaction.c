@@ -467,11 +467,15 @@ test_transaction(void)
             sixtp *parser;
             tran_data data;
 
-            data.trn = ran_trn;
+	    gchar *msg = "[xaccAccountScrubCommodity()] Account \"\" does not have a commodity!";
+	    gchar *logdomain = "gnc.engine.scrub";
+	    guint loglevel = G_LOG_LEVEL_CRITICAL;
+	    TestErrorStruct check = { loglevel, logdomain, msg };
+	    g_log_set_handler (logdomain, loglevel,
+			       (GLogFunc)test_checked_handler, &check);
+           data.trn = ran_trn;
             data.com = com;
             data.value = i;
-
-            g_print(" There will follow a bunch of CRIT scrub errors about the account not having a commodity. There isn't an account in the XML, so of course not. Ignore the errors\n");
             parser = gnc_transaction_sixtp_parser_create();
 
             if (!gnc_xml_parse_file(parser, filename1, test_add_transaction,

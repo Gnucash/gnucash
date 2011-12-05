@@ -319,12 +319,18 @@ test_generation()
     {
         /* empty some things. */
         Account *act;
+	gchar *msg = "xaccAccountSetCommodity: assertion `GNC_IS_COMMODITY(com)' failed";
+	gchar *logdomain = "gnc.engine";
+	guint loglevel = G_LOG_LEVEL_CRITICAL;
+	TestErrorStruct check = { loglevel, logdomain, msg };
+	g_log_set_handler (logdomain, loglevel,
+			   (GLogFunc)test_checked_handler, &check);
 
         act = get_random_account(sixbook);
 
         xaccAccountSetCode(act, "");
         xaccAccountSetDescription(act, "");
-        g_print("Expect a critical assert here:\n");
+
         xaccAccountSetCommodity(act, NULL);
 
         test_account(-1, act);
