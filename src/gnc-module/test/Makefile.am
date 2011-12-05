@@ -1,10 +1,15 @@
 SUBDIRS = mod-foo mod-bar mod-baz misc-mods
 
-LDADD = ../libgnc-module.la ${GLIB_LIBS} ${GUILE_LIBS}
+LDADD = \
+  ${top_builddir}/src/test-core/libtest-core.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ../libgnc-module.la ${GLIB_LIBS} ${GUILE_LIBS}
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src/test-core \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
