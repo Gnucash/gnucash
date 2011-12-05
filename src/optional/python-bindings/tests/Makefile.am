@@ -1,6 +1,6 @@
 
-
 TESTS_ENVIRONMENT = \
+  GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
   PYTHONPATH=$(PYTHONPATH):$(top_builddir)/src/optional/python-bindings \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/src/optional/python-bindings/.libs \
   $(top_builddir)/src/bin/overrides/gnucash-build-env $(PYTHON)

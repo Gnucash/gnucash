@@ -72,9 +72,6 @@ eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --guile-load-dir ${top_builddir}/src/report/report-gnome \
   --guile-load-dir ${top_builddir}/src/report/stylesheets \
   --guile-load-dir ${top_builddir}/src/import-export/qif-import \
-  --guile-load-dir ${top_builddir}/src/business/business-core \
-  --guile-load-dir ${top_builddir}/src/business/business-utils \
-  --guile-load-dir ${top_builddir}/src/business/dialog-tax-table \
   --guile-load-dir ${top_builddir}/src/business/business-gnome \
   --guile-load-dir ${top_builddir}/src/business/business-reports \
   --library-dir    ${top_builddir}/src/libqof/qof \
@@ -82,9 +79,21 @@ eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --library-dir    ${top_builddir}/src/calculation \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/gnome-utils \
+  --library-dir    ${top_builddir}/src/html \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql  \
-  --library-dir    ${top_builddir}/src/gnc-module
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/gnome \
+  --library-dir    ${top_builddir}/src/gnome-search \
+  --library-dir    ${top_builddir}/src/import-export \
+  --library-dir    ${top_builddir}/src/register/register-gnome \
+  --library-dir    ${top_builddir}/src/register/register-core \
+  --library-dir    ${top_builddir}/src/register/ledger-core \
+  --library-dir    ${top_builddir}/src/business/business-ledger \
+  --library-dir    ${top_builddir}/src/report/report-system \
+  --library-dir    ${top_builddir}/src/report/report-gnome
   `
+LD_LIBRARY_PATH="${DYLD_LIBRARY_PATH}"
+
 exec "$@"

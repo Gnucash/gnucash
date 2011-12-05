@@ -1,4 +1,7 @@
 import unittest
+import os
+
+os.environ["GNC_UNINSTALLED"] = "1"
 
 from test import test_support
 
