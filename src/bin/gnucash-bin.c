@@ -852,9 +852,10 @@ main(int argc, char ** argv)
     setlocale(LC_ALL, "");
     gnucash_command_line(&argc, argv);
     gnc_print_unstable_message();
-    gnc_log_init();
 
     gnc_module_system_init();
+    gnc_log_init();
+
 
     if (add_quotes_file)
     {
