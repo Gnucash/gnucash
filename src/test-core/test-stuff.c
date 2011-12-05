@@ -358,37 +358,95 @@ get_random_string_in_array(const char* str_list[])
     return str_list[num];
 }
 
-void
-test_silent_logger(  const char *log_domain, GLogLevelFlags log_level,
+gboolean
+test_null_handler (const char *log_domain, GLogLevelFlags log_level,
                      const gchar *msg, gpointer user_data )
 {
     //Silent, remember?
-    return;
+    return FALSE;
+}
+
+static gchar*
+test_log_level (GLogLevelFlags flags)
+{
+    const gchar *message[] = {"RECURSIVE", "FATAL", "ERROR", "CRITICAL",
+			      "WARNING","MESSAGE", "INFO",  "DEBUG"};
+    guint i = 0, last = 0, max_bit = 7;
+    gchar *msg = NULL;
+
+    for (i; i <= max_bit; i++)
+	if (flags & 1 << i)
+	{
+	    gchar *tmp_msg = msg;
+	    gchar *sep = (last < 2 ? " " : "|");
+	    last = i;
+	    msg = (tmp_msg ? g_strjoin (sep, tmp_msg, message[i], NULL)
+		   : g_strdup (message[i]));
+	    if (tmp_msg)
+		g_free (tmp_msg);
+	}
+
+    if (msg == NULL)
+	msg = g_strdup ("");
+    return msg;
+}
+
+static GList *message_queue = NULL;
+
+void
+test_add_error (TestErrorStruct *error)
+{
+    message_queue = g_list_append (message_queue, error);
+}
+
+void
+test_clear_error_list (void)
+{
+    g_list_free (message_queue);
+    message_queue = NULL;
 }
 
 gboolean
-test_handle_faults( const char *log_domain, GLogLevelFlags log_level,
-                    const gchar *msg, gpointer user_data )
+test_list_handler (const char *log_domain, GLogLevelFlags log_level,
+		   const gchar *msg, gpointer user_data )
+{
+    GList *list = g_list_first (message_queue);
+    const guint fatal = G_LOG_FLAG_FATAL;
+
+    while (list)
+    {
+	TestErrorStruct *error = (TestErrorStruct*)list->data;
+	if (!g_strcmp0 (log_domain, error->log_domain)
+	    && ((log_level | fatal) == (error->log_level | fatal))
+	    && !g_strcmp0 (msg, error->msg))
+	    return FALSE;
+	list = g_list_next (list);
+    }
+/* No list or no matches, fall through */
+    return test_checked_handler (log_domain, log_level, msg, user_data);
+}
+
+
+gboolean
+test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
+                     const gchar *msg, gpointer user_data )
 {
     TestErrorStruct *tdata = (TestErrorStruct*)user_data;
-    if (tdata == NULL)
+
+    if ((tdata == NULL)
+	|| (tdata->log_domain != NULL
+	    && g_strcmp0 (tdata->log_domain, log_domain))
+	|| (tdata->log_level && tdata->log_level != log_level)
+	|| (tdata->msg && g_strcmp0 (tdata->msg, msg)))
     {
-        g_printf("Received Log Message %s\n", msg);
+	gchar *level = test_log_level (log_level);
+	g_printf ( "<%s> (%s) %s\n", level, log_domain, msg);
+	g_free (level);
+	g_assert (log_level ^ G_LOG_FLAG_FATAL);
         return FALSE;
     }
-/* If it's a lower loglevel than we expected, report it and move on */
-    if (tdata->log_level && log_level < tdata->log_level)
-    {
-	g_printf ("Received Log Message %s\n", msg);
-	return FALSE;
-    }
-    if (tdata->log_domain != NULL)
-        g_assert_cmpstr (tdata->log_domain, ==, log_domain);
-    if (tdata->log_level)
-        g_assert_cmpuint (tdata->log_level, ==, log_level);
-    if (tdata->log_level)
-        g_assert_cmpstr (tdata->msg, ==, msg);
     return FALSE;
+
 }
 
 void

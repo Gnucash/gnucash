@@ -79,11 +79,21 @@ Otherwise, only failures are printed out.
 }
 
 /**
- * Test Support
+ * Suppressing Expected Errors
  *
- * Struct and functions for unit test support:
- * Intercept and report GLib error messages to test functions.
- * Ensure that mock functions are called, and with the right data pointer
+ * Functions for suppressing expected errors during tests. Pass 
+ * 
+ * Note that you need to call both g_log_set_handler *and*
+ * g_test_log_set_fatal_handler to both avoid the assertion and
+ * suppress the error message. The callbacks work in either role, just
+ * cast them appropriately for the use.
+ */
+
+/**
+ * Struct to pass as user_data for the handlers. Setting a parameter
+ * to NULL or 0 will match any value in the error, so if you have the
+ * same message and log level being issued in two domains you can
+ * match both of them by setting log_domain = NULL.
  *
  */
 
@@ -95,22 +105,41 @@ typedef struct
 } TestErrorStruct;
 
 /**
- * Pass this to g_test_log_set_fatal_handler(), setting user_data to
- * a pointer to TestErrorStruct to intercept and handle expected
- * error and warning messages. It will g_assert if an error is
- * received which doesn't match the log_level, log_domain, and
- * message in the struct (if they're set), or return FALSE to prevent
- * the message from aborting. Be sure to g_free() the
- * TestErrorData:msg after you're done testing it.
+ * Check the user_data against the actual error and assert on any
+ * differences.  Displays the error (and asserts if G_LOG_FLAG_FATAL
+ * is TRUE) if NULL is passed as user_data, but a NULL or 0 value
+ * member matches anything.
  */
-gboolean test_handle_faults( const char *log_domain, GLogLevelFlags log_level,
+gboolean test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
                              const gchar *msg, gpointer user_data);
 /**
- * When you know you're going to get a useless log message, pass this
- * to g_log_set_default_handler to shut it up.
+ * Just returns FALSE or suppresses the message regardless of what the
+ * error is. Use this only as a last resort.
  */
-void test_silent_logger(  const char *log_domain, GLogLevelFlags log_level,
-                          const gchar *msg, gpointer user_data );
+gboolean test_null_handler (const char *log_domain, GLogLevelFlags log_level,
+			 const gchar *msg, gpointer user_data );
+/**
+ * Maintains an internal list of TestErrorStructs which are each
+ * checked by the list handler. If an error matches any entry on the
+ * list, test_list_handler will return FALSE, blocking the error from
+ * halting the program.
+ *
+ * Call test_add_error for each TestErrorStruct to check against and
+ * test_clear_error_list when you no longer expect the errors.
+ */
+void test_add_error (TestErrorStruct *error);
+void test_clear_error_list (void);
+
+/**
+ * Checks received errors against the list created by
+ * test_add_error. If the list is empty or nothing matches, passes
+ * control on to test_checked_handler, giving the opportunity for an
+ * additional check that's not in the list (set user_data to NULL if
+ * you want test_checked_handler to immediately print the error).
+ */
+gboolean test_list_handler (const char *log_domain,
+			    GLogLevelFlags log_level,
+			    const gchar *msg, gpointer user_data );
 /**
  * Call this from a mock object to indicate that the mock has in fact
  * been called
@@ -236,5 +265,11 @@ TestSignal test_signal_new (QofInstance *entity, QofEventId eventType,
  */
 void test_signal_assert_hits (TestSignal sig, guint hits);
 void test_signal_free (TestSignal sig);
+
+/* For Scheme testing access:
+void gnc_log_init_filename_special (gchar *filename);
+void gnc_log_shutdown (void);
+void gnc_log_set_handler (guint logdomain, gchar *logdomain, GLogFunc * func, gpointer data);
+*/
 
 #endif /* TEST_STUFF_H */
