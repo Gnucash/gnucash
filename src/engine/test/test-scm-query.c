@@ -66,12 +66,12 @@ main_helper (void *closure, int argc, char **argv)
     gnc_module_load("gnucash/engine", 0);
 
     xaccLogDisable ();
-
+    qof_query_core_init ();
     /* scm conversion doesn't handle binary atm */
     kvp_exclude_type (KVP_TYPE_BINARY);
 
     run_tests ();
-
+    qof_query_core_shutdown ();
     print_test_results ();
 
     exit (get_rv ());
