@@ -29,6 +29,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
 
 
 TESTS_ENVIRONMENT = \
+  GUILE_WARN_DEPRECATED=no \
   SRCDIR=${srcdir} \
   GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

@@ -40,6 +40,7 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/gnc-module/test/mod-baz
 
 TESTS_ENVIRONMENT = \
+  GUILE_WARN_DEPRECATED=no \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \

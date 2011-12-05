@@ -193,6 +193,7 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/backend/xml
 
 TESTS_ENVIRONMENT = \
+  GUILE_WARN_DEPRECATED=no \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   GNC_TEST_FILES=${srcdir}/test-files/xml2 \
   SRCDIR=${srcdir} \
