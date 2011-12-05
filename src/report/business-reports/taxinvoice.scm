@@ -85,10 +85,8 @@
 (define notespage    (N_ "Notes"))
 ;(define filespage    (N_ "Files"))
 (define displaypage  (N_ "Display"))
-(define generalpage  gnc:pagename-general)
 ; option names 
 (define optname-report-title   (N_ "Report title"))
-(define optname-invoice-number (N_ "Invoice number"))
 (define optname-template-file  (N_ "Template file"))
 (define optname-css-file       (N_ "CSS stylesheet file"))
 (define optname-heading-font   (N_ "Heading font"))
@@ -131,7 +129,7 @@
 
   (add-option
     (gnc:make-invoice-option ; defined in gnucash/scm/business-options.scm
-      generalpage optname-invoice-number 
+      gnc:pagename-general gnc:optname-invoice-number 
       "a" "" (lambda () '()) 
       #f))        ;customers-only)) ;-- see above
 
@@ -192,7 +190,7 @@
                 ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
 
   (gnc:options-set-default-section
-    report-options generalpage)
+    report-options gnc:pagename-general)
 
   report-options)
 
@@ -210,7 +208,7 @@
 
   ; Get all the options
   (let* ((document                  (gnc:make-html-document))
-         (opt-invoice               (opt-value generalpage  optname-invoice-number))
+         (opt-invoice               (opt-value gnc:pagename-general gnc:optname-invoice-number))
          (opt-template-file         (find-file 
                                       (opt-value displaypage optname-template-file)))
          (opt-css-file              (find-file 
