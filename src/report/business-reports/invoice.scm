@@ -34,9 +34,6 @@
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
 
-(define invoice-page gnc:pagename-general)
-(define invoice-name (N_ "Invoice Number"))
-
 (define-macro (addto! alist element)
   `(set! ,alist (cons ,element ,alist)))
 
@@ -244,12 +241,12 @@
     (gnc:register-option gnc:*report-options* new-option))
 
   (gnc:register-inv-option
-   (gnc:make-invoice-option invoice-page invoice-name "x" ""
+   (gnc:make-invoice-option gnc:pagename-general gnc:optname-invoice-number "x" ""
 			    (lambda () '()) #f))
 
   (gnc:register-inv-option
    (gnc:make-string-option
-    invoice-page (N_ "Custom Title")
+    gnc:pagename-general (N_ "Custom Title")
     "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher")
     ""))
 
@@ -399,7 +396,7 @@
     (define (add-payment-row table used-columns split total-collector reverse-payments?)
       (let* ((t (xaccSplitGetParent split))
 	     (currency (xaccTransGetCurrency t))
-	     (invoice (opt-val invoice-page invoice-name))
+	     (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
 	     (owner '())
 	     ;; Depending on the document type, the payments may need to be sign-reversed
 	     (amt (gnc:make-gnc-monetary currency
@@ -656,11 +653,11 @@
   (let* ((document (gnc:make-html-document))
 	 (table '())
 	 (orders '())
-	 (invoice (opt-val invoice-page invoice-name))
+	 (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
 	 (owner '())
 	 (references? (opt-val "Display" "References"))
 	 (default-title (_ "Invoice"))
-	 (custom-title (opt-val invoice-page "Custom Title"))
+	 (custom-title (opt-val gnc:pagename-general "Custom Title"))
 	 (title "")
 	 (cust-doc? #f)
 	 (credit-note? #f))
@@ -803,12 +800,3 @@
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #t)
-
-(define (gnc:invoice-report-create-internal invoice)
-  (let* ((options (gnc:make-report-options invoice-report-guid))
-         (invoice-op (gnc:lookup-option options invoice-page invoice-name)))
-
-    (gnc:option-set-value invoice-op invoice)
-    (gnc:make-report invoice-report-guid options)))
-
-(export gnc:invoice-report-create-internal)

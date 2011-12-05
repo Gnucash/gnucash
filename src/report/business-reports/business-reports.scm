@@ -32,6 +32,7 @@
 (gnc:module-load "gnucash/html" 0)
 
 (define gnc:menuname-business-reports (N_ "_Business"))
+(define gnc:optname-invoice-number (N_ "Invoice Number"))
 
 (define (guid-ref idstr type guid)
   (gnc-build-url type (string-append idstr guid) ""))
@@ -95,7 +96,30 @@
 	  (gnc-build-url URL-TYPE-OWNERREPORT ref ""))
 	ref)))
 
-(export gnc:menuname-business-reports)
+;; Creates a new report instance for the given invoice. The given
+;; report name must be the name of one existing report template, which
+;; is then used to instantiate the new report instance.
+(define (gnc:invoice-report-create-withname invoice report-name)
+  ;; Look up the internal template-id that belongs to the given report
+  ;; name
+  (let ((report-template-id
+         (gnc:report-template-name-to-id report-name)))
+
+    (if report-template-id
+        ;; We found the report template id, so instantiate a report
+        ;; and set the invoice option accordingly.
+        (let* ((options (gnc:make-report-options report-template-id))
+               (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
+
+          (gnc:option-set-value invoice-op invoice)
+          (gnc:make-report report-template-id options))
+        ;; No report template id was found (probably the name has a
+        ;; typo), so let's return zero as an invalid report id.
+        0
+        )))
+
+(export gnc:invoice-report-create-withname)
+(export gnc:menuname-business-reports gnc:optname-invoice-number)
 
 (use-modules (gnucash report fancy-invoice))
 (use-modules (gnucash report invoice))
@@ -108,7 +132,16 @@
 (use-modules (gnucash report customer-summary))
 (use-modules (gnucash report balsheet-eg))
 
-(define gnc:invoice-report-create gnc:invoice-report-create-internal)
+(define (gnc:invoice-report-create invoice)
+  (gnc:invoice-report-create-withname
+   invoice
+   ;; Feel free to insert a different invoice report name below, such
+   ;; as "Tax Invoice"
+   "Printable Invoice"))
+
+;; Alternatively, if your preferred report has a "create-internal"
+;; function, uncomment the line below and delete the ones above
+;;(define gnc:invoice-report-create gnc:invoice-report-create-internal)
 
 (define (gnc:payables-report-create account title show-zeros?)
   (payables-report-create-internal account title show-zeros?))
