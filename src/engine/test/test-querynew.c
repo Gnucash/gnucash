@@ -51,8 +51,17 @@ static void test_class (void)
         { NULL },
     };
 
-    fprintf (stderr, "\tTesting the qof_query_object interface. \n"
-             "\tYou may see some \"** CRITICAL **\" messages, which you can safely ignore\n");
+    gchar *msg1 = "qof_class_get_parameter: assertion `obj_name' failed";
+    gchar *msg2 = "qof_class_get_parameter: assertion `parameter' failed";
+    gchar *logdomain = "qof";
+    guint loglevel = G_LOG_LEVEL_CRITICAL;
+    TestErrorStruct check1 = { loglevel, logdomain, msg1 };
+    TestErrorStruct check2 = { loglevel, logdomain, msg2 };
+    test_add_error (&check1);
+    test_add_error (&check2);
+    g_log_set_handler (logdomain, loglevel,
+		       (GLogFunc)test_list_handler, NULL);
+
 
     qof_class_register (TEST_MODULE_NAME, (QofSortFunc)test_sort, params);
 
@@ -79,6 +88,7 @@ static void test_class (void)
     	   "qof_class_get_default_sort");
       do_test (qof_class_get_default_sort (NULL) == NULL,
     	   "qof_class_get_default_sort (NULL)");*/
+    test_clear_error_list ();
 }
 
 static void test_query_core (void)
