@@ -1,6 +1,8 @@
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libguile.h>
+#include <test-stuff.h>
 
 #include "gnc-module.h"
 
@@ -8,8 +10,18 @@ static void
 guile_main(void *closure, int argc, char ** argv)
 {
     GNCModule foo;
+    gchar *msg1 = "Module '../../../src/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
+    gchar *msg2 = "Could not locate module gnucash/futuremodsys interface v.0";
+    gchar *logdomain = "gnc.module";
+    guint loglevel = G_LOG_LEVEL_WARNING;
+    TestErrorStruct check1 = { loglevel, logdomain, msg1 };
+    TestErrorStruct check2 = { loglevel, logdomain, msg2 };
+    test_add_error (&check1);
+    test_add_error (&check2);
+    g_log_set_handler (logdomain, loglevel,
+		       (GLogFunc)test_list_handler, NULL);
 
-    printf("  test-modsysver.c: checking for a module we shouldn't find ...\n");
+    g_test_message("  test-modsysver.c: checking for a module we shouldn't find ...\n");
 
     gnc_module_system_init();
 
@@ -25,6 +37,7 @@ guile_main(void *closure, int argc, char ** argv)
         printf("  oops! loaded incompatible module\n");
         exit(-1);
     }
+    test_error_clear_list ();
 }
 
 int

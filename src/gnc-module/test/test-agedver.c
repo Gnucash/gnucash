@@ -1,15 +1,22 @@
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libguile.h>
 
 #include "gnc-module.h"
+#include <test-stuff.h>
 
 static void
 guile_main(void *closure, int argc, char ** argv)
 {
     GNCModule foo;
-
-    printf("  test-agedver.c:  asking for an old but supported interface ...");
+    gchar *msg = "Module '../../../src/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
+    gchar *logdomain = "gnc.module";
+    guint loglevel = G_LOG_LEVEL_WARNING;
+    TestErrorStruct check = { loglevel, logdomain, msg };
+    g_log_set_handler (logdomain, loglevel,
+		       (GLogFunc)test_checked_handler, &check);
+    g_test_message("  test-agedver.c:  asking for an old but supported interface ...");
 
     gnc_module_system_init();
 

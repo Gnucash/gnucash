@@ -4,9 +4,11 @@
  * it via dlsym
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
 #include <gmodule.h>
 #include <libguile.h>
+#include <test-stuff.h>
 
 #include "gnc-module.h"
 
@@ -14,8 +16,14 @@ static void
 guile_main(void *closure, int argc, char ** argv)
 {
     GModule *gmodule;
+    gchar *msg = "Module '../../../src/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
+    gchar *logdomain = "gnc.module";
+    guint loglevel = G_LOG_LEVEL_WARNING;
+    TestErrorStruct check = { loglevel, logdomain, msg };
+    g_log_set_handler (logdomain, loglevel,
+		       (GLogFunc)test_checked_handler, &check);
 
-    printf("  test-dynload.c: testing dynamic linking of libgnc-module ...");
+    g_test_message("  test-dynload.c: testing dynamic linking of libgnc-module ...");
     gmodule = g_module_open("libgnc-module", 0);
 
     /* Maybe MacOS? */
