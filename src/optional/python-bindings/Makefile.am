@@ -104,3 +104,29 @@ sqlite3test_SOURCES = sqlite3test.c
 sqlite3test_LDADD = ${_gnucash_core_c_la_LIBADD}
 sqlite3test_CPPFLAGS = ${_gnucash_core_c_la_CPPFLAGS}
 
+PYTHON_LINK_FILES = \
+  $(pkgpython_PYTHON)
+
+.py-links:
+	$(RM) -rf gnucash
+	mkdir -p gnucash
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${PYTHON_LINK_FILES} ; do \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
+	done
+endif
+	( cd gnucash; for file in $(PYTHON_LINK_FILES) ; do \
+	  $(LN_S) -f ${top_srcdir}/src/optional/python-bindings/$$file .; \
+	  done )
+
+
+if ! OS_WIN32
+	touch .py-links
+endif
+
+noinst_DATA = .py-links
+
+CLEANFILES = $(BUILT_SOURCES) .py-links
+
+clean-local:
+	rm -rf gnucash

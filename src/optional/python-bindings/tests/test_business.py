@@ -51,9 +51,9 @@ class TestBusiness( BusinessSession ):
 
     def test_employee_name(self):
         NAME = 'John Doe'
-        self.assertEqual( '', self.employee.GetName() )
-        self.employee.SetName(NAME)
-        self.assertEqual( NAME, self.employee.GetName() )
+        self.assertEqual( '', self.employee.GetUsername() )
+        self.employee.SetUsername(NAME)
+        self.assertEqual( NAME, self.employee.GetUsername() )
 
     def test_post(self):
         self.assertTrue( self.invoice.IsPosted() )
