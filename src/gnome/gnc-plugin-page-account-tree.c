@@ -805,7 +805,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
     Account *account = NULL;
     gboolean sensitive;
     gboolean subaccounts;
-    gboolean is_readwrite = qof_book_is_readonly(gnc_get_current_book());
+    gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
 
