@@ -37,7 +37,7 @@ guile_main(void *closure, int argc, char ** argv)
         printf("  oops! loaded incompatible module\n");
         exit(-1);
     }
-    test_error_clear_list ();
+    test_clear_error_list ();
 }
 
 int
