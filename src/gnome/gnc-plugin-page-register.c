@@ -873,6 +873,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister *page;
     GncPluginPageRegisterPrivate *priv;
+    GNCLedgerDisplayType ledger_type;
     GncWindow *gnc_window;
     guint numRows;
     GtkWidget *gsr;
@@ -917,40 +918,45 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     gnc_plugin_page_register_ui_initial_state (page);
     gnc_plugin_page_register_ui_update (NULL, page);
 
-    /* Set the sort order for the split register and status of save order button */
-    priv->sd.save_order = FALSE;
-    order = gnc_plugin_page_register_get_sort_order(plugin_page);
+    ledger_type = gnc_ledger_display_type (priv->ledger);
 
-    PINFO("Loaded Sort order is %s", order);
-
-    gnc_split_reg_set_sort_type(priv->gsr, SortTypefromString(order));
-
-    if (order && (strcmp (order, DEFAULT_SORT_ORDER) != 0))
-        priv->sd.save_order = TRUE;
-
-    priv->sd.original_save_order = priv->sd.save_order;
-    g_free(order);
-
-    /* Set the filter for the split register and status of save filter button */
-    priv->fd.save_filter = FALSE;
-
-    filter = g_strsplit(gnc_plugin_page_register_get_filter(plugin_page),",",-1);
-
-    PINFO("Loaded Filter Status is %s", filter[0]);
-
-    priv->fd.cleared_match = (gint)g_ascii_strtoll( filter[0], NULL, 16 );
-
-    if (filter[0] && (strcmp (filter[0], DEFAULT_FILTER) != 0))
-        filter_changed = filter_changed + 1;
-
-    if (filter[1] && (strcmp (filter[1],"0") != 0 ))
+    if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
     {
-        PINFO("Loaded Filter Start Date is %s", filter[1]);
-
-        priv->fd.start_time = gnc_plugin_page_register_filter_dmy2time( filter[1] );
-        priv->fd.start_time = gnc_timet_get_day_start(priv->fd.start_time);
-        filter_changed = filter_changed + 1;
-
+        /* Set the sort order for the split register and status of save order button */
+        priv->sd.save_order = FALSE;
+        order = gnc_plugin_page_register_get_sort_order(plugin_page);
+    
+        PINFO("Loaded Sort order is %s", order);
+    
+        gnc_split_reg_set_sort_type(priv->gsr, SortTypefromString(order));
+    
+        if (order && (strcmp (order, DEFAULT_SORT_ORDER) != 0))
+            priv->sd.save_order = TRUE;
+    
+        priv->sd.original_save_order = priv->sd.save_order;
+        g_free(order);
+    
+        /* Set the filter for the split register and status of save filter button */
+        priv->fd.save_filter = FALSE;
+    
+        filter = g_strsplit(gnc_plugin_page_register_get_filter(plugin_page),",",-1);
+    
+        PINFO("Loaded Filter Status is %s", filter[0]);
+    
+        priv->fd.cleared_match = (gint)g_ascii_strtoll( filter[0], NULL, 16 );
+    
+        if (filter[0] && (strcmp (filter[0], DEFAULT_FILTER) != 0))
+            filter_changed = filter_changed + 1;
+    
+        if (filter[1] && (strcmp (filter[1],"0") != 0 ))
+        {
+            PINFO("Loaded Filter Start Date is %s", filter[1]);
+    
+            priv->fd.start_time = gnc_plugin_page_register_filter_dmy2time( filter[1] );
+            priv->fd.start_time = gnc_timet_get_day_start(priv->fd.start_time);
+            filter_changed = filter_changed + 1;
+        }
+    
         if (filter[2] && (strcmp (filter[2],"0") != 0 ))
         {
             PINFO("Loaded Filter End Date is %s", filter[2]);
@@ -959,17 +965,17 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
             priv->fd.end_time = gnc_timet_get_day_end(priv->fd.end_time);
             filter_changed = filter_changed + 1;
         }
+    
+        if(filter_changed != 0)
+            priv->fd.save_filter = TRUE;
+    
+        priv->fd.original_save_filter = priv->fd.save_filter;
+        g_strfreev(filter);
+    
+        /* Update Query with Filter Status and Dates */
+        gnc_ppr_update_status_query (page);
+        gnc_ppr_update_date_query(page);
     }
-
-    if(filter_changed != 0)
-        priv->fd.save_filter = TRUE;
-
-    priv->fd.original_save_filter = priv->fd.save_filter;
-    g_strfreev(filter);
-
-    /* Update Query with Filter Status and Dates */
-    gnc_ppr_update_status_query (page);
-    gnc_ppr_update_date_query(page);
 
     plugin_page->summarybar = gsr_create_summary_bar(priv->gsr);
     if (plugin_page->summarybar)
@@ -1462,7 +1468,6 @@ gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page)
     SplitRegister *reg;
     Account *leader;
     const char* filter;
-    gchar *default_filter;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
 
@@ -1476,9 +1481,7 @@ gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page)
     if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
         filter = xaccAccountGetFilter (leader);
 
-    default_filter = g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
-
-    return g_strdup(filter ? filter : default_filter);
+    return filter ? g_strdup(filter) : g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
 }
 
 void
@@ -1497,12 +1500,17 @@ gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *fi
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
 
-    default_filter = g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
-
-    if (!filter || (strcmp (filter, default_filter) == 0))
-        xaccAccountSetFilter (leader, NULL);
-    else
-        xaccAccountSetFilter (leader, filter);
+    if (leader != NULL)
+    {
+        default_filter = g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
+    
+        if (!filter || (strcmp (filter, default_filter) == 0))
+            xaccAccountSetFilter (leader, NULL);
+        else
+            xaccAccountSetFilter (leader, filter);
+        
+        g_free (default_filter);
+    }
 
     return;
 }
@@ -1546,11 +1554,14 @@ gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar
     reg = gnc_ledger_display_get_split_register (ld);
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
-
-    if (!sort_order || (strcmp (sort_order, DEFAULT_SORT_ORDER) == 0))
-        xaccAccountSetSortOrder (leader, NULL);
-    else
-        xaccAccountSetSortOrder (leader, sort_order);
+    
+    if (leader != NULL)
+    {
+        if (!sort_order || (strcmp (sort_order, DEFAULT_SORT_ORDER) == 0))
+            xaccAccountSetSortOrder (leader, NULL);
+        else
+            xaccAccountSetSortOrder (leader, sort_order);
+    }
 
     return;
 }
@@ -1668,10 +1679,8 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog *dialog,
 	{
             type = gnc_split_reg_get_sort_type(priv->gsr);
             order = SortTypeasString(type);
-            gnc_plugin_page_register_set_sort_order (plugin_page, g_strdup_printf("%s", order));
+            gnc_plugin_page_register_set_sort_order (plugin_page, order);
 	}
-        else
-            gnc_plugin_page_register_set_sort_order (plugin_page, g_strdup_printf("%s", DEFAULT_SORT_ORDER));
     }
     priv->sd.dialog = NULL;
     gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -1991,7 +2000,6 @@ get_filter_times(GncPluginPageRegister *page)
         time_val = gnc_date_edit_get_date(GNC_DATE_EDIT(priv->fd.start_date));
         time_val = gnc_timet_get_day_start(time_val);
         priv->fd.start_time = time_val;
-
     }
     else
     {
@@ -2232,7 +2240,6 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
 {
     GncPluginPageRegisterPrivate *priv;
     GncPluginPage *plugin_page;
-    const char* filter;
 
     g_return_if_fail(GTK_IS_DIALOG(dialog));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
@@ -2257,24 +2264,32 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
 
         if(priv->fd.save_filter)
 	{
+            gchar* filter;
             filter = g_strdup_printf("0x%04x", priv->fd.cleared_match);
 
             if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.start_date_choose)) && priv->fd.start_time != 0 )
-                filter = g_strconcat ( filter, ",", gnc_plugin_page_register_filter_time2dmy(priv->fd.start_time) , NULL);
+            {
+                gchar *timeval = gnc_plugin_page_register_filter_time2dmy(priv->fd.start_time);
+                filter = g_strconcat ( filter, ",", timeval, NULL);
+                g_free (timeval);
+            }
             else
                 filter = g_strconcat ( filter, ",0", NULL);
 
             if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.end_date_choose)) && priv->fd.end_time != 0 )
-                filter = g_strconcat ( filter, ",", gnc_plugin_page_register_filter_time2dmy(priv->fd.end_time) , NULL);
+            {
+                gchar *timeval = gnc_plugin_page_register_filter_time2dmy(priv->fd.end_time);
+                filter = g_strconcat ( filter, ",", timeval, NULL);
+                g_free (timeval);
+            }
             else
                 filter = g_strconcat ( filter, ",0", NULL);
 
             PINFO("The filter to save is %s",filter);
 
             gnc_plugin_page_register_set_filter (plugin_page, filter);
+            g_free (filter);
 	}
-        else
-            gnc_plugin_page_register_set_filter (plugin_page, g_strdup_printf("%s,%s,%s", DEFAULT_FILTER,"0","0"));
     }
     priv->fd.dialog = NULL;
     gtk_widget_destroy(GTK_WIDGET(dialog));
