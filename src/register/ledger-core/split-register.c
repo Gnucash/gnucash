@@ -48,6 +48,7 @@
 #include "split-register-model-save.h"
 #include "table-allgui.h"
 #include "dialog-account.h"
+#include "dialog-dup-trans.h"
 
 
 /** static variables ******************************************************/

@@ -103,8 +103,6 @@ int      gnc_choose_radio_option_dialog (GtkWidget *parent,
         int default_value,
         GList *radio_list);
 
-gboolean gnc_dup_trans_dialog (GtkWidget *parent, time_t *date_p,
-                               const char *num, char **out_num);
 void     gnc_tax_info_dialog (GtkWidget *parent);
 void     gnc_stock_split_dialog (GtkWidget *parent, Account * initial);
 

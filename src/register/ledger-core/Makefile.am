@@ -3,7 +3,6 @@ SUBDIRS = . test
 pkglib_LTLIBRARIES = libgncmod-ledger-core.la
 
 libgncmod_ledger_core_la_SOURCES = \
-  dialog-dup-trans.c \
   gnc-ledger-display.c \
   gncmod-ledger-core.c \
   split-register.c \

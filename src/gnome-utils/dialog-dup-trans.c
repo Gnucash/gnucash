@@ -28,13 +28,13 @@
 #include <time.h>
 #include <stdlib.h>
 
+#include "dialog-dup-trans.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
 #include "qof.h"
-#include "gnc-ui.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 typedef struct
 {
@@ -44,6 +44,10 @@ typedef struct
 
     GtkWidget * date_edit;
     GtkWidget * num_edit;
+
+    GtkWidget *duplicate_title_label; // GtkLabel
+    GtkWidget *duplicate_table; // GtkTable
+    GtkWidget *num_label; // GtkLabel
 } DupTransDialog;
 
 /* Parses the string value and returns true if it is a
@@ -121,6 +125,10 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         dt_dialog->date_edit = date_edit;
     }
 
+    dt_dialog->duplicate_title_label = GTK_WIDGET(gtk_builder_get_object (builder, "duplicate_title_label"));
+    dt_dialog->duplicate_table = GTK_WIDGET(gtk_builder_get_object (builder, "duplicate_table"));
+    dt_dialog->num_label = GTK_WIDGET(gtk_builder_get_object (builder, "num_label"));
+
     {
         GtkWidget *num_spin;
         long int num;
@@ -143,20 +151,9 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     g_object_unref(G_OBJECT(builder));
 }
 
-/********************************************************************\
- * gnc_dup_trans_dialog                                             *
- *   opens up a window to do an automatic transfer between accounts *
- *                                                                  *
- * Args:   parent  - the parent of the window to be created         *
- *         date    - the initial date to use, and the output        *
- *                   parameter for the new date                     *
- *         num     - input num field                                *
- *         out_num - output num field, g_newed string               *
- * Return: TRUE if user closes dialog with 'OK'                     *
-\********************************************************************/
-gboolean
-gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
-                      const char *num, char **out_num)
+static gboolean
+gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title, time_t *date_p,
+                               const char *num, char **out_num)
 {
     DupTransDialog *dt_dialog;
     GNCDateEdit *gde;
@@ -164,7 +161,7 @@ gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
     gboolean ok;
     gint result;
 
-    if (!date_p || !out_num)
+    if (!date_p)
         return FALSE;
 
     dt_dialog = g_new0 (DupTransDialog, 1);
@@ -176,12 +173,25 @@ gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
 
     gtk_widget_grab_focus (entry);
 
+    if (title)
+    {
+        gtk_label_set_text(GTK_LABEL (dt_dialog->duplicate_title_label), title);
+    }
+
+    if (!out_num)
+    {
+        // The "num" field isn't being asked for, so we make the widgets invisible
+        gtk_widget_set_visible(dt_dialog->num_label, FALSE);
+        gtk_widget_set_visible(dt_dialog->num_edit, FALSE);
+    }
+
     result = gtk_dialog_run (GTK_DIALOG (dt_dialog->dialog));
 
     if (result == GTK_RESPONSE_OK)
     {
         *date_p = gnc_date_edit_get_date (GNC_DATE_EDIT (dt_dialog->date_edit));
-        *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->num_edit)));
+        if (out_num)
+            *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->num_edit)));
         ok = TRUE;
     }
     else
@@ -191,4 +201,17 @@ gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
     g_free (dt_dialog);
 
     return ok;
+}
+
+gboolean
+gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
+                      const char *num, char **out_num)
+{
+    return gnc_dup_trans_dialog_internal(parent, NULL, date_p, num, out_num);
+}
+
+gboolean
+gnc_dup_date_dialog (GtkWidget * parent, const char* title, time_t *date_p)
+{
+    return gnc_dup_trans_dialog_internal(parent, title, date_p, NULL, NULL);
 }
