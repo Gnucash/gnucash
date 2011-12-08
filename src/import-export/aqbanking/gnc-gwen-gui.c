@@ -165,7 +165,6 @@ static void unregister_callbacks(GncGWENGui *gui);
 static void setup_dialog(GncGWENGui *gui);
 static void enable_password_cache(GncGWENGui *gui, gboolean enabled);
 static void reset_dialog(GncGWENGui *gui);
-static void set_runing(GncGWENGui *gui);
 static void set_finished(GncGWENGui *gui);
 static void set_aborted(GncGWENGui *gui);
 static void show_dialog(GncGWENGui *gui, gboolean clear_log);

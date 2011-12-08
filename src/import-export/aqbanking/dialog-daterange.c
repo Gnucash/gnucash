@@ -66,6 +66,8 @@ gnc_ab_enter_daterange(GtkWidget *parent,
     DaterangeInfo info;
     gint result;
 
+    ENTER("");
+
     xml = gnc_glade_xml_new("aqbanking.glade", "Date Range Dialog");
 
     dialog = glade_xml_get_widget(xml, "Date Range Dialog");
@@ -133,6 +135,7 @@ gnc_ab_enter_daterange(GtkWidget *parent,
 
     gtk_widget_destroy(dialog);
 
+    LEAVE("");
     return result == GTK_RESPONSE_OK;
 }
 

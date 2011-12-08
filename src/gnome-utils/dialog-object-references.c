@@ -50,6 +50,8 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
     GtkCellRenderer* renderer;
     gint response;
 
+    ENTER("");
+
     /* Open the dialog */
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-object-references.glade", "Object references" );
@@ -86,4 +88,6 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
     response = gtk_dialog_run( GTK_DIALOG(dialog) );
     g_object_unref(G_OBJECT(builder));
     gtk_widget_destroy( dialog );
+
+    LEAVE("");
 }

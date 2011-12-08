@@ -31,3 +31,9 @@ libgncmod_agedver_gnc_module_init(int refcount)
 {
     return TRUE;
 }
+
+int
+libgncmod_agedver_gnc_module_end(int refcount)
+{
+    return TRUE;
+}

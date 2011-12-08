@@ -39,10 +39,6 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.sx"
 
-/* Local Prototypes *****/
-
-void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
-
 enum
 {
     PROP_0,

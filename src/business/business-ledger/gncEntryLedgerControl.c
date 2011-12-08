@@ -890,7 +890,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
                 break;
             }
 
-            /* FALLTHROUGH */
+            /* FALL THROUGH */
         default:
             response = GTK_RESPONSE_ACCEPT;
             break;

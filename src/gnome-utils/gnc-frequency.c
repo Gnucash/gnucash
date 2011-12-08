@@ -332,18 +332,6 @@ semimonthly_sel_changed( GtkButton *b, gpointer d )
 }
 
 
-static inline guint32 minn( guint32 a, guint32 b )
-{
-    return a > b ? b : a;
-}
-
-
-static inline guint32 maxn( guint32 a, guint32 b )
-{
-    return a > b ? a : b;
-}
-
-
 static void
 freq_combo_changed(GtkComboBox *b, gpointer d)
 {

@@ -1482,7 +1482,7 @@ conn_table_operation( GncSqlConnection *sql_conn, GSList *table_name_list,
                     if ( result )
                         break;
                 }
-                /* Note fall-through */
+                /* Fall through */
             case backup:
             case drop_backup:
                 result = conn_table_manage_backup( conn, table_name, op );

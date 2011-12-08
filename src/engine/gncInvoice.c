@@ -370,6 +370,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
         default:
             // this is an invoice
             gncInvoiceAddEntry(invoice, to_entry);
+            break;
         }
     }
 

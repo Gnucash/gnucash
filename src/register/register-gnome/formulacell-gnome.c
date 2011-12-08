@@ -74,7 +74,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
         if (!(event->state &
                 (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
             is_return = TRUE;
-        /* FALL THROUGH TO NEXT CASE */
+        /* FALL THROUGH */
 
     case GDK_KP_Enter:
     {

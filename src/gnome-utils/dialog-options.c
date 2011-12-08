@@ -1436,6 +1436,7 @@ gnc_options_dialog_response_cb(GtkDialog *dialog, gint response, GNCOptionWin *w
         {
             gtk_widget_hide(window->dialog);
         }
+        break;
     }
 }
 

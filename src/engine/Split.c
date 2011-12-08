@@ -659,12 +659,6 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     return TRUE;
 }
 
-static void
-add_keys_to_list(gpointer key, gpointer val, gpointer list)
-{
-    *(GList **)list = g_list_prepend(*(GList **)list, key);
-}
-
 /********************************************************************
  * Account funcs
  ********************************************************************/
@@ -1527,6 +1521,7 @@ qofSplitSetReconcile (Split *split, char recn)
         break;
     default:
         PERR("Bad reconciled flag");
+        break;
     }
 }
 
@@ -1550,6 +1545,7 @@ xaccSplitSetReconcile (Split *split, char recn)
         break;
     default:
         PERR("Bad reconciled flag");
+        break;
     }
     xaccTransCommitEdit(split->parent);
 

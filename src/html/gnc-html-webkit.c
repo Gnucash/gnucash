@@ -66,7 +66,7 @@ static QofLogModule log_module = GNC_MOD_HTML;
 
 /* hashes for URLType -> protocol and protocol -> URLType */
 //extern GHashTable* gnc_html_type_to_proto_hash;
-extern GHashTable* gnc_html_proto_to_type_hash;
+//extern GHashTable* gnc_html_proto_to_type_hash;
 
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 extern GHashTable* gnc_html_object_handlers;

@@ -71,20 +71,20 @@
 (define (owner-string owner-type)
   (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
-        ;; FALLTHROUGH
+        ;; FALL THROUGH
         (else (N_ "Company")))) 
 
 ;; Error strings in case there is no (valid) selection (translated)
 (define (invalid-selection-title-string owner-type)
   (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "No valid customer selected."))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "No valid employee selected."))
-        ;; FALLTHROUGH
+        ;; FALL THROUGH
         (else (_ "No valid company selected."))))
 
 (define (invalid-selection-string owner-type)
   (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "This report requires a customer to be selected."))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "This report requires a employee to be selected."))
-        ;; FALLTHROUGH
+        ;; FALL THROUGH
         (else (_ "This report requires a company to be selected."))))
 
 ;; Html formatted error message documents
@@ -109,7 +109,7 @@
 (define (doctype-str owner-type)
   (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "Customer"))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "Employee"))
-        ;; FALLTHROUGH
+        ;; FALL THROUGH
         (else (_ "Vendor")))) 
 
 (define-macro (addto! alist element)

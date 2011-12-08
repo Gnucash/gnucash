@@ -57,11 +57,11 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
         do_test((g_date_get_year(next) - g_date_get_year(start)) % mult == 0,
                 "year period phase wrong"); // redundant
         mult *= 12;
-        // fall-through
+        // fall through
     case PERIOD_END_OF_MONTH:
         if (pt == PERIOD_END_OF_MONTH)
             do_test(g_date_is_last_of_month(next), "end of month phase wrong");
-        // fall-through
+        // fall through
     case PERIOD_LAST_WEEKDAY:
     case PERIOD_NTH_WEEKDAY:
     case PERIOD_MONTH:
@@ -114,7 +114,7 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
     break;
     case PERIOD_WEEK:
         mult *= 7;
-        // fall-through
+        // fall through
     case PERIOD_DAY:
         do_test((startToNext % mult) == 0, "week or day period phase wrong");
         break;
@@ -123,6 +123,7 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
         break;
     default:
         do_test(FALSE, "invalid PeriodType");
+        break;
     }
 
 }

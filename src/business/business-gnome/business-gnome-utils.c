@@ -76,6 +76,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     case GNCSEARCH_TYPE_EDIT:
         text = _("Edit...");
         text_editable = FALSE;
+        break;
     };
 
     switch (owner->type)
@@ -222,6 +223,7 @@ gnc_invoice_select_search_set_label(GncISI* isi)
         break;
     default:
         label = _("Invoice");
+        break;
     }
 
     gtk_label_set_text(GTK_LABEL(isi->label), label);

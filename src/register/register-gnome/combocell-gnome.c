@@ -614,7 +614,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
             return FALSE;
         }
         keep_on_going = TRUE;
-        /* Fall through */
+        /* fall through */
     case GDK_Tab:
     case GDK_ISO_Left_Tab:
         if (!(event->state & GDK_CONTROL_MASK) &&

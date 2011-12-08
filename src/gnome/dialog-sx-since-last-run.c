@@ -1094,7 +1094,7 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
     g_list_free(app_dialog->created_txns);
     app_dialog->created_txns = NULL;
 
-    /* FALLTHROUGH */
+    /* FALL THROUGH */
     case GTK_RESPONSE_CANCEL:
     case GTK_RESPONSE_DELETE_EVENT:
         gnc_close_gui_component(app_dialog->component_id);

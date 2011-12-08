@@ -319,6 +319,7 @@ gnc_transaction_get_property(GObject* object,
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
     }
 }
 
@@ -352,6 +353,7 @@ gnc_transaction_set_property(GObject* object,
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
     }
 }
 
@@ -1408,7 +1410,7 @@ xaccTransRollbackEdit (Transaction *trans)
             s->amount = so->amount;
             s->value = so->value;
             s->lot = so->lot;
-            s->gains_split = s->gains_split;
+            s->gains_split = so->gains_split;
             //SET_GAINS_A_VDIRTY(s);
             s->date_reconciled = so->date_reconciled;
             qof_instance_mark_clean(QOF_INSTANCE(s));

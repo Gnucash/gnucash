@@ -508,7 +508,7 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
         if (flen != 0)
             break;
     }
-    /* FALLTHROUGH */
+    /* FALL THROUGH */
     case QOF_DATE_FORMAT_ISO:
     case QOF_DATE_FORMAT_UTC:
         flen = g_snprintf (buff, len, "%04d-%02d-%02d", year, month, day);

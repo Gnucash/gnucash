@@ -157,14 +157,6 @@ gnc_exp_parser_shutdown (void)
     parser_inited = FALSE;
 }
 
-static void
-prepend_name (gpointer key, gpointer value, gpointer data)
-{
-    GList **list = data;
-
-    *list = g_list_prepend (*list, key);
-}
-
 void
 gnc_exp_parser_remove_variable (const char *variable_name)
 {

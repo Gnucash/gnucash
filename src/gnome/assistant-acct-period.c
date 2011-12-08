@@ -84,7 +84,6 @@ typedef struct
 
 /* =============================================================== */
 
-void     ap_assistant_window_destroy_cb (GtkObject *object, gpointer user_data);
 void     ap_assistant_prepare           (GtkAssistant  *assistant, GtkWidget *page,
         gpointer user_data);
 void     ap_assistant_menu_prepare      (GtkAssistant *assistant, gpointer user_data);
@@ -194,6 +193,7 @@ get_close_status_str (AcctPeriodInfo *info)
         break;
     default:
         str = "";
+        break;
     }
     return str;
 }
@@ -456,18 +456,6 @@ ap_validate_menu (GtkAssistant *assistant, gpointer user_data)
         return FALSE;
     }
     return TRUE;
-}
-
-/* =============================================================== */
-
-static void
-scrub_all(void)
-{
-    Account *root = gnc_get_current_root_account ();
-    xaccAccountTreeScrubOrphans (root);
-    xaccAccountTreeScrubImbalance (root);
-    // XXX: Lots are disabled
-    // xaccAccountTreeScrubLots (root);
 }
 
 /* =============================================================== */

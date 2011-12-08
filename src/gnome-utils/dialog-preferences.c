@@ -85,9 +85,6 @@
 static QofLogModule log_module = GNC_MOD_PREFS;
 
 void gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused);
-void gnc_reset_warnings_select_all_cb (GtkButton *button, gpointer user_data);
-void gnc_reset_warnings_unselect_all_cb (GtkButton *button, gpointer user_data);
-void gnc_reset_warnings_response_cb (GtkDialog *dialog, gint arg1, gpointer user_data);
 
 
 /** This data structure holds the information for a single addition to

@@ -295,6 +295,7 @@ xaccQueryAddAccountGUIDMatch(QofQuery *q, AccountGUIDList *guid_list,
         break;
     default:
         PERR ("Invalid match type: %d", how);
+        break;
     }
 
     qof_query_add_term (q, param_list, pred_data, op);

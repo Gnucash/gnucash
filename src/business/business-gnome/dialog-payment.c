@@ -814,26 +814,15 @@ static Split *getFirstAPARAccountSplit(SplitList* slist)
         return NULL;
 }
 
-static gint predicate_not_equal(gconstpointer a,
-                                gconstpointer user_data)
-{
-    return (a != user_data);
-}
-static Split *getFirstOtherSplit(SplitList* slist, const Split *postaccount_split)
-{
-    GList *r = g_list_find_custom(slist, postaccount_split, &predicate_not_equal);
-    if (r)
-        return r->data;
-    else
-        return NULL;
-}
-
 // ///////////////
 
 gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
 {
     SplitList *slist;
     gboolean result = TRUE;
+
+    Split *assetaccount_split;
+    gnc_numeric amount;
 
     if (!txn)
         return result;
@@ -850,13 +839,11 @@ gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
         return result;
     }
 
-    {
-        Split *assetaccount_split = getFirstAssetAccountSplit(slist);
-        gnc_numeric amount = xaccSplitGetValue(assetaccount_split);
-        gboolean result = gnc_numeric_positive_p(amount); // positive amounts == customer
-        //g_message("Amount=%s", gnc_numeric_to_string(amount));
-        return result;
-    }
+    assetaccount_split = getFirstAssetAccountSplit(slist);
+    amount = xaccSplitGetValue(assetaccount_split);
+    result = gnc_numeric_positive_p(amount); // positive amounts == customer
+    //g_message("Amount=%s", gnc_numeric_to_string(amount));
+    return result;
 }
 
 // ///////////////
@@ -865,6 +852,11 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
 {
     SplitList *slist;
 
+    Split *assetaccount_split;
+    Split *postaccount_split;
+    gnc_numeric amount;
+    PaymentWindow *pw;
+
     if (!txn)
         return NULL;
 
@@ -880,29 +872,27 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
         return NULL;
     }
 
+    assetaccount_split = getFirstAssetAccountSplit(slist);
+    postaccount_split = getFirstAPARAccountSplit(slist); // watch out: Might be NULL
+    amount = xaccSplitGetValue(assetaccount_split);
+
+    pw = gnc_ui_payment_new(owner,
+                            qof_instance_get_book(QOF_INSTANCE(txn)));
+    g_assert(assetaccount_split); // we can rely on this because of the countAssetAccounts() check above
+    //g_message("Amount=%s", gnc_numeric_to_string(amount));
+
+    // Fill in the values from the given txn
+    pw->pre_existing_txn = txn;
+    gnc_ui_payment_window_set_num(pw, xaccTransGetNum(txn));
+    gnc_ui_payment_window_set_memo(pw, xaccTransGetDescription(txn));
     {
-        Split *assetaccount_split = getFirstAssetAccountSplit(slist);
-        Split *postaccount_split = getFirstAPARAccountSplit(slist); // watch out: Might be NULL
-        gnc_numeric amount = xaccSplitGetValue(assetaccount_split);
-
-        PaymentWindow *pw = gnc_ui_payment_new(owner,
-                                               qof_instance_get_book(QOF_INSTANCE(txn)));
-        g_assert(assetaccount_split); // we can rely on this because of the countAssetAccounts() check above
-        //g_message("Amount=%s", gnc_numeric_to_string(amount));
-
-        // Fill in the values from the given txn
-        pw->pre_existing_txn = txn;
-        gnc_ui_payment_window_set_num(pw, xaccTransGetNum(txn));
-        gnc_ui_payment_window_set_memo(pw, xaccTransGetDescription(txn));
-        {
-            GDate txn_date = xaccTransGetDatePostedGDate (txn);
-            gnc_ui_payment_window_set_date(pw, &txn_date);
-        }
-        gnc_ui_payment_window_set_amount(pw, gnc_numeric_abs(amount));
-        gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(assetaccount_split));
-        if (postaccount_split)
-            gnc_ui_payment_window_set_postaccount(pw, xaccSplitGetAccount(postaccount_split));
-
-        return pw;
+        GDate txn_date = xaccTransGetDatePostedGDate (txn);
+        gnc_ui_payment_window_set_date(pw, &txn_date);
     }
+    gnc_ui_payment_window_set_amount(pw, gnc_numeric_abs(amount));
+    gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(assetaccount_split));
+    if (postaccount_split)
+        gnc_ui_payment_window_set_postaccount(pw, xaccSplitGetAccount(postaccount_split));
+
+    return pw;
 }

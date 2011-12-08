@@ -855,7 +855,7 @@ static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
         if (gncEntryGetInvoice (entry) != NULL)
             return XACC_CELL_ALLOW_SHADOW;
     }
-    /* FALLTHROUGH */
+    /* FALL THROUGH */
     default:
         return XACC_CELL_ALLOW_ALL;
     }
@@ -887,7 +887,7 @@ static CellIOFlags get_inv_io_flags (VirtualLocation virt_loc,
             return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
 
     }
-    /* FALLTHROUGH */
+    /* FALL THROUGH */
     default:
         return XACC_CELL_ALLOW_SHADOW;
     }

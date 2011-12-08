@@ -1005,6 +1005,7 @@ gnc_invoice_window_sort (InvoiceWindow *iw, invoice_sort_type_t sort_code)
     default:
         g_slist_free (standard);
         g_return_if_fail (FALSE);
+        break;
     }
 
     qof_query_set_sort_order (query, p1, p2, p3);
@@ -2191,6 +2192,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
             break;
         default:
             g_warning ("Invalid owner type");
+            break;
         }
         break;
     case VIEW_INVOICE:
@@ -2214,7 +2216,9 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
             break;
         default:
             g_warning ("Invalid owner type");
+            break;
         }
+        break;
     }
     entry_ledger = gnc_entry_ledger_new (iw->book, ledger_type);
 
@@ -2959,6 +2963,8 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     QofQueryPredData* pred_data;
     time_t end_date;
     GList *res;
+    gchar *message;
+    DialogQueryList *dialog;
     gint len;
     Timespec ts;
     static GList *param_list = NULL;
@@ -3023,24 +3029,22 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
         return NULL;
     }
 
-    {
-        gchar *message = g_strdup_printf
-                         (/* Translators: %d is the number of bills due. This is a
-	                         ngettext(3) message. */
-                             ngettext("The following %d bill is due:",
-                                      "The following %d bills are due:",
-                                      len),
-                             len);
-        DialogQueryList *dialog =
-            gnc_dialog_query_list_create(param_list, q,
-                                         _("Due Bills Reminder"),
-                                         message,
-                                         TRUE, FALSE,
-                                         buttons, NULL);
-        g_free(message);
-        qof_query_destroy(q);
-        return dialog;
-    }
+    message = g_strdup_printf
+                 (/* Translators: %d is the number of bills due. This is a
+                     ngettext(3) message. */
+                     ngettext("The following %d bill is due:",
+                              "The following %d bills are due:",
+                              len),
+                     len);
+    dialog = gnc_dialog_query_list_create(param_list, q,
+                                          _("Due Bills Reminder"),
+                                          message,
+                                          TRUE, FALSE,
+                                          buttons, NULL);
+    g_free(message);
+    qof_query_destroy(q);
+    return dialog;
+
 }
 
 void

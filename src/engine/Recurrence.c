@@ -198,7 +198,8 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
     switch (pt)
     {
     case PERIOD_YEAR:
-        mult *= 12;             /* fall-through */
+        mult *= 12;
+        /* fall through */
     case PERIOD_MONTH:
     case PERIOD_NTH_WEEKDAY:
     case PERIOD_LAST_WEEKDAY:
@@ -281,7 +282,8 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
             g_date_add_months(next, mult - 1);
         break;
     case PERIOD_WEEK:
-        mult *= 7;              /* fall-through */
+        mult *= 7;
+        /* fall through */
     case PERIOD_DAY:
         g_date_add_days(next, mult);
         break;
@@ -290,6 +292,7 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
         return;                 /* earlier than start, so this is invalid. */
     default:
         PERR("Invalid period type");
+        break;
     }
 
     /* Step 2: Back up to align to the base phase. To ensure forward
@@ -356,6 +359,7 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
         break;
     default:
         PERR("Invalid period type");
+        break;
     }
 }
 
@@ -814,6 +818,7 @@ recurrenceCmp(Recurrence *a, Recurrence *b)
 {
     PeriodType period_a, period_b;
     int a_order_index, b_order_index;
+    int a_mult, b_mult;
 
     g_return_val_if_fail(a != NULL && b != NULL, 0);
     g_return_val_if_fail(a != NULL, 1);
@@ -839,13 +844,10 @@ recurrenceCmp(Recurrence *a, Recurrence *b)
     }
     /* else { the basic periods are equal; compare the multipliers } */
 
-    {
-        int a_mult, b_mult;
-        a_mult = recurrenceGetMultiplier(a);
-        b_mult = recurrenceGetMultiplier(b);
+    a_mult = recurrenceGetMultiplier(a);
+    b_mult = recurrenceGetMultiplier(b);
 
-        return a_mult - b_mult;
-    }
+    return a_mult - b_mult;
 }
 
 int

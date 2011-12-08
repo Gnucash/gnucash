@@ -348,13 +348,13 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     {
     case SEARCH_STRING_MATCHES_REGEX:
         is_regex = TRUE;
-        /* FALLTHROUGH */
+        /* FALL THROUGH */
     case SEARCH_STRING_CONTAINS:
         how = QOF_COMPARE_EQUAL;
         break;
     case SEARCH_STRING_NOT_MATCHES_REGEX:
         is_regex = TRUE;
-        /* FALLTHROUGH */
+        /* FALL THROUGH */
     case SEARCH_STRING_NOT_CONTAINS:
         how = QOF_COMPARE_NEQ;
         break;

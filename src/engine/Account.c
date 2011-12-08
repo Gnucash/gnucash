@@ -453,6 +453,7 @@ gnc_account_set_property (GObject         *object,
     case PROP_TAX_SOURCE:
         xaccAccountSetTaxUSPayerNameSource(account,
                                            g_value_get_string(value));
+        break;
     case PROP_TAX_COPY_NUMBER:
         xaccAccountSetTaxUSCopyNumber(account,
                                       g_value_get_int64(value));

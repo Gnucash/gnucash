@@ -307,7 +307,7 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         close_accounts_of_type(cbw, expense_acct, ACCT_TYPE_EXPENSE);
         gnc_resume_gui_refresh();
 
-        /* FALLTHROUGH */
+        /* FALL THROUGH */
     default:
         gtk_widget_destroy(GTK_WIDGET(dialog));
         break;

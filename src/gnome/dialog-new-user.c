@@ -110,24 +110,23 @@ gnc_ui_new_user_dialog (void)
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button)))
         {
             gnc_ui_hierarchy_assistant_with_callback(TRUE, after_hierarchy_assistant);
-            break;
         }
         else if ((qifImportAssistantFcn != NULL)
                  && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button)))
         {
             qifImportAssistantFcn();
             gncp_new_user_finish ();
-            break;
         }
         else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button)))
         {
             gnc_gnome_help (HF_GUIDE, NULL);
             gncp_new_user_finish ();
-            break;
         }
+        break;
     default:
         g_print ("DEBUG: Response: %d", result);
         g_assert_not_reached ();
+        break;
     }
 
     g_object_unref(G_OBJECT(builder));

@@ -179,6 +179,7 @@ static void gnc_dialog_response_cb(GtkDialog *dlg,
 
         if (success)
             gtk_widget_destroy(GTK_WIDGET(dlg));
+        break;
     }
 }
 

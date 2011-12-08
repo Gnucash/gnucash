@@ -596,7 +596,8 @@ gnc_file_query_save (gboolean can_cancel)
         default:
             if (can_cancel)
                 return FALSE;
-            /* No cancel function available.  Fall through. */
+            /* No cancel function available. */
+            /* Fall through */
 
         case GTK_RESPONSE_OK:
             return TRUE;

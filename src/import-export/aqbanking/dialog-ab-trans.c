@@ -191,6 +191,7 @@ ab_trans_fill_values(GncABTransDialog *td)
     default:
         /* AB_Transaction_SetTransactionCode (trans, 51); */
         AB_Transaction_SetTextKey (trans, 51);
+        break;
     }
 
     return trans;
@@ -324,6 +325,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     default:
         g_critical("gnc_ab_trans_dialog_new: Oops, unknown GncABTransType %d",
                    trans_type);
+    break;
     }
 
     gtk_label_set_text(GTK_LABEL(orig_name_label), ab_ownername);
@@ -644,6 +646,7 @@ get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType trans_type)
     case SINGLE_TRANSFER:
     default:
         job = AB_JobSingleTransfer_new(ab_acc);
+        break;
     };
 
     if (!job || AB_Job_CheckAvailability(job
@@ -687,6 +690,7 @@ gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
         case SINGLE_TRANSFER:
         default:
             AB_JobSingleTransfer_SetTransaction(job, ab_trans);
+            break;
         };
     }
     return job;
