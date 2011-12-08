@@ -808,7 +808,7 @@ gnc_plugin_page_set_page_name (GncPluginPage *page, const gchar *name)
 
 
 /*  Retrieve the long name of this page.  This is the string used in
- *  the tooltip that is attached to the pate name in the notebook
+ *  the tooltip that is attached to the page name in the notebook
  *  tab. */
 const gchar *
 gnc_plugin_page_get_page_long_name (GncPluginPage *page)

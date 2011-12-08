@@ -65,14 +65,6 @@ gnc_option_menu_cb(GtkWidget *w, gpointer data)
     cb(w, index, data);
 }
 
-static void
-option_menu_destroy_cb (GtkObject *obj, gpointer data)
-{
-    GtkTooltips *tips = data;
-
-    g_object_unref (tips);
-}
-
 /********************************************************************\
  * gnc_build_option_menu:                                           *
  *   create an GTK "option menu" given the option structure         *
@@ -84,7 +76,6 @@ option_menu_destroy_cb (GtkObject *obj, gpointer data)
 GtkWidget *
 gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 {
-    GtkTooltips *tooltips;
     GtkWidget *omenu;
     GtkWidget *menu;
     GtkWidget *menu_item;
@@ -96,14 +87,10 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
     menu = gtk_menu_new();
     gtk_widget_show(menu);
 
-    tooltips = gtk_tooltips_new();
-
-    g_object_ref_sink(tooltips);
-
     for (i = 0; i < num_options; i++)
     {
         menu_item = gtk_menu_item_new_with_label(option_info[i].name);
-        gtk_tooltips_set_tip(tooltips, menu_item, option_info[i].tip, NULL);
+        gtk_widget_set_tooltip_text(menu_item, option_info[i].tip);
         gtk_widget_show(menu_item);
 
         g_object_set_data(G_OBJECT(menu_item),
@@ -127,9 +114,6 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
     }
 
     gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), menu);
-
-    g_signal_connect (omenu, "destroy",
-                      G_CALLBACK (option_menu_destroy_cb), tooltips);
 
     return omenu;
 }

@@ -117,8 +117,6 @@ static void gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
 
 typedef struct GncTreeViewPrivate
 {
-    GtkTooltips       *title_tips;
-
     /*  Spacer column */
     GtkTreeViewColumn *spacer_column;
     GtkTreeViewColumn *selection_column;
@@ -1929,9 +1927,7 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
     gnc_tree_view_append_column (view, column);
 
     /* Also add the full title to the object as a tooltip */
-    if (!priv->title_tips)
-        priv->title_tips = gtk_tooltips_new();
-    gtk_tooltips_set_tip(priv->title_tips, column->button, column_title, NULL);
+    gtk_widget_set_tooltip_text(column->button, column_title);
 
     return column;
 }

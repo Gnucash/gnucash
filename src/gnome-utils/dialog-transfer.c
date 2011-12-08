@@ -115,8 +115,6 @@ struct _xferDialog
 
     GtkWidget * fetch_button;
 
-    GtkTooltips *tips;
-
     QofBook *	book;
     GNCPriceDB *	pricedb;
 
@@ -570,7 +568,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-    gtk_tooltips_set_tip (xferData->tips, GTK_WIDGET (button), show_inc_exp_message, NULL);
+    gtk_widget_set_tooltip_text (button, show_inc_exp_message);
 
     if (direction == XFER_DIALOG_TO)
     {
@@ -1624,8 +1622,6 @@ gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data)
     g_signal_handlers_disconnect_matched (G_OBJECT (entry), G_SIGNAL_MATCH_DATA,
                                           0, 0, NULL, NULL, xferData);
 
-    g_object_unref (xferData->tips);
-
     DEBUG("unregister component");
     gnc_unregister_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 
@@ -1714,10 +1710,6 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     /* parent */
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (xferData->dialog), GTK_WINDOW (parent));
-
-    xferData->tips = gtk_tooltips_new();
-
-    g_object_ref_sink(xferData->tips);
 
     /* default to quickfilling off of the "From" account. */
     xferData->quickfill = XFER_DIALOG_FROM;

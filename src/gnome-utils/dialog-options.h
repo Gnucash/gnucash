@@ -76,28 +76,27 @@ void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
 
 /* Function to set the UI widget based upon the option */
 typedef GtkWidget *
-(*GNCOptionUISetWidget)	(GNCOption *option, GtkBox *page_box,
-                         GtkTooltips *tooltips,
+(*GNCOptionUISetWidget) (GNCOption *option, GtkBox *page_box,
                          char *name, char *documentation,
                          /* Return values */
                          GtkWidget **enclosing, gboolean *packed);
 
 /* Function to set the UI Value for a particular option */
 typedef gboolean
-(*GNCOptionUISetValue)	(GNCOption *option, gboolean use_default,
+(*GNCOptionUISetValue)  (GNCOption *option, gboolean use_default,
                          GtkWidget *widget, SCM value);
 
 /* Function to get the UI Value for a particular option */
 typedef SCM
-(*GNCOptionUIGetValue)	(GNCOption *option, GtkWidget *widget);
+(*GNCOptionUIGetValue)  (GNCOption *option, GtkWidget *widget);
 
 
 typedef struct gnc_option_def
 {
-    const char *		option_name;
-    GNCOptionUISetWidget	set_widget;
-    GNCOptionUISetValue	set_value;
-    GNCOptionUIGetValue	get_value;
+    const char *         option_name;
+    GNCOptionUISetWidget set_widget;
+    GNCOptionUISetValue  set_value;
+    GNCOptionUIGetValue  get_value;
 } GNCOptionDef_t;
 
 

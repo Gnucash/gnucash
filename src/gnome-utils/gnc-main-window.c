@@ -461,11 +461,6 @@ static const gchar *multiple_page_actions[] =
 };
 
 
-/* This data structure holds the tooltops for all notebook tabs.
- * Typically these are used to provide the full path of a register
- * page. */
-static GtkTooltips *tips = NULL;
-
 /************************************************************
  *                                                          *
  ************************************************************/
@@ -1962,7 +1957,7 @@ main_window_update_page_name (GncPluginPage *page,
         gnc_plugin_page_set_page_long_name(page, new_page_long_name);
 
         if (main_window_find_tab_event(window, page, &event_box))
-            gtk_tooltips_set_tip(GTK_TOOLTIPS(tips), event_box, new_page_long_name, NULL);
+            gtk_widget_set_tooltip_text(event_box, new_page_long_name);
 
         g_free(new_page_long_name);
     }
@@ -2231,7 +2226,6 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
     gnc_hook_add_dangler(HOOK_BOOK_OPENED,
                          (GFunc)gnc_main_window_attach_to_book, NULL);
 
-    tips = gtk_tooltips_new();
 }
 
 
@@ -2658,7 +2652,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     text = gnc_plugin_page_get_page_long_name(page);
     if (text)
     {
-        gtk_tooltips_set_tip(tips, event_box, text, NULL);
+        gtk_widget_set_tooltip_text(event_box, text);
     }
 
     entry = gtk_entry_new();

@@ -107,7 +107,6 @@ get_owner_type_from_option (GNCOption *option)
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
 owner_set_widget (GNCOption *option, GtkBox *page_box,
-                  GtkTooltips *tooltips,
                   char *name, char *documentation,
                   /* Return values */
                   GtkWidget **enclosing, gboolean *packed)
@@ -177,7 +176,6 @@ owner_get_value (GNCOption *option, GtkWidget *widget)
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
 customer_set_widget (GNCOption *option, GtkBox *page_box,
-                     GtkTooltips *tooltips,
                      char *name, char *documentation,
                      /* Return values */
                      GtkWidget **enclosing, gboolean *packed)
@@ -236,7 +234,6 @@ customer_get_value (GNCOption *option, GtkWidget *widget)
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
 vendor_set_widget (GNCOption *option, GtkBox *page_box,
-                   GtkTooltips *tooltips,
                    char *name, char *documentation,
                    /* Return values */
                    GtkWidget **enclosing, gboolean *packed)
@@ -294,7 +291,6 @@ vendor_get_value (GNCOption *option, GtkWidget *widget)
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
 employee_set_widget (GNCOption *option, GtkBox *page_box,
-                     GtkTooltips *tooltips,
                      char *name, char *documentation,
                      /* Return values */
                      GtkWidget **enclosing, gboolean *packed)
@@ -369,7 +365,6 @@ create_invoice_widget (GNCOption *option, GtkWidget *hbox)
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
 invoice_set_widget (GNCOption *option, GtkBox *page_box,
-                    GtkTooltips *tooltips,
                     char *name, char *documentation,
                     /* Return values */
                     GtkWidget **enclosing, gboolean *packed)
@@ -448,7 +443,6 @@ create_taxtable_widget (GNCOption *option, GtkWidget *hbox)
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
 taxtable_set_widget (GNCOption *option, GtkBox *page_box,
-                     GtkTooltips *tooltips,
                      char *name, char *documentation,
                      /* Return values */
                      GtkWidget **enclosing, gboolean *packed)

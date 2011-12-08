@@ -56,7 +56,6 @@ void billterms_type_combobox_changed (GtkComboBox *cb, gpointer data);
 
 typedef struct _billterm_notebook
 {
-    GtkTooltips *		tooltips;
     GtkWidget *		notebook;
 
     /* "Days" widgets */
@@ -124,9 +123,6 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
 {
     GladeXML *xml;
     GtkWidget *parent;
-
-    /* Initialize the tooltips */
-    notebook->tooltips = gtk_tooltips_new ();
 
     /* Load the notebook from XML */
     xml = gnc_glade_xml_new ("billterms.glade", "Term Notebook");

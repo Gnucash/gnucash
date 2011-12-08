@@ -298,16 +298,7 @@ gnc_reset_warnings_add_one (RWDialog *rw_dialog, GConfEntry *entry, GtkWidget *b
         long_desc = gconf_schema_get_long_desc(schema);
         checkbox = gtk_check_button_new_with_label(desc ? desc : name);
         if (long_desc)
-        {
-            GtkTooltips *tips;
-            tips = g_object_get_data(G_OBJECT(box), TIPS_STRING);
-            if (!tips)
-            {
-                tips = gtk_tooltips_new();
-                g_object_set_data(G_OBJECT(box), TIPS_STRING, tips);
-            }
-            gtk_tooltips_set_tip(tips, checkbox, long_desc, NULL);
-        }
+            gtk_widget_set_tooltip_text(checkbox, long_desc);
         gconf_schema_free(schema);
     }
     else
