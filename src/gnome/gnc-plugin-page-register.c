@@ -930,7 +930,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     
         gnc_split_reg_set_sort_type(priv->gsr, SortTypefromString(order));
     
-        if (order && (strcmp (order, DEFAULT_SORT_ORDER) != 0))
+        if (order && (g_strcmp0 (order, DEFAULT_SORT_ORDER) != 0))
             priv->sd.save_order = TRUE;
     
         priv->sd.original_save_order = priv->sd.save_order;
@@ -945,25 +945,25 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     
         priv->fd.cleared_match = (gint)g_ascii_strtoll( filter[0], NULL, 16 );
     
-        if (filter[0] && (strcmp (filter[0], DEFAULT_FILTER) != 0))
+        if (filter[0] && (g_strcmp0 (filter[0], DEFAULT_FILTER) != 0))
             filter_changed = filter_changed + 1;
     
-        if (filter[1] && (strcmp (filter[1],"0") != 0 ))
+        if (filter[1] && (g_strcmp0 (filter[1],"0") != 0 ))
         {
             PINFO("Loaded Filter Start Date is %s", filter[1]);
     
             priv->fd.start_time = gnc_plugin_page_register_filter_dmy2time( filter[1] );
             priv->fd.start_time = gnc_timet_get_day_start(priv->fd.start_time);
             filter_changed = filter_changed + 1;
-        }
-    
-        if (filter[2] && (strcmp (filter[2],"0") != 0 ))
-        {
-            PINFO("Loaded Filter End Date is %s", filter[2]);
 
-            priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time( filter[2] );
-            priv->fd.end_time = gnc_timet_get_day_end(priv->fd.end_time);
-            filter_changed = filter_changed + 1;
+            if (filter[2] && (g_strcmp0 (filter[2],"0") != 0 ))
+            {
+                PINFO("Loaded Filter End Date is %s", filter[2]);
+    
+                priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time( filter[2] );
+                priv->fd.end_time = gnc_timet_get_day_end(priv->fd.end_time);
+                filter_changed = filter_changed + 1;
+            }
         }
     
         if(filter_changed != 0)
@@ -1426,6 +1426,7 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
         default:
             break;
         }
+        break;
 
     default:
         break;
@@ -1504,7 +1505,7 @@ gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *fi
     {
         default_filter = g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
     
-        if (!filter || (strcmp (filter, default_filter) == 0))
+        if (!filter || (g_strcmp0 (filter, default_filter) == 0))
             xaccAccountSetFilter (leader, NULL);
         else
             xaccAccountSetFilter (leader, filter);
@@ -1557,7 +1558,7 @@ gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar
     
     if (leader != NULL)
     {
-        if (!sort_order || (strcmp (sort_order, DEFAULT_SORT_ORDER) == 0))
+        if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
             xaccAccountSetSortOrder (leader, NULL);
         else
             xaccAccountSetSortOrder (leader, sort_order);
@@ -1919,7 +1920,7 @@ gnc_plugin_page_register_filter_status_one_cb (GtkToggleButton *button,
     value = CLEARED_NONE;
     for (i = 0; status_actions[i].action_name; i++)
     {
-        if (strcmp(name, status_actions[i].action_name) == 0)
+        if (g_strcmp0(name, status_actions[i].action_name) == 0)
         {
             value = status_actions[i].value;
             break;
@@ -2138,7 +2139,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget *radio,
     }
 
     name = gtk_buildable_get_name(GTK_BUILDABLE(radio));
-    active = ( strcmp(name, g_strdup("start_date_choose")) == 0 ? 1 : 0 );
+    active = ( g_strcmp0(name, g_strdup("start_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.start_date, active);
     get_filter_times(page);
     gnc_ppr_update_date_query(page);
@@ -2185,7 +2186,7 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget *radio,
     }
 
     name = gtk_buildable_get_name(GTK_BUILDABLE(radio));
-    active = ( strcmp(name, g_strdup("end_date_choose")) == 0 ? 1 : 0 );
+    active = ( g_strcmp0(name, g_strdup("end_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.end_date, active);
     get_filter_times(page);
     gnc_ppr_update_date_query(page);
