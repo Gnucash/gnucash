@@ -31,7 +31,7 @@ if %_perlmajor% equ 5 (
 )
 echo.
 echo Did not find a usable perl.
-echo Please install ActivePerl 5.8, 5.10 or 5.12 (http://www.activestate.com/store/activeperl)
+echo Please install ActivePerl 5.8, or above (http://www.activestate.com/store/activeperl)
 echo and add the bin directory to your Path environment variable.
 goto error
 :ccp
