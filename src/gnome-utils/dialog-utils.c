@@ -59,10 +59,14 @@ gnc_option_menu_cb(GtkWidget *w, gpointer data)
 
     cb = g_object_get_data(G_OBJECT(w), "gnc_option_cb");
 
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
+    cb(w, data);
+#else
     _index = g_object_get_data(G_OBJECT(w), "gnc_option_index");
     index = GPOINTER_TO_INT(_index);
 
     cb(w, index, data);
+#endif
 }
 
 /********************************************************************\

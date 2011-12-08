@@ -37,12 +37,19 @@
 
 #define MAX_CHOICES 6
 
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
+static void
+choice_option_changed (GtkWidget *widget, gpointer index_p)
+{
+}
+#else
 static void
 choice_option_changed (GtkWidget *widget, gint index, gpointer index_p)
 {
     gint *my_index = index_p;
     *my_index = index;
 }
+#endif
 
 static GncImportFormat
 add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat fmt)
