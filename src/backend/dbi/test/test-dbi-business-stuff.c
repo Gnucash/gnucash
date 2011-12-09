@@ -194,7 +194,12 @@ test_dbi_business_store_and_reload( const gchar* driver, QofSession* session_1, 
     QofSession* session_2;
     QofSession* session_3;
 
-    printf( "Testing %s\n", driver );
+    gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
+    gchar *log_domain = "gnc.backend.dbi";
+    guint loglevel = G_LOG_LEVEL_WARNING, hdlr;
+    TestErrorStruct check = { loglevel, log_domain, msg };
+
+    g_test_message ( "Testing %s\n", driver );
 
     // Save the session data
     session_2 = qof_session_new();
@@ -213,7 +218,10 @@ test_dbi_business_store_and_reload( const gchar* driver, QofSession* session_1, 
     qof_session_destroy( session_1 );
     qof_session_end( session_2 );
     qof_session_destroy( session_2 );
-    g_print(" You may ignore the warning about the lock file having no entries: We had to ignore locking to run two sessions on the same database\n");
+
+    hdlr = g_log_set_handler (log_domain, loglevel,
+			      (GLogFunc)test_checked_handler, &check);
     qof_session_end( session_3 );
+    g_log_remove_handler (log_domain, hdlr);
     qof_session_destroy( session_3 );
 }

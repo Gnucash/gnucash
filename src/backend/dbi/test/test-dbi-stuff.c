@@ -139,7 +139,7 @@ test_conn_get_index_list( QofBackend *qbe )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
     GSList *index_list = ((GncDbiSqlConnection*)(be->sql_be.conn))->provider->get_index_list( be->conn );
-    g_print ( "Returned from index list\n");
+    g_test_message ( "Returned from index list\n");
     if ( index_list == NULL )
     {
         do_test( FALSE, "Index List Test -- No List" );
@@ -170,10 +170,17 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     QofSession* session_2;
     QofSession* session_3;
 
-    printf( "Testing %s\n", driver );
+    gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
+    gchar *log_domain = "gnc.backend.dbi";
+    guint loglevel = G_LOG_LEVEL_WARNING, hdlr;
+    TestErrorStruct check = { loglevel, log_domain, msg };
+
+    g_test_message ( "Testing %s\n", driver );
 
     // Save the session data
     session_2 = qof_session_new();
+    hdlr = g_log_set_handler (log_domain, loglevel,
+			       (GLogFunc)test_checked_handler, &check);
     qof_session_begin( session_2, url, FALSE, TRUE, TRUE );
     if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
     {
@@ -212,9 +219,9 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     qof_session_destroy( session_1 );
     qof_session_end( session_2 );
     qof_session_destroy( session_2 );
-    g_print(" You may ignore the warning about the lock file having no entries: We had to ignore locking to run two sessions on the same database\n");
     qof_session_end( session_3 );
     qof_session_destroy( session_3 );
+    g_log_remove_handler (log_domain, hdlr);
 }
 
 /* Given an already-created url (yeah, bad testing practice: Should
@@ -229,7 +236,12 @@ test_dbi_safe_save( const gchar* driver,  const gchar* url )
 {
     QofSession *session_1 = NULL, *session_2 = NULL;
 
-    printf( "Testing safe save %s\n", driver );
+    gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
+    gchar *log_domain = "gnc.backend.dbi";
+    guint loglevel = G_LOG_LEVEL_WARNING, hdlr;
+    TestErrorStruct check = { loglevel, log_domain, msg };
+
+    g_test_message ( "Testing safe save %s\n", driver );
 
     // Load the session data
     session_1 = qof_session_new();
@@ -266,6 +278,8 @@ test_dbi_safe_save( const gchar* driver,  const gchar* url )
                    qof_session_get_book( session_2 ) );
 
 cleanup:
+    hdlr = g_log_set_handler (log_domain, loglevel,
+			       (GLogFunc)test_checked_handler, &check);
     if (session_2 != NULL)
     {
         qof_session_end( session_2 );
@@ -276,6 +290,7 @@ cleanup:
         qof_session_end( session_1 );
         qof_session_destroy( session_1 );
     }
+    g_log_remove_handler (log_domain, hdlr);
     return;
 }
 
@@ -293,7 +308,7 @@ test_dbi_version_control( const gchar* driver,  const gchar* url )
     QofBackendError err;
     gint ourversion = gnc_get_long_version();
 
-    printf( "Testing safe save %s\n", driver );
+    g_test_message ( "Testing safe save %s\n", driver );
 
     // Load the session data
     sess = qof_session_new();

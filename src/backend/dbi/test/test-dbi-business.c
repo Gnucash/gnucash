@@ -167,16 +167,16 @@ int main (int argc, char ** argv)
     // Create a session with data
     session_1 = create_session();
     filename = tempnam( "/tmp", "test-sqlite3-" );
-    printf( "Using filename: %s\n", filename );
+    g_test_message ( "Using filename: %s\n", filename );
     test_dbi_business_store_and_reload( "sqlite3", session_1, filename );
 #if 0
-    printf( "TEST_MYSQL_URL='%s'\n", TEST_MYSQL_URL );
+    g_test_message ( "TEST_MYSQL_URL='%s'\n", TEST_MYSQL_URL );
     if ( strlen( TEST_MYSQL_URL ) > 0 )
     {
         session_1 = create_session();
         test_dbi_store_and_reload( "mysql", session_1, TEST_MYSQL_URL );
     }
-    printf( "TEST_PGSQL_URL='%s'\n", TEST_PGSQL_URL );
+    g_test_message ( "TEST_PGSQL_URL='%s'\n", TEST_PGSQL_URL );
     if ( strlen( TEST_PGSQL_URL ) > 0 )
     {
         session_1 = create_session();

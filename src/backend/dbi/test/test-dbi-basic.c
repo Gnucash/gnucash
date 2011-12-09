@@ -42,19 +42,27 @@
 static QofSession*
 create_session(void)
 {
-    QofSession* session = qof_session_new();
-    QofBook* book = qof_session_get_book( session );
-    Account* root = gnc_book_get_root_account( book );
-    Account* acct1;
-    Account* acct2;
+    QofSession* session;
+    QofBook* book;
+    Account *root, *acct1, *acct2;
     KvpFrame* frame;
     Transaction* tx;
-    Split* spl1;
-    Split* spl2;
+    Split *spl1, *spl2;
     Timespec ts;
     struct timeval tv;
     gnc_commodity_table* table;
     gnc_commodity* currency;
+    gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
+    gchar *log_domain = "gnc.backend.dbi";
+    guint loglevel = G_LOG_LEVEL_WARNING, hdlr;
+    TestErrorStruct check = { loglevel, log_domain, msg };
+    hdlr = g_log_set_handler (log_domain, loglevel,
+			      (GLogFunc)test_checked_handler, &check);
+
+    session = qof_session_new();
+    book = qof_session_get_book( session );
+    root = gnc_book_get_root_account( book );
+    g_log_remove_handler (log_domain, hdlr);
 
     table = gnc_commodity_table_get_table( book );
     currency = gnc_commodity_table_lookup( table, GNC_COMMODITY_NS_CURRENCY, "CAD" );
@@ -110,13 +118,13 @@ int main (int argc, char ** argv)
     // Create a session with data
     session_1 = create_session();
     filename = tempnam( "/tmp", "test-sqlite3-" );
-    printf( "Using filename: %s\n", filename );
+    g_test_message ( "Using filename: %s\n", filename );
     test_dbi_store_and_reload( "sqlite3", session_1, filename );
     session_1 = create_session();
     test_dbi_safe_save( "sqlite3", filename );
     test_dbi_version_control( "sqlite3", filename );
 #ifdef TEST_MYSQL_URL
-    printf( "TEST_MYSQL_URL='%s'\n", TEST_MYSQL_URL );
+    g_test_message ( "TEST_MYSQL_URL='%s'\n", TEST_MYSQL_URL );
     if ( strlen( TEST_MYSQL_URL ) > 0 )
     {
         session_1 = create_session();
@@ -127,7 +135,7 @@ int main (int argc, char ** argv)
     }
 #endif
 #ifdef TEST_PGSQL_URL
-    printf( "TEST_PGSQL_URL='%s'\n", TEST_PGSQL_URL );
+    g_test_message ( "TEST_PGSQL_URL='%s'\n", TEST_PGSQL_URL );
     if ( strlen( TEST_PGSQL_URL ) > 0 )
     {
         session_1 = create_session();
