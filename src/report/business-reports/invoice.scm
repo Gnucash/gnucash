@@ -492,7 +492,7 @@
 
 	    (if display-all-taxes
 		(let ((tax-list (gncEntryReturnTaxValues current cust-doc?)))
-		  (update-account-hash acct-hash tax-list))
+		  (update-account-hash acct-hash tax-list credit-note?))
 		(tax-collector 'add
 			       (gnc:gnc-monetary-commodity (cdr entry-values))
 			       (gnc:gnc-monetary-amount (cdr entry-values))))
