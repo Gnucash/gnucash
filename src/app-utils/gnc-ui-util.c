@@ -1174,6 +1174,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     /* rounding? -- can only ROUND if force_fit is also true */
     if (value_is_decimal && info->round && info->force_fit)
     {
+	gnc_numeric oldval = val;
         rounding.num = 5; /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
         rounding.denom = pow(10, max_dp + 1);
         val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);

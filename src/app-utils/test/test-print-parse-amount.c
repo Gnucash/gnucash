@@ -1,12 +1,12 @@
 #include "config.h"
 #include <glib.h>
 #include <stdlib.h>
+#include <glib/gprintf.h>
 
 #include "gnc-ui-util.h"
 #include "gnc-numeric.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
-
 
 static void
 test_num_print_info (gnc_numeric n, GNCPrintAmountInfo print_info, int line)
@@ -15,22 +15,32 @@ test_num_print_info (gnc_numeric n, GNCPrintAmountInfo print_info, int line)
     const char *s;
     gboolean ok, print_ok;
 
+    gchar *msg = "[PrintAmountInternal()] Bad numeric from rounding: GNC_ERROR_OVERFLOW.";
+    gchar *log_domain = "gnc.gui";
+    guint loglevel = G_LOG_LEVEL_WARNING, hdlr;
+    TestErrorStruct check = { loglevel, log_domain, msg };
+
+/* Throws overflows during rounding step in xaccPrintAmount when the "fraction" is high. See bug 665707. */
+    hdlr = g_log_set_handler (log_domain, loglevel,
+			      (GLogFunc)test_checked_handler, &check);
     s = xaccPrintAmount (n, print_info);
-    print_ok = (s && s[0] != '\0');
+     print_ok = (s && s[0] != '\0');
     if (!print_ok)
         return;
 
     ok = xaccParseAmount (s, print_info.monetary, &n_parsed, NULL);
+    g_log_remove_handler (log_domain, hdlr);
+
 
     do_test_args (ok, "parsing failure", __FILE__, __LINE__,
                   "num: %s, string %s (line %d)", gnc_numeric_to_string (n), s, line);
 
     ok = gnc_numeric_equal (n, n_parsed);
-
     do_test_args (ok, "not equal", __FILE__, __LINE__,
                   "start: %s, string %s, finish: %s (line %d)",
                   gnc_numeric_to_string (n), s,
                   gnc_numeric_to_string (n_parsed), line);
+
 }
 
 static void

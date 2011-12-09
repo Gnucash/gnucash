@@ -63,10 +63,16 @@ run_parser_test (TestNode *node)
     gboolean succeeded;
     gnc_numeric result;
     char *error_loc;
+    gchar *msg = "[func_op()] function eval error: [[func_op(]\n";
+    guint loglevel = G_LOG_LEVEL_CRITICAL, hdlr;
+    TestErrorStruct check = { loglevel, "gnc.gui", msg };
 
     result = gnc_numeric_error( -1 );
-    printf("Running test \"%s\" [%s] = ", node->test_name, node->exp);
+    hdlr = g_log_set_handler ("gnc.gui", loglevel,
+			       (GLogFunc)test_checked_handler, &check);
+    g_test_message ("Running test \"%s\" [%s] = ", node->test_name, node->exp);
     succeeded = gnc_exp_parser_parse (node->exp, &result, &error_loc);
+    g_log_remove_handler ("gnc.gui", hdlr);
     {
         int pass;
         pass = (succeeded == node->should_succeed);
@@ -74,9 +80,9 @@ run_parser_test (TestNode *node)
         {
             pass &= gnc_numeric_equal( result, node->expected_result );
         }
-        printf( "%0.4f [%s]\n",
-                gnc_numeric_to_double( result ),
-                (pass ? "PASS" : "FAIL" ) );
+        g_test_message ( "%0.4f [%s]\n",
+			 gnc_numeric_to_double( result ),
+			 (pass ? "PASS" : "FAIL" ) );
     }
 
     if (succeeded != node->should_succeed)
