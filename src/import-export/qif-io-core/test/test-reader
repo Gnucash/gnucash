@@ -1,2 +1,0 @@
-#!/bin/sh
-guile -l ./test-reader.scm -c "(exit (run-test))"

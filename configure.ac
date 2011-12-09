@@ -1376,8 +1376,6 @@ AC_CONFIG_FILES(
   src/import-export/qif/test/Makefile
   src/import-export/qif-import/schemas/Makefile
   src/import-export/qif-import/test/Makefile
-  src/import-export/qif-io-core/Makefile
-  src/import-export/qif-io-core/test/Makefile
   src/import-export/schemas/Makefile
   src/import-export/ofx/Makefile
   src/import-export/ofx/test/Makefile
