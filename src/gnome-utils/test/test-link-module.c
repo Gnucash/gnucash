@@ -5,14 +5,17 @@
 static void
 guile_main(void *closure, int argc, char ** argv)
 {
+    GNCModule mod;
     gnc_module_system_init();
-    /*  gnc_module_load("gnucash/gnome-utils", 0); */
-    exit(0);
+    mod = gnc_module_load("gnucash/gnome-utils", 0);
+
+    exit(mod == NULL);
 }
 
 int
 main(int argc, char ** argv)
 {
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     scm_boot_guile(argc, argv, guile_main, NULL);
     return 0;
 }

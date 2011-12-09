@@ -205,10 +205,12 @@ gnc_get_default_report_font_family(void)
     const gchar*    default_font_family;
 
     top_list = gtk_window_list_toplevels();
+    g_return_val_if_fail (top_list != NULL, NULL);
     top_widget = GTK_WIDGET(top_list->data);
     g_list_free(top_list);
     top_widget_style = gtk_rc_get_style(top_widget);
-    default_font_family = pango_font_description_get_family(top_widget_style->font_desc);
+    default_font_family =
+	pango_font_description_get_family(top_widget_style->font_desc);
 
     if (default_font_family == NULL)
         return g_strdup("Arial");

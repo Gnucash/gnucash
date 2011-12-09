@@ -192,6 +192,7 @@ test_state_changes()
 int
 main(int argc, char **argv)
 {
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     g_type_init();
     qof_init();
     gnc_engine_init(0, NULL);

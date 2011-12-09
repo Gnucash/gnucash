@@ -14,6 +14,7 @@ exec guile -s "$0"
 
 (gnc:module-system-init)
 
+(setenv "GNC_UNINSTALLED" "1")
 (if (gnc:module-load "gnucash/report/report-gnome" 0)
     (begin 
       (display "ok\n")

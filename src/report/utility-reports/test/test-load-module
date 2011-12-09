@@ -3,6 +3,7 @@ exec guile -s "$0"
 !#
 
 (display "  testing utility report module load ... ")
+(setenv "GNC_UNINSTALLED" "1")
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)
 

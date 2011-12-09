@@ -2,6 +2,7 @@
 exec guile -s "$0"
 !#
 
+(setenv "GNC_UNINSTALLED" "1")
 (display "  testing stylesheet module load ... ")
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)

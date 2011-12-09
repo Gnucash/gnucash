@@ -4,6 +4,7 @@
 (use-modules (gnucash gnc-module))
 
 (define (run-test)
+  (setenv "GNC_UNINSTALLED" "1")
   (gnc:module-system-init)
   (gnc:module-load "gnucash/engine" 0)
 
