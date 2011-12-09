@@ -31,7 +31,10 @@ test_qofdir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
 
 #The tests might require more libraries, but try to keep them
 #as independent as possible.
-test_qof_LDADD = ${top_builddir}/${MODULEPATH}/libgnc-qof.la $(GLIB_LIBS)
+test_qof_LDADD = \
+	${top_builddir}/${MODULEPATH}/libgnc-qof.la \
+	${top_builddir}/src/test-core/.libs/libtest-core.la \
+	$(GLIB_LIBS)
 
 test_qof_CFLAGS = \
 	${DEFAULT_INCLUDES} \

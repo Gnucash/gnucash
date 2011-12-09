@@ -550,9 +550,19 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     QofCollection *m_col, *m_col2;
     QofIdType my_type = "my_type", my_type2 = "my_type2";
     guint param = (guint) g_test_rand_int();
+    gchar *msg1 = "qof_book_foreach_collection: assertion `book' failed";
+    gchar *msg2 = "qof_book_foreach_collection: assertion `cb' failed";
+    gchar *log_domain = "qof";
+    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;
+    TestErrorStruct check1 = { loglevel, log_domain, msg1 };
+    TestErrorStruct check2 = { loglevel, log_domain, msg2 };
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
+    test_add_error (&check1);
+    test_add_error (&check2);
+    hdlr = g_log_set_handler (log_domain, loglevel,
+			      (GLogFunc)test_list_handler, NULL);
 
     g_test_message( "Testing when book is null" );
     m_col = qof_book_get_collection( fixture->book, my_type );
@@ -574,6 +584,8 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     g_assert( !col_struct.col2_called );
     g_assert_cmpstr( test_struct.msg, == , "qof_book_foreach_collection: assertion `cb' failed" );
     g_free( test_struct.msg );
+    g_log_remove_handler (log_domain, hdlr);
+    test_clear_error_list ();
 
     g_test_message( "Testing when book and cb not null, user_data provided" );
     /* both cols have to be called */

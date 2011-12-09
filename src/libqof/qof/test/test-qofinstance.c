@@ -116,6 +116,13 @@ test_instance_new_destroy( void )
     QofInstanceClass *klass;
     /* test var */
     Timespec *timespec_priv;
+    gchar *msg1 = "qof_instance_get_collection: assertion `QOF_IS_INSTANCE(ptr)' failed";
+    gchar *msg2 = "qof_instance_get_editlevel: assertion `QOF_IS_INSTANCE(ptr)' failed";
+    gchar *msg3 = "qof_instance_get_destroying: assertion `QOF_IS_INSTANCE(ptr)' failed";
+    gchar *msg4 = "qof_instance_get_dirty_flag: assertion `QOF_IS_INSTANCE(ptr)' failed";
+    gchar *log_domain = "qof";
+    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;
+    TestErrorStruct check = { loglevel, log_domain, msg1 };
 
     g_test_message( "Testing qofinstance object initialization" );
     inst = g_object_new(QOF_TYPE_INSTANCE, NULL);
@@ -149,21 +156,27 @@ test_instance_new_destroy( void )
     g_assert( !QOF_IS_INSTANCE( inst ) );
     /* set fatal handler */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )fatal_handler, NULL );
+    hdlr = g_log_set_handler (log_domain, loglevel,
+			      (GLogFunc)test_checked_handler, &check);
     g_assert( qof_instance_get_collection( inst ) == NULL );
     g_assert( g_strrstr( error_message, "assertion `QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
 
+    check.msg = msg2;
     g_assert_cmpint( qof_instance_get_editlevel( inst ), == , 0 );
     g_assert( g_strrstr( error_message, "assertion `QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
 
+    check.msg = msg3;
     g_assert( !qof_instance_get_destroying( inst ) );
     g_assert( g_strrstr( error_message, "assertion `QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
 
+    check.msg = msg4;
     g_assert( !qof_instance_get_dirty_flag( inst ) );
     g_assert( g_strrstr( error_message, "assertion `QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
+    g_log_remove_handler (log_domain, hdlr);
 }
 
 static void
@@ -479,6 +492,10 @@ static void
 test_instance_commit_edit( Fixture *fixture, gconstpointer pData )
 {
     gboolean result;
+    gchar *msg = "[qof_commit_edit()] unbalanced call - resetting (was -2)";
+    gchar *log_domain = "qof.engine";
+    guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;
+    TestErrorStruct check = { loglevel, log_domain, msg };
 
     g_test_message( "Test when instance set to null" );
     result = qof_commit_edit( NULL );
@@ -499,12 +516,15 @@ test_instance_commit_edit( Fixture *fixture, gconstpointer pData )
 
     g_test_message( "Test when instance's editlevel < 0" );
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )fatal_handler, NULL );
+    hdlr = g_log_set_handler (log_domain, loglevel,
+			      (GLogFunc)test_checked_handler, &check);
     qof_instance_decrease_editlevel( fixture->inst );
     g_assert_cmpint( qof_instance_get_editlevel( fixture->inst ), == , -1 );
     result = qof_commit_edit( fixture->inst );
     g_assert_cmpint( qof_instance_get_editlevel( fixture->inst ), == , 0 );
     g_assert_cmpstr( error_message, == , "[qof_commit_edit()] unbalanced call - resetting (was -2)" );
     g_free( error_message );
+    g_log_remove_handler (log_domain, hdlr);
 }
 
 /* backend commit test start */
