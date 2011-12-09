@@ -141,10 +141,19 @@ gchar *gnc_path_get_accountsdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_reportdir()
 {
-    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-    gchar *result = g_build_filename (pkgdatadir, "guile-modules",
+    gchar *result;
+    const gchar *builddir = g_getenv ("GNC_BUILDDIR");
+    if (g_getenv ("GNC_UNINSTALLED") && builddir)
+    {
+	result = g_build_filename (builddir, "src", "report", NULL);
+    }
+    else
+    {
+	gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+	result = g_build_filename (pkgdatadir, "guile-modules",
                                       "gnucash", "report", (char*)NULL);
-    g_free (pkgdatadir);
+	g_free (pkgdatadir);
+    }
     //printf("Returning stdreportsdir %s\n", result);
     return result;
 }
@@ -156,8 +165,17 @@ gchar *gnc_path_get_reportdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_stdreportsdir()
 {
+    gchar *result;
     gchar *reportdir = gnc_path_get_reportdir ();
-    gchar *result = g_build_filename (reportdir, "standard-reports", (char*)NULL);
+    if (g_getenv ("GNC_UNINSTALLED"))
+    {
+	result = g_build_filename (reportdir, "standard-reports", "gnucash",
+				   "report", "standard-reports", NULL);
+    }
+    else
+    {
+	result = g_build_filename (reportdir, "standard-reports", NULL);
+    }
     g_free (reportdir);
     //printf("Returning stdreportsdir %s\n", result);
     return result;
