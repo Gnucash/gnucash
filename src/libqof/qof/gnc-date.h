@@ -209,7 +209,9 @@ Timespec timespec_diff(const Timespec *ta, const Timespec *tb);
 Timespec timespec_abs(const Timespec *t);
 
 /** convert a timepair on a certain day (localtime) to
- * the timepair representing midday on that day */
+ * the timepair representing midday on that day. Watch out - this is *not* the
+ * first second of the day, which is returned by various other functions
+ * returning a Timespec. */
 Timespec timespecCanonicalDayTime(Timespec t);
 
 /** Returns the current clock time as a Timespec, taken from time(2). */
@@ -228,14 +230,14 @@ GDate* gnc_g_date_new_today (void);
 /** Turns a Timespec into a GDate */
 GDate timespec_to_gdate (Timespec ts);
 
-/** Turns a GDate into a Timespec  */
+/** Turns a GDate into a Timespec, returning the first second of the day  */
 Timespec gdate_to_timespec (GDate d);
 
 /** Convert a day, month, and year to a GDate. Similar to g_date_new_dmy() but
  * returns by-value and not by pointer. */
 GDate gnc_dmy2gdate (gint day, gint month, gint year);
 
-/** Convert a day, month, and year to a Timespec */
+/** Convert a day, month, and year to a Timespec, returning the first second of the day */
 Timespec gnc_dmy2timespec (gint day, gint month, gint year);
 
 /** Same as gnc_dmy2timespec, but last second of the day */
