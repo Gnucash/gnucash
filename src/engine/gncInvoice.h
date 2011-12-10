@@ -99,6 +99,9 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *other_invoice);
  @{ */
 void gncInvoiceSetID (GncInvoice *invoice, const char *id);
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
+/** Set the DateOpened using a GDate argument. (Note: Internally this stores
+the date in a Timespec as created through timespecCanonicalDayTime()). */
+void gncInvoiceSetDateOpenedGDate (GncInvoice *invoice, const GDate *date);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date);
 void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date);
 void gncInvoiceSetTerms (GncInvoice *invoice, GncBillTerm *terms);

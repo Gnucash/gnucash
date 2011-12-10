@@ -459,6 +459,12 @@ qofInvoiceSetBillTo (GncInvoice *invoice, QofInstance *ent)
     gncInvoiceCommitEdit (invoice);
 }
 
+void gncInvoiceSetDateOpenedGDate (GncInvoice *invoice, const GDate *date)
+{
+    g_assert (date);
+    gncInvoiceSetDateOpened(invoice, timespecCanonicalDayTime(gdate_to_timespec(*date)));
+}
+
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date)
 {
     if (!invoice) return;
