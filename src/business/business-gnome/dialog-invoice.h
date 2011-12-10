@@ -54,7 +54,18 @@ typedef enum
 /* Create and edit an invoice */
 InvoiceWindow * gnc_ui_invoice_edit (GncInvoice *invoice);
 InvoiceWindow * gnc_ui_invoice_new (GncOwner *owner, QofBook *book);
-InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *invoice, gboolean open_properties);
+
+/** Create a new invoice as a duplicate of the given existing invoice.
+ *
+ * \param invoice The invoice which is being duplicated
+ * \param open_properties If TRUE, open the "invoice properties" dialog window after creating the new invoice
+ * \param new_date If non-NULL, use this date as the date for the "opening date" and also as date for all invoice entries.
+ *
+ * \return The InvoiceWindow structure that contains a whole lot of things,
+ * among others the "created_invoice" as a GncInvoice* pointer on the newly
+ * created invoice.
+ */
+InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *invoice, gboolean open_properties, const GDate *new_date);
 
 /* Search for invoices */
 GNCSearchWindow * gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book);

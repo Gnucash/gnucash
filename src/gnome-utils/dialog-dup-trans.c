@@ -152,7 +152,8 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
 }
 
 static gboolean
-gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title, time_t *date_p,
+gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title,
+                               time_t *date_p, GDate *gdate_p,
                                const char *num, char **out_num)
 {
     DupTransDialog *dt_dialog;
@@ -175,7 +176,9 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title, time_t *da
 
     if (title)
     {
-        gtk_label_set_text(GTK_LABEL (dt_dialog->duplicate_title_label), title);
+        gchar *full_text = g_strdup_printf("<b>%s</b>", title);
+        gtk_label_set_markup(GTK_LABEL (dt_dialog->duplicate_title_label), full_text);
+        g_free(full_text);
     }
 
     if (!out_num)
@@ -189,7 +192,10 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title, time_t *da
 
     if (result == GTK_RESPONSE_OK)
     {
-        *date_p = gnc_date_edit_get_date (GNC_DATE_EDIT (dt_dialog->date_edit));
+        if (date_p)
+            *date_p = gnc_date_edit_get_date (GNC_DATE_EDIT (dt_dialog->date_edit));
+        if (gdate_p)
+            gnc_date_edit_get_gdate(GNC_DATE_EDIT (dt_dialog->date_edit), gdate_p);
         if (out_num)
             *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->num_edit)));
         ok = TRUE;
@@ -207,11 +213,26 @@ gboolean
 gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
                       const char *num, char **out_num)
 {
-    return gnc_dup_trans_dialog_internal(parent, NULL, date_p, num, out_num);
+    return gnc_dup_trans_dialog_internal(parent, NULL, date_p, NULL, num, out_num);
 }
 
 gboolean
-gnc_dup_date_dialog (GtkWidget * parent, const char* title, time_t *date_p)
+gnc_dup_trans_dialog_gdate (GtkWidget * parent, GDate *gdate_p,
+                            const char *num, char **out_num)
 {
-    return gnc_dup_trans_dialog_internal(parent, title, date_p, NULL, NULL);
+    time_t tmp_time;
+    g_assert(gdate_p);
+
+    tmp_time = timespecToTime_t(gdate_to_timespec(*gdate_p));
+    return gnc_dup_trans_dialog_internal(parent, NULL, &tmp_time, gdate_p, num, out_num);
+}
+
+gboolean
+gnc_dup_date_dialog (GtkWidget * parent, const char* title, GDate *gdate_p)
+{
+    time_t tmp_time;
+    g_assert(gdate_p);
+
+    tmp_time = timespecToTime_t(gdate_to_timespec(*gdate_p));
+    return gnc_dup_trans_dialog_internal(parent, title, &tmp_time, gdate_p, NULL, NULL);
 }
