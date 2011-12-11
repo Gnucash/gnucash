@@ -1366,7 +1366,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                             gnc_numeric converted_amount;
                             xaccSplitSetValue(split, (reverse ? gnc_numeric_neg(value) : value));
                             converted_amount = gnc_numeric_div(value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
-                            printf("converting from %f to %f\n", gnc_numeric_to_double(value), gnc_numeric_to_double(converted_amount));
+                            DEBUG("converting from %f to %f\n", gnc_numeric_to_double(value), gnc_numeric_to_double(converted_amount));
                             xaccSplitSetAmount(split, reverse ? gnc_numeric_neg(converted_amount) : converted_amount);
                         }
                     }
@@ -1457,7 +1457,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                 gnc_numeric converted_amount;
                 xaccSplitSetValue(split, (reverse ? gnc_numeric_neg(acc_val->value) : acc_val->value));
                 converted_amount = gnc_numeric_div(acc_val->value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
-                printf("converting from %f to %f\n", gnc_numeric_to_double(acc_val->value), gnc_numeric_to_double(converted_amount));
+                DEBUG("converting from %f to %f\n", gnc_numeric_to_double(acc_val->value), gnc_numeric_to_double(converted_amount));
 
                 xaccSplitSetAmount(split, reverse ? gnc_numeric_neg(converted_amount) : converted_amount);
             }
