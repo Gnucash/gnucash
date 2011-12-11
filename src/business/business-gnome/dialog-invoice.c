@@ -648,6 +648,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
     GncEntry* entry;
     gboolean reverse;
     gboolean show_dialog = TRUE;
+    gboolean post_ok = TRUE;
 
     /* Make sure the invoice is ok */
     if (!gnc_invoice_window_verify_ok (iw))
@@ -791,46 +792,64 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
                 gnc_xfer_dialog_hide_from_account_tree(xfer);
                 gnc_xfer_dialog_hide_to_account_tree(xfer);
                 gnc_xfer_dialog_is_exchange_dialog(xfer, &exch_rate);
-                gnc_xfer_dialog_run_until_done(xfer);
+                if (gnc_xfer_dialog_run_until_done(xfer))
+                {
+                    /* User finished the transfer dialog successfully */
+                    convprice = gnc_price_create(iw->book);
+                    gnc_price_begin_edit (convprice);
+                    gnc_price_set_commodity (convprice, xaccAccountGetCommodity(this_acc));
+                    gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
+                    date.tv_sec = time (NULL);
+                    date.tv_nsec = 0;
+                    gnc_price_set_time (convprice, date);
+                    gnc_price_set_source (convprice, "user:invoice-post");
 
-                convprice = gnc_price_create(iw->book);
-                gnc_price_begin_edit (convprice);
-                gnc_price_set_commodity (convprice, xaccAccountGetCommodity(this_acc));
-                gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
-                date.tv_sec = time (NULL);
-                date.tv_nsec = 0;
-                gnc_price_set_time (convprice, date);
-                gnc_price_set_source (convprice, "user:invoice-post");
-
-                /* Yes, magic strings are evil but I can't find any defined constants
-                   for this..*/
-                gnc_price_set_typestr (convprice, "last");
-                gnc_price_set_value (convprice, exch_rate);
-                gncInvoiceAddPrice(invoice, convprice);
-                gnc_price_commit_edit (convprice);
+                    /* Yes, magic strings are evil but I can't find any defined constants
+                       for this..*/
+                    gnc_price_set_typestr (convprice, "last");
+                    gnc_price_set_value (convprice, exch_rate);
+                    gncInvoiceAddPrice(invoice, convprice);
+                    gnc_price_commit_edit (convprice);
+                }
+                else
+                {
+                    /* User canceled the transfer dialog, abort posting */
+                    post_ok = FALSE;
+                    goto cleanup;
+                }
             }
         }
     }
 
 
-    /* Save acc as last used account in the kvp frame of the invoice owner */
+    /* Save account as last used account in the kvp frame of the invoice owner */
     kvp_val = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE (acc)));;
     qof_begin_edit (owner_inst);
     kvp_frame_set_slot_nc (kvpf, LAST_POSTED_TO_ACCT, kvp_val);
     qof_instance_set_dirty (owner_inst);
     qof_commit_edit (owner_inst);
 
-    /* ... post it; post date is set to now ... */
+    /* ... post it ... */
     gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, accumulate);
+
+cleanup:
     gncInvoiceCommitEdit (invoice);
     gnc_resume_gui_refresh ();
 
     if (memo)
         g_free (memo);
 
-    /* Reset the type; change to read-only! */
-    iw->dialog_type = VIEW_INVOICE;
-    gnc_entry_ledger_set_readonly (iw->ledger, TRUE);
+    if (post_ok)
+    {
+        /* Reset the type; change to read-only! */
+        iw->dialog_type = VIEW_INVOICE;
+        gnc_entry_ledger_set_readonly (iw->ledger, TRUE);
+    }
+    else
+    {
+        text = _("The post action was canceled because not all exchange rates were given.");
+        gnc_info_dialog(iw_get_window(iw), "%s", text);
+    }
 
     /* ... and redisplay here. */
     gnc_invoice_update_window (iw, NULL);
