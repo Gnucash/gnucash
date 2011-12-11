@@ -116,7 +116,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	( cd gnucash; for file in $(PYTHON_LINK_FILES) ; do \
-	  $(LN_S) -f ${top_srcdir}/src/optional/python-bindings/$$file .; \
+	  $(LN_S) -f ../$$file .; \
 	  done )
 
 
