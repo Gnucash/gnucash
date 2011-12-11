@@ -610,17 +610,21 @@ gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data)
 static void
 gnc_invoice_window_print_invoice(GncInvoice *invoice)
 {
-    SCM func, arg;
+    SCM func, arg, arg2;
     SCM args = SCM_EOL;
     int report_id;
+    const char *reportname = gnc_plugin_business_get_invoice_printreport();
 
     g_return_if_fail (invoice);
+    if (!reportname)
+        reportname = "Printable Invoice"; // fallback if the option lookup failed
 
-    func = scm_c_eval_string ("gnc:invoice-report-create");
+    func = scm_c_eval_string ("gnc:invoice-report-create-withname");
     g_return_if_fail (scm_is_procedure (func));
 
     arg = SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p__gncInvoice"), 0);
-    args = scm_cons (arg, args);
+    arg2 = scm_from_locale_string(reportname);
+    args = scm_cons2 (arg, arg2, args);
 
     /* scm_gc_protect_object(func); */
 

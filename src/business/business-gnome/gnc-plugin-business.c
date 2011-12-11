@@ -1169,3 +1169,24 @@ static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
                      G_CALLBACK(gnc_plugin_business_main_window_page_changed),
                      plugin);
 }
+
+static const char* invoice_printreport_values[] =
+{
+    // FIXME: You must manually keep this list in sync with the one at the end
+    // of business-prefs.glade
+    "Printable Invoice",
+    "Tax Invoice",
+    "Easy Invoice",
+    "Fancy Invoice",
+    NULL
+};
+
+const char *gnc_plugin_business_get_invoice_printreport(void)
+{
+    int value = gnc_gconf_get_int(GCONF_SECTION_INVOICE,
+                                  "invoice_printreport", NULL);
+    if (value >= 0 && value < 4)
+        return invoice_printreport_values[value];
+    else
+        return NULL;
+}

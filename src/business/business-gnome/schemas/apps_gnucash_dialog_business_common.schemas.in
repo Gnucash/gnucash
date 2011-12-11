@@ -63,6 +63,20 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/dialogs/business/invoice/invoice_printreport</key>
+      <applyto>/apps/gnucash/dialogs/business/invoice/invoice_printreport</applyto>
+      <owner>gnucash</owner>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>The invoice report to be used for printing</short>
+        <long>
+          The name of the report to be used for invoice printing.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/dialogs/business/invoice/use_new_window</key>
       <applyto>/apps/gnucash/dialogs/business/invoice/use_new_window</applyto>
       <owner>gnucash</owner>
