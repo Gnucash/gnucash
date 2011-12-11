@@ -1089,7 +1089,6 @@ impl_webkit_print( GncHtml* self, const gchar* jobname )
     gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
 #endif
     webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, &error );
-    g_object_unref( op );
 
     if ( error != NULL )
     {
@@ -1104,6 +1103,11 @@ impl_webkit_print( GncHtml* self, const gchar* jobname )
         g_signal_connect( dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
         gtk_widget_show( dialog );
     }
+
+    // Remember to save the printing settings after this print job
+    gnc_print_operation_save_print_settings(op);
+    g_object_unref( op );
+
 #else
     webkit_web_frame_print( frame );
 #endif

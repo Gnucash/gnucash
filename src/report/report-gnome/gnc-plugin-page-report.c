@@ -1628,7 +1628,10 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
                       "Report name", NULL);
         if (!report_name)
             report_name = g_strdup (_(default_jobname));
-        if (safe_strcmp(report_name, _("Printable Invoice")) == 0)
+        if (g_strcmp0(report_name, _("Printable Invoice")) == 0
+                || g_strcmp0(report_name, _("Tax Invoice")) == 0
+                || g_strcmp0(report_name, _("Easy Invoice")) == 0
+                || g_strcmp0(report_name, _("Fancy Invoice")) == 0)
         {
             /* Again HACK alert: We modify this single known string here into
              * something more appropriate. */
