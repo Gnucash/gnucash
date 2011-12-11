@@ -646,7 +646,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
     const char *text;
     EntryList *entries, *entries_iter;
     GncEntry* entry;
-    gboolean reverse;
+    gboolean is_cust_doc;
     gboolean show_dialog = TRUE;
     gboolean post_ok = TRUE;
 
@@ -666,7 +666,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
         return;
     }
 
-    reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+    is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
     /* Make sure that the invoice has a positive balance */
     if (gnc_numeric_negative_p(gncInvoiceGetTotal(invoice)))
@@ -757,7 +757,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
         Account *this_acc;
 
         entry = (GncEntry*)entries_iter->data;
-        this_acc = (reverse ? gncEntryGetInvAccount (entry) :
+        this_acc = (is_cust_doc ? gncEntryGetInvAccount (entry) :
                     gncEntryGetBillAccount (entry));
 
         if (this_acc &&
