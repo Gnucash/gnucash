@@ -7,6 +7,7 @@
       <menu name="FileExport" action="FileExportAction">
         <placeholder name="FileExportPlaceholder">
           <menuitem name="FileReportExport" action="ReportExportAction" />
+          <menuitem name="FileExportPDF" action="FilePrintPDFAction"/>
         </placeholder>
       </menu>
     </menu>
@@ -36,6 +37,7 @@
       <toolitem name="ReportToolbarExport" action="ReportExportAction" />
       <toolitem name="ReportToolbarOptions" action="ReportOptionsAction" />
       <toolitem name="ReportToolbarPrint" action="FilePrintAction" />
+      <toolitem name="ReportToolbarExportPDF" action="FilePrintPDFAction"/>
     </placeholder>
   </toolbar>
 </ui>

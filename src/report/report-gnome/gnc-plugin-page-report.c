@@ -174,6 +174,7 @@ static void gnc_plugin_page_report_save_cb(GtkAction *action, GncPluginPageRepor
 static void gnc_plugin_page_report_export_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_options_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_exportpdf_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_copy_cb(GtkAction *action, GncPluginPageReport *rep);
 
 GType
@@ -1031,6 +1032,11 @@ static GtkActionEntry report_actions[] =
         G_CALLBACK(gnc_plugin_page_report_print_cb)
     },
     {
+        "FilePrintPDFAction", GTK_STOCK_PRINT_REPORT, N_("Export as P_DF..."), NULL,
+        N_("Export the current report as a PDF document"),
+        G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
+    },
+    {
         "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
         N_("Cut the current selection and copy it to clipboard"),
         NULL
@@ -1597,16 +1603,14 @@ gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *repor
     }
 }
 
-static void
-gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report )
+static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
 {
-    GncPluginPageReportPrivate *priv;
-    gchar *report_name = NULL;
     gchar *job_name = NULL;
+    gchar *report_name = NULL;
     gchar *job_date = qof_print_date( time( NULL ) );
     const gchar *default_jobname = N_("GnuCash-Report");
 
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    g_assert(priv);
 
     if (priv->cur_report == SCM_BOOL_F)
         report_name = g_strdup (_(default_jobname));
@@ -1704,9 +1708,31 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
         }
     }
 
+    return job_name;
+}
+
+static void
+gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report )
+{
+    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    gchar *job_name = report_create_jobname(priv);
+
     //g_warning("Setting job name=%s", job_name);
 
-    gnc_html_print(priv->html, job_name);
+    gnc_html_print(priv->html, job_name, FALSE);
+
+    g_free (job_name);
+}
+
+static void
+gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *report )
+{
+    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    gchar *job_name = report_create_jobname(priv);
+
+    g_warning("Setting job name=%s", job_name);
+
+    gnc_html_print(priv->html, job_name, TRUE);
 
     g_free (job_name);
 }

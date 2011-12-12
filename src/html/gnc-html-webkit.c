@@ -106,7 +106,7 @@ static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen
 static void impl_webkit_reload( GncHtml* self );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
 static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
-static void impl_webkit_print( GncHtml* self, const gchar* jobname );
+static void impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf );
 static void impl_webkit_cancel( GncHtml* self );
 static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
 
@@ -1054,6 +1054,8 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
     }
 }
 
+#define GNC_GTK_PRINT_SETTINGS_EXPORT_DIR "gnc-pdf-export-directory"
+
 /**
  * Prints the current page.
  *
@@ -1067,17 +1069,19 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
  * @param self HTML renderer object
  */
 static void
-impl_webkit_print( GncHtml* self, const gchar* jobname )
+impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
 {
 #if !HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
     extern void webkit_web_frame_print( WebKitWebFrame * frame );
 #endif
 
+    gchar *export_filename = NULL;
     GncHtmlWebkitPrivate* priv;
     WebKitWebFrame* frame;
 #if HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
     GtkPrintOperation* op = gtk_print_operation_new();
     GError* error = NULL;
+    GtkPrintSettings *print_settings;
 #endif
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
@@ -1085,10 +1089,107 @@ impl_webkit_print( GncHtml* self, const gchar* jobname )
 
 #if HAVE(WEBKIT_WEB_FRAME_PRINT_FULL)
     gnc_print_operation_init( op, jobname );
+    print_settings = gtk_print_operation_get_print_settings (op);
+    if (!print_settings)
+    {
+        print_settings = gtk_print_settings_new();
+        gtk_print_operation_set_print_settings(op, print_settings);
+    }
 #ifdef G_OS_WIN32
     gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
 #endif
-    webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, &error );
+
+    // Make sure to generate a full export filename
+    if (g_str_has_suffix(jobname, ".pdf"))
+    {
+        export_filename = g_strdup(jobname);
+    }
+    else
+    {
+        export_filename = g_strconcat(jobname, ".pdf", NULL);
+    }
+
+    // Two different modes of operation. Either export to PDF, or run the
+    // normal print dialog
+    if (export_pdf)
+    {
+        gboolean have_outputdir = gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
+        if (have_outputdir)
+        {
+            gchar *tmp = g_build_filename(gtk_print_settings_get(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR),
+                                          export_filename, NULL);
+            g_free(export_filename);
+            export_filename = tmp;
+        }
+        else
+        {
+            GtkWidget *dialog;
+            gint result;
+            dialog = gtk_file_chooser_dialog_new (_("Save PDF File"),
+                                                  NULL,
+                                                  GTK_FILE_CHOOSER_ACTION_SAVE,
+                                                  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                                  GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                                                  NULL);
+            gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+            gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(dialog), export_filename);
+            result = gtk_dialog_run (GTK_DIALOG (dialog));
+            if (result == GTK_RESPONSE_ACCEPT)
+            {
+                gchar *dirname;
+                char *tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+                g_free(export_filename);
+                export_filename = tmp;
+
+                // Store the directory for later
+                dirname = g_path_get_dirname(export_filename);
+                gtk_print_settings_set(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR, dirname);
+                g_free(dirname);
+            }
+            gtk_widget_destroy (dialog);
+
+            if (result != GTK_RESPONSE_ACCEPT)
+            {
+                // User pressed cancel - no saving here.
+                g_free(export_filename);
+                g_object_unref( op );
+                return;
+            }
+        }
+
+        // This function expects the full filename including (absolute?) path
+        gtk_print_operation_set_export_filename(op, export_filename);
+
+        // Run the "Export to PDF" print operation
+        webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_EXPORT, &error );
+    }
+    else
+    {
+
+        // Also store this export file name as output URI in the settings
+        if (gtk_print_settings_has_key(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI))
+        {
+            const gchar *olduri = gtk_print_settings_get(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
+            gchar *dirname = g_path_get_dirname(olduri);
+            gchar *newuri = (g_strcmp0(dirname, ".") == 0)
+                    ? g_strdup(export_filename)
+                    : g_build_filename(dirname, export_filename, NULL);
+            //g_warning("olduri=%s newuri=%s", olduri, newuri);
+
+            // This function expects the full filename including protocol, path, and name
+            gtk_print_settings_set(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI, newuri);
+
+            g_free(newuri);
+            g_free(dirname);
+        }
+        else
+        {
+            gtk_print_settings_set(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI, export_filename);
+        }
+
+        // Run the normal printing dialog
+        webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, &error );
+    }
 
     if ( error != NULL )
     {
@@ -1107,6 +1208,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname )
     // Remember to save the printing settings after this print job
     gnc_print_operation_save_print_settings(op);
     g_object_unref( op );
+    g_free(export_filename);
 
 #else
     webkit_web_frame_print( frame );

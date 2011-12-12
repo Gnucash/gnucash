@@ -2779,7 +2779,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         { N_("Process Payment"), pay_invoice_cb, NULL, FALSE},
         { N_("Duplicate"), NULL, multi_duplicate_invoice_cb, FALSE},
         { N_("Post"), NULL, multi_post_invoice_cb, FALSE},
-        { N_("Print"), NULL, multi_print_invoice_cb, TRUE},
+        { N_("Printable Report"), NULL, multi_print_invoice_cb, TRUE},
         { NULL },
     };
     static GNCSearchCallbackButton bill_buttons[] =
@@ -2788,7 +2788,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         { N_("Process Payment"), pay_invoice_cb, NULL, FALSE},
         { N_("Duplicate"), NULL, multi_duplicate_invoice_cb, FALSE},
         { N_("Post"), NULL, multi_post_invoice_cb, FALSE},
-        { N_("Print"), NULL, multi_print_invoice_cb, TRUE},
+        { N_("Printable Report"), NULL, multi_print_invoice_cb, TRUE},
         { NULL },
     };
     static GNCSearchCallbackButton emp_buttons[] =
@@ -2799,7 +2799,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         { N_("Process Payment"), pay_invoice_cb, NULL, FALSE},
         { N_("Duplicate"), NULL, multi_duplicate_invoice_cb, FALSE},
         { N_("Post"), NULL, multi_post_invoice_cb, FALSE},
-        { N_("Print"), NULL, multi_print_invoice_cb, TRUE},
+        { N_("Printable Report"), NULL, multi_print_invoice_cb, TRUE},
         { NULL },
     };
 
