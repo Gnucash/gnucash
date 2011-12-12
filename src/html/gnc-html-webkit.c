@@ -1113,48 +1113,46 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
     // normal print dialog
     if (export_pdf)
     {
-        gboolean have_outputdir = gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
-        if (have_outputdir)
+        GtkWidget *dialog;
+        gint result;
+        dialog = gtk_file_chooser_dialog_new (_("Save PDF File"),
+                                              NULL,
+                                              GTK_FILE_CHOOSER_ACTION_SAVE,
+                                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                                              NULL);
+        gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+        gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(dialog), export_filename);
+
+        if (gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
         {
-            gchar *tmp = g_build_filename(gtk_print_settings_get(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR),
-                                          export_filename, NULL);
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),
+                                                gtk_print_settings_get(print_settings,
+                                                        GNC_GTK_PRINT_SETTINGS_EXPORT_DIR));
+        }
+
+        result = gtk_dialog_run (GTK_DIALOG (dialog));
+
+        if (result == GTK_RESPONSE_ACCEPT)
+        {
+            gchar *dirname;
+            char *tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
             g_free(export_filename);
             export_filename = tmp;
+
+            // Store the directory for later
+            dirname = g_path_get_dirname(export_filename);
+            gtk_print_settings_set(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR, dirname);
+            g_free(dirname);
         }
-        else
+        gtk_widget_destroy (dialog);
+
+        if (result != GTK_RESPONSE_ACCEPT)
         {
-            GtkWidget *dialog;
-            gint result;
-            dialog = gtk_file_chooser_dialog_new (_("Save PDF File"),
-                                                  NULL,
-                                                  GTK_FILE_CHOOSER_ACTION_SAVE,
-                                                  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                                  GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                                                  NULL);
-            gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-            gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(dialog), export_filename);
-            result = gtk_dialog_run (GTK_DIALOG (dialog));
-            if (result == GTK_RESPONSE_ACCEPT)
-            {
-                gchar *dirname;
-                char *tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-                g_free(export_filename);
-                export_filename = tmp;
-
-                // Store the directory for later
-                dirname = g_path_get_dirname(export_filename);
-                gtk_print_settings_set(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR, dirname);
-                g_free(dirname);
-            }
-            gtk_widget_destroy (dialog);
-
-            if (result != GTK_RESPONSE_ACCEPT)
-            {
-                // User pressed cancel - no saving here.
-                g_free(export_filename);
-                g_object_unref( op );
-                return;
-            }
+            // User pressed cancel - no saving here.
+            g_free(export_filename);
+            g_object_unref( op );
+            return;
         }
 
         // This function expects the full filename including (absolute?) path
@@ -1172,8 +1170,8 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
             const gchar *olduri = gtk_print_settings_get(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
             gchar *dirname = g_path_get_dirname(olduri);
             gchar *newuri = (g_strcmp0(dirname, ".") == 0)
-                    ? g_strdup(export_filename)
-                    : g_build_filename(dirname, export_filename, NULL);
+                            ? g_strdup(export_filename)
+                            : g_build_filename(dirname, export_filename, NULL);
             //g_warning("olduri=%s newuri=%s", olduri, newuri);
 
             // This function expects the full filename including protocol, path, and name
