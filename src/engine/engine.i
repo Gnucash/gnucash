@@ -128,7 +128,13 @@ SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 %include <qofbook.h>
 
 KvpFrame* qof_book_get_slots(QofBook* book);
-
+%ignore GNC_DENOM_AUTO;
+%ignore GNCNumericErrorCodes;
+%ignore GNC_ERROR_OK;
+%ignore GNC_ERROR_ARG;
+%ignore GNC_ERROR_OVERFLOW;
+%ignore GNC_ERROR_DENOM_DIFF;
+%ignore GNC_ERROR_REMAINDER;
 %include <gnc-numeric.h>
 
 Timespec timespecCanonicalDayTime(Timespec t);
@@ -166,6 +172,7 @@ gchar * gnc_build_book_path (const gchar *filename);
 void gnc_quote_source_set_fq_installed (GList *sources_list);
 %clear GList *;
 %ignore gnc_quote_source_set_fq_installed;
+%ignore gnc_commodity_table_get_quotable_commodities;
 %include <gnc-commodity.h>
 
 void gnc_hook_add_scm_dangler (const gchar *name, SCM proc);
