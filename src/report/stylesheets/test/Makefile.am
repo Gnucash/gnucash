@@ -8,6 +8,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/report/stylesheets \
   --gnc-module-dir ${top_builddir}/src/calculation \
 \
+  --guile-load-dir ${top_builddir}/src/test-core \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/scm \
@@ -18,6 +19,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/report/stylesheets \
 \
   --library-dir    ${top_builddir}/src/libqof/qof \
+  --library-dir    ${top_builddir}/src/test-core \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
