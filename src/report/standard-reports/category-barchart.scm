@@ -654,7 +654,7 @@ developing over time"))
                     (lambda (col)
                       (gnc:html-table-set-col-style!
                        table col "td"
-                       'attribute (list "align" "right")))
+                       'attribute (list "class" "number-cell")))
                     '(1 2 3 4 5 6 7 8 9 10 11 12 13 14))
                    (gnc:html-document-add-object! document table)
                    ) ;; begin if
