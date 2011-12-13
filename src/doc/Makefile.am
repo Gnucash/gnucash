@@ -1,7 +1,7 @@
 
 SUBDIRS = \
-  design \
   xml
+DIST_SUBDIRS = $(SUBDIRS) design
 
 EXTRA_DIST = \
   README \
