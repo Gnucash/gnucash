@@ -1,5 +1,5 @@
 /********************************************************************\
- * assistant-utils.h -- utility functions for creating druids       *
+ * assistant-utils.h -- utility functions for creating assistants   *
  * Copyright (C) 2001 Jeremy Collins                                *
  * Copyright (C) 2010 Geert Janssens                                *
  *                                                                  *

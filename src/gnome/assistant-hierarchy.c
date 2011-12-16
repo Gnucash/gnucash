@@ -1108,11 +1108,6 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     data->category_description = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "account_types_description"));
     data->account_list_added = FALSE;
 
-    /* FIXME -- what is this ?
-        color = &GNOME_DRUID_PAGE_EDGE(start_page)->textbox_color;
-        gtk_widget_modify_base(GTK_WIDGET(data->category_description), GTK_STATE_INSENSITIVE, color);
-        */
-
     /* Final Accounts Page */
     data->final_account_tree_container = GTK_WIDGET(gtk_builder_get_object (builder, "final_account_tree_box"));
     data->final_account_tree = NULL;

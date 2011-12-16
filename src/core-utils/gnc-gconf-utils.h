@@ -880,7 +880,7 @@ GSList *gnc_gconf_client_all_entries (const gchar *section);
 
 /** Check gconf to see if the schema for one of the gnucash keys can
  *  be found.  This function is called to determine whether or not to
- *  launch a druid to help the user properly set up GConf for Gnucash.
+ *  launch an assistant to help the user properly set up GConf for Gnucash.
  *
  *  @return This function returns TRUE if it was able to find a
  *  schema.

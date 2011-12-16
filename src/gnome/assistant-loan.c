@@ -207,7 +207,7 @@ typedef struct LoanData_
 } LoanData;
 
 /**
- * The UI-side storage of the loan druid data.
+ * The UI-side storage of the loan assistant data.
  **/
 typedef struct LoanAssistantData_
 {
@@ -3067,7 +3067,7 @@ loan_create_sxes( LoanAssistantData *ldd )
             }
             tcSX->schedule = rod->schedule;
             /* So it won't get destroyed when the close the
-             * Druid. */
+             * Assistant. */
             tcSX->instNum =
                 ld_calc_sx_instance_num(&tcSX->start, rod->schedule);
             rod->schedule = NULL;

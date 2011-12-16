@@ -162,7 +162,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account)
     },
     {
-        "FileAddAccountHierarchyDruidAction", GNC_STOCK_NEW_ACCOUNT, N_("New Account _Hierarchy..."), NULL,
+        "FileAddAccountHierarchyAssistantAction", GNC_STOCK_NEW_ACCOUNT, N_("New Account _Hierarchy..."), NULL,
         N_("Extend the current book by merging with new account type categories"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_new_hierarchy)
     },
@@ -272,7 +272,7 @@ static const gchar *actions_requiring_account_always[] =
 static const gchar* readonly_inactive_actions[] =
 {
     "FileNewAccountAction",
-    "FileAddAccountHierarchyDruidAction",
+    "FileAddAccountHierarchyAssistantAction",
     "EditEditAccountAction",
     "EditDeleteAccountAction",
     "EditRenumberSubaccountsAction",

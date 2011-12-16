@@ -14,7 +14,7 @@
       <placeholder name="ActionsPlaceholder">
 	<separator name="ActionsSep1"/>
         <menuitem name="FileNewAccount" action="FileNewAccountAction"/>
-        <menuitem name="FileAddAccountHierarchyDruid" action="FileAddAccountHierarchyDruidAction"/>
+        <menuitem name="FileAddAccountHierarchyAssistant" action="FileAddAccountHierarchyAssistantAction"/>
         <separator name="ActionsSep2"/>
 	<menuitem name="ActionsTransfer" action="ActionsTransferAction"/>
 	<menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>

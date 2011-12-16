@@ -38,6 +38,7 @@
 #include "dialog-commodity.h"
 #include "dialog-progress.h"
 #include "dialog-utils.h"
+#include "dialog-file-access.h" 
 #include "assistant-qif-import.h"
 #include "assistant-utils.h"
 #include "gnc-component-manager.h"
@@ -155,6 +156,7 @@ struct _qifimportwindow
     gboolean  ask_date_format;
     gboolean  busy;
     gboolean  load_stop;
+    gboolean  acct_tree_found;
 
     SCM       imported_files;
     SCM       selected_file;
@@ -1334,6 +1336,10 @@ void
 gnc_ui_qif_import_close_cb(GtkAssistant *gtkassistant, gpointer user_data)
 {
     QIFImportWindow  *wind = user_data;
+
+    /* If We did not have an account tree, lets save it */
+    if(!wind->acct_tree_found)
+        gnc_ui_file_access_for_save_as();
 
     gnc_close_gui_component_by_data( ASSISTANT_QIF_IMPORT_CM_CLASS, wind );
 }
@@ -3219,6 +3225,7 @@ gnc_ui_qif_import_finish_cb (GtkAssistant *gtkassistant,
     gnc_main_window_foreach_page(gnc_ui_qif_import_check_acct_tree,
                                  &acct_tree_found);
 
+    wind->acct_tree_found = acct_tree_found;
     if (!acct_tree_found)
     {
         page = gnc_plugin_page_account_tree_new();
@@ -3580,6 +3587,9 @@ gnc_ui_qif_import_assistant_make(QIFImportWindow *qif_win)
 
     /* Get all interesting builder-defined widgets. */
     get_assistant_widgets(qif_win, builder);
+
+    /* Make this window stay on top */
+    gtk_window_set_keep_above (GTK_WINDOW(qif_win->window), TRUE);
 
     /* Build the details of all GtkTreeView widgets. */
     build_views(qif_win);
