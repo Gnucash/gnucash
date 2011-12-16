@@ -149,7 +149,6 @@ src/engine/cashobjects.c
 src/engine/engine-helpers.c
 src/engine/glib-helpers.c
 src/engine/gncAddress.c
-src/engine/gnc-associate-account.c
 src/engine/gncBillTerm.c
 src/engine/gnc-budget.c
 src/engine/gncBusGuile.c
