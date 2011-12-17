@@ -382,14 +382,10 @@ src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in
 src/import-export/csv/gnc-csv-gnumeric-popup.c
 src/import-export/csv/gnc-csv-import.c
 src/import-export/csv/gnc-csv-model.c
-src/import-export/csv/gnc-csv-preview-dialog.glade
+src/import-export/csv/gnc-csv-import.glade
 src/import-export/csv/gncmod-csv-import.c
 src/import-export/csv/gnc-plugin-csv.c
 src/import-export/dialog-import.glade
-src/import-export/generic-import.glade
-src/import-export/gnc-import-desc-format.c
-src/import-export/gnc-import-format-cb.c
-src/import-export/gnc-import-format-gnome.c
 src/import-export/gncmod-generic-import.c
 src/import-export/import-account-matcher.c
 src/import-export/import-backend.c

@@ -38,7 +38,6 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 
-
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
 #define GCONF_SECTION "dialogs/import/generic_matcher/account_matcher"
@@ -156,7 +155,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
     gint response;
     Account * retval = NULL;
     const gchar *retval_name = NULL;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget * online_id_label, *button;
     gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE] = "";
     gboolean ok_pressed_retval = FALSE;
@@ -183,20 +182,21 @@ Account * gnc_import_select_account(GtkWidget *parent,
     if (retval == NULL && auto_create != 0)
     {
         /* load the interface */
-        xml = gnc_glade_xml_new ("generic-import.glade", "Generic Import Account Picker");
+        builder = gtk_builder_new();
+        gnc_builder_add_from_file (builder,"dialog-import.glade", "Generic Import Account Picker");
         /* connect the signals in the interface */
-        if (xml == NULL)
+        if (builder == NULL)
         {
-            PERR("Error opening the glade interface");
+            PERR("Error opening the glade builder interface");
         }
 
-        picker->dialog     = glade_xml_get_widget (xml, "Generic Import Account Picker");
+        picker->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Generic Import Account Picker"));
         if (parent)
             gtk_window_set_transient_for (GTK_WINDOW (picker->dialog),
                                           GTK_WINDOW (parent));
-        picker->account_tree_sw   = glade_xml_get_widget (xml, "account_tree_sw");
-        online_id_label = glade_xml_get_widget (xml, "online_id_label");
-        button = glade_xml_get_widget (xml, "newbutton");
+        picker->account_tree_sw = GTK_WIDGET(gtk_builder_get_object (builder, "account_tree_sw"));
+        online_id_label = GTK_WIDGET(gtk_builder_get_object (builder, "online_id_label"));
+        button = GTK_WIDGET(gtk_builder_get_object (builder, "newbutton"));
         gtk_button_set_use_stock (GTK_BUTTON(button), TRUE);
 
         //printf("gnc_import_select_account(): Fin get widget\n");
@@ -265,6 +265,8 @@ Account * gnc_import_select_account(GtkWidget *parent,
             }
         }
         while (response == GNC_RESPONSE_NEW);
+
+        g_object_unref(G_OBJECT(builder));
         gtk_widget_destroy(picker->dialog);
     }
     else

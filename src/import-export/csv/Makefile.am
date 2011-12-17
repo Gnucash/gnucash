@@ -52,10 +52,10 @@ uidir = $(GNC_UI_DIR)
 ui_DATA = \
 	gnc-plugin-csv-ui.xml
 
-gladedir = ${GNC_GLADE_DIR}
-glade_DATA = \
-	gnc-csv-preview-dialog.glade
+gtkbuilderdir = ${GNC_GTKBUILDER_DIR}
+gtkbuilder_DATA = \
+	gnc-csv-import.glade
 
-EXTRA_DIST = $(ui_DATA) $(glade_DATA)
+EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA)
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.csv\"

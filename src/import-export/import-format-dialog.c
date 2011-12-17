@@ -29,7 +29,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <glade/glade.h>
 
 #include "import-parse.h"
 #include "dialog-utils.h"
@@ -131,7 +130,7 @@ GncImportFormat
 gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
 
 {
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *dialog;
     GtkWidget *widget;
 
@@ -142,12 +141,16 @@ gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
     {
         return fmts;
     }
-
-    xml = gnc_glade_xml_new("generic-import.glade", "format_picker");
-    dialog = glade_xml_get_widget(xml, "format_picker");
-    widget = glade_xml_get_widget(xml, "msg_label");
+    /* Open the Glade Builder file */
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder,"dialog-import.glade", "format_picker");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "format_picker"));
+    widget = GTK_WIDGET(gtk_builder_get_object (builder, "msg_label"));
     gtk_label_set_text(GTK_LABEL(widget), msg);
 
-    widget = glade_xml_get_widget(xml, "menu_box");
+    widget = GTK_WIDGET(gtk_builder_get_object (builder, "menu_box"));
+
+    g_object_unref(G_OBJECT(builder));
+
     return add_menu_and_run_dialog(dialog, widget, fmts);
 }

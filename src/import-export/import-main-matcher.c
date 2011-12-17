@@ -80,6 +80,11 @@ enum downloaded_cols
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
+void on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info);
+void on_matcher_cancel_clicked (GtkButton *button, gpointer user_data);
+void on_matcher_help_clicked (GtkButton *button, gpointer user_data);
+void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
+
 /* Local prototypes */
 static void
 automatch_store_transactions(GNCImportMainMatcher *info,
@@ -126,7 +131,7 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     g_free (info);
 }
 
-static void
+void
 on_matcher_ok_clicked (GtkButton *button,
                        GNCImportMainMatcher *info)
 {
@@ -196,47 +201,50 @@ on_matcher_ok_clicked (GtkButton *button,
     /* DEBUG ("End") */
 }
 
-static void
-on_matcher_cancel_clicked (GtkButton *button,
-                           gpointer user_data)
+void
+on_matcher_cancel_clicked (GtkButton *button, gpointer user_data)
 {
     GNCImportMainMatcher *info = user_data;
     gnc_gen_trans_list_delete (info);
 }
 
-static void
-on_matcher_help_close_clicked (GtkButton *button,
-                               gpointer user_data)
+void
+on_matcher_help_close_clicked (GtkButton *button, gpointer user_data)
 {
     GtkWidget *help_dialog = user_data;
 
     gtk_widget_destroy(help_dialog);
 }
 
-static void
-on_matcher_help_clicked (GtkButton *button,
-                         gpointer user_data)
+void
+on_matcher_help_clicked (GtkButton *button, gpointer user_data)
 {
     GNCImportMainMatcher *info = user_data;
-    GladeXML *xml;
-    GtkWidget *help_dialog, *box;
+    GtkBuilder *builder;
+    GtkWidget *help_dialog, *box, *closebutton;
 
-    xml = gnc_glade_xml_new ("generic-import.glade", "matcher_help");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer2");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer3");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer4");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer5");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "matcher_help");
 
-    box = glade_xml_get_widget (xml, "red");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "red"));
     gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_red);
-    box = glade_xml_get_widget (xml, "yellow");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "yellow"));
     gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_yellow);
-    box = glade_xml_get_widget (xml, "green");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "green"));
     gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_green);
 
-    help_dialog = glade_xml_get_widget (xml, "matcher_help");
+    help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help"));
     gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
                                  GTK_WINDOW(info->dialog));
 
-    glade_xml_signal_connect_data(xml, "on_matcher_help_close_clicked",
-                                  G_CALLBACK(on_matcher_help_close_clicked),
-                                  help_dialog);
+    /* Connect the signals */
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, help_dialog);
+
+    g_object_unref(G_OBJECT(builder));
 
     gtk_widget_show(help_dialog);
 }
@@ -523,8 +531,9 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
         gint match_date_hardlimit)
 {
     GNCImportMainMatcher *info;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *heading_label;
+    GtkWidget *button;
     gboolean show_update;
 
     info = g_new0 (GNCImportMainMatcher, 1);
@@ -534,32 +543,22 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     gnc_import_Settings_set_match_date_hardlimit (info->user_settings, match_date_hardlimit);
 
     /* Initialize the GtkDialog. */
-    xml = gnc_glade_xml_new ("generic-import.glade", "transaction_matcher");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher");
 
-    info->dialog = glade_xml_get_widget (xml, "transaction_matcher");
+    info->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher"));
     g_assert (info->dialog != NULL);
-    info->view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "downloaded_view"));
+    info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
     g_assert (info->view != NULL);
 
     show_update = gnc_import_Settings_get_action_update_enabled(info->user_settings);
     gnc_gen_trans_init_view(info, all_from_same_account, show_update);
-    heading_label = glade_xml_get_widget (xml, "heading_label");
+    heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
     g_assert (heading_label != NULL);
 
     /* if (parent)
       gtk_window_set_transient_for (GTK_WINDOW (info->dialog),
     			  GTK_WINDOW (parent));*/
-
-    /* Connect signals */
-    glade_xml_signal_connect_data(xml, "on_matcher_ok_clicked",
-                                  G_CALLBACK(on_matcher_ok_clicked),
-                                  info);
-    glade_xml_signal_connect_data(xml, "on_matcher_cancel_clicked",
-                                  G_CALLBACK(on_matcher_cancel_clicked),
-                                  info);
-    glade_xml_signal_connect_data(xml, "on_matcher_help_clicked",
-                                  G_CALLBACK(on_matcher_help_clicked),
-                                  info);
 
     /*Initialise the colors */
     gdk_color_parse(COLOR_RED,    &info->color_back_red);
@@ -573,6 +572,11 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     gtk_widget_show_all (GTK_WIDGET (info->dialog));
 
     info->transaction_processed_cb = NULL;
+
+    /* Connect the signals */
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, info);
+
+    g_object_unref(G_OBJECT(builder));
 
     return info;
 }
@@ -627,9 +631,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     gtk_list_store_set(store, iter, DOWNLOADED_COL_ACCOUNT, ro_text, -1);
 
     /*Date*/
-
-    text =
-        qof_print_date ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) );
+    text = qof_print_date ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) );
     gtk_list_store_set(store, iter, DOWNLOADED_COL_DATE, text, -1);
     g_free(text);
 

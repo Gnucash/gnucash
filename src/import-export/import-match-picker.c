@@ -36,7 +36,6 @@
 
 #include "qof.h"
 #include "gnc-ui-util.h"
-#include <glade/glade.h>
 #include "dialog-utils.h"
 /********************************************************************\
  *   Constants   *
@@ -401,7 +400,7 @@ gnc_import_match_picker_init_match_view (GNCImportMatchPicker * matcher)
 static void
 init_match_picker_gui(GNCImportMatchPicker * matcher)
 {
-    GladeXML *xml;
+    GtkBuilder *builder;
 
     /* DEBUG("Begin..."); */
 
@@ -409,12 +408,13 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
     matcher->user_settings = gnc_import_Settings_new ();
 
     /* load the interface */
-    xml = gnc_glade_xml_new ("generic-import.glade", "match_picker");
-    g_return_if_fail (xml != NULL);
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "match_picker");
+    g_return_if_fail (builder != NULL);
 
-    matcher->transaction_matcher = glade_xml_get_widget (xml, "match_picker");
-    matcher->downloaded_view = (GtkTreeView *)glade_xml_get_widget (xml, "downloaded_view");
-    matcher->match_view = (GtkTreeView *)glade_xml_get_widget (xml, "matched_view");
+    matcher->transaction_matcher = GTK_WIDGET(gtk_builder_get_object (builder, "match_picker"));
+    matcher->downloaded_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "download_view"));
+    matcher->match_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "matched_view"));
 
     gnc_import_match_picker_init_downloaded_view(matcher);
     gnc_import_match_picker_init_match_view(matcher);
@@ -429,6 +429,8 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
     gnc_restore_window_size(GCONF_SECTION,
                             GTK_WINDOW (matcher->transaction_matcher));
     gtk_widget_show(matcher->transaction_matcher);
+
+    g_object_unref(G_OBJECT(builder));
 
 }/* end init_match_picker_gui */
 

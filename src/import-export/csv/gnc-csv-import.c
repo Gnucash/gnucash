@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib/gi18n.h>
 #include <goffice/gtk/go-charmap-sel.h>
 
@@ -57,32 +56,32 @@ enum SEP_BUTTON_TYPES {SEP_SPACE, SEP_TAB, SEP_COMMA, SEP_COLON, SEP_SEMICOLON, 
  * import. */
 typedef struct
 {
-    GncCsvParseData* parse_data; /**< The actual data we are previewing */
+    GncCsvParseData* parse_data;       /**< The actual data we are previewing */
     GtkDialog* dialog;
-    GOCharmapSel* encselector; /**< The widget for selecting the encoding */
-    GtkComboBox* date_format_combo; /**< The widget for selecting the date format */
-    GladeXML* xml; /**< The Glade file that contains the dialog. */
-    GtkTreeView* treeview; /**< The treeview containing the data */
-    GtkTreeView* ctreeview; /**< The treeview containing the column types */
+    GOCharmapSel* encselector;         /**< The widget for selecting the encoding */
+    GtkComboBox* date_format_combo;    /**< The widget for selecting the date format */
+    GtkTreeView* treeview;             /**< The treeview containing the data */
+    GtkTreeView* ctreeview;            /**< The treeview containing the column types */
     GtkCheckButton* sep_buttons[SEP_NUM_OF_TYPES]; /**< Checkbuttons for common separators */
-    GtkCheckButton* custom_cbutton; /**< The checkbutton for a custom separator */
-    GtkEntry* custom_entry; /**< The entry for custom separators */
+    GtkCheckButton* custom_cbutton;    /**< The checkbutton for a custom separator */
+    GtkEntry* custom_entry;            /**< The entry for custom separators */
+    GtkLabel* instructions_label;      /**< The instructions label */
+    GtkImage* instructions_image;      /**< The instructions image */
     gboolean encoding_selected_called; /**< Before encoding_selected is first called, this is FALSE.
-                                      * (See description of encoding_selected.) */
-    gboolean not_empty; /**< FALSE initially, true after the first type gnc_csv_preview_update is called. */
-    gboolean previewing_errors; /**< TRUE if the dialog is displaying
-                               * error lines, instead of all the file
-                               * data. */
-    int code_encoding_calls; /**< Normally this is 0. If the computer
-                            * changes encselector, this is set to
-                            * 2. encoding_selected is called twice,
-                            * each time decrementing this by 1. */
-    gboolean approved; /**< This is FALSE until the user clicks "OK". */
-    GtkWidget** treeview_buttons; /**< This array contains the header buttons in treeview */
-    int longest_line; /**< The length of the longest row */
-    int fixed_context_col; /**< The number of the column whose the user has clicked */
-    int fixed_context_dx; /**< The horizontal coordinate of the pixel in the header of the column
-                         * the user has clicked */
+                                        * (See description of encoding_selected.) */
+    gboolean not_empty;                /**< FALSE initially, true after the first type gnc_csv_preview_update is called. */
+    gboolean previewing_errors;        /**< TRUE if the dialog is displaying
+                                       * error lines, instead of all the file data. */
+    int code_encoding_calls;           /**< Normally this is 0. If the computer
+                                       * changes encselector, this is set to
+                                       * 2. encoding_selected is called twice,
+                                       * each time decrementing this by 1. */
+    gboolean approved;                 /**< This is FALSE until the user clicks "OK". */
+    GtkWidget** treeview_buttons;      /**< This array contains the header buttons in treeview */
+    int longest_line;                  /**< The length of the longest row */
+    int fixed_context_col;             /**< The number of the column whose the user has clicked */
+    int fixed_context_dx;              /**< The horizontal coordinate of the pixel in the header of the column
+                                       * the user has clicked */
 } GncCsvPreview;
 
 static void gnc_csv_preview_update(GncCsvPreview* preview);
@@ -408,7 +407,8 @@ static GncCsvPreview* gnc_csv_preview_new()
     GncCsvPreview* preview = g_new(GncCsvPreview, 1);
     GtkWidget *ok_button, *cancel_button, *csv_button;
     GtkContainer* date_format_container;
-    /* The names in the glade file for the sep buttons. */
+    GtkBuilder *builder;
+    /* The names in the glade builder file for the sep buttons. */
     char* sep_button_names[] = {"space_cbutton",
                                 "tab_cbutton",
                                 "comma_cbutton",
@@ -425,17 +425,19 @@ static GncCsvPreview* gnc_csv_preview_new()
     g_signal_connect(G_OBJECT(preview->encselector), "charmap_changed",
                      G_CALLBACK(encoding_selected), (gpointer)preview);
 
-    /* Load the Glade file. */
-    preview->xml = gnc_glade_xml_new("gnc-csv-preview-dialog.glade", "dialog");
-    /* Load the dialog. */
-    preview->dialog = GTK_DIALOG(glade_xml_get_widget(preview->xml, "dialog"));
+    /* Load the Glade builder file. */
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "gnc-csv-import.glade", "preview-dialog");
 
-    /* Load the separator buttons from the glade file into the
+    /* Load the dialog. */
+    preview->dialog = GTK_DIALOG(gtk_builder_get_object (builder, "preview-dialog"));
+
+    /* Load the separator buttons from the glade builder file into the
      * preview->sep_buttons array. */
     for (i = 0; i < SEP_NUM_OF_TYPES; i++)
     {
         preview->sep_buttons[i]
-        = (GtkCheckButton*)glade_xml_get_widget(preview->xml, sep_button_names[i]);
+        = (GtkCheckButton*)GTK_WIDGET(gtk_builder_get_object (builder, sep_button_names[i]));
         /* Connect them to the sep_button_clicked event handler. */
         g_signal_connect(G_OBJECT(preview->sep_buttons[i]), "toggled",
                          G_CALLBACK(sep_button_clicked), (gpointer)preview);
@@ -444,22 +446,26 @@ static GncCsvPreview* gnc_csv_preview_new()
     /* Load and connect the custom separator checkbutton in the same way
      * as the other separator buttons. */
     preview->custom_cbutton
-    = (GtkCheckButton*)glade_xml_get_widget(preview->xml, "custom_cbutton");
+    = (GtkCheckButton*)GTK_WIDGET(gtk_builder_get_object (builder, "custom_cbutton"));
     g_signal_connect(G_OBJECT(preview->custom_cbutton), "clicked",
                      G_CALLBACK(sep_button_clicked), (gpointer)preview);
 
     /* Load the entry for the custom separator entry. Connect it to the
      * sep_button_clicked event handler as well. */
-    preview->custom_entry = (GtkEntry*)glade_xml_get_widget(preview->xml, "custom_entry");
+    preview->custom_entry = (GtkEntry*)GTK_WIDGET(gtk_builder_get_object (builder, "custom_entry"));
     g_signal_connect(G_OBJECT(preview->custom_entry), "changed",
                      G_CALLBACK(sep_button_clicked), (gpointer)preview);
 
-    /* Get the table from the Glade file. */
-    enctable = GTK_TABLE(glade_xml_get_widget(preview->xml, "enctable"));
+    /* Get the table from the Glade builder file. */
+    enctable = GTK_TABLE(gtk_builder_get_object (builder, "enctable"));
     /* Put the selector in at the top. */
     gtk_table_attach_defaults(enctable, GTK_WIDGET(preview->encselector), 1, 2, 0, 1);
     /* Show the table in all its glory. */
     gtk_widget_show_all(GTK_WIDGET(enctable));
+
+    /* The instructions label and image */
+    preview->instructions_label = GTK_LABEL(gtk_builder_get_object (builder, "instructions_label"));
+    preview->instructions_image = GTK_IMAGE(gtk_builder_get_object (builder, "instructions_image"));
 
     /* Add in the date format combo box and hook it up to an event handler. */
     preview->date_format_combo = GTK_COMBO_BOX(gtk_combo_box_new_text());
@@ -472,33 +478,32 @@ static GncCsvPreview* gnc_csv_preview_new()
                      G_CALLBACK(date_format_selected), (gpointer)preview);
 
     /* Add it to the dialog. */
-    date_format_container = GTK_CONTAINER(glade_xml_get_widget(preview->xml,
-                                          "date_format_container"));
+    date_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "date_format_container"));
     gtk_container_add(date_format_container, GTK_WIDGET(preview->date_format_combo));
     gtk_widget_show_all(GTK_WIDGET(date_format_container));
 
     /* Connect the "OK" and "Cancel" buttons to their event handlers. */
-    ok_button = glade_xml_get_widget(preview->xml, "ok_button");
+    ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
     g_signal_connect(G_OBJECT(ok_button), "clicked",
                      G_CALLBACK(ok_button_clicked), (gpointer)preview);
 
-    cancel_button = glade_xml_get_widget(preview->xml, "cancel_button");
+    cancel_button = GTK_WIDGET(gtk_builder_get_object (builder, "cancel_button"));
     g_signal_connect(G_OBJECT(cancel_button), "clicked",
                      G_CALLBACK(cancel_button_clicked), (gpointer)preview);
 
     /* Connect the CSV/Fixed-Width radio button event handler. */
-    csv_button = glade_xml_get_widget(preview->xml, "csv_button");
+    csv_button = GTK_WIDGET(gtk_builder_get_object (builder, "csv_button"));
     g_signal_connect(csv_button, "toggled",
                      G_CALLBACK(separated_or_fixed_selected), (gpointer)preview);
 
     /* Load the data treeview and connect it to its resizing event handler. */
-    preview->treeview = (GtkTreeView*)(glade_xml_get_widget(preview->xml, "treeview"));
+    preview->treeview = (GtkTreeView*)GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     g_signal_connect(G_OBJECT(preview->treeview), "size-allocate",
                      G_CALLBACK(treeview_resized), (gpointer)preview);
     context = gtk_widget_create_pango_context(GTK_WIDGET(preview->treeview));
 
     /* Load the column type treeview. */
-    preview->ctreeview = (GtkTreeView*)(glade_xml_get_widget(preview->xml, "ctreeview"));
+    preview->ctreeview = (GtkTreeView*)GTK_WIDGET(gtk_builder_get_object (builder, "ctreeview"));
 
     /* This is TRUE only after encoding_selected is called, so we must
      * set it initially to FALSE. */
@@ -506,6 +511,8 @@ static GncCsvPreview* gnc_csv_preview_new()
 
     /* It is empty at first. */
     preview->not_empty = FALSE;
+
+    g_object_unref(G_OBJECT(builder));
 
     return preview;
 }
@@ -516,7 +523,6 @@ static GncCsvPreview* gnc_csv_preview_new()
  */
 static void gnc_csv_preview_free(GncCsvPreview* preview)
 {
-    g_object_unref(preview->xml);
     g_free(preview);
 }
 
@@ -1065,18 +1071,16 @@ static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
 /* TODO Let the user manually edit cells' data? */
 static int gnc_csv_preview_errors(GncCsvPreview* preview)
 {
-    GtkLabel* instructions_label = GTK_LABEL(glade_xml_get_widget(preview->xml, "instructions_label"));
-    GtkImage* instructions_image = GTK_IMAGE(glade_xml_get_widget(preview->xml, "instructions_image"));
     gchar* name;
     GtkIconSize size;
     GtkTreeViewColumn* last_col;
 
-    gtk_image_get_stock(instructions_image, &name, &size);
-    gtk_image_set_from_stock(instructions_image, GTK_STOCK_DIALOG_ERROR, size);
-    gtk_label_set_text(instructions_label,
+    gtk_image_get_stock(preview->instructions_image, &name, &size);
+    gtk_image_set_from_stock(preview->instructions_image, GTK_STOCK_DIALOG_ERROR, size);
+    gtk_label_set_text(preview->instructions_label,
                        _("The rows displayed below had errors. You can attempt to correct these errors by changing the configuration."));
-    gtk_widget_show(GTK_WIDGET(instructions_image));
-    gtk_widget_show(GTK_WIDGET(instructions_label));
+    gtk_widget_show(GTK_WIDGET(preview->instructions_image));
+    gtk_widget_show(GTK_WIDGET(preview->instructions_label));
 
     preview->previewing_errors = TRUE;
     preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
