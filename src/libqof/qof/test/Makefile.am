@@ -15,14 +15,16 @@ test_qof_SOURCES = \
 	test-qofinstance.c \
 	test-kvp_frame.c \
 	test-qofobject.c \
-	test-qofsession.c
+	test-qofsession.c \
+	${top_srcdir}/src/test-core/test-stuff.c
 
 test_qof_HEADERS = \
 	$(top_srcdir)/${MODULEPATH}/qofbook.h \
 	$(top_srcdir)/${MODULEPATH}/qofinstance.h \
 	$(top_srcdir)/${MODULEPATH}/kvp_frame.h \
 	$(top_srcdir)/${MODULEPATH}/qofobject.h \
-	$(top_srcdir)/${MODULEPATH}/qofsession.h
+	$(top_srcdir)/${MODULEPATH}/qofsession.h \
+	$(top_srcdir)/src/test-core/test-stuff.h
 
 TEST_PROGS += test-qof
 
@@ -33,12 +35,11 @@ test_qofdir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
 #as independent as possible.
 test_qof_LDADD = \
 	${top_builddir}/${MODULEPATH}/libgnc-qof.la \
-	${top_builddir}/src/test-core/.libs/libtest-core.la \
 	$(GLIB_LIBS)
 
 test_qof_CFLAGS = \
 	${DEFAULT_INCLUDES} \
-	-I$(top_srcdir)/${MODULEPATH}/ \
+	-I$(top_srcdir)/${MODULEPATH} \
 	-I$(top_srcdir)/src/test-core \
 	-DTESTPROG=test_qof \
 	${GLIB_CFLAGS}

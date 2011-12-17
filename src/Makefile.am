@@ -1,7 +1,7 @@
 # These directories do not contain any gtk dependencies
 NONGUI_SUBDIRS = \
-  test-core \
   libqof \
+  test-core \
   debug \
   doc \
   pixmaps \
