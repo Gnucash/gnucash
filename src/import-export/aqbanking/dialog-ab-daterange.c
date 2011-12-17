@@ -1,5 +1,5 @@
 /*
- * dialog-daterange.c --
+ * dialog-ab-daterange.c --
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -29,7 +29,7 @@
 
 #include "config.h"
 
-#include "dialog-daterange.h"
+#include "dialog-ab-daterange.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
 
@@ -57,7 +57,7 @@ gnc_ab_enter_daterange(GtkWidget *parent,
                        Timespec *to_date,
                        gboolean *to_now)
 {
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *dialog;
     GtkWidget *heading_label;
     GtkWidget *first_button;
@@ -68,30 +68,31 @@ gnc_ab_enter_daterange(GtkWidget *parent,
 
     ENTER("");
 
-    xml = gnc_glade_xml_new("aqbanking.glade", "Date Range Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Date Range Dialog");
 
-    dialog = glade_xml_get_widget(xml, "Date Range Dialog");
-    g_object_set_data_full(G_OBJECT(dialog), "xml", xml, g_object_unref);
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-                                      &info);
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Date Range Dialog"));
+
+    /* Connect the signals */
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, &info );
 
     if (parent)
         gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
-    heading_label  = glade_xml_get_widget(xml, "heading_label");
-    first_button  = glade_xml_get_widget(xml, "first_button");
-    last_retrieval_button  = glade_xml_get_widget(xml, "last_retrieval_button");
-    info.enter_from_button  = glade_xml_get_widget(xml, "enter_from_button");
-    now_button  = glade_xml_get_widget(xml, "now_button");
-    info.enter_to_button  = glade_xml_get_widget(xml, "enter_to_button");
+    heading_label  = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
+    first_button  = GTK_WIDGET(gtk_builder_get_object (builder, "first_button"));
+    last_retrieval_button  = GTK_WIDGET(gtk_builder_get_object (builder, "last_retrieval_button"));
+    info.enter_from_button  = GTK_WIDGET(gtk_builder_get_object (builder, "enter_from_button"));
+    now_button  = GTK_WIDGET(gtk_builder_get_object (builder, "now_button"));
+    info.enter_to_button  = GTK_WIDGET(gtk_builder_get_object (builder, "enter_to_button"));
 
     info.from_dateedit = gnc_date_edit_new_ts(*from_date, FALSE, FALSE);
-    gtk_container_add(GTK_CONTAINER(glade_xml_get_widget(xml, "enter_from_box")),
+    gtk_container_add(GTK_CONTAINER(gtk_builder_get_object (builder, "enter_from_box")),
                       info.from_dateedit);
     gtk_widget_show(info.from_dateedit);
 
     info.to_dateedit = gnc_date_edit_new_ts(*to_date, FALSE, FALSE);
-    gtk_container_add(GTK_CONTAINER(glade_xml_get_widget(xml, "enter_to_box")),
+    gtk_container_add(GTK_CONTAINER(gtk_builder_get_object (builder, "enter_to_box")),
                       info.to_dateedit);
     gtk_widget_show(info.to_dateedit);
 
@@ -132,6 +133,8 @@ gnc_ab_enter_daterange(GtkWidget *parent,
         *to_now = gtk_toggle_button_get_active(
                       GTK_TOGGLE_BUTTON(now_button));
     }
+
+    g_object_unref(G_OBJECT(builder));
 
     gtk_widget_destroy(dialog);
 

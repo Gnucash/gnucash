@@ -34,7 +34,7 @@
 
 #include "Account.h"
 #include "dialog-ab-trans.h"
-#include "druid-ab-initial.h"
+#include "assistant-ab-initial.h"
 #include "gnc-ab-getbalance.h"
 #include "gnc-ab-gettrans.h"
 #include "gnc-ab-transfer.h"
@@ -430,7 +430,7 @@ static void
 gnc_plugin_ab_cmd_setup(GtkAction *action, GncMainWindowActionData *data)
 {
     ENTER("action %p, main window data %p", action, data);
-    gnc_ab_initial_druid();
+    gnc_ab_initial_assistant();
     LEAVE(" ");
 }
 

@@ -203,7 +203,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
                         GList *templates)
 {
     GncABTransDialog *td;
-    GladeXML *xml;
+    GtkBuilder  *builder;
     const gchar *ab_ownername;
     const gchar *ab_accountnumber;
     const gchar *ab_bankname;
@@ -244,38 +244,37 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     td->blzcheck = AccountNumberCheck_new();
 #endif
 
-    xml = gnc_glade_xml_new("aqbanking.glade", "Transaction Dialog");
-    td->dialog = glade_xml_get_widget(xml, "Transaction Dialog");
-    g_object_set_data_full(G_OBJECT(td->dialog), "xml", xml, g_object_unref);
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, td);
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Transaction Dialog");
+    td->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Transaction Dialog"));
 
     if (parent)
         gtk_window_set_transient_for(GTK_WINDOW(td->dialog), GTK_WINDOW(parent));
 
     /* Extract widgets */
-    heading_label = glade_xml_get_widget(xml, "heading_label");
-    recp_name_heading = glade_xml_get_widget(xml, "recp_name_heading");
-    td->recp_name_entry = glade_xml_get_widget(xml, "recp_name_entry");
-    recp_account_heading = glade_xml_get_widget(xml, "recp_account_heading");
-    td->recp_account_entry = glade_xml_get_widget(xml, "recp_account_entry");
-    recp_bankcode_heading = glade_xml_get_widget(xml, "recp_bankcode_heading");
-    td->recp_bankcode_entry = glade_xml_get_widget(xml, "recp_bankcode_entry");
-    td->recp_bankname_label = glade_xml_get_widget(xml, "recp_bankname_label");
-    amount_hbox = glade_xml_get_widget(xml, "amount_hbox");
-    td->purpose_entry = glade_xml_get_widget(xml, "purpose_entry");
-    td->purpose_cont_entry = glade_xml_get_widget(xml, "purpose_cont_entry");
-    td->purpose_cont2_entry = glade_xml_get_widget(xml, "purpose_cont2_entry");
-    td->purpose_cont3_entry = glade_xml_get_widget(xml, "purpose_cont3_entry");
-    orig_name_heading = glade_xml_get_widget(xml, "orig_name_heading");
-    orig_name_label = glade_xml_get_widget(xml, "orig_name_label");
-    orig_account_heading = glade_xml_get_widget(xml, "orig_account_heading");
-    orig_account_label = glade_xml_get_widget(xml, "orig_account_label");
-    orig_bankname_heading = glade_xml_get_widget(xml, "orig_bankname_heading");
-    orig_bankname_label = glade_xml_get_widget(xml, "orig_bankname_label");
-    orig_bankcode_heading = glade_xml_get_widget(xml, "orig_bankcode_heading");
-    orig_bankcode_label = glade_xml_get_widget(xml, "orig_bankcode_label");
+    heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
+    recp_name_heading = GTK_WIDGET(gtk_builder_get_object (builder, "recp_name_heading"));
+    td->recp_name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "recp_name_entry"));
+    recp_account_heading = GTK_WIDGET(gtk_builder_get_object (builder, "recp_account_heading"));
+    td->recp_account_entry = GTK_WIDGET(gtk_builder_get_object (builder, "recp_account_entry"));
+    recp_bankcode_heading = GTK_WIDGET(gtk_builder_get_object (builder, "recp_bankcode_heading"));
+    td->recp_bankcode_entry = GTK_WIDGET(gtk_builder_get_object (builder, "recp_bankcode_entry"));
+    td->recp_bankname_label = GTK_WIDGET(gtk_builder_get_object (builder, "recp_bankname_label"));
+    amount_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "amount_hbox"));
+    td->purpose_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_entry"));
+    td->purpose_cont_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_cont_entry"));
+    td->purpose_cont2_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_cont2_entry"));
+    td->purpose_cont3_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_cont3_entry"));
+    orig_name_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_name_heading"));
+    orig_name_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_name_label"));
+    orig_account_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_account_heading"));
+    orig_account_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_account_label"));
+    orig_bankname_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_bankname_heading"));
+    orig_bankname_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_bankname_label"));
+    orig_bankcode_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_bankcode_heading"));
+    orig_bankcode_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_bankcode_label"));
     td->template_gtktreeview =
-        GTK_TREE_VIEW(glade_xml_get_widget(xml, "template_list"));
+        GTK_TREE_VIEW(gtk_builder_get_object (builder, "template_list"));
 
     /* Amount edit */
     td->amount_edit = gnc_amount_edit_new();
@@ -347,6 +346,11 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     column = gtk_tree_view_column_new_with_attributes(
                  "Template Name", renderer, "text", TEMPLATE_NAME, NULL);
     gtk_tree_view_append_column(td->template_gtktreeview, column);
+
+    /* Connect the Signals */
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, td);
+
+    g_object_unref(G_OBJECT(builder));
 
     return td;
 }
@@ -873,7 +877,7 @@ void
 dat_add_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *dialog;
     GtkWidget *entry;
     gint retval;
@@ -887,10 +891,11 @@ dat_add_templ_cb(GtkButton *button, gpointer user_data)
     g_return_if_fail(td);
 
     ENTER("td=%p", td);
-    xml = gnc_glade_xml_new ("aqbanking.glade", "Template Name Dialog");
-    dialog = glade_xml_get_widget(xml, "Template Name Dialog");
-    g_object_set_data_full(G_OBJECT(dialog), "xml", xml, g_object_unref);
-    entry = glade_xml_get_widget(xml, "template_name");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Template Name Dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Template Name Dialog"));
+
+    entry = GTK_WIDGET(gtk_builder_get_object (builder, "template_name"));
 
     /* Suggest recipient name as name of the template */
     gtk_entry_set_text(GTK_ENTRY(entry),
@@ -948,6 +953,8 @@ dat_add_templ_cb(GtkButton *button, gpointer user_data)
         break;
     }
     while (TRUE);
+
+    g_object_unref(G_OBJECT(builder));
 
     gtk_widget_destroy(dialog);
 

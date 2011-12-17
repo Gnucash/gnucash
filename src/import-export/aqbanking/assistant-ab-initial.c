@@ -1,5 +1,5 @@
 /*
- * druid-ab-initial.c --
+ * assistant-ab-initial.c -- Initialise the AqBanking wizard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,11 +21,12 @@
 
 /**
  * @internal
- * @file druid-ab-initial.c
+ * @file assistant-ab-initial.c
  * @brief AqBanking setup functionality
  * @author Copyright (C) 2002 Christian Stimming <stimming@tuhh.de>
  * @author Copyright (C) 2006 David Hampton <hampton@employees.org>
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
+ * @author Copyright (C) 2011 Robert Fewell
  */
 
 #include "config.h"
@@ -42,8 +43,8 @@
 #include <unistd.h>
 
 #include "dialog-utils.h"
-#include "druid-ab-initial.h"
-#include "druid-utils.h"
+#include "assistant-ab-initial.h"
+#include "assistant-utils.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
 #include "gnc-component-manager.h"
@@ -59,42 +60,48 @@
 #endif
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
+static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
-#define DRUID_AB_INITIAL_CM_CLASS "druid-ab-initial"
+#define ASSISTANT_AB_INITIAL_CM_CLASS "assistant-ab-initial"
 
 typedef struct _ABInitialInfo ABInitialInfo;
 typedef struct _DeferredInfo DeferredInfo;
 typedef struct _AccCbData AccCbData;
 typedef struct _RevLookupData RevLookupData;
 
-gboolean dai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
-void dai_cancel_cb(GnomeDruid *druid, gpointer user_data);
-void dai_destroy_cb(GtkObject *object, gpointer user_data);
-void dai_wizard_page_prepare_cb(GnomeDruidPage *druid_page, GtkWidget *widget, gpointer user_data);
-void dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data);
-void dai_match_page_prepare_cb(GnomeDruidPage *druid_page, GtkWidget *widget, gpointer user_data);
-void dai_finish_cb(GnomeDruidPage *druid_page, GtkWidget *widget, gpointer user_data);
+void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
+                 gpointer user_data);
+
+void aai_on_finish (GtkAssistant *gtkassistant, gpointer user_data);
+void aai_on_cancel (GtkAssistant *assistant, gpointer user_data);
+void aai_destroy_cb(GtkObject *object, gpointer user_data);
+
+gboolean aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
+
+void aai_wizard_page_prepare (GtkAssistant *assistant, gpointer user_data);
+void aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data);
+
+void aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 
 static gboolean banking_has_accounts(AB_BANKING *banking);
 static void hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
-static void druid_enable_next_button(ABInitialInfo *info);
-static void druid_disable_next_button(ABInitialInfo *info);
+
 static void child_exit_cb(GPid pid, gint status, gpointer data);
 static gchar *ab_account_longname(const AB_ACCOUNT *ab_acc);
 static AB_ACCOUNT *update_account_list_acc_cb(AB_ACCOUNT *ab_acc, gpointer user_data);
 static void update_account_list(ABInitialInfo *info);
 static gboolean find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static gboolean clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
-static void account_list_changed_cb(GtkTreeSelection *selection, gpointer user_data);
+static void account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
+                  GtkTreeViewColumn  *col, gpointer user_data);
 static void clear_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
 static void save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
-static void cm_close_handler(gpointer user_data);
+static void aai_close_handler(gpointer user_data);
 
 struct _ABInitialInfo
 {
     GtkWidget *window;
-    GtkWidget *druid;
+    GtkWidget *assistant;
 
     /* account match page */
     gboolean match_page_prepared;
@@ -140,7 +147,7 @@ enum account_list_cols
 };
 
 gboolean
-dai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
     if (event->keyval == GDK_Escape)
     {
@@ -154,7 +161,7 @@ dai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data
 }
 
 void
-dai_cancel_cb(GnomeDruid *druid, gpointer user_data)
+aai_on_cancel (GtkAssistant *gtkassistant, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
 
@@ -162,18 +169,18 @@ dai_cancel_cb(GnomeDruid *druid, gpointer user_data)
 }
 
 void
-dai_destroy_cb(GtkObject *object, gpointer user_data)
+aai_destroy_cb(GtkObject *object, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
 
-    gnc_unregister_gui_component_by_data(DRUID_AB_INITIAL_CM_CLASS, info);
+    gnc_unregister_gui_component_by_data(ASSISTANT_AB_INITIAL_CM_CLASS, info);
 
     if (info->deferred_info)
     {
-        g_message("Online Banking druid is being closed but the wizard is still "
+        g_message("Online Banking assistant is being closed but the wizard is still "
                   "running.  Inoring.");
 
-        /* Tell child_exit_cb() that there is no druid anymore */
+        /* Tell child_exit_cb() that there is no assistant anymore */
         info->deferred_info->initial_info = NULL;
     }
 
@@ -201,23 +208,28 @@ dai_destroy_cb(GtkObject *object, gpointer user_data)
 }
 
 void
-dai_wizard_page_prepare_cb(GnomeDruidPage *druid_page, GtkWidget *widget,
-                           gpointer user_data)
+aai_wizard_page_prepare (GtkAssistant *assistant, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     g_return_if_fail(info->api);
 
+    /* Enable the Assistant Buttons if we accounts */
     if (banking_has_accounts(info->api))
-        druid_enable_next_button(info);
+        gtk_assistant_set_page_complete (assistant, page, TRUE);
     else
-        druid_disable_next_button(info);
+        gtk_assistant_set_page_complete (assistant, page, FALSE);
 }
 
 void
-dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
+aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
+    gint num = gtk_assistant_get_current_page (GTK_ASSISTANT(info->window));
+    GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(info->window), num);
+
     AB_BANKING *banking = info->api;
     GWEN_BUFFER *buf;
     gboolean wizard_exists;
@@ -248,8 +260,6 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
         if (!dlg)
         {
             PERR("Could not lookup Setup Dialog of aqbanking!");
-            /* Dialog failed, but maybe the user wants to continue anyway */
-            druid_enable_next_button(info);
         }
         else
         {
@@ -257,12 +267,7 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
             if (rv <= 0)
             {
                 /* Dialog was aborted/rejected */
-                druid_disable_next_button(info);
-            }
-            else
-            {
-                /* Dialog accepted, all fine */
-                druid_enable_next_button(info);
+                PERR("Setup Dialog of aqbanking aborted/rejected !");
             }
             GWEN_Dialog_free(dlg);
         }
@@ -278,7 +283,7 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
 
 
     /* This is the point where we look for and start an external
-     * application shipped with aqbanking that contains the setup druid
+     * application shipped with aqbanking that contains the setup assistant
      * for AqBanking related stuff.  It requires qt (but not kde).  This
      * application contains the very verbose step-by-step setup wizard
      * for the AqBanking account, and the application is shared with
@@ -317,8 +322,6 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
         }
     }
 #endif
-
-    druid_disable_next_button(info);
 
     if (wizard_exists)
     {
@@ -371,57 +374,60 @@ dai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
            "ensure this program is present.  On some distributions this "
            "may require installing additional packages."),
          QT3_WIZARD_PACKAGE);
-        druid_disable_next_button(info);
     }
 
     GWEN_Buffer_free(buf);
 #endif
 
+    /* Enable the Assistant Buttons if we accounts */
+    if (banking_has_accounts(info->api))
+        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, TRUE);
+    else
+        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, FALSE);
+
     LEAVE(" ");
 }
 
 void
-dai_match_page_prepare_cb(GnomeDruidPage *druid_page, GtkWidget *widget,
-                          gpointer user_data)
+aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+
     Account *root;
     AccCbData data;
 
     g_return_if_fail(info && info->api);
 
-    /* No way back */
-    gnome_druid_set_buttons_sensitive(GNOME_DRUID(info->druid),
-                                      FALSE, TRUE, TRUE, TRUE);
-
     /* Do not run this twice */
-    if (info->match_page_prepared)
-        return;
-    else
-        info->match_page_prepared = TRUE;
-
-    /* Load aqbanking accounts */
+    if (!info->match_page_prepared)
+    {
+        /* Load aqbanking accounts */
 #ifdef AQBANKING_VERSION_4_EXACTLY
-    AB_Banking_OnlineInit(info->api, 0);
+        AB_Banking_OnlineInit(info->api, 0);
 #else
-    AB_Banking_OnlineInit(info->api);
+        AB_Banking_OnlineInit(info->api);
 #endif
+        /* Determine current mapping */
+        root = gnc_book_get_root_account(gnc_get_current_book());
+        info->gnc_hash = g_hash_table_new(&g_direct_hash, &g_direct_equal);
+        data.api = info->api;
+        data.hash = info->gnc_hash;
+        gnc_account_foreach_descendant(
+            root, (AccountCb) hash_from_kvp_acc_cb, &data);
 
-    /* Determine current mapping */
-    root = gnc_book_get_root_account(gnc_get_current_book());
-    info->gnc_hash = g_hash_table_new(&g_direct_hash, &g_direct_equal);
-    data.api = info->api;
-    data.hash = info->gnc_hash;
-    gnc_account_foreach_descendant(
-        root, (AccountCb) hash_from_kvp_acc_cb, &data);
-
+        info->match_page_prepared = TRUE;
+    }
     /* Update the graphical representation */
     update_account_list(info);
+
+    /* Enable the Assistant Buttons */
+    gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
 
 void
-dai_finish_cb(GnomeDruidPage *druid_page, GtkWidget *widget,
-              gpointer user_data)
+aai_on_finish (GtkAssistant *assistant, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
     Account *root;
@@ -480,26 +486,13 @@ hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data)
 }
 
 static void
-druid_enable_next_button(ABInitialInfo *info)
-{
-    g_return_if_fail(info);
-    gnome_druid_set_buttons_sensitive(GNOME_DRUID(info->druid),
-                                      TRUE, TRUE, TRUE, TRUE);
-}
-
-static void
-druid_disable_next_button(ABInitialInfo *info)
-{
-    g_return_if_fail(info);
-    gnome_druid_set_buttons_sensitive(GNOME_DRUID(info->druid),
-                                      TRUE, FALSE, TRUE, TRUE);
-}
-
-static void
 child_exit_cb(GPid pid, gint status, gpointer data)
 {
     DeferredInfo *deferred_info = data;
     ABInitialInfo *info = deferred_info->initial_info;
+    gint num = gtk_assistant_get_current_page (GTK_ASSISTANT(info->window));
+    GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(info->window), num);
+
     gint exit_status;
 
 #ifdef G_OS_WIN32
@@ -512,14 +505,14 @@ child_exit_cb(GPid pid, gint status, gpointer data)
 
     if (!info)
     {
-        g_message("Online Banking wizard exited, but the druid has been "
+        g_message("Online Banking wizard exited, but the assistant has been "
                   "destroyed already");
         goto cleanup_child_exit_cb;
     }
 
     if (exit_status == 0)
     {
-        druid_enable_next_button(info);
+         gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, TRUE);
     }
     else
     {
@@ -556,7 +549,7 @@ child_exit_cb(GPid pid, gint status, gpointer data)
                "if this wizard has run successfully.  "
                "Please try running the \"AqBanking Setup Wizard\" again."));
         }
-        druid_disable_next_button(info);
+        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, FALSE);
     }
 
 cleanup_child_exit_cb:
@@ -624,9 +617,9 @@ update_account_list_acc_cb(AB_ACCOUNT *ab_acc, gpointer user_data)
                        ACCOUNT_LIST_COL_GNC_NAME, gnc_name,
                        ACCOUNT_LIST_COL_CHECKED, FALSE,
                        -1);
-
     g_free(gnc_name);
     g_free(ab_name);
+
     return NULL;
 }
 
@@ -653,6 +646,7 @@ update_account_list(ABInitialInfo *info)
     /* Attach model to view again */
     gtk_tree_view_set_model(info->account_view,
                             GTK_TREE_MODEL(info->account_store));
+
     g_object_unref(info->account_store);
 }
 
@@ -693,9 +687,11 @@ clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 }
 
 static void
-account_list_changed_cb(GtkTreeSelection *selection, gpointer user_data)
+account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
+                  GtkTreeViewColumn  *col, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
+    GtkTreeSelection *selection;
     GtkTreeModel *model;
     GtkTreeIter iter;
     AB_ACCOUNT *ab_acc;
@@ -707,14 +703,15 @@ account_list_changed_cb(GtkTreeSelection *selection, gpointer user_data)
 
     g_return_if_fail(info);
 
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
-        return;
-    gtk_tree_model_get(model, &iter, ACCOUNT_LIST_COL_AB_ACCT, &ab_acc, -1);
+    PINFO("Row has been double-clicked.");
 
-    /* Avoid recursion when unselecting the item again */
-    g_signal_handlers_block_by_func(selection, account_list_changed_cb, info);
-    gtk_tree_selection_unselect_iter(selection, &iter);
-    g_signal_handlers_unblock_by_func(selection, account_list_changed_cb, info);
+    model = gtk_tree_view_get_model(view);
+    selection = gtk_tree_view_get_selection(info->account_view);
+
+    if (!gtk_tree_model_get_iter(model, &iter, path))
+      return; /* path describes a non-existing row - should not happen */
+
+    gtk_tree_model_get(model, &iter, ACCOUNT_LIST_COL_AB_ACCT, &ab_acc, -1);
 
     if (ab_acc)
     {
@@ -819,33 +816,48 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
 }
 
 static void
-cm_close_handler(gpointer user_data)
+aai_close_handler(gpointer user_data)
 {
     ABInitialInfo *info = user_data;
 
     gtk_widget_destroy(info->window);
 }
 
+void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
+                 gpointer user_data)
+{
+    ABInitialInfo *info = user_data;
+    gint currentpage = gtk_assistant_get_current_page(assistant);
+
+    switch (gtk_assistant_get_current_page(assistant))
+    {
+    case 1:
+        /* Current page is wizard button page */
+        aai_wizard_page_prepare (assistant , user_data );
+        break;
+    case 2:
+        /* Current page is match page */
+        aai_match_page_prepare (assistant , user_data );
+        break;
+    }
+}
+
 void
-gnc_ab_initial_druid(void)
+gnc_ab_initial_assistant(void)
 {
     ABInitialInfo *info;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkTreeViewColumn *column;
     GtkTreeSelection *selection;
     gint component_id;
 
     info = g_new0(ABInitialInfo, 1);
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder,"assistant-ab-initial.glade", "AqBanking Init Assistant");
 
-    xml = gnc_glade_xml_new("aqbanking.glade", "AqBanking Init Druid");
+    info->window = GTK_WIDGET(gtk_builder_get_object (builder, "AqBanking Init Assistant"));
 
-    info->window = glade_xml_get_widget(xml, "AqBanking Init Druid");
-    g_object_set_data_full(G_OBJECT(info->window), "xml", xml, g_object_unref);
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-                                      info);
-
-    info->druid = glade_xml_get_widget(xml, "ab_init_druid");
-    gnc_druid_set_colors(GNOME_DRUID(info->druid));
+    gnc_assistant_set_colors (GTK_ASSISTANT (info->assistant));
 
     info->api = gnc_AB_BANKING_new();
     info->deferred_info = NULL;
@@ -853,7 +865,8 @@ gnc_ab_initial_druid(void)
 
     info->match_page_prepared = FALSE;
     info->account_view =
-        GTK_TREE_VIEW(glade_xml_get_widget(xml, "account_page_view"));
+        GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_page_view"));
+
     info->account_store = gtk_list_store_new(NUM_ACCOUNT_LIST_COLS,
                           G_TYPE_INT, G_TYPE_STRING,
                           G_TYPE_POINTER, G_TYPE_STRING,
@@ -879,11 +892,20 @@ gnc_ab_initial_druid(void)
     gtk_tree_view_append_column(info->account_view, column);
 
     selection = gtk_tree_view_get_selection(info->account_view);
-    g_signal_connect(selection, "changed",
-                     G_CALLBACK(account_list_changed_cb), info);
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 
-    component_id = gnc_register_gui_component(DRUID_AB_INITIAL_CM_CLASS,
-                   NULL, cm_close_handler, info);
+    g_signal_connect(info->account_view, "row-activated",
+                     G_CALLBACK(account_list_clicked_cb), info);
+
+    g_signal_connect (G_OBJECT(info->window), "destroy",
+                      G_CALLBACK (aai_destroy_cb), info);
+
+    gtk_builder_connect_signals(builder, info);
+    g_object_unref(G_OBJECT(builder));
+
+    component_id = gnc_register_gui_component(ASSISTANT_AB_INITIAL_CM_CLASS,
+                   NULL, aai_close_handler, info);
+
     gnc_gui_component_set_session(component_id, gnc_get_current_session());
 
     gtk_widget_show(info->window);

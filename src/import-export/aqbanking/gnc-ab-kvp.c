@@ -28,6 +28,7 @@
  */
 
 #include "config.h"
+#include "gnc-ui-util.h"
 
 #include "gnc-ab-kvp.h"
 
@@ -144,11 +145,12 @@ static void
 force_account_dirty(Account *acct)
 {
     gchar *name = g_strdup(xaccAccountGetName(acct));
-
+    QofBook *book = gnc_get_current_book ();
     /* This is necessary because modifying the KvpFrames doesn't mark
      * accounts dirty, which means the changes wont be propagated to the
      * backend.
      */
+    qof_book_mark_dirty(book);
     xaccAccountSetName(acct, name);
     g_free(name);
 }

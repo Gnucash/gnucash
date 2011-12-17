@@ -4,8 +4,8 @@ pkglib_LTLIBRARIES = libgncmod-aqbanking.la
 
 libgncmod_aqbanking_la_SOURCES = \
   dialog-ab-trans.c \
-  dialog-daterange.c \
-  druid-ab-initial.c \
+  dialog-ab-daterange.c \
+  assistant-ab-initial.c \
   gnc-ab-getbalance.c \
   gnc-ab-gettrans.c \
   gnc-ab-kvp.c \
@@ -19,8 +19,8 @@ libgncmod_aqbanking_la_SOURCES = \
 
 noinst_HEADERS = \
   dialog-ab-trans.h \
-  dialog-daterange.h \
-  druid-ab-initial.h \
+  dialog-ab-daterange.h \
+  assistant-ab-initial.h \
   gnc-ab-getbalance.h \
   gnc-ab-gettrans.h \
   gnc-ab-kvp.h \
@@ -70,10 +70,11 @@ uidir = $(GNC_UI_DIR)
 ui_DATA = \
   gnc-plugin-aqbanking-ui.xml
 
-gladedir = $(GNC_GLADE_DIR)
-glade_DATA = \
-  aqbanking.glade
+gtkbuilderdir = $(GNC_GTKBUILDER_DIR)
+gtkbuilder_DATA = \
+  assistant-ab-initial.glade \
+  dialog-ab.glade
 
-EXTRA_DIST = ${ui_DATA} ${glade_DATA}
+EXTRA_DIST = ${ui_DATA} ${gtkbuilder_DATA}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.aqbanking\"

@@ -363,10 +363,11 @@ src/html/gnc-html-graph-gog-webkit.c
 src/html/gnc-html-history.c
 src/html/gnc-html-webkit.c
 src/html/gncmod-html.c
-src/import-export/aqbanking/aqbanking.glade
+src/import-export/aqbanking/assistant-ab-initial.glade
+src/import-export/aqbanking/dialog-ab.glade
 src/import-export/aqbanking/dialog-ab-trans.c
-src/import-export/aqbanking/dialog-daterange.c
-src/import-export/aqbanking/druid-ab-initial.c
+src/import-export/aqbanking/dialog-ab-daterange.c
+src/import-export/aqbanking/assistant-ab-initial.c
 src/import-export/aqbanking/gnc-ab-getbalance.c
 src/import-export/aqbanking/gnc-ab-gettrans.c
 src/import-export/aqbanking/gnc-ab-kvp.c

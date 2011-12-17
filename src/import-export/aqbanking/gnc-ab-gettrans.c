@@ -34,7 +34,7 @@
 #include <aqbanking/jobgettransactions.h>
 
 #include "Account.h"
-#include "dialog-daterange.h"
+#include "dialog-ab-daterange.h"
 #include "gnc-ab-gettrans.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"

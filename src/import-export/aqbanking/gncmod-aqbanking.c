@@ -73,7 +73,9 @@ libgncmod_aqbanking_gnc_module_init(gint refcount)
     /* Add menu items with C callbacks */
     gnc_plugin_aqbanking_create_plugin();
 
-    gnc_preferences_add_to_page("aqbanking.glade", "aqbanking_prefs",
+
+    /* Add AqBanking preferences to the preferences dialog */
+    gnc_preferences_add_to_page("dialog-ab.glade", "aqbanking_prefs",
                                 _("Online Banking"));
 
     /* Initialize gwen library */

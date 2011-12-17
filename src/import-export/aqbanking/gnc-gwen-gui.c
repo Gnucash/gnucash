@@ -515,32 +515,35 @@ unregister_callbacks(GncGWENGui *gui)
 static void
 setup_dialog(GncGWENGui *gui)
 {
-    GladeXML *xml;
+    GtkBuilder *builder;
     gint component_id;
 
     g_return_if_fail(gui);
 
     ENTER("gui=%p", gui);
 
-    xml = gnc_glade_xml_new("aqbanking.glade", "Connection Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Connection Dialog");
 
-    gui->dialog = glade_xml_get_widget(xml, "Connection Dialog");
-    g_object_set_data_full(G_OBJECT(gui->dialog), "xml", xml, g_object_unref);
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, gui);
-    gui->entries_table = glade_xml_get_widget(xml, "entries_table");
-    gui->top_entry = glade_xml_get_widget(xml, "top_entry");
-    gui->top_progress = glade_xml_get_widget(xml, "top_progress");
-    gui->second_entry = glade_xml_get_widget(xml, "second_entry");
+    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Connection Dialog"));
+
+    gui->entries_table = GTK_WIDGET(gtk_builder_get_object (builder, "entries_table"));
+    gui->top_entry = GTK_WIDGET(gtk_builder_get_object (builder, "top_entry"));
+    gui->top_progress = GTK_WIDGET(gtk_builder_get_object (builder, "top_progress"));
+    gui->second_entry = GTK_WIDGET(gtk_builder_get_object (builder, "second_entry"));
     gui->other_entries_box = NULL;
     gui->progresses = NULL;
-    gui->log_text = glade_xml_get_widget(xml, "log_text");
-    gui->abort_button = glade_xml_get_widget(xml, "abort_button");
-    gui->close_button = glade_xml_get_widget(xml, "close_button");
-    gui->close_checkbutton = glade_xml_get_widget(xml, "close_checkbutton");
+    gui->log_text = GTK_WIDGET(gtk_builder_get_object (builder, "log_text"));
+    gui->abort_button = GTK_WIDGET(gtk_builder_get_object (builder, "abort_button"));
+    gui->close_button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
+    gui->close_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "close_checkbutton"));
     gui->accepted_certs = NULL;
     gui->permanently_accepted_certs = NULL;
     gui->showbox_hash = NULL;
     gui->showbox_id = 1;
+
+    /* Connect the Signals */
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(gui->close_checkbutton),
@@ -549,6 +552,10 @@ setup_dialog(GncGWENGui *gui)
     component_id = gnc_register_gui_component(GWEN_GUI_CM_CLASS, NULL,
                    cm_close_handler, gui);
     gnc_gui_component_set_session(component_id, gnc_get_current_session());
+
+
+
+    g_object_unref(G_OBJECT(builder));
 
     reset_dialog(gui);
 
@@ -971,7 +978,7 @@ static void
 get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
           gchar **input, gint min_len, gint max_len)
 {
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *dialog;
     GtkWidget *heading_label;
     GtkWidget *input_entry;
@@ -990,15 +997,15 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     ENTER(" ");
 
     /* Set up dialog */
-    xml = gnc_glade_xml_new("aqbanking.glade", "Password Dialog");
-    dialog = glade_xml_get_widget(xml, "Password Dialog");
-    g_object_set_data_full(G_OBJECT(dialog), "xml", xml, g_object_unref);
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Password Dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Password Dialog"));
 
-    heading_label = glade_xml_get_widget(xml, "heading_label");
-    input_entry = glade_xml_get_widget(xml, "input_entry");
-    confirm_entry = glade_xml_get_widget(xml, "confirm_entry");
-    confirm_label = glade_xml_get_widget(xml, "confirm_label");
-    remember_pin_checkbutton = glade_xml_get_widget(xml, "remember_pin");
+    heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
+    input_entry = GTK_WIDGET(gtk_builder_get_object (builder, "input_entry"));
+    confirm_entry = GTK_WIDGET(gtk_builder_get_object (builder, "confirm_entry"));
+    confirm_label = GTK_WIDGET(gtk_builder_get_object (builder, "confirm_label"));
+    remember_pin_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "remember_pin"));
     if (is_tan)
     {
         gtk_widget_hide(remember_pin_checkbutton);
@@ -1090,6 +1097,8 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
             break;
         }
     }
+
+    g_object_unref(G_OBJECT(builder));
 
     /* This trashes passwords in the entries' memory as well */
     gtk_widget_destroy(dialog);

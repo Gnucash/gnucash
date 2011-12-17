@@ -1,5 +1,5 @@
 /*
- * druid-ab-initial.h -- aqbanking creation functionality
+ * assistant-ab-initial.h -- aqbanking creation functionality
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -25,27 +25,27 @@
  * @{
  * @addtogroup AqBanking
  * @{
- * @file druid-ab-initial.h
+ * @file assistant-ab-initial.h
  * @brief AqBanking setup functionality
  * @author Copyright (C) 2002 Christian Stimming <stimming@tuhh.de>
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
  */
 
-#ifndef DRUID_AB_INITIAL_H
-#define DRUID_AB_INITIAL_H
+#ifndef ASSISTANT_AB_INITIAL_H
+#define ASSISTANT_AB_INITIAL_H
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
 /**
- * Create and show a druid for the aqbanking setup.
+ * Create and show an assistant for the aqbanking setup.
  */
-void gnc_ab_initial_druid(void);
+void gnc_ab_initial_assistant(void);
 
 G_END_DECLS
 
 /** @} */
 /** @} */
 
-#endif /* DRUID_AB_INITIAL_H */
+#endif /* ASSISTANT_AB_INITIAL_H */
