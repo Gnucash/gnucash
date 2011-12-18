@@ -118,6 +118,7 @@
     )
 )
 
+(gnc:debug "stdrpt-dir=" (gnc-path-get-stdreportsdir))
 (gnc:debug "dir-files=" (directory-files (gnc-path-get-stdreportsdir)))
 (gnc:debug "processed=" (process-file-list (directory-files (gnc-path-get-stdreportsdir))))
 (gnc:debug "report-list=" (get-report-list))
