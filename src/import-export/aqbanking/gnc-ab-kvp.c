@@ -42,6 +42,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
+static void force_account_dirty(Account *acct);
 static kvp_frame *gnc_ab_get_account_kvp(const Account *a, gboolean create);
 static kvp_frame *gnc_ab_get_book_kvp(QofBook *b, gboolean create);
 
@@ -60,7 +61,7 @@ gnc_ab_set_account_accountid(Account *a, const gchar *id)
     kvp_value *value = kvp_value_new_string(id);
     xaccAccountBeginEdit(a);
     kvp_frame_set_slot_nc(frame, AB_ACCOUNT_ID, value);
-    qof_book_mark_dirty(gnc_get_current_book());
+    force_account_dirty(a);
     xaccAccountCommitEdit(a);
 }
 
@@ -79,7 +80,7 @@ gnc_ab_set_account_bankcode(Account *a, const gchar *code)
     kvp_value *value = kvp_value_new_string(code);
     xaccAccountBeginEdit(a);
     kvp_frame_set_slot_nc(frame, AB_BANK_CODE, value);
-    qof_book_mark_dirty(gnc_get_current_book());
+    force_account_dirty(a);
     xaccAccountCommitEdit(a);
 }
 
@@ -98,7 +99,7 @@ gnc_ab_set_account_uid(Account *a, guint32 uid)
     kvp_value *value = kvp_value_new_gint64(uid);
     xaccAccountBeginEdit(a);
     kvp_frame_set_slot_nc(frame, AB_ACCOUNT_UID, value);
-    qof_book_mark_dirty(gnc_get_current_book());
+    force_account_dirty(a);
     xaccAccountCommitEdit(a);
 }
 
@@ -117,7 +118,7 @@ gnc_ab_set_account_trans_retrieval(Account *a, Timespec time)
     kvp_value *value = kvp_value_new_timespec(time);
     xaccAccountBeginEdit(a);
     kvp_frame_set_slot_nc(frame, AB_TRANS_RETRIEVAL, value);
-    qof_book_mark_dirty(gnc_get_current_book());
+    force_account_dirty(a);
     xaccAccountCommitEdit(a);
 }
 
@@ -138,6 +139,20 @@ gnc_ab_set_book_template_list(QofBook *b, GList *template_list)
     kvp_frame_set_slot_nc(frame, AB_TEMPLATES, value);
     qof_book_mark_dirty(b);
     qof_book_commit_edit(b);
+}
+
+static void
+force_account_dirty(Account *acct)
+{
+    gchar *name = g_strdup(xaccAccountGetName(acct));
+    QofBook *book = gnc_get_current_book ();
+    /* This is necessary because modifying the KvpFrames doesn't mark
+     * accounts dirty, which means the changes wont be propagated to the
+     * backend.
+     */
+    qof_book_mark_dirty(book);
+    xaccAccountSetName(acct, name);
+    g_free(name);
 }
 
 static kvp_frame *
