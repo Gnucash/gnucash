@@ -59,7 +59,7 @@ gnc_ab_set_account_accountid(Account *a, const gchar *id)
     kvp_value *value = kvp_value_new_string(id);
     xaccAccountBeginEdit(a);
     kvp_frame_set_slot_nc(frame, AB_ACCOUNT_ID, value);
-    qof_book_mark_dirty(gnc_get_current_book());
+    qof_instance_set_dirty(QOF_INSTANCE (a));
     xaccAccountCommitEdit(a);
 }
 
@@ -78,7 +78,7 @@ gnc_ab_set_account_bankcode(Account *a, const gchar *code)
     kvp_value *value = kvp_value_new_string(code);
     xaccAccountBeginEdit(a);
     kvp_frame_set_slot_nc(frame, AB_BANK_CODE, value);
-    qof_book_mark_dirty(gnc_get_current_book());
+    qof_instance_set_dirty(QOF_INSTANCE (a));
     xaccAccountCommitEdit(a);
 }
 
@@ -97,7 +97,7 @@ gnc_ab_set_account_uid(Account *a, guint32 uid)
     kvp_value *value = kvp_value_new_gint64(uid);
     xaccAccountBeginEdit(a);
     kvp_frame_set_slot_nc(frame, AB_ACCOUNT_UID, value);
-    qof_book_mark_dirty(gnc_get_current_book());
+    qof_instance_set_dirty(QOF_INSTANCE (a));
     xaccAccountCommitEdit(a);
 }
 
@@ -116,7 +116,7 @@ gnc_ab_set_account_trans_retrieval(Account *a, Timespec time)
     kvp_value *value = kvp_value_new_timespec(time);
     xaccAccountBeginEdit(a);
     kvp_frame_set_slot_nc(frame, AB_TRANS_RETRIEVAL, value);
-    qof_book_mark_dirty(gnc_get_current_book());
+    qof_instance_set_dirty(QOF_INSTANCE (a));
     xaccAccountCommitEdit(a);
 }
 
