@@ -34,7 +34,6 @@ SET (libgncmod_engine_HEADERS
   cashobjects.h
   engine-helpers.h
   glib-helpers.h
-  gnc-associate-account.h
   gnc-budget.h
   gnc-commodity.h
   gnc-engine.h
@@ -110,7 +109,6 @@ SET (libgncmod_engine_SOURCES
   Transaction.c
   cap-gains.c
   cashobjects.c
-  gnc-associate-account.c
   gnc-budget.c
   gnc-commodity.c
   gnc-engine.c
