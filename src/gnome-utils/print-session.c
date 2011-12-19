@@ -113,3 +113,8 @@ gnc_ui_page_setup(GtkWindow *parent)
     if (old_page_setup)
         g_object_unref(old_page_setup);
 }
+
+GtkPrintSettings *gnc_print_get_settings()
+{
+    return print_settings;
+}

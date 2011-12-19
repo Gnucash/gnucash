@@ -69,6 +69,7 @@
 #include "swig-runtime.h"
 #include "app-utils/business-options.h"
 #include "gnome-utils/gnc-icons.h"
+#include "gnome-utils/print-session.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
@@ -1604,6 +1605,13 @@ gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *repor
     }
 }
 
+static GncInvoice *lookup_invoice(GncPluginPageReportPrivate *priv)
+{
+    g_assert(priv);
+    return gnc_option_db_lookup_invoice_option(priv->cur_odb, "General",
+                                               "Invoice Number", NULL);
+}
+
 static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
 {
     gchar *job_name = NULL;
@@ -1644,8 +1652,7 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
             report_name = g_strdup(_("Invoice"));
         }
 
-        invoice = gnc_option_db_lookup_invoice_option(priv->cur_odb, "General",
-                  "Invoice Number", NULL);
+        invoice = lookup_invoice(priv);
         if (invoice)
         {
             const gchar *invoice_number = gncInvoiceGetID(invoice);
@@ -1725,15 +1732,67 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
     g_free (job_name);
 }
 
+#define KVP_OWNER_EXPORT_PDF_DIRNAME "export-pdf-directory"
+
 static void
 gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *report )
 {
     GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     gchar *job_name = report_create_jobname(priv);
+    GncInvoice *invoice;
+    GncOwner *owner;
+    KvpFrame *kvp;
 
-    g_warning("Setting job name=%s", job_name);
+    // Do we have an invoice report?
+    invoice = lookup_invoice(priv);
+    if (invoice)
+    {
+        // Does this invoice also have an owner?
+        owner = (GncOwner*) gncInvoiceGetOwner(invoice);
+        if (owner)
+        {
+            // Yes. In the kvp, look up the key for the Export-PDF output
+            // directory. If it exists, prepend this to the job name so that
+            // we can export to PDF.
+            kvp = gncOwnerGetSlots(owner);
+            if (kvp)
+            {
+                const char *dirname = kvp_frame_get_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME);
+                if (dirname && g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+                {
+                    gchar *tmp = g_build_filename(dirname, job_name, NULL);
+                    g_free(job_name);
+                    job_name = tmp;
+                }
+            }
+        }
+    }
+
+    //g_warning("Setting job name=%s", job_name);
 
     gnc_html_print(priv->html, job_name, TRUE);
+
+    if (owner && kvp)
+    {
+        // As this is an invoice report with some owner, we will try to look up the
+        // chosen output directory from the print settings and store it again in the owner kvp.
+        GtkPrintSettings *print_settings = gnc_print_get_settings();
+        if (print_settings && gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
+        {
+            const char* dirname = gtk_print_settings_get(print_settings,
+                                                             GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
+            // Only store the directory if it exists.
+            if (g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+            {
+                QofInstance *qofinstance = qofOwnerGetOwner(owner);
+                //gncOwnerBeginEdit(owner);
+                kvp_frame_set_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME, dirname);
+                if (qofinstance)
+                    qof_instance_set_dirty(qofinstance);
+                // shoot... there is no such thing as: gncOwnerCommitEdit(owner);
+            }
+        }
+    }
 
     g_free (job_name);
 }

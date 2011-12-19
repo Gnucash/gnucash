@@ -62,6 +62,10 @@ void gnc_print_operation_init(GtkPrintOperation *op, const gchar* jobname);
  */
 void gnc_ui_page_setup(GtkWindow *parent);
 
+/** Returns the pointer to our static GtkPrintSettings object. Watch out: This
+ * might get modified by other threads. */
+GtkPrintSettings *gnc_print_get_settings(void);
+
 /** Key for saving the PDF-export directory in the print settings */
 #define GNC_GTK_PRINT_SETTINGS_EXPORT_DIR "gnc-pdf-export-directory"
 
