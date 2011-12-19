@@ -150,11 +150,14 @@ void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
         category = key;
         key = NULL;
     }
+    g_return_if_fail (acc != NULL);
 
     value = kvp_value_new_guid (xaccAccountGetGUID (acc));
     g_return_if_fail (value != NULL);
-
+    xaccAccountBeginEdit (imap->acc);
     kvp_frame_set_slot_path (imap->frame, value, IMAP_FRAME, category, key, NULL);
+    qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
+    xaccAccountCommit (imap->acc);
     kvp_value_delete (value);
 
     /* XXX Mark the account (or book) as dirty! */
@@ -475,7 +478,9 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
         return;
     }
 
+    g_return_if_fail (acc != NULL);
     account_fullname = gnc_account_get_full_name(acc);
+    xaccAccountBeginEdit (imap->acc);
 
     PINFO("account name: '%s'\n", account_fullname);
 
@@ -524,13 +529,14 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
          */
         kvp_frame_set_slot_path(imap->frame, new_value, IMAP_FRAME_BAYES,
                                 (char*)current_token->data, account_fullname, NULL);
-
         /* kvp_frame_set_slot_path() copied the value so we
          * need to delete this one ;-) */
         kvp_value_delete(new_value);
     }
 
     /* free up the account fullname string */
+    qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
+    xaccAccountCommitEdit (imap->acc);
     g_free(account_fullname);
 
     LEAVE(" ");
