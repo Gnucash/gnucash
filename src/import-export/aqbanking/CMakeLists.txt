@@ -18,6 +18,7 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/libqof/qof) # for qof.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/gnc-module) # for gnc-module.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/core-utils) # for gnc-glib-utils.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/engine)
+INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/app-utils)
 
 SET (libgnc_aqbanking_SOURCES
   gnc-ab-kvp.c
