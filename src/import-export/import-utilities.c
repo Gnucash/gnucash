@@ -47,12 +47,18 @@ const gchar * gnc_import_get_acc_online_id(Account * account)
     return kvp_frame_get_string(frame, "online_id");
 }
 
+/* Used in the midst of editing a transaction; make it save the
+ * account data. */
 void gnc_import_set_acc_online_id(Account * account,
                                   const gchar * string_value)
 {
     kvp_frame * frame;
+    g_return_if_fail (account != NULL);
     frame = xaccAccountGetSlots(account);
+    xaccAccountBeginEdit (account);
     kvp_frame_set_str(frame, "online_id", string_value);
+    qof_instance_set_dirty (QOF_INSTANCE (account));
+    xaccAccountCommitEdit (account);
 }
 
 const gchar * gnc_import_get_trans_online_id(Transaction * transaction)
@@ -61,7 +67,7 @@ const gchar * gnc_import_get_trans_online_id(Transaction * transaction)
     frame = xaccTransGetSlots(transaction);
     return kvp_frame_get_string(frame, "online_id");
 }
-
+/* Not actually used */
 void gnc_import_set_trans_online_id(Transaction * transaction,
                                     const gchar * string_value)
 {
@@ -83,7 +89,9 @@ const gchar * gnc_import_get_split_online_id(Split * split)
     frame = xaccSplitGetSlots(split);
     return kvp_frame_get_string(frame, "online_id");
 }
-
+/* Used several places in a transaction edit where many other
+ * parameters are also being set, so individual commits wouldn't be
+ * appropriate. */
 void gnc_import_set_split_online_id(Split * split,
                                     const gchar * string_value)
 {
