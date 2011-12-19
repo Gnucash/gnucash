@@ -1087,9 +1087,11 @@ gncInvoiceDetachFromLot (GNCLot *lot)
     KvpFrame *kvp;
 
     if (!lot) return;
-
+    gnc_lot_begin_edit (lot);
     kvp = gnc_lot_get_slots (lot);
     kvp_frame_set_slot_path (kvp, NULL, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
+    qof_instance_set_dirty (QOF_INSTANCE (lot));
+    gnc_log_commit_edit (lot);
 }
 
 static void
@@ -1103,9 +1105,12 @@ gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
 
     if (invoice->posted_lot) return;	/* Cannot reset invoice's lot */
 
+    gnc_lot_begin_edit (lot);
     kvp = gnc_lot_get_slots (lot);
     value = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE(invoice)));
     kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
+    qof_instance_set_dirty (QOF_INSTANCE (lot));
+    gnc_log_commit_edit (lot);
     kvp_value_delete (value);
     gncInvoiceSetPostedLot (invoice, lot);
 }

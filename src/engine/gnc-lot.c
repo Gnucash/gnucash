@@ -700,12 +700,14 @@ GNCLot * gnc_lot_make_default (Account *acc)
     lot = gnc_lot_new (qof_instance_get_book(acc));
 
     /* Provide a reasonable title for the new lot */
+    xaccAccountBeginEdit (acc);
     id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
     snprintf (buff, 200, ("%s %" G_GINT64_FORMAT), _("Lot"), id);
     kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
     id ++;
     kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);
-
+    qof_instance_set_dirty (QOF_INSTANCE(acc));
+    xaccAccountCommitEdit (acc);
     return lot;
 }
 

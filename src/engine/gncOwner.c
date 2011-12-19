@@ -488,6 +488,7 @@ void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)
         return;
 
     kvp = gnc_lot_get_slots (lot);
+    gnc_lot_begin_edit (lot);
 
     value = kvp_value_new_gint64 (gncOwnerGetType (owner));
     kvp_frame_set_slot_path (kvp, value, GNC_OWNER_ID, GNC_OWNER_TYPE, NULL);
@@ -495,6 +496,8 @@ void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)
 
     value = kvp_value_new_guid (gncOwnerGetGUID (owner));
     kvp_frame_set_slot_path (kvp, value, GNC_OWNER_ID, GNC_OWNER_GUID, NULL);
+    qof_instance_set_dirty (QOF_INSTANCE (lot));
+    gnc_log_commit_edit (lot);
     kvp_value_delete (value);
 
 }

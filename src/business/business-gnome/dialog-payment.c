@@ -189,10 +189,11 @@ gnc_payment_dialog_remember_account(PaymentWindow *pw, Account *acc)
     value = kvp_value_new_guid(xaccAccountGetGUID(acc));
     if (!value) return;
 
+    xaccAccountBeginEdit (acc);
     kvp_frame_set_slot_path(slots, value, "payment", "last_acct", NULL);
+    qof_instance_set_dirty (QOF_INSTANCE (acc));
+    xaccAccountCommitEdit (acc);
     kvp_value_delete(value);
-
-    /* XXX: FIXME:  Need a commit_edit here to save the data! */
 }
 
 
