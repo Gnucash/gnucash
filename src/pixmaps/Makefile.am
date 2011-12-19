@@ -11,6 +11,8 @@ gncpixmap_DATA = \
   gnc-account-open-16.png \
   gnc-account-open.png \
   gnc-account.png \
+  gnc-gnome-pdf-16.png \
+  gnc-gnome-pdf-24.png \
   gnc-invoice-16.png \
   gnc-invoice-duplicate-16.png \
   gnc-invoice-duplicate.png \
@@ -119,7 +121,7 @@ scalable/gnucash-icon.svg: ${top_srcdir}/art/tango/scalable/gnucash.svg
 
 gnucash-icon-16x16.png:
 	cp ${top_srcdir}/art/tango/16x16/gnucash.png gnucash-icon-16x16.png
-	
+
 gnucash-icon-32x32.png:
 	cp ${top_srcdir}/art/tango/32x32/gnucash.png gnucash-icon-32x32.png
 endif

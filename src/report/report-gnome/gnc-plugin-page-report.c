@@ -68,6 +68,7 @@
 #include "window-report.h"
 #include "swig-runtime.h"
 #include "app-utils/business-options.h"
+#include "gnome-utils/gnc-icons.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
@@ -1032,7 +1033,7 @@ static GtkActionEntry report_actions[] =
         G_CALLBACK(gnc_plugin_page_report_print_cb)
     },
     {
-        "FilePrintPDFAction", GTK_STOCK_PRINT_REPORT, N_("Export as P_DF..."), NULL,
+        "FilePrintPDFAction", GNC_STOCK_PDF_EXPORT, N_("Export as P_DF..."), NULL,
         N_("Export the current report as a PDF document"),
         G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
     },
