@@ -1054,8 +1054,6 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
     }
 }
 
-#define GNC_GTK_PRINT_SETTINGS_EXPORT_DIR "gnc-pdf-export-directory"
-
 /**
  * Prints the current page.
  *
@@ -1115,41 +1113,90 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
     {
         GtkWidget *dialog;
         gint result;
-        dialog = gtk_file_chooser_dialog_new (_("Save PDF File"),
+        gchar *export_dirname = NULL;
+
+        // Before we save the PDF file, we always as the user for the export
+        // file name. We will store the chosen directory in the gtk print settings
+        // as well.
+        dialog = gtk_file_chooser_dialog_new (_("Export to PDF File"),
                                               NULL,
                                               GTK_FILE_CHOOSER_ACTION_SAVE,
                                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                               GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                                               NULL);
         gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-        gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(dialog), export_filename);
 
-        if (gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
+        // Does the jobname look like a valid full file path?
+        if (g_basename(jobname) != jobname)
         {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),
-                                                gtk_print_settings_get(print_settings,
-                                                        GNC_GTK_PRINT_SETTINGS_EXPORT_DIR));
+            gchar *tmp_basename;
+            gchar *tmp_dirname = g_path_get_dirname(jobname);
+
+            if (g_file_test(tmp_dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+            {
+                // Yes, the jobname starts with a directory name that actually
+                // exists. Hence we use this as output directory.
+                export_dirname = tmp_dirname;
+                tmp_dirname = NULL;
+
+                // As the prefix part of the "jobname" is the directory path, we
+                // need to extract the suffix part for the filename.
+                tmp_basename = g_path_get_basename(export_filename);
+                g_free(export_filename);
+                export_filename = tmp_basename;
+            }
+            g_free(tmp_dirname);
         }
 
+        // Set the output file name from the given jobname
+        gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(dialog), export_filename);
+
+        // Do we have a stored output directory?
+        if (!export_dirname && gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
+        {
+            const char* tmp_dirname = gtk_print_settings_get(print_settings,
+                                                             GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
+            // Only use the directory subsequently if it exists.
+            if (g_file_test(tmp_dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+            {
+                export_dirname = g_strdup(tmp_dirname);
+            }
+        }
+
+        // If we have an already existing directory, propose it now.
+        if (export_dirname)
+        {
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), export_dirname);
+        }
+        g_free(export_dirname);
+
         result = gtk_dialog_run (GTK_DIALOG (dialog));
+        // Weird. In gtk_dialog_run, the gtk code will run a fstat() on the
+        // proposed new output filename, which of course fails with "file not
+        // found" as this file doesn't exist. It will still show a warning output
+        // in the trace file, though.
 
         if (result == GTK_RESPONSE_ACCEPT)
         {
+            // The user pressed "Ok", so use the file name for the actual file output.
             gchar *dirname;
             char *tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
             g_free(export_filename);
             export_filename = tmp;
 
-            // Store the directory for later
+            // Store the directory part of the file for later
             dirname = g_path_get_dirname(export_filename);
-            gtk_print_settings_set(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR, dirname);
+            if (g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+            {
+                gtk_print_settings_set(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR, dirname);
+            }
             g_free(dirname);
         }
         gtk_widget_destroy (dialog);
 
         if (result != GTK_RESPONSE_ACCEPT)
         {
-            // User pressed cancel - no saving here.
+            // User pressed cancel - no saving of the PDF file here.
             g_free(export_filename);
             g_object_unref( op );
             return;
@@ -1167,6 +1214,8 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         // Also store this export file name as output URI in the settings
         if (gtk_print_settings_has_key(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI))
         {
+            // Get the previous output URI, extract the directory part, and
+            // append the current filename.
             const gchar *olduri = gtk_print_settings_get(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
             gchar *dirname = g_path_get_dirname(olduri);
             gchar *newuri = (g_strcmp0(dirname, ".") == 0)
@@ -1182,6 +1231,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         }
         else
         {
+            // No stored output URI from the print settings, so just set our export filename
             gtk_print_settings_set(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI, export_filename);
         }
 

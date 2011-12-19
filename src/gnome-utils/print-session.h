@@ -62,6 +62,9 @@ void gnc_print_operation_init(GtkPrintOperation *op, const gchar* jobname);
  */
 void gnc_ui_page_setup(GtkWindow *parent);
 
+/** Key for saving the PDF-export directory in the print settings */
+#define GNC_GTK_PRINT_SETTINGS_EXPORT_DIR "gnc-pdf-export-directory"
+
 
 /** @} */
 /** @} */
