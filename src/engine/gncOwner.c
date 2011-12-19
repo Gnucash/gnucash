@@ -497,7 +497,7 @@ void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)
     value = kvp_value_new_guid (gncOwnerGetGUID (owner));
     kvp_frame_set_slot_path (kvp, value, GNC_OWNER_ID, GNC_OWNER_GUID, NULL);
     qof_instance_set_dirty (QOF_INSTANCE (lot));
-    gnc_log_commit_edit (lot);
+    gnc_lot_commit_edit (lot);
     kvp_value_delete (value);
 
 }

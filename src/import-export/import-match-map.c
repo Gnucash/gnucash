@@ -157,7 +157,7 @@ void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
     xaccAccountBeginEdit (imap->acc);
     kvp_frame_set_slot_path (imap->frame, value, IMAP_FRAME, category, key, NULL);
     qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
-    xaccAccountCommit (imap->acc);
+    xaccAccountCommitEdit (imap->acc);
     kvp_value_delete (value);
 
     /* XXX Mark the account (or book) as dirty! */
