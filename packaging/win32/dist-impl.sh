@@ -198,8 +198,8 @@ function dist_gwenhywfar() {
     cp -a ${_GWENHYWFAR_UDIR}/bin/*.dll ${DIST_UDIR}/bin
     mkdir -p ${DIST_UDIR}/etc
     cp -a ${_GWENHYWFAR_UDIR}/lib/gwenhywfar ${DIST_UDIR}/lib
-    mkdir -p ${DIST_UDIR}/share/gwenhywfar
-    cp -a ${_GWENHYWFAR_UDIR}/share/gwenhywfar/ca-bundle.crt ${DIST_UDIR}/share/gwenhywfar
+    mkdir -p ${DIST_UDIR}/share
+    cp -a ${_GWENHYWFAR_UDIR}/share/gwenhywfar ${DIST_UDIR}/share
 }
 
 function dist_ktoblzcheck() {
@@ -248,13 +248,23 @@ function dist_gnucash() {
     cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.cmd $DIST_UDIR/bin
 
     _QTDIR_WIN=$(unix_path $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' )
-    _AQBANKING_SO_EFFECTIVE=$(awk '/AQBANKING_SO_EFFECTIVE / { print $3 }' ${_AQBANKING_UDIR}/include/aqbanking/version.h )
-    _GWENHYWFAR_SO_EFFECTIVE=$(awk '/GWENHYWFAR_SO_EFFECTIVE / { print $3 }' ${_GWENHYWFAR_UDIR}/include/gwenhywfar3/gwenhywfar/version.h )
+    if [ "$AQBANKING5" != "yes" ] ; then
+        # aqbanking < 5
+        AQBANKING_VERSION_H=${_AQBANKING_UDIR}/include/aqbanking/version.h
+        GWENHYWFAR_VERSION_H=${_GWENHYWFAR_UDIR}/include/gwenhywfar3/gwenhywfar/version.h
+    else
+        # aqbanking >= 5.0.0
+        AQBANKING_VERSION_H=${_AQBANKING_UDIR}/include/aqbanking5/aqbanking/version.h
+        GWENHYWFAR_VERSION_H=${_GWENHYWFAR_UDIR}/include/gwenhywfar4/gwenhywfar/version.h
+    fi
+
+    _AQBANKING_SO_EFFECTIVE=$(awk '/AQBANKING_SO_EFFECTIVE / { print $3 }' ${AQBANKING_VERSION_H} )
+    _GWENHYWFAR_SO_EFFECTIVE=$(awk '/GWENHYWFAR_SO_EFFECTIVE / { print $3 }' ${GWENHYWFAR_VERSION_H} )
     sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
         > $_GNUCASH_UDIR/gnucash.iss \
         -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g" \
-	-e "s#@-gwenhywfar_so_effective-@#${_GWENHYWFAR_SO_EFFECTIVE}#g" \
-	-e "s#@-aqbanking_so_effective-@#${_AQBANKING_SO_EFFECTIVE}#g"
+        -e "s#@-gwenhywfar_so_effective-@#${_GWENHYWFAR_SO_EFFECTIVE}#g" \
+        -e "s#@-aqbanking_so_effective-@#${_AQBANKING_SO_EFFECTIVE}#g"
 }
 
 function dist_finish() {
