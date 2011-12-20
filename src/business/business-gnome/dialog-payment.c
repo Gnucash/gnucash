@@ -551,7 +551,6 @@ static PaymentWindow *
 new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 {
     PaymentWindow *pw;
-    GladeXML *xml;
     GtkBuilder *builder;
     GtkWidget *box, *label;
     char * cm_class = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER ?
@@ -589,7 +588,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     if (gncOwnerIsValid(owner))
         pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
 
-    /* Open and read the XML */
+    /* Open and read the Glade File */
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "post_combo_model");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "Payment Dialog");

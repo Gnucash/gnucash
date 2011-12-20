@@ -1,104 +1,33 @@
 <?xml version="1.0"?>
-<glade-interface>
-  <!-- interface-requires gtk+ 2.10 -->
-  <!-- interface-naming-policy toplevel-contextual -->
-  <widget class="GtkDialog" id="Date Close Dialog">
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkDialog" id="Date Account Dialog">
     <property name="visible">True</property>
+    <property name="can_focus">False</property>
     <property name="title" translatable="yes">Question</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox1">
+      <object class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
+        <property name="can_focus">False</property>
         <property name="spacing">8</property>
-        <child>
-          <widget class="GtkVBox" id="vbox1">
-            <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <widget class="GtkHBox" id="the_hbox">
-                <property name="visible">True</property>
-                <property name="border_width">3</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </widget>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkHBox" id="hbox2">
-                <property name="visible">True</property>
-                <property name="border_width">3</property>
-                <child>
-                  <widget class="GtkLabel" id="label1">
-                    <property name="visible">True</property>
-                    <property name="justify">center</property>
-                  </widget>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label">
-                    <property name="visible">True</property>
-                    <property name="xalign">1</property>
-                    <property name="label" translatable="yes">label1</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="padding">3</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkHBox" id="date_box">
-                    <property name="visible">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="padding">3</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                    <property name="justify">center</property>
-                  </widget>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-              </widget>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="position">2</property>
-          </packing>
-        </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area1">
+          <object class="GtkHButtonBox" id="dialog-action_area6">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="cancelbutton">
+              <object class="GtkButton" id="cancelbutton1">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="gnc_dialog_date_close_cancel_cb"/>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -106,67 +35,61 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="okbutton">
+              <object class="GtkButton" id="okbutton1">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="gnc_dialog_date_close_ok_cb"/>
-              </widget>
+                <signal name="clicked" handler="gnc_dialog_date_close_ok_cb" swapped="no"/>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
-      </widget>
-    </child>
-  </widget>
-  <widget class="GtkDialog" id="Date Account Dialog">
-    <property name="visible">True</property>
-    <property name="title" translatable="yes">Question</property>
-    <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
-    <child internal-child="vbox">
-      <widget class="GtkVBox" id="vbox2">
-        <property name="visible">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">8</property>
         <child>
-          <widget class="GtkVBox" id="vbox3">
+          <object class="GtkVBox" id="vbox3">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
+            <property name="can_focus">False</property>
             <child>
-              <widget class="GtkHBox" id="the_hbox">
+              <object class="GtkHBox" id="the_top_hbox">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="border_width">3</property>
                 <child>
                   <placeholder/>
                 </child>
-              </widget>
+              </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox4">
+              <object class="GtkHBox" id="hbox4">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="border_width">3</property>
                 <child>
-                  <widget class="GtkLabel" id="label3">
+                  <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="justify">center</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -174,17 +97,18 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVBox" id="vbox4">
+                  <object class="GtkVBox" id="vbox4">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+                    <property name="can_focus">False</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <widget class="GtkLabel" id="postdate_label">
+                      <object class="GtkLabel" id="postdate_label">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">postd</property>
                         <property name="justify">right</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -192,12 +116,13 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="date_label">
+                      <object class="GtkLabel" id="date_label">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">duedate</property>
                         <property name="justify">right</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -205,12 +130,13 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="memo_label">
+                      <object class="GtkLabel" id="memo_label">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">Description</property>
                         <property name="justify">right</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -218,12 +144,13 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="acct_label">
+                      <object class="GtkLabel" id="acct_label">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">acct</property>
                         <property name="justify">right</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -231,16 +158,17 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="hide1">
+                      <object class="GtkLabel" id="hide1">
                         <property name="visible">True</property>
-                      </widget>
+                        <property name="can_focus">False</property>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -249,17 +177,18 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVBox" id="vbox5">
+                  <object class="GtkVBox" id="vbox5">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+                    <property name="can_focus">False</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <widget class="GtkHBox" id="post_date_box">
+                      <object class="GtkHBox" id="post_date_box">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <placeholder/>
                         </child>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -267,12 +196,13 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="date_box">
+                      <object class="GtkHBox" id="date_hbox">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <placeholder/>
                         </child>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -280,10 +210,16 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="memo_entry">
+                      <object class="GtkEntry" id="memo_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                      </widget>
+                        <property name="invisible_char">&#x25CF;</property>
+                        <property name="invisible_char_set">True</property>
+                        <property name="primary_icon_activatable">False</property>
+                        <property name="secondary_icon_activatable">False</property>
+                        <property name="primary_icon_sensitive">True</property>
+                        <property name="secondary_icon_sensitive">True</property>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -291,12 +227,13 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="acct_hbox">
+                      <object class="GtkHBox" id="acct_hbox">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <placeholder/>
                         </child>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
@@ -304,61 +241,89 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkCheckButton" id="question_check">
+                      <object class="GtkCheckButton" id="question_check">
                         <property name="label" translatable="yes">question</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="padding">3</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label5">
+                  <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="justify">center</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancelbutton1</action-widget>
+      <action-widget response="-5">okbutton1</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="Date Close Dialog">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Question</property>
+    <property name="modal">True</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">8</property>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="hbuttonbox1">
+          <object class="GtkHButtonBox" id="dialog-action_area4">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <widget class="GtkButton" id="cancelbutton">
+              <object class="GtkButton" id="cancelbutton">
                 <property name="label">gtk-cancel</property>
-                <property name="response_id">-6</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-              </widget>
+                <signal name="clicked" handler="gnc_dialog_date_close_cancel_cb" swapped="no"/>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -366,31 +331,127 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="okbutton">
+              <object class="GtkButton" id="okbutton">
                 <property name="label">gtk-ok</property>
-                <property name="response_id">-5</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="gnc_dialog_date_close_ok_cb"/>
-              </widget>
+                <signal name="clicked" handler="gnc_dialog_date_close_ok_cb" swapped="no"/>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
-      </widget>
+        <child>
+          <object class="GtkVBox" id="vbox1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkHBox" id="the_hbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="border_width">3</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHBox" id="hbox2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="border_width">3</property>
+                <child>
+                  <object class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="justify">center</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">label</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">3</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="date_box">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">3</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="justify">center</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+    <action-widgets>
+      <action-widget response="0">cancelbutton</action-widget>
+      <action-widget response="0">okbutton</action-widget>
+    </action-widgets>
+  </object>
+</interface>

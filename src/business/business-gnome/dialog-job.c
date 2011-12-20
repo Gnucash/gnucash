@@ -301,7 +301,7 @@ static JobWindow *
 gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
 {
     JobWindow *jw;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *owner_box, *owner_label;
 
     /*
@@ -329,26 +329,26 @@ gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
     jw->book = bookp;
     gncOwnerCopy (owner, &(jw->owner)); /* save it off now, we know it's valid */
 
-    /* Load the XML */
-    xml = gnc_glade_xml_new ("job.glade", "Job Dialog");
+    /* Load the Glade File */
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder,"dialog-job.glade", "Job Dialog");
 
     /* Find the dialog */
-    jw->dialog = glade_xml_get_widget (xml, "Job Dialog");
-    g_object_set_data (G_OBJECT (jw->dialog), "dialog_info", jw);
+    jw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Job Dialog"));
 
     /* Get entry points */
-    jw->id_entry  = glade_xml_get_widget (xml, "id_entry");
-    jw->name_entry = glade_xml_get_widget (xml, "name_entry");
-    jw->desc_entry = glade_xml_get_widget (xml, "desc_entry");
-    jw->active_check = glade_xml_get_widget (xml, "active_check");
+    jw->id_entry  = GTK_WIDGET(gtk_builder_get_object (builder, "id_entry"));
+    jw->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
+    jw->desc_entry = GTK_WIDGET(gtk_builder_get_object (builder, "desc_entry"));
+    jw->active_check = GTK_WIDGET(gtk_builder_get_object (builder, "active_check"));
 
-    owner_box = glade_xml_get_widget (xml, "customer_hbox");
-    owner_label = glade_xml_get_widget (xml, "owner_label");
+    owner_box = GTK_WIDGET(gtk_builder_get_object (builder, "customer_hbox"));
+    owner_label = GTK_WIDGET(gtk_builder_get_object (builder, "owner_label"));
 
     /* Setup signals */
-    glade_xml_signal_autoconnect_full( xml,
-                                       gnc_glade_autoconnect_full_func,
-                                       jw);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, jw);
+
+
     /* Set initial entries */
     if (job != NULL)
     {
@@ -401,6 +401,8 @@ gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     gtk_widget_show_all (jw->dialog);
+
+    g_object_unref(G_OBJECT(builder));
 
     return jw;
 }

@@ -1,4 +1,4 @@
-SUBDIRS = . glade gtkbuilder schemas ui
+SUBDIRS = . gtkbuilder schemas ui
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la
 
