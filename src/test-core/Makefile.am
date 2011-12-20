@@ -6,6 +6,7 @@ libtest_core_la_SOURCES = \
 	test-stuff.c
 
 libtest_core_la_LIBADD = \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS}
 
 noinst_HEADERS=test-stuff.h
