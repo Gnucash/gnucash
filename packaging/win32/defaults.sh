@@ -202,7 +202,7 @@ set_default LIBXSLT_ICONV_URL "${XMLSOFT_URL}/iconv-1.9.2.win32.zip"
 set_default LIBXSLT_ZLIB_URL "${XMLSOFT_URL}/zlib-1.2.3.win32.zip"
 set_default LIBXSLT_DIR $GLOBAL_DIR\\libxslt
 set_default LIBXSLT_SRC_URL "http://xmlsoft.org/sources/libxslt-1.1.26.tar.gz" # needed for webkit build
-*******
+
 XMLSOFT_URL="http://xmlsoft.org/sources/win32"
 XSLT_BASE_URL="http://ftp.acc.umu.se/pub/GNOME/sources/libxslt/1.1"
 XML2_BASE_URL="ftp://xmlsoft.org/libxml2"
