@@ -115,7 +115,7 @@ function inst_mingw() {
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
     # Configure msys to use mingw on the above path before running any tests !
     configure_msys "$_PID" "$_MINGW_WFSDIR"
-    [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/bin PATH
+    add_to_env $_MINGW_UDIR/bin PATH
 
     if quiet test_for_mingw
     then
