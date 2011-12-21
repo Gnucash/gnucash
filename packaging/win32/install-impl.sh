@@ -122,18 +122,32 @@ function inst_mingw() {
         echo "mingw already installed in $_MINGW_UDIR.  skipping."
     else
         mkdir -p $_MINGW_UDIR
+        # Download the precompiled packages in any case to get their DLLs
+        wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_CORE_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_GPP_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_GMP_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_MPC_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_MPFR_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_PTHREADS_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $MINGW_RT_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
+
         if [ "$CROSS_COMPILE" != "yes" ]; then
-            wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
-            wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
             (echo "y"; echo "y"; echo "$_MINGW_WFSDIR"; echo "y") | sh pi.sh
         else
             ./create_cross_mingw.sh
         fi
         quiet test_for_mingw || die "mingw not installed correctly"
+    fi
+
+    if [ "$CROSS_COMPILE" != "yes" ]; then
+        # Some preparation steps, only for native (non-cross-compile)
+        cp ${_MINGW_UDIR}/bin/libpthread-2.dll ${_MINGW_UDIR}/bin/pthreadGC2.dll
     fi
 }
 
@@ -518,7 +532,7 @@ function inst_libxslt() {
     fi
 }
 
-function inst_gnome() {
+ inst_gnome() {
     setup Gnome platform
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     add_to_env -I$_GNOME_UDIR/include GNOME_CPPFLAGS
@@ -535,29 +549,15 @@ function inst_gnome() {
         quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
+        quiet ${PKG_CONFIG} --atleast-version=${PIXMAN_VERSION} pixman-1 &&
+        quiet ${PKG_CONFIG} --exact-version=${LIBXML2_VERSION} libxml-2.0 &&
         quiet intltoolize --version
     then
         echo "gnome packages installed in $_GNOME_UDIR.  skipping."
     else
         mkdir -p $_GNOME_UDIR
-        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GETTEXT_RUNTIME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GETTEXT_TOOLS_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBJPEG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBPNG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBTIFF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ZLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PKG_CONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ATK_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ATK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -566,38 +566,57 @@ function inst_gnome() {
         wget_unpacked $FONTCONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $FREETYPE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ATK_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ATK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $PANGO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        echo 'gtk-theme-name = "Nimbus"' > ${_GNOME_UDIR}/etc/gtk-2.0/gtkrc
-        wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GAIL_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GAIL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $POPT_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $POPT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GCONF_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GCONF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GDK_PIXBUF_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GDK_PIXBUF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_RUNTIME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_TOOLS_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GNOME_VFS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBJPEG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBPNG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBTIFF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+#        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
+#        wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PANGO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PKG_CONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $POPT_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $POPT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ZLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        echo 'gtk-theme-name = "Nimbus"' > ${_GNOME_UDIR}/etc/gtk-2.0/gtkrc
+
         wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/gtk2-themes-*
         cp -a $TMP_UDIR/gtk2-themes-*/lib $_GNOME_UDIR/
@@ -636,25 +655,55 @@ EOF
             rm -rf $TMP_UDIR/gtk-doc-*
         qpopd
 
-        if [ "$CROSS_COMPILE" = "yes" ]; then
-            qpushd $_GNOME_UDIR/lib/pkgconfig
-                perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
-                #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
+        if quiet ${PKG_CONFIG} --exact-version=${PIXMAN_VERSION} pixman-1 ; then
+            echo "Pixman already compiled+installed"
+        else
+            wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
+            assert_one_dir $TMP_UDIR/pixman-*
+            qpushd $TMP_UDIR/pixman-*
+	        GLIB_CPPFLAGS=`${PKG_CONFIG} --cflags glib-2.0`
+                GTK_CPPFLAGS="-I${_GNOME_UDIR}/include/gtk-2.0"
+                ./configure ${HOST_XCOMPILE} \
+                    --prefix=$_GNOME_UDIR \
+                    --disable-static \
+                    CPPFLAGS="${GLIB_CPPFLAGS} ${GTK_CPPFLAGS}"
+                make
+                make install
             qpopd
+            rm -rf $TMP_UDIR/pixman-*
         fi
-        wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $TMP_DIR
-        assert_one_dir $TMP_UDIR/pixman-*
-        qpushd $TMP_UDIR/pixman-*
-            ./configure ${HOST_XCOMPILE} \
-                --prefix=$_GNOME_UDIR \
-                --disable-static
-            make
-            make install
+        quiet ${PKG_CONFIG} --exact-version=${PIXMAN_VERSION} pixman-1 || die "pixman not installed correctly"
+
+        if quiet ${PKG_CONFIG} --exact-version=${LIBXML2_VERSION} libxml-2.0 ; then
+            echo "Libxml2 already compiled + installed"
+        else
+            wget_unpacked $LIBXML2_SRC_URL $DOWNLOAD_DIR $TMP_DIR
+            assert_one_dir $TMP_UDIR/libxml2-*
+            qpushd $TMP_UDIR/libxml2-*
+                ./configure ${HOST_XCOMPILE} \
+                    --prefix=${_GNOME_UDIR} \
+                    --disable-static \
+                    --with-python=no \
+                    --without-threads \
+                    CPPFLAGS="${GNOME_CPPFLAGS}" LDFLAGS="${GNOME_LDFLAGS}"
+                make
+                make install
+            qpopd
+            rm -rf ${TMP_UDIR}/libxml2-*
+        fi
+
+        qpushd $_GNOME_UDIR/lib/pkgconfig
+            perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
+            #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
         qpopd
-        rm -rf $TMP_UDIR/pixman-*
-        ${PKG_CONFIG} --exists pixman-1 || die "pixman not installed correctly"
+
         quiet gconftool-2 --version &&
         quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
+        quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
+        quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
+        quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
+        quiet ${PKG_CONFIG} --atleast-version=${PIXMAN_VERSION} pixman-1 &&
+        quiet ${PKG_CONFIG} --exact-version=${LIBXML2_VERSION} libxml-2.0 &&
         quiet intltoolize --version || die "gnome not installed correctly"
     fi
     [ ! -d $_GNOME_UDIR/share/aclocal ] || add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
