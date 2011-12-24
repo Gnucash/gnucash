@@ -6,6 +6,7 @@
 # be the top-level daily-build packaging directory.
 #
 
+set -o pipefail
 set -e
 LOG_DIR=build-logs
 
