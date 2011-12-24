@@ -86,14 +86,14 @@ set_default MINGW_DIR $GLOBAL_DIR\\mingw
 
 # The URLs for precompiled gcc/mingw binaries
 set_default BINUTILS_URL "$SF_MIRROR/mingw/binutils-2.21-2-mingw32-bin.tar.lzma"
-set_default GCC_CORE_URL "$SF_MIRROR/mingw/gcc-core-4.5.2-1-mingw32-bin.tar.lzma"
-set_default GCC_CORE_DLL_URL "$SF_MIRROR/mingw/libgcc-4.5.2-1-mingw32-dll-1.tar.lzma"
-set_default GCC_GPP_URL "$SF_MIRROR/mingw/gcc-c++-4.5.2-1-mingw32-bin.tar.lzma"
-set_default GCC_GPP_DLL_URL "$SF_MIRROR/mingw/libstdc++-4.5.2-1-mingw32-dll-6.tar.lzma"
+set_default GCC_CORE_URL "$SF_MIRROR/mingw/gcc-core-4.4.0-mingw32-bin.tar.gz"
+set_default GCC_CORE_DLL_URL "$SF_MIRROR/mingw/gcc-core-4.4.0-mingw32-dll.tar.gz"
+set_default GCC_GPP_URL "$SF_MIRROR/mingw/gcc-c++-4.4.0-mingw32-bin.tar.gz"
+set_default GCC_GPP_DLL_URL "$SF_MIRROR/mingw/gcc-c++-4.4.0-mingw32-dll.tar.gz"
 set_default GCC_GPP_PATCH "`pwd`/gcc-c++-4.4.0.patch"
-set_default GCC_MPC_URL "$SF_MIRROR/mingw/libmpc-0.8.1-1-mingw32-dll-2.tar.lzma"
-set_default GCC_MPFR_URL "$SF_MIRROR/mingw/libmpfr-2.4.1-1-mingw32-dll-1.tar.lzma"
-set_default GCC_GMP_URL "$SF_MIRROR/mingw/libgmp-5.0.1-1-mingw32-dll-10.tar.lzma"
+#set_default GCC_MPC_URL "$SF_MIRROR/mingw/libmpc-0.8.1-1-mingw32-dll-2.tar.lzma"
+set_default GCC_MPFR_URL "$SF_MIRROR/mingw/mpfr-2.4.1-mingw32-dll.tar.gz"
+set_default GCC_GMP_URL "$SF_MIRROR/mingw/gmp-4.2.4-mingw32-dll.tar.gz"
 set_default GCC_PTHREADS_URL "$SF_MIRROR/mingw/libpthread-2.8.0-3-mingw32-dll-2.tar.lzma"
 
 if [ "$CROSS_COMPILE" != yes ]; then
@@ -247,9 +247,9 @@ set_default GCONF_DEV_URL           "$GNOME_WIN32_URL/GConf/2.22/GConf-dev_${GCO
 #GDK_PIXBUF_VERSION=2.22.1
 set_default GDK_PIXBUF_URL          "$GNOME_WIN32_URL/gdk-pixbuf/2.22/gdk-pixbuf_${GCONF_VERSION}-1_win32.zip"
 set_default GDK_PIXBUF_DEV_URL      "$GNOME_WIN32_URL/gdk-pixbuf/2.22/gdk-pixbuf-dev_${GCONF_VERSION}-1_win32.zip"
-set_default GETTEXT_RUNTIME_URL     "$GNOME_WIN32_DEPS_URL/gettext-runtime_0.18.1.1-2_win32.zip"
-set_default GETTEXT_RUNTIME_DEV_URL "$GNOME_WIN32_DEPS_URL/gettext-runtime-dev_0.18.1.1-2_win32.zip"
-set_default GETTEXT_TOOLS_URL       "$GNOME_WIN32_DEPS_URL/gettext-tools-dev_0.18.1.1-2_win32.zip"
+set_default GETTEXT_RUNTIME_URL     "$GNOME_WIN32_DEPS_URL/gettext-runtime_0.18.1.1-1_win32.zip"
+set_default GETTEXT_RUNTIME_DEV_URL "$GNOME_WIN32_DEPS_URL/gettext-runtime-dev_0.18.1.1-1_win32.zip"
+set_default GETTEXT_TOOLS_URL       "$GNOME_WIN32_DEPS_URL/gettext-tools-dev_0.18.1.1-1_win32.zip"
 set_default GLIB_URL                "$GNOME_WIN32_URL/glib/2.28/glib_2.28.1-1_win32.zip"
 set_default GLIB_DEV_URL            "$GNOME_WIN32_URL/glib/2.28/glib-dev_2.28.1-1_win32.zip"
 set_default GNOME_VFS_URL           "$GNOME_WIN32_URL/gnome-vfs/2.24/gnome-vfs_2.24.1-1_win32.zip"
@@ -314,8 +314,8 @@ LIBGSF_VERSION="1.14.17"
 set_default LIBGSF_URL "$GNOME_MIRROR/sources/libgsf/1.14/libgsf-${LIBGSF_VERSION}.tar.bz2"
 set_default LIBGSF_DIR $GLOBAL_DIR\\libgsf
 
-GOFFICE_VERSION="0.7.18"
-set_default GOFFICE_URL "$GNOME_MIRROR/sources/goffice/0.7/goffice-${GOFFICE_VERSION}.tar.bz2"
+GOFFICE_VERSION="0.8.17"
+set_default GOFFICE_URL "$GNOME_MIRROR/sources/goffice/0.8/goffice-${GOFFICE_VERSION}.tar.bz2"
 set_default GOFFICE_DIR $GLOBAL_DIR\\goffice
 #set_default GOFFICE_PATCH `pwd`/goffice-0.7.2-patch.diff
 

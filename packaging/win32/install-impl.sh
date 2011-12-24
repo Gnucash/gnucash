@@ -129,7 +129,7 @@ function inst_mingw() {
         wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $GCC_GPP_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $GCC_GMP_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $GCC_MPC_URL $DOWNLOAD_DIR $MINGW_DIR
+#        wget_unpacked $GCC_MPC_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $GCC_MPFR_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $GCC_PTHREADS_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
@@ -148,6 +148,9 @@ function inst_mingw() {
     if [ "$CROSS_COMPILE" != "yes" ]; then
         # Some preparation steps, only for native (non-cross-compile)
         cp ${_MINGW_UDIR}/bin/libpthread-2.dll ${_MINGW_UDIR}/bin/pthreadGC2.dll
+        # Handle mis-named libstdc++ in the MINGW_GPP_DLL package:
+        cp ${_MINGW_UDIR}/lib/gcc/mingw32/4.4.0/libstdc++.la ${_MINGW_UDIR}/lib/gcc/mingw32/4.4.0/libstdc++.la.bak
+        sed s/libstdc++.dll.a// ${_MINGW_UDIR}/lib/gcc/mingw32/4.4.0/libstdc++.la.bak > ${_MINGW_UDIR}/lib/gcc/mingw32/4.4.0/libstdc++.la
     fi
 }
 
