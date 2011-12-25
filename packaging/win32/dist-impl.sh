@@ -103,6 +103,7 @@ function dist_gnome() {
     wget_unpacked $ATK_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $GDK_PIXBUF_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GTK_URL $DOWNLOAD_DIR $DIST_DIR
     echo 'gtk-theme-name = "Nimbus"' > $DIST_DIR/etc/gtk-2.0/gtkrc
     wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $DIST_DIR
