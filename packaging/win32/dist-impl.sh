@@ -71,11 +71,11 @@ function dist_autotools() {
 function dist_guile() {
     setup Guile
     mkdir -p $DIST_UDIR/bin
-    cp -a $_GUILE_UDIR/bin/libguile{.,-ltdl.,-srfi}*dll $DIST_UDIR/bin
+    cp -a $_GUILE_UDIR/bin/libguile{.,-srfi}*dll $DIST_UDIR/bin
     cp -a $_GUILE_UDIR/bin/guile.exe $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
     cp -a $_GUILE_UDIR/share/guile $DIST_UDIR/share
-    [ -f $DIST_UDIR/share/guile/1.6/slibcat ] && rm $DIST_UDIR/share/guile/1.6/slibcat
+    [ -f $DIST_UDIR/share/guile/1.8/slibcat ] && rm $DIST_UDIR/share/guile/1.8/slibcat
 }
 
 function dist_openssl() {
@@ -87,7 +87,6 @@ function dist_openssl() {
 
 function dist_gnome() {
     setup Gnome platform
-    wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $DIST_DIR
     smart_wget $LIBICONV_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
@@ -117,8 +116,10 @@ function dist_gnome() {
     wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
-	wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $DIST_DIR
-	wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
+    wget_unpacked $GTK_THEME_URL $DOWNLOAD_DIR $TMP_DIR
+
+    cp $_GNOME_UDIR/bin/libxml2-2.dll $DIST_DIR/bin
+    cp $_GNOME_UDIR/bin/libpixman-1-0.dll $DIST_DIR/bin
 
     assert_one_dir $TMP_UDIR/gtk2-themes-*
     cp -a $TMP_UDIR/gtk2-themes-*/lib $DIST_DIR/
@@ -253,16 +254,19 @@ function dist_gnucash() {
         # aqbanking < 5
         AQBANKING_VERSION_H=${_AQBANKING_UDIR}/include/aqbanking/version.h
         GWENHYWFAR_VERSION_H=${_GWENHYWFAR_UDIR}/include/gwenhywfar3/gwenhywfar/version.h
+        _AQB_PFX=""
     else
         # aqbanking >= 5.0.0
         AQBANKING_VERSION_H=${_AQBANKING_UDIR}/include/aqbanking5/aqbanking/version.h
         GWENHYWFAR_VERSION_H=${_GWENHYWFAR_UDIR}/include/gwenhywfar4/gwenhywfar/version.h
+        _AQB_PFX=";;"
     fi
 
     _AQBANKING_SO_EFFECTIVE=$(awk '/AQBANKING_SO_EFFECTIVE / { print $3 }' ${AQBANKING_VERSION_H} )
     _GWENHYWFAR_SO_EFFECTIVE=$(awk '/GWENHYWFAR_SO_EFFECTIVE / { print $3 }' ${GWENHYWFAR_VERSION_H} )
     sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
         > $_GNUCASH_UDIR/gnucash.iss \
+        -e "s#@-aqb_pfx-@#${_AQB_PFX}#" \
         -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g" \
         -e "s#@-gwenhywfar_so_effective-@#${_GWENHYWFAR_SO_EFFECTIVE}#g" \
         -e "s#@-aqbanking_so_effective-@#${_AQBANKING_SO_EFFECTIVE}#g"

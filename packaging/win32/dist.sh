@@ -28,6 +28,7 @@ add_step dist_prepare
 add_step dist_regex
 add_step dist_autotools
 add_step dist_guile
+add_step dist_webkit
 add_step dist_gnome
 add_step dist_isocodes
 add_step dist_pcre
@@ -41,7 +42,6 @@ add_step dist_gwenhywfar
 add_step dist_ktoblzcheck
 add_step dist_aqbanking
 add_step dist_libdbi
-add_step dist_webkit
 add_step dist_gnucash
 add_step dist_finish
 
