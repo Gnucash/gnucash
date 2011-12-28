@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-29 11:05+0300\n"
-"PO-Revision-Date: 2011-11-27 10:51+0300\n"
+"PO-Revision-Date: 2011-12-25 13:53+0300\n"
 "Last-Translator: Aurimas Fišeras <aurimas@members.fsf.org>\n"
 "Language-Team: komp_lt@konf.lt\n"
 "Language: lt\n"
@@ -2734,7 +2734,7 @@ msgstr "_Standartinis"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:211
 msgid "Keep normal invoice order"
-msgstr ""
+msgstr "Išlaikyti įprastą sąskaitų-faktūrų rikiuotę"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:212
 #: ../src/gnome/glade/register.glade.h:80
@@ -2757,7 +2757,7 @@ msgstr "Į_vedimo data"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:213
 #: ../src/gnome/glade/register.glade.h:64
 msgid "Sort by the date of entry"
-msgstr "Rikiuoti pagal įvedimo datas"
+msgstr "Rikiuoti pagal įvedimo datą"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:214
 msgid "_Quantity"
@@ -2992,7 +2992,6 @@ msgstr ""
 #: ../src/business/business-ledger/gncEntryLedger.c:861
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:851
 #: ../src/register/ledger-core/split-register.c:460
-#, fuzzy
 msgid "_Record"
 msgstr "Į_rašyti"
 
@@ -5918,7 +5917,7 @@ msgstr "Peršokti į atitinkamą operaciją kitoje sąskaitoje"
 
 #: ../src/gnome/glade/register.glade.h:30
 msgid "Keep normal account order"
-msgstr ""
+msgstr "Išlaikyti įprastą sąskaitų rikiuotę"
 
 #: ../src/gnome/glade/register.glade.h:31
 #: ../src/gnome/gnc-plugin-page-register.c:225
@@ -6003,7 +6002,8 @@ msgstr "Rodyti operacijas vienoje ar dvejose eilutėse"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr ""
-"Rodyti operacijas vienoje ar dvejose eilutėse ir išplėsti dabartinę operaciją"
+"Rodyti operacijas vienoje ar dvejose eilutėse ir išplėsti dabartinę "
+"operaciją"
 
 #: ../src/gnome/glade/register.glade.h:50
 #: ../src/gnome/gnc-plugin-page-register.c:351
@@ -6059,7 +6059,7 @@ msgstr "Rikiuoti pagal numerį"
 
 #: ../src/gnome/glade/register.glade.h:65
 msgid "Sort by the statement date (unreconciled items last)"
-msgstr ""
+msgstr "Rikiuoti pagal išrašo datą (nesuderinti elementai paskiausi)"
 
 #: ../src/gnome/glade/register.glade.h:66
 msgid "Sort register by..."
@@ -6154,9 +6154,8 @@ msgid "_Standard Order"
 msgstr "_Įprasta tvarka"
 
 #: ../src/gnome/glade/register.glade.h:97
-#, fuzzy
 msgid "_Statement Date"
-msgstr "_Deklaravimo data"
+msgstr "_Išrašo data"
 
 #: ../src/gnome/glade/register.glade.h:98
 msgid "_Today"
@@ -7290,7 +7289,7 @@ msgstr "Atverti"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:265
 msgid "New"
-msgstr "Naujas"
+msgstr "Nauja"
 
 #.
 #. * Various option sections and options within those sections
@@ -8336,6 +8335,8 @@ msgid ""
 "If active, always open the reconcile dialog using today's date for the "
 "statement date, regardless of previous reconciliations."
 msgstr ""
+"Jei aktyvu, visada atverti suderinimo dialogo langą naudojant šiandienos "
+"datą kaip išrašo datą, neatsižvelgiant į ankstesnius suderinimus."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 msgid "Pre-select cleared transactions"
@@ -8930,16 +8931,20 @@ msgid ""
 "reconciled split. Allowing these changes can make it hard to perform future "
 "reconciliations."
 msgstr ""
+"Šis dialogo langas yra parodomas prieš leidžiant pakeisti suderinto skaidymo "
+"turinį. Šių pakeitimų leidimas gali apsunkinti ateities suderinimus."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:17
 msgid ""
 "This dialog is presented before allowing you to delete a commodity that has "
 "price quotes attached. Deleting the commodity will delete the quotes as well."
 msgstr ""
+"Šis dialogo langas yra parodomas prieš leidžiant pašalinti prekę, kuri turi "
+"kainų pasiūlymų. Prekės pašalinimas taip pat pašalins ir pasiūlymus."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:18
 msgid "This dialog is presented before allowing you to delete a commodity."
-msgstr ""
+msgstr "Šis dialogo langas yra parodomas prieš leidžiant pašalinti prekę."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:19
 msgid ""
@@ -8947,16 +8952,21 @@ msgid ""
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
+"Šis dialogo langas yra parodomas prieš leidžiant pašalinti operaciją, kuri "
+"turi suderintų skaidymų. Taip darant bus pamesta suderinta registro reikšmė "
+"ir gali būti sunku ateityje atlikti suderinimus."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:20
 msgid "This dialog is presented before allowing you to delete a transaction."
-msgstr ""
+msgstr "Šis dialogo langas yra parodomas prieš leidžiant pašalinti operaciją."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:21
 msgid ""
 "This dialog is presented before allowing you to delete multiple price quotes "
 "at one time."
 msgstr ""
+"Šis dialogo langas yra parodomas prieš leidžiant pašalinti kelis kainų "
+"pasiūlymus iš karto."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:22
 msgid ""
@@ -8964,6 +8974,9 @@ msgid ""
 "unreconciled. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
+"Šis dialogo langas yra parodomas prieš leidžiant pažymėti operacijos "
+"skaidymą kaip nesuderintą. Taip darant bus pamesta suderinta registro "
+"reikšmė ir gali būti sunku ateityje atlikti suderinimus."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:23
 msgid ""
@@ -8971,12 +8984,17 @@ msgid ""
 "from a transaction. Doing so will throw off the reconciled value of the "
 "register and can make it hard to perform future reconciliations."
 msgstr ""
+"Šis dialogo langas yra parodomas prieš leidžiant pašalinti suderintą "
+"operacijos skaidymą. Taip darant bus pamesta suderinta registro reikšmė ir "
+"gali būti sunku ateityje atlikti suderinimus."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:24
 msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
 msgstr ""
+"Šis dialogo langas yra parodomas prieš leidžiant pašalinti skaidymą iš "
+"operacijos."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:25
 msgid ""
@@ -8985,49 +9003,67 @@ msgid ""
 "reconciled value of the register and can make it hard to perform future "
 "reconciliations."
 msgstr ""
+"Šis dialogo langas yra parodomas prieš leidžiant pašalinti visus operacijos "
+"skaidymus (įskaitant kelis suderintus skaidymus). Taip darant bus pamesta "
+"suderinta registro reikšmė ir gali būti sunku ateityje atlikti suderinimus."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:26
 msgid ""
 "This dialog is presented before allowing you to remove all splits from a "
 "transaction."
 msgstr ""
+"Šis dialogo langas yra parodomas prieš leidžiant pašalinti visus skaidymus "
+"iš operacijos."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:27
 msgid ""
 "This dialog is presented if you try to print checks from multiple accounts "
 "at the same time."
 msgstr ""
+"Šis dialogo langas yra parodomas, jei bandote atspausdinti skirtingų "
+"sąskaitų čekius iš karto."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:28
 msgid "This dialog is presented when a read-only register is opened."
 msgstr ""
+"Šis dialogo langas yra parodomas kai atveriamas registras tik skaitymui."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:29
 msgid ""
 "This dialog is presented when you attempt to duplicate a modified invoice "
 "entry. The changed data must be saved or the duplication canceled."
 msgstr ""
+"Šis dialogo langas yra parodomas kai mėginate dubliuoti modifikuotą s"
+"ąskaitos-faktūros įrašą. Pakeisti duomenys privalo būti išsaugoti arba "
+"atmestas dubliavimas."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:30
 msgid ""
 "This dialog is presented when you attempt to duplicate a modified "
 "transaction. The changed data must be saved or the duplication canceled."
 msgstr ""
+"Šis dialogo langas yra parodomas kai mėginate dubliuoti modifikuotą "
+"operaciją. Pakeisti duomenys privalo būti išsaugoti arba atmestas "
+"dubliavimas."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:31
 msgid ""
 "This dialog is presented when you attempt to move out of a modified invoice "
 "entry. The changed data must be either saved or discarded."
 msgstr ""
+"Šis dialogo langas yra parodomas kai mėginate perkelti modifikuotą s"
+"ąskaitos-faktūros įrašą. Pakeisti duomenys privalo būti išsaugoti arba "
+"atmesti."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:32
 msgid ""
 "This dialog is presented when you attempt to move out of a modified "
 "transaction. The changed data must be either saved or discarded."
 msgstr ""
+"Šis dialogo langas yra parodomas kai mėginate perkelti modifikuotą "
+"operaciją. Pakeisti duomenys privalo būti išsaugoti arba atmesti."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:1
-#, fuzzy
 msgid "Ending date (in seconds from Jan 1, 1970)"
 msgstr "Pabaigos data (sekundėmis nuo 1970 m. sausio 1 d.)"
 
@@ -9056,12 +9092,10 @@ msgstr ""
 "Rodyti visų sąskaitų bendrą sumą konvertuotą į numatytąją ataskaitų valiutą"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
-#, fuzzy
 msgid "Show non currency commodities"
-msgstr "Rodyti bevaliutines prekes"
+msgstr "Rodyti nevaliutines prekes"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:8
-#, fuzzy
 msgid "Starting date (in seconds from Jan 1, 1970)"
 msgstr "Pradžios data (sekundėmis nuo 1970 m. sausio 1 d.)"
 
@@ -9558,10 +9592,9 @@ msgid "Select currency"
 msgstr "Pasirinkite valiutą"
 
 #: ../src/gnome-utils/dialog-commodity.c:529
-#, fuzzy
 msgid "You must select a commodity. To create a new one, click \"New\""
 msgstr ""
-"Jūs turite pasirinkti prekę. Sukurdami naują prekę, spauskite \"Naujas\"."
+"Jūs privalote pasirinkti prekę. Naujai prekei sukurti spauskite „Naujas“"
 
 #: ../src/gnome-utils/dialog-commodity.c:878
 msgid "Use local time"
@@ -9588,12 +9621,10 @@ msgid "Security Information"
 msgstr "Vertybinio popieriaus informacija"
 
 #: ../src/gnome-utils/dialog-commodity.c:1266
-#, fuzzy
 msgid "You may not create a new national currency."
-msgstr "Jūs negalėsite sukurti naujos nacionalinės valiutos."
+msgstr "Jūs negalite sukurti naujos nacionalinės valiutos."
 
 #: ../src/gnome-utils/dialog-commodity.c:1280
-#, fuzzy
 msgid "That commodity already exists."
 msgstr "Tokia prekė jau yra."
 
@@ -9769,23 +9800,20 @@ msgid "To Amount:"
 msgstr "Į sumą:"
 
 #: ../src/gnome-utils/dialog-utils.c:967
-#, fuzzy
 msgid "Remember and don't _ask me again."
-msgstr "_Prisiminti ir daugiau neklausti."
+msgstr "Prisiminti ir daugiau _neklausti."
 
 #: ../src/gnome-utils/dialog-utils.c:968
 msgid "Don't _tell me again."
 msgstr "_Daugiau nekartoti."
 
 #: ../src/gnome-utils/dialog-utils.c:971
-#, fuzzy
 msgid "Remember and don't ask me again this _session."
-msgstr "Prisiminti ir daugiau neklausti per šią _sesiją."
+msgstr "Prisiminti ir daugiau neklausti šiame _seanse."
 
 #: ../src/gnome-utils/dialog-utils.c:972
-#, fuzzy
 msgid "Don't tell me again this _session."
-msgstr "Daugiau neklausti per šią _sesiją."
+msgstr "Daugiau nepranešti šiame _seanse."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:428
 msgid ""
@@ -9952,7 +9980,6 @@ msgstr "ISO-8859-13"
 #. another error, cannot handle this here
 #: ../src/gnome-utils/druid-gnc-xml-import.c:750
 #: ../src/gnome-utils/druid-gnc-xml-import.c:770
-#, fuzzy
 msgid "The file could not be reopened."
 msgstr "Failas negali būti pakartotinai atvertas."
 
@@ -9990,7 +10017,7 @@ msgstr ""
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1126
 msgid "That GnuCash XML file is already loaded. Please select another file."
-msgstr ""
+msgstr "Šis GnuCash XML failas jau įkeltas. Pasirinkite kitą failą."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1457
 msgid "This encoding has been added to the list already."
@@ -10018,12 +10045,16 @@ msgid ""
 "Enter a unique code used to identify the commodity. Or, you may safely leave "
 "this field blank."
 msgstr ""
+"Įveskite unikalų kodą, naudojamą prekei identifikuoti. Arba saugiai galite "
+"palikti šį lauką tuščią."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:4
 msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr ""
+"Įveskite visą prekės pavadinimą. Pavyzdžiui, Cisco Systems Inc. ar Apple "
+"Computer, Inc."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:5
 msgid ""
@@ -10056,7 +10087,6 @@ msgid "Select security/currency "
 msgstr "Pasirinkite vertybinį popierių/valiutą "
 
 #: ../src/gnome-utils/glade/commodity.glade.h:10
-#, fuzzy
 msgid "Select user information here..."
 msgstr "Pasirinkite naudotojo informaciją čia..."
 
@@ -10169,7 +10199,7 @@ msgstr "Paaiškinimas"
 #: ../src/gnome-utils/glade/dialog-object-references.glade.h:2
 #, fuzzy
 msgid "Object references"
-msgstr "Nustatymai"
+msgstr "Objektų nuorodos"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
@@ -10252,7 +10282,6 @@ msgid "Please run the following commands:"
 msgstr "Paleiskite sekančias komandas:"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:11
-#, fuzzy
 msgid "S_kip"
 msgstr "_Praleisti"
 
@@ -10302,7 +10331,6 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:18
-#, fuzzy
 msgid "Update GnuCash configuration data"
 msgstr "Atnaujinti GnuCash konfigūravimo duomenis"
 
@@ -10405,11 +10433,11 @@ msgstr "Nesujungti"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:11
 msgid "Edit the list of encodings"
-msgstr ""
+msgstr "Redaguoti koduočių sąrašą"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:12
 msgid "Finish GnuCash Datafile Import"
-msgstr ""
+msgstr "Baigti GnuCash duomenų failo importą"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
 msgid "GnuCash Datafile Import Assistant"
@@ -10694,10 +10722,12 @@ msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
 msgstr ""
+"Po kreditinės kortelės suderinimo paraginti naudotoją įvesti kreditinės "
+"kortelės mokėjimą."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:38
 msgid "All transactions are expanded to show all splits."
-msgstr ""
+msgstr "Visos operacijos yra išskleistos visiems skaidymams parodyti."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:39
 msgid ""
@@ -10710,10 +10740,12 @@ msgid ""
 "Always open the reconcile dialog using today's date for the statement date, "
 "regardless of previous reconciliations."
 msgstr ""
+"Visada atverti suderinimo dialogo langą naudojant šiandienos datą kaip "
+"išrašo datą, neatsižvelgiant į ankstesnius suderinimus."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:41
 msgid "Always reconcile to t_oday"
-msgstr ""
+msgstr "Visada suderinti „šiandien“"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:42
 msgid "Auto-save time _interval:"
@@ -10732,6 +10764,9 @@ msgid ""
 "Automatically expand the current transaction to show all splits.  All other "
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
+"Automatiškai išskleisti dabartinę operaciją visiems skaidymams parodyti. "
+"Visos kitos operacijos rodomos viena eilute. (Dviem dvigubų eilučių "
+"veiksenoje)."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:46
 msgid ""
@@ -15119,6 +15154,8 @@ msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating the transaction, or cancel the duplication?"
 msgstr ""
+"Dabartinė operacija buvo pakeista. Ar norite įrašyti pakeitimus prieš šios "
+"operacijos dubliavimą, ar atsisakyti dubliavimo?"
 
 #: ../src/register/ledger-core/split-register.c:805
 msgid ""
@@ -15371,7 +15408,7 @@ msgstr "Nepavyko rasti įvestos sąskaitos."
 #: ../src/register/ledger-core/split-register-control.c:1377
 #: ../src/register/ledger-core/split-register-control.c:1390
 msgid "The two currencies involved equal each other."
-msgstr ""
+msgstr "Naudojamos dvi tos pačios valiutos."
 
 #: ../src/register/ledger-core/split-register-control.c:1441
 msgid "The split's amount is zero, so no exchange rate is needed."
@@ -15387,6 +15424,9 @@ msgid ""
 "changes before moving to a new transaction, discard the changes, or return "
 "to the changed transaction?"
 msgstr ""
+"Dabartinė operacija buvo pakeista. Ar norite įrašyti pakeitimus prieš "
+"pereidami prie naujos operacijos, atsisakyti pakeitimų, ar grįžti į pakeistą "
+"operaciją?"
 
 #: ../src/register/ledger-core/split-register-control.c:1506
 msgid "_Discard Changes"
@@ -15394,7 +15434,7 @@ msgstr "_Atmesti pakeitimus"
 
 #: ../src/register/ledger-core/split-register-control.c:1508
 msgid "_Record Changes"
-msgstr "_Įrašyti pakeitimus"
+msgstr "Į_rašyti pakeitimus"
 
 #: ../src/register/ledger-core/split-register-control.c:1787
 msgid "Mark split as unreconciled?"
@@ -17508,9 +17548,8 @@ msgstr "Pelnas"
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/gnucash/report/customer-summary.scm
 #: ../intl-scm/guile-strings.c:748 ../intl-scm/guile-strings.c:1352
-#, fuzzy
 msgid "Sort by profit amount"
-msgstr "Rikiuoti pagal sumą"
+msgstr "Rikiuoti pagal pelno sumą"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/gnucash/report/customer-summary.scm
@@ -17536,16 +17575,14 @@ msgstr "Pardavimas"
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/gnucash/report/customer-summary.scm
 #: ../intl-scm/guile-strings.c:756 ../intl-scm/guile-strings.c:1360
-#, fuzzy
 msgid "Sort by sales amount"
-msgstr "Rikiuoti pagal sumą"
+msgstr "Rikiuoti pagal pardavimo sumą"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/gnucash/report/customer-summary.scm
 #: ../intl-scm/guile-strings.c:760 ../intl-scm/guile-strings.c:1364
-#, fuzzy
 msgid "Sort by expense amount"
-msgstr "Rikiuoti pagal sumą"
+msgstr "Rikiuoti pagal sąnaudų sumą"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/gnucash/report/customer-summary.scm
@@ -21832,7 +21869,7 @@ msgstr "Sąskaitas, kurios viršija gylio limitą, rodo gylio limito lygyje"
 #: ../intl-scm/guile-strings.c:4090 ../intl-scm/guile-strings.c:4314
 #: ../intl-scm/guile-strings.c:5466 ../intl-scm/guile-strings.c:5670
 msgid "Label the assets section"
-msgstr ""
+msgstr "Trumpai apibūdinti turto dalį"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21841,7 +21878,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4092 ../intl-scm/guile-strings.c:4316
 #: ../intl-scm/guile-strings.c:5468 ../intl-scm/guile-strings.c:5672
 msgid "Whether or not to include a label for the assets section"
-msgstr ""
+msgstr "Ar įtraukti į ataskaitą etiketę turto daliai"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21850,7 +21887,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4094 ../intl-scm/guile-strings.c:4318
 #: ../intl-scm/guile-strings.c:5470 ../intl-scm/guile-strings.c:5674
 msgid "Include assets total"
-msgstr ""
+msgstr "Įtraukti turto bendrąją sumą"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21859,7 +21896,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4096 ../intl-scm/guile-strings.c:4320
 #: ../intl-scm/guile-strings.c:5472 ../intl-scm/guile-strings.c:5676
 msgid "Whether or not to include a line indicating total assets"
-msgstr ""
+msgstr "Ar įtraukti eilutę, rodančią bendrąją turto sumą"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21868,7 +21905,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4098 ../intl-scm/guile-strings.c:4322
 #: ../intl-scm/guile-strings.c:5474 ../intl-scm/guile-strings.c:5678
 msgid "Label the liabilities section"
-msgstr ""
+msgstr "Trumpai apibūdinti įsipareigojimų dalį"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21877,7 +21914,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4100 ../intl-scm/guile-strings.c:4324
 #: ../intl-scm/guile-strings.c:5476 ../intl-scm/guile-strings.c:5680
 msgid "Whether or not to include a label for the liabilities section"
-msgstr ""
+msgstr "Ar įtraukti į ataskaitą etiketę įsipareigojimų daliai"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21886,7 +21923,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4102 ../intl-scm/guile-strings.c:4326
 #: ../intl-scm/guile-strings.c:5478 ../intl-scm/guile-strings.c:5682
 msgid "Include liabilities total"
-msgstr ""
+msgstr "Įtraukti įsipareigojimų bendrąją sumą"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21895,7 +21932,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4104 ../intl-scm/guile-strings.c:4328
 #: ../intl-scm/guile-strings.c:5480 ../intl-scm/guile-strings.c:5684
 msgid "Whether or not to include a line indicating total liabilities"
-msgstr ""
+msgstr "Ar įtraukti eilutę, rodančią bendrąją įsipareigojimų sumą"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21904,7 +21941,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4106 ../intl-scm/guile-strings.c:4330
 #: ../intl-scm/guile-strings.c:5482 ../intl-scm/guile-strings.c:5686
 msgid "Label the equity section"
-msgstr ""
+msgstr "Trumpai apibūdinti nuosavybės dalį"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21913,7 +21950,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4108 ../intl-scm/guile-strings.c:4332
 #: ../intl-scm/guile-strings.c:5484 ../intl-scm/guile-strings.c:5688
 msgid "Whether or not to include a label for the equity section"
-msgstr ""
+msgstr "Ar įtraukti į ataskaitą etiketę nuosavybės daliai"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21922,7 +21959,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4110 ../intl-scm/guile-strings.c:4334
 #: ../intl-scm/guile-strings.c:5486 ../intl-scm/guile-strings.c:5690
 msgid "Include equity total"
-msgstr ""
+msgstr "Įtraukti nuosavybės bendrąją sumą"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -21931,7 +21968,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4112 ../intl-scm/guile-strings.c:4336
 #: ../intl-scm/guile-strings.c:5488 ../intl-scm/guile-strings.c:5692
 msgid "Whether or not to include a line indicating total equity"
-msgstr ""
+msgstr "Ar įtraukti eilutę, rodančią bendrąją nuosavybės sumą"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -22464,7 +22501,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4500 ../intl-scm/guile-strings.c:5856
 #: ../intl-scm/guile-strings.c:6410 ../intl-scm/guile-strings.c:7560
 msgid "Label the revenue section"
-msgstr ""
+msgstr "Trumpai apibūdinti pajamų dalį"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22473,7 +22510,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4502 ../intl-scm/guile-strings.c:5858
 #: ../intl-scm/guile-strings.c:6412 ../intl-scm/guile-strings.c:7562
 msgid "Whether or not to include a label for the revenue section"
-msgstr ""
+msgstr "Ar įtraukti į ataskaitą etiketę pajamų daliai"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22482,7 +22519,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4504 ../intl-scm/guile-strings.c:5860
 #: ../intl-scm/guile-strings.c:6414 ../intl-scm/guile-strings.c:7564
 msgid "Include revenue total"
-msgstr ""
+msgstr "Įtraukti pajamų bendrąją sumą"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22491,7 +22528,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4506 ../intl-scm/guile-strings.c:5862
 #: ../intl-scm/guile-strings.c:6416 ../intl-scm/guile-strings.c:7566
 msgid "Whether or not to include a line indicating total revenue"
-msgstr ""
+msgstr "Ar įtraukti eilutę, rodančią bendrąją pajamų sumą"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22500,7 +22537,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4508 ../intl-scm/guile-strings.c:5864
 #: ../intl-scm/guile-strings.c:6426 ../intl-scm/guile-strings.c:7576
 msgid "Label the expense section"
-msgstr ""
+msgstr "Trumpai apibūdinti sąnaudų dalį"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22509,7 +22546,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4510 ../intl-scm/guile-strings.c:5866
 #: ../intl-scm/guile-strings.c:6428 ../intl-scm/guile-strings.c:7578
 msgid "Whether or not to include a label for the expense section"
-msgstr ""
+msgstr "Ar įtraukti į ataskaitą etiketę sąnaudų daliai"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22518,7 +22555,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4512 ../intl-scm/guile-strings.c:5868
 #: ../intl-scm/guile-strings.c:6430 ../intl-scm/guile-strings.c:7580
 msgid "Include expense total"
-msgstr ""
+msgstr "Įtraukti sąnaudų bendrąją sumą"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22527,7 +22564,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4514 ../intl-scm/guile-strings.c:5870
 #: ../intl-scm/guile-strings.c:6432 ../intl-scm/guile-strings.c:7582
 msgid "Whether or not to include a line indicating total expense"
-msgstr ""
+msgstr "Ar įtraukti eilutę, rodančią bendrąją sąnaudų sumą"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -22551,7 +22588,7 @@ msgstr "Įrašai"
 #: ../intl-scm/guile-strings.c:4532 ../intl-scm/guile-strings.c:5888
 #: ../intl-scm/guile-strings.c:6462 ../intl-scm/guile-strings.c:7612
 msgid "Display as a two column report"
-msgstr ""
+msgstr "Rodyti kaip dviejų stulpelių ataskaitą"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22560,7 +22597,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4534 ../intl-scm/guile-strings.c:5890
 #: ../intl-scm/guile-strings.c:6464 ../intl-scm/guile-strings.c:7614
 msgid "Divides the report into an income column and an expense column"
-msgstr ""
+msgstr "Padalina ataskaitą į pajamų stulpelį ir sąnaudų stulpelį"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22569,7 +22606,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4536 ../intl-scm/guile-strings.c:5892
 #: ../intl-scm/guile-strings.c:6466 ../intl-scm/guile-strings.c:7616
 msgid "Display in standard, income first, order"
-msgstr ""
+msgstr "Rodyti įprasta tvarka – iš pradžių pajamos"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -22580,7 +22617,7 @@ msgstr ""
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses"
-msgstr ""
+msgstr "Ataskaitą rodo įprasta tvarka, iš pradžių pajamas, po to sąnaudas"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
@@ -23142,7 +23179,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:8088 ../intl-scm/guile-strings.c:8640
 #, c-format
 msgid "For Period Covering %s to %s"
-msgstr ""
+msgstr "laikotarpiui nuo %s iki %s"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
@@ -23153,7 +23190,6 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4894 ../intl-scm/guile-strings.c:6250
 #: ../intl-scm/guile-strings.c:6474 ../intl-scm/guile-strings.c:7486
 #: ../intl-scm/guile-strings.c:7624 ../intl-scm/guile-strings.c:8636
-#, fuzzy
 msgid "for Period"
 msgstr "laikotarpiui"
 
@@ -23417,28 +23453,27 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:6418 ../intl-scm/guile-strings.c:7568
-#, fuzzy
 msgid "Label the trading accounts section"
-msgstr "Pasirinkti numatytąsias sąskaitos parinktys."
+msgstr "Trumpai apibūdinti prekybos sąskaitų dalį"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:6420 ../intl-scm/guile-strings.c:7570
 msgid "Whether or not to include a label for the trading accounts section"
-msgstr ""
+msgstr "Ar įtraukti į ataskaitą etiketę prekybos sąskaitų daliai"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:6422 ../intl-scm/guile-strings.c:7572
 msgid "Include trading accounts total"
-msgstr ""
+msgstr "Įtraukti prekybos sąskaitų bendrąją sumą"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:6424 ../intl-scm/guile-strings.c:7574
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance"
-msgstr ""
+msgstr "Ar įtraukti eilutę, rodančią bendrąją prekybos sąskaitų sumą"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/income-statement.scm
@@ -24119,7 +24154,6 @@ msgstr "Тikslus laikas"
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7160 ../intl-scm/guile-strings.c:8310
-#, fuzzy
 msgid "Sort by exact time"
 msgstr "Rikiuoti pagal tikslų laiką"
 
@@ -24158,9 +24192,8 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7188 ../intl-scm/guile-strings.c:8338
-#, fuzzy
 msgid "Sort by check/transaction number"
-msgstr "Rikiuoti pagal kvito/pavedimo numerį"
+msgstr "Rikiuoti pagal čekio/operacijos numerį"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
