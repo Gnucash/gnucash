@@ -4,10 +4,12 @@
       <placeholder name="FileSavePlaceholder">
         <menuitem name="FileReportSave" action="ReportSaveAction" />
       </placeholder>
+      <placeholder name="FilePrintPlaceholder">
+        <menuitem name="FileExportPDF" action="FilePrintPDFAction"/>
+      </placeholder>
       <menu name="FileExport" action="FileExportAction">
         <placeholder name="FileExportPlaceholder">
           <menuitem name="FileReportExport" action="ReportExportAction" />
-          <menuitem name="FileExportPDF" action="FilePrintPDFAction"/>
         </placeholder>
       </menu>
     </menu>
