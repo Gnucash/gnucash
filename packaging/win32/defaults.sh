@@ -86,14 +86,14 @@ set_default MINGW_DIR $GLOBAL_DIR\\mingw
 
 # The URLs for precompiled gcc/mingw binaries
 set_default BINUTILS_URL "$SF_MIRROR/mingw/binutils-2.21-2-mingw32-bin.tar.lzma"
-set_default GCC_CORE_URL "$SF_MIRROR/mingw/gcc-core-4.4.0-mingw32-bin.tar.gz"
-set_default GCC_CORE_DLL_URL "$SF_MIRROR/mingw/gcc-core-4.4.0-mingw32-dll.tar.gz"
-set_default GCC_GPP_URL "$SF_MIRROR/mingw/gcc-c++-4.4.0-mingw32-bin.tar.gz"
-set_default GCC_GPP_DLL_URL "$SF_MIRROR/mingw/gcc-c++-4.4.0-mingw32-dll.tar.gz"
+set_default GCC_CORE_URL "$SF_MIRROR/mingw/gcc-core-4.5.2-1-mingw32-bin.tar.lzma"
+set_default GCC_CORE_DLL_URL "$SF_MIRROR/mingw/libgcc-4.5.2-1-mingw32-dll-1.tar.lzma"
+set_default GCC_GPP_URL "$SF_MIRROR/mingw/gcc-c++-4.5.2-1-mingw32-bin.tar.lzma"
+set_default GCC_GPP_DLL_URL "$SF_MIRROR/mingw/libstdc++-4.5.2-1-mingw32-dll-6.tar.lzma"
 set_default GCC_GPP_PATCH "`pwd`/gcc-c++-4.4.0.patch"
-#set_default GCC_MPC_URL "$SF_MIRROR/mingw/libmpc-0.8.1-1-mingw32-dll-2.tar.lzma"
-set_default GCC_MPFR_URL "$SF_MIRROR/mingw/mpfr-2.4.1-mingw32-dll.tar.gz"
-set_default GCC_GMP_URL "$SF_MIRROR/mingw/gmp-4.2.4-mingw32-dll.tar.gz"
+set_default GCC_MPC_URL "$SF_MIRROR/mingw/libmpc-0.8.1-1-mingw32-dll-2.tar.lzma"
+set_default GCC_MPFR_URL "$SF_MIRROR/mingw/libmpfr-2.4.1-1-mingw32-dll-1.tar.lzma"
+set_default GCC_GMP_URL "$SF_MIRROR/mingw/libgmp-5.0.1-1-mingw32-dll-10.tar.lzma"
 set_default GCC_PTHREADS_URL "$SF_MIRROR/mingw/libpthread-2.8.0-3-mingw32-dll-2.tar.lzma"
 
 if [ "$CROSS_COMPILE" != yes ]; then
@@ -179,8 +179,10 @@ set_default READLINE_DIR $GLOBAL_DIR\\readline
 set_default ACTIVE_PERL_URL "http://downloads.activestate.com/ActivePerl/releases/5.14.2.1402/ActivePerl-5.14.2.1402-MSWin32-x86-295342.zip"
 set_default ACTIVE_PERL_DIR $GLOBAL_DIR\\active-perl
 
+#set_default AUTOCONF_URL "http://ftp.gnu.org/gnu/autoconf/autoconf-2.63.tar.bz2"
+#set_default AUTOMAKE_URL "http://ftp.gnu.org/gnu/automake/automake-1.10.2.tar.bz2"
 set_default AUTOCONF_URL "http://ftp.gnu.org/gnu/autoconf/autoconf-2.63.tar.bz2"
-set_default AUTOMAKE_URL "http://ftp.gnu.org/gnu/automake/automake-1.10.2.tar.bz2"
+set_default AUTOMAKE_URL "http://ftp.gnu.org/gnu/automake/automake-1.11.1.tar.bz2"
 set_default LIBTOOL_URL "http://ftp.gnu.org/gnu/libtool/libtool-2.2.6a.tar.gz"
 set_default AUTOTOOLS_DIR $GLOBAL_DIR\\autotools
 
@@ -190,9 +192,13 @@ set_default GMP_DIR $GLOBAL_DIR\\gmp
 set_default GMP5_BIN_URL "$SF_MIRROR/mingw/libgmp-5.0.1-1-mingw32-dll-10.tar.lzma"
 set_default GMP5_DEV_URL "$SF_MIRROR/mingw/gmp-5.0.1-1-mingw32-dev.tar.lzma"
 
-set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
-set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
+GUILE_VERSION="1.8.8"
+set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-${GUILE_VERSION}.tar.gz"
 set_default GUILE_DIR $GLOBAL_DIR\\guile
+set_default GUILE_PATCH `pwd`/guile-1.8.8.patch
+#set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
+set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/slib-3b3.zip"
+#set_default GUILE_DIR $GLOBAL_DIR\\guile
 
 set_default OPENSSL_URL "http://www.openssl.org/source/openssl-0.9.8j.tar.gz"
 set_default OPENSSL_DIR $GLOBAL_DIR\\openssl
