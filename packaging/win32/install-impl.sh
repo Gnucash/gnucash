@@ -129,7 +129,7 @@ function inst_mingw() {
         wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $GCC_GPP_DLL_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $GCC_GMP_URL $DOWNLOAD_DIR $MINGW_DIR
-#        wget_unpacked $GCC_MPC_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_MPC_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $GCC_MPFR_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $GCC_PTHREADS_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
@@ -148,9 +148,6 @@ function inst_mingw() {
     if [ "$CROSS_COMPILE" != "yes" ]; then
         # Some preparation steps, only for native (non-cross-compile)
         cp ${_MINGW_UDIR}/bin/libpthread-2.dll ${_MINGW_UDIR}/bin/pthreadGC2.dll
-        # Handle mis-named libstdc++ in the MINGW_GPP_DLL package:
-        cp ${_MINGW_UDIR}/lib/gcc/mingw32/4.4.0/libstdc++.la ${_MINGW_UDIR}/lib/gcc/mingw32/4.4.0/libstdc++.la.bak
-        sed s/libstdc++.dll.a// ${_MINGW_UDIR}/lib/gcc/mingw32/4.4.0/libstdc++.la.bak > ${_MINGW_UDIR}/lib/gcc/mingw32/4.4.0/libstdc++.la
     fi
 }
 
@@ -315,40 +312,18 @@ function inst_guile() {
         tar -xzpf $_GUILE_BALL -C $TMP_UDIR
         assert_one_dir $TMP_UDIR/guile-*
         qpushd $TMP_UDIR/guile-*
-            qpushd ice-9
-                cp boot-9.scm boot-9.scm.bak
-                cat boot-9.scm.bak | sed '/SIGBUS/d' > boot-9.scm
-            qpopd
-            qpushd libguile
-                cp fports.c fports.c.bak
-                cat fports.c.bak | sed 's,#elif defined (FIONREAD),#elif 0,' > fports.c
-                cp load.c load.c.bak
-                cat load.c.bak | sed '/scan !=/s,:,;,' > load.c
-            qpopd
-            qpushd libguile-ltdl
-                cp raw-ltdl.c raw-ltdl.c.bak
-                cat raw-ltdl.c.bak | sed 's,\(SCMLTSTATIC\) LT_GLOBAL_DATA,\1,' > raw-ltdl.c
-                touch upstream/ltdl.c.diff
-            qpopd
+            patch -p1 < $GUILE_PATCH
+            ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS
             ./configure ${HOST_XCOMPILE} \
                 --disable-static \
                 --disable-elisp \
-                --disable-networking \
                 --disable-dependency-tracking \
-                --disable-libtool-lock \
-                --disable-linuxthreads \
                 -C --prefix=$_GUILE_WFSDIR \
                 ac_cv_func_regcomp_rx=yes \
-                CPPFLAGS="${READLINE_CPPFLAGS} ${REGEX_CPPFLAGS}" \
-                LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS}"
-            cp config.status config.status.bak
-            cat config.status.bak | sed 's# fileblocks[$.A-Za-z]*,#,#' > config.status
-            ./config.status
-            qpushd guile-config
-              cp Makefile Makefile.bak
-              cat Makefile.bak | sed '/-bindir-/s,:,^,g' > Makefile
-            qpopd
-            make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -no-undefined -avoid-version"
+                CFLAGS="-D__MINGW32__" \
+                CPPFLAGS="${READLINE_CPPFLAGS} ${REGEX_CPPFLAGS} ${AUTOTOOLS_CPPFLAGS} ${GMP_CPPFLAGS} -D__MINGW32__" \
+                LDFLAGS="${READLINE_LDFLAGS} ${REGEX_LDFLAGS} ${AUTOTOOLS_LDFLAGS} ${GMP_LDFLAGS} -Wl,--enable-auto-import"
+            make LDFLAGS="${READLINE_LDFLAGS} ${REGEX_LDFLAGS} ${AUTOTOOLS_LDFLAGS} ${GMP_LDFLAGS} -Wl,--enable-auto-import -no-undefined -avoid-version"
             make install
         qpopd
         _SLIB_DIR=$_GUILE_UDIR/share/guile/1.*
@@ -606,8 +581,6 @@ function inst_libxslt() {
         wget_unpacked $LIBPNG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBTIFF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-#        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
-#        wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
