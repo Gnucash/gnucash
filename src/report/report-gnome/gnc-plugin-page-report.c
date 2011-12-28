@@ -1740,8 +1740,8 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
     GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     gchar *job_name = report_create_jobname(priv);
     GncInvoice *invoice;
-    GncOwner *owner;
-    KvpFrame *kvp;
+    GncOwner *owner = NULL;
+    KvpFrame *kvp = NULL;
 
     // Do we have an invoice report?
     invoice = lookup_invoice(priv);
