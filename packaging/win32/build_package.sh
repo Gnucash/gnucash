@@ -42,7 +42,7 @@ mkdir -p ${_OUTPUT_DIR}
 
 # Small hack to create $LOG_DIR on the webserver if it doesn't exist yet
 if [ `hostname` = "gnucash-win32" ]; then
-  mkdir "$_OUTPUT_DIR/$LOG_DIR"
+  mkdir -p "$_OUTPUT_DIR/$LOG_DIR"
   scp -r "$_OUTPUT_DIR/$LOG_DIR" upload@code.gnucash.org:public_html/win32
   rmdir "$_OUTPUT_DIR/$LOG_DIR"
 fi
@@ -95,7 +95,7 @@ fi
 # If we're running on the build server then upload the files
 if [ `hostname` = "gnucash-win32" ]; then
   # Small hack to create the $TARGET_DIR on the webserver if it doesn't exist yet
-  mkdir "$_OUTPUT_DIR/$TARGET_DIR"
+  mkdir -p "$_OUTPUT_DIR/$TARGET_DIR"
   scp -r "$_OUTPUT_DIR/$TARGET_DIR" upload@code.gnucash.org:public_html/win32
   rmdir "$_OUTPUT_DIR/$TARGET_DIR"
   # Copy the files to the chosen target directory
