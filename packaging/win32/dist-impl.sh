@@ -48,6 +48,7 @@ Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
     _WEBKIT_UDIR=`unix_path $WEBKIT_DIR`
     _ISOCODES_UDIR=`unix_path $ISOCODES_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
+    _MINGW_UDIR=`unix_path $MINGW_DIR`
     add_to_env $_UNZIP_UDIR/bin PATH # unzip
     add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
     add_to_env $_EXETYPE_UDIR/bin PATH # exetype
@@ -208,6 +209,8 @@ function dist_ktoblzcheck() {
     setup ktoblzcheck
     # dll is already copied in dist_gwenhywfar
     cp -a ${_GWENHYWFAR_UDIR}/share/ktoblzcheck ${DIST_UDIR}/share
+    cp -a ${_MINGW_UDIR}/bin/libstdc++-6.dll ${DIST_UDIR}/bin
+    cp -a ${_MINGW_UDIR}/bin/libgcc_s_dw2-1.dll ${DIST_UDIR}/bin
 }
 
 function dist_aqbanking() {
