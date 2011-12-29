@@ -818,6 +818,7 @@ void
 qof_session_swap_data (QofSession *session_1, QofSession *session_2)
 {
     QofBook *book_1, *book_2;
+    gboolean tmp;
 
     if (session_1 == session_2) return;
     if (!session_1 || !session_2) return;
@@ -826,6 +827,11 @@ qof_session_swap_data (QofSession *session_1, QofSession *session_2)
 
     book_1 = session_1->book;
     book_2 = session_2->book;
+
+    // Swap the read_only flags backwards.
+    tmp = book_1->read_only;
+    book_1->read_only = book_2->read_only;
+    book_2->read_only = tmp;
 
     session_1->book = book_2;
     session_2->book = book_1;
