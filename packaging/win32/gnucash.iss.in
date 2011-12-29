@@ -16,14 +16,14 @@ AppUpdatesURL=http://www.gnucash.org
 VersionInfoVersion=@VERSION@
 DefaultDirName={pf}\@PACKAGE@
 DefaultGroupName=GnuCash
-LicenseFile=@prefix@\..\dist\share\@PACKAGE@\doc\COPYING
+LicenseFile=@prefix@\..\dist\share\doc\@PACKAGE@\COPYING
 Compression=lzma
 MinVersion=5.0,5.0
 PrivilegesRequired=poweruser
 OutputDir=.
 OutputBaseFilename=@PACKAGE@-@VERSION@-setup
 UninstallFilesDir={app}\uninstall\@PACKAGE@
-InfoAfterFile=@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt
+InfoAfterFile=@prefix@\..\dist\share\doc\@PACKAGE@\README.win32-bin.txt
 SetupIconFile=@prefix@\..\dist\share\@PACKAGE@\pixmaps\gnucash-icon.ico
 WizardSmallImageFile=@prefix@\..\dist\share\@PACKAGE@\pixmaps\gnucash-icon-48x48.bmp
 
@@ -94,19 +94,19 @@ Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdir
 ;Source: "@prefix@\..\dist\share\locale\*"; DestDir: "{app}\share\locale"; Flags: recursesubdirs; Components: translations
 ;
 ;; The account templates
-;Source: "@prefix@\..\dist\share\gnucash\accounts\*"; DestDir: "{app}\share\gnucash\accounts"; Flags: recursesubdirs; Components: templates
+;Source: "@prefix@\..\dist\share\@PACKAGE@\accounts\*"; DestDir: "{app}\share\@PACKAGE@\accounts"; Flags: recursesubdirs; Components: templates
 
 ; And all the documentation
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-fr.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-it.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-zh_CN.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-zh_TW.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\README.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\README-de.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\README-fr.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\README-it.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\README-zh_CN.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\README-zh_TW.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\doc\@PACKAGE@\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -385,16 +385,16 @@ end;
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
-Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-de.win32-bin.txt"
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\share\doc\@PACKAGE@\README-de.win32-bin.txt"
 Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
-Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
-Name: "it"; MessagesFile: "compiler:Languages\Italian.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-it.win32-bin.txt"
+Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\doc\@PACKAGE@\README-fr.win32-bin.txt"
+Name: "it"; MessagesFile: "compiler:Languages\Italian.isl"; InfoAfterFile: "@prefix@\share\doc\@PACKAGE@\README-it.win32-bin.txt"
 Name: "ja"; MessagesFile: "@prefix@\share\@PACKAGE@\Japanese-5-5.1.11.isl"
-Name: "lv"; MessagesFile: "@prefix@\share\@PACKAGE@\Latvian-1-5.1.11.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-lv.win32-bin.txt"
-Name: "nl"; MessagesFile: "compiler:Languages\Dutch.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-nl.win32-bin.txt"
+Name: "lv"; MessagesFile: "@prefix@\share\@PACKAGE@\Latvian-1-5.1.11.isl"; InfoAfterFile: "@prefix@\share\doc\@PACKAGE@\README-lv.win32-bin.txt"
+Name: "nl"; MessagesFile: "compiler:Languages\Dutch.isl"; InfoAfterFile: "@prefix@\share\doc\@PACKAGE@\README-nl.win32-bin.txt"
 Name: "pt_BR"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
-Name: "zh_CN"; MessagesFile: "@prefix@\share\@PACKAGE@\ChineseSimp-12-5.1.11.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-zh_CN.win32-bin.txt"
-Name: "zh_TW"; MessagesFile: "@prefix@\share\@PACKAGE@\ChineseTrad-2-5.1.11.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-zh_TW.win32-bin.txt"
+Name: "zh_CN"; MessagesFile: "@prefix@\share\@PACKAGE@\ChineseSimp-12-5.1.11.isl"; InfoAfterFile: "@prefix@\share\doc\@PACKAGE@\README-zh_CN.win32-bin.txt"
+Name: "zh_TW"; MessagesFile: "@prefix@\share\@PACKAGE@\ChineseTrad-2-5.1.11.isl"; InfoAfterFile: "@prefix@\share\doc\@PACKAGE@\README-zh_TW.win32-bin.txt"
 
 ;; The following language files are available as well, in alphabetical
 ;; order: Basque, BrazilianPortuguese, Catalan, Czech, Danish, Dutch,
