@@ -1139,15 +1139,8 @@ function inst_libxslt() {
     then
         echo "libxslt already installed in $_LIBXSLT_UDIR.  skipping."
     else
-        if [ "$CROSS_COMPILE" = "yes" ]; then
-            _MORE_CPPFLAGS="-I${_LIBXSLT_UDIR}/iconv-1.9.2.win32/include"
-            _MORE_LDFLAGS="-L${_LIBXSLT_UDIR}/lib"
-            wget_unpacked ${LIBXSLT_ICONV_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
-            wget_unpacked ${LIBXSLT_ZLIB_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
-        else
-            _MORE_CPPFLAGS=""
-            _MORE_LDFLAGS=""
-        fi
+        #wget_unpacked ${LIBXSLT_ICONV_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
+        #wget_unpacked ${LIBXSLT_ZLIB_URL} ${DOWNLOAD_DIR} ${LIBXSLT_DIR}
 
         wget_unpacked $LIBXSLT_SRC_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libxslt-*
@@ -1157,8 +1150,8 @@ function inst_libxslt() {
                 --prefix=${_LIBXSLT_UDIR} \
                 --with-python=no \
                 --with-libxml-prefix=${_GNOME_UDIR} \
-                CPPFLAGS="-I${_GNOME_UDIR}/include ${GNUTLS_CPPFLAGS} ${_MORE_CPPFLAGS}" \
-                LDFLAGS="-L${_GNOME_UDIR}/lib ${GNUTLS_LDFLAGS} ${_MORE_LD_FLAGS}"
+                CPPFLAGS="-I${_GNOME_UDIR}/include ${GNUTLS_CPPFLAGS}" \
+                LDFLAGS="-L${_GNOME_UDIR}/lib ${GNUTLS_LDFLAGS}"
             make
             make install
         qpopd
