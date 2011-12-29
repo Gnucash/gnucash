@@ -24,7 +24,6 @@
 \********************************************************************/
 
 #include "config.h"
-#include <gnome.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>

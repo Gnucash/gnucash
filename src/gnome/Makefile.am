@@ -19,6 +19,7 @@ libgnc_gnome_la_LIBADD = \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
+  ${GCONF_LIBS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS}
 
@@ -121,6 +122,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
+  ${GCONF_CFLAGS} \
   ${GLADE_CFLAGS} \
   $(GLIB_CFLAGS) \
   ${GTK_MAC_CFLAGS}

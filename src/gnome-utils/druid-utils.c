@@ -24,7 +24,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <libgnomeui/gnome-druid-page-edge.h>
+#include <libgnomeui/gnome-druid-page-standard.h>
 
 #include "dialog-utils.h"
 #include "druid-utils.h"

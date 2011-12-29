@@ -36,7 +36,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/libqof/qof \
-  ${GNOME_CFLAGS} \
+  ${GCONF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \

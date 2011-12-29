@@ -16,7 +16,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
-  ${GNOME_CFLAGS} \
+  ${GCONF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 libgncmod_report_gnome_la_SOURCES = \
@@ -49,7 +49,7 @@ libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
-  ${GNOME_LIBS} \
+  ${GCONF_LIBS} \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SVN

@@ -35,6 +35,10 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#ifdef __G_IR_SCANNER__
+#undef __G_IR_SCANNER__
+#endif
+#include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <glade/glade.h>
 #include "gnc-date-edit.h"

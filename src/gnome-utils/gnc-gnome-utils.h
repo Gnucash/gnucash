@@ -35,7 +35,6 @@
 #ifndef GNC_GNOME_UTILS_H
 #define GNC_GNOME_UTILS_H
 
-#include <libgnome/libgnome.h>
 #include <gnc-main-window.h>
 
 /** Initialize the Gnome libraries. */

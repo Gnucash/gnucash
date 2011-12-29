@@ -10,7 +10,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
-  ${GNOME_CFLAGS} \
+  ${GCONF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 libgncmod_gnome_search_la_SOURCES = \
@@ -54,7 +54,7 @@ libgncmod_gnome_search_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
-  ${GNOME_LIBS} \
+  ${GCONF_LIBS} \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
   ${REGEX_LIBS}

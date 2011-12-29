@@ -32,6 +32,10 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#ifdef __G_IR_SCANNER__
+#undef __G_IR_SCANNER__
+#endif
+#include <gdk/gdkkeysyms.h>
 
 #include "Scrub.h"
 #include "Scrub3.h"

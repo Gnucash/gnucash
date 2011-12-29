@@ -22,9 +22,6 @@
 \********************************************************************/
 
 #include "config.h"
-
-#include <gnome.h>
-
 #include "dialog-utils.h"
 #include "gnc-ui.h"
 

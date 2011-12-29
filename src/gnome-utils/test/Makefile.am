@@ -48,7 +48,6 @@ INCLUDES= \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS} \
-  ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS}
 
 LDADD = \

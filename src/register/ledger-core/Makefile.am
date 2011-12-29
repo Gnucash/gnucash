@@ -51,7 +51,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
-  ${GNOME_CFLAGS} \
+  ${GCONF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 

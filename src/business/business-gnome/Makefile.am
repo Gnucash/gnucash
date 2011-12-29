@@ -20,6 +20,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
+  ${GCONF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
@@ -81,6 +82,7 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLADE_LIBS} \
   ${GNOME_LIBS} \
+  ${GCONF_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${EFENCE_LIBS}

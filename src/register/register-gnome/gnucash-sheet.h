@@ -21,7 +21,7 @@
 #ifndef GNUCASH_SHEET_H
 #define GNUCASH_SHEET_H
 
-#include <gnome.h>
+#include <libgnomecanvas/gnome-canvas.h>
 
 #include "split-register-model.h"
 

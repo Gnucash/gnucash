@@ -5,7 +5,7 @@ else
 SUBDIRS = . test
 endif
 
-AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
+AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GCONF_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -DPKGSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
   -DPKGDATADIR=\"${GNC_SHAREDIR}\" \
   -I${top_srcdir}/src \
@@ -70,6 +70,7 @@ gnucash_LDADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
+  ${GCONF_LIBS} \
   ${GNOME_LIBS} \
   ${GTK_LIBS}
 
