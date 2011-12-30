@@ -164,7 +164,7 @@ Root: HKLM; Subkey: "Software\AqBanking\Paths"; ValueType: string; ValueName: "c
 [UninstallDelete]
 Type: files; Name: "{app}\bin\guile.cmd"
 Type: files; Name: "{app}\etc\gnucash\environment"
-Type: files; Name: "{app}\share\guile\1.6\slibcat"
+Type: files; Name: "{app}\share\guile\1.8\slibcat"
 Type: filesandordirs; Name: "{app}\share\guile"
 Type: filesandordirs; Name: "{app}\etc\gconf"
 Type: dirifempty; Name: "{app}\etc\gnucash"
