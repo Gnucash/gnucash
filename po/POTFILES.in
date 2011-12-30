@@ -269,7 +269,6 @@ src/gnome-utils/dialog-utils.c
 src/gnome-utils/druid-gnc-xml-import.c
 src/gnome-utils/druid-utils.c
 src/gnome-utils/glade/druid-gnc-xml-import.glade
-src/gnome-utils/glade/druid-provider-multifile.glade
 src/gnome-utils/gnc-account-sel.c
 src/gnome-utils/gnc-amount-edit.c
 src/gnome-utils/gnc-autosave.c
