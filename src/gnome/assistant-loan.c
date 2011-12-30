@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
+#include <stdlib.h>
 #include <glade/glade.h>
 #include <math.h>
 #include "assistant-loan.h"
