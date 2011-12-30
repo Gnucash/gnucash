@@ -10,6 +10,7 @@ gtkbuilder_DATA = \
   dialog-preferences.glade \
   dialog-query-list.glade \
   dialog-reset-warnings.glade \
+  dialog-tax-table.glade \
   dialog-totd.glade \
   dialog-transfer.glade \
   dialog-userpass.glade \

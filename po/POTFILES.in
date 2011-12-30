@@ -277,7 +277,6 @@ src/gnome-utils/druid-gnc-xml-import.c
 src/gnome-utils/druid-utils.c
 src/gnome-utils/glade/druid-gnc-xml-import.glade
 src/gnome-utils/glade/druid-provider-multifile.glade
-src/gnome-utils/glade/tax-tables.glade
 src/gnome-utils/gnc-account-sel.c
 src/gnome-utils/gnc-amount-edit.c
 src/gnome-utils/gnc-autosave.c
@@ -342,6 +341,7 @@ src/gnome-utils/gtkbuilder/dialog-options.glade
 src/gnome-utils/gtkbuilder/dialog-preferences.glade
 src/gnome-utils/gtkbuilder/dialog-query-list.glade
 src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade
+src/gnome-utils/gtkbuilder/dialog-tax-tables.glade
 src/gnome-utils/gtkbuilder/dialog-totd.glade
 src/gnome-utils/gtkbuilder/dialog-transfer.glade
 src/gnome-utils/gtkbuilder/dialog-userpass.glade

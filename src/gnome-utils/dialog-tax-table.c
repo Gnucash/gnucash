@@ -67,7 +67,6 @@ void tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw);
 void tax_table_window_close (GtkWidget *widget, gpointer data);
 void tax_table_window_destroy_cb (GtkWidget *widget, gpointer data);
 
-
 struct _taxtable_window
 {
     GtkWidget *	dialog;
@@ -93,7 +92,6 @@ typedef struct _new_taxtable
     gint			type;
     gboolean		new_table;
 } NewTaxTable;
-
 
 static gboolean
 new_tax_table_ok_cb (NewTaxTable *ntt)
@@ -211,7 +209,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 {
     GncTaxTable *created_table = NULL;
     NewTaxTable *ntt;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *box, *widget, *combo;
     gboolean done;
     gint response, index;
@@ -229,27 +227,30 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     else
         ntt->type = GNC_AMT_TYPE_PERCENT;
 
-    /* Open and read the XML */
-    xml = gnc_glade_xml_new ("tax-tables.glade", "New Tax Table Dialog");
-    ntt->dialog = glade_xml_get_widget (xml, "New Tax Table Dialog");
-    ntt->name_entry = glade_xml_get_widget (xml, "name_entry");
+    /* Open and read the Glade File */
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "type_liststore");
+    gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "New Tax Table Dialog");
+
+    ntt->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "New Tax Table Dialog"));
+    ntt->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
     if (name)
         gtk_entry_set_text (GTK_ENTRY (ntt->name_entry), name);
 
     /* Create the menu */
-    combo = glade_xml_get_widget (xml, "type_combobox");
+    combo = GTK_WIDGET(gtk_builder_get_object (builder, "type_combobox"));
     index = ntt->type ? ntt->type : GNC_AMT_TYPE_VALUE;
     gtk_combo_box_set_active(GTK_COMBO_BOX(combo), index - 1);
     g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), ntt);
 
     /* Attach our own widgets */
-    box = glade_xml_get_widget (xml, "amount_box");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "amount_box"));
     ntt->amount_entry = widget = gnc_amount_edit_new ();
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (widget), TRUE);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (widget), 100000);
     gtk_box_pack_start (GTK_BOX (box), widget, TRUE, TRUE, 0);
 
-    box = glade_xml_get_widget (xml, "acct_window");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_window"));
     ntt->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
     gtk_container_add (GTK_CONTAINER (box), ntt->acct_tree);
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ntt->acct_tree), FALSE);
@@ -260,9 +261,9 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
                                     TRUE);
 
     /* Fix mnemonics for generated target widgets */
-    widget = glade_xml_get_widget (xml, "value_label");
+    widget = GTK_WIDGET(gtk_builder_get_object (builder, "value_label"));
     gtk_label_set_mnemonic_widget (GTK_LABEL (widget), ntt->amount_entry);
-    widget = glade_xml_get_widget (xml, "account_label");
+    widget = GTK_WIDGET(gtk_builder_get_object (builder, "account_label"));
     gtk_label_set_mnemonic_widget (GTK_LABEL (widget), ntt->acct_tree);
 
     /* Fill in the widgets appropriately */
@@ -278,20 +279,18 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     gtk_window_set_transient_for (GTK_WINDOW(ntt->dialog), GTK_WINDOW(ttw->dialog));
 
     /* Setup signals */
-    glade_xml_signal_autoconnect_full( xml,
-                                       gnc_glade_autoconnect_full_func,
-                                       ntt);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ntt);
 
     /* Show what we should */
     gtk_widget_show_all (ntt->dialog);
     if (new_table == FALSE)
     {
-        gtk_widget_hide (glade_xml_get_widget (xml, "table_title"));
-        gtk_widget_hide (glade_xml_get_widget (xml, "table_name"));
-        gtk_widget_hide (glade_xml_get_widget (xml, "spacer"));
+        gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "table_title")));
+        gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "table_name")));
+        gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "spacer")));
         gtk_widget_hide (ntt->name_entry);
         /* Tables are great for layout, but a pain when you hide widgets */
-        widget = glade_xml_get_widget (xml, "ttd_table");
+        widget = GTK_WIDGET(gtk_builder_get_object (builder, "ttd_table"));
         gtk_table_set_row_spacing (GTK_TABLE(widget), 0, 0);
         gtk_table_set_row_spacing (GTK_TABLE(widget), 1, 0);
         gtk_table_set_row_spacing (GTK_TABLE(widget), 2, 0);
@@ -322,6 +321,8 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
             break;
         }
     }
+
+    g_object_unref(G_OBJECT(builder));
 
     gtk_widget_destroy(ntt->dialog);
     g_free(ntt);
@@ -681,7 +682,7 @@ TaxTableWindow *
 gnc_ui_tax_table_window_new (QofBook *book)
 {
     TaxTableWindow *ttw;
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkTreeView *view;
     GtkTreeViewColumn *column;
     GtkCellRenderer *renderer;
@@ -707,11 +708,12 @@ gnc_ui_tax_table_window_new (QofBook *book)
     ttw = g_new0 (TaxTableWindow, 1);
     ttw->book = book;
 
-    /* Open and read the XML */
-    xml = gnc_glade_xml_new ("tax-tables.glade", "Tax Table Window");
-    ttw->dialog = glade_xml_get_widget (xml, "Tax Table Window");
-    ttw->names_view = glade_xml_get_widget (xml, "tax_tables_view");
-    ttw->entries_view = glade_xml_get_widget (xml, "tax_table_entries");
+    /* Open and read the Glade File */
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "Tax Table Window");
+    ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Tax Table Window"));
+    ttw->names_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_tables_view"));
+    ttw->entries_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_entries"));
 
     /* Create the tax tables view */
     view = GTK_TREE_VIEW(ttw->names_view);
@@ -729,7 +731,6 @@ gnc_ui_tax_table_window_new (QofBook *book)
     selection = gtk_tree_view_get_selection(view);
     g_signal_connect(selection, "changed",
                      G_CALLBACK(tax_table_selection_changed), ttw);
-
 
     /* Create the tax table entries view */
     view = GTK_TREE_VIEW(ttw->entries_view);
@@ -750,11 +751,8 @@ gnc_ui_tax_table_window_new (QofBook *book)
     g_signal_connect(view, "row-activated",
                      G_CALLBACK(tax_table_entry_row_activated), ttw);
 
-
     /* Setup signals */
-    glade_xml_signal_autoconnect_full( xml,
-                                       gnc_glade_autoconnect_full_func,
-                                       ttw);
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ttw);
 
     /* register with component manager */
     ttw->component_id =
@@ -766,6 +764,9 @@ gnc_ui_tax_table_window_new (QofBook *book)
     tax_table_window_refresh (ttw);
     gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW (ttw->dialog));
     gtk_widget_show_all (ttw->dialog);
+
+    g_object_unref(G_OBJECT(builder));
+
     return ttw;
 }
 

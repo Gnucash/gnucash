@@ -22,6 +22,8 @@
 \********************************************************************/
 
 #include "config.h"
+#include <gtk/gtk.h>
+
 #include "dialog-utils.h"
 #include "gnc-ui.h"
 
@@ -34,26 +36,27 @@ gnc_get_username_password (GtkWidget *parent,
                            char **username,
                            char **password)
 {
-    GtkWidget *dialog;
-    GtkWidget *heading_label;
-    GtkWidget *username_entry;
-    GtkWidget *password_entry;
-    GladeXML *xml;
+    GtkWidget  *dialog;
+    GtkWidget  *heading_label;
+    GtkWidget  *username_entry;
+    GtkWidget  *password_entry;
+    GtkBuilder *builder;
     gint result;
 
     g_return_val_if_fail (username != NULL, FALSE);
     g_return_val_if_fail (password != NULL, FALSE);
 
-    xml = gnc_glade_xml_new ("userpass.glade", "Username Password Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-userpass.glade", "Username Password Dialog");
 
-    dialog = glade_xml_get_widget (xml, "Username Password Dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Username Password Dialog"));
 
     if (parent)
         gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-    heading_label  = glade_xml_get_widget (xml, "heading_label");
-    username_entry = glade_xml_get_widget (xml, "username_entry");
-    password_entry = glade_xml_get_widget (xml, "password_entry");
+    heading_label  = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
+    username_entry = GTK_WIDGET(gtk_builder_get_object (builder, "username_entry"));
+    password_entry = GTK_WIDGET(gtk_builder_get_object (builder, "password_entry"));
 
     if (heading)
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
@@ -79,6 +82,8 @@ gnc_get_username_password (GtkWidget *parent,
 
     *username = NULL;
     *password = NULL;
+
+    g_object_unref(G_OBJECT(builder));
 
     gtk_widget_destroy(dialog);
     return FALSE;
