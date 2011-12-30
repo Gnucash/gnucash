@@ -66,7 +66,6 @@
 
 #include "qof.h"
 
-#include "gnc-dialog.h"
 #include "gnc-recurrence.h"
 #include "Recurrence.h"
 #include "gnc-tree-model-account-types.h"

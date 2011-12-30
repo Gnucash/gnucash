@@ -59,7 +59,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-dense-cal.c \
   gnc-dense-cal-model.c \
   gnc-dense-cal-store.c \
-  gnc-dialog.c \
   gnc-embedded-window.c \
   gnc-file.c \
   gnc-frequency.c \
@@ -172,7 +171,6 @@ gncinclude_HEADERS = \
   gnc-window.h \
   misc-gnome-utils.h \
   print-session.h \
-  gnc-dialog.h \
   window-main-summarybar.h
 
 noinst_HEADERS = \

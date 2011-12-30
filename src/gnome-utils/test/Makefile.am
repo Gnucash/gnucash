@@ -4,7 +4,7 @@ TESTS =  \
 # The following tests are nice, but have absolutely no place in an
 # automated testing system.
 #
-TESTS_GUI = test-gnc-recurrence test-gnc-dialog
+TESTS_GUI = test-gnc-recurrence
 
 ##lib_LTLIBRARIES = libgncgnome.la
 
@@ -35,7 +35,7 @@ TESTS_ENVIRONMENT = \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
-  test-link-module test-gnc-recurrence test-gnc-dialog
+  test-link-module test-gnc-recurrence
 
 INCLUDES= \
   -I${top_srcdir}/src \
