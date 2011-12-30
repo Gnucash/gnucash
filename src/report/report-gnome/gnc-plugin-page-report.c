@@ -1612,14 +1612,57 @@ static GncInvoice *lookup_invoice(GncPluginPageReportPrivate *priv)
                                                "Invoice Number", NULL);
 }
 
+#define GCONF_GENERAL_REPORT_PDFEXPORT GCONF_GENERAL_REPORT "/pdf_export"
+
 static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
 {
     gchar *job_name = NULL;
     gchar *report_name = NULL;
-    gchar *job_date = qof_print_date( time( NULL ) );
+    const gchar *report_number = "";
+    gchar *job_date;
     const gchar *default_jobname = N_("GnuCash-Report");
 
     g_assert(priv);
+
+    {
+        // Look up the date format that was chosen in the gconf registry
+        QofDateFormat date_format_here;
+        QofDateFormat date_format_old = qof_date_format_get();
+        char *format_code = gnc_gconf_get_string(GCONF_GENERAL_REPORT_PDFEXPORT,
+                                                 "filename_date_format", NULL);
+
+        if (format_code == NULL)
+        {
+            format_code = g_strdup("locale");
+            g_warning("No gconf key found for " GCONF_GENERAL_REPORT_PDFEXPORT
+                      "/filename_date_format, using default %s", format_code);
+        }
+        if (*format_code == '\0')
+        {
+            g_free(format_code);
+            format_code = g_strdup("locale");
+        }
+
+        if (gnc_date_string_to_dateformat(format_code, &date_format_here))
+        {
+            PERR("Incorrect date format code");
+            if (format_code != NULL)
+                free(format_code);
+        }
+
+        // To apply this chosen date format, temporarily switch the
+        // process-wide default to our chosen date format. Note: It is a
+        // totally brain-dead implementation of qof_print_date() to not offer a
+        // variation where the QofDateFormat can be passed as an argument.
+        // Hrmpf.
+        qof_date_format_set(date_format_here);
+
+        job_date = qof_print_date( time( NULL ) );
+
+        // Restore to the original general  date format
+        qof_date_format_set(date_format_old);
+    }
+
 
     if (priv->cur_report == SCM_BOOL_F)
         report_name = g_strdup (_(default_jobname));
@@ -1655,21 +1698,27 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
         invoice = lookup_invoice(priv);
         if (invoice)
         {
-            const gchar *invoice_number = gncInvoiceGetID(invoice);
-            if (invoice_number)
-            {
-                /* Report is for an invoice. Add the invoice number to
-                 * the job name. */
-                gchar *name_number = g_strjoin ( "_", report_name, invoice_number, NULL );
-                g_free (report_name);
-                report_name = name_number;
-            }
+            // Report is for an invoice. Hence, we get a number of the invoice.
+            report_number = gncInvoiceGetID(invoice);
         }
     }
 
-    job_name = g_strjoin ( "_", report_name, job_date, NULL );
+    if (report_name && job_date)
+    {
+        // Look up the sprintf format of the output name from the gconf registry
+        char* format = gnc_gconf_get_string(GCONF_GENERAL_REPORT_PDFEXPORT, "filename_format", NULL);
+        if (!format)
+        {
+            // Fallback name format in case the gconf does not contain this key
+            format = g_strdup("%s_%s_%s");
+            g_warning("No gconf key found for " GCONF_GENERAL_REPORT_PDFEXPORT "/filename_format, using default %s", format);
+        }
+
+        job_name = g_strdup_printf(format, report_name, report_number, job_date);
+
+        g_free(format);
+    }
     g_free (report_name);
-    report_name = NULL;
     g_free (job_date);
 
     {
