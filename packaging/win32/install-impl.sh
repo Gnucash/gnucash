@@ -1150,8 +1150,8 @@ function inst_libxslt() {
                 --prefix=${_LIBXSLT_UDIR} \
                 --with-python=no \
                 --with-libxml-prefix=${_GNOME_UDIR} \
-                CPPFLAGS="-I${_GNOME_UDIR}/include ${GNUTLS_CPPFLAGS}" \
-                LDFLAGS="-L${_GNOME_UDIR}/lib ${GNUTLS_LDFLAGS}"
+                CPPFLAGS="${GNOME_CPPFLAGS} ${GNUTLS_CPPFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS} ${GNUTLS_LDFLAGS}"
             make
             make install
         qpopd
