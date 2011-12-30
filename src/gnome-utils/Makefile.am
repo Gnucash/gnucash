@@ -60,10 +60,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-dense-cal-model.c \
   gnc-dense-cal-store.c \
   gnc-dialog.c \
-  gnc-druid-gnome.c \
-  gnc-druid-provider-edge-gnome.c \
-  gnc-druid-provider-file-gnome.c \
-  gnc-druid-provider-multifile-gnome.c \
   gnc-embedded-window.c \
   gnc-file.c \
   gnc-frequency.c \
@@ -138,7 +134,6 @@ gncinclude_HEADERS = \
   gnc-dense-cal.h \
   gnc-dense-cal-model.h \
   gnc-dense-cal-store.h \
-  gnc-druid-gnome-ui.h \
   gnc-embedded-window.h \
   gnc-file.h \
   gnc-frequency.h \
@@ -183,10 +178,6 @@ gncinclude_HEADERS = \
 noinst_HEADERS = \
   dialog-tax-table.h \
   gnc-autosave.h \
-  gnc-druid-gnome.h \
-  gnc-druid-provider-edge-gnome.h \
-  gnc-druid-provider-file-gnome.h \
-  gnc-druid-provider-multifile-gnome.h \
   gnc-gobject-utils.h \
   gnc-gtk-utils.h \
   search-param.h
