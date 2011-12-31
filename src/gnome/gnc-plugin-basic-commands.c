@@ -55,6 +55,7 @@
 #include "gnc-window.h"
 #include "gnc-session.h"
 #include "gnc-plugin-page-sx-list.h"
+#include "gnc-plugin-file-history.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -70,6 +71,7 @@ static void gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowAction
 static void gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_main_window_cmd_file_revert (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data);
@@ -114,6 +116,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
         N_("Save this file with a different name"),
         G_CALLBACK (gnc_main_window_cmd_file_save_as)
+    },
+    {
+        "FileRevertAction", GTK_STOCK_REVERT_TO_SAVED, N_("Re_vert"), NULL,
+        N_("Reload the current database, reverting all unsaved changes"),
+        G_CALLBACK (gnc_main_window_cmd_file_revert)
     },
     {
         "FileExportAccountsAction", GTK_STOCK_CONVERT,
@@ -420,6 +427,26 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
 #endif
     gnc_window_set_progressbar_window (NULL);
     /* FIXME GNOME 2 Port (update the title etc.) */
+}
+
+static void
+gnc_main_window_cmd_file_revert (GtkAction *action, GncMainWindowActionData *data)
+{
+    g_return_if_fail (data != NULL);
+
+    if (!gnc_main_window_all_finish_pending())
+        return;
+
+    gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+
+    {
+        gchar *filename = gnc_history_get_last();
+        // And actually open the current file again
+        gnc_file_open_file (filename, qof_book_is_readonly(gnc_get_current_book()));
+        g_free(filename);
+    }
+
+    gnc_window_set_progressbar_window (NULL);
 }
 
 static void

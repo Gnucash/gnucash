@@ -10,6 +10,7 @@
       <placeholder name="FileSavePlaceholder">
         <menuitem name="FileSave" action="FileSaveAction"/>
         <menuitem name="FileSaveAs" action="FileSaveAsAction"/>
+        <menuitem name="FileRevert" action="FileRevertAction"/>
       </placeholder>
       <menu name="FileExport" action="FileExportAction">
         <menuitem name="FileExportAccounts" action="FileExportAccountsAction"/>
