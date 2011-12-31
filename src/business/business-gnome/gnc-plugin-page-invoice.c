@@ -219,7 +219,6 @@ static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
 
 static const gchar *posted_actions[] =
 {
-    "FilePrintAction",
     NULL
 };
 
