@@ -96,12 +96,12 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* File menu */
 
     {
-        "FileNewAction", GTK_STOCK_NEW, N_("New _File"), NULL,
+        "FileNewAction", GTK_STOCK_NEW, N_("New _File"), "<control>n",
         N_("Create a new file"),
         G_CALLBACK (gnc_main_window_cmd_file_new)
     },
     {
-        "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), NULL,
+        "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), "<control>o",
         N_("Open an existing GnuCash file"),
         G_CALLBACK (gnc_main_window_cmd_file_open)
     },
@@ -112,7 +112,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     {
         "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
-        NULL,
+        N_("Save this file with a different name"),
         G_CALLBACK (gnc_main_window_cmd_file_save_as)
     },
     {
