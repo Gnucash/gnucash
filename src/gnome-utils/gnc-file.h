@@ -143,7 +143,7 @@ char * gnc_file_dialog (const char * title,
                         const char * starting_dir,
                         GNCFileDialogType type);
 
-gboolean gnc_file_open_file (const char *filename);
+gboolean gnc_file_open_file (const char *filename, gboolean open_readonly);
 
 gboolean gnc_file_query_save (gboolean can_cancel);
 

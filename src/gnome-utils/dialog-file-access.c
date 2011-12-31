@@ -52,6 +52,7 @@ typedef struct FileAccessWindow
     GtkWidget* dialog;
     GtkWidget* frame_file;
     GtkWidget* frame_database;
+    GtkWidget* readonly_checkbutton;
     GtkFileChooser* fileChooser;
     gchar *starting_dir;
     GtkComboBox* cb_uri_type;
@@ -140,7 +141,10 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
 	}
         if ( faw->type == FILE_ACCESS_OPEN )
         {
-            gnc_file_open_file( url );
+            gboolean open_readonly = faw->readonly_checkbutton
+                    ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(faw->readonly_checkbutton))
+                    : FALSE;
+            gnc_file_open_file( url, open_readonly );
         }
         else if ( faw->type == FILE_ACCESS_SAVE_AS )
         {
@@ -278,6 +282,7 @@ gnc_ui_file_access( int type )
 
     faw->frame_file = GTK_WIDGET(gtk_builder_get_object (builder, "frame_file" ));
     faw->frame_database = GTK_WIDGET(gtk_builder_get_object (builder, "frame_database" ));
+    faw->readonly_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "readonly_checkbutton"));
     faw->tf_host = GTK_ENTRY(gtk_builder_get_object (builder, "tf_host" ));
     gtk_entry_set_text( faw->tf_host, DEFAULT_HOST );
     faw->tf_database = GTK_ENTRY(gtk_builder_get_object (builder, "tf_database" ));
@@ -300,6 +305,8 @@ gnc_ui_file_access( int type )
         button_label = "gtk-save-as";
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         gconf_section = GCONF_DIR_OPEN_SAVE;
+        gtk_widget_destroy(faw->readonly_checkbutton);
+        faw->readonly_checkbutton = NULL;
         break;
 
     case FILE_ACCESS_EXPORT:
@@ -307,6 +314,8 @@ gnc_ui_file_access( int type )
         button_label = "gtk-save-as";
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         gconf_section = GCONF_DIR_EXPORT;
+        gtk_widget_destroy(faw->readonly_checkbutton);
+        faw->readonly_checkbutton = NULL;
         break;
     }
 

@@ -686,7 +686,7 @@ static gboolean test_unknown_features(QofSession* new_session)
 #define RESPONSE_READONLY 4
 
 static gboolean
-gnc_post_file_open (const char * filename)
+gnc_post_file_open (const char * filename, gboolean is_readonly)
 {
     QofSession *current_session, *new_session;
     QofBook *new_book;
@@ -701,7 +701,6 @@ gnc_post_file_open (const char * filename)
     gchar *password = NULL;
     gchar *path = NULL;
     gint32 port = 0;
-    gboolean is_readonly = FALSE;
 
 
     ENTER(" ");
@@ -1069,7 +1068,7 @@ gnc_file_open (void)
     g_free ( last );
     g_free ( default_dir );
 
-    result = gnc_post_file_open ( newfile );
+    result = gnc_post_file_open ( newfile, /*is_readonly*/ FALSE );
 
     /* This dialogue can show up early in the startup process. If the
      * user fails to pick a file (by e.g. hitting the cancel button), we
@@ -1081,14 +1080,14 @@ gnc_file_open (void)
 }
 
 gboolean
-gnc_file_open_file (const char * newfile)
+gnc_file_open_file (const char * newfile, gboolean open_readonly)
 {
     if (!newfile) return FALSE;
 
     if (!gnc_file_query_save (TRUE))
         return FALSE;
 
-    return gnc_post_file_open (newfile);
+    return gnc_post_file_open (newfile, open_readonly);
 }
 
 /* Note: this dialog will only be used when dbi is not enabled
