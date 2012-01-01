@@ -108,9 +108,9 @@ typedef enum
 
 enum page_tree
 {
-  PAGE_INDEX = 0,
-  PAGE_NAME,
-  NUM_COLUMNS
+    PAGE_INDEX = 0,
+    PAGE_NAME,
+    NUM_COLUMNS
 };
 
 static GNCOptionWinCallback global_help_cb = NULL;
@@ -120,7 +120,7 @@ void gnc_options_dialog_response_cb(GtkDialog *dialog, gint response,
                                     GNCOptionWin *window);
 static void gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data);
 void gnc_options_dialog_list_select_cb (GtkTreeSelection *selection,
-                      gpointer data);
+                                        gpointer data);
 
 GtkWidget *
 gnc_option_get_gtk_widget (GNCOption *option)
@@ -1228,7 +1228,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     /* The reset button on each option page */
     reset_button = gtk_button_new_with_label (_("Reset defaults"));
     gtk_widget_set_tooltip_text(reset_button,
-                         _("Reset all values to their defaults."));
+                                _("Reset all values to their defaults."));
 
     g_signal_connect(G_OBJECT(reset_button), "clicked",
                      G_CALLBACK(gnc_options_dialog_reset_cb), propertybox);
@@ -1262,13 +1262,13 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
             gtk_notebook_set_show_border(GTK_NOTEBOOK(propertybox->notebook), FALSE);
         }
         else
-	    gtk_widget_hide(propertybox->page_list);
+            gtk_widget_hide(propertybox->page_list);
 
         /* Tweak "advanced" pages for later handling. */
         if (advanced)
         {
             notebook_page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(propertybox->notebook),
-                                          page_count);
+                            page_count);
 
             g_object_set_data(G_OBJECT(notebook_page), "listitem", listitem);
             g_object_set_data(G_OBJECT(notebook_page), "advanced",
@@ -1350,7 +1350,7 @@ gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
         GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(propertybox->page_list_view));
         GtkTreeIter iter;
         GtkTreeModel *model;
- 
+
         model = gtk_tree_view_get_model(GTK_TREE_VIEW(propertybox->page_list_view));
         gtk_tree_model_iter_nth_child(model, &iter, NULL, default_page);
         gtk_tree_selection_select_iter (selection, &iter);
@@ -1433,7 +1433,7 @@ gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data)
 
 void
 gnc_options_dialog_list_select_cb (GtkTreeSelection *selection,
-                      gpointer data)
+                                   gpointer data)
 {
     GNCOptionWin * win = data;
     GtkTreeModel *list;
@@ -1523,7 +1523,7 @@ gnc_options_dialog_new(gchar *title)
                  "text", PAGE_NAME, NULL);
         gtk_tree_view_append_column(view, column);
 
-        gtk_tree_view_column_set_alignment(column,0.5);
+        gtk_tree_view_column_set_alignment(column, 0.5);
 
         selection = gtk_tree_view_get_selection(view);
         gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
@@ -1800,7 +1800,7 @@ gnc_option_set_ui_widget_commodity (GNCOption *option, GtkBox *page_box,
 
     if (documentation != NULL)
         gtk_widget_set_tooltip_text(GNC_GENERAL_SELECT(value)->entry,
-                             documentation);
+                                    documentation);
 
     g_signal_connect(G_OBJECT(GNC_GENERAL_SELECT(value)->entry), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), option);

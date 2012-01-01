@@ -180,7 +180,7 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     // Save the session data
     session_2 = qof_session_new();
     hdlr = g_log_set_handler (log_domain, loglevel,
-			       (GLogFunc)test_checked_handler, &check);
+                              (GLogFunc)test_checked_handler, &check);
     qof_session_begin( session_2, url, FALSE, TRUE, TRUE );
     if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
     {
@@ -279,7 +279,7 @@ test_dbi_safe_save( const gchar* driver,  const gchar* url )
 
 cleanup:
     hdlr = g_log_set_handler (log_domain, loglevel,
-			       (GLogFunc)test_checked_handler, &check);
+                              (GLogFunc)test_checked_handler, &check);
     if (session_2 != NULL)
     {
         qof_session_end( session_2 );

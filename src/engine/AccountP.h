@@ -144,7 +144,7 @@ typedef struct
     void (*xaccFreeAccount) (Account *acc);
     void (*qofAccountSetParent) (Account *acc, QofInstance *parent);
     Account *(*gnc_account_lookup_by_full_name_helper) (const Account *acc,
-							gchar **names);
+            gchar **names);
 } AccountTestFunctions;
 
 AccountTestFunctions* _utest_account_fill_functions(void);

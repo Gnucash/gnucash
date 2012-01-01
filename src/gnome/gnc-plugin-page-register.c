@@ -925,53 +925,53 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         /* Set the sort order for the split register and status of save order button */
         priv->sd.save_order = FALSE;
         order = gnc_plugin_page_register_get_sort_order(plugin_page);
-    
+
         PINFO("Loaded Sort order is %s", order);
-    
+
         gnc_split_reg_set_sort_type(priv->gsr, SortTypefromString(order));
-    
+
         if (order && (g_strcmp0 (order, DEFAULT_SORT_ORDER) != 0))
             priv->sd.save_order = TRUE;
-    
+
         priv->sd.original_save_order = priv->sd.save_order;
         g_free(order);
-    
+
         /* Set the filter for the split register and status of save filter button */
         priv->fd.save_filter = FALSE;
-    
-        filter = g_strsplit(gnc_plugin_page_register_get_filter(plugin_page),",",-1);
-    
+
+        filter = g_strsplit(gnc_plugin_page_register_get_filter(plugin_page), ",", -1);
+
         PINFO("Loaded Filter Status is %s", filter[0]);
-    
+
         priv->fd.cleared_match = (gint)g_ascii_strtoll( filter[0], NULL, 16 );
-    
+
         if (filter[0] && (g_strcmp0 (filter[0], DEFAULT_FILTER) != 0))
             filter_changed = filter_changed + 1;
-    
-        if (filter[1] && (g_strcmp0 (filter[1],"0") != 0 ))
+
+        if (filter[1] && (g_strcmp0 (filter[1], "0") != 0 ))
         {
             PINFO("Loaded Filter Start Date is %s", filter[1]);
-    
+
             priv->fd.start_time = gnc_plugin_page_register_filter_dmy2time( filter[1] );
             priv->fd.start_time = gnc_timet_get_day_start(priv->fd.start_time);
             filter_changed = filter_changed + 1;
 
-            if (filter[2] && (g_strcmp0 (filter[2],"0") != 0 ))
+            if (filter[2] && (g_strcmp0 (filter[2], "0") != 0 ))
             {
                 PINFO("Loaded Filter End Date is %s", filter[2]);
-    
+
                 priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time( filter[2] );
                 priv->fd.end_time = gnc_timet_get_day_end(priv->fd.end_time);
                 filter_changed = filter_changed + 1;
             }
         }
-    
-        if(filter_changed != 0)
+
+        if (filter_changed != 0)
             priv->fd.save_filter = TRUE;
-    
+
         priv->fd.original_save_filter = priv->fd.save_filter;
         g_strfreev(filter);
-    
+
         /* Update Query with Filter Status and Dates */
         gnc_ppr_update_status_query (page);
         gnc_ppr_update_date_query(page);
@@ -1504,12 +1504,12 @@ gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *fi
     if (leader != NULL)
     {
         default_filter = g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
-    
+
         if (!filter || (g_strcmp0 (filter, default_filter) == 0))
             xaccAccountSetFilter (leader, NULL);
         else
             xaccAccountSetFilter (leader, filter);
-        
+
         g_free (default_filter);
     }
 
@@ -1555,7 +1555,7 @@ gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar
     reg = gnc_ledger_display_get_split_register (ld);
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
-    
+
     if (leader != NULL)
     {
         if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
@@ -1670,18 +1670,18 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog *dialog,
     {
         /* Restore the original sort order */
         gnc_split_reg_set_sort_type(priv->gsr, priv->sd.original_sort_type);
-	priv->sd.save_order = priv->sd.original_save_order;
+        priv->sd.save_order = priv->sd.original_save_order;
     }
     else
     {
         priv->sd.original_save_order = priv->sd.save_order;
 
-        if(priv->sd.save_order)
-	{
+        if (priv->sd.save_order)
+        {
             type = gnc_split_reg_get_sort_type(priv->gsr);
             order = SortTypeasString(type);
             gnc_plugin_page_register_set_sort_order (plugin_page, order);
-	}
+        }
     }
     priv->sd.dialog = NULL;
     gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -1861,7 +1861,7 @@ gnc_plugin_page_register_filter_time2dmy ( time_t raw_time)
     gint i;
 
     timeinfo = localtime ( &raw_time );
-    i= strftime(date_string,11,"%d-%m-%Y", timeinfo );
+    i = strftime(date_string, 11, "%d-%m-%Y", timeinfo );
     PINFO("Date string is %s", date_string);
 
     return g_strdup(date_string);
@@ -1873,7 +1873,7 @@ static time_t
 gnc_plugin_page_register_filter_dmy2time ( char *date_string)
 {
     struct tm *when;
-    gint yy=0, mm=0, dd=0;
+    gint yy = 0, mm = 0, dd = 0;
 
     time_t raw_time;
 
@@ -1885,7 +1885,7 @@ gnc_plugin_page_register_filter_dmy2time ( char *date_string)
     when = localtime ( &raw_time );
 
     when->tm_year = yy - 1900;
-    when->tm_mon = mm -1 ;
+    when->tm_mon = mm - 1 ;
     when->tm_mday = dd;
 
     return mktime(when);
@@ -2256,15 +2256,15 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
         gnc_ppr_update_status_query(page);
         priv->fd.start_time = priv->fd.original_start_time;
         priv->fd.end_time = priv->fd.original_end_time;
-	priv->fd.save_filter = priv->fd.original_save_filter;
+        priv->fd.save_filter = priv->fd.original_save_filter;
         gnc_ppr_update_date_query(page);
     }
     else
     {
         priv->fd.original_save_filter = priv->fd.save_filter;
 
-        if(priv->fd.save_filter)
-	{
+        if (priv->fd.save_filter)
+        {
             gchar* filter;
             filter = g_strdup_printf("0x%04x", priv->fd.cleared_match);
 
@@ -2286,11 +2286,11 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
             else
                 filter = g_strconcat ( filter, ",0", NULL);
 
-            PINFO("The filter to save is %s",filter);
+            PINFO("The filter to save is %s", filter);
 
             gnc_plugin_page_register_set_filter (plugin_page, filter);
             g_free (filter);
-	}
+        }
     }
     priv->fd.dialog = NULL;
     gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -2697,7 +2697,7 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
         return;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder ,"gnc-plugin-page-register.glade", "Void Transaction");
+    gnc_builder_add_from_file  (builder , "gnc-plugin-page-register.glade", "Void Transaction");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Void Transaction"));
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "reason"));
 
@@ -2854,7 +2854,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     priv->sd.original_sort_type = sort;
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_save"));
-    if(priv->sd.save_order == TRUE)
+    if (priv->sd.save_order == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
     /* Wire it up */
@@ -2909,13 +2909,13 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     {
         toggle = GTK_WIDGET(gtk_builder_get_object (builder, status_actions[i].action_name));
         value = priv->fd.cleared_match & status_actions[i].value;
-	status_actions[i].widget = toggle;
+        status_actions[i].widget = toggle;
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(toggle), value);
     }
     priv->fd.original_cleared_match = priv->fd.cleared_match;
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "filter_save"));
-    if(priv->fd.save_filter == TRUE)
+    if (priv->fd.save_filter == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
 

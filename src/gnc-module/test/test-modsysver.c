@@ -19,7 +19,7 @@ guile_main(void *closure, int argc, char ** argv)
     test_add_error (&check1);
     test_add_error (&check2);
     g_log_set_handler (logdomain, loglevel,
-		       (GLogFunc)test_list_handler, NULL);
+                       (GLogFunc)test_list_handler, NULL);
 
     g_test_message("  test-modsysver.c: checking for a module we shouldn't find ...\n");
 

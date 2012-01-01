@@ -562,7 +562,7 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     test_add_error (&check1);
     test_add_error (&check2);
     hdlr = g_log_set_handler (log_domain, loglevel,
-			      (GLogFunc)test_list_handler, NULL);
+                              (GLogFunc)test_list_handler, NULL);
 
     g_test_message( "Testing when book is null" );
     m_col = qof_book_get_collection( fixture->book, my_type );

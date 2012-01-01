@@ -81,8 +81,8 @@ Otherwise, only failures are printed out.
 /**
  * Suppressing Expected Errors
  *
- * Functions for suppressing expected errors during tests. Pass 
- * 
+ * Functions for suppressing expected errors during tests. Pass
+ *
  * Note that you need to call both g_log_set_handler *and*
  * g_test_log_set_fatal_handler to both avoid the assertion and
  * suppress the error message. The callbacks work in either role, just
@@ -111,13 +111,13 @@ typedef struct
  * member matches anything.
  */
 gboolean test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
-                             const gchar *msg, gpointer user_data);
+                               const gchar *msg, gpointer user_data);
 /**
  * Just returns FALSE or suppresses the message regardless of what the
  * error is. Use this only as a last resort.
  */
 gboolean test_null_handler (const char *log_domain, GLogLevelFlags log_level,
-			 const gchar *msg, gpointer user_data );
+                            const gchar *msg, gpointer user_data );
 /**
  * Maintains an internal list of TestErrorStructs which are each
  * checked by the list handler. If an error matches any entry on the
@@ -138,8 +138,8 @@ void test_clear_error_list (void);
  * you want test_checked_handler to immediately print the error).
  */
 gboolean test_list_handler (const char *log_domain,
-			    GLogLevelFlags log_level,
-			    const gchar *msg, gpointer user_data );
+                            GLogLevelFlags log_level,
+                            const gchar *msg, gpointer user_data );
 /**
  * Call this from a mock object to indicate that the mock has in fact
  * been called
@@ -258,7 +258,7 @@ const char* get_random_string_in_array(const char* str_list[]);
  */
 typedef gpointer TestSignal;
 TestSignal test_signal_new (QofInstance *entity, QofEventId eventType,
-			     gpointer event_data);
+                            gpointer event_data);
 /* test_signal_assert_hits calls g_assert_cmpuint with an ==
  * operator. Use it in a test program to see if a TestSignal has been
  * emitted the number of times you expect.

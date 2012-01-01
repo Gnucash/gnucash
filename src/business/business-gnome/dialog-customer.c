@@ -647,8 +647,8 @@ gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
 
     /* Setup signals */
     gtk_builder_connect_signals_full( builder,
-                                       gnc_builder_connect_full_func,
-                                       cw);
+                                      gnc_builder_connect_full_func,
+                                      cw);
 
     /* Setup initial values */
     if (cust != NULL)

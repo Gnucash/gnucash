@@ -413,9 +413,9 @@ gnc_html_graph_gog_create_linechart( GncHtmlLineChartInfo* info )
             style->fill.type = GO_STYLE_FILL_PATTERN;
             if ( gdk_color_parse( info->col_colors[i], &color ) )
             {
-        style->line.width = info->line_width;
-		style->line.auto_color = FALSE;
-		style->line.color = GO_COLOR_FROM_GDK(color);
+                style->line.width = info->line_width;
+                style->line.auto_color = FALSE;
+                style->line.color = GO_COLOR_FROM_GDK(color);
             }
             else
             {
@@ -437,7 +437,7 @@ gnc_html_graph_gog_create_linechart( GncHtmlLineChartInfo* info )
         GogObject *object;
 
         object = gog_object_get_child_by_role( chart,
-                            gog_object_find_role_by_name( chart, "Y-Axis" ) );
+                                               gog_object_find_role_by_name( chart, "Y-Axis" ) );
         if ( info->major_grid )
         {
             gog_object_add_by_name( GOG_OBJECT(object), "MajorGrid",  NULL );

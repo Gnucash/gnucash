@@ -1609,7 +1609,7 @@ static GncInvoice *lookup_invoice(GncPluginPageReportPrivate *priv)
 {
     g_assert(priv);
     return gnc_option_db_lookup_invoice_option(priv->cur_odb, "General",
-                                               "Invoice Number", NULL);
+            "Invoice Number", NULL);
 }
 
 #define GCONF_GENERAL_REPORT_PDFEXPORT GCONF_GENERAL_REPORT "/pdf_export"
@@ -1629,7 +1629,7 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
         QofDateFormat date_format_here;
         QofDateFormat date_format_old = qof_date_format_get();
         char *format_code = gnc_gconf_get_string(GCONF_GENERAL_REPORT_PDFEXPORT,
-                                                 "filename_date_format", NULL);
+                            "filename_date_format", NULL);
 
         if (format_code == NULL)
         {
@@ -1829,7 +1829,7 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
         if (print_settings && gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
         {
             const char* dirname = gtk_print_settings_get(print_settings,
-                                                             GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
+                                  GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
             // Only store the directory if it exists.
             if (g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
             {

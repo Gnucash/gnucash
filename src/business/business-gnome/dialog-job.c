@@ -331,7 +331,7 @@ gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
 
     /* Load the Glade File */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"dialog-job.glade", "Job Dialog");
+    gnc_builder_add_from_file (builder, "dialog-job.glade", "Job Dialog");
 
     /* Find the dialog */
     jw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Job Dialog"));

@@ -50,13 +50,13 @@ struct _GNCQueryListPriv
 struct _OriginalGtkCListPointers
 {
     void   (*original_select_row)          (GtkCList       *clist,
-                                   gint            row,
-                                   gint            column,
-                                   GdkEvent       *event);
+                                            gint            row,
+                                            gint            column,
+                                            GdkEvent       *event);
     void   (*original_unselect_row)        (GtkCList       *clist,
-                                   gint            row,
-                                   gint            column,
-                                   GdkEvent       *event);
+                                            gint            row,
+                                            gint            column,
+                                            GdkEvent       *event);
 };
 
 #define GNC_QUERY_LIST_GET_PRIVATE(o)  \

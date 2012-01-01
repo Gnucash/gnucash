@@ -235,7 +235,7 @@ iw_ask_unpost (InvoiceWindow *iw)
     char *s;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"dialog-invoice.glade", "Unpost Message Dialog");
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "Unpost Message Dialog");
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Unpost Message Dialog"));
     toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "yes_tt_reset"));
 
@@ -777,7 +777,7 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
         account_currency = xaccAccountGetCommodity (this_acc);
 
         if (this_acc &&
-            !gnc_commodity_equal (gncInvoiceGetCurrency (invoice), account_currency))
+                !gnc_commodity_equal (gncInvoiceGetCurrency (invoice), account_currency))
         {
             GNCPrice *convprice;
 
@@ -812,8 +812,8 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
                 /* Obtain the Entry's total value (net + tax) */
                 gncEntryGetValue (entry, is_cust_doc, &value, NULL, &tax, NULL);
                 amount = gnc_numeric_add (value, tax,
-                        gnc_commodity_get_fraction (account_currency),
-                        GNC_HOW_RND_ROUND_HALF_UP );
+                                          gnc_commodity_get_fraction (account_currency),
+                                          GNC_HOW_RND_ROUND_HALF_UP );
 
                 /* create the exchange-rate dialog */
                 xfer = gnc_xfer_dialog (iw_get_window(iw), acc);
@@ -833,8 +833,11 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
 
                     /* Invert the exchange rate as explained above */
                     if (!gnc_numeric_zero_p (exch_rate))
-                        exch_rate = gnc_numeric_div ((gnc_numeric) {1, 1}, exch_rate,
-                                                      GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+                        exch_rate = gnc_numeric_div ((gnc_numeric)
+                    {
+                        1, 1
+                    }, exch_rate,
+                    GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
                     convprice = gnc_price_create(iw->book);
                     gnc_price_begin_edit (convprice);
                     gnc_price_set_commodity (convprice, account_currency);
@@ -1845,16 +1848,16 @@ gnc_invoice_get_title (InvoiceWindow *iw)
         {
         case NEW_INVOICE:
             wintitle = iw->is_credit_note ? _("New Credit Note")
-                                          : _("New Invoice");
+                       : _("New Invoice");
             break;
         case MOD_INVOICE:
         case EDIT_INVOICE:
             wintitle = iw->is_credit_note ? _("Edit Credit Note")
-                                          : _("Edit Invoice");
+                       : _("Edit Invoice");
             break;
         case VIEW_INVOICE:
             wintitle = iw->is_credit_note ? _("View Credit Note")
-                                          : _("View Invoice");
+                       : _("View Invoice");
             break;
         }
         break;
@@ -1863,16 +1866,16 @@ gnc_invoice_get_title (InvoiceWindow *iw)
         {
         case NEW_INVOICE:
             wintitle = iw->is_credit_note ? _("New Credit Note")
-                                          : _("New Bill");
+                       : _("New Bill");
             break;
         case MOD_INVOICE:
         case EDIT_INVOICE:
             wintitle = iw->is_credit_note ? _("Edit Credit Note")
-                                          : _("Edit Bill");
+                       : _("Edit Bill");
             break;
         case VIEW_INVOICE:
             wintitle = iw->is_credit_note ? _("View Credit Note")
-                                          : _("View Bill");
+                       : _("View Bill");
             break;
         }
         break;
@@ -1881,16 +1884,16 @@ gnc_invoice_get_title (InvoiceWindow *iw)
         {
         case NEW_INVOICE:
             wintitle = iw->is_credit_note ? _("New Credit Note")
-                                          : _("New Expense Voucher");
+                       : _("New Expense Voucher");
             break;
         case MOD_INVOICE:
         case EDIT_INVOICE:
             wintitle = iw->is_credit_note ? _("Edit Credit Note")
-                                          : _("Edit Expense Voucher");
+                       : _("Edit Expense Voucher");
             break;
         case VIEW_INVOICE:
             wintitle = iw->is_credit_note ? _("View Credit Note")
-                                          : _("View Expense Voucher");
+                       : _("View Expense Voucher");
             break;
         }
         break;
@@ -2230,15 +2233,15 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         {
         case GNC_OWNER_CUSTOMER:
             ledger_type = is_credit_note ? GNCENTRY_CUST_CREDIT_NOTE_ENTRY
-                                         : GNCENTRY_INVOICE_ENTRY;
+                          : GNCENTRY_INVOICE_ENTRY;
             break;
         case GNC_OWNER_VENDOR:
             ledger_type = is_credit_note ? GNCENTRY_VEND_CREDIT_NOTE_ENTRY
-                                         : GNCENTRY_BILL_ENTRY;
+                          : GNCENTRY_BILL_ENTRY;
             break;
         case GNC_OWNER_EMPLOYEE:
             ledger_type = is_credit_note ? GNCENTRY_EMPL_CREDIT_NOTE_ENTRY
-                                         : GNCENTRY_EXPVOUCHER_ENTRY;
+                          : GNCENTRY_EXPVOUCHER_ENTRY;
             break;
         default:
             g_warning ("Invalid owner type");
@@ -2251,17 +2254,17 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         {
         case GNC_OWNER_CUSTOMER:
             ledger_type = is_credit_note ? GNCENTRY_CUST_CREDIT_NOTE_VIEWER
-                                         : GNCENTRY_INVOICE_VIEWER;
+                          : GNCENTRY_INVOICE_VIEWER;
             gconf_section = GCONF_SECTION_INVOICE;
             break;
         case GNC_OWNER_VENDOR:
             ledger_type = is_credit_note ? GNCENTRY_VEND_CREDIT_NOTE_VIEWER
-                                         : GNCENTRY_BILL_VIEWER;
+                          : GNCENTRY_BILL_VIEWER;
             gconf_section = GCONF_SECTION_BILL;
             break;
         case GNC_OWNER_EMPLOYEE:
             ledger_type = is_credit_note ? GNCENTRY_EMPL_CREDIT_NOTE_VIEWER
-                                         : GNCENTRY_EXPVOUCHER_VIEWER;
+                          : GNCENTRY_EXPVOUCHER_VIEWER;
             gconf_section = GCONF_SECTION_BILL;
             break;
         default:
@@ -2374,14 +2377,14 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
         start_owner = owner;
         switch (gncOwnerGetType (gncOwnerGetEndOwner (owner)))
         {
-            case GNC_OWNER_CUSTOMER:
-                owner_terms = gncCustomerGetTerms (gncOwnerGetCustomer (gncOwnerGetEndOwner (owner)));
-                break;
-            case GNC_OWNER_VENDOR:
-                owner_terms = gncVendorGetTerms (gncOwnerGetVendor (gncOwnerGetEndOwner (owner)));
-                break;
-            default:
-                break;
+        case GNC_OWNER_CUSTOMER:
+            owner_terms = gncCustomerGetTerms (gncOwnerGetCustomer (gncOwnerGetEndOwner (owner)));
+            break;
+        case GNC_OWNER_VENDOR:
+            owner_terms = gncVendorGetTerms (gncOwnerGetVendor (gncOwnerGetEndOwner (owner)));
+            break;
+        default:
+            break;
         }
         if (owner_terms)
             gncInvoiceSetTerms (invoice, owner_terms);
@@ -2450,8 +2453,8 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
 
     /* Setup signals */
     gtk_builder_connect_signals_full( builder,
-                                       gnc_builder_connect_full_func,
-                                       iw);
+                                      gnc_builder_connect_full_func,
+                                      iw);
 
     /* Setup initial values */
     iw->invoice_guid = *gncInvoiceGetGUID (invoice);
@@ -3108,12 +3111,12 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     }
 
     message = g_strdup_printf
-                 (/* Translators: %d is the number of bills due. This is a
+              (/* Translators: %d is the number of bills due. This is a
                      ngettext(3) message. */
-                     ngettext("The following %d bill is due:",
-                              "The following %d bills are due:",
-                              len),
-                     len);
+                  ngettext("The following %d bill is due:",
+                           "The following %d bills are due:",
+                           len),
+                  len);
     dialog = gnc_dialog_query_list_create(param_list, q,
                                           _("Due Bills Reminder"),
                                           message,

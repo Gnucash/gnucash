@@ -201,7 +201,7 @@ gnc_commodity * gnc_tree_view_commodity_get_cursor_commodity (GncTreeViewCommodi
  *
  *  @return The selected commodity, or NULL if no commodity was selected.
  */
- gnc_commodity * gnc_tree_view_commodity_get_selected_commodity  (GncTreeViewCommodity *view);
+gnc_commodity * gnc_tree_view_commodity_get_selected_commodity  (GncTreeViewCommodity *view);
 
 /** This function selects all sub-commodities of an commodity in the
  *  commodity tree view.  All other commodities will be unselected.

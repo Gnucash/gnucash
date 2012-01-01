@@ -700,7 +700,7 @@ gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
 
 /*@ dependent @*/
 gnc_commodity * gnc_commodity_find_commodity_by_guid(const GncGUID *guid,
-						     QofBook *book);
+        QofBook *book);
 
 /** @} */
 /* ---------------------------------------------------------- */

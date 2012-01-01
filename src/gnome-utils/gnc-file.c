@@ -611,18 +611,18 @@ gnc_file_query_save (gboolean can_cancel)
 
 static void features_test(const gchar *key, KvpValue *value, gpointer data)
 {
-  GList** unknown_features = (GList**) data;
-  char* feature_desc;
+    GList** unknown_features = (GList**) data;
+    char* feature_desc;
 
-  g_assert(data);
+    g_assert(data);
 
-  /* XXX: test if 'key' is an unknown feature. */
+    /* XXX: test if 'key' is an unknown feature. */
 
-  /* Yes, it is unknown, so add the description to the list: */
-  feature_desc = kvp_value_get_string(value);
-  g_assert(feature_desc);
+    /* Yes, it is unknown, so add the description to the list: */
+    feature_desc = kvp_value_get_string(value);
+    g_assert(feature_desc);
 
-  *unknown_features = g_list_prepend(*unknown_features, feature_desc);  
+    *unknown_features = g_list_prepend(*unknown_features, feature_desc);
 }
 
 /*
@@ -644,34 +644,34 @@ static gboolean test_unknown_features(QofSession* new_session)
     if (value)
     {
         GList* features_list = NULL;
-	frame = kvp_value_get_frame(value);
-	g_assert(frame);
+        frame = kvp_value_get_frame(value);
+        g_assert(frame);
 
-	/* Iterate over the members of this frame for unknown features */
-	kvp_frame_for_each_slot(frame, &features_test, &features_list);
-	if (features_list)
-	{
+        /* Iterate over the members of this frame for unknown features */
+        kvp_frame_for_each_slot(frame, &features_test, &features_list);
+        if (features_list)
+        {
             GList *i;
             char* msg = g_strdup(
-                _("This Dataset contains features not supported by this "
-                  "version of GnuCash.  You must use a newer version of "
-                  "GnuCash in order to support the following features:"
-		  ));
+                            _("This Dataset contains features not supported by this "
+                              "version of GnuCash.  You must use a newer version of "
+                              "GnuCash in order to support the following features:"
+                             ));
 
-	    for (i = features_list; i; i=i->next)
+            for (i = features_list; i; i = i->next)
             {
                 char *tmp = g_strconcat(msg, "\n* ", _(i->data), NULL);
                 g_free (msg);
                 msg = tmp;
             }
 
-	    // XXX: should pull out the file name here */
-	    gnc_error_dialog(gnc_ui_get_toplevel(), msg, "");
-	    
-	    g_free(msg);
-	    g_list_free(features_list);
+            // XXX: should pull out the file name here */
+            gnc_error_dialog(gnc_ui_get_toplevel(), msg, "");
+
+            g_free(msg);
+            g_list_free(features_list);
             return TRUE;
-	}
+        }
     }
 
     return FALSE;
@@ -773,20 +773,20 @@ RESTART:
 
     if (ERR_BACKEND_BAD_URL == io_err)
     {
-	gchar *directory;
-	show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
-	io_err = ERR_BACKEND_NO_ERR;
-	if (g_file_test (filename, G_FILE_TEST_IS_DIR))
-	    directory = g_strdup (filename);
-	else
-	    directory = gnc_get_default_directory (GCONF_DIR_OPEN_SAVE);
+        gchar *directory;
+        show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
+        io_err = ERR_BACKEND_NO_ERR;
+        if (g_file_test (filename, G_FILE_TEST_IS_DIR))
+            directory = g_strdup (filename);
+        else
+            directory = gnc_get_default_directory (GCONF_DIR_OPEN_SAVE);
 
-	filename = gnc_file_dialog (NULL, NULL, directory,
-				    GNC_FILE_DIALOG_OPEN);
-	qof_session_destroy (new_session);
-	new_session = NULL;
-	g_free (directory);
-	goto RESTART;
+        filename = gnc_file_dialog (NULL, NULL, directory,
+                                    GNC_FILE_DIALOG_OPEN);
+        qof_session_destroy (new_session);
+        new_session = NULL;
+        g_free (directory);
+        goto RESTART;
     }
     /* if file appears to be locked, ask the user ... */
     else if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
@@ -973,9 +973,9 @@ RESTART:
                                         GNC_FILE_DIALOG_OPEN);
         }
 
-	/* test for unknown features. */
-	if (!uh_oh)
-	{
+        /* test for unknown features. */
+        if (!uh_oh)
+        {
             uh_oh = test_unknown_features(new_session);
         }
     }
@@ -1291,9 +1291,9 @@ gnc_file_save (void)
     if (qof_book_is_readonly(qof_session_get_book(session)))
     {
         gint response = gnc_ok_cancel_dialog(gnc_ui_get_toplevel(),
-                                       GTK_RESPONSE_CANCEL,
-                                       _("The database was opened read-only. "
-                                         "Do you want to save it to a different place?"));
+                                             GTK_RESPONSE_CANCEL,
+                                             _("The database was opened read-only. "
+                                               "Do you want to save it to a different place?"));
         if (response == GTK_RESPONSE_OK)
         {
             gnc_file_save_as ();

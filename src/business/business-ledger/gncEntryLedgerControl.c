@@ -1007,7 +1007,7 @@ gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
         gboolean dontask = FALSE;
 
         if (ledger->type ==  GNCENTRY_INVOICE_ENTRY ||
-            ledger->type ==  GNCENTRY_CUST_CREDIT_NOTE_ENTRY)
+                ledger->type ==  GNCENTRY_CUST_CREDIT_NOTE_ENTRY)
         {
             gboolean inv_value;
             gboolean only_inv_changed = FALSE;

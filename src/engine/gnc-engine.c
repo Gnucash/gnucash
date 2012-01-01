@@ -72,11 +72,11 @@ gnc_engine_init_part2()
     gchar *pkglibdir;
     const gchar *builddir = g_getenv ("GNC_BUILDDIR");
     gboolean uninstalled = (g_getenv ("GNC_UNINSTALLED") != NULL
-			    && builddir != NULL);
+                            && builddir != NULL);
 
     static struct
     {
-	const gchar* subdir;
+        const gchar* subdir;
         const gchar* lib;
         gboolean required;
     } libs[] =
@@ -89,19 +89,19 @@ gnc_engine_init_part2()
     }, *lib;
 
     if (uninstalled)
-	pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir,
-				  "src", "backend", NULL);
+        pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir,
+                                  "src", "backend", NULL);
     else
-	pkglibdir = gnc_path_get_pkglibdir ();
+        pkglibdir = gnc_path_get_pkglibdir ();
 
     for (lib = libs; lib->lib ; lib++)
     {
-	gchar *libdir;
-	if (uninstalled)
-	    libdir = g_build_path (G_DIR_SEPARATOR_S, pkglibdir,
-				   lib->subdir, ".libs", NULL);
-	else
-	    libdir = pkglibdir;
+        gchar *libdir;
+        if (uninstalled)
+            libdir = g_build_path (G_DIR_SEPARATOR_S, pkglibdir,
+                                   lib->subdir, ".libs", NULL);
+        else
+            libdir = pkglibdir;
         if (qof_load_backend_library(libdir, lib->lib))
         {
             engine_is_initialized = 1;
@@ -115,8 +115,8 @@ gnc_engine_init_part2()
                 g_critical("required library %s not found.\n", lib->lib);
             }
         }
-	if (uninstalled)
-	    g_free (libdir);
+        if (uninstalled)
+            g_free (libdir);
     }
     g_free (pkglibdir);
 }

@@ -51,21 +51,21 @@ typedef struct
     GtkWidget   *buttonbox;
     GtkWidget   *nolabel;
     GtkWidget   *applybutton;
-}RWDialog;
+} RWDialog;
 
 void gnc_reset_warnings_select_all_cb (GtkButton *button, gpointer user_data);
 void gnc_reset_warnings_unselect_all_cb (GtkButton *button, gpointer user_data);
 void gnc_reset_warnings_response_cb (GtkDialog *dialog, gint response, gpointer user_data);
-static GSList *gnc_reset_warnings_add_section (RWDialog *rw_dialog, 
-                                               const gchar *section, GtkWidget *box);
+static GSList *gnc_reset_warnings_add_section (RWDialog *rw_dialog,
+        const gchar *section, GtkWidget *box);
 static void gnc_reset_warnings_release_entries (GSList *entries);
 static void gnc_reset_warnings_update_widgets (RWDialog *rw_dialog);
 static void gnc_reset_warnings_gconf_changed (GConfClient *client, guint cnxn_id,
-                                              GConfEntry *entry, gpointer user_data);
+        GConfEntry *entry, gpointer user_data);
 
 
 /****************************************************
- *  Update the Dialog Widgets     
+ *  Update the Dialog Widgets
  *  @internal
  *  @param rw_dialog structure.
  ****************************************************/
@@ -396,7 +396,7 @@ gnc_reset_warnings_gconf_changed (GConfClient *client,
                                   GConfEntry *entry,
                                   gpointer user_data)
 {
-    RWDialog *rw_dialog = g_object_get_data(G_OBJECT(user_data),"dialog-structure");
+    RWDialog *rw_dialog = g_object_get_data(G_OBJECT(user_data), "dialog-structure");
 
     GtkWidget *box;
     GList     *list;
@@ -545,7 +545,7 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
     gnc_reset_warnings_update_widgets(rw_dialog);
 
     /* Record the pointer to the rw data structure and claen up after */
-    g_object_set_data_full(G_OBJECT(rw_dialog->dialog),"dialog-structure",rw_dialog, g_free);
+    g_object_set_data_full(G_OBJECT(rw_dialog->dialog), "dialog-structure", rw_dialog, g_free);
 
     gnc_gconf_add_notification(G_OBJECT(rw_dialog->dialog), GCONF_WARNINGS,
                                gnc_reset_warnings_gconf_changed,

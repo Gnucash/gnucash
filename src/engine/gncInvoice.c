@@ -868,19 +868,19 @@ GncInvoiceType gncInvoiceGetType (const GncInvoice *invoice)
     {
     case GNC_OWNER_CUSTOMER:
         return (gncInvoiceGetIsCreditNote(invoice) ?
-                      GNC_INVOICE_CUST_CREDIT_NOTE :
-                      GNC_INVOICE_CUST_INVOICE);
+                GNC_INVOICE_CUST_CREDIT_NOTE :
+                GNC_INVOICE_CUST_INVOICE);
     case GNC_OWNER_VENDOR:
         return (gncInvoiceGetIsCreditNote(invoice) ?
-                      GNC_INVOICE_VEND_CREDIT_NOTE :
-                      GNC_INVOICE_VEND_INVOICE);
+                GNC_INVOICE_VEND_CREDIT_NOTE :
+                GNC_INVOICE_VEND_INVOICE);
     case GNC_OWNER_EMPLOYEE:
         return (gncInvoiceGetIsCreditNote(invoice) ?
-                      GNC_INVOICE_EMPL_CREDIT_NOTE :
-                      GNC_INVOICE_EMPL_INVOICE);
+                GNC_INVOICE_EMPL_CREDIT_NOTE :
+                GNC_INVOICE_EMPL_INVOICE);
     default:
         PWARN ("No invoice types defined for owner %d",
-                gncInvoiceGetOwnerType (invoice));
+               gncInvoiceGetOwnerType (invoice));
         return GNC_INVOICE_UNDEFINED;
     }
 }

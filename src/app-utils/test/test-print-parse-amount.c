@@ -20,11 +20,11 @@ test_num_print_info (gnc_numeric n, GNCPrintAmountInfo print_info, int line)
     guint loglevel = G_LOG_LEVEL_WARNING, hdlr;
     TestErrorStruct check = { loglevel, log_domain, msg };
 
-/* Throws overflows during rounding step in xaccPrintAmount when the "fraction" is high. See bug 665707. */
+    /* Throws overflows during rounding step in xaccPrintAmount when the "fraction" is high. See bug 665707. */
     hdlr = g_log_set_handler (log_domain, loglevel,
-			      (GLogFunc)test_checked_handler, &check);
+                              (GLogFunc)test_checked_handler, &check);
     s = xaccPrintAmount (n, print_info);
-     print_ok = (s && s[0] != '\0');
+    print_ok = (s && s[0] != '\0');
     if (!print_ok)
         return;
 

@@ -59,7 +59,7 @@ typedef struct
     GtkWidget   *dialog;
     GtkTextView *textview;
     GtkWidget   *showcheck_button;
-}TotdDialog;
+} TotdDialog;
 
 
 /***********************************************************************
@@ -68,7 +68,7 @@ typedef struct
  *  the number in the GConf database, and updating the dialog window
  *  with the text of the newly selected tip.
  *
- *  @param Tip of the day structure. This points to the dialog and 
+ *  @param Tip of the day structure. This points to the dialog and
  *  the GtkTextView widget that holds the text of the tip.
  *
  *  @param offset Which tip to show.  If the value is zero then the
@@ -127,8 +127,8 @@ gnc_new_tip_number (TotdDialog *totd_dialog, gint offset)
 /*    Dialog Callbacks     */
 /***************************/
 void gnc_totd_dialog_response_cb (GtkDialog *dialog,
-                               gint       response,
-                               gpointer   user_data)
+                                  gint       response,
+                                  gpointer   user_data)
 {
     TotdDialog *totd_dialog = user_data;
 
@@ -158,7 +158,7 @@ void gnc_totd_dialog_response_cb (GtkDialog *dialog,
 
 void
 gnc_totd_dialog_startup_toggled_cb (GtkToggleButton *button,
-                                 gpointer user_data)
+                                    gpointer user_data)
 {
     gboolean active;
 
@@ -329,7 +329,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     }
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"dialog-totd.glade", "totd_dialog");
+    gnc_builder_add_from_file (builder, "dialog-totd.glade", "totd_dialog");
     dialog  = GTK_WIDGET(gtk_builder_get_object (builder, "totd_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
 

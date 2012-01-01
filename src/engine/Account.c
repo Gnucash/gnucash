@@ -4819,7 +4819,7 @@ _utest_account_fill_functions(void)
     func->xaccFreeAccount = xaccFreeAccount;
     func->qofAccountSetParent = qofAccountSetParent;
     func->gnc_account_lookup_by_full_name_helper =
-	gnc_account_lookup_by_full_name_helper;
+        gnc_account_lookup_by_full_name_helper;
 
     return func;
 }

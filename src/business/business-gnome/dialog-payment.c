@@ -635,8 +635,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 
     /* Setup signals */
     gtk_builder_connect_signals_full( builder,
-                                       gnc_builder_connect_full_func,
-                                       pw);
+                                      gnc_builder_connect_full_func,
+                                      pw);
 
     g_signal_connect (G_OBJECT (pw->owner_choice), "changed",
                       G_CALLBACK (gnc_payment_dialog_owner_changed_cb), pw);

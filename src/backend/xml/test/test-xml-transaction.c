@@ -467,13 +467,13 @@ test_transaction(void)
             sixtp *parser;
             tran_data data;
 
-	    gchar *msg = "[xaccAccountScrubCommodity()] Account \"\" does not have a commodity!";
-	    gchar *logdomain = "gnc.engine.scrub";
-	    guint loglevel = G_LOG_LEVEL_CRITICAL;
-	    TestErrorStruct check = { loglevel, logdomain, msg };
-	    g_log_set_handler (logdomain, loglevel,
-			       (GLogFunc)test_checked_handler, &check);
-           data.trn = ran_trn;
+            gchar *msg = "[xaccAccountScrubCommodity()] Account \"\" does not have a commodity!";
+            gchar *logdomain = "gnc.engine.scrub";
+            guint loglevel = G_LOG_LEVEL_CRITICAL;
+            TestErrorStruct check = { loglevel, logdomain, msg };
+            g_log_set_handler (logdomain, loglevel,
+                               (GLogFunc)test_checked_handler, &check);
+            data.trn = ran_trn;
             data.com = com;
             data.value = i;
             parser = gnc_transaction_sixtp_parser_create();

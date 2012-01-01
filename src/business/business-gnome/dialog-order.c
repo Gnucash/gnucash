@@ -700,7 +700,7 @@ gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
 
     /* Find the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"dialog-order.glade", "New Order Dialog");
+    gnc_builder_add_from_file (builder, "dialog-order.glade", "New Order Dialog");
 
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "New Order Dialog"));
 

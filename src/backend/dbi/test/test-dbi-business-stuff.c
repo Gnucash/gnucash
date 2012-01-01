@@ -220,7 +220,7 @@ test_dbi_business_store_and_reload( const gchar* driver, QofSession* session_1, 
     qof_session_destroy( session_2 );
 
     hdlr = g_log_set_handler (log_domain, loglevel,
-			      (GLogFunc)test_checked_handler, &check);
+                              (GLogFunc)test_checked_handler, &check);
     qof_session_end( session_3 );
     g_log_remove_handler (log_domain, hdlr);
     qof_session_destroy( session_3 );

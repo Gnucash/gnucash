@@ -477,7 +477,7 @@ gnc_xfer_dialog_to_tree_selection_changed_cb (GtkTreeSelection *selection, gpoin
 
 gboolean
 gnc_xfer_dialog_inc_exp_filter_func (Account *account,
-        gpointer data)
+                                     gpointer data)
 {
     AccountTreeFilterInfo* info;
     GNCAccountType type;

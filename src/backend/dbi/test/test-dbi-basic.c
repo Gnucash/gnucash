@@ -57,7 +57,7 @@ create_session(void)
     guint loglevel = G_LOG_LEVEL_WARNING, hdlr;
     TestErrorStruct check = { loglevel, log_domain, msg };
     hdlr = g_log_set_handler (log_domain, loglevel,
-			      (GLogFunc)test_checked_handler, &check);
+                              (GLogFunc)test_checked_handler, &check);
 
     session = qof_session_new();
     book = qof_session_get_book( session );

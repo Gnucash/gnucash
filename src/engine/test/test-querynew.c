@@ -60,7 +60,7 @@ static void test_class (void)
     test_add_error (&check1);
     test_add_error (&check2);
     g_log_set_handler (logdomain, loglevel,
-		       (GLogFunc)test_list_handler, NULL);
+                       (GLogFunc)test_list_handler, NULL);
 
 
     qof_class_register (TEST_MODULE_NAME, (QofSortFunc)test_sort, params);

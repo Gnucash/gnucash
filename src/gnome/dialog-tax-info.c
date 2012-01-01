@@ -1268,7 +1268,7 @@ tax_related_toggled_cb (GtkToggleButton *togglebutton,
 
     gtk_widget_set_sensitive (hbox, on);
 
-    if(on == FALSE)
+    if (on == FALSE)
         gtk_widget_hide (ti_dialog->txf_help_text); /* textview doesn't go insensitive!? */
     else
         gtk_widget_show (ti_dialog->txf_help_text);
@@ -1305,8 +1305,8 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     GtkWidget *label;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"dialog-tax-info.glade", "copy_spin_adj");
-    gnc_builder_add_from_file (builder,"dialog-tax-info.glade", "Tax Information Dialog");
+    gnc_builder_add_from_file (builder, "dialog-tax-info.glade", "copy_spin_adj");
+    gnc_builder_add_from_file (builder, "dialog-tax-info.glade", "Tax Information Dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Tax Information Dialog"));
     ti_dialog->dialog = dialog;

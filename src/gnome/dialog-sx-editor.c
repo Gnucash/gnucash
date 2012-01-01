@@ -1678,7 +1678,7 @@ sxed_excal_update_adapt_cb(GtkObject *o, gpointer ud)
 
 void
 on_sx_check_toggled_cb (GtkWidget *togglebutton,
-                     gpointer user_data)
+                        gpointer user_data)
 {
     GtkWidget *widget_create, *widget_notify;
     gboolean active; // , notify;
@@ -1693,7 +1693,7 @@ on_sx_check_toggled_cb (GtkWidget *togglebutton,
     widget_notify = g_hash_table_lookup(table, "gconf/dialogs/scheduled_trans/transaction_editor/notify");
 
     active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget_create));
-    if(active)
+    if (active)
         gtk_widget_set_sensitive(widget_notify, TRUE);
     else
         gtk_widget_set_sensitive(widget_notify, FALSE);

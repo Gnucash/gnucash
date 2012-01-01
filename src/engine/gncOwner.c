@@ -752,8 +752,8 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
      */
 
     open_lot_fifo = xaccAccountFindOpenLots (posted_account, gnc_lot_match_invoice_owner,
-                                             (gpointer)owner,
-                                             (GCompareFunc)gnc_lot_sort_func);
+                    (gpointer)owner,
+                    (GCompareFunc)gnc_lot_sort_func);
 
     /* Check if an invoice was passed in. */
     if (invoice)
@@ -808,7 +808,7 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
          * If they are of the same sign, we may reserve it as the pre-payment lot for later
          */
         if ( (gnc_numeric_negative_p (balance) && gnc_numeric_negative_p (payment_value)) ||
-             (gnc_numeric_positive_p (balance) && gnc_numeric_positive_p (payment_value)) )
+                (gnc_numeric_positive_p (balance) && gnc_numeric_positive_p (payment_value)) )
         {
             if (prepay_lot)
             {

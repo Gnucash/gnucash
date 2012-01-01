@@ -134,6 +134,6 @@ int
 main (int argc, char **argv)
 {
     g_setenv ("GNC_UNINSTALLED", "1", TRUE);
-   //  scm_boot_guile (argc, argv, main_helper, NULL);
+    //  scm_boot_guile (argc, argv, main_helper, NULL);
     return get_rv();
 }

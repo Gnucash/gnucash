@@ -15,7 +15,7 @@ guile_main(void *closure, int argc, char ** argv)
     guint loglevel = G_LOG_LEVEL_WARNING;
     TestErrorStruct check = { loglevel, logdomain, msg };
     g_log_set_handler (logdomain, loglevel,
-		       (GLogFunc)test_checked_handler, &check);
+                       (GLogFunc)test_checked_handler, &check);
 
     g_test_message("  test-load-c.c: testing module load/unload from C ... ");
 

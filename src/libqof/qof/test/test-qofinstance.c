@@ -157,7 +157,7 @@ test_instance_new_destroy( void )
     /* set fatal handler */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )fatal_handler, NULL );
     hdlr = g_log_set_handler (log_domain, loglevel,
-			      (GLogFunc)test_checked_handler, &check);
+                              (GLogFunc)test_checked_handler, &check);
     g_assert( qof_instance_get_collection( inst ) == NULL );
     g_assert( g_strrstr( error_message, "assertion `QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
@@ -517,7 +517,7 @@ test_instance_commit_edit( Fixture *fixture, gconstpointer pData )
     g_test_message( "Test when instance's editlevel < 0" );
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )fatal_handler, NULL );
     hdlr = g_log_set_handler (log_domain, loglevel,
-			      (GLogFunc)test_checked_handler, &check);
+                              (GLogFunc)test_checked_handler, &check);
     qof_instance_decrease_editlevel( fixture->inst );
     g_assert_cmpint( qof_instance_get_editlevel( fixture->inst ), == , -1 );
     result = qof_commit_edit( fixture->inst );

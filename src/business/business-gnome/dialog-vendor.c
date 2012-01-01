@@ -475,8 +475,8 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
 
     /* Setup signals */
     gtk_builder_connect_signals_full( builder,
-                                       gnc_builder_connect_full_func,
-                                       vw);
+                                      gnc_builder_connect_full_func,
+                                      vw);
 
     /* Setup initial values */
     if (vendor != NULL)

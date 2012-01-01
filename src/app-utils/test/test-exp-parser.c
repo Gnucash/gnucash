@@ -69,7 +69,7 @@ run_parser_test (TestNode *node)
 
     result = gnc_numeric_error( -1 );
     hdlr = g_log_set_handler ("gnc.gui", loglevel,
-			       (GLogFunc)test_checked_handler, &check);
+                              (GLogFunc)test_checked_handler, &check);
     g_test_message ("Running test \"%s\" [%s] = ", node->test_name, node->exp);
     succeeded = gnc_exp_parser_parse (node->exp, &result, &error_loc);
     g_log_remove_handler ("gnc.gui", hdlr);
@@ -81,8 +81,8 @@ run_parser_test (TestNode *node)
             pass &= gnc_numeric_equal( result, node->expected_result );
         }
         g_test_message ( "%0.4f [%s]\n",
-			 gnc_numeric_to_double( result ),
-			 (pass ? "PASS" : "FAIL" ) );
+                         gnc_numeric_to_double( result ),
+                         (pass ? "PASS" : "FAIL" ) );
     }
 
     if (succeeded != node->should_succeed)

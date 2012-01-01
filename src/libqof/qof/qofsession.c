@@ -412,16 +412,16 @@ qof_session_begin (QofSession *session, const char * book_id,
     }
     scheme = g_uri_parse_scheme (book_id);
     if (g_strcmp0 (scheme, "file") == 0)
-	filename = g_filename_from_uri (book_id, NULL, NULL);
+        filename = g_filename_from_uri (book_id, NULL, NULL);
     else if (!scheme)
-	filename = g_strdup (book_id);
+        filename = g_strdup (book_id);
 
     if (filename && g_file_test (filename, G_FILE_TEST_IS_DIR))
     {
         if (ERR_BACKEND_NO_ERR == qof_session_get_error(session))
             qof_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
-	g_free (filename);
-	g_free (scheme);
+        g_free (filename);
+        g_free (scheme);
         LEAVE("Can't open a directory");
         return;
     }

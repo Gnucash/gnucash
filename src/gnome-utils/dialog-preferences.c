@@ -38,7 +38,7 @@
     done by providing the name of a glade file and the content to
     load from that file along with a widget in that file.  If a
     partial page is added, the widget name provided must be that of
-    a GtkTable containing four columns. If a full page is added, 
+    a GtkTable containing four columns. If a full page is added,
     the widget name provided to this code can be any kind of
     widget, but for consistence it should probably be the same.
 
@@ -332,7 +332,7 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
                               GtkWidget *dialog)
 {
     GHashTable *table;
-    GSList *interesting, *runner; 
+    GSList *interesting, *runner;
     const gchar *name;
     const gchar *wname;
     GtkWidget *widget;
@@ -340,7 +340,7 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
     table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
 
     interesting = gtk_builder_get_objects(builder);
-		
+
     for (runner = interesting; runner; runner = g_slist_next(runner))
     {
         widget = runner->data;
@@ -349,7 +349,7 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
             wname = gtk_widget_get_name(widget);
             name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
             DEBUG("Widget type is %s and buildable get name is %s", wname, name);
-            if(g_str_has_prefix (name,"gconf"))
+            if (g_str_has_prefix (name, "gconf"))
                 g_hash_table_insert(table, (gchar *)name, widget);
         }
     }
@@ -482,12 +482,12 @@ gnc_preferences_build_page (gpointer data,
     builder = gtk_builder_new();
 
     /* Adjustments etc... must come before dialog information */
-    widgetname = g_strsplit(add_in->widgetname,",",-1);
+    widgetname = g_strsplit(add_in->widgetname, ",", -1);
 
-    for(i=0; widgetname[i]; i++)
+    for (i = 0; widgetname[i]; i++)
     {
-       DEBUG("Opening %s to get content %s", add_in->filename, widgetname[i]);
-       gnc_builder_add_from_file (builder, add_in->filename, widgetname[i]);
+        DEBUG("Opening %s to get content %s", add_in->filename, widgetname[i]);
+        gnc_builder_add_from_file (builder, add_in->filename, widgetname[i]);
     }
 
     DEBUG("Widget Content is %s", widgetname[i - 1]);
@@ -1513,7 +1513,7 @@ gnc_prefs_connect_one (const gchar *name,
 
 
 /** Create the preferences dialog.  This function first reads the
- *  dialog-preferences.glade file to obtain the content and then 
+ *  dialog-preferences.glade file to obtain the content and then
  *  the dialog is created with a set of common preferences.  It then
  *  runs the list of add-ins, calling a helper function to add each full/partial
  *  page to this dialog, Finally it builds the "interesting widgets"
@@ -1539,14 +1539,14 @@ gnc_preferences_dialog_create(void)
     DEBUG("Opening dialog-preferences.glade:");
     builder = gtk_builder_new();
 
-    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "auto_decimal_places_adj");
-    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "autosave_interval_minutes_adj");
-    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "date_backmonth_adj");
-    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "max_transactions_adj");
-    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "new_search_limit_adj");
-    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "retain_days_adj");
-    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "tab_width_adj");
-    gnc_builder_add_from_file (builder,"dialog-preferences.glade", "GnuCash Preferences");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "auto_decimal_places_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "autosave_interval_minutes_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "date_backmonth_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "max_transactions_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "new_search_limit_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "retain_days_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "tab_width_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "GnuCash Preferences");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GnuCash Preferences"));
 
     DEBUG("autoconnect");
@@ -1800,7 +1800,7 @@ gnc_preferences_gconf_changed (GConfClient *client,
             {
                 DEBUG("widget %p - period_select", widget_child);
                 gnc_prefs_period_select_gconf_cb(GNC_PERIOD_SELECT(widget_child),
-                                             gconf_value_get_int(entry->value));
+                                                 gconf_value_get_int(entry->value));
             }
             else if (GNC_IS_DATE_EDIT(widget_child))
             {

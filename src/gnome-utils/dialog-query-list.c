@@ -217,8 +217,8 @@ gnc_dialog_query_list_new (GList *param_list, Query *q)
 
     /* register ourselves */
     dql->component_id = gnc_register_gui_component ("GNC Dialog Query List",
-                                    gnc_dialog_query_list_refresh_handler,
-                                    close_handler, dql);
+                        gnc_dialog_query_list_refresh_handler,
+                        close_handler, dql);
 
     /* Build the book list */
     dql_build_booklist (dql, q);

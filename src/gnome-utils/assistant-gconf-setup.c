@@ -78,7 +78,7 @@ typedef struct
     GtkWidget *install_text;
     GtkWidget *finish_page;
 
-}gconf_data;
+} gconf_data;
 
 
 /********************
@@ -220,7 +220,7 @@ assistant_gconf_install_keys (GError **error)
 
 /** This function is called before the Update page is presented to the
  *  user. It gets the active button from the Method page and uses this
- *  to either add the path strings or jump to the install page.  
+ *  to either add the path strings or jump to the install page.
  */
 void
 assistant_gconf_update_prep (GtkAssistant *assistant, gpointer user_data)
@@ -338,7 +338,7 @@ assistant_gconf_install_prep (GtkAssistant *assistant, gpointer user_data)
  ********************/
 
 /** This function is called before the finish page is presented to the
- *  user. It populates the page with text based on previous page options 
+ *  user. It populates the page with text based on previous page options
  *  taken.
  */
 void
@@ -477,7 +477,7 @@ assistant_gconf_finish (GtkAssistant *assistant, gpointer user_data)
  ************************************/
 void
 assistant_gconf_prepare (GtkAssistant  *assistant, GtkWidget *page,
-                 gconf_data  *data)
+                         gconf_data  *data)
 {
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
@@ -490,11 +490,11 @@ assistant_gconf_prepare (GtkAssistant  *assistant, GtkWidget *page,
     case 3:
         /* Current page is a step page */
         assistant_gconf_step_prep(assistant, data);
-	break;
+        break;
     case 4:
         /* Current page is install page */
         assistant_gconf_install_prep(assistant, data);
-	break;
+        break;
     case 5:
         /* Current page is finish page */
         assistant_gconf_finish_prep(assistant, data);
@@ -508,7 +508,7 @@ assistant_gconf_prepare (GtkAssistant  *assistant, GtkWidget *page,
  */
 void
 assistant_gconf_cancel (GtkAssistant *gtkassistant,
-                    gpointer user_data)
+                        gpointer user_data)
 {
     gconf_data *data = user_data;
     gtk_widget_destroy(GTK_WIDGET(data->dialog));

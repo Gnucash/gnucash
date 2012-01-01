@@ -133,17 +133,17 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
             return;
         }
 
-	if ( g_file_test( g_filename_from_uri( url, NULL, NULL ),
-			  G_FILE_TEST_IS_DIR ))
-	{
-	    gtk_file_chooser_set_current_folder_uri( faw->fileChooser, url );
-	    return;
-	}
+        if ( g_file_test( g_filename_from_uri( url, NULL, NULL ),
+                          G_FILE_TEST_IS_DIR ))
+        {
+            gtk_file_chooser_set_current_folder_uri( faw->fileChooser, url );
+            return;
+        }
         if ( faw->type == FILE_ACCESS_OPEN )
         {
             gboolean open_readonly = faw->readonly_checkbutton
-                    ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(faw->readonly_checkbutton))
-                    : FALSE;
+                                     ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(faw->readonly_checkbutton))
+                                     : FALSE;
             gnc_file_open_file( url, open_readonly );
         }
         else if ( faw->type == FILE_ACCESS_SAVE_AS )
@@ -329,7 +329,7 @@ gnc_ui_file_access( int type )
     file_chooser = GTK_WIDGET(gtk_builder_get_object (builder, "file_chooser" ));
     fileChooser = GTK_FILE_CHOOSER_WIDGET(gtk_file_chooser_widget_new( fileChooserAction ));
     faw->fileChooser = GTK_FILE_CHOOSER(fileChooser);
-    gtk_box_pack_start( GTK_BOX(file_chooser), GTK_WIDGET(fileChooser),TRUE, TRUE, 6 );
+    gtk_box_pack_start( GTK_BOX(file_chooser), GTK_WIDGET(fileChooser), TRUE, TRUE, 6 );
 
     /* Set the default directory */
     if (type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS)

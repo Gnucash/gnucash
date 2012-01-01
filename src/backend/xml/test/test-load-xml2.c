@@ -83,7 +83,7 @@ test_load_file(const char *filename)
     guint loglevel = G_LOG_LEVEL_WARNING;
     TestErrorStruct check = { loglevel, logdomain, NULL };
     g_log_set_handler (logdomain, loglevel,
-		       (GLogFunc)test_checked_handler, &check);
+                       (GLogFunc)test_checked_handler, &check);
 
     session = qof_session_new();
 

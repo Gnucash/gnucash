@@ -68,7 +68,7 @@ typedef void (*GNCSearchSelectedCB) (gpointer selected_object,
  * returns.
  */
 typedef void (*GNCSearchMultiSelectedCB) (GList *list_of_selected_objects,
-                                          gpointer user_data);
+        gpointer user_data);
 
 typedef struct
 {

@@ -1149,7 +1149,7 @@ do_destroy (Transaction *trans)
      * they need to be destroyed too unless we're shutting down in
      * which case all transactions will be destroyed. */
     if (!shutting_down)
-    	destroy_gains (trans);
+        destroy_gains (trans);
 
     /* Make a log in the journal before destruction.  */
     if (!shutting_down && !qof_book_is_readonly(qof_instance_get_book(trans)))

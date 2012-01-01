@@ -488,7 +488,7 @@ static void create_invoice_query (GncEntryLedger *ledger)
 
     /* Term 3 */
     if ((ledger->type == GNCENTRY_INVOICE_ENTRY ||
-         ledger->type == GNCENTRY_CUST_CREDIT_NOTE_ENTRY) &&
+            ledger->type == GNCENTRY_CUST_CREDIT_NOTE_ENTRY) &&
             gncOwnerGetEndGUID (gncInvoiceGetOwner (ledger->invoice)) != NULL)
     {
 
