@@ -28,14 +28,6 @@ SET (app_utils_HEADERS
   gnc-accounting-period.h
   gnc-addr-quickfill.h
   gnc-component-manager.h
-  gnc-druid.h
-  gnc-druid-cb.h
-  gnc-druid-provider.h
-  gnc-druid-provider-desc.h
-  gnc-druid-provider-desc-edge.h
-  gnc-druid-provider-desc-file.h
-  gnc-druid-provider-desc-multifile.h
-  gnc-druid-provider-file-cb.h
   gnc-entry-quickfill.h
   gnc-euro.h
   gnc-exp-parser.h
@@ -61,14 +53,6 @@ SET (app_utils_SOURCES
   gnc-accounting-period.c
   gnc-addr-quickfill.c
   gnc-component-manager.c
-  gnc-druid.c
-  gnc-druid-cb.c
-  gnc-druid-provider.c
-  gnc-druid-provider-desc.c
-  gnc-druid-provider-desc-edge.c
-  gnc-druid-provider-desc-file.c
-  gnc-druid-provider-desc-multifile.c
-  gnc-druid-provider-file-cb.c
   gnc-entry-quickfill.c
   gnc-euro.c
   gnc-exp-parser.c
