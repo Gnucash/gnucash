@@ -48,6 +48,7 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-main-window.h"
+#include "gnc-ui-util.h" // for gnc_get_current_book
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -174,6 +175,13 @@ static const gchar *need_account_actions[] =
     NULL
 };
 
+static const gchar *readonly_inactive_actions[] =
+{
+    "OnlineActionsAction",
+    "ABSetupAction",
+    NULL
+};
+
 static GncMainWindow *gnc_main_window = NULL;
 
 /************************************************************
@@ -286,6 +294,31 @@ gnc_plugin_ab_main_window_page_added(GncMainWindow *window, GncPluginPage *page,
     LEAVE(" ");
 }
 
+/** Update the actions sensitivity
+*/
+static void update_inactive_actions(GncPluginPage *plugin_page)
+{
+    GncMainWindow  *window;
+    GtkActionGroup *action_group;
+
+    // We are readonly - so we have to switch particular actions to inactive.
+    gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
+
+    // We continue only if the current page is a plugin page
+    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+        return;
+
+    window = GNC_MAIN_WINDOW(plugin_page->window);
+    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+
+    /* Set the action's sensitivity */
+    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
+                               "sensitive", is_readwrite);
+}
+
+
 /**
  * Whenever the current page has changed, update the aqbanking menus based upon
  * the page that is currently selected.
@@ -299,7 +332,11 @@ gnc_plugin_ab_main_window_page_changed(GncMainWindow *window,
     /* Make sure not to call this with a NULL GncPluginPage */
     if (page)
     {
+        // Update the menu items according to the selected account
         gnc_plugin_ab_account_selected(page, account, user_data);
+
+        // Also update the action sensitivity due to read-only
+        update_inactive_actions(page);
     }
 }
 

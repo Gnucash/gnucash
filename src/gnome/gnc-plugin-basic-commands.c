@@ -65,6 +65,7 @@ static void gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin);
 static void gnc_plugin_basic_commands_finalize (GObject *object);
 
 static void gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+static void gnc_plugin_basic_commands_main_window_page_changed(GncMainWindow *window, GncPluginPage *page, gpointer user_data);
 
 /* Command callbacks */
 static void gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data);
@@ -218,6 +219,12 @@ static const gchar *gnc_plugin_important_actions[] =
     NULL,
 };
 
+static const gchar *readonly_inactive_actions[] =
+{
+    "FileSaveAction",
+    "ToolsBookCloseAction",
+    NULL
+};
 
 /** The instance private data structure for an basic commands
  *  plugin. */
@@ -297,6 +304,46 @@ gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
         GncMainWindow *window,
         GQuark type)
 {
+    g_signal_connect(window, "page_changed",
+                     G_CALLBACK(gnc_plugin_basic_commands_main_window_page_changed),
+                     plugin);
+}
+
+/** Update the actions sensitivity
+*/
+static void update_inactive_actions(GncPluginPage *plugin_page)
+{
+    GncMainWindow  *window;
+    GtkActionGroup *action_group;
+
+    // We are readonly - so we have to switch particular actions to inactive.
+    gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
+
+    // We continue only if the current page is a plugin page
+    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+        return;
+
+    window = GNC_MAIN_WINDOW(plugin_page->window);
+    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+    action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
+
+    /* Set the action's sensitivity */
+    gnc_plugin_update_actions (action_group, readonly_inactive_actions,
+                               "sensitive", is_readwrite);
+}
+
+static void
+gnc_plugin_basic_commands_main_window_page_changed(GncMainWindow *window,
+        GncPluginPage *page,
+        gpointer user_data)
+{
+    /* Make sure not to call this with a NULL GncPluginPage */
+    if (page)
+    {
+        // Update the action sensitivity due to read-only
+        update_inactive_actions(page);
+    }
 }
 
 /** Initialize the class for a new basic commands plugin.  This will
