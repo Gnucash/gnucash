@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-29 11:05+0300\n"
-"PO-Revision-Date: 2011-12-25 13:53+0300\n"
+"PO-Revision-Date: 2011-12-31 14:04+0300\n"
 "Last-Translator: Aurimas Fišeras <aurimas@members.fsf.org>\n"
 "Language-Team: komp_lt@konf.lt\n"
 "Language: lt\n"
@@ -860,7 +860,6 @@ msgstr "Ar tikrai norite registruoti sąskaitą-faktūrą?"
 #: ../intl-scm/guile-strings.c:2248 ../intl-scm/guile-strings.c:2520
 #: ../intl-scm/guile-strings.c:2538 ../intl-scm/guile-strings.c:2648
 #: ../intl-scm/guile-strings.c:2730 ../intl-scm/guile-strings.c:2792
-#, fuzzy
 msgid "Due Date"
 msgstr "Terminas"
 
@@ -1117,9 +1116,8 @@ msgstr "Registruota"
 #: ../src/business/business-gnome/dialog-invoice.c:2657
 #: ../src/business/business-gnome/dialog-invoice.c:2824
 #: ../intl-scm/guile-strings.c:994 ../intl-scm/guile-strings.c:1598
-#, fuzzy
 msgid "Due"
-msgstr "Terminas"
+msgstr "Apmokėtina"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2659
 #: ../src/business/business-gnome/dialog-order.c:863
@@ -1223,13 +1221,13 @@ msgstr "Suma"
 #, c-format
 msgid "The following %d bill is due:"
 msgid_plural "The following %d bills are due:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ši %d sąskaita yra apmokėtina:"
+msgstr[1] "Šios %d sąskaitas yra apmokėtinos:"
+msgstr[2] "Šios %d sąskaitų yra apmokėtinos:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2883
 msgid "Due Bills Reminder"
-msgstr ""
+msgstr "Apmokėtinų gautų sąskaitų priminimas"
 
 #: ../src/business/business-gnome/dialog-job.c:133
 msgid "The Job must be given a name."
@@ -1506,11 +1504,11 @@ msgstr "Nuolaidų dienos: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:18
 msgid "Due Day: "
-msgstr ""
+msgstr "Termino diena: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:19
 msgid "Due Days: "
-msgstr ""
+msgstr "Termino dienos: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:20
 msgid "Edit the current Billing Term"
@@ -1543,7 +1541,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:25
 msgid "The day of the month bills are due"
-msgstr ""
+msgstr "Mėnesio diena, kada gautos sąskaitos yra apmokėtinos"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:26
 #, fuzzy
@@ -1610,7 +1608,7 @@ msgstr "Rodyti papildomus _mygtukus"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:5
 msgid "How many days in the future to warn about Bills coming due."
-msgstr ""
+msgstr "Prieš kiek dienų įspėti apie apmokėtinas gautas sąskaitas."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
@@ -1668,20 +1666,19 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:13
 msgid "Whether to display the list of Bills Due at startup."
-msgstr ""
+msgstr "Ar rodyti apmokėtinų gautų sąskaitų sąrašą paleidus."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
 msgid "_Accumulate splits on post"
 msgstr "_Sumuoti skaidymus registravimo metu"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:15
-#, fuzzy
 msgid "_Days in advance:"
-msgstr "_Dienos iš anksto:"
+msgstr "_Prieš kiek dienų:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:16
 msgid "_Notify when due"
-msgstr ""
+msgstr "Pranešti, kada _apmokėtinos"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:17
 msgid "_Open in new window"
@@ -1957,7 +1954,7 @@ msgstr "Atsiskaitymas"
 #: ../src/business/business-gnome/glade/employee.glade.h:6
 #: ../src/gnome-utils/dialog-transfer.c:1788
 msgid "Credit Account"
-msgstr "Kredito sąskaita"
+msgstr "Kreditinė sąskaita"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:8
 msgid "Default Hours per Day: "
@@ -2909,15 +2906,14 @@ msgid "Show bills due within this many days"
 msgstr ""
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
-#, fuzzy
 msgid ""
 "This field defines the number of days in advance that GnuCash will check for "
 "due bills. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
-"Šis laukas nurodo prieš kiek dienų skaičių, kurį GnuCash naudos gautų "
-"sąskaitų apmokėjimo tikrinimui. Lauko reikšmė naudojama, jei nuostata "
-"„Pranešti mokėjimo terminą“ aktyvi."
+"Šis laukas nurodo prieš kiek dienų iš anksto GnuCash patikrins apmokėtinas "
+"gautas sąskaitas. Lauko reikšmė naudojama, jei nuostata „Pranešti, kada "
+"apmokėtinos“ aktyvi."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:15
 msgid ""
@@ -3365,7 +3361,6 @@ msgid "Enter the Tax Table to apply to this entry"
 msgstr "Įveskite mokesčių lentelę, kurią pritaikyti šiam įrašui"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:711
-#, fuzzy
 msgid "Is this entry taxable?"
 msgstr "Ar šis įrašas apmokestinamas?"
 
@@ -3574,6 +3569,14 @@ msgid ""
 "Below you will find the list of invalid account names:\n"
 "%s"
 msgstr ""
+"Skirtuko simbolis „%s“ yra naudojamas vienos ar daugiau sąskaitų "
+"pavadinimuose.\n"
+"\n"
+"Tai baigsis netikėta elgsena. Arba pakeiskite sąskaitų pavadinimus, arba "
+"pasirinkite kitą skirtuko simbolį.\n"
+"\n"
+"Žemiau rasite netinkamų sąskaitų pavadinimų sąrašą:\n"
+"%s"
 
 #. src/report/report-system/report-utilities.scm
 #: ../src/engine/Account.c:3965
@@ -4086,9 +4089,8 @@ msgstr "Kiti"
 
 #: ../src/gnome/dialog-print-check.c:2512
 #: ../src/gnome-utils/glade/preferences.glade.h:140
-#, fuzzy
 msgid "Top"
-msgstr "Viršus"
+msgstr "Viršuje"
 
 #: ../src/gnome/dialog-progress.c:478 ../src/gnome/dialog-progress.c:527
 msgid "(paused)"
@@ -5962,9 +5964,8 @@ msgid "S_plit Transaction"
 msgstr "_Skaidyti operaciją"
 
 #: ../src/gnome/glade/register.glade.h:40
-#, fuzzy
 msgid "S_tatement Date"
-msgstr "_Deklaravimo data:"
+msgstr "_Išrašo data"
 
 #: ../src/gnome/glade/register.glade.h:42
 msgid "Schedule..."
@@ -6107,7 +6108,7 @@ msgstr "_Pagrindinė didžioji knyga"
 #: ../src/gnome/glade/register.glade.h:83
 #: ../src/gnome/gnc-plugin-page-register.c:350
 msgid "_Double Line"
-msgstr "_Dviguba eilutė"
+msgstr "_Dvi eilutės"
 
 #: ../src/gnome/glade/register.glade.h:84
 #, fuzzy
@@ -6306,7 +6307,7 @@ msgstr "Suma:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:55
 msgid "Begin notifications this many days before the transaction is created."
-msgstr ""
+msgstr "Pradėti priminimus tiek dienų prieš operacijos sukūrimą."
 
 #: ../src/gnome/glade/sched-xact.glade.h:56
 msgid "Conditional on splits not having variables"
@@ -6326,7 +6327,7 @@ msgstr "Sukurti iš anksto:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:60
 msgid "Create the transaction this many days before its effective date."
-msgstr ""
+msgstr "Sukurti operaciją tiek dienų prieš jos įsigaliojimo datą."
 
 #: ../src/gnome/glade/sched-xact.glade.h:61
 msgid "Creation State"
@@ -6727,7 +6728,7 @@ msgstr "_Peržiūrėti sukurtas operacijas"
 
 #: ../src/gnome/glade/sched-xact.glade.h:169
 msgid "_Run when data file opened"
-msgstr ""
+msgstr "_Vykdyti, kai atveriamas duomenų failas"
 
 #: ../src/gnome/glade/sched-xact.glade.h:170
 #: ../src/gnome-utils/glade/preferences.glade.h:188
@@ -6797,6 +6798,10 @@ msgid ""
 "for the share distribution. You can also enter a description of the "
 "transaction, or accept the default one."
 msgstr ""
+"Įveskite datą ir akcijų skaičių, kurį gavote ar praradote dėl akcijų "
+"skaidymo ar jungimo. Akcijų jungimui (neigiamas skaidymas) naudokite "
+"neigiamą reikšmę akcijų paskirstymui. Jūs taip pat galite įvesti operacijos "
+"aprašą, ar priimti numatytąjį."
 
 #: ../src/gnome/glade/stocks.glade.h:7
 msgid ""
@@ -6813,6 +6818,8 @@ msgid ""
 "If you received a cash disbursement as a result of the stock split, enter "
 "the details of that payment here. Otherwise, just click `Forward'."
 msgstr ""
+"Jei gavote piniginę išmoką dėl akcijų skaidymo, įveskite mokėjimo "
+"informaciją čia. Kitu atveju tiesiog spauskite „Pirmyn“."
 
 #: ../src/gnome/glade/stocks.glade.h:9
 msgid ""
@@ -6827,19 +6834,19 @@ msgstr "_Nauja kaina:"
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid ""
 "Select the account for which you want to record a stock split or merger."
-msgstr ""
+msgstr "Pasirinkite sąskaitą kuriai norite įrašyti akcijų skaidymą ar jungimą."
 
 #: ../src/gnome/glade/stocks.glade.h:12
 msgid "Stock Account"
-msgstr ""
+msgstr "Akcijų sąskaita"
 
 #: ../src/gnome/glade/stocks.glade.h:13
 msgid "Stock Split"
-msgstr ""
+msgstr "Akcijų skaidymas"
 
 #: ../src/gnome/glade/stocks.glade.h:14
 msgid "Stock Split Details"
-msgstr ""
+msgstr "Akcijų skaidymo išsami informacija"
 
 #: ../src/gnome/glade/stocks.glade.h:15
 msgid "This assistant will help you record a stock split or stock merger."
@@ -6898,9 +6905,8 @@ msgid "Click to change Tax Name and/or Tax Type"
 msgstr ""
 
 #: ../src/gnome/glade/tax.glade.h:11
-#, fuzzy
 msgid "Income Tax Information"
-msgstr "Mokesčių informacija"
+msgstr "Pajamų mokesčio informacija"
 
 #: ../src/gnome/glade/tax.glade.h:13
 msgid "Tax _Related"
@@ -7741,6 +7747,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:2320
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
+"Jūs negalite anuliuoti operacijos su suderintais ar apmokėtais skaidymais."
 
 #: ../src/gnome/gnc-plugin-page-register.c:2390
 #: ../src/gnome/gnc-split-reg.c:877
@@ -8246,13 +8253,12 @@ msgid "The default check printing font"
 msgstr "Numatytasis čekių spausdinimo šriftas"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:16
-#, fuzzy
 msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
 msgstr ""
-"Naudojamas numatytasis šriftas, kai spausdinami kvitai. Ši reikšmė nepaisys "
-"jokių kitų apibrėžtų šriftų aprašytoje kvito faile."
+"Numatytasis šriftas naudojimui, kai spausdinami čekiai. Ši reikšmė bus "
+"nustelbta visų šriftų nurodytų čekio aprašo faile."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:17
 msgid "This is the numerical identifier of the predefined date format to use."
@@ -8350,6 +8356,10 @@ msgid ""
 "only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and "
 "Liability accounts."
 msgstr ""
+"Prieš suderinant sąskaitą, kurioje imamos ar mokamos palūkanos, paraginti "
+"naudotoją įvesti operaciją palūkanų paėmimui ar išmokėjimui. Dabar įjungta "
+"tik banko, kredito, investicinių fondų, turto, gautinų sumų, mokėtinų sumų "
+"ar įsipareigojimų sąskaitoms."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:7
 #, fuzzy
@@ -8417,9 +8427,8 @@ msgid "Show \"Tip Of The Day\" at GnuCash start"
 msgstr "Rodyti „Dienos patarimus“ paleidus GnuCash"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:3
-#, fuzzy
 msgid "The next tip to show."
-msgstr "Rodyti sekantį patarimą."
+msgstr "Kitas rodytinas patarimas."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:1
 msgid "\"Enter\" key moves to bottom of register"
@@ -8427,10 +8436,9 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:2
 msgid "Accounts to reverse the balance"
-msgstr ""
+msgstr "Sąskaitos likučio ženklo pakeitimui"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:3
-#, fuzzy
 msgid "Allow file incompatibility with older versions."
 msgstr "Leisti failo nesuderinamumą su senesnėmis versijomis."
 
@@ -8444,7 +8452,7 @@ msgstr "Automatiškai įterpti dešimtainį skirtuką"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:6
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr ""
+msgstr "Automatiškai pakelti sąskaitų sąrašus ar veiksmus įvedimo metu"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:7
 #, fuzzy
@@ -8461,7 +8469,7 @@ msgstr "Spalvinti visas operacijos eilutes taip pat"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:10
 msgid "Color the register as specified by the system theme"
-msgstr ""
+msgstr "Spalvinti registrą kaip nurodyta sistemos temoje"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:11
 msgid "Compress the data file"
@@ -8469,17 +8477,15 @@ msgstr "Suspausti duomenų failą"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:12
 msgid "Create a new window for each new register"
-msgstr ""
+msgstr "Sukurti naują langą kiekvienam naujam registrui"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:13
-#, fuzzy
 msgid "Create a new window for each new report"
 msgstr "Sukurti naują langą kiekvienai naujai ataskaitai"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:14
-#, fuzzy
 msgid "Date format choice"
-msgstr "Pasirinktite datos formatą"
+msgstr "Datos formato pasirinkimas"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:15
 #: ../src/gnome-utils/glade/preferences.glade.h:59
@@ -8491,18 +8497,16 @@ msgstr ""
 "didžiausią mėnesių skaičių grįžimui laiku atgal, kai užbaigiamos datos."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:16
-#, fuzzy
 msgid "Default currency for new accounts"
-msgstr "Įprasta valiuta naujoms sąskaitoms"
+msgstr "Numatytoji valiuta naujoms sąskaitoms"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:17
-#, fuzzy
 msgid "Default currency for new reports"
-msgstr "Numatytoji valiuta naujose ataskaitose"
+msgstr "Numatytoji valiuta naujoms ataskaitoms"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:18
 msgid "Default view style for new register"
-msgstr ""
+msgstr "Numatytasis peržiūros stilius naujiems registrams"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:19
 msgid "Delete old log/backup files after this many days (0 = never)"
@@ -8515,12 +8519,10 @@ msgid "Display negative amounts in red"
 msgstr "Rodyti neigiamas sumas raudonai"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:21
-#, fuzzy
 msgid "Enables Euro support"
-msgstr "Įjungti Euro palaikymą"
+msgstr "Įjungia Euro palaikymą"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:22
-#, fuzzy
 msgid "Enables additional support for the European Union EURO currency."
 msgstr "Įjungti papildomą Europos sąjungos EURO valiutos palaikymą."
 
@@ -8530,7 +8532,7 @@ msgstr "Įjungia failų suspaudimą, kai įrašinėjamas duomenų failas."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:24
 msgid "How to interpret dates without a year"
-msgstr ""
+msgstr "Kaip interpretuoti datas be metų"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:25
 msgid ""
@@ -8584,6 +8586,8 @@ msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
 msgstr ""
+"Jei aktyvu, kiekvienas naujas registras bus atvertas naujame lange. Kitaip "
+"naujas registras bus atvertas pagrindinio lango kortelėje."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
 msgid ""
@@ -8644,6 +8648,7 @@ msgstr "Didžiausias stulpelių skaičius grafike"
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
 msgid "Move to Transfer field when memorised transaction auto filled"
 msgstr ""
+"Pereiti į pervedimo lauką, kai įsiminta operacija automatiškai užpildoma"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:43
 msgid "Number of automatic decimal places"
@@ -8651,7 +8656,7 @@ msgstr "Automatinių dešimtainių skilčių skaičius"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:44
 msgid "Only display leaf account names."
-msgstr ""
+msgstr "Rodyti tik žemiausiojo lygio sąskaitų pavadinimus."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:45
 msgid "Position of the notebook tabs"
@@ -8691,6 +8696,10 @@ msgid ""
 "including the path in the account tree. Activating this option implies that "
 "you use unique leaf names."
 msgstr ""
+"Rodyti tik žemiausiojo lygio sąskaitų pavadinimus registre ir sąskaitų "
+"pasirinkimo iškylančiame meniu. Numatytoji elgsena yra rodyti visą "
+"pavadinimą, įtraukiant kelią sąskaitų medyje. Šio nustatymo įjungimas "
+"numano, kad naudojate unikalius žemiausiojo lygio pavadinimus."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:53
 msgid "Show splash screen"
@@ -8764,6 +8773,12 @@ msgid ""
 "status of the account. The setting \"none\" doesn't reverse the sign on any "
 "balances."
 msgstr ""
+"Šis nustatymas leidžia kai kurioms sąskaitoms pakeisti jų likučio ženklą iš "
+"teigiamo į neigiamą ar atvirkščiai. Nustatymas „income_expense“ yra "
+"naudotojams, kurie mėgsta matyti neigiamas sąnaudas ir teigiamas pajamas. "
+"Nustatymas „credit“ yra naudotojams, kurie nori, kad likučiai atvaizduotų "
+"sąskaitos debeto/kredito būseną. Nustatymas „none“ nepakeičia jokio likučio "
+"ženklo."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
 msgid ""
@@ -8802,6 +8817,10 @@ msgid ""
 "the user's locale setting. If set to \"other\", GnuCash will use the setting "
 "specified by the currency_other key."
 msgstr ""
+"Ši nuostata kontroliuoja numatytosios valiutos naujoms sąskaitoms šaltinį. "
+"Jei nustatyta „locale“, tada GnuCash gaus numatytąją valiutą iš naudotojo "
+"lokalės nuostatos. Jei nustatyta „other“, GnuCash naudos nuostatą, nurodytą "
+"raktu „currency_other“."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:69
 msgid ""
@@ -8810,6 +8829,10 @@ msgid ""
 "character, or any of the following strings: \"colon\" \"slash\", \"backslash"
 "\", \"dash\" and \"period\"."
 msgstr ""
+"Šis nustatymas nustato simbolį, kuris bus naudojamas tarp sąskaitos "
+"pavadinimo komponentų. Galimos reikšmės yra bet koks unikodinis simbolis, "
+"išskyrus raides ir skaitmenis, ar bet kuri iš šių eilučių: „colon“, „slash“, "
+"backslash“, „dash“ ir „period“."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:70
 msgid ""
@@ -9679,7 +9702,7 @@ msgstr "Pasirinkti visas pasirinktos sąskaitos antrines sąskaitas"
 #: ../src/gnome-utils/dialog-options.c:952
 #: ../src/gnome-utils/dialog-options.c:1087
 msgid "Select Default"
-msgstr "Pasirinkti numatytasias"
+msgstr "Pasirinkti numatytąsias"
 
 #: ../src/gnome-utils/dialog-options.c:954
 msgid "Select the default account selection."
@@ -9740,7 +9763,7 @@ msgstr "Pasirinkite atvaizdžio failą."
 #: ../src/gnome-utils/dialog-preferences.c:144
 #, c-format
 msgid "Income%sSalary%sTaxable"
-msgstr "Pajamos%sAtlyginimas%sApmokestinamos"
+msgstr "Pajamos%sAtlyginimas%sApmokestinamas"
 
 #: ../src/gnome-utils/dialog-transfer.c:496
 msgid "Show the income and expense accounts"
@@ -10667,7 +10690,7 @@ msgstr "<b>Suderinimas</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:23
 msgid "<b>Reverse Balanced Accounts</b>"
-msgstr ""
+msgstr "<b>Atvirkštinio įrašo sąskaitos</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:24
 msgid "<b>Search Dialog</b>"
@@ -10734,6 +10757,8 @@ msgid ""
 "Alternate the primary and secondary colors by transaction instead of by "
 "alternating by row."
 msgstr ""
+"Keisti pirminę ir antrinę spalvas pagal operaciją vietoj keitimo pagal "
+"eilutę."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:40
 msgid ""
@@ -10753,11 +10778,11 @@ msgstr "Automatinio _išsaugojimo intervalas:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:43
 msgid "Automatic _interest transfer"
-msgstr ""
+msgstr "Automatinis _palūkanų pervedimas"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:44
 msgid "Automatic credit card _payment"
-msgstr ""
+msgstr "Automatinis _kreditinės kortelės mokėjimas"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:45
 msgid ""
@@ -10777,30 +10802,27 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:47
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr ""
+msgstr "Automatiškai pakelti sąskaitų sąrašus ar veiksmus įvedimo metu."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:48
-#, fuzzy
 msgid "B_ottom"
-msgstr "_Apačia"
+msgstr "_Apačioje"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:49
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr ""
+msgstr "Po tikrąja data spausdinti tos datos formatą 8 punktų šriftu."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:50
-#, fuzzy
 msgid "Bottom"
-msgstr "Apačia"
+msgstr "Apačioje"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:51
 msgid "Bring the most _recent tab to the front"
 msgstr "Perkelti _naujausią kortelę į priekį"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:52
-#, fuzzy
 msgid "C_redit accounts"
-msgstr "_Kredito sąskaitos"
+msgstr "_Kreditinės sąskaitos"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:53
 msgid "Ch_oose:"
@@ -10812,7 +10834,7 @@ msgstr "Simbolis:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:55
 msgid "Check cleared _transactions"
-msgstr "Pažymėt apmokėtas _operacijas"
+msgstr "Pažymėti apmokėtas _operacijas"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:56
 msgid "Com_press files"
@@ -10854,19 +10876,19 @@ msgstr "Rodyti _neigiamas sumas raudonai"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:67
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr ""
+msgstr "Rodyti korteles lango apačioje."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:68
 msgid "Display the notebook tabs at the left of the window."
-msgstr ""
+msgstr "Rodyti korteles lango kairėje."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:69
 msgid "Display the notebook tabs at the right of the window."
-msgstr ""
+msgstr "Rodyti korteles lango dešinėje."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:70
 msgid "Display the notebook tabs at the top of the window."
-msgstr ""
+msgstr "Rodyti korteles lango viršuje."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:71
 msgid "Display the summary bar at the bottom of the page."
@@ -10902,11 +10924,11 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:77
 msgid "Don't sign reverse any accounts."
-msgstr ""
+msgstr "Nekeisti jokių sąskaitų ženklo."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid "Double _mode colors alternate with transactions"
-msgstr ""
+msgstr "Dvigubos eilutės _veiksenoje spalvos keičiasi operacijoms"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:79
 msgid "Draw _vertical lines between columns"
@@ -10950,6 +10972,8 @@ msgid ""
 "If checked, each register will be opened in its own top level window.  If "
 "clear, the register will be opened in the current window."
 msgstr ""
+"Jei pažymėta, kiekvienas registras bus atvertas naujame aukščiausiojo lygio "
+"lange. Jei nepažymėta, registras bus atvertas dabartiniame lange."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:91
 msgid ""
@@ -10974,6 +10998,10 @@ msgid ""
 "display the full name, including the path in the account tree. Checking this "
 "option implies that you use unique leaf names."
 msgstr ""
+"Jei pažymėta, tik žemiausiojo lygio sąskaitų pavadinimai yra rodomi registre "
+"ir sąskaitų pasirinkimo iškylančiame meniu. Numatytoji elgsena yra rodyti "
+"visą pavadinimą, įtraukiant kelią sąskaitų medyje. Šio nustatymo įjungimas "
+"numano, kad naudojate unikalius žemiausiojo lygio pavadinimus."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:94
 msgid ""
@@ -10981,12 +11009,17 @@ msgid ""
 "the bottom of the register.  If clear, pressing the 'Enter' key will move "
 "down one row."
 msgstr ""
+"Jei pažymėta, paspaudę klavišą „Įvesti“ pereisite į tuščią operaciją "
+"registro apačioje. Jei nepažymėta, paspaudę klavišą „Įvesti“ pereisite viena "
+"eilute žemyn."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:95
 msgid ""
 "If checked, the system color theme will be applied to register windows.  If "
 "clear, the original GnuCash register colors will be used."
 msgstr ""
+"Jei pažymėta, sistemos spalvų tema bus pritaikyta registrų langams. Jei "
+"nepažymėta, bus naudojamos originalios GnuCash registrų spalvos."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:96
 msgid ""
@@ -11015,6 +11048,7 @@ msgstr "_Lokalė:"
 #: ../src/gnome-utils/glade/preferences.glade.h:102
 msgid "Move to Transfer field when memorised transaction auto filled."
 msgstr ""
+"Pereiti į pervedimo lauką, kai įsiminta operacija automatiškai užpildoma."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:104
 msgid "New search _limit:"
@@ -11043,14 +11077,13 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:109
 msgid "Print '***' before and after each text field on the check."
-msgstr ""
+msgstr "Spausdinti „***“ prieš ir po kiekvienu tekstiniu lauku čekyje."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:110
 msgid "Print _blocking chars"
-msgstr ""
+msgstr "Spausdinti _blokuojančius simbolius"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:111
-#, fuzzy
 msgid "Print _date format"
 msgstr "Spausdinti _datos formatą"
 
@@ -11072,7 +11105,7 @@ msgstr "Registrų nuostatos"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:118
 msgid "Register opens in a new _window"
-msgstr ""
+msgstr "Registras atveriamas naujame _lange"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:119
 msgid "Report opens in a new _window"
@@ -11099,6 +11132,7 @@ msgstr ""
 #: ../src/gnome-utils/glade/preferences.glade.h:124
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr ""
+"Rodyti visas operacijas viena eilute. (Dviem dviejų eilučių veiksenoje.)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:125
 msgid "Show auto-save confirmation _question"
@@ -11125,12 +11159,16 @@ msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
 msgstr ""
+"Rodyti tiek operacijų registre. Nulinė reikšmė reiškia rodyti visas "
+"operacijas."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:131
 msgid ""
 "Show two lines of information for each transaction instead of one.  Does not "
 "affect expanded transactions."
 msgstr ""
+"Rodyti dvi informacijos eilutes kiekvienai operacijai vietoje vienos. "
+"Neįtakoja išskleistų operacijų."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:132
 msgid "Show vertical borders on the cells."
@@ -11138,17 +11176,19 @@ msgstr "Rodyti vertikalius langelių rėmelius."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:133
 msgid "Sign reverse balances on income and expense accounts."
-msgstr ""
+msgstr "Pakeisti pajamų ir sąnaudų sąskaitų likučių ženklą."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:134
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
 msgstr ""
+"Pakeisti likučių ženklą šiems: kreditinė kortelė, mokėtinos sumos, "
+"įsipareigojimas, nuosavybė ir pajamos."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:135
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr ""
+msgstr "Tabuliavimo tvarka į_traukia pervedimo ar įsimintas operacijas"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid "Text _below icons"
@@ -11161,11 +11201,13 @@ msgid ""
 "the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and "
 "\"period\"."
 msgstr ""
+"Simbolis, kuris bus naudojamas tarp sąskaitos pavadinimo komponentų. Tinkama "
+"reikšmė yra bet koks vienas simbolis, išskyrus raides ir skaitmenis, ar bet "
+"kuri iš šių eilučių: „colon“, „slash“, backslash“, „dash“ ir „period“."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:139
-#, fuzzy
 msgid "To_p"
-msgstr "_Viršus"
+msgstr "_Viršuje"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:142
 msgid "US Dollars (USD)"
@@ -11192,9 +11234,8 @@ msgid "Use only 'debit' and 'credit' instead of informal synonyms"
 msgstr "Naudoti tik „debetas“ ir „kreditas“ vietoje neoficialių sinonimų"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:148
-#, fuzzy
 msgid "Use s_ystem default"
-msgstr "Naudoti sistemos numatytuosius nustatymus"
+msgstr "Naudoti sistemos numatytąjį"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:149
 msgid "Use the date format common in continental Europe."
@@ -11275,9 +11316,8 @@ msgid "_Absolute:"
 msgstr "_Аbsoliuti:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:166
-#, fuzzy
 msgid "_Auto-raise lists"
-msgstr "_Аutomatiškai didėjantys sąrašai"
+msgstr "_Automatiškai pakylantys sąrašai"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:167
 msgid "_Auto-split ledger"
@@ -11296,9 +11336,8 @@ msgid "_Decimal places:"
 msgstr "_Dešimtainės skiltys:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:171
-#, fuzzy
 msgid "_Double line mode"
-msgstr "_Dviejų eilučių režimas"
+msgstr "_Dviejų eilučių veiksena"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:172
 msgid "_Europe:"
@@ -11318,16 +11357,15 @@ msgstr "_Pajamos ir sąnaudos"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:176
 msgid "_Left"
-msgstr "_Kairė"
+msgstr "_Kairėje"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:177
-#, fuzzy
 msgid "_None"
 msgstr "_Nėra"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:178
 msgid "_Only display leaf account names"
-msgstr ""
+msgstr "Rodyti tik _žemiausiojo lygio sąskaitų vardus"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:179
 msgid "_Relative:"
@@ -11339,7 +11377,7 @@ msgstr "_Išlaikyti žurnalo failus:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:181
 msgid "_Right"
-msgstr "_Dešinė"
+msgstr "_Dešinėje"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:182
 msgid "_Save window size and position"
@@ -11354,9 +11392,8 @@ msgid "_US:"
 msgstr "_JAV:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:185
-#, fuzzy
 msgid "_Use system theme colors"
-msgstr "_Naudoti sistemos temų spalvas"
+msgstr "_Naudoti sistemos temos spalvas"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:186
 msgid "_Width:"
@@ -13129,12 +13166,10 @@ msgstr ""
 "ryšio dabar."
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:69
-#, fuzzy
 msgid "Use Transaction Template"
-msgstr "Naudoti pervedimo šabloną"
+msgstr "Naudoti operacijos šabloną"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:70
-#, fuzzy
 msgid "_Close log window when finished"
 msgstr "_Užverti žurnalo langą pabaigus"
 
@@ -13152,11 +13187,11 @@ msgstr "_Dabar"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:74
 msgid "_Start AqBanking Wizard"
-msgstr ""
+msgstr "_Pradėti AqBanking vediklį"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:75
 msgid "_Verbose debug messages"
-msgstr ""
+msgstr "_Išsamūs derinimo pranešimai"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:76
 msgid "at Bank"
@@ -13915,6 +13950,8 @@ msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
 msgstr ""
+"Operacija, kurios geriausio atitikmens rezultatas yra žalioje zonoje (virš "
+"ar lygus automatinio APMOKĖJIMO slenksčiui) bus APMOKĖTA."
 
 #: ../src/import-export/generic-import.glade.h:9
 msgid ""
@@ -13922,14 +13959,17 @@ msgid ""
 "threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
 "default."
 msgstr ""
+"Operacija, kurios geriausio atitikmens rezultatas yra raudonoje zonoje (virš "
+"rodymo slenksčio, bet žemiau ar lygus automatinio PRIDĖJIMO slenksčiui) bus "
+"PRIDĖTA."
 
 #: ../src/import-export/generic-import.glade.h:11
 msgid "Auto-_add threshold"
-msgstr ""
+msgstr "Automatinio pri_dėjimo slenkstis"
 
 #: ../src/import-export/generic-import.glade.h:12
 msgid "Auto-c_lear threshold"
-msgstr ""
+msgstr "Automatinio ap_mokėjimo slenkstis"
 
 #: ../src/import-export/generic-import.glade.h:13
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:2
@@ -13942,7 +13982,7 @@ msgstr "Pasirinkite formatą"
 
 #: ../src/import-export/generic-import.glade.h:15
 msgid "Commercial ATM _fees threshold"
-msgstr ""
+msgstr "_Komercinių bankomatų mokesčių slenkstis"
 
 #: ../src/import-export/generic-import.glade.h:18
 msgid ""
@@ -13953,7 +13993,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:20
 msgid "Enable skip transaction action"
-msgstr ""
+msgstr "Įjungti operacijų praleidimo veiksmą"
 
 #: ../src/import-export/generic-import.glade.h:21
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
@@ -13962,6 +14002,10 @@ msgid ""
 "whose best match's score is in the yellow zone (above the Auto-ADD threshold "
 "but below the Auto-CLEAR threshold) will be skipped by default."
 msgstr ""
+"Įjungti veiksmą PRALEISTI operacijų atitikimo mechanizme. Jei įjungta, "
+"operacija, kurios geriausio atitikimo rezultatas yra geltonoje zonoje (virš "
+"automatinio-PRIDĖTI slenksčio, bet žemiau automatinio-APMOKĖTI slenksčio) "
+"bus praleista."
 
 #: ../src/import-export/generic-import.glade.h:22
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
@@ -13972,10 +14016,15 @@ msgid ""
 "transaction will cause the existing transaction to be updated and cleared by "
 "default."
 msgstr ""
+"Įjungti veiksmą ATNAUJINTI IR SUDERINTI operacijų atitikimo mechanizme. Jei "
+"įjungta, operacija, kurios geriausio atitikimo rezultatas yra virš "
+"automatinio-APMOKĖTI slenksčio ir kuri turi kitokią datą ar sumą, nei "
+"atitinkanti egzistuojanti operacija, atnaujins ir apmokės egzistuojančią "
+"operaciją."
 
 #: ../src/import-export/generic-import.glade.h:23
 msgid "Enable update match action"
-msgstr ""
+msgstr "Įjungti atitikimo atnaujinimo veiksmą"
 
 #: ../src/import-export/generic-import.glade.h:24
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:9
@@ -13984,6 +14033,9 @@ msgid ""
 "is encountered during import. Otherwise the user will be asked what to do "
 "with each unknown commodity."
 msgstr ""
+"Įjungia automatinį naujų prekių sukūrimą, jei sutinkama nežinoma prekė "
+"importo metu. Kitu atveju naudotojo bus paklausta, ką daryti su kiekviena "
+"nežinoma preke."
 
 #: ../src/import-export/generic-import.glade.h:25
 msgid ""
@@ -14004,9 +14056,8 @@ msgid "Generic import transaction matcher"
 msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:33
-#, fuzzy
 msgid "Green"
-msgstr "Žalias"
+msgstr "Žalia"
 
 #: ../src/import-export/generic-import.glade.h:34
 msgid "Imported transaction's first split:"
@@ -14023,6 +14074,14 @@ msgid ""
 "fee in your area (in units of your local currency), so the transaction will "
 "be recognised as a match."
 msgstr ""
+"Kai kuriose vietose komerciniai bankomatai (nepriklausantys finansinei "
+"institucijai) yra įtaisyti tokiose vietose, kaip parduotuvės. Šie bankomatai "
+"prideda savo mokestį tiesiai prie sumos, vietoj to, kad jis būtų parodytas "
+"atskira operacija ar jūsų mėnesiniuose bankininkystės mokesčiuose. "
+"Pavyzdžiui, jūs išimate 100 Lt, o nuo sąskaitos yra nurašoma 101,50 Lt ir "
+"kiti mokesčiai. Jei rankiniu būdu įvesite 100 Lt, sumos nesutaps. Jūs "
+"turėtumėte nustatyti šią reikšmę į didžiausią galimą tokį mokestį jūsų "
+"vietovėje (vietine valiuta), kad operacija būtų atpažinta kaip atitikmuo."
 
 #: ../src/import-export/generic-import.glade.h:36
 msgid "List of downloaded transactions (source split shown):"
@@ -14030,7 +14089,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:37
 msgid "Match _display threshold"
-msgstr ""
+msgstr "Atitikimo _rodymo slenkstis"
 
 #: ../src/import-export/generic-import.glade.h:39
 msgid "Online account ID here..."
@@ -14049,9 +14108,8 @@ msgid "Potential splits matching the selected transaction: "
 msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:44
-#, fuzzy
 msgid "Red"
-msgstr "Raudonas"
+msgstr "Raudona"
 
 #: ../src/import-export/generic-import.glade.h:45
 msgid "Select \"A\" to add the transaction as new."
@@ -14078,6 +14136,8 @@ msgid ""
 "The minimum score a potential match must have to be displayed in the match "
 "list."
 msgstr ""
+"Mažiausias rezultatas, kurį privalo turėti potencialus atitikimas, kad būtų "
+"parodytas atitikimų sąraše."
 
 #: ../src/import-export/generic-import.glade.h:52
 msgid ""
@@ -14112,9 +14172,8 @@ msgstr ""
 "egzistuojančiomis sąskaitomis."
 
 #: ../src/import-export/generic-import.glade.h:58
-#, fuzzy
 msgid "Yellow"
-msgstr "Geltonas"
+msgstr "Geltona"
 
 #. Numeric formats
 #: ../src/import-export/gnc-import-format-gnome.c:106
@@ -14906,7 +14965,7 @@ msgstr "_Pasirinkti..."
 
 #: ../src/import-export/qif-import/qif.glade.h:90
 msgid "_Show documentation"
-msgstr "_Rodyti dokumentaciją"
+msgstr "Rodyti d_okumentaciją"
 
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:1
 msgid "Default QIF transaction status"
@@ -14914,7 +14973,7 @@ msgstr "Numatytoji QIF operacijos būsena"
 
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:2
 msgid "Default status for QIF transaction when not specified in QIF file."
-msgstr ""
+msgstr "Numatytoji QIF operacijų būsena, kai nenurodyta QIF faile."
 
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:3
 msgid "Show documentation"
@@ -14922,19 +14981,19 @@ msgstr "Rodyti dokumentaciją"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:1
 msgid "Add matching transactions below this score"
-msgstr ""
+msgstr "Pridėti atitinkančias operacijas žemiau šio rezultato"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:3
 msgid "Clear matching transactions above this score"
-msgstr ""
+msgstr "Apmokėti atitinkančias operacijas aukščiau šio rezultato"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:4
 msgid "Enable SKIP transaction action"
-msgstr ""
+msgstr "Įjungti operacijų PRALEIDIMO veiksmą"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:5
 msgid "Enable UPDATE match action"
-msgstr ""
+msgstr "Įjungti atitikimo ATNAUJINIMO veiksmą"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
 msgid ""
@@ -14952,7 +15011,7 @@ msgstr ""
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:11
 msgid "Minimum score to be displayed"
-msgstr ""
+msgstr "Mažiausias rezultatas rodymui"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
 msgid ""
@@ -14966,6 +15025,16 @@ msgid ""
 "whatever is the maximum such fee in your area (in units of your local "
 "currency), so the transaction will be recognised as a match."
 msgstr ""
+"Šis laukas nurodo papildomą mokestį į kurį yra atsižvelgiama sutapdinant "
+"importuotas operacijas. Kai kuriose vietose komerciniai bankomatai "
+"(nepriklausantys finansinei institucijai) yra įtaisyti tokiose vietose, kaip "
+"parduotuvės. Šie bankomatai prideda savo mokestį tiesiai prie sumos, vietoj "
+"to, kad jis būtų parodytas atskira operacija ar jūsų mėnesiniuose "
+"bankininkystės mokesčiuose. Pavyzdžiui, jūs išimate 100 Lt, o nuo sąskaitos "
+"yra nurašoma 101,50 Lt ir kiti mokesčiai. Jei rankiniu būdu įvesite 100 Lt, "
+"sumos nesutaps. Jūs turėtumėte nustatyti šią reikšmę į didžiausią galimą "
+"tokį mokestį jūsų vietovėje (vietine valiuta), kad operacija būtų atpažinta "
+"kaip atitikmuo."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
 msgid ""
@@ -15500,12 +15569,11 @@ msgid "sample:(x + 0.33 * y + (x+y) )"
 msgstr "sample:(x + 0.33 * y + (x+y) )"
 
 #: ../src/register/ledger-core/split-register-load.c:335
-#, fuzzy
 msgid ""
 "Could not determine the account currency.  Using the default currency "
 "provided by your system."
 msgstr ""
-"Neįmanoma nustatyti sąskaitos valiutą. Naudojama jūsų sistemos numatytoji "
+"Nepavyko nustatyti sąskaitos valiutos. Naudojama jūsų sistemos numatytoji "
 "valiuta."
 
 #: ../src/register/ledger-core/split-register-model.c:214
@@ -15576,9 +15644,8 @@ msgid "Enter notes for the transaction"
 msgstr "Įveskite pastabas operacijai"
 
 #: ../src/register/ledger-core/split-register-model.c:1045
-#, fuzzy
 msgid "Reason the transaction was voided"
-msgstr "Panaikinto pervedimo priežastis"
+msgstr "Operacijos anuliavimo priežastis"
 
 #: ../src/register/ledger-core/split-register-model.c:1137
 msgid "Enter the type of transaction, or choose one from the list"
@@ -15612,6 +15679,8 @@ msgstr ""
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
+"Ši operacija yra akcijų skaidymas; spauskite mygtuką „Skaidymas“ detalesnei "
+"informacijai pamatyti"
 
 #: ../src/register/ledger-core/split-register-model.c:1889
 #, c-format
@@ -17157,9 +17226,8 @@ msgstr "Rodyti nulinio likučio elementus"
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:622 ../intl-scm/guile-strings.c:1226
 #: ../intl-scm/guile-strings.c:2098 ../intl-scm/guile-strings.c:2642
-#, fuzzy
 msgid "Due or Post Date"
-msgstr "Perkėlimo data"
+msgstr "Termino ar registravimo data"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/gnucash/report/aging.scm
@@ -17267,7 +17335,7 @@ msgstr "Įkeliami duomenys..."
 #: ../intl-scm/guile-strings.c:658 ../intl-scm/guile-strings.c:1262
 #: ../intl-scm/guile-strings.c:2188 ../intl-scm/guile-strings.c:2732
 msgid "Due date is leading"
-msgstr ""
+msgstr "Termino data yra priekyje"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/gnucash/report/aging.scm
@@ -17995,9 +18063,8 @@ msgstr "Rodyti mano įmonės ID?"
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/gnucash/report/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:902 ../intl-scm/guile-strings.c:1506
-#, fuzzy
 msgid "Display due date?"
-msgstr "Rodyti paskolos datą?"
+msgstr "Rodyti termino datą?"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -18328,9 +18395,8 @@ msgstr "Iš viso (laikotarpis)"
 #: ../intl-scm/guile-strings.c:1962 ../intl-scm/guile-strings.c:2308
 #: ../intl-scm/guile-strings.c:2348 ../intl-scm/guile-strings.c:2506
 #: ../intl-scm/guile-strings.c:2852 ../intl-scm/guile-strings.c:2892
-#, fuzzy
 msgid "Amount Due"
-msgstr "Paskolos suma"
+msgstr "Priklausanti suma"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -18546,9 +18612,8 @@ msgstr "Iš viso kredito"
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:2020 ../intl-scm/guile-strings.c:2150
 #: ../intl-scm/guile-strings.c:2564 ../intl-scm/guile-strings.c:2694
-#, fuzzy
 msgid "Total Due"
-msgstr "Iš viso skolinga"
+msgstr "Visa priklausanti suma"
 
 #. src/report/business-reports/gnucash/report/job-report.scm
 #. src/report/business-reports/job-report.scm
@@ -23276,9 +23341,8 @@ msgstr "Filtro tipas"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4952 ../intl-scm/guile-strings.c:6308
 #: ../intl-scm/guile-strings.c:6968 ../intl-scm/guile-strings.c:8118
-#, fuzzy
 msgid "Void Transactions"
-msgstr "Panaikinti pervedimus?"
+msgstr "Anuliuotos operacijos"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
@@ -24082,35 +24146,31 @@ msgstr ""
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7128 ../intl-scm/guile-strings.c:8278
 msgid "How to handle void transactions"
-msgstr ""
+msgstr "Kaip apdoroti anuliuotas operacijas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7130 ../intl-scm/guile-strings.c:8280
-#, fuzzy
 msgid "Non-void only"
-msgstr "Tik nepanaikintus"
+msgstr "Tik neanuliuotas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7132 ../intl-scm/guile-strings.c:8282
-#, fuzzy
 msgid "Show only non-voided transactions"
-msgstr "Rodyti tik nepanaikintus pervedimus"
+msgstr "Rodyti tik neanuliuotas operacijas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7134 ../intl-scm/guile-strings.c:8284
-#, fuzzy
 msgid "Void only"
-msgstr "Тik panaikintus"
+msgstr "Tik anuliuotas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7136 ../intl-scm/guile-strings.c:8286
-#, fuzzy
 msgid "Show only voided transactions"
-msgstr "Rodyti tik panaikintus pervedimus"
+msgstr "Rodyti tik anuliuotas operacijas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -24123,7 +24183,7 @@ msgstr "Abu"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7140 ../intl-scm/guile-strings.c:8290
 msgid "Show both (and include void transactions in totals)"
-msgstr ""
+msgstr "Rodyti abi (ir įtraukti anuliuotas operacijas į bendrą sumą)"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -24330,7 +24390,7 @@ msgstr "Suma nerodoma"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7334 ../intl-scm/guile-strings.c:8484
 msgid "Reverse amount display for certain account types"
-msgstr ""
+msgstr "Pakeisti sumų rodymą kai kuriems sąskaitų tipams"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -24348,14 +24408,13 @@ msgstr "Pajamos ir sąnaudos"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7342 ../intl-scm/guile-strings.c:8492
 msgid "Reverse amount display for Income and Expense Accounts"
-msgstr ""
+msgstr "Pakeisti sumų rodymą pajamų ir sąnaudų sąskaitoms"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7344 ../intl-scm/guile-strings.c:8494
-#, fuzzy
 msgid "Credit Accounts"
-msgstr "Keditinės sąskaitos"
+msgstr "Kreditinės sąskaitos"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -24364,6 +24423,8 @@ msgid ""
 "Reverse amount display for Liability, Payable, Equity, Credit Card, and "
 "Income accounts"
 msgstr ""
+"Pakeisti sumų rodymą įsipareigojimų, mokėtinų sumų, nuosavybės, kreditinių "
+"kortelių ir pajamų sąskaitoms"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
