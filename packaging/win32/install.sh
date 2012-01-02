@@ -83,6 +83,7 @@ add_step inst_gnome
 add_step inst_guile
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_svn
+ add_step inst_git
 fi
 add_step inst_gnutls
 add_step inst_libxslt

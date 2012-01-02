@@ -251,6 +251,20 @@ function inst_unzip() {
     fi
 }
 
+function inst_git() {
+    setup Git
+    _GIT_UDIR=`unix_path $GIT_DIR`
+    add_to_env $_GIT_UDIR/bin PATH
+    if quiet $_GIT_UDIR/bin/git --help || quiet git --help
+    then
+        echo "git already installed in $_GIT_UDIR.  skipping."
+    else
+        smart_wget $GIT_URL $DOWNLOAD_DIR
+        $LAST_FILE //SP- //SILENT //DIR="$GIT_DIR"
+        quiet git --help || die "git unavailable"
+    fi
+}
+
 # Functions before this point are basic build infrastructure functions or else they get pieces needed to build
 # gnucash but which are not part of the final product.  Functions after this point are for components of the
 # final build.  Please leave in alphabetical order so they are easier to find.

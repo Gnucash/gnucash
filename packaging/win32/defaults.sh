@@ -353,6 +353,9 @@ set_default ICU4C_PATCH `pwd`/icu-crossmingw.patch
 set_default SVN_URL "http://subversion.tigris.org/files/documents/15/47914/svn-win32-1.6.6.zip"
 set_default SVN_DIR $GLOBAL_DIR\\svn
 
+set_default GIT_URL "http://msysgit.googlecode.com/files/Git-1.7.8-preview20111206.exe"
+set_default GIT_DIR $GLOBAL_DIR\\git-1.7.8
+
 # OFX import in gnucash and ofx directconnect support for aqbanking
 set_default OPENSP_URL "$SF_MIRROR/openjade/OpenSP-1.5.2.tar.gz"
 set_default OPENSP_DIR $GLOBAL_DIR\\opensp
