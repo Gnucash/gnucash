@@ -75,7 +75,7 @@ Source: "@prefix@\..\dist\etc\@PACKAGE@\environment"; DestDir: "{app}\etc\@PACKA
 ; environment config file on-the-fly by the Pascal script below.
 Source: "@prefix@\..\dist\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
 Source: "@prefix@\..\dist\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
-Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main; AfterInstall: MyAfterInstallConfig()
+Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main;
 
 ;;; Not needed with AQBANKING5!
 ;; Additionally, we ship the Qt DLLs because the Online-Banking-Wizard
