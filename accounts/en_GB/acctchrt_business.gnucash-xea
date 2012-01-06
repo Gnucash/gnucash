@@ -7,7 +7,7 @@
      Full chart of accounts for a business.
     </gnc-act:short-description>
     <gnc-act:long-description>
-     Users running a business want to select this instead of other choices.  This includes all the accounts you need to run a most businesses, including Payables, Receivables, Income, and Expenses.
+     Users running a business want to select this instead of other choices.  This includes all the accounts you need to run most businesses, including Payables, Receivables, Income, and Expenses.
     </gnc-act:long-description>
     <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
