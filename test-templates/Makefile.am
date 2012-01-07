@@ -23,6 +23,8 @@ TEST_PROGS += test-foo
 
 noinst_PROGRAMS = ${TEST_PROGS}
 
+test_foodir = ${top_srcdir}/${MODULEPATH}/test
+
 #Program files for tests go here. It's probably best to have one for
 #each file in the parent directory. Include
 #test_foo_support.c if you have one and aren't building the
@@ -44,6 +46,7 @@ test_foo_HEADERSS = \
 test_foo_LDADD = ${top_buildir}/${MODULEPATH}/libgnc_foo.la
 
 test_foo_CFLAGS = \
+	-DTESTPROG=test_foo \
 	${DEFAULT_INCLUDES} \
 	-I$(top_srcdir)/${MODULEPATH}/ \
 	${GLIB_CFLAGS}

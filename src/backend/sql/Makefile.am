@@ -1,4 +1,6 @@
+include $(top_srcdir)/test-templates/Makefile.decl
 SUBDIRS = . test
+TEST_SUBDIRS = test
 
 # Now a shared library AND a GModule
 lib_LTLIBRARIES = libgnc-backend-sql.la
