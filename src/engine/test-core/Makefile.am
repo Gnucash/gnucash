@@ -1,4 +1,4 @@
-check_LTLIBRARIES=libgncmod-test-engine.la
+noinst_LTLIBRARIES=libgncmod-test-engine.la
 
 LDADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
