@@ -672,8 +672,8 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
         (void)gnc_sql_connection_rollback_transaction( be->conn );
 
         // Don't let unknown items still mark the book as being dirty
-        qof_instance_mark_clean(inst);
         qof_book_mark_saved( be->primary_book );
+        qof_instance_mark_clean(inst);
         LEAVE( "Rolled back - unknown object type" );
         return;
     }
@@ -689,8 +689,8 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 
     (void)gnc_sql_connection_commit_transaction( be->conn );
 
-    qof_instance_mark_clean(inst);
     qof_book_mark_saved( be->primary_book );
+    qof_instance_mark_clean(inst);
 
     LEAVE( "" );
 }
