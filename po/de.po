@@ -12,10 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-26 13:55+0100\n"
-"PO-Revision-Date: 2011-03-26 13:55+0100\n"
+"POT-Creation-Date: 2012-01-08 22:28+0100\n"
+"PO-Revision-Date: 2012-01-08 22:26+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
+"Language: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -580,6 +581,11 @@ msgstr ""
 "Ein oder mehrere Einträge beziehen sich auf Konten, deren Währung anders ist "
 "als die Rechnungswährung.  Für jeden der Einträge wird daher nach einem "
 "Umrechnungskurs gefragt."
+
+msgid "The post action was canceled because not all exchange rates were given."
+msgstr ""
+"Diese Buchung wurde abgebrochen, da nicht alle benötigten Wechselkurse "
+"vorliegen."
 
 msgid "Total:"
 msgstr "Summe:"
@@ -8890,11 +8896,18 @@ msgid ""
 "installing a different version of \"libdbi\".  Please see https://bugzilla."
 "gnome.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
-"Die Bibliothek »libdbi« auf Ihrem System ist fehlerhaft und kann große Zahlen "
-"nicht korrekt speichern.  Dadurch kann GnuCash keine SQL-Datenbank "
+"Die Bibliothek »libdbi« auf Ihrem System ist fehlerhaft und kann große "
+"Zahlen nicht korrekt speichern.  Dadurch kann GnuCash keine SQL-Datenbank "
 "benutzen.  GnuCash kann keine SQL-Datenbank öffnen oder dahin speichern, bis "
-"eine andere Version von »libdbi« installiert ist. Siehe auch https://bugzilla."
-"gnome.org/show_bug.cgi?id=611936 "
+"eine andere Version von »libdbi« installiert ist. Siehe auch https://"
+"bugzilla.gnome.org/show_bug.cgi?id=611936 "
+
+msgid ""
+"GnuCash could not complete a critical test for the presence of a bug in the "
+"\"libdbi\" library. This may be caused by a permissions misconfiguration of "
+"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"id=645216 for more information."
+msgstr ""
 
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
@@ -8911,6 +8924,16 @@ msgstr ""
 
 msgid "Continue _Without Saving"
 msgstr "Schließen _ohne zu speichern"
+
+msgid ""
+"This Dataset contains features not supported by this version of GnuCash.  "
+"You must use a newer version of GnuCash in order to support the following "
+"features:"
+msgstr ""
+"Diese Datei oder Datenbank benutzt neuere Features von GnuCash, die in "
+"dieser Version noch nicht vorhanden sind.  Sie brauchen eine neuere GnuCash "
+"Version, um die Datei lesen zu können.  Folgende neuere Features werden "
+"verwendet:"
 
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
@@ -12324,8 +12347,11 @@ msgstr "Stil_vorlagen"
 msgid "Edit report style sheets."
 msgstr "Stilvorlagen für Berichte bearbeiten."
 
-msgid "GnuCash Finance Management"
-msgstr "GnuCash Finanzmanager"
+msgid "Finance Management"
+msgstr "Finanzmanagement"
+
+msgid "GnuCash"
+msgstr "GnuCash"
 
 msgid "Manage your finances, accounts, and investments"
 msgstr "Verwaltung der Finanzen von Privatanwendern und Kleinbetrieben."
@@ -13139,6 +13165,7 @@ msgid "Show zero balance items"
 msgstr "Nullsalden anzeigen"
 
 #. src/report/business-reports/aging.scm
+#. src/report/business-reports/owner-report.scm
 msgid "Due or Post Date"
 msgstr "Fälligkeits- oder Buchungsdatum"
 
@@ -13148,8 +13175,8 @@ msgid ""
 "Transactions relating to '%s' contain more than one currency.  This report "
 "is not designed to cope with this possibility."
 msgstr ""
-"Die Buchungen betreffend »%s« enthalten mehr als eine Währung. Dieser Bericht "
-"ist für diese Möglichkeit nicht ausgelegt."
+"Die Buchungen betreffend »%s« enthalten mehr als eine Währung. Dieser "
+"Bericht ist für diese Möglichkeit nicht ausgelegt."
 
 #. src/report/business-reports/aging.scm
 msgid "Sort companies by"
@@ -13258,6 +13285,325 @@ msgid ""
 msgstr ""
 "Kein gültiges Konto gewählt.  Klicken Sie auf »Optionen«, um ein Konto zu "
 "wählen."
+
+#. src/report/business-reports/balsheet-eg.eguile.scm
+msgid "Assets Accounts"
+msgstr "Aktiva"
+
+#. src/report/business-reports/balsheet-eg.eguile.scm
+msgid "Liability Accounts"
+msgstr "Fremdkapital"
+
+#. src/report/business-reports/balsheet-eg.eguile.scm
+msgid "Equity Accounts"
+msgstr "Eigenkapital"
+
+#. src/report/business-reports/balsheet-eg.eguile.scm
+#. src/report/report-system/report-utilities.scm
+msgid "Trading Accounts"
+msgstr "Devisenhandel-Konten"
+
+#. src/report/business-reports/balsheet-eg.eguile.scm
+#. src/report/standard-reports/balance-sheet.scm
+msgid "Retained Losses"
+msgstr "Erwirtschafteter Verlust"
+
+#. src/report/business-reports/balsheet-eg.eguile.scm
+msgid "Total Equity, Trading, and Liabilities"
+msgstr "Summe Passiva und schwebendes Ergebnis"
+
+#. src/report/business-reports/balsheet-eg.eguile.scm
+msgid "Imbalance Amount"
+msgstr "Ausgleichsbetrag"
+
+#. src/report/business-reports/balsheet-eg.eguile.scm
+msgid "<strong>Exchange Rates</strong> used for this report"
+msgstr "Diesem Bericht zugrundeliegende<strong>Wechselkurse</strong>"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Balance Sheet (eguile)"
+msgstr "Bilanz (mit »eguile«)"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/equity-statement.scm
+#. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
+#. src/report/standard-reports/trial-balance.scm
+msgid "Report Title"
+msgstr "Berichtstitel"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/equity-statement.scm
+#. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
+#. src/report/standard-reports/trial-balance.scm
+msgid "Title for this report"
+msgstr "Titel des Berichts"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/balance-sheet.scm
+msgid "Balance Sheet Date"
+msgstr "Bilanzdatum"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "1- or 2-column report"
+msgstr "Ein- oder zweispaltig anzeigen"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid ""
+"The balance sheet can be displayed with either 1 or 2 columns.  'auto' means "
+"that the layout will be adjusted to fit the width of the page."
+msgstr ""
+"Die Bilanz kann in einer oder zwei Spalten dargestellt werden. 'Automatisch' "
+"bedeutet, daß das Layout an die Breite der Seite angepaßt wird."
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
+#. src/report/standard-reports/trial-balance.scm
+msgid "Levels of Subaccounts"
+msgstr "Verschachtelungstiefe Unterkonten"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
+#. src/report/standard-reports/trial-balance.scm
+msgid "Maximum number of levels in the account tree displayed"
+msgstr "Maximale Verschachtelungstiefe in der Kontenhierarchie"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/budget.scm
+#. src/report/standard-reports/income-statement.scm
+msgid "Flatten list to depth limit"
+msgstr "Baumstruktur ab Tiefenlimit flach darstellen"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/budget.scm
+#. src/report/standard-reports/income-statement.scm
+msgid "Displays accounts which exceed the depth limit at the depth limit"
+msgstr ""
+"Konten, die tiefer als das gegebene Tiefenlimit in der Baumstruktur stehen, "
+"am Tiefenlimit darstellen"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Exclude accounts with zero total balances"
+msgstr "Unterkonten ignorieren, die Kontostand Null haben"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid ""
+"Exclude non-top-level accounts with zero balance and no non-zero sub-accounts"
+msgstr ""
+"Untergeordnete Konten, die Kontostand Null haben, aber Unterkonten mit einem "
+"Kontostand ungleich Null, ausschließen."
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
+#. src/report/standard-reports/trial-balance.scm
+msgid "Display accounts as hyperlinks"
+msgstr "Kontonamen anklickbar anzeigen"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
+#. src/report/standard-reports/trial-balance.scm
+msgid "Shows each account in the table as a hyperlink to its register window"
+msgstr ""
+"Konto als klickbaren Hyperlink anzeigen, der beim Anklicken das Kontofenster "
+"öffnet"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Negative amount format"
+msgstr "Anzeigeformat für negative Beträge"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid ""
+"The formatting to use for negative amounts: with a leading sign, or "
+"enclosing brackets"
+msgstr "Format für negative Beträge: mit Vorzeichen oder eingeklammert"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Font family"
+msgstr "Schrifttypenfamilie"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Font definition in CSS font-family format"
+msgstr "Schrifttypendefinition im CSS-font-family-Format"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Font size"
+msgstr "Schriftgröße"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")"
+msgstr "Schriftgröße im CSS-font-size-Format, z.B. \"medium\" oder \"10pt\""
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/business-reports/taxinvoice.scm
+msgid "Template file"
+msgstr "Vorlagendatei"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid ""
+"The file name of the eguile template part of this report.  This file must be "
+"in your .gnucash directory, or else in its proper place within the GnuCash "
+"installation directories."
+msgstr ""
+"Der Dateiname der eguile-Vorlage für diesen Bericht. Die Datei muß sich in "
+"Ihrem .gnucash-Verzeichnis oder an ihrem angestammten Platz in den GnuCash-"
+"Installationsverzeichnissen befinden."
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/business-reports/taxinvoice.scm
+msgid "CSS stylesheet file"
+msgstr "CSS Stilvorlage"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid ""
+"The file name of the CSS stylesheet to use with this report.  If specified, "
+"this file should be in your .gnucash directory, or else in its proper place "
+"within the GnuCash installation directories."
+msgstr ""
+"Der Dateiname der CSS-Vorlage für diesen Bericht. Die Datei muß sich in "
+"Ihrem .gnucash-Verzeichnis oder an ihrem angestammten Platz in den GnuCash-"
+"Installationsverzeichnissen befinden."
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/business-reports/easy-invoice.scm
+#. src/report/business-reports/fancy-invoice.scm
+#. src/report/business-reports/invoice.scm
+msgid "Extra Notes"
+msgstr "Zusätzliche Bemerkungen"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/business-reports/taxinvoice.scm
+msgid "Notes added at end of invoice -- may contain HTML markup"
+msgstr "Zusätzlicher Text am Ende der Rechnung ─ darf HTML-Elemente enthalten"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/equity-statement.scm
+#. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
+#. src/report/standard-reports/trial-balance.scm
+msgid "Show Foreign Currencies"
+msgstr "Fremdwährungen anzeigen"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/equity-statement.scm
+#. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
+#. src/report/standard-reports/trial-balance.scm
+msgid "Display any foreign currency amount in an account"
+msgstr "Fremdwährungen in Konten anzeigen"
+
+#. src/report/business-reports/balsheet-eg.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/balance-sheet.scm
+#. src/report/standard-reports/budget-balance-sheet.scm
+#. src/report/standard-reports/budget-income-statement.scm
+#. src/report/standard-reports/equity-statement.scm
+#. src/report/standard-reports/income-statement.scm
+#. src/report/standard-reports/sx-summary.scm
+#. src/report/standard-reports/trial-balance.scm
+msgid "Commodities"
+msgstr "Währungen/Wertpapiere"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Auto"
+msgstr "automatisch"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Adjust the layout to fit the width of the screen or page"
+msgstr "Paßt das Layout an die Breite des Fensters oder der Seite an"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "One"
+msgstr "eine"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Display liabilities and equity below assets"
+msgstr ""
+"Zeigt die Passiva Eigenkapital und Verbindlichkeiten unter den Aktiva an"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Two"
+msgstr "zwei"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Display assets on the left, liabilities and equity on the right"
+msgstr "Stellt Aktiva links und Passiva rechts dar"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Sign"
+msgstr "Vorzeichen"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Prefix negative amounts with a minus sign, e.g. -$10.00"
+msgstr "Stelle negativen Beträgen ein Minuszeichen voran, z.B. -10,00 €"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Brackets"
+msgstr "Klammern"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Surround negative amounts with brackets, e.g. ($100.00)"
+msgstr "Klammere negative Beträge ein, z.B. (100,00 €)"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid ""
+"(Development version -- don't rely on the numbers on this report without "
+"double-checking them.<br>Change the 'Extra Notes' option to get rid of this "
+"message)"
+msgstr ""
+"(Testversion ─ verlassen Sie sich nicht auf die Zahlen in diesem Bericht "
+"ohne sie zu überprüfen.<br>Ändern Sie die 'Zusätzliche Anmerkungen'-Option, "
+"um diese Nachricht loszuwerden."
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Balance Sheet using eguile-gnc"
+msgstr "Bilanz (mit »eguile«)"
+
+#. src/report/business-reports/balsheet-eg.scm
+msgid "Display a balance sheet (using eguile template)"
+msgstr "Bilanz anzeigen (mit »eguile«-Vorlage)"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
@@ -13648,13 +13994,6 @@ msgid "Text"
 msgstr "Text"
 
 #. src/report/business-reports/easy-invoice.scm
-#. src/report/business-reports/fancy-invoice.scm
-#. src/report/business-reports/invoice.scm
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Extra Notes"
-msgstr "Zusätzliche Bemerkungen"
-
-#. src/report/business-reports/easy-invoice.scm
 msgid "Extra notes to put on the invoice (simple HTML is accepted)"
 msgstr ""
 "Zusätzliche Bemerkungen, die auf die Rechnung gedruckt werden sollen "
@@ -13733,8 +14072,8 @@ msgid ""
 "No valid invoice selected.  Click on the Options button and select the "
 "invoice to use."
 msgstr ""
-"Keine gültige Rechnung gewählt.  Klicken Sie auf »Optionen«, um eine Rechnung "
-"zu wählen."
+"Keine gültige Rechnung gewählt.  Klicken Sie auf »Optionen«, um eine "
+"Rechnung zu wählen."
 
 #. src/report/business-reports/easy-invoice.scm
 msgid "Easy Invoice"
@@ -13890,8 +14229,8 @@ msgstr "Auftragsbericht"
 msgid ""
 "No valid customer selected. Click on the Options button to select a customer."
 msgstr ""
-"Keine gültiger Kunde gewählt.  Klicken Sie auf »Optionen«, um einen Kunden zu "
-"wählen."
+"Keine gültiger Kunde gewählt.  Klicken Sie auf »Optionen«, um einen Kunden "
+"zu wählen."
 
 #. src/report/business-reports/owner-report.scm
 msgid ""
@@ -14002,16 +14341,6 @@ msgid "Report title"
 msgstr "Berichtstitel"
 
 #. src/report/business-reports/taxinvoice.scm
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Template file"
-msgstr "Vorlagendatei"
-
-#. src/report/business-reports/taxinvoice.scm
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "CSS stylesheet file"
-msgstr "CSS Stilvorlage"
-
-#. src/report/business-reports/taxinvoice.scm
 msgid "Heading font"
 msgstr "Schriftart Titel"
 
@@ -14108,11 +14437,6 @@ msgstr ""
 #. src/report/business-reports/taxinvoice.scm
 msgid "Payment received, thank you"
 msgstr "Vielen Dank für Ihre Zahlung."
-
-#. src/report/business-reports/taxinvoice.scm
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Notes added at end of invoice -- may contain HTML markup"
-msgstr "Zusätzlicher Text am Ende der Rechnung ─ darf HTML-Elemente enthalten"
 
 #. src/report/business-reports/taxinvoice.scm
 msgid "Display a customer invoice with tax columns (using eguile template)"
@@ -14935,6 +15259,7 @@ msgstr "Ihr Bericht »%s« wurde in die Konfigurationsdatei »%s« gespeichert."
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/net-linechart.scm
 msgid "Assets"
 msgstr "Aktiva"
 
@@ -14943,6 +15268,7 @@ msgstr "Aktiva"
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/net-linechart.scm
 msgid "Liabilities"
 msgstr "Fremdkapital"
 
@@ -14985,11 +15311,6 @@ msgstr "Verbindlichkeiten Konten"
 #. src/report/report-system/report-utilities.scm
 msgid "Credit Lines"
 msgstr "Kreditrahmen"
-
-#. src/report/report-system/report-utilities.scm
-#. src/report/standard-reports/balsheet-eg.eguile.scm
-msgid "Trading Accounts"
-msgstr "Devisenhandel-Konten"
 
 #. src/report/report-system/report-utilities.scm
 #, c-format
@@ -15041,6 +15362,7 @@ msgstr "Tortendiagramm der Verbindlichkeiten eines Zeitpunkts anzeigen"
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/net-linechart.scm
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -15055,6 +15377,7 @@ msgstr "Anfangsdatum"
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/net-linechart.scm
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/sx-summary.scm
 #. src/report/standard-reports/transaction.scm
@@ -15153,6 +15476,7 @@ msgstr "Wöchentlichen Durchschnitt anzeigen"
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/net-linechart.scm
 msgid "Report on these accounts, if chosen account level allows."
 msgstr ""
 "Diese Konten anzeigen, solange die Verschachtelungstiefe eingehalten wird."
@@ -15213,30 +15537,6 @@ msgstr "Kontenübersicht"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/equity-statement.scm
-#. src/report/standard-reports/income-statement.scm
-#. src/report/standard-reports/sx-summary.scm
-#. src/report/standard-reports/trial-balance.scm
-msgid "Report Title"
-msgstr "Berichtstitel"
-
-#. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/equity-statement.scm
-#. src/report/standard-reports/income-statement.scm
-#. src/report/standard-reports/sx-summary.scm
-#. src/report/standard-reports/trial-balance.scm
-msgid "Title for this report"
-msgstr "Titel des Berichts"
-
-#. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -15256,28 +15556,6 @@ msgstr "Firmenname"
 #. src/report/standard-reports/trial-balance.scm
 msgid "Name of company/individual"
 msgstr "Name der Organisation/Firma"
-
-#. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/income-statement.scm
-#. src/report/standard-reports/sx-summary.scm
-#. src/report/standard-reports/trial-balance.scm
-msgid "Levels of Subaccounts"
-msgstr "Verschachtelungstiefe Unterkonten"
-
-#. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/income-statement.scm
-#. src/report/standard-reports/sx-summary.scm
-#. src/report/standard-reports/trial-balance.scm
-msgid "Maximum number of levels in the account tree displayed"
-msgstr "Maximale Verschachtelungstiefe in der Kontenhierarchie"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -15368,30 +15646,6 @@ msgid "Use rules beneath columns of added numbers like accountants do"
 msgstr "Linien neben Spalten mit Salden anzeigen, wie im Rechnungswesen üblich"
 
 #. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/income-statement.scm
-#. src/report/standard-reports/sx-summary.scm
-#. src/report/standard-reports/trial-balance.scm
-msgid "Display accounts as hyperlinks"
-msgstr "Kontonamen anklickbar anzeigen"
-
-#. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/income-statement.scm
-#. src/report/standard-reports/sx-summary.scm
-#. src/report/standard-reports/trial-balance.scm
-msgid "Shows each account in the table as a hyperlink to its register window"
-msgstr ""
-"Konto als klickbaren Hyperlink anzeigen, der beim Anklicken das Kontofenster "
-"öffnet"
-
-#. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 msgid "Show an account's balance"
 msgstr "Kontensaldo anzeigen"
@@ -15425,42 +15679,6 @@ msgstr "Kontennotizen"
 #. src/report/standard-reports/sx-summary.scm
 msgid "Show an account's notes"
 msgstr "Kontennotizen anzeigen"
-
-#. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/equity-statement.scm
-#. src/report/standard-reports/income-statement.scm
-#. src/report/standard-reports/sx-summary.scm
-#. src/report/standard-reports/trial-balance.scm
-msgid "Commodities"
-msgstr "Währungen/Wertpapiere"
-
-#. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/equity-statement.scm
-#. src/report/standard-reports/income-statement.scm
-#. src/report/standard-reports/sx-summary.scm
-#. src/report/standard-reports/trial-balance.scm
-msgid "Show Foreign Currencies"
-msgstr "Fremdwährungen anzeigen"
-
-#. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/equity-statement.scm
-#. src/report/standard-reports/income-statement.scm
-#. src/report/standard-reports/sx-summary.scm
-#. src/report/standard-reports/trial-balance.scm
-msgid "Display any foreign currency amount in an account"
-msgstr "Fremdwährungen in Konten anzeigen"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -15701,6 +15919,7 @@ msgstr "Durchschnittlicher Kontostand"
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/net-linechart.scm
 #. src/report/standard-reports/price-scatter.scm
 msgid "Step Size"
 msgstr "Schrittgrösse"
@@ -15797,11 +16016,6 @@ msgid "Balance Sheet"
 msgstr "Bilanz"
 
 #. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Balance Sheet Date"
-msgstr "Bilanzdatum"
-
-#. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
 msgid "Single column Balance Sheet"
 msgstr "Einspaltige Bilanz"
@@ -15814,26 +16028,6 @@ msgid ""
 msgstr ""
 "Passiva unterhalb der Aktiva statt in einer zweiten Spaltigen rechts neben "
 "ihnen darstellen"
-
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/budget.scm
-#. src/report/standard-reports/income-statement.scm
-msgid "Flatten list to depth limit"
-msgstr "Baumstruktur ab Tiefenlimit flach darstellen"
-
-#. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.scm
-#. src/report/standard-reports/budget-balance-sheet.scm
-#. src/report/standard-reports/budget-income-statement.scm
-#. src/report/standard-reports/budget.scm
-#. src/report/standard-reports/income-statement.scm
-msgid "Displays accounts which exceed the depth limit at the depth limit"
-msgstr ""
-"Konten, die tiefer als das gegebene Tiefenlimit in der Baumstruktur stehen, "
-"am Tiefenlimit darstellen"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/budget-balance-sheet.scm
@@ -15906,11 +16100,6 @@ msgid "Total Liabilities"
 msgstr "Gesamt Verbindlichkeiten"
 
 #. src/report/standard-reports/balance-sheet.scm
-#. src/report/standard-reports/balsheet-eg.eguile.scm
-msgid "Retained Losses"
-msgstr "Erwirtschafteter Verlust"
-
-#. src/report/standard-reports/balance-sheet.scm
 msgid "Trading Gains"
 msgstr "Gewinne Devisenhandel"
 
@@ -15941,162 +16130,6 @@ msgstr "Gesamt Eigenkapital"
 #. src/report/standard-reports/budget-balance-sheet.scm
 msgid "Total Liabilities & Equity"
 msgstr "Gesamt Passiva"
-
-#. src/report/standard-reports/balsheet-eg.eguile.scm
-msgid "Assets Accounts"
-msgstr "Aktiva"
-
-#. src/report/standard-reports/balsheet-eg.eguile.scm
-msgid "Liability Accounts"
-msgstr "Fremdkapital"
-
-#. src/report/standard-reports/balsheet-eg.eguile.scm
-msgid "Equity Accounts"
-msgstr "Eigenkapital"
-
-#. src/report/standard-reports/balsheet-eg.eguile.scm
-msgid "Total Equity, Trading, and Liabilities"
-msgstr "Summe Passiva und schwebendes Ergebnis"
-
-#. src/report/standard-reports/balsheet-eg.eguile.scm
-msgid "Imbalance Amount"
-msgstr "Ausgleichsbetrag"
-
-#. src/report/standard-reports/balsheet-eg.eguile.scm
-msgid "<strong>Exchange Rates</strong> used for this report"
-msgstr "Diesem Bericht zugrundeliegende<strong>Wechselkurse</strong>"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Balance Sheet (eguile)"
-msgstr "Bilanz (mit »eguile«)"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "1- or 2-column report"
-msgstr "Ein- oder zweispaltig anzeigen"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid ""
-"The balance sheet can be displayed with either 1 or 2 columns.  'auto' means "
-"that the layout will be adjusted to fit the width of the page."
-msgstr ""
-"Die Bilanz kann in einer oder zwei Spalten dargestellt werden. 'Automatisch' "
-"bedeutet, daß das Layout an die Breite der Seite angepaßt wird."
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Exclude accounts with zero total balances"
-msgstr "Unterkonten ignorieren, die Kontostand Null haben"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid ""
-"Exclude non-top-level accounts with zero balance and no non-zero sub-accounts"
-msgstr ""
-"Untergeordnete Konten, die Kontostand Null haben, aber Unterkonten mit einem "
-"Kontostand ungleich Null, ausschließen."
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Negative amount format"
-msgstr "Anzeigeformat für negative Beträge"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid ""
-"The formatting to use for negative amounts: with a leading sign, or "
-"enclosing brackets"
-msgstr "Format für negative Beträge: mit Vorzeichen oder eingeklammert"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Font family"
-msgstr "Schrifttypenfamilie"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Font definition in CSS font-family format"
-msgstr "Schrifttypendefinition im CSS-font-family-Format"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Font size"
-msgstr "Schriftgröße"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")"
-msgstr "Schriftgröße im CSS-font-size-Format, z.B. \"medium\" oder \"10pt\""
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid ""
-"The file name of the eguile template part of this report.  This file must be "
-"in your .gnucash directory, or else in its proper place within the GnuCash "
-"installation directories."
-msgstr ""
-"Der Dateiname der eguile-Vorlage für diesen Bericht. Die Datei muß sich in "
-"Ihrem .gnucash-Verzeichnis oder an ihrem angestammten Platz in den GnuCash-"
-"Installationsverzeichnissen befinden."
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid ""
-"The file name of the CSS stylesheet to use with this report.  If specified, "
-"this file should be in your .gnucash directory, or else in its proper place "
-"within the GnuCash installation directories."
-msgstr ""
-"Der Dateiname der CSS-Vorlage für diesen Bericht. Die Datei muß sich in "
-"Ihrem .gnucash-Verzeichnis oder an ihrem angestammten Platz in den GnuCash-"
-"Installationsverzeichnissen befinden."
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Auto"
-msgstr "automatisch"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Adjust the layout to fit the width of the screen or page"
-msgstr "Paßt das Layout an die Breite des Fensters oder der Seite an"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "One"
-msgstr "eine"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Display liabilities and equity below assets"
-msgstr ""
-"Zeigt die Passiva Eigenkapital und Verbindlichkeiten unter den Aktiva an"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Two"
-msgstr "zwei"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Display assets on the left, liabilities and equity on the right"
-msgstr "Stellt Aktiva links und Passiva rechts dar"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Sign"
-msgstr "Vorzeichen"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Prefix negative amounts with a minus sign, e.g. -$10.00"
-msgstr "Stelle negativen Beträgen ein Minuszeichen voran, z.B. -10,00 €"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Brackets"
-msgstr "Klammern"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Surround negative amounts with brackets, e.g. ($100.00)"
-msgstr "Klammere negative Beträge ein, z.B. (100,00 €)"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid ""
-"(Development version -- don't rely on the numbers on this report without "
-"double-checking them.<br>Change the 'Extra Notes' option to get rid of this "
-"message)"
-msgstr ""
-"(Testversion ─ verlassen Sie sich nicht auf die Zahlen in diesem Bericht "
-"ohne sie zu überprüfen.<br>Ändern Sie die 'Zusätzliche Anmerkungen'-Option, "
-"um diese Nachricht loszuwerden."
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Balance Sheet using eguile-gnc"
-msgstr "Bilanz (mit »eguile«)"
-
-#. src/report/standard-reports/balsheet-eg.scm
-msgid "Display a balance sheet (using eguile template)"
-msgstr "Bilanz anzeigen (mit »eguile«-Vorlage)"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 msgid "Budget Balance Sheet"
@@ -16827,10 +16860,12 @@ msgid "Profit & Loss"
 msgstr "Gewinn- und Verlustrechnung"
 
 #. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/net-linechart.scm
 msgid "Income/Expense Chart"
 msgstr "Erträge/Aufwendungen Diagramm"
 
 #. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/net-linechart.scm
 #. src/report/standard-reports/price-scatter.scm
 msgid "Show Net Profit"
 msgstr "Reingewinn anzeigen"
@@ -16892,6 +16927,42 @@ msgstr "Reinvermögen Balkendiagramm"
 #. src/report/standard-reports/net-barchart.scm
 msgid "Income & Expense Chart"
 msgstr "Erträge/Aufwendungen Diagramm"
+
+#. src/report/standard-reports/net-linechart.scm
+msgid "Show Asset & Liability"
+msgstr "Aktiva und Fremdkapital anzeigen"
+
+#. src/report/standard-reports/net-linechart.scm
+msgid "Show Net Worth"
+msgstr "Reinvermögen anzeigen"
+
+#. src/report/standard-reports/net-linechart.scm
+msgid "Line Width"
+msgstr "Linienbreite"
+
+#. src/report/standard-reports/net-linechart.scm
+msgid "Set line width in pixels"
+msgstr "Linienbreite in Pixeln."
+
+#. src/report/standard-reports/net-linechart.scm
+msgid "Data markers?"
+msgstr "Markierungspunkte?"
+
+#. src/report/standard-reports/net-linechart.scm
+msgid "Y Grid"
+msgstr "Y Netzlinien"
+
+#. src/report/standard-reports/net-linechart.scm
+msgid "Add horizontal grid lines."
+msgstr "Horizontale Gitterlinien anzeigen."
+
+#. src/report/standard-reports/net-linechart.scm
+msgid "Display a mark for each data point."
+msgstr "Einen Markierungspunkt für jeden Datenpunkt anzeigen."
+
+#. src/report/standard-reports/net-linechart.scm
+msgid "Net Worth Linechart"
+msgstr "Reinvermögen Liniendiagramm"
 
 #. src/report/standard-reports/portfolio.scm
 msgid "Investment Portfolio"
@@ -18271,7 +18342,6 @@ msgid "Adding remaining good quotes."
 msgstr "Benutzbare Kurse werden eingetragen."
 
 #. src/tax/us/de_DE.scm
-#. src/tax/us/gnucash/tax/de_DE.scm
 msgid "Tax Number"
 msgstr "Steuernummer"
 
@@ -18310,9 +18380,9 @@ msgid ""
 msgstr ""
 "Wenn Sie bereits mit anderen Finanzprogrammen wie z.B. Quicken vertraut "
 "sind, sollten Sie beachten, dass GnuCash durchgängig »Konten« anstelle von "
-"»Kategorien« benutzt, um Erträge und Aufwendungen (Einnahmen und Ausgaben) zu "
-"gliedern. Weitere Informationen zu Ertrags- und Aufwandskonten finden Sie im "
-"GnuCash Online-Handbuch."
+"»Kategorien« benutzt, um Erträge und Aufwendungen (Einnahmen und Ausgaben) "
+"zu gliedern. Weitere Informationen zu Ertrags- und Aufwandskonten finden Sie "
+"im GnuCash Online-Handbuch."
 
 msgid ""
 "Create new accounts by clicking the New button in the main window tool bar.  "
