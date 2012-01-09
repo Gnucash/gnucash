@@ -270,8 +270,10 @@ gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoad
 
     be->loading = FALSE;
 
-    // Mark the book as clean
-    qof_book_mark_saved( book );
+    /* Mark the sessoion as clean -- though it should never be marked
+     * dirty with this backend
+     */
+    qof_book_mark_session_saved( book );
     finish_progress( be );
 
     LEAVE( "" );
@@ -545,8 +547,10 @@ gnc_sql_sync_all( GncSqlBackend* be, /*@ dependent @*/ QofBook *book )
     {
         be->is_pristine_db = FALSE;
 
-        // Mark the book as clean
-        qof_book_mark_saved( book );
+        /* Mark the session as clean -- though it shouldn't ever get
+	 * marked dirty with this backend
+	 */
+        qof_book_mark_session_saved( book );
     }
     else
     {
@@ -632,7 +636,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
     if ( strcmp( inst->e_type, "PriceDB" ) == 0 )
     {
         qof_instance_mark_clean( inst );
-        qof_book_mark_saved( be->book );
+        qof_book_mark_session_saved( be->book );
         return;
     }
 
@@ -672,7 +676,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
         (void)gnc_sql_connection_rollback_transaction( be->conn );
 
         // Don't let unknown items still mark the book as being dirty
-        qof_book_mark_saved( be->book );
+        qof_book_mark_session_saved( be->book );
         qof_instance_mark_clean(inst);
         LEAVE( "Rolled back - unknown object type" );
         return;
@@ -689,7 +693,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 
     (void)gnc_sql_connection_commit_transaction( be->conn );
 
-    qof_book_mark_saved( be->book );
+    qof_book_mark_session_saved( be->book );
     qof_instance_mark_clean(inst);
 
     LEAVE( "" );

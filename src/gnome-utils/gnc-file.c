@@ -551,7 +551,7 @@ gnc_file_query_save (gboolean can_cancel)
      * up the file-selection dialog, we don't blow him out of the water;
      * instead, give them another chance to say "no" to the verify box.
      */
-    while (qof_book_not_saved(current_book))
+    while (qof_book_session_not_saved(current_book))
     {
         GtkWidget *dialog;
         gint response;
@@ -565,7 +565,7 @@ gnc_file_query_save (gboolean can_cancel)
                                         GTK_MESSAGE_QUESTION,
                                         GTK_BUTTONS_NONE,
                                         "%s", title);
-        oldest_change = qof_book_get_dirty_time(current_book);
+        oldest_change = qof_book_get_session_dirty_time(current_book);
         minutes = (time(NULL) - oldest_change) / 60 + 1;
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 ngettext("If you don't save, changes from the past %d minute will be discarded.",

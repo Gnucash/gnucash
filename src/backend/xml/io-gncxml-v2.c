@@ -783,8 +783,8 @@ qof_session_load_from_xml_file_v2_full(
 
     xaccEnableDataScrubbing();
 
-    /* Mark the book as saved */
-    qof_book_mark_saved (book);
+    /* Mark the session as saved */
+    qof_book_mark_session_saved (book);
 
     /* Call individual scrub functions */
     memset(&be_data, 0, sizeof(be_data));

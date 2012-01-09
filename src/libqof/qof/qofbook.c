@@ -77,6 +77,7 @@ qof_book_init (QofBook *book)
 
     book->book_open = 'y';
     book->read_only = FALSE;
+    book->session_dirty = FALSE;
     book->version = 0;
 }
 
@@ -154,41 +155,35 @@ qof_book_destroy (QofBook *book)
 /* ====================================================================== */
 
 gboolean
-qof_book_not_saved (const QofBook *book)
+qof_book_session_not_saved (const QofBook *book)
 {
     if (!book) return FALSE;
+    return book->session_dirty;
 
-    return(qof_instance_get_dirty_flag(book) || qof_object_is_dirty(book));
 }
 
 void
-qof_book_mark_saved (QofBook *book)
+qof_book_mark_session_saved (QofBook *book)
 {
-    gboolean was_dirty;
-
     if (!book) return;
 
-    was_dirty = qof_instance_get_dirty_flag(book);
-    qof_instance_set_dirty_flag(book, FALSE);
     book->dirty_time = 0;
-    qof_object_mark_clean (book);
-    if (was_dirty)
+    if (book->session_dirty)
     {
+/* Set the session clean upfront, because the callback will check. */
+	book->session_dirty = FALSE;
         if (book->dirty_cb)
             book->dirty_cb(book, FALSE, book->dirty_data);
     }
 }
 
-void qof_book_mark_dirty (QofBook *book)
+void qof_book_mark_session_dirty (QofBook *book)
 {
-    gboolean was_dirty;
-
     if (!book) return;
-
-    was_dirty = qof_instance_get_dirty_flag(book);
-    qof_instance_set_dirty_flag(book, TRUE);
-    if (!was_dirty)
+    if (!book->session_dirty)
     {
+/* Set the session dirty upfront, because the callback will check. */
+	book->session_dirty = TRUE;
         book->dirty_time = time(NULL);
         if (book->dirty_cb)
             book->dirty_cb(book, TRUE, book->dirty_data);
@@ -196,7 +191,7 @@ void qof_book_mark_dirty (QofBook *book)
 }
 
 time_t
-qof_book_get_dirty_time (const QofBook *book)
+qof_book_get_session_dirty_time (const QofBook *book)
 {
     return book->dirty_time;
 }
@@ -243,7 +238,7 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
 void qof_book_kvp_changed (QofBook *book)
 {
     qof_book_begin_edit(book);
-    qof_book_mark_dirty(book);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
 
@@ -441,7 +436,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     value = kvp_value_new_gint64 (counter);
     kvp_frame_set_slot_path (kvp, value, "counters", counter_name, NULL);
     kvp_value_delete (value);
-    qof_book_mark_dirty(book);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 
     format = qof_book_get_counter_format(book, counter_name);
@@ -657,7 +652,7 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
 {
     qof_book_begin_edit(book);
     kvp_frame_set_string(qof_book_get_slots(book), opt_name, opt_val);
-    qof_book_mark_dirty(book);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
 
