@@ -1513,6 +1513,9 @@ conn_table_operation( GncSqlConnection *sql_conn, GSList *table_name_list,
  * Really a bit of an understatement. More like "delete everything in
  * storage and replace with what's in memory".
  *
+ * THIS ROUTINE IS EXTREMELY DANGEROUS AND CAN LEAD TO SEVERE DATA
+ * LOSS It should be used *only* by gnc_dbi_safe_sync_all!
+ *
  * @param qbe: QofBackend for the session.
  * @param book: QofBook to be saved in the database.
  */
@@ -1676,7 +1679,9 @@ init_sql_backend( GncDbiBackend* dbi_be )
     be->events_pending = NULL;
     be->process_events = NULL;
 
-    be->sync = gnc_dbi_sync_all;
+/* The SQL/DBI backend doesn't need to be synced until it is
+ * configured for multiuser access. */
+    be->sync = gnc_dbi_safe_sync_all;
     be->safe_sync = gnc_dbi_safe_sync_all;
     be->load_config = NULL;
     be->get_config = NULL;
