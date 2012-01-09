@@ -66,6 +66,16 @@ struct _QofSession
     gint lock;
 };
 
+typedef struct qof_instance_copy_data
+{
+    QofInstance *from;
+    QofInstance *to;
+    QofParam  *param;
+    GList  *referenceList;
+    GSList *param_list;
+    QofSession *new_session;
+    gboolean error;
+} QofInstanceCopyData;
 
 QofBackend * qof_session_get_backend (const QofSession *session);
 

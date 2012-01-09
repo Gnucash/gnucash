@@ -1,4 +1,6 @@
+include $(top_srcdir)/test-templates/Makefile.decl
 SUBDIRS = . test
+TEST_SUBDIRS = test
 
 lib_LTLIBRARIES = libgnc-qof.la
 
@@ -77,7 +79,7 @@ noinst_HEADERS = \
    qofquerycore-p.h \
    qofsession-p.h
 
-EXTRA_DIST = \
+EXTRA_DIST += \
   qofmath128.c
 
 if OS_WIN32
