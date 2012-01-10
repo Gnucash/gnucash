@@ -69,8 +69,18 @@ struct _QofBook
 {
     QofInstance   inst;     /* Unique guid for this book. */
 
+    /* Boolean indicates that the session is dirty -- that is, it has
+     * not yet been written out to disk after the last time the
+     * backend ran commit_edit(). This is distinct from the inherited
+     * QofInstance::dirty, which indicates that some persisitent
+     * property of the book object itself has been edited and not
+     * committed. Some backends write data out as part of
+     * commit_edit() and so don't use this flag.
+     */
+    gboolean session_dirty;
+
     /* The time when the book was first dirtied.  This is a secondary
-     * indicator. It should only be used when inst.dirty is TRUE. */
+     * indicator. It should only be used when session_saved is FALSE. */
     time_t dirty_time;
 
     /* This callback function is called any time the book dirty flag
@@ -97,7 +107,7 @@ struct _QofBook
     GHashTable *data_table_finalizers;
 
     /* Boolean indicates whether book is safe to write to (true means
-     * that it isn't. The usual reason will be a database version
+     * that it isn't). The usual reason will be a database version
      * mismatch with the running instance of Gnucash.
      */
     gboolean read_only;
@@ -241,15 +251,14 @@ gboolean qof_book_use_trading_accounts (const QofBook *book);
 /** Is the book shutting down? */
 gboolean qof_book_shutting_down (const QofBook *book);
 
-/** qof_book_not_saved() will return TRUE if any
- *    data in the book hasn't been saved to long-term storage.
- *    (Actually, that's not quite true.  The book doesn't know
- *    anything about saving.  Its just that whenever data is modified,
- *    the 'dirty' flag is set.  This routine returns the value of the
- *    'dirty' flag.  Its up to the backend to periodically reset this
- *    flag, when it actually does save the data.)
+/** qof_book_not_saved() returns the value of the session_dirty flag,
+ * set when changes to any object in the book are committed
+ * (qof_backend->commit_edit has been called) and the backend hasn't
+ * yet written out the changes. (Note that SQL backends write commits
+ * out immediately; file backends don't, and use the flag to control
+ * an autosave timer.)
  */
-gboolean qof_book_not_saved (const QofBook *book);
+gboolean qof_book_session_not_saved (const QofBook *book);
 
 /* The following functions are not useful in scripting languages */
 #ifndef SWIG
@@ -259,13 +268,13 @@ gboolean qof_book_not_saved (const QofBook *book);
  *    notsaved flag as FALSE just after loading.  Can also be used
  *    by the frontend when the used has said to abandon any changes.
  */
-void qof_book_mark_saved(QofBook *book);
+void qof_book_mark_session_saved(QofBook *book);
 
 /** The qof_book_mark_dirty() routine marks the book as having been
  *    modified. It can be used by frontend when the used has made a
  *    change at the book level.
  */
-void qof_book_mark_dirty(QofBook *book);
+void qof_book_mark_session_dirty(QofBook *book);
 
 /** This debugging function can be used to traverse the book structure
  *    and all subsidiary structures, printing out which structures
@@ -274,7 +283,7 @@ void qof_book_mark_dirty(QofBook *book);
 void qof_book_print_dirty (const QofBook *book);
 
 /** Retrieve the earliest modification time on the book. */
-time_t qof_book_get_dirty_time(const QofBook *book);
+time_t qof_book_get_session_dirty_time(const QofBook *book);
 
 /** Set the function to call when a book transitions from clean to
  *    dirty, or vice versa.
