@@ -701,7 +701,7 @@ qof_instance_coll_copy (QofInstance *original, gpointer user_data)
     qof_commit_edit (inst);
 }
 
-gboolean
+static gboolean
 qof_instance_copy_to_session (QofSession* new_session, QofInstance* original)
 {
     QofInstanceCopyData qecd;
@@ -742,7 +742,8 @@ qof_instance_copy_to_session (QofSession* new_session, QofInstance* original)
     return TRUE;
 }
 
-gboolean qof_instance_copy_list (QofSession *new_session, GList *entity_list)
+static gboolean
+qof_instance_copy_list (QofSession *new_session, GList *entity_list)
 {
     QofInstanceCopyData *qecd;
 
@@ -767,7 +768,7 @@ gboolean qof_instance_copy_list (QofSession *new_session, GList *entity_list)
     return TRUE;
 }
 
-gboolean
+static gboolean
 qof_instance_copy_coll (QofSession *new_session, QofCollection *entity_coll)
 {
     QofInstanceCopyData qecd;
@@ -940,7 +941,7 @@ recurse_ent_cb (QofInstance *ent, gpointer user_data)
     }
 }
 
-gboolean
+static gboolean
 qof_instance_copy_coll_r (QofSession *new_session, QofCollection *coll)
 {
     struct recurse_s store;
@@ -963,7 +964,8 @@ qof_instance_copy_coll_r (QofSession *new_session, QofCollection *coll)
     return success;
 }
 
-gboolean qof_instance_copy_one_r (QofSession *new_session, QofInstance *ent)
+static gboolean
+qof_instance_copy_one_r (QofSession *new_session, QofInstance *ent)
 {
     struct recurse_s store;
     QofCollection *coll;
