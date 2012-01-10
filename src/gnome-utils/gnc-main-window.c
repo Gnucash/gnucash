@@ -1150,7 +1150,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
                                     GTK_BUTTONS_NONE,
                                     title,
                                     filename);
-    oldest_change = qof_book_get_dirty_time(book);
+    oldest_change = qof_book_get_session_dirty_time(book);
     minutes = (time(NULL) - oldest_change) / 60 + 1;
     hours = minutes / 60;
     minutes = minutes % 60;
@@ -1187,7 +1187,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         return FALSE;
 
     case GTK_RESPONSE_CLOSE:
-        qof_book_mark_saved(book);
+        qof_book_mark_session_saved(book);
         return FALSE;
 
     default:
@@ -1242,7 +1242,7 @@ gnc_main_window_quit(GncMainWindow *window)
     gboolean needs_save, do_shutdown;
 
     session = gnc_get_current_session();
-    needs_save = qof_book_not_saved(qof_session_get_book(session)) &&
+    needs_save = qof_book_session_not_saved(qof_session_get_book(session)) &&
                  !gnc_file_save_in_progress();
     do_shutdown = !needs_save ||
                   (needs_save && !gnc_main_window_prompt_for_save(GTK_WIDGET(window)));
@@ -1372,7 +1372,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     {
         book_id = qof_session_get_url (gnc_get_current_session ());
         book = gnc_get_current_book();
-        if (qof_instance_is_dirty(QOF_INSTANCE(book)))
+        if (qof_book_session_not_saved (book))
         {
             dirty = "*";
             if (action != NULL)
@@ -3407,7 +3407,7 @@ gtk_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
         return TRUE;
     }
     session = gnc_get_current_session();
-    needs_save = qof_book_not_saved(qof_session_get_book(session)) &&
+    needs_save = qof_book_session_not_saved(qof_session_get_book(session)) &&
                  !gnc_file_save_in_progress();
     if (needs_save && gnc_main_window_prompt_for_save(GTK_WIDGET(window)))
         return TRUE;

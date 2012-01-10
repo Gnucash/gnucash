@@ -655,7 +655,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
 
     /* If the book is 'clean', recently saved, then don't save again. */
     /* XXX this is currently broken due to faulty 'Save As' logic. */
-    /* if (FALSE == qof_book_not_saved (book)) return FALSE; */
+    /* if (FALSE == qof_book_session_not_saved (book)) return FALSE; */
 
     tmp_name = g_new(char, strlen(datafile) + 12);
     strcpy(tmp_name, datafile);
@@ -757,7 +757,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
 
         /* Since we successfully saved the book,
          * we should mark it clean. */
-        qof_book_mark_saved (book);
+        qof_book_mark_session_saved (book);
         LEAVE (" successful save of book=%p to file=%s", book, datafile);
         return TRUE;
     }
@@ -1019,7 +1019,7 @@ xml_commit_edit (QofBackend *be, QofInstance *inst)
             !(qof_instance_get_infant(inst) && qof_instance_get_destroying(inst)))
     {
         qof_collection_mark_dirty(qof_instance_get_collection(inst));
-        qof_book_mark_dirty(qof_instance_get_book(inst));
+        qof_book_mark_session_dirty(qof_instance_get_book(inst));
     }
 #if BORKEN_FOR_NOW
     FileBackend *fbe = (FileBackend *) be;
@@ -1111,7 +1111,7 @@ gnc_xml_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType l
     }
 
     /* We just got done loading, it can't possibly be dirty !! */
-    qof_book_mark_saved (book);
+    qof_book_mark_session_saved (book);
 }
 
 /* ---------------------------------------------------------------------- */
