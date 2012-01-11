@@ -635,7 +635,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
     // The engine has a PriceDB object but it isn't in the database
     if ( strcmp( inst->e_type, "PriceDB" ) == 0 )
     {
-        qof_book_mark_session_saved( be->book );
+        qof_book_mark_session_saved( be->primary_book );
         qof_instance_mark_clean( inst );
         return;
     }
@@ -676,7 +676,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
         (void)gnc_sql_connection_rollback_transaction( be->conn );
 
         // Don't let unknown items still mark the book as being dirty
-        qof_book_mark_session_saved( be->book );
+        qof_book_mark_session_saved( be->primary_book );
         qof_instance_mark_clean(inst);
         LEAVE( "Rolled back - unknown object type" );
         return;
@@ -693,7 +693,7 @@ gnc_sql_commit_edit( GncSqlBackend *be, QofInstance *inst )
 
     (void)gnc_sql_connection_commit_transaction( be->conn );
 
-    qof_book_mark_session_saved( be->book );
+    qof_book_mark_session_saved( be->primary_book );
     qof_instance_mark_clean(inst);
 
     LEAVE( "" );
