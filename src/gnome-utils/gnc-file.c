@@ -768,7 +768,8 @@ RESTART:
     /* but first, check to make sure we've got a session going. */
     new_session = qof_session_new ();
 
-    qof_session_begin (new_session, newfile, FALSE, FALSE, FALSE);
+    // Begin the new session. If we are in read-only mode, ignore the locks.
+    qof_session_begin (new_session, newfile, is_readonly, FALSE, FALSE);
     io_err = qof_session_get_error (new_session);
 
     if (ERR_BACKEND_BAD_URL == io_err)
@@ -853,8 +854,8 @@ RESTART:
             // re-enable the splash screen, file loading and display of
             // reports may take some time
             gnc_show_splash_screen();
-            /* user told us to open readonly. We do not ignore locks, but force the opening. */
-            qof_session_begin (new_session, newfile, FALSE, FALSE, TRUE);
+            /* user told us to open readonly. We do ignore locks (just as before), but now also force the opening. */
+            qof_session_begin (new_session, newfile, is_readonly, FALSE, TRUE);
             break;
         case RESPONSE_OPEN:
             // re-enable the splash screen, file loading and display of
