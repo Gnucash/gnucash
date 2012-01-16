@@ -26,6 +26,9 @@
 #ifndef PRICE_CELL_GNOME_H
 #define PRICE_CELL_GNOME_H
 
+#include <glib.h>
+#include "basiccell.h"
+
 BasicCell * gnc_price_cell_gnome_new (void);
 
 /* fixme: find a better home for this. */

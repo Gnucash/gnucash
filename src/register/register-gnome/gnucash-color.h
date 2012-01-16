@@ -23,7 +23,7 @@
 #ifndef GNUCASH_COLOR_H
 #define GNUCASH_COLOR_H
 
-#include <gnome.h>
+#include <gdk/gdk.h>
 
 void      gnucash_color_init        (void);
 
