@@ -1,6 +1,7 @@
-/*
- * druid-gnc-xml-import.c --
+/**********************************************************************
+ * assistant-xml-encoding.c -- Coversion of old XML file
  * Copyright (C) 2006 Andreas Koehler <andi5.py@gmx.net>
+ * Copyright (C) 2011 Robert Fewell
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -18,7 +19,8 @@
  * Free Software Foundation           Voice:  +1-617-542-5942
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
- */
+ *
+ **********************************************************************/
 
 #include "config.h"
 
@@ -27,20 +29,15 @@
 #include <gmodule.h>
 
 #include "TransLog.h"
-#include "druid-gnc-xml-import.h"
+#include "assistant-xml-encoding.h"
 #include "dialog-utils.h"
-#include "druid-utils.h"
+#include "assistant-utils.h"
 #include "gnc-backend-xml.h"
+#include "gnc-component-manager.h"
 #include "gnc-uri-utils.h"
 #include "gnc-module.h"
 #include "gnc-ui.h"
 #include "io-gncxml-v2.h"
-
-#define XML_GLADE_FILE "druid-gnc-xml-import.glade"
-
-/* NOTE: Merge stuff is not implemented, only the result of a file parse is
- * merged into a given session.
- */
 
 /* NOTE: This file uses the term "encoding" even in places where it is not
  * accurate. Please ignore that. Encodings occur in different forms:
@@ -50,29 +47,20 @@
  * - as pointer, containing above gquark, used in lists
  */
 
-typedef enum
-{
-    XML_CONVERT_SINGLE_FILE,
-    XML_MERGE_FILES
-} GncXmlImportType;
-
 typedef struct
 {
-    GncXmlImportType import_type;
-
-    GtkWidget *dialog;                  /* global window */
-    GtkWidget *druid;                   /* druid */
-    GtkWidget *file_chooser;            /* file chooser widget on load file page */
+    GtkWidget *assistant;               /* assistant */
+    gboolean  canceled;                 /* we are canceled */
     GtkWidget *default_encoding_combo;  /* top combo on conversion page */
+    GtkWidget *default_encoding_hbox;   /* Encoding Hbox */
     GtkWidget *summary_label;           /* label on conversion page */
+    GtkWidget *impossible_label;        /* impossible label on conversion page */
     GtkWidget *string_box;              /* vbox of combos on conversion page */
+    GtkWidget *string_box_container;    /* container on conversion page */
     GtkWidget *encodings_dialog;        /* dialog for selection of encodings */
+    GtkWidget *custom_enc_entry;        /* custom entry */
     GtkTreeView *available_encs_view;   /* list view of standard encodings */
     GtkTreeView *selected_encs_view;    /* list view of selected encodings */
-    GtkListStore *file_list_store;      /* list store for loaded files */
-    GtkTreeView *file_list_view;        /* list view for loaded files */
-
-    GList *files;                       /* list of loaded files */
 
     GList *encodings;                   /* list of GQuarks for encodings */
     GQuark default_encoding;            /* default GQuark, may be zero */
@@ -110,12 +98,6 @@ typedef struct
     QofSession *session;
 } GncXmlImportData;
 
-typedef struct
-{
-    gchar *filename;
-    GtkTreeIter *file_list_iter;
-} GncXmlImportFile;
-
 /* used for the string combos, see ambiguous_free */
 typedef struct
 {
@@ -144,6 +126,14 @@ enum
     ENC_NUM_COLS
 };
 
+
+void gxi_prepare_cb (GtkAssistant  *assistant, GtkWidget *page, GncXmlImportData  *data);
+void gxi_cancel_cb (GtkAssistant  *gtkassistant, GncXmlImportData *data);
+void gxi_finish_cb (GtkAssistant  *gtkassistant, GncXmlImportData *data);
+
+void gxi_conversion_prepare (GtkAssistant *assistant, gpointer data );
+void gxi_conversion_next (GtkAssistant *assistant,  gpointer data);
+
 static void gxi_data_destroy (GncXmlImportData *data);
 static void gxi_ambiguous_info_destroy (GncXmlImportData *data);
 static void gxi_session_destroy (GncXmlImportData *data);
@@ -156,44 +146,19 @@ static void gxi_update_default_enc_combo (GncXmlImportData *data);
 static void gxi_update_summary_label (GncXmlImportData *data);
 static void gxi_update_string_box (GncXmlImportData *data);
 static void gxi_update_conversion_forward (GncXmlImportData *data);
-static GnomeDruidPage *gxi_get_named_page (GncXmlImportData *data,
-        const gchar *name);
-void gxi_dialog_destroy_cb (GtkObject *object, GncXmlImportData *data);
-void gxi_cancel_cb (GnomeDruid *druid, GncXmlImportData *data);
-void gxi_chooser_file_activated_cb (GtkFileChooser *chooser,
-                                    GncXmlImportData *data);
-gboolean gxi_load_file_next_cb (GnomeDruidPage *page, GtkWidget *widget,
-                                GncXmlImportData *data);
-void gxi_conversion_prepare_cb (GnomeDruidPage *page, GtkWidget *widget,
-                                GncXmlImportData *data);
-static void gxi_default_enc_combo_changed_cb (GtkComboBox *combo,
-        GncXmlImportData *data);
-static void gxi_string_combo_changed_cb (GtkComboBox *combo,
-        GncXmlImportData *data);
+
+static void gxi_default_enc_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data);
+static void gxi_string_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data);
 void gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data);
-void gxi_available_enc_activated_cb (GtkTreeView *view, GtkTreePath *path,
-                                     GtkTreeViewColumn *column,
-                                     GncXmlImportData *data);
+void gxi_available_enc_activated_cb (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *column, GncXmlImportData *data);
 void gxi_add_enc_clicked_cb (GtkButton *button, GncXmlImportData *data);
 void gxi_custom_enc_activate_cb (GtkEntry *entry, GncXmlImportData *data);
 void gxi_add_custom_enc_clicked_cb (GtkButton *button, GncXmlImportData *data);
-void gxi_selected_enc_activated_cb (GtkTreeView *view, GtkTreePath *path,
-                                    GtkTreeViewColumn *column,
-                                    GncXmlImportData *data);
+void gxi_selected_enc_activated_cb (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *column, GncXmlImportData *data);
 void gxi_remove_enc_clicked_cb (GtkButton *button, GncXmlImportData *data);
-gboolean gxi_conversion_next_cb  (GnomeDruidPage *page, GtkWidget *widget,
-                                  GncXmlImportData *data);
-void gxi_loaded_files_prepare_cb (GnomeDruidPage *page, GtkWidget *widget,
-                                  GncXmlImportData *data);
-gboolean gxi_loaded_files_next_cb (GnomeDruidPage *page, GtkWidget *widget,
-                                   GncXmlImportData *data);
-void gxi_unload_file_clicked_cb (GtkButton *button, GncXmlImportData *data);
-void gxi_load_file_clicked_cb (GtkButton *button, GncXmlImportData *data);
-void gxi_end_finish_cb (GnomeDruidPage *page, GtkWidget *widget,
-                        GncXmlImportData *data);
 
 static const gchar *encodings_doc_string = N_(
-            "The file you are trying to load is from an older version of "
+            "\nThe file you are trying to load is from an older version of "
             "GnuCash. The file format in the older versions was missing the "
             "detailed specification of the character encoding being used. This "
             "means the text in your data file could be read in multiple ambiguous "
@@ -211,7 +176,7 @@ static const gchar *encodings_doc_string = N_(
             "encodings by clicking on the respective button."
             "\n\n"
             "Press 'Forward' now to select the correct character encoding for "
-            "your data file.");
+            "your data file.\n");
 
 static const gchar *encodings_doc_page_title = N_("Ambiguous character encoding");
 
@@ -222,7 +187,7 @@ static const gchar *finish_convert_string = N_(
             "You can also go back and verify your selections by clicking on 'Back'.");
 
 /* The debugging module that this .o belongs to. */
-static QofLogModule log_module = GNC_MOD_GUI;
+static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
 /* window containing a progress bar */
 static GtkWidget *progress_window = NULL;
@@ -263,17 +228,67 @@ static system_encoding_type system_encodings [] =
 };
 static guint n_system_encodings = G_N_ELEMENTS (system_encodings);
 
+
+void gxi_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
+                 GncXmlImportData  *data)
+{
+    gint currentpage = gtk_assistant_get_current_page(assistant);
+
+    switch (gtk_assistant_get_current_page(assistant))
+    {
+    case 1:
+        /* Current page is the Conversion page */
+        gxi_conversion_prepare (assistant, data);
+        break;
+    case 2:
+        /* Current page is final page */
+        gxi_conversion_next (assistant, data);
+        break;
+    }
+}
+
+void
+gxi_finish_cb (GtkAssistant *assistant, GncXmlImportData *data)
+{
+    gtk_main_quit();
+}
+
+static void
+gxi_update_conversion_forward (GncXmlImportData *data)
+{
+    GtkAssistant *assistant = GTK_ASSISTANT(data->assistant);
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+
+    if (data->n_unassigned || data->n_impossible)
+          gtk_assistant_set_page_complete (assistant, page, FALSE);
+    else
+        gtk_assistant_set_page_complete (assistant, page, TRUE);
+}
+
+void
+gxi_cancel_cb (GtkAssistant *gtkassistant, GncXmlImportData *data)
+{
+    gnc_suspend_gui_refresh ();
+    data->canceled = TRUE;
+    gnc_resume_gui_refresh ();
+    gtk_main_quit();
+}
+
+/***************************************************/
+
 gboolean
 gnc_xml_convert_single_file (const gchar *filename)
 {
     GncXmlImportData *data;
-    GtkWidget *dialog, *widget;
-    GladeXML *xml;
+    GtkWidget *widget;
+    GtkVBox *vb;
+    GtkBuilder *builder;
     gboolean success;
 
     data = g_new0 (GncXmlImportData, 1);
-    data->import_type = XML_CONVERT_SINGLE_FILE;
     data->filename = gnc_uri_get_path (filename);
+    data->canceled = FALSE;
 
     /* gather ambiguous info */
     gxi_check_file (data);
@@ -282,119 +297,72 @@ gnc_xml_convert_single_file (const gchar *filename)
 
     if (!g_hash_table_size (data->ambiguous_ht))
     {
-
         /* no ambiguous strings */
-        success =
-            gxi_parse_file (data) &&
-            gxi_save_file (data);
+        success = gxi_parse_file (data) &&
+                  gxi_save_file (data);
 
         gxi_data_destroy (data);
-
     }
     else
     {
+        /* common assistant initialization */
+        builder = gtk_builder_new();
+        gnc_builder_add_from_file  (builder , "assistant-xml-encoding.glade", "assistant_xml_encoding");
+        data->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "assistant_xml_encoding"));
 
-        /* common druid initialization */
-        xml = gnc_glade_xml_new (XML_GLADE_FILE, "GnuCash XML Import Dialog");
+        gnc_assistant_set_colors (GTK_ASSISTANT (data->assistant));
 
-        dialog = glade_xml_get_widget (xml, "GnuCash XML Import Dialog");
-        gtk_widget_hide ((GTK_DIALOG (dialog))->action_area);
-        data->dialog = dialog;
-        g_object_set_data_full (G_OBJECT (dialog), "xml", xml, g_object_unref);
-        glade_xml_signal_autoconnect_full (xml, gnc_glade_autoconnect_full_func,
-                                           data);
-
-        data->druid = glade_xml_get_widget (xml, "gnc_xml_import_druid");
-        gnc_druid_set_colors (GNOME_DRUID (data->druid));
+        /* Enable buttons on all pages. */
+        gtk_assistant_set_page_complete (GTK_ASSISTANT (data->assistant),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "start_page")),
+                                     TRUE);
+        gtk_assistant_set_page_complete (GTK_ASSISTANT (data->assistant),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "conversion_page")),
+                                     TRUE);
+        gtk_assistant_set_page_complete (GTK_ASSISTANT (data->assistant),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "end_page")),
+                                     TRUE);
 
         /* start page, explanations */
-        widget = glade_xml_get_widget (xml, "start_page");
-        gnome_druid_page_edge_set_text (GNOME_DRUID_PAGE_EDGE (widget),
-                                        gettext (encodings_doc_string));
-        gnome_druid_page_edge_set_title (GNOME_DRUID_PAGE_EDGE (widget),
-                                         gettext (encodings_doc_page_title));
-        gtk_widget_show (widget);
+	gtk_assistant_set_page_title (GTK_ASSISTANT(data->assistant),
+					 gtk_assistant_get_nth_page (GTK_ASSISTANT(data->assistant),0),
+					 gettext(encodings_doc_page_title));
 
-        gtk_widget_hide (glade_xml_get_widget (xml, "encodings_doc_page"));
-        gtk_widget_hide (glade_xml_get_widget (xml, "load_file_page"));
-        gtk_widget_hide (glade_xml_get_widget (xml, "loaded_files_page"));
-        gtk_widget_hide (glade_xml_get_widget (xml, "merge_page"));
+	widget = GTK_WIDGET(gtk_builder_get_object (builder, "start_page"));
+	gtk_label_set_text (GTK_LABEL(widget), gettext (encodings_doc_string));
+
+        /* conversion page */
+	data->default_encoding_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "default_enc_box"));
+	data->string_box_container = GTK_WIDGET(gtk_builder_get_object (builder, "string_box_container"));
+	data->impossible_label = GTK_WIDGET(gtk_builder_get_object (builder, "impossible_label"));
 
         /* finish page */
-        widget = glade_xml_get_widget (xml, "end_page");
-        gnome_druid_page_edge_set_text (GNOME_DRUID_PAGE_EDGE (widget),
-                                        gettext (finish_convert_string));
-        gtk_widget_show (widget);
+        widget = GTK_WIDGET(gtk_builder_get_object(builder, "end_page"));
+	gtk_label_set_text (GTK_LABEL(widget), gettext (finish_convert_string));
+
+        gtk_builder_connect_signals(builder, data);
+
+        gtk_widget_show_all (data->assistant);
 
         gxi_update_default_enc_combo (data);
         gxi_update_string_box (data);
 
-        success =
-            gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_APPLY &&
-            gxi_save_file (data);
+        g_object_unref(G_OBJECT(builder));
 
-        gtk_widget_destroy (data->dialog);
+        /* This won't return until the assistant is finished */
+        gtk_main();
+
+	if (data->canceled)
+	    success = FALSE;
+	else
+	    success = gxi_save_file (data);
     }
 
+    /* destroy all the data variables */
+    gxi_data_destroy (data);
+    g_free (data);
+
     return success;
-}
-
-/* this is NOT fully implemented */
-void
-gnc_xml_merge_files (void)
-{
-    GncXmlImportData *data;
-    GtkWidget *dialog, *widget, *box;
-    GladeXML *xml;
-
-    data = g_new0 (GncXmlImportData, 1);
-    data->import_type = XML_MERGE_FILES;
-
-    /* common druid initialization */
-    xml = gnc_glade_xml_new (XML_GLADE_FILE, "GnuCash XML Import Dialog");
-
-    dialog = glade_xml_get_widget (xml, "GnuCash XML Import Dialog");
-    gtk_widget_hide ((GTK_DIALOG (dialog))->action_area);
-    data->dialog = dialog;
-    g_object_set_data_full (G_OBJECT (dialog), "xml", xml, g_object_unref);
-    glade_xml_signal_autoconnect_full (xml, gnc_glade_autoconnect_full_func,
-                                       data);
-
-    data->druid = glade_xml_get_widget (xml, "gnc_xml_import_druid");
-    gnc_druid_set_colors (GNOME_DRUID (data->druid));
-
-    /* encodings explanations */
-    widget = glade_xml_get_widget (xml, "encodings_doc_label");
-    gtk_label_set_text (GTK_LABEL (widget), gettext (encodings_doc_string));
-    widget = glade_xml_get_widget (xml, "encodings_doc_page");
-    gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (widget),
-                                         gettext (encodings_doc_page_title));
-
-    gtk_widget_show (glade_xml_get_widget (xml, "start_page"));
-    gtk_widget_show (glade_xml_get_widget (xml, "end_page"));
-
-    /* file chooser */
-    data->file_chooser = gtk_file_chooser_widget_new (
-                             GTK_FILE_CHOOSER_ACTION_OPEN);
-    box = glade_xml_get_widget (xml, "file_chooser_box");
-    gtk_box_pack_start (GTK_BOX (box), data->file_chooser, TRUE, TRUE, 0);
-    g_signal_connect (G_OBJECT (data->file_chooser), "file-activated",
-                      G_CALLBACK (gxi_chooser_file_activated_cb), data);
-    gtk_widget_show (data->file_chooser);
-
-    /* selected file list */
-    data->file_list_store = gtk_list_store_new (FILE_NUM_COLS,
-                            G_TYPE_STRING, G_TYPE_POINTER);
-    data->file_list_view = GTK_TREE_VIEW (glade_xml_get_widget (
-            xml, "selected_file_list"));
-    gtk_tree_view_insert_column_with_attributes (
-        data->file_list_view, -1, NULL,
-        gtk_cell_renderer_text_new (), "text", FILE_COL_NAME, NULL);
-    gtk_tree_view_set_model (data->file_list_view,
-                             GTK_TREE_MODEL (data->file_list_store));
-    g_object_unref (data->file_list_store);
-
-    gtk_widget_show (dialog);
 }
 
 static void
@@ -402,15 +370,6 @@ gxi_data_destroy (GncXmlImportData *data)
 {
     if (!data)
         return;
-
-    if (data->dialog)
-        gtk_widget_hide (data->dialog);
-
-    if (data->file_chooser)
-    {
-        gtk_widget_destroy (data->file_chooser);
-        data->file_chooser = NULL;
-    }
 
     if (data->filename)
     {
@@ -433,13 +392,11 @@ gxi_data_destroy (GncXmlImportData *data)
         data->string_box = NULL;
     }
 
-    if (data->dialog)
+    if (data->assistant)
     {
-        gtk_widget_destroy (data->dialog);
-        data->dialog = NULL;
+        gtk_widget_destroy (data->assistant);
+        data->assistant = NULL;
     }
-
-    g_free (data);
 }
 
 static void
@@ -587,84 +544,6 @@ gxi_session_destroy (GncXmlImportData *data)
 }
 
 static void
-gxi_check_file (GncXmlImportData *data)
-{
-    if (!data->encodings)
-    {
-        gboolean is_utf8;
-        const gchar *locale_enc;
-        gchar *enc_string, **enc_array, **enc_cursor;
-        gpointer enc_ptr;
-        GIConv iconv;
-
-        /* first locale encoding */
-        is_utf8 = g_get_charset (&locale_enc);
-        enc_string = g_ascii_strup (locale_enc, -1);
-        enc_ptr = GUINT_TO_POINTER (g_quark_from_string (enc_string));
-        g_free (enc_string);
-        data->encodings = g_list_append (NULL, enc_ptr);
-
-        /* add utf-8 */
-        if (!is_utf8)
-        {
-            enc_ptr = GUINT_TO_POINTER (g_quark_from_string ("UTF-8"));
-            data->encodings = g_list_append (data->encodings, enc_ptr);
-        }
-
-        /* Translators: Please insert encodings here that are typically used in your
-         * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
-         * for assistance with spelling. */
-        enc_array = g_strsplit (_("ISO-8859-1 KOI8-U"), " ", 0);
-
-        /* loop through typical encodings */
-        for (enc_cursor = enc_array; *enc_cursor; enc_cursor++)
-        {
-            if (!**enc_cursor) continue;
-            enc_string = g_ascii_strup (*enc_cursor, -1);
-            enc_ptr = GUINT_TO_POINTER (g_quark_from_string (enc_string));
-
-            if (!g_list_find (data->encodings, enc_ptr))
-            {
-                /* test whether we like this encoding */
-                iconv = g_iconv_open ("UTF-8", enc_string);
-                if (iconv != (GIConv) - 1)
-                    /* we like it */
-                    data->encodings = g_list_append (data->encodings, enc_ptr);
-                g_iconv_close (iconv);
-            }
-            g_free (enc_string);
-        }
-        g_strfreev (enc_array);
-    }
-
-    if (!data->default_encoding)
-    {
-        /* choose top one */
-        data->default_encoding = GPOINTER_TO_UINT (data->encodings->data);
-    }
-
-    if (!data->choices)
-    {
-        data->choices = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                               g_free, (GDestroyNotify) conv_free);
-    }
-
-    gxi_ambiguous_info_destroy (data);
-
-    /* analyze file */
-    data->n_impossible = gnc_xml2_find_ambiguous (
-                             data->filename, data->encodings, &data->unique, &data->ambiguous_ht, NULL);
-
-    if (data->n_impossible != -1)
-    {
-        /* sort ambiguous words */
-        g_hash_table_foreach (data->ambiguous_ht, (GHFunc)ambiguous_list_insert,
-                              data);
-        gxi_sort_ambiguous_list (data);
-    }
-}
-
-static void
 gxi_sort_ambiguous_list (GncXmlImportData *data)
 {
     data->ambiguous_list = g_list_sort_with_data (
@@ -716,112 +595,6 @@ subst_insert_unique (gchar *byte_sequence, conv_type *conv,
         return;
     g_hash_table_insert (data->subst, g_strdup (byte_sequence),
                          g_strdup (conv->utf8_string));
-}
-
-static gboolean
-gxi_parse_file (GncXmlImportData *data)
-{
-    QofSession *session = NULL;
-    QofBook *book;
-    FileBackend *backend;
-    QofBackendError io_err = ERR_BACKEND_NO_ERR;
-    gchar *logpath, *message = NULL;
-    gboolean success = FALSE;
-
-    if (data->n_unassigned || data->n_impossible)
-        goto cleanup_parse_file;
-
-    /* fill subst hash table with byte sequence substitutions */
-    data->subst = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-    g_hash_table_foreach (data->ambiguous_ht, (GHFunc) subst_insert_amb, data);
-    g_hash_table_foreach (data->unique, (GHFunc) subst_insert_unique, data);
-
-    if (!data->subst)
-        goto cleanup_parse_file;
-
-    /* create a temporary QofSession */
-    gxi_session_destroy (data);
-    session = qof_session_new ();
-    data->session = session;
-    qof_session_begin (session, data->filename, TRUE, FALSE, FALSE);
-    io_err = qof_session_get_error (session);
-    if (io_err != ERR_BACKEND_NO_ERR)
-    {
-        message = _("The file could not be reopened.");
-        goto cleanup_parse_file;
-    }
-
-    xaccLogDisable ();
-    gxi_update_progress_bar (_("Reading file..."), 0.0);
-    qof_session_load (session, gxi_update_progress_bar);
-    gxi_update_progress_bar (NULL, -1.0);
-    xaccLogEnable ();
-
-    io_err = qof_session_get_error (session);
-    if (io_err == ERR_BACKEND_NO_ERR)
-    {
-        /* loaded sucessfully now. strange, but ok */
-        success = TRUE;
-        goto cleanup_parse_file;
-    }
-    else if (io_err != ERR_FILEIO_NO_ENCODING)
-    {
-        /* another error, cannot handle this here */
-        message = _("The file could not be reopened.");
-        goto cleanup_parse_file;
-    }
-
-    qof_session_pop_error (session);
-    book = qof_session_get_book (session);
-    backend = (FileBackend*) qof_book_get_backend (book);
-
-    gxi_update_progress_bar (_("Parsing file..."), 0.0);
-    success = gnc_xml2_parse_with_subst (backend, book, data->subst);
-    gxi_update_progress_bar (NULL, -1.0);
-
-    if (success)
-        data->session = session;
-    else
-        message = _("There was an error parsing the file.");
-
-cleanup_parse_file:
-
-    if (data->subst)
-    {
-        g_hash_table_destroy (data->subst);
-        data->subst = NULL;
-    }
-    if (message)
-    {
-        gnc_error_dialog (data->dialog, "%s", message);
-    }
-    if (!success)
-        gxi_session_destroy (data);
-
-    return success;
-}
-
-static gboolean
-gxi_save_file (GncXmlImportData *data)
-{
-    QofBackendError io_err;
-    g_return_val_if_fail (data && data->session, FALSE);
-
-    gxi_update_progress_bar (_("Writing file..."), 0.0);
-    qof_session_save (data->session, gxi_update_progress_bar);
-    gxi_update_progress_bar (NULL, -1.0);
-
-    io_err = qof_session_get_error (data->session);
-
-    if (io_err == ERR_BACKEND_NO_ERR)
-    {
-        return TRUE;
-    }
-    else
-    {
-        gxi_session_destroy (data);
-        return FALSE;
-    }
 }
 
 static void
@@ -878,9 +651,7 @@ gxi_update_default_enc_combo (GncXmlImportData *data)
     /* show encodings */
     g_signal_connect (G_OBJECT (combo), "changed",
                       G_CALLBACK (gxi_default_enc_combo_changed_cb), data);
-    gtk_container_add (GTK_CONTAINER (gnc_glade_lookup_widget (
-                                          data->druid, "default_enc_box")),
-                       GTK_WIDGET (combo));
+    gtk_container_add (GTK_CONTAINER (data->default_encoding_hbox), GTK_WIDGET (combo));
     gtk_widget_show (GTK_WIDGET (combo));
 }
 
@@ -1042,156 +813,21 @@ gxi_update_string_box (GncXmlImportData *data)
     } /* next word */
 
     /* wire up whole string vbox */
-    gtk_container_add (GTK_CONTAINER (gnc_glade_lookup_widget (
-                                          data->druid, "string_box_container")),
-                       GTK_WIDGET (vbox));
+    gtk_container_add (GTK_CONTAINER (data->string_box_container), GTK_WIDGET (vbox));
     gtk_widget_show (GTK_WIDGET (vbox));
 
     /* update label now, n_unassigned is calculated */
     if (!data->summary_label)
-        data->summary_label = gnc_glade_lookup_widget (data->druid,
-                              "impossible_label");
+        data->summary_label = data->impossible_label;
     gxi_update_summary_label (data);
 }
 
-static void
-gxi_update_conversion_forward (GncXmlImportData *data)
-{
-    if (data->n_unassigned || data->n_impossible)
-        gnome_druid_set_buttons_sensitive (GNOME_DRUID (data->druid),
-                                           TRUE, FALSE, TRUE, TRUE);
-    else
-        gnome_druid_set_buttons_sensitive (GNOME_DRUID (data->druid),
-                                           TRUE, TRUE, TRUE, TRUE);
-}
-
-static GnomeDruidPage *
-gxi_get_named_page (GncXmlImportData *data, const gchar *name)
-{
-    return GNOME_DRUID_PAGE (gnc_glade_lookup_widget (data->dialog, name));
-}
-
 void
-gxi_dialog_destroy_cb (GtkObject *object, GncXmlImportData *data)
+gxi_conversion_prepare (GtkAssistant *assistant, gpointer user_data )
 {
-    data->dialog = NULL;
-    gxi_data_destroy (data);
-}
+    GncXmlImportData *data = user_data;
 
-void
-gxi_cancel_cb (GnomeDruid *druid, GncXmlImportData *data)
-{
-    if (data->import_type == XML_CONVERT_SINGLE_FILE)
-    {
-        gtk_dialog_response (GTK_DIALOG (data->dialog), GTK_RESPONSE_CANCEL);
-    }
-    else
-    {
-        gtk_widget_destroy (data->dialog);
-    }
-}
-
-static gint
-file_filename_cmp (const GncXmlImportFile *file, const gchar *filename)
-{
-    return strcmp (file->filename, filename);
-}
-
-static void
-gxi_load_file (GncXmlImportData *data)
-{
-    GncXmlImportFile *file;
-    gchar *filename;
-    GtkTreeIter iter;
-
-    g_return_if_fail (data != NULL);
-
-    filename  = gtk_file_chooser_get_filename (
-                    GTK_FILE_CHOOSER (data->file_chooser));
-
-    if (filename == NULL)
-    {
-        return;
-    }
-    if (!g_file_test (filename, G_FILE_TEST_IS_REGULAR))
-    {
-        g_free (filename);
-        return;
-    }
-
-    if (g_list_find_custom (data->files, filename,
-                            (GCompareFunc) file_filename_cmp))
-    {
-        const gchar *message = _(
-                                   "That GnuCash XML file is already loaded. Please select another file.");
-        gnc_error_dialog (data->dialog, "%s", message);
-        g_free (filename);
-        return;
-    }
-
-    file = g_new0 (GncXmlImportFile, 1);
-    file->filename = filename;
-
-    data->files = g_list_append (data->files, file);
-
-    gtk_list_store_append (data->file_list_store, &iter);
-    gtk_list_store_set (data->file_list_store, &iter,
-                        FILE_COL_NAME, filename,
-                        FILE_COL_INFO, file,
-                        -1);
-    file->file_list_iter = gtk_tree_iter_copy (&iter);
-
-    gnome_druid_set_page (
-        GNOME_DRUID (data->druid),
-        /*     gxi_get_named_page (data, "loaded_files_page")); */
-        gxi_get_named_page (data, "encodings_doc_page"));
-}
-
-static void
-gxi_unload_file (GncXmlImportData *data, GncXmlImportFile *file)
-{
-    g_return_if_fail (data != NULL && file != NULL);
-
-    data->files = g_list_remove (data->files, file);
-    gtk_list_store_remove (data->file_list_store, file->file_list_iter);
-    gtk_tree_iter_free (file->file_list_iter);
-
-    g_free (file->filename);
-}
-
-void
-gxi_chooser_file_activated_cb (GtkFileChooser *chooser, GncXmlImportData *data)
-{
-    gxi_load_file (data);
-}
-
-gboolean
-gxi_load_file_next_cb (GnomeDruidPage *page, GtkWidget *widget,
-                       GncXmlImportData *data)
-{
-    GtkFileChooser *chooser = GTK_FILE_CHOOSER (data->file_chooser);
-    gchar *filename = gtk_file_chooser_get_filename (chooser);
-
-    if (filename != NULL)
-    {
-        if (g_file_test (filename, G_FILE_TEST_IS_DIR))
-        {
-            gtk_file_chooser_set_current_folder (chooser, filename);
-        }
-        else
-        {
-            gxi_load_file (data);
-        }
-        g_free (filename);
-    }
-
-    return TRUE;
-}
-
-void
-gxi_conversion_prepare_cb (GnomeDruidPage *page, GtkWidget *widget,
-                           GncXmlImportData *data)
-{
+    gxi_update_string_box (data);
     gxi_update_conversion_forward (data);
 }
 
@@ -1324,9 +960,206 @@ gxi_string_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data)
 }
 
 void
+gxi_conversion_next (GtkAssistant *assistant, gpointer user_data)
+{
+    GncXmlImportData *data = user_data;
+    gxi_parse_file (data);
+}
+
+static void
+gxi_check_file (GncXmlImportData *data)
+{
+    if (!data->encodings)
+    {
+        gboolean is_utf8;
+        const gchar *locale_enc;
+        gchar *enc_string, **enc_array, **enc_cursor;
+        gpointer enc_ptr;
+        GIConv iconv;
+
+        /* first locale encoding */
+        is_utf8 = g_get_charset (&locale_enc);
+        enc_string = g_ascii_strup (locale_enc, -1);
+        enc_ptr = GUINT_TO_POINTER (g_quark_from_string (enc_string));
+        g_free (enc_string);
+        data->encodings = g_list_append (NULL, enc_ptr);
+
+        /* add utf-8 */
+        if (!is_utf8)
+        {
+            enc_ptr = GUINT_TO_POINTER (g_quark_from_string ("UTF-8"));
+            data->encodings = g_list_append (data->encodings, enc_ptr);
+        }
+
+        /* Translators: Please insert encodings here that are typically used in your
+         * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
+         * for assistance with spelling. */
+        enc_array = g_strsplit (_("ISO-8859-1 KOI8-U"), " ", 0);
+
+        /* loop through typical encodings */
+        for (enc_cursor = enc_array; *enc_cursor; enc_cursor++)
+        {
+            if (!**enc_cursor) continue;
+            enc_string = g_ascii_strup (*enc_cursor, -1);
+            enc_ptr = GUINT_TO_POINTER (g_quark_from_string (enc_string));
+
+            if (!g_list_find (data->encodings, enc_ptr))
+            {
+                /* test whether we like this encoding */
+                iconv = g_iconv_open ("UTF-8", enc_string);
+                if (iconv != (GIConv) - 1)
+                    /* we like it */
+                    data->encodings = g_list_append (data->encodings, enc_ptr);
+                g_iconv_close (iconv);
+            }
+            g_free (enc_string);
+        }
+        g_strfreev (enc_array);
+    }
+
+    if (!data->default_encoding)
+    {
+        /* choose top one */
+        data->default_encoding = GPOINTER_TO_UINT (data->encodings->data);
+    }
+
+    if (!data->choices)
+    {
+        data->choices = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                               g_free, (GDestroyNotify) conv_free);
+    }
+
+    gxi_ambiguous_info_destroy (data);
+
+    /* analyze file */
+    data->n_impossible = gnc_xml2_find_ambiguous (
+                             data->filename, data->encodings, &data->unique, &data->ambiguous_ht, NULL);
+
+    if (data->n_impossible != -1)
+    {
+        /* sort ambiguous words */
+        g_hash_table_foreach (data->ambiguous_ht, (GHFunc)ambiguous_list_insert,
+                              data);
+        gxi_sort_ambiguous_list (data);
+    }
+}
+
+static gboolean
+gxi_parse_file (GncXmlImportData *data)
+{
+    QofSession *session = NULL;
+    QofBook *book;
+    FileBackend *backend;
+    QofBackendError io_err = ERR_BACKEND_NO_ERR;
+    gchar *logpath, *message = NULL;
+    gboolean success = FALSE;
+
+    if (data->n_unassigned || data->n_impossible)
+        goto cleanup_parse_file;
+
+    /* fill subst hash table with byte sequence substitutions */
+    data->subst = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+    g_hash_table_foreach (data->ambiguous_ht, (GHFunc) subst_insert_amb, data);
+    g_hash_table_foreach (data->unique, (GHFunc) subst_insert_unique, data);
+
+    if (!data->subst)
+        goto cleanup_parse_file;
+
+    /* create a temporary QofSession */
+    gxi_session_destroy (data);
+    session = qof_session_new ();
+    data->session = session;
+    qof_session_begin (session, data->filename, TRUE, FALSE, FALSE);
+    io_err = qof_session_get_error (session);
+    if (io_err != ERR_BACKEND_NO_ERR)
+    {
+        message = _("The file could not be reopened.");
+        goto cleanup_parse_file;
+    }
+
+    xaccLogDisable ();
+    gxi_update_progress_bar (_("Reading file..."), 0.0);
+    qof_session_load (session, gxi_update_progress_bar);
+    gxi_update_progress_bar (NULL, -1.0);
+    xaccLogEnable ();
+
+    io_err = qof_session_get_error (session);
+    if (io_err == ERR_BACKEND_NO_ERR)
+    {
+        /* loaded sucessfully now. strange, but ok */
+        success = TRUE;
+        goto cleanup_parse_file;
+    }
+    else if (io_err != ERR_FILEIO_NO_ENCODING)
+    {
+        /* another error, cannot handle this here */
+        message = _("The file could not be reopened.");
+        goto cleanup_parse_file;
+    }
+
+    qof_session_pop_error (session);
+    book = qof_session_get_book (session);
+    backend = (FileBackend*) qof_book_get_backend (book);
+
+    gxi_update_progress_bar (_("Parsing file..."), 0.0);
+    success = gnc_xml2_parse_with_subst (backend, book, data->subst);
+    gxi_update_progress_bar (NULL, -1.0);
+
+    if (success)
+        data->session = session;
+    else
+        message = _("There was an error parsing the file.");
+
+cleanup_parse_file:
+
+    if (data->subst)
+    {
+        g_hash_table_destroy (data->subst);
+        data->subst = NULL;
+    }
+    if (message)
+    {
+        gnc_error_dialog (data->assistant, "%s", message);
+    }
+    if (!success)
+        gxi_session_destroy (data);
+
+    return success;
+}
+
+static gboolean
+gxi_save_file (GncXmlImportData *data)
+{
+    QofBackendError io_err;
+    g_return_val_if_fail (data && data->session, FALSE);
+
+    gxi_update_progress_bar (_("Writing file..."), 0.0);
+    qof_session_save (data->session, gxi_update_progress_bar);
+    gxi_update_progress_bar (NULL, -1.0);
+
+    io_err = qof_session_get_error (data->session);
+
+    if (io_err == ERR_BACKEND_NO_ERR)
+    {
+        return TRUE;
+    }
+    else
+    {
+        gxi_session_destroy (data);
+        return FALSE;
+    }
+}
+
+
+/***************************
+ *                         *
+ * Encodings dialog window *
+ *                         *
+ **************************/
+void
 gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
 {
-    GladeXML *xml;
+    GtkBuilder *builder;
     GtkWidget *dialog;
     GtkListStore *list_store;
     GtkTreeStore *tree_store;
@@ -1338,19 +1171,21 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     gpointer enc_ptr;
     gint i, j;
 
-    xml = gnc_glade_xml_new (XML_GLADE_FILE, "Encodings Dialog");
-    dialog = glade_xml_get_widget (xml, "Encodings Dialog");
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "assistant-xml-encoding.glade", "Encodings Dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Encodings Dialog"));
     data->encodings_dialog = dialog;
-    g_object_set_data_full (G_OBJECT (dialog), "xml", xml, g_object_unref);
-    glade_xml_signal_autoconnect_full (xml, gnc_glade_autoconnect_full_func, data);
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->dialog));
 
-    data->available_encs_view = GTK_TREE_VIEW (glade_xml_get_widget (
-                                    xml, "available_encs_view"));
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
+
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->assistant));
+
+    data->available_encs_view = GTK_TREE_VIEW (gtk_builder_get_object (builder, "available_encs_view"));
+
+    data->custom_enc_entry = GTK_WIDGET(gtk_builder_get_object (builder, "custom_enc_entry"));
 
     /* set up selected encodings list */
-    data->selected_encs_view = GTK_TREE_VIEW (glade_xml_get_widget (
-                                   xml, "selected_encs_view"));
+    data->selected_encs_view = GTK_TREE_VIEW (gtk_builder_get_object (builder, "selected_encs_view"));
     list_store = gtk_list_store_new (ENC_NUM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
     for (enc_iter = data->encodings; enc_iter; enc_iter = enc_iter->next)
     {
@@ -1367,8 +1202,7 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     g_object_unref (list_store);
 
     /* set up system encodings list */
-    data->available_encs_view = GTK_TREE_VIEW (glade_xml_get_widget (
-                                    xml, "available_encs_view"));
+    data->available_encs_view = GTK_TREE_VIEW (gtk_builder_get_object (builder, "available_encs_view"));
     tree_store = gtk_tree_store_new (ENC_NUM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
     for (i = 0, system_enc = system_encodings;
             i < n_system_encodings;
@@ -1434,6 +1268,7 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
         g_list_free (data->encodings);
         data->encodings = encodings_bak;
     }
+    g_object_unref(G_OBJECT(builder));
 
     gtk_widget_destroy (dialog);
     data->encodings_dialog = NULL;
@@ -1486,6 +1321,50 @@ gxi_add_encoding (GncXmlImportData *data, gpointer encoding_ptr)
 }
 
 void
+gxi_add_enc_clicked_cb (GtkButton *button, GncXmlImportData *data)
+{
+    GtkTreeSelection *selection;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gpointer enc_ptr;
+
+    selection = gtk_tree_view_get_selection (data->available_encs_view);
+    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+        return;
+    gtk_tree_model_get (model, &iter, ENC_COL_QUARK, &enc_ptr, -1);
+    if (!enc_ptr)
+        return;
+    gxi_add_encoding (data, enc_ptr);
+}
+
+static void
+gxi_remove_encoding (GncXmlImportData *data, GtkTreeModel *model,
+                     GtkTreeIter *iter)
+{
+    gpointer enc_ptr;
+
+    gtk_tree_model_get (model, iter, ENC_COL_QUARK, &enc_ptr, -1);
+    data->encodings = g_list_remove (data->encodings, enc_ptr);
+    gtk_list_store_remove (GTK_LIST_STORE (model), iter);
+    if (!data->encodings)
+        gtk_dialog_set_response_sensitive (GTK_DIALOG (data->encodings_dialog),
+                                           GTK_RESPONSE_OK, FALSE);
+}
+
+void
+gxi_remove_enc_clicked_cb (GtkButton *button, GncXmlImportData *data)
+{
+    GtkTreeSelection *selection;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+
+    selection = gtk_tree_view_get_selection (data->selected_encs_view);
+    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+        return;
+    gxi_remove_encoding (data, model, &iter);
+}
+
+void
 gxi_available_enc_activated_cb (GtkTreeView *view, GtkTreePath *path,
                                 GtkTreeViewColumn *column,
                                 GncXmlImportData *data)
@@ -1496,23 +1375,6 @@ gxi_available_enc_activated_cb (GtkTreeView *view, GtkTreePath *path,
 
     model = gtk_tree_view_get_model (data->available_encs_view);
     if (!gtk_tree_model_get_iter (model, &iter, path))
-        return;
-    gtk_tree_model_get (model, &iter, ENC_COL_QUARK, &enc_ptr, -1);
-    if (!enc_ptr)
-        return;
-    gxi_add_encoding (data, enc_ptr);
-}
-
-void
-gxi_add_enc_clicked_cb (GtkButton *button, GncXmlImportData *data)
-{
-    GtkTreeSelection *selection;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    gpointer enc_ptr;
-
-    selection = gtk_tree_view_get_selection (data->available_encs_view);
-    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
         return;
     gtk_tree_model_get (model, &iter, ENC_COL_QUARK, &enc_ptr, -1);
     if (!enc_ptr)
@@ -1534,23 +1396,8 @@ gxi_custom_enc_activate_cb (GtkEntry *entry, GncXmlImportData *data)
 void
 gxi_add_custom_enc_clicked_cb (GtkButton *button, GncXmlImportData *data)
 {
-    GtkWidget *entry = gnc_glade_lookup_widget (data->encodings_dialog,
-                       "custom_enc_entry");
+    GtkWidget *entry = data->custom_enc_entry;
     gxi_custom_enc_activate_cb (GTK_ENTRY (entry), data);
-}
-
-static void
-gxi_remove_encoding (GncXmlImportData *data, GtkTreeModel *model,
-                     GtkTreeIter *iter)
-{
-    gpointer enc_ptr;
-
-    gtk_tree_model_get (model, iter, ENC_COL_QUARK, &enc_ptr, -1);
-    data->encodings = g_list_remove (data->encodings, enc_ptr);
-    gtk_list_store_remove (GTK_LIST_STORE (model), iter);
-    if (!data->encodings)
-        gtk_dialog_set_response_sensitive (GTK_DIALOG (data->encodings_dialog),
-                                           GTK_RESPONSE_OK, FALSE);
 }
 
 void
@@ -1566,85 +1413,3 @@ gxi_selected_enc_activated_cb (GtkTreeView *view, GtkTreePath *path,
     gxi_remove_encoding (data, model, &iter);
 }
 
-void
-gxi_remove_enc_clicked_cb (GtkButton *button, GncXmlImportData *data)
-{
-    GtkTreeSelection *selection;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-
-    selection = gtk_tree_view_get_selection (data->selected_encs_view);
-    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
-        return;
-    gxi_remove_encoding (data, model, &iter);
-}
-
-gboolean
-gxi_conversion_next_cb  (GnomeDruidPage *page, GtkWidget *widget,
-                         GncXmlImportData *data)
-{
-    return !gxi_parse_file (data);
-}
-
-void
-gxi_loaded_files_prepare_cb (GnomeDruidPage *page, GtkWidget *widget,
-                             GncXmlImportData *data)
-{
-    gnome_druid_set_buttons_sensitive (GNOME_DRUID (data->druid),
-                                       FALSE, TRUE, TRUE, TRUE);
-}
-
-gboolean
-gxi_loaded_files_next_cb (GnomeDruidPage *page, GtkWidget *widget,
-                          GncXmlImportData *data)
-{
-    if (!g_list_first (data->files))
-    {
-        const gchar *message = _(
-                                   "No files to merge. Please add ones by clicking on 'Load another file'.");
-        gnc_error_dialog (data->dialog, "%s", message);
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-void
-gxi_unload_file_clicked_cb (GtkButton *button, GncXmlImportData *data)
-{
-    GtkTreeSelection *selection;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GncXmlImportFile *file;
-
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (data->file_list_view));
-    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
-        return;
-
-    gtk_tree_model_get (model, &iter, FILE_COL_INFO, &file, -1);
-
-
-
-    gxi_unload_file (data, file);
-}
-
-void
-gxi_load_file_clicked_cb (GtkButton *button, GncXmlImportData *data)
-{
-    gnome_druid_set_page (GNOME_DRUID (data->druid),
-                          gxi_get_named_page (data, "load_file_page"));
-}
-
-void
-gxi_end_finish_cb (GnomeDruidPage *page, GtkWidget *widget,
-                   GncXmlImportData *data)
-{
-    if (data->import_type == XML_CONVERT_SINGLE_FILE)
-    {
-        gtk_dialog_response (GTK_DIALOG (data->dialog), GTK_RESPONSE_APPLY);
-    }
-    else
-    {
-        gtk_widget_destroy (data->dialog);
-    }
-}

@@ -250,6 +250,7 @@ src/gnome/top-level.c
 src/gnome-utils/account-quickfill.c
 src/gnome-utils/assistant-gconf-setup.c
 src/gnome-utils/assistant-utils.c
+src/gnome-utils/assistant-xml-encoding.c
 src/gnome-utils/cursors.c
 src/gnome-utils/dialog-account.c
 src/gnome-utils/dialog-book-close.c
@@ -266,9 +267,7 @@ src/gnome-utils/dialog-totd.c
 src/gnome-utils/dialog-transfer.c
 src/gnome-utils/dialog-userpass.c
 src/gnome-utils/dialog-utils.c
-src/gnome-utils/druid-gnc-xml-import.c
 src/gnome-utils/druid-utils.c
-src/gnome-utils/glade/druid-gnc-xml-import.glade
 src/gnome-utils/gnc-account-sel.c
 src/gnome-utils/gnc-amount-edit.c
 src/gnome-utils/gnc-autosave.c
@@ -319,6 +318,7 @@ src/gnome-utils/gnc-tree-view-price.c
 src/gnome-utils/gnc-tree-view-sx-list.c
 src/gnome-utils/gnc-window.c
 src/gnome-utils/gtkbuilder/assistant-gconf-setup.glade
+src/gnome-utils/gtkbuilder/assistant-xml-encoding.glade
 src/gnome-utils/gtkbuilder/dialog-account.glade
 src/gnome-utils/gtkbuilder/dialog-book-close.glade
 src/gnome-utils/gtkbuilder/dialog-commodity.glade

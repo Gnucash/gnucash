@@ -1,6 +1,7 @@
 /*
- * druid-gnc-xml-import.h --
+ * assistant-xml-encoding.h --
  * Copyright (C) 2006 Andreas Koehler <andi5.py@gmx.net>
+ * Copyright (C) 2011 Robert Fewell
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -20,14 +21,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#ifndef DRUID_GNC_XML_IMPORT_H
-#define DRUID_GNC_XML_IMPORT_H
+#ifndef ASSISTANT_XML_ENCODING_H
+#define ASSISTANT_XML_ENCODING_H
 
 #include "qof.h"
 
 gboolean gnc_xml_convert_single_file (const gchar *filename);
 
-/* this is NOT fully implemented */
-void gnc_xml_merge_files (void);
-
-#endif /* DRUID_GNC_XML_IMPORT_H */
+#endif /* ASSISTANT_XML_ENCODING_H */

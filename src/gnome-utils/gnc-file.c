@@ -28,7 +28,7 @@
 #include <string.h>
 
 #include "dialog-utils.h"
-#include "druid-gnc-xml-import.h"
+#include "assistant-xml-encoding.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"

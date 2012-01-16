@@ -1,4 +1,4 @@
-SUBDIRS = glade gtkbuilder schemas . test ui
+SUBDIRS = gtkbuilder schemas . test ui
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
@@ -28,7 +28,9 @@ AM_CPPFLAGS = \
 
 libgncmod_gnome_utils_la_SOURCES = \
   account-quickfill.c \
+  assistant-gconf-setup.c \
   assistant-utils.c \
+  assistant-xml-encoding.c \
   cursors.c \
   dialog-account.c \
   dialog-book-close.c \
@@ -46,8 +48,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-userpass.c \
   dialog-utils.c \
   druid-utils.c \
-  assistant-gconf-setup.c \
-  druid-gnc-xml-import.c \
   gnc-account-sel.c \
   gnc-amount-edit.c \
   gnc-autosave.c \
@@ -106,7 +106,9 @@ libgncmod_gnome_utils_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   account-quickfill.h \
+  assistant-gconf-setup.h \
   assistant-utils.h \
+  assistant-xml-encoding.h \
   dialog-account.h \
   dialog-book-close.h \
   dialog-commodity.h \
@@ -121,8 +123,6 @@ gncinclude_HEADERS = \
   dialog-transfer.h \
   dialog-utils.h \
   druid-utils.h \
-  assistant-gconf-setup.h \
-  druid-gnc-xml-import.h \
   gnc-account-sel.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
