@@ -267,7 +267,6 @@ src/gnome-utils/dialog-totd.c
 src/gnome-utils/dialog-transfer.c
 src/gnome-utils/dialog-userpass.c
 src/gnome-utils/dialog-utils.c
-src/gnome-utils/druid-utils.c
 src/gnome-utils/gnc-account-sel.c
 src/gnome-utils/gnc-amount-edit.c
 src/gnome-utils/gnc-autosave.c

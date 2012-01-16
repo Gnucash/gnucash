@@ -6,7 +6,6 @@
 #include <glib-object.h>
 #include <dialog-options.h>
 #include <dialog-utils.h>
-#include <druid-utils.h>
 #include <gnc-amount-edit.h>
 #include <gnc-date-edit.h>
 #include <gnc-file.h>
