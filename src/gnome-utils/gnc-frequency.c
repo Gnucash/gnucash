@@ -25,8 +25,8 @@
 
 #include "config.h"
 
+#include <glib.h>
 #include <gtk/gtk.h>
-#include <glib/gtypes.h>
 #include <math.h>
 #include <time.h>
 
