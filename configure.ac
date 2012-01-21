@@ -1341,7 +1341,7 @@ AC_CONFIG_FILES(
   dnl # Stuff for bill/invoice import plugin
   src/plugins/Makefile
   src/plugins/bi_import/Makefile
-  src/plugins/bi_import/glade/Makefile
+  src/plugins/bi_import/gtkbuilder/Makefile
   src/plugins/bi_import/ui/Makefile
   dnl # non-makefiles
   dnl # Please read doc/build-system before adding *anything* here

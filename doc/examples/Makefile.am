@@ -5,12 +5,14 @@ doc_DATA = \
   Money95mfunds_fr.qif \
   Money95stocks_fr.qif \
   README \
+  README_invoice \
   abc-all.qif \
   abc.qif \
   bogus.qif \
   cbb-export.qif \
   currency_tree_xml.gnucash \
   every.qif \
+  invoice.csv \
   ms-money.qif \
   quicktest.qif \
   swipe.qif \
