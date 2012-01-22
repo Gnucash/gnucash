@@ -72,6 +72,12 @@ void dat_movedown_templ_cb(GtkButton *button, gpointer user_data);
 void dat_sort_templ_cb(GtkButton *button, gpointer user_data);
 void dat_del_templ_cb(GtkButton *button, gpointer user_data);
 
+static void entry_insert_cb (GtkEditable *editable,
+                             const gchar *text,
+                             gint         length,
+                             gint        *position,
+                             gpointer     data);
+
 enum
 {
     TEMPLATE_NAME,
@@ -276,6 +282,12 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     td->template_gtktreeview =
         GTK_TREE_VIEW(gtk_builder_get_object (builder, "template_list"));
 
+    /* Connect signals */
+    g_signal_connect (td->recp_account_entry, "insert-text",
+                      G_CALLBACK (entry_insert_cb), td);
+    g_signal_connect (td->recp_bankcode_entry, "insert-text",
+                      G_CALLBACK (entry_insert_cb), td);
+
     /* Amount edit */
     td->amount_edit = gnc_amount_edit_new();
     gtk_box_pack_start_defaults(GTK_BOX(amount_hbox), td->amount_edit);
@@ -324,7 +336,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     default:
         g_critical("gnc_ab_trans_dialog_new: Oops, unknown GncABTransType %d",
                    trans_type);
-    break;
+        break;
     }
 
     gtk_label_set_text(GTK_LABEL(orig_name_label), ab_ownername);
@@ -1062,4 +1074,36 @@ dat_del_templ_cb(GtkButton *button, gpointer user_data)
     }
     g_free(name);
     LEAVE(" ");
+}
+
+static void
+entry_insert_cb (GtkEditable *editable,
+                 const gchar *text,
+                 gint         length,
+                 gint        *position,
+                 gpointer     data)
+{
+    GString* result = g_string_new(NULL);
+    gint i;
+
+    if (length == -1)
+        length = strlen(text);
+
+    /* Filter non digits */
+    for (i = 0; i < length; i++)
+    {
+        gchar c = text[i];
+        if (g_ascii_isdigit(c))
+        {
+            g_string_append_c(result, c);
+        }
+    }
+
+    g_signal_handlers_block_by_func (editable,
+                                     (gpointer) entry_insert_cb, data);
+    gtk_editable_insert_text (editable, result->str, result->len, position);
+    g_signal_handlers_unblock_by_func (editable,
+                                       (gpointer) entry_insert_cb, data);
+    g_signal_stop_emission_by_name (editable, "insert_text");
+    g_string_free (result, TRUE);
 }
