@@ -33,7 +33,6 @@ libgncmod_ledger_core_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-  ${GLADE_LIBS} \
   ${GCONF_LIBS} \
   ${GUILE_LIBS} \
   ${GTK_LIBS} \
@@ -50,8 +49,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
-  ${GLADE_CFLAGS} \
   ${GCONF_CFLAGS} \
+  ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 
 

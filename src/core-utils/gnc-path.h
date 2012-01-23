@@ -62,12 +62,6 @@ gchar *gnc_path_get_pkgsysconfdir(void);
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkglibdir(void);
 
-/** Returns the glade file path, usually
- * "$prefix/share/gnucash/glade".
- *
- * @returns A newly allocated string. */
-gchar *gnc_path_get_gladedir(void);
-
 /** Returns the gtkbuilder file path, usually
  * "$prefix/share/gnucash/gktbuilder".
  *

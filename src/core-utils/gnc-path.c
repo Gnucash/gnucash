@@ -96,19 +96,6 @@ gchar *gnc_path_get_pkglibdir()
     return result;
 }
 
-/** Returns the glade file path, usually
- * "$prefix/share/gnucash/glade".
- *
- * @returns A newly allocated string. */
-gchar *gnc_path_get_gladedir()
-{
-    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-    gchar *result = g_build_filename (pkgdatadir, "glade", (char*)NULL);
-    g_free (pkgdatadir);
-    //printf("Returning gladedir %s\n", result);
-    return result;
-}
-
 /** Returns the gtkbuilder file path, usually
  * "$prefix/share/gnucash/gtkbuilder".
  *

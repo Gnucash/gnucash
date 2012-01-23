@@ -97,7 +97,6 @@ function dist_gnome() {
     wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $DIST_DIR

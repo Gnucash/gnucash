@@ -40,7 +40,6 @@
 #endif
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
-#include <glade/glade.h>
 #include "gnc-date-edit.h"
 
 #include "gnc-plugin-page-register.h"

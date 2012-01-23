@@ -536,8 +536,6 @@ function inst_gnome() {
         wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $GNOME_DIR

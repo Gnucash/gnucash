@@ -24,7 +24,6 @@ noinst_PROGRAMS = ${TEST_PROGS}
 test_gtkmm_LDADD = ${top_builddir}/${MODULEPATH}/libgncmod-gtkmm.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GTKMM_LIBS} \
-  ${GLADE_LIBS} \
   ${GLIB_LIBS}
 
 AM_CPPFLAGS = \
@@ -38,5 +37,4 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/optional/gtkmm \
   ${GTKMM_CFLAGS} \
-  ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS}

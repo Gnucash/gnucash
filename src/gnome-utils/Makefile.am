@@ -15,7 +15,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
-  ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GCONF_CFLAGS} \
@@ -191,7 +190,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GNOME_LIBS} \
   ${GCONF_LIBS} \
   ${GNOME_KEYRING_LIBS} \
-  ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \

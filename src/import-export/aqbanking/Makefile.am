@@ -44,7 +44,6 @@ libgncmod_aqbanking_la_LIBADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GNOME_LIBS} \
   ${GCONF_LIBS} \
-  ${GLADE_LIBS} \
   ${GLIB_LIBS} \
   ${GWENGUI_GTK2_LIBS} \
   ${AQBANKING_LIBS}
@@ -64,7 +63,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
   ${GCONF_CFLAGS} \
-  ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${AQBANKING_CFLAGS}
 

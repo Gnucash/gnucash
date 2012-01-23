@@ -27,7 +27,6 @@ libgncmod_bi_import_la_LIBADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/lib/libc/libc-missing.la \
   ${GCONF_LIBS} \
-  ${GLADE_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
@@ -50,7 +49,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/lib/libc \
   ${GCONF_CFLAGS} \
-  ${GLADE_CFLAGS} \
+  ${GTK_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 

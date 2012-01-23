@@ -35,8 +35,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/libqof/qof \
   ${GCONF_CFLAGS} \
-  ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
+  ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 
 uidir = $(GNC_UI_DIR)

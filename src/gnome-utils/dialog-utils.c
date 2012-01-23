@@ -28,7 +28,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
-#include <glade/glade.h>
 #include <gmodule.h>
 #ifdef HAVE_DLFCN_H
 # include <dlfcn.h>
@@ -786,136 +785,12 @@ gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
         gtk_clist_set_text (list, row, col, "");
 }
 
-/*   Glade Stuff
- *
- *
- */
-
-static gboolean glade_inited = FALSE;
-
-/* gnc_glade_xml_new: a convenience wrapper for glade_xml_new
- *   - takes care of glade initialization, if needed
- *   - takes care of finding the directory for glade files
- */
-GladeXML *
-gnc_glade_xml_new (const char *filename, const char *root)
-{
-    GladeXML *xml;
-    char *fname;
-    gchar *gnc_glade_dir;
-
-    g_return_val_if_fail (filename != NULL, NULL);
-    g_return_val_if_fail (root != NULL, NULL);
-
-    if (!glade_inited)
-    {
-        glade_gnome_init ();
-        glade_inited = TRUE;
-    }
-
-    gnc_glade_dir = gnc_path_get_gladedir ();
-    if (!g_file_test(gnc_glade_dir, G_FILE_TEST_IS_DIR))
-    {
-        g_critical("Directory for glade UI files \"%s\" is not found. Your installation is incomplete and cannot be run.", gnc_glade_dir);
-        g_free (gnc_glade_dir);
-        return NULL;
-    }
-
-    fname = g_build_filename(gnc_glade_dir, filename, (char *)NULL);
-    g_free (gnc_glade_dir);
-
-    if (!g_file_test(fname, G_FILE_TEST_EXISTS))
-    {
-        g_critical("The glade UI file \"%s\" is not found. Your installation is incomplete and cannot be run.", fname);
-        return NULL;
-    }
-
-    xml = glade_xml_new (fname, root, NULL);
-
-    g_free (fname);
-
-    return xml;
-}
-
-/* gnc_glade_lookup_widget:  Given a root (or at least ancestor) widget,
- *   find the child widget with the given name.
- */
-GtkWidget *
-gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
-{
-    GladeXML *xml;
-    GtkWidget *wid;
-
-    if (!widget || !name) return NULL;
-
-    xml = glade_get_widget_tree (widget);
-    if (!xml) return NULL;
-
-    wid = glade_xml_get_widget (xml, name);
-    if (!wid)
-        PWARN("I know nothing of this '%s' whom you seek.", name);
-
-    return wid;
-}
-
-/*
- * The following function is built from a couple of glade functions.
- */
-GModule *allsymbols = NULL;
-
-void
-gnc_glade_autoconnect_full_func(const gchar *handler_name,
-                                GObject *signal_object,
-                                const gchar *signal_name,
-                                const gchar *signal_data,
-                                GObject *other_object,
-                                gboolean signal_after,
-                                gpointer user_data)
-{
-    GCallback func;
-    GCallback *p_func = &func;
-
-    if (allsymbols == NULL)
-    {
-        /* get a handle on the main executable -- use this to find symbols */
-        allsymbols = g_module_open(NULL, 0);
-    }
-
-    if (!g_module_symbol(allsymbols, handler_name, (gpointer *)p_func))
-    {
-#ifdef HAVE_DLSYM
-        /* Fallback to dlsym -- necessary for *BSD linkers */
-        func = dlsym(RTLD_DEFAULT, handler_name);
-#else
-        func = NULL;
-#endif
-        if (func == NULL)
-        {
-            g_warning("ggaff: could not find signal handler '%s'.", handler_name);
-            return;
-        }
-    }
-
-    if (other_object)
-    {
-        if (signal_after)
-            g_signal_connect_object (signal_object, signal_name, func,
-                                     other_object, G_CONNECT_AFTER);
-        else
-            g_signal_connect_object (signal_object, signal_name, func, other_object, 0);
-    }
-    else
-    {
-        if (signal_after)
-            g_signal_connect_after(signal_object, signal_name, func, user_data);
-        else
-            g_signal_connect(signal_object, signal_name, func, user_data);
-    }
-}
 
 /*--------------------------------------------------------------------------
  *   GtkBuilder support functions
  *-------------------------------------------------------------------------*/
+
+GModule *allsymbols = NULL;
 
 /* gnc_builder_add_from_file:
  *

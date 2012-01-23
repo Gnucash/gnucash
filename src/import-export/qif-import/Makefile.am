@@ -26,7 +26,6 @@ libgncmod_qif_import_la_LIBADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${GCONF_LIBS} \
-  ${GLADE_LIBS} \
   ${GLIB_LIBS}
 
 
@@ -64,7 +63,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${GLADE_CFLAGS} \
+  ${GTK_CFLAGS} \
   ${GCONF_CFLAGS} 
 
 uidir = $(GNC_UI_DIR)

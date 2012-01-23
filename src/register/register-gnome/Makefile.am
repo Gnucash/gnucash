@@ -61,7 +61,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
-  ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_XIM_FLAGS} \
   ${GNOME_CFLAGS}

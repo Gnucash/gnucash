@@ -258,8 +258,6 @@ set_default LIBART_LGPL_URL         "$GNOME_WIN32_URL/libart_lgpl/2.3/libart-lgp
 set_default LIBART_LGPL_DEV_URL     "$GNOME_WIN32_URL/libart_lgpl/2.3/libart-lgpl-dev_2.3.21-1_win32.zip"
 set_default LIBBONOBO_URL           "$GNOME_WIN32_URL/libbonobo/2.24/libbonobo_2.24.0-1_win32.zip"
 set_default LIBBONOBO_DEV_URL       "$GNOME_WIN32_URL/libbonobo/2.24/libbonobo-dev_2.24.0-1_win32.zip"
-set_default LIBGLADE_URL            "$GNOME_WIN32_URL/libglade/2.6/libglade_2.6.4-1_win32.zip"
-set_default LIBGLADE_DEV_URL        "$GNOME_WIN32_URL/libglade/2.6/libglade-dev_2.6.4-1_win32.zip"
 set_default LIBGNOME_URL            "$GNOME_WIN32_URL/libgnome/2.24/libgnome_2.24.1-1_win32.zip"
 set_default LIBGNOME_DEV_URL        "$GNOME_WIN32_URL/libgnome/2.24/libgnome-dev_2.24.1-1_win32.zip"
 set_default LIBGNOMECANVAS_URL      "$GNOME_WIN32_URL/libgnomecanvas/2.30/libgnomecanvas_2.30.1-1_win32.zip"

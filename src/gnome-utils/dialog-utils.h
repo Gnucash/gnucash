@@ -26,7 +26,6 @@
 #ifndef DIALOG_UTILS_H
 #define DIALOG_UTILS_H
 
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 #include "qof.h"
 
@@ -117,16 +116,6 @@ gboolean gnc_handle_date_accelerator (GdkEventKey *event,
 void gnc_clist_set_check (GtkCList *list, int row, int col,
                           gboolean checked);
 #endif
-
-GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
-GtkWidget * gnc_glade_lookup_widget (GtkWidget *widget, const char *name);
-void gnc_glade_autoconnect_full_func(const gchar *handler_name,
-                                     GObject *signal_object,
-                                     const gchar *signal_name,
-                                     const gchar *signal_data,
-                                     GObject *connect_object,
-                                     gboolean after,
-                                     gpointer user_data);
 
 gboolean gnc_builder_add_from_file (GtkBuilder *builder, const char *filename, const char *root);
 void gnc_builder_connect_full_func (GtkBuilder *builder,

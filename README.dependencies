@@ -67,7 +67,6 @@ glib2
 gtk+2
 guile
 libart2
-libglade2
 libgnomeprint2.2
 libgnomeui2
 [lib]goffice
@@ -131,7 +130,6 @@ libgoffice/libgsf details
   - pangoft2		>= 1.8.1
   - cairo		>= 0.5.0 [optional]
   - gtk+-2.0		>= 2.6.0
-  - libglade-2.0	>= 2.3.6
   - libgnomeprint-2.2	>= 2.8.2
   - libart-2.0		>= 2.3.11
   - gconf-2.0
@@ -151,7 +149,6 @@ Partial update, 2007-06-09; RHEL-only
     - gtk2-2.4.13			gtk2-2.10.4-16.el5
     - guile-1.6.4			guile-1.8.0--8.20060831cvs
     - libart_lgpl-2.3.16		libart-lgpl-2.3.17-4
-    - libglade2-2.4.0			libglade2-2.6.0-2
     - libgnomeprint22-2.8.0		libgnomeprint22-2.12.1-6
     - libgnomeui-2.8.0			libgnomeui-2.16.0-5.el5
     - libgsf-1.10.1			libgsf-1.14.1-6.1
@@ -208,12 +205,8 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.7-1ubuntu3
     - g-wrap-1.9.6-2ubuntu2
     - libart2-2.3.17-1
-    - libglade2-2.5.1-2ubuntu1
     - libgnomeprint2.2-2.12.1-0ubuntu1
     - libgnomeui2-2.12.0-0ubuntu1
-    - libgtkhtml3
-      - libgtkhtml3.6-18-3.6.2-1
-      - gtkhtml3.8-15-3.8.1-0ubuntu1
     - libgsf1-1.12.3-3ubuntu3
     - libofx2-0.8.0-3ubuntu8
     - libxml2-2.6.21-0ubuntu1
@@ -231,7 +224,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
       - gwrapguile-1.3.4
       - g-wrap-1.9.6
     - libart-2 libart-2.0-2_2.3.17-1_i386.deb
-    - libglade-2 libglade2-0_2.5.1-0ubuntu1_i386.deb
     - libgnomeprint-2.2 libgnomeprint2.2-0_2.10.3-0ubuntu1_i386.deb
     - libgnomeui-2  libgnomeui-0_2.10.0-0ubuntu1_i386.deb
     - libgsf-1 libgsf-1_1.11.1-1ubuntu1_i386.deb
@@ -249,14 +241,12 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.8
     - g-wrap-1.9.6
     - libart-2.3.17
-    - libglade-2.6.0
     - libgnomeprint-2.2-2.12.1
     - libgnomeui-2.16.0
     - libgsf-1.14.1
     - libofx-0.8.0
     - libxml-2.6.26
     - pango-1.14.3
-    - libgtkhtml-3.8-3.12.0
     Note: -devel packages for the libraries above must also be installed.
   -  2006 = 2005-10-06
     [from ftp://ftp.rutgers.edu/pub/Mandrakelinux/devel/2006.0/i586/media/main/]
@@ -268,15 +258,12 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.7
     - g-wrap-1.3.4
     - libart-2.3.17
-    - libglade-2.5.1
     - libgnomeprint-2.2-2.10.3
     - libgnomeui-2.10.2
     - libgsf-1.12.2
     - libofx-0.7.0
     - libxml-2.6.21
     - pango-1.10.0
-    - libgtkhtml-3.1-3.2.5
-    - libgtkhtml-3.6-3.6.2
   - *2005 = 2005-04-14
     [from ftp://ftp.rutgers.edu/pub/Mandrakelinux/devel/2005/i586/media/main/]
     - aqbanking-1.0.7
@@ -287,14 +274,12 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.7
     - g-wrap-1.3.4
     - libart-2.3.17
-    - libglade-2.4.2
     - libgnomeprint-2.2-2.8.2
     - libgnomeui-2.8.2
     - libgsf-1.11.1
     - libofx-0.7.0
     - libxml-2.6.17
     - pango-1.8.1
-    - libgtkhtml-3.1.11
 - SUSE / opensuse
   -  10.2 = 2006-12-07
     - aqbanking-2.2.3
@@ -303,11 +288,9 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - glib2-2.12.4
     - goffice-0.2.1
     - gtk2-2.10.6
-    - gtkhtml2-3.12.2
     - guile-1.8.1
     - g-wrap: not included
     - libart_lgpl-2.3.17
-    - libglade2-2.6.0
     - libgnomeprint-2.12.1
     - libgnomeui-2.16.1
     - libgsf-1.14.2
@@ -322,11 +305,9 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - glib2-2.8.5
     - goffice-0.1.2
     - gtk2-2.8.10
-    - gtkhtml2-3.10.0
     - guile-1.6.7
     - g-wrap: not included
     - libart_lgpl-2.3.17
-    - libglade2-2.5.1
     - libgnomeprint-2.12.1
     - libgnomeui-2.12.0
     - libgsf-1.13.99
@@ -343,7 +324,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.7
     - g-wrap: not included
     - libart_lgpl-2.3.17
-    - libglade2-2.5.1
     - libgnomeprint-2.12.0
     - libgnomeui-2.12.0
     - libgsf-1.12.1
@@ -357,11 +337,9 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - gconf2-2.10.0
     - glib2-2.6.3
     - gtk2-2.6.4
-    - gtkhtml2-3.6.1
     - guile-1.6.7
     - gwrap: not included
     - libart_lgpl-2.3.17
-    - libglade2-2.5.1
     - libgnomeprint-2.10.1
     - libgnomeui-2.10.0
     - libgsf-1.11.1
@@ -379,7 +357,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - gtk2-2.6.10
     - guile-1.6.7
     - libart_lgpl-2.3.17
-    - libglade2-2.5.1
     - libgnomeprint22-2.10.3
     - libgnomeui-2.10.0
     - libgsf-1.11.1
@@ -395,7 +372,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - gtk2-2.4.14
     - guile-1.6.4
     - libart_lgpl-2.3.16
-    - libglade2-2.4.0
     - libgnomeprint22-2.8.0
     - libgnomeui-2.8.0
     - libgsf-1.10.1
@@ -412,7 +388,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - gtk2-2.6.10
     - guile-1.6.7
     - libart2-2.3.17
-    - libglade2-??
     - libgnomeprint2.2-2.10.3
     - libgnomeui2-2.10.1
     - libgsf1-1.12.3
@@ -429,7 +404,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - gtk2-2.6.4
     - guile-1.6.7
     - libart2-2.3.17
-    - libglade2-??
     - libgnomeprint2.2-2.8.2
     - libgnomeui2-2.8.1
     - libgsf1-1.11.1
@@ -455,7 +429,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - gtk+-2.6.8
     - guile-1.6.7
     - libart_lgpl-2.3.17
-    - libglade-2.5.1
     - libgnomeprint-2.10.3
     - libgnomeui-2.10.0
     - libgsf-1.12.1
@@ -472,7 +445,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - glib-2.6.2
     - guile-1.6.7
     - libart_gpl-2.3.16
-    - libglade-2.4.0
     - libgnomeprint-2.8.1
     - libgnomeui-2.8.1-r1
     - libgsf-1.10.0
@@ -493,11 +465,9 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.7
     - gwrap: no
     - libart2-2.3.17
-    - libglade2-2.4.2
     - libgnomeprint2.2: no
     - libgnomeui2: no
     - libgsf1-1.12.1
-    - [lib]gtkhtml3: no
     - libofx: no
     - libxml2-2.6.22
     - pango-1.8.2
@@ -511,12 +481,9 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.5
     - gwrap: no
     - libart2-2.3.16
-    - libglade2-2.6.0
     - libgnomeprint2.2-2.6.1
     - libgnomeui2-2.6.1
     - libgsf1-1.9.1
-    - [lib]gtkhtml3: no
-      - libgtkhtml-2.6.2
     - libofx: no
     - libxml2-2.6.16
     - pango-1.8.1
@@ -535,11 +502,9 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.5
     - g-wrap-1.3.4_6
     - libart_lgpl2-2.3.17
-    - libglade2-2.5.1_2
     - libgnomeprint-2.10.1
     - libgnomeui-2.10.0_1
     - libgsf-1.11.1
-    - [lib]gtkhtml3-3.6.1
     - libofx-0.7.0
     - libxml2-2.6.18
     - pango-1.8.1
@@ -557,7 +522,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.4
     - gwrap: not included
     - libart_lgpl-2.3.16
-    - libglade2-2.4.0
     - libgnomeprint22-2.8.0
     - libgnomeui-2.8.0
     - libgsf-1.10.1
@@ -573,7 +537,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.4
     - g-wrap: not included
     - libart_lgpl-2.3.11
-    - libglade2-2.0.1
     - libgnomeprint22-2.2.1.3
     - libgnomeui-2.2.1
     - libgsf-1.6.0
@@ -591,11 +554,9 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.4
     - gwrap: no
     - libart2-2.3.16
-    - libglade2-2.4.0
     - libgnomeprint2.2-2.8.0
     - libgnomeui2-2.8.0
     - libgsf1-1.10.1
-    - [lib]gtkhtml3-3.3.2
     - libofx: no 
     - libxml2-2.6.16
     - pango-1.6.0
@@ -608,11 +569,9 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - guile-1.6.4
     - gwrap: no
     - libart2-2.3.16
-    - libglade2-2.4.0
     - libgnomeprint2.2-2.8.0
     - libgnomeui2-2.8.0
     - libgsf1-1.10.1
-    - [lib]gtkhtml3-3.3.2
     - libofx: no
     - libxml2-2.6.16
     - pango-1.6.0

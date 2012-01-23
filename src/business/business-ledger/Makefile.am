@@ -39,8 +39,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_INCS} \
-  ${GLADE_CFLAGS} \
   ${GCONF_CFLAGS} \
+  ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.ledger\"

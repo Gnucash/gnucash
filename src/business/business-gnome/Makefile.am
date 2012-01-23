@@ -21,7 +21,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GNOME_CFLAGS} \
   ${GCONF_CFLAGS} \
-  ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
 
@@ -80,7 +79,6 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-  ${GLADE_LIBS} \
   ${GNOME_LIBS} \
   ${GCONF_LIBS} \
   ${GUILE_LIBS} \
