@@ -1,6 +1,5 @@
 %module sw_core_utils
 %{
-#include <guile-mappings.h>
 #include <gnc-glib-utils.h>
 #include <gnc-main.h>
 #include <gnc-path.h>
@@ -10,6 +9,7 @@
 %}
 #if defined(SWIGGUILE)
 %{
+#include <guile-mappings.h>
 SCM scm_init_sw_core_utils_module (void);
 %}
 #endif
