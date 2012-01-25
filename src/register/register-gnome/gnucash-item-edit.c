@@ -59,7 +59,6 @@ enum
     TARGET_UTF8_STRING,
     TARGET_STRING,
     TARGET_TEXT,
-    TARGET_COMPOUND_TEXT
 };
 
 static GnomeCanvasItemClass *gnc_item_edit_parent_class;
@@ -831,6 +830,7 @@ static void
 gnc_item_edit_cut_copy_clipboard (GncItemEdit *item_edit, guint32 time, gboolean cut)
 {
     GtkEditable *editable;
+    GtkClipboard *clipboard;
     gint start_sel, end_sel;
     gchar *clip;
 
@@ -842,15 +842,13 @@ gnc_item_edit_cut_copy_clipboard (GncItemEdit *item_edit, guint32 time, gboolean
     if (!gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel))
         return;
 
-    g_free(item_edit->clipboard);
-
-    if (gtk_selection_owner_set (GTK_WIDGET(item_edit->sheet),
-                                 clipboard_atom, time))
-        clip = gtk_editable_get_chars (editable, start_sel, end_sel);
-    else
-        clip = NULL;
-
-    item_edit->clipboard = clip;
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET (editable),
+					  clipboard_atom);
+    g_return_if_fail (clipboard != NULL);
+    g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
+    clip = gtk_editable_get_chars (editable, start_sel, end_sel);
+    gtk_clipboard_set_text (clipboard, clip, -1);
+    g_free (clip);
 
     if (!cut)
         return;
@@ -873,17 +871,49 @@ gnc_item_edit_copy_clipboard (GncItemEdit *item_edit, guint32 time)
     gnc_item_edit_cut_copy_clipboard(item_edit, time, FALSE);
 }
 
+static void
+paste_received (GtkClipboard *clipboard, const gchar *text, gpointer data)
+{
+    GtkEditable *editable = GTK_EDITABLE (data);
+    gboolean reselect = FALSE;
+    gint old_pos, tmp_pos;
+    gint start_sel, end_sel;
+
+    if (text == NULL)
+	return;
+    if (gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel))
+    {
+	reselect = TRUE;
+	gtk_editable_delete_text (editable, start_sel, end_sel);
+    }
+
+    tmp_pos = old_pos = gtk_editable_get_position (editable);
+
+    gtk_editable_insert_text (editable, text, -1, &tmp_pos);
+    gtk_editable_set_position (editable, tmp_pos);
+
+    if (!reselect)
+	return;
+
+    gtk_editable_select_region (editable, old_pos,
+				gtk_editable_get_position (editable));
+
+}
 
 void
 gnc_item_edit_paste_clipboard (GncItemEdit *item_edit, guint32 time)
 {
+    GtkClipboard *clipboard;
     g_return_if_fail(item_edit != NULL);
     g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
-    gtk_selection_convert(GTK_WIDGET(item_edit->sheet),
-                          clipboard_atom,
-                          gdk_atom_intern("UTF8_STRING", FALSE),
-                          time);
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET (item_edit->sheet),
+					  clipboard_atom);
+
+    g_return_if_fail (clipboard != NULL);
+    g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
+
+    gtk_clipboard_request_text (clipboard, paste_received, item_edit->editor);
 }
 
 
@@ -1202,7 +1232,6 @@ gnc_item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *ent
     static const GtkTargetEntry targets[] =
     {
         { "UTF8_STRING", 0, TARGET_UTF8_STRING },
-        { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
         { "TEXT",   0, TARGET_TEXT },
         { "STRING", 0, TARGET_STRING },
     };
@@ -1505,6 +1534,7 @@ gnc_item_edit_selection_get (GncItemEdit      *item_edit,
 
     gint start_pos;
     gint end_pos;
+    GdkAtom selection = selection_data->selection;
 
     gchar *str;
     gint length;
@@ -1514,7 +1544,7 @@ gnc_item_edit_selection_get (GncItemEdit      *item_edit,
 
     editable = GTK_EDITABLE (item_edit->editor);
 
-    if (selection_data->selection == GDK_SELECTION_PRIMARY)
+    if (selection == GDK_SELECTION_PRIMARY)
     {
         gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
 
