@@ -8,9 +8,10 @@ msgstr ""
 "Project-Id-Version: gnucash 2.2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-12 17:08+0100\n"
-"PO-Revision-Date: 2008-10-17 00:00+0300\n"
-"Last-Translator: Tuomo Kohvakka <tuomo.kohvakka@iki.fi>\n"
+"PO-Revision-Date: 2012-01-22 20:59+0200\n"
+"Last-Translator: Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>\n"
 "Language-Team: UNKNOWN\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,11 +27,11 @@ msgstr ""
 
 #: ../src/app-utils/gnc-exp-parser.c:669
 msgid "Stack overflow"
-msgstr ""
+msgstr "Pinon ylivuoto"
 
 #: ../src/app-utils/gnc-exp-parser.c:671
 msgid "Stack underflow"
-msgstr ""
+msgstr "Pinon alivuoto"
 
 #: ../src/app-utils/gnc-exp-parser.c:673
 msgid "Undefined character"
@@ -46,11 +47,11 @@ msgstr ""
 
 #: ../src/app-utils/gnc-exp-parser.c:679
 msgid "Out of memory"
-msgstr ""
+msgstr "Muisti loppu"
 
 #: ../src/app-utils/gnc-exp-parser.c:681
 msgid "Numeric error"
-msgstr ""
+msgstr "Numeerinen virhe"
 
 #. Translators: This and the following strings appear on
 #. * the account tab if the Tax Info column is displayed,
@@ -211,23 +212,27 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:87
 msgid "This is a development version. It may or may not work.\n"
-msgstr ""
+msgstr "Tämä on kehitysversio. Se saattaa toimia tai olla toimimatta.\n"
 
 #: ../src/bin/gnucash-bin.c:88
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
 msgstr ""
+"Raportoi bugit ja muut ongelmat sähköpostiosoitteeseen gnucash-devel@gnucash."
+"org.\n"
 
 #: ../src/bin/gnucash-bin.c:89
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
 msgstr ""
+"Voit myös etsiä ja jättää bugiraportteja osoitteessa http://bugzilla.gnome."
+"org\n"
 
 #: ../src/bin/gnucash-bin.c:90
 msgid "The last stable version was "
-msgstr ""
+msgstr "Viimeisin vakaa versio oli"
 
 #: ../src/bin/gnucash-bin.c:91
 msgid "The next stable version will be "
-msgstr ""
+msgstr "Seuraava vakaa versio tulee olemaan"
 
 #: ../src/bin/gnucash-bin.c:446
 msgid "Show GnuCash version"
@@ -243,8 +248,8 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:461
 msgid ""
-"Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}"
-"\""
+"Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
+"error}\""
 msgstr ""
 
 #: ../src/bin/gnucash-bin.c:467
@@ -255,7 +260,7 @@ msgstr ""
 
 #: ../src/bin/gnucash-bin.c:473
 msgid "Do not load the last file opened"
-msgstr ""
+msgstr "Älä lataa viimeksi avattua tiedostoa"
 
 #: ../src/bin/gnucash-bin.c:477
 msgid "Set the prefix path for gconf queries"
@@ -265,7 +270,7 @@ msgstr ""
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:480
 msgid "GCONFPATH"
-msgstr ""
+msgstr "GCONFPATH"
 
 #: ../src/bin/gnucash-bin.c:484
 msgid "Add price quotes to given GnuCash datafile"
@@ -286,26 +291,26 @@ msgstr ""
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:494
 msgid "REGEXP"
-msgstr ""
+msgstr "REGEXP"
 
 #. Translators: %s is the version number
 #: ../src/bin/gnucash-bin.c:519
 #, c-format
 msgid "GnuCash %s development version"
-msgstr ""
+msgstr "GnuCash %s kehitysversio"
 
 #. Translators: %s is the version number
 #: ../src/bin/gnucash-bin.c:524
 #, c-format
 msgid "GnuCash %s"
-msgstr ""
+msgstr "GnuCash %s"
 
 #. Translators: 1st %s is the build date; 2nd %s is the SVN
 #. revision number
 #: ../src/bin/gnucash-bin.c:529
 #, c-format
 msgid "Built %s from r%s"
-msgstr ""
+msgstr "Käännetty %s versiosta r%s"
 
 #: ../src/bin/gnucash-bin.c:625
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
@@ -314,11 +319,11 @@ msgstr ""
 #. Install Price Quote Sources
 #: ../src/bin/gnucash-bin.c:706
 msgid "Checking Finance::Quote..."
-msgstr ""
+msgstr "Tarkistetaan Finance::Quote…"
 
 #: ../src/bin/gnucash-bin.c:714
 msgid "Loading data..."
-msgstr ""
+msgstr "Ladataan tietoja..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:265
@@ -616,22 +621,22 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-vendor.c:688
 #: ../intl-scm/guile-strings.c:514 ../intl-scm/guile-strings.c:1362
 msgid "Company"
-msgstr ""
+msgstr "Yritys"
 
 #: ../src/business/business-gnome/dialog-customer.c:887
 #: ../src/business/business-gnome/dialog-employee.c:730
 #: ../src/business/business-gnome/dialog-job.c:567
 #: ../src/business/business-gnome/dialog-vendor.c:690
 msgid "ID #"
-msgstr ""
+msgstr "ID nro"
 
 #: ../src/business/business-gnome/dialog-customer.c:910
 msgid "Find Customer"
-msgstr ""
+msgstr "Etsi asiakas"
 
 #: ../src/business/business-gnome/dialog-date-close.c:76
 msgid "No Account selected.  Please try again."
-msgstr ""
+msgstr "Tiliä ei valittu. Yritä uudestaan."
 
 #: ../src/business/business-gnome/dialog-date-close.c:83
 msgid "Placeholder account selected.  Please try again."
@@ -971,12 +976,12 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1352 ../intl-scm/guile-strings.c:2322
 #: ../intl-scm/guile-strings.c:4066
 msgid "Type"
-msgstr ""
+msgstr "Tyyppi"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2609
 #: ../src/register/ledger-core/split-register-model.c:247
 msgid "Paid"
-msgstr ""
+msgstr "Maksettu"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2612
 msgid "Posted"
@@ -1010,7 +1015,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4116 ../intl-scm/guile-strings.c:4182
 #: ../intl-scm/guile-strings.c:4382
 msgid "Num"
-msgstr ""
+msgstr "Nro"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2707
 msgid "Find Bill"
@@ -1214,9 +1219,9 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-payment.c:564
 #, c-format
 msgid ""
-"You have no valid \"Post To\" accounts.  Please create an account of type \"%"
-"s\" before you continue to process this payment.  Perhaps you want to create "
-"an Invoice or Bill first?"
+"You have no valid \"Post To\" accounts.  Please create an account of type "
+"\"%s\" before you continue to process this payment.  Perhaps you want to "
+"create an Invoice or Bill first?"
 msgstr ""
 
 #: ../src/business/business-gnome/dialog-vendor.c:208
@@ -1564,7 +1569,7 @@ msgstr ""
 #: ../src/business/business-gnome/glade/employee.glade.h:7
 #: ../src/business/business-gnome/glade/vendor.glade.h:4
 msgid "Currency: "
-msgstr ""
+msgstr "Valuutta:"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
@@ -1952,7 +1957,7 @@ msgstr "Muistiinpano"
 #: ../src/business/business-gnome/glade/vendor.glade.h:13
 #: ../src/gnome/window-reconcile.c:454
 msgid "Payment Information"
-msgstr ""
+msgstr "Maksun tiedot"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:6
 msgid "Post To"
@@ -2034,7 +2039,7 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-business.c:259
 #: ../intl-scm/guile-strings.c:532
 msgid "_Business"
-msgstr ""
+msgstr "_Liiketoiminta"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:137
@@ -2287,9 +2292,8 @@ msgid "Edit this invoice"
 msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
-#, fuzzy
 msgid "_Duplicate Invoice"
-msgstr "Monista"
+msgstr "_Monista lasku"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:134
 msgid "Create a new invoice as a duplicate of the current one"
@@ -2426,9 +2430,8 @@ msgid "_Price"
 msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:202
-#, fuzzy
 msgid "Sort by price"
-msgstr "Lasku"
+msgstr "Järjestä hinnan mukaan"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:203
 #: ../src/gnome/glade/register.glade.h:18
@@ -2713,7 +2716,7 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:53
 msgid "$"
-msgstr ""
+msgstr "$"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -2723,19 +2726,19 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:876 ../intl-scm/guile-strings.c:1082
 #, no-c-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:66
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:68
 msgid "="
-msgstr ""
+msgstr "="
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:70
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #. src/report/report-system/report-utilities.scm
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:128
@@ -2758,11 +2761,11 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:55
 msgid "Income Account"
-msgstr ""
+msgstr "Tulotili"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:60
 msgid "Expense Account"
-msgstr ""
+msgstr "Kulutili"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -2781,11 +2784,11 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:868 ../intl-scm/guile-strings.c:916
 #: ../intl-scm/guile-strings.c:1074 ../intl-scm/guile-strings.c:1122
 msgid "Discount"
-msgstr ""
+msgstr "Alennus"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:85
 msgid "Discount Type"
-msgstr ""
+msgstr "Alennustyyppi"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:90
 msgid "Discount How"
@@ -3207,7 +3210,7 @@ msgstr ""
 
 #: ../src/engine/gnc-budget.c:93 ../src/gnome/gnc-plugin-page-budget.c:891
 msgid "Unnamed Budget"
-msgstr ""
+msgstr "Nimetön budjetti"
 
 #. Set memo.  action?
 #: ../src/engine/gncInvoice.c:1473
@@ -3327,7 +3330,7 @@ msgstr ""
 #: ../src/engine/Split.c:1495 ../src/engine/Split.c:1512
 #: ../intl-scm/guile-strings.c:3852 ../intl-scm/guile-strings.c:4500
 msgid "-- Split Transaction --"
-msgstr ""
+msgstr "-- Jaettu tapahtuma --"
 
 #. Translators: This string has a disambiguation prefix
 #: ../src/engine/Split.c:1529
@@ -3428,7 +3431,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:427
 #: ../src/gnome/window-reconcile.c:1226
 msgid "Reconcile"
-msgstr ""
+msgstr "Tarkista"
 
 #: ../src/gnome/dialog-find-transactions.c:113
 msgid "Share Price"
@@ -3731,9 +3734,8 @@ msgid "now"
 msgstr ""
 
 #: ../src/gnome/dialog-tax-info.c:1086
-#, fuzzy
 msgid "Income Tax Identity"
-msgstr "Tuloslaskelma"
+msgstr ""
 
 #: ../src/gnome/dialog-tax-info.c:1148
 msgid ""
@@ -3761,8 +3763,8 @@ msgstr ""
 #, c-format
 msgid ""
 "You have asked for a book to be created.  This book will contain all "
-"transactions up to midnight %s (for a total of %d transactions spread over %"
-"d accounts). Click on 'Forward' to create this book. Click on 'Back' to "
+"transactions up to midnight %s (for a total of %d transactions spread over "
+"%d accounts). Click on 'Forward' to create this book. Click on 'Back' to "
 "adjust the dates."
 msgstr ""
 
@@ -4045,12 +4047,11 @@ msgstr "<b>_Ylätili</b>"
 #: ../src/gnome/glade/account.glade.h:11 ../intl-scm/guile-strings.c:2282
 #: ../intl-scm/guile-strings.c:4024
 msgid "Account Type"
-msgstr ""
+msgstr "Tilin tyyppi"
 
 #: ../src/gnome/glade/account.glade.h:12
-#, fuzzy
 msgid "Account _Color:"
-msgstr "Tilin koodi"
+msgstr "Tilin _väri:"
 
 #: ../src/gnome/glade/account.glade.h:13
 msgid "Account _name:"
@@ -4250,9 +4251,8 @@ msgid "Select or add a GnuCash account"
 msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:57
-#, fuzzy
 msgid "Setup selected accounts"
-msgstr "Näytä alitilien tasoja"
+msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:58
 msgid "Show _hidden accounts"
@@ -4346,7 +4346,7 @@ msgstr ""
 #: ../src/gnome/glade/stocks.glade.h:17
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:5
 msgid "_Date:"
-msgstr ""
+msgstr "_Päiväys:"
 
 #: ../src/gnome/glade/account.glade.h:83
 msgid "_Default"
@@ -4442,7 +4442,7 @@ msgstr ""
 #: ../src/gnome/glade/autoclear.glade.h:2
 #: ../src/gnome/glade/reconcile.glade.h:6
 msgid "_Ending Balance:"
-msgstr ""
+msgstr "_Lopputase:"
 
 #: ../src/gnome/glade/budget.glade.h:1
 msgid "Always use the last day (or day of week) in the month?"
@@ -4450,11 +4450,11 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:2
 msgid "Budget List"
-msgstr ""
+msgstr "Budjettilista"
 
 #: ../src/gnome/glade/budget.glade.h:3
 msgid "Budget Name:"
-msgstr ""
+msgstr "Budjetin nimi:"
 
 #: ../src/gnome/glade/budget.glade.h:4
 #: ../src/gnome/gnc-plugin-page-budget.c:146
@@ -5059,24 +5059,24 @@ msgstr ""
 
 #: ../src/gnome/glade/progress.glade.h:1
 msgid "Working..."
-msgstr ""
+msgstr "Käsitellään..."
 
 #: ../src/gnome/glade/reconcile.glade.h:1
 msgid "<b>Reconcile Information</b>"
-msgstr ""
+msgstr "<b>Tarkistustiedot</b>"
 
 #: ../src/gnome/glade/reconcile.glade.h:2 ../src/gnome/window-reconcile.c:741
 msgid "Enter _Interest Payment..."
-msgstr ""
+msgstr "Syötä _koronmaksu..."
 
 #: ../src/gnome/glade/reconcile.glade.h:3
 msgid "Include _subaccounts"
-msgstr ""
+msgstr "_Sisällytä alitilit"
 
 #. starting balance title/value
 #: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1755
 msgid "Starting Balance:"
-msgstr ""
+msgstr "Alkutase:"
 
 #: ../src/gnome/glade/reconcile.glade.h:5
 msgid "Statement _Date:"
@@ -5404,7 +5404,7 @@ msgstr "_Tavanomainen järjestys"
 
 #: ../src/gnome/glade/register.glade.h:97
 msgid "_Statement Date"
-msgstr ""
+msgstr "_Tiliotteen päiväys"
 
 #: ../src/gnome/glade/register.glade.h:98
 msgid "_Today"
@@ -5512,7 +5512,7 @@ msgstr ""
 #: ../src/gnome/glade/sched-xact.glade.h:54
 #: ../src/gnome-utils/glade/transfer.glade.h:5
 msgid "Amount:"
-msgstr ""
+msgstr "Määrä:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:55
 msgid "Begin notifications this many days before the transaction is created."
@@ -5578,7 +5578,7 @@ msgstr ""
 #: ../src/gnome/glade/sched-xact.glade.h:77
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:173
 msgid "Enabled"
-msgstr ""
+msgstr "Käytössä"
 
 #: ../src/gnome/glade/sched-xact.glade.h:78
 msgid "End Date:"
@@ -5590,7 +5590,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:80
 msgid "Every"
-msgstr ""
+msgstr "Joka"
 
 #: ../src/gnome/glade/sched-xact.glade.h:82
 msgid "First on the:"
@@ -5613,7 +5613,7 @@ msgstr ""
 #: ../src/gnome/glade/sched-xact.glade.h:89
 #: ../src/gnome-utils/glade/preferences.glade.h:83
 msgid "Forever"
-msgstr ""
+msgstr "Ikuisesti"
 
 #: ../src/gnome/glade/sched-xact.glade.h:90
 #: ../src/gnome-utils/gnc-dense-cal.c:337
@@ -5624,7 +5624,7 @@ msgstr ""
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:92 ../intl-scm/guile-strings.c:3310
 msgid "Friday"
-msgstr ""
+msgstr "Perjantai"
 
 #: ../src/gnome/glade/sched-xact.glade.h:93
 msgid "Interest Rate Change Frequency"
@@ -5644,7 +5644,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:97
 msgid "Length:"
-msgstr ""
+msgstr "Pituus:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:98
 msgid "Loan Account:"
@@ -5661,7 +5661,7 @@ msgstr ""
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:101 ../intl-scm/guile-strings.c:3302
 msgid "Monday"
-msgstr ""
+msgstr "Maanantai"
 
 #: ../src/gnome/glade/sched-xact.glade.h:103
 msgid "Months Remaining:"
@@ -5787,7 +5787,7 @@ msgstr ""
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:143 ../intl-scm/guile-strings.c:3312
 msgid "Saturday"
-msgstr ""
+msgstr "Lauantai"
 
 #: ../src/gnome/glade/sched-xact.glade.h:144
 msgid "Select occurrence date above."
@@ -5824,7 +5824,7 @@ msgstr ""
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:153 ../intl-scm/guile-strings.c:3300
 msgid "Sunday"
-msgstr ""
+msgstr "Sunnuntai"
 
 #: ../src/gnome/glade/sched-xact.glade.h:154
 msgid "Template Transaction"
@@ -5850,12 +5850,12 @@ msgstr ""
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:159 ../intl-scm/guile-strings.c:3308
 msgid "Thursday"
-msgstr ""
+msgstr "Torstai"
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:160 ../intl-scm/guile-strings.c:3304
 msgid "Tuesday"
-msgstr ""
+msgstr "Tiistai"
 
 #: ../src/gnome/glade/sched-xact.glade.h:162
 msgid "Until:"
@@ -5893,21 +5893,23 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:171
 msgid "days."
-msgstr ""
+msgstr "päivää."
 
 #: ../src/gnome/glade/sched-xact.glade.h:172
 msgid "except on weekends:"
-msgstr ""
+msgstr "paitsi viikonloppuisin:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:173
 msgid ""
 "months\n"
 "years"
 msgstr ""
+"kuukautta\n"
+"vuotta"
 
 #: ../src/gnome/glade/sched-xact.glade.h:175
 msgid "months."
-msgstr ""
+msgstr "kuukautta."
 
 #: ../src/gnome/glade/sched-xact.glade.h:176
 msgid "occurrences"
@@ -5923,7 +5925,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:179
 msgid "weeks."
-msgstr ""
+msgstr "viikkoa."
 
 #: ../src/gnome/glade/stocks.glade.h:1
 msgid "<b>A_sset Account</b>"
@@ -6008,7 +6010,7 @@ msgstr ""
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../src/gnome/glade/tax.glade.h:2
 #, fuzzy
@@ -6083,23 +6085,23 @@ msgstr ""
 
 #: ../src/gnome/glade/userpass.glade.h:1
 msgid "Enter your username and password"
-msgstr ""
+msgstr "Syötä käyttäjätunnus ja salasana"
 
 #: ../src/gnome/glade/userpass.glade.h:2
 msgid "Username and Password"
-msgstr ""
+msgstr "Käyttäjätunnus ja salasana"
 
 #: ../src/gnome/glade/userpass.glade.h:3
 msgid "_Password:"
-msgstr ""
+msgstr "_Salasana:"
 
 #: ../src/gnome/glade/userpass.glade.h:4
 msgid "_Username:"
-msgstr ""
+msgstr "_Käyttäjätunnus:"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
-msgstr ""
+msgstr "Uu_si tilivalikko"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
@@ -6111,7 +6113,7 @@ msgstr "Uusi _tiedosto"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:100
 msgid "Create a new file"
-msgstr ""
+msgstr "Luo uusi tiedosto"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:104
 msgid "_Open..."
@@ -6119,7 +6121,7 @@ msgstr "_Avaa..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:105
 msgid "Open an existing GnuCash file"
-msgstr ""
+msgstr "Avaa olemassaoleva GnuCash-tiedosto"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:109
 msgid "_Save"
@@ -6152,9 +6154,8 @@ msgid "Find transactions with a search"
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:134
-#, fuzzy
 msgid "Ta_x Report Options"
-msgstr "_Raportin ominaisuudet"
+msgstr "_Veroraportin ominaisuudet"
 
 #. Translators: currently implemented are *
 #. * US: income tax and                     *
@@ -6196,9 +6197,8 @@ msgstr ""
 #. src/report/report-system/report.scm
 #: ../src/gnome/gnc-plugin-basic-commands.c:161
 #: ../intl-scm/guile-strings.c:2060
-#, fuzzy
 msgid "B_udget"
-msgstr "Uusi budjetti"
+msgstr "_Budjetti"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:164
 msgid "Close _Books"
@@ -6262,28 +6262,27 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-budget.c:65
 msgid "Open Budget"
-msgstr ""
+msgstr "Avaa budjetti"
 
 #: ../src/gnome/gnc-plugin-budget.c:66
 msgid "Open an existing Budget"
-msgstr ""
+msgstr "Avaa olemassaoleva budjetti"
 
 #: ../src/gnome/gnc-plugin-budget.c:71
-#, fuzzy
 msgid "Copy Budget"
-msgstr "Uusi budjetti"
+msgstr "Kopioi budjetti"
 
 #: ../src/gnome/gnc-plugin-budget.c:72
 msgid "Copy an existing Budget"
-msgstr ""
+msgstr "Kopioi olemassaoleva budjetti"
 
 #: ../src/gnome/gnc-plugin-budget.c:293
 msgid "Select a Budget"
-msgstr ""
+msgstr "Valitse budjetti"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:156
 msgid "Create a new Account"
-msgstr ""
+msgstr "Luo uusi tili"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:160
 msgid "New Account _Hierarchy..."
@@ -6301,7 +6300,7 @@ msgstr "_Avaa tili"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:166
 #: ../src/gnome/gnc-plugin-page-budget.c:129
 msgid "Open the selected account"
-msgstr ""
+msgstr "Avaa valittu tili"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:170
 #: ../src/gnome/gnc-plugin-page-budget.c:134
@@ -6311,7 +6310,7 @@ msgstr "Avaa a_litilit"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:171
 #: ../src/gnome/gnc-plugin-page-budget.c:135
 msgid "Open the selected account and all its subaccounts"
-msgstr ""
+msgstr "Avaa valittu tili ja kaikki sen alatilit"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:177
 #: ../src/gnome/gnc-plugin-page-register.c:196
@@ -6321,7 +6320,7 @@ msgstr "_Muokkaa tilin ominaisuuksia"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:178
 #: ../src/gnome/gnc-plugin-page-register.c:197
 msgid "Edit the selected account"
-msgstr ""
+msgstr "Muokkaa valittua tiliä"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 msgid "_Delete Account..."
@@ -6329,7 +6328,7 @@ msgstr "_Poista tili..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:183
 msgid "Delete selected account"
-msgstr ""
+msgstr "Poista valittu tili"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:187
 msgid "_Renumber Subaccounts..."
@@ -6521,23 +6520,23 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1154
 msgid "Are you sure you want to do this?"
-msgstr ""
+msgstr "Oletko varma että haluat tehdä tämän?"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:141
 msgid "_Delete Budget"
-msgstr ""
+msgstr "_Poista budjetti"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:142
 msgid "Delete this budget"
-msgstr ""
+msgstr "Poista tämä budjetti"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:147
 msgid "Edit this budget's options"
-msgstr ""
+msgstr "Muokkaa tämän budjetin ominaisuuksia"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:151
 msgid "Estimate Budget"
-msgstr ""
+msgstr "Arviobudjetti"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:153
 msgid ""
@@ -6546,7 +6545,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-budget.c:181
 msgid "Estimate"
-msgstr ""
+msgstr "arvio"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-barchart.scm
@@ -6561,7 +6560,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2916 ../intl-scm/guile-strings.c:2932
 #: ../intl-scm/guile-strings.c:3092 ../intl-scm/guile-strings.c:3094
 msgid "Budget"
-msgstr ""
+msgstr "Budjetti"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:812
 msgid "Set the budget options using this dialog."
@@ -6570,7 +6569,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-budget.c:894
 #, c-format
 msgid "Delete %s?"
-msgstr ""
+msgstr "Poista %s?"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:962
 msgid "You must select at least one account to estimate."
@@ -6698,7 +6697,7 @@ msgstr "Muuta valuuttakurssia tämänhetkiselle tapahtumalle"
 
 #: ../src/gnome/gnc-plugin-page-register.c:319
 msgid "Sche_dule..."
-msgstr ""
+msgstr "_Ajasta..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:324
 msgid "_All transactions"
@@ -6710,7 +6709,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:335
 msgid "Account Report"
-msgstr ""
+msgstr "Tiliraportti"
 
 #: ../src/gnome/gnc-plugin-page-register.c:336
 msgid "Open a register report for this Account"
@@ -6756,7 +6755,7 @@ msgstr "Pääkirja"
 #: ../src/gnome/gnc-plugin-page-register.c:1228
 #, c-format
 msgid "Save changes to %s?"
-msgstr ""
+msgstr "Tallenna muutokset kohteeseen %s?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1232
 msgid ""
@@ -6788,11 +6787,11 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:1296
 #: ../src/gnome/gnc-plugin-page-register.c:1960
 msgid "Search Results"
-msgstr ""
+msgstr "Haun tulokset"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1950
 msgid "General Ledger Report"
-msgstr ""
+msgstr "Pääkirja-raportti"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1956
 msgid "Portfolio Report"
@@ -6808,7 +6807,7 @@ msgstr ""
 #: ../src/gnome-utils/glade/preferences.glade.h:116
 #: ../intl-scm/guile-strings.c:3400 ../intl-scm/guile-strings.c:3968
 msgid "Register"
-msgstr ""
+msgstr "Pääkirja"
 
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:1968
@@ -6892,7 +6891,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-register.c:50
 msgid "_General Ledger"
-msgstr ""
+msgstr "P_ääkirja"
 
 #: ../src/gnome/gnc-plugin-register.c:51
 msgid "Open a general ledger window"
@@ -8608,14 +8607,12 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/dialog-file-access.c:283
-#, fuzzy
 msgid "Open..."
-msgstr "_Avaa..."
+msgstr "Avaa..."
 
 #: ../src/gnome-utils/dialog-file-access.c:290
-#, fuzzy
 msgid "Save As..."
-msgstr "Tallenna _nimellä..."
+msgstr "Tallenna nimellä..."
 
 #: ../src/gnome-utils/dialog-file-access.c:297
 #: ../src/gnome-utils/gnc-file.c:118 ../src/gnome-utils/gnc-file.c:288
@@ -8642,9 +8639,8 @@ msgid "Clear the selection and unselect all accounts."
 msgstr ""
 
 #: ../src/gnome-utils/dialog-options.c:944
-#, fuzzy
 msgid "Select Children"
-msgstr "Valitse kaikki"
+msgstr "Valitse lapset"
 
 #: ../src/gnome-utils/dialog-options.c:946
 #, fuzzy
@@ -8661,9 +8657,8 @@ msgid "Select the default account selection."
 msgstr ""
 
 #: ../src/gnome-utils/dialog-options.c:968
-#, fuzzy
 msgid "Show Hidden Accounts"
-msgstr "P_iilotettu"
+msgstr "Näytä piilotetut tilit"
 
 #: ../src/gnome-utils/dialog-options.c:970
 msgid "Show accounts that have been marked hidden."
@@ -8683,9 +8678,8 @@ msgstr ""
 
 #. The reset button on each option page
 #: ../src/gnome-utils/dialog-options.c:1244
-#, fuzzy
 msgid "Reset defaults"
-msgstr "Valitse oletukset"
+msgstr "Palauta oletukset"
 
 #: ../src/gnome-utils/dialog-options.c:1246
 msgid "Reset all values to their defaults."
@@ -9133,9 +9127,8 @@ msgid "<b>File</b>"
 msgstr ""
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:4
-#, fuzzy
 msgid "Database"
-msgstr "Päivämäärä"
+msgstr "Tietokanta"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:5
 msgid "Host"
@@ -10297,7 +10290,7 @@ msgstr ""
 #: ../src/gnome-utils/glade/transfer.glade.h:12
 #: ../intl-scm/guile-strings.c:3636 ../intl-scm/guile-strings.c:3754
 msgid "Show Income/Expense"
-msgstr ""
+msgstr "Näytä tulo/meno"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:14
 msgid "Transfer Funds"
@@ -10470,6 +10463,8 @@ msgstr ""
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr ""
+"Yhdistäminen kohteeseen %s epäonnistui. Osoite, käyttäjätunnus tai salasana "
+"oli virheellinen."
 
 #: ../src/gnome-utils/gnc-file.c:238
 #, c-format
@@ -10536,6 +10531,8 @@ msgstr ""
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
 msgstr ""
+"Osoitteessa %s olevalla palvelimella tapahtui virhe tai tieto oli "
+"virheellistä."
 
 #: ../src/gnome-utils/gnc-file.c:331
 #, c-format
@@ -10683,14 +10680,12 @@ msgstr "Luo _uusi tiedosto"
 
 #. try to load once again
 #: ../src/gnome-utils/gnc-file.c:792 ../src/gnome-utils/gnc-file.c:805
-#, fuzzy
 msgid "Loading user data..."
-msgstr "Lataa..."
+msgstr "Ladataan käyttäjätietoja..."
 
 #: ../src/gnome-utils/gnc-file.c:821
-#, fuzzy
 msgid "Re-saving user data..."
-msgstr "Lataa..."
+msgstr "Tallennetaan käyttäjätietoja..."
 
 #: ../src/gnome-utils/gnc-file.c:1086 ../src/gnome-utils/gnc-file.c:1314
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1448
@@ -10748,7 +10743,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-keyring.c:193
 #, c-format
 msgid "Enter a user name and password to connect to: %s"
-msgstr ""
+msgstr "Syötä käyttäjätunnus ja salasana yhdistääksesi kohteeseen %s"
 
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:231
@@ -10790,7 +10785,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:254
 msgid "Pa_ge Setup..."
-msgstr ""
+msgstr "S_ivun asetukset..."
 
 #: ../src/gnome-utils/gnc-main-window.c:255
 msgid "Specify the page size and orientation for printing"
@@ -10926,7 +10921,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:376
 msgid "Stat_us Bar"
-msgstr ""
+msgstr "T_ilapalkki"
 
 #: ../src/gnome-utils/gnc-main-window.c:377
 msgid "Show/hide the status bar on this window"
@@ -10975,7 +10970,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-main-window.c:1125
 #, c-format
 msgid "Save changes to file %s before closing?"
-msgstr ""
+msgstr "Tallennetaanko muutokset tiedostoon %s ennen sulkemista?"
 
 #: ../src/gnome-utils/gnc-main-window.c:1130
 #, c-format
@@ -11001,7 +10996,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:1386
 msgid "Unsaved Book"
-msgstr ""
+msgstr "Tallentamaton kirja"
 
 #: ../src/gnome-utils/gnc-main-window.c:2354
 msgid "Unable to save to database."
@@ -11014,17 +11009,19 @@ msgstr ""
 #: ../src/gnome-utils/gnc-main-window.c:3969
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
+"GnuCash henkilökohtainen kirjanpito-ohjelma. GNU:mpi tapa taloutesi "
+"hallintaan!"
 
 #. Development version
 #: ../src/gnome-utils/gnc-main-window.c:3982
 #, c-format
 msgid "%s  This copy was built from svn r%s on %s."
-msgstr ""
+msgstr "%s Tämä kopio on käännetty svn-versiosta r%s %s."
 
 #: ../src/gnome-utils/gnc-main-window.c:3985
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
-msgstr ""
+msgstr "%s Tämä kopio on käännetty versiosta r%s %s."
 
 #: ../src/gnome-utils/gnc-main-window.c:3997
 msgid "translator_credits"
@@ -11068,14 +11065,12 @@ msgstr "Viime vuoden alku"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:77
-#, fuzzy
 msgid "Start of this accounting period"
-msgstr "Tämän vuosineljänneksen alku"
+msgstr "Tämän tilikauden alku"
 
 #: ../src/gnome-utils/gnc-period-select.c:78
-#, fuzzy
 msgid "Start of previous accounting period"
-msgstr "Edellisen vuosineljänneksen alku"
+msgstr "Edellisen tilikauden alku"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:85 ../intl-scm/guile-strings.c:40
@@ -11108,35 +11103,32 @@ msgstr "Viime vuoden loppu"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:93
-#, fuzzy
 msgid "End of this accounting period"
-msgstr "Tämän vuosineljänneksen loppu"
+msgstr "Tämän tilikauden loppu"
 
 #: ../src/gnome-utils/gnc-period-select.c:94
-#, fuzzy
 msgid "End of previous accounting period"
-msgstr "Viime vuosineljänneksen loppu"
+msgstr "Viime tilikauden loppu"
 
 #. Development version
 #: ../src/gnome-utils/gnc-splash.c:90
 #, c-format
 msgid "Version: GnuCash-%s svn (r%s built %s)"
-msgstr ""
+msgstr "Versio: GnuCash-%s svn (r%s käännetty %s)"
 
 #. Dist Tarball
 #: ../src/gnome-utils/gnc-splash.c:94
 #, c-format
 msgid "Version: GnuCash-%s (r%s built %s)"
-msgstr ""
+msgstr "Versio: GnuCash-%s (r%s käännetty %s)"
 
 #: ../src/gnome-utils/gnc-splash.c:111
 msgid "Loading..."
 msgstr "Lataa..."
 
 #: ../src/gnome-utils/gnc-sx-list-tree-model-adapter.c:490
-#, fuzzy
 msgid "never"
-msgstr "Syötä"
+msgstr "ei koskaan"
 
 #: ../src/gnome-utils/gnc-tree-model-account.c:621
 msgid "New top level account"
@@ -11436,11 +11428,11 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:464
 msgid "Payment From"
-msgstr ""
+msgstr "Maksu tililtä"
 
 #: ../src/gnome/window-reconcile.c:470 ../src/gnome/window-reconcile.c:480
 msgid "Reconcile Account"
-msgstr ""
+msgstr "Tarkistustili"
 
 #: ../src/gnome/window-reconcile.c:485
 msgid "Payment To"
@@ -11448,11 +11440,11 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:498
 msgid "No Auto Interest Payments for this Account"
-msgstr ""
+msgstr "Ei automaattisia koronmaksuja tälle tilille"
 
 #: ../src/gnome/window-reconcile.c:499
 msgid "No Auto Interest Charges for this Account"
-msgstr ""
+msgstr "Ei automaattisia koronveloituksia tälle tilille"
 
 #: ../src/gnome/window-reconcile.c:743
 msgid "Enter _Interest Charge..."
@@ -11557,9 +11549,8 @@ msgid "Add a new transaction to the account"
 msgstr ""
 
 #: ../src/gnome/window-reconcile.c:2167
-#, fuzzy
 msgid "_Balance"
-msgstr "Tase"
+msgstr "_Tase"
 
 #: ../src/gnome/window-reconcile.c:2168
 msgid "Add a new balancing entry to the account"
@@ -12522,7 +12513,7 @@ msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:9
 msgid "Import CSV/Fixed-Width File"
-msgstr ""
+msgstr "Tuo CSV/kiinteäleveyksinen tiedosto"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:10
 msgid "Select the type of each column below."
@@ -12542,9 +12533,8 @@ msgid "Separators"
 msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:14
-#, fuzzy
 msgid "Space"
-msgstr "Tallenna"
+msgstr "Tyhjä"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:15
 msgid "Tab"
@@ -13663,9 +13653,8 @@ msgid "4. Preview"
 msgstr ""
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:6
-#, fuzzy
 msgid "Comma separated"
-msgstr "Alkupäivämäärä"
+msgstr "Pilkulla erotettu"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:7
 msgid "Comma separated with quotes"
@@ -13814,9 +13803,8 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:2232
 #: ../src/register/ledger-core/split-register.c:2263
-#, fuzzy
 msgid "ATM Deposit"
-msgstr "Talletus"
+msgstr "Pankkiautomaattitalletus"
 
 #: ../src/register/ledger-core/split-register.c:2233
 #: ../src/register/ledger-core/split-register.c:2264
@@ -14096,15 +14084,15 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-model.c:376
 #, c-format
 msgid "Tot %s"
-msgstr ""
+msgstr "Yht. %s"
 
 #: ../src/register/ledger-core/split-register-model.c:358
 msgid "Tot Credit"
-msgstr ""
+msgstr "Yht. kredit"
 
 #: ../src/register/ledger-core/split-register-model.c:382
 msgid "Tot Debit"
-msgstr ""
+msgstr "Yht. debet"
 
 #: ../src/register/ledger-core/split-register-model.c:391
 msgid "Tot Shares"
@@ -14527,14 +14515,12 @@ msgid "Use Trading Accounts"
 msgstr "_Muokkaa tilin ominaisuuksia"
 
 #: ../src/libqof/qof/qofbookslots.h:68
-#, fuzzy
 msgid "Budgeting"
-msgstr "Uusi budjetti"
+msgstr "Budjetointi"
 
 #: ../src/libqof/qof/qofbookslots.h:69
-#, fuzzy
 msgid "Default Budget"
-msgstr "Oletus"
+msgstr "Oletusbudjetti"
 
 #. * @}
 #. For the grep-happy:
@@ -14565,93 +14551,78 @@ msgstr ""
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:6
-#, fuzzy
 msgid "First day of the current calendar year"
-msgstr "Tämän kalenterivuoden loppuun"
+msgstr "Tämän kalenterivuoden ensimmäinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:10
-#, fuzzy
 msgid "Last day of the current calendar year"
-msgstr "Tämän kalenterivuoden loppuun"
+msgstr "Tämän kalenterivuoden viimeinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:14
-#, fuzzy
 msgid "First day of the previous calendar year"
-msgstr "Edellisen kalenterivuoden alku"
+msgstr "Edellisen kalenterivuoden ensimmäinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:18
-#, fuzzy
 msgid "Last day of the previous calendar year"
-msgstr "Edellisen kalenterivuoden alku"
+msgstr "Edellisen kalenterivuoden viimeinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:20
-#, fuzzy
 msgid "Start of next year"
-msgstr "Tämän vuoden alku"
+msgstr "Seuraavan vuoden alku"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:22
-#, fuzzy
 msgid "First day of the next calendar year"
-msgstr "Tämän kalenterivuoden loppuun"
+msgstr "Seuraavan kalenterivuoden ensimmäinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:24
-#, fuzzy
 msgid "End of next year"
-msgstr "Tämän vuoden loppu"
+msgstr "Seuraavan vuoden loppu"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:26
-#, fuzzy
 msgid "Last day of the next calendar year"
-msgstr "Tämän kalenterivuoden loppuun"
+msgstr "Seuraavan kalenterivuoden viimeinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:28
-#, fuzzy
 msgid "Start of accounting period"
-msgstr "Tilikauden alusta"
+msgstr "Tilikauden alku"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:30
-#, fuzzy
 msgid "First day of the accounting period, as set in the global preferences"
-msgstr "Tilikauden alusta (otetaan asetuksista)"
+msgstr "Tilikauden ensimmäinen päivä, määritetty asetuksissa"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:32
-#, fuzzy
 msgid "End of accounting period"
-msgstr "Tilikauden loppuun"
+msgstr "Tilikauden loppu"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:34
-#, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences"
-msgstr "Tilikauden alusta (otetaan asetuksista)"
+msgstr "Tilikauden viimeinen päivä, määritetty asetuksissa"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:38
-#, fuzzy
 msgid "First day of the current month"
-msgstr "Tämän kuun alku"
+msgstr "Tämän kuukauden ensimmäinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:42
-#, fuzzy
 msgid "Last day of the current month"
-msgstr "Tämän kuun alku"
+msgstr "Tämän kuukauden viimeinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:46
-#, fuzzy
 msgid "First day of the previous month"
-msgstr "Viime kuun alku"
+msgstr "Edellisen kuukauden ensimmäinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:50
@@ -14660,27 +14631,23 @@ msgstr ""
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:52
-#, fuzzy
 msgid "Start of next month"
-msgstr "Tämän kuun alku"
+msgstr "Seuraavan kuukauden alku"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:54
-#, fuzzy
 msgid "First day of the next month"
-msgstr "Tämän kuun alku"
+msgstr "Seuraavan kuukauden ensimmäinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:56
-#, fuzzy
 msgid "End of next month"
-msgstr "Tämän kuun loppu"
+msgstr "sueraavan kuukauden loppu"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:58
-#, fuzzy
 msgid "Last day of next month"
-msgstr "Tämän kuun alku"
+msgstr "Seuraavan kuukauden viimeinen päivä"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:60
@@ -14716,9 +14683,8 @@ msgstr "Edellisen vuosineljänneksen alku"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:76
-#, fuzzy
 msgid "Start of next quarter"
-msgstr "Tämän vuosineljänneksen alku"
+msgstr "Seuraavan vuosineljänneksen alku"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:78
@@ -14728,9 +14694,8 @@ msgstr "Tekee kopion valitusta tapahtumasta"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:80
-#, fuzzy
 msgid "End of next quarter"
-msgstr "Tämän vuosineljänneksen loppu"
+msgstr "Seuraavan vuosineljänneksen loppu"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:82
@@ -14905,9 +14870,8 @@ msgstr ""
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:216
-#, fuzzy
 msgid "Bill number"
-msgstr "Lasku"
+msgstr ""
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:218
@@ -15513,9 +15477,8 @@ msgstr "Näytä välisummat"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:470
-#, fuzzy
 msgid "Show zero balance items"
-msgstr "Jätä nollataseet merkitsemättä"
+msgstr "Näytä nollataseelliset"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:472
@@ -15762,9 +15725,8 @@ msgstr ""
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:574
-#, fuzzy
 msgid "Sort Column"
-msgstr "Valitse kaikki"
+msgstr "Järjestä sarake"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:576
@@ -15858,9 +15820,8 @@ msgstr ""
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:644
-#, fuzzy
 msgid "No Customer"
-msgstr "_Mukautettu"
+msgstr "Ei asiakasta"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:648
@@ -15931,9 +15892,8 @@ msgstr ""
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:678 ../intl-scm/guile-strings.c:880
 #: ../intl-scm/guile-strings.c:1086
-#, fuzzy
 msgid "Custom Title"
-msgstr "_Mukautettu"
+msgstr "Mukautettu otsikko"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -15967,9 +15927,8 @@ msgstr ""
 
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:698
-#, fuzzy
 msgid "Display the charge type?"
-msgstr "Näytä %s-raportti"
+msgstr "Näytä veloituksen tyyppi?"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16271,9 +16230,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:824 ../intl-scm/guile-strings.c:1024
 #: ../intl-scm/guile-strings.c:1202 ../intl-scm/guile-strings.c:1530
 #: ../intl-scm/guile-strings.c:1570
-#, fuzzy
 msgid "Net Price"
-msgstr "Nettotulot"
+msgstr "Nettohinta"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16282,9 +16240,8 @@ msgstr "Nettotulot"
 #: ../intl-scm/guile-strings.c:828 ../intl-scm/guile-strings.c:1028
 #: ../intl-scm/guile-strings.c:1206 ../intl-scm/guile-strings.c:1536
 #: ../intl-scm/guile-strings.c:1576
-#, fuzzy
 msgid "Total Price"
-msgstr "Yhteensä: "
+msgstr "Kokonaishinta"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16499,9 +16456,8 @@ msgstr ""
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:1298 ../intl-scm/guile-strings.c:1420
-#, fuzzy
 msgid "Display the transaction amount?"
-msgstr "Poistaa tämänhetkisen tapahtuman"
+msgstr "Näytä tapahtuman määrä?"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -16592,21 +16548,18 @@ msgstr ""
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:1470
-#, fuzzy
 msgid "Email"
-msgstr "Päivittäin"
+msgstr "Sähköposti"
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:1472
-#, fuzzy
 msgid "Website"
-msgstr "Debit"
+msgstr "Web-sivusto"
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:1478
-#, fuzzy
 msgid "Invoice Date"
-msgstr "Lasku"
+msgstr "Laskun päiväys"
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -16646,7 +16599,6 @@ msgstr ""
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1504
-#, fuzzy
 msgid "Report title"
 msgstr "Raportin otsikko"
 
@@ -16659,9 +16611,8 @@ msgstr ""
 #. src/report/business-reports/taxinvoice.scm
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:1510 ../intl-scm/guile-strings.c:2698
-#, fuzzy
 msgid "CSS stylesheet file"
-msgstr "Tyylitiedosto"
+msgstr "CSS-tyylitiedosto"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1512
@@ -16697,9 +16648,8 @@ msgstr ""
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1526 ../intl-scm/guile-strings.c:1566
-#, fuzzy
 msgid "Discount Rate"
-msgstr "Tilin nimi"
+msgstr "Alennusprosentti"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1528 ../intl-scm/guile-strings.c:1568
@@ -16714,7 +16664,6 @@ msgstr "Päivämäärä"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1538 ../intl-scm/guile-strings.c:1578
-#, fuzzy
 msgid "Sub-total"
 msgstr "Välisumma"
 
@@ -17164,9 +17113,8 @@ msgstr "Näytä %s-raportti"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:1796
-#, fuzzy
 msgid "Custom Reports"
-msgstr "_Raportit"
+msgstr "Mukautetut raportit"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:1798
@@ -17215,9 +17163,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1838 ../intl-scm/guile-strings.c:1844
 #: ../intl-scm/guile-strings.c:1850 ../intl-scm/guile-strings.c:1856
 #: ../intl-scm/guile-strings.c:1862
-#, fuzzy
 msgid "Fonts"
-msgstr "Tilit"
+msgstr "Fontit"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1818
@@ -17227,9 +17174,8 @@ msgstr "Vie HTML-muotoiltu raportti tiedostoon"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1822
-#, fuzzy
 msgid "Account link"
-msgstr "Tili"
+msgstr "Tililinkki"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1824
@@ -17701,7 +17647,7 @@ msgstr "Älä näytä mitään välisummaa ylätileille"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2052
 msgid "Text book style (experimental)"
-msgstr ""
+msgstr "Oppikirjatyyli (kokeellinen)"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2054
@@ -17752,6 +17698,9 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
+"Yhdellä raporteistasi on report-guid joka on sama toisen kanssa. Tarkista "
+"raporttijärjestelmä, erityisesti tallennetut raporttisi, sellaisen raportin "
+"varalta jonka report-guid on:"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:2080
@@ -17860,13 +17809,13 @@ msgstr "_Muokkaa tilin ominaisuuksia"
 #: ../intl-scm/guile-strings.c:2130
 #, c-format
 msgid "Building '%s' report ..."
-msgstr ""
+msgstr "Rakennetaan raporttia %s…"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:2132
 #, c-format
 msgid "Rendering '%s' report ..."
-msgstr ""
+msgstr "Luodaan raportin %s näkymää…"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2134
@@ -17972,9 +17921,8 @@ msgstr ""
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2174
-#, fuzzy
 msgid "Show Percents"
-msgstr "Uusi budjetti"
+msgstr "Näytä prosentit"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -18019,9 +17967,8 @@ msgstr ""
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2184 ../intl-scm/guile-strings.c:3198
-#, fuzzy
 msgid "Show Average"
-msgstr "Uusi budjetti"
+msgstr "Näytä keskiarvo"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -18101,16 +18048,14 @@ msgstr ""
 
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:2216
-#, fuzzy
 msgid "Yearly Average"
-msgstr "Vuosittain"
+msgstr "Vuosittainen keskiarvo"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2218 ../intl-scm/guile-strings.c:3234
-#, fuzzy
 msgid "Monthly Average"
-msgstr "Kuukausittain"
+msgstr "Kuukausittainen keskiarvo"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -18234,13 +18179,13 @@ msgstr ""
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2250 ../intl-scm/guile-strings.c:3992
 msgid "Depth limit behavior"
-msgstr ""
+msgstr "Syvyysrajoitteen toiminta"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2252 ../intl-scm/guile-strings.c:3994
 msgid "How to treat accounts which exceed the specified depth limit (if any)"
-msgstr ""
+msgstr "Mahdollisen syvyysrajoitteen ylittävien tilien käsittely"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18398,13 +18343,13 @@ msgstr ""
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2286 ../intl-scm/guile-strings.c:4028
 msgid "Account Description"
-msgstr ""
+msgstr "Tilin kuvaus"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2288 ../intl-scm/guile-strings.c:4030
 msgid "Show an account's description"
-msgstr ""
+msgstr "Näytä tilin kuvaus"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -18508,7 +18453,7 @@ msgstr ""
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2308 ../intl-scm/guile-strings.c:4050
 msgid "Recursive Balance"
-msgstr ""
+msgstr "Rekursiivinen tase"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -18517,30 +18462,32 @@ msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit"
 msgstr ""
+"Näytä kokonaistase, mukaanlukien alatilien taseet, mille tahansa tilille "
+"syvyysrajalla"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2312 ../intl-scm/guile-strings.c:4054
 msgid "Raise Accounts"
-msgstr ""
+msgstr "Korota tilit"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2314 ../intl-scm/guile-strings.c:4056
 msgid "Shows accounts deeper than the depth limit at the depth limit"
-msgstr ""
+msgstr "Näytä syvyysrajan ylittävät tilit syvyysrajalla"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2316 ../intl-scm/guile-strings.c:4058
 msgid "Omit Accounts"
-msgstr ""
+msgstr "Ohita tilit"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
 #: ../intl-scm/guile-strings.c:2318 ../intl-scm/guile-strings.c:4060
 msgid "Disregard completely any accounts deeper than the depth limit"
-msgstr ""
+msgstr "Ohita syvyysrajan ylittävät tilit kokonaan"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -19138,9 +19085,8 @@ msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2690
-#, fuzzy
 msgid "Font size"
-msgstr "Tilit"
+msgstr "Fontin koko"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2692
@@ -19165,9 +19111,8 @@ msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2718
-#, fuzzy
 msgid "Auto"
-msgstr "Määrä"
+msgstr "Auto"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2720
@@ -19186,9 +19131,8 @@ msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2726
-#, fuzzy
 msgid "Two"
-msgstr "Päättyen"
+msgstr "Kaksi"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2728
@@ -19371,9 +19315,8 @@ msgstr ""
 
 #. src/report/standard-reports/budget-flow.scm
 #: ../intl-scm/guile-strings.c:2912 ../intl-scm/guile-strings.c:2918
-#, fuzzy
 msgid "Period"
-msgstr "aikavälillä"
+msgstr "Aikaväli"
 
 #. src/report/standard-reports/budget-flow.scm
 #: ../intl-scm/guile-strings.c:2922
@@ -19565,7 +19508,7 @@ msgstr ""
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3044
 msgid "Budget Report"
-msgstr ""
+msgstr "Budjettiraportti"
 
 #. src/report/standard-reports/budget.scm
 #. src/report/standard-reports/cash-flow.scm
@@ -19587,15 +19530,13 @@ msgstr ""
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3058
-#, fuzzy
 msgid "Select Columns"
-msgstr "Valitse kaikki"
+msgstr "Valitse sarakkeet"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3060
-#, fuzzy
 msgid "Show Budget"
-msgstr "Uusi budjetti"
+msgstr "Näytä budjetti"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3062
@@ -19604,9 +19545,8 @@ msgstr ""
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3064
-#, fuzzy
 msgid "Show Actual"
-msgstr "Näytä _kaikki"
+msgstr "Näytä toteutuma"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3066
@@ -19703,7 +19643,7 @@ msgstr ""
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3106
 msgid "Cash Flow"
-msgstr ""
+msgstr "Kassavirta"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:3132
@@ -19819,9 +19759,8 @@ msgstr ""
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3238
-#, fuzzy
 msgid "Daily Average"
-msgstr "Vuosittain"
+msgstr "Päivittäinen keskiarvo"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:3242
@@ -19989,9 +19928,8 @@ msgstr "Suodattimen toiminta"
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3432 ../intl-scm/guile-strings.c:4092
-#, fuzzy
 msgid "Void Transactions"
-msgstr "Mitätöidyt tapahtumat?"
+msgstr "Mitätöidyt tapahtumat"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -20005,9 +19943,8 @@ msgstr ""
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3446 ../intl-scm/guile-strings.c:4148
 #: ../intl-scm/guile-strings.c:4398
-#, fuzzy
 msgid "Use Full Account Name"
-msgstr "Käytä koko tilin nimeä"
+msgstr "Käytä tilin koko nimeä"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -20020,9 +19957,8 @@ msgstr "Toisen tilin nimi"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3452 ../intl-scm/guile-strings.c:4164
 #: ../intl-scm/guile-strings.c:4410
-#, fuzzy
 msgid "Use Full Other Account Name"
-msgstr "Käytä koko toisen tilin nimeä"
+msgstr "Käytä toisen tilin koko nimeä"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -20035,9 +19971,8 @@ msgstr "Toisen tilin koodi"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3466 ../intl-scm/guile-strings.c:4456
 #: ../intl-scm/guile-strings.c:4496
-#, fuzzy
 msgid "Sign Reverses"
-msgstr "Etumerkkien kääntö?"
+msgstr "Etumerkkien kääntö"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -20056,17 +19991,15 @@ msgstr "Ensisijainen järjestysperuste"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3472 ../intl-scm/guile-strings.c:4172
 #: ../intl-scm/guile-strings.c:4348
-#, fuzzy
 msgid "Show Full Account Name"
-msgstr "Näytä koko tilin nimi?"
+msgstr "Näytä tilin koko nimi"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:3474 ../intl-scm/guile-strings.c:4168
 #: ../intl-scm/guile-strings.c:4352
-#, fuzzy
 msgid "Show Account Code"
-msgstr "Näytä tilin koodi?"
+msgstr "Näytä tilin koodi"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -20147,9 +20080,8 @@ msgstr "Tuloslaskelma"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:3620
-#, fuzzy
 msgid "Profit & Loss"
-msgstr "Voittoa:"
+msgstr "Tuloslaskelma"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:3622
@@ -20444,9 +20376,8 @@ msgstr ""
 
 #. src/report/standard-reports/register.scm
 #: ../intl-scm/guile-strings.c:3932
-#, fuzzy
 msgid "Display the value in transaction currency?"
-msgstr "Poistaa tämänhetkisen tapahtuman"
+msgstr "Näytä arvo tapahtuman valuutassa?"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
@@ -20499,7 +20430,7 @@ msgstr ""
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4076
 msgid "Transaction Report"
-msgstr ""
+msgstr "Tapahtumaraportti"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4094
@@ -20513,9 +20444,8 @@ msgstr "Yhteinen valuutta"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4100
-#, fuzzy
 msgid "Split Transaction"
-msgstr "_Jaa tapahtuma"
+msgstr "Jaa tapahtuma"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4102
