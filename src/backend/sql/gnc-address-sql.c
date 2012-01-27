@@ -52,13 +52,13 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 static GncSqlColumnTableEntry col_table[] =
 {
     { "name",  CT_STRING, ADDRESS_MAX_NAME_LEN,         COL_NNUL, "name" },
-    { "addr1", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, NULL, ADDRESS_ONE },
-    { "addr2", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, NULL, ADDRESS_TWO },
-    { "addr3", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, NULL, ADDRESS_THREE },
-    { "addr4", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, NULL, ADDRESS_FOUR },
-    { "phone", CT_STRING, ADDRESS_MAX_PHONE_LEN,        COL_NNUL, NULL, ADDRESS_PHONE },
-    { "fax",   CT_STRING, ADDRESS_MAX_FAX_LEN,          COL_NNUL, NULL, ADDRESS_FAX },
-    { "email", CT_STRING, ADDRESS_MAX_EMAIL_LEN,        COL_NNUL, NULL, ADDRESS_EMAIL },
+    { "addr1", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr1" },
+    { "addr2", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr2" },
+    { "addr3", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr3" },
+    { "addr4", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr4" },
+    { "phone", CT_STRING, ADDRESS_MAX_PHONE_LEN,        COL_NNUL, "phone" },
+    { "fax",   CT_STRING, ADDRESS_MAX_FAX_LEN,          COL_NNUL, "fax" },
+    { "email", CT_STRING, ADDRESS_MAX_EMAIL_LEN,        COL_NNUL, "email" },
     { NULL }
 };
 
