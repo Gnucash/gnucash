@@ -3,13 +3,13 @@
 # Copyright (C) 2009 Free Software Foundation, Inc.
 # Tadas Masiulionis <tadzikaz@gmail.com>, 2009.
 # Mantas Kriaučiūnas <mantas@akl.lt>, 2011.
-# Aurimas Fišeras <aurimas@members.fsf.org>, 2011.
+# Aurimas Fišeras <aurimas@members.fsf.org>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-29 11:05+0300\n"
-"PO-Revision-Date: 2011-12-31 14:04+0300\n"
+"PO-Revision-Date: 2012-01-26 21:22+0300\n"
 "Last-Translator: Aurimas Fišeras <aurimas@members.fsf.org>\n"
 "Language-Team: komp_lt@konf.lt\n"
 "Language: lt\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
 "100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Virtaal 0.7.1-rc1\n"
+"X-Generator: Virtaal 0.7.1\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:656
 msgid "Illegal variable in expression."
@@ -1547,7 +1547,7 @@ msgstr "Mėnesio diena, kada gautos sąskaitos yra apmokėtinos"
 #, fuzzy
 msgid "The description of the Billing Term, printed on invoices"
 msgstr ""
-"Atsiskaitymo termino aprašymas, kuris atspausdintas ant sąskaitos-faktūros"
+"Atsiskaitymo termino aprašas, kuris atspausdintas ant sąskaitos-faktūros"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:27
 msgid "The discount percentage applied if paid early."
@@ -7842,6 +7842,8 @@ msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
 msgstr ""
+"Pašalinsite suderintą skaidymą! Tai nėra gera idėja, nes jūsų suderintas "
+"likutis taps netiksliu."
 
 #: ../src/gnome/gnc-split-reg.c:1046
 msgid "You cannot delete this split."
@@ -7854,15 +7856,18 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
+"Tai yra skaidymas susiejantis šią operaciją su registru. Jūs negalite jo "
+"pašalinti iš šio registro lango. Jūs galite pašalinti visą operaciją iš šio "
+"lango, arba pereiti į registrą, kuris rodo šios operacijos kitą pusę, ir "
+"pašalinti skaidymą iš to registro."
 
 #: ../src/gnome/gnc-split-reg.c:1075
 msgid "(no memo)"
 msgstr "(nėra užrašo)"
 
 #: ../src/gnome/gnc-split-reg.c:1078
-#, fuzzy
 msgid "(no description)"
-msgstr "(nėra aprašymo)"
+msgstr "(nėra aprašo)"
 
 #: ../src/gnome/gnc-split-reg.c:1103
 msgid "_Delete Split"
@@ -7877,6 +7882,8 @@ msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
+"Pašalinsite operaciją su suderintais skaidymais! Tai nėra gera idėja, nes "
+"jūsų suderintas likutis taps netiksliu."
 
 #: ../src/gnome/gnc-split-reg.c:1430
 msgid "Balancing entry from reconcilation"
@@ -7962,9 +7969,8 @@ msgstr "Partijos sąskaitoje %s"
 #: ../src/gnome/reconcile-list.c:213
 #: ../src/register/ledger-core/split-register-layout.c:570
 #: ../src/register/ledger-core/split-register-model.c:250
-#, fuzzy
 msgid "Reconciled:R"
-msgstr "Suderinta:S"
+msgstr "Reconciled:S"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:1
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:1
@@ -14256,9 +14262,8 @@ msgid "U+R"
 msgstr ""
 
 #: ../src/import-export/import-main-matcher.c:485
-#, fuzzy
 msgid "R"
-msgstr "R"
+msgstr "S"
 
 #: ../src/import-export/import-main-matcher.c:491
 msgid "Info"
@@ -15200,7 +15205,7 @@ msgstr "Įvedimo failas negali būti atvertas."
 
 #: ../src/plugins/bi_import/gui.c:329
 msgid "Adjust regular expression used for import"
-msgstr ""
+msgstr "Koreguoti reguliariuosius reiškinius naudojamus importui"
 
 #: ../src/plugins/bi_import/gui.c:329
 msgid ""
@@ -19598,7 +19603,7 @@ msgstr "Neįmanoma perskaityti šablono failo „%s“"
 #: ../intl-scm/guile-strings.c:7484 ../intl-scm/guile-strings.c:7620
 #: ../intl-scm/guile-strings.c:8634
 msgid "Closing Entries"
-msgstr ""
+msgstr "Uždarantys įrašai"
 
 #. src/report/report-system/html-acct-table.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
@@ -19606,7 +19611,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3330 ../intl-scm/guile-strings.c:7482
 #: ../intl-scm/guile-strings.c:8632
 msgid "Adjusting Entries"
-msgstr ""
+msgstr "Koreguojantys įrašai"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3334 ../intl-scm/guile-strings.c:3340
@@ -23167,7 +23172,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6450 ../intl-scm/guile-strings.c:7432
 #: ../intl-scm/guile-strings.c:7600 ../intl-scm/guile-strings.c:8582
 msgid "Closing Entries pattern"
-msgstr ""
+msgstr "Uždarančių įrašų šablonas"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
@@ -23180,6 +23185,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7602 ../intl-scm/guile-strings.c:8584
 msgid "Any text in the Description column which identifies closing entries"
 msgstr ""
+"Bet koks tekstas aprašo stulpelyje, kuris identifikuoja uždarančius įrašus"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
@@ -23191,7 +23197,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6454 ../intl-scm/guile-strings.c:7436
 #: ../intl-scm/guile-strings.c:7604 ../intl-scm/guile-strings.c:8586
 msgid "Closing Entries pattern is case-sensitive"
-msgstr ""
+msgstr "Uždarančių įrašų šablonas skiria didžiąsias ir mažąsias raides"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
@@ -23204,6 +23210,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7606 ../intl-scm/guile-strings.c:8588
 msgid "Causes the Closing Entries Pattern match to be case-sensitive"
 msgstr ""
+"Padaro, kad uždarančių įrašų šablono atitiktys skirtų didžiąsias ir mažąsias "
+"raides"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
@@ -23215,7 +23223,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6458 ../intl-scm/guile-strings.c:7440
 #: ../intl-scm/guile-strings.c:7608 ../intl-scm/guile-strings.c:8590
 msgid "Closing Entries Pattern is regular expression"
-msgstr ""
+msgstr "Uždarančių įrašų šablonas yra reguliarusis reiškinys"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
@@ -23229,6 +23237,7 @@ msgstr ""
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression"
 msgstr ""
+"Padaro, kad uždarančių įrašų šablonas būtų laikomas reguliariuoju reiškiniu"
 
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
@@ -23552,7 +23561,6 @@ msgstr "Bendras pelnas"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:6494 ../intl-scm/guile-strings.c:7498
 #: ../intl-scm/guile-strings.c:7644 ../intl-scm/guile-strings.c:8648
-#, fuzzy
 msgid "Income Statement"
 msgstr "Pajamų deklaracija"
 
@@ -23810,7 +23818,6 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:6694 ../intl-scm/guile-strings.c:7844
-#, fuzzy
 msgid "Identical commodities"
 msgstr "Tapačios prekės"
 
@@ -24008,7 +24015,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6832 ../intl-scm/guile-strings.c:7982
 #, fuzzy
 msgid "Value Change"
-msgstr "Datos laikotarpis"
+msgstr "Vertės kitimas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/register.scm
 #. src/report/standard-reports/register.scm
@@ -24090,7 +24097,7 @@ msgstr "Rodyti 1 eilutę"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7100 ../intl-scm/guile-strings.c:8250
 msgid "Convert all transactions into a common currency"
-msgstr ""
+msgstr "Konvertuoti visas operacijas į bendrą valiutą"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -24188,7 +24195,6 @@ msgstr "Rodyti abi (ir įtraukti anuliuotas operacijas į bendrą sumą)"
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7144 ../intl-scm/guile-strings.c:8294
-#, fuzzy
 msgid "Do not sort"
 msgstr "Nerikiuoti"
 
@@ -24207,9 +24213,8 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:7158 ../intl-scm/guile-strings.c:8308
-#, fuzzy
 msgid "Exact Time"
-msgstr "Тikslus laikas"
+msgstr "Tikslus laikas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -24549,7 +24554,7 @@ msgstr "Bandomasis balansas"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7392 ../intl-scm/guile-strings.c:8542
 msgid "Start of Adjusting/Closing"
-msgstr ""
+msgstr "Koregavimo/uždarymo pradžia"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -24609,31 +24614,35 @@ msgstr ""
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7420 ../intl-scm/guile-strings.c:8570
 msgid "Adjusting Entries pattern"
-msgstr ""
+msgstr "Koreguojančių įrašų šablonas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7422 ../intl-scm/guile-strings.c:8572
 msgid "Any text in the Description column which identifies adjusting entries"
 msgstr ""
+"Bet koks tekstas aprašo stulpelyje, kuris identifikuoja koreguojančius "
+"įrašus"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7424 ../intl-scm/guile-strings.c:8574
 msgid "Adjusting Entries pattern is case-sensitive"
-msgstr ""
+msgstr "Koreguojančių įrašų šablonas skiria didžiąsias ir mažąsias raides"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7426 ../intl-scm/guile-strings.c:8576
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive"
 msgstr ""
+"Padaro, kad koreguojančių įrašų šablono atitiktys skirtų didžiąsias ir "
+"mažąsias raides"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7428 ../intl-scm/guile-strings.c:8578
 msgid "Adjusting Entries Pattern is regular expression"
-msgstr ""
+msgstr "Koreguojančių įrašų šablonas yra reguliarusis reiškinys"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -24641,6 +24650,8 @@ msgstr ""
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression"
 msgstr ""
+"Padaro, kad koreguojančių įrašų šablonas būtų laikomas reguliariuoju "
+"reiškiniu"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -24664,7 +24675,7 @@ msgstr ""
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7476 ../intl-scm/guile-strings.c:8626
 msgid "Ignores Adjusting/Closing entries"
-msgstr ""
+msgstr "Ignoruoja koreguojančius/uždarančius įrašus"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -24682,7 +24693,6 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7494 ../intl-scm/guile-strings.c:8644
-#, fuzzy
 msgid "Adjustments"
 msgstr "Koregavimai"
 
@@ -24690,7 +24700,7 @@ msgstr "Koregavimai"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:7496 ../intl-scm/guile-strings.c:8646
 msgid "Adjusted Trial Balance"
-msgstr ""
+msgstr "Koreguotas bandomasis balansas"
 
 #. src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/trial-balance.scm
