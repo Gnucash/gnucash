@@ -559,6 +559,7 @@ function inst_libxslt() {
         wget_unpacked $GNOME_VFS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $HICOLOR_THEME_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
