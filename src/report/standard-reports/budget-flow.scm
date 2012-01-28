@@ -159,7 +159,7 @@
         (bgt-total-numeric (gnc:sum-collector-commodity bgt-total report-currency exchange-fn))
         (act-total-numeric (gnc:sum-collector-commodity act-total report-currency exchange-fn))
       )
-      (gnc:html-table-add-budget-row! html-table "total-number-cell" "Total:" bgt-total-numeric act-total-numeric)
+      (gnc:html-table-add-budget-row! html-table "total-number-cell" (string-append (_ "Total") ":") bgt-total-numeric act-total-numeric)
       
       ;; Display hr FIXME: kind of a hack
       (gnc:html-table-append-row! html-table "<tr><td colspan='3'><hr></td></tr>")
@@ -241,7 +241,7 @@
       )
 
       ;; Display Grand Total
-      (gnc:html-table-add-budget-row! html-table "total-number-cell" "Total:" bgt-total-numeric act-total-numeric)
+      (gnc:html-table-add-budget-row! html-table "total-number-cell" (string-append (_ "Total") ":") bgt-total-numeric act-total-numeric)
 
 )))
 
