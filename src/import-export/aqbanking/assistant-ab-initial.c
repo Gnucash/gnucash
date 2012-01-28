@@ -70,7 +70,7 @@ typedef struct _AccCbData AccCbData;
 typedef struct _RevLookupData RevLookupData;
 
 void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
-                 gpointer user_data);
+                     gpointer user_data);
 
 void aai_on_finish (GtkAssistant *gtkassistant, gpointer user_data);
 void aai_on_cancel (GtkAssistant *assistant, gpointer user_data);
@@ -93,7 +93,7 @@ static void update_account_list(ABInitialInfo *info);
 static gboolean find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static gboolean clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
 static void account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
-                  GtkTreeViewColumn  *col, gpointer user_data);
+                                     GtkTreeViewColumn  *col, gpointer user_data);
 static void clear_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
 static void save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static void aai_close_handler(gpointer user_data);
@@ -512,7 +512,7 @@ child_exit_cb(GPid pid, gint status, gpointer data)
 
     if (exit_status == 0)
     {
-         gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, TRUE);
+        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, TRUE);
     }
     else
     {
@@ -688,7 +688,7 @@ clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 
 static void
 account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
-                  GtkTreeViewColumn  *col, gpointer user_data)
+                         GtkTreeViewColumn  *col, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
     GtkTreeSelection *selection;
@@ -709,7 +709,7 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
     selection = gtk_tree_view_get_selection(info->account_view);
 
     if (!gtk_tree_model_get_iter(model, &iter, path))
-      return; /* path describes a non-existing row - should not happen */
+        return; /* path describes a non-existing row - should not happen */
 
     gtk_tree_model_get(model, &iter, ACCOUNT_LIST_COL_AB_ACCT, &ab_acc, -1);
 
@@ -824,7 +824,7 @@ aai_close_handler(gpointer user_data)
 }
 
 void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
-                 gpointer user_data)
+                     gpointer user_data)
 {
     ABInitialInfo *info = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
@@ -853,7 +853,7 @@ gnc_ab_initial_assistant(void)
 
     info = g_new0(ABInitialInfo, 1);
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"assistant-ab-initial.glade", "AqBanking Init Assistant");
+    gnc_builder_add_from_file (builder, "assistant-ab-initial.glade", "AqBanking Init Assistant");
 
     info->window = GTK_WIDGET(gtk_builder_get_object (builder, "AqBanking Init Assistant"));
 
