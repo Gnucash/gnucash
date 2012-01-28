@@ -69,11 +69,10 @@ static AB_TRANSACTION *gnc_ab_trans_dialog_fill_values(GncABTransDialog *td);
 static AB_JOB *gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc,
                                                            GncABTransType trans_type);
 
-static gboolean gnc_ab_trans_dialog_check_ktoblzcheck(GtkWidget *parent, const GncABTransDialog *td,
-                                                      const AB_TRANSACTION *trans);
+static void gnc_ab_trans_dialog_check_ktoblzcheck(const GncABTransDialog *td,
+                                                  const AB_TRANSACTION *trans);
 
-/* Callbacks - connect with GtkBuilder */
-G_MODULE_EXPORT void gnc_ab_trans_dialog_account_changed_cb(GtkEditable *editable, gpointer user_data);
+/* Callbacks - connected with GtkBuilder */
 G_MODULE_EXPORT void gnc_ab_trans_dialog_bankcode_changed_cb(GtkEditable *editable, gpointer user_data);
 G_MODULE_EXPORT void gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data);
 G_MODULE_EXPORT void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data);
@@ -89,6 +88,7 @@ G_MODULE_EXPORT void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView
                                                                      GtkTreePath *path,
                                                                      GtkTreeViewColumn *column, 
                                                                      gpointer user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_verify_values(GncABTransDialog *td);
 
 
 enum
@@ -104,7 +104,7 @@ struct _GncABTransDialog
     GtkWidget *dialog;
     GtkWidget *parent;
     AB_ACCOUNT *ab_acc;
-
+    
     /* Whether this is a transfer or a direct debit */
     GncABTransType trans_type;
 
@@ -129,6 +129,9 @@ struct _GncABTransDialog
     GtkTreeView *template_gtktreeview;
     GtkListStore *template_list_store;
 
+    /* Exec button */
+    GtkWidget *exec_button;
+    
     /* Flag, if template list has been changed */
     gboolean templ_changed;
 
@@ -227,6 +230,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     const gchar *ab_accountnumber;
     const gchar *ab_bankname;
     const gchar *ab_bankcode;
+    GtkWidget *trans_vbox;
     GtkWidget *heading_label;
     GtkWidget *recp_name_heading;
     GtkWidget *recp_account_heading;
@@ -271,6 +275,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
         gtk_window_set_transient_for(GTK_WINDOW(td->dialog), GTK_WINDOW(parent));
 
     /* Extract widgets */
+    trans_vbox = GTK_WIDGET(gtk_builder_get_object (builder, "trans_vbox"));    
     heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
     recp_name_heading = GTK_WIDGET(gtk_builder_get_object (builder, "recp_name_heading"));
     td->recp_name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "recp_name_entry"));
@@ -284,6 +289,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     td->purpose_cont_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_cont_entry"));
     td->purpose_cont2_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_cont2_entry"));
     td->purpose_cont3_entry = GTK_WIDGET(gtk_builder_get_object (builder, "purpose_cont3_entry"));
+    td->exec_button = GTK_WIDGET(gtk_builder_get_object(builder, "exec_now_button"));
     orig_name_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_name_heading"));
     orig_name_label = GTK_WIDGET(gtk_builder_get_object (builder, "orig_name_label"));
     orig_account_heading = GTK_WIDGET(gtk_builder_get_object (builder, "orig_account_heading"));
@@ -302,7 +308,9 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
                                           TRUE);
     gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(td->amount_edit),
                                  commodity_scu);
-
+    g_signal_connect_swapped (gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(td->amount_edit)), "changed",
+                              G_CALLBACK(gnc_ab_trans_dialog_verify_values), td);
+    
     /* Check for what kind of transaction this should be, and change the
      * labels accordingly */
     switch (trans_type)
@@ -367,23 +375,37 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     gtk_tree_view_append_column(td->template_gtktreeview, column);
 
     /* Connect the Signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, td);
+    gtk_builder_connect_signals_full(builder, gnc_builder_connect_full_func, td);
 
     g_object_unref(G_OBJECT(builder));
 
+    /* Disabled OK button until suitable values are filled */
+    gnc_ab_trans_dialog_verify_values(td);
+    
     return td;
 }
 
-static gboolean
-check_ktoblzcheck(GtkWidget *parent, const GncABTransDialog *td,
-                  const AB_TRANSACTION *trans)
+static void
+gnc_ab_trans_dialog_entry_set (GtkWidget* entry,
+                               const gchar* message,
+                               const gchar* stock_icon)
+{
+        g_object_set (entry, 
+                      "secondary-icon-stock", stock_icon, 
+                      "secondary-icon-tooltip-text", message,
+                      NULL);
+}
+
+static void
+gnc_ab_trans_dialog_check_ktoblzcheck(const GncABTransDialog *td,
+                                      const AB_TRANSACTION *trans)
 {
 #ifndef HAVE_KTOBLZCHECK_H
-    return TRUE;
+    return;
 #else
     gint blzresult;
     const char *blztext;
-    gboolean values_ok = TRUE;
+    gchar* message;
 
     ENTER(" ");
 
@@ -394,15 +416,16 @@ check_ktoblzcheck(GtkWidget *parent, const GncABTransDialog *td,
     switch (blzresult)
     {
     case 2:
-        gtk_widget_show(parent);
-        values_ok = gnc_verify_dialog(
-                        parent, TRUE,
-                        _("The internal check of the destination account number '%s' "
-                          "at the specified bank with bank code '%s' failed. This means "
-                          "the account number might contain an error. Should the online "
-                          "transfer job be sent with this account number anyway?"),
-                        AB_Transaction_GetRemoteAccountNumber(trans),
-                        AB_Transaction_GetRemoteBankCode(trans));
+        message = g_strdup_printf(_("The internal check of the destination account number '%s' "
+                                    "at the specified bank with bank code '%s' failed. This means "
+                                    "the account number might contain an error."),
+                                  AB_Transaction_GetRemoteAccountNumber(trans),
+                                  AB_Transaction_GetRemoteBankCode(trans));
+        gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry, message, 
+                                       GTK_STOCK_DIALOG_WARNING);
+        gnc_ab_trans_dialog_entry_set (td->recp_account_entry, message, 
+                                       GTK_STOCK_DIALOG_WARNING);
+                                       
         blztext = "Kontonummer wahrscheinlich falsch";
         break;
     case 0:
@@ -417,11 +440,128 @@ check_ktoblzcheck(GtkWidget *parent, const GncABTransDialog *td,
         break;
     }
 
+    if (blzresult != 2)
+    {
+        gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry, "", 
+                                       NULL);
+        gnc_ab_trans_dialog_entry_set (td->recp_account_entry, "", 
+                                       NULL);
+    }
+
     LEAVE("KtoBlzCheck said check is %d = %s",
           blzresult, blztext ? blztext : "(none)");
-
-    return values_ok;
 #endif
+}
+
+static void
+gnc_ab_trans_dialog_clear_transaction(GncABTransDialog *td)
+{
+    AB_Transaction_free(td->ab_trans);
+    td->ab_trans = NULL;
+}
+
+void
+gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
+{
+    gchar* purpose;
+    gchar* othername;
+    const gchar* account;
+    const gchar* bankcode;
+
+    gboolean values_ok = TRUE;
+
+    GtkWidget *amount_entry = gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(td->amount_edit));
+
+    /* Fill in the values from the entry fields into a new
+     * AB_TRANSACTION */
+    td->ab_trans = gnc_ab_trans_dialog_fill_values(td);
+
+    /* Check recipient / remote name */
+    othername = gnc_ab_get_remote_name(td->ab_trans);
+    if (!othername || !strlen(othername))
+    {
+        gnc_ab_trans_dialog_entry_set (td->recp_name_entry, 
+                                       _("You did not enter a recipient name.  A recipient name is "
+                                         "required for an online transfer.\n"),
+                                       GTK_STOCK_CANCEL);
+
+        g_free (othername);
+        values_ok = FALSE;
+    }
+    else
+    {
+        gnc_ab_trans_dialog_entry_set (td->recp_name_entry, "", NULL);
+        g_free(othername);
+    }
+
+    /* Check account */
+    account = AB_Transaction_GetRemoteAccountNumber(td->ab_trans);
+    if (!account || !strlen(account))
+    {
+        gnc_ab_trans_dialog_entry_set (td->recp_account_entry, 
+                                       _("You did not enter a recipient account.  A recipient account is "
+                                         "required for an online transfer.\n"),
+                                       GTK_STOCK_CANCEL);
+        values_ok = FALSE;
+    }
+    else
+    {
+        gnc_ab_trans_dialog_entry_set (td->recp_account_entry, "", NULL);
+    }
+    /* Check bank */
+    bankcode = AB_Transaction_GetRemoteBankCode(td->ab_trans);
+    if (!bankcode || !strlen(bankcode))
+    {
+        gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry, 
+                                       _("You did not enter a recipient bank.  A recipient bank is "
+                                         "required for an online transfer.\n"),
+                                       GTK_STOCK_CANCEL);
+        values_ok = FALSE;
+    }
+    else
+    {
+        gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry, "", NULL);
+    }
+    /* Check if account details are correct - gives warning only */
+    if (values_ok)
+        gnc_ab_trans_dialog_check_ktoblzcheck(td, td->ab_trans);
+
+    /* Check transaction value */
+    if (AB_Value_GetValueAsDouble(AB_Transaction_GetValue(td->ab_trans))
+        == 0.0)
+    {
+        gnc_ab_trans_dialog_entry_set (amount_entry, 
+                                       _("The amount is zero or the amount field could not be "
+                                         "interpreted correctly. You might have mixed up decimal "
+                                         "point and comma, compared to your locale settings. "
+                                         "This does not result in a valid online transfer job."),
+                                       GTK_STOCK_CANCEL);
+        values_ok = FALSE;
+    }
+    else
+    {
+        gnc_ab_trans_dialog_entry_set (amount_entry, "", NULL);
+    }
+    
+    /* Check transaction purpose */
+    purpose = gnc_ab_get_purpose(td->ab_trans);
+    if (!purpose || !strlen(purpose))
+    {
+        gnc_ab_trans_dialog_entry_set (td->purpose_entry, 
+                                       _("You did not enter any transaction purpose. A purpose is "
+                                         "required for an online transfer.\n"),
+                                       GTK_STOCK_CANCEL);
+        g_free (purpose);
+        values_ok = FALSE;
+    }
+    else
+    {
+        gnc_ab_trans_dialog_entry_set (td->purpose_entry, "", NULL);
+        g_free(purpose);
+    }
+
+    gtk_widget_set_sensitive(td->exec_button, values_ok);
+    gnc_ab_trans_dialog_clear_transaction(td);
 }
 
 gint
@@ -454,116 +594,29 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     /* Show the dialog */
     gtk_widget_show(td->dialog);
 
-    /* Repeat until entered values make sense */
-    do
+    /* Now run the dialog until it gets closed by a button press */
+    result = gtk_dialog_run (GTK_DIALOG (td->dialog));
+
+    /* Was cancel pressed or dialog closed?
+     *  GNC_RESPONSE_NOW == execute now
+     *  GNC_RESPONSE_LATER == scheduled for later execution (unimplemented)
+     *  GTK_RESPONSE_CANCEL == cancel
+     *  GTK_RESPONSE_DELETE_EVENT == window destroyed */
+    if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
     {
-        /* Now run the dialog until it gets closed by a button press */
-        result = gtk_dialog_run (GTK_DIALOG (td->dialog));
-
-        /* Was cancel pressed or dialog closed?
-         *  GNC_RESPONSE_NOW == execute now
-         *  GNC_RESPONSE_LATER == scheduled for later execution (unimplemented)
-         *  GTK_RESPONSE_CANCEL == cancel
-         *  GTK_RESPONSE_DELETE_EVENT == window destroyed */
-        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
-        {
-            gtk_widget_destroy(td->dialog);
-            td->dialog = NULL;
-            break;
-        }
-
-        /* Now fill in the values from the entry fields into a new
-         * AB_TRANSACTION */
-        td->ab_trans = gnc_ab_trans_dialog_fill_values(td);
-        values_ok = TRUE;
-
-        /* Check transaction value */
-        values_ok =
-            AB_Value_GetValueAsDouble(AB_Transaction_GetValue(td->ab_trans))
-            != 0.0;
-        if (!values_ok)
-        {
-            gtk_widget_show(td->dialog);
-            if (gnc_verify_dialog(
-                        td->dialog, TRUE, "%s",
-                        _("The amount is zero or the amount field could not be "
-                          "interpreted correctly. You might have mixed up decimal "
-                          "point and comma, compared to your locale settings. "
-                          "This does not result in a valid online transfer job. \n"
-                          "\n"
-                          "Do you want to enter the job again?")))
-            {
-                continue;
-            }
-            else
-            {
-                AB_Transaction_free(td->ab_trans);
-                td->ab_trans = NULL;
-                result = GTK_RESPONSE_CANCEL;
-                break;
-            }
-        }
-
-        /* Check transaction purpose */
-        purpose = gnc_ab_get_purpose(td->ab_trans);
-        values_ok = *purpose;
-        g_free(purpose);
-        if (!values_ok)
-        {
-            gtk_widget_show(td->dialog);
-            if (gnc_verify_dialog(
-                        td->dialog, TRUE, "%s",
-                        _("You did not enter any transaction purpose. A purpose is "
-                          "required for an online transfer.\n"
-                          "\n"
-                          "Do you want to enter the job again?")))
-            {
-                continue;
-            }
-            else
-            {
-                AB_Transaction_free(td->ab_trans);
-                td->ab_trans = NULL;
-                result = GTK_RESPONSE_CANCEL;
-                break;
-            }
-        }
-
-        /* Check recipient / remote name */
-        othername = gnc_ab_get_remote_name(td->ab_trans);
-        values_ok = othername && *othername;
-        g_free(othername);
-        if (!values_ok)
-        {
-            gtk_widget_show(td->dialog);
-            if (gnc_verify_dialog(
-                        td->dialog, TRUE, "%s",
-                        _("You did not enter a recipient name.  A recipient name is "
-                          "required for an online transfer.\n"
-                          "\n"
-                          "Do you want to enter the job again?")))
-            {
-                continue;
-            }
-            else
-            {
-                AB_Transaction_free(td->ab_trans);
-                td->ab_trans = NULL;
-                result = GTK_RESPONSE_CANCEL;
-                break;
-            }
-        }
-
-        /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
-         * transactionCode according to some GUI selection here!! */
-        /*if (td->trans_type == SINGLE_DEBITNOTE)
-          AB_TRANSACTION_setTextKey (td->hbci_trans, 05); */
-
-        /* And finally check the account code, if ktoblzcheck is available */
-        values_ok = check_ktoblzcheck(td->dialog, td, td->ab_trans);
-
+        gtk_widget_destroy(td->dialog);
+        td->dialog = NULL;
+        return result;
     }
-    while (!values_ok);
+
+    /* Get the transaction details - have been checked beforehand */
+    td->ab_trans = gnc_ab_trans_dialog_fill_values(td);
+
+    /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
+     * transactionCode according to some GUI selection here!! */
+    /*if (td->trans_type == SINGLE_DEBITNOTE)
+    AB_TRANSACTION_setTextKey (td->hbci_trans, 05); */
+    
 
     /* Hide the dialog */
     if (td->dialog)
@@ -808,12 +861,6 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
 }
 
 void
-gnc_ab_trans_dialog_account_changed_cb(GtkEditable *editable, gpointer user_data)
-{
-    /* TODO */
-}
-
-void
 gnc_ab_trans_dialog_bankcode_changed_cb(GtkEditable *editable, gpointer user_data)
 {
 #if HAVE_KTOBLZCHECK_H
@@ -864,6 +911,7 @@ gnc_ab_trans_dialog_bankcode_changed_cb(GtkEditable *editable, gpointer user_dat
     }
     LEAVE(" ");
 #endif
+    gnc_ab_trans_dialog_verify_values(td);
 }
 
 struct _FindTemplData
