@@ -117,8 +117,8 @@ gnc_xml_be_get_file_lock (FileBackend *be)
 {
     struct stat statbuf;
 #ifndef G_OS_WIN32
-    char pathbuf[PATH_MAX];
-    char *path = NULL;
+    char *pathbuf = NULL, *path = NULL;
+    size_t pathbuf_size = 0;
 #endif
     int rc;
     QofBackendError be_err;
@@ -169,9 +169,16 @@ gnc_xml_be_get_file_lock (FileBackend *be)
      */
 
 #ifndef G_OS_WIN32
+    pathbuf_size = strlen (be->lockfile) + 100;
+    pathbuf = (char *) malloc (pathbuf_size);
     strcpy (pathbuf, be->lockfile);
     path = strrchr (pathbuf, '.');
-    sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
+    while (snprintf (path, pathbuf_size - (path - pathbuf), ".%lx.%d.LNK", gethostid(), getpid())
+           >= pathbuf_size - (path - pathbuf))
+      {
+        pathbuf_size += 100;
+        pathbuf = (char *) realloc (pathbuf, pathbuf_size);
+      }
 
     rc = link (be->lockfile, pathbuf);
     if (rc)
@@ -187,12 +194,14 @@ gnc_xml_be_get_file_lock (FileBackend *be)
            )
         {
             be->linkfile = NULL;
+            free (pathbuf);
             return TRUE;
         }
 
         /* Otherwise, something else is wrong. */
         qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_LOCKED);
         g_unlink (pathbuf);
+        free (pathbuf);
         close (be->lockfd);
         g_unlink (be->lockfile);
         return FALSE;
@@ -206,6 +215,7 @@ gnc_xml_be_get_file_lock (FileBackend *be)
         qof_backend_set_message ((QofBackend*)be, "Failed to stat lockfile %s",
                                  be->lockfile );
         g_unlink (pathbuf);
+        free (pathbuf);
         close (be->lockfd);
         g_unlink (be->lockfile);
         return FALSE;
@@ -215,12 +225,14 @@ gnc_xml_be_get_file_lock (FileBackend *be)
     {
         qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_LOCKED);
         g_unlink (pathbuf);
+        free (pathbuf);
         close (be->lockfd);
         g_unlink (be->lockfile);
         return FALSE;
     }
 
     be->linkfile = g_strdup (pathbuf);
+    free (pathbuf);
 
     return TRUE;
 
