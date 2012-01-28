@@ -56,16 +56,16 @@ enum _GncABTransType
 };
 
 /**
- * FIXME
+ * Create a new AqBanking transfer dialog
  *
  * @param parent Widget to use as parent, may be NULL
- * @param ab_acc FIXME
- * @param commodity_scu FIXME
+ * @param ab_acc Aqbanking account
+ * @param commodity_scu commodity used for the amount
  * @param trans_type Type of transaction
  * @param templates A GList of template transactions which will become fully
  * managed by the dialog, so do not free it and retrieve snapshots via
  * gnc_ab_trans_dialog_get_templ()
- * @return FIXME
+ * @return A new GncABTransDialog, free with gnc_ab_trans_dialog_free()
  */
 GncABTransDialog *gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
         gint commodity_scu,
@@ -73,16 +73,18 @@ GncABTransDialog *gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
         GList *templates);
 
 /**
- * FIXME
+ * Run the Aqbanking transfer dialog until correct values where entered or
+ * the user cancelled the dialog.
  *
  * @param td Transaction dialog
  * @param ab_acc AqBanking account
- * @return FIXME
+ * @return GTK_RESPONSE_CANCEL or GTK_RESPONSE_DESTROY_EVENT if the user cancelled the dialog
+ * and GNC_RESPONSE_NOW otherwise.
  */
 gint gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td);
 
 /**
- * FIXME
+ * Free a Aqbanking transfer dialog
  *
  * @param td Transaction dialog
  */
@@ -111,19 +113,19 @@ GList *gnc_ab_trans_dialog_get_templ(const GncABTransDialog *td,
 GtkWidget *gnc_ab_trans_dialog_get_parent(const GncABTransDialog *td);
 
 /**
- * FIXME
+ * Receive the Aqbanking Transaction filled by the dialog
  *
  * @param td Transaction dialog
- * @return FIXME
+ * @return An Aqbanking transaction
  */
 const AB_TRANSACTION *gnc_ab_trans_dialog_get_ab_trans(
     const GncABTransDialog *td);
 
 /**
- * FIXME
+ * Receive the Aqbanking job associated with the transaction
  *
  * @param td Transaction dialog
- * @return FIXME
+ * @return An Aqbanking job
  */
 AB_JOB *gnc_ab_trans_dialog_get_job(const GncABTransDialog *td);
 
