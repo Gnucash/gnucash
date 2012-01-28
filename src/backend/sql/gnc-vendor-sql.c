@@ -64,22 +64,16 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 static GncSqlColumnTableEntry col_table[] =
 {
     { "guid",         CT_GUID,          0,               COL_NNUL | COL_PKEY, "guid" },
-    { "name",         CT_STRING,        MAX_NAME_LEN,    COL_NNUL,          "name" },
-    { "id",           CT_STRING,        MAX_ID_LEN,      COL_NNUL,          NULL, VENDOR_ID },
-    { "notes",        CT_STRING,        MAX_NOTES_LEN,   COL_NNUL,          NULL, VENDOR_NOTES },
-    {
-        "currency",     CT_COMMODITYREF,  0,               COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncVendorGetCurrency, (QofSetterFunc)gncVendorSetCurrency
-    },
-    {
-        "active",       CT_BOOLEAN,       0,               COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncVendorGetActive, (QofSetterFunc)gncVendorSetActive
-    },
-    { "tax_override", CT_BOOLEAN,       0,               COL_NNUL,          NULL, VENDOR_TAX_OVERRIDE },
-    { "addr",         CT_ADDRESS,       0,               0,                 NULL, VENDOR_ADDR },
-    { "terms",        CT_BILLTERMREF,   0,               0,                 NULL, VENDOR_TERMS },
-    { "tax_inc",      CT_STRING,        MAX_TAX_INC_LEN, 0,                 NULL, VENDOR_TAX_INC },
-    { "tax_table",    CT_TAXTABLEREF,   0,               0,                 NULL, VENDOR_TAX_TABLE },
+    { "name",         CT_STRING,        MAX_NAME_LEN,    COL_NNUL,            "name" },
+    { "id",           CT_STRING,        MAX_ID_LEN,      COL_NNUL,            "id" },
+    { "notes",        CT_STRING,        MAX_NOTES_LEN,   COL_NNUL,            "notes" },
+    { "currency",     CT_COMMODITYREF,  0,               COL_NNUL,            "currency" },
+    { "active",       CT_BOOLEAN,       0,               COL_NNUL,            "active" },
+    { "tax_override", CT_BOOLEAN,       0,               COL_NNUL,            "tax-table-override" },
+    { "addr",         CT_ADDRESS,       0,               0,                   "address" },
+    { "terms",        CT_BILLTERMREF,   0,               0,                   "terms" },
+    { "tax_inc",      CT_STRING,        MAX_TAX_INC_LEN, 0,                   "tax-included-string" },
+    { "tax_table",    CT_TAXTABLEREF,   0,               0,                   "tax-table" },
     { NULL }
 };
 

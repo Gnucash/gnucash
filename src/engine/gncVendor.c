@@ -43,6 +43,9 @@
 static gint gs_address_event_handler_id = 0;
 static void listen_for_address_events(QofInstance *entity, QofEventId event_type,
                                       gpointer user_data, gpointer event_data);
+static void qofVendorSetAddr (GncVendor *vendor, QofInstance *addr_ent);
+static const char* qofVendorGetTaxIncluded(const GncVendor *vendor);
+static void qofVendorSetTaxIncluded(GncVendor *vendor, const char* type_string);
 
 struct _gncVendor
 {
@@ -85,7 +88,17 @@ void mark_vendor (GncVendor *vendor)
 enum
 {
     PROP_0,
-    PROP_NAME
+    PROP_NAME,
+    PROP_ID,
+    PROP_NOTES,
+    PROP_CURRENCY,
+    PROP_ACTIVE,
+    PROP_TAXTABLE_OVERRIDE,
+    PROP_BILLTERMS,
+    PROP_TAXTABLE,
+    PROP_ADDRESS,
+    PROP_TAX_INCLUDED,
+    PROP_TAX_INCLUDED_STR
 };
 
 /* GObject Initialization */
@@ -124,6 +137,36 @@ gnc_vendor_get_property (GObject         *object,
     case PROP_NAME:
         g_value_set_string(value, vendor->name);
         break;
+    case PROP_ID:
+        g_value_set_string(value, vendor->id);
+        break;
+    case PROP_NOTES:
+        g_value_set_string(value, vendor->notes);
+        break;
+    case PROP_CURRENCY:
+        g_value_set_object(value, vendor->currency);
+        break;
+    case PROP_ACTIVE:
+        g_value_set_boolean(value, vendor->active);
+        break;
+    case PROP_TAXTABLE_OVERRIDE:
+        g_value_set_boolean(value, vendor->taxtable_override);
+        break;
+    case PROP_BILLTERMS:
+        g_value_set_object(value, vendor->terms);
+        break;
+    case PROP_TAXTABLE:
+        g_value_set_object(value, vendor->taxtable);
+        break;
+    case PROP_ADDRESS:
+        g_value_set_object(value, vendor->addr);
+        break;
+    case PROP_TAX_INCLUDED:
+        g_value_set_int(value, vendor->taxincluded);
+        break;
+    case PROP_TAX_INCLUDED_STR:
+    	g_value_set_string(value, qofVendorGetTaxIncluded(vendor));
+    	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -146,7 +189,37 @@ gnc_vendor_set_property (GObject         *object,
     case PROP_NAME:
         gncVendorSetName(vendor, g_value_get_string(value));
         break;
-    default:
+    case PROP_ID:
+        gncVendorSetID(vendor, g_value_get_string(value));
+        break;
+    case PROP_NOTES:
+        gncVendorSetNotes(vendor, g_value_get_string(value));
+        break;
+    case PROP_CURRENCY:
+        gncVendorSetCurrency(vendor, g_value_get_object(value));
+        break;
+    case PROP_ACTIVE:
+        gncVendorSetActive(vendor, g_value_get_boolean(value));
+        break;
+    case PROP_TAXTABLE_OVERRIDE:
+        gncVendorSetTaxTableOverride(vendor, g_value_get_boolean(value));
+        break;
+    case PROP_BILLTERMS:
+        gncVendorSetTerms(vendor, g_value_get_object(value));
+        break;
+    case PROP_TAXTABLE:
+        gncVendorSetTaxTable(vendor, g_value_get_object(value));
+        break;
+    case PROP_ADDRESS:
+        qofVendorSetAddr(vendor, g_value_get_object(value));
+        break;
+    case PROP_TAX_INCLUDED:
+        gncVendorSetTaxIncluded(vendor, (GncTaxIncluded)g_value_get_int(value));
+        break;
+    case PROP_TAX_INCLUDED_STR:
+        qofVendorSetTaxIncluded(vendor, g_value_get_string(value));
+        break;
+   default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
     }
@@ -215,6 +288,101 @@ gnc_vendor_class_init (GncVendorClass *klass)
                           "The vendor name is an arbitrary string "
                           "assigned by the user to provide the vendor name.",
                           NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ID,
+     g_param_spec_string ("id",
+                          "Vendor ID",
+                          "The vendor id is an arbitrary string "
+                          "assigned by the user to identify the vendor.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_NOTES,
+     g_param_spec_string ("notes",
+                          "Vendor notes",
+                          "The vendor notes is an arbitrary string "
+                          "assigned by the user to add extra information about the vendor.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_CURRENCY,
+     g_param_spec_object ("currency",
+                          "Currency",
+                          "The currency property denotes the currency used by this vendor.",
+                          GNC_TYPE_COMMODITY,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ACTIVE,
+     g_param_spec_boolean ("active",
+                           "Active",
+                           "TRUE if the vendor is active.  FALSE if inactive.",
+                           FALSE,
+                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_TAXTABLE_OVERRIDE,
+     g_param_spec_boolean ("tax-table-override",
+                           "Tax table override",
+                           "TRUE if the vendor has a specific tax table which overrides the default "
+                           "tax table.  FALSE if the default table should be used.",
+                           FALSE,
+                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_BILLTERMS,
+     g_param_spec_object ("terms",
+                          "Terms",
+                          "The billing terms used by this vendor.",
+                          GNC_TYPE_COMMODITY,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_TAXTABLE,
+     g_param_spec_object ("tax-table",
+                          "Tax table",
+                          "The tax table which applies to this vendor.",
+                          GNC_TYPE_COMMODITY,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ADDRESS,
+     g_param_spec_object ("address",
+                          "Address",
+                          "The address property contains the address information for this vendor.",
+                          GNC_TYPE_ADDRESS,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_TAX_INCLUDED,
+     g_param_spec_int  ("tax-included",
+                          "Tax included",
+                          "The tax-included property contains the information about tax calculation this vendor.",
+                          GNC_TAXINCLUDED_YES,       /* min */
+                          GNC_TAXINCLUDED_USEGLOBAL, /* max */
+                          GNC_TAXINCLUDED_USEGLOBAL, /* default */
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_TAX_INCLUDED_STR,
+     g_param_spec_string("tax-included-string",
+                          "Tax included string",
+                          "The tax-included-string property contains a character version of tax-included.",
+                          FALSE,
                           G_PARAM_READWRITE));
 }
 
