@@ -1149,6 +1149,8 @@
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
+                    <signal name="changed" handler="gnc_ab_trans_dialog_account_changed_cb" swapped="no"/>
+                    <signal name="insert-text" handler="gnc_ab_trans_dialog_entry_filter_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">3</property>
@@ -1181,7 +1183,8 @@
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
-                    <signal name="changed" handler="dat_bankcode_changed_cb" swapped="no"/>
+                    <signal name="changed" handler="gnc_ab_trans_dialog_bankcode_changed_cb" swapped="no"/>
+                    <signal name="insert-text" handler="gnc_ab_trans_dialog_entry_filter_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1456,7 +1459,7 @@
                             <property name="tooltip_markup">Add the current online transaction as a new transaction template</property>
                             <property name="tooltip_text" translatable="yes">Add the current online transaction as a new transaction template</property>
                             <property name="use_action_appearance">False</property>
-                            <signal name="clicked" handler="dat_add_templ_cb" swapped="no"/>
+                            <signal name="clicked" handler="gnc_ab_trans_dialog_add_templ_cb" swapped="no"/>
                             <child>
                               <object class="GtkAlignment" id="alignment3">
                                 <property name="visible">True</property>
@@ -1515,7 +1518,7 @@
                             <property name="tooltip_text" translatable="yes">Move the selected transaction template one row up</property>
                             <property name="use_action_appearance">False</property>
                             <property name="use_stock">True</property>
-                            <signal name="clicked" handler="dat_moveup_templ_cb" swapped="no"/>
+                            <signal name="clicked" handler="gnc_ab_trans_dialog_moveup_templ_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1534,7 +1537,7 @@
                             <property name="tooltip_text" translatable="yes">Move the selected transaction template one row down</property>
                             <property name="use_action_appearance">False</property>
                             <property name="use_stock">True</property>
-                            <signal name="clicked" handler="dat_movedown_templ_cb" swapped="no"/>
+                            <signal name="clicked" handler="gnc_ab_trans_dialog_movedown_templ_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1551,7 +1554,7 @@
                             <property name="tooltip_markup">Sort the list of transaction templates alphabetically</property>
                             <property name="tooltip_text" translatable="yes">Sort the list of transaction templates alphabetically</property>
                             <property name="use_action_appearance">False</property>
-                            <signal name="clicked" handler="dat_sort_templ_cb" swapped="no"/>
+                            <signal name="clicked" handler="gnc_ab_trans_dialog_sort_templ_cb" swapped="no"/>
                             <child>
                               <object class="GtkAlignment" id="alignment4">
                                 <property name="visible">True</property>
@@ -1610,7 +1613,7 @@
                             <property name="tooltip_text" translatable="yes">Delete the currently selected transaction template</property>
                             <property name="use_action_appearance">False</property>
                             <property name="use_stock">True</property>
-                            <signal name="clicked" handler="dat_del_templ_cb" swapped="no"/>
+                            <signal name="clicked" handler="gnc_ab_trans_dialog_del_templ_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1639,7 +1642,7 @@
                             <property name="can_focus">True</property>
                             <property name="headers_visible">False</property>
                             <property name="rules_hint">True</property>
-                            <signal name="row-activated" handler="templ_list_row_activated_cb" swapped="no"/>
+                            <signal name="row-activated" handler="gnc_ab_trans_dialog_templ_list_row_activated_cb" swapped="no"/>
                           </object>
                         </child>
                       </object>

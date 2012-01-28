@@ -50,33 +50,46 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-static void fill_templ_helper(gpointer data, gpointer user_data);
-static AB_TRANSACTION *ab_trans_fill_values(GncABTransDialog *td);
-static gboolean check_ktoblzcheck(GtkWidget *parent, const GncABTransDialog *td,
-                                  const AB_TRANSACTION *trans);
-static gboolean clear_templ_helper(GtkTreeModel *model, GtkTreePath *path,
-                                   GtkTreeIter *iter, gpointer user_data);
-static gboolean get_templ_helper(GtkTreeModel *model, GtkTreePath *path,
-                                 GtkTreeIter *iter, gpointer data);
-static AB_JOB *get_available_empty_job(AB_ACCOUNT *ab_acc,
-                                       GncABTransType trans_type);
+/* Template handling */
+static void gnc_ab_trans_dialog_fill_templ_helper(gpointer data, gpointer user_data);
+static gboolean gnc_ab_trans_dialog_clear_templ_helper(GtkTreeModel *model, 
+                                                       GtkTreePath *path,
+                                                       GtkTreeIter *iter, 
+                                                       gpointer user_data);
+static gboolean gnc_ab_trans_dialog_get_templ_helper(GtkTreeModel *model, 
+                                                     GtkTreePath *path,
+                                                     GtkTreeIter *iter, 
+                                                     gpointer data);
+static gboolean gnc_ab_trans_dialog_find_templ_helper(GtkTreeModel *model, 
+                                                      GtkTreePath *path,
+                                                      GtkTreeIter *iter, 
+                                                      gpointer user_data);
 
-void dat_bankcode_changed_cb(GtkEditable *editable, gpointer user_data);
-void templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
-                                 GtkTreeViewColumn *column, gpointer user_data);
-static gboolean find_templ_helper(GtkTreeModel *model, GtkTreePath *path,
-                                  GtkTreeIter *iter, gpointer user_data);
-void dat_add_templ_cb(GtkButton *button, gpointer user_data);
-void dat_moveup_templ_cb(GtkButton *button, gpointer user_data);
-void dat_movedown_templ_cb(GtkButton *button, gpointer user_data);
-void dat_sort_templ_cb(GtkButton *button, gpointer user_data);
-void dat_del_templ_cb(GtkButton *button, gpointer user_data);
+static AB_TRANSACTION *gnc_ab_trans_dialog_fill_values(GncABTransDialog *td);
+static AB_JOB *gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc,
+                                                           GncABTransType trans_type);
 
-static void entry_insert_cb (GtkEditable *editable,
-                             const gchar *text,
-                             gint         length,
-                             gint        *position,
-                             gpointer     data);
+static gboolean gnc_ab_trans_dialog_check_ktoblzcheck(GtkWidget *parent, const GncABTransDialog *td,
+                                                      const AB_TRANSACTION *trans);
+
+/* Callbacks - connect with GtkBuilder */
+G_MODULE_EXPORT void gnc_ab_trans_dialog_account_changed_cb(GtkEditable *editable, gpointer user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_bankcode_changed_cb(GtkEditable *editable, gpointer user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_entry_filter_cb (GtkEditable *editable,
+                                                          const gchar *text,
+                                                          gint         length,
+                                                          gint        *position,
+                                                          gpointer     user_data);
+G_MODULE_EXPORT void gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view, 
+                                                                     GtkTreePath *path,
+                                                                     GtkTreeViewColumn *column, 
+                                                                     gpointer user_data);
+
 
 enum
 {
@@ -132,7 +145,7 @@ struct _GncABTransDialog
 };
 
 static void
-fill_templ_helper(gpointer data, gpointer user_data)
+gnc_ab_trans_dialog_fill_templ_helper(gpointer data, gpointer user_data)
 {
     GncABTransTempl *templ = data;
     GtkListStore *store = user_data;
@@ -151,7 +164,7 @@ fill_templ_helper(gpointer data, gpointer user_data)
  * and return it.  The caller must AB_TRANSACTION_free() it when finished.
  */
 static AB_TRANSACTION *
-ab_trans_fill_values(GncABTransDialog *td)
+gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
 {
     /* Fill in the user-entered values */
     AB_TRANSACTION *trans = AB_Transaction_new();
@@ -282,12 +295,6 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     td->template_gtktreeview =
         GTK_TREE_VIEW(gtk_builder_get_object (builder, "template_list"));
 
-    /* Connect signals */
-    g_signal_connect (td->recp_account_entry, "insert-text",
-                      G_CALLBACK (entry_insert_cb), td);
-    g_signal_connect (td->recp_bankcode_entry, "insert-text",
-                      G_CALLBACK (entry_insert_cb), td);
-
     /* Amount edit */
     td->amount_edit = gnc_amount_edit_new();
     gtk_box_pack_start_defaults(GTK_BOX(amount_hbox), td->amount_edit);
@@ -347,7 +354,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     /* Fill list for choosing a transaction template */
     td->template_list_store = gtk_list_store_new(TEMPLATE_NUM_COLUMNS,
                               G_TYPE_STRING, G_TYPE_POINTER);
-    g_list_foreach(templates, fill_templ_helper, td->template_list_store);
+    g_list_foreach(templates, gnc_ab_trans_dialog_fill_templ_helper, td->template_list_store);
     gtk_tree_view_set_model(td->template_gtktreeview,
                             GTK_TREE_MODEL(td->template_list_store));
     td->templ_changed = FALSE;
@@ -429,7 +436,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     gchar *othername;
 
     /* Check whether the account supports this job */
-    job = get_available_empty_job(td->ab_acc, td->trans_type);
+    job = gnc_ab_trans_dialog_get_available_empty_job(td->ab_acc, td->trans_type);
     if (!job)
     {
         g_warning("gnc_ab_trans_dialog_run_until_ok: Oops, job not available");
@@ -467,7 +474,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
 
         /* Now fill in the values from the entry fields into a new
          * AB_TRANSACTION */
-        td->ab_trans = ab_trans_fill_values(td);
+        td->ab_trans = gnc_ab_trans_dialog_fill_values(td);
         values_ok = TRUE;
 
         /* Check transaction value */
@@ -566,8 +573,10 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
 }
 
 static gboolean
-clear_templ_helper(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-                   gpointer user_data)
+gnc_ab_trans_dialog_clear_templ_helper(GtkTreeModel *model,
+                                       GtkTreePath *path, 
+                                       GtkTreeIter *iter,
+                                       gpointer user_data)
 {
     GncABTransTempl *templ;
 
@@ -589,7 +598,7 @@ gnc_ab_trans_dialog_free(GncABTransDialog *td)
     if (td->template_list_store)
     {
         gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
-                               clear_templ_helper, NULL);
+                               gnc_ab_trans_dialog_clear_templ_helper, NULL);
         g_object_unref(td->template_list_store);
     }
 #if HAVE_KTOBLZCHECK_H
@@ -599,8 +608,10 @@ gnc_ab_trans_dialog_free(GncABTransDialog *td)
 }
 
 static gboolean
-get_templ_helper(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
-                 gpointer data)
+gnc_ab_trans_dialog_get_templ_helper(GtkTreeModel *model, 
+                                     GtkTreePath *path, 
+                                     GtkTreeIter *iter,
+                                     gpointer data)
 {
     GList **list = data;
     GncABTransTempl *templ;
@@ -627,7 +638,7 @@ gnc_ab_trans_dialog_get_templ(const GncABTransDialog *td, gboolean *changed)
     }
 
     gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
-                           get_templ_helper, &list);
+                           gnc_ab_trans_dialog_get_templ_helper, &list);
     list = g_list_reverse(list);
     return list;
 }
@@ -647,7 +658,7 @@ gnc_ab_trans_dialog_get_ab_trans(const GncABTransDialog *td)
 }
 
 static AB_JOB *
-get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType trans_type)
+gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType trans_type)
 {
     AB_JOB *job;
 
@@ -692,7 +703,7 @@ gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
 
     g_return_val_if_fail(ab_acc && ab_trans, NULL);
 
-    job = get_available_empty_job(ab_acc, trans_type);
+    job = gnc_ab_trans_dialog_get_available_empty_job(ab_acc, trans_type);
     if (job)
     {
         switch (trans_type)
@@ -713,8 +724,10 @@ gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
 }
 
 void
-templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
-                            GtkTreeViewColumn *column, gpointer user_data)
+gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view, 
+                                                GtkTreePath *path,
+                                                GtkTreeViewColumn *column, 
+                                                gpointer user_data)
 {
     GncABTransDialog *td = user_data;
     GtkTreeModel *model;
@@ -795,7 +808,13 @@ templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
 }
 
 void
-dat_bankcode_changed_cb(GtkEditable *editable, gpointer user_data)
+gnc_ab_trans_dialog_account_changed_cb(GtkEditable *editable, gpointer user_data)
+{
+    /* TODO */
+}
+
+void
+gnc_ab_trans_dialog_bankcode_changed_cb(GtkEditable *editable, gpointer user_data)
 {
 #if HAVE_KTOBLZCHECK_H
     GncABTransDialog *td = user_data;
@@ -886,7 +905,7 @@ find_templ_helper(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 }
 
 void
-dat_add_templ_cb(GtkButton *button, gpointer user_data)
+gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
     GtkBuilder *builder;
@@ -974,7 +993,7 @@ dat_add_templ_cb(GtkButton *button, gpointer user_data)
 }
 
 void
-dat_moveup_templ_cb(GtkButton *button, gpointer user_data)
+gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
     GtkTreeSelection *selection;
@@ -1002,7 +1021,7 @@ dat_moveup_templ_cb(GtkButton *button, gpointer user_data)
 }
 
 void
-dat_movedown_templ_cb(GtkButton *button, gpointer user_data)
+gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
     GtkTreeSelection *selection;
@@ -1025,7 +1044,7 @@ dat_movedown_templ_cb(GtkButton *button, gpointer user_data)
 }
 
 void
-dat_sort_templ_cb(GtkButton *button, gpointer user_data)
+gnc_ab_trans_dialog_sort_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
 
@@ -1044,7 +1063,7 @@ dat_sort_templ_cb(GtkButton *button, gpointer user_data)
 }
 
 void
-dat_del_templ_cb(GtkButton *button, gpointer user_data)
+gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data)
 {
     GncABTransDialog *td = user_data;
     GtkTreeSelection *selection;
@@ -1076,12 +1095,12 @@ dat_del_templ_cb(GtkButton *button, gpointer user_data)
     LEAVE(" ");
 }
 
-static void
-entry_insert_cb (GtkEditable *editable,
-                 const gchar *text,
-                 gint         length,
-                 gint        *position,
-                 gpointer     data)
+void
+gnc_ab_trans_dialog_entry_filter_cb (GtkEditable *editable,
+                                     const gchar *text,
+                                     gint         length,
+                                     gint        *position,
+                                     gpointer     data)
 {
     GString* result = g_string_new(NULL);
     gint i;
@@ -1100,10 +1119,10 @@ entry_insert_cb (GtkEditable *editable,
     }
 
     g_signal_handlers_block_by_func (editable,
-                                     (gpointer) entry_insert_cb, data);
+                                     (gpointer) gnc_ab_trans_dialog_entry_filter_cb, data);
     gtk_editable_insert_text (editable, result->str, result->len, position);
     g_signal_handlers_unblock_by_func (editable,
-                                       (gpointer) entry_insert_cb, data);
+                                       (gpointer) gnc_ab_trans_dialog_entry_filter_cb, data);
     g_signal_stop_emission_by_name (editable, "insert_text");
     g_string_free (result, TRUE);
 }
