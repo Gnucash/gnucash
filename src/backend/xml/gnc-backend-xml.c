@@ -99,15 +99,6 @@ typedef int ssize_t;
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-typedef enum
-{
-    GNC_BOOK_NOT_OURS,
-    GNC_BOOK_BIN_FILE,
-    GNC_BOOK_XML1_FILE,
-    GNC_BOOK_XML2_FILE,
-    GNC_BOOK_XML2_FILE_NO_ENCODING,
-} QofBookFileType;
-
 static gboolean save_may_clobber_data (QofBackend *bend);
 
 /* ================================================================= */
@@ -561,7 +552,10 @@ static QofBookFileType
 gnc_xml_be_determine_file_type(const char *path)
 {
     gboolean with_encoding;
-    if (gnc_is_xml_data_file_v2(path, &with_encoding))
+    QofBookFileType v2type;
+
+    v2type = gnc_is_xml_data_file_v2(path, &with_encoding);
+    if (v2type == GNC_BOOK_XML2_FILE)
     {
         if (with_encoding)
         {
@@ -572,7 +566,11 @@ gnc_xml_be_determine_file_type(const char *path)
             return GNC_BOOK_XML2_FILE_NO_ENCODING;
         }
     }
-    else if (gnc_is_xml_data_file(path))
+    else if (v2type == GNC_BOOK_POST_XML2_0_0_FILE)
+    {
+        return GNC_BOOK_POST_XML2_0_0_FILE;
+    }
+    else if (v2type == GNC_BOOK_XML1_FILE)
     {
         return GNC_BOOK_XML1_FILE;
     }
@@ -586,6 +584,7 @@ gnc_determine_file_type (const char *uri)
     int rc;
     FILE *t;
     gchar *filename;
+    QofBookFileType xml_type;
     gboolean result;
 
     if (!uri)
@@ -619,12 +618,10 @@ gnc_determine_file_type (const char *uri)
         result = TRUE;
         goto det_exit;
     }
-    if (gnc_is_xml_data_file_v2(filename, NULL))
-    {
-        result = TRUE;
-        goto det_exit;
-    }
-    else if (gnc_is_xml_data_file(filename))
+    xml_type = gnc_is_xml_data_file_v2(filename, NULL);
+    if ((xml_type == GNC_BOOK_XML2_FILE) ||
+        (xml_type == GNC_BOOK_XML1_FILE) ||
+        (xml_type == GNC_BOOK_POST_XML2_0_0_FILE))
     {
         result = TRUE;
         goto det_exit;
@@ -1117,7 +1114,7 @@ gnc_xml_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType l
     switch (gnc_xml_be_determine_file_type(be->fullpath))
     {
     case GNC_BOOK_XML2_FILE:
-        rc = qof_session_load_from_xml_file_v2 (be, book);
+        rc = qof_session_load_from_xml_file_v2 (be, book, GNC_BOOK_XML2_FILE);
         if (FALSE == rc)
         {
             PWARN( "Syntax error in Xml File %s", be->fullpath );
@@ -1136,6 +1133,10 @@ gnc_xml_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType l
             PWARN( "Syntax error in Xml File %s", be->fullpath );
             error = ERR_FILEIO_PARSE_ERROR;
         }
+        break;
+    case GNC_BOOK_POST_XML2_0_0_FILE:
+        error = ERR_BACKEND_TOO_NEW;
+        PWARN( "Version of Xml file %s is newer than what we can read", be->fullpath );
         break;
     default:
         /* If file type wasn't known, check errno again to give the

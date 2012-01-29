@@ -1257,6 +1257,7 @@ qof_session_load (QofSession *session,
     if ((err != ERR_BACKEND_NO_ERR) &&
             (err != ERR_FILEIO_FILE_TOO_OLD) &&
             (err != ERR_FILEIO_NO_ENCODING) &&
+            (err != ERR_FILEIO_FILE_UPGRADE) &&
             (err != ERR_SQL_DB_TOO_OLD) &&
             (err != ERR_SQL_DB_TOO_NEW))
     {

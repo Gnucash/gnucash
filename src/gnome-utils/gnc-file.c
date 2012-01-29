@@ -421,7 +421,8 @@ show_session_error (QofBackendError io_error,
     case ERR_SQL_DB_TOO_NEW:
         fmt = _("This database is from a newer version of GnuCash. "
                 "This version can read it, but cannot safely save to it. "
-                "It will be marked read-only until you do File>Save As.");
+                "It will be marked read-only until you do File>Save As, "
+                "but data may be lost in writing to the old version.");
         gnc_warning_dialog (parent, "%s", fmt);
         uh_oh = TRUE;
         break;
@@ -456,6 +457,16 @@ show_session_error (QofBackendError io_error,
                 "information.");
 
         gnc_error_dialog (parent, "%s", fmt);
+        break;
+
+    case ERR_FILEIO_FILE_UPGRADE:
+        fmt = _("This file is from an older version of GnuCash and will be "
+                "upgraded when saved by this version. You will not be able "
+                "to read the saved file from the older version of Gnucash "
+                "(it will report an \"error parsing the file\"). If you wish "
+                "to preserve the old version, exit without saving.");
+        gnc_warning_dialog (parent, "%s", fmt);
+        uh_oh = FALSE;
         break;
 
     default:

@@ -43,6 +43,16 @@ typedef enum
     XML_RETAIN_ALL
 } XMLFileRetentionType;
 
+typedef enum
+{
+    GNC_BOOK_NOT_OURS,
+    GNC_BOOK_BIN_FILE,
+    GNC_BOOK_XML1_FILE,
+    GNC_BOOK_XML2_FILE,
+    GNC_BOOK_XML2_FILE_NO_ENCODING,
+    GNC_BOOK_POST_XML2_0_0_FILE
+} QofBookFileType;
+
 struct FileBackend_struct
 {
     QofBackend be;

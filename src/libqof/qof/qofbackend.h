@@ -98,6 +98,8 @@ typedef enum
     ERR_FILEIO_FILE_EACCES,    /**< No read access permission for the given file */
     ERR_FILEIO_RESERVED_WRITE, /**< User attempt to write to a directory reserved
                                     for internal use by GnuCash */
+    ERR_FILEIO_FILE_UPGRADE,   /**< file will be upgraded and not be able to be
+                                    read by prior versions - warn users*/
 
     /* network errors */
     ERR_NETIO_SHORT_READ = 2000,  /**< not enough bytes received */
