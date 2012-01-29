@@ -43,6 +43,9 @@
 
 #include "gnc-commodity.h"
 
+#define GNC_V2_STRING "gnc-v2"
+const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
+
 static void
 test_dom_tree_to_commodity_ref(void)
 {

@@ -412,7 +412,9 @@ qof_session_load_from_xml_file(QofBook *book, const char *filename)
 gboolean
 gnc_is_xml_data_file(const gchar *filename)
 {
-    return gnc_is_our_xml_file(filename, "gnc", NULL);
+    if ((gnc_is_our_xml_file(filename, NULL)) == GNC_BOOK_XML1_FILE)
+        return TRUE;
+    return FALSE;
 }
 
 /* ================================================================== */

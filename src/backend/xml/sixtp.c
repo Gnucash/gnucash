@@ -41,6 +41,8 @@ typedef int ssize_t;
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.backend.file.sixtp"
 
+extern const gchar *gnc_v2_xml_version_string;        /* see io-gncxml-v2.c */
+
 /************************************************************************/
 gboolean
 is_child_result_from_node_named(sixtp_child_result *cr, const char *tag)
@@ -860,21 +862,19 @@ search_for(unsigned char marker, char **cursor)
     }
 }
 
-gboolean
-gnc_is_our_xml_file(const char *filename, const char *first_tag,
-                    gboolean *with_encoding)
+QofBookFileType
+gnc_is_our_xml_file(const char *filename, gboolean *with_encoding)
 {
     FILE *f = NULL;
     char first_chunk[256];
     ssize_t num_read;
 
-    g_return_val_if_fail(filename, FALSE);
-    g_return_val_if_fail(first_tag, FALSE);
+    g_return_val_if_fail(filename, GNC_BOOK_NOT_OURS);
 
     f = g_fopen(filename, "r");
     if (f == NULL)
     {
-        return FALSE;
+        return GNC_BOOK_NOT_OURS;
     }
 
     num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
@@ -882,17 +882,16 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag,
 
     if (num_read == 0)
     {
-        return FALSE;
+        return GNC_BOOK_NOT_OURS;
     }
 
     first_chunk[num_read] = '\0';
 
-    return gnc_is_our_first_xml_chunk(first_chunk, first_tag, with_encoding);
+    return gnc_is_our_first_xml_chunk(first_chunk, with_encoding);
 }
 
-gboolean
-gnc_is_our_first_xml_chunk(char *chunk, const char *first_tag,
-                           gboolean *with_encoding)
+QofBookFileType
+gnc_is_our_first_xml_chunk(char *chunk, gboolean *with_encoding)
 {
     char *cursor = NULL;
 
@@ -905,51 +904,58 @@ gnc_is_our_first_xml_chunk(char *chunk, const char *first_tag,
 
     if (!eat_whitespace(&cursor))
     {
-        return FALSE;
+        return GNC_BOOK_NOT_OURS;
     }
 
     if (strncmp(cursor, "<?xml", 5) == 0)
     {
         char *tag_compare;
-        gboolean result;
 
         if (!search_for('>', &cursor))
         {
-            return FALSE;
+            return GNC_BOOK_NOT_OURS;
         }
 
         if (!eat_whitespace(&cursor))
         {
-            return FALSE;
+            return GNC_BOOK_NOT_OURS;
         }
 
-        tag_compare = g_strdup_printf("<%s", first_tag);
+        tag_compare = g_strdup_printf("<%s\n", gnc_v2_xml_version_string);
 
-        result = (strncmp(cursor, tag_compare, strlen(tag_compare)) == 0);
-        g_free (tag_compare);
-
-        if (result && with_encoding)
+        if (strncmp(cursor, tag_compare, strlen(tag_compare)) == 0)
         {
-            *cursor = '\0';
-            cursor = chunk;
-            while (search_for('e', &cursor))
+            if (with_encoding)
             {
-                if (strncmp(cursor, "ncoding=", 8) == 0)
+                *cursor = '\0';
+                cursor = chunk;
+                while (search_for('e', &cursor))
                 {
-                    *with_encoding = TRUE;
-                    break;
+                    if (strncmp(cursor, "ncoding=", 8) == 0)
+                    {
+                        *with_encoding = TRUE;
+                        break;
+                    }
                 }
             }
+            g_free (tag_compare);
+            return GNC_BOOK_XML2_FILE;
         }
 
-        return result;
-    }
-    else
-    {
-        return FALSE;
+        g_free (tag_compare);
+
+        if (strncmp(cursor, "<gnc>\n", strlen("<gnc>\n")) == 0)
+            return GNC_BOOK_XML1_FILE;
+
+        /* If it doesn't match any of the above but has '<gnc-v...', it must */
+        /* be a later version */
+        if (strncmp(cursor, "<gnc-v", strlen("<gnc-v")) == 0)
+            return GNC_BOOK_POST_XML2_0_0_FILE;
+
+        return GNC_BOOK_NOT_OURS;
     }
 
-    return FALSE;
+    return GNC_BOOK_NOT_OURS;
 }
 
 /************************* END OF FILE *********************************/

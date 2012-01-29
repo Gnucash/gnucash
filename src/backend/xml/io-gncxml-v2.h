@@ -128,7 +128,7 @@ typedef struct
 void run_callback(sixtp_gdv2 *data, const char *type);
 
 /** read in an account group from a file */
-gboolean qof_session_load_from_xml_file_v2(FileBackend *, QofBook *);
+gboolean qof_session_load_from_xml_file_v2(FileBackend *, QofBook *, QofBookFileType);
 
 /* write all book info to a file */
 gboolean gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *fh);
@@ -142,7 +142,7 @@ gboolean gnc_book_write_accounts_to_xml_file_v2(QofBackend * be, QofBook *book,
 /** The is_gncxml_file() routine checks to see if the first few
  * chars of the file look like gnc-xml data.
  */
-gboolean gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding);
+QofBookFileType gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding);
 
 /** Write a name-space declaration for the provided namespace data type
  * within the GNC XML namespace at http://www.gnucash.org/XML.

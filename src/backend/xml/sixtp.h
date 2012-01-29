@@ -31,6 +31,7 @@
 
 #include "gnc-xml-helper.h"
 #include "gnc-engine.h"
+#include "gnc-backend-xml.h"
 
 typedef struct _sixtp_child_result sixtp_child_result;
 
@@ -208,11 +209,10 @@ sixtp* sixtp_add_some_sub_parsers(sixtp *tochange, gboolean cleanup, ...);
 gboolean sixtp_add_sub_parser(sixtp *parser, const gchar* tag,
                               sixtp *sub_parser);
 
-gboolean gnc_is_our_xml_file(const char *filename, const char *first_tag,
+QofBookFileType gnc_is_our_xml_file(const char *filename,
                              gboolean *with_encoding);
 
-gboolean gnc_is_our_first_xml_chunk(char *chunk, const char *first_tag,
-                                    gboolean *with_encoding);
+QofBookFileType gnc_is_our_first_xml_chunk(char *chunk, gboolean *with_encoding);
 
 
 #endif /* _SIXTP_H_ */
