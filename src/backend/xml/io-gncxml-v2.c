@@ -692,7 +692,7 @@ qof_session_load_from_xml_file_v2_full(
     sixtp *book_parser;
     struct file_backend be_data;
     gboolean retval;
-    char *v2type;
+    char *v2type = NULL;
 
     gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
 
