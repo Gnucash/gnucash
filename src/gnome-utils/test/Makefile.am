@@ -47,6 +47,7 @@ INCLUDES= \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
+  ${GTK_CFLAGS} \
   ${GUILE_INCS}
 
 LDADD = \
