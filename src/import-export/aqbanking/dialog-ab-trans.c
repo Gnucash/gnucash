@@ -308,8 +308,11 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
                                           TRUE);
     gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(td->amount_edit),
                                  commodity_scu);
+#if 0
+    // This doesn't yet work
     g_signal_connect_swapped (gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(td->amount_edit)), "changed",
                               G_CALLBACK(gnc_ab_trans_dialog_verify_values), td);
+#endif
 
     /* Check for what kind of transaction this should be, and change the
      * labels accordingly */
