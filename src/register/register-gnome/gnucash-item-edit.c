@@ -582,9 +582,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
     item_edit->sheet = NULL;
     item_edit->parent = NULL;
     item_edit->editor = NULL;
-    item_edit->clipboard = NULL;
 
-    item_edit->has_selection = FALSE;
     item_edit->is_popup = FALSE;
     item_edit->show_popup = FALSE;
 
@@ -653,12 +651,6 @@ static void
 gnc_item_edit_finalize (GObject *object)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT (object);
-
-    if (item_edit->clipboard != NULL)
-    {
-        g_free (item_edit->clipboard);
-        item_edit->clipboard = NULL;
-    }
 
     if (item_edit->gc)
     {
@@ -831,6 +823,7 @@ static void
 gnc_item_edit_cut_copy_clipboard (GncItemEdit *item_edit, guint32 time, gboolean cut)
 {
     GtkEditable *editable;
+    GtkClipboard *clipboard;
     gint start_sel, end_sel;
     gchar *clip;
 
@@ -842,15 +835,13 @@ gnc_item_edit_cut_copy_clipboard (GncItemEdit *item_edit, guint32 time, gboolean
     if (!gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel))
         return;
 
-    g_free(item_edit->clipboard);
-
-    if (gtk_selection_owner_set (GTK_WIDGET(item_edit->sheet),
-                                 clipboard_atom, time))
-        clip = gtk_editable_get_chars (editable, start_sel, end_sel);
-    else
-        clip = NULL;
-
-    item_edit->clipboard = clip;
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET (editable),
+					  clipboard_atom);
+    g_return_if_fail (clipboard != NULL);
+    g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
+    clip = gtk_editable_get_chars (editable, start_sel, end_sel);
+    gtk_clipboard_set_text (clipboard, clip, -1);
+    g_free (clip);
 
     if (!cut)
         return;
@@ -874,31 +865,52 @@ gnc_item_edit_copy_clipboard (GncItemEdit *item_edit, guint32 time)
 }
 
 
-void
-gnc_item_edit_paste_clipboard (GncItemEdit *item_edit, guint32 time)
+
+static void
+paste_received (GtkClipboard *clipboard, const gchar *text, gpointer data)
 {
+    GtkEditable *editable = GTK_EDITABLE (data);
+    gboolean reselect = FALSE;
+    gint old_pos, tmp_pos;
+    gint start_sel, end_sel;
+
+    if (text == NULL)
+	return;
+    if (gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel))
+    {
+	reselect = TRUE;
+	gtk_editable_delete_text (editable, start_sel, end_sel);
+    }
+
+    tmp_pos = old_pos = gtk_editable_get_position (editable);
+
+    gtk_editable_insert_text (editable, text, -1, &tmp_pos);
+    gtk_editable_set_position (editable, tmp_pos);
+
+    if (!reselect)
+	return;
+
+    gtk_editable_select_region (editable, old_pos,
+				gtk_editable_get_position (editable));
+
+}
+
+void
+gnc_item_edit_paste_selection (GncItemEdit *item_edit, GdkAtom selection,
+			       guint32 time)
+{
+    GtkClipboard *clipboard;
     g_return_if_fail(item_edit != NULL);
     g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
-    gtk_selection_convert(GTK_WIDGET(item_edit->sheet),
-                          clipboard_atom,
-                          gdk_atom_intern("UTF8_STRING", FALSE),
-                          time);
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET (item_edit->sheet),
+					  selection);
+
+    g_return_if_fail (clipboard != NULL);
+    g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
+
+    gtk_clipboard_request_text (clipboard, paste_received, item_edit->editor);
 }
-
-
-void
-gnc_item_edit_paste_primary (GncItemEdit *item_edit, guint32 time)
-{
-    g_return_if_fail(item_edit != NULL);
-    g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
-
-    gtk_selection_convert(GTK_WIDGET(item_edit->sheet),
-                          GDK_SELECTION_PRIMARY,
-                          gdk_atom_intern("UTF8_STRING", FALSE),
-                          time);
-}
-
 
 static void
 gnc_item_edit_show_popup_toggle (GncItemEdit *item_edit,
@@ -1463,154 +1475,4 @@ gnc_item_edit_get_has_selection (GncItemEdit *item_edit)
     editable = GTK_EDITABLE (item_edit->editor);
     return gtk_editable_get_selection_bounds(editable, NULL, NULL);
 }
-
-gboolean
-gnc_item_edit_selection_clear (GncItemEdit          *item_edit,
-                               GdkEventSelection *event)
-{
-    g_return_val_if_fail(item_edit != NULL, FALSE);
-    g_return_val_if_fail(GNC_IS_ITEM_EDIT(item_edit), FALSE);
-    g_return_val_if_fail(event != NULL, FALSE);
-
-    /* Let the selection handling code know that the selection
-     * has been changed, since we've overriden the default handler */
-    if (!gtk_selection_clear (GTK_WIDGET(item_edit->sheet), event))
-        return FALSE;
-
-    if (event->selection == GDK_SELECTION_PRIMARY)
-    {
-        if (item_edit->has_selection)
-        {
-            item_edit->has_selection = FALSE;
-            /* TODO: redraw differently? */
-        }
-    }
-    else if (event->selection == clipboard_atom)
-    {
-        g_free (item_edit->clipboard);
-        item_edit->clipboard = NULL;
-    }
-
-    return TRUE;
-}
-
-
-void
-gnc_item_edit_selection_get (GncItemEdit      *item_edit,
-                             GtkSelectionData *selection_data,
-                             guint             info,
-                             guint             time)
-{
-    GtkEditable *editable;
-
-    gint start_pos;
-    gint end_pos;
-
-    gchar *str;
-    gint length;
-
-    g_return_if_fail(item_edit != NULL);
-    g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
-
-    editable = GTK_EDITABLE (item_edit->editor);
-
-    if (selection_data->selection == GDK_SELECTION_PRIMARY)
-    {
-        gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
-
-        str = gtk_editable_get_chars(editable, start_pos, end_pos);
-    }
-    else /* CLIPBOARD */
-    {
-        str = item_edit->clipboard;
-    }
-
-    if (str == NULL)
-        return;
-
-    length = strlen(str);
-    gtk_selection_data_set_text(selection_data, str, length);
-
-    if (str != item_edit->clipboard)
-        g_free(str);
-}
-
-
-void
-gnc_item_edit_selection_received (GncItemEdit       *item_edit,
-                                  GtkSelectionData  *selection_data,
-                                  guint              time)
-{
-    GtkEditable *editable;
-    gboolean reselect;
-    gint old_pos;
-    gint tmp_pos;
-    gint start_sel, end_sel;
-    enum {INVALID, CTEXT} type;
-
-    g_return_if_fail(item_edit != NULL);
-    g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
-
-    editable = GTK_EDITABLE(item_edit->editor);
-
-    /* @fixme: this should implement the fallback logic from
-     * gtkclipboard.c:request_text_received_func.  It'd be nice to have a
-     * good way to test the various request types. :( --jsled **/
-
-    if (selection_data->type == GDK_TARGET_STRING
-            || selection_data->type == gdk_atom_intern("UTF8_STRING", FALSE)
-            || selection_data->type == gdk_atom_intern("COMPOUND_TEXT", FALSE)
-            || selection_data->type == gdk_atom_intern("TEXT", FALSE))
-    {
-        type = CTEXT;
-    }
-    else
-    {
-        type = INVALID;
-    }
-
-    if (type == INVALID || selection_data->length < 0)
-    {
-        /* avoid infinite loop */
-        if (selection_data->target != GDK_TARGET_STRING)
-        {
-            gtk_selection_convert(GTK_WIDGET(item_edit->sheet),
-                                  selection_data->selection,
-                                  GDK_TARGET_STRING, time);
-        }
-        return;
-    }
-
-    reselect = FALSE;
-
-    if (gtk_editable_get_selection_bounds(editable, &start_sel, &end_sel)
-            && (!item_edit->has_selection
-                || selection_data->selection == clipboard_atom))
-    {
-        reselect = TRUE;
-        gtk_editable_delete_text(editable, start_sel, end_sel);
-    }
-
-    tmp_pos = old_pos = gtk_editable_get_position (editable);
-
-    {
-        guchar *sel = gtk_selection_data_get_text(selection_data);
-
-        if (sel)
-        {
-            gtk_editable_insert_text(editable,
-                                     (gchar *)sel,
-                                     strlen((char *)sel),
-                                     &tmp_pos);
-            gtk_editable_set_position(editable, tmp_pos);
-            g_free(sel);
-        }
-    }
-
-    if (!reselect)
-        return;
-
-    gtk_editable_select_region(editable, old_pos, gtk_editable_get_position (editable));
-}
-
 

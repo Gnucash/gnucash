@@ -29,6 +29,8 @@
  */
 
 #include "config.h"
+#include <glib.h>
+#include <glib/gprintf.h>
 
 #include "gnucash-sheet.h"
 
@@ -1406,8 +1408,9 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
     case 2:
         if (event->type != GDK_BUTTON_PRESS)
             return FALSE;
-        gnc_item_edit_paste_primary(GNC_ITEM_EDIT(sheet->item_editor),
-                                    event->time);
+        gnc_item_edit_paste_selection (GNC_ITEM_EDIT(sheet->item_editor),
+				       GDK_SELECTION_PRIMARY,
+				       event->time);
         return TRUE;
     case 3:
         do_popup = (sheet->popup != NULL);
@@ -1445,8 +1448,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
     {
         gtk_grab_add(widget);
         sheet->grabbed = TRUE;
-        gnc_item_edit_set_has_selection
-        (GNC_ITEM_EDIT(sheet->item_editor), TRUE);
+        gnc_item_edit_set_has_selection (GNC_ITEM_EDIT(sheet->item_editor),
+					 TRUE);
     }
 
     if (virt_loc_equal (new_virt_loc, cur_virt_loc) && sheet->editing)
@@ -1549,7 +1552,8 @@ gnucash_register_paste_clipboard (GnucashRegister *reg)
     sheet = GNUCASH_SHEET(reg->sheet);
     item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
-    gnc_item_edit_paste_clipboard(item_edit, GDK_CURRENT_TIME);
+    gnc_item_edit_paste_selection (item_edit, GDK_SELECTION_CLIPBOARD,
+				   GDK_CURRENT_TIME);
 }
 
 static void
@@ -1610,14 +1614,16 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
     case GDK_v:
         if (event->state & GDK_CONTROL_MASK)
         {
-            gnc_item_edit_paste_clipboard(item_edit, time);
+            gnc_item_edit_paste_selection (item_edit, GDK_SELECTION_CLIPBOARD,
+					   time);
             handled = TRUE;
         }
         break;
     case GDK_Insert:
         if (event->state & GDK_SHIFT_MASK)
         {
-            gnc_item_edit_paste_clipboard(item_edit, time);
+            gnc_item_edit_paste_selection (item_edit, GDK_SELECTION_CLIPBOARD,
+					   time);
             handled = TRUE;
         }
         else if (event->state & GDK_CONTROL_MASK)
@@ -2544,53 +2550,6 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
     gnucash_sheet_activate_cursor_cell (sheet, TRUE);
 }
 
-static gboolean
-gnucash_sheet_selection_clear (GtkWidget          *widget,
-                               GdkEventSelection  *event)
-{
-    GnucashSheet *sheet;
-
-    g_return_val_if_fail(widget != NULL, FALSE);
-    g_return_val_if_fail(GNUCASH_IS_SHEET(widget), FALSE);
-
-    sheet = GNUCASH_SHEET(widget);
-
-    return gnc_item_edit_selection_clear(GNC_ITEM_EDIT(sheet->item_editor), event);
-}
-
-static void
-gnucash_sheet_selection_get (GtkWidget         *widget,
-                             GtkSelectionData  *selection_data,
-                             guint              info,
-                             guint              time)
-{
-    GnucashSheet *sheet;
-
-    g_return_if_fail(widget != NULL);
-    g_return_if_fail(GNUCASH_IS_SHEET(widget));
-
-    sheet = GNUCASH_SHEET(widget);
-
-    gnc_item_edit_selection_get(GNC_ITEM_EDIT(sheet->item_editor),
-                                selection_data, info, time);
-}
-
-static void
-gnucash_sheet_selection_received (GtkWidget          *widget,
-                                  GtkSelectionData   *selection_data,
-                                  guint               time)
-{
-    GnucashSheet *sheet;
-
-    g_return_if_fail(widget != NULL);
-    g_return_if_fail(GNUCASH_IS_SHEET(widget));
-
-    sheet = GNUCASH_SHEET(widget);
-
-    gnc_item_edit_selection_received(GNC_ITEM_EDIT(sheet->item_editor),
-                                     selection_data, time);
-}
-
 static void
 gnucash_sheet_realize_entry (GnucashSheet *sheet, GtkWidget *entry)
 {
@@ -2738,9 +2697,6 @@ gnucash_sheet_class_init (GnucashSheetClass *class)
     widget_class->motion_notify_event = gnucash_motion_event;
     widget_class->scroll_event = gnucash_scroll_event;
 
-    widget_class->selection_clear_event = gnucash_sheet_selection_clear;
-    widget_class->selection_received = gnucash_sheet_selection_received;
-    widget_class->selection_get = gnucash_sheet_selection_get;
 }
 
 

@@ -75,8 +75,6 @@ typedef struct
     /* The editor whose status we reflect on the sheet */
     GtkWidget *editor;
 
-    gchar *clipboard;
-
     gboolean has_selection;
 
     gboolean is_popup;
@@ -147,24 +145,11 @@ void gnc_item_edit_redraw (GncItemEdit *item_edit);
 
 void gnc_item_edit_cut_clipboard (GncItemEdit *item_edit, guint32 time);
 void gnc_item_edit_copy_clipboard (GncItemEdit *item_edit, guint32 time);
-void gnc_item_edit_paste_clipboard (GncItemEdit *item_edit, guint32 time);
-void gnc_item_edit_paste_primary (GncItemEdit *item_edit, guint32 time);
+void gnc_item_edit_paste_selection (GncItemEdit *item_edit, GdkAtom selection,
+				    guint32 time);
 
 void gnc_item_edit_set_has_selection (GncItemEdit *item_edit, gboolean has_selection);
 gboolean gnc_item_edit_get_has_selection (GncItemEdit *item_edit);
-
-gboolean gnc_item_edit_selection_clear (GncItemEdit       *item_edit,
-                                        GdkEventSelection *event);
-
-void gnc_item_edit_selection_get (GncItemEdit         *item_edit,
-                                  GtkSelectionData *selection_data,
-                                  guint             info,
-                                  guint             time);
-
-void gnc_item_edit_selection_received (GncItemEdit       *item_edit,
-                                       GtkSelectionData  *selection_data,
-                                       guint              time);
-
 void gnc_item_edit_focus_in (GncItemEdit *item_edit);
 void gnc_item_edit_focus_out (GncItemEdit *item_edit);
 
