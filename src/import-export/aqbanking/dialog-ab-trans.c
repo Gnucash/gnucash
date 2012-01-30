@@ -912,9 +912,9 @@ gnc_ab_trans_dialog_bankcode_changed_cb(GtkEditable *editable, gpointer user_dat
     {
         gtk_label_set_text(GTK_LABEL(td->recp_bankname_label), _("(unknown)"));
     }
+    gnc_ab_trans_dialog_verify_values(td);
     LEAVE(" ");
 #endif
-    gnc_ab_trans_dialog_verify_values(td);
 }
 
 struct _FindTemplData
