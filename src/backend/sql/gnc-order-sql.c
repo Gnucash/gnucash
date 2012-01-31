@@ -56,13 +56,13 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 static GncSqlColumnTableEntry col_table[] =
 {
     { "guid",        CT_GUID,     0,                 COL_NNUL | COL_PKEY, "guid" },
-    { "id",          CT_STRING,   MAX_ID_LEN,        COL_NNUL,          NULL, ORDER_ID },
-    { "notes",       CT_STRING,   MAX_NOTES_LEN,     COL_NNUL,          "notes" },
-    { "reference",   CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,          NULL, ORDER_REFERENCE },
-    { "active",      CT_BOOLEAN,  0,                 COL_NNUL,          NULL, QOF_PARAM_ACTIVE },
-    { "date_opened", CT_TIMESPEC, 0,                 COL_NNUL,          NULL, ORDER_OPENED },
-    { "date_closed", CT_TIMESPEC, 0,                 COL_NNUL,          NULL, ORDER_CLOSED },
-    { "owner",       CT_OWNERREF, 0,                 COL_NNUL,          NULL, ORDER_OWNER },
+    { "id",          CT_STRING,   MAX_ID_LEN,        COL_NNUL,            "id" },
+    { "notes",       CT_STRING,   MAX_NOTES_LEN,     COL_NNUL,            "notes" },
+    { "reference",   CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,            "reference" },
+    { "active",      CT_BOOLEAN,  0,                 COL_NNUL,            "order" },
+    { "date_opened", CT_TIMESPEC, 0,                 COL_NNUL,            "date-opened" },
+    { "date_closed", CT_TIMESPEC, 0,                 COL_NNUL,            "date-closed" },
+    { "owner",       CT_OWNERREF, 0,                 COL_NNUL,            NULL, ORDER_OWNER },
     { NULL },
 };
 

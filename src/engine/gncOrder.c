@@ -84,7 +84,12 @@ void mark_order (GncOrder *order)
 enum
 {
     PROP_0,
-    PROP_NOTES
+    PROP_ID,
+    PROP_NOTES,
+    PROP_ACTIVE,
+    PROP_DATE_OPENED,
+    PROP_DATE_CLOSED,
+    PROP_REFERENCE
 };
 
 /* GObject Initialization */
@@ -113,15 +118,30 @@ gnc_order_get_property (GObject         *object,
                         GValue          *value,
                         GParamSpec      *pspec)
 {
-    GncOrder *order;
+    GncOrder *priv;
 
     g_return_if_fail(GNC_IS_ORDER(object));
 
-    order = GNC_ORDER(object);
+    priv = GNC_ORDER(object);
     switch (prop_id)
     {
+    case PROP_ID:
+        g_value_set_string(value, priv->id);
+        break;
     case PROP_NOTES:
-        g_value_set_string(value, order->notes);
+        g_value_set_string(value, priv->notes);
+        break;
+    case PROP_ACTIVE:
+        g_value_set_boolean(value, priv->active);
+        break;
+    case PROP_DATE_OPENED:
+        g_value_set_boxed(value, &priv->opened);
+        break;
+    case PROP_DATE_CLOSED:
+        g_value_set_boxed(value, &priv->closed);
+        break;
+    case PROP_REFERENCE:
+        g_value_set_string(value, priv->reference);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -142,8 +162,23 @@ gnc_order_set_property (GObject         *object,
     order = GNC_ORDER(object);
     switch (prop_id)
     {
+    case PROP_ID:
+        gncOrderSetID(order, g_value_get_string(value));
+        break;
     case PROP_NOTES:
         gncOrderSetNotes(order, g_value_get_string(value));
+        break;
+    case PROP_ACTIVE:
+        gncOrderSetActive(order, g_value_get_boolean(value));
+        break;
+    case PROP_DATE_OPENED:
+        gncOrderSetDateOpened(order, *(Timespec*)g_value_get_boxed(value));
+        break;
+    case PROP_DATE_CLOSED:
+        gncOrderSetDateClosed(order, *(Timespec*)g_value_get_boxed(value));
+        break;
+    case PROP_REFERENCE:
+        gncOrderSetReference(order, g_value_get_string(value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -181,11 +216,59 @@ gnc_order_class_init (GncOrderClass *klass)
 
     g_object_class_install_property
     (gobject_class,
+     PROP_ID,
+     g_param_spec_string ("id",
+                          "Order ID",
+                          "The order id is an arbitrary string "
+                          "assigned by the user to identify the order.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
      PROP_NOTES,
-     g_param_spec_string ("name",
+     g_param_spec_string ("notes",
                           "Order Notes",
                           "The order notes is an arbitrary string "
                           "assigned by the user to provide notes about "
+                          "this order.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ACTIVE,
+     g_param_spec_boolean ("active",
+                           "Active",
+                           "TRUE if the order is active.  FALSE if inactive.",
+                           FALSE,
+                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_DATE_OPENED,
+     g_param_spec_boxed("date-opened",
+                        "Date Opened",
+                        "The date the order was opened.",
+                        GNC_TYPE_TIMESPEC,
+                        G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_DATE_CLOSED,
+     g_param_spec_boxed("date-closed",
+                        "Date Closed",
+                        "The date the order was closed.",
+                        GNC_TYPE_TIMESPEC,
+                        G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_REFERENCE,
+     g_param_spec_string ("reference",
+                          "Order Reference",
+                          "The order reference is an arbitrary string "
+                          "assigned by the user to provide a reference for "
                           "this order.",
                           NULL,
                           G_PARAM_READWRITE));
