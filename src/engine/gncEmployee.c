@@ -79,7 +79,16 @@ void mark_employee (GncEmployee *employee)
 enum
 {
     PROP_0,
-    PROP_USERNAME
+    PROP_USERNAME,
+    PROP_ID,
+    PROP_ACTIVE,
+    PROP_LANGUAGE,
+    PROP_CURRENCY,
+    PROP_ACL,
+    PROP_ADDRESS,
+    PROP_WORKDAY,
+    PROP_RATE,
+    PROP_CCARD
 };
 
 /* GObject Initialization */
@@ -118,6 +127,33 @@ gnc_employee_get_property (GObject         *object,
     case PROP_USERNAME:
         g_value_set_string(value, emp->username);
         break;
+    case PROP_ID:
+        g_value_set_string(value, emp->id);
+        break;
+    case PROP_ACTIVE:
+        g_value_set_boolean(value, emp->active);
+        break;
+    case PROP_LANGUAGE:
+        g_value_set_string(value, emp->language);
+        break;
+    case PROP_CURRENCY:
+        g_value_set_object(value, emp->currency);
+        break;
+    case PROP_ACL:
+        g_value_set_string(value, emp->acl);
+        break;
+    case PROP_ADDRESS:
+        g_value_set_object(value, emp->addr);
+        break;
+    case PROP_WORKDAY:
+    	g_value_set_boxed(value, &emp->workday);
+    	break;
+    case PROP_RATE:
+    	g_value_set_boxed(value, &emp->rate);
+    	break;
+    case PROP_CCARD:
+    	g_value_set_object(value, emp->ccard_acc);
+    	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -140,6 +176,33 @@ gnc_employee_set_property (GObject         *object,
     case PROP_USERNAME:
         gncEmployeeSetUsername(emp, g_value_get_string(value));
         break;
+    case PROP_ID:
+        gncEmployeeSetID(emp, g_value_get_string(value));
+        break;
+    case PROP_ACTIVE:
+        gncEmployeeSetActive(emp, g_value_get_boolean(value));
+        break;
+    case PROP_LANGUAGE:
+        gncEmployeeSetLanguage(emp, g_value_get_string(value));
+        break;
+    case PROP_CURRENCY:
+        gncEmployeeSetCurrency(emp, g_value_get_object(value));
+        break;
+    case PROP_ACL:
+        gncEmployeeSetAcl(emp, g_value_get_string(value));
+        break;
+    case PROP_ADDRESS:
+        qofEmployeeSetAddr(emp, g_value_get_object(value));
+        break;
+    case PROP_WORKDAY:
+    	gncEmployeeSetWorkday(emp, *(gnc_numeric*)g_value_get_boxed(value));
+    	break;
+    case PROP_RATE:
+    	gncEmployeeSetRate(emp, *(gnc_numeric*)g_value_get_boxed(value));
+    	break;
+    case PROP_CCARD:
+    	gncEmployeeSetCCard(emp, g_value_get_object(value));
+    	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -210,6 +273,93 @@ gnc_employee_class_init (GncEmployeeClass *klass)
                           "assigned by the user which provides the employee "
                           "name.",
                           NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ID,
+     g_param_spec_string ("id",
+                          "Employee ID",
+                          "The employee ID is an arbitrary string "
+                          "assigned by the user which provides the employee "
+                          "ID.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ACTIVE,
+     g_param_spec_boolean ("active",
+                           "Active",
+                           "TRUE if the employee is active.  FALSE if inactive.",
+                           FALSE,
+                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_LANGUAGE,
+     g_param_spec_string ("language",
+                          "Employee Language",
+                          "The language is an arbitrary string "
+                          "assigned by the user which provides the language spoken "
+                          " by the employee.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_CURRENCY,
+     g_param_spec_object ("currency",
+                          "Currency",
+                          "The currency property denotes the currency used by this employee.",
+                          GNC_TYPE_COMMODITY,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ACL,
+     g_param_spec_string ("acl",
+                          "Employee ACL",
+                          "The acl is an arbitrary string "
+                          "assigned by the user which provides ??? "
+                          " for the employee.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_ADDRESS,
+     g_param_spec_object ("address",
+                          "Address",
+                          "The address property contains the address information for this employee.",
+                          GNC_TYPE_ADDRESS,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_WORKDAY,
+     g_param_spec_boxed("workday",
+                        "Workday rate",
+                        "The daily rate for this employee.",
+                        GNC_TYPE_NUMERIC,
+                        G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_RATE,
+     g_param_spec_boxed("rate",
+                        "Hourly rate",
+                        "The hourly rate for this employee.",
+                        GNC_TYPE_NUMERIC,
+                        G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_CCARD,
+     g_param_spec_object ("credit-card-account",
+                          "Credit card account",
+                          "The credit card account for this employee.",
+                          GNC_TYPE_ACCOUNT,
                           G_PARAM_READWRITE));
 }
 

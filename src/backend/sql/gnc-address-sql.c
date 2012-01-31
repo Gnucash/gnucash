@@ -113,7 +113,14 @@ load_address( const GncSqlBackend* be, GncSqlRow* row,
             (*setter)( addr, (const gpointer)s );
         }
     }
-    (*a_setter)( pObject, addr );
+    if ( table_row->gobj_param_name != NULL )
+    {
+        g_object_set( pObject, table_row->gobj_param_name, addr, NULL );
+    }
+    else
+    {
+        (*a_setter)( pObject, addr );
+    }
 }
 
 static void
@@ -163,9 +170,15 @@ get_gvalue_address( const GncSqlBackend* be, QofIdTypeConst obj_name, const gpoi
     g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
-
-    getter = (AddressGetterFunc)gnc_sql_get_getter( obj_name, table_row );
-    addr = (*getter)( pObject );
+    if ( table_row->gobj_param_name != NULL )
+    {
+        g_object_get( pObject, table_row->gobj_param_name, &addr, NULL );
+    }
+    else
+    {
+        getter = (AddressGetterFunc)gnc_sql_get_getter( obj_name, table_row );
+        addr = (*getter)( pObject );
+    }
     g_value_init( value, gnc_address_get_type() );
     g_value_set_object( value, addr );
 }

@@ -59,19 +59,16 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 static GncSqlColumnTableEntry col_table[] =
 {
     { "guid",       CT_GUID,          0,                COL_NNUL | COL_PKEY, "guid" },
-    { "username",   CT_STRING,        MAX_USERNAME_LEN, COL_NNUL,          "username" },
-    { "id",         CT_STRING,        MAX_ID_LEN,       COL_NNUL,          NULL, EMPLOYEE_ID },
-    { "language",   CT_STRING,        MAX_LANGUAGE_LEN, COL_NNUL,          NULL, EMPLOYEE_LANGUAGE },
-    { "acl",        CT_STRING,        MAX_ACL_LEN,      COL_NNUL,          NULL, EMPLOYEE_ACL },
-    { "active",     CT_BOOLEAN,       0,                COL_NNUL,          NULL, QOF_PARAM_ACTIVE },
-    {
-        "currency",   CT_COMMODITYREF,  0,                COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncEmployeeGetCurrency, (QofSetterFunc)gncEmployeeSetCurrency
-    },
-    { "ccard_guid", CT_ACCOUNTREF,    0,                0,                 NULL, EMPLOYEE_CC },
-    { "workday",    CT_NUMERIC,       0,                COL_NNUL,          NULL, EMPLOYEE_WORKDAY },
-    { "rate",       CT_NUMERIC,       0,                COL_NNUL,          NULL, EMPLOYEE_RATE },
-    { "addr",       CT_ADDRESS,       0,                0,                 NULL, EMPLOYEE_ADDR },
+    { "username",   CT_STRING,        MAX_USERNAME_LEN, COL_NNUL,            "username" },
+    { "id",         CT_STRING,        MAX_ID_LEN,       COL_NNUL,            "id" },
+    { "language",   CT_STRING,        MAX_LANGUAGE_LEN, COL_NNUL,            "language" },
+    { "acl",        CT_STRING,        MAX_ACL_LEN,      COL_NNUL,            "acl" },
+    { "active",     CT_BOOLEAN,       0,                COL_NNUL,            "active" },
+    { "currency",   CT_COMMODITYREF,  0,                COL_NNUL,            "currency" },
+    { "ccard_guid", CT_ACCOUNTREF,    0,                0,                   "credit-card-account" },
+    { "workday",    CT_NUMERIC,       0,                COL_NNUL,            "workday" },
+    { "rate",       CT_NUMERIC,       0,                COL_NNUL,            "rate" },
+    { "addr",       CT_ADDRESS,       0,                0,                   "address" },
     { NULL }
 };
 
