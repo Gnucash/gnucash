@@ -668,6 +668,7 @@
 
     (if (not (null? invoice))
 	(begin
+  (set! owner (gncInvoiceGetOwner invoice)) 
 	  (let ((type (gncInvoiceGetType invoice)))
 	    (cond
 	      ((eqv? type GNC-INVOICE-CUST-INVOICE)
