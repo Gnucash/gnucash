@@ -52,6 +52,7 @@ Name: "{group}\{cm:IconName_Uninstall}"; Filename: "{uninstallexe}"; Comment: "{
 Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.exe"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon
 
 [Run]
+Filename: "{app}\bin\guile-setup.cmd"; Description: "Add SLib to Guile vocabulary"; Parameters: """{app}"""
 Filename: "{app}\bin\gnucash.exe"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent
 ;; The Windows firewall exceptions, see http://www.vincenzo.net/isxkb/index.php?title=Adding_a_rule_to_the_Windows_firewall
 Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gnucash.exe"" ""GnuCash Free Finance Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
@@ -182,14 +183,14 @@ var
   PrevVersionMajor, PrevVersionMinor, PrevVersionMicro : Cardinal;
   Uninstallrequired : Boolean;
 
-// -----------------------------------------------------------
+// ----------------------------------------------------------------
 // Sometimes it's not possible to install a newer version of
-// GnuCash over an older one on Windows. This is mostly the
-// case when libraries are moved around in the newer version.
+// GnuCash over an older one on Windows. This happens for example
+// when libraries or reports are moved around in the newer version.
 // The code below will detect an existing GnuCash installation
 // and will remove it (if the user accepts) before installing
 // the version the user has selected.
-// -----------------------------------------------------------
+// ----------------------------------------------------------------
 
 { Lookup the registry information on a previous installation }
 procedure GetPrevInstallInfo();
@@ -218,10 +219,9 @@ begin
   RegQueryDwordValue(rootKey, sAppVersionPath, 'VersionMicro', PrevVersionMicro);
 end;
 
-{ Check if there is another GnuCash currently installed                }
-{ and whether we can simply install over it or have to remove it first }
-{ Versions are considered 'incompatible' if the major or minor         }
-{ version components are different                                     }
+{ Check if there is another GnuCash currently installed                  }
+{ If so, the user will be prompted if it can be uninstalled first.       }
+{ If the user doesn't allow uninstall, the installation will be aborted. }
 procedure CheckUninstallRequired();
 begin
   UninstallRequired := True;
@@ -229,8 +229,11 @@ begin
 
   if (PrevUninstallString = '') then
     UninstallRequired := False
-  else if (PrevVersionMajor = @GNUCASH_MAJOR_VERSION@) and (PrevVersionMinor = @GNUCASH_MINOR_VERSION@) then
-    UninstallRequired := False;
+// We used to check on major-minor versions to determine the uninstall requirement,
+// but this is not always sufficient. So the following code won't be used until
+// refined.
+//  else if (PrevVersionMajor = @GNUCASH_MAJOR_VERSION@) and (PrevVersionMinor = @GNUCASH_MINOR_VERSION@) then
+//    UninstallRequired := False;
 end;
 
 { Uninstall the current installation }

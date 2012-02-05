@@ -168,7 +168,8 @@ update-gnucash-gconf: update-gnucash-gconf.in \
 	    -e 's#@-GCONF_SCHEMA_FILE_DIR-@#${GCONF_SCHEMA_FILE_DIR}#g'
 	mv $@.tmp $@
 	chmod +x $@
-
+else
+bin_SCRIPTS = guile-setup.cmd
 endif
 
 EXTRA_DIST = \
@@ -179,5 +180,9 @@ EXTRA_DIST = \
 	gnucash-gdb.in \
 	environment.in \
 	gnucash-setup-env-osx.in
+
+if PLATFORM_WIN32
+EXTRA_DIST += guile-setup.cmd
+endif
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.bin\"

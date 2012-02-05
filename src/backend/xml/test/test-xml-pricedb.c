@@ -42,6 +42,9 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
+#define GNC_V2_STRING "gnc-v2"
+const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
+
 static QofSession *session;
 
 struct pricedb_data_struct

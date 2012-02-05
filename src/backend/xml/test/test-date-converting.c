@@ -10,6 +10,9 @@
 #include "sixtp-utils.h"
 #include "sixtp-dom-generators.h"
 
+#define GNC_V2_STRING "gnc-v2"
+const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
+
 int
 main(int argc, char **argv)
 {

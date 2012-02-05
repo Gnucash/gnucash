@@ -11,6 +11,8 @@
 #include "sixtp-dom-generators.h"
 #include "sixtp-dom-parsers.h"
 
+#define GNC_V2_STRING "gnc-v2"
+const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
 
 static void
 test_kvp_get_slot(int run,

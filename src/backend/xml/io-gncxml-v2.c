@@ -95,6 +95,8 @@ struct file_backend
 };
 
 #define GNC_V2_STRING "gnc-v2"
+/* non-static because they are used in sixtp.c */
+const gchar *gnc_v2_xml_version_string = GNC_V2_STRING;
 extern const gchar *gnc_v2_book_version_string;        /* see gnc-book-xml-v2 */
 
 void
@@ -679,7 +681,8 @@ gnc_sixtp_gdv2_new (
 static gboolean
 qof_session_load_from_xml_file_v2_full(
     FileBackend *fbe, QofBook *book,
-    sixtp_push_handler push_handler, gpointer push_user_data)
+    sixtp_push_handler push_handler, gpointer push_user_data,
+    QofBookFileType type)
 {
     Account *root;
     QofBackend *be = &fbe->be;
@@ -689,6 +692,7 @@ qof_session_load_from_xml_file_v2_full(
     sixtp *book_parser;
     struct file_backend be_data;
     gboolean retval;
+    char *v2type = NULL;
 
     gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
 
@@ -696,13 +700,19 @@ qof_session_load_from_xml_file_v2_full(
     main_parser = sixtp_new();
     book_parser = sixtp_new();
 
+    if (type == GNC_BOOK_XML2_FILE)
+        v2type = g_strdup(GNC_V2_STRING);
+
     if (!sixtp_add_some_sub_parsers(
                 top_parser, TRUE,
-                GNC_V2_STRING, main_parser,
+                v2type, main_parser,
                 NULL, NULL))
     {
+        g_free(v2type);
         goto bail;
     }
+
+    g_free(v2type);
 
     if (!sixtp_add_some_sub_parsers(
                 main_parser, TRUE,
@@ -819,9 +829,10 @@ bail:
 }
 
 gboolean
-qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
+qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book,
+    QofBookFileType type)
 {
-    return qof_session_load_from_xml_file_v2_full(fbe, book, NULL, NULL);
+    return qof_session_load_from_xml_file_v2_full(fbe, book, NULL, NULL, type);
 }
 
 /***********************************************************************/
@@ -1620,12 +1631,9 @@ is_gzipped_file(const gchar *name)
     return FALSE;
 }
 
-gboolean
+QofBookFileType
 gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding)
 {
-    if (gnc_is_our_xml_file(name, GNC_V2_STRING, with_encoding))
-        return TRUE;
-
     if (is_gzipped_file(name))
     {
         gzFile *file;
@@ -1647,19 +1655,18 @@ gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding)
         file = gzopen(name, "r");
 #endif
         if (file == NULL)
-            return FALSE;
+            return GNC_BOOK_NOT_OURS;
 
         num_read = gzread(file, first_chunk, sizeof(first_chunk) - 1);
         gzclose(file);
 
         if (num_read < 1)
-            return FALSE;
+            return GNC_BOOK_NOT_OURS;
 
-        return gnc_is_our_first_xml_chunk(first_chunk, GNC_V2_STRING,
-                                          with_encoding);
+        return gnc_is_our_first_xml_chunk(first_chunk, with_encoding);
     }
 
-    return FALSE;
+    return (gnc_is_our_xml_file(name, with_encoding));
 }
 
 
@@ -2095,7 +2102,7 @@ gnc_xml2_parse_with_subst (FileBackend *fbe, QofBook *book, GHashTable *subst)
 
     success = qof_session_load_from_xml_file_v2_full(
                   fbe, book, (sixtp_push_handler) parse_with_subst_push_handler,
-                  push_data);
+                  push_data, GNC_BOOK_XML2_FILE);
 
     if (success)
         qof_book_kvp_changed(book);

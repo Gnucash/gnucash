@@ -495,8 +495,9 @@ gnc_load_example_account_list(const char *dirname)
 
 
 /***********************************************************************/
+/*
 gboolean
 gnc_is_example_account_xml(const gchar *name)
 {
     return gnc_is_our_xml_file(name, GNC_ACCOUNT_STRING, NULL);
-}
+} */
