@@ -10,6 +10,7 @@ src/app-utils/gnc-component-manager.c
 src/app-utils/gnc-entry-quickfill.c
 src/app-utils/gnc-euro.c
 src/app-utils/gnc-exp-parser.c
+src/app-utils/gnc-features.c
 src/app-utils/gnc-gettext-util.c
 src/app-utils/gnc-helpers.c
 src/app-utils/gnc-help-utils.c
@@ -424,11 +425,12 @@ src/libqof/qof/qofsession.c
 src/libqof/qof/qofutil.c
 src/libqof/qof/qof-win32.c
 src/plugins/bi_import/dialog-bi-import.c
-src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade
-src/plugins/bi_import/gncmod-bi-import.c
-src/plugins/bi_import/gnc-plugin-bi-import.c
 src/plugins/bi_import/dialog-bi-import-gui.c
 src/plugins/bi_import/dialog-bi-import-helper.c
+src/plugins/bi_import/glade/bi_import.glade
+src/plugins/bi_import/gncmod-bi-import.c
+src/plugins/bi_import/gnc-plugin-bi-import.c
+src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade
 src/python/gncmod-python.c
 src/register/ledger-core/gnc-ledger-display.c
 src/register/ledger-core/gncmod-ledger-core.c
