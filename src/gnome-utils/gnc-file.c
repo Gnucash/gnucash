@@ -34,6 +34,7 @@
 #include "gnc-engine.h"
 #include "Account.h"
 #include "gnc-file.h"
+#include "gnc-features.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
@@ -615,76 +616,6 @@ gnc_file_query_save (gboolean can_cancel)
 }
 
 
-
-static void features_test(const gchar *key, KvpValue *value, gpointer data)
-{
-  GList** unknown_features = (GList**) data;
-  char* feature_desc;
-
-  g_assert(data);
-
-  /* XXX: test if 'key' is an unknown feature. */
-
-  /* Yes, it is unknown, so add the description to the list: */
-  feature_desc = kvp_value_get_string(value);
-  g_assert(feature_desc);
-
-  *unknown_features = g_list_prepend(*unknown_features, feature_desc);  
-}
-
-/*
- * Right now this is done by a KVP check for a features table.
- * Currently we don't know about any features, so the mere
- * existence of this KVP frame means we have a problem and
- * need to tell the user.
- *
- * returns true if we found unknown features, false if we're okay.
- */
-static gboolean test_unknown_features(QofSession* new_session)
-{
-    KvpFrame *frame = qof_book_get_slots (qof_session_get_book (new_session));
-    KvpValue *value;
-
-    g_assert(frame);
-    value = kvp_frame_get_value(frame, "features");
-
-    if (value)
-    {
-        GList* features_list = NULL;
-	frame = kvp_value_get_frame(value);
-	g_assert(frame);
-
-	/* Iterate over the members of this frame for unknown features */
-	kvp_frame_for_each_slot(frame, &features_test, &features_list);
-	if (features_list)
-	{
-            GList *i;
-            char* msg = g_strdup(
-                _("This Dataset contains features not supported by this "
-                  "version of GnuCash.  You must use a newer version of "
-                  "GnuCash in order to support the following features:"
-		  ));
-
-	    for (i = features_list; i; i=i->next)
-            {
-                char *tmp = g_strconcat(msg, "\n* ", _(i->data), NULL);
-                g_free (msg);
-                msg = tmp;
-            }
-
-	    // XXX: should pull out the file name here */
-	    gnc_error_dialog(gnc_ui_get_toplevel(), msg, "");
-	    
-	    g_free(msg);
-	    g_list_free(features_list);
-            return TRUE;
-	}
-    }
-
-    return FALSE;
-}
-
-
 /* private utilities for file open; done in two stages */
 
 #define RESPONSE_NEW  1
@@ -963,10 +894,19 @@ RESTART:
                                         GNC_FILE_DIALOG_OPEN);
         }
 
-	/* test for unknown features. */
-	if (!uh_oh)
-	{
-            uh_oh = test_unknown_features(new_session);
+        /* test for unknown features. */
+        if (!uh_oh)
+        {
+            gchar *msg = test_unknown_features(new_session);
+
+            if (msg)
+            {
+                uh_oh = TRUE;
+
+                // XXX: should pull out the file name here */
+                gnc_error_dialog(gnc_ui_get_toplevel(), msg, "");
+                g_free (msg);
+            }
         }
     }
 

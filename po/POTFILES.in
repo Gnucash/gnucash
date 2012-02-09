@@ -18,6 +18,7 @@ src/app-utils/gnc-druid-provider-file-cb.c
 src/app-utils/gnc-entry-quickfill.c
 src/app-utils/gnc-euro.c
 src/app-utils/gnc-exp-parser.c
+src/app-utils/gnc-features.c
 src/app-utils/gnc-gettext-util.c
 src/app-utils/gnc-helpers.c
 src/app-utils/gnc-help-utils.c
