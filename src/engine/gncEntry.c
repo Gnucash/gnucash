@@ -1344,48 +1344,48 @@ gncEntryRecomputeValues (GncEntry *entry)
     entry->values_dirty = FALSE;
 }
 
-void gncEntryGetValue (GncEntry *entry, gboolean is_inv, gnc_numeric *value,
+void gncEntryGetValue (GncEntry *entry, gboolean is_cust_doc, gnc_numeric *value,
                        gnc_numeric *discount_value, gnc_numeric *tax_value,
                        GList **tax_values)
 {
     if (!entry) return;
     gncEntryRecomputeValues (entry);
     if (value)
-        *value = (is_inv ? entry->i_value : entry->b_value);
+        *value = (is_cust_doc ? entry->i_value : entry->b_value);
     if (discount_value)
-        *discount_value = (is_inv ? entry->i_disc_value : gnc_numeric_zero());
+        *discount_value = (is_cust_doc ? entry->i_disc_value : gnc_numeric_zero());
     if (tax_value)
-        *tax_value = (is_inv ? entry->i_tax_value : entry->b_tax_value);
+        *tax_value = (is_cust_doc ? entry->i_tax_value : entry->b_tax_value);
     if (tax_values)
-        *tax_values = (is_inv ? entry->i_tax_values : entry->b_tax_values);
+        *tax_values = (is_cust_doc ? entry->i_tax_values : entry->b_tax_values);
 }
 
-gnc_numeric gncEntryReturnValue (GncEntry *entry, gboolean is_inv)
+gnc_numeric gncEntryReturnValue (GncEntry *entry, gboolean is_cust_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
-    return (is_inv ? entry->i_value_rounded : entry->b_value_rounded);
+    return (is_cust_doc ? entry->i_value_rounded : entry->b_value_rounded);
 }
 
-gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_inv)
+gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_cust_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
-    return (is_inv ? entry->i_tax_value_rounded : entry->b_tax_value_rounded);
+    return (is_cust_doc ? entry->i_tax_value_rounded : entry->b_tax_value_rounded);
 }
 
-AccountValueList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv)
+AccountValueList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_cust_doc)
 {
     if (!entry) return NULL;
     gncEntryRecomputeValues (entry);
-    return (is_inv ? entry->i_tax_values : entry->b_tax_values);
+    return (is_cust_doc ? entry->i_tax_values : entry->b_tax_values);
 }
 
-gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv)
+gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_cust_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
-    return (is_inv ? entry->i_disc_value_rounded : gnc_numeric_zero());
+    return (is_cust_doc ? entry->i_disc_value_rounded : gnc_numeric_zero());
 }
 
 /* XXX this existence of this routine is just wrong */
