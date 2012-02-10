@@ -129,16 +129,6 @@
 
 (define (make-account-hash) (make-hash-table 23))
 
-;; Internally invoice values are positive and credit-note values are negative
-;; However on the invoice/cn document they are always displayed as positive
-;; So depending on the document type the internal values have to be reversed
-;; before they are printed on the document. This function handles that.
-;; It should be called for each internal value that is to be displayed on the document.
-(define (inv-or-cn-value value credit-note?)
-  (if (not credit-note?)
-	value
-	(gnc-numeric-neg value)))
-
 (define (update-account-hash hash values)
   (for-each
    (lambda (item)
@@ -191,7 +181,7 @@
 	(addto! row-contents
 		(gnc:make-html-table-cell/markup
 		 "number-cell"
-		 (inv-or-cn-value (gncEntryGetQuantity entry) credit-note?))))
+		 (gncEntryGetDocQuantity entry credit-note?))))
 
     (if (price-col column-vector)
 	(addto! row-contents

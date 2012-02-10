@@ -316,6 +316,7 @@ find_entry_in_book_by_desc(GncEntryLedger *reg, const char* desc)
         break;
     default:
         use_invoice = FALSE;
+        break;
     };
 
     query = new_query_for_entry_desc(reg, desc, use_invoice);
@@ -543,21 +544,25 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
     set_value_combo_cell (cell, account_name);
     g_free (account_name);
 
-    /* Auto-complete quantity cell
-     * Note: we always autofill a positive quantity value. This allows us to
-     * - reuse invoice entries on credit note ledgers, meaning you can credit
-     *   some invoice entry via autofill without having to manually fix the sign
-     *   on the credit note.
-     * - autofill credit note entries on other credit note entries (without having
-     *   to juggle sign reversals internally)
-     * - autofill credit note entries on invoice ledgers
-     *
-     * Disadvantage: invoice entries with explicitly set negative quantities will
-     * be autofilled to positive quantities in later uses. But it seems less common
-     * to me to require a negative entry again next time.
-     */
-    cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_QTY_CELL);
-    set_value_price_cell (cell, gnc_numeric_abs(gncEntryGetQuantity (auto_entry)));
+    /* Auto-complete quantity cell. Note that this requires some care because
+     * credit notes store quantities with a reversed sign. So we need to figure
+     * out if the original document from which we extract the autofill entry
+     * was a credit note or not. */
+    {
+        gboolean orig_is_cn;
+        switch (ledger->type)
+        {
+        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+            orig_is_cn = gncInvoiceGetIsCreditNote (gncEntryGetInvoice (auto_entry));
+            break;
+        default:
+            orig_is_cn = gncInvoiceGetIsCreditNote (gncEntryGetBill (auto_entry));
+            break;
+        }
+        cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_QTY_CELL);
+        set_value_price_cell (cell, gncEntryGetDocQuantity (auto_entry, orig_is_cn));
+    }
 
     /* Auto-complete price cell */
     {
@@ -570,6 +575,7 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
             break;
         default:
             price = gncEntryGetBillPrice (auto_entry);
+            break;
         }
 
         /* Auto-complete price cell */
@@ -595,6 +601,7 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
             taxable = gncEntryGetBillTaxable (auto_entry);
             taxincluded = gncEntryGetBillTaxIncluded (auto_entry);
             taxtable = gncEntryGetBillTaxTable (auto_entry);
+            break;
         }
 
         /* Taxable? cell */

@@ -106,7 +106,19 @@ void gncEntrySetDateEntered (GncEntry *entry, Timespec date);
 void gncEntrySetDescription (GncEntry *entry, const char *desc);
 void gncEntrySetAction (GncEntry *entry, const char *action);
 void gncEntrySetNotes (GncEntry *entry, const char *notes);
+/** Set the internal quantity without any conversion.
+ *  This distinction is made because credit notes store their quantity
+ *  sign-reversed compared to how the quantity is written on the
+ *  actual credit note (and hence how the ledger and reports show it
+ *  to the user). */
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
+/** Set the internal quantity converting from the quantity as
+ *  visible on the physical document.
+ *  This distinction is made because credit notes store their quantity
+ *  sign-reversed compared to how the quantity is written on the
+ *  actual credit note (and hence how the ledger and reports show it
+ *  to the user). */
+void gncEntrySetDocQuantity (GncEntry *entry, gnc_numeric quantity, gboolean is_cn);
 /** @} */
 
 /** @name Customer Invoices
@@ -152,7 +164,18 @@ Timespec gncEntryGetDateEntered (const GncEntry *entry);
 const char * gncEntryGetDescription (const GncEntry *entry);
 const char * gncEntryGetAction (const GncEntry *entry);
 const char * gncEntryGetNotes (const GncEntry *notes);
+/** Get the quantity as stored internally.
+ *  This distinction is made because credit notes store their quantity
+ *  sign-reversed compared to how the quantity is written on the
+ *  actual credit note (and hence how the ledger and reports show it
+ *  to the user). */
 gnc_numeric gncEntryGetQuantity (const GncEntry *entry);
+/** Get the quantity as on the physical document.
+ *  This distinction is made because credit notes store their quantity
+ *  sign-reversed compared to how the quantity is written on the
+ *  actual credit note (and hence how the ledger and reports show it
+ *  to the user). */
+gnc_numeric gncEntryGetDocQuantity (const GncEntry *entry, gboolean is_cn);
 /** @} */
 
 /** @name Customer Invoices

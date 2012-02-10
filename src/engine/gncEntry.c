@@ -531,6 +531,17 @@ void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity)
     gncEntryCommitEdit (entry);
 }
 
+void gncEntrySetDocQuantity (GncEntry *entry, gnc_numeric quantity, gboolean is_cn)
+{
+    if (!entry) return;
+    if (gnc_numeric_eq (entry->quantity, quantity)) return;
+    gncEntryBeginEdit (entry);
+    entry->quantity = (is_cn ? gnc_numeric_neg (quantity) : quantity);
+    entry->values_dirty = TRUE;
+    mark_entry (entry);
+    gncEntryCommitEdit (entry);
+}
+
 /* Customer Invoices */
 
 void gncEntrySetInvAccount (GncEntry *entry, Account *acc)
@@ -881,6 +892,12 @@ gnc_numeric gncEntryGetQuantity (const GncEntry *entry)
 {
     if (!entry) return gnc_numeric_zero();
     return entry->quantity;
+}
+
+gnc_numeric gncEntryGetDocQuantity (const GncEntry *entry, gboolean is_cn)
+{
+    gnc_numeric value = gncEntryGetQuantity (entry);
+    return (is_cn ? gnc_numeric_neg (value) : value);
 }
 
 /* Customer Invoice */

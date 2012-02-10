@@ -313,17 +313,10 @@ static const char * get_qty_entry (VirtualLocation virt_loc,
     gnc_numeric qty;
 
     entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-    qty = gncEntryGetQuantity (entry);
+    qty = gncEntryGetDocQuantity (entry, ledger->is_credit_note);
 
     if (gnc_numeric_zero_p (qty))
         return NULL;
-
-    /* Credit notes have negative quantities, but the ledger should
-     * display it as on the document, meaning positive.
-     * So reverse the quantity for credit notes.
-     */
-    if (ledger->is_credit_note)
-        qty = gnc_numeric_neg (qty);
 
     return xaccPrintAmount (qty, gnc_default_print_info (FALSE));
 }
@@ -1079,13 +1072,7 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 
         if (gnc_entry_ledger_get_numeric (ledger, ENTRY_QTY_CELL, &amount))
         {
-            /* Credit notes have negative quantities, but the ledger should
-             * display it as on the document, meaning positive.
-             * So reverse the quantity for credit notes.
-             */
-            if (ledger->is_credit_note)
-                amount = gnc_numeric_neg (amount);
-            gncEntrySetQuantity (entry, amount);
+            gncEntrySetDocQuantity (entry, amount, ledger->is_credit_note);
         }
     }
 
