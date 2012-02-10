@@ -204,18 +204,6 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
                           const char *memo, const char *num);
 
 /**
- * Apply a payment of "amount" for the owner, between the xfer_account
- * (bank or other asset) and the posted_account (A/R or A/P).  If the
- * caller supplies an (optional) invoice argument, then apply the
- * payment to that invoice first before any other invoice.
- */
-Transaction *
-gncOwnerApplyPayment (const GncOwner *owner, GncInvoice *invoice,
-                      Account *posted_acc, Account *xfer_acc,
-                      gnc_numeric amount, gnc_numeric exch, Timespec date,
-                      const char *memo, const char *num);
-
-/**
  * Given a list of lots, try to balance as many of them as possible
  * by creating balancing transactions between them. This can be used
  * to automatically link invoices to payments (to "mark" invoices as
@@ -250,32 +238,6 @@ gncOwnerApplyPayment (const GncOwner *owner, GncInvoice *invoice,
  *   it as well.
  */
 void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots);
-
-/**
- * Fill in a half-finished payment transaction for the owner. The
- * transaction txn must already contain one split that belongs to a
- * bank or other asset account. This function will add the other split
- * (or splits) that go to the posted_account (A/R or A/P), including
- * the linking to the lots so that the payment is recorded in the
- * correct lot(s).
- *
- * If the caller supplies an (optional) invoice argument, then apply
- * the payment to that invoice first before any other invoice.
- *
- * Preconditions: The arguments owner, txn, and posted_account must
- * not be NULL. The txn must be open (by xaccTransBeginEdit()); it
- * must contain exactly one split; its commodity (by
- * xaccTransGetCurrency()) must be equal to the owner's commodity (by
- * gncOwnerGetCurrency()).
- *
- * \return The number of splits that have been assigned as owner
- * payments. On success, this is always positive (1 or larger). In
- * case of failure (due to unfulfilled conditions on the input
- * values), null is returned.
- */
-gint
-gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
-                         Account *posted_account, GncInvoice* invoice);
 
 /** Returns a GList of account-types based on the owner type */
 GList * gncOwnerGetAccountTypesList (const GncOwner *owner);

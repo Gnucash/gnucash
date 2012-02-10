@@ -38,7 +38,7 @@ from gnucash_core import \
      Split, Book, GncLot, Account
 
 from gnucash_core_c import GNC_OWNER_CUSTOMER, GNC_OWNER_JOB, \
-    GNC_OWNER_EMPLOYEE, GNC_OWNER_VENDOR, gncOwnerApplyPayment, \
+    GNC_OWNER_EMPLOYEE, GNC_OWNER_VENDOR, gncOwnerCreatePaymentLot, \
     GNC_PAYMENT_CASH, GNC_PAYMENT_CARD, \
     GNC_DISC_PRETAX, GNC_DISC_SAMETIME, GNC_DISC_POSTTAX, \
     GNC_TAXINCLUDED_YES, GNC_TAXINCLUDED_NO, GNC_TAXINCLUDED_USEGLOBAL, \
