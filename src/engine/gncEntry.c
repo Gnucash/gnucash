@@ -1364,6 +1364,7 @@ gnc_numeric gncEntryGetIntTaxValue (GncEntry *entry, gboolean round, gboolean is
         return (is_cust_doc ? entry->i_tax_value : entry->b_tax_value);
 }
 
+/* Careful: the returned list is managed by the entry, and will only be valid for a short time */
 AccountValueList * gncEntryGetIntTaxValues (GncEntry *entry, gboolean is_cust_doc)
 {
     if (!entry) return NULL;
@@ -1393,12 +1394,22 @@ gnc_numeric gncEntryGetDocTaxValue (GncEntry *entry, gboolean round, gboolean is
     return (is_cn ? gnc_numeric_neg (value) : value);
 }
 
+/* Careful: the returned list is NOT owned by the entry and should be freed by the caller */
 AccountValueList * gncEntryGetDocTaxValues (GncEntry *entry, gboolean is_cust_doc, gboolean is_cn)
 {
-    AccountValueList *values = gncEntryGetIntTaxValues (entry, is_cust_doc);
-    g_assert_not_reached ();
-    /* FIXME How to invert the values in this case ? */
-    return (is_cn ? values : values);
+    AccountValueList *int_values = gncEntryGetIntTaxValues (entry, is_cust_doc);
+    AccountValueList *values = NULL, *node;
+
+    /* Make a copy of the list with negated values if necessary. */
+    for (node = int_values; node; node = node->next)
+    {
+        GncAccountValue *acct_val = node->data;
+        values = gncAccountValueAdd (values, acct_val->account,
+                                     (is_cn ? gnc_numeric_neg (acct_val->value)
+                                            : acct_val->value));
+    }
+
+    return values;
 }
 
 gnc_numeric gncEntryGetDocDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
@@ -1407,30 +1418,40 @@ gnc_numeric gncEntryGetDocDiscountValue (GncEntry *entry, gboolean round, gboole
     return (is_cn ? gnc_numeric_neg (value) : value);
 }
 
-gnc_numeric gncEntryGetBalValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+gnc_numeric gncEntryGetBalValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
     gnc_numeric value = gncEntryGetIntValue (entry, round, is_cust_doc);
-    return (is_cn ? gnc_numeric_neg (value) : value);
+    return (is_cust_doc ? gnc_numeric_neg (value) : value);
 }
 
-gnc_numeric gncEntryGetBalTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+gnc_numeric gncEntryGetBalTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
     gnc_numeric value = gncEntryGetIntTaxValue (entry, round, is_cust_doc);
-    return (is_cn ? gnc_numeric_neg (value) : value);
+    return (is_cust_doc ? gnc_numeric_neg (value) : value);
 }
 
-AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_doc, gboolean is_cn)
+/* Careful: the returned list is NOT owned by the entry and should be freed by the caller */
+AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_doc)
 {
-    AccountValueList *values = gncEntryGetIntTaxValues (entry, is_cust_doc);
-    g_assert_not_reached ();
-    /* FIXME How to invert the values in this case ? */
-    return (is_cn ? values : values);
+    AccountValueList *int_values = gncEntryGetIntTaxValues (entry, is_cust_doc);
+    AccountValueList *values = NULL, *node;
+
+    /* Make a copy of the list with negated values if necessary. */
+    for (node = int_values; node; node = node->next)
+    {
+        GncAccountValue *acct_val = node->data;
+        values = gncAccountValueAdd (values, acct_val->account,
+                                     (is_cust_doc ? gnc_numeric_neg (acct_val->value)
+                                                  : acct_val->value));
+    }
+
+    return values;
 }
 
-gnc_numeric gncEntryGetBalDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+gnc_numeric gncEntryGetBalDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
     gnc_numeric value = gncEntryGetIntDiscountValue (entry, round, is_cust_doc);
-    return (is_cn ? gnc_numeric_neg (value) : value);
+    return (is_cust_doc ? gnc_numeric_neg (value) : value);
 }
 
 /* XXX this existence of this routine is just wrong */
