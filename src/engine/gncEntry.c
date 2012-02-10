@@ -103,62 +103,90 @@ struct _gncEntryClass
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
-/* You must edit the functions in this block in tandem.  KEEP THEM IN
-   SYNC! */
 
-#define GNC_RETURN_ENUM_AS_STRING(x,s) case (x): return (s);
+/* You must edit the functions in this block in tandem.
+ * KEEP THIS FUNCTION IN SYNC with the one below! */
 const char *
 gncEntryDiscountHowToString (GncDiscountHow how)
 {
     switch (how)
     {
-        GNC_RETURN_ENUM_AS_STRING(GNC_DISC_PRETAX, "PRETAX");
-        GNC_RETURN_ENUM_AS_STRING(GNC_DISC_SAMETIME, "SAMETIME");
-        GNC_RETURN_ENUM_AS_STRING(GNC_DISC_POSTTAX, "POSTTAX");
-    default:
-        g_warning ("asked to translate unknown discount-how %d.\n", how);
-        break;
+        case (GNC_DISC_PRETAX):
+            return "PRETAX";
+        case (GNC_DISC_SAMETIME):
+            return "SAMETIME";
+        case (GNC_DISC_POSTTAX):
+            return "POSTTAX";
+        default:
+            g_warning ("asked to translate unknown discount-how %d.\n", how);
+            break;
     }
-    return(NULL);
+    return NULL;
 }
 
+/* You must edit the functions in this block in tandem.
+ * KEEP THIS FUNCTION IN SYNC with the one above! */
+gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how)
+{
+    if(g_strcmp0 ("PRETAX", str) == 0)
+    {
+        *how = GNC_DISC_PRETAX;
+        return TRUE;
+    }
+    if(g_strcmp0 ("SAMETIME", str) == 0)
+    {
+        *how = GNC_DISC_SAMETIME;
+        return TRUE;
+    }
+    if(g_strcmp0 ("POSTTAX", str) == 0)
+    {
+        *how = GNC_DISC_POSTTAX;
+        return TRUE;
+    }
+    g_warning ("asked to translate unknown discount-how string %s.\n",
+               str ? str : "(null)");
+
+    return FALSE;
+}
+
+/* You must edit the functions in this block in tandem.
+ * KEEP THIS FUNCTION IN SYNC with the one below! */
 const char * gncEntryPaymentTypeToString (GncEntryPaymentType type)
 {
     switch (type)
     {
-        GNC_RETURN_ENUM_AS_STRING(GNC_PAYMENT_CASH, "CASH");
-        GNC_RETURN_ENUM_AS_STRING(GNC_PAYMENT_CARD, "CARD");
+        case (GNC_PAYMENT_CASH):
+            return "CASH";
+        case (GNC_PAYMENT_CARD):
+            return "CARD";
     default:
         g_warning ("asked to translate unknown payment type %d.\n", type);
         break;
     }
-    return(NULL);
+    return NULL ;
 }
-#undef GNC_RETURN_ENUM_AS_STRING
-#define GNC_RETURN_ON_MATCH(s,x,r) \
-  if(safe_strcmp((s), (str)) == 0) { *(r) = x; return(TRUE); }
-gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how)
-{
-    GNC_RETURN_ON_MATCH ("PRETAX", GNC_DISC_PRETAX, how);
-    GNC_RETURN_ON_MATCH ("SAMETIME", GNC_DISC_SAMETIME, how);
-    GNC_RETURN_ON_MATCH ("POSTTAX", GNC_DISC_POSTTAX, how);
-    g_warning ("asked to translate unknown discount-how string %s.\n",
-               str ? str : "(null)");
 
-    return(FALSE);
-}
+/* You must edit the functions in this block in tandem.
+ * KEEP THIS FUNCTION IN SYNC with the one above! */
 gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type)
 {
-    GNC_RETURN_ON_MATCH ("CASH", GNC_PAYMENT_CASH, type);
-    GNC_RETURN_ON_MATCH ("CARD", GNC_PAYMENT_CARD, type);
+    if(g_strcmp0 ("CASH", str) == 0)
+    {
+        *type = GNC_PAYMENT_CASH;
+        return TRUE;
+    }
+    if(g_strcmp0 ("CARD", str) == 0)
+    {
+        *type = GNC_PAYMENT_CARD;
+        return TRUE;
+    }
     g_warning ("asked to translate unknown discount-how string %s.\n",
                str ? str : "(null)");
 
-    return(FALSE);
+    return FALSE;
 }
-#undef GNC_RETURN_ON_MATCH
 
-#define _GNC_MOD_NAME	GNC_ID_ENTRY
+#define _GNC_MOD_NAME GNC_ID_ENTRY
 
 #define SET_STR(obj, member, str) { \
 	char * tmp; \
@@ -998,23 +1026,24 @@ GncOrder * gncEntryGetOrder (const GncEntry *entry)
  * In other words, we combine the quantity, unit-price, discount and
  * taxes together, depending on various flags.
  *
- * There are four potental ways to combine these numbers:
+ * There are four potential ways to combine these numbers:
  * Discount:     Pre-Tax   Post-Tax
  *   Tax   :     Included  Not-Included
  *
  * The process is relatively simple:
  *
- *  1) compute the agregate price (price*qty)
- *  2) if taxincluded, then back-compute the agregate pre-tax price
+ *  1) compute the aggregate price (price*qty)
+ *  2) if taxincluded, then back-compute the aggregate pre-tax price
  *  3) apply discount and taxes in the appropriate order
  *  4) return the requested results.
  *
- * step 2 can be done with agregate taxes; no need to compute them all
+ * Step 2 can be done with aggregate taxes; no need to compute them all
  * unless the caller asked for the tax_value.
  *
- * Note that the returned "value" is such that value + tax == "total
- * to pay," which means in the case of tax-included that the returned
- * "value" may be less than the agregate price, even without a
+ * Note that the returned "value" is such that
+ *   value + tax == "total to pay"
+ * which means in the case of tax-included that the returned
+ * "value" may be less than the aggregate price, even without a
  * discount.  If you want to display the tax-included value, you need
  * to add the value and taxes together.  In other words, the value is
  * the amount the merchant gets; the taxes are the amount the gov't
@@ -1032,16 +1061,16 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
                            gnc_numeric *value, gnc_numeric *discount_value,
                            GList **tax_value)
 {
-    gnc_numeric	aggregate;
-    gnc_numeric	pretax;
-    gnc_numeric	result;
-    gnc_numeric	tax;
-    gnc_numeric	percent = gnc_numeric_create (100, 1);
-    gnc_numeric	tpercent = gnc_numeric_zero ();
-    gnc_numeric	tvalue = gnc_numeric_zero ();
+    gnc_numeric aggregate;
+    gnc_numeric pretax;
+    gnc_numeric result;
+    gnc_numeric tax;
+    gnc_numeric percent = gnc_numeric_create (100, 1);
+    gnc_numeric tpercent = gnc_numeric_zero ();
+    gnc_numeric tvalue = gnc_numeric_zero ();
 
-    GList * 	entries = gncTaxTableGetEntries (tax_table);
-    GList * 	node;
+    GList     * entries = gncTaxTableGetEntries (tax_table);
+    GList     * node;
 
     /* Step 1: compute the aggregate price */
 
@@ -1067,6 +1096,7 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
             break;
         default:
             g_warning ("Unknown tax type: %d", gncTaxTableEntryGetType (entry));
+            break;
         }
     }
     /* now we need to convert from 5% -> .05 */
@@ -1108,10 +1138,10 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
      */
 
     /*
-     * Type:	discount	tax
-     * PRETAX	pretax		pretax-discount
-     * SAMETIME	pretax		pretax
-     * POSTTAX	pretax+tax	pretax
+     * Type:    discount    tax
+     * PRETAX   pretax      pretax-discount
+     * SAMETIME pretax      pretax
+     * POSTTAX  pretax+tax  pretax
      */
 
     switch (discount_how)
@@ -1157,6 +1187,7 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 
     default:
         g_warning ("unknown DiscountHow value: %d", discount_how);
+        break;
     }
 
     /* Step 4:  return the requested results. */
@@ -1357,7 +1388,7 @@ gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv)
     return (is_inv ? entry->i_disc_value_rounded : gnc_numeric_zero());
 }
 
-/* XXXX this exsitnace of this routine is just wrong */
+/* XXX this existence of this routine is just wrong */
 gboolean gncEntryIsOpen (const GncEntry *entry)
 {
     if (!entry) return FALSE;
