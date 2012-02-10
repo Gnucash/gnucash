@@ -139,11 +139,11 @@
 	value
 	(gnc-numeric-neg value)))
 
-(define (update-account-hash hash values credit-note?)
+(define (update-account-hash hash values)
   (for-each
    (lambda (item)
      (let* ((acct (car item))
-	    (val (inv-or-cn-value(cdr item) credit-note?))
+	    (val (cdr item))
 	    (ref (hash-ref hash acct)))
 
        (hash-set! hash acct (if ref (gnc-numeric-add-fixed ref val) val))))
@@ -524,8 +524,8 @@
 					      cust-doc? credit-note?)))
 
 	    (if display-all-taxes
-		(let ((tax-list (gncEntryGetIntTaxValues current cust-doc?)))
-		  (update-account-hash acct-hash tax-list credit-note?))
+		(let ((tax-list (gncEntryGetDocTaxValues current cust-doc? credit-note?)))
+		  (update-account-hash acct-hash tax-list))
 		(tax-collector 'add
 			       (gnc:gnc-monetary-commodity (cdr entry-values))
 			       (gnc:gnc-monetary-amount (cdr entry-values))))

@@ -133,11 +133,11 @@
 	value
 	(gnc-numeric-neg value)))
 
-(define (update-account-hash hash values credit-note?)
+(define (update-account-hash hash values)
   (for-each
    (lambda (item)
      (let* ((acct (car item))
-	    (val (inv-or-cn-value(cdr item) credit-note?))
+	    (val (cdr item))
 	    (ref (hash-ref hash acct)))
 
        (hash-set! hash acct (if ref (gnc-numeric-add-fixed ref val) val))))
@@ -165,10 +165,10 @@
   (let* ((row-contents '())
 	 (entry-value (gnc:make-gnc-monetary
 		       currency
-		       (inv-or-cn-value (gncEntryGetIntValue entry #t cust-doc?) credit-note?)))
+		       (gncEntryGetDocValue entry #t cust-doc? credit-note?)))
 	 (entry-tax-value (gnc:make-gnc-monetary
 			   currency
-			   (inv-or-cn-value (gncEntryGetIntTaxValue entry #t cust-doc?) credit-note?))))
+			   (gncEntryGetDocTaxValue entry #t cust-doc? credit-note?))))
 
     (if (date-col column-vector)
         (addto! row-contents
@@ -328,7 +328,7 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Payments")
-    "tc" (N_ "Display the payments applied to this cust-doc?") #f))
+    "tc" (N_ "Display the payments applied to this invoice?") #f))
 
   (gnc:register-inv-option
    (gnc:make-text-option
@@ -469,7 +469,8 @@
 		   (lambda (split)
 		     (if (not (equal? (xaccSplitGetParent split) txn))
 			 (add-payment-row table used-columns
-					  split total-collector reverse-payments?)))
+					  split total-collector
+					  reverse-payments?)))
 		   splits)))
 
 	    (add-subtotal-row table used-columns total-collector
@@ -491,8 +492,8 @@
 					      cust-doc? credit-note?)))
 
 	    (if display-all-taxes
-		(let ((tax-list (gncEntryGetIntTaxValues current cust-doc?)))
-		  (update-account-hash acct-hash tax-list credit-note?))
+		(let ((tax-list (gncEntryGetDocTaxValues current cust-doc? credit-note?)))
+		  (update-account-hash acct-hash tax-list))
 		(tax-collector 'add
 			       (gnc:gnc-monetary-commodity (cdr entry-values))
 			       (gnc:gnc-monetary-amount (cdr entry-values))))
