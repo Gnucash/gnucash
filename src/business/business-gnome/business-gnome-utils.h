@@ -58,10 +58,14 @@ GncInvoice * gnc_invoice_get_invoice (GtkWidget *widget);
 void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice);
 void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner);
 
-/* Fill in a combo box with the appropriate list of accounts */
-void gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
-                                    GList *acct_types,
-                                    GList *acct_commodities);
+/* Fill in a combo box with the appropriate list of accounts
+ * Returns the default selected account */
+Account * gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
+                                         GList *acct_types,
+                                         GList *acct_commodities);
+
+/* Returns the currently selected account in the combo box*/
+Account * gnc_account_select_combo_get_active (GtkWidget *combo);
 
 /* Create a combo box of available billing terms based on
  * the combo box If none_ok is true, then add "none" as a

@@ -128,7 +128,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
 
     gnc_general_search_set_selected (GNC_GENERAL_SEARCH (edit),
                                      owner->owner.undefined);
-    gtk_box_pack_start (GTK_BOX (hbox), edit, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
     if (label)
         gtk_label_set_text (GTK_LABEL (label), _(qof_object_get_type_label (type_name)));
 
@@ -311,8 +311,8 @@ void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner)
     gnc_invoice_select_search_set_label(isi);
 }
 
-void
-gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
+Account *
+gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
                                GList *acct_types, GList *acct_commodities)
 {
     GtkListStore *store;
@@ -320,18 +320,17 @@ gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
     GList *list, *node;
     char *text;
 
-    g_return_if_fail (combo && GTK_IS_COMBO_BOX_ENTRY(combo));
-    g_return_if_fail (book);
-    g_return_if_fail (acct_types);
+    g_return_val_if_fail (combo && GTK_IS_COMBO_BOX_ENTRY(combo), NULL);
+    g_return_val_if_fail (book, NULL);
+    g_return_val_if_fail (acct_types, NULL);
 
     /* Figure out if anything is set in the combo */
     text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo));
 
+    g_object_set_data (G_OBJECT(combo), "book", book);
     list = gnc_account_get_descendants (gnc_book_get_root_account (book));
 
     /* Clear the existing list */
-    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo)));
-    gtk_entry_set_text(entry, "");
     store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
     gtk_list_store_clear(store);
 
@@ -360,6 +359,12 @@ gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
 
         name = gnc_account_get_full_name (account);
         gtk_combo_box_append_text(GTK_COMBO_BOX(combo), name);
+        /* Save the first account name in case no account name was set */
+        if (!text || g_strcmp0 (text, "") == 0)
+        {
+            g_free (text); /* This is ok, even if text is already NULL */
+            text = g_strdup (name);
+        }
         g_free(name);
     }
     gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
@@ -370,6 +375,28 @@ gnc_fill_account_select_combo (GtkWidget *combo, QofBook *book,
 
     if (text)
         g_free (text);
+
+    return gnc_account_select_combo_get_active (combo);
+}
+
+Account *
+gnc_account_select_combo_get_active (GtkWidget *combo)
+{
+    gchar *text;
+    QofBook *book;
+
+    if (!combo || !GTK_IS_COMBO_BOX_ENTRY(combo))
+        return NULL;
+
+    book = g_object_get_data (G_OBJECT(combo), "book");
+    if (!book)
+        return NULL;
+
+    text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo));
+    if (!text || g_strcmp0 (text, "") == 0)
+        return NULL;
+
+    return gnc_account_lookup_by_full_name (gnc_book_get_root_account (book), text);
 }
 
 /***********************************************************************
