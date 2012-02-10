@@ -1344,48 +1344,93 @@ gncEntryRecomputeValues (GncEntry *entry)
     entry->values_dirty = FALSE;
 }
 
-void gncEntryGetValue (GncEntry *entry, gboolean is_cust_doc, gnc_numeric *value,
-                       gnc_numeric *discount_value, gnc_numeric *tax_value,
-                       GList **tax_values)
-{
-    if (!entry) return;
-    gncEntryRecomputeValues (entry);
-    if (value)
-        *value = (is_cust_doc ? entry->i_value : entry->b_value);
-    if (discount_value)
-        *discount_value = (is_cust_doc ? entry->i_disc_value : gnc_numeric_zero());
-    if (tax_value)
-        *tax_value = (is_cust_doc ? entry->i_tax_value : entry->b_tax_value);
-    if (tax_values)
-        *tax_values = (is_cust_doc ? entry->i_tax_values : entry->b_tax_values);
-}
-
-gnc_numeric gncEntryReturnValue (GncEntry *entry, gboolean is_cust_doc)
+gnc_numeric gncEntryGetIntValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
-    return (is_cust_doc ? entry->i_value_rounded : entry->b_value_rounded);
+    if (round)
+        return (is_cust_doc ? entry->i_value_rounded : entry->b_value_rounded);
+    else
+        return (is_cust_doc ? entry->i_value : entry->b_value);
 }
 
-gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_cust_doc)
+gnc_numeric gncEntryGetIntTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
-    return (is_cust_doc ? entry->i_tax_value_rounded : entry->b_tax_value_rounded);
+    if (round)
+        return (is_cust_doc ? entry->i_tax_value_rounded : entry->b_tax_value_rounded);
+    else
+        return (is_cust_doc ? entry->i_tax_value : entry->b_tax_value);
 }
 
-AccountValueList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_cust_doc)
+AccountValueList * gncEntryGetIntTaxValues (GncEntry *entry, gboolean is_cust_doc)
 {
     if (!entry) return NULL;
     gncEntryRecomputeValues (entry);
     return (is_cust_doc ? entry->i_tax_values : entry->b_tax_values);
 }
 
-gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_cust_doc)
+gnc_numeric gncEntryGetIntDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
-    return (is_cust_doc ? entry->i_disc_value_rounded : gnc_numeric_zero());
+    if (round)
+        return (is_cust_doc ? entry->i_disc_value_rounded : gnc_numeric_zero());
+    else
+        return (is_cust_doc ? entry->i_disc_value : gnc_numeric_zero());
+}
+
+gnc_numeric gncEntryGetDocValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+{
+    gnc_numeric value = gncEntryGetIntValue (entry, round, is_cust_doc);
+    return (is_cn ? gnc_numeric_neg (value) : value);
+}
+
+gnc_numeric gncEntryGetDocTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+{
+    gnc_numeric value = gncEntryGetIntTaxValue (entry, round, is_cust_doc);
+    return (is_cn ? gnc_numeric_neg (value) : value);
+}
+
+AccountValueList * gncEntryGetDocTaxValues (GncEntry *entry, gboolean is_cust_doc, gboolean is_cn)
+{
+    AccountValueList *values = gncEntryGetIntTaxValues (entry, is_cust_doc);
+    g_assert_not_reached ();
+    /* FIXME How to invert the values in this case ? */
+    return (is_cn ? values : values);
+}
+
+gnc_numeric gncEntryGetDocDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+{
+    gnc_numeric value = gncEntryGetIntDiscountValue (entry, round, is_cust_doc);
+    return (is_cn ? gnc_numeric_neg (value) : value);
+}
+
+gnc_numeric gncEntryGetBalValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+{
+    gnc_numeric value = gncEntryGetIntValue (entry, round, is_cust_doc);
+    return (is_cn ? gnc_numeric_neg (value) : value);
+}
+
+gnc_numeric gncEntryGetBalTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+{
+    gnc_numeric value = gncEntryGetIntTaxValue (entry, round, is_cust_doc);
+    return (is_cn ? gnc_numeric_neg (value) : value);
+}
+
+AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_doc, gboolean is_cn)
+{
+    AccountValueList *values = gncEntryGetIntTaxValues (entry, is_cust_doc);
+    g_assert_not_reached ();
+    /* FIXME How to invert the values in this case ? */
+    return (is_cn ? values : values);
+}
+
+gnc_numeric gncEntryGetBalDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+{
+    gnc_numeric value = gncEntryGetIntDiscountValue (entry, round, is_cust_doc);
+    return (is_cn ? gnc_numeric_neg (value) : value);
 }
 
 /* XXX this existence of this routine is just wrong */

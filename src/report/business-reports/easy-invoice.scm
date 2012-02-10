@@ -170,10 +170,10 @@
   (let* ((row-contents '())
 	 (entry-value (gnc:make-gnc-monetary
 		       currency
-		       (inv-or-cn-value (gncEntryReturnValue entry cust-doc?) credit-note?)))
+		       (gncEntryGetDocValue entry #t cust-doc? credit-note?)))
 	 (entry-tax-value (gnc:make-gnc-monetary
 			   currency
-			   (inv-or-cn-value (gncEntryReturnTaxValue entry cust-doc?) credit-note?))))
+			   (gncEntryGetDocTaxValue entry #t cust-doc? credit-note?))))
 
     (if (date-col column-vector)
         (addto! row-contents
@@ -524,7 +524,7 @@
 					      cust-doc? credit-note?)))
 
 	    (if display-all-taxes
-		(let ((tax-list (gncEntryReturnTaxValues current cust-doc?)))
+		(let ((tax-list (gncEntryGetIntTaxValues current cust-doc?)))
 		  (update-account-hash acct-hash tax-list credit-note?))
 		(tax-collector 'add
 			       (gnc:gnc-monetary-commodity (cdr entry-values))

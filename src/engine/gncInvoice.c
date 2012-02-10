@@ -800,8 +800,7 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
         if (use_payment_type && gncEntryGetBillPayment (entry) != type)
             continue;
 
-        gncEntryGetValue (entry, is_cust_doc, &value, NULL, &tax, NULL);
-
+        value = gncEntryGetIntValue (entry, FALSE, is_cust_doc);
         if (gnc_numeric_check (value) == GNC_ERROR_OK)
         {
             if (use_value)
@@ -810,13 +809,14 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
         else
             g_warning ("bad value in our entry");
 
-        if (gnc_numeric_check (tax) == GNC_ERROR_OK)
+        if (use_tax)
         {
-            if (use_tax)
+            tax = gncEntryGetIntTaxValue (entry, FALSE, is_cust_doc);
+            if (gnc_numeric_check (tax) == GNC_ERROR_OK)
                 total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            else
+                g_warning ("bad tax-value in our entry");
         }
-        else
-            g_warning ("bad tax-value in our entry");
     }
     return total;
 }
@@ -1327,7 +1327,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         gncEntryCommitEdit (entry);
 
         /* Obtain the Entry's Value and TaxValues */
-        gncEntryGetValue (entry, is_cust_doc, &value, NULL, &tax, &taxes);
+        value = gncEntryGetIntValue (entry, FALSE, is_cust_doc);
+        tax   = gncEntryGetIntTaxValue (entry, FALSE, is_cust_doc);
+        taxes = gncEntryGetIntTaxValues (entry, is_cust_doc);
 
         /* add the value for the account split */
         this_acc = (is_cust_doc ? gncEntryGetInvAccount (entry) :

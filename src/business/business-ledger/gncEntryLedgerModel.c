@@ -454,22 +454,14 @@ static const char * get_value_entry (VirtualLocation virt_loc,
     GncEntryLedger *ledger = user_data;
     gnc_numeric value;
 
-    /* Credit notes need some attention here: the ledger displays values
-     * as on the document, meaning positive for credit notes. Credit note
-     * values are negative internally though. So depending on which values
-     * are used to calculate the subtotal, the resulting subtotal has to be
-     * sign-reversed before displaying.
-     */
     /* Check if this is the current cursor */
     if (virt_cell_loc_equal (ledger->table->current_cursor_loc.vcell_loc,
                              virt_loc.vcell_loc))
     {
-        gnc_entry_ledger_compute_value (ledger, &value, NULL);
-        /* Credit note info: this function works with values as seen
+        /* Sign attention: this function works with values as seen
          * on-screen in the ledger, so they are always in the proper sign.
-         * As per the above no sign reversal is needed for
-         * credit note type ledgers.
          */
+        gnc_entry_ledger_compute_value (ledger, &value, NULL);
     }
     else
     {
@@ -478,14 +470,10 @@ static const char * get_value_entry (VirtualLocation virt_loc,
         if (entry == gnc_entry_ledger_get_blank_entry (ledger))
             return NULL;
 
-        value = gncEntryReturnValue (entry, ledger->is_cust_doc);
-        /* Credit note info: this function works with internal values,
-         * so they are negative for credit note type ledgers and have to
-         * be sign-reversed as per the above.
+        /* Ledger should display values with the same sign as on the document
+         * so get the document value instead of the internal value here.
          */
-
-        if (ledger->is_credit_note)
-            value = gnc_numeric_neg (value);
+        value = gncEntryGetDocValue (entry, TRUE, ledger->is_cust_doc, ledger->is_credit_note);
     }
 
     return xaccPrintAmount (value, gnc_default_print_info (FALSE));
@@ -503,6 +491,9 @@ static const char * get_taxval_entry (VirtualLocation virt_loc,
     if (virt_cell_loc_equal (ledger->table->current_cursor_loc.vcell_loc,
                              virt_loc.vcell_loc))
     {
+        /* Sign attention: this function works with values as seen
+         * on-screen in the ledger, so they are always in the proper sign.
+         */
         gnc_entry_ledger_compute_value (ledger, NULL, &value);
     }
     else
@@ -512,15 +503,11 @@ static const char * get_taxval_entry (VirtualLocation virt_loc,
         if (entry == gnc_entry_ledger_get_blank_entry (ledger))
             return NULL;
 
-        value = gncEntryReturnTaxValue (entry, ledger->is_cust_doc);
+        /* Ledger should display values with the same sign as on the document
+         * so get the document value instead of the internal value here.
+         */
+        value = gncEntryGetDocTaxValue (entry, TRUE, ledger->is_cust_doc, ledger->is_credit_note);
     }
-
-    /* Credit notes have negative values, but the ledger should
-     * display it as on the document, meaning positive.
-     * So reverse the value for credit notes.
-     */
-    if (ledger->is_credit_note)
-        value = gnc_numeric_neg (value);
 
     return xaccPrintAmount (value, gnc_default_print_info (FALSE));
 }

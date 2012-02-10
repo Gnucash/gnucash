@@ -661,6 +661,7 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
     EntryList *entries, *entries_iter;
     GncEntry* entry;
     gboolean is_cust_doc;
+    gboolean is_cn;
     gboolean show_dialog = TRUE;
     gboolean post_ok = TRUE;
 
@@ -681,6 +682,7 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
     }
 
     is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+    is_cn = gncInvoiceGetIsCreditNote (invoice);
 
 //    /* Make sure that the invoice/credit note has a positive balance */
 //    if (gnc_numeric_negative_p(gncInvoiceGetTotal(invoice)))
@@ -810,7 +812,8 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
                  */
 
                 /* Obtain the Entry's total value (net + tax) */
-                gncEntryGetValue (entry, is_cust_doc, &value, NULL, &tax, NULL);
+                value = gncEntryGetDocValue (entry, FALSE, is_cust_doc, is_cn);
+                tax   = gncEntryGetDocTaxValue (entry, FALSE, is_cust_doc, is_cn);
                 amount = gnc_numeric_add (value, tax,
                                           gnc_commodity_get_fraction (account_currency),
                                           GNC_HOW_RND_ROUND_HALF_UP );

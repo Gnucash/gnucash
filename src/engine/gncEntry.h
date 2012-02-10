@@ -185,33 +185,70 @@ GncEntryPaymentType gncEntryGetBillPayment (const GncEntry* entry);
 void gncEntryCopy (const GncEntry *src, GncEntry *dest);
 
 /** @name Getting Values
-
- * The first three return the rounded values -- the last returns the
- * list of unrounded account-values.  The list belongs to the entry
- * and will be destroyed, so use it quickly.
+ *
+ * An entry has three important values:
+ * - entry value: the amount the merchant gets
+ * - tax value: the amount the government gets
+ * - discount value: the amount the customer saved
+ *
+ * These values can be retrieved in several variants. depending on
+ * how they will be used some sign reversals can be applied on
+ * the values:
+ * - Int value: the value as stored internally. No sign reversals will
+ *              ever be done on this value
+ * - Doc value: the value as listed on the document. This is usually
+ *              a positive value, unless the document was a
+ *              negative invoice/bill or negative credit note.
+ *              Since credit note entry values are stored negatively
+ *              internally, they will be sign-reversed before returning
+ *              them.
+ * - Bal value: the value as it will impact the balance. Customer
+ *              invoices and vendor credit notes have a positive
+ *              influence on the balance, so these values will be positive.
+ *              For vendor bills and customer credit notes, the
+ *              values will be negative.
+ *
+ * For tax there are TaxValue and TaxValues variants: the first one
+ * returns to total tax value for this entry, meaning the sum of all
+ * individual taxes. The second one returns a list of all the individual
+ * tax values for this entry. This list holds unrounded values only, there's
+ * no variant with rounded values.
+ *
+ * The list is owned by the entry and will be destroyed automatically,
+ * so use it quickly.
+ *
+ * Finally, there are rounded and unrounded variants of most of
+ * these functions.
  @{
 */
-gnc_numeric gncEntryReturnValue (GncEntry *entry, gboolean is_inv);
-gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv);
-gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_inv);
 typedef GList AccountValueList;
-AccountValueList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv);
+gnc_numeric gncEntryGetIntValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
+gnc_numeric gncEntryGetIntTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
+AccountValueList * gncEntryGetIntTaxValues (GncEntry *entry, gboolean is_cust_doc);
+gnc_numeric gncEntryGetIntDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
 
-/** Compute the Entry value, tax-value, and discount_value, based on
- * the quantity, price, discount, tax-table, and types.  The value is
+gnc_numeric gncEntryGetDocValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
+gnc_numeric gncEntryGetDocTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
+AccountValueList * gncEntryGetDocTaxValues (GncEntry *entry, gboolean is_cust_doc, gboolean is_cn);
+gnc_numeric gncEntryGetDocDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
+
+gnc_numeric gncEntryGetBalValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
+gnc_numeric gncEntryGetBalTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
+AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_doc, gboolean is_cn);
+gnc_numeric gncEntryGetBalDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
+
+/** Compute the Entry value, tax_value, and discount_value, based on
+ * the quantity, price, discount, tax_-table, and types.  The value is
  * the amount the merchant gets, the taxes are what the gov't gets,
  * and the discount is how much the customer saved.  The SCU is the
  * target denominator of the value and tax -- it should be the
  * account or commodity SCU of the target.
  *
- * The tax_values list is the property of the entry and will be
- * destroyed automatically, so use it quickly.  Note that all return
- * values from these two functions are NOT rounded.
+ *  The return values are NOT rounded.
+ *
+ * The tax_values list is owned by the entry and will be
+ * destroyed automatically, so use it quickly.
  */
-void gncEntryGetValue (GncEntry *entry, gboolean is_inv, gnc_numeric *value,
-                       gnc_numeric *discount, gnc_numeric *tax_value,
-                       GList **tax_values);
-
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
                            const GncTaxTable *tax_table, gboolean tax_included,
                            gnc_numeric discount, GncAmountType discount_type,
