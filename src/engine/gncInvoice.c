@@ -1222,6 +1222,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     gnc_numeric total;
     gboolean positive_balance;
     gboolean is_cust_doc;
+    gboolean is_cn;
     const char *name, *type;
     char *lot_title;
     Account *ccard_acct = NULL;
@@ -1244,6 +1245,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     /* GncEntry functions need to know if the invoice/credit note is for a customer or a vendor/employee. */
     is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+    is_cn = gncInvoiceGetIsCreditNote (invoice);
 
     /* Figure out if we need to separate out "credit-card" items */
     owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
@@ -1500,6 +1502,11 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     {
         Split *split = xaccMallocSplit (book);
 
+        /* To charge amount is stored in document value. We need balance value here
+         * so convert if necessary. */
+        gnc_numeric to_charge_bal_amount = (is_cn ? gnc_numeric_neg (invoice->to_charge_amount)
+                                                  : invoice->to_charge_amount);
+
         /* Set memo.  action? */
         xaccSplitSetMemo (split, _("Extra to Charge Card"));
         xaccSplitSetAction (split, type);
@@ -1508,10 +1515,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         xaccAccountInsertSplit (ccard_acct, split);
         xaccAccountCommitEdit (ccard_acct);
         xaccTransAppendSplit (txn, split);
-        xaccSplitSetBaseValue (split, gnc_numeric_neg (invoice->to_charge_amount),
+        xaccSplitSetBaseValue (split, gnc_numeric_neg (to_charge_bal_amount),
                                invoice->currency);
 
-        total = gnc_numeric_sub (total, invoice->to_charge_amount,
+        total = gnc_numeric_sub (total, to_charge_bal_amount,
                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
     }
 
