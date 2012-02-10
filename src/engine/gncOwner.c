@@ -1211,8 +1211,7 @@ gncOwnerGetBalanceInCurrency (const GncOwner *owner,
 
         /* Get a list of open lots for this owner and account */
         lot_list = xaccAccountFindOpenLots (account, gnc_lot_match_invoice_owner,
-                                            (gpointer)owner,
-                                            (GCompareFunc)gnc_lot_sort_func);
+                                            (gpointer)owner, NULL);
         /* For each lot */
         for (lot_node = lot_list; lot_node; lot_node = lot_node->next)
         {
