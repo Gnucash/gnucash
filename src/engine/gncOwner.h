@@ -177,8 +177,18 @@ GncGUID gncOwnerRetGUID (GncOwner *owner);
 const GncOwner * gncOwnerGetEndOwner (const GncOwner *owner);
 const GncGUID * gncOwnerGetEndGUID (const GncOwner *owner);
 
-/** attach an owner to a lot */
+/** Attach an owner to a lot */
 void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot);
+
+/** Helper function used to filter a list of lots by owner.
+ */
+gboolean gncOwnerLotMatchOwnerFunc (GNCLot *lot, gpointer user_data);
+
+/** Helper function used to sort lots by date. If the lot is
+ * linked to an invoice, use the invoice posted date, otherwise
+ * use the lot's opened date.
+ */
+gint gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB);
 
 /** Get the owner from the lot.  If an owner is found in the lot,
  * fill in "owner" and return TRUE.  Otherwise return FALSE.

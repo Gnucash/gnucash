@@ -656,8 +656,8 @@ KvpFrame* gncOwnerGetSlots(GncOwner* owner)
     }
 }
 
-static gboolean
-gnc_lot_match_invoice_owner (GNCLot *lot, gpointer user_data)
+gboolean
+gncOwnerLotMatchOwnerFunc (GNCLot *lot, gpointer user_data)
 {
     GncOwner owner_def;
     const GncOwner *owner;
@@ -681,17 +681,24 @@ gnc_lot_match_invoice_owner (GNCLot *lot, gpointer user_data)
     return gncOwnerEqual (owner, this_owner);
 }
 
-static gint
-gnc_lot_sort_func (GNCLot *a, GNCLot *b)
+gint
+gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB)
 {
     GncInvoice *ia, *ib;
     Timespec da, db;
 
-    ia = gncInvoiceGetInvoiceFromLot (a);
-    ib = gncInvoiceGetInvoiceFromLot (b);
+    ia = gncInvoiceGetInvoiceFromLot (lotA);
+    ib = gncInvoiceGetInvoiceFromLot (lotB);
 
-    da = gncInvoiceGetDateDue (ia);
-    db = gncInvoiceGetDateDue (ib);
+    if (ia)
+        da = gncInvoiceGetDateDue (ia);
+    else
+        da = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_earliest_split (lotA)));
+
+    if (ib)
+        db = gncInvoiceGetDateDue (ib);
+    else
+        db = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_earliest_split (lotB)));
 
     return timespec_cmp (&da, &db);
 }
@@ -1086,7 +1093,7 @@ gncOwnerGetBalanceInCurrency (const GncOwner *owner,
             continue;
 
         /* Get a list of open lots for this owner and account */
-        lot_list = xaccAccountFindOpenLots (account, gnc_lot_match_invoice_owner,
+        lot_list = xaccAccountFindOpenLots (account, gncOwnerLotMatchOwnerFunc,
                                             (gpointer)owner, NULL);
         /* For each lot */
         for (lot_node = lot_list; lot_node; lot_node = lot_node->next)

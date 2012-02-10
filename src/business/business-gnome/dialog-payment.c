@@ -531,7 +531,7 @@ get_selected_lots (GtkTreeModel *model,
     g_value_unset (&value);
 
     if (lot)
-        *return_list = g_list_append(*return_list, lot);
+        *return_list = g_list_insert_sorted (*return_list, lot, (GCompareFunc)gncOwnerLotsSortFunc);
 }
 
 void
