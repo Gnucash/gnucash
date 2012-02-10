@@ -765,7 +765,7 @@ gnc_tree_view_price_set_selected_price (GncTreeViewPrice *view,
 
 /*
  * This helper function is called once for each row in the tree view
- * that is currently selected.  Its task is to an the corresponding
+ * that is currently selected.  Its task is to add the corresponding
  * price to the end of a glist.
  */
 static void

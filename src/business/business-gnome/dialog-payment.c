@@ -1065,7 +1065,7 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
     if (!txn)
         return NULL;
 
-    // We require the txn to have one split in an A/R or A/P account.
+    // We require the txn to have one split in an Asset account.
 
     slist = xaccTransGetSplitList(txn);
     if (!slist)
