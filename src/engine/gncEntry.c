@@ -1361,7 +1361,9 @@ gncEntryRecomputeValues (GncEntry *entry)
     entry->values_dirty = FALSE;
 }
 
-gnc_numeric gncEntryGetIntValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
+/* The "Int" functions below are for internal use only.
+ * Outside this file, use the "Doc" or "Bal" variants found below instead. */
+static gnc_numeric gncEntryGetIntValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
@@ -1371,7 +1373,7 @@ gnc_numeric gncEntryGetIntValue (GncEntry *entry, gboolean round, gboolean is_cu
         return (is_cust_doc ? entry->i_value : entry->b_value);
 }
 
-gnc_numeric gncEntryGetIntTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
+static gnc_numeric gncEntryGetIntTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
@@ -1382,14 +1384,14 @@ gnc_numeric gncEntryGetIntTaxValue (GncEntry *entry, gboolean round, gboolean is
 }
 
 /* Careful: the returned list is managed by the entry, and will only be valid for a short time */
-AccountValueList * gncEntryGetIntTaxValues (GncEntry *entry, gboolean is_cust_doc)
+static AccountValueList * gncEntryGetIntTaxValues (GncEntry *entry, gboolean is_cust_doc)
 {
     if (!entry) return NULL;
     gncEntryRecomputeValues (entry);
     return (is_cust_doc ? entry->i_tax_values : entry->b_tax_values);
 }
 
-gnc_numeric gncEntryGetIntDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
+static gnc_numeric gncEntryGetIntDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);

@@ -214,11 +214,9 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest);
  * - tax value: the amount the government gets
  * - discount value: the amount the customer saved
  *
- * These values can be retrieved in several variants. depending on
+ * These values can be retrieved in several variants. Depending on
  * how they will be used some sign reversals can be applied on
  * the values:
- * - Int value: the value as stored internally. No sign reversals will
- *              ever be done on this value
  * - Doc value: the value as listed on the document. This is usually
  *              a positive value, unless the document was a
  *              negative invoice/bill or negative credit note.
@@ -237,25 +235,14 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest);
  * tax values for this entry. This list holds unrounded values only, there's
  * no variant with rounded values.
  *
- * Note that this list may or may not be owned by the entry depending on the
- * variant being called. If not owned by the entry, it should be freed with
- * gncAccountValueDestroy.
- *
- * - gncEntryGetIntTaxValues returns a list owned by the entry.
- * - gncEntryGetDocTaxValues returns a list NOT owned by the entry. It should be freed by the caller.
- * - gncEntryGetBalTaxValues returns a list NOT owned by the entry. It should be freed by the caller.
+ * Note that this list is not owned by the entry. When no longer needed,
+ * it should be freed with gncAccountValueDestroy.
  *
  * Finally, there are rounded and unrounded variants of most of
  * these functions.
  @{
 */
 typedef GList AccountValueList;
-gnc_numeric gncEntryGetIntValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
-gnc_numeric gncEntryGetIntTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
-/** Careful: the returned list is managed by the entry, and will only be valid for a short time */
-AccountValueList * gncEntryGetIntTaxValues (GncEntry *entry, gboolean is_cust_doc);
-gnc_numeric gncEntryGetIntDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
-
 gnc_numeric gncEntryGetDocValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
 gnc_numeric gncEntryGetDocTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
 /** Careful: the returned list is NOT owned by the entry and should be freed by the caller */
