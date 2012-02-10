@@ -1327,9 +1327,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         gncEntryCommitEdit (entry);
 
         /* Obtain the Entry's Value and TaxValues */
-        value = gncEntryGetIntValue (entry, FALSE, is_cust_doc);
-        tax   = gncEntryGetIntTaxValue (entry, FALSE, is_cust_doc);
-        taxes = gncEntryGetIntTaxValues (entry, is_cust_doc);
+        value = gncEntryGetBalValue (entry, FALSE, is_cust_doc);
+        tax   = gncEntryGetBalTaxValue (entry, FALSE, is_cust_doc);
+        taxes = gncEntryGetBalTaxValues (entry, is_cust_doc);
 
         /* add the value for the account split */
         this_acc = (is_cust_doc ? gncEntryGetInvAccount (entry) :
@@ -1373,8 +1373,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                      */
                     if (gnc_commodity_equal(xaccAccountGetCommodity(this_acc), invoice->currency))
                     {
-                        xaccSplitSetBaseValue (split, (is_cust_doc ? gnc_numeric_neg (value)
-                                                       : value),
+                        xaccSplitSetBaseValue (split, value,
                                                invoice->currency);
                     }
                     else
@@ -1393,10 +1392,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                         else
                         {
                             gnc_numeric converted_amount;
-                            xaccSplitSetValue(split, (is_cust_doc ? gnc_numeric_neg(value) : value));
+                            xaccSplitSetValue(split, value);
                             converted_amount = gnc_numeric_div(value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
                             DEBUG("converting from %f to %f\n", gnc_numeric_to_double(value), gnc_numeric_to_double(converted_amount));
-                            xaccSplitSetAmount(split, is_cust_doc ? gnc_numeric_neg(converted_amount) : converted_amount);
+                            xaccSplitSetAmount(split, converted_amount);
                         }
                     }
                 }
@@ -1422,7 +1421,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                     xaccAccountInsertSplit (ccard_acct, split);
                     xaccAccountCommitEdit (ccard_acct);
                     xaccTransAppendSplit (txn, split);
-                    xaccSplitSetBaseValue (split, (is_cust_doc ? value : gnc_numeric_neg (value)),
+                    xaccSplitSetBaseValue (split, gnc_numeric_neg (value),
                                            invoice->currency);
 
                 }
@@ -1443,6 +1442,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         else
             g_warning ("bad tax in our entry");
 
+        gncAccountValueDestroy (taxes);
     } /* for */
 
     /* Iterate through the splitinfo list and generate the splits */
@@ -1464,8 +1464,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
         if (gnc_commodity_equal(xaccAccountGetCommodity(acc_val->account), invoice->currency))
         {
-            xaccSplitSetBaseValue (split, (is_cust_doc ? gnc_numeric_neg (acc_val->value)
-                                           : acc_val->value),
+            xaccSplitSetBaseValue (split, acc_val->value,
                                    invoice->currency);
         }
         else
@@ -1484,17 +1483,17 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
             else
             {
                 gnc_numeric converted_amount;
-                xaccSplitSetValue(split, (is_cust_doc ? gnc_numeric_neg(acc_val->value) : acc_val->value));
+                xaccSplitSetValue(split, acc_val->value);
                 converted_amount = gnc_numeric_div(acc_val->value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
                 DEBUG("converting from %f to %f\n", gnc_numeric_to_double(acc_val->value), gnc_numeric_to_double(converted_amount));
 
-                xaccSplitSetAmount(split, is_cust_doc ? gnc_numeric_neg(converted_amount) : converted_amount);
+                xaccSplitSetAmount(split, converted_amount);
             }
         }
     }
 
     /* If there is a ccard account, we may have an additional "to_card" payment.
-     * we should make that now..
+     * we should make that now.
      */
     if (ccard_acct && !gnc_numeric_zero_p (invoice->to_charge_amount))
     {
@@ -1508,8 +1507,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         xaccAccountInsertSplit (ccard_acct, split);
         xaccAccountCommitEdit (ccard_acct);
         xaccTransAppendSplit (txn, split);
-        xaccSplitSetBaseValue (split, (is_cust_doc ? invoice->to_charge_amount :
-                                       gnc_numeric_neg(invoice->to_charge_amount)),
+        xaccSplitSetBaseValue (split, gnc_numeric_neg (invoice->to_charge_amount),
                                invoice->currency);
 
         total = gnc_numeric_sub (total, invoice->to_charge_amount,
@@ -1528,7 +1526,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         xaccAccountInsertSplit (acc, split);
         xaccAccountCommitEdit (acc);
         xaccTransAppendSplit (txn, split);
-        xaccSplitSetBaseValue (split, (is_cust_doc ? total : gnc_numeric_neg (total)),
+        xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
                                invoice->currency);
 
         /* add this split to the lot */
