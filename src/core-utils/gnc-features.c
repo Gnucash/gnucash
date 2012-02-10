@@ -29,42 +29,71 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "gnc-engine.h"
+#include "libqof/qof/qof.h"
 #include "gnc-features.h"
 
+typedef struct {
+        const gchar *key;
+        const gchar *desc;
+} gncFeature;
+
+static GHashTable *features_table = NULL;
+static gncFeature known_features[] =
+{
+        { GNC_FEATURE_CREDIT_NOTES, "Customer and vendor credit notes (requires at least GnuCash 2.5.0)" },
+        { NULL },
+};
+
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 /********************************************************************\
 \********************************************************************/
-static void features_test(const gchar *key, KvpValue *value, gpointer data)
+
+static void gnc_features_init ()
 {
-    GList** unknown_features = (GList**) data;
-    char* feature_desc;
+    gint i;
+
+    if (features_table)
+        return;
+
+    features_table = g_hash_table_new (g_str_hash, g_str_equal);
+    for (i = 0; known_features[i].key; i++)
+        g_hash_table_insert (features_table,
+                             g_strdup (known_features[i].key),
+                             g_strdup (known_features[i].desc));
+}
+
+static void gnc_features_test_one(const gchar *key, KvpValue *value, gpointer data)
+{
+    GList **unknown_features;
+    gchar *feature_desc;
 
     g_assert(data);
+    unknown_features = (GList**) data;
 
-    /* XXX: test if 'key' is an unknown feature. */
+    /* Check if this feature is in the known features list. */
+    if (g_hash_table_lookup_extended (features_table, key, NULL, NULL))
+        return;
 
-    /* Yes, it is unknown, so add the description to the list: */
+    /* It is unknown, so add the description to the unknown features list: */
     feature_desc = kvp_value_get_string(value);
     g_assert(feature_desc);
 
     *unknown_features = g_list_prepend(*unknown_features, feature_desc);
 }
 
-/*
- * Right now this is done by a KVP check for a features table.
- * Currently we don't know about any features, so the mere
- * existence of this KVP frame means we have a problem and
- * need to tell the user.
+/* Check if the session requires features unknown to this version of GnuCash.
  *
- * returns a message to display if we found unknown features, NULL if we're okay.
+ * Returns a message to display if we found unknown features, NULL if we're okay.
  */
-gchar *test_unknown_features(QofSession* new_session)
+gchar *gnc_features_test_unknown (QofBook *book)
 {
-    KvpFrame *frame = qof_book_get_slots (qof_session_get_book (new_session));
+    KvpFrame *frame = qof_book_get_slots (book);
     KvpValue *value;
+
+    /* Setup the known_features hash table */
+    gnc_features_init();
 
     g_assert(frame);
     value = kvp_frame_get_value(frame, "features");
@@ -76,7 +105,7 @@ gchar *test_unknown_features(QofSession* new_session)
         g_assert(frame);
 
         /* Iterate over the members of this frame for unknown features */
-        kvp_frame_for_each_slot(frame, &features_test, &features_list);
+        kvp_frame_for_each_slot(frame, &gnc_features_test_one, &features_list);
         if (features_list)
         {
             GList *i;
@@ -88,7 +117,7 @@ gchar *test_unknown_features(QofSession* new_session)
 
             for (i = features_list; i; i = i->next)
             {
-                char *tmp = g_strconcat(msg, "\n* ", _(i->data), NULL);
+                char *tmp = g_strconcat(msg, "\n* ", i->data, NULL);
                 g_free (msg);
                 msg = tmp;
             }
@@ -100,4 +129,31 @@ gchar *test_unknown_features(QofSession* new_session)
     }
 
     return NULL;
+}
+
+void gnc_features_set_used (QofBook *book, const gchar *feature)
+{
+    KvpFrame *frame;
+    const gchar *description;
+    gchar *kvp_path;
+
+    g_return_if_fail (book);
+    g_return_if_fail (feature);
+
+    gnc_features_init();
+
+    /* Can't set an unknown feature */
+    description = g_hash_table_lookup (features_table, feature);
+    if (!description)
+    {
+        PWARN("Tried to set unknown feature as used.");
+        return;
+    }
+
+    frame = qof_book_get_slots (book);
+    kvp_path = g_strconcat ("/features/", feature, NULL);
+    kvp_frame_set_string (frame, kvp_path, description);
+    qof_book_kvp_changed (book);
+
+
 }

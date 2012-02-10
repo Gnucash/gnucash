@@ -10,7 +10,6 @@ src/app-utils/gnc-component-manager.c
 src/app-utils/gnc-entry-quickfill.c
 src/app-utils/gnc-euro.c
 src/app-utils/gnc-exp-parser.c
-src/app-utils/gnc-features.c
 src/app-utils/gnc-gettext-util.c
 src/app-utils/gnc-helpers.c
 src/app-utils/gnc-help-utils.c
@@ -125,6 +124,7 @@ src/calculation/fin-main.c
 src/calculation/gncmod-calculation.c
 src/calculation/numeric_ops.c
 src/core-utils/binreloc.c
+src/core-utils/gnc-features.c
 src/core-utils/gnc-filepath-utils.c
 src/core-utils/gnc-gconf-utils.c
 src/core-utils/gnc-gdate-utils.c

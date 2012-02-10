@@ -37,6 +37,7 @@
 #include "gncBillTermP.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
+#include "gnc-features.h"
 #include "gncJobP.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
@@ -533,6 +534,12 @@ void gncInvoiceSetIsCreditNote (GncInvoice *invoice, gboolean credit_note)
                          credit_note ? 1 : 0);
     mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);
+
+    /* If this is a credit note, set a feature flag for it in the book
+     * This will prevent older GnuCash versions that don't support
+     * credit notes to open this file. */
+    if (credit_note)
+        gnc_features_set_used (gncInvoiceGetBook (invoice), GNC_FEATURE_CREDIT_NOTES);
 }
 
 void gncInvoiceSetCurrency (GncInvoice *invoice, gnc_commodity *currency)

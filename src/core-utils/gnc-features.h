@@ -30,19 +30,33 @@
  *
  *  These functions help you to manage features that GnuCash supports.
  *  This is mainly used to prevent older GnuCash versions from opening
- *  datasets with data they aren't capable of processing properly.
+ *  book with data they aren't capable of processing properly.
  */
 
 #ifndef GNC_FEATURES_H
 #define GNC_FEATURES_H
 
+/** @name Defined features
+@{
+ */
+#define GNC_FEATURE_CREDIT_NOTES "Credit Notes"
+
+/** @} */
 
 /**
- * Test if the current session relies on features we don't know.
+ * Test if the current book relies on features only introduced in a more
+ * recent version of GnuCash.
  *
  * Returns a message to display if we found unknown features, NULL if we're okay.
  */
-gchar *test_unknown_features(QofSession* new_session);
+gchar *gnc_features_test_unknown (QofBook *book);
+
+/**
+ * Indicate that the current book uses the given feature. This will prevent
+ * older versions of GnuCash that don't support this feature to refuse to load
+ * this book.
+ */
+void gnc_features_set_used (QofBook *book, const gchar *feature);
 
 #endif /* GNC_FEATURES_H */
 /** @} */

@@ -919,7 +919,7 @@ RESTART:
         /* test for unknown features. */
         if (!uh_oh)
         {
-            gchar *msg = test_unknown_features(new_session);
+            gchar *msg = gnc_features_test_unknown(qof_session_get_book (new_session));
 
             if (msg)
             {
