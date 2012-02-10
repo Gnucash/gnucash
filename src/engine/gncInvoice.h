@@ -184,7 +184,7 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                          const char *memo, gboolean accumulatesplits);
 
 /**
- * UNpost this invoice.  This will destroy the posted transaction and
+ * Unpost this invoice.  This will destroy the posted transaction and
  * return the invoice to its unposted state.  It may leave empty lots
  * out there.  If reset_tax_tables is TRUE, then it will also revert
  * all the Tax Tables to the parent, which will potentially change the
@@ -195,6 +195,14 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
  */
 gboolean
 gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables);
+
+/**
+ * Attempt to pay the invoice using open payment lots and
+ * lots for documents of the opposite sign (credit notes versus
+ * invoices).
+ */
+void
+gncInvoiceAutoApplyPayments (GncInvoice *invoice);
 
 
 /** Given a transaction, find and return the Invoice */

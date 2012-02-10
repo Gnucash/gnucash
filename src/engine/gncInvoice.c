@@ -1179,37 +1179,6 @@ gboolean gncInvoiceAmountPositive (const GncInvoice *invoice)
     }
 }
 
-struct lotmatch
-{
-    const GncOwner *owner;
-    gboolean positive_balance;
-};
-
-static gboolean
-gnc_lot_match_owner_payment (GNCLot *lot, gpointer user_data)
-{
-    struct lotmatch *lm = user_data;
-    GncOwner owner_def;
-    const GncOwner *owner;
-    gnc_numeric balance = gnc_lot_get_balance (lot);
-
-    /* Is this a payment lot */
-    if (gnc_numeric_positive_p (lm->positive_balance ? balance :
-                                gnc_numeric_neg (balance)))
-        return FALSE;
-
-    /* Is there an invoice attached? */
-    if (gncInvoiceGetInvoiceFromLot (lot))
-        return FALSE;
-
-    /* Is it ours? */
-    if (!gncOwnerGetOwnerFromLot (lot, &owner_def))
-        return FALSE;
-    owner = gncOwnerGetEndOwner (&owner_def);
-
-    return gncOwnerEqual (owner, lm->owner);
-}
-
 static gboolean gncInvoicePostAddSplit (QofBook *book,
                                     Account *acc,
                                     Transaction *txn,
@@ -1286,13 +1255,13 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     GList *iter;
     GList *splitinfo = NULL;
     gnc_numeric total;
-    gboolean positive_balance;
     gboolean is_cust_doc;
     gboolean is_cn;
     const char *name, *type;
     char *lot_title;
     Account *ccard_acct = NULL;
     const GncOwner *owner;
+    gboolean autopay = TRUE; /* FIXME this will have to become a user selectable option at some point */
 
     if (!invoice || !acc) return NULL;
 
@@ -1304,11 +1273,6 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         gncInvoiceSetTerms (invoice,
                             gncBillTermReturnChild (invoice->terms, TRUE));
 
-    /* Does the invoice/credit note have a positive effect on the balance ? Note that
-     * payments for such invoices by definition then have a negative effect on the balance.
-     * This is used to determine which open lots can be considered when posting the invoice. */
-    positive_balance = gncInvoiceAmountPositive (invoice);
-
     /* GncEntry functions need to know if the invoice/credit note is for a customer or a vendor/employee. */
     is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
     is_cn = gncInvoiceGetIsCreditNote (invoice);
@@ -1318,25 +1282,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)
         ccard_acct = gncEmployeeGetCCard (gncOwnerGetEmployee (owner));
 
-    /* Find an existing payment-lot for this owner */
-    {
-        LotList *lot_list;
-        struct lotmatch lm;
-
-        lm.positive_balance = positive_balance;
-        lm.owner = owner;
-
-        lot_list = xaccAccountFindOpenLots (acc, gnc_lot_match_owner_payment,
-                                            &lm, NULL);
-        if (lot_list)
-            lot = lot_list->data;
-
-        g_list_free (lot_list);
-    }
-
-    /* Create a new lot for this invoice, if we need to do so */
-    if (!lot)
-        lot = gnc_lot_new (book);
+    /* Create a new lot for this invoice */
+    lot = gnc_lot_new (book);
     gnc_lot_begin_edit (lot);
 
     type = gncInvoiceGetTypeString (invoice);
@@ -1536,73 +1483,14 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     gncAccountValueDestroy (splitinfo);
 
-    /* check the lot -- if we still look like a payment lot, then that
-     * means we need to create a balancing split and create a new payment
-     * lot for the next invoice
-     *
-     * we're looking for a positive balance for bill/AP, and a negative balance
-     * for invoice/AR.
-     * (because bill payments debit AP accounts and invoice payments
-     * credit AR accounts)
-     */
-    total = gnc_lot_get_balance (lot);
-
-    if ( (gnc_numeric_negative_p (total) && positive_balance) ||
-            (gnc_numeric_positive_p (total) && !positive_balance) )
-    {
-        Transaction *t2;
-        GNCLot *lot2;
-        Split *split;
-        /* Translators: This is the memo of an auto-created split */
-        char *memo2 = _("Automatic Payment Forward");
-        char *action2 = _("Auto Split");
-
-        t2 = xaccMallocTransaction (book);
-        lot2 = gnc_lot_new (book);
-        gnc_lot_begin_edit (lot2);
-        gncOwnerAttachToLot (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)),
-                             lot2);
-
-        xaccTransBeginEdit (t2);
-        xaccAccountBeginEdit (acc);
-
-        /* Set Transaction Description (Owner Name), Currency */
-        xaccTransSetDescription (t2, name ? name : "");
-        xaccTransSetCurrency (t2, invoice->currency);
-
-        /* Entered and Posted at date */
-        xaccTransSetDateEnteredSecs (t2, time(NULL));
-        if (post_date)
-            xaccTransSetDatePostedTS (t2, post_date);
-
-        /* Balance out this lot */
-        split = xaccMallocSplit (book);
-        xaccSplitSetMemo (split, memo2);
-        xaccSplitSetAction (split, action2);
-        xaccAccountInsertSplit (acc, split);
-        xaccTransAppendSplit (t2, split);
-        // the value of total used here is correct for both bill/AP and
-        // invoice/AR. See the comment before this if block
-        xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
-                               invoice->currency);
-        gnc_lot_add_split (lot, split);
-
-        /* And apply the pre-payment to a new lot */
-        split = xaccMallocSplit (book);
-        xaccSplitSetMemo (split, memo2);
-        xaccSplitSetAction (split, action2);
-        xaccAccountInsertSplit (acc, split);
-        xaccTransAppendSplit (t2, split);
-        xaccSplitSetBaseValue (split, total, invoice->currency);
-        gnc_lot_add_split (lot2, split);
-
-        gnc_lot_commit_edit (lot2);
-        xaccTransCommitEdit (t2);
-        xaccAccountCommitEdit (acc);
-    }
-
     gnc_lot_commit_edit (lot);
     gncInvoiceCommitEdit (invoice);
+
+    /* If requested, attempt to automatically apply open payments
+     * and reverse documents to this lot to close it (or at least
+     * reduce its balance) */
+    if (autopay)
+        gncInvoiceAutoApplyPayments (invoice);
 
     return txn;
 }
@@ -1612,6 +1500,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
 {
     Transaction *txn;
     GNCLot *lot;
+    GList *lot_split_list, *lot_split_iter;
 
     if (!invoice) return FALSE;
     if (!gncInvoiceIsPosted (invoice)) return FALSE;
@@ -1631,6 +1520,71 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
     /* Disconnect the lot from the invoice; re-attach to the invoice owner */
     gncInvoiceDetachFromLot (lot);
     gncOwnerAttachToLot (&invoice->owner, lot);
+
+    /* Check if this invoice was linked to other lots (payments/inverse signed
+     * invoices).
+     * If this is the case, recreate the link transaction between all the remaining lots.
+     *
+     * Note that before GnuCash 2.6 payments were not stored in separate lots, but
+     * always ended up in invoice lots when matched to an invoice. Over-payments
+     * were copied to a new lot, to which later an invoice was added again and so on.
+     * These over-payments were handled with automatic payment forward transactions.
+     * You could consider these transactions to be links between lots as well, but
+     * to avoid some unexpected behavior, these are will not be altered here.
+     */
+    lot_split_list = gnc_lot_get_split_list (lot);
+    for (lot_split_iter = lot_split_list; lot_split_iter; lot_split_iter = lot_split_iter->next)
+    {
+        Split *split = lot_split_iter->data;
+        GList *other_split_list, *list_iter;
+        GNCLot *other_lot;
+        Transaction *other_txn = xaccSplitGetParent (split);
+        GList *lot_list = NULL;
+
+        /* Only work with transactions that link invoices and payments.
+         * Note: this check also catches the possible case of NULL splits. */
+        if (xaccTransGetTxnType (other_txn) != TXN_TYPE_LINK)
+            continue;
+
+        /* Save a list of lots this linking transaction linked to */
+        other_split_list = xaccTransGetSplitList (other_txn);
+        for (list_iter = other_split_list; list_iter; list_iter = list_iter->next)
+        {
+            Split *other_split = other_split_list->data;
+            GNCLot *other_lot = xaccSplitGetLot (other_split);
+
+            /* Omit the lot we are about to delete */
+            if (other_lot == lot)
+                continue;
+
+            lot_list = g_list_prepend (lot_list, other_lot);
+        }
+        /* Maintain original split order */
+        lot_list = g_list_reverse (lot_list);
+
+        /* Now remove this link transaction. */
+        xaccTransClearReadOnly (other_txn);
+        xaccTransBeginEdit (other_txn);
+        xaccTransDestroy (other_txn);
+        xaccTransCommitEdit (other_txn);
+
+        /* Re-balance the saved lots as well as is possible */
+        gncOwnerAutoApplyPaymentsWithLots (&invoice->owner, lot_list);
+
+        /* If any of the saved lots has no more splits, then destroy it.
+         * Otherwise if any has an invoice associated with it,
+         * send it a modified event to reset its paid status */
+        for (list_iter = lot_list; list_iter; list_iter = list_iter->next)
+        {
+            GNCLot *other_lot = list_iter->data;
+            GncInvoice *other_invoice = gncInvoiceGetInvoiceFromLot (other_lot);
+
+            if (!gnc_lot_count_splits (other_lot))
+                gnc_lot_destroy (other_lot);
+            else if (other_invoice)
+                qof_event_gen (QOF_INSTANCE(other_invoice), QOF_EVENT_MODIFY, NULL);
+        }
+    }
 
     /* If the lot has no splits, then destroy it */
     if (!gnc_lot_count_splits (lot))
@@ -1669,6 +1623,72 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
     gncInvoiceCommitEdit (invoice);
 
     return TRUE;
+}
+
+struct lotmatch
+{
+    const GncOwner *owner;
+    gboolean positive_balance;
+};
+
+static gboolean
+gnc_lot_match_owner_balancing (GNCLot *lot, gpointer user_data)
+{
+    struct lotmatch *lm = user_data;
+    GncOwner owner_def;
+    const GncOwner *owner;
+    gnc_numeric balance = gnc_lot_get_balance (lot);
+
+    /* Could (part of) this lot serve to balance the lot
+     * for which this query was run ?*/
+    if (lm->positive_balance == gnc_numeric_positive_p (balance))
+        return FALSE;
+
+    /* Is it ours? */
+    if (!gncOwnerGetOwnerFromLot (lot, &owner_def))
+        return FALSE;
+    owner = gncOwnerGetEndOwner (&owner_def);
+
+    return gncOwnerEqual (owner, lm->owner);
+}
+
+void gncInvoiceAutoApplyPayments (GncInvoice *invoice)
+{
+    GNCLot *inv_lot;
+    Account *acct;
+    const GncOwner *owner;
+    GList *lot_list;
+    struct lotmatch lm;
+
+    /* General note: "paying" in this context means balancing
+     * a lot, by linking opposite signed lots together. So below the term
+     * "payment" can both mean a true payment or it can mean a document of
+     * the opposite sign (invoice vs credit note). It just
+     * depends on what type of document was given as parameter
+     * to this function. */
+
+    /* Payments can only be applied to posted invoices */
+    g_return_if_fail (invoice);
+    g_return_if_fail (invoice->posted_lot);
+
+    inv_lot = invoice->posted_lot;
+    acct = invoice->posted_acc;
+    owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+
+    /* Find all lots whose balance (or part of their balance) could be
+     * used to close this lot.
+     * To be eligible, the lots have to have an opposite signed balance
+     * and be for the same owner.
+     * For example, for an invoice lot, payment lots and credit note lots
+     * could be used. */
+    lm.positive_balance =  gnc_numeric_positive_p (gnc_lot_get_balance (inv_lot));
+    lm.owner = owner;
+    lot_list = xaccAccountFindOpenLots (acct, gnc_lot_match_owner_balancing,
+                                        &lm, NULL);
+
+    lot_list = g_list_prepend (lot_list, inv_lot);
+    gncOwnerAutoApplyPaymentsWithLots (owner, lot_list);
+    g_list_free (lot_list);
 }
 
 static gboolean gncInvoiceDateExists (const Timespec *date)

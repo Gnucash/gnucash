@@ -277,7 +277,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
             if (trans)
                 doc_date = xaccTransRetDatePostedTS (trans);
             else
-                continue; /* Not valid split in this lot, skip it */
+                continue; /* No valid split in this lot, skip it */
         }
         doc_date_str = gnc_print_date (doc_date);
 
@@ -563,7 +563,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         return;
     }
 
-    /* Ok, now post the damn thing */
+    /* Ok, now execute the payment */
     gnc_suspend_gui_refresh ();
     {
         const char *memo, *num;
@@ -574,6 +574,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         memo = gtk_entry_get_text (GTK_ENTRY (pw->memo_entry));
         num = gtk_entry_get_text (GTK_ENTRY (pw->num_entry));
         date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (pw->date_edit));
+        /* FIXME Get a lotlist from the dialog */
 
         /* If the 'acc' account and the post account don't have the same
            currency, we need to get the user to specify the exchange rate */

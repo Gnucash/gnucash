@@ -203,6 +203,42 @@ gncOwnerApplyPayment (const GncOwner *owner, GncInvoice *invoice,
                       const char *memo, const char *num);
 
 /**
+ * Given a list of lots, try to balance as many of them as possible
+ * by creating balancing transactions between them. This can be used
+ * to automatically link invoices to payments (to "mark" invoices as
+ * paid) or to credit notes or the other way around.
+ *
+ * The function starts with the first lot in the list and tries to
+ * create balancing transactions to the remainder of the lots in the
+ * list. If it reaches the end of the list, it will find the next
+ * still open lot in the list and tries to balance it with all lots
+ * that follow it (the ones that precede it are either already closed
+ * or not suitable or they would have been processed in a previous
+ * iteration).
+ *
+ * By intelligently sorting the list of lots, you can play with the
+ * order of precedence in which the lots should be processed. For
+ * example, by sorting the oldest invoice lots first, the code will
+ * attempt to balance these first.
+ *
+ * Some restrictions:
+ * - the algorithm is lazy: it will create the smallest balancing
+ *   transaction(s) possible, not the largest ones. Since the process
+ *   is iterative, you will have balanced the maximum amount possible
+ *   in the end, but it may be done in several transactions instead of
+ *   only one big one.
+ * - the balancing transactions only work within one account. If a
+ *   balancing lot is from another account than the lot currently being
+ *   balanced, it will be skipped during balance evaluation. However
+ *   if there is a mix of lots from two different accounts, the algorithm
+ *   will still attempt to match all lots per account.
+ * - the calling function is responsible for the memory management
+ *   of the lots list. If it created the list, it should properly free
+ *   it as well.
+ */
+void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots);
+
+/**
  * Fill in a half-finished payment transaction for the owner. The
  * transaction txn must already contain one split that belongs to a
  * bank or other asset account. This function will add the other split

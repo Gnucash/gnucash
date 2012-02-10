@@ -119,6 +119,7 @@ GType gnc_transaction_get_type(void);
 #define TXN_TYPE_NONE	 '\0' /**< No transaction type       */
 #define TXN_TYPE_INVOICE 'I'  /**< Transaction is an invoice */
 #define TXN_TYPE_PAYMENT 'P'  /**< Transaction is a payment  */
+#define TXN_TYPE_LINK    'L'  /**< Transaction is a link between (invoice and payment) lots  */
 /** @} */
 
 /* --------------------------------------------------------------- */
