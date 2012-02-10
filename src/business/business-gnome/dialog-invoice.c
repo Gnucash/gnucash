@@ -684,22 +684,6 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
     is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
     is_cn = gncInvoiceGetIsCreditNote (invoice);
 
-//    /* Make sure that the invoice/credit note has a positive balance */
-//    if (gnc_numeric_negative_p(gncInvoiceGetTotal(invoice)))
-//    {
-//        gnc_error_dialog(iw_get_window(iw), "%s",
-//                         _("You may not post an invoice with a negative total value."));
-//        return;
-//    }
-
-//    if (iw->total_cash_label &&
-//            gnc_numeric_negative_p(gncInvoiceGetTotalOf(invoice, GNC_PAYMENT_CASH)))
-//    {
-//        gnc_error_dialog(iw_get_window(iw), "%s",
-//                         _("You may not post an expense voucher with a negative total cash value."));
-//        return;
-//    }
-
     /* Ok, we can post this invoice.  Ask for verification, set the due date,
      * post date, and posted account
      */
@@ -1482,33 +1466,18 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     if (iw->total_label)
     {
         amount = gncInvoiceGetTotal (invoice);
-        /* Credit notes have their value signs reversed internally.
-         * So reverse here as well before displaying
-         */
-        if (iw->is_credit_note)
-            amount = gnc_numeric_neg (amount);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_label), amount, currency);
     }
 
     if (iw->total_subtotal_label)
     {
         amount = gncInvoiceGetTotalSubtotal (invoice);
-        /* Credit notes have their value signs reversed internally.
-         * So reverse here as well before displaying
-         */
-        if (iw->is_credit_note)
-            amount = gnc_numeric_neg (amount);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_subtotal_label), amount, currency);
     }
 
     if (iw->total_tax_label)
     {
         amount = gncInvoiceGetTotalTax (invoice);
-        /* Credit notes have their value signs reversed internally.
-         * So reverse here as well before displaying
-         */
-        if (iw->is_credit_note)
-            amount = gnc_numeric_neg (amount);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_tax_label), amount, currency);
     }
 
@@ -1518,21 +1487,11 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     {
         gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (iw->to_charge_edit));
         to_charge_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(iw->to_charge_edit));
-        /* Credit notes have their value signs reversed internally.
-         * So reverse here as well before displaying
-         */
-        if (iw->is_credit_note)
-            to_charge_amt = gnc_numeric_neg (to_charge_amt);
     }
 
     if (iw->total_cash_label)
     {
         amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CASH);
-        /* Credit notes have their value signs reversed internally.
-         * So reverse here as well before displaying
-         */
-        if (iw->is_credit_note)
-            amount = gnc_numeric_neg (amount);
         amount = gnc_numeric_sub (amount, to_charge_amt,
                                   gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND_HALF_UP);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_cash_label), amount, currency);
@@ -1541,11 +1500,6 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     if (iw->total_charge_label)
     {
         amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CARD);
-        /* Credit notes have their value signs reversed internally.
-         * So reverse here as well before displaying
-         */
-        if (iw->is_credit_note)
-            amount = gnc_numeric_neg (amount);
         amount = gnc_numeric_add (amount, to_charge_amt,
                                   gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND_HALF_UP);
         gnc_invoice_reset_total_label (GTK_LABEL (iw->total_charge_label), amount, currency);

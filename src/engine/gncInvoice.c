@@ -783,7 +783,7 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
 {
     GList *node;
     gnc_numeric total = gnc_numeric_zero();
-    gboolean is_cust_doc;
+    gboolean is_cust_doc, is_cn;
 
     g_return_val_if_fail (invoice, total);
 
@@ -791,6 +791,7 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
      * The GncEntry code needs to know to return the proper entry amounts
      */
     is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+    is_cn = gncInvoiceGetIsCreditNote (invoice);
 
     for (node = gncInvoiceGetEntries(invoice); node; node = node->next)
     {
@@ -800,7 +801,7 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
         if (use_payment_type && gncEntryGetBillPayment (entry) != type)
             continue;
 
-        value = gncEntryGetIntValue (entry, FALSE, is_cust_doc);
+        value = gncEntryGetDocValue (entry, FALSE, is_cust_doc, is_cn);
         if (gnc_numeric_check (value) == GNC_ERROR_OK)
         {
             if (use_value)
@@ -811,7 +812,7 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
 
         if (use_tax)
         {
-            tax = gncEntryGetIntTaxValue (entry, FALSE, is_cust_doc);
+            tax = gncEntryGetDocTaxValue (entry, FALSE, is_cust_doc, is_cn);
             if (gnc_numeric_check (tax) == GNC_ERROR_OK)
                 total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
             else

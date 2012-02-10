@@ -152,7 +152,8 @@ Transaction * gncInvoiceGetPostedTxn (const GncInvoice *invoice);
 Account * gncInvoiceGetPostedAcc (const GncInvoice *invoice);
 /** @} */
 
-/** return the "total" amount of the invoice */
+/** Return the "total" amount of the invoice as seen on the document
+ *  (and shown to the user in the reports and invoice ledger). */
 gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type);
 gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice);
