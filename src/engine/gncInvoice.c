@@ -1210,6 +1210,72 @@ gnc_lot_match_owner_payment (GNCLot *lot, gpointer user_data)
     return gncOwnerEqual (owner, lm->owner);
 }
 
+static gboolean gncInvoicePostAddSplit (QofBook *book,
+                                    Account *acc,
+                                    Transaction *txn,
+                                    gnc_numeric value,
+                                    const gchar *memo,
+                                    const gchar *type,
+                                    GncInvoice *invoice)
+{
+    Split *split;
+
+    split = xaccMallocSplit (book);
+    /* set action and memo? */
+
+    xaccSplitSetMemo (split, memo);
+    xaccSplitSetAction (split, type);
+
+    /* Need to insert this split into the account AND txn before
+     * we set the Base Value.  Otherwise SetBaseValue complains
+     * that we don't have an account and fails to set the value.
+     */
+    xaccAccountBeginEdit (acc);
+    xaccAccountInsertSplit (acc, split);
+    xaccAccountCommitEdit (acc);
+    xaccTransAppendSplit (txn, split);
+
+    /* General note on the split creations below:
+     * Invoice and bill amounts are always stored as positive values in entries
+     * So to convert them to proper splits, the amounts may have to be reverted
+     * to have the proper effect on the account balance.
+     * Credit notes have the opposite effect of invoices/bills, but their amounts
+     * are stored as negative values as well. So to convert them into splits
+     * they can be treated exactly the same as their invoice/bill counter parts.
+     * The net effect is that the owner type is sufficient to determine whether a
+     * value has to be reverted when converting an invoice/bill/cn amount to a split.
+     */
+    if (gnc_commodity_equal(xaccAccountGetCommodity(acc), invoice->currency))
+    {
+        xaccSplitSetBaseValue (split, value,
+                               invoice->currency);
+    }
+    else
+    {
+        /*need to do conversion */
+        GNCPrice *price = gncInvoiceGetPrice(invoice, xaccAccountGetCommodity(acc));
+
+        if (price == NULL)
+        {
+            /*This is an error, which shouldn't even be able to happen.
+              We can't really do anything sensible about it, and this is
+                        a user-interface free zone so we can't try asking the user
+              again either, have to return NULL*/
+            return FALSE;
+        }
+        else
+        {
+            gnc_numeric converted_amount;
+            xaccSplitSetValue(split, value);
+            converted_amount = gnc_numeric_div(value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+            DEBUG("converting from %f to %f\n", gnc_numeric_to_double(value), gnc_numeric_to_double(converted_amount));
+            xaccSplitSetAmount(split, converted_amount);
+        }
+    }
+
+    return TRUE;
+}
+
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                                        Timespec *post_date, Timespec *due_date,
                                        const char * memo, gboolean accumulatesplits)
@@ -1323,7 +1389,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
             gncEntrySetBillTaxTable
             (entry, gncTaxTableReturnChild (gncEntryGetBillTaxTable (entry), TRUE));
 
-            /* If this is a bill, and the entry is billable, copy the price */
+            /* If this is a bill, and the entry came from an invoice originally, copy the price */
             if (gncEntryGetBillable (entry))
                 gncEntrySetInvPrice (entry, gncEntryGetBillPrice (entry));
         }
@@ -1342,65 +1408,16 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
             if (gnc_numeric_check (value) == GNC_ERROR_OK)
             {
                 if (accumulatesplits)
-                {
                     splitinfo = gncAccountValueAdd (splitinfo, this_acc, value);
-                }
-                else
+                else if (!gncInvoicePostAddSplit (book, this_acc, txn, value,
+                                                 gncEntryGetDescription (entry),
+                                                 type, invoice))
                 {
-                    Split *split;
-
-                    split = xaccMallocSplit (book);
-                    /* set action and memo? */
-
-                    xaccSplitSetMemo (split, gncEntryGetDescription (entry));
-                    xaccSplitSetAction (split, type);
-
-                    /* Need to insert this split into the account AND txn before
-                     * we set the Base Value.  Otherwise SetBaseValue complains
-                     * that we don't have an account and fails to set the value.
-                     */
-                    xaccAccountBeginEdit (this_acc);
-                    xaccAccountInsertSplit (this_acc, split);
-                    xaccAccountCommitEdit (this_acc);
-                    xaccTransAppendSplit (txn, split);
-
-                    /* General note on the split creations below:
-                     * Invoice and bill amounts are always stored as positive values in entries
-                     * So to convert them to proper splits, the amounts may have to be reverted
-                     * to have the proper effect on the account balance.
-                     * Credit notes have the opposite effect of invoices/bills, but their amounts
-                     * are stored as negative values as well. So to convert them into splits
-                     * they can be treated exactly the same as their invoice/bill counter parts.
-                     * The net effect is that the owner type is sufficient to determine whether a
-                     * value has to be reverted when converting an invoice/bill/cn amount to a split.
-                     */
-                    if (gnc_commodity_equal(xaccAccountGetCommodity(this_acc), invoice->currency))
-                    {
-                        xaccSplitSetBaseValue (split, value,
-                                               invoice->currency);
-                    }
-                    else
-                    {
-                        /*need to do conversion */
-                        GNCPrice *price = gncInvoiceGetPrice(invoice, xaccAccountGetCommodity(this_acc));
-
-                        if (price == NULL)
-                        {
-                            /*This is an error, which shouldn't even be able to happen.
-                              We can't really do anything sensible about it, and this is
-                            		    a user-interface free zone so we can't try asking the user
-                              again either, have to return NULL*/
-                            return NULL;
-                        }
-                        else
-                        {
-                            gnc_numeric converted_amount;
-                            xaccSplitSetValue(split, value);
-                            converted_amount = gnc_numeric_div(value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
-                            DEBUG("converting from %f to %f\n", gnc_numeric_to_double(value), gnc_numeric_to_double(converted_amount));
-                            xaccSplitSetAmount(split, converted_amount);
-                        }
-                    }
+                    /*This is an error, which shouldn't even be able to happen.
+                      We can't really do anything sensible about it, and this is
+                      a user-interface free zone so we can't try asking the user
+                      again either, have to return NULL*/
+                    return NULL;
                 }
 
                 /* If there is a credit-card account, and this is a CCard
@@ -1451,47 +1468,15 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     /* Iterate through the splitinfo list and generate the splits */
     for (iter = splitinfo; iter; iter = iter->next)
     {
-        Split *split;
         GncAccountValue *acc_val = iter->data;
-
-        split = xaccMallocSplit (book);
-        /* set action and memo? */
-
-        xaccSplitSetMemo (split, memo);
-        xaccSplitSetAction (split, type);
-
-        xaccAccountBeginEdit (acc_val->account);
-        xaccAccountInsertSplit (acc_val->account, split);
-        xaccAccountCommitEdit (acc_val->account);
-        xaccTransAppendSplit (txn, split);
-
-        if (gnc_commodity_equal(xaccAccountGetCommodity(acc_val->account), invoice->currency))
+        if (!gncInvoicePostAddSplit (book, acc_val->account, txn, acc_val->value,
+                                     memo, type, invoice))
         {
-            xaccSplitSetBaseValue (split, acc_val->value,
-                                   invoice->currency);
-        }
-        else
-        {
-            /*need to do conversion */
-            GNCPrice *price = gncInvoiceGetPrice(invoice, xaccAccountGetCommodity(acc_val->account));
-
-            if (price == NULL)
-            {
-                /*This is an error, which shouldn't even be able to happen.
-                  We can't really do anything sensible about it, and this is
-                  a user-interface free zone so we can't try asking the user
-                  again either, have to return NULL*/
-                return NULL;
-            }
-            else
-            {
-                gnc_numeric converted_amount;
-                xaccSplitSetValue(split, acc_val->value);
-                converted_amount = gnc_numeric_div(acc_val->value, gnc_price_get_value(price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
-                DEBUG("converting from %f to %f\n", gnc_numeric_to_double(acc_val->value), gnc_numeric_to_double(converted_amount));
-
-                xaccSplitSetAmount(split, converted_amount);
-            }
+            /*This is an error, which shouldn't even be able to happen.
+              We can't really do anything sensible about it, and this is
+              a user-interface free zone so we can't try asking the user
+              again either, have to return NULL*/
+            return NULL;
         }
     }
 
