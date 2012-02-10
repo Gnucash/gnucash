@@ -1644,10 +1644,16 @@ gnc_lot_match_owner_balancing (GNCLot *lot, gpointer user_data)
     if (lm->positive_balance == gnc_numeric_positive_p (balance))
         return FALSE;
 
-    /* Is it ours? */
+    /* Is it ours? Either the lot owner or the lot invoice owner should match */
     if (!gncOwnerGetOwnerFromLot (lot, &owner_def))
-        return FALSE;
-    owner = gncOwnerGetEndOwner (&owner_def);
+    {
+        const GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+        if (!invoice)
+            return FALSE;
+        owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+    }
+    else
+        owner = gncOwnerGetEndOwner (&owner_def);
 
     return gncOwnerEqual (owner, lm->owner);
 }
