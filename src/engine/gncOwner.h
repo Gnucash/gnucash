@@ -191,6 +191,19 @@ gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType
 KvpFrame* gncOwnerGetSlots(GncOwner* owner);
 
 /**
+ * Create a lot for a payment for the given owner and with the given
+ * parameters. If a transaction is passed, this transaction will be
+ * reused if possible (meaning, if the transaction currency matches
+ * the owner's currency and if the transaction has (at least?) one
+ * split in the transfer account).
+ */
+GNCLot *
+gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
+                          Account *posted_acc, Account *xfer_acc,
+                          gnc_numeric amount, gnc_numeric exch, Timespec date,
+                          const char *memo, const char *num);
+
+/**
  * Apply a payment of "amount" for the owner, between the xfer_account
  * (bank or other asset) and the posted_account (A/R or A/P).  If the
  * caller supplies an (optional) invoice argument, then apply the

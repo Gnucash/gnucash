@@ -899,6 +899,144 @@ gncOwnerAssignPaymentTxn(const GncOwner *owner, Transaction *txn,
  * Apply a payment of "amount" for the owner, between the xfer_account
  * (bank or other asset) and the posted_account (A/R or A/P).
  */
+GNCLot *
+gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
+                          Account *posted_acc, Account *xfer_acc,
+                          gnc_numeric amount, gnc_numeric exch, Timespec date,
+                          const char *memo, const char *num)
+{
+    QofBook *book;
+    Split *split;
+    const char *name;
+    gnc_commodity *commodity;
+    gboolean reverse;
+    gnc_numeric payment_value = amount;
+    Split *xfer_split = NULL;
+    GNCLot *payment_lot;
+
+    /* Verify our arguments */
+    if (!owner || !posted_acc || !xfer_acc) return NULL;
+    g_return_val_if_fail (owner->owner.undefined != NULL, NULL);
+
+    /* Compute the ancillary data */
+    book = gnc_account_get_book (posted_acc);
+    name = gncOwnerGetName (gncOwnerGetEndOwner ((GncOwner*)owner));
+    commodity = gncOwnerGetCurrency (owner);
+    reverse = use_reversed_payment_amounts(owner);
+
+    if (txn)
+    {
+        /* Pre-existing transaction was specified. We completely clear it,
+         * except for the split in the transfer account, unless the
+         * transaction can't be reused (wrong currency, wrong transfer account).
+         * In that case, the transaction is simply removed and an new
+         * one created. */
+
+        xfer_split = xaccTransFindSplitByAccount(txn, xfer_acc);
+
+        if (xaccTransGetCurrency(txn) != gncOwnerGetCurrency (owner))
+        {
+            g_message("Uh oh, mismatching currency/commodity between selected transaction and owner. We fall back to manual creation of a new transaction.");
+            xfer_split = NULL;
+        }
+
+        if (!xfer_split)
+        {
+            g_message("Huh? Asset account not found anymore. Fully deleting old txn and now creating a new one.");
+
+            xaccTransBeginEdit (txn);
+            xaccTransDestroy (txn);
+            xaccTransCommitEdit (txn);
+
+            txn = NULL;
+        }
+        else
+        {
+            int i = 0;
+            xaccTransBeginEdit (txn);
+            while (i < xaccTransCountSplits(txn))
+            {
+                Split *split = xaccTransGetSplit (txn, i);
+                if (split == xfer_split)
+                {
+                    ++i;
+                }
+                else
+                {
+                    xaccSplitDestroy(split);
+                }
+            }
+            xaccTransCommitEdit (txn);
+        }
+    }
+
+    /* Create the transaction if we don't have one yet */
+    if (!txn)
+        txn = xaccMallocTransaction (book);
+
+    /* Insert a split for the transfer account if we don't have one yet */
+    if (!xfer_split)
+    {
+        xaccTransBeginEdit (txn);
+
+        /* Set up the transaction */
+        xaccTransSetDescription (txn, name ? name : "");
+        xaccTransSetNum (txn, num);
+        xaccTransSetCurrency (txn, commodity);
+        xaccTransSetDateEnteredSecs (txn, time(NULL));
+        xaccTransSetDatePostedTS (txn, &date);
+        xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
+
+
+        /* The split for the transfer account */
+        split = xaccMallocSplit (book);
+        xaccSplitSetMemo (split, memo);
+        xaccSplitSetAction (split, _("Payment"));
+        xaccAccountBeginEdit (xfer_acc);
+        xaccAccountInsertSplit (xfer_acc, split);
+        xaccAccountCommitEdit (xfer_acc);
+        xaccTransAppendSplit (txn, split);
+
+        if (gnc_commodity_equal(xaccAccountGetCommodity(xfer_acc), commodity))
+        {
+            xaccSplitSetBaseValue (split, reverse ? amount :
+                                   gnc_numeric_neg (amount), commodity);
+        }
+        else
+        {
+            /* Need to value the payment in terms of the owner commodity */
+            xaccSplitSetAmount(split, reverse ? amount : gnc_numeric_neg (amount));
+            payment_value = gnc_numeric_mul(amount, exch, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+            xaccSplitSetValue(split, reverse ? payment_value : gnc_numeric_neg(payment_value));
+        }
+    }
+
+    /* Add a split in the post account */
+    split = xaccMallocSplit (book);
+    xaccSplitSetMemo (split, memo);
+    xaccSplitSetAction (split, _("Payment"));
+    xaccAccountBeginEdit (posted_acc);
+    xaccAccountInsertSplit (posted_acc, split);
+    xaccAccountCommitEdit (posted_acc);
+    xaccTransAppendSplit (txn, split);
+    xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (amount) : amount, commodity);
+
+    /* Create a new lot for the payment */
+    payment_lot = gnc_lot_new (book);
+    gncOwnerAttachToLot (owner, payment_lot);
+    gnc_lot_add_split (payment_lot, split);
+
+
+    /* Commit this new transaction */
+    xaccTransCommitEdit (txn);
+
+    return payment_lot;
+}
+
+/*
+ * Apply a payment of "amount" for the owner, between the xfer_account
+ * (bank or other asset) and the posted_account (A/R or A/P).
+ */
 Transaction *
 gncOwnerApplyPayment (const GncOwner *owner, GncInvoice* invoice,
                       Account *posted_acc, Account *xfer_acc,
@@ -976,8 +1114,8 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
      * perform a balancing action on a set of lots, so you
      * will also find frequent references to balancing instead. */
 
-    /* Payments can only be applied when at least an owner is given
-     * and either a list of lots to use or a first lot */
+    /* Payments can only be applied when at least an owner
+     * and a list of lots to use are given */
     if (!owner) return;
     if (!lots) return;
 

@@ -183,7 +183,7 @@
                                 <property name="resizable">True</property>
                                 <property name="sizing">fixed</property>
                                 <property name="min_width">50</property>
-                                <property name="title" translatable="yes">Debet</property>
+                                <property name="title" translatable="yes">Debit</property>
                                 <property name="reorderable">True</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="docs_list_deb_renderer"/>

@@ -204,7 +204,9 @@ gnc_payment_dialog_document_selection_changed (PaymentWindow *pw)
 
     /* Set the payment amount in the dialog */
     val = gnc_payment_dialog_calculate_selected_total (pw);
-    gnc_ui_payment_window_set_amount(pw, val);
+    /* XXX It may not always be correct to use the absolute value of amount here
+     * This is an assumption from before the credit notes implementation. */
+    gnc_ui_payment_window_set_amount(pw, gnc_numeric_abs (val));
 }
 
 static gboolean
@@ -259,6 +261,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
         GtkTreeIter iter;
         Timespec doc_date;
         GncInvoice *document;
+        gnc_numeric value = gnc_numeric_zero();
         gnc_numeric debit = gnc_numeric_zero();
         gnc_numeric credit = gnc_numeric_zero();
         GncInvoiceType doc_type = GNC_INVOICE_UNDEFINED;
@@ -297,22 +300,16 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
         }
 
         /* Find the debit/credit amount.
-         * Invoices/bills are debit
-         * Credit notes are credit
-         * Pre-payments are credit
+         * Invoices/vendor credit notes are debit (increasing the balance)
+         * Customer credit notes/bills are credit (decreasing the balance)
+         * Pre-payments are debit or credit depending on their sign
          */
-        if (document)
-        {
-            if (!gncInvoiceGetIsCreditNote (document))
-                debit = gnc_lot_get_balance (lot);
-            else
-                credit = gnc_lot_get_balance (lot);
-        }
+        value = gnc_lot_get_balance (lot);
+
+        if (gnc_numeric_positive_p (value))
+            debit = value;
         else
-        {
-            /* This is a pre-payment */
-                credit = gnc_lot_get_balance (lot);
-        }
+            credit = gnc_numeric_neg (value);
 
         /* Only display non-zero debits/credits */
         if (!gnc_numeric_zero_p (debit))
@@ -514,6 +511,29 @@ gnc_payment_dialog_post_to_changed_cb (GtkWidget *widget, gpointer data)
     return FALSE;
 }
 
+/*
+ * This helper function is called once for each row in the tree view
+ * that is currently selected.  Its task is to add the corresponding
+ * lot to the end of a glist.
+ */
+static void
+get_selected_lots (GtkTreeModel *model,
+                   GtkTreePath *path,
+                   GtkTreeIter *iter,
+                   gpointer data)
+{
+    GList **return_list = data;
+    GNCLot *lot;
+    GValue value = { 0 };
+
+    gtk_tree_model_get_value (model, iter, 5, &value);
+    lot = (GNCLot *) g_value_get_pointer (&value);
+    g_value_unset (&value);
+
+    if (lot)
+        *return_list = g_list_append(*return_list, lot);
+}
+
 void
 gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 {
@@ -527,6 +547,9 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 
     /* Verify the amount is non-zero */
     amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_edit));
+
+    /* XXX Amounts could possibly be negative as well if you take credit notes into account
+     * This still has to be reviewed */
     if (gnc_numeric_check (amount) || !gnc_numeric_positive_p (amount))
     {
         text = _("You must enter the amount of the payment.  "
@@ -569,12 +592,18 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         const char *memo, *num;
         Timespec date;
         gnc_numeric exch = gnc_numeric_create(1, 1); //default to "one to one" rate
+        GNCLot *payment_lot;
+        GList *selected_lots = NULL;
+        GtkTreeSelection *selection;
 
         /* Obtain all our ancillary information */
         memo = gtk_entry_get_text (GTK_ENTRY (pw->memo_entry));
         num = gtk_entry_get_text (GTK_ENTRY (pw->num_entry));
         date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (pw->date_edit));
-        /* FIXME Get a lotlist from the dialog */
+
+        /* Obtain the list of selected lots (documents/payments) from the dialog */
+        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
+        gtk_tree_selection_selected_foreach (selection, get_selected_lots, &selected_lots);
 
         /* If the 'acc' account and the post account don't have the same
            currency, we need to get the user to specify the exchange rate */
@@ -600,64 +629,17 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
             gnc_xfer_dialog_run_until_done(xfer);
         }
 
-        if (!gnc_payment_dialog_has_pre_existing_txn(pw))
-        {
-            /* Now apply the payment */
-            gncOwnerApplyPayment (&pw->owner, pw->invoice,
-                                  post, acc, amount, exch, date, memo, num);
-        }
-        else
-        {
-            // New implementation: Allow the user to have a
-            // pre-selected transaction
-            Transaction *txn = pw->pre_existing_txn;
-            GncOwner *owner = &pw->owner;
+        /* Create a lot for this payment */
+        payment_lot = gncOwnerCreatePaymentLot (&pw->owner, pw->pre_existing_txn,
+                                                post, acc, amount, exch, date, memo, num);
 
-            Split *xfer_split = xaccTransFindSplitByAccount(txn, acc);
-
-            if (xaccTransGetCurrency(txn) != gncOwnerGetCurrency (owner))
-            {
-                g_message("Uh oh, mismatching currency/commodity between selected transaction and owner. We fall back to manual creation of a new transaction.");
-                xfer_split = NULL;
-            }
-
-            if (!xfer_split)
-            {
-                g_message("Huh? Asset account not found anymore. Fully deleting old txn and now creating a new one.");
-
-                xaccTransBeginEdit (txn);
-                xaccTransDestroy (txn);
-                xaccTransCommitEdit (txn);
-
-                pw->pre_existing_txn = NULL;
-                gncOwnerApplyPayment (owner, pw->invoice,
-                                      post, acc, amount, exch, date, memo, num);
-            }
-            else
-            {
-                int i = 0;
-                xaccTransBeginEdit (txn);
-                while (i < xaccTransCountSplits(txn))
-                {
-                    Split *split = xaccTransGetSplit (txn, i);
-                    if (split == xfer_split)
-                    {
-                        ++i;
-                    }
-                    else
-                    {
-                        xaccSplitDestroy(split);
-                    }
-                }
-
-                // We have opened the txn for editing, and we have deleted all the other splits.
-                gncOwnerAssignPaymentTxn (owner, txn,
-                                          post, pw->invoice);
-
-                xaccTransCommitEdit (txn);
-            }
-        }
-
+        /* And link the selected lots and the payment lot together as well as possible.
+         * If the payment was bigger than the selected documents/overpayments, only
+         * part of the payment will be used. Similarly if more documents were selected
+         * than the payment value set, not all documents will be marked as paid. */
+        if (payment_lot)
+            selected_lots = g_list_prepend (selected_lots, payment_lot);
+        gncOwnerAutoApplyPaymentsWithLots (&pw->owner, selected_lots);
     }
     gnc_resume_gui_refresh ();
 
@@ -1094,6 +1076,8 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
         GDate txn_date = xaccTransGetDatePostedGDate (txn);
         gnc_ui_payment_window_set_date(pw, &txn_date);
     }
+    /* XXX It may not always be correct to use the absolute value of amount here
+     * This is an assumption from before the credit notes implementation. */
     gnc_ui_payment_window_set_amount(pw, gnc_numeric_abs(amount));
     gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(assetaccount_split));
     if (postaccount_split)
