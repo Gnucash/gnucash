@@ -268,7 +268,7 @@
     (add-option
       (gnc:make-string-option
       pagename-entries optname-closing-pattern
-      "a" opthelp-closing-pattern (N_ "Closing Entries")))
+      "a" opthelp-closing-pattern (_ "Closing Entries")))
     (add-option
      (gnc:make-simple-boolean-option
       pagename-entries optname-closing-casing

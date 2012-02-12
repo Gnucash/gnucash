@@ -240,7 +240,7 @@
     (add-option
       (gnc:make-string-option
       pagename-entries optname-adjusting-pattern
-      "a" opthelp-adjusting-pattern (N_ "Adjusting Entries")))
+      "a" opthelp-adjusting-pattern (_ "Adjusting Entries")))
     (add-option
      (gnc:make-simple-boolean-option
       pagename-entries optname-adjusting-casing
@@ -252,7 +252,7 @@
     (add-option
       (gnc:make-string-option
       pagename-entries optname-closing-pattern
-      "d" opthelp-closing-pattern (N_ "Closing Entries")))
+      "d" opthelp-closing-pattern (_ "Closing Entries")))
     (add-option
      (gnc:make-simple-boolean-option
       pagename-entries optname-closing-casing
