@@ -621,14 +621,14 @@
 	 (balance-mode (or (get-val env 'balance-mode) 'post-closing))
 	 (closing-pattern (or (get-val env 'closing-pattern)
 			      (list
-			       (list 'str (N_ "Closing Entries"))
+			       (list 'str (_ "Closing Entries"))
 			       (list 'cased #f)
 			       (list 'regexp #f)
 			       )
 			      ))
 	 (adjusting-pattern (or (get-val env 'adjusting-pattern)
 				(list
-				 (list 'str (N_ "Adjusting Entries"))
+				 (list 'str (_ "Adjusting Entries"))
 				 (list 'cased #f)
 				 (list 'regexp #f)
 				 )
