@@ -85,7 +85,7 @@ if [ -n "${tag}" ] ; then
   [0-9]*.[0-9]*.[0-9]*)
      if [ "${PKG_VERSION}" != "${tag}" ] ; then
        echo "" >> ${LOGFILE}
-       echo " *** ERROR: Package Version ${PKG_VERSION} doesn't match Tag ${tag}" >> ${LOGILE}
+       echo " *** ERROR: Package Version ${PKG_VERSION} doesn't match Tag ${tag}" >> ${LOGFILE}
        echo "" >> ${LOGFILE}
     fi
     ;;
