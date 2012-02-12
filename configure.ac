@@ -1211,6 +1211,7 @@ AC_CONFIG_FILES(
   accounts/pt_PT/Makefile
   accounts/ru/Makefile
   accounts/sk/Makefile
+  accounts/sv_SE/Makefile
   accounts/tr_TR/Makefile
   accounts/zh_CN/Makefile
   checks/Makefile

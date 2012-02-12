@@ -1,8 +1,9 @@
 
-accountdir = ${GNC_ACCOUNTS_DIR}/en_GB
+accountdir = ${GNC_ACCOUNTS_DIR}/sv_SE
 
 account_DATA = \
-	swedish_small_business.gnucash.xea
+	swedish_small_business.gnucash-xea \
+	bas_2012.gnucash-xea 
 EXTRA_DIST = \
   ${account_DATA} \
-  acctchrt_full.gnucash-xea 
+  acctchrt_full.gnucash-xea
