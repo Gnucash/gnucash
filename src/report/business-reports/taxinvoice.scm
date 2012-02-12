@@ -156,36 +156,36 @@
   ;; Heading options
   (add-option (gnc:make-string-option
                 ; page / name / orderkey / tooltip / default
-                headingpage optname-report-title "a" "" (N_ "Invoice")))
+                headingpage optname-report-title "a" "" (_ "Invoice")))
   (add-option (gnc:make-string-option
-                headingpage optname-units "b" "" (N_ "Units")))
+                headingpage optname-units "b" "" (_ "Units")))
   (add-option (gnc:make-string-option
-                headingpage optname-qty "c" "" (N_ "Qty")))
+                headingpage optname-qty "c" "" (_ "Qty")))
   (add-option (gnc:make-string-option
-                headingpage optname-unit-price "d" "" (N_ "Unit Price")))
+                headingpage optname-unit-price "d" "" (_ "Unit Price")))
   (add-option (gnc:make-string-option
-                headingpage optname-disc-rate "e" "" (N_ "Discount Rate")))
+                headingpage optname-disc-rate "e" "" (_ "Discount Rate")))
   (add-option (gnc:make-string-option
-                headingpage optname-disc-amount "f" "" (N_ "Discount Amount")))
+                headingpage optname-disc-amount "f" "" (_ "Discount Amount")))
   (add-option (gnc:make-string-option
-                headingpage optname-net-price "g" "" (N_ "Net Price")))
+                headingpage optname-net-price "g" "" (_ "Net Price")))
   (add-option (gnc:make-string-option
-                headingpage optname-tax-rate "h" "" (N_ "Tax Rate")))
+                headingpage optname-tax-rate "h" "" (_ "Tax Rate")))
   (add-option (gnc:make-string-option
-                headingpage optname-tax-amount "i" "" (N_ "Tax Amount")))
+                headingpage optname-tax-amount "i" "" (_ "Tax Amount")))
   (add-option (gnc:make-string-option
-                headingpage optname-total-price "j" "" (N_ "Total Price")))
+                headingpage optname-total-price "j" "" (_ "Total Price")))
   (add-option (gnc:make-string-option
-                headingpage2 optname-subtotal "a" "" (N_ "Sub-total")))
+                headingpage2 optname-subtotal "a" "" (_ "Sub-total")))
   (add-option (gnc:make-string-option
-                headingpage2 optname-amount-due "b" "" (N_ "Amount Due")))
+                headingpage2 optname-amount-due "b" "" (_ "Amount Due")))
   (add-option (gnc:make-string-option
                 headingpage2 optname-payment-recd "c" "" 
-                (N_ "Payment received, thank you")))
+                (_ "Payment received, thank you")))
 
   (add-option (gnc:make-text-option
                 notespage optname-extra-notes "a"
-                (N_ "Notes added at end of invoice -- may contain HTML markup") 
+                (_ "Notes added at end of invoice -- may contain HTML markup") 
                 ""))
                 ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
 
