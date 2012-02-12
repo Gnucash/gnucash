@@ -581,7 +581,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
     post = gnc_account_select_combo_get_active (pw->post_combo);
     if (!post)
     {
-        text = _("Your must enter a valid account name for posting.");
+        text = _("You must enter a valid account name for posting.");
         gnc_error_dialog (pw->dialog, "%s", text);
         return;
     }
