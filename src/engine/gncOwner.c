@@ -871,10 +871,9 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
         Account *acct;
         const gchar *name;
         GList *lot_list, *lot_iter;
-        Transaction *txn;
+        Transaction *txn = NULL;
         gnc_numeric base_lot_bal, val_to_pay, val_paid = { 0, 1 };
         gboolean base_bal_is_pos;
-        gboolean txn_created = FALSE;
         const gchar *action, *memo;
 
         /* Only attempt to apply payments to open lots.
@@ -957,7 +956,7 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
 
             /* If not created yet, create a new transaction linking
              * the base lot and the balancing lot(s) */
-            if (!txn_created)
+            if (!txn)
             {
                 Timespec ts = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_latest_split (base_lot)));
 
@@ -971,7 +970,6 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
                 xaccTransSetDateEnteredSecs (txn, time(NULL));
                 xaccTransSetDatePostedTS (txn, &ts);
                 xaccTransSetTxnType (txn, TXN_TYPE_LINK);
-                txn_created = TRUE;
             }
 
             /* Create the split for this link in current balancing lot */
@@ -1000,7 +998,7 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
 
         /* If the above loop managed to create a transaction and some balancing splits,
          * create the final split for the link transaction in the base lot */
-        if (txn_created)
+        if (txn)
         {
             GncInvoice *this_invoice;
             Split *split = xaccMallocSplit (book);
