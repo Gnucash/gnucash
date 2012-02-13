@@ -105,7 +105,7 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-ignore-brokerage-fees "g"
       (N_ "Ignore brokerage fees when calculating returns")
-      #t))
+      #f))
 
     (gnc:register-option
       options
@@ -668,6 +668,13 @@
 		  (bothgain (gnc:make-gnc-monetary currency  (gnc-numeric-add (gnc:gnc-monetary-amount gain)
 									      (gnc:gnc-monetary-amount ugain)
 									      100 GNC-RND-ROUND)))
+		  (totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount bothgain)
+										(if ignore-brokerage-fees
+										    (gnc:gnc-monetary-amount income)
+										    (gnc-numeric-sub (gnc:gnc-monetary-amount income)
+												     (gnc:gnc-monetary-amount brokerage)
+												     100 GNC-RND-ROUND))
+										100 GNC-RND-ROUND)))
 
 		  (activecols (list (gnc:html-account-anchor current)))
 		  )
@@ -705,26 +712,22 @@
 					(gnc:make-html-table-header-cell/markup "number-cell" value)
 					(gnc:make-html-table-header-cell/markup "number-cell" moneyin)
 					(gnc:make-html-table-header-cell/markup "number-cell" moneyout)
-					(gnc:make-html-table-header-cell/markup "number-cell" income)
 					(gnc:make-html-table-header-cell/markup "number-cell" gain)
 					(gnc:make-html-table-header-cell/markup "number-cell" ugain)
 					(gnc:make-html-table-header-cell/markup "number-cell" bothgain)
+					(gnc:make-html-table-header-cell/markup "number-cell" income)))
+	      (if (not ignore-brokerage-fees)
+		  (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" brokerage))))
+	      (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" totalreturn)
 					(gnc:make-html-table-header-cell/markup "number-cell" 
 					    (let* ((moneyinvalue (gnc-numeric-to-double
 								  (gnc:gnc-monetary-amount moneyin)))
-					           (bothgainvalue (+ (gnc-numeric-to-double
-								      (gnc:gnc-monetary-amount income))
-								   (- (gnc-numeric-to-double
-								       (gnc:gnc-monetary-amount bothgain))
-								      (if ignore-brokerage-fees
-								       0
-								       (gnc-numeric-to-double
-								        (gnc:gnc-monetary-amount brokerage))))))
+					           (totalreturnvalue (gnc-numeric-to-double
+								      (gnc:gnc-monetary-amount totalreturn)))
                                              )
 					      (if (= 0.0 moneyinvalue)
 						  (sprintf #f "%.2f%%" moneyinvalue)
-						  (sprintf #f "%.2f%%" (* 100 (/ bothgainvalue moneyinvalue))))))
-                                        (gnc:make-html-table-header-cell/markup "number-cell" brokerage)
+						  (sprintf #f "%.2f%%" (* 100 (/ totalreturnvalue moneyinvalue))))))
 					 )
 			)
                        
@@ -815,7 +818,8 @@
 	       (sum-total-both-gains (gnc-numeric-zero))
 	       (sum-total-gain (gnc-numeric-zero))
 	       (sum-total-ugain (gnc-numeric-zero))
-	       (sum-total-brokerage (gnc-numeric-zero)))
+	       (sum-total-brokerage (gnc-numeric-zero))
+	       (sum-total-totalreturn (gnc-numeric-zero)))
 
 	  ;;begin building lists for which columns to display
           (if show-symbol 
@@ -839,12 +843,16 @@
 				    (_ "Value")
 				    (_ "Money In")
 				    (_ "Money Out")
-				    (_ "Income")
 				    (_ "Realized Gain")
 				    (_ "Unrealized Gain")
 				    (_ "Total Gain")
-				    (_ "Total Return")
-                                    (_ "Brokerage Fees")))
+				    (_ "Income")))
+
+	  (if (not ignore-brokerage-fees)
+	      (append! headercols (list (_ "Brokerage Fees"))))
+
+	  (append! headercols (list (_ "Total Return")
+				    (_ "Rate of Return")))
 
           (append! totalscols (list " "))
 
@@ -868,13 +876,20 @@
 										      (gnc:gnc-monetary-amount sum-total-ugain)
 										      100 GNC-RND-ROUND)))
 	  (set! sum-total-brokerage (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
+	  (set! sum-total-totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-both-gains)
+										       (if ignore-brokerage-fees
+										           (gnc:gnc-monetary-amount sum-total-income)
+											   (gnc-numeric-sub (gnc:gnc-monetary-amount sum-total-income)
+													    (gnc:gnc-monetary-amount sum-total-brokerage)
+													    100 GNC-RND-ROUND))
+										       100 GNC-RND-ROUND)))
 
           (gnc:html-table-append-row/markup!
            table
            "grand-total"
            (list
             (gnc:make-html-table-cell/size
-             1 16 (gnc:make-html-text (gnc:html-markup-hr)))))
+             1 17 (gnc:make-html-text (gnc:html-markup-hr)))))
 
 	  ;; finish building the totals columns, now that totals are complete
 	  (append! totalscols (list
@@ -887,32 +902,30 @@
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" (gnc:sum-collector-commodity total-moneyout currency exchange-fn))
 			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-income)
-			       (gnc:make-html-table-cell/markup
 				"total-number-cell" sum-total-gain)
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" sum-total-ugain)
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" sum-total-both-gains)
 			       (gnc:make-html-table-cell/markup
+				"total-number-cell" sum-total-income)))
+	  (if (not ignore-brokerage-fees)
+	      (append! totalscols (list
+			       (gnc:make-html-table-cell/markup
+                                "total-number-cell" sum-total-brokerage))))
+	  (append! totalscols (list
+			       (gnc:make-html-table-cell/markup
+                                "total-number-cell" sum-total-totalreturn)
+			       (gnc:make-html-table-cell/markup
 				"total-number-cell" 
 				(let* ((totalinvalue (gnc-numeric-to-double
 						      (gnc:gnc-monetary-amount sum-total-moneyin)))
-				       (totalgainvalue (+ (gnc-numeric-to-double
-							   (gnc:gnc-monetary-amount sum-total-income))
-							(- (gnc-numeric-to-double
-						            (gnc:gnc-monetary-amount sum-total-both-gains))
-							   (if ignore-brokerage-fees
-							    0
-							    (gnc-numeric-to-double
-							     (gnc:gnc-monetary-amount sum-total-brokerage))))))
+				       (totalreturnvalue (gnc-numeric-to-double
+						          (gnc:gnc-monetary-amount sum-total-totalreturn)))
 				 )
-
 				  (if (= 0.0 totalinvalue) 
 				      (sprintf #f "%.2f%%" totalinvalue) 
-				      (sprintf #f "%.2f%%" (* 100 (/ totalgainvalue totalinvalue))))))
-                             (gnc:make-html-table-cell/markup
-                              "total-number-cell" sum-total-brokerage)
+				      (sprintf #f "%.2f%%" (* 100 (/ totalreturnvalue totalinvalue))))))
 			       ))
 	  
 
