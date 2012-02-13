@@ -2,7 +2,7 @@ SUBDIRS = . tests
 
 SWIG_FILES = gnucash_core.i timespec.i
 
-pkgpython_PYTHON = \
+pkgpyexec_DATA = \
   __init__.py \
   function_class.py \
   gnucash_core.py \
@@ -85,6 +85,7 @@ gnucash_core_c.py: gnucash_core.c $(SWIG_FILES)
 endif
 
 EXTRA_DIST = \
+  $(pkgpyexec_DATA) \
   $(SWIG_FILES) \
   example_scripts/simple_book.py \
   example_scripts/simple_session.py \
