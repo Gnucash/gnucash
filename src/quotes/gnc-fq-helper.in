@@ -32,77 +32,91 @@ use FileHandle;
 # handle the time conversion.
 use Date::Manip;
 
-# Input: (on standard input - one entry per line and one line per
-# entry, and double quotes must only be delimiters, not string
-# content -- remember, we don't have a real scheme parser on the perl
-# side :>).
+=head1 NAME
 
-# (<method-name> symbol symbol symbol ...)
+gnc-fq-helper  -  allows gnucash to communicate with Finance::Quote
+                  over pipes from guile. The requests and responses
+                  are scheme forms.
 
-# where <method-name> indicates the desired Finance::Quote method.
-# The currently recognized subset is yahoo, yahoo_europe,
-# fidelity_direct, troweprice_direct, vanguard, asx, tiaacref,
-# and currency.
+=head1 SYNOPSIS
 
-# For currency quotes, the symbols alternate between the 'from'
-# and 'to' currencies.
+gnc-fq-helper
 
-# For example:
-#
-# (yahoo "IBM" "LNUX")
-# (fidelity_direct "FBIOX" "FSELX")
-# (currency "USD" "AUD")
+=head1 DESCRIPTION
 
-# Output (on standard output, one output form per input line):
+Input: (on standard input - one entry per line and one line per
+entry, and double quotes must only be delimiters, not string
+content -- remember, we don't have a real scheme parser on the perl
+side :>).
 
-# Schemified version of gnc-fq's output, basically an alist of
-# alists, as in the example below.  Right now, only the fields that
-# this script knows about (and knows how to convert to scheme) are
-# returned, so the conversion function will have to be updated
-# whenever Finance::Quote changes.  Currently you'll get symbol,
-# gnc:time-no-zone, and currency, and either last, nav, or price.
-# Fields with gnc: prefixes are non-Finance::Quote fields.
-# gnc:time-no-zone is returned as a string of the form "YYYY-MM-DD
-# HH:MM:SS", basically the unmolested (and underspecified) output of
-# the quote source.  It's up to you to know what it's proper timezone
-# really is.  i.e. if you know the time was in America/Chicago, you'll
-# need to convert it to that.
+(<method-name> symbol symbol symbol ...)
 
-# For example:
+where <method-name> indicates the desired Finance::Quote method.
+The currently recognized subset is yahoo, yahoo_europe,
+fidelity_direct, troweprice_direct, vanguard, asx, tiaacref,
+and currency.
 
-#  $ echo '(yahoo "CSCO" "JDSU" "^IXIC")' | ./gnc-fq-helper
-# (("CSCO" (symbol . "CSCO")
-#          (gnc:time-no-zone . "2001-03-13 19:27:00")
-#          (last . 20.375)
-#          (currency . "USD"))
-#  ("JDSU" (symbol . "JDSU")
-#          (gnc:time-no-zone . "2001-03-13 19:27:00")
-#          (last . 23.5625)
-#          (currency . "USD"))
-# ("^IXIC" (symbol . ^IXIC)
-#          (gnc:time-no-zone . 2002-12-04 17:16:00)
-#          (last . 1430.35)
-#          (currency . failed-conversion)))
+For currency quotes, the symbols alternate between the 'from'
+and 'to' currencies.
 
-# On error, the overall result may be #f, or on individual errors, the
-# list sub-item for a given symbol may be #f, like this:
+For example:
 
-#  $ echo '(yahoo "CSCO" "JDSU")' | ./gnc-fq-helper
-# (#f
-#  ("JDSU" (symbol . "JDSU")
-#          (gnc:time-no-zone . "2001-03-13 19:27:00")
-#          (last . 23.5625)
-#          (currency . "USD")))
+(yahoo "IBM" "LNUX")
+(fidelity_direct "FBIOX" "FSELX")
+(currency "USD" "AUD")
 
-# further, errors may be stored with each quote as indicated in
-# Finance::Quote, and whenever the conversion to scheme data fails,
-# the field will have the value 'failed-conversion, and accordingly
-# this symbol will never be a legitimate conversion.
+Output (on standard output, one output form per input line):
 
-# Exit status
-#
-# 0 - success
-# non-zero - failure
+Schemified version of gnc-fq's output, basically an alist of
+alists, as in the example below.  Right now, only the fields that
+this script knows about (and knows how to convert to scheme) are
+returned, so the conversion function will have to be updated
+whenever Finance::Quote changes.  Currently you'll get symbol,
+gnc:time-no-zone, and currency, and either last, nav, or price.
+Fields with gnc: prefixes are non-Finance::Quote fields.
+gnc:time-no-zone is returned as a string of the form "YYYY-MM-DD
+HH:MM:SS", basically the unmolested (and underspecified) output of
+the quote source.  It's up to you to know what it's proper timezone
+really is.  i.e. if you know the time was in America/Chicago, you'll
+need to convert it to that.
+
+For example:
+
+ $ echo '(yahoo "CSCO" "JDSU" "^IXIC")' | ./gnc-fq-helper
+(("CSCO" (symbol . "CSCO")
+         (gnc:time-no-zone . "2001-03-13 19:27:00")
+         (last . 20.375)
+         (currency . "USD"))
+ ("JDSU" (symbol . "JDSU")
+         (gnc:time-no-zone . "2001-03-13 19:27:00")
+         (last . 23.5625)
+         (currency . "USD"))
+("^IXIC" (symbol . ^IXIC)
+         (gnc:time-no-zone . 2002-12-04 17:16:00)
+         (last . 1430.35)
+         (currency . failed-conversion)))
+
+On error, the overall result may be #f, or on individual errors, the
+list sub-item for a given symbol may be #f, like this:
+
+ $ echo '(yahoo "CSCO" "JDSU")' | ./gnc-fq-helper
+(#f
+ ("JDSU" (symbol . "JDSU")
+         (gnc:time-no-zone . "2001-03-13 19:27:00")
+         (last . 23.5625)
+         (currency . "USD")))
+
+further, errors may be stored with each quote as indicated in
+Finance::Quote, and whenever the conversion to scheme data fails,
+the field will have the value 'failed-conversion, and accordingly
+this symbol will never be a legitimate conversion.
+
+Exit status
+
+0 - success
+non-zero - failure
+
+=cut
 
 # The methods we know about.  For now we assume they all have the same
 # signature so this works OK.

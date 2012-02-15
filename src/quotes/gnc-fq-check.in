@@ -26,17 +26,30 @@ use strict;
 use English;
 use FileHandle;
 
-# Input: <none>
-#
-# Output (on standard output, one output form per input line):
-#
-# A list of quote sources supported by Finance::Quote, or the single
-# term missing-lib if finance quote could not be executed.
-#
-# Exit status
-#
-# 0 - success
-# non-zero - failure
+=head1 NAME
+
+gnc-fq-check  -  check for the presence of Finance::Quote
+                 From gnc-fq-helper
+
+=head1 SYNOPSIS
+
+gnc-fq-check
+
+=head1 DESCRIPTION
+
+Input: <none>
+
+Output (on standard output, one output form per input line):
+
+A list of quote sources supported by Finance::Quote, or the single
+term missing-lib if finance quote could not be executed.
+
+Exit status
+
+0 - success
+non-zero - failure
+
+=cut
 
 sub check_modules {
   my @modules = qw(Finance::Quote LWP HTML::Parser HTML::TableExtract Crypt::SSLeay Date::Manip);
