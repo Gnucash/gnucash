@@ -5,6 +5,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Process Payment</property>
+    <property name="default_height">380</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="gnc_payment_window_destroy_cb" swapped="no"/>
     <child internal-child="vbox">
@@ -139,7 +140,8 @@
                                 <property name="sizing">fixed</property>
                                 <property name="min_width">50</property>
                                 <property name="title" translatable="yes">Date</property>
-                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">0</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="docs_list_date_renderer"/>
                                   <attributes>
@@ -154,7 +156,7 @@
                                 <property name="sizing">fixed</property>
                                 <property name="min_width">50</property>
                                 <property name="title" translatable="yes">Number</property>
-                                <property name="reorderable">True</property>
+                                <property name="sort_column_id">1</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="docs_list_num_renderer"/>
                                   <attributes>
@@ -169,7 +171,7 @@
                                 <property name="sizing">fixed</property>
                                 <property name="min_width">50</property>
                                 <property name="title" translatable="yes">Type</property>
-                                <property name="reorderable">True</property>
+                                <property name="sort_column_id">2</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="docs_list_type_renderer"/>
                                   <attributes>
@@ -184,7 +186,7 @@
                                 <property name="sizing">fixed</property>
                                 <property name="min_width">50</property>
                                 <property name="title" translatable="yes">Debit</property>
-                                <property name="reorderable">True</property>
+                                <property name="sort_column_id">3</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="docs_list_deb_renderer"/>
                                   <attributes>
@@ -199,7 +201,7 @@
                                 <property name="sizing">fixed</property>
                                 <property name="min_width">50</property>
                                 <property name="title" translatable="yes">Credit</property>
-                                <property name="reorderable">True</property>
+                                <property name="sort_column_id">4</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="docs_list_cred_renderer"/>
                                   <attributes>
