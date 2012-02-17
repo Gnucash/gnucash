@@ -221,11 +221,11 @@
 	 (gnc-commodity-get-mnemonic report-currency)))
     (gnc:html-scatter-set-x-axis-label!
      chart (case interval
-             ((DayDelta) (N_ "Days"))
-             ((WeekDelta) (N_ "Weeks"))
-             ((TwoWeekDelta) (N_ "Double-Weeks"))
-             ((MonthDelta) (N_ "Months"))
-             ((YearDelta) (N_ "Years"))))
+             ((DayDelta) (_ "Days"))
+             ((WeekDelta) (_ "Weeks"))
+             ((TwoWeekDelta) (_ "Double-Weeks"))
+             ((MonthDelta) (_ "Months"))
+             ((YearDelta) (_ "Years"))))
 
     (if 
      (not (gnc-commodity-equiv report-currency price-commodity))
