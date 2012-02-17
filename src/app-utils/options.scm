@@ -1109,7 +1109,7 @@
      (lambda (x) (set! value x))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f (symbol->string value) p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
      (lambda (f p)
        (let ((v (kvp-frame-get-slot-path-gslist f p)))
          (if (and v (number? v))
