@@ -237,6 +237,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
     gchar *id, *date_opened, *date_posted, *owner_id, *date, *quantity, *price;
     GString *prev_id, *prev_date_opened, *prev_date_posted, *prev_owner_id, *prev_date;	// needed to fix multi line invoices
     guint dummy;
+    gint row = 1;
 
     // allow the call to this function with only GtkListeStore* specified
     if (!fixed)
@@ -276,8 +277,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
             gtk_list_store_remove (store, &iter);
             row_deleted = TRUE;
             g_string_append_printf (info,
-                                    _("ROW DELETED, PRICE_NOT_SET: id=%s\n"),
-                                    id);
+                                    _("ROW %d DELETED, PRICE_NOT_SET: id=%s\n"),
+                                   row, id);
         }
         else if (strlen (quantity) == 0)
         {
@@ -285,8 +286,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
             // no fix possible -> delete row
             gtk_list_store_remove (store, &iter);
             row_deleted = TRUE;
-            g_string_append_printf (info, _("ROW DELETED, QTY_NOT_SET: id=%s\n"),
-                                    id);
+            g_string_append_printf (info, _("ROW %d DELETED, QTY_NOT_SET: id=%s\n"),
+                                    row, id);
         }
         else
         {
@@ -299,7 +300,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                     gtk_list_store_remove (store, &iter);
                     row_deleted = TRUE;
                     g_string_append_printf (info,
-                                            _("ROW DELETED, ID_NOT_SET\n"));
+                                            _("ROW %d DELETED, ID_NOT_SET\n"),row);
                 }
                 else
                 {
@@ -394,8 +395,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                     gtk_list_store_remove (store, &iter);
                     row_deleted = TRUE;
                     g_string_append_printf (info,
-                                            _("ROW DELETED, VENDOR_NOT_SET: id=%s\n"),
-                                            id);
+                                            _("ROW %d DELETED, VENDOR_NOT_SET: id=%s\n"),
+                                            row, id);
                 }
                 else
                 {
@@ -417,8 +418,8 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                 gtk_list_store_remove (store, &iter);
                 row_deleted = TRUE;
                 g_string_append_printf (info,
-                                        _("ROW DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"),
-                                        id);
+                                        _("ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"),
+                                        row, id);
             }
 
             // owner_id is valid
@@ -443,7 +444,11 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         }
         else if (row_fixed)
             (*fixed)++;
+    
+    if (!row_deleted)
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+    
+    row++;
     }
 
     // deallocate strings
