@@ -20,6 +20,7 @@ GNC_ADD_SWIG_COMMAND (${SWIG_CORE_UTILS_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-util
 SET (libgnc_core_utils_SOURCES
   binreloc.c
   gnc-filepath-utils.c
+  gnc-features.c
   gnc-gconf-utils.c
   gnc-gdate-utils.c
   gnc-gkeyfile-utils.c
@@ -59,6 +60,7 @@ FILE (WRITE ${CMAKE_CURRENT_BINARY_DIR}/gnc-version.h "
 
 SET (libgnc_core_utils_HEADERS
   binreloc.h
+  gnc-features.h
   gnc-filepath-utils.h
   gnc-gconf-utils.h
   gnc-gdate-utils.h
