@@ -1338,7 +1338,7 @@ gz_thread_func(gz_thread_params_t *params)
     gchar buffer[BUFLEN];
     gssize bytes;
     gint gzval;
-    gzFile *file;
+    gzFile file;
     gint success = 1;
 
 #ifdef G_OS_WIN32
@@ -1636,7 +1636,7 @@ gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding)
 {
     if (is_gzipped_file(name))
     {
-        gzFile *file = NULL;
+        gzFile file = NULL;
         char first_chunk[256];
         int num_read;
 
