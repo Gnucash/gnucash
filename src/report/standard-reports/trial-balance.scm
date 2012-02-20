@@ -149,7 +149,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
-      "b" opthelp-party-name (gnc:company-info gnc:*company-name*)))
+      "b" opthelp-party-name (or (gnc:company-info gnc:*company-name*) "")))
     
     ;; the period over which to collect adjusting/closing entries and
     ;; date at which to report the balance

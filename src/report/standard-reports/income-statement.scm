@@ -151,7 +151,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (gnc:company-info gnc:*company-name*)))
+      "b" opthelp-party-name (or (gnc:company-info gnc:*company-name*) "")))
     
     ;; period over which to report income
     (gnc:options-add-date-interval!

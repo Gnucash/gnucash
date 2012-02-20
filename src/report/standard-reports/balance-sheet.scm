@@ -158,7 +158,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (gnc:company-info gnc:*company-name*)))
+      "b" opthelp-party-name (or (gnc:company-info gnc:*company-name*) "")))
     
     ;; date at which to report balance
     (gnc:options-add-report-date!
