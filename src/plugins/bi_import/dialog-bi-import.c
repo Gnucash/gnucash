@@ -597,8 +597,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 timespecFromTime_t (&now_timespec, now);
                 gncInvoiceSetDateOpened (invoice, now_timespec);
             }
-            gncInvoiceSetBillingID (invoice, billing_id);
-            gncInvoiceSetNotes (invoice, notes);
+            gncInvoiceSetBillingID (invoice, billing_id ? billing_id : "");
+            gncInvoiceSetNotes (invoice, notes ? notes : "");
             gncInvoiceSetActive (invoice, TRUE);
             //if (g_ascii_strcasecmp(type,"INVOICE"))gncInvoiceSetBillTo( invoice, billto );
             (*n_invoices_created)++;
