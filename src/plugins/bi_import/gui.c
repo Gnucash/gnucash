@@ -200,7 +200,7 @@ gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     res = gnc_bi_import_read_file (filename, gui->regexp->str, gui->store, 0, &stats);
     if (res == RESULT_OK)
     {
-        gnc_bi_import_fix_bis (gui->store, &n_fixed, &n_deleted, info);
+        gnc_bi_import_fix_bis (gui->store, &n_fixed, &n_deleted, info, gui->type);
         if (info->len > 0)
             gnc_info_dialog (gui->dialog, "%s", info->str);
         g_string_free( info, TRUE );
@@ -269,7 +269,7 @@ void gnc_bi_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
     filename = gnc_plugin_bi_import_getFilename();
     if (filename)
     {
-        //printf("Setting filename"); // debug
+        //printf("Setting filename %s\n",filename); // debug
         gtk_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
         //printf("Set filename"); // debug
         g_free( filename );

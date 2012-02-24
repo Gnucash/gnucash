@@ -65,7 +65,7 @@ bi_import_result
 gnc_bi_import_read_file (const gchar *filename, const gchar *parser_regexp, GtkListStore *store, guint max_rows, bi_import_stats *stats);
 
 void
-gnc_bi_import_fix_bis (GtkListStore *store, guint *fixed, guint *deleted, GString *info);
+gnc_bi_import_fix_bis (GtkListStore *store, guint *fixed, guint *deleted, GString *info, gchar *type);
 
 void
 gnc_bi_import_create_bis (GtkListStore *store, QofBook *book, guint *n_invoices_created, guint *n_invoices_updated,	gchar *type);
