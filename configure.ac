@@ -1337,6 +1337,11 @@ AC_CONFIG_FILES(
   src/plugins/bi_import/Makefile
   src/plugins/bi_import/gtkbuilder/Makefile
   src/plugins/bi_import/ui/Makefile
+  dnl # Stuff for customer import.
+  src/plugins/customer_import/Makefile
+  src/plugins/customer_import/gtkbuilder/Makefile
+  src/plugins/customer_import/ui/Makefile
+
   dnl # non-makefiles
   dnl # Please read doc/build-system before adding *anything* here
 

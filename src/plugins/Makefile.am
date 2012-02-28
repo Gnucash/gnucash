@@ -1,1 +1,1 @@
-SUBDIRS=bi_import
+SUBDIRS=customer_import bi_import
