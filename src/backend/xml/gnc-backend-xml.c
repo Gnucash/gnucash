@@ -928,6 +928,7 @@ gnc_xml_be_remove_old_files(FileBackend *be)
             else if (regexec(&pattern, stamp_start, 0, NULL, 0) == 0)
                 got_date_stamp = TRUE;
 
+            regfree(&pattern);
             g_free(expression);
 
             if (!got_date_stamp) /* Not a gnucash created file after all... */
