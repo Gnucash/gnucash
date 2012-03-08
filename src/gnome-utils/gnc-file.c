@@ -932,6 +932,12 @@ RESTART:
         }
     }
 
+    g_free (protocol);
+    g_free (hostname);
+    g_free (username);
+    g_free (password);
+    g_free (path);
+
     gnc_unset_busy_cursor (NULL);
 
     /* going down -- abandon ship */
