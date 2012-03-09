@@ -1,0 +1,289 @@
+#!/usr/bin/perl -w
+# -*- perl -*-
+use strict;
+use File::Spec;
+
+sub process_func;
+sub print_preamble;
+sub scan_file;
+sub process_function;
+
+#Main
+my ($author, $inpath, $outpath) = @ARGV;
+die "Must provide author name and email" unless $author;
+die "No file to process" unless $inpath;
+my ($invol, $indir, $infile) = File::Spec->splitpath($inpath);
+my ($outvol, $outdir, $outfile);
+if ($outpath) {
+  ($outvol, $outdir, $outfile) = File::Spec->splitpath($outpath);
+} else {
+    $outvol = $invol;
+    $outdir = File::Spec->catdir($indir, "test");
+    $outfile = "utest-" . $infile;
+    $outpath = File::Spec->catpath($outvol, $outdir, $outfile);
+}
+open OUTFH, ">$outpath" or die "Failed to open $outpath: $!";
+
+my $inname = print_preamble($infile, $author);
+
+my $testlist = scan_file($inpath);
+
+print OUTFH "\n\nvoid\ntest_suite_$inname (void)\n{\n\n";
+print OUTFH join("\n", @$testlist), "\n";
+print OUTFH "\n}\n";
+close OUTFH;
+
+#end
+
+sub strip_comments {
+    my ($line, $comment) = @_;
+    my $comment_begin_re = qr{/\*.*};
+    my $comment_end_re = qr{.*\*/};
+    my $inline_comment_re = qr{/\*.*\*/};
+    my $rest_is_comment_re = qr{//.*$};
+    $line =~ s/$inline_comment_re//g;
+    $line =~ s/$rest_is_comment_re//;
+    if ($line =~ s/$comment_end_re//) {
+	return ($line, 0);
+    }
+    if ($line =~ s/$comment_begin_re//) {
+	return ($line, 1);
+    }
+    $line = "" if $comment;
+    return ($line, $comment);
+}
+
+sub scan_file {
+    my $inpath = shift;
+    my $func = [], $testlist = [];
+    my ($static, $body, $comment, $func_name) = (0, 0, 0, "");
+    open INFH, "<$inpath" or die "Failed to open $inpath: $!";
+    my $decl_or_def_re = qr{^(?:\w+[\w\d\s]+\s+)?(\w[\w\d]+)\s*\(};
+    my $preproc_re = qr/(?>^[\#}]|;$)/;
+    my @testlist;
+    while (my $line = <INFH>) {
+	chomp $line;
+	($line, $comment) = strip_comments($line);
+	next unless $line;
+	$body = 0 if $line =~ /^}/;
+	next if $body;
+	next if $line =~ /$preproc_re/;
+
+	$static = 1 if $line =~ /^static/;
+	if ( $line =~ /$decl_or_def_re/ ) {
+	    $func_name = $1;
+	    $body = 1 if $line =~ /{\s*$/;
+	}
+	push @$func, $line unless $line =~ /^[{}\/\s]/;
+	if ($body || $line =~ /^{/) {
+	    push @$testlist, process_function($func_name, $static,
+					      $func, $inpath) if $func_name;
+	    $body = 1;
+	    ($static, $func_name) = (0, "");
+	    $func = [];
+	}
+    }
+    close INFH;
+    return $testlist;
+}
+
+sub search_external {
+    my ($name, $inpath) = @_;
+    my ($invol, $indir, $infile) = File::Spec->splitpath($inpath);
+    my @excludes = qw(test* utest* swig* gnucash_core.c);
+    push @excludes, $infile;
+    my $exclude_string = "--exclude=" . join(" --exclude=", @excludes);
+    my $calls = `egrep -r $name --include="*.c" $exclude_string src | wc -l`;
+    chomp $calls;
+    $calls =~ s/\s//g;
+    my $files = `egrep -rl $name --include="*.c" $exclude_string src | wc -l`;
+    chomp $files;
+    $files =~ s/\s//g;
+
+    return ($calls, $files);
+}
+
+sub search_scheme {
+    my ($name) = @_;
+    $name =~ tr/_/-/;
+    my $egrepre = '\b' . $name . '[^\w_-]';
+    my $calls = `egrep -r "$egrepre"  --include="*.scm" src | wc -l`;
+    chomp $calls;
+    $calls =~ s/\s//g;
+    my $files = `egrep -rl "$egrepre" --include="*.scm" src | wc -l`;
+    chomp $files;
+    $files =~ s/\s//g;
+
+    return ($calls, $files);
+}
+
+sub search_local {
+    my ($name, $inpath) = @_;
+    open INFILE, "<$inpath" or die "Failed to open $inpath: $!";
+    my $comment = 0;
+    my $line;
+    my ($calls, $callbacks, $refs) = (0, 0, 0);
+    my $call_re = qr{\b$name\s*\(\w*[,)]};
+    my $callback_re = qr{\([^)]*$name(?>!\s*\()};
+    my $ref_re = qr{(?<=\=)\s*$name(?>!\s*\()};
+    while (my $line = <INFILE>) {
+	chomp $line;
+	($line, $comment) = strip_comments($line, $comment);
+	++ $calls if $line =~ /$call_re/;
+	++ $callbacks if $line =~ /$callback_re/;
+	++ $refs if $line =~ /$ref_re/;
+    }
+
+    close INFILE;
+    return ($calls, $callbacks, $refs);
+}
+
+sub process_function {
+    my ($c_name, $static, $func, $inpath) = @_;
+    my ($ext_calls, $ext_files, $scm_calls, $scm_files, $not_used);
+    my $gobject_re = qr/_(?:init|constructor|dispose|finalize|[sg]et_property)$/;
+    if ($c_name =~ /$gobject_re/) {
+	print OUTFH "/* $c_name\n";
+	print OUTFH join("\n", @$func);
+        print OUTFH "*/\n";
+	goto NO_USAGE;
+    }
+    unless ($static) {
+	($ext_calls, $ext_files) = search_external($c_name, $inpath);
+	($scm_calls, $scm_files) = search_scheme($c_name);
+    }
+    my ($local_calls, $local_callbacks, $local_refs) = search_local($c_name, $inpath);
+    unless ($ext_calls || $scm_calls) {
+	my $local_use = $local_calls + $local_callbacks + $local_refs;
+	print OUTFH "// Make Static\n" if !$static && $local_use > 1;
+	unless ($local_use) {
+	    print OUTFH "// Not Used\n";
+	    $not_used = 1;
+	}
+	print OUTFH "/* $c_name\n";
+	print OUTFH join("\n", @$func);
+	print OUTFH "// Local: $local_calls:$local_callbacks:$local_refs\n";
+        print OUTFH "*/\n";
+    } else {
+	print OUTFH "/* $c_name\n";
+	print OUTFH join("\n", @$func);
+	print OUTFH "// ";
+	print OUTFH "External: 0\n" if $ext_calls + $scm_calls == 0;
+	print OUTFH "C: $ext_calls " if $ext_calls > 0;
+	print OUTFH "in $ext_files " if $ext_calls > 1;
+	print OUTFH "SCM: $scm_calls " if $scm_calls > 0;
+	print OUTFH "in $scm_files" if $scm_calls > 1;
+	print OUTFH " Local: $local_calls:$local_callbacks:$local_refs\n";
+        print OUTFH "*/\n";
+    }
+NO_USAGE:
+    unless ($not_used) {
+	my $test_func = "test_$c_name";
+	my $test_name = $c_name;
+	$test_name =~ tr/_/ /;
+	print OUTFH "/* static void\n";
+	print OUTFH "test_$c_name (Fixture *fixture, gconstpointer pData)\n";
+	print OUTFH "{\n";
+	print OUTFH "}*/\n";
+	return "// GNC_TEST_ADD (suitename, \"$test_name\", Fixture, NULL, $test_func, teardown);";
+    }
+    return;
+}
+
+sub print_preamble {
+    my ($infile, $author) = @_;
+    my ($gnuemail) = ('gnu@gnu.org');
+    my $inName = substr($infile, 0, index($infile, "."));
+    my $inname = lc $inName;
+    my @indirs = File::Spec->splitdir($indir);
+    my @date = localtime(time());
+    my $year = $date[5] + 1900;
+    delete $indirs[-1];
+    $indirs[0] = "";
+    eval{
+	$indir = File::Spec->catfile((@indirs, $inName));
+    };
+    die "Catdir Failed $@" if $@;
+    print OUTFH <<EOF;
+/********************************************************************
+ * $outfile: GLib g_test test suite for $infile.		    *
+ * Copyright $year $author		    *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, you can retrieve it from        *
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html            *
+ * or contact:                                                      *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       $gnuemail                   *
+ ********************************************************************/
+#include "config.h"
+#include <string.h>
+#include <glib.h>
+#include "test-stuff.h"
+/* Add specific headers for this class */
+
+static const gchar *suitename = "$indir";
+void test_suite_$inname ( void );
+
+EOF
+    return $inname;
+}
+
+=head1 NAME
+
+make_testfile
+
+=head1 SYNOPSIS
+
+make_testfile "Author Name <author@email.addr>" path/to/input [path/to/output]
+
+=head1 SUMMARY
+
+Creates template unit test files from C source files. The default
+output file is utest-filename in a subdirectory named "test". For
+example, if the input file is src/engine/Account.c, the default output
+file will be src/engine/test/test-Account.c.
+
+The program scans the input file to find function signatures. Each
+function signature will generate a comment with the function's
+signature and the number of places that the function is called in C
+and Scheme incantations (Scheme calls are assumed to be the same
+function name with underscores replaced with dashes. The program
+doesn't look at SWIG files to find aliases.)
+
+The program attempts to determine each function's usage: All other C
+and Scheme files in the source tree are searched for uses of the
+function unless the function is marked "static". The function name is
+mangled to replaces underscores with hyphens for searching Scheme
+files. The input file is also searched for additional calls or
+assignments to the function, and recursion is excepted.
+
+A function for which no calls are found is marked "Not Used". A global
+(i.e. not static) function with only local calls or assignments is
+marked "should be static". GObject special functions (gnc_foo_init,
+gnc_foo_class_init, gnc_foo_constructor, gnc_foo_dispose,
+gnc_foo_finalize, gnc_foo_get_property, gnc_foo_set_property) are not
+searched for.
+
+After scanning, the program will add a comment to the outfile with the
+function's signature and the results of the usage scan, followed by a
+commented-out test function template (unless the function is found to
+have no usage). After all of the functions are written out, the
+program will finish by writing a test-suite function containing
+commented-out macros invoking each of the skeleton test functions.
+
+
+
+=cut
