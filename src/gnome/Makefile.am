@@ -105,9 +105,9 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
-  -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/app-utils/calculation \
   -I${top_srcdir}/src/backend/xml \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome-search \

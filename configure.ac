@@ -1242,8 +1242,6 @@ AC_CONFIG_FILES(
   src/bin/test/Makefile
   src/core-utils/Makefile
   src/core-utils/test/Makefile
-  src/calculation/Makefile
-  src/calculation/test/Makefile
   src/debug/Makefile
   src/debug/valgrind/Makefile
   src/doc/Makefile

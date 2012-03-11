@@ -59,12 +59,6 @@ libgncmod_gnome_utils_gnc_module_init(int refcount)
         return FALSE;
     }
 
-    /* load the calculation module (we depend on it) */
-    if (!gnc_module_load("gnucash/calculation", 0))
-    {
-        return FALSE;
-    }
-
     if (!gnc_module_load("gnucash/app-utils", 0))
     {
         return FALSE;

@@ -24,7 +24,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/gnc-module \
-  -I${top_srcdir}/src/calculation \
+  -I${top_srcdir}/src/app-utils/calculation \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/libqof/qof \
@@ -35,6 +35,8 @@ AM_CPPFLAGS = \
   ${GTK_CFLAGS}
 
 libgncmod_app_utils_la_SOURCES = \
+  calculation/expression_parser.c \
+  calculation/fin.c \
   swig-app-utils-guile.c \
   business-options.c \
   QuickFill.c \
@@ -84,7 +86,6 @@ libgncmod_app_utils_la_LDFLAGS = -avoid-version
 libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GCONF_LIBS} \
@@ -132,6 +133,12 @@ gncscm_DATA = \
   simple-obj.scm
 
 noinst_DATA = .scm-links
+
+noinst_HEADERS = \
+  calculation/finvar.h \
+  calculation/finproto.h \
+  calculation/fin_spl_protos.h \
+  calculation/fin_static_proto.h
 
 EXTRA_DIST = \
   swig-app-utils-python.c \

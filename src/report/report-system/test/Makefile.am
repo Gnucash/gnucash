@@ -17,7 +17,6 @@ TESTS = \
   test-load-module
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
-  --gnc-module-dir ${top_builddir}/src/calculation \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/html \
@@ -33,7 +32,6 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
 \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
-  --library-dir    ${top_builddir}/src/calculation \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/gnome-utils \
   --library-dir    ${top_builddir}/src/engine \

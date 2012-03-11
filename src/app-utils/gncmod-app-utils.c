@@ -66,12 +66,6 @@ libgncmod_app_utils_gnc_module_init(int refcount)
         return FALSE;
     }
 
-    /* load the calculation module (we depend on it) */
-    if (!gnc_module_load("gnucash/calculation", 0))
-    {
-        return FALSE;
-    }
-
     scm_init_sw_app_utils_module();
     /* publish swig bindings */
     /* load the scheme code */

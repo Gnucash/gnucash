@@ -9,7 +9,6 @@ TESTS_GUI = test-gnc-recurrence
 ##lib_LTLIBRARIES = libgncgnome.la
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
-  --gnc-module-dir ${top_builddir}/src/calculation \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/gnc-module \
@@ -24,7 +23,6 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql \
-  --library-dir    ${top_builddir}/src/calculation \
   --library-dir    ${top_builddir}/src/app-utils
 
 

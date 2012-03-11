@@ -11,7 +11,6 @@ NONGUI_SUBDIRS = \
   backend \
   scm \
   quotes \
-  calculation \
   tax
 
 # These directories should also not contain any gtk dependencies, but
