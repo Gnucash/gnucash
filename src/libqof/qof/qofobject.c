@@ -226,10 +226,10 @@ qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
 }
 
 static void
-do_append (QofInstance *qof_p, gpointer list_p)
+do_prepend (QofInstance *qof_p, gpointer list_p)
 {
     GList **list = list_p;
-    *list = g_list_append(*list, qof_p);
+    *list = g_list_prepend(*list, qof_p);
 }
 
 void
@@ -238,7 +238,7 @@ qof_object_foreach_sorted (QofIdTypeConst type_name, QofBook *book, QofInstanceF
     GList *list = NULL;
     GList *iter;
 
-    qof_object_foreach(type_name, book, do_append, &list);
+    qof_object_foreach(type_name, book, do_prepend, &list);
 
     list = g_list_sort(list, qof_instance_guid_compare);
 
@@ -248,6 +248,13 @@ qof_object_foreach_sorted (QofIdTypeConst type_name, QofBook *book, QofInstanceF
     }
 
     g_list_free(list);
+
+    // FIXME: Apparently this is a memory leak, as this g_list_free doesn't
+    // free all of the allocated memory of g_list_append in do_append(). Why?!?
+    // Does g_list_sort have special side-effects on the memory of the list?
+    // Subsequently, I've changed the g_list_append into g_list_prepend, but
+    // solely for performance reasons. To my surprise, this also makes the
+    // dubious memory leak go away. But again why?!?
 }
 
 const char *
