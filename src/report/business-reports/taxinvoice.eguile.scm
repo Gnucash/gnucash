@@ -44,7 +44,7 @@
            (txn          (gncInvoiceGetPostedTxn  opt-invoice))
            (currency     (gncInvoiceGetCurrency   opt-invoice))
            (entries      (gncInvoiceGetEntries    opt-invoice))
-           (splits      '()) 
+           (splits      '())
            (slots        (qof-book-get-slots book))
            (coyname      (coy-info slots gnc:*company-name*))
            (coycontact   (coy-info slots gnc:*company-contact*))
@@ -301,7 +301,7 @@
               (dsc-total 'add currency rdiscval)
     ?>
     <tr valign="top">
-      <td align="center"><?scm:d (gnc-print-date (gncEntryGetDate entry)) ?></td>
+      <td align="center" ><nobr><?scm:d (gnc-print-date (gncEntryGetDate entry)) ?></nobr></td>
       <td align="left"><?scm:d (gncEntryGetDescription entry) ?></td>
       <!-- td align="left">< ?scm:d (gncEntryGetNotes entry) ?></td -->
       <?scm (if units? (begin ?>
