@@ -14,7 +14,7 @@ INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src ) # for gnc-ui.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/libqof/qof) # for qof.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/gnc-module) # for gnc-glib-utils.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/core-utils) # for gnc-glib-utils.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/calculation) # for finproto.h
+INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/app-utils/calculation) # for finproto.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/engine) # for gnc-engine.h
 INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/src/engine) # for swig-runtime.h
 INCLUDE_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}) # for <option-util.h>
@@ -39,6 +39,10 @@ SET (app_utils_HEADERS
   gnc-ui-balances.h
   guile-util.h
   option-util.h
+  calculation/finvar.h
+  calculation/finproto.h
+  calculation/fin_spl_protos.h
+  calculation/fin_static_proto.h
 )
 
 # Command to generate the swig-app-utils.c wrapper file
@@ -46,6 +50,8 @@ SET (SWIG_APP_UTILS_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils.c)
 GNC_ADD_SWIG_COMMAND (${SWIG_APP_UTILS_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
 
 SET (app_utils_SOURCES
+  calculation/expression_parser.c
+  calculation/fin.c
   QuickFill.c
   file-utils.c
   gfec.c
