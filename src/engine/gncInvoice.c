@@ -1530,7 +1530,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
      * were copied to a new lot, to which later an invoice was added again and so on.
      * These over-payments were handled with automatic payment forward transactions.
      * You could consider these transactions to be links between lots as well, but
-     * to avoid some unexpected behavior, these are will not be altered here.
+     * to avoid some unexpected behavior, these will not be altered here.
      */
     lot_split_list = gnc_lot_get_split_list (lot);
     for (lot_split_iter = lot_split_list; lot_split_iter; lot_split_iter = lot_split_iter->next)
@@ -1550,7 +1550,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
         other_split_list = xaccTransGetSplitList (other_txn);
         for (list_iter = other_split_list; list_iter; list_iter = list_iter->next)
         {
-            Split *other_split = other_split_list->data;
+            Split *other_split = list_iter->data;
             GNCLot *other_lot = xaccSplitGetLot (other_split);
 
             /* Omit the lot we are about to delete */
