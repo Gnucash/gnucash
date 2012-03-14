@@ -112,6 +112,7 @@ noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
 
 test_engine_SOURCES = \
 	test-engine.c \
+	utest-Invoice.c \
 	utest-Account.c
 
 test_engine_HEADERS = \

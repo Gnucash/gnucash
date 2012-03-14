@@ -1537,7 +1537,6 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
     {
         Split *split = lot_split_iter->data;
         GList *other_split_list, *list_iter;
-        GNCLot *other_lot;
         Transaction *other_txn = xaccSplitGetParent (split);
         GList *lot_list = NULL;
 
@@ -1567,6 +1566,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
         xaccTransBeginEdit (other_txn);
         xaccTransDestroy (other_txn);
         xaccTransCommitEdit (other_txn);
+        g_assert(lot_split_list == gnc_lot_get_split_list (lot));
 
         /* Re-balance the saved lots as well as is possible */
         gncOwnerAutoApplyPaymentsWithLots (&invoice->owner, lot_list);

@@ -26,6 +26,7 @@
 #include "qof.h"
 
 extern void test_suite_account();
+extern void test_suite_gncInvoice();
 //extern void test_suite_transaction();
 //extern void test_suite_split();
 
@@ -36,9 +37,11 @@ main (int   argc,
     g_type_init(); 			/* Initialize the GObject system */
     g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
     qof_log_init_filename_special("stderr"); /* Init the log system */
+    //qof_log_set_level("gnc", G_LOG_LEVEL_DEBUG);
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
 
     test_suite_account();
+    test_suite_gncInvoice();
 //    test_suite_transaction();
 //    test_suite_split();
 
