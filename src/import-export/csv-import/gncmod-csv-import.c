@@ -21,7 +21,7 @@
 /**@internal
 @file gncmod-csv-import.c
 @brief module definition/initialization for the csv importer
-@author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
+@author Copyright (c) 2012 Robert Fewell
 */
 #include "config.h"
 
@@ -29,36 +29,35 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-#include "gnc-plugin-csv.h"
+#include "gnc-plugin-csv-import.h"
 
-GNC_MODULE_API_DECL(libgncmod_csv)
+GNC_MODULE_API_DECL(libgncmod_csv_import)
 
 /* version of the gnc module system interface we require */
-int libgncmod_csv_gnc_module_system_interface = 0;
+int libgncmod_csv_import_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int libgncmod_csv_gnc_module_current  = 0;
-int libgncmod_csv_gnc_module_revision = 0;
-int libgncmod_csv_gnc_module_age      = 0;
+int libgncmod_csv_import_gnc_module_current  = 0;
+int libgncmod_csv_import_gnc_module_revision = 0;
+int libgncmod_csv_import_gnc_module_age      = 0;
 
 //static GNCModule bus_core;
 //static GNCModule file;
 
-
 char *
-libgncmod_csv_gnc_module_path(void)
+libgncmod_csv_import_gnc_module_path(void)
 {
-    return g_strdup("gnucash/import-export/csv");
+    return g_strdup("gnucash/import-export/csv-import");
 }
 
 char *
-libgncmod_csv_gnc_module_description(void)
+libgncmod_csv_import_gnc_module_description(void)
 {
-    return g_strdup("Gnome GUI and C code for CSV importer using libcsv");
+    return g_strdup("Gnome GUI and C code for CSV importer.");
 }
 
 int
-libgncmod_csv_gnc_module_init(int refcount)
+libgncmod_csv_import_gnc_module_init(int refcount)
 {
     if (!gnc_module_load("gnucash/engine", 0))
     {
@@ -78,13 +77,13 @@ libgncmod_csv_gnc_module_init(int refcount)
     }
 
     /* Add menu items with C callbacks */
-    gnc_plugin_csv_create_plugin();
+    gnc_plugin_csv_import_create_plugin();
 
     return TRUE;
 }
 
 int
-libgncmod_csv_gnc_module_end(int refcount)
+libgncmod_csv_import_gnc_module_end(int refcount)
 {
     return TRUE;
 }

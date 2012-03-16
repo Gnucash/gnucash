@@ -540,7 +540,7 @@ static GtkCellRenderer* gnc_csv_preview_get_cell_renderer(GncCsvPreview* preview
 }
 
 /* The following is code copied from Gnumeric 1.7.8 licensed under the
- * GNU General Public License version 2 and/or version 3. It is from the file
+ * GNU General Public License version 2. It is from the file
  * gnumeric/src/dialogs/dialog-stf-fixed-page.c, and it has been
  * modified slightly to work within GnuCash. */
 

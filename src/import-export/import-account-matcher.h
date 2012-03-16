@@ -1,4 +1,9 @@
 /********************************************************************\
+ * import-account-matcher.h - flexible account picker/matcher       *
+ *                                                                  *          
+ * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
+ * Copyright (C) 2012 Robert Fewell                                 *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -22,11 +27,29 @@
   @brief  Generic and very flexible account matcher/picker
  @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
-#ifndef ACCOUNT_MATCHER_H
-#define ACCOUNT_MATCHER_H
+#ifndef IMPORT_ACCOUNT_MATCHER_H
+#define IMPORT_ACCOUNT_MATCHER_H
 
 #include "Account.h"
 #include <gtk/gtk.h>
+
+#include "gnc-tree-view-account.h"
+
+typedef struct
+{
+    GtkWidget           *dialog;                         /* Dialog Widget */
+    GtkWidget           *assistant;                      /* assistant Widget */
+    GncTreeViewAccount  *account_tree;                   /* Account tree */
+    GtkWidget           *account_tree_sw;                /* Scroll Window for Account tree */
+    gboolean             auto_create;                    /* Auto create retAccount, can be used to step over this stage */
+    const gchar         *account_human_description;      /* description for on line id, incoming */
+    const gchar         *account_online_id_value;        /* On line id value, incoming */
+    GtkWidget           *account_online_id_label;        /* the label Widget for the on line id, incoming */
+    const gnc_commodity *new_account_default_commodity;  /* new account default commodity, incoming */
+    GNCAccountType       new_account_default_type;       /* new account default type, incoming */
+    Account             *default_account;                /* default account for selection, incoming */
+    Account             *retAccount;                     /* Account value returned to caller */
+}AccountPickerDialog;
 
 /**  Must be called with a string containing a unique identifier for the
   account.  If an account with a matching online_id kvp_frame is
@@ -98,6 +121,30 @@ Account * gnc_import_select_account(GtkWidget *parent,
                                     Account * default_selection,
                                     gboolean * ok_pressed
                                    );
+
+
+/**  Must be called with the parent widget, ie. a vbox that the 
+     account picker dialog will be packed into. The data structure
+     AccountPickerDialog is initialised and default values populated.
+     
+  @param parent The parent widget. This is the place the account picker dialog will
+  be packed into.
+
+  @return A pointer to the AccountPickerDialog which has been setup.
+*/
+AccountPickerDialog * gnc_import_account_assist_setup (GtkWidget *parent);
+
+
+/**  Must be called with an AccountPickerDialog structure allready setup.
+     If an account with a matching online_id kvp_frame is found, which is 
+     allready present in the dialog structure, the function returns with a 
+     pointer to that account or NULL if not found.
+
+  @param Account picker Dialog structure, AccountPickerDialog
+
+  @return A pointer to the found account, or NULL if account not found.
+*/
+Account * gnc_import_account_assist_update (AccountPickerDialog *picker);
 
 #endif
 /**@}*/

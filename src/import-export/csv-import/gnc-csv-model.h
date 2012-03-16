@@ -20,7 +20,7 @@
 /** @file
      @brief CSV import GUI
      *
-     gnc-csv-import.h
+     gnc-csv-model.h
      @author Copyright (c) 2007 Benny Sperisen <lasindi@gmail.com>
  */
 
@@ -41,6 +41,7 @@
 enum GncCsvColumnType {GNC_CSV_NONE,
                        GNC_CSV_DATE,
                        GNC_CSV_DESCRIPTION,
+                       GNC_CSV_ACCOUNT,
                        GNC_CSV_BALANCE,
                        GNC_CSV_DEPOSIT,
                        GNC_CSV_WITHDRAWAL,
@@ -82,8 +83,12 @@ typedef struct
     gboolean balance_set; /**< TRUE if balance has been set from user data, FALSE otherwise */
 } GncCsvTransLine;
 
-extern const int num_date_formats;
+/* A set of currency formats that the user sees. */
+extern const int num_currency_formats;
+extern const gchar* currency_format_user[];
+
 /* A set of date formats that the user sees. */
+extern const int num_date_formats;
 extern const gchar* date_format_user[];
 
 /* This array contains all of the different strings for different column types. */
@@ -93,19 +98,22 @@ extern gchar* gnc_csv_column_type_strs[];
 typedef struct
 {
     gchar* encoding;
-    GMappedFile* raw_mapping; /**< The mapping containing raw_str */
-    GncCsvStr raw_str; /**< Untouched data from the file as a string */
-    GncCsvStr file_str; /**< raw_str translated into UTF-8 */
-    GPtrArray* orig_lines; /**< file_str parsed into a two-dimensional array of strings */
-    GArray* orig_row_lengths; /**< The lengths of rows in orig_lines
-                             * before error messages are appended */
-    int orig_max_row; /**< Holds the maximum value in orig_row_lengths */
-    GStringChunk* chunk; /**< A chunk of memory in which the contents of orig_lines is stored */
+    GMappedFile* raw_mapping;   /**< The mapping containing raw_str */
+    GncCsvStr raw_str;          /**< Untouched data from the file as a string */
+    GncCsvStr file_str;         /**< raw_str translated into UTF-8 */
+    GPtrArray* orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
+    GArray* orig_row_lengths;   /**< The lengths of rows in orig_lines
+                                      before error messages are appended */
+    int orig_max_row;           /**< Holds the maximum value in orig_row_lengths */
+    GStringChunk* chunk;        /**< A chunk of memory in which the contents of orig_lines is stored */
     StfParseOptions_t* options; /**< Options controlling how file_str should be parsed */
-    GArray* column_types; /**< Array of values from the GncCsvColumnType enumeration */
-    GList* error_lines; /**< List of row numbers in orig_lines that have errors */
-    GList* transactions; /**< List of GncCsvTransLine*s created using orig_lines and column_types */
-    int date_format; /**< The format of the text in the date columns from date_format_internal. */
+    GArray* column_types;       /**< Array of values from the GncCsvColumnType enumeration */
+    GList* error_lines;         /**< List of row numbers in orig_lines that have errors */
+    GList* transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
+    int date_format;            /**< The format of the text in the date columns from date_format_internal. */
+    int start_row;              /**< The start row to generate transactions from. */
+    int end_row;                /**< The end row to generate transactions from. */
+    int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
 } GncCsvParseData;
 
 GncCsvParseData* gnc_csv_new_parse_data(void);
@@ -120,5 +128,7 @@ int gnc_csv_convert_encoding(GncCsvParseData* parse_data, const char* encoding, 
 int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** error);
 
 int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
+
+time_t parse_date(const char* date_str, int format);
 
 #endif

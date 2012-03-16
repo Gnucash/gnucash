@@ -1,4 +1,11 @@
 /********************************************************************\
+ * import-main-matcher.c - Transaction matcher main window          *
+ *                                                                  *          
+ * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
+ * Copyright (C) 2002 Christian Stimming                            *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2012 Robert Fewell                                 *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -47,6 +54,7 @@
 struct _main_matcher_info
 {
     GtkWidget *dialog;
+    GtkWidget *assistant;
     GtkTreeView *view;
     GNCImportSettings *user_settings;
     GdkColor color_back_red;
@@ -125,9 +133,15 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
         while (gtk_tree_model_iter_next (model, &iter));
     }
 
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
-    gnc_import_Settings_delete (info->user_settings);
-    gtk_widget_destroy (GTK_WIDGET (info->dialog));
+
+    if(!(info->dialog == NULL))
+    {
+        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
+        gnc_import_Settings_delete (info->user_settings);
+        gtk_widget_destroy (GTK_WIDGET (info->dialog));
+    }
+    else
+        gnc_import_Settings_delete (info->user_settings);
     g_free (info);
 }
 
@@ -533,7 +547,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     GNCImportMainMatcher *info;
     GtkBuilder *builder;
     GtkWidget *heading_label;
-    GtkWidget *button;
+    GtkWidget *button, *box, *pbox;
     gboolean show_update;
 
     info = g_new0 (GNCImportMainMatcher, 1);
@@ -545,9 +559,16 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     /* Initialize the GtkDialog. */
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher");
-
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_content");
     info->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher"));
     g_assert (info->dialog != NULL);
+
+    /* Pack the content into the dialog vbox */
+    pbox = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_vbox"));
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
+    gtk_box_pack_start( GTK_BOX(pbox), box, TRUE, TRUE,0);
+
+    /* Get the view */
     info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
     g_assert (info->view != NULL);
 
@@ -581,6 +602,74 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     return info;
 }
 
+/*****************************************************************
+ *                 Assistant routines Start                      *
+ *****************************************************************/
+
+GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
+        const gchar* heading,
+        gboolean all_from_same_account,
+        gint match_date_hardlimit)
+{
+    GNCImportMainMatcher *info;
+    GtkBuilder *builder;
+    GtkWidget *heading_label;
+    GtkWidget *button, *box, *pbox;
+    gboolean show_update;
+
+    info = g_new0 (GNCImportMainMatcher, 1);
+
+    /* Initialize user Settings. */
+    info->user_settings = gnc_import_Settings_new ();
+    gnc_import_Settings_set_match_date_hardlimit (info->user_settings, match_date_hardlimit);
+
+    /* load the interface */
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_content");
+    if (builder == NULL)
+    {
+        PERR("Error opening the glade builder interface");
+    }
+    /* Pack content into Assistant page widget */
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
+    gtk_box_pack_start( GTK_BOX(parent), box, TRUE, TRUE, 6);
+
+    /* Get the view */
+    info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
+    g_assert (info->view != NULL);
+
+    show_update = gnc_import_Settings_get_action_update_enabled(info->user_settings);
+    gnc_gen_trans_init_view(info, all_from_same_account, show_update);
+    heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
+    g_assert (heading_label != NULL);
+
+    /*Initialise the colors */
+    gdk_color_parse(COLOR_RED,    &info->color_back_red);
+    gdk_color_parse(COLOR_YELLOW, &info->color_back_yellow);
+    gdk_color_parse(COLOR_GREEN,  &info->color_back_green);
+
+    if (heading)
+        gtk_label_set_text (GTK_LABEL (heading_label), heading);
+
+    info->transaction_processed_cb = NULL;
+
+    /* Connect the signals */
+    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, info);
+
+    g_object_unref(G_OBJECT(builder));
+
+    return info;
+}	
+
+void gnc_gen_trans_assist_start (GNCImportMainMatcher *info)
+{
+    on_matcher_ok_clicked (NULL, info);
+}
+
+/*****************************************************************
+ *                   Assistant routines End                      *
+ *****************************************************************/
+
 void gnc_gen_trans_list_add_tp_cb(GNCImportMainMatcher *info,
                                   GNCTransactionProcessedCB trans_processed_cb,
                                   gpointer user_data)
@@ -588,7 +677,6 @@ void gnc_gen_trans_list_add_tp_cb(GNCImportMainMatcher *info,
     info->user_data = user_data;
     info->transaction_processed_cb = trans_processed_cb;
 }
-
 
 gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info)
 {
@@ -603,7 +691,6 @@ gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info)
 
     return result;
 }
-
 
 static void
 refresh_model_row (GNCImportMainMatcher *gui,
@@ -816,7 +903,6 @@ refresh_model_row (GNCImportMainMatcher *gui,
     selection = gtk_tree_view_get_selection(gui->view);
     gtk_tree_selection_unselect_all(selection);
 }
-
 
 void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans)
 {

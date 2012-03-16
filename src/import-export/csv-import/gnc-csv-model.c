@@ -11,6 +11,8 @@
 #endif
 #include <goffice/utils/go-glib-extras.h>
 
+#include "gnc-ui-util.h"
+
 #include <string.h>
 #include <sys/time.h>
 
@@ -29,7 +31,6 @@
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
 const int num_date_formats = 5;
-
 const gchar* date_format_user[] = {N_("y-m-d"),
                                    N_("d-m-y"),
                                    N_("m-d-y"),
@@ -37,10 +38,17 @@ const gchar* date_format_user[] = {N_("y-m-d"),
                                    N_("m-d")
                                   };
 
+const int num_currency_formats = 3;
+const gchar* currency_format_user[] = {N_("Locale"),
+                                   N_("Period: 123,456.78"),
+                                   N_("Comma: 123.456,78")
+                                  };
+
 /* This array contains all of the different strings for different column types. */
 gchar* gnc_csv_column_type_strs[GNC_CSV_NUM_COL_TYPES] = {N_("None"),
         N_("Date"),
         N_("Description"),
+        N_("Account"),
         N_("Balance"),
         N_("Deposit"),
         N_("Withdrawal"),
@@ -305,7 +313,7 @@ static time_t parse_date_without_year(const char* date_str, int format)
  * @param format An index specifying a format in date_format_user
  * @return The parsed value of date_str on success or -1 on failure
  */
-static time_t parse_date(const char* date_str, int format)
+time_t parse_date(const char* date_str, int format)
 {
     if (strchr(date_format_user[format], 'y'))
         return parse_date_with_year(date_str, format);
@@ -331,7 +339,10 @@ GncCsvParseData* gnc_csv_new_parse_data(void)
     parse_data->error_lines = parse_data->transactions = NULL;
     parse_data->options = default_parse_options();
     parse_data->date_format = -1;
+    parse_data->currency_format = 0;
     parse_data->chunk = g_string_chunk_new(100 * 1024);
+    parse_data->start_row = 0;
+    parse_data->end_row = 1000;
     return parse_data;
 }
 
@@ -432,7 +443,7 @@ GError** error)
 int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
 GError** error)
 {
-    const char* guess_enc;
+    const char* guess_enc = NULL;
 
     /* Get the raw data first and handle an error if one occurs. */
     parse_data->raw_mapping = g_mapped_file_new(filename, FALSE, error);
@@ -441,6 +452,7 @@ GError** error)
         /* TODO Handle file opening errors more specifically,
          * e.g. inexistent file versus no read permission. */
         parse_data->raw_str.begin = NULL;
+        g_clear_error (error);
         g_set_error(error, 0, GNC_CSV_FILE_OPEN_ERR, "%s", _("File opening failed."));
         return 1;
     }
@@ -450,15 +462,15 @@ GError** error)
     parse_data->raw_str.end = parse_data->raw_str.begin + g_mapped_file_get_length(parse_data->raw_mapping);
 
     /* Make a guess at the encoding of the data. */
-    guess_enc = go_guess_encoding((const char*)(parse_data->raw_str.begin),
-    (size_t)(parse_data->raw_str.end - parse_data->raw_str.begin),
-    "UTF-8", NULL);
+    if(!g_mapped_file_get_length(parse_data->raw_mapping) == 0)
+        guess_enc = go_guess_encoding((const char*)(parse_data->raw_str.begin),
+        (size_t)(parse_data->raw_str.end - parse_data->raw_str.begin),
+        "UTF-8", NULL);
     if (guess_enc == NULL)
     {
         g_set_error(error, 0, GNC_CSV_ENCODING_ERR, "%s", _("Unknown encoding."));
         return 1;
     }
-
     /* Convert using the guessed encoding into parse_data->file_str and
      * handle any errors that occur. */
     gnc_csv_convert_encoding(parse_data, guess_enc, error);
@@ -512,7 +524,8 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
         g_array_free(parse_data->orig_row_lengths, FALSE);
 
     parse_data->orig_row_lengths =
-    g_array_sized_new(FALSE, FALSE, sizeof(int), parse_data->orig_lines->len);
+        g_array_sized_new(FALSE, FALSE, sizeof(int), parse_data->orig_lines->len);
+
     g_array_set_size(parse_data->orig_row_lengths, parse_data->orig_lines->len);
     parse_data->orig_max_row = 0;
     for (i = 0; i < parse_data->orig_lines->len; i++)
@@ -576,6 +589,7 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
 typedef struct
 {
     int date_format; /**< The format for parsing dates */
+    int currency_format; /**< The format for currency */
     Account* account; /**< The account the transaction belongs to */
     GList* properties; /**< List of TransProperties */
 } TransPropertyList;
@@ -632,7 +646,7 @@ static void trans_property_free(TransProperty* prop)
 static gboolean trans_property_set(TransProperty* prop, char* str)
 {
     char *endptr, *possible_currency_symbol, *str_dupe;
-    double value;
+    gnc_numeric val;
     switch (prop->type)
     {
     case GNC_CSV_DATE:
@@ -672,27 +686,40 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
             }
         }
 
-        /* Translate the string (now clean of currency symbols) into a number. */
-        value = strtod(str_dupe, &endptr);
-
-        /* If this isn't a valid numeric string, this is an error. */
-        if (endptr != str_dupe + strlen(str_dupe))
+        /* Currency format */
+        switch (prop->list->currency_format)
         {
-            g_free(str_dupe);
-            return FALSE;
+        case 0:
+            /* Currancy locale */
+            if(!(xaccParseAmount(str_dupe, TRUE, &val, &endptr)))
+            {
+                g_free(str_dupe);
+                return FALSE;
+            }
+            break;
+        case 1:
+            /* Currancy decimal period */
+            if(!(xaccParseAmountExtended(str_dupe, TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
+            {
+                g_free(str_dupe);
+                return FALSE;
+            }
+            break;
+        case 2:
+            /* Currancy decimal comma */
+            if(!(xaccParseAmountExtended(str_dupe, TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
+            {
+                g_free(str_dupe);
+                return FALSE;
+            }
+            break;
         }
 
+        prop->value = g_new(gnc_numeric, 1);
+        *((gnc_numeric*)(prop->value)) = val;
         g_free(str_dupe);
-
-        /* Change abs to fabs, to fix bug 586805 */
-        if (fabs(value) > 0.00001)
-        {
-            prop->value = g_new(gnc_numeric, 1);
-            *((gnc_numeric*)(prop->value)) =
-            double_to_gnc_numeric(value, xaccAccountGetCommoditySCU(prop->list->account),
-            GNC_HOW_RND_ROUND_HALF_UP);
-        }
         return TRUE;
+
     }
     return FALSE; /* We should never actually get here. */
 }
@@ -702,11 +729,12 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
  * @param date_format An index from date_format_user for how date properties should be parsed
  * @return A pointer to a new TransPropertyList
  */
-static TransPropertyList* trans_property_list_new(Account* account, int date_format)
+static TransPropertyList* trans_property_list_new(Account* account, int date_format, int currency_format)
 {
     TransPropertyList* list = g_new(TransPropertyList, 1);
     list->account = account;
     list->date_format = date_format;
+    list->currency_format = currency_format;
     list->properties = NULL;
     return list;
 }
@@ -1014,26 +1042,32 @@ int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account,
     {
         /* The following while-loop effectively behaves like the following for-loop:
          * for(i = 0; i < parse_data->orig_lines->len; i++). */
-        i = 0;
+        i = parse_data->start_row;
         last_transaction = NULL;
     }
-    while (i < parse_data->orig_lines->len)
+
+    /* set parse_data->end_row to number of lines */
+    if(parse_data->end_row > parse_data->orig_lines->len)
+        parse_data->end_row = parse_data->orig_lines->len;
+
+    while (i < parse_data->end_row)
     {
         GPtrArray* line = parse_data->orig_lines->pdata[i];
         /* This flag is TRUE if there are any errors in this row. */
         gboolean errors = FALSE;
         gchar* error_message = NULL;
-        TransPropertyList* list = trans_property_list_new(account, parse_data->date_format);
+        TransPropertyList* list = trans_property_list_new(account, parse_data->date_format, parse_data->currency_format );
         GncCsvTransLine* trans_line = NULL;
 
         for (j = 0; j < line->len; j++)
         {
-            /* We do nothing in "None" columns. */
-            if (column_types->data[j] != GNC_CSV_NONE)
+            /* We do nothing in "None" or "Account" columns. */
+            if ((column_types->data[j] != GNC_CSV_NONE) && (column_types->data[j] != GNC_CSV_ACCOUNT))
             {
                 /* Affect the transaction appropriately. */
                 TransProperty* property = trans_property_new(column_types->data[j], list);
                 gboolean succeeded = trans_property_set(property, line->pdata[j]);
+
                 /* TODO Maybe move error handling to within TransPropertyList functions? */
                 if (succeeded)
                 {

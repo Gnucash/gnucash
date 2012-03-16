@@ -1,23 +1,29 @@
-SUBDIRS = .
+SUBDIRS = . schemas
 
-pkglib_LTLIBRARIES=libgncmod-csv.la
+pkglib_LTLIBRARIES=libgncmod-csv-import.la
 
-libgncmod_csv_la_SOURCES = \
+libgncmod_csv_import_la_SOURCES = \
   gncmod-csv-import.c \
-  gnc-plugin-csv.c \
-  gnc-csv-import.c \
+  assistant-csv-account-import.c \
+  assistant-csv-trans-import.c \
+  gnc-plugin-csv-import.c \
+  csv-account-import.c \
   gnc-csv-model.c \
-  gnc-csv-gnumeric-popup.c
+  gnc-csv-gnumeric-popup.c \
+  gnc-csv-import.c
 
 noinst_HEADERS = \
-  gnc-plugin-csv.h \
-  gnc-csv-import.h \
+  assistant-csv-account-import.h \
+  assistant-csv-trans-import.h \
+  gnc-plugin-csv-import.h \
+  csv-account-import.h \
   gnc-csv-model.h \
-  gnc-csv-gnumeric-popup.h
+  gnc-csv-gnumeric-popup.h \
+  gnc-csv-import.h
 
-libgncmod_csv_la_LDFLAGS = -avoid-version
+libgncmod_csv_import_la_LDFLAGS = -avoid-version
 
-libgncmod_csv_la_LIBADD = \
+libgncmod_csv_import_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
@@ -49,11 +55,13 @@ AM_CPPFLAGS = \
 
 uidir = $(GNC_UI_DIR)
 ui_DATA = \
-	gnc-plugin-csv-ui.xml
+	gnc-plugin-csv-import-ui.xml
 
 gtkbuilderdir = ${GNC_GTKBUILDER_DIR}
 gtkbuilder_DATA = \
-	gnc-csv-import.glade
+	assistant-csv-account-import.glade \
+	assistant-csv-trans-import.glade \
+        gnc-csv-import.glade
 
 EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA)
 

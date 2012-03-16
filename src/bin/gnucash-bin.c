@@ -569,7 +569,7 @@ load_gnucash_modules()
         { "gnucash/register/register-gnome", 0, FALSE },
         { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
-        { "gnucash/import-export/csv", 0, TRUE },
+        { "gnucash/import-export/csv-import", 0, TRUE },
         { "gnucash/import-export/csv-export", 0, TRUE },
         { "gnucash/import-export/log-replay", 0, TRUE },
         { "gnucash/import-export/aqbanking", 0, TRUE },
