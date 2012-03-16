@@ -165,8 +165,8 @@ gnc_vendor_get_property (GObject         *object,
         g_value_set_int(value, vendor->taxincluded);
         break;
     case PROP_TAX_INCLUDED_STR:
-    	g_value_set_string(value, qofVendorGetTaxIncluded(vendor));
-    	break;
+        g_value_set_string(value, qofVendorGetTaxIncluded(vendor));
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -219,7 +219,7 @@ gnc_vendor_set_property (GObject         *object,
     case PROP_TAX_INCLUDED_STR:
         qofVendorSetTaxIncluded(vendor, g_value_get_string(value));
         break;
-   default:
+    default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
     }
@@ -369,21 +369,21 @@ gnc_vendor_class_init (GncVendorClass *klass)
     (gobject_class,
      PROP_TAX_INCLUDED,
      g_param_spec_int  ("tax-included",
-                          "Tax included",
-                          "The tax-included property contains the information about tax calculation this vendor.",
-                          GNC_TAXINCLUDED_YES,       /* min */
-                          GNC_TAXINCLUDED_USEGLOBAL, /* max */
-                          GNC_TAXINCLUDED_USEGLOBAL, /* default */
-                          G_PARAM_READWRITE));
+                        "Tax included",
+                        "The tax-included property contains the information about tax calculation this vendor.",
+                        GNC_TAXINCLUDED_YES,       /* min */
+                        GNC_TAXINCLUDED_USEGLOBAL, /* max */
+                        GNC_TAXINCLUDED_USEGLOBAL, /* default */
+                        G_PARAM_READWRITE));
 
     g_object_class_install_property
     (gobject_class,
      PROP_TAX_INCLUDED_STR,
      g_param_spec_string("tax-included-string",
-                          "Tax included string",
-                          "The tax-included-string property contains a character version of tax-included.",
-                          FALSE,
-                          G_PARAM_READWRITE));
+                         "Tax included string",
+                         "The tax-included-string property contains a character version of tax-included.",
+                         FALSE,
+                         G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */

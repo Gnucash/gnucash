@@ -1,6 +1,6 @@
 /********************************************************************\
  * import-main-matcher.h - Transaction matcher main window          *
- *                                                                  *          
+ *                                                                  *
  * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
  * Copyright (C) 2002 Christian Stimming                            *
  * Copyright (C) 2012 Robert Fewell                                 *
@@ -72,7 +72,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
 
 
 /**  Add the Transaction matcher to an existing page of an assistant.
- *   Must be called with the parent widget, ie. a vbox that the 
+ *   Must be called with the parent widget, ie. a vbox that the
  *   transaction matcher will be packed into. The data structure
  *   GNCImportMainMatcher is returned.
  *

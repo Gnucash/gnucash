@@ -1682,8 +1682,8 @@ init_sql_backend( GncDbiBackend* dbi_be )
     be->events_pending = NULL;
     be->process_events = NULL;
 
-/* The SQL/DBI backend doesn't need to be synced until it is
- * configured for multiuser access. */
+    /* The SQL/DBI backend doesn't need to be synced until it is
+     * configured for multiuser access. */
     be->sync = gnc_dbi_safe_sync_all;
     be->safe_sync = gnc_dbi_safe_sync_all;
     be->load_config = NULL;

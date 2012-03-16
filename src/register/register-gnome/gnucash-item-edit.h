@@ -146,7 +146,7 @@ void gnc_item_edit_redraw (GncItemEdit *item_edit);
 void gnc_item_edit_cut_clipboard (GncItemEdit *item_edit, guint32 time);
 void gnc_item_edit_copy_clipboard (GncItemEdit *item_edit, guint32 time);
 void gnc_item_edit_paste_selection (GncItemEdit *item_edit, GdkAtom selection,
-				    guint32 time);
+                                    guint32 time);
 
 void gnc_item_edit_set_has_selection (GncItemEdit *item_edit, gboolean has_selection);
 gboolean gnc_item_edit_get_has_selection (GncItemEdit *item_edit);

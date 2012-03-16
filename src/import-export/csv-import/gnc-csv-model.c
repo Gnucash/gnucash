@@ -40,9 +40,9 @@ const gchar* date_format_user[] = {N_("y-m-d"),
 
 const int num_currency_formats = 3;
 const gchar* currency_format_user[] = {N_("Locale"),
-                                   N_("Period: 123,456.78"),
-                                   N_("Comma: 123.456,78")
-                                  };
+                                       N_("Period: 123,456.78"),
+                                       N_("Comma: 123.456,78")
+                                      };
 
 /* This array contains all of the different strings for different column types. */
 gchar* gnc_csv_column_type_strs[GNC_CSV_NUM_COL_TYPES] = {N_("None"),
@@ -462,7 +462,7 @@ GError** error)
     parse_data->raw_str.end = parse_data->raw_str.begin + g_mapped_file_get_length(parse_data->raw_mapping);
 
     /* Make a guess at the encoding of the data. */
-    if(!g_mapped_file_get_length(parse_data->raw_mapping) == 0)
+    if (!g_mapped_file_get_length(parse_data->raw_mapping) == 0)
         guess_enc = go_guess_encoding((const char*)(parse_data->raw_str.begin),
         (size_t)(parse_data->raw_str.end - parse_data->raw_str.begin),
         "UTF-8", NULL);
@@ -524,7 +524,7 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
         g_array_free(parse_data->orig_row_lengths, FALSE);
 
     parse_data->orig_row_lengths =
-        g_array_sized_new(FALSE, FALSE, sizeof(int), parse_data->orig_lines->len);
+    g_array_sized_new(FALSE, FALSE, sizeof(int), parse_data->orig_lines->len);
 
     g_array_set_size(parse_data->orig_row_lengths, parse_data->orig_lines->len);
     parse_data->orig_max_row = 0;
@@ -691,7 +691,7 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
         {
         case 0:
             /* Currancy locale */
-            if(!(xaccParseAmount(str_dupe, TRUE, &val, &endptr)))
+            if (!(xaccParseAmount(str_dupe, TRUE, &val, &endptr)))
             {
                 g_free(str_dupe);
                 return FALSE;
@@ -699,7 +699,7 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
             break;
         case 1:
             /* Currancy decimal period */
-            if(!(xaccParseAmountExtended(str_dupe, TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
+            if (!(xaccParseAmountExtended(str_dupe, TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
             {
                 g_free(str_dupe);
                 return FALSE;
@@ -707,7 +707,7 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
             break;
         case 2:
             /* Currancy decimal comma */
-            if(!(xaccParseAmountExtended(str_dupe, TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
+            if (!(xaccParseAmountExtended(str_dupe, TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
             {
                 g_free(str_dupe);
                 return FALSE;
@@ -1047,7 +1047,7 @@ int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account,
     }
 
     /* set parse_data->end_row to number of lines */
-    if(parse_data->end_row > parse_data->orig_lines->len)
+    if (parse_data->end_row > parse_data->orig_lines->len)
         parse_data->end_row = parse_data->orig_lines->len;
 
     while (i < parse_data->end_row)

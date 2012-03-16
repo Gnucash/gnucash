@@ -229,7 +229,7 @@ static guint n_system_encodings = G_N_ELEMENTS (system_encodings);
 
 
 void gxi_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
-                 GncXmlImportData  *data)
+                     GncXmlImportData  *data)
 {
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
@@ -260,7 +260,7 @@ gxi_update_conversion_forward (GncXmlImportData *data)
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     if (data->n_unassigned || data->n_impossible)
-          gtk_assistant_set_page_complete (assistant, page, FALSE);
+        gtk_assistant_set_page_complete (assistant, page, FALSE);
     else
         gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
@@ -313,31 +313,31 @@ gnc_xml_convert_single_file (const gchar *filename)
 
         /* Enable buttons on all pages. */
         gtk_assistant_set_page_complete (GTK_ASSISTANT (data->assistant),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "start_page")),
-                                     TRUE);
+                                         GTK_WIDGET(gtk_builder_get_object(builder, "start_page")),
+                                         TRUE);
         gtk_assistant_set_page_complete (GTK_ASSISTANT (data->assistant),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "conversion_page")),
-                                     TRUE);
+                                         GTK_WIDGET(gtk_builder_get_object(builder, "conversion_page")),
+                                         TRUE);
         gtk_assistant_set_page_complete (GTK_ASSISTANT (data->assistant),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "end_page")),
-                                     TRUE);
+                                         GTK_WIDGET(gtk_builder_get_object(builder, "end_page")),
+                                         TRUE);
 
         /* start page, explanations */
-	gtk_assistant_set_page_title (GTK_ASSISTANT(data->assistant),
-					 gtk_assistant_get_nth_page (GTK_ASSISTANT(data->assistant),0),
-					 gettext(encodings_doc_page_title));
+        gtk_assistant_set_page_title (GTK_ASSISTANT(data->assistant),
+                                      gtk_assistant_get_nth_page (GTK_ASSISTANT(data->assistant), 0),
+                                      gettext(encodings_doc_page_title));
 
-	widget = GTK_WIDGET(gtk_builder_get_object (builder, "start_page"));
-	gtk_label_set_text (GTK_LABEL(widget), gettext (encodings_doc_string));
+        widget = GTK_WIDGET(gtk_builder_get_object (builder, "start_page"));
+        gtk_label_set_text (GTK_LABEL(widget), gettext (encodings_doc_string));
 
         /* conversion page */
-	data->default_encoding_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "default_enc_box"));
-	data->string_box_container = GTK_WIDGET(gtk_builder_get_object (builder, "string_box_container"));
-	data->impossible_label = GTK_WIDGET(gtk_builder_get_object (builder, "impossible_label"));
+        data->default_encoding_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "default_enc_box"));
+        data->string_box_container = GTK_WIDGET(gtk_builder_get_object (builder, "string_box_container"));
+        data->impossible_label = GTK_WIDGET(gtk_builder_get_object (builder, "impossible_label"));
 
         /* finish page */
         widget = GTK_WIDGET(gtk_builder_get_object(builder, "end_page"));
-	gtk_label_set_text (GTK_LABEL(widget), gettext (finish_convert_string));
+        gtk_label_set_text (GTK_LABEL(widget), gettext (finish_convert_string));
 
         gtk_builder_connect_signals(builder, data);
 
@@ -351,10 +351,10 @@ gnc_xml_convert_single_file (const gchar *filename)
         /* This won't return until the assistant is finished */
         gtk_main();
 
-	if (data->canceled)
-	    success = FALSE;
-	else
-	    success = gxi_save_file (data);
+        if (data->canceled)
+            success = FALSE;
+        else
+            success = gxi_save_file (data);
     }
 
     /* destroy all the data variables */

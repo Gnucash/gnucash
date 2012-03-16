@@ -146,14 +146,14 @@ gnc_employee_get_property (GObject         *object,
         g_value_set_object(value, emp->addr);
         break;
     case PROP_WORKDAY:
-    	g_value_set_boxed(value, &emp->workday);
-    	break;
+        g_value_set_boxed(value, &emp->workday);
+        break;
     case PROP_RATE:
-    	g_value_set_boxed(value, &emp->rate);
-    	break;
+        g_value_set_boxed(value, &emp->rate);
+        break;
     case PROP_CCARD:
-    	g_value_set_object(value, emp->ccard_acc);
-    	break;
+        g_value_set_object(value, emp->ccard_acc);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -195,14 +195,14 @@ gnc_employee_set_property (GObject         *object,
         qofEmployeeSetAddr(emp, g_value_get_object(value));
         break;
     case PROP_WORKDAY:
-    	gncEmployeeSetWorkday(emp, *(gnc_numeric*)g_value_get_boxed(value));
-    	break;
+        gncEmployeeSetWorkday(emp, *(gnc_numeric*)g_value_get_boxed(value));
+        break;
     case PROP_RATE:
-    	gncEmployeeSetRate(emp, *(gnc_numeric*)g_value_get_boxed(value));
-    	break;
+        gncEmployeeSetRate(emp, *(gnc_numeric*)g_value_get_boxed(value));
+        break;
     case PROP_CCARD:
-    	gncEmployeeSetCCard(emp, g_value_get_object(value));
-    	break;
+        gncEmployeeSetCCard(emp, g_value_get_object(value));
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;

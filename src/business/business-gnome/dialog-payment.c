@@ -174,7 +174,7 @@ static gnc_numeric
 gnc_payment_dialog_calculate_selected_total (PaymentWindow *pw)
 {
     GtkTreeSelection *selection;
-    GList *list=NULL, *node;
+    GList *list = NULL, *node;
     gnc_numeric val = gnc_numeric_zero();
 
     if (!pw->docs_list_tree_view || !GTK_IS_TREE_VIEW(pw->docs_list_tree_view))
@@ -235,7 +235,7 @@ static void
 gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 {
     GtkListStore *store;
-    GList *list=NULL, *node;
+    GList *list = NULL, *node;
 
     g_return_if_fail (pw->docs_list_tree_view && GTK_IS_TREE_VIEW(pw->docs_list_tree_view));
 

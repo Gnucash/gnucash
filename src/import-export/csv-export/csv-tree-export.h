@@ -29,7 +29,7 @@
 
 #include "assistant-csv-export.h"
 
-/** The csv_tree_export() will let the user export the  
+/** The csv_tree_export() will let the user export the
  *  account tree to a deliminated file.
  */
 void csv_tree_export (CsvExportInfo *info);

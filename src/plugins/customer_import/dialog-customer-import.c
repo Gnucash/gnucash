@@ -349,15 +349,15 @@ gnc_customer_import_create_customers (GtkListStore *store, QofBook *book, guint 
             {
                 if (g_ascii_strcasecmp (type, "CUSTOMER") == 0)
                 {
-                  customer = gncCustomerCreate( book );
-                  gncCustomerSetCurrency( customer, gnc_default_currency() );
+                    customer = gncCustomerCreate( book );
+                    gncCustomerSetCurrency( customer, gnc_default_currency() );
                 }
-                else if(g_ascii_strcasecmp (type, "VENDOR") == 0)
+                else if (g_ascii_strcasecmp (type, "VENDOR") == 0)
                 {
-                  vendor = gncVendorCreate( book );
-                  gncVendorSetCurrency( vendor, gnc_default_currency() );
+                    vendor = gncVendorCreate( book );
+                    gncVendorSetCurrency( vendor, gnc_default_currency() );
                 }
-                
+
                 (*n_customers_created)++;
             }
             else

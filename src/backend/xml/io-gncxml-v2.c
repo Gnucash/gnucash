@@ -830,7 +830,7 @@ bail:
 
 gboolean
 qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book,
-    QofBookFileType type)
+                                  QofBookFileType type)
 {
     return qof_session_load_from_xml_file_v2_full(fbe, book, NULL, NULL, type);
 }

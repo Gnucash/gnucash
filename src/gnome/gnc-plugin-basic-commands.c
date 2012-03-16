@@ -336,9 +336,9 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
     /* Set the action's sensitivity */
     gnc_plugin_update_actions (action_group, readonly_inactive_actions,
                                "sensitive", is_readwrite);
-/* FileSaveAction needs to be set separately because it has *two* conditions */
+    /* FileSaveAction needs to be set separately because it has *two* conditions */
     file_save_action = gtk_action_group_get_action (action_group,
-						    "FileSaveAction");
+                       "FileSaveAction");
     gtk_action_set_sensitive (file_save_action, is_readwrite && is_dirty);
 }
 

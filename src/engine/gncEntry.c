@@ -111,15 +111,15 @@ gncEntryDiscountHowToString (GncDiscountHow how)
 {
     switch (how)
     {
-        case (GNC_DISC_PRETAX):
-            return "PRETAX";
-        case (GNC_DISC_SAMETIME):
-            return "SAMETIME";
-        case (GNC_DISC_POSTTAX):
-            return "POSTTAX";
-        default:
-            g_warning ("asked to translate unknown discount-how %d.\n", how);
-            break;
+    case (GNC_DISC_PRETAX):
+        return "PRETAX";
+    case (GNC_DISC_SAMETIME):
+        return "SAMETIME";
+    case (GNC_DISC_POSTTAX):
+        return "POSTTAX";
+    default:
+        g_warning ("asked to translate unknown discount-how %d.\n", how);
+        break;
     }
     return NULL;
 }
@@ -128,17 +128,17 @@ gncEntryDiscountHowToString (GncDiscountHow how)
  * KEEP THIS FUNCTION IN SYNC with the one above! */
 gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how)
 {
-    if(g_strcmp0 ("PRETAX", str) == 0)
+    if (g_strcmp0 ("PRETAX", str) == 0)
     {
         *how = GNC_DISC_PRETAX;
         return TRUE;
     }
-    if(g_strcmp0 ("SAMETIME", str) == 0)
+    if (g_strcmp0 ("SAMETIME", str) == 0)
     {
         *how = GNC_DISC_SAMETIME;
         return TRUE;
     }
-    if(g_strcmp0 ("POSTTAX", str) == 0)
+    if (g_strcmp0 ("POSTTAX", str) == 0)
     {
         *how = GNC_DISC_POSTTAX;
         return TRUE;
@@ -155,10 +155,10 @@ const char * gncEntryPaymentTypeToString (GncEntryPaymentType type)
 {
     switch (type)
     {
-        case (GNC_PAYMENT_CASH):
-            return "CASH";
-        case (GNC_PAYMENT_CARD):
-            return "CARD";
+    case (GNC_PAYMENT_CASH):
+        return "CASH";
+    case (GNC_PAYMENT_CARD):
+        return "CARD";
     default:
         g_warning ("asked to translate unknown payment type %d.\n", type);
         break;
@@ -170,12 +170,12 @@ const char * gncEntryPaymentTypeToString (GncEntryPaymentType type)
  * KEEP THIS FUNCTION IN SYNC with the one above! */
 gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type)
 {
-    if(g_strcmp0 ("CASH", str) == 0)
+    if (g_strcmp0 ("CASH", str) == 0)
     {
         *type = GNC_PAYMENT_CASH;
         return TRUE;
     }
-    if(g_strcmp0 ("CARD", str) == 0)
+    if (g_strcmp0 ("CARD", str) == 0)
     {
         *type = GNC_PAYMENT_CARD;
         return TRUE;
@@ -1425,7 +1425,7 @@ AccountValueList * gncEntryGetDocTaxValues (GncEntry *entry, gboolean is_cust_do
         GncAccountValue *acct_val = node->data;
         values = gncAccountValueAdd (values, acct_val->account,
                                      (is_cn ? gnc_numeric_neg (acct_val->value)
-                                            : acct_val->value));
+                                      : acct_val->value));
     }
 
     return values;
@@ -1461,7 +1461,7 @@ AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_do
         GncAccountValue *acct_val = node->data;
         values = gncAccountValueAdd (values, acct_val->account,
                                      (is_cust_doc ? gnc_numeric_neg (acct_val->value)
-                                                  : acct_val->value));
+                                      : acct_val->value));
     }
 
     return values;

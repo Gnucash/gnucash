@@ -506,8 +506,8 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
         g_free(text);
         buffer = gtk_text_view_get_buffer(data->category_description);
         gtk_text_buffer_set_text(buffer, gea->long_description ?
-                                         gea->long_description :
-                                         _("No description provided."), -1);
+                                 gea->long_description :
+                                 _("No description provided."), -1);
 
         tree_view = gnc_tree_view_account_new_with_root (gea->root, FALSE);
         /* Override the normal fixed (user settable) sizing */

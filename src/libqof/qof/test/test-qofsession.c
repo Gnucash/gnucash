@@ -86,15 +86,15 @@ test_qof_session_new_destroy (void)
     g_test_message ("Test session initialization");
     session = qof_session_new ();
     g_assert (session);
-    g_assert_cmpstr (session->entity.e_type, ==, QOF_ID_SESSION);
+    g_assert_cmpstr (session->entity.e_type, == , QOF_ID_SESSION);
     g_assert (session->book);
     book = (QofBook*) session->book;
     g_assert (book);
     g_assert (QOF_IS_BOOK (book));
     g_assert (!session->book_id);
     g_assert (!session->backend);
-    g_assert_cmpint (session->lock, ==, 1);
-    g_assert_cmpint (qof_session_get_error (session), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (session->lock, == , 1);
+    g_assert_cmpint (qof_session_get_error (session), == , ERR_BACKEND_NO_ERR);
 
     g_test_message ("Test session destroy");
     qof_session_destroy (session);
@@ -126,7 +126,7 @@ static gboolean
 mock_check_data_type (const char* book_id)
 {
     g_assert (book_id);
-    g_assert_cmpstr (book_id, ==, "my book");
+    g_assert_cmpstr (book_id, == , "my book");
     load_backend_struct.check_data_type_called = TRUE;
     return load_backend_struct.data_compatible;
 }
@@ -157,18 +157,18 @@ test_qof_session_load_backend (Fixture *fixture, gconstpointer pData)
     g_assert (get_provider_list () == NULL);
     p_qof_session_load_backend (fixture->session, "file");
     g_assert (get_qof_providers_initialized ());
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "failed to load 'file' using access_method");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
     p_qof_session_clear_error (fixture->session);
 
     g_test_message ("Test with provider registered but access method not supported");
     prov->access_method = "unsupported";
     qof_backend_register_provider (prov);
     g_assert (get_provider_list ());
-    g_assert_cmpint (g_slist_length (get_provider_list ()), ==, 1);
+    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 1);
     p_qof_session_load_backend (fixture->session, "file");
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "failed to load 'file' using access_method");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
     p_qof_session_clear_error (fixture->session);
 
     g_test_message ("Test with access method supported but type incompatible");
@@ -179,8 +179,8 @@ test_qof_session_load_backend (Fixture *fixture, gconstpointer pData)
     fixture->session->book_id = g_strdup ("my book");
     p_qof_session_load_backend (fixture->session, "file");
     g_assert (load_backend_struct.check_data_type_called);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "failed to load 'file' using access_method");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
     p_qof_session_clear_error (fixture->session);
 
     g_test_message ("Test with type compatible but backend_new not set");
@@ -189,8 +189,8 @@ test_qof_session_load_backend (Fixture *fixture, gconstpointer pData)
     load_backend_struct.check_data_type_called = FALSE;
     p_qof_session_load_backend (fixture->session, "file");
     g_assert (load_backend_struct.check_data_type_called);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "failed to load 'file' using access_method");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
     p_qof_session_clear_error (fixture->session);
 
     g_test_message ("Test with type compatible backend_new set");
@@ -210,10 +210,10 @@ test_qof_session_load_backend (Fixture *fixture, gconstpointer pData)
     g_assert (load_backend_struct.be == fixture->session->backend);
     g_assert (prov == fixture->session->backend->provider);
     g_assert (qof_book_get_backend (book) == load_backend_struct.be);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
 
     unregister_all_providers ();
-    g_assert_cmpint (g_slist_length (get_provider_list ()), ==, 0);
+    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 0);
 }
 
 static struct
@@ -233,7 +233,7 @@ mock_load (QofBackend *be, QofBook *book, QofBackendLoadType type)
     g_assert (book != load_session_struct.oldbook);
     g_assert (qof_book_get_backend (book) == be);
     if (load_session_struct.error)
-	qof_backend_set_error (be, ERR_BACKEND_DATA_CORRUPT); /* just any valid error */
+        qof_backend_set_error (be, ERR_BACKEND_DATA_CORRUPT); /* just any valid error */
     load_session_struct.load_called = TRUE;
 }
 
@@ -299,14 +299,14 @@ mock_session_begin (QofBackend *be, QofSession *session, const char *book_id,
     g_assert (session);
     g_assert (session == session_begin_struct.session);
     g_assert (book_id);
-    g_assert_cmpstr (book_id, ==, session_begin_struct.book_id);
+    g_assert_cmpstr (book_id, == , session_begin_struct.book_id);
     g_assert (ignore_lock);
     g_assert (!create);
     g_assert (force);
     if (session_begin_struct.produce_error)
     {
-	qof_backend_set_error (be, ERR_BACKEND_DATA_CORRUPT);
-	qof_backend_set_message (be, "push any error");
+        qof_backend_set_error (be, ERR_BACKEND_DATA_CORRUPT);
+        qof_backend_set_message (be, "push any error");
     }
     session_begin_struct.session_begin_called = TRUE;
 }
@@ -338,7 +338,7 @@ test_qof_session_begin (Fixture *fixture, gconstpointer pData)
 
     be = g_new0 (QofBackend, 1);
     g_assert (be);
-    g_assert_cmpint (g_slist_length (get_provider_list ()), ==, 0);
+    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 0);
     prov = g_new0 (QofBackendProvider, 1);
     prov->backend_new = mock_backend_new_for_begin;
 
@@ -363,15 +363,15 @@ test_qof_session_begin (Fixture *fixture, gconstpointer pData)
     qof_session_begin (fixture->session, "default_should_be_file", ignore_lock, create, force);
     g_assert (fixture->session->backend == NULL);
     g_assert (fixture->session->book_id == NULL);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "failed to load 'file' using access_method");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'file' using access_method");
 
     g_test_message ("Test access_method parsing");
     qof_session_begin (fixture->session, "postgres://localhost:8080", ignore_lock, create, force);
     g_assert (fixture->session->backend == NULL);
     g_assert (fixture->session->book_id == NULL);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "failed to load 'postgres' using access_method");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load 'postgres' using access_method");
 
     g_test_message ("Test with valid backend returned and session begin set; error is produced");
     session_begin_struct.session = fixture->session;
@@ -387,8 +387,8 @@ test_qof_session_begin (Fixture *fixture, gconstpointer pData)
     g_assert (session_begin_struct.backend_new_called == TRUE);
     g_assert (session_begin_struct.session_begin_called == TRUE);
     g_assert (fixture->session->book_id == NULL);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_DATA_CORRUPT);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "push any error");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_DATA_CORRUPT);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "push any error");
 
     g_test_message ("Test normal session_begin execution");
     session_begin_struct.backend_new_called = FALSE;
@@ -400,8 +400,8 @@ test_qof_session_begin (Fixture *fixture, gconstpointer pData)
     g_assert (session_begin_struct.backend_new_called == TRUE);
     g_assert (session_begin_struct.session_begin_called == TRUE);
     g_assert (fixture->session->book_id);
-    g_assert_cmpstr (fixture->session->book_id, ==, "postgres://localhost:8080");
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpstr (fixture->session->book_id, == , "postgres://localhost:8080");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
 
     unregister_all_providers ();
 }
@@ -429,14 +429,14 @@ mock_sync (QofBackend *be, QofBook *book)
 
 static void
 mock_session_begin_for_save (QofBackend *be, QofSession *session, const char *book_id,
-			     gboolean ignore_lock, gboolean create, gboolean force)
+                             gboolean ignore_lock, gboolean create, gboolean force)
 {
     g_assert (be);
     g_assert (be == session_save_struct.be);
     g_assert (session);
     g_assert (session == session_save_struct.session);
     g_assert (book_id);
-    g_assert_cmpstr (book_id, ==, session_save_struct.book_id);
+    g_assert_cmpstr (book_id, == , session_save_struct.book_id);
     g_assert (ignore_lock);
     g_assert (create);
     g_assert (force);
@@ -470,18 +470,18 @@ test_qof_session_save (Fixture *fixture, gconstpointer pData)
     g_assert (book);
     qof_book_set_data (book, PARTIAL_QOFBOOK, GINT_TO_POINTER (FALSE));
     qof_session_push_error (fixture->session, ERR_BACKEND_DATA_CORRUPT, "push any error");
-    g_assert_cmpint (fixture->session->lock, ==, 1);
+    g_assert_cmpint (fixture->session->lock, == , 1);
     qof_session_save (fixture->session, NULL);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_HANDLER);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "failed to load backend");
-    g_assert_cmpint (fixture->session->lock, ==, 1);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_HANDLER);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "failed to load backend");
+    g_assert_cmpint (fixture->session->lock, == , 1);
 
     g_test_message ("Test when book not partial and backend set; imitate error");
     be = g_new0 (QofBackend, 1);
     g_assert (be);
     be->sync = mock_sync;
     fixture->session->backend = be;
-    g_assert_cmpint (fixture->session->lock, ==, 1);
+    g_assert_cmpint (fixture->session->lock, == , 1);
     session_save_struct.sync_called = FALSE;
     session_save_struct.be = be;
     session_save_struct.book = book;
@@ -491,19 +491,19 @@ test_qof_session_save (Fixture *fixture, gconstpointer pData)
     g_assert (qof_book_get_backend (book) == be);
     g_assert (be->percentage == percentage_fn);
     g_assert (session_save_struct.sync_called);
-    g_assert_cmpint (fixture->session->lock, ==, 1);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_DATA_CORRUPT);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "");
+    g_assert_cmpint (fixture->session->lock, == , 1);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_DATA_CORRUPT);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "");
 
     g_test_message ("Test when book not partial and backend set; successful save");
-    g_assert_cmpint (fixture->session->lock, ==, 1);
+    g_assert_cmpint (fixture->session->lock, == , 1);
     session_save_struct.sync_called = FALSE;
     qof_session_save (fixture->session, percentage_fn);
     g_assert (qof_book_get_backend (book) == be);
     g_assert (be->percentage == percentage_fn);
     g_assert (session_save_struct.sync_called);
-    g_assert_cmpint (fixture->session->lock, ==, 1);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (fixture->session->lock, == , 1);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
 
     /* change backend testing
      * code probably should be moved to separate routine or some existing code can be reused
@@ -513,7 +513,7 @@ test_qof_session_save (Fixture *fixture, gconstpointer pData)
     prov = g_new0 (QofBackendProvider, 1);
     prov->partial_book_supported = TRUE;
     fixture->session->backend->provider = prov;
-    g_assert_cmpint (fixture->session->lock, ==, 1);
+    g_assert_cmpint (fixture->session->lock, == , 1);
     qof_book_set_data (book, PARTIAL_QOFBOOK, GINT_TO_POINTER (TRUE));
     session_save_struct.sync_called = FALSE;
     qof_session_save (fixture->session, percentage_fn);
@@ -522,17 +522,17 @@ test_qof_session_save (Fixture *fixture, gconstpointer pData)
     g_assert (qof_book_get_backend (book) == be);
     g_assert (be->percentage == percentage_fn);
     g_assert (session_save_struct.sync_called);
-    g_assert_cmpint (fixture->session->lock, ==, 1);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (fixture->session->lock, == , 1);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
 
     g_test_message ("Test when book is partial and current backend does not support it; backend should be changed");
     prov->partial_book_supported = FALSE;
-    g_assert_cmpint (fixture->session->lock, ==, 1);
+    g_assert_cmpint (fixture->session->lock, == , 1);
     reg_prov = g_new0 (QofBackendProvider, 1);
     reg_prov->partial_book_supported = TRUE;
     reg_prov->backend_new = mock_backend_new_for_save;
     qof_backend_register_provider (reg_prov);
-    g_assert_cmpint (g_slist_length (get_provider_list ()), ==, 1);
+    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 1);
     session_save_struct.book = book;
     session_save_struct.session = fixture->session;
     fixture->session->book_id = g_strdup ("my book");
@@ -550,8 +550,8 @@ test_qof_session_save (Fixture *fixture, gconstpointer pData)
     g_assert (session_save_struct.session_begin_called);
     g_assert (qof_book_get_backend (book) == session_save_struct.be);
     g_assert (session_save_struct.sync_called);
-    g_assert_cmpint (fixture->session->lock, ==, 1);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (fixture->session->lock, == , 1);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
 
     unregister_all_providers ();
     g_free (prov);
@@ -625,7 +625,7 @@ test_qof_session_end (Fixture *fixture, gconstpointer pData)
     session_end_struct.be = be;
     qof_session_end (fixture->session);
     g_assert (session_end_struct.called);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
     g_assert (!fixture->session->book_id);
 }
 
@@ -799,7 +799,7 @@ mock_all_data_load (QofBackend *be, QofBook *book, QofBackendLoadType type)
     g_assert (book);
     g_assert (be == data_load_struct.be);
     g_assert (book == data_load_struct.book);
-    g_assert_cmpint (type, ==, LOAD_TYPE_LOAD_ALL);
+    g_assert_cmpint (type, == , LOAD_TYPE_LOAD_ALL);
     qof_backend_set_error (be, ERR_BACKEND_DATA_CORRUPT);
     data_load_struct.called = TRUE;
 }
@@ -820,8 +820,8 @@ test_qof_session_data_loaded (Fixture *fixture, gconstpointer pData)
     data_load_struct.called = FALSE;
     qof_session_ensure_all_data_loaded (fixture->session);
     g_assert (data_load_struct.called);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_DATA_CORRUPT);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_DATA_CORRUPT);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "");
 }
 
 static void
@@ -833,22 +833,22 @@ test_qof_backend_get_access_method_list (Fixture *fixture, gconstpointer pData)
 
     for (i = 0; i < 4; i++)
     {
-	QofBackendProvider *prov = g_new0 (QofBackendProvider, 1);
-	g_assert (prov);
-	prov->access_method = access_methods[ i ];
-	qof_backend_register_provider (prov);
-	g_assert_cmpint (g_slist_length (get_provider_list ()), ==, (i + 1));
+        QofBackendProvider *prov = g_new0 (QofBackendProvider, 1);
+        g_assert (prov);
+        prov->access_method = access_methods[ i ];
+        qof_backend_register_provider (prov);
+        g_assert_cmpint (g_slist_length (get_provider_list ()), == , (i + 1));
     }
-    g_assert_cmpint (g_slist_length (get_provider_list ()), ==, 4);
+    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 4);
 
     g_test_message ("Test list of access methods is returned");
     list = qof_backend_get_registered_access_method_list ();
     g_assert (list);
-    g_assert_cmpint (g_list_length (list), ==, 4);
-    g_assert_cmpstr (g_list_nth_data (list, 0), ==, "file");
-    g_assert_cmpstr (g_list_nth_data (list, 1), ==, "http");
-    g_assert_cmpstr (g_list_nth_data (list, 2), ==, "postgres");
-    g_assert_cmpstr (g_list_nth_data (list, 3), ==, "sqlite");
+    g_assert_cmpint (g_list_length (list), == , 4);
+    g_assert_cmpstr (g_list_nth_data (list, 0), == , "file");
+    g_assert_cmpstr (g_list_nth_data (list, 1), == , "http");
+    g_assert_cmpstr (g_list_nth_data (list, 2), == , "postgres");
+    g_assert_cmpstr (g_list_nth_data (list, 3), == , "sqlite");
 
     g_list_free (list);
     unregister_all_providers ();
@@ -867,7 +867,7 @@ test_qof_session_get_book (Fixture *fixture, gconstpointer pData)
     g_assert (fixture->session->book);
     book = qof_session_get_book (fixture->session);
     g_assert (book);
-    g_assert_cmpuint (book->book_open, ==, 'y');
+    g_assert_cmpuint (book->book_open, == , 'y');
 
     g_test_message ("Test when book is closed null returned");
     qof_book_mark_closed (book);
@@ -881,23 +881,23 @@ test_qof_session_get_error (Fixture *fixture, gconstpointer pData)
     QofBackend *be = NULL;
 
     g_test_message ("Test if session is null");
-    g_assert_cmpint (qof_session_get_error (NULL), ==, ERR_BACKEND_NO_BACKEND);
+    g_assert_cmpint (qof_session_get_error (NULL), == , ERR_BACKEND_NO_BACKEND);
 
     g_test_message ("Test when there is a local error");
     fixture->session->last_err = ERR_BACKEND_DATA_CORRUPT; /* just any error */
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_DATA_CORRUPT);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_DATA_CORRUPT);
 
     g_test_message ("Test if session backend is null");
     g_assert (!fixture->session->backend);
     fixture->session->last_err = ERR_BACKEND_NO_ERR;
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
 
     g_test_message ("Test for backend error");
     be = g_new0 (QofBackend, 1);
     g_assert (be);
     qof_backend_set_error (be, ERR_BACKEND_CANT_CONNECT);
     fixture->session->backend = be;
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_CANT_CONNECT);
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_CANT_CONNECT);
 }
 
 static void
@@ -913,10 +913,10 @@ test_qof_session_clear_error (Fixture *fixture, gconstpointer pData)
     fixture->session->backend = be;
     qof_backend_set_error (be, ERR_BACKEND_CANT_CONNECT);
     p_qof_session_clear_error (fixture->session);
-    g_assert_cmpint (qof_session_get_error (fixture->session), ==, ERR_BACKEND_NO_ERR);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), ==, "");
+    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
+    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "");
     g_assert (!fixture->session->error_message);
-    g_assert_cmpint (qof_backend_get_error (be), ==, ERR_BACKEND_NO_ERR);
+    g_assert_cmpint (qof_backend_get_error (be), == , ERR_BACKEND_NO_ERR);
 }
 
 static struct
@@ -938,11 +938,11 @@ mock_hook_fn (gpointer data, gpointer user_data)
     session = (QofSession*) data;
     g_assert (session == hooks_struct.session);
     if (hooks_struct.call_count == 0)
-       g_assert (hooks_struct.data1 == user_data);
+        g_assert (hooks_struct.data1 == user_data);
     if (hooks_struct.call_count == 1)
-       g_assert (hooks_struct.data2 == user_data);
+        g_assert (hooks_struct.data2 == user_data);
     if (hooks_struct.call_count == 2)
-       g_assert (hooks_struct.data3 == user_data);
+        g_assert (hooks_struct.data3 == user_data);
     hooks_struct.call_count++;
 }
 
@@ -968,7 +968,7 @@ test_qof_session_close_hooks (Fixture *fixture, gconstpointer pData)
     hooks_struct.data3 = (gpointer) &data3;
     hooks_struct.call_count = 0;
     qof_session_call_close_hooks (fixture->session);
-    g_assert_cmpuint (hooks_struct.call_count, ==, 3);
+    g_assert_cmpuint (hooks_struct.call_count, == , 3);
 
     /* currently qofsession does not provide a way to clear hooks list
      * g_hook_list_clear is used to destroy list and all of it's elements

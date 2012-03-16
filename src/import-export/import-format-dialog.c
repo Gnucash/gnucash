@@ -143,7 +143,7 @@ gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
     }
     /* Open the Glade Builder file */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder,"dialog-import.glade", "format_picker");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "format_picker");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "format_picker"));
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "msg_label"));
     gtk_label_set_text(GTK_LABEL(widget), msg);

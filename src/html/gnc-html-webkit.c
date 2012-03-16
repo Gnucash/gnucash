@@ -1155,7 +1155,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         if (!export_dirname && gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
         {
             const char* tmp_dirname = gtk_print_settings_get(print_settings,
-                                                             GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
+                                      GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
             // Only use the directory subsequently if it exists.
             if (g_file_test(tmp_dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
             {

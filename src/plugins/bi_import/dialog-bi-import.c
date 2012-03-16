@@ -462,10 +462,10 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         else if (row_fixed)
             (*fixed)++;
 
-	if (!row_deleted)
+        if (!row_deleted)
             valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
 
-	row++;
+        row++;
     }
 
     // deallocate strings

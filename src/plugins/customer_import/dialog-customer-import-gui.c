@@ -84,7 +84,7 @@ gnc_plugin_customer_import_showGUI(void)
     GtkTreeIter iter;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
-    
+
     // if window exists already, activate it
     glist = gnc_find_gui_components ("dialog-customer_import_gui", NULL, NULL);
     if (glist)
@@ -171,7 +171,7 @@ gnc_plugin_customer_import_getFilename(void)
     filename = gnc_file_dialog(_("Import Customers from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
 
     return filename;
-} 
+}
 
 void
 gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data)
@@ -182,11 +182,11 @@ gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     customer_import_result res;
     guint n_fixed, n_deleted, n_customers_created, n_customers_updated;
     gchar *cv_type_text;
-    
+
     // import
     if (g_ascii_strcasecmp (gui->type, "CUSTOMER") == 0) cv_type_text = _("customers");
     else cv_type_text = _("vendors");
-    
+
     gtk_list_store_clear (gui->store);
     res = gnc_customer_import_read_file (filename, gui->regexp->str, gui->store, 0, &stats);
     if (res == CI_RESULT_OK)
@@ -194,13 +194,13 @@ gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data)
         gnc_customer_import_fix_customers (gui->store, &n_fixed, &n_deleted, gui->type);
         gnc_customer_import_create_customers (gui->store, gui->book, &n_customers_created, &n_customers_updated, gui->type);
         gnc_info_dialog (gui->dialog, _("Import results:\n%i lines were ignored\n%i lines imported:\n   %u %s fixed\n   %u %s ignored (not fixable)\n\n   %u %s created\n   %u %s updated (based on id)"), \
-                                            stats.n_ignored, stats.n_imported, n_fixed, cv_type_text, n_deleted, cv_type_text, n_customers_created, cv_type_text, n_customers_updated,cv_type_text);
+                         stats.n_ignored, stats.n_imported, n_fixed, cv_type_text, n_deleted, cv_type_text, n_customers_created, cv_type_text, n_customers_updated, cv_type_text);
 
         if (stats.n_ignored > 0)
             gnc_info2_dialog (gui->dialog, _("These lines were ignored during import"), stats.ignored_lines->str);
 
         g_string_free (stats.ignored_lines, TRUE);
-        gnc_close_gui_component (gui->component_id); 
+        gnc_close_gui_component (gui->component_id);
     }
     else if (res == CI_RESULT_OPEN_FAILED)
     {
@@ -272,7 +272,7 @@ void gnc_customer_import_gui_filenameChanged_cb (GtkWidget *widget, gpointer dat
     gtk_list_store_clear (gui->store);
     gnc_customer_import_read_file (filename, gui->regexp->str, gui->store, 10, NULL);
 
-    g_free( filename ); 
+    g_free( filename );
 }
 // Semicolon separated.
 void gnc_customer_import_gui_option1_cb (GtkWidget *widget, gpointer data)
@@ -340,10 +340,10 @@ void gnc_customer_import_gui_type_cb (GtkWidget *widget, gpointer data)
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
     name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
-    if(name)
+    if (name)
     {
-    if  (g_ascii_strcasecmp(name, "radiobutton_customer") == 0)gui->type = "CUSTOMER";
-    else if (g_ascii_strcasecmp(name, "radiobutton_vendor") == 0)gui->type = "VENDOR";
+        if  (g_ascii_strcasecmp(name, "radiobutton_customer") == 0)gui->type = "CUSTOMER";
+        else if (g_ascii_strcasecmp(name, "radiobutton_vendor") == 0)gui->type = "VENDOR";
     }
     //printf ("TYPE set to, %s\n",gui->type); // DEBUG
 

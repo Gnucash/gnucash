@@ -68,22 +68,31 @@ gboolean get_qof_providers_initialized (void );
 void unregister_all_providers (void );
 
 GHookList*
-get_session_closed_hooks (void) { return session_closed_hooks; }
+get_session_closed_hooks (void)
+{
+    return session_closed_hooks;
+}
 
 GSList*
-get_provider_list (void) { return provider_list; }
+get_provider_list (void)
+{
+    return provider_list;
+}
 
 gboolean
-get_qof_providers_initialized (void) { return qof_providers_initialized; }
+get_qof_providers_initialized (void)
+{
+    return qof_providers_initialized;
+}
 
 void
 unregister_all_providers (void)
 {
     if (provider_list)
     {
-	g_slist_foreach (provider_list, (GFunc) g_free, NULL);
-	g_slist_free (provider_list);
-	provider_list = NULL;
+        g_slist_foreach (provider_list, (GFunc) g_free, NULL);
+        g_slist_free (provider_list);
+        provider_list = NULL;
     }
 }
 
@@ -388,7 +397,7 @@ col_ref_cb (QofInstance* ref_ent, gpointer user_data)
     ref->ref_guid = g_new (GncGUID, 1);
     ref->ent_guid = qof_instance_get_guid (ent);
     ref->param = qof_class_get_parameter (ent->e_type,
-                                         qecd->param->param_name);
+                                          qecd->param->param_name);
     cm_guid = qof_entity_get_guid (ref_ent);
     guid_to_string_buff (cm_guid, cm_sa);
     cm_string = g_strdup (cm_sa);
@@ -467,7 +476,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         registered_type = TRUE;
     }
     if ((safe_strcmp (cm_param->param_type, QOF_TYPE_NUMERIC) == 0)  ||
-        (safe_strcmp (cm_param->param_type, QOF_TYPE_DEBCRED) == 0))
+            (safe_strcmp (cm_param->param_type, QOF_TYPE_DEBCRED) == 0))
     {
         numeric_getter = (gnc_numeric (*)(QofInstance*, QofParam*))cm_param->param_getfcn;
         cm_numeric = numeric_getter (importEnt, cm_param);
@@ -784,7 +793,7 @@ qof_instance_copy_coll (QofSession *new_session, QofCollection *entity_coll)
     qof_book_set_partial (qof_session_get_book (qecd.new_session));
     qof_collection_foreach (entity_coll, qof_instance_coll_foreach, &qecd);
     qof_class_param_foreach (qof_collection_get_type (entity_coll),
-                            qof_instance_param_cb, &qecd);
+                             qof_instance_param_cb, &qecd);
     qof_collection_foreach (entity_coll, qof_instance_coll_copy, &qecd);
     if (qecd.param_list != NULL)
     {

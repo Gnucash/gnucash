@@ -148,7 +148,7 @@ static void
 gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action,
         GncMainWindowActionData *data)
 {
-      gnc_file_qif_import();
+    gnc_file_qif_import();
 }
 
 

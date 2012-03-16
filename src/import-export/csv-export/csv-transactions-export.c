@@ -87,7 +87,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
     qof_query_set_book (q, book);
 
     /* Set up separators */
-    if(info->use_quotes)
+    if (info->use_quotes)
     {
         end_sep = "\"";
         mid_sep = g_strconcat ( "\"", info->separator_str, "\"", NULL);
@@ -146,7 +146,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         g_free(part1);
         /* Notes */
         currentSel = xaccTransGetNotes(trans);
-        if(currentSel == NULL)
+        if (currentSel == NULL)
             part1 = g_strconcat ( part2, mid_sep, NULL);
         else
             part1 = g_strconcat ( part2, currentSel, mid_sep, NULL);
@@ -207,7 +207,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         /* Write to file */
         if (!write_line_to_file(fh, part1))
         {
-	    info->failed = TRUE;
+            info->failed = TRUE;
             break;
         }
         g_free(part1);
@@ -263,7 +263,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
 
             /* From / To with Symbol */
             split_amount = xaccPrintAmount(xaccSplitGetAmount(t_split), gnc_split_amount_print_info(t_split, TRUE));
-            if(xaccSplitGetAccount(t_split) == acc)
+            if (xaccSplitGetAccount(t_split) == acc)
                 part2 = g_strconcat ( part1,  split_amount, mid_sep, mid_sep, NULL);
             else
                 part2 = g_strconcat ( part1, mid_sep, split_amount, mid_sep, NULL);
@@ -271,7 +271,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
 
             /* From / To Numbers only */
             split_amount = xaccPrintAmount(xaccSplitGetAmount(t_split), gnc_split_amount_print_info(t_split, FALSE));
-            if(xaccSplitGetAccount(t_split) == acc)
+            if (xaccSplitGetAccount(t_split) == acc)
                 part1 = g_strconcat ( part2,  split_amount, mid_sep, mid_sep, NULL);
             else
                 part1 = g_strconcat ( part2, mid_sep, split_amount, mid_sep, NULL);
@@ -279,14 +279,14 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
 
             /* From / To - Share Price / Conversion factor */
             split_amount = xaccPrintAmount(xaccSplitGetSharePrice(t_split), gnc_split_amount_print_info(t_split, FALSE));
-            if(xaccSplitGetAccount(t_split) == acc)
+            if (xaccSplitGetAccount(t_split) == acc)
                 part2 = g_strconcat ( part1,  split_amount, mid_sep, end_sep, "\n", NULL);
             else
                 part2 = g_strconcat ( part1, mid_sep, split_amount, end_sep, "\n", NULL);
             g_free(part1);
 
             if (!write_line_to_file(fh, part2))
-	        info->failed = TRUE;
+                info->failed = TRUE;
 
             g_free(part2);
             cnt++;
@@ -326,7 +326,7 @@ void csv_transactions_export (CsvExportInfo *info)
         int i;
 
         /* Set up separators */
-        if(info->use_quotes)
+        if (info->use_quotes)
         {
             end_sep = "\"";
             mid_sep = g_strconcat ( "\"", info->separator_str, "\"", NULL);
@@ -339,18 +339,18 @@ void csv_transactions_export (CsvExportInfo *info)
 
         /* Header string */
         header = g_strconcat ( end_sep, _("Date"), mid_sep, _("Account Name"), mid_sep,
-                            _("Number"), mid_sep, _("Description"), mid_sep,
-                            _("Notes"), mid_sep, _("Memo"), mid_sep, _("Category"), mid_sep,
-                            _("Type"), mid_sep, _("Action"), mid_sep, _("Reconcile"), mid_sep,
-                            _("To With Sym"), mid_sep, _("From With Sym"), mid_sep,
-                            _("To Num."), mid_sep, _("From Num."), mid_sep,
-                            _("To Factor/Price"), mid_sep, _("From Factor/Price"), end_sep, "\n", NULL);
+                               _("Number"), mid_sep, _("Description"), mid_sep,
+                               _("Notes"), mid_sep, _("Memo"), mid_sep, _("Category"), mid_sep,
+                               _("Type"), mid_sep, _("Action"), mid_sep, _("Reconcile"), mid_sep,
+                               _("To With Sym"), mid_sep, _("From With Sym"), mid_sep,
+                               _("To Num."), mid_sep, _("From Num."), mid_sep,
+                               _("To Factor/Price"), mid_sep, _("From Factor/Price"), end_sep, "\n", NULL);
         DEBUG("Header String: %s", header);
 
         /* Write header line */
         if (!write_line_to_file(fh, header))
         {
-	    info->failed = TRUE;
+            info->failed = TRUE;
             g_free(mid_sep);
             g_free(header);
             return;
@@ -368,7 +368,7 @@ void csv_transactions_export (CsvExportInfo *info)
     }
     else
         info->failed = TRUE;
-    if(fh)
+    if (fh)
         fclose (fh);
     LEAVE("");
 }

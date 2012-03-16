@@ -48,7 +48,7 @@ typedef struct
 
     time_t     start_time;
     time_t     end_time;
-}CsvExportDate;
+} CsvExportDate;
 
 typedef struct
 {
@@ -63,7 +63,7 @@ typedef struct
     GList            *account_list;
     int               num_accounts;
     GNCAccountType    account_type;
-}CsvExportAcc;
+} CsvExportAcc;
 
 
 typedef struct
@@ -91,7 +91,7 @@ typedef struct
 } CsvExportInfo;
 
 
-/** The gnc_file_csv_export() will let the user export thte 
+/** The gnc_file_csv_export() will let the user export thte
  *  account tree or transactions to a deliminated file.
  */
 void gnc_file_csv_export (CsvExportType export_type);

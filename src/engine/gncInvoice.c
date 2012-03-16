@@ -1180,12 +1180,12 @@ gboolean gncInvoiceAmountPositive (const GncInvoice *invoice)
 }
 
 static gboolean gncInvoicePostAddSplit (QofBook *book,
-                                    Account *acc,
-                                    Transaction *txn,
-                                    gnc_numeric value,
-                                    const gchar *memo,
-                                    const gchar *type,
-                                    GncInvoice *invoice)
+                                        Account *acc,
+                                        Transaction *txn,
+                                        gnc_numeric value,
+                                        const gchar *memo,
+                                        const gchar *type,
+                                        GncInvoice *invoice)
 {
     Split *split;
 
@@ -1357,8 +1357,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                 if (accumulatesplits)
                     splitinfo = gncAccountValueAdd (splitinfo, this_acc, value);
                 else if (!gncInvoicePostAddSplit (book, this_acc, txn, value,
-                                                 gncEntryGetDescription (entry),
-                                                 type, invoice))
+                                                  gncEntryGetDescription (entry),
+                                                  type, invoice))
                 {
                     /*This is an error, which shouldn't even be able to happen.
                       We can't really do anything sensible about it, and this is
@@ -1437,7 +1437,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         /* To charge amount is stored in document value. We need balance value here
          * so convert if necessary. */
         gnc_numeric to_charge_bal_amount = (is_cn ? gnc_numeric_neg (invoice->to_charge_amount)
-                                                  : invoice->to_charge_amount);
+                                            : invoice->to_charge_amount);
 
         /* Set memo.  action? */
         xaccSplitSetMemo (split, _("Extra to Charge Card"));

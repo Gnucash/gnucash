@@ -1409,8 +1409,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         if (event->type != GDK_BUTTON_PRESS)
             return FALSE;
         gnc_item_edit_paste_selection (GNC_ITEM_EDIT(sheet->item_editor),
-				       GDK_SELECTION_PRIMARY,
-				       event->time);
+                                       GDK_SELECTION_PRIMARY,
+                                       event->time);
         return TRUE;
     case 3:
         do_popup = (sheet->popup != NULL);
@@ -1449,7 +1449,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         gtk_grab_add(widget);
         sheet->grabbed = TRUE;
         gnc_item_edit_set_has_selection (GNC_ITEM_EDIT(sheet->item_editor),
-					 TRUE);
+                                         TRUE);
     }
 
     if (virt_loc_equal (new_virt_loc, cur_virt_loc) && sheet->editing)
@@ -1553,7 +1553,7 @@ gnucash_register_paste_clipboard (GnucashRegister *reg)
     item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
     gnc_item_edit_paste_selection (item_edit, GDK_SELECTION_CLIPBOARD,
-				   GDK_CURRENT_TIME);
+                                   GDK_CURRENT_TIME);
 }
 
 static void
@@ -1615,7 +1615,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
         if (event->state & GDK_CONTROL_MASK)
         {
             gnc_item_edit_paste_selection (item_edit, GDK_SELECTION_CLIPBOARD,
-					   time);
+                                           time);
             handled = TRUE;
         }
         break;
@@ -1623,7 +1623,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
         if (event->state & GDK_SHIFT_MASK)
         {
             gnc_item_edit_paste_selection (item_edit, GDK_SELECTION_CLIPBOARD,
-					   time);
+                                           time);
             handled = TRUE;
         }
         else if (event->state & GDK_CONTROL_MASK)

@@ -32,16 +32,17 @@
 #include "libqof/qof/qof.h"
 #include "gnc-features.h"
 
-typedef struct {
-        const gchar *key;
-        const gchar *desc;
+typedef struct
+{
+    const gchar *key;
+    const gchar *desc;
 } gncFeature;
 
 static GHashTable *features_table = NULL;
 static gncFeature known_features[] =
 {
-        { GNC_FEATURE_CREDIT_NOTES, "Customer and vendor credit notes (requires at least GnuCash 2.5.0)" },
-        { NULL },
+    { GNC_FEATURE_CREDIT_NOTES, "Customer and vendor credit notes (requires at least GnuCash 2.5.0)" },
+    { NULL },
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */

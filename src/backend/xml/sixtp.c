@@ -927,7 +927,7 @@ gnc_is_our_first_xml_chunk(char *chunk, gboolean *with_encoding)
         tag_compare2 = g_strdup_printf("<%s\r\n", gnc_v2_xml_version_string);
 
         if ((strncmp(cursor, tag_compare1, strlen(tag_compare1)) == 0)
-            || (strncmp(cursor, tag_compare2, strlen(tag_compare2)) == 0))
+                || (strncmp(cursor, tag_compare2, strlen(tag_compare2)) == 0))
         {
             if (with_encoding)
             {

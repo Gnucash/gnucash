@@ -30,7 +30,7 @@
 
 #include "assistant-csv-export.h"
 
-/** The csv_transactions_export() will let the user export the  
+/** The csv_transactions_export() will let the user export the
  *  transactions to a deliminated file.
  */
 void csv_transactions_export (CsvExportInfo *info);

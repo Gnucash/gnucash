@@ -1,6 +1,6 @@
 /********************************************************************\
  * import-main-matcher.c - Transaction matcher main window          *
- *                                                                  *          
+ *                                                                  *
  * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
  * Copyright (C) 2002 Christian Stimming                            *
  * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
@@ -134,7 +134,7 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     }
 
 
-    if(!(info->dialog == NULL))
+    if (!(info->dialog == NULL))
     {
         gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
         gnc_import_Settings_delete (info->user_settings);
@@ -566,7 +566,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     /* Pack the content into the dialog vbox */
     pbox = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_vbox"));
     box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
-    gtk_box_pack_start( GTK_BOX(pbox), box, TRUE, TRUE,0);
+    gtk_box_pack_start( GTK_BOX(pbox), box, TRUE, TRUE, 0);
 
     /* Get the view */
     info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
@@ -659,7 +659,7 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     g_object_unref(G_OBJECT(builder));
 
     return info;
-}	
+}
 
 void gnc_gen_trans_assist_start (GNCImportMainMatcher *info)
 {

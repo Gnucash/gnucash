@@ -97,7 +97,7 @@ void csv_tree_export (CsvExportInfo *info)
 
 
         /* Set up separators */
-        if(info->use_quotes)
+        if (info->use_quotes)
         {
             end_sep = "\"";
             mid_sep = g_strconcat ( "\"", info->separator_str, "\"", NULL);
@@ -110,16 +110,16 @@ void csv_tree_export (CsvExportInfo *info)
 
         /* Header string */
         header = g_strconcat ( end_sep, _("type"), mid_sep, _("fullname"), mid_sep,
-                            _("name"), mid_sep, _("code"), mid_sep,
-                            _("description"), mid_sep, _("color"), mid_sep, _("notes"), mid_sep,
-                            _("commoditym"), mid_sep, _("commodityn"), mid_sep,
-                            _("hidden"), mid_sep, _("tax"), mid_sep, _("placeholder"), end_sep, "\n", NULL);
+                               _("name"), mid_sep, _("code"), mid_sep,
+                               _("description"), mid_sep, _("color"), mid_sep, _("notes"), mid_sep,
+                               _("commoditym"), mid_sep, _("commodityn"), mid_sep,
+                               _("hidden"), mid_sep, _("tax"), mid_sep, _("placeholder"), end_sep, "\n", NULL);
         DEBUG("Header String: %s", header);
 
         /* Write header line */
         if (!write_line_to_file(fh, header))
         {
-	    info->failed = TRUE;
+            info->failed = TRUE;
             g_free(mid_sep);
             g_free(header);
             return;
@@ -159,7 +159,7 @@ void csv_tree_export (CsvExportInfo *info)
             g_free(part1);
             /* Notes */
             currentSel = xaccAccountGetNotes(acc) ? xaccAccountGetNotes(acc) : "" ;
-            if(!g_strcmp0(currentSel, "") == 0)
+            if (!g_strcmp0(currentSel, "") == 0)
             {
                 /* Check for multiple lines */
                 gchar **parts;
@@ -197,7 +197,7 @@ void csv_tree_export (CsvExportInfo *info)
             /* Write to file */
             if (!write_line_to_file(fh, part2))
             {
-	        info->failed = TRUE;
+                info->failed = TRUE;
                 break;
             }
             g_free(part2);
@@ -206,7 +206,7 @@ void csv_tree_export (CsvExportInfo *info)
     }
     else
         info->failed = TRUE;
-    if(fh)
+    if (fh)
         fclose (fh);
 
     g_list_free( accts );

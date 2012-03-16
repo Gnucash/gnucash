@@ -170,8 +170,8 @@ qof_book_mark_session_saved (QofBook *book)
     book->dirty_time = 0;
     if (book->session_dirty)
     {
-/* Set the session clean upfront, because the callback will check. */
-	book->session_dirty = FALSE;
+        /* Set the session clean upfront, because the callback will check. */
+        book->session_dirty = FALSE;
         if (book->dirty_cb)
             book->dirty_cb(book, FALSE, book->dirty_data);
     }
@@ -182,8 +182,8 @@ void qof_book_mark_session_dirty (QofBook *book)
     if (!book) return;
     if (!book->session_dirty)
     {
-/* Set the session dirty upfront, because the callback will check. */
-	book->session_dirty = TRUE;
+        /* Set the session dirty upfront, because the callback will check. */
+        book->session_dirty = TRUE;
         book->dirty_time = time(NULL);
         if (book->dirty_cb)
             book->dirty_cb(book, TRUE, book->dirty_data);

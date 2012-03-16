@@ -210,7 +210,7 @@ gboolean sixtp_add_sub_parser(sixtp *parser, const gchar* tag,
                               sixtp *sub_parser);
 
 QofBookFileType gnc_is_our_xml_file(const char *filename,
-                             gboolean *with_encoding);
+                                    gboolean *with_encoding);
 
 QofBookFileType gnc_is_our_first_xml_chunk(char *chunk, gboolean *with_encoding);
 

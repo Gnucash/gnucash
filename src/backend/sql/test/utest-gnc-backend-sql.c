@@ -177,9 +177,9 @@ test_dirty_cb (QofBook* book, gboolean dirty, gpointer data)
 {
     g_assert (data != NULL);
     if (dirty)
-	++*(guint*)data;
+        ++*(guint*)data;
     else if (*(guint*)data)
-	--*(guint*)data;
+        --*(guint*)data;
 }
 
 static gboolean
@@ -206,7 +206,7 @@ test_gnc_sql_commit_edit (void)
     test_add_error (&check1);
     test_add_error (&check2);
     hdlr1 = g_log_set_handler (logdomain, loglevel,
-			       (GLogFunc)test_list_handler, NULL);
+                               (GLogFunc)test_list_handler, NULL);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
 
     qof_object_initialize ();
@@ -224,31 +224,31 @@ test_gnc_sql_commit_edit (void)
 
     g_assert (qof_instance_get_dirty_flag (inst));
     g_assert (qof_book_session_not_saved (be.book));
-    g_assert_cmpint (dirty_called, ==, 1);
+    g_assert_cmpint (dirty_called, == , 1);
     gnc_sql_commit_edit (&be, inst);
     g_assert (!qof_instance_get_dirty_flag (inst));
     g_assert (!qof_book_session_not_saved (be.book));
-    g_assert_cmpint (dirty_called, ==, 0);
+    g_assert_cmpint (dirty_called, == , 0);
 
     qof_book_mark_session_dirty (be.book);
 
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
     g_assert (qof_book_session_not_saved (be.book));
-    g_assert_cmpint (dirty_called, ==, 1);
+    g_assert_cmpint (dirty_called, == , 1);
     gnc_sql_commit_edit (&be, QOF_INSTANCE (be.book));
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
     g_assert (qof_book_session_not_saved (be.book));
-    g_assert_cmpint (dirty_called, ==, 1);
+    g_assert_cmpint (dirty_called, == , 1);
 
     qof_instance_set_dirty_flag (QOF_INSTANCE (be.book), TRUE);
 
     g_assert (qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
     g_assert (qof_book_session_not_saved (be.book));
-    g_assert_cmpint (dirty_called, ==, 1);
+    g_assert_cmpint (dirty_called, == , 1);
     gnc_sql_commit_edit (&be, QOF_INSTANCE (be.book));
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
     g_assert (!qof_book_session_not_saved (be.book));
-    g_assert_cmpint (dirty_called, ==, 0);
+    g_assert_cmpint (dirty_called, == , 0);
 
     g_log_remove_handler (logdomain, hdlr1);
     g_object_unref (inst);

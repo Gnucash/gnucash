@@ -836,7 +836,7 @@ gnc_item_edit_cut_copy_clipboard (GncItemEdit *item_edit, guint32 time, gboolean
         return;
 
     clipboard = gtk_widget_get_clipboard (GTK_WIDGET (editable),
-					  clipboard_atom);
+                                          clipboard_atom);
     g_return_if_fail (clipboard != NULL);
     g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
     clip = gtk_editable_get_chars (editable, start_sel, end_sel);
@@ -875,11 +875,11 @@ paste_received (GtkClipboard *clipboard, const gchar *text, gpointer data)
     gint start_sel, end_sel;
 
     if (text == NULL)
-	return;
+        return;
     if (gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel))
     {
-	reselect = TRUE;
-	gtk_editable_delete_text (editable, start_sel, end_sel);
+        reselect = TRUE;
+        gtk_editable_delete_text (editable, start_sel, end_sel);
     }
 
     tmp_pos = old_pos = gtk_editable_get_position (editable);
@@ -888,23 +888,23 @@ paste_received (GtkClipboard *clipboard, const gchar *text, gpointer data)
     gtk_editable_set_position (editable, tmp_pos);
 
     if (!reselect)
-	return;
+        return;
 
     gtk_editable_select_region (editable, old_pos,
-				gtk_editable_get_position (editable));
+                                gtk_editable_get_position (editable));
 
 }
 
 void
 gnc_item_edit_paste_selection (GncItemEdit *item_edit, GdkAtom selection,
-			       guint32 time)
+                               guint32 time)
 {
     GtkClipboard *clipboard;
     g_return_if_fail(item_edit != NULL);
     g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
     clipboard = gtk_widget_get_clipboard (GTK_WIDGET (item_edit->sheet),
-					  selection);
+                                          selection);
 
     g_return_if_fail (clipboard != NULL);
     g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));

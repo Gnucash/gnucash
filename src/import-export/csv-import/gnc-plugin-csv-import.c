@@ -96,8 +96,8 @@ gnc_plugin_csv_import_get_type (void)
         };
 
         gnc_plugin_csv_import_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                              "GncPluginCsvImport",
-                              &our_info, 0);
+                                     "GncPluginCsvImport",
+                                     &our_info, 0);
     }
 
     return gnc_plugin_csv_import_type;
@@ -159,21 +159,21 @@ gnc_plugin_csv_import_finalize (GObject *object)
  ************************************************************/
 static void
 gnc_plugin_csv_import_tree_cmd (GtkAction *action,
-                           GncMainWindowActionData *data)
+                                GncMainWindowActionData *data)
 {
-   gnc_file_csv_account_import ();
+    gnc_file_csv_account_import ();
 }
 
 static void
 gnc_plugin_csv_import_trans_cmd (GtkAction *action,
-                           GncMainWindowActionData *data)
+                                 GncMainWindowActionData *data)
 {
-   gnc_file_csv_trans_import ();
+    gnc_file_csv_trans_import ();
 }
 
 static void
 gnc_plugin_csv_import_transx_cmd (GtkAction *action,
-                           GncMainWindowActionData *data)
+                                  GncMainWindowActionData *data)
 {
     gnc_file_csv_import();
 }

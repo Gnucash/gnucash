@@ -140,21 +140,21 @@ void csv_import_hrows_cb (GtkWidget *spin, gpointer user_data )
     num_rows = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(info->store), NULL);
 
     /* Modify background color for header rows */
-    if(info->header_rows == 0)
+    if (info->header_rows == 0)
     {
         valid = gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(info->store), &iter, NULL, 0 );
-        if(valid)
+        if (valid)
             gtk_list_store_set (info->store, &iter, ROW_COLOR, NULL, -1);
     }
     else
     {
-	if (info->header_rows - 1 < num_rows)
+        if (info->header_rows - 1 < num_rows)
         {
             valid = gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(info->store), &iter, NULL, info->header_rows - 1 );
-            if(valid)
+            if (valid)
                 gtk_list_store_set (info->store, &iter, ROW_COLOR, "pink", -1);
             valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(info->store), &iter);
-            if(valid)
+            if (valid)
                 gtk_list_store_set (info->store, &iter, ROW_COLOR, NULL, -1);
         }
     }
@@ -205,7 +205,7 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data )
     /* Generate preview */
     gtk_list_store_clear (info->store);
 
-    if(csv_import_read_file (info->file_name, info->regexp->str, info->store, 11 ) == MATCH_FOUND)
+    if (csv_import_read_file (info->file_name, info->regexp->str, info->store, 11 ) == MATCH_FOUND)
         gtk_widget_set_sensitive (info->header_row_spin, TRUE);
     else
         gtk_widget_set_sensitive (info->header_row_spin, FALSE);
@@ -309,7 +309,7 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
  *******************************************************/
 void
 csv_import_assistant_start_page_prepare (GtkAssistant *assistant,
-                                   gpointer user_data)
+        gpointer user_data)
 {
     CsvImportInfo *info = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
@@ -322,7 +322,7 @@ csv_import_assistant_start_page_prepare (GtkAssistant *assistant,
 
 void
 csv_import_assistant_file_page_prepare (GtkAssistant *assistant,
-                                   gpointer user_data)
+                                        gpointer user_data)
 {
     CsvImportInfo *info = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
@@ -339,7 +339,7 @@ csv_import_assistant_file_page_prepare (GtkAssistant *assistant,
 
 void
 csv_import_assistant_account_page_prepare (GtkAssistant *assistant,
-                                   gpointer user_data)
+        gpointer user_data)
 {
     CsvImportInfo *info = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
@@ -347,7 +347,7 @@ csv_import_assistant_account_page_prepare (GtkAssistant *assistant,
 
     gtk_list_store_clear (info->store);
 
-    if(csv_import_read_file (info->file_name, info->regexp->str, info->store, 11 ) == MATCH_FOUND)
+    if (csv_import_read_file (info->file_name, info->regexp->str, info->store, 11 ) == MATCH_FOUND)
         gtk_widget_set_sensitive (info->header_row_spin, TRUE);
     else
         gtk_widget_set_sensitive (info->header_row_spin, FALSE);
@@ -356,7 +356,7 @@ csv_import_assistant_account_page_prepare (GtkAssistant *assistant,
 
 void
 csv_import_assistant_finish_page_prepare (GtkAssistant *assistant,
-                                   gpointer user_data)
+        gpointer user_data)
 {
     CsvImportInfo *info = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
@@ -379,23 +379,23 @@ csv_import_assistant_finish_page_prepare (GtkAssistant *assistant,
 
 void
 csv_import_assistant_summary_page_prepare (GtkAssistant *assistant,
-                                   gpointer user_data)
+        gpointer user_data)
 {
     CsvImportInfo *info = user_data;
     gchar *text, *errtext, *mtext;
 
-    if(!g_strcmp0(info->error,"") == 0)
+    if (!g_strcmp0(info->error, "") == 0)
     {
-	text = g_strdup_printf(gettext ("Import completed but with errors!\n\nThe number of Accounts added was %u and "
-                                  "updated was %u.\n\nSee below for errors..." ), info->num_new, info->num_updates );
+        text = g_strdup_printf(gettext ("Import completed but with errors!\n\nThe number of Accounts added was %u and "
+                                        "updated was %u.\n\nSee below for errors..." ), info->num_new, info->num_updates );
         errtext = g_strdup_printf ( "%s", info->error);
         gtk_label_set_text (GTK_LABEL(info->summary_error), errtext);
         g_free(errtext);
         g_free(info->error);
     }
     else
-	text = g_strdup_printf(gettext ("Import completed successfully!\n\nThe number of Accounts added was %u and "
-                                  "updated was %u.\n" ), info->num_new, info->num_updates );
+        text = g_strdup_printf(gettext ("Import completed successfully!\n\nThe number of Accounts added was %u and "
+                                        "updated was %u.\n" ), info->num_new, info->num_updates );
 
     mtext = g_strdup_printf("<span size=\"medium\"><b>%s</b></span>", text);
     gtk_label_set_markup(GTK_LABEL(info->summary_label), mtext);
@@ -407,7 +407,7 @@ csv_import_assistant_summary_page_prepare (GtkAssistant *assistant,
 
 void
 csv_import_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
-                      gpointer user_data)
+                              gpointer user_data)
 {
     CsvImportInfo *info = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
@@ -470,7 +470,7 @@ csv_import_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 
     gtk_list_store_clear (info->store);
     csv_import_read_file (info->file_name, info->regexp->str, info->store, 0 );
-    csv_account_import (info); 
+    csv_account_import (info);
 }
 
 static void
@@ -519,7 +519,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     gtk_widget_show (button);
     gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), button);
     g_signal_connect (G_OBJECT (button), "clicked",
-                  G_CALLBACK (csv_import_file_chooser_confirm_cb), info);
+                      G_CALLBACK (csv_import_file_chooser_confirm_cb), info);
 
     box = GTK_WIDGET(gtk_builder_get_object(builder, "file_page"));
     gtk_box_pack_start (GTK_BOX (box), info->file_chooser, TRUE, TRUE, 6);
@@ -533,8 +533,8 @@ csv_import_assistant_create (CsvImportInfo *info)
 
     /* create model and bind to view */
     info->store = gtk_list_store_new (N_COLUMNS,
-                                     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                                     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model( GTK_TREE_VIEW(info->tree_view), GTK_TREE_MODEL(info->store) );
 #define CREATE_COLUMN(description,column_id) \
   renderer = gtk_cell_renderer_text_new (); \

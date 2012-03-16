@@ -1,6 +1,6 @@
 /********************************************************************\
  * import-account-matcher.h - flexible account picker/matcher       *
- *                                                                  *          
+ *                                                                  *
  * Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>        *
  * Copyright (C) 2012 Robert Fewell                                 *
  *                                                                  *
@@ -49,7 +49,7 @@ typedef struct
     GNCAccountType       new_account_default_type;       /* new account default type, incoming */
     Account             *default_account;                /* default account for selection, incoming */
     Account             *retAccount;                     /* Account value returned to caller */
-}AccountPickerDialog;
+} AccountPickerDialog;
 
 /**  Must be called with a string containing a unique identifier for the
   account.  If an account with a matching online_id kvp_frame is
@@ -123,10 +123,10 @@ Account * gnc_import_select_account(GtkWidget *parent,
                                    );
 
 
-/**  Must be called with the parent widget, ie. a vbox that the 
+/**  Must be called with the parent widget, ie. a vbox that the
      account picker dialog will be packed into. The data structure
      AccountPickerDialog is initialised and default values populated.
-     
+
   @param parent The parent widget. This is the place the account picker dialog will
   be packed into.
 
@@ -136,8 +136,8 @@ AccountPickerDialog * gnc_import_account_assist_setup (GtkWidget *parent);
 
 
 /**  Must be called with an AccountPickerDialog structure allready setup.
-     If an account with a matching online_id kvp_frame is found, which is 
-     allready present in the dialog structure, the function returns with a 
+     If an account with a matching online_id kvp_frame is found, which is
+     allready present in the dialog structure, the function returns with a
      pointer to that account or NULL if not found.
 
   @param Account picker Dialog structure, AccountPickerDialog
