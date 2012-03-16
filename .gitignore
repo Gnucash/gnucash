@@ -210,3 +210,9 @@ src/tax/us/gnucash
 src/tax/us/test/test-link-module
 stamp-h1
 swig-*.c
+CMakeLists.txt.user
+gnucash.config
+gnucash.creator
+gnucash.creator.user
+gnucash.files
+gnucash.includes
