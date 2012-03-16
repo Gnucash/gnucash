@@ -371,6 +371,13 @@ src/import-export/csv/gnc-csv-import.glade
 src/import-export/csv/gnc-csv-model.c
 src/import-export/csv/gncmod-csv-import.c
 src/import-export/csv/gnc-plugin-csv.c
+src/import-export/csv-export/assistant-csv-export.c
+src/import-export/csv-export/assistant-csv-export.glade
+src/import-export/csv-export/csv-transactions-export.c
+src/import-export/csv-export/csv-tree-export.c
+src/import-export/csv-export/gnc-plugin-csv-export.c
+src/import-export/csv-export/gncmod-csv-export.c
+src/import-export/csv-export/schemas/apps_gnucash_dialog_export.schemas.in
 src/import-export/dialog-import.glade
 src/import-export/gncmod-generic-import.c
 src/import-export/import-account-matcher.c

@@ -1279,6 +1279,8 @@ AC_CONFIG_FILES(
   src/import-export/ofx/Makefile
   src/import-export/ofx/test/Makefile
   src/import-export/csv/Makefile
+  src/import-export/csv-export/Makefile
+  src/import-export/csv-export/schemas/Makefile
   src/import-export/log-replay/Makefile
   src/import-export/aqbanking/Makefile
   src/import-export/aqbanking/schemas/Makefile
