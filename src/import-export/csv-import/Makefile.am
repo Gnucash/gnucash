@@ -9,8 +9,7 @@ libgncmod_csv_import_la_SOURCES = \
   gnc-plugin-csv-import.c \
   csv-account-import.c \
   gnc-csv-model.c \
-  gnc-csv-gnumeric-popup.c \
-  gnc-csv-import.c
+  gnc-csv-gnumeric-popup.c
 
 noinst_HEADERS = \
   assistant-csv-account-import.h \
@@ -18,8 +17,7 @@ noinst_HEADERS = \
   gnc-plugin-csv-import.h \
   csv-account-import.h \
   gnc-csv-model.h \
-  gnc-csv-gnumeric-popup.h \
-  gnc-csv-import.h
+  gnc-csv-gnumeric-popup.h
 
 libgncmod_csv_import_la_LDFLAGS = -avoid-version
 
@@ -60,8 +58,7 @@ ui_DATA = \
 gtkbuilderdir = ${GNC_GTKBUILDER_DIR}
 gtkbuilder_DATA = \
 	assistant-csv-account-import.glade \
-	assistant-csv-trans-import.glade \
-        gnc-csv-import.glade
+	assistant-csv-trans-import.glade
 
 EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA)
 

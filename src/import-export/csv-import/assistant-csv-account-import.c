@@ -117,6 +117,11 @@ csv_import_file_chooser_confirm_cb (GtkWidget *button, CsvImportInfo *info)
 
     DEBUG("file_name selected is %s", info->file_name);
     DEBUG("starting directory is %s", info->starting_dir);
+
+    /* Step to next page if page is complete */
+    if(gtk_assistant_get_page_complete(assistant, page))
+        gtk_assistant_set_current_page (assistant, num + 1);
+
 }
 
 

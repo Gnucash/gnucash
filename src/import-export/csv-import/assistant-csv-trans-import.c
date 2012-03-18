@@ -3,6 +3,7 @@
  *                                     Transactions from a file.    *
  *                                                                  *
  * Copyright (C) 2012 Robert Fewell                                 *
+ * Copyright (c) 2007 Benny Sperisen <lasindi@gmail.com>            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -213,6 +214,10 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
 
     DEBUG("file_name selected is %s", info->file_name);
     DEBUG("starting directory is %s", info->starting_dir);
+
+    /* Step to next page if page is complete */
+    if(gtk_assistant_get_page_complete(assistant, page))
+        gtk_assistant_set_current_page (assistant, num + 1);
 }
 
 

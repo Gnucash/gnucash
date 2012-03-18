@@ -28,10 +28,8 @@
 #include "gnc-plugin-csv-import.h"
 #include "gnc-plugin-manager.h"
 
-
 #include "assistant-csv-account-import.h"
 #include "assistant-csv-trans-import.h"
-#include "gnc-csv-import.h"
 
 static void gnc_plugin_csv_import_class_init (GncPluginCsvImportClass *klass);
 static void gnc_plugin_csv_import_init (GncPluginCsvImport *plugin);
@@ -40,7 +38,6 @@ static void gnc_plugin_csv_import_finalize (GObject *object);
 /* Command callbacks */
 static void gnc_plugin_csv_import_tree_cmd (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_csv_import_trans_cmd (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_csv_import_transx_cmd (GtkAction *action, GncMainWindowActionData *data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-csv-import-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-csv-import-ui.xml"
@@ -53,13 +50,8 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_plugin_csv_import_tree_cmd)
     },
     {
-        "CsvImportTransActionx", GTK_STOCK_CONVERT, N_("Import _CSV/Fixed-Width..."), NULL,
+        "CsvImportTransAction", GTK_STOCK_CONVERT, N_("Import _Transactions from CSV..."), NULL,
         N_("Import Transactions from a CSV file"),
-        G_CALLBACK (gnc_plugin_csv_import_transx_cmd)
-    },
-    {
-        "CsvImportTransAction", GTK_STOCK_CONVERT, N_("Import Transactions _New from CSV..."), NULL,
-        N_("Import Transactions New from a CSV file"),
         G_CALLBACK (gnc_plugin_csv_import_trans_cmd)
     },
 };
@@ -171,12 +163,6 @@ gnc_plugin_csv_import_trans_cmd (GtkAction *action,
     gnc_file_csv_trans_import ();
 }
 
-static void
-gnc_plugin_csv_import_transx_cmd (GtkAction *action,
-                                  GncMainWindowActionData *data)
-{
-    gnc_file_csv_import();
-}
 /************************************************************
  *                    Plugin Bootstrapping                   *
  ************************************************************/

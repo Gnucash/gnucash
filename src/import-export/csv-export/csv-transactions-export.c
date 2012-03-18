@@ -344,7 +344,7 @@ void csv_transactions_export (CsvExportInfo *info)
                                _("Type"), mid_sep, _("Action"), mid_sep, _("Reconcile"), mid_sep,
                                _("To With Sym"), mid_sep, _("From With Sym"), mid_sep,
                                _("To Num."), mid_sep, _("From Num."), mid_sep,
-                               _("To Factor/Price"), mid_sep, _("From Factor/Price"), end_sep, "\n", NULL);
+                               _("To Rate/Price"), mid_sep, _("From Rate/Price"), end_sep, "\n", NULL);
         DEBUG("Header String: %s", header);
 
         /* Write header line */
