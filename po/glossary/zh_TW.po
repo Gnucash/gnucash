@@ -16,7 +16,7 @@ msgstr ""
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr "期"
+msgstr "術語"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -196,7 +196,7 @@ msgstr "帳單"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
-msgstr "記帳期限"
+msgstr "支付條款"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
@@ -256,7 +256,7 @@ msgstr "商品選項：最小單位"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "商品選項：標記"
+msgstr "商品選項：代號"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -304,7 +304,7 @@ msgstr "預設值"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr "定金(用於調整對話盒)"
+msgstr "存入(用於對帳對話盒)"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -548,7 +548,7 @@ msgstr "重新結算"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
-msgstr "一致化"
+msgstr "對帳"
 
 #. "-"
 msgid "record keeping"
@@ -668,7 +668,7 @@ msgstr "交易狀態：凍結的"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr "交易狀態：已一致"
+msgstr "交易狀態：已對帳"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
@@ -716,4 +716,4 @@ msgstr "憑證"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "提款(在一致化對話盒)"
+msgstr "提出(在對帳對話盒)"

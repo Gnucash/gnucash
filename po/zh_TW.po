@@ -388,7 +388,7 @@ msgstr "憑證"
 #: ../intl-scm/guile-strings.c:1462 ../intl-scm/guile-strings.c:1558
 #: ../intl-scm/guile-strings.c:3962
 msgid "Invoice"
-msgstr "收據"
+msgstr "發票"
 
 #. This array contains all of the different strings for different column types.
 #. src/report/standard-reports/transaction.scm
@@ -468,14 +468,14 @@ msgstr "百分比必須介於 0 和 100 之間。"
 
 #: ../src/business/business-gnome/dialog-billterms.c:301
 msgid "You must provide a name for this Billing Term."
-msgstr "您必須輸入此記帳期限的名稱。"
+msgstr "您必須輸入此支付條款的名稱。"
 
 #: ../src/business/business-gnome/dialog-billterms.c:308
 #, c-format
 msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
-msgstr "您必須為這個記帳期限提供一個獨一無二的名稱。您的選擇「%s」已經被使用了。"
+msgstr "您必須為這個支付條款提供一個獨一無二的名稱。您的選擇「%s」已經被使用了。"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../src/business/business-gnome/dialog-billterms.c:486
@@ -502,7 +502,7 @@ msgstr "未知"
 #: ../src/business/business-gnome/dialog-billterms.c:621
 #, c-format
 msgid "Term \"%s\" is in use.  You cannot delete it."
-msgstr "期限「%s」正在使用中。您不能刪除它。"
+msgstr "條款「%s」正在使用中。您不能刪除它。"
 
 #: ../src/business/business-gnome/dialog-billterms.c:627
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:570
@@ -573,7 +573,7 @@ msgstr "客戶的工作"
 #. { N_("Customer's Orders"), order_customer_cb},
 #: ../src/business/business-gnome/dialog-customer.c:859
 msgid "Customer's Invoices"
-msgstr "客戶的收據"
+msgstr "客戶的發票"
 
 #: ../src/business/business-gnome/dialog-customer.c:860
 #: ../src/business/business-gnome/dialog-employee.c:708
@@ -728,11 +728,11 @@ msgstr "這個項目是附加在訂單上的因此也要刪除其來源！"
 
 #: ../src/business/business-gnome/dialog-invoice.c:647
 msgid "The Invoice must have at least one Entry."
-msgstr "收據必須有一個以上的項目。"
+msgstr "發票必須有一個以上的項目。"
 
 #: ../src/business/business-gnome/dialog-invoice.c:657
 msgid "You may not post an invoice with a negative total value."
-msgstr "您不能張貼總值為負數的收據。"
+msgstr "您不能張貼總值為負數的發票。"
 
 #: ../src/business/business-gnome/dialog-invoice.c:665
 msgid "You may not post an expense voucher with a negative total cash value."
@@ -743,7 +743,7 @@ msgstr ""
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:672
 msgid "Do you really want to post the invoice?"
-msgstr "您確定要張貼這張收據？"
+msgstr "您確定要張貼這張發票？"
 
 #. src/report/business-reports/aging.scm
 #. src/report/business-reports/easy-invoice.scm
@@ -811,15 +811,15 @@ msgstr "合計收費："
 #: ../src/business/business-gnome/glade/invoice.glade.h:18
 #: ../src/gnome-search/dialog-search.c:845
 msgid "New Invoice"
-msgstr "新增收據"
+msgstr "新增發票"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1723
 msgid "Edit Invoice"
-msgstr "編輯收據"
+msgstr "編輯發票"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1726
 msgid "View Invoice"
-msgstr "檢視收據"
+msgstr "檢視發票"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1734
 #: ../src/gnome-search/dialog-search.c:829
@@ -849,7 +849,7 @@ msgstr "檢視消費憑證"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2474
 msgid "View/Edit Invoice"
-msgstr "檢視/編輯收據"
+msgstr "檢視/編輯發票"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2476
 #: ../src/business/business-gnome/dialog-invoice.c:2483
@@ -873,7 +873,7 @@ msgstr "檢視/編輯憑證"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2502
 msgid "Invoice Owner"
-msgstr "收據所有人"
+msgstr "發票所有人"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -882,7 +882,7 @@ msgstr "收據所有人"
 #: ../intl-scm/guile-strings.c:792 ../intl-scm/guile-strings.c:970
 #: ../intl-scm/guile-strings.c:1176
 msgid "Invoice Notes"
-msgstr "收據備註"
+msgstr "發票備註"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -928,7 +928,7 @@ msgstr "是否張貼？"
 #: ../src/business/business-gnome/glade/invoice.glade.h:8
 #: ../src/business/business-gnome/glade/order.glade.h:6
 msgid "Date Opened"
-msgstr "開收據的日期"
+msgstr "開發票的日期"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2526
 #: ../src/business/business-gnome/dialog-invoice.c:2560
@@ -938,7 +938,7 @@ msgstr "公司名稱 "
 #: ../src/business/business-gnome/dialog-invoice.c:2530
 #: ../src/business/business-gnome/glade/invoice.glade.h:14
 msgid "Invoice ID"
-msgstr "收據 ID"
+msgstr "發票 ID"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2536
 msgid "Bill Owner"
@@ -1038,7 +1038,7 @@ msgstr "消費憑證"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2719
 msgid "Find Invoice"
-msgstr "尋找收據"
+msgstr "尋找發票"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
@@ -1103,7 +1103,7 @@ msgstr "檢視/編輯工作"
 
 #: ../src/business/business-gnome/dialog-job.c:536
 msgid "View Invoices"
-msgstr "檢視收據"
+msgstr "檢視發票"
 
 #: ../src/business/business-gnome/dialog-job.c:546
 msgid "Owner's Name"
@@ -1144,7 +1144,7 @@ msgid ""
 "This order contains entries that have not been invoiced. Are you sure you "
 "want to close it out before you invoice all the entries?"
 msgstr ""
-"這張訂單包含了未開收據的項目。您確定要在您為所有的項目開收據之前將它關閉？"
+"這張訂單包含了未開發票的項目。您確定要在您為所有的項目開發票之前將它關閉？"
 
 #. Ok, we can close this.  Ask for verification and set the closed date
 #: ../src/business/business-gnome/dialog-order.c:305
@@ -1279,15 +1279,15 @@ msgstr "尋找廠商"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:1
 msgid "<b>New Billing Term</b>"
-msgstr "<b>新增記帳期限</b>"
+msgstr "<b>新增支付條款</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:2
 msgid "<b>Term Definition</b>"
-msgstr "<b>期限定義</b>"
+msgstr "<b>條款定義</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:3
 msgid "<b>Terms</b>"
-msgstr "<b>期限</b>"
+msgstr "<b>條款</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:4
 msgid "Cancel your changes"
@@ -1299,11 +1299,11 @@ msgstr "關閉此視窗"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:6
 msgid "Commit this Billing Term"
-msgstr "提交這個記帳期限"
+msgstr "提交這個支付條款"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:7
 msgid "Create a new Billing Term"
-msgstr "建立新記帳期限"
+msgstr "建立新支付條款"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:8
 msgid "Cutoff Day: "
@@ -1322,7 +1322,7 @@ msgstr "敘述(_S)："
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:13
 msgid "Delete the current Billing Term"
-msgstr "刪除目前的記帳期限"
+msgstr "刪除目前的支付條款"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:15
 #, no-c-format
@@ -1347,7 +1347,7 @@ msgstr "到期日數: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:20
 msgid "Edit the current Billing Term"
-msgstr "編輯目前的記帳期限"
+msgstr "編輯目前的支付條款"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:22
 msgid "Table"
@@ -1361,7 +1361,7 @@ msgstr "表格"
 #: ../intl-scm/guile-strings.c:850 ../intl-scm/guile-strings.c:1056
 #: ../intl-scm/guile-strings.c:1228
 msgid "Terms"
-msgstr "期限"
+msgstr "條款"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:24
 msgid ""
@@ -1378,7 +1378,7 @@ msgstr "本月帳單到期的日子"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:26
 msgid "The description of the Billing Term, printed on invoices"
-msgstr "記帳期限的描述，會列印於收據上"
+msgstr "支付條款的描述，會列印於發票上"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:27
 msgid "The discount percentage applied if paid early."
@@ -1386,7 +1386,7 @@ msgstr "如果早期付款所享的折扣百分比。"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:28
 msgid "The internal name of the Billing Term."
-msgstr "記帳期限的內部名稱。"
+msgstr "支付條款的內部名稱。"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:29
 msgid "The last day of the month for the early payment discount."
@@ -1428,7 +1428,7 @@ msgstr "<b>一般</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:3
 msgid "<b>Invoices</b>"
-msgstr "<b>收據</b>"
+msgstr "<b>發票</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:4
 msgid "How many days in the future to warn about Bills coming due."
@@ -1675,7 +1675,7 @@ msgstr "稅金表格: "
 #: ../src/business/business-gnome/glade/customer.glade.h:23
 #: ../src/business/business-gnome/glade/vendor.glade.h:17
 msgid "Terms: "
-msgstr "期限: "
+msgstr "條款: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:24
 msgid ""
@@ -1792,11 +1792,11 @@ msgstr "額外付款"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:13
 msgid "Invoice Entries"
-msgstr "收據項目"
+msgstr "發票項目"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:15
 msgid "Invoice Information"
-msgstr "收據資訊"
+msgstr "發票資訊"
 
 #. src/report/business-reports/job-report.scm
 #: ../src/business/business-gnome/glade/invoice.glade.h:16
@@ -1825,13 +1825,13 @@ msgstr ""
 msgid ""
 "The invoice ID number.  If left blank a reasonable number will be chosen for "
 "you."
-msgstr "收據的 ID 編號。如果保持空白則會為您選擇一個合理的號碼。"
+msgstr "發票的 ID 編號。如果保持空白則會為您選擇一個合理的號碼。"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:25
 msgid ""
 "Unposting this Invoice will delete the posted transaction.\n"
 "Are you sure you want to unpost it?"
-msgstr "解除張貼這張收據會刪除已張貼的交易。\n您確定要將它解除張貼？"
+msgstr "解除張貼這張發票會刪除已張貼的交易。\n您確定要將它解除張貼？"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:27
 msgid "Yes, reset the Tax Tables"
@@ -1864,7 +1864,7 @@ msgstr "關閉訂單"
 
 #: ../src/business/business-gnome/glade/order.glade.h:7
 msgid "Invoices"
-msgstr "收據"
+msgstr "發票"
 
 #: ../src/business/business-gnome/glade/order.glade.h:8
 #: ../src/gnome-search/dialog-search.c:853
@@ -2074,19 +2074,19 @@ msgstr "開啟尋找客戶對話盒"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:149
 msgid "New _Invoice..."
-msgstr "新增收據(_I)..."
+msgstr "新增發票(_I)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:150
 msgid "Open the New Invoice dialog"
-msgstr "開啟新收據對話盒"
+msgstr "開啟新發票對話盒"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:154
 msgid "Find In_voice..."
-msgstr "尋找收據(_I)..."
+msgstr "尋找發票(_I)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
 msgid "Open the Find Invoice dialog"
-msgstr "開啟尋找收據對話盒"
+msgstr "開啟尋找發票對話盒"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:159
 #: ../src/business/business-gnome/gnc-plugin-business.c:197
@@ -2206,11 +2206,11 @@ msgstr "檢視並編輯銷售稅金表格 (GST/VAT)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:247
 msgid "_Billing Terms Editor"
-msgstr "記帳期限編輯器(_B)"
+msgstr "支付條款編輯器(_B)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:248
 msgid "View and edit the list of Billing Terms"
-msgstr "檢視並編輯記帳期限的清單"
+msgstr "檢視並編輯支付條款的清單"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:252
 msgid "Bills _Due Reminder"
@@ -2231,11 +2231,11 @@ msgstr "測試搜尋對話盒"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:266
 msgid "Reload invoice report"
-msgstr "重新讀取收據報表"
+msgstr "重新讀取發票報表"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:267
 msgid "Reload invoice report scheme file"
-msgstr "重新讀取收據報表方案檔案"
+msgstr "重新讀取發票報表方案檔案"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:271
 msgid "Reload owner report"
@@ -2274,11 +2274,11 @@ msgstr "建立新科目"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:106
 msgid "Print Invoice"
-msgstr "列印收據"
+msgstr "列印發票"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:107
 msgid "Make a printable invoice"
-msgstr "製作可列印的收據"
+msgstr "製作可列印的發票"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:113
 msgid "_Cut"
@@ -2297,15 +2297,15 @@ msgstr "貼上(_P)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:128
 msgid "_Edit Invoice"
-msgstr "編輯收據(_E)"
+msgstr "編輯發票(_E)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:129
 msgid "Edit this invoice"
-msgstr "編輯這張收據"
+msgstr "編輯這張發票"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
 msgid "_Duplicate Invoice"
-msgstr "重複相同的收據(_D)"
+msgstr "重複相同的發票(_D)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:134
 msgid "Create a new invoice as a duplicate of the current one"
@@ -2313,19 +2313,19 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:138
 msgid "_Post Invoice"
-msgstr "張貼收據(_P)"
+msgstr "張貼發票(_P)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:139
 msgid "Post this Invoice to your Chart of Accounts"
-msgstr "將這張收據張貼到您的會計科目表"
+msgstr "將這張發票張貼到您的會計科目表"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:143
 msgid "_Unpost Invoice"
-msgstr "不張貼收據(_U)"
+msgstr "不張貼發票(_U)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:144
 msgid "Unpost this Invoice and make it editable"
-msgstr "取消張貼這張收據並且讓它變為可編輯的"
+msgstr "取消張貼這張發票並且讓它變為可編輯的"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:150
 #: ../src/gnome/glade/register.glade.h:86
@@ -2363,7 +2363,7 @@ msgstr "空白(_B)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:166
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr "移至此收據底端的空白項目處"
+msgstr "移至此發票底端的空白項目處"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:170
 msgid "Dup_licate Entry"
@@ -2375,7 +2375,7 @@ msgstr "製作目前項目的拷貝"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:177
 msgid "New _Invoice"
-msgstr "新增收據(_I)"
+msgstr "新增發票(_I)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:178
 #, fuzzy
@@ -2384,11 +2384,11 @@ msgstr "為每個報表或科目樹建立新的頂端層級視窗"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:182
 msgid "_Pay Invoice"
-msgstr "支付收據(_P)"
+msgstr "支付發票(_P)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:183
 msgid "Enter a payment for the owner of this Invoice"
-msgstr "輸入此收據所有人的付款"
+msgstr "輸入此發票所有人的付款"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:189
 msgid "_Company Report"
@@ -2396,7 +2396,7 @@ msgstr "公司報表(_C)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:190
 msgid "Open a company report window for the owner of this Invoice"
-msgstr "開啟此收據所有人的公司報表視窗"
+msgstr "開啟此發票所有人的公司報表視窗"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:198
 #: ../src/gnome/glade/register.glade.h:95
@@ -2405,7 +2405,7 @@ msgstr "標準順序(_S)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:198
 msgid "Keep normal invoice order"
-msgstr "保持正常收據順序"
+msgstr "保持正常發票順序"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:199
 #: ../src/gnome/glade/register.glade.h:80
@@ -2536,7 +2536,7 @@ msgstr "稅金是否已經包含在這個項目的價格中？"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:8
 msgid "Open new invoice in new window"
-msgstr "在新視窗中開啟收據"
+msgstr "在新視窗中開啟發票"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:9
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:7
@@ -2848,7 +2848,7 @@ msgstr "含稅？"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:120
 msgid "Invoiced?"
-msgstr "已開收據？"
+msgstr "已開發票？"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/report-system/options-utilities.scm
@@ -2964,11 +2964,11 @@ msgstr "稅金是否已經包含在這個項目的價格中？"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:738
 msgid "Is this entry Invoiced?"
-msgstr "此項目已開收據？"
+msgstr "此項目已開發票？"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:742
 msgid "Include this entry on this invoice?"
-msgstr "這個項目是否包含收據？"
+msgstr "這個項目是否包含發票？"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:745
 msgid "Unknown EntryLedger Type"
@@ -3246,7 +3246,7 @@ msgstr "額外的簽帳卡"
 
 #: ../src/engine/gncInvoice.c:1512
 msgid "Generated from an invoice.  Try unposting the invoice."
-msgstr "從收據產生。試著解除張貼此收據。"
+msgstr "從發票產生。試著解除張貼此發票。"
 
 #. Translators: This is the memo of an auto-created split
 #: ../src/engine/gncInvoice.c:1535
@@ -9479,12 +9479,12 @@ msgstr ""
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:14
 #, fuzzy
 msgid "The data has _already been installed in another window"
-msgstr "關閉此收據視窗"
+msgstr "關閉此發票視窗"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:15
 #, fuzzy
 msgid "The search path has _already been updated in another window"
-msgstr "關閉此收據視窗"
+msgstr "關閉此發票視窗"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:16
 msgid ""
@@ -9606,9 +9606,8 @@ msgid "Do not merge"
 msgstr "不要合併"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:11
-#, fuzzy
 msgid "Edit the list of encodings"
-msgstr "檢視並編輯記帳期限的清單"
+msgstr "編輯編碼列表"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:12
 msgid "Finish GnuCash Datafile Import"
@@ -10022,7 +10021,7 @@ msgstr "負數以紅色顯示(_G)"
 #: ../src/gnome-utils/glade/preferences.glade.h:67
 #, fuzzy
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "移至此收據底端的空白項目處"
+msgstr "移至此發票底端的空白項目處"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:68
 msgid "Display the notebook tabs at the left of the window."
@@ -14185,7 +14184,7 @@ msgstr "匯入帳單 CSV 資料"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:10
 msgid "Import invoice CSV data"
-msgstr "匯入收據 CSV 資料"
+msgstr "匯入發票 CSV 資料"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:11
 #, fuzzy
@@ -14646,7 +14645,7 @@ msgstr "已排程"
 
 #: ../src/register/ledger-core/split-register-model.c:940
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr "輸入交易參照，像是收據或支票號碼"
+msgstr "輸入交易參照，像是發票或支票號碼"
 
 #: ../src/register/ledger-core/split-register-model.c:944
 msgid "Enter the transaction number, such as the check number"
@@ -15370,13 +15369,13 @@ msgstr ""
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:206
 msgid "Invoice number format"
-msgstr "收據編號格式"
+msgstr "發票編號格式"
 
 #. src/business/business-utils/business-prefs.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:208 ../intl-scm/guile-strings.c:1506
 msgid "Invoice number"
-msgstr "收據編號"
+msgstr "發票編號"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:210
@@ -15527,7 +15526,7 @@ msgstr "您的商務地址"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:258
 msgid "The contact person to print on invoices"
-msgstr "收據上列印的聯絡人"
+msgstr "發票上列印的聯絡人"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:260
@@ -16402,7 +16401,7 @@ msgstr "客戶編號: "
 #: ../intl-scm/guile-strings.c:654 ../intl-scm/guile-strings.c:856
 #: ../intl-scm/guile-strings.c:1062 ../intl-scm/guile-strings.c:1474
 msgid "Invoice Number"
-msgstr "收據號碼"
+msgstr "發票號碼"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16660,7 +16659,7 @@ msgstr "參照"
 #: ../intl-scm/guile-strings.c:776 ../intl-scm/guile-strings.c:954
 #: ../intl-scm/guile-strings.c:1160
 msgid "Display the invoice references?"
-msgstr "是否顯示收據參照？"
+msgstr "是否顯示發票參照？"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16668,7 +16667,7 @@ msgstr "是否顯示收據參照？"
 #: ../intl-scm/guile-strings.c:780 ../intl-scm/guile-strings.c:958
 #: ../intl-scm/guile-strings.c:1164
 msgid "Billing Terms"
-msgstr "記帳期限"
+msgstr "支付條款"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16676,7 +16675,7 @@ msgstr "記帳期限"
 #: ../intl-scm/guile-strings.c:782 ../intl-scm/guile-strings.c:960
 #: ../intl-scm/guile-strings.c:1166
 msgid "Display the invoice billing terms?"
-msgstr "是否顯示收據記帳期限？"
+msgstr "是否顯示發票支付條款？"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16692,7 +16691,7 @@ msgstr "是否顯示記帳 id？"
 #: ../intl-scm/guile-strings.c:794 ../intl-scm/guile-strings.c:972
 #: ../intl-scm/guile-strings.c:1178
 msgid "Display the invoice notes?"
-msgstr "是否顯示收據備註？"
+msgstr "是否顯示發票備註？"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16708,17 +16707,17 @@ msgstr "付款"
 #: ../intl-scm/guile-strings.c:800 ../intl-scm/guile-strings.c:978
 #: ../intl-scm/guile-strings.c:1184
 msgid "Display the payments applied to this invoice?"
-msgstr "是否顯示此收據的付款？"
+msgstr "是否顯示此發票的付款？"
 
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:804
 msgid "Invoice Width"
-msgstr "收據寬度"
+msgstr "發票寬度"
 
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:806
 msgid "The minimum width of the invoice."
-msgstr "收據最小的寬度。"
+msgstr "發票最小的寬度。"
 
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:808 ../intl-scm/guile-strings.c:816
@@ -16737,7 +16736,7 @@ msgstr "額外備註"
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:812
 msgid "Extra notes to put on the invoice (simple HTML is accepted)"
-msgstr "收據上的額外備註。(允許簡單的 HTML)"
+msgstr "發票上的額外備註。(允許簡單的 HTML)"
 
 #. src/report/business-reports/easy-invoice.scm
 #. src/report/business-reports/fancy-invoice.scm
@@ -16842,7 +16841,7 @@ msgstr ""
 #. src/report/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:854
 msgid "Easy Invoice"
-msgstr "簡單收據"
+msgstr "簡單發票"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
@@ -16858,13 +16857,13 @@ msgstr ""
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:984
 msgid "The minimum number of invoice entries to display. (-1)"
-msgstr "最少顯示多少收據項目。(-1)"
+msgstr "最少顯示多少發票項目。(-1)"
 
 #. src/report/business-reports/fancy-invoice.scm
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:990 ../intl-scm/guile-strings.c:1190
 msgid "Extra notes to put on the invoice"
-msgstr "收據上的額外備註。"
+msgstr "發票上的額外備註。"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:996
@@ -16949,17 +16948,17 @@ msgstr "%s&nbsp;日期"
 #: ../intl-scm/guile-strings.c:1052 ../intl-scm/guile-strings.c:1224
 #: ../intl-scm/guile-strings.c:1476
 msgid "Invoice in progress..."
-msgstr "收據處理中..."
+msgstr "發票處理中..."
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1060
 msgid "Fancy Invoice"
-msgstr "精美的收據"
+msgstr "精美的發票"
 
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:1232
 msgid "Printable Invoice"
-msgstr "可列印的收據"
+msgstr "可列印的發票"
 
 #. src/report/business-reports/job-report.scm
 #. src/report/business-reports/owner-report.scm
@@ -17116,14 +17115,14 @@ msgstr "網頁"
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:1478
 msgid "Invoice Date"
-msgstr "收據日期"
+msgstr "發票日期"
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1486 ../intl-scm/guile-strings.c:1490
 #: ../intl-scm/guile-strings.c:1586 ../intl-scm/guile-strings.c:1588
 msgid "Tax Invoice"
-msgstr "稅務收據"
+msgstr "稅務發票"
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:1488
@@ -21266,7 +21265,7 @@ msgstr "是否顯示對帳日期？"
 #: ../intl-scm/guile-strings.c:4392
 #, fuzzy
 msgid "Display the notes if the memo is unavailable?"
-msgstr "是否顯示此收據的付款？"
+msgstr "是否顯示此發票的付款？"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4396
@@ -22722,7 +22721,7 @@ msgstr ""
 "Universe)》"
 
 #~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "預設收據中顯示的登記簿列數。"
+#~ msgstr "預設發票中顯示的登記簿列數。"
 
 #~ msgid "The two passwords didn't match. Please try again."
 #~ msgstr "兩個密碼不相符。請再試一次。"
