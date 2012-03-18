@@ -2890,7 +2890,7 @@
     <act:parent type="new">4b94caba6927babf0af628999af0e00d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Geleistete Anzahlungen 19% Vorsteuer</act:name>
+    <act:name>Geleistete Anzahlungen 16% Vorsteuer</act:name>
     <act:id type="new">32b51fff8b5b5b4cd5c4f43031e91635</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -2965,7 +2965,7 @@
     <act:parent type="new">c4ecd4b8292df74335546eda34e7e375</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erhaltene Anzahlungen 19% MWSt</act:name>
+    <act:name>Erhaltene Anzahlungen 16% MWSt</act:name>
     <act:id type="new">52862a56692726129c73604f7c12d9af</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -4982,7 +4982,7 @@
     <act:parent type="new">d4ac4ec9e7c83bcbb6ac389be1821f0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Abziehbare Vorsteuer 19%</act:name>
+    <act:name>Abziehbare Vorsteuer 16%</act:name>
     <act:id type="new">f5f12dd9ee63444b35271eb0cc29ca27</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5090,7 +5090,7 @@
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Abziehbare Vorsteuer aus innergemeinschaftlichem Erwerb 15%/19%</act:name>
+    <act:name>Abziehbare Vorsteuer aus innergemeinschaftlichem Erwerb 15%/16%</act:name>
     <act:id type="new">fb1eb58215969d65581a6e4f313f43c4</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5234,7 +5234,7 @@
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Abziehbare Vorsteuer nach §13b UStG 19%</act:name>
+    <act:name>Abziehbare Vorsteuer nach §13b UStG 16%</act:name>
     <act:id type="new">eb6e059c85e0833a7715864b3ad75343</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -5323,7 +5323,7 @@
     <act:parent type="new">186a44919607662c803018c7279ce2ff</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Aufzuteilende Vorsteuer 19%</act:name>
+    <act:name>Aufzuteilende Vorsteuer 16%</act:name>
     <act:id type="new">1bd6188c3e365846096324b2dec9a708</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -9468,7 +9468,7 @@
     <act:parent type="new">8849ae77228dd660bcdfd0becbfd9e7f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erhaltene Anzahlungen 19% USt</act:name>
+    <act:name>Erhaltene Anzahlungen 16% USt</act:name>
     <act:id type="new">63ce0da19dbe9d32234963c756cff0f1</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -11787,7 +11787,7 @@
     <act:parent type="new">a4ca09669a36f58cc3081d5ecff9cdb6</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer aus innergemeinschaftlichem Erwerb 15%/19%</act:name>
+    <act:name>Umsatzsteuer aus innergemeinschaftlichem Erwerb 15%/16%</act:name>
     <act:id type="new">a17ba6e2ea6c5860cec8ab134fc1b7e4</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -11809,7 +11809,7 @@
     <act:parent type="new">e726cf1027d9589c65f0681a73fbc8c8</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer 19%</act:name>
+    <act:name>Umsatzsteuer 16%</act:name>
     <act:id type="new">ea57995749ee6b3af394f62ff181e502</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -11858,7 +11858,7 @@
     <act:parent type="new">a4ca09669a36f58cc3081d5ecff9cdb6</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer EG-Lieferungen 15%/19%</act:name>
+    <act:name>Umsatzsteuer EG-Lieferungen 15%/16%</act:name>
     <act:id type="new">4a390f95f31f6c2799b0868ea61b0571</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -11968,7 +11968,7 @@
     <act:parent type="new">cb006e38c871c34faeb5164e7662ede0</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer nicht fällig aus im Inland steuerpflichtigen EG-Lieferungen 19%</act:name>
+    <act:name>Umsatzsteuer nicht fällig aus im Inland steuerpflichtigen EG-Lieferungen 16%</act:name>
     <act:id type="new">6f91728564f5efceef7ed4a7188c698f</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -11990,7 +11990,7 @@
     <act:parent type="new">98828285aa78b084da26b62acc4880d4</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer nicht fällig 19%</act:name>
+    <act:name>Umsatzsteuer nicht fällig 16%</act:name>
     <act:id type="new">8198644d9fb9d0f780cee1f2f5de7b26</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -12159,7 +12159,7 @@
     <act:parent type="new">b0b8449ed3962e5c8932ad6ca1e29792</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer nach §13b UStG 19%</act:name>
+    <act:name>Umsatzsteuer nach §13b UStG 16%</act:name>
     <act:id type="new">6dc1d68bf6a196c6b51e5f5e3d50de3d</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -12226,7 +12226,7 @@
     <act:parent type="new">b0b8449ed3962e5c8932ad6ca1e29792</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzsteuer nach §13b UStG 19%</act:name>
+    <act:name>Umsatzsteuer nach §13b UStG 16%</act:name>
     <act:id type="new">a2046307bda04804b5e6277e01baef5a</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -12917,7 +12917,7 @@
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse Geldspielautomaten 19% USt</act:name>
+    <act:name>Erlöse Geldspielautomaten 16% USt</act:name>
     <act:id type="new">435c18fffaa5d002930d05c4f6fb3594</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13033,7 +13033,7 @@
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse aus im Inland steuerpflichtigen EG Lieferungen 19% USt</act:name>
+    <act:name>Erlöse aus im Inland steuerpflichtigen EG Lieferungen 16% USt</act:name>
     <act:id type="new">7fb425afaf83ab27a04c4665b18f3498</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13235,7 +13235,7 @@
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Umsatzerlöse 19% USt</act:name>
+    <act:name>Umsatzerlöse 16% USt</act:name>
     <act:id type="new">ece894d93ba331ecafc6e4084b83ebe1</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13408,7 +13408,7 @@
     <act:parent type="new">4cc96976e01bee25735c73178ffdea87</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Provisionserlöse 19% USt</act:name>
+    <act:name>Provisionserlöse 16% USt</act:name>
     <act:id type="new">75cf3712ed8f53436100fa010b13988a</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13675,7 +13675,7 @@
     <act:parent type="new">ce8895363d9f2d01b9f4f733ab7b02db</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Entnahme Unternehmer (Waren) 19% USt</act:name>
+    <act:name>Entnahme Unternehmer (Waren) 16% USt</act:name>
     <act:id type="new">2fdff321a5595354194ae1add2bd02f9</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13742,7 +13742,7 @@
     <act:parent type="new">ce8895363d9f2d01b9f4f733ab7b02db</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Verwendung von Gegenständen 19% USt</act:name>
+    <act:name>Verwendung von Gegenständen 16% USt</act:name>
     <act:id type="new">c16b376270a42bcd3c4b8fa86e70c45c</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13764,7 +13764,7 @@
     <act:parent type="new">ce8895363d9f2d01b9f4f733ab7b02db</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Verwendung von Gegenst. (Kfz) 19% USt</act:name>
+    <act:name>Verwendung von Gegenst. (Kfz) 16% USt</act:name>
     <act:id type="new">71940396e45e4c1bc5db557523157e89</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13786,7 +13786,7 @@
     <act:parent type="new">ce8895363d9f2d01b9f4f733ab7b02db</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Verwendung von Gegenst. (Tel) 19% USt</act:name>
+    <act:name>Verwendung von Gegenst. (Tel) 16% USt</act:name>
     <act:id type="new">5799fccd3eff0f1f5dd8588869968cae</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13852,7 +13852,7 @@
     <act:parent type="new">ce8895363d9f2d01b9f4f733ab7b02db</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Unentgeltl. Erbringung Leist. 19% USt</act:name>
+    <act:name>Unentgeltl. Erbringung Leist. 16% USt</act:name>
     <act:id type="new">a6d29473689f19e6f02a7995a5851f5b</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13918,7 +13918,7 @@
     <act:parent type="new">ce8895363d9f2d01b9f4f733ab7b02db</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Unentgeltl. Zuwend. von Waren 19% USt</act:name>
+    <act:name>Unentgeltl. Zuwend. von Waren 16% USt</act:name>
     <act:id type="new">6e9c8acc1279162df6ec22cbc7a65ade</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -13940,7 +13940,7 @@
     <act:parent type="new">ce8895363d9f2d01b9f4f733ab7b02db</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Unentgeltl. Zuwend. Gegenstände 19% USt</act:name>
+    <act:name>Unentgeltl. Zuwend. Gegenstände 16% USt</act:name>
     <act:id type="new">bc39aeb36e4a887ed5251b4a449204b4</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -14095,7 +14095,7 @@
     <act:parent type="new">2210f6850f7a649cf982df696a48e4b7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlösschmälerungen 19% USt</act:name>
+    <act:name>Erlösschmälerungen 16% USt</act:name>
     <act:id type="new">0fe3dac857bf4c0cf4b41f706940f914</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -14161,7 +14161,7 @@
     <act:parent type="new">2210f6850f7a649cf982df696a48e4b7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlösschmälerung EG-Lieferung 19% USt</act:name>
+    <act:name>Erlösschmälerung EG-Lieferung 16% USt</act:name>
     <act:id type="new">eafc4576e0d2d210cfa2a2243b10d36d</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -14271,7 +14271,7 @@
     <act:parent type="new">4ab6afbf7ce3c5c37b0c6b8119901a8c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gewährte Skonti 19% USt</act:name>
+    <act:name>Gewährte Skonti 16% USt</act:name>
     <act:id type="new">94bb4c07d09e97b8af1d1a59fb6cfe3d</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -14337,7 +14337,7 @@
     <act:parent type="new">e9d326df0db8487c535eaa4c76c57b3e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gewährte Boni 19% USt</act:name>
+    <act:name>Gewährte Boni 16% USt</act:name>
     <act:id type="new">3a203c3df13417fcca5fb6533b4df55e</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -14403,7 +14403,7 @@
     <act:parent type="new">9bf908bfc78429d448d917b0f9f433dd</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Gewährte Rabatte 19% USt</act:name>
+    <act:name>Gewährte Rabatte 16% USt</act:name>
     <act:id type="new">da92ba1f3e5569c97f3659e85ea96724</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -14684,7 +14684,7 @@
     <act:parent type="new">3e8610310df1d2b66689dead1545a65b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sonstige Erträge betriebl., regelm. 19%</act:name>
+    <act:name>Sonstige Erträge betriebl., regelm. 16%</act:name>
     <act:id type="new">5ccde0717a2fd075cba8743eca2ded90</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -14817,7 +14817,7 @@
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse aus Verkäufen des Anlagevermögens 19% USt</act:name>
+    <act:name>Erlöse aus Verkäufen des Anlagevermögens 16% USt</act:name>
     <act:id type="new">7fcd15b7eaadd2a98d2378c7b96bd04d</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -15633,7 +15633,7 @@
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Sachbezüge 19% USt</act:name>
+    <act:name>Sachbezüge 16% USt</act:name>
     <act:id type="new">fe11c825876a7d72756e9e755d3c7242</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -15682,7 +15682,7 @@
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Verrechnete sonstige Sachbezüge 19% USt</act:name>
+    <act:name>Verrechnete sonstige Sachbezüge 16% USt</act:name>
     <act:id type="new">21e5fefc1bb5d4e1b82a6c9eb1901f47</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -16993,7 +16993,7 @@
     <act:parent type="new">59bf2e65d45938c741124bcadeaec5d7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Wareneingang 19% Vorsteuer</act:name>
+    <act:name>Wareneingang 16% Vorsteuer</act:name>
     <act:id type="new">58240effa2e23a34456451ebdbbe2253</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17041,7 +17041,7 @@
     <act:parent type="new">59bf2e65d45938c741124bcadeaec5d7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Innergemeinschaftlicher Erwerb 19% Vorsteuer und 19% Umsatzsteuer</act:name>
+    <act:name>Innergemeinschaftlicher Erwerb 16% Vorsteuer und 16% Umsatzsteuer</act:name>
     <act:id type="new">253eef204d2144b246281d7b75384463</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17085,7 +17085,7 @@
     <act:parent type="new">59bf2e65d45938c741124bcadeaec5d7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>lnnergemeinschaftlicher Erwerb ohne Vorsteuerabzug und 19% Umsatzsteuer</act:name>
+    <act:name>lnnergemeinschaftlicher Erwerb ohne Vorsteuerabzug und 16% Umsatzsteuer</act:name>
     <act:id type="new">8d5c5548c5258b8cd0a67fdf7b7fa555</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17107,7 +17107,7 @@
     <act:parent type="new">59bf2e65d45938c741124bcadeaec5d7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Innergemeinschaftlicher Erwerb von Neufahrzeugen von Lieferanten ohne UStID 19% Vorsteuer und 19% Umsatzsteuer</act:name>
+    <act:name>Innergemeinschaftlicher Erwerb von Neufahrzeugen von Lieferanten ohne UStID 16% Vorsteuer und 16% Umsatzsteuer</act:name>
     <act:id type="new">4179a7eda45302f30da1ce7808e5463c</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17241,7 +17241,7 @@
     <act:parent type="new">59bf2e65d45938c741124bcadeaec5d7</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Waren aus einem Umsatzsteuerlager, 13a UStG 19% Vorsteuer und 19% Umsatzsteuer</act:name>
+    <act:name>Waren aus einem Umsatzsteuerlager, 13a UStG 16% Vorsteuer und 16% Umsatzsteuer</act:name>
     <act:id type="new">ee4fbeca33ba890c7d9f0530aac81998</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17416,7 +17416,7 @@
     <act:parent type="new">c8b4e4c777e6650af27bbed454f912aa</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Nicht abziehbare Vorsteuer 19%</act:name>
+    <act:name>Nicht abziehbare Vorsteuer 16%</act:name>
     <act:id type="new">84625bed3f700e014810140e8b2142ef</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17482,7 +17482,7 @@
     <act:parent type="new">af24e50ccea7ed9d9b7ec2c1c3351487</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Nachlässe 19% Vorsteuer</act:name>
+    <act:name>Nachlässe 16% Vorsteuer</act:name>
     <act:id type="new">eeae7d9a0a3c5b4bfec2ff0c68d2615d</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17526,7 +17526,7 @@
     <act:parent type="new">af24e50ccea7ed9d9b7ec2c1c3351487</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Nachlässe aus innergemeinschaftlichem Erwerb 19% Vorsteuer/USt</act:name>
+    <act:name>Nachlässe aus innergemeinschaftlichem Erwerb 16% Vorsteuer/USt</act:name>
     <act:id type="new">d4e2fd6eff61c73328273c02c860dc46</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17614,7 +17614,7 @@
     <act:parent type="new">d94cb515db63aaf5eabdae9db2613f43</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erhaltene Skonti 19% Vorsteuer</act:name>
+    <act:name>Erhaltene Skonti 16% Vorsteuer</act:name>
     <act:id type="new">f102ca47edf7326f8f0fc0402924f040</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17680,7 +17680,7 @@
     <act:parent type="new">efee14bb9a89c0167140dcf044adbda0</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erhaltene Boni 19% Vorsteuer</act:name>
+    <act:name>Erhaltene Boni 16% Vorsteuer</act:name>
     <act:id type="new">2ea10f61338e8d8299589485c13dcde7</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17746,7 +17746,7 @@
     <act:parent type="new">7b101af339d563e0dea15a34d46d9926</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erhaltene Rabatte 19% Vorsteuer</act:name>
+    <act:name>Erhaltene Rabatte 16% Vorsteuer</act:name>
     <act:id type="new">b04a4d2c473b980cba8e301fc94101a6</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -18016,7 +18016,7 @@
     <act:parent type="new">6a2cb0c78ebe7460483db55b133914ea</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Bauleistungen eines im Inland ansässigen Unternehmers 19% Vorsteuer und 19% Umsatzsteuer</act:name>
+    <act:name>Bauleistungen eines im Inland ansässigen Unternehmers 16% Vorsteuer und 16% Umsatzsteuer</act:name>
     <act:id type="new">81f2b245256d430aa5d700109d8e401c</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -18038,7 +18038,7 @@
     <act:parent type="new">6a2cb0c78ebe7460483db55b133914ea</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Leistungen eines im Ausland ansässigen Unternehmers 19% Vorsteuer und 19% Umsatzsteuer</act:name>
+    <act:name>Leistungen eines im Ausland ansässigen Unternehmers 16% Vorsteuer und 16% Umsatzsteuer</act:name>
     <act:id type="new">0ccccf12bc12434a789e474a90df0f5f</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -18104,7 +18104,7 @@
     <act:parent type="new">6a2cb0c78ebe7460483db55b133914ea</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Bauleistungen eines im Inland ansässigen Unternehmers ohne Vorsteuer und 19% Umsatzsteuer</act:name>
+    <act:name>Bauleistungen eines im Inland ansässigen Unternehmers ohne Vorsteuer und 16% Umsatzsteuer</act:name>
     <act:id type="new">be19fe61d445ebf0624a22ac1d8b55b9</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -18149,7 +18149,7 @@
     <act:parent type="new">6a2cb0c78ebe7460483db55b133914ea</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Leistungen eines im Ausland ansässigen Unternehmers ohne Vorsteuer und 19% Umsatzsteuer</act:name>
+    <act:name>Leistungen eines im Ausland ansässigen Unternehmers ohne Vorsteuer und 16% Umsatzsteuer</act:name>
     <act:id type="new">c36d54c2fbef4995bac8602e3ffec374</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -19470,7 +19470,7 @@
     <act:parent type="new">9dda452d32d7855339d67cf02698c269</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Forderungsverluste 19% USt</act:name>
+    <act:name>Forderungsverluste 16% USt</act:name>
     <act:id type="new">9d80d2a60c495c4598b5e011e4689ac2</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -21722,7 +21722,7 @@
     <act:parent type="new">409e30043821b8a8cc676a839f7ad79c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Nicht abziehbare Vorsteuer 19%</act:name>
+    <act:name>Nicht abziehbare Vorsteuer 16%</act:name>
     <act:id type="new">0fa17f3721cfdbee57682773a67bae9c</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -22379,7 +22379,7 @@
     <act:parent type="new">47767b5fa390ff8a4dbb0fdf05a3ee3b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Erlöse aus Verkäufen Sachanlagevermögen 19% USt</act:name>
+    <act:name>Erlöse aus Verkäufen Sachanlagevermögen 16% USt</act:name>
     <act:id type="new">187525b967b669624823c158eca38554</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -23702,7 +23702,7 @@
     <act:parent type="new">18243e4b412ad0a904dc36d08b20f695</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Forderungsverluste aus im Inland steuerpflichtigen EGLieferungen 19% USt</act:name>
+    <act:name>Forderungsverluste aus im Inland steuerpflichtigen EGLieferungen 16% USt</act:name>
     <act:id type="new">83c1fdccdb8ad8c92f8dff79a93a8319</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -23725,7 +23725,7 @@
     <act:parent type="new">18243e4b412ad0a904dc36d08b20f695</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Forderungsverluste 19% USt</act:name>
+    <act:name>Forderungsverluste 16% USt</act:name>
     <act:id type="new">39591bd8942fd922918d1bb6b93f4f9a</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
