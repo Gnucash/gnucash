@@ -45,6 +45,10 @@
 #include "split-register.h"
 #include "gnc-engine.h"		// For debugging, e.g. ENTER(), LEAVE()
 
+#ifdef G_OS_WIN32
+# include <gdk/gdkwin32.h>
+#endif
+
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  400
 /* Used to calculate the minimum preferred height of the register window: */
@@ -1885,6 +1889,11 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
        bug#618434
            save keyval to handle GDK_KP_Decimal event
      */
+#ifdef G_OS_WIN32
+    /* gdk never sends GDK_KP_Decimal on win32. See #486658 */
+    if (event->hardware_keycode == VK_DECIMAL)
+        event->keyval = GDK_KP_Decimal;
+#endif
     if (sheet->preedit_length)
     {
         sheet->shift_state = 0;

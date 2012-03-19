@@ -41,6 +41,10 @@
 #include "formulacell-gnome.h"
 #include "pricecell-gnome.h"
 
+#ifdef G_OS_WIN32
+# include <gdk/gdkwin32.h>
+#endif
+
 //static QofLogModule log_module = GNC_MOD_REGISTER;
 
 static
@@ -68,6 +72,11 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
      * this after fixing a bug where one copy was kept up to date, and the
      * other not.  So, fix this.
      */
+#ifdef G_OS_WIN32
+    /* gdk never sends GDK_KP_Decimal on win32. See #486658 */
+    if (event->hardware_keycode == VK_DECIMAL)
+        event->keyval = GDK_KP_Decimal;
+#endif
     switch (event->keyval)
     {
     case GDK_Return:
