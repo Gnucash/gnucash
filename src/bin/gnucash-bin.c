@@ -817,8 +817,6 @@ main(int argc, char ** argv)
             g_error_free(binreloc_error);
         }
     }
-#else
-    g_message("main: binreloc relocation support was disabled at configure time.\n");
 #endif
 
     /* This should be called before gettext is initialized
