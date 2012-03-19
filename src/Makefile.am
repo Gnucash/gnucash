@@ -39,7 +39,11 @@ GUI_SUBDIRS = \
   bin
 
 # Need to include '.' in order to build swig-runtime.h
+if GNUCASH_ENABLE_GUI
 SUBDIRS = . $(NONGUI_SUBDIRS) $(ALMOST_NONGUI_SUBDIRS) $(GUI_SUBDIRS)
+else
+SUBDIRS = . $(NONGUI_SUBDIRS) $(ALMOST_NONGUI_SUBDIRS)
+endif
 
 noinst_HEADERS = \
   swig-runtime.h
