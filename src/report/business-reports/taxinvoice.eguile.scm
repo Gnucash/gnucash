@@ -7,8 +7,10 @@
 ;; taxinvoice.eguile.scm  0.03
 ;; GnuCash report template called from taxinvoice.scm 0.02
 ;; (c) 2009 Chris Dennis chris@starsoftanalysis.co.uk
+;;  ©  2012 Dmitry Smirnov <onlyjob@member.fsf.org>
 ;;
 ;; $Author: chris $ $Date: 2009/07/23 10:42:08 $ $Revision: 1.33 $
+;; Modified by Dmitry Smirnov <onlyjob@member.fsf.org>  16 Feb 2012
 ;;
 ;; This file is a mixture of HTML and Guile --
 ;; see eguile-gnc.scm for details.
@@ -54,7 +56,10 @@
            (coyfax       (coy-info slots gnc:*company-fax*))
            (coyurl       (coy-info slots gnc:*company-url*))
            (coyemail     (coy-info slots gnc:*company-email*))
-           (owneraddr    (gnc:owner-get-name-and-address-dep owner))
+           (owneraddr  (gnc:owner-get-address-dep owner))
+           (ownername  (gnc:owner-get-name-dep owner))
+           (jobnumber  (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner  opt-invoice))))
+           (jobname    (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner  opt-invoice))))
            (billcontact  (gncAddressGetName (gnc:owner-get-address owner)))
            ; flags and counters
            (discount?  #f) ; any discounts on this invoice?
@@ -63,8 +68,9 @@
            (payments?  #f) ; have any payments been made on this invoice?
            (units?     #f) ; does any row specify units?
            (qty?       #f) ; does any row have qty <> 1?
-           (spancols1  2)  ; for total line
-           (spancols2  2)) ; for subtotal line
+           (spancols_subtotal	1)	; for subtotal line
+           (spancols_payments	0)	; for payments line (between total and subtotal)
+           (spancols_total	0))	; for total line
 
       ; load splits, if any
       (if (not (null? lot))
@@ -157,16 +163,15 @@
   <td align="left">
     <h1 class="coyname"><?scm:d (or coyname (_ "Company Name")) ?></h1>
   </td>
-  <td align="right"><h2 class="invoice"><?scm:d opt-report-title ?></h2></td>
+  <td align="right"><h2 class="invoice"><?scm:d opt-report-title ?>
+    <?scm (if opt-invnum-next-to-title (begin ?><?scm:d (nbsp opt-invoice-number-text) ?><?scm:d invoiceid ?><?scm )) ?>
+  </h2></td>
 </tr>
 </table>
 <table border="0" width="100%">
 <tr valign="top">
   <td align="left">
-    <?scm (if coycontact (begin ?>
-      <strong><?scm:d coycontact ?></strong><br>
-    <?scm )) ?>
-    <?scm (if coyaddr (begin ?>
+    <?scm (if (and opt-row-address coyaddr) (begin ?>
       <?scm:d (nl->br coyaddr) ?><br>
     <?scm )) ?>
     <?scm (if coyid (begin ?>
@@ -175,6 +180,11 @@
   </td>
   <td align="right">
     <table border="0">
+      <?scm (if (and opt-row-contact coycontact) (begin ?>
+        <tr>
+          <th colspan="2" align="right"><?scm:d coycontact ?></th>
+        </tr>
+      <?scm )) ?>
       <?scm (if coyphone (begin ?>
         <tr>
           <td align="right"><?scm:d (_ "Phone") ?>:&nbsp;</td>
@@ -207,21 +217,24 @@
 <table border="0" width="100%">
 <tr valign="top">
   <!-- customer info -->
+  <th align="right" width="1%"><?scm:d opt-to-text ?></th>
   <td align="left">
-    <?scm (if (not (string=? billcontact "")) (begin ?>
-      <strong>Attn: <?scm:d billcontact ?></strong><br>
+    <?scm (if (and opt-row-company-name (not (string=? ownername ""))) (begin ?>
+        <?scm:d ownername ?><br>
     <?scm )) ?>
     <?scm (if (not (string=? owneraddr "")) (begin ?>
-      <strong><?scm:d (nl->br owneraddr) ?></strong>
+      <?scm:d (nl->br owneraddr) ?>
     <?scm )) ?>
   </td>
   <!-- invoice number etc. -->
   <td align="right">
     <table border="0">
+      <?scm (if opt-row-invoice-number (begin ?>
       <tr>
-        <td align="right" class="invnum"><big><strong><?scm:d (nbsp (_ "Invoice Number")) ?>:</strong></big>&nbsp;</td>
+        <td align="right" class="invnum"><big><strong><?scm:d (nbsp opt-invoice-number-text) ?></strong></big></td>
         <td align="right" class="invnum"><big><strong><?scm:d invoiceid ?></strong></big></td>
       </tr>
+      <?scm )) ?>
       <?scm (if (equal? postdate (cons 0 0)) (begin ?>
         <tr>
            <td colspan="2" align="right"><?scm:d (_ "Invoice in progress...") ?></td>
@@ -235,6 +248,24 @@
            <td align="right"><?scm:d (nbsp (_ "Due Date")) ?>:&nbsp;</td>
            <td align="right"><?scm:d (gnc-print-date duedate) ?></td>
         </tr>
+        <?scm (if (not (string=? billingid "")) (begin ?>
+          <tr>
+            <td align="right"><?scm:d opt-ref-text ?></td>
+            <td align="right"><?scm:d billingid ?></td>
+          </tr>
+        <?scm )) ?>
+        <?scm (if (and opt-jobname-show (not (string=? jobname ""))) (begin ?>
+          <tr>
+            <td align="right"><?scm:d opt-jobname-text ?></td>
+            <td align="right"><?scm:d jobname ?></td>
+          </tr>
+        <?scm )) ?>
+        <?scm (if (and opt-jobnumber-show (not (string=? jobnumber ""))) (begin ?>
+          <tr>
+            <td align="right"><?scm:d opt-jobnumber-text ?></td>
+            <td align="right"><?scm:d jobnumber ?></td>
+          </tr>
+        <?scm )) ?>
       <?scm )) ?>
       <?scm (if (not (string=? termsdesc "")) (begin ?>
         <tr><td colspan="2" align="right"><?scm:d termsdesc ?></td></tr>
@@ -242,11 +273,6 @@
     </table>
   </td>
 </tr>
-<?scm (if (not (string=? billingid "")) (begin ?>
-  <tr>
-    <td>Your ref: <?scm:d billingid ?></td>
-  </tr>
-<?scm )) ?>
 </table>
 
 <!-- invoice lines table -->
@@ -254,31 +280,36 @@
 <table border="1" width="100%" cellpadding="4" class="entries"> 
   <thead>
     <tr bgcolor="#ccc" valign="bottom">
+      <?scm (if opt-col-date (begin ?>
       <th align="center" ><?scm:d (_ "Date") ?></th>
+      <?scm (set! spancols_subtotal (+ spancols_subtotal 1))
+            (set! spancols_total (+ spancols_total 1)))) ?>
       <th align="left" width="80%"><?scm:d (_ "Description") ?></th>
-      <?scm (if units? (begin ?>
+      <?scm (if (and units? opt-col-units) (begin ?>
         <th align="left"><?scm:d opt-units-heading ?></th>
-        <?scm (set! spancols1 (+ spancols1 1)) 
-              (set! spancols2 (+ spancols2 1)))) ?>
+        <?scm (set! spancols_subtotal (+ spancols_subtotal 1))
+              (set! spancols_total (+ spancols_total 1)))) ?>
       <?scm (if (or units? qty?) (begin ?>
         <th align="right"><?scm:d opt-qty-heading ?></th>
-        <?scm (set! spancols1 (+ spancols1 1)) 
-              (set! spancols2 (+ spancols2 1)))) ?>
+        <?scm (set! spancols_total (+ spancols_total 1))
+               (set! spancols_subtotal (+ spancols_subtotal 1)))) ?>
       <?scm (if (or units? qty? discount?) (begin ?>
         <th align="right"><?scm:d opt-unit-price-heading ?></th>
-        <?scm (set! spancols1 (+ spancols1 1)) 
-              (set! spancols2 (+ spancols2 1)))) ?>
+        <?scm (set! spancols_total (+ spancols_total 1))
+              (set! spancols_subtotal (+ spancols_subtotal 1)))) ?>
       <?scm (if discount? (begin ?>
         <th align="right"><?scm:d opt-disc-rate-heading ?></th>
         <th align="right"><?scm:d opt-disc-amount-heading ?></th>
-        <?scm (set! spancols1 (+ spancols1 2)) 
-              (set! spancols2 (+ spancols2 1)))) ?>
+        <?scm (set! spancols_total (+ spancols_total 3))
+              (set! spancols_subtotal (+ spancols_subtotal 1)))) ?>
       <?scm (if (and tax? taxtables?) (begin ?>
         <th align="right"><?scm:d opt-net-price-heading ?></th>
+        <?scm (if opt-col-taxrate (begin ?>
         <th align="right"><?scm:d opt-tax-rate-heading ?></th>
+        <?scm (set! spancols_total (+ spancols_total 1)))) ?>
         <th align="right"><?scm:d opt-tax-amount-heading ?></th>
-        <?scm (set! spancols1 (+ spancols1 3))
-              (set! spancols2 (+ spancols2 0)))) ?>
+        <?scm (set! spancols_total (+ spancols_total 3))
+              (set! spancols_subtotal (+ spancols_subtotal 0)))) ?>
       <th align="right"><?scm:d opt-total-price-heading ?></th>
     </tr>
   </thead>
@@ -308,11 +339,15 @@
               (dsc-total 'add currency rdiscval)
     ?>
     <tr valign="top">
+      <?scm (if opt-col-date (begin ?>
       <td align="center" ><nobr><?scm:d (nbsp (gnc-print-date (gncEntryGetDate entry))) ?></nobr></td>
+      <?scm )) ?>
       <td align="left"><?scm:d (gncEntryGetDescription entry) ?></td>
       <!-- td align="left">< ?scm:d (gncEntryGetNotes entry) ?></td -->
+      <?scm (if opt-col-units (begin ?>
       <?scm (if units? (begin ?>
         <td align="left"><?scm:d action ?></td>
+      <?scm )) ?>
       <?scm )) ?>
       <?scm (if (or units? qty?) (begin ?>
         <td align="right"><?scm:d (fmtnumeric qty) ?></td>
@@ -330,7 +365,9 @@
       <?scm )) ?>
       <?scm (if (and tax? taxtables?) (begin ?>
         <td align="right"><?scm:d (fmtmoney currency rval) ?></td>
+        <?scm (if opt-col-taxrate (begin ?>
         <td align="right"><?scm (taxrate taxable taxtable currency) ?></td>  
+        <?scm )) ?>
         <td align="right"><?scm:d (fmtmoney currency rtaxval) ?></td>
       <?scm )) ?>
       <!-- TO DO: need an option about whether to display the tax-inclusive total? -->
@@ -341,13 +378,15 @@
     <!-- display subtotals row -->
     <?scm (if (or tax? discount? payments?) (begin ?>
       <tr valign="top"> 
-        <td align="left" class="subtotal" colspan="<?scm:d spancols2 ?>"><strong><?scm:d opt-subtotal-heading ?></strong></td>
+        <td align="left" class="subtotal" colspan="<?scm:d spancols_subtotal ?>"><strong><?scm:d opt-subtotal-heading ?></strong></td>
         <?scm (if discount? (begin ?>
           <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total dsc-total #f) ?></strong></td>
         <?scm )) ?>
         <?scm (if (and tax? taxtables?) (begin ?>
           <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total sub-total #f) ?></strong></td>
+          <?scm (if opt-col-taxrate (begin ?>
           <td>&nbsp;</td>
+          <?scm )) ?>
           <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total tax-total #f) ?></strong></td>
         <?scm )) ?>
         <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total inv-total #f) ?></strong></td>
@@ -363,17 +402,21 @@
                 (let ((c (xaccTransGetCurrency t))
                       (a (xaccSplitGetValue    split))) 
                   (inv-total 'add c a) 
+        (set! spancols_payments (+ 0 spancols_total))
     ?>
     <tr valign="top">
+      <?scm (if opt-col-date (begin ?>
       <td align="center"><?scm:d (gnc-print-date (gnc-transaction-get-date-posted t)) ?></td>
-      <td align="left" colspan="<?scm:d (- spancols1 1) ?>"><?scm:d opt-payment-recd-heading ?></td> 
+      <?scm (set! spancols_payments (- spancols_payments 1)))) ?>
+      <td align="left" colspan="<?scm:d spancols_payments ?>"><?scm:d opt-payment-recd-heading ?></td> 
       <td align="right"><?scm:d (fmtmoney c a) ?></td>
     </tr>
     <?scm ))))) ?>
 
     <!-- total row -->
     <tr valign="top">
-      <td align="left" class="total" colspan="<?scm:d spancols1 ?>"><strong><?scm:d opt-amount-due-heading ?></strong></td>
+      <td align="left" class="total" colspan="<?scm:d spancols_total ?>"><strong><?scm:d opt-amount-due-heading ?><?scm (if (not (string=? (gnc-commodity-get-mnemonic opt-report-currency) "")) (begin ?>,
+        <?scm:d (gnc-commodity-get-mnemonic opt-report-currency) ?><?scm )) ?></strong></td>
       <td align="right" class="total"><strong><?scm (display-comm-coll-total inv-total #f) ?></strong></td>
     </tr>
 
