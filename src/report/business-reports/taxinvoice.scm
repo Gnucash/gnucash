@@ -86,6 +86,10 @@
 ;(define filespage    (N_ "Files"))
 (define displaypage  (N_ "Display"))
 ; option names 
+(define optname-border-collapse		(N_ "table-border-collapse"))
+(define optname-border-color-th		(N_ "table-header-border-color"))
+(define optname-border-color-td		(N_ "table-cell-border-color"))
+(define optname-extra-css		(N_ "Embedded CSS"))
 (define optname-report-title   (N_ "Report title"))
 (define optname-template-file  (N_ "Template file"))
 (define optname-css-file       (N_ "CSS stylesheet file"))
@@ -152,6 +156,9 @@
                 ""))
   (add-option (gnc:make-string-option
                 displaypage optname-logo-width "f" (N_ "Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display the logo at its natural width.  The height of the logo will be scaled accordingly.") ""))
+(add-option (gnc:make-simple-boolean-option	displaypage	optname-border-collapse	"g" (N_ "Border-collapse?") #f))
+(add-option (gnc:make-string-option		displaypage	optname-border-color-th "h" "CSS color" (N_ "black")))
+(add-option (gnc:make-string-option		displaypage	optname-border-color-td "i" "CSS color" (N_ "black")))
 
   ;; Heading options
   (add-option (gnc:make-string-option
@@ -189,6 +196,8 @@
                 ""))
                 ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
 
+  (add-option (gnc:make-text-option	notespage optname-extra-css "b"
+                (N_ "Embedded CSS")	"h1.coyname { text-align: left; }"))
   (gnc:options-set-default-section
     report-options gnc:pagename-general)
 
@@ -219,6 +228,9 @@
                                       (opt-value displaypage optname-text-font)))
          (opt-logofile              (opt-value displaypage  optname-logofile)) 
          (opt-logo-width            (opt-value displaypage  optname-logo-width)) 
+         (opt-css-border-collapse   (if (opt-value displaypage optname-border-collapse) "border-collapse:collapse;"))
+         (opt-css-border-color-th   (opt-value displaypage optname-border-color-th))
+         (opt-css-border-color-td   (opt-value displaypage optname-border-color-td))
          (opt-report-title          (opt-value headingpage  optname-report-title))
          (opt-units-heading         (opt-value headingpage  optname-units))
          (opt-qty-heading           (opt-value headingpage  optname-qty))
@@ -232,6 +244,7 @@
          (opt-subtotal-heading      (opt-value headingpage2 optname-subtotal))
          (opt-amount-due-heading    (opt-value headingpage2 optname-amount-due))
          (opt-payment-recd-heading  (opt-value headingpage2 optname-payment-recd))
+         (opt-extra-css             (opt-value notespage    optname-extra-css)) 
          (opt-extra-notes           (opt-value notespage    optname-extra-notes)) 
          (css? #t) ;(and (defined? 'gnc-html-engine-supports-css) (gnc-html-engine-supports-css)))
          (html #f))

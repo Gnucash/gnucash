@@ -121,12 +121,19 @@
   }
   table { /* table does not inherit font */
     <?scm:d opt-text-font ?>
+    <?scm:d opt-css-border-collapse ?>
   }
+  table[border="1"] th {
+    border-color:<?scm:d opt-css-border-color-th ?>;
+  }
+  table[border="1"] td {
+    border-color:<?scm:d opt-css-border-color-td ?>;
+  }
+
   h1.coyname {
     <?scm:d opt-heading-font ?>
-    /* font-size: 141%; */
-    text-align: left;
   }
+  <?scm:d opt-extra-css ?>
 </style>
 <?scm )) ?>
 
@@ -301,7 +308,7 @@
               (dsc-total 'add currency rdiscval)
     ?>
     <tr valign="top">
-      <td align="center" ><nobr><?scm:d (gnc-print-date (gncEntryGetDate entry)) ?></nobr></td>
+      <td align="center" ><nobr><?scm:d (nbsp (gnc-print-date (gncEntryGetDate entry))) ?></nobr></td>
       <td align="left"><?scm:d (gncEntryGetDescription entry) ?></td>
       <!-- td align="left">< ?scm:d (gncEntryGetNotes entry) ?></td -->
       <?scm (if units? (begin ?>
