@@ -1532,7 +1532,10 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
      * You could consider these transactions to be links between lots as well, but
      * to avoid some unexpected behavior, these will not be altered here.
      */
-    lot_split_list = gnc_lot_get_split_list (lot);
+
+    // Note: make a copy of the lot list here, when splits are deleted from the lot,
+    //       the original list may be destroyed by the lot code.
+    lot_split_list = g_list_copy (gnc_lot_get_split_list (lot));
     for (lot_split_iter = lot_split_list; lot_split_iter; lot_split_iter = lot_split_iter->next)
     {
         Split *split = lot_split_iter->data;
@@ -1566,7 +1569,6 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
         xaccTransBeginEdit (other_txn);
         xaccTransDestroy (other_txn);
         xaccTransCommitEdit (other_txn);
-        g_assert(lot_split_list == gnc_lot_get_split_list (lot));
 
         /* Re-balance the saved lots as well as is possible */
         gncOwnerAutoApplyPaymentsWithLots (&invoice->owner, lot_list);
@@ -1585,6 +1587,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
                 qof_event_gen (QOF_INSTANCE(other_invoice), QOF_EVENT_MODIFY, NULL);
         }
     }
+    g_list_free (lot_split_list);
 
     /* If the lot has no splits, then destroy it */
     if (!gnc_lot_count_splits (lot))
