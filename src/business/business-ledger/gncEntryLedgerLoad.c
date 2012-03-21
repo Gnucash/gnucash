@@ -518,6 +518,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
     /* get the current time and reset the dividing row */
     present = gnc_timet_get_today_end ();
+    table->model->dividing_row_upper = -1;
     table->model->dividing_row = -1;
     cursor = gnc_table_layout_get_cursor (table->layout, "cursor");
 

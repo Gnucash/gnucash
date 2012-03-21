@@ -262,11 +262,14 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     gboolean start_primary_color = TRUE;
     gboolean found_pending = FALSE;
+    gboolean need_divider_upper = FALSE;
+    gboolean found_divider_upper = FALSE;
     gboolean found_divider = FALSE;
     gboolean has_last_num = FALSE;
     gboolean multi_line;
     gboolean dynamic;
     gboolean we_own_slist = FALSE;
+    gboolean use_autofreeze = qof_book_uses_autofreeze(gnc_get_current_book());
 
     VirtualCellLocation vcell_loc;
     VirtualLocation save_loc;
@@ -274,7 +277,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     int new_trans_split_row = -1;
     int new_trans_row = -1;
     int new_split_row = -1;
-    time_t present;
+    time_t present, autofreeze_time;
 
     g_return_if_fail(reg);
     table = reg->table;
@@ -431,6 +434,11 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     /* get the current time and reset the dividing row */
     present = gnc_timet_get_today_end ();
+    {
+        GDate *d = qof_book_get_autofreeze_gdate(gnc_get_current_book());
+        autofreeze_time = timespecToTime_t(gdate_to_timespec(*d));
+        g_date_free(d);
+    }
 
     if (info->first_pass)
     {
@@ -473,6 +481,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
             gnc_split_register_recn_cell_confirm, reg);
     }
 
+    table->model->dividing_row_upper = -1;
     table->model->dividing_row = -1;
 
     // Ensure that the transaction and splits being edited are in the split
@@ -529,8 +538,23 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         }
 
         if (info->show_present_divider &&
+                use_autofreeze &&
+                !found_divider_upper)
+        {
+            if (xaccTransGetDate (trans) > autofreeze_time)
+            {
+                table->model->dividing_row_upper = vcell_loc.virt_row;
+                found_divider_upper = TRUE;
+            }
+            else
+            {
+                need_divider_upper = TRUE;
+            }
+        }
+
+        if (info->show_present_divider &&
                 !found_divider &&
-                (present < xaccTransGetDate (trans)))
+                (xaccTransGetDate (trans) > present))
         {
             table->model->dividing_row = vcell_loc.virt_row;
             found_divider = TRUE;
@@ -564,6 +588,15 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     /* add the blank split at the end. */
     if (pending_trans == blank_trans)
         found_pending = TRUE;
+
+    /* No upper divider yet? Store it now */
+    if (info->show_present_divider &&
+            use_autofreeze &&
+            !found_divider_upper && need_divider_upper)
+    {
+        table->model->dividing_row_upper = vcell_loc.virt_row;
+        found_divider_upper = TRUE;
+    }
 
     if (blank_trans == find_trans)
         new_trans_row = vcell_loc.virt_row;

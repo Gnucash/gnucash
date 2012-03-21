@@ -449,7 +449,36 @@ draw_cell (GnucashGrid *grid,
         gnucash_draw_hatching (drawable, grid->gc,
                                x, y, width, height);
 
-    /* dividing line */
+    /* dividing line upper (red) */
+    if ((virt_loc.phys_row_offset == 0) &&
+            (table->model->dividing_row_upper >= 0))
+    {
+        if (virt_loc.vcell_loc.virt_row == table->model->dividing_row_upper)
+        {
+            gdk_gc_set_foreground (grid->gc, &gn_red);
+            gdk_draw_line (drawable, grid->gc, x, y - 1, x + width, y - 1);
+            gdk_draw_line (drawable, grid->gc, x, y,   x + width, y);
+            gdk_draw_line (drawable, grid->gc, x, y + 1, x + width, y + 1);
+        }
+    }
+
+    if ((virt_loc.phys_row_offset == (block->style->nrows - 1)) &&
+            (table->model->dividing_row_upper >= 0))
+    {
+        if (virt_loc.vcell_loc.virt_row ==
+                (table->model->dividing_row_upper - 1))
+        {
+            gdk_gc_set_foreground (grid->gc, &gn_red);
+            gdk_draw_line (drawable, grid->gc, x, y + height - 1,
+                           x + width, y + height - 1);
+            gdk_draw_line (drawable, grid->gc, x, y + height,
+                           x + width, y + height);
+            gdk_draw_line (drawable, grid->gc, x, y + height + 1,
+                           x + width, y + height + 1);
+        }
+    }
+
+    /* dividing line lower (blue) */
     if ((virt_loc.phys_row_offset == 0) &&
             (table->model->dividing_row >= 0))
     {
