@@ -22,6 +22,7 @@ endif
 
 ALMOST_NONGUI_SUBDIRS = \
   app-utils \
+  optional \
   ${PYTHON_DIR}
 
 # These directories contain the code with gtk dependency
@@ -34,7 +35,6 @@ GUI_SUBDIRS = \
   gnome \
   import-export \
   business \
-  optional \
   plugins \
   bin
 
