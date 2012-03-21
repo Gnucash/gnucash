@@ -193,7 +193,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
     locale = g_win32_getlocale();
     if (!locale)
     {
-        PWARN ("Couldn't retrieve locale. Falling back to default one.")
+        PWARN ("Couldn't retrieve locale. Falling back to default one.");
         locale = g_strdup ("C");
     }
 # else
