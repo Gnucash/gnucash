@@ -248,6 +248,23 @@ void qof_book_mark_readonly(QofBook *book);
 /** Returns flag indicating whether this book uses trading accounts */
 gboolean qof_book_use_trading_accounts (const QofBook *book);
 
+/** Returns TRUE if the auto-freeze feature should be used, otherwise
+ * FALSE. This is just a wrapper on get_num_days_autofreeze == 0. */
+gboolean qof_book_uses_autofreeze (const QofBook *book);
+
+/** Returns the number of days for auto-freeze transactions. If zero,
+ * the auto-freeze feature should be disabled (and uses_autofreeze
+ * returns FALSE). */
+gint qof_book_get_num_days_autofreeze (const QofBook *book);
+
+/** Returns the GDate that is the threshold for autofreeze. Any txn
+ * with posted-date lesser or equal to this date should be set to
+ * freeze.
+ *
+ * The returned object was allocated newly; the caller must
+ * g_date_free() the object afterwards. */
+GDate* qof_book_get_autofreeze_gdate (const QofBook *book);
+
 /** Is the book shutting down? */
 gboolean qof_book_shutting_down (const QofBook *book);
 

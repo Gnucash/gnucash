@@ -64,6 +64,7 @@
 
 #define OPTION_SECTION_ACCOUNTS        N_("Accounts")
 #define OPTION_NAME_TRADING_ACCOUNTS   N_("Use Trading Accounts")
+#define OPTION_NAME_AUTO_FREEZE_DAYS   N_("Day Threshold for Read-Only Transactions (red line)")
 
 #define OPTION_SECTION_BUDGETING       N_("Budgeting")
 #define OPTION_NAME_DEFAULT_BUDGET     N_("Default Budget")
@@ -74,6 +75,7 @@
  * KVP-OPTION-PATH
  * OPTION-SECTION-ACCOUNTS
  * OPTION-NAME-TRADING-ACCOUNTS
+ * OPTION-NAME-AUTO-FREEZE-DAYS
  * OPTION-SECTION-BUDGETING
  * OPTION-NAME-DEFAULT-BUDGET
  */

@@ -388,6 +388,41 @@ test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
 }
 
 static void
+test_book_get_num_days_autofreeze( Fixture *fixture, gconstpointer pData )
+{
+    const char *slot_path;
+
+    /* create correct slot path */
+    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/", OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_AUTO_FREEZE_DAYS, NULL );
+    g_assert( slot_path != NULL );
+
+    g_test_message( "Testing default: No auto-freeze days are set" );
+    g_assert( qof_book_uses_autofreeze( fixture-> book ) == FALSE );
+    g_assert( qof_book_get_num_days_autofreeze( fixture-> book ) == 0 );
+
+    g_test_message( "Testing with incorrect slot path and some correct value - 17" );
+    kvp_frame_set_double(qof_book_get_slots(fixture->book), OPTION_NAME_AUTO_FREEZE_DAYS, 17);
+    g_assert( qof_book_uses_autofreeze( fixture-> book ) == FALSE );
+    g_assert( qof_book_get_num_days_autofreeze( fixture-> book ) == 0 );
+
+    g_test_message( "Testing when setting this correctly with some correct value - 17" );
+    kvp_frame_set_double(qof_book_get_slots(fixture->book), slot_path, 17);
+    g_assert( qof_book_uses_autofreeze( fixture-> book ) == TRUE );
+    g_assert( qof_book_get_num_days_autofreeze( fixture-> book ) == 17 );
+
+    g_test_message( "Testing when setting this correctly to zero again" );
+    kvp_frame_set_double(qof_book_get_slots(fixture->book), slot_path, 0);
+    g_assert( qof_book_uses_autofreeze( fixture-> book ) == FALSE );
+    g_assert( qof_book_get_num_days_autofreeze( fixture-> book ) == 0 );
+
+    g_test_message( "Testing when setting this correctly with some correct value - 32" );
+    kvp_frame_set_double(qof_book_get_slots(fixture->book), slot_path, 32);
+    g_assert( qof_book_uses_autofreeze( fixture-> book ) == TRUE );
+    g_assert( qof_book_get_num_days_autofreeze( fixture-> book ) == 32 );
+
+}
+
+static void
 test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
 {
     QofBook *_empty = NULL;
@@ -696,6 +731,7 @@ test_suite_qofbook ( void )
     GNC_TEST_ADD( suitename, "increment and format counter", Fixture, NULL, setup, test_book_increment_and_format_counter, teardown );
     GNC_TEST_ADD( suitename, "kvp changed", Fixture, NULL, setup, test_book_kvp_changed, teardown );
     GNC_TEST_ADD( suitename, "use trading accounts", Fixture, NULL, setup, test_book_use_trading_accounts, teardown );
+    GNC_TEST_ADD( suitename, "get autofreeze days", Fixture, NULL, setup, test_book_get_num_days_autofreeze, teardown );
     GNC_TEST_ADD( suitename, "mark session dirty", Fixture, NULL, setup, test_book_mark_session_dirty, teardown );
     GNC_TEST_ADD( suitename, "session dirty time", Fixture, NULL, setup, test_book_get_session_dirty_time, teardown );
     GNC_TEST_ADD( suitename, "set dirty callback", Fixture, NULL, setup, test_book_set_dirty_cb, teardown );

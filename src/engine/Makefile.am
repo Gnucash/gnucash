@@ -191,9 +191,11 @@ noinst_DATA = .scm-links
 if BUILDING_FROM_SVN
 
 # The generated file depends on various libqof headers. Out of
-# laziness I only include one here - more might be needed
+# laziness I only include a few here - more might be needed
 # subsequently.
-QOFHEADERS = $(top_srcdir)/src/libqof/qof/qofbook.h
+QOFHEADERS = \
+  $(top_srcdir)/src/libqof/qof/qofbook.h \
+  $(top_srcdir)/src/libqof/qof/qofbookslots.h
 
 swig-engine.c: engine.i $(top_srcdir)/src/base-typemaps.i \
                $(QOFHEADERS) \

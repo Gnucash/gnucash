@@ -641,6 +641,41 @@ qof_book_use_trading_accounts (const QofBook *book)
     return FALSE;
 }
 
+gboolean qof_book_uses_autofreeze (const QofBook *book)
+{
+    g_assert(book);
+    return (qof_book_get_num_days_autofreeze(book) != 0);
+}
+
+gint qof_book_get_num_days_autofreeze (const QofBook *book)
+{
+    kvp_value *kvp_val;
+    double tmp;
+    g_assert(book);
+    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
+                                       KVP_OPTION_PATH,
+                                       OPTION_SECTION_ACCOUNTS,
+                                       OPTION_NAME_AUTO_FREEZE_DAYS,
+                                       NULL);
+
+    if (kvp_val == NULL)
+    {
+        //g_warning("kvp_val for slot '%s' is NULL", OPTION_NAME_AUTO_FREEZE_DAYS);
+        return 0;
+    }
+
+    tmp = kvp_value_get_double (kvp_val);
+    return (gint) tmp;
+}
+
+GDate* qof_book_get_autofreeze_gdate (const QofBook *book)
+{
+    GDate* result = gnc_g_date_new_today();
+    g_assert(book);
+    g_date_subtract_days(result, qof_book_get_num_days_autofreeze(book));
+    return result;
+}
+
 const char*
 qof_book_get_string_option(const QofBook* book, const char* opt_name)
 {
