@@ -294,6 +294,8 @@ gnc_customer_import_create_customers (GtkListStore *store, QofBook *book, guint 
     GncVendor *vendor;
     customer = NULL;
     vendor = NULL;
+    addr = NULL;
+    shipaddr = NULL;
     // these arguments are needed
     g_return_if_fail (store && book);
     printf("\nTYPE = %s\n", type);
