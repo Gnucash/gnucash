@@ -268,11 +268,18 @@ const char* get_random_string_in_array(const char* str_list[]);
 typedef gpointer TestSignal;
 TestSignal test_signal_new (QofInstance *entity, QofEventId eventType,
                             gpointer event_data);
-/* test_signal_assert_hits calls g_assert_cmpuint with an ==
- * operator. Use it in a test program to see if a TestSignal has been
- * emitted the number of times you expect.
+/* test_signal_return_hits gets the number of times the TestSignal has
+ * been called.
  */
-void test_signal_assert_hits (TestSignal sig, guint hits);
+guint test_signal_return_hits (TestSignal sig);
+
+/* test_signal_assert_hits is a convenience macro which wraps
+ * test_signal_return_hits with and equality assertion.
+ */
+
+#define test_signal_assert_hits(sig, hits) \
+    g_assert_cmpint (test_signal_return_hits (sig), ==, hits)
+
 void test_signal_free (TestSignal sig);
 
 /* For Scheme testing access:

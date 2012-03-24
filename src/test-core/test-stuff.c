@@ -541,9 +541,11 @@ test_signal_free (TestSignal sigp)
     g_slice_free (_TestSignal, sig);
 }
 
-void
-test_signal_assert_hits (TestSignal sigp, guint hits)
+guint
+test_signal_return_hits (TestSignal sigp)
 {
     _TestSignal *sig = (_TestSignal *)sigp;
-    g_assert_cmpint (sig->hits, == , hits);
+    return sig->hits;
+}
+
 }
