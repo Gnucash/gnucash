@@ -450,6 +450,17 @@ test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
 
 }
 
+gboolean
+test_log_handler (const char *log_domain, GLogLevelFlags log_level,
+                      const gchar *msg, gpointer user_data )
+{
+    gchar *level = test_log_level (log_level);
+    g_printf ( "<%s> (%s) %s\n", level, log_domain, msg);
+    g_free (level);
+    g_assert (log_level ^ G_LOG_FLAG_FATAL);
+    return FALSE;
+}
+
 void
 test_set_called( const gboolean val )
 {

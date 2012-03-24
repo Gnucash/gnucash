@@ -112,6 +112,15 @@ typedef struct
  */
 gboolean test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
                                const gchar *msg, gpointer user_data);
+
+/**
+ * Just print the log message. Since GLib has a habit of eating its
+ * log messages, it's sometimes useful to call
+ * g_test_log_set_fatal_handler() with this to make sure that
+ * g_return_if_fail() error messages make it to the surface.
+ */
+gboolean test_log_handler (const char *log_domain, GLogLevelFlags log_level,
+			   const gchar *msg, gpointer user_data);
 /**
  * Just returns FALSE or suppresses the message regardless of what the
  * error is. Use this only as a last resort.
