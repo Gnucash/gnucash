@@ -321,11 +321,22 @@ SplitList *   xaccTransGetSplitList (const Transaction *trans);
 gboolean xaccTransStillHasSplit(const Transaction *trans, const Split *s);
 
 
-/** Set the transaction to be ReadOnly */
+/** Set the transaction to be ReadOnly by setting a non-NULL value as "reason".
+ *
+ * FIXME: If "reason" is NULL, this function does nothing, instead of removing the
+ * readonly flag; the actual removal is possible only through
+ * xaccTransClearReadOnly(). */
 void          xaccTransSetReadOnly (Transaction *trans, const char *reason);
 void	      xaccTransClearReadOnly (Transaction *trans);
-/** FIXME: document me */
+
+/** Returns a non-NULL value if this Transaction was marked as read-only with
+ * some specific "reason" text. */
 const char *  xaccTransGetReadOnly (const Transaction *trans);
+
+/** Returns TRUE if this Transaction is read-only because its posted-date is
+ * older than the "auto-readonly" threshold of this book. See
+ * qof_book_uses_autofreeze() and qof_book_get_autofreeze_gdate(). */
+gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans);
 
 /** Returns the number of splits in this transaction. */
 int           xaccTransCountSplits (const Transaction *trans);

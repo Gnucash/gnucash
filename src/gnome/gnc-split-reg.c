@@ -897,7 +897,7 @@ gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
 
 
 static gboolean
-xaccTransWarnReadOnly (const Transaction *trans)
+is_trans_readonly_and_warn (const Transaction *trans)
 {
     GtkWidget *dialog;
     const gchar *reason;
@@ -906,6 +906,21 @@ xaccTransWarnReadOnly (const Transaction *trans)
         _("This transaction is marked read-only with the comment: '%s'");
 
     if (!trans) return FALSE;
+
+    if (xaccTransIsReadonlyByPostedDate (trans))
+    {
+        dialog = gtk_message_dialog_new(NULL,
+                                        0,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_OK,
+                                        "%s", title);
+        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book.  "
+                        "This setting can be changed in File -> Properties -> Accounts."));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        return TRUE;
+    }
 
     reason = xaccTransGetReadOnly (trans);
     if (reason)
@@ -944,7 +959,7 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
     reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
     trans = gnc_split_register_get_current_trans (reg);
-    if (xaccTransWarnReadOnly(trans))
+    if (is_trans_readonly_and_warn(trans))
         return;
     dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1033,7 +1048,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     if (cursor_class == CURSOR_CLASS_NONE)
         return;
 
-    if (xaccTransWarnReadOnly(trans))
+    if (is_trans_readonly_and_warn(trans))
         return;
 
     /* On a split cursor, just delete the one split. */

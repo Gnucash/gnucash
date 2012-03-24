@@ -1770,41 +1770,6 @@ gnc_split_register_get_rbaln_entry (VirtualLocation virt_loc,
     return xaccPrintAmount (balance, gnc_account_print_info (account, FALSE));
 }
 
-static gboolean posted_date_means_readonly(const Transaction *trans)
-{
-    GDate *threshold_date;
-    GDate trans_date;
-    const QofBook *book = gnc_get_current_book ();
-    gboolean result;
-    g_assert(trans);
-
-    if (!qof_book_uses_autofreeze(book))
-    {
-        //g_warning("we don't use auto-read-only, num_days=%d", qof_book_get_num_days_autofreeze(book));
-        return FALSE;
-    }
-
-    threshold_date = qof_book_get_autofreeze_gdate(book);
-    trans_date = xaccTransGetDatePostedGDate(trans);
-
-//    g_warning("there is auto-read-only with days=%d, trans_date_day=%d, threshold_date_day=%d",
-//              qof_book_get_num_days_autofreeze(book),
-//              g_date_get_day(&trans_date),
-//              g_date_get_day(threshold_date));
-
-    if (g_date_compare(&trans_date, threshold_date) < 0)
-    {
-        //g_warning("we must auto-read-only");
-        result = TRUE;
-    }
-    else
-    {
-        result = FALSE;
-    }
-    g_date_free(threshold_date);
-    return result;
-}
-
 static gboolean
 gnc_split_register_cursor_is_readonly (VirtualLocation virt_loc,
                                        gpointer user_data)
@@ -1821,7 +1786,7 @@ gnc_split_register_cursor_is_readonly (VirtualLocation virt_loc,
     if (!txn) return FALSE;
 
     if (xaccTransGetReadOnly(txn)
-            || posted_date_means_readonly(txn))
+            || xaccTransIsReadonlyByPostedDate(txn))
         return(TRUE);
 
     type = xaccTransGetTxnType (txn);

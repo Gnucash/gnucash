@@ -1957,6 +1957,41 @@ xaccTransGetReadOnly (const Transaction *trans)
                trans->inst.kvp_data, TRANS_READ_ONLY_REASON) : NULL;
 }
 
+gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans)
+{
+    GDate *threshold_date;
+    GDate trans_date;
+    const QofBook *book = xaccTransGetBook (trans);
+    gboolean result;
+    g_assert(trans);
+
+    if (!qof_book_uses_autofreeze(book))
+    {
+        return FALSE;
+    }
+
+    threshold_date = qof_book_get_autofreeze_gdate(book);
+    trans_date = xaccTransGetDatePostedGDate(trans);
+
+//    g_warning("there is auto-read-only with days=%d, trans_date_day=%d, threshold_date_day=%d",
+//              qof_book_get_num_days_autofreeze(book),
+//              g_date_get_day(&trans_date),
+//              g_date_get_day(threshold_date));
+
+    if (g_date_compare(&trans_date, threshold_date) < 0)
+    {
+        //g_warning("we are auto-read-only");
+        result = TRUE;
+    }
+    else
+    {
+        result = FALSE;
+    }
+    g_date_free(threshold_date);
+    return result;
+}
+
+
 gboolean
 xaccTransHasReconciledSplitsByAccount (const Transaction *trans,
                                        const Account *account)
