@@ -1965,12 +1965,12 @@ gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans)
     gboolean result;
     g_assert(trans);
 
-    if (!qof_book_uses_autofreeze(book))
+    if (!qof_book_uses_autoreadonly(book))
     {
         return FALSE;
     }
 
-    threshold_date = qof_book_get_autofreeze_gdate(book);
+    threshold_date = qof_book_get_autoreadonly_gdate(book);
     trans_date = xaccTransGetDatePostedGDate(trans);
 
 //    g_warning("there is auto-read-only with days=%d, trans_date_day=%d, threshold_date_day=%d",

@@ -269,7 +269,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     gboolean multi_line;
     gboolean dynamic;
     gboolean we_own_slist = FALSE;
-    gboolean use_autofreeze = qof_book_uses_autofreeze(gnc_get_current_book());
+    gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
 
     VirtualCellLocation vcell_loc;
     VirtualLocation save_loc;
@@ -277,7 +277,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     int new_trans_split_row = -1;
     int new_trans_row = -1;
     int new_split_row = -1;
-    time_t present, autofreeze_time;
+    time_t present, autoreadonly_time;
 
     g_return_if_fail(reg);
     table = reg->table;
@@ -435,8 +435,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     /* get the current time and reset the dividing row */
     present = gnc_timet_get_today_end ();
     {
-        GDate *d = qof_book_get_autofreeze_gdate(gnc_get_current_book());
-        autofreeze_time = timespecToTime_t(gdate_to_timespec(*d));
+        GDate *d = qof_book_get_autoreadonly_gdate(gnc_get_current_book());
+        autoreadonly_time = timespecToTime_t(gdate_to_timespec(*d));
         g_date_free(d);
     }
 
@@ -538,10 +538,10 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         }
 
         if (info->show_present_divider &&
-                use_autofreeze &&
+                use_autoreadonly &&
                 !found_divider_upper)
         {
-            if (xaccTransGetDate (trans) >= autofreeze_time)
+            if (xaccTransGetDate (trans) >= autoreadonly_time)
             {
                 table->model->dividing_row_upper = vcell_loc.virt_row;
                 found_divider_upper = TRUE;
@@ -591,7 +591,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     /* No upper divider yet? Store it now */
     if (info->show_present_divider &&
-            use_autofreeze &&
+            use_autoreadonly &&
             !found_divider_upper && need_divider_upper)
     {
         table->model->dividing_row_upper = vcell_loc.virt_row;

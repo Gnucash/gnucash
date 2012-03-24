@@ -322,9 +322,9 @@
 
 (define gnc:*option-section-accounts* OPTION-SECTION-ACCOUNTS)
 (define gnc:*option-name-trading-accounts* OPTION-NAME-TRADING-ACCOUNTS)
-(define gnc:*option-name-auto-freeze-days* OPTION-NAME-AUTO-FREEZE-DAYS)
+(define gnc:*option-name-auto-readonly-days* OPTION-NAME-AUTO-READONLY-DAYS)
 
-(export gnc:*option-section-accounts* gnc:*option-name-trading-accounts* gnc:*option-name-auto-freeze-days*)
+(export gnc:*option-section-accounts* gnc:*option-name-trading-accounts* gnc:*option-name-auto-readonly-days*)
 
 (define gnc:*option-section-budgeting* OPTION-SECTION-BUDGETING)
 (define gnc:*option-name-default-budget* OPTION-NAME-DEFAULT-BUDGET)

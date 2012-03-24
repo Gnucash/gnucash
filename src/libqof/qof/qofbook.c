@@ -641,13 +641,13 @@ qof_book_use_trading_accounts (const QofBook *book)
     return FALSE;
 }
 
-gboolean qof_book_uses_autofreeze (const QofBook *book)
+gboolean qof_book_uses_autoreadonly (const QofBook *book)
 {
     g_assert(book);
-    return (qof_book_get_num_days_autofreeze(book) != 0);
+    return (qof_book_get_num_days_autoreadonly(book) != 0);
 }
 
-gint qof_book_get_num_days_autofreeze (const QofBook *book)
+gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 {
     kvp_value *kvp_val;
     double tmp;
@@ -655,12 +655,12 @@ gint qof_book_get_num_days_autofreeze (const QofBook *book)
     kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
                                        KVP_OPTION_PATH,
                                        OPTION_SECTION_ACCOUNTS,
-                                       OPTION_NAME_AUTO_FREEZE_DAYS,
+                                       OPTION_NAME_AUTO_READONLY_DAYS,
                                        NULL);
 
     if (kvp_val == NULL)
     {
-        //g_warning("kvp_val for slot '%s' is NULL", OPTION_NAME_AUTO_FREEZE_DAYS);
+        //g_warning("kvp_val for slot '%s' is NULL", OPTION_NAME_AUTO_READONLY_DAYS);
         return 0;
     }
 
@@ -668,11 +668,18 @@ gint qof_book_get_num_days_autofreeze (const QofBook *book)
     return (gint) tmp;
 }
 
-GDate* qof_book_get_autofreeze_gdate (const QofBook *book)
+GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
 {
-    GDate* result = gnc_g_date_new_today();
+    gint num_days;
+    GDate* result = NULL;
+
     g_assert(book);
-    g_date_subtract_days(result, qof_book_get_num_days_autofreeze(book));
+    num_days = qof_book_get_num_days_autoreadonly(book);
+    if (num_days > 0)
+    {
+        result = gnc_g_date_new_today();
+        g_date_subtract_days(result, num_days);
+    }
     return result;
 }
 
