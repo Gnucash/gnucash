@@ -282,6 +282,25 @@ guint test_signal_return_hits (TestSignal sig);
 
 void test_signal_free (TestSignal sig);
 
+/* test_object_checked_destroy unrefs obj and returns true if its finalize
+ * method was called.
+ */
+
+gboolean test_object_checked_destroy (GObject *obj);
+
+/**
+ * test_destroy() ensures that a GObject is still alive at the time
+ * it's called and that it is finalized. The first assertion will
+ * trigger if you pass it a ponter which isn't a GObject -- which
+ * could be the case if the object has already been finalized. Then it
+ * calls test_object_checked_destroy() on it, asserting if the
+ * finalize method wasn't called (which indicates a leak).
+ */
+
+#define test_destroy(obj) \
+    g_assert (obj != NULL && G_IS_OBJECT (obj));		\
+    g_assert (test_object_checked_destroy (G_OBJECT (obj)))
+
 /* For Scheme testing access:
 void gnc_log_init_filename_special (gchar *filename);
 void gnc_log_shutdown (void);
