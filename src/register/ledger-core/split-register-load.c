@@ -541,7 +541,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
                 use_autofreeze &&
                 !found_divider_upper)
         {
-            if (xaccTransGetDate (trans) > autofreeze_time)
+            if (xaccTransGetDate (trans) >= autofreeze_time)
             {
                 table->model->dividing_row_upper = vcell_loc.virt_row;
                 found_divider_upper = TRUE;

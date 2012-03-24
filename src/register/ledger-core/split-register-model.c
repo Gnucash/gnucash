@@ -1792,7 +1792,7 @@ static gboolean posted_date_means_readonly(const Transaction *trans)
 //              g_date_get_day(&trans_date),
 //              g_date_get_day(threshold_date));
 
-    if (g_date_compare(&trans_date, threshold_date) <= 0)
+    if (g_date_compare(&trans_date, threshold_date) < 0)
     {
         //g_warning("we must auto-read-only");
         result = TRUE;
