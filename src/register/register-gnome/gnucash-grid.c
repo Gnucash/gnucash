@@ -367,6 +367,57 @@ gnucash_draw_hatching (GdkDrawable *drawable, GdkGC *gc,
                    x + 2, y + 2, x + 2 + height / 3, y + 2 + height / 3);
 }
 
+#ifdef READONLY_LINES_WITH_CHANGED_FG_COLOR
+/** For a given byte value, multiply the difference to 0xFF by a rational number,
+specified by numerator and denominator. This is some simple integer arithmetics
+for the case when we don't even need a conversion to floating point and
+backwards. */
+static guint8 inc_intensity_byte(guint8 input, int numerator, int denominator)
+{
+    guint8 result_inv, result;
+    guint8 input_inv = 0xff - input;
+    result_inv = (input_inv * numerator) / denominator;
+    result = 0xff - result_inv;
+    return result;
+}
+
+/** For a given RGB value, increase the color intensity for each of the three
+colors indentically by 10 percent (i.e. make them "less black" and "more gray")
+and return this changed RGB value. */
+static guint32 inc_intensity_10percent(guint32 argb)
+{
+    guint32 result =
+            (inc_intensity_byte((argb & 0x00FF0000) >> 16, 8, 10) << 16)
+            + (inc_intensity_byte((argb & 0x0000FF00) >> 8, 8, 10) << 8)
+            + (inc_intensity_byte(argb & 0x000000FF, 8, 10));
+    return result;
+}
+#endif
+
+/** For a given byte value, multiply the value by a rational number,
+specified by numerator and denominator. This is some simple integer arithmetics
+for the case when we don't even need a conversion to floating point and
+backwards. */
+static guint8 dec_intensity_byte(guint8 input, int numerator, int denominator)
+{
+    guint8 result;
+    result = (input * numerator) / denominator;
+    return result;
+}
+
+/** For a given RGB value, decrease the color intensity for each of the three
+colors indentically by 10 percent and return this changed RGB value. */
+static guint32 dec_intensity_10percent(guint32 argb)
+{
+    // Multiply each single byte by 9/10 i.e. by 0.9 which decreases the
+    // intensity by 10 percent.
+    guint32 result =
+            (dec_intensity_byte((argb & 0x00FF0000) >> 16, 9, 10) << 16)
+            + (dec_intensity_byte((argb & 0x0000FF00) >> 8, 9, 10) << 8)
+            + (dec_intensity_byte(argb & 0x000000FF, 9, 10));
+    return result;
+}
+
 static void
 draw_cell (GnucashGrid *grid,
            SheetBlock *block,
@@ -400,6 +451,13 @@ draw_cell (GnucashGrid *grid,
     else
     {
         argb = gnc_table_get_bg_color (table, virt_loc, &hatching);
+        // Are we in a read-only row? Then make the background color somewhat more gray.
+        if ((virt_loc.phys_row_offset == (block->style->nrows - 1))
+                && (table->model->dividing_row_upper >= 0)
+                && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
+        {
+            argb = dec_intensity_10percent(argb);
+        }
         bg_color = gnucash_color_argb_to_gdk (argb);
     }
 
@@ -516,6 +574,15 @@ draw_cell (GnucashGrid *grid,
     font = pango_font_description_copy (pango_context_get_font_description (context));
 
     argb = gnc_table_get_fg_color (table, virt_loc);
+#ifdef READONLY_LINES_WITH_CHANGED_FG_COLOR
+    // Are we in a read-only row? Then make the foreground color somewhat less black
+    if ((virt_loc.phys_row_offset == (block->style->nrows - 1))
+            && (table->model->dividing_row_upper >= 0)
+            && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
+    {
+        argb = inc_intensity_10percent(argb);
+    }
+#endif
     fg_color = gnucash_color_argb_to_gdk (argb);
 
     gdk_gc_set_foreground (grid->gc, fg_color);
