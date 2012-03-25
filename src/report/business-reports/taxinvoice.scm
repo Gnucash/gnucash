@@ -102,7 +102,7 @@
 (define optname-jobname-text		(N_ "Job Number text"))
 (define optname-jobnumber-text		(N_ "Job Name text"))
 (define optname-jobname-show		(N_ "Show Job name"))
-(define optname-jobnumber-show		(N_ "Sjow Job number"))
+(define optname-jobnumber-show		(N_ "Show Job number"))
 (define optname-invnum-next-to-title	(N_ "Invoice number next to title"))
 (define optname-border-collapse		(N_ "table-border-collapse"))
 (define optname-border-color-th		(N_ "table-header-border-color"))

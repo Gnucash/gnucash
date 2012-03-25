@@ -70,7 +70,7 @@
            (qty?       #f) ; does any row have qty <> 1?
            (spancols_subtotal	1)	; for subtotal line
            (spancols_payments	0)	; for payments line (between total and subtotal)
-           (spancols_total	0))	; for total line
+           (spancols_total	1))	; for total line
 
       ; load splits, if any
       (if (not (null? lot))
@@ -300,7 +300,7 @@
       <?scm (if discount? (begin ?>
         <th align="right"><?scm:d opt-disc-rate-heading ?></th>
         <th align="right"><?scm:d opt-disc-amount-heading ?></th>
-        <?scm (set! spancols_total (+ spancols_total 3))
+        <?scm (set! spancols_total (+ spancols_total 2))
               (set! spancols_subtotal (+ spancols_subtotal 1)))) ?>
       <?scm (if (and tax? taxtables?) (begin ?>
         <th align="right"><?scm:d opt-net-price-heading ?></th>
@@ -308,7 +308,7 @@
         <th align="right"><?scm:d opt-tax-rate-heading ?></th>
         <?scm (set! spancols_total (+ spancols_total 1)))) ?>
         <th align="right"><?scm:d opt-tax-amount-heading ?></th>
-        <?scm (set! spancols_total (+ spancols_total 3))
+        <?scm (set! spancols_total (+ spancols_total 1))
               (set! spancols_subtotal (+ spancols_subtotal 0)))) ?>
       <th align="right"><?scm:d opt-total-price-heading ?></th>
     </tr>
