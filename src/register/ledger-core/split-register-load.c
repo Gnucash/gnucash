@@ -277,7 +277,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     int new_trans_split_row = -1;
     int new_trans_row = -1;
     int new_split_row = -1;
-    time_t present, autoreadonly_time;
+    time_t present, autoreadonly_time = 0;
 
     g_return_if_fail(reg);
     table = reg->table;
@@ -434,9 +434,11 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     /* get the current time and reset the dividing row */
     present = gnc_timet_get_today_end ();
+    if (use_autoreadonly)
     {
         GDate *d = qof_book_get_autoreadonly_gdate(gnc_get_current_book());
-        autoreadonly_time = timespecToTime_t(gdate_to_timespec(*d));
+        // "d" is NULL if use_autoreadonly is FALSE
+        autoreadonly_time = d ? timespecToTime_t(gdate_to_timespec(*d)) : 0;
         g_date_free(d);
     }
 
