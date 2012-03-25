@@ -123,14 +123,21 @@ sub search_local {
     my $comment = 0;
     my $line;
     my ($calls, $callbacks, $refs) = (0, 0, 0);
-    my $call_re = qr{\b$name\s*\(\w*[,)]};
-    my $callback_re = qr{\([^)]*$name(?>!\s*\()};
-    my $ref_re = qr{(?<=\=)\s*$name(?>!\s*\()};
+    my $call_re = qr/\b$name\b\s*\([^{]*$/;
+    my $callback_re = qr{\b$name\s*[,)]};
+    my $ref_re = qr{=\s*\b$name\b(?!\s*\()};
+    my $body = 0;
     while (my $line = <INFILE>) {
 	chomp $line;
+	while ($line =~ /{/g) {
+	    ++$body;
+	}
+	while ($line =~ /}/g) {
+	    --$body;
+	}
 	($line, $comment) = strip_comments($line, $comment);
-	++ $calls if $line =~ /$call_re/;
-	++ $callbacks if $line =~ /$callback_re/;
+	++ $calls if $body && $line =~ /$call_re/;
+	++ $callbacks if $body && $line =~ /$callback_re/;
 	++ $refs if $line =~ /$ref_re/;
     }
 
