@@ -185,7 +185,7 @@ NO_USAGE:
 	print OUTFH "test_$c_name (Fixture *fixture, gconstpointer pData)\n";
 	print OUTFH "{\n";
 	print OUTFH "}*/\n";
-	return "// GNC_TEST_ADD (suitename, \"$test_name\", Fixture, NULL, $test_func, teardown);";
+	return "// GNC_TEST_ADD (suitename, \"$test_name\", Fixture, NULL, setup, $test_func, teardown);";
     }
     return;
 }
