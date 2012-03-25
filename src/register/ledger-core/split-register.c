@@ -509,6 +509,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         const char *in_num = NULL;
         char *out_num;
         time_t date;
+        gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
 
         /* We are on a transaction row. Copy the whole transaction. */
 
@@ -529,6 +530,30 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
             gnc_resume_gui_refresh ();
             LEAVE("dup cancelled");
             return NULL;
+        }
+
+        if (use_autoreadonly)
+        {
+            GDate d;
+            GDate *readonly_threshold = qof_book_get_autoreadonly_gdate(gnc_get_current_book());
+            g_date_set_time_t (&d, date);
+            if (g_date_compare(&d, readonly_threshold) < 0)
+            {
+                GtkWidget *dialog = gtk_message_dialog_new(NULL,
+                                    0,
+                                    GTK_MESSAGE_ERROR,
+                                    GTK_BUTTONS_OK,
+                                    "%s", _("Cannot store a transaction at this date"));
+                gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                        "%s", _("The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book.  "
+                                "This setting can be changed in File -> Properties -> Accounts."));
+                gtk_dialog_run(GTK_DIALOG(dialog));
+                gtk_widget_destroy(dialog);
+
+                g_date_free(readonly_threshold);
+                return NULL;
+            }
+            g_date_free(readonly_threshold);
         }
 
         split_index = xaccTransGetSplitIndex(trans, split);
