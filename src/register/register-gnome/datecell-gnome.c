@@ -94,11 +94,43 @@ static void
 gnc_parse_date (struct tm *parsed, const char * datestr)
 {
     int day, month, year;
+    gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
 
     if (!parsed) return;
     if (!datestr) return;
 
     qof_scan_date (datestr, &day, &month, &year);
+
+    // If we have an auto-read-only threshold, do not accept a date that is
+    // older than the threshold.
+    if (use_autoreadonly)
+    {
+        GDate *d = g_date_new_dmy(day, month, year);
+        GDate *readonly_threshold = qof_book_get_autoreadonly_gdate(gnc_get_current_book());
+        if (g_date_compare(d, readonly_threshold) < 0)
+        {
+            g_warning("Entered date %s is before the \"auto-read-only threshold\"; resetting to the threshold.", datestr);
+#if 0
+            GtkWidget *dialog = gtk_message_dialog_new(NULL,
+                                                       0,
+                                                       GTK_MESSAGE_ERROR,
+                                                       GTK_BUTTONS_OK,
+                                                       "%s", _("Cannot store a transaction at this date"));
+            gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                                                     "%s", _("The entered date of the new transaction is older than the \"Read-Only Threshold\" set for this book.  "
+                                                             "This setting can be changed in File -> Properties -> Accounts."));
+            gtk_dialog_run(GTK_DIALOG(dialog));
+            gtk_widget_destroy(dialog);
+#endif
+
+            // Reset the date to the threshold date
+            day = g_date_get_day(readonly_threshold);
+            month = g_date_get_month(readonly_threshold);
+            year = g_date_get_year(readonly_threshold);
+        }
+        g_date_free(d);
+        g_date_free(readonly_threshold);
+    }
 
     parsed->tm_mday = day;
     parsed->tm_mon  = month - 1;
