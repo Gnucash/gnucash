@@ -2,20 +2,22 @@
 # Copyright (C) 2002, 2003, 2004, 2007 Miloslav Trmac <mitr@volny.cz>
 # This file is distributed under the same license as the gnucash package.
 # Miloslav Trmac <mitr@volny.cz>, 2002, 2003, 2004, 2007.
+# Petr Pisar <petr.pisar@atlas.cz>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 2.1.5\n"
+"Project-Id-Version: gnucash 2.4.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-12 17:08+0100\n"
-"PO-Revision-Date: 2007-09-09 01:19+0200\n"
-"Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
+"PO-Revision-Date: 2012-03-29 11:39+0200\n"
+"Last-Translator: Petr Pisar <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:656
 msgid "Illegal variable in expression."
@@ -249,8 +251,8 @@ msgstr "Povolit další/vývojové/ladicí funkce."
 
 #: ../src/bin/gnucash-bin.c:461
 msgid ""
-"Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}"
-"\""
+"Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
+"error}\""
 msgstr ""
 "Nahrazení úrovně zaznamenávání, ve tvaru \"ces.ta.záznamu={debug,info,warn,"
 "crit,error}\""
@@ -1244,9 +1246,9 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-payment.c:564
 #, c-format
 msgid ""
-"You have no valid \"Post To\" accounts.  Please create an account of type \"%"
-"s\" before you continue to process this payment.  Perhaps you want to create "
-"an Invoice or Bill first?"
+"You have no valid \"Post To\" accounts.  Please create an account of type "
+"\"%s\" before you continue to process this payment.  Perhaps you want to "
+"create an Invoice or Bill first?"
 msgstr ""
 "Nemáte žádné platné účty \"Vystavit na\". Před pokračováním ve zpracovávání "
 "této platby prosím vytvořte účet typu \"%s\". Možná chcete nejdříve vytvořit "
@@ -3302,9 +3304,8 @@ msgid "A/Payable"
 msgstr "Kniha závazků"
 
 #: ../src/engine/Account.c:3978
-#, fuzzy
 msgid "Root"
-msgstr "Sestava"
+msgstr ""
 
 #. src/report/standard-reports/income-statement.scm
 #: ../src/engine/Account.c:3979 ../src/engine/Scrub.c:454
@@ -3681,9 +3682,8 @@ msgid "Top"
 msgstr "Na_hoře"
 
 #: ../src/gnome/dialog-progress.c:478 ../src/gnome/dialog-progress.c:527
-#, fuzzy
 msgid "(paused)"
-msgstr " (vystaveno)"
+msgstr ""
 
 #: ../src/gnome/dialog-progress.c:762 ../src/gnome/dialog-progress.c:765
 msgid "Complete"
@@ -3927,8 +3927,8 @@ msgstr ""
 #, c-format
 msgid ""
 "You have asked for a book to be created.  This book will contain all "
-"transactions up to midnight %s (for a total of %d transactions spread over %"
-"d accounts). Click on 'Forward' to create this book. Click on 'Back' to "
+"transactions up to midnight %s (for a total of %d transactions spread over "
+"%d accounts). Click on 'Forward' to create this book. Click on 'Back' to "
 "adjust the dates."
 msgstr ""
 "Požádali jste o vytvoření účetní knihy. Tato účetní kniha bude obsahovat "
@@ -5254,9 +5254,9 @@ msgid ""
 "Quicken(tm) Wallet Checks w/ side stub\n"
 "Custom"
 msgstr ""
-"Quicken/QuickBooks� US Letter\n"
-"Deluxe� Personal Checks US Letter\n"
-"Quicken� Wallet Checks s boční útržkem\n"
+"Quicken/QuickBooks™ US Letter\n"
+"Deluxe™ Personal Checks US Letter\n"
+"Quicken™ Wallet Checks s boční útržkem\n"
 "Vlastní"
 
 #: ../src/gnome/glade/print.glade.h:23
@@ -9156,7 +9156,7 @@ msgstr "Zrušit výběr všech účtů."
 #: ../src/gnome-utils/dialog-options.c:944
 #, fuzzy
 msgid "Select Children"
-msgstr "Vyberte účty"
+msgstr "Zvolte měnu"
 
 #: ../src/gnome-utils/dialog-options.c:946
 #, fuzzy
@@ -9721,9 +9721,8 @@ msgid "Database"
 msgstr "Databáze cen"
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:5
-#, fuzzy
 msgid "Host"
-msgstr "Vystavit"
+msgstr ""
 
 #: ../src/gnome-utils/glade/dialog-file-access.glade.h:6
 #, fuzzy
@@ -9733,7 +9732,7 @@ msgstr "Heslo:"
 #: ../src/gnome-utils/glade/dialog-object-references.glade.h:1
 #, fuzzy
 msgid "Explanation"
-msgstr "_Rozdělit účetní položku"
+msgstr "aplikace"
 
 #: ../src/gnome-utils/glade/dialog-object-references.glade.h:2
 #, fuzzy
@@ -10159,7 +10158,7 @@ msgstr "<b>Šeky</b>"
 #: ../src/gnome-utils/glade/preferences.glade.h:8
 #, fuzzy
 msgid "<b>Date Completion</b>"
-msgstr "<b>Umístění záložek</b>"
+msgstr "<b>Formát data</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:9
 msgid "<b>Date Format</b>"
@@ -13017,9 +13016,8 @@ msgstr ""
 
 #. indicate that additional failures exist
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:283
-#, fuzzy
 msgid "...\n"
-msgstr "Nový..."
+msgstr ""
 
 #: ../src/import-export/aqbanking/gnc-file-aqb-import.c:297
 #, c-format
@@ -13162,9 +13160,8 @@ msgstr ""
 "bankovnictví"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:160
-#, fuzzy
 msgid "Show _log window"
-msgstr "Otevřít kurz pro nového uživatele"
+msgstr ""
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:161
 #, fuzzy
@@ -13349,7 +13346,7 @@ msgstr ""
 #: ../src/import-export/csv/gnc-csv-model.c:1045
 #, fuzzy, c-format
 msgid "%s column could not be understood."
-msgstr "Soubor nelze otevřít znovu."
+msgstr "Soubor %s nelze najít."
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:1
 msgid "Colon (:)"
@@ -13360,9 +13357,8 @@ msgid "Comma (,)"
 msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:4
-#, fuzzy
 msgid "Data type: "
-msgstr "Datum: "
+msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:5
 #, fuzzy
@@ -13397,17 +13393,15 @@ msgstr ""
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:12
 #, fuzzy
 msgid "Separated"
-msgstr "Počáteční datum"
+msgstr "Vytvořena"
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:13
-#, fuzzy
 msgid "Separators"
-msgstr "znaků"
+msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:14
-#, fuzzy
 msgid "Space"
-msgstr "Uložit"
+msgstr ""
 
 #: ../src/import-export/csv/gnc-csv-preview-dialog.glade.h:15
 #, fuzzy
@@ -13432,9 +13426,8 @@ msgid "\"R\""
 msgstr "\"O\""
 
 #: ../src/import-export/generic-import.glade.h:3
-#, fuzzy
 msgid "\"U+R\""
-msgstr "\"O\""
+msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:4
 msgid "(none)"
@@ -14002,9 +13995,8 @@ msgstr "Zrušit"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:874
 #: ../src/import-export/qif-import/druid-qif-import.c:878
-#, fuzzy
 msgid "An error occurred while loading the QIF file."
-msgstr "Při běhu sestavy došlo k chybě."
+msgstr "Při načítání souboru QIF došlo k chybě."
 
 #. Inform the user.
 #: ../src/import-export/qif-import/druid-qif-import.c:875
@@ -14014,9 +14006,8 @@ msgstr "Při běhu sestavy došlo k chybě."
 #: ../src/import-export/qif-import/druid-qif-import.c:2686
 #: ../src/import-export/qif-import/druid-qif-import.c:2707
 #: ../src/import-export/qif-import/druid-qif-import.c:2756
-#, fuzzy
 msgid "Failed"
-msgstr "_Soubor"
+msgstr ""
 
 #. Unload the file.
 #. Remove any converted data.
@@ -14048,9 +14039,8 @@ msgstr ""
 #: ../src/import-export/qif-import/druid-qif-import.c:1062
 #: ../src/import-export/qif-import/druid-qif-import.c:2813
 #: ../src/import-export/qif-import/druid-qif-import.c:2817
-#, fuzzy
 msgid "_Resume"
-msgstr "_Přečíslovat"
+msgstr ""
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1434
 msgid "You must enter an account name."
@@ -14721,7 +14711,7 @@ msgstr "Zvolte typ slevy"
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:3
 #, fuzzy
 msgid "3. Select import options"
-msgstr "<b>_Zvolené sestavy</b>"
+msgstr "Upravit možnosti sestavy"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:4
 #, fuzzy
@@ -14729,9 +14719,8 @@ msgid "4. Preview"
 msgstr "Zkontrolovat"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:6
-#, fuzzy
 msgid "Comma separated"
-msgstr "Počáteční datum"
+msgstr ""
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:7
 msgid "Comma separated with quotes"
@@ -14759,9 +14748,8 @@ msgid "Import transactions from text file"
 msgstr "První část importované účetní položky:"
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:13
-#, fuzzy
 msgid "Semicolon separated"
-msgstr "Počáteční datum"
+msgstr ""
 
 #: ../src/plugins/bi_import/glade/bi_import.glade.h:14
 msgid "Semicolon separated with quotes"
@@ -15632,7 +15620,7 @@ msgstr "Spravovat vaše finance, účty a investice"
 #: ../src/libqof/qof/qofbookslots.h:66
 #, fuzzy
 msgid "Use Trading Accounts"
-msgstr "existující účet"
+msgstr "Účty Dal"
 
 #: ../src/libqof/qof/qofbookslots.h:68
 #, fuzzy
@@ -15932,7 +15920,7 @@ msgstr "Utraceno"
 #: ../intl-scm/guile-strings.c:188
 #, fuzzy
 msgid "Counters"
-msgstr "Obsah"
+msgstr "Střed"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:190
@@ -15990,7 +15978,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:206
 #, fuzzy
 msgid "Invoice number format"
-msgstr "Číslo faktury"
+msgstr "Informace o faktuře"
 
 #. src/business/business-utils/business-prefs.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -16314,9 +16302,8 @@ msgstr "Úrok pákového úvěru"
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:346 ../intl-scm/guile-strings.c:348
-#, fuzzy
 msgid "Line"
-msgstr "Online"
+msgstr ""
 
 #. src/import-export/qif-import/qif-file.scm
 #: ../intl-scm/guile-strings.c:350
@@ -16674,7 +16661,7 @@ msgstr "Datum vystavení"
 
 #. src/report/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:474
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Transactions relating to '%s' contain more than one currency.  This report "
 "is not designed to cope with this possibility."
@@ -16924,7 +16911,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:574
 #, fuzzy
 msgid "Sort Column"
-msgstr "Vyberte účty"
+msgstr "Řadit podle částky"
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:576
@@ -16974,9 +16961,8 @@ msgstr ""
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:604 ../intl-scm/guile-strings.c:640
-#, fuzzy
 msgid "Sales"
-msgstr "Podíly"
+msgstr ""
 
 #. src/report/business-reports/customer-summary.scm
 #: ../intl-scm/guile-strings.c:606
@@ -17032,7 +17018,7 @@ msgstr "Nový zákazník"
 #: ../intl-scm/guile-strings.c:648
 #, fuzzy, c-format
 msgid "%s %s - %s"
-msgstr "%s: %s"
+msgstr "Období %s – %s"
 
 #. src/report/business-reports/customer-summary.scm
 #. src/report/business-reports/job-report.scm
@@ -17591,9 +17577,9 @@ msgstr "WWW:"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1046
-#, fuzzy, c-format
+#, c-format
 msgid "%s&nbsp;#"
-msgstr "Datum&nbsp;splatnosti"
+msgstr ""
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1048
@@ -17778,13 +17764,11 @@ msgstr "E-mail: "
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:1472
-#, fuzzy
 msgid "Website"
-msgstr "WWW:"
+msgstr ""
 
 #. src/report/business-reports/taxinvoice.eguile.scm
 #: ../intl-scm/guile-strings.c:1478
-#, fuzzy
 msgid "Invoice Date"
 msgstr "Datum faktury"
 
@@ -17852,7 +17836,7 @@ msgstr "Stylesheet"
 #: ../intl-scm/guile-strings.c:1512
 #, fuzzy
 msgid "Heading font"
-msgstr "Obrázek nadpisu"
+msgstr "Nadpis"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1514
@@ -17911,7 +17895,7 @@ msgstr "Částečný součet"
 #: ../intl-scm/guile-strings.c:1542
 #, fuzzy
 msgid "Payment received text"
-msgstr "Platba, děkujeme vám"
+msgstr "Počet plateb"
 
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:1544
@@ -18353,17 +18337,15 @@ msgstr "Zdanitelný příjem / odčitatelné výdaje"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1784
-#, fuzzy
 msgid ""
 "This report shows transaction detail for your accounts related to Income "
 "Taxes."
-msgstr "Tato sestava zobrazuje váš zdanitelný příjem a odčitatelné výdaje."
+msgstr ""
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1788
-#, fuzzy
 msgid "This page shows transaction detail for relevant Income Tax accounts."
-msgstr "Tato sestava zobrazuje váš zdanitelný příjem a odčitatelné výdaje."
+msgstr ""
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:1790
@@ -18430,9 +18412,8 @@ msgstr "Položky úprav"
 #: ../intl-scm/guile-strings.c:1838 ../intl-scm/guile-strings.c:1844
 #: ../intl-scm/guile-strings.c:1850 ../intl-scm/guile-strings.c:1856
 #: ../intl-scm/guile-strings.c:1862
-#, fuzzy
 msgid "Fonts"
-msgstr "Měsíce"
+msgstr ""
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1818
@@ -18450,7 +18431,7 @@ msgstr "Odstranění účtu"
 #: ../intl-scm/guile-strings.c:1824
 #, fuzzy
 msgid "Font info for account name"
-msgstr "Tisknout úplné názvy účtů"
+msgstr "Název účtu QIF"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:1828
@@ -19080,7 +19061,7 @@ msgstr "Úvěrové rámce"
 #: ../intl-scm/guile-strings.c:2128 ../intl-scm/guile-strings.c:2642
 #, fuzzy
 msgid "Trading Accounts"
-msgstr "existující účet"
+msgstr "Účty Dal"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:2130
@@ -19262,7 +19243,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2188 ../intl-scm/guile-strings.c:3202
 #, fuzzy
 msgid "No Averaging"
-msgstr "Řazení"
+msgstr "Průměr"
 
 #. src/report/standard-reports/account-piecharts.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -20310,7 +20291,7 @@ msgstr "Upravit účet"
 #: ../intl-scm/guile-strings.c:2648
 #, fuzzy
 msgid "Total Equity, Trading, and Liabilities"
-msgstr "Pasiva"
+msgstr "Pasiva celkem"
 
 #. src/report/standard-reports/balsheet-eg.eguile.scm
 #: ../intl-scm/guile-strings.c:2650
@@ -20350,10 +20331,9 @@ msgstr "Zahrnout účty s nulovými celkovými zůstatky"
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2676
-#, fuzzy
 msgid ""
 "Exclude non-top-level accounts with zero balance and no non-zero sub-accounts"
-msgstr "Zahrnout účty s nulovými celkovými zůstatky"
+msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2682
@@ -20380,9 +20360,8 @@ msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2690
-#, fuzzy
 msgid "Font size"
-msgstr "Měsíce"
+msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2692
@@ -20440,9 +20419,8 @@ msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2730
-#, fuzzy
 msgid "Sign"
-msgstr "Jednoduchý"
+msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2732
@@ -20451,9 +20429,8 @@ msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2734
-#, fuzzy
 msgid "Brackets"
-msgstr "Zpět"
+msgstr ""
 
 #. src/report/standard-reports/balsheet-eg.scm
 #: ../intl-scm/guile-strings.c:2736
@@ -20521,7 +20498,7 @@ msgstr "Aktiva celkem"
 #: ../intl-scm/guile-strings.c:2846
 #, fuzzy
 msgid "Unallocated Assets"
-msgstr "Nerealizovaná ztráta"
+msgstr "Aktiva celkem"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2852
@@ -20611,9 +20588,8 @@ msgstr "Vytvořit sestavu o těchto účtech"
 
 #. src/report/standard-reports/budget-barchart.scm
 #: ../intl-scm/guile-strings.c:2900
-#, fuzzy
 msgid "Actual"
-msgstr "Ročně"
+msgstr ""
 
 #. src/report/standard-reports/budget-flow.scm
 #: ../intl-scm/guile-strings.c:2904
@@ -20772,7 +20748,7 @@ msgstr "Období rozpočtu:"
 #: ../intl-scm/guile-strings.c:3026
 #, fuzzy, c-format
 msgid "for Budget %s"
-msgstr "Rozpočet"
+msgstr "Seznam rozpočtů"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
@@ -20895,13 +20871,12 @@ msgstr "Zobrazovat částečné součty"
 #: ../intl-scm/guile-strings.c:3074
 #, fuzzy
 msgid "Display a column with the row totals"
-msgstr "Zobrazovat hodnotu položky"
+msgstr "Zobrazovat součty?"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3076
-#, fuzzy
 msgid "Roll up budget amounts to parent"
-msgstr "Odstranění účtu"
+msgstr ""
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:3078
@@ -21394,7 +21369,7 @@ msgstr "Jestli zahrnout popis oddílu aktiv nebo ne"
 #: ../intl-scm/guile-strings.c:3546
 #, fuzzy
 msgid "Include trading accounts total"
-msgstr "Včetně _úplného součtu"
+msgstr "Zahrnout součet aktiv"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:3548
@@ -21518,7 +21493,7 @@ msgstr "Cena komodity"
 #: ../intl-scm/guile-strings.c:3752
 #, fuzzy
 msgid "Invert prices"
-msgstr "Faktury"
+msgstr "Zaznamenané ceny"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:3762
@@ -22776,9 +22751,8 @@ msgstr "Technicolor"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:5090 ../intl-scm/guile-strings.c:5214
 #: ../intl-scm/guile-strings.c:5282 ../intl-scm/guile-strings.c:5284
-#, fuzzy
 msgid "Footer"
-msgstr "Navždy"
+msgstr ""
 
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:5092
@@ -23528,6 +23502,22 @@ msgstr ""
 "nevysvětlitelným. Existuje jiná teorie, že se to již stalo. Douglas Adams, "
 "\"Restaurace na konci Vesmíru\""
 
+#, fuzzy
+msgid " on "
+msgstr "je"
+
+#, fuzzy
+msgid "Item "
+msgstr "položka"
+
+#, fuzzy
+msgid " (TXF Parameter: "
+msgstr "%i:Název parametru: %s "
+
+#, fuzzy
+msgid " Line "
+msgstr "Online"
+
 #~ msgid "Default number of register rows to display in Invoices."
 #~ msgstr "Implicitní počet řádků účetní knihy, který zobrazit na faktuře."
 
@@ -23555,6 +23545,7 @@ msgstr ""
 #~ msgid "an Account"
 #~ msgstr "účet"
 
+#, fuzzy
 #~ msgid "This SX has changed; are you sure you want to cancel?"
 #~ msgstr "Tato PÚP byla změněna; opravdu to chcete zrušit?"
 
@@ -23724,8 +23715,9 @@ msgstr ""
 #~ msgid "Import a CSV file into GnuCash"
 #~ msgstr "Importovat do Gnucash soubor CSV"
 
+#, fuzzy
 #~ msgid "Import CSV and s_end..."
-#~ msgstr "Importovat CSV a ode_slat..."
+#~ msgstr "Importovat DTAUS a _odeslat..."
 
 #~ msgid ""
 #~ "Import a CSV file into GnuCash and send the transfers online through "
@@ -23734,6 +23726,7 @@ msgstr ""
 #~ "Importovat do GnuCash soubor CSV a odeslat převody online pomocí online "
 #~ "bankovnictví"
 
+#, fuzzy
 #~ msgid ""
 #~ "The PIN needs to be at least %d characters long. Do you want to try again?"
 #~ msgstr "PIN musí být dlouhý alespoň %d znaků. Chcete to zkusit znovu?"
@@ -23824,8 +23817,9 @@ msgstr ""
 #~ msgid "Created Transaction Review"
 #~ msgstr "Kontrola vytvořené účetní položky"
 
+#, fuzzy
 #~ msgid "Creating transactions..."
-#~ msgstr "Vytvářím účetní položky..."
+#~ msgstr "Importuji účetní položky"
 
 #~ msgid "Days Away"
 #~ msgstr "Zbývá dnů"
@@ -23957,8 +23951,9 @@ msgstr ""
 #~ msgid "Report Accounts"
 #~ msgstr "Účty sestavy"
 
+#, fuzzy
 #~ msgid "Filter Accounts"
-#~ msgstr "Filtrovat účty"
+#~ msgstr "Filtrovat účet"
 
 #, fuzzy
 #~ msgid "Flatten list to depth limit?"
@@ -24348,7 +24343,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "<b>Faktury</b>"
+#~ msgstr "Za_platit fakturu"
 
 #~ msgid "Set the logging level from 0 (least) to 6 (most)"
 #~ msgstr "Nastavit úroveň zaznamenávání od 0 (nejméně) po 6 (nejvíce)"
@@ -24418,22 +24413,10 @@ msgstr ""
 #~ msgstr "Používat šablonu účetních položek"
 
 #, fuzzy
-#~ msgid " on "
-#~ msgstr "je"
-
-#, fuzzy
 #~ msgid " (Account Commodity: "
 #~ msgstr ""
 #~ "\n"
 #~ "Komodita: "
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "položka"
-
-#, fuzzy
-#~ msgid " (TXF Parameter: "
-#~ msgstr "%i:Název parametru: %s "
 
 #, fuzzy
 #~ msgid "Balance on "
@@ -24445,7 +24428,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid " For "
-#~ msgstr "Formulář"
+#~ msgstr "Součet pro "
 
 #, fuzzy
 #~ msgid ": Parameters"
@@ -24454,10 +24437,6 @@ msgstr ""
 #, fuzzy
 #~ msgid ") / Account Name"
 #~ msgstr "Název účtu"
-
-#, fuzzy
-#~ msgid " Line "
-#~ msgstr "Online"
 
 #, fuzzy
 #~ msgid ": Payer Name Option "
@@ -24506,7 +24485,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Do not display full account names"
-#~ msgstr "Zobrazovat úplný název účtu"
+#~ msgstr "Tisknout úplné názvy účtů"
 
 #, fuzzy
 #~ msgid "Display all Transfer To/From Accounts"
@@ -24514,7 +24493,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Do not display all Transfer To/From Accounts"
-#~ msgstr "Nezobrazovat žádné zůstatky rodičovských účtů"
+#~ msgstr "Cílový účet"
 
 #, fuzzy
 #~ msgid "Display Action:Memo data"
@@ -24522,23 +24501,23 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Display transactions for selected accounts"
-#~ msgstr "Přidat do účtu novou účetní položku"
+#~ msgstr "Ignorovat účetní položky z/do všech filtrovaných účtů"
 
 #, fuzzy
 #~ msgid "Do not display transactions for selected accounts"
-#~ msgstr "Nezobrazovat částečné součty rodičovských účtů"
+#~ msgstr "Vytvořit sestavu účetních položek tohoto účtu"
 
 #, fuzzy
 #~ msgid "Do not include transactions outside of selected dates"
-#~ msgstr "Zobrazovat obojí (a zahrnout neplatné účetní položky v součtech)"
+#~ msgstr "Ignorovat účetní položky z/do všech filtrovaných účtů"
 
 #, fuzzy
 #~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "Zahrnout podúčty všech vybraných účtů"
+#~ msgstr "Ignorovat účetní položky z/do všech filtrovaných účtů"
 
 #, fuzzy
 #~ msgid "Do not shade alternate transactions"
-#~ msgstr "Barvy v dvojitém _režimu se mění s účetními položkami"
+#~ msgstr "Odškrtnout vy_nulované účetní položky"
 
 #, fuzzy
 #~ msgid "PriceDB lookups nearest to transaction date"
@@ -24546,7 +24525,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "PriceDB lookups nearest to report end date"
-#~ msgstr "Cena zaznamenaná v čase nejbližším datu sestavy"
+#~ msgstr "Nejnovější před sestavou"
 
 #~ msgid "The following bills are due"
 #~ msgstr "Je potřeba zaplatit následující účty"
@@ -24556,7 +24535,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Show Hidden"
-#~ msgstr "_Skryté"
+#~ msgstr "Zobrazovat _skryté účty"
 
 #, fuzzy
 #~ msgid "Show hidden accounts."
@@ -24567,7 +24546,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "A bug was detected while reading the QIF file."
-#~ msgstr "Při načítání souboru QIF došlo k chybě."
+#~ msgstr "Při zpracovávání souboru QIF došlo k chybě"
 
 #~ msgid "Int"
 #~ msgstr "Úrok"
@@ -24588,6 +24567,7 @@ msgstr ""
 #~ msgid "ATM"
 #~ msgstr "Bankomat"
 
+#, fuzzy
 #~ msgid "Future dates are not supported"
 #~ msgstr "Budoucí data nejsou podporována"
 
@@ -24879,3 +24859,35 @@ msgstr ""
 
 #~ msgid "Sub-"
 #~ msgstr "Pod-"
+
+#, fuzzy
+#~ msgid "Enable extra _buttons"
+#~ msgstr "Povolit akci úpravy přiřazení"
+
+#, fuzzy
+#~ msgid "Move Entry _Up"
+#~ msgstr "Posunout na_horu"
+
+#, fuzzy
+#~ msgid "Move the current entry one row upwards"
+#~ msgstr "Uložit aktuální položku?"
+
+#, fuzzy
+#~ msgid "Move Entry Do_wn"
+#~ msgstr "Posunout _dolů"
+
+#, fuzzy
+#~ msgid "Move the current entry one row downwards"
+#~ msgstr "Přesunout vybranou šablonu účetních položek o řádek níž"
+
+#, fuzzy
+#~ msgid "Enable extra toolbar buttons for business"
+#~ msgstr "Tlačítka lišty nástrojů"
+
+#, fuzzy
+#~ msgid "Automatically create new commodities"
+#~ msgstr "Automatická desetinná čárka"
+
+#, fuzzy
+#~ msgid "GnuCash-Report"
+#~ msgstr "Možnosti GnuCash"
