@@ -2052,5 +2052,17 @@ gboolean xaccSplitRegister (void)
     return qof_object_register (&split_object_def);
 }
 
+SplitTestFunctions*
+_utest_split_fill_functions (void)
+{
+    SplitTestFunctions *func = g_new (SplitTestFunctions, 1);
+
+    func->xaccSplitEqualCheckBal = xaccSplitEqualCheckBal;
+    func->get_currency_denom = get_currency_denom;
+    func->get_commodity_denom = get_commodity_denom;
+    func->get_corr_account_split = get_corr_account_split;
+    return func;
+}
+
 /************************ END OF ************************************\
 \************************* FILE *************************************/

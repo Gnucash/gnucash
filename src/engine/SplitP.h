@@ -238,6 +238,19 @@ void         DxaccSplitSetShareAmount (Split *split, double amount);
 #define SET_GAINS_A_VDIRTY(s) SET_GAINS_DIRTY(s,GAINS_STATUS_A_VDIRTY);
 #define SET_GAINS_VDIRTY(s)  SET_GAINS_DIRTY(s,GAINS_STATUS_VDIRTY);
 
+/* Structure for accessing static functions for testing */
+typedef struct
+{
+    gboolean (*xaccSplitEqualCheckBal) (const char *tag, gnc_numeric a,
+					gnc_numeric b);
+    int (*get_currency_denom) (const Split *s);
+    int (*get_commodity_denom) (const Split *s);
+    gboolean (*get_corr_account_split) (const Split *sa, const Split **retval);
+} SplitTestFunctions;
+
+SplitTestFunctions* _utest_split_fill_functions (void);
+
+
 /*@}*/
 
 

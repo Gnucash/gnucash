@@ -43,7 +43,7 @@ main (int   argc,
     test_suite_account();
     test_suite_gncInvoice();
 //    test_suite_transaction();
-//    test_suite_split();
+    test_suite_split();
 
     return g_test_run( );
 }
