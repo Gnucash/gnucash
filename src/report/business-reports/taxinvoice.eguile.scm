@@ -68,9 +68,7 @@
            (payments?  #f) ; have any payments been made on this invoice?
            (units?     #f) ; does any row specify units?
            (qty?       #f) ; does any row have qty <> 1?
-           (spancols_subtotal	1)	; for subtotal line
-           (spancols_payments	0)	; for payments line (between total and subtotal)
-           (spancols_total	1))	; for total line
+           (tbl_cols   0)) ; number of columns for 'colspan' attributes
 
       ; load splits, if any
       (if (not (null? lot))
@@ -282,34 +280,29 @@
     <tr bgcolor="#ccc" valign="bottom">
       <?scm (if opt-col-date (begin ?>
       <th align="center" ><?scm:d (_ "Date") ?></th>
-      <?scm (set! spancols_subtotal (+ spancols_subtotal 1))
-            (set! spancols_total (+ spancols_total 1)))) ?>
+      <?scm (set! tbl_cols (+ tbl_cols 1)) )) ?>
       <th align="left" width="80%"><?scm:d (_ "Description") ?></th>
       <?scm (if (and units? opt-col-units) (begin ?>
         <th align="left"><?scm:d opt-units-heading ?></th>
-        <?scm (set! spancols_subtotal (+ spancols_subtotal 1))
-              (set! spancols_total (+ spancols_total 1)))) ?>
+      <?scm (set! tbl_cols (+ tbl_cols 1)) )) ?>
       <?scm (if (or units? qty?) (begin ?>
         <th align="right"><?scm:d opt-qty-heading ?></th>
-        <?scm (set! spancols_total (+ spancols_total 1))
-               (set! spancols_subtotal (+ spancols_subtotal 1)))) ?>
+      <?scm (set! tbl_cols (+ tbl_cols 1)) )) ?>
       <?scm (if (or units? qty? discount?) (begin ?>
         <th align="right"><?scm:d opt-unit-price-heading ?></th>
-        <?scm (set! spancols_total (+ spancols_total 1))
-              (set! spancols_subtotal (+ spancols_subtotal 1)))) ?>
+      <?scm (set! tbl_cols (+ tbl_cols 1)) )) ?>
       <?scm (if discount? (begin ?>
         <th align="right"><?scm:d opt-disc-rate-heading ?></th>
         <th align="right"><?scm:d opt-disc-amount-heading ?></th>
-        <?scm (set! spancols_total (+ spancols_total 2))
-              (set! spancols_subtotal (+ spancols_subtotal 1)))) ?>
+      <?scm (set! tbl_cols (+ tbl_cols 2)) )) ?>
       <?scm (if (and tax? taxtables?) (begin ?>
         <th align="right"><?scm:d opt-net-price-heading ?></th>
+        <?scm (set! tbl_cols (+ tbl_cols 1)) ?>
         <?scm (if opt-col-taxrate (begin ?>
         <th align="right"><?scm:d opt-tax-rate-heading ?></th>
-        <?scm (set! spancols_total (+ spancols_total 1)))) ?>
+        <?scm (set! tbl_cols (+ tbl_cols 1)) )) ?>
         <th align="right"><?scm:d opt-tax-amount-heading ?></th>
-        <?scm (set! spancols_total (+ spancols_total 1))
-              (set! spancols_subtotal (+ spancols_subtotal 0)))) ?>
+      <?scm (set! tbl_cols (+ tbl_cols 1)) )) ?>
       <th align="right"><?scm:d opt-total-price-heading ?></th>
     </tr>
   </thead>
@@ -375,10 +368,14 @@
     </tr>
     <?scm )) ?>
 
-    <!-- display subtotals row -->
+    <!-- subtotals row -->
     <?scm (if (or tax? discount? payments?) (begin ?>
       <tr valign="top"> 
-        <td align="left" class="subtotal" colspan="<?scm:d spancols_subtotal ?>"><strong><?scm:d opt-subtotal-heading ?></strong></td>
+        <td align="left" class="subtotal" colspan="<?scm:d 
+        (- tbl_cols (if (and tax? taxtables? opt-col-taxrate) 1 0)
+                    (if (and tax? taxtables?) 1 -1)
+                    (if (and discount?) 1 0)
+        ) ?>"><strong><?scm:d opt-subtotal-heading ?></strong></td>
         <?scm (if discount? (begin ?>
           <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total dsc-total #f) ?></strong></td>
         <?scm )) ?>
@@ -393,7 +390,7 @@
       </tr>
     <?scm )) ?>
 
-    <!-- payments -->
+    <!-- payments row -->
     <?scm 
       (if payments? 
         (for split in splits do
@@ -402,20 +399,20 @@
                 (let ((c (xaccTransGetCurrency t))
                       (a (xaccSplitGetValue    split))) 
                   (inv-total 'add c a) 
-        (set! spancols_payments (+ 0 spancols_total))
     ?>
     <tr valign="top">
       <?scm (if opt-col-date (begin ?>
       <td align="center"><?scm:d (gnc-print-date (gnc-transaction-get-date-posted t)) ?></td>
-      <?scm (set! spancols_payments (- spancols_payments 1)))) ?>
-      <td align="left" colspan="<?scm:d spancols_payments ?>"><?scm:d opt-payment-recd-heading ?></td> 
+      <?scm )) ?>
+      <td align="left" colspan="<?scm:d (+ tbl_cols (if opt-col-date 0 1)) ?>"><?scm:d opt-payment-recd-heading ?></td>
       <td align="right"><?scm:d (fmtmoney c a) ?></td>
     </tr>
     <?scm ))))) ?>
 
     <!-- total row -->
     <tr valign="top">
-      <td align="left" class="total" colspan="<?scm:d spancols_total ?>"><strong><?scm:d opt-amount-due-heading ?><?scm (if (not (string=? (gnc-commodity-get-mnemonic opt-report-currency) "")) (begin ?>,
+      <td align="left" class="total" colspan="<?scm:d (+ tbl_cols 1) ?>"><strong>
+        <?scm:d opt-amount-due-heading ?><?scm (if (not (string=? (gnc-commodity-get-mnemonic opt-report-currency) "")) (begin ?>,
         <?scm:d (gnc-commodity-get-mnemonic opt-report-currency) ?><?scm )) ?></strong></td>
       <td align="right" class="total"><strong><?scm (display-comm-coll-total inv-total #f) ?></strong></td>
     </tr>
