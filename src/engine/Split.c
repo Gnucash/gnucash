@@ -1429,7 +1429,7 @@ xaccSplitCompareAccountCodes(const Split *sa, const Split *sb)
     aa = sa->acc;
     ab = sb->acc;
 
-    return safe_strcmp(xaccAccountGetName(aa), xaccAccountGetName(ab));
+    return safe_strcmp(xaccAccountGetCode(aa), xaccAccountGetCode(ab));
 }
 
 int
