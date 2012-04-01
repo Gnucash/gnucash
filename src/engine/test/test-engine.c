@@ -28,7 +28,7 @@
 extern void test_suite_account();
 extern void test_suite_gncInvoice();
 //extern void test_suite_transaction();
-//extern void test_suite_split();
+extern void test_suite_split();
 
 int
 main (int   argc,
