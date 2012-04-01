@@ -482,8 +482,8 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     g_free (msg03);
 }
 /* xaccSplitGetAccount
-xaccSplitSetAccount
-commit_err
+ * xaccSplitSetAccount
+ * commit_err
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 Used as a callback in xaccSplitCommitEdit; it will get tested there via intercepting the warning and testing the signal.
 */
@@ -1614,13 +1614,9 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     g_log_set_default_handler (oldhandler, NULL);
 
 }
-/* xaccSplitGetType
-const char *
-xaccSplitGetType(const Split *s)// C: 4 in 2
-xaccSplitMakeStockSplit
-void
-xaccSplitMakeStockSplit(Split *s)// C: 1
-*/
+/* xaccSplitGetType // C: 4 in 2
+ * xaccSplitMakeStockSplit // C: 1
+ */
 static void
 test_xaccSplitMakeStockSplit (Fixture *fixture, gconstpointer pData)
 {
