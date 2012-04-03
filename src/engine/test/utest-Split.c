@@ -429,6 +429,7 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     test_add_error (&checkA);
     test_add_error (&checkB);
     test_add_error (&checkC);
+    test_add_error (&checkD);
 
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, &checkA);
     hdlr  = g_log_set_handler (logdomain, loglevel,
@@ -499,6 +500,21 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (checkB.hits, ==, 4);
     g_assert_cmpint (checkC.hits, ==, 2);
     g_assert_cmpint (checkD.hits, ==, 0);
+
+    split2->balance = fixture->split->balance;
+    g_assert (xaccSplitEqual (fixture->split, split2, TRUE, TRUE, TRUE) == FALSE);
+    g_assert_cmpint (checkA.hits, ==, 12);
+    g_assert_cmpint (checkB.hits, ==, 4);
+    g_assert_cmpint (checkC.hits, ==, 4);
+    g_assert_cmpint (checkD.hits, ==, 0);
+
+    split2->cleared_balance = fixture->split->cleared_balance;
+    g_assert (xaccSplitEqual (fixture->split, split2, TRUE, TRUE, TRUE) == FALSE);
+    g_assert_cmpint (checkA.hits, ==, 12);
+    g_assert_cmpint (checkB.hits, ==, 4);
+    g_assert_cmpint (checkC.hits, ==, 4);
+    g_assert_cmpint (checkD.hits, ==, 2);
+
     test_clear_error_list ();
     g_assert (xaccSplitEqual (fixture->split, split2, TRUE, FALSE, TRUE) == TRUE);
     g_object_unref (split1);
