@@ -22,7 +22,7 @@
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include "test-stuff.h"
+#include "unittest-support.h"
 #include "qof.h"
 
 static const gchar *suitename = "/qof/kvp_frame";

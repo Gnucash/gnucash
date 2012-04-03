@@ -1,7 +1,7 @@
 from unittest import main
 
 from gnucash import Book, Account, Split, Transaction
-from test_stuff import *
+from unittest_support import *
 
 from test_book import BookSession
 

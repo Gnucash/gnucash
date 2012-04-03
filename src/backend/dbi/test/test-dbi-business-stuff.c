@@ -30,6 +30,7 @@
 #include "test-stuff.h"
 #include "test-dbi-stuff.h"
 #include "test-dbi-business-stuff.h"
+#include <unittest-support.h>
 
 #include "Account.h"
 #include "Split.h"

@@ -33,23 +33,24 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include "gnc-xml-helper.h"
-#include "gnc-xml.h"
-#include "gnc-engine.h"
-#include "cashobjects.h"
-#include "sixtp-parsers.h"
+#include "../gnc-xml-helper.h"
+#include "../gnc-xml.h"
+#include <gnc-engine.h>
+#include <cashobjects.h>
+#include "../sixtp-parsers.h"
 
-#include "sixtp-dom-parsers.h"
-#include "TransLog.h"
-#include "io-gncxml-gen.h"
+#include "../sixtp-dom-parsers.h"
+#include <TransLog.h>
+#include "../io-gncxml-gen.h"
 
-#include "test-stuff.h"
-#include "test-engine-stuff.h"
-#include "test-file-stuff.h"
+#include <test-stuff.h>
+#include <test-engine-stuff.h>
+#include <test-file-stuff.h>
+#include <unittest-support.h>
 
-#include "AccountP.h"
-#include "Transaction.h"
-#include "TransactionP.h"
+#include <AccountP.h>
+#include <Transaction.h>
+#include <TransactionP.h>
 
 static QofBook *book;
 

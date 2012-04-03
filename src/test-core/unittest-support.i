@@ -1,12 +1,12 @@
-%module test_stuff
+%module unittest_support
 %{
 #include "config.h"
-#include "test-stuff.h"
+#include "unittest-support.h"
 %}
 
 #if defined(SWIGGUILE)
 %{
-SCM scm_init_test_stuff_module (void);
+SCM scm_init_unittest_support_module (void);
 %}
 #endif
 

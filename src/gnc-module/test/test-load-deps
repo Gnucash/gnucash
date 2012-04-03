@@ -3,7 +3,7 @@ exec guile -s $0 "$@"
 !#
 ;; test-load-deps.scm : load gnc-mod-baz, which depends on gnc-mod-foo
 
-(use-modules (gnucash test-stuff))
+(use-modules (gnucash unittest-support))
 (define log-domain "gnc.module")
 (define check (new-TestErrorStruct))
 (define log-level (G-LOG-LEVEL-WARNING))

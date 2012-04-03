@@ -22,10 +22,10 @@
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include "qof.h"
-#include "qofbook-p.h"
-#include "qofbookslots.h"
-#include "test-stuff.h"
+#include <unittest-support.h>
+#include "../qof.h"
+#include "../qofbook-p.h"
+#include "../qofbookslots.h"
 
 static const gchar *suitename = "/qof/qofbook";
 void test_suite_qofbook ( void );

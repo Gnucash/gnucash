@@ -29,9 +29,9 @@
 #include "gncmm/Book.hpp"
 
 extern "C" {
-#include "qofbook-p.h"
-#include "qofbookslots.h"
-#include "test-stuff.h"
+#include <qofbook-p.h>
+#include <qofbookslots.h>
+#include <unittest-support.h>
 }
 
 static const gchar *suitename = "/optional/gtkmm";

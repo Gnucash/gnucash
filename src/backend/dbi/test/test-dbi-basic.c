@@ -29,6 +29,7 @@
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "test-dbi-stuff.h"
+#include <unittest-support.h>
 
 #include "TransLog.h"
 #include "Account.h"

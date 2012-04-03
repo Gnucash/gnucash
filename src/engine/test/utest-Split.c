@@ -24,7 +24,7 @@
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include "test-stuff.h"
+#include <unittest-support.h>
 /* Add specific headers for this class */
 #include <Split.h>
 #include <SplitP.h>

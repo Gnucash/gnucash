@@ -24,9 +24,10 @@
 #include "config.h"
 #include <glib.h>
 #include <stdio.h>
-#include "qof.h"
-#include "cashobjects.h"
-#include "test-stuff.h"
+#include <qof.h>
+#include <test-stuff.h>
+#include <unittest-support.h>
+#include "../cashobjects.h"
 
 #define TEST_MODULE_NAME	"TestModuleName"
 #define TEST_CORE		"TestCoreType"

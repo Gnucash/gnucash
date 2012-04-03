@@ -23,9 +23,9 @@
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include "test-stuff.h"
+#include <unittest-support.h>
 /* Add specific headers for this class */
-#include "gnc-backend-sql.h"
+#include "../gnc-backend-sql.h"
 
 static const gchar *suitename = "/backend/sql/gnc-backend-sql";
 void test_suite_gnc_backend_sql (void);

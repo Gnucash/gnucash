@@ -1,5 +1,5 @@
 /********************************************************************
- * utest-Account.c: GLib g_test test suite for Account.c.		    *
+ * utest-Account.c: GLib g_test test suite for Account.c.	    *
  * Copyright 2011 John Ralls <jralls@ceridwen.us>		    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -22,8 +22,8 @@
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include "test-stuff.h"
-#include "gnc-event.h"
+#include <unittest-support.h>
+#include <gnc-event.h>
 /* Add specific headers for this class */
 #include "../Account.h"
 #include "../AccountP.h"

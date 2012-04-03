@@ -22,11 +22,11 @@
 
 #include "config.h"
 #include <glib.h>
-#include "test-stuff.h"
-#include "qof.h"
-#include "qofbackend-p.h"
-#include "qofsession-p.h"
-#include "qofclass-p.h"
+#include <unittest-support.h>
+#include "../qof.h"
+#include "../qofbackend-p.h"
+#include "../qofsession-p.h"
+#include "../qofclass-p.h"
 
 static const gchar *suitename = "/qof/qofsession";
 void test_suite_qofsession ( void );

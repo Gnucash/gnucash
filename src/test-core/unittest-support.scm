@@ -1,6 +1,6 @@
-(define-module (gnucash test-stuff))
-(load-extension "libtest-core-guile" "scm_init_test_stuff_module")
-(use-modules (test_stuff))
+(define-module (gnucash unittest-support))
+(load-extension "libtest-core-guile" "scm_init_unittest_support_module")
+(use-modules (unittest_support))
 
 (re-export TestErrorStruct-log-level-set)
 (re-export TestErrorStruct-log-level-get)

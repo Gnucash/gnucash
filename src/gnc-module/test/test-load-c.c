@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <libguile.h>
-#include <test-stuff.h>
+#include <unittest-support.h>
 
 #include "gnc-module.h"
 

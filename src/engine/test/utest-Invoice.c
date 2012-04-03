@@ -1,6 +1,6 @@
 /********************************************************************
  * test_qofbook.c: GLib g_test test suite for qofbook.		    *
- * Copyright 2011 John Ralls <jralls@ceridwen.us>		    *
+ * Copyright 2012 Christian Stimming <christian@cstimming.de>       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,8 +22,8 @@
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include "qof.h"
-#include "test-stuff.h"
+#include <qof.h>
+#include <unittest-support.h>
 #include "../gncInvoice.h"
 
 static const gchar *suitename = "/engine/gncInvoice";

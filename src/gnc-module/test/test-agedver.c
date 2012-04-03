@@ -4,7 +4,7 @@
 #include <libguile.h>
 
 #include "gnc-module.h"
-#include <test-stuff.h>
+#include <unittest-support.h>
 
 static void
 guile_main(void *closure, int argc, char ** argv)

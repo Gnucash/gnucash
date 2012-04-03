@@ -22,9 +22,9 @@
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include "test-stuff.h"
-#include "qof.h"
-#include "qofobject-p.h"
+#include <unittest-support.h>
+#include "../qof.h"
+#include "../qofobject-p.h"
 
 static const gchar *suitename = "/qof/qofobject";
 void test_suite_qofobject ( void );

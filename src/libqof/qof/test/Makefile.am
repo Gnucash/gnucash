@@ -16,7 +16,7 @@ test_qof_SOURCES = \
 	test-kvp_frame.c \
 	test-qofobject.c \
 	test-qofsession.c \
-	${top_srcdir}/src/test-core/test-stuff.c
+	${top_srcdir}/src/test-core/unittest-support.c
 
 test_qof_HEADERS = \
 	$(top_srcdir)/${MODULEPATH}/qofbook.h \
@@ -24,7 +24,7 @@ test_qof_HEADERS = \
 	$(top_srcdir)/${MODULEPATH}/kvp_frame.h \
 	$(top_srcdir)/${MODULEPATH}/qofobject.h \
 	$(top_srcdir)/${MODULEPATH}/qofsession.h \
-	$(top_srcdir)/src/test-core/test-stuff.h
+	$(top_srcdir)/src/test-core/unittest-support.h
 
 TEST_PROGS += test-qof
 

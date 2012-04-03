@@ -8,6 +8,7 @@
 #include "gnc-exp-parser.h"
 #include "gnc-numeric.h"
 #include "test-stuff.h"
+#include <unittest-support.h>
 
 static GList *tests = NULL;
 

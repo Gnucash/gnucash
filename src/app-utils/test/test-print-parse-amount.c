@@ -7,6 +7,7 @@
 #include "gnc-numeric.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
+#include <unittest-support.h>
 
 static void
 test_num_print_info (gnc_numeric n, GNCPrintAmountInfo print_info, int line)

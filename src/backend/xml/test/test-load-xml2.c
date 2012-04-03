@@ -37,15 +37,16 @@
 #include <glib-object.h>
 #include <glib/gstdio.h>
 
-#include "cashobjects.h"
-#include "TransLog.h"
-#include "gnc-engine.h"
-#include "gnc-backend-xml.h"
-#include "io-gncxml-v2.h"
+#include <cashobjects.h>
+#include <TransLog.h>
+#include <gnc-engine.h>
+#include "../gnc-backend-xml.h"
+#include "../io-gncxml-v2.h"
 
-#include "test-stuff.h"
-#include "test-engine-stuff.h"
-#include "test-file-stuff.h"
+#include <test-stuff.h>
+#include <unittest-support.h>
+#include <test-engine-stuff.h>
+#include <test-file-stuff.h>
 
 #define GNC_LIB_NAME "gncmod-backend-xml"
 

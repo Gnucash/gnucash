@@ -4,7 +4,7 @@ exec guile -s "$0"
 
 (setenv "GNC_UNINSTALLED" "1")
 (display "  testing stylesheet module load ... ")
-(use-modules (gnucash test-stuff))
+(use-modules (gnucash unittest-support))
 (define log-domain "gnc.report.core")
 (define check (new-TestErrorStruct))
 (define log-level (G-LOG-LEVEL-CRITICAL))

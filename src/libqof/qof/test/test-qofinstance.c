@@ -19,11 +19,11 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-#include "config.h"
+#include <config.h>
 #include <glib.h>
-#include "qof.h"
-#include "test-stuff.h"
-#include "qofbackend-p.h"
+#include <unittest-support.h>
+#include "../qof.h"
+#include "../qofbackend-p.h"
 
 static const gchar *suitename = "/qof/qofinstance";
 void test_suite_qofinstance ( void );
