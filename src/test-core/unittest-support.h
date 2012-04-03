@@ -74,6 +74,7 @@ typedef struct
     GLogLevelFlags log_level;
     gchar *log_domain;
     gchar *msg;
+    guint hits;
 } TestErrorStruct;
 
 /**

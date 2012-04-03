@@ -39,6 +39,7 @@ test_null_handler (const char *log_domain, GLogLevelFlags log_level,
                    const gchar *msg, gpointer user_data )
 {
     //Silent, remember?
+
     return FALSE;
 }
 
@@ -96,7 +97,10 @@ test_list_handler (const char *log_domain, GLogLevelFlags log_level,
         if (!g_strcmp0 (log_domain, error->log_domain)
                 && ((log_level | fatal) == (error->log_level | fatal))
                 && !g_strcmp0 (msg, error->msg))
+	{
+	    ++(error->hits);
             return FALSE;
+	}
         list = g_list_next (list);
     }
     /* No list or no matches, fall through */
@@ -122,6 +126,7 @@ test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
         g_assert (log_level ^ G_LOG_FLAG_FATAL);
         return FALSE;
     }
+    ++(tdata->hits);
     return FALSE;
 
 }

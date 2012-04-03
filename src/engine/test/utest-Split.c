@@ -374,7 +374,7 @@ test_xaccSplitEqualCheckBal (Fixture *fixture, gconstpointer pData)
 {
     gchar *msg = "[xaccSplitEqualCheckBal()] test balances differ: 123/100 vs 456/100";
     guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL, hdlr;
-    TestErrorStruct check = { loglevel, "gnc.engine", msg };
+    TestErrorStruct check = { loglevel, "gnc.engine", msg, 0 };
 
     GLogFunc oldlogger;
     gnc_numeric foo = gnc_numeric_create (123, 100);
@@ -389,6 +389,7 @@ test_xaccSplitEqualCheckBal (Fixture *fixture, gconstpointer pData)
 
     g_assert_cmpint (fixture->func->xaccSplitEqualCheckBal ("test ", foo, foo), ==, TRUE);
     g_assert_cmpint (fixture->func->xaccSplitEqualCheckBal ("test ", foo, bar), ==, FALSE);
+    g_assert_cmpint (check.hits, ==, 2);
     g_log_remove_handler ("gnc.engine", hdlr);
     test_clear_error_list ();
 
@@ -418,10 +419,10 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     gchar *msg14 = "[xaccSplitEqualCheckBal()] reconciled balances differ: 321/1000 vs 0/1";
     gchar *logdomain = "gnc.engine";
     guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
-    TestErrorStruct checkA = { loglevel, logdomain, msg01 };
-    TestErrorStruct checkB = { loglevel, logdomain, msg10 };
-    TestErrorStruct checkC = { loglevel, logdomain, msg11 };
-    TestErrorStruct checkD = { loglevel, logdomain, msg14 };
+    TestErrorStruct checkA = { loglevel, logdomain, msg01, 0 };
+    TestErrorStruct checkB = { loglevel, logdomain, msg10, 0 };
+    TestErrorStruct checkC = { loglevel, logdomain, msg11, 0 };
+    TestErrorStruct checkD = { loglevel, logdomain, msg14, 0 };
     guint hdlr;
     GLogFunc oldlogger;
     oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &checkA);
@@ -436,6 +437,10 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
 /* Test that a NULL comparison fails */
     g_assert (xaccSplitEqual (fixture->split, NULL, TRUE, TRUE, TRUE) == FALSE);
     g_assert (xaccSplitEqual (NULL, split1, TRUE, TRUE, TRUE) == FALSE);
+    g_assert_cmpint (checkA.hits, ==, 4);
+    g_assert_cmpint (checkB.hits, ==, 0);
+    g_assert_cmpint (checkC.hits, ==, 0);
+    g_assert_cmpint (checkD.hits, ==, 0);
     checkA.msg = msg02;
 /* Clone creates splits with different GUIDs: Make sure that it fails comparison */
     g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == FALSE);
@@ -445,6 +450,10 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
 			      (GLogFunc)test_list_handler, &checkA);
     g_assert (xaccSplitEqual (fixture->split, split1, FALSE, TRUE, TRUE) == FALSE);
 /* Now set split1's parent so that it passes -- we're also checking that the GUID check is disabled when we pass FALSE to check_guids */
+    g_assert_cmpint (checkA.hits, ==, 6);
+    g_assert_cmpint (checkB.hits, ==, 2);
+    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkD.hits, ==, 0);
     split1->parent = fixture->split->parent;
     g_log_remove_handler (logdomain, hdlr);
     hdlr = g_log_set_handler (logdomain, loglevel,
@@ -455,6 +464,10 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
 		  "guid", qof_instance_get_guid (QOF_INSTANCE(fixture->split)),
 		  NULL);
     g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == TRUE);
+    g_assert_cmpint (checkA.hits, ==, 6);
+    g_assert_cmpint (checkB.hits, ==, 2);
+    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkD.hits, ==, 0);
 /* Change the memo and action and test that each in turn causes the comparison to fail */
     split1->memo = "baz";
     msg03 = g_strdup_printf ("[xaccSplitEqual()] memos differ: (%p)%s vs (%p)%s",
@@ -462,6 +475,10 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
 		     split1->memo, split1->memo);
     checkA.msg = msg03;
     g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == FALSE);
+    g_assert_cmpint (checkA.hits, ==, 8);
+    g_assert_cmpint (checkB.hits, ==, 2);
+    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkD.hits, ==, 0);
     split1->memo = fixture->split->memo;
     split1->action = "bar";
     checkA.msg = msg04;
@@ -470,10 +487,18 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     hdlr  = g_log_set_handler (logdomain, loglevel,
 			       (GLogFunc)test_list_handler, &checkA);
    g_assert (xaccSplitEqual (fixture->split, split1, TRUE, TRUE, TRUE) == FALSE);
+    g_assert_cmpint (checkA.hits, ==, 12);
+    g_assert_cmpint (checkB.hits, ==, 2);
+    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkD.hits, ==, 0);
 /* Split2 doesn't have balances copied from fixture->split, so the balance test fails */
     checkB.msg = msg12;
     checkC.msg = msg13;
     g_assert (xaccSplitEqual (fixture->split, split2, TRUE, TRUE, TRUE) == FALSE);
+    g_assert_cmpint (checkA.hits, ==, 12);
+    g_assert_cmpint (checkB.hits, ==, 4);
+    g_assert_cmpint (checkC.hits, ==, 2);
+    g_assert_cmpint (checkD.hits, ==, 0);
     test_clear_error_list ();
     g_assert (xaccSplitEqual (fixture->split, split2, TRUE, FALSE, TRUE) == TRUE);
     g_object_unref (split1);
@@ -514,8 +539,8 @@ test_xaccSplitCommitEdit (Fixture *fixture, gconstpointer pData)
     gchar *logdomain = "gnc.engine";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     guint hdlr;
-    TestErrorStruct checkA = { loglevel, logdomain, msg1 };
-    TestErrorStruct checkB = { loglevel, logdomain, msg2 };
+    TestErrorStruct checkA = { loglevel, logdomain, msg1, 0 };
+    TestErrorStruct checkB = { loglevel, logdomain, msg2, 0 };
     TestSignal sig1, sig2;
     TestErr error = { 0, ERR_BACKEND_NO_ERR };
     Account *oacc = xaccMallocAccount (xaccSplitGetBook (fixture->split));
@@ -551,6 +576,8 @@ test_xaccSplitCommitEdit (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (error.lasterr, ==, ERR_BACKEND_NO_ERR);
     g_assert (fixture->split->orig_acc == fixture->split->acc);
     g_assert (fixture->split->orig_parent == fixture->split->parent);
+    g_assert_cmpint (checkA.hits, ==, 4);
+    g_assert_cmpint (checkB.hits, ==, 2);
 
     g_log_remove_handler (logdomain, hdlr);
     qof_instance_mark_clean (QOF_INSTANCE (fixture->split->parent));
@@ -571,6 +598,8 @@ test_xaccSplitCommitEdit (Fixture *fixture, gconstpointer pData)
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 4);
+    g_assert_cmpint (checkA.hits, ==, 4);
+    g_assert_cmpint (checkB.hits, ==, 2);
     g_assert_cmpint (error.hits, ==, 0);
     g_assert_cmpint (error.lasterr, ==, ERR_BACKEND_NO_ERR);
     g_assert (fixture->split->orig_acc == fixture->split->acc);
@@ -838,7 +867,7 @@ test_xaccSplitSetBaseValue (Fixture *fixture, gconstpointer pData)
 	"given split currency=%s and commodity=%s\n";
     gchar *logdomain = "gnc.engine";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    TestErrorStruct check = { loglevel, logdomain, msg1 };
+    TestErrorStruct check = { loglevel, logdomain, msg1, 0 };
     gnc_numeric value = { 360, 240 };
     gnc_numeric old_val = fixture->split->value;
     gnc_numeric old_amt = fixture->split->amount;
@@ -851,6 +880,7 @@ test_xaccSplitSetBaseValue (Fixture *fixture, gconstpointer pData)
     xaccSplitSetBaseValue (fixture->split, value, fixture->comm);
     g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
     xaccTransRollbackEdit (fixture->split->parent);
+    g_assert_cmpint (check.hits, ==, 1);
 /* Base currency ==  currency, != commodity */
     fixture->split->acc = acc;
     xaccSplitSetBaseValue (fixture->split, value, fixture->curr);
@@ -859,6 +889,7 @@ test_xaccSplitSetBaseValue (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (fixture->split->amount.num, ==, 321);
     g_assert_cmpint (fixture->split->amount.denom, ==, 1000);
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
+    g_assert_cmpint (check.hits, ==, 1);
 
 /* Base currency == currency, == commodity */
     qof_instance_mark_clean (QOF_INSTANCE (fixture->split));
@@ -872,6 +903,7 @@ test_xaccSplitSetBaseValue (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (fixture->split->amount.num, ==, 360);
     g_assert_cmpint (fixture->split->amount.denom, ==, 240);
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
+    g_assert_cmpint (check.hits, ==, 1);
 /* Base currency != currency, == commodity */
     qof_instance_mark_clean (QOF_INSTANCE (fixture->split));
     fixture->split->value = old_val;
@@ -882,6 +914,7 @@ test_xaccSplitSetBaseValue (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (fixture->split->amount.num, ==, 1500);
     g_assert_cmpint (fixture->split->amount.denom, ==, 1000);
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
+    g_assert_cmpint (check.hits, ==, 1);
 
 /* Base currency != currency, != commodity */
     check.msg = g_strdup_printf (fmt, gnc_commodity_get_printname (gnaira),
@@ -895,6 +928,7 @@ test_xaccSplitSetBaseValue (Fixture *fixture, gconstpointer pData)
     xaccAccountSetCommodity(fixture->split->acc, fixture->comm);
     xaccSplitSetBaseValue (fixture->split, value, gnaira);
     g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
+    g_assert_cmpint (check.hits, ==, 2);
 
     g_free (check.msg);
     g_log_set_default_handler (oldlogger, NULL);
@@ -933,7 +967,7 @@ test_xaccSplitConvertAmount (void)
 
     gchar *logdomain = "gnc.engine";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    TestErrorStruct check = { loglevel, logdomain, NULL };
+    TestErrorStruct check = { loglevel, logdomain, NULL, 0 };
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
 
     check.msg = g_strdup_printf ("[xaccSplitConvertAmount()] The split's (%s) amount can't be converted from GNCXX into GNM.", guid_to_string(xaccSplitGetGUID(o_split)));
@@ -976,18 +1010,20 @@ test_xaccSplitConvertAmount (void)
 				  &check);
     result = xaccSplitConvertAmount (split, ya_acc);
     g_assert (gnc_numeric_zero_p (result));
-
+    g_assert_cmpint (check.hits, ==, 1);
 
 /* Transaction isn't balanced, split has 0 value, returns that */
     split->value = gnc_numeric_zero ();
     result = xaccSplitConvertAmount (split, o_acc);
     g_assert (gnc_numeric_zero_p (result));
+    g_assert_cmpint (check.hits, ==, 1);
 
 /* Transaction isn't balanced, compute a conversion */
     split->value = gnc_numeric_create (71330, 240);
     result = xaccSplitConvertAmount (split, o_acc);
     g_assert_cmpint (result.num, ==, -402131);
     g_assert_cmpint (result.denom, ==, 1000);
+    g_assert_cmpint (check.hits, ==, 1);
 
     test_destroy (split);
     test_destroy (acc);
@@ -1489,7 +1525,7 @@ test_xaccSplitSetParent (Fixture *fixture, gconstpointer pData)
 /* FIXME: This error doesn't actually stop execution, so we need to test for it happening. */
     gchar *msg = "[xaccSplitSetParent()] You may not add the split to more"
 	" than one transaction during the BeginEdit/CommitEdit block.";
-    TestErrorStruct check = { loglevel, logdomain, msg };
+    TestErrorStruct check = { loglevel, logdomain, msg, 0 };
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler,
 						    &check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
@@ -1505,6 +1541,7 @@ test_xaccSplitSetParent (Fixture *fixture, gconstpointer pData)
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 1);
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (split)));
+    g_assert_cmpint (check.hits, ==, 1);
 
     test_signal_free (sig1);
     test_signal_free (sig2);
@@ -1524,7 +1561,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     const guint PRICE_SIGFIGS = 6;
     char *logdomain = "gnc.engine";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    TestErrorStruct check = { loglevel, logdomain, NULL };
+    TestErrorStruct check = { loglevel, logdomain, NULL, 0 };
     guint hdlr = g_log_set_handler (logdomain, loglevel,
 				    (GLogFunc)test_checked_handler, &check);
     GLogFunc oldhandler = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
@@ -1541,16 +1578,19 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
 
     result = xaccSplitGetSharePrice (split);
     g_assert (gnc_numeric_equal (result, expected));
+    g_assert_cmpint (check.hits, ==, 0);
 
     expected = gnc_numeric_create (0, 1);
     split->amount = gnc_numeric_zero ();
     result = xaccSplitGetSharePrice (split);
     g_assert (gnc_numeric_equal (result, expected));
+    g_assert_cmpint (check.hits, ==, 0);
 
     split->value = gnc_numeric_zero ();
     expected = gnc_numeric_create (1, 1);
     result = xaccSplitGetSharePrice (split);
     g_assert (gnc_numeric_equal (result, expected));
+    g_assert_cmpint (check.hits, ==, 0);
 
 /* Now invent some value/ammount pairs which cause numeric errors to test the limits */
     split->amount = gnc_numeric_create (987654321, 10);
@@ -1570,6 +1610,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     expected = gnc_numeric_create (0, 1);
     result = xaccSplitGetSharePrice (split);
     g_assert (gnc_numeric_equal (result, expected));
+    g_assert_cmpint (check.hits, ==, 2);
     g_free (check.msg);
 
     split->amount = gnc_numeric_create (987654321, 10);
@@ -1589,6 +1630,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     expected = gnc_numeric_create (0, 1);
     result = xaccSplitGetSharePrice (split);
     g_assert (gnc_numeric_equal (result, expected));
+    g_assert_cmpint (check.hits, ==, 4);
     g_free (check.msg);
 
     split->amount = gnc_numeric_create (9, 0);
@@ -1608,6 +1650,7 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     expected = gnc_numeric_create (0, 1);
     result = xaccSplitGetSharePrice (split);
     g_assert (gnc_numeric_equal (result, expected));
+    g_assert_cmpint (check.hits, ==, 6);
     g_free (check.msg);
 
     g_log_remove_handler (logdomain, hdlr);
