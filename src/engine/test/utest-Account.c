@@ -454,21 +454,27 @@ GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)/
 static void
 test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
 {
-    TestErrorStruct quiet = { 0, NULL, NULL, 0 };
+    guint log_level = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    gchar *log_domain = "gnc.engine";
+    gchar *msg = "gnc_account_list_name_violations: assertion `separator != NULL' failed";
+    TestErrorStruct check = { log_level, log_domain, msg, 0 };
     GList *results, *res_iter;
     gchar *sep = ":";
     QofBook *book = gnc_account_get_book (fixture->acct);
     /* Because of GLib bug 653052, we have to set the logging user_data to
      * affect the test_log_fatal_handler
      */
-    GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &quiet);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &quiet);
+    GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     g_assert (gnc_account_list_name_violations (NULL, NULL) == NULL);
+    g_assert_cmpint (check.hits, ==, 1);
     g_assert (gnc_account_list_name_violations (book, NULL) == NULL);
+    g_assert_cmpint (check.hits, ==, 2);
     g_assert (gnc_account_list_name_violations (NULL, sep) == NULL);
     g_log_set_default_handler (oldlogger, NULL);
     results = gnc_account_list_name_violations (book, sep);
     g_assert_cmpuint (g_list_length (results), == , 2);
+    g_assert_cmpint (check.hits, ==, 2);
     for (res_iter = results; res_iter; res_iter = g_list_next (res_iter))
         test_free (res_iter->data);
     g_list_free (results);
@@ -638,8 +644,10 @@ Simple pass-through for qof_collection_get_data ()
 static void
 test_gnc_book_set_get_root_account (Fixture *fixture, gconstpointer pData)
 {
+    guint log_level = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    gchar *log_domain = "gnc.account";
     gchar *msg = "[gnc_book_set_root_account()] cannot mix and match books freely!";
-    TestErrorStruct quiet = { 0, NULL, msg, 0 };
+    TestErrorStruct check = { log_level, log_domain, msg, 0 };
     Account *acc1, *acc2;
     QofBook* book1 = qof_book_new ();
     GLogFunc oldlogger;
@@ -655,10 +663,12 @@ test_gnc_book_set_get_root_account (Fixture *fixture, gconstpointer pData)
     /* Now try to set the book's root account to the fixture
      * accout. Should throw an error.
      */
-    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &quiet);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &quiet);
+    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,
+				  &check);
     gnc_book_set_root_account (book1, fixture->acct);
     g_assert (gnc_book_get_root_account (book1) == acc1);
+    g_assert_cmpint (check.hits, ==, 1);
     g_log_set_default_handler (oldlogger, NULL);
     /* Check that if we set the same root, it stays set */
     gnc_book_set_root_account (book2, fixture->acct);
@@ -728,15 +738,20 @@ test_xaccCloneAccount (Fixture *fixture, gconstpointer pData)
     Account *clone;
     QofBook *book = gnc_account_get_book (fixture->acct);
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    TestErrorStruct quiet = { loglevel, "gnc.engine", NULL, 0 };
+    gchar *msg1 = "xaccCloneAccount: assertion `GNC_IS_ACCOUNT(from)' failed";
+    gchar *msg2 = "xaccCloneAccount: assertion `QOF_IS_BOOK(book)' failed";
+    TestErrorStruct check = { loglevel, "gnc.engine", msg1, 0 };
     GLogFunc oldlogger;
     AccountPrivate *acct_p, *clone_p;
-    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &quiet);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &quiet);
+    oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     clone = xaccCloneAccount (NULL, book);
     g_assert (clone == NULL);
+    g_assert_cmpint (check.hits, ==, 1);
+    check.msg = msg2;
     clone = xaccCloneAccount (fixture->acct, NULL);
     g_assert (clone == NULL);
+    g_assert_cmpint (check.hits, ==, 2);
     g_log_set_default_handler (oldlogger, NULL);
     /* Now test the real clone */
     clone = xaccCloneAccount (fixture->acct, book);
@@ -1042,21 +1057,23 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     AccountPrivate *priv = fixture->func->get_private (fixture->acct);
     gint hdlr1, hdlr2, hdlr3;
     gchar *msg1 = "gnc_account_insert_split: assertion `GNC_IS_ACCOUNT(acc)' failed";
-    gchar *msg2 = "gnc_account_insert_split: assertion `GNC_IS_SPLIT(acc)' failed";
+    gchar *msg2 = "gnc_account_insert_split: assertion `GNC_IS_SPLIT(s)' failed";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
 //    gchar *log_domain = "gnc.engine";
-    TestErrorStruct check1 = { loglevel, "gnc.account", msg1, 0 };
-    TestErrorStruct check2 = { loglevel, "gnc.account", msg2, 0 };
+    TestErrorStruct check1 = { loglevel, "gnc.engine", msg1, 0 };
+    TestErrorStruct check2 = { loglevel, "gnc.engine", msg2, 0 };
     TestErrorStruct check3 = { loglevel, "gnc.engine", NULL, 0 };
     guint logger;
     sig1 = test_signal_new (&fixture->acct->inst, QOF_EVENT_MODIFY, NULL);
     sig2 = test_signal_new (&fixture->acct->inst, GNC_EVENT_ITEM_ADDED, split1);
-    /* Check that the call fails with invalid account and split (throws) */
+
     test_add_error (&check1);
     test_add_error (&check2);
     logger = g_log_set_handler ("gnc.engine", loglevel,
-                                (GLogFunc)test_checked_handler, &check3);
+                                (GLogFunc)test_null_handler, &check3);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
+
+    /* Check that the call fails with invalid account and split (throws) */
     g_assert (!gnc_account_insert_split (NULL, split1));
     g_assert_cmpuint (g_list_length (priv->splits), == , 0);
     g_assert (!priv->sort_dirty);
@@ -1069,11 +1086,17 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     g_assert (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 0);
     test_signal_assert_hits (sig2, 0);
+    /* g_assert (!gnc_account_insert_split (fixture->acct, (Split*)priv)); */
+    /* g_assert_cmpuint (g_list_length (priv->splits), == , 0); */
+    /* g_assert (!priv->sort_dirty); */
+    /* g_assert (!priv->balance_dirty); */
+    /* test_signal_assert_hits (sig1, 0); */
+    /* test_signal_assert_hits (sig2, 0); */
+    g_assert_cmpint (check1.hits, ==, 1);
+    g_assert_cmpint (check2.hits, ==, 1);
+    g_assert_cmpint (check3.hits, ==, 0);
     g_log_remove_handler ("gnc.engine", logger);
     test_clear_error_list ();
-    g_assert_cmpint (check1.hits, ==, 0);
-    g_assert_cmpint (check2.hits, ==, 0);
-    g_assert_cmpint (check3.hits, ==, 4);
 
     /* Check that it works the first time */
     g_assert (gnc_account_insert_split (fixture->acct, split1));
@@ -1082,9 +1105,6 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     g_assert (priv->balance_dirty);
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 1);
-    g_assert_cmpint (check1.hits, ==, 0);
-    g_assert_cmpint (check2.hits, ==, 0);
-    g_assert_cmpint (check3.hits, ==, 4);
     /* Check that it fails if the split has already been added once */
     g_assert (!gnc_account_insert_split (fixture->acct, split1));
     /* Free up hdlr2 and set up hdlr2 */
@@ -1097,9 +1117,6 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     g_assert (priv->balance_dirty);
     test_signal_assert_hits (sig1, 2);
     test_signal_assert_hits (sig3, 1);
-    g_assert_cmpint (check1.hits, ==, 0);
-    g_assert_cmpint (check2.hits, ==, 0);
-    g_assert_cmpint (check3.hits, ==, 4);
     /* One more add, incrementing the editlevel to get sort_dirty set. */
     test_signal_free (sig3);
     sig3 = test_signal_new (&fixture->acct->inst, GNC_EVENT_ITEM_ADDED, split3);
@@ -1111,9 +1128,6 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     g_assert (priv->balance_dirty);
     test_signal_assert_hits (sig1, 3);
     test_signal_assert_hits (sig3, 1);
-    g_assert_cmpint (check1.hits, ==, 0);
-    g_assert_cmpint (check2.hits, ==, 0);
-    g_assert_cmpint (check3.hits, ==, 4);
     /* Finally delete a split. It's going to recompute the balance, so
      * balance_dirty will be false. */
     test_signal_free (sig3);
@@ -1125,9 +1139,6 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     g_assert (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 4);
     test_signal_assert_hits (sig3, 1);
-    g_assert_cmpint (check1.hits, ==, 0);
-    g_assert_cmpint (check2.hits, ==, 0);
-    g_assert_cmpint (check3.hits, ==, 4);
    /* And do it again to make sure that it fails when the split has
      * already been removed */
     g_assert (!gnc_account_remove_split (fixture->acct, split3));
@@ -1136,9 +1147,7 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     g_assert (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 4);
     test_signal_assert_hits (sig3, 1);
-    g_assert_cmpint (check1.hits, ==, 0);
-    g_assert_cmpint (check2.hits, ==, 0);
-    g_assert_cmpint (check3.hits, ==, 4);
+
     /* Clean up the handlers */
     test_signal_free (sig3);
     test_signal_free (sig1);
@@ -2329,10 +2338,10 @@ test_gnc_account_merge_children (Fixture *fixture, gconstpointer pData)
     gchar *logdomain = "gnc.engine";
     gint loglevel =  G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *msg = "[xaccSplitCommitEdit ()] Account grabbed split prematurely.";
-    TestErrorStruct quiet = { loglevel, logdomain, msg, 0 };
+    TestErrorStruct check = { loglevel, logdomain, msg, 0 };
     guint hdlr = g_log_set_handler (logdomain, loglevel,
-    			   (GLogFunc)test_null_handler, &quiet);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &quiet);
+    			   (GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
 
     sig1 = test_signal_new (QOF_INSTANCE (baz), QOF_EVENT_MODIFY, NULL);
     sig2 = test_signal_new (QOF_INSTANCE (baz2), QOF_EVENT_MODIFY, NULL);
