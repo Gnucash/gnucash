@@ -124,7 +124,7 @@ endif
 
 noinst_DATA = .py-links
 
-CLEANFILES = $(BUILT_SOURCES) .py-links
+CLEANFILES = $(BUILT_SOURCES) .py-links gnucash_core.c gnucash_core.c.py
 
 clean-local:
 	rm -rf gnucash

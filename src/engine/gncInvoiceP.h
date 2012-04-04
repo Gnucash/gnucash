@@ -39,7 +39,7 @@ gchar *gncInvoiceNextID (QofBook *book, const GncOwner *owner);
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc);
 void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn);
 void gncInvoiceSetPostedLot (GncInvoice *invoice, GNCLot *lot);
-void gncInvoiceSetPaidTxn (GncInvoice *invoice, Transaction *txn);
+//void gncInvoiceSetPaidTxn (GncInvoice *invoice, Transaction *txn);
 
 #define gncInvoiceSetGUID(I,G) qof_instance_set_guid(QOF_INSTANCE(I),(G))
 #endif /* GNC_INVOICEP_H_ */

@@ -71,6 +71,7 @@
 #include "gncBillTerm.h"
 #include "gncOwner.h"
 #include "gncInvoice.h"
+#include "gncInvoiceP.h"
 #include "gncJob.h"
 #include "gncEntry.h"
 #include "gncTaxTable.h"
@@ -194,6 +195,7 @@
 %include <gncAddress.h>
 %include <gncBillTerm.h>
 %include <gncInvoice.h>
+%include <gncInvoiceP.h>
 %include <gncJob.h>
 %include <gncEntry.h>
 %include <gncTaxTable.h>

@@ -40,7 +40,7 @@ from gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
     gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
     gncCustomerLookup, gncVendorLookup, gncJobLookup, gncEmployeeLookup, \
     gncTaxTableLookup, gncTaxTableLookupByName, gnc_search_invoice_on_id, \
-    gnc_search_customer_on_id, gnc_search_bill_on_id , gnc_search_vendor_on_id
+    gnc_search_customer_on_id, gnc_search_bill_on_id , gnc_search_vendor_on_id, gncInvoiceNextID
 
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
@@ -223,6 +223,18 @@ class Book(GnuCashCoreClass):
         from gnucash_business import Vendor
         return self.do_lookup_create_oo_instance(
             gnc_search_vendor_on_id, Vendor, id)
+            
+    def InvoiceNextID(self, customer):
+      ''' Return the next invoice ID. 
+      This works but I'm not entirely happy with it.  FIX ME'''
+      from gnucash.gnucash_core_c import gncInvoiceNextID
+      return gncInvoiceNextID(self.get_instance(),customer.GetEndOwner().get_instance()[1])
+      
+    def BillNextID(self, vendor):
+      ''' Return the next Bill ID. '''
+      from gnucash.gnucash_core_c import gncInvoiceNextID
+      return gncInvoiceNextID(self.get_instance(),vendor.GetEndOwner().get_instance()[1])
+    
 
 class GncNumeric(GnuCashCoreClass):
     """Object used by GnuCash to store all numbers. Always consists of a
@@ -466,6 +478,7 @@ Book.add_method('gnc_book_get_root_account', 'get_root_account')
 Book.add_method('gnc_book_set_root_account', 'set_root_account')
 Book.add_method('gnc_commodity_table_get_table', 'get_table')
 Book.add_method('gnc_pricedb_get_db', 'get_price_db')
+Book.add_method('qof_book_increment_and_format_counter', 'increment_and_format_counter')
 
 #Functions that return Account
 Book.get_root_account = method_function_returns_instance(
