@@ -245,7 +245,7 @@
         <tr>
            <td align="right"><?scm:d (nbsp (_ "Due Date")) ?>:&nbsp;</td>
            <td align="right"><?scm:d (gnc-print-date duedate) ?></td>
-        </tr>
+        </tr> <?scm )) ?>
         <?scm (if (not (string=? billingid "")) (begin ?>
           <tr>
             <td align="right"><?scm:d opt-ref-text ?></td>
@@ -263,7 +263,6 @@
             <td align="right"><?scm:d opt-jobnumber-text ?></td>
             <td align="right"><?scm:d jobnumber ?></td>
           </tr>
-        <?scm )) ?>
       <?scm )) ?>
       <?scm (if (not (string=? termsdesc "")) (begin ?>
         <tr><td colspan="2" align="right"><?scm:d termsdesc ?></td></tr>
@@ -329,7 +328,7 @@
               (inv-total 'add currency rtaxval)
               (tax-total 'add currency rtaxval)
               (sub-total 'add currency rval)
-              (dsc-total 'add currency rdiscval)
+              (dsc-total 'add currency rdiscval) 
     ?>
     <tr valign="top">
       <?scm (if opt-col-date (begin ?>
