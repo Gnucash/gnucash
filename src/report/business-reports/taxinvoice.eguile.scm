@@ -96,12 +96,7 @@
             (if taxable? ; Also check if the taxable flag is set
               (if  (not (eq? taxtable '()))
               (begin ; presence of a tax table AND taxable flag means it's taxed
-                (set! tax? #t)
-                (let ((ttentries (gncTaxTableGetEntries taxtable)))
-                  (if (string-prefix? "#<swig-pointer PriceList" (object->string ttentries))
-                    ; error in SWIG binding -- disable display of tax details
-                    ; (see http://bugzilla.gnome.org/show_bug.cgi?id=573645)
-                    (set! taxtables? #f)))))))) ; hack required until Swig is fixed (fixed in r18056, hack still here)
+                (set! tax? #t))))))
 
       ; pre-scan invoice splits to see if any payments have been made
       (for split in splits do
