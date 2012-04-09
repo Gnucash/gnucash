@@ -2432,6 +2432,12 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
     gnc_invoice_update_window (iw, iw->dialog);
     gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 
+    // The customer choice widget should have keyboard focus
+    if (GNC_IS_GENERAL_SEARCH(iw->owner_choice))
+    {
+        gnc_general_search_grab_focus(GNC_GENERAL_SEARCH(iw->owner_choice));
+    }
+
     return iw;
 }
 

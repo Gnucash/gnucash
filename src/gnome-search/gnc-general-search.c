@@ -504,6 +504,14 @@ gnc_general_search_new (QofIdTypeConst type,
     return GTK_WIDGET (gsl);
 }
 
+void
+gnc_general_search_grab_focus (GNCGeneralSearch *gsl)
+{
+    g_assert(gsl);
+    g_assert(gsl->entry);
+    gtk_widget_grab_focus(gsl->entry);
+}
+
 /**
  * gnc_general_search_set_selected:
  * @gsl: the general selection widget

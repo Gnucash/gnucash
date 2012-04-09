@@ -88,4 +88,7 @@ gpointer   gnc_general_search_get_selected   (GNCGeneralSearch *gsl);
 
 GType      gnc_general_search_get_type       (void);
 
+void	   gnc_general_search_grab_focus (GNCGeneralSearch *gsl);
+
+
 #endif
