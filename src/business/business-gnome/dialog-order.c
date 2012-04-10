@@ -46,6 +46,7 @@
 #include "dialog-invoice.h"
 #include "business-gnome-utils.h"
 #include "dialog-date-close.h"
+#include "gnome-search/gnc-general-search.h"
 
 #define DIALOG_NEW_ORDER_CM_CLASS "dialog-new-order"
 #define DIALOG_EDIT_ORDER_CM_CLASS "dialog-edit-order"
@@ -737,6 +738,12 @@ gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
 
     /* Now fill in a lot of the pieces and display properly */
     gnc_order_update_window (ow);
+
+    // The customer choice widget should have keyboard focus
+    if (GNC_IS_GENERAL_SEARCH(ow->owner_choice))
+    {
+        gnc_general_search_grab_focus(GNC_GENERAL_SEARCH(ow->owner_choice));
+    }
 
     /* Maybe set the reference */
     gnc_order_owner_changed_cb (ow->owner_choice, ow);

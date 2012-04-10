@@ -47,6 +47,7 @@
 #include "business-gnome-utils.h"
 
 #include "dialog-transfer.h"
+#include "gnome-search/gnc-general-search.h"
 
 #define DIALOG_PAYMENT_CUSTOMER_CM_CLASS "customer-payment-dialog"
 #define DIALOG_PAYMENT_VENDOR_CM_CLASS "vendor-payment-dialog"
@@ -862,6 +863,12 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     /* Show it all */
     gtk_widget_show_all (pw->dialog);
     g_object_unref(G_OBJECT(builder));
+
+    // The customer choice widget should have keyboard focus
+    if (GNC_IS_GENERAL_SEARCH(pw->owner_choice))
+    {
+        gnc_general_search_grab_focus(GNC_GENERAL_SEARCH(pw->owner_choice));
+    }
 
     /* Warn the user if they have no valid post-to accounts */
     {

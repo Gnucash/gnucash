@@ -402,6 +402,14 @@ gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
 
     gtk_widget_show_all (jw->dialog);
 
+    // The job name should have keyboard focus
+    gtk_widget_grab_focus(jw->name_entry);
+    // Or should the owner field have focus?
+//    if (GNC_IS_GENERAL_SEARCH(jw->cust_edit))
+//    {
+//        gnc_general_search_grab_focus(GNC_GENERAL_SEARCH(jw->cust_edit));
+//    }
+
     g_object_unref(G_OBJECT(builder));
 
     return jw;
