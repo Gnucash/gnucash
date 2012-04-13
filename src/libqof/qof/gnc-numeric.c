@@ -27,7 +27,9 @@
 #include <glib.h>
 #include <math.h>
 #if defined(G_OS_WIN32) && !defined(_MSC_VER)
-# include <pow.h>
+# ifdef HAVE_POW_H
+#   include <pow.h>
+# endif
 #endif
 #include <stdio.h>
 #include <stdlib.h>

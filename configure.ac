@@ -153,7 +153,7 @@ AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AC_HEADER_STDC
 
-AC_CHECK_HEADERS(limits.h sys/time.h sys/times.h sys/wait.h)
+AC_CHECK_HEADERS(limits.h sys/time.h sys/times.h sys/wait.h pow.h)
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 AC_CHECK_FUNCS(setenv,,[
   AC_CHECK_FUNCS(putenv,,[
