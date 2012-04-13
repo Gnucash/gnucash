@@ -220,6 +220,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                 xfer_dialog, _("Online Banking Transaction"));
             gnc_xfer_dialog_lock_from_account_tree(xfer_dialog);
         }
+        gnc_xfer_dialog_set_to_show_button_active(xfer_dialog, TRUE);
 
         amount = double_to_gnc_numeric(
                      AB_Value_GetValueAsDouble(AB_Transaction_GetValue(ab_trans)),
