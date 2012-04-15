@@ -140,6 +140,7 @@ libutest_Split_la_SOURCES = \
 	utest-Split.c \
 	${top_srcdir}/src/libqof/qof/gnc-numeric.c
 
+libutest_Split_la_LIBADD = $(LDADD)
 
 clean-local:
 	rm -f translog.*
