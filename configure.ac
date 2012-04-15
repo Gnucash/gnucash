@@ -128,7 +128,7 @@ AC_ARG_ENABLE(gtkmm,
 AS_IF([test x${enable_GTKMM} = "xtrue"],
   [
     # We require gtkmm, of course
-    PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.20)
+    PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.24)
     # and also the c++ compiler
     AC_PROG_CXXCPP
     AC_PROG_CXX
@@ -229,8 +229,8 @@ fi
 ### --------------------------------------------------------------------------
 ### Glib checks.
 
-# We require glib >= 2.20, released together with gtk-2.16
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.20 gthread-2.0 gobject-2.0 gmodule-2.0)
+# We require glib >= 2.28, released together with gtk-2.24
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.28 gthread-2.0 gobject-2.0 gmodule-2.0)
 
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
@@ -863,7 +863,7 @@ then
   fi
   GNOME_COMPILE_WARNINGS
 
-  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.18.1)
+  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.24.0)
   AS_SCRUB_INCLUDE(GTK_CFLAGS)
   AC_SUBST(GTK_CFLAGS)
   AC_SUBST(GTK_LIBS)
@@ -879,11 +879,7 @@ then
   AC_SUBST(GDK_PIXBUF_LIBS)
 
    # checks for goffice
-  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0, [goffice=1], [
-    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.6 >= 0.6.0, [goffice=1], [
-      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [goffice=1], [AC_MSG_ERROR([Cannot find libgoffice.>= 0.5.1])])
-    ])
-  ])
+  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0, [goffice=1], [AC_MSG_ERROR([Cannot find libgoffice.>= 0.5.1])])
   AS_SCRUB_INCLUDE(GOFFICE_CFLAGS)
   AC_SUBST(GOFFICE_CFLAGS)
   AC_SUBST(GOFFICE_LIBS)
