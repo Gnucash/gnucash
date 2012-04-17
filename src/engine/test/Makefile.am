@@ -118,7 +118,7 @@ test_engine_SOURCES = \
 test_engine_HEADERS = \
 	${top_srcdir}/${MODULEPATH}/gnc-engine.h
 
-test_engine_LTLIBRARIES = \
+noinst_LTLIBRARIES = \
 	libutest-Split.la
 
 test_enginedir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
