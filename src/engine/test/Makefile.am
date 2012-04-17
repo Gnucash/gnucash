@@ -115,26 +115,18 @@ test_engine_SOURCES = \
 	utest-Invoice.c \
 	utest-Account.c
 
-test_engine_HEADERS = \
-	${top_srcdir}/${MODULEPATH}/gnc-engine.h
-
-noinst_LTLIBRARIES = \
-	libutest-Split.la
-
-test_enginedir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
-
 test_engine_LDADD = \
-	${top_builddir}/${MODULEPATH}/libgncmod-engine.la \
-	${top_builddir}/src/libqof/qof/libgnc-qof.la \
-	${top_builddir}/src/test-core/libtest-core.la \
-	libutest-Split.la
-
+	libutest-Split.la \
+	$(LDADD)
 
 test_engine_CFLAGS = \
 	${DEFAULT_INCLUDES} \
 	-I${top_srcdir}/${MODULEPATH}/ \
 	-DTESTPROG=test_engine \
 	${GLIB_CFLAGS}
+
+noinst_LTLIBRARIES = \
+	libutest-Split.la
 
 libutest_Split_la_SOURCES = \
 	utest-Split.c \
