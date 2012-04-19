@@ -50,9 +50,9 @@ static void
 setup (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_book_new ();
-    Transaction *txn = xaccMallocTransaction (book), *rtxn = NULL;
-    Account *acc = xaccMallocAccount (book), *racc = NULL;
-    GNCLot *lot = gnc_lot_new (book), *rlot = NULL;
+    Transaction *txn = xaccMallocTransaction (book);
+    Account *acc = xaccMallocAccount (book);
+    GNCLot *lot = gnc_lot_new (book);
     gnc_numeric value = gnc_numeric_create (123, 240);
     gnc_numeric amount = gnc_numeric_create (321, 1000);
     Timespec time = timespec_now ();
@@ -100,6 +100,8 @@ teardown (Fixture *fixture, gconstpointer pData)
     test_destroy (txn);
     test_destroy (acc);
     test_destroy (fixture->split);
+    test_destroy (fixture->curr);
+    test_destroy (fixture->comm);
     test_destroy (book);
     g_free (fixture->func);
 
