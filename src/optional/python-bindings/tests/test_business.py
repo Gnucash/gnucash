@@ -58,25 +58,6 @@ class TestBusiness( BusinessSession ):
     def test_post(self):
         self.assertTrue( self.invoice.IsPosted() )
 
-    def test_payment(self):
-        self.assertFalse( self.invoice.IsPaid() )
-        self.customer.ApplyPayment(
-            self.invoice,
-            self.receivable, self.bank,
-            GncNumeric(50), GncNumeric(50),
-            self.today,
-            "", "")
-        self.assertFalse( self.invoice.IsPaid() )
-        BAL = self.invoice.GetPostedLot().get_balance()
-        self.assertTrue( GncNumeric(50).equal( BAL ) )
-        self.customer.ApplyPayment(
-            self.invoice,
-            self.receivable, self.bank,
-            GncNumeric(50), GncNumeric(50),
-            self.today,
-            "", "")
-        self.assertTrue( self.invoice.IsPaid() )
-
     def test_owner(self):
         OWNER = self.invoice.GetOwner()
         self.assertTrue( self.customer.Equal( OWNER ) )
