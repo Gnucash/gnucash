@@ -18,7 +18,8 @@ LDADD = \
   $(top_builddir)/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${GUILE_LIBS}
 
 TESTS = \
   test-link \

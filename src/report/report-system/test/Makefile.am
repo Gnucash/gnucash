@@ -10,7 +10,8 @@ AM_CPPFLAGS = \
 LDADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${GUILE_LIBS}
 
 TESTS = \
   test-link-module \
