@@ -214,9 +214,7 @@ load_budget_amounts( GncSqlBackend* be, GncBudget* budget )
         if ( result != NULL )
         {
             GncSqlRow* row = gnc_sql_result_get_first_row( result );
-            budget_amount_info_t info;
-
-            info.budget = budget;
+            budget_amount_info_t info = { budget, NULL, 0 };
 
             while ( row != NULL )
             {
