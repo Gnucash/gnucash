@@ -1,7 +1,38 @@
-diff -ur libbonoboui-2.24.2/configure libbonoboui-2.24.2-cs/configure
---- libbonoboui-2.24.2/configure	2009-09-22 23:12:20 +0000
-+++ libbonoboui-2.24.2-cs/configure	2010-02-23 12:25:27 +0000
-@@ -16422,219 +16422,6 @@
+diff -ur libbonoboui-2.24.2/configure ../libbonoboui-2.24.2/configure
+--- libbonoboui-2.24.2/configure	2009-09-22 18:12:20.000000000 -0500
++++ ../libbonoboui-2.24.2/configure	2012-04-19 16:43:20.000000000 -0500
+@@ -798,8 +798,6 @@
+ GLIB_MKENUMS
+ GLIB_GENMARSHAL
+ BONOBOUI_SINGLE_INCLUDES
+-BONOBOUI_GLADE_LIBS
+-BONOBOUI_GLADE_CFLAGS
+ BONOBOUI_LIBS
+ BONOBOUI_CFLAGS
+ POPT_LIBS
+@@ -998,9 +996,7 @@
+ XMKMF
+ PKG_CONFIG
+ BONOBOUI_CFLAGS
+-BONOBOUI_LIBS
+-BONOBOUI_GLADE_CFLAGS
+-BONOBOUI_GLADE_LIBS'
++BONOBOUI_LIBS'
+ 
+ 
+ # Initialize some variables set by options.
+@@ -1680,10 +1676,6 @@
+               C compiler flags for BONOBOUI, overriding pkg-config
+   BONOBOUI_LIBS
+               linker flags for BONOBOUI, overriding pkg-config
+-  BONOBOUI_GLADE_CFLAGS
+-              C compiler flags for BONOBOUI_GLADE, overriding pkg-config
+-  BONOBOUI_GLADE_LIBS
+-              linker flags for BONOBOUI_GLADE, overriding pkg-config
+ 
+ Use these variables to override the choices made by `configure' or to help
+ it to find libraries and programs with nonstandard names/locations.
+@@ -16422,219 +16414,6 @@
  
  
  # popt
@@ -221,3 +252,202 @@ diff -ur libbonoboui-2.24.2/configure libbonoboui-2.24.2-cs/configure
  
  
  
+@@ -16891,115 +16670,6 @@
+ fi;
+ 
+ 
+-pkg_failed=no
+-{ $as_echo "$as_me:$LINENO: checking for BONOBOUI_GLADE" >&5
+-$as_echo_n "checking for BONOBOUI_GLADE... " >&6; }
+-
+-if test -n "$BONOBOUI_GLADE_CFLAGS"; then
+-    pkg_cv_BONOBOUI_GLADE_CFLAGS="$BONOBOUI_GLADE_CFLAGS"
+- elif test -n "$PKG_CONFIG"; then
+-    if test -n "$PKG_CONFIG" && \
+-    { ($as_echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$BONOBOUI_MODULES libglade-2.0 >= 1.99.11\"") >&5
+-  ($PKG_CONFIG --exists --print-errors "$BONOBOUI_MODULES libglade-2.0 >= 1.99.11") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); }; then
+-  pkg_cv_BONOBOUI_GLADE_CFLAGS=`$PKG_CONFIG --cflags "$BONOBOUI_MODULES libglade-2.0 >= 1.99.11" 2>/dev/null`
+-else
+-  pkg_failed=yes
+-fi
+- else
+-    pkg_failed=untried
+-fi
+-if test -n "$BONOBOUI_GLADE_LIBS"; then
+-    pkg_cv_BONOBOUI_GLADE_LIBS="$BONOBOUI_GLADE_LIBS"
+- elif test -n "$PKG_CONFIG"; then
+-    if test -n "$PKG_CONFIG" && \
+-    { ($as_echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$BONOBOUI_MODULES libglade-2.0 >= 1.99.11\"") >&5
+-  ($PKG_CONFIG --exists --print-errors "$BONOBOUI_MODULES libglade-2.0 >= 1.99.11") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); }; then
+-  pkg_cv_BONOBOUI_GLADE_LIBS=`$PKG_CONFIG --libs "$BONOBOUI_MODULES libglade-2.0 >= 1.99.11" 2>/dev/null`
+-else
+-  pkg_failed=yes
+-fi
+- else
+-    pkg_failed=untried
+-fi
+-
+-
+-
+-if test $pkg_failed = yes; then
+-
+-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+-        _pkg_short_errors_supported=yes
+-else
+-        _pkg_short_errors_supported=no
+-fi
+-        if test $_pkg_short_errors_supported = yes; then
+-	        BONOBOUI_GLADE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$BONOBOUI_MODULES libglade-2.0 >= 1.99.11" 2>&1`
+-        else
+-	        BONOBOUI_GLADE_PKG_ERRORS=`$PKG_CONFIG --print-errors "$BONOBOUI_MODULES libglade-2.0 >= 1.99.11" 2>&1`
+-        fi
+-	# Put the nasty error message in config.log where it belongs
+-	echo "$BONOBOUI_GLADE_PKG_ERRORS" >&5
+-
+-	{ { $as_echo "$as_me:$LINENO: error: Package requirements ($BONOBOUI_MODULES libglade-2.0 >= 1.99.11) were not met:
+-
+-$BONOBOUI_GLADE_PKG_ERRORS
+-
+-Consider adjusting the PKG_CONFIG_PATH environment variable if you
+-installed software in a non-standard prefix.
+-
+-Alternatively, you may set the environment variables BONOBOUI_GLADE_CFLAGS
+-and BONOBOUI_GLADE_LIBS to avoid the need to call pkg-config.
+-See the pkg-config man page for more details.
+-" >&5
+-$as_echo "$as_me: error: Package requirements ($BONOBOUI_MODULES libglade-2.0 >= 1.99.11) were not met:
+-
+-$BONOBOUI_GLADE_PKG_ERRORS
+-
+-Consider adjusting the PKG_CONFIG_PATH environment variable if you
+-installed software in a non-standard prefix.
+-
+-Alternatively, you may set the environment variables BONOBOUI_GLADE_CFLAGS
+-and BONOBOUI_GLADE_LIBS to avoid the need to call pkg-config.
+-See the pkg-config man page for more details.
+-" >&2;}
+-   { (exit 1); exit 1; }; }
+-elif test $pkg_failed = untried; then
+-	{ { $as_echo "$as_me:$LINENO: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-{ { $as_echo "$as_me:$LINENO: error: The pkg-config script could not be found or is too old.  Make sure it
+-is in your PATH or set the PKG_CONFIG environment variable to the full
+-path to pkg-config.
+-
+-Alternatively, you may set the environment variables BONOBOUI_GLADE_CFLAGS
+-and BONOBOUI_GLADE_LIBS to avoid the need to call pkg-config.
+-See the pkg-config man page for more details.
+-
+-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+-See \`config.log' for more details." >&5
+-$as_echo "$as_me: error: The pkg-config script could not be found or is too old.  Make sure it
+-is in your PATH or set the PKG_CONFIG environment variable to the full
+-path to pkg-config.
+-
+-Alternatively, you may set the environment variables BONOBOUI_GLADE_CFLAGS
+-and BONOBOUI_GLADE_LIBS to avoid the need to call pkg-config.
+-See the pkg-config man page for more details.
+-
+-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+-See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }; }
+-else
+-	BONOBOUI_GLADE_CFLAGS=$pkg_cv_BONOBOUI_GLADE_CFLAGS
+-	BONOBOUI_GLADE_LIBS=$pkg_cv_BONOBOUI_GLADE_LIBS
+-        { $as_echo "$as_me:$LINENO: result: yes" >&5
+-$as_echo "yes" >&6; }
+-	:
+-fi
+-
+ 
+ 
+ if test "$enable_maintainer_mode" = "yes"; then
+@@ -17194,7 +16864,7 @@
+ 
+ 
+ 
+-ac_config_files="$ac_config_files Makefile libbonoboui-zip po/Makefile.in bonobo/Makefile bonobo/libbonoboui-2.0.pc bonobo/libbonoboui-2.0-uninstalled.pc glade/Makefile samples/Makefile samples/controls/Makefile samples/bonoboui/Makefile samples/container/Makefile samples/compound-doc/Makefile samples/compound-doc/container/Makefile samples/canvdemo/Makefile tests/Makefile tests/control/Makefile tools/Makefile tools/browser/Makefile doc/Makefile doc/api/Makefile doc/api/figures/Makefile"
++ac_config_files="$ac_config_files Makefile libbonoboui-zip po/Makefile.in bonobo/Makefile bonobo/libbonoboui-2.0.pc bonobo/libbonoboui-2.0-uninstalled.pc samples/Makefile samples/controls/Makefile samples/bonoboui/Makefile samples/container/Makefile samples/compound-doc/Makefile samples/compound-doc/container/Makefile samples/canvdemo/Makefile tests/Makefile tests/control/Makefile tools/Makefile tools/browser/Makefile doc/Makefile doc/api/Makefile doc/api/figures/Makefile"
+ 
+ 
+ cat >confcache <<\_ACEOF
+@@ -18123,7 +17793,6 @@
+     "bonobo/Makefile") CONFIG_FILES="$CONFIG_FILES bonobo/Makefile" ;;
+     "bonobo/libbonoboui-2.0.pc") CONFIG_FILES="$CONFIG_FILES bonobo/libbonoboui-2.0.pc" ;;
+     "bonobo/libbonoboui-2.0-uninstalled.pc") CONFIG_FILES="$CONFIG_FILES bonobo/libbonoboui-2.0-uninstalled.pc" ;;
+-    "glade/Makefile") CONFIG_FILES="$CONFIG_FILES glade/Makefile" ;;
+     "samples/Makefile") CONFIG_FILES="$CONFIG_FILES samples/Makefile" ;;
+     "samples/controls/Makefile") CONFIG_FILES="$CONFIG_FILES samples/controls/Makefile" ;;
+     "samples/bonoboui/Makefile") CONFIG_FILES="$CONFIG_FILES samples/bonoboui/Makefile" ;;
+Only in ../libbonoboui-2.24.2: configure~
+diff -ur libbonoboui-2.24.2/configure.in ../libbonoboui-2.24.2/configure.in
+--- libbonoboui-2.24.2/configure.in	2009-09-22 18:11:35.000000000 -0500
++++ ../libbonoboui-2.24.2/configure.in	2012-04-19 16:41:13.000000000 -0500
+@@ -96,11 +96,6 @@
+ 
+ AC_SUBST(X_LIBS)
+ 
+-# popt
+-AC_CHECK_LIB(popt, poptStrippedArgv, POPT_LIBS=-lpopt, AC_MSG_ERROR([You must have popt version 1.5 or greater installed.]))
+-AC_SUBST(POPT_LIBS)
+-AC_CHECK_HEADER(popt.h,,AC_MSG_ERROR([Failed to find popt.h - you may have to adjust your environment]))
+-
+ dnl
+ dnl Start of pkg-config checks
+ dnl
+@@ -127,10 +122,6 @@
+ 	AC_MSG_RESULT([clean])
+ fi;
+ 
+-PKG_CHECK_MODULES(BONOBOUI_GLADE, $BONOBOUI_MODULES libglade-2.0 >= 1.99.11)
+-AC_SUBST(BONOBOUI_GLADE_CFLAGS)
+-AC_SUBST(BONOBOUI_GLADE_LIBS)
+-
+ if test "$enable_maintainer_mode" = "yes"; then
+ 	BONOBOUI_SINGLE_INCLUDES="-DGTK_DISABLE_SINGLE_INCLUDES -DG_DISABLE_SINGLE_INCLUDES"
+ 	AC_SUBST(BONOBOUI_SINGLE_INCLUDES)
+@@ -150,7 +141,6 @@
+ bonobo/Makefile
+ bonobo/libbonoboui-2.0.pc
+ bonobo/libbonoboui-2.0-uninstalled.pc
+-glade/Makefile
+ samples/Makefile
+ samples/controls/Makefile
+ samples/bonoboui/Makefile
+diff -ur libbonoboui-2.24.2/Makefile.am ../libbonoboui-2.24.2/Makefile.am
+--- libbonoboui-2.24.2/Makefile.am	2009-04-23 17:38:18.000000000 -0500
++++ ../libbonoboui-2.24.2/Makefile.am	2012-04-19 16:41:13.000000000 -0500
+@@ -1,4 +1,4 @@
+-SUBDIRS = bonobo glade samples tests tools po doc
++SUBDIRS = bonobo samples tests tools po doc
+ 
+ libincludedir = $(includedir)/libbonoboui-2.0
+ libinclude_HEADERS =    \
+diff -ur libbonoboui-2.24.2/Makefile.in ../libbonoboui-2.24.2/Makefile.in
+--- libbonoboui-2.24.2/Makefile.in	2009-09-22 18:12:19.000000000 -0500
++++ ../libbonoboui-2.24.2/Makefile.in	2012-04-19 16:43:32.000000000 -0500
+@@ -138,8 +138,6 @@
+ AUTOMAKE = @AUTOMAKE@
+ AWK = @AWK@
+ BONOBOUI_CFLAGS = @BONOBOUI_CFLAGS@
+-BONOBOUI_GLADE_CFLAGS = @BONOBOUI_GLADE_CFLAGS@
+-BONOBOUI_GLADE_LIBS = @BONOBOUI_GLADE_LIBS@
+ BONOBOUI_LIBS = @BONOBOUI_LIBS@
+ BONOBOUI_SINGLE_INCLUDES = @BONOBOUI_SINGLE_INCLUDES@
+ CATALOGS = @CATALOGS@
+@@ -284,7 +282,7 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = bonobo glade samples tests tools po doc
++SUBDIRS = bonobo samples tests tools po doc
+ libincludedir = $(includedir)/libbonoboui-2.0
+ libinclude_HEADERS = \
+ 	bonobo.h	\
+Only in ../libbonoboui-2.24.2: Makefile.in~
