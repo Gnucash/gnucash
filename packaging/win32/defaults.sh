@@ -428,7 +428,7 @@ set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"
 set_default DOCS_DIR $GLOBAL_DIR\\gnucash-docs
 set_default XSLTPROCFLAGS ""
 
-set_default ISOCODES_URL "ftp://pkg-isocodes.alioth.debian.org/pub/pkg-isocodes/iso-codes-3.18.tar.bz2"
+set_default ISOCODES_URL "http://pkg-isocodes.alioth.debian.org/downloads/iso-codes-3.34.tar.bz2"
 set_default ISOCODES_DIR $GLOBAL_DIR\\isocodes
 
 ### Local Variables: ***
