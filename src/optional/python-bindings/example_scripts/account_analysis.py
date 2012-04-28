@@ -138,6 +138,7 @@ def generate_period_boundaries(start_year, start_month, period_type, periods):
 def account_from_path(top_account, account_path, original_path=None):
     if original_path==None: original_path = account_path
     account, account_path = account_path[0], account_path[1:]
+
     account = top_account.lookup_by_name(account)
     if account.get_instance() == None:
         raise Exception(
@@ -149,112 +150,128 @@ def account_from_path(top_account, account_path, original_path=None):
 
 
 def main():
-    (gnucash_file, start_year, start_month, period_type, periods,
-     debits_show, credits_show) = argv[1:8]
-    start_year, start_month, periods = [int(blah)
-                                        for blah in (start_year, start_month,
-                                                     periods) ]
 
-    debits_show = debits_show == DEBITS_SHOW
-    credits_show = credits_show == CREDITS_SHOW
+    if len(argv) < 10:
+        print 'not enough parameters'
+        print 'usage: account_analysis.py {book url} {start year} {start month, numeric} {period type: monthly, quarterly, or yearly} {number of periods to show, from start year and month} {whether to show debits: debits-show for true, all other values false} {whether to show credits: credits-show for true, all other values false} {space separated account path, as many nested levels as desired} '
+        print 'examples:\n'
+        print "The following example analyzes 12 months of 'Assets:Test Account' from /home/username/test.gnucash, starting in January of 2010, and shows both credits and debits"
+        print "gnucash-env python account_analysis.py '/home/username/test.gnucash' 2010 1 monthly 12 debits-show credits-show Assets 'Test Account'\n"
+        print "The following example analyzes 2 quarters of 'Liabilities:First Level:Second Level' from /home/username/test.gnucash, starting March 2011, and shows credits but not debits"
+        print "gnucash-env python account_analysis.py '/home/username/test.gnucash' 2011 3 quarterly 2 debits-noshow credits-show Liabilities 'First Level' 'Second Level"
+        return
 
-    account_path = argv[8:]
+    try:
+        (gnucash_file, start_year, start_month, period_type, periods,
+         debits_show, credits_show) = argv[1:8]
+        start_year, start_month, periods = [int(blah)
+                                            for blah in (start_year, start_month,
+                                                         periods) ]
 
-    gnucash_session = Session(gnucash_file, is_new=False)
-    root_account = gnucash_session.book.get_root_account()
-    account_of_interest = account_from_path(root_account, account_path)
+        debits_show = debits_show == DEBITS_SHOW
+        credits_show = credits_show == CREDITS_SHOW
 
-    # a list of all the periods of interest, for each period
-    # keep the start date, end date, a list to store debits and credits,
-    # and sums for tracking the sum of all debits and sum of all credits
-    period_list = [
-        [start_date, end_date,
-         [], # debits
-         [], # credits
-         ZERO, # debits sum
-         ZERO, # credits sum
-         ]
-        for start_date, end_date in generate_period_boundaries(
-            start_year, start_month, period_type, periods)
-        ]
-    # a copy of the above list with just the period start dates
-    period_starts = [e[0] for e in period_list ]
+        account_path = argv[8:]
+
+        gnucash_session = Session(gnucash_file, is_new=False)
+        root_account = gnucash_session.book.get_root_account()
+        account_of_interest = account_from_path(root_account, account_path)
+
+        # a list of all the periods of interest, for each period
+        # keep the start date, end date, a list to store debits and credits,
+        # and sums for tracking the sum of all debits and sum of all credits
+        period_list = [
+            [start_date, end_date,
+             [], # debits
+             [], # credits
+             ZERO, # debits sum
+             ZERO, # credits sum
+             ]
+            for start_date, end_date in generate_period_boundaries(
+                start_year, start_month, period_type, periods)
+            ]
+        # a copy of the above list with just the period start dates
+        period_starts = [e[0] for e in period_list ]
     
-    # insert and add all splits in the periods of interest
-    for split in account_of_interest.GetSplitList():
-        trans = split.parent
-        trans_date = date.fromtimestamp(trans.GetDate())
+        # insert and add all splits in the periods of interest
+        for split in account_of_interest.GetSplitList():
+            trans = split.parent
+            trans_date = date.fromtimestamp(trans.GetDate())
 
-        # use binary search to find the period that starts before or on
-        # the transaction date
-        period_index = bisect_right( period_starts, trans_date ) - 1
+            # use binary search to find the period that starts before or on
+            # the transaction date
+            period_index = bisect_right( period_starts, trans_date ) - 1
         
-        # ignore transactions with a date before the matching period start
-        # (after subtracting 1 above start_index would be -1)
-        # and after the last period_end
-        if period_index >= 0 and \
-                trans_date <= period_list[len(period_list)-1][1]:
+            # ignore transactions with a date before the matching period start
+            # (after subtracting 1 above start_index would be -1)
+            # and after the last period_end
+            if period_index >= 0 and \
+                    trans_date <= period_list[len(period_list)-1][1]:
+  
+                # get the period bucket appropriate for the split in question
+                period = period_list[period_index]
 
-            # get the period bucket appropriate for the split in question
-            period = period_list[period_index]
+                # more specifically, we'd expect the transaction date
+                # to be on or after the period start, and  before or on the
+                # period end, assuming the binary search (bisect_right)
+                # assumptions from above are are right..
+                #
+                # in other words, we assert our use of binary search
+                # and the filtered results from the above if provide all the
+                # protection we need
+                assert( trans_date>= period[0] and trans_date <= period[1] )
+               
+                split_amount = gnc_numeric_to_python_Decimal(split.GetAmount())
 
-            # more specifically, we'd expect the transaction date
-            # to be on or after the period start, and  before or on the
-            # period end, assuming the binary search (bisect_right)
-            # assumptions from above are are right..
-            #
-            # in other words, we assert our use of binary search
-            # and the filtered results from the above if provide all the
-            # protection we need
-            assert( trans_date>= period[0] and trans_date <= period[1] )
-            
-            split_amount = gnc_numeric_to_python_Decimal(split.GetAmount())
+                # if the amount is negative, this is a credit
+                if split_amount < ZERO:
+                    debit_credit_offset = 1
+                # else a debit
+                else:
+                    debit_credit_offset = 0
 
-            # if the amount is negative, this is a credit
-            if split_amount < ZERO:
-                debit_credit_offset = 1
-            # else a debit
-            else:
-                debit_credit_offset = 0
-
-            # store the debit or credit Split with its transaction, using the
-            # above offset to get in the right bucket
-            #
-            # if we wanted to be really cool we'd keep the transactions
-            period[2+debit_credit_offset].append( (trans, split) )
+                # store the debit or credit Split with its transaction, using the
+                # above offset to get in the right bucket
+                #
+                # if we wanted to be really cool we'd keep the transactions
+                period[2+debit_credit_offset].append( (trans, split) )
     
-            # add the debit or credit to the sum, using the above offset
-            # to get in the right bucket
-            period[4+debit_credit_offset] += split_amount
+                # add the debit or credit to the sum, using the above offset
+                # to get in the right bucket
+                period[4+debit_credit_offset] += split_amount
 
-    csv_writer = csv.writer(stdout)
-    csv_writer.writerow( ('period start', 'period end', 'debits', 'credits') )
+        csv_writer = csv.writer(stdout)
+        csv_writer.writerow( ('period start', 'period end', 'debits', 'credits') )
     
-    def generate_detail_rows(values):
-        return (
-            ('', '', '', '', trans.GetDescription(),
-             gnc_numeric_to_python_Decimal(split.GetAmount()))
-            for trans, split in values )
+        def generate_detail_rows(values):
+            return (
+                ('', '', '', '', trans.GetDescription(),
+                 gnc_numeric_to_python_Decimal(split.GetAmount()))
+                for trans, split in values )
             
 
-    for start_date, end_date, debits, credits, debit_sum, credit_sum in \
-            period_list:
-        csv_writer.writerow( (start_date, end_date, debit_sum, credit_sum) )
+        for start_date, end_date, debits, credits, debit_sum, credit_sum in \
+                period_list:
+            csv_writer.writerow( (start_date, end_date, debit_sum, credit_sum) )
 
-        if debits_show and len(debits) > 0:
-            csv_writer.writerow(
-                ('DEBITS', '', '', '', 'description', 'value') )
-            csv_writer.writerows( generate_detail_rows(debits) )
-            csv_writer.writerow( () )
-        if credits_show and len(credits) > 0:
-            csv_writer.writerow(
-                ('CREDITS', '', '', '', 'description', 'value') )
-            csv_writer.writerows( generate_detail_rows(credits) )
-            csv_writer.writerow( () )
+            if debits_show and len(debits) > 0:
+                csv_writer.writerow(
+                    ('DEBITS', '', '', '', 'description', 'value') )
+                csv_writer.writerows( generate_detail_rows(debits) )
+                csv_writer.writerow( () )
+            if credits_show and len(credits) > 0:
+                csv_writer.writerow(
+                    ('CREDITS', '', '', '', 'description', 'value') )
+                csv_writer.writerows( generate_detail_rows(credits) )
+                csv_writer.writerow( () )
 
-    # no save needed, we're just reading..
-    gnucash_session.end()
+        # no save needed, we're just reading..
+        gnucash_session.end()
+    except:
+        if not gnucash_session == None:
+            gnucash_session.end()
 
+        raise
 
 if __name__ == "__main__": main()
 
