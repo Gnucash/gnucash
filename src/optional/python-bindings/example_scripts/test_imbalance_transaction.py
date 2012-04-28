@@ -27,7 +27,7 @@
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 #   @ingroup python_bindings_examples
 
-from sys import argv
+from sys import argv, exit
 
 from gnucash import Session, Transaction, Split, Account, GncNumeric, \
     GncCommodity
@@ -40,50 +40,64 @@ from gnucash import Session, Transaction, Split, Account, GncNumeric, \
 #
 # You should try it out with a gnucash file with tranding accounts enabled
 # and trading accounts disabled
+
+if len(argv) < 2:    
+    print 'not enough parameters'
+    print 'usage: test_imbalance_transaction.py {book_url}'
+    print 'examples:'
+    print "gnucash-env python test_imbalance_transaction.py '/home/username/test.gnucash'"
+    exit()
+
 session = Session(argv[1])
-book = session.book
 
-root = book.get_root_account()
-root.get_instance()
-commod_tab = session.book.get_table()
-CAD = commod_tab.lookup("ISO4217","CAD")
-USD = commod_tab.lookup("ISO4217","USD")
-account = Account(book)
-account2 = Account(book)
-root.append_child(account)
-root.append_child(account2)
-account.SetCommodity(CAD)
-account.SetName("blahblah")
-account.SetType(3)
-account2.SetCommodity(USD)
-account2.SetName("blahblahsdfs ")
-account2.SetType(3)
+try:
+    book = session.book
 
-a = Transaction(book)
-a.BeginEdit()
+    root = book.get_root_account()
+    root.get_instance()
+    commod_tab = session.book.get_table()
+    CAD = commod_tab.lookup("ISO4217","CAD")
+    USD = commod_tab.lookup("ISO4217","USD")
+    account = Account(book)
+    account2 = Account(book)
+    root.append_child(account)
+    root.append_child(account2)
+    account.SetCommodity(CAD)
+    account.SetName("blahblah")
+    account.SetType(3)
+    account2.SetCommodity(USD)
+    account2.SetName("blahblahsdfs ")
+    account2.SetType(3)
 
-s = Split(book)
-s.SetParent(a)
-s2 = Split(book)
-s2.SetParent(a)
+    a = Transaction(book)
+    a.BeginEdit()
 
-a.SetCurrency(CAD)
-s.SetAccount(account)
-s.SetValue(GncNumeric(2))
-s.SetAmount(GncNumeric(2))
+    s = Split(book)
+    s.SetParent(a)
+    s2 = Split(book)
+    s2.SetParent(a)
 
-s2.SetAccount(account2)
-s2.SetValue(GncNumeric(4))
-s2.SetAmount(GncNumeric(4))
-print 'overall imbalance', a.GetImbalanceValue().to_string()
+    a.SetCurrency(CAD)
+    s.SetAccount(account)
+    s.SetValue(GncNumeric(2))
+    s.SetAmount(GncNumeric(2))
 
-print 'per-currency imbalances'
-imbalance_list = a.GetImbalance()
-for (commod, value) in imbalance_list:
-    print value.to_string(), commod.get_mnemonic()
+    s2.SetAccount(account2)
+    s2.SetValue(GncNumeric(4))
+    s2.SetAmount(GncNumeric(4))
+    print 'overall imbalance', a.GetImbalanceValue().to_string()
 
-a.CommitEdit()
+    print 'per-currency imbalances'
+    imbalance_list = a.GetImbalance()
+    for (commod, value) in imbalance_list:
+        print value.to_string(), commod.get_mnemonic()
+
+    a.CommitEdit()
 
 
-session.end()
-session.destroy()
+    session.end()
+    session.destroy()
+except:
+    if not session == None:
+        session.end()
+    raise
