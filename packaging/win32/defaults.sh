@@ -35,21 +35,26 @@ if [ "$BUILD_FROM_TARBALL" = "yes" ]; then
     set_default REPOS_DIR $GNUCASH_DIR
     # keep this pointing from BUILD_DIR to REPOS_DIR
     set_default REL_REPOS_DIR ..
-    set_default BUILD_DIR $GNUCASH_DIR\\build
-    set_default INSTALL_DIR $GNUCASH_DIR\\inst
 else
     # change this to "no" if you are using install.sh from the same repository checkout
     set_default UPDATE_SOURCES yes
-    # latest revision that should compile, use HEAD or vwxyz
-    set_default SVN_REV "HEAD"
     set_default GNUCASH_DIR $GLOBAL_DIR\\gnucash
-    set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/trunk"
     set_default REPOS_DIR $GNUCASH_DIR\\repos
     # keep this pointing from BUILD_DIR to REPOS_DIR
     set_default REL_REPOS_DIR ..\\repos
-    set_default BUILD_DIR $GNUCASH_DIR\\build
-    set_default INSTALL_DIR $GNUCASH_DIR\\inst
+
+    set_default REPOS_TYPE svn
+    if [ "$REPOS_TYPE" = "git" ]; then
+      set_default GIT_REV "trunk"
+      set_default REPOS_URL "git://github.com/Gnucash/gnucash.git"
+    elif [ "$REPOS_TYPE" = "svn" ]; then
+      # latest revision that should compile, use HEAD or vwxyz
+      set_default SVN_REV "HEAD"
+      set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/trunk"
+    fi
 fi
+set_default BUILD_DIR $GNUCASH_DIR\\build
+set_default INSTALL_DIR $GNUCASH_DIR\\inst
 
 set_default WITH_CUTECASH no
 set_default CUTECASH_BUILD_DIR $GNUCASH_DIR\\build-cutecash
@@ -351,8 +356,8 @@ set_default ICU4C_PATCH `pwd`/icu-crossmingw.patch
 set_default SVN_URL "http://subversion.tigris.org/files/documents/15/47914/svn-win32-1.6.6.zip"
 set_default SVN_DIR $GLOBAL_DIR\\svn
 
-set_default GIT_URL "http://msysgit.googlecode.com/files/Git-1.7.8-preview20111206.exe"
-set_default GIT_DIR $GLOBAL_DIR\\git-1.7.8
+set_default GIT_URL "http://msysgit.googlecode.com/files/Git-1.7.10-preview20120409.exe"
+set_default GIT_DIR $GLOBAL_DIR\\git-1.7.10
 
 # OFX import in gnucash and ofx directconnect support for aqbanking
 set_default OPENSP_URL "$SF_MIRROR/openjade/OpenSP-1.5.2.tar.gz"

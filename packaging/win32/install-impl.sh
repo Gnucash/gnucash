@@ -254,15 +254,24 @@ function inst_unzip() {
 function inst_git() {
     setup Git
     _GIT_UDIR=`unix_path $GIT_DIR`
-    add_to_env $_GIT_UDIR/bin PATH
-    if quiet $_GIT_UDIR/bin/git --help || quiet git --help
+    # Don't add git's directory to the PATH, its installed DLLs conflict
+    # with the ones in our mingw environment
+    # add_to_env $_GIT_UDIR/bin PATH
+    if quiet git --help
+    then
+        echo "git already installed in the system path.  skipping."
+        set_env git GIT_CMD
+    elif quiet "$_GIT_UDIR/bin/git" --help
     then
         echo "git already installed in $_GIT_UDIR.  skipping."
+        set_env "$_GIT_UDIR/bin/git" GIT_CMD
     else
         smart_wget $GIT_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$GIT_DIR"
-        quiet git --help || die "git unavailable"
+        quiet "$_GIT_UDIR/bin/git" --help || die "git unavailable"
     fi
+    # Make sure GIT_CMD is available to subshells if it is set
+    [ -n "$GIT_CMD" ] && export GIT_CMD
 }
 
 # Functions before this point are basic build infrastructure functions or else they get pieces needed to build
@@ -1441,6 +1450,27 @@ function inst_hh() {
         qpopd
         quiet test_for_hh || die "html help workshop not installed correctly"
     fi
+}
+
+function git_up() {
+    mkdir -p $_REPOS_UDIR
+    qpushd $_REPOS_UDIR
+    if [ -x .git ]; then
+        setup "git update in ${REPOS_DIR}"
+# FIXME I'm not sure what update sources should do for git.
+#       git update ? That would pull from upstream branches
+#                    but does nothing useful if the user checked out a local branches
+#                    Additionally this script is not available by default
+#       git pull ? I'm not sure if this doesn't have unwanted side effects
+#       So for now an update does nothing other than cloning the repository the
+#       first time it's called
+#        $GIT_CMD pull origin
+    else
+        setup git clone
+        $GIT_CMD clone $REPOS_URL .
+        $GIT_CMD checkout $GIT_REV .
+    fi
+    qpopd
 }
 
 function svn_up() {

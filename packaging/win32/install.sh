@@ -83,7 +83,7 @@ add_step inst_gnome
 add_step inst_guile
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_svn
-# add_step inst_git
+add_step inst_git
 fi
 add_step inst_gnutls
 add_step inst_libxslt
@@ -112,7 +112,13 @@ add_step inst_webkit
 
 ##
 if [ "$UPDATE_SOURCES" = "yes" ]; then
- add_step svn_up
+  if [ "$REPOS_TYPE" = "git" ]; then
+    add_step git_up
+  elif [ "$REPOS_TYPE" = "svn" ]; then
+    add_step svn_up
+  else
+    die "Unkown repos type $REPOS_TYPE. Sources can only be updated for git or svn type repos"
+  fi
 fi
 if [ "$WITH_CUTECASH" = "yes" ]; then
  add_step inst_cmake
