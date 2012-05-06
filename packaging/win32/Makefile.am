@@ -4,6 +4,8 @@ EXTRA_DIST = \
   dist.sh \
   exetype.pl \
   functions.sh \
+  getperl.vbs \
+  gnc-path-check \
   goffice-0.7.2-patch.diff \
   gwenhywfar-3.6.0-patch.diff \
   install.sh \

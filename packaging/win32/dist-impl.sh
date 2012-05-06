@@ -255,7 +255,7 @@ function dist_gnucash() {
     cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{doc,gnucash,locale} $DIST_UDIR/share
-    cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.cmd $DIST_UDIR/bin
+    cp -a $_REPOS_UDIR/packaging/win32/{getperl.vbs,gnc-path-check,install-fq-mods.cmd} $DIST_UDIR/bin
 
     _QTDIR_WIN=$(unix_path $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' )
     if [ "$AQBANKING5" != "yes" ] ; then
