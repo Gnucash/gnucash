@@ -577,12 +577,23 @@ xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName )
 const GDate*
 xaccSchedXactionGetStartDate(const SchedXaction *sx )
 {
+    g_assert (sx);
     return &sx->start_date;
 }
 
 void
 xaccSchedXactionSetStartDate( SchedXaction *sx, const GDate* newStart )
 {
+    if ( newStart == NULL || !g_date_valid( newStart ))
+    {
+        /* XXX: I reject the bad data - is this the right
+         * thing to do <rgmerk>.
+         * This warning is only human readable - the caller
+         * doesn't know the call failed.  This is bad
+         */
+        g_critical("Invalid Start Date");
+        return;
+    }
     gnc_sx_begin_edit(sx);
     sx->start_date = *newStart;
     qof_instance_set_dirty(&sx->inst);
@@ -592,27 +603,29 @@ xaccSchedXactionSetStartDate( SchedXaction *sx, const GDate* newStart )
 gboolean
 xaccSchedXactionHasEndDate( const SchedXaction *sx )
 {
-    return g_date_valid( &sx->end_date );
+    return sx != NULL && g_date_valid( &sx->end_date );
 }
 
 const GDate*
 xaccSchedXactionGetEndDate(const SchedXaction *sx )
 {
+    g_assert (sx);
     return &sx->end_date;
 }
 
 void
 xaccSchedXactionSetEndDate( SchedXaction *sx, const GDate *newEnd )
 {
-    if ( g_date_valid( newEnd )
-            && g_date_compare( newEnd, &sx->start_date ) < 0 )
+    if (newEnd == NULL
+	|| !g_date_valid( newEnd )
+	|| g_date_compare( newEnd, &sx->start_date ) < 0 )
     {
         /* XXX: I reject the bad data - is this the right
          * thing to do <rgmerk>.
          * This warning is only human readable - the caller
          * doesn't know the call failed.  This is bad
          */
-        g_critical("New end date before start date");
+        g_critical("Bad End Date: Invalid or before Start Date");
         return;
     }
 
