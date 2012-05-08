@@ -98,6 +98,7 @@ void gnc_invoice_terms_changed_cb (GtkWidget *widget, gpointer data);
 #define ENUM_INVOICE_TYPE(_) \
   _(NEW_INVOICE, )  \
   _(MOD_INVOICE, )  \
+  _(DUP_INVOICE, )  \
   _(EDIT_INVOICE, ) \
   _(VIEW_INVOICE, )
 
@@ -269,12 +270,22 @@ iw_get_invoice (InvoiceWindow *iw)
     return gncInvoiceLookup (iw->book, &iw->invoice_guid);
 }
 
+static void
+set_gncEntry_switch_type (gpointer data, gpointer user_data)
+{
+    GncEntry *entry = data;
+    //g_warning("Modifying date for entry with desc=\"%s\"", gncEntryGetDescription(entry));
+
+    gncEntrySetQuantity (entry, gnc_numeric_neg (gncEntryGetQuantity (entry)));
+}
+
 static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 {
     GtkTextBuffer* text_buffer;
     GtkTextIter start, end;
     gchar *text;
     Timespec ts;
+    gboolean is_credit_note = gncInvoiceGetIsCreditNote (invoice);
 
     if (iw->dialog_type == VIEW_INVOICE)
         return;
@@ -329,9 +340,18 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
             gncInvoiceSetBillTo (invoice, &iw->proj_cust);
     }
 
-    /* Document type can only be modified for a new invoice/credit note */
-    if (iw->dialog_type == NEW_INVOICE)
+    /* Document type can only be modified for a new or duplicated invoice/credit note */
+    if (iw->dialog_type == NEW_INVOICE || iw->dialog_type == DUP_INVOICE)
         gncInvoiceSetIsCreditNote (invoice, iw->is_credit_note);
+
+    /* If the document type changed on a duplicated invoice,
+     * its entries should be updated
+     */
+    if (iw->dialog_type == DUP_INVOICE && iw->is_credit_note != is_credit_note)
+    {
+        g_list_foreach(gncInvoiceGetEntries(invoice),
+                       &set_gncEntry_switch_type, NULL);
+    }
 
     gncInvoiceCommitEdit (invoice);
     gnc_resume_gui_refresh ();
@@ -407,11 +427,12 @@ gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data)
     /* Ok, we don't need this anymore */
     iw->invoice_guid = *guid_null ();
 
-    /* if this is a NEW_INVOICE, and created_invoice is NON-NULL, then
-     * open up a new window with the invoice.  This used to be done
+    /* if this is a new or duplicated invoice, and created_invoice is NON-NULL,
+     * then open up a new window with the invoice.  This used to be done
      * in gnc_ui_invoice_new() but cannot be done anymore
      */
-    if (iw->dialog_type == NEW_INVOICE && iw->created_invoice)
+    if ((iw->dialog_type == NEW_INVOICE || iw->dialog_type == DUP_INVOICE)
+            && iw->created_invoice)
         gnc_ui_invoice_edit (iw->created_invoice);
 
     gnc_close_gui_component (iw->component_id);
@@ -1227,6 +1248,7 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
             break;
         case NEW_INVOICE:
         case MOD_INVOICE:
+        case DUP_INVOICE:
             iw->job_choice =
                 gnc_general_search_new (GNC_JOB_MODULE_NAME, _("Select..."), TRUE,
                                         gnc_invoice_select_job_cb, iw, iw->book);
@@ -1298,6 +1320,7 @@ gnc_invoice_update_proj_job (InvoiceWindow *iw)
         break;
     case NEW_INVOICE:
     case MOD_INVOICE:
+    case DUP_INVOICE:
         if (iw->proj_cust.owner.undefined == NULL)
         {
             iw->proj_job_choice = NULL;
@@ -1603,6 +1626,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         break;
     case NEW_INVOICE:
     case MOD_INVOICE:
+    case DUP_INVOICE:
         iw->owner_choice =
             gnc_owner_select_create (iw->owner_label, iw->owner_box, iw->book,
                                      &(iw->owner));
@@ -1706,7 +1730,9 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     }
 
     gnc_invoice_id_changed_cb(NULL, iw);
-    if (iw->dialog_type == NEW_INVOICE || iw->dialog_type == MOD_INVOICE)
+    if (iw->dialog_type == NEW_INVOICE ||
+        iw->dialog_type == DUP_INVOICE ||
+        iw->dialog_type == MOD_INVOICE)
     {
         if (widget)
             gtk_widget_show (widget);
@@ -1808,6 +1834,7 @@ gnc_invoice_get_title (InvoiceWindow *iw)
                        : _("New Invoice");
             break;
         case MOD_INVOICE:
+        case DUP_INVOICE:
         case EDIT_INVOICE:
             wintitle = iw->is_credit_note ? _("Edit Credit Note")
                        : _("Edit Invoice");
@@ -1826,6 +1853,7 @@ gnc_invoice_get_title (InvoiceWindow *iw)
                        : _("New Bill");
             break;
         case MOD_INVOICE:
+        case DUP_INVOICE:
         case EDIT_INVOICE:
             wintitle = iw->is_credit_note ? _("Edit Credit Note")
                        : _("Edit Bill");
@@ -1844,6 +1872,7 @@ gnc_invoice_get_title (InvoiceWindow *iw)
                        : _("New Expense Voucher");
             break;
         case MOD_INVOICE:
+        case DUP_INVOICE:
         case EDIT_INVOICE:
             wintitle = iw->is_credit_note ? _("Edit Credit Note")
                        : _("Edit Expense Voucher");
@@ -1925,7 +1954,7 @@ gnc_invoice_new_page (QofBook *bookp, InvoiceDialogType type,
     GncOwner *billto;
     GncPluginPage *new_page;
 
-    g_assert (type != NEW_INVOICE && type != MOD_INVOICE);
+    g_assert (type != NEW_INVOICE && type != MOD_INVOICE && type != DUP_INVOICE);
     g_assert (invoice != NULL);
 
     /*
@@ -2291,14 +2320,17 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 }
 
 static InvoiceWindow *
-gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
-                                GncInvoice *invoice)
+gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
+                                const GncOwner *owner, GncInvoice *invoice)
 {
     InvoiceWindow *iw;
     GtkBuilder *builder;
     GtkWidget *hbox;
     GncOwner *billto;
     const GncOwner *start_owner;
+    GncBillTerm *owner_terms = NULL;
+
+    g_assert (dialog_type == NEW_INVOICE || dialog_type == MOD_INVOICE || dialog_type == DUP_INVOICE);
 
     if (invoice)
     {
@@ -2323,11 +2355,13 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
      */
 
     iw = g_new0 (InvoiceWindow, 1);
+    iw->dialog_type = dialog_type;
 
-    if (invoice == NULL)
+    switch (dialog_type)
     {
-        GncBillTerm *owner_terms = NULL;
-        iw->dialog_type = NEW_INVOICE;
+    case NEW_INVOICE:
+        g_assert (bookp);
+
         invoice = gncInvoiceCreate (bookp);
         gncInvoiceSetCurrency (invoice, gnc_default_currency ());
         iw->book = bookp;
@@ -2345,12 +2379,16 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
         }
         if (owner_terms)
             gncInvoiceSetTerms (invoice, owner_terms);
-    }
-    else
-    {
-        iw->dialog_type = MOD_INVOICE;
+        break;
+
+    case MOD_INVOICE:
+    case DUP_INVOICE:
         start_owner = gncInvoiceGetOwner (invoice);
         iw->book = gncInvoiceGetBook (invoice);
+        break;
+    default:
+        /* The assert at the beginning of this function should prevent this switch case ! */
+        return NULL;
     }
 
     /* Save this for later */
@@ -2374,16 +2412,19 @@ gnc_invoice_window_new_invoice (QofBook *bookp, const GncOwner *owner,
     iw->type_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_choice_hbox"));
     iw->type_choice = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_invoice"));
     /* configure the type related widgets based on dialog type and invoice type */
-    if (iw->dialog_type == NEW_INVOICE)
+    switch (dialog_type)
     {
+    case NEW_INVOICE:
+    case DUP_INVOICE:
         gtk_widget_show_all (iw->type_hbox);
         gtk_widget_hide (iw->type_label);
-    }
-    else
-    {
+        break;
+    case MOD_INVOICE:
         gtk_widget_hide_all (iw->type_hbox);
         gtk_widget_show (iw->type_label);
-
+        break;
+    default:
+        break;
     }
 
     iw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_id_entry"));
@@ -2467,7 +2508,7 @@ gnc_ui_invoice_modify (GncInvoice *invoice)
     InvoiceWindow *iw;
     if (!invoice) return NULL;
 
-    iw = gnc_invoice_window_new_invoice (NULL, NULL, invoice);
+    iw = gnc_invoice_window_new_invoice (MOD_INVOICE, NULL, NULL, invoice);
     return iw;
 }
 
@@ -2535,17 +2576,16 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice, gboolean open
     g_list_foreach(gncInvoiceGetEntries(new_invoice),
                    &set_gncEntry_date, &new_date_gdate);
 
-    // Now open that newly created invoice in the "edit" window
-    iw = gnc_ui_invoice_edit (new_invoice);
-    iw->created_invoice = new_invoice;
 
     if (open_properties)
     {
-        // And also open the "properties" pop-up... however, changing the
-        // invoice ID won't be copied over to the tab title even though
-        // it's correctly copied into the invoice.
-        iw = gnc_ui_invoice_modify (new_invoice);
-        iw->created_invoice = new_invoice;
+        // Open the "properties" pop-up for the invoice...
+        iw = gnc_invoice_window_new_invoice (DUP_INVOICE, NULL, NULL, new_invoice);
+    }
+    else
+    {
+        // Open the newly created invoice in the "edit" window
+        iw = gnc_ui_invoice_edit (new_invoice);
     }
 
     return iw;
@@ -2567,7 +2607,7 @@ gnc_ui_invoice_new (GncOwner *ownerp, QofBook *bookp)
     /* Make sure required options exist */
     if (!bookp) return NULL;
 
-    iw = gnc_invoice_window_new_invoice (bookp, &owner, NULL);
+    iw = gnc_invoice_window_new_invoice (NEW_INVOICE, bookp, &owner, NULL);
 
     return iw;
 }
