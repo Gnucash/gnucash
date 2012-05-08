@@ -659,26 +659,23 @@ KvpFrame* gncOwnerGetSlots(GncOwner* owner)
 gboolean
 gncOwnerLotMatchOwnerFunc (GNCLot *lot, gpointer user_data)
 {
-    GncOwner owner_def;
-    const GncOwner *owner;
-    const GncOwner *this_owner = user_data;
-    GncInvoice *invoice;
+    const GncOwner *req_owner = user_data;
+    GncOwner lot_owner;
+    const GncOwner *end_owner;
+    GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
 
-    /* If this lot is not for this owner, then ignore it */
-    invoice = gncInvoiceGetInvoiceFromLot (lot);
+    /* Determine the owner associated to the lot */
     if (invoice)
-    {
-        owner = gncInvoiceGetOwner (invoice);
-        owner = gncOwnerGetEndOwner ((GncOwner*)owner);
-    }
+        /* Invoice lots */
+        end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+    else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
+        /* Pre-payment lots */
+        end_owner = gncOwnerGetEndOwner (&lot_owner);
     else
-    {
-        if (!gncOwnerGetOwnerFromLot (lot, &owner_def))
-            return FALSE;
-        owner = gncOwnerGetEndOwner (&owner_def);
-    }
+        return FALSE;
 
-    return gncOwnerEqual (owner, this_owner);
+    /* Is this a lot for the requested owner ? */
+    return gncOwnerEqual (end_owner, req_owner);
 }
 
 gint
@@ -1022,6 +1019,43 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
         }
 
     }
+}
+
+/*
+ * Create a payment of "amount" for the owner and match it with
+ * the set of lots passed in. If not lots were given all open
+ * lots for the owner are considered.
+ */
+void
+gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
+                      Account *posted_acc, Account *xfer_acc,
+                      gnc_numeric amount, gnc_numeric exch, Timespec date,
+                      const char *memo, const char *num)
+{
+    GNCLot *payment_lot;
+    GList *selected_lots;
+
+    /* Verify our arguments */
+    if (!owner || !posted_acc || !xfer_acc) return;
+    g_return_if_fail (owner->owner.undefined);
+
+    /* Create a lot for this payment */
+    payment_lot = gncOwnerCreatePaymentLot (owner, txn, posted_acc, xfer_acc,
+                                            amount, exch, date, memo, num);
+
+    if (lots)
+        selected_lots = lots;
+    else
+        selected_lots = xaccAccountFindOpenLots (posted_acc, gncOwnerLotMatchOwnerFunc,
+                                                 (gpointer)owner, NULL);
+
+    /* And link the selected lots and the payment lot together as well as possible.
+     * If the payment was bigger than the selected documents/overpayments, only
+     * part of the payment will be used. Similarly if more documents were selected
+     * than the payment value set, not all documents will be marked as paid. */
+    if (payment_lot)
+        selected_lots = g_list_prepend (selected_lots, payment_lot);
+    gncOwnerAutoApplyPaymentsWithLots (owner, selected_lots);
 }
 
 GList *

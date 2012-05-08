@@ -210,28 +210,6 @@ gnc_payment_dialog_document_selection_changed (PaymentWindow *pw)
     gnc_ui_payment_window_set_amount(pw, gnc_numeric_abs (val));
 }
 
-static gboolean
-gnc_lot_match_owner (GNCLot *lot, gpointer user_data)
-{
-    const GncOwner *req_owner = user_data;
-    GncOwner lot_owner;
-    const GncOwner *end_owner;
-    GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
-
-    /* Determine the owner associated to the lot */
-    if (invoice)
-        /* Invoice lots */
-        end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
-    else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
-        /* Pre-payment lots */
-        end_owner = gncOwnerGetEndOwner (&lot_owner);
-    else
-        return FALSE;
-
-    /* Is this a lot for the requested owner ? */
-    return gncOwnerEqual (end_owner, req_owner);
-}
-
 static void
 gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 {
@@ -242,7 +220,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 
     /* Get a list of open lots for this owner and post account */
     if (pw->owner.owner.undefined)
-        list = xaccAccountFindOpenLots (pw->post_acct, gnc_lot_match_owner,
+        list = xaccAccountFindOpenLots (pw->post_acct, gncOwnerLotMatchOwnerFunc,
                                         &pw->owner, NULL);
 
     /* Clear the existing list */
@@ -630,17 +608,9 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
             gnc_xfer_dialog_run_until_done(xfer);
         }
 
-        /* Create a lot for this payment */
-        payment_lot = gncOwnerCreatePaymentLot (&pw->owner, pw->pre_existing_txn,
-                                                post, acc, amount, exch, date, memo, num);
-
-        /* And link the selected lots and the payment lot together as well as possible.
-         * If the payment was bigger than the selected documents/overpayments, only
-         * part of the payment will be used. Similarly if more documents were selected
-         * than the payment value set, not all documents will be marked as paid. */
-        if (payment_lot)
-            selected_lots = g_list_prepend (selected_lots, payment_lot);
-        gncOwnerAutoApplyPaymentsWithLots (&pw->owner, selected_lots);
+        /* Perform the payment */
+        gncOwnerApplyPayment (&pw->owner, pw->pre_existing_txn, selected_lots,
+                              post, acc, amount, exch, date, memo, num);
     }
     gnc_resume_gui_refresh ();
 

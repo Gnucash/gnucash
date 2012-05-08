@@ -201,8 +201,8 @@ gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType
 KvpFrame* gncOwnerGetSlots(GncOwner* owner);
 
 /**
- * Create a lot for a payment for the given owner and with the given
- * parameters. If a transaction is passed, this transaction will be
+ * Create a lot for a payment to the owner using the other
+ * parameters passed in. If a transaction is set, this transaction will be
  * reused if possible (meaning, if the transaction currency matches
  * the owner's currency and if the transaction has (at least?) one
  * split in the transfer account).
@@ -248,6 +248,23 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
  *   it as well.
  */
 void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots);
+
+/**
+ * A convenience function to apply a payment to the owner.
+ * It creates a lot for a payment, optionally based on an existing
+ * transaction and then tries to balance it with the list of
+ * document/payment lots passed in. If not lots were given,
+ * all open lots for the owner are considered.
+ *
+ * This code is actually a convenience wrapper around gncOwnerCreatePaymentLot
+ * and gncOwnerAutoApplyPaymentsWithLots. See their descriptions for more
+ * details on what happens exactly.
+ */
+void
+gncOwnerApplyPayment (const GncOwner *owner, Transaction *txn, GList *lots,
+                      Account *posted_acc, Account *xfer_acc,
+                      gnc_numeric amount, gnc_numeric exch, Timespec date,
+                      const char *memo, const char *num);
 
 /** Returns a GList of account-types based on the owner type */
 GList * gncOwnerGetAccountTypesList (const GncOwner *owner);

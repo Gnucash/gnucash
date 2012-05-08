@@ -1700,6 +1700,39 @@ void gncInvoiceAutoApplyPayments (GncInvoice *invoice)
     g_list_free (lot_list);
 }
 
+/*
+ * Create a payment of "amount" for the invoice owner and attempt
+ * to balance it with the given invoice.
+ */
+void
+gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
+                        Account *xfer_acc, gnc_numeric amount,
+                        gnc_numeric exch, Timespec date,
+                        const char *memo, const char *num)
+{
+    GNCLot *payment_lot, *invoice_lot;
+    GList *selected_lots = NULL;
+    const GncOwner *owner;
+
+    /* Verify our arguments */
+    if (!invoice || !gncInvoiceIsPosted (invoice) || !xfer_acc) return;
+
+    owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+    g_return_if_fail (owner->owner.undefined);
+
+    /* Create a lot for this payment */
+    payment_lot = gncOwnerCreatePaymentLot (owner, txn, invoice->posted_acc, xfer_acc,
+                                            amount, exch, date, memo, num);
+
+    /* Select the invoice as only payment candidate */
+    selected_lots = g_list_prepend (selected_lots, invoice->posted_lot);
+
+    /* And link the invoice lot and the payment lot together as well as possible. */
+    if (payment_lot)
+        selected_lots = g_list_prepend (selected_lots, payment_lot);
+    gncOwnerAutoApplyPaymentsWithLots (owner, selected_lots);
+}
+
 static gboolean gncInvoiceDateExists (const Timespec *date)
 {
     g_return_val_if_fail (date, FALSE);

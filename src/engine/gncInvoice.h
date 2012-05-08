@@ -204,6 +204,25 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables);
 void
 gncInvoiceAutoApplyPayments (GncInvoice *invoice);
 
+/**
+ * A convenience function to apply a payment to an invoice.
+ * It creates a lot for a payment optionally based on an existing
+ * transaction and then tries to balance it with
+ * the given invoice.
+ * Contrary to gncOwnerApplyPayment, no other open documents
+ * or payments for the owner will be considered
+ * to balance the payment.
+ *
+ * This code is actually a convenience wrapper around gncOwnerCreatePaymentLot
+ * and gncOwnerAutoApplyPaymentsWithLots. See their descriptions for more
+ * details on what happens exactly.
+ */
+void
+gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
+                      Account *xfer_acc, gnc_numeric amount,
+                      gnc_numeric exch, Timespec date,
+                      const char *memo, const char *num);
+
 
 /** Given a transaction, find and return the Invoice */
 GncInvoice * gncInvoiceGetInvoiceFromTxn (const Transaction *txn);
