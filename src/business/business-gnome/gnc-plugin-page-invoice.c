@@ -55,10 +55,6 @@ static void gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page, 
 
 static void gnc_plugin_page_invoice_summarybar_position_changed(GConfEntry *entry, gpointer user_data);
 
-void gnc_plugin_page_invoice_start_toggle_cb(GtkToggleButton *toggle, gpointer data);
-void gnc_plugin_page_invoice_end_toggle_cb(GtkToggleButton *toggle, gpointer data);
-void gnc_plugin_page_invoice_today_cb(GtkButton *buttontoggle, gpointer data);
-
 /* Command callbacks */
 static void gnc_plugin_page_invoice_cmd_new_invoice (GtkAction *action, GncPluginPageInvoice *plugin_page);
 static void gnc_plugin_page_invoice_cmd_new_account (GtkAction *action, GncPluginPageInvoice *plugin_page);
