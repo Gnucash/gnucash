@@ -447,6 +447,18 @@ void gncEmployeeSetUsername (GncEmployee *employee, const char *username)
     gncEmployeeCommitEdit (employee);
 }
 
+/* Employees don't have a name property defined, but
+ * in order to get a consistent interface with other owner types,
+ * this function fakes one by setting the name property of
+ * the employee's address.
+ */
+void gncEmployeeSetName (GncEmployee *employee, const char *name)
+{
+    if (!employee) return;
+    if (!name) return;
+    gncAddressSetName (gncEmployeeGetAddr (employee), name);
+}
+
 void gncEmployeeSetLanguage (GncEmployee *employee, const char *language)
 {
     if (!employee) return;
@@ -553,6 +565,17 @@ const char * gncEmployeeGetUsername (const GncEmployee *employee)
 {
     if (!employee) return NULL;
     return employee->username;
+}
+
+/* Employees don't have a name property defined, but
+ * in order to get a consistent interface with other owner types,
+ * this function fakes one by returning the name property of
+ * the employee's address.
+ */
+const char * gncEmployeeGetName (const GncEmployee *employee)
+{
+    if (!employee) return NULL;
+    return gncAddressGetName ( gncEmployeeGetAddr (employee));
 }
 
 GncAddress * gncEmployeeGetAddr (const GncEmployee *employee)
@@ -811,6 +834,10 @@ gboolean gncEmployeeRegister (void)
         {
             EMPLOYEE_USERNAME, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetUsername,
             (QofSetterFunc)gncEmployeeSetUsername
+        },
+        {
+            EMPLOYEE_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetName,
+            (QofSetterFunc)gncEmployeeSetName
         },
         {
             EMPLOYEE_LANGUAGE, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetLanguage,

@@ -397,7 +397,7 @@ const char * gncOwnerGetName (const GncOwner *owner)
     case GNC_OWNER_VENDOR:
         return gncVendorGetName (owner->owner.vendor);
     case GNC_OWNER_EMPLOYEE:
-        return gncAddressGetName(gncEmployeeGetAddr (owner->owner.employee));
+        return gncEmployeeGetName (owner->owner.employee);
     }
 }
 

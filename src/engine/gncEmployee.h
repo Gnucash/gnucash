@@ -66,6 +66,12 @@ int gncEmployeeCompare (const GncEmployee *a, const GncEmployee *b);
  @{ */
 void gncEmployeeSetID (GncEmployee *employee, const char *id);
 void gncEmployeeSetUsername (GncEmployee *employee, const char *username);
+/* Note: Employees don't have a name property defined, but
+ * in order to get a consistent interface with other owner types,
+ * this function fakes one by setting the name property of
+ * the employee's address.
+ */
+void gncEmployeeSetName (GncEmployee *employee, const char *name);
 void gncEmployeeSetLanguage (GncEmployee *employee, const char *language);
 void gncEmployeeSetAcl (GncEmployee *employee, const char *acl);
 void gncEmployeeSetWorkday (GncEmployee *employee, gnc_numeric workday);
@@ -82,6 +88,12 @@ void qofEmployeeSetAddr (GncEmployee *employee, QofInstance *addr_ent);
 QofBook * gncEmployeeGetBook (GncEmployee *employee);
 const char * gncEmployeeGetID (const GncEmployee *employee);
 const char * gncEmployeeGetUsername (const GncEmployee *employee);
+/* Note: Employees don't have a name property defined, but
+ * in order to get a consistent interface with other owner types,
+ * this function fakes one by returning the name property of
+ * the employee's address.
+ */
+const char * gncEmployeeGetName (const GncEmployee *employee);
 GncAddress * gncEmployeeGetAddr (const GncEmployee *employee);
 const char * gncEmployeeGetLanguage (const GncEmployee *employee);
 const char * gncEmployeeGetAcl (const GncEmployee *employee);
@@ -107,6 +119,7 @@ static inline GncEmployee * gncEmployeeLookup (const QofBook *book, const GncGUI
 
 #define EMPLOYEE_ID       "id"
 #define EMPLOYEE_USERNAME "username"
+#define EMPLOYEE_NAME     "name"
 #define EMPLOYEE_ADDR     "addr"
 #define EMPLOYEE_LANGUAGE "native language"
 #define EMPLOYEE_ACL      "acl"
