@@ -50,7 +50,7 @@
 #   @ingroup python_bindings_examples
 
 from os.path import abspath
-from sys import argv
+from sys import argv, exit
 import datetime
 from datetime import timedelta
 from gnucash import Session, Account, GncNumeric
@@ -61,118 +61,130 @@ from gnucash.gnucash_core_c import \
     ACCT_TYPE_ASSET, ACCT_TYPE_RECEIVABLE, ACCT_TYPE_INCOME, \
     GNC_OWNER_CUSTOMER, ACCT_TYPE_LIABILITY
 
+if len(argv) < 2:
+    print 'not enough parameters'
+    print 'usage: simple_business_create.py {new_book_url}'
+    print 'example:'
+    print "gnucash-env python simple_business_create.py sqlite3:///home/blah/blah.gnucash"
+    exit()
+    
 
 s = Session(argv[1], is_new=True)
-# this seems to make a difference in more complex cases
-s.save()
 
-book = s.book
-root = book.get_root_account()
-commod_table = book.get_table()
-CAD = commod_table.lookup('CURRENCY', 'CAD')
+try:
 
-a = Account(book)
-root.append_child(a)
-a.SetName('Assets')
-a.SetType(ACCT_TYPE_ASSET)
-a.SetCommodity(CAD)
+    book = s.book
+    root = book.get_root_account()
+    commod_table = book.get_table()
+    CAD = commod_table.lookup('CURRENCY', 'CAD')
 
-a2 = Account(book)
-a.append_child(a2)
-a2.SetName('Recievables')
-a2.SetType(ACCT_TYPE_RECEIVABLE)
-a2.SetCommodity(CAD)
+    a = Account(book)
+    root.append_child(a)
+    a.SetName('Assets')
+    a.SetType(ACCT_TYPE_ASSET)
+    a.SetCommodity(CAD)
 
-a3 = Account(book)
-root.append_child(a3)
-a3.SetName('Income')
-a3.SetType(ACCT_TYPE_INCOME)
-a3.SetCommodity(CAD)
+    a2 = Account(book)
+    a.append_child(a2)
+    a2.SetName('Receivables')
+    a2.SetType(ACCT_TYPE_RECEIVABLE)
+    a2.SetCommodity(CAD)
 
-a4 = Account(book)
-root.append_child(a4)
-a4.SetName('Liabilities')
-a4.SetType(ACCT_TYPE_LIABILITY)
-a4.SetCommodity(CAD)
+    a3 = Account(book)
+    root.append_child(a3)
+    a3.SetName('Income')
+    a3.SetType(ACCT_TYPE_INCOME)
+    a3.SetCommodity(CAD)
 
-a5 = Account(book)
-a4.append_child(a5)
-a5.SetName('Tax payable')
-a5.SetType(ACCT_TYPE_LIABILITY)
-a5.SetCommodity(CAD)
+    a4 = Account(book)
+    root.append_child(a4)
+    a4.SetName('Liabilities')
+    a4.SetType(ACCT_TYPE_LIABILITY)
+    a4.SetCommodity(CAD)
 
-a6 = Account(book)
-a.append_child(a6)
-a6.SetName('Bank')
-a6.SetType(ACCT_TYPE_ASSET)
-a6.SetCommodity(CAD)
+    a5 = Account(book)
+    a4.append_child(a5)
+    a5.SetName('Tax payable')
+    a5.SetType(ACCT_TYPE_LIABILITY)
+    a5.SetCommodity(CAD)
 
-# name isn't required, ID and currency are
-new_customer = Customer(book, "1", CAD, "Bill & Bob Industries")
+    a6 = Account(book)
+    a.append_child(a6)
+    a6.SetName('Bank')
+    a6.SetType(ACCT_TYPE_ASSET)
+    a6.SetCommodity(CAD)
 
-# not required, but a good idea because the GUI insists on basic address info
-address = new_customer.GetAddr()
-address.SetName("Bill & Bob")
-address.SetAddr1("201 Nowhere street")
+    # name isn't required, ID and currency are
+    new_customer = Customer(book, "1", CAD, "Bill & Bob Industries")
 
-new_employee = Employee(book, "2", CAD, "Reliable employee")
+    # not required, but a good idea because the GUI insists on basic address info
+    address = new_customer.GetAddr()
+    address.SetName("Bill & Bob")
+    address.SetAddr1("201 Nowhere street")
 
-new_vendor = Vendor(book, "3", CAD, "Dependable vendor")
+    new_employee = Employee(book, "2", CAD, "Reliable employee")
 
-new_job = Job(book, "4", new_vendor, "Good clean, fun")
+    new_vendor = Vendor(book, "3", CAD, "Dependable vendor")
 
-# 7% tax
-tax_table = TaxTable(book, "good tax",
-                     TaxTableEntry(a5, True, GncNumeric(700000, 100000) ) )
+    new_job = Job(book, "4", new_vendor, "Good clean, fun")
 
-
-invoice_customer = Invoice(book, "5", CAD, new_customer)
-customer_extract = invoice_customer.GetOwner()
-assert( isinstance(customer_extract, Customer) )
-assert( customer_extract.GetName() == new_customer.GetName() )
-
-invoice_employee = Invoice(book, "6", CAD, new_employee)
-employee_extract = invoice_employee.GetOwner()
-assert( isinstance(employee_extract, Employee) )
-assert( employee_extract.GetName() == new_employee.GetName() )
-
-invoice_vendor = Invoice(book, "7", CAD, new_vendor)
-vendor_extract = invoice_vendor.GetOwner()
-assert( isinstance(vendor_extract, Vendor) )
-assert( vendor_extract.GetName() == new_vendor.GetName() )
-
-invoice_job = Invoice(book, "8", CAD, new_job)
-job_extract = invoice_job.GetOwner()
-assert( isinstance(job_extract, Job) )
-assert( job_extract.GetName() == new_job.GetName() )
+    # 7% tax
+    tax_table = TaxTable(book, "good tax",
+                         TaxTableEntry(a5, True, GncNumeric(700000, 100000) ) )
 
 
-invoice_entry = Entry(book, invoice_customer)
-invoice_entry.SetInvTaxTable(tax_table)
-invoice_entry.SetInvTaxIncluded(False)
-invoice_entry.SetDescription("excelent product")
-invoice_entry.SetQuantity( GncNumeric(1) )
-invoice_entry.SetInvAccount(a3)
-invoice_entry.SetInvPrice(GncNumeric(1) )
+    invoice_customer = Invoice(book, "5", CAD, new_customer)
+    customer_extract = invoice_customer.GetOwner()
+    assert( isinstance(customer_extract, Customer) )
+    assert( customer_extract.GetName() == new_customer.GetName() )
 
-invoice_customer.PostToAccount(a2, datetime.date.today(), datetime.date.today(),
-                               "the memo", True)
+    invoice_employee = Invoice(book, "6", CAD, new_employee)
+    employee_extract = invoice_employee.GetOwner()
+    assert( isinstance(employee_extract, Employee) )
+    assert( employee_extract.GetName() == new_employee.GetName() )
 
-new_customer.ApplyPayment(None, a2, a6, GncNumeric(100,100),
-                          GncNumeric(1), datetime.date.today(), "", "")
+    invoice_vendor = Invoice(book, "7", CAD, new_vendor)
+    vendor_extract = invoice_vendor.GetOwner()
+    assert( isinstance(vendor_extract, Vendor) )
+    assert( vendor_extract.GetName() == new_vendor.GetName() )
 
-new_customer.ApplyPayment(invoice_customer, a2, a6, GncNumeric(7,100),
-                          GncNumeric(1), datetime.date.today(), "", "")
+    invoice_job = Invoice(book, "8", CAD, new_job)
+    job_extract = invoice_job.GetOwner()
+    assert( isinstance(job_extract, Job) )
+    assert( job_extract.GetName() == new_job.GetName() )
 
-vendor_bill_returns = book.BillLoookupByID("7")
-assert( vendor_bill_returns.GetID() == "7" )
-vendor_extract = vendor_bill_returns.GetOwner()
-assert( vendor_extract.GetName() == new_vendor.GetName() )
-customer_invoice_returns = book.InvoiceLookupByID("5")
-assert( customer_invoice_returns.GetID() == "5" )
-customer_returns = book.CustomerLookupByID("1")
-assert( customer_returns.GetName() == new_customer.GetName() )
 
-s.save()
+    invoice_entry = Entry(book, invoice_customer)
+    invoice_entry.SetInvTaxTable(tax_table)
+    invoice_entry.SetInvTaxIncluded(False)
+    invoice_entry.SetDescription("excellent product")
+    invoice_entry.SetQuantity( GncNumeric(1) )
+    invoice_entry.SetInvAccount(a3)
+    invoice_entry.SetInvPrice(GncNumeric(1) )
+    invoice_entry.SetDateEntered(datetime.datetime.now())
 
-s.end()
+    invoice_customer.PostToAccount(a2, datetime.date.today(), datetime.date.today(),
+                                   "the memo", True)
+
+    new_customer.ApplyPayment(None, None, a2, a6, GncNumeric(100,100),
+                              GncNumeric(1), datetime.date.today(), "", "")
+
+    invoice_customer.ApplyPayment(None, a6, GncNumeric(7,100),
+                                  GncNumeric(1), datetime.date.today(), "", "")
+
+    vendor_bill_returns = book.BillLoookupByID("7")
+    assert( vendor_bill_returns.GetID() == "7" )
+    vendor_extract = vendor_bill_returns.GetOwner()
+    assert( vendor_extract.GetName() == new_vendor.GetName() )
+    customer_invoice_returns = book.InvoiceLookupByID("5")
+    assert( customer_invoice_returns.GetID() == "5" )
+    customer_returns = book.CustomerLookupByID("1")
+    assert( customer_returns.GetName() == new_customer.GetName() )
+
+    s.save()
+
+    s.end()
+except:
+    if not s == None:
+        s.end()
+    raise
