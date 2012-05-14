@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.4.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-12 17:08+0100\n"
-"PO-Revision-Date: 2012-03-11 01:13+0800\n"
+"PO-Revision-Date: 2012-05-13 16:21+0800\n"
 "Last-Translator: Kuang-che Wu <kcwu@csie.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -272,7 +272,7 @@ msgstr "GCONFPATH"
 
 #: ../src/bin/gnucash-bin.c:484
 msgid "Add price quotes to given GnuCash datafile"
-msgstr "增加報價至指定的 GnuCash 檔案。"
+msgstr "增加報價至指定的 GnuCash 檔案"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -529,7 +529,7 @@ msgid ""
 "Identification - Company Name, and\n"
 "Payment Address - Name."
 msgstr ""
-"你必須輸入公司名稱。若客戶是個人而非公司，請在\"識別 - 公司名稱\"跟\"連絡地址 - 名稱\"填相"
+"你必須輸入公司名稱。若客戶是個人而非公司，請在「識別 - 公司名稱」跟「連絡地址 - 名稱」填相"
 "同的名字。"
 
 #: ../src/business/business-gnome/dialog-customer.c:335
@@ -1211,7 +1211,7 @@ msgstr "您必須輸入張貼的科目名稱。"
 #: ../src/business/business-gnome/dialog-payment.c:300
 #, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr "您選擇的張貼科目 %s 並不存在。"
+msgstr "您選擇的張貼科目 %s 並不存在"
 
 #: ../src/business/business-gnome/dialog-payment.c:325
 msgid ""
@@ -1235,7 +1235,7 @@ msgid ""
 "Identification - Company Name, and\n"
 "Payment Address - Name."
 msgstr ""
-"你必須輸入公司名稱。若廠商是個人而非公司，請在\"識別 - 公司名稱\"跟\"連絡地址 - 名稱\"填相"
+"你必須輸入公司名稱。若廠商是個人而非公司，請在「識別 - 公司名稱」跟「連絡地址 - 名稱」填相"
 "同的名字。"
 
 #: ../src/business/business-gnome/dialog-vendor.c:220
@@ -1877,7 +1877,7 @@ msgstr "訂單項目"
 
 #: ../src/business/business-gnome/glade/order.glade.h:11
 msgid "Order Entry"
-msgstr "排序項目"
+msgstr "訂單項目"
 
 #: ../src/business/business-gnome/glade/order.glade.h:13
 msgid "Order Information"
@@ -2058,7 +2058,7 @@ msgstr "客戶(_C)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:139
 msgid "_New Customer..."
-msgstr "新增客戶(_C)..."
+msgstr "新增客戶(_N)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:140
 msgid "Open the New Customer dialog"
@@ -2082,7 +2082,7 @@ msgstr "開啟新發票對話盒"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:154
 msgid "Find In_voice..."
-msgstr "尋找發票(_I)..."
+msgstr "尋找發票(_V)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
 msgid "Open the Find Invoice dialog"
@@ -2282,7 +2282,7 @@ msgstr "製作可列印的發票"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:113
 msgid "_Cut"
-msgstr "剪下(_U)"
+msgstr "剪下(_C)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:118
 msgid "Copy"
@@ -2321,7 +2321,7 @@ msgstr "將這張發票張貼到您的會計科目表"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:143
 msgid "_Unpost Invoice"
-msgstr "不張貼發票(_U)"
+msgstr "解除張貼發票(_U)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:144
 msgid "Unpost this Invoice and make it editable"
@@ -2430,7 +2430,7 @@ msgstr "以項目的日期排序"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:201
 msgid "_Quantity"
-msgstr "總額(_Q)"
+msgstr "數量(_Q)"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:201
 msgid "Sort by quantity"
@@ -2840,7 +2840,7 @@ msgstr "稅金表格"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:110
 msgid "Taxable?"
-msgstr "稅金表格?"
+msgstr "應稅?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:115
 msgid "Tax Included?"
@@ -2867,11 +2867,11 @@ msgstr "小計"
 #: ../intl-scm/guile-strings.c:1204 ../intl-scm/guile-strings.c:5570
 #: ../intl-scm/guile-strings.c:5574
 msgid "Tax"
-msgstr "稅務"
+msgstr "稅"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:135
 msgid "Billable?"
-msgstr "可有帳單？"
+msgstr "可計費？"
 
 #. src/app-utils/prefs.scm
 #. src/report/business-reports/customer-summary.scm
@@ -2896,7 +2896,7 @@ msgstr "輸入此項目的收入/支出科目，或從清單中選擇一個"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:557
 msgid "Enter the type of Entry"
-msgstr "輸入項目的日期"
+msgstr "輸入項目的類別"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:593
 msgid "Enter the Entry Description"
@@ -2932,11 +2932,11 @@ msgstr "在套用折扣後計算稅金"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:659
 msgid "Discount and tax both applied on pretax value"
-msgstr "折扣和稅金都套用到稅前數值"
+msgstr "折扣和稅金都以未稅價格計算"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:662
 msgid "Discount computed after tax is applied"
-msgstr "在套用稅金後計算折扣"
+msgstr "以稅後價格計算折扣"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:665
 msgid "Select how to compute the Discount and Taxes"
@@ -2956,7 +2956,7 @@ msgstr "輸入要套用到這個項目的稅金表格"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:711
 msgid "Is this entry taxable?"
-msgstr "此項目已扣稅？"
+msgstr "此項目已含稅？"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:720
 msgid "Is the tax already included in the price of this entry?"
@@ -3657,7 +3657,7 @@ msgstr "剩下發生次數 (%d) 大於全部發生次數 (%d)。"
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
-msgstr "您試圖建立永遠不會執行的排程交易。您真的要這麼做？"
+msgstr "您試圖建立永遠不會發生的排程交易。您真的要這麼做？"
 
 #: ../src/gnome/dialog-sx-editor.c:1403
 msgid "(never)"
@@ -4078,7 +4078,7 @@ msgstr "<b>交易</b>"
 
 #: ../src/gnome/glade/account.glade.h:10
 msgid "<b>_Parent Account</b>"
-msgstr "<b>母科目</b>"
+msgstr "<b>母科目(_P)</b>"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/sx-summary.scm
@@ -4097,7 +4097,7 @@ msgstr "科目名稱(_N)："
 
 #: ../src/gnome/glade/account.glade.h:14
 msgid "C_lear All"
-msgstr "清除全部(_C)"
+msgstr "清除全部(_L)"
 
 #: ../src/gnome/glade/account.glade.h:15
 msgid "Choose Currency"
@@ -4696,9 +4696,9 @@ msgid ""
 msgstr ""
 "每年\n"
 "每半年\n"
-"每三分之一年\n"
+"每四個月\n"
 "每季\n"
-"每兩月\n"
+"每兩個月\n"
 "每月\n"
 "每半個月\n"
 "每兩週\n"
@@ -5670,7 +5670,7 @@ msgstr "條件用於沒有變數的分割"
 
 #: ../src/gnome/glade/sched-xact.glade.h:57
 msgid "Crea_te in advance:"
-msgstr "多久後建立(_T):"
+msgstr "多久前建立(_T):"
 
 #: ../src/gnome/glade/sched-xact.glade.h:58
 msgid "Create automatically"
@@ -5678,7 +5678,7 @@ msgstr "自動建立"
 
 #: ../src/gnome/glade/sched-xact.glade.h:59
 msgid "Create in advance:"
-msgstr "多久後建立:"
+msgstr "多久前建立:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:60
 msgid "Create the transaction this many days before its effective date."
@@ -6274,7 +6274,7 @@ msgstr "使用者名稱(_U)："
 
 #: ../src/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
-msgstr "新增科目頁"
+msgstr "新增科目頁(_P)"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
@@ -6714,7 +6714,7 @@ msgstr "估計預算"
 #: ../src/gnome/gnc-plugin-page-budget.c:153
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr "根據選定科目過去的交易紀錄估計預算值。"
+msgstr "根據選定科目過去的交易紀錄估計預算值"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:181
 msgid "Estimate"
@@ -6758,7 +6758,7 @@ msgstr "列印支票(_P)..."
 #: ../src/gnome-utils/gnc-main-window.c:277
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1013
 msgid "Cu_t"
-msgstr "剪下(_U)"
+msgstr "剪下(_T)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
 #: ../src/gnome-utils/gnc-main-window.c:278
@@ -7676,7 +7676,7 @@ msgstr "下一個要顯示的秘訣。"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:1
 msgid "\"Enter\" key moves to bottom of register"
-msgstr "按 \"Enter\" 鍵移至登記簿底端的空白交易處"
+msgstr "按「Enter」鍵移至登記簿底端的空白交易處"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:2
 #, fuzzy
@@ -7966,7 +7966,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:57
 msgid "Show vertical borders in a register"
-msgstr "顯示細格的垂直邊線。"
+msgstr "顯示細格的垂直邊線"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:58
 #, fuzzy
@@ -8379,7 +8379,7 @@ msgstr "對話盒中欄位的寬度"
 
 #: ../src/gnome-search/dialog-search.c:162
 msgid "You must select an item from the list"
-msgstr "您必須從清單中選擇一個項目。"
+msgstr "您必須從清單中選擇一個項目"
 
 #: ../src/gnome-search/dialog-search.c:282
 msgid "Select"
@@ -8695,7 +8695,7 @@ msgstr ""
 #. children
 #: ../src/gnome-utils/dialog-account.c:681
 msgid "_Show children accounts"
-msgstr "顯示子科目"
+msgstr "顯示子科目(_S)"
 
 #: ../src/gnome-utils/dialog-account.c:754
 msgid "The account must be given a name."
@@ -8886,7 +8886,7 @@ msgstr "選擇子科目"
 
 #: ../src/gnome-utils/dialog-options.c:946
 msgid "Select all descendents of selected account."
-msgstr "選擇選定科目的所有子科目"
+msgstr "選擇選定科目的所有子科目。"
 
 #: ../src/gnome-utils/dialog-options.c:952
 #: ../src/gnome-utils/dialog-options.c:1087
@@ -8895,7 +8895,7 @@ msgstr "選擇預設值"
 
 #: ../src/gnome-utils/dialog-options.c:954
 msgid "Select the default account selection."
-msgstr "選擇預設的科目選擇"
+msgstr "選擇預設的科目選擇。"
 
 #: ../src/gnome-utils/dialog-options.c:968
 msgid "Show Hidden Accounts"
@@ -9107,39 +9107,39 @@ msgstr "歐洲"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:245
 msgid "ISO-8859-1 (West European)"
-msgstr "ISO-8859-1 (西歐語言)"
+msgstr "ISO-8859-1 (西歐語系)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:246
 msgid "ISO-8859-2 (East European)"
-msgstr "ISO-8859-2 (東歐語言)"
+msgstr "ISO-8859-2 (東歐語系)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:247
 msgid "ISO-8859-3 (South European)"
-msgstr "ISO-8859-3 (南歐語言)"
+msgstr "ISO-8859-3 (南歐語系)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:248
 msgid "ISO-8859-4 (North European)"
-msgstr "ISO-8859-4 (北歐語言)"
+msgstr "ISO-8859-4 (北歐語系)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:249
 msgid "ISO-8859-5 (Cyrillic)"
-msgstr "ISO-8859-5 (Cyrillic)"
+msgstr "ISO-8859-5 (斯拉夫語)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:250
 msgid "ISO-8859-6 (Arabic)"
-msgstr "ISO-8859-6 (阿拉伯語)"
+msgstr "ISO-8859-6 (阿拉伯文)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:251
 msgid "ISO-8859-7 (Greek)"
-msgstr "ISO-8859-7 (希臘語)"
+msgstr "ISO-8859-7 (希臘文)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:252
 msgid "ISO-8859-8 (Hebrew)"
-msgstr "ISO-8859-8 (希伯來語)"
+msgstr "ISO-8859-8 (希伯來文)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:253
 msgid "ISO-8859-9 (Turkish)"
-msgstr "ISO-8859-9 (土耳其語)"
+msgstr "ISO-8859-9 (土耳其文)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:254
 msgid "ISO-8859-10 (Nordic)"
@@ -9147,15 +9147,15 @@ msgstr "ISO-8859-10 (北日耳曼語支)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:255
 msgid "ISO-8859-11 (Thai)"
-msgstr "ISO-8859-11 (泰語)"
+msgstr "ISO-8859-11 (泰文)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:256
 msgid "ISO-8859-13 (Baltic)"
-msgstr "ISO-8859-13 (Baltic)"
+msgstr "ISO-8859-13 (波羅的海語系)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:257
 msgid "ISO-8859-14 (Celtic)"
-msgstr "ISO-8859-14 (Celtic)"
+msgstr "ISO-8859-14 (塞爾特語)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:258
 msgid "ISO-8859-15 (West European, Euro sign)"
@@ -9182,7 +9182,7 @@ msgstr "KOI8-U (烏克蘭)"
 #. * for assistance with spelling.
 #: ../src/gnome-utils/druid-gnc-xml-import.c:617
 msgid "ISO-8859-1 KOI8-U"
-msgstr "ISO-8859-1 KOI8-U"
+msgstr "Big5 BIG5 Big5HKSCS BIG5-HKSCS ISO-8859-1"
 
 #. another error, cannot handle this here
 #: ../src/gnome-utils/druid-gnc-xml-import.c:750
@@ -9586,10 +9586,10 @@ msgid ""
 "Click \"Forward\" to finish loading files and move to the next step of the "
 "GnuCash Datafile import process."
 msgstr ""
-"如果您此時還有更多資料要匯入，點選「讀取其他檔案」。\n"
+"如果您此時還有更多資料要匯入，點選「讀取其他檔案」。"
 "您可以在您的科目儲存於不同 GnuCash 檔案時這麼做。\n"
 "\n"
-"點選「向前」以結束載入檔案並且移至 GnuCash 資料檔匯入程序\n"
+"點選「向前」以結束載入檔案並且移至 GnuCash 資料檔匯入程序"
 "的下一個步驟。"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:8
@@ -9983,7 +9983,7 @@ msgstr "核對已結清的交易(_T)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:56
 msgid "Com_press files"
-msgstr "壓縮資料檔案"
+msgstr "壓縮資料檔案(_P)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:57
 msgid "Compress the data file with gzip when saving it to disk."
@@ -10008,7 +10008,7 @@ msgstr "預設如果傳回的項目少於這個數字時進行「重新搜尋」
 
 #: ../src/gnome-utils/glade/preferences.glade.h:63
 msgid "Display \"_tip of the day\" dialog"
-msgstr "顯示「每日一訣」對話盒"
+msgstr "顯示「每日一訣」對話盒(_T)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:64
 msgid "Display hints for using GnuCash at startup"
@@ -10214,7 +10214,7 @@ msgstr "列印"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:114
 msgid "Priority text besi_de icons"
-msgstr "重要文字在圖示旁"
+msgstr "重要文字在圖示旁(_D)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:115
 msgid "Re_lative:"
@@ -10254,7 +10254,7 @@ msgstr "以一行顯示全部交易(在雙行模式則用兩行)。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:125
 msgid "Show auto-save confirmation _question"
-msgstr "顯示確認自動存檔的詢問"
+msgstr "顯示確認自動存檔的詢問(_Q)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:126
 msgid "Show close button on _notebook tabs"
@@ -10432,7 +10432,7 @@ msgstr "自動分割分類帳(_A)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:168
 msgid "_Automatic decimal point"
-msgstr "自動小數點"
+msgstr "自動小數點(_A)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:169
 msgid "_Basic ledger"
@@ -10440,7 +10440,7 @@ msgstr "基本分類帳(_B)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:170
 msgid "_Decimal places:"
-msgstr "自動小數位數:"
+msgstr "自動小數位數(_D):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:171
 msgid "_Double line mode"
@@ -10585,7 +10585,7 @@ msgstr "新增..."
 
 #: ../src/gnome-utils/gnc-autosave.c:99
 msgid "Save file automatically?"
-msgstr "自動存檔"
+msgstr "自動存檔？"
 
 #: ../src/gnome-utils/gnc-autosave.c:102
 #, c-format
@@ -11664,7 +11664,7 @@ msgstr "啟用"
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:187
 msgid "Last Occur"
-msgstr "上次發生 "
+msgstr "上次發生"
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:192
 msgid "Next Occur"
@@ -12662,7 +12662,7 @@ msgstr "匯入 _DTAUS"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:137
 msgid "Import a DTAUS file into GnuCash"
-msgstr "匯入 _DTAUS 檔到 GnuCash"
+msgstr "匯入 DTAUS 檔到 GnuCash"
 
 #: ../src/import-export/aqbanking/gnc-plugin-aqbanking.c:149
 msgid "Import DTAUS and _send..."
@@ -13856,6 +13856,7 @@ msgid ""
 msgstr ""
 "請選擇要載入的檔案。當您點選「向前」時，檔案將會被載入並分析。您可能需要回答"
 "一些關於此檔案中的科目的問題。\n"
+"\n"
 "您將有機會載入任何數量的檔案，因此即使您的資料位於不同的檔案中也不用擔心。\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:54
@@ -13993,7 +13994,7 @@ msgstr "選擇(_S)..."
 
 #: ../src/import-export/qif-import/qif.glade.h:90
 msgid "_Show documentation"
-msgstr "顯示說明文件"
+msgstr "顯示說明文件(_S)"
 
 #: ../src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in.h:1
 #, fuzzy
@@ -14547,7 +14548,7 @@ msgid ""
 "You are about to mark a reconciled split as unreconciled.  Doing so might "
 "make future reconciliation difficult!  Continue with this change?"
 msgstr ""
-"您確定要標記此交易為未對帳？"
+"您即將把已對帳交易改標記成未對帳。"
 "這麼做可能使未來的對帳很困難！繼續這個修改？"
 
 #: ../src/register/ledger-core/split-register-control.c:1806
@@ -14721,7 +14722,7 @@ msgid ""
 "You are about to change a reconciled split.  Doing so might make future "
 "reconciliation difficult!  Continue with this change?"
 msgstr ""
-"您確定要修改已對帳的交易？"
+"您即將要修改已對帳的交易。"
 "這麼做可能使未來的對帳很困難！繼續這個修改？"
 
 #: ../src/register/ledger-core/split-register-model.c:1957
@@ -16863,7 +16864,7 @@ msgstr "最少顯示多少發票項目。(-1)"
 #. src/report/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:990 ../intl-scm/guile-strings.c:1190
 msgid "Extra notes to put on the invoice"
-msgstr "發票上的額外備註。"
+msgstr "發票上的額外備註"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:996
@@ -16898,7 +16899,7 @@ msgstr "公司連絡方式"
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1012
 msgid "Display the Company contact information"
-msgstr "是否顯示公司聯絡資訊？"
+msgstr "是否顯示公司聯絡資訊"
 
 #. src/report/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:1016
@@ -17596,7 +17597,7 @@ msgstr "選擇提出報表的日期"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1766
 msgid "Nearest transaction date"
-msgstr "最接近交易的日期？"
+msgstr "最接近交易的日期"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:1768
@@ -17699,7 +17700,7 @@ msgstr "在處理範本時發生錯誤:"
 #: ../intl-scm/guile-strings.c:1806
 #, c-format
 msgid "Template file \"%s\" can not be read"
-msgstr "範本檔 \"%s\" 無法讀取"
+msgstr "範本檔「%s」無法讀取"
 
 #. src/report/report-system/html-acct-table.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -21280,7 +21281,7 @@ msgstr "顯示科目全名"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4404
 msgid "Display the account code"
-msgstr "顯示科目代碼？"
+msgstr "顯示科目代碼"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:4408
