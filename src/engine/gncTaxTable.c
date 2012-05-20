@@ -207,7 +207,9 @@ gncTaxTableRemoveChild (GncTaxTable *table, const GncTaxTable *child)
 enum
 {
     PROP_0,
-    PROP_NAME
+    PROP_NAME,
+    PROP_INVISIBLE,
+    PROP_REFCOUNT
 };
 
 /* GObject Initialization */
@@ -246,6 +248,12 @@ gnc_taxtable_get_property (GObject         *object,
     case PROP_NAME:
         g_value_set_string(value, tt->name);
         break;
+    case PROP_INVISIBLE:
+    	g_value_set_boolean(value, tt->invisible);
+    	break;
+    case PROP_REFCOUNT:
+    	g_value_set_uint64(value, tt->refcount);
+    	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -268,6 +276,15 @@ gnc_taxtable_set_property (GObject         *object,
     case PROP_NAME:
         gncTaxTableSetName(tt, g_value_get_string(value));
         break;
+    case PROP_INVISIBLE:
+    	if (g_value_get_boolean(value))
+    	{
+            gncTaxTableMakeInvisible(tt);
+    	}
+    	break;
+    case PROP_REFCOUNT:
+    	gncTaxTableSetRefcount(tt, g_value_get_uint64(value));
+    	break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -360,6 +377,27 @@ gnc_taxtable_class_init (GncTaxTableClass *klass)
                           "tax table mnemonic.",
                           NULL,
                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_INVISIBLE,
+     g_param_spec_boolean ("invisible",
+                           "Invisible",
+                           "TRUE if the tax table is invisible.  FALSE if visible.",
+                           FALSE,
+                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_REFCOUNT,
+     g_param_spec_uint64("ref-count",
+                         "Reference count",
+                         "The ref-count property contains number of times this tax table "
+                         "is referenced.",
+                         0,           /* min */
+                         G_MAXUINT64, /* max */
+                         0,           /* default */
+                         G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */
