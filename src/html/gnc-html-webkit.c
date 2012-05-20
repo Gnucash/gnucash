@@ -1114,6 +1114,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         GtkWidget *dialog;
         gint result;
         gchar *export_dirname = NULL;
+        gchar* basename;
 
         // Before we save the PDF file, we always as the user for the export
         // file name. We will store the chosen directory in the gtk print settings
@@ -1127,7 +1128,8 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
         // Does the jobname look like a valid full file path?
-        if (g_basename(jobname) != jobname)
+        basename = g_path_get_basename(jobname);
+        if (strcmp(basename, jobname) != 0)
         {
             gchar *tmp_basename;
             gchar *tmp_dirname = g_path_get_dirname(jobname);
@@ -1147,6 +1149,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
             }
             g_free(tmp_dirname);
         }
+        g_free(basename);
 
         // Set the output file name from the given jobname
         gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(dialog), export_filename);
