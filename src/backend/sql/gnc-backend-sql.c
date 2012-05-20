@@ -1551,7 +1551,6 @@ load_int64( const GncSqlBackend* be, GncSqlRow* row,
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( row != NULL );
-    g_return_if_fail( setter != NULL );
     g_return_if_fail( table_row != NULL );
     g_return_if_fail( table_row->gobj_param_name != NULL || setter != NULL );
 
