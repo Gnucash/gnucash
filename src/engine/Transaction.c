@@ -408,7 +408,7 @@ gnc_transaction_class_init(TransactionClass* klass)
      g_param_spec_boxed("post-date",
                         "Post Date",
                         "The date the transaction occurred.",
-                        GNC_TYPE_NUMERIC,
+                        GNC_TYPE_TIMESPEC,
                         G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -417,7 +417,7 @@ gnc_transaction_class_init(TransactionClass* klass)
      g_param_spec_boxed("enter-date",
                         "Enter Date",
                         "The date the transaction was entered.",
-                        GNC_TYPE_NUMERIC,
+                        GNC_TYPE_TIMESPEC,
                         G_PARAM_READWRITE));
 }
 
