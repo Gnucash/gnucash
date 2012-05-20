@@ -46,8 +46,6 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-static void set_invisible( gpointer data, gboolean value );
-
 typedef struct
 {
     GncSqlBackend* be;
@@ -70,11 +68,8 @@ static GncSqlColumnTableEntry tt_col_table[] =
 {
     { "guid",      CT_GUID,        0,            COL_NNUL | COL_PKEY, "guid" },
     { "name",      CT_STRING,      MAX_NAME_LEN, COL_NNUL,          "name" },
-    { "refcount",  CT_INT64,       0,            COL_NNUL,          NULL, GNC_TT_REFCOUNT },
-    {
-        "invisible", CT_BOOLEAN,     0,            COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncTaxTableGetInvisible, (QofSetterFunc)set_invisible
-    },
+    { "refcount",  CT_INT64,       0,            COL_NNUL,          "ref-count" },
+    { "invisible", CT_BOOLEAN,     0,            COL_NNUL,          "invisible" },
     /*	{ "child",     CT_TAXTABLEREF, 0,			 0,                 NULL, NULL,
     			get_child, (QofSetterFunc)gncTaxTableSetChild }, */
     {
@@ -144,20 +139,6 @@ static void
 set_obj_guid( gpointer pObject, gpointer pValue )
 {
     // Nowhere to put the GncGUID
-}
-
-static void
-set_invisible( gpointer data, gboolean value )
-{
-    GncTaxTable* tt = GNC_TAXTABLE(data);
-
-    g_return_if_fail( data != NULL );
-    g_return_if_fail( GNC_IS_TAXTABLE(data) );
-
-    if ( value )
-    {
-        gncTaxTableMakeInvisible( tt );
-    }
 }
 
 static gpointer
