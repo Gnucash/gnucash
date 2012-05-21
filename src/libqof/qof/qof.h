@@ -94,5 +94,6 @@
 #include "qofsession.h"
 #include "qofchoice.h"
 #include "qofreference.h"
+#include "qof-string-cache.h"
 
 #endif /* QOF_H_ */

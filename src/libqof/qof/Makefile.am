@@ -35,6 +35,7 @@ libgnc_qof_la_SOURCES =  \
    qofquerycore.c    \
    qofreference.c    \
    qofsession.c      \
+   qof-string-cache.c  \
    qofutil.c
 
 qofincludedir = ${pkgincludedir}
@@ -65,6 +66,7 @@ qofinclude_HEADERS = \
    qofquerycore.h    \
    qofreference.h    \
    qofsession.h      \
+   qof-string-cache.h  \
    qofutil.h         \
    qof-gobject.h
 

@@ -16,6 +16,7 @@ test_qof_SOURCES = \
 	test-kvp_frame.c \
 	test-qofobject.c \
 	test-qofsession.c \
+	test-qof-string-cache.c \
 	${top_srcdir}/src/test-core/unittest-support.c
 
 test_qof_HEADERS = \

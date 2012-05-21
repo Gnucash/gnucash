@@ -225,66 +225,6 @@ gboolean gnc_strisnum(const gchar *s);
 #define stpcpy g_stpcpy
 #endif
 
-/** The QOF String Cache:
- *
- * Many strings used throughout QOF and QOF applications are likely to
- * be duplicated.
- *
- * QOF provides a reference counted cache system for the strings, which
- * shares strings whenever possible.
- *
- * Use qof_util_string_cache_insert to insert a string into the cache (it
- * will return a pointer to the cached string).  Basically you should
- * use this instead of g_strdup.
- *
- * Use qof_util_string_cache_remove (giving it a pointer to a cached
- * string) if the string is unused.  If this is the last reference to
- * the string it will be removed from the cache, otherwise it will
- * just decrement the reference count.  Basically you should use this
- * instead of g_free.
- *
- * Just in case it's not clear: The remove function must NOT be called
- * for the string you passed INTO the insert function.  It must be
- * called for the _cached_ string that is _returned_ by the insert
- * function.
- *
- * Note that all the work is done when inserting or removing.  Once
- * cached the strings are just plain C strings.
- *
- * The string cache is demand-created on first use.
- *
- **/
-/** Destroy the qof_util_string_cache */
-void qof_util_string_cache_destroy (void);
-
-/** You can use this function as a destroy notifier for a GHashTable
-   that uses common strings as keys (or values, for that matter.)
-*/
-void qof_util_string_cache_remove(gconstpointer key);
-
-/** You can use this function with g_hash_table_insert(), for the key
-   (or value), as long as you use the destroy notifier above.
-*/
-gpointer qof_util_string_cache_insert(gconstpointer key);
-
-#define CACHE_INSERT(str) qof_util_string_cache_insert((gconstpointer)(str))
-#define CACHE_REMOVE(str) qof_util_string_cache_remove((str))
-
-/* Replace cached string currently in 'dst' with string in 'src'.
- * Typical usage:
- *     void foo_set_name(Foo *f, const char *str) {
- *        CACHE_REPLACE(f->name, str);
- *     }
- * It avoids unnecessary ejection by doing INSERT before REMOVE.
-*/
-#define CACHE_REPLACE(dst, src) do {          \
-        gpointer tmp = CACHE_INSERT((src));   \
-        CACHE_REMOVE((dst));                  \
-        (dst) = tmp;                          \
-    } while (0)
-
-#define QOF_CACHE_NEW(void) qof_util_string_cache_insert("")
-
 /** begin_edit
  *
  * @param  inst: an instance of QofInstance
