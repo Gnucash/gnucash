@@ -91,9 +91,9 @@ add_step inst_swig
 add_step inst_pcre
 add_step inst_libbonoboui
 add_step inst_libgsf
-#if [ "$CROSS_COMPILE" != "yes" ]; then
-# add_step inst_hh
-#fi
+if [ "$CROSS_COMPILE" != "yes" ]; then
+ add_step inst_hh
+fi
 add_step inst_goffice
 #add_step inst_glade
 add_step inst_opensp
