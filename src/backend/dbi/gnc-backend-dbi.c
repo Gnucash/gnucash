@@ -2005,16 +2005,26 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
         {
             return NULL;
         }
-        else
-        {
-            time = dbi_result_get_datetime( dbi_row->result, col_name );
-            (void)gmtime_r( &time, &tm_struct );
-            (void)g_value_init( value, G_TYPE_STRING );
-            g_value_take_string( value,
-                                 g_strdup_printf( "%d%02d%02d%02d%02d%02d",
-                                                  1900 + tm_struct.tm_year, tm_struct.tm_mon + 1, tm_struct.tm_mday,
-                                                  tm_struct.tm_hour, tm_struct.tm_min, tm_struct.tm_sec ) );
-        }
+	time = dbi_result_get_datetime( dbi_row->result, col_name );
+	/* Protect gmtime from time values < 0 to work around a mingw
+	   bug that fills struct_tm with garbage values which in turn
+	   creates a string that GDate can't parse. */
+	if (time >= 0)
+	  {
+	    (void)gmtime_r( &time, &tm_struct );
+	    (void)g_value_init( value, G_TYPE_STRING );
+	    g_value_take_string( value,
+				 g_strdup_printf( "%d%02d%02d%02d%02d%02d",
+						  1900 + tm_struct.tm_year,
+						  tm_struct.tm_mon + 1,
+						  tm_struct.tm_mday,
+						  tm_struct.tm_hour,
+						  tm_struct.tm_min,
+						  tm_struct.tm_sec ) );
+	  }
+	else
+	  g_value_take_string (value, "19691231235959");
+        
         break;
     default:
         PERR( "Field %s: unknown DBI_TYPE: %d\n", col_name, type );
