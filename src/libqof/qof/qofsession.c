@@ -1066,6 +1066,7 @@ qof_session_load_backend(QofSession * session, const char * access_method)
     }
     msg = g_strdup_printf("failed to load '%s' using access_method", access_method);
     qof_session_push_error (session, ERR_BACKEND_NO_HANDLER, msg);
+    g_free(msg);
     LEAVE (" ");
 }
 

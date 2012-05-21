@@ -1479,6 +1479,7 @@ gnc_dmy2timespec (int day, int month, int year)
 GDate gnc_dmy2gdate (gint day, gint month, gint year)
 {
     GDate result;
+    g_date_clear(&result, 1);
     g_date_set_day (&result, day);
     g_date_set_month (&result, month);
     g_date_set_year (&result, year);
