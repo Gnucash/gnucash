@@ -584,7 +584,8 @@ AC_ARG_ENABLE( debug,
      CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
      LDFLAGS="${LDFLAGS} -g"
      AC_DEFINE(DEBUG_MEMORY,1,[Enable debug memory])
-     AC_DEFINE(DEBUG_MEMORY,0,[Enable debug memory])
+  ],
+  [     AC_DEFINE(DEBUG_MEMORY,0,[Enable debug memory])
   ])
 
 AC_ARG_ENABLE( profile,
