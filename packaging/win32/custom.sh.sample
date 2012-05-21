@@ -17,3 +17,5 @@
 # function greetings() { setup Greetings; }
 # QTDIR=c:\\Qt\\4.2.3
 # CROSS_COMPILE=yes
+#Uncomment this for building on Win7 (and maybe Vista):
+#EXTRA_CFLAGS="-fno-builtin-dgettext -fno-builtin-towupper -fno-builtin-iswlower"
