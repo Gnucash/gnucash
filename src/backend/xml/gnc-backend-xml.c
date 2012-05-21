@@ -882,11 +882,17 @@ gnc_xml_be_remove_old_files(FileBackend *be)
 
         /* Only evaluate files associated with the current data file. */
         if (!g_str_has_prefix(name, be->fullpath))
+        {
+            g_free(name);
             continue;
+        }
 
         /* Never remove the current data file itself */
         if (g_strcmp0(name, be->fullpath) == 0)
+        {
+            g_free(name);
             continue;
+        }
 
         /* Test if the current file is a lock file */
         if (g_str_has_suffix(name, ".LNK"))
@@ -901,6 +907,7 @@ gnc_xml_be_remove_old_files(FileBackend *be)
                 g_unlink(name);
             }
 
+            g_free(name);
             continue;
         }
 
@@ -932,7 +939,10 @@ gnc_xml_be_remove_old_files(FileBackend *be)
             g_free(expression);
 
             if (!got_date_stamp) /* Not a gnucash created file after all... */
+            {
+                g_free(name);
                 continue;
+            }
         }
 
         /* The file is a backup or log file. Check the user's retention preference
@@ -950,7 +960,10 @@ gnc_xml_be_remove_old_files(FileBackend *be)
 
             /* Is the backup file old enough to delete */
             if (g_stat(name, &statbuf) != 0)
+            {
+                g_free(name);
                 continue;
+            }
             days = (int)(difftime(now, statbuf.st_mtime) / 86400);
 
             PINFO ("file retention = %d days", be->file_retention_days);
