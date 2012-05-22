@@ -112,7 +112,7 @@ clean-local:
 	rm -rf gnucash
 
 CLEANFILES = $(BUILT_SOURCES) .scm-links
-MAINTAINERCLEANFILES = swig-core-utils.c
+MAINTAINERCLEANFILES = swig-core-utils-guile.c swig-core-utils-python.c
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.core-utils\"
 

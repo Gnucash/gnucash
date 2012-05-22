@@ -73,7 +73,7 @@ EXTRA_DIST = \
   gnc-html.i
 
 CLEANFILES = $(BUILT_SOURCES) gnucash
-MAINTAINERCLEANFILES = swig-html.c
+MAINTAINERCLEANFILES = swig-gnc-html.c
 
 # FIXME: Symlinking directories only works on non-win32.
 if !PLATFORM_WIN32
