@@ -28,12 +28,6 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
         ${top_builddir}/lib/libc/libc-missing.la
 
-#TESTS = \
-#  test-dbi-basic \
-#  test-dbi \
-#  test-dbi-business \
-#  test-load-backend
-
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/engine \
@@ -48,12 +42,6 @@ TESTS_ENVIRONMENT = \
   ${gnc_dbd_dir_override} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-#check_PROGRAMS = \
-#  test-dbi-basic \
-#  test-dbi \
-#  test-dbi-business \
-#  test-load-backend
-
 EXTRA_DIST += \
     test-dbi-stuff.h \
     test-dbi-business-stuff.h
@@ -63,21 +51,6 @@ TEST_PROGS += \
 
 noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
 
-#check_LTLIBRARIES=libgncmod-test-dbi.la
-
-#libgncmod_test_dbi_la_SOURCES = \
-#    test-dbi-stuff.c
-libgncmod_test_dbi_la_LDFLAGS = -module
-
-test_dbi_business_SOURCES = \
-  test-dbi-business.c \
-  test-dbi-business-stuff.c
-
-test_dbi_basic_SOURCES = \
-  test-dbi-basic.c
-
-test_dbi_SOURCES = \
-  test-dbi.c
 
 if CUSTOM_GNC_DBD_DIR
 gnc_dbd_dir_override = GNC_DBD_DIR="@GNC_DBD_DIR@"

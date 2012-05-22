@@ -26,7 +26,7 @@ noinst_HEADERS = \
   gnc-backend-dbi.h \
   gnc-backend-dbi-priv.h
 
-libgncmod_backend_dbi_la_LDFLAGS = -module -avoid-version
+libgncmod_backend_dbi_la_LDFLAGS = -shared -avoid-version
 libgncmod_backend_dbi_la_LIBADD = \
    ${GLIB_LIBS} \
    ${GCONF_LIBS} \
