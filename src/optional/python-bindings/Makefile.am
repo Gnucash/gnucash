@@ -103,9 +103,9 @@ sqlite3test_LDADD = ${_gnucash_core_c_la_LIBADD}
 sqlite3test_CPPFLAGS = ${_gnucash_core_c_la_CPPFLAGS}
 
 PYTHON_LINK_FILES = \
-  $(pkgpython_PYTHON)
+  $(pkgpyexec_DATA)
 
-.py-links:
+.py-links:$(PYTHON_LINK_FILES)
 	$(RM) -rf gnucash
 	mkdir -p gnucash
 if GNUCASH_SEPARATE_BUILDDIR
