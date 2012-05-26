@@ -154,15 +154,9 @@ gnc_plugin_budget_init(GncPluginBudget *plugin)
 static void
 gnc_plugin_budget_finalize(GObject *object)
 {
-    GncPluginBudget *plugin;
-    GncPluginBudgetPrivate *priv;
-
     g_return_if_fail(GNC_IS_PLUGIN_BUDGET (object));
 
     ENTER(" ");
-    plugin = GNC_PLUGIN_BUDGET(object);
-    priv = GNC_PLUGIN_BUDGET_GET_PRIVATE(plugin);
-
     (parent_class->finalize)(object);
     LEAVE(" ");
 

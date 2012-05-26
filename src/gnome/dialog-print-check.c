@@ -61,7 +61,7 @@
 
 /* This static indicates the debugging module that this .o belongs to.
  */
-static QofLogModule log_module = "gnc.printing.checks";
+G_GNUC_UNUSED static QofLogModule log_module = "gnc.printing.checks";
 
 #define GCONF_SECTION 	       "dialogs/print_checks"
 #define KEY_CHECK_FORMAT_GUID  "check_format_guid"
@@ -804,7 +804,6 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
     GncGUID guid;
     char buf[GUID_ENCODING_LENGTH+1];
     gchar *filename, *pathname;
-    GtkTreeModel *model;
 
     multip = pcd_get_custom_multip(pcd);
 
@@ -851,7 +850,6 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
             /* Reload the format combo box and reselect the "custom" entry */
             initialize_format_combobox(pcd);
 
-        model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
         gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
                                  pcd->format_max - 1);
     }
@@ -1653,7 +1651,6 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     GtkWindow *window;
     gchar *font;
     Transaction *trans = NULL;
-    Split *split;
 
     pcd = g_new0(PrintCheckDialog, 1);
     pcd->plugin_page = plugin_page;
@@ -1853,7 +1850,6 @@ draw_text(GncPrintContext *context, const gchar *text, check_item_t *data,
     gint layout_height, layout_width;
     gdouble width, height;
     gchar *new_text;
-    CheckItemType ct;
 
     if ((NULL == text) || (strlen(text) == 0))
         return 0.0;
@@ -2051,10 +2047,10 @@ draw_date_format(GncPrintContext *context, const gchar *date_format,
     PangoFontDescription *date_desc;
     check_item_t date_item;
     gchar *text = NULL, *expanded = NULL;
-    const gchar *thislocale, *c;
+    const gchar *c;
     GString *cdn_fmt;
 
-    thislocale = setlocale(LC_ALL, NULL);
+    setlocale(LC_ALL, NULL);
     if ( !data->print_date_format ) return;
 
     date_desc = pango_font_description_copy_static(default_desc);
@@ -2633,7 +2629,6 @@ gnc_print_check_position_changed (GtkComboBox *widget,
     gint pnum;
     guint check_count;
     gint first_page_max, first_page_min, first_page_value;
-    gdouble fpmin, fpmax;
 
     pnum = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
 

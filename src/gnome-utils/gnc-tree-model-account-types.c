@@ -124,14 +124,8 @@ gnc_tree_model_account_types_init (GncTreeModelAccountTypes * model)
 static void
 gnc_tree_model_account_types_finalize (GObject * object)
 {
-    GncTreeModelAccountTypes *model;
-    GncTreeModelAccountTypesPrivate *priv;
-
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT_TYPES (object));
-
-    model = GNC_TREE_MODEL_ACCOUNT_TYPES (object);
-    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE (model);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

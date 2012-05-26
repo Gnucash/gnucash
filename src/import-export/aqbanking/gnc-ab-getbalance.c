@@ -40,7 +40,7 @@
 #include "gnc-ui.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 void
 gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)

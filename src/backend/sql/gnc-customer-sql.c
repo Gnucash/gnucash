@@ -110,11 +110,9 @@ load_all_customers( GncSqlBackend* be )
 {
     GncSqlStatement* stmt;
     GncSqlResult* result;
-    QofBook* pBook;
 
     g_return_if_fail( be != NULL );
 
-    pBook = be->book;
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );

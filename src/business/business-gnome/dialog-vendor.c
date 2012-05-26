@@ -320,7 +320,6 @@ gnc_vendor_terms_changed_cb (GtkWidget *widget, gpointer data)
 {
     GtkComboBox *cbox = GTK_COMBO_BOX (widget);
     VendorWindow *vw = data;
-    gchar *title;
 
     if (!vw) return;
     if (!cbox) return;
@@ -333,7 +332,6 @@ gnc_vendor_taxincluded_changed_cb (GtkWidget *widget, gpointer data)
 {
     GtkComboBox *cbox = GTK_COMBO_BOX (widget);
     VendorWindow *vw = data;
-    gchar *title;
 
     if (!vw) return;
     if (!cbox) return;
@@ -346,7 +344,6 @@ gnc_vendor_taxtable_changed_cb (GtkWidget *widget, gpointer data)
 {
     GtkComboBox *cbox = GTK_COMBO_BOX (widget);
     VendorWindow *vw = data;
-    gchar *title;
 
     if (!vw) return;
     if (!cbox) return;

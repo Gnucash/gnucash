@@ -688,8 +688,6 @@ set_aborted(GncGWENGui *gui)
 static void
 show_dialog(GncGWENGui *gui, gboolean clear_log)
 {
-    gboolean cache_pin;
-
     g_return_if_fail(gui);
 
     ENTER("gui=%p, clear_log=%d", gui, clear_log);
@@ -740,8 +738,6 @@ static gboolean
 show_progress_cb(gpointer user_data)
 {
     Progress *progress = user_data;
-    GncGWENGui *gui;
-    GList *item;
 
     g_return_val_if_fail(progress, FALSE);
 
@@ -987,9 +983,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     GtkWidget *remember_pin_checkbutton;
     const gchar *internal_input, *internal_confirmed;
     gboolean confirm = (flags & GWEN_GUI_INPUT_FLAGS_CONFIRM) != 0;
-    gboolean hidden = (flags & GWEN_GUI_INPUT_FLAGS_SHOW) == 0;
     gboolean is_tan = (flags & GWEN_GUI_INPUT_FLAGS_TAN) != 0;
-    gint retval;
 
     g_return_if_fail(input);
     g_return_if_fail(max_len >= min_len && max_len > 0);
@@ -1215,7 +1209,6 @@ static void
 hidebox_cb(GWEN_GUI *gwen_gui, guint32 id)
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
-    GtkWidget *dialog;
 
     g_return_if_fail(gui && gui->showbox_hash);
 

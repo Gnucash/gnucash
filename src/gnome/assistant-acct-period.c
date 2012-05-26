@@ -237,7 +237,6 @@ void
 ap_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
                       gpointer user_data)
 {
-    AcctPeriodInfo *info = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
     switch (currentpage)
@@ -467,15 +466,11 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     GtkTextBuffer * buffer;
     GtkTextIter startiter, enditer;
     gint len;
-    QofBook *closed_book = NULL, *current_book;
     const char *btitle;
     char *bnotes;
     Timespec closing_date;
-    KvpFrame *book_frame;
 
     ENTER("info=%p", info);
-
-    current_book = gnc_get_current_book ();
 
     btitle = gtk_entry_get_text (GTK_ENTRY(info->book_title));
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(info->book_notes));
@@ -647,15 +642,13 @@ void
 gnc_acct_period_dialog (void)
 {
     AcctPeriodInfo *info;
-    gint component_id;
 
     info = g_new0 (AcctPeriodInfo, 1);
 
     ap_assistant_create (info);
 
-    component_id = gnc_register_gui_component (ASSISTANT_ACCT_PERIOD_CM_CLASS,
-                   NULL, ap_close_handler,
-                   info);
+    gnc_register_gui_component (ASSISTANT_ACCT_PERIOD_CM_CLASS,
+				NULL, ap_close_handler, info);
 
     gtk_widget_show_all (info->window);
 

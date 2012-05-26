@@ -1099,7 +1099,6 @@ gnc_trans_scm_get_num_splits(SCM trans_scm)
 char *
 gnc_get_debit_string(GNCAccountType account_type)
 {
-    const gchar *string;
     SCM result;
     SCM arg;
 
@@ -1131,7 +1130,6 @@ gnc_get_debit_string(GNCAccountType account_type)
 char *
 gnc_get_credit_string(GNCAccountType account_type)
 {
-    const gchar *string;
     SCM result;
     SCM arg;
 

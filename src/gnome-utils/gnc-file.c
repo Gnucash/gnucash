@@ -1055,14 +1055,9 @@ gnc_file_open_file (const char * newfile, gboolean open_readonly)
 void
 gnc_file_export (void)
 {
-    QofSession *new_session;
-    QofSession *session;
     const char *filename;
     char *default_dir = NULL;        /* Default to last open */
     char *last;
-    char *newfile;
-    const char *oldfile;
-    QofBackendError io_err = ERR_BACKEND_NO_ERR;
 
     ENTER(" ");
 

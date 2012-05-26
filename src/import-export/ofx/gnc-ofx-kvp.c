@@ -53,7 +53,6 @@ void gnc_ofx_kvp_set_assoc_account(Account* investment_account,
 {
     kvp_frame * acc_frame;
     kvp_value * kvp_val;
-    Account *result = NULL;
     const GncGUID * income_acc_guid;
 
     g_assert(investment_account);

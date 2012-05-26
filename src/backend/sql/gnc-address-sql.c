@@ -41,7 +41,7 @@
 #include "gnc-backend-sql.h"
 #include "gnc-address-sql.h"
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define ADDRESS_MAX_NAME_LEN 1024
 #define ADDRESS_MAX_ADDRESS_LINE_LEN 1024
@@ -130,7 +130,6 @@ add_address_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEn
     GncSqlColumnInfo* info;
     gchar* buf;
     const GncSqlColumnTableEntry* subtable_row;
-    const gchar* type;
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( table_row != NULL );

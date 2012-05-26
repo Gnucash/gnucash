@@ -235,8 +235,6 @@ handle_piechart( GncHtml* html, gpointer eb, gpointer d )
     gchar** pResult = (gchar**)d;
     GncHtmlPieChartInfo pieChartInfo;
     GdkPixbuf* pixbuf;
-    gchar* p;
-    gchar* p_end;
     gchar* temp_str;
     gchar* base64_buf;
 
@@ -300,8 +298,6 @@ handle_barchart( GncHtml* html, gpointer eb, gpointer d )
     gchar** pResult = (gchar**)d;
     GncHtmlBarChartInfo barChartInfo;
     GdkPixbuf* pixbuf;
-    gchar* p;
-    gchar* p_end;
     gchar* temp_str;
     gchar* base64_buf;
 
@@ -381,8 +377,6 @@ handle_linechart( GncHtml* html, gpointer eb, gpointer d )
     gchar** pResult = (gchar**)d;
     GncHtmlLineChartInfo lineChartInfo;
     GdkPixbuf* pixbuf;
-    gchar* p;
-    gchar* p_end;
     gchar* temp_str;
     gchar* base64_buf;
 
@@ -451,8 +445,6 @@ handle_scatter( GncHtml* html, gpointer eb, gpointer d )
     gchar** pResult = (gchar**)d;
     GncHtmlScatterPlotInfo scatterPlotInfo;
     GdkPixbuf* pixbuf;
-    gchar* p;
-    gchar* p_end;
     gchar* temp_str;
     gchar* base64_buf;
 

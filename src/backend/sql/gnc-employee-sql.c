@@ -98,13 +98,8 @@ load_all_employees( GncSqlBackend* be )
 {
     GncSqlStatement* stmt;
     GncSqlResult* result;
-    QofBook* pBook;
-    gnc_commodity_table* pTable;
 
     g_return_if_fail( be != NULL );
-
-    pBook = be->book;
-    pTable = gnc_commodity_table_get_table( pBook );
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );

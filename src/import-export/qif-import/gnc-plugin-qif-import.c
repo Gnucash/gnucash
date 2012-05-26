@@ -125,13 +125,7 @@ gnc_plugin_qif_import_init (GncPluginQifImport *plugin)
 static void
 gnc_plugin_qif_import_finalize (GObject *object)
 {
-    GncPluginQifImport *plugin;
-    GncPluginQifImportPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_QIF_IMPORT (object));
-
-    plugin = GNC_PLUGIN_QIF_IMPORT (object);
-    priv = GNC_PLUGIN_QIF_IMPORT_GET_PRIVATE(plugin);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

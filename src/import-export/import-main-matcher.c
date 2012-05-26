@@ -154,7 +154,7 @@ on_matcher_ok_clicked (GtkButton *button,
     GtkTreeRowReference *ref;
     GtkTreeIter iter;
     GNCImportTransInfo *trans_info;
-    GSList *refs_list = NULL, *item;
+    GSList *refs_list = NULL;
 
     g_assert (info);
 
@@ -235,7 +235,7 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
 {
     GNCImportMainMatcher *info = user_data;
     GtkBuilder *builder;
-    GtkWidget *help_dialog, *box, *closebutton;
+    GtkWidget *help_dialog, *box;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer2");
@@ -547,7 +547,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     GNCImportMainMatcher *info;
     GtkBuilder *builder;
     GtkWidget *heading_label;
-    GtkWidget *button, *box, *pbox;
+    GtkWidget *box, *pbox;
     gboolean show_update;
 
     info = g_new0 (GNCImportMainMatcher, 1);
@@ -614,7 +614,7 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     GNCImportMainMatcher *info;
     GtkBuilder *builder;
     GtkWidget *heading_label;
-    GtkWidget *button, *box, *pbox;
+    GtkWidget *box;
     gboolean show_update;
 
     info = g_new0 (GNCImportMainMatcher, 1);

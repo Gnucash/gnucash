@@ -1799,7 +1799,7 @@ xaccPostSplitMove (Split *split, Account *accto)
 void
 xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 {
-    AccountPrivate *from_priv, *to_priv;
+    AccountPrivate *from_priv;
 
     /* errors */
     g_return_if_fail(GNC_IS_ACCOUNT(accfrom));
@@ -1807,7 +1807,6 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 
     /* optimizations */
     from_priv = GET_PRIVATE(accfrom);
-    to_priv = GET_PRIVATE(accto);
     if (!from_priv->splits || accfrom == accto)
         return;
 
@@ -1882,7 +1881,6 @@ xaccAccountRecomputeBalance (Account * acc)
     gnc_numeric  balance;
     gnc_numeric  cleared_balance;
     gnc_numeric  reconciled_balance;
-    Split *last_split = NULL;
     GList *lp;
 
     if (NULL == acc) return;
@@ -1922,7 +1920,6 @@ xaccAccountRecomputeBalance (Account * acc)
         split->cleared_balance = cleared_balance;
         split->reconciled_balance = reconciled_balance;
 
-        last_split = split;
     }
 
     priv->balance = balance;

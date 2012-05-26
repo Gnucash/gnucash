@@ -56,7 +56,7 @@
 #include "gnc-plugin-page-register.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 /* g_object functions */
 static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
@@ -449,13 +449,7 @@ gnc_plugin_business_init (GncPluginBusiness *plugin)
 static void
 gnc_plugin_business_finalize (GObject *object)
 {
-    GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (object));
-
-    plugin = GNC_PLUGIN_BUSINESS (object);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -799,14 +793,9 @@ static void
 gnc_plugin_business_cmd_tax_tables (GtkAction *action,
                                     GncMainWindowActionData *mw)
 {
-    GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
-
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-    plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     gnc_ui_tax_table_window_new (gnc_get_current_book());
 }
 
@@ -814,14 +803,9 @@ static void
 gnc_plugin_business_cmd_billing_terms (GtkAction *action,
                                        GncMainWindowActionData *mw)
 {
-    GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
-
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-    plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     gnc_ui_billterms_window_new (gnc_get_current_book());
 }
 

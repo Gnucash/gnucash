@@ -436,8 +436,6 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
                  hierarchy_data  *data)
 {
-    gint currentpage = gtk_assistant_get_current_page(assistant);
-
     switch (gtk_assistant_get_current_page(assistant))
     {
     case 2:
@@ -449,7 +447,6 @@ void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
         on_final_account_prepare (data);
         break;
     }
-
 }
 
 void
@@ -1065,9 +1062,8 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     hierarchy_data *data;
     GtkWidget *dialog;
     GtkTreeView *tree_view;
-    GtkWidget *box, *start_page;
+    GtkWidget *box;
     GtkBuilder *builder;
-    GdkColor *color;
 
     data = g_new0 (hierarchy_data, 1);
     builder = gtk_builder_new();

@@ -281,7 +281,6 @@ static void
 sxftd_update_schedule( SXFromTransInfo *sxfti, GDate *date, GList **recurrences)
 {
     gint index;
-    GtkWidget *w;
 
     /* Note that we make the start date the *NEXT* instance, not the
      * present one. */
@@ -449,7 +448,6 @@ sxftd_init( SXFromTransInfo *sxfti )
 static guint
 sxftd_compute_sx(SXFromTransInfo *sxfti)
 {
-    GtkWidget *w;
     gchar *name;
     GDate date;
     GList *schedule = NULL;
@@ -607,11 +605,9 @@ static void
 sxftd_advanced_clicked(SXFromTransInfo *sxfti)
 {
     guint sx_error = sxftd_compute_sx(sxfti);
-    GncSxEditorDialog *adv_edit_dlg;
     GMainContext *context;
 
-    if ( sx_error != 0
-            && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION )
+    if ( sx_error != 0 && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION )
     {
         // unbalanced-xaction is "okay", since this is also checked for by
         // the advanced editor.
@@ -623,9 +619,7 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
     context = g_main_context_default();
     while (g_main_context_iteration(context, FALSE));
 
-    adv_edit_dlg =
-        gnc_ui_scheduled_xaction_editor_dialog_create(sxfti->sx,
-                TRUE /* newSX */);
+    gnc_ui_scheduled_xaction_editor_dialog_create(sxfti->sx, TRUE /* newSX */);
     /* close ourself, since advanced editing entails us, and there are sync
      * issues otherwise. */
     sxftd_close(sxfti, FALSE);
@@ -714,7 +708,6 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
     recurrenceListNextInstance(schedule, &date, &nextDate);
 
     {
-        GtkWidget *w;
         gchar *name;
         /* get the name */
         name = NULL;

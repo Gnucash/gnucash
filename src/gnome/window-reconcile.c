@@ -158,7 +158,7 @@ static gboolean find_by_account (gpointer find_data, gpointer user_data);
 
 /** GLOBALS ************************************************************/
 /* This static indicates the debugging module that this .o belongs to. */
-static QofLogModule log_module = GNC_MOD_GUI;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
 
 static time_t gnc_reconcile_last_statement_date = 0;
 

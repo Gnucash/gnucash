@@ -149,13 +149,8 @@ gnc_general_select_init (GNCGeneralSelect *gsl)
 static void
 gnc_general_select_finalize (GObject *object)
 {
-    GNCGeneralSelect *gsl;
-
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_GENERAL_SELECT (object));
-
-    gsl = GNC_GENERAL_SELECT (object);
-
 
     if (G_OBJECT_CLASS (parent_class)->finalize)
         G_OBJECT_CLASS (parent_class)->finalize (object);

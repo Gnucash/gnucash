@@ -115,7 +115,9 @@ static void gnc_main_window_destroy (GtkObject *object);
 
 static void gnc_main_window_setup_window (GncMainWindow *window);
 static void gnc_window_main_window_init (GncWindowIface *iface);
+#ifndef MAC_INTEGRATION
 static void gnc_main_window_update_all_menu_items (void);
+#endif
 
 /* Callbacks */
 static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
@@ -142,7 +144,9 @@ static void gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMa
 static void gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window);
+#ifndef MAC_INTEGRATION
 static void gnc_main_window_cmd_window_raise (GtkAction *action, GtkRadioAction *current, GncMainWindow *window);
+#endif
 static void gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window);
@@ -381,6 +385,7 @@ static GtkToggleActionEntry toggle_actions [] =
 /** The number of toggle actions provided by the main window. */
 static guint n_toggle_actions = G_N_ELEMENTS (toggle_actions);
 
+#ifndef MAC_INTEGRATION
 /** An array of all of the radio action provided by the main window
  *  code. */
 static GtkRadioActionEntry radio_entries [] =
@@ -396,9 +401,10 @@ static GtkRadioActionEntry radio_entries [] =
     { "Window8Action", NULL, N_("Window _9"), NULL, NULL, 8 },
     { "Window9Action", NULL, N_("Window _0"), NULL, NULL, 9 },
 };
+
 /** The number of radio actions provided by the main window. */
 static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
-
+#endif
 
 /** These are the "important" actions provided by the main window.
  *  Their labels will appear when the toolbar is set to "Icons and
@@ -1497,7 +1503,7 @@ struct menu_update
     gboolean  visible;
 };
 
-
+#ifndef MAC_INTEGRATION
 /** Update the label on the specified GtkRadioAction in the specified
  *  window.  This action is displayed as a menu item in the "Windows"
  *  menu.  This function will end up being called whenever the front
@@ -1527,16 +1533,8 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
                      "label", data->label,
                      "visible", data->visible,
                      (char *)NULL);
-#ifdef MAC_INTEGRATION
-    {
-        GtkOSXApplication *theApp =
-            g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
-        gtk_osxapplication_sync_menubar(theApp);
-    }
-#endif
     LEAVE(" ");
 }
-
 
 /** Update the window selection GtkRadioAction for a specific window.
  *  This is fairly simple since the windows are listed in the same
@@ -1593,7 +1591,6 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
     LEAVE(" ");
 }
 
-
 /** In every window that the user has open, update the "Window" menu
  *  item that points to the specified window.  This keeps the "Window"
  *  menu items consistent across all open windows.  (These items
@@ -1648,6 +1645,7 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
 
     LEAVE(" ");
 }
+#endif /* !MAC_INTEGRATION */
 
 /** Update all menu entries for all window menu items in all windows.
  *  This function is called whenever a window is added or deleted.
@@ -1656,6 +1654,8 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
  *
  *  @internal
  */
+
+#ifndef MAC_INTEGRATION
 static void
 gnc_main_window_update_all_menu_items (void)
 {
@@ -1664,7 +1664,6 @@ gnc_main_window_update_all_menu_items (void)
     gint i;
 
     ENTER("");
-#ifndef MAC_INTEGRATION
     /* First update the entries for all existing windows */
     g_list_foreach(active_windows,
                    (GFunc)gnc_main_window_update_menu_item,
@@ -1688,10 +1687,9 @@ gnc_main_window_update_all_menu_items (void)
         g_free(data.action_name);
         g_free(label);
     }
-#endif
     LEAVE(" ");
 }
-
+#endif /* !MAC_INTEGRATION */
 
 /** Show/hide the close box on the tab of a notebook page.  This
  *  function first checks to see if the specified page has a close
@@ -1985,7 +1983,6 @@ main_window_update_page_color (GncPluginPage *page,
                                const gchar *color_in)
 {
     GncMainWindow *window;
-    GncMainWindowPrivate *priv;
     GtkWidget *event_box;
     GdkColor tab_color;
     gchar *color_string;
@@ -2010,7 +2007,6 @@ main_window_update_page_color (GncPluginPage *page,
 
     /* Update the plugin */
     window = GNC_MAIN_WINDOW(page->window);
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     gnc_plugin_page_set_page_color(page, color_string);
 
     /* Update the notebook tab */
@@ -2269,14 +2265,8 @@ gnc_main_window_init (GncMainWindow *window,
 static void
 gnc_main_window_finalize (GObject *object)
 {
-    GncMainWindow *window;
-    GncMainWindowPrivate *priv;
-
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
-
-    window = GNC_MAIN_WINDOW (object);
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
 
     if (active_windows == NULL)
     {
@@ -3235,12 +3225,12 @@ connect_proxy (GtkUIManager *merge,
 static void
 gnc_main_window_window_menu (GncMainWindow *window)
 {
-    GncMainWindowPrivate *priv;
     guint merge_id;
 #ifdef MAC_INTEGRATION
     gchar *filename = gnc_gnome_locate_ui_file("gnc-windows-menu-ui-quartz.xml");
 #else
     gchar *filename = gnc_gnome_locate_ui_file("gnc-windows-menu-ui.xml");
+    GncMainWindowPrivate *priv;
 #endif
     GError *error = NULL;
     g_assert(filename);
@@ -3446,7 +3436,6 @@ gnc_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 static void
 gnc_quartz_set_menu(GncMainWindow* window)
 {
-    GtkOSXApplicationMenuGroup *group;
     GtkOSXApplication *theApp = g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
     GtkWidget       *menu;
     GtkWidget       *item;
@@ -3768,7 +3757,6 @@ gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window)
     GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
     GtkTextBuffer *text_buffer;
     GtkClipboard *clipboard;
-    gboolean editable;
 
     if (GTK_IS_EDITABLE (widget))
     {
@@ -3779,7 +3767,6 @@ gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window)
         text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
         clipboard = gtk_widget_get_clipboard (GTK_WIDGET(text_buffer),
                                               GDK_SELECTION_CLIPBOARD);
-        editable = gtk_text_view_get_editable (GTK_TEXT_VIEW (widget));
         gtk_text_buffer_paste_clipboard (text_buffer, clipboard, NULL, FALSE);
     }
 }
@@ -3893,7 +3880,7 @@ gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
 {
-    GncMainWindowPrivate *priv, *new_priv;
+    GncMainWindowPrivate *priv;
     GncMainWindow *new_window;
     GncPluginPage *page;
     GtkNotebook *notebook;
@@ -3940,7 +3927,6 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
     g_object_unref(page);
 
     /* just a little debugging. :-) */
-    new_priv = GNC_MAIN_WINDOW_GET_PRIVATE(new_window);
     DEBUG("Moved page %p from window %p to new window %p",
           page, window, new_window);
     DEBUG("Old window current is %p, new window current is %p",
@@ -3949,6 +3935,7 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
     LEAVE("page moved");
 }
 
+#ifndef MAC_INTEGRATION
 static void
 gnc_main_window_cmd_window_raise (GtkAction *action,
                                   GtkRadioAction *current,
@@ -3965,13 +3952,12 @@ gnc_main_window_cmd_window_raise (GtkAction *action,
     value = gtk_radio_action_get_current_value(current);
     new_window = g_list_nth_data(active_windows, value);
     gtk_window_present(GTK_WINDOW(new_window));
-#ifndef MAC_INTEGRATION
     /* revert the change in the radio group
      * impossible while handling "changed" (G_SIGNAL_NO_RECURSE) */
     g_idle_add((GSourceFunc)gnc_main_window_update_radio_button, old_window);
-#endif
     LEAVE(" ");
 }
+#endif /* !MAC_INTEGRATION */
 
 static void
 gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow *window)

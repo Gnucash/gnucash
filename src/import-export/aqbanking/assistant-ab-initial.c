@@ -85,8 +85,9 @@ void aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 
 static gboolean banking_has_accounts(AB_BANKING *banking);
 static void hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
-
+#if AQBANKING_VERSION_INT <= 49908
 static void child_exit_cb(GPid pid, gint status, gpointer data);
+#endif
 static gchar *ab_account_longname(const AB_ACCOUNT *ab_acc);
 static AB_ACCOUNT *update_account_list_acc_cb(AB_ACCOUNT *ab_acc, gpointer user_data);
 static void update_account_list(ABInitialInfo *info);
@@ -231,11 +232,12 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(info->window), num);
 
     AB_BANKING *banking = info->api;
+#if AQBANKING_VERSION_INT <= 49908
     GWEN_BUFFER *buf;
     gboolean wizard_exists;
     const gchar *wizard_path;
     gboolean qt_probably_unavailable = FALSE;
-
+#endif /* AQBANKING_VERSION_INT */
     g_return_if_fail(banking);
 
     ENTER("user_data: %p", user_data);
@@ -485,6 +487,7 @@ hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data)
         g_hash_table_insert(data->hash, ab_acc, gnc_acc);
 }
 
+#if AQBANKING_VERSION_INT <= 49908
 static void
 child_exit_cb(GPid pid, gint status, gpointer data)
 {
@@ -558,6 +561,7 @@ cleanup_child_exit_cb:
     if (info)
         info->deferred_info = NULL;
 }
+#endif /* AQBANKING_VERSION_INT <= 49908 */
 
 static gchar *
 ab_account_longname(const AB_ACCOUNT *ab_acc)
@@ -691,7 +695,6 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
                          GtkTreeViewColumn  *col, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
-    GtkTreeSelection *selection;
     GtkTreeModel *model;
     GtkTreeIter iter;
     AB_ACCOUNT *ab_acc;
@@ -706,7 +709,6 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
     PINFO("Row has been double-clicked.");
 
     model = gtk_tree_view_get_model(view);
-    selection = gtk_tree_view_get_selection(info->account_view);
 
     if (!gtk_tree_model_get_iter(model, &iter, path))
         return; /* path describes a non-existing row - should not happen */
@@ -826,9 +828,6 @@ aai_close_handler(gpointer user_data)
 void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
                      gpointer user_data)
 {
-    ABInitialInfo *info = user_data;
-    gint currentpage = gtk_assistant_get_current_page(assistant);
-
     switch (gtk_assistant_get_current_page(assistant))
     {
     case 1:

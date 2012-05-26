@@ -69,8 +69,6 @@ gncFindFile (const char * filename)
 
     if (scm_is_string(scm_result))
     {
-        char * str;
-
         scm_dynwind_begin (0);
         full_filename = scm_to_locale_string(scm_result);
         return_string = g_strdup (full_filename);
@@ -207,7 +205,7 @@ gnc_find_state_file (const gchar *url,
                      const gchar *guid,
                      gchar **filename_p)
 {
-    gchar *basename, *original = NULL, *filename, *tmp, *file_guid;
+    gchar *basename, *original = NULL, *filename, *file_guid;
     gchar *sf_extension = NULL, *newstyle_filename = NULL;
     GKeyFile *key_file = NULL;
     gint i;

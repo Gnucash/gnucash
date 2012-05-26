@@ -263,11 +263,9 @@ static void
 test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
 {
     const char *counter_name = "Counter name";
-    const char *counter_name_not_set = "Counter name not set";
     const char *err_no_book = "No book";
     const char *err_invalid_cnt = "Invalid counter name";
     gchar *r;
-    gint64 counter;
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
@@ -291,7 +289,6 @@ test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
     g_free( test_struct.msg );
 
     g_test_message( "Testing counter format with existing counter" );
-    counter = qof_book_get_counter( fixture->book, counter_name );
     r = qof_book_get_counter_format( fixture->book, counter_name );
     g_assert_cmpstr( r, == , "%.6" G_GINT64_FORMAT);
 
@@ -578,7 +575,7 @@ test_book_get_collection( Fixture *fixture, gconstpointer pData )
 static void
 test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
 {
-    QofCollection *m_col, *m_col2;
+    G_GNUC_UNUSED QofCollection *m_col, *m_col2;
     QofIdType my_type = "my_type", my_type2 = "my_type2";
     guint param = (guint) g_test_rand_int();
     gchar *msg1 = "qof_book_foreach_collection: assertion `book' failed";

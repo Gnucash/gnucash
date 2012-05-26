@@ -131,13 +131,7 @@ gnc_plugin_csv_import_init (GncPluginCsvImport *plugin)
 static void
 gnc_plugin_csv_import_finalize (GObject *object)
 {
-    GncPluginCsvImport *plugin;
-    GncPluginCsvImportPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_CSV_IMPORT (object));
-
-    plugin = GNC_PLUGIN_CSV_IMPORT (object);
-    priv = GNC_PLUGIN_CSV_IMPORT_GET_PRIVATE(plugin);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

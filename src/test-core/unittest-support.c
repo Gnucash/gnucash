@@ -52,7 +52,7 @@ test_log_level (GLogLevelFlags flags)
     guint i = 0, last = 0, max_bit = 7;
     gchar *msg = NULL;
 
-    for (i; i <= max_bit; i++)
+    for (i = 0; i <= max_bit; i++)
         if (flags & 1 << i)
         {
             gchar *tmp_msg = msg;

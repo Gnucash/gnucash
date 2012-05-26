@@ -688,10 +688,8 @@ _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer
     }
     else if (GNC_IS_SXES(ent))
     {
-        SchedXactions *sxes = GNC_SXES(ent);
         SchedXaction *sx = GNC_SX(evt_data);
 
-        sxes = NULL;
         if (event_type & GNC_EVENT_ITEM_REMOVED)
         {
             GList *instances_link;
@@ -1552,7 +1550,6 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
 {
     SxCashflowData *creation_data = user_data;
     GList *template_splits;
-    gboolean err_flag = FALSE;
     const gnc_commodity *first_cmdty = NULL;
 
     g_debug("Evaluating txn desc [%s] for sx [%s]",
@@ -1583,7 +1580,6 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
         if (!_get_template_split_account(creation_data->sx, template_split, &split_acct, creation_data->creation_errors))
         {
             g_debug("Could not find account for split");
-            err_flag = TRUE;
             break;
         }
 

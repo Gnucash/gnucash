@@ -1693,7 +1693,6 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 static void
 gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 {
-    GtkWidget  *dialog;
     GtkBuilder *builder;
     gboolean  use_accounting_labels;
 

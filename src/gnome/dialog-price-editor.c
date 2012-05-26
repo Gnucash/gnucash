@@ -54,7 +54,7 @@
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
 
 
 typedef struct

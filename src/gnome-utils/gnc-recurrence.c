@@ -348,19 +348,17 @@ static void
 gnc_recurrence_class_init( GncRecurrenceClass *klass )
 {
     GObjectClass *object_class;
-    static gint signals[LAST_SIGNAL] = { 0 };
 
     object_class = G_OBJECT_CLASS (klass);
-    signals[GNCRECURRENCE_CHANGED] =
-        g_signal_new ("changed",
-                      G_OBJECT_CLASS_TYPE (object_class),
-                      G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET (GncRecurrenceClass, changed),
-                      NULL,
-                      NULL,
-                      g_cclosure_marshal_VOID__VOID,
-                      G_TYPE_NONE,
-                      0);
+    g_signal_new ("changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GncRecurrenceClass, changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 
     parent_class = g_type_class_peek_parent (klass);
     object_class->finalize = gnc_recurrence_finalize;
@@ -577,19 +575,17 @@ static void
 gnc_recurrence_comp_class_init( GncRecurrenceCompClass *klass )
 {
     GObjectClass *object_class;
-    static gint signals[GNCRC_LAST_SIGNAL] = { 0 };
 
     object_class = G_OBJECT_CLASS (klass);
-    signals[GNCRECURRENCECOMP_CHANGED] =
-        g_signal_new ("changed",
-                      G_OBJECT_CLASS_TYPE (object_class),
-                      G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET (GncRecurrenceCompClass, changed),
-                      NULL,
-                      NULL,
-                      g_cclosure_marshal_VOID__VOID,
-                      G_TYPE_NONE,
-                      0);
+    g_signal_new ("changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GncRecurrenceCompClass, changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 
     //parent_class = g_type_class_peek_parent (klass);
     //object_class->finalize = gnc_recurrence_finalize;

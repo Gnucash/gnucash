@@ -502,7 +502,6 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         Transaction *trans = xaccSplitGetParent (split);
         time_t date = xaccTransGetDate (trans);
         gnc_numeric amnt, valu, gains;
-        int row;
 
         /* Do not show gains splits */
         if (gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
@@ -609,7 +608,6 @@ static void
 lv_close_handler (gpointer user_data)
 {
     GNCLotViewer *lv = user_data;
-    GNCLot *lot = lv->selected_lot;
 
     lv_save_current_lot (lv);
 
@@ -699,8 +697,6 @@ lv_add_split_to_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
 static void
 lv_remove_split_from_lot_cb (GtkWidget *widget, GNCLotViewer * lv)
 {
-    GncInvoice *lot_invoice, *txn_invoice;
-    Transaction *txn;
     Split *split;
 
     if ( NULL == lv->selected_lot ) return;

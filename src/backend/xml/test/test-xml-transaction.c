@@ -375,7 +375,6 @@ test_transaction(void)
     for (i = 0; i < 50; i++)
     {
         Transaction *ran_trn;
-        Account *root;
         xmlNodePtr test_node;
         gnc_commodity *com, *new_com;
         gchar *compare_msg;
@@ -384,7 +383,7 @@ test_transaction(void)
 
         /* The next line exists for its side effect of creating the
          * account tree. */
-        root = get_random_account_tree(book);
+        get_random_account_tree(book);
         ran_trn = get_random_transaction(book);
         new_com = get_random_commodity( book );
         if (!ran_trn)

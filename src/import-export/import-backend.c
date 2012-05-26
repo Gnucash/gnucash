@@ -1117,7 +1117,6 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
   its parent account. */
 gboolean gnc_import_exists_online_id (Transaction *trans)
 {
-    int i;
     gboolean online_id_exists = FALSE;
     Account *dest_acct;
     Split *source_split;

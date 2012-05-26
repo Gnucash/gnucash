@@ -770,7 +770,6 @@ int ofx_proc_statement_cb(struct OfxStatementData data, void * statement_user_da
 
 int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
 {
-    Account *selected_account;
     gnc_commodity_table * commodity_table;
     gnc_commodity * default_commodity;
     GNCAccountType default_type = ACCT_TYPE_NONE;
@@ -837,10 +836,9 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
                                   "%s \"%s\"",
                                   account_type_name,
                                   data.account_name);
-        selected_account = gnc_import_select_account(NULL,
-                           data.account_id, 1,
-                           account_description, default_commodity,
-                           default_type, NULL, NULL);
+        gnc_import_select_account(NULL, data.account_id, 1,
+				  account_description, default_commodity,
+				  default_type, NULL, NULL);
         g_free(account_description);
     }
     else

@@ -87,7 +87,7 @@ void gnc_uri_get_components (const gchar *uri,
                              gchar **password,
                              gchar **path)
 {
-    gchar **splituri, **spliturl;
+    gchar **splituri;
     gchar *url = NULL, *tmpusername = NULL, *tmphostname = NULL;
     gchar *delimiter = NULL;
 

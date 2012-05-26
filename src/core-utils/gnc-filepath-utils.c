@@ -119,7 +119,6 @@ check_path_return_if_valid(gchar *path)
 gchar *
 gnc_resolve_file_path (const gchar * filefrag)
 {
-    int namelen;
     gchar *fullpath = NULL, *tmp_path = NULL;
 
     /* seriously invalid */
@@ -135,10 +134,6 @@ gnc_resolve_file_path (const gchar * filefrag)
     /* check for an absolute file path */
     if (g_path_is_absolute(filefrag))
         return g_strdup (filefrag);
-
-    /* get conservative on the length so that sprintf(getpid()) works ... */
-    /* strlen ("/.LCK") + sprintf (%x%d) */
-    namelen = strlen (filefrag) + 25;
 
     /* Look in the current working directory */
     tmp_path = g_get_current_dir();

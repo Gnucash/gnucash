@@ -1937,10 +1937,9 @@ commodity_restore_after_child_handler(gpointer data_for_children,
     if (strcmp(child_result->tag, "fraction") == 0)
     {
         gint64 frac;
-        gboolean conv_ok;
 
         if (cpi->seen_fraction) return(FALSE);
-        conv_ok = string_to_gint64((gchar *) child_result->data, &frac);
+        string_to_gint64((gchar *) child_result->data, &frac);
         cpi->fraction = frac;
         cpi->seen_fraction = TRUE;
         child_result->should_cleanup = TRUE;

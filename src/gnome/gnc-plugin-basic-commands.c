@@ -58,7 +58,7 @@
 #include "gnc-plugin-file-history.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
 
 static void gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass);
 static void gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin);
@@ -78,7 +78,11 @@ static void gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWind
 static void gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data);
+
+#if CLOSE_BOOKS_ACTUALLY_WORKS
 static void gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data);
+#endif /* CLOSE_BOOKS_ACTUALLY_WORKS */
+
 static void gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data);
@@ -411,13 +415,7 @@ gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin)
 static void
 gnc_plugin_basic_commands_finalize (GObject *object)
 {
-    GncPluginBasicCommands *plugin;
-    GncPluginBasicCommandsPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_BASIC_COMMANDS (object));
-
-    plugin = GNC_PLUGIN_BASIC_COMMANDS (object);
-    priv = GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE (plugin);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -586,12 +584,13 @@ gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActio
 {
     gnc_ui_sx_loan_assistant_create ();
 }
-
+#ifdef CLOSE_BOOKS_ACTUALLY_WORKS
 static void
 gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data)
 {
     gnc_acct_period_dialog();
 }
+#endif /* CLOSE_BOOKS_ACTUALLY_WORKS */
 
 static void
 gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data)

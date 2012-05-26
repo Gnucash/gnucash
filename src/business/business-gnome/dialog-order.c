@@ -507,8 +507,6 @@ gnc_order_update_window (OrderWindow *ow)
 
     if (hide_cd)
     {
-        GtkWidget *hide;
-
         gtk_widget_hide_all (ow->closed_date);
         gtk_widget_hide_all (ow->cd_label);
         gtk_widget_hide_all (ow->hide1);
@@ -517,8 +515,6 @@ gnc_order_update_window (OrderWindow *ow)
 
     if (ow->dialog_type == VIEW_ORDER)
     {
-        GtkWidget *hide;
-
         /* Setup viewer for read-only access */
         gtk_widget_set_sensitive (ow->id_entry, FALSE);
         gtk_widget_set_sensitive (ow->opened_date, FALSE);

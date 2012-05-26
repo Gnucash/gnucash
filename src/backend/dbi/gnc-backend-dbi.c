@@ -221,8 +221,6 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 static void
 sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
 {
-    GncDbiBackend *be = (GncDbiBackend*)user_data;
-    GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)be->sql_be.conn;
     const gchar* msg;
 
     (void)dbi_conn_error( conn, &msg );
@@ -1512,6 +1510,7 @@ conn_table_operation( GncSqlConnection *sql_conn, GSList *table_name_list,
     return result;
 }
 
+#if 0 /* Not Used */
 /**
  * Really a bit of an understatement. More like "delete everything in
  * storage and replace with what's in memory".
@@ -1529,7 +1528,6 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
     GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(((GncSqlBackend*)be)->conn);
     GSList* table_name_list;
     const gchar* dbname;
-    gint status;
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( book != NULL );
@@ -1553,6 +1551,7 @@ gnc_dbi_sync_all( QofBackend* qbe, /*@ dependent @*/ QofBook *book )
 
     LEAVE( "book=%p", book );
 }
+#endif
 
 /**
  * Safely resave a database by renaming all of its tables, recreating
@@ -1570,7 +1569,6 @@ gnc_dbi_safe_sync_all( QofBackend *qbe, QofBook *book )
     GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(((GncSqlBackend*)be)->conn);
     GSList *table_list, *index_list, *iter;
     const gchar* dbname = NULL;
-    gint status;
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( book != NULL );
@@ -1757,7 +1755,6 @@ gnc_dbi_check_sqlite3_file( const gchar *uri )
 {
     FILE* f;
     gchar buf[50];
-    size_t chars_read;
     gint status;
     gchar *filename;
 
@@ -1776,7 +1773,7 @@ gnc_dbi_check_sqlite3_file( const gchar *uri )
     }
 
     // OK if file has the correct header
-    chars_read = fread( buf, sizeof(buf), 1, f );
+    fread( buf, sizeof(buf), 1, f );
     status = fclose( f );
     if ( status < 0 )
     {
@@ -2307,6 +2304,7 @@ conn_create_statement_from_sql( /*@ observer @*/ GncSqlConnection* conn, const g
     return create_dbi_statement( conn, sql );
 }
 
+#if 0 /* Not Used */
 static GValue*
 create_gvalue_from_string( /*@ only @*/ gchar* s )
 {
@@ -2320,6 +2318,7 @@ create_gvalue_from_string( /*@ only @*/ gchar* s )
 
     return s_gval;
 }
+#endif
 
 static gboolean
 conn_does_table_exist( GncSqlConnection* conn, const gchar* table_name )
@@ -2483,7 +2482,6 @@ add_columns_ddl( GncSqlConnection* conn,
 {
     GString* ddl;
     const GList* list_node;
-    const GncSqlColumnTableEntry* table_row;
     guint col_num;
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
 
@@ -2821,7 +2819,6 @@ conn_create_index( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/ const g
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     gchar* ddl;
     dbi_result result;
-    gint status;
 
     g_return_val_if_fail( conn != NULL, FALSE );
     g_return_val_if_fail( index_name != NULL, FALSE );
@@ -2858,7 +2855,6 @@ conn_add_columns_to_table( /*@ unused @*/ GncSqlConnection* conn, /*@ unused @*/
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     gchar* ddl;
     dbi_result result;
-    gint status;
 
     g_return_val_if_fail( conn != NULL, FALSE );
     g_return_val_if_fail( table_name != NULL, FALSE );
@@ -2916,7 +2912,6 @@ conn_get_table_list( dbi_conn conn, const gchar* dbname )
     while ( dbi_result_next_row( tables ) != 0 )
     {
         const gchar* table_name;
-        dbi_result result;
 
         table_name = dbi_result_get_string_idx( tables, 1 );
         list = g_slist_prepend( list, strdup( table_name ) );

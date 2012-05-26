@@ -45,7 +45,7 @@
 #include "gnc-ui.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 static void save_templates(GtkWidget *parent, Account *gnc_acc, GList *templates,
                            gboolean dont_ask);
@@ -84,7 +84,6 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
     AB_BANKING *api;
     gboolean online = FALSE;
     AB_ACCOUNT *ab_acc;
-    GncABTransDialog *dialog = NULL;
     GList *templates = NULL;
     GncABTransDialog *td = NULL;
     gboolean successful = FALSE;

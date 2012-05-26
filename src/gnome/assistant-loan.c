@@ -1353,7 +1353,6 @@ gboolean
 loan_rep_page_complete( GtkAssistant *assistant, gpointer user_data )
 {
     LoanAssistantData *ldd = user_data;
-    int i;
 
     ldd->ld.repFromAcct =
         gnc_account_sel_get_account( ldd->repAssetsFromGAS );
@@ -1382,7 +1381,6 @@ void
 loan_rep_page_save( GtkAssistant *assistant, gpointer user_data )
 {
     LoanAssistantData *ldd = user_data;
-    int i;
 
     if ( ldd->ld.repMemo )
         g_free( ldd->ld.repMemo );
@@ -3139,7 +3137,6 @@ void
 loan_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
                         gpointer user_data)
 {
-    LoanAssistantData *ldd = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
     switch (currentpage)

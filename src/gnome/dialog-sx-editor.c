@@ -784,14 +784,11 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
     // @@FIXME: similar to below, check the commodities involved, and disallow autocreation
     {
-        gboolean autocreateState, notifyState;
+        gboolean autocreateState;
 
         autocreateState =
-            gtk_toggle_button_get_active(
-                GTK_TOGGLE_BUTTON(sxed->autocreateOpt) );
-        notifyState =
-            gtk_toggle_button_get_active(
-                GTK_TOGGLE_BUTTON(sxed->notifyOpt) );
+            gtk_toggle_button_get_active (
+                GTK_TOGGLE_BUTTON(sxed->autocreateOpt));
 
         if (((ttVarCount > 0) || multi_commodity) && autocreateState)
         {
@@ -997,7 +994,6 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
     /* start date and freq spec */
     {
         GDate gdate;
-        GString *str;
         GList *schedule = NULL;
 
         gnc_frequency_save_to_recurrence(sxed->gncfreq, &schedule, &gdate);
@@ -1120,8 +1116,8 @@ sxed_delete_event( GtkWidget *widget, GdkEvent *event, gpointer ud )
  * Create the Schedule Editor Dialog *
  ************************************/
 GncSxEditorDialog *
-gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
-        gboolean newSX)
+gnc_ui_scheduled_xaction_editor_dialog_create (SchedXaction *sx,
+					       gboolean newSX)
 {
     GncSxEditorDialog *sxed;
     GtkBuilder *builder;
@@ -1566,8 +1562,6 @@ gnc_sxed_reg_check_close(GncSxEditorDialog *sxed)
 
     if (gnc_verify_dialog(sxed->dialog, TRUE, "%s", message))
     {
-        Transaction *trans;
-        trans = gnc_split_register_get_current_trans( reg );
         if ( !gnc_split_register_save( reg, TRUE ) )
             return;
 

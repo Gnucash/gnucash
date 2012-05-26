@@ -139,7 +139,6 @@ static GtkTreeModel *
 create_and_fill_report_list(CustomReportDialog *crd)
 {
     GtkListStore *store;
-    GtkTreeIter iter;
 
     store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_INT);
 
@@ -276,15 +275,10 @@ void
 delete_custom_report_clicked_cb(GtkWidget *button, gpointer data)
 {
     CustomReportDialog *crd = data;
-    GtkTreeSelection *sel;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
 
     SCM template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
     SCM guid;
     gchar* report_name;
-
-    sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(crd->reportview));
 
     guid = get_custom_report_selection(crd, _("You must select a report to delete."));
     if (!scm_is_null(guid))

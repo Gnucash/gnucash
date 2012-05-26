@@ -839,7 +839,6 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
     gchar        *title = NULL;
     const char   *str;
     GtkWidget    *page;
-    gint         newindex;
     char         *name_tooltip =
         _("Enter a name or short description, such as \"Red Hat Stock\".");
     char         *mnemonic_tooltip =
@@ -858,7 +857,7 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
     page = retval->page;
 
     /* Insert the new page */
-    newindex = gtk_assistant_insert_page (GTK_ASSISTANT(wind->window), page, 14);
+    gtk_assistant_insert_page (GTK_ASSISTANT(wind->window), page, 14);
     gtk_assistant_set_page_type(GTK_ASSISTANT(wind->window), page, GTK_ASSISTANT_PAGE_PROGRESS );
     gtk_assistant_set_page_complete (GTK_ASSISTANT (wind->window), page, TRUE);
     gtk_assistant_update_buttons_state (GTK_ASSISTANT (wind->window));
@@ -1498,10 +1497,6 @@ void
 gnc_ui_qif_import_intro_prepare (GtkAssistant  *assistant, gpointer user_data)
 {
     QIFImportWindow   *wind = user_data;
-
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     SCM unload = scm_c_eval_string("qif-dialog:unload-qif-file");
     SCM files_list;
 
@@ -1577,7 +1572,6 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
 void
 gnc_ui_qif_import_load_file_prepare (GtkAssistant  *assistant, gpointer user_data)
 {
-    QIFImportWindow   *wind = user_data;
 
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
@@ -2000,7 +1994,6 @@ gnc_ui_qif_import_date_format_prepare (GtkAssistant  *assistant, gpointer user_d
 
 {
     QIFImportWindow *wind = user_data;
-    GtkWidget *page;
     gint num = gtk_assistant_get_current_page (assistant);
 
     if (wind->ask_date_format)
@@ -2030,7 +2023,6 @@ gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     SCM  reparse_dates   = scm_c_eval_string("qif-file:reparse-dates");
-    SCM  check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
     SCM  format_sym;
     gchar *text;
 
@@ -2063,7 +2055,6 @@ void
 gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
-    GtkWidget *page;
     gint num = gtk_assistant_get_current_page (assistant);
 
     SCM  check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
@@ -2169,8 +2160,6 @@ gnc_ui_qif_import_load_another_cb(GtkButton * button,
 {
     QIFImportWindow * wind = user_data;
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    GtkWidget *page;
-    gint num = gtk_assistant_get_current_page (assistant);
 
     gtk_assistant_set_current_page (assistant, 1);
 }
@@ -2542,7 +2531,6 @@ void
 gnc_ui_qif_import_currency_prepare(GtkAssistant *assistant,
                                    gpointer user_data)
 {
-    QIFImportWindow * wind = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
@@ -2643,7 +2631,6 @@ void
 gnc_ui_qif_import_commodity_new_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
-    QIFImportWindow     *wind = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
@@ -3168,7 +3155,6 @@ void
 gnc_ui_qif_import_end_page_prepare (GtkAssistant *assistant,
                                     gpointer user_data)
 {
-    QIFImportWindow * wind = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
@@ -3271,7 +3257,6 @@ gnc_ui_qif_import_summary_page_prepare (GtkAssistant *assistant,
 void gnc_ui_qif_import_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
                                    gpointer user_data)
 {
-    QIFImportWindow   *wind = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
     GtkWidget *mypage = gtk_assistant_get_nth_page (assistant, currentpage);
     const char *pagename = gtk_buildable_get_name(GTK_BUILDABLE(mypage));

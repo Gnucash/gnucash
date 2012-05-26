@@ -829,7 +829,6 @@ gnc_tree_model_account_iter_next (GtkTreeModel *tree_model,
                                   GtkTreeIter *iter)
 {
     GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
-    GncTreeModelAccountPrivate *priv;
     Account *account, *parent;
     gint i;
 
@@ -839,8 +838,6 @@ gnc_tree_model_account_iter_next (GtkTreeModel *tree_model,
     g_return_val_if_fail (iter->stamp == model->stamp, FALSE);
 
     ENTER("model %p, iter %s", tree_model, iter_to_string(iter));
-
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
     parent = (Account *) iter->user_data2;
     if (parent == NULL)
@@ -929,7 +926,6 @@ gnc_tree_model_account_iter_has_child (GtkTreeModel *tree_model,
                                        GtkTreeIter *iter)
 {
     GncTreeModelAccount *model;
-    GncTreeModelAccountPrivate *priv;
     Account *account;
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
@@ -937,7 +933,6 @@ gnc_tree_model_account_iter_has_child (GtkTreeModel *tree_model,
     ENTER("model %p, iter %s", tree_model, iter_to_string(iter));
 
     model = GNC_TREE_MODEL_ACCOUNT (tree_model);
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
     gnc_leave_return_val_if_fail (iter != NULL, FALSE);
     gnc_leave_return_val_if_fail (iter->user_data != NULL, FALSE);
@@ -959,14 +954,12 @@ gnc_tree_model_account_iter_n_children (GtkTreeModel *tree_model,
                                         GtkTreeIter *iter)
 {
     GncTreeModelAccount *model;
-    GncTreeModelAccountPrivate *priv;
     gint num;
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
     ENTER("model %p, iter %s", tree_model, iter_to_string(iter));
 
     model = GNC_TREE_MODEL_ACCOUNT (tree_model);
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
     if (iter == NULL)
     {
@@ -1057,7 +1050,6 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
                                     GtkTreeIter *child)
 {
     GncTreeModelAccount *model;
-    GncTreeModelAccountPrivate *priv;
     Account *account, *parent;
     gint i;
 
@@ -1079,7 +1071,6 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
     gnc_leave_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 
     model = GNC_TREE_MODEL_ACCOUNT (tree_model);
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
     gnc_leave_return_val_if_fail (child != NULL, FALSE);
     gnc_leave_return_val_if_fail (child->user_data != NULL, FALSE);

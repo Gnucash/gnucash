@@ -393,6 +393,7 @@ test_xaccSplitEqualCheckBal (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (fixture->func->xaccSplitEqualCheckBal ("test ", foo, bar), ==, FALSE);
     g_assert_cmpint (check.hits, ==, 2);
     g_log_remove_handler ("gnc.engine", hdlr);
+    g_log_set_default_handler (oldlogger, NULL);
     test_clear_error_list ();
 
 }
@@ -410,10 +411,10 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     gchar *msg02 = "[xaccSplitEqual()] GUIDs differ";
     gchar *msg03;
     gchar *msg04 = "[xaccSplitEqual()] actions differ: foo vs bar";
-    gchar *msg05 = "[xaccSplitEqual()] kvp frames: differ foo vs bar";
-    gchar *msg06 = "[xaccSplitEqual()] reconcile flags differ: foo vs bar";
-    gchar *msg07 = "[xaccSplitEqual()] reconciled date differs";
-    gchar *msg08 = "[xaccSplitEqual()] amounts differ: foo vs bar";
+    G_GNUC_UNUSED gchar *msg05 = "[xaccSplitEqual()] kvp frames: differ foo vs bar";
+    G_GNUC_UNUSED gchar *msg06 = "[xaccSplitEqual()] reconcile flags differ: foo vs bar";
+    G_GNUC_UNUSED gchar *msg07 = "[xaccSplitEqual()] reconciled date differs";
+    G_GNUC_UNUSED gchar *msg08 = "[xaccSplitEqual()] amounts differ: foo vs bar";
     gchar *msg10 = "[xaccSplitEqual()] transactions differ";
     gchar *msg11 = "[xaccTransEqual()] one is NULL";
     gchar *msg12 = "[xaccSplitEqualCheckBal()] balances differ: 321/1000 vs 0/1";
@@ -522,6 +523,7 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     g_object_unref (split1);
     g_object_unref (split2);
     test_clear_error_list ();
+    g_log_set_default_handler (oldlogger, NULL);
     g_free (msg03);
 }
 /* xaccSplitGetAccount
@@ -1051,6 +1053,7 @@ test_xaccSplitConvertAmount (void)
     test_destroy (gnaira);
     test_destroy (gncxx);
     test_destroy (gnm);
+    g_log_set_default_handler (oldlogger, NULL);
     g_free (check.msg);
 }
 /* xaccSplitDestroy
@@ -1283,7 +1286,7 @@ test_xaccSplitGetCorrAccountFullName (Fixture *fixture, gconstpointer pData)
     Account *acc1 = xaccMallocAccount (book);
     Account *acc2 = xaccMallocAccount (book);
 
-    gchar *name1 = "waldo", *name2 = "pepper", fullname[32], *result;
+    gchar *name1 = "waldo", *name2 = "pepper", *result;
     gchar *err = "-- Split Transaction --";
 
     xaccAccountSetCommodity (acc2, fixture->curr);
@@ -1360,7 +1363,6 @@ test_xaccSplitCompareAccountFullNames (Fixture *fixture, gconstpointer pData)
     Account *acc2 = xaccMallocAccount (book);
 
     gchar *name1 = "waldo", *name2 = "pepper";
-    gchar *err = "-- Split Transaction --";
 
     xaccAccountSetCommodity (acc2, fixture->curr);
     gnc_account_append_child (acc1, acc2);
@@ -1563,6 +1565,7 @@ test_xaccSplitSetParent (Fixture *fixture, gconstpointer pData)
 
     test_signal_free (sig1);
     test_signal_free (sig2);
+    g_log_set_default_handler (oldlogger, NULL);
 /* txn already destroyed by xaccTransCommitEdit() */
 }
 /* xaccSplitGetSharePrice
@@ -1682,7 +1685,6 @@ static void
 test_xaccSplitMakeStockSplit (Fixture *fixture, gconstpointer pData)
 {
     Split *split = fixture->split;
-    Transaction *txn = split->parent;
     g_assert_cmpstr (xaccSplitGetType (split), ==, "normal");
 
     xaccSplitMakeStockSplit (split);

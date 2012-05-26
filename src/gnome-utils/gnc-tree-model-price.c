@@ -1364,7 +1364,6 @@ gnc_tree_model_price_row_add (GncTreeModelPrice *model,
     GtkTreePath *path;
     GtkTreeModel *tree_model;
     GtkTreeIter tmp_iter;
-    gint i;
 
     ENTER("model %p, iter (%p)%s", model, iter, iter_to_string(model, iter));
 

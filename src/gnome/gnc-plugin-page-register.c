@@ -554,7 +554,6 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
     GncPluginPageRegisterPrivate *priv;
     GncPluginPage *plugin_page;
     GNCSplitReg *gsr;
-    SplitRegister *reg;
     const GList *item;
     GList *book_list;
     gchar *label;
@@ -598,10 +597,6 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
     for (item = book_list; item; item = g_list_next(item))
         gnc_plugin_page_add_book (plugin_page, (QofBook *)item->data);
     // Do not free the list. It is owned by the query.
-
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
-
-
 
     priv->component_manager_id = 0;
     return plugin_page;
@@ -716,14 +711,9 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 static void
 gnc_plugin_page_register_finalize (GObject *object)
 {
-    GncPluginPageRegister *page;
-    GncPluginPageRegisterPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (object));
 
     ENTER("object %p", object);
-    page = GNC_PLUGIN_PAGE_REGISTER (object);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
@@ -1181,7 +1171,6 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
         GKeyFile *key_file,
         const gchar *group_name)
 {
-    GncPluginPageRegisterPrivate *priv;
     GtkAction *action;
     GError *error = NULL;
     gchar *style_name;
@@ -1189,7 +1178,6 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
     gboolean use_double_line;
 
     ENTER(" ");
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 
     /* Convert the style name to an index */
     style_name = g_key_file_get_string(key_file, group_name,
@@ -1441,7 +1429,6 @@ gnc_plugin_page_register_get_tab_color (GncPluginPage *plugin_page)
     GncPluginPageRegisterPrivate *priv;
     GNCLedgerDisplayType ledger_type;
     GNCLedgerDisplay *ld;
-    SplitRegister *reg;
     Account *leader;
     const char* color;
 
@@ -1449,7 +1436,6 @@ gnc_plugin_page_register_get_tab_color (GncPluginPage *plugin_page)
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
     color = NULL;
@@ -1466,7 +1452,6 @@ gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page)
     GncPluginPageRegisterPrivate *priv;
     GNCLedgerDisplayType ledger_type;
     GNCLedgerDisplay *ld;
-    SplitRegister *reg;
     Account *leader;
     const char* filter;
 
@@ -1474,7 +1459,6 @@ gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page)
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
     filter = NULL;
@@ -1489,16 +1473,12 @@ void
 gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *filter )
 {
     GncPluginPageRegisterPrivate *priv;
-    GNCLedgerDisplayType ledger_type;
     GNCLedgerDisplay *ld;
-    SplitRegister *reg;
     Account *leader;
     gchar *default_filter;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
-    ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
 
     if (leader != NULL)
@@ -1522,7 +1502,6 @@ gnc_plugin_page_register_get_sort_order (GncPluginPage *plugin_page)
     GncPluginPageRegisterPrivate *priv;
     GNCLedgerDisplayType ledger_type;
     GNCLedgerDisplay *ld;
-    SplitRegister *reg;
     Account *leader;
     const char* sort_order;
 
@@ -1530,7 +1509,6 @@ gnc_plugin_page_register_get_sort_order (GncPluginPage *plugin_page)
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
     sort_order = NULL;
@@ -1545,15 +1523,11 @@ void
 gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar *sort_order )
 {
     GncPluginPageRegisterPrivate *priv;
-    GNCLedgerDisplayType ledger_type;
     GNCLedgerDisplay *ld;
-    SplitRegister *reg;
     Account *leader;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
-    ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
 
     if (leader != NULL)
@@ -1573,14 +1547,12 @@ gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page)
     GncPluginPageRegisterPrivate *priv;
     GNCLedgerDisplayType ledger_type;
     GNCLedgerDisplay *ld;
-    SplitRegister *reg;
     Account *leader;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
 
@@ -1858,10 +1830,9 @@ gnc_plugin_page_register_filter_time2dmy ( time_t raw_time)
 {
     struct tm * timeinfo;
     gchar date_string[11];
-    gint i;
 
     timeinfo = localtime ( &raw_time );
-    i = strftime(date_string, 11, "%d-%m-%Y", timeinfo );
+    strftime(date_string, 11, "%d-%m-%Y", timeinfo );
     PINFO("Date string is %s", date_string);
 
     return g_strdup(date_string);
@@ -1992,7 +1963,6 @@ static void
 get_filter_times(GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
-    GtkWidget *button, *today, *gde;
     time_t time_val;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
@@ -2482,7 +2452,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     }
     else if (ledger_type == LD_GL && reg->type == SEARCH_LEDGER)
     {
-        Account *common_acct = NULL, *account;
+        Account *common_acct = NULL;
         splits = qof_query_run(gnc_ledger_display_get_query(priv->ledger));
         /* Make sure each split is from the same account */
         for (item = splits; item; item = g_list_next(item))
@@ -2785,8 +2755,7 @@ gnc_plugin_page_register_cmd_shift_transaction_forward (GtkAction *action,
 {
     GncPluginPageRegisterPrivate *priv;
     SplitRegister *reg;
-    GNCSplitReg *gsr;
-    Transaction *trans, *new_trans;
+    Transaction *trans;
     Timespec entered;
 
     ENTER("(action %p, page %p)", action, page);
@@ -2871,7 +2840,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
         GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
-    GtkWidget *dialog, *toggle, *button, *start_date, *end_date, *table, *hbox;
+    GtkWidget *dialog, *toggle, *button, *table, *hbox;
     time_t start_time, end_time, time_val;
     GtkBuilder *builder;
     gboolean sensitive, value;
@@ -3297,7 +3266,6 @@ gnc_plugin_page_register_cmd_jump (GtkAction *action,
 {
     GncPluginPageRegisterPrivate *priv;
     GncPluginPage *new_page;
-    GncPluginPageRegister *new_reg_page;
     GtkWidget *window;
     GNCSplitReg *gsr;
     SplitRegister *reg;
@@ -3362,7 +3330,6 @@ gnc_plugin_page_register_cmd_jump (GtkAction *action,
         LEAVE("couldn't create new page");
         return;
     }
-    new_reg_page = GNC_PLUGIN_PAGE_REGISTER(new_page);
 
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
     gsr = gnc_plugin_page_register_get_gsr (new_page);

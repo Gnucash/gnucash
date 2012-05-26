@@ -41,9 +41,7 @@ typedef struct
 static void
 setup( Fixture *fixture, gconstpointer pData )
 {
-    Account *root;
     fixture->book = qof_book_new();
-    root = gnc_account_create_root (fixture->book);
 
     fixture->account = xaccMallocAccount(fixture->book);
     fixture->commodity = gnc_commodity_new(fixture->book, "foo", "bar", "xy", "xy", 100);

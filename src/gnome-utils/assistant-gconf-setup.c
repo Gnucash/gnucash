@@ -231,7 +231,6 @@ assistant_gconf_update_prep (GtkAssistant *assistant, gpointer user_data)
     gchar *gconfdir = gnc_path_get_gconfdir (TRUE);
 
     gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data->update_path)))
     {
@@ -305,9 +304,7 @@ assistant_gconf_install_cb (GtkToggleButton *button, gpointer user_data)
 void
 assistant_gconf_step_prep (GtkAssistant *assistant, gpointer user_data)
 {
-    gconf_data *data = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gtk_assistant_set_current_page (assistant, num + 2);
 }
 
@@ -417,7 +414,6 @@ void
 assistant_gconf_finish (GtkAssistant *assistant, gpointer user_data)
 {
     gconf_data *data = user_data;
-    GtkWidget *window;
     gint value, value2;
     GError *error = NULL;
     gboolean keep_going = TRUE;
@@ -478,8 +474,6 @@ void
 assistant_gconf_prepare (GtkAssistant  *assistant, GtkWidget *page,
                          gconf_data  *data)
 {
-    gint currentpage = gtk_assistant_get_current_page(assistant);
-
     switch (gtk_assistant_get_current_page(assistant))
     {
     case 2:

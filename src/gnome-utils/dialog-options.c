@@ -2918,10 +2918,9 @@ gnc_option_get_ui_value_budget(GNCOption *option, GtkWidget *widget)
     GtkComboBox *cb;
     GtkTreeModel *tm;
     GtkTreeIter iter;
-    gboolean success;
 
     cb = GTK_COMBO_BOX(widget);
-    success = gtk_combo_box_get_active_iter(cb, &iter);
+    gtk_combo_box_get_active_iter(cb, &iter);
     tm = gtk_combo_box_get_model(cb);
     bgt = gnc_tree_model_budget_get_budget(tm, &iter);
 

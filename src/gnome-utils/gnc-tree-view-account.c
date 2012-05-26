@@ -1471,14 +1471,12 @@ gnc_tree_view_account_expand_to_account (GncTreeViewAccount *view,
 Account *
 gnc_tree_view_account_get_cursor_account (GncTreeViewAccount *view)
 {
-    GtkTreeModel *s_model;
     GtkTreePath *s_path;
     Account *account;
 
     ENTER("view %p", view);
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
 
-    s_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
     gtk_tree_view_get_cursor (GTK_TREE_VIEW(view), &s_path, NULL);
     if (!s_path)
     {

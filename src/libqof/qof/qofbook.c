@@ -394,7 +394,6 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
 gchar *
 qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
 {
-    QofBackend *be;
     KvpFrame *kvp;
     KvpValue *value;
     gint64 counter;

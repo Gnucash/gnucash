@@ -199,9 +199,6 @@ void csv_export_sep_cb (GtkWidget *radio, gpointer user_data )
 void csv_export_quote_cb (GtkToggleButton *button, gpointer user_data )
 {
     CsvExportInfo *info = user_data;
-    const gchar *name;
-
-    name = gtk_buildable_get_name(GTK_BUILDABLE(button));
 
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)))
         info->use_quotes = TRUE;
@@ -479,7 +476,6 @@ csv_export_info_acct_type_cb (GtkWidget *w, gpointer user_data)
 static void
 get_filter_times (CsvExportInfo *info)
 {
-    GtkWidget *button, *today, *gde;
     time_t time_val;
 
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(info->csvd.start_date_choose)))
@@ -770,7 +766,6 @@ void
 csv_export_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
                               gpointer user_data)
 {
-    CsvExportInfo *info = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
     switch (currentpage)
@@ -856,9 +851,8 @@ csv_export_assistant_create (CsvExportInfo *info)
     GtkWidget *window;
     GtkWidget *box;
     GtkWidget *button;
-    GtkWidget *toggle, *start_date, *end_date, *table, *hbox;
-    time_t start_time, end_time, time_val;
-    gboolean sensitive, value;
+    GtkWidget *table, *hbox;
+    time_t start_time, end_time;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "CSV Export Assistant");
@@ -1026,19 +1020,13 @@ void
 gnc_file_csv_export (CsvExportType export_type)
 {
     CsvExportInfo *info;
-    gint component_id;
 
     info = g_new0 (CsvExportInfo, 1);
-
     info->export_type = export_type;
-
     csv_export_assistant_create (info);
-
-    component_id = gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
-                   NULL, csv_export_close_handler,
-                   info);
-
+    gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
+				NULL, csv_export_close_handler,
+				info);
     gtk_widget_show_all (info->window);
-
     gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
 }

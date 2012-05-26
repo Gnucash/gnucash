@@ -1011,7 +1011,6 @@ gnc_split_reg_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
 void
 gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 {
-    SplitRegisterStyle style;
     CursorClass cursor_class;
     SplitRegister *reg;
     Transaction *trans;
@@ -1031,7 +1030,6 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     }
 
     trans = xaccSplitGetParent(split);
-    style = reg->style;
     cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
     /* Deleting the blank split just cancels */

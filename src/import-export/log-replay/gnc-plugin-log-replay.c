@@ -126,13 +126,7 @@ gnc_plugin_log_replay_init (GncPluginLogreplay *plugin)
 static void
 gnc_plugin_log_replay_finalize (GObject *object)
 {
-    GncPluginLogreplay *plugin;
-    GncPluginLogreplayPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_LOG_REPLAY (object));
-
-    plugin = GNC_PLUGIN_LOG_REPLAY (object);
-    priv = GNC_PLUGIN_LOG_REPLAY_GET_PRIVATE(plugin);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

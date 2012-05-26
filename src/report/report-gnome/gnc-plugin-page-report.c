@@ -314,15 +314,9 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 static void
 gnc_plugin_page_report_finalize (GObject *object)
 {
-    GncPluginPageReport *page;
-    GncPluginPageReportPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REPORT (object));
 
     ENTER("object %p", object);
-    page = GNC_PLUGIN_PAGE_REPORT (object);
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
-
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
 }

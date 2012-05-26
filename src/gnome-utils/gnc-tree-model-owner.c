@@ -532,11 +532,9 @@ gnc_tree_model_owner_get_value (GtkTreeModel *tree_model,
                                 GValue *value)
 {
     GncTreeModelOwner *model = GNC_TREE_MODEL_OWNER (tree_model);
-    GncTreeModelOwnerPrivate *priv;
     GncOwner *owner;
     gboolean negative; /* used to set "deficit style" also known as red numbers */
     gchar *string = NULL;
-    time_t last_date;
 
     g_return_if_fail (GNC_IS_TREE_MODEL_OWNER (model));
     g_return_if_fail (iter != NULL);
@@ -547,7 +545,6 @@ gnc_tree_model_owner_get_value (GtkTreeModel *tree_model,
           iter_to_string(iter), column);
 
     owner = (GncOwner *) iter->user_data;
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
     switch (column)
     {

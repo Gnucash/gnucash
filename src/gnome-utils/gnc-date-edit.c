@@ -575,13 +575,9 @@ gnc_date_edit_init (GNCDateEdit *gde)
 static void
 gnc_date_edit_finalize (GObject *object)
 {
-    GNCDateEdit *gde;
 
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_DATE_EDIT (object));
-
-    gde = GNC_DATE_EDIT (object);
-
 
     if (G_OBJECT_CLASS (parent_class)->finalize)
         (* G_OBJECT_CLASS (parent_class)->finalize) (object);

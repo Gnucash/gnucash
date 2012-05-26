@@ -1580,7 +1580,7 @@ gnc_pricedb_lookup_day(GNCPriceDB *db,
     return result;
 }
 
-
+#if 0 /* Not Used */
 static void
 lookup_day(gpointer key, gpointer val, gpointer user_data)
 {
@@ -1603,7 +1603,7 @@ lookup_day(gpointer key, gpointer val, gpointer user_data)
         item = item->next;
     }
 }
-
+#endif
 
 PriceList *
 gnc_pricedb_lookup_at_time(GNCPriceDB *db,
@@ -1663,7 +1663,7 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
     LEAVE (" ");
     return result;
 }
-
+#if 0 /* Not Used */
 static void
 lookup_time(gpointer key, gpointer val, gpointer user_data)
 {
@@ -1686,7 +1686,7 @@ lookup_time(gpointer key, gpointer val, gpointer user_data)
         item = item->next;
     }
 }
-
+#endif
 GNCPrice *
 gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
                                    const gnc_commodity *c,
@@ -2538,9 +2538,7 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
 static void
 pricedb_book_begin (QofBook *book)
 {
-    GNCPriceDB *db;
-
-    db = gnc_pricedb_create(book);
+    gnc_pricedb_create(book);
 }
 
 static void

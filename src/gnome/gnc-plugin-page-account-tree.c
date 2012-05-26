@@ -477,11 +477,7 @@ gnc_plugin_page_account_refresh_cb (GHashTable *changes, gpointer user_data)
 static void
 gnc_plugin_page_account_tree_close_cb (gpointer user_data)
 {
-    GncPluginPage *plugin_page;
-    GncPluginPageAccountTree *page;
-
-    plugin_page = GNC_PLUGIN_PAGE(user_data);
-    page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+    GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
     gnc_main_window_close_page(plugin_page);
 }
 
@@ -749,12 +745,11 @@ gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
         GdkEventButton *event,
         GncPluginPage *page)
 {
-    gboolean result;
 
     g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
 
     ENTER("widget %p, event %p, page %p", widget, event, page);
-    result = gnc_main_window_button_press_cb(widget, event, page);
+    gnc_main_window_button_press_cb(widget, event, page);
     LEAVE(" ");
 
     /* Always return FALSE.  This will let the tree view callback run as
@@ -769,14 +764,12 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
                            Account *account,
                            gboolean include_subs)
 {
-    GncPluginPageAccountTreePrivate *priv;
     GtkWidget *window;
     GncPluginPage *new_page;
 
     if (account == NULL)
         return;
 
-    priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
     window = GNC_PLUGIN_PAGE (page)->window;
     new_page = gnc_plugin_page_register_new (account, include_subs);
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);

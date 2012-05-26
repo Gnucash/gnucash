@@ -175,7 +175,6 @@ static gnc_numeric
 gnc_payment_dialog_calculate_selected_total (PaymentWindow *pw)
 {
     GtkTreeSelection *selection;
-    GList *list = NULL, *node;
     gnc_numeric val = gnc_numeric_zero();
 
     if (!pw->docs_list_tree_view || !GTK_IS_TREE_VIEW(pw->docs_list_tree_view))
@@ -194,7 +193,6 @@ gnc_payment_dialog_calculate_selected_total (PaymentWindow *pw)
 static void
 gnc_payment_dialog_document_selection_changed (PaymentWindow *pw)
 {
-    GNCLot *lot;
     gnc_numeric val;
 
     /* Don't change the amount based on the selected documents
@@ -232,7 +230,6 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
     {
         GNCLot *lot = node->data;
         const gchar *doc_date_str = NULL;
-        const gchar *doc_num_str  = NULL;
         const gchar *doc_type_str = NULL;
         const gchar *doc_id_str   = NULL;
         const gchar *doc_deb_str  = NULL;
@@ -243,7 +240,6 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
         gnc_numeric value = gnc_numeric_zero();
         gnc_numeric debit = gnc_numeric_zero();
         gnc_numeric credit = gnc_numeric_zero();
-        GncInvoiceType doc_type = GNC_INVOICE_UNDEFINED;
 
         /* Find the lot's document if it exists,
          * it could also be a prepayment lot. */
@@ -266,7 +262,6 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
         /* Find the document type. No type means pre-payment in this case */
         if (document)
         {
-            doc_type     = gncInvoiceGetType (document);
             doc_type_str = gncInvoiceGetTypeString (document);
         }
         else
@@ -350,11 +345,9 @@ static void
 gnc_payment_dialog_owner_changed (PaymentWindow *pw)
 {
     Account *last_acct = NULL;
-    Account *post_acct = NULL;
     GncGUID *guid = NULL;
     KvpValue* value;
     KvpFrame* slots;
-    gchar *text;
     GncOwner *owner = &pw->owner;
 
     /* If the owner changed, the initial invoice is no longer valid */
@@ -571,7 +564,6 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         const char *memo, *num;
         Timespec date;
         gnc_numeric exch = gnc_numeric_create(1, 1); //default to "one to one" rate
-        GNCLot *payment_lot;
         GList *selected_lots = NULL;
         GtkTreeSelection *selection;
 

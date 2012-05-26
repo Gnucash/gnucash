@@ -49,7 +49,7 @@
 #define MAX_DATE_LEN 80
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
 
 enum
 {
@@ -209,14 +209,8 @@ gnc_date_format_init (GNCDateFormat *gdf)
 static void
 gnc_date_format_finalize (GObject *object)
 {
-    GNCDateFormat *gdf;
-    GNCDateFormatPriv *priv;
-
     g_return_if_fail(object != NULL);
     g_return_if_fail(GNC_IS_DATE_FORMAT(object));
-
-    gdf = GNC_DATE_FORMAT(object);
-    priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
 
     if (G_OBJECT_CLASS(parent_class)->finalize)
         (* G_OBJECT_CLASS(parent_class)->finalize) (object);

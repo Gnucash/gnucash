@@ -506,7 +506,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
           *accumulatesplits;
     guint dummy;
     GncInvoice *invoice;
-    GncOrder *order;
     GncEntry *entry;
     gint day, month, year;
     gnc_numeric n;
@@ -515,7 +514,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     enum update {YES = GTK_RESPONSE_YES, NO = GTK_RESPONSE_NO} update;
     GtkWidget *dialog;
     Timespec today;
-    GncPluginPage *new_page;
     InvoiceWindow *iw;
 
     // these arguments are needed
@@ -530,7 +528,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     *n_invoices_updated = 0;
 
     invoice = NULL;
-    order = NULL;
     update = NO;
 
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
@@ -610,7 +607,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                         && strlen(date_posted) == 0))
             {
                 iw =  gnc_ui_invoice_edit (invoice);
-                new_page = gnc_plugin_page_invoice_new (iw);
+                gnc_plugin_page_invoice_new (iw);
             }
         }
 // I want to warn the user that an existing billvoice exists, but not every
@@ -722,7 +719,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         // handle auto posting of invoices
         {
             gchar *new_id = NULL;
-            Transaction *tnx;
             if (valid)
                 gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &new_id, -1);
             if (g_strcmp0 (id, new_id) != 0)
@@ -737,9 +733,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                     d2 = gnc_dmy2timespec (day, month, year);
                     acc = gnc_account_lookup_for_register
                           (gnc_get_current_root_account (), account_posted);
-                    tnx = gncInvoicePostToAccount (invoice, acc, &d1, &d2,
-                                                   memo_posted,
-                                                   text2bool (accumulatesplits));
+                    gncInvoicePostToAccount (invoice, acc, &d1, &d2,
+					     memo_posted,
+					     text2bool (accumulatesplits));
                 }
             }
             g_free (new_id);

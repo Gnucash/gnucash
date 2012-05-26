@@ -39,7 +39,7 @@
 #include "gnc-commodity.h"
 #include "../gnc-backend-dbi-priv.h"
 
-static QofLogModule log_module = "test-dbi";
+G_GNUC_UNUSED static QofLogModule log_module = "test-dbi";
 
 void
 do_compare( QofBook* book_1, QofBook* book_2, const gchar* id, QofInstanceForeachCB cb, const gchar* msg )

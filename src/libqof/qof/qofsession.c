@@ -272,7 +272,6 @@ qof_session_new (void)
 QofBook *
 qof_session_get_book (const QofSession *session)
 {
-    GList *node;
     if (!session) return NULL;
     if (!session->book) return NULL;
 
@@ -323,7 +322,7 @@ qof_session_ensure_all_data_loaded (QofSession *session)
 }
 
 /* =============================================================== */
-
+#if 0
 static void
 qof_book_set_partial (QofBook *book)
 {
@@ -802,7 +801,7 @@ qof_instance_copy_coll (QofSession *new_session, QofCollection *entity_coll)
     qof_event_resume ();
     return TRUE;
 }
-
+#endif
 struct recurse_s
 {
     QofSession *session;
@@ -810,6 +809,7 @@ struct recurse_s
     GList      *ref_list;
     GList      *ent_list;
 };
+#if 0 /* recurse_ent_cb, qof_instance_copy_coll_r, and qof_instance_copy_one_r aren't used */
 
 static void
 recurse_collection_cb (QofInstance *ent, gpointer user_data)
@@ -999,7 +999,7 @@ qof_instance_copy_one_r (QofSession *new_session, QofInstance *ent)
     }
     return success;
 }
-
+#endif
 
 /* ====================================================================== */
 
@@ -1311,7 +1311,6 @@ qof_session_save (QofSession *session,
     GSList *p;
     QofBook *book;
     int err;
-    gint num;
     char *msg = NULL;
     char *book_id;
 

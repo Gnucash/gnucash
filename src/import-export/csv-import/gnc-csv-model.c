@@ -28,7 +28,7 @@
 #include "localtime_r.h"
 #endif
 
-static QofLogModule log_module = GNC_MOD_IMPORT;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
 const int num_date_formats = 5;
 const gchar* date_format_user[] = {N_("y-m-d"),

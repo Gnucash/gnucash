@@ -28,7 +28,7 @@
 #include "engine/gncAddress.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
-static QofLogModule log_module = GNC_MOD_REGISTER;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_REGISTER;
 
 typedef struct
 {
@@ -136,7 +136,6 @@ static void address_cb(gpointer data, gpointer user_data)
  * current book. */
 static QofQuery *new_query_for_addresss(QofBook *book)
 {
-    GSList *primary_sort_params = NULL;
     QofQuery *query = qof_query_create_for (GNC_ID_ADDRESS);
     g_assert(book);
     qof_query_set_book (query, book);

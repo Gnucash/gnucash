@@ -418,13 +418,11 @@ qof_instance_set_property (GObject         *object,
                            GParamSpec      *pspec)
 {
     QofInstance *inst;
-    QofInstancePrivate *priv;
     Timespec *ts;
 
     g_return_if_fail(QOF_IS_INSTANCE(object));
 
     inst = QOF_INSTANCE(object);
-    priv = GET_PRIVATE(inst);
 
     switch (prop_id)
     {
@@ -1009,10 +1007,8 @@ qof_commit_edit_part2(QofInstance *inst,
 {
     QofInstancePrivate *priv;
     QofBackend * be;
-    gboolean dirty;
 
     priv = GET_PRIVATE(inst);
-    dirty = priv->dirty;
 
     /* See if there's a backend.  If there is, invoke it. */
     be = qof_book_get_backend(priv->book);

@@ -36,12 +36,12 @@ typedef struct
 {
 } Fixture;
 
-static void
+G_GNUC_UNUSED static void
 setup( Fixture *fixture, gconstpointer pData )
 {
 }
 
-static void
+G_GNUC_UNUSED static void
 teardown( Fixture *fixture, gconstpointer pData )
 {
 }

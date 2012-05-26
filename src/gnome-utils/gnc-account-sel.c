@@ -361,9 +361,6 @@ gnc_account_sel_get_account( GNCAccountSel *gas )
 void
 gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *typeFilters, GList *commodityFilters )
 {
-    GList *src = NULL;
-    GList *dest = NULL;
-    gnc_commodity* commClone = NULL;
 
     if ( gas->acctTypeFilters != NULL )
     {

@@ -129,12 +129,11 @@ load_all_lots( GncSqlBackend* be )
         if ( result != NULL )
         {
             GncSqlRow* row = gnc_sql_result_get_first_row( result );
-            GNCLot* lot;
             gchar* sql;
 
             while ( row != NULL )
             {
-                lot = load_single_lot( be, row );
+                load_single_lot( be, row );
                 row = gnc_sql_result_get_next_row( result );
             }
             gnc_sql_result_dispose( result );

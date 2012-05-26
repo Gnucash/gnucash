@@ -66,10 +66,12 @@ static gboolean gnc_tree_view_owner_filter_helper (GtkTreeModel *model,
         GtkTreeIter *iter,
         gpointer data);
 
+#if 0 /* Not Used */
 static void gtvo_setup_column_renderer_edited_cb(GncTreeViewOwner *owner_view,
         GtkTreeViewColumn *column,
         GtkCellRenderer *renderer,
         GncTreeViewOwnerColumnTextEdited col_edited_cb);
+#endif /* Not Used */
 
 typedef struct GncTreeViewOwnerPrivate
 {
@@ -363,8 +365,6 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     GtkTreeModel *model, *f_model, *s_model;
     const gchar *sample_type, *sample_currency;
     GncTreeViewOwnerPrivate *priv;
-    GtkTreeViewColumn *tax_info_column;
-    GtkCellRenderer *renderer;
 
     ENTER(" ");
     /* Create our view */
@@ -517,6 +517,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     g_free(path_string);                                \
   }
 
+#if 0 /* Not Used */
 static GtkTreePath *
 gnc_tree_view_owner_get_path_from_owner (GncTreeViewOwner *view,
         GncOwner *owner)
@@ -592,6 +593,7 @@ gnc_tree_view_owner_get_iter_from_owner (GncTreeViewOwner *view,
     LEAVE(" ");
     return TRUE;
 }
+#endif /* Not Used */
 
 /************************************************************/
 /*            Owner Tree View Filter Functions            */
@@ -796,7 +798,7 @@ gnc_tree_view_owner_set_selected_owner (GncTreeViewOwner *view,
                                         GncOwner *owner)
 {
     GtkTreeModel *model, *f_model, *s_model;
-    GtkTreePath *path, *f_path, *s_path, *parent_path;
+    GtkTreePath *path, *f_path, *s_path;
     GtkTreeSelection *selection;
 
     ENTER("view %p, owner %p (%s)", view,
@@ -860,6 +862,7 @@ typedef struct
     GncTreeViewOwnerPrivate* priv;
 } GncTreeViewSelectionInfo;
 
+#if 0 /* Not Used */
 /*
  * This helper function is called once for each row in the tree view
  * that is currently selected.  Its task is to append the corresponding
@@ -890,6 +893,7 @@ get_selected_owners_helper (GtkTreeModel *s_model,
         gtvsi->return_list = g_list_append(gtvsi->return_list, owner);
     }
 }
+#endif /* Not Used */
 
 /************************************************************/
 /*         Owner Tree View Add Column Functions           */
@@ -938,6 +942,8 @@ gtvo_currency_changed_cb (void)
         gtvo_update_column_names (ptr->data);
     }
 }
+
+#if 0 /* Not Used */
 /* This function implements a custom mapping between an owner's KVP
  * and the cell renderer's 'text' property. */
 static void
@@ -1030,6 +1036,7 @@ gtvo_setup_column_renderer_edited_cb(GncTreeViewOwner *owner_view,
         g_object_set_data(G_OBJECT(renderer), "column_view", column);
     }
 }
+#endif /* Not Used */
 
 /* BEGIN FILTER FUNCTIONS */
 #define FILTER_TREE_VIEW "types_tree_view"
@@ -1226,7 +1233,6 @@ tree_save_selected_row (GncTreeViewOwner *view,
                         gpointer user_data)
 {
     GncOwner *owner;
-    GncOwnerType owner_type;
     bar_t *bar = user_data;
     const gchar *owner_name;
 
@@ -1296,8 +1302,7 @@ gnc_tree_view_owner_restore(GncTreeViewOwner *view,
                             GncOwnerType owner_type)
 {
     GError *error = NULL;
-    gchar *key, *value;
-    gint i, count;
+    gchar *value;
     gboolean show;
 
     /* Filter information. Ignore missing keys. */
@@ -1335,6 +1340,7 @@ gnc_tree_view_owner_restore(GncTreeViewOwner *view,
     gnc_tree_view_owner_refilter(view);
 }
 
+#if 0 /* Not Used */
 static void
 gtvo_set_column_editor(GncTreeViewOwner *view,
                        GtkTreeViewColumn *column,
@@ -1353,3 +1359,4 @@ gtvo_set_column_editor(GncTreeViewOwner *view,
     g_return_if_fail(renderer != NULL);
     gtvo_setup_column_renderer_edited_cb(GNC_TREE_VIEW_OWNER(view), column, renderer, edited_cb);
 }
+#endif /* Not Used */

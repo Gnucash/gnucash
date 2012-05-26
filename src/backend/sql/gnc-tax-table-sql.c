@@ -54,7 +54,6 @@ typedef struct
 
 static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
 static void set_obj_guid( gpointer pObject, gpointer pValue );
-static gpointer get_child( gpointer pObject, const QofParam* param );
 static gpointer bt_get_parent( gpointer pObject );
 static void tt_set_parent( gpointer pObject, gpointer pValue );
 static void tt_set_parent_guid( gpointer pObject, gpointer pValue );
@@ -140,7 +139,7 @@ set_obj_guid( gpointer pObject, gpointer pValue )
 {
     // Nowhere to put the GncGUID
 }
-
+#if 0 /* Not Used */
 static gpointer
 get_child( gpointer pObject, const QofParam* param )
 {
@@ -151,6 +150,7 @@ get_child( gpointer pObject, const QofParam* param )
 
     return gncTaxTableGetChild( tt );
 }
+#endif
 
 static /*@ null @*//*@ dependent @*/ gpointer
 bt_get_parent( gpointer pObject )
@@ -234,7 +234,6 @@ load_taxtable_entries( GncSqlBackend* be, GncTaxTable* tt )
     GValue value;
     gchar* buf;
     GncSqlStatement* stmt;
-    GError* error = NULL;
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( tt != NULL );
@@ -339,8 +338,6 @@ load_all_taxtables( GncSqlBackend* be )
         if ( tt_needing_parents != NULL )
         {
             gboolean progress_made = TRUE;
-            GncTaxTable* root;
-            Account* pParent;
             GList* elem;
 
             while ( progress_made )

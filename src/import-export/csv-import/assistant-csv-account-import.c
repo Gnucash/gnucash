@@ -316,7 +316,6 @@ void
 csv_import_assistant_start_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
-    CsvImportInfo *info = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
@@ -347,8 +346,6 @@ csv_import_assistant_account_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvImportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     gtk_list_store_clear (info->store);
 
@@ -414,7 +411,6 @@ void
 csv_import_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
                               gpointer user_data)
 {
-    CsvImportInfo *info = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
     switch (currentpage)
@@ -500,7 +496,6 @@ csv_import_assistant_create (CsvImportInfo *info)
     GtkWidget *window;
     GtkWidget *box;
     GtkWidget *button;
-    GtkTreeIter iter;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
 
@@ -588,15 +583,14 @@ void
 gnc_file_csv_account_import(void)
 {
     CsvImportInfo *info;
-    gint component_id;
 
     info = g_new0 (CsvImportInfo, 1);
 
     csv_import_assistant_create (info);
 
-    component_id = gnc_register_gui_component (ASSISTANT_CSV_IMPORT_CM_CLASS,
-                   NULL, csv_import_close_handler,
-                   info);
+    gnc_register_gui_component (ASSISTANT_CSV_IMPORT_CM_CLASS,
+				NULL, csv_import_close_handler,
+				info);
 
     gtk_widget_show_all (info->window);
 

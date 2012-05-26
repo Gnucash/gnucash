@@ -170,7 +170,6 @@ add_owner_col_info_to_list( const GncSqlBackend* be, const GncSqlColumnTableEntr
 {
     GncSqlColumnInfo* info;
     gchar* buf;
-    const gchar* type;
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( table_row != NULL );

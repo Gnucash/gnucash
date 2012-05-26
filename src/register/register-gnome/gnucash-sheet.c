@@ -381,7 +381,6 @@ gnucash_sheet_y_pixel_to_block (GnucashSheet *sheet, int y)
 void
 gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
 {
-    Table *table;
     VirtualCellLocation vcell_loc;
     gint height;
     gint cy;
@@ -390,7 +389,6 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
-    table = sheet->table;
     height = GTK_WIDGET(sheet)->allocation.height;
 
     gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &cy);
@@ -865,7 +863,6 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
     GString *change_text_gs;
 
     int new_text_len;
-    int old_text_len;
     int change_text_len;
 
     const char *old_text;
@@ -902,7 +899,6 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
     old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
     if (old_text == NULL)
         old_text = "";
-    old_text_len = strlen (old_text);
 
     old_position = *position;
 
@@ -1205,14 +1201,11 @@ gnucash_sheet_check_direct_update_cell(GnucashSheet *sheet,
 static void
 gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
 {
-    GnomeCanvas *canvas;
     const char *text;
     VirtualLocation virt_loc;
 
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET (sheet));
-
-    canvas = GNOME_CANVAS(sheet);
 
     gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
@@ -1720,7 +1713,6 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 {
     Table *table;
     GnucashSheet *sheet;
-    CellBlock *header;
     gboolean pass_on = FALSE;
     gboolean abort_move;
     VirtualLocation cur_virt_loc;
@@ -1734,7 +1726,6 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 
     sheet = GNUCASH_SHEET (widget);
     table = sheet->table;
-    header = gnc_table_get_header_cell(table)->cellblock;
 
     if (gnucash_sheet_direct_event(sheet, (GdkEvent *) event))
         return TRUE;
@@ -1876,7 +1867,6 @@ static gint
 gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
     GnucashSheet *sheet;
-    gint result;
 
     g_return_val_if_fail(widget != NULL, TRUE);
     g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1964,7 +1954,7 @@ gnucash_sheet_commit_cb (GtkIMContext *context, const gchar *str,
                          GnucashSheet *sheet)
 {
     GtkEditable *editable;
-    gint tmp_pos, length, sel_start, sel_end;
+    gint tmp_pos, sel_start, sel_end;
 
     g_return_if_fail(strlen(str) > 0);
     g_return_if_fail(sheet->editing == TRUE);
@@ -2680,11 +2670,9 @@ gnucash_sheet_class_init (GnucashSheetClass *class)
 {
     GObjectClass *gobject_class;
     GtkWidgetClass *widget_class;
-    GnomeCanvasClass *canvas_class;
 
     gobject_class = G_OBJECT_CLASS (class);
     widget_class = GTK_WIDGET_CLASS (class);
-    canvas_class = GNOME_CANVAS_CLASS (class);
 
     sheet_parent_class = g_type_class_peek_parent (class);
 
@@ -2795,7 +2783,6 @@ GtkWidget *
 gnucash_sheet_new (Table *table)
 {
     GnucashSheet *sheet;
-    GnomeCanvas *sheet_canvas;
     GnomeCanvasItem *item;
     GnomeCanvasGroup *sheet_group;
 
@@ -2804,7 +2791,6 @@ gnucash_sheet_new (Table *table)
     sheet = gnucash_sheet_create (table);
 
     /* handy shortcuts */
-    sheet_canvas = GNOME_CANVAS (sheet);
     sheet_group = gnome_canvas_root (GNOME_CANVAS(sheet));
 
     /* The grid */
@@ -2856,12 +2842,8 @@ static void
 gnucash_register_class_init (GnucashRegisterClass *class)
 {
     GObjectClass *gobject_class;
-    GtkWidgetClass *widget_class;
-    GtkTableClass *table_class;
 
     gobject_class = G_OBJECT_CLASS (class);
-    widget_class = (GtkWidgetClass *) class;
-    table_class = (GtkTableClass *) class;
 
     register_parent_class = g_type_class_peek_parent (class);
 

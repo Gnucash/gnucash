@@ -725,7 +725,6 @@ delete_column (CsvImportTrans* info, int col, gboolean test_only)
 static void
 select_column (CsvImportTrans* info, int col)
 {
-    GError* error = NULL;
     int colcount = stf_parse_options_fixed_splitpositions_count (info->parse_data->options);
     GtkTreeViewColumn *column;
 
@@ -1090,7 +1089,6 @@ static void gnc_csv_preview_update_assist(CsvImportTrans* info)
 
     if (info->not_empty)
     {
-        GList *children, *children_begin;
         GList *tv_columns, *tv_columns_begin, *ctv_columns, *ctv_columns_begin;
         tv_columns = tv_columns_begin = gtk_tree_view_get_columns(info->treeview);
         ctv_columns = ctv_columns_begin = gtk_tree_view_get_columns(info->ctreeview);
@@ -1280,7 +1278,6 @@ void
 csv_import_trans_assistant_start_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
-    CsvImportTrans *info = user_data;
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
@@ -1316,8 +1313,6 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
 {
     CsvImportTrans *info = user_data;
     GtkAdjustment *adj;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     g_signal_connect(G_OBJECT(info->treeview), "size-allocate",
                      G_CALLBACK(treeview_resized), (gpointer)info);
@@ -1326,7 +1321,6 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
     {
         gchar* name;
         GtkIconSize size;
-        GtkTreeViewColumn* last_col;
 
         /* Block going back */
         gtk_assistant_commit (GTK_ASSISTANT(info->window));
@@ -1525,7 +1519,6 @@ void
 csv_import_trans_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
                                     gpointer user_data)
 {
-    CsvImportTrans *info = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
     switch (currentpage)
@@ -1630,9 +1623,6 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
     GtkWidget *window;
     GtkWidget *box;
     GtkWidget *button, *csv_button;
-    GtkTreeIter iter;
-    GtkCellRenderer *renderer;
-    GtkTreeViewColumn *column;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "start_row_adj");
@@ -1698,7 +1688,6 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
 
         /* The table containing info->encselector and the separator configuration widgets */
         GtkTable* enctable;
-        PangoContext* context; /* Used to set a monotype font on info->treeview */
 
         info->start_row_spin = GTK_WIDGET(gtk_builder_get_object (builder, "start_row"));
         info->end_row_spin = GTK_WIDGET(gtk_builder_get_object (builder, "end_row"));
@@ -1783,7 +1772,6 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
 
         /* Load the data treeview and connect it to its resizing event handler. */
         info->treeview = (GtkTreeView*)GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
-        context = gtk_widget_create_pango_context(GTK_WIDGET(info->treeview));
 
         /* Load the column type treeview. */
         info->ctreeview = (GtkTreeView*)GTK_WIDGET(gtk_builder_get_object (builder, "ctreeview"));
@@ -1831,15 +1819,14 @@ void
 gnc_file_csv_trans_import(void)
 {
     CsvImportTrans *info;
-    gint component_id;
 
     info = g_new0 (CsvImportTrans, 1);
 
     csv_import_trans_assistant_create (info);
 
-    component_id = gnc_register_gui_component (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS,
-                   NULL, csv_import_trans_close_handler,
-                   info);
+    gnc_register_gui_component (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS,
+				NULL, csv_import_trans_close_handler,
+				info);
 
     gtk_widget_show_all (info->window);
 

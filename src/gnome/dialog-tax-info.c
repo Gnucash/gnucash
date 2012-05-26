@@ -1298,7 +1298,6 @@ static void
 gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 {
     GtkWidget *dialog;
-    GtkObject *tido;
     GtkBuilder  *builder;
     GtkTreeView *tree_view;
     GtkTreeSelection *selection;
@@ -1310,7 +1309,6 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Tax Information Dialog"));
     ti_dialog->dialog = dialog;
-    tido = GTK_OBJECT (dialog);
 
     initialize_getters ();
 

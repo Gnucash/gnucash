@@ -776,11 +776,7 @@ gnucash_grid_set_property (GObject         *object,
                            const GValue    *value,
                            GParamSpec      *pspec)
 {
-    GnomeCanvasItem *item;
-    GnucashGrid *grid;
-
-    item = GNOME_CANVAS_ITEM (object);
-    grid = GNUCASH_GRID (object);
+    GnucashGrid *grid = GNUCASH_GRID (object);
 
     switch (prop_id)
     {
@@ -800,11 +796,7 @@ gnucash_grid_get_property (GObject         *object,
                            GValue          *value,
                            GParamSpec      *pspec)
 {
-    GnomeCanvasItem *item;
-    GnucashGrid *grid;
-
-    item = GNOME_CANVAS_ITEM (object);
-    grid = GNUCASH_GRID (object);
+    GnucashGrid *grid = GNUCASH_GRID (object);
 
     switch (prop_id)
     {

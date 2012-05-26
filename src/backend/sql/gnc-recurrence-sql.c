@@ -42,7 +42,7 @@
 #include "splint-defs.h"
 #endif
 
-/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "recurrences"
 #define TABLE_VERSION 1

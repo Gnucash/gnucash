@@ -700,7 +700,7 @@ kvp_frame_set_slot_path_gslist (KvpFrame *frame,
             return;
     }
 }
-#if 8
+#if 0 /*decode isn't used*/
 /* ============================================================ */
 /* decode url-encoded string, do it in place
  * + == space

@@ -48,7 +48,9 @@ extern void init_sw_core_utils(void);
 int
 libgncmod_python_gnc_module_init(int refcount)
 {
+    /* There isn't yet a python module to init.
     PyObject *pName, *pModule;
+    */
     FILE *fp;
     gchar *pkgdatadir, *init_filename;
 
@@ -61,7 +63,7 @@ libgncmod_python_gnc_module_init(int refcount)
     init_sw_core_utils();
 #endif
 
-    /*
+    /* There isn't yet a python module to init.
     pName = PyString_FromString("path/to/init.py");
     pModule = PyImport_Import(pName);
 

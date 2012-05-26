@@ -1795,7 +1795,6 @@ Amortization_Schedule (amort_sched_ptr amortsched)
     unsigned bep = amortsched->bep;
     double cpmt = 0;
     double final_pmt = 0;
-    double delayed_int = amortsched->delayed_int;
     char summary = amortsched->summary;
     unsigned option = amortsched->option;
     unsigned yr_pmt = amortsched->yr_pmt;
@@ -1832,7 +1831,6 @@ Amortization_Schedule (amort_sched_ptr amortsched)
         summary = (summary == 'y') ? 'x' : 'o';
         break;
     case 3:
-        delayed_int = 0.0;
         amortsched->final_pmt = final_pmt = amortsched->final_pmt_opt_3;
         break;
     case 4:

@@ -33,7 +33,7 @@
 #include "gnc-html-factory.h"
 
 /* indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_HTML;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_HTML;
 
 GncHtml* gnc_html_factory_create_html( void )
 {

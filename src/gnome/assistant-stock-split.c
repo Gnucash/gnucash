@@ -252,7 +252,6 @@ refresh_details_page (StockSplitInfo *info)
 void gnc_stock_split_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page,
                                         gpointer user_data)
 {
-    StockSplitInfo *info = user_data;
     gint currentpage = gtk_assistant_get_current_page(assistant);
 
     switch (currentpage)
@@ -289,7 +288,6 @@ gnc_stock_split_assistant_cash_prepare (GtkAssistant *assistant,
                                         gpointer user_data)
 {
     StockSplitInfo *info = user_data;
-    GtkTreeSelection *selection;
 
     gtk_widget_grab_focus(info->cash_edit);
 
@@ -629,9 +627,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         GtkWidget *box;
         GtkWidget *amount;
         GtkWidget *date;
-        GtkWidget *ce;
         GtkWidget *label;
-        GtkWidget *button;
 
         info->description_entry = GTK_WIDGET(gtk_builder_get_object(builder, "description_entry"));
 
@@ -681,7 +677,6 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         GtkWidget *amount;
         GtkWidget *label;
         GtkWidget *scroll;
-        GtkWidget *button;
         GtkTreeSelection *selection;
 
         box = GTK_WIDGET(gtk_builder_get_object(builder, "cash_box"));
@@ -756,8 +751,6 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 {
     StockSplitInfo *info = user_data;
     Account *old_account;
-    GtkWidget *page;
-    GtkBuilder *builder;
 
     old_account = info->acct;
 

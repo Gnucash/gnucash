@@ -71,7 +71,7 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.plugin-page.sx-list"
 
-static QofLogModule log_module = GNC_MOD_GUI_SX;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
 #define GCONF_SECTION "window/pages/sx_list"
@@ -201,10 +201,7 @@ static void
 gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
 {
     GtkActionGroup *action_group;
-    GncPluginPageSxListPrivate *priv;
     GncPluginPage *parent;
-
-    priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
@@ -287,11 +284,7 @@ gnc_plugin_page_sx_list_refresh_cb (GHashTable *changes, gpointer user_data)
 static void
 gnc_plugin_page_sx_list_close_cb (gpointer user_data)
 {
-    GncPluginPage *plugin_page;
-    GncPluginPageSxList *page;
-
-    plugin_page = GNC_PLUGIN_PAGE(user_data);
-    page = GNC_PLUGIN_PAGE_SX_LIST (plugin_page);
+    GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
     gnc_main_window_close_page(plugin_page);
 }
 

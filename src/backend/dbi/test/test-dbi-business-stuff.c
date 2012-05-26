@@ -41,7 +41,7 @@
 #include "gncEmployee.h"
 #include "gncVendor.h"
 
-static QofLogModule log_module = "test-dbi";
+G_GNUC_UNUSED static QofLogModule log_module = "test-dbi";
 
 static void
 compare_single_customer( QofInstance* inst, gpointer user_data )

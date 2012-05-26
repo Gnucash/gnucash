@@ -61,8 +61,6 @@ test_gint_fcn (QofBook *book, const char *message,
 static void
 test_vendor (void)
 {
-    QofBackend *be;
-    QofSession *session;
     QofBook *book;
     GncVendor *vendor;
 

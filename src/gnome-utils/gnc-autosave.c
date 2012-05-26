@@ -77,11 +77,10 @@ autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data);
 
 static gboolean autosave_confirm(GtkWidget *toplevel)
 {
-    GtkWidget *dialog, *label;
+    GtkWidget *dialog;
     guint interval_mins =
         gnc_gconf_get_float(GCONF_GENERAL, KEY_AUTOSAVE_INTERVAL, NULL);
     gboolean switch_off_autosave, show_expl_again, save_now;
-    gchar *message;
     gint response;
 
 #define YES_THIS_TIME 1

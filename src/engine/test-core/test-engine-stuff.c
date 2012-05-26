@@ -916,7 +916,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
     Account *acc, *bcc;
     Split *s;
-    gnc_numeric val, amt;
+    gnc_numeric val;
 
     /* Gotta have at least two different accounts */
     if (1 >= g_list_length (account_list)) return;
@@ -949,23 +949,6 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     }
     val = gnc_numeric_neg(val);
     xaccSplitSetValue(s, val);
-
-    if (gnc_commodity_equal (xaccTransGetCurrency(trn),
-                             xaccAccountGetCommodity(bcc)) &&
-            (!do_bork()))
-    {
-        amt = val;
-    }
-    else
-    {
-        gnc_numeric amt2 = xaccSplitGetAmount(s);
-        if (gnc_numeric_positive_p(amt2) ^ gnc_numeric_positive_p(val))
-            amt = gnc_numeric_neg(amt2);
-    }
-
-    if (gnc_numeric_zero_p(val))
-        amt = val;
-
     xaccSplitSetAmount(s, val);
     xaccTransCommitEdit(trn);
 }
@@ -1940,10 +1923,9 @@ add_random_transactions_to_book (QofBook *book, gint num_transactions)
     while (num_transactions--)
     {
         gnc_commodity *com;
-        Transaction *trans;
 
         com = get_random_commodity_from_table (table);
-        trans = get_random_transaction_with_currency (book, com, accounts);
+        get_random_transaction_with_currency (book, com, accounts);
     }
     g_list_free (accounts);
 }

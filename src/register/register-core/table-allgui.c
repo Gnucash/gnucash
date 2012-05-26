@@ -393,15 +393,12 @@ gnc_table_get_gtkrc_bg_color (Table *table, VirtualLocation virt_loc,
                               gboolean *hatching)
 {
     TableGetBGColorHandler bg_color_handler;
-    const char *cell_name;
 
     if (hatching)
         *hatching = FALSE;
 
     if (!table || !table->model)
         return 0xffffff; /* white */
-
-    cell_name = gnc_table_get_cell_name (table, virt_loc);
 
     bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
                        "gtkrc");
@@ -1719,13 +1716,10 @@ gnc_table_traverse_update(Table *table,
                           gncTableTraversalDir dir,
                           VirtualLocation *dest_loc)
 {
-    CellBlock *cb;
     gboolean abort_move;
 
     if ((table == NULL) || (dest_loc == NULL))
         return FALSE;
-
-    cb = table->current_cursor;
 
     ENTER("proposed (%d %d) -> (%d %d)\n",
           virt_loc.vcell_loc.virt_row, virt_loc.vcell_loc.virt_row,

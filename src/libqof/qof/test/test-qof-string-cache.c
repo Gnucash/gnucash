@@ -37,13 +37,13 @@ typedef struct
 {
 } Fixture;
 
-static void
+G_GNUC_UNUSED static void
 setup( Fixture *fixture, gconstpointer pData )
 {
     qof_string_cache_init();
 }
 
-static void
+G_GNUC_UNUSED static void
 teardown( Fixture *fixture, gconstpointer pData )
 {
     qof_string_cache_destroy();
@@ -58,7 +58,6 @@ test_qof_string_cache( void )
     gchar* str1_1;
     gchar* str1_2;
     gchar* str1_3;
-    gchar* str2_1;
     gchar* str1_4;
 
     strncpy(str, "str1", sizeof(str));
@@ -72,7 +71,7 @@ test_qof_string_cache( void )
     qof_string_cache_remove(str);               /* Refcount = 1 */
     qof_string_cache_remove(str);               /* Refcount = 0 */
     strncpy(str, "str2", sizeof(str));
-    str2_1 = qof_string_cache_insert(str);      /* Refcount = 1 */
+    qof_string_cache_insert(str);               /* Refcount = 1 */
     strncpy(str, "str1", sizeof(str));
     str1_4 = qof_string_cache_insert(str);      /* Refcount = 1 */
     g_assert(str1_1 != str1_4);

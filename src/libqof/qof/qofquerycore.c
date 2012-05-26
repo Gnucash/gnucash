@@ -1346,13 +1346,11 @@ collect_match_predicate (gpointer object, QofParam *getter,
                          QofQueryPredData *pd)
 {
     query_coll_t pdata;
-    QofCollection *coll;
     GList *node, *node2, *o_list;
     const GncGUID *guid;
 
     pdata = (query_coll_t)pd;
     VERIFY_PREDICATE (query_collect_type);
-    coll = ((query_collect_getter)getter->param_getfcn) (object, getter);
     guid = NULL;
     switch (pdata->options)
     {

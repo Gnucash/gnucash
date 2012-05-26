@@ -122,7 +122,6 @@ remove_clicked (CommoditiesDialog *cd)
     GList *node;
     GList *prices;
     GList *accounts;
-    gboolean do_delete;
     gboolean can_delete;
     gnc_commodity *commodity;
     GtkWidget *dialog;
@@ -135,7 +134,6 @@ remove_clicked (CommoditiesDialog *cd)
 
     accounts = gnc_account_get_descendants (gnc_book_get_root_account(cd->book));
     can_delete = TRUE;
-    do_delete = FALSE;
 
     for (node = accounts; node; node = node->next)
     {

@@ -250,16 +250,10 @@ gnc_embedded_window_init (GncEmbeddedWindow *window,
 static void
 gnc_embedded_window_finalize (GObject *object)
 {
-    GncEmbeddedWindow *window;
-    GncEmbeddedWindowPrivate *priv;
-
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (object));
 
     ENTER("object %p", object);
-    window = GNC_EMBEDDED_WINDOW (object);
-    priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
-
     gnc_gobject_tracking_forget(object);
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");

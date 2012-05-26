@@ -89,7 +89,6 @@ static const GncSqlColumnTableEntry tx_col_table[] =
 
 static /*@ dependent @*//*@ null @*/ gpointer get_split_reconcile_state( gpointer pObject );
 static void set_split_reconcile_state( gpointer pObject, /*@ null @*/ gpointer pValue );
-static void set_split_reconcile_date( gpointer pObject, Timespec ts );
 static void set_split_lot( gpointer pObject, /*@ null @*/ gpointer pLot );
 
 #define SPLIT_MAX_MEMO_LEN 2048
@@ -168,7 +167,7 @@ set_split_reconcile_state( gpointer pObject, /*@ null @*/ gpointer pValue )
 
     xaccSplitSetReconcile( GNC_SPLIT(pObject), s[0] );
 }
-
+#if 0 /* Not Used */
 static void
 set_split_reconcile_date( gpointer pObject, Timespec ts )
 {
@@ -177,6 +176,7 @@ set_split_reconcile_date( gpointer pObject, Timespec ts )
 
     xaccSplitSetDateReconciledTS( GNC_SPLIT(pObject), &ts );
 }
+#endif
 
 static void
 set_split_lot( gpointer pObject, /*@ null @*/ gpointer pLot )
@@ -319,6 +319,7 @@ typedef struct
     gnc_numeric end_reconciled_bal;
 } full_acct_balances_t;
 
+#if 0 /* Not Used */
 /**
  * Saves the start/end balances for an account.
  *
@@ -364,7 +365,7 @@ save_account_balances( Account* acc, gpointer pData )
     g_free( pstart_r );
     g_free( pend_r );
 }
-
+#endif
 /**
  * Executes a transaction query statement and loads the transactions and all
  * of the splits.
@@ -387,11 +388,11 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
         GList* node;
         GncSqlRow* row;
         Transaction* tx;
+#if LOAD_TRANSACTIONS_AS_NEEDED
         GSList* bal_list = NULL;
         GSList* nextbal;
         Account* root = gnc_book_get_root_account( be->book );
 
-#if LOAD_TRANSACTIONS_AS_NEEDED
         qof_event_suspend();
         xaccAccountBeginEdit( root );
 
@@ -776,8 +777,8 @@ save_transaction( GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits )
     }
     if (! is_ok )
     {
-        gchar *message1 = "Transaction %s dated %s in account %s not saved due to %s.%s";
-        gchar *message2 = "\nDatabase may be corrupted, check your data carefully.";
+        G_GNUC_UNUSED gchar *message1 = "Transaction %s dated %s in account %s not saved due to %s.%s";
+        G_GNUC_UNUSED gchar *message2 = "\nDatabase may be corrupted, check your data carefully.";
         Split* split = xaccTransGetSplit( pTx, 0);
         Account *acc = xaccSplitGetAccount( split );
         /* FIXME: This needs to be implemented
@@ -819,6 +820,7 @@ commit_transaction( GncSqlBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
+#if 0 /* Not Used */
 static /*@ dependent @*//*@ null @*/ const GncGUID*
 get_guid_from_query( QofQuery* pQuery )
 {
@@ -849,7 +851,7 @@ get_guid_from_query( QofQuery* pQuery )
         return NULL;
     }
 }
-
+#endif
 /**
  * Loads all transactions for an account.
  *
@@ -946,15 +948,12 @@ convert_query_comparison_to_sql( QofQueryPredData* pPredData, gboolean isInverte
 static void
 convert_query_term_to_sql( const GncSqlBackend* be, const gchar* fieldName, QofQueryTerm* pTerm, GString* sql )
 {
-    GSList* pParamPath;
     QofQueryPredData* pPredData;
     gboolean isInverted;
-    GSList* name;
 
     g_return_if_fail( pTerm != NULL );
     g_return_if_fail( sql != NULL );
 
-    pParamPath = qof_query_term_get_param_path( pTerm );
     pPredData = qof_query_term_get_pred_data( pTerm );
     isInverted = qof_query_term_is_inverted( pTerm );
 
@@ -1130,11 +1129,11 @@ typedef struct
     gboolean has_been_run;
 } split_query_info_t;
 
-static /*@ null @*/ gpointer
+#define TX_GUID_CHECK 0
+
+G_GNUC_UNUSED static /*@ null @*/ gpointer
 compile_split_query( GncSqlBackend* be, QofQuery* query )
 {
-    const GncGUID* acct_guid;
-    gchar guid_buf[GUID_ENCODING_LENGTH+1];
     split_query_info_t* query_info = NULL;
     gchar* query_sql;
 
@@ -1157,8 +1156,9 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
             GList* andterms = (GList*)orTerm->data;
             GList* andTerm;
             gboolean need_AND = FALSE;
+#if TX_GUID_CHECK
             gboolean has_tx_guid_check = FALSE;
-
+#endif
             if ( need_OR )
             {
                 g_string_append( sql, " OR " );
@@ -1198,7 +1198,7 @@ compile_split_query( GncSqlBackend* be, QofQuery* query )
                 }
                 else if ( strcmp( paramPath->data, SPLIT_TRANS ) == 0 )
                 {
-#if 0
+#if TX_GUID_CHECK
                     if ( !has_tx_guid_check )
                     {
                         g_string_append( sql, "(splits.tx_guid = transactions.guid) AND " );
@@ -1290,7 +1290,7 @@ done_compiling_query:
     return query_info;
 }
 
-static void
+G_GNUC_UNUSED static void
 run_split_query( GncSqlBackend* be, gpointer pQuery )
 {
     split_query_info_t* query_info = (split_query_info_t*)pQuery;
@@ -1307,7 +1307,7 @@ run_split_query( GncSqlBackend* be, gpointer pQuery )
     }
 }
 
-static void
+G_GNUC_UNUSED static void
 free_split_query( GncSqlBackend* be, gpointer pQuery )
 {
     g_return_if_fail( be != NULL );
@@ -1370,7 +1370,7 @@ static const GncSqlColumnTableEntry acct_balances_col_table[] =
     /*@ +full_init_block @*/
 };
 
-static /*@ null @*/ single_acct_balance_t*
+G_GNUC_UNUSED static /*@ null @*/ single_acct_balance_t*
 load_single_acct_balances( const GncSqlBackend* be, GncSqlRow* row )
 {
     single_acct_balance_t* bal = NULL;

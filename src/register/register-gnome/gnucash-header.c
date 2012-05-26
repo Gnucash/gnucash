@@ -292,7 +292,6 @@ void
 gnc_header_reconfigure (GncHeader *header)
 {
     GnomeCanvas *canvas;
-    GtkWidget *widget;
     GnucashSheet *sheet;
     SheetBlockStyle *old_style;
     int w, h;
@@ -301,7 +300,6 @@ gnc_header_reconfigure (GncHeader *header)
     g_return_if_fail (GNC_IS_HEADER (header));
 
     canvas = GNOME_CANVAS_ITEM(header)->canvas;
-    widget = GTK_WIDGET (header->sheet);
     sheet = GNUCASH_SHEET(header->sheet);
     old_style = header->style;
 

@@ -237,10 +237,8 @@ static void
 gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
 {
     GObjectClass    *object_class;
-    GtkCListClass   *clist_class;
 
     object_class =  G_OBJECT_CLASS (klass);
-    clist_class = GTK_CLIST_CLASS (klass);
 
     parent_class = g_type_class_peek_parent (klass);
 

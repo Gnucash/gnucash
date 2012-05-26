@@ -954,7 +954,6 @@ gboolean gncInvoiceGetActive (const GncInvoice *invoice)
 
 gboolean gncInvoiceGetIsCreditNote (const GncInvoice *invoice)
 {
-    gint64 is_cn;
     if (!invoice) return FALSE;
     if (kvp_frame_get_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN))
         return TRUE;
@@ -1710,7 +1709,7 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
                         gnc_numeric exch, Timespec date,
                         const char *memo, const char *num)
 {
-    GNCLot *payment_lot, *invoice_lot;
+    GNCLot *payment_lot;
     GList *selected_lots = NULL;
     const GncOwner *owner;
 

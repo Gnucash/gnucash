@@ -127,13 +127,7 @@ gnc_search_owner_init (GNCSearchOwner *o)
 static void
 gnc_search_owner_finalize (GObject *obj)
 {
-    GNCSearchOwner *o;
-    GNCSearchOwnerPrivate *priv;
-
     g_assert (IS_GNCSEARCH_OWNER (obj));
-
-    o = GNCSEARCH_OWNER(obj);
-    priv = GNC_SEARCH_OWNER_GET_PRIVATE(o);
 
     G_OBJECT_CLASS (parent_class)->finalize(obj);
 }

@@ -172,8 +172,6 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
 {
     const char LINE_FEED = 0x0a;
 
-    SheetBlock *block;
-    SheetBlockStyle *style;
     GtkEditable *editable;
     Table *table;
 
@@ -190,11 +188,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
     GnucashSheet *sheet;
 
     sheet = GNUCASH_SHEET (item_edit->sheet);
-    style = item_edit->style;
     table = item_edit->sheet->table;
-
-    block = gnucash_sheet_get_block (item_edit->sheet,
-                                     item_edit->virt_loc.vcell_loc);
 
     if (item_edit->sheet->use_theme_colors)
     {
@@ -479,10 +473,6 @@ gnc_item_edit_realize (GnomeCanvasItem *item)
 static void
 gnc_item_edit_unrealize (GnomeCanvasItem *item)
 {
-    GncItemEdit *item_edit;
-
-    item_edit = GNC_ITEM_EDIT (item);
-
     if (GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_parent_class)->unrealize)
         (*GNOME_CANVAS_ITEM_CLASS
          (gnc_item_edit_parent_class)->unrealize) (item);
@@ -672,7 +662,7 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
     GtkEditable *editable;
     Table *table;
     gint pos = 0;
-    gint o_x, o_y;
+    gint o_x;
     CellDimensions *cd;
     gint cell_row, cell_col;
     SheetBlockStyle *style;
@@ -697,7 +687,6 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
         gnc_item_edit_reset_offset (item_edit);
 
     o_x = cd->origin_x + item_edit->x_offset;
-    o_y = cd->origin_y;
 
     if (changed_cells)
     {
@@ -713,14 +702,14 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
     {
         PangoLayout *layout;
         int textByteIndex, textIndex, textTrailing;
-        gboolean insideText;
         const gchar *text;
 
-        layout = gtk_entry_get_layout( GTK_ENTRY(item_edit->editor) );
+        layout = gtk_entry_get_layout (GTK_ENTRY(item_edit->editor));
         text = pango_layout_get_text (layout);
-        insideText = pango_layout_xy_to_index( layout,
-                                               ((x - o_x) - CELL_HPADDING) * PANGO_SCALE, 10 * PANGO_SCALE,
-                                               &textByteIndex, &textTrailing );
+        pango_layout_xy_to_index (layout,
+				  ((x - o_x) - CELL_HPADDING) * PANGO_SCALE,
+				  10 * PANGO_SCALE, &textByteIndex,
+				  &textTrailing);
         textIndex = (int) g_utf8_pointer_to_offset (text, text + textByteIndex);
         pos = textIndex + textTrailing;
     }

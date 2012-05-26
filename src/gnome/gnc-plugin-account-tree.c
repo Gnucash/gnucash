@@ -177,13 +177,7 @@ gnc_plugin_account_tree_init (GncPluginAccountTree *plugin)
 static void
 gnc_plugin_account_tree_finalize (GObject *object)
 {
-    GncPluginAccountTree *plugin;
-    GncPluginAccountTreePrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (object));
-
-    plugin = GNC_PLUGIN_ACCOUNT_TREE (object);
-    priv = GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE (object);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

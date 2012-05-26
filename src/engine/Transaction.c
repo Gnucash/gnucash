@@ -198,7 +198,8 @@ enum
     PROP_ENTER_DATE
 };
 
-void check_open (const Transaction *trans)
+void
+check_open (const Transaction *trans)
 {
     if (trans && 0 >= qof_instance_get_editlevel(trans))
         PERR ("transaction %p not open for editing", trans);

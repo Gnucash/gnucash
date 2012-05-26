@@ -84,7 +84,6 @@ gnc_plugin_bi_import_showGUI(void)
     BillImportGui *gui;
     GtkBuilder *builder;
     GList *glist;
-    GtkTreeIter iter;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
 
@@ -454,11 +453,8 @@ static void
 gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
 {
     GtkWidget *dialog, *scrolledwindow, *content_area;
-    gint result;
     GtkWidget *view;
     GtkTextBuffer *buffer;
-    gchar *user_input;
-    GtkTextIter start, end;
     gint width, height;
 
     /* Create the widgets */

@@ -493,12 +493,10 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
 static void
 gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
 {
-    GncPluginPageBudget *page;
     GncPluginPageBudgetPrivate *priv;
     gchar *priv_gconf_section = NULL;
 
     ENTER("page %p", plugin_page);
-    page = GNC_PLUGIN_PAGE_BUDGET (plugin_page);
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
 
     if (priv->delete_budget)

@@ -102,7 +102,7 @@ xmlNodePtr
 gnc_book_dom_tree_create(QofBook *book)
 {
     xmlNodePtr ret;
-    gboolean allow_incompat = TRUE;
+    G_GNUC_UNUSED gboolean allow_incompat = TRUE;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_book_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST gnc_v2_book_version_string);
@@ -225,12 +225,10 @@ gnc_book_end_handler(gpointer data_for_children,
                      gpointer parent_data, gpointer global_data,
                      gpointer *result, const gchar *tag)
 {
-    int successful;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
     QofBook *book = gdata->bookdata;
 
-    successful = TRUE;
 
     if (parent_data) return TRUE;
 

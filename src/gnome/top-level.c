@@ -112,7 +112,6 @@ gnc_html_register_url_cb (const char *location, const char *label,
     Account     * account = NULL;
     Transaction * trans;
     GList       * node;
-    QofBook     * book = gnc_get_current_book();
     GncGUID       guid;
     QofInstance * entity = NULL;
 
@@ -191,7 +190,6 @@ static gboolean
 gnc_html_price_url_cb (const char *location, const char *label,
                        gboolean new_window, GNCURLResult *result)
 {
-    QofBook     * book = gnc_get_current_book();
     GncGUID       guid;
     QofInstance * entity = NULL;
 

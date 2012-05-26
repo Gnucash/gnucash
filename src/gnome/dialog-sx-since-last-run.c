@@ -55,7 +55,7 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.sx.slr"
 
-static QofLogModule log_module = GNC_MOD_GUI_SX;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define DIALOG_SX_SINCE_LAST_RUN_CM_CLASS "dialog-sx-since-last-run"
 #define GCONF_SECTION "dialogs/scheduled_trans/since_last_run"

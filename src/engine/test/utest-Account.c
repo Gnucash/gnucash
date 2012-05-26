@@ -366,7 +366,7 @@ setup (Fixture *fixture, gconstpointer pData)
 static void
 teardown ( Fixture *fixture, gconstpointer pData)
 {
-    Account *parent = NULL, *child = fixture->acct;
+    Account *child = fixture->acct;
     qof_book_destroy (gnc_account_get_book (child));
     /* No need to free the last account, qof_book_destroy did that */
     g_free (fixture->func);
@@ -695,7 +695,6 @@ test_xaccMallocAccount (void)
     QofBook *book = qof_book_new ();
     Account *acc;
     TestSignal signal = test_signal_new (NULL, QOF_EVENT_CREATE, NULL);
-    gpointer handler_data = (gpointer)0xabcdef;
     acc = xaccMallocAccount (book);
     g_assert (acc != NULL);
     test_signal_assert_hits (signal, 1);
@@ -839,7 +838,6 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     TestErrorStruct check1 = { loglevel, "gnc.account", msg1, 0 };
     TestErrorStruct check2 = { loglevel, "gnc.engine", msg2, 0 };
-    GLogLevelFlags oldmask1, oldmask2;
     QofBook *book = gnc_account_get_book (fixture->acct);
     Account *parent = gnc_account_get_parent (fixture->acct);
     AccountPrivate *p_priv = fixture->func->get_private (parent);
@@ -1055,7 +1053,6 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     Split *split3 = xaccMallocSplit (book);
     TestSignal sig1, sig2, sig3;
     AccountPrivate *priv = fixture->func->get_private (fixture->acct);
-    gint hdlr1, hdlr2, hdlr3;
     gchar *msg1 = "gnc_account_insert_split: assertion `GNC_IS_ACCOUNT(acc)' failed";
     gchar *msg2 = "gnc_account_insert_split: assertion `GNC_IS_SPLIT(s)' failed";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
@@ -1696,7 +1693,6 @@ test_gnc_account_lookup_by_full_name (Fixture *fixture, gconstpointer pData)
     gchar *names2 =  "income:exempt:int";
     gchar *names3 = "expense:taxable:int";
     gchar *code;
-    AccountTestFunctions *func = _utest_account_fill_functions ();
 
     root = gnc_account_get_root (fixture->acct);
     target = gnc_account_lookup_by_full_name (root, names1);
@@ -2317,24 +2313,25 @@ static void
 test_gnc_account_merge_children (Fixture *fixture, gconstpointer pData)
 {
     Account *root = gnc_account_get_root (fixture->acct);
-    Account *stocks = gnc_account_lookup_by_name (root, "stocks");
-    Account *baz = gnc_account_lookup_by_name (root, "baz");
-    Account *baz2 = gnc_account_lookup_by_name (root, "baz2");
     Account *taxable = gnc_account_lookup_by_name (root, "taxable");
     Account *expense = gnc_account_lookup_by_name (root, "expense");
     Account *div = gnc_account_lookup_by_name (root, "div");
     Account *div1 = gnc_account_lookup_by_name (root, "div1");
-    gint stocks_desc = gnc_account_n_descendants (stocks);
     gint taxable_desc = gnc_account_n_descendants (taxable);
     gint expense_desc = gnc_account_n_descendants (expense);
+    TestSignal sig4, sig5;
+    /* This segment doesn't test because of problems with resetting
+     * the accounts on the splits. It will have to be rewritten with a
+     * mock Split object
+    Account *stocks = gnc_account_lookup_by_name (root, "stocks");
+    Account *baz = gnc_account_lookup_by_name (root, "baz");
+    Account *baz2 = gnc_account_lookup_by_name (root, "baz2");
+    gint stocks_desc = gnc_account_n_descendants (stocks);
     gfloat stocks_balance = gnc_numeric_to_double (
                                 xaccAccountGetBalance (stocks));
     gfloat baz_balance = gnc_numeric_to_double (xaccAccountGetBalance (baz));
     gfloat baz2_balance = gnc_numeric_to_double (xaccAccountGetBalance (baz2));
-    TestSignal sig1, sig2, sig3, sig4, sig5;
-    /* This segment doesn't test because of problems with resetting
-     * the accounts on the splits. It will have to be rewritten with a
-     * mock Split object
+    TestSignal sig1, sig2, sig3;
     gchar *logdomain = "gnc.engine";
     gint loglevel =  G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *msg = "[xaccSplitCommitEdit ()] Account grabbed split prematurely.";

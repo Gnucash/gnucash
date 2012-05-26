@@ -233,7 +233,6 @@ iw_ask_unpost (InvoiceWindow *iw)
     GtkToggleButton *toggle;
     GtkBuilder *builder;
     gint response;
-    char *s;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "Unpost Message Dialog");
@@ -1367,11 +1366,8 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
     /* If this owner really changed, then reset ourselves */
     if (!gncOwnerEqual (&owner, &(iw->owner)))
     {
-        GncInvoice *invoice;
-
         gncOwnerCopy (&owner, &(iw->owner));
         gncOwnerInitJob (&(iw->job), NULL);
-        invoice = iw_get_invoice (iw);
         gnc_entry_ledger_reset_query (iw->ledger);
     }
 
@@ -1927,7 +1923,6 @@ gnc_invoice_terms_changed_cb (GtkWidget *widget, gpointer data)
 {
     GtkComboBox *cbox = GTK_COMBO_BOX (widget);
     InvoiceWindow *iw = data;
-    gchar *title;
 
     if (!iw) return;
     if (!cbox) return;
@@ -2531,7 +2526,6 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *old_invoice, gboolean open
     InvoiceWindow *iw;
     GncInvoice *new_invoice = NULL;
     gchar *new_id;
-    GList *node;
     GDate new_date_gdate;
 
     g_assert(old_invoice);
@@ -2676,7 +2670,6 @@ static void multi_duplicate_invoice_one(gpointer data, gpointer user_data)
 static void
 multi_duplicate_invoice_cb (GList *invoice_list, gpointer user_data)
 {
-    struct _invoice_select_window *sw = user_data; // unused, though
     g_return_if_fail (invoice_list);
     switch (g_list_length(invoice_list))
     {

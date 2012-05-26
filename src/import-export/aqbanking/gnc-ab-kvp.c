@@ -40,7 +40,7 @@
 #define AB_TEMPLATES "template-list"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 static kvp_frame *gnc_ab_get_account_kvp(const Account *a, gboolean create);
 static kvp_frame *gnc_ab_get_book_kvp(QofBook *b, gboolean create);

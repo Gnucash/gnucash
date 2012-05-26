@@ -93,6 +93,7 @@ gnc_print_unstable_message(void)
             _("To find the last stable version, please refer to http://www.gnucash.org"));
 }
 
+#ifndef MAC_INTEGRATION
 static gchar  *environment_expand(gchar *param)
 {
     gchar *search_start;
@@ -166,7 +167,6 @@ static gchar  *environment_expand(gchar *param)
 static void
 environment_override()
 {
-    const gchar *path;
     gchar *config_path;
     gchar *env_file;
     GKeyFile    *keyfile = g_key_file_new();
@@ -269,7 +269,7 @@ environment_override()
     g_key_file_free(keyfile);
 }
 
-#ifdef MAC_INTEGRATION
+#else /* MAC_INTEGRATION */
 static void
 set_mac_locale()
 {

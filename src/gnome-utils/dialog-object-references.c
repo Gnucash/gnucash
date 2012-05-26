@@ -40,15 +40,12 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
     GtkWidget* dialog;
     GtkBuilder* builder;
     GtkWidget* box;
-    GList* ds_node;
-    GtkButton* op;
     GList* node;
     GtkLabel* explanation;
     GtkListStore* store;
     GtkWidget* listview;
     GtkTreeViewColumn* column;
     GtkCellRenderer* renderer;
-    gint response;
 
     ENTER("");
 
@@ -85,7 +82,7 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
 
     /* Run the dialog */
     gtk_widget_show_all( dialog );
-    response = gtk_dialog_run( GTK_DIALOG(dialog) );
+    gtk_dialog_run( GTK_DIALOG(dialog) );
     g_object_unref(G_OBJECT(builder));
     gtk_widget_destroy( dialog );
 

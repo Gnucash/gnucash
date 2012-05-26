@@ -27,7 +27,7 @@
 #include "engine/gncEntry.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
-static QofLogModule log_module = GNC_MOD_REGISTER;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_REGISTER;
 
 typedef struct
 {

@@ -55,7 +55,7 @@ run_test (void)
     int i;
     QofSession *sess;
     QofBook *book;
-    QofInstance *ent, *eblk[NENT];
+    QofInstance *ent;
     QofCollection *col;
     QofIdType type;
     GncGUID guid;
@@ -70,7 +70,6 @@ run_test (void)
     for (i = 0; i < NENT; i++)
     {
         ent = g_object_new(QOF_TYPE_INSTANCE, NULL);
-        eblk[i] = ent;
         guid_new(&guid);
         ent = g_object_new(QOF_TYPE_INSTANCE, "guid", &guid, NULL);
         do_test ((NULL == qof_collection_lookup_entity (col, &guid)),

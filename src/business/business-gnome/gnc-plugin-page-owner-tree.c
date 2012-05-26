@@ -122,7 +122,9 @@ static void gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *s
 /* Command callbacks */
 static void gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_edit_owner (GtkAction *action, GncPluginPageOwnerTree *page);
+#if 0 /* Disabled due to crash */
 static void gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwnerTree *page);
+#endif
 static void gnc_plugin_page_owner_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_owners_report (GtkAction *action, GncPluginPageOwnerTree *plugin_page);
@@ -169,11 +171,13 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
 
-/* FIXME disabled due to crash    {
+#if 0 /* Disabled due to crash */
+    {
         "EditDeleteOwnerAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Owner..."), "Delete",
         N_("Delete selected owner"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_delete_owner)
-    }, */
+    },
+#endif /* Disabled due to crash */
 
     /* View menu */
     {
@@ -578,10 +582,8 @@ static void
 gnc_plugin_page_owner_tree_close_cb (gpointer user_data)
 {
     GncPluginPage *plugin_page;
-    GncPluginPageOwnerTree *page;
 
     plugin_page = GNC_PLUGIN_PAGE(user_data);
-    page = GNC_PLUGIN_PAGE_OWNER_TREE (plugin_page);
     gnc_main_window_close_page(plugin_page);
 }
 
@@ -817,12 +819,10 @@ gnc_plugin_page_owner_tree_button_press_cb (GtkWidget *widget,
         GdkEventButton *event,
         GncPluginPage *page)
 {
-    gboolean result;
-
     g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
 
     ENTER("widget %p, event %p, page %p", widget, event, page);
-    result = gnc_main_window_button_press_cb(widget, event, page);
+    gnc_main_window_button_press_cb(widget, event, page);
     LEAVE(" ");
 
     /* Always return FALSE.  This will let the tree view callback run as
@@ -850,7 +850,6 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
         GncPluginPageOwnerTree *page)
 {
     GtkActionGroup *action_group;
-    GtkAction *action;
     GtkTreeView *view;
     GncOwner *owner = NULL;
     gboolean sensitive;
@@ -885,10 +884,8 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
 static int
 build_aging_report (GncOwnerType owner_type)
 {
-    Account *account;
     gchar *report_name = NULL;
     gchar *report_title = NULL;
-    swig_type_info * qtype;
     SCM args;
     SCM func;
     SCM arg;
@@ -949,7 +946,6 @@ build_aging_report (GncOwnerType owner_type)
 
 static int build_owner_report (GncOwner *owner, Account *acc)
 {
-    int id;
     SCM args;
     SCM func;
     SCM arg;
@@ -1041,12 +1037,12 @@ gnc_plugin_page_owner_tree_cmd_edit_owner (GtkAction *action, GncPluginPageOwner
     LEAVE(" ");
 }
 
+#if 0 /* Disabled due to crash */
 static void
 gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwnerTree *page)
 {
     GncOwner *owner = gnc_plugin_page_owner_tree_get_current_owner (page);
     gchar *owner_name;
-    GtkWidget *widget;
     GtkWidget *window;
     GtkWidget *dialog = NULL;
     gint response;
@@ -1108,6 +1104,7 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwn
     }
     g_free(owner_name);
 }
+#endif /* Disabled due to crash */
 
 /*********************/
 

@@ -1277,7 +1277,6 @@ do_nothing (gpointer *a, gpointer b)
 void
 gnc_search_dialog_test (void)
 {
-    GNCSearchWindow *sw;
     static GList *params = NULL;
     static GList *display = NULL;
     static GNCSearchCallbackButton buttons[] =
@@ -1297,9 +1296,10 @@ gnc_search_dialog_test (void)
     if (display == NULL)
         display = get_display_list (GNC_ID_SPLIT);
 
-    sw = gnc_search_dialog_create (GNC_ID_SPLIT, _("Find Transaction"),
-                                   params, display,
-                                   NULL, NULL, buttons, NULL, NULL, NULL, NULL,
-                                   NULL, NULL);
+/* FIXME: All this does is leak. */
+    gnc_search_dialog_create (GNC_ID_SPLIT, _("Find Transaction"),
+			      params, display,
+			      NULL, NULL, buttons, NULL, NULL, NULL, NULL,
+			      NULL, NULL);
 }
 

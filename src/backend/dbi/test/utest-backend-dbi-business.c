@@ -92,9 +92,6 @@ create_business_session(void)
     GncAddress* addr;
     GncCustomer* cust;
     GncEmployee* emp;
-    GncVendor* v;
-    GncInvoice* inv;
-    GncJob* job;
     GncTaxTable* tt;
     GncTaxTableEntry* tte;
 
@@ -158,7 +155,7 @@ create_business_session(void)
 static const gchar* fixed_load_order[] =
 { GNC_ID_BILLTERM, GNC_ID_TAXTABLE, NULL };
 
-static void
+G_GNUC_UNUSED static void
 init_business_sql(void)
 {
     /* Initialize our pointers into the backend subsystem */

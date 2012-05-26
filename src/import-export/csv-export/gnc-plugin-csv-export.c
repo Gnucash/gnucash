@@ -130,13 +130,7 @@ gnc_plugin_csv_export_init (GncPluginCsvExport *plugin)
 static void
 gnc_plugin_csv_export_finalize (GObject *object)
 {
-    GncPluginCsvExport *plugin;
-    GncPluginCsvExportPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_CSV_EXPORT (object));
-
-    plugin = GNC_PLUGIN_CSV_EXPORT (object);
-    priv = GNC_PLUGIN_CSV_EXPORT_GET_PRIVATE(plugin);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

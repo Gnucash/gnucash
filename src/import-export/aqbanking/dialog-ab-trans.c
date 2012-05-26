@@ -60,10 +60,6 @@ static gboolean gnc_ab_trans_dialog_get_templ_helper(GtkTreeModel *model,
         GtkTreePath *path,
         GtkTreeIter *iter,
         gpointer data);
-static gboolean gnc_ab_trans_dialog_find_templ_helper(GtkTreeModel *model,
-        GtkTreePath *path,
-        GtkTreeIter *iter,
-        gpointer user_data);
 
 static AB_TRANSACTION *gnc_ab_trans_dialog_fill_values(GncABTransDialog *td);
 static AB_JOB *gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc,
@@ -230,7 +226,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     const gchar *ab_accountnumber;
     const gchar *ab_bankname;
     const gchar *ab_bankcode;
-    GtkWidget *trans_vbox;
+    G_GNUC_UNUSED GtkWidget *trans_vbox;
     GtkWidget *heading_label;
     GtkWidget *recp_name_heading;
     GtkWidget *recp_account_heading;
@@ -240,7 +236,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     GtkWidget *orig_name_label;
     GtkWidget *orig_account_heading;
     GtkWidget *orig_account_label;
-    GtkWidget *orig_bankname_heading;
+    G_GNUC_UNUSED GtkWidget *orig_bankname_heading;
     GtkWidget *orig_bankname_label;
     GtkWidget *orig_bankcode_heading;
     GtkWidget *orig_bankcode_label;
@@ -573,9 +569,6 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     AB_JOB *job;
     const AB_TRANSACTION_LIMITS *joblimits;
     guint8 max_purpose_lines;
-    gboolean values_ok;
-    gchar *purpose;
-    gchar *othername;
 
     /* Check whether the account supports this job */
     job = gnc_ab_trans_dialog_get_available_empty_job(td->ab_acc, td->trans_type);
@@ -785,7 +778,6 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
         gpointer user_data)
 {
     GncABTransDialog *td = user_data;
-    GtkTreeModel *model;
     GtkTreeIter iter;
     GncABTransTempl *templ;
     const gchar *old_name, *new_name;

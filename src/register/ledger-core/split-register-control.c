@@ -47,7 +47,6 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 static gboolean
 gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
 {
-    gnc_numeric imbalance;
     int choice;
     int default_value;
     Account *default_account;
@@ -498,10 +497,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
         if (gnc_split_register_find_split (reg, new_trans, new_trans_split,
                                            new_split, new_class, &vcell_loc))
         {
-            VirtualCell *vcell;
 
-            vcell = gnc_table_get_virtual_cell (reg->table, vcell_loc);
-
+            gnc_table_get_virtual_cell (reg->table, vcell_loc);
             new_virt_loc.vcell_loc = vcell_loc;
         }
         else
@@ -1157,6 +1154,7 @@ gnc_split_register_get_account_always (SplitRegister *reg,
     return gnc_split_register_get_account_by_name (reg, cell, name);
 }
 
+#if 0 /* Not Used */
 static const char *
 gnc_split_register_get_cell_string (SplitRegister *reg, const char *cell_name)
 {
@@ -1184,6 +1182,7 @@ gnc_split_register_get_cell_date (SplitRegister *reg, const char *cell_name)
 
     return ts;
 }
+#endif /* Not Used */
 
 /* Creates a transfer dialog and fills its values from register cells (if
  * available) or from the provided transaction and split.

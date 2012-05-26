@@ -34,8 +34,9 @@
 #include <string.h>
 #include "qof.h"
 
+/* Uncomment if you need to log anything.
 static QofLogModule log_module = QOF_MOD_UTIL;
-
+*/
 /* =================================================================== */
 /* The QOF string cache                                                */
 /*                                                                     */

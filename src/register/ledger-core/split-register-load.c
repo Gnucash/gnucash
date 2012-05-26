@@ -645,7 +645,6 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     /* restore the cursor to its rightful position */
     {
         VirtualLocation trans_split_loc;
-        Split *trans_split;
 
         if (new_split_row > 0)
             save_loc.vcell_loc.virt_row = new_split_row;
@@ -656,9 +655,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
         trans_split_loc = save_loc;
 
-        trans_split =
-            gnc_split_register_get_trans_split (reg, save_loc.vcell_loc,
-                                                &trans_split_loc.vcell_loc);
+	gnc_split_register_get_trans_split (reg, save_loc.vcell_loc,
+					    &trans_split_loc.vcell_loc);
 
         if (dynamic || multi_line || info->trans_expanded)
         {

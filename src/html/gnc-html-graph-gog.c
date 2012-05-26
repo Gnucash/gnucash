@@ -105,7 +105,6 @@ create_graph_pixbuf( GogObject *graph, int width, int height )
     GogRenderer *renderer;
 
     GdkPixbuf *buf;
-    gboolean update_status;
 
     // Note that this shouldn't be necessary as per discussion with Jody...
     // ... but it is because we don't embed in a control which passes the
@@ -114,7 +113,7 @@ create_graph_pixbuf( GogObject *graph, int width, int height )
     gog_object_update (GOG_OBJECT (graph));
 
     renderer = GOG_RENDERER(g_object_new( GOG_TYPE_RENDERER, "model", graph, NULL ));
-    update_status = gog_renderer_update( renderer, width, height );
+    gog_renderer_update( renderer, width, height );
     buf = gog_renderer_get_pixbuf( renderer );
     g_object_set_data_full( G_OBJECT(buf), "renderer", renderer, g_object_unref );
 

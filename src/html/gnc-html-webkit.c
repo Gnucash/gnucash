@@ -97,8 +97,10 @@ static void gnc_html_link_clicked_cb( GtkHTML* html, const gchar* url, gpointer 
 static gboolean gnc_html_object_requested_cb( GtkHTML* html, GtkHTMLEmbedded* eb,
         gpointer data );
 #endif
+#if 0 /* Not Used */
 static int gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
                                      gpointer user_data );
+#endif /* Not Used */
 static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
                                   gboolean new_window_hint );
@@ -502,9 +504,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
             }
             else
             {
-                char *fullurl;
-
-                fullurl = gnc_build_url( type, location, label );
+                gnc_build_url( type, location, label );
             }
 
         }
@@ -662,6 +662,7 @@ gnc_html_set_base_cb( GtkHTML* gtkhtml, const gchar* base,
  * mouse button callback (if any)
  ********************************************************************/
 
+#if 0 /* Not Used */
 static int
 gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
                           gpointer user_data )
@@ -680,6 +681,7 @@ gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
         return FALSE;
     }
 }
+#endif /* Not Used */
 
 /********************************************************************
  * gnc_html_open_scm
@@ -961,8 +963,6 @@ GncHtml*
 gnc_html_webkit_new( void )
 {
     GncHtmlWebkit* self = g_object_new( GNC_TYPE_HTML_WEBKIT, NULL );
-    GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-
     return GNC_HTML(self);
 }
 

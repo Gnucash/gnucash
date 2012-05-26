@@ -201,7 +201,6 @@ load_all_accounts( GncSqlBackend* be )
     GncSqlStatement* stmt = NULL;
     GncSqlResult* result;
     QofBook* pBook;
-    gnc_commodity_table* pTable;
     GList* l_accounts_needing_parents = NULL;
     GSList* bal_slist;
     GSList* bal;
@@ -211,7 +210,6 @@ load_all_accounts( GncSqlBackend* be )
     ENTER( "" );
 
     pBook = be->book;
-    pTable = gnc_commodity_table_get_table( pBook );
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     if ( stmt == NULL )
@@ -224,12 +222,11 @@ load_all_accounts( GncSqlBackend* be )
     if ( result != NULL )
     {
         GncSqlRow* row = gnc_sql_result_get_first_row( result );
-        Account* acc;
         gchar* sql;
 
         while ( row != NULL )
         {
-            acc = load_single_account( be, row, &l_accounts_needing_parents );
+            load_single_account( be, row, &l_accounts_needing_parents );
             row = gnc_sql_result_get_next_row( result );
         }
         gnc_sql_result_dispose( result );

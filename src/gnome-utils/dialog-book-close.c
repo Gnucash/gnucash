@@ -96,7 +96,6 @@ find_or_create_txn(struct CloseAccountsCB* cacb, gnc_commodity* cmdty)
     txn = g_hash_table_lookup(cacb->txns, cmdty);
     if (!txn)
     {
-        kvp_frame* frame;
         txn = g_new0(struct CACBTransactionList, 1);
         txn->cmdty = cmdty;
         txn->total = gnc_numeric_zero();

@@ -246,13 +246,7 @@ gnc_plugin_manager_dispose (GObject *object)
 static void
 gnc_plugin_manager_finalize (GObject *object)
 {
-    GncPluginManager *manager;
-    GncPluginManagerPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_MANAGER (object));
-
-    manager = GNC_PLUGIN_MANAGER (object);
-    priv = GNC_PLUGIN_MANAGER_GET_PRIVATE (manager);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

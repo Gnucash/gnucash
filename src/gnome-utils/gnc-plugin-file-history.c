@@ -617,15 +617,9 @@ gnc_plugin_file_history_init (GncPluginFileHistory *plugin)
 static void
 gnc_plugin_file_history_finalize (GObject *object)
 {
-    GncPluginFileHistory *plugin;
-    GncPluginFileHistoryPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_FILE_HISTORY (object));
 
     ENTER("plugin %p", object);
-    plugin = GNC_PLUGIN_FILE_HISTORY (object);
-    priv = GNC_PLUGIN_FILE_HISTORY_GET_PRIVATE (plugin);
-
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE("");
 }

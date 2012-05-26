@@ -327,7 +327,6 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
     CellBlock *cursor_header, *cursor;
     VirtualCellLocation vcell_loc;
     VirtualLocation save_loc;
-    time_t present;
     gboolean start_primary_color = TRUE;
 
     int new_entry_row = -1;
@@ -517,7 +516,6 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
     vcell_loc.virt_row++;
 
     /* get the current time and reset the dividing row */
-    present = gnc_timet_get_today_end ();
     table->model->dividing_row_upper = -1;
     table->model->dividing_row = -1;
     cursor = gnc_table_layout_get_cursor (table->layout, "cursor");

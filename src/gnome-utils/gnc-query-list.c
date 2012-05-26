@@ -272,7 +272,6 @@ static void
 gnc_query_list_init_clist (GNCQueryList *list)
 {
     GtkCList *clist = GTK_CLIST (list);
-    GtkStyle *style;
     GList *node;
     gchar **titles;
     gint i;
@@ -317,13 +316,14 @@ gnc_query_list_init_clist (GNCQueryList *list)
                       G_CALLBACK(gnc_query_list_size_allocate_cb),
                       NULL);
 
-    style = gtk_widget_get_style (GTK_WIDGET(list));
 
 #if 0
     {
+	GtkStyle *style;
         GdkFont *font = NULL;
         gint width;
 
+	style = gtk_widget_get_style (GTK_WIDGET(list));
         font = style->font;
         if (font != NULL)
         {
@@ -346,13 +346,9 @@ static void
 gnc_query_list_class_init (GNCQueryListClass *klass)
 {
     GtkObjectClass    *object_class;
-    GtkWidgetClass    *widget_class;
-    GtkContainerClass *container_class;
     GtkCListClass     *clist_class;
 
     object_class =    (GtkObjectClass*) klass;
-    widget_class =    (GtkWidgetClass*) klass;
-    container_class = (GtkContainerClass*) klass;
     clist_class =     (GtkCListClass*) klass;
 
     parent_class = gtk_type_class(GTK_TYPE_CLIST);

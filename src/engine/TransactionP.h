@@ -172,7 +172,7 @@ void xaccDisableDataScrubbing(void);
 #define xaccTransSetSlots_nc(T,F) qof_instance_set_slots(QOF_INSTANCE(T),F)
 
 void xaccTransRemoveSplit (Transaction *trans, const Split *split);
-G_INLINE_FUNC void check_open (const Transaction *trans);
+void check_open (const Transaction *trans);
 
 /*@}*/
 

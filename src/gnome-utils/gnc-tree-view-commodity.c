@@ -124,16 +124,10 @@ gnc_tree_view_commodity_init (GncTreeViewCommodity *view)
 static void
 gnc_tree_view_commodity_finalize (GObject *object)
 {
-    GncTreeViewCommodity *view;
-    GncTreeViewCommodityPrivate *priv;
-
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (object));
 
     ENTER("view %p", object);
-    view = GNC_TREE_VIEW_COMMODITY (object);
-    priv = GNC_TREE_VIEW_COMMODITY_GET_PRIVATE (view);
-
     if (G_OBJECT_CLASS (parent_class)->finalize)
         (* G_OBJECT_CLASS (parent_class)->finalize) (object);
     LEAVE(" ");
@@ -142,13 +136,10 @@ gnc_tree_view_commodity_finalize (GObject *object)
 static void
 gnc_tree_view_commodity_destroy (GtkObject *object)
 {
-    GncTreeViewCommodity *view;
-
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (object));
 
     ENTER("view %p", object);
-    view = GNC_TREE_VIEW_COMMODITY (object);
 
     if (GTK_OBJECT_CLASS (parent_class)->destroy)
         (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -487,6 +478,7 @@ gnc_tree_view_commodity_new (QofBook *book,
     g_free(path_string);				\
   }
 
+#if 0 /* Not Used */
 static gboolean
 gnc_tree_view_commodity_get_iter_from_commodity (GncTreeViewCommodity *view,
         gnc_commodity *commodity,
@@ -519,6 +511,7 @@ gnc_tree_view_commodity_get_iter_from_commodity (GncTreeViewCommodity *view,
     LEAVE(" ");
     return TRUE;
 }
+#endif /* Not Used */
 
 /************************************************************/
 /*          Commodity Tree View Visibility Filter           */
@@ -678,6 +671,7 @@ gnc_tree_view_commodity_get_selected_commodity (GncTreeViewCommodity *view)
 }
 
 
+#if 0 /* Not Used */
 /*
  * This helper function is called once for each row in the tree view
  * that is currently selected.  Its task is to an the corresponding
@@ -706,3 +700,4 @@ get_selected_commodities_helper (GtkTreeModel *s_model,
                 &iter);
     *return_list = g_list_append(*return_list, commodity);
 }
+#endif /* Not Used */

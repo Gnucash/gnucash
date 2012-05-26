@@ -48,7 +48,7 @@
 #define BOOK_TABLE "books"
 #define TABLE_VERSION 1
 
-/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 static /*@ dependent @*//*@ null @*/ gpointer get_root_account_guid( gpointer pObject );
 static void set_root_account_guid( gpointer pObject, /*@ null @*/ gpointer pValue );
@@ -140,13 +140,12 @@ set_root_template_guid( gpointer pObject, /*@ null @*/ gpointer pValue )
 static void
 load_single_book( GncSqlBackend* be, GncSqlRow* row )
 {
-    const GncGUID* guid;
     QofBook* pBook;
 
     g_return_if_fail( be != NULL );
     g_return_if_fail( row != NULL );
 
-    guid = gnc_sql_load_guid( be, row );
+    gnc_sql_load_guid( be, row );
 
     pBook = be->book;
     if ( pBook == NULL )

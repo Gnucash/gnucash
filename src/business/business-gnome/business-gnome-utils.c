@@ -316,7 +316,6 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
                                GList *acct_types, GList *acct_commodities)
 {
     GtkListStore *store;
-    GtkEntry *entry;
     GList *list, *node;
     char *text;
 
@@ -554,7 +553,6 @@ gnc_taxtables_combo (GtkComboBox *cbox, QofBook *book,
 void
 gnc_taxincluded_combo (GtkComboBox *cbox, GncTaxIncluded initial_choice)
 {
-    GtkWidget *menu;
     GtkListStore *liststore;
 
     if (!cbox) return;

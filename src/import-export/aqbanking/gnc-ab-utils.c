@@ -52,7 +52,7 @@
 #endif /* AQBANKING_VERSION_5_PLUS */
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 /* Global variables for AB_BANKING caching. */
 static AB_BANKING *gnc_AB_BANKING = NULL;
@@ -85,7 +85,6 @@ struct _GncABImExContextImport
 void
 gnc_GWEN_Init(void)
 {
-    gint i;
     gchar* gwen_logging = g_strdup(g_getenv("GWEN_LOGLEVEL"));
     gchar* aqb_logging = g_strdup(g_getenv("AQBANKING_LOGLEVEL"));
 

@@ -40,7 +40,7 @@ run_test (void)
     QofSession *sess;
     QofBook *book;
     Account *acc;
-    gnc_numeric *start, *end, end2, delta, zero, five;
+    gnc_numeric *start, *end, end2, delta, five;
 
     sess = get_random_session ();
     book = qof_session_get_book (sess);
@@ -80,8 +80,6 @@ run_test (void)
 int
 main (int argc, char **argv)
 {
-    gint i;
-
     qof_init();
     if (!cashobjects_register())
         exit(1);

@@ -579,7 +579,6 @@ gnc_transaction_end_handler(gpointer data_for_children,
                             gpointer *result, const gchar *tag)
 {
     Transaction *trn = NULL;
-    gboolean successful = FALSE;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
 
@@ -601,7 +600,6 @@ gnc_transaction_end_handler(gpointer data_for_children,
     if (trn != NULL)
     {
         gdata->cb(tag, gdata->parsedata, trn);
-        successful = TRUE;
     }
 
     xmlFreeNode(tree);

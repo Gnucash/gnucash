@@ -244,8 +244,6 @@ gnc_ui_file_access( int type )
 {
     FileAccessWindow *faw;
     GtkBuilder* builder;
-    GtkWidget* box;
-    GList* ds_node;
     GtkButton* op;
     GtkWidget* file_chooser;
     GtkFileChooserWidget* fileChooser;

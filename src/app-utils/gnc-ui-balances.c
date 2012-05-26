@@ -34,7 +34,7 @@
 #include "gncOwner.h"
 #include "qof.h"
 
-static QofLogModule log_module = GNC_MOD_GUI;
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
 
 /********************************************************************
  * Balance calculations related to accounts

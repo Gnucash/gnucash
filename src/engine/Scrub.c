@@ -1008,10 +1008,9 @@ commodity_compare( gconstpointer a, gconstpointer b)
 static gnc_commodity *
 xaccTransFindCommonCurrency (Transaction *trans, QofBook *book)
 {
-    gnc_commodity *com_first, *com_scratch;
+    gnc_commodity *com_scratch;
     GList *node = NULL;
     GSList *comlist = NULL, *found = NULL;
-    int score = 0;
 
     if (!trans) return NULL;
 

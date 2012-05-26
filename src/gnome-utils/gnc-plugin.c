@@ -141,13 +141,7 @@ gnc_plugin_init (GncPlugin *plugin_page, GncPluginClass *klass)
 static void
 gnc_plugin_finalize (GObject *object)
 {
-    GncPlugin *plugin;
-    GncPluginPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN (object));
-
-    plugin = GNC_PLUGIN (object);
-    priv = GNC_PLUGIN_GET_PRIVATE (plugin);
 
     gnc_gobject_tracking_forget(object);
     G_OBJECT_CLASS (parent_class)->finalize (object);

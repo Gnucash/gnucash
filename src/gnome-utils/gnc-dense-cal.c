@@ -671,11 +671,8 @@ gnc_dense_cal_dispose (GObject *object)
 static void
 gnc_dense_cal_finalize (GObject *object)
 {
-    GncDenseCal *dcal;
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_DENSE_CAL (object));
-
-    dcal = GNC_DENSE_CAL(object);
 
     if (G_OBJECT_CLASS (parent_class)->finalize)
         G_OBJECT_CLASS(parent_class)->finalize(object);
@@ -747,11 +744,8 @@ _gdc_compute_min_size(GncDenseCal *dcal, guint *min_width, guint *min_height)
 static void
 recompute_x_y_scales(GncDenseCal *dcal)
 {
-    GtkWidget *widget;
     int denom;
     int width, height;
-
-    widget = GTK_WIDGET(dcal);
 
     width = DENSE_CAL_DEFAULT_WIDTH;
     height = DENSE_CAL_DEFAULT_HEIGHT;

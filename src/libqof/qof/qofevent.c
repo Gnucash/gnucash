@@ -169,14 +169,8 @@ qof_event_generate_internal (QofInstance *entity, QofEventId event_id,
 {
     GList *node;
     GList *next_node = NULL;
-    gboolean use_old_handlers = FALSE;
 
     g_return_if_fail(entity);
-
-    if (event_id <= QOF_EVENT__LAST)
-    {
-        use_old_handlers = TRUE;
-    }
 
     switch (event_id)
     {

@@ -33,7 +33,7 @@
 #include "qof.h"
 #include "qofbackend-p.h"
 
-static QofLogModule log_module = QOF_MOD_BACKEND;
+G_GNUC_UNUSED static QofLogModule log_module = QOF_MOD_BACKEND;
 
 #define QOF_CONFIG_DESC    "desc"
 #define QOF_CONFIG_TIP     "tip"

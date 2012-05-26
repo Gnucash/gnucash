@@ -370,12 +370,9 @@ gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass)
 static void
 gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
 {
-    GncPluginPageInvoicePrivate *priv;
     GncPluginPage *parent;
     GtkActionGroup *action_group;
     gboolean use_new;
-
-    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);
@@ -408,15 +405,9 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
 static void
 gnc_plugin_page_invoice_finalize (GObject *object)
 {
-    GncPluginPageInvoice *page;
-    GncPluginPageInvoicePrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE (object));
 
     ENTER("object %p", object);
-    page = GNC_PLUGIN_PAGE_INVOICE (object);
-    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
-
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
 }

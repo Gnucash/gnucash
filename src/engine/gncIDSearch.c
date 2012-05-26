@@ -92,17 +92,14 @@ static void * search(QofBook * book, const gchar *id, void * object, QofIdType t
 
     if (strcmp(type, GNC_CUSTOMER_MODULE_NAME))
     {
-        GncCustomer *c = NULL;
         qof_query_add_term (q, qof_query_build_param_list("CUSTOMER_ID"), string_pred_data, QOF_QUERY_AND);
     }
     else if (strcmp(type, GNC_INVOICE_MODULE_NAME))
     {
-        GncInvoice *c = NULL;
         qof_query_add_term (q, qof_query_build_param_list("INVOICE_ID"), string_pred_data, QOF_QUERY_AND);
     }
     else if (strcmp(type, GNC_VENDOR_MODULE_NAME))
     {
-        GncVendor *c = NULL;
         qof_query_add_term (q, qof_query_build_param_list("VENDOR_ID"), string_pred_data, QOF_QUERY_AND);
     }
 

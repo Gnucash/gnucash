@@ -76,7 +76,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
 {
     Query   *q;
     GSList  *p1, *p2;
-    GList   *splits, *ptr;
+    GList   *splits;
     QofBook *book;
 
     gchar   *end_sep;
@@ -307,7 +307,6 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
 void csv_transactions_export (CsvExportInfo *info)
 {
     FILE    *fh;
-    Account *root;
     Account *acc;
     GList   *ptr;
 

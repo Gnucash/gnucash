@@ -46,10 +46,8 @@ static gboolean qof_choice_is_initialized(void)
 
 gboolean qof_object_is_choice(QofIdTypeConst type)
 {
-    gpointer value, check;
+    gpointer value = NULL;
 
-    value = NULL;
-    check = NULL;
     if (!qof_choice_is_initialized())
     {
         return FALSE;

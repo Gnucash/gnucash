@@ -43,7 +43,7 @@
 
 #define _GNC_MOD_NAME	GNC_ID_JOB
 
-static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "jobs"
 #define TABLE_VERSION 1
@@ -95,11 +95,8 @@ load_all_jobs( GncSqlBackend* be )
 {
     GncSqlStatement* stmt;
     GncSqlResult* result;
-    QofBook* pBook;
 
     g_return_if_fail( be != NULL );
-
-    pBook = be->book;
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );

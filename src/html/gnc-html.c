@@ -65,12 +65,6 @@ GHashTable* gnc_html_url_handlers = NULL;
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 extern GHashTable* gnc_html_object_handlers;
 
-static char error_404_format[] =
-    "<html><body><h3>%s</h3><p>%s</body></html>";
-static char error_404_title[] = N_("Not found");
-static char error_404_body[] =
-    N_("The specified URL could not be loaded.");
-
 G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BIN)
 
 static void gnc_html_class_init( GncHtmlClass* klass );

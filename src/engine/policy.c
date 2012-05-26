@@ -195,7 +195,7 @@ xaccGetFIFOPolicy (void)
  * I'm not sure I got it right.
  */
 
-static GNCLot *
+G_GNUC_UNUSED static GNCLot *
 LIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
 {
     if (!split) return NULL;
@@ -203,14 +203,14 @@ LIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
                                          split->parent->common_currency);
 }
 
-static Split *
+G_GNUC_UNUSED static Split *
 LIFOPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot)
 {
     return DirectionPolicyGetSplit (pcy, lot, 1);
 }
 
 /* This routine is actually identical to FIFO... */
-static void
+G_GNUC_UNUSED static void
 LIFOPolicyGetLotOpening (GNCPolicy *pcy,
                          GNCLot *lot,
                          gnc_numeric *ret_amount, gnc_numeric *ret_value,
@@ -225,7 +225,7 @@ LIFOPolicyGetLotOpening (GNCPolicy *pcy,
 }
 
 /* This routine is actually identical to FIFO... */
-static gboolean
+G_GNUC_UNUSED static gboolean
 LIFOPolicyIsOpeningSplit (GNCPolicy *pcy, GNCLot *lot, Split *split)
 {
     Split *opening_split;

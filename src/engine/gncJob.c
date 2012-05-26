@@ -475,14 +475,6 @@ static const char * _gncJobPrintable (gpointer item)
     return c->name;
 }
 
-static void
-destroy_job_on_book_close(QofInstance *ent, gpointer data)
-{
-    GncJob* job = GNC_JOB(ent);
-
-    gncJobFree(job);
-}
-
 static QofObject gncJobDesc =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,

@@ -34,7 +34,7 @@
 #include "qof.h"
 #include "qofbackend-p.h"
 
-static QofLogModule log_module = QOF_MOD_UTIL;
+G_GNUC_UNUSED static QofLogModule log_module = QOF_MOD_UTIL;
 
 void
 g_hash_table_foreach_sorted(GHashTable *hash_table, GHFunc func, gpointer user_data, GCompareFunc compare_func)
@@ -236,7 +236,7 @@ gnc_strisnum(const gchar *s)
  * Else return pointer to first non-whitespace character. */
 /* =================================================================== */
 
-static const gchar *
+G_GNUC_UNUSED static const gchar *
 qof_util_whitespace_filter (const gchar * val)
 {
     size_t len;

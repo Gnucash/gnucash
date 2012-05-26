@@ -225,11 +225,8 @@ load_all_billterms( GncSqlBackend* be )
 {
     GncSqlStatement* stmt;
     GncSqlResult* result;
-    QofBook* pBook;
 
     g_return_if_fail( be != NULL );
-
-    pBook = be->book;
 
     stmt = gnc_sql_create_select_statement( be, TABLE_NAME );
     result = gnc_sql_execute_select_statement( be, stmt );
@@ -266,8 +263,6 @@ load_all_billterms( GncSqlBackend* be )
         if ( l_billterms_needing_parents != NULL )
         {
             gboolean progress_made = TRUE;
-            GncTaxTable* root;
-            Account* pParent;
             GList* elem;
 
             while ( progress_made )

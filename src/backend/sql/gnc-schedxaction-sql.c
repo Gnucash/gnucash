@@ -51,7 +51,7 @@
 #define SCHEDXACTION_TABLE "schedxactions"
 #define TABLE_VERSION 1
 
-/*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
+G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define SX_MAX_NAME_LEN 2048
 

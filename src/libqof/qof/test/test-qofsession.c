@@ -703,7 +703,6 @@ test_qof_session_swap_data (Fixture *fixture, gconstpointer pData)
     QofSession *session2 = NULL;
     QofBackend *be1 = NULL, *be2 = NULL;
     QofBook *book1 = NULL, *book2 = NULL;
-    GList *node;
 
     /* init */
     g_assert (fixture->session);

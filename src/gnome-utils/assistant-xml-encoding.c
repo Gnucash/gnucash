@@ -231,8 +231,6 @@ static guint n_system_encodings = G_N_ELEMENTS (system_encodings);
 void gxi_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
                      GncXmlImportData  *data)
 {
-    gint currentpage = gtk_assistant_get_current_page(assistant);
-
     switch (gtk_assistant_get_current_page(assistant))
     {
     case 1:
@@ -281,7 +279,6 @@ gnc_xml_convert_single_file (const gchar *filename)
 {
     GncXmlImportData *data;
     GtkWidget *widget;
-    GtkVBox *vb;
     GtkBuilder *builder;
     gboolean success;
 
@@ -1050,7 +1047,7 @@ gxi_parse_file (GncXmlImportData *data)
     QofBook *book;
     FileBackend *backend;
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
-    gchar *logpath, *message = NULL;
+    gchar *message = NULL;
     gboolean success = FALSE;
 
     if (data->n_unassigned || data->n_impossible)
@@ -1165,7 +1162,6 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     GtkTreeIter iter, parent, *parent_ptr;
     GList *encodings_bak, *enc_iter;
     const gchar *encoding;
-    gchar *string;
     system_encoding_type *system_enc;
     gpointer enc_ptr;
     gint i, j;
@@ -1232,7 +1228,7 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
             enc_ptr = GUINT_TO_POINTER (g_quark_from_string (system_enc->encoding));
         else
             enc_ptr = NULL;
-        string = gettext (system_enc->text);
+
         gtk_tree_store_append (tree_store, &iter, parent_ptr);
         gtk_tree_store_set (tree_store, &iter, ENC_COL_STRING,
                             gettext (system_enc->text), ENC_COL_QUARK, enc_ptr, -1);

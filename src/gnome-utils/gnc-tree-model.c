@@ -122,15 +122,9 @@ gnc_tree_model_init (GncTreeModel *model, GncTreeModelClass *klass)
 static void
 gnc_tree_model_finalize (GObject *object)
 {
-    GncTreeModel *model;
-    GncTreeModelPrivate *priv;
-
     ENTER("model %p", object);
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_MODEL (object));
-
-    model = GNC_TREE_MODEL(object);
-    priv = GNC_TREE_MODEL_GET_PRIVATE(model);
 
     gnc_gobject_tracking_forget(object);
 

@@ -124,13 +124,7 @@ gnc_plugin_ofx_init (GncPluginOfx *plugin)
 static void
 gnc_plugin_ofx_finalize (GObject *object)
 {
-    GncPluginOfx *plugin;
-    GncPluginOfxPrivate *priv;
-
     g_return_if_fail (GNC_IS_PLUGIN_OFX (object));
-
-    plugin = GNC_PLUGIN_OFX (object);
-    priv = GNC_PLUGIN_OFX_GET_PRIVATE(plugin);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

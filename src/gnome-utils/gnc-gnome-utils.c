@@ -242,7 +242,6 @@ gnc_gtk_add_rc_file (void)
 void
 gnc_gnome_init (int argc, char **argv, const char * version)
 {
-    GError *error = NULL;
     gchar *prefix = gnc_path_get_prefix ();
     gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
     gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
@@ -316,7 +315,7 @@ gnc_gnome_init (int argc, char **argv, const char * version)
                                   NULL
                                  };
         GList *icons = NULL;
-        char *fullname, *name_iter;
+        char *fullname;
 
         for (idx = 0; icon_filenames[idx] != NULL; idx++)
         {
@@ -704,7 +703,9 @@ gnc_gui_init(void)
 {
     static GncMainWindow *main_window;
     gchar *map;
+#ifdef MAC_INTEGRATION
     gchar *data_dir;
+#endif
 
     ENTER ("");
 

@@ -308,17 +308,11 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
 static void
 gnc_tree_view_finalize (GObject *object)
 {
-    GncTreeView *view;
-    GncTreeViewPrivate *priv;
-
     ENTER("view %p", object);
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_VIEW (object));
 
     gnc_gobject_tracking_forget(object);
-
-    view = GNC_TREE_VIEW (object);
-    priv = GNC_TREE_VIEW_GET_PRIVATE (view);
 
     if (G_OBJECT_CLASS (parent_class)->finalize)
         G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -1396,7 +1390,6 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
     GncTreeViewPrivate *priv;
     GtkWidget *widget;
     const gchar *column_name, *pref_name;
-    gulong id;
     gchar *key;
 
     // ENTER("view %p, column %p", view, column);
@@ -1436,8 +1429,8 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
     }
 
     /* Set up the callback  */
-    id = g_signal_connect(widget, "toggled",
-                          (GCallback)gnc_tree_view_menu_item_toggled, view);
+    g_signal_connect(widget, "toggled",
+		     (GCallback)gnc_tree_view_menu_item_toggled, view);
 
     /* Store data on the widget for callbacks */
     key = g_strdup_printf("%s_%s", pref_name, GCONF_KEY_VISIBLE);
@@ -1556,7 +1549,7 @@ gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
                                 GncTreeView *view)
 {
     GncTreeViewPrivate *priv;
-    GtkWidget *widget, *menu;
+    GtkWidget *menu;
 
     g_return_if_fail(GTK_IS_TREE_VIEW_COLUMN(column));
     g_return_if_fail(GNC_IS_TREE_VIEW(view));
@@ -1575,7 +1568,6 @@ gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
     gtk_widget_show_all(menu);
 
     /* Pop the menu up at the button */
-    widget = gtk_tree_view_column_get_widget(column);
     gtk_menu_popup(GTK_MENU(priv->column_menu), NULL, GTK_WIDGET(menu),
                    NULL, NULL, 0, gtk_get_current_event_time());
 }
@@ -1895,13 +1887,11 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
                                  GtkTreeIterCompareFunc column_sort_fn,
                                  renderer_toggled toggle_edited_cb)
 {
-    GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column;
     GtkCellRenderer *renderer;
 
     g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
 
-    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     renderer = gtk_cell_renderer_toggle_new ();
     column =
         gtk_tree_view_column_new_with_attributes (column_short_title,

@@ -124,15 +124,9 @@ gnc_tree_view_price_init (GncTreeViewPrice *view)
 static void
 gnc_tree_view_price_finalize (GObject *object)
 {
-    GncTreeViewPrice *view;
-    GncTreeViewPricePrivate *priv;
-
     ENTER("view %p", object);
     gnc_leave_return_if_fail (object != NULL);
     gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
-
-    view = GNC_TREE_VIEW_PRICE (object);
-    priv = GNC_TREE_VIEW_PRICE_GET_PRIVATE (view);
 
     if (G_OBJECT_CLASS (parent_class)->finalize)
         (* G_OBJECT_CLASS (parent_class)->finalize) (object);
@@ -142,13 +136,9 @@ gnc_tree_view_price_finalize (GObject *object)
 static void
 gnc_tree_view_price_destroy (GtkObject *object)
 {
-    GncTreeViewPrice *view;
-
     ENTER("view %p", object);
     gnc_leave_return_if_fail (object != NULL);
     gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
-
-    view = GNC_TREE_VIEW_PRICE (object);
 
     if (GTK_OBJECT_CLASS (parent_class)->destroy)
         (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -502,6 +492,7 @@ gnc_tree_view_price_new (QofBook *book,
     g_free(path_string);				\
   }
 
+#if 0 /* Not Used */
 static gboolean
 gnc_tree_view_price_get_iter_from_price (GncTreeViewPrice *view,
         GNCPrice *price,
@@ -534,6 +525,7 @@ gnc_tree_view_price_get_iter_from_price (GncTreeViewPrice *view,
     LEAVE(" ");
     return TRUE;
 }
+#endif /* Not Used */
 
 /************************************************************/
 /*            Price Tree View Filter Functions            */

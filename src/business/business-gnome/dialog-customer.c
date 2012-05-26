@@ -451,7 +451,6 @@ gnc_customer_terms_changed_cb (GtkWidget *widget, gpointer data)
 {
     GtkComboBox *cbox = GTK_COMBO_BOX (widget);
     CustomerWindow *cw = data;
-    gchar *title;
 
     if (!cw) return;
     if (!cbox) return;
@@ -464,7 +463,6 @@ gnc_customer_taxincluded_changed_cb (GtkWidget *widget, gpointer data)
 {
     GtkComboBox *cbox = GTK_COMBO_BOX (widget);
     CustomerWindow *cw = data;
-    gchar *title;
 
     if (!cw) return;
     if (!cbox) return;
@@ -477,7 +475,6 @@ gnc_customer_taxtable_changed_cb (GtkWidget *widget, gpointer data)
 {
     GtkComboBox *cbox = GTK_COMBO_BOX (widget);
     CustomerWindow *cw = data;
-    gchar *title;
 
     if (!cw) return;
     if (!cbox) return;
@@ -1072,7 +1069,6 @@ gnc_customer_addr_common_insert_cb(GtkEditable *editable,
     CustomerWindow *wdata = user_data;
     gchar *concatenated_text;
     QuickFill *match;
-    const gchar *match_str;
     gint prefix_len, concatenated_text_len;
 
     if (new_text_length <= 0)
