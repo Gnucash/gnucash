@@ -123,7 +123,6 @@ gchar *gnc_features_test_unknown (QofBook *book)
                 msg = tmp;
             }
 
-            g_free(msg);
             g_list_free(features_list);
             return msg;
         }
