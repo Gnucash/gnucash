@@ -575,10 +575,75 @@ test_gnc_sql_add_objectref_guid_col_info_to_list (Fixture *fixture, gconstpointe
 /* gnc_sql_convert_timespec_to_string
 gchar*
 gnc_sql_convert_timespec_to_string (const GncSqlBackend* be, Timespec ts)// C: 1 */
-/* static void
-test_gnc_sql_convert_timespec_to_string (Fixture *fixture, gconstpointer pData)
+static Timespec*
+gnc_date_string_to_timespec_gmt (gchar *datestr)
 {
-}*/
+    Timespec *ts = g_slice_new0 (Timespec);
+    gint yr, mo, da, hr, min;
+    gdouble sec;
+    GDateTime *dt = NULL;
+
+    sscanf (datestr, "%04d-%02d-%02d %02d:%02d:%02lf",
+	    &yr, &mo, &da, &hr, &min, &sec);
+    g_assert_cmpint (1, <=, yr);
+    g_assert_cmpint (9999, >=, yr);
+    g_assert_cmpint (1, <=, mo);
+    g_assert_cmpint (12, >=, mo);
+    g_assert_cmpint (1, <=, da);
+    if (mo == 1 || mo == 3 || mo == 5 || mo == 7
+	|| mo == 8 || mo == 10 || mo == 12)
+	g_assert_cmpint (31, >=, da);
+    else if (mo != 2)
+	g_assert_cmpint (30, >=, da);
+    else if (yr % 4 == 0 && !(yr % 400 == 0 && yr % 2000 != 0))
+	g_assert_cmpint (29, >=, da);
+    else
+	g_assert_cmpint (28, >=, da);
+    g_assert_cmpint (0, <=, hr);
+    g_assert_cmpint (60, >=, hr);
+    g_assert_cmpint (0, <=, min);
+    g_assert_cmpint (60, >=, min);
+    g_assert_cmpfloat (0.0, <=, sec);
+    g_assert_cmpfloat (60.0, >=, sec);
+    dt = g_date_time_new_utc (yr, mo, da, hr, min, sec);
+    ts->tv_sec = g_date_time_to_unix (dt);
+    ts->tv_nsec = g_date_time_get_microsecond (dt) * 1000;
+    g_date_time_unref (dt);
+    return ts;
+}
+
+#define numtests 6
+static void
+test_gnc_sql_convert_timespec_to_string ()
+{
+    GncSqlBackend be = {{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+			 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+			 0, NULL, 0, "", NULL, 0, "", NULL, NULL},
+			NULL, NULL, FALSE, FALSE, FALSE, 0, 0, NULL,
+			"%4d-%02d-%02d %02d:%02d:%02d"};
+    gchar *date[numtests] = {"1995-03-11 19:17:26",
+			     "2001-04-20 11:44:07",
+			     "1964-02-29 09:15:23",
+			     "1959-04-02 00:00:00",
+			     "2043-11-22 05:32:45",
+			     "2153-12-18 01:15:30"};
+    int i;
+    for (i = 0; i < numtests; i++)
+    {
+
+	Timespec *ts = gnc_date_string_to_timespec_gmt (date[i]);
+	gchar *datestr = gnc_sql_convert_timespec_to_string (&be, *ts);
+	if (i < 3)
+	    g_assert_cmpstr (date[i], ==, datestr);
+/* Dates before 1960 fail, as do dates after 2038 */
+	else
+	    g_assert_cmpstr (date[i], !=, datestr);
+
+	g_free (datestr);
+	g_slice_free (Timespec, ts);
+    }
+
+}
 /* load_timespec
 static void
 load_timespec (const GncSqlBackend* be, GncSqlRow* row,// 2
@@ -970,7 +1035,7 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "add gvalue guid to slist", Fixture, NULL, test_add_gvalue_guid_to_slist,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add gvalue objectref guid to slist", Fixture, NULL, test_gnc_sql_add_gvalue_objectref_guid_to_slist,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add objectref guid col info to list", Fixture, NULL, test_gnc_sql_add_objectref_guid_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql convert timespec to string", Fixture, NULL, test_gnc_sql_convert_timespec_to_string,  teardown);
+    GNC_TEST_ADD_FUNC (suitename, "gnc sql convert timespec to string", test_gnc_sql_convert_timespec_to_string);
 // GNC_TEST_ADD (suitename, "load timespec", Fixture, NULL, test_load_timespec,  teardown);
 // GNC_TEST_ADD (suitename, "add timespec col info to list", Fixture, NULL, test_add_timespec_col_info_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "add gvalue timespec to slist", Fixture, NULL, test_add_gvalue_timespec_to_slist,  teardown);
