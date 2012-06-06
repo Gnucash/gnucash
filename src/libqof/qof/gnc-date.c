@@ -1680,3 +1680,10 @@ timespec_get_type( void )
     return type;
 }
 
+Testfuncs*
+gnc_date_load_funcs (void)
+{
+    Testfuncs *tf = g_slice_new (Testfuncs);
+    tf->timespec_normalize = timespec_normalize;
+    return tf;
+}

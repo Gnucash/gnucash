@@ -26,6 +26,8 @@
 
 #include "gnc-date.h"
 
+#define NANOS_PER_SECOND 1000000000
+
 /** Convert a given date/time format from UTF-8 to an encoding suitable for the
  *  strftime system call.
  *
@@ -62,7 +64,14 @@ typedef enum
  *  @return The format specification as constant ASCII string.
  */
 const char *qof_win32_get_time_format(QofWin32Picture picture);
-
 #endif /* G_OS_WIN32 */
+
+/* Test Access for static functions */
+typedef struct
+{
+    void (*timespec_normalize) (Timespec *t);
+} Testfuncs;
+
+Testfuncs *gnc_date_load_funcs (void);
 
 #endif /* __GNC_DATE_P_H__ */
