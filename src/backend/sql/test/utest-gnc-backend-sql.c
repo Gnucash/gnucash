@@ -635,7 +635,9 @@ test_gnc_sql_convert_timespec_to_string ()
 	gchar *datestr = gnc_sql_convert_timespec_to_string (&be, *ts);
 	if (i < 3)
 	    g_assert_cmpstr (date[i], ==, datestr);
-/* Dates before 1960 fail, as do dates after 2038 */
+/* Dates before 1960 fail regardless of time_t */
+	else if (sizeof (time_t) > 4 && i > 3)
+	    g_assert_cmpstr (date[i], ==, datestr);
 	else
 	    g_assert_cmpstr (date[i], !=, datestr);
 
