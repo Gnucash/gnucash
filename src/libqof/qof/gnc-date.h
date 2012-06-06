@@ -450,14 +450,6 @@ const char * gnc_print_date(Timespec ts);
 
 size_t qof_print_date_time_buff (char * buff, size_t len, time_t secs);
 
-/* ------------------------------------------------------------------ */
-/* The xaccDateUtilGetStamp() routine will take the given time in
- *  seconds and return a buffer containing a textual for the date.
- *  @param thyme The time in seconds to convert.
- *  @return A pointer to the generated string.
- *  @note The caller owns this buffer and must free it when done. */
-/* char * xaccDateUtilGetStamp (time_t thyme); */
-
 /** qof_scan_date
  *    Convert a string into  day / month / year integers according to
  *    the current dateFormat value.
@@ -472,9 +464,6 @@ size_t qof_print_date_time_buff (char * buff, size_t len, time_t secs);
  * Globals: uses global dateFormat value to assist in parsing.
  */
 gboolean qof_scan_date (const char *buff, int *day, int *month, int *year);
-
-/** as above, but returns seconds */
-gboolean qof_scan_date_secs (const char *buff, time_t *secs);
 
 // @}
 /** \name Date Start/End Adjustment routines
@@ -533,15 +522,8 @@ time_t gnc_timet_get_day_start(time_t time_val);
 time_t gnc_timet_get_day_end(time_t time_val);
 
 /** Get the numerical last date of the month. (28, 29, 30, 31) */
-int date_get_last_mday(const struct tm *tm);
+int gnc_date_get_last_mday (int month, int year);
 
-/** Is the mday field the last day of the specified month.*/
-gboolean date_is_last_mday(const struct tm *tm);
-
-/** \deprecated Use date_get_last_mday() */
-int gnc_date_my_last_mday (int month, int year);
-/** DOCUMENT ME! Probably the same as date_get_last_mday() */
-int gnc_timespec_last_mday (Timespec ts);
 // @}
 
 /* ======================================================== */

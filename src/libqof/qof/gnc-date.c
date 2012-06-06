@@ -54,8 +54,6 @@
 #endif
 #include "platform.h"
 
-#define NANOS_PER_SECOND 1000000000
-
 #ifdef HAVE_LANGINFO_D_FMT
 #  define GNC_D_FMT (nl_langinfo (D_FMT))
 #  define GNC_D_T_FMT (nl_langinfo (D_T_FMT))
@@ -93,8 +91,6 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /********************************************************************\
 \********************************************************************/
-
-static time_t xaccDMYToSec (gint day, gint month, gint year);
 
 const char*
 gnc_date_dateformat_to_string(QofDateFormat format)
@@ -217,20 +213,36 @@ timespec_normalize(Timespec *t)
 gboolean
 timespec_equal (const Timespec *ta, const Timespec *tb)
 {
+    Timespec pta, ptb;
+
     if (ta == tb) return TRUE;
-    if (ta->tv_sec != tb->tv_sec) return FALSE;
-    if (ta->tv_nsec != tb->tv_nsec) return FALSE;
+/* Copy and normalize the copies */
+    pta = *ta;
+    ptb = *tb;
+    timespec_normalize (&pta);
+    timespec_normalize (&ptb);
+
+    if (pta.tv_sec != ptb.tv_sec) return FALSE;
+    if (pta.tv_nsec != ptb.tv_nsec) return FALSE;
     return TRUE;
 }
 
 gint
 timespec_cmp(const Timespec *ta, const Timespec *tb)
 {
+    Timespec pta, ptb;
+
     if (ta == tb) return 0;
-    if (ta->tv_sec < tb->tv_sec) return -1;
-    if (ta->tv_sec > tb->tv_sec) return 1;
-    if (ta->tv_nsec < tb->tv_nsec) return -1;
-    if (ta->tv_nsec > tb->tv_nsec) return 1;
+/* Copy and normalize the copies */
+    pta = *ta;
+    ptb = *tb;
+    timespec_normalize (&pta);
+    timespec_normalize (&ptb);
+
+    if (pta.tv_sec < ptb.tv_sec) return -1;
+    if (pta.tv_sec > ptb.tv_sec) return 1;
+    if (pta.tv_nsec < ptb.tv_nsec) return -1;
+    if (pta.tv_nsec > ptb.tv_nsec) return 1;
     return 0;
 }
 
@@ -277,7 +289,7 @@ timespecCanonicalDayTime(Timespec t)
     return retval;
 }
 
-int gnc_date_my_last_mday (int month, int year)
+int gnc_date_get_last_mday (int month, int year)
 {
     static int last_day_of_month[2][12] =
     {
@@ -290,31 +302,6 @@ int gnc_date_my_last_mday (int month, int year)
     if (year % 400 == 0 ) return last_day_of_month[0][month-1];
     if (year % 4   == 0 ) return last_day_of_month[1][month-1];
     return last_day_of_month[0][month-1];
-}
-
-/* Retrieve the last numerical day of the month
-
- Retrieve the last numerical day for the month specified in the
- tm_year and tm_mon fields.
-
-param  tm: the time value in question
-return the last day of the month, integer.
-*/
-int date_get_last_mday(const struct tm *tm)
-{
-    return gnc_date_my_last_mday (tm->tm_mon + 1, tm->tm_year + 1900);
-}
-
-/* Determines if tm_mday is the last day of the month.
-
- Determines whether the tm_mday field contains the last day of the
- month as specified in the tm_year and tm_mon fields.
-param  tm: the time value in question
-return TRUE if tm_mday matches the last day of the month, else FALSE.
-*/
-gboolean date_is_last_mday(const struct tm *tm)
-{
-    return(tm->tm_mday == date_get_last_mday(tm));
 }
 
 /* Return the set dateFormat.
@@ -465,7 +452,7 @@ param   day - value to be set with the day of the month as 1 ... 31
 param   month - value to be set with the month of the year as 1 ... 12
 param   year - value to be set with the year (4-digit)
 
-return void
+return length of string created in buff.
 
 Globals: global dateFormat value
 */
@@ -569,63 +556,6 @@ gnc_print_date (Timespec ts)
 
 /* ============================================================== */
 
-size_t
-qof_print_date_time_buff (char * buff, size_t len, time_t secs)
-{
-    int flen;
-    int day, month, year, hour, min;
-    struct tm ltm, gtm;
-
-    if (!buff) return 0;
-
-    /* Note that when printing year, we use %-4d in format string;
-     * this causes a one, two or three-digit year to be left-adjusted
-     * when printed (i.e. padded with blanks on the right).  This is
-     * important while the user is editing the year, since erasing a
-     * digit can temporarily cause a three-digit year, and having the
-     * blank on the left is a real pain for the user.  So pad on the
-     * right.
-     */
-    ltm = *localtime (&secs);
-    day = ltm.tm_mday;
-    month = ltm.tm_mon + 1;
-    year = ltm.tm_year + 1900;
-    hour = ltm.tm_hour;
-    min = ltm.tm_min;
-
-    switch (dateFormat)
-    {
-    case QOF_DATE_FORMAT_UK:
-        flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", day, month, year, hour, min);
-        break;
-    case QOF_DATE_FORMAT_CE:
-        flen = g_snprintf (buff, len, "%02d.%02d.%-4d %2d:%02d", day, month, year, hour, min);
-        break;
-    case QOF_DATE_FORMAT_ISO:
-        flen = g_snprintf (buff, len, "%04d-%02d-%02d %02d:%02d", year, month, day, hour, min);
-        break;
-    case QOF_DATE_FORMAT_UTC:
-    {
-        gtm = *gmtime (&secs);
-        flen = qof_strftime (buff, len, QOF_UTC_DATE_FORMAT, &gtm);
-        break;
-    }
-    case QOF_DATE_FORMAT_LOCALE:
-    {
-        flen = qof_strftime (buff, len, GNC_D_T_FMT, &ltm);
-    }
-    break;
-
-    case QOF_DATE_FORMAT_US:
-    default:
-        flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", month, day, year, hour, min);
-        break;
-    }
-    return flen;
-}
-
-/* ============================================================== */
-
 /* return the greatest integer <= a/b; works for b > 0 and positive or
    negative a. */
 static int
@@ -677,7 +607,8 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
 
     if (which_format == QOF_DATE_FORMAT_UTC)
     {
-        if (strptime(buff, QOF_UTC_DATE_FORMAT, &utc))
+        if (strptime(buff, QOF_UTC_DATE_FORMAT, &utc)
+	    || strptime (buff, "%Y-%m-%d", &utc))
         {
             *day = utc.tm_mday;
             *month = utc.tm_mon + 1;
@@ -900,18 +831,6 @@ qof_scan_date (const char *buff, int *day, int *month, int *year)
     return qof_scan_date_internal(buff, day, month, year, dateFormat);
 }
 
-gboolean
-qof_scan_date_secs (const char *buff, time_t *secs)
-{
-    gboolean rc;
-    int day, month, year;
-
-    rc = qof_scan_date_internal(buff, &day, &month, &year, dateFormat);
-    if (secs) *secs = xaccDMYToSec (day, month, year);
-
-    return rc;
-}
-
 /* Return the field separator for the current date format
 return date character
 */
@@ -1088,48 +1007,23 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 /********************************************************************\
 \********************************************************************/
 
-/* Convert time in seconds to a textual.
-
-The xaccDateUtilGetStamp() routine will take the given time in
-seconds and return a buffer containing a textual for the date.
-
-param thyme The time in seconds to convert.
-return A pointer to the generated string.
-The caller owns this buffer and must free it when done.
+/** Return a string representation of the current local time.
+ * @return string in YYYYMMDDHHmmss format. The string must be g_free()'d
+ *         by the caller.
 */
-static char *
-xaccDateUtilGetStamp (time_t thyme)
-{
-    struct tm *stm;
-
-    stm = localtime (&thyme);
-
-    return g_strdup_printf("%04d%02d%02d%02d%02d%02d",
-                           (stm->tm_year + 1900),
-                           (stm->tm_mon + 1),
-                           stm->tm_mday,
-                           stm->tm_hour,
-                           stm->tm_min,
-                           stm->tm_sec
-                          );
-}
-
-
-/* Convert textual to time in seconds.
-
-The xaccDateUtilGetStampNow() routine returns the current time in
-seconds in textual format.
-
-return A pointer to the generated string.
-
-note The caller owns this buffer and must free it when done.
-*/
-char *
+gchar *
 xaccDateUtilGetStampNow (void)
 {
-    time_t now;
-    time (&now);
-    return xaccDateUtilGetStamp (now);
+    GDateTime *gdt = g_date_time_new_now_local ();
+    gchar *timestr = g_strdup_printf("%04d%02d%02d%02d%02d%02d",
+				     g_date_time_get_year (gdt),
+				     g_date_time_get_month (gdt),
+				     g_date_time_get_day_of_month (gdt),
+				     g_date_time_get_hour (gdt),
+				     g_date_time_get_minute (gdt),
+				     g_date_time_get_second (gdt));
+    g_date_time_unref (gdt);
+    return timestr;
 }
 
 /********************************************************************\
@@ -1344,13 +1238,15 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
     time_t tmp;
     struct tm parsed;
 
+    g_return_val_if_fail (buff != NULL, NULL);
+
     tmp = ts.tv_sec;
     localtime_r(&tmp, &parsed);
 
     secs = gnc_timezone (&parsed);
 
     /* We also have to print the sign by hand, to work around a bug
-     * in the glibc 2.1.3 printf (where %+02d fails to zero-pad).
+     * in the glibc printf (where %+02d fails to zero-pad).
      */
     cyn = '-';
     if (0 > secs)
@@ -1379,15 +1275,6 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
     return buff;
 }
 
-int
-gnc_timespec_last_mday (Timespec t)
-{
-    struct tm result;
-    time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-    localtime_r(&t_secs, &result);
-    return date_get_last_mday (&result);
-}
-
 void
 gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
 {
@@ -1399,29 +1286,6 @@ gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
     if (month) *month = result.tm_mon + 1;
     if (year) *year = result.tm_year + 1900;
 }
-
-/********************************************************************\
-\********************************************************************/
-/* hack alert -- this routine returns incorrect values for
- * dates before 1970 */
-
-static time_t
-xaccDMYToSec (int day, int month, int year)
-{
-    struct tm stm;
-    time_t secs;
-
-    stm.tm_year = year - 1900;
-    stm.tm_mon = month - 1;
-    stm.tm_mday = day;
-    gnc_tm_set_day_start(&stm);
-
-    /* compute number of seconds */
-    secs = mktime (&stm);
-
-    return secs;
-}
-
 
 #define THIRTY_TWO_YEARS 0x3c30fc00LL
 
