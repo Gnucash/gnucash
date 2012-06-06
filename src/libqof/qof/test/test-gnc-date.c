@@ -225,10 +225,10 @@ timespec_diff(const Timespec *ta, const Timespec *tb)// C: 4 in 1  Local: 0:0:0
 static void
 test_timespec_diff (void)
 {
-    const int sec_per_day = 24 * 3600;
-    const int sec_per_mo = 30 * sec_per_day;
-    const int sec_per_yr = 365 * sec_per_day;
-    const int nsec1 = 439652, nsec2 = 132794892, nsec3 = 1132794892;
+    const gint sec_per_day = 24 * 3600;
+    const gint sec_per_mo = 30 * sec_per_day;
+    const gint sec_per_yr = 365 * sec_per_day;
+    const glong nsec1 = 439652, nsec2 = 132794892, nsec3 = 1132794892;
     const gint64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day;
     const gint64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day;
     const gint64 secs3 = 72 * sec_per_yr + 2 * sec_per_mo + 26 * sec_per_day;
@@ -257,9 +257,17 @@ test_timespec_diff (void)
     g_assert_cmpint (tt.tv_nsec, ==, 0);
 
     tt = timespec_diff (&tf, &th);
-    g_assert_cmpint (tt.tv_sec, ==, secs2 - secs1 - 3);
-    g_assert_cmpint (tt.tv_nsec, ==, 2 * nsec3 + 2 * NANOS_PER_SECOND); /* Overflow nanosecs */
-
+    if (sizeof (time_t) > 4)
+    {
+	glong nsec_diff_norm = 2 * nsec3 - 2 * NANOS_PER_SECOND - NANOS_PER_SECOND;
+	g_assert_cmpint (tt.tv_sec, ==, secs2 - secs1 + 2);
+	g_assert_cmpint (tt.tv_nsec, ==,  nsec_diff_norm);
+    }
+    else
+    {
+	g_assert_cmpint (tt.tv_sec, ==, secs2 - secs1 - 3);
+	g_assert_cmpint (tt.tv_nsec, ==, 2 * nsec3 + 2 * NANOS_PER_SECOND); /* Overflow nanosecs */
+    }
     tt = timespec_diff (&tg, &td);
     g_assert_cmpint (tt.tv_sec, ==, -secs2 - secs3);
     g_assert_cmpint (tt.tv_nsec, ==, nsec2 - nsec1);
@@ -407,7 +415,7 @@ test_qof_date_format_set (void)
     gchar *logdomain = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, NULL);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     qof_date_format_set ((QofDateFormat)((guint)DATE_FORMAT_LAST + 97));
     g_assert_cmpint (qof_date_format_get (), ==,  QOF_DATE_FORMAT_ISO);
     g_assert_cmpint (check.hits, ==,1);
@@ -438,11 +446,34 @@ size_t
 qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)// C: 12 in 3  Local: 2:0:0
 */
 
+#ifdef HAVE_LANGINFO_D_FMT
+#include <langinfo.h>
+#  define GNC_D_FMT (nl_langinfo (D_FMT))
+#  define GNC_D_T_FMT (nl_langinfo (D_T_FMT))
+#  define GNC_T_FMT (nl_langinfo (T_FMT))
+#elif defined(G_OS_WIN32)
+#  define GNC_D_FMT (qof_win32_get_time_format(QOF_WIN32_PICTURE_DATE))
+#  define GNC_T_FMT (qof_win32_get_time_format(QOF_WIN32_PICTURE_TIME))
+#  define GNC_D_T_FMT (qof_win32_get_time_format(QOF_WIN32_PICTURE_DATETIME))
+#else
+#  define GNC_D_FMT "%Y-%m-%d"
+#  define GNC_D_T_FMT "%Y-%m-%d %r"
+#  define GNC_T_FMT "%r"
+#endif
+
+static void tm_set_dmy (struct tm *tm, gint year, gint month, gint mday)
+{
+    tm->tm_year = year;
+    tm->tm_mon = month;
+    tm->tm_mday = mday;
+}
+
 static void
 test_qof_print_date_dmy_buff (void)
 {
-    gchar buff[MAX_DATE_LENGTH];
+    gchar buff[MAX_DATE_LENGTH], t_buff[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
+    struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -482,48 +513,85 @@ test_qof_print_date_dmy_buff (void)
     g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 23, 11, 1974), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1974-11-23");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 2, 2, 1961), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 2, 2, 1961),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1961-02-02");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 16, 6, 2045), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 16, 6, 2045),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "2045-06-16");
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     setlocale (LC_TIME, "en_US");
+    tm_set_dmy (&tm, 1974, 11, 23);
+    strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 23, 11, 1974), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "11/23/1974");
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+					      tm.tm_mon + 1, tm.tm_year),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, t_buff);
+    tm_set_dmy (&tm, 1961, 2, 2);
+    strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 2, 2, 1961), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02/02/1961");
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+					      tm.tm_mon + 1, tm.tm_year),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 16, 6, 2045), ==, strlen (buff));
-/*    g_assert_cmpstr (buff, ==, "06/16/2045"); localtime gets it wrong */
-    g_assert_cmpstr (buff, ==, "12/31/1969");
-
+    tm_set_dmy (&tm, 2045, 6, 16);
+    strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
+    memset ((gpointer)buff, 0, sizeof (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+					      tm.tm_mon + 1, tm.tm_year),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, t_buff);
     setlocale (LC_TIME, "en_GB");
+    tm_set_dmy (&tm, 1974, 11, 23);
+    strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 23, 11, 1974), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "23/11/1974");
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+					      tm.tm_mon + 1, tm.tm_year),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, t_buff);
+    tm_set_dmy (&tm, 1961, 2, 2);
+    strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 2, 2, 1961), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02/02/1961");
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+					      tm.tm_mon + 1, tm.tm_year),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 16, 6, 2045), ==, strlen (buff));
-    /* g_assert_cmpstr (buff, ==, "16/06/2045"); localtime again */
-    g_assert_cmpstr (buff, ==, "31/12/1969");
+    tm_set_dmy (&tm, 2045, 6, 16);
+    strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
+    memset ((gpointer)buff, 0, sizeof (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+					      tm.tm_mon + 1, tm.tm_year),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, t_buff);
 
     setlocale (LC_TIME, "fr_FR");
+    tm_set_dmy (&tm, 1974, 11, 23);
+    strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 23, 11, 1974), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "23.11.1974");
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+					      tm.tm_mon + 1, tm.tm_year),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, t_buff);
+    tm_set_dmy (&tm, 1961, 2, 2);
+    strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 2, 2, 1961), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02.02.1961");
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+					      tm.tm_mon + 1, tm.tm_year),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 16, 6, 2045), ==, strlen (buff));
-    /* g_assert_cmpstr (buff, ==, "16.06.2045"); localtime again */
-    g_assert_cmpstr (buff, ==, "31.12.1969");
+    tm_set_dmy (&tm, 2045, 6, 16);
+    strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
+    memset ((gpointer)buff, 0, sizeof (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+					      tm.tm_mon + 1, tm.tm_year),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, t_buff);
 
     setlocale (LC_TIME, locale);
     g_free (locale);
@@ -535,110 +603,144 @@ qof_print_date_buff (char * buff, size_t len, time_t t)// C: 3 in 1  Local: 2:0:
 static void
 test_qof_print_date_buff (void)
 {
-    gchar buff[MAX_DATE_LENGTH];
+    gchar buff[MAX_DATE_LENGTH], t_buff[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     GDateTime *gd1 = g_date_time_new_local (1974, 11, 23, 0, 0, 0.0);
     GDateTime *gd2 = g_date_time_new_local (1961, 2, 2, 0, 0, 0.0);
-    GDateTime *gd3 = g_date_time_new_local (2045, 12, 31, 0, 0, 0.0);
-    GTimeVal tm1, tm2, tm3;
+    GDateTime *gd3 = g_date_time_new_local (2045, 6, 16, 0, 0, 0.0);
 
-    g_date_time_to_timeval (gd1, &tm1);
-    g_date_time_to_timeval (gd2, &tm2);
-    g_date_time_to_timeval (gd3, &tm3);
-    g_date_time_unref (gd1);
-    g_date_time_unref (gd2);
-    g_date_time_unref (gd3);
+    gint64 tm1 = g_date_time_to_unix (gd1);
+    gint64 tm2 = g_date_time_to_unix (gd2);
+    gint64 tm3 = g_date_time_to_unix (gd3);
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm1.tv_sec), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm1),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23/11/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm2.tv_sec), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm3.tv_sec), ==, strlen (buff));
-    /*g_assert_cmpstr (buff, ==, "16/06/2045"); timeval conversion error */
-    g_assert_cmpstr (buff, ==, "24/11/1909");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (buff, ==, "16/06/2045");
+    else
+	g_assert_cmpstr (buff, ==, "24/11/1909");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm1.tv_sec), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm1),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23.11.1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm2.tv_sec), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02.02.1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm3.tv_sec), ==, strlen (buff));
-    /*g_assert_cmpstr (buff, ==, "16.06.2045"); timeval conversion error */
-    g_assert_cmpstr (buff, ==, "24.11.1909");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (buff, ==, "16.06.2045");
+    else
+	g_assert_cmpstr (buff, ==, "24.11.1909");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm1.tv_sec), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm1),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "11/23/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm2.tv_sec), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm3.tv_sec), ==, strlen (buff));
-    /*g_assert_cmpstr (buff, ==, "06/16/2045"); timeval conversion error */
-    g_assert_cmpstr (buff, ==, "11/24/1909");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (buff, ==, "06/16/2045");
+    else
+	g_assert_cmpstr (buff, ==, "11/24/1909");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm1.tv_sec), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm1),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1974-11-23");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm2.tv_sec), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1961-02-02");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm3.tv_sec), ==, strlen (buff));
-    /*g_assert_cmpstr (buff, ==, "2045-06-16"); timeval conversion error */
-    g_assert_cmpstr (buff, ==, "1909-11-24");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (buff, ==, "2045-06-16");
+    else
+	g_assert_cmpstr (buff, ==, "1909-11-24");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     setlocale (LC_TIME, "en_US");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm1.tv_sec), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "11/23/1974");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm1),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, g_date_time_format (gd1, GNC_D_FMT));
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm2.tv_sec), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02/02/1961");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, g_date_time_format (gd2, GNC_D_FMT));
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm3.tv_sec), ==, strlen (buff));
-/*    g_assert_cmpstr (buff, ==, "06/16/2045"); localtime gets it wrong */
-    g_assert_cmpstr (buff, ==, "11/24/1909");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (buff, ==, g_date_time_format (gd3, GNC_D_FMT));
+    else
+	g_assert_cmpstr (buff, ==, "11/24/1909");
 
     setlocale (LC_TIME, "en_GB");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm1.tv_sec), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "23/11/1974");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm1),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, g_date_time_format (gd1, GNC_D_FMT));
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm2.tv_sec), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02/02/1961");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, g_date_time_format (gd2, GNC_D_FMT));
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm3.tv_sec), ==, strlen (buff));
-    /* g_assert_cmpstr (buff, ==, "16/06/2045"); localtime again */
-    g_assert_cmpstr (buff, ==, "24/11/1909");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (buff, ==, g_date_time_format (gd3, GNC_D_FMT));
+    else
+	g_assert_cmpstr (buff, ==, "24/11/1909");
 
     setlocale (LC_TIME, "fr_FR");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm1.tv_sec), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "23.11.1974");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm1),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, g_date_time_format (gd1, GNC_D_FMT));
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm2.tv_sec), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02.02.1961");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
+		     ==, strlen (buff));
+    g_assert_cmpstr (buff, ==, g_date_time_format (gd2, GNC_D_FMT));
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), tm3.tv_sec), ==, strlen (buff));
-    /* g_assert_cmpstr (buff, ==, "16.06.2045"); localtime again */
-    g_assert_cmpstr (buff, ==, "24.11.1909");
+    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (buff, ==, g_date_time_format (gd3, GNC_D_FMT));
+    else
+	g_assert_cmpstr (buff, ==, "24.11.1909");
 
     setlocale (LC_TIME, locale);
     g_free (locale);
+    g_date_time_unref (gd1);
+    g_date_time_unref (gd2);
+    g_date_time_unref (gd3);
 }
 /* qof_print_gdate
 size_t
@@ -647,7 +749,7 @@ qof_print_gdate( char *buf, size_t len, const GDate *gd )// C: 6 in 5  Local: 0:
 static void
 test_qof_print_gdate (void)
 {
-    gchar buff[MAX_DATE_LENGTH];
+    gchar buff[MAX_DATE_LENGTH], t_buff[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     GDate *gd1 = g_date_new_dmy (23, 11, 1974);
     GDate *gd2 = g_date_new_dmy (2, 2, 1961);
@@ -655,87 +757,129 @@ test_qof_print_gdate (void)
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23/11/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "16/06/2045");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23.11.1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02.02.1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "16.06.2045");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "11/23/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "06/16/2045");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1974-11-23");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1961-02-02");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3), ==, strlen (buff));
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+		     ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "2045-06-16");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     setlocale (LC_TIME, "en_US");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "11/23/1974");
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+		     ==, strlen (buff));
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
+    g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02/02/1961");
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+		     ==, strlen (buff));
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
+    g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3), ==, strlen (buff));
-    /*g_assert_cmpstr (buff, ==, "06/16/2045"); localtime failure */
-    g_assert_cmpstr (buff, ==, "12/31/1969");
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+    {
+	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
+	g_assert_cmpstr (buff, ==, t_buff);
+    }
+    else
+	g_assert_cmpstr (buff, ==, "12/31/1969");
 
     setlocale (LC_TIME, "en_GB");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "23/11/1974");
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+		     ==, strlen (buff));
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
+    g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02/02/1961");
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+		     ==, strlen (buff));
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
+    g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3), ==, strlen (buff));
-    /*g_assert_cmpstr (buff, ==, "16/06/2045"); localtime failure */
-    g_assert_cmpstr (buff, ==, "31/12/1969");
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+    {
+	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
+	g_assert_cmpstr (buff, ==, t_buff);
+    }
+    else
+	g_assert_cmpstr (buff, ==, "31/12/1969");
 
     setlocale (LC_TIME, "fr_FR");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "23.11.1974");
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+		     ==, strlen (buff));
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
+    g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2), ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02.02.1961");
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+		     ==, strlen (buff));
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
+    g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3), ==, strlen (buff));
-    /*g_assert_cmpstr (buff, ==, "16.06.2045"); localtime failure */
-    g_assert_cmpstr (buff, ==, "31.12.1969");
+    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+		     ==, strlen (buff));
+    if (sizeof (time_t) > 4)
+    {
+	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
+	g_assert_cmpstr (buff, ==, t_buff);
+    }
+    else
+	g_assert_cmpstr (buff, ==, "31.12.1969");
 
 
     setlocale (LC_TIME, locale);
@@ -754,64 +898,86 @@ test_qof_print_date (void)
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     GDateTime *gd1 = g_date_time_new_local (1974, 11, 23, 0, 0, 0.0);
     GDateTime *gd2 = g_date_time_new_local (1961, 2, 2, 0, 0, 0.0);
-    GDateTime *gd3 = g_date_time_new_local (2045, 12, 31, 0, 0, 0.0);
-    GTimeVal tm1, tm2, tm3;
+    GDateTime *gd3 = g_date_time_new_local (2045, 6, 16, 0, 0, 0.0);
 
-    g_date_time_to_timeval (gd1, &tm1);
-    g_date_time_to_timeval (gd2, &tm2);
-    g_date_time_to_timeval (gd3, &tm3);
-    g_date_time_unref (gd1);
-    g_date_time_unref (gd2);
-    g_date_time_unref (gd3);
-
+    gint64 tm1 = g_date_time_to_unix (gd1);
+    gint64 tm2 = g_date_time_to_unix (gd2);
+    gint64 tm3 = g_date_time_to_unix (gd3);
+ 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
-    g_assert_cmpstr (qof_print_date (tm1.tv_sec), ==, "23/11/1974");
-    g_assert_cmpstr (qof_print_date (tm2.tv_sec), ==, "02/02/1961");
-    /*g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "16/06/2045"); timeval conversion error */
-    g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "24/11/1909");
+    g_assert_cmpstr (qof_print_date ((time_t)tm1), ==, "23/11/1974");
+    g_assert_cmpstr (qof_print_date ((time_t)tm2), ==, "02/02/1961");
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "16/06/2045");
+    else
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "24/11/1909");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
-    g_assert_cmpstr (qof_print_date (tm1.tv_sec), ==, "23.11.1974");
-    g_assert_cmpstr (qof_print_date (tm2.tv_sec), ==, "02.02.1961");
-    /*g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "16.06.2045"); timeval conversion error */
-    g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "24.11.1909");
+    g_assert_cmpstr (qof_print_date ((time_t)tm1), ==, "23.11.1974");
+    g_assert_cmpstr (qof_print_date ((time_t)tm2), ==, "02.02.1961");
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "16.06.2045");
+    else
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "24.11.1909");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
-    g_assert_cmpstr (qof_print_date (tm1.tv_sec), ==, "11/23/1974");
-    g_assert_cmpstr (qof_print_date (tm2.tv_sec), ==, "02/02/1961");
-    /*g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "06/16/2045"); timeval conversion error */
-    g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "11/24/1909");
+    g_assert_cmpstr (qof_print_date ((time_t)tm1), ==, "11/23/1974");
+    g_assert_cmpstr (qof_print_date ((time_t)tm2), ==, "02/02/1961");
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "06/16/2045");
+    else
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "11/24/1909");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
-    g_assert_cmpstr (qof_print_date (tm1.tv_sec), ==, "1974-11-23");
-    g_assert_cmpstr (qof_print_date (tm2.tv_sec), ==, "1961-02-02");
-    /*g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "2045-06-16"); timeval conversion error */
-    g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "1909-11-24");
+    g_assert_cmpstr (qof_print_date ((time_t)tm1), ==, "1974-11-23");
+    g_assert_cmpstr (qof_print_date ((time_t)tm2), ==, "1961-02-02");
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "2045-06-16");
+    else
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "1909-11-24");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     setlocale (LC_TIME, "en_US");
-    g_assert_cmpstr (qof_print_date (tm1.tv_sec), ==, "11/23/1974");
-    g_assert_cmpstr (qof_print_date (tm2.tv_sec), ==, "02/02/1961");
-/*    g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "06/16/2045"); localtime gets it wrong */
-    g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "11/24/1909");
+    g_assert_cmpstr (qof_print_date ((time_t)tm1),
+		     ==, g_date_time_format (gd1, GNC_D_FMT));
+    g_assert_cmpstr (qof_print_date ((time_t)tm2),
+		     ==, g_date_time_format (gd2, GNC_D_FMT));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (qof_print_date ((time_t)tm3),
+			 ==, g_date_time_format (gd3, GNC_D_FMT));
+    else
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "11/24/1909");
 
     setlocale (LC_TIME, "en_GB");
-    g_assert_cmpstr (qof_print_date (tm1.tv_sec), ==, "23/11/1974");
-    g_assert_cmpstr (qof_print_date (tm2.tv_sec), ==, "02/02/1961");
-    /* g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "16/06/2045"); localtime again */
-    g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "24/11/1909");
+    g_assert_cmpstr (qof_print_date ((time_t)tm1),
+		     ==, g_date_time_format (gd1, GNC_D_FMT));
+    g_assert_cmpstr (qof_print_date ((time_t)tm2),
+		     ==, g_date_time_format (gd2, GNC_D_FMT));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (qof_print_date ((time_t)tm3),
+			 ==, g_date_time_format (gd3, GNC_D_FMT));
+    else
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "24/11/1909");
 
     setlocale (LC_TIME, "fr_FR");
-    g_assert_cmpstr (qof_print_date (tm1.tv_sec), ==, "23.11.1974");
-    g_assert_cmpstr (qof_print_date (tm2.tv_sec), ==, "02.02.1961");
-    /* g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "16.06.2045"); localtime again */
-    g_assert_cmpstr (qof_print_date (tm3.tv_sec), ==, "24.11.1909");
+    g_assert_cmpstr (qof_print_date ((time_t)tm1),
+		     ==, g_date_time_format (gd1, GNC_D_FMT));
+    g_assert_cmpstr (qof_print_date ((time_t)tm2),
+		     ==, g_date_time_format (gd2, GNC_D_FMT));
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (qof_print_date ((time_t)tm3),
+			 ==, g_date_time_format (gd3, GNC_D_FMT));
+    else
+	g_assert_cmpstr (qof_print_date ((time_t)tm3), ==, "24.11.1909");
 
     setlocale (LC_TIME, locale);
     g_free (locale);
+    g_date_time_unref (gd1);
+    g_date_time_unref (gd2);
+    g_date_time_unref (gd3);
 }
 /* gnc_print_date
 const char *
@@ -820,6 +986,7 @@ gnc_print_date (Timespec ts)// C: 11 in 9 SCM: 166 in 59 Local: 0:0:0
 static void
 test_gnc_print_date (void)
 {
+    gchar t_buff[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     GDate *gd1 = g_date_new_dmy (23, 11, 1974);
     GDate *gd2 = g_date_new_dmy (2, 2, 1961);
@@ -828,58 +995,87 @@ test_gnc_print_date (void)
     Timespec tm2 = gdate_to_timespec (*gd2);
     Timespec tm3 = gdate_to_timespec (*gd3);
 
-    g_date_free (gd1);
-    g_date_free (gd2);
-    g_date_free (gd3);
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     g_assert_cmpstr (gnc_print_date (tm1), ==, "23/11/1974");
     g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
-    /*g_assert_cmpstr (gnc_print_date (tm3), ==, "16/06/2045"); Timespec conversion error */
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "10/05/1909");
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "16/06/2045");
+    else
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "10/05/1909");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
     g_assert_cmpstr (gnc_print_date (tm1), ==, "23.11.1974");
     g_assert_cmpstr (gnc_print_date (tm2), ==, "02.02.1961");
-    /*g_assert_cmpstr (gnc_print_date (tm3), ==, "16.06.2045"); Timespec conversion error */
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "10.05.1909");
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "16.06.2045");
+    else
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "10.05.1909");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
     g_assert_cmpstr (gnc_print_date (tm1), ==, "11/23/1974");
     g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
-    /*g_assert_cmpstr (gnc_print_date (tm3), ==, "06/16/2045"); Timespec conversion error */
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "05/10/1909");
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "06/16/2045");
+    else
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "05/10/1909");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
     g_assert_cmpstr (gnc_print_date (tm1), ==, "1974-11-23");
     g_assert_cmpstr (gnc_print_date (tm2), ==, "1961-02-02");
-    /*g_assert_cmpstr (gnc_print_date (tm3), ==, "2045-06-16"); Timespec conversion error */
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "1909-05-10");
+    if (sizeof (time_t) > 4)
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "2045-06-16");
+    else
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "1909-05-10");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     setlocale (LC_TIME, "en_US");
-    g_assert_cmpstr (gnc_print_date (tm1), ==, "11/23/1974");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
-/*    g_assert_cmpstr (gnc_print_date (tm3), ==, "06/16/2045"); localtime gets it wrong */
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "05/10/1909");
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
+    g_assert_cmpstr (gnc_print_date (tm1), ==, t_buff);
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
+    g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
+    if (sizeof (time_t) > 4)
+    {
+	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
+	g_assert_cmpstr (gnc_print_date (tm3), ==, t_buff);
+    }
+    else
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "05/10/1909");
 
     setlocale (LC_TIME, "en_GB");
-    g_assert_cmpstr (gnc_print_date (tm1), ==, "23/11/1974");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
-    /* g_assert_cmpstr (gnc_print_date (tm3), ==, "16/06/2045"); localtime again */
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "10/05/1909");
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
+    g_assert_cmpstr (gnc_print_date (tm1), ==, t_buff);
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
+    g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
+    if (sizeof (time_t) > 4)
+    {
+	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
+	g_assert_cmpstr (gnc_print_date (tm3), ==, t_buff);
+    }
+    else
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "10/05/1909");
 
     setlocale (LC_TIME, "fr_FR");
-    g_assert_cmpstr (gnc_print_date (tm1), ==, "23.11.1974");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "02.02.1961");
-    /* g_assert_cmpstr (qof_print_date (tm3), ==, "16.06.2045"); localtime again */
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "10.05.1909");
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
+    g_assert_cmpstr (gnc_print_date (tm1), ==, t_buff);
+    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
+    g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
+    if (sizeof (time_t) > 4)
+    {
+	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
+	g_assert_cmpstr (gnc_print_date (tm3), ==, t_buff);
+    }
+    else
+	g_assert_cmpstr (gnc_print_date (tm3), ==, "10.05.1909");
 
     setlocale (LC_TIME, locale);
     g_free (locale);
+    g_date_free (gd1);
+    g_date_free (gd2);
+    g_date_free (gd3);
 }
 /* floordiv
 static int
@@ -909,7 +1105,8 @@ test_qof_scan_date (void)
     GDateTime *gdt = g_date_time_new_now_local ();
     gint year = g_date_time_get_year (gdt);
     gint month = g_date_time_get_month (gdt);
-
+    struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    gchar buff[MAX_DATE_LENGTH];
     g_date_time_unref (gdt);
 
     g_assert (!qof_scan_date (NULL, &day, &mo, &yr));
@@ -1001,20 +1198,29 @@ test_qof_scan_date (void)
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     setlocale (LC_TIME, "en_GB");
-    g_assert (qof_scan_date ("23/11/1974", &day, &mo, &yr));
-    g_assert_cmpint (day, ==, 23);
-    g_assert_cmpint (mo, ==, 11);
-    g_assert_cmpint (yr, ==, 1974);
+    tm_set_dmy (&tm, 1974, 11, 23);
+    strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
+    g_assert (qof_scan_date (buff, &day, &mo, &yr));
+    g_assert_cmpint (day, ==, tm.tm_mday);
+    g_assert_cmpint (mo, ==, tm.tm_mon + 1);
+    g_assert_cmpint (yr, ==, tm.tm_year);
 
-    g_assert (qof_scan_date ("2/2/1961", &day, &mo, &yr));
-    g_assert_cmpint (day, ==, 2);
-    g_assert_cmpint (mo, ==, 2);
-    g_assert_cmpint (yr, ==, 1961);
+    tm_set_dmy (&tm, 1961,2, 2);
+    strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
+    g_assert (qof_scan_date (buff, &day, &mo, &yr));
+    g_assert_cmpint (day, ==, tm.tm_mday);
+    g_assert_cmpint (mo, ==, tm.tm_mon + 1);
+/* Some locale date formats result in a 2-digit year, which strptime
+ * interprets as being in the current century.
+ */
+    g_assert_cmpint (yr % 100, ==, tm.tm_year % 100);
 
-    g_assert (qof_scan_date ("16/6/2045", &day, &mo, &yr));
-    g_assert_cmpint (day, ==, 16);
-    g_assert_cmpint (mo, ==, 6);
-    g_assert_cmpint (yr, ==, 2045);
+    tm_set_dmy (&tm, 2045, 6, 16);
+    strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
+    g_assert (qof_scan_date (buff, &day, &mo, &yr));
+    g_assert_cmpint (day, ==, tm.tm_mday);
+    g_assert_cmpint (mo, ==, tm.tm_mon + 1);
+    g_assert_cmpint (yr, ==, tm.tm_year);
 
     setlocale (LC_TIME, locale);
     g_free (locale);
@@ -1146,8 +1352,12 @@ test_gnc_iso8601_to_timespec_gmt (void)
     g_sprintf (msg1, msgfmt, 22, 61, 53, 19, -1, "1961-09-22 17:53:19 -05");
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_null_handler, NULL);
     t = gnc_iso8601_to_timespec_gmt ("1961-09-22 17:53:19 -05");
-/*    g_assert_cmpint (t.tv_sec, ==, g_date_time_to_unix (gdt4));
-      g_assert_cmpint (t.tv_nsec, ==, get_nanoseconds (gdt4)); */
+/* gnc_iso8601_to_timespec_gmt has a pretty bogus test for mktime
+ * implementations that return -1 when they have an error. As a
+ * result, it can't handle dates before the beginning of the era.
+    g_assert_cmpint (t.tv_sec, ==, g_date_time_to_unix (gdt4));
+    g_assert_cmpint (t.tv_nsec, ==, get_nanoseconds (gdt4));
+*/
     g_assert_cmpint (t.tv_sec, ==, 0);
     g_assert_cmpint (t.tv_nsec, ==, 0);
     g_assert_cmpint (check1.hits, ==, 1);
@@ -1155,12 +1365,18 @@ test_gnc_iso8601_to_timespec_gmt (void)
 
     g_sprintf (msg1, msgfmt, 28, 161, 21, 19, -1, "2061-01-25 23:21:19.0 -05:00");
     t = gnc_iso8601_to_timespec_gmt ("2061-01-25 23:21:19.0 -05:00");
-/*    g_assert_cmpint (t.tv_sec, ==, g_date_time_to_unix (gdt2));
-      g_assert_cmpint (t.tv_nsec, ==, get_nanoseconds (gdt2)); */
-    g_assert_cmpint (t.tv_sec, ==, 0);
-    g_assert_cmpint (t.tv_nsec, ==, 0);
-    g_assert_cmpint (check1.hits, ==, 2);
-    g_assert_cmpint (check2.hits, ==, 2);
+    if (sizeof (time_t) > 4)
+    {
+	g_assert_cmpint (t.tv_sec, ==, g_date_time_to_unix (gdt5));
+	g_assert_cmpint (t.tv_nsec, ==, get_nanoseconds (gdt5));
+    }
+    else
+    {
+	g_assert_cmpint (t.tv_sec, ==, 0);
+	g_assert_cmpint (t.tv_nsec, ==, 0);
+	g_assert_cmpint (check1.hits, ==, 2);
+	g_assert_cmpint (check2.hits, ==, 2);
+    }
 
     g_date_time_unref (gdt1);
     g_date_time_unref (gdt2);
@@ -1226,7 +1442,7 @@ test_gnc_timespec_to_iso8601_buff (void)
     TestErrorStruct check = { loglevel, logdomain, msg, 0 };
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler,
 						    &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, NULL);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
 
     memset (buff, 0, sizeof buff);
 
