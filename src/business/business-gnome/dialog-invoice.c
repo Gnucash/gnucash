@@ -2422,6 +2422,14 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
         break;
     }
 
+    if (dialog_type == DUP_INVOICE)
+    {
+        GtkWidget *invoice_radio = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_invoice_type"));
+        GtkWidget *cn_radio = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_creditnote_type"));
+
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(cn_radio), gncInvoiceGetIsCreditNote (invoice));
+    }
+
     iw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_id_entry"));
     iw->billing_id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_billing_id_entry"));
     iw->terms_menu = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_terms_menu"));
