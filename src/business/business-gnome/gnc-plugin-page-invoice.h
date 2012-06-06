@@ -36,7 +36,6 @@
 #include <gtk/gtk.h>
 
 #include "Account.h"
-#include "gnc-ledger-display.h"
 #include "gnc-plugin-page.h"
 #include "dialog-invoice.h" /* for InvoiceWindow */
 

@@ -28,6 +28,7 @@
 
 #include "gnc-plugin.h"
 #include "dialog-invoice.h"
+#include "gnc-ledger-display.h"
 #include "gnc-plugin-page-invoice.h"
 
 #include "dialog-account.h"
