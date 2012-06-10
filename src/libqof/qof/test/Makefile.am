@@ -43,4 +43,5 @@ test_qof_CFLAGS = \
 	-I$(top_srcdir)/${MODULEPATH} \
 	-I$(top_srcdir)/src/test-core \
 	-DTESTPROG=test_qof \
+	-I$(top_srcdir)/lib/libc \
 	${GLIB_CFLAGS}

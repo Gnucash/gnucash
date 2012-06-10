@@ -31,6 +31,9 @@
 #include "../gnc-date-p.h"
 #include <locale.h>
 #include <glib/gprintf.h>
+#ifndef HAVE_STRPTIME
+#  include "strptime.h"
+#endif
 
 static const gchar *suitename = "/qof/gnc-date";
 void test_suite_gnc_date ( void );
@@ -473,7 +476,11 @@ test_qof_print_date_dmy_buff (void)
 {
     gchar buff[MAX_DATE_LENGTH], t_buff[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
-    struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0
+#ifndef G_OS_WIN32
+                     , 0, 0
+#endif
+    };
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -1105,7 +1112,11 @@ test_qof_scan_date (void)
     GDateTime *gdt = g_date_time_new_now_local ();
     gint year = g_date_time_get_year (gdt);
     gint month = g_date_time_get_month (gdt);
-    struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0
+#ifndef G_OS_WIN32
+                     , 0, 0
+#endif
+    };
     gchar buff[MAX_DATE_LENGTH];
     g_date_time_unref (gdt);
 
