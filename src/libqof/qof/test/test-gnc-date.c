@@ -165,7 +165,7 @@ test_timespec_equal (void)
 {
     const int sec_per_day = 24 * 3600;
     const int sec_per_mo = 30 * sec_per_day;
-    const int sec_per_yr = 365 * sec_per_day;
+    const gint64 sec_per_yr = 365 * sec_per_day;
     const int nsec1 = 439652, nsec2 = 132794892, nsec3 = 1132794892;
     const gint64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day;
     const gint64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day;
@@ -193,7 +193,7 @@ test_timespec_cmp (void)
 {
     const int sec_per_day = 24 * 3600;
     const int sec_per_mo = 30 * sec_per_day;
-    const int sec_per_yr = 365 * sec_per_day;
+    const gint64 sec_per_yr = 365 * sec_per_day;
     const int nsec1 = 439652, nsec2 = 132794892, nsec3 = 1132794892;
     const gint64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day;
     const gint64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day;
@@ -227,7 +227,7 @@ test_timespec_diff (void)
 {
     const gint sec_per_day = 24 * 3600;
     const gint sec_per_mo = 30 * sec_per_day;
-    const gint sec_per_yr = 365 * sec_per_day;
+    const gint64 sec_per_yr = 365 * sec_per_day;
     const glong nsec1 = 439652, nsec2 = 132794892, nsec3 = 1132794892;
     const gint64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day;
     const gint64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day;
@@ -335,7 +335,7 @@ test_timespecCanonicalDayTime (void)
 {
     const int sec_per_day = 24 * 3600;
     const int sec_per_mo = 30 * sec_per_day;
-    const int sec_per_yr = 365 * sec_per_day;
+    const gint64 sec_per_yr = 365 * sec_per_day;
     const gint64 secs = 8 * 3600 + 43 * 60 + 11;
     const gint64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day + 8 * 3600 + 43 * 60 + 11;
     const gint64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day + 21 * 3600 + 9 * 60 + 48;
