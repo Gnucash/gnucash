@@ -161,10 +161,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-12-31 21:00:00 -0800</ts:date>
+    <ts:date>1995-01-01 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>563969000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -192,10 +192,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-15 21:00:00 -0800</ts:date>
+    <ts:date>1995-01-16 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>569022000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -223,10 +223,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-31 21:00:00 -0800</ts:date>
+    <ts:date>1995-02-01 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>572348000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -254,10 +254,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-15 21:00:00 -0800</ts:date>
+    <ts:date>1995-02-16 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>576414000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -285,10 +285,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-28 21:00:00 -0800</ts:date>
+    <ts:date>1995-03-01 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>580193000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -316,10 +316,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-15 21:00:00 -0800</ts:date>
+    <ts:date>1995-03-16 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>584377000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -347,10 +347,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-31 21:00:00 -0800</ts:date>
+    <ts:date>1995-04-01 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>591148000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -378,10 +378,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-15 21:00:00 -0700</ts:date>
+    <ts:date>1995-04-16 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>607128000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -409,10 +409,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-30 21:00:00 -0700</ts:date>
+    <ts:date>1995-05-01 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>612605000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -440,10 +440,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-15 21:00:00 -0700</ts:date>
+    <ts:date>1995-05-16 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>760444000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -471,10 +471,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-31 21:00:00 -0700</ts:date>
+    <ts:date>1995-06-01 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>767487000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -502,10 +502,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-15 21:00:00 -0700</ts:date>
+    <ts:date>1995-06-16 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>774300000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -533,10 +533,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-30 21:00:00 -0700</ts:date>
+    <ts:date>1995-07-01 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>782986000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -564,10 +564,10 @@
     <cmdty:id>USSA</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-05 21:00:00 -0700</ts:date>
+    <ts:date>1995-07-06 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>788855000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -595,10 +595,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-15 21:00:00 -0700</ts:date>
+    <ts:date>1995-07-16 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>793677000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -626,10 +626,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-31 21:00:00 -0700</ts:date>
+    <ts:date>1995-08-01 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>810277000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -657,10 +657,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-15 21:00:00 -0700</ts:date>
+    <ts:date>1995-08-16 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>820724000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -688,10 +688,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-31 21:00:00 -0700</ts:date>
+    <ts:date>1995-09-01 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>831302000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -719,10 +719,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-15 21:00:00 -0700</ts:date>
+    <ts:date>1995-09-16 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>842924000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -750,10 +750,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-30 21:00:00 -0700</ts:date>
+    <ts:date>1995-10-01 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>870500000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -781,10 +781,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-15 21:00:00 -0700</ts:date>
+    <ts:date>1995-10-16 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>882549000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -812,10 +812,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-31 21:00:00 -0800</ts:date>
+    <ts:date>1995-11-01 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>903735000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -843,10 +843,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-15 21:00:00 -0800</ts:date>
+    <ts:date>1995-11-16 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>918545000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -874,10 +874,10 @@
     <cmdty:id>USSA</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-17 21:00:00 -0800</ts:date>
+    <ts:date>1995-11-18 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>924478000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -905,10 +905,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-30 21:00:00 -0800</ts:date>
+    <ts:date>1995-12-01 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>933363000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -936,10 +936,10 @@
     <cmdty:id>USSA</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-09 21:00:00 -0800</ts:date>
+    <ts:date>1995-12-10 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>940053000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -967,10 +967,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-15 21:00:00 -0800</ts:date>
+    <ts:date>1995-12-16 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>958106000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -998,10 +998,10 @@
     <cmdty:id>MSFT</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-12-31 21:00:00 -0800</ts:date>
+    <ts:date>1995-01-01 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:32:05 -0800</ts:date>
+    <ts:date>2001-03-26 22:32:05 +0200</ts:date>
     <ts:ns>561450000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>

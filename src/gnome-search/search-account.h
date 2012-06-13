@@ -26,9 +26,9 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_ACCOUNT 	(gnc_search_account_get_type ())
-#define GNCSEARCH_ACCOUNT(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccount)
-#define GNCSEARCH_ACCOUNT_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccountClass)
-#define IS_GNCSEARCH_ACCOUNT(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_ACCOUNT)
+#define GNCSEARCH_ACCOUNT(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccount)
+#define GNCSEARCH_ACCOUNT_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccountClass)
+#define IS_GNCSEARCH_ACCOUNT(obj)	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_ACCOUNT)
 
 typedef struct _GNCSearchAccount	GNCSearchAccount;
 typedef struct _GNCSearchAccountClass	GNCSearchAccountClass;

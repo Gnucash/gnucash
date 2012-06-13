@@ -25,9 +25,9 @@
 #include "search-core-type.h"
 
 #define GNC_TYPE_SEARCH_STRING		(gnc_search_string_get_type ())
-#define GNCSEARCH_STRING(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_STRING, GNCSearchString)
-#define GNCSEARCH_STRING_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_STRING, GNCSearchStringClass)
-#define IS_GNCSEARCH_STRING(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_STRING)
+#define GNCSEARCH_STRING(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_STRING, GNCSearchString)
+#define GNCSEARCH_STRING_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_STRING, GNCSearchStringClass)
+#define IS_GNCSEARCH_STRING(obj)	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_STRING)
 
 typedef struct _GNCSearchString	GNCSearchString;
 typedef struct _GNCSearchStringClass	GNCSearchStringClass;

@@ -349,7 +349,7 @@ gnc_tree_view_destroy (GtkObject *object)
     if (priv->column_menu)
     {
         DEBUG("removing column selection menu");
-        gtk_widget_unref(priv->column_menu);
+        g_object_unref(priv->column_menu);
         priv->column_menu = NULL;
     }
 
@@ -1463,7 +1463,7 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
     /* Destroy any old menu */
     if (priv->column_menu)
     {
-        gtk_widget_unref(priv->column_menu);
+        g_object_unref(priv->column_menu);
         priv->column_menu = NULL;
     }
 
@@ -2055,7 +2055,7 @@ gnc_tree_view_column_get_renderer(GtkTreeViewColumn *column)
     g_return_val_if_fail(GTK_TREE_VIEW_COLUMN(column), NULL);
 
     /* Get the list of one renderer */
-    renderers = gtk_tree_view_column_get_cell_renderers(column);
+    renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
     if (g_list_length(renderers) > 0)
         cr = GTK_CELL_RENDERER(renderers->data);
     g_list_free(renderers);

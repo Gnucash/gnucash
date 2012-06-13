@@ -122,10 +122,10 @@
     <cmdty:id>O-Sicav Plus</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-23 21:00:00 -0700</ts:date>
+    <ts:date>1995-07-24 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:30:31 -0800</ts:date>
+    <ts:date>2001-03-26 22:30:31 +0200</ts:date>
     <ts:ns>435420000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -160,10 +160,10 @@
     <cmdty:id>O-Sicav Plus</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-07 21:00:00 -0700</ts:date>
+    <ts:date>1995-10-08 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:30:31 -0800</ts:date>
+    <ts:date>2001-03-26 22:30:31 +0200</ts:date>
     <ts:ns>436816000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -198,10 +198,10 @@
     <cmdty:id>O-Sicav Plus</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-09 21:00:00 -0800</ts:date>
+    <ts:date>1995-12-10 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:30:31 -0800</ts:date>
+    <ts:date>2001-03-26 22:30:31 +0200</ts:date>
     <ts:ns>437989000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>

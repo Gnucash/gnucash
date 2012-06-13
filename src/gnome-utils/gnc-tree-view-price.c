@@ -541,7 +541,7 @@ typedef struct
     gnc_tree_view_price_cm_filter_func user_cm_fn;
     gnc_tree_view_price_pc_filter_func user_pc_fn;
     gpointer                           user_data;
-    GtkDestroyNotify                   user_destroy;
+    GDestroyNotify                     user_destroy;
 } filter_user_data;
 
 static void
@@ -611,7 +611,7 @@ gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
                                 gnc_tree_view_price_cm_filter_func cm_func,
                                 gnc_tree_view_price_pc_filter_func pc_func,
                                 gpointer data,
-                                GtkDestroyNotify destroy)
+                                GDestroyNotify destroy)
 {
     GtkTreeModel *f_model, *s_model;
     filter_user_data *fd = data;

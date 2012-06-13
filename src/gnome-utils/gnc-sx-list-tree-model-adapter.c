@@ -268,7 +268,7 @@ gsltma_set_sort_func(GtkTreeSortable        *sortable,
                      gint                    sort_column_id,
                      GtkTreeIterCompareFunc  func,
                      gpointer                data,
-                     GtkDestroyNotify        destroy)
+                     GDestroyNotify          destroy)
 {
     gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real),
                                     sort_column_id,
@@ -281,7 +281,7 @@ static void
 gsltma_set_default_sort_func(GtkTreeSortable        *sortable,
                              GtkTreeIterCompareFunc  func,
                              gpointer                data,
-                             GtkDestroyNotify        destroy)
+                             GDestroyNotify          destroy)
 {
     gtk_tree_sortable_set_default_sort_func(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real),
                                             func, data, destroy);

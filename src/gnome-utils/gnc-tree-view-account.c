@@ -83,7 +83,7 @@ typedef struct GncTreeViewAccountPrivate
 
     gnc_tree_view_account_filter_func filter_fn;
     gpointer                          filter_data;
-    GtkFunction                       filter_destroy;
+    GSourceFunc                       filter_destroy;
 
     GtkTreeViewColumn *name_column;
     GtkTreeViewColumn *code_column;
@@ -989,7 +989,7 @@ void
 gnc_tree_view_account_set_filter (GncTreeViewAccount *view,
                                   gnc_tree_view_account_filter_func func,
                                   gpointer data,
-                                  GtkFunction destroy)
+                                  GSourceFunc destroy)
 {
     GncTreeViewAccountPrivate *priv;
 
@@ -2311,7 +2311,7 @@ gtva_set_column_editor(GncTreeViewAccount *view,
 
     // look for the first text-renderer; on the 0th column of the account tree,
     // there are two renderers: pixbuf and text.  So find the text one.
-    for (renderers_orig = renderers = gtk_tree_view_column_get_cell_renderers(column);
+    for (renderers_orig = renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
             renderers && !GTK_IS_CELL_RENDERER_TEXT(renderers->data);
             renderers = renderers->next);
     renderer = GTK_CELL_RENDERER(renderers->data);

@@ -123,7 +123,7 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
     GtkObjectClass  *object_class;
 
     gnc_date_picker_parent_class =
-        gtk_type_class (gnome_canvas_widget_get_type());
+        g_type_class_peek_parent (date_picker_class);
 
     object_class = GTK_OBJECT_CLASS (date_picker_class);
 

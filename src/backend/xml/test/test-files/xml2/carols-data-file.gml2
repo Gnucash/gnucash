@@ -525,10 +525,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-12-19 22:00:00 -0800</ts:date>
+    <ts:date>2000-12-20 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-12-20 10:05:39 -0800</ts:date>
+    <ts:date>2000-12-20 19:05:39 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Paycheck deposit</trn:description>
   <trn:splits>
@@ -536,7 +536,7 @@
       <split:id type="guid">26399b198b8beab9c11a84cabbd22da4</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+        <ts:date>2001-01-16 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>80000/100</split:value>
       <split:quantity>80000/100</split:quantity>
@@ -558,10 +558,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-12-26 22:00:00 -0800</ts:date>
+    <ts:date>2000-12-27 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-12-20 10:25:30 -0800</ts:date>
+    <ts:date>2000-12-20 19:25:30 +0100</ts:date>
     <ts:ns>54442000</ts:ns>
   </trn:date-entered>
   <trn:description>Paycheck deposit</trn:description>
@@ -571,7 +571,7 @@
       <split:memo>Effect on checking</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+        <ts:date>2001-01-16 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>80000/100</split:value>
       <split:quantity>80000/100</split:quantity>
@@ -610,10 +610,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-02 22:00:00 -0800</ts:date>
+    <ts:date>2001-01-03 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-12-20 10:05:39 -0800</ts:date>
+    <ts:date>2000-12-20 19:05:39 +0100</ts:date>
     <ts:ns>389786000</ts:ns>
   </trn:date-entered>
   <trn:description>Paycheck deposit</trn:description>
@@ -623,7 +623,7 @@
       <split:memo>Effect on checking</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+        <ts:date>2001-01-16 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>80000/100</split:value>
       <split:quantity>80000/100</split:quantity>
@@ -662,10 +662,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-14 22:00:00 -0800</ts:date>
+    <ts:date>2001-01-15 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-16 08:38:22 -0800</ts:date>
+    <ts:date>2001-01-16 17:38:22 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Service charge</trn:description>
   <trn:splits>
@@ -680,7 +680,7 @@
       <split:id type="guid">42b82c4437208eba6afaa9e7ce76bb61</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+        <ts:date>2001-01-16 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-500/100</split:value>
       <split:quantity>-500/100</split:quantity>
@@ -695,10 +695,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+    <ts:date>2001-01-16 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-16 07:52:39 -0800</ts:date>
+    <ts:date>2001-01-16 16:52:39 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Transfer from Savings</trn:description>
   <trn:splits>
@@ -706,7 +706,7 @@
       <split:id type="guid">ff61df2aa1ff54a7683ded3312c7cde9</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+        <ts:date>2001-01-16 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>50000/100</split:value>
       <split:quantity>50000/100</split:quantity>
@@ -729,10 +729,10 @@
   </trn:currency>
   <trn:num>ATM</trn:num>
   <trn:date-posted>
-    <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+    <ts:date>2001-01-16 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-16 08:25:34 -0800</ts:date>
+    <ts:date>2001-01-16 17:25:34 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Cash withdrawal</trn:description>
   <trn:splits>
@@ -747,7 +747,7 @@
       <split:id type="guid">9d5f50ab638f22ec7be2833c3dc2487d</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+        <ts:date>2001-01-16 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-10000/100</split:value>
       <split:quantity>-10000/100</split:quantity>
@@ -763,10 +763,10 @@
   </trn:currency>
   <trn:num>100</trn:num>
   <trn:date-posted>
-    <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+    <ts:date>2001-01-16 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-16 08:14:37 -0800</ts:date>
+    <ts:date>2001-01-16 17:14:37 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Home Town Grocery</trn:description>
   <trn:splits>
@@ -781,7 +781,7 @@
       <split:id type="guid">2244e92f65e67e37f4d237278a70aa8f</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+        <ts:date>2001-01-16 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-7500/100</split:value>
       <split:quantity>-7500/100</split:quantity>
@@ -797,10 +797,10 @@
   </trn:currency>
   <trn:num>101</trn:num>
   <trn:date-posted>
-    <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+    <ts:date>2001-01-16 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-16 08:19:55 -0800</ts:date>
+    <ts:date>2001-01-16 17:19:55 +0100</ts:date>
   </trn:date-entered>
   <trn:description>ABC Hardware</trn:description>
   <trn:splits>
@@ -825,7 +825,7 @@
       <split:memo>Parts and tools</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+        <ts:date>2001-01-16 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-10000/100</split:value>
       <split:quantity>-10000/100</split:quantity>
@@ -840,10 +840,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-02-04 22:00:00 -0800</ts:date>
+    <ts:date>2001-02-05 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 17:36:36 -0800</ts:date>
+    <ts:date>2001-02-20 02:36:36 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Payment of bill</trn:description>
   <trn:splits>
@@ -851,7 +851,7 @@
       <split:id type="guid">eed91ed9af5677c13e860157aed999d1</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-02-27 22:00:00 -0800</ts:date>
+        <ts:date>2001-02-28 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>30000/100</split:value>
       <split:quantity>30000/100</split:quantity>
@@ -874,10 +874,10 @@
   </trn:currency>
   <trn:num>104</trn:num>
   <trn:date-posted>
-    <ts:date>2001-03-04 22:00:00 -0800</ts:date>
+    <ts:date>2001-03-05 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 17:47:42 -0800</ts:date>
+    <ts:date>2001-02-20 02:47:42 +0100</ts:date>
     <ts:ns>926968000</ts:ns>
   </trn:date-entered>
   <trn:description>Payment of bill</trn:description>
@@ -905,10 +905,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-15 22:00:00 -0800</ts:date>
+    <ts:date>2001-01-16 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-16 07:33:53 -0800</ts:date>
+    <ts:date>2001-01-16 16:33:53 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Opening Balance</trn:description>
   <trn:splits>
@@ -935,10 +935,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-30 22:00:00 -0800</ts:date>
+    <ts:date>2001-01-31 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 14:36:43 -0800</ts:date>
+    <ts:date>2001-02-19 23:36:43 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Opening Balance</trn:description>
   <trn:splits>
@@ -953,7 +953,7 @@
       <split:id type="guid">cc135c8a137d846a963066bfc423c021</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-02-27 22:00:00 -0800</ts:date>
+        <ts:date>2001-02-28 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-100000/100</split:value>
       <split:quantity>-100000/100</split:quantity>
@@ -968,10 +968,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-31 22:00:00 -0800</ts:date>
+    <ts:date>2001-02-01 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 15:25:02 -0800</ts:date>
+    <ts:date>2001-02-20 00:25:02 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Greasy Spoon Cafe</trn:description>
   <trn:splits>
@@ -986,7 +986,7 @@
       <split:id type="guid">54f62e99004b96a3ee68f039dc31bf73</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-02-27 22:00:00 -0800</ts:date>
+        <ts:date>2001-02-28 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-2500/100</split:value>
       <split:quantity>-2500/100</split:quantity>
@@ -1001,10 +1001,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-02-02 22:00:00 -0800</ts:date>
+    <ts:date>2001-02-03 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 15:25:43 -0800</ts:date>
+    <ts:date>2001-02-20 00:25:43 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Faux Pas Fashions</trn:description>
   <trn:splits>
@@ -1019,7 +1019,7 @@
       <split:id type="guid">db1fdfb171f7c20f6ac5e8086010faf2</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-02-27 22:00:00 -0800</ts:date>
+        <ts:date>2001-02-28 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-10000/100</split:value>
       <split:quantity>-10000/100</split:quantity>
@@ -1034,10 +1034,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-02-14 22:00:00 -0800</ts:date>
+    <ts:date>2001-02-15 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 15:26:38 -0800</ts:date>
+    <ts:date>2001-02-20 00:26:38 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Premium Gasoline</trn:description>
   <trn:splits>
@@ -1052,7 +1052,7 @@
       <split:id type="guid">b8479d346c1ccec3371c7f6e51e94850</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-02-27 22:00:00 -0800</ts:date>
+        <ts:date>2001-02-28 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-2500/100</split:value>
       <split:quantity>-2500/100</split:quantity>
@@ -1067,10 +1067,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-02-19 22:00:00 -0800</ts:date>
+    <ts:date>2001-02-20 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 15:28:01 -0800</ts:date>
+    <ts:date>2001-02-20 00:28:01 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Groceries R Us</trn:description>
   <trn:splits>
@@ -1095,7 +1095,7 @@
       <split:memo>Total charge</split:memo>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-02-27 22:00:00 -0800</ts:date>
+        <ts:date>2001-02-28 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-12500/100</split:value>
       <split:quantity>-12500/100</split:quantity>
@@ -1110,10 +1110,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-02-24 22:00:00 -0800</ts:date>
+    <ts:date>2001-02-25 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 15:29:38 -0800</ts:date>
+    <ts:date>2001-02-20 00:29:38 +0100</ts:date>
   </trn:date-entered>
   <trn:description>CheapMart</trn:description>
   <trn:splits>
@@ -1128,7 +1128,7 @@
       <split:id type="guid">e5cce296604b1eee149bec0957316238</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-02-27 22:00:00 -0800</ts:date>
+        <ts:date>2001-02-28 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-6000/100</split:value>
       <split:quantity>-6000/100</split:quantity>
@@ -1143,10 +1143,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-02-24 22:00:00 -0800</ts:date>
+    <ts:date>2001-02-25 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 15:39:32 -0800</ts:date>
+    <ts:date>2001-02-20 00:39:32 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Faux Pas Fashions</trn:description>
   <trn:splits>
@@ -1154,7 +1154,7 @@
       <split:id type="guid">ac79d516c3d665eadc58272dae5c87f9</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-02-27 22:00:00 -0800</ts:date>
+        <ts:date>2001-02-28 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>10000/100</split:value>
       <split:quantity>10000/100</split:quantity>
@@ -1176,10 +1176,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-02-24 22:00:00 -0800</ts:date>
+    <ts:date>2001-02-25 07:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-02-19 16:19:27 -0800</ts:date>
+    <ts:date>2001-02-20 01:19:27 +0100</ts:date>
   </trn:date-entered>
   <trn:description>Finance Charge</trn:description>
   <trn:splits>
@@ -1194,7 +1194,7 @@
       <split:id type="guid">cb8b3b3cb076ec3b6a46325ea6b65eaa</split:id>
       <split:reconciled-state>y</split:reconciled-state>
       <split:reconcile-date>
-        <ts:date>2001-02-27 22:00:00 -0800</ts:date>
+        <ts:date>2001-02-28 07:00:00 +0100</ts:date>
       </split:reconcile-date>
       <split:value>-2000/100</split:value>
       <split:quantity>-2000/100</split:quantity>

@@ -195,7 +195,7 @@ typedef gboolean (*gnc_tree_view_owner_filter_func)(GncOwner *owner, gpointer da
 void gnc_tree_view_owner_set_filter (GncTreeViewOwner *owner_view,
                                      gnc_tree_view_owner_filter_func func,
                                      gpointer data,
-                                     GtkFunction destroy);
+                                     GSourceFunc destroy);
 
 
 /** This function forces the owner tree filter to be evaluated.  It

@@ -239,7 +239,7 @@ gnc_plugin_page_sx_list_dispose(GObject *object)
 
     g_object_unref(G_OBJECT(priv->dense_cal_model));
     priv->dense_cal_model = NULL;
-    gtk_widget_unref(GTK_WIDGET(priv->gdcal));
+    g_object_unref(GTK_WIDGET(priv->gdcal));
     priv->gdcal = NULL;
     g_object_unref(G_OBJECT(priv->instances));
     priv->instances = NULL;

@@ -131,7 +131,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -148,7 +148,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -165,7 +165,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -182,7 +182,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -199,7 +199,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -216,7 +216,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -233,7 +233,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -250,7 +250,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -267,7 +267,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -284,7 +284,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -301,7 +301,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -318,7 +318,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -335,7 +335,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -352,7 +352,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -369,7 +369,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -386,7 +386,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -403,7 +403,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -420,7 +420,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -437,7 +437,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -454,7 +454,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -471,7 +471,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -488,7 +488,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -505,7 +505,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -522,7 +522,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -539,7 +539,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -556,7 +556,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -573,7 +573,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -590,7 +590,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -607,7 +607,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -624,7 +624,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -641,7 +641,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -658,7 +658,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -675,7 +675,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -692,7 +692,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -709,7 +709,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -726,7 +726,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:57:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -743,7 +743,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:57:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -760,7 +760,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:57:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -777,7 +777,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:57:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -794,7 +794,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:57:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -811,7 +811,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:57:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:57:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -828,7 +828,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -845,7 +845,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -862,7 +862,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -879,7 +879,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -896,7 +896,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -913,7 +913,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -930,7 +930,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -947,7 +947,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -964,7 +964,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -981,7 +981,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -998,7 +998,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1015,7 +1015,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1032,7 +1032,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1049,7 +1049,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1066,7 +1066,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1083,7 +1083,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1100,7 +1100,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1117,7 +1117,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1134,7 +1134,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1151,7 +1151,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1168,7 +1168,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1185,7 +1185,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1202,7 +1202,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1219,7 +1219,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1236,7 +1236,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1253,7 +1253,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1270,7 +1270,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1287,7 +1287,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1304,7 +1304,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1321,7 +1321,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1338,7 +1338,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1355,7 +1355,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1372,7 +1372,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1389,7 +1389,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1406,7 +1406,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1423,7 +1423,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1440,7 +1440,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1457,7 +1457,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1474,7 +1474,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1491,7 +1491,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1508,7 +1508,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1525,7 +1525,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1542,7 +1542,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1559,7 +1559,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1576,7 +1576,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1593,7 +1593,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1610,7 +1610,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1627,7 +1627,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1644,7 +1644,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1661,7 +1661,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1678,7 +1678,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1695,7 +1695,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1712,7 +1712,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1729,7 +1729,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1746,7 +1746,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1763,7 +1763,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1780,7 +1780,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1797,7 +1797,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1814,7 +1814,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1831,7 +1831,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1848,7 +1848,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1865,7 +1865,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1882,7 +1882,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1899,7 +1899,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1916,7 +1916,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1933,7 +1933,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1950,7 +1950,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1967,7 +1967,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -1984,7 +1984,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2001,7 +2001,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2018,7 +2018,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2035,7 +2035,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2052,7 +2052,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2069,7 +2069,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2086,7 +2086,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2103,7 +2103,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2120,7 +2120,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2137,7 +2137,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2154,7 +2154,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2171,7 +2171,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2188,7 +2188,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2205,7 +2205,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2222,7 +2222,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2239,7 +2239,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2256,7 +2256,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2273,7 +2273,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2290,7 +2290,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2307,7 +2307,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2324,7 +2324,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2341,7 +2341,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2358,7 +2358,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2375,7 +2375,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2392,7 +2392,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2409,7 +2409,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2426,7 +2426,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2443,7 +2443,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2460,7 +2460,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2477,7 +2477,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2494,7 +2494,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2511,7 +2511,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2528,7 +2528,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2545,7 +2545,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2562,7 +2562,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2579,7 +2579,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2596,7 +2596,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2613,7 +2613,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2630,7 +2630,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2647,7 +2647,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2664,7 +2664,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2681,7 +2681,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2698,7 +2698,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2715,7 +2715,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2732,7 +2732,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2749,7 +2749,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2766,7 +2766,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:01:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2783,7 +2783,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2800,7 +2800,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:58:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2817,7 +2817,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:01:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2834,7 +2834,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:01:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2851,7 +2851,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:01:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2868,7 +2868,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:01:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2885,7 +2885,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:01:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2902,7 +2902,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:01:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:01:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2919,7 +2919,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2936,7 +2936,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2953,7 +2953,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2970,7 +2970,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -2987,7 +2987,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3004,7 +3004,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3021,7 +3021,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3038,7 +3038,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3055,7 +3055,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3072,7 +3072,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3089,7 +3089,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3106,7 +3106,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3123,7 +3123,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3140,7 +3140,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3157,7 +3157,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3174,7 +3174,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3191,7 +3191,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3208,7 +3208,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3225,7 +3225,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3242,7 +3242,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3259,7 +3259,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3276,7 +3276,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3293,7 +3293,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3310,7 +3310,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3327,7 +3327,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3344,7 +3344,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3361,7 +3361,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3378,7 +3378,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3395,7 +3395,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3412,7 +3412,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3429,7 +3429,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3446,7 +3446,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3463,7 +3463,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:04:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3480,7 +3480,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3497,7 +3497,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:58:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3514,7 +3514,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:04:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3531,7 +3531,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:04:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3548,7 +3548,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:04:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3565,7 +3565,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:04:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3582,7 +3582,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:04:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3599,7 +3599,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:04:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:04:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3616,7 +3616,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3633,7 +3633,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3650,7 +3650,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3667,7 +3667,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3684,7 +3684,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3701,7 +3701,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3718,7 +3718,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3735,7 +3735,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3752,7 +3752,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3769,7 +3769,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3786,7 +3786,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3803,7 +3803,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3820,7 +3820,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3837,7 +3837,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3854,7 +3854,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3871,7 +3871,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3888,7 +3888,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3905,7 +3905,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3922,7 +3922,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3939,7 +3939,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3956,7 +3956,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3973,7 +3973,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -3990,7 +3990,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4007,7 +4007,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4024,7 +4024,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4041,7 +4041,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4058,7 +4058,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4075,7 +4075,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4092,7 +4092,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4109,7 +4109,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4126,7 +4126,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4143,7 +4143,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4160,7 +4160,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4177,7 +4177,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4194,7 +4194,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:58:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4211,7 +4211,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4228,7 +4228,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4245,7 +4245,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4262,7 +4262,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4279,7 +4279,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4296,7 +4296,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-21 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-21 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4313,7 +4313,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4330,7 +4330,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4347,7 +4347,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4364,7 +4364,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4381,7 +4381,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4398,7 +4398,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4415,7 +4415,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4432,7 +4432,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4449,7 +4449,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4466,7 +4466,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4483,7 +4483,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4500,7 +4500,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4517,7 +4517,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4534,7 +4534,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4551,7 +4551,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4568,7 +4568,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4585,7 +4585,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4602,7 +4602,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4619,7 +4619,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4636,7 +4636,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4653,7 +4653,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4670,7 +4670,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4687,7 +4687,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4704,7 +4704,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4721,7 +4721,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4738,7 +4738,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4755,7 +4755,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4772,7 +4772,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4789,7 +4789,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4806,7 +4806,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4823,7 +4823,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4840,7 +4840,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4857,7 +4857,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4874,7 +4874,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4891,7 +4891,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4908,7 +4908,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4925,7 +4925,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4942,7 +4942,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4959,7 +4959,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:00:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:00:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4976,7 +4976,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -4993,7 +4993,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:58:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5010,7 +5010,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5027,7 +5027,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5044,7 +5044,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5061,7 +5061,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5078,7 +5078,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5095,7 +5095,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5112,7 +5112,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5129,7 +5129,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5146,7 +5146,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5163,7 +5163,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5180,7 +5180,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5197,7 +5197,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5214,7 +5214,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5231,7 +5231,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5248,7 +5248,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5265,7 +5265,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5282,7 +5282,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5299,7 +5299,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5316,7 +5316,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5333,7 +5333,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5350,7 +5350,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5367,7 +5367,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5384,7 +5384,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5401,7 +5401,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5418,7 +5418,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5435,7 +5435,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5452,7 +5452,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5469,7 +5469,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5486,7 +5486,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5503,7 +5503,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5520,7 +5520,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5537,7 +5537,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5554,7 +5554,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-26 23:02:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5571,7 +5571,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:59:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:59:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5588,7 +5588,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-26 12:58:00 -0800</ts:date>
+      <ts:date>2001-03-26 22:58:00 +0200</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5605,7 +5605,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5622,7 +5622,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5639,7 +5639,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5656,7 +5656,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5673,7 +5673,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>
@@ -5690,7 +5690,7 @@
       <cmdty:id>USD</cmdty:id>
     </price:currency>
     <price:time>
-      <ts:date>2001-03-23 13:02:00 -0800</ts:date>
+      <ts:date>2001-03-23 22:02:00 +0100</ts:date>
     </price:time>
     <price:source>Finance::Quote</price:source>
     <price:type>last</price:type>

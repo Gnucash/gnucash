@@ -26,9 +26,9 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_DOUBLE		(gnc_search_double_get_type ())
-#define GNCSEARCH_DOUBLE(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_DOUBLE, GNCSearchDouble)
-#define GNCSEARCH_DOUBLE_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_DOUBLE, GNCSearchDoubleClass)
-#define IS_GNCSEARCH_DOUBLE(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_DOUBLE)
+#define GNCSEARCH_DOUBLE(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_DOUBLE, GNCSearchDouble)
+#define GNCSEARCH_DOUBLE_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_DOUBLE, GNCSearchDoubleClass)
+#define IS_GNCSEARCH_DOUBLE(obj)	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_DOUBLE)
 
 typedef struct _GNCSearchDouble	GNCSearchDouble;
 typedef struct _GNCSearchDoubleClass	GNCSearchDoubleClass;

@@ -79,7 +79,7 @@ typedef struct GncTreeViewOwnerPrivate
 
     gnc_tree_view_owner_filter_func filter_fn;
     gpointer                          filter_data;
-    GtkFunction                       filter_destroy;
+    GSourceFunc                       filter_destroy;
 
     GtkTreeViewColumn *name_column;
     GtkTreeViewColumn *id_column;
@@ -631,7 +631,7 @@ void
 gnc_tree_view_owner_set_filter (GncTreeViewOwner *view,
                                 gnc_tree_view_owner_filter_func func,
                                 gpointer data,
-                                GtkFunction destroy)
+                                GSourceFunc destroy)
 {
     GncTreeViewOwnerPrivate *priv;
 
@@ -1351,7 +1351,7 @@ gtvo_set_column_editor(GncTreeViewOwner *view,
 
     // look for the first text-renderer; on the 0th column of the owner tree,
     // there are two renderers: pixbuf and text.  So find the text one.
-    for (renderers_orig = renderers = gtk_tree_view_column_get_cell_renderers(column);
+    for (renderers_orig = renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
             renderers && !GTK_IS_CELL_RENDERER_TEXT(renderers->data);
             renderers = renderers->next);
     renderer = GTK_CELL_RENDERER(renderers->data);

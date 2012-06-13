@@ -27,9 +27,9 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_DATE		(gnc_search_date_get_type ())
-#define GNCSEARCH_DATE(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_DATE, GNCSearchDate)
-#define GNCSEARCH_DATE_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_DATE, GNCSearchDateClass)
-#define IS_GNCSEARCH_DATE(obj)     	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_DATE)
+#define GNCSEARCH_DATE(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_DATE, GNCSearchDate)
+#define GNCSEARCH_DATE_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_DATE, GNCSearchDateClass)
+#define IS_GNCSEARCH_DATE(obj)     	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_DATE)
 
 typedef struct _GNCSearchDate	GNCSearchDate;
 typedef struct _GNCSearchDateClass	GNCSearchDateClass;

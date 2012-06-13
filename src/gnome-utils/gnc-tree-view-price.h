@@ -143,7 +143,7 @@ void gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
                                      gnc_tree_view_price_cm_filter_func cm_func,
                                      gnc_tree_view_price_pc_filter_func pc_func,
                                      gpointer data,
-                                     GtkDestroyNotify destroy);
+                                     GDestroyNotify destroy);
 /** @} */
 
 

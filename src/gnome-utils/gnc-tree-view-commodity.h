@@ -159,7 +159,7 @@ void gnc_tree_view_commodity_set_filter (GncTreeViewCommodity *view,
         gnc_tree_view_commodity_ns_filter_func ns_func,
         gnc_tree_view_commodity_cm_filter_func cm_func,
         gpointer data,
-        GtkDestroyNotify destroy);
+        GDestroyNotify destroy);
 
 
 /** This function forces the commodity tree filter to be evaluated.  It

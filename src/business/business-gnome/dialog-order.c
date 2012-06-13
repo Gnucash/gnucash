@@ -433,7 +433,7 @@ gnc_order_update_window (OrderWindow *ow)
     if (ow->owner_choice)
     {
         gtk_container_remove (GTK_CONTAINER (ow->owner_box), ow->owner_choice);
-        gtk_object_destroy (GTK_OBJECT (ow->owner_choice));
+        gtk_widget_destroy (ow->owner_choice);
     }
 
     switch (ow->dialog_type)
@@ -507,10 +507,10 @@ gnc_order_update_window (OrderWindow *ow)
 
     if (hide_cd)
     {
-        gtk_widget_hide_all (ow->closed_date);
-        gtk_widget_hide_all (ow->cd_label);
-        gtk_widget_hide_all (ow->hide1);
-        gtk_widget_hide_all (ow->hide2);
+        gtk_widget_hide (ow->closed_date);
+        gtk_widget_hide (ow->cd_label);
+        gtk_widget_hide (ow->hide1);
+        gtk_widget_hide (ow->hide2);
     }
 
     if (ow->dialog_type == VIEW_ORDER)
@@ -522,7 +522,7 @@ gnc_order_update_window (OrderWindow *ow)
         gtk_widget_set_sensitive (ow->notes_text, FALSE); /* XXX: Should notes remain writable? */
 
         /* Hide the 'close order' button */
-        gtk_widget_hide_all (ow->close_order_button);
+        gtk_widget_hide (ow->close_order_button);
     }
 }
 

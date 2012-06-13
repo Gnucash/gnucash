@@ -390,10 +390,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-03-23 21:00:00 -0800</ts:date>
+    <ts:date>1993-03-24 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>712028000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -422,10 +422,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1993-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>739492000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -453,10 +453,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-04-29 21:00:00 -0700</ts:date>
+    <ts:date>1993-04-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>795666000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -484,10 +484,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-05-30 21:00:00 -0700</ts:date>
+    <ts:date>1993-05-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>799715000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -515,10 +515,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-06-29 21:00:00 -0700</ts:date>
+    <ts:date>1993-06-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>852837000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -546,10 +546,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-07-30 21:00:00 -0700</ts:date>
+    <ts:date>1993-07-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>887346000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -577,10 +577,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-08-30 21:00:00 -0700</ts:date>
+    <ts:date>1993-08-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>920642000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -608,10 +608,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-09-29 21:00:00 -0700</ts:date>
+    <ts:date>1993-09-30 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>195612000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -639,10 +639,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-10-30 21:00:00 -0700</ts:date>
+    <ts:date>1993-10-31 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>242264000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -670,10 +670,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-11-29 21:00:00 -0800</ts:date>
+    <ts:date>1993-11-30 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>292049000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -701,10 +701,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-30 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>426822000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -732,10 +732,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-01-30 21:00:00 -0800</ts:date>
+    <ts:date>1994-01-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>481957000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -763,10 +763,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-02-27 21:00:00 -0800</ts:date>
+    <ts:date>1994-02-28 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>564263000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -794,10 +794,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1994-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>664060000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -825,10 +825,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-04-29 21:00:00 -0700</ts:date>
+    <ts:date>1994-04-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>716774000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -856,10 +856,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-05-30 21:00:00 -0700</ts:date>
+    <ts:date>1994-05-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>764011000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -887,10 +887,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-06-29 21:00:00 -0700</ts:date>
+    <ts:date>1994-06-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>849025000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -918,10 +918,10 @@
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-07-30 21:00:00 -0700</ts:date>
+    <ts:date>1994-07-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>900265000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -949,10 +949,10 @@
     <cmdty:id>FID Eq Inc II</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-04-27 21:00:00 -0700</ts:date>
+    <ts:date>1993-04-28 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>792210000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -988,10 +988,10 @@
     <cmdty:id>FID Eq Inc II</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-06-10 21:00:00 -0700</ts:date>
+    <ts:date>1993-06-11 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>831653000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1019,10 +1019,10 @@
     <cmdty:id>FID Eq Inc II</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-09-09 21:00:00 -0700</ts:date>
+    <ts:date>1993-09-10 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>183541000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1050,10 +1050,10 @@
     <cmdty:id>IRR</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-16 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-17 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>390709000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1088,10 +1088,10 @@
     <cmdty:id>IRR</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-16 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-17 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>395796000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1126,10 +1126,10 @@
     <cmdty:id>FID Eq Inc II</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-16 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-17 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>401628000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1157,10 +1157,10 @@
     <cmdty:id>FID Eq Inc II</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-01-06 21:00:00 -0800</ts:date>
+    <ts:date>1994-01-07 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>463277000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1188,10 +1188,10 @@
     <cmdty:id>FID Eq Inc II</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-03-10 21:00:00 -0800</ts:date>
+    <ts:date>1994-03-11 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>613627000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1219,10 +1219,10 @@
     <cmdty:id>FID Eq Inc II</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-06-16 21:00:00 -0700</ts:date>
+    <ts:date>1994-06-17 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>839384000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1250,10 +1250,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1988-12-31 21:00:00 -0800</ts:date>
+    <ts:date>1989-01-01 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>389282000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1282,10 +1282,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-01-30 21:00:00 -0800</ts:date>
+    <ts:date>1989-01-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>394957000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1313,10 +1313,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-02-02 21:00:00 -0800</ts:date>
+    <ts:date>1989-02-03 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>400522000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1345,10 +1345,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-02-27 21:00:00 -0800</ts:date>
+    <ts:date>1989-02-28 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>403213000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1376,10 +1376,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-03-21 21:00:00 -0800</ts:date>
+    <ts:date>1989-03-22 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>415826000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1407,10 +1407,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1989-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>419387000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1438,10 +1438,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-04-29 21:00:00 -0700</ts:date>
+    <ts:date>1989-04-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>422649000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1469,10 +1469,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-05-30 21:00:00 -0700</ts:date>
+    <ts:date>1989-05-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>426211000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1500,10 +1500,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-06-29 21:00:00 -0700</ts:date>
+    <ts:date>1989-06-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>515035000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1531,10 +1531,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-07-30 21:00:00 -0700</ts:date>
+    <ts:date>1989-07-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>523107000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1562,10 +1562,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-08-30 21:00:00 -0700</ts:date>
+    <ts:date>1989-08-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>529783000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1593,10 +1593,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-09-29 21:00:00 -0700</ts:date>
+    <ts:date>1989-09-30 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>543932000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1624,10 +1624,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-10-30 21:00:00 -0800</ts:date>
+    <ts:date>1989-10-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>553825000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1655,10 +1655,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-11-29 21:00:00 -0800</ts:date>
+    <ts:date>1989-11-30 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>572519000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1686,10 +1686,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-12-30 21:00:00 -0800</ts:date>
+    <ts:date>1989-12-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>624189000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1717,10 +1717,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-01-30 21:00:00 -0800</ts:date>
+    <ts:date>1990-01-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>632046000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1748,10 +1748,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-02-27 21:00:00 -0800</ts:date>
+    <ts:date>1990-02-28 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>642472000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1779,10 +1779,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-03-11 21:00:00 -0800</ts:date>
+    <ts:date>1990-03-12 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>658326000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1811,10 +1811,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-03-15 21:00:00 -0800</ts:date>
+    <ts:date>1990-03-16 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>665613000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1843,10 +1843,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1990-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>683102000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1874,10 +1874,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-04-29 21:00:00 -0700</ts:date>
+    <ts:date>1990-04-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>692027000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1905,10 +1905,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-05-30 21:00:00 -0700</ts:date>
+    <ts:date>1990-05-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>706155000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1936,10 +1936,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-06-29 21:00:00 -0700</ts:date>
+    <ts:date>1990-06-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>732758000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1967,10 +1967,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-07-08 21:00:00 -0700</ts:date>
+    <ts:date>1990-07-09 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>750573000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2006,10 +2006,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-07-30 21:00:00 -0700</ts:date>
+    <ts:date>1990-07-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>763310000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2037,10 +2037,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-08-26 21:00:00 -0700</ts:date>
+    <ts:date>1990-08-27 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>781712000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2069,10 +2069,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-08-30 21:00:00 -0700</ts:date>
+    <ts:date>1990-08-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>793770000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2100,10 +2100,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-09-29 21:00:00 -0700</ts:date>
+    <ts:date>1990-09-30 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>822127000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2131,10 +2131,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-10-30 21:00:00 -0800</ts:date>
+    <ts:date>1990-10-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>832680000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2162,10 +2162,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-11-15 21:00:00 -0800</ts:date>
+    <ts:date>1990-11-16 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>843406000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2194,10 +2194,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-11-29 21:00:00 -0800</ts:date>
+    <ts:date>1990-11-30 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>855909000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2225,10 +2225,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-12-30 21:00:00 -0800</ts:date>
+    <ts:date>1990-12-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>875804000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2256,10 +2256,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-01-30 21:00:00 -0800</ts:date>
+    <ts:date>1991-01-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>889309000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2287,10 +2287,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-02-27 21:00:00 -0800</ts:date>
+    <ts:date>1991-02-28 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>902153000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2318,10 +2318,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1991-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>931615000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2349,10 +2349,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-04-29 21:00:00 -0700</ts:date>
+    <ts:date>1991-04-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>954218000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2380,10 +2380,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-05-30 21:00:00 -0700</ts:date>
+    <ts:date>1991-05-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>965787000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2411,10 +2411,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-06-29 21:00:00 -0700</ts:date>
+    <ts:date>1991-06-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>35491000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2442,10 +2442,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-07-30 21:00:00 -0700</ts:date>
+    <ts:date>1991-07-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>50028000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2473,10 +2473,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-08-30 21:00:00 -0700</ts:date>
+    <ts:date>1991-08-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>65209000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2504,10 +2504,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-09-29 21:00:00 -0700</ts:date>
+    <ts:date>1991-09-30 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>130770000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2535,10 +2535,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-10-30 21:00:00 -0800</ts:date>
+    <ts:date>1991-10-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>144398000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2566,10 +2566,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-11-29 21:00:00 -0800</ts:date>
+    <ts:date>1991-11-30 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>160459000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2597,10 +2597,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-12-30 21:00:00 -0800</ts:date>
+    <ts:date>1991-12-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>193766000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2628,10 +2628,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-01-30 21:00:00 -0800</ts:date>
+    <ts:date>1992-01-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>210773000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2659,10 +2659,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-02-28 21:00:00 -0800</ts:date>
+    <ts:date>1992-02-29 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>225678000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2690,10 +2690,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1992-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>262643000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2721,10 +2721,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-04-29 21:00:00 -0700</ts:date>
+    <ts:date>1992-04-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>280782000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2752,10 +2752,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-05-30 21:00:00 -0700</ts:date>
+    <ts:date>1992-05-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>295354000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2783,10 +2783,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-06-29 21:00:00 -0700</ts:date>
+    <ts:date>1992-06-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>324440000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2814,10 +2814,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-07-30 21:00:00 -0700</ts:date>
+    <ts:date>1992-07-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>344988000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2845,10 +2845,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-08-30 21:00:00 -0700</ts:date>
+    <ts:date>1992-08-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>370192000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2876,10 +2876,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-09-29 21:00:00 -0700</ts:date>
+    <ts:date>1992-09-30 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>432558000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2907,10 +2907,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-10-30 21:00:00 -0800</ts:date>
+    <ts:date>1992-10-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>459844000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2938,10 +2938,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-11-29 21:00:00 -0800</ts:date>
+    <ts:date>1992-11-30 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>526076000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2969,10 +2969,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-12-30 21:00:00 -0800</ts:date>
+    <ts:date>1992-12-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>591693000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3000,10 +3000,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-01-30 21:00:00 -0800</ts:date>
+    <ts:date>1993-01-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>640235000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3031,10 +3031,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-02-27 21:00:00 -0800</ts:date>
+    <ts:date>1993-02-28 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>667629000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3062,10 +3062,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-03-25 21:00:00 -0800</ts:date>
+    <ts:date>1993-03-26 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>724378000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3093,10 +3093,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1993-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>761094000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3124,10 +3124,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1993-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>781218000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3155,10 +3155,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-05-30 21:00:00 -0700</ts:date>
+    <ts:date>1993-05-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>820663000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3186,10 +3186,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-06-29 21:00:00 -0700</ts:date>
+    <ts:date>1993-06-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>873979000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3217,10 +3217,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-07-30 21:00:00 -0700</ts:date>
+    <ts:date>1993-07-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>902174000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3248,10 +3248,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-08-30 21:00:00 -0700</ts:date>
+    <ts:date>1993-08-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>934365000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3279,10 +3279,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-09-29 21:00:00 -0700</ts:date>
+    <ts:date>1993-09-30 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>221118000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3310,10 +3310,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-10-30 21:00:00 -0700</ts:date>
+    <ts:date>1993-10-31 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>271797000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3341,10 +3341,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-11-29 21:00:00 -0800</ts:date>
+    <ts:date>1993-11-30 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>311218000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3372,10 +3372,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-30 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>448368000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3403,10 +3403,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-01-30 21:00:00 -0800</ts:date>
+    <ts:date>1994-01-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>540528000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3434,10 +3434,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-02-27 21:00:00 -0800</ts:date>
+    <ts:date>1994-02-28 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>600129000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3465,10 +3465,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1994-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>691841000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3496,10 +3496,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-04-29 21:00:00 -0700</ts:date>
+    <ts:date>1994-04-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>750397000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3527,10 +3527,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-05-30 21:00:00 -0700</ts:date>
+    <ts:date>1994-05-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>798535000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3558,10 +3558,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-06-29 21:00:00 -0700</ts:date>
+    <ts:date>1994-06-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>873703000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3589,10 +3589,10 @@
     <cmdty:id>FID Govt Res</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-07-30 21:00:00 -0700</ts:date>
+    <ts:date>1994-07-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>923053000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3620,10 +3620,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1988-12-31 21:00:00 -0800</ts:date>
+    <ts:date>1989-01-01 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>387023000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3652,10 +3652,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-01-05 21:00:00 -0800</ts:date>
+    <ts:date>1989-01-06 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>392268000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3684,10 +3684,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-03-21 21:00:00 -0800</ts:date>
+    <ts:date>1989-03-22 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>406030000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3715,10 +3715,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-06-20 21:00:00 -0700</ts:date>
+    <ts:date>1989-06-21 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>502484000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3746,10 +3746,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-09-06 21:00:00 -0700</ts:date>
+    <ts:date>1989-09-07 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>534827000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3777,10 +3777,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-09-06 21:00:00 -0700</ts:date>
+    <ts:date>1989-09-07 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>539150000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3808,10 +3808,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-11-09 21:00:00 -0800</ts:date>
+    <ts:date>1989-11-10 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>566126000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3847,10 +3847,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-12-06 21:00:00 -0800</ts:date>
+    <ts:date>1989-12-07 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>580938000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3878,10 +3878,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-12-06 21:00:00 -0800</ts:date>
+    <ts:date>1989-12-07 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>599777000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3909,10 +3909,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1989-12-06 21:00:00 -0800</ts:date>
+    <ts:date>1989-12-07 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>605179000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3940,10 +3940,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-03-08 21:00:00 -0800</ts:date>
+    <ts:date>1990-03-09 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>650450000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3971,10 +3971,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-06-14 21:00:00 -0700</ts:date>
+    <ts:date>1990-06-15 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>715197000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4002,10 +4002,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-07-05 21:00:00 -0700</ts:date>
+    <ts:date>1990-07-06 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>741484000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4034,10 +4034,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-09-06 21:00:00 -0700</ts:date>
+    <ts:date>1990-09-07 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>802554000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4065,10 +4065,10 @@
     <cmdty:id>IRR</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-09-06 21:00:00 -0700</ts:date>
+    <ts:date>1990-09-07 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>809391000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4103,10 +4103,10 @@
     <cmdty:id>IRR</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1990-12-13 21:00:00 -0800</ts:date>
+    <ts:date>1990-12-14 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>867579000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4141,10 +4141,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-03-07 21:00:00 -0800</ts:date>
+    <ts:date>1991-03-08 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>915250000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4172,10 +4172,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-04-15 21:00:00 -0700</ts:date>
+    <ts:date>1991-04-16 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:48 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:48 +0200</ts:date>
     <ts:ns>944175000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4204,10 +4204,10 @@
     <cmdty:id>IRR</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-06-13 21:00:00 -0700</ts:date>
+    <ts:date>1991-06-14 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>9336000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4242,10 +4242,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-09-05 21:00:00 -0700</ts:date>
+    <ts:date>1991-09-06 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>84032000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4273,10 +4273,10 @@
     <cmdty:id>IRR</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-09-05 21:00:00 -0700</ts:date>
+    <ts:date>1991-09-06 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>101337000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4311,10 +4311,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-09-05 21:00:00 -0700</ts:date>
+    <ts:date>1991-09-06 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>110059000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4342,10 +4342,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1991-12-05 21:00:00 -0800</ts:date>
+    <ts:date>1991-12-06 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>171475000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4373,10 +4373,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-03-12 21:00:00 -0800</ts:date>
+    <ts:date>1992-03-13 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>250396000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4404,10 +4404,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-06-11 21:00:00 -0700</ts:date>
+    <ts:date>1992-06-12 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>312749000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4435,10 +4435,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-09-03 21:00:00 -0700</ts:date>
+    <ts:date>1992-09-04 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>384390000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4466,10 +4466,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-09-03 21:00:00 -0700</ts:date>
+    <ts:date>1992-09-04 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>404235000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4497,10 +4497,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-09-03 21:00:00 -0700</ts:date>
+    <ts:date>1992-09-04 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>414657000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4528,10 +4528,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-11-12 21:00:00 -0800</ts:date>
+    <ts:date>1992-11-13 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>473011000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4567,10 +4567,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-11-15 21:00:00 -0800</ts:date>
+    <ts:date>1992-11-16 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>512951000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4599,10 +4599,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-12-03 21:00:00 -0800</ts:date>
+    <ts:date>1992-12-04 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>553043000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4630,10 +4630,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-12-03 21:00:00 -0800</ts:date>
+    <ts:date>1992-12-04 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>564845000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4661,10 +4661,10 @@
     <cmdty:id>IRR</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1992-12-03 21:00:00 -0800</ts:date>
+    <ts:date>1992-12-04 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>578623000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4699,10 +4699,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-03-11 21:00:00 -0800</ts:date>
+    <ts:date>1993-03-12 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>682752000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4730,10 +4730,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-03-23 21:00:00 -0800</ts:date>
+    <ts:date>1993-03-24 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>695791000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4762,10 +4762,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-06-24 21:00:00 -0700</ts:date>
+    <ts:date>1993-06-25 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>844998000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4793,10 +4793,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-09-02 21:00:00 -0700</ts:date>
+    <ts:date>1993-09-03 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>950696000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4824,10 +4824,10 @@
     <cmdty:id>IRR</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-09-02 21:00:00 -0700</ts:date>
+    <ts:date>1993-09-03 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:49 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:49 +0200</ts:date>
     <ts:ns>972770000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4862,10 +4862,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-09-02 21:00:00 -0700</ts:date>
+    <ts:date>1993-09-03 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>5018000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4893,10 +4893,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-02 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-03 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>339053000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4924,10 +4924,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-02 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-03 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>357816000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4955,10 +4955,10 @@
     <cmdty:id>IRR</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-02 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-03 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>381700000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4993,10 +4993,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-03-17 21:00:00 -0800</ts:date>
+    <ts:date>1994-03-18 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>632156000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5024,10 +5024,10 @@
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-06-16 21:00:00 -0700</ts:date>
+    <ts:date>1994-06-17 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>818547000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5055,10 +5055,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-09-15 21:00:00 -0700</ts:date>
+    <ts:date>1993-09-16 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>188235000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5087,10 +5087,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-09-29 21:00:00 -0700</ts:date>
+    <ts:date>1993-09-30 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>201862000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5118,10 +5118,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-10-30 21:00:00 -0700</ts:date>
+    <ts:date>1993-10-31 05:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>249386000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5149,10 +5149,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-11-29 21:00:00 -0800</ts:date>
+    <ts:date>1993-11-30 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>300351000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5180,10 +5180,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-16 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-17 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>410525000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5211,10 +5211,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1993-12-30 21:00:00 -0800</ts:date>
+    <ts:date>1993-12-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>434149000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5242,10 +5242,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-01-30 21:00:00 -0800</ts:date>
+    <ts:date>1994-01-31 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>488179000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5273,10 +5273,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-02-03 21:00:00 -0800</ts:date>
+    <ts:date>1994-02-04 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>554177000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5304,10 +5304,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-02-27 21:00:00 -0800</ts:date>
+    <ts:date>1994-02-28 06:00:00 +0100</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>572522000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5335,10 +5335,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-03-30 21:00:00 -0800</ts:date>
+    <ts:date>1994-03-31 07:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>671287000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5366,10 +5366,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-04-29 21:00:00 -0700</ts:date>
+    <ts:date>1994-04-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>733134000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5397,10 +5397,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-05-30 21:00:00 -0700</ts:date>
+    <ts:date>1994-05-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>775582000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5428,10 +5428,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-06-29 21:00:00 -0700</ts:date>
+    <ts:date>1994-06-30 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>861245000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5459,10 +5459,10 @@
     <cmdty:id>FID NewMkt Inc</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1994-07-30 21:00:00 -0700</ts:date>
+    <ts:date>1994-07-31 06:00:00 +0200</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 12:41:50 -0800</ts:date>
+    <ts:date>2001-03-26 22:41:50 +0200</ts:date>
     <ts:ns>908364000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>

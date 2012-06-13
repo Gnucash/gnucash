@@ -31,10 +31,10 @@
 
 #include "qof.h"
 
-#define GNC_TYPE_DATE_FORMAT         (gnc_date_format_get_type ())
-#define GNC_DATE_FORMAT(obj)          GTK_CHECK_CAST (obj, gnc_date_format_get_type(), GNCDateFormat)
-#define GNC_DATE_FORMAT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_format_get_type(), GNCDateFormatClass)
-#define GNC_IS_DATE_FORMAT(obj)       GTK_CHECK_TYPE (obj, gnc_date_format_get_type ())
+#define GNC_TYPE_DATE_FORMAT          (gnc_date_format_get_type ())
+#define GNC_DATE_FORMAT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_date_format_get_type(), GNCDateFormat)
+#define GNC_DATE_FORMAT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_date_format_get_type(), GNCDateFormatClass)
+#define GNC_IS_DATE_FORMAT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_date_format_get_type ())
 
 /**
  **/

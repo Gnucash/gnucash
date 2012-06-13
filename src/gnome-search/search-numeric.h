@@ -27,9 +27,9 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_NUMERIC		(gnc_search_numeric_get_type ())
-#define GNCSEARCH_NUMERIC(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumeric)
-#define GNCSEARCH_NUMERIC_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumericClass)
-#define IS_GNCSEARCH_NUMERIC(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_NUMERIC)
+#define GNCSEARCH_NUMERIC(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumeric)
+#define GNCSEARCH_NUMERIC_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumericClass)
+#define IS_GNCSEARCH_NUMERIC(obj)	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_NUMERIC)
 
 typedef struct _GNCSearchNumeric	GNCSearchNumeric;
 typedef struct _GNCSearchNumericClass	GNCSearchNumericClass;

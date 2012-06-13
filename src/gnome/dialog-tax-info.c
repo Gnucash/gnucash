@@ -769,14 +769,14 @@ gui_to_accounts (TaxInfoDialog *ti_dialog)
 }
 
 static void
-identity_edit_destroy_cb (GtkObject *object, gpointer data)
+identity_edit_destroy_cb (GtkDialog *dialog, gpointer data)
 {
     TaxInfoDialog *ti_dialog = data;
 
     ti_dialog->entity_name_entry = NULL;
     ti_dialog->entity_type_combo = NULL;
 
-    gtk_object_destroy (object);
+    gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 static void
@@ -1149,7 +1149,7 @@ identity_edit_response_cb (GtkDialog *dialog, gint response, gpointer data)
         set_focus_sensitivity (ti_dialog);
         ti_dialog->tax_type_changed = FALSE;
     }
-    identity_edit_destroy_cb (GTK_OBJECT (dialog), ti_dialog);
+    identity_edit_destroy_cb (GTK_DIALOG (dialog), ti_dialog);
 }
 
 static void

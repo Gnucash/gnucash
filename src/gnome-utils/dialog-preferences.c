@@ -440,12 +440,12 @@ gnc_prefs_move_table_entry (GtkWidget *child,
                             "y-padding", &y_pad,
                             NULL);
 
-    gtk_widget_ref(child);
+    g_object_ref(child);
     gtk_container_remove(GTK_CONTAINER(copydata->table_from), child);
     gtk_table_attach(copydata->table_to, child, left, right,
                      top + copydata->row_offset, bottom + copydata->row_offset,
                      x_opts, y_opts, x_pad, y_pad);
-    gtk_widget_unref(child);
+    g_object_unref(child);
     LEAVE(" ");
 }
 
