@@ -94,10 +94,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-26 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>31238000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -127,10 +127,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-26 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>32417000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -160,10 +160,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-26 07:00:00 +0200</ts:date>
+    <ts:date>1995-03-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>33369000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -193,10 +193,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-26 06:00:00 +0200</ts:date>
+    <ts:date>1995-04-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>34356000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -226,10 +226,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-26 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>36554000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -259,10 +259,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-26 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>37673000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -292,10 +292,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-26 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>38685000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -325,10 +325,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-12 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>39707000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -358,10 +358,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-26 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>40707000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -391,10 +391,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-01 06:00:00 +0100</ts:date>
+    <ts:date>1994-12-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:28:38 +0200</ts:date>
+    <ts:date>2001-03-26 12:28:38 -0800</ts:date>
     <ts:ns>30261000</ts:ns>
   </trn:date-entered>
   <trn:description>Opening Balance</trn:description>

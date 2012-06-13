@@ -493,10 +493,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-10-21 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>179866000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -524,10 +524,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-16 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-15 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>378164000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -555,10 +555,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-01-23 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-22 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>502983000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -586,10 +586,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-03 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-02 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>558557000</ts:ns>
   </trn:date-entered>
   <trn:description>Opening Balance</trn:description>
@@ -617,10 +617,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-03 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-02 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>560035000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -649,10 +649,10 @@
   </trn:currency>
   <trn:num>106</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-03 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-02 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>562204000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -681,10 +681,10 @@
   </trn:currency>
   <trn:num>107</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-05 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>563780000</ts:ns>
   </trn:date-entered>
   <trn:description>Insurance</trn:description>
@@ -712,10 +712,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-08 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-07 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>566323000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -744,10 +744,10 @@
   </trn:currency>
   <trn:num>108</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-08 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-07 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>567822000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -776,10 +776,10 @@
   </trn:currency>
   <trn:num>109</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-08 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-07 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>569328000</ts:ns>
   </trn:date-entered>
   <trn:description>W Bank</trn:description>
@@ -807,10 +807,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-09 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>570809000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -839,10 +839,10 @@
   </trn:currency>
   <trn:num>110</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-11 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>572524000</ts:ns>
   </trn:date-entered>
   <trn:description>F Visa</trn:description>
@@ -870,10 +870,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-20 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-19 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>574826000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -901,10 +901,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-22 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-21 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>576494000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -933,10 +933,10 @@
   </trn:currency>
   <trn:num>111</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-27 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>578040000</ts:ns>
   </trn:date-entered>
   <trn:description>B's Supermarket</trn:description>
@@ -965,10 +965,10 @@
   </trn:currency>
   <trn:num>112</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-27 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>579581000</ts:ns>
   </trn:date-entered>
   <trn:description>Court</trn:description>
@@ -997,10 +997,10 @@
   </trn:currency>
   <trn:num>113</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-27 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>581273000</ts:ns>
   </trn:date-entered>
   <trn:description>AAA</trn:description>
@@ -1029,10 +1029,10 @@
   </trn:currency>
   <trn:num>114</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-31 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>582830000</ts:ns>
   </trn:date-entered>
   <trn:description>BN</trn:description>
@@ -1061,10 +1061,10 @@
   </trn:currency>
   <trn:num>115</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-31 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>589237000</ts:ns>
   </trn:date-entered>
   <trn:description>Gas Co.</trn:description>
@@ -1092,10 +1092,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-01-01 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>590867000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -1124,10 +1124,10 @@
   </trn:currency>
   <trn:num>116</trn:num>
   <trn:date-posted>
-    <ts:date>1996-01-01 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>592447000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -1155,10 +1155,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-01-05 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>605634000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1186,10 +1186,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-01-06 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-05 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>607373000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -1217,10 +1217,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-01-10 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>608948000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -1249,10 +1249,10 @@
   </trn:currency>
   <trn:num>117</trn:num>
   <trn:date-posted>
-    <ts:date>1996-01-13 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-12 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>610540000</ts:ns>
   </trn:date-entered>
   <trn:description>MCL</trn:description>
@@ -1280,10 +1280,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-01-23 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-22 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>612161000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1313,10 +1313,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-01-23 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-22 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>613763000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1345,10 +1345,10 @@
   </trn:currency>
   <trn:num>118</trn:num>
   <trn:date-posted>
-    <ts:date>1996-01-23 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-22 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>672151000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -1377,10 +1377,10 @@
   </trn:currency>
   <trn:num>119</trn:num>
   <trn:date-posted>
-    <ts:date>1996-01-23 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-22 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>676861000</ts:ns>
   </trn:date-entered>
   <trn:description>DC</trn:description>
@@ -1409,10 +1409,10 @@
   </trn:currency>
   <trn:num>120</trn:num>
   <trn:date-posted>
-    <ts:date>1996-01-23 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-22 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>679339000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -1441,10 +1441,10 @@
   </trn:currency>
   <trn:num>121</trn:num>
   <trn:date-posted>
-    <ts:date>1996-01-23 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-22 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>681885000</ts:ns>
   </trn:date-entered>
   <trn:description>W Bank</trn:description>
@@ -1473,10 +1473,10 @@
   </trn:currency>
   <trn:num>122</trn:num>
   <trn:date-posted>
-    <ts:date>1996-01-26 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>685851000</ts:ns>
   </trn:date-entered>
   <trn:description>XM</trn:description>
@@ -1504,10 +1504,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-01-27 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>688510000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1536,10 +1536,10 @@
   </trn:currency>
   <trn:num>123</trn:num>
   <trn:date-posted>
-    <ts:date>1996-01-28 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-27 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>690988000</ts:ns>
   </trn:date-entered>
   <trn:description>Gas Co.</trn:description>
@@ -1567,10 +1567,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-01-30 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-29 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>693430000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1599,10 +1599,10 @@
   </trn:currency>
   <trn:num>126</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-01 06:00:00 +0100</ts:date>
+    <ts:date>1996-01-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>706467000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -1631,10 +1631,10 @@
   </trn:currency>
   <trn:num>124</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-03 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-02 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>708997000</ts:ns>
   </trn:date-entered>
   <trn:description>DBC</trn:description>
@@ -1662,10 +1662,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-02-07 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>711596000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -1694,10 +1694,10 @@
   </trn:currency>
   <trn:num>125</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-07 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>716622000</ts:ns>
   </trn:date-entered>
   <trn:description>LJ</trn:description>
@@ -1726,10 +1726,10 @@
   </trn:currency>
   <trn:num>127</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-07 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>719201000</ts:ns>
   </trn:date-entered>
   <trn:description>M&amp;W Trading Co.</trn:description>
@@ -1758,10 +1758,10 @@
   </trn:currency>
   <trn:num>128</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-07 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>721697000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -1790,10 +1790,10 @@
   </trn:currency>
   <trn:num>129</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-07 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>724509000</ts:ns>
   </trn:date-entered>
   <trn:description>AG</trn:description>
@@ -1821,10 +1821,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-02-09 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>727025000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -1852,10 +1852,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-02-09 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>729511000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1884,10 +1884,10 @@
   </trn:currency>
   <trn:num>130</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-10 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>732145000</ts:ns>
   </trn:date-entered>
   <trn:description>B's Supermarket</trn:description>
@@ -1916,10 +1916,10 @@
   </trn:currency>
   <trn:num>131</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-11 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>739185000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -1948,10 +1948,10 @@
   </trn:currency>
   <trn:num>132</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-11 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>741786000</ts:ns>
   </trn:date-entered>
   <trn:description>W Visa Gold</trn:description>
@@ -1980,10 +1980,10 @@
   </trn:currency>
   <trn:num>133</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-14 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>751336000</ts:ns>
   </trn:date-entered>
   <trn:description>AUC</trn:description>
@@ -2011,10 +2011,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-02-19 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-18 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>753902000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -2042,10 +2042,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-02-19 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-18 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>757483000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2074,10 +2074,10 @@
   </trn:currency>
   <trn:num>134</trn:num>
   <trn:date-posted>
-    <ts:date>1996-02-21 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-20 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>760209000</ts:ns>
   </trn:date-entered>
   <trn:description>HCA</trn:description>
@@ -2105,10 +2105,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-02-27 06:00:00 +0100</ts:date>
+    <ts:date>1996-02-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>762701000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -2137,10 +2137,10 @@
   </trn:currency>
   <trn:num>135</trn:num>
   <trn:date-posted>
-    <ts:date>1996-03-02 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-01 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>766747000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -2168,10 +2168,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-03-09 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>769283000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -2200,10 +2200,10 @@
   </trn:currency>
   <trn:num>136</trn:num>
   <trn:date-posted>
-    <ts:date>1996-03-09 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>772624000</ts:ns>
   </trn:date-entered>
   <trn:description>Toy's R Us Visa Gold</trn:description>
@@ -2232,10 +2232,10 @@
   </trn:currency>
   <trn:num>137</trn:num>
   <trn:date-posted>
-    <ts:date>1996-03-09 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>778152000</ts:ns>
   </trn:date-entered>
   <trn:description>Gas Co.</trn:description>
@@ -2264,10 +2264,10 @@
   </trn:currency>
   <trn:num>138</trn:num>
   <trn:date-posted>
-    <ts:date>1996-03-09 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>780710000</ts:ns>
   </trn:date-entered>
   <trn:description>DC</trn:description>
@@ -2296,10 +2296,10 @@
   </trn:currency>
   <trn:num>139</trn:num>
   <trn:date-posted>
-    <ts:date>1996-03-09 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>783566000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -2328,10 +2328,10 @@
   </trn:currency>
   <trn:num>140</trn:num>
   <trn:date-posted>
-    <ts:date>1996-03-09 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>786394000</ts:ns>
   </trn:date-entered>
   <trn:description>W Visa Gold</trn:description>
@@ -2360,10 +2360,10 @@
   </trn:currency>
   <trn:num>141</trn:num>
   <trn:date-posted>
-    <ts:date>1996-03-09 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-08 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>788979000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -2391,10 +2391,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-03-12 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>791570000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -2422,10 +2422,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-03-24 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-23 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>803249000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2454,10 +2454,10 @@
   </trn:currency>
   <trn:num>142</trn:num>
   <trn:date-posted>
-    <ts:date>1996-03-24 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-23 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>807419000</ts:ns>
   </trn:date-entered>
   <trn:description>B's Supermarket</trn:description>
@@ -2485,10 +2485,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-03-27 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>809992000</ts:ns>
   </trn:date-entered>
   <trn:description>BB</trn:description>
@@ -2517,10 +2517,10 @@
   </trn:currency>
   <trn:num>143</trn:num>
   <trn:date-posted>
-    <ts:date>1996-03-27 06:00:00 +0100</ts:date>
+    <ts:date>1996-03-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>812589000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -2549,10 +2549,10 @@
   </trn:currency>
   <trn:num>144</trn:num>
   <trn:date-posted>
-    <ts:date>1996-04-01 07:00:00 +0200</ts:date>
+    <ts:date>1996-03-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>833270000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -2580,10 +2580,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-04-08 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>837125000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -2611,10 +2611,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-04-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>839712000</ts:ns>
   </trn:date-entered>
   <trn:description>BB</trn:description>
@@ -2642,10 +2642,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-04-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>842309000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -2674,10 +2674,10 @@
   </trn:currency>
   <trn:num>145</trn:num>
   <trn:date-posted>
-    <ts:date>1996-04-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>852045000</ts:ns>
   </trn:date-entered>
   <trn:description>Gas Co.</trn:description>
@@ -2706,10 +2706,10 @@
   </trn:currency>
   <trn:num>146</trn:num>
   <trn:date-posted>
-    <ts:date>1996-04-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>858871000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -2738,10 +2738,10 @@
   </trn:currency>
   <trn:num>147</trn:num>
   <trn:date-posted>
-    <ts:date>1996-04-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>861689000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -2770,10 +2770,10 @@
   </trn:currency>
   <trn:num>148</trn:num>
   <trn:date-posted>
-    <ts:date>1996-04-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>865127000</ts:ns>
   </trn:date-entered>
   <trn:description>Toy's R Us Visa Gold</trn:description>
@@ -2801,10 +2801,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-05-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>867802000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -2833,10 +2833,10 @@
   </trn:currency>
   <trn:num>149</trn:num>
   <trn:date-posted>
-    <ts:date>1996-05-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>870503000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -2865,10 +2865,10 @@
   </trn:currency>
   <trn:num>150</trn:num>
   <trn:date-posted>
-    <ts:date>1996-05-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-04-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>875485000</ts:ns>
   </trn:date-entered>
   <trn:description>BN</trn:description>
@@ -2897,10 +2897,10 @@
   </trn:currency>
   <trn:num>151</trn:num>
   <trn:date-posted>
-    <ts:date>1996-05-02 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>878330000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC Co.</trn:description>
@@ -2929,10 +2929,10 @@
   </trn:currency>
   <trn:num>152</trn:num>
   <trn:date-posted>
-    <ts:date>1996-05-09 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-08 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>881011000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -2960,10 +2960,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-05-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>883666000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -2991,10 +2991,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-05-17 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>887889000</ts:ns>
   </trn:date-entered>
   <trn:description>Gas Co.</trn:description>
@@ -3023,10 +3023,10 @@
   </trn:currency>
   <trn:num>153</trn:num>
   <trn:date-posted>
-    <ts:date>1996-05-19 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-18 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>890537000</ts:ns>
   </trn:date-entered>
   <trn:description>DW</trn:description>
@@ -3055,10 +3055,10 @@
   </trn:currency>
   <trn:num>154</trn:num>
   <trn:date-posted>
-    <ts:date>1996-05-19 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-18 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>893182000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -3087,10 +3087,10 @@
   </trn:currency>
   <trn:num>155</trn:num>
   <trn:date-posted>
-    <ts:date>1996-05-19 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-18 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>905451000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -3119,10 +3119,10 @@
   </trn:currency>
   <trn:num>156</trn:num>
   <trn:date-posted>
-    <ts:date>1996-05-20 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-19 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>908184000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -3150,10 +3150,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-05-28 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-27 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>910861000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -3182,10 +3182,10 @@
   </trn:currency>
   <trn:num>157</trn:num>
   <trn:date-posted>
-    <ts:date>1996-05-31 06:00:00 +0200</ts:date>
+    <ts:date>1996-05-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>913672000</ts:ns>
   </trn:date-entered>
   <trn:description>Dr. Lin</trn:description>
@@ -3213,10 +3213,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-06-02 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>919411000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -3244,10 +3244,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-06-02 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>922316000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3276,10 +3276,10 @@
   </trn:currency>
   <trn:num>158</trn:num>
   <trn:date-posted>
-    <ts:date>1996-06-02 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>926588000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -3308,10 +3308,10 @@
   </trn:currency>
   <trn:num>159</trn:num>
   <trn:date-posted>
-    <ts:date>1996-06-02 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>929352000</ts:ns>
   </trn:date-entered>
   <trn:description>BN</trn:description>
@@ -3340,10 +3340,10 @@
   </trn:currency>
   <trn:num>160</trn:num>
   <trn:date-posted>
-    <ts:date>1996-06-06 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-05 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>932110000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC Co.</trn:description>
@@ -3372,10 +3372,10 @@
   </trn:currency>
   <trn:num>161</trn:num>
   <trn:date-posted>
-    <ts:date>1996-06-06 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-05 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>936779000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -3404,10 +3404,10 @@
   </trn:currency>
   <trn:num>162</trn:num>
   <trn:date-posted>
-    <ts:date>1996-06-07 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>939543000</ts:ns>
   </trn:date-entered>
   <trn:description>Insurance Co.</trn:description>
@@ -3435,10 +3435,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-06-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>942243000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -3466,10 +3466,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-06-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>965302000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -3498,10 +3498,10 @@
   </trn:currency>
   <trn:num>163</trn:num>
   <trn:date-posted>
-    <ts:date>1996-06-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>968340000</ts:ns>
   </trn:date-entered>
   <trn:description>W Visa Gold</trn:description>
@@ -3530,10 +3530,10 @@
   </trn:currency>
   <trn:num>164</trn:num>
   <trn:date-posted>
-    <ts:date>1996-06-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>971146000</ts:ns>
   </trn:date-entered>
   <trn:description>DC</trn:description>
@@ -3562,10 +3562,10 @@
   </trn:currency>
   <trn:num>165</trn:num>
   <trn:date-posted>
-    <ts:date>1996-06-11 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>975957000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -3594,10 +3594,10 @@
   </trn:currency>
   <trn:num>166</trn:num>
   <trn:date-posted>
-    <ts:date>1996-06-13 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>979005000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -3625,10 +3625,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-06-28 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-27 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>982656000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3657,10 +3657,10 @@
   </trn:currency>
   <trn:num>167</trn:num>
   <trn:date-posted>
-    <ts:date>1996-07-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-06-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>987122000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -3688,10 +3688,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-07-08 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>989865000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -3720,10 +3720,10 @@
   </trn:currency>
   <trn:num>168</trn:num>
   <trn:date-posted>
-    <ts:date>1996-07-08 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:51 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:51 -0800</ts:date>
     <ts:ns>992871000</ts:ns>
   </trn:date-entered>
   <trn:description>Toy's R Us Visa Gold</trn:description>
@@ -3752,10 +3752,10 @@
   </trn:currency>
   <trn:num>169</trn:num>
   <trn:date-posted>
-    <ts:date>1996-07-16 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-15 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>3717000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -3784,10 +3784,10 @@
   </trn:currency>
   <trn:num>170</trn:num>
   <trn:date-posted>
-    <ts:date>1996-07-16 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-15 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>8422000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -3816,10 +3816,10 @@
   </trn:currency>
   <trn:num>171</trn:num>
   <trn:date-posted>
-    <ts:date>1996-07-16 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-15 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>11227000</ts:ns>
   </trn:date-entered>
   <trn:description>Time</trn:description>
@@ -3848,10 +3848,10 @@
   </trn:currency>
   <trn:num>173</trn:num>
   <trn:date-posted>
-    <ts:date>1996-07-16 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-15 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>14951000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -3880,10 +3880,10 @@
   </trn:currency>
   <trn:num>174</trn:num>
   <trn:date-posted>
-    <ts:date>1996-07-16 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-15 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>17848000</ts:ns>
   </trn:date-entered>
   <trn:description>City</trn:description>
@@ -3912,10 +3912,10 @@
   </trn:currency>
   <trn:num>175</trn:num>
   <trn:date-posted>
-    <ts:date>1996-07-16 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-15 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>20629000</ts:ns>
   </trn:date-entered>
   <trn:description>City</trn:description>
@@ -3943,10 +3943,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-07-18 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>23418000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -3975,10 +3975,10 @@
   </trn:currency>
   <trn:num>176</trn:num>
   <trn:date-posted>
-    <ts:date>1996-08-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-07-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>28954000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -4006,10 +4006,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-08-06 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-05 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>31779000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -4038,10 +4038,10 @@
   </trn:currency>
   <trn:num>177</trn:num>
   <trn:date-posted>
-    <ts:date>1996-08-08 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>37056000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -4069,10 +4069,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-08-09 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-08 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>39923000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -4100,10 +4100,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-08-09 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-08 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>42746000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -4131,10 +4131,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-08-13 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>55164000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4163,10 +4163,10 @@
   </trn:currency>
   <trn:num>178</trn:num>
   <trn:date-posted>
-    <ts:date>1996-08-19 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-18 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>58303000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -4195,10 +4195,10 @@
   </trn:currency>
   <trn:num>179</trn:num>
   <trn:date-posted>
-    <ts:date>1996-08-19 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-18 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>61378000</ts:ns>
   </trn:date-entered>
   <trn:description>AUC</trn:description>
@@ -4227,10 +4227,10 @@
   </trn:currency>
   <trn:num>180</trn:num>
   <trn:date-posted>
-    <ts:date>1996-08-19 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-18 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>68177000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -4259,10 +4259,10 @@
   </trn:currency>
   <trn:num>181</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>71140000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -4291,10 +4291,10 @@
   </trn:currency>
   <trn:num>182</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>74700000</ts:ns>
   </trn:date-entered>
   <trn:description>Toy's R Us Visa Gold</trn:description>
@@ -4323,10 +4323,10 @@
   </trn:currency>
   <trn:num>183</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>77730000</ts:ns>
   </trn:date-entered>
   <trn:description>City</trn:description>
@@ -4355,10 +4355,10 @@
   </trn:currency>
   <trn:num>184</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-08-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>80595000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC Co.</trn:description>
@@ -4387,10 +4387,10 @@
   </trn:currency>
   <trn:num>185</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-03 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>83703000</ts:ns>
   </trn:date-entered>
   <trn:description>School C.</trn:description>
@@ -4419,10 +4419,10 @@
   </trn:currency>
   <trn:num>186</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-03 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>87724000</ts:ns>
   </trn:date-entered>
   <trn:description>Pasadena Municipal Court</trn:description>
@@ -4450,10 +4450,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-09-04 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-03 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>90616000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -4481,10 +4481,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-09-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>102595000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -4513,10 +4513,10 @@
   </trn:currency>
   <trn:num>187</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-15 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-14 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>107417000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -4545,10 +4545,10 @@
   </trn:currency>
   <trn:num>188</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-16 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-15 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>110405000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -4577,10 +4577,10 @@
   </trn:currency>
   <trn:num>189</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-16 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-15 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>113406000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -4609,10 +4609,10 @@
   </trn:currency>
   <trn:num>190</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-16 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-15 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>118109000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -4641,10 +4641,10 @@
   </trn:currency>
   <trn:num>191</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-23 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-22 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>121032000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -4673,10 +4673,10 @@
   </trn:currency>
   <trn:num>192</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-26 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>127069000</ts:ns>
   </trn:date-entered>
   <trn:description>Kee Wah Bakery</trn:description>
@@ -4705,10 +4705,10 @@
   </trn:currency>
   <trn:num>193</trn:num>
   <trn:date-posted>
-    <ts:date>1996-09-26 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>130450000</ts:ns>
   </trn:date-entered>
   <trn:description>Kee Wah Bakery</trn:description>
@@ -4736,10 +4736,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-09-29 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>133402000</ts:ns>
   </trn:date-entered>
   <trn:description>Hu Hua</trn:description>
@@ -4767,10 +4767,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-09-29 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>136960000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -4798,10 +4798,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-09-29 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>139863000</ts:ns>
   </trn:date-entered>
   <trn:description>P.C.C.</trn:description>
@@ -4829,10 +4829,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-09-29 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>142788000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4861,10 +4861,10 @@
   </trn:currency>
   <trn:num>194</trn:num>
   <trn:date-posted>
-    <ts:date>1996-10-01 06:00:00 +0200</ts:date>
+    <ts:date>1996-09-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>157064000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -4892,10 +4892,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-10-02 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>160041000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -4923,10 +4923,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-10-04 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-03 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>163102000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -4955,10 +4955,10 @@
   </trn:currency>
   <trn:num>195</trn:num>
   <trn:date-posted>
-    <ts:date>1996-10-07 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>166726000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -4987,10 +4987,10 @@
   </trn:currency>
   <trn:num>196</trn:num>
   <trn:date-posted>
-    <ts:date>1996-10-07 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>169711000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -5019,10 +5019,10 @@
   </trn:currency>
   <trn:num>197</trn:num>
   <trn:date-posted>
-    <ts:date>1996-10-07 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>172709000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -5050,10 +5050,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-10-10 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>176912000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -5082,10 +5082,10 @@
   </trn:currency>
   <trn:num>198</trn:num>
   <trn:date-posted>
-    <ts:date>1996-10-21 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>182862000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -5114,10 +5114,10 @@
   </trn:currency>
   <trn:num>199</trn:num>
   <trn:date-posted>
-    <ts:date>1996-10-21 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>189657000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -5146,10 +5146,10 @@
   </trn:currency>
   <trn:num>200</trn:num>
   <trn:date-posted>
-    <ts:date>1996-10-21 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>193487000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -5177,10 +5177,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-10-22 06:00:00 +0200</ts:date>
+    <ts:date>1996-10-21 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>203573000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -5209,10 +5209,10 @@
   </trn:currency>
   <trn:num>201</trn:num>
   <trn:date-posted>
-    <ts:date>1996-10-27 05:00:00 +0100</ts:date>
+    <ts:date>1996-10-26 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>208776000</ts:ns>
   </trn:date-entered>
   <trn:description>Toy's R Us Visa Gold</trn:description>
@@ -5240,10 +5240,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-10-31 06:00:00 +0100</ts:date>
+    <ts:date>1996-10-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>211814000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -5271,10 +5271,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-10-31 06:00:00 +0100</ts:date>
+    <ts:date>1996-10-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>216936000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -5302,10 +5302,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-10-31 06:00:00 +0100</ts:date>
+    <ts:date>1996-10-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>219998000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -5334,10 +5334,10 @@
   </trn:currency>
   <trn:num>202</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-01 06:00:00 +0100</ts:date>
+    <ts:date>1996-10-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>223390000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -5366,10 +5366,10 @@
   </trn:currency>
   <trn:num>203</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-06 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-05 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>228139000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -5398,10 +5398,10 @@
   </trn:currency>
   <trn:num>204</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-06 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-05 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>231184000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -5429,10 +5429,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-11-10 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>236009000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -5460,10 +5460,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-11-12 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>239094000</ts:ns>
   </trn:date-entered>
   <trn:description>WJ</trn:description>
@@ -5492,10 +5492,10 @@
   </trn:currency>
   <trn:num>205</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-12 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>242110000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -5524,10 +5524,10 @@
   </trn:currency>
   <trn:num>206</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-14 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>254863000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -5556,10 +5556,10 @@
   </trn:currency>
   <trn:num>207</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-14 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>258436000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -5587,10 +5587,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-11-18 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-17 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>261793000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -5618,10 +5618,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-11-18 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-17 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>269089000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -5650,10 +5650,10 @@
   </trn:currency>
   <trn:num>209</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-18 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-17 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>272213000</ts:ns>
   </trn:date-entered>
   <trn:description>LJ</trn:description>
@@ -5682,10 +5682,10 @@
   </trn:currency>
   <trn:num>210</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-25 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>278063000</ts:ns>
   </trn:date-entered>
   <trn:description>AUC</trn:description>
@@ -5714,10 +5714,10 @@
   </trn:currency>
   <trn:num>211</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-25 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>281192000</ts:ns>
   </trn:date-entered>
   <trn:description>LJ</trn:description>
@@ -5746,10 +5746,10 @@
   </trn:currency>
   <trn:num>212</trn:num>
   <trn:date-posted>
-    <ts:date>1996-11-25 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>285845000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -5777,10 +5777,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-11-27 06:00:00 +0100</ts:date>
+    <ts:date>1996-11-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>289008000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -5808,10 +5808,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-03 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-02 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>293007000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -5840,10 +5840,10 @@
   </trn:currency>
   <trn:num>213</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-03 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-02 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>307201000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -5871,10 +5871,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-05 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>310400000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -5903,10 +5903,10 @@
   </trn:currency>
   <trn:num>214</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-05 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>313491000</ts:ns>
   </trn:date-entered>
   <trn:description>Insurance</trn:description>
@@ -5935,10 +5935,10 @@
   </trn:currency>
   <trn:num>215</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-05 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>317456000</ts:ns>
   </trn:date-entered>
   <trn:description>BN</trn:description>
@@ -5967,10 +5967,10 @@
   </trn:currency>
   <trn:num>216</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-07 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>320628000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -5998,10 +5998,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-10 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>323736000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -6030,10 +6030,10 @@
   </trn:currency>
   <trn:num>217</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-10 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>356093000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -6062,10 +6062,10 @@
   </trn:currency>
   <trn:num>218</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-10 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>359532000</ts:ns>
   </trn:date-entered>
   <trn:description>W Bank</trn:description>
@@ -6094,10 +6094,10 @@
   </trn:currency>
   <trn:num>219</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-10 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>362917000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -6125,10 +6125,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-13 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-12 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>370828000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -6156,10 +6156,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-15 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-14 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>374577000</ts:ns>
   </trn:date-entered>
   <trn:description>Wei yan Shi</trn:description>
@@ -6187,10 +6187,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-16 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-15 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>381256000</ts:ns>
   </trn:date-entered>
   <trn:description>Wei yan Shi</trn:description>
@@ -6219,10 +6219,10 @@
   </trn:currency>
   <trn:num>220</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-16 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-15 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>386877000</ts:ns>
   </trn:date-entered>
   <trn:description>OppenheimerFunds</trn:description>
@@ -6251,10 +6251,10 @@
   </trn:currency>
   <trn:num>221</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-16 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-15 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>390151000</ts:ns>
   </trn:date-entered>
   <trn:description>OppenheimerFunds</trn:description>
@@ -6283,10 +6283,10 @@
   </trn:currency>
   <trn:num>222</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-16 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-15 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>393388000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -6314,10 +6314,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-20 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-19 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>406198000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -6345,10 +6345,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-31 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>409596000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -6376,10 +6376,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1996-12-31 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>412834000</ts:ns>
   </trn:date-entered>
   <trn:description>ATM Charge</trn:description>
@@ -6408,10 +6408,10 @@
   </trn:currency>
   <trn:num>223</trn:num>
   <trn:date-posted>
-    <ts:date>1996-12-31 06:00:00 +0100</ts:date>
+    <ts:date>1996-12-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>417677000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -6439,10 +6439,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-01-02 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-01 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>420881000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -6470,10 +6470,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-01-02 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-01 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>427138000</ts:ns>
   </trn:date-entered>
   <trn:description>LJ</trn:description>
@@ -6501,10 +6501,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-01-02 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-01 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>430542000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -6533,10 +6533,10 @@
   </trn:currency>
   <trn:num>224</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-04 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-03 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>434489000</ts:ns>
   </trn:date-entered>
   <trn:description>Mellon Bank</trn:description>
@@ -6565,10 +6565,10 @@
   </trn:currency>
   <trn:num>225</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-04 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-03 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>437911000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -6596,10 +6596,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-01-07 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>441404000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -6627,10 +6627,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-01-10 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>453760000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -6659,10 +6659,10 @@
   </trn:currency>
   <trn:num>226</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-10 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>459321000</ts:ns>
   </trn:date-entered>
   <trn:description>W Bank</trn:description>
@@ -6691,10 +6691,10 @@
   </trn:currency>
   <trn:num>227</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-10 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>462643000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -6723,10 +6723,10 @@
   </trn:currency>
   <trn:num>228</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-10 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>467534000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -6755,10 +6755,10 @@
   </trn:currency>
   <trn:num>229</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-13 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-12 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>470852000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -6787,10 +6787,10 @@
   </trn:currency>
   <trn:num>230</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-13 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-12 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>475292000</ts:ns>
   </trn:date-entered>
   <trn:description>P.C.C.</trn:description>
@@ -6819,10 +6819,10 @@
   </trn:currency>
   <trn:num>231</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-13 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-12 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>478886000</ts:ns>
   </trn:date-entered>
   <trn:description>DWV</trn:description>
@@ -6850,10 +6850,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-01-20 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-19 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>482153000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -6881,10 +6881,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-01-20 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-19 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>488775000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -6913,10 +6913,10 @@
   </trn:currency>
   <trn:num>232</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-20 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-19 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>492079000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -6945,10 +6945,10 @@
   </trn:currency>
   <trn:num>233</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-25 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>508842000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -6977,10 +6977,10 @@
   </trn:currency>
   <trn:num>234</trn:num>
   <trn:date-posted>
-    <ts:date>1997-01-31 06:00:00 +0100</ts:date>
+    <ts:date>1997-01-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>512202000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -7009,10 +7009,10 @@
   </trn:currency>
   <trn:num>235</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-06 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-05 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>517500000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -7041,10 +7041,10 @@
   </trn:currency>
   <trn:num>236</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-06 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-05 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>520886000</ts:ns>
   </trn:date-entered>
   <trn:description>BN</trn:description>
@@ -7073,10 +7073,10 @@
   </trn:currency>
   <trn:num>237</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-06 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-05 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>525629000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -7105,10 +7105,10 @@
   </trn:currency>
   <trn:num>238</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-06 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-05 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>529106000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -7136,10 +7136,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-02-07 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>532437000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -7167,10 +7167,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-02-10 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>537275000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -7198,10 +7198,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-02-11 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>540603000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -7229,10 +7229,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-02-11 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>553538000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -7261,10 +7261,10 @@
   </trn:currency>
   <trn:num>239</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-11 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>557560000</ts:ns>
   </trn:date-entered>
   <trn:description>CAF</trn:description>
@@ -7293,10 +7293,10 @@
   </trn:currency>
   <trn:num>240</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-11 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>560832000</ts:ns>
   </trn:date-entered>
   <trn:description>City</trn:description>
@@ -7324,10 +7324,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-02-12 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>566132000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -7355,10 +7355,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-02-12 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>569607000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -7387,10 +7387,10 @@
   </trn:currency>
   <trn:num>241</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-19 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-18 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>573105000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -7419,10 +7419,10 @@
   </trn:currency>
   <trn:num>242</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-19 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-18 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>579170000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -7451,10 +7451,10 @@
   </trn:currency>
   <trn:num>243</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-19 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-18 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>582956000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -7483,10 +7483,10 @@
   </trn:currency>
   <trn:num>244</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-19 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-18 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>591970000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -7515,10 +7515,10 @@
   </trn:currency>
   <trn:num>245</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-19 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-18 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>602746000</ts:ns>
   </trn:date-entered>
   <trn:description>AUC</trn:description>
@@ -7547,10 +7547,10 @@
   </trn:currency>
   <trn:num>246</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-19 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-18 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>608475000</ts:ns>
   </trn:date-entered>
   <trn:description>HCA</trn:description>
@@ -7578,10 +7578,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-02-27 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>612462000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -7609,10 +7609,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-02-27 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>616230000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -7641,10 +7641,10 @@
   </trn:currency>
   <trn:num>247</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-27 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>619861000</ts:ns>
   </trn:date-entered>
   <trn:description>W Bank</trn:description>
@@ -7673,10 +7673,10 @@
   </trn:currency>
   <trn:num>249</trn:num>
   <trn:date-posted>
-    <ts:date>1997-02-27 06:00:00 +0100</ts:date>
+    <ts:date>1997-02-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>623421000</ts:ns>
   </trn:date-entered>
   <trn:description>Siphon</trn:description>
@@ -7704,10 +7704,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-03-02 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-01 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>630005000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -7736,10 +7736,10 @@
   </trn:currency>
   <trn:num>248</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-02 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-01 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>633489000</ts:ns>
   </trn:date-entered>
   <trn:description>Void</trn:description>
@@ -7768,10 +7768,10 @@
   </trn:currency>
   <trn:num>250</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-02 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-01 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>638849000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -7799,10 +7799,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-03-04 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-03 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>642395000</ts:ns>
   </trn:date-entered>
   <trn:description>Coast Federal Bank</trn:description>
@@ -7830,10 +7830,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-03-10 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>653068000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -7862,10 +7862,10 @@
   </trn:currency>
   <trn:num>251</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-12 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>658138000</ts:ns>
   </trn:date-entered>
   <trn:description>Image Check</trn:description>
@@ -7894,10 +7894,10 @@
   </trn:currency>
   <trn:num>252</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-13 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-12 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>662085000</ts:ns>
   </trn:date-entered>
   <trn:description>1HR Photo</trn:description>
@@ -7925,10 +7925,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>670018000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -7957,10 +7957,10 @@
   </trn:currency>
   <trn:num>253</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>673432000</ts:ns>
   </trn:date-entered>
   <trn:description>HCA</trn:description>
@@ -7989,10 +7989,10 @@
   </trn:currency>
   <trn:num>254</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>677388000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -8021,10 +8021,10 @@
   </trn:currency>
   <trn:num>255</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>680980000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -8053,10 +8053,10 @@
   </trn:currency>
   <trn:num>256</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>687025000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -8085,10 +8085,10 @@
   </trn:currency>
   <trn:num>257</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>690690000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -8117,10 +8117,10 @@
   </trn:currency>
   <trn:num>258</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>702455000</ts:ns>
   </trn:date-entered>
   <trn:description>MA</trn:description>
@@ -8149,10 +8149,10 @@
   </trn:currency>
   <trn:num>259</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>707847000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -8181,10 +8181,10 @@
   </trn:currency>
   <trn:num>260</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>712283000</ts:ns>
   </trn:date-entered>
   <trn:description>FTB</trn:description>
@@ -8213,10 +8213,10 @@
   </trn:currency>
   <trn:num>261</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-18 06:00:00 +0100</ts:date>
+    <ts:date>1997-03-17 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>717441000</ts:ns>
   </trn:date-entered>
   <trn:description>Dr</trn:description>
@@ -8245,10 +8245,10 @@
   </trn:currency>
   <trn:num>262</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-31 07:00:00 +0200</ts:date>
+    <ts:date>1997-03-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>720990000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -8277,10 +8277,10 @@
   </trn:currency>
   <trn:num>263</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-31 07:00:00 +0200</ts:date>
+    <ts:date>1997-03-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>726757000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -8309,10 +8309,10 @@
   </trn:currency>
   <trn:num>264</trn:num>
   <trn:date-posted>
-    <ts:date>1997-03-31 07:00:00 +0200</ts:date>
+    <ts:date>1997-03-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>730375000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -8341,10 +8341,10 @@
   </trn:currency>
   <trn:num>265</trn:num>
   <trn:date-posted>
-    <ts:date>1997-04-07 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>734748000</ts:ns>
   </trn:date-entered>
   <trn:description>HMH</trn:description>
@@ -8373,10 +8373,10 @@
   </trn:currency>
   <trn:num>266</trn:num>
   <trn:date-posted>
-    <ts:date>1997-04-07 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>738338000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -8405,10 +8405,10 @@
   </trn:currency>
   <trn:num>267</trn:num>
   <trn:date-posted>
-    <ts:date>1997-04-07 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>741918000</ts:ns>
   </trn:date-entered>
   <trn:description>City</trn:description>
@@ -8436,10 +8436,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-04-10 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>756517000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -8467,10 +8467,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-04-10 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>760170000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -8498,10 +8498,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-04-21 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>763725000</ts:ns>
   </trn:date-entered>
   <trn:description>U.S. Treasure</trn:description>
@@ -8530,10 +8530,10 @@
   </trn:currency>
   <trn:num>268</trn:num>
   <trn:date-posted>
-    <ts:date>1997-04-21 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>768828000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -8562,10 +8562,10 @@
   </trn:currency>
   <trn:num>269</trn:num>
   <trn:date-posted>
-    <ts:date>1997-04-21 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>772557000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -8594,10 +8594,10 @@
   </trn:currency>
   <trn:num>270</trn:num>
   <trn:date-posted>
-    <ts:date>1997-04-21 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>777173000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -8626,10 +8626,10 @@
   </trn:currency>
   <trn:num>271</trn:num>
   <trn:date-posted>
-    <ts:date>1997-04-21 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>781147000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -8658,10 +8658,10 @@
   </trn:currency>
   <trn:num>272</trn:num>
   <trn:date-posted>
-    <ts:date>1997-04-21 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>788261000</ts:ns>
   </trn:date-entered>
   <trn:description>AN</trn:description>
@@ -8690,10 +8690,10 @@
   </trn:currency>
   <trn:num>273</trn:num>
   <trn:date-posted>
-    <ts:date>1997-04-25 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>791897000</ts:ns>
   </trn:date-entered>
   <trn:description>Time</trn:description>
@@ -8722,10 +8722,10 @@
   </trn:currency>
   <trn:num>275</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-01 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>802258000</ts:ns>
   </trn:date-entered>
   <trn:description>DWV</trn:description>
@@ -8754,10 +8754,10 @@
   </trn:currency>
   <trn:num>276</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-01 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>807296000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -8786,10 +8786,10 @@
   </trn:currency>
   <trn:num>277</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-01 06:00:00 +0200</ts:date>
+    <ts:date>1997-04-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>811931000</ts:ns>
   </trn:date-entered>
   <trn:description>WJ</trn:description>
@@ -8817,10 +8817,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-05-07 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>818111000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -8848,10 +8848,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-05-07 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>821754000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -8879,10 +8879,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-05-10 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>827293000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -8911,10 +8911,10 @@
   </trn:currency>
   <trn:num>278</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-13 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>831052000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -8943,10 +8943,10 @@
   </trn:currency>
   <trn:num>279</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-13 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>878146000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -8975,10 +8975,10 @@
   </trn:currency>
   <trn:num>280</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-13 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>882010000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -9007,10 +9007,10 @@
   </trn:currency>
   <trn:num>281</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-13 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>886369000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -9039,10 +9039,10 @@
   </trn:currency>
   <trn:num>283</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-20 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-19 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>890152000</ts:ns>
   </trn:date-entered>
   <trn:description>MA</trn:description>
@@ -9071,10 +9071,10 @@
   </trn:currency>
   <trn:num>284</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-20 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-19 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>902096000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -9103,10 +9103,10 @@
   </trn:currency>
   <trn:num>282</trn:num>
   <trn:date-posted>
-    <ts:date>1997-05-29 06:00:00 +0200</ts:date>
+    <ts:date>1997-05-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>910229000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -9134,10 +9134,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-02 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>915272000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC Co.</trn:description>
@@ -9165,10 +9165,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-02 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>919308000</ts:ns>
   </trn:date-entered>
   <trn:description>AN</trn:description>
@@ -9197,10 +9197,10 @@
   </trn:currency>
   <trn:num>285</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-02 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>923215000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -9229,10 +9229,10 @@
   </trn:currency>
   <trn:num>286</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-02 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>929466000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -9260,10 +9260,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-05 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-04 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>933294000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -9291,10 +9291,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-05 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-04 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>938773000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -9322,10 +9322,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-05 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-04 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>942684000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss1</trn:description>
@@ -9353,10 +9353,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-09 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-08 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>956025000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -9384,10 +9384,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-10 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>959771000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -9415,10 +9415,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-11 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>963589000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -9447,10 +9447,10 @@
   </trn:currency>
   <trn:num>287</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-13 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:52 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:52 -0800</ts:date>
     <ts:ns>983797000</ts:ns>
   </trn:date-entered>
   <trn:description>Insurance</trn:description>
@@ -9478,10 +9478,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-14 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-13 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>11908000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -9510,10 +9510,10 @@
   </trn:currency>
   <trn:num>288</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-14 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-13 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>17571000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -9542,10 +9542,10 @@
   </trn:currency>
   <trn:num>289</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-14 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-13 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>21529000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -9574,10 +9574,10 @@
   </trn:currency>
   <trn:num>290</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-14 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-13 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>27169000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -9605,10 +9605,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-06-24 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-23 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>31076000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -9637,10 +9637,10 @@
   </trn:currency>
   <trn:num>291</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-24 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-23 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>39088000</ts:ns>
   </trn:date-entered>
   <trn:description>MC</trn:description>
@@ -9669,10 +9669,10 @@
   </trn:currency>
   <trn:num>292</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-24 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-23 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>42937000</ts:ns>
   </trn:date-entered>
   <trn:description>PC</trn:description>
@@ -9701,10 +9701,10 @@
   </trn:currency>
   <trn:num>293</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-24 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-23 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>52741000</ts:ns>
   </trn:date-entered>
   <trn:description>HMH</trn:description>
@@ -9733,10 +9733,10 @@
   </trn:currency>
   <trn:num>294</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-24 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-23 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>67385000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -9764,10 +9764,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-07-02 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>71163000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -9796,10 +9796,10 @@
   </trn:currency>
   <trn:num>295</trn:num>
   <trn:date-posted>
-    <ts:date>1997-07-02 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>75908000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -9828,10 +9828,10 @@
   </trn:currency>
   <trn:num>296</trn:num>
   <trn:date-posted>
-    <ts:date>1997-07-03 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>79830000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -9859,10 +9859,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-07-10 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>86821000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -9891,10 +9891,10 @@
   </trn:currency>
   <trn:num>297</trn:num>
   <trn:date-posted>
-    <ts:date>1997-07-14 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-13 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>91686000</ts:ns>
   </trn:date-entered>
   <trn:description>NB</trn:description>
@@ -9923,10 +9923,10 @@
   </trn:currency>
   <trn:num>298</trn:num>
   <trn:date-posted>
-    <ts:date>1997-07-14 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-13 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>98862000</ts:ns>
   </trn:date-entered>
   <trn:description>C Master Card</trn:description>
@@ -9955,10 +9955,10 @@
   </trn:currency>
   <trn:num>299</trn:num>
   <trn:date-posted>
-    <ts:date>1997-07-14 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-13 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>102930000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -9987,10 +9987,10 @@
   </trn:currency>
   <trn:num>300</trn:num>
   <trn:date-posted>
-    <ts:date>1997-07-28 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-27 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>113775000</ts:ns>
   </trn:date-entered>
   <trn:description>SL</trn:description>
@@ -10019,10 +10019,10 @@
   </trn:currency>
   <trn:num>301</trn:num>
   <trn:date-posted>
-    <ts:date>1997-07-28 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-27 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>119797000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -10050,10 +10050,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-07-31 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>123707000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -10081,10 +10081,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-07-31 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>130494000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -10113,10 +10113,10 @@
   </trn:currency>
   <trn:num>302</trn:num>
   <trn:date-posted>
-    <ts:date>1997-07-31 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>136270000</ts:ns>
   </trn:date-entered>
   <trn:description>LDPC</trn:description>
@@ -10144,10 +10144,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-08-02 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>437157000</ts:ns>
   </trn:date-entered>
   <trn:description>Gov</trn:description>
@@ -10176,10 +10176,10 @@
   </trn:currency>
   <trn:num>303</trn:num>
   <trn:date-posted>
-    <ts:date>1997-08-03 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>441318000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -10208,10 +10208,10 @@
   </trn:currency>
   <trn:num>304</trn:num>
   <trn:date-posted>
-    <ts:date>1997-08-04 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-03 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>447733000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -10240,10 +10240,10 @@
   </trn:currency>
   <trn:num>305</trn:num>
   <trn:date-posted>
-    <ts:date>1997-08-04 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-03 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>451762000</ts:ns>
   </trn:date-entered>
   <trn:description>Community Hospital</trn:description>
@@ -10271,10 +10271,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-08-10 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>465571000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -10302,10 +10302,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-08-14 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-13 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>469555000</ts:ns>
   </trn:date-entered>
   <trn:description>College</trn:description>
@@ -10334,10 +10334,10 @@
   </trn:currency>
   <trn:num>306</trn:num>
   <trn:date-posted>
-    <ts:date>1997-08-14 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-13 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>473567000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -10365,10 +10365,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-08-15 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-14 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>480303000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -10397,10 +10397,10 @@
   </trn:currency>
   <trn:num>307</trn:num>
   <trn:date-posted>
-    <ts:date>1997-08-15 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-14 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>485219000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -10429,10 +10429,10 @@
   </trn:currency>
   <trn:num>309</trn:num>
   <trn:date-posted>
-    <ts:date>1997-08-15 06:00:00 +0200</ts:date>
+    <ts:date>1997-08-14 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>489474000</ts:ns>
   </trn:date-entered>
   <trn:description>School</trn:description>
@@ -10461,10 +10461,10 @@
   </trn:currency>
   <trn:num>310</trn:num>
   <trn:date-posted>
-    <ts:date>1997-09-03 06:00:00 +0200</ts:date>
+    <ts:date>1997-09-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>493645000</ts:ns>
   </trn:date-entered>
   <trn:description>Robo</trn:description>
@@ -10492,10 +10492,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-09-06 06:00:00 +0200</ts:date>
+    <ts:date>1997-09-05 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>500369000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss2</trn:description>
@@ -10524,10 +10524,10 @@
   </trn:currency>
   <trn:num>311</trn:num>
   <trn:date-posted>
-    <ts:date>1997-09-06 06:00:00 +0200</ts:date>
+    <ts:date>1997-09-05 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>507537000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -10558,10 +10558,10 @@
   </trn:currency>
   <trn:num>312</trn:num>
   <trn:date-posted>
-    <ts:date>1997-09-08 06:00:00 +0200</ts:date>
+    <ts:date>1997-09-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>512414000</ts:ns>
   </trn:date-entered>
   <trn:description>Travel</trn:description>
@@ -10592,10 +10592,10 @@
   </trn:currency>
   <trn:num>314</trn:num>
   <trn:date-posted>
-    <ts:date>1997-09-25 06:00:00 +0200</ts:date>
+    <ts:date>1997-09-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>518612000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -10626,10 +10626,10 @@
   </trn:currency>
   <trn:num>313</trn:num>
   <trn:date-posted>
-    <ts:date>1997-09-28 06:00:00 +0200</ts:date>
+    <ts:date>1997-09-27 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>522918000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -10657,10 +10657,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-10-03 06:00:00 +0200</ts:date>
+    <ts:date>1997-10-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>527472000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss2</trn:description>
@@ -10689,10 +10689,10 @@
   </trn:currency>
   <trn:num>315</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-06 06:00:00 +0200</ts:date>
+    <ts:date>1997-10-05 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>531555000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -10721,10 +10721,10 @@
   </trn:currency>
   <trn:num>316</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-06 06:00:00 +0200</ts:date>
+    <ts:date>1997-10-05 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>538809000</ts:ns>
   </trn:date-entered>
   <trn:description>City of </trn:description>
@@ -10754,10 +10754,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-10-17 06:00:00 +0200</ts:date>
+    <ts:date>1997-10-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>542802000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss2</trn:description>
@@ -10786,10 +10786,10 @@
   </trn:currency>
   <trn:num>317</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-17 06:00:00 +0200</ts:date>
+    <ts:date>1997-10-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>548608000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -10818,10 +10818,10 @@
   </trn:currency>
   <trn:num>318</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-26 05:00:00 +0100</ts:date>
+    <ts:date>1997-10-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>552892000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -10850,10 +10850,10 @@
   </trn:currency>
   <trn:num>319</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-26 05:00:00 +0100</ts:date>
+    <ts:date>1997-10-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>565974000</ts:ns>
   </trn:date-entered>
   <trn:description>CO</trn:description>
@@ -10882,10 +10882,10 @@
   </trn:currency>
   <trn:num>320</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-26 05:00:00 +0100</ts:date>
+    <ts:date>1997-10-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>570461000</ts:ns>
   </trn:date-entered>
   <trn:description>Insurance Co.</trn:description>
@@ -10916,10 +10916,10 @@
   </trn:currency>
   <trn:num>321</trn:num>
   <trn:date-posted>
-    <ts:date>1997-10-26 05:00:00 +0100</ts:date>
+    <ts:date>1997-10-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>577093000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -10947,10 +10947,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-10-31 06:00:00 +0100</ts:date>
+    <ts:date>1997-10-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>581233000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss2</trn:description>
@@ -10979,10 +10979,10 @@
   </trn:currency>
   <trn:num>322</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-01 06:00:00 +0100</ts:date>
+    <ts:date>1997-10-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>586006000</ts:ns>
   </trn:date-entered>
   <trn:description>AUC</trn:description>
@@ -11011,10 +11011,10 @@
   </trn:currency>
   <trn:num>323</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-01 06:00:00 +0100</ts:date>
+    <ts:date>1997-10-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>590257000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -11043,10 +11043,10 @@
   </trn:currency>
   <trn:num>324</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-05 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>597900000</ts:ns>
   </trn:date-entered>
   <trn:description>Robo</trn:description>
@@ -11074,10 +11074,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-11-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>602860000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss2</trn:description>
@@ -11106,10 +11106,10 @@
   </trn:currency>
   <trn:num>326</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>608886000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -11138,10 +11138,10 @@
   </trn:currency>
   <trn:num>327</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-14 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>613282000</ts:ns>
   </trn:date-entered>
   <trn:description>APSR</trn:description>
@@ -11170,10 +11170,10 @@
   </trn:currency>
   <trn:num>325</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-25 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>619988000</ts:ns>
   </trn:date-entered>
   <trn:description>CO</trn:description>
@@ -11202,10 +11202,10 @@
   </trn:currency>
   <trn:num>328</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-25 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>629870000</ts:ns>
   </trn:date-entered>
   <trn:description>Pacific Bell</trn:description>
@@ -11234,10 +11234,10 @@
   </trn:currency>
   <trn:num>329</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-25 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>636357000</ts:ns>
   </trn:date-entered>
   <trn:description>Landlord</trn:description>
@@ -11267,10 +11267,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-11-26 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>640787000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss2</trn:description>
@@ -11299,10 +11299,10 @@
   </trn:currency>
   <trn:num>330</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-26 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>645435000</ts:ns>
   </trn:date-entered>
   <trn:description>Travel</trn:description>
@@ -11330,10 +11330,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-11-27 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>649666000</ts:ns>
   </trn:date-entered>
   <trn:description>C</trn:description>
@@ -11361,10 +11361,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-11-27 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-26 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>653723000</ts:ns>
   </trn:date-entered>
   <trn:description>Insurance</trn:description>
@@ -11392,10 +11392,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-12-11 06:00:00 +0100</ts:date>
+    <ts:date>1997-12-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>668608000</ts:ns>
   </trn:date-entered>
   <trn:description>Power Co.</trn:description>
@@ -11424,10 +11424,10 @@
   </trn:currency>
   <trn:num>331</trn:num>
   <trn:date-posted>
-    <ts:date>1997-12-11 06:00:00 +0100</ts:date>
+    <ts:date>1997-12-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>679027000</ts:ns>
   </trn:date-entered>
   <trn:description>Robo</trn:description>
@@ -11455,10 +11455,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1997-12-12 06:00:00 +0100</ts:date>
+    <ts:date>1997-12-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:43:53 +0200</ts:date>
+    <ts:date>2001-03-26 12:43:53 -0800</ts:date>
     <ts:ns>683306000</ts:ns>
   </trn:date-entered>
   <trn:description>Boss2</trn:description>

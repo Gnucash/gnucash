@@ -117,10 +117,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-03-26 16:00:00 +0200</ts:date>
+    <ts:date>2001-03-26 06:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-27 04:26:10 +0200</ts:date>
+    <ts:date>2001-03-26 18:26:10 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Initial Balance</trn:description>
   <trn:splits>
@@ -148,10 +148,10 @@
   </trn:currency>
   <trn:num>0001</trn:num>
   <trn:date-posted>
-    <ts:date>2001-03-26 16:00:00 +0200</ts:date>
+    <ts:date>2001-03-26 06:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-27 04:26:30 +0200</ts:date>
+    <ts:date>2001-03-26 18:26:30 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Buy stock</trn:description>
   <trn:splits>
@@ -179,10 +179,10 @@
   </trn:currency>
   <trn:num>002</trn:num>
   <trn:date-posted>
-    <ts:date>2001-03-26 16:00:00 +0200</ts:date>
+    <ts:date>2001-03-26 06:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-27 04:26:44 +0200</ts:date>
+    <ts:date>2001-03-26 18:26:44 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Buy stock</trn:description>
   <trn:splits>
@@ -210,10 +210,10 @@
   </trn:currency>
   <trn:num>003</trn:num>
   <trn:date-posted>
-    <ts:date>2001-03-26 16:00:00 +0200</ts:date>
+    <ts:date>2001-03-26 06:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-27 04:27:05 +0200</ts:date>
+    <ts:date>2001-03-26 18:27:05 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Buy Stock</trn:description>
   <trn:splits>

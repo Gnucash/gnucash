@@ -633,10 +633,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-01 06:00:00 +0100</ts:date>
+    <ts:date>1994-12-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>167565000</ts:ns>
   </trn:date-entered>
   <trn:description>Opening Balance</trn:description>
@@ -664,10 +664,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-01 06:00:00 +0100</ts:date>
+    <ts:date>1994-12-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>183423000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -695,10 +695,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-03 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-02 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>186234000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -742,10 +742,10 @@
   </trn:currency>
   <trn:num>6351</trn:num>
   <trn:date-posted>
-    <ts:date>1995-01-05 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>188671000</ts:ns>
   </trn:date-entered>
   <trn:description>MACIF</trn:description>
@@ -775,10 +775,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-08 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-07 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>203492000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -806,10 +806,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-10 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>205833000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -840,10 +840,10 @@
   </trn:currency>
   <trn:num>6352</trn:num>
   <trn:date-posted>
-    <ts:date>1995-01-10 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>208154000</ts:ns>
   </trn:date-entered>
   <trn:description>Intermarché</trn:description>
@@ -872,10 +872,10 @@
   </trn:currency>
   <trn:num>6353</trn:num>
   <trn:date-posted>
-    <ts:date>1995-01-12 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>210949000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -903,10 +903,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-17 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-16 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>213577000</ts:ns>
   </trn:date-entered>
   <trn:description>France Télécom</trn:description>
@@ -934,10 +934,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-18 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-17 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>215972000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -968,10 +968,10 @@
   </trn:currency>
   <trn:num>6354</trn:num>
   <trn:date-posted>
-    <ts:date>1995-01-22 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-21 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>218347000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -1001,10 +1001,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-24 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-23 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>221853000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1034,10 +1034,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-25 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>224353000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -1065,10 +1065,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-01-26 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>226714000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1098,10 +1098,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-01 06:00:00 +0100</ts:date>
+    <ts:date>1995-01-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>229067000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -1129,10 +1129,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-02 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-01 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>232995000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1168,10 +1168,10 @@
   </trn:currency>
   <trn:num>6355</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-07 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-06 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>235421000</ts:ns>
   </trn:date-entered>
   <trn:description>Restaurant Saint-Paul</trn:description>
@@ -1200,10 +1200,10 @@
   </trn:currency>
   <trn:num>6356</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-10 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-09 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>237851000</ts:ns>
   </trn:date-entered>
   <trn:description>Centre des Impôts</trn:description>
@@ -1234,10 +1234,10 @@
   </trn:currency>
   <trn:num>6357</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-12 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>248545000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -1265,10 +1265,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-21 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-20 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>251624000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1304,10 +1304,10 @@
   </trn:currency>
   <trn:num>6358</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-22 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-21 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>254112000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -1337,10 +1337,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-25 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>256503000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -1368,10 +1368,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-26 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>258906000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1402,10 +1402,10 @@
   </trn:currency>
   <trn:num>6359</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-26 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>263748000</ts:ns>
   </trn:date-entered>
   <trn:description>Carrefour</trn:description>
@@ -1434,10 +1434,10 @@
   </trn:currency>
   <trn:num>6360</trn:num>
   <trn:date-posted>
-    <ts:date>1995-02-26 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>266339000</ts:ns>
   </trn:date-entered>
   <trn:description>SNCF</trn:description>
@@ -1465,10 +1465,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-02-28 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-27 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>268792000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1498,10 +1498,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-01 06:00:00 +0100</ts:date>
+    <ts:date>1995-02-28 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>271678000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -1529,10 +1529,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-08 06:00:00 +0100</ts:date>
+    <ts:date>1995-03-07 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>274153000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -1561,10 +1561,10 @@
   </trn:currency>
   <trn:num>6361</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-12 06:00:00 +0100</ts:date>
+    <ts:date>1995-03-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>276654000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -1592,10 +1592,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-14 06:00:00 +0100</ts:date>
+    <ts:date>1995-03-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>279359000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1631,10 +1631,10 @@
   </trn:currency>
   <trn:num>6362</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-15 06:00:00 +0100</ts:date>
+    <ts:date>1995-03-14 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>282341000</ts:ns>
   </trn:date-entered>
   <trn:description>Senzo Alimentation</trn:description>
@@ -1662,10 +1662,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-17 06:00:00 +0100</ts:date>
+    <ts:date>1995-03-16 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>284285000</ts:ns>
   </trn:date-entered>
   <trn:description>France Télécom</trn:description>
@@ -1694,10 +1694,10 @@
   </trn:currency>
   <trn:num>6363</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-17 06:00:00 +0100</ts:date>
+    <ts:date>1995-03-16 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>285984000</ts:ns>
   </trn:date-entered>
   <trn:description>Interflora</trn:description>
@@ -1727,10 +1727,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-21 06:00:00 +0100</ts:date>
+    <ts:date>1995-03-20 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>287674000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1760,10 +1760,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-25 06:00:00 +0100</ts:date>
+    <ts:date>1995-03-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>289339000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -1791,10 +1791,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-26 07:00:00 +0200</ts:date>
+    <ts:date>1995-03-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>292612000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -1825,10 +1825,10 @@
   </trn:currency>
   <trn:num>6365</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-26 07:00:00 +0200</ts:date>
+    <ts:date>1995-03-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>294495000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -1859,10 +1859,10 @@
   </trn:currency>
   <trn:num>6364</trn:num>
   <trn:date-posted>
-    <ts:date>1995-03-30 07:00:00 +0200</ts:date>
+    <ts:date>1995-03-29 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>297133000</ts:ns>
   </trn:date-entered>
   <trn:description>Carrefour</trn:description>
@@ -1918,10 +1918,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-03-31 07:00:00 +0200</ts:date>
+    <ts:date>1995-03-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>299253000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -1957,10 +1957,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-01 07:00:00 +0200</ts:date>
+    <ts:date>1995-03-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>301715000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -1988,10 +1988,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-11 06:00:00 +0200</ts:date>
+    <ts:date>1995-04-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>303495000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2022,10 +2022,10 @@
   </trn:currency>
   <trn:num>6366</trn:num>
   <trn:date-posted>
-    <ts:date>1995-04-12 06:00:00 +0200</ts:date>
+    <ts:date>1995-04-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>305222000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -2054,10 +2054,10 @@
   </trn:currency>
   <trn:num>6367</trn:num>
   <trn:date-posted>
-    <ts:date>1995-04-21 06:00:00 +0200</ts:date>
+    <ts:date>1995-04-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>307007000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -2087,10 +2087,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-23 06:00:00 +0200</ts:date>
+    <ts:date>1995-04-22 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>309211000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2132,10 +2132,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-25 06:00:00 +0200</ts:date>
+    <ts:date>1995-04-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>314980000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -2163,10 +2163,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-04-26 06:00:00 +0200</ts:date>
+    <ts:date>1995-04-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>317563000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2196,10 +2196,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-01 06:00:00 +0200</ts:date>
+    <ts:date>1995-04-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>322056000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -2227,10 +2227,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-02 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>324996000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2265,10 +2265,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-08 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>327622000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -2296,10 +2296,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-09 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-08 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>332010000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2330,10 +2330,10 @@
   </trn:currency>
   <trn:num>6368</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-11 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>334793000</ts:ns>
   </trn:date-entered>
   <trn:description>Gaz de France</trn:description>
@@ -2364,10 +2364,10 @@
   </trn:currency>
   <trn:num>6369</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-12 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>337431000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -2396,10 +2396,10 @@
   </trn:currency>
   <trn:num>6370</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-13 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>340082000</ts:ns>
   </trn:date-entered>
   <trn:description>Intermarché</trn:description>
@@ -2427,10 +2427,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-17 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>356863000</ts:ns>
   </trn:date-entered>
   <trn:description>France Télécom</trn:description>
@@ -2458,10 +2458,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-18 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>359576000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2492,10 +2492,10 @@
   </trn:currency>
   <trn:num>6371</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-18 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>362888000</ts:ns>
   </trn:date-entered>
   <trn:description>La Bonne Franquette</trn:description>
@@ -2523,10 +2523,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-25 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>365525000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -2554,10 +2554,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-26 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>368171000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -2588,10 +2588,10 @@
   </trn:currency>
   <trn:num>6372</trn:num>
   <trn:date-posted>
-    <ts:date>1995-05-29 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>372900000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -2621,10 +2621,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-05-30 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-29 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>375638000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2654,10 +2654,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-01 06:00:00 +0200</ts:date>
+    <ts:date>1995-05-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>378315000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -2686,10 +2686,10 @@
   </trn:currency>
   <trn:num>6373</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-02 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-01 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>383273000</ts:ns>
   </trn:date-entered>
   <trn:description>FNAC</trn:description>
@@ -2717,10 +2717,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-06 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-05 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>386246000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2756,10 +2756,10 @@
   </trn:currency>
   <trn:num>6375</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-10 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>389039000</ts:ns>
   </trn:date-entered>
   <trn:description>Centre des Impôts</trn:description>
@@ -2790,10 +2790,10 @@
   </trn:currency>
   <trn:num>6376</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-10 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>398857000</ts:ns>
   </trn:date-entered>
   <trn:description>Gaz de France</trn:description>
@@ -2823,10 +2823,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-11 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-10 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>402216000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2857,10 +2857,10 @@
   </trn:currency>
   <trn:num>6378</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-12 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>405222000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -2888,10 +2888,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-20 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-19 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>407965000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -2922,10 +2922,10 @@
   </trn:currency>
   <trn:num>6380</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-20 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-19 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>413702000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -2956,10 +2956,10 @@
   </trn:currency>
   <trn:num>6379</trn:num>
   <trn:date-posted>
-    <ts:date>1995-06-21 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>416534000</ts:ns>
   </trn:date-entered>
   <trn:description>Nasa Electronics</trn:description>
@@ -2989,10 +2989,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-25 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>419365000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -3020,10 +3020,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-06-26 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>422808000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3053,10 +3053,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-01 06:00:00 +0200</ts:date>
+    <ts:date>1995-06-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>425562000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -3084,10 +3084,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-04 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-03 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>428365000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3118,10 +3118,10 @@
   </trn:currency>
   <trn:num>6381</trn:num>
   <trn:date-posted>
-    <ts:date>1995-07-07 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>432394000</ts:ns>
   </trn:date-entered>
   <trn:description>U.G.C.</trn:description>
@@ -3151,10 +3151,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-08 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>435165000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -3183,10 +3183,10 @@
   </trn:currency>
   <trn:num>6382</trn:num>
   <trn:date-posted>
-    <ts:date>1995-07-12 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>437958000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -3215,10 +3215,10 @@
   </trn:currency>
   <trn:num>6383</trn:num>
   <trn:date-posted>
-    <ts:date>1995-07-13 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>442987000</ts:ns>
   </trn:date-entered>
   <trn:description>Gaz de France</trn:description>
@@ -3248,10 +3248,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-17 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>445826000</ts:ns>
   </trn:date-entered>
   <trn:description>France Télécom</trn:description>
@@ -3279,10 +3279,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-18 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>448887000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3318,10 +3318,10 @@
   </trn:currency>
   <trn:num>6384</trn:num>
   <trn:date-posted>
-    <ts:date>1995-07-21 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-20 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>453674000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -3351,10 +3351,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-25 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>456495000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -3382,10 +3382,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-25 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>459319000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3415,10 +3415,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-07-26 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>462946000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -3448,10 +3448,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-01 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>466061000</ts:ns>
   </trn:date-entered>
   <trn:description>Crédit Mutuel</trn:description>
@@ -3489,10 +3489,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-01 06:00:00 +0200</ts:date>
+    <ts:date>1995-07-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>468931000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -3520,10 +3520,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-03 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>473481000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3559,10 +3559,10 @@
   </trn:currency>
   <trn:num>6353</trn:num>
   <trn:date-posted>
-    <ts:date>1995-08-07 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-06 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>476473000</ts:ns>
   </trn:date-entered>
   <trn:description>MACIF</trn:description>
@@ -3592,10 +3592,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-09 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-08 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>479386000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3626,10 +3626,10 @@
   </trn:currency>
   <trn:num>6385</trn:num>
   <trn:date-posted>
-    <ts:date>1995-08-12 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>482935000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -3658,10 +3658,10 @@
   </trn:currency>
   <trn:num>6386</trn:num>
   <trn:date-posted>
-    <ts:date>1995-08-13 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-12 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>486845000</ts:ns>
   </trn:date-entered>
   <trn:description>C &amp; A</trn:description>
@@ -3723,10 +3723,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-18 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>492331000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3762,10 +3762,10 @@
   </trn:currency>
   <trn:num>6387</trn:num>
   <trn:date-posted>
-    <ts:date>1995-08-22 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-21 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>495542000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -3795,10 +3795,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-25 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>498561000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -3826,10 +3826,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-25 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>504389000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3871,10 +3871,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-08-30 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-29 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>507381000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -3904,10 +3904,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-01 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>511918000</ts:ns>
   </trn:date-entered>
   <trn:description>Crédit Mutuel</trn:description>
@@ -3945,10 +3945,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-01 06:00:00 +0200</ts:date>
+    <ts:date>1995-08-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>514903000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -3976,10 +3976,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-08 06:00:00 +0200</ts:date>
+    <ts:date>1995-09-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>517817000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -4007,10 +4007,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-08 06:00:00 +0200</ts:date>
+    <ts:date>1995-09-07 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>521727000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4046,10 +4046,10 @@
   </trn:currency>
   <trn:num>6388</trn:num>
   <trn:date-posted>
-    <ts:date>1995-09-12 06:00:00 +0200</ts:date>
+    <ts:date>1995-09-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>524796000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -4077,10 +4077,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-17 06:00:00 +0200</ts:date>
+    <ts:date>1995-09-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>527753000</ts:ns>
   </trn:date-entered>
   <trn:description>France Télécom</trn:description>
@@ -4108,10 +4108,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-17 06:00:00 +0200</ts:date>
+    <ts:date>1995-09-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>533919000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4141,10 +4141,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-22 06:00:00 +0200</ts:date>
+    <ts:date>1995-09-21 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>537055000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4174,10 +4174,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-25 05:00:00 +0100</ts:date>
+    <ts:date>1995-09-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>541242000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -4206,10 +4206,10 @@
   </trn:currency>
   <trn:num>6389</trn:num>
   <trn:date-posted>
-    <ts:date>1995-09-26 05:00:00 +0100</ts:date>
+    <ts:date>1995-09-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>544686000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -4239,10 +4239,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-09-29 05:00:00 +0100</ts:date>
+    <ts:date>1995-09-28 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>547748000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4272,10 +4272,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-01 05:00:00 +0100</ts:date>
+    <ts:date>1995-09-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>552274000</ts:ns>
   </trn:date-entered>
   <trn:description>Crédit Mutuel</trn:description>
@@ -4313,10 +4313,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-01 05:00:00 +0100</ts:date>
+    <ts:date>1995-09-30 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>556896000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -4344,10 +4344,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-03 05:00:00 +0100</ts:date>
+    <ts:date>1995-10-02 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>561884000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4382,10 +4382,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-10 05:00:00 +0100</ts:date>
+    <ts:date>1995-10-09 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>565406000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4421,10 +4421,10 @@
   </trn:currency>
   <trn:num>6390</trn:num>
   <trn:date-posted>
-    <ts:date>1995-10-12 05:00:00 +0100</ts:date>
+    <ts:date>1995-10-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>568517000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -4453,10 +4453,10 @@
   </trn:currency>
   <trn:num>6391</trn:num>
   <trn:date-posted>
-    <ts:date>1995-10-15 05:00:00 +0100</ts:date>
+    <ts:date>1995-10-14 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>573311000</ts:ns>
   </trn:date-entered>
   <trn:description>Centre des Impôts</trn:description>
@@ -4486,10 +4486,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-18 05:00:00 +0100</ts:date>
+    <ts:date>1995-10-17 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>576614000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4525,10 +4525,10 @@
   </trn:currency>
   <trn:num>6392</trn:num>
   <trn:date-posted>
-    <ts:date>1995-10-24 05:00:00 +0100</ts:date>
+    <ts:date>1995-10-23 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>579799000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -4558,10 +4558,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-25 05:00:00 +0100</ts:date>
+    <ts:date>1995-10-24 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>583949000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -4589,10 +4589,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-26 05:00:00 +0100</ts:date>
+    <ts:date>1995-10-25 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>587324000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4627,10 +4627,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-10-31 06:00:00 +0100</ts:date>
+    <ts:date>1995-10-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>592288000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4660,10 +4660,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-01 06:00:00 +0100</ts:date>
+    <ts:date>1995-10-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>597275000</ts:ns>
   </trn:date-entered>
   <trn:description>Crédit Mutuel</trn:description>
@@ -4701,10 +4701,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-01 06:00:00 +0100</ts:date>
+    <ts:date>1995-10-31 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>601111000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -4732,10 +4732,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-06 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-05 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>604563000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4771,10 +4771,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-08 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-07 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>607676000</ts:ns>
   </trn:date-entered>
   <trn:description>E.D.F.</trn:description>
@@ -4802,10 +4802,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-12 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>612951000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -4836,10 +4836,10 @@
   </trn:currency>
   <trn:num>6393</trn:num>
   <trn:date-posted>
-    <ts:date>1995-11-12 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>616130000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -4867,10 +4867,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-14 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-13 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>619305000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -4901,10 +4901,10 @@
   </trn:currency>
   <trn:num>6394</trn:num>
   <trn:date-posted>
-    <ts:date>1995-11-16 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-15 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>637291000</ts:ns>
   </trn:date-entered>
   <trn:description>Toys'R'Us</trn:description>
@@ -4934,10 +4934,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-17 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-16 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>647476000</ts:ns>
   </trn:date-entered>
   <trn:description>France Télécom</trn:description>
@@ -4965,10 +4965,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-20 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-19 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>653861000</ts:ns>
   </trn:date-entered>
   <trn:description>Crédit Mutuel</trn:description>
@@ -4998,10 +4998,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-21 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-20 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>657132000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -5032,10 +5032,10 @@
   </trn:currency>
   <trn:num>6395</trn:num>
   <trn:date-posted>
-    <ts:date>1995-11-22 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-21 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>661081000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -5065,10 +5065,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-25 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>664349000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -5096,10 +5096,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-11-28 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-27 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>667602000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -5129,10 +5129,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-01 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>672518000</ts:ns>
   </trn:date-entered>
   <trn:description>Crédit Mutuel</trn:description>
@@ -5170,10 +5170,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-01 06:00:00 +0100</ts:date>
+    <ts:date>1995-11-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>675778000</ts:ns>
   </trn:date-entered>
   <trn:description>Canal Satellite</trn:description>
@@ -5202,10 +5202,10 @@
   </trn:currency>
   <trn:num>6396</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-04 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-03 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>679388000</ts:ns>
   </trn:date-entered>
   <trn:description>C &amp; A</trn:description>
@@ -5240,10 +5240,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-05 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-04 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>684337000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -5274,10 +5274,10 @@
   </trn:currency>
   <trn:num>6397</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-12 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>687601000</ts:ns>
   </trn:date-entered>
   <trn:description>Propriétaire</trn:description>
@@ -5305,10 +5305,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-15 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-14 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>699051000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -5339,10 +5339,10 @@
   </trn:currency>
   <trn:num>6398</trn:num>
   <trn:date-posted>
-    <ts:date>1995-12-20 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-19 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>703136000</ts:ns>
   </trn:date-entered>
   <trn:description>RATP</trn:description>
@@ -5372,10 +5372,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-23 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-22 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>706639000</ts:ns>
   </trn:date-entered>
   <trn:description>Cash</trn:description>
@@ -5410,10 +5410,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-25 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-24 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>710061000</ts:ns>
   </trn:date-entered>
   <trn:description>Employeur</trn:description>
@@ -5441,10 +5441,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-26 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-25 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>716695000</ts:ns>
   </trn:date-entered>
   <trn:description></trn:description>
@@ -5474,10 +5474,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>1995-12-31 06:00:00 +0100</ts:date>
+    <ts:date>1995-12-30 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-20 06:40:27 +0100</ts:date>
+    <ts:date>2001-03-19 21:40:27 -0800</ts:date>
     <ts:ns>719976000</ts:ns>
   </trn:date-entered>
   <trn:description>Crédit Mutuel</trn:description>

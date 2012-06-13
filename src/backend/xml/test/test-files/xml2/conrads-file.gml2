@@ -138,10 +138,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 06:03:09 +0100</ts:date>
+    <ts:date>2000-11-27 21:03:09 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 06:03:58 +0100</ts:date>
+    <ts:date>2000-11-27 21:03:58 -0800</ts:date>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
@@ -168,10 +168,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 06:04:14 +0100</ts:date>
+    <ts:date>2000-11-27 21:04:14 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 06:05:23 +0100</ts:date>
+    <ts:date>2000-11-27 21:05:23 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Initial purchase of stock</trn:description>
   <trn:splits>
@@ -198,10 +198,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 12:39:20 +0100</ts:date>
+    <ts:date>2000-11-28 03:39:20 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 13:31:28 +0100</ts:date>
+    <ts:date>2000-11-28 04:31:28 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Sale (1)</trn:description>
   <trn:splits>
@@ -228,10 +228,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 12:39:20 +0100</ts:date>
+    <ts:date>2000-11-28 03:39:20 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 13:31:30 +0100</ts:date>
+    <ts:date>2000-11-28 04:31:30 -0800</ts:date>
     <ts:ns>66309000</ts:ns>
   </trn:date-entered>
   <trn:description>Sale (1)</trn:description>
@@ -259,10 +259,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 12:39:20 +0100</ts:date>
+    <ts:date>2000-11-28 03:39:20 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 13:31:46 +0100</ts:date>
+    <ts:date>2000-11-28 04:31:46 -0800</ts:date>
     <ts:ns>664262000</ts:ns>
   </trn:date-entered>
   <trn:description>Sale (1)</trn:description>
@@ -290,10 +290,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-28 12:39:20 +0100</ts:date>
+    <ts:date>2000-11-28 03:39:20 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-28 13:32:08 +0100</ts:date>
+    <ts:date>2000-11-28 04:32:08 -0800</ts:date>
     <ts:ns>413532000</ts:ns>
   </trn:date-entered>
   <trn:description>Sale (1)</trn:description>
@@ -321,10 +321,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-29 01:01:14 +0100</ts:date>
+    <ts:date>2000-11-28 16:01:14 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-29 01:01:39 +0100</ts:date>
+    <ts:date>2000-11-28 16:01:39 -0800</ts:date>
   </trn:date-entered>
   <trn:description>buy more</trn:description>
   <trn:splits>
@@ -351,10 +351,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-30 01:18:25 +0100</ts:date>
+    <ts:date>2000-11-29 16:18:25 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-30 01:19:12 +0100</ts:date>
+    <ts:date>2000-11-29 16:19:12 -0800</ts:date>
   </trn:date-entered>
   <trn:description>Sell lots</trn:description>
   <trn:splits>
@@ -381,10 +381,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2000-11-30 01:43:12 +0100</ts:date>
+    <ts:date>2000-11-29 16:43:12 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2000-11-30 01:45:18 +0100</ts:date>
+    <ts:date>2000-11-29 16:45:18 -0800</ts:date>
   </trn:date-entered>
   <trn:description>some purchases</trn:description>
   <trn:splits>
@@ -411,10 +411,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-08 14:00:00 +0100</ts:date>
+    <ts:date>2001-01-08 05:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-09 05:56:02 +0100</ts:date>
+    <ts:date>2001-01-08 20:56:02 -0800</ts:date>
   </trn:date-entered>
   <trn:description>gargle</trn:description>
   <trn:splits>
@@ -441,10 +441,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-08 14:00:00 +0100</ts:date>
+    <ts:date>2001-01-08 05:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-09 10:22:12 +0100</ts:date>
+    <ts:date>2001-01-09 01:22:12 -0800</ts:date>
   </trn:date-entered>
   <trn:description>fandangle</trn:description>
   <trn:splits>
@@ -471,10 +471,10 @@
     <cmdty:id>stk</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-01-08 14:00:00 +0100</ts:date>
+    <ts:date>2001-01-08 05:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-01-09 12:57:22 +0100</ts:date>
+    <ts:date>2001-01-09 03:57:22 -0800</ts:date>
   </trn:date-entered>
   <trn:description>A small sale</trn:description>
   <trn:splits>

@@ -149,10 +149,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-04-04 16:00:00 +0200</ts:date>
+    <ts:date>2001-04-04 07:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-04-05 09:00:17 +0200</ts:date>
+    <ts:date>2001-04-05 00:00:17 -0700</ts:date>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
@@ -179,10 +179,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-04-04 16:00:00 +0200</ts:date>
+    <ts:date>2001-04-04 07:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-04-05 09:00:40 +0200</ts:date>
+    <ts:date>2001-04-05 00:00:40 -0700</ts:date>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
@@ -209,10 +209,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-04-04 16:00:00 +0200</ts:date>
+    <ts:date>2001-04-04 07:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-04-05 09:21:15 +0200</ts:date>
+    <ts:date>2001-04-05 00:21:15 -0700</ts:date>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
@@ -239,10 +239,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-04-04 16:00:00 +0200</ts:date>
+    <ts:date>2001-04-04 07:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-04-05 09:22:12 +0200</ts:date>
+    <ts:date>2001-04-05 00:22:12 -0700</ts:date>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
@@ -269,10 +269,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2002-08-12 16:00:00 +0200</ts:date>
+    <ts:date>2002-08-12 07:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-04-05 09:00:32 +0200</ts:date>
+    <ts:date>2001-04-05 00:00:32 -0700</ts:date>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>
@@ -299,10 +299,10 @@
     <cmdty:id>USD</cmdty:id>
   </trn:currency>
   <trn:date-posted>
-    <ts:date>2001-04-04 16:00:00 +0200</ts:date>
+    <ts:date>2001-04-04 07:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-04-05 09:43:14 +0200</ts:date>
+    <ts:date>2001-04-05 00:43:14 -0700</ts:date>
   </trn:date-entered>
   <trn:description></trn:description>
   <trn:splits>

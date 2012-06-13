@@ -109,10 +109,10 @@
   </trn:currency>
   <trn:num>TXFR</trn:num>
   <trn:date-posted>
-    <ts:date>1997-09-12 06:00:00 +0200</ts:date>
+    <ts:date>1997-09-11 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:35:15 +0200</ts:date>
+    <ts:date>2001-03-26 12:35:15 -0800</ts:date>
     <ts:ns>421794000</ts:ns>
   </trn:date-entered>
   <trn:description>move a pile of money to trading acct</trn:description>
@@ -143,10 +143,10 @@
   </trn:currency>
   <trn:num>TXFR</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-11 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:35:15 +0200</ts:date>
+    <ts:date>2001-03-26 12:35:15 -0800</ts:date>
     <ts:ns>422791000</ts:ns>
   </trn:date-entered>
   <trn:description>hal stock</trn:description>
@@ -177,10 +177,10 @@
   </trn:currency>
   <trn:num>TXFR</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-11 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-10 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:35:15 +0200</ts:date>
+    <ts:date>2001-03-26 12:35:15 -0800</ts:date>
     <ts:ns>423736000</ts:ns>
   </trn:date-entered>
   <trn:description>hal stock</trn:description>
@@ -211,10 +211,10 @@
   </trn:currency>
   <trn:num>TXFR</trn:num>
   <trn:date-posted>
-    <ts:date>1997-11-12 06:00:00 +0100</ts:date>
+    <ts:date>1997-11-11 21:00:00 -0800</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:35:15 +0200</ts:date>
+    <ts:date>2001-03-26 12:35:15 -0800</ts:date>
     <ts:ns>424738000</ts:ns>
   </trn:date-entered>
   <trn:description>hal stock</trn:description>
@@ -245,10 +245,10 @@
   </trn:currency>
   <trn:num>DEP</trn:num>
   <trn:date-posted>
-    <ts:date>1997-06-17 06:00:00 +0200</ts:date>
+    <ts:date>1997-06-16 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:35:15 +0200</ts:date>
+    <ts:date>2001-03-26 12:35:15 -0800</ts:date>
     <ts:ns>418417000</ts:ns>
   </trn:date-entered>
   <trn:description>from my pillow case</trn:description>
@@ -279,10 +279,10 @@
   </trn:currency>
   <trn:num>DEP</trn:num>
   <trn:date-posted>
-    <ts:date>1997-08-01 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:35:15 +0200</ts:date>
+    <ts:date>2001-03-26 12:35:15 -0800</ts:date>
     <ts:ns>419571000</ts:ns>
   </trn:date-entered>
   <trn:description>put in more money</trn:description>
@@ -313,10 +313,10 @@
   </trn:currency>
   <trn:num>101</trn:num>
   <trn:date-posted>
-    <ts:date>1997-08-01 06:00:00 +0200</ts:date>
+    <ts:date>1997-07-31 21:00:00 -0700</ts:date>
   </trn:date-posted>
   <trn:date-entered>
-    <ts:date>2001-03-26 22:35:15 +0200</ts:date>
+    <ts:date>2001-03-26 12:35:15 -0800</ts:date>
     <ts:ns>420785000</ts:ns>
   </trn:date-entered>
   <trn:description>paycheck</trn:description>
