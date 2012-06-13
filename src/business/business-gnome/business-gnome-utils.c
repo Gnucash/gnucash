@@ -316,15 +316,16 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
                                GList *acct_types, GList *acct_commodities)
 {
     GtkListStore *store;
+    GtkTreeIter iter;
     GList *list, *node;
-    char *text;
+    const gchar *text;
 
-    g_return_val_if_fail (combo && GTK_IS_COMBO_BOX_ENTRY(combo), NULL);
+    g_return_val_if_fail (combo && GTK_IS_COMBO_BOX(combo), NULL);
     g_return_val_if_fail (book, NULL);
     g_return_val_if_fail (acct_types, NULL);
 
     /* Figure out if anything is set in the combo */
-    text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo));
+    text = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(combo)))));
 
     g_object_set_data (G_OBJECT(combo), "book", book);
     list = gnc_account_get_descendants (gnc_book_get_root_account (book));
@@ -357,11 +358,12 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
         }
 
         name = gnc_account_get_full_name (account);
-        gtk_combo_box_append_text(GTK_COMBO_BOX(combo), name);
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set (store, &iter, 0, name, -1);
+
         /* Save the first account name in case no account name was set */
         if (!text || g_strcmp0 (text, "") == 0)
         {
-            g_free (text); /* This is ok, even if text is already NULL */
             text = g_strdup (name);
         }
         g_free(name);
@@ -370,10 +372,7 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
 
     g_list_free (list);
 
-    gnc_cbe_set_by_string(GTK_COMBO_BOX_ENTRY(combo), text);
-
-    if (text)
-        g_free (text);
+    gnc_cbwe_set_by_string(GTK_COMBO_BOX(combo), text);
 
     return gnc_account_select_combo_get_active (combo);
 }
@@ -381,17 +380,18 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
 Account *
 gnc_account_select_combo_get_active (GtkWidget *combo)
 {
-    gchar *text;
+    const gchar *text;
     QofBook *book;
 
-    if (!combo || !GTK_IS_COMBO_BOX_ENTRY(combo))
+    if (!combo || !GTK_IS_COMBO_BOX(combo))
         return NULL;
 
     book = g_object_get_data (G_OBJECT(combo), "book");
     if (!book)
         return NULL;
 
-    text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo));
+    text = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(combo)))));
+
     if (!text || g_strcmp0 (text, "") == 0)
         return NULL;
 

@@ -256,14 +256,14 @@ gnc_period_select_set_fy_end (GncPeriodSelect *period, const GDate *fy_end)
         for (i = GNC_ACCOUNTING_PERIOD_CYEAR_LAST; i < GNC_ACCOUNTING_PERIOD_FYEAR_LAST; i++)
         {
             label = priv->start ? _(start_strings[i]) : _(end_strings[i]);
-            gtk_combo_box_append_text(GTK_COMBO_BOX(priv->selector), label);
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(priv->selector), label);
         }
     }
     else
     {
         for (i = GNC_ACCOUNTING_PERIOD_FYEAR_LAST - 1; i >= GNC_ACCOUNTING_PERIOD_FYEAR_LAST; i--)
         {
-            gtk_combo_box_remove_text(GTK_COMBO_BOX(priv->selector), i);
+            gtk_combo_box_text_remove(GTK_COMBO_BOX_TEXT(priv->selector), i);
         }
     }
 }
@@ -286,7 +286,7 @@ gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
         {
             priv->date_align = gtk_alignment_new(0.5, 0.5, 0, 0);
             gtk_alignment_set_padding(GTK_ALIGNMENT(priv->date_align), 0, 0, 6, 0);
-            gtk_box_pack_start_defaults(GTK_BOX(period), priv->date_align);
+            gtk_box_pack_start(GTK_BOX(period), priv->date_align, TRUE, TRUE, 0);
             priv->date_label = gtk_label_new("");
             gtk_container_add(GTK_CONTAINER(priv->date_align), priv->date_label);
             gtk_widget_show_all(priv->date_align);
@@ -619,11 +619,11 @@ gnc_period_select_new (gboolean starting_labels)
 
     /* Set up private data structures */
     priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-    priv->selector   = gtk_combo_box_new_text();
+    priv->selector   = gtk_combo_box_text_new();
     priv->start      = starting_labels;
 
     /* Add the internal widgets to the hbox */
-    gtk_box_pack_start_defaults(GTK_BOX(period), priv->selector);
+    gtk_box_pack_start(GTK_BOX(period), priv->selector, TRUE, TRUE, 0);
     gtk_widget_show(priv->selector);
 
     /* Find out when the combo box changes */
@@ -634,7 +634,7 @@ gnc_period_select_new (gboolean starting_labels)
     for (i = 0; i < GNC_ACCOUNTING_PERIOD_CYEAR_LAST; i++)
     {
         label = starting_labels ? _(start_strings[i]) : _(end_strings[i]);
-        gtk_combo_box_append_text(GTK_COMBO_BOX(priv->selector), label);
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(priv->selector), label);
     }
 
     /* Track changes to date formatting */

@@ -67,12 +67,12 @@
 
 typedef struct
 {
-    GtkComboBoxEntry combobox;
+    GtkComboBox combobox;
 } GNCCurrencyEdit;
 
 typedef struct
 {
-    GtkComboBoxEntryClass combobox;
+    GtkComboBoxClass combobox;
 } GNCCurrencyEditClass;
 
 /** Return the GType for the GNCCurrencyEdit currency selection widget.

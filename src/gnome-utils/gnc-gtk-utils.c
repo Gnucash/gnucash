@@ -29,16 +29,16 @@
 #define CHANGED_ID "changed_id"
 
 
-/** Find an entry in the GtkComboBoxEntry by its text value, and set
+/** Find an entry in the GtkComboBox by its text value, and set
  *  the widget to that value.  This function also records the index of
  *  that text value for use when the user leaves the widget.
  *
- *  @param cbe A pointer to a GtkComboBoxEntry widget.
+ *  @param cbwe A pointer to a GtkComboBox with entry widget.
  *
  *  @param text The entry text to find in the model of the combo box
  *  entry. */
 void
-gnc_cbe_set_by_string(GtkComboBoxEntry *cbe,
+gnc_cbwe_set_by_string(GtkComboBox *cbwe,
                       const gchar *text)
 {
     GtkTreeModel *model;
@@ -47,15 +47,15 @@ gnc_cbe_set_by_string(GtkComboBoxEntry *cbe,
     gint column, index, id;
     gboolean match;
 
-    model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbwe));
     if (!gtk_tree_model_get_iter_first(model, &iter))
     {
         /* empty tree */
-        gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), -1);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(cbwe), -1);
         return;
     }
 
-    column = gtk_combo_box_entry_get_text_column(cbe);
+    column = gtk_combo_box_get_entry_text_column(cbwe);
     do
     {
         gtk_tree_model_get(model, &iter, column, &tree_string, -1);
@@ -65,36 +65,36 @@ gnc_cbe_set_by_string(GtkComboBoxEntry *cbe,
             continue;
 
         /* Found a matching string */
-        id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cbe), CHANGED_ID));
-        g_signal_handler_block(cbe, id);
-        gtk_combo_box_set_active_iter(GTK_COMBO_BOX(cbe), &iter);
-        g_signal_handler_unblock(cbe, id);
+        id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cbwe), CHANGED_ID));
+        g_signal_handler_block(cbwe, id);
+        gtk_combo_box_set_active_iter(GTK_COMBO_BOX(cbwe), &iter);
+        g_signal_handler_unblock(cbwe, id);
 
-        index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbe));
-        g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
+        index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbwe));
+        g_object_set_data(G_OBJECT(cbwe), LAST_INDEX, GINT_TO_POINTER(index));
         return;
     }
     while (gtk_tree_model_iter_next(model, &iter));
 }
 
 
-/**  The GtkComboBoxEntry widget has changed its value.  If the widget
+/**  The GtkComboBox with entry widget has changed its value.  If the widget
  *   now points to another valid entry string then record the index of
  *   that string for use when the user leaves the widget.
  *
  *   @param widget Unused.
  *
- *   @param cbe A pointer to a GtkComboBoxEntry widget. */
+ *   @param cbwe A pointer to a GtkComboBox widget. */
 static void
-gnc_cbe_changed_cb (GtkComboBox *widget,
-                    GtkComboBoxEntry *cbe)
+gnc_cbwe_changed_cb (GtkComboBox *widget,
+                    GtkComboBox *cbwe)
 {
     gint index;
 
     index = gtk_combo_box_get_active(widget);
     if (index == -1)
         return;
-    g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
+    g_object_set_data(G_OBJECT(cbwe), LAST_INDEX, GINT_TO_POINTER(index));
 }
 
 
@@ -113,19 +113,19 @@ gnc_cbe_changed_cb (GtkComboBox *widget,
  *   @param comp_iter The iter in the completion's temporary model
  *   that represents the user selected match.
  *
- *   @param cbe A pointer to a currency entry widget. */
+ *   @param cbwe A pointer to a currency entry widget. */
 static gboolean
-gnc_cbe_match_selected_cb (GtkEntryCompletion *completion,
-                           GtkTreeModel       *comp_model,
-                           GtkTreeIter        *comp_iter,
-                           GtkComboBoxEntry   *cbe)
+gnc_cbwe_match_selected_cb (GtkEntryCompletion *completion,
+                            GtkTreeModel       *comp_model,
+                            GtkTreeIter        *comp_iter,
+                            GtkComboBox        *cbwe)
 {
     gint column;
     gchar *text;
 
-    column = gtk_combo_box_entry_get_text_column(cbe);
+    column = gtk_combo_box_get_entry_text_column(cbwe);
     gtk_tree_model_get(comp_model, comp_iter, column, &text, -1);
-    gnc_cbe_set_by_string(cbe, text);
+    gnc_cbwe_set_by_string(cbwe, text);
     g_free(text);
     return FALSE;
 }
@@ -142,40 +142,40 @@ gnc_cbe_match_selected_cb (GtkEntryCompletion *completion,
  *
  *   @param event Unused.
  *
- *   @param cbe A pointer to a currency entry widget. */
+ *   @param cbwe A pointer to a currency entry widget. */
 static gboolean
-gnc_cbe_focus_out_cb (GtkEntry *entry,
-                      GdkEventFocus *event,
-                      GtkComboBoxEntry *cbe)
+gnc_cbwe_focus_out_cb (GtkEntry *entry,
+                       GdkEventFocus *event,
+                       GtkComboBox *cbwe)
 {
     const gchar *text;
     gint index;
 
     /* Make a final attempt to match the current text. */
     text = gtk_entry_get_text(entry);
-    gnc_cbe_set_by_string(cbe, text);
+    gnc_cbwe_set_by_string(cbwe, text);
 
     /* Get the last known index (which may have just been set). */
-    index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cbe), LAST_INDEX));
-    gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), index);
+    index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cbwe), LAST_INDEX));
+    gtk_combo_box_set_active(GTK_COMBO_BOX(cbwe), index);
     return FALSE;
 }
 
 void
-gnc_cbe_add_completion (GtkComboBoxEntry *cbe)
+gnc_cbwe_add_completion (GtkComboBox *cbwe)
 {
     GtkEntry *entry;
     GtkEntryCompletion *completion;
     GtkTreeModel *model;
 
-    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
+    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbwe)));
     completion = gtk_entry_get_completion(entry);
     if (completion)
         return;
 
     /* No completion yet? Set one up. */
     completion = gtk_entry_completion_new();
-    model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbwe));
     gtk_entry_completion_set_model(completion, model);
     gtk_entry_completion_set_text_column(completion, 0);
     gtk_entry_completion_set_inline_completion(completion, TRUE);
@@ -184,7 +184,7 @@ gnc_cbe_add_completion (GtkComboBoxEntry *cbe)
 }
 
 void
-gnc_cbe_require_list_item (GtkComboBoxEntry *cbe)
+gnc_cbwe_require_list_item (GtkComboBox *cbwe)
 {
     GtkEntry *entry;
     GtkEntryCompletion *completion;
@@ -193,33 +193,33 @@ gnc_cbe_require_list_item (GtkComboBoxEntry *cbe)
     gint index, id;
 
     /* Ensure completion is set up. */
-    gnc_cbe_add_completion(cbe);
+    gnc_cbwe_add_completion(cbwe);
 
     /* If an item in the combo box isn't already selected, then force
      * select the first item. Take care, the combo box may not have been
      * filled yet.  */
-    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
+    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbwe)));
     completion = gtk_entry_get_completion(entry);
-    index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbe));
+    index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbwe));
     if (index == -1)
     {
         model = gtk_entry_completion_get_model(completion);
         if (gtk_tree_model_get_iter_first(model, &iter))
         {
-            gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), 0);
+            gtk_combo_box_set_active(GTK_COMBO_BOX(cbwe), 0);
             index = 0;
         }
     }
-    g_object_set_data(G_OBJECT(cbe), LAST_INDEX, GINT_TO_POINTER(index));
+    g_object_set_data(G_OBJECT(cbwe), LAST_INDEX, GINT_TO_POINTER(index));
 
     /* Now the signals to make sure the user can't leave the
        widget without a valid match. */
-    id = g_signal_connect(cbe, "changed",
-                          G_CALLBACK(gnc_cbe_changed_cb), cbe);
+    id = g_signal_connect(cbwe, "changed",
+                          G_CALLBACK(gnc_cbwe_changed_cb), cbwe);
     g_signal_connect(completion, "match_selected",
-                     G_CALLBACK(gnc_cbe_match_selected_cb), cbe);
+                     G_CALLBACK(gnc_cbwe_match_selected_cb), cbwe);
     g_signal_connect(entry, "focus-out-event",
-                     G_CALLBACK(gnc_cbe_focus_out_cb), cbe);
+                     G_CALLBACK(gnc_cbwe_focus_out_cb), cbwe);
 
-    g_object_set_data(G_OBJECT(cbe), CHANGED_ID, GINT_TO_POINTER(id));
+    g_object_set_data(G_OBJECT(cbwe), CHANGED_ID, GINT_TO_POINTER(id));
 }

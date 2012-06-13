@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-gtk-utils.c -- utility functions based on glib functions     *
+ * gnc-gtk-utils.h -- utility functions based on glib functions     *
  * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -41,9 +41,9 @@
  @{
 */
 
-void gnc_cbe_set_by_string(GtkComboBoxEntry *cbe, const gchar *text);
-void gnc_cbe_add_completion (GtkComboBoxEntry *cbe);
-void gnc_cbe_require_list_item (GtkComboBoxEntry *cbe);
+void gnc_cbwe_set_by_string(GtkComboBox *cbwe, const gchar *text);
+void gnc_cbwe_add_completion (GtkComboBox *cbwe);
+void gnc_cbwe_require_list_item (GtkComboBox *cbwe);
 
 /** @} */
 

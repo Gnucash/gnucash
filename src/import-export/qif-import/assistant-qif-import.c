@@ -834,6 +834,7 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
 {
 
     QIFAssistantPage *retval = g_new0(QIFAssistantPage, 1);
+    GtkListStore *store;
     GtkWidget    *table;
     GtkWidget    *label;
     gchar        *title = NULL;
@@ -922,8 +923,14 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
                       G_CALLBACK (gnc_ui_qif_import_comm_changed_cb), wind);
 
     /* Namespace entry */
-    retval->namespace_combo = gtk_combo_box_entry_new_text();
-    gnc_cbe_add_completion(GTK_COMBO_BOX_ENTRY(retval->namespace_combo));
+    store = gtk_list_store_new (1, G_TYPE_STRING);
+    retval->namespace_combo = gtk_combo_box_new_with_model_and_entry(GTK_TREE_MODEL(store));
+    g_object_unref(store);
+
+    /* Set the column for the text */
+    gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(retval->namespace_combo), 0);
+
+    gnc_cbwe_add_completion(GTK_COMBO_BOX(retval->namespace_combo));
     label = gtk_label_new_with_mnemonic(
                 _("_Exchange or abbreviation type:"));
     gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->namespace_combo);
@@ -1885,26 +1892,28 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
                                            SCM_CDR(parse_return),
                                            scm_str2symbol("date"))) != SCM_BOOL_F)
             {
-                gint n_items;
+                GtkComboBox *combo_box;
+                GtkTreeModel *model;
+                GtkTreeIter iter;
 
                 /* Block the date call back */
                 g_signal_handlers_block_by_func( wind->date_format_combo, gnc_ui_qif_import_date_valid_cb, wind );
+
                 /* Clear the date format combo box. */
+                combo_box = GTK_COMBO_BOX(wind->date_format_combo);
+                model = gtk_combo_box_get_model(combo_box);
+                gtk_list_store_clear(GTK_LIST_STORE(model));
+
                 gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), -1);
-                n_items = gtk_tree_model_iter_n_children(
-                              gtk_combo_box_get_model(GTK_COMBO_BOX(wind->date_format_combo)),
-                              NULL);
-                while (n_items-- > 0)
-                    gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
 
                 /* Add the formats for the user to select from. */
                 while (scm_is_list(date_formats) && !scm_is_null(date_formats))
                 {
-                    gtk_combo_box_append_text(GTK_COMBO_BOX(wind->date_format_combo),
-                                              SCM_SYMBOL_CHARS(SCM_CAR(date_formats)));
+                    gtk_list_store_append(GTK_LIST_STORE(model), &iter);
+                    gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, SCM_SYMBOL_CHARS(SCM_CAR(date_formats)), -1);
+
                     date_formats = SCM_CDR(date_formats);
                 }
-                gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), -1 );
 
                 /* Unblock the date call back */
                 g_signal_handlers_unblock_by_func( wind->date_format_combo, gnc_ui_qif_import_date_valid_cb, wind );
@@ -2017,6 +2026,8 @@ void
 gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
 
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
     gint num = gtk_assistant_get_current_page (assistant);
@@ -2027,7 +2038,10 @@ gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
     gchar *text;
 
     /* Get the selected date format. */
-    text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->date_format_combo));
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX(wind->date_format_combo));
+    gtk_combo_box_get_active_iter (GTK_COMBO_BOX(wind->date_format_combo), &iter);
+    gtk_tree_model_get( model, &iter, 0, &text, -1 );
+
     if (!text)
     {
         g_critical("QIF import: BUG DETECTED in gnc_ui_qif_import_date_valid_cb. Format is NULL.");
@@ -2635,10 +2649,10 @@ gnc_ui_qif_import_commodity_new_prepare (GtkAssistant *assistant,
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     QIFAssistantPage    *qpage = g_object_get_data(G_OBJECT(page), "page_struct");
-    gchar               *ns;
+    const gchar         *ns;
 
     /* Get any entered namespace. */
-    ns = gtk_combo_box_get_active_text(GTK_COMBO_BOX(qpage->namespace_combo));
+    ns = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(qpage->namespace_combo)))));
 
     /* Update the namespaces available to select. */
     if (!ns || !ns[0])
@@ -2648,8 +2662,6 @@ gnc_ui_qif_import_commodity_new_prepare (GtkAssistant *assistant,
             DIAG_COMM_ALL);
     else
         gnc_ui_update_namespace_picker(qpage->namespace_combo, ns, DIAG_COMM_ALL);
-
-    g_free(ns);
 }
 
 
@@ -2822,8 +2834,7 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
                                       0);
 
     /* The default currency. */
-    gchar *currname =
-        gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->currency_picker));
+    const gchar *currname = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(wind->currency_picker)))));
 
     /* Raise the busy flag so the assistant can't be canceled unexpectedly. */
     wind->busy = TRUE;
@@ -2858,7 +2869,6 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
                                  progress),
                        SCM_EOL);
     gnc_progress_dialog_pop(wind->convert_progress);
-    g_free(currname);
 
     if (retval == SCM_BOOL_T)
     {

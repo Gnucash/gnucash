@@ -179,6 +179,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     SCM              new_ss = SCM_BOOL_F;
     GtkWidget        * template_combo;
     GtkTreeModel     * template_model;
+    GtkTreeIter      iter; 
     GtkWidget        * name_entry;
     gint             dialog_retval;
     GList *template_names = NULL;
@@ -218,8 +219,8 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
         template_names = g_list_prepend (template_names, (gpointer)orig_name);
 
         /* The displayed name should be translated */
-        gtk_combo_box_prepend_text(GTK_COMBO_BOX(template_combo),
-                                   _(orig_name));
+        gtk_list_store_append(GTK_LIST_STORE(template_model), &iter);
+        gtk_list_store_set (GTK_LIST_STORE(template_model), &iter, 0, _(orig_name), -1);
     }
     gtk_combo_box_set_active(GTK_COMBO_BOX(template_combo), 0);
 

@@ -112,9 +112,9 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
                                dialog_commodity_mode mode);
 void gnc_ui_select_commodity_new_cb(GtkButton * button,
                                     gpointer user_data);
-void gnc_ui_select_commodity_changed_cb(GtkComboBoxEntry *cbe,
+void gnc_ui_select_commodity_changed_cb(GtkComboBox *cbwe,
                                         gpointer user_data);
-void gnc_ui_select_commodity_namespace_changed_cb(GtkComboBoxEntry *cbe,
+void gnc_ui_select_commodity_namespace_changed_cb(GtkComboBox *cbwe,
         gpointer user_data);
 
 /* The commodity creation window */
@@ -249,55 +249,21 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     GtkWidget *button, *label;
 
     builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore1");
+    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "Security Selector Dialog");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
     retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Security Selector Dialog"));
-    retval->namespace_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_namespace_cbe"));
-    retval->commodity_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_commodity_cbe"));
+    retval->namespace_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_namespace_cbwe"));
+    retval->commodity_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_commodity_cbwe"));
     retval->select_user_prompt = GTK_WIDGET(gtk_builder_get_object (builder, "select_user_prompt"));
     retval->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ss_ok_button"));
     label = GTK_WIDGET(gtk_builder_get_object (builder, "item_label"));
 
-    /* namespace List Store - create here as we get an error if created in builder */
-    {
-        GtkListStore  *store;
-        GtkTreeIter    iter;
-        gchar          string[] = "Dummy namespace Line";
-
-        store = gtk_list_store_new( 1, G_TYPE_STRING );
-
-        gtk_list_store_append( store, &iter );
-        gtk_list_store_set( store, &iter, 0, string, -1 );
-
-        gtk_combo_box_set_model( GTK_COMBO_BOX( retval->namespace_combo ),
-                                 GTK_TREE_MODEL( store ) );
-        g_object_unref( G_OBJECT( store ) );
-        gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( retval->namespace_combo ), 0 );
-    }
-
-    /* commodity List Store - create here as we get an error if created in builder */
-    {
-        GtkListStore  *store;
-        GtkTreeIter    iter;
-        gchar          string[] = "Dummy commodity Line";
-
-        store = gtk_list_store_new( 1, G_TYPE_STRING );
-
-        gtk_list_store_append( store, &iter );
-        gtk_list_store_set( store, &iter, 0, string, -1 );
-
-        gtk_combo_box_set_model( GTK_COMBO_BOX( retval->commodity_combo ),
-                                 GTK_TREE_MODEL( store ) );
-        g_object_unref( G_OBJECT( store ) );
-        gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( retval->commodity_combo ), 0 );
-    }
-
-    gtk_combo_box_remove_text(GTK_COMBO_BOX(retval->namespace_combo), 0);
-    gtk_combo_box_remove_text(GTK_COMBO_BOX(retval->commodity_combo), 0);
-    gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(retval->namespace_combo));
-    gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(retval->commodity_combo));
+    gnc_cbwe_require_list_item(GTK_COMBO_BOX(retval->namespace_combo));
+    gnc_cbwe_require_list_item(GTK_COMBO_BOX(retval->commodity_combo));
 
     gtk_label_set_text (GTK_LABEL (retval->select_user_prompt), "");
 
@@ -395,27 +361,28 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
  *  Commodity Selection dialog.  It should not be used outside of the
  *  dialog-commodity.c file.
  *
- *  @param cbe A pointer to the commodity name entry widget in the
+ *  @param cbwe A pointer to the commodity name entry widget in the
  *  dialog.
  *
  *  @param user_data A pointer to the data structure describing the
  *  current state of the commodity picker.
  */
 void
-gnc_ui_select_commodity_changed_cb (GtkComboBoxEntry *cbe,
+gnc_ui_select_commodity_changed_cb (GtkComboBox *cbwe,
                                     gpointer user_data)
 {
     SelectCommodityWindow * w = user_data;
-    gchar *namespace, *fullname;
+    gchar *namespace;
+    const gchar *fullname;
     gboolean ok;
 
-    ENTER("cbe=%p, user_data=%p", cbe, user_data);
+    ENTER("cbwe=%p, user_data=%p", cbwe, user_data);
     namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
-    fullname = gtk_combo_box_get_active_text(GTK_COMBO_BOX(w->commodity_combo));
+    fullname = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(w->commodity_combo)))));
+
     DEBUG("namespace=%s, name=%s", namespace, fullname);
     w->selection = gnc_commodity_table_find_full(gnc_get_current_commodities(),
                    namespace, fullname);
-    g_free(fullname);
     g_free(namespace);
 
     ok = (w->selection != NULL);
@@ -435,20 +402,20 @@ gnc_ui_select_commodity_changed_cb (GtkComboBoxEntry *cbe,
  *  Commodity Selection dialog.  It should not be used outside of the
  *  dialog-commodity.c file.
  *
- *  @param cbe A pointer to the commodity namespace entry widget in
+ *  @param cbwe A pointer to the commodity namespace entry widget in
  *  the dialog.
  *
  *  @param user_data A pointer to the data structure describing the
  *  current state of the commodity picker.
  */
 void
-gnc_ui_select_commodity_namespace_changed_cb (GtkComboBoxEntry *cbe,
+gnc_ui_select_commodity_namespace_changed_cb (GtkComboBox *cbwe,
         gpointer user_data)
 {
     SelectCommodityWindow * w = user_data;
     gchar *namespace;
 
-    ENTER("cbe=%p, user_data=%p", cbe, user_data);
+    ENTER("cbwe=%p, user_data=%p", cbwe, user_data);
     namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
     DEBUG("namespace=%s", namespace);
     gnc_ui_update_commodity_picker(w->commodity_combo, namespace, NULL);
@@ -472,7 +439,7 @@ collate(gconstpointer a, gconstpointer b)
 
 
 void
-gnc_ui_update_commodity_picker (GtkWidget *cbe,
+gnc_ui_update_commodity_picker (GtkWidget *cbwe,
                                 const gchar * namespace,
                                 const gchar * init_string)
 {
@@ -482,15 +449,16 @@ gnc_ui_update_commodity_picker (GtkWidget *cbe,
     GtkComboBox *combo_box;
     GtkEntry *entry;
     GtkTreeModel *model;
+    GtkTreeIter iter;
     gnc_commodity_table *table;
     gint current = 0, match = 0;
     gchar *name;
 
-    g_return_if_fail(GTK_IS_COMBO_BOX_ENTRY(cbe));
+    g_return_if_fail(GTK_IS_COMBO_BOX(cbwe));
     g_return_if_fail(namespace);
 
     /* Erase the old entries */
-    combo_box = GTK_COMBO_BOX(cbe);
+    combo_box = GTK_COMBO_BOX(cbwe);
     model = gtk_combo_box_get_model(combo_box);
     gtk_list_store_clear(GTK_LIST_STORE(model));
 
@@ -514,7 +482,9 @@ gnc_ui_update_commodity_picker (GtkWidget *cbe,
     for (iterator = commodity_items; iterator; iterator = iterator->next)
     {
         name = (char *)iterator->data;
-        gtk_combo_box_append_text(combo_box, name);
+        gtk_list_store_append(GTK_LIST_STORE(model), &iter);
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, name, -1);
+
         if (init_string && g_utf8_collate(name, init_string) == 0)
             match = current;
         current++;
@@ -663,19 +633,20 @@ gnc_ui_update_fq_info (CommodityWindow *cw)
  * gnc_ui_update_namespace_picker
  ********************************************************************/
 void
-gnc_ui_update_namespace_picker (GtkWidget *cbe,
+gnc_ui_update_namespace_picker (GtkWidget *cbwe,
                                 const char * init_string,
                                 dialog_commodity_mode mode)
 {
     GtkComboBox *combo_box;
     GtkTreeModel *model;
+    GtkTreeIter iter;
     GList *namespaces, *node;
     gint current = 0, match = 0;
 
-    g_return_if_fail(GTK_IS_COMBO_BOX_ENTRY (cbe));
+    g_return_if_fail(GTK_IS_COMBO_BOX (cbwe));
 
     /* Erase the old entries */
-    combo_box = GTK_COMBO_BOX(cbe);
+    combo_box = GTK_COMBO_BOX(cbwe);
     model = gtk_combo_box_get_model(combo_box);
     gtk_list_store_clear(GTK_LIST_STORE(model));
     gtk_combo_box_set_active(combo_box, -1);
@@ -708,7 +679,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbe,
         break;
     }
 
-    /* stick them in the combobox */
+    /* add them to the combobox */
     namespaces = g_list_sort(namespaces, collate);
     for (node = namespaces; node; node = node->next)
     {
@@ -716,7 +687,11 @@ gnc_ui_update_namespace_picker (GtkWidget *cbe,
             continue;
         /* Hide the template entry */
         if (g_utf8_collate(node->data, "template" ) != 0)
-            gtk_combo_box_append_text(combo_box, node->data);
+        {
+            gtk_list_store_append(GTK_LIST_STORE(model), &iter);
+            gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, node->data, -1);
+        }
+
         if (init_string && (g_utf8_collate(node->data, init_string) == 0))
             match = current;
         current++;
@@ -728,22 +703,21 @@ gnc_ui_update_namespace_picker (GtkWidget *cbe,
 
 
 gchar *
-gnc_ui_namespace_picker_ns (GtkWidget *cbe)
+gnc_ui_namespace_picker_ns (GtkWidget *cbwe)
 {
-    gchar *namespace;
+    const gchar *namespace;
 
-    g_return_val_if_fail(GTK_IS_COMBO_BOX_ENTRY (cbe), NULL);
+    g_return_val_if_fail(GTK_IS_COMBO_BOX (cbwe), NULL);
 
-    namespace = gtk_combo_box_get_active_text(GTK_COMBO_BOX(cbe));
+    namespace = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cbwe)))));
 
     if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
     {
         /* In case the user types in ISO4217, map it to CURRENCY. */
-        g_free(namespace);
         return g_strdup(GNC_COMMODITY_NS_CURRENCY);
     }
     else
-        return namespace;
+        return g_strdup(namespace);
 }
 
 
@@ -755,15 +729,16 @@ gnc_ui_commodity_quote_info_cb (GtkWidget *w, gpointer data)
 {
     CommodityWindow *cw = data;
     gboolean get_quote, allow_src, active;
-    gchar *text;
+    const gchar *text;
     gint i;
 
     ENTER(" ");
     get_quote = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w));
 
-    text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(cw->namespace_combo));
+    text = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cw->namespace_combo)))));
+
     allow_src = !gnc_commodity_namespace_is_iso(text);
-    g_free(text);
+
     gtk_widget_set_sensitive(cw->source_label, get_quote && allow_src);
 
     for (i = SOURCE_SINGLE; i < SOURCE_MAX; i++)
@@ -929,11 +904,11 @@ gnc_ui_quote_tz_menu_create(void)
        order to be portable to non GNU OSes, we may have to support
        whatever we add here manually on those systems. */
 
-    combo = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(combo), _("Use local time"));
+    combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), _("Use local time"));
     for (itemstr = &known_timezones[0]; *itemstr; itemstr++)
     {
-        gtk_combo_box_append_text(GTK_COMBO_BOX(combo), *itemstr);
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), *itemstr);
     }
 
     gtk_widget_show(combo);
@@ -967,6 +942,7 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
           parent, selected_namespace, fullname, mnemonic);
 
     builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "adjustment1");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "Security Dialog");
 
@@ -993,33 +969,15 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     /* Get widget pointers */
     retval->fullname_entry = GTK_WIDGET(gtk_builder_get_object (builder, "fullname_entry"));
     retval->mnemonic_entry = GTK_WIDGET(gtk_builder_get_object (builder, "mnemonic_entry"));
-    retval->namespace_combo = GTK_WIDGET(gtk_builder_get_object (builder, "namespace_cbe"));
+    retval->namespace_combo = GTK_WIDGET(gtk_builder_get_object (builder, "namespace_cbwe"));
     retval->code_entry = GTK_WIDGET(gtk_builder_get_object (builder, "code_entry"));
-    retval->fraction_spinbutton = GTK_WIDGET(gtk_builder_get_object (builder,
-                                  "fraction_spinbutton"));
+    retval->fraction_spinbutton = GTK_WIDGET(gtk_builder_get_object (builder, "fraction_spinbutton"));
     retval->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
     retval->get_quote_check = GTK_WIDGET(gtk_builder_get_object (builder, "get_quote_check"));
     retval->source_label = GTK_WIDGET(gtk_builder_get_object (builder, "source_label"));
     retval->source_button[SOURCE_SINGLE] = GTK_WIDGET(gtk_builder_get_object (builder, "single_source_button"));
     retval->source_button[SOURCE_MULTI] = GTK_WIDGET(gtk_builder_get_object (builder, "multi_source_button"));
     retval->quote_tz_label = GTK_WIDGET(gtk_builder_get_object (builder, "quote_tz_label"));
-
-    /* namespace List Store - create here as we get an error if created in builder */
-    {
-        GtkListStore  *store;
-        GtkTreeIter    iter;
-        gchar          string[] = "Dummy namespace Line";
-
-        store = gtk_list_store_new( 1, G_TYPE_STRING );
-
-        gtk_list_store_append( store, &iter );
-        gtk_list_store_set( store, &iter, 0, string, -1 );
-
-        gtk_combo_box_set_model( GTK_COMBO_BOX( retval->namespace_combo ),
-                                 GTK_TREE_MODEL( store ) );
-        g_object_unref( G_OBJECT( store ) );
-        gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( retval->namespace_combo ), 0 );
-    }
 
     /* Build custom widgets */
     box = GTK_WIDGET(gtk_builder_get_object (builder, "single_source_box"));
@@ -1108,8 +1066,7 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     /* Fill in any data, top to bottom */
     gtk_entry_set_text (GTK_ENTRY (retval->fullname_entry), fullname ? fullname : "");
     gtk_entry_set_text (GTK_ENTRY (retval->mnemonic_entry), mnemonic ? mnemonic : "");
-    gnc_cbe_add_completion(GTK_COMBO_BOX_ENTRY(retval->namespace_combo));
-    gtk_combo_box_remove_text(GTK_COMBO_BOX(retval->namespace_combo), 0);
+    gnc_cbwe_add_completion(GTK_COMBO_BOX(retval->namespace_combo));
     gnc_ui_update_namespace_picker(retval->namespace_combo,
                                    selected_namespace,
                                    include_iso ? DIAG_COMM_ALL : DIAG_COMM_NON_CURRENCY);

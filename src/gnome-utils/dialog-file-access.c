@@ -49,23 +49,23 @@ typedef struct FileAccessWindow
     /* Parts of the dialog */
     int type;
 
-    GtkWidget* dialog;
-    GtkWidget* frame_file;
-    GtkWidget* frame_database;
-    GtkWidget* readonly_checkbutton;
-    GtkFileChooser* fileChooser;
-    gchar *starting_dir;
-    GtkComboBox* cb_uri_type;
-    GtkEntry* tf_host;
-    GtkEntry* tf_database;
-    GtkEntry* tf_username;
-    GtkEntry* tf_password;
+    GtkWidget           *dialog;
+    GtkWidget           *frame_file;
+    GtkWidget           *frame_database;
+    GtkWidget           *readonly_checkbutton;
+    GtkFileChooser      *fileChooser;
+    gchar               *starting_dir;
+    GtkComboBoxText     *cb_uri_type;
+    GtkEntry            *tf_host;
+    GtkEntry            *tf_database;
+    GtkEntry            *tf_username;
+    GtkEntry            *tf_password;
 } FileAccessWindow;
 
 void gnc_ui_file_access_file_activated_cb( GtkFileChooser *chooser,
         FileAccessWindow *faw );
 void gnc_ui_file_access_response_cb( GtkDialog *, gint, GtkDialog * );
-static void cb_uri_type_changed_cb( GtkComboBox* cb );
+static void cb_uri_type_changed_cb( GtkComboBoxText* cb );
 
 static gchar*
 geturl( FileAccessWindow* faw )
@@ -85,7 +85,7 @@ geturl( FileAccessWindow* faw )
     password = gtk_entry_get_text( faw->tf_password );
     file = gtk_file_chooser_get_filename( faw->fileChooser );
 
-    type = gtk_combo_box_get_active_text( faw->cb_uri_type );
+    type = gtk_combo_box_text_get_active_text(faw->cb_uri_type );
     if ( gnc_uri_is_file_protocol( type ) )
     {
         if ( file == NULL ) /* file protocol was chosen but no filename was set */
@@ -208,7 +208,7 @@ set_widget_sensitivity_for_uri_type( FileAccessWindow* faw, const gchar* uri_typ
 }
 
 static void
-cb_uri_type_changed_cb( GtkComboBox* cb )
+cb_uri_type_changed_cb( GtkComboBoxText* cb )
 {
     GtkWidget* dialog;
     FileAccessWindow* faw;
@@ -221,7 +221,7 @@ cb_uri_type_changed_cb( GtkComboBox* cb )
     faw = g_object_get_data( G_OBJECT(dialog), "FileAccessWindow" );
     g_return_if_fail( faw != NULL );
 
-    type = gtk_combo_box_get_active_text( cb );
+    type = gtk_combo_box_text_get_active_text( cb );
     set_widget_sensitivity_for_uri_type( faw, type );
 }
 
@@ -348,7 +348,7 @@ gnc_ui_file_access( int type )
                       gnc_ui_file_access_file_activated_cb, faw, NULL );
 
     uri_type_container = GTK_WIDGET(gtk_builder_get_object (builder, "vb_uri_type_container" ));
-    faw->cb_uri_type = GTK_COMBO_BOX(gtk_combo_box_new_text());
+    faw->cb_uri_type = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
     gtk_container_add( GTK_CONTAINER(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
     gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type),
                                /*expand*/TRUE, /*fill*/FALSE, /*padding*/0, GTK_PACK_START );
@@ -406,27 +406,27 @@ gnc_ui_file_access( int type )
     access_method_index = -1;
     if ( need_access_method_file )
     {
-        gtk_combo_box_append_text( faw->cb_uri_type, "file" );
+        gtk_combo_box_text_append_text( faw->cb_uri_type, "file" );
         active_access_method_index = ++access_method_index;
     }
     if ( need_access_method_mysql )
     {
-        gtk_combo_box_append_text( faw->cb_uri_type, "mysql" );
+        gtk_combo_box_text_append_text( faw->cb_uri_type, "mysql" );
         ++access_method_index;
     }
     if ( need_access_method_postgres )
     {
-        gtk_combo_box_append_text( faw->cb_uri_type, "postgres" );
+        gtk_combo_box_text_append_text( faw->cb_uri_type, "postgres" );
         ++access_method_index;
     }
     if ( need_access_method_sqlite3 )
     {
-        gtk_combo_box_append_text( faw->cb_uri_type, "sqlite3" );
+        gtk_combo_box_text_append_text( faw->cb_uri_type, "sqlite3" );
         active_access_method_index = ++access_method_index;
     }
     if ( need_access_method_xml )
     {
-        gtk_combo_box_append_text( faw->cb_uri_type, "xml" );
+        gtk_combo_box_text_append_text( faw->cb_uri_type, "xml" );
         ++access_method_index;
 
         // Set XML as default if it is offered (which mean we are in
@@ -442,8 +442,8 @@ gnc_ui_file_access( int type )
 
     /* Hide the frame that's not required for the active access method so either only
      * the File or only the Database frame are presented. */
-    gtk_combo_box_set_active( faw->cb_uri_type, active_access_method_index );
-    set_widget_sensitivity_for_uri_type( faw, gtk_combo_box_get_active_text( faw->cb_uri_type ) );
+    gtk_combo_box_set_active(GTK_COMBO_BOX(faw->cb_uri_type), active_access_method_index );
+    set_widget_sensitivity_for_uri_type( faw, gtk_combo_box_text_get_active_text( faw->cb_uri_type ));
 }
 
 void

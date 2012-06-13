@@ -107,7 +107,7 @@ gnc_currency_edit_get_type (void)
             NULL
         };
 
-        currency_edit_type = g_type_register_static (GTK_TYPE_COMBO_BOX_ENTRY,
+        currency_edit_type = g_type_register_static (GTK_TYPE_COMBO_BOX,
                              "GNCCurrencyEdit",
                              &currency_edit_info, 0);
     }
@@ -157,10 +157,17 @@ gnc_currency_edit_init (GNCCurrencyEdit *gce)
 static void
 add_item(gnc_commodity *commodity, GNCCurrencyEdit *gce)
 {
+    GtkTreeModel *model;
+    GtkTreeIter iter;
     const char *string;
 
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX(gce));
+
     string = gnc_commodity_get_printname(commodity);
-    gtk_combo_box_append_text(GTK_COMBO_BOX(gce), string);
+
+    gtk_list_store_append(GTK_LIST_STORE(model), &iter);
+    gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, string, -1);
+
 }
 
 
@@ -198,13 +205,16 @@ gnc_currency_edit_new (void)
     store = gtk_list_store_new (1, G_TYPE_STRING);
     gce = g_object_new (GNC_TYPE_CURRENCY_EDIT,
                         "model", store,
-                        "text-column", 0,
+                        "has-entry", TRUE,
                         NULL);
     g_object_unref (store);
 
+    /* Set the column for the text */
+    gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(gce), 0);
+
     /* Now the signals to make sure the user can't leave the
        widget without a valid currency. */
-    gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(gce));
+    gnc_cbwe_require_list_item(GTK_COMBO_BOX(gce));
 
     /* Fill in all the data. */
     fill_currencies (gce);
@@ -237,7 +247,7 @@ gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
     g_return_if_fail(currency != NULL);
 
     printname = gnc_commodity_get_printname(currency);
-    gnc_cbe_set_by_string(GTK_COMBO_BOX_ENTRY(gce), printname);
+    gnc_cbwe_set_by_string(GTK_COMBO_BOX(gce), printname);
 }
 
 

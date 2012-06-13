@@ -626,22 +626,21 @@ gxi_update_progress_bar (const gchar *message, double percentage)
 static void
 gxi_update_default_enc_combo (GncXmlImportData *data)
 {
-    GtkComboBox *combo;
+    GtkComboBoxText *combo;
     GList *enc_iter;
 
     /* add encodings list */
     if (data->default_encoding_combo)
         gtk_widget_destroy (data->default_encoding_combo);
-    data->default_encoding_combo = gtk_combo_box_new_text ();
-    combo = GTK_COMBO_BOX (data->default_encoding_combo);
+    data->default_encoding_combo = gtk_combo_box_text_new();
+    combo = GTK_COMBO_BOX_TEXT (data->default_encoding_combo);
 
     for (enc_iter = data->encodings; enc_iter; enc_iter = enc_iter->next)
     {
-        gtk_combo_box_append_text (
+        gtk_combo_box_text_append_text (
             combo, g_quark_to_string (GPOINTER_TO_UINT (enc_iter->data)));
     }
-    gtk_combo_box_set_active (
-        combo,
+    gtk_combo_box_set_active (GTK_COMBO_BOX(combo),
         g_list_index (data->encodings, GUINT_TO_POINTER (data->default_encoding)));
 
     /* show encodings */

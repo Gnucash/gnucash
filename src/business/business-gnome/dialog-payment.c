@@ -103,7 +103,7 @@ void gnc_ui_payment_window_set_postaccount (PaymentWindow *pw, const Account* ac
     g_assert(account);
     {
         gchar *acct_string = gnc_account_get_full_name (account);
-        gnc_cbe_set_by_string(GTK_COMBO_BOX_ENTRY(pw->post_combo), acct_string);
+        gnc_cbwe_set_by_string(GTK_COMBO_BOX(pw->post_combo), acct_string);
         g_free(acct_string);
     }
 }
@@ -752,8 +752,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     pw->num_entry = GTK_WIDGET (gtk_builder_get_object (builder, "num_entry"));
     pw->memo_entry = GTK_WIDGET (gtk_builder_get_object (builder, "memo_entry"));
     pw->post_combo = GTK_WIDGET (gtk_builder_get_object (builder, "post_combo"));
-    gtk_combo_box_entry_set_text_column( GTK_COMBO_BOX_ENTRY( pw->post_combo ), 0 );
-    gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(pw->post_combo));
+    gtk_combo_box_set_entry_text_column( GTK_COMBO_BOX( pw->post_combo ), 0 );
+    gnc_cbwe_require_list_item(GTK_COMBO_BOX(pw->post_combo));
 
     label = GTK_WIDGET (gtk_builder_get_object (builder, "owner_label"));
     box = GTK_WIDGET (gtk_builder_get_object (builder, "owner_box"));
@@ -792,7 +792,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
         if (postacct)
         {
             gchar *acct_string = gnc_account_get_full_name (postacct);
-            gnc_cbe_set_by_string(GTK_COMBO_BOX_ENTRY(pw->post_combo), acct_string);
+            gnc_cbwe_set_by_string(GTK_COMBO_BOX(pw->post_combo), acct_string);
             gnc_payment_dialog_post_to_changed(pw);
             g_free(acct_string);
         }
@@ -837,7 +837,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
         const gchar *text;
         const char *acct_type;
 
-        text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(pw->post_combo));
+        text = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(pw->post_combo)))));
+
         if (!text || safe_strcmp (text, "") == 0)
         {
 

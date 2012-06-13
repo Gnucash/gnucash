@@ -2550,7 +2550,7 @@ gnc_print_check_format_changed (GtkComboBox *widget,
 {
     GtkListStore *p_store;
     GtkTreeModel *f_model;
-    GtkTreeIter f_iter;
+    GtkTreeIter f_iter, iter;
     gboolean sensitive;
     gint pnum;
     check_format_t *format;
@@ -2578,21 +2578,24 @@ gnc_print_check_format_changed (GtkComboBox *widget,
             pcd->position_max = g_slist_length(format->positions); /* -1 for 0 base, +1 for custom entry */
             for (elem = format->positions; elem; elem = g_slist_next(elem))
             {
-                gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->position_combobox), elem->data);
+                gtk_list_store_append(GTK_LIST_STORE(p_store), &iter);
+                gtk_list_store_set (GTK_LIST_STORE(p_store), &iter, 0, elem->data, -1);
             }
         }
         else
         {
             /* Invent a "Top" position if format has no positions */
             pcd->position_max = 1;
-            gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->position_combobox), _("Top"));
+            gtk_list_store_append(GTK_LIST_STORE(p_store), &iter);
+            gtk_list_store_set (GTK_LIST_STORE(p_store), &iter, 0, _("Top"), -1);
         }
     }
     else
     {
         pcd->position_max = 0;
     }
-    gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->position_combobox), _("Custom"));
+    gtk_list_store_append(GTK_LIST_STORE(p_store), &iter);
+    gtk_list_store_set (GTK_LIST_STORE(p_store), &iter, 0, _("Custom"), -1);
 
     /* If there's only one thing in the position combobox, make it insensitive */
     sensitive = (pcd->position_max > 0);

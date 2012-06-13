@@ -70,7 +70,7 @@ static GtkHBoxClass *parent_class;
 /**
  * gnc_date_delta_get_type:
  *
- * Returns the GtkType for the GNCDateDelta widget
+ * Returns the GType for the GNCDateDelta widget
  */
 GType
 gnc_date_delta_get_type (void)
@@ -212,13 +212,13 @@ set_units (GtkComboBox *combo, GNCDateDelta *gdd)
 static void
 fill_units_combo(GNCDateDelta *gdd)
 {
-    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->units_combo),
                               _("Days"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->units_combo),
                               _("Weeks"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->units_combo),
                               _("Months"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->units_combo),
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->units_combo),
                               _("Years"));
 
     g_signal_connect (gdd->units_combo, "changed",
@@ -242,9 +242,9 @@ set_polarity (GtkComboBox *combo, GNCDateDelta *gdd)
 static void
 fill_polarity_combo(GNCDateDelta *gdd)
 {
-    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->polarity_combo),
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->polarity_combo),
                               _("Ago"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(gdd->polarity_combo),
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gdd->polarity_combo),
                               _("From Now"));
 
     g_signal_connect (gdd->polarity_combo, "changed",
@@ -265,13 +265,13 @@ create_children (GNCDateDelta *gdd)
     g_signal_connect(gdd->value_spin, "changed",
                      G_CALLBACK(value_changed), gdd);
 
-    gdd->units_combo = gtk_combo_box_new_text();
+    gdd->units_combo = gtk_combo_box_text_new();
     fill_units_combo(gdd);
     gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->units_combo), 0);
     gtk_box_pack_start(GTK_BOX(gdd), gdd->units_combo, FALSE, FALSE, 0);
     gtk_widget_show(gdd->units_combo);
 
-    gdd->polarity_combo = gtk_combo_box_new_text();
+    gdd->polarity_combo = gtk_combo_box_text_new();
     fill_polarity_combo(gdd);
     gtk_combo_box_set_active(GTK_COMBO_BOX(gdd->polarity_combo), 0);
     gtk_box_pack_start(GTK_BOX(gdd), gdd->polarity_combo, FALSE, FALSE, 0);

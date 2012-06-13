@@ -1,7 +1,6 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkDialog" id="Deletion Date">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -9,18 +8,19 @@
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox19">
+      <object class="GtkBox" id="dialog-vbox19">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area19">
+          <object class="GtkButtonBox" id="dialog-action_area19">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancel_button">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -37,6 +37,7 @@
             <child>
               <object class="GtkButton" id="ok_button">
                 <property name="label">gtk-ok</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -76,12 +77,13 @@
               <packing>
                 <property name="right_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="delete_manual">
                 <property name="label" translatable="yes">Delete _manually entered prices</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -95,12 +97,13 @@
                 <property name="top_attach">3</property>
                 <property name="bottom_attach">4</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="delete_last">
                 <property name="label" translatable="yes">Delete _last price for a stock</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -114,7 +117,7 @@
                 <property name="top_attach">4</property>
                 <property name="bottom_attach">5</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -128,7 +131,7 @@
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -142,8 +145,8 @@
               <packing>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
-                <property name="x_options"></property>
-                <property name="y_options"></property>
+                <property name="x_options"/>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -184,18 +187,19 @@
     <property name="type_hint">dialog</property>
     <signal name="response" handler="pedit_dialog_response_cb" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox18">
+      <object class="GtkBox" id="dialog-vbox18">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area18">
+          <object class="GtkButtonBox" id="dialog-action_area18">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="pd_cancel_button">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -212,6 +216,7 @@
             <child>
               <object class="GtkButton" id="pd_apply_button">
                 <property name="label">gtk-apply</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -227,6 +232,7 @@
             <child>
               <object class="GtkButton" id="pd_ok_button">
                 <property name="label">gtk-ok</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -258,33 +264,6 @@
             <property name="column_spacing">12</property>
             <property name="row_spacing">6</property>
             <child>
-              <object class="GtkComboBoxEntry" id="commodity_cbe">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <signal name="changed" handler="pedit_commodity_changed_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxEntry" id="namespace_cbe">
-                <property name="width_request">250</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <signal name="changed" handler="pedit_commodity_ns_changed_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="namespace_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -292,11 +271,11 @@
                 <property name="label" translatable="yes">_Namespace:</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
-                <property name="mnemonic_widget">namespace_cbe</property>
+                <property name="mnemonic_widget">namespace_cbwe</property>
               </object>
               <packing>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -307,13 +286,13 @@
                 <property name="label" translatable="yes">_Security:</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
-                <property name="mnemonic_widget">commodity_cbe</property>
+                <property name="mnemonic_widget">commodity_cbwe</property>
               </object>
               <packing>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -329,11 +308,11 @@
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="date_label">
+              <object class="GtkLabel" id="date__label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
@@ -345,7 +324,7 @@
                 <property name="top_attach">3</property>
                 <property name="bottom_attach">4</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -361,7 +340,7 @@
                 <property name="top_attach">4</property>
                 <property name="bottom_attach">5</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -378,7 +357,7 @@
                 <property name="top_attach">5</property>
                 <property name="bottom_attach">6</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -394,7 +373,7 @@
                 <property name="top_attach">6</property>
                 <property name="bottom_attach">7</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -437,8 +416,6 @@
                 <property name="editable">False</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
-                <property name="primary_icon_sensitive">True</property>
-                <property name="secondary_icon_sensitive">True</property>
                 <signal name="changed" handler="pedit_data_changed_cb" swapped="no"/>
               </object>
               <packing>
@@ -446,7 +423,7 @@
                 <property name="right_attach">2</property>
                 <property name="top_attach">4</property>
                 <property name="bottom_attach">5</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -488,6 +465,49 @@
                 <property name="y_options">GTK_FILL</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkComboBox" id="namespace_cbwe">
+                <property name="width_request">250</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="model">liststore3</property>
+                <property name="has_entry">True</property>
+                <property name="entry_text_column">0</property>
+                <signal name="changed" handler="pedit_commodity_ns_changed_cb" swapped="no"/>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="commodity_cbwe">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="model">liststore2</property>
+                <property name="has_entry">True</property>
+                <property name="entry_text_column">0</property>
+                <signal name="changed" handler="pedit_commodity_changed_cb" swapped="no"/>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -514,18 +534,19 @@
     <signal name="close" handler="gnc_prices_dialog_close_cb" after="yes" swapped="no"/>
     <signal name="response" handler="gnc_prices_dialog_response" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="vbox121">
+      <object class="GtkBox" id="vbox121">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="hbuttonbox4">
+          <object class="GtkButtonBox" id="hbuttonbox4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="close_button">
                 <property name="label">gtk-close</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -556,8 +577,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">3</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <placeholder/>
@@ -578,6 +597,7 @@
                 <child>
                   <object class="GtkButton" id="add_button">
                     <property name="label">gtk-add</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
@@ -596,6 +616,7 @@
                 <child>
                   <object class="GtkButton" id="remove_button">
                     <property name="label">gtk-remove</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
@@ -614,6 +635,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="edit_button">
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
@@ -671,6 +693,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="remove_old_button">
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
@@ -727,6 +750,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="get_quotes_button">
+                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
@@ -821,6 +845,28 @@
       </row>
       <row>
         <col id="0" translatable="yes">Unknown</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <!-- column-name item -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Dummy commodity Line</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore3">
+    <columns>
+      <!-- column-name item -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Dummy namespace Line</col>
       </row>
     </data>
   </object>

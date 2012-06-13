@@ -155,18 +155,16 @@ gnc_account_sel_init (GNCAccountSel *gas)
     g_object_set(gas, "spacing", 2, (gchar*)NULL);
 
     gas->store = gtk_list_store_new(NUM_ACCT_COLS, G_TYPE_STRING, G_TYPE_POINTER);
-    widget =
-        gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(gas->store), ACCT_COL_NAME);
-    gas->combo = GTK_COMBO_BOX_ENTRY(widget);
-    gtk_combo_box_set_model(GTK_COMBO_BOX(widget),
-                            GTK_TREE_MODEL(gas->store));
+    widget = gtk_combo_box_new_with_model_and_entry(GTK_TREE_MODEL(gas->store));
+    gas->combo = GTK_COMBO_BOX(widget);
+    gtk_combo_box_set_entry_text_column(GTK_COMBO_BOX(widget), ACCT_COL_NAME);
     g_object_unref(gas->store);
     g_signal_connect_swapped(gas->combo, "changed",
                              G_CALLBACK(combo_changed_cb), gas);
     gtk_container_add( GTK_CONTAINER(gas), widget );
 
     /* Add completion. */
-    gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(widget));
+    gnc_cbwe_require_list_item(GTK_COMBO_BOX(widget));
 
     /* Get the accounts, place into combo list */
     gas_populate_list( gas );

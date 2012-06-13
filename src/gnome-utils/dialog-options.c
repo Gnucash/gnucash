@@ -538,11 +538,11 @@ gnc_option_create_date_widget (GNCOption *option)
              * see http://bugzilla.gnome.org/show_bug.cgi?id=303717 , see
              * also gnc_option_create_multichoice_widget() below. */
             char *string;
-            rel_widget = gtk_combo_box_new_text();
+            rel_widget = gtk_combo_box_text_new();
             for (i = 0; i < num_values; i++)
             {
                 string = gnc_option_permissible_value_name(option, i);
-                gtk_combo_box_append_text(GTK_COMBO_BOX(rel_widget), string);
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(rel_widget), string);
                 g_free(string);
             }
 
@@ -712,12 +712,12 @@ gnc_option_create_multichoice_widget(GNCOption *option)
            see http://bugzilla.gnome.org/show_bug.cgi?id=303717 */
         char *itemstring;
         /* char *description; */
-        widget = gtk_combo_box_new_text();
+        widget = gtk_combo_box_text_new();
         for (i = 0; i < num_values; i++)
         {
             itemstring = gnc_option_permissible_value_name(option, i);
             /* description = gnc_option_permissible_value_description(option, i); */
-            gtk_combo_box_append_text(GTK_COMBO_BOX(widget),
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(widget),
                                       (itemstring && *itemstring) ? _(itemstring) : "");
             /*, (description && *description) ? _(description) : "" */
             /* Maybe the per-item tooltip will simply be added as such an

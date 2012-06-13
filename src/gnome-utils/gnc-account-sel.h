@@ -44,7 +44,7 @@ typedef struct
     gboolean initDone;
     gboolean isModal;
     GtkListStore *store;
-    GtkComboBoxEntry *combo;
+    GtkComboBox *combo;
     GList *acctTypeFilters;
     GList *acctCommodityFilters;
     gint eventHandlerId;
