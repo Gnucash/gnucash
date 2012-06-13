@@ -81,14 +81,15 @@
 	 (title-op (gnc:lookup-option options acc-page gnc:optname-reportname)))
 
     (gnc:option-set-value acct-op acct)
-    (gnc:option-set-value title-op title)
+    (if (not (string-null? title))
+        (gnc:option-set-value title-op title))
     (gnc:option-set-value zero-op show-zeros?)
     (gnc:make-report receivables-aging-guid options)))
 
 (define (gnc:receivables-report-create-internal
 	 account split query journal? double? title
 	 debit-string credit-string)
-  (receivables-report-create-internal account #f #f))
+  (receivables-report-create-internal account "" #f))
 
 (gnc:register-report-hook ACCT-TYPE-RECEIVABLE #f
 			  gnc:receivables-report-create-internal)
