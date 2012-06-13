@@ -264,7 +264,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         attr->end_index = end_byte_pos;
         pango_attr_list_insert (attr_list, attr);
 
-        color = GTK_WIDGET_HAS_FOCUS(item_edit->sheet) ? 0x0 : 0x7fff;
+        color = gtk_widget_has_focus(GTK_WIDGET(item_edit->sheet)) ? 0x0 : 0x7fff;
         attr = pango_attr_background_new (color, color, color);
         attr->start_index = start_byte_pos;
         attr->end_index = end_byte_pos;

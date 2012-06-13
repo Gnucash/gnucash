@@ -793,7 +793,7 @@ show_progress(GncGWENGui *gui, Progress *progress)
             gtk_entry_set_text(GTK_ENTRY(entry), current->title);
             if (new_box)
                 gui->other_entries_box = box = gtk_vbox_new(TRUE, 6);
-            gtk_box_pack_start_defaults(GTK_BOX(box), entry);
+            gtk_box_pack_start(GTK_BOX(box), entry, TRUE, TRUE, 0);
             gtk_widget_show(entry);
             if (new_box)
             {

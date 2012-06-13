@@ -84,7 +84,7 @@ static guint general_search_signals[LAST_SIGNAL];
 /**
  * gnc_general_search_get_type:
  *
- * Returns the GtkType for the GNCGeneralSearch widget
+ * Returns the GType for the GNCGeneralSearch widget
  */
 GType
 gnc_general_search_get_type (void)
@@ -121,7 +121,7 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 
     object_class = (GtkObjectClass*) klass;
 
-    parent_class = gtk_type_class (gtk_hbox_get_type ());
+    parent_class = g_type_class_peek_parent (klass);
 
     general_search_signals[SELECTION_CHANGED] =
         g_signal_new("changed",

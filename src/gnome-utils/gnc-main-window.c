@@ -121,7 +121,7 @@ static void gnc_main_window_update_all_menu_items (void);
 
 /* Callbacks */
 static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
-static void gnc_main_window_switch_page (GtkNotebook *notebook, GtkNotebookPage *notebook_page, gint pos, GncMainWindow *window);
+static void gnc_main_window_switch_page (GtkNotebook *notebook, gpointer *notebook_page, gint pos, GncMainWindow *window);
 static void gnc_main_window_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint pos, GncMainWindow *window);
 static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
@@ -3533,7 +3533,7 @@ gnc_main_window_show_summarybar (GncMainWindow *window, GtkAction *action)
  */
 static void
 gnc_main_window_switch_page (GtkNotebook *notebook,
-                             GtkNotebookPage *notebook_page,
+                             gpointer *notebook_page,
                              gint pos,
                              GncMainWindow *window)
 {

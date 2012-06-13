@@ -522,7 +522,7 @@ _gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon, gboolean redraw)
     g_timer_start(t);
     recompute_extents(dcal);
     g_debug("recompute_extents: %f", g_timer_elapsed(t, NULL) * 1000.);
-    if (redraw && GTK_WIDGET_REALIZED(dcal))
+    if (redraw && gtk_widget_get_realized(GTK_WIDGET(dcal)))
     {
         g_timer_start(t);
         recompute_x_y_scales(dcal);
@@ -552,7 +552,7 @@ _gnc_dense_cal_set_year(GncDenseCal *dcal, guint year, gboolean redraw)
     dcal->year = year;
     recompute_first_of_month_offset(dcal);
     recompute_extents(dcal);
-    if (redraw && GTK_WIDGET_REALIZED(dcal))
+    if (redraw && gtk_widget_get_realized(GTK_WIDGET(dcal)))
     {
         recompute_x_y_scales(dcal);
         gnc_dense_cal_draw_to_buffer(dcal);
@@ -599,7 +599,7 @@ gnc_dense_cal_set_num_months(GncDenseCal *dcal, guint num_months)
     dcal->numMonths = num_months;
     recompute_extents(dcal);
     recompute_mark_storage(dcal);
-    if (GTK_WIDGET_REALIZED(dcal))
+    if (gtk_widget_get_realized(GTK_WIDGET(dcal)))
     {
         recompute_x_y_scales(dcal);
         gnc_dense_cal_draw_to_buffer(dcal);
@@ -645,7 +645,7 @@ gnc_dense_cal_dispose (GObject *object)
         return;
     dcal->disposed = TRUE;
 
-    if (GTK_WIDGET_REALIZED(dcal->transPopup))
+    if (gtk_widget_get_realized(GTK_WIDGET(dcal->transPopup)))
     {
         gtk_widget_hide(GTK_WIDGET(dcal->transPopup));
         gtk_widget_destroy(GTK_WIDGET(dcal->transPopup));
@@ -864,7 +864,7 @@ gnc_dense_cal_expose(GtkWidget *widget,
         return FALSE;
 
     dcal = GNC_DENSE_CAL(user_data);
-    gc = widget->style->fg_gc[GTK_WIDGET_STATE(widget)];
+    gc = widget->style->fg_gc[gtk_widget_get_state(widget)];
     gdk_draw_drawable(GDK_DRAWABLE(GTK_WIDGET(dcal->cal_drawing_area)->window),
                       gc, GDK_DRAWABLE(dcal->drawbuf),
                       0, 0, 0, 0, -1, -1);
@@ -909,7 +909,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         GList *mcList, *mcListIter;
 
         gc = gdk_gc_new(GTK_WIDGET(dcal)->window);
-        gdk_gc_copy(gc, widget->style->fg_gc[GTK_WIDGET_STATE(widget)]);
+        gdk_gc_copy(gc, widget->style->fg_gc[gtk_widget_get_state(widget)]);
 
         /* reset all of the month position offsets. */
         for (i = 0; i < 12; i++)

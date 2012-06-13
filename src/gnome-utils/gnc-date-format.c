@@ -96,7 +96,7 @@ static GtkHBoxClass *parent_class;
 /**
  * gnc_date_format_get_type:
  *
- * Returns the GtkType for the GNCDateFormat widget
+ * Returns the GType for the GNCDateFormat widget
  */
 GType
 gnc_date_format_get_type (void)

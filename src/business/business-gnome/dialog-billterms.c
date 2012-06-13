@@ -497,7 +497,7 @@ billterms_term_refresh (BillTermsWindow *btw)
 
     if (!btw->current_term)
     {
-        gtk_widget_hide_all (btw->term_vbox);
+        gtk_widget_hide (btw->term_vbox);
         return;
     }
 

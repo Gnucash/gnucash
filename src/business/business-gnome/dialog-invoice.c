@@ -1652,13 +1652,13 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
 
     /* Hide the project frame for customer invoices */
     if (iw->owner.type == GNC_OWNER_CUSTOMER)
-        gtk_widget_hide_all (iw->proj_frame);
+        gtk_widget_hide (iw->proj_frame);
 
     /* Hide the "job" label and entry for employee invoices */
     if (iw->owner.type == GNC_OWNER_EMPLOYEE)
     {
-        gtk_widget_hide_all (iw->job_label);
-        gtk_widget_hide_all (iw->job_box);
+        gtk_widget_hide (iw->job_label);
+        gtk_widget_hide (iw->job_box);
     }
 
     acct_entry = GTK_WIDGET (gtk_builder_get_object (iw->builder, "acct_entry"));
@@ -1753,25 +1753,25 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         if (is_posted == TRUE)
         {
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide3"));
-            gtk_widget_hide_all (hide);
+            gtk_widget_hide (hide);
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide4"));
-            gtk_widget_hide_all (hide);
+            gtk_widget_hide (hide);
 
         }
         else           /* ! posted */
         {
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "posted_label"));
-            gtk_widget_hide_all (hide);
-            gtk_widget_hide_all (iw->posted_date_hbox);
+            gtk_widget_hide (hide);
+            gtk_widget_hide (iw->posted_date_hbox);
 
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "acct_label"));
-            gtk_widget_hide_all (hide);
-            gtk_widget_hide_all (acct_entry);
+            gtk_widget_hide (hide);
+            gtk_widget_hide (acct_entry);
 
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide1"));
-            gtk_widget_hide_all (hide);
+            gtk_widget_hide (hide);
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide2"));
-            gtk_widget_hide_all (hide);
+            gtk_widget_hide (hide);
         }
     }
 
@@ -1792,7 +1792,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     }
     else
     {
-        gtk_widget_hide_all (iw->to_charge_frame);
+        gtk_widget_hide (iw->to_charge_frame);
     }
 
     if (is_posted)
@@ -2415,7 +2415,7 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
         gtk_widget_hide (iw->type_label);
         break;
     case MOD_INVOICE:
-        gtk_widget_hide_all (iw->type_hbox);
+        gtk_widget_hide (iw->type_hbox);
         gtk_widget_show (iw->type_label);
         break;
     default:

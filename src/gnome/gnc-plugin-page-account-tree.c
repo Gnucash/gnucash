@@ -943,9 +943,9 @@ set_ok_sensitivity(GtkWidget *dialog)
     trans_mas_cnt = gnc_account_sel_get_num_account(GNC_ACCOUNT_SEL(trans_mas));
 
     sensitive = (((NULL == sa_mas) ||
-                  (!GTK_WIDGET_IS_SENSITIVE(sa_mas) || sa_mas_cnt)) &&
+                  (!gtk_widget_is_sensitive(sa_mas) || sa_mas_cnt)) &&
                  ((NULL == trans_mas) ||
-                  (!GTK_WIDGET_IS_SENSITIVE(trans_mas) || trans_mas_cnt)));
+                  (!gtk_widget_is_sensitive(trans_mas) || trans_mas_cnt)));
 
     button = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_OK_BUTTON);
     gtk_widget_set_sensitive(button, sensitive);
@@ -1170,11 +1170,11 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
             g_free(acct_name);
             return;
         }
-        if (trans_mas && GTK_WIDGET_IS_SENSITIVE(trans_mas))
+        if (trans_mas && gtk_widget_is_sensitive(trans_mas))
             ta = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(trans_mas));
-        if (sa_mas && GTK_WIDGET_IS_SENSITIVE(sa_mas))
+        if (sa_mas && gtk_widget_is_sensitive(sa_mas))
             saa = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(sa_mas));
-        if (sa_trans_mas && GTK_WIDGET_IS_SENSITIVE(sa_trans_mas))
+        if (sa_trans_mas && gtk_widget_is_sensitive(sa_trans_mas))
             sta = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(sa_trans_mas));
         gtk_widget_destroy(dialog);
         g_list_free(filter);

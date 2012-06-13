@@ -399,7 +399,7 @@ gnc_reconcile_list_get_needed_height (GNCReconcileList *list, gint num_rows)
     g_return_val_if_fail (list != NULL, 0);
     g_return_val_if_fail (GNC_IS_RECONCILE_LIST(list), 0);
 
-    if (!GTK_WIDGET_REALIZED (list))
+    if (!gtk_widget_get_realized (GTK_WIDGET(list)))
         return 0;
 
     return gnc_query_list_get_needed_height (GNC_QUERY_LIST(list), num_rows);

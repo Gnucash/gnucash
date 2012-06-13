@@ -1391,7 +1391,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
     if (sheet->button == 3)
         sheet->button = 0;
 
-    if (!GTK_WIDGET_HAS_FOCUS(widget))
+    if (!gtk_widget_has_focus(widget))
         gtk_widget_grab_focus(widget);
 
     button_1 = FALSE;
@@ -2702,8 +2702,8 @@ gnucash_sheet_init (GnucashSheet *sheet)
 {
     GnomeCanvas *canvas = GNOME_CANVAS (sheet);
 
-    GTK_WIDGET_SET_FLAGS (canvas, GTK_CAN_FOCUS);
-    GTK_WIDGET_SET_FLAGS (canvas, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_focus (GTK_WIDGET(canvas), TRUE);
+    gtk_widget_set_can_default (GTK_WIDGET(canvas), TRUE);
 
     sheet->top_block = 1;
     sheet->bottom_block = 1;
@@ -2888,8 +2888,8 @@ gnucash_register_init (GnucashRegister *g_reg)
 {
     GtkTable *table = GTK_TABLE(g_reg);
 
-    GTK_WIDGET_UNSET_FLAGS (table, GTK_CAN_FOCUS);
-    GTK_WIDGET_UNSET_FLAGS (table, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_focus (GTK_WIDGET(table), FALSE);
+    gtk_widget_set_can_default (GTK_WIDGET(table), FALSE);
 
     gtk_table_set_homogeneous (table, FALSE);
     gtk_table_resize (table, 3, 2);
@@ -3007,14 +3007,14 @@ gnucash_register_new (Table *table)
      * user. */
     box = gtk_hbox_new(FALSE, 0);
     gtk_widget_set_no_show_all(GTK_WIDGET(box), TRUE);
-    gtk_box_pack_start_defaults(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->header_color);
-    gtk_box_pack_start_defaults(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->primary_color);
-    gtk_box_pack_start_defaults(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->secondary_color);
-    gtk_box_pack_start_defaults(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->split_color);
+    gtk_box_pack_start(GTK_BOX(box),
+                                GNUCASH_SHEET(sheet)->header_color, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(box),
+                                GNUCASH_SHEET(sheet)->primary_color, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(box),
+                                GNUCASH_SHEET(sheet)->secondary_color, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(box),
+                                GNUCASH_SHEET(sheet)->split_color, TRUE, TRUE, 0);
 
     gtk_table_attach (GTK_TABLE(widget), box,
                       0, 1, 4, 5,

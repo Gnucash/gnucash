@@ -81,7 +81,7 @@ static GtkHBoxClass *parent_class;
 /**
  * gnc_date_edit_get_type:
  *
- * Returns the GtkType for the GNCDateEdit widget
+ * Returns the GType for the GNCDateEdit widget
  */
 GType
 gnc_date_edit_get_type (void)
@@ -314,7 +314,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gde->date_button),
                                   TRUE);
 
-    if (!GTK_WIDGET_HAS_FOCUS (gde->calendar))
+    if (!gtk_widget_has_focus (gde->calendar))
         gtk_widget_grab_focus (gde->calendar);
 
     if (!popup_grab_on_window ((GTK_WIDGET(gde->cal_popup))->window,
@@ -356,7 +356,7 @@ gnc_date_edit_button_pressed (GtkWidget      *widget,
         return FALSE;
     }
 
-    if (!GTK_WIDGET_HAS_FOCUS (gde->date_button))
+    if (!gtk_widget_has_focus (gde->date_button))
         gtk_widget_grab_focus (gde->date_button);
 
     gde->popup_in_progress = TRUE;
@@ -1175,12 +1175,12 @@ gnc_date_edit_set_flags (GNCDateEdit *gde, GNCDateEditFlags flags)
             != (old_flags & GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY))
     {
         if (flags & GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY)
-            gtk_calendar_display_options
+            gtk_calendar_set_display_options
             (GTK_CALENDAR (gde->calendar),
              (GTK_CALENDAR (gde->calendar)->display_flags
               | GTK_CALENDAR_WEEK_START_MONDAY));
         else
-            gtk_calendar_display_options
+            gtk_calendar_set_display_options
             (GTK_CALENDAR (gde->calendar),
              (GTK_CALENDAR (gde->calendar)->display_flags
               & ~GTK_CALENDAR_WEEK_START_MONDAY));

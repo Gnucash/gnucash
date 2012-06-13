@@ -533,7 +533,7 @@ gnc_query_list_get_needed_height (GNCQueryList *list, gint num_rows)
     g_return_val_if_fail (list != NULL, 0);
     g_return_val_if_fail (IS_GNC_QUERY_LIST(list), 0);
 
-    if (!GTK_WIDGET_REALIZED (list))
+    if (!gtk_widget_get_realized (GTK_WIDGET(list)))
         return 0;
 
     clist = GTK_CLIST (list);

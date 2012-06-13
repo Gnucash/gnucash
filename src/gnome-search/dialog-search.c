@@ -65,63 +65,62 @@ enum search_cols
 
 struct _GNCSearchWindow
 {
-    GtkWidget *	dialog;
-    GtkWidget *	grouping_combo;
-    GtkWidget *	match_all_label;
-    GtkWidget *	criteria_table;
-    GtkWidget *	result_hbox;
+    GtkWidget               *dialog;
+    GtkWidget               *grouping_combo;
+    GtkWidget               *match_all_label;
+    GtkWidget               *criteria_table;
+    GtkWidget               *result_hbox;
 
     /* The "results" sub-window widgets */
-    GtkWidget *	result_list;
-    gpointer	selected_item;
-    GList *selected_item_list;
+    GtkWidget               *result_list;
+    gpointer	             selected_item;
+    GList                   *selected_item_list;
 
     /* The search_type radio-buttons */
-    GtkWidget *	new_rb;
-    GtkWidget *	narrow_rb;
-    GtkWidget *	add_rb;
-    GtkWidget *	del_rb;
-
-    GtkWidget *	active_only_check;
+    GtkWidget               *new_rb;
+    GtkWidget               *narrow_rb;
+    GtkWidget               *add_rb;
+    GtkWidget               *del_rb;
+    GtkWidget               *active_only_check;
 
     /* The Select button */
-    GtkWidget *	select_button;
+    GtkWidget               *select_button;
 
     /* The close/cancel buttons */
-    GtkWidget *	close_button;
-    GtkWidget *	cancel_button;
+    GtkWidget 		    *close_button;
+    GtkWidget               *cancel_button;
 
     /* Callbacks */
-    GNCSearchResultCB result_cb;
-    GNCSearchNewItemCB new_item_cb;
+    GNCSearchResultCB        result_cb;
+    GNCSearchNewItemCB       new_item_cb;
     GNCSearchCallbackButton *buttons;
-    GNCSearchFree	free_cb;
-    gpointer		user_data;
+    GNCSearchFree	     free_cb;
+    gpointer		     user_data;
 
-    GNCSearchSelectedCB	selected_cb;
-    gpointer		select_arg;
-    gboolean		allow_clear;
+    GNCSearchSelectedCB	     selected_cb;
+    gpointer		     select_arg;
+    gboolean		     allow_clear;
 
     /* What we're searching for, and how */
-    const gchar *  type_label;
-    QofIdTypeConst search_for;
-    GNCSearchType	grouping;	/* Match Any, Match All */
-    const QofParam * get_guid;	/* Function to GetGUID from the object */
-    int		search_type;	/* New, Narrow, Add, Delete */
+    const gchar              *type_label;
+    QofIdTypeConst            search_for;
+    GNCSearchType             grouping;		/* Match Any, Match All */
+    const QofParam           *get_guid;		/* Function to GetGUID from the object */
+    int		              search_type;	/* New, Narrow, Add, Delete */
 
     /* Our query status */
-    QofQuery *	q;
-    QofQuery *	start_q;	/* The query to start from, if any */
+    QofQuery                 *q;
+    QofQuery                 *start_q;		/* The query to start from, if any */
 
     /* The list of criteria */
-    GNCSearchParam * last_param;
-    GList *	params_list;	/* List of GNCSearchParams */
-    GList *	display_list;	/* List of GNCSearchParams for Display */
-    gint		num_cols;	/* Number of Display Columns */
-    GList *	crit_list;	/* list of crit_data */
+    GNCSearchParam           *last_param;
+    GList                    *params_list;	/* List of GNCSearchParams */
+    GList                    *display_list;	/* List of GNCSearchParams for Display */
+    gint	              num_cols;		/* Number of Display Columns */
+    GList                    *crit_list;	/* list of crit_data */
 
-    gint		component_id;
-    const gchar * gconf_section;
+    gint	             component_id;
+    const gchar             *gconf_section;
 };
 
 struct _crit_data
@@ -378,9 +377,9 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 
 
 static void
-match_combo_changed (GtkComboBox *combo_box, GNCSearchWindow *sw)
+match_combo_changed (GtkComboBoxText *combo_box, GNCSearchWindow *sw)
 {
-    sw->grouping = gtk_combo_box_get_active(combo_box);
+    sw->grouping = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_box));
 }
 
 
@@ -957,13 +956,13 @@ type_label_to_new_button(const gchar* type_label)
 static void
 gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 {
-    GtkBuilder *builder;
-    GtkWidget *label, *add, *box;
-    GtkComboBox *combo_box;
-    GtkWidget *widget;
-    GtkWidget *new_item_button;
-    const char * type_label;
-    gboolean active;
+    GtkBuilder        *builder;
+    GtkWidget         *label, *add, *box;
+    GtkComboBoxText   *combo_box;
+    GtkWidget         *widget;
+    GtkWidget         *new_item_button;
+    const char        *type_label;
+    gboolean           active;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-search.glade", "Search Dialog");
@@ -996,11 +995,11 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gtk_widget_show (add);
 
     /* Set the match-type menu */
-    sw->grouping_combo = gtk_combo_box_new_text();
-    combo_box = GTK_COMBO_BOX(sw->grouping_combo);
-    gtk_combo_box_append_text(combo_box, _("all criteria are met"));
-    gtk_combo_box_append_text(combo_box, _("any criteria are met"));
-    gtk_combo_box_set_active(combo_box, sw->grouping);
+    sw->grouping_combo = gtk_combo_box_text_new();
+    combo_box = GTK_COMBO_BOX_TEXT(sw->grouping_combo);
+    gtk_combo_box_text_append_text(combo_box, _("all criteria are met"));
+    gtk_combo_box_text_append_text(combo_box, _("any criteria are met"));
+    gtk_combo_box_set_active(GTK_COMBO_BOX(combo_box), sw->grouping);
     g_signal_connect(combo_box, "changed", G_CALLBACK (match_combo_changed), sw);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "type_menu_box"));

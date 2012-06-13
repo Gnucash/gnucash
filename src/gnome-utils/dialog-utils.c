@@ -742,7 +742,7 @@ gnc_clist_add_check (GtkCList *list)
     g_signal_connect (object, "destroy",
                       G_CALLBACK (check_destroy), check_info);
 
-    if (GTK_WIDGET_REALIZED (GTK_WIDGET (list)))
+    if (gtk_widget_get_realized (GTK_WIDGET (list)))
         check_realize (GTK_WIDGET (list), check_info);
 
     return check_info;
@@ -761,7 +761,7 @@ gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
     if (!check_info)
         check_info = gnc_clist_add_check (list);
 
-    if (!GTK_WIDGET_REALIZED (GTK_WIDGET (list)))
+    if (!gtk_widget_get_realized (GTK_WIDGET (list)))
     {
         GNCCListCheckNode *node;
 
@@ -945,8 +945,8 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
             : _("Don't tell me again this _session."));
     gtk_widget_show(perm);
     gtk_widget_show(temp);
-    gtk_box_pack_start_defaults(GTK_BOX(dialog->vbox), perm);
-    gtk_box_pack_start_defaults(GTK_BOX(dialog->vbox), temp);
+    gtk_box_pack_start(GTK_BOX(dialog->vbox), perm, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(dialog->vbox), temp, TRUE, TRUE, 0);
     g_signal_connect(perm, "clicked", G_CALLBACK(gnc_perm_button_cb), temp);
 
     /* OK. Present the dialog. */

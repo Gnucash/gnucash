@@ -423,10 +423,10 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
 
     gtk_widget_show_all (ddc->dialog);
 
-    gtk_widget_hide_all (GTK_WIDGET(gtk_builder_get_object (builder, "postdate_label")));
-    gtk_widget_hide_all (GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box")));
-    gtk_widget_hide_all (GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry")));
-    gtk_widget_hide_all (GTK_WIDGET(gtk_builder_get_object (builder, "memo_label")));
+    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "postdate_label")));
+    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box")));
+    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry")));
+    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "memo_label")));
 
     ddc->retval = FALSE;
     while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)

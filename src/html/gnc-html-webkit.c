@@ -1245,7 +1245,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
     if ( error != NULL )
     {
         GtkWidget* window = gtk_widget_get_toplevel( GTK_WIDGET(priv->web_view) );
-        GtkWidget* dialog = gtk_message_dialog_new( GTK_WIDGET_TOPLEVEL(window) ? GTK_WINDOW(window) : NULL,
+        GtkWidget* dialog = gtk_message_dialog_new( gtk_widget_is_toplevel(window) ? GTK_WINDOW(window) : NULL,
                             GTK_DIALOG_DESTROY_WITH_PARENT,
                             GTK_MESSAGE_ERROR,
                             GTK_BUTTONS_CLOSE,

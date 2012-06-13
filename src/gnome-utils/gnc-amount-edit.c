@@ -70,7 +70,7 @@ static GtkEntryClass *parent_class;
 /**
  * gnc_amount_edit_get_type:
  *
- * Returns the GtkType for the GNCAmountEdit widget
+ * Returns the GType for the GNCAmountEdit widget
  */
 GType
 gnc_amount_edit_get_type (void)

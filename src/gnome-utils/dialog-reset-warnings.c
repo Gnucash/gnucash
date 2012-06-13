@@ -310,7 +310,7 @@ gnc_reset_warnings_add_one (RWDialog *rw_dialog, GConfEntry *entry, GtkWidget *b
     gtk_widget_set_name(checkbox, entry->key);
     g_signal_connect_swapped(G_OBJECT(checkbox), "toggled",
                              (GCallback)gnc_reset_warnings_update_widgets, rw_dialog);
-    gtk_box_pack_start_defaults(GTK_BOX(box), checkbox);
+    gtk_box_pack_start(GTK_BOX(box), checkbox, TRUE, TRUE, 0);
     LEAVE(" ");
 }
 

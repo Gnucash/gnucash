@@ -1250,7 +1250,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (SchedXaction *sx,
 
     /* Do not call show_all here. Screws up the gtkuimanager code */
     gtk_widget_show(sxed->dialog);
-    gtk_notebook_set_page(GTK_NOTEBOOK(sxed->notebook), 0);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(sxed->notebook), 0);
 
     /* Refresh the cal and the ledger */
     gtk_widget_queue_resize( GTK_WIDGET( sxed->example_cal ) );
@@ -1708,7 +1708,7 @@ static void
 _open_editors(GtkDialog *dialog, gint response_code, gpointer data)
 {
     acct_deletion_handler_data *adhd = (acct_deletion_handler_data *)data;
-    gtk_widget_hide_all(adhd->dialog);
+    gtk_widget_hide(adhd->dialog);
     {
         GList *sx_iter;
         for (sx_iter = adhd->affected_sxes; sx_iter; sx_iter = sx_iter->next)

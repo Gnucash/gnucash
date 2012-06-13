@@ -267,7 +267,7 @@ gnc_xfer_dialog_key_press_cb (GtkWidget   *widget,
     if ((event->keyval == GDK_Return) || (event->keyval == GDK_KP_Enter))
     {
         toplevel = gtk_widget_get_toplevel (widget);
-        if (GTK_WIDGET_TOPLEVEL(toplevel) && GTK_IS_WINDOW(toplevel))
+        if (gtk_widget_is_toplevel(toplevel) && GTK_IS_WINDOW(toplevel))
         {
             gtk_window_activate_default(GTK_WINDOW(toplevel));
             return TRUE;

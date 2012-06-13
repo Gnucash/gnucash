@@ -203,6 +203,7 @@
                         <child>
                           <object class="GtkCheckButton" id="active_check">
                             <property name="label" translatable="yes">Active</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -403,7 +404,7 @@
                           </object>
                           <packing>
                             <property name="expand">True</property>
-                            <property name="fill">True</property>
+                            <property name="fill">False</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
@@ -672,6 +673,7 @@
             <child>
               <object class="GtkButton" id="helpbutton">
                 <property name="label">gtk-help</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -689,6 +691,7 @@
             <child>
               <object class="GtkButton" id="cancelbutton">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -706,6 +709,7 @@
             <child>
               <object class="GtkButton" id="okbutton">
                 <property name="label">gtk-ok</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -826,6 +830,7 @@
                                 <child>
                                   <object class="GtkRadioButton" id="dialog_invoice_type">
                                     <property name="label" translatable="yes">Invoice</property>
+                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -844,6 +849,7 @@
                                 <child>
                                   <object class="GtkRadioButton" id="dialog_creditnote_type">
                                     <property name="label" translatable="yes">Credit Note</property>
+                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -1269,6 +1275,7 @@
             <child>
               <object class="GtkButton" id="cancelbutton1">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -1285,6 +1292,7 @@
             <child>
               <object class="GtkButton" id="okbutton1">
                 <property name="label">gtk-ok</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -1362,6 +1370,7 @@ Are you sure you want to unpost it?</property>
                     <child>
                       <object class="GtkRadioButton" id="yes_tt_reset">
                         <property name="label" translatable="yes">Yes, reset the Tax Tables</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -1379,6 +1388,7 @@ Are you sure you want to unpost it?</property>
                     <child>
                       <object class="GtkRadioButton" id="no_tt_reset">
                         <property name="label" translatable="yes">No, keep them as they are</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

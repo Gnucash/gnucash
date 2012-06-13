@@ -299,7 +299,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
 
     /* Amount edit */
     td->amount_edit = gnc_amount_edit_new();
-    gtk_box_pack_start_defaults(GTK_BOX(amount_hbox), td->amount_edit);
+    gtk_box_pack_start(GTK_BOX(amount_hbox), td->amount_edit, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter(GNC_AMOUNT_EDIT(td->amount_edit),
                                           TRUE);
     gnc_amount_edit_set_fraction(GNC_AMOUNT_EDIT(td->amount_edit),

@@ -332,7 +332,6 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           button_name, GTK_RESPONSE_OK,
                                           NULL);
-    gtk_dialog_set_has_separator (GTK_DIALOG(dialog), FALSE);
 
     /* default to ok */
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);

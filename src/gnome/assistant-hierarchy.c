@@ -968,7 +968,7 @@ on_final_account_prepare (hierarchy_data  *data)
                                                GNC_TREE_VIEW_COLUMN_DATA_NONE,
                                                GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                                NULL);
-        renderers = gtk_tree_view_column_get_cell_renderers(column);
+        renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
         g_object_set(G_OBJECT(renderer), "xalign", 1.0, (char*)NULL);
         gtk_tree_view_column_set_cell_data_func(column, GTK_CELL_RENDERER(renderers->data),
                                                 use_existing_account_data_func, (gpointer)data, NULL);

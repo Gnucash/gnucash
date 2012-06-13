@@ -58,7 +58,7 @@ static guint general_select_signals[LAST_SIGNAL];
 /**
  * gnc_general_select_get_type:
  *
- * Returns the GtkType for the GNCGeneralSelect widget
+ * Returns the GType for the GNCGeneralSelect widget
  */
 GType
 gnc_general_select_get_type (void)

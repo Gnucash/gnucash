@@ -82,8 +82,8 @@ typedef struct
     GtkCheckButton  *sep_buttons[SEP_NUM_OF_TYPES]; /**< Checkbuttons for common separators */
     GtkCheckButton  *custom_cbutton;                /**< The checkbutton for a custom separator */
     GtkEntry        *custom_entry;                  /**< The entry for custom separators */
-    GtkComboBox     *date_format_combo;             /**< The widget for selecting the date format */
-    GtkComboBox     *currency_format_combo;             /**< The widget for selecting the currency format */
+    GtkComboBoxText *date_format_combo;             /**< The Combo Text widget for selecting the date format */
+    GtkComboBoxText *currency_format_combo;         /**< The Combo Text widget for selecting the currency format */
     GtkTreeView     *treeview;                      /**< The treeview containing the data */
     GtkTreeView     *ctreeview;                     /**< The treeview containing the column types */
     GtkLabel        *instructions_label;            /**< The instructions label */
@@ -358,7 +358,8 @@ void csv_import_trans_auto_cb (GtkWidget *cb, gpointer user_data )
  */
 static GtkCellRenderer* gnc_csv_preview_get_cell_renderer(CsvImportTrans* info, int col)
 {
-    GList* renderers = gtk_tree_view_column_get_cell_renderers(gtk_tree_view_get_column(info->treeview, col));
+    GList* renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(gtk_tree_view_get_column(info->treeview, col)));
+
     GtkCellRenderer* cell = GTK_CELL_RENDERER(renderers->data);
     g_list_free(renderers);
     return cell;
@@ -515,9 +516,9 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
  * @param format_selector The combo box for selecting date formats
  * @param info The display of the data being imported
  */
-static void date_format_selected(GtkComboBox* format_selector, CsvImportTrans* info)
+static void date_format_selected(GtkComboBoxText* format_selector, CsvImportTrans* info)
 {
-    info->parse_data->date_format = gtk_combo_box_get_active(format_selector);
+    info->parse_data->date_format = gtk_combo_box_get_active(GTK_COMBO_BOX(format_selector));
 }
 
 
@@ -525,9 +526,9 @@ static void date_format_selected(GtkComboBox* format_selector, CsvImportTrans* i
  * @param currency_selector The combo box for selecting currency formats
  * @param info The display of the data being imported
  */
-static void currency_format_selected(GtkComboBox* currency_selector, CsvImportTrans* info)
+static void currency_format_selected(GtkComboBoxText* currency_selector, CsvImportTrans* info)
 {
-    info->parse_data->currency_format = gtk_combo_box_get_active(currency_selector);
+    info->parse_data->currency_format = gtk_combo_box_get_active(GTK_COMBO_BOX(currency_selector));
 }
 
 
@@ -871,7 +872,7 @@ static void column_type_changed(GtkCellRenderer* renderer, gchar* path,
         /* The column in the treeview we are looking at */
         GtkTreeViewColumn* col = gtk_tree_view_get_column(info->ctreeview, i);
         /* The list of renderers for col */
-        GList* rend_list = gtk_tree_view_column_get_cell_renderers(col);
+        GList* rend_list = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(col));
         /* rend_list has only one entry, which we put in col_renderer. */
         col_renderer = rend_list->data;
         g_list_free(rend_list);
@@ -1242,7 +1243,7 @@ static void gnc_csv_preview_update_assist(CsvImportTrans* info)
 
     /* Set the date format to what's in the combo box (since we don't
      * necessarily know if this will always be the same). */
-    info->parse_data->date_format = gtk_combo_box_get_active(info->date_format_combo);
+    info->parse_data->date_format = gtk_combo_box_get_active(GTK_COMBO_BOX(info->date_format_combo));
 
     /* It's now been filled with some stuff. */
     info->not_empty = TRUE;
@@ -1735,12 +1736,12 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         info->instructions_image = GTK_IMAGE(gtk_builder_get_object (builder, "instructions_image"));
 
         /* Add in the date format combo box and hook it up to an event handler. */
-        info->date_format_combo = GTK_COMBO_BOX(gtk_combo_box_new_text());
+        info->date_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
         for (i = 0; i < num_date_formats; i++)
         {
-            gtk_combo_box_append_text(info->date_format_combo, _(date_format_user[i]));
+            gtk_combo_box_text_append_text(info->date_format_combo, _(date_format_user[i]));
         }
-        gtk_combo_box_set_active(info->date_format_combo, 0);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(info->date_format_combo), 0);
         g_signal_connect(G_OBJECT(info->date_format_combo), "changed",
                          G_CALLBACK(date_format_selected), (gpointer)info);
 
@@ -1750,13 +1751,13 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         gtk_widget_show_all(GTK_WIDGET(date_format_container));
 
         /* Add in the currency format combo box and hook it up to an event handler. */
-        info->currency_format_combo = GTK_COMBO_BOX(gtk_combo_box_new_text());
+        info->currency_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
         for (i = 0; i < num_currency_formats; i++)
         {
-            gtk_combo_box_append_text(info->currency_format_combo, _(currency_format_user[i]));
+            gtk_combo_box_text_append_text(info->currency_format_combo, _(currency_format_user[i]));
         }
         /* Default will the locale */
-        gtk_combo_box_set_active(info->currency_format_combo, 0);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(info->currency_format_combo), 0);
         g_signal_connect(G_OBJECT(info->currency_format_combo), "changed",
                          G_CALLBACK(currency_format_selected), (gpointer)info);
 

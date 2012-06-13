@@ -482,7 +482,7 @@ gnc_progress_dialog_pause(GNCProgressDialog *progress)
 
     suffix = g_strconcat(" ", _("(paused)"), NULL);
 
-    if (progress->sub_label && GTK_WIDGET_VISIBLE(progress->sub_label))
+    if (progress->sub_label && gtk_widget_get_visible(progress->sub_label))
     {
         const gchar *txt = gtk_label_get_text(GTK_LABEL(progress->sub_label));
 
@@ -505,7 +505,7 @@ gnc_progress_dialog_pause(GNCProgressDialog *progress)
         }
     }
     else if (progress->primary_label &&
-             GTK_WIDGET_VISIBLE(progress->primary_label))
+             gtk_widget_get_visible(progress->primary_label))
     {
         const gchar *txt = gtk_label_get_text(GTK_LABEL(progress->primary_label));
 
@@ -763,7 +763,7 @@ gnc_progress_dialog_finish(GNCProgressDialog *progress)
     gtk_widget_set_sensitive(progress->ok_button, TRUE);
     gtk_widget_set_sensitive(progress->cancel_button, FALSE);
 
-    if (GTK_WIDGET_VISIBLE(progress->primary_label))
+    if (gtk_widget_get_visible(progress->primary_label))
         gnc_progress_dialog_set_heading(progress, _("Complete"));
 
     if (!progress->title_set)
