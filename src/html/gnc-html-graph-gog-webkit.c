@@ -420,6 +420,7 @@ handle_linechart( GncHtml* html, gpointer eb, gpointer d )
     lineChartInfo.markers = get_int_param( &object_info, "markers" );
     lineChartInfo.major_grid = get_int_param( &object_info, "major_grid" );
     lineChartInfo.minor_grid = get_int_param( &object_info, "minor_grid" );
+    lineChartInfo.line_width = get_int_param( &object_info, "line_width" );
 
     pixbuf = gnc_html_graph_gog_create_linechart( &lineChartInfo );
     if ( lineChartInfo.title != NULL ) g_free( (gchar*)lineChartInfo.title );

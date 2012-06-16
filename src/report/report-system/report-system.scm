@@ -1,8 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  report-system.scm
-;;  module definition for the report system code 
+;;  module definition for the report system code
 ;;
-;;  Copyright (c) 2001 Linux Developers Group, Inc. 
+;;  Copyright (c) 2001 Linux Developers Group, Inc.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report report-system))
@@ -51,7 +51,7 @@
 (export gnc:sum-collector-stocks)
 (export gnc-commodity-collector-contains-commodity?)
 
-;; options-utilities.scm 
+;; options-utilities.scm
 
 (export gnc:options-add-report-date!)
 (export gnc:options-add-date-interval!)
@@ -73,7 +73,7 @@
 (export register-font-options)
 (export add-css-information-to-doc)
 
-;; html-utilities.scm 
+;; html-utilities.scm
 
 (export gnc:html-make-empty-cell)
 (export gnc:html-make-empty-cells)
@@ -383,9 +383,9 @@
 (export gnc:html-linechart-append-column!)
 (export gnc:html-linechart-prepend-column!)
 (export gnc:html-linechart-render linechart)
-
-
-;; html-style-info.scm 
+(export gnc:html-linechart-set-line-width!)
+(export gnc:html-linechart-line-width)
+;; html-style-info.scm
 
 (export make-kvtable)
 (export kvt-ref)
@@ -483,7 +483,7 @@
 (export gnc:html-style-sheet-find)
 (export gnc:html-style-sheet-remove)
 
-;; html-acct-table.scm 
+;; html-acct-table.scm
 
 (export gnc:colspans-are-working-right)
 (export <html-acct-table>)
@@ -520,7 +520,7 @@
 (export gnc-commodity-table)
 (export gnc:uniform-commodity?)
 
-;; html-table.scm 
+;; html-table.scm
 
 (export <html-table>)
 (export gnc:html-table?)
@@ -627,7 +627,7 @@
 (export gnc:html-text-render)
 (export gnc:html-text-render-markup)
 
-;; report-utilities.scm 
+;; report-utilities.scm
 
 (export list-ref-safe)
 (export list-set-safe!)
