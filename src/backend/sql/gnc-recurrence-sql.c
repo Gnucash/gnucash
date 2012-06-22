@@ -45,9 +45,10 @@
 /*@ unused @*/ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "recurrences"
-#define TABLE_VERSION 1
+#define TABLE_VERSION 2
 
 #define BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN 2048
+#define BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN 2048
 
 typedef struct
 {
@@ -64,6 +65,8 @@ static gint get_recurrence_mult( gpointer pObject );
 static void set_recurrence_mult( gpointer pObject, gint value );
 static /*@ null @*/ gpointer get_recurrence_period_type( gpointer pObject );
 static void set_recurrence_period_type( gpointer pObject, /*@ null @*/ gpointer pValue );
+static /*@ null @*/ gpointer get_recurrence_weekend_adjust( gpointer pObject );
+static void set_recurrence_weekend_adjust( gpointer pObject, /*@ null @*/ gpointer pValue );
 static /*@ dependent @*//*@ null @*/ gpointer get_recurrence_period_start( gpointer pObject );
 static void set_recurrence_period_start( gpointer pObject, /*@ null @*/ gpointer pValue );
 
@@ -87,6 +90,10 @@ static const GncSqlColumnTableEntry col_table[] =
         "recurrence_period_start", CT_GDATE,  0,                                     COL_NNUL, NULL, NULL,
         (QofAccessFunc)get_recurrence_period_start, set_recurrence_period_start
     },
+    {
+        "recurrence_weekend_adjust",  CT_STRING, BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, COL_NNUL, NULL, NULL,
+        (QofAccessFunc)get_recurrence_weekend_adjust, set_recurrence_weekend_adjust
+    },
     { NULL }
     /*@ +full_init_block @*/
 };
@@ -99,6 +106,17 @@ static const GncSqlColumnTableEntry guid_col_table[] =
     {
         "obj_guid", CT_GUID, 0, 0, NULL, NULL,
         (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid
+    },
+    { NULL }
+    /*@ +full_init_block @*/
+};
+
+/* Special column table used to upgrade table from version 1 to 2 */
+static const GncSqlColumnTableEntry weekend_adjust_col_table[] =
+{
+    /*@ -full_init_block @*/
+    {
+        "recurrence_weekend_adjust",  CT_STRING, BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, 0,
     },
     { NULL }
     /*@ +full_init_block @*/
@@ -166,6 +184,30 @@ set_recurrence_period_type( gpointer pObject, gpointer pValue )
     g_return_if_fail( pValue != NULL );
 
     pInfo->pRecurrence->ptype = recurrencePeriodTypeFromString( (gchar*)pValue );
+}
+
+static /*@ null @*/ gpointer
+get_recurrence_weekend_adjust( gpointer pObject )
+{
+    recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
+
+    g_return_val_if_fail( pObject != NULL, NULL );
+    g_return_val_if_fail( pInfo->pRecurrence != NULL, NULL );
+
+    return (gpointer)recurrenceWeekendAdjustToString(
+               recurrenceGetWeekendAdjust( pInfo->pRecurrence ) );
+}
+
+static void
+set_recurrence_weekend_adjust( gpointer pObject, gpointer pValue )
+{
+    recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
+
+    g_return_if_fail( pObject != NULL );
+    g_return_if_fail( pInfo->pRecurrence != NULL );
+    g_return_if_fail( pValue != NULL );
+
+    pInfo->pRecurrence->wadj = recurrenceWeekendAdjustFromString( (gchar*)pValue );
 }
 
 static /*@ dependent @*//*@ null @*/ gpointer
@@ -348,9 +390,38 @@ gnc_sql_recurrence_load_list( GncSqlBackend* be, const GncGUID* guid )
 
 /* ================================================================= */
 static void
+upgrade_recurrence_table_1_2 ( GncSqlBackend* be )
+{
+    /* Step 1: add field, but allow it to be null */
+    gboolean ok = gnc_sql_add_columns_to_table( be, TABLE_NAME, weekend_adjust_col_table );
+    if ( !ok )
+    {
+        PERR( "Unable to add recurrence_weekend_adjust column\n" );
+        return;
+    }
+
+    /* Step 2: insert a default value in the newly created column */
+    {
+        gchar *weekend_adj_str = recurrenceWeekendAdjustToString(WEEKEND_ADJ_NONE);
+        gchar *update_query = g_strdup_printf ("UPDATE %s SET %s = '%s';",
+                                               TABLE_NAME,
+                                               weekend_adjust_col_table[0].col_name,
+                                               weekend_adj_str);
+        (void)gnc_sql_execute_nonselect_sql (be, update_query);
+        g_free (weekend_adj_str);
+        g_free (update_query);
+    }
+
+    /* Step 3: rewrite the table, requiring the weekend_adj column to be non-null */
+    gnc_sql_upgrade_table( be, TABLE_NAME, col_table );
+
+}
+
+static void
 create_recurrence_tables( GncSqlBackend* be )
 {
     gint version;
+    gboolean ok;
 
     g_return_if_fail( be != NULL );
 
@@ -358,6 +429,18 @@ create_recurrence_tables( GncSqlBackend* be )
     if ( version == 0 )
     {
         (void)gnc_sql_create_table( be, TABLE_NAME, TABLE_VERSION, col_table );
+    }
+    else if ( version < TABLE_VERSION )
+    {
+        /* Upgrade:
+            1->2: Add recurrence_weekend_adjust field (mandatory, non-null field)
+        */
+        if ( version == 1 )
+        {
+            upgrade_recurrence_table_1_2 (be);
+        }
+        (void)gnc_sql_set_table_version( be, TABLE_NAME, TABLE_VERSION );
+        PINFO("Recurrence table upgraded from version %d to version %d\n", version, TABLE_VERSION);
     }
 }
 
