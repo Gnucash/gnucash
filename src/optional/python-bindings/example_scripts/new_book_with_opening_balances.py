@@ -343,10 +343,10 @@ def main():
         new_book_session.end()
         original_book_session.end()
     except:
-        if not original_book_session == None:
+        if "original_book_session" in locals():
             original_book_session.end()
  
-        if not new_book_session == None:
+        if "new_book_session" in locals():
             new_book_session.end()
 
         raise

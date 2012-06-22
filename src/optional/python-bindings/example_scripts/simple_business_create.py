@@ -69,9 +69,8 @@ if len(argv) < 2:
     exit()
     
 
-s = Session(argv[1], is_new=True)
-
 try:
+    s = Session(argv[1], is_new=True)
 
     book = s.book
     root = book.get_root_account()
@@ -185,6 +184,6 @@ try:
 
     s.end()
 except:
-    if not s == None:
+    if "s" in locals():
         s.end()
     raise

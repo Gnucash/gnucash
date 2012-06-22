@@ -268,7 +268,7 @@ def main():
         # no save needed, we're just reading..
         gnucash_session.end()
     except:
-        if not gnucash_session == None:
+        if "gnucash_session" in locals():
             gnucash_session.end()
 
         raise

@@ -48,9 +48,10 @@ if len(argv) < 2:
     print "gnucash-env python test_imbalance_transaction.py '/home/username/test.gnucash'"
     exit()
 
-session = Session(argv[1])
 
 try:
+    session = Session(argv[1])
+
     book = session.book
 
     root = book.get_root_account()
@@ -98,6 +99,6 @@ try:
     session.end()
     session.destroy()
 except:
-    if not session == None:
+    if "session" in locals():
         session.end()
     raise
