@@ -2285,7 +2285,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         regWidget = gnucash_register_new (gnc_entry_ledger_get_table
                                           (entry_ledger));
         gtk_widget_show(regWidget);
-        gnc_table_init_gui( regWidget, entry_ledger );
+        gnc_table_init_gui( regWidget, NULL);
 
         frame = GTK_WIDGET (gtk_builder_get_object (builder, "ledger_frame"));
         gtk_container_add (GTK_CONTAINER (frame), regWidget);

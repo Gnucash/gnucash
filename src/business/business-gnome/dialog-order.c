@@ -640,7 +640,7 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
 
     /* Watch the order of operations, here... */
     regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger));
-    gnc_table_init_gui( regWidget, entry_ledger );
+    gnc_table_init_gui( regWidget, NULL);
     ow->reg = GNUCASH_REGISTER (regWidget);
     GNUCASH_SHEET (ow->reg->sheet)->window = GTK_WIDGET(ow->dialog);
     gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);

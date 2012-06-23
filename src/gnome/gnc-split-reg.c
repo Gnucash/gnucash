@@ -388,6 +388,14 @@ gsr_create_table( GNCSplitReg *gsr )
     GtkWidget *register_widget;
     SplitRegister *sr;
 
+    gchar *gconf_key;
+    const GncGUID * guid;
+    Account * account;
+    
+    account = gnc_ledger_display_leader(gsr->ledger);
+    guid = xaccAccountGetGUID(account);
+    gconf_key = (gchar*)guid_to_string (guid);
+
     ENTER("gsr=%p", gsr);
 
     gnc_ledger_display_set_user_data( gsr->ledger, (gpointer)gsr );
@@ -399,8 +407,7 @@ gsr_create_table( GNCSplitReg *gsr )
     sr = gnc_ledger_display_get_split_register( gsr->ledger );
     register_widget = gnucash_register_new( sr->table );
     gsr->reg = GNUCASH_REGISTER( register_widget );
-    gnc_table_init_gui( GTK_WIDGET(gsr->reg), sr );
-
+    gnc_table_init_gui( GTK_WIDGET(gsr->reg), gconf_key );
     gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
     GNUCASH_SHEET(gsr->reg->sheet)->window = gsr->window;
     gtk_widget_show ( GTK_WIDGET(gsr->reg) );
@@ -696,7 +703,16 @@ static void
 gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 {
     GNCSplitReg *gsr = gnc_ledger_display_get_user_data( ledger );
-
+    
+    gchar *gconf_key;
+    const GncGUID * guid;
+    Account * account;
+    
+    account = gnc_ledger_display_leader(ledger);
+    guid = xaccAccountGetGUID(account);
+    gconf_key = (gchar*)guid_to_string (guid);
+    
+    
     if (gsr)
     {
         SplitRegister *reg;
@@ -704,7 +720,7 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
         reg = gnc_ledger_display_get_split_register (ledger);
 
         if (reg && reg->table)
-            gnc_table_save_state (reg->table);
+            gnc_table_save_state (reg->table, gconf_key);
 
         /*
          * Don't destroy the window here any more.  The register no longer
