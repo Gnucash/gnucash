@@ -758,12 +758,15 @@
 	      (let* ((term (gncInvoiceGetTerms invoice))
 		     (terms (gncBillTermGetDescription term)))
 		(if (and terms (> (string-length terms) 0))
-		    (gnc:html-document-add-object!
-		     document
-		     (gnc:make-html-text
-		      (string-append
-		       (_ "Terms") ":&nbsp;"
-		       (string-expand terms #\newline "<br>")))))))
+		    (begin
+		      (gnc:html-document-add-object!
+		       document
+		       (gnc:make-html-text
+			(string-append
+			  (_ "Terms") ":&nbsp;"
+			  (string-expand terms #\newline "<br>"))))
+		      (make-break! document))
+		)))
 
 	  ;(make-break! document)
     
