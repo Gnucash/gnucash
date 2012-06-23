@@ -321,6 +321,12 @@
     "tc" (N_ "Display the payments applied to this invoice?") #f))
 
   (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Job Details")
+    "td" (N_ "Display the job name for this invoice?") #f))
+    
+    
+  (gnc:register-inv-option
    (gnc:make-text-option
     (N_ "Display") (N_ "Extra Notes")
      "u" (N_ "Extra notes to put on the invoice")
@@ -346,7 +352,10 @@
 	(display-all-taxes (opt-val "Display" "Individual Taxes"))
 	(lot (gncInvoiceGetPostedLot invoice))
 	(txn (gncInvoiceGetPostedTxn invoice))
+  (job? (opt-val "Display" "Job Details"))
 	(currency (gncInvoiceGetCurrency invoice))
+  (jobnumber  (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
+  (jobname    (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
 	(reverse-payments? (not (gncInvoiceAmountPositive invoice))))
 
     (define (colspan monetary used-columns)
@@ -648,6 +657,9 @@
 	 (owner '())
 	 (references? (opt-val "Display" "References"))
 	 (default-title (_ "Invoice"))
+   (job? (opt-val "Display" "Job Details"))
+   (jobnumber  (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
+   (jobname    (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
 	 (custom-title (opt-val gnc:pagename-general "Custom Title"))
 	 (title "")
 	 (cust-doc? #f)
@@ -717,6 +729,8 @@
 		 document
 		 (gnc:make-html-text
 		  (_ "Invoice in progress...")))))
+      
+    
 
 	  (make-break! document)
 	  (make-break! document)
@@ -751,8 +765,29 @@
 		       (_ "Terms") ":&nbsp;"
 		       (string-expand terms #\newline "<br>")))))))
 
-	  (make-break! document)
-
+	  ;(make-break! document)
+    
+    ;; Add job number and name to invoice if requested and if it exists
+    (if job? 
+    (if (not(string=? jobnumber "" ))
+    (begin
+    (gnc:html-document-add-object!
+		       document
+		       (gnc:make-html-text
+			(string-append
+			 (_ "Job number") ":&nbsp;"
+			 (string-expand jobnumber #\newline "<br>"))))
+       (make-break! document)
+       (gnc:html-document-add-object!
+		       document
+		       (gnc:make-html-text
+			(string-append
+			 (_ "Job name") ":&nbsp;"
+			 (string-expand jobname #\newline "<br>"))))
+       (make-break! document)
+       (make-break! document)
+    )))
+    
 	  (gnc:html-document-add-object! document table)
 
 	  (make-break! document)
@@ -782,7 +817,7 @@
 
     document))
 
-(define invoice-report-guid "5123a759ceb9483abf2182d01c140e8d")
+(define invoice-report-guid "5223a759ceb9483abf2182d01c140e8d")
 
 (gnc:define-report
  'version 1
