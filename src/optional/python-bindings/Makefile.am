@@ -109,7 +109,7 @@ PYTHON_LINK_FILES = \
 	$(RM) -rf gnucash
 	mkdir -p gnucash
 if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${PYTHON_LINK_FILES} ; do \
+	for X in $(filter-out gnucash_core_c.py,${PYTHON_LINK_FILES}) ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
