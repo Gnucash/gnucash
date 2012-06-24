@@ -48,7 +48,7 @@ USER_OPTIMIZATION=""
 for flag in $CFLAGS; do
   tmp_flag=`echo $flag | sed -e 's,-O.,,'`
   if test -z "$tmp_flag"; then
-    USER_OPTIMIZATION="$USER_OPTIMIZATION ${tmp_flag}"
+    USER_OPTIMIZATION="$USER_OPTIMIZATION ${flag}"
   fi
 done
 
