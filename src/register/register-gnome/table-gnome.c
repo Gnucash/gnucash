@@ -74,7 +74,7 @@ gnc_table_save_state (Table *table, gchar * gconf_key)
     GList *node;
     gchar *key;
     
-    gchar * gconf_section;
+    gchar * gconf_section = NULL;
     if(gconf_key != NULL)gconf_section = g_strjoin(NULL,GCONF_SECTION, "/", gconf_key,NULL);
     PINFO("gconf_key=%s",gconf_key );
     
@@ -170,7 +170,7 @@ gnc_table_init_gui (GtkWidget *widget, gchar * gconf_key)
     guint value;
  
     // Stuff for per-register settings load.
-    gchar * gconf_section;
+    gchar * gconf_section = NULL;
     if(gconf_key != NULL) gconf_section =g_strjoin(NULL,GCONF_SECTION, "/", gconf_key,NULL);
     
     g_return_if_fail (widget != NULL);
