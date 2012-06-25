@@ -93,7 +93,6 @@ gchar *test_unknown_features(QofSession* new_session)
                 msg = tmp;
             }
 
-            g_free(msg);
             g_list_free(features_list);
             return msg;
         }
