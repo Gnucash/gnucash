@@ -37,6 +37,7 @@
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
+#include "gnc-date-edit.h"
 #include "gnc-general-select.h"
 #include "gnc-commodity.h"
 #include "gnc-commodity-edit.h"
@@ -448,8 +449,8 @@ gnc_ui_to_account(AccountWindow *aw)
     if (gnc_reverse_balance (account))
         balance = gnc_numeric_neg (balance);
 
-    date = gnome_date_edit_get_time (
-               GNOME_DATE_EDIT (aw->opening_balance_date_edit));
+    date = gnc_date_edit_get_date (
+               GNC_DATE_EDIT (aw->opening_balance_date_edit));
 
     use_equity = gtk_toggle_button_get_active
                  (GTK_TOGGLE_BUTTON (aw->opening_equity_radio));
@@ -1296,6 +1297,7 @@ static void
 gnc_account_window_create(AccountWindow *aw)
 {
     GtkWidget *amount;
+    GtkWidget *date_edit;
     GObject *awo;
     GtkWidget *box;
     GtkWidget *label;
@@ -1378,7 +1380,10 @@ gnc_account_window_create(AccountWindow *aw)
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), amount);
 
     box = glade_xml_get_widget (xml, "opening_balance_date_box");
-    aw->opening_balance_date_edit = glade_xml_get_widget (xml, "opening_balance_date_edit");
+    date_edit = gnc_date_edit_new (time (NULL), 1, 1);
+    aw->opening_balance_date_edit = date_edit;
+    gtk_box_pack_start(GTK_BOX(box), date_edit, TRUE, TRUE, 0);
+    gtk_widget_show (date_edit);
 
     aw->opening_balance_page =
         gtk_notebook_get_nth_page (GTK_NOTEBOOK (aw->notebook), 1);

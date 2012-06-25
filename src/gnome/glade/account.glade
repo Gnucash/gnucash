@@ -620,13 +620,7 @@
                       <widget class="GtkHBox" id="opening_balance_date_box">
                         <property name="visible">True</property>
                         <child>
-                          <widget class="GnomeDateEdit" id="opening_balance_date_edit">
-                            <property name="visible">True</property>
-                            <property name="dateedit_flags">GNOME_DATE_EDIT_SHOW_TIME | GNOME_DATE_EDIT_24_HR</property>
-                          </widget>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
+                          <placeholder/>
                         </child>
                       </widget>
                       <packing>
