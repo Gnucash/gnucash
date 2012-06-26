@@ -820,7 +820,7 @@
 
     document))
 
-(define invoice-report-guid "5223a759ceb9483abf2182d01c140e8d")
+(define invoice-report-guid "5123a759ceb9483abf2182d01c140e8d")
 
 (gnc:define-report
  'version 1
