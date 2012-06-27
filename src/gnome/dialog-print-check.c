@@ -2200,7 +2200,6 @@ draw_check_format(GncPrintContext * context, gint position,
     gdouble x, y, r, multip;
 
     cr = gtk_print_context_get_cairo_context(context);
-    cairo_identity_matrix(cr);
     cairo_translate(cr, format->trans_x, format->trans_y);
     g_debug("Page translated by %f,%f", format->trans_x, format->trans_y);
     cairo_rotate(cr, format->rotation * DEGREES_TO_RADIANS);
@@ -2215,15 +2214,19 @@ draw_check_format(GncPrintContext * context, gint position,
                   pcd->default_font);
     }
 
-    /* Translate all subsequent check items if requested. */
-    if ((position >= 0) && (position < pcd->position_max))
+    /* Translate all subsequent check items if requested.
+     * For check position 0, no translation is needed. */
+    if ((position > 0) && (position < pcd->position_max))
     {
-        y = format->height * position;
-        cairo_translate(cr, 0, y);
-        g_debug("Position translated by %f (pre-defined)", y);
+        /* Standard positioning is used.
+         * Note that the first check on the page (position 0) doesn't
+         * need to be moved (hence the test for position > 0 above. */
+        cairo_translate(cr, 0, format->height);
+        g_debug("Position %d translated by %f (pre-defined)", position, format->height);
     }
-    else
+    else if (position == pcd->position_max)
     {
+        /* Custom positioning is used. */
         multip = pcd_get_custom_multip(pcd);
         x = multip * gtk_spin_button_get_value(pcd->translation_x);
         y = multip * gtk_spin_button_get_value(pcd->translation_y);
