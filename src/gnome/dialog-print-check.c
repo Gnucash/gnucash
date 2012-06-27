@@ -133,8 +133,6 @@ typedef enum format_combo_col_t
                                  *   this enry specifies a separator line. */
 } format_combo_col;
 
-#define GncPrintContext GtkPrintContext
-
 void gnc_ui_print_check_response_cb (GtkDialog *dialog, gint response, PrintCheckDialog *pcd);
 void gnc_print_check_format_changed (GtkComboBox *widget, PrintCheckDialog *pcd);
 void gnc_print_check_position_changed (GtkComboBox *widget, PrintCheckDialog *pcd);
@@ -1779,7 +1777,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
  * figuring out the offsets for where to print various items on the page.
  */
 static void
-draw_grid(GncPrintContext *context, gint width, gint height, const gchar *font)
+draw_grid(GtkPrintContext *context, gint width, gint height, const gchar *font)
 {
     const double dash_pattern[2] = { 1.0, 5.0 };
     PangoFontDescription *desc;
@@ -1841,7 +1839,7 @@ draw_grid(GncPrintContext *context, gint width, gint height, const gchar *font)
  * available.
  */
 static gdouble
-draw_text(GncPrintContext *context, const gchar *text, check_item_t *data,
+draw_text(GtkPrintContext *context, const gchar *text, check_item_t *data,
           PangoFontDescription *default_desc)
 {
     PangoFontDescription *desc;
@@ -2040,7 +2038,7 @@ draw_picture(GtkPrintContext *context, check_item_t *data)
  * knowing if the user's checks already have a date format printed on them.
  */
 static void
-draw_date_format(GncPrintContext *context, const gchar *date_format,
+draw_date_format(GtkPrintContext *context, const gchar *date_format,
                  check_item_t *data, PangoFontDescription *default_desc,
                  gdouble width)
 {
@@ -2113,7 +2111,7 @@ draw_date_format(GncPrintContext *context, const gchar *date_format,
  * function uses helper functions to print text based and picture based items.
  */
 static void
-draw_page_items(GncPrintContext *context,
+draw_page_items(GtkPrintContext *context,
                 check_format_t *format, gpointer user_data)
 {
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
@@ -2226,6 +2224,7 @@ draw_page_items(GncPrintContext *context,
             text = g_strdup_printf("(unknown check field, type %d)", item->type);
             draw_text(context, text, item, default_desc);
             g_free(text);
+            break;
         }
     }
 
@@ -2237,7 +2236,7 @@ draw_page_items(GncPrintContext *context,
  * function uses helper functions to print text based and picture based items.
  */
 static void
-draw_page_boxes(GncPrintContext *context,
+draw_page_boxes(GtkPrintContext *context,
                 check_format_t *format, gpointer user_data)
 {
     cairo_t *cr;
@@ -2264,7 +2263,7 @@ draw_page_boxes(GncPrintContext *context,
  * all check items.
  */
 static void
-draw_check_format(GncPrintContext *context, gint position,
+draw_check_format(GtkPrintContext *context, gint position,
                   check_format_t *format, gpointer user_data)
 {
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
@@ -2317,7 +2316,7 @@ draw_check_format(GncPrintContext *context, gint position,
 
 
 static void
-draw_check_custom(GncPrintContext *context, gpointer user_data)
+draw_check_custom(GtkPrintContext *context, gpointer user_data)
 {
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
     GNCPrintAmountInfo info;
@@ -2432,7 +2431,6 @@ draw_page(GtkPrintOperation *operation,
         gint    checks_per_page;
         GList   *next_split;
 
-        position = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
         if (position == pcd->position_max)
         {
             /* Custom position, one check per page */
