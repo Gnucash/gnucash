@@ -52,7 +52,7 @@ gnucash.1: gnucash.1.in Makefile
 tip_of_the_day.list: tip_of_the_day.list.in Makefile
 	${CC} -E -P -x c -D'N_(x)=x' -o $@.tmp $<
 	cat -s $@.tmp | ${SED} -e 's/^ *"//' \
-	                       -e 's/" *$$//' \
+	                       -e 's/" *$$/\n/' \
 	                       -e 's/"* *[|] */|/' \
                            -e 's:@-GNUCASH_LATEST_STABLE_SERIES-@:${GNUCASH_LATEST_STABLE_SERIES}:g' > $@
 	rm -f $@.tmp
