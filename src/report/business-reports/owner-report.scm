@@ -28,8 +28,7 @@
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash printf))
-(use-modules (gnucash main))		; for gnc:debug
+(use-modules (gnucash main))        ; for gnc:debug
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/business-utils" 0)
@@ -306,7 +305,7 @@
     (if reverse?
 	(set! value (gnc-numeric-neg value)))
 
-    (if (gnc:timepair-later start-date date)
+    (if (gnc:timepair-le start-date date)
 	(begin
 	  
 	  ; Adds 'balance' row if needed
