@@ -830,11 +830,11 @@
              (gnc:error "Illegal account value set"))))
      (lambda () (convert-to-account (get-default)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
      (lambda (f p)
        (let ((v (kvp-frame-get-slot-path-gslist f p)))
          (if (and v (string? v))
-             (set! value v))))
+             (set! option v))))
      validator
      (cons #f acct-type-list) #f #f #f)))
 
