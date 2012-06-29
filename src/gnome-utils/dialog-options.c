@@ -1916,9 +1916,7 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
 
     gnc_option_set_widget (option, value);
-    /* DOCUMENT ME: Why is the only option type that sets use_default to
-       TRUE? */
-    gnc_option_set_ui_value(option, TRUE);
+    gnc_option_set_ui_value(option, FALSE);
 
     *enclosing = gtk_hbox_new(FALSE, 5);
     gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);

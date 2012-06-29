@@ -809,7 +809,7 @@
                                  (get-default)))))
          (value->string (lambda ()
                           (string-append
-                           "'" (gnc:value->string (if option-set option #f)))))
+                            (gnc:value->string (if option-set option #f)))))
          (validator
           (if (not value-validator)
               (lambda (account) (list #t account))
