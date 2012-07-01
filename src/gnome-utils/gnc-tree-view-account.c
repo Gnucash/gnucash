@@ -1835,8 +1835,7 @@ gppat_filter_select_all_cb (GtkWidget *button,
  *
  *  @param button The button that was clicked.
  *
- *  @param fd A pointer to the account filter dialog struct.
- *
+ *  @param fd A pointer to the account filter dialog struct.*/
 void
 gppat_filter_select_default_cb (GtkWidget *button,
                                 AccountFilterDialog *fd)
@@ -1845,7 +1844,7 @@ gppat_filter_select_default_cb (GtkWidget *button,
     gppat_filter_select_all_cb(button, fd);
     LEAVE(" ");
 }
-*/
+
 /** Set the renderer's properties.
  *
  *  @param column A GtkTreeColumn
