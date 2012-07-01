@@ -26,6 +26,7 @@
 #include "qof.h"
 
 extern void test_suite_account();
+extern void test_suite_budget();
 extern void test_suite_gncInvoice();
 //extern void test_suite_transaction();
 extern void test_suite_split();
@@ -41,6 +42,7 @@ main (int   argc,
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
 
     test_suite_account();
+    test_suite_budget();
     test_suite_gncInvoice();
 //    test_suite_transaction();
     test_suite_split();
