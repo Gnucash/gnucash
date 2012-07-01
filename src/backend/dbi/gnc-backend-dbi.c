@@ -1755,6 +1755,7 @@ gnc_dbi_check_sqlite3_file( const gchar *uri )
 {
     FILE* f;
     gchar buf[50];
+    G_GNUC_UNUSED size_t chars_read;
     gint status;
     gchar *filename;
 
@@ -1773,7 +1774,7 @@ gnc_dbi_check_sqlite3_file( const gchar *uri )
     }
 
     // OK if file has the correct header
-    fread( buf, sizeof(buf), 1, f );
+    chars_read = fread( buf, sizeof(buf), 1, f );
     status = fclose( f );
     if ( status < 0 )
     {
