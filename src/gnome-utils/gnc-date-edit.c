@@ -747,7 +747,7 @@ static int
 date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     GNCDateEdit *gde = data;
-    G_CONST_RETURN char *string;
+    const char *string;
     struct tm tm;
 
     string = gtk_entry_get_text (GTK_ENTRY (widget));

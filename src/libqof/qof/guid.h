@@ -64,7 +64,7 @@ typedef union GNC_INTERNAL_GUID
 #define GNC_VALUE_HOLDS_GUID(value) G_VALUE_HOLDS(value, GNC_TYPE_GUID)
 
 GType gnc_guid_get_type (void);
-G_CONST_RETURN GncGUID* gnc_value_get_guid (const GValue *value);
+const GncGUID* gnc_value_get_guid (const GValue *value);
 
 /** number of characters needed to encode a guid as a string
  * not including the null terminator. */

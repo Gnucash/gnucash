@@ -45,7 +45,7 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 static kvp_frame *gnc_ab_get_account_kvp(const Account *a, gboolean create);
 static kvp_frame *gnc_ab_get_book_kvp(QofBook *b, gboolean create);
 
-G_CONST_RETURN gchar *
+const gchar *
 gnc_ab_get_account_accountid(const Account *a)
 {
     kvp_frame *frame = gnc_ab_get_account_kvp(a, FALSE);
@@ -64,7 +64,7 @@ gnc_ab_set_account_accountid(Account *a, const gchar *id)
     xaccAccountCommitEdit(a);
 }
 
-G_CONST_RETURN gchar *
+const gchar *
 gnc_ab_get_account_bankcode(const Account *a)
 {
     kvp_frame *frame = gnc_ab_get_account_kvp(a, FALSE);

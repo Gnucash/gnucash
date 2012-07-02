@@ -71,7 +71,7 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
  *
  * @return the value stored in @a value
  */
-G_CONST_RETURN GncGUID*
+const GncGUID*
 gnc_value_get_guid (const GValue *value)
 {
     GncGUID *val;
