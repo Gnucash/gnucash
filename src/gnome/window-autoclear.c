@@ -137,7 +137,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
     gnc_numeric toclear_value;
     GHashTable *sack;
 
-    gtk_label_set_text(data->status_label, "Searching for splits to clear ...");
+    gtk_label_set_text(data->status_label, _("Searching for splits to clear ..."));
 
     /* Value we have to reach */
     toclear_value = gnc_amount_edit_get_amount(data->end_value);
@@ -239,14 +239,14 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
             {
                 /* We couldn't reconstruct the solution */
                 PINFO("    Solution not unique.\n");
-                gtk_label_set_text(data->status_label, "Cannot uniquely clear splits. Found multiple possibilities.");
+                gtk_label_set_text(data->status_label, _("Cannot uniquely clear splits. Found multiple possibilities."));
                 return;
             }
         }
         else
         {
             PINFO("    No solution found.\n");
-            gtk_label_set_text(data->status_label, "The selected amount cannot be cleared.");
+            gtk_label_set_text(data->status_label, _("The selected amount cannot be cleared."));
             return;
         }
     }
