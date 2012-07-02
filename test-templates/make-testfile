@@ -117,6 +117,19 @@ sub search_scheme {
     return ($calls, $files);
 }
 
+sub search_glade {
+    my ($name) = @_;
+    my $calls = `egrep -r $name --include="*.glade" --include=*.xml"  --include=*.ui" src | wc -l`;
+    chomp $calls;
+    $calls =~ s/\s//g;
+    my $files = `egrep -rl $name --include="*.glade" --include=*.xml"  --include=*.ui" src | wc -l`;
+    chomp $files;
+    $files =~ s/\s//g;
+
+    return ($calls, $files);
+}
+
+
 sub search_local {
     my ($name, $inpath) = @_;
     open INFILE, "<$inpath" or die "Failed to open $inpath: $!";
@@ -147,7 +160,7 @@ sub search_local {
 
 sub process_function {
     my ($c_name, $static, $func, $inpath) = @_;
-    my ($ext_calls, $ext_files, $scm_calls, $scm_files, $not_used);
+    my ($ext_calls, $ext_files, $scm_calls, $scm_files, $ui_calls, $ui_files, $not_used);
     my $gobject_re = qr/_(?:init|constructor|dispose|finalize|[sg]et_property)$/;
     if ($c_name =~ /$gobject_re/) {
 	print OUTFH "/* $c_name\n";
@@ -158,9 +171,10 @@ sub process_function {
     unless ($static) {
 	($ext_calls, $ext_files) = search_external($c_name, $inpath);
 	($scm_calls, $scm_files) = search_scheme($c_name);
+	($ui_calls, $ui_files) = search_glade($c_name);
     }
     my ($local_calls, $local_callbacks, $local_refs) = search_local($c_name, $inpath);
-    unless ($ext_calls || $scm_calls) {
+    unless ($ext_calls || $scm_calls || $ui_calls) {
 	my $local_use = $local_calls + $local_callbacks + $local_refs;
 	print OUTFH "// Make Static\n" if !$static && $local_use > 1;
 	unless ($local_use) {
@@ -175,11 +189,13 @@ sub process_function {
 	print OUTFH "/* $c_name\n";
 	print OUTFH join("\n", @$func);
 	print OUTFH "// ";
-	print OUTFH "External: 0\n" if $ext_calls + $scm_calls == 0;
+	print OUTFH "External: 0\n" if $ext_calls + $scm_calls + $ui_calls == 0;
 	print OUTFH "C: $ext_calls " if $ext_calls > 0;
 	print OUTFH "in $ext_files " if $ext_calls > 1;
 	print OUTFH "SCM: $scm_calls " if $scm_calls > 0;
 	print OUTFH "in $scm_files" if $scm_calls > 1;
+	print OUTFH "UI: $ui_calls " if $ui_calls > 0;
+	print OUTFH "in $ui_files" if $ui_calls > 1;
 	print OUTFH " Local: $local_calls:$local_callbacks:$local_refs\n";
         print OUTFH "*/\n";
     }
