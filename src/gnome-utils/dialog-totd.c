@@ -173,7 +173,7 @@ gnc_totd_dialog_startup_toggled (GtkToggleButton *button,
 static gboolean
 gnc_totd_initialize (void)
 {
-    gchar *filename, *contents, *new, *found;
+    gchar *filename, *contents, *new;
     gsize length;
     GError *error;
 
@@ -190,44 +190,43 @@ gnc_totd_initialize (void)
         g_free(filename);
         return FALSE;
     }
+    g_free(filename);
 
-    /* Replace maximal substrings of more than two newlines by \n\n,
-     * remove leading and trailing \n\n */
-    while ((found = strstr(contents, "\n\n\n")) != NULL)
+    /* Split into multiple strings. Due to the nature of the
+     * tip list file, this can contain empty strings */
+    tip_list = g_strsplit(contents, "\n", 0);
+    g_free(contents);
+    contents = NULL;
+
+    /* Remove the empty strings */
+    for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++)
     {
-        *found++ = '\0';
-        while (*found == '\n') found++;
-        if (*contents && *found)
+        if (*tip_list[tip_count]!='\0')
         {
-            /* put \n\n between the two nonempty parts */
-            new = g_strdup_printf("%s\n\n%s", contents, found);
-            g_free(contents);
-            contents = new;
-        }
-        else if (*found)
-        {
-            /* remove leading newlines */
-            new = g_strdup(found);
-            g_free(contents);
-            contents = new;
+            g_strstrip(tip_list[tip_count]);
+            if (!contents)
+                contents = g_strdup (tip_list[tip_count]);
+            else
+            {
+                new = g_strjoin ("\n", contents, tip_list[tip_count], NULL);
+                g_free (contents);
+                contents = new;
+            }
         }
     }
 
-    /* Split into multiple strings */
-    tip_list = g_strsplit(contents, "\n\n", 0);
+    /* Split cleaned up contents into multiple strings again */
+    g_strfreev (tip_list);
+    tip_list = g_strsplit(contents, "\n", 0);
 
     /* Convert any escaped characters while counting the strings */
     for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++)
     {
-
-        g_strstrip(tip_list[tip_count]);
-        new = g_strcompress(g_strdelimit(tip_list[tip_count], "\n", ' '));
+        new = g_strcompress(tip_list[tip_count]);
         g_free(tip_list[tip_count]);
         tip_list[tip_count] = new;
     }
 
-    g_free(contents);
-    g_free(filename);
 
     /* Don't continue when no tips were found, to prevent
      * gnc_new_tip_number doesn't handle that case (it would try to
