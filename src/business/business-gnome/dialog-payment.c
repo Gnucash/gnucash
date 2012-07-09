@@ -793,7 +793,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
         {
             gchar *acct_string = gnc_account_get_full_name (postacct);
             gnc_cbwe_set_by_string(GTK_COMBO_BOX(pw->post_combo), acct_string);
-            gnc_payment_dialog_post_to_changed(pw);
+            gnc_payment_dialog_post_to_changed_cb (pw->post_combo, pw);
             g_free(acct_string);
         }
     }
