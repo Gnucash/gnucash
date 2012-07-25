@@ -1007,6 +1007,7 @@ gboolean preview_settings_valid (CsvImportTrans* info)
                     break;
 
                 case GNC_CSV_DESCRIPTION:
+                case GNC_CSV_NOTES:
                     weight = weight + 100;
                     break;
 
@@ -1623,7 +1624,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
     GtkBuilder *builder;
     GtkWidget *window;
     GtkWidget *box;
-    GtkWidget *button, *csv_button;
+    GtkWidget *button, *csv_button, *h_box;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "start_row_adj");
@@ -1667,7 +1668,9 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     button = gtk_button_new_from_stock(GTK_STOCK_OK);
     gtk_widget_show (button);
-    gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), button);
+    h_box = gtk_hbox_new(TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), button, FALSE, FALSE, 0);
+    gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), h_box);
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (csv_import_trans_file_chooser_confirm_cb), info);
 

@@ -47,12 +47,13 @@ const gchar* currency_format_user[] = {N_("Locale"),
 /* This array contains all of the different strings for different column types. */
 gchar* gnc_csv_column_type_strs[GNC_CSV_NUM_COL_TYPES] = {N_("None"),
         N_("Date"),
+        N_("Num"),
         N_("Description"),
+        N_("Notes"),
         N_("Account"),
-        N_("Balance"),
         N_("Deposit"),
         N_("Withdrawal"),
-        N_("Num")
+        N_("Balance")
                                                          };
 
 /** A set of sensible defaults for parsing CSV files.
@@ -657,6 +658,7 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
         return *((time_t*)(prop->value)) != -1;
 
     case GNC_CSV_DESCRIPTION:
+    case GNC_CSV_NOTES:
     case GNC_CSV_NUM:
         prop->value = g_strdup(str);
         return TRUE;
@@ -927,6 +929,10 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
 
         case GNC_CSV_DESCRIPTION:
             xaccTransSetDescription(trans_line->trans, (char*)(prop->value));
+            break;
+
+        case GNC_CSV_NOTES:
+            xaccTransSetNotes(trans_line->trans, (char*)(prop->value));
             break;
 
         case GNC_CSV_NUM:

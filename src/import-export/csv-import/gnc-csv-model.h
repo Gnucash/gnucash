@@ -40,12 +40,13 @@
  * type. */
 enum GncCsvColumnType {GNC_CSV_NONE,
                        GNC_CSV_DATE,
+                       GNC_CSV_NUM,
                        GNC_CSV_DESCRIPTION,
+                       GNC_CSV_NOTES,
                        GNC_CSV_ACCOUNT,
-                       GNC_CSV_BALANCE,
                        GNC_CSV_DEPOSIT,
                        GNC_CSV_WITHDRAWAL,
-                       GNC_CSV_NUM,
+                       GNC_CSV_BALANCE,
                        GNC_CSV_NUM_COL_TYPES
                       };
 
