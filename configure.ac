@@ -591,12 +591,6 @@ AC_ARG_ENABLE( profile,
   CFLAGS="${CFLAGS} -pg"
   LDFLAGS="${LDFLAGS} -pg")
 
-AC_ARG_ENABLE( ref-counts-dumps,
-  [AS_HELP_STRING([--enable-ref-counts-dumps],[compile with ref count dumps])],
-  AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,[Enable reference count dumps])
-  AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,[Enable reference count dumps]) )
-
-
 ### --------------------------------------------------------------------------
 ### OFX
 want_ofx=auto

@@ -53,9 +53,6 @@ gnc_gobject_tracking_table (void)
     if (!singleton)
     {
         singleton = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
-#if DEBUG_REFERENCE_COUNTING
-        gtk_quit_add (0, (GSourceFunc)gnc_gobject_tracking_dump, NULL);
-#endif
     }
     return singleton;
 }
