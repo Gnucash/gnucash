@@ -430,30 +430,28 @@ gnc_date_edit_button_toggled (GtkWidget *widget, GNCDateEdit *gde)
     LEAVE(" ");
 }
 
-typedef struct
-{
-    char *hour;
-    GNCDateEdit *gde;
-} hour_info_t;
-
 static void
-set_time (GtkWidget *widget, hour_info_t *hit)
+set_time (GtkWidget *widget, GNCDateEdit *gde)
 {
-    gtk_entry_set_text (GTK_ENTRY (hit->gde->time_entry), hit->hour);
-    g_signal_emit (G_OBJECT (hit->gde), date_edit_signals [TIME_CHANGED], 0);
+    gchar *text;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX(gde->time_combo));
+    gtk_combo_box_get_active_iter (GTK_COMBO_BOX(gde->time_combo), &iter);
+    gtk_tree_model_get( model, &iter, 0, &text, -1 );
+
+    gtk_entry_set_text (GTK_ENTRY (gde->time_entry), text);
+    if(text)
+        g_free(text);
+    g_signal_emit (G_OBJECT (gde), date_edit_signals [TIME_CHANGED], 0);
 }
 
 static void
-free_resources (GtkWidget *widget, hour_info_t *hit)
+fill_time_combo (GtkWidget *widget, GNCDateEdit *gde)
 {
-    g_free (hit->hour);
-    g_free (hit);
-}
-
-static void
-fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
-{
-    GtkWidget *menu;
+    GtkTreeModel *model;
+    GtkTreeIter  hour_iter, min_iter;
     struct tm *tm_returned;
     struct tm mtm;
     time_t current_time;
@@ -462,8 +460,7 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
     if (gde->lower_hour > gde->upper_hour)
         return;
 
-    menu = gtk_menu_new ();
-    gtk_option_menu_set_menu (GTK_OPTION_MENU (gde->time_popup), menu);
+    model = gtk_combo_box_get_model (GTK_COMBO_BOX(gde->time_combo));
 
     time (&current_time);
     tm_returned = localtime_r (&current_time, &mtm);
@@ -471,56 +468,29 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 
     for (i = gde->lower_hour; i <= gde->upper_hour; i++)
     {
-        GtkWidget *item, *submenu;
-        hour_info_t *hit;
         char buffer [40];
-
         mtm.tm_hour = i;
         mtm.tm_min  = 0;
-        hit = g_new (hour_info_t, 1);
 
         if (gde->flags & GNC_DATE_EDIT_24_HR)
             qof_strftime (buffer, sizeof (buffer), "%H:00", &mtm);
         else
             qof_strftime (buffer, sizeof (buffer), "%I:00 %p ", &mtm);
-        hit->hour = g_strdup (buffer);
-        hit->gde  = gde;
 
-        item = gtk_menu_item_new_with_label (buffer);
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-#if 0
-        g_signal_connect (G_OBJECT (item), "activate",
-                          G_CALLBACK  (set_time), hit);
-#endif
-        g_signal_connect (G_OBJECT (item), "destroy",
-                          G_CALLBACK  (free_resources), hit);
-        gtk_widget_show (item);
+        gtk_tree_store_append (GTK_TREE_STORE(model), &hour_iter, NULL);
+        gtk_tree_store_set (GTK_TREE_STORE(model), &hour_iter, 0, buffer, -1);
 
-        submenu = gtk_menu_new ();
-        gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), submenu);
         for (j = 0; j < 60; j += 15)
         {
-            GtkWidget *mins;
-
             mtm.tm_min = j;
-            hit = g_new (hour_info_t, 1);
-            if (gde->flags & GNC_DATE_EDIT_24_HR)
-                qof_strftime (buffer, sizeof (buffer),
-                              "%H:%M", &mtm);
-            else
-                qof_strftime (buffer, sizeof (buffer),
-                              "%I:%M %p", &mtm);
-            hit->hour = g_strdup (buffer);
-            hit->gde  = gde;
 
-            mins = gtk_menu_item_new_with_label (buffer);
-            gtk_menu_shell_append (GTK_MENU_SHELL (submenu), mins);
-            g_signal_connect (G_OBJECT (mins), "activate",
-                              G_CALLBACK  (set_time), hit);
-            g_signal_connect (G_OBJECT (item), "destroy",
-                              G_CALLBACK  (free_resources),
-                              hit);
-            gtk_widget_show (mins);
+            if (gde->flags & GNC_DATE_EDIT_24_HR)
+                qof_strftime (buffer, sizeof (buffer), "%H:%M", &mtm);
+            else
+                qof_strftime (buffer, sizeof (buffer), "%I:%M %p", &mtm);
+
+            gtk_tree_store_append(GTK_TREE_STORE(model), &min_iter, &hour_iter );
+            gtk_tree_store_set (GTK_TREE_STORE(model), &min_iter, 0, buffer, -1);
         }
     }
 }
@@ -609,8 +579,8 @@ gnc_date_edit_dispose (GObject *object)
     gtk_widget_destroy (GTK_WIDGET(gde->time_entry));
     gde->time_entry = NULL;
 
-    gtk_widget_destroy (GTK_WIDGET(gde->time_popup));
-    gde->time_popup = NULL;
+    gtk_widget_destroy (GTK_WIDGET(gde->time_combo));
+    gde->time_combo = NULL;
 
     if (G_OBJECT_CLASS (parent_class)->dispose)
         (* G_OBJECT_CLASS (parent_class)->dispose) (object);
@@ -739,7 +709,7 @@ gnc_date_edit_set_popup_range (GNCDateEdit *gde, int low_hour, int up_hour)
     gde->lower_hour = low_hour;
     gde->upper_hour = up_hour;
 
-    fill_time_popup(NULL, gde);
+    fill_time_combo(NULL, gde);
 }
 
 /* This code should be kept in sync with src/register/datecell.c */
@@ -798,6 +768,9 @@ create_children (GNCDateEdit *gde)
     GtkWidget *frame;
     GtkWidget *hbox;
     GtkWidget *arrow;
+    GtkComboBox  *combo;
+    GtkTreeStore *store;
+    GtkCellRenderer *cell;
 
     /* Create the text entry area. */
     gde->date_entry  = gtk_entry_new ();
@@ -841,20 +814,32 @@ create_children (GNCDateEdit *gde)
     gtk_widget_set_size_request (GTK_WIDGET(gde->time_entry), 88, -1);
     gtk_box_pack_start (GTK_BOX (gde), gde->time_entry, TRUE, TRUE, 0);
 
-    gde->time_popup = gtk_option_menu_new ();
-    gtk_box_pack_start (GTK_BOX (gde), gde->time_popup, FALSE, FALSE, 0);
+    store = gtk_tree_store_new(1, G_TYPE_STRING);
+    gde->time_combo = GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)));
+    g_object_unref(store);
+    /* Create cell renderer. */
+    cell = gtk_cell_renderer_text_new();
+    /* Pack it to the combo box. */
+    gtk_cell_layout_pack_start( GTK_CELL_LAYOUT( gde->time_combo ), cell, TRUE );
+    /* Connect renderer to data source */
+    gtk_cell_layout_set_attributes( GTK_CELL_LAYOUT( gde->time_combo ), cell, "text", 0, NULL );
+
+    g_signal_connect (G_OBJECT (gde->time_combo), "changed",
+                              G_CALLBACK  (set_time), gde);
+
+    gtk_box_pack_start (GTK_BOX (gde), gde->time_combo, FALSE, FALSE, 0);
 
     /* We do not create the popup menu with the hour range until we are
      * realized, so that it uses the values that the user might supply in a
      * future call to gnc_date_edit_set_popup_range
      */
     g_signal_connect (G_OBJECT (gde), "realize",
-                      G_CALLBACK  (fill_time_popup), gde);
+                      G_CALLBACK  (fill_time_combo), gde);
 
     if (gde->flags & GNC_DATE_EDIT_SHOW_TIME)
     {
         gtk_widget_show (GTK_WIDGET(gde->time_entry));
-        gtk_widget_show (GTK_WIDGET(gde->time_popup));
+        gtk_widget_show (GTK_WIDGET(gde->time_combo));
     }
 
     gde->cal_popup = gtk_window_new (GTK_WINDOW_POPUP);
@@ -1157,19 +1142,19 @@ gnc_date_edit_set_flags (GNCDateEdit *gde, GNCDateEditFlags flags)
         {
             gtk_widget_show (gde->cal_label);
             gtk_widget_show (gde->time_entry);
-            gtk_widget_show (gde->time_popup);
+            gtk_widget_show (gde->time_combo);
         }
         else
         {
             gtk_widget_hide (gde->cal_label);
             gtk_widget_hide (gde->time_entry);
-            gtk_widget_hide (gde->time_popup);
+            gtk_widget_hide (gde->time_combo);
         }
     }
 
     if ((flags & GNC_DATE_EDIT_24_HR) != (old_flags & GNC_DATE_EDIT_24_HR))
         /* This will destroy the old menu properly */
-        fill_time_popup (GTK_WIDGET (gde), gde);
+        fill_time_combo (NULL, gde);
 
     if ((flags & GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY)
             != (old_flags & GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY))

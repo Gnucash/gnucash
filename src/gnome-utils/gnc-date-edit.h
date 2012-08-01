@@ -64,7 +64,7 @@ typedef struct
     GtkWidget *date_button;
 
     GtkWidget *time_entry;
-    GtkWidget *time_popup;
+    GtkWidget *time_combo;
 
     GtkWidget *cal_label;
     GtkWidget *cal_popup;
