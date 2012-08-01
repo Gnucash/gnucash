@@ -57,12 +57,6 @@ void gnc_restore_window_size (const char *prefix, GtkWindow *window);
 void gnc_save_window_size (const char *section, GtkWindow *window);
 
 
-void gnc_option_menu_init (GtkWidget * option_menu);
-void gnc_option_menu_init_w_signal(GtkWidget * w,
-                                   GCallback f,
-                                   gpointer cb_data);
-int  gnc_option_menu_get_active (GtkWidget * option_menu);
-
 /********************************************************************\
  * Adjust the window size if it is bigger than the screen size.     *
  *                                                                  *
