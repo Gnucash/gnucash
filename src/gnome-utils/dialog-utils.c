@@ -47,81 +47,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define WINDOW_POSITION		"window_position"
 #define WINDOW_GEOMETRY		"window_geometry"
 
-/* =========================================================== */
-
-static void
-gnc_option_menu_cb(GtkWidget *w, gpointer data)
-{
-    GNCOptionCallback cb;
-    gpointer _index;
-    gint index;
-
-    cb = g_object_get_data(G_OBJECT(w), "gnc_option_cb");
-
-#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
-    cb(w, data);
-#else
-    _index = g_object_get_data(G_OBJECT(w), "gnc_option_index");
-    index = GPOINTER_TO_INT(_index);
-
-    cb(w, index, data);
-#endif
-}
-
-/********************************************************************\
- * gnc_build_option_menu:                                           *
- *   create an GTK "option menu" given the option structure         *
- *                                                                  *
- * Args: option_info - the option structure to use                  *
- *       num_options - the number of options                        *
- * Returns: void                                                    *
- \*******************************************************************/
-GtkWidget *
-gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
-{
-    GtkWidget *omenu;
-    GtkWidget *menu;
-    GtkWidget *menu_item;
-    gint i;
-
-    omenu = gtk_option_menu_new();
-    gtk_widget_show(omenu);
-
-    menu = gtk_menu_new();
-    gtk_widget_show(menu);
-
-    for (i = 0; i < num_options; i++)
-    {
-        menu_item = gtk_menu_item_new_with_label(option_info[i].name);
-        gtk_widget_set_tooltip_text(menu_item, option_info[i].tip);
-        gtk_widget_show(menu_item);
-
-        g_object_set_data(G_OBJECT(menu_item),
-                          "gnc_option_cb",
-                          option_info[i].callback);
-
-        g_object_set_data(G_OBJECT(menu_item),
-                          "gnc_option_index",
-                          GINT_TO_POINTER(i));
-
-        g_object_set_data(G_OBJECT(menu_item),
-                          "gnc_option_menu",
-                          omenu);
-
-        if (option_info[i].callback != NULL)
-            g_signal_connect(menu_item, "activate",
-                             G_CALLBACK(gnc_option_menu_cb),
-                             option_info[i].user_data);
-
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
-    }
-
-    gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), menu);
-
-    return omenu;
-}
-
-
 /********************************************************************\
  * gnc_get_toolbar_style                                            *
  *   returns the current toolbar style for gnucash toolbars         *
@@ -153,6 +78,7 @@ gnc_get_toolbar_style(void)
 
     return tbstyle;
 }
+
 
 /********************************************************************\
  * gnc_get_deficit_color                                            *

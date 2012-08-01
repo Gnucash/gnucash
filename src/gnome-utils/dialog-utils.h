@@ -29,32 +29,6 @@
 #include <gtk/gtk.h>
 #include "qof.h"
 
-/* option button callback function */
-#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
-typedef void (*GNCOptionCallback) (GtkWidget *,
-                                   gpointer user_data);
-#else
-typedef void (*GNCOptionCallback) (GtkWidget *, gint index,
-                                   gpointer user_data);
-#endif
-
-/* Structure for building option buttons */
-typedef struct _GNCOptionInfo GNCOptionInfo;
-struct _GNCOptionInfo
-{
-    char *name;
-    char *tip;
-    GNCOptionCallback callback;
-    gpointer user_data;
-};
-
-
-/**** PROTOTYPES *************************************************/
-
-GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
-                                   gint num_options);
-
-
 GtkToolbarStyle gnc_get_toolbar_style (void);
 void gnc_get_deficit_color (GdkColor *color);
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);

@@ -49,6 +49,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-account-sel.c \
   gnc-amount-edit.c \
   gnc-autosave.c \
+  gnc-combott.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
   gnc-date-delta.c \
@@ -122,6 +123,7 @@ gncinclude_HEADERS = \
   dialog-utils.h \
   gnc-account-sel.h \
   gnc-amount-edit.h \
+  gnc-combott.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \
   gnc-date-delta.h \
