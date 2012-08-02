@@ -777,15 +777,35 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
 
 static void
 gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
-        GtkTreePath        *path,
-        GtkTreeViewColumn  *col,
-        GncPluginPageAccountTree *page)
+                                              GtkTreePath        *path,
+                                              GtkTreeViewColumn  *col,
+                                              GncPluginPageAccountTree *page)
 {
-    Account *account;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
-    account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(treeview), path);
-    gppat_open_account_common (page, account, FALSE);
+    g_return_if_fail (treeview);
+
+    model = gtk_tree_view_get_model(treeview);
+    if (gtk_tree_model_get_iter(model, &iter, path))
+    {
+        if (gtk_tree_model_iter_has_child(model, &iter))
+        {
+            /* There are children,
+             * just expand or collapse the row. */
+            if (gtk_tree_view_row_expanded(treeview, path))
+                gtk_tree_view_collapse_row(treeview, path);
+            else
+                gtk_tree_view_expand_row(treeview, path, FALSE);
+        }
+        else
+        {
+            /* It's an account without any children, so open its register */
+            Account *account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(treeview), path);
+            gppat_open_account_common (page, account, FALSE);
+        }
+    }
 }
 
 static void
