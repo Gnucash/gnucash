@@ -474,12 +474,12 @@
     (if (used-date column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc:make-html-table-cell/markup "text-cell"
+                    (gnc:make-html-table-cell/markup "date-cell"
                         (gnc-print-date (gnc-transaction-get-date-posted parent)))
                     " ")))
     (if (used-reconciled-date column-vector)
         (addto! row-contents
-                (gnc:make-html-table-cell/markup "text-cell"
+                (gnc:make-html-table-cell/markup "date-cell"
 		    (let ((date (gnc-split-get-date-reconciled split)))
 		      (if (equal? date (cons 0 0))
 		          " "
