@@ -1072,6 +1072,12 @@ AC_ARG_ENABLE(python,
   )
 if test x${enable_python} = "xtrue"
 then
+  # Check for Python
+  # We require python-2.4 because our implementation doesn't run
+  # with earlier version anymore. 
+  PKG_CHECK_MODULES(PYTHON, python >= 2.4 , , [
+    AC_MSG_ERROR([Could not find python >= 2.4. If you use --enable-python, you MUST have python installed!])
+  ])
   AM_PATH_PYTHON(2.4)
   AC_PYTHON_DEVEL(>= '2.4')
   SWIG_PYTHON
