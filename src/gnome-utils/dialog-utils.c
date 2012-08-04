@@ -164,9 +164,20 @@ gnc_restore_window_size(const char *section, GtkWindow *window)
                                     GCONF_VALUE_INT, NULL);
     if (coord_list)
     {
+        gint screen_width = gdk_screen_width();
+        gint screen_height = gdk_screen_height();
+
         coords[0] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 0));
         coords[1] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 1));
-        DEBUG("coords[0]: %d, coords[1]: %d", coords[0], coords[1]);
+        DEBUG("from gconf - coords[0]: %d, coords[1]: %d", coords[0], coords[1]);
+
+        /* Keep the window on screen if possible */
+        if (screen_width != 0)
+            coords[0] = coords[0] % screen_width;
+        if (screen_height != 0)
+            coords[1] = coords[1] % screen_height;
+        DEBUG("after screen adaption - coords[0]: %d, coords[1]: %d", coords[0], coords[1]);
+
         gtk_window_move(window, coords[0], coords[1]);
         g_slist_free(coord_list);
     }
