@@ -745,7 +745,6 @@ csv_export_assistant_summary_page_prepare (GtkAssistant *assistant,
     gnc_gconf_set_int(GCONF_SECTION, PANED_POSITION,
                       gtk_paned_get_position(GTK_PANED(info->csva.paned)), NULL);
     gnc_set_default_directory(GCONF_SECTION, info->starting_dir);
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
 
     if (info->failed)
         text = _("There was a problem with the export, this could be due to lack of space, "
@@ -838,6 +837,7 @@ csv_export_close_handler (gpointer user_data)
     g_free(info->file_name);
     g_free(info->starting_dir);
 
+    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
     gtk_widget_destroy (info->window);
 }
 

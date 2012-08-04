@@ -62,6 +62,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
+#define GCONF_SECTION "dialogs/ab_initial"
 #define ASSISTANT_AB_INITIAL_CM_CLASS "assistant-ab-initial"
 
 typedef struct _ABInitialInfo ABInitialInfo;
@@ -822,6 +823,7 @@ aai_close_handler(gpointer user_data)
 {
     ABInitialInfo *info = user_data;
 
+    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
     gtk_widget_destroy(info->window);
 }
 
@@ -892,6 +894,8 @@ gnc_ab_initial_assistant(void)
 
     selection = gtk_tree_view_get_selection(info->account_view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+
+    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(info->window));
 
     g_signal_connect(info->account_view, "row-activated",
                      G_CALLBACK(account_list_clicked_cb), info);

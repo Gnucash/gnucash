@@ -372,7 +372,6 @@ csv_import_assistant_finish_page_prepare (GtkAssistant *assistant,
 
     /* Save the Window size and directory */
     gnc_set_default_directory(GCONF_SECTION, info->starting_dir);
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
 
     /* Enable the Assistant Buttons */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
@@ -483,6 +482,7 @@ csv_import_close_handler (gpointer user_data)
     g_free(info->file_name);
     g_string_free(info->regexp, TRUE);
 
+    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
     gtk_widget_destroy (info->window);
 }
 

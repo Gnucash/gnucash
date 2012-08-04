@@ -206,9 +206,6 @@ gnc_save_window_size(const char *section, GtkWindow *window)
     g_return_if_fail(section != NULL);
     g_return_if_fail(window != NULL);
 
-    if (GTK_OBJECT_FLAGS(window) & GTK_IN_DESTRUCTION)
-        return;
-
     if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
         return;
 

@@ -1503,7 +1503,6 @@ csv_import_trans_assistant_summary_page_prepare (GtkAssistant *assistant,
 
     /* Save the Window size and directory */
     gnc_set_default_directory(GCONF_SECTION, info->starting_dir);
-    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
 
     /* Remove the added button */
     gtk_assistant_remove_action_widget (assistant, info->help_button);
@@ -1612,6 +1611,7 @@ csv_import_trans_close_handler (gpointer user_data)
     if (!(info->gnc_csv_importer_gui == NULL))
         info->gnc_csv_importer_gui = NULL;
 
+    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->window));
     gtk_widget_destroy (info->window);
 }
 

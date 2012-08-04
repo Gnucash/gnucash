@@ -117,6 +117,7 @@ void on_finish (GtkAssistant  *gtkassistant, hierarchy_data *data);
 static void
 delete_hierarchy_dialog (hierarchy_data *data)
 {
+    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(data->dialog));
     gtk_widget_destroy (data->dialog);
 }
 
@@ -1116,6 +1117,8 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     data->final_account_tree = NULL;
 
     data->balance_hash = g_hash_table_new(NULL, NULL);
+
+    gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(data->dialog));
 
     g_signal_connect (G_OBJECT(dialog), "destroy",
                       G_CALLBACK (gnc_hierarchy_destroy_cb), data);
