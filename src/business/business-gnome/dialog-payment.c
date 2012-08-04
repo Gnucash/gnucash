@@ -60,7 +60,8 @@ struct _payment_window
     GtkWidget   * memo_entry;
     GtkWidget   * post_combo;
     GtkWidget   * owner_choice;
-    GtkWidget   * amount_edit;
+    GtkWidget   * amount_debit_edit;
+    GtkWidget   * amount_credit_edit;
     GtkWidget   * date_edit;
     GtkWidget   * acct_tree;
     GtkWidget   * docs_list_tree_view;
@@ -95,7 +96,23 @@ void gnc_ui_payment_window_set_date (PaymentWindow *pw, const GDate *date)
 void gnc_ui_payment_window_set_amount (PaymentWindow *pw, gnc_numeric amount)
 {
     g_assert(pw);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(pw->amount_edit), amount);
+
+    /* Debits are negative, credits are positive */
+    if (gnc_numeric_positive_p (amount))
+    {
+        gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(pw->amount_credit_edit),
+                                    amount);
+        gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(pw->amount_debit_edit),
+                                    gnc_numeric_zero ());
+    }
+    else
+    {
+        gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(pw->amount_debit_edit),
+                                    gnc_numeric_neg (amount));
+        gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(pw->amount_credit_edit),
+                                    gnc_numeric_zero ());
+    }
+
 }
 void gnc_ui_payment_window_set_postaccount (PaymentWindow *pw, const Account* account)
 {
@@ -126,6 +143,8 @@ void gnc_payment_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
         GtkTreeViewColumn *column, PaymentWindow *pw);
+void gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
+        PaymentWindow *pw);
 
 
 static void
@@ -203,9 +222,7 @@ gnc_payment_dialog_document_selection_changed (PaymentWindow *pw)
 
     /* Set the payment amount in the dialog */
     val = gnc_payment_dialog_calculate_selected_total (pw);
-    /* XXX It may not always be correct to use the absolute value of amount here
-     * This is an assumption from before the credit notes implementation. */
-    gnc_ui_payment_window_set_amount(pw, gnc_numeric_abs (val));
+    gnc_ui_payment_window_set_amount(pw, val);
 }
 
 static void
@@ -521,20 +538,22 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
     PaymentWindow *pw = data;
     const char *text = NULL;
     Account *post, *acc;
-    gnc_numeric amount;
+    gnc_numeric amount_deb, amount_cred, amount_tot;
 
     if (!pw)
         return;
 
-    /* Verify the amount is non-zero */
-    amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_edit));
+    /* Verify the total amount is non-zero */
+    amount_deb  = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit));
+    amount_cred = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit));
+    amount_tot = gnc_numeric_sub (amount_cred, amount_deb,
+            gnc_commodity_get_fraction (xaccAccountGetCommodity (pw->post_acct)),
+            GNC_HOW_RND_ROUND_HALF_UP);
 
-    /* XXX Amounts could possibly be negative as well if you take credit notes into account
-     * This still has to be reviewed */
-    if (gnc_numeric_check (amount) || !gnc_numeric_positive_p (amount))
+    if (gnc_numeric_check (amount_tot) || gnc_numeric_zero_p (amount_tot))
     {
         text = _("You must enter the amount of the payment.  "
-                 "The payment amount must be greater than zero.");
+                 "The payment amount must not be zero.");
         gnc_error_dialog (pw->dialog, "%s", text);
         return;
     }
@@ -597,7 +616,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
             gnc_info_dialog(pw->dialog, "%s", text);
 
             gnc_xfer_dialog_select_to_account(xfer, post);
-            gnc_xfer_dialog_set_amount(xfer, amount);
+            gnc_xfer_dialog_set_amount(xfer, amount_tot);
 
             /* All we want is the exchange rate so prevent the user from thinking
                it makes sense to mess with other stuff */
@@ -611,7 +630,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 
         /* Perform the payment */
         gncOwnerApplyPayment (&pw->owner, pw->pre_existing_txn, selected_lots,
-                              post, acc, amount, exch, date, memo, num);
+                              post, acc, amount_tot, exch, date, memo, num);
     }
     gnc_resume_gui_refresh ();
 
@@ -669,6 +688,25 @@ gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
             /* It's an account without any children, so click the Ok button. */
             gnc_payment_ok_cb(widget, pw);
     }
+}
+
+void
+gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
+        PaymentWindow *pw)
+{
+    gnc_numeric amount_deb, amount_cred, amount_tot;
+
+    if (! pw->amount_credit_edit || ! pw->amount_debit_edit)
+        return;
+
+    /* If both credit and debit amount are entered, simplify it to either one */
+    amount_deb  = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit));
+    amount_cred = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit));
+    amount_tot = gnc_numeric_sub (amount_cred, amount_deb,
+            gnc_commodity_get_fraction (xaccAccountGetCommodity (pw->post_acct)),
+            GNC_HOW_RND_ROUND_HALF_UP);
+
+    gnc_ui_payment_window_set_amount (pw, amount_tot);
 }
 
 /* Select the list of accounts to show in the tree */
@@ -768,12 +806,25 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     box = GTK_WIDGET (gtk_builder_get_object (builder, "owner_box"));
     pw->owner_choice = gnc_owner_select_create (label, box, book, owner);
 
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_box"));
-    pw->amount_edit = gnc_amount_edit_new ();
-    gtk_box_pack_start (GTK_BOX (box), pw->amount_edit, TRUE, TRUE, 0);
-    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_edit),
+    box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_debit_box"));
+    pw->amount_debit_edit = gnc_amount_edit_new ();
+    gtk_box_pack_start (GTK_BOX (box), pw->amount_debit_edit, TRUE, TRUE, 0);
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_debit_edit),
                                            TRUE);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_edit), gnc_numeric_zero());
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit), gnc_numeric_zero());
+    g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_debit_edit))),
+                     "focus-out-event",
+                     G_CALLBACK(gnc_payment_leave_amount_cb), pw);
+
+    box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_credit_box"));
+    pw->amount_credit_edit = gnc_amount_edit_new ();
+    gtk_box_pack_start (GTK_BOX (box), pw->amount_credit_edit, TRUE, TRUE, 0);
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_credit_edit),
+                                           TRUE);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit), gnc_numeric_zero());
+    g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_credit_edit))),
+                     "focus-out-event",
+                     G_CALLBACK(gnc_payment_leave_amount_cb), pw);
 
     box = GTK_WIDGET (gtk_builder_get_object (builder, "date_box"));
     pw->date_edit = gnc_date_edit_new (time(NULL), FALSE, FALSE);
@@ -1045,7 +1096,7 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
     pw = gnc_ui_payment_new(owner,
                             qof_instance_get_book(QOF_INSTANCE(txn)));
     g_assert(assetaccount_split); // we can rely on this because of the countAssetAccounts() check above
-    //g_message("Amount=%s", gnc_numeric_to_string(amount));
+    g_debug("Amount=%s", gnc_numeric_to_string(amount));
 
     // Fill in the values from the given txn
     pw->pre_existing_txn = txn;
@@ -1055,9 +1106,7 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
         GDate txn_date = xaccTransGetDatePostedGDate (txn);
         gnc_ui_payment_window_set_date(pw, &txn_date);
     }
-    /* XXX It may not always be correct to use the absolute value of amount here
-     * This is an assumption from before the credit notes implementation. */
-    gnc_ui_payment_window_set_amount(pw, gnc_numeric_abs(amount));
+    gnc_ui_payment_window_set_amount(pw, amount);
     gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(assetaccount_split));
     if (postaccount_split)
         gnc_ui_payment_window_set_postaccount(pw, xaccSplitGetAccount(postaccount_split));

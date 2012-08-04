@@ -700,17 +700,6 @@ gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB)
     return timespec_cmp (&da, &db);
 }
 
-static gboolean use_reversed_payment_amounts(const GncOwner *owner)
-{
-    g_assert(owner);
-    return (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);
-}
-
-
-/*
- * Create a payment of "amount" for the owner and return
- * the new lot associated with this payment.
- */
 GNCLot *
 gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
                           Account *posted_acc, Account *xfer_acc,
@@ -721,8 +710,6 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
     Split *split;
     const char *name;
     gnc_commodity *commodity;
-    gboolean reverse;
-    gnc_numeric payment_value = amount;
     Split *xfer_split = NULL;
     GNCLot *payment_lot;
 
@@ -734,7 +721,7 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
     book = gnc_account_get_book (posted_acc);
     name = gncOwnerGetName (gncOwnerGetEndOwner ((GncOwner*)owner));
     commodity = gncOwnerGetCurrency (owner);
-    reverse = use_reversed_payment_amounts(owner);
+//    reverse = use_reversed_payment_amounts(owner);
 
     if (txn)
     {
@@ -811,15 +798,16 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
 
         if (gnc_commodity_equal(xaccAccountGetCommodity(xfer_acc), commodity))
         {
-            xaccSplitSetBaseValue (split, reverse ? amount :
-                                   gnc_numeric_neg (amount), commodity);
+            xaccSplitSetBaseValue (split, amount, commodity);
         }
         else
         {
             /* Need to value the payment in terms of the owner commodity */
-            xaccSplitSetAmount(split, reverse ? amount : gnc_numeric_neg (amount));
-            payment_value = gnc_numeric_mul(amount, exch, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
-            xaccSplitSetValue(split, reverse ? payment_value : gnc_numeric_neg(payment_value));
+            gnc_numeric payment_value = gnc_numeric_mul(amount,
+                    exch, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
+
+            xaccSplitSetAmount(split, amount);
+            xaccSplitSetValue(split, payment_value);
         }
     }
 
@@ -831,7 +819,7 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
     xaccAccountInsertSplit (posted_acc, split);
     xaccAccountCommitEdit (posted_acc);
     xaccTransAppendSplit (txn, split);
-    xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (amount) : amount, commodity);
+    xaccSplitSetBaseValue (split, gnc_numeric_neg (amount), commodity);
 
     /* Create a new lot for the payment */
     payment_lot = gnc_lot_new (book);
