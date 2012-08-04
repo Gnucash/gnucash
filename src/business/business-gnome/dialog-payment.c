@@ -209,6 +209,45 @@ gnc_payment_dialog_document_selection_changed (PaymentWindow *pw)
 }
 
 static void
+gnc_payment_dialog_highlight_document (PaymentWindow *pw)
+{
+    if (pw->invoice)
+    {
+        GtkTreeIter iter;
+        GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pw->docs_list_tree_view));
+        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
+
+        if (gtk_tree_model_get_iter_first (model, &iter))
+        {
+            do
+            {
+                GValue value = { 0 };
+                GNCLot *lot;
+                GncInvoice *invoice;
+
+                gtk_tree_model_get_value (model, &iter, 5, &value);
+                lot = (GNCLot *) g_value_get_pointer (&value);
+                g_value_unset (&value);
+
+
+                invoice = gncInvoiceGetInvoiceFromLot (lot);
+                if (!invoice)
+                    continue;
+
+                if (pw->invoice == invoice)
+                {
+                    gtk_tree_selection_select_iter (selection, &iter);
+                    gnc_payment_dialog_document_selection_changed (pw);
+                }
+                else
+                    gtk_tree_selection_unselect_iter (selection, &iter);
+            }
+            while (gtk_tree_model_iter_next (model, &iter));
+        }
+    }
+}
+
+static void
 gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 {
     GtkListStore *store;
@@ -306,39 +345,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
     g_list_free (list);
 
     /* Highlight the preset invoice if it's in the new list */
-    if (pw->invoice)
-    {
-        GtkTreeIter iter;
-        GtkTreeModel *model = GTK_TREE_MODEL (store);
-        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
-
-        if (gtk_tree_model_get_iter_first (model, &iter))
-        {
-            do
-            {
-                GValue value = { 0 };
-                GNCLot *lot;
-                GncInvoice *invoice;
-
-                gtk_tree_model_get_value (model, &iter, 5, &value);
-                lot = (GNCLot *) g_value_get_pointer (&value);
-                g_value_unset (&value);
-
-
-                invoice = gncInvoiceGetInvoiceFromLot (lot);
-                if (!invoice)
-                    continue;
-
-                if (pw->invoice == invoice)
-                {
-                    gtk_tree_selection_select_iter (selection, &iter);
-                    gnc_payment_dialog_document_selection_changed (pw);
-                    break;
-                }
-            }
-            while (gtk_tree_model_iter_next (model, &iter));
-        }
-    }
+    gnc_payment_dialog_highlight_document (pw);
 }
 
 static void
@@ -479,6 +486,8 @@ gnc_payment_dialog_post_to_changed_cb (GtkWidget *widget, gpointer data)
         pw->post_acct = post_acct;
         gnc_payment_dialog_post_to_changed(pw);
     }
+    else
+        gnc_payment_dialog_highlight_document (pw);
 
     return FALSE;
 }
