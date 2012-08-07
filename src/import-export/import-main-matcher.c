@@ -184,32 +184,8 @@ on_matcher_ok_clicked (GtkButton *button,
                                                info->user_data);
             }
         }
-        else
-        {
-            /* transaction skipped -> destroy
-             * Otherwise temporary transactions remains visible if account is open
-             * (see gnc_import_process_trans_item() case GNCImport_CLEAR) */
-/*FIXME            xaccTransDestroy(gnc_import_TransInfo_get_trans(trans_info));
-            xaccTransCommitEdit(gnc_import_TransInfo_get_trans(trans_info)); */
-        }
-
     }
     while (gtk_tree_model_iter_next (model, &iter));
-
-    /* DEBUG ("Deleting") */
-    /* DRH: Is this necessary. Isn't the call to trans_list_delete at
-       the end of this routine going to destroy the entire list store
-       anyway? */
-/*FIXME    for (item = refs_list; item; item = g_slist_next(item))
-    {
-        ref = item->data;
-        path =  gtk_tree_row_reference_get_path(ref);
-        if (gtk_tree_model_get_iter(model, &iter, path))
-            gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
-        gtk_tree_path_free(path);
-        gtk_tree_row_reference_free(ref);
-    }
-    g_slist_free(refs_list); */
 
     gnc_gen_trans_list_delete (info);
     /* DEBUG ("End") */
