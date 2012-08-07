@@ -552,7 +552,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
 
     g_return_val_if_fail (book, NULL);
 
-    /* Build parameter list in reverse order*/
+    /* Build parameter list in reverse order */
     if (params == NULL)
     {
         params = gnc_search_param_prepend (params, _("Owner's Name"), NULL, type,

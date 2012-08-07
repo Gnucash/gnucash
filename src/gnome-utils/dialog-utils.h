@@ -33,7 +33,6 @@ GtkToolbarStyle gnc_get_toolbar_style (void);
 void gnc_get_deficit_color (GdkColor *color);
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
 
-
 /********************************************************************\
  * Returns the window size to use for the given option prefix,      *
  * if window sizes are being saved, otherwise returns 0 for both.   *
@@ -56,7 +55,6 @@ void gnc_restore_window_size (const char *prefix, GtkWindow *window);
 \********************************************************************/
 void gnc_save_window_size (const char *section, GtkWindow *window);
 
-
 /********************************************************************\
  * Adjust the window size if it is bigger than the screen size.     *
  *                                                                  *
@@ -65,27 +63,12 @@ void gnc_save_window_size (const char *section, GtkWindow *window);
 \********************************************************************/
 void gnc_window_adjust_for_screen (GtkWindow * window);
 
-
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
                                       struct tm *tm,
                                       const char *date_str);
 
-
-/* This function sets a pixmap of a set or cleared check mark in a
- * cell of a GtkCList row.
- *
- * There are some restrictions on using this function. If you mix
- * this function with gtk_clist_{insert, prepend, remove} before
- * the clist is realized, then the checks may appear in the wrong
- * place. Stick to gtk_clist_append, or use gnc_clist_set_check
- * after you have built the list. This only applies to unrealized
- * widgets. */
-#ifdef __GTK_CLIST_H__
-void gnc_clist_set_check (GtkCList *list, int row, int col,
-                          gboolean checked);
-#endif
-
 gboolean gnc_builder_add_from_file (GtkBuilder *builder, const char *filename, const char *root);
+
 void gnc_builder_connect_full_func (GtkBuilder *builder,
                                     GObject *signal_object,
                                     const gchar *signal_name,
@@ -93,7 +76,6 @@ void gnc_builder_connect_full_func (GtkBuilder *builder,
                                     GObject *connect_object,
                                     GConnectFlags flags,
                                     gpointer user_data);
-
 
 /** This function generates a button with icon and adds it to a
  *  GtkDialog.  This is similar to just adding a stock button to the
@@ -113,10 +95,9 @@ void gnc_gtk_dialog_add_button (GtkWidget *dialog,
                                 const gchar *stock_id,
                                 guint response);
 
-
 /** Note: This dialog is modal!  (It calls gtk_dialog_run() which is modal.)
  */
 gint
 gnc_dialog_run(GtkDialog *dialog, const gchar *gconf_key);
 
-#endif
+#endif /* DIALOG_UTILS_H */

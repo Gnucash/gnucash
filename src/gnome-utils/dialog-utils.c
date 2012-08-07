@@ -431,225 +431,6 @@ gnc_handle_date_accelerator (GdkEventKey *event,
 }
 
 
-typedef struct
-{
-    int row;
-    int col;
-    gboolean checked;
-} GNCCListCheckNode;
-
-typedef struct
-{
-    GdkPixmap *on_pixmap;
-    GdkPixmap *off_pixmap;
-    GdkBitmap *mask;
-
-    GList *pending_checks;
-} GNCCListCheckInfo;
-
-static void
-free_check_list (GList *list)
-{
-    GList *node;
-
-    for (node = list; node; node = node->next)
-        g_free (node->data);
-
-    g_list_free (list);
-}
-
-static void
-check_realize (GtkWidget *widget, gpointer user_data)
-{
-    GNCCListCheckInfo *check_info = user_data;
-    GdkGCValues gc_values;
-    GtkCList *clist;
-    gint font_height;
-    gint check_size;
-    GdkColormap *cm;
-    GtkStyle *style;
-    GList *list;
-    GList *node;
-    GdkGC *gc;
-    PangoLayout *layout;
-
-    if (check_info->mask)
-        return;
-
-    layout = gtk_widget_create_pango_layout(widget, "sample");
-    pango_layout_get_pixel_size(layout, NULL,  &font_height);
-    g_object_unref(layout);
-    check_size = (font_height > 0) ? font_height - 6 : 9;
-
-    check_info->mask = gdk_pixmap_new (NULL, check_size, check_size, 1);
-
-    check_info->on_pixmap = gdk_pixmap_new (widget->window,
-                                            check_size, check_size, -1);
-
-    check_info->off_pixmap = gdk_pixmap_new (widget->window,
-                             check_size, check_size, -1);
-
-    style = gtk_widget_get_style (widget);
-    gc_values.foreground = style->white;
-    gc = gtk_gc_get (1, gtk_widget_get_colormap (widget),
-                     &gc_values, GDK_GC_FOREGROUND);
-
-    gdk_draw_rectangle (check_info->mask, gc, TRUE,
-                        0, 0, check_size, check_size);
-
-    gtk_gc_release (gc);
-
-    gc = style->base_gc[GTK_STATE_NORMAL];
-
-    gdk_draw_rectangle (check_info->on_pixmap, gc, TRUE,
-                        0, 0, check_size, check_size);
-    gdk_draw_rectangle (check_info->off_pixmap, gc, TRUE,
-                        0, 0, check_size, check_size);
-
-    cm = gtk_widget_get_colormap (widget);
-
-    gc_values.foreground.red = 0;
-    gc_values.foreground.green = 65535 / 2;
-    gc_values.foreground.blue = 0;
-
-    gdk_colormap_alloc_color (cm, &gc_values.foreground, FALSE, TRUE);
-
-    gc = gdk_gc_new_with_values (widget->window, &gc_values, GDK_GC_FOREGROUND);
-
-    gdk_draw_line (check_info->on_pixmap, gc,
-                   1, check_size / 2,
-                   check_size / 3, check_size - 5);
-    gdk_draw_line (check_info->on_pixmap, gc,
-                   1, check_size / 2 + 1,
-                   check_size / 3, check_size - 4);
-
-    gdk_draw_line (check_info->on_pixmap, gc,
-                   check_size / 3, check_size - 5,
-                   check_size - 3, 2);
-    gdk_draw_line (check_info->on_pixmap, gc,
-                   check_size / 3, check_size - 4,
-                   check_size - 3, 1);
-
-    g_object_unref (gc);
-
-    clist = GTK_CLIST (widget);
-
-    list = check_info->pending_checks;
-    check_info->pending_checks = NULL;
-
-    /* reverse so we apply in the order of the calls */
-    list = g_list_reverse (list);
-
-    for (node = list; node; node = node->next)
-    {
-        GNCCListCheckNode *cl_node = node->data;
-
-        gnc_clist_set_check (clist, cl_node->row, cl_node->col, cl_node->checked);
-    }
-
-    free_check_list (list);
-}
-
-static void
-check_unrealize (GtkWidget *widget, gpointer user_data)
-{
-    GNCCListCheckInfo *check_info = user_data;
-
-    if (check_info->mask)
-        g_object_unref (check_info->mask);
-
-    if (check_info->on_pixmap)
-        g_object_unref (check_info->on_pixmap);
-
-    if (check_info->off_pixmap)
-        g_object_unref (check_info->off_pixmap);
-
-    check_info->mask = NULL;
-    check_info->on_pixmap = NULL;
-    check_info->off_pixmap = NULL;
-}
-
-static void
-check_destroy (GtkWidget *widget, gpointer user_data)
-{
-    GNCCListCheckInfo *check_info = user_data;
-
-    free_check_list (check_info->pending_checks);
-    check_info->pending_checks = NULL;
-
-    g_free (check_info);
-}
-
-static GNCCListCheckInfo *
-gnc_clist_add_check (GtkCList *list)
-{
-    GNCCListCheckInfo *check_info;
-    GObject *object;
-
-    object = G_OBJECT (list);
-
-    check_info = g_object_get_data (object, "gnc-check-info");
-    if (check_info)
-    {
-        PWARN ("clist already has check");
-        return check_info;
-    }
-
-    check_info = g_new0 (GNCCListCheckInfo, 1);
-
-    g_object_set_data (object, "gnc-check-info", check_info);
-
-    g_signal_connect (object, "realize",
-                      G_CALLBACK (check_realize), check_info);
-    g_signal_connect (object, "unrealize",
-                      G_CALLBACK (check_unrealize), check_info);
-    g_signal_connect (object, "destroy",
-                      G_CALLBACK (check_destroy), check_info);
-
-    if (gtk_widget_get_realized (GTK_WIDGET (list)))
-        check_realize (GTK_WIDGET (list), check_info);
-
-    return check_info;
-}
-
-
-void
-gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
-{
-    GNCCListCheckInfo *check_info;
-    GdkPixmap *pixmap;
-
-    g_return_if_fail (GTK_IS_CLIST (list));
-
-    check_info = g_object_get_data (G_OBJECT (list), "gnc-check-info");
-    if (!check_info)
-        check_info = gnc_clist_add_check (list);
-
-    if (!gtk_widget_get_realized (GTK_WIDGET (list)))
-    {
-        GNCCListCheckNode *node;
-
-        node = g_new0 (GNCCListCheckNode, 1);
-
-        node->row = row;
-        node->col = col;
-        node->checked = checked;
-
-        check_info->pending_checks =
-            g_list_prepend (check_info->pending_checks, node);
-
-        return;
-    }
-
-    pixmap = checked ? check_info->on_pixmap : check_info->off_pixmap;
-
-    if (checked)
-        gtk_clist_set_pixmap (list, row, col, pixmap, check_info->mask);
-    else
-        gtk_clist_set_text (list, row, col, "");
-}
-
-
 /*--------------------------------------------------------------------------
  *   GtkBuilder support functions
  *-------------------------------------------------------------------------*/
@@ -695,11 +476,10 @@ gnc_builder_add_from_file (GtkBuilder *builder, const char *filename, const char
     return result;
 }
 
-/*
- * The following function is built from a couple of glade functions.
- */
-//GModule *allsymbols = NULL;
 
+/*---------------------------------------------------------------------
+ * The following function is built from a couple of glade functions.
+ *--------------------------------------------------------------------*/
 void
 gnc_builder_connect_full_func(GtkBuilder *builder,
                               GObject *signal_object,
@@ -740,8 +520,10 @@ gnc_builder_connect_full_func(GtkBuilder *builder,
         g_signal_connect_data(signal_object, signal_name, func,
                               user_data, NULL , flags);
 }
+/*--------------------------------------------------------------------------
+ * End of GtkBuilder utilities 
+ *-------------------------------------------------------------------------*/
 
-/* End of GtkBuilder utilities */
 
 void
 gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *stock_id, guint response)

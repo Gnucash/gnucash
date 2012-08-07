@@ -33,7 +33,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
-#include "gnc-query-list.h"
+#include "gnc-query-view.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-session.h"
 #include "qof.h"
@@ -72,7 +72,7 @@ struct _GNCSearchWindow
     GtkWidget               *result_hbox;
 
     /* The "results" sub-window widgets */
-    GtkWidget               *result_list;
+    GtkWidget               *result_view;
     gpointer	             selected_item;
     GList                   *selected_item_list;
 
@@ -85,6 +85,7 @@ struct _GNCSearchWindow
 
     /* The Select button */
     GtkWidget               *select_button;
+    GList                   *button_list;
 
     /* The close/cancel buttons */
     GtkWidget 		    *close_button;
@@ -117,7 +118,7 @@ struct _GNCSearchWindow
     GList                    *params_list;	/* List of GNCSearchParams */
     GList                    *display_list;	/* List of GNCSearchParams for Display */
     gint	              num_cols;		/* Number of Display Columns */
-    GList                    *crit_list;	/* list of crit_data */
+    GList                    *crit_list;	/* List of crit_data */
 
     gint	             component_id;
     const gchar             *gconf_section;
@@ -136,47 +137,30 @@ struct _crit_data
 static void search_clear_criteria (GNCSearchWindow *sw);
 static void gnc_search_dialog_display_results (GNCSearchWindow *sw);
 
-/** The callback for converting the row numbers from a GTree to actual item
-pointers in a GList */
-static void cb_tree_to_itemlist (gpointer element,
-                                 gpointer user_data)
-{
-    GNCSearchWindow *sw = user_data;
-    gint row_number = GPOINTER_TO_INT(element);
-    gpointer item = gtk_clist_get_row_data (GTK_CLIST(sw->result_list), row_number);
-    sw->selected_item_list = g_list_prepend(sw->selected_item_list, item);
-}
-
 static void
 gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
                                     GNCSearchWindow *sw)
 {
-    GNCQueryList* gql = GNC_QUERY_LIST(sw->result_list);
-    GtkCList* clist;
+    GNCQueryView     *qview = GNC_QUERY_VIEW(sw->result_view);
+    GtkTreeSelection *selection;
+    GtkTreeModel     *model;
+    GtkTreeIter       iter;
 
     // Sanity check
-    g_assert(gql);
-    clist = &gql->clist;
-    g_assert(clist->selection_mode == GTK_SELECTION_MULTIPLE);
+    g_assert(qview);
+    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(qview));
+    g_assert(gtk_tree_selection_get_mode(selection) == GTK_SELECTION_MULTIPLE);
+    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(qview));
 
-    // Do we have a callback for multi-selections, and also more than one selected item?
-    if (cb->cb_multiselect_fn && (!cb->cb_fcn || g_list_length(clist->selection) > 1))
+    /* Do we have a callback for multi-selections ? */
+    if (cb->cb_multiselect_fn && (!cb->cb_fcn ))
     {
-        GList *selected_rows_list = clist->selection;
-        // Yes, use the multi-selection callback
-
-        // Obtain the GncInvoice pointer for each selected row
-        sw->selected_item_list = NULL;
-        g_list_foreach(selected_rows_list, cb_tree_to_itemlist, sw);
+        /* We have allready populated the selected_item_list from the select row callback */
         // We use g_list_prepend (for performance reasons), so we have to reverse once here
         sw->selected_item_list = g_list_reverse(sw->selected_item_list);
 
         // Call the callback
         (cb->cb_multiselect_fn)(sw->selected_item_list, sw->user_data);
-
-        // And clean up again
-        g_list_free(sw->selected_item_list);
-        sw->selected_item_list = NULL;
     }
     else
     {
@@ -198,6 +182,50 @@ gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
 
 
 static void
+gnc_search_dialog_select_buttons_enable (GNCSearchWindow *sw, gint selected)
+{
+    gint i;
+    gboolean enable, read_only;
+    GList  *blist;
+
+    read_only = qof_book_is_readonly (gnc_get_current_book ());
+
+    for (blist = sw->button_list; blist; blist = blist->next)
+    {
+        GNCSearchCallbackButton  *button_spec = g_object_get_data (G_OBJECT(blist->data) , "data");
+
+        if(selected == 0)
+        {
+            gtk_widget_set_sensitive (GTK_WIDGET(blist->data), FALSE);
+            continue;
+        }
+
+        if(read_only == TRUE)
+        {
+            if((selected > 1) && (!(button_spec->cb_multiselect_fn == NULL)) && (button_spec->sensitive_if_readonly == TRUE))
+                enable = TRUE;
+            else
+                enable = FALSE;
+
+            if((selected == 1) && (button_spec->sensitive_if_readonly == TRUE))
+                enable = TRUE;
+        }
+        else
+        {
+            if((selected > 1) && (!(button_spec->cb_multiselect_fn == NULL)))
+                enable = TRUE;
+            else
+                enable = FALSE;
+
+            if(selected == 1)
+                enable = TRUE;
+        }
+        gtk_widget_set_sensitive (GTK_WIDGET(blist->data), enable);
+    }
+}
+
+
+static void
 gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
 {
     g_return_if_fail (sw->selected_cb);
@@ -213,91 +241,71 @@ gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
     gnc_search_dialog_destroy (sw);
 }
 
-#if 0
+
 static void
-gnc_search_dialog_line_toggled (GNCQueryList *list, gpointer item,
-                                gpointer user_data)
+gnc_search_dialog_select_row_cb (GNCQueryView *qview,
+                                 gpointer item,
+                                 gpointer user_data)
 {
-    GNCSearchWindow *sw = user_data;
-    if (sw->selected_item == item)
-        sw->selected_item = NULL;
+    GNCSearchWindow  *sw = user_data;
+    gint              number_of_rows;
+
+    sw->selected_item_list = NULL;
+    sw->selected_item = NULL;
+
+    number_of_rows = GPOINTER_TO_INT(item);
+
+    gnc_search_dialog_select_buttons_enable(sw, number_of_rows);
+
+    if(number_of_rows == 1)
+    {
+        sw->selected_item = qview->selected_entry;
+        sw->selected_item_list = qview->selected_entry_list;
+    }
     else
-        sw->selected_item = item;
+        sw->selected_item_list = qview->selected_entry_list;
 }
 
+
 static void
-gnc_search_dialog_double_click_entry (GNCQueryList *list, gpointer item,
-                                      gpointer user_data)
+gnc_search_dialog_double_click_cb (GNCQueryView *qview,
+                                   gpointer item,
+                                   gpointer user_data)
 {
-    GNCSearchWindow *sw = user_data;
+    GNCSearchWindow  *sw = user_data;
 
-    /* Force the selected item */
     sw->selected_item = item;
-
-    /* If we double-click an item, then either "select" it, or run it
-     * through the first button (which should be view/edit
-     */
     if (sw->selected_cb)
-        /* Select the time */
+        /* Select the item */
         gnc_search_dialog_select_cb (NULL, sw);
     else if (sw->buttons)
         /* Call the first button (usually view/edit) */
         gnc_search_callback_button_execute (sw->buttons, sw);
-}
-#endif
 
-
-static void
-gnc_search_dialog_select_row_cb (GtkCList *clist, gint row, gint column,
-                                 GdkEventButton *event, gpointer user_data)
-{
-    GNCSearchWindow *sw = user_data;
-    sw->selected_item = gtk_clist_get_row_data (clist, row);
-    //g_message("select-row, row=%d", row);
-
-    /* If we double-click an item, then either "select" it, or run it
-     * through the first button (which should be view/edit
-     */
-    if (event && event->type == GDK_2BUTTON_PRESS)
-    {
-        if (sw->selected_cb)
-            /* Select the time */
-            gnc_search_dialog_select_cb (NULL, sw);
-        else if (sw->buttons)
-            /* Call the first button (usually view/edit) */
-            gnc_search_callback_button_execute (sw->buttons, sw);
-
-        /* If we get here, then nothing to do for a double-click */
-    }
+    /* If we get here, then nothing to do for a double-click */
 }
 
 
 static void
-gnc_search_dialog_unselect_row_cb (GtkCList *clist, gint row, gint column,
-                                   GdkEventButton *event, gpointer user_data)
+gnc_search_dialog_init_result_view (GNCSearchWindow *sw)
 {
-    GNCSearchWindow *sw = user_data;
-    gpointer item = gtk_clist_get_row_data (clist, row);
-    //g_message("unselect-row, row=%d", row);
+    GtkTreeSelection *selection;
 
-    if (sw->selected_item == item)
-        sw->selected_item = NULL;
-}
+    sw->result_view = gnc_query_view_new(sw->display_list, sw->q);
 
+    // We want the multi-selection mode of the tree view.
+    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(sw->result_view));
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
-static void
-gnc_search_dialog_init_result_list (GNCSearchWindow *sw)
-{
-    sw->result_list = gnc_query_list_new(sw->display_list, sw->q);
-
-    // We want the multi-selection mode of GtkCList.
-    gtk_clist_set_selection_mode(&GNC_QUERY_LIST(sw->result_list)->clist, GTK_SELECTION_MULTIPLE);
+    /* Set the sort order of the tree view */
+    gnc_query_sort_order(GNC_QUERY_VIEW(sw->result_view), 1, GTK_SORT_ASCENDING);
 
     /* Setup the list callbacks */
-    g_signal_connect (G_OBJECT (sw->result_list), "select-row",
+    g_signal_connect (GNC_QUERY_VIEW(sw->result_view), "row_selected",
                       G_CALLBACK (gnc_search_dialog_select_row_cb), sw);
-    g_signal_connect (G_OBJECT (sw->result_list), "unselect-row",
-                      G_CALLBACK (gnc_search_dialog_unselect_row_cb), sw);
+
+    g_signal_connect (GNC_QUERY_VIEW(sw->result_view), "double_click_entry",
+                      G_CALLBACK(gnc_search_dialog_double_click_cb), sw);
 }
 
 
@@ -307,23 +315,26 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     gdouble max_count;
 
     /* Check if this is the first time this is called for this window.
-     * If so, then build the results sub-window, the scrolled listbox,
+     * If so, then build the results sub-window, the scrolled treeview,
      * and the active buttons.
      */
-    if (sw->result_list == NULL)
+    if (sw->result_view == NULL)
     {
-        GtkWidget *scroller, *button_box, *button;
+        GtkWidget *scroller, *frame, *button_box, *button;
 
-        /* Create the list */
-        gnc_search_dialog_init_result_list (sw);
+        /* Create the view */
+        gnc_search_dialog_init_result_view (sw);
 
-        /* Create the scroller and add the list to the scroller */
+        frame = gtk_frame_new(NULL);
+
+        /* Create the scroller and add the view to the scroller */
         scroller = gtk_scrolled_window_new (NULL, NULL);
         gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroller),
                                         GTK_POLICY_AUTOMATIC,
                                         GTK_POLICY_AUTOMATIC);
         gtk_widget_set_size_request(GTK_WIDGET(scroller), 300, 100);
-        gtk_container_add (GTK_CONTAINER (scroller), sw->result_list);
+        gtk_container_add (GTK_CONTAINER (scroller), sw->result_view);
+        gtk_container_add(GTK_CONTAINER(frame), scroller);
 
         /* Create the button_box */
         button_box = gtk_vbox_new (FALSE, 3);
@@ -344,34 +355,41 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
                 GNCSearchCallbackButton* button_spec = sw->buttons + i;
                 button = gtk_button_new_with_label (_(button_spec->label));
                 g_object_set_data (G_OBJECT (button), "data", button_spec);
+
                 if (qof_book_is_readonly (gnc_get_current_book ()))
-                {
                     gtk_widget_set_sensitive (GTK_WIDGET(button), button_spec->sensitive_if_readonly);
-                }
+
+                /* Save the button pointer */
+                sw->button_list = g_list_append(sw->button_list, button);
+
                 g_signal_connect (G_OBJECT (button), "clicked",
                                   G_CALLBACK (gnc_search_dialog_result_clicked), sw);
                 gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 3);
             }
         }
 
-        /* Add the scrolled-list and button-box to the results_box */
+        /* Add the scrolled-view and button-box to the results_box */
         gtk_box_pack_end (GTK_BOX (sw->result_hbox), button_box, FALSE, FALSE, 3);
-        gtk_box_pack_end (GTK_BOX (sw->result_hbox), scroller, TRUE, TRUE, 3);
+        gtk_box_pack_end (GTK_BOX (sw->result_hbox), frame, TRUE, TRUE, 3);
 
         /* And show the results */
         gtk_widget_show_all (sw->result_hbox);
 
-        /* But maybe hide the select button */
+        /* But may be hide the select button */
         if (!sw->selected_cb)
             gtk_widget_hide (sw->select_button);
     }
+    else
+        /* Update the query in the view */
+        gnc_query_view_reset_query (GNC_QUERY_VIEW(sw->result_view), sw->q);
 
-    /* Update the query in the list */
-    gnc_query_list_reset_query (GNC_QUERY_LIST(sw->result_list), sw->q);
+    /* Deselect all the select buttons and any items */
+    gnc_search_dialog_select_buttons_enable (sw, 0);
+    gnc_query_view_unselect_all (GNC_QUERY_VIEW(sw->result_view));
 
     /* set 'new search' if fewer than max_count items is returned. */
     max_count = gnc_gconf_get_float("dialogs/search", "new_search_limit", NULL);
-    if (gnc_query_list_get_num_entries(GNC_QUERY_LIST(sw->result_list)) < max_count)
+    if (gnc_query_view_get_num_entries(GNC_QUERY_VIEW(sw->result_view)) < max_count)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->new_rb), TRUE);
 }
 
@@ -824,9 +842,7 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
         gtk_widget_set_sensitive(sw->grouping_combo, TRUE);
         gtk_widget_hide(sw->match_all_label);
     }
-
     /* create a new criterion element */
-
     new = gnc_search_core_type_new_type_name
           (gnc_search_param_get_param_type (sw->last_param));
 
@@ -864,8 +880,11 @@ gnc_search_dialog_close_cb (GtkDialog *dialog, GNCSearchWindow *sw)
 
     gnc_unregister_gui_component (sw->component_id);
 
-    /* XXX: Clear the params_list? */
+    /* Clear the crit list */
     g_list_free (sw->crit_list);
+
+    /* Clear the button list */
+    g_list_free (sw->button_list);
 
     /* Destroy the queries */
     if (sw->q) qof_query_destroy (sw->q);
@@ -1028,7 +1047,6 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sw->active_only_check), active);
     g_signal_connect (sw->active_only_check, "toggled",
                       G_CALLBACK (search_active_only_cb), sw);
-
 
     /* Figure out if we this object-type has an "active" parameter, and
      * if not, then set the active-check button insensitive

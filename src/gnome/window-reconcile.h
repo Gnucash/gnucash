@@ -65,4 +65,4 @@ RecnWindow *recnWindowWithBalance (GtkWidget *parent,
 
 void gnc_ui_reconcile_window_raise(RecnWindow * recnData);
 
-#endif
+#endif /* WINDOW_RECONCILE_H */

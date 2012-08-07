@@ -39,7 +39,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-object-references.c \
   dialog-options.c \
   dialog-preferences.c \
-  dialog-query-list.c \
+  dialog-query-view.c \
   dialog-reset-warnings.c \
   dialog-tax-table.c \
   dialog-totd.c \
@@ -80,7 +80,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-plugin-page.c \
   gnc-plugin.c \
   gnc-period-select.c \
-  gnc-query-list.c \
+  gnc-query-view.c \
   gnc-splash.c \
   gnc-sx-instance-dense-cal-adapter.c \
   gnc-sx-list-tree-model-adapter.c \
@@ -121,7 +121,7 @@ gncinclude_HEADERS = \
   dialog-preferences.h \
   dialog-object-references.h \
   dialog-options.h \
-  dialog-query-list.h \
+  dialog-query-view.h \
   dialog-reset-warnings.h \
   dialog-totd.h \
   dialog-transfer.h \
@@ -157,7 +157,7 @@ gncinclude_HEADERS = \
   gnc-plugin-page.h \
   gnc-plugin.h \
   gnc-period-select.h \
-  gnc-query-list.h \
+  gnc-query-view.h \
   gnc-splash.h \
   gnc-sx-instance-dense-cal-adapter.h \
   gnc-sx-list-tree-model-adapter.h \

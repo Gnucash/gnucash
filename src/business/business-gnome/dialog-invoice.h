@@ -33,7 +33,7 @@ typedef struct _invoice_window InvoiceWindow;
 #include "gncInvoice.h"
 #include "gncOwner.h"
 #include "dialog-search.h"
-#include "dialog-query-list.h"
+#include "dialog-query-view.h"
 
 typedef enum
 {
@@ -90,7 +90,7 @@ void gnc_invoice_save_page (InvoiceWindow *iw, GKeyFile *key_file, const gchar *
 
 GtkWidget * gnc_invoice_create_page (InvoiceWindow *iw, gpointer page);
 
-DialogQueryList *gnc_invoice_show_bills_due (QofBook *book, double days_in_advance);
+DialogQueryView *gnc_invoice_show_bills_due (QofBook *book, double days_in_advance);
 
 GtkWidget *gnc_invoice_get_register(InvoiceWindow *iw);
 

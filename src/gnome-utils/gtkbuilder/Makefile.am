@@ -9,7 +9,7 @@ gtkbuilder_DATA = \
   dialog-object-references.glade \
   dialog-options.glade \
   dialog-preferences.glade \
-  dialog-query-list.glade \
+  dialog-query-view.glade \
   dialog-reset-warnings.glade \
   dialog-tax-table.glade \
   dialog-totd.glade \

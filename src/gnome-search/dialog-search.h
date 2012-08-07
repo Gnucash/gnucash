@@ -21,8 +21,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#ifndef _GNC_DIALOG_SEARCH_H
-#define _GNC_DIALOG_SEARCH_H
+#ifndef GNC_DIALOG_SEARCH_H
+#define GNC_DIALOG_SEARCH_H
 
 #include "GNCId.h"
 #include "qof.h"
@@ -72,14 +72,14 @@ typedef void (*GNCSearchMultiSelectedCB) (GList *list_of_selected_objects,
 
 typedef struct
 {
-    const char *		label;
-    GNCSearchCallback	cb_fcn;
-    GNCSearchMultiSelectedCB cb_multiselect_fn;
+    const char 			*label;
+    GNCSearchCallback	         cb_fcn;
+    GNCSearchMultiSelectedCB     cb_multiselect_fn;
 
     /** TRUE if this action should be sensitive even in a read-only book. If
     FALSE, this action is sensitive in read-write book but not in a read-only
     book. */
-    gboolean sensitive_if_readonly;
+    gboolean      		 sensitive_if_readonly;
 } GNCSearchCallbackButton;
 
 /* Caller MUST supply _EITHER_ a result_callback or a list of callback
@@ -140,4 +140,4 @@ void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
 /* Test the dialog */
 void gnc_search_dialog_test (void);
 
-#endif
+#endif /* GNC_DIALOG_SEARCH_H */

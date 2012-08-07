@@ -52,7 +52,7 @@ libgnc_gnome_la_SOURCES = \
   gnc-plugin-page-register.c \
   gnc-plugin-page-register2.c \
   gnc-split-reg.c \
-  reconcile-list.c \
+  reconcile-view.c \
   top-level.c \
   window-reconcile.c \
   window-autoclear.c
@@ -90,7 +90,7 @@ noinst_HEADERS = \
   gnc-plugin-page-register.h \
   gnc-plugin-page-register2.h \
   gnc-split-reg.h \
-  reconcile-list.h \
+  reconcile-view.h \
   top-level.h \
   window-reconcile.h \
   window-autoclear.h

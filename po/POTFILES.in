@@ -220,7 +220,7 @@ src/gnome/gtkbuilder/gnc-plugin-page-budget.glade
 src/gnome/gtkbuilder/gnc-plugin-page-register.glade
 src/gnome/gtkbuilder/window-autoclear.glade
 src/gnome/gtkbuilder/window-reconcile.glade
-src/gnome/reconcile-list.c
+src/gnome/reconcile-view.c
 src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in
 src/gnome/schemas/apps_gnucash_dialog_common.schemas.in
 src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in
@@ -260,7 +260,7 @@ src/gnome-utils/dialog-file-access.c
 src/gnome-utils/dialog-object-references.c
 src/gnome-utils/dialog-options.c
 src/gnome-utils/dialog-preferences.c
-src/gnome-utils/dialog-query-list.c
+src/gnome-utils/dialog-query-view.c
 src/gnome-utils/dialog-reset-warnings.c
 src/gnome-utils/dialog-tax-table.c
 src/gnome-utils/dialog-totd.c
@@ -297,7 +297,7 @@ src/gnome-utils/gnc-plugin-file-history.c
 src/gnome-utils/gnc-plugin-manager.c
 src/gnome-utils/gnc-plugin-menu-additions.c
 src/gnome-utils/gnc-plugin-page.c
-src/gnome-utils/gnc-query-list.c
+src/gnome-utils/gnc-query-view.c
 src/gnome-utils/gnc-recurrence.c
 src/gnome-utils/gnc-splash.c
 src/gnome-utils/gnc-sx-instance-dense-cal-adapter.c
@@ -325,7 +325,7 @@ src/gnome-utils/gtkbuilder/dialog-file-access.glade
 src/gnome-utils/gtkbuilder/dialog-object-references.glade
 src/gnome-utils/gtkbuilder/dialog-options.glade
 src/gnome-utils/gtkbuilder/dialog-preferences.glade
-src/gnome-utils/gtkbuilder/dialog-query-list.glade
+src/gnome-utils/gtkbuilder/dialog-query-view.glade
 src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade
 src/gnome-utils/gtkbuilder/dialog-tax-table.glade
 src/gnome-utils/gtkbuilder/dialog-totd.glade

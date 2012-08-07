@@ -64,7 +64,7 @@
 #include "guile-mappings.h"
 #include "dialog-dup-trans.h"
 
-#include "dialog-query-list.h"
+#include "dialog-query-view.h"
 
 #include "gnc-plugin-business.h"
 #include "gnc-plugin-page-invoice.h"
@@ -3040,7 +3040,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
                                      label);
 }
 
-DialogQueryList *
+DialogQueryView *
 gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
 {
     QofIdType type = GNC_INVOICE_MODULE_NAME;
@@ -3049,11 +3049,11 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     time_t end_date;
     GList *res;
     gchar *message;
-    DialogQueryList *dialog;
+    DialogQueryView *dialog;
     gint len;
     Timespec ts;
     static GList *param_list = NULL;
-    static GNCDisplayListButton buttons[] =
+    static GNCDisplayViewButton buttons[] =
     {
         { N_("View/Edit Bill"), edit_invoice_direct },
         { N_("Process Payment"), pay_invoice_direct },
@@ -3121,15 +3121,16 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
                            "The following %d bills are due:",
                            len),
                   len);
-    dialog = gnc_dialog_query_list_create(param_list, q,
-                                          _("Due Bills Reminder"),
+    dialog = gnc_dialog_query_view_create(param_list, q,
+                                        _("Due Bills Reminder"),
                                           message,
                                           TRUE, FALSE,
+                                          1, GTK_SORT_ASCENDING,
                                           buttons, NULL);
+
     g_free(message);
     qof_query_destroy(q);
     return dialog;
-
 }
 
 void
