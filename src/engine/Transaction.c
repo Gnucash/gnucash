@@ -954,6 +954,45 @@ xaccTransGetAccountAmount (const Transaction *trans, const Account *acc)
     return total;
 }
 
+gboolean
+xaccTransGetRateForCommodity(const Transaction *trans,
+                             const gnc_commodity *split_com,
+                             const Split *split_to_exclude, gnc_numeric *rate)
+{
+    GList *splits;
+    gnc_commodity *trans_curr;
+
+    trans_curr = xaccTransGetCurrency(trans);
+    if (gnc_commodity_equal(trans_curr, split_com)) {
+        if (rate) 
+            *rate = gnc_numeric_create(1, 1);
+        return TRUE;
+    }
+
+    for (splits = trans->splits; splits; splits = splits->next) {
+        Split *s = splits->data;
+        gnc_commodity *comm;
+
+        if (s == split_to_exclude) continue;
+        if (!xaccTransStillHasSplit(trans, s)) continue;
+
+        comm = xaccAccountGetCommodity(xaccSplitGetAccount(s));
+        if (gnc_commodity_equal(split_com, comm)) {
+            gnc_numeric amt = xaccSplitGetAmount(s);
+            gnc_numeric val = xaccSplitGetValue(s);
+
+            if (!gnc_numeric_zero_p(xaccSplitGetValue(s)) &&
+                !gnc_numeric_zero_p(xaccSplitGetValue(s))) {
+                if (rate) 
+                    *rate = gnc_numeric_div(amt, val, GNC_DENOM_AUTO,
+                                            GNC_HOW_DENOM_REDUCE);
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
 gnc_numeric
 xaccTransGetAccountConvRate(const Transaction *txn, const Account *acc)
 {

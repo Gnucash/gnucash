@@ -49,6 +49,9 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-account-sel.c \
   gnc-amount-edit.c \
   gnc-autosave.c \
+  gnc-cell-renderer-date.c \
+  gnc-cell-renderer-popup.c \
+  gnc-cell-renderer-popup-entry.c \
   gnc-combott.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
@@ -87,11 +90,13 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model-budget.c \
   gnc-tree-model-owner.c \
   gnc-tree-model-commodity.c \
+  gnc-tree-model-split-reg.c \
   gnc-tree-model-price.c \
   gnc-tree-view-account.c \
   gnc-tree-view-commodity.c \
   gnc-tree-view-owner.c \
   gnc-tree-view-price.c \
+  gnc-tree-view-split-reg.c \
   gnc-tree-view-sx-list.c \
   gnc-tree-view.c \
   gnc-window.c \
@@ -123,6 +128,9 @@ gncinclude_HEADERS = \
   dialog-utils.h \
   gnc-account-sel.h \
   gnc-amount-edit.h \
+  gnc-cell-renderer-date.h \
+  gnc-cell-renderer-popup.h \
+  gnc-cell-renderer-popup-entry.h \
   gnc-combott.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \
@@ -160,10 +168,12 @@ gncinclude_HEADERS = \
   gnc-tree-model-owner.h \
   gnc-tree-model-commodity.h \
   gnc-tree-model-price.h \
+  gnc-tree-model-split-reg.h \
   gnc-tree-view-account.h \
   gnc-tree-view-commodity.h \
   gnc-tree-view-owner.h \
   gnc-tree-view-price.h \
+  gnc-tree-view-split-reg.h \
   gnc-tree-view-sx-list.h \
   gnc-tree-view.h \
   gnc-ui.h \

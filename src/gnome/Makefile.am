@@ -45,10 +45,12 @@ libgnc_gnome_la_SOURCES = \
   gnc-plugin-basic-commands.c \
   gnc-plugin-budget.c \
   gnc-plugin-register.c \
+  gnc-plugin-register2.c \
   gnc-plugin-page-account-tree.c \
   gnc-plugin-page-budget.c \
   gnc-plugin-page-sx-list.c \
   gnc-plugin-page-register.c \
+  gnc-plugin-page-register2.c \
   gnc-split-reg.c \
   reconcile-list.c \
   top-level.c \
@@ -81,10 +83,12 @@ noinst_HEADERS = \
   gnc-plugin-basic-commands.h \
   gnc-plugin-budget.h \
   gnc-plugin-register.h \
+  gnc-plugin-register2.h \
   gnc-plugin-page-account-tree.h \
   gnc-plugin-page-budget.h \
   gnc-plugin-page-sx-list.h \
   gnc-plugin-page-register.h \
+  gnc-plugin-page-register2.h \
   gnc-split-reg.h \
   reconcile-list.h \
   top-level.h \

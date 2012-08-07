@@ -343,6 +343,9 @@ Split      * xaccSplitLookup (const GncGUID *guid, QofBook *book);
 #define      xaccSplitLookupDirect(g,b) xaccSplitLookup(&(g),b)
 
 
+/* Get a GList of unique transactions containing the given list of Splits. */
+GList *xaccSplitListGetUniqueTransactions(const GList *splits);
+
 /**
  * The xaccSplitGetOtherSplit() is a convenience routine that returns
  *    the other of a pair of splits.  If there are more than two

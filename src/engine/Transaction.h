@@ -264,11 +264,12 @@ void	      xaccTransSetTxnType (Transaction *trans, char type);
  * See #TXN_TYPE_NONE, #TXN_TYPE_INVOICE and #TXN_TYPE_PAYMENT */
 char	      xaccTransGetTxnType (const Transaction *trans);
 
-
 /** Sets the transaction Number (or ID) field*/
 void          xaccTransSetNum (Transaction *trans, const char *num);
+
 /** Sets the transaction Description */
 void          xaccTransSetDescription (Transaction *trans, const char *desc);
+
 /** Sets the transaction Notes
  *
  The Notes field is only visible in the register in double-line mode */
@@ -318,8 +319,7 @@ int xaccTransGetSplitIndex(const Transaction *trans, const Split *split);
     this list when you are done with it. */
 /*@ dependent @*/
 SplitList *   xaccTransGetSplitList (const Transaction *trans);
-gboolean xaccTransStillHasSplit(const Transaction *trans, const Split *s);
-
+gboolean      xaccTransStillHasSplit(const Transaction *trans, const Split *s);
 
 /** Set the transaction to be ReadOnly by setting a non-NULL value as "reason".
  *
@@ -409,6 +409,13 @@ gnc_numeric xaccTransGetAccountValue (const Transaction *trans,
 /** Same as xaccTransGetAccountValue, but uses the Account's commodity. */
 gnc_numeric xaccTransGetAccountAmount (const Transaction *trans,
                                        const Account *account);
+
+/* Gets the amt/val rate, i.e. rate from the transaction currency to
+   the 'split_com' */
+gboolean
+xaccTransGetRateForCommodity(const Transaction *trans,
+                             const gnc_commodity *split_com,
+                             const Split *split_to_exclude, gnc_numeric *rate);
 
 /* Compute the conversion rate for the transaction to this account.
  * Any "split value" (which is in the transaction currency),

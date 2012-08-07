@@ -659,6 +659,33 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     return TRUE;
 }
 
+
+/********************************************************************
+ * xaccSplitListGetUniqueTransactions
+ ********************************************************************/
+static void
+add_keys_to_list(gpointer key, gpointer val, gpointer list)
+{
+    *(GList **)list = g_list_prepend(*(GList **)list, key);
+}
+
+GList *
+xaccSplitListGetUniqueTransactions(const GList *splits)
+{
+    const GList *node;
+    GList *transList = NULL;
+    GHashTable *transHash = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+    for(node = splits; node; node = node->next) {
+        Transaction *trans = xaccSplitGetParent((Split *)(node->data));
+        g_hash_table_insert(transHash, trans, trans);
+    }
+    g_hash_table_foreach(transHash, add_keys_to_list, &transList);
+    g_hash_table_destroy(transHash);
+    return transList;
+}
+
+
 /********************************************************************
  * Account funcs
  ********************************************************************/

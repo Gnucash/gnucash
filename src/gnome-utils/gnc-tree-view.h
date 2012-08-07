@@ -33,6 +33,7 @@
 #define __GNC_TREE_VIEW_H
 
 #include <gtk/gtk.h>
+#include "gnc-cell-renderer-date.h"
 
 G_BEGIN_DECLS
 
@@ -207,6 +208,22 @@ gnc_tree_view_add_combo_column (GncTreeView *view,
                                 GtkTreeModel *combo_tree_model,
                                 gint combo_model_text_column,
                                 GtkTreeIterCompareFunc column_sort_fn);
+
+
+/** This function adds a new date column to a GncTreeView base
+ *  view.  The parameters it takes in common with
+ *  gnc_tree_view_add_text_column() behave the same as there.
+ */
+GtkTreeViewColumn *
+gnc_tree_view_add_date_column (GncTreeView *view,
+                                   const gchar *column_title,
+                                   const gchar *pref_name,
+                                   const gchar *stock_icon_name,
+                                   const gchar *sizing_text,
+                                   gint model_data_column,
+                                   gint model_visibility_column,
+                                   GtkTreeIterCompareFunc column_sort_fn);
+
 
 /** This function adds a new numeric column to a GncTreeView base
  *  view.  It takes all the parameters necessary to hook a
