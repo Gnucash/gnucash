@@ -144,7 +144,7 @@ gnc_num_cell_modify_verify (BasicCell *_cell,
         number = 0;
 
     /* If there is already a non-number there, don't accelerate. */
-    if (accel && !is_num && (safe_strcmp(_cell->value, "") != 0))
+    if (accel && !is_num && (g_strcmp0(_cell->value, "") != 0))
         accel = FALSE;
 
     if (accel)
@@ -157,7 +157,7 @@ gnc_num_cell_modify_verify (BasicCell *_cell,
         strcpy (buff, "");
         snprintf (buff, sizeof(buff), "%ld", number);
 
-        if (safe_strcmp (buff, "") == 0)
+        if (g_strcmp0 (buff, "") == 0)
             return;
 
         gnc_basic_cell_set_value_internal (&cell->cell, buff);

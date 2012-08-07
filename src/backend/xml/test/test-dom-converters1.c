@@ -106,7 +106,7 @@ test_dom_tree_to_text(void)
                          "null return from dom_tree_to_text");
             xmlElemDump(stdout, NULL, test_node);
         }
-        else if (safe_strcmp(test_string1, test_string2) == 0)
+        else if (g_strcmp0(test_string1, test_string2) == 0)
         {
             success_args("dom_tree_to_text", __FILE__, __LINE__, "with string %s",
                          test_string1);

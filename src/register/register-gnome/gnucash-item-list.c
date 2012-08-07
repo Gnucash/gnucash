@@ -131,7 +131,7 @@ _gnc_item_find_selection(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
     gboolean found;
 
     gtk_tree_model_get(model, iter, 0, &iterStr, -1);
-    found = safe_strcmp(to_find->string_to_find, iterStr) == 0;
+    found = g_strcmp0(to_find->string_to_find, iterStr) == 0;
     g_free(iterStr);
     if (found)
     {

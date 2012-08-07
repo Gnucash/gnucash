@@ -732,7 +732,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
         return;
     }
 
-    if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
+    if (g_strcmp0 ("stock-split", xaccSplitGetType (split)) == 0)
     {
         LEAVE ("Stock split split, returning.");
         return;

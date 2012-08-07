@@ -264,7 +264,7 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
 
     g_free( protocol );
 
-    if ( !safe_strcmp( retval, URL_TYPE_FILE ) )
+    if ( !g_strcmp0( retval, URL_TYPE_FILE ) )
     {
         if ( !found_protocol && path && self && priv->base_location )
         {
@@ -285,7 +285,7 @@ gnc_html_parse_url( GncHtml* self, const gchar* url,
         }
 
     }
-    else if ( !safe_strcmp( retval, URL_TYPE_JUMP ) )
+    else if ( !g_strcmp0( retval, URL_TYPE_JUMP ) )
     {
         *url_location = NULL;
         g_free( path );

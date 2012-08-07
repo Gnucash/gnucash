@@ -397,7 +397,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 static int
 gnc_plugin_page_report_check_urltype(URLType t)
 {
-    if (!safe_strcmp (t, URL_TYPE_REPORT))
+    if (!g_strcmp0 (t, URL_TYPE_REPORT))
     {
         return TRUE;
     }
@@ -473,7 +473,7 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
      * if any URL is clicked.  If an options URL is clicked, we want to
      * know about it */
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-    if (!safe_strcmp (type, URL_TYPE_REPORT)
+    if (!g_strcmp0 (type, URL_TYPE_REPORT)
             && location
             && (strlen(location) > 3)
             && !strncmp("id=", location, 3))
@@ -481,7 +481,7 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
         report_id = atoi(location + 3);
         DEBUG( "parsed id=%d", report_id );
     }
-    else if (!safe_strcmp( type, URL_TYPE_OPTIONS)
+    else if (!g_strcmp0( type, URL_TYPE_OPTIONS)
              && location
              && (strlen(location) > 10)
              && !strncmp("report-id=", location, 10))
@@ -636,7 +636,7 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
     }
 
     if (node
-            && !safe_strcmp (node->type, URL_TYPE_REPORT)\
+            && !g_strcmp0 (node->type, URL_TYPE_REPORT)\
             && !strncmp("id=", node->location, 3))
     {
         sscanf(node->location + 3, "%d", &report_id);

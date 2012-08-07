@@ -98,7 +98,7 @@ test_string_converters(void)
         backout = dom_tree_to_text(test_node);
 
         do_test_args(
-            safe_strcmp(backout, mark) == 0,
+            g_strcmp0(backout, mark) == 0,
             "string converting", __FILE__, __LINE__, "with string %s", mark);
     }
 }

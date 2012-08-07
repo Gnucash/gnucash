@@ -674,7 +674,7 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
         changed = TRUE;
     }
 
-    if ( !safe_strcmp(gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry)), "" ))
+    if ( !g_strcmp0(gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry)), "" ))
     {
         DEBUG("updating memo");
         gtk_entry_set_text( GTK_ENTRY(xferData->memo_entry),

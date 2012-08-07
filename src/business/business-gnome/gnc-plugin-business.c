@@ -1130,7 +1130,7 @@ gnc_plugin_business_gconf_changed (GConfClient *client,
     if (!entry_key)
         return;
 
-    if (safe_strcmp(entry_key, full_gconf_path) == 0)
+    if (g_strcmp0(entry_key, full_gconf_path) == 0)
     {
         update_extra_toolbuttons(mainwindow);
     }

@@ -234,7 +234,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
     SCM codes;
 
     if (ti_dialog->tax_type == NULL ||
-            (safe_strcmp (ti_dialog->tax_type, "") == 0))
+            (g_strcmp0 (ti_dialog->tax_type, "") == 0))
     {
         destroy_txf_infos (infos);
         return NULL;
@@ -302,7 +302,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
             str = g_strdup (SCM_SYMBOL_CHARS (scm));
         else
             str = g_strdup ("");
-        if (safe_strcmp (str, "not-impl") == 0)
+        if (g_strcmp0 (str, "not-impl") == 0)
         {
             g_free (str);
             continue;
@@ -310,7 +310,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
 
         txf_info = g_new0 (TXFInfo, 1);
 
-        if (safe_strcmp (str, "none") == 0)
+        if (g_strcmp0 (str, "none") == 0)
             txf_info->payer_name_source = NULL;
         else
             txf_info->payer_name_source = g_strdup (str);
@@ -417,7 +417,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
                 g_free (temp);
                 g_free (temp2);
             }
-            if (safe_strcmp (until, now) != 0)
+            if (g_strcmp0 (until, now) != 0)
                 g_free (until);
         }
         if (year != 0)
@@ -538,7 +538,7 @@ load_tax_entity_type_list (TaxInfoDialog *ti_dialog)
                                          " - ",
                                          tax_type_info->description, NULL);
         /* save combo text for current tax type code */
-        if (safe_strcmp (ti_dialog->tax_type, tax_type_info->type_code) == 0)
+        if (g_strcmp0 (ti_dialog->tax_type, tax_type_info->type_code) == 0)
             ti_dialog->tax_type_combo_text = tax_type_info->combo_box_entry;
         /* the last will be default */
         ti_dialog->default_tax_type = tax_type_info->combo_box_entry;
@@ -633,7 +633,7 @@ txf_infos_find_code (GList *infos, const char *code)
     {
         TXFInfo *info = infos->data;
 
-        if (safe_strcmp (code, info->code) == 0)
+        if (g_strcmp0 (code, info->code) == 0)
             return info;
     }
 
@@ -681,7 +681,7 @@ account_to_gui (TaxInfoDialog *ti_dialog, Account *account)
     gtk_tree_path_free(path);
 
     str = xaccAccountGetTaxUSPayerNameSource (account);
-    if (safe_strcmp (str, "parent") == 0)
+    if (g_strcmp0 (str, "parent") == 0)
         gtk_toggle_button_set_active
         (GTK_TOGGLE_BUTTON (ti_dialog->parent_account_button), TRUE);
     else
@@ -924,13 +924,13 @@ gnc_tax_info_acct_type_cb (GtkWidget *w, gpointer data)
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
     {
         button_name = gtk_buildable_get_name(GTK_BUILDABLE(w));
-        if (safe_strcmp (button_name, "income_radio") == 0)
+        if (g_strcmp0 (button_name, "income_radio") == 0)
             ti_dialog->account_type = ACCT_TYPE_INCOME;
-        else if (safe_strcmp (button_name, "expense_radio") == 0)
+        else if (g_strcmp0 (button_name, "expense_radio") == 0)
             ti_dialog->account_type = ACCT_TYPE_EXPENSE;
-        else if (safe_strcmp (button_name, "asset_radio") == 0)
+        else if (g_strcmp0 (button_name, "asset_radio") == 0)
             ti_dialog->account_type = ACCT_TYPE_ASSET;
-        else if (safe_strcmp (button_name, "liab_eq_radio") == 0)
+        else if (g_strcmp0 (button_name, "liab_eq_radio") == 0)
             ti_dialog->account_type = ACCT_TYPE_LIABILITY;
         else
             return;
@@ -1052,8 +1052,8 @@ static void
 set_focus_sensitivity (TaxInfoDialog *ti_dialog)
 {
     if ((ti_dialog->tax_type == NULL) ||
-            (safe_strcmp (ti_dialog->tax_type, "Other") == 0) ||
-            (safe_strcmp (ti_dialog->tax_type, "") == 0))
+            (g_strcmp0 (ti_dialog->tax_type, "Other") == 0) ||
+            (g_strcmp0 (ti_dialog->tax_type, "") == 0))
     {
         gtk_widget_grab_focus (ti_dialog->tax_identity_edit_button);
         gtk_widget_set_sensitive (ti_dialog->acct_info, FALSE);
@@ -1102,7 +1102,7 @@ identity_edit_response_cb (GtkDialog *dialog, gint response, gpointer data)
             if (selected_type)
             {
                 entry_type = selected_type->type_code;
-                if (!(safe_strcmp (ti_dialog->tax_type, entry_type) == 0))
+                if (!(g_strcmp0 (ti_dialog->tax_type, entry_type) == 0))
                 {
                     ti_dialog->tax_type_changed = TRUE;
                     gnc_set_current_book_tax_type (entry_type);
@@ -1139,7 +1139,7 @@ identity_edit_response_cb (GtkDialog *dialog, gint response, gpointer data)
                 }
             }
         }
-        if (!(safe_strcmp (ti_dialog->tax_name, entry_name) == 0))
+        if (!(g_strcmp0 (ti_dialog->tax_name, entry_name) == 0))
         {
             gnc_set_current_book_tax_name (entry_name);
             ti_dialog->tax_name = g_strdup (entry_name);
@@ -1184,7 +1184,7 @@ identity_edit_clicked_cb (GtkButton *button,
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
     name_entry = gtk_entry_new();
     ti_dialog->entity_name_entry = name_entry;
-    if (!(safe_strcmp (ti_dialog->tax_name, NULL) == 0))
+    if (!(g_strcmp0 (ti_dialog->tax_name, NULL) == 0))
         gtk_entry_set_text (GTK_ENTRY (name_entry), ti_dialog->tax_name);
     label = gtk_label_new (_("Name"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.00, 0.50);
@@ -1206,7 +1206,7 @@ identity_edit_clicked_cb (GtkButton *button,
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 0, tax_type_info->combo_box_entry, -1);
-        if (safe_strcmp (ti_dialog->tax_type, tax_type_info->type_code) == 0)
+        if (g_strcmp0 (ti_dialog->tax_type, tax_type_info->type_code) == 0)
             current_item = item;
         item++;
     }

@@ -316,7 +316,7 @@ static void gncCustomerFree (GncCustomer *cust)
 #define SET_STR(obj, member, str) { \
         char * tmp; \
         \
-        if (!safe_strcmp (member, str)) return; \
+        if (!g_strcmp0 (member, str)) return; \
         gncCustomerBeginEdit (obj); \
         tmp = CACHE_INSERT (str); \
         CACHE_REMOVE (member); \
@@ -682,19 +682,19 @@ gncCustomerEqual(const GncCustomer *a, const GncCustomer *b)
     g_return_val_if_fail(GNC_IS_CUSTOMER(a), FALSE);
     g_return_val_if_fail(GNC_IS_CUSTOMER(b), FALSE);
 
-    if (safe_strcmp(a->id, b->id) != 0)
+    if (g_strcmp0(a->id, b->id) != 0)
     {
         PWARN("IDs differ: %s vs %s", a->id, b->id);
         return FALSE;
     }
 
-    if (safe_strcmp(a->name, b->name) != 0)
+    if (g_strcmp0(a->name, b->name) != 0)
     {
         PWARN("Names differ: %s vs %s", a->name, b->name);
         return FALSE;
     }
 
-    if (safe_strcmp(a->notes, b->notes) != 0)
+    if (g_strcmp0(a->notes, b->notes) != 0)
     {
         PWARN("Notes differ: %s vs %s", a->notes, b->notes);
         return FALSE;

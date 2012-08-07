@@ -368,21 +368,21 @@ gnc_ui_to_account(AccountWindow *aw)
 
     string = gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
     old_string = xaccAccountGetName (account);
-    if (safe_strcmp (string, old_string) != 0)
+    if (g_strcmp0 (string, old_string) != 0)
         xaccAccountSetName (account, string);
 
     string = gtk_entry_get_text (GTK_ENTRY(aw->description_entry));
     old_string = xaccAccountGetDescription (account);
-    if (safe_strcmp (string, old_string) != 0)
+    if (g_strcmp0 (string, old_string) != 0)
         xaccAccountSetDescription (account, string);
 
     gtk_color_button_get_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color );
     string = gdk_color_to_string(&color);
-    if (safe_strcmp (string, DEFAULT_COLOR) == 0)
+    if (g_strcmp0 (string, DEFAULT_COLOR) == 0)
         string = "Not Set";
 
     old_string = xaccAccountGetColor (account);
-    if (safe_strcmp (string, old_string) != 0)
+    if (g_strcmp0 (string, old_string) != 0)
         xaccAccountSetColor (account, string);
 
     commodity = (gnc_commodity *)
@@ -408,7 +408,7 @@ gnc_ui_to_account(AccountWindow *aw)
 
     string = gtk_entry_get_text (GTK_ENTRY(aw->code_entry));
     old_string = xaccAccountGetCode (account);
-    if (safe_strcmp (string, old_string) != 0)
+    if (g_strcmp0 (string, old_string) != 0)
         xaccAccountSetCode (account, string);
 
     gtk_text_buffer_get_start_iter (aw->notes_text_buffer, &start);
@@ -758,7 +758,7 @@ gnc_common_ok (AccountWindow *aw)
 
     /* check for valid name */
     name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
-    if (safe_strcmp(name, "") == 0)
+    if (g_strcmp0(name, "") == 0)
     {
         const char *message = _("The account must be given a name.");
         gnc_error_dialog(aw->dialog, "%s", message);
@@ -1663,7 +1663,7 @@ gnc_split_account_name (QofBook *book, const char *in_name, Account **base_accou
         {
             account = node->data;
 
-            if (safe_strcmp(xaccAccountGetName (account), *ptr) == 0)
+            if (g_strcmp0(xaccAccountGetName (account), *ptr) == 0)
             {
                 /* We found an account. */
                 *base_account = account;

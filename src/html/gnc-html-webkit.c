@@ -260,9 +260,9 @@ extract_base_name(URLType type, const gchar* path)
     regcomp(&compiled_m, machine_rexp, REG_EXTENDED);
     regcomp(&compiled_p, path_rexp, REG_EXTENDED);
 
-    if (!safe_strcmp (type, URL_TYPE_HTTP) ||
-            !safe_strcmp (type, URL_TYPE_SECURE) ||
-            !safe_strcmp (type, URL_TYPE_FTP))
+    if (!g_strcmp0 (type, URL_TYPE_HTTP) ||
+            !g_strcmp0 (type, URL_TYPE_SECURE) ||
+            !g_strcmp0 (type, URL_TYPE_FTP))
     {
 
         /* step 1: split the machine name away from the path
@@ -479,11 +479,11 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 
     do
     {
-        if ( !safe_strcmp( type, URL_TYPE_SECURE ) ||
-                !safe_strcmp( type, URL_TYPE_HTTP ) )
+        if ( !g_strcmp0( type, URL_TYPE_SECURE ) ||
+                !g_strcmp0( type, URL_TYPE_HTTP ) )
         {
 
-            if ( !safe_strcmp( type, URL_TYPE_SECURE ) )
+            if ( !g_strcmp0( type, URL_TYPE_SECURE ) )
             {
                 if ( !https_allowed() )
                 {
@@ -865,23 +865,23 @@ impl_webkit_show_url( GncHtml* self, URLType type,
         return;
     }
 
-    if ( safe_strcmp( type, URL_TYPE_SCHEME ) == 0 )
+    if ( g_strcmp0( type, URL_TYPE_SCHEME ) == 0 )
     {
         gnc_html_open_scm( GNC_HTML_WEBKIT(self), location, label, new_window );
 
     }
-    else if ( safe_strcmp( type, URL_TYPE_JUMP ) == 0 )
+    else if ( g_strcmp0( type, URL_TYPE_JUMP ) == 0 )
     {
         /* Webkit jumps to the anchor on its own */
     }
-    else if ( safe_strcmp( type, URL_TYPE_SECURE ) == 0 ||
-              safe_strcmp( type, URL_TYPE_HTTP ) == 0 ||
-              safe_strcmp( type, URL_TYPE_FILE ) == 0 )
+    else if ( g_strcmp0( type, URL_TYPE_SECURE ) == 0 ||
+              g_strcmp0( type, URL_TYPE_HTTP ) == 0 ||
+              g_strcmp0( type, URL_TYPE_FILE ) == 0 )
     {
 
         do
         {
-            if ( safe_strcmp( type, URL_TYPE_SECURE ) == 0 )
+            if ( g_strcmp0( type, URL_TYPE_SECURE ) == 0 )
             {
                 if ( !https_allowed() )
                 {
@@ -893,7 +893,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
                 }
             }
 
-            if ( safe_strcmp( type, URL_TYPE_HTTP ) == 0 )
+            if ( g_strcmp0( type, URL_TYPE_HTTP ) == 0 )
             {
                 if ( !http_allowed() )
                 {

@@ -711,7 +711,7 @@ gnc_ui_namespace_picker_ns (GtkWidget *cbwe)
 
     namespace = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cbwe)))));
 
-    if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
+    if (g_strcmp0 (namespace, GNC_COMMODITY_NS_ISO) == 0)
     {
         /* In case the user types in ISO4217, map it to CURRENCY. */
         return g_strdup(GNC_COMMODITY_NS_CURRENCY);
@@ -870,7 +870,7 @@ gnc_find_timezone_menu_position(const gchar *timezone)
     guint i = 0;
     while (!found && known_timezones[i])
     {
-        if (safe_strcmp(timezone, known_timezones[i]) != 0)
+        if (g_strcmp0(timezone, known_timezones[i]) != 0)
         {
             i++;
         }

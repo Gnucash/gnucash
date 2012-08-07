@@ -352,7 +352,7 @@ do_counter_cb (const char *type, gpointer data_p, gpointer be_data_p)
     if (be_data->ok == TRUE)
         return;
 
-    if (!safe_strcmp (be_data->tag, data->type_name))
+    if (!g_strcmp0 (be_data->tag, data->type_name))
         be_data->ok = TRUE;
 
     /* XXX: should we do anything with this counter? */
@@ -394,27 +394,27 @@ gnc_counter_end_handler(gpointer data_for_children,
               strval ? strval : "(null)");
         ret = FALSE;
     }
-    else if (safe_strcmp(type, "transaction") == 0)
+    else if (g_strcmp0(type, "transaction") == 0)
     {
         sixdata->counter.transactions_total = val;
     }
-    else if (safe_strcmp(type, "account") == 0)
+    else if (g_strcmp0(type, "account") == 0)
     {
         sixdata->counter.accounts_total = val;
     }
-    else if (safe_strcmp(type, "book") == 0)
+    else if (g_strcmp0(type, "book") == 0)
     {
         sixdata->counter.books_total = val;
     }
-    else if (safe_strcmp(type, "commodity") == 0)
+    else if (g_strcmp0(type, "commodity") == 0)
     {
         sixdata->counter.commodities_total = val;
     }
-    else if (safe_strcmp(type, "schedxaction") == 0)
+    else if (g_strcmp0(type, "schedxaction") == 0)
     {
         sixdata->counter.schedXactions_total = val;
     }
-    else if (safe_strcmp(type, "budget") == 0)
+    else if (g_strcmp0(type, "budget") == 0)
     {
         sixdata->counter.budgets_total = val;
     }
@@ -534,7 +534,7 @@ add_item_cb (const char *type, gpointer data_p, gpointer be_data_p)
     if (be_data->ok)
         return;
 
-    if (!safe_strcmp (be_data->tag, data->type_name))
+    if (!g_strcmp0 (be_data->tag, data->type_name))
     {
         if (data->add_item)
             (data->add_item)(be_data->gd, be_data->data);
@@ -548,31 +548,31 @@ book_callback(const char *tag, gpointer globaldata, gpointer data)
 {
     sixtp_gdv2 *gd = (sixtp_gdv2*)globaldata;
 
-    if (safe_strcmp(tag, ACCOUNT_TAG) == 0)
+    if (g_strcmp0(tag, ACCOUNT_TAG) == 0)
     {
         add_account_local(gd, (Account*)data);
     }
-    else if (safe_strcmp(tag, PRICEDB_TAG) == 0)
+    else if (g_strcmp0(tag, PRICEDB_TAG) == 0)
     {
         add_pricedb_local(gd, (GNCPriceDB*)data);
     }
-    else if (safe_strcmp(tag, COMMODITY_TAG) == 0)
+    else if (g_strcmp0(tag, COMMODITY_TAG) == 0)
     {
         add_commodity_local(gd, (gnc_commodity*)data);
     }
-    else if (safe_strcmp(tag, TRANSACTION_TAG) == 0)
+    else if (g_strcmp0(tag, TRANSACTION_TAG) == 0)
     {
         add_transaction_local(gd, (Transaction*)data);
     }
-    else if (safe_strcmp(tag, SCHEDXACTION_TAG) == 0)
+    else if (g_strcmp0(tag, SCHEDXACTION_TAG) == 0)
     {
         add_schedXaction_local(gd, (SchedXaction*)data);
     }
-    else if (safe_strcmp(tag, TEMPLATE_TRANSACTION_TAG) == 0)
+    else if (g_strcmp0(tag, TEMPLATE_TRANSACTION_TAG) == 0)
     {
         add_template_transaction_local( gd, (gnc_template_xaction_data*)data );
     }
-    else if (safe_strcmp(tag, BUDGET_TAG) == 0)
+    else if (g_strcmp0(tag, BUDGET_TAG) == 0)
     {
         // Nothing needed here.
     }
@@ -600,7 +600,7 @@ generic_callback(const char *tag, gpointer globaldata, gpointer data)
 {
     sixtp_gdv2 *gd = (sixtp_gdv2*)globaldata;
 
-    if (safe_strcmp(tag, BOOK_TAG) == 0)
+    if (g_strcmp0(tag, BOOK_TAG) == 0)
     {
         add_book_local(gd, (QofBook*)data);
         book_callback(tag, globaldata, data);
@@ -900,7 +900,7 @@ compare_namespaces(gconstpointer a, gconstpointer b)
 {
     const gchar *sa = (const gchar *) a;
     const gchar *sb = (const gchar *) b;
-    return(safe_strcmp(sa, sb));
+    return(g_strcmp0(sa, sb));
 }
 
 static gint
@@ -908,7 +908,7 @@ compare_commodity_ids(gconstpointer a, gconstpointer b)
 {
     const gnc_commodity *ca = (const gnc_commodity *) a;
     const gnc_commodity *cb = (const gnc_commodity *) b;
-    return(safe_strcmp(gnc_commodity_get_mnemonic(ca),
+    return(g_strcmp0(gnc_commodity_get_mnemonic(ca),
                        gnc_commodity_get_mnemonic(cb)));
 }
 

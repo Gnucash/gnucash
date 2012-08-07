@@ -250,7 +250,7 @@ gnc_price_cell_set_value (PriceCell * cell, gnc_numeric amount)
     buff = gnc_price_cell_print_value (cell);
     cell->need_to_parse = FALSE;
 
-    if (safe_strcmp (buff, cell->cell.value) == 0)
+    if (g_strcmp0 (buff, cell->cell.value) == 0)
         return FALSE;
 
     gnc_basic_cell_set_value_internal (&cell->cell, buff);

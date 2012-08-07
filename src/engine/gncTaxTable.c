@@ -103,7 +103,7 @@ gncTaxIncludedTypeToString (GncTaxIncluded type)
 }
 #undef GNC_RETURN_ENUM_AS_STRING
 #define GNC_RETURN_ON_MATCH(s,x) \
-  if(safe_strcmp((s), (str)) == 0) { *type = x; return(TRUE); }
+  if(g_strcmp0((s), (str)) == 0) { *type = x; return(TRUE); }
 gboolean
 gncAmountStringToType (const char *str, GncAmountType *type)
 {
@@ -136,7 +136,7 @@ gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type)
 #define SET_STR(obj, member, str) { \
         char * tmp; \
         \
-        if (!safe_strcmp (member, str)) return; \
+        if (!g_strcmp0 (member, str)) return; \
         gncTaxTableBeginEdit (obj); \
         tmp = CACHE_INSERT (str); \
         CACHE_REMOVE (member); \
@@ -657,7 +657,7 @@ GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name)
     for ( ; list; list = list->next)
     {
         GncTaxTable *table = list->data;
-        if (!safe_strcmp (table->name, name))
+        if (!g_strcmp0 (table->name, name))
             return list->data;
     }
     return NULL;
@@ -793,7 +793,7 @@ int gncTaxTableEntryCompare (const GncTaxTableEntry *a, const GncTaxTableEntry *
 
     name_a = gnc_account_get_full_name (a->account);
     name_b = gnc_account_get_full_name (b->account);
-    retval = safe_strcmp(name_a, name_b);
+    retval = g_strcmp0(name_a, name_b);
     g_free(name_a);
     g_free(name_b);
 
@@ -808,7 +808,7 @@ int gncTaxTableCompare (const GncTaxTable *a, const GncTaxTable *b)
     if (!a && !b) return 0;
     if (!a) return -1;
     if (!b) return 1;
-    return safe_strcmp (a->name, b->name);
+    return g_strcmp0 (a->name, b->name);
 }
 
 gboolean gncTaxTableEntryEqual(const GncTaxTableEntry *a, const GncTaxTableEntry *b)
@@ -845,7 +845,7 @@ gboolean gncTaxTableEqual(const GncTaxTable *a, const GncTaxTable *b)
     g_return_val_if_fail(GNC_IS_TAXTABLE(a), FALSE);
     g_return_val_if_fail(GNC_IS_TAXTABLE(b), FALSE);
 
-    if (safe_strcmp(a->name, b->name) != 0)
+    if (g_strcmp0(a->name, b->name) != 0)
     {
         PWARN("Names differ: %s vs %s", a->name, b->name);
         return FALSE;

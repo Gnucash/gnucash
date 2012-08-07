@@ -105,12 +105,12 @@ static GHashTable *predEqualTable = NULL;
 #define VERIFY_PDATA(str) { \
         g_return_if_fail (pd != NULL); \
         g_return_if_fail (pd->type_name == str || \
-                        !safe_strcmp (str, pd->type_name)); \
+                        !g_strcmp0 (str, pd->type_name)); \
 }
 #define VERIFY_PDATA_R(str) { \
         g_return_val_if_fail (pd != NULL, NULL); \
         g_return_val_if_fail (pd->type_name == str || \
-                                !safe_strcmp (str, pd->type_name), \
+                                !g_strcmp0 (str, pd->type_name), \
                                 NULL); \
 }
 #define VERIFY_PREDICATE(str) { \
@@ -118,7 +118,7 @@ static GHashTable *predEqualTable = NULL;
         g_return_val_if_fail (getter->param_getfcn != NULL, PREDICATE_ERROR); \
         g_return_val_if_fail (pd != NULL, PREDICATE_ERROR); \
         g_return_val_if_fail (pd->type_name == str || \
-                                !safe_strcmp (str, pd->type_name), \
+                                !g_strcmp0 (str, pd->type_name), \
                                 PREDICATE_ERROR); \
 }
 
@@ -186,7 +186,7 @@ string_compare_func (gpointer a, gpointer b, gint options,
     if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
         return safe_strcasecmp (s1, s2);
 
-    return safe_strcmp (s1, s2);
+    return g_strcmp0 (s1, s2);
 }
 
 int
@@ -216,7 +216,7 @@ qof_string_number_compare_func (gpointer a, gpointer b, gint options,
     if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
         return safe_strcasecmp (sr1, sr2);
 
-    return safe_strcmp (sr1, sr2);
+    return g_strcmp0 (sr1, sr2);
 }
 
 static void
@@ -253,7 +253,7 @@ string_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
 
     if (pd1->options != pd2->options) return FALSE;
     if (pd1->is_regex != pd2->is_regex) return FALSE;
-    return (safe_strcmp (pd1->matchstring, pd2->matchstring) == 0);
+    return (g_strcmp0 (pd1->matchstring, pd2->matchstring) == 0);
 }
 
 QofQueryPredData *
@@ -1170,7 +1170,7 @@ char_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
     const query_char_t pd2 = (const query_char_t) p2;
 
     if (pd1->options != pd2->options) return FALSE;
-    return (safe_strcmp (pd1->char_list, pd2->char_list) == 0);
+    return (g_strcmp0 (pd1->char_list, pd2->char_list) == 0);
 }
 
 QofQueryPredData *
@@ -1277,7 +1277,7 @@ kvp_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
 
     for ( ; n1 && n2; n1 = n1->next, n2 = n2->next)
     {
-        if (safe_strcmp (n1->data, n2->data) != 0)
+        if (g_strcmp0 (n1->data, n2->data) != 0)
             return FALSE;
     }
 
@@ -1928,7 +1928,7 @@ qof_query_core_predicate_equal (const QofQueryPredData *p1, const QofQueryPredDa
     if (!p1 || !p2) return FALSE;
 
     if (p1->how != p2->how) return FALSE;
-    if (safe_strcmp (p1->type_name, p2->type_name)) return FALSE;
+    if (g_strcmp0 (p1->type_name, p2->type_name)) return FALSE;
 
     pred_equal = g_hash_table_lookup (predEqualTable, p1->type_name);
     g_return_val_if_fail (pred_equal, FALSE);

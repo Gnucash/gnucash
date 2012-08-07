@@ -422,7 +422,7 @@ static void gncEmployeeFree (GncEmployee *employee)
 #define SET_STR(obj, member, str) { \
         char * tmp; \
         \
-        if (!safe_strcmp (member, str)) return; \
+        if (!g_strcmp0 (member, str)) return; \
         gncEmployeeBeginEdit (obj); \
         tmp = CACHE_INSERT (str); \
         CACHE_REMOVE (member); \
@@ -684,13 +684,13 @@ gboolean gncEmployeeEqual(const GncEmployee* a, const GncEmployee* b)
     g_return_val_if_fail(GNC_IS_EMPLOYEE(a), FALSE);
     g_return_val_if_fail(GNC_IS_EMPLOYEE(b), FALSE);
 
-    if (safe_strcmp(a->id, b->id) != 0)
+    if (g_strcmp0(a->id, b->id) != 0)
     {
         PWARN("IDs differ: %s vs %s", a->id, b->id);
         return FALSE;
     }
 
-    if (safe_strcmp(a->username, b->username) != 0)
+    if (g_strcmp0(a->username, b->username) != 0)
     {
         PWARN("Usernames differ: %s vs %s", a->username, b->username);
         return FALSE;
@@ -714,13 +714,13 @@ gboolean gncEmployeeEqual(const GncEmployee* a, const GncEmployee* b)
         return FALSE;
     }
 
-    if (safe_strcmp(a->language, b->language) != 0)
+    if (g_strcmp0(a->language, b->language) != 0)
     {
         PWARN("Languages differ: %s vs %s", a->language, b->language);
         return FALSE;
     }
 
-    if (safe_strcmp(a->acl, b->acl) != 0)
+    if (g_strcmp0(a->acl, b->acl) != 0)
     {
         PWARN("ACLs differ: %s vs %s", a->acl, b->acl);
         return FALSE;

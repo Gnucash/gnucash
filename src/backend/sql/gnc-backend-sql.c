@@ -288,7 +288,7 @@ compare_namespaces(gconstpointer a, gconstpointer b)
     const gchar *sa = (const gchar *) a;
     const gchar *sb = (const gchar *) b;
 
-    return( safe_strcmp( sa, sb ) );
+    return( g_strcmp0( sa, sb ) );
 }
 
 static gint
@@ -297,7 +297,7 @@ compare_commodity_ids(gconstpointer a, gconstpointer b)
     const gnc_commodity *ca = (const gnc_commodity *) a;
     const gnc_commodity *cb = (const gnc_commodity *) b;
 
-    return( safe_strcmp( gnc_commodity_get_mnemonic( ca ),
+    return( g_strcmp0( gnc_commodity_get_mnemonic( ca ),
     gnc_commodity_get_mnemonic( cb ) ) );
 }
 

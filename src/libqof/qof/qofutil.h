@@ -177,21 +177,6 @@ void g_hash_table_foreach_sorted(GHashTable *hash_table, GHFunc func, gpointer u
  * otherwise. */
 gboolean qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle);
 
-/** The safe_strcmp compares strings da and db the same way that strcmp()
- does, except that either may be null.  This routine assumes that
- a non-null string is always greater than a null string.
-
- @param da string 1.
- @param db string 2.
-
- @return If da == NULL && db != NULL, returns -1.
-         If da != NULL && db == NULL, returns +1.
-         If da != NULL && db != NULL, returns the result of
-                   strcmp(da, db).
-         If da == NULL && db == NULL, returns 0.
-*/
-gint safe_strcmp (const gchar * da, const gchar * db);
-
 /** case sensitive comparison of strings da and db - either
 may be NULL. A non-NULL string is greater than a NULL string.
 

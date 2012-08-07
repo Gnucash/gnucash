@@ -81,7 +81,7 @@ test_string_fcn (GncAddress *address, const char *message,
     do_test (!gncAddressIsDirty (address), "test if start dirty");
     set (address, str);
     do_test (gncAddressIsDirty (address), "test dirty later");
-    do_test (safe_strcmp (get (address), str) == 0, message);
+    do_test (g_strcmp0 (get (address), str) == 0, message);
     gncAddressClearDirty (address);
 }
 

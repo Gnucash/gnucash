@@ -118,7 +118,7 @@ test_job (void)
         gncJobSetName (job, str);
         res = qof_object_printable (GNC_ID_JOB, job);
         do_test (res != NULL, "Printable NULL?");
-        do_test (safe_strcmp (str, res) == 0, "Printable equals");
+        do_test (g_strcmp0 (str, res) == 0, "Printable equals");
     }
     {
         GList *list;
@@ -167,7 +167,7 @@ test_string_fcn (QofBook *book, const char *message,
      * without having circular dependencies.
      */
     // do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
-    do_test (safe_strcmp (get (job), str) == 0, message);
+    do_test (g_strcmp0 (get (job), str) == 0, message);
     gncJobSetActive (job, FALSE);
     count++;
 }

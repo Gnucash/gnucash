@@ -554,8 +554,8 @@ gnc_split_register_get_bg_color (VirtualLocation virt_loc,
 
     cursor_name = vcell->cellblock->cursor_name;
 
-    if (safe_strcmp (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
-            safe_strcmp (cursor_name, CURSOR_SINGLE_LEDGER) == 0)
+    if (g_strcmp0 (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
+            g_strcmp0 (cursor_name, CURSOR_SINGLE_LEDGER) == 0)
     {
         if (is_current)
             return vcell->start_primary_color ?
@@ -566,8 +566,8 @@ gnc_split_register_get_bg_color (VirtualLocation virt_loc,
                reg_colors.primary_bg_color : reg_colors.secondary_bg_color;
     }
 
-    if (safe_strcmp (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
-            safe_strcmp (cursor_name, CURSOR_DOUBLE_LEDGER) == 0)
+    if (g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
+            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0)
     {
         double_alternate_virt = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
                                 "alternate_color_by_transaction",
@@ -594,7 +594,7 @@ gnc_split_register_get_bg_color (VirtualLocation virt_loc,
                reg_colors.secondary_bg_color;
     }
 
-    if (safe_strcmp (cursor_name, CURSOR_SPLIT) == 0)
+    if (g_strcmp0 (cursor_name, CURSOR_SPLIT) == 0)
     {
         if (is_current)
             return reg_colors.split_active_bg_color;
@@ -637,8 +637,8 @@ gnc_split_register_get_gtkrc_bg_color (VirtualLocation virt_loc,
 
     cursor_name = vcell->cellblock->cursor_name;
 
-    if (safe_strcmp (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
-            safe_strcmp (cursor_name, CURSOR_SINGLE_LEDGER) == 0)
+    if (g_strcmp0 (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
+            g_strcmp0 (cursor_name, CURSOR_SINGLE_LEDGER) == 0)
     {
         if (is_current)
             return vcell->start_primary_color ?
@@ -649,8 +649,8 @@ gnc_split_register_get_gtkrc_bg_color (VirtualLocation virt_loc,
                COLOR_PRIMARY : COLOR_SECONDARY;
     }
 
-    if (safe_strcmp (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
-            safe_strcmp (cursor_name, CURSOR_DOUBLE_LEDGER) == 0)
+    if (g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
+            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0)
     {
         double_alternate_virt = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
                                 "alternate_color_by_transaction",
@@ -677,7 +677,7 @@ gnc_split_register_get_gtkrc_bg_color (VirtualLocation virt_loc,
                COLOR_SECONDARY;
     }
 
-    if (safe_strcmp (cursor_name, CURSOR_SPLIT) == 0)
+    if (g_strcmp0 (cursor_name, CURSOR_SPLIT) == 0)
     {
         if (is_current)
             return COLOR_SPLIT_ACTIVE;
@@ -1357,7 +1357,7 @@ gnc_split_register_get_mxfrm_entry (VirtualLocation virt_loc,
 
         if (s)
             name = g_strdup (SPLIT_TRANS_STR);
-        else if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
+        else if (g_strcmp0 ("stock-split", xaccSplitGetType (split)) == 0)
             name = g_strdup (STOCK_SPLIT_STR);
         else
             name = g_strdup ("");
@@ -1399,7 +1399,7 @@ gnc_split_register_get_mxfrm_help (VirtualLocation virt_loc,
         if (s)
             help = _("This transaction has multiple splits; "
                      "press the Split button to see them all");
-        else if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
+        else if (g_strcmp0 ("stock-split", xaccSplitGetType (split)) == 0)
             help = _("This transaction is a stock split; "
                      "press the Split button to see details");
         else
@@ -1860,7 +1860,7 @@ gnc_split_register_get_debcred_io_flags (VirtualLocation virt_loc,
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
-    if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
+    if (g_strcmp0 ("stock-split", xaccSplitGetType (split)) == 0)
         return XACC_CELL_ALLOW_NONE;
 
     return XACC_CELL_ALLOW_ALL;

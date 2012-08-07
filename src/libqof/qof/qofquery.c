@@ -492,7 +492,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
         if (sort->comp_fcn == NULL)
             sort->obj_cmp = qof_class_get_default_sort (resObj->param_type);
     }
-    else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
+    else if (!g_strcmp0 (sort->param_list->data, QUERY_DEFAULT_SORT))
     {
         sort->use_default = TRUE;
     }
@@ -580,7 +580,7 @@ static int param_list_cmp (const QofQueryParamList *l1, const QofQueryParamList 
         if (!l1 && l2) return -1;
         if (l1 && !l2) return 1;
 
-        ret = safe_strcmp (l1->data, l2->data);
+        ret = g_strcmp0 (l1->data, l2->data);
         if (ret)
             return ret;
 
@@ -851,7 +851,7 @@ qof_query_run_subquery (QofQuery *subq, const QofQuery* primaryq)
     /* Make sure we're searching for the same thing */
     g_return_val_if_fail (subq->search_for, NULL);
     g_return_val_if_fail (primaryq->search_for, NULL);
-    g_return_val_if_fail(!safe_strcmp(subq->search_for, primaryq->search_for),
+    g_return_val_if_fail(!g_strcmp0(subq->search_for, primaryq->search_for),
                          NULL);
 
     /* Perform the subquery */
@@ -894,7 +894,7 @@ void qof_query_search_for (QofQuery *q, QofIdTypeConst obj_type)
     if (!q || !obj_type)
         return;
 
-    if (safe_strcmp (q->search_for, obj_type))
+    if (g_strcmp0 (q->search_for, obj_type))
     {
         q->search_for = (QofIdType) obj_type;
         q->changed = 1;
@@ -1103,7 +1103,7 @@ qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
     if (!q2) return q1;
 
     if (q1->search_for && q2->search_for)
-        g_return_val_if_fail (safe_strcmp (q1->search_for, q2->search_for) == 0,
+        g_return_val_if_fail (g_strcmp0 (q1->search_for, q2->search_for) == 0,
                               NULL);
 
     search_for = (q1->search_for ? q1->search_for : q2->search_for);
@@ -1702,8 +1702,8 @@ qof_query_printPredData (QofQueryPredData *pd, GList *lst)
     g_string_append (gs, (gchar *) pd->type_name);
 
     /* Char Predicate and GncGUID predicate don't use the 'how' field. */
-    if (safe_strcmp (pd->type_name, QOF_TYPE_CHAR) &&
-            safe_strcmp (pd->type_name, QOF_TYPE_GUID))
+    if (g_strcmp0 (pd->type_name, QOF_TYPE_CHAR) &&
+            g_strcmp0 (pd->type_name, QOF_TYPE_GUID))
     {
         g_string_append_printf (gs, " how: %s",
                                 qof_query_printStringForHow (pd->how));
@@ -1747,7 +1747,7 @@ static void
 qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
 {
 
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_GUID))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_GUID))
     {
         GList *node;
         query_guid_t pdata = (query_guid_t) pd;
@@ -1761,7 +1761,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
         }
         return;
     }
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_STRING))
     {
         query_string_t pdata = (query_string_t) pd;
         g_string_append_printf (gs, " Match type %s",
@@ -1771,7 +1771,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                                 pdata->matchstring);
         return;
     }
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_NUMERIC))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_NUMERIC))
     {
         query_numeric_t pdata = (query_numeric_t) pd;
         g_string_append_printf (gs, " Match type %s",
@@ -1780,7 +1780,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                                 gnc_num_dbg_to_string (pdata->amount));
         return;
     }
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_KVP))
     {
         GSList *node;
         query_kvp_t pdata = (query_kvp_t) pd;
@@ -1793,25 +1793,25 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                                 kvp_value_to_string (pdata->value));
         return;
     }
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_INT64))
     {
         query_int64_t pdata = (query_int64_t) pd;
         g_string_append_printf (gs, " int64: %" G_GINT64_FORMAT, pdata->val);
         return;
     }
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_INT32))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_INT32))
     {
         query_int32_t pdata = (query_int32_t) pd;
         g_string_append_printf (gs, " int32: %d", pdata->val);
         return;
     }
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_DOUBLE))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_DOUBLE))
     {
         query_double_t pdata = (query_double_t) pd;
         g_string_append_printf (gs, " double: %.18g", pdata->val);
         return;
     }
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_DATE))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_DATE))
     {
         query_date_t pdata = (query_date_t) pd;
         g_string_append_printf (gs, " Match type %s",
@@ -1819,7 +1819,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
         g_string_append_printf (gs, " query_date: %s", gnc_print_date (pdata->date));
         return;
     }
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_CHAR))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_CHAR))
     {
         query_char_t pdata = (query_char_t) pd;
         g_string_append_printf (gs, " Match type %s",
@@ -1827,7 +1827,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
         g_string_append_printf (gs, " char list: %s", pdata->char_list);
         return;
     }
-    if (!safe_strcmp (pd->type_name, QOF_TYPE_BOOLEAN))
+    if (!g_strcmp0 (pd->type_name, QOF_TYPE_BOOLEAN))
     {
         query_boolean_t pdata = (query_boolean_t) pd;
         g_string_append_printf (gs, " boolean: %s", pdata->val ? "TRUE" : "FALSE");

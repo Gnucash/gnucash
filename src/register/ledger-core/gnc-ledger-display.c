@@ -207,9 +207,9 @@ gnc_get_default_register_style (GNCAccountType type)
     default:
         style_string = gnc_gconf_get_string(GCONF_GENERAL_REGISTER,
                                             "default_style", NULL);
-        if (safe_strcmp(style_string, "journal") == 0)
+        if (g_strcmp0(style_string, "journal") == 0)
             new_style = REG_STYLE_JOURNAL;
-        else if (safe_strcmp(style_string, "auto_ledger") == 0)
+        else if (g_strcmp0(style_string, "auto_ledger") == 0)
             new_style = REG_STYLE_AUTO_LEDGER;
         else
             new_style = REG_STYLE_LEDGER;

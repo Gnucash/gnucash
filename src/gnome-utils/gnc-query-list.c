@@ -201,7 +201,7 @@ update_booleans (GNCQueryList *list, gint row)
         const char *type = gnc_search_param_get_param_type (param);
 
         /* if this is a boolean, ignore it now -- we'll use a checkmark later */
-        if (safe_strcmp (type, QOF_TYPE_BOOLEAN))
+        if (g_strcmp0 (type, QOF_TYPE_BOOLEAN))
             continue;
 
         result = (gboolean) GPOINTER_TO_INT(gnc_search_param_compute_value(param, entry));
@@ -733,8 +733,8 @@ gnc_query_list_set_query_sort (GNCQueryList *list, gboolean new_column)
     if (list->numeric_inv_sort)
     {
         const char *type = gnc_search_param_get_param_type (param);
-        if (!safe_strcmp(type, QOF_TYPE_NUMERIC) ||
-                !safe_strcmp(type, QOF_TYPE_DEBCRED))
+        if (!g_strcmp0(type, QOF_TYPE_NUMERIC) ||
+                !g_strcmp0(type, QOF_TYPE_DEBCRED))
             sort_order = !sort_order;
     }
 
@@ -840,7 +840,7 @@ gnc_query_list_fill(GNCQueryList *list)
             gpointer res = item->data;
 
             /* if this is a boolean, ignore it now -- we'll use a checkmark later */
-            if (!safe_strcmp (type, QOF_TYPE_BOOLEAN))
+            if (!g_strcmp0 (type, QOF_TYPE_BOOLEAN))
             {
                 strings[i++] = g_strdup("");
                 continue;
@@ -857,8 +857,8 @@ gnc_query_list_fill(GNCQueryList *list)
             }
 
             /* Now convert this to a text value for the row */
-            if (!safe_strcmp(type, QOF_TYPE_DEBCRED) ||
-                    !safe_strcmp(type, QOF_TYPE_NUMERIC))
+            if (!g_strcmp0(type, QOF_TYPE_DEBCRED) ||
+                    !g_strcmp0(type, QOF_TYPE_NUMERIC))
             {
                 gnc_numeric (*nfcn)(gpointer, QofParam *) =
                     (gnc_numeric(*)(gpointer, QofParam *))(qp->param_getfcn);

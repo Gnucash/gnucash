@@ -705,14 +705,14 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     /* If the same book, since we use cached strings, we can just compare pointer
      * equality for num and description
      */
-    if ((same_book && ta->num != tb->num) || (!same_book && safe_strcmp(ta->num, tb->num) != 0))
+    if ((same_book && ta->num != tb->num) || (!same_book && g_strcmp0(ta->num, tb->num) != 0))
     {
         PWARN ("num differs: %s vs %s", ta->num, tb->num);
         return FALSE;
     }
 
     if ((same_book && ta->description != tb->description)
-            || (!same_book && safe_strcmp(ta->description, tb->description)))
+            || (!same_book && g_strcmp0(ta->description, tb->description)))
     {
         PWARN ("descriptions differ: %s vs %s", ta->description, tb->description);
         return FALSE;

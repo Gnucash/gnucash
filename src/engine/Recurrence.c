@@ -506,7 +506,7 @@ recurrencePeriodTypeFromString(const gchar *str)
     int i;
 
     for (i = 0; i < NUM_PERIOD_TYPES; i++)
-        if (safe_strcmp(period_type_strings[i], str) == 0)
+        if (g_strcmp0(period_type_strings[i], str) == 0)
             return i;
     return -1;
 }
@@ -523,7 +523,7 @@ recurrenceWeekendAdjustFromString(const gchar *str)
     int i;
 
     for (i = 0; i < NUM_WEEKEND_ADJS; i++)
-        if (safe_strcmp(weekend_adj_strings[i], str) == 0)
+        if (g_strcmp0(weekend_adj_strings[i], str) == 0)
             return i;
     return -1;
 }

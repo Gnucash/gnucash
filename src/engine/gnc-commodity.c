@@ -380,38 +380,38 @@ gnc_quote_source_lookup_by_internal(const char * name)
     GList *node;
     gint i;
 
-    if ((name == NULL) || (safe_strcmp(name, "") == 0))
+    if ((name == NULL) || (g_strcmp0(name, "") == 0))
     {
         return NULL;
     }
 
-    if (safe_strcmp(name, currency_quote_source.internal_name) == 0)
+    if (g_strcmp0(name, currency_quote_source.internal_name) == 0)
         return &currency_quote_source;
-    if (safe_strcmp(name, currency_quote_source.old_internal_name) == 0)
+    if (g_strcmp0(name, currency_quote_source.old_internal_name) == 0)
         return &currency_quote_source;
 
     for (i = 0; i < num_single_quote_sources; i++)
     {
-        if (safe_strcmp(name, single_quote_sources[i].internal_name) == 0)
+        if (g_strcmp0(name, single_quote_sources[i].internal_name) == 0)
             return &single_quote_sources[i];
-        if (safe_strcmp(name, single_quote_sources[i].old_internal_name) == 0)
+        if (g_strcmp0(name, single_quote_sources[i].old_internal_name) == 0)
             return &single_quote_sources[i];
     }
 
     for (i = 0; i < num_multiple_quote_sources; i++)
     {
-        if (safe_strcmp(name, multiple_quote_sources[i].internal_name) == 0)
+        if (g_strcmp0(name, multiple_quote_sources[i].internal_name) == 0)
             return &multiple_quote_sources[i];
-        if (safe_strcmp(name, multiple_quote_sources[i].old_internal_name) == 0)
+        if (g_strcmp0(name, multiple_quote_sources[i].old_internal_name) == 0)
             return &multiple_quote_sources[i];
     }
 
     for (i = 0, node = new_quote_sources; node; node = node->next, i++)
     {
         source = node->data;
-        if (safe_strcmp(name, source->internal_name) == 0)
+        if (g_strcmp0(name, source->internal_name) == 0)
             return source;
-        if (safe_strcmp(name, source->old_internal_name) == 0)
+        if (g_strcmp0(name, source->old_internal_name) == 0)
             return source;
     }
 
@@ -1449,7 +1449,7 @@ gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b)
     priv_a = GET_PRIVATE(a);
     priv_b = GET_PRIVATE(b);
     if (priv_a->namespace != priv_b->namespace) return FALSE;
-    if (safe_strcmp(priv_a->mnemonic, priv_b->mnemonic) != 0) return FALSE;
+    if (g_strcmp0(priv_a->mnemonic, priv_b->mnemonic) != 0) return FALSE;
     return TRUE;
 }
 
@@ -1473,7 +1473,7 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
     same_book = qof_instance_get_book(QOF_INSTANCE(a)) == qof_instance_get_book(QOF_INSTANCE(b));
 
     if ((same_book && priv_a->namespace != priv_b->namespace)
-            || (!same_book && safe_strcmp( gnc_commodity_namespace_get_name(priv_a->namespace),
+            || (!same_book && g_strcmp0( gnc_commodity_namespace_get_name(priv_a->namespace),
                                            gnc_commodity_namespace_get_name(priv_b->namespace)) != 0))
     {
         DEBUG ("namespaces differ: %p(%s) vs %p(%s)",
@@ -1482,19 +1482,19 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
         return FALSE;
     }
 
-    if (safe_strcmp(priv_a->mnemonic, priv_b->mnemonic) != 0)
+    if (g_strcmp0(priv_a->mnemonic, priv_b->mnemonic) != 0)
     {
         DEBUG ("mnemonics differ: %s vs %s", priv_a->mnemonic, priv_b->mnemonic);
         return FALSE;
     }
 
-    if (safe_strcmp(priv_a->fullname, priv_b->fullname) != 0)
+    if (g_strcmp0(priv_a->fullname, priv_b->fullname) != 0)
     {
         DEBUG ("fullnames differ: %s vs %s", priv_a->fullname, priv_b->fullname);
         return FALSE;
     }
 
-    if (safe_strcmp(priv_a->cusip, priv_b->cusip) != 0)
+    if (g_strcmp0(priv_a->cusip, priv_b->cusip) != 0)
     {
         DEBUG ("cusips differ: %s vs %s", priv_a->cusip, priv_b->cusip);
         return FALSE;
@@ -1549,14 +1549,14 @@ gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace *namesp
 gboolean
 gnc_commodity_namespace_is_iso(const char *namespace)
 {
-    return ((safe_strcmp(namespace, GNC_COMMODITY_NS_ISO) == 0) ||
-            (safe_strcmp(namespace, GNC_COMMODITY_NS_CURRENCY) == 0));
+    return ((g_strcmp0(namespace, GNC_COMMODITY_NS_ISO) == 0) ||
+            (g_strcmp0(namespace, GNC_COMMODITY_NS_CURRENCY) == 0));
 }
 
 static const gchar *
 gnc_commodity_table_map_namespace(const char * namespace)
 {
-    if (safe_strcmp(namespace, GNC_COMMODITY_NS_ISO) == 0)
+    if (g_strcmp0(namespace, GNC_COMMODITY_NS_ISO) == 0)
         return GNC_COMMODITY_NS_CURRENCY;
     return namespace;
 }
@@ -1618,7 +1618,7 @@ count_coms(gpointer key, gpointer value, gpointer user_data)
     GHashTable *tbl = ((gnc_commodity_namespace*)value)->cm_table;
     guint *count = (guint*)user_data;
 
-    if (safe_strcmp((char*)key, GNC_COMMODITY_NS_CURRENCY) == 0)
+    if (g_strcmp0((char*)key, GNC_COMMODITY_NS_CURRENCY) == 0)
     {
         /* don't count default commodities */
         return;
@@ -1958,8 +1958,8 @@ gnc_commodity_is_currency(const gnc_commodity *cm)
     if (!cm) return FALSE;
 
     ns_name = gnc_commodity_namespace_get_name(GET_PRIVATE(cm)->namespace);
-    return (!safe_strcmp(ns_name, GNC_COMMODITY_NS_LEGACY) ||
-            !safe_strcmp(ns_name, GNC_COMMODITY_NS_CURRENCY));
+    return (!g_strcmp0(ns_name, GNC_COMMODITY_NS_LEGACY) ||
+            !g_strcmp0(ns_name, GNC_COMMODITY_NS_CURRENCY));
 }
 
 /********************************************************************

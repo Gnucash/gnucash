@@ -81,7 +81,7 @@ test_object (void)
         do_test (qof_object_lookup ("snm98sn snml say  dyikh9y9ha") == NULL,
                  "lookup non-existant object object");
 
-        do_test (!safe_strcmp (qof_object_get_type_label (TEST_MODULE_NAME),
+        do_test (!g_strcmp0 (qof_object_get_type_label (TEST_MODULE_NAME),
                                _(TEST_MODULE_DESC)),
                  "test description return");
     }

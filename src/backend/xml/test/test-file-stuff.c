@@ -122,7 +122,7 @@ check_dom_tree_version(xmlNodePtr node, gchar *verstr)
                          FALSE);
 
     verteststr = (char*) node->properties->xmlAttrPropertyValue->content;
-    if (safe_strcmp(verstr, verteststr) == 0)
+    if (g_strcmp0(verstr, verteststr) == 0)
     {
         return TRUE;
     }
@@ -146,7 +146,7 @@ equals_node_val_vs_string(xmlNodePtr node, const gchar* str)
     {
         return FALSE;
     }
-    else if (safe_strcmp(cmp1, str) == 0)
+    else if (g_strcmp0(cmp1, str) == 0)
     {
         g_free(cmp1);
         return TRUE;

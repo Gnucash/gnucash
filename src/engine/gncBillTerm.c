@@ -73,7 +73,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define SET_STR(obj, member, str) { \
         char * tmp; \
         \
-        if (!safe_strcmp (member, str)) return; \
+        if (!g_strcmp0 (member, str)) return; \
         gncBillTermBeginEdit (obj); \
         tmp = CACHE_INSERT (str); \
         CACHE_REMOVE (member); \
@@ -490,7 +490,7 @@ GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name)
     for ( ; list; list = list->next)
     {
         GncBillTerm *term = list->data;
-        if (!safe_strcmp (term->name, name))
+        if (!g_strcmp0 (term->name, name))
             return list->data;
     }
     return NULL;
@@ -625,10 +625,10 @@ int gncBillTermCompare (const GncBillTerm *a, const GncBillTerm *b)
     if (!a) return -1;
     if (!b) return 1;
 
-    ret = safe_strcmp (a->name, b->name);
+    ret = g_strcmp0 (a->name, b->name);
     if (ret) return ret;
 
-    return safe_strcmp (a->desc, b->desc);
+    return g_strcmp0 (a->desc, b->desc);
 }
 
 gboolean gncBillTermEqual(const GncBillTerm *a, const GncBillTerm *b)
@@ -639,13 +639,13 @@ gboolean gncBillTermEqual(const GncBillTerm *a, const GncBillTerm *b)
     g_return_val_if_fail(GNC_IS_BILLTERM(a), FALSE);
     g_return_val_if_fail(GNC_IS_BILLTERM(b), FALSE);
 
-    if (safe_strcmp(a->name, b->name) != 0)
+    if (g_strcmp0(a->name, b->name) != 0)
     {
         PWARN("Names differ: %s vs %s", a->name, b->name);
         return FALSE;
     }
 
-    if (safe_strcmp(a->desc, b->desc) != 0)
+    if (g_strcmp0(a->desc, b->desc) != 0)
     {
         PWARN("Descriptions differ: %s vs %s", a->desc, b->desc);
         return FALSE;

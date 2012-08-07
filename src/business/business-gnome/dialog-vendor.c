@@ -194,7 +194,7 @@ static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
                                       const char * error_message)
 {
     const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
-    if (safe_strcmp (res, "") == 0)
+    if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
             gnc_error_dialog (dialog, "%s", error_message);
@@ -229,7 +229,7 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
     }
 
     /* Check for valid id and set one if necessary */
-    if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
+    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
     {
         string = gncVendorNextID(vw->book);
         gtk_entry_set_text (GTK_ENTRY (vw->id_entry), string);

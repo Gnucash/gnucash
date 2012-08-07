@@ -348,10 +348,10 @@ taxtable_entries_handler (xmlNodePtr node, gpointer taxtable_pdata)
     {
         GncTaxTableEntry *entry;
 
-        if (safe_strcmp ("text", (char*)mark->name) == 0)
+        if (g_strcmp0 ("text", (char*)mark->name) == 0)
             continue;
 
-        if (safe_strcmp (gnc_taxtableentry_string, (char*)mark->name))
+        if (g_strcmp0 (gnc_taxtableentry_string, (char*)mark->name))
             return FALSE;
 
         entry = dom_tree_to_ttentry (mark, pdata->book);

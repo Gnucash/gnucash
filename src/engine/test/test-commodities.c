@@ -71,19 +71,19 @@ test_commodity(void)
             com != NULL, "commodity with data new and destroy");
 
         do_test(
-            safe_strcmp(fullname, gnc_commodity_get_fullname(com)) == 0,
+            g_strcmp0(fullname, gnc_commodity_get_fullname(com)) == 0,
             "fullnames equal test");
 
         do_test(
-            safe_strcmp(namespace, gnc_commodity_get_namespace(com)) == 0,
+            g_strcmp0(namespace, gnc_commodity_get_namespace(com)) == 0,
             "namespace equal test");
 
         do_test(
-            safe_strcmp(mnemonic, gnc_commodity_get_mnemonic(com)) == 0,
+            g_strcmp0(mnemonic, gnc_commodity_get_mnemonic(com)) == 0,
             "mnemonic equal test");
 
         do_test(
-            safe_strcmp(cusip, gnc_commodity_get_cusip(com)) == 0,
+            g_strcmp0(cusip, gnc_commodity_get_cusip(com)) == 0,
             "cusip equal test");
 
         do_test(
@@ -93,25 +93,25 @@ test_commodity(void)
         fullname = get_random_string();
         gnc_commodity_set_fullname(com, fullname);
         do_test(
-            safe_strcmp(fullname, gnc_commodity_get_fullname(com)) == 0,
+            g_strcmp0(fullname, gnc_commodity_get_fullname(com)) == 0,
             "reset fullnames equal test");
 
         namespace = get_random_commodity_namespace();
         gnc_commodity_set_namespace(com, namespace);
         do_test(
-            safe_strcmp(namespace, gnc_commodity_get_namespace(com)) == 0,
+            g_strcmp0(namespace, gnc_commodity_get_namespace(com)) == 0,
             "reset namespace equal test");
 
         mnemonic = get_random_string();
         gnc_commodity_set_mnemonic(com, mnemonic);
         do_test(
-            safe_strcmp(mnemonic, gnc_commodity_get_mnemonic(com)) == 0,
+            g_strcmp0(mnemonic, gnc_commodity_get_mnemonic(com)) == 0,
             "reset mnemonic equal test");
 
         cusip = get_random_string();
         gnc_commodity_set_cusip(com, cusip);
         do_test(
-            safe_strcmp(cusip, gnc_commodity_get_cusip(com)) == 0,
+            g_strcmp0(cusip, gnc_commodity_get_cusip(com)) == 0,
             "reset cusip equal test");
 
         fraction = get_random_int_in_range(0, 10000);

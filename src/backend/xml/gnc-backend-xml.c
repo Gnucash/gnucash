@@ -593,7 +593,7 @@ gnc_determine_file_type (const char *uri)
     }
 
     filename = gnc_uri_get_path ( uri );
-    if (0 == safe_strcmp(filename, QOF_STDOUT))
+    if (0 == g_strcmp0(filename, QOF_STDOUT))
     {
         result = FALSE;
         goto det_exit;
@@ -731,7 +731,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
         if (rc == 0)
         {
             /* We must never chmod the file /dev/null */
-            g_assert(safe_strcmp(tmp_name, "/dev/null") != 0);
+            g_assert(g_strcmp0(tmp_name, "/dev/null") != 0);
 
             /* Use the permissions from the original data file */
             if (g_chmod(tmp_name, statbuf.st_mode) != 0)
@@ -1243,13 +1243,13 @@ retain_type_changed_cb(GConfEntry *entry, gpointer user_data)
     if (!choice)
         choice = g_strdup("days");
 
-    if (safe_strcmp (choice, "never") == 0)
+    if (g_strcmp0 (choice, "never") == 0)
         be->file_retention_type = XML_RETAIN_NONE;
-    else if (safe_strcmp (choice, "forever") == 0)
+    else if (g_strcmp0 (choice, "forever") == 0)
         be->file_retention_type = XML_RETAIN_ALL;
     else
     {
-        if (safe_strcmp (choice, "days") != 0)
+        if (g_strcmp0 (choice, "days") != 0)
             PERR("bad value '%s'", choice ? choice : "(null)");
         be->file_retention_type = XML_RETAIN_DAYS;
     }

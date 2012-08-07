@@ -34,7 +34,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
 {
     xmlNodePtr mark;
 
-    while (safe_strcmp ((char*)node->name, "text") == 0)
+    while (g_strcmp0 ((char*)node->name, "text") == 0)
         node = node->next;
 
     if (!check_dom_tree_version(node, "2.0.0"))
@@ -42,17 +42,17 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
         return "version wrong.  Not 2.0.0 or not there";
     }
 
-    if (!node->name || safe_strcmp((char*)node->name, "gnc:commodity"))
+    if (!node->name || g_strcmp0((char*)node->name, "gnc:commodity"))
     {
         return "Name of toplevel node is bad";
     }
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if (safe_strcmp((char*)mark->name, "text") == 0)
+        if (g_strcmp0((char*)mark->name, "text") == 0)
         {
         }
-        else if (safe_strcmp((char*)mark->name, "cmdty:space") == 0)
+        else if (g_strcmp0((char*)mark->name, "cmdty:space") == 0)
         {
             if (!equals_node_val_vs_string(
                         mark, gnc_commodity_get_namespace_compat(com)))
@@ -60,7 +60,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 return "namespaces differ";
             }
         }
-        else if (safe_strcmp((char*)mark->name, "cmdty:id") == 0)
+        else if (g_strcmp0((char*)mark->name, "cmdty:id") == 0)
         {
             if (!equals_node_val_vs_string(
                         mark, gnc_commodity_get_mnemonic(com)))
@@ -68,7 +68,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 return "mnemonic differ";
             }
         }
-        else if (safe_strcmp((char*)mark->name, "cmdty:name") == 0)
+        else if (g_strcmp0((char*)mark->name, "cmdty:name") == 0)
         {
             if (!equals_node_val_vs_string(
                         mark, gnc_commodity_get_fullname(com)))
@@ -76,7 +76,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 return "names differ";
             }
         }
-        else if (safe_strcmp((char*)mark->name, "cmdty:xcode") == 0)
+        else if (g_strcmp0((char*)mark->name, "cmdty:xcode") == 0)
         {
             if (!equals_node_val_vs_string(
                         mark, gnc_commodity_get_cusip(com)))
@@ -84,7 +84,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 return "exchange codes differ";
             }
         }
-        else if (safe_strcmp((char*)mark->name, "cmdty:fraction") == 0)
+        else if (g_strcmp0((char*)mark->name, "cmdty:fraction") == 0)
         {
             gchar *txt;
             gint64 type;
@@ -112,9 +112,9 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
             }
         }
         /* Legitimate tags which we don't yet have tests */
-        else if (safe_strcmp((char*)mark->name, "cmdty:get_quotes") == 0 ||
-                 safe_strcmp((char*)mark->name, "cmdty:quote_source") == 0 ||
-                 safe_strcmp((char*)mark->name, "cmdty:quote_tz") == 0)
+        else if (g_strcmp0((char*)mark->name, "cmdty:get_quotes") == 0 ||
+                 g_strcmp0((char*)mark->name, "cmdty:quote_source") == 0 ||
+                 g_strcmp0((char*)mark->name, "cmdty:quote_tz") == 0)
         {
             continue;
         }

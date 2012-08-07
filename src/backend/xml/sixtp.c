@@ -49,7 +49,7 @@ is_child_result_from_node_named(sixtp_child_result *cr, const char *tag)
 {
     return((cr->type == SIXTP_CHILD_RESULT_NODE)
            &&
-           (safe_strcmp(cr->tag, tag) == 0));
+           (g_strcmp0(cr->tag, tag) == 0));
 }
 
 void
@@ -511,13 +511,13 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name)
 
     /* time to make sure we got the right closing tag.  Is this really
        necessary? */
-    if (safe_strcmp(current_frame->tag, (gchar*) name) != 0)
+    if (g_strcmp0(current_frame->tag, (gchar*) name) != 0)
     {
         g_warning("bad closing tag (start <%s>, end <%s>)", current_frame->tag, name);
         pdata->parsing_ok = FALSE;
 
         /* See if we're just off by one and try to recover */
-        if (safe_strcmp(parent_frame->tag, (gchar*) name) == 0)
+        if (g_strcmp0(parent_frame->tag, (gchar*) name) == 0)
         {
             pdata->stack = sixtp_pop_and_destroy_frame(pdata->stack);
             current_frame = (sixtp_stack_frame *) pdata->stack->data;

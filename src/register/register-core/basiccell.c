@@ -48,7 +48,7 @@ gboolean
 gnc_cell_name_equal (const char * cell_name_1,
                      const char * cell_name_2)
 {
-    return (safe_strcmp (cell_name_1, cell_name_2) == 0);
+    return (g_strcmp0 (cell_name_1, cell_name_2) == 0);
 }
 
 BasicCell *

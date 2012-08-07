@@ -1309,19 +1309,19 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
         return FALSE;
     }
 
-    if (safe_strcmp(priv_aa->accountName, priv_ab->accountName) != 0)
+    if (g_strcmp0(priv_aa->accountName, priv_ab->accountName) != 0)
     {
         PWARN ("names differ: %s vs %s", priv_aa->accountName, priv_ab->accountName);
         return FALSE;
     }
 
-    if (safe_strcmp(priv_aa->accountCode, priv_ab->accountCode) != 0)
+    if (g_strcmp0(priv_aa->accountCode, priv_ab->accountCode) != 0)
     {
         PWARN ("codes differ: %s vs %s", priv_aa->accountCode, priv_ab->accountCode);
         return FALSE;
     }
 
-    if (safe_strcmp(priv_aa->description, priv_ab->description) != 0)
+    if (g_strcmp0(priv_aa->description, priv_ab->description) != 0)
     {
         PWARN ("descriptions differ: %s vs %s", priv_aa->description, priv_ab->description);
         return FALSE;
@@ -1981,7 +1981,7 @@ xaccAccountOrder (const Account *aa, const Account *ab)
     }
 
     /* Otherwise do a string sort */
-    result = safe_strcmp (da, db);
+    result = g_strcmp0 (da, db);
     if (result)
         return result;
 
@@ -2056,7 +2056,7 @@ xaccAccountSetName (Account *acc, const char *str)
 
     /* optimizations */
     priv = GET_PRIVATE(acc);
-    if (safe_strcmp(str, priv->accountName) == 0)
+    if (g_strcmp0(str, priv->accountName) == 0)
         return;
 
     xaccAccountBeginEdit(acc);
@@ -2075,7 +2075,7 @@ xaccAccountSetCode (Account *acc, const char *str)
 
     /* optimizations */
     priv = GET_PRIVATE(acc);
-    if (safe_strcmp(str, priv->accountCode) == 0)
+    if (g_strcmp0(str, priv->accountCode) == 0)
         return;
 
     xaccAccountBeginEdit(acc);
@@ -2094,7 +2094,7 @@ xaccAccountSetDescription (Account *acc, const char *str)
 
     /* optimizations */
     priv = GET_PRIVATE(acc);
-    if (safe_strcmp(str, priv->description) == 0)
+    if (g_strcmp0(str, priv->description) == 0)
         return;
 
     xaccAccountBeginEdit(acc);
@@ -2635,7 +2635,7 @@ gnc_account_lookup_by_name (const Account *parent, const char * name)
     {
         child = node->data;
         cpriv = GET_PRIVATE(child);
-        if (safe_strcmp(cpriv->accountName, name) == 0)
+        if (g_strcmp0(cpriv->accountName, name) == 0)
             return child;
     }
 
@@ -2668,7 +2668,7 @@ gnc_account_lookup_by_code (const Account *parent, const char * code)
     {
         child = node->data;
         cpriv = GET_PRIVATE(child);
-        if (safe_strcmp(cpriv->accountCode, code) == 0)
+        if (g_strcmp0(cpriv->accountCode, code) == 0)
             return child;
     }
 
@@ -2707,7 +2707,7 @@ gnc_account_lookup_by_full_name_helper (const Account *parent,
         Account *account = node->data;
 
         priv = GET_PRIVATE(account);
-        if (safe_strcmp(priv->accountName, names[0]) == 0)
+        if (g_strcmp0(priv->accountName, names[0]) == 0)
         {
             /* We found an account.  If the next entry is NULL, there is
              * nothing left in the name, so just return the account. */
@@ -3825,7 +3825,7 @@ xaccAccountTypeEnumAsString(GNCAccountType type)
 #undef GNC_RETURN_ENUM_AS_STRING
 
 #define GNC_RETURN_ON_MATCH(x) \
-  if(safe_strcmp(#x, (str)) == 0) { *type = ACCT_TYPE_ ## x; return(TRUE); }
+  if(g_strcmp0(#x, (str)) == 0) { *type = ACCT_TYPE_ ## x; return(TRUE); }
 
 gboolean
 xaccAccountStringToType(const char* str, GNCAccountType *type)
@@ -4355,7 +4355,7 @@ finder_help_function(const Account *acc, const char *description,
         Split *lsplit = slp->data;
         Transaction *ltrans = xaccSplitGetParent(lsplit);
 
-        if (safe_strcmp (description, xaccTransGetDescription (ltrans)) == 0)
+        if (g_strcmp0 (description, xaccTransGetDescription (ltrans)) == 0)
         {
             if (split) *split = lsplit;
             if (trans) *trans = ltrans;

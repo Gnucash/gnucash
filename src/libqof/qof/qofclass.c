@@ -278,51 +278,51 @@ find_reference_param_cb(QofParam *param, gpointer user_data)
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_STRING))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_STRING))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_NUMERIC))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_NUMERIC))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_DATE))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_DATE))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_CHAR))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_CHAR))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_DEBCRED))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_DEBCRED))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_GUID))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_GUID))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_INT32))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_INT32))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_INT64))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_INT64))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_DOUBLE))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_DOUBLE))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_KVP))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_KVP))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_TYPE_BOOLEAN))
+    if (0 == g_strcmp0(param->param_type, QOF_TYPE_BOOLEAN))
     {
         return;
     }
-    if (0 == safe_strcmp(param->param_type, QOF_ID_BOOK))
+    if (0 == g_strcmp0(param->param_type, QOF_ID_BOOK))
     {
         return;
     }

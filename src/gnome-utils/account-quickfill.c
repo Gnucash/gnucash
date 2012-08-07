@@ -369,7 +369,7 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
         if (match)
         {
             match_str = gnc_quickfill_string (match);
-            if (match_str && (safe_strcmp(match_str, name) != 0))
+            if (match_str && (g_strcmp0(match_str, name) != 0))
             {
                 PINFO ("got match for %s", name);
                 break;

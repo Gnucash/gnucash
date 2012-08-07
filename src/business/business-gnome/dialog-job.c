@@ -130,7 +130,7 @@ gnc_job_verify_ok (JobWindow *jw)
 
     /* Check for valid name */
     res = gtk_entry_get_text (GTK_ENTRY (jw->name_entry));
-    if (safe_strcmp (res, "") == 0)
+    if (g_strcmp0 (res, "") == 0)
     {
         const char *message = _("The Job must be given a name.");
         gnc_error_dialog(jw->dialog, "%s", message);
@@ -140,7 +140,7 @@ gnc_job_verify_ok (JobWindow *jw)
     /* Check for owner */
     gnc_owner_get_owner (jw->cust_edit, &(jw->owner));
     res = gncOwnerGetName (&(jw->owner));
-    if (res == NULL || safe_strcmp (res, "") == 0)
+    if (res == NULL || g_strcmp0 (res, "") == 0)
     {
         const char *message = _("You must choose an owner for this job.");
         gnc_error_dialog(jw->dialog, "%s", message);
@@ -149,7 +149,7 @@ gnc_job_verify_ok (JobWindow *jw)
 
     /* Set a valid id if one was not created */
     res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
-    if (safe_strcmp (res, "") == 0)
+    if (g_strcmp0 (res, "") == 0)
     {
         string = gncJobNextID(jw->book);
         gtk_entry_set_text (GTK_ENTRY (jw->id_entry), string);

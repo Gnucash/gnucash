@@ -87,7 +87,7 @@ main(int argc, char **argv)
         }
 
         daout = gnc_resolve_file_path(dain);
-        do_test_args(safe_strcmp(daout, wantout) == 0,
+        do_test_args(g_strcmp0(daout, wantout) == 0,
                      "gnc_resolve_file_path",
                      __FILE__, __LINE__,
                      "%s (%s) vs %s", daout, dain, wantout);

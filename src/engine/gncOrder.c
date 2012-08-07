@@ -65,7 +65,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
-	if (!safe_strcmp (member, str)) return; \
+	if (!g_strcmp0 (member, str)) return; \
 	gncOrderBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
@@ -516,7 +516,7 @@ int gncOrderCompare (const GncOrder *a, const GncOrder *b)
     if (!a) return -1;
     if (!b) return 1;
 
-    compare = safe_strcmp (a->id, b->id);
+    compare = g_strcmp0 (a->id, b->id);
     if (compare) return compare;
 
     compare = timespec_cmp (&(a->opened), &(b->opened));

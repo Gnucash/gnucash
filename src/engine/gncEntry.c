@@ -191,7 +191,7 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 #define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
-	if (!safe_strcmp (member, str)) return; \
+	if (!g_strcmp0 (member, str)) return; \
 	gncEntryBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
@@ -1522,17 +1522,17 @@ int gncEntryCompare (const GncEntry *a, const GncEntry *b)
     compare = timespec_cmp (&(a->date_entered), &(b->date_entered));
     if (compare) return compare;
 
-    compare = safe_strcmp (a->desc, b->desc);
+    compare = g_strcmp0 (a->desc, b->desc);
     if (compare) return compare;
 
-    compare = safe_strcmp (a->action, b->action);
+    compare = g_strcmp0 (a->action, b->action);
     if (compare) return compare;
 
     return qof_instance_guid_compare(a, b);
 }
 
 #define CHECK_STRING(X, Y, FIELD) \
-    if (safe_strcmp((X)->FIELD, (Y)->FIELD) != 0) \
+    if (g_strcmp0((X)->FIELD, (Y)->FIELD) != 0) \
     { \
         PWARN("%s differ: %s vs %s", #FIELD, (X)->FIELD, (Y)->FIELD); \
         return FALSE; \

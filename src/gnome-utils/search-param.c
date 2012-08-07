@@ -279,7 +279,7 @@ gnc_search_param_type_match (GNCSearchParam *a, GNCSearchParam *b)
     a_priv = GNC_SEARCH_PARAM_GET_PRIVATE(a);
     b_priv = GNC_SEARCH_PARAM_GET_PRIVATE(b);
     if (a_priv->type == b_priv->type ||
-            !safe_strcmp (a_priv->type, b_priv->type))
+            !g_strcmp0 (a_priv->type, b_priv->type))
         return TRUE;
 
     return FALSE;

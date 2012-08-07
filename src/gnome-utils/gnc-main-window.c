@@ -1998,7 +1998,7 @@ main_window_update_page_color (GncPluginPage *page,
     color_string = g_strstrip(g_strdup(color_in));
 
     /* Optimization, if the color hasn't changed, don't update. */
-    if (*color_string == '\0' || 0 == safe_strcmp(color_string, gnc_plugin_page_get_page_color(page)))
+    if (*color_string == '\0' || 0 == g_strcmp0(color_string, gnc_plugin_page_get_page_color(page)))
     {
         g_free(color_string);
         LEAVE("empty string or color unchanged");

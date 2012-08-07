@@ -81,7 +81,7 @@ static void test_class (void)
              == (QofAccessFunc)test_core_param,
              "qof_class_get_parameter_getter");
 
-    do_test (safe_strcmp (qof_class_get_parameter_type (TEST_MODULE_NAME,
+    do_test (g_strcmp0 (qof_class_get_parameter_type (TEST_MODULE_NAME,
                           TEST_PARAM),
                           TEST_CORE) == 0, "qof_class_get_parameter_type");
 

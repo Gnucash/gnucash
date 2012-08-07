@@ -141,7 +141,7 @@ struct com_char_handler com_handlers[] =
 static void
 set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 {
-    if (safe_strcmp((char*) node->name, cmdty_fraction) == 0)
+    if (g_strcmp0((char*) node->name, cmdty_fraction) == 0)
     {
         gint64 val;
         char *string;
@@ -153,11 +153,11 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
         }
         xmlFree (string);
     }
-    else if (safe_strcmp((char*)node->name, cmdty_get_quotes) == 0)
+    else if (g_strcmp0((char*)node->name, cmdty_get_quotes) == 0)
     {
         gnc_commodity_set_quote_flag(com, TRUE);
     }
-    else if (safe_strcmp((char*)node->name, cmdty_quote_source) == 0)
+    else if (g_strcmp0((char*)node->name, cmdty_quote_source) == 0)
     {
         gnc_quote_source *source;
         char *string;
@@ -169,7 +169,7 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
         gnc_commodity_set_quote_source(com, source);
         xmlFree (string);
     }
-    else if (safe_strcmp((char*)node->name, cmdty_slots) == 0)
+    else if (g_strcmp0((char*)node->name, cmdty_slots) == 0)
     {
         /* We ignore the results here */
         dom_tree_to_kvp_frame_given(node,
@@ -181,7 +181,7 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 
         for (mark = com_handlers; mark->tag; mark++)
         {
-            if (safe_strcmp(mark->tag, (char*)node->name) == 0)
+            if (g_strcmp0(mark->tag, (char*)node->name) == 0)
             {
                 gchar* val = dom_tree_to_text(node);
                 g_strstrip(val);
@@ -224,9 +224,9 @@ gnc_commodity_find_currency (QofBook *book, xmlNodePtr tree)
 
     for (node = tree->xmlChildrenNode; node; node = node->next)
     {
-        if (safe_strcmp((char*) node->name, cmdty_namespace) == 0)
+        if (g_strcmp0((char*) node->name, cmdty_namespace) == 0)
             exchange = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
-        if (safe_strcmp((char*) node->name, cmdty_id) == 0)
+        if (g_strcmp0((char*) node->name, cmdty_id) == 0)
             mnemonic = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
     }
 

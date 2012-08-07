@@ -101,16 +101,16 @@ gnc_prices_set_changed (PriceEditDialog *pedit_dialog, gboolean changed)
 static int
 type_string_to_index (const char *type)
 {
-    if (safe_strcmp (type, "bid") == 0)
+    if (g_strcmp0 (type, "bid") == 0)
         return 0;
 
-    if (safe_strcmp (type, "ask") == 0)
+    if (g_strcmp0 (type, "ask") == 0)
         return 1;
 
-    if (safe_strcmp (type, "last") == 0)
+    if (g_strcmp0 (type, "last") == 0)
         return 2;
 
-    if (safe_strcmp (type, "nav") == 0)
+    if (g_strcmp0 (type, "nav") == 0)
         return 3;
 
     return 4;

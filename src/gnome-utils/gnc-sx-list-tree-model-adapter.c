@@ -377,7 +377,7 @@ _name_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer u
 
     a_caseless = g_utf8_casefold(xaccSchedXactionGetName(a_inst->sx), -1);
     b_caseless = g_utf8_casefold(xaccSchedXactionGetName(b_inst->sx), -1);
-    rtn = safe_strcmp(a_caseless, b_caseless);
+    rtn = g_strcmp0(a_caseless, b_caseless);
     g_free(a_caseless);
     g_free(b_caseless);
 

@@ -559,7 +559,7 @@ gnc_unregister_gui_component_by_data (const char *component_class,
         ComponentInfo *ci = node->data;
 
         if (component_class &&
-                safe_strcmp (component_class, ci->component_class) != 0)
+                g_strcmp0 (component_class, ci->component_class) != 0)
             continue;
 
         gnc_unregister_gui_component (ci->component_id);
@@ -791,7 +791,7 @@ gnc_close_gui_component_by_data (const char *component_class,
         ComponentInfo *ci = node->data;
 
         if (component_class &&
-                safe_strcmp (component_class, ci->component_class) != 0)
+                g_strcmp0 (component_class, ci->component_class) != 0)
             continue;
 
         gnc_close_gui_component (ci->component_id);
@@ -848,7 +848,7 @@ gnc_find_gui_components (const char *component_class,
     {
         ComponentInfo *ci = node->data;
 
-        if (safe_strcmp (component_class, ci->component_class) != 0)
+        if (g_strcmp0 (component_class, ci->component_class) != 0)
             continue;
 
         if (find_handler && !find_handler (find_data, ci->user_data))
@@ -900,7 +900,7 @@ find_component_ids_by_class (const char *component_class)
         ComponentInfo *ci = node->data;
 
         if (component_class &&
-                safe_strcmp (component_class, ci->component_class) != 0)
+                g_strcmp0 (component_class, ci->component_class) != 0)
             continue;
 
         list = g_list_prepend (list, GINT_TO_POINTER (ci->component_id));

@@ -97,29 +97,6 @@ qof_utf8_strcasecmp (const gchar *da, const gchar *db)
 }
 
 gint
-safe_strcmp (const gchar * da, const gchar * db)
-{
-    if ((da) && (db))
-    {
-        if ((da) != (db))
-        {
-            gint retval = strcmp ((da), (db));
-            /* if strings differ, return */
-            if (retval) return retval;
-        }
-    }
-    else if ((!(da)) && (db))
-    {
-        return -1;
-    }
-    else if ((da) && (!(db)))
-    {
-        return +1;
-    }
-    return 0;
-}
-
-gint
 safe_strcasecmp (const gchar * da, const gchar * db)
 {
     if ((da) && (db))

@@ -1126,7 +1126,7 @@ gnc_table_enter_update (Table *table,
 
         can_edit = enter (cell, cursor_position, start_selection, end_selection);
 
-        if (safe_strcmp (old_value, cell->value) != 0)
+        if (g_strcmp0 (old_value, cell->value) != 0)
         {
             if (gnc_table_model_read_only (table->model))
             {
@@ -1186,7 +1186,7 @@ gnc_table_leave_update (Table *table, VirtualLocation virt_loc)
 
         leave (cell);
 
-        if (safe_strcmp (old_value, cell->value) != 0)
+        if (g_strcmp0 (old_value, cell->value) != 0)
         {
             if (gnc_table_model_read_only (table->model))
             {
@@ -1292,7 +1292,7 @@ gnc_table_modify_update (Table *table,
         gnc_basic_cell_set_value (cell, newval);
     }
 
-    if (safe_strcmp (old_value, cell->value) != 0)
+    if (g_strcmp0 (old_value, cell->value) != 0)
     {
         changed = TRUE;
         cell->changed = TRUE;
@@ -1362,7 +1362,7 @@ gnc_table_direct_update (Table *table,
     result = cell->direct_update (cell, cursor_position, start_selection,
                                   end_selection, gui_data);
 
-    if (safe_strcmp (old_value, cell->value) != 0)
+    if (g_strcmp0 (old_value, cell->value) != 0)
     {
         if (!gnc_table_confirm_change (table, virt_loc))
         {

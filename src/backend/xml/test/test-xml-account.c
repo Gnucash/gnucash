@@ -54,7 +54,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
 {
     xmlNodePtr mark;
 
-    while (safe_strcmp ((char*)node->name, "text") == 0)
+    while (g_strcmp0 ((char*)node->name, "text") == 0)
     {
         node = node->next;
     }
@@ -64,31 +64,31 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         return g_strdup("version wrong.  Not 2.0.0 or not there");
     }
 
-    if (!node->name || safe_strcmp((char*)node->name, "gnc:account"))
+    if (!node->name || g_strcmp0((char*)node->name, "gnc:account"))
     {
         return g_strdup("Name of toplevel node is bad");
     }
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if (safe_strcmp((char*)mark->name, "text") == 0)
+        if (g_strcmp0((char*)mark->name, "text") == 0)
         {
         }
-        else if (safe_strcmp((char*)mark->name, "act:name") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:name") == 0)
         {
             if (!equals_node_val_vs_string(mark, xaccAccountGetName(act)))
             {
                 return g_strdup("names differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:id") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:id") == 0)
         {
             if (!equals_node_val_vs_guid(mark, xaccAccountGetGUID(act)))
             {
                 return g_strdup("ids differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:type") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:type") == 0)
         {
             gchar *txt;
             int type;
@@ -114,7 +114,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 g_free(txt);
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:commodity") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:commodity") == 0)
         {
             /* This is somewhat BS, because if the commodity isn't a
                currency (and therefore built in) there isn't a
@@ -128,14 +128,14 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 return g_strdup("commodities differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:code") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:code") == 0)
         {
             if (!equals_node_val_vs_string(mark, xaccAccountGetCode(act)))
             {
                 return g_strdup("codes differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:description") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:description") == 0)
         {
             if (!equals_node_val_vs_string(
                         mark, xaccAccountGetDescription(act)))
@@ -143,7 +143,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 return g_strdup("descriptions differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:slots") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:slots") == 0)
         {
             /* xaccAccountDeleteOldData (act); */
 
@@ -152,7 +152,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 return g_strdup("slots differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:parent") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:parent") == 0)
         {
             if (!equals_node_val_vs_guid(
                         mark, xaccAccountGetGUID(gnc_account_get_parent(act))))
@@ -160,28 +160,28 @@ node_and_account_equal(xmlNodePtr node, Account *act)
                 return g_strdup("parent ids differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:commodity-scu") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:commodity-scu") == 0)
         {
             if (!equals_node_val_vs_int(mark, xaccAccountGetCommoditySCU(act)))
             {
                 return g_strdup("commodity scus differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:hidden") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:hidden") == 0)
         {
             if (!equals_node_val_vs_boolean(mark, xaccAccountGetHidden(act)))
             {
                 return g_strdup("Hidden flags differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:placeholder") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:placeholder") == 0)
         {
             if (!equals_node_val_vs_boolean(mark, xaccAccountGetPlaceholder(act)))
             {
                 return g_strdup("Placeholder flags differ");
             }
         }
-        else if (safe_strcmp((char*)mark->name, "act:security") == 0)
+        else if (g_strcmp0((char*)mark->name, "act:security") == 0)
         {
             return NULL; // This tag is ignored.
         }

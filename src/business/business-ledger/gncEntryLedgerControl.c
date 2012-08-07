@@ -364,7 +364,7 @@ gnc_find_entry_in_reg_by_desc(GncEntryLedger *reg, const char* desc)
             if (entry == last_entry)
                 continue;
 
-            if (safe_strcmp (desc, gncEntryGetDescription (entry)) == 0)
+            if (g_strcmp0 (desc, gncEntryGetDescription (entry)) == 0)
                 return entry;
 
             last_entry = entry;
@@ -378,7 +378,7 @@ static void set_value_combo_cell(BasicCell *cell, const char *new_value)
 {
     if (!cell || !new_value)
         return;
-    if (safe_strcmp (new_value, gnc_basic_cell_get_value (cell)) == 0)
+    if (g_strcmp0 (new_value, gnc_basic_cell_get_value (cell)) == 0)
         return;
 
     gnc_combo_cell_set_value ((ComboCell *) cell, new_value);

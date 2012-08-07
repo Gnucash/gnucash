@@ -55,7 +55,7 @@ dom_tree_to_guid(xmlNodePtr node)
         type = (char*)xmlNodeGetContent (node->properties->xmlAttrPropertyValue);
 
         /* handle new and guid the same for the moment */
-        if ((safe_strcmp("guid", type) == 0) || (safe_strcmp("new", type) == 0))
+        if ((g_strcmp0("guid", type) == 0) || (g_strcmp0("new", type) == 0))
         {
             GncGUID *gid = g_new(GncGUID, 1);
             char *guid_str;
@@ -338,7 +338,7 @@ dom_tree_to_list_kvp_value(xmlNodePtr node)
     {
         kvp_value *new_val;
 
-        if (safe_strcmp ((char*)mark->name, "text") == 0)
+        if (g_strcmp0 ((char*)mark->name, "text") == 0)
             continue;
 
         new_val = dom_tree_to_kvp_value(mark);
@@ -412,7 +412,7 @@ dom_tree_to_kvp_value(xmlNodePtr node)
 
     for (mark = val_converters; mark->tag; mark++)
     {
-        if (safe_strcmp(type, mark->tag) == 0)
+        if (g_strcmp0(type, mark->tag) == 0)
         {
             ret = (mark->converter)(node);
         }
@@ -438,7 +438,7 @@ dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame)
 
     for (mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if (safe_strcmp((char*)mark->name, "slot") == 0)
+        if (g_strcmp0((char*)mark->name, "slot") == 0)
         {
             xmlNodePtr mark2;
             gchar *key = NULL;
@@ -446,11 +446,11 @@ dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame)
 
             for (mark2 = mark->xmlChildrenNode; mark2; mark2 = mark2->next)
             {
-                if (safe_strcmp((char*)mark2->name, "slot:key") == 0)
+                if (g_strcmp0((char*)mark2->name, "slot:key") == 0)
                 {
                     key = dom_tree_to_text(mark2);
                 }
-                else if (safe_strcmp((char*)mark2->name, "slot:value") == 0)
+                else if (g_strcmp0((char*)mark2->name, "slot:value") == 0)
                 {
                     val = dom_tree_to_kvp_value(mark2);
                 }
@@ -597,7 +597,7 @@ dom_tree_to_timespec(xmlNodePtr node)
         case XML_TEXT_NODE:
             break;
         case XML_ELEMENT_NODE:
-            if (safe_strcmp("ts:date", (char*)n->name) == 0)
+            if (g_strcmp0("ts:date", (char*)n->name) == 0)
             {
                 if (seen_s)
                 {
@@ -620,7 +620,7 @@ dom_tree_to_timespec(xmlNodePtr node)
                     seen_s = TRUE;
                 }
             }
-            else if (safe_strcmp("ts:ns", (char*)n->name) == 0)
+            else if (g_strcmp0("ts:ns", (char*)n->name) == 0)
             {
                 if (seen_ns)
                 {
@@ -686,7 +686,7 @@ dom_tree_to_gdate(xmlNodePtr node)
         case XML_TEXT_NODE:
             break;
         case XML_ELEMENT_NODE:
-            if (safe_strcmp("gdate", (char*)n->name) == 0)
+            if (g_strcmp0("gdate", (char*)n->name) == 0)
             {
                 if (seen_date)
                 {
@@ -765,7 +765,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *book)
         case XML_TEXT_NODE:
             break;
         case XML_ELEMENT_NODE:
-            if (safe_strcmp("cmdty:space", (char*)n->name) == 0)
+            if (g_strcmp0("cmdty:space", (char*)n->name) == 0)
             {
                 if (space_str)
                 {
@@ -778,7 +778,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *book)
                     space_str = content;
                 }
             }
-            else if (safe_strcmp("cmdty:id", (char*)n->name) == 0)
+            else if (g_strcmp0("cmdty:id", (char*)n->name) == 0)
             {
                 if (id_str)
                 {
@@ -874,7 +874,7 @@ gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gpointer item,
 {
     for (; handlers->tag != NULL; handlers++)
     {
-        if (safe_strcmp(tag, handlers->tag) == 0)
+        if (g_strcmp0(tag, handlers->tag) == 0)
         {
             (handlers->handler)(node, item);
             handlers->gotten = TRUE;
@@ -904,7 +904,7 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
     for (achild = node->xmlChildrenNode; achild; achild = achild->next)
     {
         /* ignore stray text nodes */
-        if (safe_strcmp ((char*)achild->name, "text") == 0)
+        if (g_strcmp0 ((char*)achild->name, "text") == 0)
             continue;
 
         if (!gnc_xml_set_data((char*)achild->name, achild, data, handlers))

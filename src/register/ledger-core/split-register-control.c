@@ -256,8 +256,8 @@ gnc_split_register_check_account (SplitRegister *reg,
     name = cell->cell.value;
     DEBUG("Changed to %s", name ? name : "NULL");
     if (!name || *name == '\0' ||
-            safe_strcmp (name, SPLIT_TRANS_STR) == 0 ||
-            safe_strcmp (name, STOCK_SPLIT_STR) == 0)
+            g_strcmp0 (name, SPLIT_TRANS_STR) == 0 ||
+            g_strcmp0 (name, STOCK_SPLIT_STR) == 0)
         return TRUE;
 
     /* Create the account if necessary. Also checks for a placeholder. */
@@ -612,7 +612,7 @@ gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
                 continue;
         }
 
-        if (safe_strcmp (memo, xaccSplitGetMemo (split)) == 0)
+        if (g_strcmp0 (memo, xaccSplitGetMemo (split)) == 0)
             return split;
     }
 
@@ -709,7 +709,7 @@ gnc_find_trans_in_reg_by_desc (SplitRegister *reg, const char *description)
             if (trans == last_trans)
                 continue;
 
-            if (safe_strcmp (description, xaccTransGetDescription (trans)) == 0)
+            if (g_strcmp0 (description, xaccTransGetDescription (trans)) == 0)
                 return trans;
 
             last_trans = trans;
@@ -1048,8 +1048,8 @@ gnc_split_register_check_stock_action (SplitRegister *reg,
     if ((name == NULL) || (*name == '\0'))
         return;
 
-    buy  = safe_strcmp (name, ACTION_BUY_STR)  == 0;
-    sell = safe_strcmp (name, ACTION_SELL_STR) == 0;
+    buy  = g_strcmp0 (name, ACTION_BUY_STR)  == 0;
+    sell = g_strcmp0 (name, ACTION_SELL_STR) == 0;
     if (!buy && !sell)
         return;
 
@@ -1093,8 +1093,8 @@ gnc_split_register_check_stock_shares (SplitRegister *reg,
         return;
     name = ((ComboCell *)cell)->cell.value;
 
-    if (!safe_strcmp(name, "") ||
-            !safe_strcmp(name, buy ? ACTION_SELL_STR : ACTION_BUY_STR))
+    if (!g_strcmp0(name, "") ||
+            !g_strcmp0(name, buy ? ACTION_SELL_STR : ACTION_BUY_STR))
     {
         gnc_combo_cell_set_value((ComboCell *)cell,
                                  buy ? ACTION_BUY_STR : ACTION_SELL_STR);
@@ -1146,7 +1146,7 @@ gnc_split_register_get_account_always (SplitRegister *reg,
 
     /* If 'name' is "-- Split Transaction --" then return NULL or the
        register acct */
-    if (!safe_strcmp (name, SPLIT_TRANS_STR))
+    if (!g_strcmp0 (name, SPLIT_TRANS_STR))
     {
         return NULL;
     }

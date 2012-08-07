@@ -1757,7 +1757,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
 
     /* Now have the account. */
     account_name = gnc_get_account_name_for_register (account);
-    if (safe_strcmp(account_name, gnc_basic_cell_get_value(bcell)))
+    if (g_strcmp0(account_name, gnc_basic_cell_get_value(bcell)))
     {
         /* The name has changed. Update the cell. */
         gnc_combo_cell_set_value (cell, account_name);

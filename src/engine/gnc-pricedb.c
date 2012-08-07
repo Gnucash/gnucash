@@ -433,7 +433,7 @@ void
 gnc_price_set_source(GNCPrice *p, const char *s)
 {
     if (!p) return;
-    if (safe_strcmp(p->source, s) != 0)
+    if (g_strcmp0(p->source, s) != 0)
     {
         char *tmp;
 
@@ -450,7 +450,7 @@ void
 gnc_price_set_typestr(GNCPrice *p, const char* type)
 {
     if (!p) return;
-    if (safe_strcmp(p->type, type) != 0)
+    if (g_strcmp0(p->type, type) != 0)
     {
         gchar *tmp;
 
@@ -564,11 +564,11 @@ gnc_price_equal (const GNCPrice *p1, const GNCPrice *p2)
     if (!timespec_equal (&ts1, &ts2))
         return FALSE;
 
-    if (safe_strcmp (gnc_price_get_source (p1),
+    if (g_strcmp0 (gnc_price_get_source (p1),
                      gnc_price_get_source (p2)) != 0)
         return FALSE;
 
-    if (safe_strcmp (gnc_price_get_typestr (p1),
+    if (g_strcmp0 (gnc_price_get_typestr (p1),
                      gnc_price_get_typestr (p2)) != 0)
         return FALSE;
 
@@ -1190,7 +1190,7 @@ check_one_price_date (GNCPrice *price, gpointer user_data)
     if (!data->delete_user)
     {
         source = gnc_price_get_source (price);
-        if (safe_strcmp(source, "Finance::Quote") != 0)
+        if (g_strcmp0(source, "Finance::Quote") != 0)
         {
             LEAVE("Not an automatic quote");
             return TRUE;
@@ -2314,12 +2314,12 @@ compare_kvpairs_by_commodity_key(gconstpointer a, gconstpointer b)
     ca = (gnc_commodity *) kvpa->key;
     cb = (gnc_commodity *) kvpb->key;
 
-    cmp_result = safe_strcmp(gnc_commodity_get_namespace(ca),
+    cmp_result = g_strcmp0(gnc_commodity_get_namespace(ca),
                              gnc_commodity_get_namespace(cb));
 
     if (cmp_result != 0) return cmp_result;
 
-    return safe_strcmp(gnc_commodity_get_mnemonic(ca),
+    return g_strcmp0(gnc_commodity_get_mnemonic(ca),
                        gnc_commodity_get_mnemonic(cb));
 }
 

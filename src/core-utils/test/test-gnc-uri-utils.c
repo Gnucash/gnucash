@@ -214,11 +214,11 @@ main(int argc, char **argv)
 
         gnc_uri_get_components( strs[i].uri, &tprotocol, &thostname,
                                 &tport, &tusername, &tpassword, &tpath );
-        testresult = ( safe_strcmp ( tprotocol, strs[i].protocol ) == 0 ) &
-                     ( safe_strcmp ( thostname, strs[i].hostname ) == 0 ) &
-                     ( safe_strcmp ( tusername, strs[i].username ) == 0 ) &
-                     ( safe_strcmp ( tpassword, strs[i].password ) == 0 ) &
-                     ( safe_strcmp ( tpath, strs[i].path ) == 0 ) &
+        testresult = ( g_strcmp0 ( tprotocol, strs[i].protocol ) == 0 ) &
+                     ( g_strcmp0 ( thostname, strs[i].hostname ) == 0 ) &
+                     ( g_strcmp0 ( tusername, strs[i].username ) == 0 ) &
+                     ( g_strcmp0 ( tpassword, strs[i].password ) == 0 ) &
+                     ( g_strcmp0 ( tpath, strs[i].path ) == 0 ) &
                      ( tport == strs[i].port );
         do_test_args(testresult,
                      "gnc_uri_get_components",
@@ -243,7 +243,7 @@ main(int argc, char **argv)
         gboolean testresult;
 
         tprotocol = gnc_uri_get_protocol( strs[i].uri );
-        testresult = ( safe_strcmp ( tprotocol, strs[i].protocol ) == 0 );
+        testresult = ( g_strcmp0 ( tprotocol, strs[i].protocol ) == 0 );
         do_test_args(testresult,
                      "gnc_uri_get_protocol",
                      __FILE__, __LINE__,
@@ -261,7 +261,7 @@ main(int argc, char **argv)
         gboolean testresult;
 
         tpath = gnc_uri_get_path( strs[i].uri );
-        testresult = ( safe_strcmp ( tpath, strs[i].path ) == 0 );
+        testresult = ( g_strcmp0 ( tpath, strs[i].path ) == 0 );
         do_test_args(testresult,
                      "gnc_uri_get_path",
                      __FILE__, __LINE__,
@@ -280,7 +280,7 @@ main(int argc, char **argv)
 
         turi = gnc_uri_create_uri( strs[i].protocol, strs[i].hostname, strs[i].port,
                                    strs[i].username, strs[i].password, strs[i].path );
-        testresult = ( safe_strcmp ( turi, strs[i].created_uri ) == 0 );
+        testresult = ( g_strcmp0 ( turi, strs[i].created_uri ) == 0 );
         do_test_args(testresult,
                      "gnc_uri_create_uri",
                      __FILE__, __LINE__,
@@ -300,7 +300,7 @@ main(int argc, char **argv)
         gboolean testresult;
 
         turi = gnc_uri_normalize_uri( strs[i].uri, strs[i].want_password );
-        testresult = ( safe_strcmp ( turi, strs[i].normalized_uri ) == 0 );
+        testresult = ( g_strcmp0 ( turi, strs[i].normalized_uri ) == 0 );
         do_test_args(testresult,
                      "gnc_uri_normalize_uri",
                      __FILE__, __LINE__,

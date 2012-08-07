@@ -71,9 +71,9 @@ entity_set_reference_cb(QofInstance *ent, gpointer user_data)
         /* collect and choice handling */
         collect_setter = (void(*)(QofInstance*, QofCollection*))ref->param->param_setfcn;
         choice_setter = (void(*)(QofInstance*, QofInstance*))ref->param->param_setfcn;
-        if ((0 == safe_strcmp(ref->param->param_type, QOF_TYPE_COLLECT)) &&
+        if ((0 == g_strcmp0(ref->param->param_type, QOF_TYPE_COLLECT)) &&
                 (0 == guid_compare(qof_instance_get_guid(ent), ref->ent_guid)) &&
-                (0 == safe_strcmp(ref->type, ent->e_type)))
+                (0 == g_strcmp0(ref->type, ent->e_type)))
         {
             QofCollection *temp_col;
             char cm_sa[GUID_ENCODING_LENGTH + 1];
@@ -97,7 +97,7 @@ entity_set_reference_cb(QofInstance *ent, gpointer user_data)
                 qof_collection_destroy(temp_col);
             }
         }
-        if (0 == safe_strcmp(ref->param->param_type, QOF_TYPE_CHOICE))
+        if (0 == g_strcmp0(ref->param->param_type, QOF_TYPE_CHOICE))
         {
             coll = qof_book_get_collection(partial_book, ref->type);
             reference = qof_collection_lookup_entity(coll, ref->ref_guid);
@@ -164,7 +164,7 @@ qof_instance_get_reference_from(QofInstance *ent, const QofParam *param)
 {
     g_return_val_if_fail(param, NULL);
     param = qof_class_get_parameter(ent->e_type, param->param_name);
-    g_return_val_if_fail(0 != safe_strcmp(param->param_type, QOF_TYPE_COLLECT), NULL);
+    g_return_val_if_fail(0 != g_strcmp0(param->param_type, QOF_TYPE_COLLECT), NULL);
     return create_reference(ent, param);
 }
 

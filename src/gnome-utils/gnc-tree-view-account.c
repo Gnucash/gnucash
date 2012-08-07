@@ -506,13 +506,13 @@ tax_info_data_func (GtkTreeViewColumn *col,
                            GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO_SUB_ACCT,
                            &tax_info_sub_acct,
                            -1);
-        if ((safe_strcmp (tax_info_sub_acct, "") == 0) ||
+        if ((g_strcmp0 (tax_info_sub_acct, "") == 0) ||
                 (tax_info_sub_acct == NULL))
             g_object_set(renderer, "text",
                          (tax_info == NULL ? "" : tax_info), NULL);
         else
         {
-            if ((safe_strcmp (tax_info, "") == 0) ||
+            if ((g_strcmp0 (tax_info, "") == 0) ||
                     (tax_info == NULL))
                 g_object_set(renderer, "text",
                              (tax_info_sub_acct == NULL ? "" : tax_info_sub_acct),
@@ -2279,7 +2279,7 @@ gnc_tree_view_account_name_edited_cb(Account *account, GtkTreeViewColumn *col, c
 void
 gnc_tree_view_account_code_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_code)
 {
-    if (safe_strcmp(xaccAccountGetCode(account), new_code) == 0)
+    if (g_strcmp0(xaccAccountGetCode(account), new_code) == 0)
         return;
     xaccAccountSetCode(account, new_code);
 }
@@ -2287,7 +2287,7 @@ gnc_tree_view_account_code_edited_cb(Account *account, GtkTreeViewColumn *col, c
 void
 gnc_tree_view_account_description_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_desc)
 {
-    if (safe_strcmp(xaccAccountGetDescription(account), new_desc) == 0)
+    if (g_strcmp0(xaccAccountGetDescription(account), new_desc) == 0)
         return;
     xaccAccountSetDescription(account, new_desc);
 }
@@ -2295,7 +2295,7 @@ gnc_tree_view_account_description_edited_cb(Account *account, GtkTreeViewColumn 
 void
 gnc_tree_view_account_notes_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_notes)
 {
-    if (safe_strcmp(xaccAccountGetNotes(account), new_notes) == 0)
+    if (g_strcmp0(xaccAccountGetNotes(account), new_notes) == 0)
         return;
     xaccAccountSetNotes(account, new_notes);
 }

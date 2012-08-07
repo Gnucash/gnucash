@@ -446,13 +446,13 @@ csv_export_info_acct_type_cb (GtkWidget *w, gpointer user_data)
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
     {
         button_name = gtk_buildable_get_name(GTK_BUILDABLE(w));
-        if (safe_strcmp (button_name, "income_radio") == 0)
+        if (g_strcmp0 (button_name, "income_radio") == 0)
             info->csva.account_type = ACCT_TYPE_INCOME;
-        else if (safe_strcmp (button_name, "expense_radio") == 0)
+        else if (g_strcmp0 (button_name, "expense_radio") == 0)
             info->csva.account_type = ACCT_TYPE_EXPENSE;
-        else if (safe_strcmp (button_name, "asset_radio") == 0)
+        else if (g_strcmp0 (button_name, "asset_radio") == 0)
             info->csva.account_type = ACCT_TYPE_ASSET;
-        else if (safe_strcmp (button_name, "liab_eq_radio") == 0)
+        else if (g_strcmp0 (button_name, "liab_eq_radio") == 0)
             info->csva.account_type = ACCT_TYPE_LIABILITY;
         else
             return;

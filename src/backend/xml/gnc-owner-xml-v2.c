@@ -105,13 +105,13 @@ owner_type_handler (xmlNodePtr node, gpointer owner_pdata)
     char* txt = dom_tree_to_text(node);
     g_return_val_if_fail(txt, FALSE);
 
-    if (!safe_strcmp (txt, GNC_ID_CUSTOMER))
+    if (!g_strcmp0 (txt, GNC_ID_CUSTOMER))
         gncOwnerInitCustomer (pdata->owner, NULL);
-    else if (!safe_strcmp (txt, GNC_ID_JOB))
+    else if (!g_strcmp0 (txt, GNC_ID_JOB))
         gncOwnerInitJob (pdata->owner, NULL);
-    else if (!safe_strcmp (txt, GNC_ID_VENDOR))
+    else if (!g_strcmp0 (txt, GNC_ID_VENDOR))
         gncOwnerInitVendor (pdata->owner, NULL);
-    else if (!safe_strcmp (txt, GNC_ID_EMPLOYEE))
+    else if (!g_strcmp0 (txt, GNC_ID_EMPLOYEE))
         gncOwnerInitEmployee (pdata->owner, NULL);
     else
     {

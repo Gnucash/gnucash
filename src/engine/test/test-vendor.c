@@ -120,7 +120,7 @@ test_vendor (void)
         gncVendorSetName (vendor, str);
         res = qof_object_printable (GNC_ID_VENDOR, vendor);
         do_test (res != NULL, "Printable NULL?");
-        do_test (safe_strcmp (str, res) == 0, "Printable equals");
+        do_test (g_strcmp0 (str, res) == 0, "Printable equals");
     }
 
     qof_book_destroy (book);
@@ -146,7 +146,7 @@ test_string_fcn (QofBook *book, const char *message,
      * without having circular dependencies.
      */
     // do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
-    do_test (safe_strcmp (get (vendor), str) == 0, message);
+    do_test (g_strcmp0 (get (vendor), str) == 0, message);
     gncVendorSetActive (vendor, FALSE);
     count++;
 }

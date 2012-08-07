@@ -87,7 +87,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
-	if (!safe_strcmp (member, str)) return; \
+	if (!g_strcmp0 (member, str)) return; \
 	gncInvoiceBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
@@ -1039,7 +1039,7 @@ qofInvoiceSetEntries(GncInvoice *invoice, QofCollection *entry_coll)
     {
         return;
     }
-    if (0 == safe_strcmp(qof_collection_get_type(entry_coll), GNC_ID_ENTRY))
+    if (0 == g_strcmp0(qof_collection_get_type(entry_coll), GNC_ID_ENTRY))
     {
         qof_collection_foreach(entry_coll, qofInvoiceEntryCB, invoice);
     }
@@ -1788,7 +1788,7 @@ int gncInvoiceCompare (const GncInvoice *a, const GncInvoice *b)
     if (!a) return -1;
     if (!b) return 1;
 
-    compare = safe_strcmp (a->id, b->id);
+    compare = g_strcmp0 (a->id, b->id);
     if (compare) return compare;
 
     compare = timespec_cmp (&(a->date_opened), &(b->date_opened));
@@ -1808,25 +1808,25 @@ gboolean gncInvoiceEqual(const GncInvoice *a, const GncInvoice *b)
     g_return_val_if_fail(GNC_IS_INVOICE(a), FALSE);
     g_return_val_if_fail(GNC_IS_INVOICE(b), FALSE);
 
-    if (safe_strcmp(a->id, b->id) != 0)
+    if (g_strcmp0(a->id, b->id) != 0)
     {
         PWARN("IDs differ: %s vs %s", a->id, b->id);
         return FALSE;
     }
 
-    if (safe_strcmp(a->notes, b->notes) != 0)
+    if (g_strcmp0(a->notes, b->notes) != 0)
     {
         PWARN("Notes differ: %s vs %s", a->notes, b->notes);
         return FALSE;
     }
 
-    if (safe_strcmp(a->billing_id, b->billing_id) != 0)
+    if (g_strcmp0(a->billing_id, b->billing_id) != 0)
     {
         PWARN("Billing IDs differ: %s vs %s", a->billing_id, b->billing_id);
         return FALSE;
     }
 
-    if (safe_strcmp(a->printname, b->printname) != 0)
+    if (g_strcmp0(a->printname, b->printname) != 0)
     {
         PWARN("Printnames differ: %s vs %s", a->printname, b->printname);
         return FALSE;

@@ -701,7 +701,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
                     conversion_ok = FALSE;
 
                 if ( (conversion_ok && (split_number == new_trans_number)) ||
-                        (safe_strcmp(new_trans_str, split_str) == 0) )
+                        (g_strcmp0(new_trans_str, split_str) == 0) )
                 {
                     /* An exact match of the Check number gives a +4 */
                     prob += 4;

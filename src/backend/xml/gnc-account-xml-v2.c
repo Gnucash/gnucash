@@ -426,7 +426,7 @@ account_lots_handler(xmlNodePtr node, gpointer act_pdata)
     {
         GNCLot *lot;
 
-        if (safe_strcmp("text", (char*) mark->name) == 0)
+        if (g_strcmp0("text", (char*) mark->name) == 0)
             continue;
 
         lot = dom_tree_to_lot(mark, pdata->book);

@@ -899,7 +899,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 
         text = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(pw->post_combo)))));
 
-        if (!text || safe_strcmp (text, "") == 0)
+        if (!text || g_strcmp0 (text, "") == 0)
         {
 
             /* The code below assumes there will only be one account type.

@@ -165,7 +165,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
 
     /* Check the ID */
     res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
-    if (safe_strcmp (res, "") == 0)
+    if (g_strcmp0 (res, "") == 0)
     {
         gnc_error_dialog (ow->dialog, "%s",
                           _("The Order must be given an ID."));
@@ -175,7 +175,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
     /* Check the Owner */
     gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
     res = gncOwnerGetName (&(ow->owner));
-    if (res == NULL || safe_strcmp (res, "") == 0)
+    if (res == NULL || g_strcmp0 (res, "") == 0)
     {
         gnc_error_dialog (ow->dialog, "%s",
                           _("You need to supply Billing Information."));

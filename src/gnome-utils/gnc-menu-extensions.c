@@ -87,15 +87,15 @@ gnc_extension_type (SCM extension, GtkUIManagerItemType *type)
         return FALSE;
     }
 
-    if (safe_strcmp(string, "menu-item") == 0)
+    if (g_strcmp0(string, "menu-item") == 0)
     {
         *type = GTK_UI_MANAGER_MENUITEM;
     }
-    else if (safe_strcmp(string, "menu") == 0)
+    else if (g_strcmp0(string, "menu") == 0)
     {
         *type = GTK_UI_MANAGER_MENU;
     }
-    else if (safe_strcmp(string, "separator") == 0)
+    else if (g_strcmp0(string, "separator") == 0)
     {
         *type = GTK_UI_MANAGER_SEPARATOR;
     }

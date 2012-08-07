@@ -1570,7 +1570,7 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
         return;
     type = entity->e_type;
 
-    if (safe_strcmp(type, GNC_ID_SPLIT) == 0) {
+    if (g_strcmp0(type, GNC_ID_SPLIT) == 0) {
         /* Get the split.*/
         split = (Split *) entity;
 
@@ -1581,7 +1581,7 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
         default:
             DEBUG("ignored event for %p (%s)", split, name);
         }
-    } else if (safe_strcmp(type, GNC_ID_TRANS) == 0) {
+    } else if (g_strcmp0(type, GNC_ID_TRANS) == 0) {
         /* Get the trans.*/
         trans = (Transaction *) entity;
 
@@ -1607,7 +1607,7 @@ gnc_tree_model_split_reg_event_handler (QofInstance *entity,
         default:
             DEBUG("ignored event for %p (%s)", trans, name);
         }
-    } else if (safe_strcmp(type, GNC_ID_ACCOUNT) == 0) {
+    } else if (g_strcmp0(type, GNC_ID_ACCOUNT) == 0) {
         switch (event_type) {
             Account *acc;
         case GNC_EVENT_ITEM_ADDED:

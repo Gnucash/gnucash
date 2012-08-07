@@ -564,14 +564,14 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     }
 
     /* If the same book, since these strings are cached we can just use pointer equality */
-    if ((same_book && sa->memo != sb->memo) || (!same_book && safe_strcmp(sa->memo, sb->memo) != 0))
+    if ((same_book && sa->memo != sb->memo) || (!same_book && g_strcmp0(sa->memo, sb->memo) != 0))
     {
         PWARN ("memos differ: (%p)%s vs (%p)%s",
                sa->memo, sa->memo, sb->memo, sb->memo);
         return FALSE;
     }
 
-    if ((same_book && sa->action != sb->action) || (!same_book && safe_strcmp(sa->action, sb->action) != 0))
+    if ((same_book && sa->action != sb->action) || (!same_book && g_strcmp0(sa->action, sb->action) != 0))
     {
         PWARN ("actions differ: %s vs %s", sa->action, sb->action);
         return FALSE;
@@ -1456,7 +1456,7 @@ xaccSplitCompareAccountCodes(const Split *sa, const Split *sb)
     aa = sa->acc;
     ab = sb->acc;
 
-    return safe_strcmp(xaccAccountGetCode(aa), xaccAccountGetCode(ab));
+    return g_strcmp0(xaccAccountGetCode(aa), xaccAccountGetCode(ab));
 }
 
 int
@@ -1474,7 +1474,7 @@ xaccSplitCompareOtherAccountFullNames(const Split *sa, const Split *sb)
 
     ca = xaccSplitGetCorrAccountFullName(sa);
     cb = xaccSplitGetCorrAccountFullName(sb);
-    retval = safe_strcmp(ca, cb);
+    retval = g_strcmp0(ca, cb);
     g_free(ca);
     g_free(cb);
     return retval;
@@ -1490,7 +1490,7 @@ xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb)
 
     ca = xaccSplitGetCorrAccountCode(sa);
     cb = xaccSplitGetCorrAccountCode(sb);
-    return safe_strcmp(ca, cb);
+    return g_strcmp0(ca, cb);
 }
 
 static void

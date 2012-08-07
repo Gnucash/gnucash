@@ -369,7 +369,7 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
     /* Check the Owner */
     gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
     res = gncOwnerGetName (&(iw->owner));
-    if (res == NULL || safe_strcmp (res, "") == 0)
+    if (res == NULL || g_strcmp0 (res, "") == 0)
     {
         gnc_error_dialog (iw_get_window(iw), "%s",
                           /* Translators: In this context,
@@ -383,7 +383,7 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
 
     /* Check the ID; set one if necessary */
     res = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
-    if (safe_strcmp (res, "") == 0)
+    if (g_strcmp0 (res, "") == 0)
     {
         /* Invoices and bills have separate counters.
            Therefore we pass the GncOwer to gncInvoiceNextID

@@ -957,7 +957,7 @@ convert_query_term_to_sql( const GncSqlBackend* be, const gchar* fieldName, QofQ
     pPredData = qof_query_term_get_pred_data( pTerm );
     isInverted = qof_query_term_is_inverted( pTerm );
 
-    if ( safe_strcmp( pPredData->type_name, QOF_TYPE_GUID ) == 0 )
+    if ( g_strcmp0( pPredData->type_name, QOF_TYPE_GUID ) == 0 )
     {
         query_guid_t guid_data = (query_guid_t)pPredData;
         GList* guid_entry;
@@ -992,7 +992,7 @@ convert_query_term_to_sql( const GncSqlBackend* be, const gchar* fieldName, QofQ
         g_string_append( sql, "))" );
 
     }
-    else if ( safe_strcmp( pPredData->type_name, QOF_TYPE_CHAR ) == 0 )
+    else if ( g_strcmp0( pPredData->type_name, QOF_TYPE_CHAR ) == 0 )
     {
         query_char_t char_data = (query_char_t)pPredData;
         int i;
@@ -1024,7 +1024,7 @@ convert_query_term_to_sql( const GncSqlBackend* be, const gchar* fieldName, QofQ
         }
 
     }
-    else if ( safe_strcmp( pPredData->type_name, QOF_TYPE_STRING ) == 0 )
+    else if ( g_strcmp0( pPredData->type_name, QOF_TYPE_STRING ) == 0 )
     {
         query_string_t string_data = (query_string_t)pPredData;
         sqlEscape* escape = sqlEscape_new();
@@ -1077,7 +1077,7 @@ convert_query_term_to_sql( const GncSqlBackend* be, const gchar* fieldName, QofQ
             g_string_append_printf( sql, "%f", d );
 
         }
-        else if ( safe_strcmp( pPredData->type_name, QOF_TYPE_DATE ) == 0 )
+        else if ( g_strcmp0( pPredData->type_name, QOF_TYPE_DATE ) == 0 )
         {
             query_date_t date_data = (query_date_t)pPredData;
             gchar* datebuf;

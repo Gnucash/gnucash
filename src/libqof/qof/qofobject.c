@@ -355,7 +355,7 @@ const QofObject * qof_object_lookup (QofIdTypeConst name)
     for (iter = object_modules; iter; iter = iter->next)
     {
         obj = iter->data;
-        if (!safe_strcmp (obj->e_type, name))
+        if (!g_strcmp0 (obj->e_type, name))
             return obj;
     }
     return NULL;

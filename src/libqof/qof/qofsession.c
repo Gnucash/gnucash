@@ -366,7 +366,7 @@ qof_instance_param_cb (QofParam *param, gpointer data)
     qecd = (QofInstanceCopyData*)data;
     g_return_if_fail (param != NULL);
     /* KVP doesn't need a set routine to be copied. */
-    if (0 == safe_strcmp (param->param_type, QOF_TYPE_KVP))
+    if (0 == g_strcmp0 (param->param_type, QOF_TYPE_KVP))
     {
         qecd->param_list = g_slist_prepend (qecd->param_list, param);
         return;
@@ -450,7 +450,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
     cm_param = (QofParam*) data;
     g_return_if_fail (cm_param != NULL);
     context->param = cm_param;
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_STRING) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_STRING) == 0)
     {
         cm_string = (gchar*)cm_param->param_getfcn (importEnt, cm_param);
         if (cm_string)
@@ -463,7 +463,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_DATE) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_DATE) == 0)
     {
         date_getter = (Timespec (*)(QofInstance*, QofParam*))cm_param->param_getfcn;
         cm_date = date_getter (importEnt, cm_param);
@@ -474,8 +474,8 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if ((safe_strcmp (cm_param->param_type, QOF_TYPE_NUMERIC) == 0)  ||
-            (safe_strcmp (cm_param->param_type, QOF_TYPE_DEBCRED) == 0))
+    if ((g_strcmp0 (cm_param->param_type, QOF_TYPE_NUMERIC) == 0)  ||
+            (g_strcmp0 (cm_param->param_type, QOF_TYPE_DEBCRED) == 0))
     {
         numeric_getter = (gnc_numeric (*)(QofInstance*, QofParam*))cm_param->param_getfcn;
         cm_numeric = numeric_getter (importEnt, cm_param);
@@ -486,7 +486,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_GUID) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_GUID) == 0)
     {
         cm_guid = (const GncGUID*)cm_param->param_getfcn (importEnt, cm_param);
         guid_setter = (void (*)(QofInstance*, const GncGUID*))cm_param->param_setfcn;
@@ -496,7 +496,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_INT32) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_INT32) == 0)
     {
         int32_getter = (gint32 (*)(QofInstance*, QofParam*)) cm_param->param_getfcn;
         cm_i32 = int32_getter (importEnt, cm_param);
@@ -507,7 +507,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_INT64) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_INT64) == 0)
     {
         int64_getter = (gint64 (*)(QofInstance*, QofParam*)) cm_param->param_getfcn;
         cm_i64 = int64_getter (importEnt, cm_param);
@@ -518,7 +518,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_DOUBLE) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_DOUBLE) == 0)
     {
         double_getter = (double (*)(QofInstance*, QofParam*)) cm_param->param_getfcn;
         cm_double = double_getter (importEnt, cm_param);
@@ -529,7 +529,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_BOOLEAN) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_BOOLEAN) == 0)
     {
         boolean_getter = (gboolean (*)(QofInstance*, QofParam*)) cm_param->param_getfcn;
         cm_boolean = boolean_getter (importEnt, cm_param);
@@ -540,7 +540,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_KVP) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_KVP) == 0)
     {
         cm_kvp = (KvpFrame*)cm_param->param_getfcn (importEnt, cm_param);
         kvp_frame_setter = (void (*)(QofInstance*, KvpFrame*))cm_param->param_setfcn;
@@ -558,7 +558,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_CHAR) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_CHAR) == 0)
     {
         cm_char = (gchar*)cm_param->param_getfcn (importEnt, cm_param);
         char_setter = (void (*)(QofInstance*, char*))cm_param->param_setfcn;
@@ -568,7 +568,7 @@ qof_instance_foreach_copy (gpointer data, gpointer user_data)
         }
         registered_type = TRUE;
     }
-    if (safe_strcmp (cm_param->param_type, QOF_TYPE_COLLECT) == 0)
+    if (g_strcmp0 (cm_param->param_type, QOF_TYPE_COLLECT) == 0)
     {
         cm_col = (QofCollection*)cm_param->param_getfcn (importEnt, cm_param);
         if (cm_col)
@@ -871,7 +871,7 @@ recurse_ent_cb (QofInstance *ent, gpointer user_data)
         {
             continue;
         }
-        if (0 == safe_strcmp (ref_param->param_type, QOF_TYPE_COLLECT))
+        if (0 == g_strcmp0 (ref_param->param_type, QOF_TYPE_COLLECT))
         {
             QofCollection *col;
 

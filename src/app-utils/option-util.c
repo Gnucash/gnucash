@@ -1319,7 +1319,7 @@ compare_sections(gconstpointer a, gconstpointer b)
     const GNCOptionSection *sa = a;
     const GNCOptionSection *sb = b;
 
-    return safe_strcmp(sa->section_name, sb->section_name);
+    return g_strcmp0(sa->section_name, sb->section_name);
 }
 
 static gint
@@ -1331,7 +1331,7 @@ compare_option_tags(gconstpointer a, gconstpointer b)
     char *tag_b = gnc_option_sort_tag(ob);
     gint result;
 
-    result = safe_strcmp(tag_a, tag_b);
+    result = g_strcmp0(tag_a, tag_b);
 
     if (tag_a != NULL)
         free(tag_a);
@@ -1545,7 +1545,7 @@ gnc_option_db_get_option_by_name(GNCOptionDB *odb, const char *section_name,
         option = option_node->data;
 
         node_name = gnc_option_name(option);
-        result = safe_strcmp(name, node_name);
+        result = g_strcmp0(name, node_name);
         free(node_name);
 
         if (result == 0)
@@ -2152,7 +2152,7 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
 
                 symbol = gnc_date_option_value_get_type (value);
 
-                if (safe_strcmp(symbol, "relative") == 0)
+                if (g_strcmp0(symbol, "relative") == 0)
                 {
                     SCM relative = gnc_date_option_value_get_relative (value);
 

@@ -85,15 +85,15 @@ gnc_configure_account_separator (void)
 
     string = gnc_gconf_get_string(GCONF_GENERAL, KEY_ACCOUNT_SEPARATOR, NULL);
 
-    if (!string || !*string || safe_strcmp(string, "colon") == 0)
+    if (!string || !*string || g_strcmp0(string, "colon") == 0)
         separator = ":";
-    else if (safe_strcmp(string, "slash") == 0)
+    else if (g_strcmp0(string, "slash") == 0)
         separator = "/";
-    else if (safe_strcmp(string, "backslash") == 0)
+    else if (g_strcmp0(string, "backslash") == 0)
         separator = "\\";
-    else if (safe_strcmp(string, "dash") == 0)
+    else if (g_strcmp0(string, "dash") == 0)
         separator = "-";
-    else if (safe_strcmp(string, "period") == 0)
+    else if (g_strcmp0(string, "period") == 0)
         separator = ".";
     else
         separator = string;
@@ -116,17 +116,17 @@ gnc_configure_reverse_balance (void)
 
     choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_REVERSED_ACCOUNTS, NULL);
 
-    if (safe_strcmp (choice, "none") == 0)
+    if (g_strcmp0 (choice, "none") == 0)
     {
     }
-    else if (safe_strcmp (choice, "income_expense") == 0)
+    else if (g_strcmp0 (choice, "income_expense") == 0)
     {
         reverse_type[ACCT_TYPE_INCOME]  = TRUE;
         reverse_type[ACCT_TYPE_EXPENSE] = TRUE;
     }
     else
     {
-        if (safe_strcmp (choice, "credit") != 0)
+        if (g_strcmp0 (choice, "credit") != 0)
             PERR("bad value '%s'", choice ? choice : "(null)");
         reverse_type[ACCT_TYPE_LIABILITY] = TRUE;
         reverse_type[ACCT_TYPE_PAYABLE]   = TRUE;
@@ -303,7 +303,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         gchar *return_string = NULL;
 
         tax_type = gnc_get_current_book_tax_type ();
-        if (tax_type == NULL || (safe_strcmp (tax_type, "") == 0))
+        if (tax_type == NULL || (g_strcmp0 (tax_type, "") == 0))
             return g_strdup (_("Tax entity type not specified"));
 
         atype = xaccAccountGetType (account);
@@ -463,7 +463,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                                                         (gint) copy_number);
                             if (tax_related)
                             {
-                                if (safe_strcmp (form, "") == 0)
+                                if (g_strcmp0 (form, "") == 0)
                                     return_string = g_strdup_printf ("%s", desc);
                                 else
                                     return_string = g_strdup_printf ("%s%s: %s",

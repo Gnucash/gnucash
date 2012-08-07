@@ -28,7 +28,7 @@
 
 #include "Account.h"
 #include "gnc-ui-util.h"
-#include "qof.h"	/* for safe_strcmp */
+#include "qof.h"	/* for g_strcmp0 */
 
 #include "datecell.h"
 #include "checkboxcell.h"
@@ -1092,9 +1092,9 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 
         value = gnc_table_layout_get_cell_value (ledger->table->layout,
                 ENTRY_PAYMENT_CELL);
-        if (!safe_strcmp (value, _("Cash")))
+        if (!g_strcmp0 (value, _("Cash")))
             gncEntrySetBillPayment (entry, GNC_PAYMENT_CASH);
-        else if (!safe_strcmp (value, _("Charge")))
+        else if (!g_strcmp0 (value, _("Charge")))
             gncEntrySetBillPayment (entry, GNC_PAYMENT_CARD);
         else
             g_warning ("Invalid Payment cell: %s", value ? value : "(null)");

@@ -76,7 +76,7 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     {
         const char *memo = xaccSplitGetMemo(spl);
 
-        if (memo && safe_strcmp(memo, "") != 0)
+        if (memo && g_strcmp0(memo, "") != 0)
         {
             xmlNewTextChild(ret, NULL, BAD_CAST "split:memo", (xmlChar*)memo);
         }
@@ -85,7 +85,7 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     {
         const char *action = xaccSplitGetAction(spl);
 
-        if (action && safe_strcmp(action, "") != 0)
+        if (action && g_strcmp0(action, "") != 0)
         {
             xmlNewTextChild(ret, NULL, BAD_CAST "split:action", (xmlChar*)action);
         }
@@ -163,7 +163,7 @@ gnc_transaction_dom_tree_create(Transaction *trn)
     xmlAddChild(ret, commodity_ref_to_dom_tree("trn:currency",
                 xaccTransGetCurrency(trn)));
 
-    if (xaccTransGetNum(trn) && (safe_strcmp(xaccTransGetNum(trn), "") != 0))
+    if (xaccTransGetNum(trn) && (g_strcmp0(xaccTransGetNum(trn), "") != 0))
     {
         xmlNewTextChild(ret, NULL, BAD_CAST "trn:num", (xmlChar*)xaccTransGetNum(trn));
     }
@@ -537,10 +537,10 @@ trn_splits_handler(xmlNodePtr node, gpointer trans_pdata)
     {
         Split *spl;
 
-        if (safe_strcmp("text", (char*)mark->name) == 0)
+        if (g_strcmp0("text", (char*)mark->name) == 0)
             continue;
 
-        if (safe_strcmp("trn:split", (char*)mark->name))
+        if (g_strcmp0("trn:split", (char*)mark->name))
         {
             return FALSE;
         }

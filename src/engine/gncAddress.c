@@ -392,7 +392,7 @@ gncAddressFree (GncAddress *addr)
 	char * tmp; \
 	\
 	if (member == str) return; \
-	if (!safe_strcmp (member, str)) return; \
+	if (!g_strcmp0 (member, str)) return; \
 	gncAddressBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
@@ -566,7 +566,7 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b)
     if (!a && b) return 1;
     if (a && !b) return -1;
 
-    return safe_strcmp (a->name, b->name);
+    return g_strcmp0 (a->name, b->name);
 }
 
 gboolean
@@ -578,42 +578,42 @@ gncAddressEqual(const GncAddress* a, const GncAddress* b)
     g_return_val_if_fail(GNC_IS_ADDRESS(a), FALSE);
     g_return_val_if_fail(GNC_IS_ADDRESS(b), FALSE);
 
-    if (safe_strcmp(a->name, b->name) != 0)
+    if (g_strcmp0(a->name, b->name) != 0)
     {
         PWARN("names differ: %s vs %s", a->name, b->name);
         return FALSE;
     }
-    if (safe_strcmp(a->addr1, b->addr1) != 0)
+    if (g_strcmp0(a->addr1, b->addr1) != 0)
     {
         PWARN("address lines 1 differ: %s vs %s", a->addr1, b->addr1);
         return FALSE;
     }
-    if (safe_strcmp(a->addr2, b->addr2) != 0)
+    if (g_strcmp0(a->addr2, b->addr2) != 0)
     {
         PWARN("address lines 2 differ: %s vs %s", a->addr2, b->addr1);
         return FALSE;
     }
-    if (safe_strcmp(a->addr3, b->addr3) != 0)
+    if (g_strcmp0(a->addr3, b->addr3) != 0)
     {
         PWARN("address lines 3 differ: %s vs %s", a->addr3, b->addr3);
         return FALSE;
     }
-    if (safe_strcmp(a->addr4, b->addr4) != 0)
+    if (g_strcmp0(a->addr4, b->addr4) != 0)
     {
         PWARN("address lines 4 differ: %s vs %s", a->addr4, b->addr4);
         return FALSE;
     }
-    if (safe_strcmp(a->phone, b->phone) != 0)
+    if (g_strcmp0(a->phone, b->phone) != 0)
     {
         PWARN("phone numbers differ: %s vs %s", a->phone, b->phone);
         return FALSE;
     }
-    if (safe_strcmp(a->fax, b->fax) != 0)
+    if (g_strcmp0(a->fax, b->fax) != 0)
     {
         PWARN("fax numbers differ: %s vs %s", a->fax, b->fax);
         return FALSE;
     }
-    if (safe_strcmp(a->email, b->email) != 0)
+    if (g_strcmp0(a->email, b->email) != 0)
     {
         PWARN("email addresses differ: %s vs %s", a->email, b->email);
         return FALSE;

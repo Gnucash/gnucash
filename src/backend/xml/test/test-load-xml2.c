@@ -90,7 +90,7 @@ test_load_file(const char *filename)
 
     remove_locks(filename);
 
-    ignore_lock = (safe_strcmp(g_getenv("SRCDIR"), ".") != 0);
+    ignore_lock = (g_strcmp0(g_getenv("SRCDIR"), ".") != 0);
     qof_session_begin(session, filename, ignore_lock, FALSE, TRUE);
 
     qof_session_load(session, NULL);

@@ -297,7 +297,7 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
      * OK, it might eliminate programming errors. */
 
     col_type = qof_collection_get_type(col);
-    if (safe_strcmp(col_type, type))
+    if (g_strcmp0(col_type, type))
     {
         PERR ("attempt to insert \"%s\" into \"%s\"", type, col_type);
         return;

@@ -267,22 +267,22 @@ qofOwnerSetEntity (GncOwner *owner, QofInstance *ent)
     {
         return;
     }
-    if (0 == safe_strcmp(ent->e_type, GNC_ID_CUSTOMER))
+    if (0 == g_strcmp0(ent->e_type, GNC_ID_CUSTOMER))
     {
         owner->type = GNC_OWNER_CUSTOMER;
         gncOwnerInitCustomer(owner, (GncCustomer*)ent);
     }
-    else if (0 == safe_strcmp(ent->e_type, GNC_ID_JOB))
+    else if (0 == g_strcmp0(ent->e_type, GNC_ID_JOB))
     {
         owner->type = GNC_OWNER_JOB;
         gncOwnerInitJob(owner, (GncJob*)ent);
     }
-    else if (0 == safe_strcmp(ent->e_type, GNC_ID_VENDOR))
+    else if (0 == g_strcmp0(ent->e_type, GNC_ID_VENDOR))
     {
         owner->type = GNC_OWNER_VENDOR;
         gncOwnerInitVendor(owner, (GncVendor*)ent);
     }
-    else if (0 == safe_strcmp(ent->e_type, GNC_ID_EMPLOYEE))
+    else if (0 == g_strcmp0(ent->e_type, GNC_ID_EMPLOYEE))
     {
         owner->type = GNC_OWNER_EMPLOYEE;
         gncOwnerInitEmployee(owner, (GncEmployee*)ent);
@@ -1166,25 +1166,25 @@ gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType
 {
     if (!book || !owner || !type || !guid) return FALSE;
 
-    if (0 == safe_strcmp(type, GNC_ID_CUSTOMER))
+    if (0 == g_strcmp0(type, GNC_ID_CUSTOMER))
     {
         GncCustomer *customer = gncCustomerLookup(book, guid);
         gncOwnerInitCustomer(owner, customer);
         return (NULL != customer);
     }
-    else if (0 == safe_strcmp(type, GNC_ID_JOB))
+    else if (0 == g_strcmp0(type, GNC_ID_JOB))
     {
         GncJob *job = gncJobLookup(book, guid);
         gncOwnerInitJob(owner, job);
         return (NULL != job);
     }
-    else if (0 == safe_strcmp(type, GNC_ID_VENDOR))
+    else if (0 == g_strcmp0(type, GNC_ID_VENDOR))
     {
         GncVendor *vendor = gncVendorLookup(book, guid);
         gncOwnerInitVendor(owner, vendor);
         return (NULL != vendor);
     }
-    else if (0 == safe_strcmp(type, GNC_ID_EMPLOYEE))
+    else if (0 == g_strcmp0(type, GNC_ID_EMPLOYEE))
     {
         GncEmployee *employee = gncEmployeeLookup(book, guid);
         gncOwnerInitEmployee(owner, employee);

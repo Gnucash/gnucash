@@ -462,7 +462,7 @@ gnc_option_create_date_widget (GNCOption *option)
     show_time = gnc_option_show_time(option);
     use24 = gnc_gconf_get_bool(GCONF_GENERAL, "24hour_time", FALSE);
 
-    if (safe_strcmp(type, "relative") != 0)
+    if (g_strcmp0(type, "relative") != 0)
     {
         ab_widget = gnc_date_edit_new(time(NULL), show_time, use24);
         entry = GNC_DATE_EDIT(ab_widget)->date_entry;
@@ -476,7 +476,7 @@ gnc_option_create_date_widget (GNCOption *option)
         }
     }
 
-    if (safe_strcmp(type, "absolute") != 0)
+    if (g_strcmp0(type, "absolute") != 0)
     {
         int i;
         num_values = gnc_option_num_permissible_values(option);
@@ -518,20 +518,20 @@ gnc_option_create_date_widget (GNCOption *option)
         }
     }
 
-    if (safe_strcmp(type, "absolute") == 0)
+    if (g_strcmp0(type, "absolute") == 0)
     {
         free(type);
         gnc_option_set_widget (option, ab_widget);
         return ab_widget;
     }
-    else if (safe_strcmp(type, "relative") == 0)
+    else if (g_strcmp0(type, "relative") == 0)
     {
         gnc_option_set_widget (option, rel_widget);
         free(type);
 
         return rel_widget;
     }
-    else if (safe_strcmp(type, "both") == 0)
+    else if (g_strcmp0(type, "both") == 0)
     {
         box = gtk_hbox_new(FALSE, 5);
 
@@ -1212,7 +1212,7 @@ gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
         page = gnc_options_dialog_append_page(propertybox, section);
 
         section_name = gnc_option_section_name(section);
-        if (safe_strcmp(section_name, default_section_name) == 0)
+        if (g_strcmp0(section_name, default_section_name) == 0)
             default_page = page;
     }
 
@@ -2259,17 +2259,17 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
         symbol_str = gnc_date_option_value_get_type (value);
         if (symbol_str)
         {
-            if (safe_strcmp(symbol_str, "relative") == 0)
+            if (g_strcmp0(symbol_str, "relative") == 0)
             {
                 SCM relative = gnc_date_option_value_get_relative (value);
 
                 index = gnc_option_permissible_value_index(option, relative);
-                if (safe_strcmp(date_option_type, "relative") == 0)
+                if (g_strcmp0(date_option_type, "relative") == 0)
                 {
                     /* GtkComboBox per-item tooltip changes needed below */
                     gnc_combott_set_active(GNC_COMBOTT(widget), index);
                 }
-                else if (safe_strcmp(date_option_type, "both") == 0)
+                else if (g_strcmp0(date_option_type, "both") == 0)
                 {
                     GList *widget_list;
                     GtkWidget *rel_date_widget;
@@ -2287,17 +2287,17 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
                     bad_value = TRUE;
                 }
             }
-            else if (safe_strcmp(symbol_str, "absolute") == 0)
+            else if (g_strcmp0(symbol_str, "absolute") == 0)
             {
                 Timespec ts;
 
                 ts = gnc_date_option_value_get_absolute (value);
 
-                if (safe_strcmp(date_option_type, "absolute") == 0)
+                if (g_strcmp0(date_option_type, "absolute") == 0)
                 {
                     gnc_date_edit_set_time(GNC_DATE_EDIT(widget), ts.tv_sec);
                 }
-                else if (safe_strcmp(date_option_type, "both") == 0)
+                else if (g_strcmp0(date_option_type, "both") == 0)
                 {
                     GList *widget_list;
                     GtkWidget *ab_widget;
@@ -2688,7 +2688,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
     SCM type, val, result = SCM_UNDEFINED;
     char *subtype = gnc_option_date_option_get_subtype(option);
 
-    if (safe_strcmp(subtype, "relative") == 0)
+    if (g_strcmp0(subtype, "relative") == 0)
     {
         /* GtkComboBox per-item tooltip changes needed below */
         index = gnc_combott_get_active(GNC_COMBOTT(widget));
@@ -2697,7 +2697,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
         val = gnc_option_permissible_value(option, index);
         result = scm_cons(type, val);
     }
-    else if (safe_strcmp(subtype, "absolute") == 0)
+    else if (g_strcmp0(subtype, "absolute") == 0)
     {
         Timespec ts;
 
@@ -2706,7 +2706,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
 
         result = scm_cons(scm_str2symbol("absolute"), gnc_timespec2timepair(ts));
     }
-    else if (safe_strcmp(subtype, "both") == 0)
+    else if (g_strcmp0(subtype, "both") == 0)
     {
         Timespec ts;
         int index;

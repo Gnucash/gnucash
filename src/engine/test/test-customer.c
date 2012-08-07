@@ -117,7 +117,7 @@ test_customer (void)
         gncCustomerCommitEdit(customer);
         res = qof_object_printable (GNC_ID_CUSTOMER, customer);
         do_test (res != NULL, "Printable NULL?");
-        do_test (safe_strcmp (str, res) == 0, "Printable equals");
+        do_test (g_strcmp0 (str, res) == 0, "Printable equals");
     }
 
     do_test (gncCustomerGetJoblist (customer, TRUE) == NULL, "joblist empty");
@@ -154,7 +154,7 @@ test_string_fcn (QofBook *book, const char *message,
      * without having circular dependencies.
      */
     // do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
-    do_test (safe_strcmp (get (customer), str) == 0, message);
+    do_test (g_strcmp0 (get (customer), str) == 0, message);
     gncCustomerSetActive (customer, FALSE);
     count++;
 }

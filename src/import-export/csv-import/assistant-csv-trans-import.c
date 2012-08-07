@@ -888,7 +888,7 @@ static void column_type_changed(GtkCellRenderer* renderer, gchar* path,
              * model 0, string 0, model 1, string 1, ..., model ncols, string ncols. */
             gtk_tree_model_get(store, &iter, 2 * i + 1, &contents, -1);
             /* If this column has the same string that the user selected ... */
-            if (!safe_strcmp(contents, new_text))
+            if (!g_strcmp0(contents, new_text))
             {
                 /* ... set this column to the "None" type. (We can't allow duplicate types.) */
                 gtk_list_store_set(GTK_LIST_STORE(store), &iter, 2 * i + 1,
@@ -991,7 +991,7 @@ gboolean preview_settings_valid (CsvImportTrans* info)
         for (type = 0; type < GNC_CSV_NUM_COL_TYPES; type++)
         {
             /* ... we find one that matches with what's in the column. */
-            if (!safe_strcmp(contents, _(gnc_csv_column_type_strs[type])))
+            if (!g_strcmp0(contents, _(gnc_csv_column_type_strs[type])))
             {
                 /* Set the column_types array appropriately and quit. */
                 column_types->data[i] = type;

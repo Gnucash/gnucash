@@ -308,7 +308,7 @@ static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
                                       const char * error_message)
 {
     const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
-    if (safe_strcmp (res, "") == 0)
+    if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
             gnc_error_dialog (dialog, "%s", error_message);
@@ -358,7 +358,7 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Set the customer id if one has not been chosen */
-    if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (cw->id_entry)), "") == 0)
+    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (cw->id_entry)), "") == 0)
     {
         string = gncCustomerNextID (cw->book);
         gtk_entry_set_text (GTK_ENTRY (cw->id_entry), string);
