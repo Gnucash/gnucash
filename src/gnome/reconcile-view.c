@@ -27,6 +27,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "gnc-date.h"
 #include "qof.h"
@@ -59,6 +60,7 @@ static gpointer gnc_reconcile_view_is_reconciled (gpointer item, gpointer user_d
 static void gnc_reconcile_view_line_toggled (GNCQueryView *qview, gpointer item, gpointer user_data);
 static void gnc_reconcile_view_double_click_entry (GNCQueryView *qview, gpointer item, gpointer user_data);
 static void gnc_reconcile_view_row_selected (GNCQueryView *qview, gpointer item, gpointer user_data);
+static gboolean gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 
 GType
@@ -129,6 +131,8 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
                       G_CALLBACK (gnc_reconcile_view_double_click_entry), view);
     g_signal_connect (G_OBJECT (qview), "row_selected",
                       G_CALLBACK (gnc_reconcile_view_row_selected), view);
+    g_signal_connect(G_OBJECT (qview), "key_press_event",
+                     G_CALLBACK(gnc_reconcile_view_key_press_cb), view);
 }
 
 GtkWidget *
@@ -441,6 +445,56 @@ gnc_reconcile_view_row_selected (GNCQueryView *qview,
 
     g_signal_emit(G_OBJECT(view),
                   reconcile_view_signals[LINE_SELECTED], 0, item);
+}
+
+
+static gboolean
+gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+                            gpointer user_data)
+{
+    GNCReconcileView  *view = GNC_RECONCILE_VIEW(user_data);
+    GNCQueryView      *qview = GNC_QUERY_VIEW(widget);
+    GtkTreeModel      *model;
+    GtkTreeIter        iter;
+    gpointer           entry, pointer;
+    gboolean           valid, toggle;
+
+    switch (event->keyval)
+    {
+    case GDK_space:
+        g_signal_stop_emission_by_name (widget, "key_press_event");
+
+        entry = gnc_query_view_get_selected_entry (qview);
+
+        model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
+        valid = gtk_tree_model_get_iter_first (model, &iter);
+
+        while (valid)
+        {
+            /* Walk through the list, reading each row, column 0
+               has a pointer to the required entry */
+            gtk_tree_model_get (model, &iter, 0, &pointer, -1);
+
+            if(pointer == entry)
+            {
+                /* Column 5 is the toggle column */
+                gtk_tree_model_get (model, &iter, 5, &toggle, -1);
+
+                if(toggle)
+                    gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 0, -1);
+                else
+                    gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 1, -1);
+            }
+            valid = gtk_tree_model_iter_next (model, &iter);
+        }
+        gnc_reconcile_view_toggle (view, entry);
+
+        return TRUE;
+        break;
+
+    default:
+        return FALSE;
+    }
 }
 
 
