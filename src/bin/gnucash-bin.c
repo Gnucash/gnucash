@@ -284,9 +284,11 @@ set_mac_locale()
 			    [locale objectForKey: NSLocaleCountryCode]];
 /* If we didn't get a valid current locale, the string will be just "_" */
     if ([locale_str isEqualToString: @"_"])
-	setlocale(LC_ALL, "en_US");
-    else
-	setlocale(LC_ALL, [locale_str UTF8String]);
+	locale_str = @"en_US";
+
+    setlocale(LC_ALL, [locale_str UTF8String]);
+    if (g_getenv("LANG") == NULL)
+	g_setenv("LANG", [locale_str UTF8String], TRUE);
 /* If the currency doesn't match the base locale, we need to find a locale that does match, because setlocale won't know what to do with just a currency identifier. */
     if (![[locale objectForKey: NSLocaleCurrencyCode] isEqualToString:
 	  [[[NSLocale alloc] initWithLocaleIdentifier: locale_str] objectForKey: NSLocaleCurrencyCode]]) {
