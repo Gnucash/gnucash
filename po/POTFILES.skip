@@ -30,11 +30,6 @@ src/app-utils/business-prefs.scm
 src/app-utils/date-utilities.scm
 src/app-utils/gnucash/app-utils.scm
 src/app-utils/prefs.scm
-src/gnome-utils/gnc-cell-renderer-date.c
-src/gnome-utils/gnc-tree-model-split-reg.c
-src/gnome-utils/gnc-tree-view-split-reg.c
-src/gnome/gnc-plugin-page-register2.c
-src/gnome/gnc-plugin-register2.c
 src/import-export/qif-import/qif-dialog-utils.scm
 src/import-export/qif-import/qif-file.scm
 src/import-export/qif-import/qif-import/qif-dialog-utils.scm
