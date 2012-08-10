@@ -7,6 +7,7 @@
 	<menuitem name="EditRenumberSubaccounts" action="EditRenumberSubaccountsAction"/>
         <separator name="EditSep2"/>
         <menuitem name="FileOpenAccount" action="FileOpenAccountAction"/>
+        <menuitem name="FileOpenAccount2" action="FileOpenAccount2Action"/>
         <menuitem name="FileOpenSubaccounts" action="FileOpenSubaccountsAction"/>
       </placeholder>
     </menu>
@@ -34,6 +35,7 @@
   <popup name="MainPopup" action="FakeToplevel">
     <placeholder name="PopupPlaceholder2">
       <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
+      <menuitem name="AccountOpenAccount2" action="FileOpenAccount2Action"/>
       <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
       <menuitem name="AccountEditAccount" action="EditEditAccountAction"/>
       <separator name="AccountSep1"/>
@@ -60,6 +62,7 @@
     <placeholder name="DefaultToolbarPlaceholder">
       <separator name="ToolbarSep2"/>
       <toolitem name="ToolbarOpenAccount" action="FileOpenAccountAction"/>
+      <toolitem name="ToolbarOpenAccount2" action="FileOpenAccount2Action"/>
       <toolitem name="ToolbarEditAccount" action="EditEditAccountAction"/>
       <separator name="ToolbarSep3"/>
       <toolitem name="ToolbarNewAccount" action="FileNewAccountAction"/>

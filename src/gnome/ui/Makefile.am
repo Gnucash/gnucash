@@ -5,6 +5,7 @@ ui_DATA = \
 	gnc-plugin-account-tree-ui.xml \
 	gnc-plugin-basic-commands-ui.xml \
 	gnc-plugin-page-account-tree-ui.xml \
+	gnc-plugin-page-account-tree2-ui.xml \
 	gnc-plugin-file-history-ui.xml \
 	gnc-plugin-register-ui.xml \
 	gnc-plugin-register2-ui.xml \

@@ -790,7 +790,7 @@ gnc_tree_model_split_reg_iter_next (GtkTreeModel *tree_model,
     GncTreeModelSplitReg *model = GNC_TREE_MODEL_SPLIT_REG (tree_model);
     Transaction *trans;
     SplitList *slist;
-    GList *tnode, *snode;
+    GList *tnode = NULL, *snode = NULL;
     gint flags = TROW1;
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_SPLIT_REG (model), FALSE);
@@ -853,7 +853,7 @@ gnc_tree_model_split_reg_iter_children (GtkTreeModel *tree_model,
        FALSE is returned and iter is set to be invalid. parent will remain a valid
        node after this function has been called. */
     GncTreeModelSplitReg *model = GNC_TREE_MODEL_SPLIT_REG (tree_model);
-    GList *tnode, *snode;
+    GList *tnode = NULL, *snode = NULL;
     gint flags = TROW1;
     Transaction *trans;
     SplitList *slist;

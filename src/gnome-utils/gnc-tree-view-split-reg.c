@@ -600,7 +600,7 @@ cdf(GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
     GtkTreePath *path;
     ViewCol viewcol;
     gboolean is_split, is_blank, is_trow1, is_trow2;
-    gboolean editable, expanded;
+    gboolean editable = FALSE, expanded = FALSE;
 
     gchar *cell_color;
     gint depth, *indices;

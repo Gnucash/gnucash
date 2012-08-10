@@ -80,6 +80,9 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define DELETE_DIALOG_SA_TRANS_MAS "sa_trans_mas"
 #define DELETE_DIALOG_OK_BUTTON    "deletebutton"
 
+/* This define will enable the New Register menu option, comment out to hide it */
+#define REG2ENABLE "yes"
+
 enum
 {
     ACCOUNT_SELECTED,
@@ -174,11 +177,13 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         N_("Open the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account)
     },
+#ifdef REG2ENABLE
     {
         "FileOpenAccount2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open New Register2 _Account"), NULL,
         N_("Open the New Register2 selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_account)
     },
+#endif
     {
         "FileOpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Subaccounts"), NULL,
         N_("Open the selected account and all its subaccounts"),
@@ -271,7 +276,9 @@ static const gchar *actions_requiring_account_rw[] =
 static const gchar *actions_requiring_account_always[] =
 {
     "FileOpenAccountAction",
+#ifdef REG2ENABLE
     "FileOpenAccount2Action",
+#endif
     "FileOpenSubaccountsAction",
     "ActionsLotsAction",
     NULL
@@ -299,7 +306,9 @@ static const gchar* readonly_inactive_actions[] =
 static action_toolbar_labels toolbar_labels[] =
 {
     { "FileOpenAccountAction", 	    N_("Open") },
+#ifdef REG2ENABLE
     { "FileOpenAccount2Action", 	    N_("Open2") },
+#endif
     { "EditEditAccountAction", 	    N_("Edit") },
     { "FileNewAccountAction",    	    N_("New") },
     { "EditDeleteAccountAction", 	    N_("Delete") },
@@ -394,7 +403,11 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     g_object_set(G_OBJECT(plugin_page),
                  "page-name",      _("Accounts"),
                  "page-uri",       "default:",
+#ifdef REG2ENABLE
+                 "ui-description", "gnc-plugin-page-account-tree2-ui.xml",
+#else
                  "ui-description", "gnc-plugin-page-account-tree-ui.xml",
+#endif
                  NULL);
     g_signal_connect (G_OBJECT (plugin_page), "selected",
                       G_CALLBACK (gnc_plugin_page_account_tree_selected), plugin_page);
@@ -785,6 +798,8 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 
+
+#ifdef REG2ENABLE
 /*#####################################################################*/
 /*                    New Register Common                              */
 static void
@@ -805,6 +820,7 @@ gppat_open2_account_common (GncPluginPageAccountTree *page,
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 /*######################################################################*/
+#endif
 
 static void
 gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
@@ -913,6 +929,8 @@ gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action,
     gppat_open_account_common (page, account, FALSE);
 }
 
+
+#ifdef REG2ENABLE
 /*#####################################################################*/
 /*          Register Firing - Single Account to start with             */
 static void
@@ -926,6 +944,7 @@ gnc_plugin_page_account_tree_cmd_open2_account (GtkAction *action,
     gppat_open2_account_common (page, account, FALSE);
 }
 /*#####################################################################*/
+#endif
 
 static void
 gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action,
