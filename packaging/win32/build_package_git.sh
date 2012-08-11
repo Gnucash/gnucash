@@ -4,6 +4,7 @@
 # This assumes we're in the "packaging" directory for the correct build.
 # It could be the packaging/win32 subdir of a tag checkout, or it could
 # be the top-level daily-build packaging directory.
+# Note: GIT_CMD below should have been set by a calling script.
 #
 
 set -o pipefail

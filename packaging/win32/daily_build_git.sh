@@ -18,7 +18,7 @@ qpushd "$(dirname $(unix_path "$0"))"
 # Variables
 _GIT_UDIR=`unix_path $GIT_DIR`
 set_env "$_GIT_UDIR/bin/git" GIT_CMD
-export $GIT_CMD
+export GIT_CMD
 
 $GIT_CMD pull
 ./build_package_git.sh
