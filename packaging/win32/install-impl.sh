@@ -268,7 +268,8 @@ function inst_git() {
     else
         smart_wget $GIT_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$GIT_DIR"
-        quiet "$_GIT_UDIR/bin/git" --help || die "git unavailable"
+        set_env "$_GIT_UDIR/bin/git" GIT_CMD
+        quiet "$GIT_CMD" --help || die "git unavailable"
     fi
     # Make sure GIT_CMD is available to subshells if it is set
     [ -n "$GIT_CMD" ] && export GIT_CMD
@@ -1457,14 +1458,20 @@ function git_up() {
     qpushd $_REPOS_UDIR
     if [ -x .git ]; then
         setup "git update in ${REPOS_DIR}"
-# FIXME I'm not sure what update sources should do for git.
-#       git update ? That would pull from upstream branches
-#                    but does nothing useful if the user checked out a local branches
-#                    Additionally this script is not available by default
-#       git pull ? I'm not sure if this doesn't have unwanted side effects
-#       So for now an update does nothing other than cloning the repository the
-#       first time it's called
-#        $GIT_CMD pull origin
+#       IMPORTANT: the update mechanism from git
+#                  has been kept deliberately simple.
+#
+#       It assumes you are working as a non-committer
+#       (see http://wiki.gnucash.org/wiki/Git for what that means)
+#       and will simply try to pull the current branch from
+#       the upstream repository.
+#       If you are a committer (and intend to commit from your Windows
+#       git clone) you should disable updates from the build scripts
+#       and manually update using the git-update script.
+#       FIXME the last part needs perl 5.8 and some config tweaks for
+#             perl to find git's Git.pm
+#             msys-dtk installed by default only has perl 5.6.
+        $GIT_CMD pull origin
     else
         setup git clone
         $GIT_CMD clone $REPOS_URL .
