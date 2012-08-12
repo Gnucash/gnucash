@@ -29,6 +29,8 @@ if [ -z "$BUILD_FROM_TARBALL" ]; then
     fi
 fi
 
+# only change this to "yes" if you are using install.sh from the outside the repository checkout
+set_default UPDATE_SOURCES noyes
 if [ "$BUILD_FROM_TARBALL" = "yes" ]; then
     UPDATE_SOURCES=no
     set_default GNUCASH_DIR "$(wpwd ..\\..)"
@@ -36,8 +38,6 @@ if [ "$BUILD_FROM_TARBALL" = "yes" ]; then
     # keep this pointing from BUILD_DIR to REPOS_DIR
     set_default REL_REPOS_DIR ..
 else
-    # change this to "no" if you are using install.sh from the same repository checkout
-    set_default UPDATE_SOURCES yes
     set_default GNUCASH_DIR $GLOBAL_DIR\\gnucash
     set_default REPOS_DIR $GNUCASH_DIR\\repos
     # keep this pointing from BUILD_DIR to REPOS_DIR
