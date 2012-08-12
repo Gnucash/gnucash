@@ -1775,7 +1775,7 @@ void
 loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
 {
     /* 3, here, does not include the Date column. */
-    const static int BASE_COLS = 3;
+    static const int BASE_COLS = 3;
     LoanAssistantData *ldd = user_data;
     GtkListStore *store;
     GtkCellRenderer *renderer;
