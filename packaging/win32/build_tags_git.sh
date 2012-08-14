@@ -24,7 +24,7 @@ pkgdir="`pwd`"
 # Variables
 _GIT_UDIR=`unix_path $GIT_DIR`
 set_env "$_GIT_UDIR/bin/git" GIT_CMD
-export $GIT_CMD
+export GIT_CMD
 
 $GIT_CMD pull
 . functions.sh
