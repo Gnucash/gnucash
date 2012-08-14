@@ -1,6 +1,10 @@
 These scripts try to download and install a Windows/mingw32 build
 environment for GnuCash on Windows.
 
+Note: The mingw homepage is http://www.mingw.org. You can read more
+      about mingw over there. The packages to download are all
+      on sourceforge however, so the direct links are given here.
+
 These scripts support two ways to build a Windows/mingw32 version of GnuCash:
 - directly on a Windows PC
 - via cross-compilation on Linux
@@ -12,9 +16,30 @@ Before you start with the automated build, you have to complete these
 steps manually. The directory variables are set in `defaults.sh' and optionally
 `custom.sh'.
 
-Note: The mingw homepage is http://www.mingw.org. You can read more
-      about mingw over there. The packages to download are all
-      on sourceforge however, so the direct links are given here.
+Note: when installing software as asked below, avoid using paths
+      with spaces. Some parts of the build system don't cope well
+      with spaces. So don't install in c:\Program Files. The build
+      system by default assumes c:\soft as base directory
+      called $GLOBAL_DIR from now on).
+      
+* Download and install git for windows from http://git-scm.com/downloads.
+  This will install some git related items in the Windows Explorer
+  context menus (you can access them via right-click in any directory)
+  
+* Choose a spot where you want to store a copy of the GnuCash repository.
+  The default path is $GLOBAL_DIR\gnucash\repos.
+  Reminder: avoid pathnames with spaces in it.
+
+* Create all directories in the path except the last one. For the example,
+  make sure $GLOBAL_DIR\gnucash exists
+  
+* Open a Windows explorer and go to $GLOBAL_DIR\gnucash (or your chosen location)
+
+* Right-click. In the popup select git bash. This will open a command prompt.
+
+* Enter: git clone git://github.com/Gnucash/gnucash.git repos
+  The last part should be what you chose the call the directory to store the
+  copy of the GnuCash repository.
 
 * Download MSYS from
   https://sourceforge.net/projects/mingw/files/MSYS%20Base%20System/msys-1.0.11/MSYS-1.0.11.exe/download
@@ -35,9 +60,16 @@ Note: The mingw homepage is http://www.mingw.org. You can read more
   Note: the version number may have changed when you try this. Use whatever version
         that is available
 
+* Via Windows Explorer go to <your-repos-dir>\packaging\win32
+
 * Look at defaults.sh and create a file named custom.sh to specify adapted directory
-  variables.  If you want verbose output of any script
-  step, add "set -x" to that file.
+  variables.
+  
+  - If you used a path to your GnuCash repository other than the default
+    $GLOBAL_DIR\gnucash\repos, you should at least specify REPOS_DIR in here.
+  - Also if you want the build system to reuse git you have just installed,
+    you can specify the path to git's installation location via GIT_DIR
+  - If you want verbose output of any script step, add "set -x" to that file.
 
 * Either, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
   install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3"; or skip building
