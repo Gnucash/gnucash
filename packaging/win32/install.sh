@@ -111,15 +111,6 @@ add_step inst_enchant
 add_step inst_webkit
 
 ##
-if [ "$UPDATE_SOURCES" = "yes" ]; then
-  if [ "$REPOS_TYPE" = "git" ]; then
-    add_step git_up
-  elif [ "$REPOS_TYPE" = "svn" ]; then
-    add_step svn_up
-  else
-    die "Unkown repos type $REPOS_TYPE. Sources can only be updated for git or svn type repos"
-  fi
-fi
 if [ "$WITH_CUTECASH" = "yes" ]; then
  add_step inst_cmake
  add_step inst_cutecash

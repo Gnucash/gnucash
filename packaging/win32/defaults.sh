@@ -29,10 +29,7 @@ if [ -z "$BUILD_FROM_TARBALL" ]; then
     fi
 fi
 
-# only change this to "yes" if you are using install.sh from the outside the repository checkout
-set_default UPDATE_SOURCES noyes
 if [ "$BUILD_FROM_TARBALL" = "yes" ]; then
-    UPDATE_SOURCES=no
     set_default GNUCASH_DIR "$(wpwd ..\\..)"
     set_default REPOS_DIR $GNUCASH_DIR
     # keep this pointing from BUILD_DIR to REPOS_DIR
@@ -43,7 +40,7 @@ else
     # keep this pointing from BUILD_DIR to REPOS_DIR
     set_default REL_REPOS_DIR ..\\repos
 
-    set_default REPOS_TYPE svn
+    set_default REPOS_TYPE "git"
     if [ "$REPOS_TYPE" = "git" ]; then
       set_default GIT_REV "trunk"
       set_default REPOS_URL "git://github.com/Gnucash/gnucash.git"

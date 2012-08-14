@@ -1453,46 +1453,6 @@ function inst_hh() {
     fi
 }
 
-function git_up() {
-    mkdir -p $_REPOS_UDIR
-    qpushd $_REPOS_UDIR
-    if [ -x .git ]; then
-        setup "git update in ${REPOS_DIR}"
-#       IMPORTANT: the update mechanism from git
-#                  has been kept deliberately simple.
-#
-#       It assumes you are working as a non-committer
-#       (see http://wiki.gnucash.org/wiki/Git for what that means)
-#       and will simply try to pull the current branch from
-#       the upstream repository.
-#       If you are a committer (and intend to commit from your Windows
-#       git clone) you should disable updates from the build scripts
-#       and manually update using the git-update script.
-#       FIXME the last part needs perl 5.8 and some config tweaks for
-#             perl to find git's Git.pm
-#             msys-dtk installed by default only has perl 5.6.
-        $GIT_CMD pull origin
-    else
-        setup git clone
-        $GIT_CMD clone $REPOS_URL .
-        $GIT_CMD checkout $GIT_REV .
-    fi
-    qpopd
-}
-
-function svn_up() {
-    mkdir -p $_REPOS_UDIR
-    qpushd $_REPOS_UDIR
-    if [ -x .svn ]; then
-        setup "svn update in ${REPOS_DIR}"
-        svn up -r ${SVN_REV}
-    else
-        setup svn co
-        svn co -r ${SVN_REV} $REPOS_URL .
-    fi
-    qpopd
-}
-
 function inst_cutecash() {
     setup Cutecash
     _BUILD_UDIR=`unix_path $CUTECASH_BUILD_DIR`
