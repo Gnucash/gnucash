@@ -64,7 +64,7 @@ typedef struct
     GtkTreeViewClass parent_class;
 
     void (*toggle_reconciled)  (GNCReconcileView *view, Split *split);
-    void (*line_selected)      (GNCReconcileView *view, Split *split);
+    void (*line_selected)      (GNCReconcileView *view, gpointer item);
     void (*double_click_split) (GNCReconcileView *view, Split *split);
 } GNCReconcileViewClass;
 
@@ -82,7 +82,11 @@ GtkWidget * gnc_reconcile_view_new (Account * account,
 
 gint gnc_reconcile_view_get_num_splits (GNCReconcileView *view);
 
+gint gnc_reconcile_view_num_selected (GNCReconcileView *view );
+
 Split * gnc_reconcile_view_get_current_split (GNCReconcileView *view);
+
+void gnc_reconcile_view_set_list (GNCReconcileView *view, gboolean reconcile);
 
 void gnc_reconcile_view_refresh (GNCReconcileView *view);
 

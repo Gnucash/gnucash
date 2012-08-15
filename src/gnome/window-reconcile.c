@@ -816,11 +816,11 @@ gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
     GtkAction *action;
 
     view = GNC_RECONCILE_VIEW(recnData->debit);
-    if (gnc_reconcile_view_get_current_split(view) != NULL)
+    if (gnc_reconcile_view_num_selected(view) == 1)
         sensitive = TRUE;
 
     view = GNC_RECONCILE_VIEW(recnData->credit);
-    if (gnc_reconcile_view_get_current_split(view) != NULL)
+    if (gnc_reconcile_view_num_selected(view) == 1)
         sensitive = TRUE;
 
     action = gtk_action_group_get_action (recnData->action_group,
@@ -829,11 +829,28 @@ gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
     action = gtk_action_group_get_action (recnData->action_group,
                                           "TransDeleteAction");
     gtk_action_set_sensitive(action, sensitive);
+
+    sensitive = FALSE;
+
+    view = GNC_RECONCILE_VIEW(recnData->debit);
+    if (gnc_reconcile_view_num_selected(view) > 0)
+        sensitive = TRUE;
+
+    view = GNC_RECONCILE_VIEW(recnData->credit);
+    if (gnc_reconcile_view_num_selected(view) > 0)
+        sensitive = TRUE;
+
+    action = gtk_action_group_get_action (recnData->action_group,
+                                          "TransRecAction");
+    gtk_action_set_sensitive(action, sensitive);
+    action = gtk_action_group_get_action (recnData->action_group,
+                                          "TransUnRecAction");
+    gtk_action_set_sensitive(action, sensitive);
 }
 
 
 static void
-gnc_reconcile_window_list_cb(GNCReconcileView *view, Split *split,
+gnc_reconcile_window_toggled_cb(GNCReconcileView *view, Split *split,
                              gpointer data)
 {
     RecnWindow *recnData = data;
@@ -843,7 +860,7 @@ gnc_reconcile_window_list_cb(GNCReconcileView *view, Split *split,
 
 
 static void
-gnc_reconcile_window_row_cb(GNCReconcileView *view, Split *split,
+gnc_reconcile_window_row_cb(GNCReconcileView *view, gpointer item,
                              gpointer data)
 {
     RecnWindow *recnData = data;
@@ -1090,7 +1107,7 @@ gnc_reconcile_window_create_view_box(Account *account,
     *list_save = view;
 
     g_signal_connect(view, "toggle_reconciled",
-                     G_CALLBACK(gnc_reconcile_window_list_cb),
+                     G_CALLBACK(gnc_reconcile_window_toggled_cb),
                      recnData);
     g_signal_connect(view, "line_selected",
                      G_CALLBACK(gnc_reconcile_window_row_cb),
@@ -1218,6 +1235,34 @@ gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
         statement_date = time(NULL); // default to 'now'
 
     gnc_split_reg_balancing_entry(gsr, account, statement_date, balancing_amount);
+}
+
+
+static void
+gnc_ui_reconcile_window_rec_cb(GtkButton *button, gpointer data)
+{
+    RecnWindow *recnData = data;
+    GNCReconcileView *debit, *credit;
+
+    debit  = GNC_RECONCILE_VIEW(recnData->debit);
+    credit = GNC_RECONCILE_VIEW(recnData->credit);
+
+    gnc_reconcile_view_set_list (debit, TRUE);
+    gnc_reconcile_view_set_list (credit, TRUE);
+}
+
+
+static void
+gnc_ui_reconcile_window_unrec_cb(GtkButton *button, gpointer data)
+{
+    RecnWindow *recnData = data;
+    GNCReconcileView *debit, *credit;
+
+    debit  = GNC_RECONCILE_VIEW(recnData->debit);
+    credit = GNC_RECONCILE_VIEW(recnData->credit);
+
+    gnc_reconcile_view_set_list (debit, FALSE);
+    gnc_reconcile_view_set_list (credit, FALSE);
 }
 
 
@@ -2179,7 +2224,7 @@ static GtkActionEntry recnWindow_actions [] =
         G_CALLBACK (gnc_ui_reconcile_window_change_cb)
     },
     {
-        "RecnFinishAction", GTK_STOCK_YES, N_("_Finish"), "<control>f",
+        "RecnFinishAction", GTK_STOCK_YES, N_("_Finish"), "<control>w",
         N_("Finish the reconciliation of this account"),
         G_CALLBACK(recnFinishCB)
     },
@@ -2239,6 +2284,16 @@ static GtkActionEntry recnWindow_actions [] =
         "TransDeleteAction", GTK_STOCK_DELETE, N_("_Delete"),  "<control>d",
         N_("Delete the selected transaction"),
         G_CALLBACK(gnc_ui_reconcile_window_delete_cb)
+    },
+    {
+        "TransRecAction", GTK_STOCK_APPLY, N_("_Reconcile Selection"), "<control>r",
+        N_("Reconcile the selected transactions"),
+        G_CALLBACK(gnc_ui_reconcile_window_rec_cb)
+    },
+    {
+        "TransUnRecAction", GTK_STOCK_CLEAR, N_("_Unreconcile Selection"), "<control>u",
+        N_("Unreconcile the selected transactions"),
+        G_CALLBACK(gnc_ui_reconcile_window_unrec_cb)
     },
 
     /* Help menu */

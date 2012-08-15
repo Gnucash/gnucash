@@ -87,7 +87,6 @@ gnc_reconcile_view_get_type (void)
                                   "GncReconcileView",
                                   &gnc_reconcile_view_info, 0);
     }
-
     return gnc_reconcile_view_type;
 }
 
@@ -122,7 +121,7 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
 
     /* Set the selection method */
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
-    gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
     /* Now set up the signals for the QueryView */
     g_signal_connect (G_OBJECT (qview), "column_toggled",
@@ -134,6 +133,7 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
     g_signal_connect(G_OBJECT (qview), "key_press_event",
                      G_CALLBACK(gnc_reconcile_view_key_press_cb), view);
 }
+
 
 GtkWidget *
 gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
@@ -420,7 +420,7 @@ gnc_reconcile_view_double_click_entry (GNCQueryView *qview,
                                        gpointer user_data)
 {
     GNCReconcileView *view;
-
+    /* item is the entry */
     g_return_if_fail (user_data);
     g_return_if_fail (GNC_IS_QUERY_VIEW (qview));
 
@@ -437,7 +437,7 @@ gnc_reconcile_view_row_selected (GNCQueryView *qview,
                                  gpointer user_data)
 {
     GNCReconcileView *view;
-
+    /* item is the number of selected entries */
     g_return_if_fail(user_data);
     g_return_if_fail(GNC_IS_QUERY_VIEW(qview));
 
@@ -445,6 +445,99 @@ gnc_reconcile_view_row_selected (GNCQueryView *qview,
 
     g_signal_emit(G_OBJECT(view),
                   reconcile_view_signals[LINE_SELECTED], 0, item);
+}
+
+
+void
+gnc_reconcile_view_set_list ( GNCReconcileView  *view, gboolean reconcile)
+{
+    GNCQueryView      *qview = GNC_QUERY_VIEW(view);
+    GtkTreeSelection  *selection;
+    GtkTreeModel      *model;
+    GtkTreeIter        iter;
+    gpointer           entry;
+    gboolean           toggled;
+    GList             *node;
+    GList             *list_of_rows;
+
+    model =  gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
+    list_of_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+
+    /* We get a list of TreePaths */
+    for(node = list_of_rows; node; node = node->next)
+    {
+        GtkTreeIter iter;
+        if(gtk_tree_model_get_iter(model, &iter, node->data))
+        {
+            /* now iter is a valid row iterator */
+            gtk_tree_model_get (model, &iter, 0, &entry, -1);
+            gtk_tree_model_get (model, &iter, 5, &toggled, -1);
+
+            if(reconcile)
+                gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 1, -1);
+            else
+                gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 0, -1);
+
+            if(reconcile != toggled)
+                gnc_reconcile_view_toggle (view, entry);
+        }
+        gtk_tree_path_free(node->data);
+    }
+    g_list_free(list_of_rows);
+}
+
+
+gint 
+gnc_reconcile_view_num_selected (GNCReconcileView  *view )
+{
+    GNCQueryView      *qview = GNC_QUERY_VIEW(view);
+    GtkTreeSelection  *selection;
+
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
+    return gtk_tree_selection_count_selected_rows (selection);
+}
+
+
+static gboolean
+gnc_reconcile_view_set_toggle (GNCReconcileView  *view)
+{
+    GNCQueryView      *qview = GNC_QUERY_VIEW(view);
+    GtkTreeSelection  *selection;
+    GtkTreeModel      *model;
+    GtkTreeIter        iter;
+    gboolean           toggled;
+    GList             *node;
+    GList             *list_of_rows;
+    gint               num_toggled = 0;
+    gint               num_selected = 0;
+
+    model =  gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
+    list_of_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    num_selected = gtk_tree_selection_count_selected_rows (selection);
+
+    /* We get a list of TreePaths */
+    for(node = list_of_rows; node; node = node->next)
+    {
+        GtkTreeIter iter;
+        toggled = FALSE;
+        if(gtk_tree_model_get_iter(model, &iter, node->data))
+        {
+            /* now iter is a valid row iterator */
+            gtk_tree_model_get (model, &iter, 5, &toggled, -1);
+
+            if(toggled)
+                num_toggled++;
+        }
+        gtk_tree_path_free(node->data);
+    }
+    g_list_free(list_of_rows);
+
+    if(num_toggled == num_selected)
+        return FALSE;
+    else
+        return TRUE;
 }
 
 
@@ -464,33 +557,44 @@ gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event,
     case GDK_space:
         g_signal_stop_emission_by_name (widget, "key_press_event");
 
-        entry = gnc_query_view_get_selected_entry (qview);
-
-        model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
-        valid = gtk_tree_model_get_iter_first (model, &iter);
-
-        while (valid)
+        if (gnc_reconcile_view_num_selected (view) == 1)
         {
-            /* Walk through the list, reading each row, column 0
-               has a pointer to the required entry */
-            gtk_tree_model_get (model, &iter, 0, &pointer, -1);
 
-            if(pointer == entry)
+            entry = gnc_query_view_get_selected_entry (qview);
+
+            model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
+            valid = gtk_tree_model_get_iter_first (model, &iter);
+
+            while (valid)
             {
-                /* Column 5 is the toggle column */
-                gtk_tree_model_get (model, &iter, 5, &toggle, -1);
+                /* Walk through the list, reading each row, column 0
+                   has a pointer to the required entry */
+                gtk_tree_model_get (model, &iter, 0, &pointer, -1);
 
-                if(toggle)
-                    gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 0, -1);
-                else
-                    gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 1, -1);
+                if(pointer == entry)
+                {
+                    /* Column 5 is the toggle column */
+                    gtk_tree_model_get (model, &iter, 5, &toggle, -1);
+
+                    if(toggle)
+                        gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 0, -1);
+                    else
+                        gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 1, -1);
+                }
+                valid = gtk_tree_model_iter_next (model, &iter);
             }
-            valid = gtk_tree_model_iter_next (model, &iter);
-        }
-        gnc_reconcile_view_toggle (view, entry);
+            gnc_reconcile_view_toggle (view, entry);
 
-        return TRUE;
-        break;
+            return TRUE;
+            break;
+        }
+        else
+        {
+            toggle = gnc_reconcile_view_set_toggle (view);
+            gnc_reconcile_view_set_list (view, toggle);
+            return TRUE;
+            break;
+        }
 
     default:
         return FALSE;
@@ -508,7 +612,6 @@ gnc_reconcile_view_finalize (GObject *object)
         g_hash_table_destroy (view->reconciled);
         view->reconciled = NULL;
     }
-
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
