@@ -20,20 +20,20 @@ function on_error() {
 
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
-tag="$1"
-
 . functions.sh
 . defaults.sh
 
+tag="${1:-$GIT_REV}"
+
 # Determine where to upload to
-# NOTE: this assumes GIT_REV to be either a tag or a branch, not a
+# NOTE: this assumes "tag" to be either a tag or a branch, not a
 #       commit hash. It will probably work with a hash as well,
 #       but will create a directory for the hash
-if [ -n "$($GIT_CMD tag -l $GIT_REV)" ]; then
+if [ -n "$($GIT_CMD tag -l $tag)" ]; then
   TARGET_DIR=releases
   LOG_TAG=$tag
 else
-  TARGET_DIR=${GIT_REV}
+  TARGET_DIR=$tag
   LOG_TAG=$TARGET_DIR
 fi
 
