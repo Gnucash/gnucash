@@ -474,10 +474,7 @@ gnc_reconcile_view_set_list ( GNCReconcileView  *view, gboolean reconcile)
             gtk_tree_model_get (model, &iter, 0, &entry, -1);
             gtk_tree_model_get (model, &iter, 5, &toggled, -1);
 
-            if(reconcile)
-                gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 1, -1);
-            else
-                gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 0, -1);
+            gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, reconcile, -1);
 
             if(reconcile != toggled)
                 gnc_reconcile_view_toggle (view, entry);
@@ -557,44 +554,10 @@ gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event,
     case GDK_space:
         g_signal_stop_emission_by_name (widget, "key_press_event");
 
-        if (gnc_reconcile_view_num_selected (view) == 1)
-        {
-
-            entry = gnc_query_view_get_selected_entry (qview);
-
-            model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
-            valid = gtk_tree_model_get_iter_first (model, &iter);
-
-            while (valid)
-            {
-                /* Walk through the list, reading each row, column 0
-                   has a pointer to the required entry */
-                gtk_tree_model_get (model, &iter, 0, &pointer, -1);
-
-                if(pointer == entry)
-                {
-                    /* Column 5 is the toggle column */
-                    gtk_tree_model_get (model, &iter, 5, &toggle, -1);
-
-                    if(toggle)
-                        gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 0, -1);
-                    else
-                        gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, 1, -1);
-                }
-                valid = gtk_tree_model_iter_next (model, &iter);
-            }
-            gnc_reconcile_view_toggle (view, entry);
-
-            return TRUE;
-            break;
-        }
-        else
-        {
-            toggle = gnc_reconcile_view_set_toggle (view);
-            gnc_reconcile_view_set_list (view, toggle);
-            return TRUE;
-            break;
-        }
+        toggle = gnc_reconcile_view_set_toggle (view);
+        gnc_reconcile_view_set_list (view, toggle);
+        return TRUE;
+        break;
 
     default:
         return FALSE;
