@@ -40,7 +40,7 @@ tagfile=tags_git
 if [ ! -f ${tagfile} ] ; then
   for one_tag in $($GIT_CMD tag)
   do
-    tag_hash=$($GIT_CMD rev_parse ${one_tag})
+    tag_hash=$($GIT_CMD rev-parse ${one_tag})
     echo ${one_tag}/${tag_hash} >> ${tagfile}
   done
 fi
@@ -49,7 +49,7 @@ fi
 rm -f ${tagfile}.new
 for one_tag in $($GIT_CMD tag)
 do
-	tag_hash=$($GIT_CMD rev_parse ${one_tag})
+	tag_hash=$($GIT_CMD rev-parse ${one_tag})
 echo ${one_tag}/${tag_hash} >> ${tagfile}.new
 done
 tags="`diff --suppress-common-lines ${tagfile} ${tagfile}.new | grep '^> ' | sed -e 's/^> //g'`"
