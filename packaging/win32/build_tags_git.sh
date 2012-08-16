@@ -91,6 +91,12 @@ for tag_rev in $tags ; do
   echo -n 'GLOBAL_DIR=c:\\soft\\gnucash-' >> ${w32pkg}/custom.sh
   echo "${tag}" >> ${w32pkg}/custom.sh
 
+  # UPDATE_SOURCES is obsolete, but preserved here to allow the
+  # current script to also build older tags, that may still
+  # use this parameter.
+  # No need to update the sources we just checked out
+  echo "UPDATE_SOURCES=no" >> ${w32pkg}/custom.sh
+
   # BUILD_FROM_TARBALL is special:
   # in install.sh place we check !=yes, in defaults.sh =yes, in dist.sh =no
   # We want it to look like 'no' in install and defaults, but yes in dist
