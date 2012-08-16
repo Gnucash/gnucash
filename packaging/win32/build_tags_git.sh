@@ -80,7 +80,7 @@ for tag_rev in $tags ; do
   cp -p $(unix_path ${DOWNLOAD_DIR})/* ${tagbasedir}/downloads
 
   # Check out the tag and setup custom.sh
-  $GIT_CMD clone checkout ${REPO_URL} ${tagdir}/repos
+  $GIT_CMD clone ${REPO_URL} ${tagdir}/repos
   qpushd {tagdir}/repos
   $GIT_CMD checkout $tag
   qpopd
