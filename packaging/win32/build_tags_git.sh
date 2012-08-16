@@ -80,9 +80,11 @@ for tag_rev in $tags ; do
   cp -p $(unix_path ${DOWNLOAD_DIR})/* ${tagbasedir}/downloads
 
   # Check out the tag and setup custom.sh
-  $GIT_CMD clone ${REPO_URL} ${tagdir}/repos
-  qpushd ${tagdir}/repos
+  qpushd ${tagdir}
+  $GIT_CMD clone ${REPO_URL} repos
+  qpushd repos
   $GIT_CMD checkout $tag
+  qpopd
   qpopd
   w32pkg=${tagdir}/repos/packaging/win32
   cp -p "${pkgdir}/custom.sh" ${w32pkg}/custom.sh
