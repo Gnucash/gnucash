@@ -1196,19 +1196,6 @@ gnc_ui_reconcile_window_change_cb(GtkAction *action, gpointer data)
 
 
 static void
-gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
-{
-    RecnWindow *recnData = data;
-    GNCSplitReg *gsr;
-
-    gsr = gnc_reconcile_window_open_register(recnData);
-    if (gsr == NULL)
-        return;
-    gnc_split_reg_jump_to_blank( gsr );
-}
-
-
-static void
 gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
 {
     RecnWindow *recnData = data;
@@ -2266,12 +2253,7 @@ static GtkActionEntry recnWindow_actions [] =
     /* Transaction menu */
 
     {
-        "TransNewAction", GTK_STOCK_NEW, N_("_New"),  "<control>n",
-        N_("Add a new transaction to the account"),
-        G_CALLBACK(gnc_ui_reconcile_window_new_cb)
-    },
-    {
-        "TransBalanceAction", GTK_STOCK_EXECUTE, N_("_Balance"), "<control>b",
+        "TransBalanceAction", GTK_STOCK_NEW, N_("_Balance"), "<control>b",
         N_("Add a new balancing entry to the account"),
         G_CALLBACK(gnc_ui_reconcile_window_balance_cb)
     },
