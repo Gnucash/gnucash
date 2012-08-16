@@ -74,7 +74,7 @@ SVN_REV=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/core-utils/gnc-svninfo.h | cut 
 # Choose the output filename based on our "build_from_tarball" setting
 # Make sure this logic matches the logic in dist.sh!
 if [ "$BUILD_FROM_TARBALL" = "no" ]; then
-  SETUP_FILENAME="gnucash-${PKG_VERSION}-git-r${SVN_REV}-setup.exe"
+  SETUP_FILENAME="gnucash-${PKG_VERSION}-$(date +'%Y-%m-%d')-git-${SVN_REV}-setup.exe"
 else
   SETUP_FILENAME="gnucash-${PKG_VERSION}-setup.exe"
 fi
