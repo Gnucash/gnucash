@@ -81,7 +81,7 @@ for tag_rev in $tags ; do
 
   # Check out the tag and setup custom.sh
   $GIT_CMD clone ${REPO_URL} ${tagdir}/repos
-  qpushd {tagdir}/repos
+  qpushd ${tagdir}/repos
   $GIT_CMD checkout $tag
   qpopd
   w32pkg=${tagdir}/repos/packaging/win32
