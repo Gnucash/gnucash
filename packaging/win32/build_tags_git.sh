@@ -81,7 +81,7 @@ for tag_rev in $tags ; do
 
   # Check out the tag and setup custom.sh
   qpushd ${tagdir}
-  $GIT_CMD clone ${REPO_URL} repos
+  $GIT_CMD clone ${REPOS_URL} repos
   qpushd repos
   $GIT_CMD checkout $tag
   qpopd
