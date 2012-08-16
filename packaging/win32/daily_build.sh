@@ -19,6 +19,12 @@
 #       using the old way)
 #    The second invocation is superfluous if this script was called
 #    from within the source code repository.
+#
+# 3. Should this script change in the source repository, then the
+#    svn update below will fail due to a limitation in Windows that
+#    won't allow to change a file that is "in use". So in the rare
+#    situation this script needs to be updated, you will need to
+#    run the svn update once yourself.
 
 set -e
 
