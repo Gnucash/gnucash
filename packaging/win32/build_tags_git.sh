@@ -104,6 +104,6 @@ for tag_rev in $tags ; do
   # Now build the tag!  (this will upload it too)
   # Use the build_package script from trunk (cwd), not from the tag
   qpushd ${w32pkg}
-    ${pkgdir}/build_package.sh ${tag}
+    ${pkgdir}/build_package_git.sh ${tag}
   qpopd
 done
