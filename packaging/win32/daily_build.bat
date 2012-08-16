@@ -5,7 +5,7 @@ rem the daily build and then the tag builds.
 cd c:\soft\packaging
 
 rem Development build (daily)
-c:\msys\1.0\bin\sh.exe --login c:\soft\gnucash\repos\packaging\win32\daily_build.sh
+c:\msys\1.0\bin\sh.exe --login c:\soft\gnucash\repos\packaging\win32\daily_build_git.sh
 rem Tags build (daily -- only tags that weren't built yet)
 c:\msys\1.0\bin\sh.exe --login c:\soft\packaging\build_tags.sh
 rem 2.4 branch build (weekly)
