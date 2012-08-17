@@ -310,8 +310,11 @@ function dist_finish() {
     if [ "$BUILD_FROM_TARBALL" = "no" ]; then
         # And changing output filename
         PKG_VERSION=`grep PACKAGE_VERSION ${_BUILD_UDIR}/config.h | cut -d" " -f3 | cut -d\" -f2 `
-        SVN_REV=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/core-utils/gnc-svninfo.h | cut -d" " -f3 | cut -d\" -f2 `
-        SETUP_FILENAME="gnucash-${PKG_VERSION}-${REPOS_TYPE}-r${SVN_REV}-setup.exe"
+        REVISION=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/core-utils/gnc-svninfo.h | cut -d" " -f3 | cut -d\" -f2 `
+        if [ "$REPOS_TYPE" = "svn" ]; then
+          SETUP_FILENAME="gnucash-${PKG_VERSION}-${REPOS_TYPE}-r${REVISION}-setup.exe"
+        else
+          SETUP_FILENAME="gnucash-${PKG_VERSION}-$(date +'%Y-%m-%d')-${REPOS_TYPE}-${REVISION}-setup.exe"
         qpushd ${_GNUCASH_UDIR}
             mv gnucash-${PKG_VERSION}-setup.exe ${SETUP_FILENAME}
         qpopd
