@@ -315,6 +315,7 @@ function dist_finish() {
           SETUP_FILENAME="gnucash-${PKG_VERSION}-${REPOS_TYPE}-r${REVISION}-setup.exe"
         else
           SETUP_FILENAME="gnucash-${PKG_VERSION}-$(date +'%Y-%m-%d')-${REPOS_TYPE}-${REVISION}-setup.exe"
+        fi
         qpushd ${_GNUCASH_UDIR}
             mv gnucash-${PKG_VERSION}-setup.exe ${SETUP_FILENAME}
         qpopd
