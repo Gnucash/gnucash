@@ -43,7 +43,7 @@ else
 fi
 
 newrev=$($GIT_CMD rev-parse HEAD)
-if [[ "${oldrev}" != "${oldrev}" ]]; then
+if [[ "${oldrev}" != "${newrev}" ]]; then
   ./build_package_git.sh
 fi
 
