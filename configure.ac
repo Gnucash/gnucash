@@ -1438,7 +1438,6 @@ AC_CONFIG_FILES(
   src/business/business-gnome/schemas/Makefile
   src/business/business-gnome/ui/Makefile
   src/business/business-ledger/Makefile
-
   dnl # Stuff for bill/invoice import plugin
   src/plugins/Makefile
   src/plugins/bi_import/Makefile
@@ -1446,7 +1445,6 @@ AC_CONFIG_FILES(
   src/plugins/bi_import/ui/Makefile
   dnl # non-makefiles
   dnl # Please read doc/build-system before adding *anything* here
-
   ,
   dnl # commands go here, but we don't have any right now
 )
