@@ -602,15 +602,17 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
         return GTK_RESPONSE_NO;
     }
 
-    /* Save the answer? */
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(perm)))
+    if (response != GTK_RESPONSE_CANCEL)
     {
-        gnc_gconf_set_int(GCONF_WARNINGS_PERM, gconf_key, response, NULL);
+        /* Save the answer? */
+        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(perm)))
+        {
+            gnc_gconf_set_int(GCONF_WARNINGS_PERM, gconf_key, response, NULL);
+        }
+        else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(temp)))
+        {
+            gnc_gconf_set_int(GCONF_WARNINGS_TEMP, gconf_key, response, NULL);
+        }
     }
-    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(temp)))
-    {
-        gnc_gconf_set_int(GCONF_WARNINGS_TEMP, gconf_key, response, NULL);
-    }
-
     return response;
 }
