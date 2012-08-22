@@ -679,7 +679,7 @@ LANGINFO_D_FMT_CHECK
 
 dnl Enable locale-specific tax-related information in the accounts
 AC_ARG_ENABLE( locale-specific-tax,
-  [AS_HELP_STRING([--enable-locale-specific-tax],[enable localized tax categories (experimental)])],
+  [AS_HELP_STRING([--enable-locale-specific-tax],[enable localized tax categories (experimental, but used by the german SKR04 account chart)])],
   AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories) )
 
 dnl Make sure we have a proper gettext installed
