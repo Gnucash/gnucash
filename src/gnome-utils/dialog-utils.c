@@ -599,7 +599,7 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
     response = gtk_dialog_run(dialog);
     if ((response == GTK_RESPONSE_NONE) || (response == GTK_RESPONSE_DELETE_EVENT))
     {
-        return GTK_RESPONSE_NO;
+        return GTK_RESPONSE_CANCEL;
     }
 
     if (response != GTK_RESPONSE_CANCEL)
