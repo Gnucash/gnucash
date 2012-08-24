@@ -74,6 +74,15 @@ the Edit -> Style Sheets menu to customize style sheets.")
  N_( "To raise the accounts menu in the transfer field of a register \
 page, press the Menu key or the Ctrl-Down key combination.")
 
+ N_( "The scheduled transaction editor comes with a very flexible \
+frequency configurator. Basic frequencies to schedule a transaction \
+include daily, weekly and monthly. But more advanced schemes can be \
+set up as well. Some examples:\n\nTo schedule a transaction every \
+three weeks, you can choose the weekly basic frequency and then \
+set 'Every 3 weeks'.\n\nTo schedule a transaction every year \
+you can choose the monthly basic frequency and then set 'Every \
+12 months'.")
+
  N_( "If you work overnight, you should close and reopen your working \
 register after midnight, to get the new date as default for new \
 transactions. It is not necessary to restart GnuCash therefore.")
