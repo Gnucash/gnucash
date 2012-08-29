@@ -1920,6 +1920,8 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     Transaction *trans;
     Split *split;
     char recn;
+    const char *cell_name;
+    gboolean change_ok;
 
     /* This assumes we reset the flag whenever we change splits.
      * This happens in gnc_split_register_move_cursor(). */
@@ -1939,14 +1941,33 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     else
         recn = xaccSplitGetReconcile (split);
 
-    if (recn == YREC)
+    /* What Cell are we in */
+    cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
+
+    /* These cells can be changed */
+    change_ok = (g_strcmp0(cell_name, "notes") == 0) || (g_strcmp0(cell_name, "memo") == 0) || (g_strcmp0(cell_name, "action") == 0);
+
+    if ((recn == YREC || xaccTransHasReconciledSplits (trans)) && !change_ok)
     {
         GtkWidget *dialog, *window;
         gint response;
-        const gchar *title = _("Change reconciled split?");
-        const gchar *message =
-            _("You are about to change a reconciled split.  Doing so might make "
-              "future reconciliation difficult!  Continue with this change?");
+        const gchar *title;
+        const gchar *message;
+
+        if(recn == YREC)
+        {
+            title = _("Change reconciled split?");
+            message =
+             _("You are about to change a reconciled split.  Doing so might make "
+               "future reconciliation difficult!  Continue with this change?");
+        }
+        else
+        {
+            title = _("Change split linked to a reconciled split?");
+            message =
+            _("You are about to change a split that is linked to a reconciled split.  "
+              "Doing so might make future reconciliation difficult!  Continue with this change?");
+        }
 
         /* Does the user want to be warned? */
         window = gnc_split_register_get_parent(reg);
