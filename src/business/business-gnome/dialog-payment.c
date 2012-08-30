@@ -749,7 +749,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 {
     PaymentWindow *pw;
     GtkBuilder *builder;
-    GtkWidget *box, *label;
+    GtkWidget *box, *label, *credit_box, *debit_box;
     GtkTreeSelection *selection;
     char * cm_class = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER ?
                        DIALOG_PAYMENT_CUSTOMER_CM_CLASS :
@@ -806,9 +806,30 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     box = GTK_WIDGET (gtk_builder_get_object (builder, "owner_box"));
     pw->owner_choice = gnc_owner_select_create (label, box, book, owner);
 
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_debit_box"));
+    /* Some terminology:
+     * Invoices are paid, credit notes are refunded.
+     * A customer payment is a credit action, paying a vendor is debit
+     *
+     * So depending on the owner the payment amount should be considered
+     * credit (customer) or debit (vendor/employee) and refunds should be
+     * considered debit (customer) or credit (vendor/employee).
+     * For visual consistency, the dialog box will always show a payment and
+     * a refund field. Internally they are treated as credit or debit depending
+     * on the owner type.
+     */
+    if (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER)
+    {
+        debit_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_refund_box"));
+        credit_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_payment_box"));
+    }
+    else
+    {
+        debit_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_payment_box"));
+        credit_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_refund_box"));
+    }
+
     pw->amount_debit_edit = gnc_amount_edit_new ();
-    gtk_box_pack_start (GTK_BOX (box), pw->amount_debit_edit, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (debit_box), pw->amount_debit_edit, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_debit_edit),
                                            TRUE);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit), gnc_numeric_zero());
@@ -816,9 +837,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
                      "focus-out-event",
                      G_CALLBACK(gnc_payment_leave_amount_cb), pw);
 
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_credit_box"));
     pw->amount_credit_edit = gnc_amount_edit_new ();
-    gtk_box_pack_start (GTK_BOX (box), pw->amount_credit_edit, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (credit_box), pw->amount_credit_edit, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_credit_edit),
                                            TRUE);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit), gnc_numeric_zero());

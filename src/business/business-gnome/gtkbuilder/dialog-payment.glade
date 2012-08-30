@@ -341,7 +341,7 @@ If you have selected an invoice, GnuCash will propose the amount still due for i
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">Debit</property>
+                                <property name="label" translatable="yes">Payment</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -367,7 +367,7 @@ If you have selected an invoice, GnuCash will propose the amount still due for i
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">Credit</property>
+                                <property name="label" translatable="yes">Refund</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -408,7 +408,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="amount_debit_box">
+                              <object class="GtkHBox" id="amount_payment_box">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
@@ -434,7 +434,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="amount_credit_box">
+                              <object class="GtkHBox" id="amount_refund_box">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
@@ -565,7 +565,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Payment Information</property>
+                    <property name="label" translatable="yes">Transaction Details</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
