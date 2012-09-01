@@ -1666,7 +1666,10 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
 
     /* File chooser Page */
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
+    g_signal_connect (G_OBJECT (info->file_chooser), "file-activated",
+                      G_CALLBACK (csv_import_trans_file_chooser_confirm_cb), info);
     button = gtk_button_new_from_stock(GTK_STOCK_OK);
+    gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
     h_box = gtk_hbox_new(TRUE, 0);
     gtk_box_pack_start(GTK_BOX(h_box), button, FALSE, FALSE, 0);

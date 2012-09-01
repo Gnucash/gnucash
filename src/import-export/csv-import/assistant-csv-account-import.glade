@@ -69,7 +69,6 @@ Enter file name and location for the Import...
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
         <property name="title" translatable="yes">Choose File to Import</property>
       </packing>
     </child>

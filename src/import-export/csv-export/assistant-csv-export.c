@@ -145,6 +145,10 @@ csv_export_file_chooser_confirm_cb (GtkWidget *button, CsvExportInfo *info)
 
     DEBUG("file_name selected is %s", info->file_name);
     DEBUG("starting directory is %s", info->starting_dir);
+
+    /* Step to next page if page is complete */
+    if(gtk_assistant_get_page_complete(assistant, page))
+        gtk_assistant_set_current_page (assistant, num + 1);
 }
 
 
@@ -849,7 +853,7 @@ csv_export_assistant_create (CsvExportInfo *info)
 {
     GtkBuilder *builder;
     GtkWidget *window;
-    GtkWidget *box;
+    GtkWidget *box, *h_box;
     GtkWidget *button;
     GtkWidget *table, *hbox;
     time_t start_time, end_time;
@@ -975,10 +979,16 @@ csv_export_assistant_create (CsvExportInfo *info)
     /* File chooser Page */
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_SAVE);
     button = gtk_button_new_from_stock(GTK_STOCK_OK);
+    gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
-    gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), button);
+    h_box = gtk_hbox_new(TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), button, FALSE, FALSE, 0);
+    gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), h_box);
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (csv_export_file_chooser_confirm_cb), info);
+
+
+
 
     box = GTK_WIDGET(gtk_builder_get_object(builder, "file_page"));
     gtk_box_pack_start (GTK_BOX (box), info->file_chooser, TRUE, TRUE, 6);
