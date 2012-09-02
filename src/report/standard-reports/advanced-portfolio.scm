@@ -715,6 +715,16 @@
 					(gnc:make-html-table-header-cell/markup "number-cell" gain)
 					(gnc:make-html-table-header-cell/markup "number-cell" ugain)
 					(gnc:make-html-table-header-cell/markup "number-cell" bothgain)
+					(gnc:make-html-table-header-cell/markup "number-cell"
+					    (let* ((moneyinvalue (gnc-numeric-to-double
+								  (gnc:gnc-monetary-amount moneyin)))
+					           (bothgainvalue (gnc-numeric-to-double
+								   (gnc:gnc-monetary-amount bothgain)))
+                                             )
+					      (if (= 0.0 moneyinvalue)
+						  ""
+						  (sprintf #f "%.2f%%" (* 100 (/ bothgainvalue moneyinvalue)))))
+					)
 					(gnc:make-html-table-header-cell/markup "number-cell" income)))
 	      (if (not ignore-brokerage-fees)
 		  (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" brokerage))))
@@ -726,7 +736,7 @@
 								      (gnc:gnc-monetary-amount totalreturn)))
                                              )
 					      (if (= 0.0 moneyinvalue)
-						  (sprintf #f "%.2f%%" moneyinvalue)
+						  ""
 						  (sprintf #f "%.2f%%" (* 100 (/ totalreturnvalue moneyinvalue))))))
 					 )
 			)
@@ -846,6 +856,7 @@
 				    (_ "Realized Gain")
 				    (_ "Unrealized Gain")
 				    (_ "Total Gain")
+				    (_ "Rate of Gain")
 				    (_ "Income")))
 
 	  (if (not ignore-brokerage-fees)
@@ -908,6 +919,16 @@
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" sum-total-both-gains)
 			       (gnc:make-html-table-cell/markup
+				"total-number-cell"
+				(let* ((totalinvalue (gnc-numeric-to-double
+						      (gnc:gnc-monetary-amount sum-total-moneyin)))
+				       (totalgainvalue (gnc-numeric-to-double
+							(gnc:gnc-monetary-amount sum-total-both-gains)))
+				       )
+				  (if (= 0.0 totalinvalue)
+				      ""
+				      (sprintf #f "%.2f%%" (* 100 (/ totalgainvalue totalinvalue))))))
+			       (gnc:make-html-table-cell/markup
 				"total-number-cell" sum-total-income)))
 	  (if (not ignore-brokerage-fees)
 	      (append! totalscols (list
@@ -924,7 +945,7 @@
 						          (gnc:gnc-monetary-amount sum-total-totalreturn)))
 				 )
 				  (if (= 0.0 totalinvalue) 
-				      (sprintf #f "%.2f%%" totalinvalue) 
+				      ""
 				      (sprintf #f "%.2f%%" (* 100 (/ totalreturnvalue totalinvalue))))))
 			       ))
 	  
