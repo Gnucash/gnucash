@@ -31,6 +31,7 @@
 #include <string.h>
 
 #include "gnucash-sheet.h"
+#include "gnucash-sheetP.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
 #include "gnucash-grid.h"
@@ -419,7 +420,7 @@ gnc_header_resize_column (GncHeader *header, gint col, gint width)
     gnucash_sheet_set_col_width (sheet, col, width);
 
     gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
-    gnc_item_edit_configure (GNC_ITEM_EDIT(sheet->item_editor));
+    gnc_item_edit_configure (gnucash_sheet_get_item_edit (sheet));
 
     gnc_header_reconfigure (header);
     gnucash_sheet_set_scroll_region (sheet);

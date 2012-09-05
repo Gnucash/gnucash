@@ -42,7 +42,7 @@ libgncmod_aqbanking_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-  ${GNOME_LIBS} \
+  ${GTK_LIBS} \
   ${GCONF_LIBS} \
   ${GLIB_LIBS} \
   ${GWENGUI_GTK2_LIBS} \
@@ -61,7 +61,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/libqof/qof \
-  ${GNOME_CFLAGS} \
+  ${GTK_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${AQBANKING_CFLAGS}

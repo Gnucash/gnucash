@@ -32,7 +32,6 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,6 +44,7 @@
 #include "gnucash-date-picker.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-sheet.h"
+#include "gnucash-sheetP.h"
 
 
 #define DATE_BUF (MAX_DATE_LENGTH+1)
@@ -573,8 +573,7 @@ static void
 gnc_date_cell_realize (BasicCell *bcell, gpointer data)
 {
     GnucashSheet *sheet = data;
-    GnomeCanvasItem *item = sheet->item_editor;
-    GncItemEdit *item_edit = GNC_ITEM_EDIT (item);
+    GncItemEdit *item_edit = gnucash_sheet_get_item_edit (sheet);
     DateCell *cell = (DateCell *) bcell;
     PopBox *box = cell->cell.gui_private;
 

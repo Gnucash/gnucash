@@ -39,13 +39,13 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <libguile.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "gnucash-sheet.h"
+#include "gnucash-sheetP.h"
 #include "gnucash-style.h"
 #include "table-allgui.h"
 #include "table-gnome.h"

@@ -642,7 +642,7 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
     regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger));
     gnc_table_init_gui( regWidget, NULL);
     ow->reg = GNUCASH_REGISTER (regWidget);
-    GNUCASH_SHEET (ow->reg->sheet)->window = GTK_WIDGET(ow->dialog);
+    gnucash_sheet_set_window (gnucash_register_get_sheet (ow->reg), ow->dialog);
     gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);
 
     vbox = GTK_WIDGET(gtk_builder_get_object (builder, "ledger_vbox"));

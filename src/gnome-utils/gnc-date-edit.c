@@ -35,7 +35,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
@@ -510,7 +510,7 @@ gnc_date_edit_class_init (GNCDateEditClass *klass)
         g_signal_new ("time_changed",
                       G_TYPE_FROM_CLASS (object_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET (GnomeDateEditClass, time_changed),
+                      G_STRUCT_OFFSET (GNCDateEditClass, time_changed),
                       NULL, NULL,
                       g_cclosure_marshal_VOID__VOID,
                       G_TYPE_NONE, 0);
@@ -519,7 +519,7 @@ gnc_date_edit_class_init (GNCDateEditClass *klass)
         g_signal_new ("date_changed",
                       G_TYPE_FROM_CLASS (object_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET (GnomeDateEditClass, date_changed),
+                      G_STRUCT_OFFSET (GNCDateEditClass, date_changed),
                       NULL, NULL,
                       g_cclosure_marshal_VOID__VOID,
                       G_TYPE_NONE, 0);

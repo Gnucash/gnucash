@@ -2292,7 +2292,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 
         iw->reg = GNUCASH_REGISTER (regWidget);
         window = gnc_plugin_page_get_window(iw->page);
-        GNUCASH_SHEET (iw->reg->sheet)->window = window;
+        gnucash_sheet_set_window (gnucash_register_get_sheet (iw->reg), window);
 
         g_signal_connect (G_OBJECT (regWidget), "activate_cursor",
                           G_CALLBACK (gnc_invoice_window_recordCB), iw);

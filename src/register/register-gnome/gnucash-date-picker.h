@@ -23,7 +23,7 @@
 #ifndef GNUCASH_DATE_PICKER_H
 #define GNUCASH_DATE_PICKER_H
 
-#include <gnome.h>
+#include <libgnomecanvas/libgnomecanvas.h>
 
 #define GNC_DATE_PICKER(obj)      G_TYPE_CHECK_INSTANCE_CAST((obj), gnc_date_picker_get_type (), GNCDatePicker)
 #define GNC_DATE_PICKER_CLASS(k)  G_TYPE_CHECK_CLASS_CAST((k), gnc_date_picker_get_type (), GNCDatePickerClass)

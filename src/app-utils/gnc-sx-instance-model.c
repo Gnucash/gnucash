@@ -278,7 +278,7 @@ gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash)
 static void
 _set_var_to_random_value(gchar *key, GncSxVariable *var, gpointer unused_user_data)
 {
-    var->value = double_to_gnc_numeric(rand() + 2, 1,
+    var->value = double_to_gnc_numeric(g_random_int() + 2, 1,
                                        GNC_NUMERIC_RND_MASK
                                        | GNC_HOW_RND_FLOOR);
 }

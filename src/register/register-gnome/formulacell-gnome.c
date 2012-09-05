@@ -28,7 +28,6 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <locale.h>
 #include <gdk/gdkkeysyms.h>
 

@@ -21,8 +21,6 @@
 #ifndef GNUCASH_GRID_H
 #define GNUCASH_GRID_H
 
-#include <gnome.h>
-
 #include "table-allgui.h"
 #include "gnucash-sheet.h"
 
@@ -32,35 +30,8 @@
 #define GNUCASH_GRID_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_GRID, GnucashGridClass))
 #define GNUCASH_IS_GRID(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNUCASH_TYPE_GRID))
 
-
-typedef struct
-{
-    GnomeCanvasItem canvas_item;
-
-    GnucashSheet *sheet;
-
-    /* The first and last displayed block */
-    int        top_block;
-    int        bottom_block;
-
-    /* Offset from spreadsheet origin in units */
-    long       top_offset;
-    long       left_offset;
-
-    GdkGC      *grid_gc;	/* Draw grid gc */
-    GdkGC      *fill_gc;	/* Default background fill gc */
-    GdkGC      *gc;		/* Color used for the cell */
-
-    GdkColor   background;
-    GdkColor   grid_color;
-    GdkColor   default_color;
-} GnucashGrid;
-
-
-typedef struct
-{
-    GnomeCanvasItemClass parent_class;
-} GnucashGridClass;
+typedef struct _GnucashGrid GnucashGrid;
+typedef struct _GnucashGridClass GnucashGridClass;
 
 
 GType      gnucash_grid_get_type (void);

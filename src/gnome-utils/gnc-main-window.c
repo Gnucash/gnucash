@@ -34,7 +34,6 @@
 */
 #include "config.h"
 
-#include <gnome.h>
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 #include <libguile.h>
@@ -345,7 +344,7 @@ static GtkActionEntry gnc_menu_actions [] =
     /* Help menu */
 
     {
-        "HelpTutorialAction", GNOME_STOCK_BOOK_BLUE, N_("Tutorial and Concepts _Guide"), NULL,
+        "HelpTutorialAction", GTK_STOCK_HELP, N_("Tutorial and Concepts _Guide"), NULL,
         N_("Open the GnuCash Tutorial"),
         G_CALLBACK (gnc_main_window_cmd_help_tutorial)
     },
@@ -355,7 +354,7 @@ static GtkActionEntry gnc_menu_actions [] =
         G_CALLBACK (gnc_main_window_cmd_help_contents)
     },
     {
-        "HelpAboutAction", GNOME_STOCK_ABOUT, N_("_About"), NULL,
+        "HelpAboutAction", GTK_STOCK_ABOUT, N_("_About"), NULL,
         N_("About GnuCash"),
         G_CALLBACK (gnc_main_window_cmd_help_about)
     },

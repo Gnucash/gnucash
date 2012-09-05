@@ -35,7 +35,6 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -45,6 +44,7 @@
 #include "gnucash-item-edit.h"
 #include "gnucash-item-list.h"
 #include "gnucash-sheet.h"
+#include "gnucash-sheetP.h"
 #include "table-allgui.h"
 
 #define KEY_AUTO_RAISE_LISTS	"auto_raise_lists"
@@ -747,8 +747,7 @@ static void
 gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 {
     GnucashSheet *sheet = data;
-    GnomeCanvasItem *item = sheet->item_editor;
-    GncItemEdit *item_edit = GNC_ITEM_EDIT (item);
+    GncItemEdit *item_edit = gnucash_sheet_get_item_edit (sheet);
     ComboCell *cell = (ComboCell *) bcell;
     PopBox *box = cell->cell.gui_private;
 

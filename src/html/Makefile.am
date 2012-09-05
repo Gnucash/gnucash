@@ -53,8 +53,7 @@ libgncmod_html_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${WEBKIT_LIBS} \
-  ${GNOME_LIBS} \
-  ${GDK_PIXBUF_LIBS} \
+  ${GTK_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
   ${QOF_LIBS} \

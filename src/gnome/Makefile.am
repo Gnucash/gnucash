@@ -16,8 +16,9 @@ libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${LIBXML2_LIBS} \
   ${GUILE_LIBS} \
-  ${GNOME_LIBS} \
+  ${GTK_LIBS} \
   ${GCONF_LIBS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS}
@@ -123,8 +124,9 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src/libqof/qof \
+  ${LIBXML2_CFLAGS} \
   ${GUILE_INCS} \
-  ${GNOME_CFLAGS} \
+  ${GTK_CFLAGS} \
   ${GCONF_CFLAGS} \
   $(GLIB_CFLAGS) \
   ${GTK_MAC_CFLAGS}

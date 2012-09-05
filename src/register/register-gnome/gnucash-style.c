@@ -23,12 +23,11 @@
  */
 
 #include "config.h"
-
-#include <gnome.h>
-
 #include "gnucash-color.h"
 #include "gnucash-grid.h"
 #include "gnucash-item-edit.h"
+#include "gnucash-sheet.h"
+#include "gnucash-sheetP.h"
 #include "gnucash-style.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-engine.h"		// For debugging, e.g. ENTER(), LEAVE()

@@ -21,8 +21,6 @@
 #ifndef GNUCASH_STYLE_H
 #define GNUCASH_STYLE_H
 
-#include <gnome.h>
-
 #include "gnucash-sheet.h"
 
 typedef struct

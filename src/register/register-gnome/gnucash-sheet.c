@@ -32,8 +32,10 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gdk/gdkkeysyms.h>
+#include <libgnomecanvas/libgnomecanvas.h>
 
 #include "gnucash-sheet.h"
+#include "gnucash-sheetP.h"
 
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
@@ -2284,6 +2286,29 @@ gnucash_sheet_get_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
                           vcell_loc.virt_col);
 }
 
+GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet)
+{
+    g_return_val_if_fail (sheet != NULL, NULL);
+    g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), NULL);
+
+    if (sheet->item_editor == NULL)
+        return NULL;
+    else
+        return GNC_ITEM_EDIT (sheet->item_editor);
+}
+
+
+void gnucash_sheet_set_window (GnucashSheet *sheet, GtkWidget *window)
+{
+    g_return_if_fail (sheet != NULL);
+    g_return_if_fail (GNUCASH_IS_SHEET(sheet));
+
+    if (window)
+        g_return_if_fail (GTK_IS_WIDGET(window));
+
+    sheet->window = window;
+}
+
 
 /* This fills up a block from the table; it sets the style and returns
  * true if the style changed. */
@@ -3037,5 +3062,14 @@ void gnucash_register_set_moved_cb (GnucashRegister *reg,
     sheet = GNUCASH_SHEET(reg->sheet);
     sheet->moved_cb = cb;
     sheet->moved_cb_data = cb_data;
+}
+
+
+GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg)
+{
+    g_return_val_if_fail (reg != NULL, NULL);
+    g_return_val_if_fail (GNUCASH_IS_REGISTER(reg), NULL);
+
+    return GNUCASH_SHEET(reg->sheet);
 }
 

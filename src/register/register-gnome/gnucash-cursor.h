@@ -21,10 +21,9 @@
 #ifndef GNUCASH_CURSOR_H
 #define GNUCASH_CURSOR_H
 
-#include <gnome.h>
-
 #include "gnucash-grid.h"
 #include "gnucash-sheet.h"
+#include <libgnomecanvas/libgnomecanvas.h>
 
 
 #define GNUCASH_TYPE_CURSOR     (gnucash_cursor_get_type ())

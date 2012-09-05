@@ -594,7 +594,6 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             numIters = NUM_ITERS_WITH_VARS;
         }
 
-        srand(time(NULL));
         for ( i = 0; i < numIters && !unbalanceable; i++ )
         {
             gnc_sx_randomize_variables(vars);

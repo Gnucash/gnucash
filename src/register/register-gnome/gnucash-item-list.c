@@ -29,9 +29,9 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
+#include <libgnomecanvas/libgnomecanvas.h>
 
 #include "gnc-engine.h"
 #include "gnucash-item-list.h"

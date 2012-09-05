@@ -25,9 +25,7 @@
  */
 
 #include "config.h"
-
-#include <gnome.h>
-
+#include <libgnomecanvas/libgnomecanvas.h>
 #include <gdk/gdkkeysyms.h>
 #include "gnucash-date-picker.h"
 

@@ -409,7 +409,7 @@ gsr_create_table( GNCSplitReg *gsr )
     gsr->reg = GNUCASH_REGISTER( register_widget );
     gnc_table_init_gui( GTK_WIDGET(gsr->reg), gconf_key );
     gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
-    GNUCASH_SHEET(gsr->reg->sheet)->window = gsr->window;
+    gnucash_sheet_set_window (gnucash_register_get_sheet (gsr->reg), gsr->window);
     gtk_widget_show ( GTK_WIDGET(gsr->reg) );
     g_signal_connect (gsr->reg, "activate_cursor",
                       G_CALLBACK(gnc_split_reg_record_cb), gsr);

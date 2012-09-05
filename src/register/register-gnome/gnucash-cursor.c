@@ -29,11 +29,13 @@
  */
 
 #include "config.h"
+#include <libgnomecanvas/libgnomecanvas.h>
 
 #include "gnucash-color.h"
 #include "gnucash-cursor.h"
 #include "gnucash-grid.h"
 #include "gnucash-sheet.h"
+#include "gnucash-sheetP.h"
 #include "gnucash-style.h"
 
 static GnomeCanvasItem *gnucash_cursor_parent_class;

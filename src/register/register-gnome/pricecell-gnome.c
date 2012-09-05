@@ -28,7 +28,6 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <locale.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -164,11 +163,10 @@ gnc_basic_cell_insert_decimal(BasicCell *bcell,
     end = MAX(*start_selection, *end_selection);
 
     /* length in bytes, not chars. do not use g_utf8_strlen. */
-    buf = malloc(strlen(bcell->value) + 1);
-    memset(buf, 0, strlen(bcell->value) + 1);
+    buf = g_malloc0(strlen(bcell->value) + 1);
     g_utf8_strncpy(buf, bcell->value, start);
     g_string_append(newval_gs, buf);
-    free(buf);
+    g_free(buf);
 
     g_string_append_unichar(newval_gs, decimal_point);
 
