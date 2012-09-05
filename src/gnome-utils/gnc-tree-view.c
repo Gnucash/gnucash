@@ -45,22 +45,6 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-cell-renderer-date.h"
 
-/* The column id refers to a specific column in the tree model.  It is
- * also attached to the side of the tree column to allow lookup of a
- * GtkTreeViewColumn when passed a column id from the underlying
- * model. By convention, negative column numbers are used when the
- * visible column has no association with the underlying model.*/
-#define MODEL_COLUMN "model_column"
-
-/* For checkbox columns, this contains the real title for the column. */
-#define REAL_TITLE  "real_title"
-
-/* The name of this column as it should appear in gconf.  This is
- * attached to the column when it is created, and used to map back and
- * forth to gconf keys.  The actual gconf keys are built from these
- * strings. */
-#define PREF_NAME  "pref-name"
-
 /* The actual gconf key for a particular column visibility.  This is
  * attached to the menu items that are in the column selection menu.
  * Makes it very easy to update gconf when a menu item is toggled. */

@@ -1,26 +1,26 @@
-/********************************************************************\
- * gnc-tree-view-account.c -- GtkTreeView implementation to display *
- *                            accounts in a GtkTreeView.            *
+/**********************************************************************\
+ * gnc-tree-view-account.c -- GtkTreeView implementation to display   *
+ *                            accounts in a GtkTreeView.              *
  * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org> *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
- *                                                                  *
-\********************************************************************/
+ *                                                                    *
+ * This program is free software; you can redistribute it and/or      *
+ * modify it under the terms of the GNU General Public License as     *
+ * published by the Free Software Foundation; either version 2 of     *
+ * the License, or (at your option) any later version.                *
+ *                                                                    *
+ * This program is distributed in the hope that it will be useful,    *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of     *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      *
+ * GNU General Public License for more details.                       *
+ *                                                                    *
+ * You should have received a copy of the GNU General Public License  *
+ * along with this program; if not, contact:                          *
+ *                                                                    *
+ * Free Software Foundation           Voice:  +1-617-542-5942         *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652         *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                     *
+ *                                                                    *
+\**********************************************************************/
 
 #include "config.h"
 
@@ -40,6 +40,7 @@
 #include "gnc-engine.h"
 #include "gnc-glib-utils.h"
 #include "gnc-gobject-utils.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-session.h"
 #include "gnc-icons.h"
@@ -77,6 +78,15 @@ static void tax_info_data_func (GtkTreeViewColumn *col,
                                 GtkTreeIter       *iter,
                                 gpointer           view);
 
+static void acc_color_data_func (GtkTreeViewColumn *col,
+                                GtkCellRenderer   *renderer,
+                                GtkTreeModel      *model,
+                                GtkTreeIter       *iter,
+                                gpointer           view);
+
+static void gnc_tree_view_account_color_update (GConfEntry *entry, gpointer user_data);
+
+
 typedef struct GncTreeViewAccountPrivate
 {
     AccountViewInfo avi;
@@ -95,6 +105,9 @@ typedef struct GncTreeViewAccountPrivate
     GtkTreeViewColumn *future_min_report_column;
     GtkTreeViewColumn *total_report_column;
     GtkTreeViewColumn *notes_column;
+
+    gboolean show_account_color;
+
 } GncTreeViewAccountPrivate;
 
 #define GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(o)  \
@@ -175,6 +188,11 @@ gnc_tree_view_account_init (GncTreeViewAccount *view)
     GncTreeViewAccountPrivate *priv;
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+
+    gnc_gconf_general_register_cb("show_account_color",
+                                  gnc_tree_view_account_color_update,
+                                  view);
+
     gnc_init_account_view_info(&priv->avi);
 }
 
@@ -191,6 +209,10 @@ gnc_tree_view_account_finalize (GObject *object)
     account_view = GNC_TREE_VIEW_ACCOUNT (object);
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(account_view);
+
+    gnc_gconf_general_remove_cb("show_account_color",
+                                gnc_tree_view_account_color_update,
+                                account_view);
     if (priv->filter_destroy)
     {
         priv->filter_destroy(priv->filter_data);
@@ -535,6 +557,107 @@ tax_info_data_func (GtkTreeViewColumn *col,
 }
 
 /************************************************************/
+/*                acc_color data function                   */
+/************************************************************/
+/*
+ * The account-color column in the account tree view is obtained
+ * from the GNC_TREE_MODEL_ACCOUNT_COL_COLOR_ACCOUNT which is
+ * checked for a valid color string to set the background color
+ * of the cell.
+ */
+static void
+update_cell_renderers (GList *renderers, gchar *account_color)
+{
+    GtkCellRenderer *cell;
+    GList *node;
+
+    /* Update the cell background in the list of renderers */
+    for (node = renderers; node; node = node->next)
+    {
+        cell = node->data;
+        g_object_set (cell, "cell-background", account_color, NULL);
+    }
+}
+
+static void
+acc_color_data_func (GtkTreeViewColumn *col,
+                    GtkCellRenderer   *renderer,
+                    GtkTreeModel      *model,
+                    GtkTreeIter       *iter,
+                    gpointer           view)
+{
+    GncTreeViewAccountPrivate *priv;
+    gchar                     *acc_color = NULL;
+    gchar                     *item;
+    GdkColor                   color;
+    gchar                     *column_name;
+    GList                     *renderers;
+
+    gboolean                   valid_color = TRUE;
+
+    gtk_tree_model_get(model,
+                       iter,
+                       GNC_TREE_MODEL_ACCOUNT_COL_COLOR_ACCOUNT,
+                       &item,
+                       -1);
+
+    /* Check for NULL */
+    if ((item == NULL) || (*item == '\0'))
+        acc_color = g_strdup("Not Set");
+    else
+        acc_color = g_strstrip(g_strdup(item));
+
+    /* Parse the color string for valid color */
+    if (!gdk_color_parse(acc_color, &color))
+        valid_color = FALSE;
+
+    priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+
+    column_name = g_object_get_data(G_OBJECT(col), PREF_NAME);
+
+    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
+
+    if(valid_color == TRUE)
+    {
+        /* Test for Account Color column and gconf preference. */
+        if (g_strcmp0(column_name, "account-color") == 0)
+            update_cell_renderers (renderers, acc_color);
+        else
+        {
+            if (priv->show_account_color == TRUE)
+                update_cell_renderers (renderers, acc_color);
+            else
+                update_cell_renderers (renderers, NULL);
+        }
+    }
+    else
+        update_cell_renderers (renderers, NULL);
+
+    g_list_free (renderers);
+    g_free (acc_color);
+    g_free (item);
+}
+
+/** Tell the GncTreeViewAccount code to show or not show the
+ *  Account name column with background in the account color.
+ *
+ *  @internal
+ */
+static void
+gnc_tree_view_account_color_update (GConfEntry *entry, gpointer user_data)
+{
+    GncTreeViewAccountPrivate *priv;
+    GncTreeViewAccount *view;
+    GConfValue *value;
+
+    g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(user_data));
+    view = user_data;
+    priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+    value = gconf_entry_get_value(entry);
+    priv->show_account_color = gconf_value_get_bool(value);
+}
+
+/************************************************************/
 /*                    New View Creation                     */
 /************************************************************/
 
@@ -552,7 +675,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     GtkTreePath *virtual_root_path = NULL;
     const gchar *sample_type, *sample_commodity;
     GncTreeViewAccountPrivate *priv;
-    GtkTreeViewColumn *tax_info_column;
+    GtkTreeViewColumn *tax_info_column, *acc_color_column;
     GtkCellRenderer *renderer;
 
     ENTER(" ");
@@ -561,6 +684,9 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                          "name", "account_tree", NULL);
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(GNC_TREE_VIEW_ACCOUNT (view));
+
+    /* Get the show_account_color value from gconf */
+    priv->show_account_color = gnc_gconf_get_bool(GCONF_GENERAL, "show_account_color", NULL);
 
     /* Create/get a pointer to the existing model for this set of books. */
     model = gnc_tree_model_account_new (root);
@@ -593,10 +719,20 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                     GNC_TREE_MODEL_ACCOUNT_COL_NAME,
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                     sort_by_string);
+
+    renderer = gnc_tree_view_column_get_renderer(priv->name_column);
+
+    gtk_tree_view_column_set_cell_data_func(priv->name_column,
+                                            renderer,
+                                            acc_color_data_func,
+                                            GTK_TREE_VIEW(view),
+                                            NULL);
+
     gnc_tree_view_add_text_column(view, _("Type"), "type", NULL, sample_type,
                                   GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
+
     gnc_tree_view_add_text_column(view, _("Commodity"), "commodity", NULL,
                                   sample_commodity,
                                   GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,
@@ -614,11 +750,13 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                     GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                     sort_by_string);
+
     gnc_tree_view_add_numeric_column(view, _("Last Num"), "lastnum", "12345",
                                      GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
                                      GNC_TREE_VIEW_COLUMN_COLOR_NONE,
                                      GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                      sort_by_string);
+
     gnc_tree_view_add_numeric_column(view, _("Present"), "present",
                                      SAMPLE_ACCOUNT_VALUE,
                                      GNC_TREE_MODEL_ACCOUNT_COL_PRESENT,
@@ -632,6 +770,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                        GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT,
                                        GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                        sort_by_present_value);
+
     gnc_tree_view_add_numeric_column(view, _("Balance"), "balance",
                                      SAMPLE_ACCOUNT_VALUE,
                                      GNC_TREE_MODEL_ACCOUNT_COL_BALANCE,
@@ -652,6 +791,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                      GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD,
                                      GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                      sort_by_balance_period_value);
+
     gnc_tree_view_add_numeric_column(view, _("Cleared"), "cleared",
                                      SAMPLE_ACCOUNT_VALUE,
                                      GNC_TREE_MODEL_ACCOUNT_COL_CLEARED,
@@ -665,6 +805,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                        GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED,
                                        GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                        sort_by_cleared_value);
+
     gnc_tree_view_add_numeric_column(view, _("Reconciled"), "reconciled",
                                      SAMPLE_ACCOUNT_VALUE,
                                      GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED,
@@ -678,11 +819,13 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                        GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED,
                                        GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                        sort_by_reconciled_value);
+
     gnc_tree_view_add_text_column(view, _("Last Reconcile Date"), "last-recon-date", NULL,
                                   "Last Reconcile Date",
                                   GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_DATE,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
+
     gnc_tree_view_add_numeric_column(view, _("Future Minimum"), "future_min",
                                      SAMPLE_ACCOUNT_VALUE,
                                      GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN,
@@ -696,6 +839,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                         GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_future_min_value);
+
     gnc_tree_view_add_numeric_column(view, _("Total"), "total",
                                      SAMPLE_ACCOUNT_VALUE,
                                      GNC_TREE_MODEL_ACCOUNT_COL_TOTAL,
@@ -709,12 +853,33 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                        GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
                                        GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                        sort_by_total_value);
+
     gnc_tree_view_add_numeric_column(view, _("Total (Period)"), "total-period",
                                      SAMPLE_ACCOUNT_VALUE,
                                      GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD,
                                      GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD,
                                      GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                      sort_by_total_period_value);
+
+    /* Translators: The C is the column title and stands for Color, this should be one character */
+    acc_color_column
+    = gnc_tree_view_add_text_column(view, _("C"), "account-color", NULL,
+                                    "xx",
+                                    GNC_TREE_VIEW_COLUMN_DATA_NONE,
+                                    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                    NULL);
+
+    renderer = gnc_tree_view_column_get_renderer(acc_color_column);
+
+    /* Add the full title to the object for menu creation */
+    g_object_set_data_full(G_OBJECT(acc_color_column), REAL_TITLE,
+                           g_strdup(_("Account Color")), g_free);
+
+    gtk_tree_view_column_set_cell_data_func(acc_color_column,
+                                            renderer,
+                                            acc_color_data_func,
+                                            GTK_TREE_VIEW(view),
+                                            NULL);
     priv->notes_column
     = gnc_tree_view_add_text_column(view, _("Notes"), "notes", NULL,
                                     "Sample account notes.",
@@ -727,12 +892,14 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                     GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                     sort_by_string);
+
     renderer = gnc_tree_view_column_get_renderer(tax_info_column);
     gtk_tree_view_column_set_cell_data_func(tax_info_column,
                                             renderer,
                                             tax_info_data_func,
                                             GTK_TREE_VIEW(view),
                                             NULL);
+
     gnc_tree_view_add_toggle_column(view, _("Placeholder"),
                                     /* Translators: This string has a context prefix; the translation
                                     	must only contain the part after the | character. */

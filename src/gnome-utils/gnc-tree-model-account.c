@@ -416,6 +416,7 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM:
 
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT:
+    case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_ACCOUNT:
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE:
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD:
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED:
@@ -791,6 +792,11 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
         string = gnc_tree_model_account_compute_period_balance(model, account, TRUE, &negative);
         gnc_tree_model_account_set_color(model, negative, value);
         g_free (string);
+        break;
+
+    case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_ACCOUNT:
+        g_value_init (value, G_TYPE_STRING);
+        g_value_set_string (value, xaccAccountGetColor (account));
         break;
 
     case GNC_TREE_MODEL_ACCOUNT_COL_NOTES:

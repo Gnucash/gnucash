@@ -68,6 +68,22 @@ GType gnc_tree_view_get_type (void);
    g_object_set_data(col, ATTRIBUTE_NAME, value);
 */
 
+/* The column id refers to a specific column in the tree model.  It is
+ * also attached to the side of the tree column to allow lookup of a
+ * GtkTreeViewColumn when passed a column id from the underlying
+ * model. By convention, negative column numbers are used when the
+ * visible column has no association with the underlying model.*/
+#define MODEL_COLUMN "model_column"
+
+/* For checkbox columns, this contains the real title for the column. */
+#define REAL_TITLE  "real_title"
+
+/* The name of this column as it should appear in gconf.  This is
+ * attached to the column when it is created, and used to map back and
+ * forth to gconf keys.  The actual gconf keys are built from these
+ * strings. */
+#define PREF_NAME  "pref-name"
+
 /* A column with this attribute set cannot be hidden from view. Valid
    values: GINT_TO_POINTER(0) and GINT_TO_POINTER(1) */
 #define ALWAYS_VISIBLE  "always-visible"

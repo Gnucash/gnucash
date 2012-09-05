@@ -743,6 +743,81 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="label11">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Account Color&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">16</property>
+                    <property name="bottom_attach">17</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="gconf/general/show_account_color">
+                    <property name="label" translatable="yes">Show the Account Color as background</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Show the Account Color as Account Name Background</property>
+                    <property name="tooltip_text" translatable="yes">Show the Account Color as Account Name Background</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">17</property>
+                    <property name="bottom_attach">18</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                    <property name="x_padding">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label13">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">15</property>
+                    <property name="bottom_attach">16</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="gconf/general/show_account_color_tabs">
+                    <property name="label" translatable="yes">Show the Account Color on tabs</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Show the Account Color as tab background</property>
+                    <property name="tooltip_text" translatable="yes">Show the Account Color as tab background</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">18</property>
+                    <property name="bottom_attach">19</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                    <property name="x_padding">12</property>
+                  </packing>
+                 </child>
+                <child>
                   <placeholder/>
                 </child>
                 <child>
