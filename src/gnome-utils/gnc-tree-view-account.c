@@ -579,6 +579,13 @@ update_cell_renderers (GList *renderers, gchar *account_color)
     }
 }
 
+/* Colorizes a cell in the account tree view if
+ * - a color is assigned to the given account
+ * - the user enabled account colorization in the preferences
+ * Only the account color column is special: it will always
+ * be colored if a valid color was set, regardless of the
+ * preference setting.
+ */
 static void
 acc_color_data_func (GtkTreeViewColumn *col,
                     GtkCellRenderer   *renderer,
@@ -587,13 +594,11 @@ acc_color_data_func (GtkTreeViewColumn *col,
                     gpointer           view)
 {
     GncTreeViewAccountPrivate *priv;
-    gchar                     *acc_color = NULL;
+    gchar                     *acc_color = NULL, *acc_cond_color = NULL;
     gchar                     *item;
     GdkColor                   color;
     gchar                     *column_name;
     GList                     *renderers;
-
-    gboolean                   valid_color = TRUE;
 
     gtk_tree_model_get(model,
                        iter,
@@ -601,41 +606,35 @@ acc_color_data_func (GtkTreeViewColumn *col,
                        &item,
                        -1);
 
-    /* Check for NULL */
-    if ((item == NULL) || (*item == '\0'))
-        acc_color = g_strdup("Not Set");
-    else
+    /* Check if color was set for the account */
+    if ((item) && (*item != '\0'))
         acc_color = g_strstrip(g_strdup(item));
+    g_free (item);
 
-    /* Parse the color string for valid color */
+    /* Test if the color string represents a valid color */
     if (!gdk_color_parse(acc_color, &color))
-        valid_color = FALSE;
+    {
+        g_free (acc_color);
+        acc_color = NULL;
+    }
 
+    /* Determine whether columns other than the
+     * Account Color column should be colored. */
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+    if (priv->show_account_color)
+        acc_cond_color = acc_color;
 
     column_name = g_object_get_data(G_OBJECT(col), PREF_NAME);
-
     renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
 
-    if(valid_color == TRUE)
-    {
-        /* Test for Account Color column and gconf preference. */
-        if (g_strcmp0(column_name, "account-color") == 0)
-            update_cell_renderers (renderers, acc_color);
-        else
-        {
-            if (priv->show_account_color == TRUE)
-                update_cell_renderers (renderers, acc_color);
-            else
-                update_cell_renderers (renderers, NULL);
-        }
-    }
+    /* Account Color column is always colored, other columns only conditionally. */
+    if (g_strcmp0(column_name, "account-color") == 0)
+        update_cell_renderers (renderers, acc_color);
     else
-        update_cell_renderers (renderers, NULL);
+        update_cell_renderers (renderers, acc_cond_color);
 
     g_list_free (renderers);
     g_free (acc_color);
-    g_free (item);
 }
 
 /** Tell the GncTreeViewAccount code to show or not show the
