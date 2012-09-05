@@ -30,6 +30,7 @@
 
 #include <gnome.h>
 #include <locale.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "gnc-locale-utils.h"
 #include "gnc-exp-parser.h"
@@ -67,13 +68,13 @@ gnc_price_cell_direct_update (BasicCell *bcell,
 #endif
     switch (event->keyval)
     {
-    case GDK_Return:
+    case GDK_KEY_Return:
         if (!(event->state &
                 (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
             is_return = TRUE;
         /* fall through */
 
-    case GDK_KP_Enter:
+    case GDK_KEY_KP_Enter:
     {
         char *error_loc;
         gnc_numeric amount;
@@ -111,7 +112,7 @@ gnc_price_cell_direct_update (BasicCell *bcell,
         return !is_return;
     }
 
-    case GDK_KP_Decimal:
+    case GDK_KEY_KP_Decimal:
         break;
 
     default:

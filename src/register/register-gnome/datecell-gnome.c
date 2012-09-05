@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "datecell.h"
 #include "dialog-utils.h"
@@ -249,7 +250,7 @@ key_press_item_cb (GNCDatePicker *gdp, GdkEventKey *event, gpointer data)
 
     switch (event->keyval)
     {
-    case GDK_Escape:
+    case GDK_KEY_Escape:
         gnc_item_edit_hide_popup (box->item_edit);
         box->calendar_popped = FALSE;
         break;

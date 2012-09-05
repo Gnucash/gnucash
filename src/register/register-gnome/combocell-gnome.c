@@ -37,6 +37,7 @@
 
 #include <gnome.h>
 #include <string.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "QuickFill.h"
 #include "combocell.h"
@@ -205,7 +206,7 @@ key_press_item_cb (GncItemList *item_list, GdkEventKey *event, gpointer data)
 
     switch (event->keyval)
     {
-    case GDK_Escape:
+    case GDK_KEY_Escape:
         gnc_item_edit_hide_popup (box->item_edit);
         box->list_popped = FALSE;
         break;
@@ -605,7 +606,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
     unicode_value = gdk_keyval_to_unicode(event->keyval);
     switch (event->keyval)
     {
-    case GDK_slash:
+    case GDK_KEY_slash:
         if (!(event->state & GDK_MOD1_MASK))
         {
             if (unicode_value == box->complete_char)
@@ -615,8 +616,8 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         }
         keep_on_going = TRUE;
         /* fall through */
-    case GDK_Tab:
-    case GDK_ISO_Left_Tab:
+    case GDK_KEY_Tab:
+    case GDK_KEY_ISO_Left_Tab:
         if (!(event->state & GDK_CONTROL_MASK) &&
                 !keep_on_going)
             return FALSE;

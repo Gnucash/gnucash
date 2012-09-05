@@ -36,6 +36,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
 #include <libguile.h>
 #include "guile-mappings.h"
 
@@ -2078,7 +2079,7 @@ gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
         GdkEventKey *event,
         GncPluginPage *page)
 {
-    if (event->keyval == GDK_Escape)
+    if (event->keyval == GDK_KEY_Escape)
     {
         GtkWidget *label, *entry2;
 

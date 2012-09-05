@@ -31,6 +31,7 @@
 #include "config.h"
 #include <glib.h>
 #include <glib/gprintf.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "gnucash-sheet.h"
 
@@ -1591,24 +1592,24 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
 
     switch (event->keyval)
     {
-    case GDK_C:
-    case GDK_c:
+    case GDK_KEY_C:
+    case GDK_KEY_c:
         if (event->state & GDK_CONTROL_MASK)
         {
             gnc_item_edit_copy_clipboard(item_edit, time);
             handled = TRUE;
         }
         break;
-    case GDK_X:
-    case GDK_x:
+    case GDK_KEY_X:
+    case GDK_KEY_x:
         if (event->state & GDK_CONTROL_MASK)
         {
             gnc_item_edit_cut_clipboard(item_edit, time);
             handled = TRUE;
         }
         break;
-    case GDK_V:
-    case GDK_v:
+    case GDK_KEY_V:
+    case GDK_KEY_v:
         if (event->state & GDK_CONTROL_MASK)
         {
             gnc_item_edit_paste_selection (item_edit, GDK_SELECTION_CLIPBOARD,
@@ -1616,7 +1617,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
             handled = TRUE;
         }
         break;
-    case GDK_Insert:
+    case GDK_KEY_Insert:
         if (event->state & GDK_SHIFT_MASK)
         {
             gnc_item_edit_paste_selection (item_edit, GDK_SELECTION_CLIPBOARD,
@@ -1745,13 +1746,13 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     {
         switch (event->keyval)
         {
-        case GDK_Return:
-        case GDK_KP_Enter:
+        case GDK_KEY_Return:
+        case GDK_KEY_KP_Enter:
             g_signal_emit_by_name(sheet->reg, "activate_cursor");
             return TRUE;
             break;
-        case GDK_Tab:
-        case GDK_ISO_Left_Tab:
+        case GDK_KEY_Tab:
+        case GDK_KEY_ISO_Left_Tab:
             if (event->state & GDK_SHIFT_MASK)
             {
                 direction = GNC_TABLE_TRAVERSE_LEFT;
@@ -1765,8 +1766,8 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
                                     TRUE);
             }
             break;
-        case GDK_KP_Page_Up:
-        case GDK_Page_Up:
+        case GDK_KEY_KP_Page_Up:
+        case GDK_KEY_Page_Up:
             direction = GNC_TABLE_TRAVERSE_UP;
             new_virt_loc.phys_col_offset = 0;
             if (event->state & GDK_SHIFT_MASK)
@@ -1778,8 +1779,8 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
                 (table, &new_virt_loc, -distance);
             }
             break;
-        case GDK_KP_Page_Down:
-        case GDK_Page_Down:
+        case GDK_KEY_KP_Page_Down:
+        case GDK_KEY_Page_Down:
             direction = GNC_TABLE_TRAVERSE_DOWN;
             new_virt_loc.phys_col_offset = 0;
             if (event->state & GDK_SHIFT_MASK)
@@ -1792,15 +1793,15 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
                 (table, &new_virt_loc, distance);
             }
             break;
-        case GDK_KP_Up:
-        case GDK_Up:
+        case GDK_KEY_KP_Up:
+        case GDK_KEY_Up:
             direction = GNC_TABLE_TRAVERSE_UP;
             gnc_table_move_vertical_position (table,
                                               &new_virt_loc, -1);
             break;
-        case GDK_KP_Down:
-        case GDK_Down:
-        case GDK_Menu:
+        case GDK_KEY_KP_Down:
+        case GDK_KEY_Down:
+        case GDK_KEY_Menu:
             if (event->keyval == GDK_Menu ||
                     event->state & GDK_CONTROL_MASK)
             {
@@ -1819,12 +1820,12 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
             gnc_table_move_vertical_position (table,
                                               &new_virt_loc, 1);
             break;
-        case GDK_Control_L:
-        case GDK_Control_R:
-        case GDK_Shift_L:
-        case GDK_Shift_R:
-        case GDK_Alt_L:
-        case GDK_Alt_R:
+        case GDK_KEY_Control_L:
+        case GDK_KEY_Control_R:
+        case GDK_KEY_Shift_L:
+        case GDK_KEY_Shift_R:
+        case GDK_KEY_Alt_L:
+        case GDK_KEY_Alt_R:
             pass_on = TRUE;
             break;
         default:
@@ -1892,7 +1893,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
     else
     {
         sheet->shift_state = event->state & GDK_SHIFT_MASK;
-        sheet->keyval_state = (event->keyval == GDK_KP_Decimal) ? GDK_KP_Decimal : 0;
+        sheet->keyval_state = (event->keyval == GDK_KEY_KP_Decimal) ? GDK_KEY_KP_Decimal : 0;
     }
     if (gtk_im_context_filter_keypress (sheet->im_context, event))
     {

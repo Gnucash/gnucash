@@ -37,6 +37,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
 #include <string.h>
 #include <stdlib.h> /* atoi */
 #include <ctype.h> /* isdigit */
@@ -193,9 +194,9 @@ key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     GNCDateEdit *gde = data;
 
-    if (event->keyval != GDK_Return &&
-            event->keyval != GDK_KP_Enter &&
-            event->keyval != GDK_Escape)
+    if (event->keyval != GDK_KEY_Return &&
+            event->keyval != GDK_KEY_KP_Enter &&
+            event->keyval != GDK_KEY_Escape)
         return date_accel_key_press(gde->date_entry, event, data);
 
     gde = data;

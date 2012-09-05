@@ -31,6 +31,7 @@
 
 #include <gnome.h>
 #include <string.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "quickfillcell.h"
 #include "quickfillcell-gnome.h"
@@ -54,12 +55,12 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
 
     switch (event->keyval)
     {
-    case GDK_slash:
+    case GDK_KEY_slash:
         if (!(event->state & GDK_MOD1_MASK))
             return FALSE;
         break;
-    case GDK_Tab:
-    case GDK_ISO_Left_Tab:
+    case GDK_KEY_Tab:
+    case GDK_KEY_ISO_Left_Tab:
         if (!(event->state & GDK_CONTROL_MASK))
             return FALSE;
         break;

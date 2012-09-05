@@ -28,6 +28,7 @@
 
 #include <gnome.h>
 
+#include <gdk/gdkkeysyms.h>
 #include "gnucash-date-picker.h"
 
 
@@ -89,18 +90,18 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 
     switch (event->keyval)
     {
-    case GDK_Return:
-    case GDK_KP_Enter:
+    case GDK_KEY_Return:
+    case GDK_KEY_KP_Enter:
         g_signal_emit (date_picker, gnc_date_picker_signals[DATE_PICKED], 0);
         g_signal_stop_emission_by_name (widget, "key_press_event");
 
         return TRUE;
 
-    case GDK_Up:
-    case GDK_Down:
-    case GDK_Left:
-    case GDK_Right:
-    case GDK_space:
+    case GDK_KEY_Up:
+    case GDK_KEY_Down:
+    case GDK_KEY_Left:
+    case GDK_KEY_Right:
+    case GDK_KEY_space:
         /* these go to the calendar */
         return FALSE;
 
