@@ -357,18 +357,25 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     transaction = xaccMallocTransaction(book);
     xaccTransBeginEdit(transaction);
 
-    if (data.date_initiated_valid)
+    /* Note: Unfortunately libofx <= 0.9.5 will not report a missing
+     * date field as an invalid one. Instead, it will report it as
+     * valid and return a completely bogus date. Starting with
+     * libofx-0.9.6 (not yet released as of 2012-09-09), it will still
+     * be reported as valid but at least the date integer itself is
+     * just plain zero. */
+    if (data.date_posted_valid && (data.date_posted != 0))
     {
+        /* The hopeful case: We have a posted_date */
+        xaccTransSetDatePostedSecs(transaction, data.date_posted);
+    } else if (data.date_initiated_valid && (data.date_initiated != 0))
+    {
+        /* No posted date? Maybe we have an initiated_date */
         xaccTransSetDatePostedSecs(transaction, data.date_initiated);
     }
-    else if (data.date_posted_valid)
+    else
     {
-        xaccTransSetDatePostedSecs(transaction, data.date_posted);
-    }
-
-    if (data.date_posted_valid)
-    {
-        xaccTransSetDatePostedSecs(transaction, data.date_posted);
+        /* Uh no, no valid date. As a workaround use today's date */
+        xaccTransSetDatePostedSecs(transaction, mktime(localtime(&current_time)));
     }
 
     current_time = time(NULL);
