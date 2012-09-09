@@ -612,7 +612,7 @@ acc_color_data_func (GtkTreeViewColumn *col,
     g_free (item);
 
     /* Test if the color string represents a valid color */
-    if (!gdk_color_parse(acc_color, &color))
+    if (acc_color && (!gdk_color_parse(acc_color, &color)))
     {
         g_free (acc_color);
         acc_color = NULL;
