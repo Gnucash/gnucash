@@ -46,8 +46,8 @@
 #    define HF_GUIDE         "Gnucash Guide"
 #    define HF_HELP          "Gnucash Help"
 #else
-#    define HF_GUIDE         "gnucash-guide.xml"
-#    define HF_HELP          "gnucash-help.xml"
+#    define HF_GUIDE         "gnucash-guide"
+#    define HF_HELP          "gnucash-help"
 #endif
 
 /** Links in the Help Files *****************************************/

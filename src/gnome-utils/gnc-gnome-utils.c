@@ -482,9 +482,16 @@ void
 gnc_gnome_help (const char *file_name, const char *anchor)
 {
     GError *error = NULL;
+    gchar *uri = NULL;
 
-    DEBUG ("Attempting to opening help file %s", file_name);
-    if (gnome_help_display (file_name, anchor, &error))
+    if (anchor)
+        uri = g_strconcat ("ghelp:", file_name, "?", anchor, NULL);
+    else
+        uri = g_strconcat ("ghelp:", file_name, NULL);
+
+    DEBUG ("Attempting to opening help uri %s", uri);
+
+    if (gtk_show_uri (NULL, uri, gtk_get_current_event_time (), &error))
         return;
 
     g_assert(error != NULL);
