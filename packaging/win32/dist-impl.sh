@@ -25,7 +25,6 @@ Please set AQBANKING_WITH_QT to yes and rerun install.sh first."
     _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     _PCRE_UDIR=`unix_path $PCRE_DIR`
-    _LIBBONOBOUI_UDIR=`unix_path $LIBBONOBOUI_DIR`
     _LIBSOUP_UDIR=`unix_path $LIBSOUP_DIR`
     _ENCHANT_UDIR=`unix_path $ENCHANT_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
@@ -92,14 +91,9 @@ function dist_gnome() {
     wget_unpacked $GDK_PIXBUF_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GLIB_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GTK_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $DIST_DIR
     smart_wget $LIBICONV_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
     wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $DIST_DIR
@@ -108,7 +102,6 @@ function dist_gnome() {
     #wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $POPT_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $DIST_DIR
     echo 'gtk-theme-name = "Nimbus"' > $DIST_DIR/etc/gtk-2.0/gtkrc
 
@@ -179,12 +172,6 @@ function dist_ktoblzcheck() {
     setup ktoblzcheck
     # dll is already copied in dist_gwenhywfar
     cp -a ${_GWENHYWFAR_UDIR}/share/ktoblzcheck ${DIST_UDIR}/share
-}
-
-function dist_libbonoboui() {
-    setup libbonoboui
-    mkdir -p $DIST_UDIR/bin
-    cp -a $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll $DIST_UDIR/bin
 }
 
 function dist_libdbi() {

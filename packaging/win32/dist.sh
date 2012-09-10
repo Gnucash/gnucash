@@ -31,7 +31,6 @@ add_step dist_guile
 add_step dist_gnome
 add_step dist_isocodes
 add_step dist_pcre
-add_step dist_libbonoboui
 add_step dist_libgsf
 add_step dist_goffice
 add_step dist_libofx

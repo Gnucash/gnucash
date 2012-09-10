@@ -535,23 +535,13 @@ function inst_gnome() {
         wget_unpacked $GETTEXT_TOOLS_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GNOME_VFS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBJPEG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -567,8 +557,6 @@ function inst_gnome() {
         wget_unpacked $PANGO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $PKG_CONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $POPT_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $POPT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ZLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         echo 'gtk-theme-name = "Nimbus"' > ${_GNOME_UDIR}/etc/gtk-2.0/gtkrc
@@ -892,43 +880,6 @@ function inst_ktoblzcheck() {
         qpopd
         ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
         rm -rf ${TMP_UDIR}/ktoblzcheck-*
-    fi
-}
-
-function inst_libbonoboui() {
-    setup libbonoboui
-    _LIBBONOBOUI_UDIR=`unix_path $LIBBONOBOUI_DIR`
-    add_to_env $_LIBBONOBOUI_UDIR/bin PATH
-    add_to_env $_LIBBONOBOUI_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ]
-    then
-        echo "libbonoboui already installed in $_LIBBONOBOUI_UDIR.  skipping."
-    else
-        wget_unpacked $LIBBONOBOUI_SRC_URL $DOWNLOAD_DIR $TMP_DIR
-        mydir=`pwd`
-        assert_one_dir $TMP_UDIR/libbonoboui-*
-        qpushd $TMP_UDIR/libbonoboui-*
-            [ -n "$LIBBONOBOUI_PATCH" -a -f "$LIBBONOBOUI_PATCH" ] && \
-                patch -p1 < $LIBBONOBOUI_PATCH
-            #libtoolize --force
-            #aclocal ${ACLOCAL_FLAGS} -I .
-            #automake
-            #autoconf
-            ./configure ${HOST_XCOMPILE} --prefix=$_LIBBONOBOUI_UDIR \
-                POPT_LIBS="-lpopt" \
-                CPPFLAGS="${GNOME_CPPFLAGS}" \
-                LDFLAGS="${GNOME_LDFLAGS}" \
-                --enable-static=no
-            make
-            make install
-
-            # We override the $GNOME_DIR libbonoboui files because
-            # those erroneously depend on the obsolete libxml2.dll
-            cp -a $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll $_GNOME_UDIR/bin
-            cp -a $_LIBBONOBOUI_UDIR/lib/libbonoboui* $_GNOME_UDIR/lib
-        qpopd
-        ${PKG_CONFIG} --exists --atleast-version=2.24.2 libbonoboui-2.0 && [ -f $_LIBBONOBOUI_UDIR/bin/libbonoboui*.dll ] || die "libbonoboui not installed correctly"
-        rm -rf ${TMP_UDIR}/libbonoboui-*
     fi
 }
 

@@ -247,8 +247,6 @@ set_default GETTEXT_RUNTIME_DEV_URL "$GNOME_WIN32_DEPS_URL/gettext-runtime-dev_0
 set_default GETTEXT_TOOLS_URL       "$GNOME_WIN32_DEPS_URL/gettext-tools-dev_0.18.1.1-2_win32.zip"
 set_default GLIB_URL                "$GNOME_WIN32_URL/glib/2.28/glib_2.28.8-1_win32.zip"
 set_default GLIB_DEV_URL            "$GNOME_WIN32_URL/glib/2.28/glib-dev_2.28.8-1_win32.zip"
-set_default GNOME_VFS_URL           "$GNOME_WIN32_URL/gnome-vfs/2.24/gnome-vfs_2.24.1-1_win32.zip"
-set_default GNOME_VFS_DEV_URL       "$GNOME_WIN32_URL/gnome-vfs/2.24/gnome-vfs-dev_2.24.1-1_win32.zip"
 GTK_VERSION="2.24.10"
 set_default GTK_URL                 "$GNOME_WIN32_URL/gtk+/2.24/gtk+_${GTK_VERSION}-1_win32.zip"
 set_default GTK_DEV_URL             "$GNOME_WIN32_URL/gtk+/2.24/gtk+-dev_${GTK_VERSION}-1_win32.zip"
@@ -258,14 +256,8 @@ set_default GTK_THEME_URL           "$SF_MIRROR/gtk-win/gtk2-themes-2009-09-07-w
 set_default INTLTOOL_URL            "$GNOME_WIN32_URL/intltool/0.40/intltool_0.40.4-1_win32.zip"
 set_default LIBART_LGPL_URL         "$GNOME_WIN32_URL/libart_lgpl/2.3/libart-lgpl_2.3.21-1_win32.zip"
 set_default LIBART_LGPL_DEV_URL     "$GNOME_WIN32_URL/libart_lgpl/2.3/libart-lgpl-dev_2.3.21-1_win32.zip"
-set_default LIBBONOBO_URL           "$GNOME_WIN32_URL/libbonobo/2.24/libbonobo_2.24.0-1_win32.zip"
-set_default LIBBONOBO_DEV_URL       "$GNOME_WIN32_URL/libbonobo/2.24/libbonobo-dev_2.24.0-1_win32.zip"
-set_default LIBGNOME_URL            "$GNOME_WIN32_URL/libgnome/2.24/libgnome_2.24.1-1_win32.zip"
-set_default LIBGNOME_DEV_URL        "$GNOME_WIN32_URL/libgnome/2.24/libgnome-dev_2.24.1-1_win32.zip"
 set_default LIBGNOMECANVAS_URL      "$GNOME_WIN32_URL/libgnomecanvas/2.30/libgnomecanvas_2.30.1-1_win32.zip"
 set_default LIBGNOMECANVAS_DEV_URL  "$GNOME_WIN32_URL/libgnomecanvas/2.30/libgnomecanvas-dev_2.30.1-1_win32.zip"
-set_default LIBGNOMEUI_URL          "$GNOME_WIN32_URL/libgnomeui/2.22/libgnomeui-2.22.1.zip"
-set_default LIBGNOMEUI_DEV_URL      "$GNOME_WIN32_URL/libgnomeui/2.22/libgnomeui-dev-2.22.1.zip"
 set_default LIBICONV_URL            "$GNOME_WIN32_DEPS_URL/libiconv-1.9.1.bin.woe32.zip"
 set_default LIBJPEG_URL             "$SF_MIRROR/gnucash/jpeg_7-1-fixed-win32.zip"
 set_default LIBJPEG_DEV_URL         "$GNOME_WIN32_DEPS_URL/jpeg-dev_7-1_win32.zip"
@@ -281,20 +273,12 @@ set_default PANGO_URL               "$GNOME_WIN32_URL/pango/1.29/pango_1.29.4-1_
 set_default PANGO_DEV_URL           "$GNOME_WIN32_URL/pango/1.29/pango-dev_1.29.4-1_win32.zip"
 set_default PKG_CONFIG_URL          "$GNOME_WIN32_DEPS_URL/pkg-config_0.25-1_win32.zip"
 set_default PKG_CONFIG_DEV_URL      "$GNOME_WIN32_DEPS_URL/pkg-config-dev_0.25-1_win32.zip"
-set_default POPT_URL                "$GNOME_WIN32_DEPS_URL/popt-1.10.2-tml-20050828.zip"
-set_default POPT_DEV_URL            "$GNOME_WIN32_DEPS_URL/popt-dev-1.10.2-tml-20050828.zip"
 set_default ZLIB_URL                "$GNOME_WIN32_DEPS_URL/zlib_1.2.5-2_win32.zip"
 set_default ZLIB_DEV_URL            "$GNOME_WIN32_DEPS_URL/zlib-dev_1.2.5-2_win32.zip"
 set_default GNOME_DIR $GLOBAL_DIR\\gnome
 
 PIXMAN_VERSION="0.22.0"
 set_default PIXMAN_URL              "http://www.cairographics.org/releases/pixman-${PIXMAN_VERSION}.tar.gz"
-
-set_default LIBBONOBOUI_URL "$GNOME_WIN32_URL/libbonoboui/2.24/libbonoboui_2.24.0-1_win32.zip"
-set_default LIBBONOBOUI_DEV_URL "$GNOME_WIN32_URL/libbonoboui/2.24/libbonoboui-dev_2.24.0-1_win32.zip"
-set_default LIBBONOBOUI_SRC_URL "$GNOME_MIRROR/sources/libbonoboui/2.24/libbonoboui-2.24.2.tar.bz2"
-set_default LIBBONOBOUI_PATCH `pwd`/libbonoboui-2.24.2.patch
-set_default LIBBONOBOUI_DIR $GLOBAL_DIR\\libbonoboui
 
 set_default SWIG_URL "$SF_MIRROR/swig/swigwin-1.3.36.zip"
 set_default SWIG_DIR $GLOBAL_DIR\\swig

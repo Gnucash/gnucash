@@ -90,7 +90,6 @@ add_step inst_libxslt
 add_step inst_isocodes
 add_step inst_swig
 add_step inst_pcre
-add_step inst_libbonoboui
 add_step inst_libgsf
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_hh
