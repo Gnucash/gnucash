@@ -503,7 +503,6 @@ function inst_gnome() {
         add_to_env pkg-config PKG_CONFIG
     fi
     if quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
@@ -642,7 +641,6 @@ EOF
         qpopd
 
         quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
