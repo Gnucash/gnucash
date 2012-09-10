@@ -49,6 +49,12 @@ gchar *gnc_path_get_libdir(void);
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkgdatadir(void);
 
+/** Returns the pkgdocdir path, usually
+ * "$prefix/share/doc/gnucash".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_pkgdocdir(void);
+
 /** Returns the pkgsysconfdir path, usually
  * "$prefix/etc/gnucash". Needed for gnome_program_init(void).
  *

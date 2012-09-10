@@ -39,6 +39,7 @@
 
 #include "gnc-plugin.h"
 #include "gnc-engine.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
@@ -381,7 +382,7 @@ gnc_plugin_add_actions (GtkUIManager *ui_merge,
           ui_merge, action_group, filename);
     gtk_ui_manager_insert_action_group (ui_merge, action_group, 0);
 
-    pathname = gnc_gnome_locate_ui_file (filename);
+    pathname = gnc_filepath_locate_ui_file (filename);
     if (pathname == NULL)
     {
         LEAVE("fail");

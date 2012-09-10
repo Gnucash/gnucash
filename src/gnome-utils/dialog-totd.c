@@ -30,6 +30,7 @@
 #include "dialog-totd.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-engine.h"
@@ -178,7 +179,7 @@ gnc_totd_initialize (void)
     GError *error;
 
     /* Find the file */
-    filename = gnc_gnome_locate_data_file("tip_of_the_day.list");
+    filename = gnc_filepath_locate_data_file("tip_of_the_day.list");
     if (!filename)
         return FALSE;
 

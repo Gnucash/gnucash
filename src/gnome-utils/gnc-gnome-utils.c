@@ -170,60 +170,6 @@ gnc_configure_date_completion (void)
     }
 }
 
-char *
-gnc_gnome_locate_pixmap (const char *name)
-{
-    char *fullname;
-
-    g_return_val_if_fail (name != NULL, NULL);
-
-    fullname = gnome_program_locate_file (gnucash_program,
-                                          GNOME_FILE_DOMAIN_APP_PIXMAP,
-                                          name, TRUE, NULL);
-    if (fullname == NULL)
-    {
-        PERR ("Could not locate pixmap/pixbuf file %s", name);
-        return NULL;
-    }
-
-    return fullname;
-}
-
-char *
-gnc_gnome_locate_data_file (const char *name)
-{
-    char *fullname;
-
-    g_return_val_if_fail (name != NULL, NULL);
-
-    fullname = gnome_program_locate_file (gnucash_program,
-                                          GNOME_FILE_DOMAIN_APP_DATADIR,
-                                          name, TRUE, NULL);
-
-    if (fullname == NULL)
-    {
-        PERR ("Could not locate file %s", name);
-        return NULL;
-    }
-
-    return fullname;
-}
-
-char *
-gnc_gnome_locate_ui_file (const char *name)
-{
-    char *partial;
-    char *fullname;
-
-    g_return_val_if_fail (name != NULL, NULL);
-
-    partial = g_strdup_printf("ui/%s", name);
-    fullname = gnc_gnome_locate_data_file(partial);
-    g_free(partial);
-
-    return fullname;
-}
-
 static void
 gnc_gtk_add_rc_file (void)
 {
@@ -321,7 +267,7 @@ gnc_gnome_init (int argc, char **argv, const char * version)
         {
             GdkPixbuf *buf = NULL;
 
-            fullname = gnc_gnome_locate_pixmap(icon_filenames[idx]);
+            fullname = gnc_filepath_locate_pixmap(icon_filenames[idx]);
             if (fullname == NULL)
             {
                 g_warning("couldn't find icon file [%s]", icon_filenames[idx]);
@@ -570,7 +516,7 @@ gnc_gnome_get_pixmap (const char *name)
 
     g_return_val_if_fail (name != NULL, NULL);
 
-    fullname = gnc_gnome_locate_pixmap (name);
+    fullname = gnc_filepath_locate_pixmap (name);
     if (fullname == NULL)
         return NULL;
 
@@ -602,7 +548,7 @@ gnc_gnome_get_gdkpixbuf (const char *name)
 
     g_return_val_if_fail (name != NULL, NULL);
 
-    fullname = gnc_gnome_locate_pixmap (name);
+    fullname = gnc_filepath_locate_pixmap (name);
     if (fullname == NULL)
         return NULL;
 

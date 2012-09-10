@@ -49,4 +49,59 @@ gchar *gnc_build_data_path (const gchar *filename);
 gchar *gnc_build_report_path (const gchar *filename);
 gchar *gnc_build_stdreports_path (const gchar *filename);
 
+/** Given a pixmap/pixbuf file name, find the file in the pixmap
+ *  directory associated with this application.  This routine will
+ *  display an error message if it can't find the file.
+ *
+ *  @param name The name of the file to be found.
+ *
+ *  @return the full path name of the file, or NULL of the file can't
+ *  be found.
+ *
+ *  @note It is the caller's responsibility to free the returned string.
+ */
+gchar *gnc_filepath_locate_pixmap (const gchar *name);
+
+
+/** Given a file name, find the file in the directories associated
+ *  with this application.  This routine will display an error message
+ *  if it can't find the file.
+ *
+ *  @param name The name of the file to be found.
+ *
+ *  @return the full path name of the file, or NULL of the file can't
+ *  be found.
+ *
+ *  @note It is the caller's responsibility to free the returned string.
+ */
+gchar *gnc_filepath_locate_data_file (const gchar *name);
+
+
+/** Given a ui file name, find the file in the ui directory associated
+ *  with this application.  This routine will display an error message
+ *  if it can't find the file.
+ *
+ *  @param name The name of the file to be found.
+ *
+ *  @return the full path name of the file, or NULL of the file can't
+ *  be found.
+ *
+ *  @note It is the caller's responsibility to free the returned string.
+ */
+gchar *gnc_filepath_locate_ui_file (const gchar *name);
+
+
+/** Given a documentation file name, find the file in the doc directory
+ *  associated with this application.  This routine will display an error
+ *  message if it can't find the file.
+ *
+ *  @param name The name of the file to be found.
+ *
+ *  @return the full path name of the file, or NULL of the file can't
+ *  be found.
+ *
+ *  @note It is the caller's responsibility to free the returned string.
+ */
+gchar *gnc_filepath_locate_doc_file (const gchar *name);
+
 #endif /* GNC_FILEPATH_UTILS_H */

@@ -51,6 +51,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-file.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
@@ -2894,7 +2895,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     g_return_if_fail (n_actions > 0);
     g_return_if_fail (filename != NULL);
 
-    pathname = gnc_gnome_locate_ui_file (filename);
+    pathname = gnc_filepath_locate_ui_file (filename);
     if (pathname == NULL)
         return;
 
@@ -3304,9 +3305,9 @@ gnc_main_window_window_menu (GncMainWindow *window)
 {
     guint merge_id;
 #ifdef MAC_INTEGRATION
-    gchar *filename = gnc_gnome_locate_ui_file("gnc-windows-menu-ui-quartz.xml");
+    gchar *filename = gnc_filepath_locate_ui_file("gnc-windows-menu-ui-quartz.xml");
 #else
-    gchar *filename = gnc_gnome_locate_ui_file("gnc-windows-menu-ui.xml");
+    gchar *filename = gnc_filepath_locate_ui_file("gnc-windows-menu-ui.xml");
     GncMainWindowPrivate *priv;
 #endif
     GError *error = NULL;
@@ -3410,7 +3411,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     g_signal_connect (G_OBJECT (window->ui_merge), "connect-proxy",
                       G_CALLBACK (connect_proxy), priv->statusbar);
 
-    filename = gnc_gnome_locate_ui_file("gnc-main-window-ui.xml");
+    filename = gnc_filepath_locate_ui_file("gnc-main-window-ui.xml");
 
     /* Can't do much without a ui. */
     g_assert (filename);
@@ -4062,7 +4063,7 @@ get_file (const gchar *partial)
 {
     gchar *filename, *text = NULL;
 
-    filename = gnc_gnome_locate_data_file(partial);
+    filename = gnc_filepath_locate_doc_file(partial);
     g_file_get_contents(filename, &text, NULL, NULL);
     g_free(filename);
 
@@ -4118,9 +4119,9 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 
     logo = gnc_gnome_get_gdkpixbuf ("gnucash-icon-48x48.png");
 
-    authors = get_file_strsplit("doc/AUTHORS");
-    documenters = get_file_strsplit("doc/DOCUMENTERS");
-    license = get_file("doc/LICENSE");
+    authors = get_file_strsplit("AUTHORS");
+    documenters = get_file_strsplit("DOCUMENTERS");
+    license = get_file("LICENSE");
 #ifdef GNUCASH_SVN
     /* Development version */
     message = g_strdup_printf(_("%s  This copy was built from svn r%s on %s."),

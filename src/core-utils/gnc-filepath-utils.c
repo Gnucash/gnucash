@@ -418,5 +418,67 @@ gnc_build_stdreports_path (const gchar *filename)
     return result;
 }
 
+static gchar *
+gnc_filepath_locate_file (const gchar *default_path, const gchar *name)
+{
+    gchar *fullname;
+
+    g_return_val_if_fail (name != NULL, NULL);
+
+    if (g_path_is_absolute (name))
+        fullname = g_strdup (name);
+    else if (default_path)
+        fullname = g_build_filename (default_path, name, NULL);
+    else
+        fullname = gnc_resolve_file_path (name);
+
+    if (!g_file_test (fullname, G_FILE_TEST_IS_REGULAR))
+    {
+        g_error ("Could not locate file %s", name);
+        g_free (fullname);
+        return NULL;
+    }
+
+    return fullname;
+}
+
+gchar *
+gnc_filepath_locate_data_file (const gchar *name)
+{
+    return gnc_filepath_locate_file (gnc_path_get_pkgdatadir(), name);
+}
+
+gchar *
+gnc_filepath_locate_pixmap (const gchar *name)
+{
+    gchar *default_path;
+    gchar *fullname;
+
+    default_path = g_build_filename (gnc_path_get_pkgdatadir (), "pixmaps", NULL);
+    fullname = gnc_filepath_locate_file (default_path, name);
+    g_free(default_path);
+
+    return fullname;
+}
+
+gchar *
+gnc_filepath_locate_ui_file (const gchar *name)
+{
+    gchar *default_path;
+    gchar *fullname;
+
+    default_path = g_build_filename (gnc_path_get_pkgdatadir (), "ui", NULL);
+    fullname = gnc_filepath_locate_file (default_path, name);
+    g_free(default_path);
+
+    return fullname;
+}
+
+gchar *
+gnc_filepath_locate_doc_file (const gchar *name)
+{
+    return gnc_filepath_locate_file (gnc_path_get_pkgdocdir(), name);
+}
+
 
 /* =============================== END OF FILE ========================== */

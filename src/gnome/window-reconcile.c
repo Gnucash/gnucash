@@ -46,6 +46,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-event.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-main-window.h"
@@ -1744,7 +1745,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
         gtk_ui_manager_insert_action_group (recnData->ui_merge, action_group, 0);
 
-        filename = gnc_gnome_locate_ui_file("gnc-reconcile-window-ui.xml");
+        filename = gnc_filepath_locate_ui_file("gnc-reconcile-window-ui.xml");
         /* Can't do much without a ui. */
         g_assert (filename);
 

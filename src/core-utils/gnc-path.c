@@ -64,6 +64,19 @@ gchar *gnc_path_get_pkgdatadir()
     return result;
 }
 
+/** Returns the docdir path, usually
+ * "$prefix/share/doc/gnucash".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_pkgdocdir()
+{
+    gchar *docdir = gnc_gbr_find_data_dir (DATADIR);
+    gchar *result = g_build_filename (docdir, "doc", "gnucash", (char*)NULL);
+    g_free (docdir);
+    //printf("Returning pkgdocdir %s\n", result);
+    return result;
+}
+
 /** Returns the sysconfdir path, usually
  * "$prefix/etc/gnucash". Needed for gnome_program_init().
  *

@@ -30,6 +30,7 @@
 #include "gnc-embedded-window.h"
 
 #include "gnc-engine.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
@@ -364,7 +365,7 @@ gnc_embedded_window_new (const gchar *action_group_name,
     priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
 
     /* Determine the full pathname of the ui file */
-    ui_fullname = gnc_gnome_locate_ui_file(ui_filename);
+    ui_fullname = gnc_filepath_locate_ui_file (ui_filename);
 
     priv->parent_window = enclosing_win;
 
