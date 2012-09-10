@@ -71,7 +71,6 @@ gnucash_LDADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${GCONF_LIBS} \
-  ${GNOME_LIBS} \
   ${GTK_LIBS}
 
 GNUCASH_BIN_INSTALL_NAME=`echo ${BIN_NAME} | sed -e '$(transform)'`

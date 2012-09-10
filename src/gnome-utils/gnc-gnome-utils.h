@@ -37,8 +37,10 @@
 
 #include <gnc-main-window.h>
 
-/** Initialize the Gnome libraries. */
-void gnc_gnome_init (int argc, char **argv, const char * version);
+/** Load a gtk resource configuration file to customize gtk
+ *  appearance and behviour.
+ */
+void gnc_gtk_add_rc_file (void);
 
 /** Launch the default gnome help browser and open to a given link
  *  within a given file.  This routine will display an error message
@@ -86,6 +88,8 @@ GdkPixbuf * gnc_gnome_get_gdkpixbuf (const char *name);
  */
 void gnc_shutdown (int exit_status);
 
+
+/** Initialize the gnucash gui */
 GncMainWindow *gnc_gui_init (void);
 int gnc_ui_start_event_loop (void);
 gboolean gnucash_ui_is_running (void);

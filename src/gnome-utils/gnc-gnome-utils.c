@@ -23,7 +23,6 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <glib/gi18n.h>
 #include <libguile.h>
 #include <gconf/gconf.h>
@@ -62,7 +61,6 @@
 #endif
 
 static QofLogModule log_module = GNC_MOD_GUI;
-static GnomeProgram *gnucash_program = NULL;
 static int gnome_is_running = FALSE;
 static int gnome_is_terminating = FALSE;
 static int gnome_is_initialized = FALSE;
@@ -170,7 +168,7 @@ gnc_configure_date_completion (void)
     }
 }
 
-static void
+void
 gnc_gtk_add_rc_file (void)
 {
     const gchar *var;
@@ -183,116 +181,6 @@ gnc_gtk_add_rc_file (void)
         gtk_rc_add_default_file (str);
         g_free (str);
     }
-}
-
-void
-gnc_gnome_init (int argc, char **argv, const char * version)
-{
-    gchar *prefix = gnc_path_get_prefix ();
-    gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
-    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-    gchar *pkglibdir = gnc_path_get_pkglibdir ();
-    gboolean installation_ok = TRUE;
-
-    /* Verify all the various directory before proceeding */
-    if (!g_file_test(pkgdatadir, G_FILE_TEST_IS_DIR))
-    {
-        g_critical("The installation data directory \"%s\" was not found. Your installation is incomplete and cannot be run.", pkgdatadir);
-        installation_ok = FALSE;
-    }
-    if (!g_file_test(pkglibdir, G_FILE_TEST_IS_DIR))
-    {
-        g_critical("The installation lib directory \"%s\" was not found. Your installation is incomplete and cannot be run.", pkglibdir);
-        installation_ok = FALSE;
-    }
-
-    if (!g_file_test(pkgsysconfdir, G_FILE_TEST_IS_DIR))
-    {
-        g_critical("The installation sysconf directory \"%s\" was not found. Your installation is incomplete and cannot be run.", pkgsysconfdir);
-        installation_ok = FALSE;
-    }
-
-    gnc_gtk_add_rc_file();
-    gnucash_program = gnome_program_init(
-                          "gnucash", version, LIBGNOMEUI_MODULE,
-                          argc, argv,
-                          GNOME_PARAM_APP_PREFIX, prefix,
-                          GNOME_PARAM_APP_SYSCONFDIR, pkgsysconfdir,
-                          GNOME_PARAM_APP_DATADIR, pkgdatadir,
-                          GNOME_PARAM_APP_LIBDIR, pkglibdir,
-                          GNOME_PARAM_NONE);
-    if (!installation_ok)
-    {
-        /* The following string does not need translation because if
-         * it shows up, the program is unusable anyway. */
-        gnc_error_dialog(NULL, "The installation directories were not found.\n\ndatadir=%s\nlibdir=%s\nsysconfdir=%s\n\nYour installation is incomplete and cannot be run.",
-                         pkgdatadir, pkglibdir, pkgsysconfdir);
-        /* gnc_error_dialog must not be called before gnome_program_init. */
-    }
-
-    g_free (prefix);
-    g_free (pkgsysconfdir);
-    g_free (pkgdatadir);
-    g_free (pkglibdir);
-
-    /* Did the installation directory check fail? Terminate
-     * immediately because it will inevitably fail in the glade file
-     * lookup. */
-    if (!installation_ok)
-    {
-        /* No correct installation? Shut down immediately. */
-        exit(-1);
-    }
-
-#ifdef G_OS_WIN32
-    /* workaround for bug #421792 */
-    xmlCleanupInputCallbacks();
-#endif
-
-    /* initialization required for gtkhtml (is it also needed for webkit?) */
-    gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
-
-    /* use custom icon */
-    {
-        int idx;
-        char *icon_filenames[] = {"gnucash-icon-16x16.png",
-                                  "gnucash-icon-32x32.png",
-                                  "gnucash-icon-48x48.png",
-                                  NULL
-                                 };
-        GList *icons = NULL;
-        char *fullname;
-
-        for (idx = 0; icon_filenames[idx] != NULL; idx++)
-        {
-            GdkPixbuf *buf = NULL;
-
-            fullname = gnc_filepath_locate_pixmap(icon_filenames[idx]);
-            if (fullname == NULL)
-            {
-                g_warning("couldn't find icon file [%s]", icon_filenames[idx]);
-                continue;
-            }
-
-            buf = gnc_gnome_get_gdkpixbuf(fullname);
-            if (buf == NULL)
-            {
-                g_warning("error loading image from [%s]", fullname);
-                g_free(fullname);
-                continue;
-            }
-            g_free(fullname);
-            icons = g_list_append(icons, buf);
-        }
-
-        gtk_window_set_default_icon_list(icons);
-        g_list_foreach(icons, (GFunc)g_object_unref, NULL);
-        g_list_free(icons);
-    }
-
-    assistant_gconf_install_check_schemas();
-
-    return;
 }
 
 #ifdef MAC_INTEGRATION
@@ -659,17 +547,54 @@ gnc_gui_init(void)
 #ifdef MAC_INTEGRATION
     gchar *data_dir;
 #endif
+    int idx;
+    char *icon_filenames[] = {"gnucash-icon-16x16.png",
+                              "gnucash-icon-32x32.png",
+                              "gnucash-icon-48x48.png",
+                              NULL
+                             };
+    GList *icons = NULL;
+    char *fullname;
 
     ENTER ("");
 
     if (gnome_is_initialized)
-    {
         return main_window;
+
+    /* use custom icon */
+    for (idx = 0; icon_filenames[idx] != NULL; idx++)
+    {
+        GdkPixbuf *buf = NULL;
+
+        fullname = gnc_filepath_locate_pixmap(icon_filenames[idx]);
+        if (fullname == NULL)
+        {
+            g_warning("couldn't find icon file [%s]", icon_filenames[idx]);
+            continue;
+        }
+
+        buf = gnc_gnome_get_gdkpixbuf(fullname);
+        if (buf == NULL)
+        {
+            g_warning("error loading image from [%s]", fullname);
+            g_free(fullname);
+            continue;
+        }
+        g_free(fullname);
+        icons = g_list_append(icons, buf);
     }
+
+    gtk_window_set_default_icon_list(icons);
+    g_list_foreach(icons, (GFunc)g_object_unref, NULL);
+    g_list_free(icons);
+
+    /* initialization required for gtkhtml (is it also needed for webkit?) */
+    gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 
     g_set_application_name(PACKAGE_NAME);
 
     gnc_show_splash_screen();
+    assistant_gconf_install_check_schemas();
 
     gnome_is_initialized = TRUE;
 

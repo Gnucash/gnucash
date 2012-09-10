@@ -42,7 +42,7 @@ gchar *gnc_path_get_bindir()
 }
 
 /** Returns the libdir path, usually
- * "$prefix/lib". Needed for gnome_program_init().
+ * "$prefix/lib".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_libdir()
@@ -52,7 +52,7 @@ gchar *gnc_path_get_libdir()
 }
 
 /** Returns the datadir path, usually
- * "$prefix/share/gnucash". Needed for gnome_program_init().
+ * "$prefix/share/gnucash". Needed for gnc_gnome_locate_*().
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkgdatadir()
@@ -78,7 +78,7 @@ gchar *gnc_path_get_pkgdocdir()
 }
 
 /** Returns the sysconfdir path, usually
- * "$prefix/etc/gnucash". Needed for gnome_program_init().
+ * "$prefix/etc/gnucash".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkgsysconfdir()

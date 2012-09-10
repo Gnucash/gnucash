@@ -16,7 +16,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \
-  ${GNOME_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GNOME_KEYRING_CFLAGS} \
   ${GUILE_INCS} \
@@ -199,7 +198,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-  ${GNOME_LIBS} \
+  ${GTK_LIBS} \
   ${GCONF_LIBS} \
   ${GNOME_KEYRING_LIBS} \
   ${GUILE_LIBS} \

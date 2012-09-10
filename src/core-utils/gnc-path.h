@@ -26,7 +26,7 @@
 #include <glib.h>
 
 /** Returns the installation prefix path, usually
- * "$prefix". Needed for gnome_program_init().
+ * "$prefix".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_prefix(void);
@@ -38,13 +38,13 @@ gchar *gnc_path_get_prefix(void);
 gchar *gnc_path_get_bindir(void);
 
 /** Returns the libdir path, usually
- * "$prefix/lib". Needed for gnome_program_init(void).
+ * "$prefix/lib".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_libdir(void);
 
 /** Returns the pkgdatadir path, usually
- * "$prefix/share/gnucash". Needed for gnome_program_init(void).
+ * "$prefix/share/gnucash". Needed for gnc_gnome_locate_*().
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkgdatadir(void);
@@ -56,7 +56,7 @@ gchar *gnc_path_get_pkgdatadir(void);
 gchar *gnc_path_get_pkgdocdir(void);
 
 /** Returns the pkgsysconfdir path, usually
- * "$prefix/etc/gnucash". Needed for gnome_program_init(void).
+ * "$prefix/etc/gnucash".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkgsysconfdir(void);
