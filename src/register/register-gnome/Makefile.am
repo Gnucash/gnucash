@@ -46,6 +46,7 @@ noinst_HEADERS = \
   gnucash-item-list.h \
   gnucash-scrolled-window.h \
   gnucash-sheet.h \
+  gnucash-sheetP.h \
   gnucash-style.h \
   pricecell-gnome.h \
   quickfillcell-gnome.h \
