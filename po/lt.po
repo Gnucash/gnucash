@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-28 13:35+0200\n"
-"PO-Revision-Date: 2012-06-29 21:38+0300\n"
+"PO-Revision-Date: 2012-09-09 17:32+0300\n"
 "Last-Translator: Aurimas Fišeras <aurimas@members.fsf.org>\n"
 "Language-Team: komp_lt@konf.lt\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: UTF-8\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Virtaal 0.7.1\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:656
@@ -3095,7 +3095,6 @@ msgid "sample:Payment"
 msgstr "pavyzdys:Mokėjimas"
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:53
-#, fuzzy
 msgid "$"
 msgstr "$"
 
@@ -3852,8 +3851,8 @@ msgid ""
 "Displayed account code of the other account in a multi-split transaction|"
 "Split"
 msgstr ""
-"Displayed account code of the other account in a multi-split transaction|"
-"Skaidymas"
+"Displayed account code of the other account in a multi-split "
+"transaction|Skaidymas"
 
 #: ../src/engine/Transaction.c:2090
 msgid "Voided transaction"
@@ -4254,7 +4253,6 @@ msgid "Never"
 msgstr "Niekada"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:521
-#, fuzzy
 msgid "(Need Value)"
 msgstr "(reikalinga reikšmė)"
 
@@ -4336,14 +4334,15 @@ msgid "The book was closed successfully."
 msgstr "Knyga sėkmingai užverta."
 
 #: ../src/gnome/druid-acct-period.c:247
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books.  Click on "
 "'Forward' to start closing the earliest book."
 msgstr ""
 "Anksčiausia operacijos data rasta šioje knygoje yra %s. Atsižvelgiant į "
-"pasirinkimą aukščiau ši knyga bus suskaidyta į %d knygas."
+"pasirinkimą aukščiau, ši knyga bus suskaidyta į %d knygas. Spauskite "
+"„Pirmyn“ anksčiausios knygos uždarymui pradėti."
 
 #: ../src/gnome/druid-acct-period.c:294
 #, c-format
@@ -4539,11 +4538,11 @@ msgstr "Klaida"
 
 #: ../src/gnome/druid-stock-split.c:305
 msgid "You must enter a valid distribution amount."
-msgstr ""
+msgstr "Jūs turite įvesti teisingą paskirstymo sumą."
 
 #: ../src/gnome/druid-stock-split.c:314
 msgid "You must enter a distribution amount."
-msgstr ""
+msgstr "Jūs turite įvesti paskirstymo kiekį."
 
 #: ../src/gnome/druid-stock-split.c:322
 msgid "You must either enter a valid price or leave it blank."
@@ -4559,22 +4558,21 @@ msgstr "Privalote įvesti teisingą pinigų sumą arba palikti tuščią."
 
 #: ../src/gnome/druid-stock-split.c:378
 msgid "The cash distribution must be positive."
-msgstr ""
+msgstr "Pinigų paskirstymas turi būti teigiamas."
 
 #: ../src/gnome/druid-stock-split.c:390
 msgid "You must select an income account for the cash distribution."
-msgstr ""
+msgstr "Jūs turite pasirinkti pajamų sąskaitą pinigų paskirstymui."
 
 #: ../src/gnome/druid-stock-split.c:399
 msgid "You must select an asset account for the cash distribution."
-msgstr ""
+msgstr "Jūs turite pasirinkti turto sąskaitą pinigų paskirstymui."
 
 #. Translators: This string has a disambiguation prefix
 #: ../src/gnome/druid-stock-split.c:461
 #: ../src/register/ledger-core/split-register.c:2328
-#, fuzzy
 msgid "Action Column|Split"
-msgstr "Skaidyti"
+msgstr "Skaidymas"
 
 #: ../src/gnome/druid-stock-split.c:492
 msgid "Error adding price."
@@ -4636,9 +4634,8 @@ msgstr "Sąskaitos _spalva:"
 #: ../src/gnome/glade/account.glade.h:9 ../intl-scm/guile-strings.c:3596
 #: ../intl-scm/guile-strings.c:3812 ../intl-scm/guile-strings.c:9526
 #: ../intl-scm/guile-strings.c:10218
-#, fuzzy
 msgid "Default"
-msgstr "Numatytasis"
+msgstr "Numatytoji"
 
 #: ../src/gnome/glade/account.glade.h:10
 msgid "No_tes:"
@@ -4653,6 +4650,8 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
+"Naudokite „Taisa->Mokesčių ataskaitos parinktys“ „susijusi su mokesčiais“ "
+"reikšmei nustatyti ir priskirti mokesčių kodą šiai sąskaitai."
 
 #: ../src/gnome/glade/account.glade.h:13
 msgid "Placeholde_r"
@@ -5193,36 +5192,34 @@ msgid ""
 "Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
+"Kalendoriaus vienetų skaičius pasikartojime: Pvz., kas ketvirtį = kas 3 "
+"mėnesius; kas pusmetį = kas 6 mėnesius"
 
 #: ../src/gnome/glade/budget.glade.h:14
-#, fuzzy
 msgid ""
 "day(s)\n"
 "week(s)\n"
 "month(s)\n"
 "year(s)"
 msgstr ""
-"diena (dienos)\n"
-"savaitė (savaitės)\n"
-"mėnuo (mėnesiai)\n"
-"metai (metai)"
+"dieną (-as)\n"
+"savaitę (-es)\n"
+"mėnesį (-ius)\n"
+"metus"
 
 #: ../src/gnome/glade/budget.glade.h:18
-#, fuzzy
 msgid "beginning on: "
-msgstr "pradėta: "
+msgstr "pradedant: "
 
 #: ../src/gnome/glade/budget.glade.h:19
-#, fuzzy
 msgid "last of month"
-msgstr "paskutinis mėnuo"
+msgstr "paskutinė mėnesio diena"
 
 #: ../src/gnome/glade/budget.glade.h:20
 msgid "Always use the last day (or day of week) in the month?"
 msgstr "Visada naudoti mėnesio (ar savaitės) paskutinę dieną?"
 
 #: ../src/gnome/glade/budget.glade.h:21
-#, fuzzy
 msgid "same week & day"
 msgstr "ta pati savaitė ir diena"
 
@@ -5233,9 +5230,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:23
-#, fuzzy
 msgid "Estimate Budget Values"
-msgstr "Apytikrė biudžeto vertė"
+msgstr "Apytikriai apskaičiuoti biudžeto vertes"
 
 #: ../src/gnome/glade/budget.glade.h:24
 msgid ""
@@ -5834,7 +5830,7 @@ msgstr "Įtraukti _antrines sąskaitas"
 
 #: ../src/gnome/glade/reconcile.glade.h:6 ../src/gnome/window-reconcile.c:741
 msgid "Enter _Interest Payment..."
-msgstr ""
+msgstr "Įvesti palūkanų _mokėjimą..."
 
 #: ../src/gnome/glade/register.glade.h:1
 #: ../src/import-export/generic-import.glade.h:10
@@ -6129,7 +6125,6 @@ msgid "Start:"
 msgstr "Pradžia:"
 
 #: ../src/gnome/glade/register.glade.h:88
-#, fuzzy
 msgid "_Earliest"
 msgstr "_Anksčiausia"
 
@@ -6785,7 +6780,7 @@ msgstr "Akcijų skaidymas"
 
 #: ../src/gnome/glade/stocks.glade.h:2
 msgid "This assistant will help you record a stock split or stock merger."
-msgstr "Šis pagelbiklis padės jums padaryti akcijų skaidymą ar jungimą."
+msgstr "Šis pagelbiklis padės jums įvykdyti akcijų skaidymą ar jungimą."
 
 #: ../src/gnome/glade/stocks.glade.h:3
 msgid "Stock Account"
@@ -6825,6 +6820,8 @@ msgid ""
 "If you want to record a stock price for the split, enter it below. You may "
 "safely leave it blank."
 msgstr ""
+"Jei norite įrašyti akcijų kainą po skaidymo, įveskite žemiau. Jūs saugiai "
+"galite nepildyti."
 
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid "New _Price:"
@@ -6836,7 +6833,7 @@ msgstr "_Valiuta:"
 
 #: ../src/gnome/glade/stocks.glade.h:13
 msgid "Cash In Lieu"
-msgstr ""
+msgstr "Pinigai vietoje akcijų"
 
 #: ../src/gnome/glade/stocks.glade.h:14
 msgid ""
@@ -6880,7 +6877,7 @@ msgstr "<b>Pajamų mokesčių tapatybė</b>"
 
 #: ../src/gnome/glade/tax.glade.h:5
 msgid "Click to change Tax Name and/or Tax Type"
-msgstr ""
+msgstr "Spauskite mokesčio pavadinimui ir/ar tipui pakeisti"
 
 #: ../src/gnome/glade/tax.glade.h:6
 msgid "<b>_Accounts</b>"
@@ -7443,9 +7440,8 @@ msgstr ""
 "operacijų"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
 msgid "Estimate"
-msgstr "Numanomas"
+msgstr "Apskaičiavimas"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-barchart.scm
@@ -7780,9 +7776,8 @@ msgid "Filter %s by..."
 msgstr "Filtruoti „%s“ pagal..."
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:118
-#, fuzzy
 msgid "_Scheduled"
-msgstr "_Užplanuotas"
+msgstr "_Suplanuota"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:120
 #: ../src/gnome/window-reconcile.c:2162
@@ -8333,9 +8328,8 @@ msgstr ""
 "nustelbta visų šriftų nurodytų čekio aprašo faile."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:25
-#, fuzzy
 msgid "Print '***' before and after text."
-msgstr "Spausdinti '***' prieš ir po masyvų."
+msgstr "Spausdinti „***“ prieš ir po teksto."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:1
 msgid "Pre-select cleared transactions"
@@ -10585,23 +10579,20 @@ msgid "<b>Exchange/Price Information</b>"
 msgstr ""
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
-#, fuzzy
 msgid "_From:"
-msgstr "_Nuo:"
+msgstr "_Iš:"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:5
-#, fuzzy
 msgid "_To:"
-msgstr "_Kam:"
+msgstr "_Į:"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:7
 msgid "_Exchange Rate:"
 msgstr "_Konvertavimo kursas:"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:8
-#, fuzzy
 msgid "To A_mount:"
-msgstr "Iki _sumos:"
+msgstr "Į _sumą:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:1
 msgid "December 31, 2000"
@@ -11034,8 +11025,7 @@ msgstr "Naujos paieškos _limitas:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid "Default to 'new search' if fewer than this number of items is returned."
-msgstr ""
-"Nustatyti „nauja paieška“, jei rasta elementų mažiau negu šis skaičius."
+msgstr "Nustatyti „nauja paieška“, jei rasta elementų mažiau negu šis skaičius."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid "Show splash scree_n"
@@ -12829,9 +12819,8 @@ msgid "Profits:"
 msgstr "Pelnas:"
 
 #: ../src/gnome/window-reconcile.c:443
-#, fuzzy
 msgid "Interest Payment"
-msgstr "Palūkanų išmoka"
+msgstr "Palūkanų mokėjimas"
 
 #: ../src/gnome/window-reconcile.c:446
 #, fuzzy
@@ -12861,7 +12850,7 @@ msgstr ""
 #: ../src/gnome/window-reconcile.c:743
 #, fuzzy
 msgid "Enter _Interest Charge..."
-msgstr "Įvesti procentines išmokas..."
+msgstr "Įvesti palūkanų išmokas..."
 
 #: ../src/gnome/window-reconcile.c:1004
 msgid "Debits"
@@ -13268,7 +13257,7 @@ msgstr "<b>Nuo</b>"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:62
 msgid "_Earliest possible date"
-msgstr ""
+msgstr "_Anksčiausia įmanoma data"
 
 #: ../src/import-export/aqbanking/aqbanking.glade.h:63
 msgid "_Last retrieval date"
@@ -15418,21 +15407,24 @@ msgid ""
 msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:838
-#, fuzzy
 msgid ""
 "You are about to overwrite an existing transaction. Are you sure you want to "
 "do that?"
-msgstr "Ar norėtumėte perrašyti esamą pervedimą?"
+msgstr ""
+"Jūs ketinate perrašyti egzistuojančią operaciją. Ar tikrai tą norite "
+"padaryti?"
 
 #: ../src/register/ledger-core/split-register.c:1924
 msgid "Recalculate Transaction"
-msgstr ""
+msgstr "Perskaičiuoti operaciją"
 
 #: ../src/register/ledger-core/split-register.c:1925
 msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
 msgstr ""
+"Reikšmės įvestos šioje operacijoje yra prieštaringos. Kuri reikšmė, "
+"norėtumėte, kad būtų perskaičiuota?"
 
 #: ../src/register/ledger-core/split-register.c:1932
 #: ../src/register/ledger-core/split-register.c:1934
@@ -15442,9 +15434,8 @@ msgstr "_Akcijos"
 #: ../src/register/ledger-core/split-register.c:1932
 #: ../src/register/ledger-core/split-register.c:1939
 #: ../src/register/ledger-core/split-register.c:1946
-#, fuzzy
 msgid "Changed"
-msgstr "Pakeistas"
+msgstr "Pakeista"
 
 #: ../src/register/ledger-core/split-register.c:1946
 #: ../src/register/ledger-core/split-register.c:1948
@@ -15699,10 +15690,12 @@ msgid ""
 "You are about to mark a reconciled split as unreconciled.  Doing so might "
 "make future reconciliation difficult!  Continue with this change?"
 msgstr ""
+"Ketinate pažymėti suderintą skaidymą kaip nesuderintą. Tai padarius gali "
+"būti sunku atlikti suderinimą ateityje! Tęsti šį pakeitimą?"
 
 #: ../src/register/ledger-core/split-register-control.c:1806
 msgid "_Unreconcile"
-msgstr ""
+msgstr "_Nesuderinti"
 
 #. Translators: The 'sample:' items are
 #. strings which are not displayed, but only
@@ -15744,7 +15737,6 @@ msgid "sample:Notes field sample text string"
 msgstr "sample:Pastabų lauko pavyzdinė teksto eilutė"
 
 #: ../src/register/ledger-core/split-register-layout.c:700
-#, fuzzy
 msgid "sample:No Particular Reason"
 msgstr "sample:Nėra ypatingos priežasties"
 
@@ -15798,9 +15790,8 @@ msgstr "Kredito formulė"
 #. This seems to be the one that initially gets used, the InactiveDateCell
 #. is set to, and subsequently displayed.
 #: ../src/register/ledger-core/split-register-model.c:908
-#, fuzzy
 msgid "Scheduled"
-msgstr "Užplanuotas"
+msgstr "Suplanuota"
 
 #: ../src/register/ledger-core/split-register-model.c:940
 msgid "Enter the transaction reference, such as the invoice or check number"
@@ -15898,11 +15889,11 @@ msgstr "_Keisti skaidymą"
 
 #: ../src/register/ledger-core/split-register-model.c:2043
 msgid "Enter debit formula for real transaction"
-msgstr ""
+msgstr "Įveskite debeto formulę tikrai operacijai"
 
 #: ../src/register/ledger-core/split-register-model.c:2073
 msgid "Enter credit formula for real transaction"
-msgstr ""
+msgstr "Įveskite kredito formulę tikrai operacijai"
 
 #: ../src/register/register-gnome/gnucash-item-list.c:487
 msgid "List"
@@ -15915,7 +15906,7 @@ msgstr "Pašalinti dabar pasirinktą ataskaitą"
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:2
 #, fuzzy
 msgid "Exit the custom report dialog"
-msgstr "Atveti naujo pirkėjo dialogo langą"
+msgstr "Užverti adaptuotų ataskaitų dialogo langą"
 
 #: ../src/report/report-gnome/custom-report-dialog.glade.h:3
 msgid "Run the currently selected report"
@@ -19686,9 +19677,8 @@ msgstr "Mokesčių lentelė"
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2512 ../intl-scm/guile-strings.c:2552
 #: ../intl-scm/guile-strings.c:3056 ../intl-scm/guile-strings.c:3096
-#, fuzzy
 msgid "Sub-total"
-msgstr "Viso"
+msgstr "Tarpinė suma"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -19723,31 +19713,32 @@ msgstr ""
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2524 ../intl-scm/guile-strings.c:3068
-#, fuzzy
 msgid "Font to use for the main heading"
-msgstr "Įveskite pervedimo pastabas"
+msgstr "Pagrindinės antraštės šriftas"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2526 ../intl-scm/guile-strings.c:3070
 msgid "Font to use for everything else"
-msgstr ""
+msgstr "Šriftas viskam kitam"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2528 ../intl-scm/guile-strings.c:3072
 msgid "Name of a file containing a logo to be used on the report"
-msgstr ""
+msgstr "Logotipo failo pavadinimas panaudojimui ataskaitoje"
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
 #: ../intl-scm/guile-strings.c:2530 ../intl-scm/guile-strings.c:3074
-#, c-format
 msgid ""
 "Width of the logo in CSS format, e.g. 10% or 32px.  Leave blank to display "
 "the logo at its natural width.  The height of the logo will be scaled "
 "accordingly."
 msgstr ""
+"Logotipo plotis CSS formatu, pavyzdžiui, 10% ar 32px. Palikite tuščią "
+"logotipo rodymui natūraliu pločiu. Logotipo aukštis bus proporcingai "
+"pakeistas."
 
 #. src/report/business-reports/gnucash/report/taxinvoice.scm
 #. src/report/business-reports/taxinvoice.scm
@@ -20316,93 +20307,87 @@ msgstr "Šriftai"
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3544
 msgid "Font info for the report title"
-msgstr ""
+msgstr "Ataskaitos pavadinimo šrifto informacija"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3548
 msgid "Account link"
-msgstr ""
+msgstr "Sąskaitos nuoroda"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3550
 msgid "Font info for account name"
-msgstr ""
+msgstr "Sąskaitos pavadinimo šrifto informacija"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3554
 msgid "Number cell"
-msgstr "Numerio langelis"
+msgstr "Skaičių langelis"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3556
 msgid "Font info for regular number cells"
-msgstr ""
+msgstr "Normalių skaičių langelių šrifto informacija"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3560
-#, fuzzy
 msgid "Negative Values in Red"
 msgstr "Neigiamos reikšmės raudonai"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3562
-#, fuzzy
 msgid "Display negative values in red."
 msgstr "Rodyti neigiamas reikšmes raudonai."
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3566
-#, fuzzy
 msgid "Number header"
-msgstr "Numeris"
+msgstr "Skaičių antraštė"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3568
 msgid "Font info for number headers"
-msgstr ""
+msgstr "Skaičių antraštės šrifto informacija"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3572
-#, fuzzy
 msgid "Text cell"
-msgstr "_Tik tekstas"
+msgstr "Teksto langelis"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3574
 msgid "Font info for regular text cells"
-msgstr ""
+msgstr "Normalių teksto langelių šrifto informacija"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3578
-#, fuzzy
 msgid "Total number cell"
-msgstr "Iš viso skolinga"
+msgstr "Sumos langelis"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3580
 msgid "Font info for number cells containing a total"
-msgstr ""
+msgstr "Sumos langelių šrifto informacija"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3584
-#, fuzzy
 msgid "Total label cell"
-msgstr "Iš viso įsipareigojimų"
+msgstr "Sumos etiketės langelis"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3586
 msgid "Font info for cells containing total labels"
-msgstr ""
+msgstr "Sumos etikečių langelių šrifto informacija"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3590
 msgid "Centered label cell"
-msgstr ""
+msgstr "Centruotas etiketės langelis"
 
 #. src/report/report-system/html-fonts.scm
 #: ../intl-scm/guile-strings.c:3592
 msgid "Font info for centered label cells"
-msgstr ""
+msgstr "Centruotų etikečių langelių šrifto informacija"
 
 #. src/report/report-system/html-style-sheet.scm
 #: ../intl-scm/guile-strings.c:3594
@@ -24956,9 +24941,8 @@ msgstr "Asmens, kuris parengė ataskaitą, vardas"
 #: ../intl-scm/guile-strings.c:9536 ../intl-scm/guile-strings.c:9660
 #: ../intl-scm/guile-strings.c:9748 ../intl-scm/guile-strings.c:9872
 #: ../intl-scm/guile-strings.c:9960 ../intl-scm/guile-strings.c:10090
-#, fuzzy
 msgid "Prepared for"
-msgstr "Parengta dėl"
+msgstr "Kam parengta"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -24970,7 +24954,7 @@ msgstr "Parengta dėl"
 #: ../intl-scm/guile-strings.c:9270 ../intl-scm/guile-strings.c:9538
 #: ../intl-scm/guile-strings.c:9750 ../intl-scm/guile-strings.c:9962
 msgid "Name of organization or company prepared for"
-msgstr ""
+msgstr "Organizacijos ar įmonės pavadinimas kam parengta"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25074,7 +25058,6 @@ msgstr "Paveikslai"
 #: ../intl-scm/guile-strings.c:9554 ../intl-scm/guile-strings.c:9704
 #: ../intl-scm/guile-strings.c:9766 ../intl-scm/guile-strings.c:9916
 #: ../intl-scm/guile-strings.c:9984 ../intl-scm/guile-strings.c:10138
-#, fuzzy
 msgid "Background Tile"
 msgstr "Foninė plytelė"
 
@@ -25090,7 +25073,6 @@ msgstr "Foninė plytelė"
 #: ../intl-scm/guile-strings.c:9294 ../intl-scm/guile-strings.c:9492
 #: ../intl-scm/guile-strings.c:9556 ../intl-scm/guile-strings.c:9768
 #: ../intl-scm/guile-strings.c:9986 ../intl-scm/guile-strings.c:10184
-#, fuzzy
 msgid "Background tile for reports."
 msgstr "Ataskaitų fono plytelė."
 
@@ -25106,9 +25088,8 @@ msgstr "Ataskaitų fono plytelė."
 #: ../intl-scm/guile-strings.c:9560 ../intl-scm/guile-strings.c:9708
 #: ../intl-scm/guile-strings.c:9772 ../intl-scm/guile-strings.c:9920
 #: ../intl-scm/guile-strings.c:9990 ../intl-scm/guile-strings.c:10142
-#, fuzzy
 msgid "Heading Banner"
-msgstr "Antraštės reklaminis skydelis"
+msgstr "Antraštės reklamjuostė"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25122,9 +25103,8 @@ msgstr "Antraštės reklaminis skydelis"
 #: ../intl-scm/guile-strings.c:9562 ../intl-scm/guile-strings.c:9568
 #: ../intl-scm/guile-strings.c:9774 ../intl-scm/guile-strings.c:9780
 #: ../intl-scm/guile-strings.c:9992 ../intl-scm/guile-strings.c:9998
-#, fuzzy
 msgid "Banner for top of report."
-msgstr "Reklaminis skydelis ataskaitos viršuje."
+msgstr "Reklamjuostė ataskaitos viršuje."
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25138,9 +25118,8 @@ msgstr "Reklaminis skydelis ataskaitos viršuje."
 #: ../intl-scm/guile-strings.c:9566 ../intl-scm/guile-strings.c:9716
 #: ../intl-scm/guile-strings.c:9778 ../intl-scm/guile-strings.c:9928
 #: ../intl-scm/guile-strings.c:9996 ../intl-scm/guile-strings.c:10150
-#, fuzzy
 msgid "Heading Alignment"
-msgstr "Antraštės lygiavimas"
+msgstr "Antraštės lygiuotė"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25151,9 +25130,8 @@ msgstr "Antraštės lygiavimas"
 #: ../intl-scm/guile-strings.c:8878 ../intl-scm/guile-strings.c:9090
 #: ../intl-scm/guile-strings.c:9308 ../intl-scm/guile-strings.c:9570
 #: ../intl-scm/guile-strings.c:9782 ../intl-scm/guile-strings.c:10000
-#, fuzzy
 msgid "Left"
-msgstr "Kairė"
+msgstr "Kairinė"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25164,9 +25142,8 @@ msgstr "Kairė"
 #: ../intl-scm/guile-strings.c:8880 ../intl-scm/guile-strings.c:9092
 #: ../intl-scm/guile-strings.c:9310 ../intl-scm/guile-strings.c:9572
 #: ../intl-scm/guile-strings.c:9784 ../intl-scm/guile-strings.c:10002
-#, fuzzy
 msgid "Align the banner to the left"
-msgstr "Lygiuoti reklaminį skydelį kairėje"
+msgstr "Lygiuoti reklamjuostę kairėje"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25177,9 +25154,8 @@ msgstr "Lygiuoti reklaminį skydelį kairėje"
 #: ../intl-scm/guile-strings.c:8882 ../intl-scm/guile-strings.c:9094
 #: ../intl-scm/guile-strings.c:9312 ../intl-scm/guile-strings.c:9574
 #: ../intl-scm/guile-strings.c:9786 ../intl-scm/guile-strings.c:10004
-#, fuzzy
 msgid "Center"
-msgstr "Centras"
+msgstr "Centrinė"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25190,9 +25166,8 @@ msgstr "Centras"
 #: ../intl-scm/guile-strings.c:8884 ../intl-scm/guile-strings.c:9096
 #: ../intl-scm/guile-strings.c:9314 ../intl-scm/guile-strings.c:9576
 #: ../intl-scm/guile-strings.c:9788 ../intl-scm/guile-strings.c:10006
-#, fuzzy
 msgid "Align the banner in the center"
-msgstr "Lygiuoti reklaminį skydelį centre"
+msgstr "Lygiuoti reklamjuostę centre"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25203,9 +25178,8 @@ msgstr "Lygiuoti reklaminį skydelį centre"
 #: ../intl-scm/guile-strings.c:8886 ../intl-scm/guile-strings.c:9098
 #: ../intl-scm/guile-strings.c:9316 ../intl-scm/guile-strings.c:9578
 #: ../intl-scm/guile-strings.c:9790 ../intl-scm/guile-strings.c:10008
-#, fuzzy
 msgid "Right"
-msgstr "Dešinė"
+msgstr "Dešininė"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25216,9 +25190,8 @@ msgstr "Dešinė"
 #: ../intl-scm/guile-strings.c:8888 ../intl-scm/guile-strings.c:9100
 #: ../intl-scm/guile-strings.c:9318 ../intl-scm/guile-strings.c:9580
 #: ../intl-scm/guile-strings.c:9792 ../intl-scm/guile-strings.c:10010
-#, fuzzy
 msgid "Align the banner to the right"
-msgstr "Lygiuoti reklaminį skydelį dešinėje"
+msgstr "Lygiuoti reklamjuostę dešinėje"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25379,9 +25352,8 @@ msgstr "Numatytasis lentelės langelių fonas."
 #: ../intl-scm/guile-strings.c:9688 ../intl-scm/guile-strings.c:9826
 #: ../intl-scm/guile-strings.c:9900 ../intl-scm/guile-strings.c:10044
 #: ../intl-scm/guile-strings.c:10122 ../intl-scm/guile-strings.c:10194
-#, fuzzy
 msgid "Alternate Table Cell Color"
-msgstr "Alternatyvi lentelės ląstelės spalva"
+msgstr "Alternatyvi lentelės langelio spalva"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25393,7 +25365,7 @@ msgstr "Alternatyvi lentelės ląstelės spalva"
 #: ../intl-scm/guile-strings.c:9354 ../intl-scm/guile-strings.c:9616
 #: ../intl-scm/guile-strings.c:9828 ../intl-scm/guile-strings.c:10046
 msgid "Default alternate background for table cells."
-msgstr ""
+msgstr "Numatytasis alternatyvus lentelės langelių fonas."
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25408,7 +25380,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:9832 ../intl-scm/guile-strings.c:9904
 #: ../intl-scm/guile-strings.c:10050 ../intl-scm/guile-strings.c:10126
 msgid "Subheading/Subtotal Cell Color"
-msgstr "Paantraštės/Tarpinės sumos langelio spalva"
+msgstr "Paantraštės/tarpinės sumos langelio spalva"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25435,7 +25407,7 @@ msgstr "Numatytoji spalva tarpinių sumų eilutėms."
 #: ../intl-scm/guile-strings.c:9838 ../intl-scm/guile-strings.c:9908
 #: ../intl-scm/guile-strings.c:10056 ../intl-scm/guile-strings.c:10130
 msgid "Sub-subheading/total Cell Color"
-msgstr "Pa-paantraštės/iš viso langelio spalva"
+msgstr "Pa-paantraštės/sumos langelio spalva"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25523,9 +25495,8 @@ msgstr "Lentelės"
 #: ../intl-scm/guile-strings.c:9720 ../intl-scm/guile-strings.c:9850
 #: ../intl-scm/guile-strings.c:9932 ../intl-scm/guile-strings.c:10068
 #: ../intl-scm/guile-strings.c:10154 ../intl-scm/guile-strings.c:10200
-#, fuzzy
 msgid "Table cell spacing"
-msgstr "Lentelės ląstelių tarpai"
+msgstr "Lentelės langelio tarpai"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25539,9 +25510,8 @@ msgstr "Lentelės ląstelių tarpai"
 #: ../intl-scm/guile-strings.c:9378 ../intl-scm/guile-strings.c:9510
 #: ../intl-scm/guile-strings.c:9640 ../intl-scm/guile-strings.c:9852
 #: ../intl-scm/guile-strings.c:10070 ../intl-scm/guile-strings.c:10202
-#, fuzzy
 msgid "Space between table cells"
-msgstr "Tarpas tarp lentelės ląstelių"
+msgstr "Tarpas tarp lentelės langelių"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25559,7 +25529,7 @@ msgstr "Tarpas tarp lentelės ląstelių"
 #: ../intl-scm/guile-strings.c:9936 ../intl-scm/guile-strings.c:10074
 #: ../intl-scm/guile-strings.c:10158 ../intl-scm/guile-strings.c:10206
 msgid "Table cell padding"
-msgstr ""
+msgstr "Lentelės langelio užpildymas"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25573,9 +25543,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:9384 ../intl-scm/guile-strings.c:9516
 #: ../intl-scm/guile-strings.c:9646 ../intl-scm/guile-strings.c:9858
 #: ../intl-scm/guile-strings.c:10076 ../intl-scm/guile-strings.c:10208
-#, fuzzy
 msgid "Space between table cell edge and content"
-msgstr "Tarpas tarp lentelės ląstelių"
+msgstr "Tarpas tarp lentelės langelio krašto ir turinio"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
@@ -25631,9 +25600,8 @@ msgstr "Parengė: "
 #: ../intl-scm/guile-strings.c:9040 ../intl-scm/guile-strings.c:9252
 #: ../intl-scm/guile-strings.c:9474 ../intl-scm/guile-strings.c:9732
 #: ../intl-scm/guile-strings.c:9944 ../intl-scm/guile-strings.c:10166
-#, fuzzy
 msgid "Prepared for: "
-msgstr "Parengta dėl: "
+msgstr "Kam parengta: "
 
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -25660,7 +25628,6 @@ msgstr "Spalvotas"
 #: ../intl-scm/guile-strings.c:9478 ../intl-scm/guile-strings.c:9480
 #: ../intl-scm/guile-strings.c:9978 ../intl-scm/guile-strings.c:10102
 #: ../intl-scm/guile-strings.c:10170 ../intl-scm/guile-strings.c:10172
-#, fuzzy
 msgid "Footer"
 msgstr "Poraštė"
 
@@ -25668,7 +25635,7 @@ msgstr "Poraštė"
 #. src/report/stylesheets/stylesheet-footer.scm
 #: ../intl-scm/guile-strings.c:9288 ../intl-scm/guile-strings.c:9980
 msgid "String to be placed as a footer"
-msgstr ""
+msgstr "Teksto eilutė puslapinei poraštei"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-plain.scm
 #. src/report/stylesheets/stylesheet-plain.scm
@@ -25679,9 +25646,8 @@ msgstr "Ataskaitų fono spalva."
 #. src/report/stylesheets/gnucash/report/stylesheet-plain.scm
 #. src/report/stylesheets/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:9490 ../intl-scm/guile-strings.c:10182
-#, fuzzy
 msgid "Background Pixmap"
-msgstr "Fono atvaizdas"
+msgstr "Fono paveikslas"
 
 #. src/report/stylesheets/gnucash/report/stylesheet-plain.scm
 #. src/report/stylesheets/stylesheet-plain.scm
@@ -25698,7 +25664,6 @@ msgstr "Fono spalva alternatyvioms eilutėms."
 #. src/report/stylesheets/gnucash/report/stylesheet-plain.scm
 #. src/report/stylesheets/stylesheet-plain.scm
 #: ../intl-scm/guile-strings.c:9524 ../intl-scm/guile-strings.c:10216
-#, fuzzy
 msgid "Plain"
 msgstr "Paprastas"
 
