@@ -906,7 +906,10 @@ refresh_handler (GHashTable *changes, gpointer data)
     GNCSearchWindow * sw = data;
 
     g_return_if_fail (sw);
-    gnc_search_dialog_display_results (sw);
+    /* This assumes that results_cb will refresh itself which is the case with
+     * registers. Also, only refresh if you are already displaying results */
+    if (!sw->result_cb && (sw->result_view != NULL))
+       gnc_search_dialog_display_results (sw);
 }
 
 
