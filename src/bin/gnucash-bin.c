@@ -499,13 +499,8 @@ load_user_config(void)
 /* Parse command line options, using GOption interface */
 
 static void
-gnucash_command_line(int *argc, char **argv)
+gnucash_command_line()
 {
-    const gchar *gconf_path = NULL;
-    GError *error = NULL;
-    GOptionContext *context;
-
-
     if (args_remaining)
         file_to_load = args_remaining[0];
 
@@ -800,6 +795,7 @@ int
 main(int argc, char ** argv)
 {
     GError *error = NULL;
+    GOptionContext *context;
 
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
@@ -840,26 +836,31 @@ main(int argc, char ** argv)
     qof_log_set_default(QOF_LOG_INFO);
 
     gnc_gtk_add_rc_file ();
-    if (!gtk_init_with_args (&argc, &argv,
-            _("- GnuCash personal and small business finance management"),
-            options,
-            GETTEXT_PACKAGE,
-            &error)
-        && !add_quotes_file)
-    {
-        g_printerr(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
-                   _("Error: could not initialize graphical user interface and option add_price_quotes was not set."),
-                   argv[0]);
-        return 1;
-    }
-    else if (error)
+    
+    /* Parse the arguments.  We can't let gtk_init_with_args do it since
+     * it fails if the GUI can't be initialized before parsing any arguments.
+     */
+    context = g_option_context_new (_("- GnuCash personal and small business finance management"));
+    g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+    g_option_context_add_group (context, gtk_get_option_group(FALSE));
+    if (!g_option_context_parse (context, &argc, &argv, &error))
     {
         g_printerr (_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
                     error->message, argv[0]);
         g_error_free (error);
         return 1;
     }
-    gnucash_command_line(&argc, argv);
+    g_option_context_free (context);
+    
+    if (!gtk_init_check (&argc, &argv)
+        && !add_quotes_file)
+    {
+        g_printerr(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
+                   _("Error: could not initialize graphical user interface and option add-price-quotes was not set."),
+                   argv[0]);
+        return 1;
+    }
+    gnucash_command_line();
     gnc_print_unstable_message();
 
     gnc_module_system_init();
