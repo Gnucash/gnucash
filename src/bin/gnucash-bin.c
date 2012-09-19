@@ -831,14 +831,9 @@ main(int argc, char ** argv)
         g_free(localedir);
     }
 #endif
-
-    qof_log_init();
-    qof_log_set_default(QOF_LOG_INFO);
-
-    gnc_gtk_add_rc_file ();
     
     /* Parse the arguments.  We can't let gtk_init_with_args do it since
-     * it fails if the GUI can't be initialized before parsing any arguments.
+     * it fails before parsing any arguments if the GUI can't be initialized.
      */
     context = g_option_context_new (_("- GnuCash personal and small business finance management"));
     g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
@@ -852,26 +847,28 @@ main(int argc, char ** argv)
     }
     g_option_context_free (context);
     
-    if (!gtk_init_check (&argc, &argv)
-        && !add_quotes_file)
-    {
-        g_printerr(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
-                   _("Error: could not initialize graphical user interface and option add-price-quotes was not set."),
-                   argv[0]);
-        return 1;
-    }
     gnucash_command_line();
     gnc_print_unstable_message();
 
-    gnc_module_system_init();
     gnc_log_init();
+    gnc_module_system_init();
 
+    /* If asked via a command line parameter, fetch quotes only */
     if (add_quotes_file)
     {
         scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
         exit(0);  /* never reached */
     }
 
+    /* No quotes fetching was asked - attempt to initialize the gui */
+    gnc_gtk_add_rc_file ();
+    if(!gtk_init_check (&argc, &argv))
+    {
+        g_printerr(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
+                   _("Error: could not initialize graphical user interface and option add-price-quotes was not set."),
+                   argv[0]);
+        return 1;
+    }
     gnc_gui_init();
     scm_boot_guile(argc, argv, inner_main, 0);
     exit(0); /* never reached */
