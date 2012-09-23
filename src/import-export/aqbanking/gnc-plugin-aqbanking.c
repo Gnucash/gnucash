@@ -467,6 +467,7 @@ static void
 gnc_plugin_ab_cmd_setup(GtkAction *action, GncMainWindowActionData *data)
 {
     ENTER("action %p, main window data %p", action, data);
+    gnc_main_window = data->window;
     gnc_ab_initial_assistant();
     LEAVE(" ");
 }
@@ -485,6 +486,7 @@ gnc_plugin_ab_cmd_get_balance(GtkAction *action, GncMainWindowActionData *data)
         return;
     }
 
+    gnc_main_window = data->window;
     gnc_ab_getbalance(GTK_WIDGET(data->window), account);
 
     LEAVE(" ");
@@ -505,6 +507,7 @@ gnc_plugin_ab_cmd_get_transactions(GtkAction *action,
         return;
     }
 
+    gnc_main_window = data->window;
     gnc_ab_gettrans(GTK_WIDGET(data->window), account);
 
     LEAVE(" ");
@@ -525,6 +528,7 @@ gnc_plugin_ab_cmd_issue_transaction(GtkAction *action,
         return;
     }
 
+    gnc_main_window = data->window;
     gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_TRANSFER);
 
     LEAVE(" ");
@@ -545,6 +549,7 @@ gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action,
         return;
     }
 
+    gnc_main_window = data->window;
     gnc_ab_maketrans(GTK_WIDGET(data->window), account,
                      SINGLE_INTERNAL_TRANSFER);
 
@@ -566,6 +571,7 @@ gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action,
         return;
     }
 
+    gnc_main_window = data->window;
     gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_DEBITNOTE);
 
     LEAVE(" ");
@@ -594,6 +600,7 @@ gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data)
 {
     gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
                                          KEY_FORMAT_SWIFT940, NULL);
+    gnc_main_window = data->window;
     gnc_file_aqbanking_import("swift", format ? format : "swift-mt940", FALSE);
     g_free(format);
 }
@@ -603,6 +610,7 @@ gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data)
 {
     gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
                                          KEY_FORMAT_SWIFT942, NULL);
+    gnc_main_window = data->window;
     gnc_file_aqbanking_import("swift", format ? format : "swift-mt942", FALSE);
     g_free(format);
 }
@@ -612,6 +620,7 @@ gnc_plugin_ab_cmd_dtaus_import(GtkAction *action, GncMainWindowActionData *data)
 {
     gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
                                          KEY_FORMAT_DTAUS, NULL);
+    gnc_main_window = data->window;
     gnc_file_aqbanking_import("dtaus", format ? format : "default", FALSE);
     g_free(format);
 }
@@ -622,6 +631,7 @@ gnc_plugin_ab_cmd_dtaus_importsend(GtkAction *action,
 {
     gchar *format = gnc_gconf_get_string(GCONF_SECTION_AQBANKING,
                                          KEY_FORMAT_DTAUS, NULL);
+    gnc_main_window = data->window;
     gnc_file_aqbanking_import("dtaus", format ? format : "default", TRUE);
     g_free(format);
 }
