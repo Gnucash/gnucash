@@ -496,13 +496,27 @@ load_user_config(void)
     try_load_config_array(stylesheet_files);
 }
 
-/* Parse command line options, using GOption interface */
-
+/* Parse command line options, using GOption interface.
+ * We can't let gtk_init_with_args do it because it fails
+ * before parsing any arguments if the GUI can't be initialized.
+ */
 static void
-gnucash_command_line()
+gnc_parse_command_line(int *argc, char ***argv)
 {
-    if (args_remaining)
-        file_to_load = args_remaining[0];
+
+    GError *error = NULL;
+    GOptionContext *context = g_option_context_new (_("- GnuCash personal and small business finance management"));
+
+    g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+    g_option_context_add_group (context, gtk_get_option_group(FALSE));
+    if (!g_option_context_parse (context, argc, argv, &error))
+    {
+        g_printerr (_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
+                    error->message, *argv[0]);
+        g_error_free (error);
+        exit (1);
+    }
+    g_option_context_free (context);
 
     if (gnucash_show_version)
     {
@@ -535,11 +549,13 @@ gnucash_command_line()
         else
             gconf_path = GCONF_PATH;
     }
-
     gnc_set_gconf_path(g_strdup(gconf_path));
 
     if (namespace_regexp)
         gnc_main_set_namespace_regexp(namespace_regexp);
+
+    if (args_remaining)
+        file_to_load = args_remaining[0];
 }
 
 static void
@@ -794,9 +810,6 @@ gnc_log_init()
 int
 main(int argc, char ** argv)
 {
-    GError *error = NULL;
-    GOptionContext *context;
-
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
 #endif
@@ -832,22 +845,7 @@ main(int argc, char ** argv)
     }
 #endif
     
-    /* Parse the arguments.  We can't let gtk_init_with_args do it since
-     * it fails before parsing any arguments if the GUI can't be initialized.
-     */
-    context = g_option_context_new (_("- GnuCash personal and small business finance management"));
-    g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
-    g_option_context_add_group (context, gtk_get_option_group(FALSE));
-    if (!g_option_context_parse (context, &argc, &argv, &error))
-    {
-        g_printerr (_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
-                    error->message, argv[0]);
-        g_error_free (error);
-        return 1;
-    }
-    g_option_context_free (context);
-    
-    gnucash_command_line();
+    gnc_parse_command_line(&argc, &argv);
     gnc_print_unstable_message();
 
     gnc_log_init();
