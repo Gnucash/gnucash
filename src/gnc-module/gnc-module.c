@@ -131,7 +131,6 @@ gnc_module_system_init(void)
     if (loaded_modules)
         return;
 
-    qof_log_init_filename_special ("stderr");
     loaded_modules = g_hash_table_new(g_direct_hash, g_direct_equal);
 
     /* now crawl the GNC_MODULE_PATH to find likely libraries */
