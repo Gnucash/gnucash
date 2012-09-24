@@ -185,15 +185,15 @@ if ($exchange eq "currency") {
 
 =head1 NAME
 
-dump-gnc-fq	- Print out data from the F::Q module
+gnc-fq-dump	- Print out data from the F::Q module
 
 =head1 SYNOPSIS
 
-    dump-gnc-fq yahoo CSCO JNPR
-    dump-gnc-fq yahoo BAESY.PK
-    dump-gnc-fq europe 48406.PA 13000.PA
-    dump-gnc-fq vwd 632034
-    dump-gnc-fq ftportfolios FKYGTX
+    gnc-fq-dump yahoo CSCO JNPR
+    gnc-fq-dump yahoo BAESY.PK
+    gnc-fq-dump europe 48406.PA 13000.PA
+    gnc-fq-dump vwd 632034
+    gnc-fq-dump ftportfolios FKYGTX
 
 =head1 DESCRIPTION
 
