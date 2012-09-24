@@ -15,7 +15,9 @@ doc_DATA = \
   projects.html 
 
 man_MANS = \
-  gnucash.1
+  gnucash.1 \
+  gnc-fq-dump.1 \
+  gnc-fq-helper.1 
 
 tipsdir = $(GNC_SHAREDIR)
 tips_DATA = tip_of_the_day.list
@@ -54,4 +56,4 @@ tip_of_the_day.list: tip_of_the_day.list.in Makefile
                            -e 's:@-GNUCASH_LATEST_STABLE_SERIES-@:${GNUCASH_LATEST_STABLE_SERIES}:g' > $@
 	rm -f $@.tmp
 
-DISTCLEANFILES = gnc-prices.1 gnucash.1 tip_of_the_day.list
+DISTCLEANFILES = gnucash.1 tip_of_the_day.list
