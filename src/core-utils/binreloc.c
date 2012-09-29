@@ -63,7 +63,7 @@ _br_find_exe (Gnc_GbrInitError *error)
     g_free (prefix);
     return result;
 #elif defined MAC_INTEGRATION
-    gchar *path = quartz_application_get_executable_path();
+    gchar *path = gtkosx_application_get_executable_path();
     g_print ("Application Path %s\n", path);
     return path;
 #else
@@ -363,8 +363,8 @@ gchar *
 gnc_gbr_find_prefix (const gchar *default_prefix)
 {
 #if defined ENABLE_BINRELOC && defined MAC_INTEGRATION
-    gchar *id = quartz_application_get_bundle_id ();
-    gchar *path = quartz_application_get_resource_path ();
+    gchar *id = gtkosx_application_get_bundle_id ();
+    gchar *path = gtkosx_application_get_resource_path ();
     if (id == NULL)
     {
         gchar *dirname = g_path_get_dirname (path);

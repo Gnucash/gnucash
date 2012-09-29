@@ -158,8 +158,8 @@ static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
 static gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget, GncPluginPage *page);
 
 #ifdef MAC_INTEGRATION
-static void gnc_quartz_shutdown(GtkOSXApplication *theApp, gpointer data);
-static gboolean gnc_quartz_should_quit(GtkOSXApplication *theApp, GncMainWindow *window);
+static void gnc_quartz_shutdown(GtkosxApplication *theApp, gpointer data);
+static gboolean gnc_quartz_should_quit(GtkosxApplication *theApp, GncMainWindow *window);
 static void gnc_quartz_set_menu(GncMainWindow* window);
 #endif
 
@@ -3479,7 +3479,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
  * loop.
  */
 static void
-gnc_quartz_shutdown (GtkOSXApplication *theApp, gpointer data)
+gnc_quartz_shutdown (GtkosxApplication *theApp, gpointer data)
 {
     /* Do Nothing. It's too late. */
 }
@@ -3491,7 +3491,7 @@ gnc_quartz_shutdown (GtkOSXApplication *theApp, gpointer data)
  * opportunity to shut down.
  */
 static gboolean
-gnc_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
+gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
 {
     QofSession *session;
     gboolean needs_save;
@@ -3514,7 +3514,7 @@ gnc_quartz_should_quit (GtkOSXApplication *theApp, GncMainWindow *window)
 static void
 gnc_quartz_set_menu(GncMainWindow* window)
 {
-    GtkOSXApplication *theApp = g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
+    GtkosxApplication *theApp = g_object_new(GTKOSX_TYPE_APPLICATION, NULL);
     GtkWidget       *menu;
     GtkWidget       *item;
 
@@ -3522,7 +3522,7 @@ gnc_quartz_set_menu(GncMainWindow* window)
     if (GTK_IS_MENU_ITEM (menu))
         menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menu));
     gtk_widget_hide(menu);
-    gtk_osxapplication_set_menu_bar (theApp, GTK_MENU_SHELL (menu));
+    gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menu));
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/File/FileQuit");
@@ -3532,24 +3532,24 @@ gnc_quartz_set_menu(GncMainWindow* window)
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Edit/EditPreferences");
     if (GTK_IS_MENU_ITEM (item))
-        gtk_osxapplication_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
+        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Help/HelpAbout");
     if (GTK_IS_MENU_ITEM (item))
     {
-        gtk_osxapplication_insert_app_menu_item (theApp,
+        gtkosx_application_insert_app_menu_item (theApp,
                 gtk_separator_menu_item_new (),
                 0);
-        gtk_osxapplication_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
+        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET (item), 0);
     }
 
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Help");
-    gtk_osxapplication_set_help_menu(theApp, GTK_MENU_ITEM(item));
+    gtkosx_application_set_help_menu(theApp, GTK_MENU_ITEM(item));
     item = gtk_ui_manager_get_widget (window->ui_merge,
                                       "/menubar/Windows");
-    gtk_osxapplication_set_window_menu(theApp, GTK_MENU_ITEM(item));
+    gtkosx_application_set_window_menu(theApp, GTK_MENU_ITEM(item));
     g_signal_connect(theApp, "NSApplicationBlockTermination",
                      G_CALLBACK(gnc_quartz_should_quit), window);
 
@@ -4161,7 +4161,7 @@ gnc_main_window_show_all_windows(void)
 {
     GList *window_iter;
 #ifdef MAC_INTEGRATION
-    GtkOSXApplication *theApp = g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
+    GtkosxApplication *theApp = g_object_new(GTKOSX_TYPE_APPLICATION, NULL);
 #endif
     for (window_iter = active_windows; window_iter != NULL; window_iter = window_iter->next)
     {
@@ -4173,7 +4173,7 @@ gnc_main_window_show_all_windows(void)
 #ifdef MAC_INTEGRATION
     g_signal_connect(theApp, "NSApplicationWillTerminate",
                      G_CALLBACK(gnc_quartz_shutdown), NULL);
-    gtk_osxapplication_ready(theApp);
+    gtkosx_application_ready(theApp);
 #endif
 }
 
