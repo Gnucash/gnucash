@@ -347,27 +347,27 @@ gnc_customer_import_create_customers (GtkListStore *store, QofBook *book, guint 
         {
             if (g_ascii_strcasecmp (type, "CUSTOMER") == 0)
             {
-              customer = gnc_search_customer_on_id (book, id);
-              if (!customer)
-              {
-                customer = gncCustomerCreate( book );
-                gncCustomerSetCurrency( customer, gnc_default_currency() );
-                (*n_customers_created)++;
+                customer = gnc_search_customer_on_id (book, id);
+                if (!customer)
+                {
+                    customer = gncCustomerCreate( book );
+                    gncCustomerSetCurrency( customer, gnc_default_currency() );
+                    (*n_customers_created)++;
                 }
-              else (*n_customers_updated)++;
+                else (*n_customers_updated)++;
             }
             else if (g_ascii_strcasecmp (type, "VENDOR") == 0)
             {
-              vendor = gnc_search_vendor_on_id (book, id);
-              if ( !vendor)
-              {
-                vendor = gncVendorCreate( book );
-                gncVendorSetCurrency( vendor, gnc_default_currency() );
-                (*n_customers_created)++;
+                vendor = gnc_search_vendor_on_id (book, id);
+                if ( !vendor)
+                {
+                    vendor = gncVendorCreate( book );
+                    gncVendorSetCurrency( vendor, gnc_default_currency() );
+                    (*n_customers_created)++;
                 }
-              else (*n_customers_updated)++;
+                else (*n_customers_updated)++;
             }
-            
+
             if (g_ascii_strcasecmp (type, "CUSTOMER") == 0)
             {
                 gncCustomerBeginEdit (customer);
