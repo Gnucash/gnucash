@@ -38,6 +38,8 @@
 #include <aqbanking/jobsingletransfer.h>
 #include <aqbanking/jobsingledebitnote.h>
 #include <aqbanking/jobinternaltransfer.h>
+#include <aqbanking/jobsepatransfer.h>
+#include <aqbanking/jobsepadebitnote.h>
 
 #include "dialog-ab-trans.h"
 #include "dialog-transfer.h"
@@ -143,6 +145,18 @@ struct _GncABTransDialog
 #endif
 };
 
+gboolean gnc_ab_trans_isSEPA(GncABTransType t)
+{
+    switch (t)
+    {
+    case SEPA_TRANSFER:
+    case SEPA_DEBITNOTE:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 static void
 gnc_ab_trans_dialog_fill_templ_helper(gpointer data, gpointer user_data)
 {
@@ -174,10 +188,20 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
         trans, AB_Account_GetAccountNumber(td->ab_acc));
     AB_Transaction_SetLocalCountry(trans, "DE");
 
-    AB_Transaction_SetRemoteBankCode(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
-    AB_Transaction_SetRemoteAccountNumber(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+    if (gnc_ab_trans_isSEPA(td->trans_type))
+    {
+        AB_Transaction_SetRemoteBic(
+                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
+        AB_Transaction_SetRemoteIban(
+                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+    }
+    else
+    {
+        AB_Transaction_SetRemoteBankCode(
+                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
+        AB_Transaction_SetRemoteAccountNumber(
+                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+    }
     AB_Transaction_SetRemoteCountry(trans, "DE");
     AB_Transaction_AddRemoteName(
         trans, gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)), FALSE);
@@ -315,9 +339,11 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     {
     case SINGLE_TRANSFER:
     case SINGLE_INTERNAL_TRANSFER:
+    case SEPA_TRANSFER:
         /* all labels are already set */
         break;
     case SINGLE_DEBITNOTE:
+    case SEPA_DEBITNOTE:
         gtk_label_set_text(GTK_LABEL (heading_label),
                            /* Translators: Strings from this file are
                              * needed only in countries that have one of
@@ -349,6 +375,26 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     default:
         g_critical("gnc_ab_trans_dialog_new: Oops, unknown GncABTransType %d",
                    trans_type);
+        break;
+    }
+
+    /* Additionally change the labels for the European (SEPA) transactions */
+    switch (trans_type)
+    {
+    case SEPA_TRANSFER:
+        gtk_label_set_text(GTK_LABEL(recp_account_heading),
+                           _("Recipient IBAN (International Account Number)"));
+        gtk_label_set_text(GTK_LABEL(recp_bankcode_heading),
+                           _("Recipient BIC (Bank Code)"));
+        break;
+    case SEPA_DEBITNOTE:
+        gtk_label_set_text(GTK_LABEL(recp_account_heading),
+                           _("Debited IBAN (International Account Number)"));
+        gtk_label_set_text(GTK_LABEL(recp_bankcode_heading),
+                           _("Debited BIC (Bank Code)"));
+        break;
+    default:
+        // do nothing
         break;
     }
 
@@ -406,6 +452,13 @@ gnc_ab_trans_dialog_check_ktoblzcheck(const GncABTransDialog *td,
     gchar* message;
 
     ENTER(" ");
+
+    if (gnc_ab_trans_isSEPA(td->trans_type))
+    {
+        // FIXME: libktoblzcheck also has <iban.h>, maybe add this here?
+        LEAVE("No ktoblzcheck implemented for IBAN");
+        return;
+    }
 
     blzresult = AccountNumberCheck_check(
                     td->blzcheck,
@@ -718,6 +771,12 @@ gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType t
     case SINGLE_INTERNAL_TRANSFER:
         job = AB_JobInternalTransfer_new(ab_acc);
         break;
+    case SEPA_TRANSFER:
+        job = AB_JobSepaTransfer_new(ab_acc);
+        break;
+    case SEPA_DEBITNOTE:
+        job = AB_JobSepaDebitNote_new(ab_acc);
+        break;
     case SINGLE_TRANSFER:
     default:
         job = AB_JobSingleTransfer_new(ab_acc);
@@ -761,6 +820,12 @@ gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
             break;
         case SINGLE_INTERNAL_TRANSFER:
             AB_JobInternalTransfer_SetTransaction(job, ab_trans);
+            break;
+        case SEPA_TRANSFER:
+            AB_JobSepaTransfer_SetTransaction(job, ab_trans);
+            break;
+        case SEPA_DEBITNOTE:
+            AB_JobSepaDebitNote_SetTransaction(job, ab_trans);
             break;
         case SINGLE_TRANSFER:
         default:

@@ -213,6 +213,16 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                 xfer_dialog, _("Online Banking Bank-Internal Transfer"));
             gnc_xfer_dialog_lock_from_account_tree(xfer_dialog);
             break;
+        case SEPA_TRANSFER:
+            gnc_xfer_dialog_set_title(
+                xfer_dialog, _("Online Banking European (SEPA) Transfer"));
+            gnc_xfer_dialog_lock_from_account_tree(xfer_dialog);
+            break;
+        case SEPA_DEBITNOTE:
+            gnc_xfer_dialog_set_title(
+                xfer_dialog, _("Online Banking European (SEPA) Debit Note"));
+            gnc_xfer_dialog_lock_to_account_tree(xfer_dialog);
+            break;
         case SINGLE_TRANSFER:
         default:
             gnc_xfer_dialog_set_title(

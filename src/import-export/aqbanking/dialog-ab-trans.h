@@ -53,7 +53,14 @@ enum _GncABTransType
     SINGLE_TRANSFER = 0,
     SINGLE_DEBITNOTE,
     SINGLE_INTERNAL_TRANSFER
+    , SEPA_TRANSFER
+    , SEPA_DEBITNOTE
 };
+/**
+  * Returns true if the given GncABTransType is an European (SEPA) transaction
+  * (transfer or debit note), otherwise false.
+  */
+gboolean gnc_ab_trans_isSEPA(GncABTransType t);
 
 /**
  * Create a new AqBanking transfer dialog

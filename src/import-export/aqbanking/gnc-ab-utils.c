@@ -623,10 +623,12 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
         case AB_Transaction_TypeDebitNote:
             trans_type = SINGLE_DEBITNOTE;
             break;
+        case AB_Transaction_TypeEuTransfer:
+            trans_type = SEPA_TRANSFER;
+            break;
         case AB_Transaction_TypeTransaction:
             /* trans_type = SINGLE_INTERNAL_TRANSFER;
              * break; */
-        case AB_Transaction_TypeEuTransfer:
         case AB_Transaction_TypeTransfer:
         default:
             trans_type = SINGLE_TRANSFER;
