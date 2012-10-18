@@ -152,6 +152,7 @@ static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPl
 
 /* Command callback for new Register Test */
 static void gnc_plugin_page_account_tree_cmd_open2_account (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_open2_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
 
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
 
@@ -182,6 +183,11 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         "FileOpenAccount2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open New Register2 _Account"), NULL,
         N_("Open the New Register2 selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_account)
+    },
+    {
+        "FileOpenSubaccounts2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open New Register2 _SubAccount"), NULL,
+        N_("Open the New Register2 selected subaccounts"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_subaccounts)
     },
 #endif
     {
@@ -800,26 +806,24 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
 
 
 #ifdef REG2ENABLE
-/*#####################################################################*/
-/*                    New Register Common                              */
+/*################## Added for Reg2 #################*/
+/*        New Register Common                        */
 static void
 gppat_open2_account_common (GncPluginPageAccountTree *page,
                            Account *account,
                            gboolean include_subs)
 {
-    GncPluginPageAccountTreePrivate *priv;
     GtkWidget *window;
     GncPluginPage *new_page;
 
     if (account == NULL)
         return;
 
-    priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
     window = GNC_PLUGIN_PAGE (page)->window;
     new_page = gnc_plugin_page_register2_new (account, include_subs);
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
-/*######################################################################*/
+/*################## Added for Reg2 #################*/
 #endif
 
 static void
@@ -929,23 +933,6 @@ gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action,
     gppat_open_account_common (page, account, FALSE);
 }
 
-
-#ifdef REG2ENABLE
-/*#####################################################################*/
-/*          Register Firing - Single Account to start with             */
-static void
-gnc_plugin_page_account_tree_cmd_open2_account (GtkAction *action,
-        GncPluginPageAccountTree *page)
-{
-    Account *account;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
-    account = gnc_plugin_page_account_tree_get_current_account (page);
-    gppat_open2_account_common (page, account, FALSE);
-}
-/*#####################################################################*/
-#endif
-
 static void
 gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action,
         GncPluginPageAccountTree *page)
@@ -956,6 +943,35 @@ gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action,
     account = gnc_plugin_page_account_tree_get_current_account (page);
     gppat_open_account_common (page, account, TRUE);
 }
+
+
+#ifdef REG2ENABLE
+/*################## Added for Reg2 #################*/
+/* Register Firing - Single Account to start with    */
+static void
+gnc_plugin_page_account_tree_cmd_open2_account (GtkAction *action,
+        GncPluginPageAccountTree *page)
+{
+    Account *account;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
+    account = gnc_plugin_page_account_tree_get_current_account (page);
+    gppat_open2_account_common (page, account, FALSE);
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_open2_subaccounts (GtkAction *action,
+        GncPluginPageAccountTree *page)
+{
+    Account *account;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
+    account = gnc_plugin_page_account_tree_get_current_account (page);
+    gppat_open2_account_common (page, account, TRUE);
+}
+/*################## Added for Reg2 #################*/
+#endif
+
 
 static void
 gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page)

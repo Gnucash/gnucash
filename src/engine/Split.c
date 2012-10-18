@@ -660,30 +660,27 @@ xaccSplitEqual(const Split *sa, const Split *sb,
 }
 
 
+/*################## Added for Reg2 #################*/
 /********************************************************************
  * xaccSplitListGetUniqueTransactions
  ********************************************************************/
-static void
-add_keys_to_list(gpointer key, gpointer val, gpointer list)
-{
-    *(GList **)list = g_list_prepend(*(GList **)list, key);
-}
-
 GList *
 xaccSplitListGetUniqueTransactions(const GList *splits)
 {
-    const GList *node;
+    const GList *snode;
     GList *transList = NULL;
-    GHashTable *transHash = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-    for(node = splits; node; node = node->next) {
-        Transaction *trans = xaccSplitGetParent((Split *)(node->data));
-        g_hash_table_insert(transHash, trans, trans);
+    for(snode = splits; snode; snode = snode->next)
+    {
+        Transaction *trans = xaccSplitGetParent((Split *)(snode->data));
+
+        GList *item = g_list_find (transList, trans);
+        if (item == NULL)
+            transList = g_list_append (transList, trans);
     }
-    g_hash_table_foreach(transHash, add_keys_to_list, &transList);
-    g_hash_table_destroy(transHash);
     return transList;
 }
+/*################## Added for Reg2 #################*/
 
 
 /********************************************************************

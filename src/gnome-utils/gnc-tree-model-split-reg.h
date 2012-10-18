@@ -30,8 +30,9 @@
 
 #include <gtk/gtk.h>
 #include "gnc-tree-model.h"
-
 #include "Query.h"
+
+
 
 G_BEGIN_DECLS
 
@@ -51,70 +52,85 @@ G_BEGIN_DECLS
  * "ledgers" are multiple-account display windows */
 typedef enum
 {
-    BANK_REGISTER2,
-    CASH_REGISTER2,
-    ASSET_REGISTER2,
-    CREDIT_REGISTER2,
-    LIABILITY_REGISTER2,
-    INCOME_REGISTER2,
-    EXPENSE_REGISTER2,
-    EQUITY_REGISTER2,
-    STOCK_REGISTER2,
-    CURRENCY_REGISTER2,
-    RECEIVABLE_REGISTER2,
-    PAYABLE_REGISTER2,
-    TRADING_REGISTER2,
-    NUM_SINGLE_REGISTER_TYPES2,
+    BANK_REGISTER2,             //0
+    CASH_REGISTER2,             //1
+    ASSET_REGISTER2,            //2
+    CREDIT_REGISTER2,           //3
+    LIABILITY_REGISTER2,        //4
+    INCOME_REGISTER2,           //5
+    EXPENSE_REGISTER2,          //6
+    EQUITY_REGISTER2,           //7
+    STOCK_REGISTER2,            //8
+    CURRENCY_REGISTER2,         //9
+    RECEIVABLE_REGISTER2,       //10
+    PAYABLE_REGISTER2,          //11
+    TRADING_REGISTER2,          //12
+    NUM_SINGLE_REGISTER_TYPES2, //13
 
-    GENERAL_LEDGER2 = NUM_SINGLE_REGISTER_TYPES2,
-    INCOME_LEDGER2,
-    PORTFOLIO_LEDGER2,
-    SEARCH_LEDGER2,
+    GENERAL_LEDGER2 = NUM_SINGLE_REGISTER_TYPES2, //13
+    INCOME_LEDGER2,             //14
+    PORTFOLIO_LEDGER2,          //15
+    SEARCH_LEDGER2,             //16
 
-    NUM_REGISTER_TYPES2
+    NUM_REGISTER_TYPES2         //17
 } SplitRegisterType2;
+
 
 /** Register styles */
 typedef enum
 {
-    REG_STYLE_LEDGER2,
-    REG_STYLE_AUTO_LEDGER2,
-    REG_STYLE_JOURNAL2
+    REG2_STYLE_LEDGER,      //0
+    REG2_STYLE_AUTO_LEDGER, //1
+    REG2_STYLE_JOURNAL      //2
 } SplitRegisterStyle2;
 
 
 typedef enum
 {
-    GNC_TREE_MODEL_SPLIT_REG_COL_GUID,
-    GNC_TREE_MODEL_SPLIT_REG_COL_DATE,
-    GNC_TREE_MODEL_SPLIT_REG_COL_NUMACT,
-    GNC_TREE_MODEL_SPLIT_REG_COL_DESCNOTES,
-    GNC_TREE_MODEL_SPLIT_REG_COL_TRANSVOID,
+    GNC_TREE_MODEL_SPLIT_REG_COL_GUID,      //0
+    GNC_TREE_MODEL_SPLIT_REG_COL_DATE,      //1
+    GNC_TREE_MODEL_SPLIT_REG_COL_DUEDATE,   //2
+    GNC_TREE_MODEL_SPLIT_REG_COL_NUMACT,    //3
+    GNC_TREE_MODEL_SPLIT_REG_COL_DESCNOTES, //4
+    GNC_TREE_MODEL_SPLIT_REG_COL_TRANSVOID, //5
+    GNC_TREE_MODEL_SPLIT_REG_COL_RECN,      //6
 
-    GNC_TREE_MODEL_SPLIT_REG_COL_LAST_VISIBLE = GNC_TREE_MODEL_SPLIT_REG_COL_TRANSVOID,
+    GNC_TREE_MODEL_SPLIT_REG_COL_LAST_VISIBLE = GNC_TREE_MODEL_SPLIT_REG_COL_RECN, //6
 
     /* internal hidden columns */
-    GNC_TREE_MODEL_SPLIT_REG_COL_COLOR,
+    GNC_TREE_MODEL_SPLIT_REG_COL_COLOR,     //7
+    GNC_TREE_MODEL_SPLIT_REG_COL_RO,        //8
 
-    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS
+    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS    //9
 } GncTreeModelSplitRegColumn;
 
 /* typedefs & structures */
 typedef struct GncTreeModelSplitRegPrivate GncTreeModelSplitRegPrivate;
 
 /** The instance data structure for an account tree model. */
-typedef struct
+typedef struct 
 {
-    GncTreeModel gnc_tree_model;    /**< The parent object data. */
+    GncTreeModel                 gnc_tree_model;        /**< The parent object data. */
     GncTreeModelSplitRegPrivate *priv;
-    int stamp;                      /**< The state of the model. Any state
-                                     *   change increments this number. */
+    int                          stamp;                 /**< The state of the model. Any state change increments this number. */
 
-    SplitRegisterType2 type;       /* This may be the wrong place for these, may be the view ? */
-    SplitRegisterStyle2 style;
+    SplitRegisterType2           type;                  /**<FIXME ? This may be the wrong place for these, may be the view ? */
+    SplitRegisterStyle2          style;                 /**<FIXME ? This may be the wrong place for these, may be the view ? */
+    gboolean                     use_double_line;       /**<FIXME ? As above, whether to use two lines per transaction */
+
+    gboolean                     is_template;
+
+    gboolean                     do_auto_complete;      /**< whether to use auto-competion */
+    gboolean                     use_accounting_labels; /**< whether to use accounting Labels */
+    gboolean                     separator_changed;     /**< whether the separator has changed */ 
+    gboolean                     alt_colors_by_txn;     /**< whether to use alternative colors by transaction */ 
+    gboolean                     use_colors;            /**< whether to use theme colors */
+
+    gboolean                     read_only;             /**< register is read only */
 
 
-} GncTreeModelSplitReg;
+
+}GncTreeModelSplitReg;
 
 
 /** The class data structure for an account tree model. */
@@ -123,7 +139,9 @@ typedef struct
     GncTreeModelClass gnc_tree_model;   /**< The parent object data. */
 } GncTreeModelSplitRegClass;
 
-
+/** Callback function type */
+/*FIXME Not sure if this is needed or what it is for yet*/
+typedef GtkWidget *(*SRGetParentCallback2) (gpointer user_data);
 
 /** Get the type of split register tree plugin.
  *
@@ -132,65 +150,83 @@ typedef struct
 GType gnc_tree_model_split_reg_get_type (void);
 
 
-/** @name Split Register Tree Model Constructors
- @{ */
+GncTreeModelSplitReg *
+gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 style,
+                        gboolean use_double_line, gboolean is_template);
 
-/** Create a new GtkTreeModel for manipulating gnucash splits.
- *
- *  @param The Query
- */
-GncTreeModelSplitReg *gnc_tree_model_split_reg_new_from_account (Account *acc);
-/** @} */
 
-/** @name Split Register Tree Model Constructors
- @{ */
+void gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList * slist, Account *default_account);
 
-/** Create a new GtkTreeModel for manipulating gnucash splits.
- *
- *  @param The Query
- */
-GncTreeModelSplitReg *gnc_tree_model_split_reg_new_from_query (Query *query);
-/** @} */
+void gnc_tree_model_split_reg_set_template_account (GncTreeModelSplitReg *model, Account *template_account);
 
-/** Get the Account of GtkTreeModel.
- *
- *  @param The model
- */
-Account * gnc_tree_model_split_reg_get_anchor(GncTreeModelSplitReg *model);
-/** @} */
+void gnc_tree_model_split_reg_destroy (GncTreeModelSplitReg *model);
+
+/** Sets the user data and callback hooks for the register. */
+void gnc_tree_model_split_reg_set_data (GncTreeModelSplitReg *model, gpointer user_data,
+                                  SRGetParentCallback2 get_parent);
+
+void gnc_tree_model_split_reg_config (GncTreeModelSplitReg *model, SplitRegisterType2 newtype,
+                                      SplitRegisterStyle2 newstyle, gboolean use_double_line);
+
+Account * gnc_tree_model_split_reg_get_anchor (GncTreeModelSplitReg *model);
+
+void gnc_tree_model_split_reg_commit_split (GncTreeModelSplitReg *model, Split *split);
+
+/* These are to do with autocompletion */
+GtkListStore *
+gnc_tree_model_split_reg_get_description_list (GncTreeModelSplitReg *model);
 
 GtkListStore *
-gnc_tree_model_split_reg_get_description_list(GncTreeModelSplitReg *model);
+gnc_tree_model_split_reg_get_notes_list (GncTreeModelSplitReg *model);
 
 GtkListStore *
-gnc_tree_model_split_reg_get_notes_list(GncTreeModelSplitReg *model);
+gnc_tree_model_split_reg_get_memo_list (GncTreeModelSplitReg *model);
 
 GtkListStore *
-gnc_tree_model_split_reg_get_memo_list(GncTreeModelSplitReg *model);
+gnc_tree_model_split_reg_get_numact_list (GncTreeModelSplitReg *model);
 
 GtkListStore *
-gnc_tree_model_split_reg_get_numact_list(GncTreeModelSplitReg *model);
-
-GtkListStore *
-gnc_tree_model_split_reg_get_acct_list(GncTreeModelSplitReg *model);
+gnc_tree_model_split_reg_get_acct_list (GncTreeModelSplitReg *model);
 
 void
-gnc_tree_model_split_reg_get_num_list(GncTreeModelSplitReg *model);
+gnc_tree_model_split_reg_get_num_list (GncTreeModelSplitReg *model);
 
 void
-gnc_tree_model_split_reg_get_action_list(GncTreeModelSplitReg *model);
+gnc_tree_model_split_reg_get_action_list (GncTreeModelSplitReg *model);
+
+void
+gnc_tree_model_split_reg_update_completion (GncTreeModelSplitReg *model);
 
 
+/* Get the split and transaction */
 gboolean
 gnc_tree_model_split_reg_get_split_and_trans (
     GncTreeModelSplitReg *model, GtkTreeIter *iter,
     gboolean *is_trow1, gboolean *is_trow2, gboolean *is_split,
     gboolean *is_blank, Split **split, Transaction **trans);
 
+/* Return FALSE if failure */
+gboolean 
+gnc_tree_model_split_reg_set_blank_split_parent (
+    GncTreeModelSplitReg *model, Transaction *trans);
+
+/* Return the blank split */
+Split *
+gnc_tree_model_split_get_blank_split (GncTreeModelSplitReg *model);
+
+
+/* If 'trans' is NULL, use split's parent.  If 'split' is NULL, just
+   get the transaction iter. */
+gboolean
+gnc_tree_model_split_reg_get_iter_from_trans_and_split (
+    GncTreeModelSplitReg *model, Transaction *trans, Split *split, 
+    GtkTreeIter *iter1, GtkTreeIter *iter2);
+
+
+/* Return the tree path, if split and trans are null, last in list returned */
+GtkTreePath *
+gnc_tree_model_split_reg_get_path_to_split_and_trans (GncTreeModelSplitReg *model, Split *split, Transaction *trans);
 
 G_END_DECLS
 
 #endif /* __GNC_TREE_MODEL_SPLIT_REG_H */
-
-/** @} */
-/** @} */

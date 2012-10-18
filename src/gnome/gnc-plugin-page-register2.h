@@ -38,9 +38,9 @@
 #include <gtk/gtk.h>
 
 #include "Account.h"
-#include "gnc-ledger-display.h"
+#include "gnc-ledger-display2.h"
 #include "gnc-plugin-page.h"
-#include "gnc-split-reg.h"
+#include "gnc-split-reg2.h"
 
 G_BEGIN_DECLS
 
@@ -99,7 +99,7 @@ gnc_plugin_page_register2_new (Account *account, gboolean subaccounts);
  *  @return The newly created plugin page.
  */
 GncPluginPage *
-gnc_plugin_page_register2_new_ledger (GNCLedgerDisplay *ledger);
+gnc_plugin_page_register2_new_ledger (GNCLedgerDisplay2 *ledger);
 
 
 /** Create a new "register" plugin page containing a general ledger.
@@ -129,7 +129,7 @@ gnc_plugin_page_register2_set_options (GncPluginPage *plugin_page,
  *
  *  @param plugin_page A "register" page.
  */
-GNCSplitReg *
+GNCSplitReg2 *
 gnc_plugin_page_register2_get_gsr (GncPluginPage *plugin_page);
 
 

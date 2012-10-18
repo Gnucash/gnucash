@@ -53,6 +53,7 @@ libgnc_gnome_la_SOURCES = \
   gnc-plugin-page-register.c \
   gnc-plugin-page-register2.c \
   gnc-split-reg.c \
+  gnc-split-reg2.c \
   reconcile-view.c \
   top-level.c \
   window-reconcile.c \
@@ -91,6 +92,7 @@ noinst_HEADERS = \
   gnc-plugin-page-register.h \
   gnc-plugin-page-register2.h \
   gnc-split-reg.h \
+  gnc-split-reg2.h \
   reconcile-view.h \
   top-level.h \
   window-reconcile.h \

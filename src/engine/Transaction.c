@@ -990,6 +990,7 @@ xaccTransGetAccountAmount (const Transaction *trans, const Account *acc)
     return total;
 }
 
+/*################## Added for Reg2 #################*/
 gboolean
 xaccTransGetRateForCommodity(const Transaction *trans,
                              const gnc_commodity *split_com,
@@ -1028,6 +1029,7 @@ xaccTransGetRateForCommodity(const Transaction *trans,
     }
     return FALSE;
 }
+/*################## Added for Reg2 #################*/
 
 gnc_numeric
 xaccTransGetAccountConvRate(const Transaction *txn, const Account *acc)
@@ -2068,6 +2070,28 @@ gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans)
     return result;
 }
 
+/*################## Added for Reg2 #################*/
+
+gboolean xaccTransInFutureByPostedDate (const Transaction *trans)
+{
+    GDate date_now;
+    GDate trans_date;
+    gboolean result;
+    g_assert(trans);
+
+    trans_date = xaccTransGetDatePostedGDate (trans);
+
+    g_date_set_time_t (&date_now, time(NULL));
+
+    if (g_date_compare (&trans_date, &date_now) > 0)
+        result = TRUE;
+    else
+        result = FALSE;
+
+    return result;
+}
+
+/*################## Added for Reg2 #################*/
 
 gboolean
 xaccTransHasReconciledSplitsByAccount (const Transaction *trans,

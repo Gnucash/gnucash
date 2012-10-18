@@ -67,7 +67,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-icons.h"
-#include "gnc-split-reg.h"
+#include "gnc-split-reg2.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
 #include "gnc-main-window.h"
@@ -84,13 +84,10 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define DEFAULT_LINES_AMOUNT         50
-#define GCONF_SECTION "window/pages/register2"
 
 static void gnc_plugin_page_register2_class_init (GncPluginPageRegister2Class *klass);
 static void gnc_plugin_page_register2_init (GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_finalize (GObject *object);
-
-/* static Account *gnc_plugin_page_register2_get_current_account (GncPluginPageRegister2 *page); */
 
 static GtkWidget *gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register2_destroy_widget (GncPluginPage *plugin_page);
@@ -128,8 +125,8 @@ static gchar *gnc_plugin_page_register2_filter_time2dmy (time_t raw_time);
 static gchar *gnc_plugin_page_register2_get_filter (GncPluginPage *plugin_page);
 void gnc_plugin_page_register2_set_filter (GncPluginPage *plugin_page, const gchar *filter);
 
-static void gnc_ppr_update_status_query (GncPluginPageRegister2 *page);
-static void gnc_ppr_update_date_query (GncPluginPageRegister2 *page);
+static void gnc_ppr_update_status_query (GncPluginPageRegister2 *page, gboolean refresh_page);
+static void gnc_ppr_update_date_query (GncPluginPageRegister2 *page, gboolean refresh_page);
 
 /* Command callbacks */
 static void gnc_plugin_page_register2_cmd_print_check (GtkAction *action, GncPluginPageRegister2 *plugin_page);
@@ -170,7 +167,7 @@ static void gnc_plugin_page_register2_cmd_scrub_current (GtkAction *action, GncP
 static void gnc_plugin_page_register2_cmd_account_report (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_transaction_report (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 
-static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister2 *register_page );
+static void gnc_plugin_page_help_changed_cb( GNCSplitReg2 *gsr, GncPluginPageRegister2 *register_page );
 static void gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data);
 static void gnc_plugin_page_register2_close_cb (gpointer user_data);
 
@@ -245,8 +242,8 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_duplicate_transaction)
     },
     {
-        "DeleteTransactionAction", GTK_STOCK_DELETE, N_("_Delete Transaction"), NULL,
-        N_("Delete the current transaction"),
+        "DeleteTransactionAction", GTK_STOCK_DELETE, N_("_Delete Selection"), NULL,
+        N_("Delete the current selection"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_delete_transaction)
     },
     {
@@ -386,17 +383,17 @@ static GtkRadioActionEntry radio_entries_2 [] =
     /* Translators: This is a menu item in the View menu */
     {
         "ViewStyleBasicAction", NULL, N_("_Basic Ledger"), NULL,
-        N_("Show transactions on one or two lines"), REG_STYLE_LEDGER
+        N_("Show transactions on one or two lines"), REG2_STYLE_LEDGER
     },
     /* Translators: This is a menu item in the View menu */
     {
         "ViewStyleAutoSplitAction", NULL, N_("_Auto-Split Ledger"), NULL,
-        N_("Show transactions on one or two lines and expand the current transaction"), REG_STYLE_AUTO_LEDGER
+        N_("Show transactions on one or two lines and expand the current transaction"), REG2_STYLE_AUTO_LEDGER
     },
     /* Translators: This is a menu item in the View menu */
     {
         "ViewStyleJournalAction", NULL, N_("Transaction _Journal"), NULL,
-        N_("Show expanded transactions with all splits"), REG_STYLE_JOURNAL
+        N_("Show expanded transactions with all splits"), REG2_STYLE_JOURNAL
     }
 };
 
@@ -474,13 +471,10 @@ static struct status_action status_actions[] =
 
 typedef struct GncPluginPageRegister2Private
 {
-    GNCLedgerDisplay *ledger;
-    GNCSplitReg *gsr;
-
     GtkWidget *widget;
 
-
-    GncTreeViewSplitReg *tv;
+    GNCLedgerDisplay2 *ledger;
+    GNCSplitReg2 *gsr;
 
     gint event_handler_id;
     gint component_manager_id;
@@ -558,7 +552,7 @@ gnc_plugin_page_register2_get_type (void)
 /*#################################################################################*/
 /*#################################################################################*/
 static GncPluginPage *
-gnc_plugin_page_register2_new_common (GNCLedgerDisplay *ledger)
+gnc_plugin_page_register2_new_common (GNCLedgerDisplay2 *ledger)
 {
     GncPluginPageRegister2 *register_page;
     GncPluginPageRegister2Private *priv;
@@ -567,8 +561,8 @@ gnc_plugin_page_register2_new_common (GNCLedgerDisplay *ledger)
     GncTreeModelSplitReg *model; 
     GtkTreeView *tv; 
 
-    GNCSplitReg *gsr;
-    SplitRegister *reg;
+    GNCSplitReg2 *gsr;
+
     const GList *item;
     GList *book_list;
     gchar *label;
@@ -576,10 +570,10 @@ gnc_plugin_page_register2_new_common (GNCLedgerDisplay *ledger)
     QofQuery *q;
     Account *account;
 
-g_print("Register New Common\n");
+//g_print("Register New Common\n");
 
     /* Is there an existing page? */
-    gsr = gnc_ledger_display_get_user_data (ledger);
+    gsr = gnc_ledger_display2_get_user_data (ledger);
     if (gsr)
     {
         item = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_REGISTER2_NAME);
@@ -591,7 +585,6 @@ g_print("Register New Common\n");
                 return GNC_PLUGIN_PAGE(register_page);
         }
     }
-
 
     register_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER2, NULL);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(register_page);
@@ -611,32 +604,11 @@ g_print("Register New Common\n");
     gnc_plugin_page_set_page_long_name(plugin_page, label);
     g_free(label);
 
-/*FIXME New Stuff here */
-
-    q = gnc_ledger_display_get_query (ledger);
+    q = gnc_ledger_display2_get_query (ledger);
     book_list = qof_query_get_books (q);
     for (item = book_list; item; item = g_list_next(item))
         gnc_plugin_page_add_book (plugin_page, (QofBook *)item->data);
     // Do not free the list. It is owned by the query.
-
-
-/*
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
-*/
-
-    account = gnc_plugin_page_register2_get_account (register_page);
-
-    model = gnc_tree_model_split_reg_new_from_account(account);
-    priv->tv = gnc_tree_view_split_reg_new_with_model(model);
-
-
-
-/*    g_object_unref(G_OBJECT(model)); */
-
-
-
-
-
 
     priv->component_manager_id = 0;
     return plugin_page;
@@ -648,7 +620,7 @@ g_print("Register New Common\n");
 GncPluginPage *
 gnc_plugin_page_register2_new (Account *account, gboolean subaccounts)
 {
-    GNCLedgerDisplay *ledger;
+    GNCLedgerDisplay2 *ledger;
     GncPluginPage *page;
     GncPluginPageRegister2Private *priv;
 
@@ -656,9 +628,9 @@ gnc_plugin_page_register2_new (Account *account, gboolean subaccounts)
           subaccounts ? "TRUE" : "FALSE");
 
     if (subaccounts)
-        ledger = gnc_ledger_display_subaccounts (account);
+        ledger = gnc_ledger_display2_subaccounts (account);
     else
-        ledger = gnc_ledger_display_simple (account);
+        ledger = gnc_ledger_display2_simple (account);
 
     page = gnc_plugin_page_register2_new_common(ledger);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
@@ -671,14 +643,14 @@ gnc_plugin_page_register2_new (Account *account, gboolean subaccounts)
 GncPluginPage *
 gnc_plugin_page_register2_new_gl (void)
 {
-    GNCLedgerDisplay *ledger;
+    GNCLedgerDisplay2 *ledger;
 
-    ledger = gnc_ledger_display_gl ();
+    ledger = gnc_ledger_display2_gl ();
     return gnc_plugin_page_register2_new_common(ledger);
 }
 
 GncPluginPage *
-gnc_plugin_page_register2_new_ledger (GNCLedgerDisplay *ledger)
+gnc_plugin_page_register2_new_ledger (GNCLedgerDisplay2 *ledger)
 {
     return gnc_plugin_page_register2_new_common(ledger);
 }
@@ -722,7 +694,7 @@ gnc_plugin_page_register2_init (GncPluginPageRegister2 *plugin_page)
     parent = GNC_PLUGIN_PAGE(plugin_page);
     use_new = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER, KEY_USE_NEW, NULL);
     g_object_set(G_OBJECT(plugin_page),
-                 "page-name",      _("General Ledger"),
+                 "page-name",      _("General Ledger2"),
                  "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-register2-ui.xml",
                  "use-new-window", use_new,
@@ -739,7 +711,7 @@ gnc_plugin_page_register2_init (GncPluginPageRegister2 *plugin_page)
                                          plugin_page);
     gtk_action_group_add_radio_actions (action_group,
                                         radio_entries_2, n_radio_entries_2,
-                                        REG_STYLE_LEDGER,
+                                        REG2_STYLE_LEDGER,
                                         G_CALLBACK(gnc_plugin_page_register2_cmd_style_changed),
                                         plugin_page);
 
@@ -771,14 +743,14 @@ Account *
 gnc_plugin_page_register2_get_account (GncPluginPageRegister2 *page)
 {
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
+    GNCLedgerDisplay2Type ledger_type;
     Account *leader;
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    ledger_type = gnc_ledger_display_type (priv->ledger);
-    leader = gnc_ledger_display_leader (priv->ledger);
+    ledger_type = gnc_ledger_display2_type (priv->ledger);
+    leader = gnc_ledger_display2_leader (priv->ledger);
 
-    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+    if ((ledger_type == LD2_SINGLE) || (ledger_type == LD2_SUBACCOUNT))
         return leader;
     return NULL;
 }
@@ -809,21 +781,27 @@ static const char* readonly_inactive_actions[] =
 };
 
 static void
-gnc_plugin_page_register2_ui_update (gpointer various, GncPluginPageRegister2 *page)
+gnc_plugin_page_register2_ui_update (gpointer various, GncPluginPageRegister2 *page) /* Working */
 {
     GncPluginPageRegister2Private *priv;
-    SplitRegister *reg;
+    GncTreeViewSplitReg *view;
+    GncTreeModelSplitReg *model;
     GtkAction *action;
     gboolean expanded, voided;
     Transaction *trans;
 
+//g_print("gnc_plugin_page_register2_ui_update\n");
+
     /* Set 'Split Transaction' */
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
-    expanded = gnc_split_register_current_trans_expanded(reg);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
+    model = gnc_ledger_display2_get_split_model_register (priv->ledger);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+
+    expanded = gnc_tree_view_split_reg_current_trans_expanded (view);
+
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "SplitTransactionAction");
-    gtk_action_set_sensitive (action, reg->style == REG_STYLE_LEDGER);
+    gtk_action_set_sensitive (action, model->style == REG2_STYLE_LEDGER);
     g_signal_handlers_block_by_func
     (action, gnc_plugin_page_register2_cmd_expand_transaction, page);
     gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), expanded);
@@ -831,8 +809,9 @@ gnc_plugin_page_register2_ui_update (gpointer various, GncPluginPageRegister2 *p
     (action, gnc_plugin_page_register2_cmd_expand_transaction, page);
 
     /* Set 'Void' and 'Unvoid' */
-    trans = gnc_split_register_get_current_trans(reg);
-    voided = xaccTransHasSplitsInState(trans, VREC);
+    trans = gnc_tree_view_split_reg_get_current_trans (view);
+    voided = xaccTransHasSplitsInState (trans, VREC); 
+
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "VoidTransactionAction");
     gtk_action_set_sensitive (GTK_ACTION(action), !voided);
@@ -862,8 +841,8 @@ gnc_plugin_page_register2_ui_initial_state (GncPluginPageRegister2 *page)
     GtkActionGroup *action_group;
     GtkAction *action;
     Account *account;
-    SplitRegister *reg;
-    GNCLedgerDisplayType ledger_type;
+    GncTreeModelSplitReg *model;
+    GNCLedgerDisplay2Type ledger_type;
     int i;
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
 
@@ -874,16 +853,16 @@ gnc_plugin_page_register2_ui_initial_state (GncPluginPageRegister2 *page)
                               "sensitive", is_readwrite && account != NULL);
 
     /* Set "style" radio button */
-    ledger_type = gnc_ledger_display_type(priv->ledger);
+    ledger_type = gnc_ledger_display2_type(priv->ledger);
     gnc_plugin_update_actions(action_group, view_style_actions,
-                              "sensitive", ledger_type == LD_SINGLE);
+                              "sensitive", ledger_type == LD2_SINGLE);
 
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    model = gnc_ledger_display2_get_split_model_register(priv->ledger);
     for (i = n_radio_entries_2 - 1; i > 0; i--)
     {
         DEBUG(" index %d: comparing %x to %x", i, radio_entries_2[i].value,
-              reg->style);
-        if (radio_entries_2[i].value == reg->style)
+              model->style);
+        if (radio_entries_2[i].value == model->style)
         {
             DEBUG("match");
             break;
@@ -900,7 +879,7 @@ gnc_plugin_page_register2_ui_initial_state (GncPluginPageRegister2 *page)
     action = gtk_action_group_get_action (action_group,
                                           "ViewStyleDoubleLineAction");
     g_signal_handlers_block_by_func(action, gnc_plugin_page_register2_cmd_style_double_line, page);
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), reg->use_double_line);
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), model->use_double_line);
     g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register2_cmd_style_double_line, page);
 }
 
@@ -914,15 +893,12 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister2 *page;
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
+    GNCLedgerDisplay2Type ledger_type;
     GncWindow *gnc_window;
     guint numRows;
     GtkWidget *gsr;
 
-    GncTreeViewSplitReg *tree_view;
-    GtkWidget *scrolled_window;
-
-    SplitRegister *reg;
+    GncTreeModelSplitReg *model;
     Account *acct;
     gchar **filter;
     gchar *order;
@@ -946,57 +922,30 @@ g_print("Register New Create\n");
     numRows = MIN(numRows, DEFAULT_LINES_AMOUNT);
 
     gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
-/*FIXME Create widget */
 
-    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrolled_window),
-                                   GTK_POLICY_AUTOMATIC,
-                                   GTK_POLICY_AUTOMATIC);
-    gtk_widget_show(scrolled_window);
-    gtk_box_pack_start(GTK_BOX (priv->widget), scrolled_window, TRUE, TRUE, 0);
-
-    tree_view = priv->tv;
-    g_object_set(G_OBJECT(tree_view), "gconf-section", GCONF_SECTION, 
-                 "show-column-menu", TRUE, NULL);
-
-    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view));
-
-    gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree_view), TRUE);
-    gtk_widget_show(GTK_WIDGET (tree_view));
-    gtk_container_add(GTK_CONTAINER(scrolled_window),
-                      GTK_WIDGET(tree_view));
-    gtk_widget_show(priv->widget);
-
-#ifdef SKIP
-
-    gsr = gnc_split_reg_new(priv->ledger,
+    gsr = gnc_split_reg2_new(priv->ledger,
                             gnc_window_get_gtk_window(gnc_window),
                             numRows, priv->read_only);
-    priv->gsr = (GNCSplitReg *)gsr;
-/*    gtk_widget_show (gsr); */
-/*    gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0); */
+    priv->gsr = (GNCSplitReg2 *)gsr;
+    gtk_widget_show (gsr);
+
+    gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
 
     g_signal_connect (G_OBJECT (gsr), "help-changed",
                       G_CALLBACK ( gnc_plugin_page_help_changed_cb ),
                       page );
 
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    model = gnc_ledger_display2_get_split_model_register (priv->ledger);
 
-    gnc_split_register_config(reg, reg->type, reg->style,
-                              reg->use_double_line);
-    gnc_ledger_display_refresh(priv->ledger);
-
-#endif
+    gnc_tree_model_split_reg_config (model, model->type, model->style, model->use_double_line);
 
     gnc_plugin_page_register2_ui_initial_state (page);
     gnc_plugin_page_register2_ui_update (NULL, page);
 
-#ifdef SKIP
-
-    ledger_type = gnc_ledger_display_type (priv->ledger);
+    ledger_type = gnc_ledger_display2_type (priv->ledger);
 
 
-    if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
+    if (ledger_type == LD2_SINGLE || ledger_type == LD2_SUBACCOUNT)
     {
         /* Set the sort order for the split register and status of save order button */
         priv->sd.save_order = FALSE;
@@ -1004,7 +953,7 @@ g_print("Register New Create\n");
 
         PINFO("Loaded Sort order is %s", order);
 
-        gnc_split_reg_set_sort_type(priv->gsr, SortTypefromString(order));
+        gnc_split_reg2_set_sort_type(priv->gsr, SortTypefromString(order));
 
         if (order && (g_strcmp0 (order, DEFAULT_SORT_ORDER) != 0))
             priv->sd.save_order = TRUE;
@@ -1049,13 +998,14 @@ g_print("Register New Create\n");
         g_strfreev(filter);
 
         /* Update Query with Filter Status and Dates */
-        gnc_ppr_update_status_query (page);
-        gnc_ppr_update_date_query(page);
+        gnc_ppr_update_status_query (page, FALSE);
+        gnc_ppr_update_date_query (page, FALSE);
     }
-#endif
 
-#ifdef SKIP
-    plugin_page->summarybar = gsr_create_summary_bar(priv->gsr);
+    gnc_ledger_display2_refresh (priv->ledger);
+
+
+    plugin_page->summarybar = gsr2_create_summary_bar(priv->gsr);
     if (plugin_page->summarybar)
     {
         gtk_widget_show_all(plugin_page->summarybar);
@@ -1065,7 +1015,6 @@ g_print("Register New Create\n");
         gnc_gconf_general_register_cb(KEY_SUMMARYBAR_POSITION,
                                       gnc_plugin_page_register2_summarybar_position_changed, page);
     }
-#endif
 
     priv->event_handler_id = qof_event_register_handler
                              ((QofEventHandler)gnc_plugin_page_register2_event_handler, page);
@@ -1081,11 +1030,11 @@ g_print("Register New Create\n");
         gnc_gui_component_watch_entity (
             priv->component_manager_id, xaccAccountGetGUID(acct),
             QOF_EVENT_DESTROY | QOF_EVENT_MODIFY);
-/*
-    gnc_split_reg_set_moved_cb
+
+    /* This allows the plugin page to be updated from the view */
+    gnc_split_reg2_set_moved_cb
     (priv->gsr, (GFunc)gnc_plugin_page_register2_ui_update, page);
-*/
-    /* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
+
     LEAVE(" ");
     return priv->widget;
 }
@@ -1136,7 +1085,7 @@ gnc_plugin_page_register2_destroy_widget (GncPluginPage *plugin_page)
     }
 
     gtk_widget_hide(priv->widget);
-    gnc_ledger_display_close (priv->ledger);
+    gnc_ledger_display2_close (priv->ledger);
     priv->ledger = NULL;
     LEAVE(" ");
 }
@@ -1171,11 +1120,13 @@ static const gchar *style_names[] =
 #define KEY_REGISTER_STYLE      "RegisterStyle"
 #define KEY_DOUBLE_LINE         "DoubleLineMode"
 
+
 #define LABEL_ACCOUNT		"Account"
 #define LABEL_SUBACCOUNT	"SubAccount"
 #define LABEL_GL		"GL"
 #define LABEL_SEARCH		"Search"
 
+#define SPLIT_REGISTER_GUID "SplitRegister GUID"
 
 /** Save enough information about this register page that it can be
  *  recreated next time the user starts gnucash.
@@ -1183,7 +1134,7 @@ static const gchar *style_names[] =
  *  @param plugin_page The page to save.
  *
  *  @param key_file A pointer to the GKeyFile data structure where the
- *  page information should be written.
+ *  page information should be written.gnc_plugin_page_register2_save_page
  *
  *  @param group_name The group name to use when saving data. */
 static void
@@ -1193,8 +1144,8 @@ gnc_plugin_page_register2_save_page (GncPluginPage *plugin_page,
 {
     GncPluginPageRegister2 *page;
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
-    SplitRegister *reg;
+    GNCLedgerDisplay2Type ledger_type;
+    GncTreeModelSplitReg *model;
     Account *leader;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
@@ -1207,30 +1158,30 @@ gnc_plugin_page_register2_save_page (GncPluginPage *plugin_page,
     page = GNC_PLUGIN_PAGE_REGISTER2(plugin_page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
 
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
-    ledger_type = gnc_ledger_display_type(priv->ledger);
-    if (ledger_type > LD_GL)
+    model = gnc_ledger_display2_get_split_model_register(priv->ledger);
+    ledger_type = gnc_ledger_display2_type(priv->ledger);
+    if (ledger_type > LD2_GL)
     {
         LEAVE("Unsupported ledger type");
         return;
     }
-    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+    if ((ledger_type == LD2_SINGLE) || (ledger_type == LD2_SUBACCOUNT))
     {
         const gchar *label;
         gchar* name;
-        label = (ledger_type == LD_SINGLE) ? LABEL_ACCOUNT : LABEL_SUBACCOUNT;
-        leader = gnc_ledger_display_leader(priv->ledger);
+        label = (ledger_type == LD2_SINGLE) ? LABEL_ACCOUNT : LABEL_SUBACCOUNT;
+        leader = gnc_ledger_display2_leader(priv->ledger);
         g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE, label);
         name = gnc_account_get_full_name(leader);
         g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME, name);
         g_free(name);
     }
-    else if (reg->type == GENERAL_LEDGER)
+    else if (model->type == GENERAL_LEDGER2)
     {
         g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
                               LABEL_GL);
     }
-    else if (reg->type == SEARCH_LEDGER)
+    else if (model->type == SEARCH_LEDGER2)
     {
         g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
                               LABEL_SEARCH);
@@ -1241,10 +1192,8 @@ gnc_plugin_page_register2_save_page (GncPluginPage *plugin_page,
         return;
     }
 
-    g_key_file_set_string(key_file, group_name, KEY_REGISTER_STYLE,
-                          style_names[reg->style]);
-    g_key_file_set_boolean(key_file, group_name, KEY_DOUBLE_LINE,
-                           reg->use_double_line);
+    g_key_file_set_string(key_file, group_name, KEY_REGISTER_STYLE, style_names[model->style]);
+    g_key_file_set_boolean(key_file, group_name, KEY_DOUBLE_LINE, model->use_double_line);
 
     LEAVE(" ");
 }
@@ -1291,7 +1240,7 @@ gnc_plugin_page_register2_restore_edit_menu (GncPluginPage *page,
     g_free(style_name);
 
     /* Update the style menu action for this page */
-    if (i <= REG_STYLE_JOURNAL)
+    if (i <= REG2_STYLE_JOURNAL)
     {
         DEBUG("Setting style: %d", i);
         action = gnc_plugin_page_get_action(page, radio_entries_2[i].name);
@@ -1394,10 +1343,11 @@ gnc_plugin_page_register2_update_edit_menu (GncPluginPage *page, gboolean hide)
     gboolean can_copy = FALSE, can_cut = FALSE, can_paste = FALSE;
     gboolean has_selection;
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
-
+//g_print("gnc_plugin_page_register2_update_edit_menu\n");
     reg_page = GNC_PLUGIN_PAGE_REGISTER2(page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(reg_page);
-    has_selection = gnucash_register_has_selection (priv->gsr->reg);
+/*FIXME    has_selection = gnucash_register_has_selection (priv->gsr->reg); */
+    has_selection = FALSE;
 
     can_copy = has_selection;
     can_cut = is_readwrite && has_selection;
@@ -1420,16 +1370,16 @@ gnc_plugin_page_register2_finish_pending (GncPluginPage *page)
 {
     GncPluginPageRegister2Private *priv;
     GncPluginPageRegister2 *reg_page;
-    SplitRegister *reg;
+    GncTreeModelSplitReg *model;
     GtkWidget *dialog, *window;
     const gchar *name;
     gint response;
 
     reg_page = GNC_PLUGIN_PAGE_REGISTER2(page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(reg_page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    model = gnc_ledger_display2_get_split_model_register(priv->ledger);
 
-    if (!reg || !gnc_split_register_changed(reg))
+/*FIXME    if (!model || !gnc_split_register_changed(model)) */
         return TRUE;
 
     name = gnc_plugin_page_register2_get_tab_name(page);
@@ -1460,12 +1410,12 @@ gnc_plugin_page_register2_finish_pending (GncPluginPage *page)
     switch (response)
     {
     case GTK_RESPONSE_ACCEPT:
-        gnc_split_register_save(reg, TRUE);
+/*FIXME        gnc_split_register_save(model, TRUE); */
         return TRUE;
 
     case GTK_RESPONSE_REJECT:
-        gnc_split_register_cancel_cursor_trans_changes(reg);
-        gnc_split_register_save (reg, TRUE);
+/*FIXME        gnc_split_register_cancel_cursor_trans_changes(model); */
+/*FIXME        gnc_split_register_save (model, TRUE); */
         return TRUE;
 
     default:
@@ -1478,29 +1428,29 @@ static gchar *
 gnc_plugin_page_register2_get_tab_name (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay *ld;
-    SplitRegister *reg;
+    GNCLedgerDisplay2Type ledger_type;
+    GNCLedgerDisplay2 *ld;
+    GncTreeModelSplitReg *model;
     Account *leader;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page), _("unknown"));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
+    model = gnc_ledger_display2_get_split_model_register(ld);
+    ledger_type = gnc_ledger_display2_type (ld);
+    leader = gnc_ledger_display2_leader (ld);
 
     switch (ledger_type)
     {
-    case LD_SINGLE:
+    case LD2_SINGLE:
         return g_strdup(xaccAccountGetName (leader));
 
-    case LD_SUBACCOUNT:
+    case LD2_SUBACCOUNT:
         return g_strdup_printf("%s+", xaccAccountGetName (leader));
 
-    case LD_GL:
-        switch (reg->type)
+    case LD2_GL:
+        switch (model->type)
         {
         case GENERAL_LEDGER:
         case INCOME_LEDGER:
@@ -1525,9 +1475,8 @@ static gchar *
 gnc_plugin_page_register2_get_tab_color (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay *ld;
-    SplitRegister *reg;
+    GNCLedgerDisplay2Type ledger_type;
+    GNCLedgerDisplay2 *ld;
     Account *leader;
     const char* color;
 
@@ -1535,12 +1484,11 @@ gnc_plugin_page_register2_get_tab_color (GncPluginPage *plugin_page)
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
+    ledger_type = gnc_ledger_display2_type (ld);
+    leader = gnc_ledger_display2_leader (ld);
     color = NULL;
 
-    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+    if ((ledger_type == LD2_SINGLE) || (ledger_type == LD2_SUBACCOUNT))
         color = xaccAccountGetColor (leader);
 
     return g_strdup(color ? color : "Not Set");
@@ -1550,9 +1498,8 @@ static gchar *
 gnc_plugin_page_register2_get_filter (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay *ld;
-    SplitRegister *reg;
+    GNCLedgerDisplay2Type ledger_type;
+    GNCLedgerDisplay2 *ld;
     Account *leader;
     const char* filter;
 
@@ -1560,12 +1507,11 @@ gnc_plugin_page_register2_get_filter (GncPluginPage *plugin_page)
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
+    ledger_type = gnc_ledger_display2_type (ld);
+    leader = gnc_ledger_display2_leader (ld);
     filter = NULL;
 
-    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+    if ((ledger_type == LD2_SINGLE) || (ledger_type == LD2_SUBACCOUNT))
         filter = xaccAccountGetFilter (leader);
 
     return filter ? g_strdup(filter) : g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
@@ -1575,17 +1521,15 @@ void
 gnc_plugin_page_register2_set_filter (GncPluginPage *plugin_page, const gchar *filter )
 {
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay *ld;
-    SplitRegister *reg;
+    GNCLedgerDisplay2Type ledger_type;
+    GNCLedgerDisplay2 *ld;
     Account *leader;
     gchar *default_filter;
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
+    ledger_type = gnc_ledger_display2_type (ld);
+    leader = gnc_ledger_display2_leader (ld);
 
     if (leader != NULL)
     {
@@ -1598,7 +1542,6 @@ gnc_plugin_page_register2_set_filter (GncPluginPage *plugin_page, const gchar *f
 
         g_free (default_filter);
     }
-
     return;
 }
 
@@ -1606,9 +1549,8 @@ static gchar *
 gnc_plugin_page_register2_get_sort_order (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay *ld;
-    SplitRegister *reg;
+    GNCLedgerDisplay2Type ledger_type;
+    GNCLedgerDisplay2 *ld;
     Account *leader;
     const char* sort_order;
 
@@ -1616,12 +1558,11 @@ gnc_plugin_page_register2_get_sort_order (GncPluginPage *plugin_page)
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
+    ledger_type = gnc_ledger_display2_type (ld);
+    leader = gnc_ledger_display2_leader (ld);
     sort_order = NULL;
 
-    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+    if ((ledger_type == LD2_SINGLE) || (ledger_type == LD2_SUBACCOUNT))
         sort_order = xaccAccountGetSortOrder (leader);
 
     return g_strdup(sort_order ? sort_order : DEFAULT_SORT_ORDER);
@@ -1631,16 +1572,14 @@ void
 gnc_plugin_page_register2_set_sort_order (GncPluginPage *plugin_page, const gchar *sort_order )
 {
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay *ld;
-    SplitRegister *reg;
+    GNCLedgerDisplay2Type ledger_type;
+    GNCLedgerDisplay2 *ld;
     Account *leader;
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
+    ledger_type = gnc_ledger_display2_type (ld);
+    leader = gnc_ledger_display2_leader (ld);
 
     if (leader != NULL)
     {
@@ -1657,25 +1596,23 @@ static gchar *
 gnc_plugin_page_register2_get_long_name (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay *ld;
-    SplitRegister *reg;
+    GNCLedgerDisplay2Type ledger_type;
+    GNCLedgerDisplay2 *ld;
     Account *leader;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page), _("unknown"));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    reg = gnc_ledger_display_get_split_register (ld);
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
+    ledger_type = gnc_ledger_display2_type (ld);
+    leader = gnc_ledger_display2_leader (ld);
 
     switch (ledger_type)
     {
-    case LD_SINGLE:
+    case LD2_SINGLE:
         return gnc_account_get_full_name (leader);
 
-    case LD_SUBACCOUNT:
+    case LD2_SUBACCOUNT:
     {
         gchar *account_full_name = gnc_account_get_full_name (leader);
         gchar *return_string = g_strdup_printf("%s+", account_full_name);
@@ -1755,7 +1692,7 @@ gnc_plugin_page_register2_sort_response_cb (GtkDialog *dialog,
     if (response != GTK_RESPONSE_OK)
     {
         /* Restore the original sort order */
-        gnc_split_reg_set_sort_type(priv->gsr, priv->sd.original_sort_type);
+        gnc_split_reg2_set_sort_type(priv->gsr, priv->sd.original_sort_type);
         priv->sd.save_order = priv->sd.original_save_order;
     }
     else
@@ -1764,7 +1701,7 @@ gnc_plugin_page_register2_sort_response_cb (GtkDialog *dialog,
 
         if (priv->sd.save_order)
         {
-            type = gnc_split_reg_get_sort_type(priv->gsr);
+            type = gnc_split_reg2_get_sort_type(priv->gsr);
             order = SortTypeasString(type);
             gnc_plugin_page_register2_set_sort_order (plugin_page, order);
         }
@@ -1798,7 +1735,7 @@ gnc_plugin_page_register2_sort_button_cb (GtkToggleButton *button,
     name = gtk_buildable_get_name(GTK_BUILDABLE(button));
     ENTER("button %s(%p), page %p", name, button, page);
     type = SortTypefromString(name);
-    gnc_split_reg_set_sort_type(priv->gsr, type);
+    gnc_split_reg2_set_sort_type(priv->gsr, type);
     LEAVE(" ");
 }
 
@@ -1850,15 +1787,15 @@ gnc_plugin_page_register2_sort_order_save_cb (GtkToggleButton *button,
  *  associated with this filter dialog.
  */
 static void
-gnc_ppr_update_status_query (GncPluginPageRegister2 *page)
+gnc_ppr_update_status_query (GncPluginPageRegister2 *page, gboolean refresh_page)
 {
     GncPluginPageRegister2Private *priv;
     GSList *param_list;
     Query *query;
-
+//g_print("gnc_ppr_update_status_query\n");
     ENTER(" ");
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    query = gnc_ledger_display_get_query( priv->ledger );
+    query = gnc_ledger_display2_get_query (priv->ledger );
     if (!query)
     {
         LEAVE("no query found");
@@ -1877,7 +1814,8 @@ gnc_ppr_update_status_query (GncPluginPageRegister2 *page)
     if (priv->fd.cleared_match != CLEARED_ALL)
         xaccQueryAddClearedMatch(query, priv->fd.cleared_match, QOF_QUERY_AND);
 
-    gnc_ledger_display_refresh (priv->ledger);
+    if(refresh_page)
+        gnc_ledger_display2_refresh (priv->ledger);
     LEAVE(" ");
 }
 
@@ -1895,7 +1833,7 @@ gnc_ppr_update_status_query (GncPluginPageRegister2 *page)
  *  associated with this filter dialog.
  */
 static void
-gnc_ppr_update_date_query (GncPluginPageRegister2 *page)
+gnc_ppr_update_date_query (GncPluginPageRegister2 *page, gboolean refresh_page)
 {
     GncPluginPageRegister2Private *priv;
     GSList *param_list;
@@ -1909,7 +1847,7 @@ gnc_ppr_update_date_query (GncPluginPageRegister2 *page)
         return;
     }
 
-    query = gnc_ledger_display_get_query( priv->ledger );
+    query = gnc_ledger_display2_get_query( priv->ledger );
     if (!query)
     {
         LEAVE("no query");
@@ -1933,7 +1871,8 @@ gnc_ppr_update_date_query (GncPluginPageRegister2 *page)
                                 QOF_QUERY_AND);
     }
 
-    gnc_ledger_display_refresh (priv->ledger);
+    if(refresh_page)
+        gnc_ledger_display2_refresh (priv->ledger);
     LEAVE(" ");
 }
 
@@ -2019,7 +1958,7 @@ gnc_plugin_page_register2_filter_status_one_cb (GtkToggleButton *button,
         priv->fd.cleared_match |= value;
     else
         priv->fd.cleared_match &= ~value;
-    gnc_ppr_update_status_query(page);
+    gnc_ppr_update_status_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2058,7 +1997,7 @@ gnc_plugin_page_register2_filter_status_all_cb (GtkButton *button,
     /* Set the requested status */
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
     priv->fd.cleared_match = CLEARED_ALL;
-    gnc_ppr_update_status_query(page);
+    gnc_ppr_update_status_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2158,7 +2097,7 @@ gnc_plugin_page_register2_filter_select_range_cb (GtkRadioButton *button,
         priv->fd.start_time = 0;
         priv->fd.end_time = 0;
     }
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_date_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2181,7 +2120,7 @@ gnc_plugin_page_register2_filter_gde_changed_cb (GtkWidget *unused,
 
     ENTER("(widget %s(%p), page %p)", gtk_buildable_get_name(GTK_BUILDABLE(unused)), unused, page);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_date_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2228,7 +2167,7 @@ gnc_plugin_page_register2_filter_start_cb (GtkWidget *radio,
     active = ( g_strcmp0(name, g_strdup("start_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.start_date, active);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_date_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2275,7 +2214,7 @@ gnc_plugin_page_register2_filter_end_cb (GtkWidget *radio,
     active = ( g_strcmp0(name, g_strdup("end_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.end_date, active);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_date_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2339,11 +2278,12 @@ gnc_plugin_page_register2_filter_response_cb (GtkDialog *dialog,
     {
         /* Remove the old status match */
         priv->fd.cleared_match = priv->fd.original_cleared_match;
-        gnc_ppr_update_status_query(page);
+        gnc_ppr_update_status_query(page, FALSE);
         priv->fd.start_time = priv->fd.original_start_time;
         priv->fd.end_time = priv->fd.original_end_time;
         priv->fd.save_filter = priv->fd.original_save_filter;
-        gnc_ppr_update_date_query(page);
+        gnc_ppr_update_date_query(page, FALSE);
+        gnc_ledger_display2_refresh (priv->ledger);
     }
     else
     {
@@ -2389,22 +2329,22 @@ gnc_plugin_page_register2_filter_response_cb (GtkDialog *dialog,
 /************************************************************/
 
 static char *
-gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
+gnc_reg_get_name (GNCLedgerDisplay2 *ledger, gboolean for_window)
 {
     Account *leader;
-    SplitRegister *reg;
+    GncTreeModelSplitReg *model;
     gchar *account_name;
     gchar *reg_name;
     gchar *name;
-    GNCLedgerDisplayType ledger_type;
+    GNCLedgerDisplay2Type ledger_type;
 
     if (ledger == NULL)
         return NULL;
 
-    reg = gnc_ledger_display_get_split_register (ledger);
-    ledger_type = gnc_ledger_display_type (ledger);
+    model = gnc_ledger_display2_get_split_model_register (ledger);
+    ledger_type = gnc_ledger_display2_type (ledger);
 
-    switch (reg->type)
+    switch (model->type)
     {
     case GENERAL_LEDGER:
     case INCOME_LEDGER:
@@ -2433,13 +2373,13 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
         break;
     }
 
-    leader = gnc_ledger_display_leader (ledger);
+    leader = gnc_ledger_display2_leader (ledger);
 
-    if ((leader != NULL) && (ledger_type != LD_GL))
+    if ((leader != NULL) && (ledger_type != LD2_GL))
     {
         account_name = gnc_account_get_full_name (leader);
 
-        if (ledger_type == LD_SINGLE)
+        if (ledger_type == LD2_SINGLE)
         {
             name = g_strconcat (account_name, " - ", reg_name, NULL);
         }
@@ -2447,7 +2387,7 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
         {
             name = g_strconcat (account_name, " ", _("and subaccounts"), " - ", reg_name, NULL);
         }
-        g_free(account_name);
+        g_free (account_name);
     }
     else
         name = g_strdup (reg_name);
@@ -2456,9 +2396,9 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
 }
 
 static int
-report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
+report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query)
 {
-    SplitRegister *reg = gnc_ledger_display_get_split_register (ledger);
+    SplitRegister *reg = gnc_ledger_display2_get_split_register (ledger);
     Account *account;
     char *str;
     swig_type_info * qtype;
@@ -2490,7 +2430,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
 
     if (!query)
     {
-        query = gnc_ledger_display_get_query (ledger);
+        query = gnc_ledger_display2_get_query (ledger);
         g_return_val_if_fail (query != NULL, -1);
     }
 
@@ -2519,7 +2459,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
     qtype = SWIG_TypeQuery ("_p_Account");
     g_return_val_if_fail (qtype, -1);
 
-    account = gnc_ledger_display_leader (ledger);
+    account = gnc_ledger_display2_leader (ledger);
     arg = SWIG_NewPointerObj (account, qtype, 0);
     args = scm_cons (arg, args);
     g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
@@ -2545,16 +2485,16 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
     Split         * split;
     Transaction   * trans;
     GList         * splits = NULL, *item;
-    GNCLedgerDisplayType ledger_type;
+    GNCLedgerDisplay2Type ledger_type;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 #ifdef SKIP
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
-    ledger_type = gnc_ledger_display_type(priv->ledger);
-    if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
+    reg = gnc_ledger_display2_get_split_register (priv->ledger);
+    ledger_type = gnc_ledger_display2_type(priv->ledger);
+    if (ledger_type == LD2_SINGLE || ledger_type == LD2_SUBACCOUNT)
     {
         split    = gnc_split_register_get_current_split(reg);
         trans    = xaccSplitGetParent(split);
@@ -2566,10 +2506,10 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
             g_list_free(splits);
         }
     }
-    else if (ledger_type == LD_GL && reg->type == SEARCH_LEDGER)
+    else if (ledger_type == LD2_GL && reg->type == SEARCH_LEDGER)
     {
         Account *common_acct = NULL, *account;
-        splits = qof_query_run(gnc_ledger_display_get_query(priv->ledger));
+        splits = qof_query_run(gnc_ledger_display2_get_query(priv->ledger));
         /* Make sure each split is from the same account */
         for (item = splits; item; item = g_list_next(item))
         {
@@ -2695,7 +2635,7 @@ gnc_plugin_page_register2_cmd_find_transactions (GtkAction *action,
 
     ENTER("(action %p, page %p)", action, page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-/* This function has the original ledger type */
+/*FIXME This function has the original ledger type */
 /*    gnc_ui_find_transactions_dialog_create(priv->ledger); */
     LEAVE(" ");
 }
@@ -2712,7 +2652,7 @@ gnc_plugin_page_register2_cmd_cut_transaction (GtkAction *action,
 
     ENTER("(action %p, page %p)", action, page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    reg = gnc_ledger_display2_get_split_register(priv->ledger);
     gnc_split_register_cut_current(reg);
     LEAVE(" ");
 }
@@ -2729,7 +2669,7 @@ gnc_plugin_page_register2_cmd_copy_transaction (GtkAction *action,
 
     ENTER("(action %p, page %p)", action, page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    reg = gnc_ledger_display2_get_split_register(priv->ledger);
     gnc_split_register_copy_current(reg);
     LEAVE(" ");
 }
@@ -2746,7 +2686,7 @@ gnc_plugin_page_register2_cmd_paste_transaction (GtkAction *action,
 
     ENTER("(action %p, page %p)", action, page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    reg = gnc_ledger_display2_get_split_register(priv->ledger);
     gnc_split_register_paste_current(reg);
     LEAVE(" ");
 }
@@ -2769,7 +2709,7 @@ gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    reg = gnc_ledger_display2_get_split_register(priv->ledger);
     trans = gnc_split_register_get_current_trans(reg);
     if (trans == NULL)
         return;
@@ -2785,7 +2725,7 @@ gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action,
         return;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder , "gnc-plugin-page-register.glade", "Void Transaction");
+    gnc_builder_add_from_file  (builder , "gnc-plugin-page-register2.glade", "Void Transaction");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Void Transaction"));
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "reason"));
 
@@ -2817,7 +2757,7 @@ gnc_plugin_page_register2_cmd_unvoid_transaction (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    reg = gnc_ledger_display2_get_split_register(priv->ledger);
     trans = gnc_split_register_get_current_trans(reg);
     if (!xaccTransHasSplitsInState(trans, VREC))
         return;
@@ -2832,7 +2772,7 @@ gnc_plugin_page_register2_cmd_reverse_transaction (GtkAction *action,
 {
     GncPluginPageRegister2Private *priv;
     SplitRegister *reg;
-    GNCSplitReg *gsr;
+    GNCSplitReg2 *gsr;
     Transaction *trans, *new_trans;
 
     ENTER("(action %p, page %p)", action, page);
@@ -2840,7 +2780,7 @@ gnc_plugin_page_register2_cmd_reverse_transaction (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    reg = gnc_ledger_display2_get_split_register(priv->ledger);
     trans = gnc_split_register_get_current_trans(reg);
     if (trans == NULL)
         return;
@@ -2863,7 +2803,7 @@ gnc_plugin_page_register2_cmd_reverse_transaction (GtkAction *action,
 
     /* Now jump to new trans */
     gsr = gnc_plugin_page_register2_get_gsr(GNC_PLUGIN_PAGE(page));
-    gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
+    gnc_split_reg2_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
     LEAVE(" ");
 }
 
@@ -2873,7 +2813,7 @@ gnc_plugin_page_register2_cmd_shift_transaction_forward (GtkAction *action,
 {
     GncPluginPageRegister2Private *priv;
     SplitRegister *reg;
-    GNCSplitReg *gsr;
+    GNCSplitReg2 *gsr;
     Transaction *trans, *new_trans;
     Timespec entered;
 
@@ -2882,7 +2822,7 @@ gnc_plugin_page_register2_cmd_shift_transaction_forward (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    reg = gnc_ledger_display2_get_split_register(priv->ledger);
     trans = gnc_split_register_get_current_trans(reg);
     if (trans == NULL)
         return;
@@ -2922,7 +2862,7 @@ gnc_plugin_page_register2_cmd_view_sort_by (GtkAction *action,
     /* Create the dialog */
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder, "gnc-plugin-page-register.glade", "Sort By");
+    gnc_builder_add_from_file  (builder, "gnc-plugin-page-register2.glade", "Sort By");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Sort By"));
     priv->sd.dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
@@ -2934,7 +2874,7 @@ gnc_plugin_page_register2_cmd_view_sort_by (GtkAction *action,
     g_free(title);
 
     /* Set the button for the current sort order */
-    sort = gnc_split_reg_get_sort_type(priv->gsr);
+    sort = gnc_split_reg2_get_sort_type(priv->gsr);
     name = SortTypeasString(sort);
     button = GTK_WIDGET(gtk_builder_get_object (builder, name));
     DEBUG("current sort %d, button %s(%p)", sort, name, button);
@@ -2980,7 +2920,7 @@ gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
 
     /* Create the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "Filter By");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register2.glade", "Filter By");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Filter By"));
     priv->fd.dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
@@ -3009,7 +2949,7 @@ gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
 
     /* Set the date info */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "filter_show_range"));
-    query = gnc_ledger_display_get_query (priv->ledger);
+    query = gnc_ledger_display2_get_query (priv->ledger);
     xaccQueryGetDateMatchTT(query, &start_time, &end_time);
     priv->fd.original_start_time = start_time;
     priv->fd.start_time = start_time;
@@ -3108,10 +3048,10 @@ gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
 static void
 gnc_plugin_page_register2_cmd_style_changed (GtkAction *action,
         GtkRadioAction *current,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) //this works
 {
     GncPluginPageRegister2Private *priv;
-    SplitRegisterStyle value;
+    SplitRegisterStyle2 value;
 
     ENTER("(action %p, radio action %p, plugin_page %p)",
           action, current, plugin_page);
@@ -3122,7 +3062,9 @@ gnc_plugin_page_register2_cmd_style_changed (GtkAction *action,
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     value = gtk_radio_action_get_current_value(current);
-    gnc_split_reg_change_style(priv->gsr, value);
+    gnc_split_reg2_change_style(priv->gsr, value);
+
+    gtk_tree_view_collapse_all (GTK_TREE_VIEW( gnc_ledger_display2_get_split_view_register (priv->ledger)));
 
     gnc_plugin_page_register2_ui_update (NULL, plugin_page);
     LEAVE(" ");
@@ -3130,10 +3072,11 @@ gnc_plugin_page_register2_cmd_style_changed (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) // this works
 {
     GncPluginPageRegister2Private *priv;
-    SplitRegister *reg;
+    GncTreeModelSplitReg *model;
+    GncTreeViewSplitReg *view;
     gboolean use_double_line;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
@@ -3142,13 +3085,16 @@ gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
+    model = gnc_ledger_display2_get_split_model_register (priv->ledger);
+
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
     use_double_line =  gtk_toggle_action_get_active (action);
-    if (use_double_line != reg->use_double_line)
+    if (use_double_line != model->use_double_line)
     {
-        gnc_split_register_config(reg, reg->type, reg->style, use_double_line);
-        gnc_ledger_display_refresh(priv->ledger);
+        gnc_tree_model_split_reg_config (model, model->type, model->style, use_double_line);
+        gtk_tree_view_collapse_all (GTK_TREE_VIEW(view));
+        gnc_ledger_display2_refresh (priv->ledger);
     }
     LEAVE(" ");
 }
@@ -3244,69 +3190,71 @@ gnc_plugin_page_register2_cmd_lots (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_enter_transaction (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) //this works
 {
     GncPluginPageRegister2Private *priv;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    gnc_split_reg_enter(priv->gsr, FALSE);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+    gnc_split_reg2_enter (priv->gsr, FALSE);
     LEAVE(" ");
 }
 
 static void
 gnc_plugin_page_register2_cmd_cancel_transaction (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) //this works
 {
     GncPluginPageRegister2Private *priv;
+    GncTreeViewSplitReg *view;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    gnc_split_register_cancel_cursor_trans_changes
-    (gnc_ledger_display_get_split_register(priv->ledger));
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+
+    gnc_tree_view_split_reg_cancel_edit (view);
+
     LEAVE(" ");
 }
 
 static void
 gnc_plugin_page_register2_cmd_delete_transaction (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) //this works
 {
     GncPluginPageRegister2Private *priv;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    gsr_default_delete_handler(priv->gsr, NULL);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+
+    gsr2_default_delete_handler (priv->gsr, NULL);
     LEAVE(" ");
 
 }
 
 static void
 gnc_plugin_page_register2_cmd_blank_transaction (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) //this works
 {
     GncPluginPageRegister2Private *priv;
-    SplitRegister *reg;
+    GncTreeViewSplitReg *view;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
-    if (gnc_split_register_save (reg, TRUE))
-        gnc_split_register_redraw (reg);
-
-    gnc_split_reg_jump_to_blank (priv->gsr);
+    gnc_tree_view_split_reg_jump_to_blank (view);
     LEAVE(" ");
 }
 
@@ -3322,41 +3270,41 @@ gnc_plugin_page_register2_cmd_duplicate_transaction (GtkAction *action,
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     gnc_split_register_duplicate_current
-    (gnc_ledger_display_get_split_register(priv->ledger));
+    (gnc_ledger_display2_get_split_register(priv->ledger));
     LEAVE(" ");
 }
 
 static void
 gnc_plugin_page_register2_cmd_reinitialize_transaction (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) //this works
 {
     GncPluginPageRegister2Private *priv;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    gsr_default_reinit_handler(priv->gsr, NULL);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+    gsr2_default_reinit_handler (priv->gsr, NULL);
     LEAVE(" ");
 }
 
 static void
 gnc_plugin_page_register2_cmd_expand_transaction (GtkToggleAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) // this works
 {
     GncPluginPageRegister2Private *priv;
-    SplitRegister *reg;
+    GncTreeViewSplitReg *view;
     gboolean expand;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
     expand = gtk_toggle_action_get_active (action);
-    gnc_split_register_expand_current_trans (reg, expand);
+    gnc_tree_view_split_reg_expand_current_trans (view, expand);
     LEAVE(" ");
 }
 
@@ -3372,7 +3320,7 @@ gnc_plugin_page_register2_cmd_exchange_rate (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
+    reg = gnc_ledger_display2_get_split_register (priv->ledger);
 
     /* XXX Ignore the return value -- we don't care if this succeeds */
     (void)gnc_split_register_handle_exchange (reg, TRUE);
@@ -3381,23 +3329,24 @@ gnc_plugin_page_register2_cmd_exchange_rate (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_jump (GtkAction *action,
-                                   GncPluginPageRegister2 *plugin_page)
+                                   GncPluginPageRegister2 *plugin_page) //this works
 {
     GncPluginPageRegister2Private *priv;
     GncPluginPage *new_page;
     GncPluginPageRegister2 *new_reg_page;
     GtkWidget *window;
-    GNCSplitReg *gsr;
-    SplitRegister *reg;
+    GNCSplitReg2 *gsr;
+    GncTreeViewSplitReg *view;
     Account *account;
     Account *leader;
     Split *split;
+    RowDepth depth;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
     window = GNC_PLUGIN_PAGE (plugin_page)->window;
     if (window == NULL)
     {
@@ -3405,35 +3354,52 @@ gnc_plugin_page_register2_cmd_jump (GtkAction *action,
         return;
     }
 
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
-    split = gnc_split_register_get_current_split (reg);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+    split = gnc_tree_view_split_reg_get_current_split (view);
     if (split == NULL)
     {
-        LEAVE("no split (1)");
+        LEAVE("split is NULL");
+        return;
+    }
+
+    if (!gnc_tree_view_split_reg_current_trans_expanded (view))
+    {
+        Transaction *trans = xaccSplitGetParent (split);
+        if (xaccTransCountSplits (trans) > 2)
+        {
+            LEAVE("more than 2 splits");
+            return;
+        }
+    }
+
+    depth = gnc_tree_view_reg_get_selected_row_depth (view);
+    if (gnc_tree_view_split_reg_current_trans_expanded (view) && depth != SPLIT3)
+    {
+        LEAVE("expanded but no split selected");
         return;
     }
 
     account = xaccSplitGetAccount (split);
     if (account == NULL)
     {
-        LEAVE("no account");
+        LEAVE("account is NULL");
         return;
     }
 
-    leader = gnc_ledger_display_leader (priv->ledger);
+    leader = gnc_ledger_display2_leader (priv->ledger);
     if (account == leader)
     {
         split = xaccSplitGetOtherSplit (split);
         if (split == NULL)
         {
-            LEAVE("no split (2)");
+            LEAVE("no other split");
             return;
         }
 
         account = xaccSplitGetAccount (split);
         if (account == NULL)
         {
-            LEAVE("no account (2)");
+            LEAVE("no other account");
             return;
         }
 
@@ -3450,11 +3416,11 @@ gnc_plugin_page_register2_cmd_jump (GtkAction *action,
         LEAVE("couldn't create new page");
         return;
     }
-    new_reg_page = GNC_PLUGIN_PAGE_REGISTER2(new_page);
+    new_reg_page = GNC_PLUGIN_PAGE_REGISTER2 (new_page);
 
-    gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
+    gnc_main_window_open_page (GNC_MAIN_WINDOW (window), new_page);
     gsr = gnc_plugin_page_register2_get_gsr (new_page);
-    gnc_split_reg_jump_to_split(gsr, split);
+    gnc_split_reg2_jump_to_split (gsr, split);
     LEAVE(" ");
 }
 
@@ -3469,7 +3435,7 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    gsr_default_schedule_handler(priv->gsr, NULL);
+    gsr2_default_schedule_handler(priv->gsr, NULL);
     LEAVE(" ");
 }
 
@@ -3488,14 +3454,14 @@ gnc_plugin_page_register2_cmd_scrub_current (GtkAction *action,
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    query = gnc_ledger_display_get_query( priv->ledger );
+    query = gnc_ledger_display2_get_query( priv->ledger );
     if (query == NULL)
     {
         LEAVE("no query found");
         return;
     }
 
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    reg = gnc_ledger_display2_get_split_register(priv->ledger);
     trans = gnc_split_register_get_current_trans(reg);
     if (trans == NULL)
     {
@@ -3527,7 +3493,7 @@ gnc_plugin_page_register2_cmd_scrub_all (GtkAction *action,
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    query = gnc_ledger_display_get_query( priv->ledger );
+    query = gnc_ledger_display2_get_query( priv->ledger );
     if (!query)
     {
         LEAVE("no query found");
@@ -3587,7 +3553,7 @@ gnc_plugin_page_register2_cmd_transaction_report (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    reg = gnc_ledger_display_get_split_register (priv->ledger);
+    reg = gnc_ledger_display2_get_split_register (priv->ledger);
 
     split = gnc_split_register_get_current_split (reg);
     if (!split)
@@ -3627,7 +3593,7 @@ gnc_plugin_page_register2_set_options (GncPluginPage *plugin_page,
     priv->read_only         = read_only;
 }
 
-GNCSplitReg *
+GNCSplitReg2 *
 gnc_plugin_page_register2_get_gsr (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister2 *page;
@@ -3642,7 +3608,7 @@ gnc_plugin_page_register2_get_gsr (GncPluginPage *plugin_page)
 }
 
 static void
-gnc_plugin_page_help_changed_cb (GNCSplitReg *gsr, GncPluginPageRegister2 *register_page)
+gnc_plugin_page_help_changed_cb (GNCSplitReg2 *gsr, GncPluginPageRegister2 *register_page)
 {
     GncPluginPageRegister2Private *priv;
     SplitRegister *reg;
@@ -3661,7 +3627,7 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg *gsr, GncPluginPageRegister2 *regis
 
     /* Get the text from the ledger */
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(register_page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    reg = gnc_ledger_display2_get_split_register(priv->ledger);
     help = gnc_table_get_help(reg->table);
     gnc_window_set_status(window, GNC_PLUGIN_PAGE(register_page), help);
     g_free(help);
@@ -3675,10 +3641,11 @@ gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data)
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-
+//g_print("gnc_plugin_page_register2_refresh_cb\n");
     if (changes)
     {
         const EventInfo* ei;
+//g_print("gnc_plugin_page_register2_refresh_cb 1\n");
         ei = gnc_gui_get_entity_events(changes, &priv->key);
         if (ei)
         {
@@ -3694,8 +3661,10 @@ gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data)
     }
     else
     {
-        /* forced updates */
-        gnucash_register_refresh_from_gconf(priv->gsr->reg);
+//g_print("gnc_plugin_page_register2_refresh_cb 2\n");
+        /* Force updates */
+
+/*FIXME        gnucash_register_refresh_from_gconf(priv->gsr->reg); */
         gtk_widget_queue_draw(priv->widget);
     }
 
@@ -3722,7 +3691,7 @@ gppr_account_destroy_cb (Account *account)
 {
     GncPluginPageRegister2 *page;
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplayType ledger_type;
+    GNCLedgerDisplay2Type ledger_type;
     const GncGUID *acct_guid;
     const GList *citem;
     GList *item, *kill = NULL;
@@ -3736,13 +3705,13 @@ gppr_account_destroy_cb (Account *account)
     {
         page = (GncPluginPageRegister2 *)citem->data;
         priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-        ledger_type = gnc_ledger_display_type (priv->ledger);
-        if (ledger_type == LD_GL)
+        ledger_type = gnc_ledger_display2_type (priv->ledger);
+        if (ledger_type == LD2_GL)
         {
             kill = g_list_append(kill, page);
             /* kill it */
         }
-        else if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+        else if ((ledger_type == LD2_SINGLE) || (ledger_type == LD2_SUBACCOUNT))
         {
             if (guid_compare(acct_guid, &priv->key) == 0)
             {

@@ -9,6 +9,7 @@
         <menuitem name="FileOpenAccount" action="FileOpenAccountAction"/>
         <menuitem name="FileOpenAccount2" action="FileOpenAccount2Action"/>
         <menuitem name="FileOpenSubaccounts" action="FileOpenSubaccountsAction"/>
+        <menuitem name="FileOpenSubaccounts2" action="FileOpenSubaccounts2Action"/>
       </placeholder>
     </menu>
     <menu name="Actions" action="ActionsAction">
@@ -37,6 +38,7 @@
       <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
       <menuitem name="AccountOpenAccount2" action="FileOpenAccount2Action"/>
       <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
+      <menuitem name="AccountOpenSubaccounts2" action="FileOpenSubaccounts2Action"/>
       <menuitem name="AccountEditAccount" action="EditEditAccountAction"/>
       <separator name="AccountSep1"/>
       <menuitem name="AccountReconcile" action="ActionsReconcileAction"/>

@@ -89,8 +89,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model-budget.c \
   gnc-tree-model-owner.c \
   gnc-tree-model-commodity.c \
-  gnc-tree-model-split-reg.c \
   gnc-tree-model-price.c \
+  gnc-tree-model-split-reg.c \
   gnc-tree-view-account.c \
   gnc-tree-view-commodity.c \
   gnc-tree-view-owner.c \

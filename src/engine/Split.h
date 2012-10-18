@@ -342,9 +342,10 @@ gboolean xaccSplitEqual(const Split *sa, const Split *sb,
 Split      * xaccSplitLookup (const GncGUID *guid, QofBook *book);
 #define      xaccSplitLookupDirect(g,b) xaccSplitLookup(&(g),b)
 
-
+/*################## Added for Reg2 #################*/
 /* Get a GList of unique transactions containing the given list of Splits. */
 GList *xaccSplitListGetUniqueTransactions(const GList *splits);
+/*################## Added for Reg2 #################*/
 
 /**
  * The xaccSplitGetOtherSplit() is a convenience routine that returns

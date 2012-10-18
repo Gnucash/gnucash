@@ -15,6 +15,7 @@ gtkbuilder_DATA = \
 	dialog-tax-info.glade \
 	gnc-plugin-page-budget.glade \
 	gnc-plugin-page-register.glade \
+	gnc-plugin-page-register2.glade \
 	window-autoclear.glade \
 	window-reconcile.glade
 
