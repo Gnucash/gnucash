@@ -32,6 +32,9 @@
 #include "gnc-plugin-register2.h"
 #include "gnc-plugin-page-register2.h"
 
+/* This define will enable the New Register menu option, comment out to hide it */
+#define REG2ENABLE "yes"
+
 
 static void gnc_plugin_register2_class_init (GncPluginRegister2Class *klass);
 static void gnc_plugin_register2_init (GncPluginRegister2 *plugin);
@@ -46,11 +49,13 @@ static void gnc_plugin_register2_cmd_general_ledger (GtkAction *action, GncMainW
 
 static GtkActionEntry gnc_plugin_actions [] =
 {
+#ifdef REG2ENABLE
     {
-        "ToolsGeneralLedgerAction", NULL, N_("_General Ledger"), NULL,
-        N_("Open a general ledger window"),
+        "ToolsGeneralLedger2Action", NULL, N_("_General Ledger2"), NULL,
+        N_("Open a general ledger2 window"),
         G_CALLBACK (gnc_plugin_register2_cmd_general_ledger)
     },
+#endif
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -154,12 +159,13 @@ gnc_plugin_register2_class_init (GncPluginRegister2Class *klass)
     /* plugin info */
     plugin_class->plugin_name  = GNC_PLUGIN_REGISTER2_NAME;
 
+#ifdef REG2ENABLE
     /* widget addition/removal */
     plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
+#endif
     plugin_class->gconf_section = GCONF_REGISTER2_SECTION;
     plugin_class->gconf_notifications = gnc_plugin_register2_gconf_changed;
 
