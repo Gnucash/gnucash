@@ -136,10 +136,13 @@ compare_lots( QofBook* book_1, QofBook* book_2 )
 }
 
 static void
-test_conn_get_index_list( QofBackend *qbe )
+test_conn_index_functions( QofBackend *qbe )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
-    GSList *index_list = ((GncDbiSqlConnection*)(be->sql_be.conn))->provider->get_index_list( be->conn );
+    GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(be->sql_be.conn);
+    GSList *index_list, *iter;
+
+    index_list = conn->provider->get_index_list( be->conn );
     g_test_message ( "Returned from index list\n");
     if ( index_list == NULL )
     {
@@ -147,7 +150,17 @@ test_conn_get_index_list( QofBackend *qbe )
         return;
     }
     do_test( g_slist_length( index_list ) == 4, "Index List Test" );
+
+    for ( iter = index_list; iter != NULL; iter = g_slist_next( iter) )
+    {
+        const char *errmsg;
+        conn->provider->drop_index (be->conn, iter->data);
+        if ( DBI_ERROR_NONE != dbi_conn_error( conn->conn, &errmsg ) )
+            do_test( FALSE, "Drop Index Test");
+    }
     g_slist_free( index_list );
+
+
 }
 
 static void
@@ -159,7 +172,6 @@ compare_books( QofBook* book_1, QofBook* book_2 )
     compare_txs( book_1, book_2 );
     compare_sxs( book_1, book_2 );
     compare_lots( book_1, book_2 );
-    test_conn_get_index_list( be );
 }
 
 /* Given a synthetic session, use the same logic as
@@ -170,6 +182,7 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
 {
     QofSession* session_2;
     QofSession* session_3;
+    QofBackend *be;
 
     gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
     gchar *log_domain = "gnc.backend.dbi";
@@ -216,6 +229,8 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     }
     // Compare with the original data
     compare_books( qof_session_get_book( session_2 ), qof_session_get_book( session_3 ) );
+    be = qof_book_get_backend( qof_session_get_book( session_3 ) );
+    test_conn_index_functions( be );
     qof_session_end( session_1 );
     qof_session_destroy( session_1 );
     qof_session_end( session_2 );
@@ -236,6 +251,7 @@ void
 test_dbi_safe_save( const gchar* driver,  const gchar* url )
 {
     QofSession *session_1 = NULL, *session_2 = NULL;
+    QofBackend *be;
 
     gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
     gchar *log_domain = "gnc.backend.dbi";
@@ -277,6 +293,8 @@ test_dbi_safe_save( const gchar* driver,  const gchar* url )
     qof_session_load( session_2, NULL );
     compare_books( qof_session_get_book( session_1 ),
                    qof_session_get_book( session_2 ) );
+    be = qof_book_get_backend( qof_session_get_book( session_2 ) );
+    test_conn_index_functions( be );
 
 cleanup:
     hdlr = g_log_set_handler (log_domain, loglevel,
