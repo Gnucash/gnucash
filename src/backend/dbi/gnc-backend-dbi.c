@@ -86,12 +86,14 @@ static GSList* conn_get_table_list( dbi_conn conn, const gchar* dbname );
 static GSList* conn_get_table_list_sqlite3( dbi_conn conn, const gchar* dbname );
 static void append_sqlite3_col_def( GString* ddl, GncSqlColumnInfo* info );
 static GSList *conn_get_index_list_sqlite3( dbi_conn conn );
+static void conn_drop_index_sqlite3 (dbi_conn conn, const gchar *index );
 static provider_functions_t provider_sqlite3 =
 {
     conn_create_table_ddl_sqlite3,
     conn_get_table_list_sqlite3,
     append_sqlite3_col_def,
-    conn_get_index_list_sqlite3
+    conn_get_index_list_sqlite3,
+    conn_drop_index_sqlite3
 };
 #define SQLITE3_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
@@ -100,12 +102,14 @@ static /*@ null @*/ gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
         const GList* col_info_list );
 static void append_mysql_col_def( GString* ddl, GncSqlColumnInfo* info );
 static GSList *conn_get_index_list_mysql( dbi_conn conn );
+static void conn_drop_index_mysql (dbi_conn conn, const gchar *index );
 static provider_functions_t provider_mysql =
 {
     conn_create_table_ddl_mysql,
     conn_get_table_list,
     append_mysql_col_def,
-    conn_get_index_list_mysql
+    conn_get_index_list_mysql,
+    conn_drop_index_mysql
 };
 #define MYSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
@@ -115,13 +119,15 @@ static /*@ null @*/ gchar* conn_create_table_ddl_pgsql( GncSqlConnection* conn,
 static GSList* conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname );
 static void append_pgsql_col_def( GString* ddl, GncSqlColumnInfo* info );
 static GSList *conn_get_index_list_pgsql( dbi_conn conn );
+static void conn_drop_index_pgsql (dbi_conn conn, const gchar *index );
 
 static provider_functions_t provider_pgsql =
 {
     conn_create_table_ddl_pgsql,
     conn_get_table_list_pgsql,
     append_pgsql_col_def,
-    conn_get_index_list_pgsql
+    conn_get_index_list_pgsql,
+    conn_drop_index_pgsql
 };
 #define PGSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d %02d%02d%02d"
 
@@ -391,6 +397,14 @@ conn_get_index_list_sqlite3( dbi_conn conn )
     }
     dbi_result_free( result );
     return list;
+}
+
+static void
+conn_drop_index_sqlite3 (dbi_conn conn, const gchar *index )
+{
+    dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", index);
+    if ( result )
+        dbi_result_free( result );
 }
 
 static void
@@ -978,12 +992,37 @@ conn_get_index_list_mysql( dbi_conn conn )
         while ( dbi_result_next_row( result ) != 0 )
         {
             const gchar*  index_name = dbi_result_get_string_idx( result, 3 );
-            index_list = g_slist_prepend( index_list, strdup( index_name ) );
+            index_list = g_slist_prepend( index_list, g_strjoin( " ", index_name, table_name, NULL ) );
         }
         dbi_result_free( result );
     }
 
     return index_list;
+}
+
+static void
+conn_drop_index_mysql (dbi_conn conn, const gchar *index )
+{
+    dbi_result result;
+    gchar **index_table_split = g_strsplit (index, " ", 2);
+    int splitlen = -1;
+
+    /* Check if the index split can be valid */
+    while (index_table_split[++splitlen] != NULL)
+    { /* do nothing, just count split members */ }
+
+    if (splitlen != 2)
+    {
+        g_print ("Drop index error: invalid MySQL index format (<index> <table>): %s", index);
+        return;
+    }
+
+    result = dbi_conn_queryf (conn, "DROP INDEX %s ON %s",
+                              index_table_split[0], index_table_split[1]);
+    if ( result )
+        dbi_result_free( result );
+
+    g_strfreev (index_table_split);
 }
 
 static void
@@ -1271,6 +1310,14 @@ conn_get_index_list_pgsql( dbi_conn conn )
     }
     dbi_result_free( result );
     return list;
+}
+
+static void
+conn_drop_index_pgsql (dbi_conn conn, const gchar *index )
+{
+    dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", index);
+    if ( result )
+        dbi_result_free( result );
 }
 
 
@@ -1590,10 +1637,7 @@ gnc_dbi_safe_sync_all( QofBackend *qbe, QofBook *book )
     for ( iter = index_list; iter != NULL; iter = g_slist_next( iter) )
     {
         const char *errmsg;
-        dbi_result result =
-            dbi_conn_queryf( conn->conn, "DROP INDEX %s", iter->data );
-        if ( result )
-            dbi_result_free( result );
+        conn->provider->drop_index (conn->conn, iter->data);
         if ( DBI_ERROR_NONE != dbi_conn_error( conn->conn, &errmsg ) )
         {
             qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
