@@ -186,8 +186,13 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
 
     gchar *msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
     gchar *log_domain = "gnc.backend.dbi";
-    guint loglevel = G_LOG_LEVEL_WARNING, hdlr;
-    TestErrorStruct check = { loglevel, log_domain, msg };
+    guint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL, hdlr;
+    TestErrorStruct check = { loglevel, log_domain, msg, 0 };
+    GLogFunc dhdlr = g_log_set_default_handler ((GLogFunc)test_null_handler,
+						&check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,
+				  &check);
+
 
     g_test_message ( "Testing %s\n", driver );
 
@@ -238,6 +243,7 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     qof_session_end( session_3 );
     qof_session_destroy( session_3 );
     g_log_remove_handler (log_domain, hdlr);
+    g_log_set_default_handler (dhdlr, NULL);
 }
 
 /* Given an already-created url (yeah, bad testing practice: Should

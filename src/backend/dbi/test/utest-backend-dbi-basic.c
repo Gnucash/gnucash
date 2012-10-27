@@ -23,11 +23,9 @@ void do_test_pgsql(void);
 #define DBI_TEST_XML_FILENAME "test-dbi.xml"
 #define FILE_NAME "sqlite3:///tmp/test-sqlite3-file"
 
-static gboolean handler(const gchar* log_domain, GLogLevelFlags log_level, const gchar* message, gpointer user_data)
+typedef struct
 {
-    printf("domain=%s level=%d message=%s\n", log_domain, log_level, message);
-    return FALSE;
-}
+     QofSession *session;
 
 void
 do_test_sqlite(void)
@@ -53,7 +51,6 @@ do_test_mysql(void)
     gchar* filename;
     QofSession* session_1;
 
-    g_test_log_set_fatal_handler(handler, 0);
 
     // Create a session with data
     session_1 = qof_session_new();
@@ -69,8 +66,6 @@ do_test_pgsql(void)
 {
     gchar* filename;
     QofSession* session_1;
-
-    g_test_log_set_fatal_handler(handler, 0);
 
     // Create a session with data
     session_1 = qof_session_new();
