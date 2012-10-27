@@ -543,7 +543,7 @@ fi
 AC_SUBST(LIBDBI_LIBS)
 AC_SUBST(GNC_DBD_DIR)
 AM_CONDITIONAL(CUSTOM_GNC_DBD_DIR, [test x"$GNC_DBD_DIR" != "x"])
-AM_CONDITIONAL(WITH_DBI, [test "x$ac_cv_header_dbi_dbi_h" == xyes])
+AM_CONDITIONAL(WITH_DBI, [test "x$ac_cv_header_dbi_dbi_h" = xyes])
 
 ### --------------------------------------------------------------------------
 ### Variables
