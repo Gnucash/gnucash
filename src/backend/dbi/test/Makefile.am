@@ -63,6 +63,8 @@ test_backend_dbi_SOURCES = \
     test-dbi-stuff.c \
     test-dbi-business-stuff.c
 
+test_backend_dbi_LDFLAGS="-ldbi"
+
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
 
 # If you let make run parallel builds it complains that there is no rule to make
