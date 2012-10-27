@@ -42,6 +42,8 @@ main (int   argc,
     qof_init();
     cashobjects_register();
     qof_load_backend_library ("../.libs/", GNC_LIB_NAME);
+    qof_load_backend_library ("../../xml/.libs", "gncmod-backend-xml");
+
 
     test_suite_gnc_backend_dbi_basic();
     test_suite_gnc_backend_dbi_business();
