@@ -1916,7 +1916,7 @@ gnc_split_reg2_enter (GNCSplitReg2 *gsr, gboolean next_transaction) //this works
     }
 
     /* First record the transaction */
-    if (gnc_tree_view_split_reg_enter (view));
+    if (gnc_tree_view_split_reg_enter (view))
     {
         if (!goto_blank && next_transaction)
             gnc_tree_view_split_reg_expand_current_trans (view, FALSE);
