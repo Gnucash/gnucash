@@ -28,8 +28,6 @@
 #include "gnc-main.h"
 #include "qofsession-p.h"
 #include "cashobjects.h"
-#include "test-engine-stuff.h"
-#include "test-stuff.h"
 #include "test-dbi-stuff.h"
 #include <unittest-support.h>
 
@@ -37,12 +35,20 @@
 #include "Split.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
+#include <SX-book.h>
+#include <gnc-lot.h>
 #include "../gnc-backend-dbi-priv.h"
 
 G_GNUC_UNUSED static QofLogModule log_module = "test-dbi";
 
+/* Placeholder for some old functions that need to be re-written and enabled */
+static void do_test (G_GNUC_UNUSED gboolean foo, G_GNUC_UNUSED gchar* bar)
+{
+}
+
 void
-do_compare( QofBook* book_1, QofBook* book_2, const gchar* id, QofInstanceForeachCB cb, const gchar* msg )
+do_compare( QofBook* book_1, QofBook* book_2, const gchar* id,
+	    QofInstanceForeachCB cb, const gchar* msg )
 {
     QofCollection* coll;
     CompareInfoStruct info;
@@ -52,8 +58,6 @@ do_compare( QofBook* book_1, QofBook* book_2, const gchar* id, QofInstanceForeac
     info.book_2 = book_2;
     info.result = TRUE;
     qof_collection_foreach(coll, cb, &info);
-
-    do_test( info.result, msg );
 }
 
 static void
@@ -63,15 +67,7 @@ compare_account_trees( QofBook* book_1, QofBook* book_2 )
     Account* root_2 = gnc_book_get_root_account( book_2 );
 
     xaccAccountSetHidden( root_1, xaccAccountGetHidden( root_1 ) );
-    do_test( xaccAccountEqual( root_1, root_2, FALSE ), "Accounts trees match" );
-}
-
-static void
-compare_pricedbs( QofBook* book_1, QofBook* book_2 )
-{
-#if 0
-    do_compare( book_1, book_2, GNC_ID_TRANS, compare_single_tx, "Transaction lists match" );
-#endif
+    g_assert (xaccAccountEqual( root_1, root_2, FALSE ));
 }
 
 static void
@@ -79,54 +75,128 @@ compare_single_tx( QofInstance* inst, gpointer user_data )
 {
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
     Transaction* tx_1 = GNC_TRANS(inst);
-    Transaction* tx_2 = xaccTransLookup( qof_instance_get_guid(inst), info->book_2 );
+    Transaction* tx_2 = xaccTransLookup( qof_instance_get_guid(inst),
+					 info->book_2 );
 
-    if (!xaccTransEqual( tx_1, tx_2, TRUE, TRUE, TRUE, FALSE ))
-    {
-        info->result = FALSE;
-    }
+    g_assert (xaccTransEqual (tx_1, tx_2, TRUE, TRUE, TRUE, FALSE));
 }
 
 static void
 compare_txs( QofBook* book_1, QofBook* book_2 )
 {
-    do_compare( book_1, book_2, GNC_ID_TRANS, compare_single_tx, "Transaction lists match" );
+    do_compare( book_1, book_2, GNC_ID_TRANS,
+		compare_single_tx, "Transaction lists match" );
+}
+
+static SchedXaction*
+get_sx_by_guid (QofBook* book, const GncGUID *guid)
+{
+    SchedXactions *sxes = gnc_book_get_schedxactions (book);
+    GList *sxitem;
+    for (sxitem = sxes->sx_list; sxitem != NULL; sxitem = sxitem->next)
+    {
+        const GncGUID *sx_guid;
+        sx_guid = qof_instance_get_guid (QOF_INSTANCE(sxitem->data));
+        if (guid_equal (sx_guid, guid))
+            return sxitem->data;
+    }
+    return NULL;
+}
+
+/* Be sure to put the control GDate first, otherwise a date that isn't
+ * properly carried over from the first instance won't assert.
+ */
+
+#define TEST_GDATES_EQUAL(gd1, gd2) \
+    if (g_date_valid (gd1))			  \
+    {						  \
+        g_assert (g_date_valid (gd2));		  \
+        g_assert (g_date_compare (gd1, gd2) == 0);\
+    }
+
+static void
+compare_recurrences (GList *rl_1, GList *rl_2)
+{
+    GList *ritem1, *ritem2;
+
+    if (rl_1 == NULL)
+        return;
+
+    g_assert (rl_2 != NULL);
+    g_assert_cmpint (g_list_length (rl_1), ==, g_list_length (rl_2));
+    for (ritem1 = rl_1, ritem2 = rl_2; ritem1 != NULL && ritem2 != NULL;
+         ritem1 = g_list_next (ritem1), ritem2 = g_list_next (ritem2))
+    {
+        Recurrence *r1 = ritem1->data, *r2 = ritem2->data;
+
+        TEST_GDATES_EQUAL (&r1->start, &r2->start);
+        g_assert_cmpint (r1->ptype, ==, r2->ptype);
+        g_assert_cmpint (r1->mult, ==, r2->mult);
+        g_assert_cmpint (r1->wadj, ==, r2->wadj);
+    }
 }
 
 static void
 compare_single_sx( QofInstance* inst, gpointer user_data )
 {
-#if 0
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
-    Transaction* tx_1 = GNC_TRANS(inst);
-    Transaction* tx_2 = xaccTransLookup( qof_instance_get_guid(inst), info->book_2 );
+    SchedXaction* sx_1 = GNC_SCHEDXACTION (inst);
+    SchedXaction* sx_2 = get_sx_by_guid (info->book_2,
+                                         qof_instance_get_guid (inst));
 
-    if (!testTransEqual( tx_1, tx_2, TRUE, TRUE, TRUE, FALSE ))
-    {
-        info->result = FALSE;
-    }
-#endif
+    g_assert (sx_2 != NULL);
+    g_assert_cmpstr (sx_1->name, ==, sx_2->name);
+    compare_recurrences (sx_2->schedule, sx_1->schedule);
+    TEST_GDATES_EQUAL(&sx_2->last_date, &sx_1->last_date);
+    TEST_GDATES_EQUAL(&sx_2->start_date, &sx_1->start_date);
+    TEST_GDATES_EQUAL(&sx_2->end_date, &sx_1->end_date);
+    g_assert_cmpint (sx_2->num_occurances_total, ==,
+                     sx_1->num_occurances_total);
+    g_assert_cmpint (sx_2->num_occurances_remain, ==,
+                     sx_1->num_occurances_remain);
+    g_assert_cmpint (sx_2->instance_num, ==, sx_1->instance_num);
+    g_assert_cmpint (sx_2->enabled, ==, sx_1->enabled);
+    g_assert_cmpint (sx_2->autoCreateOption, ==, sx_1->autoCreateOption);
+    g_assert_cmpint (sx_2->autoCreateNotify, ==, sx_1->autoCreateNotify);
+    g_assert_cmpint (sx_2->advanceCreateDays, ==, sx_1->advanceCreateDays);
+    g_assert_cmpint (sx_2->advanceRemindDays, ==, sx_1->advanceRemindDays);
+
 }
 
 static void
 compare_sxs( QofBook* book_1, QofBook* book_2 )
 {
-    do_compare( book_1, book_2, GNC_ID_SCHEDXACTION, compare_single_sx, "Scheduled transaction lists match" );
+    do_compare( book_1, book_2, GNC_ID_SCHEDXACTION,
+		compare_single_sx, "Scheduled transaction lists match" );
 }
 
 static void
 compare_single_lot( QofInstance* inst, gpointer user_data )
 {
-#if 0
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
-    Transaction* tx_1 = GNC_TRANS(inst);
-    Transaction* tx_2 = xaccTransLookup( qof_instance_get_guid(inst), info->book_2 );
+    GNCLot *lot_1 = GNC_LOT(inst);
+    GNCLot *lot_2 = gnc_lot_lookup (qof_instance_get_guid(inst),
+					 info->book_2 );
+    GList *split1, *splits1, *splits2;
 
-    if (!testTransEqual( tx_1, tx_2, TRUE, TRUE, TRUE, FALSE ))
+    g_assert (xaccAccountEqual( gnc_lot_get_account (lot_1),
+                                gnc_lot_get_account (lot_2), FALSE ));
+    g_assert_cmpint (gnc_lot_is_closed (lot_1), ==, gnc_lot_is_closed (lot_2));
+
+    g_assert (kvp_frame_compare (gnc_lot_get_slots (lot_1),
+                                 gnc_lot_get_slots (lot_2)) == 0);
+    splits1 = gnc_lot_get_split_list (lot_1);
+    splits2 = gnc_lot_get_split_list (lot_2);
+    g_assert_cmpint (g_list_length (splits1), ==, g_list_length (splits2));
+    for (split1 = splits1; split1 != NULL; split1 = g_list_next (split1))
     {
-        info->result = FALSE;
+        Split *split2;
+        g_assert (GNC_IS_SPLIT (split1->data));
+        split2 = xaccSplitLookup (qof_instance_get_guid (split1->data),
+                                  info->book_2);
+        g_assert (GNC_IS_SPLIT (split2));
+        g_assert (xaccSplitEqual (split1->data, split2, TRUE, TRUE, TRUE));
     }
-#endif
 }
 
 static void
@@ -144,23 +214,26 @@ test_conn_index_functions( QofBackend *qbe )
 
     index_list = conn->provider->get_index_list( be->conn );
     g_test_message ( "Returned from index list\n");
-    if ( index_list == NULL )
-    {
-        do_test( FALSE, "Index List Test -- No List" );
-        return;
-    }
-    do_test( g_slist_length( index_list ) == 4, "Index List Test" );
-
+    g_assert (index_list != NULL);
+    g_assert_cmpint (g_slist_length( index_list ), ==, 4);
     for ( iter = index_list; iter != NULL; iter = g_slist_next( iter) )
     {
         const char *errmsg;
         conn->provider->drop_index (be->conn, iter->data);
-        if ( DBI_ERROR_NONE != dbi_conn_error( conn->conn, &errmsg ) )
-            do_test( FALSE, "Drop Index Test");
+        g_assert (DBI_ERROR_NONE == dbi_conn_error( conn->conn, &errmsg));
     }
+
+
     g_slist_free( index_list );
 
 
+}
+
+static void
+compare_pricedbs( QofBook* book_1, QofBook* book_2 )
+{
+    do_compare( book_1, book_2, GNC_ID_TRANS,
+		compare_single_tx, "Transaction lists match" );
 }
 
 static void
@@ -201,43 +274,26 @@ test_dbi_store_and_reload( const gchar* driver, QofSession* session_1, const gch
     hdlr = g_log_set_handler (log_domain, loglevel,
                               (GLogFunc)test_checked_handler, &check);
     qof_session_begin( session_2, url, FALSE, TRUE, TRUE );
-    if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
-    {
-        g_warning("Session Error: %d, %s", qof_session_get_error(session_2), qof_session_get_error_message(session_2));
-        do_test( FALSE, "First DB Session Creation Failed");
-        return;
-    }
+    g_assert (session_2 != NULL);
+    g_assert_cmpint (qof_session_get_error (session_2), ==, ERR_BACKEND_NO_ERR);
     qof_session_swap_data( session_1, session_2 );
     qof_session_save( session_2, NULL );
-    if (session_2 && qof_session_get_error(session_2) != ERR_BACKEND_NO_ERR)
-    {
-        g_warning("Session Error: %s", qof_session_get_error_message(session_2));
-        do_test( FALSE, "First DB Session Save Failed");
-        return;
-    }
+    g_assert (session_2 != NULL);
+    g_assert_cmpint (qof_session_get_error (session_2), ==, ERR_BACKEND_NO_ERR);
 
     // Reload the session data
     session_3 = qof_session_new();
+    g_assert (session_3 != NULL);
     qof_session_begin( session_3, url, TRUE, FALSE, FALSE );
-    if (session_3 && qof_session_get_error(session_3) != ERR_BACKEND_NO_ERR)
-    {
-        g_warning("Session Error: %s", qof_session_get_error_message(session_3));
-        do_test( FALSE, "Second DB Session Creation Failed");
-        return;
-    }
+    g_assert (session_3 != NULL);
+    g_assert_cmpint (qof_session_get_error (session_3), ==, ERR_BACKEND_NO_ERR);
     qof_session_load( session_3, NULL );
-    if (session_3 && qof_session_get_error(session_3) != ERR_BACKEND_NO_ERR)
-    {
-        g_warning("Session Error: %s", qof_session_get_error_message(session_3));
-        do_test( FALSE, "Second DBI Session Load Failed");
-        return;
-    }
+    g_assert (session_3 != NULL);
+    g_assert_cmpint (qof_session_get_error (session_3), ==, ERR_BACKEND_NO_ERR);
     // Compare with the original data
-    compare_books( qof_session_get_book( session_2 ), qof_session_get_book( session_3 ) );
-    be = qof_book_get_backend( qof_session_get_book( session_3 ) );
-    test_conn_index_functions( be );
-    qof_session_end( session_1 );
-    qof_session_destroy( session_1 );
+    compare_books (qof_session_get_book( session_2),
+		   qof_session_get_book( session_3));
+/* Session_1 belongs to the fixture and teardown() will clean it up */
     qof_session_end( session_2 );
     qof_session_destroy( session_2 );
     qof_session_end( session_3 );
