@@ -7,7 +7,7 @@
 
 #include "config.h"
 
-#include <stdio.h>
+#include <glib/gstdio.h>
 
 #include "unittest-support.h"
 #include "test-stuff.h"
@@ -21,67 +21,66 @@ void do_test_mysql(void);
 void do_test_pgsql(void);
 
 #define DBI_TEST_XML_FILENAME "test-dbi.xml"
-#define FILE_NAME "sqlite3:///tmp/test-sqlite3-file"
 
 typedef struct
 {
      QofSession *session;
+     gchar *filename;
+} Fixture;
 
-void
-do_test_sqlite(void)
+static void
+setup (Fixture *fixture, gconstpointer pData)
 {
-    gchar* filename;
-    QofSession* session_1;
+    fixture->session = qof_session_new();
+    qof_session_begin( fixture->session, DBI_TEST_XML_FILENAME, FALSE,
+		       FALSE, FALSE );
+    g_assert_cmpint (qof_session_get_error (fixture->session), ==,
+		     ERR_BACKEND_NO_ERR);
+    qof_session_load( fixture->session, NULL );
 
-    g_test_log_set_fatal_handler(handler, 0);
-
-    // Create a session with data
-    session_1 = qof_session_new();
-    qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE, FALSE );
-    qof_session_load( session_1, NULL );
-
-    filename = tempnam( "/tmp", "test-sqlite3-" );
-    g_test_message ( "Using filename: %s\n", filename );
-    test_dbi_store_and_reload( "sqlite3", session_1, filename );
+    fixture->filename = tempnam( "/tmp", "test-sqlite3-" );
+    g_test_message ( "Using filename: %s\n", fixture->filename );
 }
 
-void
-do_test_mysql(void)
+static void
+teardown (Fixture *fixture, gconstpointer pData)
 {
-    gchar* filename;
-    QofSession* session_1;
-
-
-    // Create a session with data
-    session_1 = qof_session_new();
-    qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE, FALSE );
-    qof_session_load( session_1, NULL );
-
-    g_test_message ( "Using database: %s\n", TEST_MYSQL_URL );
-    test_dbi_store_and_reload( "mysql", session_1, TEST_MYSQL_URL );
+     qof_session_end (fixture->session);
+     qof_session_destroy (fixture->session);
+     g_unlink (fixture->filename);
 }
 
-void
-do_test_pgsql(void)
+
+static void
+test_sqlite_store_and_reload (Fixture *fixture, gconstpointer pData)
 {
-    gchar* filename;
-    QofSession* session_1;
-
     // Create a session with data
-    session_1 = qof_session_new();
-    qof_session_begin( session_1, DBI_TEST_XML_FILENAME, FALSE, FALSE, FALSE );
-    qof_session_load( session_1, NULL );
+    test_dbi_store_and_reload( "sqlite3", fixture->session, fixture->filename );
+}
 
-    g_test_message ( "Using database: %s\n", TEST_PGSQL_URL );
-    test_dbi_store_and_reload( "postgres", session_1, TEST_PGSQL_URL );
+static void
+test_mysql_store_and_reload (Fixture *fixture, gconstpointer pData)
+{
+    g_assert (strlen (TEST_MYSQL_URL) > 0);
+    test_dbi_store_and_reload( TEST_MYSQL_URL, fixture->session,
+			       fixture->filename );
+}
+
+static void
+test_pgsql_store_and_reload (Fixture *fixture, gconstpointer pData)
+{
+    g_assert (strlen (TEST_PGSQL_URL) > 0);
+    test_dbi_store_and_reload( TEST_PGSQL_URL, fixture->session,
+			       fixture->filename );
 }
 
 void
 test_suite_gnc_backend_dbi_basic(void)
 {
-    GNC_TEST_ADD_FUNC(suitename, "gnc dbi test sqlite", do_test_sqlite);
-    if ( strlen( TEST_MYSQL_URL ) > 0 )
-        GNC_TEST_ADD_FUNC(suitename, "gnc dbi test mysql", do_test_mysql);
-    if ( strlen( TEST_PGSQL_URL ) > 0 )
-        GNC_TEST_ADD_FUNC(suitename, "gnc dbi test pgsql", do_test_pgsql);
+     GNC_TEST_ADD (suitename, "store_and_reload/sqlite", Fixture, NULL, setup, test_sqlite_store_and_reload, teardown);
+     if (strlen (TEST_MYSQL_URL) > 0)
+         GNC_TEST_ADD (suitename, "store_and_reload/mysql", Fixture, NULL, setup, test_mysql_store_and_reload, teardown);
+     if (strlen (TEST_PGSQL_URL) > 0)
+         GNC_TEST_ADD (suitename, "store_and_reload/postgres", Fixture, NULL, setup, test_pgsql_store_and_reload, teardown);
+
 }
