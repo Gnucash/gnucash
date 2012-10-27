@@ -223,21 +223,30 @@ qof_load_backend_library (const char *directory, const char* module_name)
     GModule *backend;
     void (*module_init_func) (void);
 
-    g_return_val_if_fail(g_module_supported(), FALSE);
-    fullpath = g_module_build_path(directory, module_name);
-    backend = g_module_open(fullpath, G_MODULE_BIND_LAZY);
-    g_free(fullpath);
+    g_return_val_if_fail(g_module_supported (), FALSE);
+    fullpath = g_module_build_path (directory, module_name);
+/* Darwin modules can have either .so or .dylib for a suffix */
+    if (!g_file_test (fullpath, G_FILE_TEST_EXISTS) &&
+	g_strcmp0 (G_MODULE_SUFFIX, "so") == 0)
+    {
+	gchar *modname = g_strdup_printf ("lib%s.dylib", module_name);
+	g_free (fullpath);
+	fullpath = g_build_filename (directory, modname, NULL);
+	g_free (modname);
+    }
+    backend = g_module_open (fullpath, G_MODULE_BIND_LAZY);
+    g_free (fullpath);
     if (!backend)
     {
         g_message ("%s: %s\n", PACKAGE, g_module_error ());
         return FALSE;
     }
-    if (g_module_symbol(backend, "qof_backend_module_init",
+    if (g_module_symbol (backend, "qof_backend_module_init",
                         (gpointer)&module_init_func))
-        module_init_func();
+        module_init_func ();
 
-    g_module_make_resident(backend);
-    backend_module_list = g_slist_prepend( backend_module_list, backend );
+    g_module_make_resident (backend);
+    backend_module_list = g_slist_prepend (backend_module_list, backend);
     return TRUE;
 }
 
