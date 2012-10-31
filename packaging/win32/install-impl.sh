@@ -1578,6 +1578,32 @@ EOF
     fi
 }
 
+function checkupd_docs_svn() {
+    if [ "$UPDATE_DOCS" = "yes" ]; then
+        if [ -x .svn ]; then
+            setup "Docs - Update repository (svn)"
+            svn up -r $DOCS_REV
+        else
+            setup "Docs - Checkout repository (svn)"
+            svn co -r $DOCS_REV $DOCS_URL .
+        fi
+    fi
+}
+
+function checkupd_docs_git() {
+    
+    if [ "$UPDATE_DOCS" = "yes" ]; then
+        if [ -x .git ]; then
+            setup "Docs - Update repository (git)"
+            $GIT_CMD pull
+        else
+            setup "Docs - Checkout repository (git)"
+            $GIT_CMD clone $DOCS_URL .
+            $GIT_CMD checkout $DOCS_REV
+        fi
+    fi
+}
+
 function make_chm() {
     _CHM_TYPE=$1
     _CHM_LANG=$2
@@ -1628,14 +1654,10 @@ function inst_docs() {
 
     mkdir -p $_DOCS_UDIR/repos
     qpushd $_DOCS_UDIR/repos
-        if [ "$UPDATE_DOCS" = "yes" ]; then
-            if [ -x .svn ]; then
-                setup "SVN update of docs"
-                svn up -r ${DOCS_REV}
-            else
-                setup "SVN checkout of docs"
-                svn co -r ${DOCS_REV} $DOCS_URL .
-            fi
+        if [ "$REPOS_TYPE" = "svn" ]; then
+            checkupd_docs_svn
+        else
+            checkupd_docs_git
         fi
         setup docs
         _DOCS_INST_UDIR=`unix_path $INSTALL_DIR`/share/gnucash/help

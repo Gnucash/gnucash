@@ -18,8 +18,6 @@ function qpushd() { pushd "$@" >/dev/null; }
 function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
-TAG_URL=http://svn.gnucash.org/repo/gnucash/tags
-
 ################################################################
 # Setup our environment  (we need the DOWNLOAD_DIR)
 
