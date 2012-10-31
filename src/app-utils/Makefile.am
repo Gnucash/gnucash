@@ -93,7 +93,7 @@ libgncmod_app_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
-if BUILDING_FROM_SVN
+if BUILDING_FROM_VCS
 swig-app-utils-guile.c: app-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<

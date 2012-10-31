@@ -53,7 +53,7 @@ noinst_HEADERS = \
 
 noinst_DATA = gnc-test-env
 
-if BUILDING_FROM_SVN
+if BUILDING_FROM_VCS
 swig-runtime.h:
 	$(SWIG) -guile -external-runtime $@
 endif

@@ -298,7 +298,7 @@ class GncPrice(GnuCashCoreClass):
       commodity with respect to another commodity.
       For example, a given price might represent the value of LNUX in USD on 2001-02-03.
 
-      See also http://svn.gnucash.org/docs/head/group__Price.html
+      See also http://code.gnucash.org/docs/head/group__Price.html
     '''
     pass
 GncPrice.add_methods_with_prefix('gnc_price_')
@@ -317,7 +317,7 @@ class GncPriceDB(GnuCashCoreClass):
     Every QofBook contains a GNCPriceDB, accessible via gnc_pricedb_get_db.
 
     Definition in file gnc-pricedb.h.
-    See also http://svn.gnucash.org/docs/head/gnc-pricedb_8h.html
+    See also http://code.gnucash.org/docs/head/gnc-pricedb_8h.html
     '''
 
 GncPriceDB.add_methods_with_prefix('gnc_pricedb_')

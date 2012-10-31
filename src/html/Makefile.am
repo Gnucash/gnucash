@@ -61,7 +61,7 @@ libgncmod_html_la_LIBADD = \
   ${GUILE_LIBS} \
   ${REGEX_LIBS}
 
-if BUILDING_FROM_SVN
+if BUILDING_FROM_VCS
 swig-gnc-html.c: gnc-html.i gnc-html.h \
                     ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \

@@ -85,14 +85,22 @@ gnc_show_splash_screen (void)
     frame = gtk_frame_new (NULL);
     vbox = gtk_vbox_new (FALSE, 3);
     hbox = gtk_hbox_new (FALSE, 3);
-#ifdef GNUCASH_SVN
+#ifdef GNUCASH_VCS
     /* Development version */
-    ver_string = g_strdup_printf(_("Version: GnuCash-%s svn (r%s built %s)"),
-                                 VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
+    /* Translators: 1st %s is the GnuCash version (eg 2.4.11);
+                    2nd %s is the vcs type (svn/svk/git/bzr);
+                    3rd %s is the vcs revision number;
+                    4th %s is the build date */
+    ver_string = g_strdup_printf(_("Version: GnuCash-%s %s (rev %s built %s)"),
+                                 VERSION, GNUCASH_VCS, GNUCASH_VCS_REV,
+                                 GNUCASH_BUILD_DATE);
 #else
     /* Dist Tarball */
-    ver_string = g_strdup_printf(_("Version: GnuCash-%s (r%s built %s)"),
-                                 VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
+    /* Translators: 1st %s is the GnuCash version (eg 2.4.11);
+                    2nd %s is the vcs (svn/svk/git/bzr) revision number;
+                    3rd %s is the build date */
+    ver_string = g_strdup_printf(_("Version: GnuCash-%s (rev %s built %s)"),
+                                 VERSION, GNUCASH_VCS_REV, GNUCASH_BUILD_DATE);
 #endif
 
     version = gtk_label_new(NULL);

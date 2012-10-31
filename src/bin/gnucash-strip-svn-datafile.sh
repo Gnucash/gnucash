@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # This script strips data elements from a gnucash data file that have
-# been introduced in the SVN-trunk version of gnucash, but are not
+# been introduced in the trunk version of gnucash, but are not
 # backwards-compatible to older versions of gnucash.
 
 ORIGFILE=$1
 ORIGTMPFILE="${ORIGFILE}.gunzip"
-BKUPFILE="${ORIGFILE}.svn.gz"
+BKUPFILE="${ORIGFILE}.bkp.gz"
 TMPFILE="${ORIGFILE}.tmp"
 
 if [ -f ${ORIGFILE} ] ; then

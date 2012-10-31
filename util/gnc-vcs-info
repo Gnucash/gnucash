@@ -1,14 +1,23 @@
 #!/bin/sh
 #
 # Usage:
-#   gnc-svnversion <srcdir>
+#   gnc-vcs-info -r <srcdir>
+#   gnc-vcs-info -t <srcdir>
 #
-# Prints the revision number to stdout and exits 0 on success
-# exits with errorcode 1 if we're not in an svn, svk or git checkout
+# With -r prints the revision number to stdout and exits 0 on success
+# With -t prints the vcs type that was detected to stdout and exits 0
+#         on success.
+#
+# Exits with errorcode 1 if we're not in an bzr, svn, svk or git checkout
 #
 # Written By:  Derek Atkins <derek@ihtfp.com>
+# Updated By:  Geert Janssens <geert@kobaltwit.be>
 #
 # $Id$
+
+# Default string to return if not invoked properly
+usage="Usage: $0 -r <srcdir>
+       $0 -t <srcdir>"
 
 # Print an error message and then exit
 my_die()
@@ -29,24 +38,45 @@ if [ "$BUILDING_FROM_SVN" = "0" -o \
 fi
 
 # Make sure we have a srcdir
-[ -n "$1" ] || my_die "Usage: $0 <srcdir>"
-[ -d "$1" ] || my_die "$0: $1: not a directory"
+[ -n "$1" ] || my_die "$usage"
+[ -n "$2" ] || my_die "$usage"
+[ -d "$2" ] || my_die "$0: $2: not a directory"
+
+
+if [ "$1" = "-t" ]
+then
+  request="type"
+elif [ "$1" = "-r" ]
+then
+  request="revision"
+else
+  my_die "$usage"
+fi
+
+srcdir=$2
 
 # Find the real srcdir.
 # This handles the case of a symlink (lndir) tree
 # $real_srcdir will hold the actual source dir
-if test -h "$1"/Makefile.am
+if test -h "$srcdir"/Makefile.am
 then 
-  tmp_srcdir=`readlink "$1"/Makefile.am`
-  real_srcdir="$1/`dirname ${tmp_srcdir}`"
+  tmp_srcdir=`readlink "$srcdir"/Makefile.am`
+  real_srcdir="$srcdir/`dirname ${tmp_srcdir}`"
 else
-  real_srcdir="$1"
+  real_srcdir="$srcdir"
 fi
 
 # Test if this code is an SVN Checkout
 #   If this is an svn checkout we assume you have svnversion!
 if test -d "${real_srcdir}"/.svn
 then
+  # If we're only interested in the vcs type, then we're done here
+  if [ "$request" = "type" ]
+  then
+    echo "svn"
+    exit 0
+  fi
+
   # svnversion without options returns the most recent revision in the repo
   # at the time of the last svn update/checkout even if that revision
   # didn't hold any changes in the current path. Not very useful as a
@@ -67,6 +97,13 @@ fi
 real_gitdir="${real_srcdir}"/.git
 if test -d "${real_gitdir}"
 then
+  # If we're only interested in the vcs type, then we're done here
+  if [ "$request" = "type" ]
+  then
+    echo "git"
+    exit 0
+  fi
+
   # The windows build uses environment variable $GIT_CMD to invoke git (adding git
   # to the PATH in Windows results in a build failure).
   # So for platform independence, use GIT_CMD for all
@@ -88,13 +125,20 @@ fi
 
 if test -d "${real_srcdir}"/.bzr ;
 then
-    bzrhead=`(cd "${real_srcdir}"; bzr version-info --custom --template='{revno}\n')`
-    if test $? = 0 ; then
-	echo "$bzrhead";
-	exit 0
-    else
-	exit 1
-    fi
+  # If we're only interested in the vcs type, then we're done here
+  if [ "$request" = "type" ]
+  then
+    echo "bzr"
+    exit 0
+  fi
+
+  bzrhead=`(cd "${real_srcdir}"; bzr version-info --custom --template='{revno}\n')`
+  if test $? = 0 ; then
+    echo "$bzrhead";
+    exit 0
+  else
+    exit 1
+  fi
 fi
 
 if test $OSTYPE -a $OSTYPE = "msys";
@@ -117,8 +161,15 @@ if test $? != 0 ; then exit 1 ; fi
 svkinfo=`echo n | $svk_cmd info "$real_srcdir" 2>&1`
 if test $? != 0 ; then exit 1 ; fi
 
-# If we got here, then $real_srcdir is an svk checkout.  Parse out
-# the revision info, print it out, and then output 0.  Just combine
+# If we got here, then $real_srcdir is an svk checkout.
+# If we're only interested in the vcs type, then we're done here
+if [ "$request" = "type" ]
+then
+  echo "bzr"
+  exit 0
+fi
+
+# Parse out the revision info, print it out, and then output 0.  Just combine
 # all the revision numbers into a single string by combining them
 # with periods.
 svkinfo=`$svk_cmd info "$real_srcdir" | grep Rev | head -5 | sed -e 's/^.* \([0-9:]*\)$/\1/'`

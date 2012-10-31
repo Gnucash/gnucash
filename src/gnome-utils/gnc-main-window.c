@@ -4122,13 +4122,21 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
     authors = get_file_strsplit("AUTHORS");
     documenters = get_file_strsplit("DOCUMENTERS");
     license = get_file("LICENSE");
-#ifdef GNUCASH_SVN
+#ifdef GNUCASH_VCS
     /* Development version */
-    message = g_strdup_printf(_("%s  This copy was built from svn r%s on %s."),
-                              fixed_message, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
+    /* Translators: 1st %s is a fixed message, which is translated independently;
+                    2nd %s is the vcs type (svn/svk/git/bzr);
+                    3rd %s is the vcs revision number;
+                    4th %s is the build date */
+    message = g_strdup_printf(_("%s\nThis copy was built from %s rev %s on %s."),
+                              fixed_message, GNUCASH_VCS, GNUCASH_VCS_REV,
+                              GNUCASH_BUILD_DATE);
 #else
-    message = g_strdup_printf(_("%s  This copy was built from r%s on %s."),
-                              fixed_message, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
+    /* Translators: 1st %s is a fixed message, which is translated independently;
+                    2nd %s is the vcs (svn/svk/git/bzr) revision number;
+                    3rd %s is the build date */
+    message = g_strdup_printf(_("%s\nThis copy was built from rev %s on %s."),
+                              fixed_message, GNUCASH_VCS_REV, GNUCASH_BUILD_DATE);
 #endif
     gtk_show_about_dialog
     (GTK_WINDOW (window),

@@ -51,7 +51,7 @@ libgncmod_report_gnome_la_LIBADD = \
   ${GCONF_LIBS} \
   ${GLIB_LIBS}
 
-if BUILDING_FROM_SVN
+if BUILDING_FROM_VCS
 swig-report-gnome.c: report-gnome.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<

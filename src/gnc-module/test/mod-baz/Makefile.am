@@ -26,7 +26,7 @@ libgncmodbaz_la_LIBADD = \
   $(GUILE_LIBS) \
   $(GLIB_LIBS)
 
-if BUILDING_FROM_SVN
+if BUILDING_FROM_VCS
 swig-baz.c: baz.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 endif

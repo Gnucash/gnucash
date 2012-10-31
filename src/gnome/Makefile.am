@@ -98,7 +98,7 @@ noinst_HEADERS = \
   window-reconcile.h \
   window-autoclear.h
 
-if BUILDING_FROM_SVN
+if BUILDING_FROM_VCS
 swig-gnome.c: gnome.i dialog-progress.h ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<

@@ -65,8 +65,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #  include <Foundation/Foundation.h>
 #endif
 
-/* GNUCASH_SVN is defined whenever we're building from an SVN tree */
-#ifdef GNUCASH_SVN
+/* GNUCASH_VCS is defined whenever we're building from an svn/svk/git/bzr tree */
+#ifdef GNUCASH_VCS
 static int is_development_version = TRUE;
 #else
 static int is_development_version = FALSE;
@@ -520,21 +520,32 @@ gnc_parse_command_line(int *argc, char ***argv)
 
     if (gnucash_show_version)
     {
+        gchar *fixed_message;
+
         if (is_development_version)
         {
-            /* Translators: %s is the version number */
-            g_print(_("GnuCash %s development version"), VERSION);
+            fixed_message = g_strdup_printf(_("GnuCash %s development version"), VERSION);
+
+            /* Translators: 1st %s is a fixed message, which is translated independently;
+                            2nd %s is the vcs type (svn/svk/git/bzr);
+                            3rd %s is the vcs revision number;
+                            4th %s is the build date */
+            g_print ( _("%s\nThis copy was built from %s rev %s on %s."),
+                      fixed_message, GNUCASH_VCS, GNUCASH_VCS_REV,
+                      GNUCASH_BUILD_DATE );
         }
         else
         {
-            /* Translators: %s is the version number */
-            g_print(_("GnuCash %s"), VERSION);
+            fixed_message = g_strdup_printf(_("GnuCash %s"), VERSION);
+
+            /* Translators: 1st %s is a fixed message, which is translated independently;
+                            2nd %s is the vcs (svn/svk/git/bzr) revision number;
+                            3rd %s is the build date */
+            g_print ( _("%s\nThis copy was built from rev %s on %s."),
+                      fixed_message, GNUCASH_VCS_REV, GNUCASH_BUILD_DATE );
         }
         g_print("\n");
-        /* Translators: 1st %s is the build date; 2nd %s is the SVN
-           revision number */
-        g_print(_("Built %s from r%s"), GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
-        g_print("\n");
+        g_free (fixed_message);
         exit(0);
     }
 

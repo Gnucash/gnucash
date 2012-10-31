@@ -42,6 +42,4 @@ const gchar *gnc_get_gconf_path(void);
 
 guint gnc_get_long_version( void );
 
-gint gnc_get_svn_version(void);
-
 #endif /* GNC_MAIN_H */
