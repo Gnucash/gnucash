@@ -136,10 +136,16 @@ gnc_schedxaction_get_property (GObject         *object,
         g_value_set_boxed(value, &sx->start_date);
         break;
     case PROP_END_DATE:
-        g_value_set_boxed(value, &sx->end_date);
+        /* g_value_set_boxed raises a critical error if sx->end_date
+         * is invalid */
+        if (g_date_valid (&sx->end_date))
+            g_value_set_boxed(value, &sx->end_date);
         break;
     case PROP_LAST_OCCURANCE_DATE:
-        g_value_set_boxed(value, &sx->last_date);
+     /* g_value_set_boxed raises a critical error if sx->last_date
+         * is invalid */
+        if (g_date_valid (&sx->last_date))
+            g_value_set_boxed(value, &sx->last_date);
         break;
     case PROP_INSTANCE_COUNT:
         g_value_set_int(value, sx->instance_num);
