@@ -297,7 +297,7 @@ function dist_finish() {
     if [ "$BUILD_FROM_TARBALL" = "no" ]; then
         # And changing output filename
         PKG_VERSION=`grep PACKAGE_VERSION ${_BUILD_UDIR}/config.h | cut -d" " -f3 | cut -d\" -f2 `
-        REVISION=`grep GNUCASH_VCS_REV ${_BUILD_UDIR}/src/core-utils/gnc-vcs-info.h | cut -d" " -f3 | cut -d\" -f2 `
+        REVISION=`grep GNUCASH_SCM_REV ${_BUILD_UDIR}/src/core-utils/gnc-scm-info.h | cut -d" " -f3 | cut -d\" -f2 `
         if [ "$REPOS_TYPE" = "svn" ]; then
           SETUP_FILENAME="gnucash-${PKG_VERSION}-${REPOS_TYPE}-r${REVISION}-setup.exe"
         else

@@ -71,8 +71,8 @@ namespace gnc
 
 #define APP_GNUCASH "/apps/gnucash"
 
-/* GNUCASH_VCS is defined whenever we're building from an svn/svk/git/bzr tree */
-#ifdef GNUCASH_VCS
+/* GNUCASH_SCM is defined whenever we're building from an svn/svk/git/bzr tree */
+#ifdef GNUCASH_SCM
 static int is_development_version = TRUE;
 #else
 static int is_development_version = FALSE;

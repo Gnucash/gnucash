@@ -65,12 +65,12 @@ rm -rf ${_DIST_UDIR}
 _BUILD_UDIR=`unix_path $BUILD_DIR`
 _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
 PKG_VERSION=`grep PACKAGE_VERSION ${_BUILD_UDIR}/config.h | cut -d" " -f3 | cut -d\" -f2 `
-GNC_VCS_REV=`grep GNUCASH_VCS_REV ${_BUILD_UDIR}/src/core-utils/gnc-vcs-info.h | cut -d" " -f3 | cut -d\" -f2 `
+GNUCASH_SCM_REV=`grep GNUCASH_SCM_REV ${_BUILD_UDIR}/src/core-utils/gnc-scm-info.h | cut -d" " -f3 | cut -d\" -f2 `
 
 # Choose the output filename based on our "build_from_tarball" setting
 # Make sure this logic matches the logic in dist.sh!
 if [ "$BUILD_FROM_TARBALL" = "no" ]; then
-  SETUP_FILENAME="gnucash-${PKG_VERSION}-svn-r${GNC_VCS_REV}-setup.exe"
+  SETUP_FILENAME="gnucash-${PKG_VERSION}-svn-r${GNUCASH_SCM_REV}-setup.exe"
 else
   SETUP_FILENAME="gnucash-${PKG_VERSION}-setup.exe"
 fi

@@ -65,8 +65,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #  include <Foundation/Foundation.h>
 #endif
 
-/* GNUCASH_VCS is defined whenever we're building from an svn/svk/git/bzr tree */
-#ifdef GNUCASH_VCS
+/* GNUCASH_SCM is defined whenever we're building from an svn/svk/git/bzr tree */
+#ifdef GNUCASH_SCM
 static int is_development_version = TRUE;
 #else
 static int is_development_version = FALSE;
@@ -527,11 +527,11 @@ gnc_parse_command_line(int *argc, char ***argv)
             fixed_message = g_strdup_printf(_("GnuCash %s development version"), VERSION);
 
             /* Translators: 1st %s is a fixed message, which is translated independently;
-                            2nd %s is the vcs type (svn/svk/git/bzr);
-                            3rd %s is the vcs revision number;
+                            2nd %s is the scm type (svn/svk/git/bzr);
+                            3rd %s is the scm revision number;
                             4th %s is the build date */
             g_print ( _("%s\nThis copy was built from %s rev %s on %s."),
-                      fixed_message, GNUCASH_VCS, GNUCASH_VCS_REV,
+                      fixed_message, GNUCASH_SCM, GNUCASH_SCM_REV,
                       GNUCASH_BUILD_DATE );
         }
         else
@@ -539,10 +539,10 @@ gnc_parse_command_line(int *argc, char ***argv)
             fixed_message = g_strdup_printf(_("GnuCash %s"), VERSION);
 
             /* Translators: 1st %s is a fixed message, which is translated independently;
-                            2nd %s is the vcs (svn/svk/git/bzr) revision number;
+                            2nd %s is the scm (svn/svk/git/bzr) revision number;
                             3rd %s is the build date */
             g_print ( _("%s\nThis copy was built from rev %s on %s."),
-                      fixed_message, GNUCASH_VCS_REV, GNUCASH_BUILD_DATE );
+                      fixed_message, GNUCASH_SCM_REV, GNUCASH_BUILD_DATE );
         }
         g_print("\n");
         g_free (fixed_message);

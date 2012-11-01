@@ -22,7 +22,7 @@ libgncmodbar_la_LIBADD=libbar.la \
   $(GUILE_LIBS) \
   $(GLIB_LIBS)
 
-if BUILDING_FROM_VCS
+if BUILDING_FROM_SCM
 swig-bar.c: bar.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 endif

@@ -42,11 +42,11 @@ else
 
     set_default REPOS_TYPE "git"
     if [ "$REPOS_TYPE" = "git" ]; then
-      set_default GNC_VCS_REV "trunk"
+      set_default GNUCASH_SCM_REV "trunk"
       set_default REPOS_URL "git://github.com/Gnucash/gnucash.git"
     elif [ "$REPOS_TYPE" = "svn" ]; then
       # latest revision that should compile, use HEAD or vwxyz
-      set_default GNC_VCS_REV "HEAD"
+      set_default GNUCASH_SCM_REV "HEAD"
       set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/trunk"
     fi
 fi
@@ -409,11 +409,11 @@ set_default CMAKE_DIR $GLOBAL_DIR\\cmake
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.76.1.zip"
 set_default DOCBOOK_DTD_URL "http://www.oasis-open.org/docbook/xml/4.1.2/docbkx412.zip"
 if [ "$REPOS_TYPE" = "git" ]; then
-  set_default DOCS_VCS_REV "trunk"
+  set_default DOCS_SCM_REV "trunk"
   set_default DOCS_URL "git://github.com/Gnucash/gnucash-docs.git"
 elif [ "$REPOS_TYPE" = "svn" ]; then
   # latest revision that should compile, use HEAD or vwxyz
-  set_default DOCS_VCS_REV "HEAD"
+  set_default DOCS_SCM_REV "HEAD"
   set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"
 fi
 set_default UPDATE_DOCS yes

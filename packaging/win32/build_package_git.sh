@@ -23,7 +23,7 @@ function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 . functions.sh
 . defaults.sh
 
-tag="${1:-$GNC_VCS_REV}"
+tag="${1:-$GNUCASH_SCM_REV}"
 
 # Determine where to upload to
 # NOTE: this assumes "tag" to be either a tag or a branch, not a
@@ -69,7 +69,7 @@ rm -rf ${_DIST_UDIR}
 _BUILD_UDIR=`unix_path $BUILD_DIR`
 _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
 PKG_VERSION=`grep PACKAGE_VERSION ${_BUILD_UDIR}/config.h | cut -d" " -f3 | cut -d\" -f2 `
-REVISION=`grep GNUCASH_VCS_REV ${_BUILD_UDIR}/src/core-utils/gnc-vcs-info.h | cut -d" " -f3 | cut -d\" -f2 `
+REVISION=`grep GNUCASH_SCM_REV ${_BUILD_UDIR}/src/core-utils/gnc-scm-info.h | cut -d" " -f3 | cut -d\" -f2 `
 
 # Choose the output filename based on our "build_from_tarball" setting
 # Make sure this logic matches the logic in dist.sh!

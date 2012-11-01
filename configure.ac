@@ -175,38 +175,38 @@ if test x$am_cv_scanf_lld = "xno"; then
 fi
 
 # test whether we are building directly from svn/svk/git/bzr
-${srcdir}/util/gnc-vcs-info -r ${srcdir} >/dev/null 2>&1
-if test $? = 0 -o "x${BUILDING_FROM_VCS}" = "xyes" ; then
-  BUILDING_FROM_VCS=yes
+${srcdir}/util/gnc-scm-info -r ${srcdir} >/dev/null 2>&1
+if test $? = 0 -o "x${BUILDING_FROM_SCM}" = "xyes" ; then
+  BUILDING_FROM_SCM=yes
 
   # We need at least version 1.3.31 of SWIG because
   # that's when SWIG doesn't barf on the "inline" keyword in C headers anymore
   AC_PROG_SWIG(1.3.31)
 else
-  BUILDING_FROM_VCS=no
-  # Make sure we've got swig-runtime.h and gnc-vcs-info.h
+  BUILDING_FROM_SCM=no
+  # Make sure we've got swig-runtime.h and gnc-scm-info.h
   AC_CHECK_FILE(${srcdir}/src/swig-runtime.h, [],
     [AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion, svk, git or bzr
 but I cannot find swig-runtime.h.  Check your PATH and make sure
-we can find gnc-vcs-info in your PATH!
+we can find gnc-scm-info in your PATH!
 Either that or contact gnucash-devel@gnucash.org because
 the tarball you downloaded is broken.
 
     ])])
-  AC_CHECK_FILE(${srcdir}/src/core-utils/gnc-vcs-info.h, [],
+  AC_CHECK_FILE(${srcdir}/src/core-utils/gnc-scm-info.h, [],
     [AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion, svk, git or bzr
-but I cannot find gnc-vcs-info.h.  Check your PATH and make sure
-we can find gnc-vcs-info in your PATH!
+but I cannot find gnc-scm-info.h.  Check your PATH and make sure
+we can find gnc-scm-info in your PATH!
 Either that or contact gnucash-devel@gnucash.org because
 the tarball you downloaded is broken.
 
     ])])
 fi
-AM_CONDITIONAL(BUILDING_FROM_VCS, test "x$BUILDING_FROM_VCS" = "xyes")
+AM_CONDITIONAL(BUILDING_FROM_SCM, test "x$BUILDING_FROM_SCM" = "xyes")
 
 # Build dir adjustments
 AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
@@ -1112,7 +1112,7 @@ then
   #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
 
   # error-on-warning should not be active in (stable) release tarballs
-  if test "x$BUILDING_FROM_VCS" = "xyes"
+  if test "x$BUILDING_FROM_SCM" = "xyes"
   then
     # This code is from svn/svk/git/bzr, so enable error-on-warning
     error_on_warning_as_default="yes"

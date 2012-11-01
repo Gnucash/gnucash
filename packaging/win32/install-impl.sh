@@ -1582,10 +1582,10 @@ function checkupd_docs_svn() {
     if [ "$UPDATE_DOCS" = "yes" ]; then
         if [ -x .svn ]; then
             setup "Docs - Update repository (svn)"
-            svn up -r $DOCS_VCS_REV
+            svn up -r $DOCS_SCM_REV
         else
             setup "Docs - Checkout repository (svn)"
-            svn co -r $DOCS_VCS_REV $DOCS_URL .
+            svn co -r $DOCS_SCM_REV $DOCS_URL .
         fi
     fi
 }
@@ -1599,7 +1599,7 @@ function checkupd_docs_git() {
         else
             setup "Docs - Checkout repository (git)"
             $GIT_CMD clone $DOCS_URL .
-            $GIT_CMD checkout $DOCS_VCS_REV
+            $GIT_CMD checkout $DOCS_SCM_REV
         fi
     fi
 }

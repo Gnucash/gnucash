@@ -77,7 +77,7 @@ EXTRA_DIST = \
   intltool-extract.in \
   intltool-merge.in \
   intltool-update.in \
-  util/gnc-vcs-info
+  util/gnc-scm-info
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -186,7 +186,7 @@ intl-scm/guile-strings.c:
 SVN = svn
 XSLTPROC = xsltproc
 
-if BUILDING_FROM_VCS
+if BUILDING_FROM_SCM
 # This rule will generate a ChangeLog of gnucash/trunk commits, plus
 # all additional branches that are added in
 # ./macros/svn2cl.xsl. (FIXME: Is the dependency on NEWS really a good

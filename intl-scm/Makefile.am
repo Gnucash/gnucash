@@ -12,7 +12,7 @@ BUILT_SOURCES = guile-strings.c
 
 SCMFILES = $(shell find ${abs_top_srcdir}/src -name test -prune -o -name '*.scm' -print | sort)
 
-if BUILDING_FROM_VCS
+if BUILDING_FROM_SCM
 # This needs to be generated in srcdir
 guile-strings.c: $(SCMFILES)
 	rm -f guile-strings.c
