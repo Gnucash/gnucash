@@ -26,6 +26,7 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ../libgncmod-backend-dbi.la \
         ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
+        ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
         ${top_builddir}/lib/libc/libc-missing.la
 
 GNC_TEST_DEPS = \
@@ -34,13 +35,14 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
-  --library-dir    ${top_builddir}/src/engine
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/backend/xml
 
 TESTS_ENVIRONMENT = \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   SRCDIR=${srcdir} \
   ${gnc_dbd_dir_override} \
-  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  $(shell ${top_srcdir}/src/gnc-test-env ${GNC_TEST_DEPS})
 
 EXTRA_DIST += \
     test-dbi-stuff.h \
@@ -64,6 +66,9 @@ test_backend_dbi_SOURCES = \
     test-dbi-business-stuff.c
 
 test_backend_dbi_LDFLAGS="-ldbi"
+test_backend_dbi_CPPFLAGS=-DDBI_TEST_XML_FILENAME=\"${srcdir}/test-dbi.xml\"
+
+
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
 

@@ -41,8 +41,9 @@ main (int   argc,
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
     qof_init();
     cashobjects_register();
-    qof_load_backend_library ("../.libs/", GNC_LIB_NAME);
-    qof_load_backend_library ("../../xml/.libs", "gncmod-backend-xml");
+    g_assert (qof_load_backend_library ("../.libs/", GNC_LIB_NAME));
+    g_assert (qof_load_backend_library ("../../xml/.libs",
+					"gncmod-backend-xml"));
 
 
     test_suite_gnc_backend_dbi_basic();

@@ -43,9 +43,6 @@ void test_suite_gnc_backend_dbi_business(void);
 
 void do_test_business_sqlite(void);
 
-#define DBI_TEST_XML_FILENAME "test-dbi.xml"
-#define FILE_NAME "sqlite3:///tmp/test-sqlite3-file"
-#define GNC_LIB_NAME "gncmod-backend-dbi"
 #include "config.h"
 #include "qof.h"
 #include "cashobjects.h"

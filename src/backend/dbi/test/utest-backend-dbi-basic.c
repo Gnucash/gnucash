@@ -20,8 +20,6 @@ void do_test_sqlite(void);
 void do_test_mysql(void);
 void do_test_pgsql(void);
 
-#define DBI_TEST_XML_FILENAME "test-dbi.xml"
-
 typedef struct
 {
      QofSession *session;
