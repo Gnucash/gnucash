@@ -1,10 +1,10 @@
-# Jul 2012: A RELAX NG Compact schema for gnucash "v2" XML files.
+# Aug 2012: A RELAX NG Compact schema for gnucash "v2" XML files.
 # Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>
 # Copyright (C) 2012 Baptiste Carvello <devel@baptiste-carvello.net>
 
 # This schema is non-normative; files emitted by gnucash <= 2.0 (and perhaps
 # later) that do not validate against it likely represent a problem with the
-# schema, not the file. The schema was last updated for gnucash 2.4.11.
+# schema, not the file. The schema was last updated for gnucash trunk, rev 22330.
 
 # http://relaxng.org/compact-tutorial-20030326.html
 
@@ -279,11 +279,11 @@ Split = element trn:split {
   element split:reconciled-state { "y" | "n" | "c" | "f" | "v" },
 
   element split:reconcile-date { TimeSpec }?,
-  element split:value { text },
-  element split:quantity { text },
+  element split:value { GncNumeric },
+  element split:quantity { GncNumeric },
   element split:account { attribute type { "guid" }, GUID },
-  element split:slots { KvpSlot+ }?,
-  element split:lot { attribute type { "guid" }, GUID }?
+  element split:lot { attribute type { "guid" }, GUID }?,
+  element split:slots { KvpSlot+ }?
 }
 
 # from write_template_transaction_data in src/backend/xml/io-gncxml-v2.c
@@ -529,7 +529,8 @@ Invoice = element gnc:GncInvoice {
     element cmdty:id { text }
   },
   element invoice:billto { OwnerContent }?,
-  element invoice:charge-amt { GncNumeric }?
+  element invoice:charge-amt { GncNumeric }?,
+  element invoice:slots { KvpSlot+ }?
 }
 
 # from job_dom_tree_create in src/backend/xml/gnc-job-xml-v2.c
