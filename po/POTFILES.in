@@ -204,8 +204,8 @@ src/gnome/gnc-plugin-page-register.c
 src/gnome/gnc-plugin-page-sx-list.c
 src/gnome/gnc-plugin-register2.c
 src/gnome/gnc-plugin-register.c
-src/gnome/gnc-split-reg.c
 src/gnome/gnc-split-reg2.c
+src/gnome/gnc-split-reg.c
 src/gnome/gtkbuilder/assistant-acct-period.glade
 src/gnome/gtkbuilder/assistant-hierarchy.glade
 src/gnome/gtkbuilder/assistant-loan.glade
@@ -220,8 +220,8 @@ src/gnome/gtkbuilder/dialog-progress.glade
 src/gnome/gtkbuilder/dialog-sx.glade
 src/gnome/gtkbuilder/dialog-tax-info.glade
 src/gnome/gtkbuilder/gnc-plugin-page-budget.glade
-src/gnome/gtkbuilder/gnc-plugin-page-register.glade
 src/gnome/gtkbuilder/gnc-plugin-page-register2.glade
+src/gnome/gtkbuilder/gnc-plugin-page-register.glade
 src/gnome/gtkbuilder/window-autoclear.glade
 src/gnome/gtkbuilder/window-reconcile.glade
 src/gnome/reconcile-view.c
@@ -457,8 +457,8 @@ src/plugins/customer_import/gnc-plugin-customer_import.c
 src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade
 src/plugins/customer_import/libgncmod-customer_import.c
 src/python/gncmod-python.c
-src/register/ledger-core/gnc-ledger-display.c
 src/register/ledger-core/gnc-ledger-display2.c
+src/register/ledger-core/gnc-ledger-display.c
 src/register/ledger-core/gncmod-ledger-core.c
 src/register/ledger-core/split-register.c
 src/register/ledger-core/split-register-control.c
