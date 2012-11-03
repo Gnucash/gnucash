@@ -728,7 +728,7 @@ gnc_plugin_page_register2_finalize (GObject *object)
 {
     GncPluginPageRegister2 *page;
     GncPluginPageRegister2Private *priv;
-
+//g_print("gnc_plugin_page_register2_finalize\n");
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (object));
 
     ENTER("object %p", object);
@@ -914,7 +914,7 @@ g_print("Register New Create\n");
         LEAVE("existing widget %p", priv->widget);
         return priv->widget;
     }
-
+g_print("Register New Create - page %p\n", page);
     priv->widget = gtk_vbox_new (FALSE, 0);
     gtk_widget_show (priv->widget);
 
@@ -1053,8 +1053,8 @@ gnc_plugin_page_register2_destroy_widget (GncPluginPage *plugin_page)
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_REGISTER2 (plugin_page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-
-    gnc_gconf_general_remove_cb(KEY_SUMMARYBAR_POSITION,
+//g_print("gnc_plugin_page_register2_destroy_widget\n");
+    gnc_gconf_general_remove_cb (KEY_SUMMARYBAR_POSITION,
                                 gnc_plugin_page_register2_summarybar_position_changed, page);
 
     if (priv->widget == NULL)
@@ -1062,29 +1062,36 @@ gnc_plugin_page_register2_destroy_widget (GncPluginPage *plugin_page)
 
     if (priv->component_manager_id)
     {
-        gnc_unregister_gui_component(priv->component_manager_id);
+        gnc_unregister_gui_component (priv->component_manager_id);
         priv->component_manager_id = 0;
     }
 
     if (priv->event_handler_id)
     {
-        qof_event_unregister_handler(priv->event_handler_id);
+        qof_event_unregister_handler (priv->event_handler_id);
         priv->event_handler_id = 0;
     }
 
     if (priv->sd.dialog)
     {
-        gtk_widget_destroy(priv->sd.dialog);
+        gtk_widget_destroy (priv->sd.dialog);
         memset(&priv->sd, 0, sizeof(priv->sd));
     }
 
     if (priv->fd.dialog)
     {
-        gtk_widget_destroy(priv->fd.dialog);
+        gtk_widget_destroy (priv->fd.dialog);
         memset(&priv->fd, 0, sizeof(priv->fd));
     }
 
-    gtk_widget_hide(priv->widget);
+    gtk_widget_hide (priv->widget);
+
+    if (priv->widget)
+    {
+        g_object_unref (G_OBJECT(priv->widget));
+        priv->widget = NULL;
+    }
+
     gnc_ledger_display2_close (priv->ledger);
     priv->ledger = NULL;
     LEAVE(" ");
@@ -1099,11 +1106,11 @@ gnc_plugin_page_register2_window_changed (GncPluginPage *plugin_page,
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    page = GNC_PLUGIN_PAGE_REGISTER2(plugin_page);
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
+    page = GNC_PLUGIN_PAGE_REGISTER2 (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
 
 /*    priv->gsr->window =
-        GTK_WIDGET(gnc_window_get_gtk_window(GNC_WINDOW(window)));
+        GTK_WIDGET(gnc_window_get_gtk_window (GNC_WINDOW (window)));
 */
 }
 
@@ -1379,7 +1386,7 @@ gnc_plugin_page_register2_finish_pending (GncPluginPage *page)
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(reg_page);
     model = gnc_ledger_display2_get_split_model_register(priv->ledger);
 
-/*FIXME    if (!model || !gnc_split_register_changed(model)) */
+/*FIXME    if (!model || !gnc_split_register_changed (model)) */
         return TRUE;
 
     name = gnc_plugin_page_register2_get_tab_name(page);
@@ -1410,11 +1417,11 @@ gnc_plugin_page_register2_finish_pending (GncPluginPage *page)
     switch (response)
     {
     case GTK_RESPONSE_ACCEPT:
-/*FIXME        gnc_split_register_save(model, TRUE); */
+/*FIXME        gnc_split_register_save (model, TRUE); */
         return TRUE;
 
     case GTK_RESPONSE_REJECT:
-/*FIXME        gnc_split_register_cancel_cursor_trans_changes(model); */
+/*FIXME        gnc_split_register_cancel_cursor_trans_changes (model); */
 /*FIXME        gnc_split_register_save (model, TRUE); */
         return TRUE;
 
@@ -3416,7 +3423,6 @@ gnc_plugin_page_register2_cmd_jump (GtkAction *action,
         LEAVE("couldn't create new page");
         return;
     }
-    new_reg_page = GNC_PLUGIN_PAGE_REGISTER2 (new_page);
 
     gnc_main_window_open_page (GNC_MAIN_WINDOW (window), new_page);
     gsr = gnc_plugin_page_register2_get_gsr (new_page);
@@ -3608,29 +3614,28 @@ gnc_plugin_page_register2_get_gsr (GncPluginPage *plugin_page)
 }
 
 static void
-gnc_plugin_page_help_changed_cb (GNCSplitReg2 *gsr, GncPluginPageRegister2 *register_page)
+gnc_plugin_page_help_changed_cb (GNCSplitReg2 *gsr, GncPluginPageRegister2 *register_page) //this works
 {
     GncPluginPageRegister2Private *priv;
-    SplitRegister *reg;
+    GncTreeViewSplitReg *view;
     GncWindow *window;
     char *help;
+//g_print("gnc_plugin_page_help_changed_cb register_page is %p\n", register_page);
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (register_page));
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(register_page));
-
-    window = GNC_WINDOW(GNC_PLUGIN_PAGE(register_page)->window);
+    window = GNC_WINDOW (GNC_PLUGIN_PAGE (register_page)->window);
     if (!window)
     {
         // This routine can be called before the page is added to a
         // window.
         return;
     }
-
-    /* Get the text from the ledger */
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(register_page);
-    reg = gnc_ledger_display2_get_split_register(priv->ledger);
-    help = gnc_table_get_help(reg->table);
-    gnc_window_set_status(window, GNC_PLUGIN_PAGE(register_page), help);
-    g_free(help);
+    /* Get the text from the view */
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (register_page);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+    help = g_strdup (view->help_text); //FIXME might need to be a function
+    gnc_window_set_status (window, GNC_PLUGIN_PAGE (register_page), help);
+    g_free (help);
 }
 
 static void
@@ -3664,7 +3669,7 @@ gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data)
 //g_print("gnc_plugin_page_register2_refresh_cb 2\n");
         /* Force updates */
 
-/*FIXME        gnucash_register_refresh_from_gconf(priv->gsr->reg); */
+/*FIXME        gnucash_register_refresh_from_gconf (priv->gsr->reg); */
         gtk_widget_queue_draw(priv->widget);
     }
 

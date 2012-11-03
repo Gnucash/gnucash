@@ -55,11 +55,20 @@ typedef struct
     GFunc moved_cb;
     gpointer moved_cb_data;
 
+    gchar *help_text;
+
 } GncTreeViewSplitReg;
 
 typedef struct
 {
     GncTreeViewClass gnc_tree_view;
+
+    /* This signal is emitted when we update the view */
+    void (*update_signal) (GncTreeViewSplitReg *view, gpointer user_data);
+
+    /* This signal is emitted when we update the help text */
+    void (*help_signal) (GncTreeViewSplitReg *view, gpointer user_data);
+
 } GncTreeViewSplitRegClass;
 
 typedef enum {

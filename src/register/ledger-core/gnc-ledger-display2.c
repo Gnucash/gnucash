@@ -612,7 +612,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
      */
     splits = qof_query_run (ld->query);
 
-//    gnc_ledger_display2_set_watches (ld, splits);
+    gnc_ledger_display2_set_watches (ld, splits);
 
     gnc_ledger_display2_refresh_internal (ld, splits);
     LEAVE(" ");
@@ -625,7 +625,7 @@ close_handler (gpointer user_data)
 
     if (!ld)
         return;
-
+//g_print("ledger close_handler\n");
     gnc_unregister_gui_component (ld->component_id);
 
     if (ld->destroy)
@@ -633,6 +633,7 @@ close_handler (gpointer user_data)
 
     gnc_tree_model_split_reg_destroy (ld->model);
     ld->model = NULL;
+    ld->view = NULL;
 
     qof_query_destroy (ld->query);
     ld->query = NULL;
@@ -821,7 +822,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 
     splits = qof_query_run (ld->query);
 
-//    gnc_ledger_display2_set_watches (ld, splits);
+    gnc_ledger_display2_set_watches (ld, splits);
 
     gnc_ledger_display2_refresh_internal (ld, splits);
 
@@ -890,11 +891,11 @@ g_print("gnc_ledger_display2_refresh_internal\n");
     else
     {
         ld->loading = TRUE;
-
+/*FIXME All this may not be required !!!!! */
         smodel =  gtk_tree_view_get_model (GTK_TREE_VIEW (ld->view)); // this is the sort model
 
         model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (smodel)); // our model
-
+//g_print("view is %p model is %p and smodel is %p\n", ld->view, model, smodel);
         g_object_ref (smodel);
         g_object_ref (model);
 
@@ -904,10 +905,10 @@ g_print("gnc_ledger_display2_refresh_internal\n");
 
         gnc_tree_model_split_reg_load (ld->model, splits, gnc_ledger_display2_leader (ld)); //reload splits
 
-//        smodel = gtk_tree_model_sort_new_with_model (model); // create new sort model
+//Not needed        smodel = gtk_tree_model_sort_new_with_model (model); // create new sort model
 
         gtk_tree_view_set_model (GTK_TREE_VIEW(ld->view), GTK_TREE_MODEL (smodel)); // Re-attach sort model to view
-
+//g_print("view is %p model is %p and smodel is %p\n", ld->view, model, smodel);
         gnc_tree_view_split_reg_block_selection (ld->view, FALSE); // This unblocks the tree selection
 
         /* Set the default selection start position */
@@ -981,7 +982,6 @@ gnc_ledger_display2_refresh_by_split_register (GncTreeModelSplitReg *model)
     }
 }
 
-
 void
 gnc_ledger_display2_set_split_view_refresh (GNCLedgerDisplay2 *ld, gboolean ok)
 {
@@ -990,11 +990,12 @@ gnc_ledger_display2_set_split_view_refresh (GNCLedgerDisplay2 *ld, gboolean ok)
 
     ld->refresh_ok = ok;
 }
+
 void
 gnc_ledger_display2_close (GNCLedgerDisplay2 *ld)
 {
     if (!ld)
         return;
-
+//g_print("gnc_ledger_display2_close\n");
     gnc_close_gui_component (ld->component_id);
 }

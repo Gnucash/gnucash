@@ -119,7 +119,7 @@ void gsr2_default_unvoid_txn_handler  ( GNCSplitReg2 *w, gpointer ud );
 void gsr2_default_reverse_txn_handler ( GNCSplitReg2 *w, gpointer ud );
 
 static void gsr2_emit_simple_signal( GNCSplitReg2 *gsr, const char *sigName );
-/*FIXME static void gsr2_emit_help_changed( GncTreeViewSplitReg *view, gpointer user_data ); */
+static void gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data);
 static void gsr2_emit_include_date_signal( GNCSplitReg2 *gsr, time_t date );
 
 void gnc_split_reg2_cut_cb(GtkWidget *w, gpointer data);
@@ -446,7 +446,6 @@ g_print("gsr2_create_table\n");
     /* This column gets all the free space */
     gnc_tree_view_expand_columns (GNC_TREE_VIEW (view), "descnotes", NULL);
 
-
     /*FIXME is this OK ? - Set the Reconcile column width */
     col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW (view), "recn");
     if (col != NULL)
@@ -485,29 +484,31 @@ g_print("gsr2_create_table\n");
     g_signal_connect (gsr->reg, "redraw_all",
                       G_CALLBACK(gsr2_redraw_all_cb), gsr); */
 
-/*FIXME I think this is to do with the help text at the bottom, we need to connect this to some thing
-    g_signal_connect (gsr->reg, "redraw_help",
-                      G_CALLBACK(gsr2_emit_help_changed), gsr); */
+
+    g_signal_connect (view, "help_signal",
+                      G_CALLBACK (gsr2_emit_help_changed), gsr); // this works
+
     LEAVE(" ");
 }
 
 static
 void
-gsr2_setup_status_widgets( GNCSplitReg2 *gsr )
+gsr2_setup_status_widgets (GNCSplitReg2 *gsr)
 {
     GncTreeModelSplitReg *model;
     gboolean use_double_line;
 
-    model = gnc_ledger_display2_get_split_model_register( gsr->ledger );
-    use_double_line = gnc_ledger_display2_default_double_line( gsr->ledger );
+    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
+    use_double_line = gnc_ledger_display2_default_double_line (gsr->ledger);
 
     /* be sure to initialize the gui elements */
-    gnc_tree_model_split_reg_config( model, model->type, model->style, use_double_line );
+    gnc_tree_model_split_reg_config (model, model->type, model->style, use_double_line);
 }
 
 void
-gnc_split_reg2_destroy_cb(GtkWidget *widget, gpointer data)
+gnc_split_reg2_destroy_cb (GtkWidget *widget, gpointer data)
 {
+//g_print("gnc_split_reg2_destroy_cb - does not do any thing\n");
 }
 
 /**
@@ -532,13 +533,13 @@ gnc_split_reg2_raise( GNCSplitReg2 *gsr )
  **/
 static
 void
-gsr2_update_summary_label( GtkWidget *label,
+gsr2_update_summary_label (GtkWidget *label,
                           xaccGetBalanceFn getter,
                           Account *leader,
                           GNCPrintAmountInfo print_info,
                           gnc_commodity *cmdty,
                           gboolean reverse,
-                          gboolean euroFlag )
+                          gboolean euroFlag)
 {
     gnc_numeric amount;
     char string[256];
@@ -603,9 +604,9 @@ account_latest_price_any_currency (Account *account)
     price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);
     if (!price_list) return NULL;
 
-    result = gnc_price_clone((GNCPrice *)(price_list->data), book);
+    result = gnc_price_clone ((GNCPrice *)(price_list->data), book);
 
-    gnc_price_list_destroy(price_list);
+    gnc_price_list_destroy (price_list);
 
     return result;
 }
@@ -2015,7 +2016,7 @@ gsr2_create_summary_bar( GNCSplitReg2 *gsr )
     gsr->summarybar = summarybar;
 
     /* Force the first update */
-    gsr2_redraw_all_cb(NULL, gsr);
+    gsr2_redraw_all_cb (NULL, gsr);
     return gsr->summarybar;
 }
 
@@ -2163,7 +2164,7 @@ gnc_split_reg2_get_parent( GNCLedgerDisplay2 *ledger )
 
 static
 void
-gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data )
+gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data ) //this works
 {
     gsr2_emit_simple_signal ((GNCSplitReg2*)user_data, "help-changed" );
 }
@@ -2177,7 +2178,7 @@ gsr2_emit_include_date_signal( GNCSplitReg2 *gsr, time_t date )
 
 static
 void
-gsr2_emit_simple_signal( GNCSplitReg2 *gsr, const char *sigName )
+gsr2_emit_simple_signal( GNCSplitReg2 *gsr, const char *sigName ) //this works
 {
     g_signal_emit_by_name( gsr, sigName, NULL );
 }
@@ -2219,7 +2220,7 @@ gnc_split_reg2_get_read_only( GNCSplitReg2 *gsr )
 }
 
 void
-gnc_split_reg2_set_moved_cb( GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data )
+gnc_split_reg2_set_moved_cb( GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data ) //this works
 {
 g_print("gnc_split_reg2_set_moved_cb\n");
     gnc_tree_view_split_reg_moved_cb (gnc_ledger_display2_get_split_view_register(gsr->ledger), cb, cb_data);

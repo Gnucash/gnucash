@@ -112,7 +112,7 @@ typedef struct
 {
     GncTreeModel                 gnc_tree_model;        /**< The parent object data. */
     GncTreeModelSplitRegPrivate *priv;
-    int                          stamp;                 /**< The state of the model. Any state change increments this number. */
+    gint                         stamp;                 /**< The state of the model. Any state change increments this number. */
 
     SplitRegisterType2           type;                  /**<FIXME ? This may be the wrong place for these, may be the view ? */
     SplitRegisterStyle2          style;                 /**<FIXME ? This may be the wrong place for these, may be the view ? */
@@ -120,7 +120,7 @@ typedef struct
 
     gboolean                     is_template;
 
-    gboolean                     do_auto_complete;      /**< whether to use auto-competion */
+    gboolean                     do_auto_complete;      /**<FIXME Not setup - whether to use auto-competion */
     gboolean                     use_accounting_labels; /**< whether to use accounting Labels */
     gboolean                     separator_changed;     /**< whether the separator has changed */ 
     gboolean                     alt_colors_by_txn;     /**< whether to use alternative colors by transaction */ 
