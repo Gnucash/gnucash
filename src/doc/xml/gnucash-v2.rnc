@@ -279,11 +279,11 @@ Split = element trn:split {
   element split:reconciled-state { "y" | "n" | "c" | "f" | "v" },
 
   element split:reconcile-date { TimeSpec }?,
-  element split:value { text },
-  element split:quantity { text },
+  element split:value { GncNumeric },
+  element split:quantity { GncNumeric },
   element split:account { attribute type { "guid" }, GUID },
-  element split:slots { KvpSlot+ }?,
-  element split:lot { attribute type { "guid" }, GUID }?
+  element split:lot { attribute type { "guid" }, GUID }?,
+  element split:slots { KvpSlot+ }?
 }
 
 # from write_template_transaction_data in src/backend/xml/io-gncxml-v2.c
