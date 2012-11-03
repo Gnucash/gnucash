@@ -1914,7 +1914,7 @@ draw_text(GtkPrintContext *context, const gchar *text, check_item_t *data,
  * directory.
  *
  * NOTE: The gtk_image_new_from_file() function never fails.  If it can't
- * find the specified file, it returs the "broken image" icon.  This function
+ * find the specified file, it returns the "broken image" icon.  This function
  * takes advantage of that.
 */
 static GtkWidget *

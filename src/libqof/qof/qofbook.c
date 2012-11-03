@@ -414,7 +414,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     /* Get the current counter value from the KVP in the book. */
     counter = qof_book_get_counter(book, counter_name);
 
-    /* Check if an error occured */
+    /* Check if an error occurred */
     if (counter < 0)
         return NULL;
 

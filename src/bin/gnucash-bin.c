@@ -403,7 +403,7 @@ set_mac_locale()
 		  this_lang = [elements componentsJoinedByString: @"_"];
 	    }
 	    new_languages = [new_languages arrayByAddingObject: this_lang];
-/* If it's an english language, add the "C" locale after it so that
+/* If it's an English language, add the "C" locale after it so that
  * any messages can default to it */
 	    if ( [[elements objectAtIndex: 0] isEqualToString: @"en"])
 		new_languages = [new_languages arrayByAddingObject: @"C"];

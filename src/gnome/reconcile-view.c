@@ -332,7 +332,7 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
 
     /*
      * Need to get all splits in this transaction and identify any that are
-     * in the same heirarchy as the account being reconciled (not necessarily
+     * in the same hierarchy as the account being reconciled (not necessarily
      * the account this split is from.)
      *
      * For each of these splits toggle them all to the same state.
@@ -350,7 +350,7 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
         other_account = xaccSplitGetAccount (other_split);
         if (other_split == split)
             continue;
-        /* Check this 'other' account in in the same heirarchy */
+        /* Check this 'other' account in in the same hierarchy */
         if (!g_list_find (child_accounts, other_account))
             continue;
         /* Search our sibling view for this split first.  We search the

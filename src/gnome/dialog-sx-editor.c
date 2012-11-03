@@ -917,14 +917,14 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
                                gnc_date_edit_get_date(
                                    sxed->endDateEntry ) );
             xaccSchedXactionSetEndDate( sxed->sx, &gdate );
-            /* set the num occurances data */
+            /* set the num occurrences data */
             xaccSchedXactionSetNumOccur( sxed->sx, 0 );
         }
         else if ( gtk_toggle_button_get_active(sxed->optEndCount) )
         {
             gint num;
 
-            /* get the occurances data */
+            /* get the occurrences data */
             num  =
                 gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endCountSpin) );
             xaccSchedXactionSetNumOccur( sxed->sx, num );
