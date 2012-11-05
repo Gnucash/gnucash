@@ -16,8 +16,10 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
 
-; put the (define-module... back when installing as a 'proper' report
-; as opposed to referring to it from .gnucash/config.user
+; If you want to adapt this report privately:
+; - copy the report to your .gnucash directory
+; - specify a different module name below (eg mytaxinvoice)
+; - refer to it from .gnucash/config.user
 ; (see http://wiki.gnucash.org/wiki/Custom_Reports )
 (define-module (gnucash report taxinvoice))        
 
