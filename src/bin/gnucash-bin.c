@@ -824,8 +824,9 @@ main(int argc, char ** argv)
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
 #endif
+#ifndef HAVE_GLIB_2_32 /* Automatic after GLib 2-32 */
     g_thread_init(NULL);
-
+#endif
 #ifdef ENABLE_BINRELOC
     {
         GError *binreloc_error = NULL;

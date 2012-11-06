@@ -379,6 +379,7 @@ iter_to_string (GncTreeModelPrice *model, GtkTreeIter *iter)
     gnc_commodity *commodity;
     GNCPrice *price;
 #ifdef G_THREADS_ENABLED
+#ifndef HAVE_GLIB_2_32
     static GStaticPrivate gtmits_buffer_key = G_STATIC_PRIVATE_INIT;
     gchar *string;
 
@@ -388,6 +389,17 @@ iter_to_string (GncTreeModelPrice *model, GtkTreeIter *iter)
         string = g_malloc(ITER_STRING_LEN + 1);
         g_static_private_set (&gtmits_buffer_key, string, g_free);
     }
+#else
+    static GPrivate gtmits_buffer_key = G_PRIVATE_INIT(g_free);
+    gchar *string;
+
+    string = g_private_get (&gtmits_buffer_key);
+    if (string == NULL)
+    {
+        string = g_malloc(ITER_STRING_LEN + 1);
+        g_private_set (&gtmits_buffer_key, string);
+    }
+#endif
 #else
     static char string[ITER_STRING_LEN + 1];
 #endif
