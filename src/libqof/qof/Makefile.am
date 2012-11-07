@@ -98,4 +98,4 @@ test_qofmath_CPPFLAGS=$(AM_CPPFLAGS) -DTEST_128_BIT_MULT
 test_qofmath_LDFLAGS=$(libgnc_qof_la_LDFLAGS)
 test_qofmath_LDADD=$(libgnc_qof_la_LIBADD)
 
-INCLUDES = -DG_LOG_DOMAIN=\"qof\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"qof\"

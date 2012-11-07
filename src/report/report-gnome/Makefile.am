@@ -105,4 +105,4 @@ clean-local:
 CLEANFILES = report .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-report-gnome.c
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.gui\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.report.gui\"

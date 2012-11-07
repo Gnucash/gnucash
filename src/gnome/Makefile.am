@@ -141,4 +141,4 @@ AM_CPPFLAGS = \
 CLEANFILES = gnucash.desktop
 MAINTAINERCLEANFILES = swig-gnome.c
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.gui\"

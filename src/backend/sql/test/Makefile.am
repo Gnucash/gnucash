@@ -36,7 +36,7 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/lib/libc/libc-missing.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -50,7 +50,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${GCONF_CFLAGS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.sql\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.sql\"
 
 TEST_PROGS += test-sqlbe
 test_sqlbedir = ${top_srcdir}/${MODULEPATH}/test

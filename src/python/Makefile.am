@@ -59,4 +59,4 @@ EXTRA_DIST = ${gncpymod_DATA}
 CLEANFILES = .py-links
 DISTCLEANFILES = ${PY_FILE_LINKS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.python\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.python\"

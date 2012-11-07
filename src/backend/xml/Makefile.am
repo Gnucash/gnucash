@@ -103,4 +103,4 @@ libgncmod_backend_xml_la_LIBADD = \
    libgnc-backend-xml-utils.la \
    ${top_builddir}/src/libqof/qof/libgnc-qof.la
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.xml\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.xml\"

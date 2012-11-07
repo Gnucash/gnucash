@@ -2,7 +2,7 @@
 
 include $(top_srcdir)/test-templates/Makefile.decl
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -66,11 +66,13 @@ test_backend_dbi_SOURCES = \
     test-dbi-business-stuff.c
 
 test_backend_dbi_LDFLAGS="-ldbi"
-test_backend_dbi_CPPFLAGS=-DDBI_TEST_XML_FILENAME=\"${srcdir}/test-dbi.xml\"
+test_backend_dbi_CPPFLAGS = \
+	-DDBI_TEST_XML_FILENAME=\"${srcdir}/test-dbi.xml\" \
+	${AM_CPPFLAGS}
 
 
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
 
 # If you let make run parallel builds it complains that there is no rule to make
 # libgncmod-test-dbi.la.  This is wrong, but I can't figure out how to fix it

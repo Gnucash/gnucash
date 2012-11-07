@@ -180,4 +180,4 @@ EXTRA_DIST = \
 	environment.in \
 	gnucash-setup-env-osx.in
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.bin\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.bin\"

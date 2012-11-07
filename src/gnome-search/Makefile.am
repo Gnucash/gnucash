@@ -65,4 +65,4 @@ gtkbuilder_DATA = \
 EXTRA_DIST = \
   ${gtkbuilder_DATA}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui.search\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.gui.search\"

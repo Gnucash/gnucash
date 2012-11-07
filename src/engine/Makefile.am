@@ -217,4 +217,4 @@ MAINTAINERCLEANFILES = swig-engine.c
 clean-local:
 	rm -rf gnucash
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.engine\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.engine\"

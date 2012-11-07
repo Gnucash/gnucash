@@ -6,7 +6,7 @@ TEST_SUBDIRS = test
 lib_LTLIBRARIES = libgnc-backend-sql.la
 
 # "${top_srcdir}/src/debug" below is for the splint header
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I.. -I../.. \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
   -I${top_srcdir}/src/backend \
@@ -77,4 +77,4 @@ libgnc_backend_sql_la_LIBADD = \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/libqof/qof/libgnc-qof.la
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.sql\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.sql\"

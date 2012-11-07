@@ -67,4 +67,4 @@ AM_CPPFLAGS = \
 
 CLEANFILES = $(BUILT_SOURCES)
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.register.core\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.core\"

@@ -56,4 +56,4 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS}
 
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.register.ledger\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.ledger\"

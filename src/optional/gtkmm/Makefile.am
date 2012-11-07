@@ -63,4 +63,4 @@ gtkbuilder_DATA =
 
 EXTRA_DIST = ${ui_DATA} ${gtkbuilder_DATA}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui.gtkmm\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.gui.gtkmm\"

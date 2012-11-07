@@ -57,4 +57,4 @@ gtkbuilder_DATA = \
 
 EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA)
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.export.csv\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.export.csv\"

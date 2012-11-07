@@ -36,4 +36,4 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.qif\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.qif\"
