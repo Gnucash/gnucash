@@ -1487,7 +1487,13 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
         params->perms = g_strdup(perms);
         params->compress = compress;
 
-        thread = g_thread_create((GThreadFunc) gz_thread_func, params, TRUE, &error);
+#ifndef HAVE_GLIB_2_32
+        thread = g_thread_create((GThreadFunc) gz_thread_func, params,
+				 TRUE, &error);
+#else
+        thread = g_thread_new("xml_thread", (GThreadFunc) gz_thread_func,
+			      params);
+#endif
         if (!thread)
         {
             g_warning("Could not create thread for (de)compression: %s",

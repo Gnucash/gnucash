@@ -253,6 +253,14 @@ else
   AC_MSG_RESULT(no)
   _have_glib_testing=no
 fi
+AC_MSG_CHECKING([for GLib 2.32 or later (glib >=2.32.0)])
+if $PKG_CONFIG "glib-2.0 >= 2.32.0"
+then
+  AC_MSG_RESULT(yes)
+  AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
+else
+  AC_MSG_RESULT(no)
+fi
 AM_CONDITIONAL(HAVE_GLIB_TESTING, test "x$_have_glib_testing" = "xyes")
 
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)

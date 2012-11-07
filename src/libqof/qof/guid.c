@@ -674,6 +674,7 @@ const char *
 guid_to_string(const GncGUID * guid)
 {
 #ifdef G_THREADS_ENABLED
+#ifndef HAVE_GLIB_2_32
     static GStaticPrivate guid_buffer_key = G_STATIC_PRIVATE_INIT;
     gchar *string;
 
@@ -683,6 +684,17 @@ guid_to_string(const GncGUID * guid)
         string = malloc(GUID_ENCODING_LENGTH + 1);
         g_static_private_set (&guid_buffer_key, string, g_free);
     }
+#else
+    static GPrivate guid_buffer_key = G_PRIVATE_INIT(g_free);
+    gchar *string;
+
+    string = g_private_get (&guid_buffer_key);
+    if (string == NULL)
+    {
+        string = malloc(GUID_ENCODING_LENGTH + 1);
+        g_private_set (&guid_buffer_key, string);
+    }
+#endif
 #else
     static char string[64];
 #endif
