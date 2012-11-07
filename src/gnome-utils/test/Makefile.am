@@ -36,7 +36,7 @@ TESTS_ENVIRONMENT = \
 check_PROGRAMS = \
   test-link-module test-gnc-recurrence test-gnc-dialog
 
-INCLUDES= \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \

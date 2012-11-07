@@ -123,4 +123,4 @@ clean-local:
 
 CLEANFILES = $(BUILT_SOURCES) .scm-links ${SCM_FILE_LINKS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.gnome\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.business.gnome\"

@@ -49,4 +49,4 @@ AM_CPPFLAGS = \
   ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.ledger\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.business.ledger\"

@@ -80,4 +80,4 @@ EXTRA_DIST = \
   $(glade_DATA) \
   generic-import-design.txt
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.i-e\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.i-e\"

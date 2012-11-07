@@ -63,4 +63,4 @@ EXTRA_DIST = \
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.locale.us\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.report.locale.us\"

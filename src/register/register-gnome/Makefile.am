@@ -66,4 +66,4 @@ AM_CPPFLAGS = \
   ${GTK_XIM_FLAGS} \
   ${GNOME_CFLAGS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.register.gnome\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.gnome\"

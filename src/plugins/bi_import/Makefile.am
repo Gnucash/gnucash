@@ -31,7 +31,7 @@ libgncmod_bi_import_la_LIBADD = \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/gnome \
@@ -54,4 +54,4 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.plugin.bi_import\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.plugin.bi-import\"

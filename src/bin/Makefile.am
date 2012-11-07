@@ -184,5 +184,4 @@ EXTRA_DIST = \
 if PLATFORM_WIN32
 EXTRA_DIST += guile-setup.cmd
 endif
-
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.bin\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.bin\"

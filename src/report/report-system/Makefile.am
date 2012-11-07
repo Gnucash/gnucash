@@ -95,4 +95,4 @@ clean-local:
 CLEANFILES = report .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-report-system.c
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.core\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.report.core\"

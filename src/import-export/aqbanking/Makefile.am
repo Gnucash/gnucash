@@ -48,7 +48,7 @@ libgncmod_aqbanking_la_LIBADD = \
   ${GWENGUI_GTK2_LIBS} \
   ${AQBANKING_LIBS}
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/gnome \
@@ -76,4 +76,4 @@ glade_DATA = \
 
 EXTRA_DIST = ${ui_DATA} ${glade_DATA}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.aqbanking\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.aqbanking\"

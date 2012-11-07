@@ -60,7 +60,7 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
         ${top_builddir}/lib/libc/libc-missing.la
 
-AM_CFLAGS = \
+AM_CPPFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -76,7 +76,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${GCONF_CFLAGS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
 
 # If you let make run parallel builds it complains that there is no rule to make
 # libgncmod-test-dbi.la.  This is wrong, but I can't figure out how to fix it

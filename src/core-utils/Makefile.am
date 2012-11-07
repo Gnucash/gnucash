@@ -85,7 +85,7 @@ clean-local:
 CLEANFILES = $(BUILT_SOURCES) .scm-links
 MAINTAINERCLEANFILES = swig-core-utils.c
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.core-utils\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.core-utils\"
 
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp

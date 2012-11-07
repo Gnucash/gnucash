@@ -59,4 +59,4 @@ clean-local:
 CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES =
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.core\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.business.core\"

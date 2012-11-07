@@ -167,4 +167,4 @@ clean-local:
 CLEANFILES = ${SCM_FILE_LINKS}  .scm-links
 MAINTAINERCLEANFILES = swig-app-utils.c
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.app-utils\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.app-utils\"

@@ -108,4 +108,4 @@ uninstall-hook:
 	rm -f ${DESTDIR}${pkgdatadir}/gnome
 endif
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.html\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.html\"

@@ -81,4 +81,4 @@ clean-local:
 CLEANFILES = .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-dialog-tax-table.c
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.tax\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.business.tax\"

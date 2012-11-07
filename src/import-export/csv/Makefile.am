@@ -58,4 +58,4 @@ glade_DATA = \
 
 EXTRA_DIST = $(ui_DATA) $(glade_DATA)
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.csv\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.csv\"

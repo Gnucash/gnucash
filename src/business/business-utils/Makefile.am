@@ -63,4 +63,4 @@ clean-local:
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.utils\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.business.utils\"
