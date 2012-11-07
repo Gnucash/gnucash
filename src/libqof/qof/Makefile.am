@@ -24,6 +24,7 @@ libgnc_qof_la_SOURCES =  \
    kvp_frame.c       \
    kvp-util.c        \
    md5.c             \
+   qof-string-cache.c  \
    qofbackend.c      \
    qofclass.c        \
    qofchoice.c       \
@@ -70,6 +71,7 @@ qofinclude_HEADERS = \
    qofreference.h    \
    qofsession.h      \
    qofsql.h          \
+   qof-string-cache.h  \
    qofutil.h         \
    qofbookmerge.h    \
    qof-gobject.h

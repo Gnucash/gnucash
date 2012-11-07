@@ -124,7 +124,7 @@ clear_mask_hash (GHashTable *hash)
 static gboolean
 destroy_mask_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
-    qof_util_string_cache_remove (key);
+    qof_string_cache_remove (key);
     g_free (value);
 
     return TRUE;
@@ -241,7 +241,7 @@ add_event_type (ComponentEventInfo *cei, QofIdTypeConst entity_type,
     mask = g_hash_table_lookup (cei->event_masks, entity_type);
     if (!mask)
     {
-        char * key = qof_util_string_cache_insert ((gpointer) entity_type);
+        char * key = qof_string_cache_insert ((gpointer) entity_type);
         mask = g_new0 (QofEventId, 1);
         g_hash_table_insert (cei->event_masks, key, mask);
     }

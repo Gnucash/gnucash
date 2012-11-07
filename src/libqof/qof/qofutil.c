@@ -301,45 +301,6 @@ static gboolean qof_util_str_equal(gconstpointer v, gconstpointer v2)
     return (v && v2) ? g_str_equal(v, v2) : FALSE;
 }
 #endif
-static GCache*
-qof_util_get_string_cache(void)
-{
-    if (!qof_string_cache)
-    {
-        qof_string_cache = g_cache_new(
-                               (GCacheNewFunc) g_strdup, /* value_new_func     */
-                               g_free,                   /* value_destroy_func */
-                               (GCacheDupFunc) g_strdup, /* key_dup_func       */
-                               g_free,                   /* key_destroy_func   */
-                               g_str_hash,               /* hash_key_func      */
-                               g_str_hash,               /* hash_value_func    */
-                               g_str_equal);             /* key_equal_func     */
-    }
-    return qof_string_cache;
-}
-
-void
-qof_util_string_cache_destroy (void)
-{
-    if (qof_string_cache)
-        g_cache_destroy (qof_string_cache);
-    qof_string_cache = NULL;
-}
-
-void
-qof_util_string_cache_remove(gconstpointer key)
-{
-    if (key)
-        g_cache_remove(qof_util_get_string_cache(), key);
-}
-
-gpointer
-qof_util_string_cache_insert(gconstpointer key)
-{
-    if (key)
-        return g_cache_insert(qof_util_get_string_cache(), (gpointer)key);
-    return NULL;
-}
 
 gchar*
 qof_util_param_as_string(QofInstance *ent, QofParam *param)
@@ -522,7 +483,7 @@ qof_init (void)
 {
     g_type_init();
     qof_log_init();
-    qof_util_get_string_cache ();
+    qof_string_cache_init();
     guid_init ();
     qof_object_initialize ();
     qof_query_init ();
@@ -536,7 +497,7 @@ qof_close(void)
     qof_object_shutdown ();
     guid_shutdown ();
     qof_finalize_backend_libraries();
-    qof_util_string_cache_destroy ();
+    qof_string_cache_destroy ();
     qof_log_shutdown();
 }
 

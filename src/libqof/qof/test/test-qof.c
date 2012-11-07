@@ -28,6 +28,7 @@
 extern void test_suite_qofbook();
 extern void test_suite_qofinstance();
 extern void test_suite_qofsession();
+extern void test_suite_qof_string_cache();
 
 int
 main (int   argc,

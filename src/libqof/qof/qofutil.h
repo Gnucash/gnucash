@@ -288,9 +288,6 @@ void qof_util_string_cache_remove(gconstpointer key);
 */
 gpointer qof_util_string_cache_insert(gconstpointer key);
 
-#define CACHE_INSERT(str) qof_util_string_cache_insert((gconstpointer)(str))
-#define CACHE_REMOVE(str) qof_util_string_cache_remove((str))
-
 /* Replace cached string currently in 'dst' with string in 'src'.
  * Typical usage:
  *     void foo_set_name(Foo *f, const char *str) {
@@ -303,8 +300,6 @@ gpointer qof_util_string_cache_insert(gconstpointer key);
         CACHE_REMOVE((dst));                  \
         (dst) = tmp;                          \
     } while (0)
-
-#define QOF_CACHE_NEW(void) qof_util_string_cache_insert("")
 
 /** begin_edit
  *
