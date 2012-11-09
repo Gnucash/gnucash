@@ -93,6 +93,8 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 
 static void gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits);
 
+static void gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer user_data);
+
 
 /** Implementations *************************************************/
 
@@ -612,7 +614,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
      */
     splits = qof_query_run (ld->query);
 
-    gnc_ledger_display2_set_watches (ld, splits);
+//    gnc_ledger_display2_set_watches (ld, splits);
 
     gnc_ledger_display2_refresh_internal (ld, splits);
     LEAVE(" ");
@@ -820,9 +822,12 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 
     gnc_tree_model_split_reg_set_data (ld->model, ld, gnc_ledger_display2_parent);
 
+    g_signal_connect (G_OBJECT (ld->model), "refresh_signal",
+                      G_CALLBACK ( gnc_ledger_display2_refresh_cb ), ld );
+
     splits = qof_query_run (ld->query);
 
-    gnc_ledger_display2_set_watches (ld, splits);
+//    gnc_ledger_display2_set_watches (ld, splits);
 
     gnc_ledger_display2_refresh_internal (ld, splits);
 
@@ -877,7 +882,7 @@ gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits)
 {
     GtkTreeModel *smodel, *model;
 
-g_print("gnc_ledger_display2_refresh_internal\n");
+g_print("gnc_ledger_display2_refresh_internal ledger %p and splits %p\n", ld, splits);
 
     if (!ld || ld->loading)
         return;
@@ -990,6 +995,18 @@ gnc_ledger_display2_set_split_view_refresh (GNCLedgerDisplay2 *ld, gboolean ok)
 
     ld->refresh_ok = ok;
 }
+
+
+static void
+gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer user_data)
+{
+    GNCLedgerDisplay2 *ld = user_data;
+//g_print("refresh model %p user_data %p\n", model,  user_data);
+
+    /* Refresh the view when idle */
+    g_idle_add ((GSourceFunc)gnc_ledger_display2_refresh, ld);
+}
+
 
 void
 gnc_ledger_display2_close (GNCLedgerDisplay2 *ld)

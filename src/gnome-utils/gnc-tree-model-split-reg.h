@@ -137,6 +137,10 @@ typedef struct
 typedef struct
 {
     GncTreeModelClass gnc_tree_model;   /**< The parent object data. */
+
+    /* This signal is emitted to refresh the view */
+    void (*refresh_signal) (GncTreeModelSplitReg *model, gpointer user_data);
+
 } GncTreeModelSplitRegClass;
 
 /** Callback function type */

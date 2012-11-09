@@ -123,6 +123,10 @@ void gnc_tree_view_split_reg_expand_current_trans (GncTreeViewSplitReg *view, gb
 
 void gnc_tree_view_split_reg_moved_cb (GncTreeViewSplitReg *view, GFunc cb, gpointer cb_data);
 
+void gnc_tree_view_split_reg_void_current_trans (GncTreeViewSplitReg *view, const char *reason);
+
+void gnc_tree_view_split_reg_unvoid_current_trans (GncTreeViewSplitReg *view);
+
 G_END_DECLS
 
 #endif /* __GNC_TREE_VIEW_SPLIT_REG_H */

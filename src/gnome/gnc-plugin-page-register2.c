@@ -2701,11 +2701,11 @@ gnc_plugin_page_register2_cmd_paste_transaction (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action,
-        GncPluginPageRegister2 *page)
+        GncPluginPageRegister2 *page) //this works
 {
     GncPluginPageRegister2Private *priv;
     GtkWidget *dialog, *entry;
-    SplitRegister *reg;
+    GncTreeViewSplitReg *view;
     Transaction *trans;
     GtkBuilder *builder;
     const char *reason;
@@ -2713,62 +2713,62 @@ gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action,
 
     ENTER("(action %p, page %p)", action, page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display2_get_split_register(priv->ledger);
-    trans = gnc_split_register_get_current_trans(reg);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+    trans = gnc_tree_view_split_reg_get_current_trans (view);
     if (trans == NULL)
         return;
-    if (xaccTransHasSplitsInState(trans, VREC))
+    if (xaccTransHasSplitsInState (trans, VREC))
         return;
-    if (xaccTransHasReconciledSplits(trans) || xaccTransHasSplitsInState(trans, CREC))
+    if (xaccTransHasReconciledSplits (trans) || xaccTransHasSplitsInState (trans, CREC))
     {
-        gnc_error_dialog(NULL, "%s", _("You cannot void a transaction with reconciled or cleared splits."));
+        gnc_error_dialog (NULL, "%s", _("You cannot void a transaction with reconciled or cleared splits."));
         return;
     }
 
-    if (!gnc_plugin_page_register2_finish_pending(GNC_PLUGIN_PAGE(page)))
+    if (!gnc_plugin_page_register2_finish_pending (GNC_PLUGIN_PAGE (page)))
         return;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "gnc-plugin-page-register2.glade", "Void Transaction");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Void Transaction"));
-    entry = GTK_WIDGET(gtk_builder_get_object (builder, "reason"));
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Void Transaction"));
+    entry = GTK_WIDGET (gtk_builder_get_object (builder, "reason"));
 
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
+    result = gtk_dialog_run (GTK_DIALOG (dialog));
     if (result == GTK_RESPONSE_OK)
     {
-        reason = gtk_entry_get_text(GTK_ENTRY(entry));
+        reason = gtk_entry_get_text (GTK_ENTRY (entry));
         if (reason == NULL)
             reason = "";
-        gnc_split_register_void_current_trans(reg, reason);
+        gnc_tree_view_split_reg_void_current_trans (view, reason);
     }
 
     /* All done. Get rid of it. */
-    gtk_widget_destroy(dialog);
-    g_object_unref(G_OBJECT(builder));
+    gtk_widget_destroy (dialog);
+    g_object_unref (G_OBJECT(builder));
 }
 
 
 static void
 gnc_plugin_page_register2_cmd_unvoid_transaction (GtkAction *action,
-        GncPluginPageRegister2 *page)
+        GncPluginPageRegister2 *page) //this works
 {
     GncPluginPageRegister2Private *priv;
-    SplitRegister *reg;
+    GncTreeViewSplitReg *view;
     Transaction *trans;
 
     ENTER("(action %p, page %p)", action, page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    reg = gnc_ledger_display2_get_split_register(priv->ledger);
-    trans = gnc_split_register_get_current_trans(reg);
-    if (!xaccTransHasSplitsInState(trans, VREC))
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+    trans = gnc_tree_view_split_reg_get_current_trans (view);
+    if (!xaccTransHasSplitsInState (trans, VREC))
         return;
-    gnc_split_register_unvoid_current_trans(reg);
+    gnc_tree_view_split_reg_unvoid_current_trans (view);
     LEAVE(" ");
 }
 
