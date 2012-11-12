@@ -347,50 +347,73 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
     // Find the <object> tag and get the classid from it.  This will provide the correct
     // object callback handler.  Pass the <object> entity text to the handler.  What should
     // come back is embedded image information.
+    gchar* remainder_str = html_str;
     gchar* object_tag;
     gchar* end_object_tag;
     gchar* object_contents;
-    gchar* html_str_start;
+    gchar* html_str_start = NULL;
     gchar* html_str_middle;
-    gchar* html_str_result;
-    gchar* classid;
+    gchar* html_str_result = NULL;
+    gchar* classid_start;
     gchar* classid_end;
-    gchar* object_classid;
+    gchar* classid_str;
+    gchar* new_chunk;
     GncHTMLObjectCB h;
 
-    object_tag = g_strstr_len( html_str, -1, "<object classid=" );
-    if ( object_tag == NULL )
+    object_tag = g_strstr_len( remainder_str, -1, "<object classid=" );
+    while (object_tag)
     {
-        //  Hmmm... no object tag
-        return html_str;
-    }
-    classid = object_tag + strlen( "<object classid=" ) + 1;
-    classid_end = g_strstr_len( classid, -1, "\"" );
-    object_classid = g_strndup( classid, (classid_end - classid) );
-    end_object_tag = g_strstr_len( object_tag, -1, "</object>" );
-    if ( end_object_tag == NULL )
-    {
-        //  Hmmm... no object end tag
-        return html_str;
-    }
-    end_object_tag += strlen( "</object>" );
-    object_contents = g_strndup( object_tag, (end_object_tag - object_tag) );
 
-    h = g_hash_table_lookup( gnc_html_object_handlers, object_classid );
-    if ( h != NULL )
+        classid_start = object_tag + strlen( "<object classid=" ) + 1;
+        classid_end = g_strstr_len( classid_start, -1, "\"" );
+        classid_str = g_strndup( classid_start, (classid_end - classid_start) );
+
+        end_object_tag = g_strstr_len( object_tag, -1, "</object>" );
+        if ( end_object_tag == NULL )
+        {
+            /*  Hmmm... no object end tag
+                Return the original html string because we can't properly parse it */
+            g_free (classid_str);
+            g_free (html_str_result);
+            return html_str;
+        }
+        end_object_tag += strlen( "</object>" );
+        object_contents = g_strndup( object_tag, (end_object_tag - object_tag) );
+
+        h = g_hash_table_lookup( gnc_html_object_handlers, classid_str );
+        if ( h != NULL )
+        {
+            (void)h( GNC_HTML(self), object_contents, &html_str_middle );
+        }
+        else
+        {
+            html_str_middle = g_strdup_printf( "No handler found for classid \"%s\"", classid_str );
+        }
+
+        html_str_start = html_str_result;
+        new_chunk = g_strndup (remainder_str, (object_tag - remainder_str));
+        if (!html_str_start)
+            html_str_result = g_strconcat (new_chunk, html_str_middle, NULL);
+        else
+            html_str_result = g_strconcat (html_str_start, new_chunk, html_str_middle, NULL);
+
+        g_free( html_str_start );
+        g_free( new_chunk );
+        g_free( html_str_middle );
+
+        remainder_str = end_object_tag;
+        object_tag = g_strstr_len( remainder_str, -1, "<object classid=" );
+    }
+
+    if (html_str_result)
     {
-        (void)h( GNC_HTML(self), object_contents, &html_str_middle );
+        html_str_start =  html_str_result;
+        html_str_result = g_strconcat (html_str_start, remainder_str, NULL);
+        g_free (html_str_start);
     }
     else
-    {
-        html_str_middle = g_strdup_printf( "No handler found for classid \"%s\"", object_classid );
-    }
+        html_str_result = g_strdup (remainder_str);
 
-    html_str_start = g_strndup( html_str, (object_tag - html_str) );
-    html_str_result = g_strdup_printf( "%s%s%s", html_str_start, html_str_middle, end_object_tag );
-
-    g_free( html_str_start );
-    g_free( html_str_middle );
     return html_str_result;
 }
 
