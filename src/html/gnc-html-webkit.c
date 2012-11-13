@@ -383,7 +383,7 @@ handle_embedded_object( GncHtmlWebkit* self, gchar* html_str )
                 Return the original html string because we can't properly parse it */
             g_free (classid_str);
             g_free (html_str_result);
-            return html_str;
+            return g_strdup (html_str);
         }
         end_object_tag += strlen( "</object>" );
         object_contents = g_strndup( object_tag, (end_object_tag - object_tag) );
