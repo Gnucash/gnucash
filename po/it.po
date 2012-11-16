@@ -54,8 +54,8 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-13 19:55+0100\n"
-"PO-Revision-Date: 2011-03-13 20:01+0100\n"
-"Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
+"PO-Revision-Date: 2012-11-16 20:22+0100\n"
+"Last-Translator: Marchi Cristian <cri.penta@gmail.it>\n"
 "Language-Team: Italian <gnucash-it@gnucash.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -3125,7 +3125,7 @@ msgid "The current entry has been changed.  However, this entry is part of an ex
 msgstr ""
 "L'elemento corrente è stato modificato,\n"
 "ma fa parte di un conto esistente.\n"
-"Si desidera registrare la modifica e\n"
+"Registrare la modifica e\n"
 "cambiare effettivamente l'ordine?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:849
@@ -5050,10 +5050,9 @@ msgstr "Selezionare le categorie in base al modo in cui si utilizzerà GnuCash. 
 msgid "Select or add a GnuCash account"
 msgstr "Scegliere o aggiungere un conto di GnuCash"
 
-# Tooltip
 #: ../src/gnome/glade/account.glade.h:57
 msgid "Setup selected accounts"
-msgstr "Imposta i conti selezionati"
+msgstr "Impostazione dei conti selezionati"
 
 #: ../src/gnome/glade/account.glade.h:58
 msgid "Show _hidden accounts"
@@ -5648,7 +5647,7 @@ msgstr "Premendo il pulsante «Sì», la finestra di <i>Benvenuto in GnuCash</i>
 
 #: ../src/gnome/glade/newuser.glade.h:5
 msgid "There are some predefined actions available that most new users prefer to get started with GnuCash. Select one of these actions from below and click the <i>OK</i> button or press the <i>Cancel</i> button if you don't want to perform any of them."
-msgstr "Sono disponibili alcune operazioni predefinite con cui la maggior parte dei nuovi utenti preferisce iniziare a utilizzare GnuCash. Selezionarne una più sotto e premere il tasto «OK»; premere invece «Annulla» se non si desidera utilizzarle."
+msgstr "Sono disponibili alcune operazioni predefinite con cui la maggior parte dei nuovi utenti preferisce iniziare a utilizzare GnuCash. Selezionarne una più sotto e premere il tasto «OK»; premere invece «Annulla» se non si intende utilizzarle."
 
 #: ../src/gnome/glade/newuser.glade.h:6
 msgid "_Import my QIF files"
@@ -7905,7 +7904,7 @@ msgstr "Cancella la transazione pianificata selezionata"
 #. dialog-sx-since-last-run.c:807
 #: ../src/gnome/gnc-plugin-page-sx-list.c:598
 msgid "Do you really want to delete this scheduled transaction?"
-msgstr "Si desidera veramente cancellare questa transazione pianificata?"
+msgstr "Cancellare veramente questa transazione pianificata?"
 
 #: ../src/gnome/gnc-plugin-register.c:50
 msgid "_General Ledger"
@@ -8017,11 +8016,11 @@ msgstr "Questo registro è di sola lettura."
 
 #: ../src/gnome/gnc-split-reg.c:1988
 msgid "This account may not be edited.  If you want to edit transactions in this register, please open the account options and turn off the placeholder checkbox."
-msgstr "Questo conto non può essere modificato. Se si desidera modificare le transazioni in questo registro, aprire le opzioni del conto e disabilitare la spunta alla voce segnalibro."
+msgstr "Questo conto non può essere modificato. Per modificare le transazioni in questo registro, aprire le opzioni del conto e disabilitare la spunta alla voce segnalibro."
 
 #: ../src/gnome/gnc-split-reg.c:1995
 msgid "One of the sub-accounts selected may not be edited.  If you want to edit transactions in this register, please open the sub-account options and turn off the placeholder checkbox. You may also open an individual account instead of a set of accounts."
-msgstr "Uno dei sottoconti selezionati non può essere modificato. Se si desidera modificare le transazioni in questo registro, si deve aprire la finestra delle opzioni del sottoconto e disabilitare la voce segnaposto. Inoltre è meglio aprire un solo conto alla volta invece di un gruppo di conti."
+msgstr "Uno dei sottoconti selezionati non può essere modificato. Per modificare le transazioni in questo registro, si deve aprire la finestra delle opzioni del sottoconto e disabilitare la voce segnaposto. Inoltre è meglio aprire un solo conto alla volta invece di un gruppo di conti."
 
 #. src/report/report-system/html-fonts.scm
 #. src/report/standard-reports/general-journal.scm
@@ -8700,7 +8699,7 @@ msgstr "Questa chiave specifica la larghezza massima di una scheda. Se il testo 
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:64
 msgid "This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting \"income_expense\" is for users who like to see negative expenses and positive income. The setting of \"credit\" is for users who want to see balances reflect the debit/credit status of the account. The setting \"none\" doesn't reverse the sign on any balances."
-msgstr "Questa impostazione permette di assegnare a certi conti un saldo a segno invertito. L'impostazione \"Entrate uscite\" è per gli utenti che desiderano visualizzare le uscite con segno negativo e le entrate con segno positivo. L'impostazione \"credito\" è per gli utenti che desiderano visualizzare il saldo in funzione dello stato di credito o debito del conto. L'impostazione \"nessuno\" non cambia segno a nessun saldo."
+msgstr "Questa impostazione permette di assegnare a certi conti un saldo a segno invertito. L'impostazione \"Entrate uscite\" è per gli utenti che intendono visualizzare le uscite con segno negativo e le entrate con segno positivo. L'impostazione \"credito\" è per gli utenti che intendono visualizzare il saldo in funzione dello stato di credito o debito del conto. L'impostazione \"nessuno\" non cambia segno a nessun saldo."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
 msgid "This setting chooses the way dates are displayed in GnuCash. Possible values for this setting are \"locale\" to use the system locale setting, \"ce\" for Continental Europe style dates, \"iso\" for ISO 8601 standard dates , \"uk\" for United Kingdom style dates, and \"us\" for United States style dates."
@@ -9798,21 +9797,25 @@ msgstr "1 /"
 msgid "<b>Quote Source Information</b>"
 msgstr "<b>Informazioni sulla fonte delle quote</b>"
 
+# Tooltip
 #: ../src/gnome-utils/glade/commodity.glade.h:3
 msgid "Enter a unique code used to identify the commodity. Or, you may safely leave this field blank."
-msgstr "Immettere un codice unico per identificare la commodity o lasciare vuoto questo campo."
+msgstr "Immettere un codice unico per identificare la commodity o lasciare vuoto questo campo"
 
+# Tooltip
 #: ../src/gnome-utils/glade/commodity.glade.h:4
 msgid "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple Computer, Inc."
-msgstr "Immettere il nome completo della commodity.Pper esempio: Cisco Sytems Inc, or Apple Computer, Inc."
+msgstr "Immettere il nome completo della commodity; per esempio: Cisco Sytems Inc, or Apple Computer, Inc."
 
+# Tooltip
 #: ../src/gnome-utils/glade/commodity.glade.h:5
 msgid "Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1."
-msgstr "Immettere la frazione di scambio più piccola per la commodity. Immettere 1 per quelle che possono essere scambiate solo per intero."
+msgstr "Immettere la frazione di scambio più piccola per la commodity. Immettere 1 per quelle che possono essere scambiate solo per intero"
 
+# Tooltip
 #: ../src/gnome-utils/glade/commodity.glade.h:6
 msgid "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). "
-msgstr "Immettere il simbolo ticker per la commodity (ad esempio CSCO o AAPL). Se si stanno ricevendo delle quotazioni online, questo campo deve corrispondere esattamente al simbolo ticker utilizzato dalla fonte delle quotazioni (incluse le lettere maiuscole)."
+msgstr "Immettere il simbolo ticker per la commodity (ad esempio CSCO o AAPL). Se si stanno ricevendo delle quotazioni online, questo campo deve corrispondere esattamente al simbolo ticker utilizzato dalla fonte delle quotazioni (incluse le lettere maiuscole)"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:7
 msgid "F_raction traded:"
@@ -9820,7 +9823,7 @@ msgstr "F_razione scambiata:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:8
 msgid "ISIN, CUSI_P or other code:"
-msgstr "CUSI_P o altro codice:"
+msgstr "ISIN, CUSI_P o altro codice:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid "Select security/currency "
@@ -10145,7 +10148,7 @@ msgid ""
 "\n"
 "Click \"Next\" to finish loading files and move to the next step. "
 msgstr ""
-"Selezionare «carica un altro file» se si desidera importare altri dati.\n"
+"Selezionare «carica un altro file» per importare altri dati.\n"
 "\n"
 "Selezionare «Successivo» per terminare il caricamento dei file ad avanzare al passo seguente."
 
@@ -11331,7 +11334,7 @@ msgstr "Si è verificato un errore elaborando «%s»."
 
 #: ../src/gnome-utils/gnc-file.c:341
 msgid "There was an error reading the file. Do you want to continue?"
-msgstr "Si è verificato un errore nella lettura del file. Si desidera continuare?"
+msgstr "Si è verificato un errore nella lettura del file. Continuare?"
 
 #: ../src/gnome-utils/gnc-file.c:350
 #, c-format
@@ -11350,7 +11353,7 @@ msgstr "Il file «%s» non è stato trovato."
 
 #: ../src/gnome-utils/gnc-file.c:372
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
-msgstr "Questo file appartiene a una vecchia versione di GnuCash. Si desidera procedere?"
+msgstr "Questo file appartiene a una vecchia versione di GnuCash. Procedere comunque?"
 
 #: ../src/gnome-utils/gnc-file.c:381
 #, c-format
@@ -12845,14 +12848,14 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Non è stato inserito il nome del destinatario. Questo è necessario per un trasferimento online.\n"
+"Non è stato inserito il nome del destinatario che è necessario per un trasferimento online.\n"
 "\n"
-"Si desidera inserire nuovamente il lavoro?"
+"Inserire nuovamente il lavoro?"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:757
 #, c-format
 msgid "Do you really want to overwrite your changes with the contents of the template \"%s\"?"
-msgstr "Si desidera veramente sovrascrivere i cambiamenti al contenuto del modello «%s»?"
+msgstr "Sovrascrivere davvero i cambiamenti al contenuto del modello «%s»?"
 
 #: ../src/import-export/aqbanking/dialog-ab-trans.c:912
 msgid "A template with the given name already exists.  Please enter another name."
@@ -13003,7 +13006,7 @@ msgid ""
 "Do you want to import it?"
 msgstr ""
 "La banca ha inviato delle informazioni sulle transazioni.\n"
-"Si desidera importarle?"
+"Importarle?"
 
 #: ../src/import-export/aqbanking/gnc-ab-utils.c:755
 msgid "No Online Banking account found for this gnucash account. These transactions will not be executed by Online Banking."
@@ -13015,7 +13018,7 @@ msgid ""
 "Do you want to import it?"
 msgstr ""
 "La banca ha inviato delle informazioni sul saldo.\n"
-"Si desidera importarle?"
+"Importarle?"
 
 #. Translators: Strings from this file are needed only in
 #. * countries that have one of aqbanking's Online Banking
@@ -13103,7 +13106,7 @@ msgid ""
 "long. Do you want to try again?"
 msgstr ""
 "Il codice PIN deve contenere almeno %d caratteri \n"
-"Si desidera riprovare?"
+"Riprovare?"
 
 #: ../src/import-export/aqbanking/gnc-gwen-gui.c:1567
 msgid "The Online Banking job is still running; are you sure you want to cancel?"
@@ -14325,7 +14328,7 @@ msgstr "_Selezionare la valuta da utilizzare per tutte le transazioni importate:
 
 #: ../src/import-export/qif-import/qif.glade.h:88
 msgid "_Select the matchings you want to change:"
-msgstr "_Selezionare le corrispondenze che si desidera cambiare:"
+msgstr "_Selezionare le corrispondenze da cambiare:"
 
 #: ../src/import-export/qif-import/qif.glade.h:89
 msgid "_Select..."
@@ -14557,13 +14560,13 @@ msgstr "Salvare la transazione prima di duplicarla?"
 
 #: ../src/register/ledger-core/split-register.c:447
 msgid "The current transaction has been changed. Would you like to record the changes before duplicating the transaction, or cancel the duplication?"
-msgstr "La transazione selezionata è stata modificata. Si desidera salvare le modifiche prima di duplicarla, o si preferisce cancellare l'operazione?"
+msgstr "La transazione selezionata è stata modificata. Salvare le modifiche prima di duplicarla, o si preferisce cancellare l'operazione?"
 
 #: ../src/register/ledger-core/split-register.c:805
 msgid "You are about to overwrite an existing split. Are you sure you want to do that?"
 msgstr ""
 "Si sta per sovrascrivere una suddivisione esistente.\n"
-"Si desidera veramente procedere?"
+"Procedere davvero?"
 
 #: ../src/register/ledger-core/split-register.c:838
 msgid "You are about to overwrite an existing transaction. Are you sure you want to do that?"
@@ -14577,7 +14580,7 @@ msgstr "Ricalcola transazione"
 msgid "The values entered for this transaction are inconsistent. Which value would you like to have recalculated?"
 msgstr ""
 "I valori immessi per questa transazione non sono consistenti.\n"
-"Quali valori si desidera siano ricalcolati?"
+"Quali valori devono essere ricalcolati?"
 
 #: ../src/register/ledger-core/split-register.c:1932
 #: ../src/register/ledger-core/split-register.c:1934
