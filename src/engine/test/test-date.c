@@ -24,17 +24,6 @@ check_time (Timespec ts, gboolean always_print)
     ts.tv_nsec /= 1000;
     ts.tv_nsec *= 1000;
 
-    /* We just can't handle dates whose time_t doesn't fit in int - skip those
-     * cases. */
-    if (ts.tv_sec > (0x7fffffff - 3600 * 25))
-        return TRUE;
-
-    /* If we are east of UTC, we also can't handle dates whose tv_sec member
-     * falls in the range [0, -gnc_timezone(tm)) - make sure were are at least 12
-     * hours past the epoch to skip those cases too */
-    if (ts.tv_sec < 3600 * 12)
-        return TRUE;
-
     gnc_timespec_to_iso8601_buff (ts, str);
 
     /* The time, in seconds, everywhere on the planet, is always
@@ -328,7 +317,7 @@ run_test (void)
        if/when we support it. */
     ts.tv_nsec = 0;
     ts.tv_sec = (long long int) 0x7fffffff + 3600 * 24 * 10;
-    //check_time(ts, do_print);
+    check_time(ts, do_print);
 
     /* Various 'special' times. What makes these so special? */
     ts.tv_sec = 152098136;

@@ -160,7 +160,6 @@ compare_single_sx( QofInstance* inst, gpointer user_data )
     g_assert_cmpint (sx_2->autoCreateNotify, ==, sx_1->autoCreateNotify);
     g_assert_cmpint (sx_2->advanceCreateDays, ==, sx_1->advanceCreateDays);
     g_assert_cmpint (sx_2->advanceRemindDays, ==, sx_1->advanceRemindDays);
-
 }
 
 static void
@@ -222,7 +221,6 @@ test_conn_index_functions( QofBackend *qbe )
         conn->provider->drop_index (be->conn, iter->data);
         g_assert (DBI_ERROR_NONE == dbi_conn_error( conn->conn, &errmsg));
     }
-
 
     g_slist_free( index_list );
 
