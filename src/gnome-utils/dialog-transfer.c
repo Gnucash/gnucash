@@ -1278,7 +1278,7 @@ gnc_xfer_dialog_set_num(XferDialog *xferData, const char *num)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_date)
+gnc_xfer_dialog_set_date(XferDialog *xferData, time64 set_date)
 {
     if (xferData == NULL)
         return;

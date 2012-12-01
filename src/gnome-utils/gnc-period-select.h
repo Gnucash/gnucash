@@ -182,17 +182,6 @@ GncAccountingPeriod gnc_period_select_get_active (GncPeriodSelect *period);
  *  @return The starting/ending time. */
 GDate *gnc_period_select_get_date (GncPeriodSelect *period);
 
-/** Get the currently selected accounting period choice from a
- *  GncPeriodSelect widget.  This is used to retrieve the user's
- *  selection in the form of an timestamp.
- *
- *  @param period The selection widget to query.
- *
- *  @return The starting/ending time (in seconds since 1970-01-01) of
- *  the accounting period selected by the user.
- */
-time_t gnc_period_select_get_time (GncPeriodSelect *period);
-
 G_END_DECLS
 
 #endif /* GNC_PERIOD_SELECT_H */

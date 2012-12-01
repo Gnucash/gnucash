@@ -859,7 +859,7 @@ g_print("handle_exchange_rate trans %p and split %p\n", trans, split);
         gnc_xfer_dialog_set_description (xfer, xaccTransGetDescription (trans));
         gnc_xfer_dialog_set_memo (xfer, xaccSplitGetMemo (split));
         gnc_xfer_dialog_set_num (xfer, xaccTransGetNum (trans));
-        gnc_xfer_dialog_set_date (xfer, timespecToTime_t (xaccTransRetDatePostedTS (trans)));
+        gnc_xfer_dialog_set_date (xfer, timespecToTime64 (xaccTransRetDatePostedTS (trans)));
 
         value = amount;
         if (gnc_xfer_dialog_run_exchange_dialog (
@@ -1388,7 +1388,7 @@ cdf (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
             //date on new transactions
             if (ts.tv_sec == 0)
             {
-                ts.tv_sec = time (NULL);
+                ts.tv_sec = gnc_time (NULL);
                 //xaccTransSetDatePostedSecs(trans, ts.tv_sec);
             }//if
             s = gnc_print_date(ts);
@@ -1960,7 +1960,7 @@ g_print("begin_edit - xaccTransBeginEdit trans %p\n", trans);
             //is a new transaction and set the time to current time to show current
             //date on new transactions
 
-            ts.tv_sec = time (NULL);
+            ts.tv_sec = gnc_time (NULL);
             xaccTransSetDatePostedSecs(trans, ts.tv_sec);
         }
     }
@@ -1975,9 +1975,8 @@ remove_edit_date (GtkCellEditable *ce, gpointer user_data)
     const gchar *new_string; 
     const gchar *current_string;
     GDate date;
-    struct tm *tm;
     char string[1024];
-    time_t tt;
+    time64 tt;
 
     //These strings are used to determine if cell data was altered so that keynav works better
 g_print("\nremove edit date\n");
@@ -2001,11 +2000,10 @@ g_print("\nremove edit date\n");
     g_date_set_parse (&date, new_string);
     if (g_date_valid (&date))
     {
-        time (&tt);
-        tm = localtime (&tt);
-
-        g_date_to_struct_tm (&date, tm);
-        qof_strftime (string, sizeof (string), "%A %d %B %Y", tm);
+	struct tm tm;
+	memset (&tm, 0, sizeof (tm));
+        g_date_to_struct_tm (&date, &tm);
+        qof_strftime (string, sizeof (string), "%A %d %B %Y", &tm);
     }
     view->help_text = g_strdup (string);
     g_signal_emit_by_name (view, "help_signal", NULL);
@@ -2518,19 +2516,16 @@ gtv_split_reg_help (GncTreeViewSplitReg *view, GtkCellRenderer *cr, ViewCol view
             if(depth == TRANS1)
             {
                 GDate date;
-                struct tm *tm;
                 char string[1024];
-                time_t tt;
 
                 current_string = g_object_get_data (G_OBJECT (cr), "current-string");
                 g_date_set_parse (&date, current_string);
                 if (g_date_valid (&date))
                 {
-                    time (&tt);
-                    tm = localtime (&tt);
-
-                    g_date_to_struct_tm (&date, tm);
-                    qof_strftime (string, sizeof (string), "%A %d %B %Y", tm);
+		    struct tm tm;
+		    memset (&tm, 0, sizeof (tm));
+                    g_date_to_struct_tm (&date, &tm);
+                    qof_strftime (string, sizeof (string), "%A %d %B %Y", &tm);
                 }
                 help = g_strdup (string);
             }

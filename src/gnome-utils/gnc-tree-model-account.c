@@ -578,7 +578,7 @@ gnc_tree_model_account_compute_period_balance(GncTreeModelAccount *model,
         gboolean *negative)
 {
     GncTreeModelAccountPrivate *priv;
-    time_t t1, t2;
+    time64 t1, t2;
     gnc_numeric b3;
 
     if ( negative )
@@ -615,7 +615,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     Account *account;
     gboolean negative; /* used to set "deficit style" also known as red numbers */
     gchar *string;
-    time_t last_date;
+    time64 last_date;
 
     g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
     g_return_if_fail (iter != NULL);

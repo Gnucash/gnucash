@@ -37,6 +37,7 @@
 #include "gnc-date.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-period-select.h"
+#include <gnc-gdate-utils.h>
 
 enum
 {
@@ -138,17 +139,27 @@ static void
 gnc_period_sample_update_date_label (GncPeriodSelect *period)
 {
     GncPeriodSelectPrivate *priv;
-    gchar *time_string;
-    time_t secs;
+    gchar time_string[MAX_DATE_LENGTH];
+    GDate *date;
+    GncAccountingPeriod which;
 
     g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
     priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
     if (!priv->date_label)
         return;
-    secs = gnc_period_select_get_time(GNC_PERIOD_SELECT(period));
-    time_string = qof_print_date(secs);
-    gtk_label_set_label(GTK_LABEL(priv->date_label), time_string);
-    g_free(time_string);
+    which = gtk_combo_box_get_active (GTK_COMBO_BOX (priv->selector));
+    if (which == -1)
+        date = g_date_new_dmy (1, 1, 1970);
+
+    else if (priv->start)
+        date = gnc_accounting_period_start_gdate (which, priv->fy_end,
+                                                  priv->date_base);
+    else
+        date = gnc_accounting_period_end_gdate (which, priv->fy_end,
+                                                priv->date_base);
+    qof_print_gdate (time_string, MAX_DATE_LENGTH, date);
+    gtk_label_set_label (GTK_LABEL(priv->date_label), time_string);
+    g_date_free (date);
 }
 
 
@@ -336,7 +347,7 @@ gnc_period_select_set_show_date (GncPeriodSelect *period, const gboolean show_da
     if (show_date)
     {
         g_date_clear(&date, 1);
-        g_date_set_time_t(&date, time (NULL));
+        gnc_gdate_set_time64(&date, gnc_time (NULL));
         gnc_period_select_set_date_common(period, &date);
     }
     else
@@ -729,32 +740,6 @@ gnc_period_select_get_date (GncPeriodSelect *period)
         return gnc_accounting_period_start_gdate(which, priv->fy_end,
                 priv->date_base);
     return gnc_accounting_period_end_gdate(which, priv->fy_end,
-                                           priv->date_base);
-}
-
-
-/*  Get the currently selected accounting period from a
- *  GncPeriodSelect widget.  This is used to retrieve the user's
- *  selection in the form of an timestamp.
- */
-time_t
-gnc_period_select_get_time (GncPeriodSelect *period)
-{
-    GncPeriodSelectPrivate *priv;
-    GncAccountingPeriod which;
-
-    g_return_val_if_fail(period != NULL, 0);
-    g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), 0);
-
-    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
-    which = gtk_combo_box_get_active(GTK_COMBO_BOX(priv->selector));
-    if (which == -1)
-        return 0;
-
-    if (priv->start)
-        return gnc_accounting_period_start_timet(which, priv->fy_end,
-                priv->date_base);
-    return gnc_accounting_period_end_timet(which, priv->fy_end,
                                            priv->date_base);
 }
 

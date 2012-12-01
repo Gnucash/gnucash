@@ -62,7 +62,7 @@ struct CloseBookWindow
     GtkWidget* desc_widget;
 
     /* The final settings */
-    time_t close_date;
+    time64 close_date;
     const char* desc;
 
     /* Component registration */
@@ -101,7 +101,7 @@ find_or_create_txn(struct CloseAccountsCB* cacb, gnc_commodity* cmdty)
         txn->total = gnc_numeric_zero();
         txn->txn = xaccMallocTransaction(cacb->cbw->book);
         xaccTransBeginEdit(txn->txn);
-        xaccTransSetDateEnteredSecs(txn->txn, time(NULL));
+        xaccTransSetDateEnteredSecs(txn->txn, gnc_time (NULL));
         xaccTransSetDatePostedSecs(txn->txn, cacb->cbw->close_date);
         xaccTransSetDescription(txn->txn, cacb->cbw->desc);
         xaccTransSetCurrency(txn->txn, cmdty);
@@ -336,7 +336,7 @@ void gnc_ui_close_book (QofBook* book)
 
     /* close date */
     box = GTK_WIDGET(gtk_builder_get_object (builder,  "date_box"));
-    cbw->close_date_widget = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+    cbw->close_date_widget = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
     gtk_box_pack_start(GTK_BOX(box), cbw->close_date_widget, TRUE, TRUE, 0);
 
     /* income acct */

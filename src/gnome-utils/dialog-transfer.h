@@ -136,7 +136,7 @@ void gnc_xfer_dialog_set_num(XferDialog *xferData, const char *num);
  *         set_date    - the date to set
  * Return: none
  */
-void gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_time);
+void gnc_xfer_dialog_set_date(XferDialog *xferData, time64 set_time);
 
 /** Set the exchange rate.  If exchange-rate is 0, then do nothing */
 void gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData,

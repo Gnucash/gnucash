@@ -33,7 +33,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtkwidget.h>
-#include <time.h>
+#include <gnc-date.h>
 #include "gnc-cell-renderer-popup.h"
 #include "gnc-cell-renderer-popup-entry.h"
 
@@ -53,7 +53,7 @@ struct _GncCellRendererDate
 	GtkWidget                *calendar;
 	GtkWidget                *today_button;
 
-	time_t                    time;
+	time64                    time;
         gboolean                  use_buttons;
 	GtkWidget                *button_box;
 

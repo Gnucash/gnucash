@@ -113,7 +113,7 @@ gnc_search_date_class_init (GNCSearchDateClass *class)
 static void
 gnc_search_date_init (GNCSearchDate *o)
 {
-    o->ts.tv_sec = time(NULL);
+    o->ts.tv_sec = gnc_time (NULL);
     o->how = QOF_COMPARE_LT;
 }
 

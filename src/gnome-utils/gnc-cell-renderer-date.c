@@ -91,12 +91,12 @@ static void     gcrd_hide                    (GncCellRendererPopup     *cell);
 
 
 /* These two functions are used internally */
-gboolean gcrd_time2dmy ( time_t raw_time, gint *day, gint *month, gint *year);
-static time_t gcrd_dmy2time ( gint day, gint month, gint year);
+gboolean gcrd_time2dmy ( time64 raw_time, gint *day, gint *month, gint *year);
+static time64 gcrd_dmy2time ( gint day, gint month, gint year);
 
 /* These two functions convert string to date to string */
-static gchar * gcrd_time2dmy_string ( time_t raw_time);
-static time_t gcrd_string_dmy2time ( char *date_string);
+static gchar * gcrd_time2dmy_string ( time64 raw_time);
+static time64 gcrd_string_dmy2time ( char *date_string);
 
 
 static GncCellRendererPopupClass *parent_class;
@@ -181,7 +181,7 @@ gcrd_init (GncCellRendererDate *date)
 			  date);
 
 	//Set calendar to show current date when displayed
-	date->time = time(NULL);
+	date->time = gnc_time (NULL);
 
         gtk_widget_show_all (frame);
 }
@@ -324,7 +324,7 @@ gcrd_show (GncCellRendererPopup *cell,
 
         if (!(g_strcmp0(cell->cell_text, "")))
         {
-	    date->time = time(NULL);
+	    date->time = gnc_time (NULL);
             gcrd_time2dmy ( date->time, &day, &month, &year);
         }
         else
@@ -356,10 +356,10 @@ gnc_cell_renderer_date_new (gboolean use_buttons)
 static void
 gcrd_today_clicked (GtkWidget *button, GncCellRendererDate *cell)
 {
-	time_t  today;
+	time64  today;
 	gint    year, month, day;
 	
-	today = time(NULL);
+	today = gnc_time (NULL);
 
         gcrd_time2dmy ( today, &day, &month, &year);
 	
@@ -409,7 +409,7 @@ gcrd_day_selected (GtkWidget *popup_window, GncCellRendererDate *cell)
 	guint    year;
 	guint    month;
 	guint    day;
-	time_t   t;
+	time64   t;
 	gchar   *str;
 
 	gtk_calendar_get_date (GTK_CALENDAR (cell->calendar),
@@ -450,72 +450,63 @@ gcrd_grab_on_window (GdkWindow *window,
 }
 
 
-/* This function converts a time_t value date to separate entities */
+/* This function converts a time64 value date to separate entities */
 gboolean
-gcrd_time2dmy ( time_t raw_time, gint *day, gint *month, gint *year)
+gcrd_time2dmy ( time64 raw_time, gint *day, gint *month, gint *year)
 {
     struct tm * timeinfo;
   
-    timeinfo = localtime ( &raw_time );
+    timeinfo = gnc_localtime (&raw_time);
  
     *day = timeinfo->tm_mday;
     *month = timeinfo->tm_mon + 1;
     *year = timeinfo->tm_year + 1900;
-
+    gnc_tm_free (timeinfo);
     return TRUE;
 }
 
-/* This function converts separate entities to a time_t value */
-static time_t
+/* This function converts separate entities to a time64 value */
+static time64
 gcrd_dmy2time ( gint day, gint month, gint year)
 {
-    struct tm *when;
+    struct tm when;
 
-    time_t raw_time;
+    memset (&when, 0, sizeof (when));
+    when.tm_year = year - 1900;
+    when.tm_mon = month - 1 ;
+    when.tm_mday = day;
 
-    time(&raw_time);
-    when = localtime ( &raw_time );
-
-    when->tm_year = year - 1900;
-    when->tm_mon = month - 1 ;
-    when->tm_mday = day;
-
-    return mktime(when);
+    return gnc_mktime (&when);
 }
 
 
-/* This function converts a time_t value date to a string */
+/* This function converts a time64 value date to a string */
 static gchar *
-gcrd_time2dmy_string ( time_t raw_time)
+gcrd_time2dmy_string ( time64 raw_time)
 {
     return qof_print_date (raw_time);
 }
 
 
-/* This function converts a string date to a time_t value */
-static time_t
-gcrd_string_dmy2time ( char *date_string)
+/* This function converts a string date to a time64 value */
+static time64
+gcrd_string_dmy2time (char *date_string)
 {
-    struct tm *when;
     gint year = 0, month = 0, day = 0;
-
-    time_t raw_time;
 
     if(qof_scan_date (date_string, &day, &month, &year))
     {
-        time(&raw_time);
-        when = localtime ( &raw_time );
+	struct tm when;
+	memset (&when, 0, sizeof (when));
+        when.tm_year = year - 1900;
+        when.tm_mon = month - 1 ;
+        when.tm_mday = day;
 
-        when->tm_year = year - 1900;
-        when->tm_mon = month - 1 ;
-        when->tm_mday = day;
-
-        return mktime(when);
+        return gnc_mktime (&when);
     }
     else
     {
- 	raw_time = time(NULL);
-        return raw_time;
+	return gnc_time (NULL);
     }
 }
 

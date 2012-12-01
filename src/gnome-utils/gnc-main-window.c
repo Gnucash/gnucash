@@ -1134,7 +1134,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         _("If you don't save, changes from the past %d hours and %d minutes will be discarded.");
     const gchar *message_days =
         _("If you don't save, changes from the past %d days and %d hours will be discarded.");
-    time_t oldest_change;
+    time64 oldest_change;
     gint minutes, hours, days;
 
     session = gnc_get_current_session();
@@ -1155,7 +1155,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
                                     title,
                                     filename);
     oldest_change = qof_book_get_session_dirty_time(book);
-    minutes = (time(NULL) - oldest_change) / 60 + 1;
+    minutes = (gnc_time (NULL) - oldest_change) / 60 + 1;
     hours = minutes / 60;
     minutes = minutes % 60;
     days = hours / 24;

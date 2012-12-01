@@ -28,6 +28,7 @@
 #define DIALOGDUPTRANS_H
 
 #include <gtk/gtk.h>
+#include <gnc-date.h>
 
 
 /********************************************************************\
@@ -42,7 +43,7 @@
  * Return: TRUE if user closes dialog with 'OK'                     *
 \********************************************************************/
 gboolean
-gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
+gnc_dup_trans_dialog (GtkWidget * parent, time64 *date_p,
                       const char *num, char **out_num);
 
 gboolean

@@ -463,7 +463,7 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
     gboolean enable_year, enable_month, enable_custom, check_modifiers;
     static gchar *format, *c;
     gchar date_string[MAX_DATE_LEN];
-    time_t secs_now;
+    time64 secs_now;
     struct tm today;
 
     g_return_if_fail(gdf);
@@ -541,8 +541,8 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
                                       0, 0, NULL, NULL, gdf);
 
     /* Visual feedback on what the date will look like. */
-    secs_now = time(NULL);
-    localtime_r(&secs_now, &today);
+    secs_now = gnc_time (NULL);
+    gnc_localtime_r (&secs_now, &today);
     qof_strftime(date_string, MAX_DATE_LEN, format, &today);
     gtk_label_set_text(GTK_LABEL(priv->sample_label), date_string);
     g_free(format);

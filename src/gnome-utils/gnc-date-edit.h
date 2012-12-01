@@ -70,16 +70,16 @@ typedef struct
     GtkWidget *cal_popup;
     GtkWidget *calendar;
 
-    time_t    initial_time;
+    time64   initial_time;
 
-    int       lower_hour;
-    int       upper_hour;
+    int        lower_hour;
+    int        upper_hour;
 
-    int       flags;
+    int        flags;
 
-    int       disposed;
+    int        disposed;
 
-    gboolean  popup_in_progress;
+    gboolean   popup_in_progress;
 } GNCDateEdit;
 
 typedef struct
@@ -91,7 +91,7 @@ typedef struct
 
 GType     gnc_date_edit_get_type        (void);
 
-GtkWidget *gnc_date_edit_new            (time_t the_time,
+GtkWidget *gnc_date_edit_new            (time64 the_time,
         int show_time, int use_24_format);
 GtkWidget *gnc_date_edit_new_ts         (Timespec the_time,
         int show_time, int use_24_format);
@@ -116,20 +116,20 @@ GtkWidget *gnc_date_edit_new_glade (gchar *widget_name,
                                     gchar *string1, gchar *string2,
                                     gint int1, gint int2);
 
-GtkWidget *gnc_date_edit_new_flags      (time_t the_time,
+GtkWidget *gnc_date_edit_new_flags      (time64 the_time,
         GNCDateEditFlags flags);
 
 void      gnc_date_edit_set_gdate       (GNCDateEdit *gde, const GDate *date);
-void      gnc_date_edit_set_time        (GNCDateEdit *gde, time_t the_time);
+void      gnc_date_edit_set_time        (GNCDateEdit *gde, time64 the_time);
 void      gnc_date_edit_set_time_ts     (GNCDateEdit *gde, Timespec the_time);
 
 void      gnc_date_edit_set_popup_range (GNCDateEdit *gde,
         int low_hour, int up_hour);
 
 void      gnc_date_edit_get_gdate       (GNCDateEdit *gde, GDate *date);
-time_t    gnc_date_edit_get_date        (GNCDateEdit *gde);
+time64  gnc_date_edit_get_date        (GNCDateEdit *gde);
 Timespec  gnc_date_edit_get_date_ts     (GNCDateEdit *gde);
-time_t    gnc_date_edit_get_date_end    (GNCDateEdit *gde);
+time64  gnc_date_edit_get_date_end    (GNCDateEdit *gde);
 Timespec  gnc_date_edit_get_date_end_ts (GNCDateEdit *gde);
 
 void      gnc_date_edit_set_flags       (GNCDateEdit *gde,

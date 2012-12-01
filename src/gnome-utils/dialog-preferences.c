@@ -1309,7 +1309,7 @@ gnc_prefs_date_edit_user_cb (GNCDateEdit *gde,
                              gpointer user_data)
 {
     const gchar *name;
-    time_t time;
+    time64 time;
 
     g_return_if_fail(GNC_IS_DATE_EDIT(gde));
     name  = g_object_get_data(G_OBJECT(gde), "name");
@@ -1333,7 +1333,7 @@ static void
 gnc_prefs_date_edit_gconf_cb (GNCDateEdit *gde,
                               GConfEntry *entry)
 {
-    time_t time;
+    time64 time;
 
     g_return_if_fail(GNC_IS_DATE_EDIT(gde));
     ENTER("date_edit %p, entry %p", gde, entry);
@@ -1360,7 +1360,7 @@ static void
 gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
 {
     const gchar *name;
-    time_t time;
+    time64 time;
 
     g_return_if_fail(GNC_IS_DATE_EDIT(gde));
 
@@ -1566,7 +1566,7 @@ gnc_preferences_dialog_create(void)
     gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/start_date"));
-    date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+    date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show (date);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
 
@@ -1576,7 +1576,7 @@ gnc_preferences_dialog_create(void)
     gtk_box_pack_start (GTK_BOX (box), period, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "gconf/window/pages/account_tree/summary/end_date"));
-    date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+    date = gnc_date_edit_new(gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show (date);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
 

@@ -138,14 +138,12 @@ something_changed( GtkWidget *wid, gpointer d )
 {
     UIPeriodType pt;
     GDate start;
-    time_t t;
     gboolean show_last, use_wd;
     GncRecurrence *gr = GNC_RECURRENCE(d);
 
 
     pt = get_pt_ui(gr);
-    t = gnc_date_edit_get_date(GNC_DATE_EDIT(gr->gde_start));
-    g_date_set_time_t(&start, t);
+    gnc_date_edit_get_gdate(GNC_DATE_EDIT(gr->gde_start), &start);
 
     if (pt == GNCR_MONTH)
         g_object_set(G_OBJECT(gr->nth_weekday), "visible", TRUE, NULL);
@@ -197,7 +195,7 @@ gnc_recurrence_init( GncRecurrence *gr )
 
     vb = GTK_VBOX(gtk_builder_get_object (builder, "RecurrenceEntryVBox"));
     hb = GTK_HBOX(gtk_builder_get_object (builder, "Startdate_hbox"));
-    w = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+    w = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gr->gde_start = w;
     gtk_box_pack_start (GTK_BOX (hb), w, TRUE, TRUE, 0);
     gtk_widget_show (w);
@@ -250,9 +248,9 @@ gnc_recurrence_set(GncRecurrence *gr, const Recurrence *r)
 
     // is there some better way?
     {
-        time_t t;
-        t = gnc_timet_get_day_start_gdate (&start);
-        gnc_date_edit_set_time(GNC_DATE_EDIT(gr->gde_start), t);
+        time64 t;
+        t = gnc_time64_get_day_start_gdate (&start);
+        gnc_date_edit_set_time (GNC_DATE_EDIT(gr->gde_start), t);
     }
 
     set_pt_ui(gr, pt);
@@ -262,7 +260,6 @@ gnc_recurrence_set(GncRecurrence *gr, const Recurrence *r)
 const Recurrence *
 gnc_recurrence_get(GncRecurrence *gr)
 {
-    time_t t;
     guint mult;
     UIPeriodType period;
     PeriodType pt;
@@ -270,8 +267,7 @@ gnc_recurrence_get(GncRecurrence *gr)
     gboolean use_eom = FALSE, rel;
 
     mult = (guint) gtk_spin_button_get_value_as_int(gr->gsb_mult);
-    t = gnc_date_edit_get_date(GNC_DATE_EDIT(gr->gde_start));
-    g_date_set_time_t(&start, t);
+    gnc_date_edit_get_gdate(GNC_DATE_EDIT(gr->gde_start), &start);
     period = get_pt_ui(gr);
 
     switch (period)

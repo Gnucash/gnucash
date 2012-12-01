@@ -87,8 +87,8 @@ typedef struct
     gboolean euro;
     gboolean grand_total;
     gboolean non_currency;
-    time_t start_date;
-    time_t end_date;
+    time64 start_date;
+    time64 end_date;
 } GNCSummarybarOptions;
 
 /**
@@ -196,11 +196,11 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
         case ACCT_TYPE_PAYABLE:
         case ACCT_TYPE_RECEIVABLE:
             end_amount = xaccAccountGetBalanceAsOfDate(account, options.end_date);
-            timespecFromTime_t(&end_timespec, options.end_date);
+            timespecFromTime64(&end_timespec, options.end_date);
             end_amount_default_currency =
                 xaccAccountConvertBalanceToCurrencyAsOfDate
                 (account, end_amount, account_currency, options.default_currency,
-                 timespecToTime_t(timespecCanonicalDayTime(end_timespec)));
+                 timespecToTime64(timespecCanonicalDayTime(end_timespec)));
 
             if (!non_currency || options.non_currency)
             {
@@ -240,17 +240,17 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
         case ACCT_TYPE_INCOME:
         case ACCT_TYPE_EXPENSE:
             start_amount = xaccAccountGetBalanceAsOfDate(account, options.start_date);
-            timespecFromTime_t(&start_timespec, options.start_date);
+            timespecFromTime64(&start_timespec, options.start_date);
             start_amount_default_currency =
                 xaccAccountConvertBalanceToCurrencyAsOfDate
                 (account, start_amount, account_currency, options.default_currency,
-                 timespecToTime_t(timespecCanonicalDayTime(start_timespec)));
+                 timespecToTime64(timespecCanonicalDayTime(start_timespec)));
             end_amount = xaccAccountGetBalanceAsOfDate(account, options.end_date);
-            timespecFromTime_t(&end_timespec, options.end_date);
+            timespecFromTime64(&end_timespec, options.end_date);
             end_amount_default_currency =
                 xaccAccountConvertBalanceToCurrencyAsOfDate
                 (account, end_amount, account_currency, options.default_currency,
-                 timespecToTime_t(timespecCanonicalDayTime(end_timespec)));
+                 timespecToTime64(timespecCanonicalDayTime(end_timespec)));
 
             if (!non_currency || options.non_currency)
             {

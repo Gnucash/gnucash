@@ -30,6 +30,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
 #include <stdlib.h>
+#include <gnc-gdate-utils.h>
 
 /**
  * Marking ...
@@ -402,11 +403,11 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     dcal->topPadding = 2;
 
     {
-        GDate *now = g_date_new();
-        g_date_set_time_t(now, time(NULL));
-        _gnc_dense_cal_set_month(dcal, g_date_get_month(now), FALSE);
-        _gnc_dense_cal_set_year(dcal, g_date_get_year(now), FALSE);
-        g_date_free(now);
+	GDate now;
+	g_date_clear (&now, 1);
+        gnc_gdate_set_today (&now);
+        _gnc_dense_cal_set_month(dcal, g_date_get_month(&now), FALSE);
+        _gnc_dense_cal_set_year(dcal, g_date_get_year(&now), FALSE);
     }
 
     recompute_extents(dcal);

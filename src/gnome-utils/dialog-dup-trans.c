@@ -91,7 +91,7 @@ gnc_dup_trans_output_cb(GtkSpinButton *spinbutton,
 
 static void
 gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
-                             time_t date, const char *num_str)
+                             time64 date, const char *num_str)
 {
     GtkWidget *dialog;
     GtkBuilder  *builder;
@@ -153,7 +153,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
 
 static gboolean
 gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title,
-                               time_t *date_p, GDate *gdate_p,
+                               time64 *date_p, GDate *gdate_p,
                                const char *num, char **out_num)
 {
     DupTransDialog *dt_dialog;
@@ -210,7 +210,7 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title,
 }
 
 gboolean
-gnc_dup_trans_dialog (GtkWidget * parent, time_t *date_p,
+gnc_dup_trans_dialog (GtkWidget * parent, time64 *date_p,
                       const char *num, char **out_num)
 {
     return gnc_dup_trans_dialog_internal(parent, NULL, date_p, NULL, num, out_num);
@@ -220,19 +220,19 @@ gboolean
 gnc_dup_trans_dialog_gdate (GtkWidget * parent, GDate *gdate_p,
                             const char *num, char **out_num)
 {
-    time_t tmp_time;
+    time64 tmp_time;
     g_assert(gdate_p);
 
-    tmp_time = timespecToTime_t(gdate_to_timespec(*gdate_p));
+    tmp_time = timespecToTime64(gdate_to_timespec(*gdate_p));
     return gnc_dup_trans_dialog_internal(parent, NULL, &tmp_time, gdate_p, num, out_num);
 }
 
 gboolean
 gnc_dup_date_dialog (GtkWidget * parent, const char* title, GDate *gdate_p)
 {
-    time_t tmp_time;
+    time64 tmp_time;
     g_assert(gdate_p);
 
-    tmp_time = timespecToTime_t(gdate_to_timespec(*gdate_p));
+    tmp_time = timespecToTime64(gdate_to_timespec(*gdate_p));
     return gnc_dup_trans_dialog_internal(parent, title, &tmp_time, gdate_p, NULL, NULL);
 }

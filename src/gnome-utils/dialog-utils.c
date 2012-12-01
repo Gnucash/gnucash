@@ -40,6 +40,7 @@
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
+#include <gnc-gdate-utils.h>
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -412,14 +413,9 @@ gnc_handle_date_accelerator (GdkEventKey *event,
 
     case GDK_T:
     case GDK_t:
-    {
         /* today */
-        GTime gtime;
-
-        gtime = time (NULL);
-        g_date_set_time_t (&gdate, gtime);
+        gnc_gdate_set_today (&gdate);
         break;
-    }
 
     default:
         return FALSE;

@@ -450,7 +450,7 @@ sort_by_xxx_period_value (GtkTreeModel *f_model,
                           gboolean recurse)
 {
     Account *acct1, *acct2;
-    time_t t1, t2;
+    time64 t1, t2;
     gnc_numeric b1, b2;
     gint result;
 

@@ -283,11 +283,6 @@ gnc_date_edit_popup (GNCDateEdit *gde)
         mtm.tm_year -= 1900;
 
     gnc_tm_set_day_start(&mtm);
-    if (mktime (&mtm) == (time_t) - 1)
-    {
-        gnc_tm_get_today_start (&mtm);
-        gnc_date_edit_set_time (gde, mktime (&mtm));
-    }
 
     /* Set the calendar.  */
     gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
@@ -455,7 +450,7 @@ fill_time_combo (GtkWidget *widget, GNCDateEdit *gde)
     GtkTreeIter  hour_iter, min_iter;
     struct tm *tm_returned;
     struct tm mtm;
-    time_t current_time;
+    time64 current_time;
     int i, j;
 
     if (gde->lower_hour > gde->upper_hour)
@@ -463,8 +458,8 @@ fill_time_combo (GtkWidget *widget, GNCDateEdit *gde)
 
     model = gtk_combo_box_get_model (GTK_COMBO_BOX(gde->time_combo));
 
-    time (&current_time);
-    tm_returned = localtime_r (&current_time, &mtm);
+    gnc_time (&current_time);
+    tm_returned = gnc_localtime_r (&current_time, &mtm);
     g_return_if_fail(tm_returned != NULL);
 
     for (i = gde->lower_hour; i <= gde->upper_hour; i++)
@@ -646,7 +641,7 @@ gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm)
  * to be the one represented by @the_time.
  */
 void
-gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
+gnc_date_edit_set_time (GNCDateEdit *gde, time64 the_time)
 {
     struct tm *tm_returned;
     struct tm tm_to_set;
@@ -656,17 +651,10 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 
     /* If the_time is invalid, use the last valid time
      * seen (or as a last resort, the current date). */
-    if (the_time == (time_t) - 1)
-    {
-        if (gde->initial_time == (time_t) - 1)
-            gde->initial_time = gnc_timet_get_today_start();
-        the_time = gde->initial_time;
-    }
-    else
-        gde->initial_time = the_time;
+    gde->initial_time = the_time;
 
-    /* Convert time_t to tm. */
-    tm_returned = localtime_r (&the_time, &tm_to_set);
+    /* Convert time64 to tm. */
+    tm_returned = gnc_localtime_r (&the_time, &tm_to_set);
     g_return_if_fail(tm_returned != NULL);
 
     gnc_date_edit_set_time_tm(gde, &tm_to_set);
@@ -676,14 +664,13 @@ void
 gnc_date_edit_set_gdate (GNCDateEdit *gde, const GDate *date)
 {
     struct tm mytm;
-    time_t t;
+    time64 t;
 
     g_return_if_fail(gde && GNC_IS_DATE_EDIT(gde) &&
                      date && g_date_valid(date));
     g_date_to_struct_tm(date, &mytm);
-    t = mktime(&mytm);
-    if (t != (time_t)(-1))
-        gnc_date_edit_set_time(gde, t);
+    t = gnc_mktime(&mytm);
+    gnc_date_edit_set_time(gde, t);
 }
 
 void
@@ -728,7 +715,7 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
     if (!gnc_handle_date_accelerator (event, &tm, string))
         return FALSE;
 
-    gnc_date_edit_set_time (gde, mktime (&tm));
+    gnc_date_edit_set_time (gde, gnc_mktime (&tm));
 
     g_signal_emit (G_OBJECT (gde), date_edit_signals [TIME_CHANGED], 0);
     return TRUE;
@@ -752,7 +739,7 @@ date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 
     /* Get the date entered and attempt to use it. */
     tm = gnc_date_edit_get_date_internal (gde);
-    gnc_date_edit_set_time (gde, mktime (&tm));
+    gnc_date_edit_set_time (gde, gnc_mktime (&tm));
 
     /* Get the date again in case it was invalid the first time. */
     tm = gnc_date_edit_get_date_internal (gde);
@@ -900,7 +887,7 @@ create_children (GNCDateEdit *gde)
  * Returns a GNCDateEdit widget.
  */
 GtkWidget *
-gnc_date_edit_new (time_t the_time, int show_time, int use_24_format)
+gnc_date_edit_new (time64 the_time, int show_time, int use_24_format)
 {
     return gnc_date_edit_new_flags
            (the_time,
@@ -945,7 +932,7 @@ gnc_date_edit_new_glade (gchar *widget_name,
  * Return value: the newly-created date editor widget.
  **/
 GtkWidget *
-gnc_date_edit_new_flags (time_t the_time, GNCDateEditFlags flags)
+gnc_date_edit_new_flags (time64 the_time, GNCDateEditFlags flags)
 {
     GNCDateEdit *gde;
 
@@ -975,11 +962,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 
     tm.tm_mon--;
 
-    /* Hope the user does not actually mean years early in the A.D. days...
-     * This date widget will obviously not work for a history program :-)
-     */
-    if (tm.tm_year >= 1900)
-        tm.tm_year -= 1900;
+    tm.tm_year -= 1900;
 
     if (gde->flags & GNC_DATE_EDIT_SHOW_TIME)
     {
@@ -1036,38 +1019,31 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
  *
  * Returns the time entered in the GNCDateEdit widget
  */
-time_t
+time64
 gnc_date_edit_get_date (GNCDateEdit *gde)
 {
     struct tm tm;
-    time_t retval;
+    time64 retval;
 
     g_return_val_if_fail (gde != NULL, 0);
     g_return_val_if_fail (GNC_IS_DATE_EDIT (gde), 0);
 
     tm = gnc_date_edit_get_date_internal (gde);
 
-    retval = mktime (&tm);
-    if (retval == (time_t) - 1)
-    {
-        if (gde->initial_time == (time_t) - 1)
-            return gnc_timet_get_today_start ();
-        else
-            return gde->initial_time;
-    }
-    return retval;
+    return gnc_mktime (&tm);
 }
 
 void
 gnc_date_edit_get_gdate (GNCDateEdit *gde, GDate *date)
 {
-    time_t t;
+    time64 t;
 
     g_return_if_fail (gde && date);
     g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
     t = gnc_date_edit_get_date(gde);
-    g_date_set_time_t(date, t);
+    g_date_clear (date, 1);
+    gnc_gdate_set_time64 (date, t);
 }
 
 Timespec
@@ -1087,7 +1063,7 @@ gnc_date_edit_get_date_ts (GNCDateEdit *gde)
  * Returns the date entered in the GNCDateEdit widget,
  * but with the time adjusted to the end of the day.
  */
-time_t
+time64
 gnc_date_edit_get_date_end (GNCDateEdit *gde)
 {
     struct tm tm;
@@ -1098,14 +1074,7 @@ gnc_date_edit_get_date_end (GNCDateEdit *gde)
     tm = gnc_date_edit_get_date_internal (gde);
     gnc_tm_set_day_end(&tm);
 
-    if (mktime (&tm) == (time_t) - 1)
-    {
-        if (gde->initial_time == (time_t) - 1)
-            return gnc_timet_get_today_end();
-        else
-            return gnc_timet_get_day_end(gde->initial_time);
-    }
-    return mktime (&tm);
+    return gnc_mktime (&tm);
 }
 
 Timespec
