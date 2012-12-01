@@ -162,6 +162,13 @@ gnc_g_date_time_new_local (gint year, gint month, gint day, gint hour, gint minu
 	return gdt;
     tz = gnc_g_time_zone_adjust_for_dst (tz, gdt);
     g_date_time_unref (gdt);
+/* g_date_time_new truncates nanoseconds to microseconds. Sometimes in
+ * converting (particularly when parsing from a string) the
+ * nanoseconds will have lost 1/2 a femtosecond or so. Adding 1/2 a
+ * nano second ensures that the truncation doesn't lose a micorsecond
+ * in translation.
+ */
+    seconds += 5e-10;
     gdt =  g_date_time_new (tz, year, month, day, hour, minute, seconds);
     g_time_zone_unref (tz);
     return gdt;
@@ -1427,7 +1434,10 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 	g_time_zone_unref (tz);
     }
     else /* No zone info, assume UTC */
+    {
+	second += 5e-10;
 	gdt = g_date_time_new_utc (year, month, day, hour, minute, second);
+    }
 
     time.tv_sec = g_date_time_to_unix (gdt);
     time.tv_nsec = g_date_time_get_microsecond (gdt) * 1000;
