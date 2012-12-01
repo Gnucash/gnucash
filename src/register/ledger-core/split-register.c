@@ -28,6 +28,7 @@
 #include <glib/gi18n.h>
 #include <libguile.h>
 
+#include <gnc-gdate-utils.h>
 #include "combocell.h"
 #include "datecell.h"
 #include "dialog-utils.h"
@@ -508,7 +509,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         int split_index;
         const char *in_num = NULL;
         char *out_num;
-        time_t date;
+        time64 date;
         gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
 
         /* We are on a transaction row. Copy the whole transaction. */
@@ -536,7 +537,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         {
             GDate d;
             GDate *readonly_threshold = qof_book_get_autoreadonly_gdate(gnc_get_current_book());
-            g_date_set_time_t (&d, date);
+            gnc_gdate_set_time64 (&d, date);
             if (g_date_compare(&d, readonly_threshold) < 0)
             {
                 GtkWidget *dialog = gtk_message_dialog_new(NULL,
@@ -1633,7 +1634,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
         account = gnc_split_register_get_default_account(reg);
         if (account)
             xaccSplitSetAccount(blank_split, account);
-        xaccTransSetDateEnteredSecs(trans, time(NULL));
+        xaccTransSetDateEnteredSecs(trans, gnc_time (NULL));
     }
 
     if (split == NULL)

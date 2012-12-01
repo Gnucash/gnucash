@@ -75,7 +75,7 @@ struct sr_info
     GncGUID default_account;
 
     /* The last date recorded in the blank split */
-    time_t last_date_entered;
+    time64 last_date_entered;
 
     /* true if the current blank split has been edited and commited */
     gboolean blank_split_edited;

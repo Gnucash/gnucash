@@ -111,7 +111,7 @@ BasicCell * gnc_date_cell_new (void);
 /* days are 1-31, mon is 1-12, year 1900 == 1900 */
 void        gnc_date_cell_set_value (DateCell *cell,
                                      int day, int mon, int year);
-void        gnc_date_cell_set_value_secs (DateCell *cell, time_t secs);
+void        gnc_date_cell_set_value_secs (DateCell *cell, time64 secs);
 
 void        gnc_date_cell_commit (DateCell *cell);
 

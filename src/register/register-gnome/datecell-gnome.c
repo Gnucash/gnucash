@@ -138,9 +138,9 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
     parsed->tm_year = year - 1900;
 
     gnc_tm_set_day_start(parsed);
-    if (mktime (parsed) == -1)
+    if (gnc_mktime (parsed) == -1)
         gnc_tm_get_today_start (parsed);
-    mktime (parsed);
+    gnc_mktime (parsed);
 }
 
 static void
@@ -158,7 +158,7 @@ static void
 gnc_date_cell_init (DateCell *cell)
 {
     PopBox *box;
-    time_t secs;
+    time64 secs;
     char buff[DATE_BUF];
 
     gnc_basic_cell_init (&(cell->cell));
@@ -186,8 +186,8 @@ gnc_date_cell_init (DateCell *cell)
     cell->cell.gui_private = box;
 
     /* default value is today's date */
-    time (&secs);
-    box->date = *localtime (&secs);
+    gnc_time (&secs);
+    gnc_localtime_r (&secs, &(box->date));
     gnc_date_cell_print_date (cell, buff);
 
     gnc_basic_cell_set_value_internal (&cell->cell, buff);
@@ -369,7 +369,7 @@ gnc_date_cell_set_value (DateCell *cell, int day, int mon, int year)
     dada.tm_year = year - 1900;
 
     gnc_tm_set_day_start(&dada);
-    mktime (&dada);
+    gnc_mktime (&dada);
 
     box->date.tm_mday = dada.tm_mday;
     box->date.tm_mon  = dada.tm_mon;
@@ -388,14 +388,12 @@ gnc_date_cell_set_value (DateCell *cell, int day, int mon, int year)
 }
 
 void
-gnc_date_cell_set_value_secs (DateCell *cell, time_t secs)
+gnc_date_cell_set_value_secs (DateCell *cell, time64 secs)
 {
     PopBox *box = cell->cell.gui_private;
     char buff[DATE_BUF];
-    struct tm * stm;
 
-    stm = localtime (&secs);
-    box->date = *stm;
+    gnc_localtime_r (&secs, &(box->date));
 
     qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
                              box->date.tm_mday,
@@ -699,7 +697,7 @@ gnc_date_cell_get_date (DateCell *cell, Timespec *ts)
 
     gnc_parse_date (&(box->date), cell->cell.value);
 
-    ts->tv_sec = mktime (&box->date);
+    ts->tv_sec = gnc_mktime (&box->date);
     ts->tv_nsec = 0;
 }
 

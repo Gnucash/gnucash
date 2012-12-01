@@ -24,6 +24,7 @@
 
 #include <glib.h>
 
+#include <gnc-gdate-utils.h>
 #include "pricecell.h"
 #include "split-register-p.h"
 
@@ -51,7 +52,7 @@ gnc_split_register_init_info (SplitRegister *reg)
     info->default_account = *guid_null ();
     info->template_account = *guid_null ();
 
-    info->last_date_entered = gnc_timet_get_today_start ();
+    info->last_date_entered = gnc_time64_get_today_start ();
 
     info->first_pass = TRUE;
     info->full_refresh = TRUE;

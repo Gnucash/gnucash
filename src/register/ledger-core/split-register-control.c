@@ -1178,7 +1178,7 @@ gnc_split_register_get_cell_date (SplitRegister *reg, const char *cell_name)
     if (cell)
         gnc_date_cell_get_date (cell, &ts);
     else
-        timespecFromTime_t (&ts, time (NULL));
+        timespecFromTime64 (&ts, gnc_time (NULL));
 
     return ts;
 }
@@ -1239,7 +1239,7 @@ gnc_split_register_xfer_dialog(SplitRegister *reg, Transaction *txn,
     {
         Timespec ts;
         gnc_date_cell_get_date((DateCell*) cell, &ts);
-        gnc_xfer_dialog_set_date(xfer, timespecToTime_t(ts));
+        gnc_xfer_dialog_set_date(xfer, timespecToTime64(ts));
     }
     else
         gnc_xfer_dialog_set_date(xfer, xaccTransGetDate(txn));

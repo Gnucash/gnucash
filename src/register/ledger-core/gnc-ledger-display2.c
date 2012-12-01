@@ -430,7 +430,7 @@ GNCLedgerDisplay2 *
 gnc_ledger_display2_gl (void)
 {
     Query *query;
-    time_t start;
+    time64 start;
     struct tm tm;
     GNCLedgerDisplay2 *ld;
 
@@ -460,7 +460,7 @@ gnc_ledger_display2_gl (void)
 
     gnc_tm_get_today_start(&tm);
     tm.tm_mon--; /* Default the register to the last month's worth of transactions. */
-    start = mktime (&tm);
+    start = gnc_mktime (&tm);
     xaccQueryAddDateMatchTT (query,
                              TRUE, start,
                              FALSE, 0,
