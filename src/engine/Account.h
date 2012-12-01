@@ -55,7 +55,7 @@ typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (
     gboolean include_children);
 
 typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
-    Account *account, time_t date);
+    Account *account, time64 date);
 
 typedef void (*AccountCb)(Account *a, gpointer data);
 typedef gpointer (*AccountCb2)(Account *a, gpointer data);
@@ -524,7 +524,7 @@ gnc_numeric xaccAccountGetPresentBalance (const Account *account);
 gnc_numeric xaccAccountGetProjectedMinimumBalance (const Account *account);
 /** Get the balance of the account as of the date specified */
 gnc_numeric xaccAccountGetBalanceAsOfDate (Account *account,
-        time_t date);
+        time64 date);
 
 /* These two functions convert a given balance from one commodity to
    another.  The account argument is only used to get the Book, and
@@ -543,7 +543,7 @@ gnc_numeric xaccAccountConvertBalanceToCurrency(
 gnc_numeric xaccAccountConvertBalanceToCurrencyAsOfDate(
     const Account *account, /* for book */
     gnc_numeric balance, gnc_commodity *balance_currency,
-    gnc_commodity *new_currency, time_t date);
+    gnc_commodity *new_currency, time64 date);
 
 /* These functions get some type of balance in the desired commodity.
    'report_commodity' may be NULL to use the account's commodity. */
@@ -566,11 +566,11 @@ gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (
 /* This function gets the balance as of the given date in the desired
    commodity. */
 gnc_numeric xaccAccountGetBalanceAsOfDateInCurrency(
-    Account *account, time_t date, gnc_commodity *report_commodity,
+    Account *account, time64 date, gnc_commodity *report_commodity,
     gboolean include_children);
 
 gnc_numeric xaccAccountGetBalanceChangeForPeriod (
-    Account *acc, time_t date1, time_t date2, gboolean recurse);
+    Account *acc, time64 date1, time64 date2, gboolean recurse);
 
 /** @} */
 
@@ -1054,9 +1054,9 @@ LotList * xaccAccountFindOpenLots (const Account *acc,
 */
 /** DOCUMENT ME! */
 gboolean xaccAccountGetReconcileLastDate (const Account *account,
-        time_t *last_date);
+        time64 *last_date);
 /** DOCUMENT ME! */
-void xaccAccountSetReconcileLastDate (Account *account, time_t last_date);
+void xaccAccountSetReconcileLastDate (Account *account, time64 last_date);
 
 /** DOCUMENT ME! */
 gboolean xaccAccountGetReconcileLastInterval (const Account *account,
@@ -1066,10 +1066,10 @@ void xaccAccountSetReconcileLastInterval (Account *account,
         int months, int days);
 /** DOCUMENT ME! */
 gboolean xaccAccountGetReconcilePostponeDate (const Account *account,
-        time_t *postpone_date);
+        time64 *postpone_date);
 /** DOCUMENT ME! */
 void xaccAccountSetReconcilePostponeDate (Account *account,
-        time_t postpone_date);
+        time64 postpone_date);
 
 /** DOCUMENT ME! */
 gboolean xaccAccountGetReconcilePostponeBalance (const Account *account,

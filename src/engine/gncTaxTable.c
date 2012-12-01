@@ -163,7 +163,7 @@ maybe_resort_list (GncTaxTable *table)
 static inline void
 mod_table (GncTaxTable *table)
 {
-    timespecFromTime_t (&table->modtime, time(NULL));
+    timespecFromTime64 (&table->modtime, gnc_time (NULL));
 }
 
 static inline void addObj (GncTaxTable *table)

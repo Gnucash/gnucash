@@ -57,6 +57,7 @@ struct timeval
 #include "gnc-engine.h"
 #include "gnc-lot.h"
 #include "gnc-event.h"
+#include <gnc-gdate-utils.h>
 
 #include "qofbackend-p.h"
 
@@ -1632,8 +1633,8 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
     xaccTransBeginEdit(trans);
 
     {
-        time_t secs = (time_t) val.tv_sec;
-        gchar *tstr = ctime(&secs);
+        time64 secs = (time64) val.tv_sec;
+        gchar *tstr = gnc_ctime (&secs);
         PINFO ("addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
                trans, val.tv_sec, val.tv_nsec, tstr ? tstr : "(null)");
     }
@@ -1659,7 +1660,7 @@ set_gains_date_dirty (Transaction *trans)
 }
 
 void
-xaccTransSetDatePostedSecs (Transaction *trans, time_t secs)
+xaccTransSetDatePostedSecs (Transaction *trans, time64 secs)
 {
     Timespec ts = {secs, 0};
     if (!trans) return;
@@ -1690,7 +1691,7 @@ xaccTransSetDatePostedGDate (Transaction *trans, GDate date)
 }
 
 void
-xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
+xaccTransSetDateEnteredSecs (Transaction *trans, time64 secs)
 {
     Timespec ts = {secs, 0};
     if (!trans) return;
@@ -1935,7 +1936,7 @@ xaccTransGetIsClosingTxn (const Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
-time_t
+time64
 xaccTransGetDate (const Transaction *trans)
 {
     return trans ? trans->date_posted.tv_sec : 0;
@@ -2081,7 +2082,7 @@ gboolean xaccTransInFutureByPostedDate (const Transaction *trans)
 
     trans_date = xaccTransGetDatePostedGDate (trans);
 
-    g_date_set_time_t (&date_now, time(NULL));
+    gnc_gdate_set_time64 (&date_now, gnc_time (NULL));
 
     if (g_date_compare (&trans_date, &date_now) > 0)
         result = TRUE;
@@ -2203,7 +2204,7 @@ xaccTransVoid(Transaction *trans, const char *reason)
     kvp_frame_set_string(frame, trans_notes_str, _("Voided transaction"));
     kvp_frame_set_string(frame, void_reason_str, reason);
 
-    now.tv_sec = time(NULL);
+    now.tv_sec = gnc_time (NULL);
     now.tv_nsec = 0;
     gnc_timespec_to_iso8601_buff(now, iso8601_str);
     kvp_frame_set_string(frame, void_time_str, iso8601_str);

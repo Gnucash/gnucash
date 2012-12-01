@@ -3038,14 +3038,14 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
 {
     AccountPrivate *priv;
     GList *node;
-    time_t today;
+    time64 today;
     gnc_numeric lowest = gnc_numeric_zero ();
     int seen_a_transaction = 0;
 
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
 
     priv = GET_PRIVATE(acc);
-    today = gnc_timet_get_today_end();
+    today = gnc_time64_get_today_end();
     for (node = g_list_last(priv->splits); node; node = node->prev)
     {
         Split *split = node->data;
@@ -3072,7 +3072,7 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
 \********************************************************************/
 
 gnc_numeric
-xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
+xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
 {
     /* Ideally this could use xaccAccountForEachSplit, but
      * it doesn't exist yet and I'm uncertain of exactly how
@@ -3096,11 +3096,11 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
 
     /* Since transaction post times are stored as a Timespec,
      * convert date into a Timespec as well rather than converting
-     * each transaction's Timespec into a time_t.
+     * each transaction's Timespec into a time64.
      *
      * FIXME: CAS: I think this comment is a bogus justification for
      * using xaccTransGetDatePostedTS.  There's no benefit to using
-     * Timespec when the input argument is time_t, and it's hard to
+     * Timespec when the input argument is time64, and it's hard to
      * imagine that casting long long to long and comparing two longs is
      * worse than comparing two long longs every time.  IMO,
      * xaccAccountGetPresentBalance gets this right, and its algorithm
@@ -3156,12 +3156,12 @@ xaccAccountGetPresentBalance (const Account *acc)
 {
     AccountPrivate *priv;
     GList *node;
-    time_t today;
+    time64 today;
 
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
 
     priv = GET_PRIVATE(acc);
-    today = gnc_timet_get_today_end();
+    today = gnc_time64_get_today_end();
     for (node = g_list_last(priv->splits); node; node = node->prev)
     {
         Split *split = node->data;
@@ -3214,7 +3214,7 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
         gnc_numeric balance,
         gnc_commodity *balance_currency,
         gnc_commodity *new_currency,
-        time_t date)
+        time64 date)
 {
     QofBook *book;
     GNCPriceDB *pdb;
@@ -3262,7 +3262,7 @@ xaccAccountGetXxxBalanceInCurrency (const Account *acc,
 }
 
 static gnc_numeric
-xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *acc, time_t date,
+xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *acc, time64 date,
         xaccGetBalanceAsOfDateFn fn,
         const gnc_commodity *report_commodity)
 {
@@ -3286,7 +3286,7 @@ typedef struct
     gnc_numeric balance;
     xaccGetBalanceFn fn;
     xaccGetBalanceAsOfDateFn asOfDateFn;
-    time_t date;
+    time64 date;
 } CurrencyBalance;
 
 
@@ -3375,7 +3375,7 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
 
 static gnc_numeric
 xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
-    Account *acc, time_t date, xaccGetBalanceAsOfDateFn fn,
+    Account *acc, time64 date, xaccGetBalanceAsOfDateFn fn,
     gnc_commodity *report_commodity, gboolean include_children)
 {
     gnc_numeric balance;
@@ -3466,7 +3466,7 @@ xaccAccountGetProjectedMinimumBalanceInCurrency (
 
 gnc_numeric
 xaccAccountGetBalanceAsOfDateInCurrency(
-    Account *acc, time_t date, gnc_commodity *report_commodity,
+    Account *acc, time64 date, gnc_commodity *report_commodity,
     gboolean include_children)
 {
     return xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
@@ -3475,7 +3475,8 @@ xaccAccountGetBalanceAsOfDateInCurrency(
 }
 
 gnc_numeric
-xaccAccountGetBalanceChangeForPeriod (Account *acc, time_t t1, time_t t2, gboolean recurse)
+xaccAccountGetBalanceChangeForPeriod (Account *acc, time64 t1, time64 t2,
+				      gboolean recurse)
 {
     gnc_numeric b1, b2;
 
@@ -3992,7 +3993,7 @@ xaccAccountIsPriced(const Account *acc)
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcileLastDate (const Account *acc, time_t *last_date)
+xaccAccountGetReconcileLastDate (const Account *acc, time64 *last_date)
 {
     KvpValue *v;
 
@@ -4013,7 +4014,7 @@ xaccAccountGetReconcileLastDate (const Account *acc, time_t *last_date)
 \********************************************************************/
 
 void
-xaccAccountSetReconcileLastDate (Account *acc, time_t last_date)
+xaccAccountSetReconcileLastDate (Account *acc, time64 last_date)
 {
     if (!acc) return;
 
@@ -4076,7 +4077,7 @@ xaccAccountSetReconcileLastInterval (Account *acc, int months, int days)
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcilePostponeDate (const Account *acc, time_t *postpone_date)
+xaccAccountGetReconcilePostponeDate (const Account *acc, time64 *postpone_date)
 {
     KvpValue *v;
 
@@ -4096,7 +4097,7 @@ xaccAccountGetReconcilePostponeDate (const Account *acc, time_t *postpone_date)
 \********************************************************************/
 
 void
-xaccAccountSetReconcilePostponeDate (Account *acc, time_t postpone_date)
+xaccAccountSetReconcilePostponeDate (Account *acc, time64 postpone_date)
 {
     if (!acc) return;
 

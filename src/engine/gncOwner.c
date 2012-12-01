@@ -782,7 +782,7 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
         xaccTransSetDescription (txn, name ? name : "");
         xaccTransSetNum (txn, num);
         xaccTransSetCurrency (txn, commodity);
-        xaccTransSetDateEnteredSecs (txn, time(NULL));
+        xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
         xaccTransSetDatePostedTS (txn, &date);
         xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
 
@@ -952,7 +952,7 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
 
                 xaccTransSetDescription (txn, name ? name : "");
                 xaccTransSetCurrency (txn, xaccAccountGetCommodity(acct));
-                xaccTransSetDateEnteredSecs (txn, time(NULL));
+                xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
                 xaccTransSetDatePostedTS (txn, &ts);
                 xaccTransSetTxnType (txn, TXN_TYPE_LINK);
             }

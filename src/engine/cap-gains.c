@@ -464,7 +464,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
     /* If we are here, then (cmp == +1 iff (amt > baln)) and we need
      * to split up the split into pieces. Do it. */
     {
-        time_t now = time(0);
+        time64 now = gnc_time (NULL);
         Split * new_split;
         gnc_numeric amt_a, amt_b, amt_tot;
         gnc_numeric val_a, val_b, val_tot;
@@ -1015,7 +1015,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
             /* Common to both */
             ts = xaccTransRetDatePostedTS (split->parent);
             xaccTransSetDatePostedTS (trans, &ts);
-            xaccTransSetDateEnteredSecs (trans, time(0));
+            xaccTransSetDateEnteredSecs (trans, gnc_time (NULL));
 
             xaccSplitSetAmount (lot_split, zero);
             xaccSplitSetValue (lot_split, value);

@@ -87,7 +87,7 @@ recurrenceSet(Recurrence *r, guint16 mult, PeriodType pt, const GDate *_start, W
     }
     else
     {
-        g_date_set_time_t(&r->start, time(NULL));
+        gnc_gdate_set_today (&r->start);
     }
 
     /* Some of the unusual period types also specify phase.  For those
@@ -377,7 +377,7 @@ recurrenceNthInstance(const Recurrence *r, guint n, GDate *date)
     }
 }
 
-time_t
+time64
 recurrenceGetPeriodTime(const Recurrence *r, guint period_num, gboolean end)
 {
     GDate date;
@@ -385,18 +385,18 @@ recurrenceGetPeriodTime(const Recurrence *r, guint period_num, gboolean end)
     if (end)
     {
         g_date_subtract_days(&date, 1);
-        return gnc_timet_get_day_end_gdate(&date);
+        return gnc_time64_get_day_end_gdate(&date);
     }
     else
     {
-        return gnc_timet_get_day_start_gdate(&date);
+        return gnc_time64_get_day_start_gdate(&date);
     }
 }
 
 gnc_numeric
 recurrenceGetAccountPeriodValue(const Recurrence *r, Account *acc, guint n)
 {
-    time_t t1, t2;
+    time64 t1, t2;
 
     // FIXME: maybe zero is not best error return val.
     g_return_val_if_fail(r && acc, gnc_numeric_zero());

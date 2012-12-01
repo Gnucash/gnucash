@@ -1304,7 +1304,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccTransSetCurrency (txn, invoice->currency);
 
     /* Entered and Posted at date */
-    xaccTransSetDateEnteredSecs (txn, time(NULL));
+    xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
     if (post_date)
     {
         xaccTransSetDatePostedTS (txn, post_date);

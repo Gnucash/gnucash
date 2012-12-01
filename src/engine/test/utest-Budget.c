@@ -340,7 +340,7 @@ setup (Fixture *fixture, gconstpointer pData)
         Transaction *txn = xaccMallocTransaction (book);
         TxnParms p = t_arr[ind];
         GDate *date = g_date_new ();
-        g_date_set_time_t (date, time (0));
+        gnc_gdate_set_time64 (date, gnc_time (NULL));
         xaccTransBeginEdit (txn);
         if (p.desc)
             xaccTransSetDescription (txn, p.desc);
@@ -1868,7 +1868,7 @@ test_xaccAccountGetProjectedMinimumBalance (Fixture *fixture, gconstpointer pDat
 }
 /* xaccAccountGetBalanceAsOfDate
 gnc_numeric
-xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)// C: 12 in 7 SCM: 4 in 4*/
+xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)// C: 12 in 7 SCM: 4 in 4*/
 static void
 test_xaccAccountGetBalanceAsOfDate (Fixture *fixture, gconstpointer pData)
 {
@@ -1889,7 +1889,8 @@ test_xaccAccountGetBalanceAsOfDate (Fixture *fixture, gconstpointer pData)
     }
     dbal = gnc_numeric_to_double (bal);
     xaccAccountRecomputeBalance (fixture->acct);
-    val = xaccAccountGetBalanceAsOfDate (fixture->acct, (time (0) - offset));
+    val = xaccAccountGetBalanceAsOfDate (fixture->acct,
+					 (gnc_time (NULL) - offset));
     dval = gnc_numeric_to_double (val);
     g_assert_cmpfloat (dval, == , dbal);
 }

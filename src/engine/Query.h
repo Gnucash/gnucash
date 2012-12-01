@@ -156,15 +156,15 @@ void xaccQueryAddDateMatchTS(QofQuery * q,
                              gboolean use_end, Timespec ets,
                              QofQueryOp op);
 void xaccQueryAddDateMatchTT(QofQuery * q,
-                             gboolean use_start, time_t stt,
-                             gboolean use_end, time_t ett,
+                             gboolean use_start, time64 stt,
+                             gboolean use_end, time64 ett,
                              QofQueryOp op);
 void xaccQueryGetDateMatchTS (QofQuery * q,
                               Timespec * sts,
                               Timespec * ets);
 void xaccQueryGetDateMatchTT (QofQuery * q,
-                              time_t * stt,
-                              time_t * ett);
+                              time64 * stt,
+                              time64 * ett);
 
 typedef enum
 {
@@ -189,7 +189,7 @@ void xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
 /*******************************************************************
  *  compatibility interface with old QofQuery API
  *******************************************************************/
-time_t xaccQueryGetEarliestDateFound(QofQuery * q);
-time_t xaccQueryGetLatestDateFound(QofQuery * q);
+time64 xaccQueryGetEarliestDateFound(QofQuery * q);
+time64 xaccQueryGetLatestDateFound(QofQuery * q);
 
 #endif

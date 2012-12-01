@@ -224,13 +224,13 @@ xaccTransWriteLog (Transaction *trans, char flag)
     if (!gen_logs) return;
     if (!trans_log) return;
 
-    timespecFromTime_t(&ts, time(NULL));
+    timespecFromTime64(&ts, gnc_time (NULL));
     gnc_timespec_to_iso8601_buff (ts, dnow);
 
-    timespecFromTime_t(&ts, trans->date_entered.tv_sec);
+    timespecFromTime64(&ts, trans->date_entered.tv_sec);
     gnc_timespec_to_iso8601_buff (ts, dent);
 
-    timespecFromTime_t(&ts, trans->date_posted.tv_sec);
+    timespecFromTime64(&ts, trans->date_posted.tv_sec);
     gnc_timespec_to_iso8601_buff (ts, dpost);
 
     guid_to_string_buff (xaccTransGetGUID(trans), trans_guid_str);
@@ -255,7 +255,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
             acc_guid_str[0] = '\0';
         }
 
-        timespecFromTime_t(&ts, split->date_reconciled.tv_sec);
+        timespecFromTime64(&ts, split->date_reconciled.tv_sec);
         gnc_timespec_to_iso8601_buff (ts, drecn);
 
         guid_to_string_buff (xaccSplitGetGUID(split), split_guid_str);

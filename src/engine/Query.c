@@ -30,9 +30,6 @@
 #include <sys/types.h>
 
 #include <regex.h>
-#ifdef HAVE_SYS_TIME_H
-# include <sys/time.h>
-#endif
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
@@ -476,18 +473,18 @@ xaccQueryAddDateMatch(QofQuery * q,
 void
 xaccQueryAddDateMatchTT(QofQuery * q,
                         gboolean use_start,
-                        time_t stt,
+                        time64 stt,
                         gboolean use_end,
-                        time_t ett,
+                        time64 ett,
                         QofQueryOp op)
 {
     Timespec   sts;
     Timespec   ets;
 
-    sts.tv_sec  = (long long)stt;
+    sts.tv_sec  = stt;
     sts.tv_nsec = 0;
 
-    ets.tv_sec  = (long long)ett;
+    ets.tv_sec  = ett;
     ets.tv_nsec = 0;
 
     /* gcc -O3 will auto-inline this function, avoiding a call overhead */
@@ -498,8 +495,8 @@ xaccQueryAddDateMatchTT(QofQuery * q,
 
 void
 xaccQueryGetDateMatchTT (QofQuery * q,
-                         time_t * stt,
-                         time_t * ett)
+                         time64 * stt,
+                         time64 * ett)
 {
     Timespec   sts;
     Timespec   ets;
@@ -594,26 +591,26 @@ xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
  *  xaccQueryGetEarliestDateFound
  *******************************************************************/
 
-time_t
+time64
 xaccQueryGetEarliestDateFound(QofQuery * q)
 {
     GList * spl;
     Split * sp;
-    time_t earliest;
+    time64 earliest;
 
     if (!q) return 0;
     spl = qof_query_last_run (q);
     if (!spl) return 0;
 
-    /* Safe until 2038 on archs where time_t is 32bit */
+    /* Safe until 2038 on archs where time64 is 32bit */
     sp = spl->data;
-    earliest = (time_t) sp->parent->date_posted.tv_sec;
+    earliest = sp->parent->date_posted.tv_sec;
     for (; spl; spl = spl->next)
     {
         sp = spl->data;
         if (sp->parent->date_posted.tv_sec < earliest)
         {
-            earliest = (time_t) sp->parent->date_posted.tv_sec;
+            earliest = sp->parent->date_posted.tv_sec;
         }
     }
     return earliest;
@@ -623,12 +620,12 @@ xaccQueryGetEarliestDateFound(QofQuery * q)
  *  xaccQueryGetLatestDateFound
  *******************************************************************/
 
-time_t
+time64
 xaccQueryGetLatestDateFound(QofQuery * q)
 {
     Split  * sp;
     GList  * spl;
-    time_t latest = 0;
+    time64 latest = 0;
 
     if (!q) return 0;
     spl = qof_query_last_run (q);
@@ -639,7 +636,7 @@ xaccQueryGetLatestDateFound(QofQuery * q)
         sp = spl->data;
         if (sp->parent->date_posted.tv_sec > latest)
         {
-            latest = (time_t) sp->parent->date_posted.tv_sec;
+            latest = sp->parent->date_posted.tv_sec;
         }
     }
     return latest;

@@ -94,7 +94,7 @@ gnc_budget_init(GncBudget* budget)
     priv->description = CACHE_INSERT("");
 
     priv->num_periods = 12;
-    g_date_set_time_t(&date, time(NULL));
+    gnc_gdate_set_today (&date);
     g_date_subtract_days(&date, g_date_get_day(&date) - 1);
     recurrenceSet(&priv->recurrence, 1, PERIOD_MONTH, &date, WEEKEND_ADJ_NONE);
 }
@@ -571,8 +571,9 @@ Timespec
 gnc_budget_get_period_start_date(const GncBudget *budget, guint period_num)
 {
     Timespec ts;
-    timespecFromTime_t(
-        &ts,  recurrenceGetPeriodTime(&GET_PRIVATE(budget)->recurrence, period_num, FALSE));
+    timespecFromTime64(
+        &ts, recurrenceGetPeriodTime(&GET_PRIVATE(budget)->recurrence,
+				     period_num, FALSE));
     return ts;
 }
 
@@ -580,7 +581,7 @@ Timespec
 gnc_budget_get_period_end_date(const GncBudget *budget, guint period_num)
 {
     Timespec ts;
-    timespecFromTime_t(
+    timespecFromTime64(
         &ts,  recurrenceGetPeriodTime(&GET_PRIVATE(budget)->recurrence, period_num, TRUE));
     return ts;
 }

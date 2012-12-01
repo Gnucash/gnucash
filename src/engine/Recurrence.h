@@ -135,7 +135,7 @@ void recurrenceNthInstance(const Recurrence *r, guint n, GDate *date);
 
 /* Get a time coresponding to the beginning (or end if 'end' is true)
    of the nth instance of the recurrence. Also zero-based. */
-time_t recurrenceGetPeriodTime(const Recurrence *r, guint n, gboolean end);
+time64 recurrenceGetPeriodTime(const Recurrence *r, guint n, gboolean end);
 
 /**
  * @return the amount that an Account's value changed between the beginning

@@ -1576,7 +1576,7 @@ xaccSplitSetReconcile (Split *split, char recn)
 }
 
 void
-xaccSplitSetDateReconciledSecs (Split *split, time_t secs)
+xaccSplitSetDateReconciledSecs (Split *split, time64 secs)
 {
     if (!split) return;
     xaccTransBeginEdit (split->parent);
