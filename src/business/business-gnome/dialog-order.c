@@ -308,7 +308,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
     message = _("Do you really want to close the order?");
     label = _("Close Date");
 
-    timespecFromTime_t (&ts, time(NULL));
+    timespecFromTime64 (&ts, gnc_time (NULL));
     if (!gnc_dialog_date_close_parented (ow->dialog, message, label, TRUE, &ts))
         return;
 
@@ -472,7 +472,8 @@ gnc_order_update_window (OrderWindow *ow)
         ts = gncOrderGetDateOpened (order);
         if (timespec_equal (&ts, &ts_zero))
         {
-            gnc_date_edit_set_time (GNC_DATE_EDIT (ow->opened_date), time(NULL));
+            gnc_date_edit_set_time (GNC_DATE_EDIT (ow->opened_date),
+				    gnc_time (NULL));
         }
         else
         {
@@ -486,7 +487,8 @@ gnc_order_update_window (OrderWindow *ow)
         ts = gncOrderGetDateClosed (order);
         if (timespec_equal (&ts, &ts_zero))
         {
-            gnc_date_edit_set_time (GNC_DATE_EDIT (ow->closed_date), time(NULL));
+            gnc_date_edit_set_time (GNC_DATE_EDIT (ow->closed_date),
+				    gnc_time (NULL));
             hide_cd = TRUE;
         }
         else

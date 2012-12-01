@@ -579,7 +579,7 @@ static char * get_date_help (VirtualLocation virt_loc, gpointer user_data)
     char string[1024];
     struct tm *tm;
     Timespec ts;
-    time_t tt;
+    time64 tt;
 
     cell = gnc_table_get_cell (ledger->table, virt_loc);
     if (!cell)
@@ -590,7 +590,7 @@ static char * get_date_help (VirtualLocation virt_loc, gpointer user_data)
 
     gnc_date_cell_get_date ((DateCell *) cell, &ts);
     tt = ts.tv_sec;
-    tm = localtime (&tt);
+    tm = gnc_localtime (&tt);
     qof_strftime (string, sizeof(string), "%A %d %B %Y", tm);
 
     return g_strdup (string);

@@ -32,6 +32,7 @@
 
 #include "qof.h"
 
+#include <gnc-gdate-utils.h>
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
@@ -849,7 +850,7 @@ gnc_invoice_window_postCB (GtkWidget *unused_widget, gpointer data)
                     gnc_price_begin_edit (convprice);
                     gnc_price_set_commodity (convprice, account_currency);
                     gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
-                    date.tv_sec = time (NULL);
+                    date.tv_sec = gnc_time (NULL);
                     date.tv_nsec = 0;
                     gnc_price_set_time (convprice, date);
                     gnc_price_set_source (convprice, "user:invoice-post");
@@ -1687,7 +1688,8 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         ts = gncInvoiceGetDateOpened (invoice);
         if (timespec_equal (&ts, &ts_zero))
         {
-            gnc_date_edit_set_time (GNC_DATE_EDIT (iw->opened_date), time(NULL));
+            gnc_date_edit_set_time (GNC_DATE_EDIT (iw->opened_date),
+				    gnc_time (NULL));
         }
         else
         {
@@ -2190,12 +2192,12 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     }
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "page_date_opened_hbox"));
-    iw->opened_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
+    iw->opened_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show(iw->opened_date);
     gtk_box_pack_start (GTK_BOX(hbox), iw->opened_date, TRUE, TRUE, 0);
 
     iw->posted_date_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "date_posted_hbox"));
-    iw->posted_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
+    iw->posted_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show(iw->posted_date);
     gtk_box_pack_start (GTK_BOX(iw->posted_date_hbox), iw->posted_date,
                         TRUE, TRUE, 0);
@@ -2445,7 +2447,7 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
     iw->proj_job_box = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_proj_job_hbox"));
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_date_opened_hbox"));
-    iw->opened_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
+    iw->opened_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gtk_widget_show(iw->opened_date);
     gtk_box_pack_start (GTK_BOX(hbox), iw->opened_date, TRUE, TRUE, 0);
 
@@ -2697,7 +2699,7 @@ multi_duplicate_invoice_cb (GList *invoice_list, gpointer user_data)
         gboolean dialog_ok;
 
         // Default date: Today
-        g_date_set_time_t(&dup_user_data.date, time(NULL));
+        gnc_gdate_set_time64(&dup_user_data.date, gnc_time (NULL));
         dialog_ok = gnc_dup_date_dialog (NULL, _("Date of duplicated entries"), &dup_user_data.date);
         if (!dialog_ok)
         {
@@ -3046,7 +3048,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     QofIdType type = GNC_INVOICE_MODULE_NAME;
     Query *q;
     QofQueryPredData* pred_data;
-    time_t end_date;
+    time64 end_date;
     GList *res;
     gchar *message;
     DialogQueryView *dialog;
@@ -3096,7 +3098,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     pred_data = qof_query_int32_predicate (QOF_COMPARE_NEQ, GNC_INVOICE_CUST_CREDIT_NOTE);
     qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
 
-    end_date = time(NULL);
+    end_date = gnc_time (NULL);
     if (days_in_advance < 0)
         days_in_advance = 0;
     end_date += days_in_advance * 60 * 60 * 24;

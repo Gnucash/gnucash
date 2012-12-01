@@ -89,7 +89,7 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
     if (entry == blank_entry)
     {
         Timespec ts;
-        ts.tv_sec = time(NULL);
+        ts.tv_sec = gnc_time (NULL);
         ts.tv_nsec = 0;
         gncEntrySetDateEntered (blank_entry, ts);
 

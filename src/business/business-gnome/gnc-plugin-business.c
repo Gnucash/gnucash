@@ -987,7 +987,7 @@ gnc_plugin_business_cmd_test_init_data (GtkAction *action,
     gncOwnerInitCustomer(owner, customer);
 
     // Create the Invoice
-    timespecFromTime_t(&now, time(NULL));
+    timespecFromTime64(&now, time(NULL));
     gncInvoiceSetID(invoice, "000012");
     gncInvoiceSetOwner(invoice, owner);
     gncInvoiceSetDateOpened(invoice, now);
