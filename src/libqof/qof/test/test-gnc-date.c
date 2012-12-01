@@ -35,14 +35,34 @@
 #  include "strptime.h"
 #endif
 
+#ifdef G_OS_WIN32
+#  define MSWIN TRUE
+#else
+#  define MSWIN FALSE
+#endif
+
 static const gchar *suitename = "/qof/gnc-date";
 void test_suite_gnc_date ( void );
+
+typedef struct
+{
+    GDateTime *(*new_local)(gint, gint, gint, gint, gint, gdouble);
+    GDateTime *(*adjust_for_dst)(GDateTime *, GTimeZone *);
+    GDateTime *(*new_from_unix_local)(gint64);
+    GDateTime *(*new_from_timeval_local)(GTimeVal *);
+    GDateTime *(*new_now_local)(void);
+    GDateTime *(*to_local)(GDateTime *);
+} _GncDateTime;
+
+static _GncDateTime gncdt;
+extern void _gnc_date_time_init (_GncDateTime *);
 
 /* gnc_date_dateformat_to_string
 const char *gnc_default_strftime_date_format =
 const char*
 gnc_date_dateformat_to_string(QofDateFormat format)// C: 1  Local: 0:0:0
 */
+
 static void
 test_gnc_date_dateformat_to_string (void)
 {
@@ -132,7 +152,19 @@ test_gnc_setlocale (int category, gchar *locale)
 {
     gchar *suffixes[] = {"utf8", "UTF-8"};
     guint i;
+/* Msys defines a different set of locales */
+#ifdef G_OS_WIN32
+    if (g_strcmp0 (locale, "en_US") == 0
+	&& setlocale (category, "English_US"))
+	return;
+    if (g_strcmp0 (locale, "en_GB") == 0
+	&& setlocale (category, "English_UK"))
+	return;
+    if (g_strcmp0 (locale, "fr_FR") == 0
+	&& setlocale (category, "French_France"))
+	return;
 
+#endif
     if (setlocale (category, locale) != NULL)
         return;
 
@@ -341,21 +373,19 @@ test_timespec_abs (void)
 Timespec
 timespecCanonicalDayTime(Timespec t)// C: 12 in 5 SCM: 19 in 10 Local: 0:0:0
 */
-
 static Timespec
 compute_noon_of_day (Timespec *ts)
 {
-    GDateTime *g = g_date_time_new_from_unix_local (ts->tv_sec);
+    GDateTime *g = gncdt.new_from_unix_local (ts->tv_sec);
     gint yr = g_date_time_get_year (g);
     gint mo = g_date_time_get_month (g);
     gint da = g_date_time_get_day_of_month (g);
     Timespec nt = {0, 0 };
 
     g_date_time_unref (g);
-    g = g_date_time_new_local (yr, mo, da, 12, 0, 0.0);
+    g = gncdt.new_local (yr, mo, da, 12, 0, 0.0);
     nt.tv_sec = g_date_time_to_unix (g);
     g_date_time_unref (g);
-
     return nt;
 }
 
@@ -390,7 +420,9 @@ test_timespecCanonicalDayTime (void)
     if (sizeof (time_t) > 4)
 	g_assert_cmpint (nc.tv_sec, ==, rc.tv_sec + 3600);
     else
-	g_assert_cmpint (nc.tv_sec, <, 0);
+/* We'd like to just test that rc.tv_sec < 0, but mingw sets rc to the
+ * value of rb. */
+	g_assert_cmpint (nc.tv_sec, !=, rc.tv_sec);
  }
 /* gnc_date_my_last_mday
 int gnc_date_my_last_mday (int month, int year)// C: 1  Local: 1:0:0
@@ -579,7 +611,7 @@ test_qof_print_date_dmy_buff (void)
     g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
 					      tm.tm_mon + 1, tm.tm_year + 1900),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (sizeof (time_t) > 4 || MSWIN)
 	g_assert_cmpstr (buff, ==, t_buff);
     else
 	g_assert_cmpstr (buff, !=, t_buff);
@@ -605,7 +637,7 @@ test_qof_print_date_dmy_buff (void)
     g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
 					      tm.tm_mon + 1, tm.tm_year + 1900),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (sizeof (time_t) > 4 || MSWIN)
 	g_assert_cmpstr (buff, ==, t_buff);
     else
 	g_assert_cmpstr (buff, !=, t_buff);
@@ -632,7 +664,7 @@ test_qof_print_date_dmy_buff (void)
     g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
 					      tm.tm_mon + 1, tm.tm_year + 1900),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (sizeof (time_t) > 4 || MSWIN)
 	g_assert_cmpstr (buff, ==, t_buff);
     else
 	g_assert_cmpstr (buff, !=, t_buff);
@@ -669,9 +701,9 @@ test_qof_print_date_buff (void)
 {
     gchar buff[MAX_DATE_LENGTH], t_buff[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
-    GDateTime *gd1 = g_date_time_new_local (1974, 11, 23, 0, 0, 0.0);
-    GDateTime *gd2 = g_date_time_new_local (1961, 2, 2, 0, 0, 0.0);
-    GDateTime *gd3 = g_date_time_new_local (2045, 6, 16, 0, 0, 0.0);
+    GDateTime *gd1 = gncdt.new_local (1974, 11, 23, 12, 0, 0.0);
+    GDateTime *gd2 = gncdt.new_local (1961, 2, 2, 12, 0, 0.0);
+    GDateTime *gd3 = gncdt.new_local (2045, 6, 16, 12, 0, 0.0);
 
     gint64 tm1 = g_date_time_to_unix (gd1);
     gint64 tm2 = g_date_time_to_unix (gd2);
@@ -685,14 +717,22 @@ test_qof_print_date_buff (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
 		     ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02/02/1961");
+    /* MinGW's localtime_r returns NULL if time is outside of the
+     * range 31DEC1969 - 19JAN2038 */
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else
+        g_assert_cmpstr (buff, ==, "02/02/1961");
+
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (buff, ==, "16/06/2045");
     else
-	g_assert_cmpstr (buff, ==, "10/05/1909");
+	g_assert_cmpstr (buff, ==, "11/05/1909");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -702,15 +742,20 @@ test_qof_print_date_buff (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
 		     ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02.02.1961");
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else
+        g_assert_cmpstr (buff, ==, "02.02.1961");
+
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (buff, ==, "16.06.2045");
     else
-	g_assert_cmpstr (buff, ==, "10.05.1909");
-
+	g_assert_cmpstr (buff, ==, "11.05.1909");
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -720,15 +765,20 @@ test_qof_print_date_buff (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
 		     ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "02/02/1961");
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else
+        g_assert_cmpstr (buff, ==, "02/02/1961");
+
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (buff, ==, "06/16/2045");
     else
-	g_assert_cmpstr (buff, ==, "05/10/1909");
-
+	g_assert_cmpstr (buff, ==, "05/11/1909");
 
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -738,15 +788,20 @@ test_qof_print_date_buff (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
 		     ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, "1961-02-02");
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else
+        g_assert_cmpstr (buff, ==, "1961-02-02");
+
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (buff, ==, "2045-06-16");
     else
-	g_assert_cmpstr (buff, ==, "1909-05-10");
-
+	g_assert_cmpstr (buff, ==, "1909-05-11");
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     test_gnc_setlocale (LC_TIME, "en_US");
@@ -757,11 +812,17 @@ test_qof_print_date_buff (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
 		     ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, g_date_time_format (gd2, GNC_D_FMT));
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else
+        g_assert_cmpstr (buff, ==, g_date_time_format (gd2, GNC_D_FMT));
+
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (buff, ==, g_date_time_format (gd3, GNC_D_FMT));
     else
         test_assert_localized_timestring (tm3, buff)
@@ -774,11 +835,16 @@ test_qof_print_date_buff (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
 		     ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, g_date_time_format (gd2, GNC_D_FMT));
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else
+	g_assert_cmpstr (buff, ==, g_date_time_format (gd2, GNC_D_FMT));
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (buff, ==, g_date_time_format (gd3, GNC_D_FMT));
     else
         test_assert_localized_timestring (tm3, buff)
@@ -791,11 +857,16 @@ test_qof_print_date_buff (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm2),
 		     ==, strlen (buff));
-    g_assert_cmpstr (buff, ==, g_date_time_format (gd2, GNC_D_FMT));
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else
+	g_assert_cmpstr (buff, ==, g_date_time_format (gd2, GNC_D_FMT));
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), (time_t)tm3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (buff, ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (buff, ==, g_date_time_format (gd3, GNC_D_FMT));
     else
         test_assert_localized_timestring (tm3, buff)
@@ -893,7 +964,7 @@ test_qof_print_gdate (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (sizeof (time_t) > 4 || MSWIN)
     {
 	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
 	g_assert_cmpstr (buff, ==, t_buff);
@@ -921,7 +992,7 @@ test_qof_print_gdate (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (sizeof (time_t) > 4 || MSWIN)
     {
 	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
 	g_assert_cmpstr (buff, ==, t_buff);
@@ -949,7 +1020,7 @@ test_qof_print_gdate (void)
     memset ((gpointer)buff, 0, sizeof (buff));
     g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
 		     ==, strlen (buff));
-    if (sizeof (time_t) > 4)
+    if (sizeof (time_t) > 4 || MSWIN)
     {
 	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
 	g_assert_cmpstr (buff, ==, t_buff);
@@ -973,14 +1044,24 @@ test_qof_print_gdate (void)
 #define test_assert_qof_print_date(time, datestr)  \
     {                                              \
         gchar *buf = qof_print_date (time);        \
-        g_assert_cmpstr (buf, ==, datestr);        \
+	g_assert_cmpstr (buf, ==, datestr);	   \
+        g_free (buf);                              \
+    }
+
+#define test_assert_qof_print_date_outside_range(time, datestr)  \
+    {                                              \
+        gchar *buf = qof_print_date (time);        \
+	if (MSWIN)                                 \
+            g_assert_cmpstr (buf, ==, "");         \
+	else                                       \
+	    g_assert_cmpstr (buf, ==, datestr);	   \
         g_free (buf);                              \
     }
 
 #define test_assert_localized_qof_print_date(time)           \
     {                                                        \
         gchar *buf = qof_print_date (time);                  \
-        test_assert_localized_timestring (time, buf);   \
+        test_assert_localized_timestring (time, buf);        \
         g_free (buf);                                        \
     }
 
@@ -993,9 +1074,9 @@ test_qof_print_date (void)
 {
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     gchar *buff;
-    GDateTime *gd1 = g_date_time_new_local (1974, 11, 23, 0, 0, 0.0);
-    GDateTime *gd2 = g_date_time_new_local (1961, 2, 2, 0, 0, 0.0);
-    GDateTime *gd3 = g_date_time_new_local (2045, 6, 16, 0, 0, 0.0);
+    GDateTime *gd1 = gncdt.new_local (1974, 11, 23, 12, 0, 0.0);
+    GDateTime *gd2 = gncdt.new_local (1961, 2, 2, 12, 0, 0.0);
+    GDateTime *gd3 = gncdt.new_local (2045, 6, 16, 12, 0, 0.0);
 
     gint64 tm1 = g_date_time_to_unix (gd1);
     gint64 tm2 = g_date_time_to_unix (gd2);
@@ -1003,56 +1084,56 @@ test_qof_print_date (void)
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     test_assert_qof_print_date ((time_t)tm1, "23/11/1974");
-    test_assert_qof_print_date ((time_t)tm2, "02/02/1961");
-    if (sizeof (time_t) > 4)
+    test_assert_qof_print_date_outside_range ((time_t)tm2, "02/02/1961");
+    if (sizeof (time_t) > 4 || MSWIN)
     {
-	test_assert_qof_print_date ((time_t)tm3, "16/06/2045");
+	test_assert_qof_print_date_outside_range ((time_t)tm3, "16/06/2045");
     }
     else
-	test_assert_qof_print_date ((time_t)tm3, "10/05/1909");
+	test_assert_qof_print_date ((time_t)tm3, "11/05/1909");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
     test_assert_qof_print_date ((time_t)tm1, "23.11.1974");
-    test_assert_qof_print_date ((time_t)tm2, "02.02.1961");
-    if (sizeof (time_t) > 4)
+    test_assert_qof_print_date_outside_range ((time_t)tm2, "02.02.1961");
+    if (sizeof (time_t) > 4 || MSWIN)
     {
-	test_assert_qof_print_date ((time_t)tm3, "16.06.2045");
+	test_assert_qof_print_date_outside_range ((time_t)tm3, "16.06.2045");
     }
     else
-	test_assert_qof_print_date ((time_t)tm3, "10.05.1909");
+	test_assert_qof_print_date ((time_t)tm3, "11.05.1909");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
     test_assert_qof_print_date ((time_t)tm1, "11/23/1974");
-    test_assert_qof_print_date ((time_t)tm2, "02/02/1961");
-    if (sizeof (time_t) > 4)
+    test_assert_qof_print_date_outside_range ((time_t)tm2, "02/02/1961");
+    if (sizeof (time_t) > 4 || MSWIN)
     {
-	test_assert_qof_print_date ((time_t)tm3, "06/16/2045");
+	test_assert_qof_print_date_outside_range ((time_t)tm3, "06/16/2045");
     }
     else
-	test_assert_qof_print_date ((time_t)tm3, "05/10/1909");
+	test_assert_qof_print_date ((time_t)tm3, "05/11/1909");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
     test_assert_qof_print_date ((time_t)tm1, "1974-11-23");
-    test_assert_qof_print_date ((time_t)tm2, "1961-02-02");
-    if (sizeof (time_t) > 4)
+    test_assert_qof_print_date_outside_range ((time_t)tm2, "1961-02-02");
+    if (sizeof (time_t) > 4 || MSWIN)
     {
-	test_assert_qof_print_date ((time_t)tm3, "2045-06-16");
+	test_assert_qof_print_date_outside_range ((time_t)tm3, "2045-06-16");
     }
     else
-	test_assert_qof_print_date ((time_t)tm3, "1909-05-10");
+	test_assert_qof_print_date ((time_t)tm3, "1909-05-11");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     test_gnc_setlocale (LC_TIME, "en_US");
     test_assert_qof_print_date ((time_t)tm1,
                                 g_date_time_format (gd1, GNC_D_FMT));
-    test_assert_qof_print_date ((time_t)tm2,
+    test_assert_qof_print_date_outside_range ((time_t)tm2,
                                 g_date_time_format (gd2, GNC_D_FMT));
-    if (sizeof (time_t) > 4)
+    if (sizeof (time_t) > 4 || MSWIN)
     {
-	test_assert_qof_print_date ((time_t)tm3,
+	test_assert_qof_print_date_outside_range ((time_t)tm3,
                                     g_date_time_format (gd3, GNC_D_FMT));
     }
     else
@@ -1061,11 +1142,11 @@ test_qof_print_date (void)
     test_gnc_setlocale (LC_TIME, "en_GB");
     test_assert_qof_print_date ((time_t)tm1,
                                 g_date_time_format (gd1, GNC_D_FMT));
-    test_assert_qof_print_date ((time_t)tm2,
+    test_assert_qof_print_date_outside_range ((time_t)tm2,
                                 g_date_time_format (gd2, GNC_D_FMT));
-    if (sizeof (time_t) > 4)
+    if (sizeof (time_t) > 4 || MSWIN)
     {
-	test_assert_qof_print_date ((time_t)tm3,
+	test_assert_qof_print_date_outside_range ((time_t)tm3,
                                     g_date_time_format (gd3, GNC_D_FMT));
     }
     else
@@ -1074,11 +1155,11 @@ test_qof_print_date (void)
     test_gnc_setlocale (LC_TIME, "fr_FR");
     test_assert_qof_print_date ((time_t)tm1,
                                 g_date_time_format (gd1, GNC_D_FMT));
-    test_assert_qof_print_date ((time_t)tm2,
+    test_assert_qof_print_date_outside_range ((time_t)tm2,
                                 g_date_time_format (gd2, GNC_D_FMT));
-    if (sizeof (time_t) > 4)
+    if (sizeof (time_t) > 4 || MSWIN)
     {
-	test_assert_qof_print_date ((time_t)tm3,
+	test_assert_qof_print_date_outside_range ((time_t)tm3,
                                     g_date_time_format (gd3, GNC_D_FMT));
     }
     else
@@ -1109,46 +1190,68 @@ test_gnc_print_date (void)
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     g_assert_cmpstr (gnc_print_date (tm1), ==, "23/11/1974");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm2), ==, "");
+    else
+	g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm3), ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (gnc_print_date (tm3), ==, "16/06/2045");
     else
 	g_assert_cmpstr (gnc_print_date (tm3), ==, "10/05/1909");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
     g_assert_cmpstr (gnc_print_date (tm1), ==, "23.11.1974");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "02.02.1961");
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm2), ==, "");
+    else
+	g_assert_cmpstr (gnc_print_date (tm2), ==, "02.02.1961");
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm3), ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (gnc_print_date (tm3), ==, "16.06.2045");
     else
 	g_assert_cmpstr (gnc_print_date (tm3), ==, "10.05.1909");
 
-
     qof_date_format_set (QOF_DATE_FORMAT_US);
     g_assert_cmpstr (gnc_print_date (tm1), ==, "11/23/1974");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm2), ==, "");
+    else
+	g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm3), ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (gnc_print_date (tm3), ==, "06/16/2045");
     else
 	g_assert_cmpstr (gnc_print_date (tm3), ==, "05/10/1909");
 
-
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
     g_assert_cmpstr (gnc_print_date (tm1), ==, "1974-11-23");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "1961-02-02");
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm2), ==, "");
+    else
+	g_assert_cmpstr (gnc_print_date (tm2), ==, "1961-02-02");
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm3), ==, "");
+    else if (sizeof (time_t) > 4)
 	g_assert_cmpstr (gnc_print_date (tm3), ==, "2045-06-16");
     else
 	g_assert_cmpstr (gnc_print_date (tm3), ==, "1909-05-10");
-
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     test_gnc_setlocale (LC_TIME, "en_US");
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
     g_assert_cmpstr (gnc_print_date (tm1), ==, t_buff);
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
-    g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm2), ==, "");
+    else
+	g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm3), ==, "");
+    else if (sizeof (time_t) > 4)
     {
 	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
 	g_assert_cmpstr (gnc_print_date (tm3), ==, t_buff);
@@ -1160,8 +1263,13 @@ test_gnc_print_date (void)
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
     g_assert_cmpstr (gnc_print_date (tm1), ==, t_buff);
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
-    g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm2), ==, "");
+    else
+	g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm3), ==, "");
+    else if (sizeof (time_t) > 4)
     {
 	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
 	g_assert_cmpstr (gnc_print_date (tm3), ==, t_buff);
@@ -1173,8 +1281,13 @@ test_gnc_print_date (void)
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
     g_assert_cmpstr (gnc_print_date (tm1), ==, t_buff);
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
-    g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
-    if (sizeof (time_t) > 4)
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm2), ==, "");
+    else
+	g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
+    if (MSWIN)
+        g_assert_cmpstr (gnc_print_date (tm3), ==, "");
+    else if (sizeof (time_t) > 4)
     {
 	g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
 	g_assert_cmpstr (gnc_print_date (tm3), ==, t_buff);
@@ -1213,7 +1326,7 @@ test_qof_scan_date (void)
 {
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     int day = 0, mo = 0, yr = 0;
-    GDateTime *gdt = g_date_time_new_now_local ();
+    GDateTime *gdt = gncdt.new_now_local ();
     gint year = g_date_time_get_year (gdt);
     gint month = g_date_time_get_month (gdt);
     struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -1387,7 +1500,14 @@ xaccDateUtilGetStampNow (void)// C: 2 in 2  Local: 0:0:0
 static void
 test_xaccDateUtilGetStampNow (void)
 {
+/* xaccDateUtilGetStampNow uses gdate, so in MinGW it gets UTC for
+ * local because of the broken GTimeZone
+ */
+#ifdef G_OS_WIN32
+    GDateTime *gdt = g_date_time_new_now_utc ();
+#else
     GDateTime *gdt = g_date_time_new_now_local ();
+#endif
     gchar *timestr = xaccDateUtilGetStampNow ();
     struct tm tm;
 
@@ -1452,8 +1572,13 @@ test_gnc_iso8601_to_timespec_gmt (void)
 
     t = gnc_iso8601_to_timespec_gmt ("1989-03-27 13:43:27.345678");
     g_assert_cmpint (t.tv_sec, ==, g_date_time_to_unix (gdt1));
+    /* MinGW has some precision issues in the last microsecond digit */
+#ifdef G_OS_WIN32
+    g_assert_cmpint (t.tv_nsec - 2000, <=, get_nanoseconds (gdt1));
+    g_assert_cmpint (t.tv_nsec + 2000, >=, get_nanoseconds (gdt1));
+#else
     g_assert_cmpint (t.tv_nsec, ==, get_nanoseconds (gdt1));
-
+#endif
     t = gnc_iso8601_to_timespec_gmt ("2020-11-7 06:21:19 -05");
     g_assert_cmpint (t.tv_sec, ==, g_date_time_to_unix (gdt2));
     g_assert_cmpint (t.tv_nsec, ==, get_nanoseconds (gdt2));
@@ -1520,12 +1645,16 @@ static gchar*
 format_timestring (GDateTime *gdt)
 {
     gchar *fmt = "%Y-%m-%d %H:%M";
-    GDateTime *ngdt = g_date_time_to_local (gdt);
+    GDateTime *ngdt = gncdt.to_local (gdt);
     gchar *date_base = g_date_time_format (ngdt, fmt);
+#ifdef G_OS_WIN32
+    gchar *tz = g_date_time_format (ngdt, "%Z");
+#else
     gchar *tz = g_date_time_format (ngdt, "%z");
+#endif
     gchar *retval = g_strdup_printf ("%s:%02d.%06d %s", date_base,
-				     g_date_time_get_second (ngdt),
-				     g_date_time_get_microsecond (ngdt), tz);
+			      g_date_time_get_second (ngdt),
+			      g_date_time_get_microsecond (ngdt), tz);
     g_date_time_unref (ngdt);
     g_free (date_base);
     g_free (tz);
@@ -1593,7 +1722,10 @@ test_gnc_timespec_to_iso8601_buff (void)
     t = g_date_time_to_timespec (gdt4);
     end = gnc_timespec_to_iso8601_buff (t, buff);
     time_str = format_timestring (gdt4);
-    g_assert_cmpstr (buff, ==, time_str);
+    if (!MSWIN) /* MSWin can't handle this, produces a ridiculous time string */
+	g_assert_cmpstr (buff, ==, time_str);
+    else
+	g_assert_cmpstr (buff, !=, time_str);
     g_free (time_str);
 
     t = g_date_time_to_timespec (gdt5);
@@ -1646,7 +1778,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt0);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = g_date_time_to_local (gdt0);
+    gdt_local = gncdt.to_local (gdt0);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     g_assert_cmpint (r_day, ==, day);
@@ -1655,7 +1787,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt1);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = g_date_time_to_local (gdt1);
+    gdt_local = gncdt.to_local (gdt1);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     g_assert_cmpint (r_day, ==, day);
@@ -1664,7 +1796,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt2);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = g_date_time_to_local (gdt2);
+    gdt_local = gncdt.to_local (gdt2);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     g_assert_cmpint (r_day, ==, day);
@@ -1673,7 +1805,7 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt3);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = g_date_time_to_local (gdt3);
+    gdt_local = gncdt.to_local (gdt3);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
     g_assert_cmpint (r_day, ==, day);
@@ -1682,16 +1814,25 @@ test_gnc_timespec2dmy (void)
 
     t = g_date_time_to_timespec (gdt4);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = g_date_time_to_local (gdt4);
+    gdt_local = gncdt.to_local (gdt4);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
-    g_assert_cmpint (r_day, ==, day);
-    g_assert_cmpint (r_mo, ==, mo);
-    g_assert_cmpint (r_yr, ==, yr);
-
+/* Out of range for MSWin */
+    if (MSWIN)
+    {
+	g_assert_cmpint (r_day, !=, day);
+	g_assert_cmpint (r_mo, !=, mo);
+	g_assert_cmpint (r_yr, !=, yr);
+    }
+    else
+    {
+	g_assert_cmpint (r_day, ==, day);
+	g_assert_cmpint (r_mo, ==, mo);
+	g_assert_cmpint (r_yr, ==, yr);
+    }
     t = g_date_time_to_timespec (gdt5);
     gnc_timespec2dmy (t, &r_day, &r_mo, &r_yr);
-    gdt_local = g_date_time_to_local (gdt5);
+    gdt_local = gncdt.to_local (gdt5);
     g_date_time_get_ymd (gdt_local, &yr, &mo, &day);
     g_date_time_unref (gdt_local);
 /* 2038 Bug */
@@ -1732,10 +1873,10 @@ gnc_dmy2timespec (int day, int month, int year)// C: 8 in 5  Local: 1:0:0
 static void
 test_gnc_dmy2timespec (void)
 {
-    GDateTime *gdt1 = g_date_time_new_local (1999, 7, 21, 0, 0, 0);
-    GDateTime *gdt2 = g_date_time_new_local (1918, 3, 31, 0, 0, 0);
-    GDateTime *gdt3 = g_date_time_new_local (1918, 4, 1, 0, 0, 0);
-    GDateTime *gdt4 = g_date_time_new_local (2057, 11, 20, 0, 0, 0);
+    GDateTime *gdt1 = gncdt.new_local (1999, 7, 21, 0, 0, 0);
+    GDateTime *gdt2 = gncdt.new_local (1918, 3, 31, 0, 0, 0);
+    GDateTime *gdt3 = gncdt.new_local (1918, 4, 1, 0, 0, 0);
+    GDateTime *gdt4 = gncdt.new_local (2057, 11, 20, 0, 0, 0);
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -1753,8 +1894,12 @@ test_gnc_dmy2timespec (void)
 	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
     else
 /* Fails before 1 April 1918 */
-#ifdef GDK_QUARTZ
-	g_assert_cmpint (r_t.tv_sec, !=, t.tv_sec);
+#if defined GDK_QUARTZ
+ /* Darwin mktime gets DST wrong before 1APR1918 */
+	g_assert_cmpint (r_t.tv_sec - 3600, ==, t.tv_sec);
+#elif defined G_OS_WIN32
+ /* MinGW mktime returns -1 for dates before 1JAN1970 */
+	g_assert_cmpint (r_t.tv_sec, ==, -1);
 #else
 	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
 #endif
@@ -1763,13 +1908,19 @@ test_gnc_dmy2timespec (void)
     t = g_date_time_to_timespec (gdt3);
     g_date_time_get_ymd (gdt3, &yr, &mon, &day);
     r_t = gnc_dmy2timespec (day, mon, yr);
-    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    if (MSWIN)
+	g_assert_cmpint (r_t.tv_sec, !=, t.tv_sec);
+    else
+	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
     g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
 
     t = g_date_time_to_timespec (gdt4);
     g_date_time_get_ymd (gdt4, &yr, &mon, &day);
     r_t = gnc_dmy2timespec (day, mon, yr);
-    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    if (MSWIN)
+	g_assert_cmpint (r_t.tv_sec, !=, t.tv_sec);
+    else
+	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
     g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
 
     g_date_time_unref (gdt1);
@@ -1788,10 +1939,10 @@ gnc_dmy2timespec_end (int day, int month, int year)// C: 1  Local: 0:0:0
 static void
 test_gnc_dmy2timespec_end (void)
 {
-    GDateTime *gdt1 = g_date_time_new_local (1999, 7, 21,23,59, 59);
-    GDateTime *gdt2 = g_date_time_new_local (1918, 3, 30, 23, 59, 59);
-    GDateTime *gdt3 = g_date_time_new_local (1918, 3, 31, 23, 59, 59);
-    GDateTime *gdt4 = g_date_time_new_local (2057, 11, 20, 23, 59, 59);
+    GDateTime *gdt1 = gncdt.new_local (1999, 7, 21,23,59, 59);
+    GDateTime *gdt2 = gncdt.new_local (1918, 3, 30, 23, 59, 59);
+    GDateTime *gdt3 = gncdt.new_local (1918, 3, 31, 23, 59, 59);
+    GDateTime *gdt4 = gncdt.new_local (2057, 11, 20, 23, 59, 59);
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -1809,8 +1960,10 @@ test_gnc_dmy2timespec_end (void)
 	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
     else
 /* Fails before 31 March 1918 */
-#ifdef GDK_QUARTZ
-	g_assert_cmpint (r_t.tv_sec, !=, t.tv_sec);
+#if defined GDK_QUARTZ
+	g_assert_cmpint (r_t.tv_sec - 3600, ==, t.tv_sec);
+#elif defined G_OS_WIN32
+	g_assert_cmpint (r_t.tv_sec, ==, -1);
 #else
 	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
 #endif
@@ -1819,13 +1972,19 @@ test_gnc_dmy2timespec_end (void)
     t = g_date_time_to_timespec (gdt3);
     g_date_time_get_ymd (gdt3, &yr, &mon, &day);
     r_t = gnc_dmy2timespec_end (day, mon, yr);
-    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    if (MSWIN)
+	g_assert_cmpint (r_t.tv_sec, !=, t.tv_sec);
+    else
+	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
     g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
 
     t = g_date_time_to_timespec (gdt4);
     g_date_time_get_ymd (gdt4, &yr, &mon, &day);
     r_t = gnc_dmy2timespec_end (day, mon, yr);
-    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    if (MSWIN)
+	g_assert_cmpint (r_t.tv_sec, !=, t.tv_sec);
+    else
+	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
     g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
 
     g_date_time_unref (gdt1);
@@ -1890,7 +2049,7 @@ test_timespec_to_gdate (void)
 
     t = g_date_time_to_timespec (gdt0);
     date1 = timespec_to_gdate (t);
-    gdt_local = g_date_time_to_local (gdt0);
+    gdt_local = gncdt.to_local (gdt0);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
@@ -1898,7 +2057,7 @@ test_timespec_to_gdate (void)
 
     t = g_date_time_to_timespec (gdt1);
     date1 = timespec_to_gdate (t);
-    gdt_local = g_date_time_to_local (gdt1);
+    gdt_local = gncdt.to_local (gdt1);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
@@ -1906,7 +2065,7 @@ test_timespec_to_gdate (void)
 
     t = g_date_time_to_timespec (gdt2);
     date1 = timespec_to_gdate (t);
-    gdt_local = g_date_time_to_local (gdt2);
+    gdt_local = gncdt.to_local (gdt2);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
@@ -1914,33 +2073,39 @@ test_timespec_to_gdate (void)
 
     t = g_date_time_to_timespec (gdt3);
     date1 = timespec_to_gdate (t);
-    gdt_local = g_date_time_to_local (gdt3);
+    gdt_local = gncdt.to_local (gdt3);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
     g_date_time_unref (gdt_local);
     g_date_set_dmy (&date2, day, mon, yr);
     g_assert_cmpint (g_date_get_julian (&date1), ==, g_date_get_julian (&date2));
+    /* So this is interesting. g_date_set_time_t uses localtime and
+     * therefore won't work on WIN32 for dates before 1970 or after 2037.
+     */
+    if (!MSWIN)
+    {
+	t = g_date_time_to_timespec (gdt4);
+	date1 = timespec_to_gdate (t);
+	gdt_local = gncdt.to_local (gdt4);
+	g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
+	g_date_time_unref (gdt_local);
+	g_date_set_dmy (&date2, day, mon, yr);
+	g_assert_cmpint (g_date_get_julian (&date1), ==, g_date_get_julian (&date2));
 
-    t = g_date_time_to_timespec (gdt4);
-    date1 = timespec_to_gdate (t);
-    gdt_local = g_date_time_to_local (gdt4);
-    g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    g_date_time_unref (gdt_local);
-    g_date_set_dmy (&date2, day, mon, yr);
-    g_assert_cmpint (g_date_get_julian (&date1), ==, g_date_get_julian (&date2));
-
-    t = g_date_time_to_timespec (gdt5);
-    date1 = timespec_to_gdate (t);
-    gdt_local = g_date_time_to_local (gdt5);
-    g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    g_date_time_unref (gdt_local);
-    g_date_set_dmy (&date2, day, mon, yr);
-    if (sizeof (time_t) > 4)
-	g_assert_cmpint (g_date_get_julian (&date1),
-			 ==, g_date_get_julian (&date2));
-    else
+	t = g_date_time_to_timespec (gdt5);
+	date1 = timespec_to_gdate (t);
+	gdt_local = gncdt.to_local (gdt5);
+	g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
+	g_date_time_unref (gdt_local);
+	g_date_set_dmy (&date2, day, mon, yr);
+	if (sizeof (time_t) > 4)
+	    g_assert_cmpint (g_date_get_julian (&date1),
+			     ==, g_date_get_julian (&date2));
+	else
 /* 2038 bug */
-	g_assert_cmpint (g_date_get_julian (&date1),
-			 !=, g_date_get_julian (&date2));
+	    g_assert_cmpint (g_date_get_julian (&date1),
+			     !=, g_date_get_julian (&date2));
+    }
+
     g_date_time_unref (gdt0);
     g_date_time_unref (gdt1);
     g_date_time_unref (gdt2);
@@ -1957,10 +2122,10 @@ Timespec gdate_to_timespec (GDate d)// C: 7 in 6  Local: 0:0:0
 static void
 test_gdate_to_timespec (void)
 {
-    GDateTime *gdt1 = g_date_time_new_local (1999, 7, 21, 0, 0, 0);
-    GDateTime *gdt2 = g_date_time_new_local (1918, 3, 31, 0, 0, 0);
-    GDateTime *gdt3 = g_date_time_new_local (1918, 4, 1, 0, 0, 0);
-    GDateTime *gdt4 = g_date_time_new_local (2057, 11, 20, 0, 0, 0);
+    GDateTime *gdt1 = gncdt.new_local (1999, 7, 21, 0, 0, 0);
+    GDateTime *gdt2 = gncdt.new_local (1918, 3, 31, 0, 0, 0);
+    GDateTime *gdt3 = gncdt.new_local (1918, 4, 1, 0, 0, 0);
+    GDateTime *gdt4 = gncdt.new_local (2057, 11, 20, 0, 0, 0);
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -1983,8 +2148,10 @@ test_gdate_to_timespec (void)
 	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
     else
 /* Fails before 1 April 1918 */
-#ifdef GDK_QUARTZ
-	g_assert_cmpint (r_t.tv_sec, !=, t.tv_sec);
+#if defined GDK_QUARTZ
+	g_assert_cmpint (r_t.tv_sec - 3600, ==, t.tv_sec);
+#elif defined G_OS_WIN32
+	g_assert_cmpint (r_t.tv_sec, ==, -1);
 #else
 	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
 #endif
@@ -1994,14 +2161,20 @@ test_gdate_to_timespec (void)
     g_date_time_get_ymd (gdt3, &yr, &mon, &day);
     g_date_set_dmy (&gd, day, mon, yr);
     r_t = gdate_to_timespec (gd);
-    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    if (MSWIN)
+	g_assert_cmpint (r_t.tv_sec, !=, t.tv_sec);
+    else
+	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
     g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
 
     t = g_date_time_to_timespec (gdt4);
     g_date_time_get_ymd (gdt4, &yr, &mon, &day);
     g_date_set_dmy (&gd, day, mon, yr);
     r_t = gdate_to_timespec (gd);
-    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    if (MSWIN)
+	g_assert_cmpint (r_t.tv_sec, !=, t.tv_sec);
+    else
+	g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
     g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
 
     g_date_time_unref (gdt1);
@@ -2046,50 +2219,57 @@ test_gnc_timet_get_day_start (void)
     gint day, mon, yr;
     gint64 time, t_time, r_time;
 
-    gdt_local = g_date_time_to_local (gdt0);
+    gdt_local = gncdt.to_local (gdt0);
     time = g_date_time_to_unix (gdt0);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_timet_get_day_start ((time_t)time);
-    g_assert_cmpint (t_time, ==, r_time);
+/* This will work in the half of the world where localtime is later than UTC */
+    if (MSWIN && r_time < 0)
+	g_assert_cmpint (t_time, !=, r_time);
+    else
+	g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt1);
+    gdt_local = gncdt.to_local (gdt1);
     time = g_date_time_to_unix (gdt1);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_timet_get_day_start ((time_t)time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt2);
+    gdt_local = gncdt.to_local (gdt2);
     time = g_date_time_to_unix (gdt2);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_timet_get_day_start ((time_t)time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt3);
+    gdt_local = gncdt.to_local (gdt3);
     time = g_date_time_to_unix (gdt3);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_timet_get_day_start ((time_t)time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt4);
+    gdt_local = gncdt.to_local (gdt4);
     time = g_date_time_to_unix (gdt4);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_timet_get_day_start ((time_t)time);
-    g_assert_cmpint (t_time, ==, r_time);
+    if (MSWIN)
+	g_assert_cmpint (t_time, !=, r_time);
+    else
+	g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt5);
+    gdt_local = gncdt.to_local (gdt5);
     time = g_date_time_to_unix (gdt5);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_begin = g_date_time_new_local (yr, mon, day, 0, 0, 0);
+    gdt_day_begin = gncdt.new_local (yr, mon, day, 0, 0, 0);
     t_time = g_date_time_to_unix (gdt_day_begin);
     r_time = gnc_timet_get_day_start ((time_t)time);
     if (sizeof (time_t) > 4)
@@ -2128,50 +2308,56 @@ test_gnc_timet_get_day_end (void)
     gint day, mon, yr;
     gint64 time, t_time, r_time;
 
-    gdt_local = g_date_time_to_local (gdt0);
+    gdt_local = gncdt.to_local (gdt0);
     time = g_date_time_to_unix (gdt0);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_timet_get_day_end ((time_t)time);
-    g_assert_cmpint (t_time, ==, r_time);
+    if (MSWIN && r_time < 0)
+	g_assert_cmpint (t_time, !=, r_time);
+    else
+	g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt1);
+    gdt_local = gncdt.to_local (gdt1);
     time = g_date_time_to_unix (gdt1);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_timet_get_day_end ((time_t)time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt2);
+    gdt_local = gncdt.to_local (gdt2);
     time = g_date_time_to_unix (gdt2);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_timet_get_day_end ((time_t)time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt3);
+    gdt_local = gncdt.to_local (gdt3);
     time = g_date_time_to_unix (gdt3);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_timet_get_day_end ((time_t)time);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt4);
+    gdt_local = gncdt.to_local (gdt4);
     time = g_date_time_to_unix (gdt4);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_timet_get_day_end ((time_t)time);
-    g_assert_cmpint (t_time, ==, r_time);
+    if (MSWIN)
+	g_assert_cmpint (t_time, !=, r_time);
+    else
+	g_assert_cmpint (t_time, ==, r_time);
 
-    gdt_local = g_date_time_to_local (gdt5);
+    gdt_local = gncdt.to_local (gdt5);
     time = g_date_time_to_unix (gdt5);
     g_date_time_get_ymd (gdt_local, &yr, &mon, &day);
-    gdt_day_end = g_date_time_new_local (yr, mon, day, 23, 59, 59);
+    gdt_day_end = gncdt.new_local (yr, mon, day, 23, 59, 59);
     t_time = g_date_time_to_unix (gdt_day_end);
     r_time = gnc_timet_get_day_end ((time_t)time);
 /* 2038 Bug */
@@ -2253,6 +2439,7 @@ timespec_get_type( void )// Local: 0:0:0
 void
 test_suite_gnc_date (void)
 {
+     _gnc_date_time_init (&gncdt);
 
     GNC_TEST_ADD_FUNC (suitename, "gnc date dateformat to string", test_gnc_date_dateformat_to_string);
     GNC_TEST_ADD_FUNC (suitename, "gnc date string to dateformat", test_gnc_date_string_to_dateformat);

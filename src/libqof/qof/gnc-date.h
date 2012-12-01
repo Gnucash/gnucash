@@ -479,6 +479,7 @@ static inline
 void gnc_tm_set_day_start (struct tm *tm)
 {
     /* First second of the day */
+    g_return_if_fail (tm != NULL);
     tm->tm_hour = 0;
     tm->tm_min = 0;
     tm->tm_sec = 0;
@@ -493,6 +494,7 @@ static inline
 void gnc_tm_set_day_middle (struct tm *tm)
 {
     /* First second of the day */
+    g_return_if_fail (tm != NULL);
     tm->tm_hour = 12;
     tm->tm_min = 0;
     tm->tm_sec = 0;
@@ -507,6 +509,7 @@ static inline
 void gnc_tm_set_day_end (struct tm *tm)
 {
     /* Last second of the day */
+    g_return_if_fail (tm != NULL);
     tm->tm_hour = 23;
     tm->tm_min = 59;
     tm->tm_sec = 59;

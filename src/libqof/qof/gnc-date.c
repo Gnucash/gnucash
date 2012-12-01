@@ -54,6 +54,10 @@
 #endif
 #include "platform.h"
 
+#ifdef G_OS_WIN32
+#  include <windows.h>
+#endif
+
 #ifdef HAVE_LANGINFO_D_FMT
 #  define GNC_D_FMT (nl_langinfo (D_FMT))
 #  define GNC_D_T_FMT (nl_langinfo (D_T_FMT))
@@ -89,8 +93,159 @@ static int dateCompletionBackMonths = 6;
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
-/********************************************************************\
-\********************************************************************/
+/***********************************************************\
+ * GLib's GTimeZone doesn't work with MSWindows, which in turn breaks
+ * g_date_time_new_local, g_date_time_new_from_unix_local,
+ * g_date_time_new_from_timeval_local, and gnc_g_date_time_to_local. The
+ * following functions provide a work-around.
+ */
+static GTimeZone*
+gnc_g_time_zone_new_local (void)
+{
+#ifndef G_OS_WIN32
+    return g_time_zone_new_local();
+#else
+    TIME_ZONE_INFORMATION tzinfo;
+    gint64 dst = GetTimeZoneInformation (&tzinfo);
+    gint bias = tzinfo.Bias + tzinfo.StandardBias;
+    gint hours = -bias / 60; // 60 minutes per hour
+    gint minutes = (bias < 0 ? -bias : bias) % 60;
+    gchar *tzstr = g_strdup_printf ("%+03d%02d", hours, minutes);
+    GTimeZone *tz = g_time_zone_new(tzstr);
+    g_free (tzstr);
+    return tz;
+#endif
+}
+
+static GTimeZone*
+gnc_g_time_zone_adjust_for_dst (GTimeZone* tz, GDateTime *date)
+{
+#ifdef G_OS_WIN32
+    TIME_ZONE_INFORMATION tzinfo;
+    gint64 dst = GetTimeZoneInformation (&tzinfo);
+    guint year = g_date_time_get_year (date);
+    guint month = g_date_time_get_month (date);
+    guint day = g_date_time_get_day_of_month (date);
+    gint bias, hours, minutes;
+    gchar *tzstr;
+    if (dst > 0 && tzinfo.StandardDate.wMonth > 0
+	&& ((month > tzinfo.DaylightDate.wMonth
+	     && month < tzinfo.StandardDate.wMonth)
+	    || (month == tzinfo.DaylightDate.wMonth
+		&& day >= tzinfo.DaylightDate.wDay)
+	    || (month == tzinfo.StandardDate.wMonth
+		&& day < tzinfo.StandardDate.wDay)))
+    {
+	g_time_zone_unref (tz);
+	bias = tzinfo.Bias + tzinfo.DaylightBias;
+	hours = -bias / 60; // 60 minutes per hour
+	minutes = (bias < 0 ? -bias : bias) % 60;
+	tzstr = g_strdup_printf ("%+03d%02d", hours, minutes);
+	tz = g_time_zone_new(tzstr);
+    }
+#endif
+    return tz;
+}
+
+static GDateTime*
+gnc_g_date_time_new_local (gint year, gint month, gint day, gint hour, gint minute, gdouble seconds)
+{ 
+#ifndef G_OS_WIN32
+    return g_date_time_new_local (year, month, day, hour, minute, seconds);
+#else
+    GTimeZone *tz = gnc_g_time_zone_new_local();
+    GDateTime *gdt = g_date_time_new (tz, year, month, day,
+				      hour, minute, seconds);
+    tz = gnc_g_time_zone_adjust_for_dst (tz, gdt);
+    g_date_time_unref (gdt);
+    gdt =  g_date_time_new (tz, year, month, day, hour, minute, seconds);
+    g_time_zone_unref (tz);
+    return gdt;
+#endif
+}
+
+static GDateTime*
+gnc_g_date_time_adjust_for_dst (GDateTime *gdt, GTimeZone *tz)
+{
+    GDateTime *ngdt = g_date_time_to_timezone (gdt, tz);
+    g_date_time_unref (gdt);
+    tz = gnc_g_time_zone_adjust_for_dst (tz, ngdt);
+    gdt = g_date_time_to_timezone (ngdt, tz);
+    g_date_time_unref (ngdt);
+    g_time_zone_unref (tz);
+    return gdt;
+}
+
+static GDateTime*
+gnc_g_date_time_new_from_unix_local (gint64 time)
+{
+#ifndef G_OS_WIN32
+    return g_date_time_new_from_unix_local (time);
+#else
+    GTimeZone *tz = gnc_g_time_zone_new_local ();
+    GDateTime *gdt = g_date_time_new_from_unix_utc (time);
+    return gnc_g_date_time_adjust_for_dst (gdt, tz);
+#endif
+}
+
+static GDateTime*
+gnc_g_date_time_new_from_timeval_local (const GTimeVal* tv)
+{
+#ifndef G_OS_WIN32
+    return g_date_time_new_from_timeval_local (tv);
+#else
+    GTimeZone *tz = gnc_g_time_zone_new_local ();
+    GDateTime *gdt = g_date_time_new_from_timeval_utc (tv);
+    return gnc_g_date_time_adjust_for_dst (gdt, tz);
+#endif
+}
+
+static GDateTime*
+gnc_g_date_time_new_now_local (void)
+{
+#ifndef G_OS_WIN32
+    return g_date_time_new_now_local ();
+#else
+    GTimeZone *tz = gnc_g_time_zone_new_local ();
+    GDateTime *gdt = g_date_time_new_now_local ();
+    return gnc_g_date_time_adjust_for_dst (gdt, tz);
+#endif
+}
+
+static GDateTime*
+gnc_g_date_time_to_local (GDateTime* gdt)
+{
+#ifndef G_OS_WIN32
+    return g_date_time_to_local (gdt);
+#else
+    GTimeZone *tz = gnc_g_time_zone_new_local ();
+    return gnc_g_date_time_adjust_for_dst (g_date_time_to_utc (gdt), tz);
+#endif
+}
+
+typedef struct
+{
+    GDateTime *(*new_local)(gint, gint, gint, gint, gint, gdouble);
+    GDateTime *(*adjust_for_dst)(GDateTime *, GTimeZone *);
+    GDateTime *(*new_from_unix_local)(gint64);
+    GDateTime *(*new_from_timeval_local)(const GTimeVal *);
+    GDateTime *(*new_now_local)(void);
+    GDateTime *(*to_local)(GDateTime *);
+} _GncDateTime;
+
+void _gnc_date_time_init(_GncDateTime*);
+void
+_gnc_date_time_init (_GncDateTime *gncdt)
+{
+    gncdt->new_local = gnc_g_date_time_new_local;
+    gncdt->adjust_for_dst = gnc_g_date_time_adjust_for_dst;
+    gncdt->new_from_unix_local = gnc_g_date_time_new_from_unix_local;
+    gncdt->new_from_timeval_local = gnc_g_date_time_new_from_timeval_local;
+    gncdt->new_now_local = gnc_g_date_time_new_now_local;
+    gncdt->to_local = gnc_g_date_time_to_local;
+}
+
+/********************************************************************/
 
 const char*
 gnc_date_dateformat_to_string(QofDateFormat format)
@@ -515,8 +670,8 @@ qof_print_date_buff (char * buff, size_t len, time_t t)
     struct tm theTime;
 
     if (!buff) return 0 ;
-
-    localtime_r(&t, &theTime);
+    if (!localtime_r(&t, &theTime))
+	return 0;
 
     return qof_print_date_dmy_buff (buff, len,
                                     theTime.tm_mday,
@@ -537,6 +692,7 @@ char *
 qof_print_date (time_t t)
 {
     char buff[MAX_DATE_LENGTH];
+    memset (buff, 0, sizeof (buff));
     qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
     return g_strdup (buff);
 }
@@ -547,6 +703,7 @@ gnc_print_date (Timespec ts)
     static char buff[MAX_DATE_LENGTH];
     time_t t;
 
+    memset (buff, 0, sizeof (buff));
     t = ts.tv_sec + (time_t)(ts.tv_nsec / 1000000000.0);
 
     qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
@@ -1433,7 +1590,8 @@ static void
 gnc_tm_get_day_start (struct tm *tm, time_t time_val)
 {
     /* Get the equivalent time structure */
-    tm = localtime_r(&time_val, tm);
+    if (!localtime_r(&time_val, tm))
+	return;
     gnc_tm_set_day_start(tm);
 }
 
@@ -1441,7 +1599,8 @@ static void
 gnc_tm_get_day_end (struct tm *tm, time_t time_val)
 {
     /* Get the equivalent time structure */
-    tm = localtime_r(&time_val, tm);
+    if (!localtime_r(&time_val, tm))
+	return;
     gnc_tm_set_day_end(tm);
 }
 
