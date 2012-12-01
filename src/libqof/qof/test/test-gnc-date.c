@@ -1898,10 +1898,6 @@ test_gnc_dmy2timespec (void)
     g_date_time_unref (gdt3);
     g_date_time_unref (gdt4);
 }
-// Not Used
-/* gnc_dmy2gdate
-GDate gnc_dmy2gdate (gint day, gint month, gint year)// Local: 0:0:0
-*/
 /* gnc_dmy2timespec_end
 Timespec
 gnc_dmy2timespec_end (int day, int month, int year)// C: 1  Local: 0:0:0

@@ -311,9 +311,6 @@ GDate timespec_to_gdate (Timespec ts);
 /** Turns a GDate into a Timespec, returning the first second of the day  */
 Timespec gdate_to_timespec (GDate d);
 
-/** Convert a day, month, and year to a GDate. Similar to g_date_new_dmy() but
- * returns by-value and not by pointer. */
-GDate gnc_dmy2gdate (gint day, gint month, gint year);
 
 /** Convert a day, month, and year to a Timespec, returning the first second of the day */
 Timespec gnc_dmy2timespec (gint day, gint month, gint year);
