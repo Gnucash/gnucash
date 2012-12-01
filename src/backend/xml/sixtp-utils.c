@@ -412,7 +412,7 @@ string_to_timespec_secs(const gchar *str, Timespec *ts)
 
     struct tm parsed_time;
     const gchar *strpos;
-    time_t parsed_secs;
+    time64 parsed_secs;
     long int gmtoff;
 
     if (!str || !ts) return FALSE;
@@ -457,8 +457,6 @@ string_to_timespec_secs(const gchar *str, Timespec *ts)
     }
 
     parsed_secs = gnc_timegm(&parsed_time);
-
-    if (parsed_secs == (time_t) - 1) return(FALSE);
 
     parsed_secs -= gmtoff;
 

@@ -1900,19 +1900,19 @@ typedef void (*TimespecSetterFunc)( const gpointer, Timespec );
 gchar*
 gnc_sql_convert_timespec_to_string( const GncSqlBackend* be, Timespec ts )
 {
-    time_t time;
+    time64 time;
     struct tm* tm;
     gint year;
     gchar* datebuf;
 
-    time = timespecToTime_t( ts );
-    tm = gmtime( &time );
+    time = timespecToTime64( ts );
+    tm = gnc_gmtime( &time );
 
-    if ( tm->tm_year < 60 ) year = tm->tm_year + 2000;
-    else year = tm->tm_year + 1900;
+    year = tm->tm_year + 1900;
 
     datebuf = g_strdup_printf( be->timespec_format,
                                year, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec );
+    gnc_tm_free (tm);
     return datebuf;
 }
 

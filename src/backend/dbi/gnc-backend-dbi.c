@@ -2009,8 +2009,7 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
     gushort type;
     guint attrs;
     GValue* value;
-    time_t time;
-    struct tm tm_struct;
+    time64 time;
 
     type = dbi_result_get_field_type( dbi_row->result, col_name );
     attrs = dbi_result_get_field_attribs( dbi_row->result, col_name );
@@ -2056,20 +2055,21 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
 	   creates a string that GDate can't parse. */
 	if (time >= 0)
 	  {
-            (void)gmtime_r( &time, &tm_struct );
-            (void)g_value_init( value, G_TYPE_STRING );
-            g_value_take_string( value,
-                                 g_strdup_printf( "%d%02d%02d%02d%02d%02d",
-                                                  1900 + tm_struct.tm_year,
-						  tm_struct.tm_mon + 1,
-						  tm_struct.tm_mday,
-                                                  tm_struct.tm_hour,
-						  tm_struct.tm_min,
-						  tm_struct.tm_sec ) );
+            struct tm *tm_struct = gnc_gmtime (&time);
+            (void)g_value_init (value, G_TYPE_STRING);
+            g_value_take_string (value,
+                                 g_strdup_printf ("%d%02d%02d%02d%02d%02d",
+                                                  1900 + tm_struct->tm_year,
+						  tm_struct->tm_mon + 1,
+						  tm_struct->tm_mday,
+                                                  tm_struct->tm_hour,
+						  tm_struct->tm_min,
+						  tm_struct->tm_sec));
+	    gnc_tm_free (tm_struct);
 	  }
 	else
 	  g_value_take_string (value, "19691231235959");
-        
+
         break;
     default:
         PERR( "Field %s: unknown DBI_TYPE: %d\n", col_name, type );

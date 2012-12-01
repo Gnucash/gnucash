@@ -857,7 +857,7 @@ gnc_xml_be_remove_old_files(FileBackend *be)
     const gchar *dent;
     GDir *dir;
     struct stat lockstatbuf, statbuf;
-    time_t now;
+    time64 now;
 
     if (g_stat (be->lockfile, &lockstatbuf) != 0)
         return;
@@ -866,7 +866,7 @@ gnc_xml_be_remove_old_files(FileBackend *be)
     if (!dir)
         return;
 
-    now = time(NULL);
+    now = gnc_time(NULL);
     while ((dent = g_dir_read_name(dir)) != NULL)
     {
         gchar *name;
