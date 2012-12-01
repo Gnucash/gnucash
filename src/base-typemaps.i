@@ -5,7 +5,7 @@
 
 /* Not sure why SWIG doesn't figure this out. */
 typedef int gint;
-typedef int time_t;
+typedef gint64 time64;
 typedef unsigned int guint;
 typedef double gdouble;
 typedef float gfloat;

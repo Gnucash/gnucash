@@ -99,8 +99,8 @@ gnc_numeric gnc_convert_to_euro(const gnc_commodity * currency,
 gnc_numeric gnc_convert_from_euro(const gnc_commodity * currency,
         gnc_numeric value);
 
-time_t gnc_accounting_period_fiscal_start(void);
-time_t gnc_accounting_period_fiscal_end(void);
+time64 gnc_accounting_period_fiscal_start(void);
+time64 gnc_accounting_period_fiscal_end(void);
 
 SCM gnc_make_kvp_options(QofIdType id_type);
 void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
@@ -129,7 +129,7 @@ Process *gnc_spawn_process_async(GList *argl, const gboolean search_path);
 gint gnc_process_get_fd(const Process *proc, const guint std_fd);
 void gnc_detach_process(Process *proc, const gboolean kill_it);
 
-time_t gnc_parse_time_to_timet(const gchar *s, const gchar *format);
+time64 gnc_parse_time_to_time64(const gchar *s, const gchar *format);
 
 %typemap(out) GHashTable * {
   SCM table = scm_c_make_hash_table (g_hash_table_size($1) + 17);
