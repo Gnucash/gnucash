@@ -1441,47 +1441,28 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 char *
 gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 {
-    int len, tz_hour, tz_min;
-    gint64 secs;
-    char cyn;
-    gint64 tmp;
-    struct tm parsed;
+    gchar *fmt1 = "%Y-%m-%d %H:%M", *fmt2 = "%s:%02d.%06d %s";
+    GDateTime *gdt;
+    gchar *time_base, *tz;
 
     g_return_val_if_fail (buff != NULL, NULL);
+    gdt = gnc_g_date_time_new_from_timespec_local (ts);
+    g_return_val_if_fail (gdt != NULL, NULL);
+    time_base = g_date_time_format (gdt, fmt1);
+#ifdef G_OS_WIN32
+    tz = g_date_time_format (gdt, "%Z");
+#else
+    tz = g_date_time_format (gdt, "%z");
+#endif
+    snprintf (buff, MAX_DATE_LENGTH, fmt2, time_base,
+	      g_date_time_get_second (gdt), g_date_time_get_microsecond (gdt),
+	      tz);
 
-    tmp = ts.tv_sec;
-    gnc_localtime_r(&tmp, &parsed);
+    g_free (time_base);
+    g_free (tz);
+    g_date_time_unref (gdt);
+    return buff + strlen (buff);
 
-    secs = gnc_timezone (&parsed);
-
-    /* We also have to print the sign by hand, to work around a bug
-     * in the glibc printf (where %+02d fails to zero-pad).
-     */
-    cyn = '-';
-    if (0 > secs)
-    {
-        cyn = '+';
-        secs = -secs;
-    }
-
-    tz_hour = secs / 3600;
-    tz_min = (secs % 3600) / 60;
-
-    len = sprintf (buff, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
-                   parsed.tm_year + 1900,
-                   parsed.tm_mon + 1,
-                   parsed.tm_mday,
-                   parsed.tm_hour,
-                   parsed.tm_min,
-                   parsed.tm_sec,
-                   ts.tv_nsec / 1000,
-                   cyn,
-                   tz_hour,
-                   tz_min);
-
-    /* Return pointer to end of string. */
-    buff += len;
-    return buff;
 }
 
 void
