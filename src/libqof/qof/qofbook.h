@@ -81,7 +81,7 @@ struct _QofBook
 
     /* The time when the book was first dirtied.  This is a secondary
      * indicator. It should only be used when session_saved is FALSE. */
-    time_t dirty_time;
+    time64 dirty_time;
 
     /* This callback function is called any time the book dirty flag
      * changes state. Both clean->dirty and dirty->clean transitions
@@ -296,7 +296,7 @@ void qof_book_mark_session_saved(QofBook *book);
 void qof_book_mark_session_dirty(QofBook *book);
 
 /** Retrieve the earliest modification time on the book. */
-time_t qof_book_get_session_dirty_time(const QofBook *book);
+time64 qof_book_get_session_dirty_time(const QofBook *book);
 
 /** Set the function to call when a book transitions from clean to
  *    dirty, or vice versa.

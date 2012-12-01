@@ -213,7 +213,7 @@ test_book_session_not_saved( Fixture *fixture, gconstpointer pData )
 static void
 test_book_mark_session_saved( Fixture *fixture, gconstpointer pData )
 {
-    time_t dirty_time, clean_time;
+    time64 dirty_time, clean_time;
 
     qof_book_mark_session_dirty( fixture-> book );
     g_assert( qof_book_session_not_saved( fixture->book ) );
@@ -423,7 +423,7 @@ static void
 test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
 {
     QofBook *_empty = NULL;
-    time_t before, after;
+    time64 before, after;
     guint param = (guint) g_test_rand_int();
 
     g_test_message( "Testing when book is NULL" );
@@ -434,9 +434,9 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), == , 0);
     g_assert( fixture->book->dirty_cb == NULL );
     g_assert( qof_book_session_not_saved( fixture->book ) == FALSE );
-    before = time( NULL );
+    before = gnc_time (NULL);
     qof_book_mark_session_dirty( fixture->book );
-    after = time( NULL );
+    after = gnc_time (NULL);
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), >= , before);
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), <= , after);
     g_assert( qof_book_session_not_saved( fixture->book ) == TRUE );
@@ -451,9 +451,9 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), == , 0);
     g_assert( qof_book_session_not_saved( fixture->book ) == FALSE );
     /* run FUT */
-    before = time( NULL );
+    before = gnc_time (NULL);
     qof_book_mark_session_dirty( fixture->book );
-    after = time( NULL );
+    after = gnc_time (NULL);
     /* test output */
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), >= , before);
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), <= , after);
@@ -472,16 +472,16 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
 static void
 test_book_get_session_dirty_time( Fixture *fixture, gconstpointer pData )
 {
-    time_t before, after;
+    time64 before, after;
 
     g_test_message( "Testing time on saved book = 0" );
     g_assert( qof_book_session_not_saved( fixture->book ) == FALSE );
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), == , 0);
 
     g_test_message( "Testing time on dirty book is correct" );
-    before = time( NULL );
+    before = gnc_time (NULL);
     qof_book_mark_session_dirty( fixture->book );
-    after = time( NULL );
+    after = gnc_time (NULL);
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), >= , before);
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), <= , after);
 

@@ -34,7 +34,7 @@
 
 static KvpFrame *
 gnc_kvp_array_va (KvpFrame *kvp_root, const char * path,
-                  time_t secs, const char * first_name, va_list ap)
+                  time64 secs, const char * first_name, va_list ap)
 {
     KvpFrame *cwd;
     Timespec ts;
@@ -72,7 +72,7 @@ gnc_kvp_array_va (KvpFrame *kvp_root, const char * path,
 
 KvpFrame *
 gnc_kvp_bag_add (KvpFrame *pwd, const char * path,
-                 time_t secs, const char *first_name, ...)
+                 time64 secs, const char *first_name, ...)
 {
     KvpFrame *cwd;
     va_list ap;

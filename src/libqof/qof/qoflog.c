@@ -103,7 +103,7 @@ log4glib_handler(const gchar     *log_domain,
 
     {
         char timestamp_buf[10];
-        time_t now;
+        time64 now;
         struct tm now_tm;
         const char *format_24hour =
 #ifdef G_OS_WIN32
@@ -113,8 +113,8 @@ log4glib_handler(const gchar     *log_domain,
 #endif
             ;
         gchar *level_str = qof_log_level_to_string(log_level);
-        now = time(NULL);
-        localtime_r(&now, &now_tm);
+        now = gnc_time (NULL);
+        gnc_localtime_r (&now, &now_tm);
         qof_strftime(timestamp_buf, 9, format_24hour, &now_tm);
 
         fprintf(fout, "* %s %*s <%s> %*s%s%s",

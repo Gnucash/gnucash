@@ -1568,7 +1568,7 @@ gnc_timezone (const struct tm *tm)
 
 
 void
-timespecFromTime_t( Timespec *ts, time64 t )
+timespecFromTime64 ( Timespec *ts, time64 t )
 {
     ts->tv_sec = t;
     ts->tv_nsec = 0;
@@ -1584,7 +1584,7 @@ timespec_now()
 }
 
 time64
-timespecToTime_t (Timespec ts)
+timespecToTime64 (Timespec ts)
 {
     return ts.tv_sec;
 }
@@ -1646,7 +1646,7 @@ gnc_tm_get_day_end (struct tm *tm, time64 time_val)
 }
 
 time64
-gnc_timet_get_day_start (time64 time_val)
+gnc_time64_get_day_start (time64 time_val)
 {
     struct tm tm;
     time64 new_time;
@@ -1657,7 +1657,7 @@ gnc_timet_get_day_start (time64 time_val)
 }
 
 time64
-gnc_timet_get_day_end (time64 time_val)
+gnc_time64_get_day_end (time64 time_val)
 {
     struct tm tm;
     time64 new_time;
@@ -1683,7 +1683,7 @@ gnc_tm_get_today_end (struct tm *tm)
 }
 
 time64
-gnc_timet_get_today_start (void)
+gnc_time64_get_today_start (void)
 {
     struct tm tm;
 
@@ -1692,7 +1692,7 @@ gnc_timet_get_today_start (void)
 }
 
 time64
-gnc_timet_get_today_end (void)
+gnc_time64_get_today_end (void)
 {
     struct tm tm;
 

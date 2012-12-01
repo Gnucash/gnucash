@@ -323,10 +323,10 @@ Timespec timespecCanonicalDayTime(Timespec t);
 Timespec timespec_now (void);
 
 /** Turns a time64 into a Timespec */
-void timespecFromTime_t( Timespec *ts, time64 t );
+void timespecFromTime64 (Timespec *ts, time64 t );
 
 /** Turns a Timespec into a time64 */
-time64 timespecToTime_t (Timespec ts);
+time64 timespecToTime64 (Timespec ts);
 
 /** Returns a newly allocated date of the current clock time, taken from
  * time(2). The caller must g_date_free() the object afterwards. */
@@ -612,13 +612,13 @@ void gnc_tm_set_day_end (struct tm *tm)
     tm->tm_isdst = -1;
 }
 
-/** The gnc_timet_get_day_start() routine will take the given time in
+/** The gnc_time64_get_day_start() routine will take the given time in
  *  seconds and adjust it to the last second of that day. */
-time64 gnc_timet_get_day_start(time64 time_val);
+time64 gnc_time64_get_day_start(time64 time_val);
 
-/** The gnc_timet_get_day_end() routine will take the given time in
+/** The gnc_time64_get_day_end() routine will take the given time in
  *  seconds and adjust it to the last second of that day. */
-time64 gnc_timet_get_day_end(time64 time_val);
+time64 gnc_time64_get_day_end(time64 time_val);
 
 /** Get the numerical last date of the month. (28, 29, 30, 31) */
 int gnc_date_get_last_mday (int month, int year);
@@ -637,13 +637,13 @@ void   gnc_tm_get_today_start(struct tm *tm);
  *  tm and fills it in with the last second of the today. */
 void   gnc_tm_get_today_end(struct tm *tm);
 
-/** The gnc_timet_get_today_start() routine returns a time64 value
+/** The gnc_time64_get_today_start() routine returns a time64 value
  *  corresponding to the first second of today. */
-time64 gnc_timet_get_today_start(void);
+time64 gnc_time64_get_today_start(void);
 
-/** The gnc_timet_get_today_end() routine returns a time64 value
+/** The gnc_time64_get_today_end() routine returns a time64 value
  *  corresponding to the last second of today. */
-time64 gnc_timet_get_today_end(void);
+time64 gnc_time64_get_today_end(void);
 
 /** \brief Make a timestamp in YYYYMMDDHHMMSS format.
  *  @return A pointer to the generated string.

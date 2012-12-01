@@ -184,13 +184,13 @@ void qof_book_mark_session_dirty (QofBook *book)
     {
         /* Set the session dirty upfront, because the callback will check. */
         book->session_dirty = TRUE;
-        book->dirty_time = time(NULL);
+        book->dirty_time = gnc_time (NULL);
         if (book->dirty_cb)
             book->dirty_cb(book, TRUE, book->dirty_data);
     }
 }
 
-time_t
+time64
 qof_book_get_session_dirty_time (const QofBook *book)
 {
     return book->dirty_time;

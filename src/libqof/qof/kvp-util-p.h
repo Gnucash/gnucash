@@ -68,7 +68,7 @@
  *  NULL if an error occured.
  */
 
-KvpFrame * gnc_kvp_bag_add (KvpFrame *kvp_root, const char *path, time_t secs,
+KvpFrame * gnc_kvp_bag_add (KvpFrame *kvp_root, const char *path, time64 secs,
                             const char *first_name, ...);
 
 
