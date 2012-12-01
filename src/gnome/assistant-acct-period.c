@@ -73,7 +73,7 @@ typedef struct
     GtkWidget  * apply_label;
     GtkWidget  * summary;
 
-    time_t earliest;
+    time64 earliest;
     char * earliest_str;
     GDate closing_date;
     GDate prev_closing_date;
@@ -102,13 +102,13 @@ void     ap_assistant_close             (GtkAssistant *gtkassistant, gpointer us
  * a query and sorting by date. Since the truncated sort returns
  * only the *last* search results, sort in decreasing order.
  */
-static time_t
+static time64
 get_earliest_in_book (QofBook *book)
 {
     QofQuery *q;
     GSList *p1, *p2;
     GList *res;
-    time_t earliest;
+    time64 earliest;
 
     q = qof_query_create_for(GNC_ID_SPLIT);
     qof_query_set_max_results(q, 1);
@@ -133,7 +133,7 @@ get_earliest_in_book (QofBook *book)
     else
     {
         /* If no results, we don't want to bomb totally */
-        earliest = time (0);
+        earliest = gnc_time (NULL);
     }
 
     qof_query_destroy (q);
@@ -146,7 +146,7 @@ get_earliest_in_book (QofBook *book)
  */
 
 static int
-get_num_xactions_before_date(QofBook *book, time_t close_date)
+get_num_xactions_before_date(QofBook *book, time64 close_date)
 {
     QofQuery *q;
     GSList *param;
@@ -161,7 +161,7 @@ get_num_xactions_before_date(QofBook *book, time_t close_date)
 
     /* Look for transactions earlier than the closing date */
     param = g_slist_prepend (NULL, TRANS_DATE_POSTED);
-    timespecFromTime_t (&ts, close_date);
+    timespecFromTime64 (&ts, close_date);
     pred = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ts);
     qof_query_add_term (q,  param, pred, QOF_QUERY_FIRST_TERM);
 
@@ -284,7 +284,7 @@ ap_assistant_menu_prepare (GtkAssistant *assistant, gpointer user_data)
     g_date_clear (&date_now, 1);
     nperiods = 0;
     period_end = info->closing_date;
-    g_date_set_time_t (&date_now, time(NULL));
+    gnc_gdate_set_time64 (&date_now, gnc_time (NULL));
 
     while (0 > g_date_compare(&period_end, &date_now ))
     {
@@ -306,7 +306,8 @@ ap_assistant_menu_prepare (GtkAssistant *assistant, gpointer user_data)
      * we may have closed books since last time. */
     info->earliest = get_earliest_in_book (gnc_get_current_book());
     info->earliest_str = qof_print_date(info->earliest);
-    PINFO ("Date of earliest transaction is %ld %s", info->earliest, ctime (&info->earliest));
+    PINFO ("Date of earliest transaction is %lld %s", info->earliest,
+	   gnc_ctime (&info->earliest));
 
     /* Display the results */
     str = g_strdup_printf (
@@ -361,7 +362,7 @@ ap_assistant_book_prepare (GtkAssistant *assistant, gpointer user_data)
 
     currbook = gnc_get_current_book();
     ntrans = get_num_xactions_before_date(currbook,
-                                          gnc_timet_get_day_end_gdate (&info->closing_date));
+                                          gnc_time64_get_day_end_gdate (&info->closing_date));
 
     nacc = gnc_account_n_descendants (gnc_book_get_root_account (currbook));
 
@@ -448,7 +449,7 @@ ap_validate_menu (GtkAssistant *assistant, gpointer user_data)
     }
 
     g_date_clear (&date_now, 1);
-    g_date_set_time_t (&date_now, time(NULL));
+    gnc_gdate_set_today (&date_now);
     if (0 < g_date_compare(&info->closing_date, &date_now))
     {
         /* Closing date must be in the future */
@@ -481,8 +482,8 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     bnotes = gtk_text_buffer_get_text(buffer, &startiter, &enditer , 0);
     PINFO("Book title is - %s\n", btitle);
 
-    timespecFromTime_t (&closing_date,
-                        gnc_timet_get_day_end_gdate (&info->closing_date));
+    timespecFromTime64 (&closing_date,
+                        gnc_time64_get_day_end_gdate (&info->closing_date));
     g_free(bnotes);
 
     /* Report the status back to the user. */
@@ -490,17 +491,20 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 
     /* Find the next closing date ... */
     info->prev_closing_date = info->closing_date;
-    recurrenceListNextInstance(info->period, &info->prev_closing_date, &info->closing_date);
+    recurrenceListNextInstance (info->period, &info->prev_closing_date,
+				&info->closing_date);
 
 
     /* FIXME Test for valid closing date, not sure why it wont be!!! */
     if (g_date_valid(&info->closing_date) == TRUE)
     {
         /* If the next closing date is in the future, then we are done. */
-        if (time(NULL) > gnc_timet_get_day_end_gdate (&info->closing_date))
+        if (gnc_time (NULL) >
+	    gnc_time64_get_day_end_gdate (&info->closing_date))
         {
             /* Load up the GUI for the next closing period. */
-            gnc_frequency_setup_recurrence(info->period_menu, NULL, &info->closing_date);
+            gnc_frequency_setup_recurrence (info->period_menu, NULL,
+					    &info->closing_date);
             /* Jump back to the Close Book page. */
             gtk_assistant_set_current_page (GTK_ASSISTANT(info->window), 1);
         }
@@ -567,11 +571,11 @@ ap_assistant_create (AcctPeriodInfo *info)
      * and use that to set up the freq spec widget. */
     info->earliest = get_earliest_in_book (gnc_get_current_book());
     info->earliest_str = qof_print_date(info->earliest);
-    PINFO ("date of earliest transaction is %ld %s",
-           info->earliest, ctime (&info->earliest));
+    PINFO ("date of earliest transaction is %lld %s",
+           info->earliest, gnc_ctime (&info->earliest));
 
     g_date_clear (&info->closing_date, 1);
-    g_date_set_time_t (&info->closing_date, info->earliest);
+    gnc_gdate_set_time64 (&info->closing_date, info->earliest);
     g_date_clear (&info->prev_closing_date, 1);
     info->prev_closing_date = info->closing_date;
     g_date_add_years (&info->closing_date, 1);

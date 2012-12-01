@@ -46,6 +46,8 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+
+#include <gnc-gdate-utils.h>
 #include "SX-book.h"
 #include "Split.h"
 #include "Transaction.h"
@@ -363,7 +365,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     {
         GDate end;
         g_date_clear(&end, 1);
-        g_date_set_time_t(&end, time(NULL));
+        gnc_gdate_set_today (&end);
         g_date_add_years(&end, 1);
         priv->instances = GNC_SX_INSTANCE_MODEL(gnc_sx_get_instances(&end, TRUE));
     }
@@ -551,7 +553,7 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
         GList *schedule;
 
         g_date_clear(&now, 1);
-        g_date_set_time_t(&now, time(NULL));
+        gnc_gdate_set_today (&now);
         recurrenceSet(r, 1, PERIOD_MONTH, &now, WEEKEND_ADJ_NONE);
         schedule = gnc_sx_get_schedule(new_sx);
         schedule = g_list_append(schedule, r);

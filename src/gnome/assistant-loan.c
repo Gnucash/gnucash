@@ -655,7 +655,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
             {
                 *gde_data[i].loc =
                     GNC_DATE_EDIT(
-                        gnc_date_edit_new( time(NULL),
+                        gnc_date_edit_new( gnc_time (NULL),
                                            FALSE, FALSE ) );
                 gtk_table_attach( gde_data[i].table,
                                   GTK_WIDGET( *gde_data[i].loc ),
@@ -901,7 +901,7 @@ loan_assistant_data_init( LoanAssistantData *ldd )
     ldd->ld.principal = gnc_numeric_zero();
     ldd->ld.startDate = g_date_new();
     ldd->ld.varStartDate = g_date_new();
-    g_date_set_time_t( ldd->ld.startDate, time(NULL) );
+    gnc_gdate_set_time64( ldd->ld.startDate, gnc_time (NULL) );
     ldd->ld.loan_schedule = NULL;
     ldd->ld.repayment_schedule = NULL;
     {
@@ -967,10 +967,10 @@ loan_info_prep( GtkAssistant *assistant, gpointer user_data )
 
         tmpTm = g_new0( struct tm, 1 );
 
-        g_date_to_struct_tm( ldd->ld.startDate, tmpTm );
-        gnc_date_edit_set_time( ldd->prmStartDateGDE,
-                                mktime(tmpTm) );
-        g_free( tmpTm );
+        g_date_to_struct_tm (ldd->ld.startDate, tmpTm);
+        gnc_date_edit_set_time (ldd->prmStartDateGDE,
+                                gnc_mktime (tmpTm));
+        g_free (tmpTm);
     }
 
     /* length: total and remaining */
@@ -1005,8 +1005,8 @@ loan_info_calc_update_cb( GtkWidget *w, gpointer user_data )
 
     g_date_clear( &start, 1 );
     g_date_clear( &now, 1 );
-    g_date_set_time_t( &start, gnc_date_edit_get_date( ldd->prmStartDateGDE ) );
-    g_date_set_time_t( &now, time(NULL) );
+    gnc_gdate_set_time64( &start, gnc_date_edit_get_date( ldd->prmStartDateGDE ) );
+    gnc_gdate_set_time64( &now, gnc_time (NULL) );
     for ( i = 0; g_date_compare( &start, &now ) < 0; i++ )
     {
         g_date_add_months( &start, 1 );
@@ -1083,15 +1083,16 @@ loan_info_page_save( GtkAssistant *assistant, gpointer user_data )
 
     /* start date */
     {
-        time_t tmpTT;
+        time64 tmpTT;
         struct tm *tmpTm;
 
         tmpTT = gnc_date_edit_get_date( ldd->prmStartDateGDE );
-        tmpTm = localtime( &tmpTT );
+        tmpTm = gnc_localtime ( &tmpTT );
         g_date_set_dmy( ldd->ld.startDate,
                         tmpTm->tm_mday,
                         (tmpTm->tm_mon + 1),
                         (1900 + tmpTm->tm_year) );
+	gnc_tm_free (tmpTm);
     }
 
     /* len / periods */
@@ -1923,12 +1924,12 @@ loan_rev_get_loan_range( LoanAssistantData *ldd, GDate *start, GDate *end )
     *start = *ldd->ld.startDate;
 
     endDateMath = g_new0( struct tm, 1 );
-    g_date_to_struct_tm( ldd->ld.startDate, endDateMath );
+    g_date_to_struct_tm (ldd->ld.startDate, endDateMath);
     monthsTotal = ( (ldd->ld.numPer - 1)
                     * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) );
     endDateMath->tm_mon += monthsTotal;
-    g_date_set_time_t( end, mktime( endDateMath ) );
-    g_free( endDateMath );
+    gnc_gdate_set_time64 (end, gnc_mktime (endDateMath));
+    g_free (endDateMath);
 }
 
 
@@ -1940,12 +1941,12 @@ loan_rev_get_dates( LoanAssistantData *ldd, GDate *start, GDate *end )
     switch ( range )
     {
     case CURRENT_YEAR:
-        g_date_set_time_t( start, time(NULL) );
+        gnc_gdate_set_time64( start, gnc_time (NULL) );
         g_date_set_dmy( start, 1, G_DATE_JANUARY, g_date_get_year( start ) );
         g_date_set_dmy( end, 31, G_DATE_DECEMBER, g_date_get_year( start ) );
         break;
     case NOW_PLUS_ONE:
-        g_date_set_time_t( start, time(NULL) );
+        gnc_gdate_set_time64( start, gnc_time (NULL) );
         *end = *start;
         g_date_add_years( end, 1 );
         break;
@@ -1953,9 +1954,9 @@ loan_rev_get_dates( LoanAssistantData *ldd, GDate *start, GDate *end )
         loan_rev_get_loan_range( ldd, start, end );
         break;
     case CUSTOM:
-        g_date_set_time_t( start,
+        gnc_gdate_set_time64( start,
                            gnc_date_edit_get_date( ldd->revStartDate ) );
-        g_date_set_time_t( end,
+        gnc_gdate_set_time64( end,
                            gnc_date_edit_get_date( ldd->revEndDate ) );
         break;
     default:
@@ -2524,7 +2525,7 @@ ld_calc_sx_instance_num(GDate *start_date, GList *schedule)
 
     g_date_clear(&next_date, 1);
     g_date_clear(&today, 1);
-    g_date_set_time_t(&today, time(NULL));
+    gnc_gdate_set_time64 (&today, gnc_time (NULL));
 
     if (g_date_compare(start_date, &today) > 0)
         return 0;

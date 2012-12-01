@@ -111,7 +111,7 @@ struct _GNCSplitRegClass
     void (*unvoid_txn_cb)   ( GNCSplitReg *w, gpointer user_data );
     void (*reverse_txn_cb)  ( GNCSplitReg *w, gpointer user_data );
     void (*help_changed_cb) ( GNCSplitReg *w, gpointer user_data );
-    void (*include_date_cb) ( GNCSplitReg *w, time_t date, gpointer user_data );
+    void (*include_date_cb) ( GNCSplitReg *w, time64 date, gpointer user_data );
 };
 
 typedef enum
@@ -231,7 +231,7 @@ void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
  * window.
  */
 void gnc_split_reg_balancing_entry (GNCSplitReg *gsr, Account *account,
-                                    time_t statement_date, gnc_numeric balancing_amount);
+                                    time64 statement_date, gnc_numeric balancing_amount);
 
 void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
 void gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction );

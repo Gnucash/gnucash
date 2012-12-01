@@ -37,8 +37,8 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <locale.h>
-#include <time.h>
 
+#include <gnc-gdate-utils.h>
 #include "qof.h"
 #include "Account.h"
 #include "SchedXaction.h"
@@ -314,7 +314,7 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
                 return TRUE;
             }
             sxEndDate = *xaccSchedXactionGetEndDate( sxed->sx );
-            g_date_set_time_t( &dlgEndDate,
+            gnc_gdate_set_time64( &dlgEndDate,
                                gnc_date_edit_get_date( sxed->
                                        endDateEntry ) );
 
@@ -858,7 +858,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         g_date_clear( &endDate, 1 );
         if ( gtk_toggle_button_get_active(sxed->optEndDate) )
         {
-            g_date_set_time_t( &endDate,
+            gnc_gdate_set_time64( &endDate,
                                gnc_date_edit_get_date( sxed->
                                        endDateEntry ) );
         }
@@ -913,7 +913,7 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
         if ( gtk_toggle_button_get_active(sxed->optEndDate) )
         {
             /* get the end date data */
-            g_date_set_time_t( &gdate,
+            gnc_gdate_set_time64( &gdate,
                                gnc_date_edit_get_date(
                                    sxed->endDateEntry ) );
             xaccSchedXactionSetEndDate( sxed->sx, &gdate );
@@ -1194,7 +1194,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create (SchedXaction *sx,
     /* Setup the end-date GNC widget */
     {
         GtkWidget *endDateBox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
-        sxed->endDateEntry = GNC_DATE_EDIT(gnc_date_edit_new( time(NULL), FALSE, FALSE ));
+        sxed->endDateEntry = GNC_DATE_EDIT(gnc_date_edit_new (gnc_time (NULL),
+							      FALSE, FALSE));
         gtk_widget_show(GTK_WIDGET(sxed->endDateEntry));
         g_signal_connect( sxed->endDateEntry, "date-changed",
                           G_CALLBACK( sxed_excal_update_adapt_cb ), sxed );
@@ -1354,7 +1355,7 @@ void
 schedXact_editor_populate( GncSxEditorDialog *sxed )
 {
     char *name;
-    time_t tmpDate;
+    time64 tmpDate;
     SplitRegister *splitReg;
     struct tm *tmpTm;
     const GDate *gd;
@@ -1385,11 +1386,7 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
     if ( g_date_valid( gd ) )
     {
         gtk_toggle_button_set_active( sxed->optEndDate, TRUE );
-        /* fill in date data. */
-        tmpTm = g_new0( struct tm, 1 );
-        g_date_to_struct_tm( gd, tmpTm );
-        tmpDate = mktime( tmpTm );
-        g_free( tmpTm );
+        tmpDate = gnc_time64_get_day_start_gdate (gd);
         gnc_date_edit_set_time( sxed->endDateEntry, tmpDate );
 
         set_endgroup_toggle_states( sxed, END_DATE );
@@ -1632,7 +1629,8 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
     if (gtk_toggle_button_get_active(sxed->optEndDate))
     {
         GDate end_date;
-        g_date_set_time_t(&end_date, gnc_date_edit_get_date(sxed->endDateEntry));
+        g_date_clear (&end_date, 1);
+        gnc_gdate_set_time64 (&end_date, gnc_date_edit_get_date(sxed->endDateEntry));
         gnc_dense_cal_store_update_recurrences_date_end(sxed->dense_cal_model, &first_date, recurrences, &end_date);
     }
     else if (gtk_toggle_button_get_active(sxed->optEndNone))

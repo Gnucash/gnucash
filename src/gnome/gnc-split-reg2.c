@@ -97,7 +97,7 @@ static void gnc_split_reg2_refresh_toolbar( GNCSplitReg2 *gsr );
 static void gnc_split_reg2_ld_destroy( GNCLedgerDisplay2 *ledger );
 
 static Transaction* create_balancing_transaction(QofBook *book, Account *account,
-        time_t statement_date, gnc_numeric balancing_amount);
+        time64 statement_date, gnc_numeric balancing_amount);
 
 void gsr2_default_enter_handler    ( GNCSplitReg2 *w, gpointer ud );
 void gsr2_default_cancel_handler   ( GNCSplitReg2 *w, gpointer ud );
@@ -120,7 +120,7 @@ void gsr2_default_reverse_txn_handler ( GNCSplitReg2 *w, gpointer ud );
 
 static void gsr2_emit_simple_signal( GNCSplitReg2 *gsr, const char *sigName );
 static void gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data);
-static void gsr2_emit_include_date_signal( GNCSplitReg2 *gsr, time_t date );
+static void gsr2_emit_include_date_signal( GNCSplitReg2 *gsr, time64 date );
 
 void gnc_split_reg2_cut_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg2_copy_cb(GtkWidget *w, gpointer data);
@@ -295,7 +295,7 @@ gnc_split_reg2_class_init( GNCSplitReg2Class *class )
                       G_SIGNAL_RUN_LAST,
                       signals[i++].defaultOffset,
                       NULL, NULL,
-                      g_cclosure_marshal_VOID__INT, /* time_t == int */
+                      g_cclosure_marshal_VOID__INT, /* time64 == int */
                       G_TYPE_NONE, 1, G_TYPE_INT );
 
     g_assert( i == LAST_SIGNAL );
@@ -975,8 +975,8 @@ gsr2_default_reverse_txn_handler (GNCSplitReg2 *gsr, gpointer data)
     new_trans = xaccTransReverse(trans);
 
     /* Clear transaction level info */
-    xaccTransSetDatePostedSecs(new_trans, time(NULL));
-    xaccTransSetDateEnteredSecs(new_trans, time(NULL));
+    xaccTransSetDatePostedSecs(new_trans, gnc_time (NULL));
+    xaccTransSetDateEnteredSecs(new_trans, gnc_time (NULL));
 
     /* Now jump to new trans */
     gnc_split_reg2_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
@@ -1479,7 +1479,7 @@ gnc_split_reg2_jump_to_blank (GNCSplitReg2 *gsr)
 
 void
 gnc_split_reg2_balancing_entry(GNCSplitReg2 *gsr, Account *account,
-                              time_t statement_date, gnc_numeric balancing_amount)
+                              time64 statement_date, gnc_numeric balancing_amount)
 {
 /*FIXME*/
 #ifdef skip
@@ -1508,7 +1508,7 @@ gnc_split_reg2_balancing_entry(GNCSplitReg2 *gsr, Account *account,
 
 static Transaction*
 create_balancing_transaction(QofBook *book, Account *account,
-                             time_t statement_date, gnc_numeric balancing_amount)
+                             time64 statement_date, gnc_numeric balancing_amount)
 {
 /*FIXME*/
 #ifdef skip
@@ -2171,7 +2171,7 @@ gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data ) //this w
 
 static
 void
-gsr2_emit_include_date_signal( GNCSplitReg2 *gsr, time_t date )
+gsr2_emit_include_date_signal( GNCSplitReg2 *gsr, time64 date )
 {
     g_signal_emit_by_name( gsr, "include-date", date, NULL );
 }

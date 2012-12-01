@@ -61,7 +61,7 @@ RecnWindow *recnWindow (GtkWidget *parent, Account *account);
 RecnWindow *recnWindowWithBalance (GtkWidget *parent,
                                    Account *account,
                                    gnc_numeric new_ending,
-                                   time_t statement_date);
+                                   time64 statement_date);
 
 void gnc_ui_reconcile_window_raise(RecnWindow * recnData);
 

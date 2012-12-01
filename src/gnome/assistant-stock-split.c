@@ -365,7 +365,7 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
     Transaction *trans;
     Account *account;
     Split *split;
-    time_t date;
+    time64 date;
 
     account = info->acct;
     g_return_if_fail (account != NULL);
@@ -632,7 +632,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         info->description_entry = GTK_WIDGET(gtk_builder_get_object(builder, "description_entry"));
 
         box = GTK_WIDGET(gtk_builder_get_object(builder, "date_box"));
-        date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+        date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
         info->date_edit = date;
         label = GTK_WIDGET(gtk_builder_get_object(builder, "date_label"));

@@ -52,7 +52,7 @@ struct GNCReconcileView
     Account             *account;
     GList               *column_list;
 
-    time_t               statement_date;
+    time64               statement_date;
 
     GNCReconcileView    *sibling;
     GNCReconcileViewType view_type;
@@ -78,7 +78,7 @@ GType gnc_reconcile_view_get_type (void);
 
 GtkWidget * gnc_reconcile_view_new (Account * account,
                                     GNCReconcileViewType type,
-                                    time_t date);
+                                    time64 date);
 
 gint gnc_reconcile_view_get_num_splits (GNCReconcileView *view);
 
@@ -92,7 +92,7 @@ void gnc_reconcile_view_refresh (GNCReconcileView *view);
 
 gnc_numeric gnc_reconcile_view_reconciled_balance (GNCReconcileView *view);
 
-void gnc_reconcile_view_commit (GNCReconcileView *view, time_t date);
+void gnc_reconcile_view_commit (GNCReconcileView *view, time64 date);
 
 void gnc_reconcile_view_postpone (GNCReconcileView *view);
 

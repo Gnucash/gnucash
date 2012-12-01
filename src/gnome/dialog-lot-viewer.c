@@ -357,7 +357,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
         GNCLot *lot = node->data;
         Split *esplit = gnc_lot_get_earliest_split (lot);
         Transaction *etrans = xaccSplitGetParent (esplit);
-        time_t open_date = xaccTransGetDate (etrans);
+        time64 open_date = xaccTransGetDate (etrans);
         gnc_numeric amt_baln = gnc_lot_get_balance (lot);
         gnc_commodity *currency = find_first_currency (lot);
         gnc_numeric gains_baln = get_realized_gains (lot, currency);
@@ -388,7 +388,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
         {
             Split *fsplit = gnc_lot_get_latest_split (lot);
             Transaction *ftrans = xaccSplitGetParent (fsplit);
-            time_t close_date = xaccTransGetDate (ftrans);
+            time64 close_date = xaccTransGetDate (ftrans);
 
             qof_print_date_buff (cbuff, MAX_DATE_LENGTH, close_date);
             gtk_list_store_set(store, &iter, LOT_COL_CLOSE, cbuff, -1);
@@ -500,7 +500,7 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         char balnbuff[200];
         gnc_commodity *currency;
         Transaction *trans = xaccSplitGetParent (split);
-        time_t date = xaccTransGetDate (trans);
+        time64 date = xaccTransGetDate (trans);
         gnc_numeric amnt, valu, gains;
 
         /* Do not show gains splits */

@@ -26,6 +26,7 @@
 
 #include "config.h"
 
+#include <gnc-gdate-utils.h>
 #include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
@@ -165,11 +166,11 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
 
     if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxfti->ed_but)))
     {
-        time_t end_tt;
+        time64 end_tt;
         retval.type = END_ON_DATE;
         g_date_clear( &(retval.end_date), 1 );
         end_tt = gnc_date_edit_get_date(sxfti->endDateGDE);
-        g_date_set_time_t( &(retval.end_date), end_tt);
+        gnc_gdate_set_time64( &(retval.end_date), end_tt);
         return retval;
     }
 
@@ -336,7 +337,7 @@ sxftd_init( SXFromTransInfo *sxfti )
     const char *transName;
     gint pos;
     GList *schedule = NULL;
-    time_t start_tt;
+    time64 start_tt;
     struct tm *tmpTm;
     GDate date, nextDate;
 
@@ -391,8 +392,8 @@ sxftd_init( SXFromTransInfo *sxfti )
     {
         GtkWidget *paramTable = GTK_WIDGET(gtk_builder_get_object(sxfti->builder, "param_table" ));
         sxfti->startDateGDE =
-            GNC_DATE_EDIT( gnc_date_edit_new( time( NULL ),
-                                              FALSE, FALSE ) );
+            GNC_DATE_EDIT( gnc_date_edit_new (gnc_time (NULL),
+                                              FALSE, FALSE));
         gtk_table_attach( GTK_TABLE(paramTable),
                           GTK_WIDGET( sxfti->startDateGDE ),
                           1, 2, 2, 3,
@@ -406,8 +407,8 @@ sxftd_init( SXFromTransInfo *sxfti )
     {
         GtkWidget *endDateBox = GTK_WIDGET(gtk_builder_get_object(sxfti->builder, "end_date_hbox" ));
         sxfti->endDateGDE =
-            GNC_DATE_EDIT( gnc_date_edit_new( time( NULL ),
-                                              FALSE, FALSE ) );
+            GNC_DATE_EDIT( gnc_date_edit_new (gnc_time (NULL),
+                                              FALSE, FALSE));
         gtk_box_pack_start( GTK_BOX( endDateBox ),
                             GTK_WIDGET( sxfti->endDateGDE ),
                             TRUE, TRUE, 0 );
@@ -419,7 +420,7 @@ sxftd_init( SXFromTransInfo *sxfti )
     /* Setup the initial start date for user display/confirmation */
     /* compute good initial date. */
     start_tt = xaccTransGetDate( sxfti->trans );
-    g_date_set_time_t( &date, start_tt );
+    gnc_gdate_set_time64( &date, start_tt );
     sxfti->freq_combo = GTK_COMBO_BOX(gtk_builder_get_object(sxfti->builder, "freq_combo_box"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(sxfti->freq_combo), 0);
     g_signal_connect( sxfti->freq_combo, "changed",
@@ -428,11 +429,7 @@ sxftd_init( SXFromTransInfo *sxfti )
     sxftd_update_schedule( sxfti, &date, &schedule);
     recurrenceListNextInstance(schedule, &date, &nextDate);
     recurrenceListFree(&schedule);
-
-    tmpTm = g_new0( struct tm, 1 );
-    g_date_to_struct_tm( &nextDate, tmpTm );
-    start_tt = mktime( tmpTm );
-    g_free( tmpTm );
+    start_tt = gnc_time64_get_day_start_gdate (&nextDate);
     gnc_date_edit_set_time( sxfti->startDateGDE, start_tt );
 
     g_signal_connect( GTK_OBJECT(sxfti->name), "destroy",
@@ -462,7 +459,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     xaccSchedXactionSetName(sx, name);
     g_free(name);
 
-    g_date_set_time_t( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
+    gnc_gdate_set_time64( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
 
     sxftd_update_schedule(sxfti, &date, &schedule);
     if (sxftd_errno == 0)
@@ -579,21 +576,17 @@ sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data )
 {
     SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
     GDate date, nextDate;
-    time_t tmp_tt;
+    time64 tmp_tt;
     struct tm *tmpTm;
     GList *schedule = NULL;
 
     tmp_tt = xaccTransGetDate( sxfti->trans );
-    g_date_set_time_t( &date, tmp_tt );
+    gnc_gdate_set_time64 (&date, tmp_tt);
 
     g_date_clear(&nextDate, 1);
     sxftd_update_schedule(sxfti, &date, &schedule);
     recurrenceListNextInstance(schedule, &date, &nextDate);
-
-    tmpTm = g_new0( struct tm, 1 );
-    g_date_to_struct_tm( &nextDate, tmpTm );
-    tmp_tt = mktime( tmpTm );
-    g_free( tmpTm );
+    tmp_tt = gnc_time64_get_day_start_gdate (&nextDate);
     gnc_date_edit_set_time( sxfti->startDateGDE, tmp_tt );
 
     recurrenceListFree(&schedule);
@@ -682,7 +675,7 @@ static void
 sxftd_update_example_cal( SXFromTransInfo *sxfti )
 {
     struct tm *tmpTm;
-    time_t tmp_tt;
+    time64 tmp_tt;
     GDate date, startDate, nextDate;
     GList *schedule = NULL;
     getEndTuple get;
@@ -690,13 +683,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
     get = sxftd_get_end_info( sxfti );
 
     tmp_tt = gnc_date_edit_get_date( sxfti->startDateGDE );
-    tmpTm = g_new0( struct tm, 1 );
-    *tmpTm = *localtime( &tmp_tt );
-    g_date_clear(&date, 1);
-    g_date_set_day( &date, tmpTm->tm_mday );
-    g_date_set_month( &date, tmpTm->tm_mon + 1 );
-    g_date_set_year( &date, tmpTm->tm_year + 1900 );
-    g_free( tmpTm );
+    gnc_gdate_set_time64 (&date, tmp_tt);
 
     sxftd_update_schedule(sxfti, &date, &schedule);
 

@@ -48,6 +48,7 @@
 #include "gnc-event.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gconf-utils.h"
+#include <gnc-gdate-utils.h>
 #include "gnc-gnome-utils.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"
@@ -66,7 +67,7 @@ struct _RecnWindow
 {
     GncGUID account;             /* The account that we are reconciling  */
     gnc_numeric new_ending;      /* The new ending balance               */
-    time_t statement_date;       /* The statement date                   */
+    time64 statement_date;       /* The statement date                   */
 
     gint component_id;           /* id of component                      */
 
@@ -117,7 +118,7 @@ typedef struct _startRecnWindowData
     XferDialog    *xferData;        /* the interest xfer dialog (if it exists) */
     gboolean       include_children;
 
-    time_t         date;            /* the interest xfer reconcile date        */
+    time64         date;            /* the interest xfer reconcile date        */
 } startRecnWindowData;
 
 
@@ -162,7 +163,7 @@ static gboolean find_by_account (gpointer find_data, gpointer user_data);
 /* This static indicates the debugging module that this .o belongs to. */
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
 
-static time_t gnc_reconcile_last_statement_date = 0;
+static time64 gnc_reconcile_last_statement_date = 0;
 
 
 /** IMPLEMENTATIONS *************************************************/
@@ -342,7 +343,7 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
 {
     GNCDateEdit *gde = GNC_DATE_EDIT (widget);
     gnc_numeric new_balance;
-    time_t new_date;
+    time64 new_date;
 
     if (data->user_set_value)
         return;
@@ -584,9 +585,9 @@ gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data)
 
 
 static void
-gnc_save_reconcile_interval(Account *account, time_t statement_date)
+gnc_save_reconcile_interval(Account *account, time64 statement_date)
 {
-    time_t prev_statement_date;
+    time64 prev_statement_date;
     int days = 0, months = 0;
     double seconds;
 
@@ -596,7 +597,7 @@ gnc_save_reconcile_interval(Account *account, time_t statement_date)
     /*
      * Compute the number of days difference.
      */
-    seconds = difftime(statement_date, prev_statement_date);
+    seconds = gnc_difftime (statement_date, prev_statement_date);
     days = (int)(seconds / 60 / 60 / 24);
 
     /*
@@ -619,8 +620,8 @@ gnc_save_reconcile_interval(Account *account, time_t statement_date)
     {
         struct tm current, prev;
 
-        current = * localtime(&statement_date);
-        prev = * localtime(&prev_statement_date);
+        gnc_localtime_r (&statement_date, &current);
+        gnc_localtime_r (&prev_statement_date, &prev);
         months = ((12 * current.tm_year + current.tm_mon) -
                   (12 * prev.tm_year + prev.tm_mon));
         days = 0;
@@ -649,7 +650,7 @@ gnc_save_reconcile_interval(Account *account, time_t statement_date)
 \********************************************************************/
 static gboolean
 startRecnWindow(GtkWidget *parent, Account *account,
-                gnc_numeric *new_ending, time_t *statement_date,
+                gnc_numeric *new_ending, time64 *statement_date,
                 gboolean enable_subaccount)
 {
     GtkWidget *dialog, *end_value, *date_value, *include_children_button;
@@ -1182,7 +1183,7 @@ gnc_ui_reconcile_window_change_cb(GtkAction *action, gpointer data)
     RecnWindow *recnData = data;
     Account *account = recn_get_account (recnData);
     gnc_numeric new_ending = recnData->new_ending;
-    time_t statement_date = recnData->statement_date;
+    time64 statement_date = recnData->statement_date;
 
     if (gnc_reverse_balance (account))
         new_ending = gnc_numeric_neg (new_ending);
@@ -1203,7 +1204,7 @@ gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
     GNCSplitReg *gsr;
     Account *account;
     gnc_numeric balancing_amount;
-    time_t statement_date;
+    time64 statement_date;
 
 
     gsr = gnc_reconcile_window_open_register(recnData);
@@ -1220,7 +1221,7 @@ gnc_ui_reconcile_window_balance_cb(GtkButton *button, gpointer data)
 
     statement_date = recnData->statement_date;
     if (statement_date == 0)
-        statement_date = time(NULL); // default to 'now'
+        statement_date = gnc_time (NULL); // default to 'now'
 
     gnc_split_reg_balancing_entry(gsr, account, statement_date, balancing_amount);
 }
@@ -1434,11 +1435,11 @@ gnc_toolbar_change_cb (GConfClient *client,
 static void
 gnc_get_reconcile_info (Account *account,
                         gnc_numeric *new_ending,
-                        time_t *statement_date)
+                        time64 *statement_date)
 {
     gboolean always_today;
     GDate date;
-    time_t today;
+    time64 today;
     struct tm tm;
 
     g_date_clear(&date, 1);
@@ -1451,7 +1452,7 @@ gnc_get_reconcile_info (Account *account,
     {
         int months = 1, days = 0;
 
-        g_date_set_time_t(&date, *statement_date);
+        gnc_gdate_set_time64(&date, *statement_date);
 
         xaccAccountGetReconcileLastInterval (account, &months, &days);
 
@@ -1464,20 +1465,18 @@ gnc_get_reconcile_info (Account *account,
             /* Track last day of the month, i.e. 1/31 -> 2/28 -> 3/31 */
             if (was_last_day_of_month)
             {
-                g_date_set_day(&date, g_date_get_days_in_month(g_date_get_month(&date),
-                               g_date_get_year(&date)));
+                g_date_set_day (&date, g_date_get_days_in_month(g_date_get_month(&date),
+                               g_date_get_year( &date)));
             }
         }
         else
         {
-            g_date_add_days(&date, days);
+            g_date_add_days (&date, days);
         }
 
-        g_date_to_struct_tm(&date, &tm);
-        gnc_tm_set_day_end (&tm);
-        *statement_date = mktime (&tm);
+	*statement_date = gnc_time64_get_day_end_gdate (&date);
 
-        today = gnc_timet_get_day_end(time(NULL));
+        today = gnc_time64_get_day_end (gnc_time (NULL));
         if (*statement_date > today)
             *statement_date = today;
     }
@@ -1630,7 +1629,7 @@ RecnWindow *
 recnWindow (GtkWidget *parent, Account *account)
 {
     gnc_numeric new_ending;
-    time_t statement_date;
+    time64 statement_date;
 
     if (account == NULL)
         return NULL;
@@ -1641,7 +1640,7 @@ recnWindow (GtkWidget *parent, Account *account)
      * statements are issued at the same time, like multiple bank
      * accounts on a single statement. */
     if (!gnc_reconcile_last_statement_date)
-        statement_date = time (NULL);
+        statement_date = gnc_time (NULL);
     else
         statement_date = gnc_reconcile_last_statement_date;
 
@@ -1680,7 +1679,7 @@ recnWindow_add_widget (GtkUIManager *merge,
 \********************************************************************/
 RecnWindow *
 recnWindowWithBalance (GtkWidget *parent, Account *account,
-                       gnc_numeric new_ending, time_t statement_date)
+                       gnc_numeric new_ending, time64 statement_date)
 {
     RecnWindow *recnData;
     GtkWidget *statusbar;
@@ -2098,7 +2097,7 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
 {
     gboolean auto_payment;
     Account *account;
-    time_t date;
+    time64 date;
 
     if (!gnc_numeric_zero_p (recnRecalculateBalance(recnData)))
     {

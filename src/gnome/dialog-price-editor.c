@@ -170,7 +170,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
     else
     {
         currency = gnc_default_currency ();
-        date.tv_sec = time (NULL);
+        date.tv_sec = gnc_time (NULL);
         date.tv_nsec = 0;
         source = DIALOG_PRICE_EDIT_SOURCE;
         type = "";

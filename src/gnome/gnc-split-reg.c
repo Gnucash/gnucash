@@ -88,7 +88,7 @@ static void gnc_split_reg_refresh_toolbar( GNCSplitReg *gsr );
 static void gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger );
 
 static Transaction* create_balancing_transaction(QofBook *book, Account *account,
-        time_t statement_date, gnc_numeric balancing_amount);
+        time64 statement_date, gnc_numeric balancing_amount);
 
 void gsr_default_enter_handler    ( GNCSplitReg *w, gpointer ud );
 void gsr_default_cancel_handler   ( GNCSplitReg *w, gpointer ud );
@@ -111,7 +111,7 @@ void gsr_default_reverse_txn_handler ( GNCSplitReg *w, gpointer ud );
 
 static void gsr_emit_simple_signal( GNCSplitReg *gsr, const char *sigName );
 static void gsr_emit_help_changed( GnucashRegister *reg, gpointer user_data );
-static void gsr_emit_include_date_signal( GNCSplitReg *gsr, time_t date );
+static void gsr_emit_include_date_signal( GNCSplitReg *gsr, time64 date );
 
 void gnc_split_reg_cut_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg_copy_cb(GtkWidget *w, gpointer data);
@@ -284,7 +284,7 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
                       G_SIGNAL_RUN_LAST,
                       signals[i++].defaultOffset,
                       NULL, NULL,
-                      g_cclosure_marshal_VOID__INT, /* time_t == int */
+                      g_cclosure_marshal_VOID__INT, /* time64 == int */
                       G_TYPE_NONE, 1, G_TYPE_INT );
 
     g_assert( i == LAST_SIGNAL );
@@ -897,8 +897,8 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
     new_trans = xaccTransReverse(trans);
 
     /* Clear transaction level info */
-    xaccTransSetDatePostedSecs(new_trans, time(NULL));
-    xaccTransSetDateEnteredSecs(new_trans, time(NULL));
+    xaccTransSetDatePostedSecs(new_trans, gnc_time (NULL));
+    xaccTransSetDateEnteredSecs(new_trans, gnc_time (NULL));
 
     /* Now jump to new trans */
     gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
@@ -1409,7 +1409,7 @@ gnc_split_reg_jump_to_blank (GNCSplitReg *gsr)
 
 void
 gnc_split_reg_balancing_entry(GNCSplitReg *gsr, Account *account,
-                              time_t statement_date, gnc_numeric balancing_amount)
+                              time64 statement_date, gnc_numeric balancing_amount)
 {
 
     Transaction *transaction;
@@ -1436,7 +1436,7 @@ gnc_split_reg_balancing_entry(GNCSplitReg *gsr, Account *account,
 
 static Transaction*
 create_balancing_transaction(QofBook *book, Account *account,
-                             time_t statement_date, gnc_numeric balancing_amount)
+                             time64 statement_date, gnc_numeric balancing_amount)
 {
 
     Transaction *trans;
@@ -2070,7 +2070,7 @@ gsr_emit_help_changed( GnucashRegister *reg, gpointer user_data )
 
 static
 void
-gsr_emit_include_date_signal( GNCSplitReg *gsr, time_t date )
+gsr_emit_include_date_signal( GNCSplitReg *gsr, time64 date )
 {
     g_signal_emit_by_name( gsr, "include-date", date, NULL );
 }

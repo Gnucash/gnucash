@@ -118,8 +118,8 @@ void gnc_plugin_page_register_filter_status_all_cb(GtkButton *button, GncPluginP
 void gnc_plugin_page_register_filter_status_one_cb(GtkToggleButton *button, GncPluginPageRegister *page);
 void gnc_plugin_page_register_filter_save_cb(GtkToggleButton *button, GncPluginPageRegister *page);
 
-static time_t gnc_plugin_page_register_filter_dmy2time (char *date_string);
-static gchar *gnc_plugin_page_register_filter_time2dmy (time_t raw_time);
+static time64 gnc_plugin_page_register_filter_dmy2time (char *date_string);
+static gchar *gnc_plugin_page_register_filter_time2dmy (time64 raw_time);
 static gchar *gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page);
 void gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *filter);
 
@@ -501,10 +501,10 @@ typedef struct GncPluginPageRegisterPrivate
         GtkWidget *end_date;
         cleared_match_t original_cleared_match;
         cleared_match_t cleared_match;
-        time_t original_start_time;
-        time_t original_end_time;
-        time_t start_time;
-        time_t end_time;
+        time64 original_start_time;
+        time64 original_end_time;
+        time64 start_time;
+        time64 end_time;
         gboolean original_save_filter;
         gboolean save_filter;
     } fd;
@@ -942,16 +942,16 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         {
             PINFO("Loaded Filter Start Date is %s", filter[1]);
 
-            priv->fd.start_time = gnc_plugin_page_register_filter_dmy2time( filter[1] );
-            priv->fd.start_time = gnc_timet_get_day_start(priv->fd.start_time);
+            priv->fd.start_time = gnc_plugin_page_register_filter_dmy2time (filter[1] );
+            priv->fd.start_time = gnc_time64_get_day_start(priv->fd.start_time);
             filter_changed = filter_changed + 1;
 
             if (filter[2] && (g_strcmp0 (filter[2], "0") != 0 ))
             {
                 PINFO("Loaded Filter End Date is %s", filter[2]);
 
-                priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time( filter[2] );
-                priv->fd.end_time = gnc_timet_get_day_end(priv->fd.end_time);
+                priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time (filter[2] );
+                priv->fd.end_time = gnc_time64_get_day_end(priv->fd.end_time);
                 filter_changed = filter_changed + 1;
             }
         }
@@ -1824,42 +1824,38 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page)
 }
 
 
-/* This function converts a time_t value date to a string */
+/* This function converts a time64 value date to a string */
 static gchar *
-gnc_plugin_page_register_filter_time2dmy ( time_t raw_time)
+gnc_plugin_page_register_filter_time2dmy ( time64 raw_time)
 {
     struct tm * timeinfo;
     gchar date_string[11];
 
-    timeinfo = localtime ( &raw_time );
-    strftime(date_string, 11, "%d-%m-%Y", timeinfo );
+    timeinfo = gnc_localtime (&raw_time);
+    strftime (date_string, 11, "%d-%m-%Y", timeinfo);
     PINFO("Date string is %s", date_string);
+    gnc_tm_free (timeinfo);
 
     return g_strdup(date_string);
 }
 
 
-/* This function converts a string date to a time_t value */
-static time_t
-gnc_plugin_page_register_filter_dmy2time ( char *date_string)
+/* This function converts a string date to a time64 value */
+static time64
+gnc_plugin_page_register_filter_dmy2time (char *date_string)
 {
-    struct tm *when;
-    gint yy = 0, mm = 0, dd = 0;
-
-    time_t raw_time;
+    struct tm when;
 
     PINFO("Date string is %s", date_string);
+    memset (&when, 0, sizeof (when));
 
-    sscanf(date_string, "%d-%d-%d", &dd, &mm, &yy );
+    sscanf (date_string, "%d-%d-%d", &when.tm_mday,
+	    &when.tm_mon, &when.tm_year);
 
-    time(&raw_time);
-    when = localtime ( &raw_time );
+    when.tm_mon -= 1;
+    when.tm_year -= 1900;
 
-    when->tm_year = yy - 1900;
-    when->tm_mon = mm - 1 ;
-    when->tm_mday = dd;
-
-    return mktime(when);
+    return gnc_mktime (&when);
 }
 
 
@@ -1963,20 +1959,20 @@ static void
 get_filter_times(GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
-    time_t time_val;
+    time64 time_val;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.start_date_choose)))
     {
         time_val = gnc_date_edit_get_date(GNC_DATE_EDIT(priv->fd.start_date));
-        time_val = gnc_timet_get_day_start(time_val);
+        time_val = gnc_time64_get_day_start(time_val);
         priv->fd.start_time = time_val;
     }
     else
     {
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.start_date_today)))
         {
-            priv->fd.start_time = gnc_timet_get_today_start();
+            priv->fd.start_time = gnc_time64_get_today_start();
         }
         else
         {
@@ -1987,14 +1983,14 @@ get_filter_times(GncPluginPageRegister *page)
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.end_date_choose)))
     {
         time_val = gnc_date_edit_get_date(GNC_DATE_EDIT(priv->fd.end_date));
-        time_val = gnc_timet_get_day_end(time_val);
+        time_val = gnc_time64_get_day_end(time_val);
         priv->fd.end_time = time_val;
     }
     else
     {
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.start_date_today)))
         {
-            priv->fd.end_time = gnc_timet_get_today_end();
+            priv->fd.end_time = gnc_time64_get_today_end();
         }
         else
         {
@@ -2738,8 +2734,8 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
     new_trans = xaccTransReverse(trans);
 
     /* Clear transaction level info */
-    xaccTransSetDatePostedSecs(new_trans, time(NULL));
-    xaccTransSetDateEnteredSecs(new_trans, time(NULL));
+    xaccTransSetDatePostedSecs (new_trans, gnc_time (NULL));
+    xaccTransSetDateEnteredSecs (new_trans, gnc_time (NULL));
 
     qof_event_resume();
 
@@ -2841,7 +2837,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
 {
     GncPluginPageRegisterPrivate *priv;
     GtkWidget *dialog, *toggle, *button, *table, *hbox;
-    time_t start_time, end_time, time_val;
+    time64 start_time, end_time, time_val;
     GtkBuilder *builder;
     gboolean sensitive, value;
     Query *query;
@@ -2918,8 +2914,8 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
         else
         {
             time_val = start_time;
-            if ((start_time >= gnc_timet_get_today_start()) &&
-                    (start_time <= gnc_timet_get_today_end()))
+            if ((start_time >= gnc_time64_get_today_start()) &&
+                    (start_time <= gnc_time64_get_today_end()))
             {
                 button = priv->fd.start_date_today;
                 sensitive = FALSE;
@@ -2931,12 +2927,12 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
             }
         }
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-        priv->fd.start_date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+        priv->fd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
         gtk_box_pack_start (GTK_BOX (hbox), priv->fd.start_date, TRUE, TRUE, 0);
         gtk_widget_show (priv->fd.start_date);
         gtk_widget_set_sensitive(GTK_WIDGET(priv->fd.start_date), sensitive);
-        gnc_date_edit_set_time(GNC_DATE_EDIT(priv->fd.start_date), time_val);
+        gnc_date_edit_set_time (GNC_DATE_EDIT(priv->fd.start_date), time_val);
         g_signal_connect (G_OBJECT (priv->fd.start_date), "date-changed",
                           G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
                           page);
@@ -2953,8 +2949,8 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
         else
         {
             time_val = end_time;
-            if ((end_time >= gnc_timet_get_today_start()) &&
-                    (end_time <= gnc_timet_get_today_end()))
+            if ((end_time >= gnc_time64_get_today_start()) &&
+                    (end_time <= gnc_time64_get_today_end()))
             {
                 button = priv->fd.end_date_today;
                 sensitive = FALSE;
@@ -2966,12 +2962,12 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
             }
         }
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-        priv->fd.end_date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+        priv->fd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
         gtk_box_pack_start (GTK_BOX (hbox), priv->fd.end_date, TRUE, TRUE, 0);
         gtk_widget_show (priv->fd.end_date);
         gtk_widget_set_sensitive(GTK_WIDGET(priv->fd.end_date), sensitive);
-        gnc_date_edit_set_time(GNC_DATE_EDIT(priv->fd.end_date), time_val);
+        gnc_date_edit_set_time (GNC_DATE_EDIT(priv->fd.end_date), time_val);
         g_signal_connect (G_OBJECT (priv->fd.end_date), "date-changed",
                           G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
                           page);

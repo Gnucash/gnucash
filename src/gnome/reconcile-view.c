@@ -137,7 +137,7 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
 
 GtkWidget *
 gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
-                       time_t statement_date)
+                       time64 statement_date)
 {
     GNCReconcileView *view;
     GtkListStore     *liststore;
@@ -203,14 +203,14 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
         {
             Split *split = splits->data;
             char recn = xaccSplitGetReconcile (split);
-            time_t trans_date = xaccTransGetDate (xaccSplitGetParent (split));
+            time64 trans_date = xaccTransGetDate (xaccSplitGetParent (split));
 
             /* Just an extra verification that our query is correct ;) */
             g_assert (recn == NREC || recn == CREC);
 
             if (recn == CREC &&
-                    difftime (trans_date, statement_date) <= 0)
-                g_hash_table_insert (view->reconciled, split, split);
+		gnc_difftime (trans_date, statement_date) <= 0)
+		g_hash_table_insert (view->reconciled, split, split);
         }
     }
 
@@ -706,14 +706,14 @@ static void
 grv_commit_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
     Split *split = key;
-    time_t *date = user_data;
+    time64 *date = user_data;
 
     xaccSplitSetReconcile (split, YREC);
     xaccSplitSetDateReconciledSecs (split, *date);
 }
 
 void
-gnc_reconcile_view_commit (GNCReconcileView *view, time_t date)
+gnc_reconcile_view_commit (GNCReconcileView *view, time64 date)
 {
     g_return_if_fail (view != NULL);
     g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
@@ -764,8 +764,8 @@ gnc_reconcile_view_postpone (GNCReconcileView *view)
 
         // Don't change splits past reconciliation date that haven't been
         // set to be reconciled
-        if ( difftime(view->statement_date,
-                      xaccTransGetDate (xaccSplitGetParent (entry))) >= 0 ||
+        if (gnc_difftime (view->statement_date,
+			  xaccTransGetDate (xaccSplitGetParent (entry))) >= 0 ||
                 g_hash_table_lookup (view->reconciled, entry))
         {
             recn = g_hash_table_lookup (view->reconciled, entry) ? CREC : NREC;

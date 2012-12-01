@@ -37,6 +37,7 @@
 #include <locale.h>
 #include <math.h>
 
+#include <gnc-gdate-utils.h>
 #include "qof.h"
 #include "gnc-date.h"
 #include "gnc-gconf-utils.h"
@@ -2124,7 +2125,6 @@ draw_page_items(GtkPrintContext *context,
     GSList *elem;
     check_item_t *item;
     gdouble width;
-    GDate *date;
     gchar *address = NULL;
 
     trans = xaccSplitGetParent(pcd->split);
@@ -2145,16 +2145,18 @@ draw_page_items(GtkPrintContext *context,
         switch (item->type)
         {
         case DATE:
-            date = g_date_new();
-            g_date_set_time_t(date, xaccTransGetDate(trans));
+	{
+	    GDate date;
+	    g_date_clear (&date, 1);
+            gnc_gdate_set_time64 (&date, xaccTransGetDate(trans));
             date_format =
                 gnc_date_format_get_custom(GNC_DATE_FORMAT
                                            (pcd->date_format));
-            g_date_strftime(buf, 100, date_format, date);
+            g_date_strftime(buf, 100, date_format, &date);
             width = draw_text(context, buf, item, default_desc);
             draw_date_format(context, date_format, item, default_desc, width);
-            g_date_free(date);
             break;
+	}
 
         case PAYEE:
             draw_text(context, xaccTransGetDescription(trans), item, default_desc);
@@ -2331,7 +2333,7 @@ draw_check_custom(GtkPrintContext *context, gpointer user_data)
     gchar *text = NULL, buf[100];
     check_item_t item = { 0 };
     gdouble x, y, multip, degrees;
-    GDate *date;
+    GDate date;
     gchar *address;
 
     trans = xaccSplitGetParent(pcd->split);
@@ -2357,12 +2359,11 @@ draw_check_custom(GtkPrintContext *context, gpointer user_data)
 
     item.x = multip * gtk_spin_button_get_value(pcd->date_x);
     item.y = multip * gtk_spin_button_get_value(pcd->date_y);
-    date = g_date_new();
-    g_date_set_time_t(date, xaccTransGetDate(trans));
+    g_date_clear (&date, 1);
+    gnc_gdate_set_time64 (&date, xaccTransGetDate(trans));
     date_format = gnc_date_format_get_custom(GNC_DATE_FORMAT(pcd->date_format));
-    g_date_strftime(buf, 100, date_format, date);
+    g_date_strftime(buf, 100, date_format, &date);
     draw_text(context, buf, &item, desc);
-    g_date_free(date);
 
     item.x = multip * gtk_spin_button_get_value(pcd->number_x);
     item.y = multip * gtk_spin_button_get_value(pcd->number_y);

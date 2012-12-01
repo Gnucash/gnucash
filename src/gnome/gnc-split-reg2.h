@@ -114,7 +114,7 @@ struct _GNCSplitReg2Class
     void (*unvoid_txn_cb)   ( GNCSplitReg2 *w, gpointer user_data );
     void (*reverse_txn_cb)  ( GNCSplitReg2 *w, gpointer user_data );
     void (*help_changed_cb) ( GNCSplitReg2 *w, gpointer user_data );
-    void (*include_date_cb) ( GNCSplitReg2 *w, time_t date, gpointer user_data );
+    void (*include_date_cb) ( GNCSplitReg2 *w, time64 date, gpointer user_data );
 };
 
 #ifdef skip // Coming from original gnc-split-reg.h
@@ -243,7 +243,7 @@ void gnc_split_reg2_jump_to_split_amount (GNCSplitReg2 *gsr, Split *split);
  * window.
  */
 void gnc_split_reg2_balancing_entry (GNCSplitReg2 *gsr, Account *account,
-                                    time_t statement_date, gnc_numeric balancing_amount);
+                                    time64 statement_date, gnc_numeric balancing_amount);
 
 void gsr2_default_delete_handler (GNCSplitReg2 *gsr, gpointer data );
 void gnc_split_reg2_enter (GNCSplitReg2 *gsr, gboolean next_transaction );
