@@ -23,7 +23,6 @@
 
 #include "config.h"
 #include <glib.h>
-#include <gnc-date.h>
 
 #include "gnc-gdate-utils.h"
 
@@ -63,25 +62,25 @@ gnc_gdate_hash( gconstpointer gd )
 }
 
 
-time_t
-gnc_timet_get_day_start_gdate (GDate *date)
+time64
+gnc_time64_get_day_start_gdate (const GDate *date)
 {
     struct tm stm;
-    time_t secs;
+    time64 secs;
 
     /* First convert to a 'struct tm' */
-    g_date_to_struct_tm(date, &stm);
+    g_date_to_struct_tm (date, &stm);
 
     /* Then convert to number of seconds */
-    secs = mktime (&stm);
+    secs = gnc_mktime (&stm);
     return secs;
 }
 
-time_t
-gnc_timet_get_day_end_gdate (GDate *date)
+time64
+gnc_time64_get_day_end_gdate (const GDate *date)
 {
     struct tm stm;
-    time_t secs;
+    time64 secs;
 
     /* First convert to a 'struct tm' */
     g_date_to_struct_tm(date, &stm);
@@ -93,7 +92,7 @@ gnc_timet_get_day_end_gdate (GDate *date)
     stm.tm_isdst = -1;
 
     /* Then convert to number of seconds */
-    secs = mktime (&stm);
+    secs = gnc_mktime (&stm);
     return secs;
 }
 

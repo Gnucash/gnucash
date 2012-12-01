@@ -38,6 +38,22 @@
 #ifndef GNC_GDATE_UTILS_H
 #define GNC_GDATE_UTILS_H
 
+#include <gnc-date.h>
+
+/** @name GDate time64 setters
+    @{ */
+/** Set a GDate to the current day
+ * @param theGDate: The date to act on
+ */
+void gnc_gdate_set_today (GDate* gd);
+
+/** Set a GDate to a time64
+ * @param theGDate: the date to act on
+ * @param time: the time to set it to.
+ */
+void gnc_gdate_set_time64 (GDate* gd, time64 time);
+
+/** @} */
 
 /** @name GDate hash table support
     @{ */
@@ -53,18 +69,18 @@ guint gnc_gdate_hash( gconstpointer gd );
 
 /** @} */
 
-/** @name GDate to time_t conversions
+/** @name GDate to time64 conversions
     @{ */
 
-/** The gnc_timet_get_day_start() routine will take the given time in
+/** The gnc_time64_get_day_start() routine will take the given time in
  *  GLib GDate format and adjust it to the first second of that day.
  */
-time_t gnc_timet_get_day_start_gdate (GDate *date);
+time64 gnc_time64_get_day_start_gdate (const GDate *date);
 
-/** The gnc_timet_get_day_end() routine will take the given time in
+/** The gnc_time64_get_day_end() routine will take the given time in
  *  GLib GDate format and adjust it to the last second of that day.
  */
-time_t gnc_timet_get_day_end_gdate (GDate *date);
+time64 gnc_time64_get_day_end_gdate (const GDate *date);
 
 /** @} */
 
