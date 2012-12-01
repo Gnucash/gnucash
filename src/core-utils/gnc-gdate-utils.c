@@ -23,10 +23,29 @@
 
 #include "config.h"
 #include <glib.h>
-#include <time.h>
+#include <gnc-date.h>
 
 #include "gnc-gdate-utils.h"
 
+void
+gnc_gdate_set_today (GDate* gd)
+{
+    GDateTime *gdt = g_date_time_new_now_local ();
+    gint y, m, d;
+    g_date_time_get_ymd (gdt, &y, &m, &d);
+    g_date_set_dmy (gd, d, m, y);
+    g_date_time_unref (gdt);
+}
+
+void
+gnc_gdate_set_time64 (GDate* gd, time64 time)
+{
+    GDateTime *gdt = g_date_time_new_from_unix_local (time);
+    gint y, m, d;
+    g_date_time_get_ymd (gdt, &y, &m, &d);
+    g_date_set_dmy (gd, d, m, y);
+    g_date_time_unref (gdt);
+}
 
 gboolean
 gnc_gdate_equal(gconstpointer gda, gconstpointer gdb)
