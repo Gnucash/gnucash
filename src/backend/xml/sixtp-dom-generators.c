@@ -27,6 +27,7 @@
 #include <glib.h>
 
 #include "gnc-xml-helper.h"
+#include <gnc-date.h>
 
 #include "sixtp-dom-generators.h"
 #include "sixtp-utils.h"
@@ -120,20 +121,21 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
     return ret;
 }
 
+/* gnc_g_date_time_new_from_timespec_local normalizes the timespec,
+ * but we want to serialize it un-normalized, so we make a partial
+ * copy.
+ */
 gchar *
 timespec_sec_to_string(const Timespec *ts)
 {
-    gchar *ret;
-
-    ret = g_new(gchar, TIMESPEC_SEC_FORMAT_MAX);
-
-    if (!timespec_secs_to_given_string (ts, ret))
-    {
-        g_free(ret);
-        return NULL;
-    }
-
-    return ret;
+     gchar *time_string;
+     GDateTime *gdt;
+     Timespec sts = { ts->tv_sec, 0};
+     gdt = gnc_g_date_time_new_from_timespec_local (sts);
+     g_return_val_if_fail (gdt != NULL, NULL);
+     time_string = g_date_time_format (gdt, "%Y-%m-%d %H:%M:%S %z");
+     g_date_time_unref (gdt);
+     return time_string;
 }
 
 gchar *

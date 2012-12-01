@@ -87,10 +87,6 @@ sixtp* simple_chars_only_parser_new(sixtp_end_handler end_handler);
 gboolean string_to_timespec_secs(const gchar *str, Timespec *ts);
 gboolean string_to_timespec_nsecs(const gchar *str, Timespec *ts);
 
-/* str must have length of at least TIMESPEC_SEC_FORMAT_MAX */
-gboolean timespec_secs_to_given_string (const Timespec *ts, gchar *str);
-
-
 gboolean generic_timespec_start_handler(GSList* sibling_data,
                                         gpointer parent_data,
                                         gpointer global_data,
