@@ -1235,7 +1235,7 @@ char dateSeparator (void)
     return '\0';
 }
 
-
+/* The following functions have Win32 forms in qof-win32.c */
 #ifndef G_OS_WIN32
 gchar *
 qof_time_format_from_utf8(const gchar *utf8_format)
