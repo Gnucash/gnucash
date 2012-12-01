@@ -190,7 +190,7 @@ gnc_g_date_time_adjust_for_dst (GDateTime *gdt, GTimeZone *tz)
 }
 
 static GDateTime*
-gnc_g_date_time_new_from_unix_local (gint64 time)
+gnc_g_date_time_new_from_unix_local (time64 time)
 {
 #ifndef G_OS_WIN32
     return g_date_time_new_from_unix_local (time);
@@ -246,7 +246,7 @@ typedef struct
 {
     GDateTime *(*new_local)(gint, gint, gint, gint, gint, gdouble);
     GDateTime *(*adjust_for_dst)(GDateTime *, GTimeZone *);
-    GDateTime *(*new_from_unix_local)(gint64);
+    GDateTime *(*new_from_unix_local)(time64);
     GDateTime *(*new_from_timeval_local)(const GTimeVal *);
     GDateTime *(*new_now_local)(void);
     GDateTime *(*to_local)(GDateTime *);
@@ -287,7 +287,7 @@ gnc_g_date_time_fill_struct_tm (GDateTime *gdt, struct tm* time)
 }
 
 struct tm*
-gnc_localtime (const gint64 *secs)
+gnc_localtime (const time64 *secs)
 {
      struct tm *time = g_slice_alloc0 (sizeof (struct tm));
      if (gnc_localtime_r (secs, time) == NULL)
@@ -299,7 +299,7 @@ gnc_localtime (const gint64 *secs)
 }
 
 struct tm*
-gnc_localtime_r (const gint64 *secs, struct tm* time)
+gnc_localtime_r (const time64 *secs, struct tm* time)
 {
      guint index = 0;
      GDateTime *gdt = gnc_g_date_time_new_from_unix_local (*secs);
@@ -323,7 +323,7 @@ gnc_localtime_r (const gint64 *secs, struct tm* time)
 }
 
 struct tm*
-gnc_gmtime (const gint64 *secs)
+gnc_gmtime (const time64 *secs)
 {
      struct tm *time;
      GDateTime *gdt = g_date_time_new_from_unix_utc (*secs);
@@ -361,7 +361,7 @@ normalize_struct_tm (struct tm* time)
 {
      gint year = time->tm_year + 1900;
      gint last_day;
-     gint64 secs;
+     time64 secs;
 
      ++time->tm_mon;
 
@@ -386,11 +386,11 @@ normalize_struct_tm (struct tm* time)
      time->tm_year = year - 1900;
 }
 
-gint64
+time64
 gnc_mktime (struct tm* time)
 {
      GDateTime *gdt;
-     gint64 secs;
+     time64 secs;
      normalize_struct_tm (time);
      gdt = gnc_g_date_time_new_local (time->tm_year + 1900, time->tm_mon,
 				      time->tm_mday, time->tm_hour,
@@ -409,11 +409,11 @@ gnc_mktime (struct tm* time)
      return secs;
 }
 
-gint64
+time64
 gnc_timegm (struct tm* time)
 {
      GDateTime *gdt;
-     gint64 secs;
+     time64 secs;
      normalize_struct_tm (time);
      gdt = g_date_time_new_utc (time->tm_year + 1900, time->tm_mon,
 				time->tm_mday, time->tm_hour, time->tm_min,
@@ -429,7 +429,7 @@ gnc_timegm (struct tm* time)
 }
 
 gchar*
-gnc_ctime (const gint64 *secs)
+gnc_ctime (const time64 *secs)
 {
      GDateTime *gdt = gnc_g_date_time_new_from_unix_local (*secs);
      gchar *string = g_date_time_format (gdt, "%a %b %H:%M:%S %Y");
@@ -437,11 +437,22 @@ gnc_ctime (const gint64 *secs)
      return string;
 }
 
-gint64
-gnc_time (gint64 *tbuf)
+time64
+gnc_time (time64 *tbuf)
 {
      GDateTime *gdt = gnc_g_date_time_new_now_local ();
-     gint64 secs = g_date_time_to_unix (gdt);
+     time64 secs = g_date_time_to_unix (gdt);
+     g_date_time_unref (gdt);
+     if (tbuf != NULL)
+	  *tbuf = secs;
+     return secs;
+}
+
+time64
+gnc_time_utc (time64 *tbuf)
+{
+     GDateTime *gdt = g_date_time_new_now_utc ();
+     time64 secs = g_date_time_to_unix (gdt);
      g_date_time_unref (gdt);
      if (tbuf != NULL)
 	  *tbuf = secs;
@@ -449,7 +460,7 @@ gnc_time (gint64 *tbuf)
 }
 
 gdouble
-gnc_difftime (const gint64 secs1, const gint64 secs2)
+gnc_difftime (const time64 secs1, const time64 secs2)
 {
      return (double)secs2 - (double)secs1;
 }
@@ -656,7 +667,7 @@ timespecCanonicalDayTime(Timespec t)
 {
     struct tm tm;
     Timespec retval;
-    gint64 t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
+    time64 t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
     gnc_localtime_r(&t_secs, &tm);
     gnc_tm_set_day_middle(&tm);
     retval.tv_sec = gnc_mktime(&tm);
@@ -857,7 +868,7 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
     case QOF_DATE_FORMAT_LOCALE:
     {
         struct tm tm_str;
-        gint64 t;
+        time64 t;
 
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
@@ -886,10 +897,10 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 }
 
 size_t
-qof_print_date_buff (char * buff, size_t len, gint64 t)
+qof_print_date_buff (char * buff, size_t len, time64 t)
 {
     struct tm theTime;
-    gint64 bt = t;
+    time64 bt = t;
     size_t actual;
     if (!buff) return 0 ;
     if (!gnc_localtime_r(&bt, &theTime))
@@ -912,7 +923,7 @@ qof_print_gdate( char *buf, size_t len, const GDate *gd )
 }
 
 char *
-qof_print_date (gint64 t)
+qof_print_date (time64 t)
 {
     char buff[MAX_DATE_LENGTH];
     memset (buff, 0, sizeof (buff));
@@ -924,10 +935,10 @@ const char *
 gnc_print_date (Timespec ts)
 {
     static char buff[MAX_DATE_LENGTH];
-    gint64 t;
+    time64 t;
 
     memset (buff, 0, sizeof (buff));
-    t = ts.tv_sec + (gint64)(ts.tv_nsec / 1000000000.0);
+    t = ts.tv_sec + (time64)(ts.tv_nsec / 1000000000.0);
 
     qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
 
@@ -981,7 +992,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     int iday, imonth, iyear;
     int now_day, now_month, now_year;
     struct tm *now, utc;
-    gint64 secs;
+    time64 secs;
 
     if (!buff) return(FALSE);
 
@@ -1238,7 +1249,7 @@ char dateSeparator (void)
             /* Make a guess */
             gchar string[256];
             struct tm tm;
-            gint64 secs;
+            time64 secs;
             gchar *s;
 
             secs = gnc_time (NULL);
@@ -1479,7 +1490,7 @@ void
 gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
 {
     struct tm result;
-    gint64 t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
+    time64 t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
     gnc_localtime_r(&t_secs, &result);
 
     if (day) *day = result.tm_mday;
@@ -1557,7 +1568,7 @@ gnc_timezone (const struct tm *tm)
 
 
 void
-timespecFromTime_t( Timespec *ts, gint64 t )
+timespecFromTime_t( Timespec *ts, time64 t )
 {
     ts->tv_sec = t;
     ts->tv_nsec = 0;
@@ -1572,7 +1583,7 @@ timespec_now()
     return ts;
 }
 
-gint64
+time64
 timespecToTime_t (Timespec ts)
 {
     return ts.tv_sec;
@@ -1617,7 +1628,7 @@ Timespec gdate_to_timespec (GDate d)
 }
 
 static void
-gnc_tm_get_day_start (struct tm *tm, gint64 time_val)
+gnc_tm_get_day_start (struct tm *tm, time64 time_val)
 {
     /* Get the equivalent time structure */
     if (!gnc_localtime_r(&time_val, tm))
@@ -1626,7 +1637,7 @@ gnc_tm_get_day_start (struct tm *tm, gint64 time_val)
 }
 
 static void
-gnc_tm_get_day_end (struct tm *tm, gint64 time_val)
+gnc_tm_get_day_end (struct tm *tm, time64 time_val)
 {
     /* Get the equivalent time structure */
     if (!gnc_localtime_r(&time_val, tm))
@@ -1634,22 +1645,22 @@ gnc_tm_get_day_end (struct tm *tm, gint64 time_val)
     gnc_tm_set_day_end(tm);
 }
 
-gint64
-gnc_timet_get_day_start (gint64 time_val)
+time64
+gnc_timet_get_day_start (time64 time_val)
 {
     struct tm tm;
-    gint64 new_time;
+    time64 new_time;
 
     gnc_tm_get_day_start(&tm, time_val);
     new_time = gnc_mktime(&tm);
     return new_time;
 }
 
-gint64
-gnc_timet_get_day_end (gint64 time_val)
+time64
+gnc_timet_get_day_end (time64 time_val)
 {
     struct tm tm;
-    gint64 new_time;
+    time64 new_time;
 
     gnc_tm_get_day_end(&tm, time_val);
     new_time = gnc_mktime(&tm);
@@ -1671,7 +1682,7 @@ gnc_tm_get_today_end (struct tm *tm)
     gnc_tm_get_day_end(tm, time(NULL));
 }
 
-gint64
+time64
 gnc_timet_get_today_start (void)
 {
     struct tm tm;
@@ -1680,7 +1691,7 @@ gnc_timet_get_today_start (void)
     return gnc_mktime(&tm);
 }
 
-gint64
+time64
 gnc_timet_get_today_end (void)
 {
     struct tm tm;

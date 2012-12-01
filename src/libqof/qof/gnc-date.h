@@ -71,6 +71,13 @@
 #include <glib-object.h>
 #include <time.h>
 
+/**
+ * Many systems, including Microsoft Windows and BSD-derived Unixes
+ * like Darwin, are retaining the int-32 typedef for time_t. Since
+ * this stops working in 2038, we define our own:
+ */
+typedef gint64 time64;
+
 /** The Timespec is just like the unix 'struct timespec'
  * except that we use a 64-bit unsigned int to
  * store the seconds.  This should adequately cover dates in the
@@ -157,7 +164,7 @@ typedef enum
  *  \return A struct tm*, allocated on the heap. Must be freed with gnc_tm_free().
  *  The time is adjusted for the current local time zone.
  */
-struct tm* gnc_localtime (const gint64 *secs);
+struct tm* gnc_localtime (const time64 *secs);
 
 /** \brief fill out a time struct from a 64-bit time value adjusted for the current time zone.
  *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
@@ -165,7 +172,7 @@ struct tm* gnc_localtime (const gint64 *secs);
  *  \param time: A struct tm* for the function to fill.
  *  The time is adjusted for the current local time zone.
  */
-struct tm* gnc_localtime_r (const gint64 *secs, struct tm* time);
+struct tm* gnc_localtime_r (const time64 *secs, struct tm* time);
 
 /** \brief fill out a time struct from a 64-bit time value
  *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
@@ -173,7 +180,7 @@ struct tm* gnc_localtime_r (const gint64 *secs, struct tm* time);
  *  \return A struct tm*, allocated on the heap. Must be freed with gnc_tm_free()
  *  The time is UTC.
  */
-struct tm* gnc_gmtime (const gint64 *secs);
+struct tm* gnc_gmtime (const time64 *secs);
 
 /** \brief calculate seconds from the epoch given a time struct
  *  \param time: A struct tm* for the function to fill.
@@ -181,7 +188,7 @@ struct tm* gnc_gmtime (const gint64 *secs);
  *  \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
  * are seconds before that moment).
  */
-gint64 gnc_mktime (struct tm* time);
+time64 gnc_mktime (struct tm* time);
 
 /** \brief calculate seconds from the epoch given a time struct
  *  \param time: A struct tm* for the function to fill.
@@ -189,7 +196,7 @@ gint64 gnc_mktime (struct tm* time);
  *  \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
  * are seconds before that moment).
  */
-gint64 gnc_timegm (struct tm* time);
+time64 gnc_timegm (struct tm* time);
 
 /** \brief Return a string representation of a date from a 64-bit time value
  *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
@@ -199,15 +206,23 @@ gint64 gnc_timegm (struct tm* time);
  *       Thu Nov 24 18:22:48 1986\n\0
  * This is equivalent to the strftime format %a %b %H:%M:%S %Y.
  */
-gchar* gnc_ctime (const gint64 *secs);
+gchar* gnc_ctime (const time64 *secs);
 
 /** \brief get the current local time
- *  \param A gint64* which, if not NULL, will be filled in with the same
+ *  \param A time64* which, if not NULL, will be filled in with the same
  * value as is returned.
  * \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
  * are seconds before that moment)
  */
-gint64 gnc_time (gint64 *tbuf);
+time64 gnc_time (time64 *tbuf);
+
+/** \brief get the current utc time
+ *  \param A time64* which, if not NULL, will be filled in with the same
+ * value as is returned.
+ * \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
+ * are seconds before that moment)
+ */
+time64 gnc_time_utc (time64 *tbuf);
 
 /** \brief Find the difference in seconds between two time values
  *  \param secs1: The first time value, in Seconds since
@@ -217,7 +232,7 @@ gint64 gnc_time (gint64 *tbuf);
  *  \return The difference in seconds between secs1 and secs2. If secs1 is
  * later than secs2 the value will be negative.
  */
-gdouble gnc_difftime (const gint64 secs1, const gint64 secs2);
+gdouble gnc_difftime (const time64 secs1, const time64 secs2);
 
 /** \brief free a struct tm* created with gnc_localtime() or gnc_gmtime()
  * \param time: The struct tm* to be freed.
@@ -273,7 +288,7 @@ gboolean gnc_date_string_to_monthformat(const gchar *format_string,
 #ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
 struct timespec64
 {
-    gint64 tv_sec;
+    time64 tv_sec;
     glong tv_nsec;
 };
 #endif /* SWIG */
@@ -307,11 +322,11 @@ Timespec timespecCanonicalDayTime(Timespec t);
 /** Returns the current clock time as a Timespec, taken from time(2). */
 Timespec timespec_now (void);
 
-/** Turns a gint64 into a Timespec */
-void timespecFromTime_t( Timespec *ts, gint64 t );
+/** Turns a time64 into a Timespec */
+void timespecFromTime_t( Timespec *ts, time64 t );
 
-/** Turns a Timespec into a gint64 */
-gint64 timespecToTime_t (Timespec ts);
+/** Turns a Timespec into a time64 */
+time64 timespecToTime_t (Timespec ts);
 
 /** Returns a newly allocated date of the current clock time, taken from
  * time(2). The caller must g_date_free() the object afterwards. */
@@ -504,7 +519,7 @@ gsize qof_strftime(gchar *buf, gsize max, const gchar *format,
 size_t qof_print_date_dmy_buff (gchar * buff, size_t buflen, int day, int month, int year);
 
 /** Convenience: calls through to qof_print_date_dmy_buff(). **/
-size_t qof_print_date_buff (char * buff, size_t buflen, gint64 secs);
+size_t qof_print_date_buff (char * buff, size_t buflen, time64 secs);
 
 /** Convenience; calls through to qof_print_date_dmy_buff(). **/
 size_t qof_print_gdate(char *buf, size_t bufflen, const GDate *gd);
@@ -512,7 +527,7 @@ size_t qof_print_gdate(char *buf, size_t bufflen, const GDate *gd);
 /** Convenience; calls through to qof_print_date_dmy_buff().
  *  Return: string, which should be freed when no longer needed.
  * **/
-char * qof_print_date (gint64 secs);
+char * qof_print_date (time64 secs);
 
 /** Convenience; calls through to qof_print_date_dmy_buff().
  *  Return: static global string.
@@ -529,7 +544,7 @@ const char * gnc_print_date(Timespec ts);
  *    Returns the number of bytes printed.
  */
 
-size_t qof_print_date_time_buff (char * buff, size_t len, gint64 secs);
+size_t qof_print_date_time_buff (char * buff, size_t len, time64 secs);
 
 /** qof_scan_date
  *    Convert a string into  day / month / year integers according to
@@ -599,11 +614,11 @@ void gnc_tm_set_day_end (struct tm *tm)
 
 /** The gnc_timet_get_day_start() routine will take the given time in
  *  seconds and adjust it to the last second of that day. */
-gint64 gnc_timet_get_day_start(gint64 time_val);
+time64 gnc_timet_get_day_start(time64 time_val);
 
 /** The gnc_timet_get_day_end() routine will take the given time in
  *  seconds and adjust it to the last second of that day. */
-gint64 gnc_timet_get_day_end(gint64 time_val);
+time64 gnc_timet_get_day_end(time64 time_val);
 
 /** Get the numerical last date of the month. (28, 29, 30, 31) */
 int gnc_date_get_last_mday (int month, int year);
@@ -622,13 +637,13 @@ void   gnc_tm_get_today_start(struct tm *tm);
  *  tm and fills it in with the last second of the today. */
 void   gnc_tm_get_today_end(struct tm *tm);
 
-/** The gnc_timet_get_today_start() routine returns a gint64 value
+/** The gnc_timet_get_today_start() routine returns a time64 value
  *  corresponding to the first second of today. */
-gint64 gnc_timet_get_today_start(void);
+time64 gnc_timet_get_today_start(void);
 
-/** The gnc_timet_get_today_end() routine returns a gint64 value
+/** The gnc_timet_get_today_end() routine returns a time64 value
  *  corresponding to the last second of today. */
-gint64 gnc_timet_get_today_end(void);
+time64 gnc_timet_get_today_end(void);
 
 /** \brief Make a timestamp in YYYYMMDDHHMMSS format.
  *  @return A pointer to the generated string.
