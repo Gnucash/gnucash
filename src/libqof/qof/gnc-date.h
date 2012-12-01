@@ -354,19 +354,13 @@ Timespec gnc_iso8601_to_timespec_gmt(const gchar *);
  */
 gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
 
-/** DOCUMENT ME! FIXME: Probably similar to xaccDMYToSec() this date
- * routine might return incorrect values for dates before 1970.  */
+/** Set the proleptic Gregorian day, month, and year from a Timespec
+ * \param ts: input timespec
+ * \param day: output day, 1 - 31
+ * \param month: output month, 1 - 12
+ * \param year: output year, 0001 - 9999 CE
+ */
 void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
-
-/* \warning hack alert XXX FIXME -- these date routines return incorrect
- * values for dates before 1970.  Most of them are good only up
- * till 2038.  This needs fixing ...
- *
- * XXX  This routine should be modified to assume that the
- * the user wanted the time at noon, localtime.  The returned
- * time_t should be seconds (at GMT) of the local noon-time.
-*/
-/* time_t xaccDMYToSec (gint day, gint month, gint year); */
 
 /** The gnc_timezone function returns the number of seconds *west*
  * of UTC represented by the tm argument, adjusted for daylight

@@ -674,8 +674,8 @@ test_timespecCanonicalDayTime (void)
     g_assert_cmpint (nc.tv_sec, ==, rc.tv_sec);
  }
 
-/* gnc_date_my_last_mday
-int gnc_date_my_last_mday (int month, int year)// C: 1  Local: 1:0:0
+/* gnc_date_get_last_mday
+int gnc_date_get_last_mday (int month, int year)// C: 1  Local: 1:0:0
 */
 static void
 test_gnc_date_get_last_mday (void)
@@ -1505,7 +1505,8 @@ test_qof_scan_date (void)
 }
 /* dateSeparator
 return date character
-char dateSeparator (void)// C: 2 in 2  Local: 0:0:0
+char dateSeparator (void)// C: 1  Local: 0:0:0
+src/register/register-gnome/datecell-gnome.h
 */
 /* static void
 test_dateSeparator (void)
@@ -1745,14 +1746,6 @@ test_gnc_timespec_to_iso8601_buff (void)
     g_time_zone_unref (tz05);
     g_time_zone_unref (tz0840);
 }
-/* gnc_timespec_last_mday
-int
-gnc_timespec_last_mday (Timespec t)// C: 1  Local: 0:0:0
-*/
-/* static void
-test_gnc_timespec_last_mday (void)
-{
-}*/
 /* gnc_timespec2dmy
 void
 gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)// C: 1  Local: 0:0:0
