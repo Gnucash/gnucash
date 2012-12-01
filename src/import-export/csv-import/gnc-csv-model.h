@@ -130,6 +130,6 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
 
 int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
 
-time_t parse_date(const char* date_str, int format);
+time64 parse_date(const char* date_str, int format);
 
 #endif

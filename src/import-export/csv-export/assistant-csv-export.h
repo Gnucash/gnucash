@@ -46,8 +46,8 @@ typedef struct
     GtkWidget *end_date_today;
     GtkWidget *end_date;
 
-    time_t     start_time;
-    time_t     end_time;
+    time64     start_time;
+    time64     end_time;
 } CsvExportDate;
 
 typedef struct

@@ -313,7 +313,7 @@ static Account *gnc_ofx_new_account(const char* name,
 int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_user_data)
 {
     char dest_string[255];
-    time_t current_time;
+    time64 current_time = gnc_time (NULL);
     Account *account;
     Account *investment_account = NULL;
     Account *income_account = NULL;
@@ -375,11 +375,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     else
     {
         /* Uh no, no valid date. As a workaround use today's date */
-        xaccTransSetDatePostedSecs(transaction, mktime(localtime(&current_time)));
+        xaccTransSetDatePostedSecs(transaction, current_time);
     }
 
-    current_time = time(NULL);
-    xaccTransSetDateEnteredSecs(transaction, mktime(localtime(&current_time)));
+    xaccTransSetDateEnteredSecs(transaction, current_time);
 
     if (data.check_number_valid)
     {
@@ -426,7 +425,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     if (data.date_funds_available_valid)
     {
         Timespec ts;
-        timespecFromTime_t(&ts, data.date_funds_available);
+        timespecFromTime64(&ts, data.date_funds_available);
         gnc_timespec_to_iso8601_buff (ts, dest_string);
         tmp = notes;
         notes = g_strdup_printf("%s%s%s", tmp, "|Date funds available:", dest_string);

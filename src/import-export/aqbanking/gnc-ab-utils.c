@@ -470,7 +470,7 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     Transaction *gnc_trans;
     const gchar *fitid;
     const GWEN_TIME *valuta_date;
-    time_t current_time;
+    time64 current_time;
     const char *custref;
     gchar *description;
     Split *split;
@@ -496,8 +496,7 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     else
         g_warning("transaction_cb: Oops, date 'valuta_date' was NULL");
 
-    current_time = time(NULL);
-    xaccTransSetDateEnteredSecs(gnc_trans, mktime(localtime(&current_time)));
+    xaccTransSetDateEnteredSecs(gnc_trans, gnc_time_utc (NULL));
 
     /* Currency.  We take simply the default currency of the gnucash account */
     xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));
@@ -804,7 +803,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     const AB_VALUE *booked_val = NULL, *noted_val = NULL;
     gdouble booked_value, noted_value;
     gnc_numeric value;
-    time_t booked_tt = 0;
+    time64 booked_tt = 0;
     GtkWidget *dialog;
     gboolean show_recn_window = FALSE;
 
@@ -873,7 +872,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
         {
             /* No time found? Use today because the HBCI query asked for today's
              * balance. */
-            booked_tt = gnc_timet_get_day_start(time(NULL));
+            booked_tt = gnc_time64_get_day_start(gnc_time(NULL));
         }
         booked_val = AB_Balance_GetValue(booked_bal);
         if (booked_val)

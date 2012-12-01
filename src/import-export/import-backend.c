@@ -409,7 +409,7 @@ TransactionGetTokens(GNCImportTransInfo *info)
     Transaction* transaction;
     GList* tokens;
     const char* text;
-    time_t transtime;
+    time64 transtime;
     struct tm *tm_struct;
     char local_day_of_week[16];
     Split* split;
@@ -432,12 +432,12 @@ TransactionGetTokens(GNCImportTransInfo *info)
      * it to day of week as a token
      */
     transtime = xaccTransGetDate(transaction);
-    tm_struct = gmtime(&transtime);
+    tm_struct = gnc_gmtime(&transtime);
     if (!qof_strftime(local_day_of_week, sizeof(local_day_of_week), "%A", tm_struct))
     {
         PERR("TransactionGetTokens: error, strftime failed\n");
     }
-
+    gnc_tm_free (tm_struct);
     /* we cannot add a locally allocated string to this array, dup it so
      * it frees the same way the rest do
      */
@@ -599,7 +599,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
         gint prob = 0;
         gboolean update_proposed;
         double downloaded_split_amount, match_split_amount;
-        time_t match_time, download_time;
+        time64 match_time, download_time;
         int datediff_day;
         Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
         Split *new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
@@ -816,7 +816,7 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
         */
         Account *importaccount =
             xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (trans_info));
-        time_t download_time = xaccTransGetDate (gnc_import_TransInfo_get_trans (trans_info));
+        time64 download_time = xaccTransGetDate (gnc_import_TransInfo_get_trans (trans_info));
 
         qof_query_set_book (query, gnc_get_current_book());
         xaccQueryAddSingleAccountMatch (query, importaccount,
@@ -917,7 +917,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
         xaccSplitSetReconcile(gnc_import_TransInfo_get_fsplit (trans_info), CREC);
         /*Set reconcile date to today*/
         xaccSplitSetDateReconciledSecs(gnc_import_TransInfo_get_fsplit (trans_info),
-                                       time(NULL));
+                                       gnc_time (NULL));
         /* Done editing. */
         xaccTransCommitEdit(gnc_import_TransInfo_get_trans (trans_info));
         return TRUE;
@@ -981,7 +981,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
             }
 
             /* Set reconcile date to today */
-            xaccSplitSetDateReconciledSecs(selected_match->split, time(NULL));
+            xaccSplitSetDateReconciledSecs(selected_match->split, gnc_time (NULL));
 
             /* Copy the online id to the reconciled transaction, so
                the match will be remembered */
@@ -1037,7 +1037,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
                 (selected_match->split, CREC);
             /* Set reconcile date to today */
             xaccSplitSetDateReconciledSecs
-            (selected_match->split, time(NULL));
+            (selected_match->split, gnc_time (NULL));
 
             /* Copy the online id to the reconciled transaction, so
             		 the match will be remembered */

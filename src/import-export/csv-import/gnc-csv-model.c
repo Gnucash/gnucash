@@ -14,7 +14,6 @@
 #include "gnc-ui-util.h"
 
 #include <string.h>
-#include <sys/time.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -23,10 +22,6 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <math.h>
-#include <time.h>
-#ifndef HAVE_LOCALTIME_R
-#include "localtime_r.h"
-#endif
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -74,9 +69,9 @@ static StfParseOptions_t* default_parse_options(void)
  * @param format An index specifying a format in date_format_user
  * @return The parsed value of date_str on success or -1 on failure
  */
-static time_t parse_date_with_year(const char* date_str, int format)
+static time64 parse_date_with_year(const char* date_str, int format)
 {
-    time_t rawtime; /* The integer time */
+    time64 rawtime; /* The integer time */
     struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
 
     int i, j, mem_length, orig_year = -1, orig_month = -1, orig_day = -1;
@@ -135,8 +130,8 @@ static time_t parse_date_with_year(const char* date_str, int format)
 
     /* Put some sane values in retvalue by using the current time for
      * the non-year-month-day parts of the date. */
-    time(&rawtime);
-    localtime_r(&rawtime, &retvalue);
+    gnc_time (&rawtime);
+    gnc_localtime_r (&rawtime, &retvalue);
 
     /* j traverses pmatch (index 0 contains the entire string, so we
      * start at index 1 for the first meaningful match). */
@@ -156,7 +151,7 @@ static time_t parse_date_with_year(const char* date_str, int format)
             date_segment[mem_length] = '\0';
 
             /* Set the appropriate member of retvalue. Save the original
-             * values so that we can check if the change when we use mktime
+             * values so that we can check if the change when we use gnc_mktime
              * below. */
             switch (segment_type)
             {
@@ -186,16 +181,16 @@ static time_t parse_date_with_year(const char* date_str, int format)
             j++;
         }
     }
-    /* Convert back to an integer. If mktime leaves retvalue unchanged,
+    /* Convert back to an integer. If gnc_mktime leaves retvalue unchanged,
      * everything is okay; otherwise, an error has occurred. */
     /* We have to use a "test" date value to account for changes in
-     * daylight savings time, which can cause a date change with mktime
+     * daylight savings time, which can cause a date change with gnc_mktime
      * near midnight, causing the code to incorrectly think a date is
      * incorrect. */
     test_retvalue = retvalue;
-    mktime(&test_retvalue);
+    gnc_mktime (&test_retvalue);
     retvalue.tm_isdst = test_retvalue.tm_isdst;
-    rawtime = mktime(&retvalue);
+    rawtime = gnc_mktime (&retvalue);
     if (retvalue.tm_mday == orig_day &&
     retvalue.tm_mon == orig_month &&
     retvalue.tm_year == orig_year)
@@ -215,9 +210,9 @@ static time_t parse_date_with_year(const char* date_str, int format)
  * @param format An index specifying a format in date_format_user
  * @return The parsed value of date_str on success or -1 on failure
  */
-static time_t parse_date_without_year(const char* date_str, int format)
+static time64 parse_date_without_year(const char* date_str, int format)
 {
-    time_t rawtime; /* The integer time */
+    time64 rawtime; /* The integer time */
     struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
 
     int i, j, mem_length, orig_year = -1, orig_month = -1, orig_day = -1;
@@ -245,8 +240,8 @@ static time_t parse_date_without_year(const char* date_str, int format)
 
     /* Put some sane values in retvalue by using the current time for
      * the non-year-month-day parts of the date. */
-    time(&rawtime);
-    localtime_r(&rawtime, &retvalue);
+    gnc_time (&rawtime);
+    gnc_localtime_r (&rawtime, &retvalue);
     orig_year = retvalue.tm_year;
 
     /* j traverses pmatch (index 0 contains the entire string, so we
@@ -268,7 +263,7 @@ static time_t parse_date_without_year(const char* date_str, int format)
             date_segment[mem_length] = '\0';
 
             /* Set the appropriate member of retvalue. Save the original
-             * values so that we can check if the change when we use mktime
+             * values so that we can check if the change when we use gnc_mktime
              * below. */
             switch (segment_type)
             {
@@ -284,16 +279,16 @@ static time_t parse_date_without_year(const char* date_str, int format)
             j++;
         }
     }
-    /* Convert back to an integer. If mktime leaves retvalue unchanged,
+    /* Convert back to an integer. If gnc_mktime leaves retvalue unchanged,
      * everything is okay; otherwise, an error has occurred. */
     /* We have to use a "test" date value to account for changes in
-     * daylight savings time, which can cause a date change with mktime
+     * daylight savings time, which can cause a date change with gnc_mktime
      * near midnight, causing the code to incorrectly think a date is
      * incorrect. */
     test_retvalue = retvalue;
-    mktime(&test_retvalue);
+    gnc_mktime (&test_retvalue);
     retvalue.tm_isdst = test_retvalue.tm_isdst;
-    rawtime = mktime(&retvalue);
+    rawtime = gnc_mktime (&retvalue);
     if (retvalue.tm_mday == orig_day &&
     retvalue.tm_mon == orig_month &&
     retvalue.tm_year == orig_year)
@@ -314,7 +309,7 @@ static time_t parse_date_without_year(const char* date_str, int format)
  * @param format An index specifying a format in date_format_user
  * @return The parsed value of date_str on success or -1 on failure
  */
-time_t parse_date(const char* date_str, int format)
+time64 parse_date(const char* date_str, int format)
 {
     if (strchr(date_format_user[format], 'y'))
         return parse_date_with_year(date_str, format);
@@ -625,7 +620,7 @@ static void trans_property_free(TransProperty* prop)
 {
     switch (prop->type)
     {
-        /* The types for "Date" and "Balance" (time_t and gnc_numeric,
+        /* The types for "Date" and "Balance" (time64 and gnc_numeric,
          * respectively) are typically not pointed to, we have to free
          * them, unlike types like char* ("Description"). */
     case GNC_CSV_DATE:
@@ -653,9 +648,9 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
     switch (prop->type)
     {
     case GNC_CSV_DATE:
-        prop->value = g_new(time_t, 1);
-        *((time_t*)(prop->value)) = parse_date(str, prop->list->date_format);
-        return *((time_t*)(prop->value)) != -1;
+        prop->value = g_new(time64, 1);
+        *((time64*)(prop->value)) = parse_date(str, prop->list->date_format);
+        return *((time64*)(prop->value)) != -1;
 
     case GNC_CSV_DESCRIPTION:
     case GNC_CSV_NOTES:
@@ -924,7 +919,7 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
         switch (prop->type)
         {
         case GNC_CSV_DATE:
-            xaccTransSetDatePostedSecs(trans_line->trans, *((time_t*)(prop->value)));
+            xaccTransSetDatePostedSecs(trans_line->trans, *((time64*)(prop->value)));
             break;
 
         case GNC_CSV_DESCRIPTION:
@@ -1202,7 +1197,7 @@ int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account,
             GncCsvTransLine* trans_line = (GncCsvTransLine*)transactions->data;
             if (trans_line->balance_set)
             {
-                time_t date = xaccTransGetDate(trans_line->trans);
+                time64 date = xaccTransGetDate(trans_line->trans);
                 /* Find what the balance should be by adding the offset to the actual balance. */
                 gnc_numeric existing_balance = gnc_numeric_add(balance_offset,
                                                xaccAccountGetBalanceAsOfDate(account, date),

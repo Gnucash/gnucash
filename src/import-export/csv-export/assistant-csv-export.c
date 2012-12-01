@@ -480,19 +480,19 @@ csv_export_info_acct_type_cb (GtkWidget *w, gpointer user_data)
 static void
 get_filter_times (CsvExportInfo *info)
 {
-    time_t time_val;
+    time64 time_val;
 
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(info->csvd.start_date_choose)))
     {
         time_val = gnc_date_edit_get_date(GNC_DATE_EDIT(info->csvd.start_date));
-        time_val = gnc_timet_get_day_start(time_val);
+        time_val = gnc_time64_get_day_start(time_val);
         info->csvd.start_time = time_val;
     }
     else
     {
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(info->csvd.start_date_today)))
         {
-            info->csvd.start_time = gnc_timet_get_today_start();
+            info->csvd.start_time = gnc_time64_get_today_start();
         }
         else
         {
@@ -503,18 +503,18 @@ get_filter_times (CsvExportInfo *info)
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(info->csvd.end_date_choose)))
     {
         time_val = gnc_date_edit_get_date(GNC_DATE_EDIT(info->csvd.end_date));
-        time_val = gnc_timet_get_day_end(time_val);
+        time_val = gnc_time64_get_day_end(time_val);
         info->csvd.end_time = time_val;
     }
     else
     {
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(info->csvd.start_date_today)))
         {
-            info->csvd.end_time = gnc_timet_get_today_end();
+            info->csvd.end_time = gnc_time64_get_today_end();
         }
         else
         {
-            info->csvd.end_time = time(NULL);
+            info->csvd.end_time = gnc_time (NULL);
         }
     }
 }
@@ -613,13 +613,13 @@ csv_export_end_date_cb (GtkWidget *radio, gpointer user_data)
  * a query and sorting by date. Since the truncated sort returns
  * only the *last* search results, sort in decreasing order.
  *******************************************************************/
-static time_t
+static time64
 get_earliest_in_book (QofBook *book)
 {
     QofQuery *q;
     GSList *p1, *p2;
     GList *res;
-    time_t earliest;
+    time64 earliest;
 
     q = qof_query_create_for(GNC_ID_SPLIT);
     qof_query_set_max_results(q, 1);
@@ -644,7 +644,7 @@ get_earliest_in_book (QofBook *book)
     else
     {
         /* If no results, we don't want to bomb totally */
-        earliest = time (0);
+        earliest = gnc_time (0);
     }
 
     qof_query_destroy (q);
@@ -856,7 +856,7 @@ csv_export_assistant_create (CsvExportInfo *info)
     GtkWidget *box, *h_box;
     GtkWidget *button;
     GtkWidget *table, *hbox;
-    time_t start_time, end_time;
+    time64 start_time, end_time;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "CSV Export Assistant");
@@ -939,7 +939,7 @@ csv_export_assistant_create (CsvExportInfo *info)
 
     /* Earliest and Latest in Book */
     start_time = get_earliest_in_book (gnc_get_current_book());
-    end_time = time(NULL);
+    end_time = gnc_time (NULL);
 
     info->csvd.start_time = start_time;
     info->csvd.end_time = end_time;
@@ -955,20 +955,20 @@ csv_export_assistant_create (CsvExportInfo *info)
     info->csvd.end_date_today = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_today"));
 
     /* Start date info */
-    info->csvd.start_date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+    info->csvd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
     gtk_box_pack_start (GTK_BOX (hbox), info->csvd.start_date, TRUE, TRUE, 0);
     gtk_widget_show (info->csvd.start_date);
-    gnc_date_edit_set_time(GNC_DATE_EDIT(info->csvd.start_date), start_time);
+    gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.start_date), start_time);
     g_signal_connect (G_OBJECT (info->csvd.start_date), "date-changed",
                       G_CALLBACK (csv_export_date_changed_cb), info);
 
     /* End date info */
-    info->csvd.end_date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+    info->csvd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
     gtk_box_pack_start (GTK_BOX (hbox), info->csvd.end_date, TRUE, TRUE, 0);
     gtk_widget_show (info->csvd.end_date);
-    gnc_date_edit_set_time(GNC_DATE_EDIT(info->csvd.end_date), end_time);
+    gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.end_date), end_time);
     g_signal_connect (G_OBJECT (info->csvd.end_date), "date-changed",
                       G_CALLBACK (csv_export_date_changed_cb), info);
 
