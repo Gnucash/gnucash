@@ -1617,7 +1617,7 @@ test_gnc_iso8601_to_timespec_gmt (void)
     g_assert_cmpint (t.tv_sec, ==, g_date_time_to_unix (gdt2));
     g_assert_cmpint (t.tv_nsec, ==, get_nanoseconds (gdt2));
 
-    t = gnc_iso8601_to_timespec_gmt ("2012-07-04 19:27:44.0+08.40");
+    t = gnc_iso8601_to_timespec_gmt ("2012-07-04 19:27:44.0+08:40");
     g_assert_cmpint (t.tv_sec, ==, g_date_time_to_unix (gdt3));
     g_assert_cmpint (t.tv_nsec, ==, get_nanoseconds (gdt3));
 

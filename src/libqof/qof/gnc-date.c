@@ -1391,157 +1391,41 @@ xaccDateUtilGetStampNow (void)
 /********************************************************************\
  * iso 8601 datetimes should look like 1998-07-02 11:00:00.68-05
 \********************************************************************/
-/* hack alert -- this routine returns incorrect values for
- * dates before 1970 */
+/* Unfortunately, not all strptime or struct tm implementations
+ * support timezones, so we have to do this with sscanf.
+ */
 
+#define ISO_DATE_FORMAT "%d-%d-%d %d:%d:%lf%s"
 Timespec
 gnc_iso8601_to_timespec_gmt(const char *str)
 {
-    char buf[4];
-    gchar *dupe;
-    Timespec ts;
-    struct tm stm;
-    long int nsec = 0;
+    Timespec time = { 0L, 0L };
+    GDateTime *gdt;
+    gint hour = 0, minute = 0, day = 0, month = 0, year = 0;
+    gchar zone[6] = "\0\0\0\0\0\0";
+    gdouble second = 0.0;
+    gint fields;
 
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    memset (&stm, 0, sizeof (stm));
-    if (!str) return ts;
-    dupe = g_strdup(str);
-    stm.tm_year = atoi(str) - 1900;
-    str = strchr (str, '-');
-    if (str)
-    {
-        str++;
-    }
-    else
-    {
-        return ts;
-    }
-    stm.tm_mon = atoi(str) - 1;
-    str = strchr (str, '-');
-    if (str)
-    {
-        str++;
-    }
-    else
-    {
-        return ts;
-    }
-    stm.tm_mday = atoi(str);
+    if (!str)
+	return time;
 
-    str = strchr (str, ' ');
-    if (str)
+    fields = sscanf (str, ISO_DATE_FORMAT, &year, &month,
+			  &day, &hour, &minute, &second, zone);
+    if (fields < 1)
+	return time;
+    else if (fields > 6 && strlen (zone) > 0) /* Date string included a timezone */
     {
-        str++;
+	GTimeZone *tz = g_time_zone_new (zone);
+	gdt = g_date_time_new (tz, year, month, day, hour, minute, second);
+	g_time_zone_unref (tz);
     }
-    else
-    {
-        return ts;
-    }
-    stm.tm_hour = atoi(str);
-    str = strchr (str, ':');
-    if (str)
-    {
-        str++;
-    }
-    else
-    {
-        return ts;
-    }
-    stm.tm_min = atoi(str);
-    str = strchr (str, ':');
-    if (str)
-    {
-        str++;
-    }
-    else
-    {
-        return ts;
-    }
-    stm.tm_sec = atoi (str);
+    else /* No zone info, assume UTC */
+	gdt = g_date_time_new_utc (year, month, day, hour, minute, second);
 
-    /* The decimal point, optionally present ... */
-    /* hack alert -- this algo breaks if more than 9 decimal places present */
-    if (strchr (str, '.'))
-    {
-        int decimals, i, multiplier = 1000000000;
-        str = strchr (str, '.') + 1;
-        decimals = strcspn (str, "+- ");
-        for (i = 0; i < decimals; i++) multiplier /= 10;
-        nsec = atoi(str) * multiplier;
-    }
-    stm.tm_isdst = -1;
-
-    /* Timezone format can be +hh or +hhmm or +hh.mm (or -) (or not present) */
-    str += strcspn (str, "+-");
-    if (*str)
-    {
-        buf[0] = str[0];
-        buf[1] = str[1];
-        buf[2] = str[2];
-        buf[3] = 0;
-        stm.tm_hour -= atoi(buf);
-
-        str += 3;
-        if ('.' == *str) str++;
-        if (isdigit ((unsigned char)*str) && isdigit ((unsigned char)*(str + 1)))
-        {
-            int cyn;
-            /* copy sign from hour part */
-            if ('+' == buf[0])
-            {
-                cyn = -1;
-            }
-            else
-            {
-                cyn = +1;
-            }
-            buf[0] = str[0];
-            buf[1] = str[1];
-            buf[2] = str[2];
-            buf[3] = 0;
-            stm.tm_min += cyn * atoi(buf);
-        }
-    }
-
-    /* Note that gnc_mktime returns 'local seconds' which is the true time
-     * minus the timezone offset.  We don't want to work with local
-     * seconds, since they swim around acording to daylight savings, etc.
-     * We want to work with universal time.  Thus, add an offset
-     * to undo the damage that gnc_mktime causes.
-     */
-    {
-        struct tm tmp_tm;
-        struct tm tm;
-        long int tz;
-        int tz_hour;
-        gint64 secs;
-
-        /* Use a temporary tm struct so the gnc_mktime call below
-         * doesn't mess up stm. */
-        tmp_tm = stm;
-        tmp_tm.tm_isdst = -1;
-
-        secs = gnc_mktime (&tmp_tm);
-        /* The call to gnc_localtime is 'bogus', but it forces 'timezone' to
-         * be set. Note that we must use the accurate date, since the
-         * value of 'gnc_timezone' includes daylight savings corrections
-         * for that date. */
-
-        gnc_localtime_r (&secs, &tm);
-
-        tz = gnc_timezone (&tmp_tm);
-
-        tz_hour = tz / 3600;
-        stm.tm_hour -= tz_hour;
-        stm.tm_min -= (tz % 3600) / 60;
-        stm.tm_isdst = tmp_tm.tm_isdst;
-        ts.tv_sec = gnc_mktime (&stm);
-        ts.tv_nsec = nsec;
-    }
-    g_free(dupe);
-    return ts;
+    time.tv_sec = g_date_time_to_unix (gdt);
+    time.tv_nsec = g_date_time_get_microsecond (gdt) * 1000;
+    g_date_time_unref (gdt);
+    return time;
 }
 
 /********************************************************************\
