@@ -28,6 +28,7 @@
 
 #include "config.h"
 #include <glib.h>
+#include <glib/gprintf.h>
 /* to be renamed qofdate.c */
 #include <ctype.h>
 
@@ -303,6 +304,7 @@ gnc_localtime_r (const gint64 *secs, struct tm* time)
      {
 	  index = 1;
 	  daylight = 1;
+          time->tm_isdst = 1;
      }
 
 #ifdef HAVE_STRUCT_TM_GMTOFF
@@ -447,6 +449,16 @@ gnc_difftime (const gint64 secs1, const gint64 secs2)
 
 /****************************************************************************/
 
+GDateTime*
+gnc_g_date_time_new_from_timespec_local (Timespec ts)
+{
+    GDateTime *gdt1 = gnc_g_date_time_new_from_unix_local (ts.tv_sec);
+    double nsecs = ((double)ts.tv_nsec + 0.5)/ 1000000000.0L;
+    GDateTime *gdt2 = g_date_time_add_seconds (gdt1, nsecs);
+    g_date_time_unref (gdt1);
+    g_assert (g_date_time_to_unix (gdt2) == ts.tv_sec + (nsecs >= 1.0 ? (gint64)nsecs : 0));
+    return gdt2;
+}
 
 const char*
 gnc_date_dateformat_to_string(QofDateFormat format)
@@ -1392,9 +1404,11 @@ gnc_iso8601_to_timespec_gmt(const char *str)
     Timespec time = { 0L, 0L };
     GDateTime *gdt;
     gint hour = 0, minute = 0, day = 0, month = 0, year = 0;
-    gchar zone[6] = "\0\0\0\0\0\0";
+    gchar zone[12];
     gdouble second = 0.0;
     gint fields;
+
+    memset (zone, 0, sizeof (zone));
 
     if (!str)
 	return time;
@@ -1406,7 +1420,10 @@ gnc_iso8601_to_timespec_gmt(const char *str)
     else if (fields > 6 && strlen (zone) > 0) /* Date string included a timezone */
     {
 	GTimeZone *tz = g_time_zone_new (zone);
+        time64 secs;
+	second += 5e-10;
 	gdt = g_date_time_new (tz, year, month, day, hour, minute, second);
+        secs = g_date_time_to_unix (gdt);
 	g_time_zone_unref (tz);
     }
     else /* No zone info, assume UTC */

@@ -4,6 +4,7 @@
  *  Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>
  *  Copyright (C) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
  *  Copyright  2005  Neil Williams <linux@codehelp.co.uk>
+ *  Copyright 2012 John Ralls <jralls@ceridwen.us>
  ****************************************************************************/
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
@@ -70,6 +71,16 @@
 #include <glib-object.h>
 #include <time.h>
 
+/** The Timespec is just like the unix 'struct timespec'
+ * except that we use a 64-bit unsigned int to
+ * store the seconds.  This should adequately cover dates in the
+ * distant future as well as the distant past, as long as they're not
+ * more than a couple dozen times the age of the universe
+ * Values of this type can range from -9,223,372,036,854,775,808 to
+ * 9,223,372,036,854,775,807.
+ */
+typedef struct timespec64 Timespec;
+
 /** @name GValue
   @{
 */
@@ -81,7 +92,7 @@ GType timespec_get_type( void );
 extern const char *gnc_default_strftime_date_format;
 
 /** The maximum length of a string created by the date printers */
-#define MAX_DATE_LENGTH 31
+#define MAX_DATE_LENGTH 34
 
 /** Constants *******************************************************/
 /** \brief UTC date format string.
@@ -131,12 +142,14 @@ typedef enum
     GNCDATE_MONTH_ABBREV,
     GNCDATE_MONTH_NAME
 } GNCDateMonthFormat;
-
 /* Replacements for POSIX functions which use time_t. Time_t is still
  * 32 bits in Microsoft Windows, Apple OSX, and some BSD versions even
  * when the rest of the system is 64-bits, as well as all 32-bit
  * versions of Unix. 32-bit time_t overflows at 03:14:07 UTC on
  * Tuesday, 19 January 2038 and so cannot represent dates after that.
+ *
+ * These functions use GLib's GDateTime internally, and include a
+ * workaround for the lack of Win32 support before GLib 2.36.
  */
 /** \brief fill out a time struct from a 64-bit time value.
  *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
@@ -211,6 +224,14 @@ gdouble gnc_difftime (const gint64 secs1, const gint64 secs2);
  */
 void gnc_tm_free (struct tm* time);
 
+/** \brief Create a GDateTime from a Timespec
+ *  \param ts: A local (int64-based) Timespec
+ *  \note: GDateTimes use microseconds, not nanoseconds, so in theory we lose precision. In practice, there's no portable way to get either.
+ *  \note: Works around the lack of Win32 support in GTimeZone before GLib 2.36.
+ *  \return A GDateTime pointer. Free it with g_date_time_unref () when you're done with it.
+ */
+GDateTime* gnc_g_date_time_new_from_timespec_local (Timespec tm);
+
 /** \name String / DateFormat conversion. */
 //@{
 
@@ -257,15 +278,6 @@ struct timespec64
 };
 #endif /* SWIG */
 
-/** The Timespec is just like the unix 'struct timespec'
- * except that we use a 64-bit unsigned int to
- * store the seconds.  This should adequately cover dates in the
- * distant future as well as the distant past, as long as they're not
- * more than a couple dozen times the age of the universe
- * Values of this type can range from -9,223,372,036,854,775,808 to
- * 9,223,372,036,854,775,807.
- */
-typedef struct timespec64 Timespec;
 
 
 /* Prototypes ******************************************************/
