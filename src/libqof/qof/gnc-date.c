@@ -1369,21 +1369,11 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 /********************************************************************\
 \********************************************************************/
 
-/** Return a string representation of the current local time.
- * @return string in YYYYMMDDHHmmss format. The string must be g_free()'d
- *         by the caller.
-*/
 gchar *
-xaccDateUtilGetStampNow (void)
+gnc_date_timestamp (void)
 {
-    GDateTime *gdt = g_date_time_new_now_local ();
-    gchar *timestr = g_strdup_printf("%04d%02d%02d%02d%02d%02d",
-				     g_date_time_get_year (gdt),
-				     g_date_time_get_month (gdt),
-				     g_date_time_get_day_of_month (gdt),
-				     g_date_time_get_hour (gdt),
-				     g_date_time_get_minute (gdt),
-				     g_date_time_get_second (gdt));
+    GDateTime *gdt = gnc_g_date_time_new_now_local ();
+    gchar *timestr = g_date_time_format (gdt, "%Y%m%d%H%M%S");
     g_date_time_unref (gdt);
     return timestr;
 }

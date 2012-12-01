@@ -1543,22 +1543,15 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)// 
 test_qof_strftime (void)
 {
 }*/
-/* xaccDateUtilGetStampNow
+/* gnc_date_timestamp
 gchar *
-xaccDateUtilGetStampNow (void)// C: 2 in 2  Local: 0:0:0
+gnc_date_timestamp (void)// C: 2 in 2  Local: 0:0:0
 */
 static void
-test_xaccDateUtilGetStampNow (void)
+test_gnc_date_timestamp (void)
 {
-/* xaccDateUtilGetStampNow uses gdate, so in MinGW it gets UTC for
- * local because of the broken GTimeZone
- */
-#ifdef G_OS_WIN32
-    GDateTime *gdt = g_date_time_new_now_utc ();
-#else
-    GDateTime *gdt = g_date_time_new_now_local ();
-#endif
-    gchar *timestr = xaccDateUtilGetStampNow ();
+    GDateTime *gdt = gncdt.new_now_local ();
+    gchar *timestr = gnc_date_timestamp ();
     struct tm tm;
 
     g_assert (strptime (timestr, "%Y%m%d%H%M%S", &tm));
@@ -2379,7 +2372,7 @@ test_suite_gnc_date (void)
 // GNC_TEST_ADD_FUNC (suitename, "qof formatted time to utf8", test_qof_formatted_time_to_utf8);
 // GNC_TEST_ADD_FUNC (suitename, "qof format time", test_qof_format_time);
 // GNC_TEST_ADD_FUNC (suitename, "qof strftime", test_qof_strftime);
-    GNC_TEST_ADD_FUNC (suitename, "xaccDateUtilGetStampNow", test_xaccDateUtilGetStampNow);
+    GNC_TEST_ADD_FUNC (suitename, "gnc_date_timestamp", test_gnc_date_timestamp);
     GNC_TEST_ADD_FUNC (suitename, "gnc iso8601 to timespec gmt", test_gnc_iso8601_to_timespec_gmt);
     GNC_TEST_ADD_FUNC (suitename, "gnc timespec to iso8601 buff", test_gnc_timespec_to_iso8601_buff);
     GNC_TEST_ADD_FUNC (suitename, "gnc timespec2dmy", test_gnc_timespec2dmy);

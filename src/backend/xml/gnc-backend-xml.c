@@ -665,7 +665,7 @@ gnc_xml_be_backup_file(FileBackend *be)
         }
     }
 
-    timestamp = xaccDateUtilGetStampNow ();
+    timestamp = gnc_date_timestamp ();
     backup = g_strconcat( datafile, ".", timestamp, GNC_DATAFILE_EXT, NULL );
     g_free (timestamp);
 

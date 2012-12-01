@@ -163,7 +163,7 @@ xaccOpenLog (void)
     if (!log_base_name) log_base_name = g_strdup ("translog");
 
     /* tag each filename with a timestamp */
-    timestamp = xaccDateUtilGetStampNow ();
+    timestamp = gnc_date_timestamp ();
 
     filename = g_strconcat (log_base_name, ".", timestamp, ".log", NULL);
 

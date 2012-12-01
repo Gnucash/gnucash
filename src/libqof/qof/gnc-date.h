@@ -624,11 +624,10 @@ gint64 gnc_timet_get_today_start(void);
  *  corresponding to the last second of today. */
 gint64 gnc_timet_get_today_end(void);
 
-/** The xaccDateUtilGetStampNow() routine returns the current time in
- *  seconds in textual format.
+/** \brief Make a timestamp in YYYYMMDDHHMMSS format.
  *  @return A pointer to the generated string.
- *  @note The caller owns this buffer and must free it when done. */
-char * xaccDateUtilGetStampNow (void);
+ *  @note The caller owns this buffer and must g_free it when done. */
+char * gnc_date_timestamp (void);
 
 #define MIN_BUF_LEN 10
 /**
