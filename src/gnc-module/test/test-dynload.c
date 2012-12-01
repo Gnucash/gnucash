@@ -18,17 +18,26 @@ guile_main(void *closure, int argc, char ** argv)
     GModule *gmodule;
     gchar *msg = "Module '../../../src/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
     gchar *logdomain = "gnc.module";
+    gchar *modpath;
     guint loglevel = G_LOG_LEVEL_WARNING;
     TestErrorStruct check = { loglevel, logdomain, msg };
     g_log_set_handler (logdomain, loglevel,
                        (GLogFunc)test_checked_handler, &check);
 
     g_test_message("  test-dynload.c: testing dynamic linking of libgnc-module ...");
-    gmodule = g_module_open("libgnc-module", 0);
-
-    /* Maybe MacOS? */
-    if (!gmodule)
-        gmodule = g_module_open("libgnc-module.dylib", 0);
+#ifdef G_OS_WIN32
+/* MinGW builds libgnc-module-0.dll */
+    modpath = g_module_build_path ("../.libs", "gnc-module-0");
+#elif defined GDK_QUARTZ
+/* We build libgnc-module as a shared library for testing, and on OSX
+ * that means that g_module_build_path (), which uses ".so", doesn't
+ * build the right path name.
+ */
+    modpath = g_build_filename ("..", ".libs", "libgnc-module.dylib", NULL);
+#else /* Regular Unix */
+    modpath = g_module_build_path ("../.libs", "gnc-module");
+#endif
+    gmodule = g_module_open(modpath, 0);
 
     if (gmodule)
     {
