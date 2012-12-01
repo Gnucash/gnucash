@@ -1304,8 +1304,8 @@ gnc_detach_process (Process *proc, const gboolean kill_it)
 }
 
 
-time_t
-gnc_parse_time_to_timet(const gchar *s, const gchar *format)
+time64
+gnc_parse_time_to_time64 (const gchar *s, const gchar *format)
 {
     struct tm tm;
 
@@ -1314,7 +1314,7 @@ gnc_parse_time_to_timet(const gchar *s, const gchar *format)
     if (!strptime(s, format, &tm))
         return -1;
 
-    return mktime(&tm);
+    return gnc_mktime(&tm);
 }
 
 gchar *gnc_scm_to_locale_string(SCM scm_string)

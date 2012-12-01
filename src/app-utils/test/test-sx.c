@@ -4,6 +4,7 @@
 #include "SX-book.h"
 #include "gnc-sx-instance-model.h"
 #include "gnc-ui-util.h"
+#include <gnc-gdate-utils.h>
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
@@ -16,7 +17,7 @@ test_basic()
     SchedXaction *one_sx;
 
     g_date_clear(&today, 1);
-    g_date_set_time_t(&today, time(NULL));
+    gnc_gdate_set_today (&today);
 
     yesterday = today;
     g_date_subtract_days(&yesterday, 1);
@@ -86,14 +87,14 @@ test_once()
 
     when = g_date_new();
     g_date_clear(when, 1);
-    g_date_set_time_t(when, time(NULL));
+    gnc_gdate_set_today (when);
     while (random_offset_within_one_year == 0)
         random_offset_within_one_year = get_random_int_in_range(-365, 365);
     g_date_add_days(when, random_offset_within_one_year);
 
     end = g_date_new();
     g_date_clear(end, 1);
-    g_date_set_time_t(end, time(NULL));
+    gnc_gdate_set_today (end);
     g_date_add_years(end, 1);
 
     lonely = add_once_sx("once", when);
@@ -128,10 +129,10 @@ test_state_changes()
     GncSxInstance *inst;
 
     start = g_date_new();
-    g_date_set_time_t(start, time(NULL));
+    gnc_gdate_set_today (start);
 
     end = g_date_new();
-    g_date_set_time_t(end, time(NULL));
+    gnc_gdate_set_today (end);
     g_date_add_days(end, 3);
 
     foo = add_daily_sx("foo", start, NULL, NULL);

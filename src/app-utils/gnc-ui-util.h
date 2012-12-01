@@ -126,7 +126,7 @@ Account * gnc_find_or_create_equity_account (Account *root,
         gnc_commodity *currency);
 gboolean gnc_account_create_opening_balance (Account *account,
         gnc_numeric balance,
-        time_t date,
+        time64 date,
         QofBook *book);
 
 /* Locale functions *************************************************/

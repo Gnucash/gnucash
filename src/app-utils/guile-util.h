@@ -153,4 +153,4 @@ void gnc_detach_process(Process *proc, const gboolean kill_it);
  *  @param format Format specification.
  *
  *  @return The time in seconds since unix epoch, or -1 on error */
-time_t gnc_parse_time_to_timet(const gchar *s, const gchar *format);
+time64 gnc_parse_time_to_time64 (const gchar *s, const gchar *format);

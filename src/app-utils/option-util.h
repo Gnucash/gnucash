@@ -182,7 +182,7 @@ char * gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
         const char *name,
         const char *default_value);
 
-time_t gnc_option_db_lookup_date_option(GNCOptionDB *odb,
+time64 gnc_option_db_lookup_date_option(GNCOptionDB *odb,
                                         const char *section,
                                         const char *name,
                                         gboolean *is_relative,

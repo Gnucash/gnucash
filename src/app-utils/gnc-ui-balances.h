@@ -108,8 +108,8 @@ gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
         gboolean *negative);
 
 gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
-        time_t date,
-        gboolean include_children);
+						   time64 date,
+						   gboolean include_children);
 
 /********************************************************************
  * Balance calculations related to owners

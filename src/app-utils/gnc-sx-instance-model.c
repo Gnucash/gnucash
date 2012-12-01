@@ -48,6 +48,7 @@
 #include "gnc-sx-instance-model.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
+#include <gnc-gdate-utils.h>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.app-utils.sx"
@@ -426,7 +427,7 @@ gnc_sx_get_current_instances(void)
 {
     GDate now;
     g_date_clear(&now, 1);
-    g_date_set_time_t(&now, time(NULL));
+    gnc_gdate_set_time64 (&now, gnc_time (NULL));
     return gnc_sx_get_instances(&now, FALSE);
 }
 

@@ -2085,7 +2085,7 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
  *   set_ab_value argument. If the default_value argument is NULL,  *
  *   copies the current date to set_ab_value. Whatever value is     *
  *   stored in set_ab_value is returned as an approximate (no       *
- *   nanoseconds) time_t value.  set_ab_value may be NULL, in which *
+ *   nanoseconds) time64 value.  set_ab_value may be NULL, in which *
  *   case only the return value can be used. If is_relative is      *
  *   non-NULL, it is set to whether the date option is currently    *
  *   storing a relative date.  If it is, and set_rel_value          *
@@ -2099,9 +2099,9 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
  *       set_ab_value  - location to store absolute option value    *
  *       set_rel_value - location to store relative option value    *
  *       default       - default value if not found                 *
- * Return: time_t approximation of set_value                        *
+ * Return: time64 approximation of set_value                        *
 \********************************************************************/
-time_t
+time64
 gnc_option_db_lookup_date_option(GNCOptionDB *odb,
                                  const char *section,
                                  const char *name,
@@ -2171,7 +2171,7 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
     {
         if (default_value == NULL)
         {
-            set_ab_value->tv_sec = time (NULL);
+            set_ab_value->tv_sec = gnc_time (NULL);
             set_ab_value->tv_nsec = 0;
         }
         else

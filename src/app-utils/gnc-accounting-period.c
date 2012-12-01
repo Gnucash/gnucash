@@ -59,7 +59,14 @@
 #define KEY_END_DATE   	 "end_date"
 #define KEY_END_PERIOD 	 "end_period"
 
-static time_t
+static time64 gnc_accounting_period_start_time64 (GncAccountingPeriod which,
+						   const GDate *fy_end,
+						   const GDate *contains);
+static time64 gnc_accounting_period_end_time64 (GncAccountingPeriod which,
+						 const GDate *fy_end,
+						 const GDate *contains);
+
+static time64
 lookup_start_date_option(const gchar *section,
                          const gchar *key_choice,
                          const gchar *key_absolute,
@@ -67,7 +74,7 @@ lookup_start_date_option(const gchar *section,
                          GDate *fy_end)
 {
     gchar *choice;
-    time_t time;
+    time64 time;
     int which;
 
     choice = gnc_gconf_get_string(section, key_choice, NULL);
@@ -78,7 +85,7 @@ lookup_start_date_option(const gchar *section,
     else
     {
         which = gnc_gconf_get_int(section, key_relative, NULL);
-        time = gnc_accounting_period_start_timet(which, fy_end, NULL);
+        time = gnc_accounting_period_start_time64(which, fy_end, NULL);
     }
     g_free(choice);
     /* we will need the balance of the last transaction before the start
@@ -88,8 +95,7 @@ lookup_start_date_option(const gchar *section,
     return time;
 }
 
-
-static time_t
+static time64
 lookup_end_date_option(const gchar *section,
                        const gchar *key_choice,
                        const gchar *key_absolute,
@@ -97,19 +103,19 @@ lookup_end_date_option(const gchar *section,
                        GDate *fy_end)
 {
     gchar *choice;
-    time_t time;
+    time64 time;
     int which;
 
     choice = gnc_gconf_get_string(section, key_choice, NULL);
     if (choice && strcmp(choice, "absolute") == 0)
     {
         time = gnc_gconf_get_int(section, key_absolute, NULL);
-        time = gnc_timet_get_day_end(time);
+        time = gnc_time64_get_day_end(time);
     }
     else
     {
         which = gnc_gconf_get_int(section, key_relative, NULL);
-        time = gnc_accounting_period_end_timet(which, fy_end, NULL);
+        time = gnc_accounting_period_end_time64(which, fy_end, NULL);
     }
     g_free(choice);
     if (time == 0)
@@ -133,10 +139,10 @@ get_fy_end(void)
     return NULL;
 }
 
-time_t
+time64
 gnc_accounting_period_fiscal_start(void)
 {
-    time_t t;
+    time64 t;
     GDate *fy_end = get_fy_end();
     t = lookup_start_date_option(GCONF_SECTION, KEY_START_CHOICE,
                                  KEY_START_DATE, KEY_START_PERIOD, fy_end);
@@ -145,10 +151,10 @@ gnc_accounting_period_fiscal_start(void)
     return t;
 }
 
-time_t
+time64
 gnc_accounting_period_fiscal_end(void)
 {
-    time_t t;
+    time64 t;
     GDate *fy_end = get_fy_end();
 
     t = lookup_end_date_option(GCONF_SECTION, KEY_END_CHOICE,
@@ -173,8 +179,8 @@ gnc_accounting_period_start_gdate (GncAccountingPeriod which,
     }
     else
     {
-        date = g_date_new();
-        g_date_set_time_t(date, time(NULL));
+        date = g_date_new ();
+        gnc_gdate_set_today (date);
     }
 
     switch (which)
@@ -235,19 +241,19 @@ gnc_accounting_period_start_gdate (GncAccountingPeriod which,
     return date;
 }
 
-time_t
-gnc_accounting_period_start_timet (GncAccountingPeriod which,
+static time64
+gnc_accounting_period_start_time64 (GncAccountingPeriod which,
                                    const GDate *fy_end,
                                    const GDate *contains)
 {
     GDate *date;
-    time_t secs;
+    time64 secs;
 
     date = gnc_accounting_period_start_gdate(which, fy_end, contains);
     if (!date)
         return 0;
 
-    secs = gnc_timet_get_day_start_gdate(date);
+    secs = gnc_time64_get_day_start_gdate(date);
     g_date_free(date);
     return secs;
 }
@@ -267,8 +273,8 @@ gnc_accounting_period_end_gdate (GncAccountingPeriod which,
     }
     else
     {
-        date = g_date_new();
-        g_date_set_time_t(date, time(NULL));
+        date = g_date_new ();
+        gnc_gdate_set_today (date);
     }
 
     switch (which)
@@ -330,22 +336,21 @@ gnc_accounting_period_end_gdate (GncAccountingPeriod which,
     return date;
 }
 
-time_t
-gnc_accounting_period_end_timet (GncAccountingPeriod which,
+static time64
+gnc_accounting_period_end_time64 (GncAccountingPeriod which,
                                  const GDate *fy_end,
                                  const GDate *contains)
 {
     GDate *date;
-    time_t secs;
+    time64 secs;
 
     date = gnc_accounting_period_end_gdate(which, fy_end, contains);
     if (!date)
         return 0;
 
-    secs = gnc_timet_get_day_end_gdate(date);
+    secs = gnc_time64_get_day_end_gdate(date);
     g_date_free(date);
     return secs ;
 }
-
 
 /** @} */
