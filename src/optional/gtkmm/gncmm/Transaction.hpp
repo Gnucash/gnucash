@@ -200,7 +200,7 @@ public:
 //    void set_date_entered(const Glib::DateTime& t) { xaccTransSetDateEnteredSecs(gobj(), t.toTime_t()); }
     time_t get_date_entered_tt() const
     {
-        return timespecToTime_t(xaccTransRetDateEnteredTS(gobj()));
+        return timespecToTime64 (xaccTransRetDateEnteredTS(gobj()));
     }
     //Glib::DateTime get_date_entered() const { return toGDateTime(xaccTransRetDateEnteredTS(gobj())); }
 

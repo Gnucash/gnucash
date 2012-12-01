@@ -34,10 +34,6 @@
 #include "config.h"
 #endif
 
-#ifndef HAVE_LOCALTIME_R
-#include "localtime_r.h"
-#endif
-
 #include <glib/gi18n.h>
 #include <regex.h>
 #include <glib.h>
@@ -60,6 +56,7 @@
 #include "gncIDSearch.h"
 #include "dialog-bi-import.h"
 #include "dialog-bi-import-helper.h"
+#include <gnc-gdate-utils.h>
 
 // To open the invoices for editing
 #include "business/business-gnome/gnc-plugin-page-invoice.h"
@@ -329,19 +326,13 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
             {
                 if (prev_date_opened->len == 0)
                 {
-                    // fix this by using the current date (why is this so complicated?)
+                    // fix this by using the current date
                     gchar temp[20];
-                    GDate *date;
-                    time_t secs;
-                    struct tm now;
-                    time (&secs);
-                    localtime_r (&secs, &now);
-                    date =
-                        g_date_new_dmy (now.tm_mday, now.tm_mon + 1,
-                                        now.tm_year + 1900);
-                    g_date_strftime (temp, 20, "%x", date);	// create a locale specific date string
+                    GDate date;
+		    g_date_clear (&date, 1);
+		    gnc_gdate_set_today (&date);
+                    g_date_strftime (temp, 20, "%x", &date);	// create a locale specific date string
                     g_string_assign (prev_date_opened, temp);
-                    g_date_free (date);
                 }
                 // fix this by using the previous date_opened value (multi line invoice)
                 gtk_list_store_set (store, &iter, DATE_OPENED,
@@ -589,9 +580,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             }
             else			// If no date in CSV
             {
-                time_t now = time (NULL);
+                time64 now = gnc_time (NULL);
                 Timespec now_timespec;
-                timespecFromTime_t (&now_timespec, now);
+                timespecFromTime64 (&now_timespec, now);
                 gncInvoiceSetDateOpened (invoice, now_timespec);
             }
             gncInvoiceSetBillingID (invoice, billing_id ? billing_id : "");
@@ -672,7 +663,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncEntrySetDateGDate (entry, date);
             g_date_free (date);
         }
-        timespecFromTime_t (&today, time (NULL));	// set today to the current date
+        timespecFromTime64 (&today, gnc_time (NULL));	// set today to the current date
         gncEntrySetDateEntered (entry, today);
         gncEntrySetDescription (entry, desc);
         gncEntrySetAction (entry, action);
