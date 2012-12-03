@@ -306,8 +306,8 @@ ap_assistant_menu_prepare (GtkAssistant *assistant, gpointer user_data)
      * we may have closed books since last time. */
     info->earliest = get_earliest_in_book (gnc_get_current_book());
     info->earliest_str = qof_print_date(info->earliest);
-    PINFO ("Date of earliest transaction is %lld %s", info->earliest,
-	   gnc_ctime (&info->earliest));
+    PINFO ("Date of earliest transaction is %" G_GINT64_FORMAT " %s",
+	   info->earliest, gnc_ctime (&info->earliest));
 
     /* Display the results */
     str = g_strdup_printf (
@@ -571,7 +571,7 @@ ap_assistant_create (AcctPeriodInfo *info)
      * and use that to set up the freq spec widget. */
     info->earliest = get_earliest_in_book (gnc_get_current_book());
     info->earliest_str = qof_print_date(info->earliest);
-    PINFO ("date of earliest transaction is %lld %s",
+    PINFO ("date of earliest transaction is %" G_GINT64_FORMAT " %s",
            info->earliest, gnc_ctime (&info->earliest));
 
     g_date_clear (&info->closing_date, 1);
