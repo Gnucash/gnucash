@@ -76,7 +76,7 @@
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ICI</act:name>
+  <act:name>IMU</act:name>
   <act:id type="new">3994b8f5a6a8b2a0a48126fa955e03f7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
