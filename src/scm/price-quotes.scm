@@ -516,7 +516,7 @@
 
   (define (timestr->time-pair timestr time-zone)
     ;; time-zone is ignored currently
-    (cons (gnc-parse-time-to-timet timestr "%Y-%m-%d %H:%M:%S")
+    (cons (gnc-parse-time-to-time64 timestr "%Y-%m-%d %H:%M:%S")
           0))
 
   (define (commodity-tz-quote-triple->price book c-tz-quote-triple)
