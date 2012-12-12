@@ -41,6 +41,40 @@
  */
 gchar *gnc_resolve_file_path (const gchar *filefrag);
 
+/** @brief Find an absolute path to a localized version of a given
+ *  relative path to a html or html related file.
+ *  If no localized version exists, an absolute path to the file
+ *  is searched for. If that file doesn't exist either, returns NULL.
+ *
+ *  @warning file_name should be a simple path fragment. It shouldn't
+ *  contain xml:// or http:// or <whatever>:// other protocol specifiers.
+ *
+ *  If passed a string which g_path_is_absolute declares an absolute
+ *  path, return the argument.
+ *
+ *  Otherwise, assume that file_name is a well-formed relative path and
+ *  try to find a file with its path relative to
+ *  \li a localized subdirectory in the html directory
+ *      of the user's configuration directory
+ *      (e.g. $HOME/.gnucash/html/de_DE, $HOME/.gnucash/html/en,...)
+ *  \li a localized subdirectory in the gnucash documentation directory
+ *      (e.g. /usr/share/doc/gnucash/C,...)
+ *  \li the html directory of the user's configuration directory
+ *      (e.g. $HOME/.gnucash/html)
+ *  \li the gnucash documentation directory
+ *      (e.g. /usr/share/doc/gnucash/)
+ *
+ *  The paths are searched for in that order. If a matching file is
+ *  found, return the absolute path to it.
+
+ *  If one isn't found, return NULL.
+ *
+ *  @param file_name The file path to resolve
+ *
+ *  @return An absolute file path or NULL if no file is found.
+ */
+gchar *gnc_path_find_localized_html_file (const gchar *file_name);
+
 const gchar *gnc_dotgnucash_dir (void);
 gchar *gnc_build_dotgnucash_path (const gchar *filename);
 gchar *gnc_build_book_path (const gchar *filename);

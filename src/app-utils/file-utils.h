@@ -45,21 +45,6 @@
 
 #include <stdio.h>		/* for FILE* */
 
-/** Locates a file in the search path of the program and
- * returns its absolute pathname.
- *
- * If the file is not found
- * this function will return NULL.
- *
- *  Uses the global xxxPath as the path to search
- *
- * @param filename The filename to search
- *
- * @return The absolute path to the file or NULL if the file
- * wasn't found.
- */
-char * gncFindFile (const char * filename);
-
 /** Reads the contents of a file into a buffer for further processing.
  *
  *  If the filename is not an absolute filename, it will be searched
