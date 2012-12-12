@@ -9,7 +9,6 @@ gncscmmod_DATA = main.scm price-quotes.scm printf.scm
 gnc_regular_scm_files = \
   string.scm \
   command-line.scm \
-  doc.scm \
   fin.scm \
   main-window.scm \
   substring-search.scm \

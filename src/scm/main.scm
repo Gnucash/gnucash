@@ -35,7 +35,6 @@
 ;; files we can load from the top-level because they're "well behaved"
 ;; (these should probably be in modules eventually)
 (load-from-path "string.scm")
-(load-from-path "doc.scm")
 (load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
 (load-from-path "fin.scm")
 
@@ -54,12 +53,6 @@
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
 (re-export hash-fold)
-
-;; from command-line.scm
-(export gnc:*doc-path*)
-
-;; from doc.scm
-(export gnc:find-doc-file)
 
 ;; from main-window.scm
 (export gnc:main-window-properties-cb)
