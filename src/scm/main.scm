@@ -49,7 +49,6 @@
 (export gnc:debug)
 (export string-join)
 (export gnc:backtrace-if-exception)
-(export gnc:main)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
 (re-export hash-fold)
@@ -188,14 +187,3 @@
 
     ;; Put it back together
     (string-join (reverse parts-out) "/")))
-
-(define (gnc:main)
-
-  ;;  (statprof-reset 0 50000) ;; 20 times/sec
-  ;;  (statprof-start)
-
-  ;; Now the fun begins.
-  (gnc:debug "starting up (1).")
-
-  ;;return to C
-  )
