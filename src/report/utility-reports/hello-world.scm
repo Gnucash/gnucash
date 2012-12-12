@@ -448,6 +448,11 @@ new, totally cool report, consult the mailing list %s.")
            document
            (gnc:make-html-text
             (gnc:html-markup-p (_ "You have selected no accounts.")))))
+            
+      (gnc:html-document-add-object! 
+       document 
+       (gnc:make-html-text 
+        (gnc:html-markup-anchor (gnc-build-url URL-TYPE-HELP "gnucash-guide" "") (_ "Display help"))))
 
       (gnc:html-document-add-object! 
        document 

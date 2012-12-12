@@ -318,7 +318,10 @@ gnc_html_help_url_cb (const char *location, const char *label,
 {
     g_return_val_if_fail (location != NULL, FALSE);
 
-    gnc_gnome_help (location, label);
+    if (label && (*label != '\0'))
+        gnc_gnome_help (location, label);
+    else
+        gnc_gnome_help (location, NULL);
     return TRUE;
 }
 
