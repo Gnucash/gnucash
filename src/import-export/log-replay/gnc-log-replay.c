@@ -30,7 +30,6 @@
 #include <glib/gstdio.h>
 #include <string.h>
 #include <sys/time.h>
-#include <libguile.h>
 #include <errno.h>
 
 #include "Account.h"

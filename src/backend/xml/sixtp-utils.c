@@ -141,66 +141,18 @@ concatenate_child_result_chars(GSList *data_from_children)
 
 /*********/
 /* double
-
-   RLB writes:
-   We have to use guile because AFAICT, libc, and C in general isn't
-   smart enough to actually parse it's own output, especially not
-   portably (big surprise).
-
-   Linas writes:
-   I don't understand the claim; I'm just going to use
-   atof or strtod to accomplish this.
-
-   RLB writes: FIXME: OK, but at the very least this may cause a
-   locale dependency.  Whoever fixes that, please delete this whole
-   comment block.
-
  */
 
 gboolean
 string_to_double(const char *str, double *result)
 {
+    char *endptr = 0x0;
+
     g_return_val_if_fail(str, FALSE);
     g_return_val_if_fail(result, FALSE);
 
-#ifdef USE_GUILE_FOR_DOUBLE_CONVERSION
-    {
-        /* FIXME: NOT THREAD SAFE - USES STATIC DATA */
-        static SCM string_to_number;
-        static gboolean ready = FALSE;
-
-        SCM conversion_result;
-
-        if (!ready)
-        {
-            string_to_number = scm_c_eval_string("string->number");
-            scm_gc_protect_object(string_to_number);
-            ready = TRUE;
-        }
-
-        conversion_result = scm_call_1(string_to_number, scm_makfrom0str(str));
-        if (!conversion_result == SCM_BOOL_F)
-        {
-            return(FALSE);
-        }
-
-        *result = scm_num2dbl(conversion_result, G_STRFUNC);
-    }
-
-#else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */
-    {
-        char *endptr = 0x0;
-
-        /* We're just going to use plain-old libc for the double conversion.
-         * There was some question as to whether libc is accurate enough
-         * in its printf function for doubles, but I don't understand
-         * how it couldn't be ...
-         */
-
-        *result = strtod (str, &endptr);
-        if (endptr == str) return (FALSE);
-    }
-#endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
+    *result = strtod (str, &endptr);
+    if (endptr == str) return (FALSE);
 
     return(TRUE);
 }

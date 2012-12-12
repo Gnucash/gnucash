@@ -226,21 +226,8 @@ gchar*
 double_to_string(double value)
 {
     gchar *numstr;
-#ifdef USE_GUILE_FOR_DOUBLE_CONVERSION
-    numstr = gh_scm2newstr(scm_call_1(scm_c_eval_string("number->string"),
-                                      scm_make_real(value)),
-                           NULL);
-
-#else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */
-    /*
-     * we're just going to use plain-old libc for the double conversion.
-     * There was some question as to whether libc is accurate enough
-     * in its printf function for doubles, but I don't understand
-     * how it couldn't be ...
-     */
     numstr = g_strdup_printf ("%24.18g", value);
 
-#endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
     if (!numstr)
     {
         return NULL;

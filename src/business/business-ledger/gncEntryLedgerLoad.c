@@ -25,7 +25,6 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <libguile.h>
 
 #include "Account.h"
 #include "account-quickfill.h"

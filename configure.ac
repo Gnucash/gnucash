@@ -1055,8 +1055,6 @@ case $host_os in
     ;;
 esac
 
-#AC_REPLACE_FUNCS(scm_strptime)
-
 if test x$am_cv_val_LC_MESSAGES = "xno"; then
   LC_MESSAGES_ENUM="LC_ALL"
 else

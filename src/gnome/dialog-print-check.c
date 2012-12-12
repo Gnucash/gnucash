@@ -33,7 +33,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <stdio.h>
-#include <libguile.h>
 #include <locale.h>
 #include <math.h>
 

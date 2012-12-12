@@ -2,7 +2,6 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
-#include <libguile.h>
 #include <stdlib.h>
 #include <unistd.h>
 

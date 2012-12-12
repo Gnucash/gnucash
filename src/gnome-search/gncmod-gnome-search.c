@@ -28,7 +28,6 @@
 
 #include <gtk/gtk.h>
 #include <gmodule.h>
-#include <libguile.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"

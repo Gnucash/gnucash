@@ -55,7 +55,6 @@
 
 #include "gnc-tree-view-split-reg.h"
 
-#include <libguile.h>
 #include "dialog-utils.h"
 
 #define GCONF_SECTION "window/pages/register2"

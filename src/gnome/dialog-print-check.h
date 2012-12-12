@@ -24,8 +24,6 @@
 #ifndef DIALOG_PRINT_CHECK_H
 #define DIALOG_PRINT_CHECK_H
 
-#include <libguile.h>
-
 #include "print-session.h"
 
 typedef struct _print_check_dialog PrintCheckDialog;

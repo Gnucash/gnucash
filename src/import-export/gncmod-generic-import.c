@@ -6,7 +6,6 @@
 
 #include "config.h"
 #include <gmodule.h>
-#include <libguile.h>
 #include <glib/gi18n.h>
 
 #include "dialog-preferences.h"
@@ -23,8 +22,6 @@ int libgncmod_generic_import_gnc_module_system_interface = 0;
 int libgncmod_generic_import_gnc_module_current  = 0;
 int libgncmod_generic_import_gnc_module_revision = 0;
 int libgncmod_generic_import_gnc_module_age      = 0;
-
-/*static GNCModule engine; NOTUSED */
 
 char *
 libgncmod_generic_import_gnc_module_path(void)

@@ -38,7 +38,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <regex.h>
-#include <libguile.h>
 
 #include "Account.h"
 #include "print-session.h"

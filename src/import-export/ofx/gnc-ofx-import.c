@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h>
-#include <libguile.h>
 #include <math.h>
 
 #include <libofx/libofx.h>

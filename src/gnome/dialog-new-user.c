@@ -24,7 +24,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <libguile.h>
 
 #include "dialog-new-user.h"
 #include "dialog-utils.h"

@@ -24,7 +24,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <errno.h>
-#include <libguile.h>
 #include <string.h>
 
 #include "dialog-utils.h"

@@ -29,10 +29,6 @@ if OS_WIN32
   AM_CPPFLAGS = -DOS_WIN32
 endif
 
-# Not currently used.  If added to AC_REPLACE_FUNCS then this line
-# should be removed.
-EXTRA_DIST = scm_strptime.c
-
 print_libobjs: Makefile
 	@echo "LIBOBJS = $(LIBOBJS)"
 	@echo "LTLIBOBJS = $(LTLIBOBJS)"

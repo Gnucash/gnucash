@@ -52,7 +52,6 @@
 #include "gnucash-sheet.h"
 #include "table-allgui.h"
 
-#include <libguile.h>
 #include "dialog-utils.h"
 
 // static QofLogModule log_module = GNC_MOD_SX;

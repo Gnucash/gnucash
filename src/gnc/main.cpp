@@ -26,7 +26,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <libguile.h>
 #include <glib/gi18n.h>
 #include <glib.h>
 extern "C"

@@ -62,7 +62,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/register/ledger-core \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/libqof/qof \
-  ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GTK_XIM_FLAGS} \
