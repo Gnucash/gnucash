@@ -28,7 +28,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
-#include <libguile.h>
 
 #include "dialog-billterms.h"
 #include "dialog-customer.h"
@@ -126,15 +125,6 @@ static void gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
         GncMainWindowActionData *data);
 
 static void gnc_plugin_business_cmd_test_search (GtkAction *action,
-        GncMainWindowActionData *data);
-
-static void gnc_plugin_business_cmd_test_reload_invoice_report (GtkAction *action,
-        GncMainWindowActionData *data);
-
-static void gnc_plugin_business_cmd_test_reload_owner_report (GtkAction *action,
-        GncMainWindowActionData *data);
-
-static void gnc_plugin_business_cmd_test_reload_receivable_report (GtkAction *action,
         GncMainWindowActionData *data);
 
 static void gnc_plugin_business_cmd_test_init_data (GtkAction *action,
@@ -303,21 +293,6 @@ static GtkActionEntry gnc_plugin_actions [] =
         "BusinessTestSearchAction", NULL, N_("Test Search Dialog"), NULL,
         N_("Test Search Dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_test_search)
-    },
-    {
-        "BusinessTestReloadInvoiceAction", NULL, N_("Reload invoice report"), NULL,
-        N_("Reload invoice report scheme file"),
-        G_CALLBACK (gnc_plugin_business_cmd_test_reload_invoice_report)
-    },
-    {
-        "BusinessTestReloadOwnerAction", NULL, N_("Reload owner report"), NULL,
-        N_("Reload owner report scheme file"),
-        G_CALLBACK (gnc_plugin_business_cmd_test_reload_owner_report)
-    },
-    {
-        "BusinessTestReloadReceivableAction", NULL, N_("Reload receivable report"), NULL,
-        N_("Reload receivable report scheme file"),
-        G_CALLBACK (gnc_plugin_business_cmd_test_reload_receivable_report)
     },
     {
         "BusinessTestInitDataAction", NULL, N_("Initialize Test Data"), NULL,
@@ -825,36 +800,6 @@ gnc_plugin_business_cmd_test_search (GtkAction *action,
                                      GncMainWindowActionData *data)
 {
     gnc_search_dialog_test();
-}
-
-static void
-gnc_plugin_business_reload_module (const gchar *name)
-{
-    SCM file_scm;
-
-    file_scm = scm_makfrom0str (name);
-    scm_call_1(scm_c_eval_string("gnc:reload-module"), file_scm);
-}
-
-static void
-gnc_plugin_business_cmd_test_reload_invoice_report (GtkAction *action,
-        GncMainWindowActionData *data)
-{
-    gnc_plugin_business_reload_module("gnucash/report/invoice.scm");
-}
-
-static void
-gnc_plugin_business_cmd_test_reload_owner_report (GtkAction *action,
-        GncMainWindowActionData *data)
-{
-    gnc_plugin_business_reload_module("gnucash/report/owner-report.scm");
-}
-
-static void
-gnc_plugin_business_cmd_test_reload_receivable_report (GtkAction *action,
-        GncMainWindowActionData *data)
-{
-    gnc_plugin_business_reload_module("gnucash/report/receivable-report.scm");
 }
 
 static void gnc_business_assign_payment (GtkWidget *parent,

@@ -10,13 +10,6 @@
 (use-modules (gnucash report business-reports))
 (use-modules (gnucash main))		;for gnc:debug
 
-(export gnc:reload-module)
-
-(define (gnc:reload-module name)
-  (let ((m (current-module)))
-    (load-from-path name)
-    (set-current-module m)))
-
 (define (business-report-function)
   (gnc-add-scm-extension
    (gnc:make-menu gnc:menuname-business-reports
