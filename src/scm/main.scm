@@ -197,13 +197,5 @@
   ;; Now the fun begins.
   (gnc:debug "starting up (1).")
 
-  ;; Now we can load a bunch of files.
-  (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
-
-  (gnc:initialize-config-vars) ;; in command-line.scm
-  ;; handle unrecognized command line args
-  (if (not (gnc:handle-command-line-args))
-      (gnc:shutdown 1))
-
   ;;return to C
   )
