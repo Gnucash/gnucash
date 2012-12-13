@@ -34,6 +34,9 @@ static QofLogModule log_module = GNC_MOD_PRICE;
 
 static gboolean add_price(GNCPriceDB *db, GNCPrice *p);
 static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
+static GNCPrice *lookup_nearest_in_time(GNCPriceDB *db, const gnc_commodity *c,
+                                        const gnc_commodity *currency,
+                                        Timespec t, gboolean sameday);
 
 enum
 {
@@ -1519,65 +1522,13 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
 }
 
 
-PriceList *
+GNCPrice *
 gnc_pricedb_lookup_day(GNCPriceDB *db,
                        const gnc_commodity *c,
                        const gnc_commodity *currency,
                        Timespec t)
 {
-    GList *price_list;
-    GList *result = NULL;
-    GList *item = NULL;
-    GHashTable *currency_hash;
-    QofBook *book;
-    QofBackend *be;
-
-    if (!db || !c || !currency) return NULL;
-    ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
-    book = qof_instance_get_book(&db->inst);
-    be = qof_book_get_backend(book);
-    /* Convert to noon local time. */
-    t = timespecCanonicalDayTime(t);
-#ifdef GNUCASH_MAJOR_VERSION
-    if (be && be->price_lookup)
-    {
-        GNCPriceLookup pl;
-        pl.type = LOOKUP_AT_TIME;
-        pl.prdb = db;
-        pl.commodity = c;
-        pl.currency = currency;
-        pl.date = t;
-        (be->price_lookup) (be, &pl);
-    }
-#endif
-    currency_hash = g_hash_table_lookup(db->commodity_hash, c);
-    if (!currency_hash)
-    {
-        LEAVE (" no currency hash");
-        return NULL;
-    }
-
-    price_list = g_hash_table_lookup(currency_hash, currency);
-    if (!price_list)
-    {
-        LEAVE (" no price list");
-        return NULL;
-    }
-
-    item = price_list;
-    while (item)
-    {
-        GNCPrice *p = item->data;
-        Timespec price_time = timespecCanonicalDayTime(gnc_price_get_time(p));
-        if (timespec_equal(&price_time, &t))
-        {
-            result = g_list_prepend(result, p);
-            gnc_price_ref(p);
-        }
-        item = item->next;
-    }
-    LEAVE (" ");
-    return result;
+    return lookup_nearest_in_time(db, c, currency, t, TRUE);
 }
 
 #if 0 /* Not Used */
@@ -1687,11 +1638,12 @@ lookup_time(gpointer key, gpointer val, gpointer user_data)
     }
 }
 #endif
-GNCPrice *
-gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
-                                   const gnc_commodity *c,
-                                   const gnc_commodity *currency,
-                                   Timespec t)
+static GNCPrice *
+lookup_nearest_in_time(GNCPriceDB *db,
+                       const gnc_commodity *c,
+                       const gnc_commodity *currency,
+                       Timespec t,
+                       gboolean sameday)
 {
     GList *price_list;
     GNCPrice *current_price = NULL;
@@ -1752,14 +1704,27 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
         item = item->next;
     }
 
-    if (current_price)
+    if (current_price)      /* How can this be null??? */
     {
         if (!next_price)
         {
+            /* It's earlier than the last price on the list */
             result = current_price;
+            if (sameday)
+            {
+                /* Must be on the same day. */
+                Timespec price_day;
+                Timespec t_day;
+                price_day = timespecCanonicalDayTime(gnc_price_get_time(current_price));
+                t_day = timespecCanonicalDayTime(t);
+                if (!timespec_equal(&price_day, &t_day))
+                    result = NULL;
+            }
         }
         else
         {
+            /* If the requested time is not earlier than the first price on the
+               list, then current_price and next_price will be the same. */
             Timespec current_t = gnc_price_get_time(current_price);
             Timespec next_t = gnc_price_get_time(next_price);
             Timespec diff_current = timespec_diff(&current_t, &t);
@@ -1767,16 +1732,43 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
             Timespec abs_current = timespec_abs(&diff_current);
             Timespec abs_next = timespec_abs(&diff_next);
 
-            /* Choose the price that is closest to the given time. In case of
-             * a tie, prefer the older price since it actually existed at the
-             * time. (This also fixes bug #541970.) */
-            if (timespec_cmp(&abs_current, &abs_next) < 0)
+            if (sameday)
             {
-                result = current_price;
+                /* Result must be on same day, see if either of the two isn't */
+                Timespec t_day = timespecCanonicalDayTime(t);
+                Timespec current_day = timespecCanonicalDayTime(current_t);
+                Timespec next_day = timespecCanonicalDayTime(next_t);
+                if (timespec_equal(&current_day, &t_day))
+                {
+                    if (timespec_equal(&next_day, &t_day))
+                    {
+                        /* Both on same day, return nearest */
+                        if (timespec_cmp(&abs_current, &abs_next) < 0)
+                            result = current_price;
+                        else
+                            result = next_price;
+                    }
+                    else
+                        /* current_price on same day, next_price not */
+                        result = current_price;
+                }
+                else if (timespec_equal(&next_day, &t_day))
+                    /* next_price on same day, current_price not */
+                    result = next_price;
             }
             else
             {
-                result = next_price;
+                /* Choose the price that is closest to the given time. In case of
+                 * a tie, prefer the older price since it actually existed at the
+                 * time. (This also fixes bug #541970.) */
+                if (timespec_cmp(&abs_current, &abs_next) < 0)
+                {
+                    result = current_price;
+                }
+                else
+                {
+                    result = next_price;
+                }
             }
         }
     }
@@ -1784,6 +1776,15 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
     gnc_price_ref(result);
     LEAVE (" ");
     return result;
+}
+
+GNCPrice *
+gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
+                                   const gnc_commodity *c,
+                                   const gnc_commodity *currency,
+                                   Timespec t)
+{
+    return lookup_nearest_in_time(db, c, currency, t, FALSE);
 }
 
 GNCPrice *

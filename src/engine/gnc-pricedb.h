@@ -346,13 +346,13 @@ PriceList * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                                        const gnc_commodity *currency,
                                        Timespec t);
 
-/** gnc_pricedb_lookup_day - return all prices that match the given
-     commodity, currency, and timespec.  Prices will be returned as a
-     GNCPrice list (see above). */
-PriceList * gnc_pricedb_lookup_day(GNCPriceDB *db,
-                                   const gnc_commodity *commodity,
-                                   const gnc_commodity *currency,
-                                   Timespec t);
+/** gnc_pricedb_lookup_day - return the price that matchex the given
+     commodity, currency, and timespec which is on the same day.
+     If no prices are on that day, returns a null value. */
+GNCPrice * gnc_pricedb_lookup_day(GNCPriceDB *db,
+                                  const gnc_commodity *commodity,
+                                  const gnc_commodity *currency,
+                                  Timespec t);
 
 
 /** gnc_pricedb_lookup_nearest_in_time - return the price for the given
