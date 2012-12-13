@@ -1680,11 +1680,15 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
     scm_call_2 (quotes_func, scm_window, book_scm);
     gnc_unset_busy_cursor (NULL);
 
-    /*the results should be in the price db now */
+    /*the results should be in the price db now, but don't crash if not. */
 
     prc = gnc_pricedb_lookup_latest(xferData->pricedb, from, to);
-    rate = gnc_price_get_value (prc);
-    gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate);
+    if (prc)
+    {
+        rate = gnc_price_get_value (prc);
+        gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate);
+        gnc_price_unref (prc);
+    }
 
     LEAVE("quote retrieved");
 
