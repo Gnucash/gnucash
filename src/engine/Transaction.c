@@ -949,7 +949,33 @@ xaccTransIsBalanced (const Transaction *trans)
 {
     MonetaryList *imbal_list;
     gboolean result;
-    if (! gnc_numeric_zero_p(xaccTransGetImbalanceValue(trans)))
+    gnc_numeric imbal = gnc_numeric_zero();
+    gnc_numeric imbal_trading = gnc_numeric_zero();
+    
+    if (xaccTransUseTradingAccounts(trans))
+    {
+        /* Transaction is imbalanced if the value is imbalanced in either 
+           trading or non-trading splits.  One can't be used to balance
+           the other. */
+        FOR_EACH_SPLIT(trans, 
+        {
+            if (xaccAccountGetType(xaccSplitGetAccount(s)) != ACCT_TYPE_TRADING)
+            {
+                imbal = gnc_numeric_add(imbal, xaccSplitGetValue(s),
+                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+            }
+            else
+            {
+                imbal_trading = gnc_numeric_add(imbal_trading, xaccSplitGetValue(s),
+                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+            }
+        } 
+        );
+    }
+    else
+        imbal = xaccTransGetImbalanceValue(trans);
+    
+    if (! gnc_numeric_zero_p(imbal) || ! gnc_numeric_zero_p(imbal_trading))
         return FALSE;
 
     if (!xaccTransUseTradingAccounts (trans))
