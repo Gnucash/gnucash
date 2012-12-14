@@ -1612,7 +1612,7 @@ GDate* gnc_g_date_new_today ()
      gint day, month, year;
      GDate *result;
 
-     g_date_time_get_ymd (gdt, &day, &month, &year);
+     g_date_time_get_ymd (gdt, &year, &month, &day);
      result = g_date_new_dmy (day, month, year);
      g_date_time_unref (gdt);
      g_assert(g_date_valid (result));
