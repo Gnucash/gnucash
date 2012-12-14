@@ -143,8 +143,6 @@ gint gnc_process_get_fd(const Process *proc, const gint std_fd);
  *  @param kill_it If TRUE, kill the process. */
 void gnc_detach_process(Process *proc, const gboolean kill_it);
 
-#endif
-
 /** Convert a time string to calendar time representation.  Combine strptime and
  *  mktime into a single function to avoid the need to wrap struct tm *.
  *
@@ -154,3 +152,5 @@ void gnc_detach_process(Process *proc, const gboolean kill_it);
  *
  *  @return The time in seconds since unix epoch, or -1 on error */
 time64 gnc_parse_time_to_time64 (const gchar *s, const gchar *format);
+
+#endif
