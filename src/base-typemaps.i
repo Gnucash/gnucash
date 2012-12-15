@@ -17,8 +17,10 @@ typedef void * gpointer;
 typedef char gchar;
 
 %typemap (out) char * {
-  $result = scm_makfrom0str((const char *)$1);
-  if (!scm_is_true($result)) {
+  if ($1) {
+    $result = scm_from_locale_string((const char *)$1);
+  }
+  if (!$1 || !scm_is_true($result)) {
     $result = scm_c_make_string(0, SCM_UNDEFINED);
   }
 }

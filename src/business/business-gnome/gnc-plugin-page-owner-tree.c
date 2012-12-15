@@ -925,7 +925,7 @@ build_aging_report (GncOwnerType owner_type)
     g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
     /* Option Report title */
-    arg = scm_makfrom0str (report_title);
+    arg = scm_from_locale_string (report_title);
     args = scm_cons (arg, args);
 
     /* Option Account - Using False to select default account

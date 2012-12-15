@@ -122,7 +122,7 @@ gnc_guid2scm(GncGUID guid)
     if (!guid_to_string_buff(&guid, string))
         return SCM_BOOL_F;
 
-    return scm_makfrom0str(string);
+    return scm_from_locale_string(string);
 }
 
 GncGUID
@@ -489,7 +489,7 @@ gnc_query_path2scm (const GSList *path)
         const char *key = node->data;
 
         if (key)
-            path_scm = scm_cons (scm_makfrom0str (key), path_scm);
+            path_scm = scm_cons (scm_from_locale_string (key), path_scm);
     }
 
     return scm_reverse (path_scm);
@@ -551,6 +551,7 @@ gnc_kvp_value2scm (const KvpValue *value)
     SCM value_scm = SCM_EOL;
     KvpValueType value_t;
     SCM scm;
+    const gchar *string;
 
     if (!value) return SCM_BOOL_F;
 
@@ -569,7 +570,8 @@ gnc_kvp_value2scm (const KvpValue *value)
         break;
 
     case KVP_TYPE_STRING:
-        scm = scm_makfrom0str (kvp_value_get_string (value));
+        string = kvp_value_get_string (value);
+        scm = string ? scm_from_locale_string (string) : SCM_BOOL_F;
         break;
 
     case KVP_TYPE_GUID:
@@ -629,7 +631,7 @@ kvp_frame_slot2scm (const char *key, KvpValue *value, gpointer data)
     SCM key_scm;
     SCM pair;
 
-    key_scm = scm_makfrom0str (key);
+    key_scm = key ? scm_from_locale_string (key) : SCM_BOOL_F;
     value_scm = gnc_kvp_value2scm (value);
     pair = scm_cons (key_scm, value_scm);
 
@@ -844,7 +846,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
 
         qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
         qt_scm = scm_cons (SCM_BOOL (pdata->is_regex), qt_scm);
-        qt_scm = scm_cons (scm_makfrom0str (pdata->matchstring), qt_scm);
+        qt_scm = scm_cons (pdata->matchstring ? scm_from_locale_string (pdata->matchstring) : SCM_BOOL_F, qt_scm);
 
     }
     else if (!g_strcmp0 (pd->type_name, QOF_TYPE_DATE))
@@ -897,7 +899,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
         query_char_t pdata = (query_char_t) pd;
 
         qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
-        qt_scm = scm_cons (scm_makfrom0str (pdata->char_list), qt_scm);
+        qt_scm = scm_cons (pdata->char_list ? scm_from_locale_string (pdata->char_list) : SCM_BOOL_F, qt_scm);
 
     }
     else if (!g_strcmp0 (pd->type_name, QOF_TYPE_KVP))

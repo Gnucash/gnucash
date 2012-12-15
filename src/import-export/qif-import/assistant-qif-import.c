@@ -1555,7 +1555,7 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
 
         /* See if the file is already loaded. */
         if (scm_call_2(qif_file_loaded,
-                       scm_makfrom0str(path_to_load),
+                       scm_from_locale_string(path_to_load ? path_to_load : ""),
                        wind->imported_files) == SCM_BOOL_T)
             gnc_error_dialog(wind->window, "%s",
                              _("That QIF file is already loaded. "
@@ -1756,7 +1756,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
     gnc_progress_dialog_push(wind->load_progress, 0.7);
     load_return = scm_call_4(qif_file_load,
                              SCM_CAR(imported_files),
-                             scm_makfrom0str(path_to_load),
+                             scm_from_locale_string(path_to_load ? path_to_load : ""),
                              wind->ticker_map,
                              progress);
     gnc_progress_dialog_pop(wind->load_progress);
@@ -2154,7 +2154,7 @@ gnc_ui_qif_import_loaded_files_prepare (GtkAssistant *assistant,
     SCM    fix_default = scm_c_eval_string("qif-import:fix-from-acct");
     SCM    scm_name;
 
-    scm_name = scm_makfrom0str(acct_name);
+    scm_name = scm_from_locale_string(acct_name ? acct_name : "");
     scm_call_2(fix_default, wind->selected_file, scm_name);
 
     /* Enable the assistant Buttons */
@@ -2865,7 +2865,7 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
                                  wind->cat_map_info,
                                  wind->memo_map_info,
                                  wind->security_hash,
-                                 scm_makfrom0str(currname),
+                                 scm_from_locale_string(currname ? currname : ""),
                                  wind->transaction_status,
                                  progress),
                        SCM_EOL);

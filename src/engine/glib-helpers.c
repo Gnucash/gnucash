@@ -99,7 +99,12 @@ gnc_glist_string_to_scm(GList *glist)
     GList *node;
 
     for (node = glist; node; node = node->next)
-        list = scm_cons (scm_makfrom0str(node->data), list);
+    {
+        if (node->data)
+            list = scm_cons (scm_from_locale_string(node->data), list);
+        else
+            list = scm_cons (SCM_BOOL_F, list);
+    }
 
     return scm_reverse (list);
 }

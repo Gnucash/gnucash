@@ -472,7 +472,7 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
     }
     else
     {
-        arg = scm_makfrom0str(name);
+        arg = scm_from_locale_string(name);
     }
     args = scm_cons(arg, args);
 
@@ -483,7 +483,7 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
     }
     else
     {
-        arg = scm_makfrom0str(section);
+        arg = scm_from_locale_string(section);
     }
     args = scm_cons(arg, args);
 

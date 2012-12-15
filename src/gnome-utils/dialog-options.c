@@ -2632,7 +2632,7 @@ gnc_option_get_ui_value_string (GNCOption *option, GtkWidget *widget)
     SCM result;
 
     string = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
-    result = scm_makfrom0str(string);
+    result = scm_from_locale_string(string ? string : "");
     g_free(string);
     return result;
 }
@@ -2644,7 +2644,7 @@ gnc_option_get_ui_value_text (GNCOption *option, GtkWidget *widget)
     SCM result;
 
     string = xxxgtk_textview_get_text (GTK_TEXT_VIEW(widget));
-    result = scm_makfrom0str(string);
+    result = scm_from_locale_string(string ? string : "");
     g_free(string);
     return result;
 }
@@ -2865,7 +2865,7 @@ gnc_option_get_ui_value_font (GNCOption *option, GtkWidget *widget)
     const gchar * string;
 
     string = gtk_font_button_get_font_name(font_button);
-    return (scm_makfrom0str(string));
+    return (string ? scm_from_locale_string(string) : SCM_BOOL_F);
 }
 
 static SCM
@@ -2876,7 +2876,7 @@ gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
 
     string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
     DEBUG("filename %s", string ? string : "(null)");
-    result = scm_makfrom0str(string ? string : "");
+    result = scm_from_locale_string(string ? string : "");
     g_free(string);
     return result;
 }

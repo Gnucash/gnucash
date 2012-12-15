@@ -2403,6 +2403,7 @@ report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query)
     SplitRegister *reg = gnc_ledger_display2_get_split_register (ledger);
     Account *account;
     char *str;
+    const char *tmp;
     swig_type_info * qtype;
     SCM args;
     SCM func;
@@ -2413,14 +2414,16 @@ report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query)
     func = scm_c_eval_string ("gnc:register-report-create");
     g_return_val_if_fail (scm_is_procedure (func), -1);
 
-    arg = scm_makfrom0str (gnc_split_register_get_credit_string (reg));
+    tmp = gnc_split_register_get_credit_string (reg);
+    arg = scm_from_locale_string (tmp ? tmp : _("Credit"));
     args = scm_cons (arg, args);
 
-    arg = scm_makfrom0str (gnc_split_register_get_debit_string (reg));
+    tmp = gnc_split_register_get_debit_string (reg);
+    arg = scm_from_locale_string (tmp ? tmp : _("Debit"));
     args = scm_cons (arg, args);
 
     str = gnc_reg_get_name (ledger, FALSE);
-    arg = scm_makfrom0str (str);
+    arg = scm_from_locale_string (str ? str : "");
     args = scm_cons (arg, args);
     g_free (str);
 

@@ -249,7 +249,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
         /* Save the full name and update the map entry. */
         g_free(wind->selected_name);
         wind->selected_name = fullname;
-        scm_call_2(name_setter, wind->map_entry, scm_makfrom0str(fullname));
+        scm_call_2(name_setter, wind->map_entry, scm_from_locale_string(fullname));
     }
     gtk_widget_destroy(dlg);
 
@@ -279,7 +279,7 @@ gnc_ui_qif_account_picker_changed_cb(GtkTreeSelection *selection,
                            ACCOUNT_COL_FULLNAME, &wind->selected_name,
                            -1);
         scm_call_2(name_setter, wind->map_entry,
-                   scm_makfrom0str(wind->selected_name));
+                   wind->selected_name ? scm_from_locale_string(wind->selected_name) : SCM_BOOL_F);
     }
     else
     {

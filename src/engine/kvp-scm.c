@@ -71,6 +71,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
 SCM
 gnc_kvp_value_ptr_to_scm(KvpValue* val)
 {
+    const gchar *string;
     switch (kvp_value_get_type(val))
     {
     case KVP_TYPE_GINT64:
@@ -83,7 +84,8 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
         return gnc_numeric_to_scm(kvp_value_get_numeric(val));
         break;
     case KVP_TYPE_STRING:
-        return scm_makfrom0str(kvp_value_get_string(val));
+        string = kvp_value_get_string(val);
+        return string ? scm_from_locale_string(string) : SCM_BOOL_F;
         break;
     case KVP_TYPE_GUID:
     {

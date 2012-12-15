@@ -1548,7 +1548,7 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
         SCM res;
 
         choice = SCM_CDR (choice);
-        file_scm = scm_makfrom0str (filepath);
+        file_scm = scm_from_locale_string (filepath);
 
         res = scm_call_3 (export_thunk, priv->cur_report, choice, file_scm);
 
