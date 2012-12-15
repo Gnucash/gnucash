@@ -44,26 +44,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define (make-kvtable) 
-  ;;  (make-hash-table 7))
-  (make-vector 1 '()))
-
-(define (kvt-ref kvtable key)
-  ;;  (hash-ref kvtable key))
-  (assoc-ref (vector-ref kvtable 0) key))
-
-(define (kvt-set! kvtable key value)
-  ;;  (hash-set! kvtable key value))
-  (vector-set! kvtable 0 (assoc-set! (vector-ref kvtable 0) key value)))
-
-(define (kvt-fold proc init-value kvtable)
-  ;;  (hash-fold proc init-value kvtable))
-  (let ((chain init-value))
-    (for-each 
-     (lambda (elt)
-       (set! chain (proc (car elt) (cdr elt) chain)))
-     (vector-ref kvtable 0))))
-
 (define <html-markup-style-info> 
   (make-record-type "<html-markup-style-info>"
                     '(tag 
@@ -82,7 +62,7 @@
 
 (define (gnc:make-html-markup-style-info . rest)
   (let ((retval (gnc:make-html-markup-style-info-internal 
-                 #f (make-kvtable) #f #f #f #f #t)))
+                 #f (make-hash-table) #f #f #f #f #t)))
     (apply gnc:html-markup-style-info-set! retval rest)
     retval))
 
@@ -171,7 +151,7 @@
   (record-modifier <html-markup-style-info> 'inheritable?))
 
 (define (gnc:html-markup-style-info-set-attribute! info attr val)
-  (kvt-set! (gnc:html-markup-style-info-attributes info) attr val))
+  (hash-set! (gnc:html-markup-style-info-attributes info) attr val))
 
 (define (gnc:html-markup-style-info-merge s1 s2) 
   (if (not (gnc:html-markup-style-info? s1))
@@ -191,13 +171,13 @@
              ;; parent tag, don't initialize the attribute table
              ;; to the parent's attributes.  Otherwise, load
              ;; parent attrs then load child attrs over them.
-             (let ((ht (make-kvtable)))
+             (let ((ht (make-hash-table)))
                (if (not tag-1)
-                   (kvt-fold 
-                    (lambda (k v p) (kvt-set! ht k v) #f) #f 
+                   (hash-fold 
+                    (lambda (k v p) (hash-set! ht k v) #f) #f 
                     (gnc:html-markup-style-info-attributes s2)))
-               (kvt-fold
-                (lambda (k v p) (kvt-set! ht k v) #f) #f 
+               (hash-fold
+                (lambda (k v p) (hash-set! ht k v) #f) #f 
                 (gnc:html-markup-style-info-attributes s1))
                ht)
              ;; font face 
@@ -297,7 +277,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; <html-style-table> class
 ;;
-;; this used to just be bare kvt tables stuck in the <html-object>
+;; this used to just be bare hash tables stuck in the <html-object>
 ;; but since we now support caching and compilation I think it 
 ;; deserves a record structure. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -313,7 +293,7 @@
   (record-constructor <html-style-table>))
 
 (define (gnc:make-html-style-table)
-  (gnc:make-html-style-table-internal (make-kvtable) #f #f))
+  (gnc:make-html-style-table-internal (make-hash-table) #f #f))
 
 (define gnc:html-style-table-primary
   (record-accessor <html-style-table> 'primary))
@@ -341,34 +321,34 @@
   (define (key-merger key value ign)
     (let* ((compiled (gnc:html-style-table-compiled table))
            (inheritable (gnc:html-style-table-inheritable table))
-           (old-val (kvt-ref compiled key))
+           (old-val (hash-ref compiled key))
            (new-val (gnc:html-style-info-merge old-val value)))
-      (kvt-set! compiled key new-val)
+      (hash-set! compiled key new-val)
       (if (and (gnc:html-markup-style-info? value)
                (gnc:html-markup-style-info-inheritable? value))
-          (kvt-set! inheritable key new-val))
+          (hash-set! inheritable key new-val))
       (if (and (gnc:html-data-style-info? value)
                (gnc:html-data-style-info-inheritable? value))
-          (kvt-set! inheritable key new-val))))
+          (hash-set! inheritable key new-val))))
   
   ;; walk up the list of antecedents merging in style info
   (define (compile-worker table-list)
     (let ((next (car table-list)))
       (if (gnc:html-style-table-compiled? next)
           (begin
-            (kvt-fold key-merger #f (gnc:html-style-table-compiled next))
+            (hash-fold key-merger #f (gnc:html-style-table-compiled next))
             #t)
           (begin 
-            (kvt-fold key-merger #f (gnc:html-style-table-primary next))
+            (hash-fold key-merger #f (gnc:html-style-table-primary next))
             (if (not (null? (cdr table-list)))
                 (compile-worker (cdr table-list))
                 #t)))))
-  ;; make the compiled kvt table 
-  (gnc:html-style-table-set-compiled! table (make-kvtable))
-  (gnc:html-style-table-set-inheritable! table (make-kvtable))
+  ;; make the compiled hash table 
+  (gnc:html-style-table-set-compiled! table (make-hash-table))
+  (gnc:html-style-table-set-inheritable! table (make-hash-table))
   
-  ;; merge the contents of the primary kvt into the compiled table 
-  (kvt-fold key-merger #f (gnc:html-style-table-primary table))
+  ;; merge the contents of the primary hash into the compiled table 
+  (hash-fold key-merger #f (gnc:html-style-table-primary table))
   
   ;; now merge in the antecedents 
   (if (not (null? antecedents))
@@ -381,7 +361,7 @@
 
 (define (gnc:html-style-table-fetch table antecedents markup)
   (define (get-inheritable-style ht)
-    (let ((s (kvt-ref ht markup)))
+    (let ((s (hash-ref ht markup)))
       (if (or (and (gnc:html-markup-style-info? s)
                    (gnc:html-markup-style-info-inheritable? s))
               (and (gnc:html-data-style-info? s)
@@ -397,7 +377,7 @@
               (if (gnc:html-style-table-compiled? parent)
                   (gnc:html-style-info-merge 
                    style 
-                   (kvt-ref (gnc:html-style-table-inheritable parent) markup))
+                   (hash-ref (gnc:html-style-table-inheritable parent) markup))
                   (fetch-worker 
                    (gnc:html-style-info-merge 
                     style (get-inheritable-style 
@@ -405,15 +385,15 @@
                    (cdr antecedents)))))))
 
   (if (and table (gnc:html-style-table-compiled? table))
-      (kvt-ref (gnc:html-style-table-compiled table) markup)
+      (hash-ref (gnc:html-style-table-compiled table) markup)
       (fetch-worker 
        (if table 
-           (kvt-ref (gnc:html-style-table-primary table) markup)
+           (hash-ref (gnc:html-style-table-primary table) markup)
            #f)
        antecedents)))
 
 (define (gnc:html-style-table-set! table markup style-info)
-  (kvt-set! (gnc:html-style-table-primary table) markup style-info))
+  (hash-set! (gnc:html-style-table-primary table) markup style-info))
 
 
 

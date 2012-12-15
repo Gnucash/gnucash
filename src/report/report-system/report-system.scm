@@ -387,10 +387,6 @@
 (export gnc:html-linechart-line-width)
 ;; html-style-info.scm
 
-(export make-kvtable)
-(export kvt-ref)
-(export kvt-set!)
-(export kvt-fold)
 (export <html-markup-style-info>)
 (export gnc:html-markup-style-info?)
 (export gnc:make-html-markup-style-info-internal)
