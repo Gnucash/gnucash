@@ -43,8 +43,8 @@ typedef char gchar;
 %typemap(in) gnc_numeric "$1 = gnc_scm_to_numeric($input);"
 %typemap(out) gnc_numeric "$result = gnc_numeric_to_scm($1);"
 
-%typemap(in) gint64 " $1 = gnc_scm_to_gint64($input); "
-%typemap(out) gint64 " $result = gnc_gint64_to_scm($1); "
+%typemap(in) gint64 " $1 = scm_to_int64($input); "
+%typemap(out) gint64 " $result = scm_from_int64($1); "
 
 %define GLIST_HELPER_INOUT(ListType, ElemSwigType)
 %typemap(in) ListType * {

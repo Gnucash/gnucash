@@ -23,7 +23,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         /* in guile 1.8 (exact? ) only works on numbers */
         if (scm_is_exact (val) && gnc_gh_gint64_p(val))
         {
-            return kvp_value_new_gint64(gnc_scm_to_gint64(val));
+            return kvp_value_new_gint64(scm_to_int64(val));
         }
         else
         {
@@ -75,7 +75,7 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
     switch (kvp_value_get_type(val))
     {
     case KVP_TYPE_GINT64:
-        return gnc_gint64_to_scm(kvp_value_get_gint64(val));
+        return scm_from_int64(kvp_value_get_gint64(val));
         break;
     case KVP_TYPE_DOUBLE:
         return scm_from_double (kvp_value_get_double(val));

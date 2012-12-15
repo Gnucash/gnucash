@@ -83,7 +83,7 @@ gnc_timespec2timepair(Timespec t)
     SCM secs;
     SCM nsecs;
 
-    secs = gnc_gint64_to_scm(t.tv_sec);
+    secs = scm_from_int64(t.tv_sec);
     nsecs = scm_from_long (t.tv_nsec);
     return(scm_cons(secs, nsecs));
 }
@@ -94,7 +94,7 @@ gnc_timepair2timespec(SCM x)
     Timespec result = {0, 0};
     if (gnc_timepair_p (x))
     {
-        result.tv_sec = gnc_scm_to_gint64(SCM_CAR(x));
+        result.tv_sec = scm_to_int64(SCM_CAR(x));
         result.tv_nsec = scm_to_long(SCM_CDR(x));
     }
     return(result);
@@ -455,8 +455,8 @@ gnc_guid_glist_free (GList *guids)
 static SCM
 gnc_query_numeric2scm (gnc_numeric val)
 {
-    return scm_cons (gnc_gint64_to_scm (val.num),
-                     gnc_gint64_to_scm (val.denom));
+    return scm_cons (scm_from_int64 (val.num),
+                     scm_from_int64 (val.denom));
 }
 
 static gboolean
@@ -474,8 +474,8 @@ gnc_query_scm2numeric (SCM pair)
     num = SCM_CAR (pair);
     denom = SCM_CDR (pair);
 
-    return gnc_numeric_create (gnc_scm_to_gint64 (num),
-                               gnc_scm_to_gint64 (denom));
+    return gnc_numeric_create (scm_to_int64 (num),
+                               scm_to_int64 (denom));
 }
 
 static SCM
@@ -562,7 +562,7 @@ gnc_kvp_value2scm (const KvpValue *value)
     switch (value_t)
     {
     case KVP_TYPE_GINT64:
-        scm = gnc_gint64_to_scm (kvp_value_get_gint64 (value));
+        scm = scm_from_int64 (kvp_value_get_gint64 (value));
         break;
 
     case KVP_TYPE_DOUBLE:
@@ -677,7 +677,7 @@ gnc_scm2KvpValue (SCM value_scm)
     switch (value_t)
     {
     case KVP_TYPE_GINT64:
-        value = kvp_value_new_gint64 (gnc_scm_to_gint64 (val_scm));
+        value = kvp_value_new_gint64 (scm_to_int64 (val_scm));
         break;
 
     case KVP_TYPE_DOUBLE:
@@ -877,7 +877,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
     {
         query_int64_t pdata = (query_int64_t) pd;
 
-        qt_scm = scm_cons (gnc_gint64_to_scm (pdata->val), qt_scm);
+        qt_scm = scm_cons (scm_from_int64 (pdata->val), qt_scm);
 
     }
     else if (!g_strcmp0 (pd->type_name, QOF_TYPE_DOUBLE))
@@ -1063,7 +1063,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
             qt_scm = SCM_CDR (qt_scm);
             if (scm_is_null (scm))
                 break;
-            val = gnc_scm_to_gint64 (scm);
+            val = scm_to_int64 (scm);
 
             pd = qof_query_int64_predicate (compare_how, val);
 
@@ -2226,18 +2226,6 @@ gnc_scm2query (SCM query_scm)
     return q;
 }
 
-SCM
-gnc_gint64_to_scm(const gint64 x)
-{
-    return scm_from_int64(x);
-}
-
-gint64
-gnc_scm_to_gint64(SCM num)
-{
-    return scm_to_int64(num);
-}
-
 int
 gnc_gh_gint64_p(SCM num)
 {
@@ -2256,11 +2244,11 @@ gnc_gh_gint64_p(SCM num)
         tmp = 0x7FFFFFFF;
         tmp <<= 32;
         tmp |= 0xFFFFFFFF;
-        maxval = gnc_gint64_to_scm(tmp);
+        maxval = scm_from_int64(tmp);
 
         tmp = 0x80000000;
         tmp <<= 32;
-        minval = gnc_gint64_to_scm(tmp);
+        minval = scm_from_int64(tmp);
 
         scm_gc_protect_object(maxval);
         scm_gc_protect_object(minval);
@@ -2287,8 +2275,8 @@ gnc_scm_to_numeric(SCM gncnum)
         get_denom = scm_c_eval_string("gnc:gnc-numeric-denom");
     }
 
-    return gnc_numeric_create(gnc_scm_to_gint64(scm_call_1(get_num, gncnum)),
-                              gnc_scm_to_gint64(scm_call_1(get_denom, gncnum)));
+    return gnc_numeric_create(scm_to_int64(scm_call_1(get_num, gncnum)),
+                              scm_to_int64(scm_call_1(get_denom, gncnum)));
 }
 
 SCM
@@ -2301,8 +2289,8 @@ gnc_numeric_to_scm(gnc_numeric arg)
         maker = scm_c_eval_string("gnc:make-gnc-numeric");
     }
 
-    return scm_call_2(maker, gnc_gint64_to_scm(gnc_numeric_num(arg)),
-                      gnc_gint64_to_scm(gnc_numeric_denom(arg)));
+    return scm_call_2(maker, scm_from_int64(gnc_numeric_num(arg)),
+                      scm_from_int64(gnc_numeric_denom(arg)));
 }
 
 int
