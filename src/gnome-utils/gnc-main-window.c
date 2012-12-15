@@ -36,13 +36,12 @@
 
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
-#include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-main-window.h"
 
+#include "dialog-options.h"
 #include "dialog-preferences.h"
 #include "dialog-reset-warnings.h"
 #include "dialog-transfer.h"
@@ -65,6 +64,7 @@
 #include "gnc-window.h"
 #include "gnc-main.h"
 #include "gnc-gconf-utils.h"
+#include "option-util.h"
 // +JSLED
 //#include "gnc-html.h"
 #include "gnc-autosave.h"
@@ -3754,15 +3754,49 @@ gnc_main_window_cmd_page_setup (GtkAction *action,
 }
 
 static void
+gnc_options_dialog_apply_cb(GNCOptionWin * optionwin,
+                            gpointer user_data)
+{
+    GNCOptionDB * options = user_data;
+    kvp_frame *slots = qof_book_get_slots (gnc_get_current_book ());
+
+    if (!options) return;
+
+    gnc_option_db_commit (options);
+    gnc_option_db_save_to_kvp (options, slots, TRUE);
+    qof_book_kvp_changed (gnc_get_current_book());
+}
+
+static void
+gnc_options_dialog_close_cb(GNCOptionWin * optionwin,
+                            gpointer user_data)
+{
+    GNCOptionDB * options = user_data;
+
+    gnc_options_dialog_destroy(optionwin);
+    gnc_option_db_destroy(options);
+}
+
+static void
 gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window)
 {
-    SCM func = scm_c_eval_string("gnc:main-window-properties-cb");
-    if (!scm_is_procedure (func))
-    {
-        PERR ("not a procedure\n");
-        return;
-    }
-    scm_call_0(func);
+    kvp_frame *slots = qof_book_get_slots (gnc_get_current_book ());
+    GNCOptionDB *options;
+    GNCOptionWin *optionwin;
+
+    options = gnc_option_db_new_for_type (QOF_ID_BOOK);
+    gnc_option_db_load_from_kvp (options, slots);
+    gnc_option_db_clean (options);
+
+    optionwin = gnc_options_dialog_new (_( "Book Options"));
+    gnc_options_dialog_build_contents (optionwin, options);
+
+    gnc_options_dialog_set_apply_cb (optionwin,
+                                     gnc_options_dialog_apply_cb,
+                                     (gpointer)options);
+    gnc_options_dialog_set_close_cb (optionwin,
+                                     gnc_options_dialog_close_cb,
+                                     (gpointer)options);
 }
 
 static void

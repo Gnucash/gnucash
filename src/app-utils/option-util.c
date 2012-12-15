@@ -305,6 +305,42 @@ gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
 
     scm_call_3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
 }
+
+void
+gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots, gboolean clear_kvp)
+{
+    static SCM scm_to_kvp = SCM_UNDEFINED;
+    static SCM kvp_option_path = SCM_UNDEFINED;
+    SCM scm_slots;
+    SCM scm_clear_kvp;
+
+    if (!odb || !slots) return;
+
+    if (scm_to_kvp == SCM_UNDEFINED)
+    {
+        scm_to_kvp = scm_c_eval_string("gnc:options-scm->kvp");
+        if (!scm_is_procedure (scm_to_kvp))
+        {
+            PERR ("not a procedure\n");
+            scm_to_kvp = SCM_UNDEFINED;
+            return;
+        }
+    }
+
+    if (kvp_option_path == SCM_UNDEFINED)
+    {
+        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
+        if (kvp_option_path == SCM_UNDEFINED)
+        {
+            PERR ("can't find the option path");
+            return;
+        }
+    }
+    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
+    scm_clear_kvp = scm_from_bool (clear_kvp);
+
+    scm_call_4 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path, scm_clear_kvp);
+}
 /********************************************************************\
  * gnc_option_db_destroy                                            *
  *   unregister the scheme options and free all the memory          *

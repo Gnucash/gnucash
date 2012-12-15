@@ -35,7 +35,6 @@
 ;; files we can load from the top-level because they're "well behaved"
 ;; (these should probably be in modules eventually)
 (load-from-path "string.scm")
-(load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
 (load-from-path "fin.scm")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -52,9 +51,6 @@
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
 (re-export hash-fold)
-
-;; from main-window.scm
-(export gnc:main-window-properties-cb)
 
 ;; Get the Makefile.am/configure.in generated variables.
 (load-from-path "build-config.scm")
