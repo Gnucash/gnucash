@@ -246,7 +246,7 @@ AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.
 AC_MSG_CHECKING(if unsigned long is at least as big as guint32)
 GNC_OLDCFLAGS="$CFLAGS"
 GNC_OLDLDFLAGS="$LDFLAGS"
-CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
+CFLAGS="${CFLAGS} ${GLIB_CFLAGS}"
 LDFLAGS="${LDFLAGS} ${GLIB_LIBS}"
 AC_TRY_RUN([
   #include <glib.h>
