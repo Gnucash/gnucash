@@ -241,6 +241,29 @@ PKG_CHECK_MODULES(GLIB,
 
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
+# I'm sure we (used to?) require this in various places, so don't remove
+# this test unless you've done sufficient code review/testing.
+AC_MSG_CHECKING(if unsigned long is at least as big as guint32)
+GNC_OLDCFLAGS="$CFLAGS"
+GNC_OLDLDFLAGS="$LDFLAGS"
+CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
+LDFLAGS="${LDFLAGS} ${GLIB_LIBS}"
+AC_TRY_RUN([
+  #include <glib.h>
+  int main(int argc, char *argv[]) {
+    return(!(sizeof(unsigned long) >= sizeof(guint32)));
+  }
+],[
+  AC_MSG_RESULT(yes)
+],[
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR(cannot continue, size of unsigned long too small.)
+],[
+  AC_MSG_RESULT(assuming yes)
+])
+CFLAGS="$GNC_OLDCFLAGS"
+LDFLAGS="$GNC_OLDLDFLAGS"
+
 # Gnucash replaced dlopen/dlsym by the g_module functions; dlsym
 # is needed optionally in one place for BSD linkers, though.
 DL_LIB=
@@ -399,30 +422,6 @@ AS_SCRUB_INCLUDE(GUILE_INCS)
 AC_SUBST(GUILE_INCS)
 AC_SUBST(GUILE_LIBS)
 AC_SUBST(GUILE)
-
-# One of the places this is critical is in gnc_scm_to_gint64 and inverse.
-# However, I'm sure we require this elsewhere, so don't remove this test
-# unless you've done sufficient code review/testing.
-AC_MSG_CHECKING(if unsigned long is at least as big as guint32)
-GNC_OLDCFLAGS="$CFLAGS"
-GNC_OLDLDFLAGS="$LDFLAGS"
-CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
-LDFLAGS="${LDFLAGS} ${GLIB_LIBS}"
-AC_TRY_RUN([
-  #include <glib.h>
-  int main(int argc, char *argv[]) {
-    return(!(sizeof(unsigned long) >= sizeof(guint32)));
-  }
-],[
-  AC_MSG_RESULT(yes)
-],[
-  AC_MSG_RESULT(no)
-  AC_MSG_ERROR(cannot continue, size of unsigned long too small.)
-],[
-  AC_MSG_RESULT(assuming yes)
-])
-CFLAGS="$GNC_OLDCFLAGS"
-LDFLAGS="$GNC_OLDLDFLAGS"
 
 ### --------------------------------------------------------------------------
 ### See if we need guile-www
