@@ -2229,79 +2229,13 @@ gnc_scm2query (SCM query_scm)
 SCM
 gnc_gint64_to_scm(const gint64 x)
 {
-#if GUILE_LONG_LONG_OK
-    return scm_from_long_long(x);
-#else
-    const gchar negative_p = (x < 0);
-    const guint64 magnitude = negative_p ? -x : x;
-    const guint32 lower_half = (guint32) (magnitude & 0xFFFFFFFF);
-    const guint32 upper_half = (guint32) (magnitude >> 32);
-    SCM result;
-
-    result = scm_sum(scm_ash(scm_from_ulong(upper_half), scm_from_int(32)),
-                     scm_from_ulong(lower_half));
-
-    if (negative_p)
-    {
-        return scm_difference(SCM_INUM0, result);
-    }
-    else
-    {
-        return result;
-    }
-#endif
+    return scm_from_int64(x);
 }
 
 gint64
 gnc_scm_to_gint64(SCM num)
 {
-#if GUILE_LONG_LONG_OK
-    return scm_to_long_long(num);
-#else
-    static SCM bits00to15_mask = SCM_BOOL_F;
-    SCM magnitude  = scm_abs(num);
-    SCM bits;
-    unsigned long c_bits;
-    long long     c_result = 0;
-    int                i;
-
-    /* This doesn't work -- atm (bit-extract 4000 0 32) proves it */
-    /*
-    SCM lower = scm_bit_extract(magnitude, scm_from_int(0), scm_from_int(32));
-    */
-
-    if (bits00to15_mask == SCM_BOOL_F)
-    {
-        bits00to15_mask = scm_from_ulong(0xFFFF);
-        scm_gc_protect_object (bits00to15_mask);
-    }
-
-    /*
-     * This isn't very complicated (IMHO).  We work from the "top" of
-     * the number downwards.  We assume this is no more than a 64-bit
-     * number, otherwise it will fail right away.  Anyways, we keep
-     * taking the top 16 bits of the number and move it to c_result.
-     * Then we 'remove' those bits from the original number and continue
-     * with the next 16 bits down, and so on.  -- warlord@mit.edu
-     * 2001/02/13
-     */
-    for (i = 48; i >= 0; i -= 16)
-    {
-        bits = scm_ash(magnitude, scm_from_int(-i));
-        c_bits = scm_to_ulong(scm_logand(bits, bits00to15_mask));
-        c_result += ((long long)c_bits << i);
-        magnitude = scm_difference(magnitude, scm_ash(bits, scm_from_int(i)));
-    }
-
-    if (scm_negative_p(num) != SCM_BOOL_F)
-    {
-        return(- c_result);
-    }
-    else
-    {
-        return(c_result);
-    }
-#endif
+    return scm_to_int64(num);
 }
 
 int

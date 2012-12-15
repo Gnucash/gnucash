@@ -400,34 +400,6 @@ AC_SUBST(GUILE_INCS)
 AC_SUBST(GUILE_LIBS)
 AC_SUBST(GUILE)
 
-
-### Check size of long_long - some guile's are broken.
-AC_MSG_CHECKING(if guile long_long is at least as big as gint64)
-AS_SCRUB_INCLUDE(CFLAGS)
-GNC_OLDCFLAGS="$CFLAGS"
-GNC_OLDLDFLAGS="$LDFLAGS"
-CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
-LDFLAGS="${LDFLAGS} ${GLIB_LIBS}"
-AC_TRY_RUN([
-  #include <glib.h>
-  #include <libguile/__scm.h>
-  int main(int argc, char *argv[]) {
-    return(!(sizeof(long_long) >= sizeof(gint64)));
-  }
-],[
-  AC_MSG_RESULT(yes)
-  AC_CHECK_LIB(guile, scm_long_long2num,
-    AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >= sizeof(gint64)))
-],[
-  AC_MSG_RESULT(no)
-],[
-  AC_MSG_RESULT(assuming yes)
-  AC_CHECK_LIB(guile, scm_long_long2num,
-    AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >= sizeof(gint64)))
-])
-CFLAGS="$GNC_OLDCFLAGS"
-LDFLAGS="$GNC_OLDLDFLAGS"
-
 # One of the places this is critical is in gnc_scm_to_gint64 and inverse.
 # However, I'm sure we require this elsewhere, so don't remove this test
 # unless you've done sufficient code review/testing.
