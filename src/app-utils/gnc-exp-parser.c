@@ -311,11 +311,11 @@ func_op(const char *fname, int argc, void **argv)
         {
         case VST_NUMERIC:
             n = *(gnc_numeric*)(vs->value);
-            scmTmp = scm_make_real( gnc_numeric_to_double( n ) );
+            scmTmp = scm_from_double ( gnc_numeric_to_double( n ) );
             break;
         case VST_STRING:
             str = (char*)(vs->value);
-            scmTmp = scm_mem2string( str, strlen(str) );
+            scmTmp = scm_from_locale_string( str );
             break;
         default:
             /* FIXME: error */
@@ -337,7 +337,7 @@ func_op(const char *fname, int argc, void **argv)
     }
 
     result = g_new0( gnc_numeric, 1 );
-    *result = double_to_gnc_numeric( scm_num2dbl(scmTmp, G_STRFUNC),
+    *result = double_to_gnc_numeric( scm_to_double(scmTmp),
                                      GNC_DENOM_AUTO,
                                      GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND_HALF_UP );
     /* FIXME: cleanup scmArgs = scm_list, cons'ed cells? */

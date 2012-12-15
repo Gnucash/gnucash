@@ -2416,7 +2416,7 @@ gnc_option_set_ui_value_number_range (GNCOption *option, gboolean use_default,
 
     if (scm_is_number(value))
     {
-        d_value = scm_num2dbl(value, G_STRFUNC);
+        d_value = scm_to_double(value);
         gtk_spin_button_set_value(spinner, d_value);
         return FALSE;
     }
@@ -2693,7 +2693,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
         /* GtkComboBox per-item tooltip changes needed below */
         index = gnc_combott_get_active(GNC_COMBOTT(widget));
 
-        type = scm_str2symbol("relative");
+        type = scm_from_locale_symbol ("relative");
         val = gnc_option_permissible_value(option, index);
         result = scm_cons(type, val);
     }
@@ -2704,7 +2704,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
         ts.tv_sec  = gnc_date_edit_get_date(GNC_DATE_EDIT(widget));
         ts.tv_nsec = 0;
 
-        result = scm_cons(scm_str2symbol("absolute"), gnc_timespec2timepair(ts));
+        result = scm_cons(scm_from_locale_symbol ("absolute"), gnc_timespec2timepair(ts));
     }
     else if (g_strcmp0(subtype, "both") == 0)
     {
@@ -2725,7 +2725,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
         {
             ts.tv_sec = gnc_date_edit_get_date(GNC_DATE_EDIT(ab_widget));
             ts.tv_nsec = 0;
-            result = scm_cons(scm_str2symbol("absolute"), gnc_timespec2timepair(ts));
+            result = scm_cons(scm_from_locale_symbol ("absolute"), gnc_timespec2timepair(ts));
         }
         else
         {
@@ -2733,7 +2733,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
             index = gnc_combott_get_active(GNC_COMBOTT(rel_widget));
 
             val = gnc_option_permissible_value(option, index);
-            result = scm_cons(scm_str2symbol("relative"), val);
+            result = scm_cons(scm_from_locale_symbol ("relative"), val);
         }
     }
     g_free(subtype);
@@ -2826,7 +2826,7 @@ gnc_option_get_ui_value_number_range (GNCOption *option, GtkWidget *widget)
 
     value = gtk_spin_button_get_value(spinner);
 
-    return (scm_make_real(value));
+    return (scm_from_double (value));
 }
 
 static SCM
@@ -2851,10 +2851,10 @@ gnc_option_get_ui_value_color (GNCOption *option, GtkWidget *widget)
     scale = gnc_option_color_range(option);
 
     result = SCM_EOL;
-    result = scm_cons(scm_make_real(alpha * scale), result);
-    result = scm_cons(scm_make_real(blue * scale), result);
-    result = scm_cons(scm_make_real(green * scale), result);
-    result = scm_cons(scm_make_real(red * scale), result);
+    result = scm_cons(scm_from_double (alpha * scale), result);
+    result = scm_cons(scm_from_double (blue * scale), result);
+    result = scm_cons(scm_from_double (green * scale), result);
+    result = scm_cons(scm_from_double (red * scale), result);
     return result;
 }
 

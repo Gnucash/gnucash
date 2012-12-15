@@ -183,7 +183,7 @@ custom_report_run_report(SCM guid,
     if (!scm_is_null(guid))
     {
         /* this runs the report */
-        report_id = SCM_INUM(scm_call_1(make_report, guid));
+        report_id = scm_to_int (scm_call_1(make_report, guid));
 
         /* do this *before* the report because sometimes the report
         	 takes a while... */
@@ -219,9 +219,8 @@ get_custom_report_selection(CustomReportDialog *crd,
     if (gtk_tree_selection_get_selected(sel, &model, &iter))
     {
         int num;
-
         gtk_tree_model_get(model, &iter, COL_NUM, &num, -1);
-        guid = scm_list_ref(crd->reportlist, scm_int2num(num));
+        guid = scm_list_ref(crd->reportlist, scm_from_int (num));
     }
     else
     {
@@ -258,7 +257,7 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
 
         gtk_tree_model_get(model, &iter, COL_NUM, &num, -1);
 
-        guid = scm_list_ref(crd->reportlist, scm_int2num(num));
+        guid = scm_list_ref(crd->reportlist, scm_from_int (num));
 
         custom_report_run_report(guid, crd);
     }

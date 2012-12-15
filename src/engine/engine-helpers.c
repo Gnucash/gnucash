@@ -84,7 +84,7 @@ gnc_timespec2timepair(Timespec t)
     SCM nsecs;
 
     secs = gnc_gint64_to_scm(t.tv_sec);
-    nsecs = scm_long2num(t.tv_nsec);
+    nsecs = scm_from_long (t.tv_nsec);
     return(scm_cons(secs, nsecs));
 }
 
@@ -95,7 +95,7 @@ gnc_timepair2timespec(SCM x)
     if (gnc_timepair_p (x))
     {
         result.tv_sec = gnc_scm_to_gint64(SCM_CAR(x));
-        result.tv_nsec = scm_num2long(SCM_CDR(x), SCM_ARG1, G_STRFUNC);
+        result.tv_nsec = scm_to_long(SCM_CDR(x));
     }
     return(result);
 }
@@ -207,42 +207,42 @@ typedef enum
 static QofQueryCompare
 gnc_query_scm2compare (SCM how_scm)
 {
-    return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
+    return scm_to_int(how_scm);
 }
 
 /* QofStringMatch */
 static QofStringMatch
 gnc_query_scm2string (SCM how_scm)
 {
-    return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
+    return scm_to_int(how_scm);
 }
 
 /* QofDateMatch */
 static QofDateMatch
 gnc_query_scm2date (SCM how_scm)
 {
-    return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
+    return scm_to_int(how_scm);
 }
 
 /* QofNumericMatch */
 static QofNumericMatch
 gnc_query_scm2numericop (SCM how_scm)
 {
-    return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
+    return scm_to_int(how_scm);
 }
 
 /* QofGuidMatch */
 static QofGuidMatch
 gnc_query_scm2guid (SCM how_scm)
 {
-    return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
+    return scm_to_int(how_scm);
 }
 
 /* QofCharMatch */
 static QofCharMatch
 gnc_query_scm2char (SCM how_scm)
 {
-    return scm_num2int(how_scm, SCM_ARG1, G_STRFUNC);
+    return scm_to_int(how_scm);
 }
 
 static QofGuidMatch
@@ -331,7 +331,7 @@ gnc_scm2bitfield (SCM field_scm)
         scm = SCM_CAR (field_scm);
         field_scm = SCM_CDR (field_scm);
 
-        bit = scm_num2int(scm, SCM_ARG2, G_STRFUNC);
+        bit = scm_to_int(scm);
         field |= bit;
     }
 
@@ -540,7 +540,7 @@ gnc_query_path_free (GSList *path)
 static KvpValueType
 gnc_scm2KvpValueType (SCM value_type_scm)
 {
-    return scm_num2int(value_type_scm, SCM_ARG1, G_STRFUNC);
+    return scm_to_int(value_type_scm);
 }
 
 static SCM gnc_kvp_frame2scm (KvpFrame *frame);
@@ -556,7 +556,7 @@ gnc_kvp_value2scm (const KvpValue *value)
 
     value_t = kvp_value_get_type (value);
 
-    value_scm = scm_cons (scm_long2num (value_t), value_scm);
+    value_scm = scm_cons (scm_from_long  (value_t), value_scm);
 
     switch (value_t)
     {
@@ -565,7 +565,7 @@ gnc_kvp_value2scm (const KvpValue *value)
         break;
 
     case KVP_TYPE_DOUBLE:
-        scm = scm_make_real (kvp_value_get_double (value));
+        scm = scm_from_double  (kvp_value_get_double (value));
         break;
 
     case KVP_TYPE_STRING:
@@ -679,7 +679,7 @@ gnc_scm2KvpValue (SCM value_scm)
         break;
 
     case KVP_TYPE_DOUBLE:
-        value = kvp_value_new_double (scm_num2dbl (val_scm, G_STRFUNC));
+        value = kvp_value_new_double (scm_to_double (val_scm));
         break;
 
     case KVP_TYPE_STRING:
@@ -835,14 +835,14 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
     qt_scm = scm_cons (SCM_BOOL (qof_query_term_is_inverted (qt)), qt_scm);
 
     pd = qof_query_term_get_pred_data (qt);
-    qt_scm = scm_cons (scm_str2symbol (pd->type_name), qt_scm);
-    qt_scm = scm_cons (scm_long2num (pd->how), qt_scm);
+    qt_scm = scm_cons (scm_from_locale_symbol (pd->type_name), qt_scm);
+    qt_scm = scm_cons (scm_from_long  (pd->how), qt_scm);
 
     if (!g_strcmp0 (pd->type_name, QOF_TYPE_STRING))
     {
         query_string_t pdata = (query_string_t) pd;
 
-        qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
+        qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
         qt_scm = scm_cons (SCM_BOOL (pdata->is_regex), qt_scm);
         qt_scm = scm_cons (scm_makfrom0str (pdata->matchstring), qt_scm);
 
@@ -851,7 +851,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
     {
         query_date_t pdata = (query_date_t) pd;
 
-        qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
+        qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
         qt_scm = scm_cons (gnc_timespec2timepair (pdata->date), qt_scm);
 
     }
@@ -859,7 +859,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
     {
         query_numeric_t pdata = (query_numeric_t) pd;
 
-        qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
+        qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
         qt_scm = scm_cons (gnc_query_numeric2scm (pdata->amount), qt_scm);
 
     }
@@ -867,7 +867,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
     {
         query_guid_t pdata = (query_guid_t) pd;
 
-        qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
+        qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
         qt_scm = scm_cons (gnc_guid_glist2scm (pdata->guids), qt_scm);
 
     }
@@ -882,7 +882,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
     {
         query_double_t pdata = (query_double_t) pd;
 
-        qt_scm = scm_cons (scm_make_real (pdata->val), qt_scm);
+        qt_scm = scm_cons (scm_from_double  (pdata->val), qt_scm);
 
     }
     else if (!g_strcmp0 (pd->type_name, QOF_TYPE_BOOLEAN))
@@ -896,7 +896,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
     {
         query_char_t pdata = (query_char_t) pd;
 
-        qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
+        qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
         qt_scm = scm_cons (scm_makfrom0str (pdata->char_list), qt_scm);
 
     }
@@ -1074,7 +1074,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
             qt_scm = SCM_CDR (qt_scm);
             if (!scm_is_number (scm))
                 break;
-            val = scm_num2dbl (scm, G_STRFUNC);
+            val = scm_to_double (scm);
 
             pd = qof_query_double_predicate (compare_how, val);
 
@@ -1288,7 +1288,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
                 break;
             scm = SCM_CAR (query_term_scm);
             query_term_scm = SCM_CDR (query_term_scm);
-            amount = scm_num2dbl (scm, G_STRFUNC);
+            amount = scm_to_double (scm);
 
             val = double_to_gnc_numeric (amount, GNC_DENOM_AUTO,
                                          GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND_HALF_UP);
@@ -1688,7 +1688,7 @@ gnc_query_sort2scm (const QofQuerySort *qs)
         return SCM_BOOL_F;
 
     sort_scm = scm_cons (gnc_query_path2scm (path), sort_scm);
-    sort_scm = scm_cons (scm_int2num (qof_query_sort_get_sort_options (qs)), sort_scm);
+    sort_scm = scm_cons (scm_from_int  (qof_query_sort_get_sort_options (qs)), sort_scm);
     sort_scm = scm_cons (SCM_BOOL (qof_query_sort_get_increasing (qs)), sort_scm);
 
     return scm_reverse (sort_scm);
@@ -1728,7 +1728,7 @@ gnc_query_scm2sort (SCM sort_scm, GSList **path, gint *options, gboolean *inc)
         gnc_query_path_free (p);
         return FALSE;
     }
-    o = scm_num2int (val, SCM_ARG1, G_STRFUNC);
+    o = scm_to_int (val);
 
     /* increasing */
     val = SCM_CAR (sort_scm);
@@ -1764,12 +1764,12 @@ gnc_query2scm (QofQuery *q)
 
     /* terms */
     pair = scm_cons (gnc_query_terms2scm (qof_query_get_terms (q)), SCM_EOL);
-    pair = scm_cons (scm_str2symbol ("terms"), pair);
+    pair = scm_cons (scm_from_locale_symbol ("terms"), pair);
     query_scm = scm_cons (pair, query_scm);
 
     /* search-for */
-    pair = scm_cons (scm_str2symbol (qof_query_get_search_for (q)), SCM_EOL);
-    pair = scm_cons (scm_str2symbol ("search-for"), pair);
+    pair = scm_cons (scm_from_locale_symbol (qof_query_get_search_for (q)), SCM_EOL);
+    pair = scm_cons (scm_from_locale_symbol ("search-for"), pair);
     query_scm = scm_cons (pair, query_scm);
 
     /* sorts... */
@@ -1777,27 +1777,27 @@ gnc_query2scm (QofQuery *q)
 
     /* primary-sort */
     pair = scm_cons (gnc_query_sort2scm (s1), SCM_EOL);
-    pair = scm_cons (scm_str2symbol ("primary-sort"), pair);
+    pair = scm_cons (scm_from_locale_symbol ("primary-sort"), pair);
     query_scm = scm_cons (pair, query_scm);
 
     /* secondary-sort */
     pair = scm_cons (gnc_query_sort2scm (s2), SCM_EOL);
-    pair = scm_cons (scm_str2symbol ("secondary-sort"), pair);
+    pair = scm_cons (scm_from_locale_symbol ("secondary-sort"), pair);
     query_scm = scm_cons (pair, query_scm);
 
     /* tertiary-sort */
     pair = scm_cons (gnc_query_sort2scm (s3), SCM_EOL);
-    pair = scm_cons (scm_str2symbol ("tertiary-sort"), pair);
+    pair = scm_cons (scm_from_locale_symbol ("tertiary-sort"), pair);
     query_scm = scm_cons (pair, query_scm);
 
     /* max results */
-    pair = scm_cons (scm_int2num (qof_query_get_max_results (q)), SCM_EOL);
-    pair = scm_cons (scm_str2symbol ("max-results"), pair);
+    pair = scm_cons (scm_from_int  (qof_query_get_max_results (q)), SCM_EOL);
+    pair = scm_cons (scm_from_locale_symbol ("max-results"), pair);
     query_scm = scm_cons (pair, query_scm);
 
     /* Reverse this list; tag it as 'query-v2' */
     pair = scm_reverse (query_scm);
-    return scm_cons (scm_str2symbol ("query-v2"), pair);
+    return scm_cons (scm_from_locale_symbol ("query-v2"), pair);
 }
 
 static GSList *
@@ -2015,7 +2015,7 @@ gnc_scm2query_v1 (SCM query_scm)
                 break;
             }
 
-            max_splits = scm_num2int (value, SCM_ARG1, G_STRFUNC);
+            max_splits = scm_to_int (value);
 
         }
         else
@@ -2154,7 +2154,7 @@ gnc_scm2query_v2 (SCM query_scm)
                 break;
             }
 
-            max_results = scm_num2int (value, SCM_ARG1, G_STRFUNC);
+            max_results = scm_to_int (value);
 
         }
         else
@@ -2228,7 +2228,7 @@ SCM
 gnc_gint64_to_scm(const gint64 x)
 {
 #if GUILE_LONG_LONG_OK
-    return scm_long_long2num(x);
+    return scm_from_long_long(x);
 #else
     const gchar negative_p = (x < 0);
     const guint64 magnitude = negative_p ? -x : x;
@@ -2236,8 +2236,8 @@ gnc_gint64_to_scm(const gint64 x)
     const guint32 upper_half = (guint32) (magnitude >> 32);
     SCM result;
 
-    result = scm_sum(scm_ash(scm_ulong2num(upper_half), SCM_MAKINUM(32)),
-                     scm_ulong2num(lower_half));
+    result = scm_sum(scm_ash(scm_from_ulong(upper_half), scm_from_int(32)),
+                     scm_from_ulong(lower_half));
 
     if (negative_p)
     {
@@ -2254,12 +2254,7 @@ gint64
 gnc_scm_to_gint64(SCM num)
 {
 #if GUILE_LONG_LONG_OK
-#ifdef SCM_MINOR_VERSION
-    /* Guile 1.6 and later have the SCM_XXX_VERSION macro */
-    return scm_num2long_long(num, SCM_ARG1, "gnc_scm_to_gint64");
-#else
-    return scm_num2long_long(num, (char *) SCM_ARG1, "gnc_scm_to_gint64");
-#endif
+    return scm_to_long_long(num);
 #else
     static SCM bits00to15_mask = SCM_BOOL_F;
     SCM magnitude  = scm_abs(num);
@@ -2270,12 +2265,12 @@ gnc_scm_to_gint64(SCM num)
 
     /* This doesn't work -- atm (bit-extract 4000 0 32) proves it */
     /*
-    SCM lower = scm_bit_extract(magnitude, SCM_MAKINUM(0), SCM_MAKINUM(32));
+    SCM lower = scm_bit_extract(magnitude, scm_from_int(0), scm_from_int(32));
     */
 
     if (bits00to15_mask == SCM_BOOL_F)
     {
-        bits00to15_mask = scm_ulong2num(0xFFFF);
+        bits00to15_mask = scm_from_ulong(0xFFFF);
         scm_gc_protect_object (bits00to15_mask);
     }
 
@@ -2290,10 +2285,10 @@ gnc_scm_to_gint64(SCM num)
      */
     for (i = 48; i >= 0; i -= 16)
     {
-        bits = scm_ash(magnitude, SCM_MAKINUM(-i));
-        c_bits = scm_num2ulong(scm_logand(bits, bits00to15_mask), SCM_ARG1, G_STRFUNC);
+        bits = scm_ash(magnitude, scm_from_int(-i));
+        c_bits = scm_to_ulong(scm_logand(bits, bits00to15_mask));
         c_result += ((long long)c_bits << i);
-        magnitude = scm_difference(magnitude, scm_ash(bits, SCM_MAKINUM(i)));
+        magnitude = scm_difference(magnitude, scm_ash(bits, scm_from_int(i)));
     }
 
     if (scm_negative_p(num) != SCM_BOOL_F)

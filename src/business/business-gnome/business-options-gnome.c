@@ -100,7 +100,7 @@ get_owner_type_from_option (GNCOption *option)
     SCM odata = gnc_option_get_option_data (option);
 
     /* The option data is enum-typed.  It's just the enum value. */
-    return (GncOwnerType) scm_num2int(odata, SCM_ARG1, G_STRFUNC);
+    return (GncOwnerType) scm_to_int(odata);
 }
 
 

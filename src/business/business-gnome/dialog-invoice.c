@@ -651,7 +651,7 @@ gnc_invoice_window_print_invoice(GncInvoice *invoice)
 
     arg = scm_apply (func, args, SCM_EOL);
     g_return_if_fail (scm_is_exact (arg));
-    report_id = scm_num2int (arg, SCM_ARG1, G_STRFUNC);
+    report_id = scm_to_int (arg);
 
     /* scm_gc_unprotect_object(func); */
     if (report_id >= 0)
@@ -1001,7 +1001,7 @@ void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
     /* Apply the function to the args */
     arg = scm_apply (func, args, SCM_EOL);
     g_return_if_fail (scm_is_exact (arg));
-    id = scm_num2int (arg, SCM_ARG1, G_STRFUNC);
+    id = scm_to_int (arg);
 
     if (id >= 0)
         reportWindow (id);

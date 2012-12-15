@@ -19,7 +19,7 @@ typedef char gchar;
 %typemap (out) char * {
   $result = scm_makfrom0str((const char *)$1);
   if (!scm_is_true($result)) {
-    $result = scm_makstr(0, 0);
+    $result = scm_c_make_string(0, SCM_UNDEFINED);
   }
 }
 %typemap(in) GNCPrintAmountInfo "$1 = gnc_scm2printinfo($input);"

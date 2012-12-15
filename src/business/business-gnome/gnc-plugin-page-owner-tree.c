@@ -941,7 +941,7 @@ build_aging_report (GncOwnerType owner_type)
     arg = scm_apply (func, args, SCM_EOL);
     g_return_val_if_fail (scm_is_exact (arg), -1);
 
-    return scm_num2int (arg, SCM_ARG1, G_STRFUNC);
+    return scm_to_int (arg);
 }
 
 static int build_owner_report (GncOwner *owner, Account *acc)
@@ -978,7 +978,7 @@ static int build_owner_report (GncOwner *owner, Account *acc)
     /* Apply the function to the args */
     arg = scm_apply (func, args, SCM_EOL);
     g_return_val_if_fail (scm_is_exact (arg), -1);
-    return scm_num2int (arg, SCM_ARG1, G_STRFUNC);
+    return scm_to_int (arg);
 }
 
 

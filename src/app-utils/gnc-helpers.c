@@ -47,12 +47,12 @@ gnc_printinfo2scm(GNCPrintAmountInfo info)
     info_scm = scm_cons (SCM_BOOL (info.use_symbol), info_scm);
     info_scm = scm_cons (SCM_BOOL (info.use_separators), info_scm);
 
-    info_scm = scm_cons (scm_int2num (info.min_decimal_places), info_scm);
-    info_scm = scm_cons (scm_int2num (info.max_decimal_places), info_scm);
+    info_scm = scm_cons (scm_from_int (info.min_decimal_places), info_scm);
+    info_scm = scm_cons (scm_from_int (info.max_decimal_places), info_scm);
 
     info_scm = scm_cons (gnc_commodity_to_scm (info.commodity), info_scm);
 
-    info_scm = scm_cons (scm_str2symbol ("print-info"), info_scm);
+    info_scm = scm_cons (scm_from_locale_symbol ("print-info"), info_scm);
 
     return info_scm;
 }
@@ -67,12 +67,10 @@ gnc_scm2printinfo(SCM info_scm)
     info.commodity = gnc_scm_to_commodity (SCM_CAR (info_scm));
 
     info_scm = SCM_CDR (info_scm);
-    info.max_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
-                                           G_STRFUNC);
+    info.max_decimal_places = scm_to_int (SCM_CAR (info_scm));
 
     info_scm = SCM_CDR (info_scm);
-    info.min_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
-                                           G_STRFUNC);
+    info.min_decimal_places = scm_to_int (SCM_CAR (info_scm));
 
     info_scm = SCM_CDR (info_scm);
     info.use_separators = scm_is_true (SCM_CAR (info_scm));

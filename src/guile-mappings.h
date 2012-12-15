@@ -1,5 +1,5 @@
 /********************************************************************\
- * guile-mappings.h - Guile version compatability mappings          *
+ * guile-mappings.h - Guile version compatibility mappings          *
  * Copyright (C) 2003, David Hampton                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *

@@ -27,7 +27,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         }
         else
         {
-            return kvp_value_new_double(scm_num2dbl(val, G_STRFUNC));
+            return kvp_value_new_double(scm_to_double(val));
         }
     }
     else if (gnc_numeric_p(val))
@@ -77,7 +77,7 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
         return gnc_gint64_to_scm(kvp_value_get_gint64(val));
         break;
     case KVP_TYPE_DOUBLE:
-        return scm_make_real(kvp_value_get_double(val));
+        return scm_from_double (kvp_value_get_double(val));
         break;
     case KVP_TYPE_NUMERIC:
         return gnc_numeric_to_scm(kvp_value_get_numeric(val));

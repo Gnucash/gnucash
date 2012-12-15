@@ -1023,7 +1023,7 @@ gnc_trans_scm_get_split_scm(SCM trans_scm, int index)
     if (!gnc_is_trans_scm(trans_scm))
         return SCM_UNDEFINED;
 
-    arg = scm_int2num(index);
+    arg = scm_from_int (index);
 
     return scm_call_2(getters.trans_scm_split_scm, trans_scm, arg);
 }
@@ -1105,7 +1105,7 @@ gnc_get_debit_string(GNCAccountType account_type)
     if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
         account_type = ACCT_TYPE_NONE;
 
-    arg = scm_long2num(account_type);
+    arg = scm_from_long (account_type);
 
     result = scm_call_1(getters.debit_string, arg);
     if (!scm_is_string(result))
@@ -1136,7 +1136,7 @@ gnc_get_credit_string(GNCAccountType account_type)
     if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
         account_type = ACCT_TYPE_NONE;
 
-    arg = scm_long2num(account_type);
+    arg = scm_from_long (account_type);
 
     result = scm_call_1(getters.credit_string, arg);
     if (!scm_is_string(result))

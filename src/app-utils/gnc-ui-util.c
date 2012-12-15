@@ -392,7 +392,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         {
             SCM code_scm;
             SCM form_scm;
-            code_scm = scm_str2symbol (code);
+            code_scm = scm_from_locale_symbol (code);
             form_scm = scm_call_3 (get_form, category, code_scm, tax_entity_type);
             if (!scm_is_string (form_scm))
             {

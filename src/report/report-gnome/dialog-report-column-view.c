@@ -127,7 +127,7 @@ update_display_lists(gnc_column_view_edit * view)
     if (scm_is_list(view->available_list) && !scm_is_null (view->available_list))
     {
         row = MIN (row, scm_ilength (view->available_list) - 1);
-        selection = scm_list_ref (view->available_list, scm_int2num (row));
+        selection = scm_list_ref (view->available_list, scm_from_int  (row));
     }
     else
     {
@@ -176,7 +176,7 @@ update_display_lists(gnc_column_view_edit * view)
     if (scm_is_list(view->contents_list) && !scm_is_null (view->contents_list))
     {
         row = MIN (row, scm_ilength (view->contents_list) - 1);
-        selection = scm_list_ref (view->contents_list, scm_int2num (row));
+        selection = scm_list_ref (view->contents_list, scm_from_int  (row));
     }
     else
     {
@@ -198,7 +198,7 @@ update_display_lists(gnc_column_view_edit * view)
             if (scm_is_equal (SCM_CAR(contents), selection))
                 row = i;
 
-            id = scm_num2int(SCM_CAAR(contents), SCM_ARG1, G_STRFUNC);
+            id = scm_to_int(SCM_CAAR(contents));
             this_report = gnc_report_find(id);
             scm_dynwind_begin (0);
             str = scm_to_locale_string (scm_call_1(report_menu_name, this_report));
@@ -211,10 +211,8 @@ update_display_lists(gnc_column_view_edit * view)
             (store, &iter,
              CONTENTS_COL_NAME, name,
              CONTENTS_COL_ROW, i,
-             CONTENTS_COL_REPORT_COLS, scm_num2int(SCM_CADR(SCM_CAR(contents)),
-                                                   SCM_ARG1, G_STRFUNC),
-             CONTENTS_COL_REPORT_ROWS, scm_num2int(SCM_CADDR(SCM_CAR(contents)),
-                                                   SCM_ARG1, G_STRFUNC),
+             CONTENTS_COL_REPORT_COLS, scm_to_int(SCM_CADR(SCM_CAR(contents))),
+             CONTENTS_COL_REPORT_ROWS, scm_to_int(SCM_CADDR(SCM_CAR(contents))),
              -1);
         }
     }
@@ -413,9 +411,9 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
             (scm_ilength(r->available_list) > r->available_selected))
     {
         template_name = scm_list_ref(r->available_list,
-                                     scm_int2num(r->available_selected));
+                                     scm_from_int (r->available_selected));
         new_report = scm_call_1(make_report, template_name);
-        id = scm_num2int(new_report, SCM_ARG1, G_STRFUNC);
+        id = scm_to_int(new_report);
         scm_call_2(mark_report, gnc_report_find(id), SCM_BOOL_T);
         oldlength = scm_ilength(r->contents_list);
 
@@ -428,8 +426,8 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
             }
             newlist = scm_append
                       (scm_listify(scm_reverse(scm_cons(SCM_LIST4(new_report,
-                                               scm_int2num(1),
-                                               scm_int2num(1),
+                                               scm_from_int (1),
+                                               scm_from_int (1),
                                                SCM_BOOL_F),
                                                newlist)),
                                    oldlist,
@@ -440,8 +438,8 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
             newlist = scm_append
                       (scm_listify(oldlist,
                                    SCM_LIST1(SCM_LIST4(new_report,
-                                             scm_int2num(1),
-                                             scm_int2num(1),
+                                             scm_from_int (1),
+                                             scm_from_int (1),
                                              SCM_BOOL_F)),
                                    SCM_UNDEFINED));
             r->contents_selected = oldlength;
@@ -604,13 +602,11 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
     if (length > r->contents_selected)
     {
         current = scm_list_ref(r->contents_list,
-                               scm_int2num(r->contents_selected));
+                               scm_from_int (r->contents_selected));
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(colspin),
-                                  (float)scm_num2int(SCM_CADR(current),
-                                          SCM_ARG1, G_STRFUNC));
+                                  (float)scm_to_int(SCM_CADR(current)));
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(rowspin),
-                                  (float)scm_num2int(SCM_CADDR(current),
-                                          SCM_ARG1, G_STRFUNC));
+                                  (float)scm_to_int(SCM_CADDR(current)));
 
         dlg_ret = gtk_dialog_run(GTK_DIALOG(dlg));
         gtk_widget_hide(dlg);
@@ -618,14 +614,14 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
         if (dlg_ret == GTK_RESPONSE_OK)
         {
             current = SCM_LIST4(SCM_CAR(current),
-                                scm_int2num(gtk_spin_button_get_value_as_int
+                                scm_from_int (gtk_spin_button_get_value_as_int
                                             (GTK_SPIN_BUTTON(colspin))),
-                                scm_int2num(gtk_spin_button_get_value_as_int
+                                scm_from_int (gtk_spin_button_get_value_as_int
                                             (GTK_SPIN_BUTTON(rowspin))),
                                 SCM_BOOL_F);
             scm_gc_unprotect_object(r->contents_list);
             r->contents_list = scm_list_set_x(r->contents_list,
-                                              scm_int2num(r->contents_selected),
+                                              scm_from_int (r->contents_selected),
                                               current);
             scm_gc_protect_object(r->contents_list);
             gnc_options_dialog_changed (r->optwin);

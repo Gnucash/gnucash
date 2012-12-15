@@ -490,7 +490,7 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkTreeSelection *selection,
         {
             scm_gc_unprotect_object(wind->selected_file);
             wind->selected_file = scm_list_ref(wind->imported_files,
-                                               scm_int2num(row));
+                                               scm_from_int (row));
             scm_gc_protect_object(wind->selected_file);
             g_object_set(button, "sensitive", TRUE, (gchar*)NULL);
         }
@@ -618,7 +618,7 @@ rematch_line(QIFImportWindow *wind, GtkTreeSelection *selection,
         return;
 
     /* Find the <qif-map-entry> corresponding to the selected row. */
-    map_entry = scm_list_ref(display_info, scm_int2num(row));
+    map_entry = scm_list_ref(display_info, scm_from_int (row));
 
     /* Call the account picker to update it. */
     if (!qif_account_picker_dialog(wind, map_entry))
@@ -638,7 +638,7 @@ rematch_line(QIFImportWindow *wind, GtkTreeSelection *selection,
         gtk_tree_model_get(model, &iter, ACCOUNT_COL_INDEX, &row, -1);
 
         /* Update the <qif-map-entry> for the selected row. */
-        map_entry = scm_list_ref(display_info, scm_int2num(row));
+        map_entry = scm_list_ref(display_info, scm_from_int (row));
         scm_call_2(set_gnc_name, map_entry, gnc_name);
 
         /* Update the mapping hash table. */
@@ -1117,9 +1117,9 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
     if (wind->match_transactions != SCM_BOOL_F)
     {
         possible_matches = SCM_CDR(scm_list_ref(wind->match_transactions,
-                                                scm_int2num(wind->selected_transaction)));
+                                                scm_from_int (wind->selected_transaction)));
         scm_call_2(scm_c_eval_string("qif-import:refresh-match-selection"),
-                   possible_matches, scm_int2num(selection));
+                   possible_matches, scm_from_int (selection));
 
         while (!scm_is_null(possible_matches))
         {
@@ -1462,12 +1462,12 @@ initialize_scheme(QIFImportWindow *wind)
      * categories to GnuCash accounts. */
     load_map_prefs = scm_c_eval_string("qif-import:load-map-prefs");
     mapping_info = scm_call_0(load_map_prefs);
-    wind->gnc_acct_info         = scm_list_ref(mapping_info, scm_int2num(0));
-    wind->acct_map_info         = scm_list_ref(mapping_info, scm_int2num(1));
-    wind->cat_map_info          = scm_list_ref(mapping_info, scm_int2num(2));
-    wind->memo_map_info         = scm_list_ref(mapping_info, scm_int2num(3));
-    wind->security_hash         = scm_list_ref(mapping_info, scm_int2num(4));
-    wind->security_prefs        = scm_list_ref(mapping_info, scm_int2num(5));
+    wind->gnc_acct_info         = scm_list_ref(mapping_info, scm_from_int (0));
+    wind->acct_map_info         = scm_list_ref(mapping_info, scm_from_int (1));
+    wind->cat_map_info          = scm_list_ref(mapping_info, scm_from_int (2));
+    wind->memo_map_info         = scm_list_ref(mapping_info, scm_from_int (3));
+    wind->security_hash         = scm_list_ref(mapping_info, scm_from_int (4));
+    wind->security_prefs        = scm_list_ref(mapping_info, scm_from_int (5));
 
     /* Get the initial ticker map. */
     create_ticker_map = scm_c_eval_string("make-ticker-map");
@@ -1891,7 +1891,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
              * it's found, set up the format selector page. */
             if ((date_formats = scm_call_2(parse_results,
                                            SCM_CDR(parse_return),
-                                           scm_str2symbol("date"))) != SCM_BOOL_F)
+                                           scm_from_locale_symbol ("date"))) != SCM_BOOL_F)
             {
                 GtkComboBox *combo_box;
                 GtkTreeModel *model;
@@ -2047,7 +2047,7 @@ gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
     {
         g_critical("QIF import: BUG DETECTED in gnc_ui_qif_import_date_valid_cb. Format is NULL.");
     }
-    format_sym = scm_str2symbol(text);
+    format_sym = scm_from_locale_symbol (text);
     g_free(text);
 
     /* Reparse the dates using the selected format. */

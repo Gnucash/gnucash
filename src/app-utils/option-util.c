@@ -190,7 +190,7 @@ gnc_option_db_init(GNCOptionDB *odb)
 {
     SCM func = scm_c_eval_string("gnc:send-options");
 
-    scm_call_2(func, scm_int2num(odb->handle), odb->guile_options);
+    scm_call_2(func, scm_from_int (odb->handle), odb->guile_options);
 }
 
 
@@ -825,7 +825,7 @@ gnc_option_num_permissible_values(GNCOption *option)
 
     if (scm_is_exact(value))
     {
-        return scm_num2int(value, SCM_ARG1, G_STRFUNC);
+        return scm_to_int(value);
     }
     else
     {
@@ -854,7 +854,7 @@ gnc_option_permissible_value_index(GNCOption *option, SCM search_value)
     }
     else
     {
-        return scm_num2int(value, SCM_ARG1, G_STRFUNC);
+        return scm_to_int(value);
     }
 }
 
@@ -880,7 +880,7 @@ gnc_option_permissible_value(GNCOption *option, int index)
     initialize_getters();
 
     value = scm_call_2(getters.index_to_value, option->guile_option,
-                       scm_int2num(index));
+                       scm_from_int (index));
 
     return value;
 }
@@ -909,7 +909,7 @@ gnc_option_permissible_value_name(GNCOption *option, int index)
     initialize_getters();
 
     name = scm_call_2(getters.index_to_name, option->guile_option,
-                      scm_int2num(index));
+                      scm_from_int (index));
     if (name == SCM_UNDEFINED)
         return NULL;
     if (!scm_is_string(name))
@@ -948,7 +948,7 @@ gnc_option_permissible_value_description(GNCOption *option, int index)
     initialize_getters();
 
     help = scm_call_2(getters.index_to_description, option->guile_option,
-                      scm_int2num(index));
+                      scm_from_int (index));
     if (help == SCM_UNDEFINED)
         return NULL;
     if (!scm_is_string(help))
@@ -1056,7 +1056,7 @@ gnc_option_get_account_type_list(GNCOption *option)
         }
         else
         {
-            type = scm_num2long (item, SCM_ARG1, G_STRFUNC);
+            type = scm_to_long (item);
             type_list = g_list_prepend (type_list, GINT_TO_POINTER (type));
         }
     }
@@ -1098,7 +1098,7 @@ gboolean gnc_option_get_range_info(GNCOption *option,
         return FALSE;
 
     if (lower_bound != NULL)
-        *lower_bound = scm_num2dbl(value, G_STRFUNC);
+        *lower_bound = scm_to_double(value);
 
     if (!scm_is_list(list) || scm_is_null(list))
         return FALSE;
@@ -1111,7 +1111,7 @@ gboolean gnc_option_get_range_info(GNCOption *option,
         return FALSE;
 
     if (upper_bound != NULL)
-        *upper_bound = scm_num2dbl(value, G_STRFUNC);
+        *upper_bound = scm_to_double(value);
 
     if (!scm_is_list(list) || scm_is_null(list))
         return FALSE;
@@ -1128,7 +1128,7 @@ gboolean gnc_option_get_range_info(GNCOption *option,
      */
     if (num_decimals != NULL)
     {
-        double decimals = scm_num2dbl(value, G_STRFUNC);
+        double decimals = scm_to_double(value);
         *num_decimals = (int)decimals;
     }
 
@@ -1143,7 +1143,7 @@ gboolean gnc_option_get_range_info(GNCOption *option,
         return FALSE;
 
     if (step_size != NULL)
-        *step_size = scm_num2dbl(value, G_STRFUNC);
+        *step_size = scm_to_double(value);
 
     return TRUE;
 }
@@ -1173,7 +1173,7 @@ gnc_option_color_range(GNCOption *option)
     if (!scm_is_number(value))
         return 0.0;
 
-    return scm_num2dbl(value, G_STRFUNC);
+    return scm_to_double(value);
 }
 
 
@@ -1286,7 +1286,7 @@ gnc_option_get_color_info(GNCOption *option,
 
     scale = 1.0 / scale;
 
-    rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
+    rgba = scm_to_double(SCM_CAR(value));
     if (red != NULL)
         *red = MIN(1.0, rgba * scale);
 
@@ -1294,7 +1294,7 @@ gnc_option_get_color_info(GNCOption *option,
     if (!scm_is_list(value) || scm_is_null(value) || !scm_is_number(SCM_CAR(value)))
         return FALSE;
 
-    rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
+    rgba = scm_to_double(SCM_CAR(value));
     if (green != NULL)
         *green = MIN(1.0, rgba * scale);
 
@@ -1302,7 +1302,7 @@ gnc_option_get_color_info(GNCOption *option,
     if (!scm_is_list(value) || scm_is_null(value) || !scm_is_number(SCM_CAR(value)))
         return FALSE;
 
-    rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
+    rgba = scm_to_double(SCM_CAR(value));
     if (blue != NULL)
         *blue = MIN(1.0, rgba * scale);
 
@@ -1310,7 +1310,7 @@ gnc_option_get_color_info(GNCOption *option,
     if (!scm_is_list(value) || scm_is_null(value) || !scm_is_number(SCM_CAR(value)))
         return FALSE;
 
-    rgba = scm_num2dbl(SCM_CAR(value), G_STRFUNC);
+    rgba = scm_to_double(SCM_CAR(value));
     if (alpha != NULL)
         *alpha = MIN(1.0, rgba * scale);
 
@@ -2248,7 +2248,7 @@ gnc_option_db_lookup_number_option(GNCOptionDB *odb,
         {
             value = scm_call_0(getter);
             if (scm_is_number(value))
-                return scm_num2dbl(value, G_STRFUNC);
+                return scm_to_double(value);
         }
     }
 
@@ -2503,7 +2503,7 @@ gnc_option_db_set_number_option(GNCOptionDB *odb,
     if (option == NULL)
         return FALSE;
 
-    scm_value = scm_make_real(value);
+    scm_value = scm_from_double (value);
 
     scm_value = gnc_option_valid_value(option, scm_value);
     if (scm_value == SCM_UNDEFINED)
@@ -2584,7 +2584,7 @@ gnc_option_db_set_string_option(GNCOptionDB *odb,
         return FALSE;
 
     if (value)
-        scm_value = scm_mem2string(value, strlen(value));
+        scm_value = scm_from_locale_string(value);
     else
         scm_value = SCM_BOOL_F;
 
@@ -2798,7 +2798,7 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
 
     /* build the list in reverse order */
     if (custom)
-        val = scm_mem2string(custom, strlen(custom));
+        val = scm_from_locale_string(custom);
     else
         val = SCM_BOOL_F;
     value = scm_cons(val, value);
@@ -2808,14 +2808,14 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
 
     str = gnc_date_monthformat_to_string(months);
     if (str)
-        val = scm_str2symbol(str);
+        val = scm_from_locale_symbol(str);
     else
         val = SCM_BOOL_F;
     value = scm_cons(val, value);
 
     str = gnc_date_dateformat_to_string(format);
     if (str)
-        val = scm_str2symbol(str);
+        val = scm_from_locale_symbol(str);
     else
         val = SCM_BOOL_F;
     value = scm_cons(val, value);

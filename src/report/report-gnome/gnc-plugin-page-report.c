@@ -641,7 +641,7 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
     {
         sscanf(node->location + 3, "%d", &report_id);
         /*    printf("unreffing report %d and children\n", report_id);
-              scm_call_1(remover, scm_int2num(report_id)); */
+              scm_call_1(remover, scm_from_int (report_id)); */
     }
     else
     {
@@ -760,7 +760,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         embedded = SCM_CDR(embedded);
         if (!scm_is_number(item))
             continue;
-        id = SCM_INUM(item);
+        id = scm_to_int (item);
         tmp_report = gnc_report_find(id);
         scm_text = scm_call_1(gen_save_text, tmp_report);
         if (!scm_is_string (scm_text))
@@ -874,7 +874,7 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
         return NULL;
     }
 
-    report_id = scm_num2int(final_id, SCM_ARG1, G_STRFUNC);
+    report_id = scm_to_int(final_id);
     report = gnc_report_find(report_id);
     if (!report)
     {
@@ -1406,7 +1406,7 @@ gnc_get_export_type_choice (SCM export_types)
     if (choice >= scm_ilength (export_types))
         return SCM_BOOL_F;
 
-    return scm_list_ref (export_types, scm_int2num (choice));
+    return scm_list_ref (export_types, scm_from_int  (choice));
 }
 
 static char *
