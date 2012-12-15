@@ -1065,6 +1065,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
     return TRUE;
     default:
         DEBUG("Invalid GNCImportAction for this imported transaction.");
+        break;
     }
     /*DEBUG("End");*/
     return FALSE;

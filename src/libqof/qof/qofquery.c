@@ -571,9 +571,10 @@ static void check_item_cb (gpointer object, gpointer user_data)
 
 static int param_list_cmp (const QofQueryParamList *l1, const QofQueryParamList *l2)
 {
+    int ret;
+
     while (1)
     {
-        int ret;
 
         /* Check the easy stuff */
         if (!l1 && !l2) return 0;
@@ -582,11 +583,12 @@ static int param_list_cmp (const QofQueryParamList *l1, const QofQueryParamList 
 
         ret = g_strcmp0 (l1->data, l2->data);
         if (ret)
-            return ret;
+            break;
 
         l1 = l1->next;
         l2 = l2->next;
     }
+    return ret;
 }
 
 static GList * merge_books (GList *l1, GList *l2)

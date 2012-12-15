@@ -1458,6 +1458,7 @@ conn_table_manage_backup (GncDbiSqlConnection *conn,
     case drop_backup:
         result = dbi_conn_queryf( conn->conn, "DROP TABLE %s",
                                   new_name );
+        break;
     default:
         break;
     }

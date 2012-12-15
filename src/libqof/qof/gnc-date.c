@@ -796,8 +796,9 @@ const gchar *qof_date_format_get_string(QofDateFormat df)
         return "%Y-%m-%d";
     case QOF_DATE_FORMAT_LOCALE:
     default:
-        return GNC_D_FMT;
+        break;
     };
+    return GNC_D_FMT;
 }
 
 /* get the date format string for the current format
@@ -824,8 +825,9 @@ const gchar *qof_date_text_format_get_string(QofDateFormat df)
         return "%Y-%b-%d";
     case QOF_DATE_FORMAT_LOCALE:
     default:
-        return GNC_D_FMT;
+        break;
     };
+    return GNC_D_FMT;
 }
 
 /* Convert day, month and year values to a date string
@@ -1260,6 +1262,7 @@ char dateSeparator (void)
                 if (!isdigit(*s))
                     return (locale_separator = *s);
         }
+        break;
     }
 
     return '\0';

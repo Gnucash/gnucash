@@ -211,15 +211,15 @@ gnc_quickfill_get_unique_len_match (QuickFill *qf, int *length)
         count = g_hash_table_size (qf->matches);
 
         if (count != 1)
-        {
-            return qf;
-        }
+            break;
 
         g_hash_table_foreach (qf->matches, unique_len_helper, &qf);
 
         if (length != NULL)
             (*length)++;
     }
+
+    return qf;
 }
 
 /********************************************************************\
@@ -278,6 +278,7 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
     case QUICKFILL_ALPHA:
         if (old_text && (g_utf8_collate (text, old_text) >= 0))
             break;
+        /* fall through */
 
     case QUICKFILL_LIFO:
     default:

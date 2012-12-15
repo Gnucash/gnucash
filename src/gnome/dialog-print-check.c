@@ -130,7 +130,7 @@ typedef enum format_combo_col_t
                                  *   NULL for the custom check format and for
                                  *   separator lines. */
     COL_SEP,                    /**< This column contains the value TRUE if
-                                 *   this enry specifies a separator line. */
+                                 *   this entry specifies a separator line. */
 } format_combo_col;
 
 void gnc_ui_print_check_response_cb (GtkDialog *dialog, gint response, PrintCheckDialog *pcd);
@@ -1122,6 +1122,7 @@ format_read_item_placement(const gchar *file,
             g_debug("Check file %s, group %s, key %s, value: %s",
                     file, KF_GROUP_ITEMS, key, data->text);
             g_free(key);
+            break;
         case DATE:
             /* no error if the date_format is not present */
             key = g_strdup_printf("%s_%d", KF_KEY_DATE_FORMAT, item_num);

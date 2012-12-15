@@ -53,8 +53,9 @@ const char * gnc_entry_ledger_type_string_getter (char flag)
     case '2':
         return _("%");
     default:
-        return "?";
+        break;
     };
+    return "?";
 }
 
 const char * gnc_entry_ledger_how_string_getter (char flag)
@@ -68,8 +69,9 @@ const char * gnc_entry_ledger_how_string_getter (char flag)
     case '3':
         return _(">");
     default:
-        return "?";
+        break;
     };
+        return "?";
 }
 
 static void load_discount_type_cells (GncEntryLedger *ledger)
@@ -295,6 +297,7 @@ load_description_cell (GncEntryLedger *ledger)
         break;
     default:
         shared_quickfill = gnc_get_shared_entry_desc_quickfill(ledger->book, DESC_QF_KEY_BILLS, FALSE);
+        break;
     };
 
     cell = (QuickFillCell *)

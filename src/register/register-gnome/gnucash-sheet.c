@@ -1805,7 +1805,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
         case GDK_KEY_Down:
         case GDK_KEY_Menu:
             if (event->keyval == GDK_Menu ||
-                    event->state & GDK_CONTROL_MASK)
+                    (event->state & GDK_CONTROL_MASK))
             {
                 GncItemEdit *item_edit;
 

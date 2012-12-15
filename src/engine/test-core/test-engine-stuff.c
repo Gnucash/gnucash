@@ -1580,6 +1580,7 @@ get_random_queryop(void)
         break;
     default:
         g_assert_not_reached();
+        break;
     };
     if (gnc_engine_debug_random) printf ("op = %d (int was %d), ", op, op_num);
     return op;
@@ -1691,6 +1692,7 @@ set_query_sort (QofQuery *q, sort_type_t sort_code)
     default:
         g_slist_free (standard);
         g_return_if_fail (FALSE);
+        break;
     }
 
     qof_query_set_sort_order (q, p1, p2, p3);

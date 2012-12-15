@@ -983,6 +983,7 @@ gnc_split_register_get_desc_help (VirtualLocation virt_loc,
             break;
         default:
             help = _("Enter a description of the transaction");
+            break;
         }
     return g_strdup (help);
 }
@@ -1466,6 +1467,7 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
         break;
     default:
         total = get_trans_total_amount (reg, xaccSplitGetParent (split));
+        break;
     }
 
     if (gnc_numeric_zero_p (total))
@@ -1710,14 +1712,13 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
                 break;
 
             default:
-            {
                 if (commodity && !gnc_commodity_equal (commodity, currency))
                     /* Convert this to the "local" value */
                     amount = xaccSplitConvertAmount(split, account);
                 else
                     amount = xaccSplitGetValue (split);
                 print_info = gnc_account_print_info (account, FALSE);
-            }
+                break;
             }
         }
 

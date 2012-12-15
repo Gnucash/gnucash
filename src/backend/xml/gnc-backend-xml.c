@@ -822,6 +822,7 @@ gnc_xml_be_write_to_file(FileBackend *fbe,
                 break;
             default:
                 be_err = ERR_BACKEND_MISC;
+                break;
             }
             qof_backend_set_error(be, be_err);
             PWARN("unable to unlink temp_filename %s: %s",

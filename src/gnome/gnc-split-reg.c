@@ -164,10 +164,6 @@ static void gnc_split_reg_class_init( GNCSplitRegClass *class );
 static void gnc_split_reg_init( GNCSplitReg *gsr );
 static void gnc_split_reg_init2( GNCSplitReg *gsr );
 
-void gnc_split_register_size_allocate (GtkWidget *widget,
-                                       GtkAllocation *allocation,
-                                       gpointer user_data);
-
 FROM_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 AS_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 
@@ -1638,6 +1634,7 @@ gnc_split_reg_sort( GNCSplitReg *gsr, SortType sort_code )
     default:
         g_slist_free (standard);
         g_return_if_fail (FALSE);
+        break;
     }
 
     qof_query_set_sort_order( query, p1, p2, p3 );

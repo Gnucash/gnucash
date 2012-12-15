@@ -2178,6 +2178,7 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
     }
 
     g_assert_not_reached();
+    return FALSE; /* to satisfy static code analysis */
 }
 
 

@@ -830,6 +830,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
                 break;
             default:
                 PERR("WRITEME: ofx_proc_account() This is an unknown account type!");
+                break;
             }
         }
 

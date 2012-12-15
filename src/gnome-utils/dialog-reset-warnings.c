@@ -228,6 +228,7 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
         gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
                                              rw_dialog);
         gtk_widget_destroy(GTK_WIDGET(rw_dialog->dialog));
+        break;
     }
     LEAVE("");
 }

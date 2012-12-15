@@ -811,6 +811,7 @@ RESTART:
              * they can click "Exit" on.
              */
             gnc_file_new ();
+            break;
         }
     }
     /* if the database doesn't exist, ask the user ... */

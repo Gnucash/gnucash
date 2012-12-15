@@ -267,6 +267,7 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         gdk_draw_rectangle (drawable, cursor->gc, FALSE,
                             dx, dy, dw, dh);
+        break;
     }
 }
 

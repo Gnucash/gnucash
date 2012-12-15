@@ -886,17 +886,18 @@ kvp_frame_get_slot_path_gslist (KvpFrame *frame,
         const char *key = key_path->data;
         KvpValue *value;
 
-        if (!key) return NULL;
+        if (!key) break;
 
         value = kvp_frame_get_slot (frame, key);
-        if (!value) return NULL;
+        if (!value) break;
 
         key_path = key_path->next;
         if (!key_path) return value;
 
         frame = kvp_value_get_frame (value);
-        if (!frame) return NULL;
+        if (!frame) break;
     }
+    return NULL;
 }
 
 /* *******************************************************************

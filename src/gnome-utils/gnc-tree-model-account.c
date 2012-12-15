@@ -838,6 +838,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 
     default:
         g_assert_not_reached ();
+        break;
     }
     LEAVE(" ");
 }

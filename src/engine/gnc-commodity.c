@@ -367,6 +367,7 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
             LEAVE("found %s", source->user_name);
             return source;
         }
+        break;
     }
 
     LEAVE("not found");

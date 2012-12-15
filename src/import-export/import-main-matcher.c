@@ -385,6 +385,7 @@ gnc_gen_trans_row_activated_cb (GtkTreeView           *view,
         break;
     default:
         PERR("I don't know what to do! (Yet...)");
+        break;
     }
     refresh_model_row(gui, model, &iter, trans_info);
 }
@@ -818,6 +819,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     default:
         color = "white";
         ro_text = "WRITEME, this is an unknown action";
+        break;
     }
 
     gtk_list_store_set(store, iter,

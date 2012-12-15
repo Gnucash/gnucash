@@ -184,6 +184,7 @@ gnc_split_register_begin_edit_or_warn(SRInfo *info, Transaction *trans)
         }
     }
     LEAVE(" ");
+    return FALSE;  /* to satisfy static code analysis */
 }
 
 void
