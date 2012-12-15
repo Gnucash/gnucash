@@ -2102,7 +2102,7 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
         {
             value = scm_call_0(getter);
             if (scm_is_symbol(value))
-                return g_strdup(SCM_SYMBOL_CHARS(value));
+                return gnc_scm_symbol_to_locale_string (value);
         }
     }
 
@@ -2196,7 +2196,7 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
                         *is_relative = TRUE;
 
                     if (set_rel_value != NULL)
-                        *set_rel_value = g_strdup(SCM_SYMBOL_CHARS (relative));
+                        *set_rel_value = gnc_scm_symbol_to_locale_string (relative);
                 }
 
                 g_free (symbol);
@@ -2356,7 +2356,7 @@ gnc_option_db_lookup_list_option(GNCOptionDB *odb,
             return default_value;
         }
 
-        list = g_slist_prepend(list, g_strdup(SCM_SYMBOL_CHARS(item)));
+        list = g_slist_prepend(list, gnc_scm_symbol_to_locale_string (item));
     }
 
     if (!scm_is_list(value) || !scm_is_null(value))
@@ -2615,12 +2615,7 @@ gnc_option_date_option_get_subtype(GNCOption *option)
 
     initialize_getters();
 
-    value = scm_call_1(getters.date_option_subtype, option->guile_option);
-
-    if (scm_is_symbol(value))
-        return g_strdup(SCM_SYMBOL_CHARS(value));
-    else
-        return NULL;
+    return gnc_guile_call1_symbol_to_string(getters.date_option_subtype, option->guile_option);
 }
 
 /*******************************************************************\
@@ -2637,11 +2632,7 @@ gnc_date_option_value_get_type (SCM option_value)
 
     initialize_getters();
 
-    value = scm_call_1 (getters.date_option_value_type, option_value);
-    if (!scm_is_symbol (value))
-        return NULL;
-
-    return g_strdup(SCM_SYMBOL_CHARS (value));
+    return gnc_guile_call1_symbol_to_string (getters.date_option_value_type, option_value);
 }
 
 /*******************************************************************\
@@ -2717,7 +2708,7 @@ gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
         gboolean *years, char **custom)
 {
     SCM val;
-    const char *str;
+    gchar *str;
 
     if (!scm_is_list(value) || scm_is_null(value))
         return TRUE;
@@ -2730,7 +2721,7 @@ gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
         value = SCM_CDR(value);
         if (!scm_is_symbol(val))
             break;
-        str = SCM_SYMBOL_CHARS (val);
+        str = gnc_scm_symbol_to_locale_string  (val);
         if (!str)
             break;
 
@@ -2738,16 +2729,18 @@ gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
         {
             if (gnc_date_string_to_dateformat(str, format))
             {
+                g_free (str);
                 break;
             }
         }
+        g_free (str);
 
         /* parse the months */
         val = SCM_CAR(value);
         value = SCM_CDR(value);
         if (!scm_is_symbol(val))
             break;
-        str = SCM_SYMBOL_CHARS (val);
+        str = gnc_scm_symbol_to_locale_string (val);
         if (!str)
             break;
 
@@ -2755,9 +2748,11 @@ gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
         {
             if (gnc_date_string_to_monthformat(str, months))
             {
+                g_free (str);
                 break;
             }
         }
+        g_free (str);
 
         /* parse the years */
         val = SCM_CAR(value);
@@ -2780,11 +2775,9 @@ gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
         {
             char * tmp_str;
             char * string;
-            scm_dynwind_begin (0);
             tmp_str = scm_to_locale_string (val);
             string = g_strdup (tmp_str);
-            scm_dynwind_free (tmp_str);
-            scm_dynwind_end ();
+            free (tmp_str);
             *custom = string;
         }
 

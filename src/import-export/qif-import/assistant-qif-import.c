@@ -53,6 +53,7 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-ui.h"
 #include "guile-mappings.h"
+#include "guile-util.h"
 
 #include "swig-runtime.h"
 
@@ -1910,7 +1911,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
                 while (scm_is_list(date_formats) && !scm_is_null(date_formats))
                 {
                     gtk_list_store_append(GTK_LIST_STORE(model), &iter);
-                    gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, SCM_SYMBOL_CHARS(SCM_CAR(date_formats)), -1);
+                    gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, gnc_scm_symbol_to_locale_string(SCM_CAR(date_formats)), -1);
 
                     date_formats = SCM_CDR(date_formats);
                 }

@@ -30,6 +30,7 @@
 #include <glib/gi18n.h>
 #include <libguile.h>
 #include "guile-mappings.h"
+#include "guile-util.h"
 
 #include "Account.h"
 #include "gnc-ui-util.h"
@@ -299,7 +300,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
         scm = scm_call_3 (getters.payer_name_source, category, code_scm,
                           tax_entity_type);
         if (scm_is_symbol(scm))
-            str = g_strdup (SCM_SYMBOL_CHARS (scm));
+            str = gnc_scm_symbol_to_locale_string (scm);
         else
             str = g_strdup ("");
         if (g_strcmp0 (str, "not-impl") == 0)
@@ -317,7 +318,7 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
         g_free (str);
 
         if (scm_is_symbol(code_scm))
-            str = g_strdup (SCM_SYMBOL_CHARS (code_scm));
+            str = gnc_scm_symbol_to_locale_string (code_scm);
         else
             str = g_strdup ("");
         txf_info->code = g_strdup (str);
@@ -504,7 +505,7 @@ load_tax_entity_type_list (TaxInfoDialog *ti_dialog)
         tax_type_info = g_new0 (TaxTypeInfo, 1);
 
         if (scm_is_symbol(type_scm))
-            str = g_strdup (SCM_SYMBOL_CHARS (type_scm));
+            str = gnc_scm_symbol_to_locale_string (type_scm);
         else
             str = g_strdup ("");
         tax_type_info->type_code = g_strdup (str);

@@ -41,6 +41,7 @@
 #include "glib-helpers.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-glib-utils.h"
+#include "gnc-guile-utils.h"
 #include "guile-util.h"
 #include "guile-mappings.h"
 
@@ -163,7 +164,7 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
 
         if (scm_is_string(value))
         {
-            return gnc_scm_to_locale_string(value);
+            return scm_to_locale_string(value);
         }
         else
         {
@@ -192,18 +193,12 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
 char *
 gnc_guile_call1_symbol_to_string(SCM func, SCM arg)
 {
-    SCM value;
+    SCM symbol_value;
 
     if (scm_is_procedure(func))
     {
-        value = scm_call_1(func, arg);
-
-        if (scm_is_symbol(value))
-            return g_strdup(SCM_SYMBOL_CHARS(value));
-        else
-        {
-            PERR("bad value\n");
-        }
+        symbol_value = scm_call_1(func, arg);
+        return gnc_scm_symbol_to_locale_string (symbol_value);
     }
     else
     {
@@ -662,7 +657,7 @@ gnc_split_scm_get_memo(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return gnc_scm_to_locale_string(result);
+    return scm_to_locale_string(result);
 }
 
 
@@ -687,7 +682,7 @@ gnc_split_scm_get_action(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return gnc_scm_to_locale_string(result);
+    return scm_to_locale_string(result);
 }
 
 
@@ -1116,7 +1111,7 @@ gnc_get_debit_string(GNCAccountType account_type)
     if (!scm_is_string(result))
         return NULL;
 
-    return gnc_scm_to_locale_string(result);
+    return scm_to_locale_string(result);
 }
 
 
@@ -1147,7 +1142,7 @@ gnc_get_credit_string(GNCAccountType account_type)
     if (!scm_is_string(result))
         return NULL;
 
-    return gnc_scm_to_locale_string(result);
+    return scm_to_locale_string(result);
 }
 
 
@@ -1315,19 +1310,4 @@ gnc_parse_time_to_time64 (const gchar *s, const gchar *format)
         return -1;
 
     return gnc_mktime(&tm);
-}
-
-gchar *gnc_scm_to_locale_string(SCM scm_string)
-{
-    gchar* s;
-    char * str;
-
-    scm_dynwind_begin (0);
-    str = scm_to_locale_string(scm_string);
-
-    /* prevent memory leaks in scm_to_locale_string() per guile manual; see 'http://www.gnu.org/software/guile/manual/html_node/Dynamic-Wind.html#Dynamic-Wind' */
-    s = g_strdup(str);
-    scm_dynwind_free (str);
-    scm_dynwind_end ();
-    return s;
 }

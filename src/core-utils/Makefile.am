@@ -10,6 +10,7 @@ libgnc_core_utils_la_SOURCES = \
   gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
+  gnc-guile-utils.c \
   gnc-jalali.c \
   gnc-locale-utils.c \
   gnc-main.c \
@@ -35,6 +36,7 @@ noinst_HEADERS = \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
   gnc-glib-utils.h \
+  gnc-guile-utils.h \
   gnc-jalali.h \
   gnc-locale-utils.h \
   gnc-path.h \
