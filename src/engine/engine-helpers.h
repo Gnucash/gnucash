@@ -60,7 +60,6 @@ GSList * gnc_query_scm2path (SCM path_scm);
 SCM gnc_query2scm (QofQuery * q);
 QofQuery * gnc_scm2query (SCM query_scm);
 
-gint64 scm_to_int64(SCM num);
 int gnc_gh_gint64_p(SCM num);
 
 SCM gnc_numeric_to_scm(gnc_numeric arg);
