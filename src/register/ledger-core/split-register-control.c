@@ -539,9 +539,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 
     /* in the mult-line and dynamic modes, we need to hide the old
      * and show the new. */
-    if (((REG_STYLE_AUTO_LEDGER == reg->style) ||
-            (REG_STYLE_JOURNAL     == reg->style) ||
-            info->trans_expanded) &&
+    if (gnc_split_register_current_trans_expanded (reg) &&
             (old_trans_split != new_trans_split))
     {
         VirtualCellLocation vc_loc;
@@ -881,9 +879,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
             SRSaveData *sd;
 
             sd = gnc_split_register_save_data_new(
-                     trans, blank_split, (info->trans_expanded ||
-                                          reg->style == REG_STYLE_AUTO_LEDGER ||
-                                          reg->style == REG_STYLE_JOURNAL));
+                     trans, blank_split, gnc_split_register_current_trans_expanded (reg));
             gnc_table_save_cells (reg->table, sd);
             gnc_split_register_save_data_destroy (sd);
         }
