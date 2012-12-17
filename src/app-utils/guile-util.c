@@ -336,39 +336,9 @@ gnc_guile_call1_to_vector(SCM func, SCM arg)
 SCM
 gnc_scm_lookup(const char *module, const char *symbol)
 {
-#if defined(SCM_GUILE_MAJOR_VERSION) && \
-    (SCM_GUILE_MAJOR_VERSION > 0) && (SCM_GUILE_MINOR_VERSION > 4)
-
     SCM scm_module = scm_c_resolve_module(module);
     SCM value = scm_c_module_lookup(scm_module, symbol);
     return value;
-#else
-
-    gchar *in_guard_str;
-    gchar *thunk_str;
-    SCM in_guard;
-    SCM thunk;
-    SCM out_guard;
-    SCM result;
-
-    in_guard_str =
-        g_strdup_printf("(lambda () (set-current-module (resolve-module (%s))))",
-                        module);
-
-    thunk_str = g_strdup_printf("(lambda () (eval '%s))", symbol);
-
-    in_guard = scm_c_eval_string(in_guard_str);
-    thunk = scm_c_eval_string(thunk_str);
-    out_guard = scm_c_eval_string("(let ((cm (current-module)))"
-                                  "  (lambda () (set-current-module cm)))");
-
-    result = scm_dynamic_wind(in_guard, thunk, out_guard);
-
-    g_free(in_guard_str);
-    g_free(thunk_str);
-
-    return result;
-#endif
 }
 
 #endif
