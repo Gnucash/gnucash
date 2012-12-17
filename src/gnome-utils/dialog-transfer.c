@@ -1544,28 +1544,29 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
             GNCPrice *price;
             gnc_numeric value;
             gnc_commodity *tmp;
+            gnc_numeric from_amt, to_amt;
+            gnc_numeric tmp_amt;
 
+            from_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
+            to_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit));
+        
             /* compute the price -- maybe we need to swap? */
 
-            value = gnc_xfer_dialog_compute_price(xferData);
+            value = gnc_numeric_div(to_amt, from_amt, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
             value = gnc_numeric_abs (value);
 
             /* Try to be consistent about how quotes are installed. */
-            if (from == gnc_default_currency())
-            {
-                tmp = from;
-                from = to;
-                to = tmp;
-                value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
-                                         GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-            }
-            else if ((to != gnc_default_currency()) &&
+            if (from == gnc_default_currency() ||
+                ((to != gnc_default_currency()) &&
                      (strcmp (gnc_commodity_get_mnemonic(from),
-                              gnc_commodity_get_mnemonic(to)) < 0))
+                              gnc_commodity_get_mnemonic(to)) < 0)))
             {
                 tmp = from;
                 from = to;
                 to = tmp;
+                tmp_amt = from_amt;
+                from_amt = to_amt;
+                to_amt = tmp_amt;
                 value = gnc_numeric_div (gnc_numeric_create(1, 1), value,
                                          GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
             }
@@ -1575,10 +1576,9 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
             if (price)
             {
                 gnc_numeric price_value = gnc_price_get_value(price);
-                if (!gnc_numeric_same (value, price_value,
-                                       MIN(gnc_numeric_denom(value),
-                                           gnc_numeric_denom(price_value)),
-                                       GNC_HOW_RND_ROUND_HALF_UP))
+                if (!gnc_numeric_equal (gnc_numeric_mul (from_amt, price_value, 
+                                            GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
+                                        to_amt))
                 {
                     gnc_price_unref (price);
                     price = NULL;
@@ -1595,10 +1595,9 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
                     gnc_numeric price_value = gnc_numeric_div (gnc_numeric_create(1, 1),
                                                                gnc_price_get_value(price),
                                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-                    if (!gnc_numeric_same (value, price_value,
-                                           MIN(gnc_numeric_denom(value), 
-                                               gnc_numeric_denom(price_value)),
-                                           GNC_HOW_RND_ROUND_HALF_UP))
+                    if (!gnc_numeric_equal (gnc_numeric_mul (from_amt, price_value, 
+                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
+                                            to_amt))
                     {
                         gnc_price_unref (price);
                         price = NULL;
