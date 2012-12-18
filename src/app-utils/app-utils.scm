@@ -26,9 +26,6 @@
 
 ;; c-interface.scm
 (export gnc:error->string)
-(export gnc:gettext)
-(export _)
-(export-syntax N_)
 (export gnc:make-string-database)
 
 ;; options.scm
@@ -279,6 +276,12 @@
 (define-syntax N_
   (syntax-rules ()
     ((_ x) x)))
+
+(export gnc:gettext)
+(export _)
+
+(if (< (string->number (major-version)) 2)
+    (export-syntax N_))
 
 ;; A lot of Gnucash's code uses procedural interfaces to load modules.
 ;; This normally works, for procedures -- but for values that need to be
