@@ -36,7 +36,9 @@ gchar * gnc_path_get_stdreportsdir(void);
 %newobject gnc_path_find_localized_html_file;
 gchar * gnc_path_find_localized_html_file(const gchar *);
 
+%newobject gnc_build_dotgnucash_path;
 gchar * gnc_build_dotgnucash_path(const gchar *);
+
 gchar * gnc_build_report_path(const gchar *);
 gchar * gnc_build_stdreports_path(const gchar *);
 

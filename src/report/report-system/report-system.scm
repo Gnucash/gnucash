@@ -11,6 +11,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-19))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash core-utils))
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
