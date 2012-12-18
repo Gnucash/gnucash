@@ -27,7 +27,6 @@
 ;; c-interface.scm
 (export gnc:error->string)
 (export gnc:gettext)
-(export gnc:_)
 (export _)
 (export-syntax N_)
 (export gnc:make-string-database)
@@ -276,7 +275,6 @@
 
 ;; gettext functions
 (define gnc:gettext gnc-gettext-helper)
-(define gnc:_ gnc:gettext)
 (define _ gnc:gettext)
 (define-syntax N_
   (syntax-rules ()

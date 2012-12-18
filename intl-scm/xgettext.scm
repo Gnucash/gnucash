@@ -42,8 +42,7 @@
            (symbol? (car rest))            ; starting with a symbol
            (string? (cadr rest))           ; and ending with a string
            (or (eqv? '_ (car rest))        ; and the symbol is _
-               (eqv? 'N_ (car rest))       ; or N_
-               (eqv? 'gnc:_ (car rest))))  ; or gnc:_
+               (eqv? 'N_ (car rest))))     ; or N_
       (write-string (cadr rest) out-port filename line-no)) ; then write it out
 
      ((pair? rest)                         ; otherwise, recurse
