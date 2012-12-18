@@ -1542,6 +1542,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
                 !(gnc_is_euro_currency (from) && gnc_is_euro_currency (to)))
         {
             GNCPrice *price;
+            gnc_numeric price_value;
             gnc_numeric value;
             gnc_commodity *tmp;
             gnc_numeric from_amt, to_amt;
@@ -1575,40 +1576,38 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
             price = gnc_pricedb_lookup_day (xferData->pricedb, from, to, ts);
             if (price)
             {
-                gnc_numeric price_value = gnc_price_get_value(price);
-                if (!gnc_numeric_equal (gnc_numeric_mul (from_amt, price_value, 
-                                            GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
-                                        to_amt))
-                {
-                    gnc_price_unref (price);
-                    price = NULL;
-                }
-                if (price)
-                    PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
-                          gnc_commodity_get_mnemonic(to));
+                price_value = gnc_price_get_value(price);
             }
             else
             {
                 price = gnc_pricedb_lookup_day (xferData->pricedb, to, from, ts);
                 if (price)
                 {
-                    gnc_numeric price_value = gnc_numeric_div (gnc_numeric_create(1, 1),
-                                                               gnc_price_get_value(price),
-                                                               GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-                    if (!gnc_numeric_equal (gnc_numeric_mul (from_amt, price_value, 
-                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
-                                            to_amt))
-                    {
-                        gnc_price_unref (price);
-                        price = NULL;
-                    }
-                    if (price)
-                        PINFO("Found reverse price for %s in %s", gnc_commodity_get_mnemonic(to),
-                              gnc_commodity_get_mnemonic(from));
+                    price_value = gnc_numeric_div (gnc_numeric_create(1, 1),
+                                                   gnc_price_get_value(price),
+                                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+                }
+            }
+            
+            /* See if we found a good enough price */
+            if (price)
+            {
+                int scu = gnc_commodity_get_fraction (to);
+                if (!gnc_numeric_equal (gnc_numeric_mul (from_amt, price_value,
+                                            scu, GNC_HOW_RND_ROUND_HALF_UP),
+                                        to_amt))
+                {
+                    gnc_price_unref (price);
+                    price = NULL;
                 }
             }
 
-            if (!price)
+            if (price)
+            {
+                PINFO("Found price for %s in %s", gnc_commodity_get_mnemonic(from),
+                      gnc_commodity_get_mnemonic(to));
+            }
+            else
             {
                 price = gnc_price_create (xferData->book);
                 gnc_price_begin_edit (price);
