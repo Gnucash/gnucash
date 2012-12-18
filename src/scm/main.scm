@@ -46,7 +46,6 @@
 (export gnc:error)
 (export gnc:msg)
 (export gnc:debug)
-(export string-join)
 (export gnc:backtrace-if-exception)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
@@ -80,19 +79,6 @@
        (a 1)
        (b -1)
        (else 0))))
-
-(define (string-join lst joinstr)
-  ;; This should avoid a bunch of unnecessary intermediate string-appends.
-  ;; I'm presuming those are more expensive than cons...
-  (if (or (not (list? lst)) (null? lst))
-      ""
-      (apply string-append
-             (car lst)
-             (let loop ((remaining-elements (cdr lst)))
-               (if (null? remaining-elements)
-                   '()
-                   (cons joinstr (cons (car remaining-elements)
-                                       (loop (cdr remaining-elements)))))))))
 
 (define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)
