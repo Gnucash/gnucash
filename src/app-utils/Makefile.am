@@ -20,6 +20,7 @@ SUBDIRS = . test
 pkglib_LTLIBRARIES = libgncmod-app-utils.la
 
 AM_CPPFLAGS = \
+  -Wno-error=deprecated-declarations \
   -I$(top_srcdir)/lib/libc \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
