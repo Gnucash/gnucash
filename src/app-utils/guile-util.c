@@ -1050,7 +1050,7 @@ gnc_trans_scm_get_num_splits(SCM trans_scm)
     if (!scm_is_list(result))
         return 0;
 
-    return SCM_LENGTH(result);
+    return scm_to_int(scm_length(result));
 }
 
 
