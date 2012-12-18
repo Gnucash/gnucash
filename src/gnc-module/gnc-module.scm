@@ -7,7 +7,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash gnc-module))
-(load-extension "libgnc-module" "scm_init_sw_gnc_module_module")
+
+;; Guile 2 needs to find the symbols from the extension at compile time already
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval) 
+      (load-extension "libgnc-module" "scm_init_sw_gnc_module_module")))
+  (else
+    (load-extension "libgnc-module" "scm_init_sw_gnc_module_module")))
+
 (use-modules (sw_gnc_module))
 
 (define gnc:module-system-init gnc-module-system-init)

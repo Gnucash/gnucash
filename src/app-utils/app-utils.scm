@@ -22,7 +22,14 @@
 (use-modules (gnucash gnc-module))
 (use-modules (ice-9 syncase))
 
-(gnc:module-load "gnucash/engine" 0)
+;; Guile 2 needs to find the symbols from the c module at compile time already
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval) 
+      (gnc:module-load "gnucash/engine" 0)))
+  (else
+    (gnc:module-load "gnucash/engine" 0)))
 
 ;; c-interface.scm
 (export gnc:error->string)

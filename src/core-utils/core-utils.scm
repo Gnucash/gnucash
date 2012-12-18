@@ -6,7 +6,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash core-utils))
-(load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")
+
+;; Guile 2 needs to find the symbols from the extension at compile time already
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval) 
+      (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")))
+  (else
+    (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")))
+
 (use-modules (sw_core_utils))
 
 (re-export gnc-is-debugging)

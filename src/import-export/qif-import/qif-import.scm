@@ -9,7 +9,15 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 
 ;; We do this initialization here because src/gnome isn't a real module.
-(load-extension "libgnc-gnome" "scm_init_sw_gnome_module")
+;; Note: Guile 2 needs to find the symbols from the extension at compile time already
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval) 
+      (load-extension "libgnc-gnome" "scm_init_sw_gnome_module")))
+  (else
+    (load-extension "libgnc-gnome" "scm_init_sw_gnome_module")))
+
 (use-modules (sw_gnome))
 
 (use-modules (gnucash gnc-module))

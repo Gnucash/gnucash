@@ -31,7 +31,15 @@
 ;; to define gnc-build-url
 (gnc:module-load "gnucash/html" 0)
 
-(define gnc:menuname-business-reports (N_ "_Business"))
+;; Guile 2 needs to find this macro at compile time already
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval) 
+      (define gnc:menuname-business-reports (N_ "_Business"))))
+  (else
+    (define gnc:menuname-business-reports (N_ "_Business"))))
+
 (define gnc:optname-invoice-number (N_ "Invoice Number"))
 
 (define (guid-ref idstr type guid)
