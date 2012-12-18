@@ -50,8 +50,6 @@
 (export gnc:backtrace-if-exception)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
-(re-export hash-fold)
-
 ;; Get the Makefile.am/configure.in generated variables.
 (load-from-path "build-config.scm")
 
@@ -82,19 +80,6 @@
        (a 1)
        (b -1)
        (else 0))))
-
-(cond-expand
- (guile-2)
- (else
-  (if (not (defined? 'hash-fold))
-      (define (hash-fold proc init table)
-        (for-each 
-         (lambda (bin)
-           (for-each 
-            (lambda (elt)
-              (set! init (proc (car elt) (cdr elt) init)))
-            bin))
-         (vector->list table))))))
 
 (define (string-join lst joinstr)
   ;; This should avoid a bunch of unnecessary intermediate string-appends.
