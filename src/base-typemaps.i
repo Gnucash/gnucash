@@ -17,6 +17,7 @@ typedef void * gpointer;
 typedef char gchar;
 
 %typemap (out) char * {
+  $result = SCM_UNSPECIFIED;
   if ($1) {
     $result = scm_from_locale_string((const char *)$1);
   }
