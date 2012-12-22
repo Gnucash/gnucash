@@ -255,3 +255,31 @@ gnc_scm_call_1_to_vector(SCM func, SCM arg)
 
     return SCM_UNDEFINED;
 }
+
+
+/*  Clean up a scheme options string for use in a key/value file.
+ *  This function removes all full line comments, removes all blank
+ *  lines, and removes all leading/trailing white space. */
+gchar *gnc_scm_strip_comments (SCM scm_text)
+{
+    gchar *raw_text, *text, **splits;
+    gint i, j;
+
+    raw_text = gnc_scm_to_locale_string (scm_text);
+    splits = g_strsplit(raw_text, "\n", -1);
+    for (i = j = 0; splits[i]; i++)
+    {
+        if ((splits[i][0] == ';') || (splits[i][0] == '\0'))
+        {
+            g_free(splits[i]);
+            continue;
+        }
+        splits[j++] = g_strstrip(splits[i]);
+    }
+    splits[j] = NULL;
+
+    text = g_strjoinv(" ", splits);
+    g_free (raw_text);
+    g_strfreev(splits);
+    return text;
+}

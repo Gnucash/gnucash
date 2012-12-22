@@ -55,4 +55,13 @@ SCM    gnc_scm_call_1_to_vector(SCM func, SCM arg);
 #define gnc_guile_call1_to_list gnc_scm_call_1_to_list
 #define gnc_guile_call1_to_vector gnc_scm_call_1_to_vector
 
+/** Clean up a scheme options string for use in a key/value file.
+ *  This function removes all full line comments, removes all blank
+ *  lines, and removes all leading/trailing white space.
+ *
+ *  @note: This function does not correctly handle comments that occur
+ *  at the end of a line. Fortunately there aren't any such
+ *  comments. */
+gchar *gnc_scm_strip_comments (SCM scm_text);
+
 #endif

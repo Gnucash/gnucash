@@ -949,32 +949,6 @@ gnc_get_credit_string(GNCAccountType account_type)
 }
 
 
-/*  Clean up a scheme options string for use in a key/value file.
- *  This function removes all full line comments, removes all blank
- *  lines, and removes all leading/trailing white space. */
-gchar *gnc_guile_strip_comments (const gchar *raw_text)
-{
-    gchar *text, **splits;
-    gint i, j;
-
-    splits = g_strsplit(raw_text, "\n", -1);
-    for (i = j = 0; splits[i]; i++)
-    {
-        if ((splits[i][0] == ';') || (splits[i][0] == '\0'))
-        {
-            g_free(splits[i]);
-            continue;
-        }
-        splits[j++] = g_strstrip(splits[i]);
-    }
-    splits[j] = NULL;
-
-    text = g_strjoinv(" ", splits);
-    g_strfreev(splits);
-    return text;
-}
-
-
 static void
 on_child_exit (GPid pid, gint status, gpointer data)
 {

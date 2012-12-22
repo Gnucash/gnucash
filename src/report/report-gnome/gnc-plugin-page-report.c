@@ -64,7 +64,6 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
-#include "guile-util.h"
 #include "option-util.h"
 #include "window-report.h"
 #include "swig-runtime.h"
@@ -732,7 +731,6 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
     SCM get_embedded_list, embedded, item, tmp_report;
     gint count, id;
     gchar *text, *key_name;
-    char * str;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REPORT(plugin_page));
     g_return_if_fail (key_file != NULL);
@@ -771,11 +769,9 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         }
 
         key_name = g_strdup_printf(SCHEME_OPTIONS_N, id);
-        str = gnc_scm_to_locale_string (scm_text);
-        text = gnc_guile_strip_comments(str);
+        text = gnc_scm_strip_comments(scm_text);
         g_key_file_set_string(key_file, group_name, key_name, text);
         g_free(text);
-        g_free (str);
         g_free(key_name);
     }
 
@@ -786,11 +782,9 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         return;
     }
 
-    str = gnc_scm_to_locale_string (scm_text);
-    text = gnc_guile_strip_comments(str);
+    text = gnc_scm_strip_comments(scm_text);
     g_key_file_set_string(key_file, group_name, SCHEME_OPTIONS, text);
     g_free(text);
-    g_free (str);
     LEAVE(" ");
 }
 
