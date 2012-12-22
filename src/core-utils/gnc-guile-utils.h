@@ -31,4 +31,13 @@
  *  a guile symbol. */
 gchar * gnc_scm_symbol_to_locale_string(SCM scm_string);
 
+/* Helpful functions for calling functions that return
+ * specific kinds of values. These functions do error
+ * checking to verify the result is of the correct type. */
+char * gnc_guile_call1_to_string(SCM func, SCM arg);
+char * gnc_guile_call1_symbol_to_string(SCM func, SCM arg);
+SCM    gnc_guile_call1_to_procedure(SCM func, SCM arg);
+SCM    gnc_guile_call1_to_list(SCM func, SCM arg);
+SCM    gnc_guile_call1_to_vector(SCM func, SCM arg);
+
 #endif

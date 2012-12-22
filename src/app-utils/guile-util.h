@@ -31,17 +31,6 @@
 #include "Account.h"
 #include "gnc-guile-utils.h"
 
-
-/* Helpful functions for calling functions that return
- * specific kinds of values. These functions do error
- * checking to verify the result is of the correct type. */
-char * gnc_guile_call1_to_string(SCM func, SCM arg);
-char * gnc_guile_call1_symbol_to_string(SCM func, SCM arg);
-SCM    gnc_guile_call1_to_procedure(SCM func, SCM arg);
-SCM    gnc_guile_call1_to_list(SCM func, SCM arg);
-SCM    gnc_guile_list_ref(SCM list, int index);
-SCM    gnc_guile_call1_to_vector(SCM func, SCM arg);
-
 /* Don't use this to get hold of symbols that are considered private
  * to a given module unless the C code you're writing is considered
  * part of that module.  */
