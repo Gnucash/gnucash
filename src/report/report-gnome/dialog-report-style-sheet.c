@@ -31,6 +31,7 @@
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-gtk-utils.h"
+#include "gnc-guile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
 
@@ -205,15 +206,10 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     /* put in the list of style sheet type names */
     for (; !scm_is_null(templates); templates = SCM_CDR(templates))
     {
-        char * str;
-        const char* orig_name;
+        gchar* orig_name;
 
         SCM t = SCM_CAR(templates);
-        scm_dynwind_begin (0);
-        str = scm_to_locale_string (scm_call_1(t_name, t));
-        orig_name = g_strdup (str);
-        scm_dynwind_free (str);
-        scm_dynwind_end ();
+        orig_name = gnc_guile_call1_to_string(t_name, t);
 
         /* Store the untranslated names for lookup later */
         template_names = g_list_prepend (template_names, (gpointer)orig_name);
@@ -221,6 +217,8 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
         /* The displayed name should be translated */
         gtk_list_store_append(GTK_LIST_STORE(template_model), &iter);
         gtk_list_store_set (GTK_LIST_STORE(template_model), &iter, 0, _(orig_name), -1);
+
+        /* Note: don't g_free orig_name here - template_names still refers to it*/
     }
     gtk_combo_box_set_active(GTK_COMBO_BOX(template_combo), 0);
 
@@ -248,7 +246,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
         }
     }
 
-    g_list_free (template_names);
+    g_list_free_full (template_names, g_free);
 
     g_object_unref(G_OBJECT(builder));
 
@@ -265,30 +263,25 @@ gnc_style_sheet_select_dialog_add_one(StyleSheetDialog * ss,
                                       SCM sheet_info,
                                       gboolean select)
 {
-    SCM get_name, scm_name;
-    const gchar *c_name;
-    char * str;
+    SCM get_name;
+    gchar *c_name;
     GtkTreeSelection *selection;
     GtkTreeIter iter;
 
-    get_name = scm_c_eval_string("gnc:html-style-sheet-name");
-    scm_name = scm_call_1(get_name, sheet_info);
-    scm_dynwind_begin (0);
-    str = scm_to_locale_string (scm_name);
-    c_name = g_strdup (str);
-    scm_dynwind_free (str);
-    scm_dynwind_end ();
+    get_name = scm_c_eval_string ("gnc:html-style-sheet-name");
+    c_name = gnc_guile_call1_to_string (get_name, sheet_info);
     if (!c_name)
         return;
 
     /* add the column name */
-    scm_gc_protect_object(sheet_info);
+    scm_gc_protect_object (sheet_info);
     gtk_list_store_append (ss->list_store, &iter);
     gtk_list_store_set (ss->list_store, &iter,
                         /* Translate the displayed name */
                         COLUMN_NAME, _(c_name),
                         COLUMN_STYLESHEET, sheet_info,
                         -1);
+    g_free (c_name);
     /* The translation of the name fortunately doesn't affect the
      * lookup because that is done through the sheet_info argument. */
 

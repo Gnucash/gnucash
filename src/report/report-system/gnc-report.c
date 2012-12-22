@@ -31,6 +31,7 @@
 #include <string.h>
 #include "gfec.h"
 
+#include "gnc-guile-utils.h"
 #include "gnc-report.h"
 
 /* Fow now, this is global, like it was in guile.  It _should_ be per-book. */
@@ -187,24 +188,11 @@ gchar*
 gnc_report_name( SCM report )
 {
     SCM    get_name = scm_c_eval_string("gnc:report-name");
-    SCM    value;
-    gchar *str = NULL;
-    gchar *report_name = NULL;
 
     if (report == SCM_BOOL_F)
         return NULL;
 
-    value = scm_call_1(get_name, report);
-    if (!scm_is_string(value))
-        return NULL;
-
-    scm_dynwind_begin (0);
-    str = scm_to_locale_string (value);
-    report_name = g_strdup (str);
-    scm_dynwind_free (str);
-    scm_dynwind_end ();
-
-    return report_name;
+    return gnc_guile_call1_to_string(get_name, report);
 }
 
 gchar*

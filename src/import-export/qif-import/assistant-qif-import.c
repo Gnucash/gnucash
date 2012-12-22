@@ -45,6 +45,7 @@
 #include "qof.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
+#include "gnc-guile-utils.h"
 #include "gnc-currency-edit.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
@@ -53,7 +54,6 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-ui.h"
 #include "guile-mappings.h"
-#include "guile-util.h"
 
 #include "swig-runtime.h"
 
@@ -276,8 +276,8 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
     SCM  get_gnc_name = scm_c_eval_string("qif-map-entry:gnc-name");
     SCM  get_new      = scm_c_eval_string("qif-map-entry:new-acct?");
     SCM  accts_left;
-    const gchar *qif_name = NULL;
-    const gchar *gnc_name = NULL;
+    gchar *qif_name = NULL;
+    gchar *gnc_name = NULL;
     gboolean checked;
     gint row = 0;
     gint prev_row;
@@ -303,26 +303,8 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 
     while (!scm_is_null(accts_left))
     {
-        if (scm_is_string(scm_call_1(get_qif_name, SCM_CAR(accts_left))))
-        {
-            char * str;
-
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (scm_call_1(get_qif_name, SCM_CAR(accts_left)));
-            qif_name = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
-        if (scm_is_string(scm_call_1(get_gnc_name, SCM_CAR(accts_left))))
-        {
-            char * str;
-
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
-            gnc_name = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+        qif_name = gnc_guile_call1_to_string(get_qif_name, SCM_CAR(accts_left));
+        gnc_name = gnc_guile_call1_to_string(get_gnc_name, SCM_CAR(accts_left));
         checked  = (scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
 
         gtk_list_store_append(store, &iter);
@@ -334,6 +316,8 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
                            ACCOUNT_COL_ELLIPSIZE, PANGO_ELLIPSIZE_START,
                            -1);
         accts_left = SCM_CDR(accts_left);
+        g_free (qif_name);
+        g_free (gnc_name);
     }
 
     /* move to the old selected row */
@@ -1797,19 +1781,6 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
     }
     else if (!scm_is_null(load_return))
     {
-        /* since the result of scm_to_locale_string doesn't appear to be used */
-        /* can we just delete the whole if statement? */
-        if (scm_is_string(SCM_CADR(load_return)))
-        {
-            char * str;
-
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (SCM_CADR(load_return));
-            /* str doesn't seem to be used anywhere, so go ahead and free it */
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
-
         if (SCM_CAR(load_return) == SCM_BOOL_F)
         {
             imported_files = scm_call_2(unload_qif_file, scm_qiffile, imported_files);
@@ -2082,20 +2053,11 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
     {
         /* There is an account name missing. Ask the user to provide one. */
         SCM default_acct = scm_c_eval_string("qif-file:path-to-accountname");
-        const gchar * default_acctname = NULL;
+        gchar * default_acctname = NULL;
 
-        if (scm_is_string(scm_call_1(default_acct, wind->selected_file)))
-        {
-            char * str;
-
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (scm_call_1(default_acct,
-                                                   wind->selected_file));
-            default_acctname = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+        default_acctname = gnc_guile_call1_to_string(default_acct, wind->selected_file);
         gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
+        g_free (default_acctname);
     }
     else
     {
@@ -2224,10 +2186,8 @@ static void
 update_file_page(QIFImportWindow * wind)
 {
     SCM       loaded_file_list = wind->imported_files;
-    SCM       scm_qiffile = SCM_BOOL_F;
     SCM       qif_file_path;
     int       row = 0;
-    const char  * row_text = NULL;
     GtkTreeView *view;
     GtkListStore *store;
     GtkTreeIter iter;
@@ -2242,23 +2202,19 @@ update_file_page(QIFImportWindow * wind)
 
     while (!scm_is_null(loaded_file_list))
     {
-        scm_qiffile = SCM_CAR(loaded_file_list);
-        if (scm_is_string(scm_call_1(qif_file_path, scm_qiffile)))
-        {
-            char * str;
+        gchar *row_text    = NULL;
+        SCM    scm_qiffile = SCM_BOOL_F;
 
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (scm_call_1(qif_file_path, scm_qiffile));
-            row_text = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+        scm_qiffile = SCM_CAR(loaded_file_list);
+        row_text = gnc_guile_call1_to_string(qif_file_path, scm_qiffile);
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
                            FILENAME_COL_INDEX, row++,
                            FILENAME_COL_NAME, row_text,
                            -1);
+        g_free (row_text);
+
         if (scm_qiffile == wind->selected_file)
         {
             path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
