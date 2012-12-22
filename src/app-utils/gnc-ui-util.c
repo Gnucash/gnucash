@@ -55,6 +55,7 @@
 #include "gnc-locale-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-features.h"
+#include "gnc-guile-utils.h"
 
 #define KEY_CURRENCY_CHOICE "currency_choice"
 #define KEY_CURRENCY_OTHER  "currency_other"
@@ -450,7 +451,13 @@ gnc_ui_account_get_tax_info_string (const Account *account)
             else
             {
                 gchar *form = NULL;
-                scm_dynwind_begin (0);
+
+                /* Note: using scm_to_locale_string directly here instead
+                   of our wrapper gnc_scm_to_locale_string. 'form' should
+                   be freed with 'free' instead of 'g_free'. This will
+                   be taken care of automatically during scm_dynwind_end,
+                   because we inform guile of this memory allocation via
+                   scm_dynwind_free a little further. */
                 form = scm_to_locale_string (form_scm);
                 if (!form)
                 {
@@ -466,6 +473,11 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                 else
                 {
                     SCM desc_scm;
+
+                    /* Create a dynwind context because we will be calling (scm) functions
+                       that potentially exit non-locally */
+                    scm_dynwind_begin (0);
+                    scm_dynwind_free (form);
                     desc_scm = scm_call_3 (get_desc, category, code_scm,
                                            tax_entity_type);
                     if (!scm_is_string (desc_scm))
@@ -482,7 +494,7 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                     else
                     {
                         gchar *desc = NULL;
-                        desc = scm_to_locale_string (desc_scm);
+                        desc = gnc_scm_to_locale_string (desc_scm);
                         if (!desc)
                         {
                             if (tax_related)
@@ -519,11 +531,10 @@ gnc_ui_account_get_tax_info_string (const Account *account)
                             }
                             g_free (copy_txt);
                         }
-                        scm_dynwind_free (desc);
+                        g_free (desc);
                     }
+                    scm_dynwind_end ();
                 }
-                scm_dynwind_free (form);
-                scm_dynwind_end ();
             }
         }
         g_free (num_code);

@@ -981,23 +981,25 @@ gnc_scm2KvpFrame (SCM frame_scm)
         if (!scm_is_string (key_scm))
             continue;
 
+        key = scm_to_locale_string (key_scm); /* key should be freed with free !
+                                                 This is automatically taken care
+                                                 of by scm_dynwind_free below. */
         scm_dynwind_begin (0);
-        key = scm_to_locale_string (key_scm);
+        scm_dynwind_free (key); /* free key whenever the dynwind context ends */
         if (!key)
         {
-            scm_dynwind_free (key);
             scm_dynwind_end ();
             continue;
         }
-        value = gnc_scm2KvpValue (val_scm);
+        value = gnc_scm2KvpValue (val_scm); /* can exit non-locally so justifies
+                                               the use of scm_dynwind context
+                                               protection */
         if (!value)
         {
-            scm_dynwind_free (key);
             scm_dynwind_end ();
             continue;
         }
         kvp_frame_set_slot_nc (frame, key, value);
-        scm_dynwind_free (key);
         scm_dynwind_end ();
     }
 
