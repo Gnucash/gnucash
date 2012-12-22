@@ -11,6 +11,7 @@
 
 #include "config.h"
 #include "gfec.h"
+#include "gnc-guile-utils.h"
 #include "platform.h"
 #if COMPILER(MSVC)
 # define strdup _strdup
@@ -36,15 +37,7 @@ gfec_catcher(void *data, SCM tag, SCM throw_args)
     {
         result = scm_call_2(func, tag, throw_args);
         if (scm_is_string(result))
-        {
-            char * str;
-
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (result);
-            msg = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+            msg = gnc_scm_to_locale_string (result);
     }
 
     if (msg == NULL)

@@ -6,6 +6,7 @@
 
 #include "kvp-scm.h"
 #include "guile-mappings.h"
+#include "gnc-guile-utils.h"
 #include "swig-runtime.h"
 
 /* NOTE: There are some problems with this approach. Currently,
@@ -48,11 +49,9 @@ gnc_scm_to_kvp_value_ptr(SCM val)
     {
         gchar *newstr;
         KvpValue *ret;
-        scm_dynwind_begin (0);
-        newstr = scm_to_locale_string (val);
+        newstr = gnc_scm_to_locale_string (val);
         ret = kvp_value_new_string(newstr);
-        scm_dynwind_free (newstr);
-        scm_dynwind_end ();
+        g_free (newstr);
         return ret;
     }
     else if (SWIG_IsPointerOfType(val, SWIG_TypeQuery("_p_KvpFrame")))

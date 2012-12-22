@@ -36,6 +36,7 @@
 #include "dialog-options.h"
 #include "file-utils.h"
 #include "gnc-gkeyfile-utils.h"
+#include "gnc-guile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
 #include "option-util.h"
@@ -158,15 +159,7 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
             {
                 ptr = scm_call_1(get_template_name, ptr);
                 if (scm_is_string(ptr))
-                {
-                    char * str;
-
-                    scm_dynwind_begin (0);
-                    str = scm_to_locale_string (ptr);
-                    title = g_strdup (str);
-                    scm_dynwind_free (str);
-                    scm_dynwind_end ();
-                }
+                    title = gnc_scm_to_locale_string (ptr);
             }
         }
 

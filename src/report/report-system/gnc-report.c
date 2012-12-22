@@ -157,11 +157,7 @@ gnc_run_report (gint report_id, char ** data)
     if (scm_text == SCM_UNDEFINED || !scm_is_string (scm_text))
         return FALSE;
 
-    scm_dynwind_begin (0);
-    free_data = scm_to_locale_string (scm_text);
-    *data = g_strdup (free_data);
-    scm_dynwind_free (free_data);
-    scm_dynwind_end ();
+    *data = gnc_scm_to_locale_string (scm_text);
 
     return TRUE;
 }

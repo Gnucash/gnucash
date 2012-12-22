@@ -31,6 +31,7 @@
 #include <libguile.h>
 #include "guile-mappings.h"
 #include "guile-util.h"
+#include "gnc-guile-utils.h"
 
 #include "Account.h"
 #include "gnc-ui-util.h"
@@ -337,37 +338,19 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
 
         scm = scm_call_3 (getters.form, category, code_scm, tax_entity_type);
         if (scm_is_string(scm))
-        {
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string(scm);
-            txf_info->form = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+            txf_info->form = gnc_scm_to_locale_string(scm);
         else
             txf_info->form = g_strdup ("");
 
         scm = scm_call_3 (getters.description, category, code_scm, tax_entity_type);
         if (scm_is_string(scm))
-        {
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string(scm);
-            txf_info->description = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+            txf_info->description = gnc_scm_to_locale_string(scm);
         else
             txf_info->description = g_strdup ("");
 
         scm = scm_call_2 (getters.help, category, code_scm);
         if (scm_is_string(scm))
-        {
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string(scm);
-            help_text = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+            help_text = gnc_scm_to_locale_string(scm);
         else
             help_text = g_strdup ("");
 
@@ -395,15 +378,8 @@ load_txf_info (gint acct_category, TaxInfoDialog *ti_dialog)
                 line_year = scm_is_bool (SCM_CAR (year_scm)) ? 0 :
                             scm_to_int (SCM_CAR (year_scm));
                 if (scm_is_string((SCM_CAR (SCM_CDR (year_scm)))))
-                {
-                    gchar *temp_line;
-                    scm_dynwind_begin (0);
-                    temp_line = scm_to_locale_string((SCM_CAR (SCM_CDR
-                                                      (year_scm))));
-                    line = g_strdup (temp_line);
-                    scm_dynwind_free (temp_line);
-                    scm_dynwind_end ();
-                }
+                    line = gnc_scm_to_locale_string((SCM_CAR (SCM_CDR
+                                                     (year_scm))));
                 else
                     line = g_strdup ("");
                 temp2 = g_strdup_printf ("%d", line_year);
@@ -505,33 +481,19 @@ load_tax_entity_type_list (TaxInfoDialog *ti_dialog)
         tax_type_info = g_new0 (TaxTypeInfo, 1);
 
         if (scm_is_symbol(type_scm))
-            str = gnc_scm_symbol_to_locale_string (type_scm);
+            tax_type_info->type_code = gnc_scm_symbol_to_locale_string (type_scm);
         else
-            str = g_strdup ("");
-        tax_type_info->type_code = g_strdup (str);
-        g_free (str);
+            tax_type_info->type_code = g_strdup ("");
 
         scm = scm_call_1 (getters.tax_entity_type, type_scm);
         if (scm_is_string(scm))
-        {
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string(scm);
-            tax_type_info->type = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+            tax_type_info->type = gnc_scm_to_locale_string(scm);
         else
             tax_type_info->type = g_strdup ("");
 
         scm = scm_call_1 (getters.tax_entity_desc, type_scm);
         if (scm_is_string(scm))
-        {
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string(scm);
-            tax_type_info->description = g_strdup (str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+            tax_type_info->description = gnc_scm_to_locale_string(scm);
         else
             tax_type_info->description = g_strdup ("");
 

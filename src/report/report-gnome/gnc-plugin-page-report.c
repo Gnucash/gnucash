@@ -51,6 +51,7 @@
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-guile-utils.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
 #include "gnc-html-factory.h"
@@ -770,13 +771,11 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         }
 
         key_name = g_strdup_printf(SCHEME_OPTIONS_N, id);
-        scm_dynwind_begin (0);
-        str = scm_to_locale_string (scm_text);
+        str = gnc_scm_to_locale_string (scm_text);
         text = gnc_guile_strip_comments(str);
         g_key_file_set_string(key_file, group_name, key_name, text);
         g_free(text);
-        scm_dynwind_free (str);
-        scm_dynwind_end ();
+        g_free (str);
         g_free(key_name);
     }
 
@@ -787,13 +786,11 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         return;
     }
 
-    scm_dynwind_begin (0);
-    str = scm_to_locale_string (scm_text);
+    str = gnc_scm_to_locale_string (scm_text);
     text = gnc_guile_strip_comments(str);
     g_key_file_set_string(key_file, group_name, SCHEME_OPTIONS, text);
     g_free(text);
-    scm_dynwind_free (str);
-    scm_dynwind_end ();
+    g_free (str);
     LEAVE(" ");
 }
 
@@ -1371,11 +1368,8 @@ gnc_get_export_type_choice (SCM export_types)
             break;
         }
 
-        scm_dynwind_begin (0);
-        name = scm_to_locale_string (scm);
-        choices = g_list_prepend (choices, g_strdup (name));
-        scm_dynwind_free (name);
-        scm_dynwind_end ();
+        name = gnc_scm_to_locale_string (scm);
+        choices = g_list_prepend (choices, name);
     }
 
     if (!bad)
@@ -1423,14 +1417,7 @@ gnc_get_export_filename (SCM choice)
     if (choice == SCM_BOOL_T)
         type = g_strdup (html_type);
     else
-    {
-        char * str;
-        scm_dynwind_begin (0);
-        str = scm_to_locale_string(SCM_CAR (choice));
-        type = g_strdup (str);
-        scm_dynwind_free (str);
-        scm_dynwind_end ();
-    }
+        type = gnc_scm_to_locale_string(SCM_CAR (choice));
 
     /* %s is the type of what is about to be saved, e.g. "HTML". */
     title = g_strdup_printf (_("Save %s To File"), type);

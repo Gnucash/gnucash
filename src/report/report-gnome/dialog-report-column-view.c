@@ -34,6 +34,7 @@
 #include "option-util.h"
 #include "window-report.h"
 #include "guile-mappings.h"
+#include "gnc-guile-utils.h"
 #include "gnc-report.h"
 
 enum available_cols
@@ -113,7 +114,7 @@ update_display_lists(gnc_column_view_edit * view)
                                     SCM_BOOL_F);
     SCM   this_report;
     SCM   selection;
-    const gchar *name;
+    gchar *name;
     int   row, i, id;
     GtkListStore *store;
     GtkTreeIter iter;
@@ -145,21 +146,17 @@ update_display_lists(gnc_column_view_edit * view)
     {
         for (i = 0; !scm_is_null(names); names = SCM_CDR(names), i++)
         {
-            char * str;
-
             if (scm_is_equal (SCM_CAR(names), selection))
                 row = i;
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(names),
+            name = gnc_scm_to_locale_string (scm_call_2(template_menu_name, SCM_CAR(names),
                                                    SCM_BOOL_F));
-            name = _(g_strdup (str));
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
+
             gtk_list_store_append(store, &iter);
             gtk_list_store_set(store, &iter,
-                               AVAILABLE_COL_NAME, name,
+                               AVAILABLE_COL_NAME, _(name),
                                AVAILABLE_COL_ROW, i,
                                -1);
+            g_free (name);
         }
 
     }
@@ -193,27 +190,22 @@ update_display_lists(gnc_column_view_edit * view)
     {
         for (i = 0; !scm_is_null(contents); contents = SCM_CDR(contents), i++)
         {
-            char * str;
-
             if (scm_is_equal (SCM_CAR(contents), selection))
                 row = i;
 
             id = scm_to_int(SCM_CAAR(contents));
             this_report = gnc_report_find(id);
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (scm_call_1(report_menu_name, this_report));
-            name = _(g_strdup (str));
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
+            name = gnc_scm_to_locale_string (scm_call_1(report_menu_name, this_report));
 
             gtk_list_store_append(store, &iter);
             gtk_list_store_set
             (store, &iter,
-             CONTENTS_COL_NAME, name,
+             CONTENTS_COL_NAME, _(name),
              CONTENTS_COL_ROW, i,
              CONTENTS_COL_REPORT_COLS, scm_to_int(SCM_CADR(SCM_CAR(contents))),
              CONTENTS_COL_REPORT_ROWS, scm_to_int(SCM_CADDR(SCM_CAR(contents))),
              -1);
+            g_free (name);
         }
     }
 

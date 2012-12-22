@@ -444,7 +444,7 @@ gnc_split_scm_set_value(SCM split_scm, gnc_numeric value)
  *   return the newly allocated memo of a scheme split, or NULL.    *
  *                                                                  *
  * Args: split_scm - the scheme split                               *
- * Returns: newly allocated memo string                             *
+ * Returns: newly allocated memo string, must be freed with g_free  *
 \********************************************************************/
 char *
 gnc_split_scm_get_memo(SCM split_scm)
@@ -460,17 +460,17 @@ gnc_split_scm_get_memo(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return scm_to_locale_string(result);
+    return gnc_scm_to_locale_string(result);
 }
 
 
-/********************************************************************\
- * gnc_split_scm_get_action                                         *
- *   return the newly allocated action of a scheme split, or NULL.  *
- *                                                                  *
- * Args: split_scm - the scheme split                               *
- * Returns: newly allocated action string                           *
-\********************************************************************/
+/**********************************************************************\
+ * gnc_split_scm_get_action                                           *
+ *   return the newly allocated action of a scheme split, or NULL.    *
+ *                                                                    *
+ * Args: split_scm - the scheme split                                 *
+ * Returns: newly allocated action string, must be freed with g_free  *
+\**********************************************************************/
 char *
 gnc_split_scm_get_action(SCM split_scm)
 {
@@ -485,7 +485,7 @@ gnc_split_scm_get_action(SCM split_scm)
     if (!scm_is_string(result))
         return NULL;
 
-    return scm_to_locale_string(result);
+    return gnc_scm_to_locale_string(result);
 }
 
 
@@ -918,13 +918,13 @@ gnc_get_debit_string(GNCAccountType account_type)
 }
 
 
-/********************************************************************\
- * gnc_get_credit_string                                            *
- *   return a credit string for a given account type                *
- *                                                                  *
- * Args: account_type - type of account to get credit string for    *
- * Return: g_malloc'd credit string or NULL                         *
-\********************************************************************/
+/************************************************************************\
+ * gnc_get_credit_string                                                *
+ *   return a credit string for a given account type                    *
+ *                                                                      *
+ * Args: account_type - type of account to get credit string for        *
+ * Return: g_malloc'd credit string or NULL, must be freed with g_free  *
+\************************************************************************/
 char *
 gnc_get_credit_string(GNCAccountType account_type)
 {
@@ -945,7 +945,7 @@ gnc_get_credit_string(GNCAccountType account_type)
     if (!scm_is_string(result))
         return NULL;
 
-    return scm_to_locale_string(result);
+    return gnc_scm_to_locale_string(result);
 }
 
 

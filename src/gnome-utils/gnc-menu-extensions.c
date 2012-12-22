@@ -171,22 +171,15 @@ gnc_extension_path (SCM extension, char **fullpath)
 
         if (scm_is_string(item))
         {
-            char* s;
-
-            scm_dynwind_begin (0);
-            s = scm_to_locale_string(item);
+            gchar* s;
+            s = gnc_scm_to_locale_string(item);
 
             if (i == 1)
-            {
-
                 strings[i] = g_strdup(s);
-            }
             else
-            {
                 strings[i] = g_strdup(gettext(s));
-            }
-            scm_dynwind_free (s);
-            scm_dynwind_end ();
+
+            g_free (s);
         }
         else
         {

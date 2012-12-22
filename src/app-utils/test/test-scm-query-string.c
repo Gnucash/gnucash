@@ -6,6 +6,7 @@
 
 #include "engine-helpers.h"
 #include "gnc-module.h"
+#include "gnc-guile-utils.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Query.h"
@@ -20,7 +21,6 @@ test_query (Query *q, SCM val2str)
     SCM res_q;
     SCM args = SCM_EOL;
     Query *q2;
-    char * str;
     gchar *str2 = NULL;
 
     scm_q = gnc_query2scm (q);
@@ -30,11 +30,7 @@ test_query (Query *q, SCM val2str)
     args = scm_cons (scm_from_locale_string ("'"), scm_cons (str_q, SCM_EOL));
     str_q = scm_string_append (args);
 
-    scm_dynwind_begin (0);
-    str = scm_to_locale_string (str_q);
-    if (str) str2 = g_strdup(str);
-    scm_dynwind_free (str);
-    scm_dynwind_end ();
+    str2 = gnc_scm_to_locale_string (str_q);
     if (str2)
     {
         res_q = scm_c_eval_string (str2);
@@ -53,14 +49,14 @@ test_query (Query *q, SCM val2str)
         scm_q = gnc_query2scm (q2);
         scm_display (scm_q, SCM_UNDEFINED);
         scm_newline (SCM_UNDEFINED);
-        if (str2) g_free(str2);
+        g_free(str2);
         exit (1);
     }
     else
     {
         success ("queries match");
     }
-    if (str2) g_free(str2);
+    g_free(str2);
     if (q2) qof_query_destroy (q2);
 }
 

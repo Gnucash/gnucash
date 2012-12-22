@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <libguile.h>
 #include "guile-mappings.h"
+#include "gnc-guile-utils.h"
 #include "swig-runtime.h"
 #include "glib-helpers.h"
 
@@ -128,14 +129,12 @@ gnc_scm_to_glist_string(SCM list)
     {
         if (scm_is_string(SCM_CAR(list)))
         {
-            char * str;
+            gchar * str;
 
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (SCM_CAR(list));
+            str = gnc_scm_to_locale_string (SCM_CAR(list));
             if (str)
                 glist = g_list_prepend (glist, g_strdup (str));
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
+            g_free (str);
         }
         list = SCM_CDR (list);
     }
@@ -152,14 +151,12 @@ gnc_scm_to_gslist_string(SCM list)
     {
         if (scm_is_string(SCM_CAR(list)))
         {
-            char * str;
+            gchar * str;
 
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (SCM_CAR(list));
+            str = gnc_scm_to_locale_string (SCM_CAR(list));
             if (str)
                 gslist = g_slist_prepend (gslist, g_strdup (str));
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
+            g_free (str);
         }
         list = SCM_CDR (list);
     }

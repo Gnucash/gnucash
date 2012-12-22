@@ -50,6 +50,7 @@
 #include "gnc-session.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
+#include "gnc-guile-utils.h"
 #include "option-util.h"
 #include "guile-mappings.h"
 #include "gnc-date-format.h"
@@ -2171,14 +2172,8 @@ gnc_option_set_ui_value_string (GNCOption *option, gboolean use_default,
     if (scm_is_string(value))
     {
         const gchar *string;
-        char * str;
 
-        scm_dynwind_begin (0);
-        str = scm_to_locale_string (value);
-        string = g_strdup (str);
-        scm_dynwind_free (str);
-        scm_dynwind_end ();
-
+        string = gnc_scm_to_locale_string (value);
         gtk_entry_set_text(GTK_ENTRY(widget), string);
         g_free ((gpointer *) string);
         return FALSE;
@@ -2201,14 +2196,8 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
     if (scm_is_string(value))
     {
         const gchar *string;
-        char * str;
 
-        scm_dynwind_begin (0);
-        str = scm_to_locale_string (value);
-        string = g_strdup (str);
-        scm_dynwind_free (str);
-        scm_dynwind_end ();
-
+        string = gnc_scm_to_locale_string (value);
         gtk_text_buffer_set_text (buffer, string, scm_c_string_length(value));
         g_free ((gpointer *) string);
         return FALSE;
@@ -2481,14 +2470,8 @@ gnc_option_set_ui_value_font (GNCOption *option, gboolean use_default,
     if (scm_is_string(value))
     {
         const gchar *string;
-        char * str;
 
-        scm_dynwind_begin (0);
-        str = scm_to_locale_string (value);
-        string = g_strdup (str);
-        scm_dynwind_free (str);
-        scm_dynwind_end ();
-
+        string = gnc_scm_to_locale_string (value);
         if ((string != NULL) && (*string != '\0'))
         {
             GtkFontButton *font_button = GTK_FONT_BUTTON(widget);
@@ -2509,14 +2492,8 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
     if (scm_is_string(value))
     {
         const gchar *string;
-        char * str;
 
-        scm_dynwind_begin (0);
-        str = scm_to_locale_string (value);
-        string = g_strdup (str);
-        scm_dynwind_free (str);
-        scm_dynwind_end ();
-
+        string = gnc_scm_to_locale_string (value);
         if (string && *string)
         {
             gchar *test;

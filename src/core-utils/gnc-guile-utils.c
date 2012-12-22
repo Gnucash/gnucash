@@ -32,7 +32,35 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 
 /********************************************************************\
- * gnc_guile_symbol_to_locale_string                                *
+ * gnc_scm_to_locale_string                                         *
+ *   returns the string representation of the scm string in         *
+ *   a newly allocated gchar * or NULL if it can't be retrieved.    *
+ *                                                                  *
+ * Args: symbol_value - the scm symbol                              *
+ * Returns: newly allocated gchar * or NULL, should be freed with   *
+ *          g_free by the caller                                    *
+\********************************************************************/
+gchar *gnc_scm_to_locale_string(SCM scm_string)
+{
+    if (scm_is_string (scm_string))
+    {
+        gchar* s;
+        char * str;
+
+        str = scm_to_locale_string(scm_string);
+        s = g_strdup(str);
+        free (str);
+        return s;
+    }
+
+    /* Unable to extract string from the symbol...*/
+    PERR("bad value\n");
+    return NULL;
+}
+
+
+/********************************************************************\
+ * gnc_scm_symbol_to_locale_string                                  *
  *   returns the string representation of the scm symbol in         *
  *   a newly allocated gchar * or NULL if it can't be retrieved.    *
  *                                                                  *

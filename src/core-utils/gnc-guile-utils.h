@@ -28,7 +28,15 @@
 #include <libguile.h>
 
 /** Helper function to get the string representation of
- *  a guile symbol. */
+ *  a guile string.
+ *
+ *  Returns a newly allocated string that must be freed with g_free*/
+gchar * gnc_scm_to_locale_string(SCM scm_string);
+
+/** Helper function to get the string representation of
+ *  a guile symbol.
+ *
+ *  Returns a newly allocated string that must be freed with g_free*/
 gchar * gnc_scm_symbol_to_locale_string(SCM scm_string);
 
 /* Helpful functions for calling functions that return

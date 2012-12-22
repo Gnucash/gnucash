@@ -32,7 +32,7 @@
 #include "option-util.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
-#include "guile-util.h"
+#include "gnc-guile-utils.h"
 #include "qof.h"
 #include "guile-mappings.h"
 
@@ -900,8 +900,6 @@ char *
 gnc_option_permissible_value_name(GNCOption *option, int index)
 {
     SCM name;
-    char * str;
-    char * string;
 
     if (index < 0)
         return NULL;
@@ -915,13 +913,7 @@ gnc_option_permissible_value_name(GNCOption *option, int index)
     if (!scm_is_string(name))
         return NULL;
 
-    scm_dynwind_begin (0);
-    str = scm_to_locale_string (name);
-    string = g_strdup (str);
-    scm_dynwind_free (str);
-    scm_dynwind_end ();
-
-    return string;
+    return gnc_scm_to_locale_string (name);
 }
 
 
@@ -939,8 +931,6 @@ char *
 gnc_option_permissible_value_description(GNCOption *option, int index)
 {
     SCM help;
-    char * str;
-    char * string;
 
     if (index < 0)
         return NULL;
@@ -954,13 +944,7 @@ gnc_option_permissible_value_description(GNCOption *option, int index)
     if (!scm_is_string(help))
         return NULL;
 
-    scm_dynwind_begin (0);
-    str = scm_to_locale_string (help);
-    string = g_strdup (str);
-    scm_dynwind_free (str);
-    scm_dynwind_end ();
-
-    return string;
+    return gnc_scm_to_locale_string (help);
 }
 
 
@@ -1708,11 +1692,7 @@ gnc_commit_option(GNCOption *option)
             return;
         }
 
-        scm_dynwind_begin (0);
-        str = scm_to_locale_string (oops);
-        message = g_strdup (str);
-        scm_dynwind_free (str);
-        scm_dynwind_end ();
+        message = gnc_scm_to_locale_string (oops);
         name = gnc_option_name(option);
         section = gnc_option_section(option);
 
@@ -1903,8 +1883,6 @@ gnc_option_db_get_default_section(GNCOptionDB *odb)
 {
     SCM getter;
     SCM value;
-    char * str;
-    char * string;
 
     if (odb == NULL)
         return NULL;
@@ -1917,12 +1895,7 @@ gnc_option_db_get_default_section(GNCOptionDB *odb)
     if (!scm_is_string(value))
         return NULL;
 
-    scm_dynwind_begin (0);
-    str = scm_to_locale_string (value);
-    string = g_strdup (str);
-    scm_dynwind_free (str);
-    scm_dynwind_end ();
-    return string;
+    return gnc_scm_to_locale_string (value);
 }
 
 
@@ -2028,16 +2001,7 @@ gnc_option_db_lookup_string_option(GNCOptionDB *odb,
         {
             value = scm_call_0(getter);
             if (scm_is_string(value))
-            {
-                char * str;
-                char * string;
-                scm_dynwind_begin (0);
-                str = scm_to_locale_string (value);
-                string = g_strdup (str);
-                scm_dynwind_free (str);
-                scm_dynwind_end ();
-                return string;
-            }
+                return gnc_scm_to_locale_string (value);
         }
     }
 
@@ -2772,14 +2736,7 @@ gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
             break;
 
         if (custom)
-        {
-            char * tmp_str;
-            char * string;
-            tmp_str = scm_to_locale_string (val);
-            string = g_strdup (tmp_str);
-            free (tmp_str);
-            *custom = string;
-        }
+            *custom = gnc_scm_to_locale_string (val);
 
         return FALSE;
 

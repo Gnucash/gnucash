@@ -35,6 +35,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "guile-mappings.h"
+#include "gnc-guile-utils.h"
 #include "gnc-ui.h" /* for GNC_RESPONSE_NEW */
 
 enum account_cols
@@ -92,15 +93,7 @@ acct_tree_add_accts(SCM accts,
         }
 
         if (scm_is_string(SCM_CAR(current)))
-        {
-            char * str;
-
-            scm_dynwind_begin (0);
-            str = scm_to_locale_string (SCM_CAR(current));
-            compname = g_strdup(str);
-            scm_dynwind_free (str);
-            scm_dynwind_end ();
-        }
+            compname = gnc_scm_to_locale_string (SCM_CAR(current));
         else
             compname = g_strdup("");
 
@@ -349,15 +342,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
 
     /* Set the initial account to be selected. */
     if (scm_is_string(orig_acct))
-    {
-        char * str;
-
-        scm_dynwind_begin (0);
-        str = scm_to_locale_string (orig_acct);
-        wind->selected_name = g_strdup(str);
-        scm_dynwind_free (str);
-        scm_dynwind_end ();
-    }
+        wind->selected_name = gnc_scm_to_locale_string (orig_acct);
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-account-picker.glade", "QIF Import Account Picker");
