@@ -42,10 +42,17 @@ gchar * gnc_scm_symbol_to_locale_string(SCM scm_string);
 /* Helpful functions for calling functions that return
  * specific kinds of values. These functions do error
  * checking to verify the result is of the correct type. */
-char * gnc_guile_call1_to_string(SCM func, SCM arg);
-char * gnc_guile_call1_symbol_to_string(SCM func, SCM arg);
-SCM    gnc_guile_call1_to_procedure(SCM func, SCM arg);
-SCM    gnc_guile_call1_to_list(SCM func, SCM arg);
-SCM    gnc_guile_call1_to_vector(SCM func, SCM arg);
+char * gnc_scm_call_1_to_string(SCM func, SCM arg);
+char * gnc_scm_call_1_symbol_to_string(SCM func, SCM arg);
+SCM    gnc_scm_call_1_to_procedure(SCM func, SCM arg);
+SCM    gnc_scm_call_1_to_list(SCM func, SCM arg);
+SCM    gnc_scm_call_1_to_vector(SCM func, SCM arg);
+
+/* Deprectated functions, will be removed soon */
+#define gnc_guile_call1_to_string gnc_scm_call_1_to_string
+#define gnc_guile_call1_symbol_to_string gnc_scm_call_1_symbol_to_string
+#define gnc_guile_call1_to_procedure gnc_scm_call_1_to_procedure
+#define gnc_guile_call1_to_list gnc_scm_call_1_to_list
+#define gnc_guile_call1_to_vector gnc_scm_call_1_to_vector
 
 #endif

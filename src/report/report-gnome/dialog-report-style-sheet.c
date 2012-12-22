@@ -209,7 +209,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
         gchar* orig_name;
 
         SCM t = SCM_CAR(templates);
-        orig_name = gnc_guile_call1_to_string(t_name, t);
+        orig_name = gnc_scm_call_1_to_string(t_name, t);
 
         /* Store the untranslated names for lookup later */
         template_names = g_list_prepend (template_names, (gpointer)orig_name);
@@ -269,7 +269,7 @@ gnc_style_sheet_select_dialog_add_one(StyleSheetDialog * ss,
     GtkTreeIter iter;
 
     get_name = scm_c_eval_string ("gnc:html-style-sheet-name");
-    c_name = gnc_guile_call1_to_string (get_name, sheet_info);
+    c_name = gnc_scm_call_1_to_string (get_name, sheet_info);
     if (!c_name)
         return;
 

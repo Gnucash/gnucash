@@ -188,7 +188,7 @@ gnc_report_name( SCM report )
     if (report == SCM_BOOL_F)
         return NULL;
 
-    return gnc_guile_call1_to_string(get_name, report);
+    return gnc_scm_call_1_to_string(get_name, report);
 }
 
 gchar*

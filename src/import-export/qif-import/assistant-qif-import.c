@@ -303,8 +303,8 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 
     while (!scm_is_null(accts_left))
     {
-        qif_name = gnc_guile_call1_to_string(get_qif_name, SCM_CAR(accts_left));
-        gnc_name = gnc_guile_call1_to_string(get_gnc_name, SCM_CAR(accts_left));
+        qif_name = gnc_scm_call_1_to_string(get_qif_name, SCM_CAR(accts_left));
+        gnc_name = gnc_scm_call_1_to_string(get_gnc_name, SCM_CAR(accts_left));
         checked  = (scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
 
         gtk_list_store_append(store, &iter);
@@ -2055,7 +2055,7 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
         SCM default_acct = scm_c_eval_string("qif-file:path-to-accountname");
         gchar * default_acctname = NULL;
 
-        default_acctname = gnc_guile_call1_to_string(default_acct, wind->selected_file);
+        default_acctname = gnc_scm_call_1_to_string(default_acct, wind->selected_file);
         gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
         g_free (default_acctname);
     }
@@ -2206,7 +2206,7 @@ update_file_page(QIFImportWindow * wind)
         SCM    scm_qiffile = SCM_BOOL_F;
 
         scm_qiffile = SCM_CAR(loaded_file_list);
-        row_text = gnc_guile_call1_to_string(qif_file_path, scm_qiffile);
+        row_text = gnc_scm_call_1_to_string(qif_file_path, scm_qiffile);
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,

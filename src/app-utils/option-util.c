@@ -594,7 +594,7 @@ gnc_option_section(GNCOption *option)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_string(getters.section, option->guile_option);
+    return gnc_scm_call_1_to_string(getters.section, option->guile_option);
 }
 
 
@@ -611,7 +611,7 @@ gnc_option_name(GNCOption *option)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_string(getters.name, option->guile_option);
+    return gnc_scm_call_1_to_string(getters.name, option->guile_option);
 }
 
 
@@ -628,7 +628,7 @@ gnc_option_type(GNCOption *option)
 {
     initialize_getters();
 
-    return gnc_guile_call1_symbol_to_string(getters.type,
+    return gnc_scm_call_1_symbol_to_string(getters.type,
                                             option->guile_option);
 }
 
@@ -646,7 +646,7 @@ gnc_option_sort_tag(GNCOption *option)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_string(getters.sort_tag, option->guile_option);
+    return gnc_scm_call_1_to_string(getters.sort_tag, option->guile_option);
 }
 
 
@@ -663,7 +663,7 @@ gnc_option_documentation(GNCOption *option)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_string(getters.documentation,
+    return gnc_scm_call_1_to_string(getters.documentation,
                                      option->guile_option);
 }
 
@@ -681,7 +681,7 @@ gnc_option_getter(GNCOption *option)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_procedure(getters.getter,
+    return gnc_scm_call_1_to_procedure(getters.getter,
                                         option->guile_option);
 }
 
@@ -699,7 +699,7 @@ gnc_option_setter(GNCOption *option)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_procedure(getters.setter,
+    return gnc_scm_call_1_to_procedure(getters.setter,
                                         option->guile_option);
 }
 
@@ -717,7 +717,7 @@ gnc_option_default_getter(GNCOption *option)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_procedure(getters.default_getter,
+    return gnc_scm_call_1_to_procedure(getters.default_getter,
                                         option->guile_option);
 }
 
@@ -735,7 +735,7 @@ gnc_option_value_validator(GNCOption *option)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_procedure(getters.value_validator,
+    return gnc_scm_call_1_to_procedure(getters.value_validator,
                                         option->guile_option);
 }
 
@@ -2579,7 +2579,7 @@ gnc_option_date_option_get_subtype(GNCOption *option)
 
     initialize_getters();
 
-    return gnc_guile_call1_symbol_to_string(getters.date_option_subtype, option->guile_option);
+    return gnc_scm_call_1_symbol_to_string(getters.date_option_subtype, option->guile_option);
 }
 
 /*******************************************************************\
@@ -2596,7 +2596,7 @@ gnc_date_option_value_get_type (SCM option_value)
 
     initialize_getters();
 
-    return gnc_guile_call1_symbol_to_string (getters.date_option_value_type, option_value);
+    return gnc_scm_call_1_symbol_to_string (getters.date_option_value_type, option_value);
 }
 
 /*******************************************************************\

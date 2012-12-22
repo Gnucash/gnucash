@@ -91,7 +91,7 @@ gnc_scm_symbol_to_locale_string(SCM symbol_value)
 
 
 /********************************************************************\
- * gnc_guile_call1_to_string                                        *
+ * gnc_scm_call_1_to_string                                         *
  *   returns the malloc'ed string returned by the guile function    *
  *   or NULL if it can't be retrieved                               *
  *                                                                  *
@@ -100,7 +100,7 @@ gnc_scm_symbol_to_locale_string(SCM symbol_value)
  * Returns: g_malloc'ed char * or NULL must be freed with g_free    *
 \********************************************************************/
 char *
-gnc_guile_call1_to_string(SCM func, SCM arg)
+gnc_scm_call_1_to_string(SCM func, SCM arg)
 {
     SCM value;
 
@@ -127,7 +127,7 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
 
 
 /********************************************************************\
- * gnc_guile_call1_symbol_to_string                                 *
+ * gnc_scm_call_1_symbol_to_string                                  *
  *   returns the malloc'ed string returned by the guile function    *
  *   or NULL if it can't be retrieved. The return value of the      *
  *   function should be a symbol.                                   *
@@ -137,7 +137,7 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
  * Returns: malloc'ed char * or NULL                                *
 \********************************************************************/
 char *
-gnc_guile_call1_symbol_to_string(SCM func, SCM arg)
+gnc_scm_call_1_symbol_to_string(SCM func, SCM arg)
 {
     SCM symbol_value;
 
@@ -156,7 +156,7 @@ gnc_guile_call1_symbol_to_string(SCM func, SCM arg)
 
 
 /********************************************************************\
- * gnc_guile_call1_to_procedure                                     *
+ * gnc_scm_call_1_to_procedure                                      *
  *   returns the SCM handle to the procedure returned by the guile  *
  *   function, or SCM_UNDEFINED if it couldn't be retrieved.        *
  *                                                                  *
@@ -165,7 +165,7 @@ gnc_guile_call1_symbol_to_string(SCM func, SCM arg)
  * Returns: SCM function handle or SCM_UNDEFINED                    *
 \********************************************************************/
 SCM
-gnc_guile_call1_to_procedure(SCM func, SCM arg)
+gnc_scm_call_1_to_procedure(SCM func, SCM arg)
 {
     SCM value;
 
@@ -190,7 +190,7 @@ gnc_guile_call1_to_procedure(SCM func, SCM arg)
 
 
 /********************************************************************\
- * gnc_guile_call1_to_list                                          *
+ * gnc_scm_call_1_to_list                                           *
  *   returns the SCM handle to the list returned by the guile       *
  *   function, or SCM_UNDEFINED if it couldn't be retrieved.        *
  *                                                                  *
@@ -199,7 +199,7 @@ gnc_guile_call1_to_procedure(SCM func, SCM arg)
  * Returns: SCM list handle or SCM_UNDEFINED                        *
 \********************************************************************/
 SCM
-gnc_guile_call1_to_list(SCM func, SCM arg)
+gnc_scm_call_1_to_list(SCM func, SCM arg)
 {
     SCM value;
 
@@ -224,7 +224,7 @@ gnc_guile_call1_to_list(SCM func, SCM arg)
 
 
 /********************************************************************\
- * gnc_guile_call1_to_vector                                        *
+ * gnc_scm_call_1_to_vector                                         *
  *   returns the SCM handle to the vector returned by the guile     *
  *   function, or SCM_UNDEFINED if it couldn't be retrieved.        *
  *                                                                  *
@@ -233,7 +233,7 @@ gnc_guile_call1_to_list(SCM func, SCM arg)
  * Returns: SCM vector handle or SCM_UNDEFINED                      *
 \********************************************************************/
 SCM
-gnc_guile_call1_to_vector(SCM func, SCM arg)
+gnc_scm_call_1_to_vector(SCM func, SCM arg)
 {
     SCM value;
 

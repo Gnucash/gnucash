@@ -80,7 +80,7 @@ gnc_extension_type (SCM extension, GtkUIManagerItemType *type)
 
     initialize_getters();
 
-    string = gnc_guile_call1_symbol_to_string(getters.type, extension);
+    string = gnc_scm_call_1_symbol_to_string(getters.type, extension);
     if (string == NULL)
     {
         PERR("bad type");
@@ -116,7 +116,7 @@ gnc_extension_name (SCM extension)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_string(getters.name, extension);
+    return gnc_scm_call_1_to_string(getters.name, extension);
 }
 
 
@@ -126,7 +126,7 @@ gnc_extension_guid (SCM extension)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_string(getters.guid, extension);
+    return gnc_scm_call_1_to_string(getters.guid, extension);
 }
 
 
@@ -136,7 +136,7 @@ gnc_extension_documentation (SCM extension)
 {
     initialize_getters();
 
-    return gnc_guile_call1_to_string(getters.documentation, extension);
+    return gnc_scm_call_1_to_string(getters.documentation, extension);
 }
 
 /* returns g_malloc'd path */
@@ -150,7 +150,7 @@ gnc_extension_path (SCM extension, char **fullpath)
 
     initialize_getters();
 
-    path = gnc_guile_call1_to_list(getters.path, extension);
+    path = gnc_scm_call_1_to_list(getters.path, extension);
     if ((path == SCM_UNDEFINED) || scm_is_null(path))
     {
         *fullpath = g_strdup("");
@@ -241,7 +241,7 @@ gnc_extension_invoke_cb (SCM extension, SCM window)
 
     initialize_getters();
 
-    script = gnc_guile_call1_to_procedure(getters.script, extension);
+    script = gnc_scm_call_1_to_procedure(getters.script, extension);
     if (script == SCM_UNDEFINED)
     {
         PERR("not a procedure.");
