@@ -65,6 +65,7 @@ ToDo:
 #include "TransactionP.h"
 #include "cap-gains.h"
 #include "gnc-engine.h"
+#include "engine-helpers.h"
 #include "gnc-lot.h"
 #include "policy.h"
 #include "policy-p.h"
@@ -532,7 +533,10 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
 
         /* Copy most of the split attributes */
         xaccSplitSetMemo (new_split, xaccSplitGetMemo (split));
-        xaccSplitSetAction (new_split, xaccSplitGetAction (split));
+        /* Set split-action with gnc_set_num_action which is the same as
+         * xaccSplitSetAction with these arguments; use gnc_get_num_action to get
+         * split-action which is the same as xaccSplitGetAction */
+        gnc_set_num_action(NULL, new_split, NULL, gnc_get_num_action(NULL, split));
         xaccSplitSetReconcile (new_split, xaccSplitGetReconcile (split));
         ts = xaccSplitRetDateReconciledTS (split);
         xaccSplitSetDateReconciledTS (new_split, &ts);

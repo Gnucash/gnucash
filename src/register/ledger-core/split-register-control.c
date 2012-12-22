@@ -38,6 +38,7 @@
 #include "split-register-model-save.h"
 #include "split-register-p.h"
 #include "table-allgui.h"
+#include "engine-helpers.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -967,7 +968,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         {
             cell = gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL);
             gnc_combo_cell_set_value ((ComboCell *) cell,
-                                      xaccSplitGetAction (auto_split));
+                                      gnc_get_num_action (NULL, auto_split));
         }
 
         /* auto-complete the account name */
@@ -1225,7 +1226,7 @@ gnc_split_register_xfer_dialog(SplitRegister *reg, Transaction *txn,
         gnc_xfer_dialog_set_num(xfer, gnc_basic_cell_get_value(cell));
     else
     {
-        const char *str = xaccTransGetNum(txn);
+        const char *str = gnc_get_num_action (txn, split);
         gnc_xfer_dialog_set_num(xfer, str ? str : "");
     }
 

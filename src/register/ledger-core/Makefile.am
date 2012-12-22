@@ -53,7 +53,8 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GCONF_CFLAGS} \
   ${GTK_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${GNOME_CFLAGS}
 
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.ledger\"

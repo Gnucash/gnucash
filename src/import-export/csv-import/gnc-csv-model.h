@@ -82,6 +82,7 @@ typedef struct
     Transaction* trans;
     gnc_numeric balance; /**< The (supposed) balance after this transaction takes place */
     gboolean balance_set; /**< TRUE if balance has been set from user data, FALSE otherwise */
+    gchar *num; /**< Saves the 'num'for use if balance has been set from user data */
 } GncCsvTransLine;
 
 /* A set of currency formats that the user sees. */

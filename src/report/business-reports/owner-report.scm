@@ -360,7 +360,7 @@
       (if (not (null? invoice))
           (set! due-date (gncInvoiceGetDateDue invoice)))
 
-      (let ((row (make-row column-vector date due-date (xaccTransGetNum txn)
+      (let ((row (make-row column-vector date due-date (gnc-get-num-action txn split)
                    type-str (xaccSplitGetMemo split)
                    (gnc:make-gnc-monetary currency value)
            (if (not (gnc-numeric-negative-p value))

@@ -1425,7 +1425,7 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="n_rows">21</property>
+                <property name="n_rows">22</property>
                 <property name="n_columns">4</property>
                 <child>
                   <object class="GtkLabel" id="label50">
@@ -1457,6 +1457,28 @@ many months before the current month:</property>
                     <property name="right_attach">4</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                    <property name="x_padding">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="gconf/general/num_source">
+                    <property name="label" translatable="yes">Set book option on new files to use split "action" field for "Num" field on registers/reports</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">If selected, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the split &amp;quot;action&amp;quot; field and the transaction &amp;quot;num&amp;quot; field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the transaction &amp;quot;num&amp;quot; field.</property>
+                    <property name="tooltip_text" translatable="yes">If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">12</property>
@@ -1528,8 +1550,8 @@ many months before the current month:</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">16</property>
-                    <property name="bottom_attach">17</property>
+                    <property name="top_attach">17</property>
+                    <property name="bottom_attach">18</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
@@ -1545,8 +1567,8 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">14</property>
-                    <property name="bottom_attach">15</property>
+                    <property name="top_attach">15</property>
+                    <property name="bottom_attach">16</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">12</property>
@@ -1567,8 +1589,8 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">11</property>
-                    <property name="bottom_attach">12</property>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">12</property>
@@ -1583,8 +1605,8 @@ many months before the current month:</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-                    <property name="top_attach">10</property>
-                    <property name="bottom_attach">11</property>
+                    <property name="top_attach">11</property>
+                    <property name="bottom_attach">12</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -1594,10 +1616,10 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
+                 </object>
+                 <packing>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -1612,8 +1634,8 @@ many months before the current month:</property>
                     <property name="mnemonic_widget">gconf/general/auto_decimal_places</property>
                   </object>
                   <packing>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">12</property>
@@ -1638,8 +1660,8 @@ many months before the current month:</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -1659,8 +1681,8 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">12</property>
@@ -1681,8 +1703,8 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">12</property>
@@ -1697,8 +1719,8 @@ many months before the current month:</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -1710,8 +1732,8 @@ many months before the current month:</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -1725,8 +1747,8 @@ many months before the current month:</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-                    <property name="top_attach">19</property>
-                    <property name="bottom_attach">20</property>
+                    <property name="top_attach">20</property>
+                    <property name="bottom_attach">21</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -1741,8 +1763,8 @@ many months before the current month:</property>
                     <property name="mnemonic_widget">gconf/dialogs/search/new_search_limit</property>
                   </object>
                   <packing>
-                    <property name="top_attach">20</property>
-                    <property name="bottom_attach">21</property>
+                    <property name="top_attach">21</property>
+                    <property name="bottom_attach">22</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">12</property>
@@ -1767,8 +1789,8 @@ many months before the current month:</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">20</property>
-                    <property name="bottom_attach">21</property>
+                    <property name="top_attach">21</property>
+                    <property name="bottom_attach">22</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -1805,8 +1827,8 @@ many months before the current month:</property>
                     <property name="mnemonic_widget">gconf/general/autosave_interval_minutes</property>
                   </object>
                   <packing>
-                    <property name="top_attach">13</property>
-                    <property name="bottom_attach">14</property>
+                    <property name="top_attach">14</property>
+                    <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">12</property>
@@ -1856,8 +1878,8 @@ many months before the current month:</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach">13</property>
-                    <property name="bottom_attach">14</property>
+                    <property name="top_attach">14</property>
+                    <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
                   </packing>
@@ -1877,8 +1899,8 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">12</property>
-                    <property name="bottom_attach">13</property>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                     <property name="x_padding">12</property>
@@ -1891,8 +1913,8 @@ many months before the current month:</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="top_attach">18</property>
-                    <property name="bottom_attach">19</property>
+                    <property name="top_attach">19</property>
+                    <property name="bottom_attach">20</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -1908,8 +1930,8 @@ many months before the current month:</property>
                     <property name="group">gconf/general/retain_type/days</property>
                   </object>
                   <packing>
-                    <property name="top_attach">15</property>
-                    <property name="bottom_attach">16</property>
+                    <property name="top_attach">16</property>
+                    <property name="bottom_attach">17</property>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1924,8 +1946,8 @@ many months before the current month:</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="top_attach">16</property>
-                    <property name="bottom_attach">17</property>
+                    <property name="top_attach">17</property>
+                    <property name="bottom_attach">18</property>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>
@@ -1940,8 +1962,8 @@ many months before the current month:</property>
                     <property name="group">gconf/general/retain_type/days</property>
                   </object>
                   <packing>
-                    <property name="top_attach">17</property>
-                    <property name="bottom_attach">18</property>
+                    <property name="top_attach">18</property>
+                    <property name="bottom_attach">19</property>
                     <property name="x_padding">12</property>
                   </packing>
                 </child>

@@ -35,6 +35,7 @@
 #include "SchedXaction.h"
 #include "Transaction.h"
 #include "gnc-engine.h"
+#include "engine-helpers.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.sx"
@@ -1039,9 +1040,10 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
     xaccSplitSetMemo(split,
                      gnc_ttsplitinfo_get_memo(s_info));
 
-    xaccSplitSetAction(split,
+    /* Set split-action with gnc_set_num_action which is the same as
+     * xaccSplitSetAction with these arguments */
+    gnc_set_num_action(NULL, split, NULL,
                        gnc_ttsplitinfo_get_action(s_info));
-
 
     xaccAccountInsertSplit(parent_acct,
                            split);
@@ -1113,8 +1115,10 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 
         xaccTransSetDatePostedSecs(new_trans, gnc_time (NULL));
 
-        xaccTransSetNum(new_trans,
-                        gnc_ttinfo_get_num(tti));
+        /* Set tran-num with gnc_set_num_action which is the same as
+         * xaccTransSetNum with these arguments */
+        gnc_set_num_action(new_trans, NULL,
+                        gnc_ttinfo_get_num(tti), NULL);
         xaccTransSetCurrency( new_trans,
                               gnc_ttinfo_get_currency(tti) );
 

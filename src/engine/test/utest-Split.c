@@ -1106,8 +1106,10 @@ xaccSplitOrder (const Split *sa, const Split *sb)// C: 5 in 3
 static void
 test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
 {
+    const char *slot_path;
     Split *split = fixture->split;
     Split *o_split = xaccMallocSplit (xaccSplitGetBook (split));
+    Transaction *o_txn = xaccMallocTransaction (xaccSplitGetBook (split));
     Transaction *txn = split->parent;
 
     g_assert_cmpint (xaccSplitOrder (split, split), ==, 0);
@@ -1118,12 +1120,57 @@ test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
  */
     g_assert_cmpint (xaccSplitOrder (split, o_split), ==, -1);
 
+/* This is testing the call to xaccTransOrder_num_action: split and o_split have
+ * parents with the same date_posted so will sort on tran-num or
+ * split-action based on book option.
+ */
+    o_split->parent = o_txn;
+    split->parent->date_posted = timespec_now ();
+    o_split->parent->date_posted = split->parent->date_posted;
+
+/* The book_use_split_action_for_num_field book option hasn't been set so it
+ * should sort on tran-num, so xaccTransOrder_num_action returns -1.
+ */
+    split->parent->num = "123";
+    split->action = "5";
+    o_split->parent->num = "124";
+    o_split->action = "6";
+    g_assert_cmpint (xaccSplitOrder (split, o_split), ==, -1);
+
+/* Reverse, so xaccTransOrder_num_action returns +1.
+ */
+    split->parent->num = "124";
+    o_split->parent->num = "123";
+    g_assert_cmpint (xaccSplitOrder (split, o_split), ==, +1);
+
+/* Now set the book_use_split_action_for_num_field book option so it will
+ * sort on split-action, so xaccTransOrder_num_action returns -1, initially.
+ */
+
+    /* create correct slot path */
+    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/",
+            OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_NUM_FIELD_SOURCE, NULL );
+    g_assert( slot_path != NULL );
+    g_test_message( "Testing with use-split-action-for-num set to true - t" );
+    qof_book_set_string_option( xaccSplitGetBook (split), slot_path, "t" );
+    g_assert(qof_book_use_split_action_for_num_field(xaccSplitGetBook(split)) == TRUE);
+
+    g_assert_cmpint (xaccSplitOrder (split, o_split), ==, -1);
+
+    split->action = "7";
+    g_assert_cmpint (xaccSplitOrder (split, o_split), ==, +1);
+
+/* Revert settings for the rest of the test */
+    o_split->action = NULL;
+    split->action = "foo";
+    o_split->parent = NULL;
+    qof_book_set_string_option( xaccSplitGetBook (split), slot_path, "f" );
+    g_assert(qof_book_use_split_action_for_num_field(xaccSplitGetBook(split)) == FALSE);
     split->parent = NULL;
 /* This should return > 0 because o_split has no memo string */
     g_assert_cmpint (xaccSplitOrder (split, o_split), >, 0);
     o_split->memo = "baz";
     g_assert_cmpint (xaccSplitOrder (split, o_split), <, 0);
-
 /* This should return > 0 because o_split has no action string */
     o_split->memo = split->memo;
     g_assert_cmpint (xaccSplitOrder (split, o_split), >, 0);
@@ -1166,6 +1213,7 @@ test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
 /* so that it won't assert during teardown */
     split->parent = txn;
     test_destroy (o_split);
+    test_destroy (o_txn);
 }
 /* xaccSplitOrderDateOnly
 gint

@@ -37,6 +37,7 @@
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
 #include "Transaction.h"
+#include "engine-helpers.h"
 #include "Scrub.h"
 #include "gnc-exp-parser.h"
 #include "dialog-transfer.h"
@@ -858,7 +859,8 @@ g_print("handle_exchange_rate trans %p and split %p\n", trans, split);
         /* fill in the dialog entries */
         gnc_xfer_dialog_set_description (xfer, xaccTransGetDescription (trans));
         gnc_xfer_dialog_set_memo (xfer, xaccSplitGetMemo (split));
-        gnc_xfer_dialog_set_num (xfer, xaccTransGetNum (trans));
+        /* Get per book option */
+        gnc_xfer_dialog_set_num (xfer, gnc_get_num_action (trans, split));
         gnc_xfer_dialog_set_date (xfer, timespecToTime64 (xaccTransRetDatePostedTS (trans)));
 
         value = amount;
@@ -1442,11 +1444,15 @@ cdf (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         editable = TRUE;
 
         if (is_trow1)
-            s = xaccTransGetNum (trans);
+            /* Get per book option */
+            s = gnc_get_num_action (trans, get_this_split (view, trans));
         else if (is_trow2 && !expanded)
-            s = xaccSplitGetAction (get_this_split (view, trans));
+            /* Get per book option */
+            s = gnc_get_action_num (trans, get_this_split (view, trans));
         else if (is_split)
-            s = xaccSplitGetAction (split);
+            /* Get split-action with gnc_get_num_action which is the same as
+             * xaccSplitGetAction with these arguments */
+            s = gnc_get_num_action (NULL, split);
         else
         {
             s = "";
@@ -3104,15 +3110,21 @@ g_print("gtv_split_reg_edited_cb New Text is '%s'\n", new_text);
         begin_edit (view, split, trans);
         if (is_trow1)
         {
-            xaccTransSetNum (trans, new_text);
+            /* set per book option */
+            gnc_set_num_action (trans, get_this_split (view, trans),
+                                                                new_text, NULL);
         }
         if (is_trow2)
         {
-            xaccSplitSetAction (get_this_split (view, trans), new_text);
+            /* set per book option */
+            gnc_set_num_action (trans, get_this_split (view, trans),
+                                                                NULL, new_text);
         }
         if (is_split)
         {
-            xaccSplitSetAction (split, new_text);
+            /* Set split-action with gnc_set_num_action which is the same as
+             * xaccSplitSetAction with these arguments */
+            gnc_set_num_action(NULL, split, NULL, new_text);
         }
         break;
 

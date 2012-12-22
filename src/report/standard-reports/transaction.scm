@@ -366,7 +366,9 @@
         (vector-set! column-list 0 #t))
     (if (opt-val (N_ "Display") (N_ "Reconciled Date"))
         (vector-set! column-list 1 #t))
-    (if (opt-val (N_ "Display") (N_ "Num"))
+    (if (if (gnc:lookup-option options (N_ "Display") (N_ "Num"))
+            (opt-val (N_ "Display") (N_ "Num"))
+            (opt-val (N_ "Display") (N_ "Num/Action")))
         (vector-set! column-list 2 #t))
     (if (opt-val (N_ "Display") (N_ "Description"))
         (vector-set! column-list 3 #t))
@@ -404,14 +406,25 @@
         (vector-set! column-list 19 #t))
     column-list))
 
-(define (make-heading-list column-vector)
+(define (make-heading-list column-vector options)
   (let ((heading-list '()))
     (if (used-date column-vector)
         (addto! heading-list (_ "Date")))
     (if (used-reconciled-date column-vector)
         (addto! heading-list (_ "Reconciled Date")))
     (if (used-num column-vector)
-        (addto! heading-list (_ "Num")))
+        (addto! heading-list (if (and (qof-book-use-split-action-for-num-field
+                                                        (gnc-get-current-book))
+                                      (if (gnc:lookup-option options
+                                                    gnc:pagename-display
+                                                    (N_ "Trans Number"))
+                                          (gnc:option-value 
+                                            (gnc:lookup-option options
+                                                    gnc:pagename-display
+                                                    (N_ "Trans Number")))
+                                          #f))
+                                 (_ "Num/T-Num")
+                                 (_ "Num"))))
     (if (used-description column-vector)
         (addto! heading-list (_ "Description")))
     (if (used-memo column-vector)
@@ -487,9 +500,26 @@
     (if (used-num column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc:make-html-table-cell/markup "text-cell"
-                        (xaccTransGetNum parent))
+                    (if (qof-book-use-split-action-for-num-field
+                                                        (gnc-get-current-book))
+                        (let* ((num (gnc-get-num-action parent split))
+                               (t-num (if (if (gnc:lookup-option options
+                                                    gnc:pagename-display
+                                                    (N_ "Trans Number"))
+                                              (opt-val gnc:pagename-display
+                                                    (N_ "Trans Number"))
+                                              #f)
+                                          (gnc-get-num-action parent #f)
+                                          ""))
+                               (num-string (if (equal? t-num "")
+                                               num
+                                               (string-append num "/" t-num))))
+                              (gnc:make-html-table-cell/markup "text-cell"
+                                   num-string))
+                        (gnc:make-html-table-cell/markup "text-cell"
+                            (gnc-get-num-action parent split)))
                     " ")))
+
     (if (used-description column-vector)
         (addto! row-contents
                 (if transaction-row?
@@ -672,57 +702,113 @@
   (let ((options gnc:*transaction-report-options*)
 
         (key-choice-list 
-         (list (vector 'none
-                       (N_ "None")
-                       (N_ "Do not sort"))
+         (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+             (list (vector 'none
+                           (N_ "None")
+                           (N_ "Do not sort"))
 
-               (vector 'account-name
-                       (N_ "Account Name")
-                       (N_ "Sort & subtotal by account name"))
+                   (vector 'account-name
+                           (N_ "Account Name")
+                           (N_ "Sort & subtotal by account name"))
 
-               (vector 'account-code
-                       (N_ "Account Code")
-                       (N_ "Sort & subtotal by account code"))
+                   (vector 'account-code
+                           (N_ "Account Code")
+                           (N_ "Sort & subtotal by account code"))
 
-               (vector 'date
-                       (N_ "Date")
-                       (N_ "Sort by date"))
+                   (vector 'date
+                           (N_ "Date")
+                           (N_ "Sort by date"))
 
-               (vector 'exact-time
-                       (N_ "Exact Time")
-                       (N_ "Sort by exact time"))
+                   (vector 'exact-time
+                           (N_ "Exact Time")
+                           (N_ "Sort by exact time"))
 
-               (vector 'reconciled-date
-                       (N_ "Reconciled Date")
-                       (N_ "Sort by the Reconciled Date"))
+                   (vector 'reconciled-date
+                           (N_ "Reconciled Date")
+                           (N_ "Sort by the Reconciled Date"))
 
-               (vector 'register-order
-                       (N_ "Register Order")
-                       (N_ "Sort as with the register"))
+                   (vector 'register-order
+                           (N_ "Register Order")
+                           (N_ "Sort as with the register"))
 
-               (vector 'corresponding-acc-name 
-                       (N_ "Other Account Name")
-                       (N_ "Sort by account transferred from/to's name"))
+                   (vector 'corresponding-acc-name 
+                           (N_ "Other Account Name")
+                           (N_ "Sort by account transferred from/to's name"))
 
-               (vector 'corresponding-acc-code
-                       (N_ "Other Account Code")
-                       (N_ "Sort by account transferred from/to's code"))
+                   (vector 'corresponding-acc-code
+                           (N_ "Other Account Code")
+                           (N_ "Sort by account transferred from/to's code"))
                
-               (vector 'amount
-                       (N_ "Amount")
-                       (N_ "Sort by amount"))
+                   (vector 'amount
+                           (N_ "Amount")
+                           (N_ "Sort by amount"))
                
-               (vector 'description
-                       (N_ "Description")
-                       (N_ "Sort by description"))
+                   (vector 'description
+                           (N_ "Description")
+                           (N_ "Sort by description"))
                
-               (vector 'number
-                       (N_ "Number")
-                       (N_ "Sort by check/transaction number"))
+                   (vector 'number
+                           (N_ "Number/Action")
+                           (N_ "Sort by check number/action"))
+
+                   (vector 't-number
+                           (N_ "Transaction Number")
+                           (N_ "Sort by transaction number"))
                
-               (vector 'memo
-                       (N_ "Memo")
-                       (N_ "Sort by memo"))))
+                   (vector 'memo
+                           (N_ "Memo")
+                           (N_ "Sort by memo")))
+             (list (vector 'none
+                           (N_ "None")
+                           (N_ "Do not sort"))
+
+                   (vector 'account-name
+                           (N_ "Account Name")
+                           (N_ "Sort & subtotal by account name"))
+
+                   (vector 'account-code
+                           (N_ "Account Code")
+                           (N_ "Sort & subtotal by account code"))
+
+                   (vector 'date
+                           (N_ "Date")
+                           (N_ "Sort by date"))
+
+                   (vector 'exact-time
+                           (N_ "Exact Time")
+                           (N_ "Sort by exact time"))
+
+                   (vector 'reconciled-date
+                           (N_ "Reconciled Date")
+                           (N_ "Sort by the Reconciled Date"))
+
+                   (vector 'register-order
+                           (N_ "Register Order")
+                           (N_ "Sort as with the register"))
+
+                   (vector 'corresponding-acc-name 
+                           (N_ "Other Account Name")
+                           (N_ "Sort by account transferred from/to's name"))
+
+                   (vector 'corresponding-acc-code
+                           (N_ "Other Account Code")
+                           (N_ "Sort by account transferred from/to's code"))
+               
+                   (vector 'amount
+                           (N_ "Amount")
+                           (N_ "Sort by amount"))
+               
+                   (vector 'description
+                           (N_ "Description")
+                           (N_ "Sort by description"))
+               
+                   (vector 'number
+                           (N_ "Number")
+                           (N_ "Sort by check/transaction number"))
+
+                   (vector 'memo
+                           (N_ "Memo")
+                           (N_ "Sort by memo")))))
 
         (ascending-choice-list 
          (list
@@ -840,7 +926,9 @@
    (list
     (list (N_ "Date")                         "a"  (N_ "Display the date?") #t)
     (list (N_ "Reconciled Date")              "a2" (N_ "Display the reconciled date?") #f)
-    (list (N_ "Num")                          "b"  (N_ "Display the check number?") #t)
+    (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+        (list (N_ "Num/Action")               "b"  (N_ "Display the check number?") #t)
+        (list (N_ "Num")                      "b"  (N_ "Display the check number?") #t))
     (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
     (list (N_ "Notes")                        "d2" (N_ "Display the notes if the memo is unavailable?") #t)
     (list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
@@ -855,6 +943,12 @@
     ;; note the "Amount" multichoice option in between here
     (list (N_ "Running Balance")              "n"  (N_ "Display a running balance") #f)
     (list (N_ "Totals")                       "o"  (N_ "Display the totals?") #t)))
+
+  (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+      (gnc:register-trep-option
+       (gnc:make-simple-boolean-option
+        gnc:pagename-display (N_ "Trans Number")
+                                    "b2" (N_ "Display the trans number?") #f)))
 
   ;; Add an option to display the memo, and disable the notes option
   ;; when memos are not included.
@@ -1121,7 +1215,7 @@ Credit Card, and Income accounts")))))
 
     (gnc:html-table-set-col-headers!
      table
-     (make-heading-list used-columns))
+     (make-heading-list used-columns options))
     ;;     (gnc:warn "Splits:" splits)
     (if (not (null? splits))
         (begin
@@ -1201,7 +1295,10 @@ Credit Card, and Income accounts")))))
                                   render-corresponding-account-subtotal))
             (cons 'amount        (vector (list SPLIT-VALUE) #f #f #f))
             (cons 'description   (vector (list SPLIT-TRANS TRANS-DESCRIPTION) #f #f #f))
-            (cons 'number        (vector (list SPLIT-TRANS TRANS-NUM) #f #f #f))
+            (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+                (cons 'number    (vector (list SPLIT-ACTION) #f #f #f))
+                (cons 'number    (vector (list SPLIT-TRANS TRANS-NUM) #f #f #f)))
+            (cons 't-number      (vector (list SPLIT-TRANS TRANS-NUM) #f #f #f))
             (cons 'memo          (vector (list SPLIT-MEMO) #f #f #f))
             (cons 'none          (vector '() #f #f #f)))))
 

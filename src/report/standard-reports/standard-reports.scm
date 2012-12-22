@@ -133,13 +133,13 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
 
-(define (gnc:register-report-create account split query journal? double?
-				    title debit-string credit-string)
+(define (gnc:register-report-create account split query journal? ledger-type?
+				    double? title debit-string credit-string)
   (let* ((acct-type (xaccAccountGetType account))
 	 (create-fcn (lookup-register-report acct-type split)))
     (gnc:debug "create-fcn: " create-fcn)
     (if create-fcn
 	(create-fcn account split query journal? double? title
 		    debit-string credit-string)
-	(gnc:register-report-create-internal #f query journal? double? title
-					     debit-string credit-string))))
+	(gnc:register-report-create-internal #f query journal? ledger-type? double?
+					     title debit-string credit-string))))

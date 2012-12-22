@@ -39,6 +39,7 @@
 #include "gnc-lot.h"
 #include "Scrub3.h"
 #include "Transaction.h"
+#include "engine-helpers.h"
 #include "gncInvoice.h"
 
 #include "dialog-utils.h"
@@ -512,8 +513,9 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         qof_print_date_buff (dbuff, MAX_DATE_LENGTH, date);
         gtk_list_store_set (store, &iter, SPLIT_COL_DATE, dbuff, -1);
 
-        /* Num */
-        gtk_list_store_set (store, &iter, SPLIT_COL_NUM, xaccTransGetNum (trans), -1);
+        /* Num  - retrieve number based on book option */
+        gtk_list_store_set (store, &iter, SPLIT_COL_NUM,
+                                        gnc_get_num_action (trans, split), -1);
 
         /* Description */
         gtk_list_store_set (store, &iter, SPLIT_COL_DESCRIPTION, xaccTransGetDescription (trans), -1);

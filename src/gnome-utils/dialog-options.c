@@ -1381,6 +1381,20 @@ component_close_handler (gpointer data)
 GNCOptionWin *
 gnc_options_dialog_new(gchar *title)
 {
+    return gnc_options_dialog_new_modal(FALSE, title);
+}
+
+/* gnc_options_dialog_new_modal:
+ *
+ *   - Opens the dialog-options glade file
+ *   - Connects signals specified in the builder file
+ *   - Sets the window's title
+ *   - Initializes a new GtkNotebook, and adds it to the window
+ *   - If modal TRUE, hides 'apply' button
+ */
+GNCOptionWin *
+gnc_options_dialog_new_modal(gboolean modal, gchar *title)
+{
     GNCOptionWin *retval;
     GtkBuilder   *builder;
     GtkWidget    *hbox;
@@ -1426,6 +1440,15 @@ gnc_options_dialog_new(gchar *title)
 
     if (title)
         gtk_window_set_title(GTK_WINDOW(retval->dialog), title);
+
+    /* modal */
+    if (modal == TRUE)
+    {
+        GtkWidget *apply_button;
+
+        apply_button = GTK_WIDGET(gtk_builder_get_object (builder, "applybutton"));
+        gtk_widget_hide (apply_button);
+    } 
 
     /* glade doesn't suport a notebook with zero pages */
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "notebook placeholder"));

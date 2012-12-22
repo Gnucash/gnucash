@@ -100,4 +100,10 @@ void gnc_gtk_dialog_add_button (GtkWidget *dialog,
 gint
 gnc_dialog_run(GtkDialog *dialog, const gchar *gconf_key);
 
+/* If this is a new book, this function can be used to display book options
+ * dialog so user can specify options, before any transactions can be
+ * imported/entered, since they can affect how transactions are created
+ * Note: This dialog is modal! */
+gboolean gnc_new_book_option_display (void);
+
 #endif /* DIALOG_UTILS_H */

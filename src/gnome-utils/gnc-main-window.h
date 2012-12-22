@@ -410,6 +410,18 @@ GtkAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name
  **/
 void gnc_main_window_show_all_windows(void);
 
+/**
+ * Opens the Book Options dialog.
+ *
+ *  @param modal True to open in modal mode, false otherwise.
+ *
+ *  @param title Title of the dialog; "Book Options" if NULL.
+ *
+ *  @return A pointer to the GtkWidget for the dialog that can be used
+ *  when started in modal mode.
+ **/
+GtkWidget *gnc_book_options_dialog_cb (gboolean modal, gchar *title);
+
 #endif /* __GNC_MAIN_WINDOW_H */
 
 /** @} */

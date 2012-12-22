@@ -42,6 +42,7 @@
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
 #include "gncOwnerP.h"
+#include "engine-helpers.h"
 
 struct _gncInvoice
 {
@@ -1192,7 +1193,8 @@ static gboolean gncInvoicePostAddSplit (QofBook *book,
     /* set action and memo? */
 
     xaccSplitSetMemo (split, memo);
-    xaccSplitSetAction (split, type);
+    /* set per book option */
+    gnc_set_num_action (NULL, split, gncInvoiceGetID(invoice), type);
 
     /* Need to insert this split into the account AND txn before
      * we set the Base Value.  Otherwise SetBaseValue complains
@@ -1298,9 +1300,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     name = gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)));
 
-    /* Set Transaction Description (Owner Name) , Num (invoice ID), Currency */
+    /* Set Transaction Description (Owner Name) , Num (invoice ID or type, based
+     * on book option), Currency */
     xaccTransSetDescription (txn, name ? name : "");
-    xaccTransSetNum (txn, gncInvoiceGetID (invoice));
+    gnc_set_num_action (txn, NULL, gncInvoiceGetID (invoice), type);
     xaccTransSetCurrency (txn, invoice->currency);
 
     /* Entered and Posted at date */
@@ -1380,9 +1383,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                     Split *split;
 
                     split = xaccMallocSplit (book);
-                    /* set action? */
                     xaccSplitSetMemo (split, gncEntryGetDescription (entry));
-                    xaccSplitSetAction (split, type);
+                    /* set action based on book option */
+                    gnc_set_num_action (NULL, split, gncInvoiceGetID (invoice), type);
                     xaccAccountBeginEdit (ccard_acct);
                     xaccAccountInsertSplit (ccard_acct, split);
                     xaccAccountCommitEdit (ccard_acct);
@@ -1438,9 +1441,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         gnc_numeric to_charge_bal_amount = (is_cn ? gnc_numeric_neg (invoice->to_charge_amount)
                                             : invoice->to_charge_amount);
 
-        /* Set memo.  action? */
+        /* Set memo. */
         xaccSplitSetMemo (split, _("Extra to Charge Card"));
-        xaccSplitSetAction (split, type);
+        /* Set action based on book option */
+        gnc_set_num_action (NULL, split, gncInvoiceGetID (invoice), type);
 
         xaccAccountBeginEdit (ccard_acct);
         xaccAccountInsertSplit (ccard_acct, split);
@@ -1457,9 +1461,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     {
         Split *split = xaccMallocSplit (book);
 
-        /* Set action/memo */
+        /* Set memo */
         xaccSplitSetMemo (split, memo);
-        xaccSplitSetAction (split, type);
+        /* Set action based on book option */
+        gnc_set_num_action (NULL, split, gncInvoiceGetID (invoice), type);
 
         xaccAccountBeginEdit (acc);
         xaccAccountInsertSplit (acc, split);

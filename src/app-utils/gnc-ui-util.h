@@ -58,10 +58,25 @@ void gnc_set_default_directory (const gchar *gconf_section,
 
 /* Engine enhancements & i18n ***************************************/
 QofBook * gnc_get_current_book (void);
+
+/* If there is no current session, there is no book and we must be dealing
+ * with a new book. When gnucash is started with --nofile, there is
+ * initially no session (and no book), but by the time we check, one
+ * could have been created (for example, if an empty account tree tab is
+ * opened, a session is created which creates a new, but empty, book).
+ * A session is created and a book is loaded from a backend when gnucash is
+ * started with a file, but selecting 'new file' keeps a session open. So we
+ * need to check as well for a book with no accounts (root with no children). */
+gboolean gnc_is_new_book (void);
+
 void gnc_set_current_book_tax_name (const gchar *tax_name);
 const gchar * gnc_get_current_book_tax_name (void);
 void gnc_set_current_book_tax_type (const gchar *tax_type);
 const gchar * gnc_get_current_book_tax_type (void);
+/** Calls gnc_book_option_num_field_source_change to initiate registered
+  * callbacks when num_field_source book option changes so that
+  * registers/reports can update themselves; sets feature flag */
+void gnc_book_option_num_field_source_change_cb (gboolean num_action);
 Account * gnc_get_current_root_account (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 

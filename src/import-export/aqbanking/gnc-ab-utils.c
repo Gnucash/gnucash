@@ -46,6 +46,7 @@
 #include "import-main-matcher.h"
 #include "import-utilities.h"
 #include "qof.h"
+#include "engine-helpers.h"
 
 #ifdef AQBANKING_VERSION_5_PLUS
 # include <aqbanking/abgui.h>
@@ -501,11 +502,8 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     /* Currency.  We take simply the default currency of the gnucash account */
     xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));
 
-    /* Number.  We use the "customer reference", if there is one. */
-    custref = AB_Transaction_GetCustomerReference(ab_trans);
-    if (custref && *custref
-            && g_ascii_strncasecmp(custref, "NONREF", 6) != 0)
-        xaccTransSetNum(gnc_trans, custref);
+    /* Trans-Num or Split-Action set with gnc_set_num_action below per book
+     * option */
 
     /* Description */
     description = gnc_ab_description_to_gnc(ab_trans);
@@ -520,6 +518,13 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     split = xaccMallocSplit(book);
     xaccSplitSetParent(split, gnc_trans);
     xaccSplitSetAccount(split, gnc_acc);
+
+    /* Set the transaction number or split action field based on book option.
+     * We use the "customer reference", if there is one. */
+    custref = AB_Transaction_GetCustomerReference(ab_trans);
+    if (custref && *custref
+            && g_ascii_strncasecmp(custref, "NONREF", 6) != 0)
+        gnc_set_num_action (gnc_trans, split, custref, NULL);
 
     /* Set OFX unique transaction ID */
     fitid = AB_Transaction_GetFiId(ab_trans);
@@ -648,7 +653,7 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
                         _("The backend found an error during the preparation "
                           "of the job. It is not possible to execute this job. \n"
                           "\n"
-                          "Most probable the bank does not support your chosen "
+                          "Most probably the bank does not support your chosen "
                           "job or your Online Banking account does not have the permission "
                           "to execute this job. More error messages might be "
                           "visible on your console log.\n"

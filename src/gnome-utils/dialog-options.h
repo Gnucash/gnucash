@@ -24,7 +24,7 @@
 #define OPTIONS_DIALOG_H
 
 #include <libguile.h>
-#include "option-util.h"
+#include "app-utils/option-util.h"
 #include <gtk/gtk.h>
 
 /** A simple wrapper that casts the gpointer result of
@@ -35,6 +35,7 @@ typedef struct gnc_option_win GNCOptionWin;
 
 typedef void (* GNCOptionWinCallback)(GNCOptionWin *, gpointer data);
 
+GNCOptionWin * gnc_options_dialog_new_modal(gboolean modal, gchar *title);
 GNCOptionWin * gnc_options_dialog_new(gchar *title);
 GNCOptionWin * gnc_options_dialog_new_w_dialog(gchar *title, GtkWidget *dialog);
 void gnc_options_dialog_destroy(GNCOptionWin * win);

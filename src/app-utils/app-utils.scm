@@ -331,8 +331,10 @@
 (define gnc:*option-section-accounts* OPTION-SECTION-ACCOUNTS)
 (define gnc:*option-name-trading-accounts* OPTION-NAME-TRADING-ACCOUNTS)
 (define gnc:*option-name-auto-readonly-days* OPTION-NAME-AUTO-READONLY-DAYS)
+(define gnc:*option-name-num-field-source* OPTION-NAME-NUM-FIELD-SOURCE)
 
-(export gnc:*option-section-accounts* gnc:*option-name-trading-accounts* gnc:*option-name-auto-readonly-days*)
+(export gnc:*option-section-accounts* gnc:*option-name-trading-accounts*
+        gnc:*option-name-auto-readonly-days* gnc:*option-name-num-field-source*)
 
 (define gnc:*option-section-budgeting* OPTION-SECTION-BUDGETING)
 (define gnc:*option-name-default-budget* OPTION-NAME-DEFAULT-BUDGET)

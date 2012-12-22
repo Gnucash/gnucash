@@ -34,6 +34,8 @@
 #include "gnc-ui-util.h"
 #include "Query.h"
 #include "Transaction.h"
+#include "engine-helpers.h"
+#include "qofbookslots.h"
 
 #include "csv-transactions-export.h"
 
@@ -137,7 +139,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         part2 = g_strconcat ( part1, currentSel, mid_sep, NULL);
         g_free(part1);
         /* Number */
-        currentSel = xaccTransGetNum(trans);
+        currentSel = gnc_get_num_action(trans, NULL);
         part1 = g_strconcat ( part2, currentSel, mid_sep, NULL);
         g_free(part2);
         /* Description */
@@ -160,7 +162,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
         part1 = g_strconcat ( part2, currentSel, mid_sep, "T", mid_sep, NULL);
         g_free(part2);
         /* Action */
-        currentSel =  xaccSplitGetAction(split);
+        currentSel =  gnc_get_num_action(NULL, split);
         part2 = g_strconcat ( part1, currentSel, mid_sep, NULL);
         g_free(part1);
         /* Reconcile */
@@ -233,7 +235,7 @@ void account_splits (CsvExportInfo *info, Account *acc, FILE *fh )
             g_free(part2);
 
             /* Action */
-            currentSel = xaccSplitGetAction(t_split);
+            currentSel = gnc_get_num_action(NULL, t_split);
             part2 = g_strconcat ( part1, currentSel, mid_sep, NULL);
             g_free(part1);
 
@@ -309,6 +311,7 @@ void csv_transactions_export (CsvExportInfo *info)
     FILE    *fh;
     Account *acc;
     GList   *ptr;
+    gboolean num_action = qof_book_use_split_action_for_num_field(gnc_get_current_book());
 
     ENTER("");
     DEBUG("File name is : %s", info->file_name);
@@ -338,12 +341,16 @@ void csv_transactions_export (CsvExportInfo *info)
 
         /* Header string */
         header = g_strconcat ( end_sep, _("Date"), mid_sep, _("Account Name"), mid_sep,
-                               _("Number"), mid_sep, _("Description"), mid_sep,
-                               _("Notes"), mid_sep, _("Memo"), mid_sep, _("Category"), mid_sep,
-                               _("Type"), mid_sep, _("Action"), mid_sep, _("Reconcile"), mid_sep,
-                               _("To With Sym"), mid_sep, _("From With Sym"), mid_sep,
-                               _("To Num."), mid_sep, _("From Num."), mid_sep,
-                               _("To Rate/Price"), mid_sep, _("From Rate/Price"), end_sep, "\n", NULL);
+                                (num_action ? _("Transaction Number") : _("Number")),
+                                mid_sep, _("Description"), mid_sep, _("Notes"),
+                                mid_sep, _("Memo"), mid_sep, _("Category"), mid_sep,
+                                _("Type"), mid_sep,
+                                (num_action ? _("Number/Action") : _("Action")),
+                                mid_sep, _("Reconcile"), mid_sep,
+                                _("To With Sym"), mid_sep, _("From With Sym"), mid_sep,
+                                _("To Num."), mid_sep, _("From Num."), mid_sep,
+                                _("To Rate/Price"), mid_sep, _("From Rate/Price"),
+                                end_sep, "\n", NULL);
         DEBUG("Header String: %s", header);
 
         /* Write header line */

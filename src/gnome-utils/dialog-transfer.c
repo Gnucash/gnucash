@@ -1489,8 +1489,8 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         xaccTransSetCurrency(trans, from_commodity);
         xaccTransSetDatePostedTS(trans, &ts);
 
-        string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
-        xaccTransSetNum(trans, string);
+        /* Trans-Num or Split-Action set with gnc_set_num_action below per book
+         * option */
 
         string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
         xaccTransSetDescription(trans, string);
@@ -1512,6 +1512,10 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount), from_commodity);
         xaccSplitSetBaseValue(to_split, amount, from_commodity);
         xaccSplitSetBaseValue(to_split, to_amount, to_commodity);
+
+        /* Set the transaction number or split action field based on book option*/
+        string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
+        gnc_set_num_action (trans, from_split, string, NULL);
 
         /* Set the memo fields */
         string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));

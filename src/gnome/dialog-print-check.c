@@ -53,6 +53,7 @@
 #include "gnc-gkeyfile-utils.h"
 
 #include "gnc-engine.h"
+#include "engine-helpers.h"
 #include "Split.h"
 #include "Transaction.h"
 
@@ -2171,11 +2172,13 @@ draw_page_items(GtkPrintContext *context,
             break;
 
         case ACTION:
-            draw_text(context, xaccSplitGetAction(pcd->split), item, default_desc);
+            draw_text(context, gnc_get_action_num(trans, pcd->split), item,
+                                                                default_desc);
             break;
 
         case CHECK_NUMBER:
-            draw_text(context, xaccTransGetNum(trans), item, default_desc);
+            draw_text(context, gnc_get_num_action(trans, pcd->split), item,
+                                                                default_desc);
             break;
 
         case AMOUNT_NUMBER:

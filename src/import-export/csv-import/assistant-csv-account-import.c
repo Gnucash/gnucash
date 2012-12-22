@@ -72,6 +72,15 @@ static const gchar *finish_tree_string = N_(
             "You can also go back and verify your selections by clicking on 'Back'"
             " or 'Cancel' to Abort Import.\n");
 
+static const gchar *new_book_finish_tree_string = N_(
+            "The accounts will be imported from the file '%s' when you click 'Apply'.\n\n"
+            "You can also go back and verify your selections by clicking on 'Back'"
+            " or 'Cancel' to Abort Import.\n\n"
+            "If this is your initial import into a new file, you will first see "
+            "a dialog for setting book options, since these can affect how "
+            "imported data are converted to GnuCash transactions. If this is an "
+            "existing file, the dialog will not be shown.\n");
+
 /*************************************************************************/
 
 /**************************************************
@@ -366,7 +375,16 @@ csv_import_assistant_finish_page_prepare (GtkAssistant *assistant,
     gchar *text;
 
     /* Set Finish page text */
-    text = g_strdup_printf (gettext (finish_tree_string), info->file_name);
+    /* Before creating accounts, if this is a new book, tell user they can
+     * specify book options, since they affect how transactions are created */
+    if (info->new_book)
+    {
+        text = g_strdup_printf (gettext (new_book_finish_tree_string), info->file_name);
+    }
+    else
+    {
+        text = g_strdup_printf (gettext (finish_tree_string), info->file_name);
+    }
     gtk_label_set_text (GTK_LABEL(info->finish_label), text);
     g_free(text);
 
@@ -384,6 +402,11 @@ csv_import_assistant_summary_page_prepare (GtkAssistant *assistant,
 {
     CsvImportInfo *info = user_data;
     gchar *text, *errtext, *mtext;
+
+    /* Before creating accounts, if this is a new book, let user specify
+     * book options, since they affect how transactions are created */
+    if (info->new_book)
+        info->new_book = gnc_new_book_option_display();
 
     if (!g_strcmp0(info->error, "") == 0)
     {
@@ -607,6 +630,10 @@ gnc_file_csv_account_import(void)
     CsvImportInfo *info;
 
     info = g_new0 (CsvImportInfo, 1);
+
+    /* In order to trigger a book options display on the creation of a new book,
+     * we need to detect when we are dealing with a new book. */
+    info->new_book = gnc_is_new_book();
 
     csv_import_assistant_create (info);
 

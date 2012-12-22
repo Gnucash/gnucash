@@ -96,6 +96,7 @@ typedef struct
 
     gboolean account_list_added;
     gboolean use_defaults;
+    gboolean new_book;  /* presumably only used for new book creation but we check*/
 
     GncHierarchyAssistantFinishedCallback when_completed;
 
@@ -454,6 +455,11 @@ void
 on_choose_account_categories_prepare (hierarchy_data  *data)
 {
     GtkTextBuffer* buffer;
+
+    /* Before creating transactions, if this is a new book, let user specify
+     * book options, since they affect how transactions are created */
+    if (data->new_book)
+        data->new_book = gnc_new_book_option_display ();
 
     if (!data->account_list_added)
     {
@@ -1067,6 +1073,14 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     GtkBuilder *builder;
 
     data = g_new0 (hierarchy_data, 1);
+
+    /* Presumably this assistant is only used to create a new book but we check.
+     * When gnucash is started with --nofile, there is initially no session (and
+     * no book), but by the time we get here, one could have been created (for
+     * example, if an empty account tree tab is opened, a session is created
+     * which creates a new, but empty, book). */
+    data->new_book = gnc_is_new_book();
+
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "assistant-hierarchy.glade", "Hierarchy Assistant");
 
@@ -1084,7 +1098,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
                                      GTK_WIDGET(gtk_builder_get_object(builder, "intro_page_label")),
                                      TRUE);
     gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
-                                     GTK_WIDGET(gtk_builder_get_object(builder, "currency_page_vbox")),
+                                     GTK_WIDGET(gtk_builder_get_object(builder, "currency_book_option_page_vbox")),
                                      TRUE);
     gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
                                      GTK_WIDGET(gtk_builder_get_object(builder, "final_account_vbox")),

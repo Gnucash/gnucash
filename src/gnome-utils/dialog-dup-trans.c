@@ -44,10 +44,13 @@ typedef struct
 
     GtkWidget * date_edit;
     GtkWidget * num_edit;
+    GtkWidget * tnum_edit;
 
     GtkWidget *duplicate_title_label; // GtkLabel
     GtkWidget *duplicate_table; // GtkTable
+    GtkWidget *date_label; // GtkLabel
     GtkWidget *num_label; // GtkLabel
+    GtkWidget *tnum_label; // GtkLabel
 } DupTransDialog;
 
 /* Parses the string value and returns true if it is a
@@ -91,13 +94,15 @@ gnc_dup_trans_output_cb(GtkSpinButton *spinbutton,
 
 static void
 gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
-                             time64 date, const char *num_str)
+                             gboolean show_date, time64 date,
+                             const char *num_str, const char *tnum_str)
 {
     GtkWidget *dialog;
     GtkBuilder  *builder;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "adjustment1");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "num_adjustment");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "tnum_adjustment");
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "Duplicate Transaction Dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Duplicate Transaction Dialog"));
@@ -108,6 +113,8 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
     /* date widget */
+    dt_dialog->date_label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
+    if (show_date)
     {
         GtkWidget *date_edit;
         GtkWidget *hbox;
@@ -118,32 +125,45 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
         gtk_widget_show (date_edit);
 
-        label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
-        gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), label);
+        gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), dt_dialog->date_label);
 
         gtk_box_pack_end (GTK_BOX (hbox), date_edit, TRUE, TRUE, 0);
         dt_dialog->date_edit = date_edit;
+    }
+    else
+    {
+        dt_dialog->date_edit = NULL;
     }
 
     dt_dialog->duplicate_title_label = GTK_WIDGET(gtk_builder_get_object (builder, "duplicate_title_label"));
     dt_dialog->duplicate_table = GTK_WIDGET(gtk_builder_get_object (builder, "duplicate_table"));
     dt_dialog->num_label = GTK_WIDGET(gtk_builder_get_object (builder, "num_label"));
+    dt_dialog->tnum_label = GTK_WIDGET(gtk_builder_get_object (builder, "tnum_label"));
 
     {
-        GtkWidget *num_spin;
-        long int num;
+        GtkWidget *num_spin, *tnum_spin;
+        long int num, tnum;
 
         num_spin = GTK_WIDGET(gtk_builder_get_object (builder, "num_spin"));
+        tnum_spin = GTK_WIDGET(gtk_builder_get_object (builder, "tnum_spin"));
         dt_dialog->num_edit = num_spin;
+        dt_dialog->tnum_edit = tnum_spin;
 
         gtk_entry_set_activates_default(GTK_ENTRY(num_spin), TRUE);
         g_signal_connect(num_spin, "output",
+                         G_CALLBACK(gnc_dup_trans_output_cb), dt_dialog);
+        g_signal_connect(tnum_spin, "output",
                          G_CALLBACK(gnc_dup_trans_output_cb), dt_dialog);
 
         if (num_str && parse_num (num_str, &num))
             gtk_spin_button_set_value (GTK_SPIN_BUTTON (num_spin), num + 1);
         else
             gtk_entry_set_text (GTK_ENTRY (num_spin), "");
+
+        if (tnum_str && parse_num (tnum_str, &tnum))
+            gtk_spin_button_set_value (GTK_SPIN_BUTTON (tnum_spin), tnum + 1);
+        else
+            gtk_entry_set_text (GTK_ENTRY (tnum_spin), "");
     }
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dt_dialog);
@@ -153,26 +173,38 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
 
 static gboolean
 gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title,
-                               time64 *date_p, GDate *gdate_p,
-                               const char *num, char **out_num)
+                               gboolean show_date, time64 *date_p,
+                               GDate *gdate_p, const char *num, char **out_num,
+                               const char *tnum, char **out_tnum)
 {
     DupTransDialog *dt_dialog;
-    GNCDateEdit *gde;
     GtkWidget *entry;
     gboolean ok;
     gint result;
 
-    if (!date_p)
-        return FALSE;
-
     dt_dialog = g_new0 (DupTransDialog, 1);
 
-    gnc_dup_trans_dialog_create (parent, dt_dialog, *date_p, num);
+    gnc_dup_trans_dialog_create (parent, dt_dialog, show_date,
+                                    *date_p, num, tnum);
 
-    gde = GNC_DATE_EDIT (dt_dialog->date_edit);
-    entry = gde->date_entry;
+    if (!show_date)
+    {
+        // The "date" field isn't being asked for, so we make the widgets invisible
+        gtk_widget_set_visible(dt_dialog->date_label, FALSE);
+        if (dt_dialog->date_edit)
+            gtk_widget_set_visible(dt_dialog->date_edit, FALSE);
+        // If no "date" field, there must be a "num" field, so give it focus
+        if (out_num)
+            gtk_widget_grab_focus (dt_dialog->num_edit);
+    }
+    else
+    {
+        GNCDateEdit *gde;
 
-    gtk_widget_grab_focus (entry);
+        gde = GNC_DATE_EDIT (dt_dialog->date_edit);
+        entry = gde->date_entry;
+        gtk_widget_grab_focus (entry);
+    }
 
     if (title)
     {
@@ -188,6 +220,25 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title,
         gtk_widget_set_visible(dt_dialog->num_edit, FALSE);
     }
 
+    if (!tnum)
+    {
+        // The "tnum" field isn't being asked for, so we make the widgets invisible
+        gtk_widget_set_visible(dt_dialog->tnum_label, FALSE);
+        gtk_widget_set_visible(dt_dialog->tnum_edit, FALSE);
+    }
+
+    if (!show_date && !tnum)
+    {
+        // The "date" and the "tnum" fields aren't being asked for, this is a split copy
+        gtk_label_set_markup(GTK_LABEL (dt_dialog->num_label), _("Action/Number:"));
+    }
+
+    if (tnum)
+    {
+        gtk_entry_set_activates_default(GTK_ENTRY(dt_dialog->num_edit), FALSE);
+        gtk_entry_set_activates_default(GTK_ENTRY(dt_dialog->tnum_edit), TRUE);
+    }
+
     result = gtk_dialog_run (GTK_DIALOG (dt_dialog->dialog));
 
     if (result == GTK_RESPONSE_OK)
@@ -198,6 +249,8 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title,
             gnc_date_edit_get_gdate(GNC_DATE_EDIT (dt_dialog->date_edit), gdate_p);
         if (out_num)
             *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->num_edit)));
+        if (tnum)
+            *out_tnum = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->tnum_edit)));
         ok = TRUE;
     }
     else
@@ -210,10 +263,12 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title,
 }
 
 gboolean
-gnc_dup_trans_dialog (GtkWidget * parent, time64 *date_p,
-                      const char *num, char **out_num)
+gnc_dup_trans_dialog (GtkWidget * parent, const char* title, gboolean show_date,
+                      time64 *date_p, const char *num, char **out_num,
+                      const char *tnum, char **out_tnum)
 {
-    return gnc_dup_trans_dialog_internal(parent, NULL, date_p, NULL, num, out_num);
+    return gnc_dup_trans_dialog_internal(parent, title, show_date, date_p, NULL,
+                                            num, out_num, tnum, out_tnum);
 }
 
 gboolean
@@ -224,7 +279,8 @@ gnc_dup_trans_dialog_gdate (GtkWidget * parent, GDate *gdate_p,
     g_assert(gdate_p);
 
     tmp_time = timespecToTime64(gdate_to_timespec(*gdate_p));
-    return gnc_dup_trans_dialog_internal(parent, NULL, &tmp_time, gdate_p, num, out_num);
+    return gnc_dup_trans_dialog_internal(parent, NULL, TRUE, &tmp_time, gdate_p,
+                                            num, out_num, NULL, NULL);
 }
 
 gboolean
@@ -234,5 +290,6 @@ gnc_dup_date_dialog (GtkWidget * parent, const char* title, GDate *gdate_p)
     g_assert(gdate_p);
 
     tmp_time = timespecToTime64(gdate_to_timespec(*gdate_p));
-    return gnc_dup_trans_dialog_internal(parent, title, &tmp_time, gdate_p, NULL, NULL);
+    return gnc_dup_trans_dialog_internal(parent, title, TRUE, &tmp_time, gdate_p,
+                                            NULL, NULL, NULL, NULL);
 }

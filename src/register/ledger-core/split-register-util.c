@@ -392,12 +392,16 @@ gnc_split_register_get_passive_cursor (SplitRegister *reg)
     case REG_STYLE_LEDGER:
     case REG_STYLE_AUTO_LEDGER:
         cursor_name = reg->use_double_line ?
-                      CURSOR_DOUBLE_LEDGER : CURSOR_SINGLE_LEDGER;
+                      (reg->use_tran_num_for_num_field ? CURSOR_DOUBLE_LEDGER
+                                                : CURSOR_DOUBLE_LEDGER_NUM_ACTN)
+                        : CURSOR_SINGLE_LEDGER;
         break;
 
     case REG_STYLE_JOURNAL:
         cursor_name = reg->use_double_line ?
-                      CURSOR_DOUBLE_JOURNAL : CURSOR_SINGLE_JOURNAL;
+                      (reg->use_tran_num_for_num_field ? CURSOR_DOUBLE_JOURNAL
+                                                : CURSOR_DOUBLE_JOURNAL_NUM_ACTN)
+                        : CURSOR_SINGLE_JOURNAL;
         break;
     }
 
@@ -422,7 +426,9 @@ gnc_split_register_get_active_cursor (SplitRegister *reg)
         if (!info->trans_expanded)
         {
             cursor_name = reg->use_double_line ?
-                          CURSOR_DOUBLE_LEDGER : CURSOR_SINGLE_LEDGER;
+                      (reg->use_tran_num_for_num_field ? CURSOR_DOUBLE_LEDGER
+                                                : CURSOR_DOUBLE_LEDGER_NUM_ACTN)
+                        : CURSOR_SINGLE_LEDGER;
             break;
         }
 
@@ -430,7 +436,9 @@ gnc_split_register_get_active_cursor (SplitRegister *reg)
     case REG_STYLE_AUTO_LEDGER:
     case REG_STYLE_JOURNAL:
         cursor_name = reg->use_double_line ?
-                      CURSOR_DOUBLE_JOURNAL : CURSOR_SINGLE_JOURNAL;
+                      (reg->use_tran_num_for_num_field ? CURSOR_DOUBLE_JOURNAL
+                                                : CURSOR_DOUBLE_JOURNAL_NUM_ACTN)
+                        : CURSOR_SINGLE_JOURNAL;
         break;
     }
 
@@ -509,8 +517,10 @@ gnc_split_register_cursor_name_to_class (const char *cursor_name)
 
     if (strcmp (cursor_name, CURSOR_SINGLE_LEDGER) == 0  ||
             strcmp (cursor_name, CURSOR_DOUBLE_LEDGER) == 0  ||
+            strcmp (cursor_name, CURSOR_DOUBLE_LEDGER_NUM_ACTN) == 0  ||
             strcmp (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
-            strcmp (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0)
+            strcmp (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
+            strcmp (cursor_name, CURSOR_DOUBLE_JOURNAL_NUM_ACTN) == 0)
         return CURSOR_CLASS_TRANS;
 
     if (strcmp (cursor_name, CURSOR_SPLIT) == 0)

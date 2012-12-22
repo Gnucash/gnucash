@@ -420,6 +420,32 @@ test_book_get_num_days_autofreeze( Fixture *fixture, gconstpointer pData )
 }
 
 static void
+test_book_use_split_action_for_num_field( Fixture *fixture, gconstpointer pData )
+{
+    const char *slot_path;
+
+    /* create correct slot path */
+    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/",
+            OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_NUM_FIELD_SOURCE, NULL );
+    g_assert( slot_path != NULL );
+
+    g_test_message( "Testing default: No selection has been specified" );
+    g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
+
+    g_test_message( "Testing with incorrect slot path and correct value - t" );
+    qof_book_set_string_option( fixture->book, OPTION_NAME_NUM_FIELD_SOURCE, "t" );
+    g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
+
+    g_test_message( "Testing with existing use split action for num set to true - t" );
+    qof_book_set_string_option( fixture->book, slot_path, "t" );
+    g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == TRUE );
+
+    g_test_message( "Testing with existing use split action for num and incorrect value - tt" );
+    qof_book_set_string_option( fixture->book, slot_path, "tt" );
+    g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
+}
+
+static void
 test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
 {
     QofBook *_empty = NULL;
@@ -729,6 +755,7 @@ test_suite_qofbook ( void )
     GNC_TEST_ADD( suitename, "kvp changed", Fixture, NULL, setup, test_book_kvp_changed, teardown );
     GNC_TEST_ADD( suitename, "use trading accounts", Fixture, NULL, setup, test_book_use_trading_accounts, teardown );
     GNC_TEST_ADD( suitename, "get autofreeze days", Fixture, NULL, setup, test_book_get_num_days_autofreeze, teardown );
+    GNC_TEST_ADD( suitename, "use split action for num field", Fixture, NULL, setup, test_book_use_split_action_for_num_field, teardown );
     GNC_TEST_ADD( suitename, "mark session dirty", Fixture, NULL, setup, test_book_mark_session_dirty, teardown );
     GNC_TEST_ADD( suitename, "session dirty time", Fixture, NULL, setup, test_book_get_session_dirty_time, teardown );
     GNC_TEST_ADD( suitename, "set dirty callback", Fixture, NULL, setup, test_book_set_dirty_cb, teardown );

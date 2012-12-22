@@ -42,6 +42,7 @@ static GHashTable *features_table = NULL;
 static gncFeature known_features[] =
 {
     { GNC_FEATURE_CREDIT_NOTES, "Customer and vendor credit notes (requires at least GnuCash 2.5.0)" },
+    { GNC_FEATURE_NUM_FIELD_SOURCE, "User specifies source of 'num' field'; either transaction number or split action (requires at least GnuCash 2.5.0)" },
     { NULL },
 };
 

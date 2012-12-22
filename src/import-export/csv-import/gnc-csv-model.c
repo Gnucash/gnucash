@@ -12,6 +12,7 @@
 #include <goffice/utils/go-glib-extras.h>
 
 #include "gnc-ui-util.h"
+#include "engine-helpers.h"
 
 #include <string.h>
 
@@ -771,14 +772,15 @@ static void trans_property_list_add(TransProperty* property)
  * @param amount The amount of the split
  */
 static void trans_add_split(Transaction* trans, Account* account, QofBook* book,
-gnc_numeric amount)
+gnc_numeric amount, const char *num)
 {
     Split* split = xaccMallocSplit(book);
     xaccSplitSetAccount(split, account);
     xaccSplitSetParent(split, trans);
     xaccSplitSetAmount(split, amount);
     xaccSplitSetValue(split, amount);
-    //xaccSplitSetAction(split, "Deposit");
+    /* set tran-num and/or split-action per book option */
+    gnc_set_num_action(trans, split, num, NULL);
 }
 
 /** Tests a TransPropertyList for having enough essential properties.
@@ -887,6 +889,7 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
     gnc_commodity* currency = xaccAccountGetCommodity(list->account);
     gnc_numeric amount = double_to_gnc_numeric(0.0, xaccAccountGetCommoditySCU(list->account),
                          GNC_HOW_RND_ROUND_HALF_UP);
+    gchar *num = NULL;
 
     /* This flag is set to TRUE if we can use the "Deposit" or "Withdrawal" column. */
     gboolean amount_set = FALSE;
@@ -894,6 +897,7 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
     /* The balance is 0 by default. */
     trans_line->balance_set = FALSE;
     trans_line->balance = amount;
+    trans_line->num = NULL;
 
     /* We make the line_no -1 just to mark that it hasn't been set. We
      * may get rid of line_no soon anyway, so it's not particularly
@@ -931,7 +935,14 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
             break;
 
         case GNC_CSV_NUM:
-            xaccTransSetNum(trans_line->trans, (char*)(prop->value));
+            /* the 'num' is saved and passed to 'trans_add_split' below where 
+             * 'gnc_set_num_action' is used to set tran-num and/or split-action
+             * per book option */
+            num = g_strdup ((char*)(prop->value));
+            /* the 'num' is also saved and used in 'gnc_csv_parse_to_trans' when
+             * it calls 'trans_add_split' after deleting the splits added below
+             * when a balance is used by the user */
+            trans_line->num = g_strdup ((char*)(prop->value));
             break;
 
         case GNC_CSV_DEPOSIT: /* Add deposits to the existing amount. */
@@ -974,7 +985,9 @@ static GncCsvTransLine* trans_property_list_to_trans(TransPropertyList* list, gc
     }
 
     /* Add a split with the cumulative amount value. */
-    trans_add_split(trans_line->trans, list->account, book, amount);
+    trans_add_split(trans_line->trans, list->account, book, amount, num);
+    if (num)
+        g_free(num);
 
     return trans_line;
 }
@@ -1218,7 +1231,10 @@ int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account,
                     splits = next_splits;
                 }
 
-                trans_add_split(trans_line->trans, account, gnc_account_get_book(account), amount);
+                trans_add_split(trans_line->trans, account,
+                        gnc_account_get_book(account), amount, trans_line->num);
+                if (trans_line->num)
+                    g_free(trans_line->num);
 
                 /* This new transaction needs to be added to the balance offset. */
                 balance_offset = gnc_numeric_add(balance_offset,

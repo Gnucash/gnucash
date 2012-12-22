@@ -640,6 +640,30 @@ qof_book_use_trading_accounts (const QofBook *book)
     return FALSE;
 }
 
+/* Returns TRUE if this book uses split action field as the 'Num' field, FALSE
+ * if it uses transaction number field */
+gboolean
+qof_book_use_split_action_for_num_field (const QofBook *book)
+{
+    const char *opt;
+    kvp_value *kvp_val;
+
+    g_assert(book);
+    kvp_val = kvp_frame_get_slot_path (qof_book_get_slots (book),
+                                       KVP_OPTION_PATH,
+                                       OPTION_SECTION_ACCOUNTS,
+                                       OPTION_NAME_NUM_FIELD_SOURCE,
+                                       NULL);
+    if (kvp_val == NULL)
+        return FALSE;
+
+    opt = kvp_value_get_string (kvp_val);
+
+    if (opt && opt[0] == 't' && opt[1] == 0)
+        return TRUE;
+    return FALSE;
+}
+
 gboolean qof_book_uses_autoreadonly (const QofBook *book)
 {
     g_assert(book);

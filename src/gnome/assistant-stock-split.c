@@ -29,6 +29,7 @@
 #include <glib/gi18n.h>
 
 #include "Transaction.h"
+#include "engine-helpers.h"
 #include "dialog-utils.h"
 #include "assistant-stock-split.h"
 #include "assistant-utils.h"
@@ -403,8 +404,10 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
 
     xaccSplitSetAmount (split, amount);
     xaccSplitMakeStockSplit (split);
+    /* Set split-action with gnc_set_num_action which is the same as
+     * xaccSplitSetAction with these arguments */
     /* Translators: This string has a disambiguation prefix */
-    xaccSplitSetAction (split, Q_("Action Column|Split"));
+    gnc_set_num_action (NULL, split, NULL, Q_("Action Column|Split"));
 
     amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->price_edit));
     if (gnc_numeric_positive_p (amount))

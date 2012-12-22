@@ -1570,14 +1570,14 @@ gnc_split_reg_double_line_cb (GtkWidget *w, gpointer data)
 }
 
 static void
-gnc_split_reg_sort( GNCSplitReg *gsr, SortType sort_code )
+gnc_split_reg_sort_force( GNCSplitReg *gsr, SortType sort_code, gboolean force )
 {
     Query *query = gnc_ledger_display_get_query( gsr->ledger );
     gboolean show_present_divider = FALSE;
     GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
     SplitRegister *reg;
 
-    if (gsr->sort_type == sort_code)
+    if ((gsr->sort_type == sort_code) && !force)
         return;
 
     standard = g_slist_prepend( NULL, QUERY_DEFAULT_SORT );
@@ -1642,6 +1642,12 @@ gnc_split_reg_sort( GNCSplitReg *gsr, SortType sort_code )
     gnc_split_register_show_present_divider( reg, show_present_divider );
     gsr->sort_type = sort_code;
     gnc_ledger_display_refresh( gsr->ledger );
+}
+
+static void
+gnc_split_reg_sort( GNCSplitReg *gsr, SortType sort_code )
+{
+    gnc_split_reg_sort_force( gsr, sort_code, FALSE );
 }
 
 void
@@ -2098,6 +2104,12 @@ void
 gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t )
 {
     gnc_split_reg_sort( gsr, t );
+}
+
+void
+gnc_split_reg_set_sort_type_force( GNCSplitReg *gsr, SortType t, gboolean force )
+{
+    gnc_split_reg_sort_force( gsr, t, force );
 }
 
 GtkWidget*

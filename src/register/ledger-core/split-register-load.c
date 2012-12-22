@@ -37,6 +37,7 @@
 #include "recncell.h"
 #include "split-register.h"
 #include "split-register-p.h"
+#include "engine-helpers.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -211,7 +212,7 @@ _find_split_with_parent_txn(gconstpointer a, gconstpointer b)
 }
 
 static void add_quickfill_completions(TableLayout *layout, Transaction *trans,
-                                      gboolean has_last_num)
+                                      Split *split, gboolean has_last_num)
 {
     Split *s;
     int i = 0;
@@ -227,7 +228,7 @@ static void add_quickfill_completions(TableLayout *layout, Transaction *trans,
     if (!has_last_num)
         gnc_num_cell_set_last_num(
             (NumCell *) gnc_table_layout_get_cell(layout, NUM_CELL),
-            xaccTransGetNum(trans));
+            gnc_get_num_action(trans, split));
 
     while ((s = xaccTransGetSplit(trans, i)) != NULL)
     {
@@ -565,7 +566,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         /* If this is the first load of the register,
          * fill up the quickfill cells. */
         if (info->first_pass)
-            add_quickfill_completions(reg->table->layout, trans, has_last_num);
+            add_quickfill_completions(reg->table->layout, trans, split, has_last_num);
 
         if (trans == find_trans)
             new_trans_row = vcell_loc.virt_row;

@@ -50,6 +50,7 @@ typedef GWEN_SYNCIO GWEN_IO_LAYER;
 #endif
 
 #include "dialog-ab-trans.h"
+#include "dialog-utils.h"
 #include "gnc-file.h"
 #include "gnc-file-aqb-import.h"
 #include "gnc-gwen-gui.h"
@@ -219,6 +220,11 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     GWEN_Io_Layer_free(io);
 #endif
     io = NULL;
+
+    /* Before importing the results, if this is a new book, let user specify
+     * book options, since they affect how transactions are created */
+    if (gnc_is_new_book())
+        gnc_new_book_option_display();
 
     /* Import the results */
     ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS,

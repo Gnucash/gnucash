@@ -40,6 +40,7 @@
 @{
  */
 #define GNC_FEATURE_CREDIT_NOTES "Credit Notes"
+#define GNC_FEATURE_NUM_FIELD_SOURCE "Number Field Source"
 
 /** @} */
 

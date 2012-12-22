@@ -33,6 +33,7 @@
 
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
+#include "gnc-ui-util.h"
 #include "dialog-utils.h"
 
 #include "gnc-component-manager.h"
@@ -118,6 +119,8 @@ typedef struct
     gboolean              match_parse_run;          /**< This is set after the first run */
 
     GtkWidget            *summary_label;            /**< The summary text */
+
+    gboolean              new_book;                 /**< Are we importing into a new book?; if yes, call book options */
 
 } CsvImportTrans;
 
@@ -1439,6 +1442,11 @@ csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant,
     /* Block going back */
     gtk_assistant_commit (GTK_ASSISTANT(info->window));
 
+    /* Before creating transactions, if this is a new book, let user specify
+     * book options, since they affect how transactions are created */
+    if (info->new_book)
+        info->new_book = gnc_new_book_option_display();
+
     /* Create transactions from the parsed data, first time with FALSE
        Subsequent times with TRUE */
     if ( info->match_parse_run == FALSE)
@@ -1828,6 +1836,10 @@ gnc_file_csv_trans_import(void)
     CsvImportTrans *info;
 
     info = g_new0 (CsvImportTrans, 1);
+
+    /* In order to trigger a book options display on the creation of a new book,
+     * we need to detect when we are dealing with a new book. */
+    info->new_book = gnc_is_new_book();
 
     csv_import_trans_assistant_create (info);
 

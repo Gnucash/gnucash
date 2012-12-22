@@ -33,6 +33,7 @@
 #include "datecell.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnome/gnc-plugin-page-register.h"
 #include "gnc-gconf-utils.h"
 #include "split-register-p.h"
 #include "gnc-ledger-display.h"
@@ -50,6 +51,8 @@
 #include "table-allgui.h"
 #include "dialog-account.h"
 #include "dialog-dup-trans.h"
+#include "engine-helpers.h"
+#include "qofbookslots.h"
 
 
 /** static variables ******************************************************/
@@ -486,21 +489,92 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
     if (cursor_class == CURSOR_CLASS_SPLIT)
     {
         Split *new_split;
+        char *out_num;
+        gboolean new_act_num = FALSE;
 
         /* We are on a split in an expanded transaction.
-         * Just copy the split and add it to the transaction. */
+         * Just copy the split and add it to the transaction.
+         * However, if the split-action field is being used as the register 
+         * number, and the action field is a number, request a new value or
+         * cancel. Need to get next number and update account last num from
+         * split account not register account, which may be the same or not */
+
+        if (!reg->use_tran_num_for_num_field
+            && gnc_strisnum (gnc_get_num_action (NULL, split)))
+        {
+            Account *account = xaccSplitGetAccount (split);
+            const char *in_num = NULL;
+            const char* title = _("New Split Information");
+            time64 date = info->last_date_entered;
+
+            if (account)
+                in_num = xaccAccountGetLastNum (account);
+            else
+                in_num = gnc_get_num_action (NULL, split);
+            if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg),
+                                   title, FALSE, &date, in_num, &out_num, NULL, NULL))
+            {
+                gnc_resume_gui_refresh ();
+                LEAVE("dup cancelled");
+                return NULL;
+            }
+            new_act_num = TRUE;
+        }
 
         new_split = xaccMallocSplit (gnc_get_current_book ());
 
         xaccTransBeginEdit (trans);
         xaccSplitSetParent (new_split, trans);
         gnc_copy_split_onto_split (split, new_split, FALSE);
+        if (new_act_num) /* if new number supplied by user dialog */
+            gnc_set_num_action (NULL, new_split, out_num, NULL);
         xaccTransCommitEdit (trans);
+
+        if (new_act_num && gnc_strisnum (out_num))
+        {
+            Account *account = xaccSplitGetAccount (new_split);
+
+            /* If current register is for account, set last num */
+            if (xaccAccountEqual(account,
+                                    gnc_split_register_get_default_account(reg),
+                                    TRUE))
+            {
+                NumCell *num_cell;
+                num_cell = (NumCell *) gnc_table_layout_get_cell (reg->table->layout,
+                       NUM_CELL);
+                if (gnc_num_cell_set_last_num (num_cell, out_num))
+                    gnc_split_register_set_last_num (reg, out_num);
+            }
+            else
+            {
+                SplitRegister *oth_reg = gnc_find_register_by_account(account);
+
+                /* If another register is open for split acct, use that register
+                 * to set last number */
+                if (oth_reg)
+                {
+                    NumCell *num_cell;
+
+                    num_cell = (NumCell *) gnc_table_layout_get_cell
+                                                        (oth_reg->table->layout,
+                                                            NUM_CELL);
+                    if (gnc_num_cell_set_last_num (num_cell, out_num))
+                        gnc_split_register_set_last_num (oth_reg, out_num);
+                }
+                /* else just update acct */
+                else
+                {
+                    xaccAccountSetLastNum (account, out_num);
+                }
+            }
+        }
 
         return_split = new_split;
 
         info->cursor_hint_split = new_split;
         info->cursor_hint_cursor_class = CURSOR_CLASS_SPLIT;
+        if (new_act_num)
+            g_free (out_num);
     }
     else
     {
@@ -509,25 +583,30 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         int trans_split_index;
         int split_index;
         const char *in_num = NULL;
+        const char *in_tnum = NULL;
         char *out_num;
+        char *out_tnum;
         time64 date;
         gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
 
         /* We are on a transaction row. Copy the whole transaction. */
 
         date = info->last_date_entered;
-        if (gnc_strisnum (xaccTransGetNum (trans)))
+        if (gnc_strisnum (gnc_get_num_action (trans, trans_split)))
         {
             Account *account = gnc_split_register_get_default_account (reg);
 
             if (account)
                 in_num = xaccAccountGetLastNum (account);
             else
-                in_num = xaccTransGetNum (trans);
+                in_num = gnc_get_num_action (trans, trans_split);
+            in_tnum = (reg->use_tran_num_for_num_field
+                                        ? NULL
+                                        : gnc_get_num_action (trans, NULL));
         }
 
-        if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg),
-                                   &date, in_num, &out_num))
+        if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg), NULL,
+                                   TRUE, &date, in_num, &out_num, in_tnum, &out_tnum))
         {
             gnc_resume_gui_refresh ();
             LEAVE("dup cancelled");
@@ -574,7 +653,19 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         xaccTransBeginEdit (new_trans);
         gnc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);
         xaccTransSetDatePostedSecs (new_trans, date);
-        xaccTransSetNum (new_trans, out_num);
+        /* set per book option */
+        gnc_set_num_action (new_trans, NULL, out_num, out_tnum);
+        if (!reg->use_tran_num_for_num_field)
+        {
+            /* find split in new_trans that equals trans_split and set
+             * split_action to out_num */
+            gnc_set_num_action (NULL,
+                                xaccTransGetSplit (new_trans, trans_split_index),
+                                out_num, NULL);
+            /* note that if the transaction has multiple splits to the register
+             * account, only the anchor split will be set with user input. The
+             * user will have to adjust other splits manually. */
+        }
         xaccTransCommitEdit (new_trans);
 
         num_cell = (NumCell *) gnc_table_layout_get_cell (reg->table->layout,
@@ -583,6 +674,8 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
             gnc_split_register_set_last_num (reg, out_num);
 
         g_free (out_num);
+        if (!reg->use_tran_num_for_num_field)
+            g_free (out_tnum);
 
         /* This shouldn't happen, but be paranoid. */
         if (split_index >= xaccTransCountSplits (new_trans))
@@ -1313,7 +1406,21 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         const char *value;
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, NUM_CELL);
-        gnc_trans_scm_set_num (trans_scm, value);
+        if (reg->use_tran_num_for_num_field)
+            gnc_trans_scm_set_num (trans_scm, value);
+     /* else this contains the same as ACTN_CELL which is already handled below *
+      * and the TNUM_CELL contains transaction number which is handled in next  *
+      * if statement. */
+    }
+
+    if (gnc_table_layout_get_cell_changed (reg->table->layout, TNUM_CELL, TRUE))
+    {
+        const char *value;
+
+        value = gnc_table_layout_get_cell_value (reg->table->layout, TNUM_CELL);
+        if (!reg->use_tran_num_for_num_field)
+            gnc_trans_scm_set_num (trans_scm, value);
+     /* else this cell is not used */
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, DESC_CELL, TRUE))
@@ -2468,6 +2575,18 @@ split_register_gconf_changed (GConfEntry *entry, gpointer user_data)
 }
 
 static void
+split_register_book_option_changed (gpointer new_val, gpointer user_data)
+{
+    SplitRegister * reg = user_data;
+    gboolean *new_data = (gboolean*)new_val;
+
+    if (reg == NULL)
+        return;
+
+    reg->use_tran_num_for_num_field = (*new_data ? FALSE : TRUE);
+}
+
+static void
 gnc_split_register_init (SplitRegister *reg,
                          SplitRegisterType type,
                          SplitRegisterStyle style,
@@ -2486,6 +2605,9 @@ gnc_split_register_init (SplitRegister *reg,
     gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
                                   split_register_gconf_changed,
                                   reg);
+    gnc_book_option_register_cb(OPTION_NAME_NUM_FIELD_SOURCE,
+                                split_register_book_option_changed,
+                                reg);
 
     reg->sr_info = NULL;
 
@@ -2494,6 +2616,9 @@ gnc_split_register_init (SplitRegister *reg,
     reg->use_double_line = use_double_line;
     reg->do_auto_complete = do_auto_complete;
     reg->is_template = is_template;
+    reg->use_tran_num_for_num_field =
+                (qof_book_use_split_action_for_num_field(gnc_get_current_book())
+                    ? FALSE : TRUE);
 
     layout = gnc_split_register_layout_new (reg);
 
@@ -2739,6 +2864,9 @@ gnc_split_register_destroy (SplitRegister *reg)
                                 reg);
     gnc_gconf_general_remove_cb(KEY_ACCOUNT_SEPARATOR,
                                 split_register_gconf_changed,
+                                reg);
+    gnc_book_option_remove_cb(OPTION_NAME_NUM_FIELD_SOURCE,
+                                split_register_book_option_changed,
                                 reg);
     gnc_split_register_cleanup (reg);
 

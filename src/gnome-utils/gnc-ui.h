@@ -61,6 +61,7 @@
 #define HL_RECNWIN           "acct-reconcile"
 #define HL_SXEDITOR          "tool-sched"
 #define HL_GCONF             "gconf"
+#define HL_BOOK_OPTIONS      "book-options"
 
 /* GTK Windows - Common Response Codes */
 

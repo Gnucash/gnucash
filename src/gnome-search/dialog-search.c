@@ -37,6 +37,8 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-session.h"
 #include "qof.h"
+#include "engine-helpers.h"
+#include "qofbookslots.h"
 
 #include "Transaction.h"	/* for the SPLIT_* and TRANS_* */
 
@@ -762,28 +764,14 @@ search_clear_criteria (GNCSearchWindow *sw)
 
 
 static GtkWidget *
-get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
+get_comb_box_widget (GNCSearchWindow *sw, struct _crit_data *data)
 {
-    GtkWidget *combo_box, *hbox, *p;
+    GtkWidget *combo_box;
     GtkListStore *store;
     GtkTreeIter iter;
     GtkCellRenderer *cell;
     GList *l;
-    struct _crit_data *data;
     int index = 0, current = 0;
-
-    data = g_new0 (struct _crit_data, 1);
-    data->element = element;
-    data->dialog = GTK_DIALOG (sw->dialog);
-
-    hbox = gtk_hbox_new (FALSE, 0);
-    /* only set to automaticaly clean up the memory */
-    g_object_set_data_full (G_OBJECT (hbox), "data", data, g_free);
-
-    p = gnc_search_core_type_get_widget (element);
-    data->elemwidget = p;
-    data->container = hbox;
-    data->param = sw->last_param;
 
     store = gtk_list_store_new(NUM_SEARCH_COLS, G_TYPE_STRING, G_TYPE_POINTER);
     combo_box = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
@@ -814,6 +802,29 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     gtk_combo_box_set_active (GTK_COMBO_BOX(combo_box), current);
     g_signal_connect (combo_box, "changed", G_CALLBACK (combo_box_changed), data);
 
+    return combo_box;
+}
+
+static GtkWidget *
+get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
+{
+    GtkWidget *combo_box, *hbox, *p;
+    struct _crit_data *data;
+
+    data = g_new0 (struct _crit_data, 1);
+    data->element = element;
+    data->dialog = GTK_DIALOG (sw->dialog);
+
+    hbox = gtk_hbox_new (FALSE, 0);
+    /* only set to automaticaly clean up the memory */
+    g_object_set_data_full (G_OBJECT (hbox), "data", data, g_free);
+
+    p = gnc_search_core_type_get_widget (element);
+    data->elemwidget = p;
+    data->container = hbox;
+    data->param = sw->last_param;
+
+    combo_box = get_comb_box_widget (sw, data);
     gtk_box_pack_start (GTK_BOX (hbox), combo_box, FALSE, FALSE, 0);
     if (p)
         gtk_box_pack_start (GTK_BOX (hbox), p, FALSE, FALSE, 0);
@@ -822,6 +833,76 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     return hbox;
 }
 
+static void
+gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
+{
+    GList *l;
+    GNCSearchWindow *sw = user_data;
+    gboolean *new_data = (gboolean*)new_val;
+    /* Save current dialog focus */
+    GtkWidget *focused_widget = gtk_window_get_focus(GTK_WINDOW(sw->dialog));
+
+    g_return_if_fail (sw);
+    if (strcmp (sw->search_for, GNC_ID_SPLIT) != 0)
+        return;
+
+    /* Adjust labels for future added search criteria */
+    for (l = sw->params_list; l; l = l->next)
+    {
+        GNCSearchParam *param = l->data;
+
+        if (*new_data)
+        {
+            if (strcmp (param->title, N_("Action")) == 0)
+                gnc_search_param_set_title (param, N_("Number/Action"));
+            if (strcmp (param->title, N_("Number")) == 0)
+                gnc_search_param_set_title (param, N_("Transaction Number"));
+        }
+        else
+        {
+            if (strcmp (param->title, N_("Number/Action")) == 0)
+                gnc_search_param_set_title (param, N_("Action"));
+            if (strcmp (param->title, N_("Transaction Number")) == 0)
+                gnc_search_param_set_title (param, N_("Number"));
+        }
+    }
+    /* Adjust labels for existing search criteria; walk the list of criteria */
+    for (l = sw->crit_list; l; l = l->next)
+    {
+        struct _crit_data *data = l->data;
+        GList *children;
+
+        /* For each, walk the list of container children to get combo_box */
+        for (children = gtk_container_get_children(GTK_CONTAINER(data->container));
+                children; children = children->next)
+        {
+            GtkWidget *combo_box = children->data;
+
+            /* Get current active item if combo_box */
+            if (GTK_IS_COMBO_BOX(combo_box))
+            {
+                GtkWidget *new_combo_box;
+                gint index;
+
+                /* Set index to current active item */
+                index = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_box));
+                /* Create new combo_box to replace existing one */
+                new_combo_box = get_comb_box_widget (sw, data);
+                /* If current combo_box has focus, point to new_combo-box */
+                if (focused_widget == combo_box)
+                    focused_widget = new_combo_box;
+                gtk_widget_destroy(combo_box);
+                /* Set new combo_box to current active item */
+                gtk_combo_box_set_active(GTK_COMBO_BOX(new_combo_box), index);
+                gtk_box_pack_start (GTK_BOX (data->container), new_combo_box,
+                                                               FALSE, FALSE, 0);
+                gtk_box_reorder_child(GTK_BOX (data->container), new_combo_box, 0);
+                gtk_widget_show_all (data->container);
+            }
+        }
+    }
+    gtk_widget_grab_focus(focused_widget);
+}
 
 static void
 gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
@@ -877,6 +958,12 @@ static int
 gnc_search_dialog_close_cb (GtkDialog *dialog, GNCSearchWindow *sw)
 {
     g_return_val_if_fail (sw, TRUE);
+
+    /* Unregister callback on book option changes originally registered
+     * if searching for splits */
+    if (strcmp (sw->search_for, GNC_ID_SPLIT) == 0)
+        gnc_book_option_remove_cb(OPTION_NAME_NUM_FIELD_SOURCE,
+                                    gnc_search_dialog_book_option_changed, sw);
 
     gnc_unregister_gui_component (sw->component_id);
 
@@ -1086,6 +1173,12 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     /* add the first criterion */
     gnc_search_dialog_add_criterion (sw);
+
+    /* register to update criterion/criteria labels based on book option changes
+     * if searching for splits */
+    if (strcmp (sw->search_for, GNC_ID_SPLIT) == 0)
+        gnc_book_option_register_cb(OPTION_NAME_NUM_FIELD_SOURCE,
+                                    gnc_search_dialog_book_option_changed, sw);
 
     /* Hide the 'new' button if there is no new_item_cb */
     if (!sw->new_item_cb)

@@ -142,6 +142,12 @@
 	1 ;; step size
 	))
 
+  (reg-option 
+   (gnc:make-simple-boolean-option
+    gnc:*option-section-accounts* gnc:*option-name-num-field-source*
+    "c" (N_ "Check to have split action field used in registers for 'Num' field in place of transaction number; transaction number shown as 'T-Num' on second line of register. Has corresponding effect on business features, reporting and imports/exports.")
+    #f))
+
   ;; Budgeting Tab
 
   (reg-option

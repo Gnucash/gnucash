@@ -51,7 +51,10 @@
 #include "app-utils/gnc-euro.h"
 #include "engine/gnc-hooks.h"
 #include "engine/gnc-session.h"
+#include "engine-helpers.h"
 #include "gnc-locale-utils.h"
+#include "gnc-component-manager.h"
+#include "gnc-features.h"
 
 #define KEY_CURRENCY_CHOICE "currency_choice"
 #define KEY_CURRENCY_OTHER  "currency_other"
@@ -193,6 +196,25 @@ gnc_get_current_book (void)
     return qof_session_get_book (gnc_get_current_session ());
 }
 
+/* If there is no current session, there is no book and we must be dealing
+ * with a new book. When gnucash is started with --nofile, there is
+ * initially no session (and no book), but by the time we check, one
+ * could have been created (for example, if an empty account tree tab is
+ * opened, a session is created which creates a new, but empty, book).
+ * A session is created and a book is loaded from a backend when gnucash is
+ * started with a file, but selecting 'new file' keeps a session open. So we
+ * need to check as well for a book with no accounts (root with no children). */
+gboolean
+gnc_is_new_book (void)
+{
+    return ((!gnc_current_session_exist() ||
+                            (gnc_current_session_exist() &&
+                                !gnc_account_get_children(
+                                    gnc_book_get_root_account(
+                                        gnc_get_current_book()))))
+                            ? TRUE : FALSE);
+}
+
 #define OPTION_TAXUS_NAME "book/tax_US/name"
 #define OPTION_TAXUS_TYPE "book/tax_US/type"
 
@@ -218,6 +240,26 @@ const gchar *
 gnc_get_current_book_tax_type (void)
 {
     return qof_book_get_string_option(gnc_get_current_book(), OPTION_TAXUS_TYPE);
+}
+
+/** Calls gnc_book_option_num_field_source_change to initiate registered
+  * callbacks when num_field_source book option changes so that
+  * registers/reports can update themselves; sets feature flag */
+void
+gnc_book_option_num_field_source_change_cb (gboolean num_action)
+{
+    gnc_suspend_gui_refresh ();
+    if (num_action)
+    {
+    /* Set a feature flag in the book for use of the split action field as number.
+     * This will prevent older GnuCash versions that don't support this feature
+     * from opening this file. */
+        gnc_features_set_used (gnc_get_current_book(),
+                                                GNC_FEATURE_NUM_FIELD_SOURCE);
+    }
+    gnc_book_option_num_field_source_change (num_action);
+    gnc_resume_gui_refresh ();
+    gnc_gui_refresh_all ();
 }
 
 Account *

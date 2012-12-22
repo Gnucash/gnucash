@@ -35,6 +35,7 @@
 #include "gnc-dense-cal-store.h"
 #include "gnc-dense-cal.h"
 #include "gnc-engine.h"
+#include "engine-helpers.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -219,14 +220,14 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     runningBalance = gnc_numeric_zero();
 
     gnc_ttinfo_set_description(tti, xaccTransGetDescription(tr));
-    gnc_ttinfo_set_num(tti, xaccTransGetNum(tr));
+    gnc_ttinfo_set_num(tti, gnc_get_num_action(tr, NULL));
     gnc_ttinfo_set_currency(tti, xaccTransGetCurrency(tr));
 
     for (splits = xaccTransGetSplitList(tr); splits; splits = splits->next)
     {
         sp = splits->data;
         ttsi = gnc_ttsplitinfo_malloc();
-        gnc_ttsplitinfo_set_action(ttsi, xaccSplitGetAction(sp));
+        gnc_ttsplitinfo_set_action(ttsi, gnc_get_num_action(NULL, sp));
         split_value = xaccSplitGetValue(sp);
         gnc_ttsplitinfo_set_memo(ttsi, xaccSplitGetMemo(sp));
 

@@ -75,6 +75,9 @@
 #include "window-reconcile.h"
 #include "window-autoclear.h"
 #include "window-report.h"
+#include "split-register-p.h"
+#include "engine-helpers.h"
+#include "qofbookslots.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -484,6 +487,8 @@ typedef struct GncPluginPageRegisterPrivate
     struct
     {
         GtkWidget *dialog;
+        GtkWidget *num_radio;
+        GtkWidget *act_radio;
         SortType original_sort_type;
         gboolean original_save_order;
         gboolean save_order;
@@ -1610,6 +1615,40 @@ gnc_plugin_page_register_summarybar_position_changed(GConfEntry *entry,
 /*                     "Sort By" Dialog                     */
 /************************************************************/
 
+/** This function is called whenever the number source book options is changed
+ *  to adjust the displayed labels. Since the book option change may change the
+ *  query sort, the gnc_split_reg_set_sort_type_force function is called to
+ *  ensure the page is refreshed.
+ *
+ *  @param new_val A pointer to the boolean for the new value of the book option.
+ *
+ *  @param page A pointer to the GncPluginPageRegister that is
+ *  associated with this sort order dialog.
+ */
+static void
+gnc_plugin_page_register_sort_book_option_changed (gpointer new_val,
+                                                    gpointer user_data)
+{
+    GncPluginPageRegisterPrivate *priv;
+    GncPluginPageRegister *page = user_data;
+    gboolean *new_data = (gboolean*)new_val;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    if (*new_data)
+    {
+        gtk_button_set_label(GTK_BUTTON (priv->sd.num_radio), _("Transaction Number"));
+        gtk_button_set_label(GTK_BUTTON (priv->sd.act_radio), _("Number/Action"));
+    }
+    else
+    {
+        gtk_button_set_label(GTK_BUTTON (priv->sd.num_radio), _("Number"));
+        gtk_button_set_label(GTK_BUTTON (priv->sd.act_radio), _("Action"));
+    }
+    gnc_split_reg_set_sort_type_force (priv->gsr, priv->gsr->sort_type, TRUE);
+}
+
 /** This function is called when the "Sort By..." dialog is closed.
  *  If the dialog was closed by any method other than clicking the OK
  *  button, the original sorting order will be restored.
@@ -1655,7 +1694,12 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog *dialog,
             gnc_plugin_page_register_set_sort_order (plugin_page, order);
         }
     }
+    gnc_book_option_remove_cb(OPTION_NAME_NUM_FIELD_SOURCE,
+                                gnc_plugin_page_register_sort_book_option_changed,
+                                page);
     priv->sd.dialog = NULL;
+    priv->sd.num_radio = NULL;
+    priv->sd.act_radio = NULL;
     gtk_widget_destroy(GTK_WIDGET(dialog));
     LEAVE(" ");
 }
@@ -2368,6 +2412,10 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
     arg = SCM_BOOL (reg->use_double_line);
     args = scm_cons (arg, args);
 
+    arg = SCM_BOOL (reg->type == GENERAL_LEDGER || reg->type == INCOME_LEDGER
+                                                || reg->type == SEARCH_LEDGER);
+    args = scm_cons (arg, args);
+
     arg = SCM_BOOL (reg->style == REG_STYLE_JOURNAL);
     args = scm_cons (arg, args);
 
@@ -2782,6 +2830,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
         GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
+    SplitRegister *reg;
     GtkWidget *dialog, *button;
     GtkBuilder *builder;
     SortType sort;
@@ -2825,7 +2874,20 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     if (priv->sd.save_order == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
-    /* Wire it up */
+    priv->sd.num_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_NUM"));
+    priv->sd.act_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_ACTION"));
+    /* Adjust labels related to Num/Action radio buttons based on book option */
+    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    if (reg && !reg->use_tran_num_for_num_field)
+    {
+        gtk_button_set_label(GTK_BUTTON (priv->sd.num_radio), _("Transaction Number"));
+        gtk_button_set_label(GTK_BUTTON (priv->sd.act_radio), _("Number/Action"));
+    }
+    gnc_book_option_register_cb(OPTION_NAME_NUM_FIELD_SOURCE,
+                                gnc_plugin_page_register_sort_book_option_changed,
+                                page);
+
+     /* Wire it up */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, page);
 
     /* Show it */
@@ -3578,6 +3640,43 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
     }
 
     gnc_plugin_page_register_ui_update(NULL, page);
+}
+
+static gboolean
+find_reg_by_acct (gpointer find_data, gpointer user_data)
+{
+    GncPluginPageRegisterPrivate *priv;
+    SplitRegister *reg;
+    Account *account = find_data;
+    GncPluginPageRegister *page = user_data;
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    reg = gnc_ledger_display_get_split_register(priv->ledger);
+
+    return (xaccAccountEqual(account,
+                             gnc_split_register_get_default_account (reg),
+                             TRUE));
+}
+
+SplitRegister *
+gnc_find_register_by_account (Account *account)
+{
+    GncPluginPageRegister *page;
+
+    if (!account) return NULL;
+
+    page = gnc_find_first_gui_component (GNC_PLUGIN_PAGE_REGISTER_NAME,
+                                            find_reg_by_acct,
+                                            (gpointer) account);
+    if (page)
+    {
+        GncPluginPageRegisterPrivate *priv;
+        SplitRegister *reg;
+
+        priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+        return reg = gnc_ledger_display_get_split_register(priv->ledger);
+    }
+    else return NULL;
 }
 
 static void

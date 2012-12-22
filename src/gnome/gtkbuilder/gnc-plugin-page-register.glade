@@ -84,7 +84,7 @@
               <object class="GtkTable" id="duplicate_table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="n_rows">2</property>
+                <property name="n_rows">3</property>
                 <property name="n_columns">2</property>
                 <property name="column_spacing">12</property>
                 <property name="row_spacing">6</property>
@@ -128,7 +128,7 @@
                     <property name="secondary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">True</property>
                     <property name="secondary_icon_sensitive">True</property>
-                    <property name="adjustment">adjustment1</property>
+                    <property name="adjustment">num_adjustment</property>
                     <property name="climb_rate">1</property>
                   </object>
                   <packing>
@@ -152,6 +152,40 @@
                     <property name="right_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="tnum_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Transaction Number:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">tnum_spin</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="tnum_spin">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="adjustment">tnum_adjustment</property>
+                    <property name="climb_rate">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </object>
@@ -1011,7 +1045,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHSeparator" id="hseparator1">
+              <object class="GtkHSeparator" id="hseparator3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
@@ -1033,7 +1067,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHBox" id="hbox1">
+              <object class="GtkHBox" id="hbox2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -1185,7 +1219,12 @@
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkAdjustment" id="adjustment1">
+  <object class="GtkAdjustment" id="num_adjustment">
+    <property name="upper">1000000000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="tnum_adjustment">
     <property name="upper">1000000000</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>

@@ -94,6 +94,8 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
     struct _ftd_data *ftd;
     static GList *params = NULL;
     QofQuery *start_q, *show_q = NULL;
+    gboolean num_action =
+                qof_book_use_split_action_for_num_field(gnc_get_current_book());
 
     /* Build parameter list in reverse order */
     if (params == NULL)
@@ -121,15 +123,42 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
                                            NULL);
         params = gnc_search_param_prepend (params, N_("Notes"), NULL,
                                            type, SPLIT_TRANS, TRANS_NOTES, NULL);
-        params = gnc_search_param_prepend (params, N_("Action"), NULL,
+        params = gnc_search_param_prepend (params, (num_action
+                                                    ? N_("Number/Action")
+                                                    : N_("Action")), NULL,
                                            type, SPLIT_ACTION, NULL);
-        params = gnc_search_param_prepend (params, N_("Number"), NULL,
+        params = gnc_search_param_prepend (params, (num_action
+                                                    ? N_("Transaction Number")
+                                                    : N_("Number")), NULL,
                                            type, SPLIT_TRANS, TRANS_NUM, NULL);
         params = gnc_search_param_prepend (params, N_("Memo"), NULL,
                                            type, SPLIT_MEMO, NULL);
         params = gnc_search_param_prepend (params, N_("Description"), NULL,
                                            type, SPLIT_TRANS, TRANS_DESCRIPTION,
                                            NULL);
+    }
+    else
+    {
+        GList *l;
+        for (l = params; l; l = l->next)
+        {
+            GNCSearchParam *param = l->data;
+
+            if (num_action)
+            {
+                if (strcmp (param->title, N_("Action")) == 0)
+                    gnc_search_param_set_title (param, N_("Number/Action"));
+                if (strcmp (param->title, N_("Number")) == 0)
+                    gnc_search_param_set_title (param, N_("Transaction Number"));
+            }
+            else
+            {
+                if (strcmp (param->title, N_("Number/Action")) == 0)
+                    gnc_search_param_set_title (param, N_("Action"));
+                if (strcmp (param->title, N_("Transaction Number")) == 0)
+                    gnc_search_param_set_title (param, N_("Number"));
+            }
+        }
     }
 
     ftd = g_new0 (struct _ftd_data, 1);

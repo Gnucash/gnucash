@@ -64,6 +64,7 @@
 #define KEY_ACCOUNTING_LABELS	"use_accounting_labels"
 #define KEY_ACCOUNT_SEPARATOR	"account_separator"
 #define KEY_NEGATIVE_IN_RED	"negative_in_red"
+#define KEY_NUM_SOURCE      "num_source"
 #define KEY_ENABLE_EURO		"enable_euro"
 #define KEY_DATE_FORMAT 	"date_format"
 #define KEY_DATE_COMPLETION 	"date_completion"

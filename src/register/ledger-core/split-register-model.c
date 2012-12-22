@@ -36,6 +36,7 @@
 #include "split-register-model.h"
 #include "split-register-model-save.h"
 #include "split-register-p.h"
+#include "engine-helpers.h"
 
 
 static SplitRegisterColors reg_colors =
@@ -214,6 +215,29 @@ gnc_split_register_get_num_label (VirtualLocation virt_loc,
         return _("Ref");
     default:
         return _("Num");
+    }
+}
+
+static const char *
+gnc_split_register_get_tran_num_label (VirtualLocation virt_loc,
+                                  gpointer user_data)
+{
+    SplitRegister *reg = user_data;
+
+    switch (reg->type)
+    {
+    case RECEIVABLE_REGISTER:
+    case PAYABLE_REGISTER:
+        return _("T-Ref");
+    case GENERAL_LEDGER:
+    case INCOME_LEDGER:
+    case SEARCH_LEDGER:
+    {
+        if (reg->use_tran_num_for_num_field)
+            return _("Num");
+    }
+    default:
+        return _("T-Num");
     }
 }
 
@@ -567,7 +591,9 @@ gnc_split_register_get_bg_color (VirtualLocation virt_loc,
     }
 
     if (g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
-            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0)
+            g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL_NUM_ACTN) == 0 ||
+            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0 ||
+            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER_NUM_ACTN) == 0)
     {
         double_alternate_virt = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
                                 "alternate_color_by_transaction",
@@ -650,7 +676,9 @@ gnc_split_register_get_gtkrc_bg_color (VirtualLocation virt_loc,
     }
 
     if (g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
-            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0)
+            g_strcmp0 (cursor_name, CURSOR_DOUBLE_JOURNAL_NUM_ACTN) == 0 ||
+            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0 ||
+            g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER_NUM_ACTN) == 0)
     {
         double_alternate_virt = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
                                 "alternate_color_by_transaction",
@@ -921,7 +949,23 @@ gnc_split_register_get_num_entry (VirtualLocation virt_loc,
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     trans = xaccSplitGetParent (split);
 
-    return xaccTransGetNum (trans);
+    return gnc_get_num_action (trans, split); 
+}
+
+static const char *
+gnc_split_register_get_tran_num_entry (VirtualLocation virt_loc,
+                                  gboolean translate,
+                                  gboolean *conditionally_changed,
+                                  gpointer user_data)
+{
+    SplitRegister *reg = user_data;
+    Transaction *trans;
+    Split *split;
+
+    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+    trans = xaccSplitGetParent (split);
+
+    return gnc_get_num_action (trans, NULL);
 }
 
 static char *
@@ -937,11 +981,43 @@ gnc_split_register_get_num_help (VirtualLocation virt_loc,
         {
         case RECEIVABLE_REGISTER:
         case PAYABLE_REGISTER:
-            help = _("Enter the transaction reference, "
-                     "such as the invoice or check number");
+            help = reg->use_tran_num_for_num_field ?
+                    _("Enter a reference, such as an invoice or check number "
+                        ", common to all entry lines (splits)") :
+                    _("Enter a reference, such as an invoice or check number "
+                        ", unique to each entry line (split)");
             break;
         default:
-            help = _("Enter the transaction number, such as the check number");
+            help = reg->use_tran_num_for_num_field ?
+                    _("Enter a reference, such as a check number "
+                        ", common to all entry lines (splits)") :
+                    _("Enter a reference, such as a check number "
+                        ", unique to each entry line (split)");
+            break;
+        }
+
+    return g_strdup (help);
+}
+
+static char *
+gnc_split_register_get_tran_num_help (VirtualLocation virt_loc,
+                                 gpointer user_data)
+{
+    SplitRegister *reg = user_data;
+    const char *help;
+
+    help = gnc_table_get_entry (reg->table, virt_loc);
+    if (!help || *help == '\0')
+        switch (reg->type)
+        {
+        case RECEIVABLE_REGISTER:
+        case PAYABLE_REGISTER:
+            help = _("Enter a transaction reference, such as an invoice "
+                    "or check number, common to all entry lines (splits)");
+            break;
+        default:
+            help = _("Enter a transaction reference, "
+                    "that will be common to all entry lines (splits)");
             break;
         }
 
@@ -1126,7 +1202,7 @@ gnc_split_register_get_action_entry (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
 
-    return xaccSplitGetAction (split);
+    return gnc_get_num_action (NULL, split);
 }
 
 static char *
@@ -1138,7 +1214,9 @@ gnc_split_register_get_action_help (VirtualLocation virt_loc,
 
     help = gnc_table_get_entry (reg->table, virt_loc);
     if (!help || *help == '\0')
-        help = _("Enter the type of transaction, or choose one from the list");
+        help = reg->use_tran_num_for_num_field ?
+        _("Enter an action type, or choose one from the list") :
+        _("Enter a reference number, such as the next check number, or choose an action type from the list");
 
     return g_strdup (help);
 }
@@ -2230,6 +2308,10 @@ gnc_split_register_model_new (void)
                                        NUM_CELL);
 
     gnc_table_model_set_entry_handler (model,
+                                       gnc_split_register_get_tran_num_entry,
+                                       TNUM_CELL);
+
+    gnc_table_model_set_entry_handler (model,
                                        gnc_split_register_get_desc_entry,
                                        DESC_CELL);
 
@@ -2321,6 +2403,10 @@ gnc_split_register_model_new (void)
     gnc_table_model_set_label_handler (model,
                                        gnc_split_register_get_num_label,
                                        NUM_CELL);
+
+    gnc_table_model_set_label_handler (model,
+                                       gnc_split_register_get_tran_num_label,
+                                       TNUM_CELL);
 
     gnc_table_model_set_label_handler (model,
                                        gnc_split_register_get_desc_label,
@@ -2419,6 +2505,10 @@ gnc_split_register_model_new (void)
                                       NUM_CELL);
 
     gnc_table_model_set_help_handler (model,
+                                      gnc_split_register_get_tran_num_help,
+                                      TNUM_CELL);
+
+    gnc_table_model_set_help_handler (model,
                                       gnc_split_register_get_desc_help,
                                       DESC_CELL);
 
@@ -2479,6 +2569,9 @@ gnc_split_register_model_new (void)
 
     gnc_table_model_set_io_flags_handler(
         model, gnc_split_register_get_standard_io_flags, NUM_CELL);
+
+    gnc_table_model_set_io_flags_handler(
+        model, gnc_split_register_get_standard_io_flags, TNUM_CELL);
 
     gnc_table_model_set_io_flags_handler(
         model, gnc_split_register_get_standard_io_flags, DESC_CELL);

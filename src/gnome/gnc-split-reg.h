@@ -185,10 +185,12 @@ GnucashRegister *gnc_split_reg_get_register( GNCSplitReg *gsr );
 GtkWidget *gsr_create_summary_bar( GNCSplitReg *gsr );
 
 /**
- * Gets/sets the sort-type of the GNCSplitReg.
+ * Gets/sets the sort-type of the GNCSplitReg. The 'force' version causes the
+ * query to be redone even if SortType has not changed.
  **/
 SortType gnc_split_reg_get_sort_type( GNCSplitReg *gsr );
 void gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t );
+void gnc_split_reg_set_sort_type_force( GNCSplitReg *gsr, SortType t, gboolean force);
 
 /**
  * Gets/sets the style of the GNCSplitReg.

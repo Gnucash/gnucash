@@ -41,6 +41,7 @@
 #include "Account.h"
 #include "Query.h"
 #include "gnc-engine.h"
+#include "engine-helpers.h"
 #include "gnc-ui-util.h"
 
 #define GCONF_SECTION "dialogs/import/generic_matcher"
@@ -678,7 +679,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 
         /* Check number heuristics */
         {
-            const char *new_trans_str = xaccTransGetNum(new_trans);
+            const char *new_trans_str = gnc_get_num_action(new_trans, new_trans_fsplit);
             if (new_trans_str && strlen(new_trans_str) != 0)
             {
                 long new_trans_number, split_number;
@@ -694,7 +695,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
                 if (errno || endptr == new_trans_str)
                     conversion_ok = FALSE;
 
-                split_str = xaccTransGetNum (xaccSplitGetParent (split));
+                split_str = gnc_get_num_action (xaccSplitGetParent (split), split);
                 errno = 0;
                 split_number = strtol(split_str, &endptr, 10);
                 if (errno || endptr == split_str)

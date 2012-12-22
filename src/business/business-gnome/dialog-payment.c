@@ -40,6 +40,7 @@
 #include "Transaction.h"
 #include "Account.h"
 #include "gncOwner.h"
+#include "engine-helpers.h"
 
 #include "gncInvoice.h"
 
@@ -1120,7 +1121,7 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
 
     // Fill in the values from the given txn
     pw->pre_existing_txn = txn;
-    gnc_ui_payment_window_set_num(pw, xaccTransGetNum(txn));
+    gnc_ui_payment_window_set_num(pw, gnc_get_num_action(txn, assetaccount_split));
     gnc_ui_payment_window_set_memo(pw, xaccTransGetDescription(txn));
     {
         GDate txn_date = xaccTransGetDatePostedGDate (txn);

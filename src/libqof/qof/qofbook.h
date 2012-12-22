@@ -267,6 +267,10 @@ gint qof_book_get_num_days_autoreadonly (const QofBook *book);
  * g_date_free() the object afterwards. */
 GDate* qof_book_get_autoreadonly_gdate (const QofBook *book);
 
+/** Returns TRUE if this book uses split action field as the 'Num' field, FALSE
+ *  if it uses transaction number field */
+gboolean qof_book_use_split_action_for_num_field (const QofBook *book);
+
 /** Is the book shutting down? */
 gboolean qof_book_shutting_down (const QofBook *book);
 

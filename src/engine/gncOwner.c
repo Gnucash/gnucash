@@ -45,6 +45,7 @@
 #include "gnc-commodity.h"
 #include "Transaction.h"
 #include "Split.h"
+#include "engine-helpers.h"
 
 #define _GNC_MOD_NAME   GNC_ID_OWNER
 
@@ -780,7 +781,8 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
 
         /* Set up the transaction */
         xaccTransSetDescription (txn, name ? name : "");
-        xaccTransSetNum (txn, num);
+        /* set per book option */
+        gnc_set_num_action (txn, NULL, num, _("Payment"));
         xaccTransSetCurrency (txn, commodity);
         xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
         xaccTransSetDatePostedTS (txn, &date);
@@ -790,7 +792,8 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
         /* The split for the transfer account */
         split = xaccMallocSplit (book);
         xaccSplitSetMemo (split, memo);
-        xaccSplitSetAction (split, _("Payment"));
+        /* set per book option */
+        gnc_set_num_action (NULL, split, num, _("Payment"));
         xaccAccountBeginEdit (xfer_acc);
         xaccAccountInsertSplit (xfer_acc, split);
         xaccAccountCommitEdit (xfer_acc);
@@ -814,7 +817,8 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction *txn,
     /* Add a split in the post account */
     split = xaccMallocSplit (book);
     xaccSplitSetMemo (split, memo);
-    xaccSplitSetAction (split, _("Payment"));
+    /* set per book option */
+    gnc_set_num_action (NULL, split, num, _("Payment"));
     xaccAccountBeginEdit (posted_acc);
     xaccAccountInsertSplit (posted_acc, split);
     xaccAccountCommitEdit (posted_acc);
@@ -960,7 +964,8 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
             /* Create the split for this link in current balancing lot */
             split = xaccMallocSplit (book);
             xaccSplitSetMemo (split, memo);
-            xaccSplitSetAction (split, action);
+            /* set Action using utility function */
+            gnc_set_num_action (NULL, split, NULL, action);
             xaccAccountInsertSplit (acct, split);
             xaccTransAppendSplit (txn, split);
             xaccSplitSetBaseValue (split, gnc_numeric_neg (split_amt), xaccAccountGetCommodity(acct));
@@ -989,7 +994,8 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
             Split *split = xaccMallocSplit (book);
 
             xaccSplitSetMemo (split, memo);
-            xaccSplitSetAction (split, action);
+            /* set Action with utiltity function */
+            gnc_set_num_action (NULL, split, NULL, action);
             xaccAccountInsertSplit (acct, split);
             xaccTransAppendSplit (txn, split);
             xaccSplitSetBaseValue (split, val_paid, xaccAccountGetCommodity(acct));

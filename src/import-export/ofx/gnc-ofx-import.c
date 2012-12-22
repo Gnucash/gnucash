@@ -40,6 +40,7 @@
 
 #include "Account.h"
 #include "Transaction.h"
+#include "engine-helpers.h"
 #include "gnc-ofx-import.h"
 #include "gnc-file.h"
 #include "gnc-engine.h"
@@ -48,6 +49,7 @@
 #include "core-utils/gnc-gconf-utils.h"
 #include "gnome-utils/gnc-ui.h"
 #include "gnome-utils/dialog-account.h"
+#include "dialog-utils.h"
 
 #include "gnc-ofx-kvp.h"
 
@@ -379,14 +381,6 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 
     xaccTransSetDateEnteredSecs(transaction, current_time);
 
-    if (data.check_number_valid)
-    {
-        xaccTransSetNum(transaction, data.check_number);
-    }
-    else if (data.reference_number_valid)
-    {
-        xaccTransSetNum(transaction, data.reference_number);
-    }
     /* Put transaction name in Description, or memo if name unavailable */
     if (data.name_valid)
     {
@@ -490,6 +484,15 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
             gnc_amount = gnc_ofx_numeric_from_double_txn(data.amount, transaction);
             xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
+            /* set tran-num and/or split-action per book option */
+            if (data.check_number_valid)
+            {
+                gnc_set_num_action(transaction, split, data.check_number, NULL);
+            }
+            else if (data.reference_number_valid)
+            {
+                gnc_set_num_action(transaction, split, data.reference_number, NULL);
+            }
             /* Also put the ofx transaction's memo in the
              * split's memo field */
             if (data.memo_valid)
@@ -637,6 +640,16 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                     xaccSplitSetAmount(split, gnc_units);
                     xaccSplitSetValue(split, gnc_amount);
 
+                    /* set tran-num and/or split-action per book option */
+                    if (data.check_number_valid)
+                    {
+                        gnc_set_num_action(transaction, split, data.check_number, NULL);
+                    }
+                    else if (data.reference_number_valid)
+                    {
+                        gnc_set_num_action(transaction, split,
+                                                data.reference_number, NULL);
+                    }
                     if (data.security_data_ptr->memo_valid)
                     {
                         xaccSplitSetMemo(split, data.security_data_ptr->memo);
@@ -779,6 +792,10 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
     gnc_commodity * default_commodity;
     GNCAccountType default_type = ACCT_TYPE_NONE;
     gchar * account_description;
+    /* In order to trigger a book options display on the creation of a new book,
+     * we need to detect when we are dealing with a new book. */
+    gboolean new_book = gnc_is_new_book();
+
     const gchar * account_type_name = _("Unknown OFX account");
 
     if (data.account_id_valid)
@@ -833,6 +850,15 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
                 break;
             }
         }
+
+        /* If the OFX importer was started in Gnucash in a 'new_book' situation,
+         * as described above, the first time the 'ofx_proc_account_cb' function
+         * is called a book is created. (This happens after the 'new_book' flag
+         * is set in 'gnc_get_current_commodities', called above.) So, before
+         * calling 'gnc_import_select_account', allow the user to set book
+         * options. */
+        if (new_book)
+            new_book = gnc_new_book_option_display();
 
         gnc_utf8_strip_invalid(data.account_name);
         account_description = g_strdup_printf( /* This string is a default account

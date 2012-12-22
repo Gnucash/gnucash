@@ -132,8 +132,10 @@ struct _qifimportwindow
     GtkWidget * memo_view_count;
     GtkWidget * memo_view_btn;
 
-    /* Widgets on the currency page. */
+    /* Widgets on the currency & book options page. */
     GtkWidget * currency_picker;
+    GtkWidget * book_option_label;
+    GtkWidget * book_option_message;
 
     /* Widgets on the commodity page. */
     gint        num_new_pages;
@@ -158,6 +160,7 @@ struct _qifimportwindow
     gboolean  busy;
     gboolean  load_stop;
     gboolean  acct_tree_found;
+    gboolean  new_book;
 
     SCM       imported_files;
     SCM       selected_file;
@@ -1461,7 +1464,7 @@ initialize_scheme(QIFImportWindow *wind)
     /* Get the saved state of mappings from Quicken accounts and
      * categories to GnuCash accounts. */
     load_map_prefs = scm_c_eval_string("qif-import:load-map-prefs");
-    mapping_info = scm_call_0(load_map_prefs);
+    mapping_info = scm_call_0(load_map_prefs); /* <- gets/creates session/book */
     wind->gnc_acct_info         = scm_list_ref(mapping_info, scm_from_int (0));
     wind->acct_map_info         = scm_list_ref(mapping_info, scm_from_int (1));
     wind->cat_map_info          = scm_list_ref(mapping_info, scm_from_int (2));
@@ -2548,6 +2551,25 @@ gnc_ui_qif_import_currency_prepare(GtkAssistant *assistant,
 {
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+    QIFImportWindow  *wind = user_data;
+
+    g_return_if_fail(wind);
+
+    /* Only display Book Option data if new book */
+    if (wind->new_book)
+    {
+        gtk_assistant_set_page_title (assistant, page,
+            _("Choose the QIF file currency and select Book Options"));
+        gtk_widget_show (wind->book_option_label);
+        gtk_widget_show (wind->book_option_message);
+    }
+    else
+    {
+        gtk_assistant_set_page_title (assistant, page,
+            _("Choose the QIF file currency"));
+        gtk_widget_hide (wind->book_option_label);
+        gtk_widget_hide (wind->book_option_message);
+    }
 
     /* Enable the Assistant Buttons */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
@@ -3036,6 +3058,11 @@ gnc_ui_qif_import_convert_progress_prepare(GtkAssistant *assistant,
 
     /* Enable the assistant buttons */
     gtk_assistant_set_page_complete (assistant, page, FALSE);
+
+    /* Before creating transactions, if this is a new book, let user specify
+     * book options, since they affect how transactions are created */
+    if (wind->new_book)
+        wind->new_book = gnc_new_book_option_display();
 }
 
 
@@ -3334,7 +3361,7 @@ void gnc_ui_qif_import_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
         /* Current page is Memo Match page */
         gnc_ui_qif_import_memo_match_prepare (assistant, user_data);
     }
-    else if (!g_strcmp0 (pagename, "currency_page"))
+    else if (!g_strcmp0 (pagename, "currency_book_option_page"))
     {
         /* Current page is Currency page */
         gnc_ui_qif_import_currency_prepare (assistant, user_data);
@@ -3409,6 +3436,8 @@ get_assistant_widgets(QIFImportWindow *wind, GtkBuilder *builder)
     wind->selected_file_view = GTK_WIDGET(gtk_builder_get_object (builder, "selected_file_view"));
     wind->unload_file_btn    = GTK_WIDGET(gtk_builder_get_object (builder, "unload_file_button"));
     wind->currency_picker    = GTK_WIDGET(gtk_builder_get_object (builder, "currency_comboboxentry"));
+    wind->book_option_label  = GTK_WIDGET(gtk_builder_get_object (builder, "book_option_label"));
+    wind->book_option_message = GTK_WIDGET(gtk_builder_get_object (builder, "book_option_message_label"));
     wind->acct_view          = GTK_WIDGET(gtk_builder_get_object (builder, "account_page_view"));
     wind->acct_view_count    = GTK_WIDGET(gtk_builder_get_object (builder, "account_page_count"));
     wind->acct_view_btn      = GTK_WIDGET(gtk_builder_get_object (builder, "account_page_change"));
@@ -3594,11 +3623,16 @@ gnc_ui_qif_import_assistant_make(QIFImportWindow *qif_win)
     qif_win->new_namespaces       = NULL;
     qif_win->selected_transaction = 0;
     qif_win->busy                 = FALSE;
+    /* In order to include a book options display on the creation of a new book,
+     * we need to detect when we are dealing with a new book. */
+    qif_win->new_book = gnc_is_new_book();
 
     /* Get all user preferences related to QIF importing. */
     get_preferences(qif_win);
 
-    /* Set up the Scheme side of things. */
+    /* Set up the Scheme side of things. Note that if a session/book did not
+     * exist prior to this function, it is created within scheme function
+     * "qif-import:load-map-prefs", so we need to have set the flag previously */
     initialize_scheme(qif_win);
 
     /* Get all interesting builder-defined widgets. */

@@ -42,6 +42,7 @@
 #include "Scrub.h"
 
 #include "gnc-ui-util.h"
+#include "engine-helpers.h"
 
 #define TREE_MODEL_SPLIT_REG_CM_CLASS "tree-model-split-reg"
 
@@ -2142,7 +2143,12 @@ gnc_tree_model_split_reg_update_completion (GncTreeModelSplitReg *model)
         }
 
         /* Add to the Num list */
-        string = xaccTransGetNum (trans);
+        /* Get transaction-number with gnc_get_num_action which is the same as
+         * xaccTransGetNum with these arguments; not sure what is being done
+         * here so not sure if this is correct; won't get the same 'num' entered
+         * by user in a register if book option to use split-action for 'num'
+         * field is set */
+        string = gnc_get_num_action (trans, NULL);
         if(g_strcmp0 (string, ""))
         {
             if(gtm_check_for_duplicates (priv->num_list, string) == FALSE)

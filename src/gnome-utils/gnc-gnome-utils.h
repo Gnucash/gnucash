@@ -36,6 +36,7 @@
 #define GNC_GNOME_UTILS_H
 
 #include <gnc-main-window.h>
+#include "dialog-options.h"
 
 /** Load a gtk resource configuration file to customize gtk
  *  appearance and behviour.
@@ -56,6 +57,15 @@ void gnc_gtk_add_rc_file (void);
 void gnc_gnome_help (const char *file_name,
                      const char *anchor);
 
+/** Set the help callback to 'gnc_book_options_help_cb' to open a help browser
+ *  and point it to the Book Options link in the Help file.
+ */
+void gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win);
+ 
+/** Set the intial values of new book options to values specified in user
+ *  preferences.
+ */
+void gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb);
 
 /** Given a file name, find and load the requested pixmap.  This
  *  routine will display an error message if it can't find the file or

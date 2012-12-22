@@ -58,6 +58,7 @@ typedef struct
     int           header_rows;
     int           num_new;
     int           num_updates;
+    gboolean      new_book; /**< Are we importing into a new book?; if yes, call book options */
 } CsvImportInfo;
 
 

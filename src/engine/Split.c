@@ -39,6 +39,7 @@
 #endif
 
 #include "qof.h"
+#include "qofbook.h"
 #include "Split.h"
 #include "AccountP.h"
 #include "Scrub.h"
@@ -1259,13 +1260,22 @@ xaccSplitOrder (const Split *sa, const Split *sb)
     int retval;
     int comp;
     char *da, *db;
+    gboolean action_for_num;
 
     if (sa == sb) return 0;
     /* nothing is always less than something */
     if (!sa) return -1;
     if (!sb) return +1;
 
-    retval = xaccTransOrder (sa->parent, sb->parent);
+    /* sort in transaction order, but use split action rather than trans num
+     * according to book option */
+    action_for_num = qof_book_use_split_action_for_num_field
+                                                        (xaccSplitGetBook (sa));
+    if (action_for_num)
+        retval = xaccTransOrder_num_action (sa->parent, sa->action,
+                                            sb->parent, sb->action);
+    else
+        retval = xaccTransOrder (sa->parent, sb->parent);
     if (retval) return retval;
 
     /* otherwise, sort on memo strings */

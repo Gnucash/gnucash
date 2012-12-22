@@ -2430,6 +2430,10 @@ report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query)
     arg = SCM_BOOL (reg->use_double_line);
     args = scm_cons (arg, args);
 
+    arg = SCM_BOOL (reg->type == GENERAL_LEDGER || reg->type == INCOME_LEDGER
+                                                || reg->type == SEARCH_LEDGER);
+    args = scm_cons (arg, args);
+
     arg = SCM_BOOL (reg->style == REG_STYLE_JOURNAL);
     args = scm_cons (arg, args);
 

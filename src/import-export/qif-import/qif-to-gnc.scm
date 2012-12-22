@@ -478,7 +478,9 @@
     (if qif-payee
         (xaccTransSetDescription gnc-xtn qif-payee))
     (if qif-number
-        (xaccTransSetNum gnc-xtn qif-number))
+        ;; Use function that will set either tran-num or split-action per
+        ;; book option.
+        (gnc-set-num-action gnc-xtn gnc-near-split qif-number #f))
 
     ;; Look for the transaction memo (QIF "M" line). When a default split
     ;; exists, the memo can be found there. Otherwise, it will be in the

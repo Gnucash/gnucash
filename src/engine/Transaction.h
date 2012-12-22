@@ -264,7 +264,11 @@ void	      xaccTransSetTxnType (Transaction *trans, char type);
  * See #TXN_TYPE_NONE, #TXN_TYPE_INVOICE and #TXN_TYPE_PAYMENT */
 char	      xaccTransGetTxnType (const Transaction *trans);
 
-/** Sets the transaction Number (or ID) field*/
+/** Sets the transaction Number (or ID) field; rather than use this function
+ *  directly, see 'gnc_set_num_action' in engine/engine-helpers.c & .h which
+ *  takes a user-set book option for selecting the source for the num-cell (the
+ *  transaction-number or the split-action field) in registers/reports into
+ *  account automatically  */
 void          xaccTransSetNum (Transaction *trans, const char *num);
 
 /** Sets the transaction Description */
@@ -275,7 +279,11 @@ void          xaccTransSetDescription (Transaction *trans, const char *desc);
  The Notes field is only visible in the register in double-line mode */
 void          xaccTransSetNotes (Transaction *trans, const char *notes);
 
-/** Gets the transaction Number (or ID) field*/
+/** Gets the transaction Number (or ID) field; rather than use this function
+ *  directly, see 'gnc_get_num_action' and 'gnc_get_action_num' in
+ *  engine/engine-helpers.c & .h which takes a user-set book option for
+ *  selecting the source for the num-cell (the transaction-number or the
+ *  split-action field) in registers/reports into account automatically  */
 const char *  xaccTransGetNum (const Transaction *trans);
 /** Gets the transaction Description */
 const char *  xaccTransGetDescription (const Transaction *trans);
@@ -455,8 +463,33 @@ gnc_numeric xaccTransGetAccountBalance (const Transaction *trans,
  *      GncGUID (compare as a guid)
  *    Finally, it returns zero if all of the above match.
  *    Note that it does *NOT* compare its member splits.
+ *    Note also that it calls xaccTransOrder_num_action with actna and actnb
+ *    set as NULL.
  */
 int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
+
+
+/**
+ * The xaccTransOrder_num_action(ta,actna,tb,actnb) method is useful for sorting.
+ *    Orders ta and tb
+ *      return <0 if ta sorts before tb
+ *      return >0 if ta sorts after tb
+ *      return 0 if they are absolutely equal
+ *
+ *    The comparrison uses the following fields, in order:
+ *      date posted  (compare as a date)
+ *      if actna and actnb are NULL,
+ *          num field (compare as an integer)
+ *      else actna and actnb  (compare as an integer)
+ *      date entered (compare as a date)
+ *      description field (comcpare as a string using strcmp())
+ *      GncGUID (compare as a guid)
+ *    Finally, it returns zero if all of the above match.
+ *    Note that it does *NOT* compare its member splits (except action as
+ *    specified above).
+ */
+int  xaccTransOrder_num_action (const Transaction *ta, const char *actna,
+                                const Transaction *tb, const char *actnb);
 
 /** @} */
 

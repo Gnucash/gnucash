@@ -41,7 +41,7 @@ There is an option for specifying the start and end row which can be used if you
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">
-Enter file name and location for the Import...
+Select location and file name for the Import, then click 'OK'...
 </property>
             <property name="wrap">True</property>
           </object>
@@ -777,6 +777,8 @@ Enter file name and location for the Import...
             <property name="label" translatable="yes">On the following page you will be able to associate each transaction to a category.
 
 If this is the first time importing, you will find that all lines may need to be associated. On subsequent imports, the importer will try to associate the transactions based on previous imports.
+
+If this is your initial import into a new file, you will first see a dialog for setting book options, since these can affect how imported data are converted to GnuCash transactions. If this is an existing file, the dialog will not be shown.
 
 The confidence of a correct association is displayed as a colored bar.
 

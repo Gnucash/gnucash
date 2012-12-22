@@ -40,6 +40,8 @@
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
+#include "guile-util.h"
+#include "gnc-main-window.h"
 #include <gnc-gdate-utils.h>
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -611,4 +613,27 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
         }
     }
     return response;
+}
+
+/* If this is a new book, this function can be used to display book options
+ * dialog so user can specify options, before any transactions can be
+ * imported/entered, since they can affect how transactions are created
+ * Note: This dialog is modal! */
+gboolean
+gnc_new_book_option_display (void)
+{
+    GtkWidget *window;
+    gint result = GTK_RESPONSE_HELP;
+
+    window = gnc_book_options_dialog_cb (TRUE, _( "New Book Options"));
+    if (window)
+    {
+        /* close dialog and proceed unless help button selected */
+        while (result == GTK_RESPONSE_HELP)
+        {
+            result = gtk_dialog_run(GTK_DIALOG(window));
+        }
+        return FALSE;
+    }
+    return TRUE;
 }

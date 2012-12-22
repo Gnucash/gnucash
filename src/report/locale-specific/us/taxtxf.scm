@@ -52,6 +52,12 @@
 ;;
 ;; Add support for code N673, Format 4
 ;;
+;; September, 2012 Update:
+;;
+;; Add support of book option for num-source; use function gnc-get-num-action in
+;; place of xaccTransGetNum and function gnc-get-action-num in place of
+;; xaccSplitGetAction and modify report headings accordingly
+;;
 ;; From prior version:
 ;; NOTE: setting of specific dates is squirly! and seems
 ;; to be current-date dependant!  Actually, time of day dependant!  Just
@@ -198,10 +204,15 @@
     gnc:pagename-display (N_ "Print TXF export parameters")
     "i" (N_ "Show TXF export parameters for each TXF code/account on report") #f))
 
-  (gnc:register-tax-option
-   (gnc:make-simple-boolean-option
-    gnc:pagename-display (N_ "Do not print Action:Memo data")
-    "j" (N_ "Do not print Action:Memo data for transactions") #f))
+  (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+      (gnc:register-tax-option
+       (gnc:make-simple-boolean-option
+        gnc:pagename-display (N_ "Do not print T-Num:Memo data")
+        "j" (N_ "Do not print T-Num:Memo data for transactions") #f))
+      (gnc:register-tax-option
+       (gnc:make-simple-boolean-option
+        gnc:pagename-display (N_ "Do not print Action:Memo data")
+        "j" (N_ "Do not print Action:Memo data for transactions") #f)))
 
   (gnc:register-tax-option
    (gnc:make-simple-boolean-option
@@ -393,14 +404,21 @@
        (append (list (gnc:make-html-table-header-cell/markup
                           "column-heading-center" "Date"))
                (list (gnc:make-html-table-header-cell/markup
-                          "column-heading-center" "Num"))
+                          "column-heading-center"
+                         (if (qof-book-use-split-action-for-num-field
+                                                         (gnc-get-current-book))
+                             "Num/Action"
+                             "Num")))
                (list (gnc:make-html-table-header-cell/markup
                           "column-heading-center" "Description"))
                (list (gnc:make-html-table-header-cell/markup
                           "column-heading-center"
                          (if suppress-action-memo?
                              "Notes"
-                             "Notes/Action:Memo")))
+                             (if (qof-book-use-split-action-for-num-field
+                                                         (gnc-get-current-book))
+                                 "Notes/T-Num:Memo"
+                                 "Notes/Action:Memo"))))
                (list (gnc:make-html-table-header-cell/markup
                           "column-heading-center"
                          (if format4?
@@ -1300,7 +1318,7 @@
                   (notes (xaccTransGetNotes parent))
                   (action (if suppress-action-memo?
                               ""
-                              (xaccSplitGetAction split)))
+                              (gnc-get-action-num  parent split)))
                   (memo  (if suppress-action-memo?
                              ""
                              (xaccSplitGetMemo split)))
@@ -1446,7 +1464,8 @@
                                           'attribute (list "cellpadding" "0"))
                        (gnc:html-table-append-row!
                             num-table
-                            (gnc:make-html-table-cell (xaccTransGetNum parent)))
+                            (gnc:make-html-table-cell (gnc-get-num-action
+                                                                parent split)))
                        (gnc:html-table-set-style! desc-table "table" 
                                           'attribute (list "border" "0")
                                           'attribute (list "cellspacing" "0")
@@ -2002,8 +2021,14 @@
                                  "Do not print transaction detail")))
          (no-special-dates? (get-option gnc:pagename-display
                                  "Do not use special date processing"))
-         (suppress-action-memo? (get-option gnc:pagename-display 
-                                 "Do not print Action:Memo data"))
+         (suppress-action-memo? (if (gnc:lookup-option
+                                        (gnc:report-options report-obj)
+                                            gnc:pagename-display
+                                            "Do not print Action:Memo data")
+                                    (get-option gnc:pagename-display 
+                                     "Do not print Action:Memo data")
+                                    (get-option gnc:pagename-display 
+                                     "Do not print T-Num:Memo data")))
          (shade-alternate-transactions? (if (gnc-html-engine-supports-css)
                                             #t 
                                             (get-option gnc:pagename-display 

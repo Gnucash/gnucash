@@ -1620,6 +1620,13 @@ xaccTransIsOpen (const Transaction *trans)
 int
 xaccTransOrder (const Transaction *ta, const Transaction *tb)
 {
+    return xaccTransOrder_num_action (ta, NULL, tb, NULL);
+}
+
+int
+xaccTransOrder_num_action (const Transaction *ta, const char *actna,
+                            const Transaction *tb, const char *actnb)
+{
     char *da, *db;
     int na, nb, retval;
 
@@ -1631,8 +1638,16 @@ xaccTransOrder (const Transaction *ta, const Transaction *tb)
     DATE_CMP(ta, tb, date_posted);
 
     /* otherwise, sort on number string */
-    na = atoi(ta->num);
-    nb = atoi(tb->num);
+    if (actna && actnb) /* split action string, if not NULL */
+    {
+        na = atoi(actna);
+        nb = atoi(actnb);
+    }
+    else                /* else transaction num string */
+    {
+        na = atoi(ta->num);
+        nb = atoi(tb->num);
+    }
     if (na < nb) return -1;
     if (na > nb) return +1;
 

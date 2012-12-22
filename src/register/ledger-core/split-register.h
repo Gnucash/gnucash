@@ -199,6 +199,7 @@ typedef enum
 #define MXFRM_CELL "transfer"
 #define NOTES_CELL "notes"
 #define NUM_CELL   "num"
+#define TNUM_CELL  "trans-num"
 #define PRIC_CELL  "price"
 #define RATE_CELL  "exchrate"
 #define RECN_CELL  "reconcile"
@@ -214,12 +215,16 @@ typedef enum
 /** @} */
 
 /** @name Cursor Names
+  * Cursors ending in 'NUM_ACTN' use the split action field for the NUM_CELL
+  * rather than the transaction number field which is shown in the TNUM_CELL
   * @{
   */
 #define CURSOR_SINGLE_LEDGER  "cursor-single-ledger"
 #define CURSOR_DOUBLE_LEDGER  "cursor-double-ledger"
+#define CURSOR_DOUBLE_LEDGER_NUM_ACTN  "cursor-double-ledger-num-actn"
 #define CURSOR_SINGLE_JOURNAL "cursor-single-journal"
 #define CURSOR_DOUBLE_JOURNAL "cursor-double-journal"
+#define CURSOR_DOUBLE_JOURNAL_NUM_ACTN "cursor-double-journal-num-actn"
 #define CURSOR_SPLIT          "cursor-split"
 /** @} */
 
@@ -261,6 +266,9 @@ struct split_register
     SplitRegisterStyle style;
 
     gboolean use_double_line;  /**< whether to use two lines per transaction */
+    gboolean use_tran_num_for_num_field;  /**< whether to use transaction number
+                                                or split action for number
+                                                field in register */
     gboolean is_template;
     gboolean do_auto_complete; /**< whether to use auto-competion */
 
