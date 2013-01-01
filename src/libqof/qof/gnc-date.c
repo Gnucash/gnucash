@@ -462,7 +462,7 @@ gnc_time_utc (time64 *tbuf)
 gdouble
 gnc_difftime (const time64 secs1, const time64 secs2)
 {
-     return (double)secs2 - (double)secs1;
+     return (double)secs1 - (double)secs2;
 }
 
 /****************************************************************************/

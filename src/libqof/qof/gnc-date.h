@@ -229,8 +229,8 @@ time64 gnc_time_utc (time64 *tbuf);
  * 00:00:01 UTC 01 January 1970 (negative values are seconds before that moment)
  *  \param secs2: The second time value, in Seconds since
  * 00:00:01 UTC 01 January 1970 (negative values are seconds before that moment)
- *  \return The difference in seconds between secs1 and secs2. If secs1 is
- * later than secs2 the value will be negative.
+ *  \return The difference in seconds between secs1 and secs2. If secs2 is
+ * later than secs1 the value will be negative.
  */
 gdouble gnc_difftime (const time64 secs1, const time64 secs2);
 
