@@ -411,6 +411,7 @@ gnc_gnome_help (const char *file_name, const char *anchor)
 {
     GError *error = NULL;
     gchar *uri = NULL;
+    gboolean success;
 
     if (anchor)
         uri = g_strconcat ("ghelp:", file_name, "?", anchor, NULL);
@@ -418,8 +419,9 @@ gnc_gnome_help (const char *file_name, const char *anchor)
         uri = g_strconcat ("ghelp:", file_name, NULL);
 
     DEBUG ("Attempting to opening help uri %s", uri);
-
-    if (gtk_show_uri (NULL, uri, gtk_get_current_event_time (), &error))
+    success = gtk_show_uri (NULL, uri, gtk_get_current_event_time (), &error);
+    g_free (uri);
+    if (success)
         return;
 
     g_assert(error != NULL);
