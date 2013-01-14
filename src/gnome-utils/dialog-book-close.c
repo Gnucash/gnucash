@@ -274,7 +274,7 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
     switch (response)
     {
     case GTK_RESPONSE_HELP:
-        gnc_gnome_help(HF_HELP, HL_GLOBPREFS);
+        gnc_gnome_help(HF_HELP, HL_CLOSE_BOOK);
         break;
     case GTK_RESPONSE_OK:
         cbw->close_date = gnc_date_edit_get_date(GNC_DATE_EDIT(cbw->close_date_widget));
