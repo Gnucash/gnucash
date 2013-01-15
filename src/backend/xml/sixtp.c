@@ -695,6 +695,7 @@ sixtp_parse_file_common(sixtp *sixtp,
                         gpointer *parse_result)
 {
     sixtp_parser_context *ctxt;
+    int parse_ret;
 
     if (!(ctxt = sixtp_context_new(sixtp, global_data, data_for_top_level)))
     {
@@ -706,12 +707,12 @@ sixtp_parse_file_common(sixtp *sixtp,
     ctxt->data.saxParserCtxt->sax = &ctxt->handler;
     ctxt->data.saxParserCtxt->userData = &ctxt->data;
     ctxt->data.bad_xml_parser = sixtp_dom_parser_new(gnc_bad_xml_end_handler, NULL, NULL);
-    xmlParseDocument( ctxt->data.saxParserCtxt );
+    parse_ret = xmlParseDocument( ctxt->data.saxParserCtxt );
     //xmlSAXUserParseFile(&ctxt->handler, &ctxt->data, filename);
 
     sixtp_context_run_end_handler(ctxt);
 
-    if (ctxt->data.parsing_ok)
+    if (parse_ret == 0 && ctxt->data.parsing_ok)
     {
         if (parse_result)
             *parse_result = ctxt->top_frame->frame_data;
