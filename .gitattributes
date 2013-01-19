@@ -41,4 +41,5 @@ gnc-scm-info     text eol=lf
 *.vbs text eol=crlf
 
 gnucash.iss.in text eol=crlf
+gnucash.rc     text eol=crlf
 README*win32-bin.txt text eol=crlf
