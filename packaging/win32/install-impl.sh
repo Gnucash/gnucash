@@ -722,7 +722,9 @@ function inst_guile() {
         tar -xzpf $_GUILE_BALL -C $TMP_UDIR
         assert_one_dir $TMP_UDIR/guile-*
         qpushd $TMP_UDIR/guile-*
-            patch -p1 < $GUILE_PATCH
+            if [ -n "$GUILE_PATCH" -a -f "$GUILE_PATCH" ]; then
+                patch -p1 < $GUILE_PATCH
+            fi
             ACLOCAL="aclocal $ACLOCAL_FLAGS" autoreconf -fvi $ACLOCAL_FLAGS
             ./configure ${HOST_XCOMPILE} \
                 --disable-static \
@@ -946,7 +948,7 @@ function inst_libdbi() {
             fi
             if [ -n "$LIBDBI_PATCH2" -a -f "$LIBDBI_PATCH2" ]; then
                 patch -p1 < $LIBDBI_PATCH2
-	    fi
+            fi
             if [ "$CROSS_COMPILE" = "yes" ]; then
                 rm ltmain.sh aclocal.m4
                 libtoolize --force
@@ -1116,7 +1118,9 @@ function inst_libxslt() {
         wget_unpacked $LIBXSLT_SRC_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libxslt-*
         qpushd $TMP_UDIR/libxslt-*
-	    patch -p0 -u -i ${LIBXSLT_MAKEFILE_PATCH}
+            if [ -n "$LIBXSLT_MAKEFILE_PATCH" -a -f "$LIBXSLT_MAKEFILE_PATCH" ]; then
+                patch -p0 -u -i ${LIBXSLT_MAKEFILE_PATCH}
+            fi
             ./configure ${HOST_XCOMPILE} \
                 --prefix=${_LIBXSLT_UDIR} \
                 --with-python=no \
