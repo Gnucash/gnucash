@@ -294,7 +294,7 @@ set_default LIBGSF_DIR $GLOBAL_DIR\\libgsf
 GOFFICE_VERSION="0.8.13"
 set_default GOFFICE_URL "$GNOME_MIRROR/sources/goffice/0.8/goffice-${GOFFICE_VERSION}.tar.bz2"
 set_default GOFFICE_DIR $GLOBAL_DIR\\goffice
-#set_default GOFFICE_PATCH `pwd`/goffice-x.x.x-patch.diff
+#set_default GOFFICE_PATCH `pwd`/goffice-x.x.x.patch
 
 set_default GLADE_URL "$GNOME_MIRROR/sources/glade3/3.0/glade3-3.1.2.tar.bz2"
 set_default GLADE_DIR $GLOBAL_DIR\\glade
@@ -343,12 +343,12 @@ set_default GIT_DIR $GLOBAL_DIR\\git-1.7.10
 # OFX import in gnucash and ofx directconnect support for aqbanking
 set_default OPENSP_URL "$SF_MIRROR/openjade/OpenSP-1.5.2.tar.gz"
 set_default OPENSP_DIR $GLOBAL_DIR\\opensp
-set_default OPENSP_PATCH `pwd`/opensp-1.5.2-patch.diff
+set_default OPENSP_PATCH `pwd`/opensp-1.5.2.patch
 
 LIBOFX_VERSION="0.9.4"
 set_default LIBOFX_URL "$SF_MIRROR/libofx/libofx-${LIBOFX_VERSION}.tar.gz"
 set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
-#set_default LIBOFX_PATCH `pwd`/libofx-x.x.x-patch.diff
+#set_default LIBOFX_PATCH `pwd`/libofx-x.x.x.patch
 
 ## online banking: gwenhywfar+aqbanking
 set_default AQBANKING5 yes
@@ -362,7 +362,7 @@ if [ "$AQBANKING5" = "yes" ]; then
 else
     GWENHYWFAR_VERSION="3.11.3"
     set_default GWENHYWFAR_URL "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=31&file=01&dummy=gwenhywfar-${GWENHYWFAR_VERSION}.tar.gz"
-    #set_default GWENHYWFAR_PATCH `pwd`/gwenhywfar-x.x.x-patch.diff
+    #set_default GWENHYWFAR_PATCH `pwd`/gwenhywfar-x.x.x.patch
 fi
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
@@ -377,7 +377,7 @@ if [ "$AQBANKING5" = "yes" ]; then
 else
     AQBANKING_VERSION="4.2.4"
     set_default AQBANKING_URL "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=50&file=01&dummy=aqbanking-${AQBANKING_VERSION}.tar.gz"
-    set_default AQBANKING_PATCH `pwd`/aqbanking-4.2.4-r2132-patch.diff
+    set_default AQBANKING_PATCH `pwd`/aqbanking-4.2.4-r2132.patch
     set_default AQBANKING_WITH_QT yes
 fi
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking

@@ -1,6 +1,6 @@
 EXTRA_DIST = \
   README \
-  aqbanking-4.2.4-r2132-patch.diff \
+  aqbanking-4.2.4-r2132.patch \
   defaults.sh \
   dist.sh \
   exetype.pl \
@@ -10,7 +10,7 @@ EXTRA_DIST = \
   install.sh \
   install-fq-mods.cmd \
   libmysql.def \
-  opensp-1.5.2-patch.diff \
+  opensp-1.5.2.patch \
   pi.sh \
   ChineseSimp-12-5.1.11.isl \
   ChineseTrad-2-5.1.11.isl \
