@@ -1,0 +1,44 @@
+# Default setting
+* text=auto
+
+# Files that should stay LF at all times
+*.am    text eol=lf
+*.c     text eol=lf
+*.chk   text eol=lf
+*.cpp   text eol=lf
+*.gnucash-xea text eol=lf
+*.h     text eol=lf
+*.hpp   text eol=lf
+*.html  text eol=lf
+*.i     text eol=lf
+*.in    text eol=lf
+*.m4    text eol=lf
+*.patch text eol=lf
+*.pl    text eol=lf
+*.po    text eol=lf
+*.py    text eol=lf
+*.qif   text eol=lf
+*.scm   text eol=lf
+*.sh    text eol=lf
+*.svg   text eol=lf
+*.xsl   text eol=lf
+
+Makefile.TAGS    text eol=lf
+Makevars         text eol=lf
+POTFILES.ignore  text eol=lf
+POTFILES.skip    text eol=lf
+configure.ac     text eol=lf
+custom.sh.sample text eol=lf
+glade-fixup      text eol=lf
+gnc-glossary.txt text eol=lf
+gnc-scm-info     text eol=lf
+
+
+# Files that should use CRLF at all times
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.isl text eol=crlf
+*.vbs text eol=crlf
+
+gnucash.iss.in text eol=crlf
+README*win32-bin.txt text eol=crlf
