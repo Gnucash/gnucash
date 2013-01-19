@@ -33,7 +33,6 @@
 #include "datecell.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
-#include "gnome/gnc-plugin-page-register.h"
 #include "gnc-gconf-utils.h"
 #include "split-register-p.h"
 #include "gnc-ledger-display.h"
@@ -547,25 +546,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
             }
             else
             {
-                SplitRegister *oth_reg = gnc_find_register_by_account(account);
-
-                /* If another register is open for split acct, use that register
-                 * to set last number */
-                if (oth_reg)
-                {
-                    NumCell *num_cell;
-
-                    num_cell = (NumCell *) gnc_table_layout_get_cell
-                                                        (oth_reg->table->layout,
-                                                            NUM_CELL);
-                    if (gnc_num_cell_set_last_num (num_cell, out_num))
-                        gnc_split_register_set_last_num (oth_reg, out_num);
-                }
-                /* else just update acct */
-                else
-                {
-                    xaccAccountSetLastNum (account, out_num);
-                }
+                xaccAccountSetLastNum (account, out_num);
             }
         }
 

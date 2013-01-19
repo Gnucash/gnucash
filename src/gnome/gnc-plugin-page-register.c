@@ -75,7 +75,6 @@
 #include "window-reconcile.h"
 #include "window-autoclear.h"
 #include "window-report.h"
-#include "split-register-p.h"
 #include "engine-helpers.h"
 #include "qofbookslots.h"
 
@@ -3640,43 +3639,6 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
     }
 
     gnc_plugin_page_register_ui_update(NULL, page);
-}
-
-static gboolean
-find_reg_by_acct (gpointer find_data, gpointer user_data)
-{
-    GncPluginPageRegisterPrivate *priv;
-    SplitRegister *reg;
-    Account *account = find_data;
-    GncPluginPageRegister *page = user_data;
-
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
-
-    return (xaccAccountEqual(account,
-                             gnc_split_register_get_default_account (reg),
-                             TRUE));
-}
-
-SplitRegister *
-gnc_find_register_by_account (Account *account)
-{
-    GncPluginPageRegister *page;
-
-    if (!account) return NULL;
-
-    page = gnc_find_first_gui_component (GNC_PLUGIN_PAGE_REGISTER_NAME,
-                                            find_reg_by_acct,
-                                            (gpointer) account);
-    if (page)
-    {
-        GncPluginPageRegisterPrivate *priv;
-        SplitRegister *reg;
-
-        priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-        return reg = gnc_ledger_display_get_split_register(priv->ledger);
-    }
-    else return NULL;
 }
 
 static void

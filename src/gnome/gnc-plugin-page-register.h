@@ -66,17 +66,6 @@ typedef struct
 
 /* function prototypes */
 
-/* gnc_find_register_by_account
- *   Search for an open register for the specified account.
- *
- * @param account The pointer to the account to search open register pages for;
- *              must be non-NULL
- *
- * @return The pointer to the open register of the account, or NULL if none found
- */
-SplitRegister *
-gnc_find_register_by_account (Account *account);
-
 /** Retrieve the type number for the plugin page.
  *
  *  @return The type number.
