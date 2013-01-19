@@ -1,17 +1,15 @@
 EXTRA_DIST = \
   README \
+  aqbanking-4.2.4-r2132-patch.diff \
   defaults.sh \
   dist.sh \
   exetype.pl \
   functions.sh \
   getperl.vbs \
   gnc-path-check \
-  goffice-0.7.2-patch.diff \
-  gwenhywfar-3.6.0-patch.diff \
   install.sh \
   install-fq-mods.cmd \
   libmysql.def \
-  libofx-0.8.3-patch.diff \
   opensp-1.5.2-patch.diff \
   pi.sh \
   ChineseSimp-12-5.1.11.isl \
