@@ -365,6 +365,8 @@ End Function
 
 
 ' Make sure we run in a console (so output is visible)
+' Based on a code snipped found here
+' http://ask.metafilter.com/79481/vbscript-printing-to-command-line
 Sub CheckStartMode
     ' Returns the running executable as upper case from the last \ symbol
     strStartExe = UCase( Mid( wscript.fullname, instrRev(wscript.fullname, "\") + 1 ) )
@@ -388,3 +390,4 @@ Sub AbortScript
     chRead = stdin.Read (1)
     WScript.Quit
 End Sub
+
