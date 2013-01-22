@@ -628,9 +628,10 @@ gnc_save_reconcile_interval(Account *account, time64 statement_date)
     }
 
     /*
-     * Remember for next time.
+     * Remember for next time unless it is negative.
      */
-    xaccAccountSetReconcileLastInterval(account, months, days);
+    if (months >= 0 && days >= 0)
+        xaccAccountSetReconcileLastInterval(account, months, days);
 }
 
 
