@@ -344,7 +344,19 @@ gnc_split_register_set_cell_fractions (SplitRegister *reg, Split *split)
     int fraction;
 
     trans = xaccSplitGetParent (split);
-    currency = xaccTransGetCurrency (trans);
+    if (gnc_split_register_current_trans_expanded (reg) &&
+        xaccTransUseTradingAccounts (trans))
+    {
+        /* If the transaction is expanded and using trading accounts then
+         * the debit and credit fields are in the split's commodity not
+         * the transaction's currency
+         */
+        currency = xaccAccountGetCommodity (xaccSplitGetAccount (split));
+    }
+    else
+    {
+        currency = xaccTransGetCurrency (trans);
+    }
     if (!currency)
         currency = gnc_default_currency ();
 
