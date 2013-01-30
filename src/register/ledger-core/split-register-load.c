@@ -365,6 +365,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
         info->blank_split_guid = *xaccSplitGetGUID (blank_split);
         info->blank_split_edited = FALSE;
+        info->auto_complete = FALSE;
         DEBUG("created new blank_split=%p", blank_split);
 
         gnc_resume_gui_refresh ();

@@ -1137,7 +1137,11 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
     Split *split, *osplit;
     Transaction *txn;
     gnc_numeric amount, value, convrate;
+    SRInfo *info = gnc_split_register_get_info (reg);
 
+    if (info->rate_reset == RATE_RESET_REQD && info->auto_complete)
+        return "0";
+        
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     if (!split)
         return NULL;
@@ -1583,12 +1587,12 @@ gnc_split_reg_has_rate_cell (SplitRegisterType type)
     case TRADING_REGISTER:
     case GENERAL_LEDGER:
     case INCOME_LEDGER:
-    case PORTFOLIO_LEDGER:
     case SEARCH_LEDGER:
         return TRUE;
 
     case STOCK_REGISTER:
     case CURRENCY_REGISTER:
+    case PORTFOLIO_LEDGER:
     case RECEIVABLE_REGISTER:
     case PAYABLE_REGISTER:
     default:

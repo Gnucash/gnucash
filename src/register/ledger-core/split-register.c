@@ -1000,6 +1000,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
             blank_split = xaccTransGetSplit(trans, 0);
             info->blank_split_guid = *xaccSplitGetGUID (blank_split);
             info->blank_split_edited = TRUE;
+            info->auto_complete = FALSE;
             DEBUG("replacement blank_split=%p", blank_split);
 
             /* NOTE: At this point, the blank transaction virtual cell is still
@@ -1114,6 +1115,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
     {
         DEBUG("deleting blank split");
         info->blank_split_guid = *guid_null();
+        info->auto_complete = FALSE;
     }
     else
     {
@@ -1620,6 +1622,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
                 info->last_date_entered = xaccTransGetDate (trans);
                 info->blank_split_guid = *guid_null ();
                 info->blank_split_edited = FALSE;
+                info->auto_complete = FALSE;
             }
 
             /* We have to clear the pending guid *before* committing the
@@ -1784,6 +1787,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
         if (do_commit)
         {
             info->blank_split_guid = *guid_null ();
+            info->auto_complete = FALSE;
             blank_split = NULL;
             info->last_date_entered = xaccTransGetDate (trans);
         }
@@ -2806,6 +2810,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
             pending_trans = NULL;
         }
         info->blank_split_guid = *guid_null ();
+        info->auto_complete = FALSE;
         blank_split = NULL;
     }
 

@@ -220,6 +220,39 @@ gnc_split_register_old_split_empty_p (SplitRegister *reg, Split *split)
     return TRUE;
 }
 
+/* Checks a cell for a debit or credit change to see if a new exchange
+ * rate is needed. */
+
+static gboolean
+gnc_split_register_check_debcred (SplitRegister *reg,
+                                  const char *cell_name)
+{
+    if ((gnc_cell_name_equal (cell_name, DEBT_CELL) &&
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               DEBT_CELL, FALSE)) ||
+         (gnc_cell_name_equal (cell_name, CRED_CELL) &&
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               CRED_CELL, FALSE)))
+    {
+        SRInfo *info = gnc_split_register_get_info (reg);
+        PriceCell *rate_cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                RATE_CELL);
+        if (gnc_split_reg_has_rate_cell(reg->type) && info->rate_reset != RATE_RESET_DONE)
+        {
+            /* Debit or credit amount changed, get a new exchange rate */
+            info->rate_reset = RATE_RESET_REQD;
+            if (info->auto_complete)
+            {
+                /* It's auto-filled, start with rate from price DB for the date
+                   of the transaction. */
+                gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
+            }
+        }
+    }
+    
+    return TRUE;
+}
+
 /* Checks a cell for an account change and takes any necessary action if
  * one has occurred. Returns TRUE if the check passes, FALSE if it fails. */
 static gboolean
@@ -228,7 +261,6 @@ gnc_split_register_check_account (SplitRegister *reg,
 {
     SRInfo *info;
     ComboCell *cell = NULL;
-    PriceCell *rate_cell;
     Account* new_acct;
     char *name;
 
@@ -270,11 +302,11 @@ gnc_split_register_check_account (SplitRegister *reg,
         return FALSE;
 
     /* See if we need to reset the exchange rate. */
-    rate_cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
-                RATE_CELL);
-    if (rate_cell)
+    if (gnc_split_reg_has_rate_cell(reg->type))
     {
         Split         *split     = gnc_split_register_get_current_split(reg);
+        PriceCell     *rate_cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                                            RATE_CELL);
         Account       *orig_acct = xaccSplitGetAccount(split);
         gnc_commodity *orig_com  = xaccAccountGetCommodity(orig_acct);
         gnc_commodity *last_com  = xaccAccountGetCommodity(info->rate_account);
@@ -294,7 +326,7 @@ gnc_split_register_check_account (SplitRegister *reg,
 
             gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
             info->rate_account = new_acct;
-            info->rate_reset = TRUE;
+            info->rate_reset = RATE_RESET_REQD;
         }
         else
         {
@@ -310,14 +342,14 @@ gnc_split_register_check_account (SplitRegister *reg,
                       gnc_num_dbg_to_string(orig_rate));
                 gnc_price_cell_set_value (rate_cell, orig_rate);
                 info->rate_account = new_acct;
-                info->rate_reset = FALSE;
+                info->rate_reset = RATE_RESET_NOT_REQD;
             }
             else
             {
                 DEBUG("Can't get rate. Using zero.");
                 gnc_price_cell_set_value (rate_cell, gnc_numeric_zero());
                 info->rate_account = new_acct;
-                info->rate_reset = TRUE;
+                info->rate_reset = RATE_RESET_REQD;
             }
         }
     }
@@ -480,7 +512,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     {
         info->change_confirmed = FALSE;
         info->rate_account = NULL;
-        info->rate_reset = FALSE;
+        info->rate_reset = RATE_RESET_NOT_REQD;
     }
 
     gnc_resume_gui_refresh ();
@@ -1115,6 +1147,13 @@ gnc_split_register_check_cell (SplitRegister *reg, const char *cell_name)
         LEAVE("account check failed");
         return FALSE;
     }
+    
+    /* See if we are leaving a debit or credit cell */
+    if (!gnc_split_register_check_debcred (reg, cell_name))
+    {
+        LEAVE("debit/credit check failed");
+        return FALSE;
+    }
 
     /* See if we are leaving an action field */
     if ((reg->type == STOCK_REGISTER) ||
@@ -1292,8 +1331,10 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     }
 
     /* See if we already have an exchange rate... */
+    info = gnc_split_register_get_info (reg);
     exch_rate = gnc_price_cell_get_value (rate_cell);
-    if (!gnc_numeric_zero_p(exch_rate) && !force_dialog)
+    if (!gnc_numeric_zero_p(exch_rate) && !force_dialog &&
+        info->rate_reset != RATE_RESET_REQD)
     {
         LEAVE("rate already non-zero");
         return FALSE;
@@ -1445,9 +1486,8 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
      * _not_ the blank split, then return FALSE -- this is a "special"
      * gain/loss stock transaction.
      */
-    info = gnc_split_register_get_info (reg);
     if (gnc_numeric_zero_p(exch_rate) && !force_dialog && split &&
-            !info->rate_reset &&
+            info->rate_reset != RATE_RESET_REQD &&
             split != gnc_split_register_get_blank_split (reg))
     {
         LEAVE("gain/loss split; no exchange rate needed");
@@ -1470,7 +1510,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     gnc_price_cell_set_value (rate_cell, exch_rate);
     gnc_basic_cell_set_changed (&rate_cell->cell, TRUE);
     info->rate_account = xfer_acc;
-    info->rate_reset = FALSE;
+    info->rate_reset = RATE_RESET_DONE;
     LEAVE("set rate=%s", gnc_num_dbg_to_string(exch_rate));
     return FALSE;
 }
@@ -1672,6 +1712,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     {
         if (gnc_split_register_auto_completion (reg, dir, p_new_virt_loc))
         {
+            info->auto_complete = TRUE;
             LEAVE("auto-complete");
             return FALSE;
         }

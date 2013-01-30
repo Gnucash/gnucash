@@ -31,6 +31,13 @@
 
 #define ACTION_BUY_STR  _("Buy")
 #define ACTION_SELL_STR _("Sell")
+
+typedef enum {
+    RATE_RESET_NOT_REQD = 0,
+    RATE_RESET_REQD     = 1,
+    RATE_RESET_DONE     = 2
+} RateReset_t;
+
 struct sr_info
 {
     /* The blank split at the bottom of the register */
@@ -91,8 +98,14 @@ struct sr_info
      * split */
     gboolean change_confirmed;
 
-    /* true if the exchange rate has been reset on the current split */
-    gboolean rate_reset;
+    /* RATE_RESET_NOT_REQD => No exchange rate dialog needed for current split
+     * RATE_RESET_REQD => Need new exchange rate for current split
+     * RATE_RESET_DONE => Already got a new exchange rate for current split
+     */
+    RateReset_t rate_reset;
+    
+    /* true if the transaction being edited was auto-filled */
+    gboolean auto_complete;
 
     /* account on the current split when the exchange rate was last set */
     Account *rate_account;
