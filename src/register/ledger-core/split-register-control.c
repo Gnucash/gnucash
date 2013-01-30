@@ -262,6 +262,7 @@ gnc_split_register_check_account (SplitRegister *reg,
     SRInfo *info;
     ComboCell *cell = NULL;
     Account* new_acct;
+    Split *split;
     char *name;
 
     g_return_val_if_fail(reg, TRUE);
@@ -300,11 +301,13 @@ gnc_split_register_check_account (SplitRegister *reg,
                cell->cell.value);
     if (!new_acct)
         return FALSE;
+    
+    split = gnc_split_register_get_current_split(reg);
+    gnc_split_register_set_cell_fractions (reg, split);
 
     /* See if we need to reset the exchange rate. */
     if (gnc_split_reg_has_rate_cell(reg->type))
     {
-        Split         *split     = gnc_split_register_get_current_split(reg);
         PriceCell     *rate_cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                                             RATE_CELL);
         Account       *orig_acct = xaccSplitGetAccount(split);
