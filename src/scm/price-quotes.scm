@@ -397,7 +397,7 @@
 	     ct))
 	   (commodity-list #f)
 	   (currency-list (filter
-			   (lambda (a) (not (equal? (cadr a) (caddr a))))
+			   (lambda (a) (not (gnc-commodity-equiv (cadr a) (caddr a))))
 			   (call-with-values 
                                (lambda () (partition!
                                            (lambda (cmd)
