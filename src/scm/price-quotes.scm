@@ -497,7 +497,17 @@
                  (= (length call-data) (+ 1 (length call-result))))
 
             ;; OK, continue.
-            (for-each process-a-quote (cdr call-data) call-result)
+	    (for-each
+	     (lambda (call-data-item call-result-item)
+	       (if (and (list? call-result-item) (list? (car call-result-item)))
+		   (for-each
+		    (lambda (result-subitem)
+		      (gnc:debug "call-data-item: " call-data-item)
+		      (gnc:debug "result-subitem: " result-subitem)
+		      (process-a-quote call-data-item result-subitem))
+		    call-result-item)
+		   (process-a-quote call-data-item call-result-item)))
+	     (cdr call-data) call-result)
 
             ;; else badly formed result, must assume all garbage.
             (for-each
