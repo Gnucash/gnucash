@@ -100,7 +100,15 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
     if (!parsed) return;
     if (!datestr) return;
 
-    qof_scan_date (datestr, &day, &month, &year);
+    if (!qof_scan_date (datestr, &day, &month, &year))
+    {
+        // Couldn't parse date, use today
+        struct tm tm_today;
+        gnc_tm_get_today_start (&tm_today);
+        day = tm_today.tm_mday;
+        month = tm_today.tm_mon + 1;
+        year = tm_today.tm_year + 1900;
+    }
 
     // If we have an auto-read-only threshold, do not accept a date that is
     // older than the threshold.
