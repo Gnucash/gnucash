@@ -152,6 +152,7 @@ void gnc_split_reg_sort_desc_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_action_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_notes_cb (GtkWidget *w, gpointer data);
 
+
 void gnc_split_reg_destroy_cb(GtkWidget *widget, gpointer data);
 void gnc_split_reg_size_allocate( GtkWidget *widget,
                                   GtkAllocation *allocation,
@@ -1720,6 +1721,15 @@ gnc_split_reg_sort_notes_cb(GtkWidget *w, gpointer data)
     gnc_split_reg_sort(gsr, BY_NOTES);
 }
 
+
+void 
+gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev)
+{
+  Query *query = gnc_ledger_display_get_query( gsr->ledger );
+  qof_query_set_sort_increasing (query, rev, rev, rev);
+  gnc_ledger_display_refresh( gsr->ledger );
+}
+
 void
 gnc_split_reg_handle_exchange_cb (GtkWidget *w, gpointer data)
 {
@@ -2111,6 +2121,7 @@ gnc_split_reg_set_sort_type_force( GNCSplitReg *gsr, SortType t, gboolean force 
 {
     gnc_split_reg_sort_force( gsr, t, force );
 }
+
 
 GtkWidget*
 gnc_split_reg_get_summarybar( GNCSplitReg *gsr )

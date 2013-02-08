@@ -193,6 +193,12 @@ void gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t );
 void gnc_split_reg_set_sort_type_force( GNCSplitReg *gsr, SortType t, gboolean force);
 
 /**
+ * Set/get sort order of register
+ **/ 
+void gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev);
+
+
+/**
  * Gets/sets the style of the GNCSplitReg.
  **/
 void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);

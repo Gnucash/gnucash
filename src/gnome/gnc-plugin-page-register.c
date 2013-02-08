@@ -107,6 +107,7 @@ static void gnc_plugin_page_register_summarybar_position_changed(GConfEntry *ent
 void gnc_plugin_page_register_sort_button_cb(GtkToggleButton *button, GncPluginPageRegister *page);
 void gnc_plugin_page_register_sort_response_cb(GtkDialog *dialog, gint response, GncPluginPageRegister *plugin_page);
 void gnc_plugin_page_register_sort_order_save_cb(GtkToggleButton *button, GncPluginPageRegister *page);
+void gnc_plugin_page_register_sort_order_reverse_cb(GtkToggleButton *button, GncPluginPageRegister *page);
 
 static gchar *gnc_plugin_page_register_get_sort_order (GncPluginPage *plugin_page);
 void gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar *sort_order);
@@ -491,6 +492,7 @@ typedef struct GncPluginPageRegisterPrivate
         SortType original_sort_type;
         gboolean original_save_order;
         gboolean save_order;
+        gboolean reverse_order;
     } sd;
 
     struct
@@ -918,6 +920,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     {
         /* Set the sort order for the split register and status of save order button */
         priv->sd.save_order = FALSE;
+        priv->sd.reverse_order = FALSE;
         order = gnc_plugin_page_register_get_sort_order(plugin_page);
 
         PINFO("Loaded Sort order is %s", order);
@@ -1761,6 +1764,41 @@ gnc_plugin_page_register_sort_order_save_cb (GtkToggleButton *button,
     LEAVE(" ");
 }
 
+/** This function is called whenever the reverse sort order is checked
+ *  or unchecked which allows reversing of the sort order.
+ *
+ *  @param button The toggle button that was changed.
+ *
+ *  @param page A pointer to the GncPluginPageRegister that is
+ *  associated with this sort order dialog.
+ */
+void
+gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton *button,
+        GncPluginPageRegister *page)
+        
+{
+    GncPluginPageRegisterPrivate *priv;
+
+    g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+    ENTER("Reverse toggle button (%p), plugin_page %p", button, page);
+
+    /* Compute the new save sort order */
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+
+    if (gtk_toggle_button_get_active(button))
+    {
+        gnc_split_reg_set_sort_reversed(priv->gsr, FALSE);
+        priv->sd.reverse_order = TRUE;
+      }
+    else
+    {
+        gnc_split_reg_set_sort_reversed(priv->gsr, TRUE);
+        priv->sd.reverse_order = FALSE;
+      }
+    LEAVE(" ");
+}
 
 /************************************************************/
 /*                    "Filter By" Dialog                    */
@@ -2872,6 +2910,11 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_save"));
     if (priv->sd.save_order == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+    
+    /* Set the button for the current reverse_order order */
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_reverse"));    
+    if(priv->sd.reverse_order == TRUE)
+       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
     priv->sd.num_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_NUM"));
     priv->sd.act_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_ACTION"));
