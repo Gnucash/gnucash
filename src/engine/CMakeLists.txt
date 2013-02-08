@@ -84,13 +84,6 @@ ADD_CUSTOM_COMMAND (
 # Add dependency on iso-4217-currencies.c
 SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS ${ISO_4217_C})
 
-# Command to generate the swig-runtime.h header
-SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h)
-ADD_CUSTOM_COMMAND (
-  OUTPUT ${SWIG_RUNTIME_H}
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-  COMMAND ${SWIG_EXECUTABLE} -guile -external-runtime ${SWIG_RUNTIME_H}
-)
 # Add dependency on swig-runtime.h
 SET_SOURCE_FILES_PROPERTIES (gnc-hooks.c engine-helpers.c kvp-scm.c glib-helpers.c PROPERTIES OBJECT_DEPENDS ${SWIG_RUNTIME_H})
 

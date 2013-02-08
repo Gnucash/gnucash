@@ -80,6 +80,8 @@ ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 SET (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CONFIG_H})
 
+SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h)
+
 # ############################################################
 
 # The subdirectories

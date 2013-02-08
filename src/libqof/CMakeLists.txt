@@ -30,6 +30,7 @@ SET (libgnc_qof_SOURCES
    qof/qofreference.c
    qof/qofsession.c
    qof/qofutil.c
+   qof/qof-string-cache.c
 )
 IF (WIN32)
   ADD_DEFINITIONS (-DOS_WIN32)
@@ -72,6 +73,7 @@ SET (libgnc_qof_HEADERS
    qof/qofsession.h
    qof/qofutil.h
    qof/qof-gobject.h
+   qof/qof-string-cache.h
 )
 
 ADD_LIBRARY	(qof
