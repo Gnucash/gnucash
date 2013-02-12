@@ -290,7 +290,7 @@ test_gnc_ctime (void)
 	GDateTime *gdt = gncdt.new_from_unix_local (secs[ind]);
 	gchar* datestr = gnc_ctime (&secs[ind]);
         g_assert_cmpstr (datestr, ==,
-	                 g_date_time_format (gdt, "%a %b %H:%M:%S %Y"));
+	                 g_date_time_format (gdt, "%a %b %e %H:%M:%S %Y\n"));
 	g_date_time_unref (gdt);
 	g_free (datestr);
     }

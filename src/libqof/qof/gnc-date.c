@@ -432,7 +432,7 @@ gchar*
 gnc_ctime (const time64 *secs)
 {
      GDateTime *gdt = gnc_g_date_time_new_from_unix_local (*secs);
-     gchar *string = g_date_time_format (gdt, "%a %b %H:%M:%S %Y");
+     gchar *string = g_date_time_format (gdt, "%a %b %e %H:%M:%S %Y\n");
      g_date_time_unref (gdt);
      return string;
 }
