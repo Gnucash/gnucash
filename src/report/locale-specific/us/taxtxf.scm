@@ -52,6 +52,11 @@
 ;;
 ;; Add support for code N673, Format 4
 ;;
+;; February, 2013 Update:
+;;
+;; Fix beginning balance sign and signs for Transfer From/To amounts for 
+;; liability/equity accounts
+;;
 ;; From prior version:
 ;; NOTE: setting of specific dates is squirly! and seems
 ;; to be current-date dependant!  Actually, time of day dependant!  Just
@@ -841,7 +846,11 @@
                         (split-acct-commodity
                                            (xaccAccountGetCommodity split-acct))
                         (splt-amnt (xaccSplitGetAmount tran-split))
-                        (splt-amnt (if (eq? acct-type ACCT-TYPE-INCOME)
+                        (splt-amnt (if (or (eq? acct-type ACCT-TYPE-INCOME)
+                                           (eq? acct-type ACCT-TYPE-CREDIT)
+                                           (eq? acct-type ACCT-TYPE-PAYABLE)
+                                           (eq? acct-type ACCT-TYPE-LIABILITY)
+                                           (eq? acct-type ACCT-TYPE-EQUITY))
                                             splt-amnt
                                             (gnc-numeric-neg splt-amnt)))
                         (print-info (gnc-account-print-info split-acct #f))
@@ -1164,7 +1173,7 @@
               );; B/S acct with either beg bal, splits or end bal
               ;; print beg bal line for B/S accts
               (let* ((curr-conv-note "")
-                     (curr-conv-data (list beg-bal-acct-curr
+                     (curr-conv-data (list beg-bal-rpt-amount
                                                           curr-conv-note #f ""))
                      (curr-conv-data (if (gnc-commodity-equiv
                                                  account-commodity USD-currency)
