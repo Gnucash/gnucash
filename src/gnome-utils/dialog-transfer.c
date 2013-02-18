@@ -1308,6 +1308,12 @@ gnc_xfer_dialog_set_date(XferDialog *xferData, time64 set_date)
 
     gnc_date_edit_set_time( GNC_DATE_EDIT(xferData->date_entry), set_date );
 }
+void gnc_xfer_dialog_set_date_sensitive(XferDialog *xferData,
+        gboolean is_sensitive)
+{
+    g_assert(xferData);
+    gtk_widget_set_sensitive (xferData->date_entry, is_sensitive);
+}
 
 void
 gnc_xfer_dialog_set_exchange_rate(XferDialog *xferData, gnc_numeric exchange_rate)
