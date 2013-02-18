@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-08 22:28+0100\n"
-"PO-Revision-Date: 2012-01-08 22:26+0100\n"
+"PO-Revision-Date: 2013-02-18 21:55+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: German\n"
@@ -2371,14 +2371,14 @@ msgstr "Währung"
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/net-barchart.scm
 msgid "Income"
-msgstr "Erträge"
+msgstr "Ertrag"
 
 #  should be prefixed: "employee|Auslagen" "Aufwendungen" sonst?
 #. src/app-utils/prefs.scm
 #. src/report/business-reports/customer-summary.scm
 #. src/report/standard-reports/net-barchart.scm
 msgid "Expense"
-msgstr "Aufwendungen"
+msgstr "Aufwand"
 
 msgid "A/Receivable"
 msgstr "Offene Forderungen"
@@ -12901,7 +12901,7 @@ msgstr "Kapitalertrag (kurzfristig)"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
 msgid "Expenses"
-msgstr "Aufwendungen"
+msgstr "Aufwand"
 
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
@@ -16364,17 +16364,17 @@ msgstr "für Budget %s"
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
 msgid "Revenues"
-msgstr "Gewinn"
+msgstr "Ertrag"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
 msgid "Total Revenue"
-msgstr "Gesamterträge"
+msgstr "Gesamtertrag"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/income-statement.scm
 msgid "Total Expenses"
-msgstr "Gesamt Aufwendungen"
+msgstr "Gesamt Aufwand"
 
 #. src/report/standard-reports/budget-income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
