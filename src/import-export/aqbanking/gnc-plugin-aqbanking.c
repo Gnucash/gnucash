@@ -74,6 +74,7 @@ static void gnc_plugin_ab_cmd_issue_transaction(GtkAction *action, GncMainWindow
 static void gnc_plugin_ab_cmd_issue_sepatransaction(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ab_cmd_issue_sepa_direct_debit(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_view_logwindow(GtkToggleAction *action, GncMainWindow *window);
 static void gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data);
@@ -127,6 +128,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         N_("Issue a new direct debit note online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_direct_debit)
     },
+    {
+        "ABIssueSepaDirectDebitAction", NULL, N_("_Issue SEPA Direct Debit..."), NULL,
+        N_("Issue a new international European (SEPA) direct debit note online through Online Banking"),
+        G_CALLBACK(gnc_plugin_ab_cmd_issue_sepa_direct_debit)
+    },
 
     /* File -> Import menu item */
     {
@@ -176,8 +182,10 @@ static const gchar *need_account_actions[] =
     "ABGetBalanceAction",
     "ABGetTransAction",
     "ABIssueTransAction",
+    "ABIssueSepaTransAction",
     "ABIssueIntTransAction",
     "ABIssueDirectDebitAction",
+    "ABIssueSepaDirectDebitAction",
     NULL
 };
 
@@ -600,6 +608,27 @@ gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action,
 
     gnc_main_window = data->window;
     gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_DEBITNOTE);
+
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_ab_cmd_issue_sepa_direct_debit(GtkAction *action,
+                                          GncMainWindowActionData *data)
+{
+    Account *account;
+
+    ENTER("action %p, main window data %p", action, data);
+    account = main_window_to_account(data->window);
+    if (account == NULL)
+    {
+        g_message("No AqBanking account selected");
+        LEAVE("no account");
+        return;
+    }
+
+    gnc_main_window = data->window;
+    gnc_ab_maketrans(GTK_WIDGET(data->window), account, SEPA_DEBITNOTE);
 
     LEAVE(" ");
 }
