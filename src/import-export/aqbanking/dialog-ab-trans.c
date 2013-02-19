@@ -929,6 +929,12 @@ gnc_ab_trans_dialog_bankcode_changed_cb(GtkEditable *editable, gpointer user_dat
 
     g_return_if_fail(td);
 
+    // FIXME: If this is a SEPA transaction, totally different verification
+    // rules apply anyway. There are some initial verification functions in
+    // <ktoblzcheck/iban.h>, but those need to be implemented here as well.
+    if (gnc_ab_trans_isSEPA(td->trans_type))
+        return;
+
     ENTER("td=%p, input=%s", td, input);
     record = AccountNumberCheck_findBank(td->blzcheck, input);
 
@@ -1211,6 +1217,7 @@ gnc_ab_trans_dialog_entry_filter_cb (GtkEditable *editable,
 {
     GString* result = g_string_new(NULL);
     gint i;
+    GncABTransDialog *td = data;
 
     if (length == -1)
         length = strlen(text);
@@ -1219,7 +1226,12 @@ gnc_ab_trans_dialog_entry_filter_cb (GtkEditable *editable,
     for (i = 0; i < length; i++)
     {
         gchar c = text[i];
-        if (g_ascii_isdigit(c))
+
+        // Only accept digits. FIXME: In the SEPA dialogs, alphanumerics are
+        // allowed, but we could also verify the input according to actual BIC
+        // and IBAN rules. This is not yet done here.
+        if (g_ascii_isdigit(c)
+                || (gnc_ab_trans_isSEPA(td->trans_type) && g_ascii_isalnum(c)))
         {
             g_string_append_c(result, c);
         }
