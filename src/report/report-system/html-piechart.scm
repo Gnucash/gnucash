@@ -97,6 +97,14 @@
 (define gnc:html-piechart-set-subtitle!
   (record-modifier <html-piechart> 'subtitle))
 
+;; FIXME url's haven't been working since GnuCash 1.x
+;;       GnuCash 2.x switched from guppy to goffice, which
+;;       made it very hard to remain the url functionality
+;;       At this point I (gjanssens) is in the process of
+;;       moving from goffice to jqplot for our charts
+;;       which perhaps may allow urls again in the charts
+;;       I'm keeping the parameters below around to remind
+;;       us this still has to be investigated again
 (define gnc:html-piechart-button-1-slice-urls
   (record-accessor <html-piechart> 'button-1-slice-urls))
 
@@ -228,7 +236,9 @@
                     seriesDefaults: {
                         renderer: $.jqplot.PieRenderer,
                     },
-                    legend: { show: true, },
+                    legend: {
+                         show: true,
+                         placement: \"outsideGrid\", },
                    };")
 
             (if title
@@ -242,79 +252,9 @@
 
             (push "$.jqplot.config.enablePlugins = true;")
             (push "var plot = $.jqplot('placeholder', [data], options);")
-            (push "});</script>")
-
-
-          (push "<object classid=\"")(push GNC-CHART-PIE)(push "\" width=")
-          (push (gnc:html-piechart-width piechart))
-          (push " height=") 
-          (push (gnc:html-piechart-height piechart))
-          (push ">\n")
-          (if title
-              (begin 
-                (push "  <param name=\"title\" value=\"")
-                (push title) (push "\">\n")))
-          (if subtitle
-              (begin 
-                (push "  <param name=\"subtitle\" value=\"")
-                (push subtitle) (push "\">\n")))
-          (if (and data (list? data))
-              (begin 
-                (push "  <param name=\"datasize\" value=\"")
-                (push (length data)) (push "\">\n")
-                (push "  <param name=\"data\" value=\"")
-                (for-each 
-                 (lambda (datum)
-                   (push datum)
-                   (push " "))
-                 data)
-                (push "\">\n")))
-          (if (and (string? colors)
-                   (> (string-length colors) 0))
-              (begin 
-                (push "  <param name=\"colors\" value=\"")
-                (push colors)
-                (push "\">\n")))
-          (if (and (string? labels)
-                   (> (string-length labels) 0))
-              (begin 
-                (push "  <param name=\"labels\" value=\"")
-                (push labels)
-                (push "\">\n")))
-          (if url-1 
-              (begin 
-                (push "  <param name=\"slice_urls_1\" value=\"")
-                (push url-1)
-                (push "\">\n")))
-          (if url-2
-              (begin 
-                (push "  <param name=\"slice_urls_2\" value=\"")
-                (push url-2)
-                (push "\">\n")))
-          (if url-3 
-              (begin 
-                (push "  <param name=\"slice_urls_3\" value=\"")
-                (push url-3)
-                (push "\">\n")))
-          (if legend-1 
-              (begin 
-                (push "  <param name=\"legend_urls_1\" value=\"")
-                (push legend-1)
-                (push "\">\n")))
-          (if legend-2
-              (begin 
-                (push "  <param name=\"legend_urls_2\" value=\"")
-                (push legend-2)
-                (push "\">\n")))
-          (if legend-3 
-              (begin 
-                (push "  <param name=\"legend_urls_3\" value=\"")
-                (push legend-3)
-                (push "\">\n")))
-          (push "Unable to display pie chart\n")
-          (push "</object> &nbsp;\n"))
-	(begin (gnc:warn "null-data, not rendering piechart")
-	       " "))
+            (push "});</script>"))
+        (begin (gnc:warn "null-data, not rendering piechart")
+               " "))
     retval))
 
 
