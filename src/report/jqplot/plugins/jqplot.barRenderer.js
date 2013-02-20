@@ -273,6 +273,19 @@
                 // this.barWidth = (paxis._offsets.min - paxis._offsets.max) / nvals - this.barPadding - this.barMargin/nseries;
             }
         }
+        // When things are getting tight, prefer a larger barWidth over a larger barPadding
+        if (this.barWidth < this.barPadding) {
+            var switcher;
+            switcher = this.barPadding;
+            this.barPadding = this.barWidth;
+	    this.barWidth = switcher;
+        }
+        // Make sure we keep a sensible minimum for barWidth when it's 0 or very small
+        this.barWidth = Math.max(3,this.barWidth);
+        // Restrict possible negative padding for better display in extremely tight conditions
+        if (this.barPadding <= -this.barWidth) {
+          this.barPadding = -(this.barWidth -1);
+        }
         return [nvals, nseries];
     };
 
