@@ -45,11 +45,15 @@
 
 #include "gnc-path.h"
 #include "gnc-filepath-utils.h"
+#include "libqof/qof/qof.h"
 
 #ifdef _MSC_VER
 #include <glib/gwin32.h>
 #define PATH_MAX MAXPATHLEN
 #endif
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 
 /**
@@ -177,6 +181,8 @@ gnc_resolve_file_path (const gchar * filefrag)
  *   (typically $HOME/.gnucash/html)
  * - the gnucash documentation directory
  *   (typically /usr/share/doc/gnucash)
+ * - the gnucash data directory
+ *   (typically /usr/share/gnucash)
  * It searches in this order.
  *
  * This is used by gnc_path_find_localized_file to search for
@@ -192,6 +198,7 @@ gnc_path_find_localized_html_file_internal (const gchar * file_name)
         {
             gnc_build_dotgnucash_path ("html"),
             gnc_path_get_pkgdocdir (),
+            gnc_path_get_pkgdatadir (),
             NULL
         };
     gchar **dirs;
@@ -207,7 +214,8 @@ gnc_path_find_localized_html_file_internal (const gchar * file_name)
 
     for (i = 0; dirs[i]; i++)
     {
-        full_path = g_build_filename (dirs[1], file_name, (gchar *)NULL);
+        full_path = g_build_filename (dirs[i], file_name, (gchar *)NULL);
+        DEBUG ("Checking for existence of %s", full_path);
         full_path = check_path_return_if_valid (full_path);
         if (full_path != NULL)
             return full_path;
@@ -238,6 +246,8 @@ gnc_path_find_localized_html_file_internal (const gchar * file_name)
  *      (e.g. $HOME/.gnucash/html)
  *  \li the gnucash documentation directory
  *      (e.g. /usr/share/doc/gnucash/)
+ *  \li last resort option: the gnucash data directory
+ *      (e.g. /usr/share/gnucash/)
  *
  *  The paths are searched for in that order. If a matching file is
  *  found, return the absolute path to it.
@@ -278,8 +288,8 @@ gnc_path_find_localized_html_file (const gchar *file_name)
     /* If not found in a localized directory, try to find the file
      * in any of the base directories
      */
-    full_path = gnc_path_find_localized_html_file_internal (file_name);
-    return full_path;
+    return gnc_path_find_localized_html_file_internal (file_name);
+
 }
 
 /* ====================================================================== */
