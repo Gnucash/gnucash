@@ -12,6 +12,7 @@
 *.html  text eol=lf
 *.i     text eol=lf
 *.in    text eol=lf
+*.js    text eol=lf
 *.m4    text eol=lf
 *.patch text eol=lf
 *.pl    text eol=lf
