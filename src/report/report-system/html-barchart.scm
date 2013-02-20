@@ -21,6 +21,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(load-from-path "html-jqplot.scm")
+
 (define <html-barchart>
   (make-record-type "<html-barchart>"
                     '(width 
@@ -326,11 +328,206 @@
          (col-labels (catenate-escaped-strings 
                       (gnc:html-barchart-col-labels barchart)))
          (col-colors (catenate-escaped-strings 
-                      (gnc:html-barchart-col-colors barchart))))
+                      (gnc:html-barchart-col-colors barchart)))
+         (series-data-start (lambda (series-index)
+                         (push "var d")
+                         (push series-index)
+                         (push " = [];")))
+         (series-data-add (lambda (series-index x y)
+                         (push (string-append
+                               "  d"
+                               (number->string series-index)
+                               ".push(["
+                               (number->string x)
+                               ", "
+                               (number->string y)
+                               "]);\n"))))
+         (series-data-end (lambda (series-index label)
+                         (push "  series.push({")
+                         (push "    label: \"")
+                         (push label)
+                         (push "\"});\n")
+                         (push "data.push(d")
+                         (push series-index)
+                         (push ");\n")))
+         (js-include (lambda (file)
+                         (push "<script language=\"javascript\" type=\"text/javascript\" src=\"")
+                         (push (gnc:find-file file (gnc:config-var-value-get gnc:*doc-path*)))
+                         (push "\"></script>\n")))
+         (css-include (lambda (file)
+                         (push "<link rel=\"stylesheet\" type=\"text/css\" href=\"")
+                         (push (gnc:find-file file (gnc:config-var-value-get gnc:*doc-path*)))
+                         (push "\" />\n"))))
     (if (and (list? data)
              (not (null? data))
 	     (gnc:not-all-zeros data))
-        (begin 
+        (begin
+            (push (gnc:html-js-include "gnucash/jqplot/jquery-1.4.2.min.js"))
+            (push (gnc:html-js-include "gnucash/jqplot/jquery.jqplot.js"))
+            (push (gnc:html-js-include "gnucash/jqplot/jqplot.barRenderer.js"))
+            (push (gnc:html-js-include "gnucash/jqplot/jqplot.categoryAxisRenderer.js"))
+            (push (gnc:html-js-include "gnucash/jqplot/jqplot.canvasTextRenderer.js"))
+            (push (gnc:html-js-include "gnucash/jqplot/jqplot.canvasAxisTickRenderer.js"))
+            (push (gnc:html-css-include "gnucash/jqplot/jquery.jqplot.css"))
+
+            (push "<div id=\"placeholder\" style=\"width:")
+            (push (gnc:html-barchart-width barchart))
+            (push "px;height:")
+            (push (gnc:html-barchart-height barchart))
+            (push "px;\"></div>")
+            (push "<script id=\"source\">\n$(function () {")
+
+            (push "var data = [];")
+            (push "var series = [];")
+
+            (if (and data (list? data))
+              (let ((rows (length data))
+                    (cols 0))
+                (let loop ((col 0) (rowcnt 1))
+                  (series-data-start col)
+                  (if (list? (car data))
+                      (begin 
+                        (set! cols (length (car data)))))    
+                  (for-each
+                    (lambda (row)
+                      (series-data-add col rowcnt
+                                       (ensure-numeric (list-ref-safe row col)))
+                      (set! rowcnt (+ rowcnt 1)))
+                    data)
+                  (series-data-end col (list-ref-safe (gnc:html-barchart-col-labels barchart) col))
+                  (if (< col (- cols 1))
+                      (loop (+ 1 col) 1)))))
+
+
+            (push "var options = {
+                   shadowAlpha: 0.07,
+                   stackSeries: false,
+                   legend: { show: true, },
+                   seriesDefaults: {
+                        renderer: $.jqplot.BarRenderer,
+                        rendererOptions: {
+                            shadowAlpha: 0.04,
+                            shadowDepth: 3,
+                        },
+                        fillToZero: true,
+                   },
+                   series: series,
+                   axesDefaults: {
+                   },        
+                    grid: {
+                        hoverable: true,
+                        markings: function(axes) {
+                            var markings = [];
+                            for (var x = Math.floor(axes.xaxis.min); x < axes.xaxis.max; x += 2)
+                                markings.push({ xaxis: { from: x - 0.5, to: x + 0.5 } })
+                            return markings;
+                        }
+                    },
+                    axes: {
+                        xaxis: {
+                            renderer: $.jqplot.CategoryAxisRenderer,
+                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                            tickOptions: {
+                                angle: -30,
+                                fontSize: '10pt',
+                            },
+                        },
+                        yaxis: {
+                            autoscale: true,
+                        },
+                    },
+                    xaxis: {
+                        tickLength: 0
+                    }
+                };")
+
+            (push "options.stackSeries = ")
+            (push (if (gnc:html-barchart-stacked? barchart)
+                "true;\n"
+                "false;\n"))
+
+            (if title
+              (begin 
+                (push "  options.title = \"")
+                (push title) (push "\";\n")))
+
+            (if subtitle
+              (begin 
+                (push "  options.title += \" (")
+                (push subtitle) (push ")\";\n")))
+
+            (if (and (string? x-label) (> (string-length x-label) 0))
+              (begin 
+                (push "  options.axes.xaxis.label = \"")
+                (push x-label)
+                (push "\";\n")))
+            (if (and (string? y-label) (> (string-length y-label) 0))
+              (begin 
+                (push "  options.axes.yaxis.label = \"")
+                (push y-label)
+                (push "\";\n")))
+            (if (and (string? row-labels) (> (string-length row-labels) 0))
+              (begin 
+                (push "  options.axes.xaxis.ticks = [")
+                (for-each (lambda (val)
+                        (push "\"")
+                        (push val)
+                        (push "\","))
+                    (gnc:html-barchart-row-labels barchart))
+                (push "];\n")))
+
+
+            (push "$.jqplot.config.enablePlugins = true;")
+            (push "var plot = $.jqplot('placeholder', data, options);
+
+                function showTooltip(x, y, contents) {
+                    $('<div id=\"tooltip\">' + contents + '</div>').css( {
+                        position: 'absolute',
+                        display: 'none',
+                        top: y + 5,
+                        left: x + 5,
+                        border: '1px solid #fdd',
+                        padding: '2px',
+                        'background-color': '#fee',
+                        opacity: 0.80
+                    }).appendTo(\"body\").fadeIn(200);
+                }
+
+                var previousPoint = null;
+
+                function graphHighlightHandler(evt, seriesIndex, pointIndex, data) {
+                    var item = [seriesIndex, pointIndex];
+                    if (seriesIndex != undefined && pointIndex != undefined) {
+                        if (previousPoint != item) {
+                            previousPoint = item;
+                            
+                            $(\"#tooltip\").remove();
+                            var x = data[0].toFixed(2),
+                                y = data[1].toFixed(2);
+
+                            if (options.axes.xaxis.ticks[pointIndex] !== undefined)
+                                x = options.axes.xaxis.ticks[pointIndex];
+
+                            var offsetX = 0;//(plot.getAxes().xaxis.scale * item.series.bars.barWidth);
+                            showTooltip(evt.pageX + offsetX, evt.pageY,
+                                        options.series[seriesIndex].label + \" of \" + x + \"<br><b>$\" + y + \"</b>\");
+                            // <small>(+100.00)</small>
+                        }
+                    } else {
+                        $(\"#tooltip\").remove();
+                        previousPoint = null;            
+                    }
+                }
+
+                $(\"#placeholder\").bind(\"jqplotDataHighlight\", graphHighlightHandler);
+                $(\"#placeholder\").bind(\"jqplotDataUnhighlight\", graphHighlightHandler);
+
+            ") 
+
+            (push "});</script>")
+
+            (gnc:msg (string-join (reverse (map (lambda (e) (if (number? e) (number->string e) e)) retval)) ""))
+ 
           (push "<object classid=\"")(push GNC-CHART-BAR)(push "\" width=")
           (push (gnc:html-barchart-width barchart))
           (push " height=") 

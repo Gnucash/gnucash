@@ -24,6 +24,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(load-from-path "html-jqplot.scm")
+
 (define <html-scatter>
   (make-record-type "<html-scatter>"
                     '(width
@@ -167,7 +169,76 @@
          (markercolor (string-append "#" (gnc:html-scatter-markercolor scatter))))
     (if (and (list? data)
              (not (null? data)))
-        (begin 
+        (begin
+            (push (gnc:html-js-include "gnucash/jqplot/jquery-1.4.2.min.js"))
+            (push (gnc:html-js-include "gnucash/jqplot/jquery.jqplot.js"))
+            (push (gnc:html-css-include "gnucash/jqplot/jquery.jqplot.css"))
+
+            (push "<div id=\"placeholder\" style=\"width:")
+            (push (gnc:html-scatter-width scatter))
+            (push "px;height:")
+            (push (gnc:html-scatter-height scatter))
+            (push "px;\"></div>")
+            (push "<script id=\"source\">\n$(function () {")
+
+            (push "var data = [];")
+            (push "var series = [];")
+
+            (if (and data (list? data))
+              (let ((x-data (map-in-order car data))
+                    (y-data (map-in-order cadr data)))
+                (for-each (lambda (x y)
+                         (push "  data.push([")
+                         (push (ensure-numeric x))
+                         (push ", ")
+                         (push (ensure-numeric y))
+                         (push "]);"))
+                       x-data y-data)
+            ))
+
+
+            (push "var options = {
+                    legend: { show: false, },
+                    series: series,
+                    axesDefaults: {
+                    },        
+                    axes: {
+                        xaxis: {
+                        },
+                        yaxis: {
+                            autoscale: true,
+                        },
+                    },
+                };")
+
+            (if title
+              (begin
+                (push "  options.title = \"")
+                (push title) (push "\";\n")))
+
+            (if subtitle
+              (begin
+                (push "  options.title += \" (")
+                (push subtitle) (push ")\";\n")))
+
+            (if (and (string? x-label) (> (string-length x-label) 0))
+              (begin
+                (push "  options.axes.xaxis.label = \"")
+                (push x-label)
+                (push "\";\n")))
+            (if (and (string? y-label) (> (string-length y-label) 0))
+              (begin
+                (push "  options.axes.yaxis.label = \"")
+                (push y-label)
+                (push "\";\n")))
+
+
+            (push "$.jqplot.config.enablePlugins = true;")
+            (push "var plot = $.jqplot('placeholder', [data], options);")
+
+            (push "});</script>")
+
+ 
           (push "<object classid=\"")(push GNC-CHART-SCATTER)(push "\" width=")
           (push (gnc:html-scatter-width scatter))
           (push " height=") 

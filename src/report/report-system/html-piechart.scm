@@ -197,6 +197,52 @@
     (if (and (list? data) 
              (not (null? data)))
         (begin 
+            (push (gnc:html-js-include "gnucash/jqplot/jquery-1.4.2.min.js"))
+            (push (gnc:html-js-include "gnucash/jqplot/jquery.jqplot.js"))
+            (push (gnc:html-js-include "gnucash/jqplot/jqplot.pieRenderer.js"))
+            (push (gnc:html-css-include "gnucash/jqplot/jquery.jqplot.css"))
+
+            (push "<div id=\"placeholder\" style=\"width:")
+            (push (gnc:html-piechart-width piechart))
+            (push "px;height:")
+            (push (gnc:html-piechart-height piechart))
+            (push "px;\"></div>")
+            (push "<script id=\"source\">\n$(function () {")
+
+            (push "var data = [];")
+
+            (if (and data (list? data))
+              (begin 
+                (for-each 
+                 (lambda (datum label)
+                   (push "  data.push(['")
+                   (push label)
+                   (push "',")
+                   (push datum)
+                   (push "]);\n"))
+                 data (gnc:html-piechart-labels piechart))))
+
+            (push "var options = {
+                    seriesDefaults: {
+                        renderer: $.jqplot.PieRenderer,
+                    },
+                    legend: { show: true, },
+                   };")
+
+            (if title
+              (begin 
+                (push "  options.title = \"")
+                (push title) (push "\";\n")))
+            (if subtitle
+              (begin 
+                (push "  options.title += \" (")
+                (push subtitle) (push ")\";\n")))
+
+            (push "$.jqplot.config.enablePlugins = true;")
+            (push "var plot = $.jqplot('placeholder', [data], options);")
+            (push "});</script>")
+
+
           (push "<object classid=\"")(push GNC-CHART-PIE)(push "\" width=")
           (push (gnc:html-piechart-width piechart))
           (push " height=") 
