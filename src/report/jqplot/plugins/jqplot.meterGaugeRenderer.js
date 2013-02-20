@@ -1,18 +1,31 @@
 /**
- * Copyright (c) 2009 - 2010 Chris Leonello
+ * jqPlot
+ * Pure JavaScript plotting plugin using jQuery
+ *
+ * Version: 1.0.6
+ * Revision: 1138
+ *
+ * Copyright (c) 2009-2013 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
- * under both the MIT and GPL version 2.0 licenses. This means that you can 
+ * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
+ * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
  * choose the license that best suits your project and use it accordingly. 
  *
- * The author would appreciate an email letting him know of any substantial
- * use of jqPlot.  You can reach the author at: chris at jqplot dot com 
- * or see http://www.jqplot.com/info.php .  This is, of course, 
- * not required.
+ * Although not required, the author would appreciate an email letting him 
+ * know of any substantial use of jqPlot.  You can reach the author at: 
+ * chris at jqplot dot com or see http://www.jqplot.com/info.php .
  *
  * If you are feeling kind and generous, consider supporting the project by
  * making a donation at: http://www.jqplot.com/donate.php .
  *
- * Thanks for using jqPlot!
+ * sprintf functions contained in jqplot.sprintf.js by Ash Searle:
+ *
+ *     version 2007.04.27
+ *     author Ash Searle
+ *     http://hexmen.com/blog/2007/03/printf-sprintf/
+ *     http://hexmen.com/js/sprintf.js
+ *     The author (Ash Searle) has placed this code in the public domain:
+ *     "This code is unrestricted: you are free to use it however you like."
  * 
  */
 (function($) {
@@ -81,7 +94,7 @@
         this.needleColor = "#C3D3E5";
         // prop: tickColor
         // color of the tick marks around the gauge.
-        this.tickColor = "989898";
+        this.tickColor = "#989898";
         // prop: ringWidth
         // width of the ring around the gauge.  Auto computed by default.
         this.ringWidth = null;
@@ -151,6 +164,7 @@
         // True will stop needle just below/above the  min/max values if data is below/above min/max,
         // as if the meter is "pegged".
         this.pegNeedle = true;
+        this._type = 'meterGauge';
         
         $.extend(true, this, options);
         this.type = null;
@@ -172,7 +186,7 @@
         }
         this._tickPoints = [];
         // reference to label element.
-        this._labelElm = null;
+        this._labelElem = null;
         
         // start the gauge at the beginning of the span
         this.startAngle = (90 + (360 - this.span)/2) * Math.PI/180;
@@ -289,7 +303,7 @@
         
     function getnmt(pos, interval, fact) {
         var temp;
-        for (i=pos.length-1; i>=0; i--) {
+        for (var i=pos.length-1; i>=0; i--) {
             temp = interval/(pos[i] * Math.pow(10, fact));
             if (temp == 4 || temp == 5) {
                 return temp - 1;
@@ -382,7 +396,7 @@
                     }
                     this.needleThickness = this.needleThickness || 2+Math.pow(this.ringWidth, 0.8);
                     this.innerPad = this.ringWidth/2 + this.needleThickness/2 + this.needlePad;
-                    this.diameter = w - 2*this.innerPad;
+                    this.diameter = w - 2*this.innerPad - this.ringWidth - this.padding;
                 }
                 // center taking into account legend and over draw for gauge bottom below hub.
                 // this will be center of hub.
@@ -400,6 +414,7 @@
                 this._center = [(cw-trans*offx)/2 + trans * offx, (ch-trans*offy)/2 + trans * offy];
             }
         }
+
         
         if (this._labelElem && this.labelPosition == 'bottom') {
             this._center[1] -= this._labelElem.outerHeight(true);
@@ -573,8 +588,8 @@
                     this.numberMinorTicks = 1;
                     var nums = [4, 5, 3, 6, 2];
                     for (i=0; i<5; i++) {
-                        temp = this.tickInterval/nums[i];
-                        if (temp == parseInt(temp)) {
+                        var temp = this.tickInterval/nums[i];
+                        if (temp == parseInt(temp, 10)) {
                             this.numberMinorTicks = nums[i]-1;
                             break;
                         }
@@ -694,7 +709,7 @@
             
             // draw the tick labels
             if (this.showTickLabels) {
-                var elem, l, t, ew, dim, maxdim=0;
+                var elem, l, t, ew, eh, dim, maxdim=0;
                 var tp = this.tickPadding * (1 - 1/(this.diameter/80+1));
                 for (i=0; i<this.ticks.length; i++) {
                     elem = $('<div class="jqplot-meterGauge-tick" style="position:absolute;">'+this.ticks[i][1]+'</div>');
@@ -704,7 +719,7 @@
                     l = this._tickPoints[i][0] - ew * (this._tickPoints[i][2]-Math.PI)/Math.PI - tp * Math.cos(this._tickPoints[i][2]);
                     t = this._tickPoints[i][1] - eh/2 + eh/2 * Math.pow(Math.abs((Math.sin(this._tickPoints[i][2]))), 0.5) + tp/3 * Math.pow(Math.abs((Math.sin(this._tickPoints[i][2]))), 0.5) ;
                     // t = this._tickPoints[i][1] - eh/2 - eh/2 * Math.sin(this._tickPoints[i][2]) - tp/2 * Math.sin(this._tickPoints[i][2]);
-                    elem.css({left:l, top:t});
+                    elem.css({left:l, top:t, color: this.tickColor});
                     dim  = ew*Math.cos(this._tickPoints[i][2]) + eh*Math.sin(Math.PI/2+this._tickPoints[i][2]/2);
                     maxdim = (dim > maxdim) ? dim : maxdim;
                 }
@@ -849,7 +864,6 @@
      *Meter gauges don't typically have a legend, this overrides the default legend renderer.
      */
     $.jqplot.MeterGaugeLegendRenderer.prototype.init = function(options) {
-
         // Maximum number of rows in the legend.  0 or null for unlimited.
         this.numberRows = null;
         // Maximum number of columns in the legend.  0 or null for unlimited.
@@ -859,7 +873,6 @@
     
     // called with context of legend
     $.jqplot.MeterGaugeLegendRenderer.prototype.draw = function() {
-        var legend = this;
         if (this.show) {
             var series = this._series;
             var ss = 'position:absolute;';
@@ -913,8 +926,9 @@
                     }
                     for (j=0; j<nc; j++) {
                         if (idx < pd.length){
+                            // debugger
                             lt = this.labels[idx] || pd[idx][0].toString();
-                            color = colorGenerator.next();
+                            color = s.color;
                             if (!reverse){
                                 if (i>0){
                                     pad = true;
@@ -961,125 +975,16 @@
         return this._elem;                
     };
     
-    // $.jqplot.MeterGaugeLegendRenderer.prototype.pack = function(offsets) {
-    //     if (this.show) {
-    //         // fake a grid for positioning
-    //         var grid = {_top:offsets.top, _left:offsets.left, _right:offsets.right, _bottom:this._plotDimensions.height - offsets.bottom};        
-    //         if (this.placement == 'insideGrid') {
-    //             switch (this.location) {
-    //                 case 'nw':
-    //                     var a = grid._left + this.xoffset;
-    //                     var b = grid._top + this.yoffset;
-    //                     this._elem.css('left', a);
-    //                     this._elem.css('top', b);
-    //                     break;
-    //                 case 'n':
-    //                     var a = (offsets.left + (this._plotDimensions.width - offsets.right))/2 - this.getWidth()/2;
-    //                     var b = grid._top + this.yoffset;
-    //                     this._elem.css('left', a);
-    //                     this._elem.css('top', b);
-    //                     break;
-    //                 case 'ne':
-    //                     var a = offsets.right + this.xoffset;
-    //                     var b = grid._top + this.yoffset;
-    //                     this._elem.css({right:a, top:b});
-    //                     break;
-    //                 case 'e':
-    //                     var a = offsets.right + this.xoffset;
-    //                     var b = (offsets.top + (this._plotDimensions.height - offsets.bottom))/2 - this.getHeight()/2;
-    //                     this._elem.css({right:a, top:b});
-    //                     break;
-    //                 case 'se':
-    //                     var a = offsets.right + this.xoffset;
-    //                     var b = offsets.bottom + this.yoffset;
-    //                     this._elem.css({right:a, bottom:b});
-    //                     break;
-    //                 case 's':
-    //                     var a = (offsets.left + (this._plotDimensions.width - offsets.right))/2 - this.getWidth()/2;
-    //                     var b = offsets.bottom + this.yoffset;
-    //                     this._elem.css({left:a, bottom:b});
-    //                     break;
-    //                 case 'sw':
-    //                     var a = grid._left + this.xoffset;
-    //                     var b = offsets.bottom + this.yoffset;
-    //                     this._elem.css({left:a, bottom:b});
-    //                     break;
-    //                 case 'w':
-    //                     var a = grid._left + this.xoffset;
-    //                     var b = (offsets.top + (this._plotDimensions.height - offsets.bottom))/2 - this.getHeight()/2;
-    //                     this._elem.css({left:a, top:b});
-    //                     break;
-    //                 default:  // same as 'se'
-    //                     var a = grid._right - this.xoffset;
-    //                     var b = grid._bottom + this.yoffset;
-    //                     this._elem.css({right:a, bottom:b});
-    //                     break;
-    //             }
-    //             
-    //         }
-    //         else {
-    //             switch (this.location) {
-    //                 case 'nw':
-    //                     var a = this._plotDimensions.width - grid._left + this.xoffset;
-    //                     var b = grid._top + this.yoffset;
-    //                     this._elem.css('right', a);
-    //                     this._elem.css('top', b);
-    //                     break;
-    //                 case 'n':
-    //                     var a = (offsets.left + (this._plotDimensions.width - offsets.right))/2 - this.getWidth()/2;
-    //                     var b = this._plotDimensions.height - grid._top + this.yoffset;
-    //                     this._elem.css('left', a);
-    //                     this._elem.css('bottom', b);
-    //                     break;
-    //                 case 'ne':
-    //                     var a = this._plotDimensions.width - offsets.right + this.xoffset;
-    //                     var b = grid._top + this.yoffset;
-    //                     this._elem.css({left:a, top:b});
-    //                     break;
-    //                 case 'e':
-    //                     var a = this._plotDimensions.width - offsets.right + this.xoffset;
-    //                     var b = (offsets.top + (this._plotDimensions.height - offsets.bottom))/2 - this.getHeight()/2;
-    //                     this._elem.css({left:a, top:b});
-    //                     break;
-    //                 case 'se':
-    //                     var a = this._plotDimensions.width - offsets.right + this.xoffset;
-    //                     var b = offsets.bottom + this.yoffset;
-    //                     this._elem.css({left:a, bottom:b});
-    //                     break;
-    //                 case 's':
-    //                     var a = (offsets.left + (this._plotDimensions.width - offsets.right))/2 - this.getWidth()/2;
-    //                     var b = this._plotDimensions.height - offsets.bottom + this.yoffset;
-    //                     this._elem.css({left:a, top:b});
-    //                     break;
-    //                 case 'sw':
-    //                     var a = this._plotDimensions.width - grid._left + this.xoffset;
-    //                     var b = offsets.bottom + this.yoffset;
-    //                     this._elem.css({right:a, bottom:b});
-    //                     break;
-    //                 case 'w':
-    //                     var a = this._plotDimensions.width - grid._left + this.xoffset;
-    //                     var b = (offsets.top + (this._plotDimensions.height - offsets.bottom))/2 - this.getHeight()/2;
-    //                     this._elem.css({right:a, top:b});
-    //                     break;
-    //                 default:  // same as 'se'
-    //                     var a = grid._right - this.xoffset;
-    //                     var b = grid._bottom + this.yoffset;
-    //                     this._elem.css({right:a, bottom:b});
-    //                     break;
-    //             }
-    //         }
-    //     } 
-    // };
     
     // setup default renderers for axes and legend so user doesn't have to
     // called with scope of plot
     function preInit(target, data, options) {
+        // debugger
         options = options || {};
         options.axesDefaults = options.axesDefaults || {};
         options.legend = options.legend || {};
         options.seriesDefaults = options.seriesDefaults || {};
         options.grid = options.grid || {};
-        options.gridPadding = options.gridPadding || {};
            
         // only set these if there is a gauge series
         var setopts = false;
@@ -1102,10 +1007,6 @@
             options.grid.drawGridlines = false;
             options.grid.borderWidth = (options.grid.borderWidth != null) ? options.grid.borderWidth : 0;
             options.grid.shadow = (options.grid.shadow != null) ? options.grid.shadow : false;
-            options.gridPadding.top = (options.gridPadding.top != null) ? options.gridPadding.top : 0;
-            options.gridPadding.bottom = (options.gridPadding.bottom != null) ? options.gridPadding.bottom : 0;
-            options.gridPadding.left = (options.gridPadding.left != null) ? options.gridPadding.left : 0;
-            options.gridPadding.right = (options.gridPadding.right != null) ? options.gridPadding.right : 0;
         }
     }
     

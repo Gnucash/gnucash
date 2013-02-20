@@ -170,7 +170,7 @@
     (if (and (list? data)
              (not (null? data)))
         (begin
-            (push (gnc:html-js-include "jqplot/jquery-1.4.2.min.js"))
+            (push (gnc:html-js-include "jqplot/jquery.min.js"))
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 

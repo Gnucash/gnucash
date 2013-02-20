@@ -2,7 +2,7 @@ SUBDIRS = .
 
 gncjqplotdir = ${GNC_SHAREDIR}/jqplot/
 gncjqplot_DATA = \
-  jquery-1.4.2.min.js \
+  jquery.min.js \
   jquery.jqplot.js \
   jquery.jqplot.css \
   plugins/jqplot.barRenderer.js \

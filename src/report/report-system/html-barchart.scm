@@ -354,7 +354,7 @@
              (not (null? data))
 	     (gnc:not-all-zeros data))
         (begin
-            (push (gnc:html-js-include "jqplot/jquery-1.4.2.min.js"))
+            (push (gnc:html-js-include "jqplot/jquery.min.js"))
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
             (push (gnc:html-js-include "jqplot/jqplot.barRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.categoryAxisRenderer.js"))

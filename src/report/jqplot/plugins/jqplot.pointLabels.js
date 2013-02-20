@@ -1,18 +1,31 @@
 /**
- * Copyright (c) 2009 - 2010 Chris Leonello
+ * jqPlot
+ * Pure JavaScript plotting plugin using jQuery
+ *
+ * Version: 1.0.6
+ * Revision: 1138
+ *
+ * Copyright (c) 2009-2013 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
- * under both the MIT and GPL version 2.0 licenses. This means that you can 
+ * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
+ * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
  * choose the license that best suits your project and use it accordingly. 
  *
- * The author would appreciate an email letting him know of any substantial
- * use of jqPlot.  You can reach the author at: chris at jqplot dot com 
- * or see http://www.jqplot.com/info.php .  This is, of course, 
- * not required.
+ * Although not required, the author would appreciate an email letting him 
+ * know of any substantial use of jqPlot.  You can reach the author at: 
+ * chris at jqplot dot com or see http://www.jqplot.com/info.php .
  *
  * If you are feeling kind and generous, consider supporting the project by
  * making a donation at: http://www.jqplot.com/donate.php .
  *
- * Thanks for using jqPlot!
+ * sprintf functions contained in jqplot.sprintf.js by Ash Searle:
+ *
+ *     version 2007.04.27
+ *     author Ash Searle
+ *     http://hexmen.com/blog/2007/03/printf-sprintf/
+ *     http://hexmen.com/js/sprintf.js
+ *     The author (Ash Searle) has placed this code in the public domain:
+ *     "This code is unrestricted: you are free to use it however you like."
  * 
  */
 (function($) {
@@ -123,10 +136,10 @@
     var oppositeLocations = ['se', 's', 'sw', 'w', 'nw', 'n', 'ne', 'e'];
     
     // called with scope of a series
-    $.jqplot.PointLabels.init = function (target, data, seriesDefaults, opts){
+    $.jqplot.PointLabels.init = function (target, data, seriesDefaults, opts, plot){
         var options = $.extend(true, {}, seriesDefaults, opts);
         options.pointLabels = options.pointLabels || {};
-        if (this.renderer.constructor == $.jqplot.BarRenderer && this.barDirection == 'horizontal' && !options.pointLabels.location) {
+        if (this.renderer.constructor === $.jqplot.BarRenderer && this.barDirection === 'horizontal' && !options.pointLabels.location) {
             options.pointLabels.location = 'e';
         }
         // add a pointLabels attribute to the series plugins
@@ -141,14 +154,14 @@
         if (p.seriesLabelIndex != null) {
             labelIdx = p.seriesLabelIndex;
         }
-        else if (this.renderer.constructor == $.jqplot.BarRenderer && this.barDirection == 'horizontal') {
-            labelIdx = 0;
+        else if (this.renderer.constructor === $.jqplot.BarRenderer && this.barDirection === 'horizontal') {
+           labelIdx = (this._plotData[0].length < 3) ? 0 : this._plotData[0].length -1;
         }
         else {
-            labelIdx = this._plotData[0].length -1;
+            labelIdx = (this._plotData.length === 0) ? 0 : this._plotData[0].length -1;
         }
         p._labels = [];
-        if (p.labels.length == 0 || p.labelsFromSeries) {    
+        if (p.labels.length === 0 || p.labelsFromSeries) {    
             if (p.stackedValue) {
                 if (this._plotData.length && this._plotData[0].length){
                     // var idx = p.seriesLabelIndex || this._plotData[0].length -1;
@@ -158,8 +171,9 @@
                 }
             }
             else {
+                // var d = this._plotData;
                 var d = this.data;
-                if (this.renderer.constructor == $.jqplot.BarRenderer && this.waterfall) {
+                if (this.renderer.constructor === $.jqplot.BarRenderer && this.waterfall) {
                     d = this._data;
                 }
                 if (d.length && d[0].length) {
@@ -168,6 +182,7 @@
                         p._labels.push(d[i][labelIdx]);
                     }
                 }
+                d = null;
             }
         }
         else if (p.labels.length){
@@ -250,14 +265,18 @@
     };
     
     // called with scope of series
-    $.jqplot.PointLabels.draw = function (sctx, options) {
+    $.jqplot.PointLabels.draw = function (sctx, options, plot) {
         var p = this.plugins.pointLabels;
         // set labels again in case they have changed.
         p.setLabels.call(this);
         // remove any previous labels
         for (var i=0; i<p._elems.length; i++) {
-            p._elems[i].remove();
+            // Memory Leaks patch
+            // p._elems[i].remove();
+            p._elems[i].emptyForce();
         }
+        p._elems.splice(0, p._elems.length);
+
         if (p.show) {
             var ax = '_'+this._stackAxis+'axis';
         
@@ -267,10 +286,12 @@
             }
         
             var pd = this._plotData;
+            var ppd = this._prevPlotData;
             var xax = this._xaxis;
             var yax = this._yaxis;
+            var elem, helem;
 
-            for (var i=p._labels.length-1; i>=0; i--) {
+            for (var i=0, l=p._labels.length; i < l; i++) {
                 var label = p._labels[i];
                 
                 if (p.hideZeros && parseInt(p._labels[i], 10) == 0) {
@@ -280,9 +301,17 @@
                 if (label != null) {
                     label = p.formatter(p.formatString, label);
                 } 
-                var elem = $('<div class="jqplot-point-label jqplot-series-'+this.index+' jqplot-point-'+i+'" style="position:absolute"></div>');
+
+                helem = document.createElement('div');
+                p._elems[i] = $(helem);
+
+                elem = p._elems[i];
+
+
+                elem.addClass('jqplot-point-label jqplot-series-'+this.index+' jqplot-point-'+i);
+                elem.css('position', 'absolute');
                 elem.insertAfter(sctx.canvas);
-                p._elems.push(elem);
+
                 if (p.escapeHTML) {
                     elem.text(label);
                 }
@@ -290,11 +319,25 @@
                     elem.html(label);
                 }
                 var location = p.location;
-                if (this.waterfall && parseInt(label, 10) < 0) {
+                if ((this.fillToZero && pd[i][1] < 0) || (this.fillToZero && this._type === 'bar' && this.barDirection === 'horizontal' && pd[i][0] < 0) || (this.waterfall && parseInt(label, 10)) < 0) {
                     location = oppositeLocations[locationIndicies[location]];
                 }
+
+
                 var ell = xax.u2p(pd[i][0]) + p.xOffset(elem, location);
                 var elt = yax.u2p(pd[i][1]) + p.yOffset(elem, location);
+
+                // we have stacked chart but are not showing stacked values,
+                // place labels in center.
+                if (this._stack && !p.stackedValue) {
+                    if (this.barDirection === "vertical") {
+                        elt = (this._barPoints[i][0][1] + this._barPoints[i][1][1]) / 2 + plot._gridPadding.top - 0.5 * elem.outerHeight(true);
+                    }
+                    else {
+                        ell = (this._barPoints[i][2][0] + this._barPoints[i][0][0]) / 2 + plot._gridPadding.left - 0.5 * elem.outerWidth(true);
+                    }
+                }
+
                 if (this.renderer.constructor == $.jqplot.BarRenderer) {
                     if (this.barDirection == "vertical") {
                         ell += this._barNudge;
@@ -305,8 +348,8 @@
                 }
                 elem.css('left', ell);
                 elem.css('top', elt);
-                var elr = ell + $(elem).width();
-                var elb = elt + $(elem).height();
+                var elr = ell + elem.width();
+                var elb = elt + elem.height();
                 var et = p.edgeTolerance;
                 var scl = $(sctx.canvas).position().left;
                 var sct = $(sctx.canvas).position().top;
@@ -314,9 +357,20 @@
                 var scb = sctx.canvas.height + sct;
                 // if label is outside of allowed area, remove it
                 if (ell - et < scl || elt - et < sct || elr + et > scr || elb + et > scb) {
-                    $(elem).detach();
+                    elem.remove();
                 }
+
+                elem = null;
+                helem = null;
             }
+
+            // finally, animate them if the series is animated
+            // if (this.renderer.animation && this.renderer.animation._supported && this.renderer.animation.show && plot._drawCount < 2) {
+            //     var sel = '.jqplot-point-label.jqplot-series-'+this.index;
+            //     $(sel).hide();
+            //     $(sel).fadeIn(1000);
+            // }
+
         }
     };
     

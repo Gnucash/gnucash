@@ -1,18 +1,31 @@
 /**
- * Copyright (c) 2009 - 2010 Chris Leonello
+ * jqPlot
+ * Pure JavaScript plotting plugin using jQuery
+ *
+ * Version: 1.0.6
+ * Revision: 1138
+ *
+ * Copyright (c) 2009-2013 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
- * under both the MIT and GPL version 2.0 licenses. This means that you can 
+ * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
+ * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
  * choose the license that best suits your project and use it accordingly. 
  *
- * The author would appreciate an email letting him know of any substantial
- * use of jqPlot.  You can reach the author at: chris at jqplot dot com 
- * or see http://www.jqplot.com/info.php .  This is, of course, 
- * not required.
+ * Although not required, the author would appreciate an email letting him 
+ * know of any substantial use of jqPlot.  You can reach the author at: 
+ * chris at jqplot dot com or see http://www.jqplot.com/info.php .
  *
  * If you are feeling kind and generous, consider supporting the project by
  * making a donation at: http://www.jqplot.com/donate.php .
  *
- * Thanks for using jqPlot!
+ * sprintf functions contained in jqplot.sprintf.js by Ash Searle:
+ *
+ *     version 2007.04.27
+ *     author Ash Searle
+ *     http://hexmen.com/blog/2007/03/printf-sprintf/
+ *     http://hexmen.com/js/sprintf.js
+ *     The author (Ash Searle) has placed this code in the public domain:
+ *     "This code is unrestricted: you are free to use it however you like."
  * 
  */
 (function($) {
@@ -131,6 +144,7 @@
         // array of jQuery labels.
         this.labels = [];
         this.bubbleCanvases = [];
+        this._type = 'bubble';
         
         // if user has passed in highlightMouseDown option and not set highlightMouseOver, disable highlightMouseOver
         if (options.highlightMouseDown && options.highlightMouseOver == null) {
@@ -153,6 +167,7 @@
         
         // adjust the series colors for options colors passed in with data or for alpha.
         // note, this can leave undefined holes in the seriesColors array.
+        var comps;
         for (var i=0; i<this.data.length; i++) {
             var color = null;
             var d = this.data[i];
@@ -296,7 +311,8 @@
             var idx = this.radii[i][0];
             var t=null;
             var color = null;
-            var el = tel = null;
+            var el = null;
+            var tel = null;
             var d = this.data[idx];
             var gd = this.gridData[idx];
             if (d[3]) {
@@ -443,7 +459,7 @@
         var x = ctx.canvas.width/2;
         var y = ctx.canvas.height/2;
         ctx.save();
-        if (gradients && !$.browser.msie) {
+        if (gradients && !$.jqplot.use_excanvas) {
             r = r*1.04;
             var comps = $.jqplot.getColorComponents(color);
             var colorinner = 'rgba('+Math.round(comps[0]+0.8*(255-comps[0]))+', '+Math.round(comps[1]+0.8*(255-comps[1]))+', '+Math.round(comps[2]+0.8*(255-comps[2]))+', '+comps[3]+')';
@@ -492,7 +508,16 @@
     $.jqplot.BubbleAxisRenderer.prototype.init = function(options){
         $.extend(true, this, options);
         var db = this._dataBounds;
-        var minsidx=minpidx=maxsids=maxpidx=maxr=minr=minMaxRadius=maxMaxRadius=maxMult=minMult=0;
+        var minsidx = 0,
+            minpidx = 0,
+            maxsidx = 0,
+            maxpidx = 0,
+            maxr = 0,
+            minr = 0,
+            minMaxRadius = 0,
+            maxMaxRadius = 0,
+            maxMult = 0,
+            minMult = 0;
         // Go through all the series attached to this axis and find
         // the min/max bounds for this axis.
         for (var i=0; i<this._series.length; i++) {
@@ -607,6 +632,7 @@
             plot.target.trigger(evt1, ins);
             if (plot.series[ins[0]].highlightMouseOver && !(ins[0] == plot.plugins.bubbleRenderer.highlightedSeriesIndex && ins[1] == plot.series[ins[0]]._highlightedPoint)) {
                 var evt = jQuery.Event('jqplotDataHighlight');
+		evt.which = ev.which;
                 evt.pageX = ev.pageX;
                 evt.pageY = ev.pageY;
                 plot.target.trigger(evt, ins);
@@ -625,6 +651,7 @@
             var ins = [si, pi, neighbor.data, plot.series[si].gridData[pi][2]];
             if (plot.series[ins[0]].highlightMouseDown && !(ins[0] == plot.plugins.bubbleRenderer.highlightedSeriesIndex && ins[1] == plot.series[ins[0]]._highlightedPoint)) {
                 var evt = jQuery.Event('jqplotDataHighlight');
+		evt.which = ev.which;
                 evt.pageX = ev.pageX;
                 evt.pageY = ev.pageY;
                 plot.target.trigger(evt, ins);
@@ -649,6 +676,7 @@
             var pi = neighbor.pointIndex;
             var ins = [si, pi, neighbor.data, plot.series[si].gridData[pi][2]];
             var evt = jQuery.Event('jqplotDataClick');
+	    evt.which = ev.which;
             evt.pageX = ev.pageX;
             evt.pageY = ev.pageY;
             plot.target.trigger(evt, ins);
@@ -665,6 +693,7 @@
                 unhighlight(plot);
             }
             var evt = jQuery.Event('jqplotDataRightClick');
+	    evt.which = ev.which;
             evt.pageX = ev.pageX;
             evt.pageY = ev.pageY;
             plot.target.trigger(evt, ins);
@@ -675,6 +704,12 @@
     // create a canvas which we can draw on.
     // insert it before the eventCanvas, so eventCanvas will still capture events.
     function postPlotDraw() {
+        // Memory Leaks patch    
+        if (this.plugins.bubbleRenderer && this.plugins.bubbleRenderer.highlightCanvas) {
+            this.plugins.bubbleRenderer.highlightCanvas.resetCanvas();
+            this.plugins.bubbleRenderer.highlightCanvas = null;
+        }
+        
         this.plugins.bubbleRenderer = {highlightedSeriesIndex:null};
         this.plugins.bubbleRenderer.highlightCanvas = new $.jqplot.GenericCanvas();
         this.plugins.bubbleRenderer.highlightLabel = null;
@@ -685,7 +720,7 @@
         var height = this._plotDimensions.height - this._gridPadding.top - this._gridPadding.bottom;
         this.plugins.bubbleRenderer.highlightLabelCanvas.css({top:top, left:left, width:width+'px', height:height+'px'});
 
-        this.eventCanvas._elem.before(this.plugins.bubbleRenderer.highlightCanvas.createElement(this._gridPadding, 'jqplot-bubbleRenderer-highlight-canvas', this._plotDimensions));
+        this.eventCanvas._elem.before(this.plugins.bubbleRenderer.highlightCanvas.createElement(this._gridPadding, 'jqplot-bubbleRenderer-highlight-canvas', this._plotDimensions, this));
         this.eventCanvas._elem.before(this.plugins.bubbleRenderer.highlightLabelCanvas);
         
         var hctx = this.plugins.bubbleRenderer.highlightCanvas.setContext();

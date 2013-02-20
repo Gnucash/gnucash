@@ -1,18 +1,31 @@
 /**
- * Copyright (c) 2009 - 2010 Chris Leonello
+ * jqPlot
+ * Pure JavaScript plotting plugin using jQuery
+ *
+ * Version: 1.0.6
+ * Revision: 1138
+ *
+ * Copyright (c) 2009-2013 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
- * under both the MIT and GPL version 2.0 licenses. This means that you can 
+ * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
+ * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
  * choose the license that best suits your project and use it accordingly. 
  *
- * The author would appreciate an email letting him know of any substantial
- * use of jqPlot.  You can reach the author at: chris at jqplot dot com 
- * or see http://www.jqplot.com/info.php .  This is, of course, 
- * not required.
+ * Although not required, the author would appreciate an email letting him 
+ * know of any substantial use of jqPlot.  You can reach the author at: 
+ * chris at jqplot dot com or see http://www.jqplot.com/info.php .
  *
  * If you are feeling kind and generous, consider supporting the project by
  * making a donation at: http://www.jqplot.com/donate.php .
  *
- * Thanks for using jqPlot!
+ * sprintf functions contained in jqplot.sprintf.js by Ash Searle:
+ *
+ *     version 2007.04.27
+ *     author Ash Searle
+ *     http://hexmen.com/blog/2007/03/printf-sprintf/
+ *     http://hexmen.com/js/sprintf.js
+ *     The author (Ash Searle) has placed this code in the public domain:
+ *     "This code is unrestricted: you are free to use it however you like."
  * 
  */
 (function($) {
@@ -80,17 +93,19 @@
     // current series passed in
     // must return null or an object {label:label, color:color}
     function addTrendlineLegend(series) {
-        var lt = series.trendline.label.toString();
         var ret = null;
-        if (this.renderer.constructor != $.jqplot.PieRenderer && series.trendline.show && lt) {
-            ret = {label:lt, color:series.trendline.color};
+        if (series.trendline && series.trendline.show) {
+            var lt = series.trendline.label.toString();
+            if (lt) {
+                ret = {label:lt, color:series.trendline.color};
+            }
         }
         return ret;
     }
 
     // called within scope of a series
     function parseTrendLineOptions (target, data, seriesDefaults, options, plot) {
-        if (this.renderer.constructor == $.jqplot.LineRenderer) {
+        if (this._type && (this._type === 'line' || this._type == 'bar')) {
             this.trendline = new $.jqplot.Trendline();
             options = options || {};
             $.extend(true, this.trendline, {color:this.color}, seriesDefaults.trendline, options.trendline);
@@ -103,7 +118,7 @@
         // if we have options, merge trendline options in with precedence
         options = $.extend(true, {}, this.trendline, options);
 
-        if (options.show && this.renderer.constructor != $.jqplot.PieRenderer) {
+        if (this.trendline && options.show) {
             var fit;
             // this.renderer.setGridData.call(this);
             var data = options.data || this.data;
