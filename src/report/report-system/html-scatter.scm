@@ -37,12 +37,8 @@
                       ;; a list of x-y-value lists.
                       data 
                       ;; Valid marker names are:
-                      ;; "none", "circle", "diamond", "cross", "x",
-                      ;; "square", "asterisk" and some more.
-                      ;; The full list can be found in
-                      ;; goffice/goffice/utils/go-marker.c, marker_shapes[]
-                      ;; Marker names prefixed by filled, e.g. "filled square",
-                      ;; are filled in the same color as the outline
+                      ;; diamond, circle, square, x, plus, dash,
+                      ;; filledDiamond, filledCircle, filledSquare
                       marker
                       ;; The color of the markers outline. Should be a hex string,
                       ;; as returned by gnc:color-option->hex-string, prefixed by
@@ -140,24 +136,6 @@
           (#t 
            0.0)))
   
-  (define (catenate-escaped-strings nlist)
-    (if (not (list? nlist))
-        ""
-        (with-output-to-string
-          (lambda ()
-            (for-each 
-             (lambda (s)
-               (let ((escaped 
-                      (regexp-substitute/global 
-                       #f " " 
-                       (regexp-substitute/global 
-                        #f "\\\\" s
-                        'pre "\\\\" 'post)
-                       'pre "\\ " 'post)))
-                 (display escaped)
-                 (display " ")))
-             nlist)))))
-
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
          (title (gnc:html-scatter-title scatter))
@@ -199,6 +177,15 @@
 
             (push "var options = {
                     legend: { show: false, },
+                    seriesDefaults: {
+                        markerOptions: {
+                            style: '")
+            (push marker)
+            (push "',
+                            color: '")
+            (push markercolor)
+            (push "', },
+                    },
                     series: series,
                     axesDefaults: {
                     },        
@@ -209,7 +196,7 @@
                             autoscale: true,
                         },
                     },
-                };")
+                };\n")
 
             (if title
               (begin
@@ -236,61 +223,8 @@
             (push "$.jqplot.config.enablePlugins = true;")
             (push "var plot = $.jqplot('placeholder', [data], options);")
 
-            (push "});</script>")
-
- 
-          (push "<object classid=\"")(push GNC-CHART-SCATTER)(push "\" width=")
-          (push (gnc:html-scatter-width scatter))
-          (push " height=") 
-          (push (gnc:html-scatter-height scatter))
-          (push ">\n")
-          (if title
-              (begin 
-                (push "  <param name=\"title\" value=\"")
-                (push title) (push "\">\n")))
-          (if subtitle
-              (begin 
-                (push "  <param name=\"subtitle\" value=\"")
-                (push subtitle) (push "\">\n")))
-          (if (and (string? x-label) (> (string-length x-label) 0))
-              (begin 
-                (push "  <param name=\"x_axis_label\" value=\"")
-                (push x-label)
-                (push "\">\n")))
-          (if (and (string? y-label) (> (string-length y-label) 0))
-              (begin 
-                (push "  <param name=\"y_axis_label\" value=\"")
-                (push y-label)
-                (push "\">\n")))
-          (if marker
-              (begin 
-                (push "  <param name=\"marker\" value=\"")
-                (push marker)
-		(push "\">\n")))
-          (if markercolor
-              (begin 
-                (push "  <param name=\"color\" value=\"")
-                (push markercolor)
-		(push "\">\n")))
-          (if (and data (list? data))
-              (let ((datasize (length data))
-		    (x-data (map-in-order car data))
-		    (y-data (map-in-order cadr data)))
-                (push "  <param name=\"datasize\" value=\"")
-                (push datasize) (push "\">\n")
-                (push "  <param name=\"x_data\" value=\"")
-		(for-each (lambda (x)
-				     (push (ensure-numeric x))
-				     (push " "))
-				   x-data)
-                (push "\">\n")
-		(push "  <param name=\"y_data\" value=\"")
-		(for-each (lambda (x)
-				     (push (ensure-numeric x))
-				     (push " "))
-				   y-data)
-		(push "\">\n")))
-          (push "Unable to push bar chart\n")
-          (push "</object> &nbsp;\n"))
-        " ")
+            (push "});</script>"))
+        (begin
+          (gnc:warn "Scatter chart has no non-zero data")
+            " "))
     retval))

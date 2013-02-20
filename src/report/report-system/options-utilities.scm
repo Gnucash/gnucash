@@ -217,10 +217,13 @@
     (N_ "Choose the marker for each data point.")
     default
     (list
+     (vector 'diamond (N_ "Diamond") (N_ "Diamond"))
      (vector 'circle (N_ "Circle") (N_ "Circle"))
-     (vector 'cross (N_ "Cross") (N_ "Cross"))
      (vector 'square (N_ "Square") (N_ "Square"))
-     (vector 'asterisk (N_ "Asterisk") (N_ "Asterisk"))
+     (vector 'cross (N_ "Cross") (N_ "Cross"))
+     (vector 'plus (N_ "Plus") (N_ "Plus"))
+     (vector 'dash (N_ "Dash") (N_ "Dash"))
+     (vector 'filleddiamond (N_ "Filled diamond") (N_ "Diamond filled with color"))
      (vector 'filledcircle (N_ "Filled circle") (N_ "Circle filled with color"))
      (vector 'filledsquare (N_ "Filled square") (N_ "Square filled with color"))))))
 

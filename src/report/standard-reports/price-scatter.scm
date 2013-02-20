@@ -205,12 +205,15 @@
     (gnc:html-scatter-set-height! chart height)
     (gnc:html-scatter-set-marker! chart 
                                   (case marker
+                                    ((diamond) "diamond")
                                     ((circle) "circle")
-                                    ((cross) "cross")
                                     ((square) "square")
-                                    ((asterisk) "asterisk")
-                                    ((filledcircle) "filled circle")
-                                    ((filledsquare) "filled square")))
+                                    ((cross) "x")
+                                    ((plus) "plus")
+                                    ((dash) "dasg")
+                                    ((filleddiamond) "filledDiamond")
+                                    ((filledcircle) "filledCircle")
+                                    ((filledsquare) "filledSquare")))
     (gnc:html-scatter-set-markercolor! chart mcolor)
     (gnc:html-scatter-set-y-axis-label!
      chart 
