@@ -21,6 +21,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(load-from-path "html-jqplot.scm")
+
 (define <html-piechart>
   (make-record-type "<html-piechart>"
                     '(width
@@ -197,10 +199,10 @@
     (if (and (list? data) 
              (not (null? data)))
         (begin 
-            (push (gnc:html-js-include "gnucash/jqplot/jquery-1.4.2.min.js"))
-            (push (gnc:html-js-include "gnucash/jqplot/jquery.jqplot.js"))
-            (push (gnc:html-js-include "gnucash/jqplot/jqplot.pieRenderer.js"))
-            (push (gnc:html-css-include "gnucash/jqplot/jquery.jqplot.css"))
+            (push (gnc:html-js-include "jqplot/jquery-1.4.2.min.js"))
+            (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.pieRenderer.js"))
+            (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
             (push "<div id=\"placeholder\" style=\"width:")
             (push (gnc:html-piechart-width piechart))
