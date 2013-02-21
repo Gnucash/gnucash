@@ -48,7 +48,7 @@
                       button-1-legend-urls
                       button-2-legend-urls
                       button-3-legend-urls
-											line-width)))
+                      line-width)))
 
 (define gnc:html-linechart?
   (record-predicate <html-linechart>))
@@ -63,8 +63,8 @@
 
 (define (gnc:make-html-linechart)
   (gnc:make-html-linechart-internal -1 -1 #f #f #f #f '() '() '()
-				   #f #f #f #f #f #f '()
-				   #f #f #f #f #f #f -1 ))
+                                    #f #f #f #f #f #f '()
+                                    #f #f #f #f #f #f -1 ))
 
 (define gnc:html-linechart-data
   (record-accessor <html-linechart> 'data))
@@ -167,6 +167,14 @@
 ;; used for all of the rows. Otherwise we could have cols*rows urls
 ;; (quite a lot), but this first requires fixing
 ;; guppi_line_1_callback() in gnome/gnc-html-guppi.c .
+;; FIXME url's haven't been working since GnuCash 1.x
+;;       GnuCash 2.x switched from guppy to goffice, which
+;;       made it very hard to remain the url functionality
+;;       At this point I (gjanssens) is in the process of
+;;       moving from goffice to jqplot for our charts
+;;       which perhaps may allow urls again in the charts
+;;       I'm keeping the parameters below around to remind
+;;       us this still has to be investigated again
 (define gnc:html-linechart-button-1-line-urls
   (record-accessor <html-linechart> 'button-1-line-urls))
 
@@ -360,135 +368,183 @@
                       (gnc:html-linechart-col-labels linechart)))
          (col-colors (catenate-escaped-strings
                       (gnc:html-linechart-col-colors linechart)))
-				(line-width (gnc:html-linechart-line-width linechart)))
+         (line-width (gnc:html-linechart-line-width linechart))
+         (series-data-start (lambda (series-index)
+                         (push "var d")
+                         (push series-index)
+                         (push " = [];\n")))
+         (series-data-add (lambda (series-index x y)
+                         (push (string-append
+                               "  d"
+                               (number->string series-index)
+                               ".push(["
+                               (number->string x)
+                               ", "
+                               (number->string y)
+                               "]);\n"))))
+         (series-data-end (lambda (series-index label)
+                         (push "data.push(d")
+                         (push series-index)
+                         (push ");\n")
+                         (push "series.push({ label: \"")
+                         (push label)
+                         (push "\"});\n\n"))))
     (if (and (list? data)
              (not (null? data))
-	     (gnc:not-all-zeros data))
+             (gnc:not-all-zeros data))
         (begin
-          (push "<object classid=\"")(push GNC-CHART-LINE)(push "\" width=")
-          (push (gnc:html-linechart-width linechart))
-          (push " height=")
-          (push (gnc:html-linechart-height linechart))
-          (push ">\n")
-          (if title
-              (begin
-                (push "  <param name=\"title\" value=\"")
-                (push title) (push "\">\n")))
-          (if subtitle
-              (begin
-                (push "  <param name=\"subtitle\" value=\"")
-                (push subtitle) (push "\">\n")))
-          (if url-1
-              (begin
-                (push "  <param name=\"line_urls_1\" value=\"")
-                (push url-1)
-                (push "\">\n")))
-          (if url-2
-              (begin
-                (push "  <param name=\"line_urls_2\" value=\"")
-                (push url-2)
-                (push "\">\n")))
-          (if url-3
-              (begin
-                (push "  <param name=\"line_urls_3\" value=\"")
-                (push url-3)
-                (push "\">\n")))
-          (if legend-1
-              (begin
-                (push "  <param name=\"legend_urls_1\" value=\"")
-                (push legend-1)
-                (push "\">\n")))
-          (if legend-2
-              (begin
-                (push "  <param name=\"legend_urls_2\" value=\"")
-                (push legend-2)
-                (push "\">\n")))
-          (if legend-3
-              (begin
-                (push "  <param name=\"legend_urls_3\" value=\"")
-                (push legend-3)
-                (push "\">\n")))
-          (if (and data (list? data))
+            (push (gnc:html-js-include "jqplot/jquery.min.js"))
+            (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
+            (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
+
+            (push "<div id=\"placeholder\" style=\"width:")
+            (push (gnc:html-linechart-width linechart))
+            (push "px;height:")
+            (push (gnc:html-linechart-height linechart))
+            (push "px;\"></div>")
+            (push "<script id=\"source\">\n$(function () {")
+
+            (push "var data = [];")
+            (push "var series = [];")
+
+            (if (and data (list? data))
               (let ((rows (length data))
                     (cols 0))
-                (push "  <param name=\"data_rows\" value=\"")
-                (push rows) (push "\">\n")
-                (if (list? (car data))
-                    (begin
-                      (set! cols (length (car data)))
-                      (push "  <param name=\"data_cols\" value=\"")
-                      (push cols)
-                      (push "\">\n")))
-                (push "  <param name=\"data\" value=\"")
-                (let loop ((col 0))
+                (let loop ((col 0) (rowcnt 1))
+                  (series-data-start col)
+                  (if (list? (car data))
+                      (begin 
+                        (set! cols (length (car data)))))    
                   (for-each
-                   (lambda (row)
-                     (push (ensure-numeric (list-ref-safe row col)))
-                     (push " "))
-                   data)
+                    (lambda (row)
+                      (series-data-add col rowcnt
+                                       (ensure-numeric (list-ref-safe row col)))
+                      (set! rowcnt (+ rowcnt 1)))
+                    data)
+                  (series-data-end col (list-ref-safe (gnc:html-linechart-col-labels linechart) col))
                   (if (< col (- cols 1))
-                      (loop (+ 1 col))))
-                (push "\">\n")))
-          (if (and (string? x-label) (> (string-length x-label) 0))
-              (begin
-                (push "  <param name=\"x_axis_label\" value=\"")
+                      (loop (+ 1 col) 1)))))
+
+
+            (push "var options = {
+                   shadowAlpha: 0.07,
+                   legend: {
+                        show: true,
+                        placement: \"outsideGrid\", },
+                   seriesDefaults: {
+                        lineWidth: ")
+            (push (ensure-numeric line-width))
+            (push ",
+                        showMarker: false,
+                   },
+                   series: series,
+                   axesDefaults: {
+                   },        
+                   grid: {
+                   },
+                   axes: {
+                       xaxis: {
+                           tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                           tickOptions: {
+                               angle: -30,
+                               fontSize: '10pt',
+                           },
+                       },
+                       yaxis: {
+                           autoscale: true,
+                       },
+                   }
+                };\n")
+
+            (if title
+              (begin 
+                (push "  options.title = \"")
+                (push title) (push "\";\n")))
+
+            (if subtitle
+              (begin 
+                (push "  options.title += \" (")
+                (push subtitle) (push ")\";\n")))
+
+            (if (and (string? x-label) (> (string-length x-label) 0))
+              (begin 
+                (push "  options.axes.xaxis.label = \"")
                 (push x-label)
-                (push "\">\n")))
-          (if (and (string? y-label) (> (string-length y-label) 0))
-              (begin
-                (push "  <param name=\"y_axis_label\" value=\"")
+                (push "\";\n")))
+            (if (and (string? y-label) (> (string-length y-label) 0))
+              (begin 
+                (push "  options.axes.yaxis.label = \"")
                 (push y-label)
-                (push "\">\n")))
-          (if (and (string? col-colors) (> (string-length col-colors) 0))
+                (push "\";\n")))
+            (if (and (string? row-labels) (> (string-length row-labels) 0))
               (begin
-                (push "  <param name=\"col_colors\" value=\"")
-                (push col-colors)
-                (push "\">\n")))
-          (if (and (string? row-labels) (> (string-length row-labels) 0))
-              (begin
-                (push "  <param name=\"row_labels\" value=\"")
-                (push row-labels)
-                (push "\">\n")))
-          (if (and (string? col-labels) (> (string-length col-labels) 0))
-              (begin
-                (push "  <param name=\"col_labels\" value=\"")
-                (push col-labels)
-                (push "\">\n")))
+                (let ((tick-count 1))
+                  (push "  options.axes.xaxis.ticks = [")
+                  (for-each 
+                    (lambda (val)
+                            (push "[")(push tick-count)
+                            (push ",\"")(push val)
+                            (push "\"],")
+                            (set! tick-count (+ tick-count 1)))
+                    (gnc:html-linechart-row-labels linechart))
+                (push "];\n"))))
 
 
+            (push "$.jqplot.config.enablePlugins = true;")
+            (push "var plot = $.jqplot('placeholder', data, options);
 
-	  (push "  <param name=\"rotate_row_labels\" value=\"")
-	  (push (if (gnc:html-linechart-row-labels-rotated? linechart)
-		    "1\">\n"
-		    "0\">\n"))
-	  (push "  <param name=\"stacked\" value=\"")
-	  (push (if (gnc:html-linechart-stacked? linechart)
-		    "1\">\n"
-		    "0\">\n"))
-          (push "  <param name=\"markers\" value=\"")
-	  (push (if (gnc:html-linechart-markers? linechart)
-		    "1\">\n"
-		    "0\">\n"))
-          (push "  <param name=\"major_grid\" value=\"")
-	  (push (if (gnc:html-linechart-major-grid? linechart)
-		    "1\">\n"
-		    "0\">\n"))
-          (push "  <param name=\"minor_grid\" value=\"")
-	  (push (if (gnc:html-linechart-minor-grid? linechart)
-		    "1\">\n"
-		    "0\">\n"))
-	  (push "  <param name=\"legend_reversed\" value=\"")
+                function showTooltip(x, y, contents) {
+                    $('<div id=\"tooltip\">' + contents + '</div>').css( {
+                        position: 'absolute',
+                        display: 'none',
+                        top: y + 5,
+                        left: x + 5,
+                        border: '1px solid #fdd',
+                        padding: '2px',
+                        'background-color': '#fee',
+                        opacity: 0.80
+                    }).appendTo(\"body\").fadeIn(200);
+                }
 
-	  (push (if (gnc:html-linechart-legend-reversed? linechart)
-		    "1\">\n"
-		    "0\">\n"))
-				(begin
-				(push "  <param name=\"line_width\" value=\"")
-				(push line-width)
-				(push "\">\n"))
-          (push "Unable to push line chart\n")
-          (push "</object> &nbsp;\n"))
+                var previousPoint = null;
+
+                function graphHighlightHandler(evt, seriesIndex, pointIndex, data) {
+                    var item = [seriesIndex, pointIndex];
+                    if (seriesIndex != undefined && pointIndex != undefined) {
+                        if (previousPoint != item) {
+                            previousPoint = item;
+                            
+                            $(\"#tooltip\").remove();
+                            var x = data[0].toFixed(2),
+                                y = data[1].toFixed(2);
+
+                            if (options.axes.xaxis.ticks[pointIndex] !== undefined)
+                                x = options.axes.xaxis.ticks[pointIndex];
+
+                            var offsetX = 0;//(plot.getAxes().xaxis.scale * item.series.bars.barWidth);
+                            showTooltip(evt.pageX + offsetX, evt.pageY,
+                                        options.series[seriesIndex].label + \" of \" + x + \"<br><b>$\" + y + \"</b>\");
+                            // <small>(+100.00)</small>
+                        }
+                    } else {
+                        $(\"#tooltip\").remove();
+                        previousPoint = null;            
+                    }
+                }
+
+                $(\"#placeholder\").bind(\"jqplotDataHighlight\", graphHighlightHandler);
+                $(\"#placeholder\").bind(\"jqplotDataUnhighlight\", graphHighlightHandler);
+
+            ") 
+
+            (push "});</script>")
+
+            (gnc:msg (string-join (reverse (map (lambda (e) (if (number? e) (number->string e) e)) retval)) ""))
+            
+        )
         (begin
-	  (gnc:warn "linechart has no non-zero data.")
-	  " "))
+          (gnc:warn "linechart has no non-zero data.")
+            " "))
     retval))
