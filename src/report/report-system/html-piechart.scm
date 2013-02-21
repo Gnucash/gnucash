@@ -216,10 +216,10 @@
             (push (gnc:html-piechart-width piechart))
             (push "px;height:")
             (push (gnc:html-piechart-height piechart))
-            (push "px;\"></div>")
+            (push "px;\"></div>\n")
             (push "<script id=\"source\">\n$(function () {")
 
-            (push "var data = [];")
+            (push "var data = [];\n")
 
             (if (and data (list? data))
               (begin 
@@ -239,7 +239,7 @@
                     legend: {
                          show: true,
                          placement: \"outsideGrid\", },
-                   };")
+                   };\n")
 
             (if title
               (begin 
@@ -252,17 +252,7 @@
 
             (push "$.jqplot.config.enablePlugins = true;")
             (push "var plot = $.jqplot('placeholder', [data], options);")
-            (push "});</script>"))
+            (push "});\n</script>"))
         (begin (gnc:warn "null-data, not rendering piechart")
                " "))
     retval))
-
-
-
-
-
-
-
-
-
-

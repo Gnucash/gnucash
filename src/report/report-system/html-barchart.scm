@@ -340,7 +340,7 @@
          (series-data-start (lambda (series-index)
                          (push "var d")
                          (push series-index)
-                         (push " = [];")))
+                         (push " = [];\n")))
          (series-data-add (lambda (series-index x y)
                          (push (string-append
                                "  d"
@@ -351,13 +351,12 @@
                                (number->string y)
                                "]);\n"))))
          (series-data-end (lambda (series-index label)
-                         (push "  series.push({")
-                         (push "    label: \"")
-                         (push label)
-                         (push "\"});\n")
                          (push "data.push(d")
                          (push series-index)
-                         (push ");\n"))))
+                         (push ");\n")
+                         (push "series.push({ label: \"")
+                         (push label)
+                         (push "\"});\n\n"))))
     (if (and (list? data)
              (not (null? data))
              (gnc:not-all-zeros data))
@@ -374,11 +373,11 @@
             (push (gnc:html-barchart-width barchart))
             (push "px;height:")
             (push (gnc:html-barchart-height barchart))
-            (push "px;\"></div>")
+            (push "px;\"></div>\n")
             (push "<script id=\"source\">\n$(function () {")
 
             (push "var data = [];")
-            (push "var series = [];")
+            (push "var series = [];\n")
 
             (if (and data (list? data))
               (let ((rows (length data))
@@ -416,34 +415,24 @@
                    series: series,
                    axesDefaults: {
                    },        
-                    grid: {
-                        hoverable: true,
-                        markings: function(axes) {
-                            var markings = [];
-                            for (var x = Math.floor(axes.xaxis.min); x < axes.xaxis.max; x += 2)
-                                markings.push({ xaxis: { from: x - 0.5, to: x + 0.5 } })
-                            return markings;
-                        }
-                    },
-                    axes: {
-                        xaxis: {
-                            renderer: $.jqplot.CategoryAxisRenderer,
-                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                            tickOptions: {
-                                angle: -30,
-                                fontSize: '10pt',
-                            },
-                        },
-                        yaxis: {
-                            autoscale: true,
-                        },
-                    },
-                    xaxis: {
-                        tickLength: 0
-                    }
-                };")
+                   grid: {
+                   },
+                   axes: {
+                       xaxis: {
+                           renderer: $.jqplot.CategoryAxisRenderer,
+                           tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                           tickOptions: {
+                               angle: -30,
+                               fontSize: '10pt',
+                           },
+                       },
+                       yaxis: {
+                           autoscale: true,
+                       },
+                   }
+                };\n")
 
-            (push "options.stackSeries = ")
+            (push "  options.stackSeries = ")
             (push (if (gnc:html-barchart-stacked? barchart)
                 "true;\n"
                 "false;\n"))
@@ -512,7 +501,7 @@
 
                             var offsetX = 0;//(plot.getAxes().xaxis.scale * item.series.bars.barWidth);
                             showTooltip(evt.pageX + offsetX, evt.pageY,
-                                        options.series[seriesIndex].label + \" of \" + x + \"<br><b>$\" + y + \"</b>\");
+                                        options.series[seriesIndex].label + \" of \" + x + \"<br><b>\" + y + \"</b>\");
                             // <small>(+100.00)</small>
                         }
                     } else {
@@ -526,7 +515,7 @@
 
             ") 
 
-            (push "});</script>")
+            (push "});\n</script>")
 
             (gnc:msg (string-join (reverse (map (lambda (e) (if (number? e) (number->string e) e)) retval)) ""))
  

@@ -156,11 +156,11 @@
             (push (gnc:html-scatter-width scatter))
             (push "px;height:")
             (push (gnc:html-scatter-height scatter))
-            (push "px;\"></div>")
+            (push "px;\"></div>\n")
             (push "<script id=\"source\">\n$(function () {")
 
             (push "var data = [];")
-            (push "var series = [];")
+            (push "var series = [];\n")
 
             (if (and data (list? data))
               (let ((x-data (map-in-order car data))
@@ -170,7 +170,7 @@
                          (push (ensure-numeric x))
                          (push ", ")
                          (push (ensure-numeric y))
-                         (push "]);"))
+                         (push "]);\n"))
                        x-data y-data)
             ))
 
@@ -223,7 +223,7 @@
             (push "$.jqplot.config.enablePlugins = true;")
             (push "var plot = $.jqplot('placeholder', [data], options);")
 
-            (push "});</script>"))
+            (push "});\n</script>"))
         (begin
           (gnc:warn "Scatter chart has no non-zero data")
             " "))
