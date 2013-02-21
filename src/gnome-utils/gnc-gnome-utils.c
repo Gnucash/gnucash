@@ -30,8 +30,6 @@
 #endif
 #include <libxml/xmlIO.h>
 
-//#include "gnc-html-graph-gog.h"
-
 #include "assistant-gconf-setup.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"

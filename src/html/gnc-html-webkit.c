@@ -47,7 +47,6 @@
 #include "gnc-html.h"
 #include "gnc-html-webkit.h"
 #include "gnc-html-history.h"
-#include "gnc-html-graph-gog-webkit.h"
 #include "print-session.h"
 
 G_DEFINE_TYPE(GncHtmlWebkit, gnc_html_webkit, GNC_TYPE_HTML )
@@ -202,9 +201,6 @@ gnc_html_webkit_class_init( GncHtmlWebkitClass* klass )
     html_class->print = impl_webkit_print;
     html_class->cancel = impl_webkit_cancel;
     html_class->set_parent = impl_webkit_set_parent;
-
-    // Initialize graphing support
-    gnc_html_graph_gog_webkit_init();
 }
 
 static void

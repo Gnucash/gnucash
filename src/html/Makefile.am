@@ -17,31 +17,25 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${GTK_CFLAGS} \
   ${GNOME_CFLAGS} \
-  ${WEBKIT_CFLAGS} \
-  ${GOFFICE_CFLAGS}
+  ${WEBKIT_CFLAGS}
 
 libgncmod_html_la_SOURCES = \
   gncmod-html.c \
   gnc-html.c \
   gnc-html-history.c \
-  gnc-html-graph-gog.c \
   gnc-html-factory.c \
   gnc-html-webkit.c \
-  gnc-html-graph-gog-webkit.c \
   swig-gnc-html.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  gnc-html-graph-gog.h \
   gnc-html-history.h \
   gnc-html.h \
   gnc-html-p.h \
   gnc-html-factory.h \
   gnc-html-webkit.h \
   gnc-html-extras.h \
-  gnc-html-webkit-p.h \
-  gnc-html-graph-gog-webkit.h \
-  gnc-html-graph-gog-extras.h
+  gnc-html-webkit-p.h
 
 libgncmod_html_la_LDFLAGS = -avoid-version
 
@@ -57,7 +51,6 @@ libgncmod_html_la_LIBADD = \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
   ${QOF_LIBS} \
-  ${GOFFICE_LIBS} \
   ${GUILE_LIBS} \
   ${REGEX_LIBS}
 
