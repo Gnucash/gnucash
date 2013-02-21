@@ -250,8 +250,8 @@
                 (push "  options.title += \" (")
                 (push subtitle) (push ")\";\n")))
 
-            (push "$.jqplot.config.enablePlugins = true;")
-            (push "var plot = $.jqplot('placeholder', [data], options);")
+            (push "$.jqplot.config.enablePlugins = true;\n")
+            (push "var plot = $.jqplot('placeholder', [data], options);\n")
             (push "});\n</script>"))
         (begin (gnc:warn "null-data, not rendering piechart")
                " "))

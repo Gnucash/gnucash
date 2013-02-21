@@ -395,6 +395,7 @@
         (begin
             (push (gnc:html-js-include "jqplot/jquery.min.js"))
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.highlighter.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
@@ -455,6 +456,10 @@
                        yaxis: {
                            autoscale: true,
                        },
+                   },
+                   highlighter: {
+                       tooltipContentEditor: formatTooltip,
+                       tooltipLocation: 'ne',
                    }
                 };\n")
 
@@ -495,49 +500,14 @@
             (push "$.jqplot.config.enablePlugins = true;")
             (push "var plot = $.jqplot('placeholder', data, options);
 
-                function showTooltip(x, y, contents) {
-                    $('<div id=\"tooltip\">' + contents + '</div>').css( {
-                        position: 'absolute',
-                        display: 'none',
-                        top: y + 5,
-                        left: x + 5,
-                        border: '1px solid #fdd',
-                        padding: '2px',
-                        'background-color': '#fee',
-                        opacity: 0.80
-                    }).appendTo(\"body\").fadeIn(200);
-                }
-
-                var previousPoint = null;
-
-                function graphHighlightHandler(evt, seriesIndex, pointIndex, data) {
-                    var item = [seriesIndex, pointIndex];
-                    if (seriesIndex != undefined && pointIndex != undefined) {
-                        if (previousPoint != item) {
-                            previousPoint = item;
-                            
-                            $(\"#tooltip\").remove();
-                            var x = data[0].toFixed(2),
-                                y = data[1].toFixed(2);
-
-                            if (options.axes.xaxis.ticks[pointIndex] !== undefined)
-                                x = options.axes.xaxis.ticks[pointIndex];
-
-                            var offsetX = 0;//(plot.getAxes().xaxis.scale * item.series.bars.barWidth);
-                            showTooltip(evt.pageX + offsetX, evt.pageY,
-                                        options.series[seriesIndex].label + \" of \" + x + \"<br><b>$\" + y + \"</b>\");
-                            // <small>(+100.00)</small>
-                        }
-                    } else {
-                        $(\"#tooltip\").remove();
-                        previousPoint = null;            
-                    }
-                }
-
-                $(\"#placeholder\").bind(\"jqplotDataHighlight\", graphHighlightHandler);
-                $(\"#placeholder\").bind(\"jqplotDataUnhighlight\", graphHighlightHandler);
-
-            ") 
+  function formatTooltip(str, seriesIndex, pointIndex) {
+      if (options.axes.xaxis.ticks[pointIndex] !== undefined)
+          x = options.axes.xaxis.ticks[pointIndex][1];
+      else
+          x = pointIndex;
+      y = data[seriesIndex][pointIndex][1].toFixed(2);
+      return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
+  }\n") 
 
             (push "});\n</script>")
 
