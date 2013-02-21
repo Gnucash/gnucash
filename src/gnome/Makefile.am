@@ -42,6 +42,7 @@ libgnc_gnome_la_SOURCES = \
   dialog-sx-from-trans.c \
   dialog-sx-since-last-run.c \
   dialog-tax-info.c \
+  gnc-budget-view.c \
   gnc-plugin-account-tree.c \
   gnc-plugin-basic-commands.c \
   gnc-plugin-budget.c \
