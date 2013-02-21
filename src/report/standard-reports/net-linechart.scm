@@ -60,7 +60,7 @@
 (define optname-markers (N_ "Data markers?"))
 
 ;;(define optname-x-grid (N_ "X grid"))
-(define optname-y-grid (N_ "Y Grid"))
+(define optname-y-grid (N_ "Grid"))
 
 
 
@@ -152,7 +152,7 @@
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-y-grid
-      "f" (N_ "Add horizontal grid lines.")
+      "f" (N_ "Add grid lines.")
       #f))
 
     ;(add-option

@@ -463,6 +463,26 @@
                    }
                 };\n")
 
+            (push "  options.stackSeries = ")
+            (push (if (gnc:html-linechart-stacked? linechart)
+                "true;\n"
+                "false;\n"))
+
+            (push "  options.seriesDefaults.showMarker = ")
+            (push (if (gnc:html-linechart-markers? linechart)
+                "true;\n"
+                "false;\n"))
+
+            (push "  options.axesDefaults.drawMajorGridlines = ")
+            (push (if (gnc:html-linechart-major-grid? linechart)
+                "true;\n"
+                "false;\n"))
+
+            (push "  options.axesDefaults.drawMinorGridlines = ")
+            (push (if (gnc:html-linechart-minor-grid? linechart)
+                "true;\n"
+                "false;\n"))
+
             (if title
               (begin 
                 (push "  options.title = \"")
