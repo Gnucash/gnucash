@@ -21,6 +21,7 @@ AM_CPPFLAGS = \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
   ${LIBGDA_CFLAGS} \
+  ${LIBXML2_CFLAGS} \
   ${GTK_MAC_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
