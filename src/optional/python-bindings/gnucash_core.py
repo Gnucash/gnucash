@@ -653,6 +653,10 @@ account_dict =  {
 methods_return_instance(Account, account_dict)
 methods_return_instance_lists(
     Account, { 'GetSplitList': Split,
+               'get_children': Account,
+               'get_children_sorted': Account,
+               'get_descendants': Account,
+               'get_descendants_sorted': Account
                        })
 Account.name = property( Account.GetName, Account.SetName )
 
