@@ -195,6 +195,7 @@ src/gnome/dialog-sx-editor.c
 src/gnome/dialog-sx-from-trans.c
 src/gnome/dialog-sx-since-last-run.c
 src/gnome/dialog-tax-info.c
+src/gnome/gnc-budget-view.c
 src/gnome/gnc-plugin-account-tree.c
 src/gnome/gnc-plugin-basic-commands.c
 src/gnome/gnc-plugin-budget.c
@@ -355,8 +356,6 @@ src/gnome/window-autoclear.c
 src/gnome/window-reconcile.c
 src/html/gnc-html.c
 src/html/gnc-html-factory.c
-src/html/gnc-html-graph-gog.c
-src/html/gnc-html-graph-gog-webkit.c
 src/html/gnc-html-history.c
 src/html/gnc-html-webkit.c
 src/html/gncmod-html.c
