@@ -277,9 +277,6 @@ set_default ZLIB_URL                "$GNOME_WIN32_DEPS_URL/zlib_1.2.5-2_win32.zi
 set_default ZLIB_DEV_URL            "$GNOME_WIN32_DEPS_URL/zlib-dev_1.2.5-2_win32.zip"
 set_default GNOME_DIR $GLOBAL_DIR\\gnome
 
-PIXMAN_VERSION="0.22.0"
-set_default PIXMAN_URL              "http://www.cairographics.org/releases/pixman-${PIXMAN_VERSION}.tar.gz"
-
 set_default SWIG_URL "$SF_MIRROR/swig/swigwin-1.3.36.zip"
 set_default SWIG_DIR $GLOBAL_DIR\\swig
 

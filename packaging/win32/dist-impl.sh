@@ -116,8 +116,6 @@ function dist_gnome() {
     mv $TMP_UDIR/gtk2_prefs-*/gtk2_prefs.exe $DIST_DIR/bin
     rm -rf $TMP_UDIR/gtk2_prefs-*
 
-    wget_unpacked $PIXMAN_URL $DOWNLOAD_DIR $DIST_DIR
-
     cp -a $_GNOME_UDIR/bin/libxml*.dll $DIST_DIR/bin
 
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}

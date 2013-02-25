@@ -246,8 +246,7 @@ function check_gnome() {
         add_to_env pkg-config PKG_CONFIG
     fi
     if quiet gconftool-2 --version &&
-        quiet ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgtkhtml-3.14 pixman-1 &&
-        [ -f $_GNOME_UDIR/lib/pkgconfig/pixman-1.pc ] &&
+        quiet ${PKG_CONFIG} --exists gconf-2.0 gtk+-2.0 cairo libxml-2.0 &&
         quiet intltoolize --version
     then
         echo "gnome packages installed."
