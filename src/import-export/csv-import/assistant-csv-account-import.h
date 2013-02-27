@@ -49,7 +49,7 @@ typedef struct
     GtkWidget    *header_row_spin;
     GtkWidget    *finish_label;
     GtkWidget    *summary_label;
-    GtkWidget    *summary_error;
+    GtkWidget    *summary_error_view;
 
     gchar        *starting_dir;
     gchar        *file_name;

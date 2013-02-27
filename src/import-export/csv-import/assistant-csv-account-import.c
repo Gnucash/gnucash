@@ -410,10 +410,13 @@ csv_import_assistant_summary_page_prepare (GtkAssistant *assistant,
 
     if (!g_strcmp0(info->error, "") == 0)
     {
+        GtkTextBuffer *buffer;
+
+        buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (info->summary_error_view));
         text = g_strdup_printf(gettext ("Import completed but with errors!\n\nThe number of Accounts added was %u and "
                                         "updated was %u.\n\nSee below for errors..." ), info->num_new, info->num_updates );
         errtext = g_strdup_printf ( "%s", info->error);
-        gtk_label_set_text (GTK_LABEL(info->summary_error), errtext);
+        gtk_text_buffer_set_text (buffer, errtext, -1);
         g_free(errtext);
         g_free(info->error);
     }
@@ -604,7 +607,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     info->finish_label = GTK_WIDGET(gtk_builder_get_object(builder, "end_page"));
     /* Summary Page */
     info->summary_label = GTK_WIDGET(gtk_builder_get_object(builder, "summary_label"));
-    info->summary_error = GTK_WIDGET(gtk_builder_get_object(builder, "summary_error"));
+    info->summary_error_view = GTK_WIDGET(gtk_builder_get_object(builder, "summary_error_view"));
 
     g_signal_connect (G_OBJECT(window), "destroy",
                       G_CALLBACK (csv_import_assistant_destroy_cb), info);

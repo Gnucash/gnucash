@@ -341,14 +341,25 @@ Cancel to abort.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="summary_error">
+          <object class="GtkScrolledWindow" id="summary_error_scrolledwindow">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="wrap">True</property>
+            <property name="border_width">1</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <property name="vscrollbar_policy">automatic</property>
+            <property name="shadow_type">etched-in</property>
+            <child>
+              <object class="GtkTextView" id="summary_error_view">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="left_margin">2</property>
+                <property name="right_margin">2</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
