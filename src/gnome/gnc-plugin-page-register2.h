@@ -133,6 +133,14 @@ GNCSplitReg2 *
 gnc_plugin_page_register2_get_gsr (GncPluginPage *plugin_page);
 
 
+/** Get the GNCLedgerDisplay data structure associated with this register page.
+ *
+ *  @param plugin_page A "register" page.
+ */
+GNCLedgerDisplay2 *
+gnc_plugin_page_register2_get_ledger (GncPluginPage *plugin_page);
+
+
 /** Get the Account associated with this register page.
  *
  *  @param page A "register" page.

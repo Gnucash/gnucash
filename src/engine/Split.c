@@ -432,6 +432,39 @@ xaccSplitClone (const Split *s)
     return split;
 }
 
+
+/*################## Added for Reg2 #################*/
+
+/* This is really a helper for xaccTransCopyOnto. It doesn't reparent
+   the 'to' split to from's transaction, because xaccTransCopyOnto is
+   responsible for parenting the split to the correct transaction.
+   Also, from's parent transaction may not even be a valid
+   transaction, so this function may not modify anything about 'from'
+   or from's transaction.
+*/
+void
+xaccSplitCopyOnto(const Split *from_split, Split *to_split)
+{
+   if (!from_split || !to_split) return;
+   xaccTransBeginEdit (to_split->parent);
+
+   xaccSplitSetMemo(to_split, xaccSplitGetMemo(from_split));
+   xaccSplitSetAction(to_split, xaccSplitGetAction(from_split));
+   xaccSplitSetAmount(to_split, xaccSplitGetAmount(from_split));
+   xaccSplitSetValue(to_split, xaccSplitGetValue(from_split));
+   /* Setting the account is okay here because, even though the from
+      split might not really belong to the account it claims to,
+      setting the account won't cause any event involving from. */
+   xaccSplitSetAccount(to_split, xaccSplitGetAccount(from_split));
+   /* N.B. Don't set parent. */
+
+   qof_instance_set_dirty(QOF_INSTANCE(to_split));
+   xaccTransCommitEdit(to_split->parent);
+}
+
+/*################## Added for Reg2 #################*/
+
+
 #ifdef DUMP_FUNCTIONS
 void
 xaccSplitDump (const Split *split, const char *tag)

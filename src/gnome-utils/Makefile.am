@@ -83,6 +83,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-splash.c \
   gnc-sx-instance-dense-cal-adapter.c \
   gnc-sx-list-tree-model-adapter.c \
+  gnc-tree-control-split-reg.c \
   gnc-tree-model.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-account.c \
@@ -160,6 +161,7 @@ gncinclude_HEADERS = \
   gnc-splash.h \
   gnc-sx-instance-dense-cal-adapter.h \
   gnc-sx-list-tree-model-adapter.h \
+  gnc-tree-control-split-reg.h \
   gnc-tree-model.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-account.h \

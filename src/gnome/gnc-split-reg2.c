@@ -1,11 +1,12 @@
 /********************************************************************\
- * gnc-split-reg2.c -- A widget for the common register look-n-feel. *
+ * gnc-split-reg2.c -- A widget for the common register look-n-feel *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-1998 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
  * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Copyright (C) 2002,2006 Joshua Sled <jsled@asynchronous.org>     *
+ * Copyright (C) 2012 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -54,12 +55,12 @@
 #include "table-allgui.h"
 
 #include "gnc-tree-view-split-reg.h"
+#include "gnc-tree-control-split-reg.h"
 
 #include "dialog-utils.h"
 
 #define GCONF_SECTION "window/pages/register2"
 
-// static QofLogModule log_module = GNC_MOD_SX;
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /***** PROTOTYPES ***************************************************/
@@ -76,7 +77,6 @@ static GtkWidget *gnc_split_reg2_get_parent( GNCLedgerDisplay2 *ledger );
 
 static void gsr2_create_table( GNCSplitReg2 *gsr );
 static void gsr2_setup_table( GNCSplitReg2 *gsr );
-
 
 
 static void gsr2_setup_status_widgets( GNCSplitReg2 *gsr );
@@ -98,57 +98,26 @@ static void gnc_split_reg2_ld_destroy( GNCLedgerDisplay2 *ledger );
 static Transaction* create_balancing_transaction(QofBook *book, Account *account,
         time64 statement_date, gnc_numeric balancing_amount);
 
-void gsr2_default_enter_handler    ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_cancel_handler   ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_delete_handler   ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_reinit_handler   ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_dup_handler      ( GNCSplitReg2 *w, gpointer ud );
+
 void gsr2_default_schedule_handler ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_expand_handler   ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_blank_handler    ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_jump_handler     ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_cut_handler      ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_cut_txn_handler  ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_copy_handler     ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_copy_txn_handler ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_paste_handler    ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_paste_txn_handler( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_void_txn_handler ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_unvoid_txn_handler  ( GNCSplitReg2 *w, gpointer ud );
-void gsr2_default_reverse_txn_handler ( GNCSplitReg2 *w, gpointer ud );
+
 
 static void gsr2_emit_simple_signal( GNCSplitReg2 *gsr, const char *sigName );
 static void gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data);
 static void gsr2_emit_include_date_signal( GNCSplitReg2 *gsr, time64 date );
 
-void gnc_split_reg2_cut_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_copy_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_paste_cb(GtkWidget *w, gpointer data);
-
-void gnc_split_reg2_cut_trans_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_copy_trans_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_paste_trans_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_void_trans_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_unvoid_trans_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_reverse_trans_cb(GtkWidget *w, gpointer data);
 
 /*FIXME void gnc_split_reg2_record_cb (GncTreeViewSplitReg *view, gpointer data); */
-void gnc_split_reg2_reinitialize_trans_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_delete_trans_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_duplicate_trans_cb(GtkWidget *w, gpointer data);
+
 void gnc_split_reg2_recur_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg2_record_trans_cb(GtkWidget *w, gpointer data);
-void gnc_split_reg2_cancel_trans_cb(GtkWidget *w, gpointer data);
 
-void gnc_split_reg2_expand_trans_menu_cb(GtkWidget *widget, gpointer data);
-void gnc_split_reg2_expand_trans_toolbar_cb(GtkWidget *widget, gpointer data);
-void gnc_split_reg2_new_trans_cb(GtkWidget *widget, gpointer data);
-void gnc_split_reg2_jump_cb(GtkWidget *widget, gpointer data);
 
 void gnc_split_reg2_style_ledger_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg2_style_auto_ledger_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg2_style_journal_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg2_double_line_cb (GtkWidget *w, gpointer data);
+
 
 void gnc_split_reg2_sort_standard_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg2_sort_date_cb (GtkWidget *w, gpointer data);
@@ -161,21 +130,15 @@ void gnc_split_reg2_sort_desc_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg2_sort_action_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg2_sort_notes_cb (GtkWidget *w, gpointer data);
 
-void gnc_split_reg2_destroy_cb(GtkWidget *widget, gpointer data);
-void gnc_split_reg2_size_allocate( GtkWidget *widget,
-                                  GtkAllocation *allocation,
-                                  gpointer user_data );
+void gnc_split_reg2_destroy_cb (GtkWidget *widget, gpointer data);
 
-
-void gnc_split_reg2_handle_exchange_cb (GtkWidget *w, gpointer data);
-
-static void gnc_split_reg2_class_init( GNCSplitReg2Class *class );
-static void gnc_split_reg2_init( GNCSplitReg2 *gsr );
-static void gnc_split_reg2_init2( GNCSplitReg2 *gsr );
+static void gnc_split_reg2_class_init (GNCSplitReg2Class *class);
+static void gnc_split_reg2_init (GNCSplitReg2 *gsr);
+static void gnc_split_reg2_init2 (GNCSplitReg2 *gsr);
 
 #ifdef SKIP
-FROM_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
-AS_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
+FROM_STRING_FUNC (SortType, ENUM_LIST_SORTTYPE)
+AS_STRING_FUNC (SortType, ENUM_LIST_SORTTYPE)
 #endif
 
 GType
@@ -187,18 +150,18 @@ gnc_split_reg2_get_type( void )
     {
         GTypeInfo type_info =
         {
-            sizeof(GNCSplitReg2Class),      /* class_size */
-            NULL,   			/* base_init */
+            sizeof(GNCSplitReg2Class),          /* class_size */
+            NULL,   			        /* base_init */
             NULL,				/* base_finalize */
             (GClassInitFunc)gnc_split_reg2_class_init,
             NULL,				/* class_finalize */
             NULL,				/* class_data */
             sizeof(GNCSplitReg2),		/* */
-            0,				/* n_preallocs */
+            0,				        /* n_preallocs */
             (GInstanceInitFunc)gnc_split_reg2_init,
         };
 
-        gnc_split_reg2_type = g_type_register_static( GTK_TYPE_VBOX,
+        gnc_split_reg2_type = g_type_register_static (GTK_TYPE_VBOX,
                              "GNCSplitReg2",
                              &type_info, 0 );
     }
@@ -209,24 +172,9 @@ gnc_split_reg2_get_type( void )
 /* SIGNALS */
 enum gnc_split_reg2_signal_enum
 {
-    ENTER_ENT_SIGNAL,
-    CANCEL_ENT_SIGNAL,
-    DELETE_ENT_SIGNAL,
-    REINIT_ENT_SIGNAL,
-    DUP_ENT_SIGNAL,
     SCHEDULE_ENT_SIGNAL,
-    EXPAND_ENT_SIGNAL,
-    BLANK_SIGNAL,
-    JUMP_SIGNAL,
-    CUT_SIGNAL,
-    CUT_TXN_SIGNAL,
-    COPY_SIGNAL,
-    COPY_TXN_SIGNAL,
-    PASTE_SIGNAL,
-    PASTE_TXN_SIGNAL,
-    VOID_TXN_SIGNAL,
-    UNVOID_TXN_SIGNAL,
-    REVERSE_TXN_SIGNAL,
+
+
     HELP_CHANGED_SIGNAL,
     INCLUDE_DATE_SIGNAL,
     LAST_SIGNAL
@@ -246,24 +194,9 @@ gnc_split_reg2_class_init( GNCSplitReg2Class *class )
         guint defaultOffset;
     } signals[] =
     {
-        { ENTER_ENT_SIGNAL,    "enter_ent",    G_STRUCT_OFFSET( GNCSplitReg2Class, enter_ent_cb ) },
-        { CANCEL_ENT_SIGNAL,   "cancel_ent",   G_STRUCT_OFFSET( GNCSplitReg2Class, cancel_ent_cb ) },
-        { DELETE_ENT_SIGNAL,   "delete_ent",   G_STRUCT_OFFSET( GNCSplitReg2Class, delete_ent_cb ) },
-        { REINIT_ENT_SIGNAL,   "reinit_ent",   G_STRUCT_OFFSET( GNCSplitReg2Class, reinit_ent_cb ) },
-        { DUP_ENT_SIGNAL,      "dup_ent",      G_STRUCT_OFFSET( GNCSplitReg2Class, dup_ent_cb ) },
         { SCHEDULE_ENT_SIGNAL, "schedule_ent", G_STRUCT_OFFSET( GNCSplitReg2Class, schedule_ent_cb ) },
-        { EXPAND_ENT_SIGNAL,   "expand_ent",   G_STRUCT_OFFSET( GNCSplitReg2Class, expand_ent_cb ) },
-        { BLANK_SIGNAL,        "blank",        G_STRUCT_OFFSET( GNCSplitReg2Class, blank_cb ) },
-        { JUMP_SIGNAL,         "jump",         G_STRUCT_OFFSET( GNCSplitReg2Class, jump_cb ) },
-        { CUT_SIGNAL,          "cut",          G_STRUCT_OFFSET( GNCSplitReg2Class, cut_cb ) },
-        { CUT_TXN_SIGNAL,      "cut_txn",      G_STRUCT_OFFSET( GNCSplitReg2Class, cut_txn_cb ) },
-        { COPY_SIGNAL,         "copy",         G_STRUCT_OFFSET( GNCSplitReg2Class, copy_cb ) },
-        { COPY_TXN_SIGNAL,     "copy_txn",     G_STRUCT_OFFSET( GNCSplitReg2Class, copy_txn_cb ) },
-        { PASTE_SIGNAL,        "paste",        G_STRUCT_OFFSET( GNCSplitReg2Class, paste_cb ) },
-        { PASTE_TXN_SIGNAL,    "paste_txn",    G_STRUCT_OFFSET( GNCSplitReg2Class, paste_txn_cb ) },
-        { VOID_TXN_SIGNAL,     "void_txn",     G_STRUCT_OFFSET( GNCSplitReg2Class, void_txn_cb ) },
-        { UNVOID_TXN_SIGNAL,   "unvoid_txn",   G_STRUCT_OFFSET( GNCSplitReg2Class, unvoid_txn_cb ) },
-        { REVERSE_TXN_SIGNAL,  "reverse_txn",  G_STRUCT_OFFSET( GNCSplitReg2Class, reverse_txn_cb ) },
+
+
         { HELP_CHANGED_SIGNAL, "help-changed", G_STRUCT_OFFSET( GNCSplitReg2Class, help_changed_cb ) },
         { INCLUDE_DATE_SIGNAL, "include-date", G_STRUCT_OFFSET( GNCSplitReg2Class, include_date_cb ) },
         { LAST_SIGNAL, NULL, 0 }
@@ -296,24 +229,8 @@ gnc_split_reg2_class_init( GNCSplitReg2Class *class )
     g_assert( i == LAST_SIGNAL );
 
     /* Setup the default handlers. */
-    class->enter_ent_cb    = gsr2_default_enter_handler;
-    class->cancel_ent_cb   = gsr2_default_cancel_handler;
-    class->delete_ent_cb   = gsr2_default_delete_handler;
-    class->reinit_ent_cb   = gsr2_default_reinit_handler;
-    class->dup_ent_cb      = gsr2_default_dup_handler;
     class->schedule_ent_cb = gsr2_default_schedule_handler;
-    class->expand_ent_cb   = gsr2_default_expand_handler;
-    class->blank_cb        = gsr2_default_blank_handler;
-    class->jump_cb         = gsr2_default_jump_handler;
-    class->cut_cb          = gsr2_default_cut_handler;
-    class->cut_txn_cb      = gsr2_default_cut_txn_handler;
-    class->copy_cb         = gsr2_default_copy_handler;
-    class->copy_txn_cb     = gsr2_default_copy_txn_handler;
-    class->paste_cb        = gsr2_default_paste_handler;
-    class->paste_txn_cb    = gsr2_default_paste_txn_handler;
-    class->void_txn_cb     = gsr2_default_void_txn_handler;
-    class->unvoid_txn_cb   = gsr2_default_unvoid_txn_handler;
-    class->reverse_txn_cb  = gsr2_default_reverse_txn_handler;
+
 
     class->help_changed_cb = NULL;
     class->include_date_cb = NULL;
@@ -382,11 +299,9 @@ gsr2_setup_table( GNCSplitReg2 *gsr )
 
     model = gnc_ledger_display2_get_split_model_register( gsr->ledger );
 
-/*FIXME    gnc_split_register_show_present_divider( model, TRUE ); */
-
     /* events should be sufficient to redraw this */
-    /* gnc_ledger_display2_refresh( gsr->ledger ); */
-    gnc_split_reg2_refresh_toolbar( gsr );
+    /* gnc_ledger_display2_refresh (gsr->ledger); */
+    gnc_split_reg2_refresh_toolbar (gsr);
 
     LEAVE(" ");
 }
@@ -400,27 +315,34 @@ gsr2_create_table( GNCSplitReg2 *gsr )
     GncTreeModelSplitReg *model;
     GtkWidget *scrolled_window;
     GtkTreeViewColumn *col;
+    GNCLedgerDisplay2Type ledger_type;
 
     gchar *gconf_key;
     const GncGUID * guid;
     Account * account;
+    const gchar *gconf_section;
+    const gchar *sort_string;
     
     account = gnc_ledger_display2_leader (gsr->ledger);
     guid = xaccAccountGetGUID (account);
     /* Used for saving different register column widths under seperate keys */
-    gconf_key = g_strconcat (GCONF_SECTION,"/", (gchar*)guid_to_string (guid), NULL); 
+    gconf_key = g_strconcat (GCONF_SECTION,"/", (gchar*)guid_to_string (guid), NULL);
 
-    ENTER("gsr=%p", gsr);
-g_print("gsr2_create_table\n");
+    ENTER("create table gsr=%p", gsr);
+
     gnc_ledger_display2_set_user_data (gsr->ledger, (gpointer)gsr );
     gnc_ledger_display2_set_handlers (gsr->ledger,
                                      gnc_split_reg2_ld_destroy,
                                      gnc_split_reg2_get_parent );
 
+    ledger_type = gnc_ledger_display2_type (gsr->ledger);
+
     model = gnc_ledger_display2_get_split_model_register (gsr->ledger );
     view = gnc_tree_view_split_reg_new_with_model (model);
 
     g_object_unref(G_OBJECT(model));
+
+    gnc_tree_model_split_reg_set_display (model, ((ledger_type == LD2_SUBACCOUNT)?TRUE:FALSE), ((ledger_type == LD2_GL)?TRUE:FALSE));
 
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -431,36 +353,50 @@ g_print("gsr2_create_table\n");
 
     gnc_ledger_display2_set_split_view_register (gsr->ledger, view);
 
+    /* Restore the sort depth from gconf */
+    view->sort_depth = gnc_gconf_get_int (gconf_key, "sort_depth", NULL);
+
+    /* Restore the sort order from gconf */
+    sort_string = gnc_gconf_get_string (gconf_key, "sort_order", NULL);
+    if (g_strcmp0 ("ascending", sort_string) == 0)
+        view->sort_direction = 1;
+    else
+        view->sort_direction = -1;
+
     g_object_set (G_OBJECT (view), "gconf-section", gconf_key, 
-                 "show-column-menu", TRUE, NULL);
+                 "show-column-menu", FALSE, NULL);
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW (view));
 
-    gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW (view), FALSE);
+    if (ledger_type == LD2_GL)
+        gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW (view), TRUE);
+    else
+        gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW (view), FALSE);
 
     /* This column gets all the free space */
     gnc_tree_view_expand_columns (GNC_TREE_VIEW (view), "descnotes", NULL);
 
     /*FIXME is this OK ? - Set the Reconcile column width */
-    col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW (view), "recn");
-    if (col != NULL)
-        g_object_set (G_OBJECT(col),
-                     "resizable", FALSE,
-                     "sizing",      GTK_TREE_VIEW_COLUMN_FIXED,
-                     "fixed-width", 15,
-                     NULL);
+//    col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW (view), "recn");
+//    if (col != NULL)
+//        g_object_set (G_OBJECT(col),
+//                     "resizable", FALSE,
+//                     "sizing", GTK_TREE_VIEW_COLUMN_FIXED,
+//                     "fixed-width", 15,
+//                      NULL);
 
-    /* This sets the right color column, 4 is the minimum */
+    /* This sets the status color column, 4 is the minimum */
     col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW (view), "status");
     if (col != NULL)
         g_object_set (G_OBJECT(col),
                      "resizable", FALSE,
-                     "sizing",      GTK_TREE_VIEW_COLUMN_FIXED,
+                     "sizing", GTK_TREE_VIEW_COLUMN_FIXED,
                      "fixed-width", 4,
-                     NULL);
+                      NULL);
 
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (view), TRUE);
     gtk_widget_show (GTK_WIDGET (view));
+
     gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET (view));
     gtk_widget_show (GTK_WIDGET (gsr));
 
@@ -470,16 +406,11 @@ g_print("gsr2_create_table\n");
     /* This tells the ledger that we have a valid tree view */
     gnc_ledger_display2_set_split_view_refresh (gsr->ledger, TRUE);
 
-/*
-    g_signal_connect (gsr->reg, "activate_cursor",
-                      G_CALLBACK(gnc_split_reg2_record_cb), gsr); */
+    /* This triggers the update of the summary bar */
+    g_signal_connect_after (model, "refresh_status_bar",
+                      G_CALLBACK(gsr2_redraw_all_cb), gsr); //this works
 
-/*FIXME This triggers the update of the summary bar, we need to connect this to some thing
-
-    g_signal_connect (gsr->reg, "redraw_all",
-                      G_CALLBACK(gsr2_redraw_all_cb), gsr); */
-
-
+    /* This triggers the update of the help text */
     g_signal_connect (view, "help_signal",
                       G_CALLBACK (gsr2_emit_help_changed), gsr); // this works
 
@@ -503,7 +434,6 @@ gsr2_setup_status_widgets (GNCSplitReg2 *gsr)
 void
 gnc_split_reg2_destroy_cb (GtkWidget *widget, gpointer data)
 {
-//g_print("gnc_split_reg2_destroy_cb - does not do any thing\n");
 }
 
 /**
@@ -767,7 +697,7 @@ gnc_split_reg2_refresh_toolbar( GNCSplitReg2 *gsr )
 }
 
 static void
-gnc_split_reg2_ld_destroy( GNCLedgerDisplay2 *ledger )
+gnc_split_reg2_ld_destroy (GNCLedgerDisplay2 *ledger)
 {
     GNCSplitReg2 *gsr = gnc_ledger_display2_get_user_data( ledger );
     
@@ -786,7 +716,8 @@ gnc_split_reg2_ld_destroy( GNCLedgerDisplay2 *ledger )
 
         model = gnc_ledger_display2_get_split_model_register (ledger);
 
-/*FIXME        if (model && model->table)
+/*FIXME This may not be required
+        if (model && model->table)
             gnc_table_save_state (model->table, gconf_key);
 */
         /*
@@ -798,476 +729,8 @@ gnc_split_reg2_ld_destroy( GNCLedgerDisplay2 *ledger )
 }
 
 
-/* ######## Handlers ############ */
+/* ########################### Handlers ############################### */
 
-
-void
-gsr2_default_cut_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME    gnucash_register_cut_clipboard( gsr->reg );*/
-}
-
-/**
- * Cut the selection to the clipboard.  This refers to the Split.
- **/
-void
-gnc_split_reg2_cut_cb (GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "cut" );*/
-}
-
-void
-gsr2_default_copy_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME    gnucash_register_copy_clipboard( gsr->reg );*/
-}
-
-/**
- * Copy the selection to the clipboard.  This refers to the Split.
- **/
-void
-gnc_split_reg2_copy_cb (GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "copy" );*/
-}
-
-void
-gsr2_default_paste_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME    gnucash_register_paste_clipboard( gsr->reg );*/
-}
-
-/**
- * Paste the clipboard to the selection.  This refers to the Split.
- **/
-void
-gnc_split_reg2_paste_cb (GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "paste" );*/
-}
-
-void
-gsr2_default_cut_txn_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME    gnc_split_register_cut_current
-    (gnc_ledger_display2_get_split_register( gsr->ledger ));*/
-}
-
-/**
- * Cut the current transaction  to the clipboard.
- **/
-void
-gnc_split_reg2_cut_trans_cb (GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "cut_txn" );*/
-}
-
-void
-gsr2_default_copy_txn_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME    gnc_split_register_copy_current
-    (gnc_ledger_display2_get_split_register( gsr->ledger ));*/
-}
-
-/**
- * Copy the current transaction to the clipboard.
- **/
-void
-gnc_split_reg2_copy_trans_cb(GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "copy_txn" );*/
-}
-
-void
-gsr2_default_paste_txn_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME    gnc_split_register_paste_current
-    (gnc_ledger_display2_get_split_register( gsr->ledger ));*/
-}
-
-/**
- * Paste the transaction clipboard to the selection.
- **/
-void
-gnc_split_reg2_paste_trans_cb (GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "paste_txn" );*/
-}
-
-/********************************************************************\
- * gnc_split_reg2_void_trans_cb                                      *
- *                                                                  *
- * Args:   widget - the widget that called us                       *
- *         data   - the data struct for this register               *
- * Return: none                                                     *
-\********************************************************************/
-void
-gsr2_default_void_txn_handler (GNCSplitReg2 *gsr, gpointer data)
-{
-    // Override this function.
-}
-
-void
-gnc_split_reg2_void_trans_cb (GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "void_txn" );*/
-}
-
-/********************************************************************\
- * gnc_split_reg2_unvoid_trans_cb                                      *
- *                                                                  *
- * Args:   widget - the widget that called us                       *
- *         data   - the data struct for this register               *
- * Return: none                                                     *
-\********************************************************************/
-void
-gsr2_default_unvoid_txn_handler (GNCSplitReg2 *gsr, gpointer data)
-{
-    // Override this function.
-}
-
-void
-gnc_split_reg2_unvoid_trans_cb (GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "unvoid_txn" );*/
-}
-
-/********************************************************************\
- * gnc_split_reg2_reverse_trans_cb                                   *
- *                                                                  *
- * Args:   widget - the widget that called us                       *
- *         data   - the data struct for this register               *
- * Return: none                                                     *
-\********************************************************************/
-void
-gsr2_default_reverse_txn_handler (GNCSplitReg2 *gsr, gpointer data)
-{
-/*FIXME*/
-#ifdef skip
-    SplitRegister *reg;
-    Transaction *trans, *new_trans;
-
-    reg = gnc_ledger_display2_get_split_register( gsr->ledger );
-    trans = gnc_split_register_get_current_trans (reg);
-    if (trans == NULL)
-        return;
-
-    if (xaccTransGetReversedBy(trans))
-    {
-        gnc_error_dialog(gsr->window, "%s",
-                         _("A reversing entry has already been created for this transaction."));
-        return;
-    }
-
-    new_trans = xaccTransReverse(trans);
-
-    /* Clear transaction level info */
-    xaccTransSetDatePostedSecs(new_trans, gnc_time (NULL));
-    xaccTransSetDateEnteredSecs(new_trans, gnc_time (NULL));
-
-    /* Now jump to new trans */
-    gnc_split_reg2_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
-#endif
-}
-
-void
-gnc_split_reg2_reverse_trans_cb (GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "reverse_txn" ); */
-}
-
-
-static gboolean
-is_trans_readonly_and_warn (const Transaction *trans) //this works
-{
-    GtkWidget *dialog;
-    const gchar *reason;
-    const gchar *title = _("Cannot modify or delete this transaction.");
-    const gchar *message =
-        _("This transaction is marked read-only with the comment: '%s'");
-
-    if (!trans) return FALSE;
-
-    if (xaccTransIsReadonlyByPostedDate (trans))
-    {
-        dialog = gtk_message_dialog_new (NULL,
-                                        0,
-                                        GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_OK,
-                                        "%s", title);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book.  "
-                        "This setting can be changed in File -> Properties -> Accounts."));
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
-        return TRUE;
-    }
-
-    reason = xaccTransGetReadOnly (trans);
-    if (reason)
-    {
-        dialog = gtk_message_dialog_new (NULL,
-                                        0,
-                                        GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_OK,
-                                        "%s", title);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                message, reason);
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
-        return TRUE;
-    }
-    return FALSE;
-}
-
-
-void
-gsr2_default_reinit_handler ( GNCSplitReg2 *gsr, gpointer data ) //this works
-{
-    GncTreeViewSplitReg *view;
-    Transaction *trans;
-    Split *split;
-    GtkWidget *dialog;
-    gint response;
-    const gchar *warning;
-
-    const char *title = _("Remove the splits from this transaction?");
-    const char *recn_warn = _("This transaction contains reconciled splits. "
-                              "Modifying it is not a good idea because that will "
-                              "cause your reconciled balance to be off.");
-
-    view = gnc_ledger_display2_get_split_view_register ( gsr->ledger );
-
-    trans = gnc_tree_view_split_reg_get_current_trans (view);
-    if (is_trans_readonly_and_warn (trans))
-        return;
-    dialog = gtk_message_dialog_new (GTK_WINDOW (gsr->window),
-                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                    GTK_MESSAGE_WARNING,
-                                    GTK_BUTTONS_NONE,
-                                    "%s", title);
-    if (xaccTransHasReconciledSplits (trans))
-    {
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                "%s", recn_warn);
-        warning = "register_remove_all_splits2";
-    }
-    else
-    {
-        warning = "register_remove_all_splits";
-    }
-
-    gtk_dialog_add_button (GTK_DIALOG (dialog),
-                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-    gnc_gtk_dialog_add_button(dialog, _("_Remove Splits"),
-                              GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-    response = gnc_dialog_run (GTK_DIALOG(dialog), warning);
-    gtk_widget_destroy (dialog);
-    if (response != GTK_RESPONSE_ACCEPT)
-        return;
-
-    gnc_tree_view_split_reg_reinit_trans (view);
-}
-
-/**
- * "Reinitializes" the current transaction.
- **/
-void
-gnc_split_reg2_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "reinit_ent" ); */
-}
-
-void
-gsr2_default_delete_handler (GNCSplitReg2 *gsr, gpointer data) //this works
-{
-    GncTreeViewSplitReg *view;
-    RowDepth depth;
-    Transaction *trans;
-    Split *split;
-    GtkWidget *dialog;
-    gint response;
-    const gchar *warning;
-
-    view = gnc_ledger_display2_get_split_view_register (gsr->ledger);
-
-    /* get the current split based on cursor position */
-    split = gnc_tree_view_split_reg_get_current_split (view);
-    if (split == NULL)
-    {
-        return;
-    }
-
-    trans = xaccSplitGetParent (split);
-    depth = gnc_tree_view_reg_get_selected_row_depth (view);
-
-    /* Deleting the blank split just cancels */
-    {
-        Split *blank_split = gnc_tree_view_split_reg_get_blank_split (view);
-
-        if (split == blank_split)
-        {
-            return;
-        }
-    }
-
-    if (is_trans_readonly_and_warn (trans))
-        return;
-
-    /* On a split cursor, just delete the one split. */
-    if (depth == SPLIT3)
-    {
-        const char *format = _("Delete the split '%s' from the transaction '%s'?");
-        const char *recn_warn = _("You would be deleting a reconciled split! "
-                                  "This is not a good idea as it will cause your "
-                                  "reconciled balance to be off.");
-        const char *anchor_error = _("You cannot delete this split.");
-        const char *anchor_split = _("This is the split anchoring this transaction "
-                                     "to the register. You may not delete it from "
-                                     "this register window.  You may delete the "
-                                     "entire transaction from this window, or you "
-                                     "may navigate to a register that shows "
-                                     "another side of this same transaction and "
-                                     "delete the split from that register.");
-        char *buf = NULL;
-        const char *memo;
-        const char *desc;
-        char recn;
-
-        if (split == gnc_tree_view_reg_get_current_trans_split (view))
-        {
-            dialog = gtk_message_dialog_new (GTK_WINDOW (gsr->window),
-                                            GTK_DIALOG_MODAL
-                                            | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                            GTK_MESSAGE_ERROR,
-                                            GTK_BUTTONS_OK,
-                                            "%s", anchor_error);
-            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                    "%s", anchor_split);
-            gtk_dialog_run (GTK_DIALOG (dialog));
-            gtk_widget_destroy (dialog);
-            return;
-        }
-
-        memo = xaccSplitGetMemo (split);
-        memo = (memo && *memo) ? memo : _("(no memo)");
-
-        desc = xaccTransGetDescription (trans);
-        desc = (desc && *desc) ? desc : _("(no description)");
-
-        /* ask for user confirmation before performing permanent damage */
-        buf = g_strdup_printf (format, memo, desc);
-        dialog = gtk_message_dialog_new (GTK_WINDOW (gsr->window),
-                                        GTK_DIALOG_MODAL
-                                        | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_MESSAGE_QUESTION,
-                                        GTK_BUTTONS_NONE,
-                                        "%s", buf);
-        g_free(buf);
-        recn = xaccSplitGetReconcile (split);
-        if (recn == YREC || recn == FREC)
-        {
-            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                    "%s", recn_warn);
-            warning = "register_delete_split2";
-        }
-        else
-        {
-            warning = "register_delete_split";
-        }
-
-        gtk_dialog_add_button (GTK_DIALOG (dialog),
-                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-        gnc_gtk_dialog_add_button (dialog, _("_Delete Split"),
-                                  GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run (GTK_DIALOG (dialog), warning);
-        gtk_widget_destroy (dialog);
-        if (response != GTK_RESPONSE_ACCEPT)
-            return;
-
-        gnc_tree_view_split_reg_delete_current_split (view);
-        return;
-    }
-
-    g_return_if_fail (depth == TRANS1 || depth == TRANS2);
-
-    /* On a transaction cursor with 2 or fewer splits in single or double
-     * mode, we just delete the whole transaction, kerblooie */
-    {
-        const char *title = _("Delete the current transaction?");
-        const char *recn_warn = _("You would be deleting a transaction "
-                                  "with reconciled splits! "
-                                  "This is not a good idea as it will cause your "
-                                  "reconciled balance to be off.");
-
-        dialog = gtk_message_dialog_new (GTK_WINDOW (gsr->window),
-                                        GTK_DIALOG_MODAL
-                                        | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_MESSAGE_WARNING,
-                                        GTK_BUTTONS_NONE,
-                                        "%s", title);
-        if (xaccTransHasReconciledSplits (trans))
-        {
-            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                    "%s", recn_warn);
-            warning = "register_delete_trans2";
-        }
-        else
-        {
-            warning = "register_delete_trans";
-        }
-        gtk_dialog_add_button (GTK_DIALOG (dialog),
-                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-        gnc_gtk_dialog_add_button (dialog, _("_Delete Transaction"),
-                                  GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-        response =  gnc_dialog_run (GTK_DIALOG (dialog), warning);
-        gtk_widget_destroy (dialog);
-        if (response != GTK_RESPONSE_ACCEPT)
-            return;
-
-        gnc_tree_view_split_reg_delete_current_trans (view);
-        return;
-    }
-}
-
-/**
- * Deletes the current transaction.
- **/
-void
-gnc_split_reg2_delete_trans_cb(GtkWidget *widget, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "delete_ent" );*/
-}
-
-
-void
-gsr2_default_dup_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME    gnc_split_register_duplicate_current
-    (gnc_ledger_display2_get_split_register( gsr->ledger ));*/
-}
-
-
-/**
- * Duplicates the current transaction in the register.
- **/
-void
-gnc_split_reg2_duplicate_trans_cb(GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "dup_ent" );*/
-}
 
 /**
  * Schedules the current transaction for recurring-entry.
@@ -1340,137 +803,6 @@ gnc_split_reg2_record_trans_cb (GtkWidget *w, gpointer data)
     gsr2_emit_simple_signal( gsr, "enter_ent" );*/
 }
 
-void
-gsr2_default_cancel_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME    gnc_split_register_cancel_cursor_trans_changes
-    (gnc_ledger_display2_get_split_register( gsr->ledger ));*/
-}
-
-/**
- * Cancels the edits of the currently-selected transaction.
- **/
-void
-gnc_split_reg2_cancel_trans_cb(GtkWidget *w, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "cancel_ent" );*/
-}
-
-void
-gsr2_default_expand_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME*/
-#ifdef skip
-    gint activeCount;
-    gboolean expand;
-    SplitRegister *reg;
-
-    if (!gsr)
-        return;
-
-    reg = gnc_ledger_display2_get_split_register (gsr->ledger);
-
-    /* These should all be in agreement. */
-    activeCount =
-        ( ( GTK_CHECK_MENU_ITEM(gsr->split_menu_check)->active ? 1 : -1 )
-          + ( GTK_CHECK_MENU_ITEM(gsr->split_popup_check)->active ? 1 : -1 )
-          + ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(gsr->split_button) )
-              ? 1 : -1 ) );
-
-    /* If activeCount > 0, then there's more active than inactive; otherwise,
-     * more inactive than active.  Both determine which state the user is
-     * attempting to get to. */
-    expand = ( activeCount < 0 );
-
-    /* The ledger's invocation of 'redraw_all' will force the agreement in the
-     * other split state widgets, so we neglect doing it here.  */
-    gnc_split_register_expand_current_trans (reg, expand);
-#endif
-}
-
-void
-gnc_split_reg2_expand_trans_menu_cb (GtkWidget *widget, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "expand_ent" );*/
-}
-
-void
-gnc_split_reg2_expand_trans_toolbar_cb (GtkWidget *widget, gpointer data)
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "expand_ent" );*/
-}
-
-/**
- * move the cursor to the split, if present in register
-**/
-void
-gnc_split_reg2_jump_to_split (GNCSplitReg2 *gsr, Split *split) //this works
-{
-    GncTreeViewSplitReg *view;
-
-//FIXME maybe collapse this back to plugin-page-register
-
-    view = gnc_ledger_display2_get_split_view_register (gsr->ledger);
-
-    gnc_tree_view_split_reg_jump_to_split (view, split);
-
-}
-
-
-/**
- * Move the cursor to the split in the non-blank amount column.
- **/
-void
-gnc_split_reg2_jump_to_split_amount(GNCSplitReg2 *gsr, Split *split)
-{
-/*FIXME*/
-#ifdef skip
-    VirtualLocation virt_loc;
-    SplitRegister *reg;
-    Transaction *trans;
-
-    if (!gsr) return;
-
-    trans = xaccSplitGetParent(split);
-    gsr2_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
-
-    reg = gnc_ledger_display2_get_split_register (gsr->ledger);
-
-    if (gnc_split_register_get_split_amount_virt_loc (reg, split, &virt_loc))
-        gnucash_register_goto_virt_loc (gsr->reg, virt_loc);
-
-    gnc_ledger_display2_refresh (gsr->ledger);
-#endif
-}
-
-void
-gnc_split_reg2_jump_to_blank (GNCSplitReg2 *gsr)
-{
-/*FIXME*/
-#ifdef skip
-    SplitRegister *reg = gnc_ledger_display2_get_split_register (gsr->ledger);
-    VirtualCellLocation vcell_loc;
-    Split *blank;
-
-    ENTER("gsr=%p", gsr);
-
-    blank = gnc_split_register_get_blank_split (reg);
-    if (blank == NULL)
-    {
-        LEAVE("no blank split");
-        return;
-    }
-
-    if (gnc_split_register_get_split_virt_loc (reg, blank, &vcell_loc))
-        gnucash_register_goto_virt_cell (gsr->reg, vcell_loc);
-
-    gnc_ledger_display2_refresh (gsr->ledger);
-    LEAVE(" ");
-#endif
-}
 
 void
 gnc_split_reg2_balancing_entry(GNCSplitReg2 *gsr, Account *account,
@@ -1482,115 +814,70 @@ gnc_split_reg2_balancing_entry(GNCSplitReg2 *gsr, Account *account,
     Split *split;
 
     // create transaction
-    transaction = create_balancing_transaction(gnc_get_current_book(),
+    transaction = create_balancing_transaction (gnc_get_current_book(),
                   account, statement_date, balancing_amount);
 
     // jump to transaction
-    split = xaccTransFindSplitByAccount(transaction, account);
+    split = xaccTransFindSplitByAccount (transaction, account);
     if (split == NULL)
     {
         // default behaviour: jump to blank split
         g_warning("create_balancing_transaction failed");
-        gnc_split_reg2_jump_to_blank(gsr);
+        gnc_split_reg2_jump_to_blank (gsr);
     }
     else
     {
         // goto balancing transaction
-        gnc_split_reg2_jump_to_split(gsr, split );
+        gnc_split_reg2_jump_to_split (gsr, split );
     }
 #endif
 }
 
 static Transaction*
-create_balancing_transaction(QofBook *book, Account *account,
+create_balancing_transaction (QofBook *book, Account *account,
                              time64 statement_date, gnc_numeric balancing_amount)
 {
-/*FIXME*/
-#ifdef skip
     Transaction *trans;
     Split *split;
 
     if (!account)
         return NULL;
-    if (gnc_numeric_zero_p(balancing_amount))
+    if (gnc_numeric_zero_p (balancing_amount))
         return NULL;
 
-    xaccAccountBeginEdit(account);
+    xaccAccountBeginEdit (account);
 
-    trans = xaccMallocTransaction(book);
+    trans = xaccMallocTransaction (book);
 
-    xaccTransBeginEdit(trans);
+    xaccTransBeginEdit (trans);
 
     // fill Transaction
-    xaccTransSetCurrency(trans, xaccAccountGetCommodity(account));
-    xaccTransSetDatePostedSecs(trans, statement_date);
-    xaccTransSetDescription(trans, _("Balancing entry from reconcilation"));
+    xaccTransSetCurrency (trans, xaccAccountGetCommodity (account));
+    xaccTransSetDatePostedSecs (trans, statement_date);
+    xaccTransSetDescription (trans, _("Balancing entry from reconcilation"));
 
     // 1. Split
-    split = xaccMallocSplit(book);
-    xaccTransAppendSplit(trans, split);
-    xaccAccountInsertSplit(account, split);
-    xaccSplitSetAmount(split, balancing_amount);
-    xaccSplitSetValue(split, balancing_amount);
+    split = xaccMallocSplit (book);
+    xaccTransAppendSplit (trans, split);
+    xaccAccountInsertSplit  (account, split);
+    xaccSplitSetAmount (split, balancing_amount);
+    xaccSplitSetValue (split, balancing_amount);
 
     // 2. Split (no account is defined: split goes to orphan account)
-    split = xaccMallocSplit(book);
-    xaccTransAppendSplit(trans, split);
+    split = xaccMallocSplit (book);
+    xaccTransAppendSplit (trans, split);
 
-    balancing_amount = gnc_numeric_neg(balancing_amount);
-    xaccSplitSetAmount(split, balancing_amount);
-    xaccSplitSetValue(split, balancing_amount);
+    balancing_amount = gnc_numeric_neg (balancing_amount);
+    xaccSplitSetAmount (split, balancing_amount);
+    xaccSplitSetValue (split, balancing_amount);
 
-    xaccTransCommitEdit(trans);
-    xaccAccountCommitEdit(account);
+    xaccTransCommitEdit (trans);
+    xaccAccountCommitEdit (account);
     return trans;
-#endif
-return NULL;
 }
 
-void
-gsr2_default_blank_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME*/
-#ifdef skip
-    SplitRegister *reg;
 
-    ENTER("gsr=%p, gpointer=%p", gsr, data);
-
-    reg = gnc_ledger_display2_get_split_register (gsr->ledger);
-
-    if (gnc_split_register_save (reg, TRUE))
-        gnc_split_register_redraw (reg);
-
-    gnc_split_reg2_jump_to_blank (gsr);
-    LEAVE(" ");
-#endif
-}
-
-void
-gnc_split_reg2_new_trans_cb (GtkWidget *widget, gpointer data)
-{
-/*FIXME   GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "blank" );*/
-}
-
-void
-gsr2_default_jump_handler( GNCSplitReg2 *gsr, gpointer data )
-{
- /*FIXME   g_assert_not_reached();*/
-}
-
-void
-gnc_split_reg2_jump_cb( GtkWidget *widget, gpointer data )
-{
-/*FIXME    GNCSplitReg2 *gsr = data;
-    gsr2_emit_simple_signal( gsr, "jump" ); */
-}
-
-/* ###### End Handlers ##### */
-
-
-
+/* ############################## End Handlers ############################ */
 
 
 void
@@ -1610,7 +897,7 @@ gnc_split_reg2_style_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM(w)->active)
+    if (!GTK_CHECK_MENU_ITEM (w)->active)
         return;
 
     gnc_split_reg2_change_style (gsr, REG2_STYLE_LEDGER);
@@ -1621,7 +908,7 @@ gnc_split_reg2_style_auto_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM(w)->active)
+    if (!GTK_CHECK_MENU_ITEM (w)->active)
         return;
 
     gnc_split_reg2_change_style (gsr, REG2_STYLE_AUTO_LEDGER);
@@ -1632,7 +919,7 @@ gnc_split_reg2_style_journal_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM(w)->active)
+    if (!GTK_CHECK_MENU_ITEM (w)->active)
         return;
 
     gnc_split_reg2_change_style (gsr, REG2_STYLE_JOURNAL);
@@ -1645,18 +932,18 @@ gnc_split_reg2_double_line_cb (GtkWidget *w, gpointer data)
     GncTreeModelSplitReg *model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
     gboolean use_double_line;
 
-    use_double_line = GTK_CHECK_MENU_ITEM(w)->active;
-    if ( use_double_line == model->use_double_line )
+    use_double_line = GTK_CHECK_MENU_ITEM (w)->active;
+    if (use_double_line == model->use_double_line)
         return;
 
-    gnc_tree_model_split_reg_config( model, model->type, model->style, use_double_line );
-    gnc_ledger_display2_refresh( gsr->ledger );
+    gnc_tree_model_split_reg_config (model, model->type, model->style, use_double_line);
+    gnc_ledger_display2_refresh (gsr->ledger);
 }
 
 static void
-gnc_split_reg2_sort( GNCSplitReg2 *gsr, SortType sort_code )
+gnc_split_reg2_sort (GNCSplitReg2 *gsr, SortType sort_code)
 {
-    Query *query = gnc_ledger_display2_get_query( gsr->ledger );
+    Query *query = gnc_ledger_display2_get_query (gsr->ledger);
     gboolean show_present_divider = FALSE;
     GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
     GncTreeModelSplitReg *model;
@@ -1664,7 +951,7 @@ gnc_split_reg2_sort( GNCSplitReg2 *gsr, SortType sort_code )
     if (gsr->sort_type == sort_code)
         return;
 
-    standard = g_slist_prepend( NULL, QUERY_DEFAULT_SORT );
+    standard = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
 
     switch (sort_code)
     {
@@ -1721,98 +1008,81 @@ gnc_split_reg2_sort( GNCSplitReg2 *gsr, SortType sort_code )
         break;
     }
 
-    qof_query_set_sort_order( query, p1, p2, p3 );
-    model = gnc_ledger_display2_get_split_model_register( gsr->ledger );
-/*FIXME    gnc_split_register_show_present_divider( model, show_present_divider ); */
+    qof_query_set_sort_order (query, p1, p2, p3);
+    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
     gsr->sort_type = sort_code;
-    gnc_ledger_display2_refresh( gsr->ledger );
+    gnc_ledger_display2_refresh (gsr->ledger);
 }
 
 void
-gnc_split_reg2_sort_standard_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_standard_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_STANDARD);
+    gnc_split_reg2_sort (gsr, BY_STANDARD);
 }
 
 void
-gnc_split_reg2_sort_date_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_date_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_DATE);
+    gnc_split_reg2_sort (gsr, BY_DATE);
 }
 
 void
-gnc_split_reg2_sort_date_entered_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_date_entered_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_DATE_ENTERED);
+    gnc_split_reg2_sort (gsr, BY_DATE_ENTERED);
 }
 
 void
-gnc_split_reg2_sort_date_reconciled_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_date_reconciled_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_DATE_RECONCILED);
+    gnc_split_reg2_sort (gsr, BY_DATE_RECONCILED);
 }
 
 void
-gnc_split_reg2_sort_num_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_num_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_NUM);
+    gnc_split_reg2_sort (gsr, BY_NUM);
 }
 
 void
-gnc_split_reg2_sort_amount_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_amount_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_AMOUNT);
+    gnc_split_reg2_sort (gsr, BY_AMOUNT);
 }
 
 void
-gnc_split_reg2_sort_memo_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_memo_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_MEMO);
+    gnc_split_reg2_sort (gsr, BY_MEMO);
 }
 
 void
-gnc_split_reg2_sort_desc_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_desc_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_DESC);
+    gnc_split_reg2_sort (gsr, BY_DESC);
 }
 
 void
-gnc_split_reg2_sort_action_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_action_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_ACTION);
+    gnc_split_reg2_sort (gsr, BY_ACTION);
 }
 
 void
-gnc_split_reg2_sort_notes_cb(GtkWidget *w, gpointer data)
+gnc_split_reg2_sort_notes_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort(gsr, BY_NOTES);
+    gnc_split_reg2_sort (gsr, BY_NOTES);
 }
-
-
-
-void
-gnc_split_reg2_handle_exchange_cb (GtkWidget *w, gpointer data)
-{
-/*FIXME*/
-#ifdef skip
-    GNCSplitReg2 *gsr = data;
-    SplitRegister *reg = gnc_ledger_display2_get_split_register (gsr->ledger);
-
-    /* XXX Ignore the return value -- we don't care if this succeeds */
-    (void)gnc_split_register_handle_exchange (reg, TRUE);
-#endif
-}
-
 
 static void
 gnc_split_reg2_record (GNCSplitReg2 *gsr)
@@ -1873,66 +1143,6 @@ gnc_split_reg2_goto_next_trans_row (GNCSplitReg2 *gsr)
 #endif
 }
 
-void
-gnc_split_reg2_enter (GNCSplitReg2 *gsr, gboolean next_transaction) //this works
-{
-    GncTreeViewSplitReg *view = gnc_ledger_display2_get_split_view_register (gsr->ledger);
-    GncTreeModelSplitReg *model;
-    gboolean goto_blank;
-
-    ENTER("gsr=%p, next_transaction=%s", gsr, next_transaction ? "TRUE" : "FALSE");
-
-    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
-
-    goto_blank = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER,
-                                    "enter_moves_to_end", NULL);
-
-    /* If we are in single or double line mode and we hit enter
-     * on the blank split, go to the blank split instead of the
-     * next row. This prevents the cursor from jumping around
-     * when you are entering transactions. */
-    if ( !goto_blank && !next_transaction )
-    {
-        SplitRegisterStyle2 style = model->style;
-
-        if (style == REG2_STYLE_LEDGER)
-        {
-            Split *blank_split;
-
-            blank_split = gnc_tree_view_split_reg_get_blank_split (view);
-            if (blank_split != NULL)
-            {
-                Split *current_split;
-
-                current_split = gnc_tree_view_split_reg_get_current_split (view);
-
-                if (blank_split == current_split)
-                    goto_blank = TRUE;
-            }
-        }
-    }
-
-    /* First record the transaction */
-    if (gnc_tree_view_split_reg_enter (view))
-    {
-        if (!goto_blank && next_transaction)
-            gnc_tree_view_split_reg_expand_current_trans (view, FALSE);
-
-        /* Now move. */
-        if (goto_blank)
-            gnc_tree_view_split_reg_jump_to_blank (view);
-        else if (next_transaction)
-            gnc_tree_view_split_reg_goto_rel_trans_row (view, 1);
-    }
-    LEAVE(" ");
-}
-
-void
-gsr2_default_enter_handler( GNCSplitReg2 *gsr, gpointer data )
-{
-/*FIXME    gnc_split_reg2_enter( gsr, FALSE );*/
-}
-
 
 #ifdef skip
 void
@@ -1941,17 +1151,6 @@ gnc_split_reg2_record_cb (GnucashRegister *reg, gpointer data)
 /*FIXME    gsr2_emit_simple_signal( (GNCSplitReg2*)data, "enter_ent" );*/
 }
 #endif
-
-
-void
-gnc_split_reg2_size_allocate (GtkWidget *widget,
-                             GtkAllocation *allocation,
-                             gpointer user_data)
-{
-    GNCSplitReg2 *gsr = user_data;
-    gsr->width = allocation->width;
-    gtk_window_set_default_size( GTK_WINDOW(gsr->window), gsr->width, 0 );
-}
 
 static
 GtkWidget*
@@ -1975,7 +1174,7 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
 }
 
 GtkWidget *
-gsr2_create_summary_bar( GNCSplitReg2 *gsr )
+gsr2_create_summary_bar (GNCSplitReg2 *gsr)
 {
     GtkWidget *summarybar;
 
@@ -1987,7 +1186,7 @@ gsr2_create_summary_bar( GNCSplitReg2 *gsr )
     gsr->shares_label     = NULL;
     gsr->value_label      = NULL;
 
-    if ( gnc_ledger_display2_type(gsr->ledger) >= LD2_SUBACCOUNT )
+    if (gnc_ledger_display2_type (gsr->ledger) >= LD2_SUBACCOUNT)
     {
         gsr->summarybar = NULL;
         return NULL;
@@ -2024,7 +1223,7 @@ gsr2_create_summary_bar( GNCSplitReg2 *gsr )
  **/
 static
 GNCPlaceholderType
-gnc_split_reg2_get_placeholder( GNCSplitReg2 *gsr )
+gnc_split_reg2_get_placeholder (GNCSplitReg2 *gsr)
 {
     Account *leader;
     GncTreeModelSplitReg *model;
@@ -2033,7 +1232,7 @@ gnc_split_reg2_get_placeholder( GNCSplitReg2 *gsr )
     if (gsr == NULL)
         return PLACEHOLDER_NONE;
 
-    model = gnc_ledger_display2_get_split_model_register( gsr->ledger );
+    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
 
     switch (model->type)
     {
@@ -2048,17 +1247,17 @@ gnc_split_reg2_get_placeholder( GNCSplitReg2 *gsr )
         break;
     }
 
-    leader = gnc_ledger_display2_leader( gsr->ledger );
+    leader = gnc_ledger_display2_leader (gsr->ledger);
 
     if (leader == NULL)
         return PLACEHOLDER_NONE;
     if (single_account)
     {
-        if (xaccAccountGetPlaceholder( leader ))
+        if (xaccAccountGetPlaceholder (leader))
             return PLACEHOLDER_THIS;
         return PLACEHOLDER_NONE;
     }
-    return xaccAccountGetDescendantPlaceholder( leader );
+    return xaccAccountGetDescendantPlaceholder (leader);
 }
 
 /**
@@ -2083,16 +1282,16 @@ gtk_callback_bug_workaround (gpointer argp)
     const gchar *read_only = _("This account register is read-only.");
     GtkWidget *dialog;
 
-    dialog = gtk_message_dialog_new(GTK_WINDOW(args->gsr->window),
+    dialog = gtk_message_dialog_new (GTK_WINDOW(args->gsr->window),
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
                                     GTK_MESSAGE_WARNING,
                                     GTK_BUTTONS_CLOSE,
                                     "%s", read_only);
-    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
             "%s", args->string);
-    gnc_dialog_run(GTK_DIALOG(dialog), "register_read_only");
-    gtk_widget_destroy(dialog);
-    g_free(args);
+    gnc_dialog_run (GTK_DIALOG (dialog), "register_read_only");
+    gtk_widget_destroy (dialog);
+    g_free (args);
     return FALSE;
 }
 
@@ -2101,9 +1300,9 @@ gtk_callback_bug_workaround (gpointer argp)
  **/
 static
 void
-gnc_split_reg2_determine_read_only( GNCSplitReg2 *gsr )
+gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
 {
-    dialog_args *args = g_malloc(sizeof(dialog_args));
+    dialog_args *args = g_malloc (sizeof (dialog_args));
     GncTreeViewSplitReg *view;
 
     if (qof_book_is_readonly (gnc_get_current_book()))
@@ -2147,10 +1346,10 @@ gnc_split_reg2_determine_read_only( GNCSplitReg2 *gsr )
 
 static
 GtkWidget *
-gnc_split_reg2_get_parent( GNCLedgerDisplay2 *ledger )
+gnc_split_reg2_get_parent (GNCLedgerDisplay2 *ledger)
 {
     GNCSplitReg2 *gsr =
-        GNC_SPLIT_REG2(gnc_ledger_display2_get_user_data( ledger ));
+        GNC_SPLIT_REG2 (gnc_ledger_display2_get_user_data (ledger));
 
     if (gsr == NULL)
         return NULL;
@@ -2160,7 +1359,7 @@ gnc_split_reg2_get_parent( GNCLedgerDisplay2 *ledger )
 
 static
 void
-gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data ) //this works
+gsr2_emit_help_changed (GncTreeViewSplitReg *view, gpointer user_data) //this works
 {
     gsr2_emit_simple_signal ((GNCSplitReg2*)user_data, "help-changed" );
 }
@@ -2174,7 +1373,7 @@ gsr2_emit_include_date_signal( GNCSplitReg2 *gsr, time64 date )
 
 static
 void
-gsr2_emit_simple_signal( GNCSplitReg2 *gsr, const char *sigName ) //this works
+gsr2_emit_simple_signal (GNCSplitReg2 *gsr, const char *sigName) //this works
 {
     g_signal_emit_by_name( gsr, sigName, NULL );
 }
@@ -2189,35 +1388,34 @@ gnc_split_reg2_get_register (GNCSplitReg2 *gsr )
 }
 
 SortType
-gnc_split_reg2_get_sort_type( GNCSplitReg2 *gsr )
+gnc_split_reg2_get_sort_type (GNCSplitReg2 *gsr)
 {
-    g_assert( gsr );
+    g_assert (gsr);
     return gsr->sort_type;
 }
 
 void
-gnc_split_reg2_set_sort_type( GNCSplitReg2 *gsr, SortType t )
+gnc_split_reg2_set_sort_type (GNCSplitReg2 *gsr, SortType t)
 {
-    gnc_split_reg2_sort( gsr, t );
+    gnc_split_reg2_sort (gsr, t);
 }
 
 GtkWidget*
-gnc_split_reg2_get_summarybar( GNCSplitReg2 *gsr )
+gnc_split_reg2_get_summarybar (GNCSplitReg2 *gsr)
 {
-    if ( !gsr ) return NULL;
+    if (!gsr) return NULL;
     return gsr->summarybar;
 }
 
 gboolean
-gnc_split_reg2_get_read_only( GNCSplitReg2 *gsr )
+gnc_split_reg2_get_read_only (GNCSplitReg2 *gsr)
 {
-    g_assert( gsr );
+    g_assert (gsr);
     return gsr->read_only;
 }
 
 void
-gnc_split_reg2_set_moved_cb( GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data ) //this works
+gnc_split_reg2_set_moved_cb (GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data ) //this works
 {
-g_print("gnc_split_reg2_set_moved_cb\n");
     gnc_tree_view_split_reg_moved_cb (gnc_ledger_display2_get_split_view_register(gsr->ledger), cb, cb_data);
 }

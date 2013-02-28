@@ -2,8 +2,8 @@
  * gnc-tree-view-split-reg.h -- GtkTreeView implementation to       *
  *                     display registers   in a GtkTreeView.        *
  *                                                                  *
- * Copyright (C) 2012 Robert Fewell                                 *
  * Copyright (C) 2006-2007 Chris Shoemaker <c.shoemaker@cox.net>    *
+ * Copyright (C) 2012 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -48,14 +48,21 @@ typedef struct GncTreeViewSplitRegPrivate GncTreeViewSplitRegPrivate;
 
 typedef struct
 {
-    GncTreeView gnc_tree_view;
+    GncTreeView                 gnc_tree_view;
     GncTreeViewSplitRegPrivate *priv;
-    int stamp;
+    int                         stamp;
 
-    GFunc moved_cb;
-    gpointer moved_cb_data;
+    GtkWidget                  *window;                   // Parent Window.
+    GFunc                       moved_cb;                 // Used for page gui update
+    gpointer                    moved_cb_data;            // Used for page gui update
 
-    gchar *help_text;
+    gchar                      *help_text;                // This is the help text to be displayed.
+    gint                        sort_depth;               // This is the row the sort direction is based on.
+    gint                        sort_col;                 // This is the column the sort direction is based on.
+    gint                        sort_direction;           // This is the direction of sort, 1 for ascending or -1 rest
+    gboolean                    reg_closing;              // This is set when closing the register.
+    gboolean                    change_allowed;           // This is set when we allow the reconciled split to change.
+    gboolean                    editing_now;              // This is set while editing of a cell.
 
 } GncTreeViewSplitReg;
 
@@ -78,6 +85,7 @@ typedef enum {
     SPLIT3, //3
 }RowDepth;
 
+
 /* Standard g_object type */
 GType gnc_tree_view_split_reg_get_type (void);
 
@@ -89,43 +97,49 @@ void gnc_tree_view_split_reg_default_selection (GncTreeViewSplitReg *view);
 
 void gnc_tree_view_split_reg_set_read_only (GncTreeViewSplitReg *view, gboolean read_only);
 
-/*************************************************************************************/
+void gnc_tree_view_split_reg_set_value_for (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gnc_numeric input, gboolean force);
+
+void gnc_tree_view_split_reg_set_dirty_trans (GncTreeViewSplitReg *view, Transaction *trans);
+
+Transaction * gnc_tree_view_split_reg_get_current_trans (GncTreeViewSplitReg *view);
 
 Split * gnc_tree_view_split_reg_get_current_split (GncTreeViewSplitReg *view);
 
-Split * gnc_tree_view_split_reg_get_blank_split (GncTreeViewSplitReg *view);
+Transaction * gnc_tree_view_split_reg_get_dirty_trans (GncTreeViewSplitReg *view);
 
-Split * gnc_tree_view_reg_get_current_trans_split (GncTreeViewSplitReg *view);
+void gnc_tree_view_split_reg_set_current_path (GncTreeViewSplitReg *view, GtkTreePath *path);
+
+GtkTreePath * gnc_tree_view_split_reg_get_current_path (GncTreeViewSplitReg *view);
 
 RowDepth gnc_tree_view_reg_get_selected_row_depth (GncTreeViewSplitReg *view);
+
+void gnc_tree_view_split_reg_moved_cb (GncTreeViewSplitReg *view, GFunc cb, gpointer cb_data);
+
+void gnc_tree_view_split_reg_refresh_from_gconf (GncTreeViewSplitReg *view);
+
+GtkWidget * gnc_tree_view_split_reg_get_parent (GncTreeViewSplitReg *view);
+
+gboolean gnc_tree_view_split_reg_trans_expanded (GncTreeViewSplitReg *view, Transaction *trans);
+
+void gnc_tree_view_split_reg_expand_trans (GncTreeViewSplitReg *view, Transaction *trans);
+
+void gnc_tree_view_split_reg_collapse_trans (GncTreeViewSplitReg *view, Transaction *trans);
+
+
+/*************************************************************************************/
 
 void gnc_tree_view_split_reg_delete_current_split (GncTreeViewSplitReg *view);
 
 void gnc_tree_view_split_reg_delete_current_trans (GncTreeViewSplitReg *view);
 
-void gnc_tree_view_split_reg_jump_to_blank (GncTreeViewSplitReg *view);
-
-void gnc_tree_view_split_reg_jump_to_split (GncTreeViewSplitReg *view, Split *split);
-
 void gnc_tree_view_split_reg_reinit_trans (GncTreeViewSplitReg *view);
-
-void gnc_tree_view_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint relative);
 
 gboolean gnc_tree_view_split_reg_enter (GncTreeViewSplitReg *view);
 
-gboolean gnc_tree_view_split_reg_current_trans_expanded (GncTreeViewSplitReg *view);
+void gnc_tree_view_split_reg_cancel_edit (GncTreeViewSplitReg *view, gboolean reg_closing);
 
-Transaction * gnc_tree_view_split_reg_get_current_trans (GncTreeViewSplitReg *view);
+void gnc_tree_view_split_reg_finish_edit (GncTreeViewSplitReg *view);
 
-void gnc_tree_view_split_reg_cancel_edit (GncTreeViewSplitReg *view);
-
-void gnc_tree_view_split_reg_expand_current_trans (GncTreeViewSplitReg *view, gboolean expand);
-
-void gnc_tree_view_split_reg_moved_cb (GncTreeViewSplitReg *view, GFunc cb, gpointer cb_data);
-
-void gnc_tree_view_split_reg_void_current_trans (GncTreeViewSplitReg *view, const char *reason);
-
-void gnc_tree_view_split_reg_unvoid_current_trans (GncTreeViewSplitReg *view);
 
 G_END_DECLS
 

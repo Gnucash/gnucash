@@ -111,6 +111,9 @@ typedef struct GncTreeViewPrivate
     GtkWidget         *column_menu;
     gboolean           show_column_menu;
 
+    /* Sort callback user_data */
+    gpointer           sort_user_data;
+
     /* Gconf related values */
     gchar             *gconf_section;
     gboolean           seen_gconf_visibility;
@@ -235,6 +238,7 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     priv->column_menu = NULL;
     priv->show_column_menu = FALSE;
+    priv->sort_user_data = NULL;
     priv->gconf_section = NULL;
     priv->seen_gconf_visibility = FALSE;
     priv->columns_changed_cb_id = 0;
@@ -954,6 +958,7 @@ gnc_tree_view_set_sort_column (GncTreeView *view,
     if (!gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(s_model),
             &current, &order))
         order = GTK_SORT_ASCENDING;
+
     g_signal_handler_block(s_model, priv->sort_column_changed_cb_id);
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
                                          model_column, order);
@@ -1053,6 +1058,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     key = gconf_entry_get_key(entry);
     value = gconf_entry_get_value(entry);
+
     if (!value)
     {
         /* Values can be unset */
@@ -1601,10 +1607,69 @@ void gnc_tree_view_expand_columns (GncTreeView *view,
     va_end (args);
 
     gtk_tree_view_column_set_visible (priv->spacer_column, !hide_spacer);
-    gtk_tree_view_column_set_visible (priv->selection_column, !hide_spacer);
 
     LEAVE(" ");
 }
+
+
+/* Links the cell backgrounds of the two control columns to the model or
+   cell data function */
+static void
+update_control_cell_renderers_background (GncTreeView *view, GtkTreeViewColumn *col, gint column, GtkTreeCellDataFunc func )
+{
+    GList *renderers;
+    GtkCellRenderer *cell;
+    GList *node;
+
+    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
+
+    /* Update the cell background in the list of renderers */
+    for (node = renderers; node; node = node->next)
+    {
+        cell = node->data;
+        if (func == NULL)
+            gtk_tree_view_column_add_attribute (col, cell, "cell-background", column);
+        else
+            gtk_tree_view_column_set_cell_data_func (col, cell, func, view, NULL);
+    }
+    g_list_free (renderers);
+}
+
+
+/* This function links the cell backgrounds of the two control columns to a column
+   in the model that has color strings or a cell data function */
+void
+gnc_tree_view_set_control_column_background (GncTreeView *view, gint column, GtkTreeCellDataFunc func )
+{
+    GncTreeViewPrivate *priv;
+
+    g_return_if_fail (GNC_IS_TREE_VIEW (view));
+
+    ENTER("view %p, column %d, func %p", view, column, func);
+    priv = GNC_TREE_VIEW_GET_PRIVATE (view);
+
+    update_control_cell_renderers_background (view, priv->spacer_column, column, func);
+    update_control_cell_renderers_background (view, priv->selection_column, column, func);
+
+    LEAVE(" ");
+}
+
+
+/* This set the user_data value used in the sort callback */
+void
+gnc_tree_view_set_sort_user_data (GncTreeView *view, gpointer user_data)
+{
+    GncTreeViewPrivate *priv;
+
+    g_return_if_fail (GNC_IS_TREE_VIEW (view));
+
+    ENTER("view %p, user_data %p", view, user_data);
+    priv = GNC_TREE_VIEW_GET_PRIVATE (view);
+
+    priv->sort_user_data = user_data;
+    LEAVE(" ");
+}
+
 
 /** This function is called to set the "show-column-menu" property on
  *  this view.  This function has no visible effect if the
@@ -1838,7 +1903,14 @@ gnc_tree_view_column_properties (GncTreeView *view,
         gtk_tree_view_column_set_sort_column_id (column, data_column);
         if (column_sort_fn)
         {
-            gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(s_model),
+            priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+            if (priv->sort_user_data != NULL)
+                gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(s_model),
+                                             data_column, column_sort_fn,
+                                             priv->sort_user_data,
+                                             NULL /* destroy fn */);
+            else
+                gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(s_model),
                                              data_column, column_sort_fn,
                                              GINT_TO_POINTER(data_column),
                                              NULL /* destroy fn */);

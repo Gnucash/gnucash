@@ -6,6 +6,7 @@
  * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Copyright (C) 2002,2006 Joshua Sled <jsled@asynchronous.org>     *
+ * Copyright (C) 2012 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -95,24 +96,9 @@ struct _GNCSplitReg2Class
     GtkVBoxClass parent_class;
 
     /* Signal defaults */
-    void (*enter_ent_cb)    ( GNCSplitReg2 *w, gpointer user_data );
-    void (*cancel_ent_cb)   ( GNCSplitReg2 *w, gpointer user_data );
-    void (*delete_ent_cb)   ( GNCSplitReg2 *w, gpointer user_data );
-    void (*reinit_ent_cb)   ( GNCSplitReg2 *w, gpointer user_data );
-    void (*dup_ent_cb)      ( GNCSplitReg2 *w, gpointer user_data );
+
     void (*schedule_ent_cb) ( GNCSplitReg2 *w, gpointer user_data );
-    void (*expand_ent_cb)   ( GNCSplitReg2 *w, gpointer user_data );
-    void (*blank_cb)        ( GNCSplitReg2 *w, gpointer user_data );
-    void (*jump_cb)         ( GNCSplitReg2 *w, gpointer user_data );
-    void (*cut_cb)          ( GNCSplitReg2 *w, gpointer user_data );
-    void (*cut_txn_cb)      ( GNCSplitReg2 *w, gpointer user_data );
-    void (*copy_cb)         ( GNCSplitReg2 *w, gpointer user_data );
-    void (*copy_txn_cb)     ( GNCSplitReg2 *w, gpointer user_data );
-    void (*paste_cb)        ( GNCSplitReg2 *w, gpointer user_data );
-    void (*paste_txn_cb)    ( GNCSplitReg2 *w, gpointer user_data );
-    void (*void_txn_cb)     ( GNCSplitReg2 *w, gpointer user_data );
-    void (*unvoid_txn_cb)   ( GNCSplitReg2 *w, gpointer user_data );
-    void (*reverse_txn_cb)  ( GNCSplitReg2 *w, gpointer user_data );
+
     void (*help_changed_cb) ( GNCSplitReg2 *w, gpointer user_data );
     void (*include_date_cb) ( GNCSplitReg2 *w, time64 date, gpointer user_data );
 };
@@ -120,21 +106,8 @@ struct _GNCSplitReg2Class
 #ifdef skip // Coming from original gnc-split-reg.h
 typedef enum
 {
-    ENTER,
-    CANCEL,
-    DELETE,
-    REINIT,
-    DUPLICATE,
     SCHEDULE,
     SPLIT,
-    BLANK,
-    JUMP,
-    CUT,
-    CUT_TXN,
-    COPY,
-    COPY_TXN,
-    PASTE,
-    PASTE_TXN,
     SORT_ORDER_SUBMENU,
     STYLE_SUBMENU,
 } GNC_SPLIT_REG2_ITEM;
@@ -212,13 +185,6 @@ void gnc_split_reg2_change_style (GNCSplitReg2 *gsr, SplitRegisterStyle2 style);
  **/
 GtkWidget *gnc_split_reg2_get_summarybar (GNCSplitReg2 *gsr );
 
-/**
- * These will manipulate the in-GNCSplitReg state-reflecting widgets as
- * appropriate.
- **/
-void gnc_split_reg2_set_split_state (GNCSplitReg2 *gsr, gboolean split );
-void gnc_split_reg2_set_double_line (GNCSplitReg2 *gsr, gboolean doubleLine );
-
 void gnc_split_reg2_raise (GNCSplitReg2 *gsr );
 
 /**
@@ -227,13 +193,6 @@ void gnc_split_reg2_raise (GNCSplitReg2 *gsr );
  * @return TRUE if the register is read-only, FALSE if not.
  **/
 gboolean gnc_split_reg2_get_read_only (GNCSplitReg2 *gsr );
-
-/*
- * Function to jump to various places in the register
- */
-void gnc_split_reg2_jump_to_blank (GNCSplitReg2 *gsr);
-void gnc_split_reg2_jump_to_split (GNCSplitReg2 *gsr, Split *split);
-void gnc_split_reg2_jump_to_split_amount (GNCSplitReg2 *gsr, Split *split);
 
 /*
  * Create a transaction entry with given amount and date. One account is
@@ -245,11 +204,6 @@ void gnc_split_reg2_jump_to_split_amount (GNCSplitReg2 *gsr, Split *split);
 void gnc_split_reg2_balancing_entry (GNCSplitReg2 *gsr, Account *account,
                                     time64 statement_date, gnc_numeric balancing_amount);
 
-void gsr2_default_delete_handler (GNCSplitReg2 *gsr, gpointer data );
-void gnc_split_reg2_enter (GNCSplitReg2 *gsr, gboolean next_transaction );
-void gsr2_default_delete_handler (GNCSplitReg2 *gsr, gpointer data );
-void gsr2_default_reinit_handler (GNCSplitReg2 *gsr, gpointer data );
-void gsr2_default_expand_handler (GNCSplitReg2 *gsr, gpointer data );
 void gsr2_default_schedule_handler (GNCSplitReg2 *gsr, gpointer data );
 
 void gnc_split_reg2_set_moved_cb (GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data );

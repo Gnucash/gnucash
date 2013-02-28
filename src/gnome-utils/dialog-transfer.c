@@ -1695,6 +1695,7 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
     SCM quotes_func;
     SCM book_scm;
     SCM scm_window;
+    gboolean have_price = FALSE;
 
     g_return_if_fail (xferData);
 
@@ -1736,6 +1737,22 @@ gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
         rate = gnc_price_get_value (prc);
         gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate);
         gnc_price_unref (prc);
+        have_price = TRUE;
+    }
+
+    /* Lets try reversing the commodities */
+    if(!have_price)
+    {
+        prc = gnc_pricedb_lookup_latest (xferData->pricedb, to, from);
+        if (prc)
+        {
+            rate = gnc_numeric_div (gnc_numeric_create (1, 1), gnc_price_get_value (prc),
+                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+
+            gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit), rate);
+            gnc_price_unref (prc);
+            have_price = TRUE;
+        }
     }
 
     LEAVE("quote retrieved");

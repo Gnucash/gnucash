@@ -113,6 +113,17 @@ void xaccSplitReinit(Split * split);
  */
 gboolean      xaccSplitDestroy (Split *split);
 
+/*################## Added for Reg2 #################*/
+/** This is really a helper for xaccTransCopyOnto. It doesn't reparent
+ *   the 'to' split to from's transaction, because xaccTransCopyOnto is
+ *   responsible for parenting the split to the correct transaction.
+ *   Also, from's parent transaction may not even be a valid
+ *   transaction, so this function may not modify anything about 'from'
+ *   or from's transaction.
+ */
+void xaccSplitCopyOnto(const Split *from_split, Split *to_split);
+/*################## Added for Reg2 #################*/
+
 /** Returns the book of this split, i.e. the entity where this split
  * is stored. */
 QofBook *   xaccSplitGetBook (const Split *split);

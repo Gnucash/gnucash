@@ -383,9 +383,40 @@ void gnc_tree_view_set_gconf_section (GncTreeView *view,
  */
 const gchar *gnc_tree_view_get_gconf_section (GncTreeView *view);
 
+/** This function set the columns that will be allocated the free space
+ *  in the view.
+ *
+ *  @param view The tree view.
+ *
+ *  @param list of column names.
+ */
 void gnc_tree_view_expand_columns (GncTreeView *view,
                                    gchar *first_column_name,
                                    ...);
+
+/** This function links the cell backgrounds of the two control columns
+ *  to a column in the model that has color strings or a cell data function
+ *  that sets the "cell-background" property.
+ *
+ *  @param view The tree view.
+ *
+ *  @param column The column in the model containg color strings.
+ *
+ *  @param func This is a cell data function that sets the "cell-background".
+ */
+void
+gnc_tree_view_set_control_column_background (GncTreeView *view, gint column,
+                                             GtkTreeCellDataFunc func);
+
+
+/** This function sets the user_data value used in the sort callback
+ *
+ *  @param view The tree view.
+ *
+ *  @param user_data pointer to the user_data to be used.
+ */
+void
+gnc_tree_view_set_sort_user_data (GncTreeView *view, gpointer user_data);
 
 /** This function is called to set the "show-column-menu" property on
  *  this view.  This function has no visible effect if the

@@ -220,6 +220,40 @@ gboolean      xaccTransIsOpen (const Transaction *trans);
 Transaction * xaccTransLookup (const GncGUID *guid, QofBook *book);
 #define xaccTransLookupDirect(g,b) xaccTransLookup(&(g),b)
 
+/*################## Added for Reg2 #################*/
+
+/** Copy a transaction to the 'clipboard' transaction using
+ *  xaccDupeTransaction. The 'clipboard' transaction must never
+ *  be dereferenced.
+ */
+Transaction * xaccTransCopyToClipBoard(const Transaction *from_trans);
+
+/** Copy a transaction to another using the function below without
+ *  changing any account information.
+ */
+void xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans);
+
+/** This function explicitly must robustly handle some unusual input.
+ *
+ *  'from_trans' may be a duped trans (see xaccDupeTransaction), so its
+ *   splits may not really belong to the accounts that they say they do.
+ *
+ *  'from_acc' need not be a valid account. It may be an already freed
+ *   Account. Therefore, it must not be dereferenced at all.
+ *
+ *   Neither 'from_trans', nor 'from_acc', nor any of 'from's splits may be modified
+ *   in any way.
+ *
+ *   The 'to_trans' transaction will end up with valid copies of from's
+ *   splits.  In addition, the copies of any of from's splits that were
+ *   in from_acc (or at least claimed to be) will end up in to_acc.
+ */
+void xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
+                           const Account *from_acc, Account *to_acc);
+
+/*################## Added for Reg2 #################*/
+
+
 Split * xaccTransFindSplitByAccount(const Transaction *trans,
                                     const Account *acc);
 
@@ -560,6 +594,11 @@ Timespec      xaccTransRetDatePostedTS (const Transaction *trans);
     the date when this transaction was posted at the bank. */
 GDate      xaccTransGetDatePostedGDate (const Transaction *trans);
 
+/*################## Added for Reg2 #################*/
+/** Retrieve the date of when the transaction was entered. The entered
+ * date is the date when the register entry was made.*/
+time64        xaccTransGetDateEntered (const Transaction *trans);
+/*################## Added for Reg2 #################*/
 /** Retrieve the date of when the transaction was entered. The entered
  * date is the date when the register entry was made.*/
 void          xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts);

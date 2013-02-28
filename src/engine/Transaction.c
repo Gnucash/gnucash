@@ -564,10 +564,10 @@ xaccDupeTransaction (const Transaction *from)
     return to;
 }
 
-/*
+/********************************************************************\
  * Use this routine to externally duplicate a transaction.  It creates
  * a full fledged transaction with unique guid, splits, etc.
- */
+\********************************************************************/
 Transaction *
 xaccTransClone (const Transaction *from)
 {
@@ -606,10 +606,90 @@ xaccTransClone (const Transaction *from)
     return to;
 }
 
+/*################## Added for Reg2 #################*/
 
 /********************************************************************\
+ * Copy a transaction to the 'clipboard' transaction using
+ *  xaccDupeTransaction. The 'clipboard' transaction must never
+ *  be dereferenced.
 \********************************************************************/
+Transaction * xaccTransCopyToClipBoard(const Transaction *from_trans)
+{
+    Transaction *to_trans;
 
+    if (!from_trans)
+        return NULL;
+
+    to_trans = xaccDupeTransaction(from_trans);
+    return to_trans;
+}
+
+/********************************************************************\
+ * Copy a transaction to another using the function below without
+ *  changing any account information.
+\********************************************************************/
+void
+xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans)
+{
+    xaccTransCopyFromClipBoard(from_trans, to_trans, NULL, NULL);
+}
+
+/********************************************************************\
+ * This function explicitly must robustly handle some unusual input.
+ *
+ *  'from_trans' may be a duped trans (see xaccDupeTransaction), so its
+ *   splits may not really belong to the accounts that they say they do.
+ *
+ *  'from_acc' need not be a valid account. It may be an already freed
+ *   Account. Therefore, it must not be dereferenced at all.
+ *
+ *   Neither 'from_trans', nor 'from_acc', nor any of 'from's splits may be modified
+ *   in any way.
+ *
+ *   The 'to_trans' transaction will end up with valid copies of from's
+ *   splits.  In addition, the copies of any of from's splits that were
+ *   in from_acc (or at least claimed to be) will end up in to_acc.
+\********************************************************************/
+void
+xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
+                           const Account *from_acc, Account *to_acc)
+{
+    Timespec ts = {0,0};
+    gboolean change_accounts = FALSE;
+    GList *node;
+
+    if (!from_trans || !to_trans)
+        return;
+
+    change_accounts = from_acc && GNC_IS_ACCOUNT(to_acc) && from_acc != to_acc;
+    xaccTransBeginEdit(to_trans);
+
+    FOR_EACH_SPLIT(to_trans, xaccSplitDestroy(s));
+
+    xaccTransSetCurrency(to_trans, xaccTransGetCurrency(from_trans));
+    xaccTransSetDescription(to_trans, xaccTransGetDescription(from_trans));
+    xaccTransSetNum(to_trans, xaccTransGetNum(from_trans));
+    xaccTransSetNotes(to_trans, xaccTransGetNotes(from_trans));
+    xaccTransGetDatePostedTS(from_trans, &ts);
+    xaccTransSetDatePostedTS(to_trans, &ts);
+
+    /* Each new split will be parented to 'to' */
+    for (node = from_trans->splits; node; node = node->next)
+    {
+        Split *new_split = xaccMallocSplit( qof_instance_get_book(QOF_INSTANCE(from_trans)));
+        xaccSplitCopyOnto(node->data, new_split);
+        if (change_accounts && xaccSplitGetAccount(node->data) == from_acc)
+            xaccSplitSetAccount(new_split, to_acc);
+        xaccSplitSetParent(new_split, to_trans);
+    }
+    xaccTransCommitEdit(to_trans);
+}
+
+/*################## Added for Reg2 #################*/
+
+/********************************************************************\
+ Free the transaction.
+\********************************************************************/
 static void
 xaccFreeTransaction (Transaction *trans)
 {
@@ -1021,36 +1101,42 @@ xaccTransGetAccountAmount (const Transaction *trans, const Account *acc)
 gboolean
 xaccTransGetRateForCommodity(const Transaction *trans,
                              const gnc_commodity *split_com,
-                             const Split *split_to_exclude, gnc_numeric *rate)
+                             const Split *split, gnc_numeric *rate)
 {
     GList *splits;
     gnc_commodity *trans_curr;
 
-    trans_curr = xaccTransGetCurrency(trans);
-    if (gnc_commodity_equal(trans_curr, split_com)) {
+    trans_curr = xaccTransGetCurrency (trans);
+    if (gnc_commodity_equal (trans_curr, split_com))
+    {
         if (rate) 
-            *rate = gnc_numeric_create(1, 1);
+            *rate = gnc_numeric_create (1, 1);
         return TRUE;
     }
 
-    for (splits = trans->splits; splits; splits = splits->next) {
+    for (splits = trans->splits; splits; splits = splits->next)
+    {
         Split *s = splits->data;
         gnc_commodity *comm;
 
-        if (s == split_to_exclude) continue;
-        if (!xaccTransStillHasSplit(trans, s)) continue;
+        if (!xaccTransStillHasSplit (trans, s)) continue;
 
-        comm = xaccAccountGetCommodity(xaccSplitGetAccount(s));
-        if (gnc_commodity_equal(split_com, comm)) {
-            gnc_numeric amt = xaccSplitGetAmount(s);
-            gnc_numeric val = xaccSplitGetValue(s);
+        if (s == split)
+        {
+            comm = xaccAccountGetCommodity (xaccSplitGetAccount(s));
+            if (gnc_commodity_equal (split_com, comm))
+            {
+                gnc_numeric amt = xaccSplitGetAmount (s);
+                gnc_numeric val = xaccSplitGetValue (s);
 
-            if (!gnc_numeric_zero_p(xaccSplitGetValue(s)) &&
-                !gnc_numeric_zero_p(xaccSplitGetValue(s))) {
-                if (rate) 
-                    *rate = gnc_numeric_div(amt, val, GNC_DENOM_AUTO,
-                                            GNC_HOW_DENOM_REDUCE);
-                return TRUE;
+                if (!gnc_numeric_zero_p (xaccSplitGetAmount (s)) &&
+                    !gnc_numeric_zero_p (xaccSplitGetValue (s)))
+                {
+                    if (rate)
+                        *rate = gnc_numeric_div (amt, val, GNC_DENOM_AUTO,
+                                                GNC_HOW_DENOM_REDUCE);
+                    return TRUE;
+                }
             }
         }
     }
@@ -1982,6 +2068,14 @@ xaccTransGetDate (const Transaction *trans)
 {
     return trans ? trans->date_posted.tv_sec : 0;
 }
+
+/*################## Added for Reg2 #################*/
+time64
+xaccTransGetDateEntered (const Transaction *trans)
+{
+    return trans ? trans->date_entered.tv_sec : 0;
+}
+/*################## Added for Reg2 #################*/
 
 void
 xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts)
