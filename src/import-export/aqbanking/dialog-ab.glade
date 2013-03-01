@@ -671,7 +671,7 @@
             <property name="border_width">5</property>
             <property name="spacing">18</property>
             <child>
-              <object class="GtkLabel" id="heading_label2">
+              <object class="GtkLabel" id="heading_pw_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Enter your password</property>

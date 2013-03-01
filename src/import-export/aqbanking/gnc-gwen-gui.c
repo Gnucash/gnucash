@@ -995,7 +995,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "Password Dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Password Dialog"));
 
-    heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
+    heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_pw_label"));
     input_entry = GTK_WIDGET(gtk_builder_get_object (builder, "input_entry"));
     confirm_entry = GTK_WIDGET(gtk_builder_get_object (builder, "confirm_entry"));
     confirm_label = GTK_WIDGET(gtk_builder_get_object (builder, "confirm_label"));
