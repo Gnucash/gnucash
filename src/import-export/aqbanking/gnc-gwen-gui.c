@@ -55,6 +55,11 @@
 # define GNC_GWENHYWFAR_CB
 #endif
 
+#define GWEN_GUI_CM_CLASS "dialog-hbcilog"
+#define GCONF_SECTION_CONNECTION GCONF_SECTION_AQBANKING "/connection_dialog"
+#define KEY_CLOSE_ON_FINISH "close_on_finish"
+#define KEY_REMEMBER_PIN "remember_pin"
+
 #ifdef USING_GWENHYWFAR_GTK2_GUI
 # include <gwen-gui-gtk2/gtk2_gui.h>
 #endif
@@ -112,7 +117,7 @@ gnc_GWEN_Gui_get_close_flag()
 gboolean
 gnc_GWEN_Gui_show_dialog()
 {
-    return;
+    return TRUE;
 }
 
 void
@@ -149,11 +154,6 @@ GWEN_INHERIT(GWEN_GUI, GncGWENGui)
 #define SETDATA_GUI(gwen_gui, gui) GWEN_INHERIT_SETDATA(GWEN_GUI, GncGWENGui, \
                                                         (gwen_gui), (gui), NULL)
 #define GETDATA_GUI(gwen_gui) GWEN_INHERIT_GETDATA(GWEN_GUI, GncGWENGui, (gwen_gui))
-
-#define GWEN_GUI_CM_CLASS "dialog-hbcilog"
-#define GCONF_SECTION_CONNECTION GCONF_SECTION_AQBANKING "/connection_dialog"
-#define KEY_CLOSE_ON_FINISH "close_on_finish"
-#define KEY_REMEMBER_PIN "remember_pin"
 
 #define OTHER_ENTRIES_ROW_OFFSET 3
 

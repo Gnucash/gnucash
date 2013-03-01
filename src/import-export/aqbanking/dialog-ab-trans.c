@@ -183,10 +183,11 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
     AB_TRANSACTION *trans = AB_Transaction_new();
     AB_VALUE *value;
 
-    AB_Transaction_SetLocalBankCode(trans, AB_Account_GetBankCode(td->ab_acc));
-    AB_Transaction_SetLocalAccountNumber(
-        trans, AB_Account_GetAccountNumber(td->ab_acc));
-    AB_Transaction_SetLocalCountry(trans, "DE");
+    AB_Transaction_FillLocalFromAccount(trans, td->ab_acc);
+    //AB_Transaction_SetLocalBankCode(trans, AB_Account_GetBankCode(td->ab_acc));
+    //AB_Transaction_SetLocalAccountNumber(
+    //  trans, AB_Account_GetAccountNumber(td->ab_acc));
+    //AB_Transaction_SetLocalCountry(trans, "DE");
 
     if (gnc_ab_trans_isSEPA(td->trans_type))
     {
@@ -397,6 +398,12 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
         // do nothing
         break;
     }
+    if (gnc_ab_trans_isSEPA(trans_type))
+    {
+        // Also, SEPA might have much longer IBAN (up to 34 chars) and BIC (11)
+        gtk_entry_set_max_length(GTK_ENTRY(td->recp_bankcode_entry), 11);
+        gtk_entry_set_max_length(GTK_ENTRY(td->recp_account_entry), 34);
+    }
 
     gtk_label_set_text(GTK_LABEL(orig_name_label), ab_ownername);
     gtk_label_set_text(GTK_LABEL(orig_account_label), ab_accountnumber);
@@ -527,6 +534,26 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
      * AB_TRANSACTION */
     td->ab_trans = gnc_ab_trans_dialog_fill_values(td);
 
+    // Verify that we have a local IBAN and BIC
+    if (gnc_ab_trans_isSEPA(td->trans_type))
+    {
+        const char* localBIC = AB_Transaction_GetLocalBic(td->ab_trans);
+        const char* localIBAN = AB_Transaction_GetLocalIban(td->ab_trans);
+        if (!localBIC || !localIBAN
+                || (strlen(localBIC) == 0) || (strlen(localIBAN) == 0))
+        {
+            values_ok = FALSE;
+            gnc_error_dialog(td->dialog,
+                             _("Your local bank account does not yet have the SEPA account information stored. "
+                               " We are sorry, but in this development version one additional step is necessary "
+                               "which has not yet been implemented directly in gnucash. "
+                               "Please execute the command line program \"aqhbci-tool\" for your account, as follows: "
+                               "aqhbci-tool4 getaccsepa -b %s -a %s"),
+                             AB_Transaction_GetLocalBankCode(td->ab_trans),
+                             AB_Transaction_GetLocalAccountNumber(td->ab_trans));
+        }
+    }
+
     /* Check recipient / remote name */
     othername = gnc_ab_get_remote_name(td->ab_trans);
     if (!othername || !strlen(othername))
@@ -546,7 +573,9 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
     }
 
     /* Check account */
-    account = AB_Transaction_GetRemoteAccountNumber(td->ab_trans);
+    account = gnc_ab_trans_isSEPA(td->trans_type)
+            ? AB_Transaction_GetRemoteIban(td->ab_trans)
+            : AB_Transaction_GetRemoteAccountNumber(td->ab_trans);
     if (!account || !strlen(account))
     {
         gnc_ab_trans_dialog_entry_set (td->recp_account_entry,
@@ -560,7 +589,9 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
         gnc_ab_trans_dialog_entry_set (td->recp_account_entry, "", NULL);
     }
     /* Check bank */
-    bankcode = AB_Transaction_GetRemoteBankCode(td->ab_trans);
+    bankcode = gnc_ab_trans_isSEPA(td->trans_type)
+            ? AB_Transaction_GetRemoteBic(td->ab_trans)
+            : AB_Transaction_GetRemoteBankCode(td->ab_trans);
     if (!bankcode || !strlen(bankcode))
     {
         gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry,
