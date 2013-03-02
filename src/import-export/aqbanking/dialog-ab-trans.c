@@ -542,6 +542,8 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
         if (!localBIC || !localIBAN
                 || (strlen(localBIC) == 0) || (strlen(localIBAN) == 0))
         {
+            const char* localBankCode = AB_Transaction_GetLocalBankCode(td->ab_trans);
+            const char* localAccountCode = AB_Transaction_GetLocalAccountNumber(td->ab_trans);
             values_ok = FALSE;
             gnc_error_dialog(td->dialog,
                              _("Your local bank account does not yet have the SEPA account information stored. "
@@ -549,8 +551,8 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
                                "which has not yet been implemented directly in gnucash. "
                                "Please execute the command line program \"aqhbci-tool\" for your account, as follows: "
                                "aqhbci-tool4 getaccsepa -b %s -a %s"),
-                             AB_Transaction_GetLocalBankCode(td->ab_trans),
-                             AB_Transaction_GetLocalAccountNumber(td->ab_trans));
+                             (localBankCode ? localBankCode : ""),
+                             (localAccountCode ? localAccountCode : ""));
         }
     }
 
