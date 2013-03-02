@@ -531,6 +531,14 @@ set_standard_connection_options( QofBackend* qbe, dbi_conn conn, const gchar* ho
         return FALSE;
     }
 
+    result = dbi_conn_set_option( conn, "encoding", "UTF-8" );
+    if ( result < 0 )
+    {
+        PERR( "Error setting 'encoding' option\n" );
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        return FALSE;
+    }
+
     return TRUE;
 }
 
@@ -925,15 +933,6 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     if ( success )
     {
         dbi_result dresult;
-
-        /* Set connection char set to utf8 */
-        dresult = dbi_conn_queryf( be->conn, "SET NAMES 'utf8'" );
-        if ( dresult == NULL )
-        {
-            PERR( "Unable to set connection char set" );
-            qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-            goto exit;
-        }
 
         if ( be->sql_be.conn != NULL )
         {
