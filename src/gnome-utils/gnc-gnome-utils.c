@@ -337,7 +337,7 @@ gnc_gnome_help (const char *dir, const char *detail)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 NSString *subdir = [NSString stringWithUTF8String: dir];
-    NSString *tag;
+NSString *tag, *subdirectory;
     NSURL *url = NULL;
 
     if (detail)
@@ -361,7 +361,7 @@ else if ([subdir compare: @HF_GUIDE] == NSOrderedSame)
          * add some more pieces, and put it all back together again. Then,
          * because the gettext way of handling localizations is different from
          * OSX's, we have to figure out which translation to use. */
-NSArray *components = [NSArray arrayWithObjects: @"share", @"gnome", @"help", @"gnucash", nil ];
+NSArray *components = [NSArray arrayWithObjects: @"share", @"doc", @"gnucash-docs", nil ];
         NSString *prefix = [[[NSBundle mainBundle] resourcePath]
                             stringByDeletingLastPathComponent];
         NSArray *prefix_comps = [[prefix pathComponents]
@@ -376,8 +376,8 @@ if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
         {
             const gchar *message =
                 _("GnuCash could not find the files for the help documentation.  "
-                  "This is likely because the 'gnucash-docs' package is not installed.");
-            gnc_error_dialog(NULL, "%s", message);
+                  "This is likely because the 'gnucash-docs' package is not installed");
+            gnc_error_dialog(NULL, "%s at %s", message, [docs_dir UTF8String]);
             [pool release];
             return;
         }
