@@ -318,7 +318,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     Account *account;
     Account *investment_account = NULL;
     Account *income_account = NULL;
-    gchar *investment_account_text;
+/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***
+    gchar *investment_account_text;************************/
+/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***/
+    gchar *investment_account_text, *investment_account_onlineid;
     gnc_commodity *currency = NULL;
     gnc_commodity *investment_commodity = NULL;
     gnc_numeric gnc_amount, gnc_units;
@@ -524,13 +527,28 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 								  in any translations.  */
                                               _("Stock account for security \"%s\""),
                                               data.security_data_ptr->secname);
+/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***/
+		investment_account_onlineid = g_strdup_printf( "%s%s", data.account_id, data.unique_id);
 
-                // @FIXME: Add the automated selection or creation of account here!
+/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***
+*               // @FIXME: Add the automated selection or creation of account here!
+*
+*               // First check whether we can find the right investment_account without asking the user
+*               investment_account = gnc_import_select_account(NULL,
+*                                    data.unique_id, FALSE, investment_account_text,
+*                                    investment_commodity, ACCT_TYPE_STOCK, NULL, NULL);
+***********************************************************/
 
-                // First check whether we can find the right investment_account without asking the user
-                investment_account = gnc_import_select_account(NULL,
-                                     data.unique_id, FALSE, investment_account_text,
-                                     investment_commodity, ACCT_TYPE_STOCK, NULL, NULL);
+/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***/
+		investment_account = gnc_import_select_account(NULL, 
+								   investment_account_onlineid,
+								   1,
+								   investment_account_text,
+								   investment_commodity,
+								   ACCT_TYPE_STOCK,
+								   NULL,
+								   NULL);
+
                 // but use it only if that's really the right commodity
                 if (investment_account
                         && xaccAccountGetCommodity(investment_account) != investment_commodity)
@@ -615,6 +633,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                     PERR("No investment account found for text: %s\n", investment_account_text);
                 }
                 g_free (investment_account_text);
+/***CPC 20130207 ref: OFX Commodity Account Patch, Burke***/
+		g_free (investment_account_onlineid);
                 investment_account_text = NULL;
 
                 if (investment_account != NULL &&
