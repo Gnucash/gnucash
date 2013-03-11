@@ -60,7 +60,6 @@ struct _GNCSplitReg2
     GtkWidget *edit_menu;
     GtkWidget *view_menu;
     GtkWidget *style_submenu;
-    GtkWidget *sort_submenu;
     GtkWidget *action_menu;
 
     GtkWidget *double_line_check;
@@ -86,8 +85,6 @@ struct _GNCSplitReg2
 
     gint numRows;
 
-    guint sort_type;
-
     gboolean read_only;
 };
 
@@ -108,38 +105,12 @@ typedef enum
 {
     SCHEDULE,
     SPLIT,
-    SORT_ORDER_SUBMENU,
     STYLE_SUBMENU,
 } GNC_SPLIT_REG2_ITEM;
 #endif
 
 /*FIXME Note sure about this == Coming from original gnc-split-reg.h */
 typedef GNC_SPLIT_REG_ITEM GNC_SPLIT_REG2_ITEM;
-
-/*FIXME Note sure about this == Coming from original gnc-split-reg.h */
-#ifdef skip
-/* Easy way to pass the sort-type
- * Note that this is STUPID -- we should be using parameter lists,
- * but this provides a simple case statement internally.  This should
- * probably not actually be exposed in the external interface....
- */
-#define ENUM_LIST_SORTTYPE(_) \
-  _(BY_NONE,) \
-  _(BY_STANDARD,) \
-  _(BY_DATE,) \
-  _(BY_DATE_ENTERED,) \
-  _(BY_DATE_RECONCILED,) \
-  _(BY_NUM,) \
-  _(BY_AMOUNT,) \
-  _(BY_MEMO,) \
-  _(BY_DESC,) \
-  _(BY_ACTION,) \
-  _(BY_NOTES,)
-
-DEFINE_ENUM(SortType, ENUM_LIST_SORTTYPE)
-AS_STRING_DEC(SortType, ENUM_LIST_SORTTYPE)
-FROM_STRING_DEC(SortType, ENUM_LIST_SORTTYPE)
-#endif
 
 
 /**
@@ -168,12 +139,6 @@ GncTreeViewSplitReg *gnc_split_reg2_get_register (GNCSplitReg2 *gsr );
  * Create and returns a summarybar for this GNCSplitReg.
  **/
 GtkWidget *gsr2_create_summary_bar (GNCSplitReg2 *gsr );
-
-/**
- * Gets/sets the sort-type of the GNCSplitReg.
- **/
-SortType gnc_split_reg2_get_sort_type (GNCSplitReg2 *gsr );
-void gnc_split_reg2_set_sort_type (GNCSplitReg2 *gsr, SortType t );
 
 /**
  * Gets/sets the style of the GNCSplitReg.

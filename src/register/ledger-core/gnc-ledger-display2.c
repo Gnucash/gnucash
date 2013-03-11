@@ -626,10 +626,10 @@ close_handler (gpointer user_data)
 {
     GNCLedgerDisplay2 *ld = user_data;
 
-
-    ENTER(" ");
     if (!ld)
         return;
+
+    ENTER(" ");
 
     gnc_unregister_gui_component (ld->component_id);
 
@@ -905,6 +905,17 @@ gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits)
 }
 
 void
+gnc_ledger_display2_refilter (GNCLedgerDisplay2 *ld)
+{
+    ENTER("ld=%p", ld);
+
+    /* Set the default selection start position and refilter */
+    gnc_tree_view_split_reg_default_selection (ld->view);
+
+    LEAVE(" ");
+}
+
+void
 gnc_ledger_display2_refresh (GNCLedgerDisplay2 *ld)
 {
     ENTER("ld=%p", ld);
@@ -974,7 +985,6 @@ gnc_ledger_display2_set_split_view_refresh (GNCLedgerDisplay2 *ld, gboolean ok)
     ld->refresh_ok = ok;
 }
 
-
 static void
 gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer user_data)
 {
@@ -983,7 +993,6 @@ gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer user_data)
     /* Refresh the view when idle */
     g_idle_add ((GSourceFunc)gnc_ledger_display2_refresh, ld);
 }
-
 
 void
 gnc_ledger_display2_close (GNCLedgerDisplay2 *ld)

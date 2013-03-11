@@ -631,7 +631,7 @@ Transaction * xaccTransCopyToClipBoard(const Transaction *from_trans)
 void
 xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans)
 {
-    xaccTransCopyFromClipBoard(from_trans, to_trans, NULL, NULL);
+    xaccTransCopyFromClipBoard(from_trans, to_trans, NULL, NULL, TRUE);
 }
 
 /********************************************************************\
@@ -643,8 +643,10 @@ xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans)
  *  'from_acc' need not be a valid account. It may be an already freed
  *   Account. Therefore, it must not be dereferenced at all.
  *
- *   Neither 'from_trans', nor 'from_acc', nor any of 'from's splits may be modified
- *   in any way.
+ *   Neither 'from_trans', nor 'from_acc', nor any of 'from's splits may
+ *   be modified in any way.
+ *
+ *   'no_date' if TRUE will not copy the date posted.
  *
  *   The 'to_trans' transaction will end up with valid copies of from's
  *   splits.  In addition, the copies of any of from's splits that were
@@ -652,7 +654,7 @@ xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans)
 \********************************************************************/
 void
 xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
-                           const Account *from_acc, Account *to_acc)
+                           const Account *from_acc, Account *to_acc, gboolean no_date)
 {
     Timespec ts = {0,0};
     gboolean change_accounts = FALSE;
@@ -670,8 +672,11 @@ xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
     xaccTransSetDescription(to_trans, xaccTransGetDescription(from_trans));
     xaccTransSetNum(to_trans, xaccTransGetNum(from_trans));
     xaccTransSetNotes(to_trans, xaccTransGetNotes(from_trans));
-    xaccTransGetDatePostedTS(from_trans, &ts);
-    xaccTransSetDatePostedTS(to_trans, &ts);
+    if(!no_date)
+    {
+        xaccTransGetDatePostedTS(from_trans, &ts);
+        xaccTransSetDatePostedTS(to_trans, &ts);
+    }
 
     /* Each new split will be parented to 'to' */
     for (node = from_trans->splits; node; node = node->next)
@@ -1109,7 +1114,7 @@ xaccTransGetRateForCommodity(const Transaction *trans,
     trans_curr = xaccTransGetCurrency (trans);
     if (gnc_commodity_equal (trans_curr, split_com))
     {
-        if (rate) 
+        if (rate)
             *rate = gnc_numeric_create (1, 1);
         return TRUE;
     }

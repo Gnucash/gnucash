@@ -82,25 +82,36 @@ void gnc_tree_control_split_reg_copy_trans (GncTreeViewSplitReg *view);
 /* Paste transaction from clipboard */
 void gnc_tree_control_split_reg_paste_trans (GncTreeViewSplitReg *view);
 
+/* Copy the last transaction with given description to the blank transaction */
+void gnc_tree_control_auto_complete (GncTreeViewSplitReg *view, Transaction *trans,  const gchar *new_text);
+
 /*****************************************************************************/
 
 /* Sort changed callback */
 void gnc_tree_control_split_reg_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data);
 
 /* Sort by date */
-gint gnc_tree_control_split_reg_sort_by_date (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
+gint gnc_tree_control_split_reg_sort_by_date (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
                        gpointer user_data);
 
 /* Sort by Description / Notes / Memo */
-gint gnc_tree_control_split_reg_sort_by_dnm (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
+gint gnc_tree_control_split_reg_sort_by_dnm (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
                        gpointer user_data);
 
 /* Sort function for Number / Action column */
-gint gnc_tree_control_split_reg_sort_by_numact (GtkTreeModel *tm, GtkTreeIter *a, GtkTreeIter *b,
+gint gnc_tree_control_split_reg_sort_by_numact (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
                   gpointer user_data);
 
 /* Sort function for Reconcile column */
-gint gnc_tree_control_split_reg_sort_by_recn (GtkTreeModel *tm, GtkTreeIter *a, GtkTreeIter *b,
+gint gnc_tree_control_split_reg_sort_by_recn (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
+                  gpointer user_data);
+
+/* Sort function for transfer column */
+gint gnc_tree_control_split_reg_sort_by_account (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
+                  gpointer user_data);
+
+/* Sort function for debit / credit column */
+gint gnc_tree_control_split_reg_sort_by_value (GtkTreeModel *fm, GtkTreeIter *fa, GtkTreeIter *fb,
                   gpointer user_data);
 
 /*****************************************************************************/

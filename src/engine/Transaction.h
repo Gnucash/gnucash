@@ -244,12 +244,14 @@ void xaccTransCopyOnto(const Transaction *from_trans, Transaction *to_trans);
  *   Neither 'from_trans', nor 'from_acc', nor any of 'from's splits may be modified
  *   in any way.
  *
+ *   'no_date' if TRUE will not copy the date posted.
+ *
  *   The 'to_trans' transaction will end up with valid copies of from's
  *   splits.  In addition, the copies of any of from's splits that were
  *   in from_acc (or at least claimed to be) will end up in to_acc.
  */
 void xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
-                           const Account *from_acc, Account *to_acc);
+                           const Account *from_acc, Account *to_acc, gboolean no_date);
 
 /*################## Added for Reg2 #################*/
 

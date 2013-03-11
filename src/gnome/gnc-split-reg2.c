@@ -119,27 +119,12 @@ void gnc_split_reg2_style_journal_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg2_double_line_cb (GtkWidget *w, gpointer data);
 
 
-void gnc_split_reg2_sort_standard_cb (GtkWidget *w, gpointer data);
-void gnc_split_reg2_sort_date_cb (GtkWidget *w, gpointer data);
-void gnc_split_reg2_sort_date_entered_cb (GtkWidget *w, gpointer data);
-void gnc_split_reg2_sort_date_reconciled_cb (GtkWidget *w, gpointer data);
-void gnc_split_reg2_sort_num_cb (GtkWidget *w, gpointer data);
-void gnc_split_reg2_sort_amount_cb (GtkWidget *w, gpointer data);
-void gnc_split_reg2_sort_memo_cb (GtkWidget *w, gpointer data);
-void gnc_split_reg2_sort_desc_cb (GtkWidget *w, gpointer data);
-void gnc_split_reg2_sort_action_cb (GtkWidget *w, gpointer data);
-void gnc_split_reg2_sort_notes_cb (GtkWidget *w, gpointer data);
-
 void gnc_split_reg2_destroy_cb (GtkWidget *widget, gpointer data);
 
 static void gnc_split_reg2_class_init (GNCSplitReg2Class *class);
 static void gnc_split_reg2_init (GNCSplitReg2 *gsr);
 static void gnc_split_reg2_init2 (GNCSplitReg2 *gsr);
 
-#ifdef SKIP
-FROM_STRING_FUNC (SortType, ENUM_LIST_SORTTYPE)
-AS_STRING_FUNC (SortType, ENUM_LIST_SORTTYPE)
-#endif
 
 GType
 gnc_split_reg2_get_type( void )
@@ -264,7 +249,6 @@ gnc_split_reg2_new( GNCLedgerDisplay2 *ld,
 static void
 gnc_split_reg2_init( GNCSplitReg2 *gsr )
 {
-    gsr->sort_type = BY_STANDARD;
     gsr->width = -1;
     gsr->height = -1;
     gsr->numRows = 10;
@@ -941,150 +925,6 @@ gnc_split_reg2_double_line_cb (GtkWidget *w, gpointer data)
 }
 
 static void
-gnc_split_reg2_sort (GNCSplitReg2 *gsr, SortType sort_code)
-{
-    Query *query = gnc_ledger_display2_get_query (gsr->ledger);
-    gboolean show_present_divider = FALSE;
-    GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
-    GncTreeModelSplitReg *model;
-
-    if (gsr->sort_type == sort_code)
-        return;
-
-    standard = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
-
-    switch (sort_code)
-    {
-    case BY_STANDARD:
-        p1 = standard;
-        show_present_divider = TRUE;
-        break;
-    case BY_DATE:
-        p1 = g_slist_prepend (p1, TRANS_DATE_POSTED);
-        p1 = g_slist_prepend (p1, SPLIT_TRANS);
-        p2 = standard;
-        show_present_divider = TRUE;
-        break;
-    case BY_DATE_ENTERED:
-        p1 = g_slist_prepend (p1, TRANS_DATE_ENTERED);
-        p1 = g_slist_prepend (p1, SPLIT_TRANS);
-        p2 = standard;
-        break;
-    case BY_DATE_RECONCILED:
-        p1 = g_slist_prepend (p1, SPLIT_RECONCILE);
-        p2 = g_slist_prepend (p2, SPLIT_DATE_RECONCILED);
-        p3 = standard;
-        break;
-    case BY_NUM:
-        p1 = g_slist_prepend (p1, TRANS_NUM);
-        p1 = g_slist_prepend (p1, SPLIT_TRANS);
-        p2 = standard;
-        break;
-    case BY_AMOUNT:
-        p1 = g_slist_prepend (p1, SPLIT_VALUE);
-        p2 = standard;
-        break;
-    case BY_MEMO:
-        p1 = g_slist_prepend (p1, SPLIT_MEMO);
-        p2 = standard;
-        break;
-    case BY_DESC:
-        p1 = g_slist_prepend (p1, TRANS_DESCRIPTION);
-        p1 = g_slist_prepend (p1, SPLIT_TRANS);
-        p2 = standard;
-        break;
-    case BY_ACTION:
-        p1 = g_slist_prepend (p1, SPLIT_ACTION);
-        p2 = standard;
-        break;
-    case BY_NOTES:
-        p1 = g_slist_prepend (p1, TRANS_NOTES);
-        p1 = g_slist_prepend (p1, SPLIT_TRANS);
-        p2 = standard;
-        break;
-    default:
-        g_slist_free (standard);
-        g_return_if_fail (FALSE);
-        break;
-    }
-
-    qof_query_set_sort_order (query, p1, p2, p3);
-    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
-    gsr->sort_type = sort_code;
-    gnc_ledger_display2_refresh (gsr->ledger);
-}
-
-void
-gnc_split_reg2_sort_standard_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_STANDARD);
-}
-
-void
-gnc_split_reg2_sort_date_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_DATE);
-}
-
-void
-gnc_split_reg2_sort_date_entered_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_DATE_ENTERED);
-}
-
-void
-gnc_split_reg2_sort_date_reconciled_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_DATE_RECONCILED);
-}
-
-void
-gnc_split_reg2_sort_num_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_NUM);
-}
-
-void
-gnc_split_reg2_sort_amount_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_AMOUNT);
-}
-
-void
-gnc_split_reg2_sort_memo_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_MEMO);
-}
-
-void
-gnc_split_reg2_sort_desc_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_DESC);
-}
-
-void
-gnc_split_reg2_sort_action_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_ACTION);
-}
-
-void
-gnc_split_reg2_sort_notes_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg2 *gsr = data;
-    gnc_split_reg2_sort (gsr, BY_NOTES);
-}
-
-static void
 gnc_split_reg2_record (GNCSplitReg2 *gsr)
 {
 /*FIXME*/
@@ -1385,19 +1225,6 @@ gnc_split_reg2_get_register (GNCSplitReg2 *gsr )
         return NULL;
 
     return gnc_ledger_display2_get_split_view_register (gsr->ledger);
-}
-
-SortType
-gnc_split_reg2_get_sort_type (GNCSplitReg2 *gsr)
-{
-    g_assert (gsr);
-    return gsr->sort_type;
-}
-
-void
-gnc_split_reg2_set_sort_type (GNCSplitReg2 *gsr, SortType t)
-{
-    gnc_split_reg2_sort (gsr, t);
 }
 
 GtkWidget*

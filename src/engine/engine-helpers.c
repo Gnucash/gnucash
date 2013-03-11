@@ -169,6 +169,7 @@ gnc_set_num_action (Transaction *trans, Split *split,
         if (num_action && action)
             xaccTransSetNum (trans, action);
     }
+
     if (split)
     {
         if (!num_action && action)

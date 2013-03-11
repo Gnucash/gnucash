@@ -64,6 +64,7 @@ typedef struct
     gboolean                    change_allowed;           // This is set when we allow the reconciled split to change.
     gboolean                    editing_now;              // This is set while editing of a cell.
 
+
 } GncTreeViewSplitReg;
 
 typedef struct
@@ -125,6 +126,17 @@ void gnc_tree_view_split_reg_expand_trans (GncTreeViewSplitReg *view, Transactio
 
 void gnc_tree_view_split_reg_collapse_trans (GncTreeViewSplitReg *view, Transaction *trans);
 
+const char * gnc_tree_view_split_reg_get_credit_debit_string (GncTreeViewSplitReg *view, gboolean credit);
+
+/*************************************************************************************/
+
+GtkTreePath * gnc_tree_view_split_reg_get_sort_path_from_model_path (GncTreeViewSplitReg *view, GtkTreePath *mpath);
+
+GncTreeModelSplitReg * gnc_tree_view_split_reg_get_model_from_view (GncTreeViewSplitReg *view);
+
+gboolean gnc_tree_view_split_reg_scroll_to_cell (GncTreeViewSplitReg *view);
+
+void gnc_tree_view_split_reg_refilter (GncTreeViewSplitReg *view);
 
 /*************************************************************************************/
 

@@ -132,6 +132,9 @@ GNCLedgerDisplay2 * gnc_ledger_display2_find_by_query (Query *q);
 void gnc_ledger_display2_refresh (GNCLedgerDisplay2 * ledger_display);
 void gnc_ledger_display2_refresh_by_split_register (GncTreeModelSplitReg *model);
 
+/* Refilter the register */
+void gnc_ledger_display2_refilter (GNCLedgerDisplay2 *ld);
+
 /* close the window */
 void gnc_ledger_display2_close (GNCLedgerDisplay2 * ledger_display);
 

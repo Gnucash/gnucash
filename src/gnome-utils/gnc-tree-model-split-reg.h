@@ -93,13 +93,16 @@ typedef enum
     GNC_TREE_MODEL_SPLIT_REG_COL_DESCNOTES, //4
     GNC_TREE_MODEL_SPLIT_REG_COL_TRANSVOID, //5
     GNC_TREE_MODEL_SPLIT_REG_COL_RECN,      //6
+    GNC_TREE_MODEL_SPLIT_REG_COL_DEBIT,     //7
+    GNC_TREE_MODEL_SPLIT_REG_COL_CREDIT,    //8
 
-    GNC_TREE_MODEL_SPLIT_REG_COL_LAST_VISIBLE = GNC_TREE_MODEL_SPLIT_REG_COL_RECN, //6
+    GNC_TREE_MODEL_SPLIT_REG_COL_LAST_VISIBLE = GNC_TREE_MODEL_SPLIT_REG_COL_CREDIT, //8
 
     /* internal hidden columns */
-    GNC_TREE_MODEL_SPLIT_REG_COL_RO,        //7
+    GNC_TREE_MODEL_SPLIT_REG_COL_RO,        //9
+    GNC_TREE_MODEL_SPLIT_REG_COL_VIS,       //10
 
-    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS    //8
+    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS    //11
 } GncTreeModelSplitRegColumn;
 
 /* typedefs & structures */
@@ -125,6 +128,10 @@ typedef struct
 
     gboolean                     read_only;             /**< register is read only */
 
+    cleared_match_t              filter_cleared_match;  // Status for Filter.
+    time64                       filter_start_time;     // Start time for Filter.
+    time64                       filter_end_time;       // End time for Filter.
+
 
 }GncTreeModelSplitReg;
 
@@ -142,7 +149,11 @@ typedef struct
 
     /* This signal is emitted before a transaction delete, the pointer has
        the transaction */
-    void (*trans_delete) (GncTreeModelSplitReg *model, gpointer item);
+    void (*selection_move_delete) (GncTreeModelSplitReg *model, gpointer item);
+
+    /* This signal is emitted before a refilter, the pointer has
+       the transaction */
+    void (*selection_move_filter) (GncTreeModelSplitReg *model, gpointer item);
 
 } GncTreeModelSplitRegClass;
 
@@ -201,9 +212,11 @@ GtkListStore * gnc_tree_model_split_reg_get_numact_list (GncTreeModelSplitReg *m
 
 GtkListStore * gnc_tree_model_split_reg_get_acct_list (GncTreeModelSplitReg *model);
 
-void gnc_tree_model_split_reg_get_num_list (GncTreeModelSplitReg *model);
+void gnc_tree_model_split_reg_update_num_list (GncTreeModelSplitReg *model);
 
-void gnc_tree_model_split_reg_get_action_list (GncTreeModelSplitReg *model);
+void gnc_tree_model_split_reg_update_action_list (GncTreeModelSplitReg *model);
+
+void gnc_tree_model_split_reg_update_account_list (GncTreeModelSplitReg *model);
 
 void gnc_tree_model_split_reg_update_completion (GncTreeModelSplitReg *model);
 

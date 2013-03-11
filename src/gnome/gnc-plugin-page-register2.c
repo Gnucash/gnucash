@@ -53,7 +53,7 @@
 
 #include "dialog-account.h"
 #include "dialog-find-transactions.h"
-/*#include "dialog-print-check.h" */
+//#include "dialog-print-check.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "assistant-stock-split.h"
@@ -106,14 +106,6 @@ static gchar *gnc_plugin_page_register2_get_long_name (GncPluginPage *plugin_pag
 
 static void gnc_plugin_page_register2_summarybar_position_changed (GConfEntry *entry, gpointer user_data);
 
-/* Callbacks for the "Sort By" dialog */
-void gnc_plugin_page_register2_sort_button_cb (GtkToggleButton *button, GncPluginPageRegister2 *page);
-void gnc_plugin_page_register2_sort_response_cb (GtkDialog *dialog, gint response, GncPluginPageRegister2 *plugin_page);
-void gnc_plugin_page_register2_sort_order_save_cb (GtkToggleButton *button, GncPluginPageRegister2 *page);
-
-static gchar *gnc_plugin_page_register2_get_sort_order (GncPluginPage *plugin_page);
-void gnc_plugin_page_register2_set_sort_order (GncPluginPage *plugin_page, const gchar *sort_order);
-
 /* Callbacks for the "Filter By" dialog */
 void gnc_plugin_page_register2_filter_select_range_cb (GtkRadioButton *button, GncPluginPageRegister2 *page);
 void gnc_plugin_page_register2_filter_start_cb (GtkWidget *radio, GncPluginPageRegister2 *page);
@@ -128,8 +120,8 @@ static gchar *gnc_plugin_page_register2_filter_time2dmy (time64 raw_time);
 static gchar *gnc_plugin_page_register2_get_filter (GncPluginPage *plugin_page);
 void gnc_plugin_page_register2_set_filter (GncPluginPage *plugin_page, const gchar *filter);
 
-static void gnc_ppr_update_status_query (GncPluginPageRegister2 *page, gboolean refresh_page);
-static void gnc_ppr_update_date_query (GncPluginPageRegister2 *page, gboolean refresh_page);
+static void gnc_ppr_update_status_filter (GncPluginPageRegister2 *page, gboolean refresh_page);
+static void gnc_ppr_update_date_filter (GncPluginPageRegister2 *page, gboolean refresh_page);
 
 /* Command callbacks */
 static void gnc_plugin_page_register2_cmd_print_check (GtkAction *action, GncPluginPageRegister2 *plugin_page);
@@ -145,7 +137,6 @@ static void gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action, G
 static void gnc_plugin_page_register2_cmd_unvoid_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_reverse_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_shift_transaction_forward (GtkAction *action, GncPluginPageRegister2 *plugin_page);
-static void gnc_plugin_page_register2_cmd_view_sort_by (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_style_changed (GtkAction *action, GtkRadioAction *current, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action, GncPluginPageRegister2 *plugin_page);
@@ -283,10 +274,6 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
 
     /* View menu */
 
-    {
-        "ViewSortByAction", NULL, N_("_Sort By..."), NULL, NULL,
-        G_CALLBACK (gnc_plugin_page_register2_cmd_view_sort_by)
-    },
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register2_cmd_view_filter_by)
@@ -466,7 +453,6 @@ static struct status_action status_actions[] =
 
 #define CLEARED_VALUE "cleared_value"
 #define DEFAULT_FILTER "0x001f"
-#define DEFAULT_SORT_ORDER "BY_STANDARD"
 
 /************************************************************/
 /*                      Data Structures                     */
@@ -485,14 +471,6 @@ typedef struct GncPluginPageRegister2Private
 
     gint lines_default;
     gboolean read_only;
-
-    struct
-    {
-        GtkWidget *dialog;
-        SortType original_sort_type;
-        gboolean original_save_order;
-        gboolean save_order;
-    } sd;
 
     struct
     {
@@ -948,22 +926,8 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
     ledger_type = gnc_ledger_display2_type (priv->ledger);
 
 
-    if (ledger_type == LD2_SINGLE || ledger_type == LD2_SUBACCOUNT)
+    if (ledger_type == LD2_SINGLE || ledger_type == LD2_SUBACCOUNT || ledger_type == LD2_GL)
     {
-        /* Set the sort order for the split register and status of save order button */
-        priv->sd.save_order = FALSE;
-        order = gnc_plugin_page_register2_get_sort_order (plugin_page);
-
-        PINFO("Loaded Sort order is %s", order);
-
-        gnc_split_reg2_set_sort_type (priv->gsr, SortTypefromString (order));
-
-        if (order && (g_strcmp0 (order, DEFAULT_SORT_ORDER) != 0))
-            priv->sd.save_order = TRUE;
-
-        priv->sd.original_save_order = priv->sd.save_order;
-        g_free(order);
-
         /* Set the filter for the split register and status of save filter button */
         priv->fd.save_filter = FALSE;
 
@@ -1000,9 +964,9 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
         priv->fd.original_save_filter = priv->fd.save_filter;
         g_strfreev (filter);
 
-        /* Update Query with Filter Status and Dates */
-        gnc_ppr_update_status_query (page, FALSE);
-        gnc_ppr_update_date_query (page, FALSE);
+        /* Update the filter with Status and Dates */
+        gnc_ppr_update_status_filter (page, FALSE);
+        gnc_ppr_update_date_filter (page, FALSE);
     }
 
     gnc_ledger_display2_refresh (priv->ledger);
@@ -1084,7 +1048,10 @@ gnc_plugin_page_register2_destroy_widget (GncPluginPage *plugin_page)
                                 gnc_plugin_page_register2_summarybar_position_changed, page);
 
     if (priv->widget == NULL)
+    {
+        LEAVE(" ");
         return;
+    }
 
     if (priv->component_manager_id)
     {
@@ -1096,12 +1063,6 @@ gnc_plugin_page_register2_destroy_widget (GncPluginPage *plugin_page)
     {
         qof_event_unregister_handler (priv->event_handler_id);
         priv->event_handler_id = 0;
-    }
-
-    if (priv->sd.dialog)
-    {
-        gtk_widget_destroy (priv->sd.dialog);
-        memset(&priv->sd, 0, sizeof(priv->sd));
     }
 
     if (priv->fd.dialog)
@@ -1583,53 +1544,6 @@ gnc_plugin_page_register2_set_filter (GncPluginPage *plugin_page, const gchar *f
 }
 
 static gchar *
-gnc_plugin_page_register2_get_sort_order (GncPluginPage *plugin_page)
-{
-    GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplay2Type ledger_type;
-    GNCLedgerDisplay2 *ld;
-    Account *leader;
-    const char* sort_order;
-
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page), _("unknown"));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    ld = priv->ledger;
-    ledger_type = gnc_ledger_display2_type (ld);
-    leader = gnc_ledger_display2_leader (ld);
-    sort_order = NULL;
-
-    if ((ledger_type == LD2_SINGLE) || (ledger_type == LD2_SUBACCOUNT))
-        sort_order = xaccAccountGetSortOrder (leader);
-
-    return g_strdup(sort_order ? sort_order : DEFAULT_SORT_ORDER);
-}
-
-void
-gnc_plugin_page_register2_set_sort_order (GncPluginPage *plugin_page, const gchar *sort_order )
-{
-    GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplay2Type ledger_type;
-    GNCLedgerDisplay2 *ld;
-    Account *leader;
-
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    ld = priv->ledger;
-    ledger_type = gnc_ledger_display2_type (ld);
-    leader = gnc_ledger_display2_leader (ld);
-
-    if (leader != NULL)
-    {
-        if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
-            xaccAccountSetSortOrder (leader, NULL);
-        else
-            xaccAccountSetSortOrder (leader, sort_order);
-    }
-
-    return;
-}
-
-static gchar *
 gnc_plugin_page_register2_get_long_name (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister2Private *priv;
@@ -1698,222 +1612,57 @@ gnc_plugin_page_register2_summarybar_position_changed(GConfEntry *entry,
 /*#################################################################################*/
 
 /************************************************************/
-/*                     "Sort By" Dialog                     */
-/************************************************************/
-
-/** This function is called when the "Sort By..." dialog is closed.
- *  If the dialog was closed by any method other than clicking the OK
- *  button, the original sorting order will be restored.
- *
- *  @param dialog A pointer to the dialog box.
- *
- *  @param response A numerical value indicating why the dialog box was closed.
- *
- *  @param page A pointer to the GncPluginPageRegister2 associated with
- *  this dialog box.
- */
-void
-gnc_plugin_page_register2_sort_response_cb (GtkDialog *dialog,
-        gint response,
-        GncPluginPageRegister2 *page)
-{
-    GncPluginPageRegister2Private *priv;
-    GncPluginPage *plugin_page;
-    SortType type;
-    const gchar *order;
-
-    g_return_if_fail(GTK_IS_DIALOG(dialog));
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
-
-    ENTER(" ");
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    plugin_page = GNC_PLUGIN_PAGE(page);
-
-    if (response != GTK_RESPONSE_OK)
-    {
-        /* Restore the original sort order */
-        gnc_split_reg2_set_sort_type(priv->gsr, priv->sd.original_sort_type);
-        priv->sd.save_order = priv->sd.original_save_order;
-    }
-    else
-    {
-        priv->sd.original_save_order = priv->sd.save_order;
-
-        if (priv->sd.save_order)
-        {
-            type = gnc_split_reg2_get_sort_type(priv->gsr);
-            order = SortTypeasString(type);
-            gnc_plugin_page_register2_set_sort_order (plugin_page, order);
-        }
-    }
-    priv->sd.dialog = NULL;
-    gtk_widget_destroy(GTK_WIDGET(dialog));
-    LEAVE(" ");
-}
-
-
-/** This function is called when a radio button in the "Sort By..."
- *  dialog is clicked.
- *
- *  @param button The button that was toggled.
- *
- *  @param page A pointer to the GncPluginPageRegister2 associated with
- *  this dialog box.
- */
-void
-gnc_plugin_page_register2_sort_button_cb (GtkToggleButton *button,
-        GncPluginPageRegister2 *page)
-{
-    GncPluginPageRegister2Private *priv;
-    const gchar *name;
-    SortType type;
-
-    g_return_if_fail(GTK_IS_TOGGLE_BUTTON(button));
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
-
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    name = gtk_buildable_get_name(GTK_BUILDABLE(button));
-    ENTER("button %s(%p), page %p", name, button, page);
-    type = SortTypefromString(name);
-    gnc_split_reg2_set_sort_type(priv->gsr, type);
-    LEAVE(" ");
-}
-
-
-/** This function is called whenever the save sort order is checked
- *  or unchecked which allows saving of the sort order.
- *
- *  @param button The toggle button that was changed.
- *
- *  @param page A pointer to the GncPluginPageRegister2 that is
- *  associated with this sort order dialog.
- */
-void
-gnc_plugin_page_register2_sort_order_save_cb (GtkToggleButton *button,
-        GncPluginPageRegister2 *page)
-{
-    GncPluginPageRegister2Private *priv;
-
-    g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
-
-    ENTER("Save toggle button (%p), plugin_page %p", button, page);
-
-    /* Compute the new save sort order */
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-
-    if (gtk_toggle_button_get_active(button))
-        priv->sd.save_order = TRUE;
-    else
-        priv->sd.save_order = FALSE;
-    LEAVE(" ");
-}
-
-/*#################################################################################*/
-/*#################################################################################*/
-
-/************************************************************/
 /*                    "Filter By" Dialog                    */
 /************************************************************/
 
 /** This function updates the "cleared match" term of the register
- *  query.  It unconditionally removes any old "cleared match" query
- *  term, then adds back a new query term if needed.  There seems to
- *  be a bug in the current g2 register code such that when the number
- *  of entries in the register doesn't fill up the window, the blank
- *  space at the end of the window isn't correctly redrawn.  This
- *  function works around that problem, but a root cause analysis
- *  should probably be done.
+ *  filter.
  *
  *  @param page A pointer to the GncPluginPageRegister2 that is
  *  associated with this filter dialog.
  */
 static void
-gnc_ppr_update_status_query (GncPluginPageRegister2 *page, gboolean refresh_page)
+gnc_ppr_update_status_filter (GncPluginPageRegister2 *page, gboolean refresh_page)
 {
     GncPluginPageRegister2Private *priv;
-    GSList *param_list;
-    Query *query;
+    GncTreeModelSplitReg *model;
 
-    ENTER(" ");
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
+
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    query = gnc_ledger_display2_get_query (priv->ledger );
-    if (!query)
-    {
-        LEAVE("no query found");
-        return;
-    }
+    model = gnc_ledger_display2_get_split_model_register (priv->ledger);
 
-    /* Remove the old status match */
-    param_list = qof_query_build_param_list (SPLIT_RECONCILE, NULL);
-    if (param_list)
-    {
-        qof_query_purge_terms (query, param_list);
-        g_slist_free(param_list);
-    }
+    model->filter_cleared_match = priv->fd.cleared_match;
 
-    /* Install the new status match */
-    if (priv->fd.cleared_match != CLEARED_ALL)
-        xaccQueryAddClearedMatch(query, priv->fd.cleared_match, QOF_QUERY_AND);
+    if (refresh_page)
+        gnc_ledger_display2_refilter (priv->ledger);
 
-    if(refresh_page)
-        gnc_ledger_display2_refresh (priv->ledger);
     LEAVE(" ");
 }
 
 /** This function updates the "date posted" term of the register
- *  query.  It unconditionally removes any old "date posted" query
- *  term, then adds back a new query term if needed.  There seems to
- *  be a bug in the current g2 register code such that when the number
- *  of entries in the register doesn't fill up the window, the blank
- *  space at the end of the window isn't correctly redrawn.  This
- *  function works around that problem, but a root cause analysis
- *  should probably be done.
+ *  filter.
  *
  *  @param page A pointer to the GncPluginPageRegister2 that is
  *  associated with this filter dialog.
  */
 static void
-gnc_ppr_update_date_query (GncPluginPageRegister2 *page, gboolean refresh_page)
+gnc_ppr_update_date_filter (GncPluginPageRegister2 *page, gboolean refresh_page)
 {
     GncPluginPageRegister2Private *priv;
-    GSList *param_list;
-    Query *query;
+    GncTreeModelSplitReg *model;
 
-    ENTER(" ");
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
+
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    if (!priv->ledger)
-    {
-        LEAVE("no ledger");
-        return;
-    }
+    model = gnc_ledger_display2_get_split_model_register (priv->ledger);
 
-    query = gnc_ledger_display2_get_query( priv->ledger );
-    if (!query)
-    {
-        LEAVE("no query");
-        return;
-    }
+    model->filter_start_time = priv->fd.start_time;
+    model->filter_end_time = priv->fd.end_time;
 
-    /* Delete any existing old date spec. */
-    param_list = qof_query_build_param_list(SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
-    if (param_list)
-    {
-        qof_query_purge_terms (query, param_list);
-        g_slist_free(param_list);
-    }
+    if (refresh_page)
+        gnc_ledger_display2_refilter (priv->ledger);
 
-    if (priv->fd.start_time || priv->fd.end_time)
-    {
-        /* Build a new spec */
-        xaccQueryAddDateMatchTT(query,
-                                priv->fd.start_time != 0, priv->fd.start_time,
-                                priv->fd.end_time != 0,   priv->fd.end_time,
-                                QOF_QUERY_AND);
-    }
-
-    if(refresh_page)
-        gnc_ledger_display2_refresh (priv->ledger);
     LEAVE(" ");
 }
 
@@ -1991,13 +1740,13 @@ gnc_plugin_page_register2_filter_status_one_cb (GtkToggleButton *button,
         priv->fd.cleared_match |= value;
     else
         priv->fd.cleared_match &= ~value;
-    gnc_ppr_update_status_query(page, TRUE);
+    gnc_ppr_update_status_filter(page, TRUE);
     LEAVE(" ");
 }
 
 /** This function is called whenever the "select all" status button is
  *  clicked.  It updates all of the checkbox widgets, then updates the
- *  query on the register.
+ *  filter on the register.
  *
  *  @param button The button that was clicked.
  *
@@ -2029,7 +1778,7 @@ gnc_plugin_page_register2_filter_status_all_cb (GtkButton *button,
     /* Set the requested status */
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
     priv->fd.cleared_match = CLEARED_ALL;
-    gnc_ppr_update_status_query(page, TRUE);
+    gnc_ppr_update_status_filter(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2090,11 +1839,11 @@ get_filter_times(GncPluginPageRegister2 *page)
 }
 
 /** This function is called when the "select range" radio button
- *  changes state.  Since there are only two choices in this radio
- *  group, this one signal can be used to handle all cases.  This
+ *  changes state. Since there are only two choices in this radio
+ *  group, this one signal can be used to handle all cases. This
  *  function is responsible for setting the sensitivity of the table
  *  of widgets underneath the "select range" choice, and updating the
- *  time limitation on the register query.  This is handled by a
+ *  time limitation on the register filter. This is handled by a
  *  helper function when the radio button is selected (as potentially
  *  all the widgets in the table need to be inspected), and is trivial
  *  for the other case.
@@ -2127,13 +1876,13 @@ gnc_plugin_page_register2_filter_select_range_cb (GtkRadioButton *button,
         priv->fd.start_time = 0;
         priv->fd.end_time = 0;
     }
-    gnc_ppr_update_date_query(page, TRUE);
+    gnc_ppr_update_date_filter(page, TRUE);
     LEAVE(" ");
 }
 
 /** This function is called when one of the start date entry widgets
- *  is updated.  It simply calls common routines to determine the
- *  start/end times and update the register query.
+ *  is updated. It simply calls common routines to determine the
+ *  start/end times and update the register filter.
  *
  *  @param unused A pointer to a GncDateEntry widgets, but it could be
  *  any widget.
@@ -2149,22 +1898,22 @@ gnc_plugin_page_register2_filter_gde_changed_cb (GtkWidget *unused,
 
     ENTER("(widget %s(%p), page %p)", gtk_buildable_get_name(GTK_BUILDABLE(unused)), unused, page);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page, TRUE);
+    gnc_ppr_update_date_filter(page, TRUE);
     LEAVE(" ");
 }
 
 /** This function is called when one of the start date radio buttons
- *  is selected.  It updates the sensitivity of the date entry widget,
+ *  is selected. It updates the sensitivity of the date entry widget,
  *  then calls a common routine to determine the start/end times and
- *  update the register query.
+ *  update the register filter.
  *
  *  *Note: This function is actually called twice for each new radio
- *  button selection.  The first time call is to uncheck the old
- *  button, and the second time to check the new button.  This does
+ *  button selection. The first time call is to uncheck the old
+ *  button, and the second time to check the new button. This does
  *  make a kind of sense, as radio buttons are nothing more than
  *  linked toggle buttons where only one can be active.
  *
- *  @param radio The button whose state is changing.  This will be
+ *  @param radio The button whose state is changing. This will be
  *  the previously selected button the first of the pair of calls to
  *  this function, and will be the newly selected button the second
  *  time.
@@ -2195,22 +1944,22 @@ gnc_plugin_page_register2_filter_start_cb (GtkWidget *radio,
     active = ( g_strcmp0(name, g_strdup("start_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.start_date, active);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page, TRUE);
+    gnc_ppr_update_date_filter(page, TRUE);
     LEAVE(" ");
 }
 
 /** This function is called when one of the end date radio buttons is
- *  selected.  It updates the sensitivity of the date entry widget,
+ *  selected. It updates the sensitivity of the date entry widget,
  *  then calls a common routine to determine the start/end times and
- *  update the register query.
+ *  update the register filter.
  *
  *  *Note: This function is actually called twice for each new radio
- *  button selection.  The first time call is to uncheck the old
- *  button, and the second time to check the new button.  This does
+ *  button selection. The first time call is to uncheck the old
+ *  button, and the second time to check the new button. This does
  *  make a kind of sense, as radio buttons are nothing more than
  *  linked toggle buttons where only one can be active.
  *
- *  @param radio The button whose state is changing.  This will be
+ *  @param radio The button whose state is changing. This will be
  *  the previously selected button the first of the pair of calls to
  *  this function, and will be the newly selected button the second
  *  time.
@@ -2241,7 +1990,7 @@ gnc_plugin_page_register2_filter_end_cb (GtkWidget *radio,
     active = ( g_strcmp0(name, g_strdup("end_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.end_date, active);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page, TRUE);
+    gnc_ppr_update_date_filter(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2303,11 +2052,11 @@ gnc_plugin_page_register2_filter_response_cb (GtkDialog *dialog,
     {
         /* Remove the old status match */
         priv->fd.cleared_match = priv->fd.original_cleared_match;
-        gnc_ppr_update_status_query(page, FALSE);
+        gnc_ppr_update_status_filter(page, FALSE);
         priv->fd.start_time = priv->fd.original_start_time;
         priv->fd.end_time = priv->fd.original_end_time;
         priv->fd.save_filter = priv->fd.original_save_filter;
-        gnc_ppr_update_date_query(page, FALSE);
+        gnc_ppr_update_date_filter(page, FALSE);
         gnc_ledger_display2_refresh (priv->ledger);
     }
     else
@@ -2319,23 +2068,23 @@ gnc_plugin_page_register2_filter_response_cb (GtkDialog *dialog,
             gchar* filter;
             filter = g_strdup_printf("0x%04x", priv->fd.cleared_match);
 
-            if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.start_date_choose)) && priv->fd.start_time != 0 )
+            if ( gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->fd.start_date_choose)) && priv->fd.start_time != 0 )
             {
-                gchar *timeval = gnc_plugin_page_register2_filter_time2dmy(priv->fd.start_time);
-                filter = g_strconcat ( filter, ",", timeval, NULL);
+                gchar *timeval = gnc_plugin_page_register2_filter_time2dmy (priv->fd.start_time);
+                filter = g_strconcat (filter, ",", timeval, NULL);
                 g_free (timeval);
             }
             else
-                filter = g_strconcat ( filter, ",0", NULL);
+                filter = g_strconcat (filter, ",0", NULL);
 
-            if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.end_date_choose)) && priv->fd.end_time != 0 )
+            if ( gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->fd.end_date_choose)) && priv->fd.end_time != 0 )
             {
-                gchar *timeval = gnc_plugin_page_register2_filter_time2dmy(priv->fd.end_time);
-                filter = g_strconcat ( filter, ",", timeval, NULL);
+                gchar *timeval = gnc_plugin_page_register2_filter_time2dmy (priv->fd.end_time);
+                filter = g_strconcat (filter, ",", timeval, NULL);
                 g_free (timeval);
             }
             else
-                filter = g_strconcat ( filter, ",0", NULL);
+                filter = g_strconcat (filter, ",0", NULL);
 
             PINFO("The filter to save is %s", filter);
 
@@ -2356,7 +2105,7 @@ gnc_plugin_page_register2_filter_response_cb (GtkDialog *dialog,
 /************************************************************/
 
 static char *
-gnc_reg_get_name (GNCLedgerDisplay2 *ledger, gboolean for_window)
+gnc_reg_get_name (GNCLedgerDisplay2 *ledger, gboolean for_window) // this works
 {
     Account *leader;
     GncTreeModelSplitReg *model;
@@ -2423,9 +2172,10 @@ gnc_reg_get_name (GNCLedgerDisplay2 *ledger, gboolean for_window)
 }
 
 static int
-report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query)
+report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query) //this works
 {
-    SplitRegister *reg = gnc_ledger_display2_get_split_register (ledger);
+    GncTreeViewSplitReg *view;
+    GncTreeModelSplitReg *model;
     Account *account;
     char *str;
     const char *tmp;
@@ -2436,14 +2186,16 @@ report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query)
 
     args = SCM_EOL;
 
+    view = gnc_ledger_display2_get_split_view_register (ledger);
+    model = gnc_ledger_display2_get_split_model_register (ledger);
+
     func = scm_c_eval_string ("gnc:register-report-create");
     g_return_val_if_fail (scm_is_procedure (func), -1);
+    tmp = gnc_tree_view_split_reg_get_credit_debit_string (view, TRUE);
 
-    tmp = gnc_split_register_get_credit_string (reg);
     arg = scm_from_locale_string (tmp ? tmp : _("Credit"));
     args = scm_cons (arg, args);
-
-    tmp = gnc_split_register_get_debit_string (reg);
+    tmp = gnc_tree_view_split_reg_get_credit_debit_string (view, FALSE);
     arg = scm_from_locale_string (tmp ? tmp : _("Debit"));
     args = scm_cons (arg, args);
 
@@ -2452,14 +2204,14 @@ report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query)
     args = scm_cons (arg, args);
     g_free (str);
 
-    arg = SCM_BOOL (reg->use_double_line);
+    arg = SCM_BOOL (model->use_double_line);
     args = scm_cons (arg, args);
 
-    arg = SCM_BOOL (reg->type == GENERAL_LEDGER || reg->type == INCOME_LEDGER
-                                                || reg->type == SEARCH_LEDGER);
+    arg = SCM_BOOL (model->type == GENERAL_LEDGER2 || model->type == INCOME_LEDGER2
+                                                   || model->type == SEARCH_LEDGER2);
     args = scm_cons (arg, args);
 
-    arg = SCM_BOOL (reg->style == REG_STYLE_JOURNAL);
+    arg = SCM_BOOL (model->style == REG2_STYLE_JOURNAL);
     args = scm_cons (arg, args);
 
     if (!query)
@@ -2515,49 +2267,56 @@ report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query)
 
 static void
 gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page) //FIXME
+        GncPluginPageRegister2 *plugin_page) //FIXME Should work but not tested
 {
     GncPluginPageRegister2Private *priv;
-    SplitRegister * reg;
+    GncTreeViewSplitReg *view;
+    GncTreeModelSplitReg *model;
     Split         * split;
     Transaction   * trans;
     GList         * splits = NULL, *item;
     GNCLedgerDisplay2Type ledger_type;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
-#ifdef SKIP
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    reg = gnc_ledger_display2_get_split_register (priv->ledger);
-    ledger_type = gnc_ledger_display2_type(priv->ledger);
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+    model = gnc_ledger_display2_get_split_model_register (priv->ledger);
+    ledger_type = gnc_ledger_display2_type (priv->ledger);
+
+//FIXME  'gnc_ui_print_check_dialog_create' uses 'GncPluginPageRegister' so this will need to wait
+//        for when we change the type back or I add a new function to dialog-print-check using
+//        'GncPluginPageRegister2'
+#ifdef skip
     if (ledger_type == LD2_SINGLE || ledger_type == LD2_SUBACCOUNT)
     {
-        split    = gnc_split_register_get_current_split(reg);
-        trans    = xaccSplitGetParent(split);
+        split = gnc_tree_view_split_reg_get_current_split (view);
+        trans = xaccSplitGetParent (split);
 
         if (split && trans)
         {
-            splits = g_list_append(splits, split);
-            gnc_ui_print_check_dialog_create(plugin_page, splits);
-            g_list_free(splits);
+            splits = g_list_append (splits, split);
+            gnc_ui_print_check_dialog_create (plugin_page, splits);
+            g_list_free (splits);
         }
     }
-    else if (ledger_type == LD2_GL && reg->type == SEARCH_LEDGER)
+    else if (ledger_type == LD2_GL && model->type == SEARCH_LEDGER2)
     {
         Account *common_acct = NULL, *account;
-        splits = qof_query_run(gnc_ledger_display2_get_query(priv->ledger));
+        splits = qof_query_run (gnc_ledger_display2_get_query (priv->ledger));
         /* Make sure each split is from the same account */
-        for (item = splits; item; item = g_list_next(item))
+        for (item = splits; item; item = g_list_next (item))
         {
             split = (Split *) item->data;
             if (common_acct == NULL)
             {
-                common_acct = xaccSplitGetAccount(split);
+                common_acct = xaccSplitGetAccount (split);
             }
             else
             {
-                if (xaccSplitGetAccount(split) != common_acct)
+                if (xaccSplitGetAccount (split) != common_acct)
                 {
                     GtkWidget *dialog, *window;
                     gint response;
@@ -2566,18 +2325,18 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
                         _("This search result contains splits from more than one account. "
                           "Do you want to print the checks even though they are not all "
                           "from the same account?");
-                    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page));
-                    dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+                    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page));
+                    dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                                     GTK_DIALOG_DESTROY_WITH_PARENT,
                                                     GTK_MESSAGE_WARNING,
                                                     GTK_BUTTONS_CANCEL,
                                                     "%s", title);
-                    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                             "%s", message);
-                    gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Print checks"),
+                    gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Print checks"),
                                           GTK_RESPONSE_YES);
-                    response = gnc_dialog_run(GTK_DIALOG(dialog), "print_multi_acct_checks");
-                    gtk_widget_destroy(dialog);
+                    response = gnc_dialog_run (GTK_DIALOG (dialog), "print_multi_acct_checks");
+                    gtk_widget_destroy (dialog);
                     if (response != GTK_RESPONSE_YES)
                     {
                         LEAVE("Multiple accounts");
@@ -2587,11 +2346,11 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
                 }
             }
         }
-        gnc_ui_print_check_dialog_create(plugin_page, splits);
+        gnc_ui_print_check_dialog_create (plugin_page, splits);
     }
     else
     {
-        gnc_error_dialog(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page)), "%s",
+        gnc_error_dialog (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)), "%s",
                          _("You can only print checks from a bank account register or search results."));
         LEAVE("Unsupported ledger type");
         return;
@@ -2677,7 +2436,7 @@ gnc_plugin_page_register2_cmd_paste (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_edit_account (GtkAction *action,
-        GncPluginPageRegister2 *page)
+        GncPluginPageRegister2 *page) //this works
 {
     Account *account;
 
@@ -2692,7 +2451,7 @@ gnc_plugin_page_register2_cmd_edit_account (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_find_transactions (GtkAction *action,
-        GncPluginPageRegister2 *page)
+        GncPluginPageRegister2 *page) //FIXME see below
 {
     GncPluginPageRegister2Private *priv;
 
@@ -2774,17 +2533,27 @@ gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action,
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
     trans = gnc_tree_view_split_reg_get_current_trans (view);
     if (trans == NULL)
+    {
+        LEAVE("trans is NULL");
         return;
+    }
     if (xaccTransHasSplitsInState (trans, VREC))
+    {
+        LEAVE("trans has split in VREC state");
         return;
+    }
     if (xaccTransHasReconciledSplits (trans) || xaccTransHasSplitsInState (trans, CREC))
     {
         gnc_error_dialog (NULL, "%s", _("You cannot void a transaction with reconciled or cleared splits."));
+        LEAVE("trans with reconciled splits");
         return;
     }
 
     if (!gnc_plugin_page_register2_finish_pending (GNC_PLUGIN_PAGE (page)))
+    {
+        LEAVE("finish pending");
         return;
+    }
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "gnc-plugin-page-register2.glade", "Void Transaction");
@@ -2803,6 +2572,7 @@ gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action,
     /* All done. Get rid of it. */
     gtk_widget_destroy (dialog);
     g_object_unref (G_OBJECT(builder));
+    LEAVE(" ");
 }
 
 static void
@@ -2821,7 +2591,10 @@ gnc_plugin_page_register2_cmd_unvoid_transaction (GtkAction *action,
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
     trans = gnc_tree_view_split_reg_get_current_trans (view);
     if (!xaccTransHasSplitsInState (trans, VREC))
+    {
+        LEAVE("trans has split in VREC state");
         return;
+    }
     gnc_tree_control_split_reg_unvoid_current_trans (view);
     LEAVE(" ");
 }
@@ -2861,7 +2634,10 @@ gnc_plugin_page_register2_cmd_shift_transaction_forward (GtkAction *action,
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
     trans = gnc_tree_view_split_reg_get_current_trans (view);
     if (trans == NULL)
+    {
+        LEAVE("trans is NULL");
         return;
+    }
 
     qof_event_suspend();
 
@@ -2877,72 +2653,17 @@ gnc_plugin_page_register2_cmd_shift_transaction_forward (GtkAction *action,
 /*#################################################################################*/
 
 static void
-gnc_plugin_page_register2_cmd_view_sort_by (GtkAction *action,
-        GncPluginPageRegister2 *page)
-{
-    GncPluginPageRegister2Private *priv;
-    GtkWidget *dialog, *button;
-    GtkBuilder *builder;
-    SortType sort;
-    const gchar *name;
-    gchar *title;
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
-    ENTER("(action %p, page %p)", action, page);
-
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    if (priv->sd.dialog)
-    {
-        gtk_window_present(GTK_WINDOW(priv->sd.dialog));
-        LEAVE("existing dialog");
-        return;
-    }
-
-    /* Create the dialog */
-
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder, "gnc-plugin-page-register2.glade", "Sort By");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Sort By"));
-    priv->sd.dialog = dialog;
-    gtk_window_set_transient_for(GTK_WINDOW(dialog),
-                                 gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
-    /* Translations: The %s is the name of the plugin page */
-    title = g_strdup_printf(_("Sort %s by..."),
-                            gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
-    gtk_window_set_title(GTK_WINDOW(dialog), title);
-    g_free(title);
-
-    /* Set the button for the current sort order */
-    sort = gnc_split_reg2_get_sort_type(priv->gsr);
-    name = SortTypeasString(sort);
-    button = GTK_WIDGET(gtk_builder_get_object (builder, name));
-    DEBUG("current sort %d, button %s(%p)", sort, name, button);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-    priv->sd.original_sort_type = sort;
-
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_save"));
-    if (priv->sd.save_order == TRUE)
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-
-    /* Wire it up */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, page);
-
-    /* Show it */
-    gtk_widget_show(dialog);
-    g_object_unref(G_OBJECT(builder));
-    LEAVE(" ");
-}
-
-static void
 gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
-        GncPluginPageRegister2 *page)
+        GncPluginPageRegister2 *page) //this works
 {
     GncPluginPageRegister2Private *priv;
+    GNCLedgerDisplay2Type ledger_type;
     GtkWidget *dialog, *toggle, *button, *start_date, *end_date, *table, *hbox;
     time64 start_time, end_time, time_val;
     GtkBuilder *builder;
     gboolean sensitive, value;
     Query *query;
+    GList *split_list;
     gchar *title;
     int i;
 
@@ -2985,15 +2706,21 @@ gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
     if (priv->fd.save_filter == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
+    // General Ledgers can not save filters so disable button.
+    ledger_type = gnc_ledger_display2_type (priv->ledger);
+    if (ledger_type == LD2_GL)
+       gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
 
     /* Set the date info */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "filter_show_range"));
     query = gnc_ledger_display2_get_query (priv->ledger);
-    xaccQueryGetDateMatchTT(query, &start_time, &end_time);
-    priv->fd.original_start_time = start_time;
-    priv->fd.start_time = start_time;
-    priv->fd.original_end_time = end_time;
-    priv->fd.end_time = end_time;
+    // Lets update the query but do not free the resulting list as it belongs to query.
+    split_list = qof_query_run (query);
+
+    priv->fd.original_start_time = priv->fd.start_time;
+    start_time = priv->fd.start_time;
+    priv->fd.original_end_time = priv->fd.end_time;
+    end_time = priv->fd.end_time;
 
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), start_time || end_time);
     table = GTK_WIDGET(gtk_builder_get_object (builder, "select_range_table"));
@@ -3143,7 +2870,7 @@ gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_transfer (GtkAction *action,
-                                       GncPluginPageRegister2 *page)
+                                       GncPluginPageRegister2 *page) //this works
 {
     Account *account;
     GncWindow *gnc_window;
@@ -3162,7 +2889,7 @@ gnc_plugin_page_register2_cmd_transfer (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_reconcile (GtkAction *action,
-                                        GncPluginPageRegister2 *page)
+                                        GncPluginPageRegister2 *page) // this works
 {
     Account *account;
     GtkWindow *window;
@@ -3182,7 +2909,7 @@ gnc_plugin_page_register2_cmd_reconcile (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_autoclear (GtkAction *action,
-                                        GncPluginPageRegister2 *page)
+                                        GncPluginPageRegister2 *page) //FIXME What is this?
 {
     Account *account;
     GtkWindow *window;
@@ -3202,7 +2929,7 @@ gnc_plugin_page_register2_cmd_autoclear (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_stock_split (GtkAction *action,
-        GncPluginPageRegister2 *page)
+        GncPluginPageRegister2 *page) // this works
 {
     Account *account;
 
@@ -3217,7 +2944,7 @@ gnc_plugin_page_register2_cmd_stock_split (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_lots (GtkAction *action,
-                                   GncPluginPageRegister2 *page)
+                                   GncPluginPageRegister2 *page) // this works
 {
     Account *account;
 
@@ -3472,7 +3199,7 @@ gnc_plugin_page_register2_cmd_jump (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
-                                       GncPluginPageRegister2 *plugin_page)
+                                       GncPluginPageRegister2 *plugin_page) //FIXME Not setup
 {
     GncPluginPageRegister2Private *priv;
 
@@ -3481,34 +3208,34 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    gsr2_default_schedule_handler(priv->gsr, NULL);
+//    gsr2_default_schedule_handler(priv->gsr, NULL);
     LEAVE(" ");
 }
 
 static void
 gnc_plugin_page_register2_cmd_scrub_current (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) // this works
 {
     GncPluginPageRegister2Private *priv;
+    GncTreeViewSplitReg *view;
     Query *query;
     Account *root;
     Transaction *trans;
-    SplitRegister *reg;
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    query = gnc_ledger_display2_get_query( priv->ledger );
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+    query = gnc_ledger_display2_get_query (priv->ledger);
     if (query == NULL)
     {
         LEAVE("no query found");
         return;
     }
 
-    reg = gnc_ledger_display2_get_split_register(priv->ledger);
-    trans = gnc_split_register_get_current_trans(reg);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+    trans = gnc_tree_view_split_reg_get_current_trans (view);
     if (trans == NULL)
     {
         LEAVE("no trans found");
@@ -3516,16 +3243,16 @@ gnc_plugin_page_register2_cmd_scrub_current (GtkAction *action,
     }
 
     gnc_suspend_gui_refresh();
-    root = gnc_get_current_root_account();
-    xaccTransScrubOrphans(trans);
-    xaccTransScrubImbalance(trans, root, NULL);
-    gnc_resume_gui_refresh();
+    root = gnc_get_current_root_account ();
+    xaccTransScrubOrphans (trans);
+    xaccTransScrubImbalance (trans, root, NULL);
+    gnc_resume_gui_refresh ();
     LEAVE(" ");
 }
 
 static void
 gnc_plugin_page_register2_cmd_scrub_all (GtkAction *action,
-                                        GncPluginPageRegister2 *plugin_page)
+                                        GncPluginPageRegister2 *plugin_page) // this works
 {
     GncPluginPageRegister2Private *priv;
     Query *query;
@@ -3564,7 +3291,7 @@ gnc_plugin_page_register2_cmd_scrub_all (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_account_report (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) // this works
 {
     GncPluginPageRegister2Private *priv;
     GncMainWindow *window;
@@ -3584,26 +3311,28 @@ gnc_plugin_page_register2_cmd_account_report (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_transaction_report (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page)
+        GncPluginPageRegister2 *plugin_page) // this works
 {
     GncPluginPageRegister2Private *priv;
     GncMainWindow *window;
-    SplitRegister *reg;
+    GncTreeViewSplitReg *view;
     Split *split;
     Query *query;
     int id;
 
-
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    reg = gnc_ledger_display2_get_split_register (priv->ledger);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
-    split = gnc_split_register_get_current_split (reg);
+    split = gnc_tree_view_split_reg_get_current_split (view);
     if (!split)
+    {
+        LEAVE("split is NULL");
         return;
+    }
 
     query = qof_query_create_for(GNC_ID_SPLIT);
 
