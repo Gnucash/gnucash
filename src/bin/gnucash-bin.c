@@ -859,6 +859,19 @@ main(int argc, char ** argv)
     gnc_print_unstable_message();
 
     gnc_log_init();
+
+    /* We need to initialize gtk before looking up all modules */
+    gnc_gtk_add_rc_file ();
+    if(!gtk_init_check (&argc, &argv))
+    {
+        g_printerr(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
+                   _("Error: could not initialize graphical user interface and option add-price-quotes was not set."),
+                   argv[0]);
+        return 1;
+    }
+
+    /* Now the module files are looked up, which might cause some library
+    initialization to be run, hence gtk must be initialized beforehand. */
     gnc_module_system_init();
 
     /* If asked via a command line parameter, fetch quotes only */
@@ -868,15 +881,6 @@ main(int argc, char ** argv)
         exit(0);  /* never reached */
     }
 
-    /* No quotes fetching was asked - attempt to initialize the gui */
-    gnc_gtk_add_rc_file ();
-    if(!gtk_init_check (&argc, &argv))
-    {
-        g_printerr(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
-                   _("Error: could not initialize graphical user interface and option add-price-quotes was not set."),
-                   argv[0]);
-        return 1;
-    }
     gnc_gui_init();
     scm_boot_guile(argc, argv, inner_main, 0);
     exit(0); /* never reached */
