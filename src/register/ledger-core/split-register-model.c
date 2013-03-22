@@ -907,7 +907,7 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     BasicCell *cell;
     char string[1024];
-    struct tm *tm;
+    struct tm tm;
     Timespec ts;
     time64 tt;
 
@@ -918,9 +918,9 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
     gnc_date_cell_get_date ((DateCell *) cell, &ts);
     tt = ts.tv_sec;
 
-    tm = gnc_localtime (&tt);
+    gnc_localtime_r (&tt, &tm);
 
-    qof_strftime (string, sizeof (string), "%A %d %B %Y", tm);
+    qof_strftime (string, sizeof (string), "%A %d %B %Y", &tm);
 
     return g_strdup (string);
 }
