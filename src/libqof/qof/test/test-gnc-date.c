@@ -57,8 +57,11 @@ extern void _gnc_date_time_init (_GncDateTime *);
 static void
 test_gnc_localtime (void)
 {
-    time64 secs[5] = {-43238956734LL, -1123692LL, 432761LL,
-		      723349832LL, 887326459367LL};
+    time64 secs[6] = {-43238956734LL, -1123692LL, 432761LL,
+                      723349832LL, 887326459367LL,
+                     1364160236LL // This is "Sunday 2013-03-24" (to verify the Sunday
+                                  // difference between g_date_time and tm->tm_wday)
+                     };
     guint ind;
     gchar *msg = "gnc_localtime_r: assertion `gdt != NULL' failed";
     gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
@@ -82,7 +85,8 @@ test_gnc_localtime (void)
 	g_assert_cmpint (time->tm_hour, ==, g_date_time_get_hour (gdt));
 	g_assert_cmpint (time->tm_min, ==, g_date_time_get_minute (gdt));
 	g_assert_cmpint (time->tm_sec, ==, g_date_time_get_second (gdt));
-	g_assert_cmpint (time->tm_wday, ==, g_date_time_get_day_of_week (gdt));
+        // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
+        g_assert_cmpint (time->tm_wday, ==, (g_date_time_get_day_of_week (gdt) % 7));
 	g_assert_cmpint (time->tm_yday, ==, g_date_time_get_day_of_year (gdt));
 	if (g_date_time_is_daylight_savings (gdt))
 	    g_assert_cmpint (time->tm_isdst, ==, 1);

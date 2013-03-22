@@ -279,7 +279,8 @@ gnc_g_date_time_fill_struct_tm (GDateTime *gdt, struct tm* time)
      time->tm_sec = g_date_time_get_second (gdt);
      time->tm_min = g_date_time_get_minute (gdt);
      time->tm_hour = g_date_time_get_hour (gdt);
-     time->tm_wday = g_date_time_get_day_of_week (gdt);
+     // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
+     time->tm_wday = g_date_time_get_day_of_week (gdt) % 7;
      time->tm_yday = g_date_time_get_day_of_year (gdt);
      time->tm_isdst = g_date_time_is_daylight_savings (gdt);
      time->tm_year -= 1900;
@@ -396,7 +397,8 @@ gnc_mktime (struct tm* time)
 				      time->tm_mday, time->tm_hour,
 				      time->tm_min, (gdouble)(time->tm_sec));
      time->tm_mon = time->tm_mon > 0 ? time->tm_mon - 1 : 11;
-     time->tm_wday = g_date_time_get_day_of_week (gdt);
+     // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
+     time->tm_wday = g_date_time_get_day_of_week (gdt) % 7;
      time->tm_yday = g_date_time_get_day_of_year (gdt);
      time->tm_isdst = g_date_time_is_daylight_savings (gdt);
 
@@ -419,7 +421,8 @@ gnc_timegm (struct tm* time)
 				time->tm_mday, time->tm_hour, time->tm_min,
 				(gdouble)(time->tm_sec));
      time->tm_mon = time->tm_mon > 0 ? time->tm_mon - 1 : 11;
-     time->tm_wday = g_date_time_get_day_of_week (gdt);
+     // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
+     time->tm_wday = g_date_time_get_day_of_week (gdt) % 7;
      time->tm_yday = g_date_time_get_day_of_year (gdt);
      time->tm_isdst = g_date_time_is_daylight_savings (gdt);
 
