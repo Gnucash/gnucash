@@ -860,6 +860,15 @@ main(int argc, char ** argv)
 
     gnc_log_init();
 
+    /* If asked via a command line parameter, fetch quotes only */
+    if (add_quotes_file)
+    {
+        /* First initialize the module system, even though gtk hasn't been initialized. */
+        gnc_module_system_init();
+        scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
+        exit(0);  /* never reached */
+    }
+
     /* We need to initialize gtk before looking up all modules */
     gnc_gtk_add_rc_file ();
     if(!gtk_init_check (&argc, &argv))
@@ -873,13 +882,6 @@ main(int argc, char ** argv)
     /* Now the module files are looked up, which might cause some library
     initialization to be run, hence gtk must be initialized beforehand. */
     gnc_module_system_init();
-
-    /* If asked via a command line parameter, fetch quotes only */
-    if (add_quotes_file)
-    {
-        scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
-        exit(0);  /* never reached */
-    }
 
     gnc_gui_init();
     scm_boot_guile(argc, argv, inner_main, 0);
