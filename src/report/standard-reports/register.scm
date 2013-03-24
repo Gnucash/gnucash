@@ -182,7 +182,7 @@
         (addto! row-contents
                 (if transaction-info?
                     (gnc:make-html-table-cell/markup
-					    "text-cell"
+					    "date-cell"
                         (gnc-print-date
                              (gnc-transaction-get-date-posted parent)))
                         " ")))
