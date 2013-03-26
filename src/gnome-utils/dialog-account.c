@@ -1946,7 +1946,7 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
     if (response == GTK_RESPONSE_OK)
     {
         gtk_widget_hide(data->dialog);
-        children = gnc_account_get_children(data->parent);
+        children = gnc_account_get_children_sorted(data->parent);
         prefix = gtk_editable_get_chars(GTK_EDITABLE(data->prefix), 0, -1);
         interval =
             gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
