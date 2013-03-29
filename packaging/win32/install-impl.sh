@@ -1612,7 +1612,9 @@ function make_chm() {
         echo "[MAP]" >> htmlhelp.hhp
         cat mymaps >> htmlhelp.hhp
         rm mymaps
+        echo "Will now call hhc.exe for $_CHM_TYPE ($_CHM_LANG)..."
         hhc htmlhelp.hhp  >/dev/null  || true
+        echo "... hhc.exe completed successfully."
         cp -fv htmlhelp.chm $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.chm
         cp -fv htmlhelp.hhmap $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.hhmap
     qpopd
@@ -1649,7 +1651,8 @@ function inst_docs() {
         make_chm guide C
         make_chm guide de_DE
         make_chm guide it_IT
-        make_chm guide ja_JP "--stringparam chunker.output.encoding Shift_JIS --stringparam htmlhelp.encoding Shift_JIS"
+# Temporarily disabled because it makes hh
+#        make_chm guide ja_JP "--stringparam chunker.output.encoding Shift_JIS --stringparam htmlhelp.encoding Shift_JIS"
         make_chm help C
         make_chm help de_DE
 #        make_chm help it_IT
