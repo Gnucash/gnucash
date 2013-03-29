@@ -1,7 +1,65 @@
 Version history:
 ------- -------
+ 2.4.12  30 Mar 2013
+       2.4.12 is a bugfix release. Please see the Changelog for details
+ 2.4.11  14 Jul 2012
+       2.4.11 is a bugfix release. Please see the Changelog for details
+ 2.4.10  10 Feb 2012
+       2.4.10 is a bugfix release. Please see the Changelog for details
+ 2.4.9 - 10 Jan 2012
+       2.4.9 is a bugfix release. Please see the Changelog for details
+ 2.4.8 - 20 Oct 2011
+       2.4.8 is a bugfix release. Please see the Changelog for details
+ 2.4.7 - 01 Jul 2011
+       2.4.7 is a bugfix release. Please see the Changelog for details
+ 2.4.6 - 28 May 2011
+       2.4.6 is a bugfix release. Please see the Changelog for details
+ 2.4.5 - 04 Apr 2011
+       2.4.5 is a bugfix release. Please see the Changelog for details
+ 2.4.4 - 13 Mar 2011
+       2.4.4 is a bugfix release. Please see the Changelog for details
+ 2.4.3 - 26 Feb 2011
+       2.4.3 is a bugfix release. Please see the Changelog for details
+ 2.4.2 - 06 Feb 2011
+       2.4.2 is a bugfix release. Please see the Changelog for details
+ 2.4.1 - 04 Feb 2011
 
- 2.3.0 - 14 May 2009
+       2.4.1 Had to be pulled before the release was completed because
+       some critical problems would have resulted in severe data loss
+       for users.
+
+ 2.4.0 - 20 Dec 2010
+
+       The GnuCash development team proudly announces GnuCash 2.4.0,
+       the latest stable release of the GnuCash Free Accounting
+       Software. With this new release series, GnuCash can use an SQL
+       database using SQLite3, MySQL or PostgreSQL. It runs on
+       GNU/Linux, *BSD, Solaris, Microsoft Windows and Mac OSX.
+
+       Major changes in the 2.4.0 release include
+
+       * In addition to the XML backend, Gnucash can now use a
+         SQLite3, MySQL or PostgreSQL database to store the data. This
+         is a new implementation using libdbi. It supports all
+         features including the business features.  In order to build
+         with this, add --enable-dbi to the configure command.  In
+         addition to the libdbi-dev package for your distribution, you
+         will also need the appropriate DBD (libdbi driver) package
+         for sqlite3, mysql or postgresql.
+
+       * As a replacement for the current GtkHTML HTML engine used to
+         display reports and graphs, Gnucash can use WebKit. WebKit is
+         the engine used by Google Chrome on Windows and Safari on
+         Apple.  In order to build with this, add
+         --with-html-engine=webkit to the configure command.  You will
+         need an appropriate webkit-dev package.  On win32, you will
+         need to download the webkit-1.1.90-win32.zip file from the
+         source repository and put it into the downloads directory of
+         your gnucash build area.
+
+       * Updated AqBanking on Win32.</li>
+ 
+2.3.0 - 14 May 2009
  	 o Welcome to GnuCash 2.3.0 the first of several unstable releases of
 	 the GnuCash Open Source Accounting Software which will eventually lead
 	 to the stable version 2.4.0. This release is the very first to use an
