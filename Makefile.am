@@ -153,7 +153,7 @@ distcheck-hook:
 			e='yes'; \
 		fi; \
 	done; \
-	for X in `grep -v \# ${distdir}/po/POTFILES.skip` ; do \
+	for X in `grep -v '\(^\#\|.scm\$\)' ${distdir}/po/POTFILES.skip` ; do \
 		if [ -f ${distdir}/$$X ] ; then \
 			echo $$X " is in POTFILES.skip but also in the dist.";\
 			e='yes'; \
