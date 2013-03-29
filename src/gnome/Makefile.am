@@ -82,6 +82,7 @@ noinst_HEADERS = \
   dialog-sx-editor.h \
   dialog-sx-from-trans.h \
   dialog-sx-since-last-run.h \
+  gnc-budget-view.h \
   gnc-plugin-account-tree.h \
   gnc-plugin-basic-commands.h \
   gnc-plugin-budget.h \

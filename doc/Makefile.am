@@ -14,7 +14,7 @@ doc_DATA = \
   guile-hackers.txt \
   projects.html 
 
-man_MANS = \
+dist_man_MANS = \
   gnucash.1 \
   gnc-fq-dump.1 \
   gnc-fq-helper.1 
