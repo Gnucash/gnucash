@@ -53,7 +53,7 @@ AM_CPPFLAGS = \
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.sql\"
 
 TEST_PROGS += test-sqlbe
-test_sqlbedir = ${top_srcdir}/${MODULEPATH}/test
+#test_sqlbedir = ${top_srcdir}/${MODULEPATH}/test
 
 noinst_PROGRAMS = $(TESTS) $(TEST_PROGS)
 
@@ -61,8 +61,8 @@ test_sqlbe_SOURCES = \
 	test-sqlbe.c \
 	utest-gnc-backend-sql.c
 
-test_sqlbe_HEADERS = \
-	$(top_srcdir)/$(MODULEPATH)/gnc-backend-sql.h
+#test_sqlbe_HEADERS = \
+#	$(top_srcdir)/$(MODULEPATH)/gnc-backend-sql.h
 
 test_sqlbe_LDADD = \
 	$(top_builddir)/$(MODULEPATH)/libgnc-backend-sql.la \

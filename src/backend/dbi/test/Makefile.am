@@ -46,7 +46,8 @@ TESTS_ENVIRONMENT = \
 
 EXTRA_DIST += \
     test-dbi-stuff.h \
-    test-dbi-business-stuff.h
+    test-dbi-business-stuff.h \
+    test-dbi.xml
 
 TEST_PROGS += \
     test-backend-dbi

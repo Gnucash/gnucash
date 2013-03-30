@@ -60,4 +60,7 @@ else
 	perl -pi.bak -e 's/" *$$/\n/' $@
 endif
 
-DISTCLEANFILES = gnucash.1 tip_of_the_day.list
+DISTCLEANFILES = \
+	gnucash.1 \
+	tip_of_the_day.list \
+	tip_of_the_day.list.bak

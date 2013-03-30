@@ -30,8 +30,12 @@ static void
 setup (Fixture *fixture, gconstpointer pData)
 {
     fixture->session = qof_session_new();
-    qof_session_begin( fixture->session, DBI_TEST_XML_FILENAME, FALSE,
-		       FALSE, FALSE );
+    /* When running distcheck the source directory is read-only, which
+     * prevents creating the lock file. Force the session to get
+     * around that.
+     */
+    qof_session_begin( fixture->session, DBI_TEST_XML_FILENAME, TRUE,
+		       FALSE, TRUE );
     g_assert_cmpint (qof_session_get_error (fixture->session), ==,
 		     ERR_BACKEND_NO_ERR);
     qof_session_load( fixture->session, NULL );
