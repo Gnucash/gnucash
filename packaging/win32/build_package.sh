@@ -74,6 +74,14 @@ if [ "$BUILD_FROM_TARBALL" = "no" ]; then
 else
   SETUP_FILENAME="gnucash-${PKG_VERSION}-setup.exe"
 fi
+if [ ! -d ${_OUTPUT_DIR} ] ; then
+    echo "Error: _OUTPUT_DIR=${_OUTPUT_DIR} does not exist" >> ${LOGFILE}
+fi
+if [ ! -f ${_GNUCASH_UDIR}/${SETUP_FILENAME} ] ; then
+    echo "Error: File _GNUCASH_UDIR/SETUP_FILENAME = ${_GNUCASH_UDIR}/${SETUP_FILENAME} does not exist" >> ${LOGFILE}
+    echo "Files in _GNUCASH_UDIR:" >> ${LOGFILE}
+    ls ${_GNUCASH_UDIR}/* >> ${LOGFILE}
+fi
 mv ${_GNUCASH_UDIR}/${SETUP_FILENAME} ${_OUTPUT_DIR}
 
 #
