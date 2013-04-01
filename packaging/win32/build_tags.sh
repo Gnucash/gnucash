@@ -60,15 +60,18 @@ for tag_rev in $tags ; do
   tagdir=${tagbasedir}/gnucash
   rm -fr $tagbasedir
   mkdir -p ${tagdir}
+  echo "Building tag $tag in $tagbasedir."
 
   # Copy the downloads to save time
   mkdir -p ${tagbasedir}/downloads
   cp -p $(unix_path ${DOWNLOAD_DIR})/* ${tagbasedir}/downloads
+  echo "Successfully copied the downloads dir to ${tagbasedir}/downloads"
 
   # Check out the tag and setup custom.sh
   svn co -q ${TAG_URL}/${tag} ${tagdir}/repos
   w32pkg=${tagdir}/repos/packaging/win32
   cp -p "${pkgdir}/custom.sh" ${w32pkg}/custom.sh
+  echo "Successfully checked out the sources"
 
   # Set the global directory to the tag build
   echo -n 'GLOBAL_DIR=c:\\soft\\gnucash-' >> ${w32pkg}/custom.sh
