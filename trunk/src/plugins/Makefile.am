@@ -1,0 +1,1 @@
+SUBDIRS=customer_import bi_import

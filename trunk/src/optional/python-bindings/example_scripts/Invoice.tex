@@ -1,0 +1,154 @@
+%---------------------------------------------------------------------------
+% Invoice.tex v0.1 by Christoph Holtermann (c.holtermann@gmx.de)
+%
+% modified from 
+% scrlttr2.tex v0.3. (c) by Juergen Fenn <juergen.fenn@gmx.de>
+% Template for a letter to be typeset with scrlttr2.cls from KOMA-Script.
+% Latest version of the LaTeX Project Public License is applicable. 
+% File may not be modified and redistributed under the same name 
+% without the author's prior consent.
+%---------------------------------------------------------------------------
+\documentclass%%
+%---------------------------------------------------------------------------
+  [fontsize=12pt,%%          Schriftgroesse
+%---------------------------------------------------------------------------
+% Satzspiegel
+   paper=a4,%%               Papierformat
+   enlargefirstpage=off,%%    Erste Seite anders
+   pagenumber=headright,%%   Seitenzahl oben mittig
+%---------------------------------------------------------------------------
+% Layout
+   headsepline=on,%%         Linie unter der Seitenzahl
+   parskip=half,%%           Abstand zwischen Absaetzen
+%---------------------------------------------------------------------------
+% Briefkopf und Anschrift
+   fromalign=right,%%        Platzierung des Briefkopfs
+   fromphone=on,%%           Telefonnummer im Absender
+   fromrule=off,%%           Linie im Absender (aftername, afteraddress)
+   fromfax=on,%%            Faxnummer
+   fromemail=on,%%           Emailadresse
+   fromurl=off,%%            Homepage
+   fromlogo=off,%%           Firmenlogo
+   addrfield=on,%%           Adressfeld fuer Fensterkuverts
+   backaddress=on,%%          ...und Absender im Fenster
+   subject=beforeopening,%%  Plazierung der Betreffzeile
+   locfield=narrow,%%        zusaetzliches Feld fuer Absender
+   foldmarks=on,%%           Faltmarken setzen
+   numericaldate=off,%%      Datum numerisch ausgeben
+   refline=narrow,%%         Geschaeftszeile im Satzspiegel
+%---------------------------------------------------------------------------
+% Formatierung
+   draft=off,%%              Entwurfsmodus
+   version=last,
+   data%%	     	     data.lco ist die Datei aus der die Rechnungsdaten gelesen werden ( invoice-data to be read from data.lco )
+]{scrlttr2}
+%---------------------------------------------------------------------------
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{eurosym}
+\usepackage{rechnung}
+\usepackage{textcomp}
+%---------------------------------------------------------------------------
+% Fonts
+\setkomafont{fromname}{\sffamily \LARGE}
+\setkomafont{fromaddress}{\sffamily}%% statt \small
+\setkomafont{pagenumber}{\sffamily}
+\setkomafont{subject}{\mdseries}
+\setkomafont{backaddress}{\mdseries}
+\usepackage{mathptmx}%% Schrift Times
+%\usepackage{mathpazo}%% Schrift Palatino
+%\setkomafont{fromname}{\LARGE}
+%---------------------------------------------------------------------------
+\begin{document}
+%---------------------------------------------------------------------------
+% Briefstil und Position des Briefkopfs
+\LoadLetterOption{DIN} %% oder: DINmtext, SN, SNleft, KOMAold.
+\makeatletter
+\@setplength{firstheadvpos}{20mm}
+\@setplength{firstheadwidth}{\paperwidth}
+\ifdim \useplength{toaddrhpos}>\z@
+  \@addtoplength[-2]{firstheadwidth}{\useplength{toaddrhpos}}
+\else
+  \@addtoplength[2]{firstheadwidth}{\useplength{toaddrhpos}}
+\fi
+\@setplength{foldmarkhpos}{6.5mm}
+%\setlength{\footskip}{1cm}
+\makeatother
+%---------------------------------------------------------------------------
+% Absender
+\setkomavar{fromname}{fromname}
+\setkomavar{fromaddress}{fromaddress}
+\setkomavar{fromphone}{fromphone}
+\renewcommand{\phonename}{Telefon}
+\setkomavar{fromfax}{fromfax}
+\setkomavar{fromemail}{fromemail}
+\setkomavar{backaddressseparator}{. }
+\setkomavar{signature}{(signature)}
+\setkomavar{frombank}{---NAME --- BANK ACCOUNT --- BANK NUMBER --- BANK NAME ---}
+\setkomavar{location}{\\[8ex]\raggedleft{\footnotesize{\usekomavar{fromaddress}\\
+	Telefon: \usekomavar{fromphone}\\Mobil: mobile-number\\Fax: \usekomavar{fromfax}\\\usekomavar{fromemail}}}}%% Neben dem Adressfenster
+%---------------------------------------------------------------------------
+\firsthead{}
+%---------------------------------------------------------------------------
+% Fußzeile
+\firstfoot{%
+	\parbox[b]{\linewidth}{%
+		\centering\def\\{, }\footnotesize\usekomavar{frombank}%
+	}%
+}%
+%---------------------------------------------------------------------------
+% Geschaeftszeilenfelder
+%\setkomavar{place}{Stadel}
+%\setkomavar{placeseparator}{, den }
+%\setkomavar{date}{\today}
+%\setkomavar{yourmail}{1. 1. 2003}%% 'Ihr Schreiben...'
+%\setkomavar{yourref} {abcdefg}%%    'Ihr Zeichen...'
+%\setkomavar{myref}{}%%      Unser Zeichen
+\setkomavar{invoice}{\usekomavar{rechnungsnummer}}%% Rechnungsnummer
+%\setkomavar{phoneseparator}{}
+
+%---------------------------------------------------------------------------
+% Versendungsart
+%\setkomavar{specialmail}{Einschreiben mit R�ckschein}
+%---------------------------------------------------------------------------
+% Anlage neu definieren
+\renewcommand{\enclname}{Anlage}
+\setkomavar{enclseparator}{: }
+%---------------------------------------------------------------------------
+% Seitenstil
+\pagestyle{plain}%% keine Header in der Kopfzeile
+%---------------------------------------------------------------------------
+% Rechnungsoptionen
+\Euro
+%---------------------------------------------------------------------------
+\begin{letter}{\usekomavar{toaddress2}}
+%---------------------------------------------------------------------------
+% Weitere Optionen
+\KOMAoptions{%%
+}
+%---------------------------------------------------------------------------
+%\setkomavar{subject}{Rechnungsnummer \usekomavar{rechnungsnummer}}
+%---------------------------------------------------------------------------
+\opening{Sehr geehrte Damen und Herren,}
+
+Ich erlaube mir, Ihnen folgende Beträge in Rechnung zu stellen:
+
+\begin{Rechnung}[N] %oder [N]
+\Steuersatz{0}{0}
+\usekomavar{entries}
+\end{Rechnung}
+
+Bitte zahlen Sie den Betrag von \Gesamtsumme \, bis zum \usekomavar{date_due} auf mein unten angegebenes Konto.
+
+\closing{Mit bestem Dank und freundlichen Grüßen,}
+%---------------------------------------------------------------------------
+%\ps{PS:}
+%\encl{}
+%\cc{}
+%---------------------------------------------------------------------------
+\end{letter}
+%---------------------------------------------------------------------------
+\end{document}
+%---------------------------------------------------------------------------

@@ -1,0 +1,10 @@
+Solaris hints:
+------------- 
+
+Provide the --with-included-gettext argument to configure:
+
+  ./configure --use-included-gettext
+
+Use GNU gmake to build:
+
+  gmake

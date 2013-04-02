@@ -1,0 +1,42 @@
+[Top]
+Guid = 617da3b6-21d8-4340-af07-6a4f38bdeb3f
+Title = Quicken(tm) Wallet Checks w/ side stub
+Rotation = 0.0
+Translation = 0.0;4.0
+Show_Grid = false
+Show_Boxes = false
+
+[Check Positions]
+Height = 204.0
+Names = Top;Middle;Bottom
+
+[Check Items]
+Type_1 = PAYEE
+Coords_1 = 231.0;64.0
+
+Type_2 = AMOUNT_WORDS
+Coords_2 = 195.0;79.0
+
+Type_3 = AMOUNT_NUMBER
+Blocking_Chars_3 = true
+Coords_3 = 518.0;67.0
+
+Type_4 = DATE
+Coords_4 = 504.0;53.0
+
+Type_5 = NOTES
+Coords_5 = 216.0;167.0
+
+# stub
+
+Type_6 = DATE
+Coords_6 = 36.0;53.0
+
+Type_7 = PAYEE
+Coords_7 = 26.0;78.0;150.0;12.0
+
+Type_8 = AMOUNT_NUMBER
+Coords_8 = 50.0;114.0
+
+Type_9 = NOTES
+Coords_9 = 28.0;139.0;150.0;12.0

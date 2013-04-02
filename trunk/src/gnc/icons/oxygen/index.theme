@@ -1,0 +1,35 @@
+[Icon Theme]
+Name=Oxygen
+
+Comment=Oxygen Team
+
+DisplayDepth=32
+
+Inherits=hicolor
+
+Example=folder
+
+LinkOverlay=link
+LockOverlay=lockoverlay
+ShareOverlay=share
+ZipOverlay=zip
+
+DesktopDefault=48
+DesktopSizes=16,22,32,48,64,128,256
+ToolbarDefault=22
+ToolbarSizes=16,22,32,48
+MainToolbarDefault=22
+MainToolbarSizes=16,22,32,48
+SmallDefault=16
+SmallSizes=16,22,32,48
+PanelDefault=32
+PanelSizes=16,22,32,48,64,128,256
+DialogDefault=32
+DialogSizes=16,22,32,48,64,128,256
+
+Directories=48x48/actions
+
+[48x48/actions]
+Size=48
+Context=Actions
+Type=Threshold

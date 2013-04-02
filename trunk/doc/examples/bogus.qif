@@ -1,0 +1,534 @@
+!Type:Cat
+NBonus
+DBonus Income
+T
+R7360
+I
+^^
+NCPP
+DCanadian Pension Plan
+T
+I
+^^
+NDiv Income
+DDividend Income
+T
+R4576
+I
+^^
+NGift Received
+DGift Received
+T
+I
+^^
+NInt Inc
+DInterest Income
+T
+R4592
+I
+^^
+NInvest Inc
+DInvestment Income
+T
+I
+^^
+NOld Age Pension
+DOld Age Pension
+T
+I
+^^
+NOther Inc
+DOther Income
+T
+I
+^^
+NRent Income
+DRent Income
+T
+R5216
+I
+^^
+NSalary
+DSalary Income
+T
+R7360
+I
+^^
+N_DivInc
+DDividend
+T
+R4576
+I
+^^
+N_IntInc
+DInvestment Interest Inc
+T
+R4592
+I
+^^
+N_LT CapGnDst
+DLong Term Cap Gain Dist
+T
+R7808
+I
+^^
+N_RlzdGain
+DRealized Gain/Loss
+T
+I
+^^
+N_ST CapGnDst
+DShort Term Cap Gain Dist
+T
+R4576
+I
+^^
+N_UnrlzdGain
+DUnrealized Gain/Loss
+I
+^^
+NAds
+DAdvertising
+T
+R4864
+E
+^^
+NAuto
+DAutomobile Expenses
+E
+^^
+NAuto:Fuel
+DAuto Fuel
+E
+^^
+NAuto:Loan
+DAuto Loan Payment
+E
+^^
+NAuto:Service
+DAuto Service
+E
+^^
+NBank Chrg
+DBank Charge
+E
+^^
+NBus. Insurance
+DInsurance (not health)
+T
+R4960
+E
+^^
+NBus. Utilities
+DWater, Gas, Electric
+T
+R5088
+E
+^^
+NBusiness Tax
+DTaxes & Licenses
+T
+R5056
+E
+^^
+NCar
+DCar & Truck
+T
+R4896
+E
+^^
+NCharity
+DCharitable Donations
+T
+R4480
+E
+^^
+NCharity:Cash
+DCash Contributions
+T
+R4480
+E
+^^
+NCharity:Non-Cash
+DNon-Cash Contributions
+T
+R7760
+E
+^^
+NChildcare
+DChildcare Expense
+E
+^^
+NChristmas
+DChristmas Expenses
+E
+^^
+NClothing
+DClothing
+E
+^^
+NCommission
+DCommissions
+T
+R4912
+E
+^^
+NDining
+DDining Out
+E
+^^
+NDues
+DDues
+E
+^^
+NEducation
+DEducation
+E
+^^
+NEntertain
+DEntertainment
+E
+^^
+NFreight
+DFreight
+T
+R4832
+E
+^^
+NGifts
+DGift Expenses
+T
+R4480
+E
+^^
+NGroceries
+DGroceries
+E
+^^
+NGST
+DGoods and Services Tax
+T
+E
+^^
+NHome Rpair
+DHome Repair & Maint.
+E
+^^
+NHousehold
+DHousehold Misc. Exp
+E
+^^
+NHousing
+DHousing
+E
+^^
+NInsurance
+DInsurance
+E
+^^
+NInt Exp
+DInterest Expense
+T
+E
+^^
+NInt Paid
+DInterest Paid
+T
+R4992
+E
+^^
+NInvest Exp
+DInvestment Expense
+T
+R4512
+E
+^^
+NL&P Fees
+DLegal & Prof. Fees
+T
+R4768
+E
+^^
+NMeals & Entertn
+DMeals & Entertainment
+T
+R4704
+E
+^^
+NMedical
+DMedical Expense
+T
+R4368
+E
+^^
+NMedical:Doctor
+DDoctor & Dental Visits
+T
+R7744
+E
+^^
+NMedical:Medicine
+DMedicine & Drugs
+T
+R4368
+E
+^^
+NMisc
+DMiscellaneous
+E
+^^
+NMort Int
+DMortgage Interest Exp
+T
+R4528
+E
+^^
+NOffice
+DOffice Expenses
+T
+R5008
+E
+^^
+NOther Exp
+DOther Expenses
+T
+E
+^^
+NPST
+DProvincial Sales Tax
+T
+E
+^^
+NRecreation
+DRecreation Expense
+E
+^^
+NRent on Equip
+DRent-Vehicle,mach,equip
+T
+R4784
+E
+^^
+NRent Paid
+DRent Paid
+T
+R4800
+E
+^^
+NRepairs
+DRepairs
+T
+R5040
+E
+^^
+NReturns
+DReturns & Allowances
+T
+R4736
+E
+^^
+NRRSP
+DReg Retirement Sav Plan
+E
+^^
+NSubscriptions
+DSubscriptions
+E
+^^
+NSupplies
+DSupplies
+E
+^^
+NSupplies, bus.
+DSupplies
+T
+R4816
+E
+^^
+NTax
+DTaxes
+T
+E
+^^
+NTax:Fed
+DFederal Tax
+T
+R7376
+E
+^^
+NTax:Medicare
+DMedicare Tax
+T
+R7680
+E
+^^
+NTax:Other
+DMisc. Taxes
+T
+E
+^^
+NTax:Prop
+DProperty Tax
+T
+R4416
+E
+^^
+NTax:Soc Sec
+DSoc Sec Tax
+T
+R7392
+E
+^^
+NTax:State
+DState Tax
+T
+R7424
+E
+^^
+NTax Spouse
+DSpouse's Taxes
+T
+E
+^^
+NTax Spouse:Fed
+DFederal Tax
+T
+R8112
+E
+^^
+NTax Spouse:Medicare
+DMedicare Tax
+T
+R8160
+E
+^^
+NTax Spouse:Soc Sec
+DSoc Sec Tax
+T
+R8128
+E
+^^
+NTax Spouse:State
+DState Tax
+T
+R8176
+E
+^^
+NTelephone
+DTelephone Expense
+E
+^^
+NTravel
+DTravel Expenses
+T
+R5072
+E
+^^
+NUIC
+DUnemploy. Ins. Commission
+T
+E
+^^
+NUtilities
+DWater, Gas, Electric
+E
+^^
+NUtilities:Gas & Electric
+DGas and Electricity
+E
+^^
+NUtilities:Water
+DWater
+E
+^^
+NWages
+DWages & Job Credits
+T
+R4752
+E
+^^
+N_Accrued Int
+DAccrued Interest
+T
+E
+^^
+N_IntExp
+DInvestment Interest Exp
+T
+R6816
+E
+^^
+!Option:AutoSwitch
+!Account
+Nbogus bank
+TBank
+Dbogus linux acct
+^^
+NABC Bank
+TInvst
+Dinvestment account
+^^
+!Clear:AutoSwitch
+!Account
+Nbogus bank
+Dbogus linux acct
+TBank
+^^
+!Type:Bank 
+D6/17/97
+T2,345.00
+NDEP
+Pfrom my pillow case
+Mmy memo
+LOther Inc
+^^
+D8/ 1/97
+T3,300.00
+NDEP
+Pput in more money
+Mthis came out of my pillowcas
+LOther Inc
+^^
+D8/ 1/97
+T543.00
+N101
+Ppaycheck
+Mthe boss paid me today!
+LGift Received
+^^
+D9/12/97
+T-5,000.00
+NTXFR
+Pmove a pile of money to trading acct
+Manother memo
+L[ABC Bank]
+^^
+D11/11/97
+T34.00
+NTXFR
+Phal stock
+Mincome
+L[ABC Bank]
+^^
+D11/11/97
+T12.00
+NTXFR
+Phal stock
+Mincome
+L[ABC Bank]
+^^
+D11/11/97
+T11.00
+NTXFR
+Phal stock
+Mincome
+L[ABC Bank]
+^^
+D11/12/97
+T500.00
+NTXFR
+Phal stock
+Msold some stockl
+L[ABC Bank]
+^^
+!Type:Memorized

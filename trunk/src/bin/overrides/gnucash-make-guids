@@ -1,0 +1,36 @@
+#!/bin/sh
+exec gnucash-env guile -s "$0" "$@"
+!#
+
+(define (usage)
+  (display "Usage: gnucash-make-guids [number-to-make (default is 100)]\n")
+  (exit 1))
+
+(define args (cdr (program-arguments)))
+(define num-to-make 100)
+
+;; Too many arguments
+(if (> (length args) 1)
+    (usage))
+
+(if (= (length args) 1)
+    (let ((arg (string->number (car args))))
+      (if (not (number? arg))
+          (usage))
+      (set! arg (inexact->exact arg))
+      (if (<= arg 0)
+          (usage))
+      (set! num-to-make arg)))
+
+(use-modules (gnucash gnc-module))
+(gnc:module-system-init)
+(gnc:module-load "gnucash/engine" 0)
+
+(let loop ((remaining num-to-make))
+  (display (guid-new-return)) (newline)
+  (if (> remaining 1)
+      (loop (- remaining 1))))
+
+;; Local Variables:
+;; mode: scheme
+;; End:

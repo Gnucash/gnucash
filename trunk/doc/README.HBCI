@@ -1,0 +1,206 @@
+README.HBCI
+-----------
+
+1. Introduction
+2. Requirements
+3. Quick Tour
+4. Known Banks
+5. Call for Feedback
+6. Known Problems
+7. Credits
+
+1. Introduction
+-----------
+
+Since the beta release 1.7.2, GnuCash features HBCI online banking
+support. This makes it the world's first *free* HBCI-enabled personal
+finance manager. 
+
+Many additional information about GnuCash and HBCI can be found in
+German language on http://linuxwiki.de/GnuCash,
+http://linuxwiki.de/AqBanking, and http://linuxwiki.de/OpenHBCI.
+
+HBCI (Home Banking Computer Interface) is a standard used by German
+banks for offering online banking service. Through this standard,
+business actions like statement retrieval, initiate bank transfer, or
+direct debits can be invoked by any HBCI-compliant client application,
+i.e. now also from GnuCash. Authentification and encryption is done
+through a bank-issued chip card or a self-generated file-based RSA key
+pair. (In the latter case, the user prints out his public key finger
+print on paper, signs it, and sends it to his bank.)
+
+Please note that the programmers of GnuCash cannot give warranties for
+anything. In particular, some banks are running a poorly implemented
+HBCI on their servers, which does not give you any proper feedback
+when a transfer order has been rejected and will not be
+executed. Please do not rely on time-critical money transfers through
+HBCI for now.
+
+2. Requirements
+------------
+
+See also http://linuxwiki.de/AqBanking
+
+Required packages:
+
+AqBanking 1.3.0, or any later version: Get aqbanking from
+http://sourceforge.net/projects/aqbanking . (Historical note:
+Until gnucash-1.8.9, the library "openhbci" had been used, but
+with gnucash-1.8.10, gnucash switched to the successor of openhbci
+which is aqbanking/aqhbci.) (Second historical note: The library
+versions aqbanking-1.2.x or older were split into multiple
+packages named "aqbanking" and "aqhbci", but with aqbanking-1.3.0
+and newer all of this is now packaged in the single aqbanking
+package.)
+
+which in turn requires: 
+
+Gwenhywfar 1.16.0, or any later version,
+http://sourceforge.net/projects/gwenhywfar, which in turn requires
+OpenSSL any 0.9.x, http://www.openssl.org .
+
+If you want chipcard support, you also need libchipcard version
+2.0.0 or later, http://sourceforge.net/projects/libchipcard
+
+(Note: Not all arbitrary version combinations between aqbanking
+and gwenhywfar will work! Only those versions that have been
+released on approximately the same date will work together without
+problems.)
+
+After aqbanking has been installed successfully, you can build
+GnuCash with:
+
+   ./configure --enable-hbci --with-aqbanking-prefix=/your/aqbanking/prefix 
+
+And you need to apply at your Bank to get HBCI access. The bank will 
+provide you with some paper work which is needed during HBCI setup in 
+GnuCash. (For problems during compile see 6. Known Problems below.)
+
+3. Quick Tour
+----------
+
+HBCI support is accessible through a few new menu items:
+
+* Setup: In the main window with the account hierarchy, the "Tools" menu 
+(German: "Werkzeuge") now contains the item "HBCI Setup" ("HBCI
+Einrichtung"). This menu item opens the HBCI Setup druid which
+will guide you through the setup. (Note: With the new
+aqbanking/aqhbci, the Setup druid is an external program provided
+by the aqhbci authors, but this will be explaning during the HBCI
+Setup druid.)
+
+   - Chip card users and PIN/TAN users will need to run this only
+     once. (see 6. Known Problems below if this doesn't work)
+
+   - Users with self-generated file-based keys need to run this
+     twice. First they will be guided to generate their keys and
+     have their Ini-Letter printed on paper, which they need to
+     send to their bank. After some days when the bank has
+     processed that letter, they need to run the HBCI Setup druid
+     a second time.
+
+   - Either way, eventually you are presented with a list of
+     HBCI-accessible accounts, and can choose which of your gnucash
+     account should be matched with each HBCI account.
+
+* Account functions: In the register window of your GnuCash accounts, 
+you now find the submenu item "Online Actions" ("Online Aktionen") in 
+the menu "Actions" ("Aktionen"). Each item in this submenu invokes a 
+particular HBCI action: "Get Balance", "Get Transactions", "New
+Transfer", "New Direct Debit" ("Saldenabfrage", "Abfrage
+Kontoumsätze", "Überweisung", "Lastschrift"). Of course those menu
+items will only do anything if that particular GnuCash account was
+matched to a HBCI account in the setup druid; otherwise, simply
+nothing will happen.  How to perform each action will be explained
+in the respective dialog windows.
+
+* Preference: By default, the user has to enter his password/PIN each 
+time a HBCI action is performed. If you prefer to have your password 
+cached in memory during your gnucash session, you can enable this by 
+activating the appropriate button in the Edit->Preference dialog
+("Bearbeiten->Einstellungen") in the tab "Online Banking &
+Importing".  Of course the password/PIN is *never ever* stored on
+disk anywhere due to security reasons.
+
+* HBCI Connection window preference: The HBCI Connection window can
+either disappear once the connection is closed, or it can still be
+left open so that you can read the bank's feedback messages about the
+order. The setting of this respective checkbox in the Connection
+window is remembered from session to session.
+
+* Debug Preference: If HBCI connectivity does not work the way you
+expected it to work, you can enable a whole lot of HBCI debugging
+output. First, on the "General" page of the preferences, activate the
+checkbox for "Show Advanced Setting". Then, on the newly appearing
+"Advanced" page, or on the "Online Banking & Importing" page,
+activate "HBCI Verbose Debug Messages" to get much more debugging
+output.
+
+4. Known Banks
+-----------
+
+Gnucash/AqBanking (or OpenHBCI) is successfully being used with:
+- Deutsche Bank
+- Kreissparkasse Hannover
+- Hamburger Sparkasse
+- Sparkasse Wilhelmshaven
+
+5. Call for Feedback
+-----------------
+
+If you encounter an error, you can report it in German language on
+gnucash-de@gnucash.org (Subscriber-only list; please subscribe on
+http://www.gnucash.org/cgi-bin/mailman/listinfo/gnucash-de ) and on on
+openhbci-general@lists.sf.net. Please remember to include the version
+numbers of gnucash and aqbanking as well as any console output and/or
+HBCI connection log (can be obtained through the HBCI Verbose Debug
+Messages preference mentioned above).
+
+Also, if you managed to successfully setup a bank that we don't have in 
+our list yet, please let us know as well. We appreciate any feedback on 
+this new functionality.
+
+6. Known Problems
+--------------
+
+* If the compilation of GnuCash fails with 'cc1: changing search order
+  for system directory ...' as one of the last message lines, then
+  call ./configure with the additional option
+  --enable-error-on-warning=no and recompile.
+
+* If you don't see the menu items mentioned above, then GnuCash was
+  not built/compiled with --enable-hbci. Please try to compile GnuCash
+  by yourself or contact the place where you got your pre-compiled
+  version of GnuCash from.
+
+* If you cannot select "Chip Card" as security medium, it means that
+  your installed version of the AqBanking library has been compiled
+  without chipcard support. You will need to recompile AqBanking while
+  libchipcard is installed, and then you (probably) need to recompile
+  GnuCash.
+
+* Currently each HBCI action can only be executed while you are
+  online; support for off-line preparation and queueing is not yet
+  implemented.
+
+If you think you can do better on any of these issues -- why not give it 
+a try and start coding on yet more HBCI features? Gnucash only requires 
+some C and Gtk/Gnome knowledge, and other developers in the IRC channel 
+#gnucash, irc.gnome.org, will always assist you with problems arising 
+during coding. You don't need to know anything about HBCI since OpenHBCI 
+will do everything for you. Also, I (Christian Stimming) will withdraw 
+from HBCI/Gnucash development due to personal/time constraints in the 
+medium term. So if you want more features, why don't *you* start coding 
+today? We definitely welcome any new developer who contributes even the 
+smallest improvements.
+
+7. Credits
+-------
+
+The excellent AqBanking/AqHBCI library is written by Martin Preuss
+<openhbci@aquamaniac.de> and Christian Stimming
+<stimming@tuhh.de>. Libchipcard is written by Martin Preuss
+<openhbci@aquamaniac.de>.
+
+By Christian Stimming <stimming@tuhh.de>
+May 10th, 2006

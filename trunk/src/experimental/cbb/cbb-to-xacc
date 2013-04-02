@@ -1,0 +1,264 @@
+#!/usr/bin/perl -w
+use strict;
+use English;
+use IO;
+
+push @INC, './cbb-engine/';
+use lib '../swig/perl5/';
+use gnucash;
+
+require "CBBlib.pl";
+require "CBBlib-auto.pl";
+require "common.pl";
+
+sub query_user {
+  my($out_stream, $in_stream, $prompt, $validation_regexp) = @_;
+  my $result;
+  my $old_rs = $$in_stream->input_record_separator();
+  my $old_oaf = $$out_stream->autoflush();
+  $$in_stream->input_record_separator("\n");
+  $$out_stream->autoflush(1);
+  
+  while(!$result) {
+    print $out_stream $prompt;
+    $result = <$in_stream>;
+    chomp $result;
+    if($result !~ /$validation_regexp/m) {
+      print $out_stream "Invalid response\n";
+      $result = undef;
+    }
+  }
+  $$in_stream->input_record_separator($old_rs);
+  $$out_stream->autoflush($old_oaf);
+  return $result;
+}
+
+sub split_date {
+  my($datestring) = @_;
+  if($datestring =~ /(\d\d\d\d)(\d\d)(\d\d)/o) {
+    return($1, $2, $3);
+  } else {
+    return ();
+  }
+}
+
+my %cash_account = ('cash' => 1
+                    );
+
+my %asset_account = ('nike' => 1,
+                     'loans-misc' => 1,
+                     'nike' => 1,
+                     'mom' => 1,
+                     'dad' => 1
+                     );
+
+sub create_accounts {
+  my($xdb, $cbbdb) = @_;
+  
+  my %accthash;
+ 
+  my $cbbacts = $cbbdb->get_accts();
+  map {
+    my $cbbacct = $_;
+    my $acct = gnucash::xaccMallocAccount();
+    
+    my $accname = $cbbacct->get_name();
+    gnucash::xaccAccountSetName($acct, $accname);
+    
+    if($cash_account{$accname}) {
+      gnucash::xaccAccountSetType($acct, $gnucash::CASH);
+    } elsif($asset_account{$accname}) {
+      gnucash::xaccAccountSetType($acct, $gnucash::ASSET);
+    } elsif($accname =~ /^cc-/o) {
+      gnucash::xaccAccountSetType($acct, $gnucash::CREDIT);
+    } else {
+      gnucash::xaccAccountSetType($acct, $gnucash::BANK);      
+    }
+    
+    my $val = $cbbacct->get_notes();
+    gnucash::xaccAccountSetDescription($acct, $val) if $val;
+
+    gnucash::insertAccount($xdb, $acct); 
+    $accthash{$cbbacct} = $acct;
+    $accthash{$acct} = $cbbacct;
+  } @$cbbacts;
+
+  my $cbbcats = $cbbdb->get_cats();
+
+  #my $cat_parent =  gnucash::xaccMallocAccount();
+  #gnucash::xaccAccountSetName($cat_parent, "Categories");
+
+  map {
+    my $cbbcat = $_;
+    my $cat = gnucash::xaccMallocAccount();
+
+    my $cbbname = $cbbcat->get_name();
+    gnucash::xaccAccountSetName($cat, $cbbname);
+
+    if($cbbname =~ /\A\((.*)\)\Z/o) {
+      gnucash::xaccAccountSetType($cat, $gnucash::INCOME);
+    } else {
+      gnucash::xaccAccountSetType($cat, $gnucash::EXPENSE);
+    }
+
+    my $val = $cbbcat->get_notes();
+    gnucash::xaccAccountSetDescription($cat, $val) if $val;
+
+    gnucash::insertAccount($xdb, $cat); 
+    #gnucash::xaccInsertSubAccount($cat_parent, $cat); 
+    $accthash{$cbbcat} = $cat;
+    $accthash{$cat} = $cbbcat;
+  } @$cbbcats;
+  
+  #gnucash::insertAccount($xdb, $cat_parent); 
+  return %accthash;
+}
+
+sub get_adjustment_acct {
+  my($xdb) = @_;
+  
+  my $adjustment_acct;
+  while(!$adjustment_acct) {
+    my $acct_name = query_user(\*STDOUT, \*STDIN, 
+
+"\nCBB allowed self-referent transactions (where the source and
+destination account are the same).  Xacc forbids this.  The
+alternative is to have an \"adjustments\" account, and use that as the
+destination.  Please enter a name for this account [adjustments]: ",
+
+                 '\w+');
+    
+    $adjustment_acct = gnucash::xaccGetAccountFromName($xdb, $acct_name);
+    
+    if($adjustment_acct) {
+      my $use_existing = query_user(\*STDOUT, \*STDIN,
+                                    "Account " . $acct_name .
+                                    " already exists, use it [y/n]? ",
+                                    '\A\s*([y]|[n])\s*\Z');
+      if($use_existing =~ /n/o) {
+        $adjustment_acct = undef;
+      }
+    } else {
+      $adjustment_acct = gnucash::xaccMallocAccount();
+      gnucash::xaccInitAccount($adjustment_acct);
+      gnucash::xaccAccountSetName($adjustment_acct, $acct_name);
+      gnucash::xaccAccountSetType($adjustment_acct, $gnucash::INCOME);
+      gnucash::insertAccount($xdb, $adjustment_acct); 
+    }
+  }
+  return($adjustment_acct);
+}
+
+sub map_cbb_status_to_xacc {
+  my($cbbstatus) = @_;
+  my $result;
+  if($cbbstatus eq ' ') {
+    $result = $gnucash::NREC;
+  } elsif($cbbstatus eq '') {
+    $result = $gnucash::NREC;
+  } elsif($cbbstatus eq '*') {
+    print STDERR "Demoting CBB status 'pending balance' to untouched\n"; 
+    $result = $gnucash::NREC;
+  } elsif($cbbstatus eq 'x') {
+    $result = $gnucash::CREC;
+  }
+  return $result;
+}
+
+
+sub migrate_transactions {
+  my($xdb, $cbbdb, $adjustment_acct, %accthash) = @_;
+  my $adjustment_acct_name = gnucash::xaccAccountGetName($adjustment_acct);
+
+  my $txns = $cbbdb->get_txns();
+  
+  map {
+    my $ctxn = $_;
+    my $xtxn = gnucash::xaccMallocTransaction();
+    
+    my($year, $month, $day) = split_date($ctxn->get_date());
+    
+    if(!$year) {
+      $ctxn->print(\*STDERR, "");
+      die "Bad date " . $ctxn->get_date();
+    }
+    
+    gnucash::xaccTransSetDate($xtxn, $day, $month, $year);
+    my $val;
+    $val = $ctxn->get_checkno();
+    gnucash::xaccTransSetNum($xtxn, $val) if $val;
+    $val = $ctxn->get_desc();
+    gnucash::xaccTransSetDescription($xtxn, $val) if $val;
+    
+    my $cbbstatus = $ctxn->get_status();
+    my $xstatus = map_cbb_status_to_xacc($cbbstatus);
+    if($xstatus) {
+      gnucash::xaccTransSetReconcile($xtxn, $xstatus);
+    } else {
+      print STDERR
+          "ERROR: Can't map CBB status field value $cbbstatus to Xacc.\n";
+      $ctxn->print(\*STDOUT, "");
+      exit(1);
+    }
+    
+    my $source_acc = $accthash{$ctxn->get_source()};
+    my $source_split = gnucash::xaccTransGetSourceSplit($xtxn);
+    gnucash::xaccAccountInsertSplit($source_acc, $source_split);
+    
+    my $cdest_splits = $ctxn->get_splits();
+    
+    my $total = 0;
+    my $num_splits = scalar(@$cdest_splits);
+    map {
+      my $csplit = $_;
+      my $xsplit = gnucash::xaccMallocSplit();
+      
+      $val = $csplit->get_notes();
+      gnucash::xaccSplitSetMemo($xsplit, $val) if $val;
+      
+      my $cbbstatus = $csplit->get_status();
+      my $xstatus = map_cbb_status_to_xacc($cbbstatus);
+      if($xstatus) {
+        gnucash::xaccSplitSetReconcile($xsplit, $xstatus);
+      } else {
+        print STDERR
+            "ERROR: Can't map CBB status field value $cbbstatus to Xacc.\n";
+        $ctxn->print(\*STDOUT, "");
+        exit(1);
+      }
+
+      my $debit = $csplit->get_debit();    
+      my $credit = $csplit->get_credit();    
+      $val = -($credit - $debit);
+      $total += $credit - $debit;
+      gnucash::xaccSplitSetValue($xsplit, $val) if $val;
+      
+      if($num_splits == 1 && $csplit->get_dest() == $ctxn->get_source()) {
+        print "self-referent " . $ctxn->get_source()->get_name() . 
+            " transaction converted to transfer from " . 
+                $adjustment_acct_name . "\n";   
+        gnucash::xaccAccountInsertSplit($adjustment_acct, $xsplit);
+      } else {
+        my $dest_acct = $accthash{$csplit->get_dest()};
+        gnucash::xaccAccountInsertSplit($dest_acct, $xsplit);
+      }
+      gnucash::xaccTransAppendSplit($xtxn, $xsplit);    
+    } @$cdest_splits;
+    gnucash::xaccSplitSetValue($source_split, $total);
+    
+  } @$txns;
+}
+
+my $filename = $ARGV[0];
+
+my $cbbdb = CBBlib::load_file($filename);
+my $xdb = gnucash::xaccMallocAccountGroup();
+
+my %accthash = create_accounts($xdb, $cbbdb);
+my $adjustment_acct = get_adjustment_acct($xdb);
+
+migrate_transactions($xdb, $cbbdb, $adjustment_acct, %accthash);
+
+gnucash::xaccWriteAccountGroup("foobar.xac", $xdb);
+
+__END__

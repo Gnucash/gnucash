@@ -1,0 +1,71 @@
+/* Stylesheet for taxinvoice.scm -- eguile-based Gnucash invoice report */
+/* Version 0.03 */
+
+/**
+;; (c) 2009 Chris Dennis chris@starsoftanalysis.co.uk
+;;
+;; $Author: chris $ $Date: 2009/07/23 10:41:58 $ $Revision: 1.25 $
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of the
+;; License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, write to the Free Software
+;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+;; 02111-1307 USA
+**/
+
+/* Note that body and table font family and size will be overridden */
+/* by separate report options.                                      */
+  div.main { 
+    margin: 2em;
+  }
+  table { /* table does not inherit font sizes for some reason */
+  }
+  table.entries {
+    border: none;
+    border-spacing: 0.1em; 
+    empty-cells: show;
+  }
+  table.entries th {
+    background: #ccc;
+    font-weight: bold;
+    padding: 0.2em 0.4em;
+  }
+  table.entries td {
+    padding: 0.2em 0.4em;
+  }
+  td.invnum {
+    font-size: 120%;
+    font-weight: bold;
+  }
+  td.subtotal {
+    font-weight: bold;
+  }
+  td.total {
+    font-size: 110%;
+    font-weight: bold;
+  }
+  table.coytable td, table.coytable tr {
+    vertical-align: top;
+  }
+  img.logo {
+    margin-right: 0.5em;
+  }
+  h1.coyname {
+    margin-top: 0em;
+    padding-top: 0em;
+    text-align: left;
+  }
+  h2.invoice {
+    padding-top: 0em;
+    margin-top: 0em;
+  }
+

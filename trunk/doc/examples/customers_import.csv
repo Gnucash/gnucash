@@ -1,0 +1,9 @@
+# This is a comment line
+# Good company has no ID and will be allocated one automajically
+,Good Company,Accounts Dept.,1 Rich drive,,,,,,,,,,,,,,,
+# Average company has an ID and will be used literally.  An already existing
+#company with the same ID will be UPDATED.  This may not be what you want!
+000099,Average Company,Accounts Dept,50 Poor Avenue,,,,,,,,,,,,,,,
+
+#Just another example after a blank line
+,"Bad Company",Accounts,99 Destutute street,,,,,,,,,,,,,,, 

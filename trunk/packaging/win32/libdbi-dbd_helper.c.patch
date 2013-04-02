@@ -1,0 +1,40 @@
+--- libdbi-0.8.3/src/dbd_helper.c.orig	Sun Sep 13 16:34:39 2009
++++ libdbi-0.8.3/src/dbd_helper.c	Sun Sep 13 16:35:02 2009
+@@ -145,7 +145,7 @@
+ 	return len;
+ }
+ 
+-void _dbd_internal_error_handler(dbi_conn_t *conn, const char *errmsg, const int errno) {
++void _dbd_internal_error_handler(dbi_conn_t *conn, const char *errmsg, const int err_no) {
+   int my_errno = DBI_ERROR_NONE;
+   int errstatus;
+   char *my_errmsg = NULL;
+@@ -154,7 +154,7 @@
+     free(conn->error_message);
+   }
+ 	
+-  if (errno == DBI_ERROR_DBD) {
++  if (err_no == DBI_ERROR_DBD) {
+     /* translate into a client-library specific error number */
+     errstatus = conn->driver->functions->geterror(conn, &my_errno, &my_errmsg);
+ 
+@@ -171,8 +171,8 @@
+     }
+   }
+   else if (errmsg) {
+-    conn->error_flag = errno; /* legacy code may rely on this */
+-    conn->error_number = errno;
++    conn->error_flag = err_no; /* legacy code may rely on this */
++    conn->error_number = err_no;
+     conn->error_message = strdup(errmsg);
+     
+     if (conn->error_handler != NULL) {
+@@ -181,7 +181,7 @@
+   }
+   else {
+     /* pass internal errors to the internal libdbi handler */
+-    _error_handler(conn, errno);
++    _error_handler(conn, err_no);
+   }
+ 
+ }

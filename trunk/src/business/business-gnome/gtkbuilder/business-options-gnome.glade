@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <object class="GtkWindow" id="dummy_toplevel">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkComboBox" id="taxtable_menu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="model">taxtable_store</property>
+        <child>
+          <object class="GtkCellRendererText" id="taxtable_cell_renderer_text"/>
+          <attributes>
+            <attribute name="text">0</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkListStore" id="taxtable_store">
+    <columns>
+      <!-- column-name taxtable_name -->
+      <column type="gchararray"/>
+      <!-- column-name taxtable_value -->
+      <column type="gpointer"/>
+    </columns>
+  </object>
+</interface>

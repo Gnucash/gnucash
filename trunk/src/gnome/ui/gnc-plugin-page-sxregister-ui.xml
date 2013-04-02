@@ -1,0 +1,54 @@
+<ui>
+  <menubar>
+    <menu name="Edit" action="EditAction">
+      <menuitem name="EditCut" action="EditCutAction"/>
+      <menuitem name="EditCopy" action="EditCopyAction"/>
+      <menuitem name="EditPaste" action="EditPasteAction"/>
+    </menu>
+
+    <menu name="Transaction" action="TransactionAction">
+      <menuitem name="CutTransaction"     	action="CutTransactionAction"/>
+      <menuitem name="CopyTransaction"    	action="CopyTransactionAction"/>
+      <menuitem name="PasteTransaction"   	action="PasteTransactionAction"/>
+      <menuitem name="DuplicateTransaction"    	action="DuplicateTransactionAction"/>
+      <menuitem name="DeleteTransaction"       	action="DeleteTransactionAction"/>
+      <menuitem name="RemoveTransactionSplits" 	action="RemoveTransactionSplitsAction"/>
+      <separator name="TransactionSep1"/>
+      <menuitem name="RecordTransaction"        action="RecordTransactionAction"/>
+      <menuitem name="CancelTransaction"        action="CancelTransactionAction"/>
+    </menu>
+
+    <menu name="View" action="ViewAction">
+      <placeholder name="ViewContentPlaceholder">
+        <menuitem name="ViewStyleDoubleLine"   	action="ViewStyleDoubleLineAction"/>
+      </placeholder>
+    </menu>
+
+    <menu name="Actions" action="ActionsAction">
+      <placeholder name="ActionsPlaceholder">
+        <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
+        <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
+        <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
+        <menuitem name="ScheduleTransaction"     action="ScheduleTransactionAction"/>
+        <menuitem name="JumpTransaction"         action="JumpTransactionAction"/>
+	<separator name="ActionsSep5"/>
+      </placeholder>
+    </menu>
+
+  </menubar>
+
+  <toolbar name="DefaultToolbar">
+    <placeholder name="DefaultToolbarPlaceholder">
+      <toolitem name="ToolbarDuplicateTransaction" action="DuplicateTransactionAction"/>
+      <toolitem name="ToolbarDeleteTransaction"    action="DeleteTransactionAction"/>
+      <separator name="ToolbarSep66"/>
+      <toolitem name="ToolbarRecordTransaction"    action="RecordTransactionAction"/>
+      <toolitem name="ToolbarCancelTransaction"    action="CancelTransactionAction"/>
+      <separator name="ToolbarSep67"/>
+      <toolitem name="ToolbarBlankTransaction"     action="BlankTransactionAction"/>
+      <toolitem name="ToolbarSplitTransaction"     action="SplitTransactionAction"/>
+      <toolitem name="ToolbarJumpTransaction"      action="JumpTransactionAction"/>
+      <toolitem name="ToolbarScheduleTransaction"  action="ScheduleTransactionAction"/>
+    </placeholder>
+  </toolbar>
+</ui>

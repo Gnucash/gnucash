@@ -1,0 +1,13 @@
+<ui>
+	<menubar>
+		<placeholder name="AdditionalMenusPlaceholder">
+			<menu name="Business" action="BusinessAction">
+				<placeholder name="BusinessPlaceholderBottom">
+					<menu name="ImportMenu" action="ImportMenuAction">
+						<menuitem name="customer_import" action="customer_importAction"/>
+					</menu>
+				</placeholder>
+			</menu>
+		</placeholder>
+	</menubar>
+</ui>

@@ -1,0 +1,20 @@
+
+This is a directory for playing around with gnome-guile for those of
+you who have it installed.  One of these days, it might be a suitable
+replacement for much of the exising gnome code, but for now it's just
+for exploration.
+
+If you're having trouble getting gnome-guile to run, and you've got it
+installed in a non-standard location.  Especially, if that location
+isn't the same as your guile install location, you may need any or all
+of these environment variables set.  The examples are for my current
+setup:
+
+  export LD_LIBRARY_PATH=/usr/local/opt/gnome
+  export PATH=/usr/local/opt/gnome/bin:${PATH}
+  export GUILE_LOAD_PATH=/usr/local/opt/gnome/share/guile
+
+The hello-world.scm and canvas-test.scm examples were taken from the
+upstream gnome-guile examples.
+
+

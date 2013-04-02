@@ -1,0 +1,198 @@
+/** \page qif QIF importer infrastructure.
+
+		    Derek Atkins <derek@ihtfp.com>
+			      2004-01-07
+
+		        A work in progress....
+
+API: \ref Import_Export
+
+\section qifintro 0. Introduction
+
+The existing qif importer in src/import-export/qif-import is both hard
+to maintain and hard to re-integrate into the shared import
+architecture.  Similarly, the half-completed re-write in qif-io-core
+is similarly hard to maintain (although it is arguably easier to
+integrate).  One problem with both of these solutions is that they are
+written in Scheme, a language that many gnucash developers just don't
+understand well.  Another issue is that the code is not commented and
+no documentation exists to help future developers track down bugs or
+extend the importer as QIF changes over time (c.f. Memorized
+Transaction import).
+
+As much as "complete rewrite" tends to be a lot of work for little
+gain, when few (if any) developers can understand the implementation
+well enough to make changes, a complete re-write may make sense.  This
+document is an attempt to describe the architecture of the new
+importer, implemented in C, and how it interfaces to the rest of the
+import infrastructure.
+
+
+\section qifarch 1. Importer Architecture
+
+The importer is a multi-step, staged system that should implement a
+read, parse, convert, combine, filter, finish process.  The importer
+starts with a clean import context and then each processing step
+modifies it as per the user's requirements.  A small set of APIs allow
+the user to progress along the processing steps (and an internal state
+machine makes sure the caller proceeds in the proper order).
+
+The importer is driven by the UI code; the importer itself is just a
+multi-stage worker.  The UI code calls each step in the process.  For
+long-running operations the UI can provide a callback mechanism for a
+progress bar of completion.
+
+Each stage of the import process may require some user input.  What
+input is required depends on the stage of the process and what the
+last stage returned.  In some cases stages can be skipped.  For
+example, during the conversion phase if the date format is unambigious
+then no user input would be required and the "ask for date format
+disamiguation" input can be skipped.
+
+QUESTION: How does the importer relate the processing state back to
+the UI?  Simiarly, how does it pass back specific disambiguating
+questions to ask the user (and how are those responses returned to the
+importer)?
+
+\section qifprocess 2. The Import Process
+
+The import process starts when the UI creates a new import context.
+All of a single import is performed within that context.  The context
+model allows multiple import processes to take place simultaneously.
+
+The first step in the import process is selecting the file (or files)
+to be imported.  The UI passes each filename to the importer which
+reads the file and performs a quick parse process to break the file
+down into its component QIF parts.  While the importer should allow
+the user to iteratively add more and more files to the import context,
+it should also allow the user to select multiple files at once
+(e.g. *.qif) to reduce the user workload.
+
+Each imported file may be a complete QIF file or it may be a single
+QIF account file.  In the latter case the UI needs to ask the user for
+the actual QIF account name for the file.  Similarly, each file may
+need user intervention to disambiguate various data, like the date or
+number formats.
+
+QUESTION: If the user provides multiple files at once and each file
+has internal ambiguities (e.g. the date format), should the user be
+asked for each file, or can we assume that all the files have the same
+format?  Perhaps the UI should allow the user to "make this choice for
+all files"?
+
+Once the user chooses all their files (they can also remove files
+during the process) the importer will combine the files into a common
+import, trying to match QIF accounts and transactions from different
+files.  Part of this is duplicate detection, because QIF only includes
+half a transaction (for any QIF transaction you only know the local
+account, not necessarily the "far" account).  If the importer sees
+multiple parts of the same transaction it can (and should) combine
+them into a single transaction, thereby pinning down the near and far
+accounts.
+
+The next series of steps maps QIF data objects to GnuCash data
+objects.  In particular, the importer needs the help of the UI to map
+unknown QIF Accounts and Categories to GnuCash Accounts (the latter to
+Income and Expense Accounts) and QIF Securities to GnuCash
+Commodities.  Finally the importer can use the generic transaction
+matcher to map the existing transactions to potential duplicates and
+also Payee/Memo fields to "destination accounts".
+
+At the end of this process the accounts, commodities, and transactions
+are merged into the existing account tree, and the import context is
+freed.
+
+
+\section qifobject 3. Importer Data Objects
+\verbatim
+QifContext
+QifError
+QifFile
+QifObject
+ +-QifAccount
+ +-QifCategory
+ +-QifClass
+ +-QifSecurity
+ +-QifTxn
+ +-QifInvstTxn
+\endverbatim
+
+\subsection qifinternal Internal Data Types
+
+QifHandler
+QifData
+
+\section qifapi 4. Importer API
+
+\subsection qifcontexts QIF Contexts
+\verbatim
+/** Create and destroy an import context */
+QifContext qif_context_create(void)
+void qif_context_destroy(QifContext ctx)
+
+/** return the list of QifFiles in the context. */
+GList *qif_context_get_files(QifContext ctx)
+
+/** merge all the files in the context up into the context, finding
+ * matched accounts and transactions, so everything is working off the
+ * same set of objects within the context.
+ */
+void qif_context_merge_files(QifContext ctx);
+\endverbatim
+
+\section qiffiles QIF Files
+\verbatim
+/**
+ * Open, read, and minimally parse the QIF file, filename.
+ * If progress is non-NULL, will call progress with pg_arg and a value from
+ *    0.0 to 1.0 that indicates the percentage of the file read and parsed.
+ * Returns the new QifFile or NULL if there was some failure during the process.
+ */
+QifFile qif_file_new(QifContext ctx, const char* filename,
+                     void(*progress)(gpointer, double), gpointer pg_arg)
+
+/** removes file from the list of active files in the import context. */
+void qif_file_remove(QifContext ctx, QifFile file)
+
+/** Return the filename of the QIF file */
+const char * qif_file_filename(QifFile file);
+
+/** Does a file need a default QIF account? */
+gboolean qif_file_needs_account(QifFile file);
+
+/** Provide a default QIF Account-name for the QIF File */
+void qif_file_set_default_account(QifFile file, const char *acct_name);
+
+/** Parse the qif file values; may require some callbacks to let the
+ *  user choose from ambigious data formats
+ *  XXX: Is there a better way to callback from here?
+ *       Do we need progress-bar info here?
+ */
+QifError qif_file_parse(QifFile ctx, gpointer ui_arg)
+\endverbatim
+
+\section qifstate 5. Importer State Machine
+
+The state machine has the following structure.  Named states (and substates)
+must proceed in order.  Some states (e.g. state b) have multiple choices.
+For example you could enter substates b1-b2, or you can run qif_file_remove.
+
+a. Create the context
+   - qif_context_create
+b. Add/Remove files to be imported
+   b1. Add file
+       - qif_file_new
+   b2. Parse the added file
+       - qif_file_parse
+         Note that this needs to callback into the ui to handle ambiguities
+   - qif_file_remove
+     If the user wants to remove some files from the import context
+   - repeat (b) as necessary until user choses to move to (c)
+c. Once all files are chosen, merge internally and continue the process
+   - qif_context_merge_files
+d. map qif accounts to gnucash accounts
+e. map qif categories to gnucash accounts
+f. map qif securities to gnucash commodities
+g. duplicate detection with existing gnucash txns
+h. transaction matcher (map one-sided txns using Payee/Memo info)
+*/

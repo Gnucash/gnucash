@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+     Italian translation for GnuCash
+     Copyright (C) 1998-2003 Free Software Foundation, Inc.
+     Lorenzo Cappelletti <lorenzo.cappelletti@email.com>, 2003.
+  -->
+<gnc-account-example>
+    <gnc-act:title>
+      Semplice libro conti
+    </gnc-act:title>
+    <gnc-act:short-description>
+     L'insieme minimale di conti per usare GnuCash.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+     Utile per tenere il saldo delle proprie entrate e uscite. Successivamente, se ce ne sarà bisogno, sarà possibile incominciare a tenerne traccia in modo più dettagliato.
+    </gnc-act:long-description>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Attività</act:name>
+  <act:id type="new">bde24bbbe01829aff3dac8d038e174cc</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Attività</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Attività correnti</act:name>
+  <act:id type="new">d90864ec1d660176244b05a0e43e621a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Attività correnti</act:description>
+  <act:parent type="new">bde24bbbe01829aff3dac8d038e174cc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Conto corrente</act:name>
+  <act:id type="new">ab2dc28552256b8d1ef4fdea4ba45717</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Conto corrente</act:description>
+  <act:parent type="new">d90864ec1d660176244b05a0e43e621a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Entrate</act:name>
+  <act:id type="new">e96c0691c219f5f55590e20fb9a3309b</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Entrate</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Uscite</act:name>
+  <act:id type="new">3b95fbbcc06ef20d61aa082b84938287</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Uscite</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">false</slot:value>
+    </slot>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string"></slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Capitali</act:name>
+  <act:id type="new">b8b72887da1adf889f171923d23efbdd</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Capitali</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bilanci d'apertura</act:name>
+  <act:id type="new">bdb4dd9be2b98f03a0b400036452232c</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Bilanci d'apertura</act:description>
+  <act:parent type="new">b8b72887da1adf889f171923d23efbdd</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

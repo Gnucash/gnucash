@@ -1,0 +1,74 @@
+[Top]
+Guid = 593b2f70-afe8-11e1-afa6-0800200c9a66
+Title = Quicken/QuickBooks (tm) US-Letter 3-part
+Rotation = 0.0
+Translation = 0.0;4.0
+Show_Grid = false
+Show_Boxes = false
+Font = Sans 10
+
+[Check Positions]
+Height = 252.0
+Names = Top;Middle;Bottom
+
+[Check Items]
+Type_1 = PAYEE
+Coords_1 = 90.0;102.0;400.0;20.0
+
+Type_2 = AMOUNT_WORDS
+Coords_2 = 90.0;132.0
+
+Type_3 = AMOUNT_NUMBER
+Blocking_Chars_3 = false
+Coords_3 = 500.0;102.0
+
+Type_4 = DATE
+Coords_4 = 500.0;67.0
+
+Type_5 = NOTES
+Coords_5 = 50.0;212.0
+
+Type_6 = ADDRESS
+Coords_6 = 90.0;192.0
+
+Type_7 = DATE
+Coords_7 = 50.0;273.0
+
+Type_8 = PAYEE
+Coords_8 = 124.0;273.0
+
+Type_9 = SPLITS_ACCOUNT
+Coords_9 = 229.0;427.0;250.0;150.0
+
+Type_10 = SPLITS_AMOUNT
+Coords_10 = 529.0;427.0;60.0;150.0
+Align_10 = right
+
+Type_11 = NOTES
+Coords_11 = 50.0;450.0
+
+Type_12 = AMOUNT_NUMBER
+Blocking_Chars_12 = false
+Coords_12 = 529.0;450.0;60.0;20.0
+Align_12 = right
+
+Type_13 = DATE
+Coords_13 = 50.0;523.0
+
+Type_14 = PAYEE
+Coords_14 = 124.0;523.0
+
+Type_15 = SPLITS_ACCOUNT
+Coords_15 = 229.0;677.0;250.0;150.0
+
+Type_16 = SPLITS_AMOUNT
+Coords_16 = 529.0;677.0;60.0;150.0
+Align_16 = right
+
+Type_17 = NOTES
+Coords_17 = 50.0;700.0
+
+Type_18 = AMOUNT_NUMBER
+Blocking_Chars_18 = false
+Coords_18 = 529.0;700.0;60.0;20.0
+Align_18 = right

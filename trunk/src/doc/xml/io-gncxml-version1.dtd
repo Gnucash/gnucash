@@ -1,0 +1,77 @@
+  <!ELEMENT gnc (version, defaults*, preferences*,
+                 ledger-data*, prices*, recurring-transactions*)>
+
+  <!-- top level elements -->
+  <!ELEMENT defaults ANY>
+  <!ELEMENT preferences ANY>
+  <!ELEMENT ledger-data (commodity*, account*, transaction*)>
+  <!ELEMENT prices ANY>
+  <!ELEMENT recurring-transactions ANY>
+
+
+  <!-- elements for ledger-data -->
+  <!ELEMENT version (#PCDATA)>
+  <!ELEMENT commodity (restore | new)>
+  <!-- used in two contexts.  As near toplevel account and as guid in -->
+  <!-- split for the account it's associated with -->
+  <!ELEMENT account ( #PCDATA | restore | new )*>
+  <!ELEMENT transaction (restore | new)>
+
+  <!ENTITY % commodity-restore
+            "( space, id, name, xcode?, fraction )">
+  <!ENTITY % account-restore
+            "( name, guid, type, currency, security?, slots?, parent? )">
+  <!ENTITY % transaction-restore
+            "( guid, num?, date-posted, date-entered, description?,
+             slots?, split+)">
+  <!ENTITY % combined-restores "%commodity-restore; | %account-restore; | %transaction-restore;">
+  <!ENTITY % commodity-type "(space, id)">
+  <!ENTITY % commodity-new "ANY">
+  <!ENTITY % account-new "ANY">
+  <!ENTITY % transaction-new "ANY">
+  <!ENTITY % combined-news "%commodity-new; | %account-new; | %transaction-new;">
+
+  <!ENTITY % slot-types
+            "string | integer | double | etc">
+  <!ELEMENT string (#PCDATA)>
+  <!ELEMENT integer (#PCDATA)>
+  <!ELEMENT double (#PCDATA)>
+  <!ELEMENT etc (#PCDATA)> <!-- placeholder for other slot types -->
+
+  <!ELEMENT parent (guid)>
+  <!ELEMENT space (#PCDATA)>
+  <!ELEMENT id (#PCDATA)>
+  <!ELEMENT name (#PCDATA)>
+  <!ELEMENT xcode (#PCDATA)>
+  <!ELEMENT fraction (#PCDATA)>
+
+  <!ELEMENT guid (#PCDATA)>
+  <!ELEMENT type (#PCDATA)>
+  <!ELEMENT security %commodity-type;>
+  <!ELEMENT currency %commodity-type;>
+  <!ELEMENT slots (s+)>
+
+  <!-- used in two contexts as item in slots list and as a date in -->
+  <!-- date-entered and date-posted. -->
+  <!ELEMENT s (#PCDATA | k | %slot-types;)+>
+
+  <!ELEMENT k (#PCDATA)>
+  <!ELEMENT num (#PCDATA)>
+  <!ELEMENT date-posted (s)>
+  <!ELEMENT ns (#PCDATA)>
+  <!ELEMENT date-entered (s, ns?)>
+
+  <!ELEMENT description (#PCDATA)>
+
+  <!ELEMENT split (guid, memo?, reconcile-state, reconcile-date?, value, quantity, account)>
+
+  <!ELEMENT reconcile-date (s)>
+
+  <!ELEMENT memo (#PCDATA)>
+  <!ELEMENT reconcile-state (#PCDATA)>
+  <!ELEMENT value (#PCDATA)>
+  <!ELEMENT quantity (#PCDATA)>
+
+  <!ELEMENT restore (%combined-restores;)>
+  <!ELEMENT new (%combined-news;)>
+

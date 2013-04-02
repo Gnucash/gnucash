@@ -1,0 +1,110 @@
+LEG22102001 - es_NI-policy.txt
+
+En este documento se describen las normas aplicadas al traducir los
+textos de GnuCash al idioma español
+
+Nota: El autor no es native speaker del español, ni especialista
+      contable.  Cualquier recomendación o corrección es muy
+      bienvenida.
+
+
+Onda:
+=====
+
+La onda es, crear una notación apta para pequeños negocios, de tal
+manera, que se puede usar en la vida comercial y fiscal.  Por lo tanto
+se prefiere términos oficiales/contables ante términos del habla
+común.
+
+La explicación de estos términos a una persona privada que quiere usar
+GnuCash es tarea de la documentación.
+
+
+Mayuscula/Menuscula:
+====================
+
+Se utiliza Mayuscula solamente al comienzo de frases y en las letras
+Shortcut de los menues.  Una palabra singular se considera una frase.
+
+Ejemplos:
+
++  "Nueva _Cuenta" es permitido
+
+-  "_Nueva Cuenta" NO es permitido sino tiene que escribirse:
+
++  "_Nueva cuenta"
+
++ "Abrir"
+
+
+Puntuación
+==========
+
+Normalmente se deja dos espacios después de la puntuación de frases.
+Ya que supongo que usamos fuentes proporcionales no se utiliza esta
+regla y solamente se inserta un (1) espacio.
+
+
+Diccionario
+===========
+
+Commodity	valores (plural)
+Stock		acción
+Income		ingreso
+Expense		egreso
+Asset		activo
+Liability	pasivo
+Price quote	cotización
+Reconcile	reconciliar
+Portfolio	cartera
+Parent account	cuenta superior
+
+Enter		ingresar
+Finish		terminar
+Delete		borrar
+Back		regresar
+Forward		avanzar
+
+Top-Level	primer plano
+
+Account Tree	jerarquía de cuentas
+GnuCash Network	Red GnuCash
+
+-- estoy buscando el término correcto para
+
+Equity		¿patrimonio? o equidad, lo último esta actualmente en
+		uso.
+
+Security	código de seguridad
+
+Share		partida
+
+Ticker symbol
+
+General Ledger
+Basic Ledger
+Journal
+
+Net Assets
+
+Cleared (a cheque)
+
+Nota: prefiereo "encontrar" bara "find" y "buscar" para "search", pero
+no ha sido esforzado.
+
+
+Género
+======
+
+Donde aplicable se utiliza los dos géneros al referirse a personas,
+usando la notación: el/la contador/a. Por razones de consistencia
+siempre el género femenino viene en segunda posición.
+
+
+
+Estatus
+=======
+
+No se ha hecho un rastreo para corregir desviaciones, sino se tratan
+de respectar al crear nuevas entradas y se corrigen al corregir
+traducciones incorrectas.

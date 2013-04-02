@@ -1,0 +1,6 @@
+
+(define gnc:version "@-VERSION-@")
+
+;; Automatically generated defaults (don't use these directly --
+;; they're used during actual initialization elsewhere)
+(define gnc:_install-doc-path_ '("@-GNC_HELPDIR-@"))

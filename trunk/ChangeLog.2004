@@ -1,0 +1,1535 @@
+-*- ChangeLog gnome-2-branch: top half of this file; HEAD branch: bottom half of this file
+
+2004-12-23  Derek Atkins  <derek@ihtfp.com>
+
+	Chris Shoemaker's patch to silence gtk errors in dialog-budget-category.c:
+	* we don't need to get our own account TreeModel and set it to our
+	  new account TreeView, because gnc_tree_view_account_new gives us
+	  a TreeView with the global account TreeModel already set.  Plus,
+	  it already has the right TreeModelSort interface, which we are
+	  counting on.
+	* check for NULL before trying to gtk_entry_set_text().
+
+2004-12-20  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's Double free bug in GncDenseCal:
+        * src/gnome-utils/gnc-dense-cal.c:
+          Remove double calls to gdc_free_all_mark_data
+          in object cleanup,
+
+	Stephen Evanchik's patch to Update scheduled transaction dialog:
+        * src/gnome/dialog-sx-from-trans.c:
+          - Removed per-button callbacks in favor of a
+            dialog response callback
+	  - Changed per-button callback functions to
+	    simple 'action' functions that are called
+	    in the response handler.
+          - Migrated away from gtk_signal_connect
+          - Removed references to GNOME 1.x dialog
+          - C Style changes: 'open curly brace on same line'
+          - Moved 'public' function gnc_sx_create_from_trans
+	    to the bottom of the file
+
+2004-12-19  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's Minor touch-ups to GNCCurrencyEdit:
+        * src/gnome-utils/gnc-currency-edit.c:
+          In gnc_currency_edit_get_type added 'const' keyword and
+          final NULL entry in currency_edit_info declaration
+
+          In gnc_currency_edit_new use g_type_class_ref and
+          GNC_TYPE_CURRENCY_EDIT macro; move gtk_type_new to
+          g_object_new
+
+	Stephen Evanchik's patch to remove references to gtk_type_new
+	in converted widgets:
+        * src/gnome-utils/gnc-date-edit.h:
+          Added GNC_TYPE_DATE_EDIT macro
+        * src/gnome-utils/gnc-general-select.h:
+          Added GNC_TYPE_GENERAL_SELECT macro
+        * src/gnome-utils/gnc-date-edit.c:
+        * src/gnome-utils/gnc-general-select.c:
+        * src/gnome-utils/gnc-dense-cal.c:
+          gtk_type_new -> g_object_new
+
+2004-12-18  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's GncDenseCal GObject patch:
+        * src/gnome-utils/gnc-dense-cal.h:
+          Added #include <glib.h>
+          Added private member 'disposed' to GncDenseCal struct
+          Added GNC_TYPE_DENSE_CAL macro
+        * src/gnome-utils/gnc-dense-cal.c:
+          Converted the following functions to use GObject:
+                gnc_dense_cal_get_type,
+                gnc_dense_cal_class_init
+          Renamed gnc_dense_cal_destroy to gnc_dense_cal_dispose
+
+2004-12-17  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's GNCDateEdit GObject patch:
+        * src/gnome-utils/gnc-date-edit.h:
+          Removed #include <gnome.h>
+          Added #include <glib.h>
+          Added private member 'disposed' to GNCDateEdit struct
+        * src/gnome-utils/gnc-date-edit.c:
+          Converted the following functions to use GObject:
+                gnc_date_edit_get_type,
+                gnc_date_edit_class_init
+          Renamed gnc_date_edit_destroy to gnc_date_edit_finalize
+          Added gnc_date_edit_dispose function that handles
+          child widget destruction
+          Explicit casts to GTK_WIDGET in create_children
+
+2004-12-16  Joshua Sled  <jsled@asynchronous.org>
+
+	Stephen Evanchik's GncGeneralSelect GObject cleanup patch:
+	* src/gnome-utils/gnc-general-select.h:
+          Removed #include <glib-object.h>
+          Added #include <glib.h>
+          Added private member 'disposed' to GNCGeneralSelect
+	* src/gnome-utils/gnc-general-select.c:
+          Converted the following functions to use GObject:
+                gnc_general_select_get_type,
+                gnc_general_select_class_init
+          Added gnc_general_select_dispose function that handles
+          child widget destruction
+
+2004-12-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-gnome/gnucash-item-edit.c
+	(create_popup_toggle): realize popup-arrow widget so it gets
+	displayed; correct tyop in "field" name.
+
+2004-12-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-gnome/gnucash-item-edit.c
+	(gnc_item_edit_set_cursor_pos): Re-add
+	text-selection-via-mouse-drag support [still buggy in multiple
+	ways; see GNOME2_STATUS for updates].
+
+	* GNOME2_STATUS: Update status.
+
+2004-12-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/business/business-gnome/business-gnome.scm
+	(business-report-function): Change business-report menu path for
+	reporting ui updates.
+
+2004-12-05  Derek Atkins  <derek@ihtfp.com>
+
+	New Account Dialog bug fix from Stephen Evanchik:
+	* src/gnome/glade/account.glade:
+	  - Made Accounts h-scroll box policy automatic.
+	  - Reordered the containing table to two rows, one column
+
+	* configure.in:
+	  change the version number to 1.99 to make it different than HEAD.
+
+2004-12-04  Derek Atkins  <derek@ihtfp.com>
+
+	Fix some deprecated functions:
+	* src/gnome-utils/gnc-gnome-utils.c:
+	  gnome_pixmap_new_from_file -> gtk_image_new_from_file
+	* src/business/business-gnome/dialog-date-close.c:
+	  gnome_pixmap_new_from_file -> gtk_image_new_from_file
+	  gnome_unconditional_pixmap_file -> gnome_program_locate_file
+	* src/business/business-gnome/dialog-invoice.c:
+	  gnome_unconditional_pixmap_file -> gnome_program_locate_file
+	  gnome_pixmap_load_file -> gtk_image_new_from_file
+
+2004-11-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/Makefile.am:
+	  Add DESTDIR to the install hooks
+	* src/gnome/gnc-plugin-page-account-tree.c: Fix spelling of "Account"
+
+2004-10-31  Derek Atkins  <derek@ihtfp.com>
+
+	Heath Martin's x86_64 patch:
+	* lib/egg/egg-menu-merge.c:
+	  change a gint to a gsize
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	  use GINT_TO_POINTER() instead of a direct cast.
+
+	* src/engine/gnc-budget-cat.c:
+	* src/gnome/dialog-budget-workbench.c:
+	  Fixes for ISO C90.  Fixes bug #153472.
+
+2004-08-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-budget*:
+	* src/gnome/*budget*:
+	* src/gnome/glade/budget.glade:
+	* src/gnome-utils/gnc-budget*:
+	  Darin Willits' initial budget code.  Still not fully functional
+	  but the basic UI is there.  See the GNOME2_STATUS for additional
+	  information.
+
+2004-07-20  Derek Atkins <derek@ihtfp.com>
+
+	* lib/egg/eggtoolbar.c
+	  Priit Laes' patch for C90 compliance (only the g2 portion).
+
+2004-07-06  David Hampton  <hampton@employees.org>
+
+	* various files: Merge in changes to HEAD from 2004-05-02
+	  (gnome2-merge-8) through yesterday (gnome2-merge-9).
+
+2004-06-13  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: add support for gtkhtml-3.1, remove src/experimental
+	* src/Makefile.am: remove experimental subtree
+	* src/app-file/gncmod-app-file.c: don't need gnc-mdi-utils.h
+	* src/gnome/gnc-window.c: register the gnc-mdi progress handler
+	* src/gnome-utils/gnc-mdi-utils.[ch]: add a progress handler
+	  that gets set by the gnc-window code (just like in gnc-file)
+	  to remove a circular dependency.
+
+2004-05-31  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_set_fwd_button),
+	(gnc_plugin_page_report_set_back_button): forw/back action sensitivity
+	(gnc_plugin_page_report_*_cb): Provide functional backing
+	[forw/back/reload/stop/export/options/print].
+
+2004-05-31  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report-ui.xml: Add
+	report UI decl.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_init),
+	(gnc_plugin_page_report_merge_actions),
+	(gnc_plugin_page_report_unmerge_actions): Create and [un]merge report
+	Actions + toolbar items on page-transitions.
+
+2004-05-31  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/top-level.c (gnc_html_register_url_cb): Modify to
+	handle hyperlinks better.
+
+	* src/engine/qofbook.c (qof_book_get_entity_by_guid): Add generic
+	GUID lookup [without entity-type being known] to handle historical
+	code.
+
+2004-05-30  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-mdi-utils.c (gnc_mdi_show_progress): Proxy
+	progress-display call through to gnc-window code.
+	(gnc_ui_get_toplevel): Re-implement gnc_ui_get_toplevel in a
+	less-correct but valid way.
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_create_widget): Set the top-level window
+	so progress-render calls work during report render-time.
+
+2004-05-24  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-new-user.c:
+	* src/gnome/gnc-embedded-window.c:
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome-utils/dialog-transfer.c:
+	* src/gnome-utils/gnc-query-list.c:
+	  Vitaly Lipatov's C-construct patch --
+	  During compiling CVS version of gnucash (tag gnucash-gnome2-dev)
+	  I have found some mistakes makes error with GCC compiler.
+
+	* lib/egg/Makefile.am: don't define *_DISABLE_DEPRECATED when
+	  building libegg.  It causes a build failure on FC2 with
+	  Gnome-2.6/Gtk-2.4 because some Gtk-2.2 functions have been
+	  deprecated.  Oops!
+
+2004-05-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_class_init): Add 'report_id'
+	object-property for page-c'tor.
+	(gnc_plugin_page_report_setup): Setup the page's report at creation time so
+	we can get the correct tab labels.
+
+	* src/gnome-utils/gnc-mdi-utils.c (gnc_mdi_show_progress): Weaken
+	assertion while code isn't fully changed over, yet.
+	(gnc_ui_get_toplevel): Comment out b0rken MDI-related code.
+
+2004-05-05  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/window-report.h: Comment interface with
+	recon about usage in the source tree.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c: Copy
+	window-report.c implementation over to here, rename, and get
+	somewhat working again. At this point, report-menu invocations
+	result in a tab being created, and displaying the error message.
+
+2004-05-05  David Hampton  <hampton@employees.org>
+
+	Fixes from Christian Neumair <chris@gnome-de.org>.
+
+	* src/gnome/dialog-new-user.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/glade/account.glade:
+	* src/gnome/glade/newuser.glade:
+	* src/gnome-utils/dialog-transfer.[ch]:
+	* src/gnome-utils/transfer.glade: HIGify several dialogs.
+
+2004-05-05  Derek Atkins  <derek@ihtfp.com>
+
+	* lib/egg/egg-menu-merge.c:
+	  we don't have a "ui" so dont notify ourself when merging.
+	* src/gnome-utils/gnc-menu-extensions.scm:
+	  Use empty strings instead of #f for menu items so we don't
+	  cause problems later where we expect to get an actual string.
+	* src/report/report-gnome/report-gnome.scm:
+	  Make sure we actually have a menu-path list!
+
+2004-05-03  David Hampton  <hampton@employees.org>
+
+	Fixes from Christian Neumair <chris@gnome-de.org>.
+
+	* src/gnome-search/search-date.c: Fix a crash.
+
+	* src/gnome-utils/gnc-tree-model-account.c: Fix memory leaks.
+
+	* src/register/register-gnome/gnucash-sheet.c: Fix popup menu.
+
+2004-05-02  David Hampton  <hampton@employees.org>
+
+	* various files: Merge in changes to HEAD from 2004-03-03
+	  (gnome2-merge-7) through today (gnome2-merge-8).
+
+	* src/business/business-core/Makefile.am:
+	* src/business/business-gnome/Makefile.am:
+	* src/import-export/binary-import/Makefile.am: Work around
+	  problems with libltdl3.
+
+	* src/import-export/hbci/druid-hbci-initial.c: Eliminate a couple
+	  of compiler warning messages.
+
+2004-05-02  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.[ch]: Plugin-Page
+	  for a report instance; yet to be finished.
+
+	* src/report/report-gnome/report-gnome.scm
+	  (gnc:add-report-template-menu-items): Update menu path
+	  constructors to have the correct gnome2-ui-merging menu path
+	  value.
+
+	* src/gnome-utils/gnc-menu-extensions.[ch]: Partially-completed
+	  changes for using the menu/UI merging code for setting up
+	  extensions menu.
+
+	* src/gnome-utils/gnc-html.[ch]: Revert gtkhtml2 changes; restoring
+	  gtkhtml1 version of the gnc-html.c code allows compatability
+	  with gtkhtml3.
+
+	* src/gnome/ui/gnc-main-window-ui.xml: Add testing MiscAction,
+	  MiscTestAction.
+
+	* src/gnome/gnc-main-window.c (gnc_main_window_cmd_test): Add test
+	  menu item for GtkHtml3-window display.
+	* src/gnome/gnc-main-window.c (gnc_main_window_setup_window): Add
+	  testing code to merge/display menu item, call the
+	  extensions_menu setup routine.
+
+	* configure.in (DB_LIBS): move from gtkhtml2 to gtkhtml3.
+
+	* lib/egg/egg-menu-merge.c (egg_menu_merge_add_ui):
+	  Merge egg_menu_merge_add_ui from gtk-2.4.0 GtkUIManager.
+
+2004-04-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc.h: add a comment about
+	  the callback functions.
+	* src/import-export/Makefile.am: remove duplicate files, add
+	  import format gnome provider.
+	* src/import-export/gnc-import-format-gnome.c: add a new format
+	  provider to let the user choose a date or numeric format.
+	* src/import-export/import-provider-format.glade:  glade file
+	  for the format provider
+
+	* src/import-export/Makefile.am: add missing header file to noinst list
+	* src/import-export/gnc-import-desc-format.[ch]: callbacks should
+	  take a GNCImportFormatCB*.
+	* src/import-export/gnc-import-format-gnome.c: fix a couple bugs.
+	  - make sure we only include available choices.
+	  - send the right callback.
+	* src/import-export/gncmod-generic-import.c: register the format provider
+	* src/import-export/qif-import/Makefile.am: include and link against
+	  generic import library (for test druid)
+	* src/import-export/qif-import/gnc-druid-test.c: add "format" provider
+	  to druid test
+
+2004-03-05  Tomas Cernaj  <tcernaj@gmx.de>
+
+	* src/register/register-gnome/gnucash-grid.c:
+	  Fix bug in the grid's update method: Called
+	  gnome_canvas_item_request_update() while updating.
+
+2004-03-04  Tomas Cernaj  <tcernaj@gmx.de>
+
+	* src/register/register-gnome/gnucash-cursor.c:
+	* src/register/register-gnome/gnucash-cursor.h:
+	* src/register/register-gnome/gnucash-grid.c:
+	* src/register/register-gnome/gnucash-grid.h:
+	* src/register/register-gnome/gnucash-header.h:
+	* src/register/register-gnome/gnucash-sheet.c:
+	* src/register/register-gnome/gnucash-sheet.h:
+	  Convert to new GType-/GObject-System.
+
+2004-02-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/Makefile.am: added new 'format' provider desc
+	* src/import-export/gnc-import-format-cb.[ch]:
+	  Callback object for the import format provider
+	* src/import-export/gnc-import-desc-format.[ch]:
+	  Descriptor for the Import Format Provider, used to choose
+	  Date and Number formats.
+
+2004-02-08  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc-file.c:
+	* src/app-utils/gnc-druid-provider-desc-multifile.c:
+	  don't need to cast to the superclass -- just use it directly
+	* src/gnome-utils/Makefile.am:
+	  add multifile sources and glade file
+	* src/gnome-utils/gnc-druid-provider-file-gnome.c:
+	  Call the next_cb with the proper argument (no clue why the compiler
+	  didn't catch this before)
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.[ch]:
+	* src/gnome-utils/druid-provider-multifile.glade:
+	  Added code and glade file to implement the multifile provider
+	* src/gnome-utils/gncmod-gnome-utils.c:
+	  Register the file and multifile providers
+	* src/import-export/qif-import/gnc-druid-test.c:
+	  Add the file and multifile providers to the druid test
+
+	* src/app-utils/gnc-druid-provider-desc-edge.c:
+	  don't need to cast to the cuperclass -- just use it directly.
+
+	* src/app-utils/gnc-druid-provider-desc/file.[ch]:
+	  add a history_id as a separate member for where to store
+	  file choice history
+	* src/gnome-utils/gnc-druid-provider-file-gnome.c:
+	  use new history_id member
+	* src/import-export/qif-import/gnc-druid-test.c:
+	  set file history_id
+
+	* src/gnome-utils/gnc-druid-gnome.c: remove debugging printfs
+
+	* src/app-utils/gnc-druid.[ch]:
+	  Make sure the jump code CAN allow a recursive jump originating
+	  and ending in the same provider.  Put a counter around the
+	  jump function to make sure we don't walk the tree while we're
+	  jumping.  This will let the last jump win correctly.
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.c
+	  handle prev-page properly by not allowing you to jump
+	  back while you have any files in the list.
+
+2004-02-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc-file.[ch]:
+	  Add 'glob' option (should we glob the filename?)
+	  Add a forward pointer to the multifile if we allow multiple file selection
+	* src/app-utils/gnc-druid-provider.c:
+	  Change the class functions so that children don't need to override
+	  all the page-movement functions if they don't need to do so.
+	* src/app-utils/gnc-druid.c:  handle jump_to_provider properly
+	* src/gnome-utils/Makefile.am: added file-chooser provider
+	* src/gnome-utils/gnc-druid-provider-edge-gnome.[ch]:
+	  use basic-gobject framework to reduce the code size
+	  remove non-necessary overrides
+	  remove non-ncessary definitions
+	* src/gnome-utils/gnc-druid-provider-file-gnome.[ch]:
+	  Add a new provider that allows the user to select a file.
+
+2004-01-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-*.[ch]:
+	  - move the remove_file() method from the MultiFile to the File Provider
+	  - add a returned gpointer this_file to the file provider callback.
+
+2004-01-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/Makefile.am:
+	  Add new multifile provider descriptor
+	* src/app-utils/gnc-druid-provider-desc-multifile.[ch]:
+	  New multi-file provider descriptor
+
+2004-01-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/Makefile.am:
+	  Add basic gobject header.
+	* src/app-utils/gnc-basic-gobject.h: provide some macros to
+	  simplify some general gobject creation, for example simple
+	  objects with just a get_type() and new() methods.
+	* src/app-utils/gnc-druid-cb.h:
+	  need to include gnc-druid-provider.h directly
+	* src/app-utils/gnc-druid-cb.c:
+	  implement in terms of the new gnc-gobject macros
+	* src/app-utils/gnc-druid-provider.c:
+	* src/app-utils/gnc-druid-provider-desc.c:
+	* src/app-utils/gnc-druid-provider-desc-edge.c:
+	  implement in terms of the new gnc-gobject macros
+	* src/app-utils/gnc-druid-provider-desc.h:
+	  re-add the various callback routines in terms of a new typedef
+	* src/app-utils/gnc-druid-provider.h:
+	  need to include gnc-druid-provider-desc.h directly
+	* src/import-export/Makefile.am:
+	  Add new files to implement the format-chooser provider framework.
+	* src/import-export/import-prov-desc-format.[ch]:
+	* src/import-export/import-prov-format-cb.[ch]:
+
+	* src/app-utils/Makefile.am:
+	  add new-file druid provider (and callback)
+	* src/app-utils/gnc-druid-provider-desc-file.[ch]:
+	  provider descriptor for enter-file provider
+	* src/app-utils/gnc-druid-provider-file-cb.[ch]:
+	  provider callback for enter-file provider
+
+2004-01-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc.h: add a pointer to the
+	  provider created from this descriptor.
+	* src/app-utils/gnc-druid-provider.c: set the provider pointer
+	  in the descriptor object.
+	* src/app-utils/gnc-druid.[ch]:
+	  - add pointer to the current provider list node.
+	  - add API to specifically jump to a particular provider
+	  - restructure code to reduce duplication
+	* src/import-export/import-parse.h: add GNCIF_NONE
+
+2004-01-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-druid-gnome.[ch]: move the next/prev signals to
+	  the pages.  Add a cancel callback to the pages (the druid's main
+	  cancel callback is never called).  Now we get our signals
+	  correct.  Save a reference to the window so we can destroy it..
+	  Use gtk_widget_destroy() instead of g_object_unref().
+	* src/import-export/qif-import/gnc-druid-test.[ch]: add some code
+	  to test the new druid framework.  Build's a test druid.
+	* src/import-export/qif-import/Makefile.am: build new test code
+	* src/import-export/qif-import/gnc-plugin-qif-import*: hook in
+	  the new druid test code; add a new menu item to test the druid.
+
+2004-01-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc-edge.[ch]: add api to
+	  build the provider-desc in one function.
+	* src/app-utils/gnc-druid-provider.[ch]: remove get_pages API;
+	  the sub-class should just insert the list of pages and let
+	  us deal with it.  Also added a last_page() method.
+	* src/app-utils/gnc-druid.c: make sure to delete the providers
+	  when we shut down.
+	* src/gnome-utils/gnc-druid-gnome*.h: move the definition of the
+	  gnome UI to a header that actually get's installed as opposed to
+	  an internal header.
+	* src/gnome-utils/gnc-druid-provider-edge-gnome.[ch]: Implement
+	  a gnome-druid edge-page (first/last page in the druid).  Probably
+	  still need to hook into the next/prev buttons.
+
+	* gnc-druid.[ch]: add gnc_druid_{next,prev}_page() APIs to choose the
+	  default next/previous page in the druid.  This will automatically
+	  walk through the providers to find the next real page.
+	* gnc-druid-gnome.c: hook in handlers for "next" and "back" signals
+	  for default page moves.  This should allow us to constantly keep
+	  track of the current provider.
+
+2004-01-13  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: pull in gobject with glib
+	* src/app-utils/Makefile.am: add the gnc-druid files
+	* src/app-utils/gnc-druid*: an abstract druid creation framework.
+
+	* src/app-utils/Makefile.am: add the edge provider description.
+	* src/app-utils/gnc-druid-provider-desc-edge.*: provider descriptor
+	  for edge pages (the first and last page of the druid).
+	* src/app-utils/gnc-druid*:
+	  - add class macros
+	  - add a title to the basic provider desc and clean it up.
+
+	* src/gnome-utils/Makefile.am: add preliminary gnome gnc-druid impl.
+	* src/gnome-utils/gnc-druid-gnome.[ch]:  gnome implementation of gnc-druid
+	* src/app-utils/gnc-druid*:
+	  - move the provider-building into the generic class and add an
+	    "append_provider" method to the druid class.  Use that when
+	    building the druid.
+	  - add a ui_type to the druid class and use that when building providers.
+
+	* src/app-utils/gnc-druid-provider.[ch]: add get_pages() class method.
+	  (I decided I don't need a special gnc-druid-provider-gnome just to
+	   add a get_pages method, as everything would need it anyways).
+	* src/gnome-utils/gnc-druid-gnome.c: use the get_pages() method
+	  to actually build the druid.
+
+	* src/gnome-utils/gncmod-gnome-utils.c: register the gnome-druid and
+	  edge provider.
+
+2004-01-06  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.
+	  Fix the actual problem, all the ...ReturnGUID() #define's which
+	  don't check that it's passed a NULL value.
+	* src/engine/Transaction.h:
+	* src/engine/Account.h:
+	  Fix ...ReturnGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+	* src/business/business-core/gncCustomer.h:
+	* src/business/business-core/gncEmployee.h:
+	* src/business/business-core/gncInvoice.h:
+	* src/business/business-core/gncJob.h:
+	* src/business/business-core/gncTaxTable.h:
+	* src/business/business-core/gncVendor.h:
+	  Fix ...RetGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+
+2004-01-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofinstance.c: return a "valid" GUID even if passed a NULL
+	  object, because lots of code assumes you can get a guid all the time.
+	  So, just return guid_null() instead of NULL.  Fixes a SEGV.
+
+-=-=-=- cvs gnome2 branch ChangeLog is above this line -=-=-=-
+
+
+2004-12-31  Derek Atkins  <derek@ihtfp.com>
+
+	John Ellson's patch to fix some gcc4 warnings (bug #162582).
+
+	Chris Shoemaker's gnc-trace patch.
+	* src/engine/gnc-trace.[ch]:
+	  - Recent use of malloc in gnc-trace breaks my compile, use g_malloc
+	  - Fix leak of filename mem
+	  - add indenting of trace file according to ENTER/LEAVE stack depth
+	  - have ENTER report file name of function along with function name
+
+	Chris Shoemaker's typo-fix patch.
+	* src/engine/qofbook.h:
+	* src/engine/qofid.h:
+	  general fixed typos and comments
+
+2004-12-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/tax/us/txf-de_DE.scm: Add Tax TXF categories for the de_DE
+	locale, i.e. the German tax report. If the current locale begins
+	with de_DE, the new German tax categories will be loaded,
+	otherwise the conventional U.S. ones. This is the easiest method
+	to allow other (non-U.S.) tax categories to be selected in the
+	accounts' tax settings.
+
+	* src/report/locale-specific/us/taxtxf-de_DE.scm: Add Tax report
+	for de_DE locale. If the current locale begins with de_DE, the new
+	German tax report will be loaded, otherwise the conventional
+	U.S. report.
+
+2004-12-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c (on_aqhbci_button):
+	Add extra sanity checks and verbose error message if the setup
+	wizard of aqhbci cannot be found.
+
+	* src/import-export/hbci/gncmod-hbci.c: Fix potentially missing
+	initialization of gwenhywfar library, as reported by Peter
+	O'Gorman on Max OS X.
+
+2004-12-17  Derek Atkins  <derek@ihtfp.com>
+
+	Rich Johnson's patch to include private structures in the doxygen docs
+	* src/doc/doxygen.cfg.in:
+	  extract local classes = yes
+	  don't exclude *P.h
+
+2004-12-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test/test-book-merge.c: targetEnt is always NULL
+	  during MERGE_NEW so don't test it in that case.
+
+2004-12-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/file/Makefile.am:
+	* src/backend/file/test/Makefile.am:
+	* src/business/business-core/file/Makefile.am:
+	  Need to include GNOME_XML_CFLAGS to make sure the libxml includes
+	  are found during the compile.  Fixes #121026.
+
+	* src/gnome/glade/register.glade:
+	  Increase "number" spin box to a maximum of 1billion.  Fixes #152772.
+
+	* src/business/business-core/gncInvoice.c:
+	  send an event when a payment is processed so the invoice gets
+	  updated as "paid" in the search window.
+	  Fixes #139092.
+
+	* src/business/business-gnome/dialog-vendor.c:
+	  Make sure we set the proper search-type when we create the
+	  query, otherwise the search will fail later.
+	  Fixes #141526.
+
+	* src/engine/test/test-numeric.c:
+	  Make sure we use gint64 instead of gint when trying to test
+	  values > 2^32.
+
+2004-12-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-ledger/Makefile.am: add explicit
+	  dependency on business-utils.
+
+	* src/engine/gnc-trace.c: Try a few different filenames for
+	  the trace log and if all else fails fall back to stderr.
+
+2004-11-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c
+	(gnc_import_find_split_matches): Improve importer performance by
+	matching imported transactions only against transactions in the
+	proper time interval.
+
+2004-11-22  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in, README: Add configure check for libofx version
+	0.7.0 and respective error message. Update docs. Fixes #159050
+
+2004-11-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-gnome/window-report.c,
+	src/scm/main-window.scm: Identified and fixed several places with
+	untranslated strings.
+
+2004-11-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/gnc-commodity.c, src/engine/iso-4217-currencies.scm:
+	Change currency mnemonic for "New Israeli Shekel" from "ILS" to
+	"NIS". Fixes #152755.
+
+2004-11-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/dialog-find-transactions.c: Mark search criteria for
+	translation -- somehow this had been missed all the time.
+
+2004-10-31  Derek Atkins  <derek@ihtfp.com>
+
+	* Neil Williams' QOF Book Merge Patch #2.
+
+	* src/engine/gnc-pricedb.c:
+	  Phil Longstaff's patch to prevent duplicate pricedb entries.
+
+	Heath Martin's x86_64 patch:
+	* macros/autogen.sh:
+	  change "head -1" to "head -n 1"
+	* src/engine/gnc-numeric.[ch]:
+	  change string_to_gnc_numeric() to return gboolean.
+	* src/app-utils/gnc-exp-parser.c:
+	* src/backend/file/sixtp-dom-parsers.c:
+	  use new string_to_gnc_numeric() API
+	* src/engine/gnc-lot.c:
+	  64-bit safe for x86_64
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/gnome/druid-loan.c:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/gnc-query-list.c:
+	* src/import-export/import-match-map.c:
+	  use GPOINTER_TO_INT and GINT_TO_POINTER macros to be 64-bit safe.
+
+	James Strandboge's "Easy Invoice" patch:
+	* src/business/business-reports/Makefile.am:
+	* src/business/business-reports/business-reports.scm:
+	* src/business/business-reports/easy-invoice.scm:
+	  add "easy invoice" code.
+	* src/business/business-utils/business-prefs.scm:
+	* src/business/business-utils/business-utils.scm:
+	  add preferences for the business ID, used in the easy invoice.
+	* src/report/stylesheets/Makefile.am:
+	* src/report/stylesheets/stylesheets.scm:
+	* src/report/stylesheets/stylesheet-easy.scm:
+	  add "easy stylesheet" code.
+
+	* src/engine/gw-engine-spec.scm:
+	  Fix parameter order to match C file (thanks for Erwin Rieger).
+
+2004-10-30  Christian Stimming  <stimming@tuhh.de>
+
+	* doc/README.HBCI: Updated HBCI readme.
+
+	* src/import-export/hbci/hbci-interaction.c: Fix problems with
+	user messages.
+
+2004-10-24  Benoit Grégoire <bock@step.polymtl.ca>
+	* po/fr.po:  Translation from Johan Buret, unfortunately on the wrong branch.
+
+2004-10-16  Derek Atkins  <derek@ihtfp.com>
+
+	* Neil Williams' QOF book merge patch #1:
+	  qof_book_merge - release 1.
+
+	  Includes
+	  qof_book_merge.c
+	  qof_book_merge.h
+	  test-book-merge.c test routine
+	  New Account Hierarchy druid
+	  Sundry adjustments to QOF support.
+	  Tweaks to several Makefile.am files to support new files.
+	  Tweaks to window-main.c to support new menu item
+	  Changes to druid-hierarchy.c to support the merge druid.
+
+2004-10-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.[ch]
+	* src/business/business-gnome/dialog-date-close.[ch]
+	* src/business/business-gnome/dialog-invoice.c
+	* src/business/business-gnome/glade/date-close.glade
+	* src/business/business-utils/business-prefs.scm
+	  Daniel Lindenaar's patch to implement a check-box in the Invoice Post
+	  Dialog (with a default in the File Preferences) to choose to accumulate
+	  splits when posting an invoice, or post a 1:1 mapping.
+
+2004-10-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-object.scm:
+	  provide a default account name so we don't crash when someone
+	  imports a broken QIF that has a !Account without an account name.
+	  Fixes bug #155244.
+
+2004-10-08  Derek Atkins  <derek@ihtfp.com>
+
+	* engine/gw-engine-spec.scm:
+	* gnome-search/dialog-search.h:
+	* report/report-gnome/dialog-column-view.h:
+	  Andreas Rottmann's patch to support g-wrap 1.9.
+	  - don't wrap non-existent objects
+	  - protect headers from multiple inclusion
+	  - include gtk.h header when we use gtk objects.
+
+2004-10-08  Benoit Grégoire <bock@step.polymtl.ca>
+       	* src/import-export/import-backend.c:  Duplicate match tweaks:
+               -Change MATCH_DATE_NOT_THRESHOLD from 3 weeks to two weeks
+               -A transaction amount mismatch past the threshold is now punished by -5 instead of -1
+               -Date mismatch is now worth -5 isntead of -10
+               -Check number mismatch is now punished -2, but only if both numbers are NOT empty.
+       	* src/import-export/ofx/gnc-ofx-import.c: Update for new LibOfx, this among other things, gives gnucash Microsoft OFC support.
+       	* src/import-export/ofx/test/test-link.cL Update for new LibOfx.
+       	* configure.in:  Partly update for new libofx.  It will crash if the right version isn't available, but there is no explicit version support (if someone wants to code it, you can use the output of "ofxdump --version".
+	* src/gnome-utils/gnc-query-list.c:  Fix gcc3.4 compile problem
+
+2004-09-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Fix HBCI balance
+	retrieval when some of the returned balance is NULL.
+
+2004-09-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofquerycore.c: Fix for x86_64.
+	* src/backend/file/io-gncbin-r.c: Fixes for x86_64
+
+2004-09-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c: Finally fix the HBCI
+	implementation based on aqbanking/aqhbci. This can now be tested
+	intensively.
+
+2004-09-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test/test-transaction-reversal.c:
+	* src/engine/test-core/test-engine-stuff.c:
+	  Fix for ISO C90.  Fixes #153465.
+
+2004-09-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c,
+	gnc-hbci-getbalance.c, gnc-hbci-gettrans.c: More AqBanking work
+	after hints from Martin Preuss <martin@libchipcard.de>.
+
+2004-09-04  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*.h, *.c, macros/aqbanking.m4,
+	configure.in: Major change for HBCI. It is no longer based on the
+	openhbci2 library but instead on the aqbanking library
+	http://sf.net/projects/aqbanking which is Martin Preuss' successor
+	of openhbci2. This means that now aqbanking-0.9.2 is required
+	instead of any of the openhbci[2] package. Still needs more
+	testing, though.
+
+2004-08-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Account.c: fix xaccAccountGetBalanceAsOfDate() to properly
+	  compute the balance at the end of the split list.  Fixes #150757.
+
+2004-08-21  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/advanced-portfolio.scm:
+	  Add option to include zero-amount splits in computations.
+	  Fixes #143722.
+
+2004-08-19  Derek Atkins  <derek@ihtfp.com>
+
+	Neil Williams's "QOF create: functionality added" patch:
+
+	QOF create: adding functions to be used with
+	qof_object_new_instance for new qof_book_merge objects, including
+	business objects.
+
+	Small documentation tweak to make QofEntity and QofParam
+	structures visible to doxygen.
+
+	* src/import-export/qif-import/qif-dialog-utils.scm:
+	  Perry Smith's Null Account Patch.  Make sure the security is
+	  a real string before appending an account separator, so we
+	  don't try to create a "null" account.
+
+2004-08-19  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: change the gtkhtml order to search for >= 1.1 before
+	  < 1.1, in order to try to fix #84707 on systems with multiple
+	  versions of gtkhtml.
+
+2004-08-12  David Montenegro  <sunrise2000@comcast.net>
+
+        * src/report/standard-reports/trial-balance.scm:
+	    src/report/standard-reports/equity-statement.scm:
+	    src/report/report-system/report-utilities.scm:
+	    Added to the work sheet special handling of
+	    inventory and income summary accounts for
+	    merchandising businesses.  Fixes #150008.
+
+2004-08-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/gnucash.desktop.in: make the desktop HIG compliant.
+	  Fixes #145545
+
+2004-07-20  Derek Atkins <derek@ihtfp.com>
+
+	* src/engine/Scrub.c
+	* src/engine/Scrub2.c
+	* src/engine/gnc-numeric.c
+	* src/engine/gnc-pricedb.c
+	* src/engine/kvp-util.c
+	* src/engine/qofid.c
+	* src/engine/qofmath128.c
+	* src/engine/qofquery.c
+	* src/engine/qofsession.c
+	* src/engine/test/test-numeric.c
+	  Priit Laes' patch for C90 compliance.
+
+2004-07-13  David Montenegro  <sunrise2000@comcast.net>
+
+        * src/report/standard-reports/general-ledger.scm:
+	  src/report/standard-reports/standard-reports.scm:
+          src/report/standard-reports/Makefile.am:
+          Added General Ledger report, a Transaction Report
+          with a pre-set set of options.
+
+	* src/report/standard-reports/transaction.scm:
+          FIXME - All accounts now selected by default, avoids
+          confusing error message. Error message also clarified.
+          Fixed "Totals" option so that it works.
+
+        * src/report/standard-reports/balance-sheet.scm:
+        * src/report/standard-reports/equity-statement.scm:
+        * src/report/standard-reports/trial-balance.scm:
+        Updated comments
+	* Fixes #144268
+
+        * src/report/standard-reports/income-statement.scm:
+          src/report/standard-reports/pnl.scm:
+          src/report/standard-reports/standard-reports.scm:
+          src/report/standard-reports/Makefile.am:
+          Rewrote pnl.scm, renamed it to income-statement.scm.
+          Can now create a meaningful statement post-closing.
+
+        * src/report/report-system/html-acct-table.scm:
+          Updated to include ability to "see through" closing
+          and/or adjusting entries.
+	* Fixes #105330.
+
+        * src/report/standard-reports/general-journal.scm:
+          src/report/standard-reports/standard-reports.scm:
+          src/report/standard-reports/Makefile.am:
+          Added General Journal report, a Register Report
+          with a pre-set set of options.
+	* Bug #109738.
+
+2004-07-13  David Montenegro  <sunrise2000@comcast.net>
+
+        * src/report/standard-reports/trial-balance.scm:
+        * src/report/standard-reports/standard-reports.scm:
+        * src/report/standard-reports/Makefile.am
+          added Trial Balance/Work Sheet report
+
+        * src/report/standard-reports/balance-sheet.scm:
+          added drop-down choices missing in previous version
+          added support for adjusting/closing entries
+
+        * src/report/standard-reports/equity-statement.scm:
+          added support for adjusting/closing entries
+          fixed "For Period Covering" label
+          fixed handling of unrealized gains
+          investment/draw discrimination based on shares sign
+          omit unrealized gains when zero
+
+        * src/report/report-system/html-acct-table.scm:
+        * src/report/report-system/html-table.scm:
+          null reference bug fixes
+
+        * src/report/report-system/report-utilities.scm:
+          added utility functions for accessing splits
+          and creating double-column balance HTML
+          gnc:double-col,
+          gnc:account-get-trans-type-balance-interval,
+          gnc:account-get-pos-trans-total-interval
+
+        * src/report/report-system/commodity-utilities.scm:
+        * src/report/report-system/html-acct-table.scm:
+        * src/report/report-system/report-utilities.scm:
+          moved gnc:commodity-collector-commodity-count and
+          gnc:uniform-commodity? into commodity-utilities.scm
+
+        * src/report/report-system/report-system.scm:
+          added some additional exports
+
+	Bug #144265
+
+2004-07-04  Derek Atkins  <derek@ihtfp.com>
+
+	* acinclude.m4: create a SCANF_QD_CHECK and make sure both
+	  that and SCANF_LLD_CHECK are "long long" constant-safe
+	* configure.in: use the new SCANF_QD_CHECK and use it
+	  earlier in the configuration.
+
+2004-07-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-print-check.c:
+	* src/gnome/glade/print.glade:
+	* src/scm/printing/print-check.scm:
+	  Apply David Reiser's patch for Quicken(tm) cheques with stub.
+
+	* src/engine/gnc-commodity.c:
+	  Apply David Grant's patch to add TD Efunds.  Fixes #145297.
+
+2004-06-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-gnome/window-report.c: Add toolbar element for
+	saving the current report.
+
+	* src/report/report-system/report.scm, report-system.scm: Add
+	function for saving one particular report to the
+	~/.gnucash/saved-reports-1.8 file. Add extra menu only for
+	customized reports.
+
+	* src/scm/main-window.scm, src/scm/main.scm: Remove the previous
+	function for saving all reports since it is no longer necessary.
+
+2004-06-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnc-module/gnc-module.scm: create (and export) a re-export macro
+	  is guile doesn't already provide one.  Then re-export the symbols
+	  instead of exporting them.  Fixes some deprecated guile warnings.
+	* src/guile-mappings.h: convert scm_gc_{un,}protect_object() back
+	  to its pre-1.6 type for earlier guiles, but upconvert to the new
+	  type to fix a deprecated warning.  Note that g-wrap is still
+	  outputting deprecated code.
+	* lots of other files:
+	  convert scm_{un,}protect_object -> scm_gc_{un,}protect_object because
+	  the former is now deprecated in guile.  Fixes a bunch of
+	  GUILE_WARN_DEPRECATED warnings (but probably not all of them).
+
+2004-06-25  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-numeric.c: small change to the 128-bit math
+	  routines to actually mark a 'carry bit' to denote numbers
+	  >= 2^63 to fix bug #144980.
+
+2004-06-24  Derek Atkins  <derek@ihtfp.com>
+
+	* Makefile.am: be sure to rebuild make-gnucash-patch and
+	  make-gnucash-potfiles when the Makefile changes (which means the
+	  PERL paths might have changed).
+	* src/scm/paths.scm: change the default config file to 1.9, so we
+	  don't screw up users of 1.8.
+
+2004-06-23  David Montenegro  <sunrise2000@comcast.net>
+
+	* src/report/report-system/html-acct-table.scm:
+	  Added file implementing gnc:html-acct-table utility
+	  object for easier creation of HTML reports.
+
+        * src/report/standard-reports/balance-sheet.scm:
+	  Updated to use the new gnc:html-acct-table object.
+	  Added many new options, including report/account
+	  form option.
+
+        * src/report/standard-reports/equity-statement.scm:
+	  Created Statement of Owner's Equity.
+	  (Unsure if correct exchange-fn's are being used.)
+
+        * src/report/report-system/commodity-utilities.scm:
+	* src/report/report-system/html-table.scm:
+	* src/report/report-system/html-utilities.scm:
+	* src/report/report-system/report-system.scm:
+	* src/report/report-system/report-utilities.scm:
+	  miscellaneous small additions and/or fixes
+	Fixes #144243.
+
+2004-06-18  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/main-window.scm, src/scm/main.scm: Added example Menu
+	item "File -> Save all reports" that will call the new report
+	saving function for all reports. Reports are appended to
+	~/.gnucash/saved-reports-1.8 . This would need more work so that
+	not all reports are saved but only the currently selected one --
+	any volunteer may feel free to add that.
+
+	* src/report/report-system/report.scm, report-system.scm: Added
+	gnc:report-generate-saved-forms that will generate the scheme code
+	necessary to create a new report from the saved options of an old
+	report (merged from 1-8-branch).
+
+2004-06-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/paths.scm: create gnc:current-saved-reports, as
+	  the file to store saved reports from cstim.  Autoload the
+	  saved-reports file at startup (after config.user/config.auto
+	  is loaded).
+	* src/scm/main.scm: export gnc:current-saved-reports
+
+2004-05-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c:
+	  Don't recompute balances or write to the translog when we're
+	  shutting down.  Destroy the parent transaction from xaccSplitDestroy()
+	  if we're shutting down.
+	* src/engine/qofbook-p.h:
+	* src/engine/qofbook.h:
+	* src/engine/qofbook.c:
+	  add "shutting_down" parameter and getter-method, so that
+	  objects can detect when the book is shutting down and
+	  ignore non-necessary reprocessing.  Fixes a memory corruption
+	  bug during book-closing.
+
+2004-05-24  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/transaction.cm: applied Vasil's
+	  patch to improve the transaction report for HTML export
+	  purposes.  Fixes bug #142942.
+
+	* src/gnome-search/dialog-search.c:
+	* src/gnome-search/gnc-general-search.c:
+	* src/gnome-utils/gnc-query-list.c:
+	  Linas missed a few QOF_QUERY_PARAM_GUID -> QOF_PARAM_GUID
+	  conversions.
+
+2004-05-17  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/locale-specific/us/taxtxf.scm: guile-1.6 complains
+	  about string->symbol when passed a symbol.  Fixes #131201
+	  Also add some code to handle accounts that are expected to
+	  have parents but do not (also described in #131201).
+
+2004-05-15  Derek Atkins  <derek@ihtfp.com>
+
+	* Luigi Ballabio's automake patch to gnucash.m4
+
+2004-05-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-match-map.c
+	(gnc_imap_add_account_bayes): Skip the case when a token is the
+	empty string. This caused many warnings about a NULL kvp_frame
+	lookup.
+
+2004-05-07  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-commodity.c: Added quote sources for Indian
+	Mutual Funds.
+
+2004-05-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/iso-currencies-to-c: don't automatically try to
+	  (require 'format), so gnucash will build on an slib-3 system.
+
+2004-05-02  David Hampton  <hampton@employees.org>
+
+	* src/business/business-core/Makefile.am:
+	* src/business/business-gnome/Makefile.am:
+	* src/import-export/binary-import/Makefile.am: Work around
+	problems with libltdl3.
+
+2004-04-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/Makefile.am: look in ${srcdir} for build-config.scm.in
+	  Fixes #141129
+
+2004-04-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/report-system/html-utilities.scm:
+	  Fix a broken recursion problem.  Don't call show-acct? from
+	  use-acct? so we don't recurse ad flictum.  This recursive
+	  call isn't necessary, just have use-acct? recurse unto itself.
+
+2004-04-19  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/balance-sheet.scm:
+	* src/report/standard-reports/pnl.scm:
+	  Fabien COELHO's zero-balance patch to remove accounts of
+	  zero balance from the report.
+
+2004-04-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c: fix a comment to better explain why
+	  we have no-op functions for some parameters.
+	* src/engine/qof*:  Revert Linas' patch from last night which
+	  is broken is way too many ways to count.  First, the code didn't
+	  compile.  Second it was calling functions that took one argument
+	  with two due to broken casting.  Third, it had repurcusions in
+	  other sections of the code that Linas needs to take into account.
+
+2004-05-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/macros/autogen.sh: Add MORE warnings around gettext because
+	  some users STILL don't "get it".
+
+2004-05-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/hbci/dialog-hbcitrans.c:  Don't use C++/C99
+	  declarations.  Declare variables at the top of the function.
+	  Fixes #140070
+
+2004-04-12  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/main.scm: Update for 1.8.9 release
+
+2004-04-05  Derek Atkins  <derek@ihtfp.com>
+
+	* macros/autogen.sh: make sure we always have intl and po Makefiles
+	  in the configure script.  Sometimes it was ripped out without being
+	  replaced.  Reported by twunder.
+
+	* src/engine/test/.cvsignore: ignore test-link in CVS.
+
+2004-04-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-scheduledxaction.c: Move variable declaration
+	  to the top of the block.
+
+2004-03-31  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: move m4/Makefile to its own line
+	* macros/autogen.sh: add code to remove "intl/Makefile po/Makefile"
+	  from AC_OUTPUT in configure.in prior to calling gettextize
+	  to make sure that you can build from CVS with recent versions
+	  of gettextize.  Tested with both RH9 and RH7.3 to make sure
+	  it works with both old and new.  Fixes #120206.
+
+	* accounts/hu_HU/Makefile.am: don't include files in the DIST that
+	  we don't have in CVS.
+
+2004-03-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/report-system/report-system.scm:
+	* src/report/utility-reports/iframe-url.scm:
+	  don't need to require format; main.scm handles it, and
+	  the default "format" (simple-format) is sufficient to
+	  handle everything we need.  This allows gnucash to work
+	  with slib3.
+
+2004-03-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/druid-loan.c (ld_get_loan_range): Fix precedence bug
+	screwing up loan review page.
+
+2004-03-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-core/formulacell.c
+	(gnc_formula_cell_modify_verify): Add ':' to the token list of
+	allowable characters in the formula cell. Fixes Bug#106260.
+
+2004-03-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/druid-loan.c (gnc_ui_sx_loan_druid_create): Use the
+	account-list filtering capability of the GncAccountSel to only
+	show/allow-creation-of valid account-types in the
+	loan-druid. Fixes Bug#124595.
+
+2004-03-13  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Bug#133709 fix: when we have a problem parsing a credit/debit
+	cell, indicate to the user what occurred.
+
+2004-03-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c, dialog-hbcitrans.h,
+	glade/hbci.glade, gnc-hbci-transfer.c: Transfer template management
+	GUI added by Bernd Wagner <F.J.Bernd.Wagner@t-online.de>
+
+2004-03-07  Joshua Sled  <jsled@asynchronous.org>
+
+	* HACKING: Added instructions about running under valgrind.
+
+	* lib/gnucash_valgrind.supp: Added a large set of valgrind
+	suppressions for both guile and gnucash.
+
+	* src/register/ledger-core/gnc-ledger-display.c
+	(gnc_ledger_display_template_gl): Change the reg_type to
+	SEARCH_LEDGER so all the 'action' types appear. Bug#108833.
+
+	* src/gnome/glade/sched-xact.glade: Remove unused 'ledger_status'
+	widget. Bug#102269.
+
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_draw_to_buffer):
+	At least be consistent about the background coloring of the month
+	labels, even if we're still not using GTK themeage correctly.
+
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_destroy): Destroy
+	the transient window when the widget is destroyed. Bug#103910.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(gnc_ui_scheduled_xaction_editor_dialog_create): Make the advance
+	and remind spin-buttons editable [Bug#94963].
+
+	* src/gnome/glade/sched-xact.glade: Change the upper bound on the
+	advance and remind spins to 365 [days], with a page-size of 30
+	[days].
+
+	* src/gnome/dialog-sx-from-trans.c (gnc_sx_create_from_trans):
+	Disallow the Scheduling of being-editing transactions in the
+	Register, preventing a class of unbalacned SX template
+	transactions from being entered and propogated through the
+	system. See Bug#130330.
+
+	* src/engine/FreqSpec.c (xaccFreqSpecGetFreqStr): Fix nasty
+	memory-corruption issue; insufficent bounds checking on array
+	index. Bug#125600.
+
+	* src/gnome/dialog-sxsincelast.c (create_each_transaction_helper):
+	Better handling of various error cases in
+        transaction-creation. Bug#102311; Bug#130330.
+
+2004-03-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-load.c: make the code a
+	  little cleaner by not re-using (and re-defining!) the same
+	  variable name inside a block of code and "over-riding" an
+	  existing variable.  Unlikely to actually fix anything, but
+	  you never know what a compiler might do.
+
+2004-03-01  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Fix for part of Bug#121740 -- only allow auto-create SXes which
+	have splits to be created.
+
+2004-02-07  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (editor_ok_button_clicked):
+	* src/gnome-utils/gnc-frequency.c (gnc_frequency_save_state):
+	* src/backend/file/gnc-freqspec-xml-v2.c (fs_none_handler):
+	* src/engine/FreqSpec.c (xaccFreqSpecGetFreqStr):
+	Adding "NONE" as an allowable FreqSpec [Bug#103968].
+
+2004-02-14  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Require the correct openhbci2 version. Add verbose
+	error message for the currently unavailable mt940 support.
+
+	* src/import-export/hbci/hbci-druid-initial.c, gnc-hbci-utils.c:
+	Finally finish openhbci2 support, phew. Requires
+	openhbci2-1.9beta7 from http://sourceforge.net/projects/openhbci
+
+2004-02-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncJob.c: Linas checked the wrong
+	  argument in SetOwner() in revision 1.40 thereby causing ALL new
+	  jobs to fail to work.  Check the new owner, not the original.
+	  Fixes #133392.
+
+2004-01-31  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/gnc-commodity.c, src/engine/iso-4217-currencies.scm:
+	Change Ukrainian "UAG" into "UAH" #128913
+
+	* src/import-export/import-backend.c: Commented out setting the
+	memo always to "Auto-created split" due to popular request.
+
+	* src/import-export/hbci/druid-hbci-initial.c, hbci-interaction.c,
+	all files: Preliminary completion of openhbci2 support -- getting
+	the transactions seems to work, as well as the HBCI setup.
+
+	* src/engine/kvp_frame.h, src/engine/Account.c: Add clear notice
+	of the semantic change of kvp_frame_get_frame
+	function. Fortunately it seems the only place that still had to be
+	fixed, apart from the hbci module, has been in Account.c.
+
+	* src/import-export/import-account-matcher.h: Make string argument
+	a const char*. Make boolean argument a gboolean.
+
+2004-01-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-layout.c:  Remove the
+	  RECN cell from payable/receivable to stop confusing people.
+
+2004-01-21  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Set application log
+	directory, needs more work.
+	* src/import-export/hbci/druid-hbci-utils.c:
+	More work for openhbci2 support.
+
+2004-01-20  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in, macros/openhbci2.m4: Add checking for new
+	openhbci2 library.
+
+	* src/import-export/hbci/ all files: Switch HBCI code to the new
+	openhbci2 library. Should be working, but needs further testing.
+
+2004-01-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/bin/overrides/gnucash-build-env.in: add import-export, ofx,
+	  and hbci which should allow running with ofx and hbci in the
+	  build tree.
+
+2004-01-19  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/gnome-utils/transfer.glade: rename from_xxx and to_xxx account
+	  tree widgets to left_xxx and right_xxx
+	* src/gnome-utils/dialog-transfer.c: if in "accountant mode" call
+	  "transfer from" "credit account" and "transfer to" "debit account"
+	  and interchange account trees
+
+2004-01-16  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: fix a typo in the help (was --diable-gui).  Fixes #131414
+
+	* configure.in: add db-4.2 to the list of databases we search.
+	  We probably need a better mechanism to search for a working db
+	  library, like defining our own macro and just supplying a list.
+	  We probably can get rid of the prefer-db1 option as well, maybe?
+	  Fixes #131506
+
+2004-01-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/options.scm: Create two new functions to centralize
+	  date-selection option creation.
+	* src/app-utils/app-utils.scm: export the new scheme functions
+	* src/app-utils/prefs.scm: Modify Herbert's patch to centralize
+	  the date-selection option code.
+	* src/report/report-system/options-utilities.scm: use the new
+	  centralized date-selection option-creation code.
+
+2004-01-13  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/app-utils/global-options.c:
+	* src/app-utils/global-options.h: add gnc_lookup_date_option()
+	  function
+	* src/app-utils/gnc-ui-util.c:
+	* src/app-utils/gnc-ui-util.h: add
+	  gnc_ui_account_get_balance_in_currency() function
+	* src/app-utils/prefs.scm: add preferences for summarybar
+	* src/engine/Account.c:
+	* src/engine/Account.h: add
+	  xaccAccountConvertBalanceToCurrencyAsOfDate() function
+	* src/gnome/window-main-summarybar.c: summarybar can now display
+	  a grand total of all commodities, profits of a period of time
+	  and net assets at the end of the period; summarybar can be
+	  configured with some options under edit->preferences
+
+2004-01-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c, gnc-hbci-utils.c: Add
+	workaround code for openhbci/chipcard problem.
+
+2004-01-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/file-utils.[ch]:  add gnc_getline() function
+	  to read an unlimited line-length from a file (so you're
+	  not limited to a buffer size with fgets() and the like).
+	  It is similar to the getline(3) on Linux except the API
+	  is different and it will always set the return string.
+
+	* src/doc/Makefile.am: add new documentation: generic-druid-framework.txt
+	* src/doc/generic-druid-framework.txt: new documentation
+
+	* src/import-export/csv/gnc-csv2glist.[ch]: add file from Kevin Hammack
+	  to parse CSV files.
+	* src/import-export/csv/test/test.csv:  a test CSV file
+
+2004-01-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.h: fix the xaccTransOrder() documentation
+	  to be more accurate with the actual implementation.
+
+	* src/doc/Makefile.am:
+	* src/doc/qif.txt:
+	  Add new qif importer documentation to the repository/dist
+
+2004-01-06  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.
+	  Fix the actual problem, all the ...ReturnGUID() #define's which
+	  don't check that it's passed a NULL value.
+	* src/engine/Transaction.h:
+	* src/engine/Account.h:
+	  Fix ...ReturnGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+	* src/business/business-core/gncCustomer.h:
+	* src/business/business-core/gncEmployee.h:
+	* src/business/business-core/gncInvoice.h:
+	* src/business/business-core/gncJob.h:
+	* src/business/business-core/gncTaxTable.h:
+	* src/business/business-core/gncVendor.h:
+	  Fix ...RetGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+
+	* README.cvs: make it even more explicit that you should not run configure
+	* src/engine/Makefile.am: remove the circular dependency I added earlier
+	* src/engine/gw-engine-spec.scm: don't include gnc-engine-util.h (it's
+	  not required and may break things).
+	* src/engine/gnc-trace.[ch]: move gnc_should_log() out of the .h
+	  and into the .c (making it a function instead of an array) due
+	  to symbol problems with libgw-engine.  With it the other way the
+	  test-account-create test was throwing an error about an
+	  undefined symbol (gnc_log_modules).
+	  NOTE: If you don't like this de-optimization then feel free to remove
+	  all the P*() calls from engine-helpers.c and then revert gnc-trace.
+	  Or you can find another way around the undefined symbol problem.
+	* src/doc/Makefile.am: include guid.txt in the dist
+
+2004-01-02  Derek Atkins  <derek@ihtfp.com>
+
+	* README.patches:
+	* make-gnucash-patch.in:
+	  Patch by Geoff Kassel to work on OpenBSD (allow user to set diffcmd)
+	Fixes #122646
+
+	* src/business/business-core/gncInvoice.c: need a non-const string
+	* src/engine/test/Makefile.am: add test-link, make libgw-engine
+	  depend on libgncmod-engine
+	* src/engine/test/test-link.c: add a source-file to test-link
+
+	* src/engine/test-core/test-engine-stuff.c: don't test double
+	  KVPs, on the theory that they will soon be deprecated.
+	Fixes #127315
+
+	* src/engine/test-core/test-engine-stuff.c: random queries only
+	  get up to 3 terms, not 4
+	* src/app-utils/test/test-scm-query-string.c: loop the test 1000
+	  times, now that the queries are smaller.
+	Fixes #127492
+
+	* src/business/business-core/gncInvoice.c: set the lot title to
+	  "<Invoice Type> <Invoice ID>" (e.g., "Invoice 000001" or
+	  "Bill I2-34") when posting an invoice.  We already assume
+	  one invoice to a lot.
+
+	* src/business/business-reports/aging.scm:  When computing the aging
+	  report, ignore splits that belong to closed lots.  This way we wont
+	  get the wrong values when the invoice falls outside the 360-day
+	  window but its payment falls inside the window.
+
+2004-01-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofinstance.c: return a "valid" GUID even if passed a NULL
+	  object, because lots of code assumes you can get a guid all the time.
+	  So, just return guid_null() instead of NULL.  Fixes a SEGV.
+
