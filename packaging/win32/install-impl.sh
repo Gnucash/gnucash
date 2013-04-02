@@ -506,7 +506,6 @@ function inst_gnome() {
         quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 &&
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo &&
-        quiet ${PKG_CONFIG} --atleast-version=${PIXMAN_VERSION} pixman-1 &&
         quiet ${PKG_CONFIG} --exact-version=${LIBXML2_VERSION} libxml-2.0 &&
         quiet intltoolize --version
     then
@@ -625,7 +624,6 @@ EOF
         quiet ${PKG_CONFIG} --atleast-version=${GCONF_VERSION} gconf-2.0 || die "gnome not installed correctly: no gconf-2.0 with atleast-version=${GCONF_VERSION}"
         quiet ${PKG_CONFIG} --atleast-version=${GTK_VERSION} gtk+-2.0 || die "gnome not installed correctly: no gtk+-2.0 with atleast-version=${GTK_VERSION}"
         quiet ${PKG_CONFIG} --atleast-version=${CAIRO_VERSION} cairo || die "gnome not installed correctly: no cairo with atleast-version=${CAIRO_VERSION}"
-        quiet ${PKG_CONFIG} --atleast-version=${PIXMAN_VERSION} pixman-1 || die "gnome not installed correctly: no pixman-1 with atleast-version=${PIXMAN_VERSION}"
         quiet ${PKG_CONFIG} --exact-version=${LIBXML2_VERSION} libxml-2.0 || die "gnome not installed correctly: no libxml-2.0 with exact-version=${LIBXML2_VERSION}"
         quiet intltoolize --version || die "gnome not installed correctly: no intltoolize"
     fi
