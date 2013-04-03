@@ -1008,13 +1008,15 @@ function inst_libgsf() {
                 --prefix=$_LIBGSF_UDIR \
                 --disable-static \
                 --without-python \
+                --with-gnome-vfs \
                 CPPFLAGS="${GNOME_CPPFLAGS}" \
                 LDFLAGS="${GNOME_LDFLAGS}"
             make
             rm -rf ${_LIBGSF_UDIR}
             make install
         qpopd
-        ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
+        ${PKG_CONFIG} --exists libgsf-1 || die "libgsf not installed correctly: No libgsf-1"
+        ${PKG_CONFIG} --exists libgsf-gnome-1 || die "libgsf not installed correctly: No libgsf-gnome-1"
     fi
 }
 
