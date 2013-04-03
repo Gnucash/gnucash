@@ -995,7 +995,7 @@ function inst_libgsf() {
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     add_to_env $_LIBGSF_UDIR/bin PATH
     add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 &&
+    if quiet ${PKG_CONFIG} --exists libgsf-1 &&
         quiet ${PKG_CONFIG} --atleast-version=${LIBGSF_VERSION} libgsf-1
     then
         echo "libgsf already installed in $_LIBGSF_UDIR.  skipping."
@@ -1008,7 +1008,6 @@ function inst_libgsf() {
                 --prefix=$_LIBGSF_UDIR \
                 --disable-static \
                 --without-python \
-                --with-gnome-vfs \
                 CPPFLAGS="${GNOME_CPPFLAGS}" \
                 LDFLAGS="${GNOME_LDFLAGS}"
             make
@@ -1016,7 +1015,7 @@ function inst_libgsf() {
             make install
         qpopd
         ${PKG_CONFIG} --exists libgsf-1 || die "libgsf not installed correctly: No libgsf-1"
-        ${PKG_CONFIG} --exists libgsf-gnome-1 || die "libgsf not installed correctly: No libgsf-gnome-1"
+        #${PKG_CONFIG} --exists libgsf-gnome-1 || die "libgsf not installed correctly: No libgsf-gnome-1"
     fi
 }
 
