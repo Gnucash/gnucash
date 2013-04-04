@@ -284,7 +284,7 @@ set_default PCRE_BIN_URL "$SF_MIRROR/gnuwin32/pcre-7.0-bin.zip"
 set_default PCRE_LIB_URL "$SF_MIRROR/gnuwin32/pcre-7.0-lib.zip"
 set_default PCRE_DIR $GLOBAL_DIR\\pcre
 
-LIBGSF_VERSION="1.14.26"
+LIBGSF_VERSION="1.14.21"
 set_default LIBGSF_URL "$GNOME_MIRROR/sources/libgsf/1.14/libgsf-${LIBGSF_VERSION}.tar.bz2"
 set_default LIBGSF_DIR $GLOBAL_DIR\\libgsf
 
