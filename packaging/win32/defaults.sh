@@ -211,13 +211,13 @@ set_default EXETYPE_SCRIPT `pwd`/exetype.pl
 set_default EXETYPE_DIR $TOOLS_DIR
 
 XMLSOFT_URL="http://xmlsoft.org/sources/win32"
-XSLT_BASE_URL="http://ftp.acc.umu.se/pub/GNOME/sources/libxslt/1.1"
+#XSLT_BASE_URL="http://ftp.acc.umu.se/pub/GNOME/sources/libxslt/1.1"
 XML2_BASE_URL="ftp://xmlsoft.org/libxml2"
-LIBXSLT_VERSION="1.1.22"
+LIBXSLT_VERSION="1.1.28"
 #LIBXSLT_VERSION=1.1.26
-set_default LIBXSLT_SRC_URL "${XSLT_BASE_URL}/libxslt-${LIBXSLT_VERSION}.tar.bz2"
-set_default LIBXSLT_MAKEFILE_PATCH "`pwd`/libxslt-1.1.22.Makefile.in.patch"
-LIBXML2_VERSION="2.7.7"
+set_default LIBXSLT_SRC_URL "${XML2_BASE_URL}/libxslt-${LIBXSLT_VERSION}.tar.gz"
+#set_default LIBXSLT_MAKEFILE_PATCH "`pwd`/libxslt-1.1.22.Makefile.in.patch"
+LIBXML2_VERSION="2.9.0"
 set_default LIBXML2_SRC_URL "${XML2_BASE_URL}/libxml2-${LIBXML2_VERSION}.tar.gz"
 set_default LIBXSLT_ICONV_URL "${XMLSOFT_URL}/iconv-1.9.2.win32.zip"
 set_default LIBXSLT_ZLIB_URL "${XMLSOFT_URL}/zlib-1.2.3.win32.zip"
@@ -288,7 +288,7 @@ LIBGSF_VERSION="1.14.21"
 set_default LIBGSF_URL "$GNOME_MIRROR/sources/libgsf/1.14/libgsf-${LIBGSF_VERSION}.tar.bz2"
 set_default LIBGSF_DIR $GLOBAL_DIR\\libgsf
 
-GOFFICE_VERSION="0.8.13"
+GOFFICE_VERSION="0.8.17"
 set_default GOFFICE_URL "$GNOME_MIRROR/sources/goffice/0.8/goffice-${GOFFICE_VERSION}.tar.bz2"
 set_default GOFFICE_DIR $GLOBAL_DIR\\goffice
 #set_default GOFFICE_PATCH `pwd`/goffice-x.x.x.patch
