@@ -706,8 +706,6 @@ gnc_tree_control_split_reg_jump_to_blank (GncTreeViewSplitReg *view)
 
     spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
 
-    gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), spath);
-
     /* Set cursor to new spath */
     gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, NULL, FALSE);
 
@@ -737,8 +735,6 @@ gnc_tree_control_split_reg_jump_to (GncTreeViewSplitReg *view, Transaction *tran
 
     if (split)
         gnc_tree_view_split_reg_expand_trans (view, xaccSplitGetParent (split));
-
-    gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), spath);
 
     /* Set cursor to new spath, if amount, cursor is set to correct column ready for editing */
     if (amount)
@@ -866,13 +862,11 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
     if (relative != 0)
         gnc_tree_view_split_reg_block_selection (view, FALSE);
 
-    gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), new_spath);
+    /* Set cursor to new spath */
+    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), new_spath, NULL, FALSE);
 
     if (relative == 0)
         gnc_tree_view_split_reg_block_selection (view, FALSE);
-
-    /* Set cursor to new spath */
-    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), new_spath, NULL, FALSE);
 
     LEAVE("new_spath is %s", gtk_tree_path_to_string (new_spath));
 

@@ -127,10 +127,6 @@ Split * gnc_tree_view_split_reg_get_current_split (GncTreeViewSplitReg *view);
 
 Transaction * gnc_tree_view_split_reg_get_dirty_trans (GncTreeViewSplitReg *view);
 
-Transaction * gnc_tree_view_split_reg_get_dirty_trans_by_ref (GncTreeViewSplitReg *view);
-
-void gnc_tree_view_split_reg_set_current_path (GncTreeViewSplitReg *view, GtkTreePath *path);
-
 GtkTreePath * gnc_tree_view_split_reg_get_current_path (GncTreeViewSplitReg *view);
 
 RowDepth gnc_tree_view_reg_get_selected_row_depth (GncTreeViewSplitReg *view);
@@ -150,8 +146,11 @@ void gnc_tree_view_split_reg_collapse_trans (GncTreeViewSplitReg *view, Transact
 const char * gnc_tree_view_split_reg_get_credit_debit_string (GncTreeViewSplitReg *view, gboolean credit);
 
 /*************************************************************************************/
-
+/* Get sort model path from the model path */
 GtkTreePath * gnc_tree_view_split_reg_get_sort_path_from_model_path (GncTreeViewSplitReg *view, GtkTreePath *mpath);
+
+/* Get model path from the sort model path */
+GtkTreePath * gnc_tree_view_split_reg_get_model_path_from_sort_path (GncTreeViewSplitReg *view, GtkTreePath *spath);
 
 GncTreeModelSplitReg * gnc_tree_view_split_reg_get_model_from_view (GncTreeViewSplitReg *view);
 
