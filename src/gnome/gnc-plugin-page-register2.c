@@ -42,6 +42,9 @@
 #include "swig-runtime.h"
 
 #include "gnc-plugin-page-register2.h"
+/*################## Added for Reg2 #################*/
+#include "gnc-plugin-page-register.h"
+/*################## Added for Reg2 #################*/
 #include "gnc-plugin-register2.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-plugin-page-report.h"
@@ -180,6 +183,27 @@ static void gnc_plugin_page_register2_event_handler (QofInstance *entity,
 /*                          Actions                         */
 /************************************************************/
 
+#define CUT_TRANSACTION_LABEL         N_("Cu_t Transaction")
+#define COPY_TRANSACTION_LABEL        N_("_Copy Transaction")
+#define PASTE_TRANSACTION_LABEL       N_("_Paste Transaction")
+#define DUPLICATE_TRANSACTION_LABEL   N_("Dup_licate Transaction")
+#define DELETE_TRANSACTION_LABEL      N_("_Delete Transaction")
+#define CUT_SPLIT_LABEL               N_("Cu_t Split")
+#define COPY_SPLIT_LABEL              N_("_Copy Split")
+#define PASTE_SPLIT_LABEL             N_("_Paste Split")
+#define DUPLICATE_SPLIT_LABEL         N_("Dup_licate Split")
+#define DELETE_SPLIT_LABEL            N_("_Delete Split")
+#define CUT_TRANSACTION_TIP           N_("Cut the selected transaction into clipboard")
+#define COPY_TRANSACTION_TIP          N_("Copy the selected transaction into clipboard")
+#define PASTE_TRANSACTION_TIP         N_("Paste the transaction from the clipboard")
+#define DUPLICATE_TRANSACTION_TIP     N_("Make a copy of the current transaction")
+#define DELETE_TRANSACTION_TIP        N_("Delete the current transaction")
+#define CUT_SPLIT_TIP                 N_("Cut the selected split into clipboard")
+#define COPY_SPLIT_TIP                N_("Copy the selected split into clipboard")
+#define PASTE_SPLIT_TIP               N_("Paste the split from the clipboard")
+#define DUPLICATE_SPLIT_TIP           N_("Make a copy of the current split")
+#define DELETE_SPLIT_TIP              N_("Delete the current split")
+
 static GtkActionEntry gnc_plugin_page_register2_actions [] =
 {
     /* File menu */
@@ -220,28 +244,28 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
     /* Transaction menu */
 
     {
-        "CutTransactionAction", GTK_STOCK_CUT, N_("Cu_t Transaction"), "",
-        N_("Cut the selected transaction into clipboard"),
+        "CutTransactionAction", GTK_STOCK_CUT, CUT_TRANSACTION_LABEL, "",
+        CUT_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register2_cmd_cut_transaction)
     },
     {
-        "CopyTransactionAction", GTK_STOCK_COPY, N_("_Copy Transaction"), "",
-        N_("Copy the selected transaction into clipboard"),
+        "CopyTransactionAction", GTK_STOCK_COPY, COPY_TRANSACTION_LABEL, "",
+        COPY_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register2_cmd_copy_transaction)
     },
     {
-        "PasteTransactionAction", GTK_STOCK_PASTE, N_("_Paste Transaction"), "",
-        N_("Paste the transaction from the clipboard"),
+        "PasteTransactionAction", GTK_STOCK_PASTE, PASTE_TRANSACTION_LABEL, "",
+        PASTE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register2_cmd_paste_transaction)
     },
     {
-        "DuplicateTransactionAction", GTK_STOCK_COPY, N_("Dup_licate Selection"), "",
-        N_("Make a copy of the current selected item"),
+        "DuplicateTransactionAction", GTK_STOCK_COPY, DUPLICATE_TRANSACTION_LABEL, "",
+        DUPLICATE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register2_cmd_duplicate_transaction)
     },
     {
-        "DeleteTransactionAction", GTK_STOCK_DELETE, N_("_Delete Selection"), NULL,
-        N_("Delete the current selection"),
+        "DeleteTransactionAction", GTK_STOCK_DELETE, DELETE_TRANSACTION_LABEL, NULL,
+        DELETE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register2_cmd_delete_transaction)
     },
     {
@@ -611,8 +635,31 @@ gnc_plugin_page_register2_new (Account *account, gboolean subaccounts)
     GncPluginPage *page;
     GncPluginPageRegister2Private *priv;
 
+/*################## Added for Reg2 #################*/
+    const GList *item;
+    GncPluginPageRegister  *old_register_page;
+/*################## Added for Reg2 #################*/
+
     ENTER("account=%p, subaccounts=%s", account,
           subaccounts ? "TRUE" : "FALSE");
+
+/*################## Added for Reg2 #################*/
+    // We test for the old register being open here, ie matching account guids
+    item = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_REGISTER_NAME);
+    for ( ; item; item = g_list_next (item))
+    {
+        Account *old_account;
+        old_register_page = (GncPluginPageRegister *)item->data;
+        old_account = gnc_plugin_page_register_get_account (old_register_page);
+
+        if (guid_equal (xaccAccountGetGUID (account), xaccAccountGetGUID (old_account)))
+        {
+            gnc_error_dialog (NULL, "%s",
+                         _("You have tried to open an account in the new register while it is open in the old register."));
+            return NULL;
+        }
+    }
+/*################## Added for Reg2 #################*/
 
     if (subaccounts)
         ledger = gnc_ledger_display2_subaccounts (account);
@@ -767,6 +814,62 @@ static const char* readonly_inactive_actions[] =
     NULL
 };
 
+/* This is the list of actions whose text needs to be changed based on whether */
+/* the current cursor class is transaction or split. */
+static const char* tran_vs_split_actions[] =
+{
+    "CutTransactionAction",
+    "CopyTransactionAction",
+    "PasteTransactionAction",
+    "DuplicateTransactionAction",
+    "DeleteTransactionAction",
+    NULL
+};
+
+/* This is the list of labels for when the current cursor class is transaction. */
+static const char* tran_action_labels[] =
+{
+    CUT_TRANSACTION_LABEL,
+    COPY_TRANSACTION_LABEL,
+    PASTE_TRANSACTION_LABEL,
+    DUPLICATE_TRANSACTION_LABEL,
+    DELETE_TRANSACTION_LABEL,
+    NULL
+};
+
+/* This is the list of tooltips for when the current cursor class is transaction. */
+static const char* tran_action_tips[] =
+{
+    CUT_TRANSACTION_TIP,
+    COPY_TRANSACTION_TIP,
+    PASTE_TRANSACTION_TIP,
+    DUPLICATE_TRANSACTION_TIP,
+    DELETE_TRANSACTION_TIP,
+    NULL
+};
+
+/* This is the list of labels for when the current cursor class is split. */
+static const char* split_action_labels[] =
+{
+    CUT_SPLIT_LABEL,
+    COPY_SPLIT_LABEL,
+    PASTE_SPLIT_LABEL,
+    DUPLICATE_SPLIT_LABEL,
+    DELETE_SPLIT_LABEL,
+    NULL
+};
+
+/* This is the list of tooltips for when the current cursor class is split. */
+static const char* split_action_tips[] =
+{
+    CUT_SPLIT_TIP,
+    COPY_SPLIT_TIP,
+    PASTE_SPLIT_TIP,
+    DUPLICATE_SPLIT_TIP,
+    DELETE_SPLIT_TIP,
+    NULL
+};
+
 static void
 gnc_plugin_page_register2_ui_update (gpointer various, GncPluginPageRegister2 *page) // this works
 {
@@ -813,6 +916,47 @@ gnc_plugin_page_register2_ui_update (gpointer various, GncPluginPageRegister2 *p
             /* Set the action's sensitivity */
             GtkAction *action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
             gtk_action_set_sensitive (action, FALSE);
+        }
+    }
+
+    /* Modifying action descriptions based on row depth */
+    {
+        RowDepth depth;
+        const char **iter, **label_iter, **tooltip_iter;
+        gboolean curr_label_trans = FALSE;
+        depth = gnc_tree_view_reg_get_selected_row_depth (view);
+        iter = tran_vs_split_actions;
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+        label_iter = tran_action_labels;
+        if (g_strcmp0 (gtk_action_get_label (action), _(*label_iter)) == 0)
+            curr_label_trans = TRUE;
+        if ((depth == SPLIT3) && curr_label_trans)
+        {
+            label_iter = split_action_labels;
+            tooltip_iter = split_action_tips;
+            for (iter = tran_vs_split_actions; *iter; ++iter)
+            {
+                /* Adjust the action's label and tooltip */
+                action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+                gtk_action_set_label (action, _(*label_iter));
+                gtk_action_set_tooltip (action, _(*tooltip_iter));
+                ++label_iter;
+                ++tooltip_iter;
+            }
+        }
+        else if ((depth == TRANS1 || depth == TRANS2) && !curr_label_trans)
+        {
+            label_iter = tran_action_labels;
+            tooltip_iter = tran_action_tips;
+            for (iter = tran_vs_split_actions; *iter; ++iter)
+            {
+                /* Adjust the action's label and tooltip */
+                action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+                gtk_action_set_label (action, _(*label_iter));
+                gtk_action_set_tooltip (action, _(*tooltip_iter));
+                ++label_iter;
+                ++tooltip_iter;
+            }
         }
     }
 }
