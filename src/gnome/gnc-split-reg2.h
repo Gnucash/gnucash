@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-split-reg2.h -- A widget for the common register look-n-feel. *
+ * gnc-split-reg2.h -- A widget for the common register look-n-feel.*
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-1998 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
@@ -31,7 +31,6 @@
 #define GNC_SPLIT_REG2_H
 
 #include "gnc-ledger-display2.h"
-#include "gnucash-sheet.h"
 #include "gnc-split-reg.h"
 #include "gnc-tree-view-split-reg.h"
 
@@ -49,24 +48,9 @@ struct _GNCSplitReg2
 
     /* The containing window. */
     GtkWidget *window;
-    gint width;
-    gint height;
 
     GtkWidget *toolbar;
     GtkWidget *summarybar;
-
-    GtkWidget *popup_menu;
-
-    GtkWidget *edit_menu;
-    GtkWidget *view_menu;
-    GtkWidget *style_submenu;
-    GtkWidget *action_menu;
-
-    GtkWidget *double_line_check;
-
-    GtkWidget *split_button;
-    GtkWidget *split_menu_check;
-    GtkWidget *split_popup_check;
 
     /* Summary Bar Labels */
     GtkWidget *balance_label;
@@ -80,9 +64,6 @@ struct _GNCSplitReg2
     /** The current ledger display. **/
     GNCLedgerDisplay2 *ledger;
 
-    /** The actual sheet widget. **/
-    GnucashRegister *reg;
-
     gint numRows;
 
     gboolean read_only;
@@ -93,25 +74,11 @@ struct _GNCSplitReg2Class
     GtkVBoxClass parent_class;
 
     /* Signal defaults */
-
-    void (*schedule_ent_cb) ( GNCSplitReg2 *w, gpointer user_data );
-
-    void (*help_changed_cb) ( GNCSplitReg2 *w, gpointer user_data );
-    void (*include_date_cb) ( GNCSplitReg2 *w, time64 date, gpointer user_data );
+    void (*help_changed) ( GNCSplitReg2 *w, gpointer user_data );
 };
-
-#ifdef skip // Coming from original gnc-split-reg.h
-typedef enum
-{
-    SCHEDULE,
-    SPLIT,
-    STYLE_SUBMENU,
-} GNC_SPLIT_REG2_ITEM;
-#endif
 
 /*FIXME Note sure about this == Coming from original gnc-split-reg.h */
 typedef GNC_SPLIT_REG_ITEM GNC_SPLIT_REG2_ITEM;
-
 
 /**
  * GTK-related; gets an identifier for the class of GNCSplitRegs.
@@ -150,7 +117,21 @@ void gnc_split_reg2_change_style (GNCSplitReg2 *gsr, SplitRegisterStyle2 style);
  **/
 GtkWidget *gnc_split_reg2_get_summarybar (GNCSplitReg2 *gsr );
 
-void gnc_split_reg2_raise (GNCSplitReg2 *gsr );
+/**
+ * Jump to split.
+ **/
+void gnc_split_reg2_jump_to_split (GNCSplitReg2 *gsr, Split *split);
+
+/**
+ * Move the cursor to the split in the non-blank amount column.
+ **/
+void gnc_split_reg2_jump_to_split_amount (GNCSplitReg2 *gsr, Split *split);
+
+
+/**
+ * Raise an existing register window to the front.
+ **/
+void gnc_split_reg2_raise (GNCSplitReg2 *gsr);
 
 /**
  * Callers can use this to determine if they need to reflect some "read-only"
@@ -169,7 +150,6 @@ gboolean gnc_split_reg2_get_read_only (GNCSplitReg2 *gsr );
 void gnc_split_reg2_balancing_entry (GNCSplitReg2 *gsr, Account *account,
                                     time64 statement_date, gnc_numeric balancing_amount);
 
-void gsr2_default_schedule_handler (GNCSplitReg2 *gsr, gpointer data );
 
 void gnc_split_reg2_set_moved_cb (GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data );
 

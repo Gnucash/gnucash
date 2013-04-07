@@ -86,6 +86,25 @@ typedef enum {
     SPLIT3, //3
 }RowDepth;
 
+typedef enum {
+    COL_DATE,      //0
+    COL_DUEDATE,   //1
+    COL_NUMACT,    //2
+    COL_DESCNOTES, //3
+    COL_TRANSVOID, //4
+    COL_RECN,      //5
+    COL_TYPE,      //6
+    COL_VALUE,     //7
+    COL_AMOUNT,    //8
+    COL_AMTVAL,    //9
+    COL_RATE,      //10
+    COL_PRICE,     //11
+    COL_DEBIT,     //12
+    COL_CREDIT,    //13
+    COL_BALANCE,   //14
+    COL_STATUS,    //15
+    COL_COMM,      //16
+} ViewCol;
 
 /* Standard g_object type */
 GType gnc_tree_view_split_reg_get_type (void);

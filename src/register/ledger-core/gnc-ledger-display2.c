@@ -437,7 +437,7 @@ gnc_ledger_display2_gl (void)
 
     ENTER(" ");
 
-    query = qof_query_create_for(GNC_ID_SPLIT);
+    query = qof_query_create_for (GNC_ID_SPLIT);
 
     qof_query_set_book (query, gnc_get_current_book());
 
@@ -826,8 +826,9 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 
     gnc_tree_model_split_reg_set_data (ld->model, ld, gnc_ledger_display2_parent);
 
-//FIXME Not Needed ?    g_signal_connect (G_OBJECT (ld->model), "refresh_signal",
-//                      G_CALLBACK ( gnc_ledger_display2_refresh_cb ), ld );
+    // This sets up a call back for the search_ledger2 to reload after changes
+    g_signal_connect (G_OBJECT (ld->model), "refresh_view",
+                      G_CALLBACK (gnc_ledger_display2_refresh_cb), ld );
 
     splits = qof_query_run (ld->query);
 
@@ -871,11 +872,35 @@ gnc_ledger_display2_set_query (GNCLedgerDisplay2 *ledger_display, Query *q)
 GNCLedgerDisplay2 *
 gnc_ledger_display2_find_by_query (Query *q)
 {
+    GNCLedgerDisplay2 *ledger_display;
+    GncTreeModelSplitReg *model;
+
+    if (!q)
+        return NULL;
+
+    ledger_display = gnc_find_first_gui_component (REGISTER_GL_CM_CLASS, find_by_query, q);
+
+    if (ledger_display)
+    {
+        model = ledger_display->model;
+        // To get a new search page from a general ledger, search register is a LD2_GL also.
+        if (model->type == GENERAL_LEDGER2)
+            ledger_display = NULL;
+    }
+    return ledger_display;
+}
+
+#ifdef skip
+GNCLedgerDisplay2 *
+gnc_ledger_display2_find_by_query (Query *q)
+{
     if (!q)
         return NULL;
 
     return gnc_find_first_gui_component (REGISTER_GL_CM_CLASS, find_by_query, q);
 }
+#endif
+
 
 /********************************************************************\
  * refresh only the indicated register window                       *
@@ -884,6 +909,8 @@ gnc_ledger_display2_find_by_query (Query *q)
 static void
 gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits)
 {
+    GtkTreeModel *s_model, *f_model, *model;
+
     if (!ld || ld->loading)
         return;
 
@@ -895,10 +922,32 @@ gnc_ledger_display2_refresh_internal (GNCLedgerDisplay2 *ld, GList *splits)
     }
     else
     {
+	/* This is used for the reloading of registers to refresh them and to update the search_ledger */
         ld->loading = TRUE;
+	s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (ld->view)); // this is the sort model
+        f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model)); // this is the filter model
+        model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (f_model)); // our model
+
+        g_object_ref (s_model);
+        g_object_ref (f_model);
+        g_object_ref (model);
+
+        gnc_tree_view_split_reg_block_selection (ld->view, TRUE); // This blocks the tree selection
+	
+        gtk_tree_view_set_model (GTK_TREE_VIEW (ld->view), NULL); // Detach sort model from view
+	
+        gnc_tree_model_split_reg_load (ld->model, splits, gnc_ledger_display2_leader (ld)); //reload splits
+
+        gtk_tree_view_set_model (GTK_TREE_VIEW (ld->view), GTK_TREE_MODEL (s_model)); // Re-attach sort model to view
+
+        gnc_tree_view_split_reg_block_selection (ld->view, FALSE); // This unblocks the tree selection
 
         /* Set the default selection start position */
         gnc_tree_view_split_reg_default_selection (ld->view);
+
+        g_object_unref (model);
+        g_object_unref (f_model);
+        g_object_unref (s_model);
 
         ld->loading = FALSE;
     }
@@ -985,13 +1034,15 @@ gnc_ledger_display2_set_split_view_refresh (GNCLedgerDisplay2 *ld, gboolean ok)
     ld->refresh_ok = ok;
 }
 
+/* This is used for the search_ledger2 reload after any changes made */
 static void
 gnc_ledger_display2_refresh_cb (GncTreeModelSplitReg *model, gpointer user_data)
 {
     GNCLedgerDisplay2 *ld = user_data;
 
-    /* Refresh the view when idle */
-    g_idle_add ((GSourceFunc)gnc_ledger_display2_refresh, ld);
+    if (model->type == SEARCH_LEDGER2)
+        /* Refresh the view when idle */
+        g_idle_add ((GSourceFunc)gnc_ledger_display2_refresh, ld);
 }
 
 void

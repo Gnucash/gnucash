@@ -35,7 +35,15 @@ G_BEGIN_DECLS
 
 /*****************************************************************************/
 
+gboolean gnc_tree_control_split_reg_trans_open_and_warn (GncTreeViewSplitReg *view, Transaction *trans);
+
+gboolean gnc_tree_control_split_reg_trans_test_for_edit (GncTreeViewSplitReg *view, Transaction *trans);
+
+/*****************************************************************************/
+
 void gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view);
+
+void gnc_tree_control_split_reg_schedule_current_trans (GncTreeViewSplitReg *view);
 
 void gnc_tree_control_split_reg_void_current_trans (GncTreeViewSplitReg *view, const char *reason);
 
@@ -43,7 +51,7 @@ void gnc_tree_control_split_reg_unvoid_current_trans (GncTreeViewSplitReg *view)
 
 void gnc_tree_control_split_reg_jump_to_blank (GncTreeViewSplitReg *view);
 
-void gnc_tree_control_split_reg_jump_to_split (GncTreeViewSplitReg *view, Split *split);
+void gnc_tree_control_split_reg_jump_to_split (GncTreeViewSplitReg *view, Split *split, gboolean amount);
 
 void gnc_tree_control_split_reg_cancel_edit (GncTreeViewSplitReg *view, gboolean reg_closing);
 

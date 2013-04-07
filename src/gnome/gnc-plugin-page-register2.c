@@ -52,10 +52,13 @@
 #include "gnc-tree-control-split-reg.h"
 
 #include "dialog-account.h"
-#include "dialog-find-transactions.h"
-//#include "dialog-print-check.h"
+#include "dialog-find-transactions2.h"
+#include "dialog-print-check2.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "SX-book.h"
+#include "dialog-sx-editor.h"
+#include "dialog-sx-from-trans.h"
 #include "assistant-stock-split.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-component-manager.h"
@@ -77,7 +80,7 @@
 #include "dialog-lot-viewer.h"
 #include "Scrub.h"
 #include "qof.h"
-#include "window-reconcile.h"
+#include "window-reconcile2.h"
 #include "window-autoclear.h"
 #include "window-report.h"
 
@@ -137,6 +140,7 @@ static void gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action, G
 static void gnc_plugin_page_register2_cmd_unvoid_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_reverse_transaction (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_shift_transaction_forward (GtkAction *action, GncPluginPageRegister2 *plugin_page);
+static void gnc_plugin_page_register2_cmd_reload (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_style_changed (GtkAction *action, GtkRadioAction *current, GncPluginPageRegister2 *plugin_page);
 static void gnc_plugin_page_register2_cmd_style_double_line (GtkToggleAction *action, GncPluginPageRegister2 *plugin_page);
@@ -277,6 +281,11 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register2_cmd_view_filter_by)
+    },
+    {
+        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
+        N_("Refresh this window"),
+        G_CALLBACK (gnc_plugin_page_register2_cmd_reload)
     },
 
     /* Actions menu */
@@ -555,13 +564,13 @@ gnc_plugin_page_register2_new_common (GNCLedgerDisplay2 *ledger)
     gsr = gnc_ledger_display2_get_user_data (ledger);
     if (gsr)
     {
-        item = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_REGISTER2_NAME);
-        for ( ; item; item = g_list_next(item))
+        item = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_REGISTER2_NAME);
+        for ( ; item; item = g_list_next (item))
         {
             register_page = (GncPluginPageRegister2 *)item->data;
-            priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(register_page);
+            priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (register_page);
             if (priv->gsr == gsr)
-                return GNC_PLUGIN_PAGE(register_page);
+                return GNC_PLUGIN_PAGE (register_page);
         }
     }
 
@@ -570,9 +579,9 @@ gnc_plugin_page_register2_new_common (GNCLedgerDisplay2 *ledger)
     priv->ledger = ledger;
     priv->key = *guid_null();
 
-    plugin_page = GNC_PLUGIN_PAGE(register_page);
-    label = gnc_plugin_page_register2_get_tab_name(plugin_page);
-    gnc_plugin_page_set_page_name(plugin_page, label);
+    plugin_page = GNC_PLUGIN_PAGE (register_page);
+    label = gnc_plugin_page_register2_get_tab_name (plugin_page);
+    gnc_plugin_page_set_page_name (plugin_page, label);
     g_free(label);
 
     label_color = gnc_plugin_page_register2_get_tab_color(plugin_page);
@@ -610,9 +619,9 @@ gnc_plugin_page_register2_new (Account *account, gboolean subaccounts)
     else
         ledger = gnc_ledger_display2_simple (account);
 
-    page = gnc_plugin_page_register2_new_common(ledger);
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-    priv->key = *xaccAccountGetGUID(account);
+    page = gnc_plugin_page_register2_new_common (ledger);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
+    priv->key = *xaccAccountGetGUID (account);
 
     LEAVE("%p", page);
     return page;
@@ -624,13 +633,13 @@ gnc_plugin_page_register2_new_gl (void)
     GNCLedgerDisplay2 *ledger;
 
     ledger = gnc_ledger_display2_gl ();
-    return gnc_plugin_page_register2_new_common(ledger);
+    return gnc_plugin_page_register2_new_common (ledger);
 }
 
 GncPluginPage *
 gnc_plugin_page_register2_new_ledger (GNCLedgerDisplay2 *ledger)
 {
-    return gnc_plugin_page_register2_new_common(ledger);
+    return gnc_plugin_page_register2_new_common (ledger);
 }
 
 static void
@@ -774,13 +783,12 @@ gnc_plugin_page_register2_ui_update (gpointer various, GncPluginPageRegister2 *p
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
     expanded = gnc_tree_view_split_reg_trans_expanded (view, NULL);
-
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                          "SplitTransactionAction");
     gtk_action_set_sensitive (action, model->style == REG2_STYLE_LEDGER);
     g_signal_handlers_block_by_func
     (action, gnc_plugin_page_register2_cmd_expand_transaction, page);
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), expanded);
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), expanded);
     g_signal_handlers_unblock_by_func
     (action, gnc_plugin_page_register2_cmd_expand_transaction, page);
 
@@ -788,25 +796,24 @@ gnc_plugin_page_register2_ui_update (gpointer various, GncPluginPageRegister2 *p
     trans = gnc_tree_view_split_reg_get_current_trans (view);
     voided = xaccTransHasSplitsInState (trans, VREC); 
 
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                          "VoidTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION(action), !voided);
+    gtk_action_set_sensitive (GTK_ACTION (action), !voided);
 
-    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                          "UnvoidTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION(action), voided);
+    gtk_action_set_sensitive (GTK_ACTION (action), voided);
 
     /* If we are in a readonly book, make any modifying action inactive */
-    if (qof_book_is_readonly(gnc_get_current_book()))
+    if (qof_book_is_readonly(gnc_get_current_book ()))
     {
         const char **iter;
         for (iter = readonly_inactive_actions; *iter; ++iter)
         {
             /* Set the action's sensitivity */
-            GtkAction *action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), *iter);
-            gtk_action_set_sensitive(action, FALSE);
+            GtkAction *action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page), *iter);
+            gtk_action_set_sensitive (action, FALSE);
         }
-
     }
 }
 
@@ -883,7 +890,7 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_REGISTER2 (plugin_page);
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
     if (priv->widget != NULL)
     {
         LEAVE("existing widget %p", priv->widget);
@@ -894,12 +901,12 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
     gtk_widget_show (priv->widget);
 
     numRows = priv->lines_default;
-    numRows = MIN(numRows, DEFAULT_LINES_AMOUNT);
+    numRows = MIN (numRows, DEFAULT_LINES_AMOUNT);
 
-    gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
+    gnc_window = GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window);
 
-    gsr = gnc_split_reg2_new(priv->ledger,
-                            gnc_window_get_gtk_window(gnc_window),
+    gsr = gnc_split_reg2_new (priv->ledger,
+                            gnc_window_get_gtk_window (gnc_window),
                             numRows, priv->read_only);
     priv->gsr = (GNCSplitReg2 *)gsr;
     gtk_widget_show (gsr);
@@ -907,7 +914,7 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
     gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
 
     g_signal_connect (G_OBJECT (gsr), "help-changed",
-                      G_CALLBACK ( gnc_plugin_page_help_changed_cb ),
+                      G_CALLBACK (gnc_plugin_page_help_changed_cb),
                       page );
 
     view = gnc_split_reg2_get_register (priv->gsr);
@@ -1130,7 +1137,7 @@ static const gchar *style_names[] =
  *  @param plugin_page The page to save.
  *
  *  @param key_file A pointer to the GKeyFile data structure where the
- *  page information should be written.gnc_plugin_page_register2_save_page
+ *  page information should be written. gnc_plugin_page_register2_save_page
  *
  *  @param group_name The group name to use when saving data. */
 static void
@@ -2267,7 +2274,7 @@ report_helper (GNCLedgerDisplay2 *ledger, Split *split, Query *query) //this wor
 
 static void
 gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
-        GncPluginPageRegister2 *plugin_page) //FIXME Should work but not tested
+        GncPluginPageRegister2 *plugin_page) // this works
 {
     GncPluginPageRegister2Private *priv;
     GncTreeViewSplitReg *view;
@@ -2286,19 +2293,42 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
     model = gnc_ledger_display2_get_split_model_register (priv->ledger);
     ledger_type = gnc_ledger_display2_type (priv->ledger);
 
-//FIXME  'gnc_ui_print_check_dialog_create' uses 'GncPluginPageRegister' so this will need to wait
-//        for when we change the type back or I add a new function to dialog-print-check using
-//        'GncPluginPageRegister2'
-#ifdef skip
     if (ledger_type == LD2_SINGLE || ledger_type == LD2_SUBACCOUNT)
     {
         split = gnc_tree_view_split_reg_get_current_split (view);
         trans = xaccSplitGetParent (split);
 
+        if (trans == NULL)
+        {
+            LEAVE("trans is NULL");
+            return;
+        }
+
+        /* See if we were asked to print a blank trans. */
+        if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
+        {
+            LEAVE("Asked to print a blank trans");
+            return;
+        }
+
+        /* See if we are being edited in another register */
+        if (gnc_tree_control_split_reg_trans_test_for_edit (view, trans))
+        {
+            LEAVE("trans being edited in another register");
+            return;
+        }
+
+        /* Make sure we ask to commit any changes before we procede */
+        if (gnc_tree_control_split_reg_trans_open_and_warn (view, trans))
+        {
+            LEAVE("trans being edited");
+            return;
+        }
+
         if (split && trans)
         {
             splits = g_list_append (splits, split);
-            gnc_ui_print_check_dialog_create (plugin_page, splits);
+            gnc_ui_print_check_dialog_create2 (plugin_page, splits);
             g_list_free (splits);
         }
     }
@@ -2346,7 +2376,7 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
                 }
             }
         }
-        gnc_ui_print_check_dialog_create (plugin_page, splits);
+        gnc_ui_print_check_dialog_create2 (plugin_page, splits);
     }
     else
     {
@@ -2355,7 +2385,6 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
         LEAVE("Unsupported ledger type");
         return;
     }
-#endif
     LEAVE(" ");
 }
 
@@ -2451,7 +2480,7 @@ gnc_plugin_page_register2_cmd_edit_account (GtkAction *action,
 
 static void
 gnc_plugin_page_register2_cmd_find_transactions (GtkAction *action,
-        GncPluginPageRegister2 *page) //FIXME see below
+        GncPluginPageRegister2 *page) // this works
 {
     GncPluginPageRegister2Private *priv;
 
@@ -2459,8 +2488,8 @@ gnc_plugin_page_register2_cmd_find_transactions (GtkAction *action,
 
     ENTER("(action %p, page %p)", action, page);
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(page);
-/*FIXME This function has the original ledger type */
-/*    gnc_ui_find_transactions_dialog_create(priv->ledger); */
+
+    gnc_ui_find_transactions_dialog_create2 (priv->ledger);
     LEAVE(" ");
 }
 
@@ -2811,6 +2840,41 @@ gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
     LEAVE(" ");
 }
 
+
+static void
+gnc_plugin_page_register2_cmd_reload (GtkAction *action, GncPluginPageRegister2 *plugin_page) //this works
+{
+    GncPluginPageRegister2Private *priv;
+    GncTreeViewSplitReg *view;
+
+    Transaction *trans;
+
+    ENTER("(action %p, page %p)", action, plugin_page);
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+
+    trans = gnc_tree_view_split_reg_get_current_trans (view);
+
+    /* Make sure we ask to commit any changes before we procede */
+    if (gnc_tree_control_split_reg_trans_open_and_warn (view, trans))
+    {
+        LEAVE("trans being edited");
+        return;
+    }
+
+    /* give gtk+ a chance to handle pending events */
+    while (gtk_events_pending ())
+        gtk_main_iteration ();
+
+    gnc_ledger_display2_refresh (priv->ledger);
+
+    LEAVE(" ");
+}
+
 /*#################################################################################*/
 /*#################################################################################*/
 
@@ -2825,15 +2889,15 @@ gnc_plugin_page_register2_cmd_style_changed (GtkAction *action,
     ENTER("(action %p, radio action %p, plugin_page %p)",
           action, current, plugin_page);
 
-    g_return_if_fail(GTK_IS_ACTION(action));
-    g_return_if_fail(GTK_IS_RADIO_ACTION(current));
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
+    g_return_if_fail (GTK_IS_ACTION (action));
+    g_return_if_fail (GTK_IS_RADIO_ACTION (current));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-    value = gtk_radio_action_get_current_value(current);
-    gnc_split_reg2_change_style(priv->gsr, value);
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
+    value = gtk_radio_action_get_current_value (current);
+    gnc_split_reg2_change_style (priv->gsr, value);
 
-    gtk_tree_view_collapse_all (GTK_TREE_VIEW( gnc_ledger_display2_get_split_view_register (priv->ledger)));
+    gtk_tree_view_collapse_all (GTK_TREE_VIEW (gnc_ledger_display2_get_split_view_register (priv->ledger)));
 
     gnc_plugin_page_register2_ui_update (NULL, plugin_page);
     LEAVE(" ");
@@ -2891,25 +2955,40 @@ static void
 gnc_plugin_page_register2_cmd_reconcile (GtkAction *action,
                                         GncPluginPageRegister2 *page) // this works
 {
+    GncPluginPageRegister2Private *priv;
+    GncTreeViewSplitReg *view;
     Account *account;
+    Transaction *trans;
     GtkWindow *window;
-    RecnWindow * recnData;
+    RecnWindow2 * recnData;
 
     ENTER("(action %p, plugin_page %p)", action, page);
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
     account = gnc_plugin_page_register2_get_account (page);
 
-    window = gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window));
-    recnData = recnWindow (GTK_WIDGET(window), account);
-    gnc_ui_reconcile_window_raise (recnData);
+    trans = gnc_tree_view_split_reg_get_current_trans (view);
+
+    /* Make sure we ask to commit any changes before we procede */
+    if (gnc_tree_control_split_reg_trans_open_and_warn (view, trans))
+    {
+        LEAVE("trans being edited");
+        return;
+    }
+
+    window = gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window));
+    recnData = recnWindow2 (GTK_WIDGET (window), account);
+    gnc_ui_reconcile_window2_raise (recnData);
     LEAVE(" ");
 }
 
 static void
 gnc_plugin_page_register2_cmd_autoclear (GtkAction *action,
-                                        GncPluginPageRegister2 *page) //FIXME What is this?
+                                        GncPluginPageRegister2 *page)
 {
     Account *account;
     GtkWindow *window;
@@ -3197,22 +3276,98 @@ gnc_plugin_page_register2_cmd_jump (GtkAction *action,
 
     ld = gnc_plugin_page_register2_get_ledger (new_page);
     new_view = gnc_ledger_display2_get_split_view_register (ld);
-    gnc_tree_control_split_reg_jump_to_split (new_view, split);
+    gnc_tree_control_split_reg_jump_to_split (new_view, split, FALSE);
     LEAVE(" ");
 }
 
+
+/**
+ * Schedules the current transaction for recurring-entry.
+ * If the selected transaction was created from a scheduled transaction,
+ * opens the editor for that Scheduled Transaction.
+ **/
 static void
 gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
-                                       GncPluginPageRegister2 *plugin_page) //FIXME Not setup
+                                       GncPluginPageRegister2 *plugin_page) // this works
 {
     GncPluginPageRegister2Private *priv;
+    GncTreeViewSplitReg *view;
+    Transaction *trans;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
-//    gsr2_default_schedule_handler(priv->gsr, NULL);
+    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+
+    trans = gnc_tree_view_split_reg_get_current_trans (view);
+
+    if (trans == NULL)
+    {
+        LEAVE("trans is NULL");
+        return;
+    }
+
+    /* See if we were asked to schedule a blank trans. */
+    if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
+    {
+        LEAVE("Asked to schedule a blank trans");
+        return;
+    }
+
+    /* See if we are being edited in another register */
+    if (gnc_tree_control_split_reg_trans_test_for_edit (view, trans))
+    {
+        LEAVE("trans being edited in another register");
+        return;
+    }
+
+    /* Make sure we ask to commit any changes before we procede */
+    if (gnc_tree_control_split_reg_trans_open_and_warn (view, trans))
+    {
+        LEAVE("trans being edited");
+        return;
+    }
+
+    /* If the transaction has a sched-xact KVP frame, then go to the editor
+     * for the existing SX; otherwise, do the sx-from-trans dialog. */
+    {
+        kvp_frame *txn_frame;
+        kvp_value *kvp_val;
+        /* set a kvp-frame element in the transaction indicating and
+         * pointing-to the SX this was created from. */
+        txn_frame = xaccTransGetSlots (trans);
+        if ( txn_frame != NULL )
+        {
+            kvp_val = kvp_frame_get_slot (txn_frame, "from-sched-xaction");
+            if (kvp_val)
+            {
+                GncGUID *fromSXId = kvp_value_get_guid (kvp_val);
+                SchedXaction *theSX = NULL;
+                GList *sxElts;
+
+                /* Get the correct SX */
+                for ( sxElts = gnc_book_get_schedxactions (gnc_get_current_book())->sx_list;
+                        (!theSX) && sxElts;
+                        sxElts = sxElts->next )
+                {
+                    SchedXaction *sx = (SchedXaction*)sxElts->data;
+                    theSX =
+                        ((guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
+                          ? sx : NULL);
+                }
+
+                if (theSX)
+                {
+                    gnc_ui_scheduled_xaction_editor_dialog_create (theSX, FALSE);
+                    LEAVE(" ");
+                    return;
+                }
+            }
+        }
+    }
+    gnc_sx_create_from_trans (trans);
     LEAVE(" ");
 }
 
@@ -3429,11 +3584,13 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg2 *gsr, GncPluginPageRegister2 *regi
 }
 
 static void
-gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data) //FIXME does not work ?
+gnc_plugin_page_register2_refresh_cb (GHashTable *changes, gpointer user_data)
 {
     GncPluginPageRegister2 *page = user_data;
     GncPluginPageRegister2Private *priv;
     GncTreeViewSplitReg *view;
+
+// Not sure what this really is but it gets fired from preference changes.
 
 //g_print("gnc_plugin_page_register2_refresh_cb\n");
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (page));

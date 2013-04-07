@@ -113,31 +113,7 @@ static void gtv_split_reg_double_click_cb (GtkTreeView *treeview,
                                              GtkTreeViewColumn *column,
                                              gpointer           user_data);
 
-
-
-
-
 static gboolean transaction_changed_confirm (GncTreeViewSplitReg *view, Transaction *new_trans);
-
-typedef enum {
-    COL_DATE,      //0
-    COL_DUEDATE,   //1
-    COL_NUMACT,    //2
-    COL_DESCNOTES, //3
-    COL_TRANSVOID, //4
-    COL_RECN,      //5
-    COL_TYPE,      //6
-    COL_VALUE,     //7
-    COL_AMOUNT,    //8
-    COL_AMTVAL,    //9
-    COL_RATE,      //10
-    COL_PRICE,     //11
-    COL_DEBIT,     //12
-    COL_CREDIT,    //13
-    COL_BALANCE,   //14
-    COL_STATUS,    //15
-    COL_COMM,      //16
-} ViewCol;
 
 typedef struct {
     ViewCol viewcol;
@@ -628,13 +604,20 @@ gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
         return col_list;
         }
 
-    case SEARCH_LEDGER2: //FIXME Not Setup yet
+    case SEARCH_LEDGER2:
+        {
+        static ViewCol col_list[] = {
+        COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSVOID, COL_RECN,
+        COL_STATUS, COL_RATE, COL_DEBIT, COL_CREDIT, -1};
+        return col_list;
+        }
+        break;
 
     default:
         {
         static ViewCol col_list[] = {
         COL_DATE, COL_NUMACT, COL_DESCNOTES, COL_TRANSVOID, COL_RECN, COL_STATUS,
-        COL_TYPE, COL_VALUE, COL_AMOUNT, COL_RATE, COL_PRICE, COL_DEBIT, COL_CREDIT,
+        COL_VALUE, COL_AMOUNT, COL_RATE, COL_PRICE, COL_DEBIT, COL_CREDIT,
         COL_BALANCE, -1};
         return col_list;
         }
@@ -950,8 +933,6 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
 {
     GtkTreeModel        *s_model, *f_model;
     GncTreeViewSplitReg *view;
-    GtkCellRenderer     *cr;
-    GtkTreeViewColumn   *col;
     GtkTreeSelection    *selection;
 
     gtk_rc_parse_string (rc_string);
@@ -965,7 +946,7 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
 
     // Setup the sort model
     s_model = gtk_tree_model_sort_new_with_model (f_model);
-    g_object_unref(G_OBJECT(f_model));
+    g_object_unref(G_OBJECT (f_model));
 
     // Connect model to tree view
     gnc_tree_view_set_model (GNC_TREE_VIEW (view), s_model);
@@ -1077,18 +1058,14 @@ gnc_tree_view_split_reg_default_selection (GncTreeViewSplitReg *view)
     gtk_tree_path_free (spath);
     gtk_tree_path_free (new_mpath);
 
-    /* give gtk+ a chance to handle pending events */
-//    while (gtk_events_pending ())
-//        gtk_main_iteration ();
-
     /* Refilter the tree view register */
     gnc_tree_view_split_reg_refilter (view);
 
     /* Set the view format */
-    g_idle_add ((GSourceFunc)gnc_tree_view_split_reg_set_format, view);
+    g_idle_add ((GSourceFunc) gnc_tree_view_split_reg_set_format, view);
 
     /* scroll window to show selection when view is idle */
-    g_idle_add ((GSourceFunc)gnc_tree_view_split_reg_scroll_to_cell, view );
+    g_idle_add ((GSourceFunc) gnc_tree_view_split_reg_scroll_to_cell, view );
 
     LEAVE(" ");
 }
@@ -2235,7 +2212,7 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         {
             Account *acct = xaccSplitGetAccount (split);
 
-            if ((xaccTransCountSplits (trans) == 0) && (model->type != GENERAL_LEDGER2)) // First split on blank transaction 
+            if ((xaccTransCountSplits (trans) == 0) && model->type != GENERAL_LEDGER2 && model->type != SEARCH_LEDGER2) // First split on blank transaction
                 acct = anchor;
 
             if (acct != NULL)
@@ -2248,7 +2225,7 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
             else
                 s = "";
 
-            if (anchor == acct && model->type != GENERAL_LEDGER2)
+            if (anchor == acct && model->type != GENERAL_LEDGER2 && model->type != SEARCH_LEDGER2)
                 editable = FALSE;
             else
                 editable = TRUE;
@@ -3271,6 +3248,7 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
     GList *columns;
     GList  *column;
     gint i;
+    RowDepth temp_depth;
 
     ENTER("title depth is %d and sort_depth %d, sort_col is %d", depth, view->sort_depth, view->sort_col);
 
@@ -3289,42 +3267,53 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
         cr0 = g_list_nth_data (renderers, 0);
         g_list_free (renderers);
 
-        viewcol = GPOINTER_TO_INT (g_object_get_data (G_OBJECT(cr0), "view_column"));
+        viewcol = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cr0), "view_column"));
 
         DEBUG("viewcol is %d", viewcol);
 
-        switch(viewcol)
+        switch (viewcol)
         {
         case COL_DATE:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
                 /* Display arrows if we are sorting on this row */
-                if (view->sort_depth == depth && view->sort_col == viewcol)
-                    gtk_tree_view_column_set_sort_indicator (tvc, TRUE);
-                else
-                    gtk_tree_view_column_set_sort_indicator (tvc, FALSE);
+                if ((depth == TRANS1 || depth == SPLIT3) && view->sort_col == viewcol)
+                {
+                    if (view->sort_depth == TRANS1 || view->sort_depth == SPLIT3)
+                        gtk_tree_view_column_set_sort_indicator (tvc, TRUE);
+                    else
+                        gtk_tree_view_column_set_sort_indicator (tvc, FALSE);
+                }
 
-                if(depth == TRANS1 || depth == SPLIT3)
+                if (depth == TRANS2 && view->sort_col == viewcol)
+                {
+                    if (view->sort_depth == TRANS2)
+                        gtk_tree_view_column_set_sort_indicator (tvc, TRUE);
+                    else
+                        gtk_tree_view_column_set_sort_indicator (tvc, FALSE);
+                }
+
+                if (depth == TRANS1 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Date Posted"));
-                else if(depth == TRANS2)
+                else if (depth == TRANS2)
                     gtk_tree_view_column_set_title (tvc, _("Date Entered"));
                 break;
             }
             break;
 
         case COL_DUEDATE:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Due Date"));
                 break;
             }
             break;
 
         case COL_NUMACT:
-            switch(model->type)
+            switch (model->type)
             {
             case RECEIVABLE_REGISTER2:
             case PAYABLE_REGISTER2:
@@ -3361,10 +3350,10 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
             break;
 
         case COL_DESCNOTES:
-            switch(model->type)
+            switch (model->type)
             {
             case RECEIVABLE_REGISTER2:
-                if(depth == TRANS1)
+                if (depth == TRANS1)
                     gtk_tree_view_column_set_title (tvc, _("Customer"));
                 else if (depth == TRANS2)
                     gtk_tree_view_column_set_title (tvc, _("Memo"));
@@ -3375,7 +3364,7 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
                 break;
 
             case PAYABLE_REGISTER2:
-                if(depth == TRANS1)
+                if (depth == TRANS1)
                     gtk_tree_view_column_set_title (tvc, _("Vendor"));
                 else if (depth == TRANS2)
                     gtk_tree_view_column_set_title (tvc, _("Memo"));
@@ -3393,7 +3382,7 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
                 else
                     gtk_tree_view_column_set_sort_indicator (tvc, FALSE);
 
-                if(depth == TRANS1)
+                if (depth == TRANS1)
                     gtk_tree_view_column_set_title (tvc, _("Description"));
                 else if (depth == TRANS2)
                     gtk_tree_view_column_set_title (tvc, _("Notes"));
@@ -3406,11 +3395,11 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
             break;
 
         case COL_TRANSVOID:
-            switch(model->type)
+            switch (model->type)
             {
             case RECEIVABLE_REGISTER2:
             case PAYABLE_REGISTER2:
-                if(depth == TRANS1)
+                if (depth == TRANS1)
                     gtk_tree_view_column_set_title (tvc, _("Accounts"));
                 else if (depth == TRANS2)
                     gtk_tree_view_column_set_title (tvc, _("Accounts"));
@@ -3427,7 +3416,7 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
                 else
                     gtk_tree_view_column_set_sort_indicator (tvc, FALSE);
 
-                if(depth == TRANS1)
+                if (depth == TRANS1)
                     gtk_tree_view_column_set_title (tvc, _("Accounts"));
                 else if (depth == TRANS2)
                     gtk_tree_view_column_set_title (tvc, _("Void Reason"));
@@ -3440,50 +3429,50 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
             break;
 
         case COL_RECN:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("R"));
                 break;
             }
             break;
 
         case COL_TYPE:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Type"));
                 break;
             }
             break;
 
         case COL_VALUE:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Value"));
                 break;
             }
             break;
 
         case COL_AMOUNT:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Amount"));
                 break;
             }
             break;
 
         case COL_AMTVAL:
-            switch(model->type)
+            switch (model->type)
             {
             default:
-                if((depth == TRANS1) || (depth == TRANS2))
+                if (depth == TRANS1 || depth == TRANS2)
                     gtk_tree_view_column_set_title (tvc, _("Value"));
                 else if (depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Amount"));
@@ -3494,30 +3483,30 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
             break;
 
         case COL_COMM:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Commodity"));
                 break;
             }
             break;
 
         case COL_RATE:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Rate"));
                 break;
             }
             break;
 
         case COL_PRICE:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Price"));
                 break;
             }
@@ -3526,70 +3515,70 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
         case COL_CREDIT:
             if(!(model->use_accounting_labels))
             {
-                switch(model->type)
+                switch (model->type)
                 {
                 case BANK_REGISTER2: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Withdrawl"));
                     break;
 
                 case CASH_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Spend"));
                     break;
 
                 case ASSET_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Decrease"));
                     break;
 
                 case LIABILITY_REGISTER2:
                 case EQUITY_REGISTER2:
                 case TRADING_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Increase"));
                     break;
 
                 case CREDIT_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Charge"));
                     break;
 
                 case INCOME_REGISTER2:
                 case INCOME_LEDGER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Income"));
                     break;
 
                 case EXPENSE_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Rebate"));
                     break;
 
                 case STOCK_REGISTER2:
                 case CURRENCY_REGISTER2:
                 case PORTFOLIO_LEDGER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Sell"));
                     break;
 
                 case RECEIVABLE_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Payment"));
                     break;
 
                 case PAYABLE_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Bill"));
                     break;
 
                 case GENERAL_LEDGER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Funds Out"));
                     break;
 
                 default:
-                    if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                    if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Credit"));
                     break;
                 }
@@ -3601,66 +3590,66 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
         case COL_DEBIT:
             if(!(model->use_accounting_labels))
             {
-                switch(model->type)
+                switch (model->type)
                 {
                 case BANK_REGISTER2: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Deposit"));
                     break;
 
                 case CASH_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Receive"));
                     break;
 
                 case ASSET_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Increase"));
                     break;
 
                 case LIABILITY_REGISTER2:
                 case EQUITY_REGISTER2:
                 case TRADING_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Decrease"));
                     break;
 
                 case INCOME_REGISTER2:
                 case INCOME_LEDGER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Charge"));
                     break;
 
                 case EXPENSE_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Expense"));
                     break;
 
                 case STOCK_REGISTER2:
                 case CURRENCY_REGISTER2:
                 case PORTFOLIO_LEDGER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Buy"));
                     break;
 
                 case RECEIVABLE_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Invoice"));
                     break;
 
                 case CREDIT_REGISTER2:
                 case PAYABLE_REGISTER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Payment"));
                     break;
 
                 case GENERAL_LEDGER2:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Funds In"));
                     break;
 
                 default:
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                         gtk_tree_view_column_set_title (tvc, _("Debit"));
                     break;
                 }
@@ -3670,10 +3659,10 @@ gtv_split_reg_titles (GncTreeViewSplitReg *view, RowDepth depth)
             break;
 
         case COL_BALANCE:
-            switch(model->type)
+            switch (model->type)
             {
             default: //FIXME These if statements may not be required
-                if(depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
+                if (depth == TRANS1 || depth == TRANS2 || depth == SPLIT3)
                     gtk_tree_view_column_set_title (tvc, _("Balance"));
                 break;
             }
@@ -3975,7 +3964,6 @@ gtv_split_reg_double_click_cb (GtkTreeView *treeview, GtkTreePath *path,
 }
 
 
-
 /* Call back for when a change to a filter requires the selection to get out of the way */
 static void
 gtv_split_reg_selection_move_filter_cb (GncTreeModelSplitReg *model, gpointer item, gpointer user_data)
@@ -4185,7 +4173,7 @@ gtv_split_reg_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user
                 view->priv->current_ref = gtk_tree_row_reference_copy (view->priv->edit_ref);
 
                 // Jump to the first split of dirty_trans.
-                gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (view->priv->dirty_trans, 0));
+                gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (view->priv->dirty_trans, 0), FALSE);
 
                 /* Remove the blank split and re-add - done so we keep it last in list */ 
                 gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, TRUE);
@@ -4232,7 +4220,6 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
     gboolean is_trow1, is_trow2, is_split, is_blank;
     RowDepth depth = 0;
     GtkTreeIter m_iter;
-
 
 //g_print ("\n** gtv_split_reg_motion_cb start\n");
 
@@ -4302,7 +4289,7 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
             view->priv->current_ref = gtk_tree_row_reference_copy (view->priv->edit_ref);
 
             // Jump to the first split of dirty_trans.
-            gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (view->priv->dirty_trans, 0));
+            gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (view->priv->dirty_trans, 0), FALSE);
 
             /* Remove the blank split and re-add - done so we keep it last in list */ 
             gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, TRUE);
@@ -4316,7 +4303,6 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
 
                 gnc_tree_view_split_reg_expand_trans (view, NULL);
 //            }
-
             return;
         }
         else
@@ -4333,7 +4319,6 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
         view->priv->current_depth = depth;
 
 //g_print("Motion - ** view->priv-> c_trans is %p c_split is %p depth %d **\n\n", view->priv->current_trans, view->priv->current_split, view->priv->current_depth);
-
         /* Auto expand transaction and collapse previous transaction */
         if (old_trans != trans)
         {
@@ -4359,6 +4344,12 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
             }
         }
         gtk_tree_path_free (spath);
+
+        // Check to see if current trans is expanded and set appropiately
+        if (gnc_tree_view_split_reg_trans_expanded (view, trans))
+                view->priv->expanded = TRUE;
+        else
+                view->priv->expanded = FALSE;
     }
     else
     {
@@ -4372,7 +4363,6 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
         /* Set the default selection start position */
         gnc_tree_view_split_reg_default_selection (view);
     }
-
     /* This updates the plugin page gui */
     if (view->moved_cb)
         (view->moved_cb)(view, view->moved_cb_data);
@@ -4666,7 +4656,10 @@ gtv_split_reg_edited_cb (GtkCellRendererText *cell, const gchar *path_string,
             if (is_blank)
             {
                 /*FIXME May be this should be a signal - Promote the blank split to a real split */
-                g_idle_add ((GSourceFunc)gnc_tree_model_split_reg_commit_blank_split, gnc_tree_view_split_reg_get_model_from_view (view));
+                g_idle_add ((GSourceFunc) gnc_tree_model_split_reg_commit_blank_split, gnc_tree_view_split_reg_get_model_from_view (view));
+
+                /* scroll when view idle */
+                g_idle_add ((GSourceFunc) gnc_tree_view_split_reg_scroll_to_cell, view);
             }
 
             // In transaction mode, two splits only, set up the other split.
@@ -5276,22 +5269,26 @@ gnc_tree_view_split_reg_scroll_to_cell (GncTreeViewSplitReg *view)
     GtkTreePath *mpath, *spath;
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
-//FIXME needs more work...
+//FIXME This may all reduce to a single scroll_to_cell...
     mpath = gnc_tree_view_split_reg_get_current_path (view);
     spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
 
     if (view->sort_direction == 1)
-        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (view), spath, NULL, TRUE, 0.0, 0.0);
+    {
+        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (view), spath, NULL, TRUE, 0.5, 0.0); //0.0
+    }
     else
     {
         if (model->use_double_line)
         {
             gtk_tree_path_down (spath); // move to the second row of transaction
-            gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (view), spath, NULL, TRUE, 1.0, 0.0);
+            gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (view), spath, NULL, TRUE, 0.5, 0.0); //1.0
             gtk_tree_path_up (spath); // back to first row of transaction
         }
         else
-            gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (view), spath, NULL, TRUE, 1.0, 0.0);
+        {
+            gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (view), spath, NULL, TRUE, 0.5, 0.0); //1.0
+        }
     }
     gtk_tree_path_free (mpath);
     gtk_tree_path_free (spath);
@@ -5383,16 +5380,20 @@ gnc_tree_view_split_reg_set_current_path (GncTreeViewSplitReg *view, GtkTreePath
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-    if(view->priv->current_ref != NULL)
+//FIXME I am not sure this function is needed, it is usualy followed by set selection which
+//      will do this any way ?????
+
+    if (view->priv->current_ref != NULL)
     {
         gtk_tree_row_reference_free (view->priv->current_ref);
         view->priv->current_ref = NULL;
     }
     view->priv->current_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (model), path);
 
-    view->priv->current_trans = gnc_tree_view_split_reg_get_current_trans (view);
-    view->priv->current_split = gnc_tree_view_split_reg_get_current_split (view);
-    view->priv->current_depth = gnc_tree_view_reg_get_selected_row_depth (view);
+//FIXME this is crap - not needed...
+//    view->priv->current_trans = gnc_tree_view_split_reg_get_current_trans (view);
+//    view->priv->current_split = gnc_tree_view_split_reg_get_current_split (view);
+//    view->priv->current_depth = gnc_tree_view_reg_get_selected_row_depth (view);
 }
 
 
@@ -5505,7 +5506,7 @@ gnc_tree_view_split_reg_enter (GncTreeViewSplitReg *view)
     if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (view), "data-edited")) && transaction_changed_confirm (view, NULL))
     {
         // Jump to the first split of dirty_trans.
-        gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (view->priv->dirty_trans, 0)); 
+        gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (view->priv->dirty_trans, 0), FALSE); 
 
         /* Remove the blank split and re-add - done so we keep it last in list */ 
         gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, TRUE);
@@ -5606,6 +5607,7 @@ gnc_tree_view_split_reg_trans_expanded (GncTreeViewSplitReg *view, Transaction *
         spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
 
         gtk_tree_path_down (spath); /* Move the path down to trow2 */
+
         expanded = gtk_tree_view_row_expanded (GTK_TREE_VIEW (view), spath);
 
         gtk_tree_path_free (mpath);
@@ -5736,6 +5738,9 @@ gnc_tree_view_split_reg_expand_trans (GncTreeViewSplitReg *view, Transaction *tr
     /* This updates the plugin page gui */
     if (view->moved_cb)
         (view->moved_cb)(view, view->moved_cb_data);
+
+    /* scroll when view idle */
+    g_idle_add ((GSourceFunc) gnc_tree_view_split_reg_scroll_to_cell, view);
 
     LEAVE(" ");
 }

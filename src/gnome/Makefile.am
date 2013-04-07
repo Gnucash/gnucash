@@ -32,11 +32,13 @@ libgnc_gnome_la_SOURCES = \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
+  dialog-find-transactions2.c \
   dialog-lot-viewer.c \
   dialog-new-user.c \
   dialog-price-editor.c \
   dialog-price-edit-db.c \
   dialog-print-check.c \
+  dialog-print-check2.c \
   dialog-progress.c \
   dialog-sx-editor.c \
   dialog-sx-from-trans.c \
@@ -58,6 +60,7 @@ libgnc_gnome_la_SOURCES = \
   reconcile-view.c \
   top-level.c \
   window-reconcile.c \
+  window-reconcile2.c \
   window-autoclear.c
 
 gnomeappdir = ${datadir}/applications
@@ -75,9 +78,11 @@ noinst_HEADERS = \
   assistant-stock-split.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
+  dialog-find-transactions2.h \
   dialog-lot-viewer.h \
   dialog-new-user.h \
   dialog-print-check.h \
+  dialog-print-check2.h \
   dialog-progress.h \
   dialog-sx-editor.h \
   dialog-sx-from-trans.h \
@@ -98,6 +103,7 @@ noinst_HEADERS = \
   reconcile-view.h \
   top-level.h \
   window-reconcile.h \
+  window-reconcile2.h \
   window-autoclear.h
 
 if BUILDING_FROM_SCM

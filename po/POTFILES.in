@@ -180,11 +180,13 @@ src/gnome/assistant-stock-split.c
 src/gnome/dialog-commodities.c
 src/gnome/dialog-fincalc.c
 src/gnome/dialog-find-transactions.c
+src/gnome/dialog-find-transactions2.c
 src/gnome/dialog-lot-viewer.c
 src/gnome/dialog-new-user.c
 src/gnome/dialog-price-edit-db.c
 src/gnome/dialog-price-editor.c
 src/gnome/dialog-print-check.c
+src/gnome/dialog-print-check2.c
 src/gnome/dialog-progress.c
 src/gnome/dialog-sx-editor.c
 src/gnome/dialog-sx-from-trans.c
@@ -350,6 +352,7 @@ src/gnome-utils/search-param.c
 src/gnome-utils/window-main-summarybar.c
 src/gnome/window-autoclear.c
 src/gnome/window-reconcile.c
+src/gnome/window-reconcile2.c
 src/html/gnc-html.c
 src/html/gnc-html-factory.c
 src/html/gnc-html-history.c

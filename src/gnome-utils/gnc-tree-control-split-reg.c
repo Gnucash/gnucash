@@ -159,8 +159,9 @@ gtc_is_trans_readonly_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
 
 
 /* Transaction is being edited dialog */
-static gboolean
-gtc_trans_open_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
+#define gtc_trans_open_and_warn gnc_tree_control_split_reg_trans_open_and_warn
+gboolean
+gnc_tree_control_split_reg_trans_open_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
 {
     Transaction *dirty_trans;
     GtkWidget *window;
@@ -201,7 +202,8 @@ gtc_trans_open_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
 }
 
 
-static gboolean
+#define gtc_trans_test_for_edit gnc_tree_control_split_reg_trans_test_for_edit
+gboolean
 gtc_trans_test_for_edit (GncTreeViewSplitReg *view, Transaction *trans)
 {
     GtkWidget *window;
@@ -503,6 +505,85 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
 }
 
 
+
+#ifdef skip
+
+/**
+ * Schedules the current transaction for recurring-entry.
+ * If the selected transaction was created from a scheduled transaction,
+ * opens the editor for that Scheduled Transaction.
+ **/
+void
+gnc_tree_control_split_reg_schedule_current_trans (GncTreeViewSplitReg *view)
+{
+    Transaction *trans;
+
+    trans = gnc_tree_view_split_reg_get_current_trans (view);
+
+    if (trans == NULL)
+        return;
+
+    /* See if we were asked to schedule a blank trans. */
+    if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
+        return;
+
+    /* Test for read only */
+    if (gtc_is_trans_readonly_and_warn (view, trans))
+        return;
+
+    /* See if we are being edited in another register */
+    if (gtc_trans_test_for_edit (view, trans))
+        return;
+
+    /* Make sure we ask to commit any changes before we procede */
+    if (gtc_trans_open_and_warn (view, trans))
+        return;
+
+    /* If the transaction has a sched-xact KVP frame, then go to the editor
+     * for the existing SX; otherwise, do the sx-from-trans dialog. */
+    {
+        kvp_frame *txn_frame;
+        kvp_value *kvp_val;
+        /* set a kvp-frame element in the transaction indicating and
+         * pointing-to the SX this was created from. */
+        txn_frame = xaccTransGetSlots (trans);
+        if ( txn_frame != NULL )
+        {
+            kvp_val = kvp_frame_get_slot (txn_frame, "from-sched-xaction");
+            if (kvp_val)
+            {
+                GncGUID *fromSXId = kvp_value_get_guid (kvp_val);
+                SchedXaction *theSX = NULL;
+                GList *sxElts;
+
+                /* Get the correct SX */
+                for ( sxElts = gnc_book_get_schedxactions (gnc_get_current_book())->sx_list;
+                        (!theSX) && sxElts;
+                        sxElts = sxElts->next )
+                {
+                    SchedXaction *sx = (SchedXaction*)sxElts->data;
+                    theSX =
+                        ( ( guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
+                          ? sx : NULL );
+                }
+
+                if (theSX)
+                {
+                    gnc_ui_scheduled_xaction_editor_dialog_create (theSX, FALSE);
+                    return;
+                }
+            }
+        }
+    }
+    gnc_sx_create_from_trans(pending_trans);
+}
+
+
+#endif
+
+
+
+
 /* Void current transaction */
 void
 gnc_tree_control_split_reg_void_current_trans (GncTreeViewSplitReg *view, const char *reason)
@@ -632,7 +713,7 @@ gnc_tree_control_split_reg_jump_to_blank (GncTreeViewSplitReg *view)
 
 /* Jump to split */
 void
-gnc_tree_control_split_reg_jump_to_split (GncTreeViewSplitReg *view, Split *split)
+gnc_tree_control_split_reg_jump_to_split (GncTreeViewSplitReg *view, Split *split, gboolean amount)
 {
     GncTreeModelSplitReg *model;
     GtkTreePath *mpath, *spath;
@@ -643,20 +724,50 @@ gnc_tree_control_split_reg_jump_to_split (GncTreeViewSplitReg *view, Split *spli
 
     spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
 
-    gnc_tree_view_split_reg_expand_trans (view, xaccSplitGetParent (split));
+//    gnc_tree_view_split_reg_set_current_path (view, spath);
 
-    gnc_tree_view_split_reg_set_current_path (view, spath);
+    gnc_tree_view_split_reg_expand_trans (view, xaccSplitGetParent (split));
 
     gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), spath);
 
-    /* Set cursor to new spath */
-    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, NULL, FALSE);
+    /* Set cursor to new spath, if amount, cursor is set to correct column ready for editing */
+    if (amount)
+    {
+        GtkCellRenderer *cr0;
+        GList *renderers;
+        GList *columns;
+        GList  *column;
+        gint i;
+
+        columns = gtk_tree_view_get_columns (GTK_TREE_VIEW (view));
+
+        for (column = columns, i = 1; column; column = g_list_next (column), i++)
+        {
+            GtkTreeViewColumn *tvc;
+            ViewCol viewcol;
+
+            tvc = column->data;
+
+            // Get the first renderer, it has the view-column value.
+            renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tvc));
+            cr0 = g_list_nth_data (renderers, 0);
+            g_list_free (renderers);
+
+            viewcol = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cr0), "view_column"));
+
+            if (viewcol == COL_DEBIT && gnc_numeric_positive_p (xaccSplitGetAmount (split)))
+                gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, tvc, TRUE);
+
+            if (viewcol == COL_CREDIT && gnc_numeric_negative_p (xaccSplitGetAmount (split)))
+                gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, tvc, TRUE);
+        }
+        g_list_free (columns);
+    }
+    else
+        gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, NULL, FALSE);
 
     gtk_tree_path_free (spath);
     gtk_tree_path_free (mpath);
-
-    /* scroll when view idle */
-    g_idle_add ((GSourceFunc)gnc_tree_view_split_reg_scroll_to_cell, view );
 }
 
 
@@ -738,7 +849,7 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
 
     new_spath = gtk_tree_path_new_from_indices (indices[0] + (relative * view->sort_direction), -1);
 
-    gnc_tree_view_split_reg_set_current_path (view, new_spath);
+//    gnc_tree_view_split_reg_set_current_path (view, new_spath);
 
     gnc_tree_view_split_reg_block_selection (view, TRUE);
     gtk_tree_selection_unselect_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), spath);
@@ -1129,7 +1240,7 @@ gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
         gtk_main_iteration ();
 
     /* Now jump to new trans */
-    gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (new_trans, 0));
+    gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (new_trans, 0), FALSE);
 
     LEAVE("Reverse transaction created");
 }
@@ -1993,6 +2104,8 @@ gnc_tree_control_split_reg_sort_by_numact (GtkTreeModel *fm, GtkTreeIter *fa, Gt
     gtk_tree_iter_free (ma);
     gtk_tree_iter_free (mb);
 
+//FIXME this may be needed for this one (!qof_book_use_split_action_for_num_field (gnc_get_current_book()))
+
     switch (depth) {
         case 1: // Number
 
@@ -2004,7 +2117,6 @@ gnc_tree_control_split_reg_sort_by_numact (GtkTreeModel *fm, GtkTreeIter *fa, Gt
 
         break;
         case 2: // Action
-//FIXME this may be needed for this one (!qof_book_use_split_action_for_num_field (gnc_get_current_book()))
 
         anchor = gnc_tree_model_split_reg_get_anchor (model);
 
