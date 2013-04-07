@@ -100,9 +100,11 @@ typedef enum
 
     /* internal hidden columns */
     GNC_TREE_MODEL_SPLIT_REG_COL_RO,        //9
-    GNC_TREE_MODEL_SPLIT_REG_COL_VIS,       //10
+    GNC_TREE_MODEL_SPLIT_REG_COL_FILTER_VIS,//10
+    GNC_TREE_MODEL_SPLIT_REG_COL_NUM_VIS,   //11
+    GNC_TREE_MODEL_SPLIT_REG_COL_ACT_VIS,   //12
 
-    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS    //11
+    GNC_TREE_MODEL_SPLIT_REG_NUM_COLUMNS    //13
 } GncTreeModelSplitRegColumn;
 
 /* typedefs & structures */
@@ -208,7 +210,7 @@ GtkListStore * gnc_tree_model_split_reg_get_notes_list (GncTreeModelSplitReg *mo
 
 GtkListStore * gnc_tree_model_split_reg_get_memo_list (GncTreeModelSplitReg *model);
 
-GtkListStore * gnc_tree_model_split_reg_get_numact_list (GncTreeModelSplitReg *model);
+GtkListStore * gnc_tree_model_split_reg_get_action_list (GncTreeModelSplitReg *model);
 
 GtkListStore * gnc_tree_model_split_reg_get_acct_list (GncTreeModelSplitReg *model);
 

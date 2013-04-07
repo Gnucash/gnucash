@@ -127,8 +127,7 @@ struct GncTreeModelSplitRegPrivate
     GtkListStore *description_list;  // description field autocomplete list
     GtkListStore *notes_list;        // notes field autocomplete list
     GtkListStore *memo_list;         // memo field autocomplete list
-    GtkListStore *num_list;          // number combo list
-    GtkListStore *numact_list;       // number / action combo list
+    GtkListStore *action_list;       // action combo list
     GtkListStore *account_list;      // Account combo list
 
     gint event_handler_id;
@@ -484,8 +483,7 @@ gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 s
     priv->description_list = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_POINTER);
     priv->notes_list = gtk_list_store_new (1, G_TYPE_STRING);
     priv->memo_list = gtk_list_store_new (1, G_TYPE_STRING);
-    priv->num_list = gtk_list_store_new (1, G_TYPE_STRING);
-    priv->numact_list = gtk_list_store_new (1, G_TYPE_STRING);
+    priv->action_list = gtk_list_store_new (1, G_TYPE_STRING);
     priv->account_list = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER );
 
     priv->event_handler_id = qof_event_register_handler
@@ -753,7 +751,9 @@ gnc_tree_model_split_reg_get_column_type (GtkTreeModel *tree_model, int index)
         return G_TYPE_STRING;
 
     case GNC_TREE_MODEL_SPLIT_REG_COL_RO:
-    case GNC_TREE_MODEL_SPLIT_REG_COL_VIS:
+    case GNC_TREE_MODEL_SPLIT_REG_COL_FILTER_VIS:
+    case GNC_TREE_MODEL_SPLIT_REG_COL_NUM_VIS:
+    case GNC_TREE_MODEL_SPLIT_REG_COL_ACT_VIS:
         return G_TYPE_BOOLEAN;
 
     default:
@@ -975,9 +975,29 @@ gtm_trans_get_account_for_splits_ancestor (const Transaction *trans, const Accou
 }
 
 
+/* Decide which render should be shown in the NUM/ACT column */
+static gboolean
+gnc_tree_model_split_reg_get_numact_vis (GncTreeModelSplitReg *model, gboolean trow1, gboolean trow2)
+{
+    // TRUE for SHOW and FALSE for HIDE, TRUE for NUM is FALSE for ACT
+
+    if (trow1)
+        return TRUE;
+
+    if (trow2)
+    {
+        if (qof_book_use_split_action_for_num_field (gnc_get_current_book()))
+            return TRUE;
+        else
+            return FALSE;
+    }
+    return FALSE;
+}
+
+
 /* Return FALSE if this row should not be shown */
 static gboolean
-gnc_tree_model_split_reg_get_vis (GncTreeModelSplitReg *model, Transaction *trans, gboolean trow1)
+gnc_tree_model_split_reg_get_filter_vis (GncTreeModelSplitReg *model, Transaction *trans, gboolean trow1)
 {
     GList *tnode, *tnode_last = NULL;
     gboolean return_value = FALSE;
@@ -1197,8 +1217,16 @@ gnc_tree_model_split_reg_get_value (GtkTreeModel *tree_model,
             g_value_set_boolean (value, gnc_tree_model_split_reg_get_read_only (model, tnode->data));
         break;
 
-    case GNC_TREE_MODEL_SPLIT_REG_COL_VIS:
-            g_value_set_boolean (value, gnc_tree_model_split_reg_get_vis (model, tnode->data, IS_TROW1(iter)));
+    case GNC_TREE_MODEL_SPLIT_REG_COL_FILTER_VIS:
+            g_value_set_boolean (value, gnc_tree_model_split_reg_get_filter_vis (model, tnode->data, IS_TROW1(iter)));
+        break;
+
+    case GNC_TREE_MODEL_SPLIT_REG_COL_NUM_VIS:
+            g_value_set_boolean (value, gnc_tree_model_split_reg_get_numact_vis (model, IS_TROW1(iter), IS_TROW2(iter)));
+        break;
+
+    case GNC_TREE_MODEL_SPLIT_REG_COL_ACT_VIS:
+            g_value_set_boolean (value, !gnc_tree_model_split_reg_get_numact_vis (model, IS_TROW1(iter), IS_TROW2(iter)));
         break;
 
     default:
@@ -2278,10 +2306,10 @@ gnc_tree_model_split_reg_get_memo_list (GncTreeModelSplitReg *model)
 }
 
 GtkListStore *
-gnc_tree_model_split_reg_get_numact_list (GncTreeModelSplitReg *model)
+gnc_tree_model_split_reg_get_action_list (GncTreeModelSplitReg *model)
 {
     g_return_val_if_fail (GNC_IS_TREE_MODEL_SPLIT_REG (model), NULL);
-    return model->priv->numact_list;
+    return model->priv->action_list;
 }
 
 GtkListStore *
@@ -2324,7 +2352,7 @@ void
 gnc_tree_model_split_reg_update_completion (GncTreeModelSplitReg *model)
 {
     GncTreeModelSplitRegPrivate *priv;
-    GtkTreeIter d_iter, n_iter, m_iter, num_iter;
+    GtkTreeIter d_iter, n_iter, m_iter;
     GList *tlist_cpy, *tnode, *slist, *snode;
     int cnt, nSplits;
 
@@ -2340,7 +2368,6 @@ gnc_tree_model_split_reg_update_completion (GncTreeModelSplitReg *model)
     /* Clear the liststores */
     gtk_list_store_clear (priv->description_list);
     gtk_list_store_clear (priv->notes_list);
-    gtk_list_store_clear (priv->num_list);
     gtk_list_store_clear (priv->memo_list);
 
     for (tnode = tlist_cpy; tnode; tnode = tnode->next)
@@ -2373,23 +2400,7 @@ gnc_tree_model_split_reg_update_completion (GncTreeModelSplitReg *model)
             }
         }
 
-        /* Add to the Num list */
-        /* Get transaction-number with gnc_get_num_action which is the same as
-         * xaccTransGetNum with these arguments; not sure what is being done
-         * here so not sure if this is correct; won't get the same 'num' entered
-         * by user in a register if book option to use split-action for 'num'
-         * field is set */
-        string = gnc_get_num_action (tnode->data, NULL);
-        if(g_strcmp0 (string, ""))
-        {
-            if(gtm_check_for_duplicates (priv->num_list, string) == FALSE)
-            {
-                gtk_list_store_prepend (priv->num_list, &num_iter);
-                gtk_list_store_set (priv->num_list, &num_iter, 0, string, -1);
-            }
-        }
-
-        /* Loop through the list of splits for each Transaction - **do not free the list** */
+         /* Loop through the list of splits for each Transaction - **do not free the list** */
         snode = slist;
         cnt = 0;
         while (cnt < nSplits)
@@ -2428,7 +2439,7 @@ gnc_tree_model_split_reg_update_action_list (GncTreeModelSplitReg *model)
     GtkTreeIter iter;
 
     priv = model->priv;
-    store = priv->numact_list;
+    store = priv->action_list;
 
 //FIXME This may need some more thought ???
 
@@ -2554,37 +2565,7 @@ gnc_tree_model_split_reg_update_action_list (GncTreeModelSplitReg *model)
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Sell"), -1);
         break;
     }
-    priv->numact_list = store;
-}
-
-
-/* Update the model with entries for the Number field ... */
-void
-gnc_tree_model_split_reg_update_num_list (GncTreeModelSplitReg *model)
-{
-    GncTreeModelSplitRegPrivate *priv;
-    GtkTreeIter iter, num_iter;
-    gboolean valid;
-
-    priv = model->priv;
-
-    /* Clear the liststore */
-    gtk_list_store_clear (priv->numact_list);
-
-    /* Here we copy the num_list to the numact_list */
-    valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->num_list), &num_iter);
-    while (valid)
-    {
-        gchar *text;
-
-        // Walk through the list, reading each row
-        gtk_tree_model_get (GTK_TREE_MODEL (priv->num_list), &num_iter, 0, &text, -1);
-        gtk_list_store_append (priv->numact_list, &iter);
-        gtk_list_store_set (priv->numact_list, &iter, 0, text, -1);
-        g_free (text);
-
-        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (priv->num_list), &num_iter);
-    }
+    priv->action_list = store;
 }
 
 static int
