@@ -47,6 +47,14 @@ if [ `hostname` = "gnucash-win32" ]; then
   rmdir "$_OUTPUT_DIR/$LOG_DIR"
 fi
 
+# If we're running on the build server, copy a temporary logfile
+# content to the webserver to signal that the build is in progress
+if [ `hostname` = "gnucash-win32" ]; then
+    _PWD=`pwd`
+    echo "Build for tag \"${tag}\" is in progress (current working directory: ${_PWD}) ..." > ${LOGFILE}
+    scp -p ${LOGFILE} upload@code.gnucash.org:public_html/win32/$LOG_DIR
+fi
+
 set +e
 trap on_error ERR
 
