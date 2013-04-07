@@ -2962,7 +2962,7 @@ remove_edit_date (GtkCellEditable *ce, gpointer user_data)
         }
 
         /* Lets update the help text */
-        g_date_set_parse (&date, new_string);
+        gnc_tree_control_split_reg_parse_date (&date, new_string);
         if (g_date_valid (&date))
         {
             struct tm tm;
@@ -3164,14 +3164,13 @@ transaction_changed_confirm (GncTreeViewSplitReg *view,
     case GTK_RESPONSE_REJECT:
         if (view->priv->dirty_trans && xaccTransIsOpen (view->priv->dirty_trans))
         {
-            // Remove the split before rollback.
-            gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, TRUE);
+            // Move selection to trans - selection is blocked
+            if (new_trans == NULL) // This is NULL for keyboard and enter...
+                gnc_tree_control_split_reg_goto_rel_trans_row (view, 0);
 
             g_object_set_data (G_OBJECT (view), "data-edited", GINT_TO_POINTER (FALSE));
             xaccTransRollbackEdit (view->priv->dirty_trans);
 
-            // Add the split after rollback so it is last in list.
-            gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, FALSE);
             view->priv->dirty_trans = NULL;
 
             split = gnc_tree_model_split_get_blank_split (model);
@@ -4079,7 +4078,7 @@ gtv_split_reg_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer user
             if (gtk_tree_selection_path_is_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), spath))
             {
                 /* Set cursor to column */
-                gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, col, FALSE);
+                gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, col, TRUE);
 
                 // Reconcile tests
                 if (gtv_split_reg_recn_tests (view, col))
@@ -4117,6 +4116,13 @@ gtv_split_reg_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user
 
     switch (event->keyval)
     {
+    case GDK_KEY_plus:
+    case GDK_KEY_minus:
+    case GDK_KEY_KP_Add:
+    case GDK_KEY_KP_Subtract:
+        return TRUE; //FIXME I may use these to expand/collapse to splits later...
+        break;
+
     case GDK_KEY_space:
     case GDK_KEY_Return:
     case GDK_KEY_KP_Enter:
@@ -4164,29 +4170,36 @@ gtv_split_reg_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user
             //Ask for confirmation if data has been edited, transaction_changed_confirm return TRUE if canceled
             if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (view), "data-edited")) && transaction_changed_confirm (view, NULL))
             {
+                Transaction *dirty_trans;
+
                 /* Restore position - Cancel / Discard */
                 if (view->priv->current_ref != NULL)
                 {
                     gtk_tree_row_reference_free (view->priv->current_ref);
                     view->priv->current_ref = NULL;
                 }
-                view->priv->current_ref = gtk_tree_row_reference_copy (view->priv->edit_ref);
+                if (gtk_tree_row_reference_valid (view->priv->edit_ref))
+                    view->priv->current_ref = gtk_tree_row_reference_copy (view->priv->edit_ref);
 
-                // Jump to the first split of dirty_trans.
-                gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (view->priv->dirty_trans, 0), FALSE);
+                dirty_trans = gnc_tree_view_split_reg_get_dirty_trans_by_ref (view);
+
+                // Expand trans on split-trans (We only expand on cancel, view->priv->dirty_trans is not NULL on cancel)
+                if ((xaccTransCountSplits (dirty_trans) > 2) && view->priv->dirty_trans != NULL)
+                {
+                    // Jump to the first split of dirty_trans.
+                    gnc_tree_control_split_reg_jump_to (view, NULL, xaccTransGetSplit (dirty_trans, 0), FALSE);
+                }
+                else
+                    // Jump to the dirty_trans.
+                    gnc_tree_control_split_reg_jump_to (view, dirty_trans, NULL, FALSE);
 
                 /* Remove the blank split and re-add - done so we keep it last in list */ 
-                gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, TRUE);
-                gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, FALSE);
+                gnc_tree_model_split_reg_set_blank_split_parent (model, dirty_trans, TRUE);
+                gnc_tree_model_split_reg_set_blank_split_parent (model, dirty_trans, FALSE);
 
-//                if (xaccTransCountSplits (view->priv->dirty_trans) > 2) //FIXME Maybe we should just expand for split-trans
-//                {
                 /* give gtk+ a chance to handle pending events */
                 while (gtk_events_pending ())
                     gtk_main_iteration ();
-
-                gnc_tree_view_split_reg_expand_trans (view, NULL);
-//                }
             }
         }
         else
@@ -4245,9 +4258,9 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
 //                                                             gtk_tree_row_reference_valid (view->priv->edit_ref));
 
 //if(gtk_tree_row_reference_valid (view->priv->current_ref))
-    //g_print("Motion - Old Current Path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->current_ref)));
+//    g_print("Motion - Old Current Path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->current_ref)));
 //if(gtk_tree_row_reference_valid (view->priv->edit_ref))
-    //g_print("Motion - Old Edit path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->edit_ref)));
+//    g_print("Motion - Old Edit path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->edit_ref)));
 
         /* save the current path */
         if(view->priv->current_ref != NULL)
@@ -4266,47 +4279,54 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
         gtk_tree_path_free (mpath);
 
 //if(gtk_tree_row_reference_valid (view->priv->current_ref))
-    //g_print("Motion - Current Path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->current_ref)));
+//    g_print("Motion - Current Path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->current_ref)));
 //if(gtk_tree_row_reference_valid (view->priv->edit_ref))
-    //g_print("Motion - Edit path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->edit_ref)));
+//    g_print("Motion - Edit path is '%s'\n", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->edit_ref)));
 
         gnc_tree_model_split_reg_get_split_and_trans (
                 GNC_TREE_MODEL_SPLIT_REG (model), &m_iter, &is_trow1, &is_trow2, &is_split, &is_blank, &split, &trans);
 
 //g_print("Motion - get model split %p, trans %p, is_split %d, is_blank %d\n", split, trans, is_split, is_blank);
 
-
         //Ask for confirmation if data has been edited, transaction_changed_confirm return TRUE if canceled
         if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (view), "data-edited")) && transaction_changed_confirm (view, trans))
         {
+            Transaction *dirty_trans;
 //g_print("Restore position - Cancel / Discard\n");
+
             /* Restore position - Cancel / Discard */
-            if(view->priv->current_ref != NULL)
+            if (view->priv->current_ref != NULL)
             {
                 gtk_tree_row_reference_free (view->priv->current_ref);
                 view->priv->current_ref = NULL;
             }
-            view->priv->current_ref = gtk_tree_row_reference_copy (view->priv->edit_ref);
+            if (gtk_tree_row_reference_valid (view->priv->edit_ref))
+                view->priv->current_ref = gtk_tree_row_reference_copy (view->priv->edit_ref);
 
-            // Jump to the first split of dirty_trans.
-            gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (view->priv->dirty_trans, 0), FALSE);
+            dirty_trans = gnc_tree_view_split_reg_get_dirty_trans_by_ref (view);
+
+            // Expand trans on split-trans (We only expand on cancel, view->priv->dirty_trans is not NULL on cancel)
+            if ((xaccTransCountSplits (dirty_trans) > 2) && view->priv->dirty_trans != NULL)
+            {
+                // Jump to the first split of dirty_trans.
+                gnc_tree_control_split_reg_jump_to (view, NULL, xaccTransGetSplit (dirty_trans, 0), FALSE);
+            }
+            else
+                // Jump to the dirty_trans.
+                gnc_tree_control_split_reg_jump_to (view, dirty_trans, NULL, FALSE);
 
             /* Remove the blank split and re-add - done so we keep it last in list */ 
-            gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, TRUE);
-            gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, FALSE);
+            gnc_tree_model_split_reg_set_blank_split_parent (model, dirty_trans, TRUE);
+            gnc_tree_model_split_reg_set_blank_split_parent (model, dirty_trans, FALSE);
 
-//            if (xaccTransCountSplits (view->priv->dirty_trans) > 2) //FIXME Maybe we should just expand for split-trans
-//            {
-                /* give gtk+ a chance to handle pending events */
-                while (gtk_events_pending ())
-                    gtk_main_iteration ();
+            /* give gtk+ a chance to handle pending events */
+            while (gtk_events_pending ())
+                gtk_main_iteration ();
 
-                gnc_tree_view_split_reg_expand_trans (view, NULL);
-//            }
             return;
         }
         else
-       {
+        {
 //g_print("Commit and skip\n");
             /* Commit and skip */
             /* Move the blank split */ 
@@ -4345,7 +4365,7 @@ gtv_split_reg_motion_cb (GtkTreeSelection *sel, gpointer user_data)
         }
         gtk_tree_path_free (spath);
 
-        // Check to see if current trans is expanded and set appropiately
+        // Check to see if current trans is expanded and remember
         if (gnc_tree_view_split_reg_trans_expanded (view, trans))
                 view->priv->expanded = TRUE;
         else
@@ -4420,16 +4440,16 @@ gtv_split_reg_edited_cb (GtkCellRendererText *cell, const gchar *path_string,
         /* Column is DATE */
         if (is_trow1)
         {
-            GDate date;
-            g_date_set_parse (&date, new_text);
-            if (g_date_valid (&date))
+            GDate parsed_date;
+            gnc_tree_control_split_reg_parse_date (&parsed_date, new_text);
+            if (g_date_valid (&parsed_date))
             {
                 gtv_begin_edit (view, NULL, trans);
-                xaccTransSetDate (trans, g_date_get_day (&date), g_date_get_month (&date), g_date_get_year (&date));
+                xaccTransSetDate (trans, g_date_get_day (&parsed_date), g_date_get_month (&parsed_date), g_date_get_year (&parsed_date));
             }
             else
             {
-                //FIXME should we default to todays date ????
+                // We should never get here
                 PERR("invalid date `%s`", new_text);
             }
         }
@@ -5180,12 +5200,12 @@ gtv_get_editable_start_editing_cb (GtkCellRenderer *cr, GtkCellEditable *editabl
     }
 
     gtv_split_reg_help (view, cr, viewcol, depth);
-
+//FIXME
     fpath = gtk_tree_model_sort_convert_path_to_child_path (GTK_TREE_MODEL_SORT (s_model), spath);
 
     mpath = gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (f_model), fpath);
 
-    if(view->priv->edit_ref != NULL)
+    if (view->priv->edit_ref != NULL)
     {
         gtk_tree_row_reference_free (view->priv->edit_ref);
         view->priv->edit_ref = NULL;
@@ -5195,6 +5215,7 @@ gtv_get_editable_start_editing_cb (GtkCellRenderer *cr, GtkCellEditable *editabl
     DEBUG("edit_path is %s", gtk_tree_path_to_string (gtk_tree_row_reference_get_path (view->priv->edit_ref)));
     gtk_tree_path_free (mpath);
     gtk_tree_path_free (fpath);
+//FIXME
     gtk_tree_path_free (spath);
 
     view->priv->temp_cr = cr;
@@ -5331,6 +5352,35 @@ gnc_tree_view_split_reg_get_dirty_trans (GncTreeViewSplitReg *view)
     return view->priv->dirty_trans;
 }
 
+Transaction *
+gnc_tree_view_split_reg_get_dirty_trans_by_ref (GncTreeViewSplitReg *view)
+{
+    GncTreeModelSplitReg *model;
+    GtkTreePath *mpath;
+    Split *split = NULL;
+    Transaction *trans = NULL;
+    gboolean is_trow1, is_trow2, is_split, is_blank;
+    GtkTreeIter m_iter;
+    gboolean valid;
+
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+    mpath = gtk_tree_row_reference_get_path (view->priv->edit_ref);
+
+    // this can be NULL when tabbing off the end of the list. 
+    if (mpath == NULL)
+        trans = view->priv->current_trans;
+    else
+    {
+        valid = gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &m_iter, mpath);
+
+        if (valid)
+            gnc_tree_model_split_reg_get_split_and_trans (
+                GNC_TREE_MODEL_SPLIT_REG (model), &m_iter, &is_trow1, &is_trow2, &is_split, &is_blank, &split, &trans);
+    }
+    return trans;
+}
+
 
 /* Sets dirty_trans to trans or NULL to clear */
 void
@@ -5409,7 +5459,7 @@ gnc_tree_view_split_reg_reinit_trans (GncTreeViewSplitReg *view)
 
     trans = view->priv->current_trans;
 
-    /* Lets get out of the way, move the selection to the transaction */
+    // Lets get out of the way, move selection to trans - selection is blocked
     gnc_tree_control_split_reg_goto_rel_trans_row (view, 0);
 
     depth = view->priv->current_depth;
@@ -5450,7 +5500,7 @@ gnc_tree_view_split_reg_delete_current_split (GncTreeViewSplitReg *view)
 
     gnc_tree_view_split_reg_set_dirty_trans (view, trans);
 
-    /* Lets get out of the way, move the selection to the transaction */
+    // Lets get out of the way, move selection to trans - selection is blocked
     gnc_tree_control_split_reg_goto_rel_trans_row (view, 0);
 
     was_open = xaccTransIsOpen (trans);
@@ -5505,21 +5555,37 @@ gnc_tree_view_split_reg_enter (GncTreeViewSplitReg *view)
     /* Ask for confirmation if data has been edited, transaction_changed_confirm return TRUE if canceled */
     if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (view), "data-edited")) && transaction_changed_confirm (view, NULL))
     {
-        // Jump to the first split of dirty_trans.
-        gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (view->priv->dirty_trans, 0), FALSE); 
+        Transaction *dirty_trans;
+
+        /* Restore position - Cancel / Discard */
+        if (view->priv->current_ref != NULL)
+        {
+            gtk_tree_row_reference_free (view->priv->current_ref);
+            view->priv->current_ref = NULL;
+        }
+        if (gtk_tree_row_reference_valid (view->priv->edit_ref))
+            view->priv->current_ref = gtk_tree_row_reference_copy (view->priv->edit_ref);
+
+        dirty_trans = gnc_tree_view_split_reg_get_dirty_trans_by_ref (view);
+
+        // Expand trans on split-trans (We only expand on cancel, view->priv->dirty_trans is not NULL on cancel)
+        if ((xaccTransCountSplits (dirty_trans) > 2) && view->priv->dirty_trans != NULL)
+        {
+            // Jump to the first split of dirty_trans.
+            gnc_tree_control_split_reg_jump_to (view, NULL, xaccTransGetSplit (dirty_trans, 0), FALSE);
+        }
+        else
+            // Jump to the dirty_trans.
+            gnc_tree_control_split_reg_jump_to (view, dirty_trans, NULL, FALSE);
 
         /* Remove the blank split and re-add - done so we keep it last in list */ 
-        gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, TRUE);
-        gnc_tree_model_split_reg_set_blank_split_parent (model, view->priv->dirty_trans, FALSE);
+        gnc_tree_model_split_reg_set_blank_split_parent (model, dirty_trans, TRUE);
+        gnc_tree_model_split_reg_set_blank_split_parent (model, dirty_trans, FALSE);
 
-//                if (xaccTransCountSplits (view->priv->dirty_trans) > 2) //FIXME Maybe we should just expand for split-trans
-//                {
         /* give gtk+ a chance to handle pending events */
         while (gtk_events_pending ())
-             gtk_main_iteration ();
+            gtk_main_iteration ();
 
-        gnc_tree_view_split_reg_expand_trans (view, NULL);
-//                }
         return FALSE;
     }
     return TRUE;
@@ -5540,6 +5606,7 @@ gnc_tree_view_split_reg_cancel_edit (GncTreeViewSplitReg *view, gboolean reg_clo
 
     if (trans && xaccTransIsOpen (trans))
     {
+        // Move selection to trans - selection is blocked
         gnc_tree_control_split_reg_goto_rel_trans_row (view, 0);
 
         // Remove the split before rollback.

@@ -91,12 +91,12 @@ static void     gcrd_hide                    (GncCellRendererPopup     *cell);
 
 
 /* These two functions are used internally */
-gboolean gcrd_time2dmy ( time64 raw_time, gint *day, gint *month, gint *year);
-static time64 gcrd_dmy2time ( gint day, gint month, gint year);
+gboolean gcrd_time2dmy (time64 raw_time, gint *day, gint *month, gint *year);
+static time64 gcrd_dmy2time (gint day, gint month, gint year);
 
 /* These two functions convert string to date to string */
-static gchar * gcrd_time2dmy_string ( time64 raw_time);
-static time64 gcrd_string_dmy2time ( char *date_string);
+static gchar * gcrd_time2dmy_string (time64 raw_time);
+static time64 gcrd_string_dmy2time (const gchar *date_string);
 
 
 static GncCellRendererPopupClass *parent_class;
@@ -306,12 +306,12 @@ gcrd_show (GncCellRendererPopup *cell,
 	   gint                      x2,
 	   gint                      y2)
 {
-	GncCellRendererDate *date;
+	GncCellRendererDate     *date;
 	gint                     year;
 	gint                     month;
 	gint                     day;
 	gint                     index;
-	gchar                   *text;
+	const gchar             *text;
 
 	if (parent_class->show_popup) {
 		parent_class->show_popup (cell,
@@ -322,14 +322,16 @@ gcrd_show (GncCellRendererPopup *cell,
 
 	date = GNC_CELL_RENDERER_DATE (cell);
 
-        if (!(g_strcmp0(cell->cell_text, "")))
+	text = gnc_popup_entry_get_text (GNC_POPUP_ENTRY (GNC_CELL_RENDERER_POPUP (cell)->editable));
+
+        if (!(g_strcmp0(text, "")))
         {
 	    date->time = gnc_time (NULL);
             gcrd_time2dmy ( date->time, &day, &month, &year);
         }
         else
         {
-            date->time = gcrd_string_dmy2time (cell->cell_text);
+            date->time = gcrd_string_dmy2time (text);
             gcrd_time2dmy ( date->time, &day, &month, &year);
         }
 
@@ -452,7 +454,7 @@ gcrd_grab_on_window (GdkWindow *window,
 
 /* This function converts a time64 value date to separate entities */
 gboolean
-gcrd_time2dmy ( time64 raw_time, gint *day, gint *month, gint *year)
+gcrd_time2dmy (time64 raw_time, gint *day, gint *month, gint *year)
 {
     struct tm * timeinfo;
   
@@ -467,7 +469,7 @@ gcrd_time2dmy ( time64 raw_time, gint *day, gint *month, gint *year)
 
 /* This function converts separate entities to a time64 value */
 static time64
-gcrd_dmy2time ( gint day, gint month, gint year)
+gcrd_dmy2time (gint day, gint month, gint year)
 {
     struct tm when;
 
@@ -482,7 +484,7 @@ gcrd_dmy2time ( gint day, gint month, gint year)
 
 /* This function converts a time64 value date to a string */
 static gchar *
-gcrd_time2dmy_string ( time64 raw_time)
+gcrd_time2dmy_string (time64 raw_time)
 {
     return qof_print_date (raw_time);
 }
@@ -490,7 +492,7 @@ gcrd_time2dmy_string ( time64 raw_time)
 
 /* This function converts a string date to a time64 value */
 static time64
-gcrd_string_dmy2time (char *date_string)
+gcrd_string_dmy2time (const gchar *date_string)
 {
     gint year = 0, month = 0, day = 0;
 

@@ -127,6 +127,8 @@ Split * gnc_tree_view_split_reg_get_current_split (GncTreeViewSplitReg *view);
 
 Transaction * gnc_tree_view_split_reg_get_dirty_trans (GncTreeViewSplitReg *view);
 
+Transaction * gnc_tree_view_split_reg_get_dirty_trans_by_ref (GncTreeViewSplitReg *view);
+
 void gnc_tree_view_split_reg_set_current_path (GncTreeViewSplitReg *view, GtkTreePath *path);
 
 GtkTreePath * gnc_tree_view_split_reg_get_current_path (GncTreeViewSplitReg *view);

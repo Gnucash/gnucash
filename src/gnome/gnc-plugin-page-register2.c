@@ -3276,7 +3276,7 @@ gnc_plugin_page_register2_cmd_jump (GtkAction *action,
 
     ld = gnc_plugin_page_register2_get_ledger (new_page);
     new_view = gnc_ledger_display2_get_split_view_register (ld);
-    gnc_tree_control_split_reg_jump_to_split (new_view, split, FALSE);
+    gnc_tree_control_split_reg_jump_to (new_view, NULL, split, FALSE);
     LEAVE(" ");
 }
 

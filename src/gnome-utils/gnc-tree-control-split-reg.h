@@ -24,7 +24,6 @@
  *                                                                  *
 \********************************************************************/
 
-
 #ifndef __GNC_TREE_CONTROL_SPLIT_REG_H
 #define __GNC_TREE_CONTROL_SPLIT_REG_H
 
@@ -51,7 +50,7 @@ void gnc_tree_control_split_reg_unvoid_current_trans (GncTreeViewSplitReg *view)
 
 void gnc_tree_control_split_reg_jump_to_blank (GncTreeViewSplitReg *view);
 
-void gnc_tree_control_split_reg_jump_to_split (GncTreeViewSplitReg *view, Split *split, gboolean amount);
+void gnc_tree_control_split_reg_jump_to (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gboolean amount);
 
 void gnc_tree_control_split_reg_cancel_edit (GncTreeViewSplitReg *view, gboolean reg_closing);
 
@@ -80,6 +79,8 @@ gboolean gnc_tree_control_split_reg_recn_change (GncTreeViewSplitReg *view);
 gboolean gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view);
 
 gboolean gnc_tree_control_split_reg_balance_trans (GncTreeViewSplitReg *view, Transaction *trans);
+
+void gnc_tree_control_split_reg_parse_date (GDate *parsed, const char *datestr);
 
 Account * gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const char *name);
 

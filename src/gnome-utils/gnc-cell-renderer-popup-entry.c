@@ -34,6 +34,8 @@
 #include <string.h>
 
 #include "gnc-cell-renderer-popup-entry.h"
+#include "dialog-utils.h"
+#include "gnc-date.h"
 
 static void     gnc_popup_entry_init       (GncPopupEntry        *entry);
 static void     gnc_popup_entry_class_init (GncPopupEntryClass   *class);
@@ -163,16 +165,37 @@ gtk_cell_editable_key_press_event (GtkEntry      *entry,
 				   GdkEventKey   *key_event,
 				   GncPopupEntry *widget)
 {
-	if (key_event->keyval == GDK_Escape) {
-		widget->editing_canceled = TRUE;
-		
-		gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (widget));
-		gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (widget));
-		
-		return TRUE;
-	}
+    const char *date_string;
+    gint year = 0, month = 0, day = 0;
+    struct tm when;
 
-	return FALSE;
+    if (key_event->keyval == GDK_Escape)
+    {
+	widget->editing_canceled = TRUE;
+		
+	gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (widget));
+	gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (widget));
+
+	return TRUE;
+    }
+
+    date_string = gtk_entry_get_text (entry);
+
+    memset (&when, 0, sizeof (when));
+
+    if (qof_scan_date (date_string, &day, &month, &year))
+    {
+        when.tm_year = year - 1900;
+        when.tm_mon = month - 1 ;
+        when.tm_mday = day;
+
+        if (!gnc_handle_date_accelerator (key_event, &when, date_string))
+            return FALSE;
+
+        gtk_entry_set_text (entry, qof_print_date (gnc_mktime (&when)));
+        return TRUE;
+    }
+    return FALSE;
 }
 
 static gboolean

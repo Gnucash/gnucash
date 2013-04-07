@@ -28,7 +28,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <libguile.h>
 #include <string.h>
 
 #include "gnc-tree-control-split-reg.h"
@@ -39,7 +38,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gdate-utils.h"
 #include "dialog-utils.h"
-#include "guile-util.h"
 #include "dialog-dup-trans.h"
 #include "dialog-account.h"
 
@@ -50,46 +48,6 @@
 
 /** Static Globals *******************************************************/
 static QofLogModule log_module = GNC_MOD_LEDGER;
-
-
-static SCM copied_item = SCM_UNDEFINED;
-
-/** implementations *******************************************************/
-
-/* Uses the scheme split copying routines */
-static void
-gtc_copy_split_onto_split (Split *from, Split *to, gboolean use_cut_semantics)
-{
-    SCM split_scm;
-
-    if ((from == NULL) || (to == NULL))
-        return;
-
-    split_scm = gnc_copy_split(from, use_cut_semantics);
-    if (split_scm == SCM_UNDEFINED)
-        return;
-
-    gnc_copy_split_scm_onto_split (split_scm, to, gnc_get_current_book ());
-}
-
-/* Uses the scheme transaction copying routines */
-static void
-gtc_copy_trans_onto_trans (Transaction *from, Transaction *to,
-                          gboolean use_cut_semantics,
-                          gboolean do_commit)
-{
-    SCM trans_scm;
-
-    if ((from == NULL) || (to == NULL))
-        return;
-
-    trans_scm = gnc_copy_trans(from, use_cut_semantics);
-    if (trans_scm == SCM_UNDEFINED)
-        return;
-
-    gnc_copy_trans_scm_onto_trans (trans_scm, to, do_commit,
-                                  gnc_get_current_book ());
-}
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -227,10 +185,60 @@ gtc_trans_test_for_edit (GncTreeViewSplitReg *view, Transaction *trans)
     return FALSE;
 }
 
-
 /*****************************************************************************/
 /*****************************************************************************/
 
+void
+gnc_tree_control_split_reg_parse_date (GDate *parsed, const char *datestr)
+{
+    int day, month, year;
+    gboolean use_autoreadonly = qof_book_uses_autoreadonly (gnc_get_current_book ());
+
+    if (!parsed) return;
+    if (!datestr) return;
+
+    if (!qof_scan_date (datestr, &day, &month, &year))
+    {
+        // Couldn't parse date, use today
+        struct tm tm_today;
+        gnc_tm_get_today_start (&tm_today);
+        day = tm_today.tm_mday;
+        month = tm_today.tm_mon + 1;
+        year = tm_today.tm_year + 1900;
+    }
+
+    // If we have an auto-read-only threshold, do not accept a date that is
+    // older than the threshold.
+    if (use_autoreadonly)
+    {
+        GDate *d = g_date_new_dmy (day, month, year);
+        GDate *readonly_threshold = qof_book_get_autoreadonly_gdate (gnc_get_current_book());
+        if (g_date_compare (d, readonly_threshold) < 0)
+        {
+            g_warning("Entered date %s is before the \"auto-read-only threshold\"; resetting to the threshold.", datestr);
+#if 0
+            GtkWidget *dialog = gtk_message_dialog_new (NULL,
+                                                       0,
+                                                       GTK_MESSAGE_ERROR,
+                                                       GTK_BUTTONS_OK,
+                                                       "%s", _("Cannot store a transaction at this date"));
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                     "%s", _("The entered date of the new transaction is older than the \"Read-Only Threshold\" set for this book.  "
+                                                             "This setting can be changed in File -> Properties -> Accounts."));
+            gtk_dialog_run (GTK_DIALOG (dialog));
+            gtk_widget_destroy (dialog);
+#endif
+
+            // Reset the date to the threshold date
+            day = g_date_get_day (readonly_threshold);
+            month = g_date_get_month (readonly_threshold);
+            year = g_date_get_year (readonly_threshold);
+        }
+        g_date_free (d);
+        g_date_free (readonly_threshold);
+    }
+    g_date_set_dmy (parsed, day, month, year);
+}
 
 gboolean
 gnc_tree_control_split_reg_balance_trans (GncTreeViewSplitReg *view, Transaction *trans)
@@ -711,22 +719,24 @@ gnc_tree_control_split_reg_jump_to_blank (GncTreeViewSplitReg *view)
 }
 
 
-/* Jump to split */
+/* Jump to transaction or split */
 void
-gnc_tree_control_split_reg_jump_to_split (GncTreeViewSplitReg *view, Split *split, gboolean amount)
+gnc_tree_control_split_reg_jump_to (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gboolean amount)
 {
     GncTreeModelSplitReg *model;
     GtkTreePath *mpath, *spath;
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-    mpath = gnc_tree_model_split_reg_get_path_to_split_and_trans (model, split, NULL);
+    if (split)
+        trans = NULL;
+
+    mpath = gnc_tree_model_split_reg_get_path_to_split_and_trans (model, split, trans);
 
     spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
 
-//    gnc_tree_view_split_reg_set_current_path (view, spath);
-
-    gnc_tree_view_split_reg_expand_trans (view, xaccSplitGetParent (split));
+    if (split)
+        gnc_tree_view_split_reg_expand_trans (view, xaccSplitGetParent (split));
 
     gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), spath);
 
@@ -849,12 +859,17 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
 
     new_spath = gtk_tree_path_new_from_indices (indices[0] + (relative * view->sort_direction), -1);
 
-//    gnc_tree_view_split_reg_set_current_path (view, new_spath);
-
+    // if relative == 0 we block all selection changes
     gnc_tree_view_split_reg_block_selection (view, TRUE);
     gtk_tree_selection_unselect_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), spath);
-    gnc_tree_view_split_reg_block_selection (view, FALSE);
+
+    if (relative != 0)
+        gnc_tree_view_split_reg_block_selection (view, FALSE);
+
     gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), new_spath);
+
+    if (relative == 0)
+        gnc_tree_view_split_reg_block_selection (view, FALSE);
 
     /* Set cursor to new spath */
     gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), new_spath, NULL, FALSE);
@@ -1240,7 +1255,7 @@ gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
         gtk_main_iteration ();
 
     /* Now jump to new trans */
-    gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (new_trans, 0), FALSE);
+    gnc_tree_control_split_reg_jump_to (view, NULL, xaccTransGetSplit (new_trans, 0), FALSE);
 
     LEAVE("Reverse transaction created");
 }
@@ -1314,7 +1329,6 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
     window = gnc_tree_view_split_reg_get_parent (view);
 
     /* Ok, we are now ready to make the copy. */
-
     if (depth == SPLIT3)
     {
         Split *new_split;
@@ -1360,8 +1374,8 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
             xaccTransBeginEdit (trans);
             gnc_tree_view_split_reg_set_dirty_trans (view, trans);
 
+            xaccSplitCopyOnto (split, new_split);
             xaccSplitSetParent (new_split, trans);
-            gtc_copy_split_onto_split (split, new_split, FALSE);
 
             // Add the blank split
             gnc_tree_model_split_reg_set_blank_split_parent (model, trans, FALSE);
@@ -1404,18 +1418,19 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
         /* We are on a transaction row. Copy the whole transaction. */
 
         date = time (0);
-        if (gnc_strisnum (xaccTransGetNum (trans)))
+        if (gnc_strisnum (gnc_get_num_action (trans, trans_split)))
         {
             Account *account = gnc_tree_model_split_reg_get_anchor (model);
+
             if (account)
                 in_num = xaccAccountGetLastNum (account);
             else
                 in_num = gnc_get_num_action (trans, trans_split);
-
-            in_tnum = (!use_split_action_for_num_field
-                                        ? NULL
-                                        : gnc_get_num_action (trans, NULL));
         }
+
+        in_tnum = (use_split_action_for_num_field
+                                        ? gnc_get_num_action (trans, NULL)
+                                        : NULL);
 
         if (!gnc_dup_trans_dialog (window, NULL, TRUE,
                                    &date, in_num, &out_num, in_tnum, &out_tnum))
@@ -1449,18 +1464,29 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
             g_date_free (readonly_threshold);
         }
 
-        split_index = xaccTransGetSplitIndex (trans, split);
         trans_split_index = xaccTransGetSplitIndex (trans, trans_split);
 
         new_trans = xaccMallocTransaction (gnc_get_current_book ());
 
         xaccTransBeginEdit (new_trans);
-        gtc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);
+
+        xaccTransCopyOnto (trans, new_trans);
+
         xaccTransSetDatePostedSecs (new_trans, date);
 
         /* set per book option */
         gnc_set_num_action (new_trans, NULL, out_num, out_tnum);
-        if (!use_split_action_for_num_field)
+
+        if (gnc_strisnum (out_num))
+        {
+            Account *account = gnc_tree_model_split_reg_get_anchor (model);
+
+            /* If current register is for account, set last num */
+            if (account)
+                xaccAccountSetLastNum (account, out_num);
+        }
+
+        if (use_split_action_for_num_field)
         {
             /* find split in new_trans that equals trans_split and set
              * split_action to out_num */
@@ -1471,11 +1497,13 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
              * account, only the anchor split will be set with user input. The
              * user will have to adjust other splits manually. */
         }
+
         xaccTransCommitEdit (new_trans);
 
-        g_free (out_num);
+        if (out_num != NULL)
+           g_free (out_num);
 
-        if (!use_split_action_for_num_field)
+        if (use_split_action_for_num_field && out_tnum != NULL)
             g_free (out_tnum);
     }
     LEAVE(" ");

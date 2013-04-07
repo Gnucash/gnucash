@@ -356,7 +356,7 @@ gnc_split_reg2_jump_to_split (GNCSplitReg2 *gsr, Split *split)
 
     view = gnc_ledger_display2_get_split_view_register (gsr->ledger);
 
-    gnc_tree_control_split_reg_jump_to_split (view, split, FALSE);
+    gnc_tree_control_split_reg_jump_to (view, NULL, split, FALSE);
 }
 
 
@@ -376,9 +376,7 @@ gnc_split_reg2_jump_to_split_amount (GNCSplitReg2 *gsr, Split *split)
 
     view = gnc_ledger_display2_get_split_view_register (gsr->ledger);
 
-    gnc_tree_control_split_reg_jump_to_split (view, split, TRUE);
-
-//FIXME this needs more
+    gnc_tree_control_split_reg_jump_to (view, NULL, split, TRUE);
 }
 
 /**
@@ -699,7 +697,7 @@ gnc_split_reg2_balancing_entry (GNCSplitReg2 *gsr, Account *account,
     else
     {
         // goto balancing transaction
-        gnc_tree_control_split_reg_jump_to_split (view, split, FALSE);
+        gnc_tree_control_split_reg_jump_to (view, NULL, split, FALSE);
     }
 }
 
