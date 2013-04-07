@@ -3130,8 +3130,12 @@ gnc_plugin_page_register2_cmd_jump (GtkAction *action,
     split = gnc_tree_view_split_reg_get_current_split (view);
     if (split == NULL)
     {
-        LEAVE("split is NULL");
-        return;
+        split = gnc_tree_control_split_reg_get_current_trans_split (view);
+        if (split == NULL)
+        {
+            LEAVE("split is NULL");
+            return;
+        }
     }
 
     if (!gnc_tree_view_split_reg_trans_expanded (view, NULL))

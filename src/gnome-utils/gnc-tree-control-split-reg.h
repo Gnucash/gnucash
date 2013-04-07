@@ -71,6 +71,10 @@ gboolean gnc_tree_control_split_reg_recn_change (GncTreeViewSplitReg *view);
 
 gboolean gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view);
 
+gboolean gnc_tree_control_split_reg_balance_trans (GncTreeViewSplitReg *view, Transaction *trans);
+
+Account * gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const char *name);
+
 /*****************************************************************************/
 
 /* Cut transaction and copy to clipboard */

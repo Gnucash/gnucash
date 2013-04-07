@@ -132,7 +132,9 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     }
     else
     {
-        dt_dialog->date_edit = NULL;
+        GtkWidget *date_edit;
+        date_edit = gnc_date_edit_new (date, FALSE, FALSE);
+        dt_dialog->date_edit = date_edit;
     }
 
     dt_dialog->duplicate_title_label = GTK_WIDGET(gtk_builder_get_object (builder, "duplicate_title_label"));
@@ -246,7 +248,7 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title,
         if (date_p)
             *date_p = gnc_date_edit_get_date (GNC_DATE_EDIT (dt_dialog->date_edit));
         if (gdate_p)
-            gnc_date_edit_get_gdate(GNC_DATE_EDIT (dt_dialog->date_edit), gdate_p);
+            gnc_date_edit_get_gdate (GNC_DATE_EDIT (dt_dialog->date_edit), gdate_p);
         if (out_num)
             *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY (dt_dialog->num_edit)));
         if (tnum)

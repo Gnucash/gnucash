@@ -41,9 +41,12 @@
 #include "dialog-utils.h"
 #include "guile-util.h"
 #include "dialog-dup-trans.h"
+#include "dialog-account.h"
 
 #include "Transaction.h"
 #include "engine-helpers.h"
+#include "gnc-event.h"
+#include "Scrub.h"
 
 /** Static Globals *******************************************************/
 static QofLogModule log_module = GNC_MOD_LEDGER;
@@ -88,25 +91,29 @@ gtc_copy_trans_onto_trans (Transaction *from, Transaction *to,
                                   gnc_get_current_book ());
 }
 
+/*****************************************************************************/
+/*****************************************************************************/
 
-/*************************************************************************/
-
-
-/* Read only dialoue */
+/* Read only dialog */
 static gboolean
-gtc_is_trans_readonly_and_warn (const Transaction *trans)
+gtc_is_trans_readonly_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
 {
+    GncTreeModelSplitReg *model;
+    GtkWidget *window;
     GtkWidget *dialog;
     const gchar *reason;
     const gchar *title = _("Cannot modify or delete this transaction.");
-    const gchar *message =
+    const gchar *message_reason =
         _("This transaction is marked read-only with the comment: '%s'");
 
     if (!trans) return FALSE;
 
+    window = gnc_tree_view_split_reg_get_parent (view);
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
+
     if (xaccTransIsReadonlyByPostedDate (trans))
     {
-        dialog = gtk_message_dialog_new (NULL,
+        dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                         0,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_OK,
@@ -122,16 +129,252 @@ gtc_is_trans_readonly_and_warn (const Transaction *trans)
     reason = xaccTransGetReadOnly (trans);
     if (reason)
     {
-        dialog = gtk_message_dialog_new (NULL,
+        dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                         0,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_OK,
                                         "%s", title);
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                message, reason);
+                message_reason, reason);
         gtk_dialog_run (GTK_DIALOG (dialog));
         gtk_widget_destroy (dialog);
         return TRUE;
+    }
+
+    if (gnc_tree_model_split_reg_get_read_only (model, trans))
+    {
+        dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                        0,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_OK,
+                                        "%s", title);
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                "%s", _("You can not change this transaction, the Book or Register is set to Read Only."));
+        gtk_dialog_run (GTK_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+
+/* Transaction is being edited dialog */
+static gboolean
+gtc_trans_open_and_warn (GncTreeViewSplitReg *view, Transaction *trans)
+{
+    Transaction *dirty_trans;
+    GtkWidget *window;
+    GtkWidget *dialog;
+    gint response;
+    const char *title = _("Save Transaction before proceding?");
+    const char *message =
+            _("The current transaction has been changed. Would you like to "
+              "record the changes before proceding, or cancel?");
+
+    window = gnc_tree_view_split_reg_get_parent (view);
+    dirty_trans = gnc_tree_view_split_reg_get_dirty_trans (view);
+
+    if (trans == dirty_trans)
+    {
+        dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_MESSAGE_QUESTION,
+                                        GTK_BUTTONS_CANCEL,
+                                        "%s", title);
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                "%s", message);
+        gtk_dialog_add_button (GTK_DIALOG (dialog),
+                              _("_Record"), GTK_RESPONSE_ACCEPT);
+        response = gnc_dialog_run (GTK_DIALOG (dialog), "transaction_being_edited");
+        gtk_widget_destroy (dialog);
+
+        if (response != GTK_RESPONSE_ACCEPT)
+            return TRUE;
+
+        xaccTransCommitEdit (trans);
+        gnc_tree_view_split_reg_set_dirty_trans (view, NULL);
+
+        return FALSE;
+    }
+    else
+        return FALSE;
+}
+
+
+static gboolean
+gtc_trans_test_for_edit (GncTreeViewSplitReg *view, Transaction *trans)
+{
+    GtkWidget *window;
+    Transaction *dirty_trans;
+
+    /* Make sure we have stopped editing */
+    gnc_tree_view_split_reg_finish_edit (view);
+
+    window = gnc_tree_view_split_reg_get_parent (view);
+
+    /* Get dirty_trans */
+    dirty_trans = gnc_tree_view_split_reg_get_dirty_trans (view);
+
+    /* We are being edited in a different register */
+    if (xaccTransIsOpen (trans) && (dirty_trans != trans))
+    {
+        gnc_error_dialog (window, "%s",
+                         _("This transaction is being edited in a different register."));
+        return TRUE;
+    }
+    return FALSE;
+}
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+
+
+gboolean
+gnc_tree_control_split_reg_balance_trans (GncTreeViewSplitReg *view, Transaction *trans)
+{
+    GncTreeModelSplitReg *model;
+    GtkWidget *window;
+    int choice;
+    int default_value;
+    Account *default_account;
+    Account *other_account;
+    Account *root;
+    GList *radio_list = NULL;
+    const char *title   = _("Rebalance Transaction");
+    const char *message = _("The current transaction is not balanced.");
+    Split *split;
+    Split *other_split;
+    gboolean two_accounts;
+    gboolean multi_currency;
+
+
+    if (xaccTransIsBalanced (trans))
+        return FALSE;
+
+    window = gnc_tree_view_split_reg_get_parent (view);
+    model = gnc_tree_view_split_reg_get_model_from_view (view);
+
+//FIXME ## Trading ## Copied from split-register-control, needs testing
+
+    if (xaccTransUseTradingAccounts (trans))
+    {
+        MonetaryList *imbal_list;
+        gnc_monetary *imbal_mon;
+        imbal_list = xaccTransGetImbalance (trans);
+
+        /* See if the imbalance is only in the transaction's currency */
+        if (!imbal_list)
+            /* Value imbalance, but not commodity imbalance.  This shouldn't
+               be something that scrubbing can cause to happen.  Perhaps someone
+               entered invalid splits.  */
+            multi_currency = TRUE;
+        else
+        {
+            imbal_mon = imbal_list->data;
+            if (!imbal_list->next &&
+                    gnc_commodity_equiv(gnc_monetary_commodity(*imbal_mon),
+                                        xaccTransGetCurrency(trans)))
+                multi_currency = FALSE;
+            else
+                multi_currency = TRUE;
+        }
+
+        /* We're done with the imbalance list, the real work will be done
+           by xaccTransScrubImbalance which will get it again. */
+        gnc_monetary_list_free(imbal_list);
+    }
+    else
+        multi_currency = FALSE;
+//FIXME
+
+    split = xaccTransGetSplit (trans, 0);
+    other_split = xaccSplitGetOtherSplit (split);
+
+    if (other_split == NULL)
+    {
+        /* Attempt to handle the inverted many-to-one mapping */
+        split = xaccTransGetSplit (trans, 1);
+        if (split) other_split = xaccSplitGetOtherSplit (split);
+        else split = xaccTransGetSplit (trans, 0);
+    }
+    if (other_split == NULL || multi_currency)
+    {
+        two_accounts = FALSE;
+        other_account = NULL;
+    }
+    else
+    {
+        two_accounts = TRUE;
+        other_account = xaccSplitGetAccount (other_split);
+    }
+
+    default_account = gnc_tree_model_split_reg_get_anchor (model);
+
+    /* If the two pointers are the same, the account from other_split
+     * is actually the default account. We must make other_account
+     * the account from split instead.   */
+
+    if (default_account == other_account)
+        other_account = xaccSplitGetAccount (split);
+
+    /*  If the two pointers are still the same, we have two splits, but
+     *  they both refer to the same account. While non-sensical, we don't
+     *  object.   */
+
+    if (default_account == other_account)
+        two_accounts = FALSE;
+
+    radio_list = g_list_append (radio_list,
+                                _("Balance it _manually"));
+    radio_list = g_list_append (radio_list,
+                                _("Let GnuCash _add an adjusting split"));
+
+    if (model->type < NUM_SINGLE_REGISTER_TYPES2 && !multi_currency)
+    {
+        radio_list = g_list_append (radio_list,
+                                    _("Adjust current account _split total"));
+
+        default_value = 2;
+        if (two_accounts)
+        {
+            radio_list = g_list_append (radio_list,
+                                        _("Adjust _other account split total"));
+            default_value = 3;
+        }
+    }
+    else
+        default_value = 0;
+
+    choice = gnc_choose_radio_option_dialog
+             (window,
+              title,
+              message,
+              _("_Rebalance"),
+              default_value,
+              radio_list);
+
+    g_list_free (radio_list);
+
+    root = gnc_account_get_root(default_account);
+    switch (choice)
+    {
+    default:
+    case 0:
+        return TRUE;
+        break;
+
+    case 1:
+        xaccTransScrubImbalance (trans, root, NULL);
+        break;
+
+    case 2:
+        xaccTransScrubImbalance (trans, root, default_account);
+        break;
+
+    case 3:
+        xaccTransScrubImbalance (trans, root, other_account);
+        break;
     }
     return FALSE;
 }
@@ -174,7 +417,23 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
     anchor = gnc_tree_model_split_reg_get_anchor (model);
     txn_com = xaccTransGetCurrency (trans);
 
-    if (gtc_is_trans_readonly_and_warn (trans))
+    if (trans == NULL)
+        return;
+
+    /* See if we were asked to change a blank trans. */
+    if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
+        return;
+
+    /* Test for read only */
+    if (gtc_is_trans_readonly_and_warn (view, trans))
+        return;
+
+    /* See if we are being edited in another register */
+    if (gtc_trans_test_for_edit (view, trans))
+        return;
+
+    /* Make sure we ask to commit any changes before we procede */
+    if (gtc_trans_open_and_warn (view, trans))
         return;
 
     if (num_splits < 2)
@@ -206,8 +465,8 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
 
         value = xaccSplitGetValue (split);
 
-        xaccTransBeginEdit (trans);
         gnc_tree_view_split_reg_set_dirty_trans (view, trans);
+        xaccTransBeginEdit (trans);
 
         if (txn_com == xaccAccountGetCommodity (xaccSplitGetAccount(split)))
            gnc_tree_view_split_reg_set_value_for (view, trans, osplit, gnc_numeric_neg (value), TRUE);
@@ -256,7 +515,7 @@ gnc_tree_control_split_reg_void_current_trans (GncTreeViewSplitReg *view, const 
 
     blank_split = gnc_tree_control_split_reg_get_blank_split (view);
 
-    /* get the current split based on cursor position */
+    /* get the current split */
     split = gnc_tree_view_split_reg_get_current_split (view);
     if (split == NULL)
         return;
@@ -270,6 +529,25 @@ gnc_tree_control_split_reg_void_current_trans (GncTreeViewSplitReg *view, const 
         return;
 
     trans = xaccSplitGetParent (split);
+
+    if (trans == NULL)
+        return;
+
+    /* See if we were asked to change a blank trans. */
+    if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
+        return;
+
+    /* Test for read only */
+    if (gtc_is_trans_readonly_and_warn (view, trans))
+        return;
+
+    /* See if we are being edited in another register */
+    if (gtc_trans_test_for_edit (view, trans))
+        return;
+
+    /* Make sure we ask to commit any changes before we procede */
+    if (gtc_trans_open_and_warn (view, trans))
+        return;
 
     gnc_tree_view_split_reg_set_dirty_trans (view, trans);
 
@@ -311,6 +589,13 @@ gnc_tree_control_split_reg_unvoid_current_trans (GncTreeViewSplitReg *view)
 
     trans = xaccSplitGetParent (split);
 
+    if (trans == NULL)
+        return;
+
+    /* See if we were asked to change a blank trans. */
+    if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
+        return;
+
     gnc_tree_view_split_reg_set_dirty_trans (view, trans);
 
     xaccTransUnvoid (trans);
@@ -333,6 +618,9 @@ gnc_tree_control_split_reg_jump_to_blank (GncTreeViewSplitReg *view)
     spath = gnc_tree_view_split_reg_get_sort_path_from_model_path (view, mpath);
 
     gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), spath);
+
+    /* Set cursor to new spath */
+    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, NULL, FALSE);
 
     gtk_tree_path_free (spath);
     gtk_tree_path_free (mpath);
@@ -360,6 +648,9 @@ gnc_tree_control_split_reg_jump_to_split (GncTreeViewSplitReg *view, Split *spli
     gnc_tree_view_split_reg_set_current_path (view, spath);
 
     gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), spath);
+
+    /* Set cursor to new spath */
+    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, NULL, FALSE);
 
     gtk_tree_path_free (spath);
     gtk_tree_path_free (mpath);
@@ -454,6 +745,9 @@ gnc_tree_control_split_reg_goto_rel_trans_row (GncTreeViewSplitReg *view, gint r
     gnc_tree_view_split_reg_block_selection (view, FALSE);
     gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (view)), new_spath);
 
+    /* Set cursor to new spath */
+    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), new_spath, NULL, FALSE);
+
     LEAVE("new_spath is %s", gtk_tree_path_to_string (new_spath));
 
     gtk_tree_path_free (new_spath);
@@ -470,6 +764,8 @@ gnc_tree_control_split_reg_enter (GncTreeViewSplitReg *view, gboolean next_trans
     gboolean goto_blank;
 
     ENTER("view=%p, next_transaction=%s", view, next_transaction ? "TRUE" : "FALSE");
+
+//FIXME Might need more...
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
@@ -508,7 +804,7 @@ gnc_tree_control_split_reg_enter (GncTreeViewSplitReg *view, gboolean next_trans
             gnc_tree_view_split_reg_collapse_trans (view, NULL);
 
         /* Now move. */
-        if (goto_blank)
+        if (goto_blank) //FIXME What do we want to do here...
             gnc_tree_control_split_reg_jump_to_blank (view);
         else if (next_transaction)
             gnc_tree_control_split_reg_goto_rel_trans_row (view, 1);
@@ -533,7 +829,24 @@ gnc_tree_control_split_reg_reinit (GncTreeViewSplitReg *view, gpointer data)
                               "cause your reconciled balance to be off.");
 
     trans = gnc_tree_view_split_reg_get_current_trans (view);
-    if (gtc_is_trans_readonly_and_warn (trans))
+
+    if (trans == NULL)
+        return;
+
+    /* See if we were asked to change a blank trans. */
+    if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
+        return;
+
+    /* Test for read only */
+    if (gtc_is_trans_readonly_and_warn (view, trans))
+        return;
+
+    /* See if we are being edited in another register */
+    if (gtc_trans_test_for_edit (view, trans))
+        return;
+
+    /* Make sure we ask to commit any changes before we procede */
+    if (gtc_trans_open_and_warn (view, trans))
         return;
 
     window = gnc_tree_view_split_reg_get_parent (view);
@@ -543,6 +856,7 @@ gnc_tree_control_split_reg_reinit (GncTreeViewSplitReg *view, gpointer data)
                                     GTK_MESSAGE_WARNING,
                                     GTK_BUTTONS_NONE,
                                     "%s", title);
+
     if (xaccTransHasReconciledSplits (trans))
     {
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
@@ -582,10 +896,27 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
     split = gnc_tree_view_split_reg_get_current_split (view);
     if (split == NULL)
     {
-        return;
+        split = gnc_tree_control_split_reg_get_current_trans_split (view);
+        if (split == NULL)
+        {
+            LEAVE("split is NULL");
+            return;
+        }
     }
 
     trans = xaccSplitGetParent (split);
+
+    if (trans == NULL)
+        return;
+
+    /* Test for read only */
+    if (gtc_is_trans_readonly_and_warn (view, trans))
+        return;
+
+    /* See if we are being edited in another register */
+    if (gtc_trans_test_for_edit (view, trans))
+        return;
+
     depth = gnc_tree_view_reg_get_selected_row_depth (view);
 
     /* Deleting the blank split just cancels */
@@ -593,13 +924,8 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
         Split *blank_split = gnc_tree_control_split_reg_get_blank_split (view);
 
         if (split == blank_split)
-        {
             return;
-        }
     }
-
-    if (gtc_is_trans_readonly_and_warn (trans))
-        return;
 
     window = gnc_tree_view_split_reg_get_parent (view);
 
@@ -726,41 +1052,58 @@ gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
 {
     GtkWidget *window;
     Transaction *trans = NULL, *new_trans = NULL;
+    GList *snode = NULL;
+    gboolean changed = FALSE;
+
+    ENTER(" ");
 
     trans = gnc_tree_view_split_reg_get_current_trans (view);
 
     if (trans == NULL)
+    {
+        LEAVE("Trans is Null");
         return;
-
-//FIXME Need same tests as duplicate ?????
-
-    window = gnc_tree_view_split_reg_get_parent (view);
-
-    /* Make sure we have stopped editing */
-    gnc_tree_view_split_reg_finish_edit (view);
+    }
 
     /* See if we were asked to reverse a blank trans. */
     if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
     {
-        LEAVE("skip blank trans");
+        LEAVE("Skip blank trans");
         return;
     }
+
+    /* Test for read only */
+    if (gtc_is_trans_readonly_and_warn (view, trans))
+    {
+        LEAVE("Read only");
+        return;
+    }
+
+    /* See if we are being edited in another register */
+    if (gtc_trans_test_for_edit (view, trans))
+    {
+        LEAVE("Open in different register");
+        return;
+    }
+
+    window = gnc_tree_view_split_reg_get_parent (view);
 
     if (xaccTransGetReversedBy (trans))
     {
         gnc_error_dialog (window, "%s",
                          _("A reversing entry has already been created for this transaction."));
+        LEAVE("Already have reversing transaction");
         return;
     }
 
-#ifdef skip
+    /* Make sure we ask to commit any changes before we add reverse transaction */
+    if (gtc_trans_open_and_warn (view, trans))
+    {
+        LEAVE("save cancelled");
+        return;
+    }
 
-//FIXME Test for trans in edit....
-
-    gnc_tree_view_split_reg_set_dirty_trans (view, trans);
-
-    xaccTransBeginEdit (trans);
-
+    /* Create reverse transaction */
     new_trans = xaccTransReverse (trans);
 
     xaccTransBeginEdit (new_trans);
@@ -770,14 +1113,25 @@ gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
     xaccTransSetDateEnteredSecs (new_trans, gnc_time (NULL));
 
     xaccTransCommitEdit (new_trans);
-    xaccTransCommitEdit (trans);
 
-    gnc_tree_view_split_reg_set_dirty_trans (view, NULL);
+    // We need to loop through the splits and send an event to update the register.
+    for (snode = xaccTransGetSplitList (new_trans); snode; snode = snode->next)
+    {
+        if (xaccTransStillHasSplit (new_trans, snode->data))
+        {
+           /* Send an event based on the split account */
+           qof_event_gen (QOF_INSTANCE (xaccSplitGetAccount(snode->data)), GNC_EVENT_ITEM_ADDED, snode->data);
+        }
+    }
+
+    /* give gtk+ a chance to handle pending events */
+    while (gtk_events_pending ())
+        gtk_main_iteration ();
 
     /* Now jump to new trans */
-//    gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (new_trans, 0));
+    gnc_tree_control_split_reg_jump_to_split (view, xaccTransGetSplit (new_trans, 0));
 
-#endif
+    LEAVE("Reverse transaction created");
 }
 
 
@@ -792,6 +1146,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
     Split *blank_split;
     Split *split, *trans_split;
     gboolean changed = FALSE;
+    gboolean use_split_action_for_num_field = FALSE;
 
     ENTER("");
 
@@ -800,99 +1155,119 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
     blank_split = gnc_tree_control_split_reg_get_blank_split (view);
     split = gnc_tree_view_split_reg_get_current_split (view);
     trans_split = gnc_tree_control_split_reg_get_current_trans_split (view);
-    trans = gnc_tree_view_split_reg_get_current_trans (view);
     depth = gnc_tree_view_reg_get_selected_row_depth (view);
-#ifdef skip
+
+    use_split_action_for_num_field = qof_book_use_split_action_for_num_field (gnc_get_current_book());
+
+    trans = gnc_tree_view_split_reg_get_current_trans (view);
+
     /* This shouldn't happen, but be paranoid. */
     if (trans == NULL)
-    {
-        LEAVE("no transaction");
         return FALSE;
-    }
 
-    if (gtc_is_trans_readonly_and_warn (trans))
-    {
-        LEAVE("read only transaction");
-        return FALSE;
-    }
-
-    /* Make sure we have stopped editing */
-    gnc_tree_view_split_reg_finish_edit (view);
-
-    /* See if we are editing this transcation all ready */
-    if (trans == gnc_tree_view_split_reg_get_dirty_trans (view))
-        changed = TRUE;
-
-    /* See if we were asked to duplicate a blank split. */
-    if (split == gnc_tree_control_split_reg_get_blank_split (view))
-    {
-        LEAVE("skip blank split");
-        return FALSE;
-    }
-
-    /* See if we were asked to duplicate a blank trans. */
+    /* See if we were asked to change a blank trans. */
     if (trans == gnc_tree_control_split_reg_get_blank_trans (view))
     {
-        LEAVE("skip blank trans");
+        LEAVE("Skip blank trans");
         return FALSE;
     }
 
-    gnc_suspend_gui_refresh ();
+    /* See if we were asked to change a blank split. */
+    if (split == blank_split)
+    {
+        LEAVE("Skip blank split");
+        return FALSE;
+    }
+
+    /* Test for read only */
+    if (gtc_is_trans_readonly_and_warn (view, trans))
+    {
+        LEAVE("Read only");
+        return FALSE;
+    }
+
+    /* See if we are being edited in another register */
+    if (gtc_trans_test_for_edit (view, trans))
+    {
+        LEAVE("Open in different register");
+        return FALSE;
+    }
+
+    /* Make sure we ask to commit any changes before we procede */
+    if (gtc_trans_open_and_warn (view, trans))
+    {
+        LEAVE("save cancelled");
+        return FALSE;
+    }
 
     window = gnc_tree_view_split_reg_get_parent (view);
-
-    /* If the cursor has been edited, we are going to have to commit
-     * it before we can duplicate. Make sure the user wants to do that. */
-    if (changed)
-    {
-        GtkWidget *dialog;
-        gint response;
-        const char *title = _("Save transaction before duplicating?");
-        const char *message =
-            _("The current transaction has been changed. Would you like to "
-              "record the changes before duplicating the transaction, or "
-              "cancel the duplication?");
-
-        dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_MESSAGE_QUESTION,
-                                        GTK_BUTTONS_CANCEL,
-                                        "%s", title);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                "%s", message);
-        gtk_dialog_add_button (GTK_DIALOG (dialog),
-                              _("_Record"), GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run (GTK_DIALOG (dialog), "transaction_duplicated");
-        gtk_widget_destroy (dialog);
-
-        if (response != GTK_RESPONSE_ACCEPT)
-        {
-            gnc_resume_gui_refresh ();
-            LEAVE("save cancelled");
-            return FALSE;
-        }
-
-        xaccTransCommitEdit (trans);
-        gnc_tree_view_split_reg_set_dirty_trans (view, NULL);
-    }
 
     /* Ok, we are now ready to make the copy. */
 
     if (depth == SPLIT3)
     {
         Split *new_split;
+        gboolean new_act_num = FALSE;
+        char *out_num;
+        time64 date;
 
         /* We are on a split in an expanded transaction.
-         * Just copy the split and add it to the transaction. */
+         * Just copy the split and add it to the transaction.
+         * However, if the split-action field is being used as the register 
+         * number, and the action field is a number, request a new value or
+         * cancel. Need to get next number and update account last num from
+         * split account not register account, which may be the same or not */
 
         if (split != trans_split)
         {
+            if (use_split_action_for_num_field && gnc_strisnum (gnc_get_num_action (NULL, split)))
+            {
+                Account *account = xaccSplitGetAccount (split);
+                const char* title = _("New Split Information");
+                const char *in_num = NULL;
+                date = time (0);
+
+                if (account)
+                    in_num = xaccAccountGetLastNum (account);
+                else
+                    in_num = gnc_get_num_action (NULL, split);
+
+                if (!gnc_dup_trans_dialog (window, title, FALSE,
+                                           &date, in_num, &out_num, NULL, NULL))
+                {
+                    LEAVE("dup cancelled");
+                    return FALSE;
+                }
+                new_act_num = TRUE;
+            }
+
             new_split = xaccMallocSplit (gnc_get_current_book ());
 
+            // Remove the blank split
+            gnc_tree_model_split_reg_set_blank_split_parent (model, trans, TRUE);
+
             xaccTransBeginEdit (trans);
+            gnc_tree_view_split_reg_set_dirty_trans (view, trans);
+
             xaccSplitSetParent (new_split, trans);
             gtc_copy_split_onto_split (split, new_split, FALSE);
-            xaccTransCommitEdit (trans);
+
+            // Add the blank split
+            gnc_tree_model_split_reg_set_blank_split_parent (model, trans, FALSE);
+
+            if (new_act_num) /* if new number supplied by user dialog */
+                gnc_set_num_action (NULL, new_split, out_num, NULL);
+
+            if (new_act_num && gnc_strisnum (out_num))
+            {
+                Account *account = xaccSplitGetAccount (new_split);
+
+                /* If current register is for account, set last num */
+                if (account == gnc_tree_model_split_reg_get_anchor (model))
+                    xaccAccountSetLastNum (account, out_num);
+            }
+            if (new_act_num)
+                g_free (out_num);
         }
         else
         {
@@ -906,14 +1281,14 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
     else
     {
         Transaction *new_trans;
+        int trans_split_index;
+        int split_index;
         const char *in_num = NULL;
         const char *in_tnum = NULL;
         char *out_num;
         char *out_tnum;
         time64 date;
         gboolean use_autoreadonly = qof_book_uses_autoreadonly (gnc_get_current_book());
-        gboolean use_split_action_for_num_field = qof_book_use_split_action_for_num_field
-                           (gnc_get_current_book());
 
         /* We are on a transaction row. Copy the whole transaction. */
 
@@ -924,16 +1299,16 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
             if (account)
                 in_num = xaccAccountGetLastNum (account);
             else
-                in_num = xaccTransGetNum (trans);
-            in_tnum = (use_split_action_for_num_field
+                in_num = gnc_get_num_action (trans, trans_split);
+
+            in_tnum = (!use_split_action_for_num_field
                                         ? NULL
-                                        : gnc_get_num_action (trans, NULL)); //FIXME is this right way round ?
+                                        : gnc_get_num_action (trans, NULL));
         }
 
         if (!gnc_dup_trans_dialog (window, NULL, TRUE,
                                    &date, in_num, &out_num, in_tnum, &out_tnum))
         {
-            gnc_resume_gui_refresh ();
             LEAVE("dup cancelled");
             return FALSE;
         }
@@ -963,19 +1338,35 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
             g_date_free (readonly_threshold);
         }
 
+        split_index = xaccTransGetSplitIndex (trans, split);
+        trans_split_index = xaccTransGetSplitIndex (trans, trans_split);
+
         new_trans = xaccMallocTransaction (gnc_get_current_book ());
 
         xaccTransBeginEdit (new_trans);
         gtc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);
         xaccTransSetDatePostedSecs (new_trans, date);
-        xaccTransSetNum (new_trans, out_num);
+
+        /* set per book option */
+        gnc_set_num_action (new_trans, NULL, out_num, out_tnum);
+        if (!use_split_action_for_num_field)
+        {
+            /* find split in new_trans that equals trans_split and set
+             * split_action to out_num */
+            gnc_set_num_action (NULL,
+                                xaccTransGetSplit (new_trans, trans_split_index),
+                                out_num, NULL);
+            /* note that if the transaction has multiple splits to the register
+             * account, only the anchor split will be set with user input. The
+             * user will have to adjust other splits manually. */
+        }
         xaccTransCommitEdit (new_trans);
+
+        g_free (out_num);
+
+        if (!use_split_action_for_num_field)
+            g_free (out_tnum);
     }
-
-
-    /* Refresh the GUI. */
-    gnc_resume_gui_refresh ();
-#endif
     LEAVE(" ");
     return TRUE;
 }
@@ -987,7 +1378,7 @@ gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing
 {
     GncTreeModelSplitReg *model;
     RowDepth depth;
-    Transaction *pending_trans;
+    Transaction *dirty_trans;
     Transaction *blank_trans;
     Transaction *trans;
     Account *account;
@@ -1013,7 +1404,7 @@ gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
     blank_split = gnc_tree_control_split_reg_get_blank_split (view);
-    pending_trans = gnc_tree_view_split_reg_get_dirty_trans (view);
+    dirty_trans = gnc_tree_view_split_reg_get_dirty_trans (view);
     blank_trans = gnc_tree_control_split_reg_get_blank_trans (view);
 
     /* get the handle to the current split and transaction */
@@ -1034,7 +1425,7 @@ gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing
         return FALSE;
     }
 
-    if (trans == pending_trans )
+    if (trans == dirty_trans )
     {
         if (trans != blank_trans)
         {
@@ -1250,6 +1641,52 @@ gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view)
 }
 
 
+/* Return the account for name given or create it */ 
+Account *
+gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const char *name)
+{
+    GtkWidget *window;
+    const char *placeholder = _("The account %s does not allow transactions.");
+    const char *missing = _("The account %s does not exist. "
+                            "Would you like to create it?");
+    char *account_name;
+    Account *account;
+
+    if (!name || (strlen(name) == 0))
+        return NULL;
+
+    /* Find the account */
+    if (gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, "show_leaf_account_names", NULL))
+        account = gnc_account_lookup_by_name (gnc_get_current_root_account(), name);
+    else
+        account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), name);
+
+    if (!account)
+        account = gnc_account_lookup_by_code (gnc_get_current_root_account(), name);
+
+    window = gnc_tree_view_split_reg_get_parent (view);
+
+    if (!account)
+    {
+        /* Ask if they want to create a new one. */
+        if (!gnc_verify_dialog (window, TRUE, missing, name))
+            return NULL;
+
+        /* User said yes, they want to create a new account. */
+        account = gnc_ui_new_accounts_from_name_window (name);
+        if (!account)
+            return NULL;
+    }
+    /* Now have the account. */
+
+    /* See if the account (either old or new) is a placeholder. */
+    if (xaccAccountGetPlaceholder (account))
+        gnc_error_dialog (window, placeholder, name);
+
+    /* Be seeing you. */
+    return account;
+}
+
 /*****************************************************************************
  *                         ClipBoard Functions                               *
  *****************************************************************************/
@@ -1272,15 +1709,9 @@ gnc_tree_control_split_reg_cut_trans (GncTreeViewSplitReg *view)
     if (!from_trans)
         return;
 
-    if (gnc_tree_model_split_reg_get_read_only (model, from_trans))
-    {
-        GtkWidget *window;
-
-        window = gnc_tree_view_split_reg_get_parent (view);
-        gnc_error_dialog (window, "%s",
-                         _("You can not cut from a read only transaction or register."));
+    /* Test for read only */
+    if (gtc_is_trans_readonly_and_warn (view, from_trans))
         return;
-    }
 
     xaccTransBeginEdit (clipboard_trans);
     if (clipboard_trans)
@@ -1354,15 +1785,13 @@ gnc_tree_control_split_reg_paste_trans (GncTreeViewSplitReg *view)
     if (!to_trans || !clipboard_trans)
         return;
 
-    if (gnc_tree_model_split_reg_get_read_only (model, to_trans))
-    {
-        GtkWidget *window;
-
-        window = gnc_tree_view_split_reg_get_parent (view);
-        gnc_error_dialog (window, "%s",
-                         _("You can not paste to a read only transaction or register."));
+    /* See if we are being edited in another register */
+    if (gtc_trans_test_for_edit (view, to_trans))
         return;
-    }
+
+    /* Test for read only */
+    if (gtc_is_trans_readonly_and_warn (view, to_trans))
+        return;
 
     //FIXME You can not paste from gl to a register, is this too simplistic
     if (clipboard_acct == NULL && anchor_acct != NULL)
