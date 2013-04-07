@@ -364,7 +364,6 @@ gnc_tree_view_split_reg_get_model_from_view (GncTreeViewSplitReg *view)
     return GNC_TREE_MODEL_SPLIT_REG (gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (f_model)));
 }
 
-
 /* Get the model iter from the view path string */
 static gboolean
 gtv_get_model_iter_from_view_string (GncTreeViewSplitReg *view,
@@ -387,7 +386,6 @@ gtv_get_model_iter_from_view_string (GncTreeViewSplitReg *view,
     return TRUE;
 }
 
-
 /* Get the model iter from the selection */
 static gboolean
 gtv_get_model_iter_from_selection (GncTreeViewSplitReg *view,
@@ -406,36 +404,42 @@ gtv_get_model_iter_from_selection (GncTreeViewSplitReg *view,
     return FALSE;
 }
 
-
 /* Get sort model path from the model path */
 GtkTreePath *
 gnc_tree_view_split_reg_get_sort_path_from_model_path (GncTreeViewSplitReg *view, GtkTreePath *mpath)
 {
     GtkTreeModel *f_model, *s_model;
-    GtkTreePath *fpath;
+    GtkTreePath *fpath, *spath;
 
     s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
 
     fpath = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model), mpath);
-//FIXME Leak fpath
-    return gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), fpath);
-}
 
+    spath = gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), fpath);
+
+    gtk_tree_path_free (fpath);
+
+    return spath;
+}
 
 /* Get model path from the sort model path */
 GtkTreePath *
 gnc_tree_view_split_reg_get_model_path_from_sort_path (GncTreeViewSplitReg *view, GtkTreePath *spath)
 {
     GtkTreeModel *f_model, *s_model;
-    GtkTreePath *fpath;
+    GtkTreePath *fpath, *mpath;
 
     s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
     f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
 
     fpath = gtk_tree_model_sort_convert_path_to_child_path (GTK_TREE_MODEL_SORT (s_model), spath);
-//FIXME Leak fpath
-    return gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (f_model), fpath);
+
+    mpath = gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (f_model), fpath);
+
+    gtk_tree_path_free (fpath);
+
+    return mpath;
 }
 
 /* Forces the entire split register tree to be re-evaluated for visibility. */
@@ -2466,7 +2470,7 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
                 g_object_set (cell, "cell-background", PINKCELL, (gchar*)NULL);
         }
 
-        /* Only allow changes to values if we have a valid split accounts */
+        /* Only allow changes to entries if we have a valid split accounts */
         editable = have_account (view, depth, expanded, trans, split);
 
         editable = (read_only == TRUE) ? FALSE : editable;
@@ -2539,7 +2543,7 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
                 g_object_set(cell, "cell-background", PINKCELL, (gchar*)NULL);
         }
 
-        /* Only allow changes to values if we have a valid split accounts */
+        /* Only allow changes to entries if we have a valid split accounts */
         editable = have_account (view, depth, expanded, trans, split);
 
         editable = (read_only == TRUE) ? FALSE : editable;
@@ -2592,7 +2596,7 @@ cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
                                 gnc_account_print_info (anchor, SHOW_SYMBOL));
         }
 
-        /* Only allow changes to values if we have a valid split accounts */
+        /* Only allow changes to entries if we have a valid split accounts */
         editable = have_account (view, depth, expanded, trans, split);
 
         editable = (read_only == TRUE) ? FALSE : editable;
@@ -4085,64 +4089,69 @@ gtv_split_reg_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer user
         if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (view), (gint) event->x, (gint) event->y,
                                              &spath, &col, NULL, NULL))
         {
+            DEBUG("event->x is %d and event->y is %d", (gint)event->x, (gint)event->y);
+
             mpath = gnc_tree_view_split_reg_get_model_path_from_sort_path (view, spath);
 
-            if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &m_iter, mpath))
+            if ((gint)event->x > 5) //FIXME This maybe a fudge, we do this so we can resize columns.
             {
-                DEBUG("Mouse Button Press - mpath is %s, spath is %s", gtk_tree_path_to_string (mpath), gtk_tree_path_to_string (spath));
-
-                // Reset the transaction confirm flag.
-                view->priv->trans_confirm = RESET;
-
-                gnc_tree_model_split_reg_get_split_and_trans (
-                    GNC_TREE_MODEL_SPLIT_REG (model), &m_iter, &is_trow1, &is_trow2, &is_split, &is_blank, &split, &trans);
-
-                // Ask for confirmation if data has been edited, transaction_changed_confirm return TRUE if canceled
-                if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (view), "data-edited")) && transaction_changed_confirm (view, trans))
+                if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &m_iter, mpath))
                 {
-                    DEBUG("MBP - Restore position - Cancel / Discard");
+                    DEBUG("Mouse Button Press - mpath is %s, spath is %s", gtk_tree_path_to_string (mpath), gtk_tree_path_to_string (spath));
 
-                    /* Restore position - Cancel / Discard */
-                    if (view->priv->trans_confirm == CANCEL)
+                    // Reset the transaction confirm flag.
+                    view->priv->trans_confirm = RESET;
+
+                    gnc_tree_model_split_reg_get_split_and_trans (
+                        GNC_TREE_MODEL_SPLIT_REG (model), &m_iter, &is_trow1, &is_trow2, &is_split, &is_blank, &split, &trans);
+
+                    // Ask for confirmation if data has been edited, transaction_changed_confirm return TRUE if canceled
+                    if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (view), "data-edited")) && transaction_changed_confirm (view, trans))
                     {
-                        DEBUG("MBP - Cancel");
+                        DEBUG("MBP - Restore position - Cancel / Discard");
 
-                        // Expand trans on split-trans (We only expand on cancel and more than two splits)
-                        if ((xaccTransCountSplits (view->priv->dirty_trans) > 2) && view->priv->dirty_trans != NULL)
+                        /* Restore position - Cancel / Discard */
+                        if (view->priv->trans_confirm == CANCEL)
                         {
-                            // Jump to the first split of dirty_trans.
-                            gnc_tree_control_split_reg_jump_to (view, NULL, xaccTransGetSplit (view->priv->dirty_trans, 0), FALSE);
-                        }
-                        else
-                            // Jump to the dirty_trans.
-                            gnc_tree_control_split_reg_jump_to (view, view->priv->dirty_trans, NULL, FALSE);
+                            DEBUG("MBP - Cancel");
 
+                            // Expand trans on split-trans (We only expand on cancel and more than two splits)
+                            if ((xaccTransCountSplits (view->priv->dirty_trans) > 2) && view->priv->dirty_trans != NULL)
+                            {
+                                // Jump to the first split of dirty_trans.
+                                gnc_tree_control_split_reg_jump_to (view, NULL, xaccTransGetSplit (view->priv->dirty_trans, 0), FALSE);
+                            }
+                            else
+                                // Jump to the dirty_trans.
+                                gnc_tree_control_split_reg_jump_to (view, view->priv->dirty_trans, NULL, FALSE);
+
+                            gtk_tree_path_free (spath);
+                            gtk_tree_path_free (mpath);
+                            return TRUE;
+                        }
+
+                        if (view->priv->trans_confirm == DISCARD)
+                        {
+                            DEBUG("MBP - Discard");
+                            view->priv->dirty_trans = NULL;
+                        }
+                    }
+
+                    /* Skip */
+                    // Reconcile tests
+                    if (gtv_split_reg_recn_tests (view, col))
+                    {
                         gtk_tree_path_free (spath);
                         gtk_tree_path_free (mpath);
                         return TRUE;
                     }
 
-                    if (view->priv->trans_confirm == DISCARD)
-                    {
-                        DEBUG("MBP - Discard");
-                        view->priv->dirty_trans = NULL;
-                    }
-                }
-
-                /* Skip */
-                // Reconcile tests
-                if (gtv_split_reg_recn_tests (view, col))
-                {
+                    /* Set cursor to column */
+                    gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, col, TRUE);
                     gtk_tree_path_free (spath);
                     gtk_tree_path_free (mpath);
                     return TRUE;
                 }
-
-                /* Set cursor to column */
-                gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), spath, col, TRUE);
-                gtk_tree_path_free (spath);
-                gtk_tree_path_free (mpath);
-                return TRUE;
             }
             gtk_tree_path_free (spath);
             gtk_tree_path_free (mpath);
