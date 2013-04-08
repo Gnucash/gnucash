@@ -1594,9 +1594,9 @@ function make_chm() {
     _XSLTPROC_OPTS=$3
     echo "Processing $_CHM_TYPE ($_CHM_LANG) ..."
     qpushd $_CHM_TYPE/$_CHM_LANG
-        # Some debug output
-        echo xsltproc $XSLTPROCFLAGS $_XSLTPROC_OPTS --path ../../../docbookx-dtd ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
-        ls ../../../docbookx-dtd ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
+        ## Some debug output
+        #echo xsltproc $XSLTPROCFLAGS $_XSLTPROC_OPTS --path ../../../docbookx-dtd ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
+        #ls ../../../docbookx-dtd ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
         xsltproc $XSLTPROCFLAGS $_XSLTPROC_OPTS --path ../../../docbookx-dtd ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
         count=0
         echo >> htmlhelp.hhp
