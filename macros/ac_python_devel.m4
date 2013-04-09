@@ -26,6 +26,9 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
 	if test -z "$python_path" ; then
 		AC_MSG_ERROR([cannot find Python include path])
 	fi
+	if ! test -f "$python_path/Python.h" ; then
+		AC_MSG_ERROR([cannot find Python.h in $python_path])
+	fi
 	AC_SUBST([PYTHON_CPPFLAGS],[-I$python_path])
 
 	# Check for Python library path
