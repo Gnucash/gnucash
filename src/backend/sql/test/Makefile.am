@@ -67,7 +67,8 @@ test_sqlbe_SOURCES = \
 test_sqlbe_LDADD = \
 	$(top_builddir)/$(MODULEPATH)/libgnc-backend-sql.la \
 	$(top_builddir)/src/libqof/qof/libgnc-qof.la \
-	$(top_builddir)/src/test-core/libtest-core.la
+	$(top_builddir)/src/test-core/libtest-core.la \
+	$(GLIB_LIBS)
 
 test_sqlbe_CFLAGS = \
 	-DTESTPROG=test_sqlbe \
