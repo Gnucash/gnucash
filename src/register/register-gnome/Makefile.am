@@ -65,7 +65,6 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GTK_XIM_FLAGS} \
-  ${GUILE_INCS} \
   ${GNOMECANVAS_CFLAGS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.gnome\"

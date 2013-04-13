@@ -48,7 +48,6 @@
 #include "gnucash-style.h"
 #include "table-allgui.h"
 #include "table-gnome.h"
-#include "guile-mappings.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-engine.h"
 
