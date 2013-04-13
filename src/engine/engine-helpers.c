@@ -30,6 +30,7 @@
 
 #include "Account.h"
 #include "engine-helpers.h"
+#include "engine-helpers-guile.h"
 #include "glib-helpers.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"

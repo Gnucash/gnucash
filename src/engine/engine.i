@@ -14,6 +14,7 @@
 #include "gnc-lot.h"
 #include "gnc-hooks-scm.h"
 #include "engine-helpers.h"
+#include "engine-helpers-guile.h"
 #include "SX-book.h"
 #include "kvp-scm.h"
 #include "glib-helpers.h"
@@ -126,6 +127,7 @@ functions. */
 }
 
 %include <engine-helpers.h>
+%include <engine-helpers-guile.h>
 %typemap(in) Transaction *trans;
 %typemap(in) Split *split;
 %typemap(in) char * num;

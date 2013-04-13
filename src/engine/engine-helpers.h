@@ -26,7 +26,6 @@
 #define ENGINE_HELPERS_H
 
 #include <glib.h>
-#include <libguile.h>
 
 #include "gnc-engine.h"
 #include "Account.h"
@@ -86,34 +85,5 @@ gnc_book_option_register_cb (gchar *key, GncBOCb func, gpointer user_data);
 /** Removes previously registered callbacks for the specified book option key */
 void
 gnc_book_option_remove_cb (gchar *key, GncBOCb func, gpointer user_data);
-
-/* Helpers for various types */
-
-SCM      gnc_timespec2timepair(Timespec t);
-Timespec gnc_timepair2timespec(SCM x);
-GDate    gnc_timepair_to_GDate(SCM x);
-int      gnc_timepair_p(SCM x);
-
-SCM  gnc_guid2scm(GncGUID guid);
-GncGUID gnc_scm2guid(SCM guid_scm);
-int  gnc_guid_p(SCM guid_scm);
-
-/* for a list of strings */
-GSList * gnc_query_scm2path (SCM path_scm);
-
-/* These two functions convert a query object into a scheme
- * representation of the query and vice-versa. They do not
- * simply convert a query pointer to a guile query pointer! */
-SCM gnc_query2scm (QofQuery * q);
-QofQuery * gnc_scm2query (SCM query_scm);
-
-int gnc_gh_gint64_p(SCM num);
-
-SCM gnc_numeric_to_scm(gnc_numeric arg);
-gnc_numeric gnc_scm_to_numeric(SCM arg);
-int gnc_numeric_p(SCM arg);
-gnc_commodity * gnc_scm_to_commodity(SCM scm);
-SCM gnc_commodity_to_scm (const gnc_commodity *commodity);
-SCM gnc_book_to_scm (const QofBook *book);
 
 #endif

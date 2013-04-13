@@ -50,7 +50,7 @@
 #include "gnc-gconf-utils.h"
 #include "dialog-new-user.h"
 #include "gnc-session.h"
-#include "engine-helpers.h"
+#include "engine-helpers-guile.h"
 #include "swig-runtime.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */

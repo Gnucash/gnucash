@@ -2,7 +2,7 @@
 
 #include "qof.h"
 #include <libguile.h>
-#include "engine-helpers.h"
+#include "engine-helpers-guile.h"
 
 #include "kvp-scm.h"
 #include "guile-mappings.h"

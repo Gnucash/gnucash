@@ -29,7 +29,7 @@
 #include "swig-runtime.h"
 
 #include "gnc-engine.h"
-#include "engine-helpers.h"
+#include "engine-helpers-guile.h"
 #include "gnc-helpers.h"
 #include "gnc-ui-util.h"
 

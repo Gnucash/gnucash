@@ -37,7 +37,7 @@
 #endif
 
 #include "qof.h"
-#include "engine-helpers.h"
+#include "engine-helpers-guile.h"
 #include "glib-helpers.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-glib-utils.h"

@@ -29,8 +29,9 @@
 #include <time.h>
 #include <string.h>
 
+#include "Account.h"
 #include "option-util.h"
-#include "engine-helpers.h"
+#include "engine-helpers-guile.h"
 #include "glib-helpers.h"
 #include "gnc-guile-utils.h"
 #include "qof.h"

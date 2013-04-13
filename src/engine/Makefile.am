@@ -77,6 +77,7 @@ gncinclude_HEADERS = \
   cap-gains.h \
   cashobjects.h \
   engine-helpers.h \
+  engine-helpers-guile.h \
   glib-helpers.h \
   gnc-budget.h \
   gnc-commodity.h \

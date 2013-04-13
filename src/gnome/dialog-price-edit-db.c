@@ -46,7 +46,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "guile-util.h"
-#include "engine-helpers.h"
+#include "engine-helpers-guile.h"
 #include "swig-runtime.h"
 
 
