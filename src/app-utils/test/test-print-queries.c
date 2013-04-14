@@ -4,7 +4,7 @@
 #include <libguile.h>
 #include "guile-mappings.h"
 
-#include "engine-helpers.h"
+#include "engine-helpers-guile.h"
 #include "gnc-module.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
