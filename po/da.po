@@ -1,12 +1,12 @@
 # Danish translation of Gnucash.
-# Copyright (C) 2012 Free Software Foundation, Inc.
+# Copyright (C) 2013 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnucash package.
 # Kenneth Christiansen <kenneth@gnome.org>, 2000.
 # Keld Simonsen <keld@dkuug.dk>, 2000-2002.
 # Johnny Ernst Nielsen <j.e.nielsen@iname.com>, 2001.
 # Claus Hindsgaul <claus_h@image.dk>, 2001.
 # Ole Laursen <olau@hardworking.dk>, 2001.
-# Joe Hansen <joedalton2@yahoo.dk>, 2009, 2010, 2012.
+# Joe Hansen <joedalton2@yahoo.dk>, 2009, 2010, 2012, 2013.
 #
 # konventioner:
 # account code -> kontonummer (ikke kontokode)
@@ -28,6 +28,7 @@
 # entry -> post (postering)
 # equity -> egenkapital (aktiekapital?)
 # Escrow -> Escrow (eksisterer ikke rigtig på dansk. Se http://en.wikipedia.org/wiki/Escrow) 
+# exchange rate -> vekselkurs
 # expense -> udgift (eller omkostning IKKE ENDELIG AFKLARET)
 # Id -> id (med lille fra 2003)
 # import -> indlæs (eller import IKKE ENDELIG AFKLARET)
@@ -823,14 +824,12 @@ msgstr "Forfaldsdato"
 #. src/report/business-reports/owner-report.scm
 #: ../src/business/business-gnome/dialog-invoice.c:692
 #: ../intl-scm/guile-strings.c:488 ../intl-scm/guile-strings.c:1528
-#, fuzzy
 msgid "Post Date"
-msgstr "Sortér efter dato"
+msgstr "Bogføringsdato"
 
 #: ../src/business/business-gnome/dialog-invoice.c:693
-#, fuzzy
 msgid "Post to Account"
-msgstr "Tabte konti"
+msgstr "Bogfør på konto"
 
 #: ../src/business/business-gnome/dialog-invoice.c:694
 msgid "Accumulate Splits?"
@@ -843,7 +842,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-invoice.c:876
 msgid "The post action was canceled because not all exchange rates were given."
-msgstr ""
+msgstr "Bogføringshandlingen blev afbrudt da ikke alle vekselkurser var angivet."
 
 #: ../src/business/business-gnome/dialog-invoice.c:1137
 #: ../src/gnome/window-reconcile.c:1074
@@ -5209,22 +5208,20 @@ msgid "Edit Exchange Rate"
 msgstr "Rediger vekselkurs"
 
 #: ../src/gnome/glade/register.glade.h:23
-#, fuzzy
 msgid "Edit the exchange rate for the current split"
-msgstr "Rediger hovedkontoen for denne kassekladde"
+msgstr "Rediger vekselkursen for den nuværende opdeling"
 
 #: ../src/gnome/glade/register.glade.h:24
-#, fuzzy
 msgid "End:"
-msgstr "Slutdato:"
+msgstr "Slut:"
 
 #: ../src/gnome/glade/register.glade.h:26
 msgid "Erase all splits except the one for this account."
-msgstr ""
+msgstr "Slet alle opdelinger undtagen den for denne konto."
 
 #: ../src/gnome/glade/register.glade.h:27
 msgid "Filter register by..."
-msgstr ""
+msgstr "Filtrer kasseklade efter ..."
 
 #: ../src/gnome/glade/register.glade.h:28
 msgid "Jump"
@@ -5259,9 +5256,8 @@ msgstr "Indsæt transaktion"
 
 #: ../src/gnome/glade/register.glade.h:35
 #: ../src/gnome/gnc-plugin-page-register.c:220
-#, fuzzy
 msgid "Paste the transaction from the clipboard"
-msgstr "Indsæt fra transaktionsklippebordet"
+msgstr "Indsæt transaktionen fra udklipsholderen"
 
 #: ../src/gnome/glade/register.glade.h:36
 #, fuzzy
@@ -5271,33 +5267,29 @@ msgstr "Indtast noter for transaktionen"
 #: ../src/gnome/glade/register.glade.h:37
 #: ../src/gnome/gnc-plugin-page-register.c:240
 msgid "Record the current transaction"
-msgstr "Gem den aktuelle transaktion"
+msgstr "Optag den aktuelle transaktion"
 
 #: ../src/gnome/glade/register.glade.h:38
-#, fuzzy
 msgid "Remove Transaction Splits"
-msgstr "Genbalancér transaktion"
+msgstr "Fjern transaktionsopdelinger"
 
 #: ../src/gnome/glade/register.glade.h:39
 #: ../src/gnome/gnc-plugin-page-register.c:356
 #: ../src/gnome-utils/gnc-icons.c:23
-#, fuzzy
 msgid "S_plit Transaction"
-msgstr "-- Opdelt transaktion --"
+msgstr "_Opdel transaktion"
 
 #: ../src/gnome/glade/register.glade.h:40
-#, fuzzy
 msgid "S_tatement Date"
-msgstr "Udskriftsdato:"
+msgstr "_Udskriftsdato"
 
 #: ../src/gnome/glade/register.glade.h:42
 msgid "Schedule..."
 msgstr "Planlæg..."
 
 #: ../src/gnome/glade/register.glade.h:43
-#, fuzzy
 msgid "Select Range:"
-msgstr "Sæt _interval..."
+msgstr "Vælg interval:"
 
 #: ../src/gnome/glade/register.glade.h:44
 msgid "Select _All"
@@ -5417,15 +5409,13 @@ msgstr "B_eløb"
 
 #: ../src/gnome/glade/register.glade.h:76
 #: ../src/gnome/gnc-plugin-page-register.c:372
-#, fuzzy
 msgid "_Auto-Split Ledger"
-msgstr "Autoopdel hovedbog"
+msgstr "_Autoopdel hovedbog"
 
 #: ../src/gnome/glade/register.glade.h:77
 #: ../src/gnome/gnc-plugin-page-register.c:367
-#, fuzzy
 msgid "_Basic Ledger"
-msgstr "Basishovedbog"
+msgstr "_Basishovedbog"
 
 #: ../src/gnome/glade/register.glade.h:83
 #: ../src/gnome/gnc-plugin-page-register.c:350
@@ -5433,14 +5423,12 @@ msgid "_Double Line"
 msgstr "_Dobbelt linje"
 
 #: ../src/gnome/glade/register.glade.h:84
-#, fuzzy
 msgid "_Earliest"
-msgstr "Vis tidligste"
+msgstr "_Tidligst"
 
 #: ../src/gnome/glade/register.glade.h:87
-#, fuzzy
 msgid "_Frozen"
-msgstr "frosset:f"
+msgstr "_Frosset"
 
 #: ../src/gnome/glade/register.glade.h:88
 #: ../src/gnome/gnc-plugin-page-register.c:314
@@ -5478,9 +5466,8 @@ msgid "_Standard Order"
 msgstr "_Standardorden"
 
 #: ../src/gnome/glade/register.glade.h:97
-#, fuzzy
 msgid "_Statement Date"
-msgstr "Udskriftsdato:"
+msgstr "_Udskriftsdato"
 
 #: ../src/gnome/glade/register.glade.h:98
 msgid "_Today"
@@ -5601,9 +5588,8 @@ msgid "<b>Occurrences</b>"
 msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:47
-#, fuzzy
 msgid "<b>Options</b>"
-msgstr "Indstillinger"
+msgstr "<b>Indstillinger</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:48
 msgid "<b>Since Last Run Dialog</b>"
@@ -5633,34 +5619,31 @@ msgstr "Beløb:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:55
 msgid "Begin notifications this many days before the transaction is created."
-msgstr ""
+msgstr "Påbegynd påmindelser dette antal dage før transaktionen oprettes."
 
 #: ../src/gnome/glade/sched-xact.glade.h:56
 msgid "Conditional on splits not having variables"
 msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:57
-#, fuzzy
 msgid "Crea_te in advance:"
-msgstr "Startsaldo:"
+msgstr "_Opret på forhånd:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:58
 msgid "Create automatically"
-msgstr ""
+msgstr "Opret automatisk"
 
 #: ../src/gnome/glade/sched-xact.glade.h:59
-#, fuzzy
 msgid "Create in advance:"
-msgstr "Startsaldo:"
+msgstr "Opret på forhånd:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:60
 msgid "Create the transaction this many days before its effective date."
-msgstr ""
+msgstr "Opret transaktionen dette antal dage før dets effektive dato."
 
 #: ../src/gnome/glade/sched-xact.glade.h:61
-#, fuzzy
 msgid "Creation State"
-msgstr "Starthjælp"
+msgstr "Oprettelsestilstand"
 
 #: ../src/gnome/glade/sched-xact.glade.h:62
 msgid ""
@@ -5684,18 +5667,16 @@ msgstr ""
 #. src/report/business-reports/owner-report.scm
 #: ../src/gnome/glade/sched-xact.glade.h:73 ../intl-scm/guile-strings.c:1426
 #: ../intl-scm/guile-strings.c:1548
-#, fuzzy
 msgid "Date Range"
-msgstr "_Datointerval"
+msgstr "Datointerval"
 
 #: ../src/gnome/glade/sched-xact.glade.h:75
 msgid "Do you..."
 msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:76
-#, fuzzy
 msgid "Edit Scheduled Transaction"
-msgstr "Redigér den nuværende transaktion"
+msgstr "Rediger planlagt transaktion"
 
 #: ../src/gnome/glade/sched-xact.glade.h:77
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:173
@@ -5745,7 +5726,7 @@ msgstr "Fjerde niveau"
 #: ../src/gnome-utils/gnc-dense-cal.c:337
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:182
 msgid "Frequency"
-msgstr ""
+msgstr "Frekvens"
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:92 ../intl-scm/guile-strings.c:3302
@@ -5774,32 +5755,34 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:97
 msgid "Length:"
-msgstr ""
+msgstr "Længde:"
 
+# nu er det ikke en kreditorkonto eller kassekredit, vel?
+# Loan Account
+# An account, opened for a customer by a bank, following the granting of a loan. The amount of the
+# loan is credited to the customers current account and similarly debited to the loan account. An
+# arrangement is subsequently made for the customer to repay the loan, usually over a stated 
+# period of time, with interest additionally being paid on the outstanding amount.
 #: ../src/gnome/glade/sched-xact.glade.h:98
-#, fuzzy
 msgid "Loan Account:"
-msgstr "Tabte konti"
+msgstr "Lånkonto:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:99
-#, fuzzy
 msgid "Loan Information"
-msgstr "Skatteoplysninger"
+msgstr "Låninformation"
 
 #: ../src/gnome/glade/sched-xact.glade.h:100
-#, fuzzy
 msgid "Make Scheduled Transaction"
-msgstr "Find identiske transaktioner"
+msgstr "Foretag planlagt transaktion"
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:101 ../intl-scm/guile-strings.c:3294
-#, fuzzy
 msgid "Monday"
-msgstr "I dag"
+msgstr "Mandag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:103
 msgid "Months Remaining:"
-msgstr ""
+msgstr "Tilbageværende måneder:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:104
 msgid "Mortgage/Loan Assistant"
@@ -5814,9 +5797,8 @@ msgid "Name:"
 msgstr "Navn:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:107
-#, fuzzy
 msgid "Never End"
-msgstr "Forrige års afslutning"
+msgstr "Slut aldrig"
 
 #: ../src/gnome/glade/sched-xact.glade.h:108
 msgid ""
@@ -5836,13 +5818,12 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:118
-#, fuzzy
 msgid "Not scheduled"
-msgstr "Planlæg"
+msgstr "Ikke planlagt"
 
 #: ../src/gnome/glade/sched-xact.glade.h:119
 msgid "Notify me when created"
-msgstr ""
+msgstr "Påmind mig når oprettet"
 
 #: ../src/gnome/glade/sched-xact.glade.h:120
 #, fuzzy
@@ -5859,13 +5840,12 @@ msgid "Overview"
 msgstr "Overblik"
 
 #: ../src/gnome/glade/sched-xact.glade.h:126
-#, fuzzy
 msgid "Part of Payment Transaction"
-msgstr "Indsæt transaktion"
+msgstr "Del af betalingstransaktion"
 
 #: ../src/gnome/glade/sched-xact.glade.h:127
 msgid "Payment Frequency"
-msgstr ""
+msgstr "Betalingsfrekvens"
 
 #: ../src/gnome/glade/sched-xact.glade.h:128
 msgid "Payment From (Escrow):"
@@ -5885,7 +5865,7 @@ msgstr "Betaling til:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:133
 msgid "Press apply to commit these changes."
-msgstr ""
+msgstr "Tryk anvend for at acceptere disse ændringer."
 
 #: ../src/gnome/glade/sched-xact.glade.h:134
 msgid "Principal To:"
@@ -5897,9 +5877,8 @@ msgid "R_emind in advance:"
 msgstr "Slutsaldo:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:136
-#, fuzzy
 msgid "Range: "
-msgstr "Dato: "
+msgstr "Interval: "
 
 #: ../src/gnome/glade/sched-xact.glade.h:137
 #, fuzzy
@@ -5907,22 +5886,20 @@ msgid "Remind in advance:"
 msgstr "Slutsaldo:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:138
-#, fuzzy
 msgid "Repayment"
-msgstr "Betaling"
+msgstr "Genbetaling"
 
 #: ../src/gnome/glade/sched-xact.glade.h:139
 msgid "Repayment Frequency"
-msgstr ""
+msgstr "Genbetalingsfrekvens"
 
 #: ../src/gnome/glade/sched-xact.glade.h:140
 msgid "Repayment Type"
-msgstr ""
+msgstr "Genbetalingstype"
 
 #: ../src/gnome/glade/sched-xact.glade.h:141
-#, fuzzy
 msgid "Repeats:"
-msgstr "Rapporter"
+msgstr "Gentagelser:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:142
 #, fuzzy
@@ -5932,7 +5909,7 @@ msgstr "Overblik"
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:143 ../intl-scm/guile-strings.c:3304
 msgid "Saturday"
-msgstr ""
+msgstr "Lørdag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:144
 #, fuzzy
@@ -5957,33 +5934,29 @@ msgid "Show the \"since last run\" window when a file is opened."
 msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:149
-#, fuzzy
 msgid "Since Last Run..."
-msgstr "Sæt _interval..."
+msgstr "Siden sidste kørsel ..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:150
-#, fuzzy
 msgid "Specify Source Account"
-msgstr "Sætter konti op"
+msgstr "Angiv kildekonto"
 
 #: ../src/gnome/glade/sched-xact.glade.h:152
-#, fuzzy
 msgid "Start Date: "
-msgstr "Startdato:"
+msgstr "Startdato: "
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:153 ../intl-scm/guile-strings.c:3292
 msgid "Sunday"
-msgstr ""
+msgstr "Søndag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:154
-#, fuzzy
 msgid "Template Transaction"
-msgstr "Slet transaktion"
+msgstr "Skabelontransaktion"
 
 #: ../src/gnome/glade/sched-xact.glade.h:155
 msgid "The following Scheduled Transactions reference the deleted account, and must now be corrected.  Press OK to edit them."
-msgstr ""
+msgstr "De følgende planlagte transaktioner har reference til den slettede konto, og skal nu rettes. Tryk O.k. for at redigere dem."
 
 #: ../src/gnome/glade/sched-xact.glade.h:156
 msgid ""
@@ -6016,18 +5989,16 @@ msgid "Wednesday"
 msgstr "Onsdag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:166
-#, fuzzy
 msgid "_Auto-create new transactions"
-msgstr "Transaktionsdublet"
+msgstr "_Autoopret nye transaktioner"
 
 #: ../src/gnome/glade/sched-xact.glade.h:167
 msgid "_Notify before transactions are created "
-msgstr ""
+msgstr "_Påmind før transaktioner oprettes"
 
 #: ../src/gnome/glade/sched-xact.glade.h:168
-#, fuzzy
 msgid "_Review created transactions"
-msgstr "Gem den aktuelle transaktion"
+msgstr "_Kontroller oprettede transaktioner"
 
 #: ../src/gnome/glade/sched-xact.glade.h:169
 msgid "_Run when data file opened"
@@ -6147,29 +6118,25 @@ msgid "Stock Split Details"
 msgstr "Aktieopdelingsdetaljer"
 
 #: ../src/gnome/glade/stocks.glade.h:15
-#, fuzzy
 msgid "This assistant will help you record a stock split or stock merger."
-msgstr "Denne hjælper vil hjælpe dig med at registrere en aktieopsplitning eller -sammenlægning."
+msgstr "Denne assistent vil hjælpe dig med at registrere en aktieopsplitning eller -sammenlægning."
 
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
-#, fuzzy
 msgid "_Amount:"
-msgstr "Beløb:"
+msgstr "_Beløb:"
 
 #: ../src/gnome/glade/stocks.glade.h:19
-#, fuzzy
 msgid "_Shares:"
-msgstr "Aktier:"
+msgstr "_Aktier:"
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
 msgstr "0"
 
 #: ../src/gnome/glade/tax.glade.h:2
-#, fuzzy
 msgid "<b>Account Tax Information</b>"
-msgstr "Skatteoplysninger"
+msgstr "<b>Skatteoplysninger</b>"
 
 #: ../src/gnome/glade/tax.glade.h:3
 #, fuzzy
@@ -6177,51 +6144,44 @@ msgid "<b>Copy Number</b>"
 msgstr "<b>Tal</b>"
 
 #: ../src/gnome/glade/tax.glade.h:4
-#, fuzzy
 msgid "<b>Income Tax Identity</b>"
-msgstr "<b>Indtægtskonto</b>"
+msgstr "<b>Identitet for indkomstskat</b>"
 
 #: ../src/gnome/glade/tax.glade.h:5
-#, fuzzy
 msgid "<b>Payer Name Source</b>"
-msgstr "Kilde for betalernavn"
+msgstr "<b>Kilde for betalernavn</b>"
 
 #: ../src/gnome/glade/tax.glade.h:6
-#, fuzzy
 msgid "<b>_Accounts</b>"
-msgstr "Konti"
+msgstr "<b>_Konti</b>"
 
 #: ../src/gnome/glade/tax.glade.h:7
-#, fuzzy
 msgid "<b>_TXF Categories</b>"
-msgstr "TXF-kategorier"
+msgstr "<b>_TXF-kategorier</b>"
 
 #: ../src/gnome/glade/tax.glade.h:8
 msgid "Accounts Selected:"
 msgstr "Valgte konti:"
 
 #: ../src/gnome/glade/tax.glade.h:9
-#, fuzzy
 msgid "C_urrent Account"
-msgstr "Aktuel konto"
+msgstr "_Aktuel konto"
 
 #: ../src/gnome/glade/tax.glade.h:10
 msgid "Click to change Tax Name and/or Tax Type"
-msgstr ""
+msgstr "Klik for at ændre skattenavn og/eller skattetype"
 
 #: ../src/gnome/glade/tax.glade.h:11
-#, fuzzy
 msgid "Income Tax Information"
-msgstr "Skatteoplysninger"
+msgstr "Information om indkomstskat"
 
 #: ../src/gnome/glade/tax.glade.h:13
 msgid "Tax _Related"
 msgstr "Skatte_relateret"
 
 #: ../src/gnome/glade/tax.glade.h:15
-#, fuzzy
 msgid "_Asset"
-msgstr "Aktiv"
+msgstr "_Aktiv"
 
 #: ../src/gnome/glade/tax.glade.h:16
 msgid "_Expense"
@@ -6232,9 +6192,8 @@ msgid "_Income"
 msgstr "_Indtægt"
 
 #: ../src/gnome/glade/tax.glade.h:18
-#, fuzzy
 msgid "_Liability/Equity"
-msgstr "Passiv"
+msgstr "_Passiv/egenkapital"
 
 #: ../src/gnome/glade/tax.glade.h:19
 msgid "_Parent Account"
@@ -6265,9 +6224,8 @@ msgid "New Accounts _Page"
 msgstr "Ny kontosi_de"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:60
-#, fuzzy
 msgid "Open a new Account Tree page"
-msgstr "Åbn en ny kontotræs-visning"
+msgstr "Åbn en ny kontotræ-side"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:99
 msgid "New _File"
@@ -6305,21 +6263,21 @@ msgstr "Eksporter _konti"
 msgid "Export the account hierarchy to a new GnuCash datafile"
 msgstr "Eksporter kontohierarkiet til en ny GnuCash-datafil"
 
+# eller søg
 #: ../src/gnome/gnc-plugin-basic-commands.c:128
 #: ../src/gnome/gnc-plugin-page-register.c:201
-#, fuzzy
 msgid "_Find..."
-msgstr "Find"
+msgstr "_Find ..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:129
 #: ../src/gnome/gnc-plugin-page-register.c:202
 msgid "Find transactions with a search"
 msgstr "Find transaktioner med en søgning"
 
+# nu er det ikke moms her vel? Den næste er indkomstskat, så er nok skat
 #: ../src/gnome/gnc-plugin-basic-commands.c:134
-#, fuzzy
 msgid "Ta_x Report Options"
-msgstr "_Rapportindstillinger"
+msgstr "Rapportindstillinger for _skat"
 
 #. Translators: currently implemented are *
 #. * US: income tax and                     *
@@ -6327,31 +6285,28 @@ msgstr "_Rapportindstillinger"
 #. * So adjust this string
 #: ../src/gnome/gnc-plugin-basic-commands.c:139
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr ""
+msgstr "Opsæt relevante konti for skatterapporter, f.eks. amerikansk indkomstskat"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:145
-#, fuzzy
 msgid "_Scheduled Transactions"
-msgstr "Virkelige transaktioner"
+msgstr "_Planlagte transaktioner"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:147
-#, fuzzy
 msgid "_Scheduled Transaction Editor"
-msgstr "Slet transaktion"
+msgstr "_Planlagt transaktionsredigeringsprogram"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:148
-#, fuzzy
 msgid "The list of Scheduled Transactions"
-msgstr "Kryds kontrollerede transaktioner af"
+msgstr "Listen over planlagte transaktioner"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:152
 msgid "Since _Last Run..."
-msgstr ""
+msgstr "Siden _sidste kørsel ..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:153
 msgid "Create Scheduled Transactions since the last time run"
-msgstr ""
+msgstr "Opret planlagte transaktioner siden den sidste kørsel"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:157
 msgid "_Mortgage & Loan Repayment..."
@@ -6403,14 +6358,12 @@ msgid "Use the loan/mortgage repayment calculator"
 msgstr "Brug finanslommeregneren"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:188
-#, fuzzy
 msgid "_Close Book"
-msgstr "Luk"
+msgstr "_Luk bog"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:189
-#, fuzzy
 msgid "Close the Book at the end of the Period"
-msgstr "Nye vinduer oprettes som faneblade i det aktuelle topniveau-vindue"
+msgstr "Luk bogen når perioden slutter"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:196
 msgid "_Tips Of The Day"
@@ -6441,14 +6394,12 @@ msgid "Open an existing Budget"
 msgstr "Åbn et eksisterende budget"
 
 #: ../src/gnome/gnc-plugin-budget.c:71
-#, fuzzy
 msgid "Copy Budget"
-msgstr "Åbn budget"
+msgstr "Kopier budget"
 
 #: ../src/gnome/gnc-plugin-budget.c:72
-#, fuzzy
 msgid "Copy an existing Budget"
-msgstr "Åbn et eksisterende budget"
+msgstr "Kopier et eksisterende budget"
 
 #: ../src/gnome/gnc-plugin-budget.c:293
 msgid "Select a Budget"
@@ -6464,7 +6415,7 @@ msgstr "Nyt konto_hierarki..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:161
 msgid "Extend the current book by merging with new account type categories"
-msgstr ""
+msgstr "Udvid den nuværende bog ved at sammenføje nye kontotypekategorier"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:165
 #: ../src/gnome/gnc-plugin-page-budget.c:130
@@ -6478,7 +6429,6 @@ msgstr "Åbn den valgte konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:170
 #: ../src/gnome/gnc-plugin-page-budget.c:136
-#, fuzzy
 msgid "Open _Subaccounts"
 msgstr "Åbn _underkonti"
 
@@ -6489,9 +6439,8 @@ msgstr "Åbn den valgte konto og alle dens underkonti"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:177
 #: ../src/gnome/gnc-plugin-page-register.c:196
-#, fuzzy
 msgid "Edit _Account"
-msgstr "Redigér konto"
+msgstr "Rediger _konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:178
 #: ../src/gnome/gnc-plugin-page-register.c:197
@@ -6499,18 +6448,16 @@ msgid "Edit the selected account"
 msgstr "Redigér den valgte konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
-#, fuzzy
 msgid "_Delete Account..."
-msgstr "_Slet konto"
+msgstr "_Slet konto ..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:183
 msgid "Delete selected account"
 msgstr "Slet den valgte konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:187
-#, fuzzy
 msgid "_Renumber Subaccounts..."
-msgstr "Inkludér underkonti"
+msgstr "_Giv nye numre til underkonti ..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:188
 #, fuzzy
@@ -6521,9 +6468,8 @@ msgstr "Afstem den valgte konto"
 #: ../src/gnome/gnc-plugin-page-budget.c:161
 #: ../src/gnome/gnc-plugin-page-register.c:272
 #: ../src/gnome-utils/gnc-main-window.c:304
-#, fuzzy
 msgid "_Filter By..."
-msgstr "Filtertype"
+msgstr "_Filtrer efter ..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:200
 #: ../src/gnome/gnc-plugin-page-register.c:284
@@ -6537,9 +6483,8 @@ msgstr "Afstem den valgte konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:205
 #: ../src/gnome/gnc-plugin-page-register.c:289
-#, fuzzy
 msgid "_Auto-clear..."
-msgstr "_Ny kunde..."
+msgstr "_Autoryd ..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:206
 msgid "Automatically clear individual transactions, given a cleared amount"
@@ -6659,76 +6604,69 @@ msgid "(no name)"
 msgstr "(intet navn)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:998
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting account %s"
-msgstr "Vælg konti"
+msgstr "Sletter konto %s"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1105
-#, fuzzy, c-format
+#, c-format
 msgid "The account %s will be deleted."
-msgstr "Denne rapport kræver valg af konti."
+msgstr "Kontoen %s vil blive slettet."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1117
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
-msgstr ""
+msgstr "Alle transaktioner på denne konto vil blive flyttet til kontoen %s."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1123
-#, fuzzy
 msgid "All transactions in this account will be deleted."
-msgstr "Alle priser før nedenstående dato vil blive slettet."
+msgstr "Alle transaktioner på denne konto vil blive slettet."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1132
-#, fuzzy, c-format
+#, c-format
 msgid "All of its sub-accounts will be moved to the account %s."
-msgstr "Inkludér underkonti fra alle valgte konti"
+msgstr "Alle dens underkonti vil blive flyttet til kontoen %s."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1138
-#, fuzzy
 msgid "All of its subaccounts will be deleted."
-msgstr "Denne rapport kræver valg af konti."
+msgstr "Alle dens underkonti vil blive slettet."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1143
-#, fuzzy, c-format
+#, c-format
 msgid "All sub-account transactions will be moved to the account %s."
-msgstr "Tilføj en ny transaktion til kontoen"
+msgstr "Alle underkontitransaktioner vil blive flyttet til kontoen %s."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1149
-#, fuzzy
 msgid "All sub-account transactions will be deleted."
-msgstr "Alle priser før nedenstående dato vil blive slettet."
+msgstr "Alle underkontitransaktioner vil blive slettet."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1154
-#, fuzzy
 msgid "Are you sure you want to do this?"
-msgstr "Er du sikker på at du ønsker at slette kontoen %s?"
+msgstr "Er du sikker på, du ønsker dette?"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:143
-#, fuzzy
 msgid "_Delete Budget"
-msgstr "_Slet konto"
+msgstr "_Slet budget"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:144
-#, fuzzy
 msgid "Delete this budget"
-msgstr "Dette budgets navn"
+msgstr "Slet dette budget"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:149
-#, fuzzy
 msgid "Edit this budget's options"
-msgstr "Redigér rapportvalg"
+msgstr "Rediger dette budgets indstillinger"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:153
 msgid "Estimate Budget"
-msgstr ""
+msgstr "Esitmer budget"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:155
 msgid "Estimate a budget value for the selected accounts from past transactions"
-msgstr ""
+msgstr "Estimer en budgetværdi for de valgte konti ud fra tidligere transaktioner"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:183
 msgid "Estimate"
-msgstr ""
+msgstr "Estimer"
 
 #. src/report/standard-reports/budget-balance-sheet.scm
 #. src/report/standard-reports/budget-barchart.scm
@@ -6747,110 +6685,95 @@ msgstr "Budget"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:852
 msgid "Set the budget options using this dialog."
-msgstr ""
+msgstr "Angiv budgetindstillinger med denne dialog."
 
 #: ../src/gnome/gnc-plugin-page-budget.c:934
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s?"
-msgstr "Slet"
+msgstr "Slet %s?"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:1002
-#, fuzzy
 msgid "You must select at least one account to estimate."
-msgstr "Du skal vælge en kontotype."
+msgstr "Du skal vælge mindst en konto at estimere."
 
 #: ../src/gnome/gnc-plugin-page-register.c:174
-#, fuzzy
 msgid "_Print Checks..."
-msgstr "_Udskriv check..."
+msgstr "_Udskriv check ..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:181
 #: ../src/gnome-utils/gnc-main-window.c:277
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1025
-#, fuzzy
 msgid "Cu_t"
-msgstr "Tilpasset"
+msgstr "_Klip"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
 #: ../src/gnome-utils/gnc-main-window.c:278
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1026
 msgid "Cut the current selection and copy it to clipboard"
-msgstr ""
+msgstr "Klip den nuværende markering og kopier den til udklipsholderen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:186
 #: ../src/gnome-utils/gnc-main-window.c:282
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1030
 msgid "_Copy"
-msgstr ""
+msgstr "_Kopier"
 
 #: ../src/gnome/gnc-plugin-page-register.c:187
 #: ../src/gnome-utils/gnc-main-window.c:283
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1031
-#, fuzzy
 msgid "Copy the current selection to clipboard"
-msgstr "Indsæt fra transaktionsklippebordet"
+msgstr "Kopier den nuværende markering til udklipsholderen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:192
 #: ../src/gnome-utils/gnc-main-window.c:288
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1036
 msgid "Paste the clipboard content at the cursor position"
-msgstr ""
+msgstr "Indsæt indholdet fra udklipsholderen på markørens position"
 
 #: ../src/gnome/gnc-plugin-page-register.c:209
-#, fuzzy
 msgid "Cu_t Transaction"
-msgstr "Klip transaktion"
+msgstr "_Klip transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:210
-#, fuzzy
 msgid "Cut the selected transaction into clipboard"
-msgstr "Klip den valgte transaktion ud"
+msgstr "Klip den valgte transaktion til udklipsholderen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:214
-#, fuzzy
 msgid "_Copy Transaction"
-msgstr "Kopiér transaktion"
+msgstr "_Kopier transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:215
-#, fuzzy
 msgid "Copy the selected transaction into clipboard"
-msgstr "Kopiér den valgte transaktion"
+msgstr "Kopier den valgte transaktion til udklipsholderen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:219
-#, fuzzy
 msgid "_Paste Transaction"
-msgstr "Indsæt transaktion"
+msgstr "_Indsæt transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:224
-#, fuzzy
 msgid "Dup_licate Transaction"
-msgstr "Transaktionsdublet"
+msgstr "_Dupliker transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:229
 #: ../src/gnome/gnc-split-reg.c:1143
-#, fuzzy
 msgid "_Delete Transaction"
-msgstr "Slet transaktion"
+msgstr "_Slet transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:234
-#, fuzzy
 msgid "Remo_ve Transaction Splits"
-msgstr "Genbalancér transaktion"
+msgstr "_Fjern transaktionsopdelinger"
 
 #: ../src/gnome/gnc-plugin-page-register.c:235
-#, fuzzy
 msgid "Remove all splits in the current transaction"
-msgstr "Vis alle opsplitninger i den aktuelle transaktion"
+msgstr "Fjern alle opdelinger i den nuværende transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:239
-#, fuzzy
 msgid "_Enter Transaction"
-msgstr "_Transaktion"
+msgstr "_Indtast transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:244
-#, fuzzy
 msgid "Ca_ncel Transaction"
-msgstr "Genbalancér transaktion"
+msgstr "_Afbryd transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:249
 #, fuzzy
@@ -6863,9 +6786,8 @@ msgid "_Unvoid Transaction"
 msgstr "_Find transaktioner"
 
 #: ../src/gnome/gnc-plugin-page-register.c:257
-#, fuzzy
 msgid "Add _Reversing Transaction"
-msgstr "_Find transaktioner"
+msgstr "Tilføj _omvendt transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:261
 #, fuzzy
@@ -6875,46 +6797,39 @@ msgstr "_Transaktionsrapport"
 #: ../src/gnome/gnc-plugin-page-register.c:268
 #: ../src/gnome-utils/gnc-main-window.c:300
 msgid "_Sort By..."
-msgstr ""
+msgstr "_Sorter efter ..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:290
 msgid "Automatically clear individual transactions, so as to reach a certain cleared amount"
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:304
-#, fuzzy
 msgid "_Blank Transaction"
-msgstr "_Transaktion"
+msgstr "_Tom transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:309
-#, fuzzy
 msgid "Edit E_xchange Rate"
-msgstr "Vekselkurs:"
+msgstr "Rediger _vekselkurs"
 
 #: ../src/gnome/gnc-plugin-page-register.c:310
-#, fuzzy
 msgid "Edit the exchange rate for the current transaction"
-msgstr "Redigér den nuværende transaktion"
+msgstr "Rediger vekselkursen for den nuværende transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:319
-#, fuzzy
 msgid "Sche_dule..."
-msgstr "Planlæg"
+msgstr "_Planlæg ..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:324
-#, fuzzy
 msgid "_All transactions"
-msgstr "Vis alle transaktioner"
+msgstr "_Alle transaktioner"
 
 #: ../src/gnome/gnc-plugin-page-register.c:328
-#, fuzzy
 msgid "_This transaction"
-msgstr "_Transaktion"
+msgstr "_Denne transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:335
-#, fuzzy
 msgid "Account Report"
-msgstr "Kontoseparator"
+msgstr "Kontorapport"
 
 #: ../src/gnome/gnc-plugin-page-register.c:336
 #, fuzzy
@@ -6962,9 +6877,9 @@ msgstr "Hovedbog"
 #. Translators: %s is the name
 #. of the tab page
 #: ../src/gnome/gnc-plugin-page-register.c:1228
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to %s?"
-msgstr "Saldi %s til %s"
+msgstr "Gem ændringer til %s?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1232
 msgid "This register has pending changes to a transaction.  Would you like to save the changes to this transaction, discard the transaction, or cancel the operation?"
@@ -6976,17 +6891,15 @@ msgid "_Discard Transaction"
 msgstr "_Find transaktioner"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1239
-#, fuzzy
 msgid "_Save Transaction"
-msgstr "_Transaktion"
+msgstr "_Gem transaktion"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1271
 #: ../src/gnome/gnc-plugin-page-register.c:1305
 #: ../src/gnome/gnc-plugin-page-register.c:1318
 #: ../src/gnome/gnc-plugin-page-register.c:1352
-#, fuzzy
 msgid "unknown"
-msgstr "Ukendt"
+msgstr "ukendt"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1294
 #: ../src/gnome/gnc-plugin-page-register.c:1960
@@ -7029,18 +6942,16 @@ msgid "and subaccounts"
 msgstr "og underkonti"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2129
-#, fuzzy
 msgid "Print checks from multiple accounts?"
-msgstr "Match konti"
+msgstr "Udskriv check fra flere konti?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2131
 msgid "This search result contains splits from more than one account. Do you want to print the checks even though they are not all from the same account?"
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:2142
-#, fuzzy
 msgid "_Print checks"
-msgstr "Udskriv check"
+msgstr "_Udskriv check"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2160
 msgid "You can only print checks from a bank account register or search results."
@@ -7060,19 +6971,18 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register.c:2468
 #, c-format
 msgid "Sort %s by..."
-msgstr ""
+msgstr "Sorter %s efter ..."
 
 #. Translators: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2521
 #: ../src/gnome-utils/gnc-tree-view-account.c:1981
-#, fuzzy, c-format
+#, c-format
 msgid "Filter %s by..."
-msgstr "Filtertype"
+msgstr "Filtrer %s efter ..."
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:118
-#, fuzzy
 msgid "_Scheduled"
-msgstr "Planlæg"
+msgstr "_Planlagt"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:120
 #: ../src/gnome/window-reconcile.c:2162
@@ -7080,28 +6990,24 @@ msgid "_New"
 msgstr "_Ny"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:121
-#, fuzzy
 msgid "Create a new scheduled transaction"
-msgstr "Klip den valgte transaktion ud"
+msgstr "Opret en ny planlagt transaktion"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:125
-#, fuzzy
 msgid "Edit the selected scheduled transaction"
-msgstr "Klip den valgte transaktion ud"
+msgstr "Rediger den valgte planlagte transaktion"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:129
-#, fuzzy
 msgid "Delete the selected scheduled transaction"
-msgstr "Klip den valgte transaktion ud"
+msgstr "Slet den valgte planlagte transaktion"
 
 #. FIXME: Does this always refer to only one transaction? Or could
 #. multiple SXs be deleted as well? Ideally, the number of
 #. to-be-deleted SXs should be mentioned here; see
 #. dialog-sx-since-last-run.c:807
 #: ../src/gnome/gnc-plugin-page-sx-list.c:598
-#, fuzzy
 msgid "Do you really want to delete this scheduled transaction?"
-msgstr "Er du sikker på at du vil slette den nuværende transaktion?"
+msgstr "Er du sikker på, at du vil slette denne planlagte transaktion?"
 
 #: ../src/gnome/gnc-plugin-register.c:50
 msgid "_General Ledger"
@@ -7116,28 +7022,25 @@ msgid "<No information>"
 msgstr "<ingen information>"
 
 #: ../src/gnome/gnc-split-reg.c:904
-#, fuzzy
 msgid "Cannot modify or delete this transaction."
-msgstr "Skift mellem farver for transaktioner i dobbeltrækketilstand"
+msgstr "Kan ikke ændre eller slette denne transaktion."
 
 #: ../src/gnome/gnc-split-reg.c:906
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr ""
+msgstr "Denne transaktion er markeret skrivebeskyttet med kommentaren: »%s«"
 
 #: ../src/gnome/gnc-split-reg.c:939
-#, fuzzy
 msgid "Remove the splits from this transaction?"
-msgstr "Indtast noter for transaktionen"
+msgstr "Fjern opdelingerne fra denne transaktion"
 
 #: ../src/gnome/gnc-split-reg.c:940
 msgid "This transaction contains reconciled splits. Modifying it is not a good idea because that will cause your reconciled balance to be off."
 msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:967
-#, fuzzy
 msgid "_Remove Splits"
-msgstr "Fjern gamle priser"
+msgstr "_Fjern opdelinger"
 
 #: ../src/gnome/gnc-split-reg.c:1042
 #, fuzzy, c-format
@@ -7149,9 +7052,8 @@ msgid "You would be deleting a reconciled split! This is not a good idea as it w
 msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:1046
-#, fuzzy
 msgid "You cannot delete this split."
-msgstr "Du kan ikke gemme i den fil."
+msgstr "Du kan ikke slette denne opdeling."
 
 #: ../src/gnome/gnc-split-reg.c:1047
 msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window.  You may delete the entire transaction from this window, or you may navigate to a register that shows another side of this same transaction and delete the split from that register."
@@ -7166,14 +7068,12 @@ msgid "(no description)"
 msgstr "(ingen beskrivelse)"
 
 #: ../src/gnome/gnc-split-reg.c:1103
-#, fuzzy
 msgid "_Delete Split"
-msgstr "_Slet"
+msgstr "_Slet opdeling"
 
 #: ../src/gnome/gnc-split-reg.c:1119
-#, fuzzy
 msgid "Delete the current transaction?"
-msgstr "Slet den nuværende transaktion"
+msgstr "Slet den nuværende transaktion?"
 
 #: ../src/gnome/gnc-split-reg.c:1120
 #, fuzzy
@@ -7255,25 +7155,23 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:2
 msgid "Show currencies in this dialog"
-msgstr ""
+msgstr "Vis valutaer i denne dialog"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:3
-#, fuzzy
 msgid "Show the Full Name column"
-msgstr "Vis det fulde kontonavn i beskrivelser?"
+msgstr "Vis kolonnen med det fulde navn"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:4
 msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-msgstr ""
+msgstr "Vis kolonnen for ISIN/CUSIP-kode (Exchange Specific Data)"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:5
 msgid "Show the Namespace column"
-msgstr ""
+msgstr "Vis kolonnen for navnerum"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:6
-#, fuzzy
 msgid "Show the Print Name column"
-msgstr "Vis indtægts- og udgiftskonti"
+msgstr "Vis kolonnen for udskriftsnavn"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:7
 msgid "Show the Quote Flag column"
@@ -7300,13 +7198,12 @@ msgid "Show the fraction column"
 msgstr "Vis alle transaktioner i kontoen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:12
-#, fuzzy
 msgid "Show the name column"
-msgstr "Vis nettogevinsten?"
+msgstr "Vis navnekolonnen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:13
 msgid "Show the symbol column"
-msgstr ""
+msgstr "Vis symbolkolonnen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:14
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:8
@@ -7338,13 +7235,12 @@ msgid "New hierarchy window on \"New File\""
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:8
-#, fuzzy
 msgid "Show the new user window"
-msgstr "Start rundvisningen for nye brugere"
+msgstr "Vis vinduet for ny bruger"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:9
 msgid "Sort column ascending or descending"
-msgstr ""
+msgstr "Sorter kolonne stigende eller faldende"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:10
 #: ../src/import-export/aqbanking/schemas/apps_gnucash_dialog_hbci.schemas.in.h:10
@@ -7408,9 +7304,8 @@ msgid "Show the currency column"
 msgstr "Genindlæs det aktuelle dokument"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:7
-#, fuzzy
 msgid "Show the date column"
-msgstr "Vis kun tekst"
+msgstr "Vis datokolonnen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:9
 msgid "This setting enables the Price column."
@@ -7437,14 +7332,12 @@ msgid "This setting enables the date column."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:1
-#, fuzzy
 msgid "Custom date format"
-msgstr "Eget format"
+msgstr "Tilpasset datoformat"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:2
-#, fuzzy
 msgid "Date format to use"
-msgstr "Datoformat:"
+msgstr "Datoformat at bruge"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:3
 msgid "Each time the date is printed, print the date format immediately below in 8 point type using the characters Y, M, and D."
@@ -7640,9 +7533,8 @@ msgid "Auto-save time interval"
 msgstr "Gem automatisk tidsinterval"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:5
-#, fuzzy
 msgid "Automatically insert a decimal point"
-msgstr "Automatiske decimalpladser"
+msgstr "Indsæt automatisk et decimalpunkt"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:6
 #, fuzzy
@@ -7668,24 +7560,20 @@ msgid "Color the register as specified by the system theme"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:11
-#, fuzzy
 msgid "Compress the data file"
-msgstr "Opret en ny fil"
+msgstr "Komprimer datafilen"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:12
-#, fuzzy
 msgid "Create a new window for each new register"
-msgstr "Åben et rapportvindue for denne kassekladde"
+msgstr "Opret et nyt vindue for hver ny kassekladde"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:13
-#, fuzzy
 msgid "Create a new window for each new report"
-msgstr "Opret et nyt topniveau-vindue for hver rapport eller kontotræ"
+msgstr "Opret et nyt vindue for hver ny rapport"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:14
-#, fuzzy
 msgid "Date format choice"
-msgstr "Datoformat:"
+msgstr "Valg af datoformat"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:15
 #: ../src/gnome-utils/glade/preferences.glade.h:59
@@ -7697,9 +7585,8 @@ msgid "Default currency for new accounts"
 msgstr "Standardvaluta for nye konti"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:17
-#, fuzzy
 msgid "Default currency for new reports"
-msgstr "Standardvaluta for nye konti"
+msgstr "Standardvaluta for nye rapporter"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:18
 #, fuzzy
