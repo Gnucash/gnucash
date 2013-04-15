@@ -39,6 +39,7 @@ libgncmod_app_utils_la_SOURCES = \
   calculation/expression_parser.c \
   calculation/fin.c \
   swig-app-utils-guile.c \
+  business-helpers.c \
   business-options.c \
   QuickFill.c \
   file-utils.c \
@@ -62,6 +63,7 @@ libgncmod_app_utils_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   QuickFill.h \
+  business-helpers.h \
   business-options.h \
   file-utils.h \
   gfec.h \

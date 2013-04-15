@@ -34,7 +34,7 @@
 #include "gnc-ui-util.h"
 #include "recncell.h"
 
-#include "business-options.h"
+#include "business-helpers.h"
 
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
@@ -373,7 +373,6 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
                 GncTaxIncluded taxincluded_p = GNC_TAXINCLUDED_USEGLOBAL;
                 gboolean taxincluded = FALSE;
                 gnc_numeric discount = gnc_numeric_zero ();
-                GNCOptionDB *odb;
 
                 /* Determine the TaxIncluded and Discount values */
                 switch (gncOwnerGetType (owner))
@@ -411,26 +410,19 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
                 }
 
                 /* Compute the proper taxtable */
-                odb = gnc_option_db_new_for_type (GNC_ID_BOOK);
-                gnc_option_db_load_from_kvp (odb, qof_book_get_slots (ledger->book));
-
                 switch (gncOwnerGetType (owner))
                 {
                 case GNC_OWNER_CUSTOMER:
-                    table = gnc_option_db_lookup_taxtable_option (odb,
-                            "Business",
-                            "Default Customer TaxTable",
-                            NULL);
+                    table = gnc_business_get_default_tax_table (ledger->book,
+                            GNC_OWNER_CUSTOMER);
 
                     if (gncCustomerGetTaxTableOverride (owner->owner.customer))
                         table = gncCustomerGetTaxTable (owner->owner.customer);
                     break;
 
                 case GNC_OWNER_VENDOR:
-                    table = gnc_option_db_lookup_taxtable_option (odb,
-                            "Business",
-                            "Default Vendor TaxTable",
-                            NULL);
+                    table = gnc_business_get_default_tax_table (ledger->book,
+                            GNC_OWNER_VENDOR);
 
                     if (gncVendorGetTaxTableOverride (owner->owner.vendor))
                         table = gncVendorGetTaxTable (owner->owner.vendor);
@@ -439,8 +431,6 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
                 default:
                     break;
                 }
-
-                gnc_option_db_destroy (odb);
 
                 if (ledger->is_cust_doc)
                 {
