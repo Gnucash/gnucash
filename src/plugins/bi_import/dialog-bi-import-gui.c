@@ -39,7 +39,6 @@
 #include "dialog-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-file.h"
-#include "gnc-gnome-utils.h"
 #include "dialog-bi-import.h"
 #include "dialog-bi-import-gui.h"
 
