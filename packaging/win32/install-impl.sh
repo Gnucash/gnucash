@@ -954,7 +954,7 @@ function inst_libofx() {
     _LIBOFX_UDIR=`unix_path ${LIBOFX_DIR}`
     add_to_env ${_LIBOFX_UDIR}/bin PATH
     add_to_env ${_LIBOFX_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libofx
+    if quiet ${PKG_CONFIG} --exists libofx && quiet ${PKG_CONFIG} --atleast-version=${LIBOFX_VERSION} libofx
     then
         echo "Libofx already installed in $_LIBOFX_UDIR. skipping."
     else
