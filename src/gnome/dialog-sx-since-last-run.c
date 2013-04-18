@@ -817,7 +817,7 @@ gnc_sx_sxsincelast_book_opened(void)
             (NULL,
              ngettext
              ("There are no Scheduled Transactions to be entered at this time. "
-              "(%d transaction automatically created)",
+              "(One transaction automatically created)",
               "There are no Scheduled Transactions to be entered at this time. "
               "(%d transactions automatically created)",
               summary.num_auto_create_no_notify_instances),
